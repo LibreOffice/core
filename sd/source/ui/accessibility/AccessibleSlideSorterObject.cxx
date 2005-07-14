@@ -1,0 +1,602 @@
+/*************************************************************************
+ *
+ *  $RCSfile: AccessibleSlideSorterObject.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:10:23 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "AccessibleSlideSorterObject.hxx"
+
+#include "controller/SlideSorterController.hxx"
+#include "controller/SlsPageSelector.hxx"
+#include "controller/SlsFocusManager.hxx"
+#include "model/SlideSorterModel.hxx"
+#include "model/SlsPageDescriptor.hxx"
+#include "view/SlideSorterView.hxx"
+
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#endif
+#ifndef COMPHELPER_ACCESSIBLE_EVENT_NOTIFIER
+#include <comphelper/accessibleeventnotifier.hxx>
+#endif
+#include <unotools/accessiblestatesethelper.hxx>
+
+#include "sdpage.hxx"
+#include "sdresid.hxx"
+#include "glob.hrc"
+
+using namespace ::rtl;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::accessibility;
+
+
+namespace accessibility {
+
+
+AccessibleSlideSorterObject::AccessibleSlideSorterObject(
+    const Reference<XAccessible>& rxParent,
+    ::sd::slidesorter::controller::SlideSorterController& rSlideSorterController,
+    sal_uInt16 nPageNumber)
+    : AccessibleSlideSorterObjectBase(::sd::MutexOwner::maMutex),
+      mxParent(rxParent),
+      mnPageNumber(nPageNumber),
+      mrSlideSorterController(rSlideSorterController),
+      mnClientId(0)
+{
+}
+
+
+
+
+AccessibleSlideSorterObject::~AccessibleSlideSorterObject (void)
+{
+    if ( ! IsDisposed())
+        dispose();
+}
+
+
+
+
+sal_uInt16 AccessibleSlideSorterObject::GetPageNumber (void) const
+{
+    return mnPageNumber;
+}
+
+
+
+
+void AccessibleSlideSorterObject::FireAccessibleEvent (
+    short nEventId,
+    const uno::Any& rOldValue,
+    const uno::Any& rNewValue)
+{
+    if (mnClientId != 0)
+    {
+        AccessibleEventObject aEventObject;
+
+        aEventObject.Source = Reference<XWeak>(this);
+        aEventObject.EventId = nEventId;
+        aEventObject.NewValue = rNewValue;
+        aEventObject.OldValue = rOldValue;
+
+        comphelper::AccessibleEventNotifier::addEvent(mnClientId, aEventObject);
+    }
+}
+
+
+
+
+void SAL_CALL AccessibleSlideSorterObject::disposing (void)
+{
+    const vos::OGuard aSolarGuard (Application::GetSolarMutex());
+
+    // Send a disposing to all listeners.
+    if (mnClientId != 0)
+    {
+        comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing(mnClientId, *this);
+        mnClientId =  0;
+    }
+}
+
+
+
+//===== XAccessible ===========================================================
+
+Reference<XAccessibleContext> SAL_CALL
+    AccessibleSlideSorterObject::getAccessibleContext (void)
+    throw (uno::RuntimeException)
+{
+    ThrowIfDisposed();
+    return this;
+}
+
+
+
+//===== XAccessibleContext ====================================================
+
+sal_Int32 SAL_CALL AccessibleSlideSorterObject::getAccessibleChildCount (void)
+    throw (uno::RuntimeException)
+{
+    ThrowIfDisposed();
+    return 0;
+}
+
+
+
+
+Reference<XAccessible> SAL_CALL AccessibleSlideSorterObject::getAccessibleChild (sal_Int32 i)
+    throw (lang::IndexOutOfBoundsException, RuntimeException)
+{
+    ThrowIfDisposed();
+    throw lang::IndexOutOfBoundsException();
+    return Reference<XAccessible>();
+}
+
+
+
+
+Reference<XAccessible> SAL_CALL AccessibleSlideSorterObject::getAccessibleParent (void)
+    throw (uno::RuntimeException)
+{
+    ThrowIfDisposed();
+    return mxParent;
+}
+
+
+
+
+sal_Int32 SAL_CALL AccessibleSlideSorterObject::getAccessibleIndexInParent()
+    throw (uno::RuntimeException)
+{
+    ThrowIfDisposed();
+    const vos::OGuard aSolarGuard (Application::GetSolarMutex());
+    sal_Int32 nIndexInParent(-1);
+
+    if (mxParent.is())
+    {
+        Reference<XAccessibleContext> xParentContext (mxParent->getAccessibleContext());
+        if (xParentContext.is())
+        {
+            sal_Int32 nChildCount (xParentContext->getAccessibleChildCount());
+            for (sal_Int32 i=0; i<nChildCount; ++i)
+                if (xParentContext->getAccessibleChild(i).get()
+                    == static_cast<XAccessible*>(this))
+                {
+                    nIndexInParent = i;
+                    break;
+                }
+        }
+    }
+
+    return nIndexInParent;
+}
+
+
+
+
+sal_Int16 SAL_CALL AccessibleSlideSorterObject::getAccessibleRole (void)
+    throw (uno::RuntimeException)
+{
+    ThrowIfDisposed();
+    return AccessibleRole::SHAPE;
+}
+
+
+
+
+::rtl::OUString SAL_CALL AccessibleSlideSorterObject::getAccessibleDescription (void)
+    throw (uno::RuntimeException)
+{
+    ThrowIfDisposed();
+    return String(SdResId(STR_PAGE));
+}
+
+
+
+
+::rtl::OUString SAL_CALL AccessibleSlideSorterObject::getAccessibleName (void)
+    throw (uno::RuntimeException)
+{
+    ThrowIfDisposed();
+    const vos::OGuard aSolarGuard (Application::GetSolarMutex());
+
+    SdPage* pPage = GetPage();
+    if (pPage != NULL)
+        return pPage->GetName();
+    else
+        return String();
+}
+
+
+
+
+Reference<XAccessibleRelationSet> SAL_CALL
+    AccessibleSlideSorterObject::getAccessibleRelationSet (void)
+    throw (uno::RuntimeException)
+{
+    ThrowIfDisposed();
+    return Reference<XAccessibleRelationSet>();
+}
+
+
+
+
+Reference<XAccessibleStateSet> SAL_CALL
+    AccessibleSlideSorterObject::getAccessibleStateSet (void)
+    throw (uno::RuntimeException)
+{
+    ThrowIfDisposed();
+    const vos::OGuard aSolarGuard (Application::GetSolarMutex());
+    ::utl::AccessibleStateSetHelper* pStateSet = new ::utl::AccessibleStateSetHelper();
+
+    if (mxParent.is())
+    {
+        // SELECTABLE
+        pStateSet->AddState(AccessibleStateType::SELECTABLE);
+
+        // SELECTED
+        if (mrSlideSorterController.GetPageSelector().IsPageSelected(mnPageNumber))
+            pStateSet->AddState(AccessibleStateType::SELECTED);
+
+        // FOCUSABLE
+        pStateSet->AddState(AccessibleStateType::FOCUSABLE);
+
+        // FOCUSED
+        if (mrSlideSorterController.GetFocusManager().GetFocusedPageIndex() == mnPageNumber)
+            if (mrSlideSorterController.GetFocusManager().IsFocusShowing())
+                pStateSet->AddState(AccessibleStateType::FOCUSED);
+    }
+
+    return pStateSet;
+}
+
+
+
+
+lang::Locale SAL_CALL AccessibleSlideSorterObject::getLocale (void)
+    throw (IllegalAccessibleComponentStateException,
+        RuntimeException)
+{
+    ThrowIfDisposed();
+    // Delegate request to parent.
+    if (mxParent.is())
+    {
+        Reference<XAccessibleContext> xParentContext (mxParent->getAccessibleContext());
+        if (xParentContext.is())
+            return xParentContext->getLocale ();
+    }
+
+    //  No locale and no parent.  Therefore throw exception to indicate this
+    //  cluelessness.
+    throw IllegalAccessibleComponentStateException();
+}
+
+
+
+
+
+//===== XAccessibleEventBroadcaster ===========================================
+
+void SAL_CALL AccessibleSlideSorterObject::addEventListener(
+    const Reference<XAccessibleEventListener>& rxListener)
+    throw (RuntimeException)
+{
+    if (rxListener.is())
+    {
+        const osl::MutexGuard aGuard(maMutex);
+
+        if (IsDisposed())
+        {
+            uno::Reference<uno::XInterface> x ((lang::XComponent *)this, uno::UNO_QUERY);
+            rxListener->disposing (lang::EventObject (x));
+        }
+        else
+        {
+            if (mnClientId == 0)
+                mnClientId = comphelper::AccessibleEventNotifier::registerClient();
+            comphelper::AccessibleEventNotifier::addEventListener(mnClientId, rxListener);
+        }
+    }
+}
+
+
+
+
+void SAL_CALL AccessibleSlideSorterObject::removeEventListener(
+    const Reference<XAccessibleEventListener>& rxListener)
+    throw (uno::RuntimeException)
+{
+    ThrowIfDisposed();
+    if (rxListener.is())
+    {
+        const osl::MutexGuard aGuard(maMutex);
+
+        sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, rxListener );
+        if ( !nListenerCount )
+        {
+            // no listeners anymore
+            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
+            // and at least to us not firing any events anymore, in case somebody calls
+            // NotifyAccessibleEvent, again
+            comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
+            mnClientId = 0;
+        }
+    }
+}
+
+
+
+
+//===== XAccessibleComponent ==================================================
+
+sal_Bool SAL_CALL AccessibleSlideSorterObject::containsPoint(const awt::Point& aPoint)
+    throw (uno::RuntimeException)
+{
+    ThrowIfDisposed();
+    const awt::Size aSize (getSize());
+    return (aPoint.X >= 0)
+        && (aPoint.X < aSize.Width)
+        && (aPoint.Y >= 0)
+        && (aPoint.Y < aSize.Height);
+}
+
+
+
+
+Reference<XAccessible> SAL_CALL
+    AccessibleSlideSorterObject::getAccessibleAtPoint(const awt::Point& aPoint)
+    throw (uno::RuntimeException)
+{
+    return NULL;
+}
+
+
+
+
+awt::Rectangle SAL_CALL AccessibleSlideSorterObject::getBounds (void)
+    throw (RuntimeException)
+{
+    const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
+    Rectangle aBBox (mrSlideSorterController.GetView().GetPageBoundingBox (
+        mnPageNumber,
+        ::sd::slidesorter::view::SlideSorterView::CS_SCREEN,
+        ::sd::slidesorter::view::SlideSorterView::BBT_INFO));
+
+    if (mxParent.is())
+    {
+        Reference<XAccessibleComponent> xParentComponent(mxParent->getAccessibleContext(), UNO_QUERY);
+        if (xParentComponent.is())
+        {
+            awt::Rectangle aParentBBox (xParentComponent->getBounds());
+            aBBox.Intersection(Rectangle(
+                aParentBBox.X,
+                aParentBBox.Y,
+                aParentBBox.Width,
+                aParentBBox.Height));
+        }
+    }
+
+    return awt::Rectangle(
+        aBBox.Left(),
+        aBBox.Top(),
+        aBBox.GetWidth(),
+        aBBox.GetHeight());
+}
+
+
+
+
+awt::Point SAL_CALL AccessibleSlideSorterObject::getLocation ()
+    throw (RuntimeException)
+{
+    const awt::Rectangle aBBox (getBounds());
+    return awt::Point(aBBox.X, aBBox.Y);
+}
+
+
+
+
+awt::Point SAL_CALL AccessibleSlideSorterObject::getLocationOnScreen (void)
+    throw (RuntimeException)
+{
+    const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
+    awt::Point aLocation (getLocation());
+
+    if (mxParent.is())
+    {
+        Reference<XAccessibleComponent> xParentComponent(mxParent->getAccessibleContext(),UNO_QUERY);
+        if (xParentComponent.is())
+        {
+            const awt::Point aParentLocationOnScreen(xParentComponent->getLocationOnScreen());
+            aLocation.X += aParentLocationOnScreen.X;
+            aLocation.Y += aParentLocationOnScreen.Y;
+        }
+    }
+
+    return aLocation;
+}
+
+
+
+
+awt::Size SAL_CALL AccessibleSlideSorterObject::getSize (void)
+    throw (RuntimeException)
+{
+    const awt::Rectangle aBBox (getBounds());
+    return awt::Size(aBBox.Width,aBBox.Height);
+}
+
+
+
+
+void SAL_CALL AccessibleSlideSorterObject::grabFocus (void)
+    throw (RuntimeException)
+{
+    // nothing to do
+}
+
+
+
+
+sal_Int32 SAL_CALL AccessibleSlideSorterObject::getForeground (void)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    svtools::ColorConfig aColorConfig;
+    UINT32 nColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
+    return static_cast<sal_Int32>(nColor);
+}
+
+
+
+
+sal_Int32 SAL_CALL AccessibleSlideSorterObject::getBackground (void)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    UINT32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
+    return static_cast<sal_Int32>(nColor);
+}
+
+
+
+
+
+//=====  XServiceInfo  ========================================================
+
+::rtl::OUString SAL_CALL
+       AccessibleSlideSorterObject::getImplementationName (void)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleSlideSorterObject"));
+}
+
+
+
+
+sal_Bool SAL_CALL
+     AccessibleSlideSorterObject::supportsService (const OUString& sServiceName)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    //  Iterate over all supported service names and return true if on of them
+    //  matches the given name.
+    uno::Sequence< ::rtl::OUString> aSupportedServices (
+        getSupportedServiceNames ());
+    for (int i=0; i<aSupportedServices.getLength(); i++)
+        if (sServiceName == aSupportedServices[i])
+            return sal_True;
+    return sal_False;
+}
+
+
+
+
+uno::Sequence< ::rtl::OUString> SAL_CALL
+       AccessibleSlideSorterObject::getSupportedServiceNames (void)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    static const OUString sServiceNames[2] = {
+        OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "com.sun.star.accessibility.Accessible")),
+        OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "com.sun.star.accessibility.AccessibleContext"))
+    };
+    return uno::Sequence<OUString> (sServiceNames, 2);
+}
+
+
+
+
+void AccessibleSlideSorterObject::ThrowIfDisposed (void)
+    throw (lang::DisposedException)
+{
+    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    {
+        OSL_TRACE ("Calling disposed object. Throwing exception:");
+        throw lang::DisposedException (
+            OUString(RTL_CONSTASCII_USTRINGPARAM("object has been already disposed")),
+            static_cast<uno::XWeak*>(this));
+    }
+}
+
+
+
+sal_Bool AccessibleSlideSorterObject::IsDisposed (void)
+{
+    return (rBHelper.bDisposed || rBHelper.bInDispose);
+}
+
+
+
+
+SdPage* AccessibleSlideSorterObject::GetPage (void) const
+{
+    ::sd::slidesorter::model::PageDescriptor* pDescriptor
+        = mrSlideSorterController.GetModel().GetPageDescriptor(mnPageNumber);
+    if (pDescriptor != NULL)
+        return pDescriptor->GetPage();
+    else
+        return NULL;
+}
+
+
+} // end of namespace ::accessibility
