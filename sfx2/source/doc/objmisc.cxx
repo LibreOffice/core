@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: kz $ $Date: 2005-05-18 10:57:18 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 11:45:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1061,7 +1061,7 @@ sal_Bool SfxObjectShell::IsAutoLoadLocked() const
 void SfxObjectShell::CheckMacrosOnLoading_Impl()
 {
     const SfxFilter* pFilter = pMedium->GetFilter();
-    sal_Bool bHasStorage = IsOwnStorageFormat_Impl( *pMedium );
+    sal_Bool bHasStorage = IsPackageStorageFormat_Impl( *pMedium );
 
     if ( GetError() != ERRCODE_NONE )
         return;
