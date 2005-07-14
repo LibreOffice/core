@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TaskPaneViewShell.sdi,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 14:40:20 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:09:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,8 @@ interface MasterPagesSelectorInterface : Object
         StateMethod = GetState ;
     ]
 
+    // The copy and paste slots are included here so that they later can be
+    // disabled in order to remove them from context menus.
     SID_CUT
     [
         ExecMethod = Execute ;
@@ -239,6 +241,24 @@ interface TaskPaneLayoutMenuInterface : Object
         StateMethod = GetState ;
     ]
     SID_INSERTPAGE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    // The copy and paste slots are included here so that they later can be
+    // disabled in order to remove them from context menus.
+    SID_CUT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_COPY
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_PASTE
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
