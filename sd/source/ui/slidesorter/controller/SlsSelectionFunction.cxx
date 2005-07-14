@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-20 12:01:20 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,13 +127,17 @@ static const sal_uInt32 MIDDLE_BUTTON            (0x00000040);
 static const sal_uInt32 BUTTON_DOWN              (0x00000100);
 static const sal_uInt32 BUTTON_UP                (0x00000200);
 static const sal_uInt32 MOUSE_MOTION             (0x00000400);
-static const sal_uInt32 OVER_SELECTED_PAGE       (0x00001000);
-static const sal_uInt32 OVER_UNSELECTED_PAGE     (0x00002000);
-static const sal_uInt32 OVER_FADE_INDICATOR      (0x00004000);
-static const sal_uInt32 SHIFT_MODIFIER           (0x00010000);
-static const sal_uInt32 CONTROL_MODIFIER         (0x00020000);
-static const sal_uInt32 SUBSTITUTION_VISIBLE     (0x00100000);
-static const sal_uInt32 RECTANGLE_VISIBLE        (0x00200000);
+// The rest leaves the lower 16 bit untouched so that it can be used with
+// key codes.
+static const sal_uInt32 OVER_SELECTED_PAGE       (0x00010000);
+static const sal_uInt32 OVER_UNSELECTED_PAGE     (0x00020000);
+static const sal_uInt32 OVER_FADE_INDICATOR      (0x00040000);
+static const sal_uInt32 SHIFT_MODIFIER           (0x00100000);
+static const sal_uInt32 CONTROL_MODIFIER         (0x00200000);
+static const sal_uInt32 SUBSTITUTION_VISIBLE     (0x01000000);
+static const sal_uInt32 RECTANGLE_VISIBLE        (0x02000000);
+
+static const sal_uInt32 KEY_EVENT                (0x10000000);
 
 // Some absent events are defined so they can be expressed explicitly.
 static const sal_uInt32 NO_MODIFIER              (0x00000000);
@@ -142,15 +146,29 @@ static const sal_uInt32 NOT_OVER_PAGE            (0x00000000);
 
 void TraceEventCode (int nCode)
 {
-    OSL_TRACE("Event code is %x: %s, %s, %s, %s, %s, %s, %s",
-        nCode,
-        (nCode&SINGLE_CLICK)?"Single":((nCode&DOUBLE_CLICK)?"Double":"No"),
-        (nCode&RIGHT_BUTTON)?"Right":((nCode&MIDDLE_BUTTON)?"Middle":((nCode&LEFT_BUTTON)?"Left":"No")),
-        (nCode&BUTTON_DOWN)?"Down":((nCode&BUTTON_UP)?"Up":((nCode&MOUSE_MOTION)?"Motion":"--")),
-        (nCode&OVER_SELECTED_PAGE)?"Selected page":((nCode&OVER_UNSELECTED_PAGE)?"Unselected page":((nCode&OVER_FADE_INDICATOR)?"fade indicator":"no page")),
-        (nCode&SHIFT_MODIFIER)?"Shift":((nCode&CONTROL_MODIFIER)?"Control":"--"),
-        (nCode&SUBSTITUTION_VISIBLE)?"substitution":"--",
-        (nCode&RECTANGLE_VISIBLE)?"rectangle":"--");
+    if ((nCode & KEY_EVENT) != 0)
+        OSL_TRACE("Event code is %x: key %d, %s",
+            nCode,
+            nCode & 0x0ffff,
+            (nCode&KEY_SHIFT)?"shift":"--");
+    else
+        OSL_TRACE("Event code is %x: %s, %s, %s, %s, %s, %s, %s",
+            nCode,
+            (nCode&SINGLE_CLICK)?"Single":((nCode&DOUBLE_CLICK)?"Double":"No"),
+            (nCode&RIGHT_BUTTON)
+                ?"Right"
+                :((nCode&MIDDLE_BUTTON)?"Middle":((nCode&LEFT_BUTTON)?"Left":"No")),
+            (nCode&BUTTON_DOWN)
+                ?"Down"
+                :((nCode&BUTTON_UP)?"Up":((nCode&MOUSE_MOTION)?"Motion":"--")),
+            (nCode&OVER_SELECTED_PAGE)
+                ?"Selected page"
+                :((nCode&OVER_UNSELECTED_PAGE)
+                    ?"Unselected page"
+                    :((nCode&OVER_FADE_INDICATOR)?"fade indicator":"no page")),
+            (nCode&SHIFT_MODIFIER)?"Shift":((nCode&CONTROL_MODIFIER)?"Control":"--"),
+            (nCode&SUBSTITUTION_VISIBLE)?"substitution":"--",
+            (nCode&RECTANGLE_VISIBLE)?"rectangle":"--");
 }
 #ifdef DEBUG
 #define TRACE_EVENT_CODE(code) TraceEventCode(code)
@@ -235,6 +253,9 @@ public:
     EventDescriptor (
         sal_uInt32 nEventType,
         const MouseEvent& rEvent,
+        SlideSorterController& rController);
+    EventDescriptor (
+        const KeyEvent& rEvent,
         SlideSorterController& rController);
 };
 
@@ -481,6 +502,11 @@ BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
             bResult = TRUE;
         }
         break;
+
+        case KEY_F10:
+            if (rEvent.GetKeyCode().IsShift())
+                ProcessKeyEvent(rEvent);
+            break;
 
         default:
             break;
@@ -834,6 +860,61 @@ sal_uInt32 SelectionFunction::EncodeMouseEvent (
 
 
 
+
+void SelectionFunction::ProcessKeyEvent (const KeyEvent& rEvent)
+{
+    // 1. Compute some frequently used values relating to the event.
+    ::std::auto_ptr<EventDescriptor> pEventDescriptor (
+        new EventDescriptor(rEvent, mrController));
+
+    // 2. Encode the event.
+    pEventDescriptor->mnEventCode = EncodeKeyEvent(*pEventDescriptor, rEvent);
+
+    // 3. Process the event.
+    EventPreprocessing(*pEventDescriptor);
+    if ( ! EventProcessing(*pEventDescriptor))
+        OSL_TRACE ("can not handle event code %x", pEventDescriptor->mnEventCode);
+    EventPostprocessing(*pEventDescriptor);
+}
+
+
+
+
+sal_uInt32 SelectionFunction::EncodeKeyEvent (
+    const EventDescriptor& rDescriptor,
+    const KeyEvent& rEvent) const
+{
+    // Initialize as key event.
+    sal_uInt32 nEventCode (KEY_EVENT);
+
+    // Add the actual key code in the lower 16 bit.
+    nEventCode |= rEvent.GetKeyCode().GetCode();
+
+    // Detect pressed modifier keys.
+    if (rEvent.GetKeyCode().IsShift())
+        nEventCode |= SHIFT_MODIFIER;
+    if (rEvent.GetKeyCode().IsMod1())
+        nEventCode |= CONTROL_MODIFIER;
+
+    // Detect whether the event has happened over a page object.
+    if (rDescriptor.mpHitPage != NULL)
+        if (rDescriptor.mpHitDescriptor->IsSelected())
+            nEventCode |= OVER_SELECTED_PAGE;
+        else
+            nEventCode |= OVER_UNSELECTED_PAGE;
+
+    // Detect whether we are dragging pages or dragging a selection rectangle.
+    view::ViewOverlay& rOverlay (mrController.GetView().GetOverlay());
+    if (rOverlay.GetSubstitutionOverlay().IsShowing())
+        nEventCode |= SUBSTITUTION_VISIBLE;
+    if (rOverlay.GetSelectionRectangleOverlay().IsShowing())
+        nEventCode |= RECTANGLE_VISIBLE;
+
+    return nEventCode;
+}
+
+
+
 void SelectionFunction::EventPreprocessing (const EventDescriptor& rDescriptor)
 {
     // Some general processing that is not specific to the exact event code.
@@ -924,10 +1005,12 @@ bool SelectionFunction::EventProcessing (const EventDescriptor& rDescriptor)
 
         // Right button for context menu.
         case BUTTON_DOWN | RIGHT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE:
-            // Single right click selects as preparation to show the context
-            // menu.  Change the selection only when the page under the
-            // mouse is not selected.  In this case the selection is set to
-            // this single page.  Otherwise the selection is not modified.
+        case KEY_EVENT | KEY_F10 | SHIFT_MODIFIER | OVER_UNSELECTED_PAGE:
+            // Single right click and shift+F10 select as preparation to
+            // show the context menu.  Change the selection only when the
+            // page under the mouse is not selected.  In this case the
+            // selection is set to this single page.  Otherwise the
+            // selection is not modified.
             DeselectAllPages();
             SelectHitPage(*rDescriptor.mpHitDescriptor);
             SetCurrentPage(*rDescriptor.mpHitDescriptor);
@@ -935,11 +1018,15 @@ bool SelectionFunction::EventProcessing (const EventDescriptor& rDescriptor)
             break;
 
         case BUTTON_DOWN | RIGHT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE:
+        case KEY_EVENT | KEY_F10 | OVER_SELECTED_PAGE | SHIFT_MODIFIER:
             // Do not change the selection.  Just adjust the insertion indicator.
             bMakeSelectionVisible = false;
             break;
 
         case BUTTON_DOWN | RIGHT_BUTTON | SINGLE_CLICK | NOT_OVER_PAGE:
+        // The Shift+F10 key event is here just for completeness. It should
+        // not be possible to really receive this (not being over a page.)
+        case KEY_EVENT | KEY_F10 | SHIFT_MODIFIER | NOT_OVER_PAGE:
             DeselectAllPages();
             bMakeSelectionVisible = false;
             break;
@@ -1087,6 +1174,25 @@ SelectionFunction::EventDescriptor::EventDescriptor (
     maMousePosition = rEvent.GetPosPixel();
     maMouseModelPosition = pWindow->PixelToLogic(maMousePosition);
     mpHitDescriptor = rController.GetPageAt(maMousePosition);
+    if (mpHitDescriptor != NULL)
+        mpHitPage = mpHitDescriptor->GetPage();
+}
+
+
+
+
+
+SelectionFunction::EventDescriptor::EventDescriptor (
+    const KeyEvent& rEvent,
+    SlideSorterController& rController)
+    : maMousePosition(),
+      maMouseModelPosition(),
+      mpHitDescriptor(NULL),
+      mpHitPage(NULL),
+      mnEventCode(0)
+{
+    ::Window* pWindow = rController.GetViewShell().GetActiveWindow();
+    mpHitDescriptor = rController.GetFocusManager().GetFocusedPageDescriptor();
     if (mpHitDescriptor != NULL)
         mpHitPage = mpHitDescriptor->GetPage();
 }
