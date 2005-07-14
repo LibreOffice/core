@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.190 $
+ *  $Revision: 1.191 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 09:10:11 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 12:04:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -752,12 +752,15 @@ X11SalFrame::~X11SalFrame()
      *  check if there is only the status frame left
      *  if so, free it
      */
-    SalFrame* pStatusFrame = I18NStatus::get().getStatusFrame();
-    std::list< SalFrame* >::const_iterator sit = GetDisplay()->getFrames().begin();
-    if( pStatusFrame
-        && *sit == pStatusFrame
-        && ++sit == GetDisplay()->getFrames().end() )
-        vcl::I18NStatus::free();
+    if( ! GetDisplay()->getFrames().empty() )
+    {
+        SalFrame* pStatusFrame = I18NStatus::get().getStatusFrame();
+        std::list< SalFrame* >::const_iterator sit = GetDisplay()->getFrames().begin();
+        if( pStatusFrame
+            && *sit == pStatusFrame
+            && ++sit == GetDisplay()->getFrames().end() )
+            vcl::I18NStatus::free();
+    }
 
     passOnSaveYourSelf();
 }
