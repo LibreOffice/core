@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellManager.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 09:08:47 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:45:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -951,7 +951,7 @@ void ViewShellManager::Implementation::Deactivate (SfxShell* pShell)
     ViewShell* pViewShell = dynamic_cast<ViewShell*>(pShell);
     if (pViewShell != NULL)
     {
-        SdrView* pView = pViewShell->GetView();
+        sd::View* pView = pViewShell->GetView();
         if (pView!=NULL && pView->IsTextEdit())
         {
             pView->EndTextEdit();
