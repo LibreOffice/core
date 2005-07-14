@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 12:57:52 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:40:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -701,6 +701,20 @@ const Font& WinMtfOutput::GetFont() const
 
 //-----------------------------------------------------------------------------------
 
+void WinMtfOutput::SetTextLayoutMode( const sal_uInt32 nTextLayoutMode )
+{
+    mnTextLayoutMode = nTextLayoutMode;
+}
+
+//-----------------------------------------------------------------------------------
+
+sal_uInt32 WinMtfOutput::GetTextLayoutMode() const
+{
+    return mnTextLayoutMode;
+}
+
+//-----------------------------------------------------------------------------------
+
 void WinMtfOutput::SetBkMode( UINT32 nMode )
 {
     mnBkMode = nMode;
@@ -895,6 +909,8 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
     mnTextAlign         ( TA_LEFT | TA_TOP | TA_NOUPDATECP ),
     maLatestBkColor     ( 0x12345678 ),
     maBkColor           ( COL_WHITE ),
+    mnLatestTextLayoutMode( TEXT_LAYOUT_DEFAULT ),
+    mnTextLayoutMode    ( TEXT_LAYOUT_DEFAULT ),
     mnLatestBkMode      ( 0 ),
     mnBkMode            ( OPAQUE ),
     meLatestRasterOp    ( ROP_INVERT ),
@@ -1443,6 +1459,11 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry
             nSum += nTemp;
             pDXArry[ i ] = nSum;
         }
+    }
+    if ( mnLatestTextLayoutMode != mnTextLayoutMode )
+    {
+        mnLatestTextLayoutMode = mnTextLayoutMode;
+        mpGDIMetaFile->AddAction( new MetaLayoutModeAction( mnTextLayoutMode ) );
     }
     SetGfxMode( nGfxMode );
     sal_Bool bChangeFont = sal_False;
@@ -2077,6 +2098,7 @@ void WinMtfOutput::Push()                       // !! to be able to access the o
     pSave->aFont = maFont;
     pSave->aTextColor = maTextColor;
     pSave->nTextAlign = mnTextAlign;
+    pSave->nTextLayoutMode = mnTextLayoutMode;
     pSave->nMapMode = mnMapMode;
     pSave->nGfxMode = mnGfxMode;
     pSave->nBkMode = mnBkMode;
@@ -2116,6 +2138,7 @@ void WinMtfOutput::Pop()
         maFont = pSave->aFont;
         maTextColor = pSave->aTextColor;
         mnTextAlign = pSave->nTextAlign;
+        mnTextLayoutMode = pSave->nTextLayoutMode;
         mnBkMode = pSave->nBkMode;
         mnGfxMode = pSave->nGfxMode;
         mnMapMode = pSave->nMapMode;
