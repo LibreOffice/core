@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPagesSelector.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:02:05 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:25:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,15 +229,7 @@ protected:
 
     DECL_LINK(ProcessPreviewUpdateRequest, Timer*);
 
-private:
-    DECL_LINK(ClickHandler, PreviewValueSet*);
-    DECL_LINK(RightClickHandler, MouseEvent*);
-
-    static void ProvideStyles (
-        SdDrawDocument* pSourceDoc,
-        SdDrawDocument* pTargetDoc,
-        SdPage* pPage);
-
+protected:
     /** Assign the given master page to the list of pages.
         @param pMasterPage
             This master page will usually be a member of the list of all
@@ -246,9 +238,19 @@ private:
             The pages to which to assign the master page.  These pages may
             be slides or master pages themselves.
     */
-    void AssignMasterPageToPageList (
+    virtual void AssignMasterPageToPageList (
         SdPage* pMasterPage,
         const ::std::vector<SdPage*>& rPageList);
+
+private:
+    DECL_LINK(ClickHandler, PreviewValueSet*);
+    DECL_LINK(RightClickHandler, MouseEvent*);
+    DECL_LINK(ContextMenuCallback, CommandEvent*);
+
+    static void ProvideStyles (
+        SdDrawDocument* pSourceDoc,
+        SdDrawDocument* pTargetDoc,
+        SdPage* pPage);
 
     /** Assign the given master page to the given page.
         @param pMasterPage
