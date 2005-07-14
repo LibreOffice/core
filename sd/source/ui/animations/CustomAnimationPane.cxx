@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationPane.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 09:36:08 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:44:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,7 +466,7 @@ IMPL_LINK(CustomAnimationPane,EventMultiplexerListener,
             onChangeCurrentPage();
             break;
         case tools::EventMultiplexerEvent::EID_END_TEXT_EDIT:
-            if( mpMainSequence.get() )
+            if( mpMainSequence.get() && pEvent->mpUserData )
                 mpCustomAnimationList->update( mpMainSequence );
             break;
     }
