@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TitledControl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-08 16:18:03 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:23:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,10 @@
  *
  ************************************************************************/
 
-#include "TitledControl.hxx"
+#include "taskpane/TitledControl.hxx"
 
-#include "AccessibleTitledControl.hxx"
-#include "ControlContainer.hxx"
+#include "AccessibleTreeNode.hxx"
+#include "taskpane/ControlContainer.hxx"
 #include "TaskPaneFocusManager.hxx"
 #include "taskpane/TaskPaneControlFactory.hxx"
 
@@ -98,9 +98,8 @@ TitledControl::TitledControl (
     }
     mpControlContainer->AddControl (pControl);
 
-    FocusManager::Instance().RegisterLink (
-        this,
-        GetControl()->GetWindow());
+    FocusManager::Instance().RegisterDownLink(this, GetControl()->GetWindow());
+    FocusManager::Instance().RegisterUpLink(GetControl()->GetWindow(), this);
 
     SetBackground (Wallpaper());
 
@@ -288,7 +287,7 @@ void TitledControl::KeyInput (const KeyEvent& rEvent)
             this,
             ControlContainer::ES_EXPAND);
 
-        if ( ! FocusManager::Instance().TransferFocusDown (this))
+        if ( ! FocusManager::Instance().TransferFocus(this,nCode))
         {
             // When already expanded then put focus on first child.
             TreeNode* pControl = GetControl(false);
@@ -299,7 +298,7 @@ void TitledControl::KeyInput (const KeyEvent& rEvent)
     }
     else if (nCode == KEY_ESCAPE)
     {
-        if ( ! FocusManager::Instance().TransferFocusUp (this))
+        if ( ! FocusManager::Instance().TransferFocus(this,nCode))
             // Put focus to parent.
             GetParent()->GrabFocus();
     }
@@ -407,21 +406,6 @@ void TitledControl::Show (bool bVisible)
 
 
 
-::com::sun::star::uno::Reference<
-    ::com::sun::star::accessibility::XAccessible>
-    TitledControl::CreateAccessible (void)
-{
-    AccessibleTitledControl* pAccessible = new AccessibleTitledControl (*this);
-    ::com::sun::star::uno::Reference<
-          ::com::sun::star::accessibility::XAccessible> xAccessible (
-              pAccessible);
-    pAccessible->Init ();
-    return xAccessible;
-}
-
-
-
-
 void TitledControl::UpdateStates (void)
 {
     if (mbVisible)
@@ -476,9 +460,8 @@ TreeNode* TitledControl::GetControl (bool bCreate)
             mpControlContainer->AddControl(pControl);
 
             pNode = mpControlContainer->GetControl(1);
-            FocusManager::Instance().RegisterLink (
-                this,
-                pNode->GetWindow());
+            FocusManager::Instance().RegisterDownLink(this, pNode->GetWindow());
+            FocusManager::Instance().RegisterUpLink(pNode->GetWindow(), this);
         }
     }
 
@@ -500,5 +483,22 @@ TitleBar* TitledControl::GetTitleBar (void)
 {
     return static_cast<TitleBar*>(mpControlContainer->GetControl(0));
 }
+
+
+
+
+::com::sun::star::uno::Reference<
+    ::com::sun::star::accessibility::XAccessible> TitledControl::CreateAccessibleObject (
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::accessibility::XAccessible>& rxParent)
+{
+    return new ::accessibility::AccessibleTreeNode(
+        *this,
+        GetTitle(),
+        GetTitle(),
+        ::com::sun::star::accessibility::AccessibleRole::PANEL);
+}
+
+
 
 } } // end of namespace ::sd::toolpanel
