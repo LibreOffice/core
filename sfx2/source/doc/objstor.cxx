@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.164 $
+ *  $Revision: 1.165 $
  *
- *  last change: $Author: kz $ $Date: 2005-07-12 12:26:28 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 11:46:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -800,7 +800,8 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     pImp->bModelInitialized = sal_False;
 
     //TODO/LATER: make a clear strategy how to handle "UsesStorage" etc.
-    sal_Bool bHasStorage = IsOwnStorageFormat_Impl( *pMedium );
+    sal_Bool bOwnStorageFormat = IsOwnStorageFormat_Impl( *pMedium );
+    sal_Bool bHasStorage = IsPackageStorageFormat_Impl( *pMedium );
     if ( pMedium->GetFilter() )
     {
         sal_uInt32 nError = HandleFilter( pMedium, this );
@@ -811,7 +812,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     EnableSetModified( sal_False );
 
     bool bShowBrokenSignatureWarningAlready = false;
-    if ( GetError() == ERRCODE_NONE && bHasStorage && ( !pFilter || !( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) ) )
+    if ( GetError() == ERRCODE_NONE && bOwnStorageFormat && ( !pFilter || !( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) ) )
     {
         uno::Reference< embed::XStorage > xStorage = pMed->GetStorage();
         if( xStorage.is() && pMed->GetLastStorageCreationState() == ERRCODE_NONE )
@@ -1117,6 +1118,15 @@ sal_Bool SfxObjectShell::IsOwnStorageFormat_Impl(const SfxMedium &rMedium) const
 
 //-------------------------------------------------------------------------
 
+sal_Bool SfxObjectShell::IsPackageStorageFormat_Impl(const SfxMedium &rMedium) const
+{
+    return !rMedium.GetFilter() || // Embedded
+           ( rMedium.GetFilter()->UsesStorage() &&
+             rMedium.GetFilter()->GetVersion() >= SOFFICE_FILEFORMAT_60 );
+}
+
+//-------------------------------------------------------------------------
+
 sal_Bool SfxObjectShell::DoSave()
 // DoSave wird nur noch ueber OLE aufgerufen. Sichern eigener Dokumente im SFX
 // laeuft uber DoSave_Impl, um das Anlegen von Backups zu ermoeglichen.
@@ -1129,7 +1139,7 @@ sal_Bool SfxObjectShell::DoSave()
         pImp->bIsSaving = sal_True;
 
         String aPasswd;
-        if ( IsOwnStorageFormat_Impl( *GetMedium() ) )
+        if ( IsPackageStorageFormat_Impl( *GetMedium() ) )
         {
             if ( GetPasswd_Impl( GetMedium()->GetItemSet(), aPasswd ) )
             {
@@ -1250,7 +1260,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         rMedium.SetFilter(pFilter);
     }
 
-    sal_Bool bOwnSource = IsOwnStorageFormat_Impl( *pMedium );
+    sal_Bool bStorageBasedSource = IsPackageStorageFormat_Impl( *pMedium );
+    sal_Bool bStorageBasedTarget = IsPackageStorageFormat_Impl( rMedium );
     sal_Bool bOwnTarget = IsOwnStorageFormat_Impl( rMedium );
 
     // use UCB for case sensitive/insensitive file name comparison
@@ -1274,7 +1285,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             }
         }
 
-        if ( bOwnSource && bOwnTarget )
+        if ( bStorageBasedSource && bStorageBasedTarget )
         {
             // The active storage must be switched. The simple saving is not enough.
             // The problem is that the target medium contains target MediaDescriptor.
@@ -1304,7 +1315,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                 rMedium.GetOutputStorage();
             }
         }
-        else if ( !bOwnSource && !bOwnTarget )
+        else if ( !bStorageBasedSource && !bStorageBasedTarget )
         {
             // the source and the target formats are alien
             // just disconnect the stream from the source format
@@ -1314,7 +1325,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             rMedium.CreateTempFileNoCopy();
             rMedium.GetOutStream();
         }
-        else if ( !bOwnSource && bOwnTarget )
+        else if ( !bStorageBasedSource && bStorageBasedTarget )
         {
             // the source format is an alien one but the target
             // format is an own one so just disconnect the source
@@ -1323,7 +1334,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             rMedium.CloseAndRelease();
             rMedium.GetOutputStorage();
         }
-        else // means if ( bOwnSource && !bOwnTarget )
+        else // means if ( bStorageBasedSource && !bStorageBasedTarget )
         {
             // the source format is an own one but the target is
             // an alien format, just connect the source to temporary
@@ -1339,7 +1350,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         }
     }
 
-    if ( bOwnTarget )
+    if ( bStorageBasedTarget )
     {
         rMedium.GetOutputStorage();
 
@@ -1586,7 +1597,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             // if the target medium is an alien format and the "old" medium was an own format and the "old" medium
             // has a name, the object storage must be exchanged, because now we need a new temporary storage
             // as object storage
-            if ( !bCopyTo && IsOwnStorageFormat_Impl(*pMedium) && !IsOwnStorageFormat_Impl(rMedium) )
+            if ( !bCopyTo && IsPackageStorageFormat_Impl(*pMedium) && !IsPackageStorageFormat_Impl(rMedium) )
             {
                 if ( pMedium->GetName().Len()
                   || ( pMedium->HasStorage_Impl() && pMedium->WillDisposeStorageOnClose_Impl() ) )
@@ -1604,7 +1615,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             // so just do not switch
             // the problem is that the old medium must be preserved but the new storage must be used
             // for it.
-            if ( IsOwnStorageFormat_Impl(rMedium) )
+            if ( IsPackageStorageFormat_Impl(rMedium) )
                 rMedium.MoveStorageTo_Impl( pMedium );
             else
                 rMedium.MoveTempTo_Impl( pMedium );
@@ -1770,8 +1781,8 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
     sal_Bool bOk = sal_True;
     sal_Bool bMedChanged = pNewMed && pNewMed!=pMedium;
 /*  sal_Bool bCreatedTempStor = pNewMed && pMedium &&
-        IsOwnStorageFormat_Impl(*pMedium) &&
-        !IsOwnStorageFormat_Impl(*pNewMed) &&
+        IsPackageStorageFormat_Impl(*pMedium) &&
+        !IsPackageStorageFormat_Impl(*pNewMed) &&
         pMedium->GetName().Len();
 */
     DBG_ASSERT( !pNewMed || pNewMed->GetError() == ERRCODE_NONE, "DoSaveCompleted: Medium has error!" );
@@ -1795,7 +1806,7 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
         }
 
         uno::Reference< embed::XStorage > xStorage;
-        if ( !pFilter || IsOwnStorageFormat_Impl( *pMedium ) )
+        if ( !pFilter || IsPackageStorageFormat_Impl( *pMedium ) )
         {
             uno::Reference < embed::XStorage > xOld = GetStorage();
             xStorage = pMedium->GetStorage();
@@ -1838,7 +1849,7 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
         if( pMedium )
         {
             const SfxFilter* pFilter = pMedium->GetFilter();
-            if( pFilter && !IsOwnStorageFormat_Impl( *pMedium ) && (pMedium->GetOpenMode() & STREAM_WRITE ))
+            if( pFilter && !IsPackageStorageFormat_Impl( *pMedium ) && (pMedium->GetOpenMode() & STREAM_WRITE ))
             {
                 pMedium->ReOpen();
                 bOk = SaveCompletedChildren( sal_False );
