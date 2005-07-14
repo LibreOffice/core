@@ -1,11 +1,23 @@
 all_fragments+=chart
 
+.IF "$(WITH_BINFILTER)" != "NO"
+T4_CHART_BINFILTER = \
+    chart_StarChart_30 \
+    chart_StarChart_40 \
+    chart_StarChart_50
+F4_CHART_BINFILTER = \
+    StarChart_3_0 \
+    StarChart_4_0 \
+    StarChart_5_0
+.ELSE
+T4_CHART_BINFILTER =
+F4_CHART_BINFILTER =
+.ENDIF
+
 # -----------------------------------------------
 # count = 5
 T4_CHART = \
-    chart_StarChart_30 \
-    chart_StarChart_40 \
-    chart_StarChart_50 \
+    $(T4_CHART_BINFILTER) \
     chart_StarOffice_XML_Chart \
     chart2_StarOffice_XML_Chart\
     chart8
@@ -13,9 +25,7 @@ T4_CHART = \
 # -----------------------------------------------
 # count = 5
 F4_CHART = \
-    StarChart_3_0 \
-    StarChart_4_0 \
-    StarChart_5_0 \
+    $(F4_CHART_BINFILTER) \
     StarOffice_XML__Chart_\
     chart8
     
