@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2003-09-16 14:35:03 $
+#   last change: $Author: kz $ $Date: 2005-07-14 10:11:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,6 +69,7 @@ PRJNAME=sd
 TARGET=accessibility
 ENABLE_EXCEPTIONS=TRUE
 AUTOSEG=true
+PRJINC=..$/slidesorter
 
 # --- Settings -----------------------------------------------------
 
@@ -87,7 +88,12 @@ SLOFILES =      									\
     $(SLO)$/AccessibleViewForwarder.obj				\
     $(SLO)$/AccessibleOutlineEditSource.obj			\
     $(SLO)$/AccessiblePageShape.obj					\
+    $(SLO)$/AccessibleScrollPanel.obj				\
     $(SLO)$/AccessibleSlideView.obj					\
+    $(SLO)$/AccessibleSlideSorterView.obj			\
+    $(SLO)$/AccessibleSlideSorterObject.obj			\
+    $(SLO)$/AccessibleTaskPane.obj					\
+    $(SLO)$/AccessibleTreeNode.obj					\
     $(SLO)$/SdShapeTypes.obj
 
 
