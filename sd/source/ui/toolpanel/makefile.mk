@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2005-03-18 17:00:12 $
+#   last change: $Author: kz $ $Date: 2005-07-14 10:24:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,7 +80,6 @@ PRJINC=..$/slidesorter
 # --- Files --------------------------------------------------------
 
 SLOFILES =      								\
-    $(SLO)$/AccessibleTitledControl.obj			\
     $(SLO)$/ControlContainer.obj				\
     $(SLO)$/ScrollPanel.obj						\
     $(SLO)$/SimpleLayoutWrapper.obj				\
