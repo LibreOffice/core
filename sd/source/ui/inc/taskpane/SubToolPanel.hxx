@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SubToolPanel.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:49:24 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,11 @@ public:
     virtual void ExpandControl (
         TreeNode* pControl,
         bool bExpansionState);
+
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::accessibility::XAccessible> CreateAccessibleObject (
+            const ::com::sun::star::uno::Reference<
+            ::com::sun::star::accessibility::XAccessible>& rxParent);
 
 protected:
     /** Initiate a rearrangement of the controls.
