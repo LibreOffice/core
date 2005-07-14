@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlxtexp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:45:11 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:50:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,10 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#endif
+
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
@@ -167,6 +171,8 @@ using namespace com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 using namespace ::rtl;
 using namespace cppu;
+
+using com::sun::star::embed::XTransactedObject;
 
 class SvxXMLTableEntryExporter
 {
@@ -355,6 +361,17 @@ sal_Bool SvxXMLXTableExportComponent::save( const OUString& rURL, const uno::Ref
 
         if( pGraphicHelper )
             SvXMLGraphicHelper::Destroy( pGraphicHelper );
+
+        if( xStorage.is() )
+        {
+            Reference< XTransactedObject > xTrans( xStorage, UNO_QUERY );
+            if( xTrans.is() )
+                xTrans->commit();
+
+            Reference< XComponent > xComp( xStorage, UNO_QUERY );
+            if( xComp.is() )
+                xStorage->dispose();
+        }
     }
     catch( uno::Exception& e )
     {
