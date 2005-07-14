@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-07 14:41:17 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 11:28:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,20 +363,24 @@ void SdTransferable::CreateData()
     }
     else if( pSdView && !pSdDrawDocumentIntern )
     {
-        bOwnDocument = TRUE;
-
         const SdrMarkList& rMarkList = pSdView->GetMarkedObjectList();
 
         if( rMarkList.GetMarkCount() == 1 )
             CreateObjectReplacement( rMarkList.GetMark( 0 )->GetObj() );
 
+        if( pSourceDoc )
+            pSourceDoc->CreatingDataObj(this);
         pSdDrawDocumentIntern = (SdDrawDocument*) pSdView->GetAllMarkedModel();
+        if( pSourceDoc )
+            pSourceDoc->CreatingDataObj(0);
 
         if( !aDocShellRef.Is() && pSdDrawDocumentIntern->GetDocSh() )
-        {
-            // DocShell schon vorhanden ( AllocModel() )
             aDocShellRef = pSdDrawDocumentIntern->GetDocSh();
-            bOwnDocument = FALSE;
+
+        if( !aDocShellRef.Is() )
+        {
+            DBG_ERROR( "SdTransferable::CreateData(), failed to create a model with persist, clipboard operation will fail for OLE objects!" );
+            bOwnDocument = TRUE;
         }
 
         // Groesse der Source-Seite uebernehmen
