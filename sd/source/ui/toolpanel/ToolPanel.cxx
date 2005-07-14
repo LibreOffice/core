@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ToolPanel.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:59:43 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,14 +59,18 @@
  *
  ************************************************************************/
 
-#include "ToolPanel.hxx"
+#include "taskpane/ToolPanel.hxx"
 
 #include "TaskPaneFocusManager.hxx"
-#include "TitleBar.hxx"
-#include "TitledControl.hxx"
-#include "ControlContainer.hxx"
+#include "taskpane/TitleBar.hxx"
+#include "taskpane/TitledControl.hxx"
+#include "taskpane/ControlContainer.hxx"
 #include "TaskPaneViewShell.hxx"
 #include "taskpane/TaskPaneControlFactory.hxx"
+#include "AccessibleTaskPane.hxx"
+
+#include "strings.hrc"
+#include "sdresid.hxx"
 
 #ifndef _SV_DECOVIEW_HXX
 #include <vcl/decoview.hxx>
@@ -92,8 +96,6 @@ ToolPanel::ToolPanel (
       mbRearrangeActive(false)
 {
     SetBackground (Wallpaper ());
-    SetAccessibleName (String::CreateFromAscii("Task Pane"));
-    SetAccessibleDescription (String::CreateFromAscii("Impress task pane"));
 }
 
 
@@ -123,14 +125,30 @@ sal_uInt32 ToolPanel::AddControl (
     if (pParent != NULL)
         pParent = pParent->GetParent();
 
+    FocusManager& rFocusManager (FocusManager::Instance());
+    int nControlCount (mpControlContainer->GetControlCount());
+
+    // Add a link up from every control to the parent.  A down link is added
+    // only for the first control so that when entering the sub tool panel
+    // the focus is set to the first control.
     if (pParent != NULL)
     {
-        // Add a down link only for the first control so that when entering
-        // the sub tool panel the focus is set to the first control.
-        if (mpControlContainer->GetControlCount() == 1)
-            FocusManager::Instance().RegisterLink (pParent, pChild->GetWindow());
-        else
-            FocusManager::Instance().RegisterUpLink (pChild->GetWindow(), pParent);
+        if (nControlCount == 1)
+            rFocusManager.RegisterDownLink(pParent, pChild->GetWindow());
+        rFocusManager.RegisterUpLink(pChild->GetWindow(), pParent);
+    }
+
+    // Replace the old links for cycling between first and last child by
+    // current ones.
+    if (nControlCount > 0)
+    {
+        ::Window* pFirst = mpControlContainer->GetControl(0)->GetWindow();
+        ::Window* pLast = mpControlContainer->GetControl(nControlCount-1)->GetWindow();
+        rFocusManager.RemoveLinks(pFirst,pLast);
+        rFocusManager.RemoveLinks(pLast,pFirst);
+
+        rFocusManager.RegisterLink(pFirst,pChild->GetWindow(), KEY_UP);
+        rFocusManager.RegisterLink(pChild->GetWindow(),pFirst, KEY_DOWN);
     }
 
     pTitledControl->GetTitleBar()->SetHelpId(nHelpId);
@@ -285,6 +303,21 @@ bool ToolPanel::IsResizable (void)
 TaskPaneShellManager* ToolPanel::GetShellManager (void)
 {
     return &mrViewShell.GetSubShellManager();
+}
+
+
+
+
+::com::sun::star::uno::Reference<
+    ::com::sun::star::accessibility::XAccessible> ToolPanel::CreateAccessibleObject (
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::accessibility::XAccessible>& rxParent)
+{
+    return new ::accessibility::AccessibleTaskPane (
+        rxParent,
+        String(SdResId(STR_RIGHT_PANE_TITLE)),
+        String(SdResId(STR_RIGHT_PANE_TITLE)),
+        *this);
 }
 
 } } // end of namespace ::sd::toolpanel
