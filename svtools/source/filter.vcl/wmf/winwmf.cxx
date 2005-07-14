@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winwmf.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 11:47:40 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:41:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,11 +448,18 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
             pWMF->SeekRel(2);
             aPosition = ReadYX();
             *pWMF >> nLen >> nOptions;
+
+            sal_Int32 nTextLayoutMode = TEXT_LAYOUT_DEFAULT;
+            if ( nOptions & ETO_RTLREADING )
+                nTextLayoutMode = TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT;
+            pOut->SetTextLayoutMode( nTextLayoutMode );
+            DBG_ASSERT( ( nOptions & ( ETO_PDY | ETO_GLYPH_INDEX ) ) == 0, "SJ: ETO_PDY || ETO_GLYPH_INDEX in WMF" );
+
             // Nur wenn der Text auch Zeichen enthaelt, macht die Ausgabe Sinn
             if( nLen )
             {
                 nOriginalTextLen = nLen;
-                if( nOptions )
+                if( nOptions & ETO_CLIPPED )
                 {
                     const Point aPt1( ReadPoint() );
                     const Point aPt2( ReadPoint() );
