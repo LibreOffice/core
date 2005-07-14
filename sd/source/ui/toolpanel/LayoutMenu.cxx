@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LayoutMenu.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2005-05-06 09:28:08 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:19:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,6 +273,7 @@ LayoutMenu::LayoutMenu (
         GetStyle()
         & ~(WB_ITEMBORDER)
         | WB_TABSTOP
+        | WB_NO_DIRECTSELECT
         );
     if (mbUseOwnScrollBar)
         SetStyle (GetStyle() | WB_VSCROLL);
@@ -288,6 +289,7 @@ LayoutMenu::LayoutMenu (
         | ::sd::tools::EventMultiplexer::ET_VIEW);
 
     SetSmartHelpId(SmartId(HID_SD_TASK_PANE_PREVIEW_LAYOUTS));
+    SetAccessibleName(SdResId(STR_TASKPANEL_LAYOUT_MENU_TITLE));
 
     Link aStateChangeLink (LINK(this,LayoutMenu,StateChangeHandler));
     mxListener = new ::sd::tools::SlotStateListener(
@@ -487,25 +489,17 @@ void LayoutMenu::Resize (void)
 
 void LayoutMenu::MouseButtonDown (const MouseEvent& rEvent)
 {
+    // As a preparation for the context menu the item under the mouse is
+    // selected.
     if (rEvent.IsRight())
     {
-        //        GrabFocus ();
         ReleaseMouse();
-        if (GetShellManager() != NULL)
-            GetShellManager()->MoveToTop (this);
-        if (GetDispatcher() != NULL)
-        {
-            USHORT nIndex = GetItemId (rEvent.GetPosPixel());
-            if (nIndex > 0)
-            {
-                SelectItem (nIndex);
-                GetDispatcher()->ExecutePopup(
-                    SdResId(RID_TASKPANE_LAYOUTMENU_POPUP));
-            }
-        }
+        USHORT nIndex = GetItemId (rEvent.GetPosPixel());
+        if (nIndex > 0)
+            SelectItem(nIndex);
     }
-    else
-        ValueSet::MouseButtonDown (rEvent);
+
+    ValueSet::MouseButtonDown (rEvent);
 }
 
 
@@ -533,6 +527,11 @@ void LayoutMenu::Execute (SfxRequest& rRequest)
 
 void LayoutMenu::GetState (SfxItemSet& rItemSet)
 {
+    // Cut and paste is not supported.  The SID_(CUT,COPY,PASTE) entries
+    // therefore must not show up in the context menu.
+    rItemSet.DisableItem (SID_CUT);
+    rItemSet.DisableItem (SID_COPY);
+    rItemSet.DisableItem (SID_PASTE);
 }
 
 
@@ -548,6 +547,7 @@ void LayoutMenu::InsertPageWithLayout (AutoLayout aLayout)
         // would end up being called ourselves.
         SfxRequest aRequest (CreateRequest (SID_INSERTPAGE, aLayout));
         pViewShell->ExecuteSlot (aRequest, BOOL(FALSE));
+        UpdateSelection();
     }
 }
 
@@ -811,6 +811,45 @@ sal_Int8 LayoutMenu::AcceptDrop (const AcceptDropEvent& rEvent)
 sal_Int8 LayoutMenu::ExecuteDrop (const ExecuteDropEvent& rEvent)
 {
     return 0;
+}
+
+
+
+
+void LayoutMenu::Command (const CommandEvent& rEvent)
+{
+    switch (rEvent.GetCommand())
+    {
+        case COMMAND_CONTEXTMENU:
+            if ( ! SD_MOD()->GetWaterCan())
+            {
+                if (GetShellManager() != NULL)
+                    GetShellManager()->MoveToTop(this);
+                if (rEvent.IsMouseEvent())
+                    mrBase.GetViewFrame()->GetDispatcher()->ExecutePopup(
+                        SdResId(RID_TASKPANE_LAYOUTMENU_POPUP));
+                else
+                {
+                    // When the command event was not caused by a mouse
+                    // event (for example a key press instead) then show the
+                    // popup menu at the center of the current item.
+                    if (GetSelectItemId() >= 0)
+                    {
+                        Rectangle aBBox (GetItemRect(GetSelectItemId()));
+                        Point aPosition (aBBox.Center());
+                        mrBase.GetViewFrame()->GetDispatcher()->ExecutePopup(
+                            SdResId(RID_TASKPANE_LAYOUTMENU_POPUP),
+                            this,
+                            &aPosition);
+                    }
+                }
+            }
+            break;
+
+        default:
+            ValueSet::Command(rEvent);
+            break;
+    }
 }
 
 
