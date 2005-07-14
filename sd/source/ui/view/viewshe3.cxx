@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 11:17:48 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:27:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1254,7 +1254,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
         SFX_REQUEST_ARG (rRequest, pIsPageBack, SfxBoolItem, ID_VAL_ISPAGEBACK, FALSE);
         SFX_REQUEST_ARG (rRequest, pIsPageObj, SfxBoolItem, ID_VAL_ISPAGEOBJ, FALSE);
 
-        if (CHECK_RANGE (AUTOLAYOUT_TITLE, (AutoLayout) pLayout->GetValue (), AUTOLAYOUT_HANDOUT6))
+        if (CHECK_RANGE (AUTOLAYOUT__START, (AutoLayout) pLayout->GetValue (), AUTOLAYOUT__END))
         {
             if (ePageKind == PK_NOTES)
             {
