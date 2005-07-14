@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationPanel.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:00:55 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,11 @@ public:
     virtual ::Window* GetWindow (void);
     virtual bool IsResizable (void);
     virtual bool IsExpandable (void) const;
+
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::accessibility::XAccessible > CreateAccessibleObject (
+            const ::com::sun::star::uno::Reference<
+            ::com::sun::star::accessibility::XAccessible>& rxParent);
 
 private:
     Size maPreferredSize;
