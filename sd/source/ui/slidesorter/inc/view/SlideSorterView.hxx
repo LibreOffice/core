@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterView.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:38:22 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:17:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,6 +240,15 @@ public:
     void SetSelectionRectangleVisibility (bool bVisible);
 
     ::sdr::contact::ObjectContact& GetObjectContact (void) const;
+
+    typedef ::std::pair<sal_Int32,sal_Int32> PageRange;
+    /** Return the range of currently visible page objects including the
+        first and last one in that range.
+        @return
+            The returned pair of page object indices is empty when the
+            second index is lower than the first.
+    */
+    PageRange GetVisiblePageRange (void);
 
 private:
     model::SlideSorterModel& mrModel;
