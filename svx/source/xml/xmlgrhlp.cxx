@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlgrhlp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $
+ *  last change: $Author: kz $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -495,7 +495,11 @@ uno::Reference < embed::XStorage > SvXMLGraphicHelper::ImplGetGraphicStorage( co
 
         try
         {
-            mxGraphicStorage = mxRootStorage->openStorageElement( maCurStorageName = rStorageName, embed::ElementModes::READWRITE );
+            mxGraphicStorage = mxRootStorage->openStorageElement(
+                maCurStorageName = rStorageName,
+                ( GRAPHICHELPER_MODE_WRITE == meCreateMode )
+                    ? embed::ElementModes::READWRITE
+                    : embed::ElementModes::READ );
         }
         catch ( uno::Exception& )
         {
