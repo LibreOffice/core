@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: kz $ $Date: 2005-07-12 11:19:43 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 11:40:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2042,8 +2042,6 @@ void SwXTextCursor::SetPropertyValue(
         throw (UnknownPropertyException, PropertyVetoException,
             IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    Any aAny;
-
     SwDoc* pDoc = rPaM.GetDoc();
     const SfxItemPropertyMap*   pMap = _pMap ? _pMap : SfxItemPropertyMap::GetByName(
                             rPropSet.getPropertyMap(), rPropertyName);
@@ -2268,7 +2266,6 @@ void SwXTextCursor::setPropertyValue(const OUString& rPropertyName, const uno::A
              lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    uno::Any aAny;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
