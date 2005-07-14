@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideTransitionPanel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:02:31 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:27:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,20 @@ bool SlideTransitionPanel::IsResizable()
 bool SlideTransitionPanel::IsExpandable() const
 {
     return true;
+}
+
+
+
+
+::com::sun::star::uno::Reference<
+    ::com::sun::star::accessibility::XAccessible> SlideTransitionPanel::CreateAccessibleObject (
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::accessibility::XAccessible>& rxParent)
+{
+    if (GetWindow() != NULL)
+        return GetWindow()->GetAccessible();
+    else
+        return NULL;
 }
 
 
