@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:03:26 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 11:33:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -940,6 +940,21 @@ void SdrGrafObj::ImpDoPaintGrafObjShadow( XOutputDevice& rOut, const SdrPaintInf
                 // get BitmapEx
                 Graphic aTempGraphic = GetTransformedGraphic();
                 Size aPixelSize(aSnapRectPixel.GetSize());
+
+                // #i48495#
+                // When this is done on a very fine resolution OutputDevice (e.g. PDF export) it may lead
+                // to problems since huge pixel bitmaps may be created. Sizes need to be cropped here. Later
+                // it may be nice to have the quadratic pixel size configurable somewhere.
+                const sal_uInt32 nMaxBitmapPixels(800L * 800L);
+                const sal_uInt32 nAllPixels(aPixelSize.getWidth() * aPixelSize.getHeight());
+
+                if(nAllPixels > nMaxBitmapPixels)
+                {
+                    const double fScale(sqrt((double)nMaxBitmapPixels) / sqrt((double)nAllPixels));
+                    aPixelSize.setWidth(FRound(aPixelSize.getWidth() * fScale));
+                    aPixelSize.setHeight(FRound(aPixelSize.getHeight() * fScale));
+                }
+
                 BitmapEx aTempBitmapEx = aTempGraphic.GetBitmapEx(&aPixelSize);
 
                 // paint
