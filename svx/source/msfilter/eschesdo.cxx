@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:19:38 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:49:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -734,7 +734,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 BOOL bAppOLE = TRUE;
                 ADD_SHAPE( ESCHER_ShpInst_PictureFrame,
                     0xa00 | (bAppOLE ? SHAPEFLAG_OLESHAPE : 0) );
-                if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), sal_False ) )
+                if ( aPropOpt.CreateOLEGraphicProperties( rObj.GetShapeRef() ) )
                 {
                     if ( bAppOLE )
                     {   // snooped from Xcl hex dump, nobody knows the trouble I have seen
