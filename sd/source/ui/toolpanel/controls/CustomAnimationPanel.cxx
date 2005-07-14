@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationPanel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:00:40 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:24:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,5 +118,18 @@ bool CustomAnimationPanel::IsExpandable() const
     return true;
 }
 
+
+
+
+::com::sun::star::uno::Reference<
+    ::com::sun::star::accessibility::XAccessible> CustomAnimationPanel::CreateAccessibleObject (
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::accessibility::XAccessible>& rxParent)
+{
+    if (GetWindow() != NULL)
+        return GetWindow()->GetAccessible();
+    else
+        return NULL;
+}
 
 } } } // end of namespace ::sd::toolpanel::controls
