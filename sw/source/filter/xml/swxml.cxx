@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:25:39 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 11:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,9 @@
 #endif
 #ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPIOEXCEPTION_HPP_
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PACKAGES_WRONGPASSWORDEXCEPTION_HPP_
+#include <com/sun/star/packages/WrongPasswordException.hpp>
 #endif
 #include <svtools/svstdarr.hxx>
 
@@ -440,7 +443,7 @@ sal_Int32 ReadThroughComponent(
     {
         return ERRCODE_SFX_WRONGPASSWORD;
     }
-    catch( packages::zip::ZipIOException& r )
+    catch( packages::zip::ZipIOException& )
     {
         return ERRCODE_IO_BROKENPACKAGE;
     }
@@ -449,6 +452,8 @@ sal_Int32 ReadThroughComponent(
         OSL_ENSURE( sal_False, "Error on import!\n" );
         // TODO/LATER: error handling
     }
+
+    return ERR_SWG_READ_ERROR;
 }
 
 sal_uInt32 XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const String & rName )
@@ -872,46 +877,51 @@ USHORT XMLReader::GetSectionList( SfxMedium& rMedium,
     Reference < embed::XStorage > xStg;
     if( xServiceFactory.is() && ( xStg = rMedium.GetStorage() ).is() )
     {
-        xml::sax::InputSource aParserInput;
-        OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "content.xml" ) );
-        aParserInput.sSystemId = sDocName;
-
-        Reference < io::XStream > xStm = xStg->openStreamElement( sDocName, embed::ElementModes::READ );
-        aParserInput.aInputStream = xStm->getInputStream();
-
-        // get parser
-        Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
-        ASSERT( xXMLParser.is(),
-            "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
-        if( xXMLParser.is() )
+        try
         {
-            // get filter
-            // #110680#
-            // Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLSectionList( rStrings );
-            Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLSectionList( xServiceFactory, rStrings );
 
-            // connect parser and filter
-            Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
-            xParser->setDocumentHandler( xFilter );
+            xml::sax::InputSource aParserInput;
+            OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( "content.xml" ) );
+            aParserInput.sSystemId = sDocName;
 
-            // parse
-            try
+            Reference < io::XStream > xStm = xStg->openStreamElement( sDocName, embed::ElementModes::READ );
+            aParserInput.aInputStream = xStm->getInputStream();
+
+            // get parser
+            Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
+                OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
+            ASSERT( xXMLParser.is(),
+                "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
+            if( xXMLParser.is() )
             {
+                // get filter
+                // #110680#
+                // Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLSectionList( rStrings );
+                Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLSectionList( xServiceFactory, rStrings );
+
+                // connect parser and filter
+                Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
+                xParser->setDocumentHandler( xFilter );
+
+                // parse
                 xParser->parseStream( aParserInput );
             }
-            catch( xml::sax::SAXParseException&  )
-            {
-                // re throw ?
-            }
-            catch( xml::sax::SAXException&  )
-            {
-                // re throw ?
-            }
-            catch( io::IOException& )
-            {
-                // re throw ?
-            }
+        }
+        catch( xml::sax::SAXParseException&  )
+        {
+            // re throw ?
+        }
+        catch( xml::sax::SAXException&  )
+        {
+            // re throw ?
+        }
+        catch( io::IOException& )
+        {
+            // re throw ?
+        }
+        catch( packages::WrongPasswordException& )
+        {
+            // re throw ?
         }
     }
     return rStrings.Count();
