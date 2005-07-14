@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: kz $ $Date: 2005-07-12 13:28:14 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:44:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5008,7 +5008,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     if ( nOlePictureId )
                         nSpFlags |= 0x10;
                     ADD_SHAPE( ESCHER_ShpInst_PictureFrame, nSpFlags );
-                    if ( aPropOpt.CreateGraphicProperties( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), sal_False ) )
+                    if ( aPropOpt.CreateOLEGraphicProperties( mXShape ) )
                         aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                     if ( nOlePictureId )
                         aPropOpt.AddOpt( ESCHER_Prop_pictureId, nOlePictureId );
