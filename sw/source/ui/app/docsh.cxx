@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 09:43:32 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 11:41:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -832,6 +832,23 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
                 GetDoc()->SetGlblDocSaveLinks( FALSE );
         }
 
+        // if the target format is storage based, then the output storage must be already created
+        if ( rMedium.IsStorage() )
+        {
+            // set MediaType on target storage
+            // (MediaType will be queried during SaveAs)
+            try
+            {
+                // TODO/MBA: testing
+                uno::Reference < beans::XPropertySet > xSet( rMedium.GetStorage(), uno::UNO_QUERY );
+                if ( xSet.is() )
+                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("MediaType"), uno::makeAny( ::rtl::OUString( SotExchange::GetFormatMimeType( nSaveClipId ) ) ) );
+            }
+            catch ( uno::Exception& )
+            {
+            }
+        }
+
         // Jetzt das Dokument normal speichern
         BOOL bRet = SaveAs( rMedium );
 
@@ -859,17 +876,6 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
             case 2:
                 xDocSh = new SwGlobalDocShell( SFX_CREATE_MODE_INTERNAL );
                 break;
-            }
-
-            try
-            {
-                // TODO/MBA: testing
-                uno::Reference < beans::XPropertySet > xSet( rMedium.GetStorage(), uno::UNO_QUERY );
-                if ( xSet.is() )
-                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("MediaType"), uno::makeAny( ::rtl::OUString( SotExchange::GetFormatMimeType( nSaveClipId ) ) ) );
-            }
-            catch ( uno::Exception& )
-            {
             }
         }
 
