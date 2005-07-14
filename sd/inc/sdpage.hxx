@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-07 13:34:19 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:42:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,6 +411,9 @@ public:
     /** returns the main animation node */
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > getAnimationNode() throw (::com::sun::star::uno::RuntimeException);
 
+    /** sets the main animation node */
+    void setAnimationNode( ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode ) throw (::com::sun::star::uno::RuntimeException);
+
     /** returns a helper class to manipulate effects inside the main sequence */
     boost::shared_ptr< sd::MainSequence > getMainSequence();
 
@@ -449,6 +452,11 @@ public:
     /** returns the presentation style with the given helpid from this masterpage or this
         slides masterpage */
     SdStyleSheet* getPresentationStyle( sal_uInt32 nHelpId ) const;
+
+private:
+    /** clone the animations from this and set them to rTargetPage
+    */
+    void    cloneAnimations( SdPage& rTargetPage ) const;
 };
 
 #endif     // _SDPAGE_HXX
