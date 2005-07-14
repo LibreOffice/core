@@ -612,7 +612,7 @@ File gid_File_Jar_Accessbridge
     TXT_FILE_BODY;
     Name = "java_uno_accessbridge.jar";
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,DONT_OVERWRITE, UNO_COMPONENT);
+    Styles = (PACKED,DONT_OVERWRITE,UNO_COMPONENT,PATCH);
 End
 
 #endif
