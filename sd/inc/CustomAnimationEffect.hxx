@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationEffect.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:16:20 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:42:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,6 +377,9 @@ public:
 
     sal_Int32 getSequenceType() const { return mnSequenceType; }
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > getTriggerShape() const { return mxEventSource; }
+    void setTriggerShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xTrigger ) { mxEventSource = xTrigger; }
+
 protected:
     virtual void implRebuild();
     virtual void reset();
@@ -410,10 +413,6 @@ public:
     /** this method rebuilds the animation nodes */
     virtual void rebuild();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > getTriggerShape() const { return mxEventSource; }
-
-protected:
-    void setTriggerShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xTrigger ) { mxEventSource = xTrigger; }
 private:
     virtual void implRebuild();
 
