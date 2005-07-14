@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:02:21 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:45:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1180,106 +1180,117 @@ void SAL_CALL SdGenericDrawPage::removeVetoableChangeListener( const OUString& P
 
 Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape( SdrObject *pObj ) const throw()
 {
-    PresObjKind eKind = GetPage()->GetPresObjKind(pObj);
+    DBG_ASSERT( GetPage(), "SdGenericDrawPage::_CreateShape(), can't create shape for disposed page!" );
+    DBG_ASSERT( pObj, "SdGenericDrawPage::_CreateShape(), invalid call with pObj == 0!" );
 
-    SvxShape* pShape = NULL;
-
-    if(pObj->GetObjInventor() == SdrInventor)
+    if( GetPage() && pObj )
     {
-        sal_uInt32 nInventor = pObj->GetObjIdentifier();
-        switch( nInventor )
+        PresObjKind eKind = GetPage()->GetPresObjKind(pObj);
+
+        SvxShape* pShape = NULL;
+
+        if(pObj->GetObjInventor() == SdrInventor)
         {
-        case OBJ_TITLETEXT:
-            pShape = new SvxShapeText( pObj );
-            if( GetPage()->GetPageKind() == PK_NOTES && GetPage()->IsMasterPage() )
+            sal_uInt32 nInventor = pObj->GetObjIdentifier();
+            switch( nInventor )
             {
-                // fake a empty PageShape if its a title shape on the master page
-                pShape->SetShapeType(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PageShape")));
+            case OBJ_TITLETEXT:
+                pShape = new SvxShapeText( pObj );
+                if( GetPage()->GetPageKind() == PK_NOTES && GetPage()->IsMasterPage() )
+                {
+                    // fake a empty PageShape if its a title shape on the master page
+                    pShape->SetShapeType(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PageShape")));
+                }
+                else
+                {
+                    pShape->SetShapeType(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.TitleTextShape")));
+                }
+                eKind = PRESOBJ_NONE;
+                break;
+            case OBJ_OUTLINETEXT:
+                pShape = new SvxShapeText( pObj );
+                pShape->SetShapeType(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.OutlinerShape")));
+                eKind = PRESOBJ_NONE;
+                break;
             }
-            else
-            {
-                pShape->SetShapeType(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.TitleTextShape")));
-            }
-            eKind = PRESOBJ_NONE;
-            break;
-        case OBJ_OUTLINETEXT:
-            pShape = new SvxShapeText( pObj );
-            pShape->SetShapeType(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.OutlinerShape")));
-            eKind = PRESOBJ_NONE;
-            break;
-        }
-    }
-
-    Reference< drawing::XShape >  xShape( pShape );
-
-    if(!xShape.is())
-        xShape = SvxFmDrawPage::_CreateShape( pObj );
-
-
-    if( eKind != PRESOBJ_NONE )
-    {
-        String aShapeType( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation."));
-
-        switch( eKind )
-        {
-        case PRESOBJ_TITLE:
-            aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("TitleTextShape") );
-            break;
-        case PRESOBJ_OUTLINE:
-            aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("OutlinerShape") );
-            break;
-        case PRESOBJ_TEXT:
-            aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("SubtitleShape") );
-            break;
-        case PRESOBJ_GRAPHIC:
-            aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("GraphicObjectShape") );
-            break;
-        case PRESOBJ_OBJECT:
-            aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("OLE2Shape") );
-            break;
-        case PRESOBJ_CHART:
-            aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("ChartShape") );
-            break;
-        case PRESOBJ_ORGCHART:
-            aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("OrgChartShape") );
-            break;
-        case PRESOBJ_TABLE:
-            aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("TableShape") );
-            break;
-        case PRESOBJ_BACKGROUND:
-            DBG_ASSERT( sal_False, "Danger! Someone got hold of the horrible background shape!" );
-            break;
-        case PRESOBJ_PAGE:
-            aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("PageShape") );
-            break;
-        case PRESOBJ_HANDOUT:
-            aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("HandoutShape") );
-            break;
-        case PRESOBJ_NOTES:
-            aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("NotesShape") );
-            break;
-        case PRESOBJ_FOOTER:
-            aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("FooterShape") );
-            break;
-        case PRESOBJ_HEADER:
-            aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("HeaderShape") );
-            break;
-        case PRESOBJ_SLIDENUMBER:
-            aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("SlideNumberShape") );
-            break;
-        case PRESOBJ_DATETIME:
-            aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("DateTimeShape") );
-            break;
         }
 
-        SvxShape* pShape = SvxShape::getImplementation( xShape );
-        if( pShape )
-            pShape->SetShapeType( aShapeType );
+        Reference< drawing::XShape >  xShape( pShape );
+
+        if(!xShape.is())
+            xShape = SvxFmDrawPage::_CreateShape( pObj );
+
+
+        if( eKind != PRESOBJ_NONE )
+        {
+            String aShapeType( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation."));
+
+            switch( eKind )
+            {
+            case PRESOBJ_TITLE:
+                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("TitleTextShape") );
+                break;
+            case PRESOBJ_OUTLINE:
+                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("OutlinerShape") );
+                break;
+            case PRESOBJ_TEXT:
+                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("SubtitleShape") );
+                break;
+            case PRESOBJ_GRAPHIC:
+                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("GraphicObjectShape") );
+                break;
+            case PRESOBJ_OBJECT:
+                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("OLE2Shape") );
+                break;
+            case PRESOBJ_CHART:
+                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("ChartShape") );
+                break;
+            case PRESOBJ_ORGCHART:
+                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("OrgChartShape") );
+                break;
+            case PRESOBJ_TABLE:
+                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("TableShape") );
+                break;
+            case PRESOBJ_BACKGROUND:
+                DBG_ASSERT( sal_False, "Danger! Someone got hold of the horrible background shape!" );
+                break;
+            case PRESOBJ_PAGE:
+                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("PageShape") );
+                break;
+            case PRESOBJ_HANDOUT:
+                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("HandoutShape") );
+                break;
+            case PRESOBJ_NOTES:
+                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("NotesShape") );
+                break;
+            case PRESOBJ_FOOTER:
+                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("FooterShape") );
+                break;
+            case PRESOBJ_HEADER:
+                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("HeaderShape") );
+                break;
+            case PRESOBJ_SLIDENUMBER:
+                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("SlideNumberShape") );
+                break;
+            case PRESOBJ_DATETIME:
+                aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("DateTimeShape") );
+                break;
+            }
+
+            SvxShape* pShape = SvxShape::getImplementation( xShape );
+            if( pShape )
+                pShape->SetShapeType( aShapeType );
+        }
+
+        // SdXShape aggregiert SvxShape
+        new SdXShape( SvxShape::getImplementation( xShape ), mpModel );
+        return xShape;
+    }
+    else
+    {
+        return SvxFmDrawPage::_CreateShape( pObj );
     }
 
-    // SdXShape aggregiert SvxShape
-    new SdXShape( SvxShape::getImplementation( xShape ), mpModel );
-    return xShape;
 }
 
 //----------------------------------------------------------------------
