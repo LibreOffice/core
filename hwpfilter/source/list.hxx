@@ -2,9 +2,9 @@
  *
  *  $RCSfile: list.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 15:46:29 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 11:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ public:
     ~LinkedListIterator();
 
     T* current();               /// return current element, or NULL if invalid
-    const int set( const int n ); /// set iterator to position n
+    void set( const int n );    /// set iterator to position n
 
     void reset( );              /// set iterator to first element
     void resetLast();           /// set iterator to last element
@@ -273,7 +273,7 @@ T* LinkedListIterator<T>::current()
 }
 
 template<class T>
-const int LinkedListIterator<T>::set( const int nIndex )
+void LinkedListIterator<T>::set( const int nIndex )
 {
     ASSERT( mpList != NULL );
     mnPosition = nIndex;
