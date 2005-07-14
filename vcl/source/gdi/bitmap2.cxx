@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-07-14 11:35:38 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 12:03:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,7 +294,7 @@ BOOL Bitmap::ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, ULONG nOffset )
 BOOL Bitmap::ImplReadDIBFileHeader( SvStream& rIStm, ULONG& rOffset )
 {
     UINT32  nTmp32;
-    UINT16  nTmp16;
+    UINT16  nTmp16 = 0;
     BOOL    bRet = FALSE;
 
     rIStm >> nTmp16;
