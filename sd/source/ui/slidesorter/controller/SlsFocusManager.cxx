@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsFocusManager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:04:57 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:16:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,6 +283,45 @@ void FocusManager::ShowFocusIndicator (model::PageDescriptor* pDescriptor)
                 view::SlideSorterView::BBT_INFO));
 
         mrController.GetView().RequestRepaint (*pDescriptor);
+        NotifyFocusChangeListeners();
+    }
+}
+
+
+
+
+void FocusManager::AddFocusChangeListener (const Link& rListener)
+{
+    if (::std::find (maFocusChangeListeners.begin(), maFocusChangeListeners.end(), rListener)
+        == maFocusChangeListeners.end())
+    {
+        maFocusChangeListeners.push_back (rListener);
+    }
+}
+
+
+
+
+void FocusManager::RemoveFocusChangeListener (const Link& rListener)
+{
+    maFocusChangeListeners.erase (
+        ::std::find (maFocusChangeListeners.begin(), maFocusChangeListeners.end(), rListener));
+}
+
+
+
+
+void FocusManager::NotifyFocusChangeListeners (void) const
+{
+    // Create a copy of the listener list to be safe when that is modified.
+    ::std::vector<Link> aListeners (maFocusChangeListeners);
+
+    // Tell the slection change listeners that the selection has changed.
+    ::std::vector<Link>::iterator iListener (aListeners.begin());
+    ::std::vector<Link>::iterator iEnd (aListeners.end());
+    for (; iListener!=iEnd; ++iListener)
+    {
+        iListener->Call(NULL);
     }
 }
 
