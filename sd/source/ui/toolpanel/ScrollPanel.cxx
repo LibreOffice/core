@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScrollPanel.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:55:24 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 10:20:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,13 @@
 
 #include "taskpane/ScrollPanel.hxx"
 
-#include "ControlContainer.hxx"
+#include "taskpane/ControlContainer.hxx"
 #include "TaskPaneFocusManager.hxx"
-#include "TitledControl.hxx"
-#include <vcl/svapp.hxx>
+#include "taskpane/TitledControl.hxx"
+#include "AccessibleScrollPanel.hxx"
 
+#include <vcl/svapp.hxx>
+#include <svtools/valueset.hxx>
 
 namespace sd { namespace toolpanel {
 
@@ -148,14 +150,11 @@ void ScrollPanel::ListHasChanged (void)
 
 
 
-void ScrollPanel::AddControl (
+TitledControl* ScrollPanel::AddControl (
     ::std::auto_ptr<TreeNode> pControl,
     const String& rTitle,
     ULONG nHelpId)
 {
-    pControl->GetWindow()->AddEventListener (
-        LINK(this,ScrollPanel,WindowEventListener));
-
     // We are interested only in the title.  The control itself is
     // managed by the content object.
     TitledControl* pTitledControl = new TitledControl(
@@ -163,24 +162,11 @@ void ScrollPanel::AddControl (
         pControl,
         rTitle,
         TitleBar::TBT_SUB_CONTROL_HEADLINE);
-    pTitledControl->GetWindow()->SetParent(&maScrollWindow);
     pTitledControl->GetTitleBar()->SetHelpId(nHelpId);
-    ::std::auto_ptr<TreeNode> pChild (pTitledControl);
 
-    // Add a down link only for the first control so that when
-    // entering the sub tool panel the focus is set to the first control.
-    if (mpControlContainer->GetControlCount() == 0)
-        FocusManager::Instance().RegisterDownLink (
-            GetParent(),
-            pTitledControl->GetWindow());
-    FocusManager::Instance().RegisterUpLink (
-        pTitledControl->GetWindow(),
-        GetParent());
+    AddControl(::std::auto_ptr<TreeNode>(pTitledControl));
 
-    mpControlContainer->AddControl(pChild);
-    mpControlContainer->SetExpansionState(
-        mpControlContainer->GetControlCount()-1,
-        ControlContainer::ES_EXPAND);
+    return pTitledControl;
 }
 
 
@@ -188,25 +174,53 @@ void ScrollPanel::AddControl (
 
 void ScrollPanel::AddControl (::std::auto_ptr<TreeNode> pControl)
 {
-    pControl->GetWindow()->AddEventListener (
-        LINK(this,ScrollPanel,WindowEventListener));
+    if (pControl.get() != NULL)
+    {
+        // Add a window event listener which does two things:
+        // 1. Listen for controls being shown or hidden so that the layout
+        // can be adapted.
+        // 2. Track selection changes in order to make the selected elements
+        // visible.
+        const Link aWindowListener(LINK(this,ScrollPanel,WindowEventListener));
+        OSL_ASSERT(pControl->GetWindow()!=NULL);
+        pControl->GetWindow()->AddEventListener(aWindowListener);
 
-    pControl->GetWindow()->SetParent(&maScrollWindow);
+        TitledControl* pTitledControl = dynamic_cast<TitledControl*>(pControl.get());
+        if (pTitledControl != NULL)
+        {
+            OSL_ASSERT(pTitledControl->GetControl()!=NULL);
+            OSL_ASSERT(pTitledControl->GetControl()->GetWindow()!=NULL);
+            pTitledControl->GetControl()->GetWindow()->AddEventListener(aWindowListener);
+        }
 
-    // Add a down link only for the first control so that when
-    // entering the sub tool panel the focus is set to the first control.
-    if (mpControlContainer->GetControlCount() == 0)
-        FocusManager::Instance().RegisterDownLink (
-            GetParent(),
-            pControl->GetWindow());
-    FocusManager::Instance().RegisterUpLink (
-        pControl->GetWindow(),
-        GetParent());
+        FocusManager& rFocusManager (FocusManager::Instance());
+        int nControlCount (mpControlContainer->GetControlCount());
+        // Replace the old links for cycling between first and last child by
+        // current ones.
+        if (nControlCount > 0)
+        {
+            ::Window* pFirst = mpControlContainer->GetControl(0)->GetWindow();
+            ::Window* pLast = mpControlContainer->GetControl(nControlCount-1)->GetWindow();
+            rFocusManager.RemoveLinks(pFirst,pLast);
+            rFocusManager.RemoveLinks(pLast,pFirst);
 
-    mpControlContainer->AddControl (pControl);
-    mpControlContainer->SetExpansionState(
-        mpControlContainer->GetControlCount()-1,
-        ControlContainer::ES_EXPAND);
+            rFocusManager.RegisterLink(pFirst,pControl->GetWindow(), KEY_UP);
+            rFocusManager.RegisterLink(pControl->GetWindow(),pFirst, KEY_DOWN);
+        }
+
+
+        // Add a down link only for the first control so that when entering
+        // the sub tool panel the focus is set to the first control.
+        if (nControlCount == 0)
+            rFocusManager.RegisterDownLink(GetParent(), pControl->GetWindow());
+        rFocusManager.RegisterUpLink(pControl->GetWindow(), GetParent());
+
+        pControl->GetWindow()->SetParent(&maScrollWindow);
+        mpControlContainer->AddControl (pControl);
+        mpControlContainer->SetExpansionState(
+            mpControlContainer->GetControlCount()-1,
+            ControlContainer::ES_EXPAND);
+    }
 }
 
 
@@ -339,6 +353,39 @@ void ScrollPanel::ExpandControl (
     Rearrange ();
     Invalidate ();
 }
+
+
+
+
+bool ScrollPanel::IsVerticalScrollBarVisible (void) const
+{
+    return maVerticalScrollBar.IsReallyVisible();
+}
+
+
+
+
+bool ScrollPanel::IsHorizontalScrollBarVisible (void) const
+{
+    return maHorizontalScrollBar.IsReallyVisible();
+}
+
+
+
+
+ScrollBar& ScrollPanel::GetVerticalScrollBar (void)
+{
+    return maVerticalScrollBar;
+}
+
+
+
+
+ScrollBar& ScrollPanel::GetHorizontalScrollBar (void)
+{
+    return maHorizontalScrollBar;
+}
+
 
 
 
@@ -641,26 +688,6 @@ IMPL_LINK(ScrollPanel, ScrollBarHandler, ScrollBar*, pScrollBar)
 
 
 
-IMPL_LINK(ScrollPanel, WindowEventListener, VclSimpleEvent*, pEvent)
-{
-    if (pEvent!=NULL && pEvent->ISA(VclWindowEvent))
-    {
-        VclWindowEvent* pWindowEvent = static_cast<VclWindowEvent*>(pEvent);
-        switch (pWindowEvent->GetId())
-        {
-            case VCLEVENT_WINDOW_SHOW:
-            case VCLEVENT_WINDOW_HIDE:
-            case VCLEVENT_WINDOW_ACTIVATE:
-            case VCLEVENT_WINDOW_RESIZE:
-                RequestResize();
-                break;
-        }
-    }
-    return 0;
-}
-
-
-
 long ScrollPanel::Notify( NotifyEvent& rNEvt )
 {
     long nRet = FALSE;
@@ -690,6 +717,133 @@ long ScrollPanel::Notify( NotifyEvent& rNEvt )
 
     return nRet;
 }
+
+
+
+
+::com::sun::star::uno::Reference<
+    ::com::sun::star::accessibility::XAccessible> ScrollPanel::CreateAccessibleObject (
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::accessibility::XAccessible>& rxParent)
+{
+    return new ::accessibility::AccessibleScrollPanel (
+        *this,
+        ::rtl::OUString::createFromAscii("Scroll Panel"),
+        ::rtl::OUString::createFromAscii("Scroll Panel"));
+}
+
+
+
+
+void ScrollPanel::MakeRectangleVisible (
+    Rectangle& aRectangle,
+    ::Window* pWindow)
+{
+    if (maVerticalScrollBar.IsVisible() && aRectangle.GetWidth()>0 && aRectangle.GetHeight()>0)
+    {
+        const Rectangle aRelativeBox (pWindow->GetWindowExtentsRelative(&maScrollWindow));
+
+        aRectangle.Move(
+            -maScrollOffset.X() + aRelativeBox.Left(),
+            -maScrollOffset.Y() + aRelativeBox.Top());
+
+        const int nVisibleHeight (maVerticalScrollBar.GetVisibleSize());
+        const int nVisibleTop (maVerticalScrollBar.GetThumbPos());
+        if (aRectangle.Bottom() >= nVisibleTop+nVisibleHeight)
+            maVerticalScrollBar.DoScroll(aRectangle.Bottom() - nVisibleHeight);
+        else if (aRectangle.Top() < nVisibleTop)
+            maVerticalScrollBar.DoScroll(aRectangle.Top());
+    }
+}
+
+
+
+
+IMPL_LINK(ScrollPanel,WindowEventListener,VclSimpleEvent*,pEvent)
+{
+    VclWindowEvent* pWindowEvent = dynamic_cast<VclWindowEvent*>(pEvent);
+    if (pWindowEvent != NULL)
+    {
+        switch (pWindowEvent->GetId())
+        {
+            case VCLEVENT_WINDOW_KEYUP:
+            case VCLEVENT_WINDOW_MOUSEBUTTONUP:
+            {
+                // Make the currently selected item visible.
+                ValueSet* pControl = dynamic_cast<ValueSet*>(pWindowEvent->GetWindow());
+                if (pControl != NULL)
+                {
+                    // Get the bounding box of the currently selected item
+                    // and enlarge this so that the selection frame is
+                    // inside as well.
+                    Rectangle aBox (pControl->GetItemRect(pControl->GetSelectItemId()));
+                    aBox.Top()-=4;
+                    aBox.Bottom()+=4;
+
+                    MakeRectangleVisible(aBox, pControl);
+                }
+            }
+            break;
+
+            case VCLEVENT_WINDOW_MOUSEBUTTONDOWN:
+            {
+                // Make the item under the mouse visible.  We need this case
+                // for right clicks that open context menus.  For these we
+                // only get the mouse down event.  The following mouse up
+                // event is sent to the context menu.
+                ValueSet* pControl = dynamic_cast<ValueSet*>(pWindowEvent->GetWindow());
+                if (pControl != NULL)
+                {
+                    // Get the bounding box of the item at the mouse
+                    // position and enlarge this so that the selection frame
+                    // is inside as well.
+                    MouseEvent* pMouseEvent
+                        = reinterpret_cast<MouseEvent*>(pWindowEvent->GetData());
+                    if (pMouseEvent != NULL)
+                    {
+                        Point aPosition (pMouseEvent->GetPosPixel());
+                        Rectangle aBox (pControl->GetItemRect(pControl->GetItemId(aPosition)));
+                        aBox.Top()-=4;
+                        aBox.Bottom()+=4;
+
+                        MakeRectangleVisible(aBox, pControl);
+                    }
+                }
+            }
+            break;
+
+
+            case VCLEVENT_WINDOW_GETFOCUS:
+            {
+                // Move title bars into the visible area when they get the
+                // focus (::Window wise their enclosing TitledControl gets
+                // the focus.)
+                TitledControl* pTitledControl = dynamic_cast<TitledControl*>(pWindowEvent->GetWindow());
+                if (pTitledControl != NULL)
+                {
+                    ::Window* pTitleBarWindow = pTitledControl->GetTitleBar()->GetWindow();
+                    Rectangle aBox(pTitleBarWindow->GetPosPixel(),pTitleBarWindow->GetSizePixel());
+                    MakeRectangleVisible(
+                        aBox,
+                        pTitleBarWindow);
+                }
+            }
+            break;
+
+            case VCLEVENT_WINDOW_SHOW:
+            case VCLEVENT_WINDOW_HIDE:
+            case VCLEVENT_WINDOW_ACTIVATE:
+            case VCLEVENT_WINDOW_RESIZE:
+                // Rearrange the children of the scroll panel when one of
+                // the children changes its size or visibility.
+                RequestResize();
+                break;
+        }
+    }
+    return 0;
+}
+
+
 
 
 } } // end of namespace ::sd::toolpanel
