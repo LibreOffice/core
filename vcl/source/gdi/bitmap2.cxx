@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:14:50 $
+ *  last change: $Author: kz $ $Date: 2005-07-14 11:35:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #ifndef _SV_BITMAP_HXX
 #include <bitmap.hxx>
 #endif
+
+#include <utility>
+
 
 // -----------
 // - Defines -
@@ -721,7 +724,15 @@ BOOL Bitmap::ImplWriteDIB( SvStream& rOStm, BitmapReadAccess& rAcc, BOOL bCompre
 
         default:
         {
-            aHeader.nBitCount = rAcc.GetBitCount();
+            // #i5xxx# Limit bitcount to 24bit, the 32 bit cases are
+            // not handled properly below (would have to set color
+            // masks, and nCompression=BITFIELDS - but color mask is
+            // not set for formats != *_TC_*). Note that this very
+            // problem might cause trouble at other places - the
+            // introduction of 32 bit RGBA bitmaps is relatively
+            // recent.
+            aHeader.nBitCount = ::std::min( 24U,
+                                            (unsigned int)rAcc.GetBitCount() );
 
             if( bCompressed )
             {
@@ -903,8 +914,16 @@ BOOL Bitmap::ImplWriteDIBBits( SvStream& rOStm, BitmapReadAccess& rAcc,
     }
     else if( !nCompression )
     {
-        const ULONG nAlignedWidth = AlignedWidth4Bytes( rAcc.Width() * rAcc.GetBitCount() );
-        BOOL        bNative = FALSE;
+        // #i5xxx# Limit bitcount to 24bit, the 32 bit cases are not
+        // handled properly below (would have to set color masks, and
+        // nCompression=BITFIELDS - but color mask is not set for
+        // formats != *_TC_*). Note that this very problem might cause
+        // trouble at other places - the introduction of 32 bit RGBA
+        // bitmaps is relatively recent.
+        const USHORT nBitCount = ::std::min( 24U,
+                                            (unsigned int)rAcc.GetBitCount() );
+        const ULONG  nAlignedWidth = AlignedWidth4Bytes( rAcc.Width() * nBitCount);
+        BOOL         bNative = FALSE;
 
         switch( rAcc.GetScanlineFormat() )
         {
@@ -934,7 +953,7 @@ BOOL Bitmap::ImplWriteDIBBits( SvStream& rOStm, BitmapReadAccess& rAcc,
             BYTE*       pTmp;
             BYTE        cTmp;
 
-            switch( rAcc.GetBitCount() )
+            switch( nBitCount )
             {
                 case( 1 ):
                 {
