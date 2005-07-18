@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.53 $
+#*  $Revision: 1.54 $
 #*
-#*  last change: $Author: obo $ $Date: 2005-07-07 13:11:33 $
+#*  last change: $Author: obo $ $Date: 2005-07-18 11:55:39 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -117,10 +117,6 @@ LIB7FILES=	\
         $(SLB)$/svrtf.lib	\
                 $(SLB)$/heavyconfig.lib 	\
         $(SLB)$/java.lib	
-
-.IF "$(GUI)" == "UNX"
-LIB7FILES+= 	$(SLB)$/eaimp.lib
-.ENDIF
 
 LIB8TARGET= $(SLB)$/svl.lib
 LIB8FILES=	\
