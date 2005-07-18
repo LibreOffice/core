@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-08 11:06:07 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 13:35:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,7 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
     ASSERT( pColl, "Collectionpointer ist 0." );
 
     SwTxtNode *pNode = new SwTxtNode( rWhere, pColl, pAutoAttr );
+    UpdateOutlineNode(*pNode);
 
     SwNodeIndex aIdx( *pNode );
 
@@ -333,8 +334,6 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
     } while( TRUE );
 }
 
-
-
 // --------------------
 // SwTxtNode
 // --------------------
@@ -343,7 +342,7 @@ SwTxtNode::SwTxtNode( const SwNodeIndex &rWhere,
                       SwTxtFmtColl *pTxtColl,
                       SwAttrSet* pAutoAttr )
     : SwCntntNode( rWhere, ND_TEXTNODE, pTxtColl ),
-      pSwpHints( 0 ), pWrong( 0 ), pNdNum( 0 )
+      pSwpHints( 0 ), pWrong( 0 ), pNdNum( 0 ), bLastOutlineState(FALSE)
 {
     // soll eine Harte-Attributierung gesetzt werden?
     if( pAutoAttr )
@@ -1024,6 +1023,8 @@ SwFmtColl* SwTxtNode::ChgFmtColl( SwFmtColl *pNewColl )
     ASSERT( HAS_BASE( SwTxtFmtColl, pNewColl ),
                 "ChgFmtColl: ist kein Text-Collectionpointer." );
 
+    SwNumRule * pOldRule = GetNumRule();
+
     SwTxtFmtColl *pOldColl = GetTxtColl();
     if( pNewColl != pOldColl )
     {
@@ -1032,7 +1033,28 @@ SwFmtColl* SwTxtNode::ChgFmtColl( SwFmtColl *pNewColl )
     }
     // nur wenn im normalen Nodes-Array
     if( GetNodes().IsDocNodes() )
-        _ChgTxtCollUpdateNum( pOldColl, (SwTxtFmtColl*)pNewColl );
+        _ChgTxtCollUpdateNum( pOldColl, static_cast<SwTxtFmtColl*>(pNewColl));
+
+    SwNumRule * pNewRule = GetNumRule();
+
+    if (pNewRule != pOldRule)
+    {
+        if (pNewRule)
+            pNewRule->SetInvalidRule(TRUE);
+
+        if (pOldRule)
+            pOldRule->SetInvalidRule(TRUE);
+    }
+    else
+    {
+        SwTxtFmtColl * pOldTxtColl = static_cast<SwTxtFmtColl *>(pOldColl);
+        SwTxtFmtColl * pNewTxtColl = static_cast<SwTxtFmtColl *>(pNewColl);
+
+        if (pNewRule &&
+            pOldTxtColl->GetOutlineLevel() != pNewTxtColl->GetOutlineLevel())
+            pNewRule->SetInvalidRule(TRUE);
+    }
+
     return  pOldColl;
 }
 
@@ -1080,7 +1102,7 @@ void SwTxtNode::_ChgTxtCollUpdateNum( const SwTxtFmtColl *pOldColl,
         }
 
         if( rNds.IsDocNodes() )
-            rNds.UpdateOutlineNode( *this, nOldLevel, nNewLevel );
+            rNds.UpdateOutlineNode( *this);
     }
 
     // Update beim Level 0 noch die Fussnoten !!
@@ -2274,10 +2296,10 @@ const SwNodeNum* SwTxtNode::UpdateNum( const SwNodeNum& rNum )
             *pNdNum = rNum;
     }
 
-#if 0 // #115901#
+#if 1 // #115901#
     // #111955#
     if ((0 == pOldNum || 0 == pNdNum) && pOldNum != pNdNum)
-        GetDoc()->UpdateNumRule(*GetDoc()->GetOutlineNumRule(), 0, TRUE);
+        GetDoc()->UpdateNumRule(*GetDoc()->GetOutlineNumRule(), 0);
 #endif
 
     NumRuleChgd();
@@ -2291,6 +2313,15 @@ SwNumRule* SwTxtNode::GetNumRule() const
     const SfxPoolItem* pItem = GetNoCondAttr( RES_PARATR_NUMRULE, TRUE );
     if( pItem && ((SwNumRuleItem*)pItem)->GetValue().Len() )
         pRet = GetDoc()->FindNumRulePtr( ((SwNumRuleItem*)pItem)->GetValue() );
+
+    if (! pRet)
+    {
+        SwTxtFmtColl * pColl = GetTxtColl();
+
+        if (pColl && pColl->GetOutlineLevel() != NO_NUMBERING)
+            pRet = GetDoc()->GetOutlineNumRule();
+    }
+
     return pRet;
 }
 
@@ -2331,7 +2362,8 @@ BOOL SwTxtNode::MayBeNumbered() const
         {
             const SwNumFmt &aFmt = pRule->Get(pNdNum->GetRealLevel());
 
-            bResult = aFmt.IsEnumeration();
+            bResult = aFmt.IsEnumeration() &&
+                aFmt.GetNumberingType() != SVX_NUM_NUMBER_NONE;
         }
     }
 
@@ -2441,7 +2473,6 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, BOOL bNext,
 #endif
             }
         }
-        rNds.GetDoc()->UpdateNumRule( pRule->GetName(), pNode->GetIndex() );
     }
 
     // jetzt kann es sein, das durch die Nummerierung dem neuen Node eine
@@ -2470,6 +2501,9 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, BOOL bNext,
 
         /* <- HB #i47372# */
     }
+
+    if (pRule)
+        rNds.GetDoc()->UpdateNumRule( pRule->GetName(), pNode->GetIndex());
 
     return pNode;
 }
@@ -3046,6 +3080,10 @@ void SwTxtNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
                         (SwTxtFmtColl*)((SwFmtChg*)pNewValue)->pChangedFmt );
 
     SwCntntNode::Modify( pOldValue, pNewValue );
+
+    SwDoc * pDoc = GetDoc();
+    if (pDoc)
+        pDoc->GetNodes().UpdateOutlineNode(*this);
 }
 
 // #111840#
@@ -3100,10 +3138,26 @@ BOOL SwTxtNode::IsOutline() const
     BOOL bResult = FALSE;
     const SwNumRule * pRule = GetNumRule();
 
-    if (pRule && pRule->IsOutlineRule())
+    if ((pRule && pRule->IsOutlineRule()) ||
+        GetOutlineLevel() != NO_NUMBERING)
         bResult = TRUE;
 
     return bResult;
+}
+
+BOOL SwTxtNode::IsOutlineStateChanged() const
+{
+    return IsOutline() != bLastOutlineState;
+}
+
+void SwTxtNode::UpdateOutlineState()
+{
+    BOOL bIsOutline = IsOutline();
+
+    if (bIsOutline != bLastOutlineState)
+        NumRuleChgd();
+
+    bLastOutlineState = bIsOutline;
 }
 
 SwNodeNum * SwTxtNode::_GetOutlineNum(BOOL bUpdate) const
@@ -3115,6 +3169,7 @@ SwNodeNum * SwTxtNode::_GetOutlineNum(BOOL bUpdate) const
 
     return const_cast<SwNodeNum *>(pResult);
 }
+
 
 const SwNodeNum * SwTxtNode::GetOutlineNum(BOOL bUpdate) const
 {
@@ -3135,17 +3190,10 @@ BYTE SwTxtNode::GetOutlineLevel() const
 {
     BYTE aResult = NO_NUMBERING;
 
-    const SwNodeNum * pNum = GetOutlineNum();
+    SwFmtColl * pFmtColl = GetFmtColl();
 
-    if (pNum)
-        aResult = pNum->GetRealLevel();
-    else
-    {
-        SwFmtColl * pFmtColl = GetFmtColl();
-
-        if (pFmtColl)
-            aResult = ((SwTxtFmtColl *) pFmtColl)->GetOutlineLevel();
-    }
+    if (pFmtColl)
+        aResult = ((SwTxtFmtColl *) pFmtColl)->GetOutlineLevel();
 
     return aResult;
 }
