@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:21:13 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 13:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -773,6 +773,45 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
             ErrorHandler::HandleError( nRet );
             if( IsWarning( nRet ) )
                 nRet = 0;
+        }
+    }
+
+
+    // clear unused named items from item pool
+
+    uno::Reference< lang::XMultiServiceFactory> xModelFactory( mxModel, uno::UNO_QUERY );
+    if( xModelFactory.is() )
+    {
+        try
+        {
+            const OUString aName( RTL_CONSTASCII_USTRINGPARAM( "~clear~" ) );
+            uno::Reference< container::XNameContainer > xGradient( xModelFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GradientTable") ) ), uno::UNO_QUERY );
+            if( xGradient.is() )
+                xGradient->removeByName( aName );
+
+            uno::Reference< container::XNameContainer > xHatch( xModelFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.HatchTable") ) ), uno::UNO_QUERY );
+            if( xHatch.is() )
+                xHatch->removeByName( aName );
+
+            uno::Reference< container::XNameContainer > xBitmap( xModelFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.BitmapTable") ) ), uno::UNO_QUERY );
+            if( xBitmap.is() )
+                xBitmap->removeByName( aName );
+
+            uno::Reference< container::XNameContainer > xTransGradient( xModelFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.TransparencyGradientTable") ) ), uno::UNO_QUERY );
+            if( xTransGradient.is() )
+                xTransGradient->removeByName( aName );
+
+            uno::Reference< container::XNameContainer > xMarker( xModelFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.MarkerTable") ) ), uno::UNO_QUERY );
+            if( xMarker.is() )
+                xMarker->removeByName( aName );
+
+            uno::Reference< container::XNameContainer > xDashes( xModelFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DashTable") ) ), uno::UNO_QUERY );
+            if( xDashes.is() )
+                xDashes->removeByName( aName );
+        }
+        catch( Exception& )
+        {
+            DBG_ERROR("sd::SdXMLFilter::Import(), exception during clearing of unused named items");
         }
     }
 
