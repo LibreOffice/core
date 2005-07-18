@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listsh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 10:43:59 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 13:36:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,9 +228,13 @@ void SwListShell::Execute(SfxRequest &rReq)
     switch (nSlot)
     {
         case FN_NUM_BULLET_DOWN:
-            rSh.NumUpDown();
-            GetView().GetViewFrame()->GetBindings().Invalidate( SID_TABLE_CELL );   // StatusZeile updaten!
-            rReq.Done();
+            {
+                SfxViewFrame * pFrame = GetView().GetViewFrame();
+
+                rReq.Done();
+                rSh.NumUpDown();
+                pFrame->GetBindings().Invalidate( SID_TABLE_CELL ); // StatusZeile updaten!
+            }
             break;
 
         case FN_NUM_BULLET_NEXT:
