@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:02:45 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 14:15:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,6 +209,10 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
     // #i27594#; copy Value, but don't insert
     if (pAllBorderWidthProperty)
         pAllBorderWidthProperty->mnIndex = -1;
+    if (pAllBorderProperty)
+        pAllBorderProperty->mnIndex = -1;
+    if (pAllPaddingProperty)
+        pAllPaddingProperty->mnIndex = -1;
 
     for (i = 0; i < 4; ++i)
     {
@@ -685,10 +689,40 @@ void XMLTableStyleContext::SetDefaults()
 
 void XMLTableStyleContext::AddProperty(const sal_Int16 nContextID, const uno::Any& rValue)
 {
+    XMLPropertyState* property = FindProperty(nContextID);
+    if (property)
+        property->mnIndex = -1; // #i46996# remove old property, so it isn't double
     sal_Int32 nIndex(static_cast<XMLTableStylesContext *>(pStyles)->GetIndex(nContextID));
     DBG_ASSERT(nIndex != -1, "Property not found in Map");
     XMLPropertyState aPropState(nIndex, rValue);
     GetProperties().push_back(aPropState); // has to be insertes in a sort order later
+}
+
+XMLPropertyState* XMLTableStyleContext::FindProperty(const sal_Int16 nContextID)
+{
+    XMLPropertyState* pRet = NULL;
+    UniReference < XMLPropertySetMapper > xPrMap;
+    UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+        pStyles->GetImportPropertyMapper( GetFamily() );
+    DBG_ASSERT( xImpPrMap.is(), "There is the import prop mapper" );
+    if( xImpPrMap.is() )
+        xPrMap = xImpPrMap->getPropertySetMapper();
+    if( xPrMap.is() )
+    {
+        ::std::vector< XMLPropertyState >::iterator endproperty(GetProperties().end());
+        ::std::vector< XMLPropertyState >::iterator aIter(GetProperties().begin());
+        while(!pRet && aIter != endproperty)
+        {
+            XMLPropertyState* property = &(*aIter);
+            if (property->mnIndex != -1 && xPrMap->GetEntryContextId(property->mnIndex) == nContextID)
+            {
+                pRet = property;
+            }
+            else
+                ++aIter;
+        }
+    }
+    return pRet;
 }
 
 // ----------------------------------------------------------------------------
