@@ -1224,7 +1224,7 @@
                     <value xml:lang="en-US">Delete Column</value>
                 </prop>
                 <prop oor:name="ContextLabel" oor:type="xs:string">
-                    <value xml:lang="de">Zeilen</value>
+                    <value xml:lang="de">Spalten</value>
                     <value xml:lang="en-US">~Columns</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
