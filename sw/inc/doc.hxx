@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-08 11:00:32 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 12:25:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1058,7 +1058,7 @@ public:
     const SwFldTypes *GetFldTypes() const { return pFldTypes; }
     SwFieldType *InsertFldType(const SwFieldType &);
     SwFieldType *GetSysFldType( const sal_uInt16 eWhich ) const;
-    SwFieldType* GetFldType(sal_uInt16 nResId, const String& rName) const;
+    SwFieldType* GetFldType(sal_uInt16 nResId, const String& rName, sal_Bool bDbFieldMatching = sal_False ) const;
     void RemoveFldType(sal_uInt16 nFld);
     void UpdateFlds( SfxPoolItem* pNewHt = 0, sal_Bool bCloseDB = sal_False );
     void InsDeletedFldType( SwFieldType & );
