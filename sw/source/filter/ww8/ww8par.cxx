@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.154 $
+ *  $Revision: 1.155 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-08 11:08:06 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 13:35:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4413,7 +4413,7 @@ void SwWW8ImplReader::SetOutLineStyles()
     #i3674# & #101291# Load new document and insert document cases.
     */
     SwNumRule aOutlineRule(*rDoc.GetOutlineNumRule());
-    mpChosenOutlineNumRule = &aOutlineRule;
+    mpChosenOutlineNumRule = rDoc.GetOutlineNumRule();
 
     sw::ParaStyles aOutLined(sw::util::GetParaStyles(rDoc));
     sw::util::SortByOutline(aOutLined);
