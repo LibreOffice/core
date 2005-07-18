@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertysetbase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:38:13 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 08:42:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ cppu::IPropertyArrayHelper& SAL_CALL PropertySetBase::getInfoHelper()
     if ( !m_pProperties )
     {
         DBG_ASSERT( !m_aProperties.empty(), "PropertySetBase::getInfoHelper: no registered properties!" );
-        m_pProperties = new cppu::OPropertyArrayHelper( m_aProperties.begin(), m_aProperties.size(), sal_False );
+        m_pProperties = new cppu::OPropertyArrayHelper( &m_aProperties[0], m_aProperties.size(), sal_False );
     }
     return *m_pProperties;
 }
