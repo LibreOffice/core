@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtdd.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 14:29:19 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 13:36:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,8 +124,7 @@
 #include <swundo.hxx>
 #endif
 
-#include "dbgoutsw.hxx"
-
+// no include "dbgoutsw.hxx" here!!!!!!
 
 extern BOOL bNoInterrupt;
 extern BOOL bFrmDrag;
