@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:03:02 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 14:15:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,7 @@ public:
     virtual void SetDefaults();
 
       void AddProperty(sal_Int16 nContextID, const com::sun::star::uno::Any& aValue);
+    XMLPropertyState* FindProperty(const sal_Int16 nContextID);
 
     sal_Int32 GetNumberFormat() { return nNumberFormat; }
 };
