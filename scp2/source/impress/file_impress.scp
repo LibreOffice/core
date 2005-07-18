@@ -64,7 +64,7 @@ End
 
 File gid_File_Lib_Animcore
 	Name = SPECIAL_NAME(animcore);
-	PACKED_UNO_LIB_FILE_BODY;
+	PACKED_UNO_LIB_FILE_BODY_PATCH;
 End
 
 File gid_File_Registry_Spool_Oo_Office_Embedding_Impress_Xcu
