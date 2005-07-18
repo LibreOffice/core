@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodes.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:38:04 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 13:35:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -872,6 +872,13 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
             break;
 
         case ND_TEXTNODE:
+            {
+                SwNumRule * pRule = pAktNode->GetTxtNode()->GetNumRule();
+
+                if (pRule)
+                    pRule->SetInvalidRule(TRUE);
+            }
+            // no break;
         case ND_GRFNODE:
         case ND_OLENODE:
             {
@@ -1365,7 +1372,7 @@ void SwNodes::Delete(const SwNodeIndex &rIndex, ULONG nNodes)
             SwTxtNode* pTxtNd = pAktNode->GetTxtNode();
             if( pTxtNd )
             {
-                if( NO_NUMBERING != pTxtNd->GetTxtColl()->GetOutlineLevel() )
+                if( pTxtNd->IsOutline())
                 {                   // loesche die Gliederungs-Indizies.
                     pOutlineNds->Remove( pTxtNd );
                     bUpdateOutline = TRUE;
