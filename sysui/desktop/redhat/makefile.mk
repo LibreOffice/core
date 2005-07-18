@@ -103,7 +103,7 @@ MIMELIST = \
     oasis-database \
     oasis-web-template
 
-HCMIMEICONLIST = \
+MIMEICONLIST = \
     oasis-text \
     oasis-text-template \
     oasis-spreadsheet \
@@ -115,9 +115,7 @@ HCMIMEICONLIST = \
     oasis-formula \
     oasis-master-document \
     oasis-database \
-    oasis-web-template
-
-MIMEICONLIST = $(HCMIMEICONLIST) \
+    oasis-web-template \
     text \
     text-template \
     spreadsheet \
@@ -140,10 +138,6 @@ GNOMEICONLIST = \
     {16x16 32x32 48x48}/apps/$(ICONPREFIX)-{$(LAUNCHERLIST)}.png \
     {16x16 32x32 48x48}/mimetypes/$(ICONPREFIX)-{$(MIMEICONLIST)}.png
 
-HCICONLIST = \
-    HighContrast/{16x16 32x32 48x48}/apps/$(ICONPREFIX)-{$(LAUNCHERLIST)}.png \
-    HighContrast/{16x16 32x32 48x48}/mimetypes/$(ICONPREFIX)-{$(HCMIMEICONLIST)}.png
-    
 KDEICONLIST = \
     hicolor/{16x16 32x32 48x48}/apps/$(ICONPREFIX)-{$(LAUNCHERLIST)}.png \
     hicolor/{16x16 32x32 48x48}/mimetypes/$(ICONPREFIX)-{$(MIMEICONLIST)}.png \
@@ -160,18 +154,19 @@ RPMDEPN = \
     $(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME) \
     $(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME)-printeradmin \
     $(MISC)/$(TARGET)/usr/share/applications/{$(LAUNCHERDEPN)} \
+    $(MISC)/$(TARGET)/usr/share/mime/packages/openoffice.org.xml \
     $(MISC)/$(TARGET)/usr/share/applnk-$(TARGET)/Office/{$(LAUNCHERDEPN)} \
     $(MISC)/$(TARGET)/usr/share/application-registry/$(UNIXFILENAME).applications \
     $(MISC)/$(TARGET)/usr/share/mime-info/$(UNIXFILENAME).keys \
     $(MISC)/$(TARGET)/usr/share/mime-info/$(UNIXFILENAME).mime \
     $(MISC)/$(TARGET)/usr/share/mimelnk/application.flag \
     $(MISC)/$(TARGET)/usr/share/icons/gnome/{$(GNOMEICONLIST)} \
-    $(MISC)/$(TARGET)/usr/share/icons/{$(HCICONLIST)} \
     $(MISC)/$(TARGET)/usr/share/icons/{$(KDEICONLIST)} 
         
 RPMDIR  = $(shell cd $(BIN); pwd)
 ULFDIR = $(COMMONMISC)$/desktopshare
-    
+SPECFILE = $(MISC)/$(TARGET)-menus.spec
+
 .ENDIF
 
 # --- Targets -------------------------------------------------------
@@ -195,10 +190,6 @@ ALLTAR : $(RPMFILE)
 # e.g. $(LAUNCHERDIR)/usr/share/icons/gnome/16x16/apps/openoffice-writer.png
 #
 $(MISC)/$(TARGET)/usr/share/icons/gnome/{$(GNOMEICONLIST)} : ../icons/hicolor/$$(@:d:d:d:d:f)/$$(@:d:d:f)/$$(@:f:s/$(ICONPREFIX)-//)
-    @$(MKDIRHIER) $(@:d)
-    @$(COPY) $< $@
-
-$(MISC)/$(TARGET)/usr/share/icons/{$(HCICONLIST)} : ../icons/$$(@:d:d:d:d:d:d:f)/$$(@:d:d:d:d:f)/$$(@:d:d:f)/$$(@:f:s/$(ICONPREFIX)-//)
     @$(MKDIRHIER) $(@:d)
     @$(COPY) $< $@
 
@@ -236,6 +227,10 @@ $(MISC)/$(TARGET)/usr/share/application-registry/$(UNIXFILENAME).applications : 
     @echo ---------------------------------
     @cat ../mimetypes/openoffice.applications | tr -d "\015" | sed -e "s/openoffice/$(UNIXFILENAME)/" -e "s/%PRODUCTNAME/$(LONGPRODUCTNAME)/" > $@
 
+$(MISC)/$(TARGET)/usr/share/mime/packages/openoffice.org.xml : $(COMMONMISC)$/desktopshare/openoffice.org.xml
+    @$(MKDIRHIER) $(@:d)
+    @cp $< $@
+
 # --- script ------------------------------------------------------
 
 $(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME) : ../share/openoffice.sh
@@ -254,14 +249,19 @@ $(MISC)/$(TARGET)/etc/$(UNIXFILENAME) :
     @$(MKDIRHIER) $(@:d)
     @touch $@
 
+# --- specfile ----------------------------------------------------
+
+$(SPECFILE) : $$(@:f)
+    @cat $< | tr -d "\015" >$@
+
 # --- packaging ---------------------------------------------------
     
-$(RPMFILE) : $(RPMDEPN) $(TARGET)-menus.spec
-    @$(MKDIRHIER) $(@:d)
-    @cat $(TARGET)-menus.spec | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" \
-        -e "s/%ICONPREFIX/$(ICONPREFIX)/" -e "s/Version: .*/Version: $(PKGVERSION)/" \
-        -e "s/Release: .*/Release: $(PKGREV)/" > $(MISC)/$(TARGET)-menus.spec
-    @echo "%define _rpmdir $(RPMDIR)" >> $(MISC)/$(TARGET)-menus.spec
-    @$(RPM) -bb $(MISC)/$(TARGET)-menus.spec --buildroot $(LAUNCHERDIR) --target noarch
+.PHONY $(RPMFILE) : $(RPMDEPN) $(SPECFILE)
+    -$(RM) $(@:d)/$(PKGNAME)-*
+    @$(RPM) -bb $(MISC)/$(TARGET)-menus.spec --buildroot $(LAUNCHERDIR) \
+        --define "_builddir $(shell cd ../share; pwd)" \
+        --define "_rpmdir $(RPMDIR)" \
+        --define "unixfilename $(UNIXFILENAME)" \
+        --define "version $(PKGVERSION)" --define "release $(PKGREV)"
 
 .ENDIF
