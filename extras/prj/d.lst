@@ -5,6 +5,10 @@ mkdir: %COMMON_DEST%\pck%_EXT%\openoffice
 
 ..\%__SRC%\bin\*.zip %_DEST%\pck%_EXT%\*.zip
 ..\common.pro\bin\*.zip %COMMON_DEST%\pck%_EXT%\*.zip
+..\common.pro\bin\wordbook_en-US.zip %COMMON_DEST%\pck%_EXT%\wordbook_ja.zip
+..\common.pro\bin\wordbook_en-US.zip %COMMON_DEST%\pck%_EXT%\wordbook_ko.zip
+..\common.pro\bin\wordbook_en-US.zip %COMMON_DEST%\pck%_EXT%\wordbook_zh-CN.zip
+..\common.pro\bin\wordbook_en-US.zip %COMMON_DEST%\pck%_EXT%\wordbook_zh-TW.zip
 ..\source\truetype\decorative\*.ttf %COMMON_DEST%\pck%_EXT%\*.ttf
 ..\source\truetype\standard_sans\*.ttf %COMMON_DEST%\pck%_EXT%\*.ttf
 ..\source\truetype\standard_serif\*.ttf %COMMON_DEST%\pck%_EXT%\*.ttf
