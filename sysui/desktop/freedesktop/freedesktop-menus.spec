@@ -8,6 +8,7 @@ BuildRoot: %_tmppath/%name-%version-build%unique
 #BuildRequires: perl
 Group: Office
 License: LGPL / SISSL
+Provides: openofficeorg-desktop-integration
 BuildArch: noarch
 AutoReqProv: no
 
@@ -32,10 +33,6 @@ rm -rf usr/share/applications.flag
 rm -rf usr/share/mime-info
 rm -rf usr/share/mimelnk
 rm -rf usr/share/applnk-redhat
-
-## create shared-mime-info file 
-mkdir -p usr/share/mime/packages
-perl %basedir/create_mime_xml.pl > usr/share/mime/packages/openoffice.org.xml
 
 ## add symlinks so that nautilus can identify the mime-icons 
 ## not strictly freedesktop-stuff but there is no common naming scheme yet.
@@ -304,8 +301,6 @@ fi
 /usr/share/icons/gnome/*/mimetypes/*png
 /usr/share/icons/hicolor/*/apps/*png
 /usr/share/icons/hicolor/*/mimetypes/*png
-/usr/share/icons/HighContrast/*/apps/*.png
-/usr/share/icons/HighContrast/*/mimetypes/*.png
 /usr/share/icons/locolor/*/apps/*png
 /usr/share/icons/locolor/*/mimetypes/*png
 /usr/share/mime/packages/*
