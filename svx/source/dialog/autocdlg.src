@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autocdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 09:12:04 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 12:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -835,7 +835,7 @@ TabPage RID_OFAPAGE_AUTOCOMPLETE_OPTIONS
     CheckBox CB_KEEP_LIST
     {
         Pos = MAP_APPFONT( 10, 59 );
-        Size = MAP_APPFONT( 110, 30 );
+        Size = MAP_APPFONT( 110, 40 );
         WordBreak = TRUE;
         Text [ de ] = "~Beim Schließen eines Dokuments Liste für spätere Verwendung speichern";
         Text [ en-US ] = "~When closing a document, save the list for later use in other documents.";
