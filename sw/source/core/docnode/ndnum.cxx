@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndnum.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2005-05-03 14:39:16 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 13:34:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,32 @@ BOOL SwOutlineNodes::Seek_Entry( const SwNodePtr rSrch, USHORT* pFndPos ) const
     return FALSE;
 }
 
+void SwNodes::UpdateOutlineNode(SwNode & rNd)
+{
+    SwTxtNode * pTxtNd = rNd.GetTxtNode();
+
+    if (pTxtNd && pTxtNd->IsOutlineStateChanged())
+    {
+        BOOL bFound = pOutlineNds->Seek_Entry(pTxtNd);
+
+        if (pTxtNd->IsOutline())
+        {
+            if (! bFound)
+                pOutlineNds->Insert(pTxtNd);
+        }
+        else
+        {
+            if (bFound)
+                pOutlineNds->Remove(pTxtNd);
+        }
+
+        pTxtNd->UpdateOutlineState();
+
+        // die Gliederungs-Felder Updaten
+        GetDoc()->GetSysFldType( RES_CHAPTERFLD )->UpdateFlds();
+    }
+}
+
 void SwNodes::UpdateOutlineNode( const SwNode& rNd, BYTE nOldLevel,
                                  BYTE nNewLevel )
 {
@@ -143,7 +169,7 @@ void SwNodes::UpdateOutlineNode( const SwNode& rNd, BYTE nOldLevel,
     if( NO_NUMBERING == nOldLevel )         // neuen Level einfuegen
     {
         // nicht vorhanden, also einfuegen
-        ASSERT( !bSeekIdx, "Der Node ist schon als OutlineNode vorhanden" );
+        //ASSERT( !bSeekIdx, "Der Node ist schon als OutlineNode vorhanden" );
 
         //JP 12.03.99: 63293 - Nodes vom RedlineBereich NIE aufnehmen
         ULONG nNd = rNd.GetIndex();
@@ -152,7 +178,9 @@ void SwNodes::UpdateOutlineNode( const SwNode& rNd, BYTE nOldLevel,
             return ;
 
         // jetzt noch alle nachfolgende Outline-Nodes updaten
-        pOutlineNds->Insert( pSrch );
+        if (! bSeekIdx)
+            pOutlineNds->Insert( pSrch );
+
         if( ! IsShowNum( nNewLevel ))
             return;     // keine Nummerierung dann kein Update
     }
@@ -177,14 +205,15 @@ void SwNodes::UpdateOutlineNode( const SwNode& rNd, BYTE nOldLevel,
         {
             const SwNodeNum * pNum = rTxtNd.GetOutlineNum();
 
-            SwNodeNum aNum(0);
+            if (0 == pNum)
+            {
+                SwNodeNum aNum(nNewLevel);
 
-            if (0 != pNum)
-                aNum = *pNum;
+                aNum.SetLevel(rTxtNd.GetTxtColl()->GetOutlineLevel());
+                rTxtNd.UpdateNum(aNum);
+            }
 
-            aNum.SetLevel(rTxtNd.GetTxtColl()->GetOutlineLevel());
-            rTxtNd.UpdateNum(aNum);
-
+            rTxtNd.NumRuleChgd();
             //GetDoc()->SetNumRule(aPam, *GetDoc()->GetOutlineNumRule());
         }
         else
@@ -217,42 +246,13 @@ void SwNodes::UpdtOutlineIdx( const SwNode& rNd )
         UpdateOutlineNode( *(*pOutlineNds)[ nPos ], 0, 0 );
 }
 
-
-
 void SwNodes::UpdateOutlineNodes()
 {
     if( pOutlineNds->Count() )      // OutlineNodes vorhanden ?
         UpdateOutlineNode( *(*pOutlineNds)[ 0 ], 0, 0 );
 }
 
-void SwNodes::UpdateOutlineNodeList() const
-{
-    if (pOutlineNds->Count() > 0)
-        pOutlineNds->Remove((USHORT)0, pOutlineNds->Count());
-
-    const SwNumRuleTbl & rNumRuleTbl = GetDoc()->GetNumRuleTbl();
-
-    for (int i = 0; i < rNumRuleTbl.Count(); i++)
-    {
-        SwNumRule * pRule = rNumRuleTbl[i];
-
-        if (pRule->IsOutlineRule())
-        {
-            SwNumRuleInfo aInfo(pRule->GetName());
-
-            aInfo.MakeList(*const_cast<SwDoc *>(GetDoc()));
-
-            for (int j = 0; j < aInfo.GetList().Count(); j++)
-            {
-                pOutlineNds->Insert(aInfo.GetList().GetObject(j));
-            }
-        }
-    }
-}
-
 const SwOutlineNodes & SwNodes::GetOutLineNds() const
 {
-    UpdateOutlineNodeList();
-
     return *pOutlineNds;
 }
