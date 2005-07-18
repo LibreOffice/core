@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfld.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:02:51 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 12:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,7 +385,11 @@ void SwDoc::RemoveFldType(USHORT nFld)
     Beschreibung: Den ersten Typen mit ResId und Namen finden
  --------------------------------------------------------------------*/
 
-SwFieldType* SwDoc::GetFldType( USHORT nResId, const String& rName ) const
+SwFieldType* SwDoc::GetFldType( USHORT nResId, const String& rName,
+         sal_Bool bDbFieldMatching // used in some UNO calls for RES_DBFLD
+                                   // to use different string matching code
+                                   // #i51815#
+         ) const
 {
     USHORT nSize = pFldTypes->Count(), i = 0;
     const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
@@ -413,8 +417,13 @@ SwFieldType* SwDoc::GetFldType( USHORT nResId, const String& rName ) const
     for( ; i < nSize; ++i )
     {
         SwFieldType* pFldType = (*pFldTypes)[i];
+
+        String aFldName( pFldType->GetName() );
+        if (bDbFieldMatching && nResId == RES_DBFLD)    // #i51815#
+            aFldName.SearchAndReplaceAll(DB_DELIM, '.');
+
         if( nResId == pFldType->Which() &&
-            rSCmp.isEqual( rName, pFldType->GetName() ))
+            rSCmp.isEqual( rName, aFldName ))
         {
             pRet = pFldType;
             break;
