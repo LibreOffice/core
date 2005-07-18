@@ -1515,17 +1515,15 @@ sub copy_additional_packages
         my $packagesourceref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$onepackage, $includepatharrayref, 0);
         if ($$packagesourceref eq "") { installer::exiter::exit_program("ERROR: Could not find jds file $onepackage!", "copy_additional_packages"); }
 
-        my $destfile = $destdir . $installer::globals::separator . $onepackage;
-        installer::systemactions::copy_one_file($$packagesourceref, $destfile);
-
-        if (( $installer::globals::issolarispkgbuild ) && ( $onepackage =~ /\.tar\.gz\s*$/ ))
+        if ( $onepackage =~ /\.tar\.gz\s*$/ )
         {
-            my $systemcall = "cd $destdir; cat $onepackage | gunzip | tar -xf -";
+            my $systemcall = "cd $destdir; gzcat $$packagesourceref | tar -xf -";
             make_systemcall($systemcall);
-
-            # deleting the tar.gz files
-            $systemcall = "cd $destdir; rm -f $onepackage";
-            make_systemcall($systemcall);
+        }
+        else
+        {
+            my $destfile = $destdir . $installer::globals::separator . $onepackage;
+            installer::systemactions::copy_one_file($$packagesourceref, $destfile);
         }
     }
 }
