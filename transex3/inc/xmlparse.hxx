@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlparse.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 19:16:06 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 11:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,7 +360,7 @@ private:
     /// Mapping iso numeric code      <-> iso alpha string code
     ByteString   isoArray[MAX_LANGUAGES];
 
-    static bool inline XMLUtil::hasPrefix( String& rString , int pos);
+    //static bool inline XMLUtil::hasPrefix( String& rString , int pos);
     static void UnQuotData( String &rString );
     static void UnQuotTags( String &rString );
 
