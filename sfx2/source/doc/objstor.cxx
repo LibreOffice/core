@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.165 $
+ *  $Revision: 1.166 $
  *
- *  last change: $Author: kz $ $Date: 2005-07-14 11:46:10 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 12:05:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 #endif
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _EXTATTR_HXX //autogen
-#include <svtools/extattr.hxx>
 #endif
 #ifndef _ZCODEC_HXX //autogen
 #include <tools/zcodec.hxx>
@@ -250,6 +247,9 @@
 #include "fltoptint.hxx"
 #include "viewfrm.hxx"
 #include "graphhelp.hxx"
+#ifndef _EXTATTR_HXX
+#include "extattr.hxx"
+#endif
 
 #include "../appl/app.hrc"
 
