@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtcol.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:37:20 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 13:34:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,30 +471,6 @@ void SwTxtFmtColl::SetOutlineLevel( BYTE nLevel )
     ASSERT( nLevel < MAXLEVEL || nLevel == NO_NUMBERING ,
                             "SwTxtFmtColl: Level too low" );
     nOutlineLevel = nLevel;
-
-    SwNumRuleItem aNumRuleItem(GetNumRule());
-
-    bool bSetOutlineNumRule = false;
-
-    if (aNumRuleItem.GetValue().Len() > 0)
-    {
-        String sNumRuleName = aNumRuleItem.GetValue();
-        SwNumRule * pNumRule = GetDoc()->FindNumRulePtr(sNumRuleName);
-
-        if (! pNumRule || !pNumRule->IsOutlineRule())
-            bSetOutlineNumRule = true;
-    }
-    else if (nLevel != NO_NUMBERING)
-        bSetOutlineNumRule = true;
-
-    if (bSetOutlineNumRule)
-    {
-        String aTmp(SwNumRule::GetOutlineRuleName(),
-                    RTL_TEXTENCODING_ASCII_US);
-        SwNumRuleItem aItem(aTmp);
-
-        GetDoc()->SetAttr(aItem, *this);
-    }
 }
 
 
