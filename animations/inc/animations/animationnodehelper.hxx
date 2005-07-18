@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animationnodehelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-07-14 10:46:18 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 14:35:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ namespace anim
         @return true, if the functor was successfully applied to
         all children, false otherwise.
     */
-    template< typename Functor > bool for_each_childNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >&   xNode,
+    template< typename Functor > inline bool for_each_childNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >&    xNode,
                                                           Functor&                                                                                  rFunctor )
     {
         try
@@ -133,7 +133,7 @@ namespace anim
 
     /** pushes the given node to the given vector and recursivly calls itself for each child node.
     */
-    void create_deep_vector( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode,
+    inline void create_deep_vector( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode,
                                 std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > >& rVector )
     {
         rVector.push_back( xNode );
