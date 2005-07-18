@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 11:23:17 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 11:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,12 +86,6 @@
 #endif
 
 #pragma hdrstop
-
-#if defined( OS2 ) || defined( MAC )
-#ifndef _EXTATTR_HXX //autogen
-#include "extattr.hxx"
-#endif
-#endif
 
 #ifndef _UNOTOOLS_UCBHELPER_HXX
 #include <unotools/ucbhelper.hxx>
@@ -543,20 +537,6 @@ static USHORT GetImageId_Impl( const INetURLObject& rObject, sal_Bool bDetectFol
             return nId;
         }
     }
-
-#if defined( OS2 ) || defined( MAC )
-    if ( nImage == IMG_FILE )
-    {
-        SvEaMgr aMgr( sURL );
-        String aType;
-        if ( aMgr.GetFileType( aType ) )
-        {
-            for( USHORT nIndex = 0; Mappings[ nIndex ]._pExt; nIndex++ )
-                if ( Mappings[ nIndex ]._pExt == aType )
-                    nImage = Mappings[ nIndex ]._nImgId;
-        }
-    }
-#endif
 
     if ( nImage == IMG_FILE && sURL.Len() )
     {
