@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 15:14:24 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 13:36:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1752,9 +1752,6 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
                 }
 
             }
-
-            if (pTxtNd->IsOutline() && pTxtNd->Len() == 0)
-                aNum.SetNoNum(TRUE);
 
             pTxtNd->UpdateNum(aNum);
 
