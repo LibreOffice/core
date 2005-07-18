@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: kz $ $Date: 2005-07-14 11:45:44 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 12:04:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,9 +150,6 @@
 #endif
 #ifndef _SFXDOCTEMPL_HXX //autogen
 #include <doctempl.hxx>
-#endif
-#ifndef _EXTATTR_HXX
-#include <svtools/extattr.hxx>
 #endif
 #ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
