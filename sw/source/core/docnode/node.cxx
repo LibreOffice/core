@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 15:11:41 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 13:35:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1719,7 +1719,7 @@ const SfxPoolItem* SwCntntNode::GetNoCondAttr( USHORT nWhich,
                     nWhich, FALSE, &pFnd ) && bInParents ))
             ((SwFmt*)GetRegisteredIn())->GetItemState( nWhich, bInParents, &pFnd );
     }
-    else
+    else if (pAttrSet)
         GetSwAttrSet().GetItemState( nWhich, bInParents, &pFnd );
     return pFnd;
 }
