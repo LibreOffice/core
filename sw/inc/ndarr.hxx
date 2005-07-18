@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndarr.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:02:12 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 13:33:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,10 +286,10 @@ public:
                             SwGrfFmtColl *pColl,
                             SwAttrSet* pAutoAttr = 0 ); // in ndole.cxx
 
-    void UpdateOutlineNodeList() const;
         // Array aller GliederiungsNodes;
     const SwOutlineNodes& GetOutLineNds() const;
-        // ab einem bestimmten TextNode alle Updaten
+
+    void UpdateOutlineNode( SwNode &);
     void UpdateOutlineNode( const SwNode&, BYTE nOldLevel, BYTE nNewLevel );
         // alle Nodes Updaten - Rule/Format-Aenderung
     void UpdateOutlineNodes();
