@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SandboxSecurityException.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:24:28 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 12:41:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,14 +89,14 @@ public class SandboxSecurityException extends SecurityException {
         msgobj[1] = (Object)arg2;
     }
 
-    public String getLocalizedMessage() {
-        if( msgobj != null)
-            return amh.getMessage(key, msgobj);
-        else
-            return amh.getMessage(key);
-    }
 
-    private static SandboxMessageHandler amh = new SandboxMessageHandler("appletsecurityexception");
+    //The loading of the static member  amh caused a deadlock:
+    //Thread 1 holds a monitor on SandboxSecuritymethod and tries to get hold of
+    //a lock of the class loader.
+    //Thread 2 is the finalizer which holds the class loader monitor an needs the
+    //SandboxSecurity monitor.
+    //Therefor the method getLocalizedMessage and the member amh have been removed.
+//    private static SandboxMessageHandler amh = new SandboxMessageHandler("appletsecurityexception");
 
 }
 
