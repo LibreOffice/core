@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2005-05-03 14:39:03 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 13:33:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,6 +460,7 @@ BOOL SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
         EndUndo(UNDO_OUTLINE_LR);
 
     SetModified();
+
     return TRUE;
 }
 
@@ -771,8 +772,7 @@ void SwNumRuleInfo::MakeList( SwDoc& rDoc, BOOL bOutline )
     // 2. Case: Information has to be generated from scratch:
     //
 
-    // -> #111955#
-    if (bOutline)
+    if (pRule->IsOutlineRule())
     {
         const SwOutlineNodes & rOutlineNodes = rDoc.GetNodes().GetOutLineNds();
 
@@ -780,11 +780,10 @@ void SwNumRuleInfo::MakeList( SwDoc& rDoc, BOOL bOutline )
         {
             SwTxtNode & aNode = *((SwTxtNode *) rOutlineNodes[i]);
 
-            AddNode(aNode);
+            if (pRule == aNode.GetNumRule())
+                AddNode(aNode);
         }
     }
-    // <- #111955#
-    else
     {
         SwModify* pMod;
         const SfxPoolItem* pItem;
@@ -1379,9 +1378,12 @@ void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
 
                 if (! pReplaceNumRule)
                 {
-                    if (bFirst)
+                    if (pRule->IsOutlineRule())
+                        pReplaceNumRule = pRule;
+                    else if (bFirst)
                     {
                         SwPosition aPos(*pCNd);
+
                         pReplaceNumRule =
                             const_cast<SwNumRule *>
                             (SearchNumRule(aPos, FALSE, pCNd->HasNumber(),
@@ -2547,9 +2549,6 @@ void lcl_UpdateNumRuleRange( SwNumRule & rRule,
        levels with their start values.*/
     if ( bInit )
     {
-        for (int i = 0; i < MAXLEVEL; i++)
-            bInitializedLevels[i] = false;
-
         lcl_NodeNumReset(aNum, rRule, 0, bInitializedLevels);
 
         nCount = rRule.Get(0).GetStart();
@@ -2685,18 +2684,28 @@ void lcl_UpdateNumRuleRange( SwNumRule & rRule,
                     aTmpNum.GetLevelVal()[nLevel] = nCount;
                     bChanged = true;
                 }
-
-                /* For each level synchronize the local numbering (aNum)
-                   with the numbering to be set in the current node
-                   (aTmpNum). If there are differences propagate the value
-                   fom aNum to aTmpNum. In this case the numbering of the
-                   current node. */
-                for (i = 0; i < MAXLEVEL; i++)
+                else if (bInit && nUpdatePos == 0)
                 {
-                    if (aTmpNum.GetLevelVal()[i] != aNum.GetLevelVal()[i])
-                    {
+                    bChanged = true;
+
+                    for (i = 0; i < MAXLEVEL; i++)
                         aTmpNum.GetLevelVal()[i] = aNum.GetLevelVal()[i];
-                        bChanged = true;
+                }
+                else
+                {
+                    /* For each level synchronize the local numbering (aNum)
+                       with the numbering to be set in the current node
+                       (aTmpNum). If there are differences propagate the value
+                       fom aNum to aTmpNum. In this case the numbering of the
+                       current node. */
+
+                    for (i = 0; i < MAXLEVEL; i++)
+                    {
+                        if (aTmpNum.GetLevelVal()[i] != aNum.GetLevelVal()[i])
+                        {
+                            aTmpNum.GetLevelVal()[i] = aNum.GetLevelVal()[i];
+                            bChanged = true;
+                        }
                     }
                 }
 
