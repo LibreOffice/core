@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 11:00:06 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 11:54:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,10 +89,6 @@
 #include "sgffilt.hxx"
 #ifndef _VOS_MODULE_HXX_
 #include "vos/module.hxx"
-#endif
-
-#ifdef MAC
-#include "extattr.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
@@ -1231,12 +1227,6 @@ String GraphicFilter::GetImportFormatShortName( USHORT nFormat )
 String GraphicFilter::GetImportOSFileType( USHORT nFormat )
 {
     String aOSFileType;
-/*
-#ifdef MAC
-    pConfig->SetGroup( IMP_FILTERSECTION );
-    aOSFileType = ImpGetMacType( pConfig->ReadKey( nFormat ) );
-#endif
-*/
     return aOSFileType;
 }
 
@@ -1322,12 +1312,6 @@ String GraphicFilter::GetExportFormatShortName( USHORT nFormat )
 String GraphicFilter::GetExportOSFileType( USHORT nFormat )
 {
     String aOSFileType;
-/*
-#ifdef MAC
-    pConfig->SetGroup( EXP_FILTERSECTION );
-    aOSFileType = ImpGetMacType( pConfig->ReadKey( nFormat ) );
-#endif
-*/
     return aOSFileType;
 }
 
