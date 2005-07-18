@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.130 $
+*  $Revision: 1.131 $
 *
-*  last change: $Author: obo $ $Date: 2005-07-18 12:06:13 $
+*  last change: $Author: obo $ $Date: 2005-07-18 14:51:46 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1606,7 +1606,7 @@ STD_LIB_FILE_PATCH( gid_File_Lib_Sdui, sdui)
 
 File gid_File_Lib_Slideshow
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
   #ifdef UNX
@@ -1793,7 +1793,7 @@ File gid_File_Lib_Store
     Styles = (PACKED);
 End
 
-STD_LIB_FILE( gid_File_Lib_Sts , sts)
+STD_LIB_FILE_PATCH( gid_File_Lib_Sts , sts)
 
 #ifdef SOLARIS
 
@@ -1863,7 +1863,7 @@ SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Lib_Tinstrm,textinstream.uno)
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Tk, tk )
 
-STD_LIB_FILE( gid_File_Lib_Tools, tl )
+STD_LIB_FILE_PATCH( gid_File_Lib_Tools, tl )
 
 SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Lib_Toutstrm,textoutstream.uno)
 
