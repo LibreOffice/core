@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:44:26 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 12:01:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,9 +120,6 @@
 #endif
 #ifndef _TXTCMP_HXX //autogen
 #include <svtools/txtcmp.hxx>
-#endif
-#ifndef _EXTATTR_HXX //autogen
-#include <svtools/extattr.hxx>
 #endif
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
