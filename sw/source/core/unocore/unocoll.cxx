@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:42:09 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 12:25:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,7 +563,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         break;
         case SW_SERVICE_FIELDMASTER_BIBLIOGRAPHY:
         {
-            SwFieldType* pType = pDoc->GetFldType(RES_AUTHORITY, aEmptyStr);
+            SwFieldType* pType = pDoc->GetFldType(RES_AUTHORITY, aEmptyStr, sal_True);
             if(!pType)
             {
                 SwAuthorityFieldType aType(pDoc);
