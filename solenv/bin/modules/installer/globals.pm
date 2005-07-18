@@ -254,6 +254,7 @@ BEGIN
     $langpackfilename = "Langpack.mlf";
     $linuxlinkrpms = "gid_Module_Root_Files_3,gid_Module_Root_Files_4,gid_Module_Root_Files_5";
     $languagenames = "";
+    @requiredpackages = ();
 
     @removedirs = ();
     @emptypackages = ();
