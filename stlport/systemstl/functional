@@ -2,9 +2,9 @@
  *
  *  $RCSfile: functional,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 14:47:25 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 08:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,7 @@
 #define SYSTEM_STL_FUNCTIONAL
 
 #ifdef GCC
-#include <bits/c++config.h>
-#include <cstddef>
-#include <bits/stl_function.h>
+#include <ext/../functional>
 #include <ext/functional>
 
 namespace std
