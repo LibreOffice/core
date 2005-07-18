@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.70 $
+#   $Revision: 1.71 $
 #
-#   last change: $Author: kz $ $Date: 2005-07-15 09:36:04 $
+#   last change: $Author: obo $ $Date: 2005-07-18 14:10:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +66,10 @@ PRJNAME=vcl
 TARGET=vcl
 VERSION=$(UPD)
 USE_DEFFILE=TRUE
+
+.IF "$(OS)" == "SOLARIS"
+LINKFLAGSRUNPATH=-R/usr/sfw/lib -R\''$$ORIGIN'\'
+.ENDIF
 
 # --- Settings -----------------------------------------------------------
 
