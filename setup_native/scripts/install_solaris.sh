@@ -168,6 +168,9 @@ then
   LD_PRELOAD_32=$GETUID_SO /usr/sbin/patchadd -R ${INSTALL_ROOT} -M ${PATCH_PATH} ${PATCH_LIST} 2>&1 | grep -v '/var/sadm/patch'
 else
 
+  # Create /usr directory required by co-packages like SUNWfreetype2
+  mkdir -m 0755 -p ${INSTALL_ROOT}/usr
+
   #
   # Check/Create installation directory
   #
@@ -192,6 +195,11 @@ else
   echo "Path to the installation   : " $INSTALL_ROOT
 
   LD_PRELOAD_32=$GETUID_SO /usr/sbin/pkgadd -d ${PACKAGE_PATH} -R ${INSTALL_ROOT} ${PKG_LIST} ${GNOMEPKG} >/dev/null
+
+  # Create symlinks in the program directory for all libraries installed to /usr
+  for i in `cd ${INSTALL_ROOT}; find usr -name '*.so.*'`; do
+    ln -s ../../../$i ${INSTALL_DIR}/program/`basename $i`
+  done
 fi
 
 rm -f $GETUID_SO
