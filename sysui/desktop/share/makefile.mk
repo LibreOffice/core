@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-06-21 15:03:46 $
+#   last change: $Author: obo $ $Date: 2005-07-18 14:00:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,11 +118,21 @@ $(LAUNCHERFLAGFILE) : $(LAUNCHERDEPN) ../productversion.mk brand.pl translate.pl
     @touch $@
 
 #
-# Merge translations from documents.ulf into shared-mime-info stub
+# Create shared mime info xml file
 #
-$(MIMEINFO) : $(COMMONMISC)$/$(TARGET)$/documents.ulf $$(@:f) 
-    @echo Merging translations into shared mime info ..
+$(MIMEINFO) : $(shell ls ../mimetypes/*.desktop) create_mime_xml.pl
+$(MIMEINFO) : $(COMMONMISC)$/$(TARGET)$/documents.ulf
+    @echo Create shared mime info xml file ..
     @echo ---------------------------------
-    @$(PERL) merge-shared-mime-translations.pl -p "OpenOffice.org" -u $< > $(@).$(INPATH)
+    @$(PERL) create_mime_xml.pl $< > $(@).$(INPATH)
     @mv -f $(@).$(INPATH) $@
 
+
+#
+# Install section
+#
+
+%.xml : $(COMMONMISC)/$(TARGET)/$$(@:f)
+    @$(MKDIRHIER) $(@:d)
+    @$(COPY) $< $@
+#	@chmod 0544 $@
