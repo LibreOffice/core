@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-21 17:03:19 $
+#   last change: $Author: obo $ $Date: 2005-07-18 12:05:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,7 @@ SLOFILES =	\
                 $(SLO)$/applet.obj \
                 $(SLO)$/plugin.obj \
         $(SLO)$/docfile.obj \
+        $(SLO)$/eaimp.obj \
         $(SLO)$/objuno.obj \
         $(SLO)$/frmdescr.obj \
         $(SLO)$/docinf.obj \
