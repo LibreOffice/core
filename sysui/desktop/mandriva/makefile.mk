@@ -103,7 +103,7 @@ MIMELIST = \
     oasis-database \
     oasis-web-template
 
-HCMIMEICONLIST = \
+MIMEICONLIST = \
     oasis-text \
     oasis-text-template \
     oasis-spreadsheet \
@@ -115,9 +115,7 @@ HCMIMEICONLIST = \
     oasis-formula \
     oasis-master-document \
     oasis-database \
-    oasis-web-template
-
-MIMEICONLIST = $(HCMIMEICONLIST) \
+    oasis-web-template \
     text \
     text-template \
     spreadsheet \
@@ -140,10 +138,6 @@ GNOMEICONLIST = \
     {16x16 32x32 48x48}/apps/$(ICONPREFIX)-{$(LAUNCHERLIST)}.png \
     {16x16 32x32 48x48}/mimetypes/$(ICONPREFIX)-{$(MIMEICONLIST)}.png
 
-HCICONLIST = \
-    HighContrast/{16x16 32x32 48x48}/apps/$(ICONPREFIX)-{$(LAUNCHERLIST)}.png \
-    HighContrast/{16x16 32x32 48x48}/mimetypes/$(ICONPREFIX)-{$(HCMIMEICONLIST)}.png
-    
 KDEICONLIST = \
     hicolor/{16x16 32x32 48x48}/apps/$(ICONPREFIX)-{$(LAUNCHERLIST)}.png \
     hicolor/{16x16 32x32 48x48}/mimetypes/$(ICONPREFIX)-{$(MIMEICONLIST)}.png \
@@ -156,6 +150,7 @@ PKGNAME=$(shell sed -n -e 's/^Name: //p' $(TARGET)-menus.spec)
 RPMFILE=$(BIN)/noarch/$(PKGNAME)-$(PKGVERSION)-$(PKGREV).noarch.rpm
 RPMDEPN = \
     $(MISC)/$(TARGET)/etc/$(UNIXFILENAME) \
+    $(MISC)/$(TARGET)/usr/bin/soffice \
     $(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME) \
     $(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME)-printeradmin \
     $(MISC)/$(TARGET)/usr/share/applications/{$(LAUNCHERDEPN)} \
@@ -164,11 +159,11 @@ RPMDEPN = \
     $(MISC)/$(TARGET)/usr/share/mime-info/$(UNIXFILENAME).mime \
     $(MISC)/$(TARGET)/usr/share/mimelnk/application.flag \
     $(MISC)/$(TARGET)/usr/share/icons/gnome/{$(GNOMEICONLIST)} \
-    $(MISC)/$(TARGET)/usr/share/icons/{$(HCICONLIST)} \
     $(MISC)/$(TARGET)/usr/share/icons/{$(KDEICONLIST)} 
-        
+
 RPMDIR  = $(shell cd $(BIN); pwd)
 ULFDIR = $(COMMONMISC)$/desktopshare
+SPECFILE = $(MISC)/$(TARGET)-menus.spec
     
 .ENDIF
 
@@ -193,10 +188,6 @@ ALLTAR : $(RPMFILE)
 # e.g. $(LAUNCHERDIR)/usr/share/icons/gnome/16x16/apps/openoffice-writer.png
 #
 $(MISC)/$(TARGET)/usr/share/icons/gnome/{$(GNOMEICONLIST)} : ../icons/hicolor/$$(@:d:d:d:d:f)/$$(@:d:d:f)/$$(@:f:s/$(ICONPREFIX)-//)
-    @$(MKDIRHIER) $(@:d)
-    @$(COPY) $< $@
-
-$(MISC)/$(TARGET)/usr/share/icons/{$(HCICONLIST)} : ../icons/$$(@:d:d:d:d:d:d:f)/$$(@:d:d:d:d:f)/$$(@:d:d:f)/$$(@:f:s/$(ICONPREFIX)-//)
     @$(MKDIRHIER) $(@:d)
     @$(COPY) $< $@
 
@@ -244,18 +235,27 @@ $(MISC)/$(TARGET)/usr/bin/$(UNIXFILENAME)-printeradmin : ../share/printeradmin.s
     @$(MKDIRHIER) $(@:d)
     @cat $< | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" > $@
 
+$(MISC)/$(TARGET)/usr/bin/soffice : 
+    @$(MKDIRHIER) $(@:d)
+    @ln -sf /etc/$(UNIXFILENAME)/program/soffice $@
+
 $(MISC)/$(TARGET)/etc/$(UNIXFILENAME) :
     @$(MKDIRHIER) $(@:d)
     @touch $@
 
+# --- specfile ----------------------------------------------------
+
+$(SPECFILE) : $$(@:f)
+    @cat $< | tr -d "\015" >$@
+
 # --- packaging ---------------------------------------------------
     
-$(RPMFILE) : $(RPMDEPN) $(TARGET)-menus.spec
-    @$(MKDIRHIER) $(@:d)
-    @cat $(TARGET)-menus.spec | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" \
-        -e "s/%ICONPREFIX/$(ICONPREFIX)/" -e "s/Version: .*/Version: $(PKGVERSION)/" \
-        -e "s/Release: .*/Release: $(PKGREV)/" > $(MISC)/$(TARGET)-menus.spec
-    @echo "%define _rpmdir $(RPMDIR)" >> $(MISC)/$(TARGET)-menus.spec
-    @$(RPM) -bb $(MISC)/$(TARGET)-menus.spec --buildroot $(LAUNCHERDIR) --target noarch
+.PHONY $(RPMFILE) : $(RPMDEPN) $(SPECFILE)
+    -$(RM) $(@:d)/$(PKGNAME)-*
+    @$(RPM) -bb $(MISC)/$(TARGET)-menus.spec --buildroot $(LAUNCHERDIR) \
+        --define "_rpmdir $(RPMDIR)" \
+        --define "unixfilename $(UNIXFILENAME)" \
+        --define "iconprefix $(ICONPREFIX)" \
+        --define "version $(PKGVERSION)" --define "release $(PKGREV)"
 
 .ENDIF
