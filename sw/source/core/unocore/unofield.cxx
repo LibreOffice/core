@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 13:54:32 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 12:25:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -767,7 +767,7 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
         OUString uTmp;
         rValue >>= uTmp;
         String sTypeName(uTmp);
-        SwFieldType* pType = m_pDoc->GetFldType(nResTypeId, sTypeName);
+        SwFieldType* pType = m_pDoc->GetFldType(nResTypeId, sTypeName, sal_False);
 
         String sTable(SW_RES(STR_POOLCOLL_LABEL_TABLE));
         String sDrawing(SW_RES(STR_POOLCOLL_LABEL_DRAWING));
@@ -1642,7 +1642,7 @@ void SwXTextField::attachToRange(
             break;
             case SW_SERVICE_FIELDTYPE_USER:
             {
-                SwFieldType* pFldType = pDoc->GetFldType(RES_USERFLD, m_sTypeName);
+                SwFieldType* pFldType = pDoc->GetFldType(RES_USERFLD, m_sTypeName, sal_True);
                 if(!pFldType)
                     throw uno::RuntimeException();
                 USHORT nUserSubType = m_pProps->bBool1 ? SUB_INVISIBLE : 0;
@@ -1686,7 +1686,7 @@ void SwXTextField::attachToRange(
             break;
             case SW_SERVICE_FIELDTYPE_DDE:
             {
-                SwFieldType* pFldType = pDoc->GetFldType(RES_DDEFLD, m_sTypeName);
+                SwFieldType* pFldType = pDoc->GetFldType(RES_DDEFLD, m_sTypeName, sal_True);
                 if(!pFldType)
                     throw uno::RuntimeException();
                 pFld = new SwDDEField( (SwDDEFieldType*)pFldType );
@@ -1754,7 +1754,7 @@ void SwXTextField::attachToRange(
             break;
             case SW_SERVICE_FIELDTYPE_DATABASE:
             {
-                SwFieldType* pFldType = pDoc->GetFldType(RES_DBFLD, m_sTypeName);
+                SwFieldType* pFldType = pDoc->GetFldType(RES_DBFLD, m_sTypeName, sal_False);
                 if(!pFldType)
                     throw uno::RuntimeException();
                 pFld = new SwDBField((SwDBFieldType*)pFldType, m_pProps->nFormat);
@@ -1769,7 +1769,7 @@ void SwXTextField::attachToRange(
             break;
             case SW_SERVICE_FIELDTYPE_SET_EXP:
             {
-                SwFieldType* pFldType = pDoc->GetFldType(RES_SETEXPFLD, m_sTypeName);
+                SwFieldType* pFldType = pDoc->GetFldType(RES_SETEXPFLD, m_sTypeName, sal_True);
                 if(!pFldType)
                     throw uno::RuntimeException();
                 //#93192# detect the field type's sub type and set an appropriate number format
@@ -1826,7 +1826,7 @@ void SwXTextField::attachToRange(
             case SW_SERVICE_FIELDTYPE_INPUT_USER:
             case SW_SERVICE_FIELDTYPE_INPUT:
             {
-                SwFieldType* pFldType = pDoc->GetFldType(RES_INPUTFLD, m_sTypeName);
+                SwFieldType* pFldType = pDoc->GetFldType(RES_INPUTFLD, m_sTypeName, sal_True);
                 if(!pFldType)
                     throw uno::RuntimeException();
                 USHORT nInpSubType = SW_SERVICE_FIELDTYPE_INPUT_USER == m_nServiceId ? INP_USR : INP_TXT;
@@ -2571,8 +2571,10 @@ sal_uInt16 lcl_GetIdByName( String& rName, String& rTypeName )
         USHORT nDotCount = rName.GetTokenCount('.');
         if( 2 <= nDotCount )
         {
-            rName.SearchAndReplace('.', DB_DELIM);
-            rName.SetChar( rName.SearchBackward( '.' ), DB_DELIM );
+            // #i51815#
+            //rName.SearchAndReplace('.', DB_DELIM);
+            //rName.SetChar( rName.SearchBackward( '.' ), DB_DELIM );
+
             rName.InsertAscii( "DataBase.", 0 );
             nResId = RES_DBFLD;
         }
@@ -2596,7 +2598,7 @@ uno::Any SwXTextFieldMasters::getByName(const OUString& rName)
         throw NoSuchElementException();
 
     sName.Erase(0, sTypeName.Len()+1);
-    SwFieldType* pType = GetDoc()->GetFldType(nResId, sName);
+    SwFieldType* pType = GetDoc()->GetFldType(nResId, sName, sal_True);
     if(!pType)
         throw NoSuchElementException();
     SwXFieldMaster* pMaster = (SwXFieldMaster*)
@@ -2711,7 +2713,7 @@ sal_Bool SwXTextFieldMasters::hasByName(const OUString& rName) throw( RuntimeExc
     if( USHRT_MAX != nResId )
     {
         sName.Erase(0, sTypeName.Len()+1);
-        bRet = USHRT_MAX != nResId && 0 != GetDoc()->GetFldType(nResId, sName);
+        bRet = USHRT_MAX != nResId && 0 != GetDoc()->GetFldType(nResId, sName, sal_True);
     }
     return bRet;
 }
