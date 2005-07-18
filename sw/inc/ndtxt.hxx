@@ -2,12 +2,12 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:50:44 $
- *  $Revision: 1.36 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 13:33:29 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:50:44 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 13:33:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,8 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
     mutable BOOL bHiddenCharsHidePara : 1;
     // The last two flags have to be recalculated if this flag is set:
     mutable BOOL bRecalcHiddenCharFlags : 1;
+
+    mutable BOOL bLastOutlineState : 1;
 
     SW_DLLPRIVATE SwTxtNode( const SwNodeIndex &rWhere, SwTxtFmtColl *pTxtColl,
                 SwAttrSet* pAutoAttr = 0 );
@@ -371,6 +373,10 @@ public:
        @retval FALSE     else
      */
     BOOL IsOutline() const;
+
+    BOOL IsOutlineStateChanged() const;
+
+    void UpdateOutlineState();
 
     /** -> #i23730#
 
