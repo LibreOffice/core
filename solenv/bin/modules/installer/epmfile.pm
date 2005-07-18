@@ -1955,6 +1955,19 @@ sub put_childprojects_into_installset
         }
     }
 
+    # Adding additional required packages (freetype).
+    # This package names are stored in global array @installer::globals::requiredpackages
+
+    if ( $allvariables->{'ADDREQUIREDPACKAGES'} )
+    {
+        for ( my $i = 0; $i <= $#installer::globals::requiredpackages; $i++ )
+        {
+            $sourcefile = $sopackpath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::separator . "requiredpackages" . $installer::globals::separator . $installer::globals::requiredpackages[$i];
+            if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: Required package file not found: $sourcefile !", "put_childprojects_into_installset"); }
+            installer::systemactions::copy_one_file($sourcefile, $destdir);
+        }
+    }
+
     # unpacking and removing the ada tar.gz file
 
     if ( $installer::globals::issolarispkgbuild )
