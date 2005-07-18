@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2005-07-14 11:28:37 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 13:05:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,9 +550,22 @@ sal_Bool SdTransferable::GetData( const DataFlavor& rFlavor )
         }
         else if( nFormat == SOT_FORMATSTR_ID_DRAWING )
         {
+            SfxObjectShellRef aOldRef( aDocShellRef );
+
+            aDocShellRef.Clear();
+
+            if( pSourceDoc )
+                pSourceDoc->CreatingDataObj(this);
             SdDrawDocument* pDoc = (SdDrawDocument*) pSdViewIntern->GetAllMarkedModel();
+            if( pSourceDoc )
+                pSourceDoc->CreatingDataObj(0);
+
             bOK = SetObject( pDoc, SDTRANSFER_OBJECTTYPE_DRAWMODEL, rFlavor );
-            delete pDoc;
+
+            if( !aDocShellRef.Is() )
+                delete pDoc;
+
+            aDocShellRef = aOldRef;
         }
         else if( nFormat == FORMAT_GDIMETAFILE )
         {
