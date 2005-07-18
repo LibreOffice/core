@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: kz $ $Date: 2005-05-31 17:04:13 $
+#   last change: $Author: obo $ $Date: 2005-07-18 08:43:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ $(INCCOM)$/stlport$/hash_map : systemstl/hash_map
         +$(COPY) systemstl/functional $(INCCOM)$/stlport
         +$(COPY) systemstl/hash_map $(INCCOM)$/stlport
         +$(COPY) systemstl/hash_set $(INCCOM)$/stlport
+        +$(COPY) systemstl/numeric $(INCCOM)$/stlport
         +$(COPY) systemstl/slist $(INCCOM)$/stlport
         +$(COPY) systemstl/rope $(INCCOM)$/stlport
         +$(COPY) systemstl/vector $(INCCOM)$/stlport
