@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:23:29 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 12:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,9 +99,6 @@
 #endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _EXTATTR_HXX //autogen
-#include <svtools/extattr.hxx>
 #endif
 #ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
