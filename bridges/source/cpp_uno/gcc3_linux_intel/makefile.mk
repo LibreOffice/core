@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2005-06-06 17:32:07 $
+#   last change: $Author: obo $ $Date: 2005-07-18 08:07:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -110,5 +110,8 @@ SHL1STDLIBS= \
 .INCLUDE :  target.mk
 
 $(SLO)$/%.obj: %.s
-    $(CC) -Wa,--noexecstack -c -o $(SLO)$/$(@:b).o $<
+#cmc: Ideally --noexecstack would be in operations, but with #i51385# pyuno
+#remote bridgeing breaks
+#    $(CC) -Wa,--noexecstack -c -o $(SLO)$/$(@:b).o $<
+    $(CC) -c -o $(SLO)$/$(@:b).o $<
     touch $@
