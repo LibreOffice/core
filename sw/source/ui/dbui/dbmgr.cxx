@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-27 09:22:51 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 12:26:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2849,6 +2849,13 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
 //CHINA001  nCmdType,
 //CHINA001  xConnection,
 //CHINA001  bWithDataSourceBrowser ? 0 : &aSelection );
+    //always create a connection for the dialog and dispose it after the dialog has been closed
+    SwDSParam* pFound = 0;
+    if(!xConnection.is())
+    {
+        xConnection = SwNewDBMgr::RegisterConnection(sDataSource);
+        pFound = FindDSConnection(sDataSource, TRUE);
+    }
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
     pImpl->pMergeDialog = pFact->CreateMailMergeDlg( ResId(DLG_MAILMERGE),
@@ -2875,6 +2882,29 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
         // reset the cursor inside
         xResSet = NULL;
         aDescriptor[daCursor] <<= xResSet;
+    }
+    if(pFound)
+    {
+        for(USHORT nPos = 0; nPos < aDataSourceParams.Count(); nPos++)
+        {
+            SwDSParam* pParam = aDataSourceParams[nPos];
+            if(pParam == pFound)
+            {
+                try
+                {
+                    uno::Reference<XComponent> xComp(pParam->xConnection, UNO_QUERY);
+                    if(xComp.is())
+                        xComp->dispose();
+                }
+                catch(const RuntimeException& )
+                {
+                    //may be disposed already since multiple entries may have used the same connection
+                }
+                break;
+            }
+            //pFound doesn't need to be removed/deleted -
+            //this has been done by the SwConnectionDisposedListener_Impl already
+        }
     }
     DELETEZ(pImpl->pMergeDialog);
 }
