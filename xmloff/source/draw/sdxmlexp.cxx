@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 09:29:23 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 13:02:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1691,7 +1691,7 @@ HeaderFooterPageSettingsImpl SdXMLExport::ImpPrepDrawPageHeaderFooterDecls( cons
 {
     HeaderFooterPageSettingsImpl aSettings;
 
-    try
+    if( xDrawPage.is() ) try
     {
         Reference< XPropertySet > xSet( xDrawPage, UNO_QUERY_THROW );
         Reference< XPropertySetInfo > xInfo( xSet->getPropertySetInfo() );
