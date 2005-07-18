@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoNameItemTable.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-18 09:19:15 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 13:09:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,14 @@ void SAL_CALL SvxUnoNameItemTable::removeByName( const OUString& aApiName )
     throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
+
+    // a little quickfix for 2.0 to let applications clear api
+    // created items that are not used
+    if( aApiName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("~clear~") ) )
+    {
+        dispose();
+        return;
+    }
 
     String Name;
     SvxUnogetInternalNameForItem( mnWhich, aApiName, Name );
