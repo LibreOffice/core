@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadminsetup.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-18 10:10:33 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 11:22:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,7 @@ TabPage PAGE_DBWIZARD_MYSQL_INTRO
 
 };
 
-
+#define AUTHENTEDIT_X   (EDIT_X - 10)
 
 TabPage PAGE_DBWIZARD_AUTHENTIFICATION
 {
@@ -267,16 +267,14 @@ TabPage PAGE_DBWIZARD_AUTHENTIFICATION
     Size = MAP_APPFONT ( WIZARD_PAGE_X , WIZARD_PAGE_Y ) ;
     Hide = TRUE ;
 
-#define AUTHENTEDIT_X   (EDIT_X - 10)
-
-    FixedText FT_AUTHENTIFICATIONHEADERTEXT                                                         \
-    {                                                                                               \
-        Pos = MAP_APPFONT ( START_X , 8 ) ;                                                         \
-        Size = MAP_APPFONT ( (WIZARD_PAGE_X - START_X) - 12 , 2 * FIXEDTEXT_HEIGHT ) ;              \
-        Text [ de ] = "Benutzer-Authentifizierung eingeben" ;                                                                                   \
-        Text[ en-US ] = "Set up the user authentication";                                    \
-        WordBreak = TRUE;                                                                           \
-    };                                                                                              \
+    FixedText FT_AUTHENTIFICATIONHEADERTEXT
+    {
+        Pos = MAP_APPFONT ( START_X , 8 ) ;
+        Size = MAP_APPFONT ( (WIZARD_PAGE_X - START_X) - 12 , 2 * FIXEDTEXT_HEIGHT ) ;
+        Text [ de ] = "Benutzer-Authentifizierung eingeben" ;
+        Text[ en-US ] = "Set up the user authentication";
+        WordBreak = TRUE;
+    };
 
 
     FixedText FT_AUTHENTIFICATIONHELPTEXT
