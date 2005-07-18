@@ -2,9 +2,9 @@
  *
  *  $RCSfile: submission.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-05-03 14:41:36 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 08:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,7 +497,7 @@ sal_Bool SAL_CALL Submission::convertFastPropertyValue(
             while ( p >= 0 )
                 aPrefixes.push_back( sTokenList.getToken( 0, ',', p ) );
 
-            Sequence< ::rtl::OUString > aConvertedPrefixes( aPrefixes.begin(), aPrefixes.size() );
+            Sequence< ::rtl::OUString > aConvertedPrefixes( &aPrefixes[0], aPrefixes.size() );
             return PropertySetBase::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, makeAny( aConvertedPrefixes ) );
         }
     }
