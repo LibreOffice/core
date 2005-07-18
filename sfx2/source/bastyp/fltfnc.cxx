@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 12:37:59 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 12:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,9 +129,6 @@
 #endif
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
-#endif
-#ifndef _EXTATTR_HXX
-#include <svtools/extattr.hxx>
 #endif
 #ifndef _LCKBITEM_HXX //autogen
 #include <svtools/lckbitem.hxx>
