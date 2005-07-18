@@ -2,9 +2,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:51:45 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 13:34:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,6 +594,10 @@ BOOL SwNodeNum::operator==( const SwNodeNum& rNum ) const
                        sizeof( USHORT ) * (nMyLevel+1) ));
 }
 
+#ifndef PRODUCT
+long int SwNumRule::nInstances = 0;
+#endif
+
 SwNumRule::SwNumRule( const String& rNm, SwNumRuleType eType, BOOL bAutoFlg )
     : eRuleType( eType ),
     sName( rNm ),
@@ -608,6 +612,10 @@ SwNumRule::SwNumRule( const String& rNm, SwNumRuleType eType, BOOL bAutoFlg )
     nPoolHelpId( USHRT_MAX ),
     nPoolHlpFileId( UCHAR_MAX )
 {
+#ifndef PRODUCT
+    nSerial = nInstances++;
+#endif
+
     if( !nRefCount++ )          // zum erstmal, also initialisiern
     {
         SwNumFmt* pFmt;
@@ -657,6 +665,10 @@ SwNumRule::SwNumRule( const SwNumRule& rNumRule )
     nPoolHelpId( rNumRule.GetPoolHelpId() ),
     nPoolHlpFileId( rNumRule.GetPoolHlpFileId() )
 {
+#ifndef PRODUCT
+    nSerial = nInstances++;
+#endif
+
     ++nRefCount;
     memset( aFmts, 0, sizeof( aFmts ));
     for( USHORT n = 0; n < MAXLEVEL; ++n )
