@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numrule.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-22 10:02:30 $
+ *  last change: $Author: obo $ $Date: 2005-07-18 13:33:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,11 @@ enum SwNumRuleType { OUTLINE_RULE = 0, NUM_RULE = 1, RULE_END = 2 };
 class SW_DLLPUBLIC SwNumRule
 {
     friend void _FinitCore();
+
+#ifndef PRODUCT
+    long int nSerial;
+    static long int nInstances;
+#endif
 
     static SwNumFmt* aBaseFmts [ RULE_END ][ MAXLEVEL ];
     static USHORT aDefNumIndents[ MAXLEVEL ];
