@@ -106,7 +106,7 @@ MIMELIST = \
     oasis-database \
     oasis-web-template
 
-HCMIMEICONLIST = \
+MIMEICONLIST = \
     oasis-text \
     oasis-text-template \
     oasis-spreadsheet \
@@ -118,9 +118,7 @@ HCMIMEICONLIST = \
     oasis-formula \
     oasis-master-document \
     oasis-database \
-    oasis-web-template
-
-MIMEICONLIST = $(HCMIMEICONLIST) \
+    oasis-web-template \
     text \
     text-template \
     spreadsheet \
@@ -171,7 +169,6 @@ DEBDEPN = \
     $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/share/mime-info/$(UNIXFILENAME).mime \
     $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/share/mimelnk/application.flag \
     $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/share/icons/gnome/{$(GNOMEICONLIST)} \
-    $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/share/icons/{$(HCICONLIST)} \
     $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/share/icons/{$(KDEICONLIST)} 
         
 DEBDIR  = $(shell cd $(BIN); pwd)
@@ -208,10 +205,6 @@ ALLTAR : $(DEBFILE)
 # e.g. $(LAUNCHERDIR)/usr/share/icons/gnome/16x16/apps/openoffice-writer.png
 #
 $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/share/icons/gnome/{$(GNOMEICONLIST)} : ../icons/hicolor/$$(@:d:d:d:d:f)/$$(@:d:d:f)/$$(@:f:s/$(ICONPREFIX)-//)
-    @$(MKDIRHIER) $(@:d)
-    @$(COPY) $< $@
-
-$(MISC)/$(TARGET)/$(DEBFILE:f)/usr/share/icons/{$(HCICONLIST)} : ../icons/$$(@:d:d:d:d:d:d:f)/$$(@:d:d:d:d:f)/$$(@:d:d:f)/$$(@:f:s/$(ICONPREFIX)-//)
     @$(MKDIRHIER) $(@:d)
     @$(COPY) $< $@
 
@@ -273,21 +266,21 @@ $(MISC)/$(TARGET)/$(DEBFILE:f)/etc/$(UNIXFILENAME) :
     @$(MKDIRHIER) $(@:d)
     @ln -sf /opt/openoffice.org$(PKGVERSION) $@
 
+
+
 # --- packaging ---------------------------------------------------
 
 # getuid.so fakes the user/group for us	
 $(DEBFILE) : $(DEBDEPN)
     @$(MKDIRHIER) $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN
-    @echo "Package: openofficeorg-debian-menus" > $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/control
+    @cat control | tr -d "\015" > $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/control
     @echo "Version: $(PKGVERSION)" >> $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/control
-    @echo "Description: OpenOffice.org desktop integration" >> $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/control
-    @echo "Maintainer: OpenOffice.org" >> $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/control
-    @echo "Architecture: all" >> $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/control
     @cat postinst | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" > $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/postinst
     @cat postrm | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" > $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/postrm
     @cat prerm | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" > $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/prerm
     @chmod -R g-w $(MISC)/$(TARGET)/$(DEBFILE:f)
-    @chmod a+x $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/post* $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/pre*
-    /bin/bash -c "LD_PRELOAD=$(SOLARBINDIR)/getuid.so dpkg-deb --build $(MISC)/$(TARGET)/$(DEBFILE:f) $(DEBFILE)"
-    @chmod -R g+w $(MISC)/$(TARGET)/$(DEBFILE:f)
+    @chmod a+rx $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/post* $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/pre*
+    /bin/bash -c "LD_PRELOAD=$(SOLARBINDIR)/getuid.so dpkg-deb --build $(MISC)/$(TARGET)/$(@:f) $@"
+    @chmod -R g+w $(MISC)/$(TARGET)/$(@:f)
+
 .ENDIF
