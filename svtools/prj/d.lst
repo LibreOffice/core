@@ -159,7 +159,6 @@ hedabu: ..\inc\inetimg.hxx %_DEST%\inc%_EXT%\svtools\inetimg.hxx
 hedabu: ..\inc\svmedit.hxx %_DEST%\inc%_EXT%\svtools\svmedit.hxx
 hedabu: ..\inc\svmedit2.hxx %_DEST%\inc%_EXT%\svtools\svmedit2.hxx
 hedabu: ..\inc\svstdarr.hxx %_DEST%\inc%_EXT%\svtools\svstdarr.hxx
-hedabu: ..\inc\extattr.hxx %_DEST%\inc%_EXT%\svtools\extattr.hxx
 hedabu: ..\inc\metitem.hxx %_DEST%\inc%_EXT%\svtools\metitem.hxx
 hedabu: ..\inc\nfversi.hxx %_DEST%\inc%_EXT%\svtools\nfversi.hxx
 hedabu: ..\inc\nfkeytab.hxx %_DEST%\inc%_EXT%\svtools\nfkeytab.hxx
