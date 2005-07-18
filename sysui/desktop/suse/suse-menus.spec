@@ -1,18 +1,56 @@
+# version and release passed by command-line
+Version: %version
+Release: %release
 Summary: OpenOffice.org desktop integration
 Name: openofficeorg-suse-menus
-Version: 2.0
-Release: 1
 Group: Office
 License: LGPL, SISSL
 Vendor: OpenOffice.org
 AutoReqProv: no
+BuildArch: noarch
 # /etc/SuSE-release for SuSE, SLES and Novell Linux Desktop ..
 Requires: openofficeorg-core01, /etc/SuSE-release
 # .. but not for Sun JDS
 Conflicts: SunDesktopVersion
+Provides: openofficeorg-desktop-integration
 %define _unpackaged_files_terminate_build 0
 %description 
 OpenOffice.org desktop integration
+
+%install
+## add symlinks so that nautilus can identify the mime-icons 
+## not strictly freedesktop-stuff but there is no common naming scheme yet.
+## One proposal is "mime-application:vnd.oasis.opendocument.spreadsheet.png"
+## for e.g. application/vnd.oasis.opendocument.spreadsheet
+cd $RPM_BUILD_ROOT/opt/gnome/share/icons/gnome
+originalname=%unixfilename
+iconname=`echo $originalname | sed -e 's/\.//g'`
+for dir in *; do
+  mkdir -p $RPM_BUILD_ROOT/opt/gnome/share/icons/hicolor/$dir/mimetypes
+  ln -sf ../../../gnome/$dir/mimetypes/$iconname-drawing.png                ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.sun.xml.draw.png
+  ln -sf ../../../gnome/$dir/mimetypes/$iconname-drawing-template.png       ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.sun.xml.draw.template.png
+  ln -sf ../../../gnome/$dir/mimetypes/$iconname-formula.png                ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.sun.xml.math.png
+  ln -sf ../../../gnome/$dir/mimetypes/$iconname-master-document.png        ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.sun.xml.writer.global.png
+  ln -sf ../../../gnome/$dir/mimetypes/$iconname-oasis-database.png         ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.sun.xml.base.png
+  ln -sf ../../../gnome/$dir/mimetypes/$iconname-oasis-database.png         ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.oasis.opendocument.database.png
+  ln -sf ../../../gnome/$dir/mimetypes/$iconname-oasis-drawing.png          ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.oasis.opendocument.graphics.png
+  ln -sf ../../../gnome/$dir/mimetypes/$iconname-oasis-drawing-template.png ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.oasis.opendocument.graphics-template.png
+  ln -sf ../../../gnome/$dir/mimetypes/$iconname-oasis-formula.png          ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.oasis.opendocument.formula.png
+  ln -sf ../../../gnome/$dir/mimetypes/$iconname-oasis-master-document.png  ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.oasis.opendocument.text-master.png
+  ln -sf ../../../gnome/$dir/mimetypes/$iconname-oasis-presentation.png     ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.oasis.opendocument.presentation.png
+  ln -sf ../../../gnome/$dir/mimetypes/$iconname-oasis-presentation-template.png ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.oasis.opendocument.presentation-template.png
+  ln -sf ../../../gnome/$dir/mimetypes/$iconname-oasis-spreadsheet.png           ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.oasis.opendocument.spreadsheet.png
+  ln -sf ../../../gnome/$dir/mimetypes/$iconname-oasis-spreadsheet-template.png  ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.oasis.opendocument.spreadsheet-template.png
+  ln -sf ../../../gnome/$dir/mimetypes/$iconname-oasis-text.png             ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.oasis.opendocument.text.png
+  ln -sf ../../../gnome/$dir/mimetypes/$iconname-oasis-text-template.png    ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.oasis.opendocument.text-template.png
+  ln -sf ../../../gnome/$dir/mimetypes/$iconname-oasis-web-template.png     ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.oasis.opendocument.text-web.png
+  ln -sf ../../../gnome/$dir/mimetypes/$iconname-presentation.png           ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.sun.xml.impress.png
+  ln -sf ../../../gnome/$dir/mimetypes/$iconname-presentation-template.png  ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.sun.xml.impress.template.png
+  ln -sf ../../../gnome/$dir/mimetypes/$iconname-spreadsheet.png            ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.sun.xml.calc.png
+  ln -sf ../../../gnome/$dir/mimetypes/$iconname-spreadsheet-template.png   ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.sun.xml.calc.template.png
+  ln -sf ../../../gnome/$dir/mimetypes/$iconname-text.png                   ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.sun.xml.writer.png
+  ln -sf ../../../gnome/$dir/mimetypes/$iconname-text-template.png          ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.sun.xml.writer.template.png
+done
 
 %triggerin -- openofficeorg-core01
 # create file in /etc that contains the office installation path
@@ -20,16 +58,43 @@ cat > /tmp/install.$$ << EOF
 while [ "\$TARGET" == "" ]
 do
   sleep 2
-  TARGET=\`rpm -q --qf '%{INSTALLPREFIX}' openofficeorg-core01 2>&1\` && ln -snf \$TARGET /etc/%PREFIX
+  TARGET=\`rpm -q --qf '%{INSTALLPREFIX}' openofficeorg-core01 2>&1\` && ln -snf \$TARGET /etc/%unixfilename
   # some rpm versions do not wait for the shared lock
   echo \$TARGET | grep '/var/lib/rpm' && TARGET=""
 done
+if [ -x /opt/gnome/bin/update-desktop-database ]; then
+  /opt/gnome/bin/update-desktop-database /usr/share/applications
+fi 
 rm -f /tmp/install.$$
 EOF
 
 /bin/sh /tmp/install.$$ &
 
+
+%triggerin -- openofficeorg-writer, openofficeorg-calc, openofficeorg-draw, openofficeorg-impress, openofficeorg-base, openofficeorg-math
+if [ -x /opt/gnome/bin/update-desktop-database -a -h /etc/%unixfilename ]; then
+  /opt/gnome/bin/update-desktop-database /usr/share/applications
+fi 
+
+%triggerun -- openofficeorg-writer, openofficeorg-calc, openofficeorg-draw, openofficeorg-impress, openofficeorg-base, openofficeorg-math
+if [ "$1" = "0" ] ; then  
+  # the menu-package gets uninstalled/updated - postun will run the command
+  exit 0
+fi
+if [ "$2" = "0" ] ; then  
+  # the triggering package gets removed
+  if [ -x /opt/gnome/bin/update-desktop-database ]; then
+    /opt/gnome/bin/update-desktop-database /usr/share/applications
+  fi 
+fi
+
 %post
+# run always, since there are versions of this package that did not include
+# a shared-mime-info xml file
+if [ -x /usr/bin/update-mime-database ]; then
+  update-mime-database /usr/share/mime
+fi
+
 # update /etc/mime.types
 # backing out existing entries to avoid duplicates
 sed '
@@ -97,56 +162,56 @@ then
   # now append our stuff to the temporary file
   cat >> /etc/mailcap.tmp$$ << END
 # OpenOffice.org
-application/vnd.oasis.opendocument.text; %PREFIX -view %s
-application/vnd.oasis.opendocument.text-template; %PREFIX -view %s
-application/vnd.oasis.opendocument.text-web; %PREFIX -view %s
-application/vnd.oasis.opendocument.text-master; %PREFIX -view %s
-application/vnd.sun.xml.writer; %PREFIX -view %s
-application/vnd.sun.xml.writer.template; %PREFIX -view %s
-application/vnd.sun.xml.writer.global; %PREFIX -view %s
-application/vnd.stardivision.writer; %PREFIX -view %s
-application/vnd.stardivision.writer-global; %PREFIX -view %s
-application/x-starwriter; %PREFIX -view %s
-application/vnd.oasis.opendocument.formula; %PREFIX -view %s
-application/vnd.sun.xml.math; %PREFIX -view %s
-application/vnd.stardivision.math; %PREFIX -view %s
-application/x-starmath; %PREFIX -view %s
-application/msword; %PREFIX -view %s
-application/vnd.oasis.opendocument.spreadsheet; %PREFIX -view %s
-application/vnd.oasis.opendocument.spreadsheet-template; %PREFIX -view %s
-application/vnd.sun.xml.calc; %PREFIX -view %s
-application/vnd.sun.xml.calc.template; %PREFIX -view %s
-application/vnd.stardivision.calc; %PREFIX -view %s
-application/x-starcalc; %PREFIX -view %s
-application/vnd.stardivision.chart; %PREFIX -view %s
-application/x-starchart; %PREFIX -view %s
-application/excel; %PREFIX -view %s
-application/msexcel; %PREFIX -view %s
-application/vnd.ms-excel; %PREFIX -view %s
-application/x-msexcel; %PREFIX -view %s
-application/vnd.oasis.opendocument.presentation; %PREFIX -view %s
-application/vnd.oasis.opendocument.presentation-template; %PREFIX -view %s
-application/vnd.sun.xml.impress; %PREFIX -view %s
-application/vnd.sun.xml.impress.template; %PREFIX -view %s
-application/vnd.stardivision.impress; %PREFIX -view %s
-application/x-starimpress; %PREFIX -view %s
-application/powerpoint; %PREFIX -view %s
-application/mspowerpoint; %PREFIX -view %s
-application/vnd.ms-powerpoint; %PREFIX -view %s
-application/x-mspowerpoint; %PREFIX -view %s
-application/vnd.oasis.opendocument.graphics; %PREFIX -view %s
-application/vnd.oasis.opendocument.graphics-template; %PREFIX -view %s
-application/vnd.sun.xml.draw; %PREFIX -view %s
-application/vnd.sun.xml.draw.template; %PREFIX -view %s
-application/vnd.stardivision.draw; %PREFIX -view %s
-application/x-stardraw; %PREFIX -view %s
-application/vnd.oasis.opendocument.database; %PREFIX -view %s
-application/vnd.sun.xml.base; %PREFIX -view %s
-application/vnd.wordperfect; %PREFIX -view %s
-application/wordperfect5.1; %PREFIX -view %s
-application/x-wordperfect; %PREFIX -view %s
-application/wordperfect; %PREFIX -view %s
-application/wpwin; %PREFIX -view %s
+application/vnd.oasis.opendocument.text; %unixfilename -view %s
+application/vnd.oasis.opendocument.text-template; %unixfilename -view %s
+application/vnd.oasis.opendocument.text-web; %unixfilename -view %s
+application/vnd.oasis.opendocument.text-master; %unixfilename -view %s
+application/vnd.sun.xml.writer; %unixfilename -view %s
+application/vnd.sun.xml.writer.template; %unixfilename -view %s
+application/vnd.sun.xml.writer.global; %unixfilename -view %s
+application/vnd.stardivision.writer; %unixfilename -view %s
+application/vnd.stardivision.writer-global; %unixfilename -view %s
+application/x-starwriter; %unixfilename -view %s
+application/vnd.oasis.opendocument.formula; %unixfilename -view %s
+application/vnd.sun.xml.math; %unixfilename -view %s
+application/vnd.stardivision.math; %unixfilename -view %s
+application/x-starmath; %unixfilename -view %s
+application/msword; %unixfilename -view %s
+application/vnd.oasis.opendocument.spreadsheet; %unixfilename -view %s
+application/vnd.oasis.opendocument.spreadsheet-template; %unixfilename -view %s
+application/vnd.sun.xml.calc; %unixfilename -view %s
+application/vnd.sun.xml.calc.template; %unixfilename -view %s
+application/vnd.stardivision.calc; %unixfilename -view %s
+application/x-starcalc; %unixfilename -view %s
+application/vnd.stardivision.chart; %unixfilename -view %s
+application/x-starchart; %unixfilename -view %s
+application/excel; %unixfilename -view %s
+application/msexcel; %unixfilename -view %s
+application/vnd.ms-excel; %unixfilename -view %s
+application/x-msexcel; %unixfilename -view %s
+application/vnd.oasis.opendocument.presentation; %unixfilename -view %s
+application/vnd.oasis.opendocument.presentation-template; %unixfilename -view %s
+application/vnd.sun.xml.impress; %unixfilename -view %s
+application/vnd.sun.xml.impress.template; %unixfilename -view %s
+application/vnd.stardivision.impress; %unixfilename -view %s
+application/x-starimpress; %unixfilename -view %s
+application/powerpoint; %unixfilename -view %s
+application/mspowerpoint; %unixfilename -view %s
+application/vnd.ms-powerpoint; %unixfilename -view %s
+application/x-mspowerpoint; %unixfilename -view %s
+application/vnd.oasis.opendocument.graphics; %unixfilename -view %s
+application/vnd.oasis.opendocument.graphics-template; %unixfilename -view %s
+application/vnd.sun.xml.draw; %unixfilename -view %s
+application/vnd.sun.xml.draw.template; %unixfilename -view %s
+application/vnd.stardivision.draw; %unixfilename -view %s
+application/x-stardraw; %unixfilename -view %s
+application/vnd.oasis.opendocument.database; %unixfilename -view %s
+application/vnd.sun.xml.base; %unixfilename -view %s
+application/vnd.wordperfect; %unixfilename -view %s
+application/wordperfect5.1; %unixfilename -view %s
+application/x-wordperfect; %unixfilename -view %s
+application/wordperfect; %unixfilename -view %s
+application/wpwin; %unixfilename -view %s
 END
 
   # and replace the original file
@@ -160,18 +225,18 @@ then
   then
     /opt/gnome/bin/gnome-panel --version | grep ' 2\.[024]\.' > /dev/null
     if [ "$?" = "0" ]; then
-      cat >> /usr/bin/%PREFIX.tmp$$ << EOF
+      cat >> /usr/bin/%unixfilename.tmp$$ << EOF
 #!/bin/sh
-USERDIR=\`sed -n -e 's/UserInstallation=//p' /etc/%PREFIX/program/bootstraprc | sed -e "s|.SYSUSERCONFIG|\$HOME|"\`
+USERDIR=\`sed -n -e 's/UserInstallation=//p' /etc/%unixfilename/program/bootstraprc | sed -e "s|.SYSUSERCONFIG|\$HOME|"\`
 # Run gnome-set-default-application on first office launch
 if [ ! -d \$USERDIR ]
 then
-  /etc/%PREFIX/program/gnome-set-default-application '%PREFIX' 'application/vnd.oasis.opendocument' 'application/vnd.sun.xml' 'application/vnd.stardivision'
+  /etc/%unixfilename/program/gnome-set-default-application '%unixfilename' 'application/vnd.oasis.opendocument' 'application/vnd.sun.xml' 'application/vnd.stardivision'
 fi
 EOF
-      sed -n -e '2,$ p' /usr/bin/%PREFIX >> /usr/bin/%PREFIX.tmp$$
-      mv -f /usr/bin/%PREFIX.tmp$$ /usr/bin/%PREFIX
-      chmod 0755 /usr/bin/%PREFIX
+      sed -n -e '2,$ p' /usr/bin/%unixfilename >> /usr/bin/%unixfilename.tmp$$
+      mv -f /usr/bin/%unixfilename.tmp$$ /usr/bin/%unixfilename
+      chmod 0755 /usr/bin/%unixfilename
     fi
   fi
 fi
@@ -181,344 +246,46 @@ fi
 if [ "$1" = 0 ]
 then
   # backing all entries pointing to our binary
-  sed '/%PREFIX/d' /etc/mailcap 2>/dev/null >> /etc/mailcap.tmp$$
+  sed '/%unixfilename/d' /etc/mailcap 2>/dev/null >> /etc/mailcap.tmp$$
 
   # and replace the original file
   mv -f /etc/mailcap.tmp$$ /etc/mailcap
 fi
 
+%postun
+# run only when erasing this package, since %post of the new package ran 
+# previously or updates already handled by triggers.
+if [ "$1" = 0 ] ; then 
+  if [ -x /opt/gnome/bin/update-desktop-database ]; then
+    /opt/gnome/bin/update-desktop-database /usr/share/applications
+  fi 
+  if [ -x /usr/bin/update-mime-database ]; then
+    update-mime-database /usr/share/mime
+  fi
+fi
+
 %files
 %attr(0755,root,root) /usr/bin/soffice
-%attr(0755,root,root) %verify(not size md5) /usr/bin/%PREFIX
-%attr(0755,root,root) /usr/bin/%PREFIX-printeradmin
+%attr(0755,root,root) %verify(not size md5) /usr/bin/%unixfilename
+%attr(0755,root,root) /usr/bin/%unixfilename-printeradmin
 %defattr(0644, root, root)
-%ghost /etc/%PREFIX
-/opt/gnome/share/application-registry/%PREFIX.applications
-/usr/share/applications/%PREFIX-writer.desktop
-/usr/share/applications/%PREFIX-calc.desktop
-/usr/share/applications/%PREFIX-draw.desktop
-/usr/share/applications/%PREFIX-impress.desktop
-/usr/share/applications/%PREFIX-math.desktop
-/usr/share/applications/%PREFIX-base.desktop
-/usr/share/applications/%PREFIX-printeradmin.desktop
-/opt/gnome/share/mime-info/%PREFIX.keys
-/opt/gnome/share/mime-info/%PREFIX.mime
-/opt/kde3/share/mimelnk/application/%PREFIX-text.desktop
-/opt/kde3/share/mimelnk/application/%PREFIX-text-template.desktop
-/opt/kde3/share/mimelnk/application/%PREFIX-spreadsheet.desktop
-/opt/kde3/share/mimelnk/application/%PREFIX-spreadsheet-template.desktop
-/opt/kde3/share/mimelnk/application/%PREFIX-drawing.desktop
-/opt/kde3/share/mimelnk/application/%PREFIX-drawing-template.desktop
-/opt/kde3/share/mimelnk/application/%PREFIX-presentation.desktop
-/opt/kde3/share/mimelnk/application/%PREFIX-presentation-template.desktop
-/opt/kde3/share/mimelnk/application/%PREFIX-master-document.desktop
-/opt/kde3/share/mimelnk/application/%PREFIX-formula.desktop
-/opt/kde3/share/mimelnk/application/%PREFIX-oasis-text.desktop
-/opt/kde3/share/mimelnk/application/%PREFIX-oasis-text-template.desktop
-/opt/kde3/share/mimelnk/application/%PREFIX-oasis-spreadsheet.desktop
-/opt/kde3/share/mimelnk/application/%PREFIX-oasis-spreadsheet-template.desktop
-/opt/kde3/share/mimelnk/application/%PREFIX-oasis-drawing.desktop
-/opt/kde3/share/mimelnk/application/%PREFIX-oasis-drawing-template.desktop
-/opt/kde3/share/mimelnk/application/%PREFIX-oasis-presentation.desktop
-/opt/kde3/share/mimelnk/application/%PREFIX-oasis-presentation-template.desktop
-/opt/kde3/share/mimelnk/application/%PREFIX-oasis-master-document.desktop
-/opt/kde3/share/mimelnk/application/%PREFIX-oasis-formula.desktop
-/opt/kde3/share/mimelnk/application/%PREFIX-oasis-database.desktop
-/opt/kde3/share/mimelnk/application/%PREFIX-oasis-web-template.desktop
-/opt/gnome/share/icons/gnome/16x16/apps/%ICONPREFIX-writer.png
-/opt/gnome/share/icons/gnome/16x16/apps/%ICONPREFIX-calc.png
-/opt/gnome/share/icons/gnome/16x16/apps/%ICONPREFIX-draw.png
-/opt/gnome/share/icons/gnome/16x16/apps/%ICONPREFIX-impress.png
-/opt/gnome/share/icons/gnome/16x16/apps/%ICONPREFIX-math.png
-/opt/gnome/share/icons/gnome/16x16/apps/%ICONPREFIX-base.png
-/opt/gnome/share/icons/gnome/16x16/apps/%ICONPREFIX-printeradmin.png
-/opt/gnome/share/icons/gnome/16x16/mimetypes/%ICONPREFIX-text.png
-/opt/gnome/share/icons/gnome/16x16/mimetypes/%ICONPREFIX-text-template.png
-/opt/gnome/share/icons/gnome/16x16/mimetypes/%ICONPREFIX-spreadsheet.png
-/opt/gnome/share/icons/gnome/16x16/mimetypes/%ICONPREFIX-spreadsheet-template.png
-/opt/gnome/share/icons/gnome/16x16/mimetypes/%ICONPREFIX-drawing.png
-/opt/gnome/share/icons/gnome/16x16/mimetypes/%ICONPREFIX-drawing-template.png
-/opt/gnome/share/icons/gnome/16x16/mimetypes/%ICONPREFIX-presentation.png
-/opt/gnome/share/icons/gnome/16x16/mimetypes/%ICONPREFIX-presentation-template.png
-/opt/gnome/share/icons/gnome/16x16/mimetypes/%ICONPREFIX-master-document.png
-/opt/gnome/share/icons/gnome/16x16/mimetypes/%ICONPREFIX-formula.png
-/opt/gnome/share/icons/gnome/16x16/mimetypes/%ICONPREFIX-database.png
-/opt/gnome/share/icons/gnome/16x16/mimetypes/%ICONPREFIX-oasis-text.png
-/opt/gnome/share/icons/gnome/16x16/mimetypes/%ICONPREFIX-oasis-text-template.png
-/opt/gnome/share/icons/gnome/16x16/mimetypes/%ICONPREFIX-oasis-spreadsheet.png
-/opt/gnome/share/icons/gnome/16x16/mimetypes/%ICONPREFIX-oasis-spreadsheet-template.png
-/opt/gnome/share/icons/gnome/16x16/mimetypes/%ICONPREFIX-oasis-drawing.png
-/opt/gnome/share/icons/gnome/16x16/mimetypes/%ICONPREFIX-oasis-drawing-template.png
-/opt/gnome/share/icons/gnome/16x16/mimetypes/%ICONPREFIX-oasis-presentation.png
-/opt/gnome/share/icons/gnome/16x16/mimetypes/%ICONPREFIX-oasis-presentation-template.png
-/opt/gnome/share/icons/gnome/16x16/mimetypes/%ICONPREFIX-oasis-master-document.png
-/opt/gnome/share/icons/gnome/16x16/mimetypes/%ICONPREFIX-oasis-formula.png
-/opt/gnome/share/icons/gnome/16x16/mimetypes/%ICONPREFIX-oasis-database.png
-/opt/gnome/share/icons/gnome/16x16/mimetypes/%ICONPREFIX-oasis-web-template.png
-/opt/gnome/share/icons/gnome/32x32/apps/%ICONPREFIX-writer.png
-/opt/gnome/share/icons/gnome/32x32/apps/%ICONPREFIX-calc.png
-/opt/gnome/share/icons/gnome/32x32/apps/%ICONPREFIX-draw.png
-/opt/gnome/share/icons/gnome/32x32/apps/%ICONPREFIX-impress.png
-/opt/gnome/share/icons/gnome/32x32/apps/%ICONPREFIX-math.png
-/opt/gnome/share/icons/gnome/32x32/apps/%ICONPREFIX-base.png
-/opt/gnome/share/icons/gnome/32x32/apps/%ICONPREFIX-printeradmin.png
-/opt/gnome/share/icons/gnome/32x32/mimetypes/%ICONPREFIX-text.png
-/opt/gnome/share/icons/gnome/32x32/mimetypes/%ICONPREFIX-text-template.png
-/opt/gnome/share/icons/gnome/32x32/mimetypes/%ICONPREFIX-spreadsheet.png
-/opt/gnome/share/icons/gnome/32x32/mimetypes/%ICONPREFIX-spreadsheet-template.png
-/opt/gnome/share/icons/gnome/32x32/mimetypes/%ICONPREFIX-drawing.png
-/opt/gnome/share/icons/gnome/32x32/mimetypes/%ICONPREFIX-drawing-template.png
-/opt/gnome/share/icons/gnome/32x32/mimetypes/%ICONPREFIX-presentation.png
-/opt/gnome/share/icons/gnome/32x32/mimetypes/%ICONPREFIX-presentation-template.png
-/opt/gnome/share/icons/gnome/32x32/mimetypes/%ICONPREFIX-master-document.png
-/opt/gnome/share/icons/gnome/32x32/mimetypes/%ICONPREFIX-formula.png
-/opt/gnome/share/icons/gnome/32x32/mimetypes/%ICONPREFIX-database.png
-/opt/gnome/share/icons/gnome/32x32/mimetypes/%ICONPREFIX-oasis-text.png
-/opt/gnome/share/icons/gnome/32x32/mimetypes/%ICONPREFIX-oasis-text-template.png
-/opt/gnome/share/icons/gnome/32x32/mimetypes/%ICONPREFIX-oasis-spreadsheet.png
-/opt/gnome/share/icons/gnome/32x32/mimetypes/%ICONPREFIX-oasis-spreadsheet-template.png
-/opt/gnome/share/icons/gnome/32x32/mimetypes/%ICONPREFIX-oasis-drawing.png
-/opt/gnome/share/icons/gnome/32x32/mimetypes/%ICONPREFIX-oasis-drawing-template.png
-/opt/gnome/share/icons/gnome/32x32/mimetypes/%ICONPREFIX-oasis-presentation.png
-/opt/gnome/share/icons/gnome/32x32/mimetypes/%ICONPREFIX-oasis-presentation-template.png
-/opt/gnome/share/icons/gnome/32x32/mimetypes/%ICONPREFIX-oasis-master-document.png
-/opt/gnome/share/icons/gnome/32x32/mimetypes/%ICONPREFIX-oasis-formula.png
-/opt/gnome/share/icons/gnome/32x32/mimetypes/%ICONPREFIX-oasis-database.png
-/opt/gnome/share/icons/gnome/32x32/mimetypes/%ICONPREFIX-oasis-web-template.png
-/opt/gnome/share/icons/gnome/48x48/apps/%ICONPREFIX-writer.png
-/opt/gnome/share/icons/gnome/48x48/apps/%ICONPREFIX-calc.png
-/opt/gnome/share/icons/gnome/48x48/apps/%ICONPREFIX-draw.png
-/opt/gnome/share/icons/gnome/48x48/apps/%ICONPREFIX-impress.png
-/opt/gnome/share/icons/gnome/48x48/apps/%ICONPREFIX-math.png
-/opt/gnome/share/icons/gnome/48x48/apps/%ICONPREFIX-base.png
-/opt/gnome/share/icons/gnome/48x48/apps/%ICONPREFIX-printeradmin.png
-/opt/gnome/share/icons/gnome/48x48/mimetypes/%ICONPREFIX-text.png
-/opt/gnome/share/icons/gnome/48x48/mimetypes/%ICONPREFIX-text-template.png
-/opt/gnome/share/icons/gnome/48x48/mimetypes/%ICONPREFIX-spreadsheet.png
-/opt/gnome/share/icons/gnome/48x48/mimetypes/%ICONPREFIX-spreadsheet-template.png
-/opt/gnome/share/icons/gnome/48x48/mimetypes/%ICONPREFIX-drawing.png
-/opt/gnome/share/icons/gnome/48x48/mimetypes/%ICONPREFIX-drawing-template.png
-/opt/gnome/share/icons/gnome/48x48/mimetypes/%ICONPREFIX-presentation.png
-/opt/gnome/share/icons/gnome/48x48/mimetypes/%ICONPREFIX-presentation-template.png
-/opt/gnome/share/icons/gnome/48x48/mimetypes/%ICONPREFIX-master-document.png
-/opt/gnome/share/icons/gnome/48x48/mimetypes/%ICONPREFIX-formula.png
-/opt/gnome/share/icons/gnome/48x48/mimetypes/%ICONPREFIX-database.png
-/opt/gnome/share/icons/gnome/48x48/mimetypes/%ICONPREFIX-oasis-text.png
-/opt/gnome/share/icons/gnome/48x48/mimetypes/%ICONPREFIX-oasis-text-template.png
-/opt/gnome/share/icons/gnome/48x48/mimetypes/%ICONPREFIX-oasis-spreadsheet.png
-/opt/gnome/share/icons/gnome/48x48/mimetypes/%ICONPREFIX-oasis-spreadsheet-template.png
-/opt/gnome/share/icons/gnome/48x48/mimetypes/%ICONPREFIX-oasis-drawing.png
-/opt/gnome/share/icons/gnome/48x48/mimetypes/%ICONPREFIX-oasis-drawing-template.png
-/opt/gnome/share/icons/gnome/48x48/mimetypes/%ICONPREFIX-oasis-presentation.png
-/opt/gnome/share/icons/gnome/48x48/mimetypes/%ICONPREFIX-oasis-presentation-template.png
-/opt/gnome/share/icons/gnome/48x48/mimetypes/%ICONPREFIX-oasis-master-document.png
-/opt/gnome/share/icons/gnome/48x48/mimetypes/%ICONPREFIX-oasis-formula.png
-/opt/gnome/share/icons/gnome/48x48/mimetypes/%ICONPREFIX-oasis-database.png
-/opt/gnome/share/icons/gnome/48x48/mimetypes/%ICONPREFIX-oasis-web-template.png
-/opt/gnome/share/icons/HighContrast/16x16/apps/%ICONPREFIX-writer.png
-/opt/gnome/share/icons/HighContrast/16x16/apps/%ICONPREFIX-calc.png
-/opt/gnome/share/icons/HighContrast/16x16/apps/%ICONPREFIX-draw.png
-/opt/gnome/share/icons/HighContrast/16x16/apps/%ICONPREFIX-impress.png
-/opt/gnome/share/icons/HighContrast/16x16/apps/%ICONPREFIX-math.png
-/opt/gnome/share/icons/HighContrast/16x16/apps/%ICONPREFIX-base.png
-/opt/gnome/share/icons/HighContrast/16x16/apps/%ICONPREFIX-printeradmin.png
-/opt/gnome/share/icons/HighContrast/16x16/mimetypes/%ICONPREFIX-oasis-text.png
-/opt/gnome/share/icons/HighContrast/16x16/mimetypes/%ICONPREFIX-oasis-text-template.png
-/opt/gnome/share/icons/HighContrast/16x16/mimetypes/%ICONPREFIX-oasis-spreadsheet.png
-/opt/gnome/share/icons/HighContrast/16x16/mimetypes/%ICONPREFIX-oasis-spreadsheet-template.png
-/opt/gnome/share/icons/HighContrast/16x16/mimetypes/%ICONPREFIX-oasis-drawing.png
-/opt/gnome/share/icons/HighContrast/16x16/mimetypes/%ICONPREFIX-oasis-drawing-template.png
-/opt/gnome/share/icons/HighContrast/16x16/mimetypes/%ICONPREFIX-oasis-presentation.png
-/opt/gnome/share/icons/HighContrast/16x16/mimetypes/%ICONPREFIX-oasis-presentation-template.png
-/opt/gnome/share/icons/HighContrast/16x16/mimetypes/%ICONPREFIX-oasis-master-document.png
-/opt/gnome/share/icons/HighContrast/16x16/mimetypes/%ICONPREFIX-oasis-formula.png
-/opt/gnome/share/icons/HighContrast/16x16/mimetypes/%ICONPREFIX-oasis-database.png
-/opt/gnome/share/icons/HighContrast/16x16/mimetypes/%ICONPREFIX-oasis-web-template.png
-/opt/gnome/share/icons/HighContrast/32x32/apps/%ICONPREFIX-writer.png
-/opt/gnome/share/icons/HighContrast/32x32/apps/%ICONPREFIX-calc.png
-/opt/gnome/share/icons/HighContrast/32x32/apps/%ICONPREFIX-draw.png
-/opt/gnome/share/icons/HighContrast/32x32/apps/%ICONPREFIX-impress.png
-/opt/gnome/share/icons/HighContrast/32x32/apps/%ICONPREFIX-math.png
-/opt/gnome/share/icons/HighContrast/32x32/apps/%ICONPREFIX-base.png
-/opt/gnome/share/icons/HighContrast/32x32/apps/%ICONPREFIX-printeradmin.png
-/opt/gnome/share/icons/HighContrast/32x32/mimetypes/%ICONPREFIX-oasis-text.png
-/opt/gnome/share/icons/HighContrast/32x32/mimetypes/%ICONPREFIX-oasis-text-template.png
-/opt/gnome/share/icons/HighContrast/32x32/mimetypes/%ICONPREFIX-oasis-spreadsheet.png
-/opt/gnome/share/icons/HighContrast/32x32/mimetypes/%ICONPREFIX-oasis-spreadsheet-template.png
-/opt/gnome/share/icons/HighContrast/32x32/mimetypes/%ICONPREFIX-oasis-drawing.png
-/opt/gnome/share/icons/HighContrast/32x32/mimetypes/%ICONPREFIX-oasis-drawing-template.png
-/opt/gnome/share/icons/HighContrast/32x32/mimetypes/%ICONPREFIX-oasis-presentation.png
-/opt/gnome/share/icons/HighContrast/32x32/mimetypes/%ICONPREFIX-oasis-presentation-template.png
-/opt/gnome/share/icons/HighContrast/32x32/mimetypes/%ICONPREFIX-oasis-master-document.png
-/opt/gnome/share/icons/HighContrast/32x32/mimetypes/%ICONPREFIX-oasis-formula.png
-/opt/gnome/share/icons/HighContrast/32x32/mimetypes/%ICONPREFIX-oasis-database.png
-/opt/gnome/share/icons/HighContrast/32x32/mimetypes/%ICONPREFIX-oasis-web-template.png
-/opt/gnome/share/icons/HighContrast/48x48/apps/%ICONPREFIX-writer.png
-/opt/gnome/share/icons/HighContrast/48x48/apps/%ICONPREFIX-calc.png
-/opt/gnome/share/icons/HighContrast/48x48/apps/%ICONPREFIX-draw.png
-/opt/gnome/share/icons/HighContrast/48x48/apps/%ICONPREFIX-impress.png
-/opt/gnome/share/icons/HighContrast/48x48/apps/%ICONPREFIX-math.png
-/opt/gnome/share/icons/HighContrast/48x48/apps/%ICONPREFIX-base.png
-/opt/gnome/share/icons/HighContrast/48x48/apps/%ICONPREFIX-printeradmin.png
-/opt/gnome/share/icons/HighContrast/48x48/mimetypes/%ICONPREFIX-oasis-text.png
-/opt/gnome/share/icons/HighContrast/48x48/mimetypes/%ICONPREFIX-oasis-text-template.png
-/opt/gnome/share/icons/HighContrast/48x48/mimetypes/%ICONPREFIX-oasis-spreadsheet.png
-/opt/gnome/share/icons/HighContrast/48x48/mimetypes/%ICONPREFIX-oasis-spreadsheet-template.png
-/opt/gnome/share/icons/HighContrast/48x48/mimetypes/%ICONPREFIX-oasis-drawing.png
-/opt/gnome/share/icons/HighContrast/48x48/mimetypes/%ICONPREFIX-oasis-drawing-template.png
-/opt/gnome/share/icons/HighContrast/48x48/mimetypes/%ICONPREFIX-oasis-presentation.png
-/opt/gnome/share/icons/HighContrast/48x48/mimetypes/%ICONPREFIX-oasis-presentation-template.png
-/opt/gnome/share/icons/HighContrast/48x48/mimetypes/%ICONPREFIX-oasis-master-document.png
-/opt/gnome/share/icons/HighContrast/48x48/mimetypes/%ICONPREFIX-oasis-formula.png
-/opt/gnome/share/icons/HighContrast/48x48/mimetypes/%ICONPREFIX-oasis-database.png
-/opt/gnome/share/icons/HighContrast/48x48/mimetypes/%ICONPREFIX-oasis-web-template.png
-/opt/kde3/share/icons/hicolor/16x16/apps/%ICONPREFIX-writer.png
-/opt/kde3/share/icons/hicolor/16x16/apps/%ICONPREFIX-calc.png
-/opt/kde3/share/icons/hicolor/16x16/apps/%ICONPREFIX-draw.png
-/opt/kde3/share/icons/hicolor/16x16/apps/%ICONPREFIX-impress.png
-/opt/kde3/share/icons/hicolor/16x16/apps/%ICONPREFIX-math.png
-/opt/kde3/share/icons/hicolor/16x16/apps/%ICONPREFIX-base.png
-/opt/kde3/share/icons/hicolor/16x16/apps/%ICONPREFIX-printeradmin.png
-/opt/kde3/share/icons/hicolor/16x16/mimetypes/%ICONPREFIX-text.png
-/opt/kde3/share/icons/hicolor/16x16/mimetypes/%ICONPREFIX-text-template.png
-/opt/kde3/share/icons/hicolor/16x16/mimetypes/%ICONPREFIX-spreadsheet.png
-/opt/kde3/share/icons/hicolor/16x16/mimetypes/%ICONPREFIX-spreadsheet-template.png
-/opt/kde3/share/icons/hicolor/16x16/mimetypes/%ICONPREFIX-drawing.png
-/opt/kde3/share/icons/hicolor/16x16/mimetypes/%ICONPREFIX-drawing-template.png
-/opt/kde3/share/icons/hicolor/16x16/mimetypes/%ICONPREFIX-presentation.png
-/opt/kde3/share/icons/hicolor/16x16/mimetypes/%ICONPREFIX-presentation-template.png
-/opt/kde3/share/icons/hicolor/16x16/mimetypes/%ICONPREFIX-master-document.png
-/opt/kde3/share/icons/hicolor/16x16/mimetypes/%ICONPREFIX-formula.png
-/opt/kde3/share/icons/hicolor/16x16/mimetypes/%ICONPREFIX-database.png
-/opt/kde3/share/icons/hicolor/16x16/mimetypes/%ICONPREFIX-oasis-text.png
-/opt/kde3/share/icons/hicolor/16x16/mimetypes/%ICONPREFIX-oasis-text-template.png
-/opt/kde3/share/icons/hicolor/16x16/mimetypes/%ICONPREFIX-oasis-spreadsheet.png
-/opt/kde3/share/icons/hicolor/16x16/mimetypes/%ICONPREFIX-oasis-spreadsheet-template.png
-/opt/kde3/share/icons/hicolor/16x16/mimetypes/%ICONPREFIX-oasis-drawing.png
-/opt/kde3/share/icons/hicolor/16x16/mimetypes/%ICONPREFIX-oasis-drawing-template.png
-/opt/kde3/share/icons/hicolor/16x16/mimetypes/%ICONPREFIX-oasis-presentation.png
-/opt/kde3/share/icons/hicolor/16x16/mimetypes/%ICONPREFIX-oasis-presentation-template.png
-/opt/kde3/share/icons/hicolor/16x16/mimetypes/%ICONPREFIX-oasis-master-document.png
-/opt/kde3/share/icons/hicolor/16x16/mimetypes/%ICONPREFIX-oasis-formula.png
-/opt/kde3/share/icons/hicolor/16x16/mimetypes/%ICONPREFIX-oasis-database.png
-/opt/kde3/share/icons/hicolor/16x16/mimetypes/%ICONPREFIX-oasis-web-template.png
-/opt/kde3/share/icons/hicolor/32x32/apps/%ICONPREFIX-writer.png
-/opt/kde3/share/icons/hicolor/32x32/apps/%ICONPREFIX-calc.png
-/opt/kde3/share/icons/hicolor/32x32/apps/%ICONPREFIX-draw.png
-/opt/kde3/share/icons/hicolor/32x32/apps/%ICONPREFIX-impress.png
-/opt/kde3/share/icons/hicolor/32x32/apps/%ICONPREFIX-math.png
-/opt/kde3/share/icons/hicolor/32x32/apps/%ICONPREFIX-base.png
-/opt/kde3/share/icons/hicolor/32x32/apps/%ICONPREFIX-printeradmin.png
-/opt/kde3/share/icons/hicolor/32x32/mimetypes/%ICONPREFIX-text.png
-/opt/kde3/share/icons/hicolor/32x32/mimetypes/%ICONPREFIX-text-template.png
-/opt/kde3/share/icons/hicolor/32x32/mimetypes/%ICONPREFIX-spreadsheet.png
-/opt/kde3/share/icons/hicolor/32x32/mimetypes/%ICONPREFIX-spreadsheet-template.png
-/opt/kde3/share/icons/hicolor/32x32/mimetypes/%ICONPREFIX-drawing.png
-/opt/kde3/share/icons/hicolor/32x32/mimetypes/%ICONPREFIX-drawing-template.png
-/opt/kde3/share/icons/hicolor/32x32/mimetypes/%ICONPREFIX-presentation.png
-/opt/kde3/share/icons/hicolor/32x32/mimetypes/%ICONPREFIX-presentation-template.png
-/opt/kde3/share/icons/hicolor/32x32/mimetypes/%ICONPREFIX-master-document.png
-/opt/kde3/share/icons/hicolor/32x32/mimetypes/%ICONPREFIX-formula.png
-/opt/kde3/share/icons/hicolor/32x32/mimetypes/%ICONPREFIX-database.png
-/opt/kde3/share/icons/hicolor/32x32/mimetypes/%ICONPREFIX-oasis-text.png
-/opt/kde3/share/icons/hicolor/32x32/mimetypes/%ICONPREFIX-oasis-text-template.png
-/opt/kde3/share/icons/hicolor/32x32/mimetypes/%ICONPREFIX-oasis-spreadsheet.png
-/opt/kde3/share/icons/hicolor/32x32/mimetypes/%ICONPREFIX-oasis-spreadsheet-template.png
-/opt/kde3/share/icons/hicolor/32x32/mimetypes/%ICONPREFIX-oasis-drawing.png
-/opt/kde3/share/icons/hicolor/32x32/mimetypes/%ICONPREFIX-oasis-drawing-template.png
-/opt/kde3/share/icons/hicolor/32x32/mimetypes/%ICONPREFIX-oasis-presentation.png
-/opt/kde3/share/icons/hicolor/32x32/mimetypes/%ICONPREFIX-oasis-presentation-template.png
-/opt/kde3/share/icons/hicolor/32x32/mimetypes/%ICONPREFIX-oasis-master-document.png
-/opt/kde3/share/icons/hicolor/32x32/mimetypes/%ICONPREFIX-oasis-formula.png
-/opt/kde3/share/icons/hicolor/32x32/mimetypes/%ICONPREFIX-oasis-database.png
-/opt/kde3/share/icons/hicolor/32x32/mimetypes/%ICONPREFIX-oasis-web-template.png
-/opt/kde3/share/icons/hicolor/48x48/apps/%ICONPREFIX-writer.png
-/opt/kde3/share/icons/hicolor/48x48/apps/%ICONPREFIX-calc.png
-/opt/kde3/share/icons/hicolor/48x48/apps/%ICONPREFIX-draw.png
-/opt/kde3/share/icons/hicolor/48x48/apps/%ICONPREFIX-impress.png
-/opt/kde3/share/icons/hicolor/48x48/apps/%ICONPREFIX-math.png
-/opt/kde3/share/icons/hicolor/48x48/apps/%ICONPREFIX-base.png
-/opt/kde3/share/icons/hicolor/48x48/apps/%ICONPREFIX-printeradmin.png
-/opt/kde3/share/icons/hicolor/48x48/mimetypes/%ICONPREFIX-text.png
-/opt/kde3/share/icons/hicolor/48x48/mimetypes/%ICONPREFIX-text-template.png
-/opt/kde3/share/icons/hicolor/48x48/mimetypes/%ICONPREFIX-spreadsheet.png
-/opt/kde3/share/icons/hicolor/48x48/mimetypes/%ICONPREFIX-spreadsheet-template.png
-/opt/kde3/share/icons/hicolor/48x48/mimetypes/%ICONPREFIX-drawing.png
-/opt/kde3/share/icons/hicolor/48x48/mimetypes/%ICONPREFIX-drawing-template.png
-/opt/kde3/share/icons/hicolor/48x48/mimetypes/%ICONPREFIX-presentation.png
-/opt/kde3/share/icons/hicolor/48x48/mimetypes/%ICONPREFIX-presentation-template.png
-/opt/kde3/share/icons/hicolor/48x48/mimetypes/%ICONPREFIX-master-document.png
-/opt/kde3/share/icons/hicolor/48x48/mimetypes/%ICONPREFIX-formula.png
-/opt/kde3/share/icons/hicolor/48x48/mimetypes/%ICONPREFIX-database.png
-/opt/kde3/share/icons/hicolor/48x48/mimetypes/%ICONPREFIX-oasis-text.png
-/opt/kde3/share/icons/hicolor/48x48/mimetypes/%ICONPREFIX-oasis-text-template.png
-/opt/kde3/share/icons/hicolor/48x48/mimetypes/%ICONPREFIX-oasis-spreadsheet.png
-/opt/kde3/share/icons/hicolor/48x48/mimetypes/%ICONPREFIX-oasis-spreadsheet-template.png
-/opt/kde3/share/icons/hicolor/48x48/mimetypes/%ICONPREFIX-oasis-drawing.png
-/opt/kde3/share/icons/hicolor/48x48/mimetypes/%ICONPREFIX-oasis-drawing-template.png
-/opt/kde3/share/icons/hicolor/48x48/mimetypes/%ICONPREFIX-oasis-presentation.png
-/opt/kde3/share/icons/hicolor/48x48/mimetypes/%ICONPREFIX-oasis-presentation-template.png
-/opt/kde3/share/icons/hicolor/48x48/mimetypes/%ICONPREFIX-oasis-master-document.png
-/opt/kde3/share/icons/hicolor/48x48/mimetypes/%ICONPREFIX-oasis-formula.png
-/opt/kde3/share/icons/hicolor/48x48/mimetypes/%ICONPREFIX-oasis-database.png
-/opt/kde3/share/icons/hicolor/48x48/mimetypes/%ICONPREFIX-oasis-web-template.png
-/opt/kde3/share/icons/locolor/16x16/apps/%ICONPREFIX-writer.png
-/opt/kde3/share/icons/locolor/16x16/apps/%ICONPREFIX-calc.png
-/opt/kde3/share/icons/locolor/16x16/apps/%ICONPREFIX-draw.png
-/opt/kde3/share/icons/locolor/16x16/apps/%ICONPREFIX-impress.png
-/opt/kde3/share/icons/locolor/16x16/apps/%ICONPREFIX-math.png
-/opt/kde3/share/icons/locolor/16x16/apps/%ICONPREFIX-base.png
-/opt/kde3/share/icons/locolor/16x16/apps/%ICONPREFIX-printeradmin.png
-/opt/kde3/share/icons/locolor/16x16/mimetypes/%ICONPREFIX-text.png
-/opt/kde3/share/icons/locolor/16x16/mimetypes/%ICONPREFIX-text-template.png
-/opt/kde3/share/icons/locolor/16x16/mimetypes/%ICONPREFIX-spreadsheet.png
-/opt/kde3/share/icons/locolor/16x16/mimetypes/%ICONPREFIX-spreadsheet-template.png
-/opt/kde3/share/icons/locolor/16x16/mimetypes/%ICONPREFIX-drawing.png
-/opt/kde3/share/icons/locolor/16x16/mimetypes/%ICONPREFIX-drawing-template.png
-/opt/kde3/share/icons/locolor/16x16/mimetypes/%ICONPREFIX-presentation.png
-/opt/kde3/share/icons/locolor/16x16/mimetypes/%ICONPREFIX-presentation-template.png
-/opt/kde3/share/icons/locolor/16x16/mimetypes/%ICONPREFIX-master-document.png
-/opt/kde3/share/icons/locolor/16x16/mimetypes/%ICONPREFIX-formula.png
-/opt/kde3/share/icons/locolor/16x16/mimetypes/%ICONPREFIX-database.png
-/opt/kde3/share/icons/locolor/16x16/mimetypes/%ICONPREFIX-oasis-text.png
-/opt/kde3/share/icons/locolor/16x16/mimetypes/%ICONPREFIX-oasis-text-template.png
-/opt/kde3/share/icons/locolor/16x16/mimetypes/%ICONPREFIX-oasis-spreadsheet.png
-/opt/kde3/share/icons/locolor/16x16/mimetypes/%ICONPREFIX-oasis-spreadsheet-template.png
-/opt/kde3/share/icons/locolor/16x16/mimetypes/%ICONPREFIX-oasis-drawing.png
-/opt/kde3/share/icons/locolor/16x16/mimetypes/%ICONPREFIX-oasis-drawing-template.png
-/opt/kde3/share/icons/locolor/16x16/mimetypes/%ICONPREFIX-oasis-presentation.png
-/opt/kde3/share/icons/locolor/16x16/mimetypes/%ICONPREFIX-oasis-presentation-template.png
-/opt/kde3/share/icons/locolor/16x16/mimetypes/%ICONPREFIX-oasis-master-document.png
-/opt/kde3/share/icons/locolor/16x16/mimetypes/%ICONPREFIX-oasis-formula.png
-/opt/kde3/share/icons/locolor/16x16/mimetypes/%ICONPREFIX-oasis-database.png
-/opt/kde3/share/icons/locolor/16x16/mimetypes/%ICONPREFIX-oasis-web-template.png
-/opt/kde3/share/icons/locolor/32x32/apps/%ICONPREFIX-writer.png
-/opt/kde3/share/icons/locolor/32x32/apps/%ICONPREFIX-calc.png
-/opt/kde3/share/icons/locolor/32x32/apps/%ICONPREFIX-draw.png
-/opt/kde3/share/icons/locolor/32x32/apps/%ICONPREFIX-impress.png
-/opt/kde3/share/icons/locolor/32x32/apps/%ICONPREFIX-math.png
-/opt/kde3/share/icons/locolor/32x32/apps/%ICONPREFIX-base.png
-/opt/kde3/share/icons/locolor/32x32/apps/%ICONPREFIX-printeradmin.png
-/opt/kde3/share/icons/locolor/32x32/mimetypes/%ICONPREFIX-text.png
-/opt/kde3/share/icons/locolor/32x32/mimetypes/%ICONPREFIX-text-template.png
-/opt/kde3/share/icons/locolor/32x32/mimetypes/%ICONPREFIX-spreadsheet.png
-/opt/kde3/share/icons/locolor/32x32/mimetypes/%ICONPREFIX-spreadsheet-template.png
-/opt/kde3/share/icons/locolor/32x32/mimetypes/%ICONPREFIX-drawing.png
-/opt/kde3/share/icons/locolor/32x32/mimetypes/%ICONPREFIX-drawing-template.png
-/opt/kde3/share/icons/locolor/32x32/mimetypes/%ICONPREFIX-presentation.png
-/opt/kde3/share/icons/locolor/32x32/mimetypes/%ICONPREFIX-presentation-template.png
-/opt/kde3/share/icons/locolor/32x32/mimetypes/%ICONPREFIX-master-document.png
-/opt/kde3/share/icons/locolor/32x32/mimetypes/%ICONPREFIX-formula.png
-/opt/kde3/share/icons/locolor/32x32/mimetypes/%ICONPREFIX-database.png
-/opt/kde3/share/icons/locolor/32x32/mimetypes/%ICONPREFIX-oasis-text.png
-/opt/kde3/share/icons/locolor/32x32/mimetypes/%ICONPREFIX-oasis-text-template.png
-/opt/kde3/share/icons/locolor/32x32/mimetypes/%ICONPREFIX-oasis-spreadsheet.png
-/opt/kde3/share/icons/locolor/32x32/mimetypes/%ICONPREFIX-oasis-spreadsheet-template.png
-/opt/kde3/share/icons/locolor/32x32/mimetypes/%ICONPREFIX-oasis-drawing.png
-/opt/kde3/share/icons/locolor/32x32/mimetypes/%ICONPREFIX-oasis-drawing-template.png
-/opt/kde3/share/icons/locolor/32x32/mimetypes/%ICONPREFIX-oasis-presentation.png
-/opt/kde3/share/icons/locolor/32x32/mimetypes/%ICONPREFIX-oasis-presentation-template.png
-/opt/kde3/share/icons/locolor/32x32/mimetypes/%ICONPREFIX-oasis-master-document.png
-/opt/kde3/share/icons/locolor/32x32/mimetypes/%ICONPREFIX-oasis-formula.png
-/opt/kde3/share/icons/locolor/32x32/mimetypes/%ICONPREFIX-oasis-database.png
-/opt/kde3/share/icons/locolor/32x32/mimetypes/%ICONPREFIX-oasis-web-template.png
+%ghost /etc/%unixfilename
+/opt/gnome/share/application-registry/*.applications
+/usr/share/applications/%unixfilename-writer.desktop
+/usr/share/applications/%unixfilename-calc.desktop
+/usr/share/applications/%unixfilename-draw.desktop
+/usr/share/applications/%unixfilename-impress.desktop
+/usr/share/applications/%unixfilename-math.desktop
+/usr/share/applications/%unixfilename-base.desktop
+/usr/share/applications/%unixfilename-printeradmin.desktop
+/opt/gnome/share/mime-info/*.keys
+/opt/gnome/share/mime-info/*.mime
+/opt/kde3/share/mimelnk/application/*.desktop
+/opt/gnome/share/icons/gnome/*/apps/*png
+/opt/gnome/share/icons/gnome/*/mimetypes/*png
+/opt/gnome/share/icons/hicolor/*/mimetypes/*png
+/opt/kde3/share/icons/hicolor/*/apps/*png
+/opt/kde3/share/icons/hicolor/*/mimetypes/*png
+/opt/kde3/share/icons/locolor/*/apps/*png
+/opt/kde3/share/icons/locolor/*/mimetypes/*png
+/usr/share/mime/packages/*
