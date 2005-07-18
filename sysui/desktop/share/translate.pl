@@ -155,9 +155,6 @@ KEY:    while (<TEMPLATE>) {
             # replace resource placeholder
             $value=~s/%PRODUCTNAME/$productname/g;
 
-            # replace not yet re-translated file format name
-            $value=~s/Open Office/OpenDocument/g;
-
             $locale=~s/-/_/;
             if ($ext eq "desktop") {
                 print OUTFILE "$key\[$locale\]=$value\n";
