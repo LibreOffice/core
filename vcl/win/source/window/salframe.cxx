@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 09:10:41 $
+ *  last change: $Author: obo $ $Date: 2005-07-19 15:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,9 @@
 #ifndef _SV_SALMENU_H
 #include <salmenu.h>
 #endif
+#ifndef _SV_SALOBJ_H
+#include <salobj.h>
+#endif
 #ifndef _SV_IMPBMP_HXX
 #include <impbmp.hxx>
 #endif
@@ -146,6 +149,7 @@
 #endif
 #define COMPILE_MULTIMON_STUBS
 #include <multimon.h>
+#include <vector>
 
 #if OSL_DEBUG_LEVEL > 1
 void MyOutputDebugString( char *s) { OutputDebugString( s ); }
@@ -1099,6 +1103,7 @@ SalGraphics* WinSalFrame::GetGraphics()
             }
             ImplSalInitGraphics( mpGraphics2 );
             mbGraphics = TRUE;
+
             pSalData->mnCacheDCInUse++;
             return mpGraphics2;
         }
@@ -1580,16 +1585,42 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, BOOL bAs
     // save hwnd, will be overwritten in WM_CREATE during createwindow
     HWND hWndOld = pThis->mhWnd;
     HWND hWndOldParent = ::GetParent( hWndOld );
+    SalData* pSalData = GetSalData();
 
     if( hNewParentWnd == hWndOldParent )
         return;
 
-    pThis->mbInReparent = TRUE;
+    ::std::vector< WinSalFrame* > children;
+    ::std::vector< WinSalObject* > systemChildren;
+
+    // search child windows
+    WinSalFrame *pFrame = pSalData->mpFirstFrame;
+    while( pFrame )
+    {
+        HWND hWndParent = ::GetParent( pFrame->mhWnd );
+        if( pThis->mhWnd == hWndParent )
+            children.push_back( pFrame );
+        pFrame = pFrame->mpNextFrame;
+    }
+
+    // search system child windows (plugins etc.)
+    WinSalObject *pObject = pSalData->mpFirstObject;
+    while( pObject )
+    {
+        HWND hWndParent = ::GetParent( pObject->mhWnd );
+        if( pThis->mhWnd == hWndParent )
+            systemChildren.push_back( pObject );
+        pObject = pObject->mpNextObject;
+    }
 
     BOOL bNeedGraphics = pThis->mbGraphics;
+    BOOL bNeedCacheDC  = FALSE;
+
     HFONT   hFont   = NULL;
     HPEN    hPen    = NULL;
     HBRUSH  hBrush  = NULL;
+
+    int oldCount = pSalData->mnCacheDCInUse;
 
     // Release Cache DC
     if ( pThis->mpGraphics2 &&
@@ -1600,6 +1631,9 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, BOOL bAs
         hPen    = (HPEN)    GetCurrentObject( pThis->mpGraphics2->mhDC, OBJ_PEN);
         hBrush  = (HBRUSH)  GetCurrentObject( pThis->mpGraphics2->mhDC, OBJ_BRUSH);
         pThis->ReleaseGraphics( pThis->mpGraphics2 );
+
+        // recreate cache dc only if it was destroyed
+        bNeedCacheDC  = TRUE;
     }
 
     // destroy saved DC
@@ -1614,7 +1648,7 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, BOOL bAs
     // create a new hwnd with the same styles
     HWND hWndParent = hNewParentWnd;
     // forward to main thread
-    HWND hWnd = (HWND) ImplSendMessage( GetSalData()->mpFirstInstance->mhComWnd,
+    HWND hWnd = (HWND) ImplSendMessage( pSalData->mpFirstInstance->mhComWnd,
                                         bAsChild ? SAL_MSG_RECREATECHILDHWND : SAL_MSG_RECREATEHWND,
                                         (WPARAM) hWndParent, (LPARAM)pThis->mhWnd );
 
@@ -1626,31 +1660,38 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, BOOL bAs
     {
         if( pThis->mpGraphics2 )
         {
-            // re-create cached DC
-            HDC hDC = (HDC)ImplSendMessage( GetSalData()->mpFirstInstance->mhComWnd,
-                                            SAL_MSG_GETDC,
-                                            (WPARAM) hWnd, 0 );
             pThis->mpGraphics2->mhWnd = hWnd;
-            if ( hDC )
+
+            if( bNeedCacheDC )
             {
-                pThis->mpGraphics2->mhDC = hDC;
-                if ( GetSalData()->mhDitherPal )
+                // re-create cached DC
+                HDC hDC = (HDC)ImplSendMessage( pSalData->mpFirstInstance->mhComWnd,
+                                                SAL_MSG_GETDC,
+                                                (WPARAM) hWnd, 0 );
+                if ( hDC )
                 {
-                    pThis->mpGraphics2->mhDefPal = SelectPalette( hDC, GetSalData()->mhDitherPal, TRUE );
-                    RealizePalette( hDC );
+                    pThis->mpGraphics2->mhDC = hDC;
+                    if ( pSalData->mhDitherPal )
+                    {
+                        pThis->mpGraphics2->mhDefPal = SelectPalette( hDC, pSalData->mhDitherPal, TRUE );
+                        RealizePalette( hDC );
+                    }
+                    ImplSalInitGraphics( pThis->mpGraphics2 );
+
+                    // re-select saved gdi objects
+                    if( hFont )
+                        SelectObject( hDC, hFont );
+                    if( hPen )
+                        SelectObject( hDC, hPen );
+                    if( hBrush )
+                        SelectObject( hDC, hBrush );
+
+                    pThis->mbGraphics = TRUE;
+
+                    pSalData->mnCacheDCInUse++;
+
+                    DBG_ASSERT( oldCount == pSalData->mnCacheDCInUse, "WinSalFrame::SetParent() hDC count corrupted");
                 }
-                ImplSalInitGraphics( pThis->mpGraphics2 );
-
-                // re-select saved gdi objects
-                if( hFont )
-                    SelectObject( hDC, hFont );
-                if( hPen )
-                    SelectObject( hDC, hPen );
-                if( hBrush )
-                    SelectObject( hDC, hBrush );
-
-                pThis->mbGraphics = TRUE;
-                GetSalData()->mnCacheDCInUse++;
             }
         }
 
@@ -1669,18 +1710,29 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, BOOL bAs
         }
     }
 
-    // now destroy original hwnd
-    if( !DestroyWindow( hWndOld ) )
-        SetWindowPtr( hWndOld, 0 );
 
-    pThis->mbInReparent = FALSE;
+    // TODO: add SetParent() call for SalObjects
+    DBG_ASSERT( systemChildren.empty(), "WinSalFrame::SetParent() parent of living system child window will be destroyed!");
+
+    // reparent children before old parent is destroyed
+    for( ::std::vector< WinSalFrame* >::iterator iChild = children.begin(); iChild != children.end(); iChild++ )
+        ImplSetParentFrame( *iChild, hWnd, FALSE );
+
+    children.clear();
+    systemChildren.clear();
+
+    // Now destroy original HWND in the thread where it was created.
+    ImplSendMessage( GetSalData()->mpFirstInstance->mhComWnd,
+                     SAL_MSG_DESTROYHWND, (WPARAM) 0, (LPARAM)hWndOld);
 }
 
 // -----------------------------------------------------------------------
 
 void WinSalFrame::SetParent( SalFrame* pNewParent )
 {
+    WinSalFrame::mbInReparent = TRUE;
     ImplSetParentFrame( this, static_cast<WinSalFrame*>(pNewParent)->mhWnd, FALSE );
+    WinSalFrame::mbInReparent = FALSE;
 }
 
 bool WinSalFrame::SetPluginParent( SystemParentData* pNewParent )
@@ -1689,7 +1741,10 @@ bool WinSalFrame::SetPluginParent( SystemParentData* pNewParent )
     {
         pNewParent->hWnd = GetDesktopWindow();
     }
+
+    WinSalFrame::mbInReparent = TRUE;
     ImplSetParentFrame( this, pNewParent->hWnd, TRUE );
+    WinSalFrame::mbInReparent = FALSE;
     return true;
 }
 
