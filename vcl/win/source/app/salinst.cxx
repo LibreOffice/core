@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 13:05:17 $
+ *  last change: $Author: obo $ $Date: 2005-07-19 15:04:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -853,6 +853,18 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
             break;
         case SAL_MSG_DESTROYFRAME:
             delete (SalFrame*)lParam;
+            rDef = FALSE;
+            break;
+        case SAL_MSG_DESTROYHWND:
+            //We only destroy the native window here. We do NOT destroy the SalFrame contained
+            //in the structure (GetWindowPtr()).
+            if (DestroyWindow((HWND)lParam) == 0)
+            {
+                OSL_ENSURE(0, "DestroyWindow failed!");
+                //Failure: We remove the SalFrame from the window structure. So we avoid that
+                // the window structure may contain an invalid pointer, once the SalFrame is deleted.
+               SetWindowPtr((HWND)lParam, 0);
+            }
             rDef = FALSE;
             break;
         case SAL_MSG_CREATEOBJECT:
