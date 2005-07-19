@@ -2,9 +2,9 @@
 #
 #   $RCSfile: directory.pm,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kz $ $Date: 2005-07-14 11:28:17 $
+#   last change: $Author: obo $ $Date: 2005-07-19 13:29:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -232,7 +232,15 @@ sub add_root_directories
         $oneline = "$installer::globals::templatefolder\tTARGETDIR\t$installer::globals::templatefoldername\n";
         push(@{$directorytableref}, $oneline);
 
-        $oneline = "$installer::globals::fontsfolder\t$installer::globals::fontsdirparent\t$installer::globals::fontsfoldername\:$installer::globals::fontsdirname\n";
+        if ( $installer::globals::fontsdirname )
+        {
+            $oneline = "$installer::globals::fontsfolder\t$installer::globals::fontsdirparent\t$installer::globals::fontsfoldername\:$installer::globals::fontsdirname\n";
+        }
+        else
+        {
+            $oneline = "$installer::globals::fontsfolder\tTARGETDIR\t$installer::globals::fontsfoldername\n";
+        }
+
         push(@{$directorytableref}, $oneline);
     }
 
