@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:21:27 $
+ *  last change: $Author: obo $ $Date: 2005-07-19 15:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,6 +325,8 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 #define SAL_MSG_RECREATEHWND         (WM_USER+122)
 // wParam == newParentHwnd; lParam == oldHwnd; lResult == newhWnd
 #define SAL_MSG_RECREATECHILDHWND    (WM_USER+123)
+// wParam == 0; lParam == HWND;
+#define SAL_MSG_DESTROYHWND         (WM_USER+124)
 
 // wParam == 0; lParam == pData
 #define SAL_MSG_USEREVENT           (WM_USER+130)
