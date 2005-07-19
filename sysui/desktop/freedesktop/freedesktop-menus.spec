@@ -39,6 +39,7 @@ rm -rf usr/share/applnk-redhat
 ## One proposal is "mime-application:vnd.oasis.opendocument.spreadsheet.png"
 ## for e.g. application/vnd.oasis.opendocument.spreadsheet
 cd usr/share/icons/hicolor
+rm */mimetypes/gnome-mime-application-vnd*
 originalname=%unixfilename
 iconname=`echo $originalname | sed -e 's/\.//g'`
 for dir in *; do
