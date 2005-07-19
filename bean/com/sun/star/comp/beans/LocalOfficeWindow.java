@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocalOfficeWindow.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-07 13:16:03 $
+ *  last change: $Author: obo $ $Date: 2005-07-19 15:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@ public class LocalOfficeWindow
        }
 
            /// called when system parent is available, reparents the bean window
-    private void aquireSystemWindow()
+    private synchronized void aquireSystemWindow()
     {
         if ( !bPeer )
         {
@@ -183,7 +183,7 @@ public class LocalOfficeWindow
     }
 
            /// called when system parent is about to die, reparents the bean window
-    private void releaseSystemWindow()
+    private synchronized void releaseSystemWindow()
     {
         if ( bPeer )
         {
@@ -199,26 +199,6 @@ public class LocalOfficeWindow
         }
     }
 
-       /// callback handler to get to know when we become visible
-       class ComponentEventHandler
-               extends java.awt.event.ComponentAdapter
-       {
-        public void componentHidden( java.awt.event.ComponentEvent e)
-        {
-            // only when we become invisible, we might lose our system window
-            CallWatchThread aCallWatchThread = new CallWatchThread( 500 );
-            setVisible(false);
-            try { aCallWatchThread.cancel(); }
-            catch ( java.lang.InterruptedException aExc )
-            {} // ignore
-        }
-
-        public void componentShown( java.awt.event.ComponentEvent e)
-        {
-            // only when we become visible, we get a system window
-             aquireSystemWindow();
-        }
-    }
 
     /// Overriding java.awt.Component.setVisible() due to Java bug (no showing event).
     public void setVisible( boolean b )
@@ -236,20 +216,20 @@ public class LocalOfficeWindow
        /** Factory method for a UNO AWT toolkit window as a child of this Java window.
     *
     */
-       private XWindowPeer createUNOWindowPeer()
+       private synchronized XWindowPeer createUNOWindowPeer()
        {
         try
         {
             // get this windows native window type
-                        int type = getNativeWindowSystemType();
+            int type = getNativeWindowSystemType();
 
-                        // Java AWT windows only have a system window when showing.
-                        XWindowPeer parentPeer;
-                        if ( isShowing() )
-                        {
+            // Java AWT windows only have a system window when showing.
+            XWindowPeer parentPeer;
+            if ( isShowing() )
+            {
                 // create direct parent relationship
                 //setVisible( true );
-                                parentPeer = new JavaWindowPeerFake( getNativeWindow(), type);
+                parentPeer = new JavaWindowPeerFake( getNativeWindow(), type);
                 bPeer = true;
                         }
                         else
@@ -270,11 +250,9 @@ public class LocalOfficeWindow
                 ? WindowAttribute.SHOW : 0;
             mWindow = queryAWTToolkit().createWindow(desc);
 
-            // to get notified when we become visible
-            addComponentListener( new ComponentEventHandler() );
 
             // set initial visibility
-                        XWindow aWindow = (XWindow)UnoRuntime.queryInterface(XWindow.class, mWindow);
+            XWindow aWindow = (XWindow)UnoRuntime.queryInterface(XWindow.class, mWindow);
             aWindow.setVisible( bPeer );
         }
         catch (com.sun.star.uno.Exception exp) {
