@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OOoBean.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-07 13:16:41 $
+ *  last change: $Author: obo $ $Date: 2005-07-19 15:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,7 +382,8 @@ public class OOoBean
        If a document is loaded and the content modified,
        the changes are dismissed.  Otherwise nothing happens.
 
-       This method only does only work on specific subclasses.
+       This method is intended to be overridden in derived classes.
+       This implementation simply calls clear.
 
        @param bClearStateToo
            Not only the document content but also the state of the bean,
@@ -402,12 +403,7 @@ public class OOoBean
             NoConnectionException
     {
         // TBD
-        com.sun.star.util.XCloseable xCloseable = (com.sun.star.util.XCloseable)
-            UnoRuntime.queryInterface( com.sun.star.util.XCloseable.class, aFrame );
-        if ( xCloseable != null )
-            xCloseable.close(true);
-        else
-            throw new RuntimeException( "frame without XCloseable" );
+        clear();
     }
 
     /** Resets the OOoBean to an empty status.
@@ -589,8 +585,7 @@ public class OOoBean
             com.sun.star.util.CloseVetoException
     {
         dbgPrint( "loadFromURL()" );
-
-        // try loading
+         // try loading
         try
         {
             boolean bLoaded = false;
