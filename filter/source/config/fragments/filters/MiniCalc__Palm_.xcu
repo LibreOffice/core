@@ -1,4 +1,4 @@
-    <node oor:name="MiniCalc (Palm)" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="MiniCalc (Palm)" oor:op="replace">
         <prop oor:name="FileFormatVersion"><value>1</value></prop>
         <prop oor:name="Type"><value>calc_MiniCalc_PalmDB_File</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
