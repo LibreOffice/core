@@ -1,4 +1,4 @@
-    <node oor:name="draw_StarOffice_XML_Draw_Template" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="draw_StarOffice_XML_Draw_Template" oor:op="replace">
         <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE TEMPLATEPATH OWN ALIEN</value></prop>
         <prop oor:name="UIComponent"/>
         <prop oor:name="FilterService"/>
