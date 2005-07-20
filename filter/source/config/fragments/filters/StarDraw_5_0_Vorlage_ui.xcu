@@ -1,4 +1,4 @@
-    <node oor:name="StarDraw 5.0 Vorlage" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="StarDraw 5.0 Vorlage">
         <prop oor:name="UIName">
             <value xml:lang="en-US">StarDraw 5.0 Template</value>
             <value xml:lang="de">StarDraw 5.0 Vorlage</value>
