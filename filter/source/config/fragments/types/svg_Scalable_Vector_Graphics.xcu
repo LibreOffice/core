@@ -1,4 +1,4 @@
-    <node oor:name="svg_Scalable_Vector_Graphics" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="svg_Scalable_Vector_Graphics" oor:op="replace" >
         <prop oor:name="DetectService"/>
         <prop oor:name="URLPattern"/>
         <prop oor:name="Extensions"><value>svg</value></prop>
