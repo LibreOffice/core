@@ -1,4 +1,4 @@
-    <node oor:name="StarOffice XML (Chart)" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="StarOffice XML (Chart)" oor:op="replace">
         <prop oor:name="Flags"><value>IMPORT EXPORT OWN ALIEN NOTINFILEDIALOG NOTINCHOOSER</value></prop>
         <prop oor:name="UIComponent"/>
         <prop oor:name="FilterService"/>
