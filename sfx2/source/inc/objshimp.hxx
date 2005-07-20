@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-22 13:32:56 $
+ *  last change: $Author: obo $ $Date: 2005-07-20 12:27:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,8 @@ struct SfxObjectShell_Impl
                         bNoBaseURL:1,
                         bInitialized:1,
                         bSignatureErrorIsShown:1,
-                        bModelInitialized:1; // whether the related model is initialized
+                        bModelInitialized:1, // whether the related model is initialized
+                        bPreserveVersions:1;
 
     String              aNewName;  // Der Name, unter dem das Doc gespeichert
                                    // werden soll
@@ -239,6 +240,7 @@ struct SfxObjectShell_Impl
         bHiddenLockedByAPI( sal_False ),
         bInCloseEvent( sal_False ),
         bLoadingWindows( sal_False ),
+        bPreserveVersions( sal_True ),
         bHidden( sal_False )
         , nStyleFilter( 0 )
         , nMacroMode( -1 )
