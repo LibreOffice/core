@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basecontainer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:11:29 $
+ *  last change: $Author: obo $ $Date: 2005-07-20 09:27:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_UTIL_XREFRESHABLE_HPP_
+#include <com/sun/star/util/XRefreshable.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -100,6 +104,10 @@
 
 #ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx>
+#endif
+
+#ifndef _CPPUHELPER_WEAKREF_HXX_
+#include <cppuhelper/weakref.hxx>
 #endif
 
 #ifndef _RTL_USTRING_HXX_
@@ -144,6 +152,9 @@ class BaseContainer : public BaseLock
         /** @short  reference to an uno service manager, which can be used
                     to create own needed services. */
         css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+
+        // TODO
+        css::uno::WeakReference< css::util::XRefreshable > m_xRefreshBroadcaster;
 
         /** @short  the implementation name of our derived class, which we provide
                     at the interface XServiceInfo of our class ... */
@@ -288,6 +299,11 @@ class BaseContainer : public BaseLock
                         // after this point p cant b e guaranteed any longer!
          */
         FilterCache* impl_getWorkingCache() const;
+
+        //---------------------------------------
+        // TODO
+
+        sal_Bool impl_checkIfItemExist(const ::rtl::OUString& sItem);
 
     //-------------------------------------------
     // uno interface
