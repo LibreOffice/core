@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:54:22 $
+ *  last change: $Author: obo $ $Date: 2005-07-20 12:26:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1429,8 +1429,8 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                     LoadStyles(*xTemplDoc);
 
                     // remember date/time of check
+                    pInfo->SetTemplateDate(aTemplDate);
                     // TODO/LATER: new functionality to store document info is required ( didn't work for SO7 XML format )
-//REPLACE                   pInfo->SetTemplateDate(aTemplDate);
 //REPLACE                   pInfo->Save(xDocStor);
                 }
             }
