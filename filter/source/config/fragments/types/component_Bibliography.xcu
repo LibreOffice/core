@@ -1,4 +1,4 @@
-    <node oor:name="component_Bibliography" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="component_Bibliography" oor:op="replace" >
         <prop oor:name="URLPattern"><value>.component:Bibliography/*</value></prop>
         <prop oor:name="Extensions"/>
         <prop oor:name="MediaType"/>
