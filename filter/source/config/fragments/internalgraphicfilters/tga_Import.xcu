@@ -1,4 +1,4 @@
-    <node oor:name="tga_Import" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="tga_Import" oor:op="replace"  >
         <prop oor:name="Type"><value>tga_Truevision_TARGA</value></prop>
         <prop oor:name="FormatName"><value>itg</value></prop>
         <prop oor:name="RealFilterName"><value>TGA - Truevision TARGA</value></prop>
