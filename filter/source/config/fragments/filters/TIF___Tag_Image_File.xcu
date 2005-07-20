@@ -1,4 +1,4 @@
-    <node oor:name="TIF - Tag Image File" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="TIF - Tag Image File" oor:op="replace">
         <prop oor:name="Flags"><value>IMPORT ALIEN</value></prop>
         <prop oor:name="UIComponent"/>
         <prop oor:name="FilterService"/>
