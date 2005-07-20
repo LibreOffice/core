@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.132 $
+*  $Revision: 1.133 $
 *
-*  last change: $Author: obo $ $Date: 2005-07-20 10:01:24 $
+*  last change: $Author: obo $ $Date: 2005-07-20 12:51:29 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1328,7 +1328,7 @@ File gid_File_Lib_Deployment
 #else
     Name = STRING(CONCAT4(deployment,OFFICEUPD,DLLSUFFIX,.uno.dll));
 #endif
-    PACKED_UNO_LIB_FILE_BODY;
+    PACKED_UNO_LIB_FILE_BODY_PATCH;
 End
 
 File gid_File_Lib_DeploymentGui
@@ -1337,7 +1337,7 @@ File gid_File_Lib_DeploymentGui
 #else
     Name = STRING(CONCAT4(deploymentgui,OFFICEUPD,DLLSUFFIX,.uno.dll));
 #endif
-    PACKED_UNO_LIB_FILE_BODY;
+    PACKED_UNO_LIB_FILE_BODY_PATCH;
 End
 
 STD_UNO_LIB_FILE( gid_File_Lib_Pl , pl)
@@ -1487,7 +1487,7 @@ File gid_File_Lib_Sal
     Name = STRING(CONCAT3(sal,UDK_MAJOR,.dll));
   #endif
     Dir = gid_Dir_Program;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED, PATCH);
 End
 
 #ifdef MACOSX
