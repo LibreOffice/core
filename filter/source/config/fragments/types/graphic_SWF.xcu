@@ -1,4 +1,4 @@
-    <node oor:name="graphic_SWF" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="graphic_SWF" oor:op="replace" >
         <prop oor:name="DetectService"/>
         <prop oor:name="URLPattern"/>
         <prop oor:name="Extensions"><value>swf</value></prop>

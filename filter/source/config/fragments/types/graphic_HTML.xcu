@@ -1,4 +1,4 @@
-    <node oor:name="graphic_HTML" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="graphic_HTML" oor:op="replace" >
         <prop oor:name="DetectService"/>
         <prop oor:name="URLPattern"/>
         <prop oor:name="Extensions"><value>html htm</value></prop>
