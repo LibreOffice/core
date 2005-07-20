@@ -2,9 +2,9 @@
 #
 #   $RCSfile: extractfiles.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2005-05-31 17:05:37 $
+#   last change: $Author: obo $ $Date: 2005-07-20 09:48:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -111,7 +111,7 @@ COMPONENT_RUNTIMELIST=	\
     rdf	\
     uconv	\
     vcard	\
-    i18n	\
+    i18n 	\
     pipnss
     
 .IF "$(GUI)"=="WNT"
@@ -144,14 +144,12 @@ COMREGISTRY_FILELIST+=	xpcom_threads.xpt
 DEFAULTS_RUNTIMELIST=	\
     defaults$/pref$/browser-prefs.js	\
     defaults$/pref$/mailnews.js	\
-    defaults$/pref$/smime.js	\
     defaults$/pref$/mdn.js	\
-    defaults$/pref$/smime.js	\
+    defaults$/pref$/smime.js \
     defaults$/autoconfig$/platform.js	\
     defaults$/autoconfig$/prefcalls.js	\
     greprefs$/all.js	\
     greprefs$/security-prefs.js
-    
 
 .IF "$(GUI)"=="WNT"
 LIBLIST=	\
@@ -275,8 +273,13 @@ $(MISC)$/build$/so_moz_include_files: $(INCCOM)$/nsBuildID.h
     +$(COPY) /QSZ $(INCLUDE_PATH)* $(INCLUDE_DIR)
     +$(COPY) /QSZ $(PUBLIC_PATH)* $(INCLUDE_DIR)
 .ELSE
+.IF "$(OS)"!="SOLARIS"
     +$(GNUCOPY) -prL $(INCLUDE_PATH)* $(INCLUDE_DIR)
     +$(GNUCOPY) -prL $(PUBLIC_PATH)* $(INCLUDE_DIR)
+.ELSE			# "$(OS)"!="SOLARIS"
+    +$(COPY) -pr $(INCLUDE_PATH)* $(INCLUDE_DIR)
+    +$(COPY) -pr $(PUBLIC_PATH)* $(INCLUDE_DIR)
+.ENDIF			# "$(OS)"!="SOLARIS"
 .ENDIF
 
 .IF "$(GUI)"=="UNX"
