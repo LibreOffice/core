@@ -1,4 +1,4 @@
-    <node oor:name="gif_Import" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="gif_Import" oor:op="replace"  >
         <prop oor:name="Type"><value>gif_Graphics_Interchange</value></prop>
         <prop oor:name="FormatName"><value>SVIGIF</value></prop>
         <prop oor:name="RealFilterName"><value>GIF - Graphics Interchange</value></prop>
