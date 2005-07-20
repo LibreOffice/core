@@ -1,4 +1,4 @@
-    <node oor:name="pcd_Photo_CD_Base16" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="pcd_Photo_CD_Base16" oor:op="replace" >
         <prop oor:name="DetectService"><value>com.sun.star.comp.draw.FormatDetector</value></prop>
         <prop oor:name="URLPattern"/>
         <prop oor:name="Extensions"><value>pcd</value></prop>
