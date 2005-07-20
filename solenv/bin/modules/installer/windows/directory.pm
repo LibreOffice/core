@@ -2,9 +2,9 @@
 #
 #   $RCSfile: directory.pm,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2005-07-19 13:29:28 $
+#   last change: $Author: obo $ $Date: 2005-07-20 10:21:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
