@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltlst.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 07:58:10 $
+ *  last change: $Author: obo $ $Date: 2005-07-20 12:25:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,12 +81,12 @@
 #include <com/sun/star/uno/Reference.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
-#include <com/sun/star/util/XFlushable.hpp>
+#ifndef _COM_SUN_STAR_UTIL_XREFRESHABLE_HPP_
+#include <com/sun/star/util/XRefreshable.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_UTIL_XFLUSHLISTENER_HPP_
-#include <com/sun/star/util/XFlushListener.hpp>
+#ifndef _COM_SUN_STAR_UTIL_XREFRESHLISTENER_HPP_
+#include <com/sun/star/util/XRefreshListener.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XEVENTLISTENER_HPP_
@@ -104,12 +104,11 @@
 //*****************************************************************************************************************
 //  declarations
 //*****************************************************************************************************************
-class SfxFilterListener : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XFlushListener >
+class SfxFilterListener : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XRefreshListener >
 {
     // member
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XFlushable >  m_xTypeCache  ;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XFlushable >  m_xFilterCache;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshable >  m_xFilterCache;
 
     // c++ interface
     public:
@@ -118,8 +117,8 @@ class SfxFilterListener : public ::cppu::WeakImplHelper1< ::com::sun::star::util
 
     // uno interface
     public:
-        // XFlushListener
-        virtual void SAL_CALL flushed( const ::com::sun::star::lang::EventObject& aSource ) throw( ::com::sun::star::uno::RuntimeException );
+        // XRefreshListener
+        virtual void SAL_CALL refreshed( const ::com::sun::star::lang::EventObject& aSource ) throw( ::com::sun::star::uno::RuntimeException );
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aSource ) throw( ::com::sun::star::uno::RuntimeException );
 
