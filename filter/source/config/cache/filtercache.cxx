@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-20 07:47:42 $
+ *  last change: $Author: obo $ $Date: 2005-07-20 09:29:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include "lateinitlistener.hxx"
 #include "macros.hxx"
 #include "constant.hxx"
+#include "cacheupdatelistener.hxx"
 
 /*TODO see using below ... */
 #define AS_ENABLE_FILTER_UINAMES
@@ -566,6 +567,16 @@ void FilterCache::setItem(      EItemType        eType ,
     impl_addItem2FlushList(eType, sItem);
 }
 
+//-----------------------------------------------
+void FilterCache::refreshItem(      EItemType        eType,
+                              const ::rtl::OUString& sItem)
+    throw(css::uno::Exception)
+{
+    // SAFE ->
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+    impl_loadItemOnDemand(eType, sItem);
+}
+
 /*-----------------------------------------------
     27.10.2003 08:14
 -----------------------------------------------*/
@@ -884,15 +895,20 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
     css::uno::Reference< css::uno::XInterface >* pConfig = 0;
     css::uno::Reference< css::uno::XInterface >  xOld       ;
     ::rtl::OString                               sRtlLog    ;
+    FilterCache::EItemType                       eItemType  ;
+    sal_Bool                                     bStartListening = sal_False;
+
     switch(eProvider)
     {
         case E_PROVIDER_TYPES :
         {
             if (m_xConfigTypes.is())
                 return m_xConfigTypes;
-            sPath   = CFGPACKAGE_TD_TYPES;
-            pConfig = &m_xConfigTypes;
-            sRtlLog = ::rtl::OString("framework (as96863) ::FilterCache::impl_openconfig(E_PROVIDER_TYPES)");
+            sPath           = CFGPACKAGE_TD_TYPES;
+            pConfig         = &m_xConfigTypes;
+            eItemType       = FilterCache::E_TYPE;
+            bStartListening = sal_True;
+            sRtlLog         = ::rtl::OString("framework (as96863) ::FilterCache::impl_openconfig(E_PROVIDER_TYPES)");
         }
         break;
 
@@ -900,9 +916,11 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
         {
             if (m_xConfigFilters.is())
                 return m_xConfigFilters;
-            sPath   = CFGPACKAGE_TD_FILTERS;
-            pConfig = &m_xConfigFilters;
-            sRtlLog = ::rtl::OString("framework (as96863) ::FilterCache::impl_openconfig(E_PROVIDER_FILTERS)");
+            sPath           = CFGPACKAGE_TD_FILTERS;
+            pConfig         = &m_xConfigFilters;
+            eItemType       = FilterCache::E_FILTER;
+            bStartListening = sal_True;
+            sRtlLog         = ::rtl::OString("framework (as96863) ::FilterCache::impl_openconfig(E_PROVIDER_FILTERS)");
         }
         break;
 
@@ -912,6 +930,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
                 return m_xConfigOthers;
             sPath   = CFGPACKAGE_TD_OTHERS;
             pConfig = &m_xConfigOthers;
+            eItemType = FilterCache::E_TYPE;
             sRtlLog = ::rtl::OString("framework (as96863) ::FilterCache::impl_openconfig(E_PROVIDER_OTHERS)");
         }
         break;
@@ -947,18 +966,14 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
                 sMsg.makeStringAndClear());
     }
 
-    /* TODO
-        - think about me
-            Problem. We will be informed about own changes too.
-            So it wouldnt be eay to differ between changes from
-            our own code and other configuration access points ...
-
     // Start listening for changes on that configuration access.
     // We must not control the lifetime of this listener. Itself
     // checks, when ist time to die :-)
-    CacheUpdateListener* pListener = new CacheUpdateListener(m_xSMGR);
-    pListener->startListening(*pConfig);
-    */
+    if (bStartListening)
+    {
+        CacheUpdateListener* pListener = new CacheUpdateListener(m_xSMGR, *pConfig, eItemType);
+        pListener->startListening();
+    }
 
     return *pConfig;
     // <- SAFE
@@ -1220,11 +1235,11 @@ void FilterCache::impl_validateAndOptimize()
                 (!bReferencedByHandler)
                )
             {
-                sLog.appendAscii("Error\t:\t"                                              );
+                sLog.appendAscii("Warning\t:\t"                                            );
                 sLog.appendAscii("The type \""                                             );
                 sLog.append     (sType                                                     );
                 sLog.appendAscii("\" isnt used by any filter, loader or content handler.\n");
-                ++nErrors;
+                ++nWarnings;
             }
         }
 
@@ -1910,14 +1925,32 @@ CacheItemList::iterator FilterCache::impl_loadItemOnDemand(      EItemType      
         break;
     }
 
-    css::uno::Reference< css::container::XNameAccess > xRoot(xConfig, css::uno::UNO_QUERY);
+    css::uno::Reference< css::container::XNameAccess > xRoot(xConfig, css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::container::XNameAccess > xSet ;
     xRoot->getByName(sSet) >>= xSet;
-    CacheItem aItem;
-    CacheItem::iterator pDbgTest = aItem.find(PROPNAME_NAME);
-    aItem = impl_loadItem(xSet, eType, sItem, E_READ_ALL);
-    (*pList)[sItem] = aItem;
-    _FILTER_CONFIG_LOG_2_("impl_loadItemOnDemand(%d, \"%s\") ... OK", (int)eType, _FILTER_CONFIG_TO_ASCII_(sItem).getStr())
+
+    CacheItemList::iterator pItemInCache  = pList->find(sItem);
+    sal_Bool                bItemInConfig = xSet->hasByName(sItem);
+
+    if (bItemInConfig)
+    {
+        CacheItem aItem;
+        CacheItem::iterator pDbgTest = aItem.find(PROPNAME_NAME);
+        aItem = impl_loadItem(xSet, eType, sItem, E_READ_ALL);
+        (*pList)[sItem] = aItem;
+        _FILTER_CONFIG_LOG_2_("impl_loadItemOnDemand(%d, \"%s\") ... OK", (int)eType, _FILTER_CONFIG_TO_ASCII_(sItem).getStr())
+    }
+    else
+    {
+        if (pItemInCache != pList->end())
+            pList->erase(pItemInCache);
+        // OK - this item does not exists inside configuration.
+        // And we already updated our internal cache.
+        // But the outside code needs this NoSuchElementException
+        // to know, that this item does notexists.
+        // Nobody checks the iterator!
+        throw css::container::NoSuchElementException();
+    }
 
     return pList->find(sItem);
 }
