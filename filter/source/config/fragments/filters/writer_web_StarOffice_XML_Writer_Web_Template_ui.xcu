@@ -1,4 +1,4 @@
-    <node oor:name="writer_web_StarOffice_XML_Writer_Web_Template" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="writer_web_StarOffice_XML_Writer_Web_Template">
         <prop oor:name="UIName">
             <value xml:lang="en-US">%productname% %formatversion% HTML Template</value>
             <value xml:lang="de">%productname% %formatversion% HTML-Dokumentvorlage</value>
