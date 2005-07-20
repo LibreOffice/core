@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: kz $ $Date: 2005-07-12 12:26:12 $
+ *  last change: $Author: obo $ $Date: 2005-07-20 12:26:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,6 +502,10 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             sal_Bool bDialogUsed = sal_False;
             sal_uInt32 nErrorCode = ERRCODE_NONE;
+
+            // by default versions should be preserved always except in case of an explicit
+            // SaveAs via GUI, so the flag must be set accordingly
+            pImp->bPreserveVersions = (nId == SID_SAVEDOC);
             try
             {
                 SfxErrorContext aEc( ERRCTX_SFX_SAVEASDOC, GetTitle() ); // ???
@@ -668,6 +672,9 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 nErrorCode = ERRCODE_IO_GENERAL;
             }
 
+            // by default versions should be preserved always except in case of an explicit
+            // SaveAs via GUI, so the flag must be reset to guarantee this
+            pImp->bPreserveVersions = sal_True;
             ULONG lErr=GetErrorCode();
 
             if ( !lErr && nErrorCode )
