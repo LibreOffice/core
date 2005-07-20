@@ -1,4 +1,4 @@
-    <node oor:name="pdf_Portable_Document_Format" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="pdf_Portable_Document_Format" oor:op="replace" >
         <prop oor:name="DetectService"/>
         <prop oor:name="URLPattern"/>
         <prop oor:name="Extensions"><value>pdf</value></prop>
