@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_resource.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 10:21:44 $
+ *  last change: $Author: obo $ $Date: 2005-07-20 12:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,8 @@ inline ::com::sun::star::lang::Locale toLocale( ::rtl::OUString const & slang )
     ::com::sun::star::lang::Locale locale;
     sal_Int32 nIndex = 0;
     locale.Language = slang.getToken( 0, '-', nIndex );
-    locale.Country = slang.getToken( 1, '-', nIndex );
-    locale.Variant = slang.getToken( 2, '-', nIndex );
+    locale.Country = slang.getToken( 0, '-', nIndex );
+    locale.Variant = slang.getToken( 0, '-', nIndex );
     return locale;
 }
 
