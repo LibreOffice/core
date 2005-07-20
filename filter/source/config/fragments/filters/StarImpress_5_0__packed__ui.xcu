@@ -1,4 +1,4 @@
-    <node oor:name="StarImpress 5.0 (packed)" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="StarImpress 5.0 (packed)">
         <prop oor:name="UIName">
             <value xml:lang="en-US">StarImpress 5.0 Packed</value>
             <value xml:lang="de">StarImpress 5.0 gepackt</value>
