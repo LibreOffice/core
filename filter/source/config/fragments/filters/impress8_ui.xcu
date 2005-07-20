@@ -1,4 +1,4 @@
-    <node oor:name="impress8" oor:finalized="false" oor:mandatory="false">
+    <node oor:name="impress8">
         <prop oor:name="UIName">
             <value xml:lang="en-US">OpenDocument Presentation</value>
             <value xml:lang="de">OpenDocument Präsentation</value>
