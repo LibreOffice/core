@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.166 $
+ *  $Revision: 1.167 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-18 12:05:22 $
+ *  last change: $Author: obo $ $Date: 2005-07-20 12:26:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1482,7 +1482,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
         if ( bOk )
         {
-               if ( pImp->bIsSaving )
+            if ( pImp->bIsSaving || pImp->bPreserveVersions )
             {
                 try
                 {
@@ -1555,7 +1555,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                     bOk = PutURLContentsToVersionStream_Impl( aTmpVersionURL, xMedStorage, aInfo.Identifier );
                 }
             }
-               else if ( bOk && pImp->bIsSaving )
+            else if ( bOk && ( pImp->bIsSaving || pImp->bPreserveVersions ) )
             {
                 rMedium.SaveVersionList_Impl( sal_True );
             }
@@ -1768,6 +1768,10 @@ sal_Bool SfxObjectShell::DoSaveAs( SfxMedium &rMedium )
     if ( GetError() )
         return sal_False;
 
+    // copy version list from "old" medium to target medium, so it can be used on saving
+    if ( pImp->bPreserveVersions )
+        rMedium.TransferVersionList_Impl( *pMedium );
+
     sal_Bool bRet = SaveTo_Impl( rMedium, NULL );
     if ( !bRet )
         SetError(rMedium.GetErrorCode());
@@ -1867,6 +1871,21 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
         if( bMedChanged )
         {
             delete pOld;
+
+            uno::Reference< frame::XModel > xModel = GetModel();
+            if ( xModel.is() )
+            {
+                ::rtl::OUString aURL = pNewMed->GetOrigURL();
+                uno::Sequence< beans::PropertyValue > aMediaDescr;
+                TransformItems( SID_OPENDOC, *pNewMed->GetItemSet(), aMediaDescr );
+                try
+                {
+                    xModel->attachResource( aURL, aMediaDescr );
+                }
+                catch( uno::Exception& )
+                {}
+            }
+
             // Titel neu setzen
             if ( pNewMed->GetName().Len() && SFX_CREATE_MODE_EMBEDDED != eCreateMode )
                 InvalidateName();
@@ -2178,6 +2197,7 @@ sal_Bool SfxObjectShell::ConvertTo
 
 void SfxObjectShell::SetEAs_Impl( SfxMedium &rMedium )
 {
+#ifndef WNT
     //!! wenn OV eine entsprechende Funktionalitaet zur Verfuegung stellt,
     // besser auf der geoeffneten Datei arbeiten
     SvEaMgr *pMgr = rMedium.GetEaMgr();
@@ -2197,6 +2217,7 @@ void SfxObjectShell::SetEAs_Impl( SfxMedium &rMedium )
 
     if ( rMedium.GetLongName().Len() )
         pMgr->SetLongName(rMedium.GetLongName());
+#endif
 }
 
 //-------------------------------------------------------------------------
@@ -2537,7 +2558,12 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
     sal_Bool bCopyTo = GetCreateMode() == SFX_CREATE_MODE_EMBEDDED || pSaveToItem && pSaveToItem->GetValue();
 
     // distinguish between "Save" and "SaveAs"
-    pImp-> bIsSaving = sal_False;
+    pImp->bIsSaving = sal_False;
+
+    // copy version list from "old" medium to target medium, so it can be used on saving
+    if ( pImp->bPreserveVersions )
+        pNewFile->TransferVersionList_Impl( *pMedium );
+
 /*
     if ( GetMedium()->GetFilter() && ( GetMedium()->GetFilter()->GetFilterFlags() & SFX_FILTER_PACKED ) )
     {
