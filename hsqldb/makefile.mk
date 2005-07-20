@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: kz $ $Date: 2005-07-14 11:42:39 $
+#   last change: $Author: obo $ $Date: 2005-07-20 13:24:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ TARFILE_NAME=hsqldb_$(HSQLDB_VERSION)
       
 TARFILE_ROOTDIR=hsqldb
 
+CONVERTFILES=build$/build.xml
 PATCH_FILE_NAME=hsqldb_1_8_0
 
 # ADDITIONAL_FILES=   src$/org$/hsqldb$/Collation.java \
