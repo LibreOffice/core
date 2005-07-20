@@ -883,7 +883,7 @@ End
 
 File gid_File_Mozilla_Runtime
     TXT_FILE_BODY;
-    Styles = (ARCHIVE);
+    Styles = (ARCHIVE,PATCH);
     Dir = gid_Dir_Program;
     Name = "mozruntime.zip";
 End
