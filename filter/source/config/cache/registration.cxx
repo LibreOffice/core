@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registration.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 13:43:32 $
+ *  last change: $Author: obo $ $Date: 2005-07-20 09:29:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include "filterfactory.hxx"
 #include "contenthandlerfactory.hxx"
 #include "frameloaderfactory.hxx"
+#include "configflush.hxx"
 
 //_______________________________________________
 // namespace
@@ -101,6 +102,10 @@ _COMPHELPER_COMPONENT_WRITEINFO
     _COMPHELPER_COMPONENTINFO( FrameLoaderFactory                                 ,
                                FrameLoaderFactory::impl_getImplementationName()   ,
                                FrameLoaderFactory::impl_getSupportedServiceNames())
+
+    _COMPHELPER_COMPONENTINFO( ConfigFlush                                 ,
+                               ConfigFlush::impl_getImplementationName()   ,
+                               ConfigFlush::impl_getSupportedServiceNames())
 )
 
 // extern "C" component_getFactory()
@@ -121,6 +126,10 @@ _COMPHELPER_COMPONENT_GETFACTORY
     _COMPHELPER_MULTIINSTANCEFACTORY( FrameLoaderFactory::impl_getImplementationName()   ,
                                       FrameLoaderFactory::impl_getSupportedServiceNames(),
                                       FrameLoaderFactory::impl_createInstance            )
+
+    _COMPHELPER_ONEINSTANCEFACTORY( ConfigFlush::impl_getImplementationName()   ,
+                                    ConfigFlush::impl_getSupportedServiceNames(),
+                                    ConfigFlush::impl_createInstance            )
 )
 
     } // namespace config
