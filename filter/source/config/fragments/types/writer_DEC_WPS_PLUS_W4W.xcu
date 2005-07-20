@@ -1,4 +1,4 @@
-    <node oor:name="writer_DEC_WPS_PLUS_W4W" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="writer_DEC_WPS_PLUS_W4W" oor:op="replace" >
         <prop oor:name="DetectService"><value>com.sun.star.text.W4WFormatDetector</value></prop>
         <prop oor:name="URLPattern"/>
         <prop oor:name="Extensions"><value>doc</value></prop>
