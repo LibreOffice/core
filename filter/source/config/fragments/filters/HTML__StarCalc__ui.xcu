@@ -1,4 +1,4 @@
-    <node oor:name="HTML (StarCalc)" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="HTML (StarCalc)">
         <prop oor:name="UIName">
             <value xml:lang="en-US">HTML Document (%productname% Calc)</value>
             <value xml:lang="de">HTML-Dokument (%productname% Calc)</value>
