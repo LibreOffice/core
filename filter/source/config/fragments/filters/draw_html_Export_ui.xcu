@@ -1,4 +1,4 @@
-    <node oor:name="draw_html_Export" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="draw_html_Export">
         <prop oor:name="UIName">
             <value xml:lang="en-US">HTML Document (%productname% Draw)</value>
             <value xml:lang="de">HTML-Dokument (%productname% Draw)</value>
