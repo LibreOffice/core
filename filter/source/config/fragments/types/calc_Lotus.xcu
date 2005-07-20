@@ -1,4 +1,4 @@
-    <node oor:name="calc_Lotus" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="calc_Lotus" oor:op="replace" >
         <prop oor:name="DetectService"><value>com.sun.star.comp.calc.FormatDetector</value></prop>
         <prop oor:name="URLPattern"/>
         <prop oor:name="Extensions"><value>wk1 wks 123</value></prop>
