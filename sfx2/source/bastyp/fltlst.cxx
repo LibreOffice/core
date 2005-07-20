@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltlst.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:11:37 $
+ *  last change: $Author: obo $ $Date: 2005-07-20 12:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,18 +119,11 @@ SfxFilterListener::SfxFilterListener()
     uno::Reference< lang::XMultiServiceFactory > xSmgr = ::comphelper::getProcessServiceFactory();
     if( xSmgr.is() == sal_True )
     {
-        uno::Reference< util::XFlushable > xNotifier( xSmgr->createInstance( DEFINE_CONST_OUSTRING("com.sun.star.document.FilterFactory") ), uno::UNO_QUERY );
+        uno::Reference< util::XRefreshable > xNotifier( xSmgr->createInstance( DEFINE_CONST_OUSTRING("com.sun.star.document.FilterConfigRefresh") ), uno::UNO_QUERY );
         if( xNotifier.is() == sal_True )
         {
             m_xFilterCache = xNotifier;
-            m_xFilterCache->addFlushListener( this );
-        }
-
-        xNotifier = uno::Reference< util::XFlushable >( xSmgr->createInstance( DEFINE_CONST_OUSTRING("com.sun.star.document.TypeDetection") ), uno::UNO_QUERY );
-        if( xNotifier.is() == sal_True )
-        {
-            m_xTypeCache = xNotifier;
-            m_xTypeCache->addFlushListener( this );
+            m_xFilterCache->addRefreshListener( this );
         }
     }
 }
@@ -139,13 +132,13 @@ SfxFilterListener::~SfxFilterListener()
 {
 }
 
-void SAL_CALL SfxFilterListener::flushed( const lang::EventObject& aSource ) throw( uno::RuntimeException )
+void SAL_CALL SfxFilterListener::refreshed( const lang::EventObject& aSource ) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    uno::Reference< util::XFlushable > xContainer( aSource.Source, uno::UNO_QUERY );
+    uno::Reference< util::XRefreshable > xContainer( aSource.Source, uno::UNO_QUERY );
     if(
-        (xContainer.is()                                       ) &&
-        (xContainer==m_xTypeCache || xContainer==m_xFilterCache)
+        (xContainer.is()           ) &&
+        (xContainer==m_xFilterCache)
       )
     {
         SfxFilterContainer::ReadFilters_Impl( TRUE );
@@ -155,19 +148,10 @@ void SAL_CALL SfxFilterListener::flushed( const lang::EventObject& aSource ) thr
 void SAL_CALL SfxFilterListener::disposing( const lang::EventObject& aSource ) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    uno::Reference< util::XFlushable > xNotifier( aSource.Source, uno::UNO_QUERY );
+    uno::Reference< util::XRefreshable > xNotifier( aSource.Source, uno::UNO_QUERY );
     if (!xNotifier.is())
         return;
 
-    if (xNotifier == m_xTypeCache)
-    {
-        m_xTypeCache->removeFlushListener( this );
-        m_xTypeCache = uno::Reference< util::XFlushable >();
-    }
-    else
     if (xNotifier == m_xFilterCache)
-    {
-        m_xFilterCache->removeFlushListener( this );
-        m_xFilterCache = uno::Reference< util::XFlushable >();
-    }
+        m_xFilterCache.clear();
 }
