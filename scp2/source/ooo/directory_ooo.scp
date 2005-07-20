@@ -917,6 +917,11 @@ Directory gid_Dir_Basic_Importwiz
     DosName = "ImportWizard";
 End
 
+Directory gid_Dir_Basic_Formwiz
+    ParentID = gid_Dir_Basic;
+    DosName = "FormWizard";
+End
+
 Directory gid_Dir_Basic_Webwiz
     ParentID = gid_Dir_Basic;
     DosName = "WebWizard";
