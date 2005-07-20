@@ -1,4 +1,4 @@
-    <node oor:name="impress_html_Export" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="impress_html_Export">
         <prop oor:name="UIName">
             <value xml:lang="en-US">HTML Document (%productname% Impress)</value>
             <value xml:lang="de">HTML-Dokument (%productname% Impress)</value>
