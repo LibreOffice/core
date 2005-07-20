@@ -1854,7 +1854,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "InstallExchangeFiles", "65", "patchmsi.dll", "InstallPatchedFiles", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
                 if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "patchmsi.dll", "InstallExchangeFiles", "Not REMOVE=\"ALL\"", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
                 $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "DeinstallExchangeFiles", "65", "patchmsi.dll", "UninstallPatchedFiles", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-                if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "patchmsi.dll", "DeinstallExchangeFiles", "REMOVE=\"ALL\"", "InstallValidate", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+                if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "patchmsi.dll", "DeinstallExchangeFiles", "REMOVE=\"ALL\"", "RemoveIniValues", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
                 $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "SetUserInstallMode", "65", "patchmsi.dll", "GetUserInstallMode", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
                 if ( $added_customaction )
                 {
