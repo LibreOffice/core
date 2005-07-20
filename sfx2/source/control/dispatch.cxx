@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 21:08:14 $
+ *  last change: $Author: obo $ $Date: 2005-07-20 12:25:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,6 @@ struct SfxDispatcher_Impl
     SfxDispatcher*          pParent;            // z.B. AppDispatcher, ggf. 0
     SfxHintPosterRef        xPoster;            // asynchrones Execute
     sal_Bool                    bFlushing;          // sal_True waehrend Flush //?
-    sal_Bool                    bFlushed;           // aToDoStack.Count() == 0
     sal_Bool                    bUpdated;           // Update_Impl gelaufen
     sal_Bool                    bLocked;            // kein Execute
     sal_Bool                    bInvalidateOnUnlock;// da fragte jemand
@@ -605,6 +604,7 @@ void SfxDispatcher::Pop
         pImp->aToDoStack.Push( SfxToDo_Impl(bPush, bDelete, bUntil, rShell) );
         if ( bFlushed )
         {
+            DBG_TRACE("Unflushed dispatcher!");
             bFlushed = sal_False;
             pImp->bUpdated = sal_False;
 
@@ -2137,6 +2137,7 @@ void SfxDispatcher::FlushImpl()
     DBG_MEMTEST();
     SFX_STACK(SfxDispatcher::FlushImpl);
 
+    DBG_TRACE("Flushing dispatcher!");
 
 #ifdef DBG_UTIL
     ByteString aMsg( "SfxDispatcher(" );
@@ -2226,6 +2227,7 @@ void SfxDispatcher::FlushImpl()
     pImp->bFlushing = sal_False;
     pImp->bUpdated = sal_False; // nicht nur bei bModify, falls Doc/Template-Config
     bFlushed = sal_True;
+    DBG_TRACE("Successfully flushed dispatcher!");
 
     // in der 2. Runde die Shells aktivieren und ggf. l"oschen
     for ( nToDo = aToDoCopy.Count()-1; nToDo >= 0; --nToDo )
@@ -2760,7 +2762,10 @@ sal_Bool SfxDispatcher::_FillState
 
     if ( pSlot )
     {
-        Flush();
+        DBG_ASSERT(bFlushed, "Dispatcher not flushed after retrieving slot servers!");
+        if ( !bFlushed )
+            return FALSE;
+        // Flush();
 
         // Objekt ermitteln und Message an diesem Objekt aufrufen
         SfxShell *pSh = GetShell(rSvr.GetShellLevel());
@@ -2991,7 +2996,7 @@ void SfxDispatcher::DebugOutput_Impl() const
     sal_uInt16 nOld = (sal_uInt16) DbgGetData()->nTraceOut;
     DbgGetData()->nTraceOut = DBG_OUT_FILE;
 
-    if (pImp->bFlushed)
+    if (bFlushed)
         DBG_TRACE("Flushed");
     if (pImp->bUpdated)
         DBG_TRACE("Updated");
