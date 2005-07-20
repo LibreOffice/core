@@ -2,9 +2,9 @@
 *
 *  $RCSfile: module_hidden_ooo.scp,v $
 *
-*  $Revision: 1.19 $
+*  $Revision: 1.20 $
 *
-*  last change: $Author: obo $ $Date: 2005-07-07 13:18:55 $
+*  last change: $Author: obo $ $Date: 2005-07-20 09:50:36 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -322,10 +322,6 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Cached1,
 	gid_File_Lib_Curl,
 	gid_File_Lib_Db,
-	gid_File_Lib_Db_Cxx,
-	gid_File_Lib_Dbjava,
-	gid_File_Lib_Dbjava31,
-	gid_File_Lib_Db31,
 	gid_File_Lib_Dbghelp,
 	gid_File_Lib_Dbpool,
 	gid_File_Lib_Embobj,
