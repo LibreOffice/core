@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.131 $
+*  $Revision: 1.132 $
 *
-*  last change: $Author: obo $ $Date: 2005-07-18 14:51:46 $
+*  last change: $Author: obo $ $Date: 2005-07-20 10:01:24 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -442,15 +442,6 @@ File gid_File_Lib_Db
   #endif
 End
 
-#ifdef UNX
-File gid_File_Lib_Db_Cxx
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Program;
-    Name = STRING(CONCAT2(libdb_cxx-4.2,UNXSUFFIX));
-End
-#endif
-
 #endif
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dba, dba)
@@ -460,27 +451,6 @@ STD_UNO_LIB_FILE( gid_File_Lib_Dbacfg, dbacfg)
 STD_UNO_LIB_FILE( gid_File_Lib_Dbase2, dbase )
 
 STD_LIB_FILE( gid_File_Lib_Dbfile , file)
-
-#ifdef SOLAR_JAVA
-#ifndef SYSTEM_DB
-
-File gid_File_Lib_Dbjava
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Program;
-  #ifdef UNX
-    #ifdef MACOSX
-        Name = "libdb_java-4.2.jnilib";
-    #else
-    	Name = STRING(CONCAT2(libdb_java-4.2,UNXSUFFIX));
-    #endif
- #else
-    Name = "libdb_java42.dll";
-  #endif
-End
-
-#endif
-#endif
 
 File gid_File_Lib_Dbodbcbase
     TXT_FILE_BODY;
