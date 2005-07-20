@@ -1722,56 +1722,56 @@ End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Base_Types_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
     Name = "/registry/spool/fcfg_base_types.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Base_Filters_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
     Name = "/registry/spool/fcfg_base_filters.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Base_Others_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Misc;
     Name = "/registry/spool/fcfg_base_others.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Chart_Types_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
     Name = "/registry/spool/fcfg_chart_types.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Chart_Filters_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
     Name = "/registry/spool/fcfg_chart_filters.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Chart_Others_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Misc;
     Name = "/registry/spool/fcfg_chart_others.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_InternalGraphics_Types_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
     Name = "/registry/spool/fcfg_internalgraphics_types.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_InternalGraphics_Filters_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_GraphicFilter;
     Name = "/registry/spool/fcfg_internalgraphics_filters.xcu";
 End
