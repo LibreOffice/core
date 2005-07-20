@@ -1,4 +1,4 @@
-    <node oor:name="pcx_Import" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="pcx_Import" oor:op="replace"  >
         <prop oor:name="Type"><value>pcx_Zsoft_Paintbrush</value></prop>
         <prop oor:name="FormatName"><value>ipx</value></prop>
         <prop oor:name="RealFilterName"><value>PCX - Zsoft Paintbrush</value></prop>

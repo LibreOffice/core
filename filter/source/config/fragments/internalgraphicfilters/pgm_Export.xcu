@@ -1,4 +1,4 @@
-    <node oor:name="pgm_Export" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="pgm_Export" oor:op="replace"  >
         <prop oor:name="Type"><value>pgm_Portable_Graymap</value></prop>
         <prop oor:name="FormatName"><value>epg</value></prop>
         <prop oor:name="RealFilterName"/>
