@@ -82,6 +82,12 @@ File gid_File_Basic_Importwiz
     Name = "basicsrvimport.zip";
 End
 
+File gid_File_Basic_Formwiz
+    Dir = gid_Dir_Basic_Formwiz;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "basicsrvform.zip";
+End
+
 File gid_File_Basic_Launcher
     Dir = gid_Dir_Basic_Launcher;
     ARCHIVE_TXT_FILE_BODY;
