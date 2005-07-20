@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_gui_dialog.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 16:42:34 $
+ *  last change: $Author: obo $ $Date: 2005-07-20 12:33:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,10 +535,10 @@ namespace {
 struct StrAllFiles : public rtl::StaticWithInit<const OUString, StrAllFiles> {
     const OUString operator () () {
         const ::vos::OGuard guard( Application::GetSolarMutex() );
-        ::std::auto_ptr<ResMgr> svt(
-            ResMgr::CreateResMgr( "svt" LIBRARY_SOLARUPD() ) );
-        OSL_ASSERT( svt.get() != 0 );
-        String ret( ResId( STR_FILTERNAME_ALL, svt.get() ) );
+        ::std::auto_ptr<ResMgr> const resmgr(
+            ResMgr::CreateResMgr( "fps_office" LIBRARY_SOLARUPD() ) );
+        OSL_ASSERT( resmgr.get() != 0 );
+        String ret( ResId( STR_FILTERNAME_ALL, resmgr.get() ) );
         return ret;
     }
 };
