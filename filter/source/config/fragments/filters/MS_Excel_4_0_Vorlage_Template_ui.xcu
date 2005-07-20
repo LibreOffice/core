@@ -1,4 +1,4 @@
-    <node oor:name="MS Excel 4.0 Vorlage/Template" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="MS Excel 4.0 Vorlage/Template">
         <prop oor:name="UIName">
             <value xml:lang="en-US">Microsoft Excel 4.0 Template</value>
             <value xml:lang="de">Microsoft Excel 4.0 Vorlage</value>
