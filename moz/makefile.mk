@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2005-03-01 17:18:37 $
+#   last change: $Author: obo $ $Date: 2005-07-20 09:49:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,6 +70,30 @@ TARGET=ooo_mozab
 .INCLUDE :	settings.mk
 
 # --- Files --------------------------------------------------------
+# ----- pkg-config start -------
+.INCLUDE .IGNORE : pkgroot.mk
+
+.IF "$(PKGCONFIG_ROOT)"!=""
+PKG_CONFIG:=$(PKGCONFIG_ROOT)$/bin$/pkg-config
+PKG_CONFIG_PATH:=$(PKGCONFIG_ROOT)$/lib$/pkgconfig
+LD_LIBRARY_PATH!:=$(subst,$(SOLARLIBDIR),$(SOLARLIBDIR)$(PATH_SEPERATOR)$(PKGCONFIG_ROOT)$/lib $(LD_LIBRARY_PATH))
+.EXPORT : PKG_CONFIG_PATH PKG_CONFIG LD_LIBRARY_PATH
+.ENDIF          # "$(PKGCONFIG_ROOT)"!=""
+
+.IF "$(BUILD_SPECIAL)"!=""
+# reduce prerequisites by disabling mozilla binary
+DISABLE_MOZ_EXECUTABLE=TRUE
+.EXPORT : DISABLE_MOZ_EXECUTABLE
+.ENDIF			# "$(BUILD_SPECIAL)"!=""
+
+.IF "$(SYSBASE)"!="" && "$(OS)" == "LINUX"
+CFLAGS:=-isystem $(SYSBASE)/usr/include
+LDFLAGS:=-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib
+SYSBASE_X11:=--x-includes=$(SYSBASE)/usr/include/X11 --x-libraries=$(SYSBASE)/usr/X11R6/lib
+.EXPORT : CFLAGS LDFLAGS
+.ENDIF			# "$(SYSBASE)"!="" && "$(OS)" == "LINUX"
+
+# ----- pkg-config end -------
 
 MOZILLA_VERSION*=1.7.5
 .IF "$(MOZILLA_VERSION)"=="1.7b"
@@ -89,22 +113,28 @@ WINTOOLS_ZIPFILE_NAME*=wintools.zip
 ADDITIONAL_FILES=mailnews$/addrbook$/src$/nsAbMD5sum.cpp
 
 CONFIGURE_DIR=
-MOZILLA_CONFIGURE_FLAGS= --disable-tests	\
-                --enable-ldap	\
-                --enable-crypto	\
-                --enable-optimize	\
-                --enable-strip	\
-                --disable-profilelocking	\
-                --disable-activex	\
-                --disable-activex-scripting	\
-                --disable-gnomevfs	\
-                --disable-debug	\
-                --disable-xprint	\
-                --disable-postscript	\
-                --disable-freetype2	\
-                --without-system-zlib	\
-                --disable-installer	\
-                --disable-accessibility
+MOZILLA_CONFIGURE_FLAGS= $(SYSBASE_X11) --disable-tests \
+                --enable-ldap \
+                --enable-crypto \
+                --enable-optimize \
+                --enable-strip \
+                --disable-profilelocking \
+                --disable-activex \
+                --disable-activex-scripting \
+                --disable-gnomevfs \
+                --disable-debug \
+                --disable-xprint \
+                --disable-postscript \
+                --disable-freetype2 \
+                --without-system-zlib \
+                --disable-installer \
+                --disable-accessibility \
+                 --disable-xpfe-components \
+                --disable-mathml \
+                --disable-oji \
+                --disable-profilesharing \
+                --disable-boehm \
+                --disable-jsloader
 
 #disable profilelocking to share profile with mozilla
 #disable activex and activex-scripting to remove the dependence of Microsoft_SDK\src\mfc\atlbase.h
@@ -122,7 +152,6 @@ MOZILLA_CONFIGURE_FLAGS+= --enable-default-toolkit=$(DEFAULT_MOZILLA_TOOLKIT)
 .ENDIF
 
 CONFIGURE_ACTION=sh -c "./configure $(MOZILLA_CONFIGURE_FLAGS)"
-
 
 BUILD_DIR=
 .IF "$(USE_SHELL)"!="4nt"
