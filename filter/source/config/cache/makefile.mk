@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-02-02 13:46:14 $
+#   last change: $Author: obo $ $Date: 2005-07-20 09:29:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,6 +78,7 @@ LIBTARGET           = NO
 SHL1TARGET=     $(TARGET)$(VERSION)
 
 SLOFILES=       \
+                $(SLO)$/configflush.obj             \
                 $(SLO)$/basecontainer.obj           \
                 $(SLO)$/cacheitem.obj               \
                 $(SLO)$/contenthandlerfactory.obj   \
@@ -88,10 +89,11 @@ SLOFILES=       \
                 $(SLO)$/lateinitthread.obj          \
                 $(SLO)$/querytokenizer.obj          \
                 $(SLO)$/registration.obj            \
-                $(SLO)$/typedetection.obj
-                
-SHL1OBJS=       $(SLOFILES)                
-                
+                $(SLO)$/typedetection.obj           \
+                $(SLO)$/cacheupdatelistener.obj
+
+SHL1OBJS=       $(SLOFILES)
+
 SHL1STDLIBS=    \
                 $(COMPHELPERLIB)    \
                 $(CPPUHELPERLIB)    \
