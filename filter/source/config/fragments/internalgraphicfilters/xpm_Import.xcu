@@ -1,4 +1,4 @@
-    <node oor:name="xpm_Import" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="xpm_Import" oor:op="replace"  >
         <prop oor:name="Type"><value>xpm_XPM</value></prop>
         <prop oor:name="FormatName"><value>SVIXPM</value></prop>
         <prop oor:name="RealFilterName"><value>XPM</value></prop>
