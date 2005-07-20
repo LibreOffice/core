@@ -1,4 +1,4 @@
-    <node oor:name="Text (encoded)" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="Text (encoded)">
         <prop oor:name="UIName">
             <value xml:lang="en-US">Text Encoded</value>
             <value xml:lang="de">Text Kodiert</value>
