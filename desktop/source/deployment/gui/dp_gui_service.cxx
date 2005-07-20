@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_gui_service.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 10:21:17 $
+ *  last change: $Author: obo $ $Date: 2005-07-20 12:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,8 +214,7 @@ sal_Int16 ServiceImpl::execute() throw (RuntimeException)
     ::std::auto_ptr<Application> app;
     if (! dp_gui::DialogImpl::s_dialog.is())
     {
-        const bool bAppUp = (Application::IsInMain() ||
-                             Application::IsInExecute());
+        const bool bAppUp = (GetpApp() != 0);
         bool bOfficePipePresent;
         try {
             bOfficePipePresent = dp_misc::office_is_running();
