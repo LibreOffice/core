@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:11:58 $
+ *  last change: $Author: obo $ $Date: 2005-07-20 09:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,6 +613,14 @@ class FilterCache : public BaseLock
         virtual void setItem(      EItemType        eType ,
                              const ::rtl::OUString& sItem ,
                              const CacheItem&       aValue)
+            throw(css::uno::Exception);
+
+        //---------------------------------------
+
+        /** TODO document me ...
+         */
+        virtual void refreshItem(      EItemType        eType,
+                                 const ::rtl::OUString& sItem)
             throw(css::uno::Exception);
 
         //---------------------------------------
