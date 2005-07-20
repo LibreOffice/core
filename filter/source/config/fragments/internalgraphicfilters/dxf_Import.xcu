@@ -1,4 +1,4 @@
-    <node oor:name="dxf_Import" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="dxf_Import" oor:op="replace"  >
         <prop oor:name="Type"><value>dxf_AutoCAD_Interchange</value></prop>
         <prop oor:name="FormatName"><value>idx</value></prop>
         <prop oor:name="RealFilterName"><value>DXF - AutoCAD Interchange</value></prop>
