@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2005-07-12 12:00:51 $
+#   last change: $Author: obo $ $Date: 2005-07-20 09:48:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,8 +118,8 @@ SHL1STDLIBS=\
     $(PKGCONFIG_LIBS)
 
 .IF "$(OS)"=="SOLARIS"
-LINKFLAGS!:=$(LINKFLAGSAPP:s/-z defs/-z nodefs/)
-.ENDIF          # "$(OS)"=="SOLARIS"
+LINKFLAGSDEFS=
+.ENDIF # "$(OS)"=="SOLARIS"
 
 SHL1VERSIONMAP=exports.map
 DEF1NAME=$(SHL1TARGET)
