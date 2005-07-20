@@ -1,4 +1,4 @@
-    <node oor:name="HTML" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="HTML">
         <prop oor:name="UIName">
             <value xml:lang="en-US">HTML Document</value>
             <value xml:lang="de">HTML-Dokument</value>
