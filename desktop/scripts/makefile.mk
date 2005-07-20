@@ -82,3 +82,9 @@ UNIXTEXT= \
 
 .INCLUDE :  target.mk
 
+ALLTAR: $(MISC)$/so$/soffice.sh
+
+$(MISC)$/so$/soffice.sh:
+    -$(MKDIR) $(MISC)$/so
+    +$(TYPE) soffice_lean.sh | tr -d "\015" > $@
+
