@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generictoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-04-01 16:14:02 $
+ *  last change: $Author: obo $ $Date: 2005-07-20 12:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,6 +332,7 @@ throw ( RuntimeException )
 
 IMPL_STATIC_LINK( GenericToolbarController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
 {
+   const sal_uInt32 nRef = Application::ReleaseSolarMutex();
    try
    {
        // Asynchronous execution as this can lead to our own destruction!
@@ -342,6 +343,8 @@ IMPL_STATIC_LINK( GenericToolbarController, ExecuteHdl_Impl, ExecuteInfo*, pExec
    catch ( Exception& )
    {
    }
+
+   Application::AcquireSolarMutex( nRef );
    delete pExecuteInfo;
    return 0;
 }
