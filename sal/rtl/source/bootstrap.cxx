@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 11:35:36 $
+ *  last change: $Author: obo $ $Date: 2005-07-20 12:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,9 +511,10 @@ sal_Bool Bootstrap_Impl::getValue(
                         getFromList( &_nameValueList, ppValue, pName );
                         if( ! *ppValue )
                         {
-                            if(pDefault)
+                            if(pDefault) {
                                 rtl_uString_assign( ppValue, pDefault );
-
+                                further_macro_expansion = false;
+                            }
                             else
                                 result = sal_False;
                         }
@@ -531,10 +532,10 @@ sal_Bool Bootstrap_Impl::getValue(
     {
         if (further_macro_expansion)
         {
-            OUString result = expandMacros(
+            OUString val = expandMacros(
                 static_cast< rtlBootstrapHandle >( const_cast< Bootstrap_Impl * >( this ) ),
-                * reinterpret_cast< OUString const * >( ppValue ) );
-            rtl_uString_assign( ppValue, result.pData );
+                OUString::unacquired(ppValue) );
+            rtl_uString_assign( ppValue, val.pData );
         }
     }
 
