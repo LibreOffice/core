@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheupdatelistener.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 13:39:26 $
+ *  last change: $Author: obo $ $Date: 2005-07-20 09:28:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,15 @@ class CacheUpdateListener : public BaseLock // must be the first one to guarante
                     which should be updated by this thread. */
         ::salhelper::SingletonRef< FilterCache > m_rCache;
 
+        /** @short  holds the configuration access, where we listen alive. */
+        css::uno::Reference< css::uno::XInterface > m_xConfig;
+
+        /** @short  every instance of this update listener listen on
+                    a special sub set of the filter configuration.
+                    So it should know, which type of configuration entry
+                    it must put into the filter cache, if the configuration notifys changes ... */
+        FilterCache::EItemType m_eConfigType;
+
     //-------------------------------------------
     // native interface
 
@@ -135,8 +144,16 @@ class CacheUpdateListener : public BaseLock // must be the first one to guarante
             @param  xSMGR
                     reference to a service manager, which can be used to create
                     own needed uno services.
+
+            @param  xConfigAccess
+                    the configuration access, where this instance should listen for changes.
+
+            @param  eConfigType
+                    specify the type of configuration.
          */
-        CacheUpdateListener(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
+        CacheUpdateListener(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR        ,
+                            const css::uno::Reference< css::uno::XInterface >&            xConfigAccess,
+                                  FilterCache::EItemType                                  eConfigType  );
 
         //---------------------------------------
 
@@ -146,37 +163,15 @@ class CacheUpdateListener : public BaseLock // must be the first one to guarante
 
         //---------------------------------------
 
-        /** @short  starts listening on the given configuration access.
-
-            @descr  There wont be a check, if this instance is already a listener
-                    on the given configuration access! Such things must be checked
-                    by the outside code.
-
-                    => startListening() and stopListening() must be called in pairs.
-                    But calling of stopListening() isnt required in real.
-                    If the configuration access dies, the listener dies automaticly too.
-
-            @param  xConfigAccess
-                    the configuration access, where this instance should listen for changes.
+        /** @short  starts listening.
          */
-        virtual void startListening(const css::uno::Reference< css::uno::XInterface >& xConfigAccess);
+        virtual void startListening();
 
         //---------------------------------------
 
-        /** @short  stop listening on the given configuration access.
-
-            @descr  There wont be a check, if this instance is a listener
-                    on the given configuration access or not! Such things must be checked
-                    by the outside code.
-
-                    => startListening() and stopListening() must be called in pairs.
-                    But calling of stopListening() isnt required in real.
-                    If the configuration access dies, the listener dies automaticly too.
-
-            @param  xConfigAccess
-                    the configuration access, where this instance should stop listening.
+        /** @short  stop listening.
          */
-        virtual void stopListening(const css::uno::Reference< css::uno::XInterface >& xConfigAccess);
+        virtual void stopListening();
 
     //-------------------------------------------
     // uno interface
