@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-25 13:08:22 $
+ *  last change: $Author: obo $ $Date: 2005-07-20 12:26:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,6 +230,7 @@ friend class SfxOrganizeListBox_Impl;
     sal_Bool                GetServiceName_Impl( String& rFactoryURL, String& rFileURL ) const;
     long                    Dispatch_Impl( USHORT nId, Menu* _pMenu );
     String                  GetPath_Impl( BOOL bOpen, const String& rFileName );
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > GetPaths_Impl( const String& rFileName );
     void                    InitBitmaps( void );
 
     DECL_LINK( GetFocus_Impl, SfxOrganizeListBox_Impl * );
@@ -1656,6 +1657,79 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( BOOL bOpen, const String& rFileName )
 
 //-------------------------------------------------------------------------
 
+::com::sun::star::uno::Sequence< ::rtl::OUString > SfxOrganizeDlg_Impl::GetPaths_Impl( const String& rFileName )
+
+/*  [Description]
+
+   Query plural paths by FileDialog, for Import / Export from document
+   templates
+
+   [Parameter]
+
+   const String& rFileName         The default file name when dialog executes
+
+   [Return value]                 Empty sequence when users have clicked
+                                  'Cancel', a sequence just containing one
+                                  file name with path when they have
+                                  choosed one file or a sequence containing
+                                  path and file names without path
+*/
+
+{
+   ::com::sun::star::uno::Sequence< ::rtl::OUString > aPaths;
+   String aExtension( DEFINE_CONST_UNICODE( "vor" ) );
+   sfx2::FileDialogHelper aFileDlg( ::sfx2::FILEOPEN_SIMPLE , SFXWB_MULTISELECTION );
+
+   // add "All" filter
+   aFileDlg.AddFilter( String( SfxResId( STR_FILTERNAME_ALL ) ),
+                       DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
+   // add template filter
+   String sFilterName( SfxResId( STR_TEMPLATE_FILTER ) );
+   String sFilterExt( DEFINE_CONST_UNICODE( "*.vor;*.stw;*.stc;*.std;*.sti;*.ott;*.ots;*.otp;*.otg" ) );
+   sFilterName += DEFINE_CONST_UNICODE( " (" );
+   sFilterName += sFilterExt;
+   sFilterName += ')';
+   aFileDlg.AddFilter( sFilterName, sFilterExt );
+
+   aFileDlg.SetCurrentFilter( sFilterName );
+
+   if ( aLastDir.Len() || rFileName.Len() )
+   {
+       INetURLObject aObj;
+       if ( aLastDir.Len() )
+       {
+           aObj.SetURL( aLastDir );
+           if ( rFileName.Len() )
+               aObj.insertName( rFileName );
+       }
+       else
+           aObj.SetURL( rFileName );
+
+       if ( aObj.hasExtension() )
+       {
+           aExtension = aObj.getExtension( INetURLObject::LAST_SEGMENT, true,
+                                           INetURLObject::DECODE_WITH_CHARSET );
+           aObj.removeExtension();
+       }
+
+       DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
+       aFileDlg.SetDisplayDirectory( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
+   }
+
+   if ( ERRCODE_NONE == aFileDlg.Execute() )
+   {
+       aPaths = aFileDlg.GetMPath();
+       sal_Int32 lastCount = aPaths.getLength() - 1;
+       INetURLObject aObj( aPaths.getArray()[ lastCount ] );
+
+       aObj.removeSegment();
+       aLastDir = aObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
+   }
+   return aPaths;
+}
+
+//-------------------------------------------------------------------------
+
 BOOL SfxOrganizeDlg_Impl::DontDelete_Impl( SvLBoxEntry *pEntry)
 {
     USHORT nDepth = pFocusBox->GetModel()->GetDepth(pEntry);
@@ -1861,14 +1935,46 @@ long SfxOrganizeDlg_Impl::Dispatch_Impl( USHORT nId, Menu* _pMenu )
                 return 1;
             USHORT nRegion = 0, nIndex = 0;
             GetIndices_Impl( pFocusBox, pEntry, nRegion, nIndex );
-            String aPath = GetPath_Impl( TRUE, String() );
 
+            ::com::sun::star::uno::Sequence < ::rtl::OUString > Paths = GetPaths_Impl( String() );
+            sal_Int32 nCount = Paths.getLength();
+            if( nCount == 1 )
+             {
+               String aPath = String( Paths.getArray()[0] );
+               if ( aPath.Len() && !aMgr.CopyFrom( pFocusBox, nRegion, nIndex, aPath ) )
+               {
+                   String aText( SfxResId( STR_ERROR_COPY_TEMPLATE ) );
+                   aText.SearchAndReplaceAscii( "$1", aPath );
+                   ErrorBox( pDialog, WB_OK, aText ).Execute();
+               }
+            }
+            else if( nCount > 1)
+            {
+                INetURLObject aPathObj( Paths[0] );
+                aPathObj.setFinalSlash();
+                for ( USHORT i = 1; i<nCount; ++i )
+                {
+                    if ( i == 1 )
+                        aPathObj.Append( Paths[i] );
+                    else
+                        aPathObj.setName( Paths[i] );
+                    String aPath = aPathObj.GetMainURL( INetURLObject::NO_DECODE );
+                    if ( aPath.Len() && !aMgr.CopyFrom( pFocusBox, nRegion, nIndex, aPath ) )
+                    {
+                        String aText( SfxResId( STR_ERROR_COPY_TEMPLATE ) );
+                        aText.SearchAndReplaceAscii( "$1", aPath );
+                        ErrorBox( pDialog, WB_OK, aText ).Execute();
+                    }
+                }
+            }
+
+            /*String aPath = GetPath_Impl( TRUE, String() );
             if ( aPath.Len() && !aMgr.CopyFrom( pFocusBox, nRegion, nIndex, aPath ) )
             {
                 String aText( SfxResId( STR_ERROR_COPY_TEMPLATE ) );
                 aText.SearchAndReplaceAscii( "$1", aPath );
                 ErrorBox( pDialog, WB_OK, aText ).Execute();
-            }
+            }*/
             break;
         }
 
