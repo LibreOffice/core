@@ -1,4 +1,4 @@
-    <node oor:name="writer8_template" oor:finalized="false" oor:mandatory="false">
+    <node oor:name="writer8_template">
         <prop oor:name="UIName">
             <value xml:lang="en-US">OpenDocument Text Template</value>
             <value xml:lang="de">OpenDocument Textdokumentvorlage</value>
