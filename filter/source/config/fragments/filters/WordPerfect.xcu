@@ -1,4 +1,4 @@
-    <node oor:name="WordPerfect" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="WordPerfect" oor:op="replace">
         <prop oor:name="Flags"><value>IMPORT ALIEN USESOPTIONS 3RDPARTYFILTER PREFERRED</value></prop>
         <prop oor:name="UIComponent"/>
         <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.WordPerfectImportFilter</value></prop>
