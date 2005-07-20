@@ -1,4 +1,4 @@
-    <node oor:name="pct_Export" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="pct_Export" oor:op="replace"  >
         <prop oor:name="Type"><value>pct_Mac_Pict</value></prop>
         <prop oor:name="FormatName"><value>ept</value></prop>
         <prop oor:name="RealFilterName"/>
