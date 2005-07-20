@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_xsltfilter.scp,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 10:19:51 $
+ *  last change: $Author: obo $ $Date: 2005-07-20 12:31:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,14 +63,14 @@
 
 File gid_File_Registry_Spool_Oo_TypeDetection_XSLT_Types_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
     Name = "/registry/spool/fcfg_xslt_types.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_XSLT_Filters_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
     Name = "/registry/spool/fcfg_xslt_filters.xcu";
 End
