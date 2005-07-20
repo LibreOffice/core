@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-13 07:29:54 $
+ *  last change: $Author: obo $ $Date: 2005-07-20 12:21:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1377,7 +1377,11 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu )
     }
 
     if ( xDispatch.is() )
+    {
+        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
         xDispatch->dispatch( aTargetURL, aArgs );
+        Application::AcquireSolarMutex( nRef );
+    }
 
     return 1;
 }
