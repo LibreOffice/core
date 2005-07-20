@@ -1,4 +1,4 @@
-    <node oor:name="draw8" oor:finalized="false" oor:mandatory="false">
+    <node oor:name="draw8">
         <prop oor:name="UIName">
             <value xml:lang="en-US">OpenDocument Drawing</value>
             <value xml:lang="de">OpenDocument Zeichnung</value>
