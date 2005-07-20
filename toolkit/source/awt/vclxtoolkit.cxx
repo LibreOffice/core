@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 15:31:42 $
+ *  last change: $Author: obo $ $Date: 2005-07-20 12:22:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1123,7 +1123,8 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                         if (!pNewWindow)
                             pNewWindow = new WorkWindow( pParent, nWinBits );
                     }
-                    *ppNewComp = new VCLXTopWindow;
+
+                    *ppNewComp = new VCLXTopWindow( pNewWindow->GetType() == WINDOW_WORKWINDOW );
                 }
                 else if ( rDescriptor.Type == ::com::sun::star::awt::WindowClass_CONTAINER )
                 {
