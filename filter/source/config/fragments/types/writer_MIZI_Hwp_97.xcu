@@ -1,4 +1,4 @@
-    <node oor:name="writer_MIZI_Hwp_97" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="writer_MIZI_Hwp_97" oor:op="replace" >
         <prop oor:name="DetectService"/>
         <prop oor:name="URLPattern"/>
         <prop oor:name="Extensions"><value>hwp</value></prop>
