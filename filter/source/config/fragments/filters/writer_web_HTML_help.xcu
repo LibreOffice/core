@@ -1,4 +1,4 @@
-    <node oor:name="writer_web_HTML_help" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="writer_web_HTML_help" oor:op="replace">
         <prop oor:name="Flags"><value>IMPORT INTERNAL NOTINFILEDIALOG NOTINCHOOSER ASYNCHRON READONLY</value></prop>
         <prop oor:name="UIComponent"/>
         <prop oor:name="FilterService"/>
