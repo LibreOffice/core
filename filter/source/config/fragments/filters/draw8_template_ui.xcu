@@ -1,4 +1,4 @@
-    <node oor:name="draw8_template" oor:finalized="false" oor:mandatory="false">
+    <node oor:name="draw8_template">
         <prop oor:name="UIName">
             <value xml:lang="en-US">OpenDocument Drawing Template</value>
             <value xml:lang="de">OpenDocument Zeichnungsdokumentvorlage</value>
