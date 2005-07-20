@@ -1,4 +1,4 @@
-    <node oor:name="calc_HTML_WebQuery" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="calc_HTML_WebQuery">
         <prop oor:name="UIName">
             <value xml:lang="en-US">Web Page Query (%productname% Calc)</value>
             <value xml:lang="de">Webseiten-Abfrage (%productname% Calc)</value>
