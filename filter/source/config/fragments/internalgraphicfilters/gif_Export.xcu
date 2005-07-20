@@ -1,4 +1,4 @@
-    <node oor:name="gif_Export" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="gif_Export" oor:op="replace"  >
         <prop oor:name="Type"><value>gif_Graphics_Interchange</value></prop>
         <prop oor:name="FormatName"><value>egi</value></prop>
         <prop oor:name="RealFilterName"/>

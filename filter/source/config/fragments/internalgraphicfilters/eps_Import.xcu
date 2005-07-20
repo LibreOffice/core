@@ -1,4 +1,4 @@
-    <node oor:name="eps_Import" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="eps_Import" oor:op="replace"  >
         <prop oor:name="Type"><value>eps_Encapsulated_PostScript</value></prop>
         <prop oor:name="FormatName"><value>ips</value></prop>
         <prop oor:name="RealFilterName"><value>EPS - Encapsulated PostScript</value></prop>
