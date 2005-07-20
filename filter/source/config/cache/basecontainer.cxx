@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basecontainer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:11:17 $
+ *  last change: $Author: obo $ $Date: 2005-07-20 09:27:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #include "basecontainer.hxx"
+#include "constant.hxx"
 
 //_______________________________________________
 // includes
@@ -137,6 +138,9 @@ void BaseContainer::init(const css::uno::Reference< css::lang::XMultiServiceFact
     m_lServiceNames       = lServiceNames      ;
     m_xSMGR               = xSMGR              ;
     m_eType               = eType              ;
+    m_xRefreshBroadcaster = css::uno::Reference< css::util::XRefreshable >(
+                                xSMGR->createInstance(SERVICE_FILTERCONFIGREFRESH),
+                                css::uno::UNO_QUERY);
     // <- SAFE
 }
 
@@ -211,6 +215,23 @@ FilterCache* BaseContainer::impl_getWorkingCache() const
     else
         return &(*m_rCache);
     // <- SAFE
+}
+
+//-----------------------------------------------
+sal_Bool BaseContainer::impl_checkIfItemExist(const ::rtl::OUString& sItem)
+{
+    // SAFE ->
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+
+    FilterCache* pCache = impl_getWorkingCache();
+    if ( pCache->hasItem(m_eType, sItem) )
+        return sal_True;
+
+    impl_loadOnDemand();
+    if ( pCache->hasItem(m_eType, sItem) )
+        return sal_True;
+
+    return sal_False;
 }
 
 /*-----------------------------------------------
@@ -381,7 +402,7 @@ css::uno::Any SAL_CALL BaseContainer::getByName(const ::rtl::OUString& sItem)
 
     css::uno::Any aValue;
 
-    impl_loadOnDemand();
+    //impl_loadOnDemand();
 
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -588,6 +609,14 @@ void SAL_CALL BaseContainer::flush()
     try
     {
         m_pFlushCache->flush();
+        // Take over all changes into the global cache and
+        // forget the clone.
+        /* TODO
+            -think about me
+                If the global cache gets this information via listener,
+                we should remove this method!
+        */
+        m_rCache->takeOver(*m_pFlushCache);
     }
     catch(const css::uno::Exception& ex)
     {
@@ -601,20 +630,16 @@ void SAL_CALL BaseContainer::flush()
                 css::uno::makeAny(ex));
     }
 
-    // Take over all changes into the global cache and
-    // forget the clone.
-    /* TODO
-        -think about me
-            If the global cache gets this information via listener,
-            we should remove this method!
-     */
-    m_rCache->takeOver(*m_pFlushCache);
-
     delete m_pFlushCache;
     m_pFlushCache = NULL;
 
+    css::uno::Reference< css::util::XRefreshable > xRefreshBroadcaster = m_xRefreshBroadcaster;
+
     aLock.clear();
     // <- SAFE
+
+    if (xRefreshBroadcaster.is())
+        xRefreshBroadcaster->refresh();
 
     // notify listener outside the lock!
     // The used listener helper lives if we live
