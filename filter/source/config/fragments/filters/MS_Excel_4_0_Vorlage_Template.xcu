@@ -1,4 +1,4 @@
-    <node oor:name="MS Excel 4.0 Vorlage/Template" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="MS Excel 4.0 Vorlage/Template" oor:op="replace">
         <prop oor:name="Flags"><value>IMPORT TEMPLATE TEMPLATEPATH ALIEN</value></prop>
         <prop oor:name="UIComponent"/>
         <prop oor:name="FilterService"/>
