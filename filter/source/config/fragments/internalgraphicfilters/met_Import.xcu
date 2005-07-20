@@ -1,4 +1,4 @@
-    <node oor:name="met_Import" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="met_Import" oor:op="replace"  >
         <prop oor:name="Type"><value>met_OS2_Metafile</value></prop>
         <prop oor:name="FormatName"><value>ime</value></prop>
         <prop oor:name="RealFilterName"><value>MET - OS/2 Metafile</value></prop>

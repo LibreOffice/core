@@ -1,4 +1,4 @@
-    <node oor:name="pbm_Export" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="pbm_Export" oor:op="replace"  >
         <prop oor:name="Type"><value>pbm_Portable_Bitmap</value></prop>
         <prop oor:name="FormatName"><value>epb</value></prop>
         <prop oor:name="RealFilterName"/>
