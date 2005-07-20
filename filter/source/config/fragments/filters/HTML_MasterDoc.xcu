@@ -1,4 +1,4 @@
-    <node oor:name="HTML_MasterDoc" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="HTML_MasterDoc" oor:op="replace">
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>writer_web_HTML</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.text.GlobalDocument</value></prop>
