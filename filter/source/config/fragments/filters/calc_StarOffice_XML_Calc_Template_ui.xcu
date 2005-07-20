@@ -1,4 +1,4 @@
-    <node oor:name="calc_StarOffice_XML_Calc_Template" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="calc_StarOffice_XML_Calc_Template">
         <prop oor:name="UIName">
             <value xml:lang="en-US">%productname% %formatversion% Spreadsheet Template</value>
             <value xml:lang="de">%productname% %formatversion% Tabellendokument Vorlage</value>
