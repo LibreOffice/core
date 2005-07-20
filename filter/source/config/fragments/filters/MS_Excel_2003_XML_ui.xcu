@@ -1,4 +1,4 @@
-    <node oor:name="MS Excel 2003 XML" oor:finalized="false" oor:mandatory="false">
+    <node oor:name="MS Excel 2003 XML">
         <prop oor:name="UIName">
             <value xml:lang="el">Microsoft Excel 2003 XML</value>
             <value xml:lang="en-US">Microsoft Excel 2003 XML</value>
