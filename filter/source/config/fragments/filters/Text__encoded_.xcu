@@ -1,4 +1,4 @@
-    <node oor:name="Text (encoded)" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="Text (encoded)" oor:op="replace">
         <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN</value></prop>
         <prop oor:name="UIComponent"><value>com.sun.star.comp.Writer.FilterOptionsDialog</value></prop>
         <prop oor:name="FilterService"/>
