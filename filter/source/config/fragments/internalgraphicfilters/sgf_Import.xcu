@@ -1,4 +1,4 @@
-    <node oor:name="sgf_Import" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="sgf_Import" oor:op="replace"  >
         <prop oor:name="Type"><value>sgf_StarOffice_Writer_SGF</value></prop>
         <prop oor:name="FormatName"><value>SVSGF</value></prop>
         <prop oor:name="RealFilterName"><value>SGF - StarOffice Writer SGF</value></prop>

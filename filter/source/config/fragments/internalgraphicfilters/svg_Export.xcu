@@ -1,4 +1,4 @@
-    <node oor:name="svg_Export" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="svg_Export" oor:op="replace"  >
         <prop oor:name="Type"><value>svg_Scalable_Vector_Graphics</value></prop>
         <prop oor:name="FormatName"><value>SVESVG</value></prop>
         <prop oor:name="RealFilterName"/>
