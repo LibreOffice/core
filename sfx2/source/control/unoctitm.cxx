@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-08 09:27:48 $
+ *  last change: $Author: obo $ $Date: 2005-07-20 12:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,6 @@
 #ifndef _COM_SUN_STAR_FRAME_STATUS_VISIBILITY_HPP_
 #include <com/sun/star/frame/status/Visibility.hpp>
 #endif
-
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <vos/mutex.hxx>
@@ -739,7 +738,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
             addParametersToArgs( aURL, lNewArgs );
 
         // Try to find call mode and frame name inside given arguments...
-        SfxCallMode nCall = SFX_CALLMODE_SLOT;
+        SfxCallMode nCall = SFX_CALLMODE_STANDARD;
         sal_Int32   nMarkArg = -1;
 
         // Filter arguments which shouldn't be part of the sequence property value
