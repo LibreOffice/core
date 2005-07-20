@@ -2,9 +2,9 @@
  *
  *  $RCSfile: constant.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 17:19:06 $
+ *  last change: $Author: obo $ $Date: 2005-07-20 09:28:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,7 @@
 #define  SERVICE_CONFIGURATIONUPDATEACCESS  _FILTER_CONFIG_FROM_ASCII_("com.sun.star.configuration.ConfigurationUpdateAccess" )
 #define  SERVICE_CONFIGURATIONACCESS        _FILTER_CONFIG_FROM_ASCII_("com.sun.star.configuration.ConfigurationAccess"       )
 #define  SERVICE_URLTRANSFORMER             _FILTER_CONFIG_FROM_ASCII_("com.sun.star.util.URLTransformer"                     )
+#define  SERVICE_FILTERCONFIGREFRESH        _FILTER_CONFIG_FROM_ASCII_("com.sun.star.document.FilterConfigRefresh"            )
 
 /** @short  some configuration pathes.
  */
