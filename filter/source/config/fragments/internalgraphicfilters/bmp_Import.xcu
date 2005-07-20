@@ -1,4 +1,4 @@
-    <node oor:name="bmp_Import" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="bmp_Import" oor:op="replace"  >
         <prop oor:name="Type"><value>bmp_MS_Windows</value></prop>
         <prop oor:name="FormatName"><value>SVBMP</value></prop>
         <prop oor:name="RealFilterName"><value>BMP - MS Windows</value></prop>
