@@ -1,4 +1,4 @@
-    <node oor:name="AportisDoc Palm DB" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="AportisDoc Palm DB" oor:op="replace">
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>writer_AportisDoc_PalmDB_File</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.text.TextDocument</value></prop>
