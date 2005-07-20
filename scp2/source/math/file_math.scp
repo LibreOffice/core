@@ -158,14 +158,14 @@ End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Math_Types_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
     Name = "/registry/spool/fcfg_math_types.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Math_Filters_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
     Name = "/registry/spool/fcfg_math_filters.xcu";
 End
