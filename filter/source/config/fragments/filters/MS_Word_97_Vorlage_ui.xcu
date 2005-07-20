@@ -1,4 +1,4 @@
-    <node oor:name="MS Word 97 Vorlage" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="MS Word 97 Vorlage">
         <prop oor:name="UIName">
             <value xml:lang="en-US">Microsoft Word 97/2000/XP Template</value>
             <value xml:lang="de">Microsoft Word 97/2000/XP Vorlage</value>
