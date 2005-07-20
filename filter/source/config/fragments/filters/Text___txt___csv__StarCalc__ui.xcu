@@ -1,4 +1,4 @@
-    <node oor:name="Text - txt - csv (StarCalc)" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="Text - txt - csv (StarCalc)">
         <prop oor:name="UIName">
             <value xml:lang="en-US">Text CSV</value>
             <value xml:lang="de">Text CSV</value>
