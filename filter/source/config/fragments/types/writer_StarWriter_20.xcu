@@ -1,4 +1,4 @@
-    <node oor:name="writer_StarWriter_20" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="writer_StarWriter_20" oor:op="replace" >
         <prop oor:name="DetectService"><value>com.sun.star.text.FormatDetector</value></prop>
         <prop oor:name="URLPattern"/>
         <prop oor:name="Extensions"><value>sdw</value></prop>
