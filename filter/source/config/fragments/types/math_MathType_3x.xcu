@@ -1,4 +1,4 @@
-    <node oor:name="math_MathType_3x" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="math_MathType_3x" oor:op="replace" >
         <prop oor:name="DetectService"><value>com.sun.star.comp.math.FormatDetector</value></prop>
         <prop oor:name="URLPattern"/>
         <prop oor:name="Extensions"><value>xxx</value></prop>
