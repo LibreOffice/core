@@ -1,4 +1,4 @@
-    <node oor:name="MS Word 95" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="MS Word 95" oor:op="replace">
         <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN</value></prop>
         <prop oor:name="UIComponent"/>
         <prop oor:name="FilterService"/>
