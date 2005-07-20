@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-18 12:04:28 $
+ *  last change: $Author: obo $ $Date: 2005-07-20 12:24:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1330,6 +1330,17 @@ void SfxFilterContainer::ReadFilters_Impl( BOOL bUpdate )
                     // Try to get filter .. but look for any exceptions!
                     // May be filter was deleted by another thread ...
                     ::rtl::OUString sFilterName = lFilterNames[nFilter];
+
+                    // This debug code can be used to break on inserting/updating
+                    // special debug filters at runtime.
+                    // Otherwise you have to check more then 300 filter names manually .-)
+                    // And conditional breakpoints on unicode values seams not to be supported .-(
+                    #ifdef DEBUG
+                    bool bDBGStop = FALSE;
+                    if (sFilterName.indexOf(::rtl::OUString::createFromAscii("DBG_"))>-1)
+                        bDBGStop = TRUE;
+                    #endif
+
                     ReadSingleFilter_Impl( sFilterName, xTypeCFG, xFilterCFG, bUpdate );
                 }
             }
