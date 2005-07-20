@@ -1,4 +1,4 @@
-    <node oor:name="tif_Import" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="tif_Import" oor:op="replace"  >
         <prop oor:name="Type"><value>tif_Tag_Image_File</value></prop>
         <prop oor:name="FormatName"><value>iti</value></prop>
         <prop oor:name="RealFilterName"><value>TIF - Tag Image File</value></prop>
