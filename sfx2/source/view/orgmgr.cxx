@@ -2,9 +2,9 @@
  *
  *  $RCSfile: orgmgr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:33:19 $
+ *  last change: $Author: obo $ $Date: 2005-07-20 12:27:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -702,7 +702,8 @@ BOOL SfxOrganizeMgr::CopyFrom(SfxOrganizeListBox_Impl *pCaller,
                                                     pCaller->GetClosedBmp(1),
                                                     pParent, TRUE, nIdx);
         pCaller->Update();
-        pCaller->EditEntry( pEntry );
+        // pCaller->EditEntry( pEntry );
+        pCaller->Expand( pParent );
         bModified = TRUE;
         return TRUE;
     }
