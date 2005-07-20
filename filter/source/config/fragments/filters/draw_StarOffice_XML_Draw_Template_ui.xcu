@@ -1,4 +1,4 @@
-    <node oor:name="draw_StarOffice_XML_Draw_Template" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="draw_StarOffice_XML_Draw_Template">
         <prop oor:name="UIName">
             <value xml:lang="en-US">%productname% %formatversion% Drawing Template</value>
             <value xml:lang="de">%productname% %formatversion% Zeichnungsvorlage</value>
