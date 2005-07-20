@@ -1,4 +1,4 @@
-    <node oor:name="writerglobal8" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="writerglobal8" oor:op="replace">
         <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN PREFERRED</value></prop>
         <prop oor:name="UIComponent"/>
         <prop oor:name="FilterService"/>
