@@ -1,4 +1,4 @@
-    <node oor:name="ras_Import" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+    <node oor:name="ras_Import" oor:op="replace"  >
         <prop oor:name="Type"><value>ras_Sun_Rasterfile</value></prop>
         <prop oor:name="FormatName"><value>ira</value></prop>
         <prop oor:name="RealFilterName"><value>RAS - Sun Rasterfile</value></prop>
