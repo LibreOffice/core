@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtopwindow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:58:10 $
+ *  last change: $Author: obo $ $Date: 2005-07-20 12:22:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,13 +115,80 @@ VCLXTopWindow::~VCLXTopWindow()
     return (aRet.hasValue() ? aRet : VCLXContainer::queryInterface( rType ));
 }
 
-// ::com::sun::star::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXTopWindow )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindow>* ) NULL ),
-    VCLXContainer::getTypes()
-IMPL_XTYPEPROVIDER_END
+::com::sun::star::uno::Sequence< sal_Int8 > VCLXTopWindow::getImplementationId() throw(::com::sun::star::uno::RuntimeException)
+{
+    static ::cppu::OImplementationId* pId = NULL;
+    static ::cppu::OImplementationId* pIdWithHandle = NULL;
+    if ( m_bWHWND )
+    {
+        if( !pIdWithHandle )
+        {
+            ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
+            if( !pIdWithHandle )
+            {
+                static ::cppu::OImplementationId idWithHandle( sal_False );
+                pIdWithHandle = &idWithHandle;
+            }
+        }
 
+        return (*pIdWithHandle).getImplementationId();
+    }
+    else
+    {
+        if( !pId )
+        {
+            ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
+            if( !pId )
+            {
+                static ::cppu::OImplementationId id( sal_False );
+                pId = &id;
+            }
+        }
 
+        return (*pId).getImplementationId();
+    }
+}
+
+::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > VCLXTopWindow::getTypes() throw(::com::sun::star::uno::RuntimeException)
+{
+    static ::cppu::OTypeCollection* pCollection = NULL;
+    static ::cppu::OTypeCollection* pCollectionWithHandle = NULL;
+
+    if ( m_bWHWND )
+    {
+        if( !pCollectionWithHandle )
+        {
+            ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
+            if( !pCollectionWithHandle )
+            {
+                static ::cppu::OTypeCollection collectionWithHandle(
+                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider>* ) NULL ),
+                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindow>* ) NULL ),
+                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XSystemDependentWindowPeer>* ) NULL ),
+                VCLXContainer::getTypes() );
+                pCollectionWithHandle = &collectionWithHandle;
+            }
+        }
+
+        return (*pCollectionWithHandle).getTypes();
+    }
+    else
+    {
+        if( !pCollection )
+        {
+            ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
+            if( !pCollection )
+            {
+                static ::cppu::OTypeCollection collection(
+                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider>* ) NULL ),
+                getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindow>* ) NULL ),
+                VCLXContainer::getTypes() );
+                pCollection = &collection;
+            }
+        }
+        return (*pCollection).getTypes();
+    }
+}
 
 ::com::sun::star::uno::Any VCLXTopWindow::getWindowHandle( const ::com::sun::star::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) throw(::com::sun::star::uno::RuntimeException)
 {
