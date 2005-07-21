@@ -288,14 +288,14 @@
       </MonthsOfYear>
       <Eras>
         <Era>
-          <EraID>ad</EraID>
-          <DefaultAbbrvName>e.Kr.</DefaultAbbrvName>
-          <DefaultFullName>efter Kristus</DefaultFullName>
-        </Era>
-        <Era>
           <EraID>bc</EraID>
           <DefaultAbbrvName>f.Kr.</DefaultAbbrvName>
           <DefaultFullName>før Kristus</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>ad</EraID>
+          <DefaultAbbrvName>e.Kr.</DefaultAbbrvName>
+          <DefaultFullName>efter Kristus</DefaultFullName>
         </Era>
       </Eras>
       <StartDayOfWeek>
