@@ -7,8 +7,8 @@
 			<Text id="a" xml:lang="de">Willkommen</Text>
 		</Paragraph>
 		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US">Last updated $Date: 2005-06-24 11:24:45 $</Text>
-			<Text id="a" xml:lang="de">Letztes Update $Date: 2005-06-24 11:24:45 $</Text>
+			<Text id="a" xml:lang="en-US">Last updated $Date: 2005-07-21 14:46:06 $</Text>
+			<Text id="a" xml:lang="de">Letztes Update $Date: 2005-07-21 14:46:06 $</Text>
 		</Paragraph>
 		<Paragraph id="A3" style="H1">
 			<Text id="a" xml:lang="en-US">OpenOffice.org 2.0 ReadMe</Text>
@@ -287,7 +287,37 @@
 			<Text id="naso2" xml:lang="en-US">If you experience OpenOffice.org startup problems (most notably while using Gnome) please &apos;unset&apos; the SESSION_MANAGER environment variable inside the shell you use to start OpenOffice.org. This can be done by adding the line &quot;unset SESSION_MANAGER&quot; to the beginning of the soffice shell script found in the &quot;[office folder]/program&quot; directory.</Text>
 		</Paragraph>
 	</Section>
-	<Section id="ArabicFont">
+	<Section id="Scroll">
+		<Paragraph id="F1a" style="H2" gui="UNX">
+            <Text id="naso" xml:lang="de">ALPS/Synaptics Notebook Touchpads unter Windows</Text>
+            <Text id="naso" xml:lang="en-US">ALPS/Synaptics notebook touchpads in Windows</Text>
+		</Paragraph>
+		<Paragraph id="F1b" gui="UNX">
+            <Text id="naso2" xml:lang="de">Bedingt durch ein Problem mit dem Windows Treiber können Sie nicht durch OpenOffice.org Dokumente scrollen, wenn Sie mit dem Finger über ein ALPS/Synaptics Touchpad fahren.</Text>
+            <Text id="naso2" xml:lang="en-US">Due to a Windows driver issue, you cannot scroll through OpenOffice.org documents when you slide your finger across an ALPS/Synaptics touchpad.</Text>
+        </Paragraph>
+    		<Paragraph id="F1c" gui="UNX">
+                <Text id="naso2" xml:lang="en-US">To enable touchpad scrolling, add the following lines to the &quot;C:\Program Files\Synaptics\SynTP\SynTPEnh.ini&quot; configuration file, and restart your computer:</Text>
+                <Text id="naso2" xml:lang="de">Um das Scrollen mit dem Trackpad zu ermöglichen, fügen Sie folgende Zeilen zur &quot;C:\Programme\Synaptics\SynTP\SynTPEnh.ini&quot; Konfigurationsdatei hinzu und starten Sie den Computer neu: </Text>
+            </Paragraph>
+    		<Paragraph id="F1d" gui="UNX">
+                <Text id="naso2" xml:lang="en-US">[OpenOffice.org]</Text>
+                <Text id="naso2" xml:lang="de">[OpenOffice.org]</Text>
+                <Text id="naso3" xml:lang="en-US">FC = &quot;SALFRAME&quot;</Text>
+                <Text id="naso3" xml:lang="de">FC = &quot;SALFRAME&quot;</Text>
+                <Text id="naso4" xml:lang="en-US">SF = 0x10000000</Text>
+                <Text id="naso4" xml:lang="de">SF = 0x10000000</Text>
+                <Text id="naso5" xml:lang="en-US">SF |= 0x00004000</Text>
+                <Text id="naso5" xml:lang="de">SF |= 0x00004000</Text>
+             </Paragraph>
+    		<Paragraph id="F1e" gui="UNX">
+                <Text id="naso2" xml:lang="de">Hinweis: Der Pfad zur Konfigurationsdatei kann je nach Windows Version unterschiedlich sein.</Text>
+                <Text id="naso2" xml:lang="en-US">Note: The location of the configuration file might vary on different versions of Windows.</Text>
+             </Paragraph>
+  
+	</Section>
+
+    <Section id="ArabicFont">
 		<Paragraph id="F2a" style="H2" os="none" gui="UNX">
 			<Text id="abdfe" xml:lang="de">Wichtige Informationen für arabische und hebräische Versionen</Text>
 			<Text id="abdfe" xml:lang="en-US">Important Information for Arabic and Hebrew Versions</Text>
