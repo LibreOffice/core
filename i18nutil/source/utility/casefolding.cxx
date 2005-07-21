@@ -2,9 +2,9 @@
  *
  *  $RCSfile: casefolding.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 12:26:02 $
+ *  last change: $Author: obo $ $Date: 2005-07-21 14:26:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,8 @@ Mapping& casefolding::getConditionalValue(const sal_Unicode* str, sal_Int32 pos,
     case 0x00cd: return langIs("lt") ? mapping_00cd[0] : mapping_00cd[1];
     case 0x0128: return langIs("lt") ? mapping_0128[0] : mapping_0128[1];
     }
+    // Should not come here
+    throw RuntimeException();
 }
 
 Mapping& casefolding::getValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 len, Locale& aLocale, sal_uInt8 nMappingType) throw (RuntimeException)
