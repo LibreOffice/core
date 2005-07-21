@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocaleNode.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2005-06-09 14:34:59 $
+ *  last change: $Author: obo $ $Date: 2005-07-21 14:28:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,9 +173,18 @@ public:
     // SHOULD NOT > nMaxLen
     // nMaxLen <  0 : any length
     // nMaxLen >= 0 : warning if more than nMaxLen characters
+    OUString writeParameterCheckLen( const OFileWriter &of, const char* pParameterName, const LocaleNode* pNode, sal_Int32 nMinLen, sal_Int32 nMaxLen ) const;
     OUString writeParameterCheckLen( const OFileWriter &of, const char* pNodeName, const char* pParameterName, sal_Int32 nMinLen, sal_Int32 nMaxLen ) const;
     // ++nError with output to stderr
     void incError( const char* pStr ) const;
+    // ++nError with output to stderr, pStr should contain "%d", otherwise appended
+    void incErrorInt( const char* pStr, int nVal ) const;
+    // ++nError with output to stderr, pStr should contain "%s", otherwise appended
+    void incErrorStr( const char* pStr, const ::rtl::OUString& rVal ) const;
+    // used by incError...(), returns a pointer to a static buffer,
+    // pDefaultConversion is appended if pFormat doesn't contain a %
+    // specification and should be something like ": %d" or ": %s" or similar.
+    char* prepareErrorFormat( const char* pFormat, const char* pDefaultConversion ) const;
     static LocaleNode* createNode (const OUString& name,const Reference< XAttributeList > & attr);
 };
 
