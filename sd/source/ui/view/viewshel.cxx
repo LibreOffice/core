@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 14:56:31 $
+ *  last change: $Author: obo $ $Date: 2005-07-21 13:44:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
