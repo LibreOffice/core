@@ -3,9 +3,9 @@
  *
  *  $RCSfile: VCL.xcu,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2005-07-01 14:22:34 $
+ *  last change: $Author: obo $ $Date: 2005-07-21 14:22:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -683,22 +683,22 @@
     </node>
     <node oor:name="km" oor:op="replace">
       <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
-        <value>Khmer OS System;Khmer OS SystemC;Khmer OS;Khmer Kampot;UniKhm;.Mondulkiri U OT;Srok Khleang;XenoType Khmer</value>
+        <value>Khmer OS System;Khmer OS;XenoType Khmer</value>
       </prop>
       <prop oor:name="CTL_DISPLAY" oor:op="replace" oor:type="xs:string">
-        <value>Khmer OS System;Khmer OS SystemC;Khmer OS;Khmer Kampot;UniKhm;.Mondulkiri U OT;Srok Khleang;XenoType Khmer</value>
+        <value>Khmer OS System;Khmer OS;XenoType Khmer</value>
       </prop>
       <prop oor:name="CTL_HEADING" oor:op="replace" oor:type="xs:string">
-        <value>Khmer OS System;Khmer OS SystemC;Khmer OS;Khmer Kampot;UniKhm;.Mondulkiri U OT;Srok Khleang;XenoType Khmer</value>
+        <value>Khmer OS;Khmer OS System;XenoType Khmer</value>
       </prop>
       <prop oor:name="CTL_PRESENTATION" oor:op="replace" oor:type="xs:string">
-        <value>Khmer OS System;Khmer OS SystemC;Khmer OS;Khmer Kampot;UniKhm;.Mondulkiri U OT;Srok Khleang;XenoType Khmer</value>
+        <value>Khmer OS;Khmer OS System;XenoType Khmer</value>
       </prop>
       <prop oor:name="CTL_SPREADSHEET" oor:op="replace" oor:type="xs:string">
-        <value>Khmer OS System;Khmer OS SystemC;Khmer OS;Khmer Kampot;UniKhm;.Mondulkiri U OT;Srok Khleang;XenoType Khmer</value>
+        <value>Khmer OS System;Khmer OS;XenoType Khmer</value>
       </prop>
       <prop oor:name="CTL_TEXT" oor:op="replace" oor:type="xs:string">
-        <value>Khmer OS System;Khmer OS SystemC;Khmer OS;Khmer Kampot;UniKhm;.Mondulkiri U OT;Srok Khleang;XenoType Khmer</value>
+        <value>Khmer OS;Khmer OS System;XenoType Khmer</value>
       </prop>
     </node>
     <node oor:name="lo" oor:op="replace">
@@ -719,6 +719,26 @@
       </prop>
       <prop oor:name="CTL_TEXT" oor:op="replace" oor:type="xs:string">
         <value>Arial Unicode MS;Saysettha OT;Saysettha Unicode;JG Basic Lao;JG Chantabouli Lao</value>
+      </prop>
+    </node>
+    <node oor:name="ne" oor:op="replace">
+      <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
+        <value>Kalimati;Samanata;Kanjirowa;Thyaka Rabison</value>
+      </prop>
+      <prop oor:name="CTL_DISPLAY" oor:op="replace" oor:type="xs:string">
+        <value>Kalimati;Samanata;Kanjirowa;Thyaka Rabison</value>
+      </prop>
+      <prop oor:name="CTL_HEADING" oor:op="replace" oor:type="xs:string">
+        <value>Kalimati;Samanata;Kanjirowa;Thyaka Rabison</value>
+      </prop>
+      <prop oor:name="CTL_PRESENTATION" oor:op="replace" oor:type="xs:string">
+        <value>Kalimati;Samanata;Kanjirowa;Thyaka Rabison</value>
+      </prop>
+      <prop oor:name="CTL_SPREADSHEET" oor:op="replace" oor:type="xs:string">
+        <value>Kalimati;Samanata;Kanjirowa;Thyaka Rabison</value>
+      </prop>
+      <prop oor:name="CTL_TEXT" oor:op="replace" oor:type="xs:string">
+        <value>Kalimati;Samanata;Kanjirowa;Thyaka Rabison</value>
       </prop>
     </node>
     <node oor:name="hi-IN" oor:op="replace">
