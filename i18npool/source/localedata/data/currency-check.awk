@@ -83,7 +83,7 @@ file != FILENAME {
         split( arr[3], code, /(\[\$)|(-[0-9a-fA-F]+\])/ )
         for ( j in code )
         {
-            if ( code[j] && code[j] !~ /\#|0/ )
+            if ( code[j] && code[j] !~ /\#|0|\[NatNum/ )
             {
                 FormatLine[nFormats] = file " line " line
                 FormatAuto[nFormats] = bFormatAuto
