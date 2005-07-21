@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2005-06-09 14:43:09 $
+ *  last change: $Author: obo $ $Date: 2005-07-21 14:37:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,7 @@ IMPL_CREATEINSTANCE( BreakIterator_hi )
 IMPL_CREATEINSTANCE_MSF( ChapterCollator )
 IMPL_CREATEINSTANCE_MSF( CollatorImpl )
 IMPL_CREATEINSTANCE( Collator_Unicode )
+IMPL_CREATEINSTANCE( Collator_dz_charset )
 IMPL_CREATEINSTANCE( Collator_zh_pinyin )
 IMPL_CREATEINSTANCE( Collator_zh_radical )
 IMPL_CREATEINSTANCE( Collator_zh_stroke )
@@ -216,6 +217,7 @@ IMPL_CREATEINSTANCE( Collator_ja_charset )
 IMPL_CREATEINSTANCE( Collator_ja_phonetic_alphanumeric_first )
 IMPL_CREATEINSTANCE( Collator_ja_phonetic_alphanumeric_last )
 IMPL_CREATEINSTANCE( Collator_zh_TW_charset )
+IMPL_CREATEINSTANCE( Collator_ne_charset )
 IMPL_CREATEINSTANCE( Collator_km_charset )
 
 IMPL_CREATEINSTANCE_MSF( CharacterClassificationImpl )
@@ -466,6 +468,9 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.Collator_Unicode",
         "com.sun.star.i18n.Collator_Unicode",
         &Collator_Unicode_CreateInstance },
+    {   "com.sun.star.i18n.Collator_dz_charset",
+        "com.sun.star.i18n.Collator_dz_charset",
+        &Collator_dz_charset_CreateInstance },
     {   "com.sun.star.i18n.Collator_zh_pinyin",
         "com.sun.star.i18n.Collator_zh_pinyin",
         &Collator_zh_pinyin_CreateInstance },
@@ -655,6 +660,10 @@ static const struct InstancesArray {
     IMPL_TRANSLITERATION_ITEM (NumToTextHangulCircledSyllable_ko),
     IMPL_TRANSLITERATION_ITEM (NumToTextTianGan_zh),
     IMPL_TRANSLITERATION_ITEM (NumToTextDiZi_zh),
+
+    {   "com.sun.star.i18n.Collator_ne_charset",
+        "com.sun.star.i18n.Collator_ne_charset",
+        &Collator_ne_charset_CreateInstance },
 
     {   "com.sun.star.i18n.Collator_km_charset",
         "com.sun.star.i18n.Collator_km_charset",
