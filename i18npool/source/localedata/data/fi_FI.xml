@@ -288,14 +288,14 @@
       </MonthsOfYear>
       <Eras>
         <Era>
-          <EraID>ad</EraID>
-          <DefaultAbbrvName>jaa.</DefaultAbbrvName>
-          <DefaultFullName>jälkeen ajanlaskumme alun</DefaultFullName>
-        </Era>
-        <Era>
           <EraID>bc</EraID>
           <DefaultAbbrvName>eaa.</DefaultAbbrvName>
           <DefaultFullName>ennen ajanlaskumme alkua</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>ad</EraID>
+          <DefaultAbbrvName>jaa.</DefaultAbbrvName>
+          <DefaultFullName>jälkeen ajanlaskumme alun</DefaultFullName>
         </Era>
       </Eras>
       <StartDayOfWeek>
