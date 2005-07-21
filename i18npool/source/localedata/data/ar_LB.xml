@@ -34,7 +34,7 @@
     <TimePM>م</TimePM>
     <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
-  <LC_FORMAT ref="ar_EG" replaceFrom="[CURRENCY]" replaceTo="[$ل.ل.‏-3001]" />
+  <LC_FORMAT ref="ar_EG" replaceFrom="[CURRENCY]" replaceTo="[$ل.ل.‏-3001]"/>
   <LC_COLLATION ref="en_US" />
   <LC_SEARCH ref="en_US"/>
   <LC_INDEX ref="ar_EG"/>
@@ -141,14 +141,14 @@
       </MonthsOfYear>
       <Eras>
         <Era>
-          <EraID>ad</EraID>
-          <DefaultAbbrvName>م</DefaultAbbrvName>
-          <DefaultFullName>م</DefaultFullName>
-        </Era>
-        <Era>
           <EraID>bc</EraID>
           <DefaultAbbrvName>ق.م</DefaultAbbrvName>
           <DefaultFullName>ق.م</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>ad</EraID>
+          <DefaultAbbrvName>م</DefaultAbbrvName>
+          <DefaultFullName>م</DefaultFullName>
         </Era>
       </Eras>
       <StartDayOfWeek>
@@ -258,14 +258,14 @@
       </MonthsOfYear>
       <Eras>
         <Era>
-          <EraID>AfterHijra</EraID>
-          <DefaultAbbrvName/>
-          <DefaultFullName>هجري</DefaultFullName>
-        </Era>
-        <Era>
           <EraID>BeforeHijra</EraID>
           <DefaultAbbrvName>ه‍</DefaultAbbrvName>
           <DefaultFullName>قبل الهجرة</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>AfterHijra</EraID>
+          <DefaultAbbrvName/>
+          <DefaultFullName>هجري</DefaultFullName>
         </Era>
       </Eras>
       <StartDayOfWeek>
@@ -276,7 +276,7 @@
   </LC_CALENDAR>
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
-      <CurrencyID>ل.ل.‏</CurrencyID>
+      <CurrencyID>LBP</CurrencyID>
       <CurrencySymbol>ل.ل.‏</CurrencySymbol>
       <BankSymbol>LBP</BankSymbol>
       <CurrencyName>LBP</CurrencyName>
