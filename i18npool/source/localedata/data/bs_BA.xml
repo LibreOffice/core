@@ -115,7 +115,7 @@
 <FormatCode>YYYY-MM-DD</FormatCode>
 <DefaultName>ISO 8601 (EN 28601)</DefaultName>
 </FormatElement>
-<FormatElement msgid="DateFormatskey21" default="false" type="medium" usage="DATE" formatindex="38">
+<FormatElement msgid="DateFormatskey22" default="false" type="medium" usage="DATE" formatindex="38">
 <FormatCode>WW</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
