@@ -339,12 +339,12 @@
 </MonthsOfYear>
 <Eras>
 <Era>
-<EraID>BC</EraID>
+<EraID>bc</EraID>
 <DefaultAbbrvName>BC</DefaultAbbrvName>
 <DefaultFullName>BC</DefaultFullName>
 </Era>
 <Era>
-<EraID>AD</EraID>
+<EraID>ad</EraID>
 <DefaultAbbrvName>Anno Domini</DefaultAbbrvName>
 <DefaultFullName>Anno Domini</DefaultFullName>
 </Era>
