@@ -68,31 +68,31 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey9" default="true" type="long" usage="DATE" formatindex="19">
-<FormatCode>NNNN "ថ្ងៃទី" DD "ខែ" MMMM "ឆ្នាំ" YYYY</FormatCode>
+<FormatCode>[NatNum1]NNNN "ទី" DD "ខែ" MMMM "ឆ្នាំ" YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey10" default="false" type="long" usage="DATE" formatindex="22">
-<FormatCode>"ថ្ងៃទី" D "ខែ" MMM "ឆ្នាំ" YY</FormatCode>
+<FormatCode>[NatNum1]"ថ្ងៃទី" D "ខែ" MMM "ឆ្នាំ" YY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey11" default="false" type="long" usage="DATE" formatindex="23">
-<FormatCode>"ថ្ងៃទី" D "ខែ" MMM "ឆ្នាំ" YYYY</FormatCode>
+<FormatCode>[NatNum1]"ថ្ងៃទី" D "ខែ" MMM "ឆ្នាំ" YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey12" default="false" type="long" usage="DATE" formatindex="25">
-<FormatCode>"ថ្ងៃទី" D "ខែ" MMMM "ឆ្នាំ" YYYY</FormatCode>
+<FormatCode>[NatNum1]"ថ្ងៃទី" D "ខែ" MMMM "ឆ្នាំ" YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey13" default="false" type="long" usage="DATE" formatindex="27">
-<FormatCode>NN "ថ្ងៃទី" D "ខែ" MMM "ឆ្នាំ" YY</FormatCode>
+<FormatCode>[NatNum1]NN "ថ្ងៃទី" D "ខែ" MMM "ឆ្នាំ" YY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey14" default="false" type="long" usage="DATE" formatindex="29">
-<FormatCode>NN "ថ្ងៃទី" D "ខែ" MMMM "ឆ្នាំ" YYYY</FormatCode>
+<FormatCode>[NatNum1]NN "ថ្ងៃទី" D "ខែ" MMMM "ឆ្នាំ" YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="30">
-<FormatCode>NNNN "ថ្ងៃទី" D "ខែ" MMM "ឆ្នាំ" YYYY</FormatCode>
+<FormatCode>[NatNum1]NNNN "ទី" D "ខែ" MMM "ឆ្នាំ" YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey16" default="false" type="long" usage="DATE" formatindex="24">
@@ -179,6 +179,24 @@
 <FormatCode>#.###,00</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
+
+<!--The following number format definitions are extensions for Khmer with index numbers 52 53 54 -->
+
+<FormatElement msgid="FixedFormatskey7" default="false" type="short" usage="FIXED_NUMBER"  formatindex="52">
+<FormatCode>[NatNum1]0</FormatCode>
+<DefaultName></DefaultName>
+</FormatElement>
+<FormatElement msgid="FixedFormatskey8" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="53">
+<FormatCode>[NatNum1]0,00</FormatCode>
+<DefaultName></DefaultName>
+</FormatElement>
+<FormatElement msgid="FixedFormatskey9" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="54">
+<FormatCode>[NatNum1]#.###,00</FormatCode>
+<DefaultName></DefaultName>
+</FormatElement>
+
+<!--End of Khmer Number extensions -->
+
 <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY"  formatindex="12">
 <FormatCode>#.##0[CURRENCY];-#.##0[CURRENCY]</FormatCode>
 <DefaultName></DefaultName>
@@ -203,6 +221,24 @@
 <FormatCode>#.##0[CURRENCY].--;[RED]-#.##0[CURRENCY].--</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
+
+<!--The following currency format definitions are extensions for Khmer with index numbers 55 56 57 -->
+
+<FormatElement msgid="CurrencyFormatskey7" default="false" type="short" usage="CURRENCY"  formatindex="55">
+<FormatCode>[NatNum1]#.##0[CURRENCY];-#.##0[CURRENCY]</FormatCode>
+<DefaultName></DefaultName>
+</FormatElement>
+<FormatElement msgid="CurrencyFormatskey8" default="false" type="medium" usage="CURRENCY"  formatindex="56">
+<FormatCode>[NatNum1]#.##0[CURRENCY].--;[RED]-#.##0[CURRENCY].--</FormatCode>
+<DefaultName></DefaultName>
+</FormatElement>
+<FormatElement msgid="CurrencyFormatskey9" default="false" type="medium" usage="CURRENCY"  formatindex="57">
+<FormatCode>[NatNum1]#.##0,00[CURRENCY];[RED]-#.##0,00[CURRENCY]</FormatCode>
+<DefaultName></DefaultName>
+</FormatElement>
+
+<!--End of Khmer Currency extensions -->
+
 <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER"  formatindex="8">
 <FormatCode>0%</FormatCode>
 <DefaultName></DefaultName>
@@ -211,6 +247,20 @@
 <FormatCode>0,00%</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
+
+<!--The following percentage format definitions are extensions for Khmer with index numbers 58 59 -->
+
+<FormatElement msgid="PercentFormatskey3" default="false" type="short" usage="PERCENT_NUMBER"  formatindex="58">
+<FormatCode>[NatNum1]0%</FormatCode>
+<DefaultName></DefaultName>
+</FormatElement>
+<FormatElement msgid="PercentFormatskey4" default="false" type="long" usage="PERCENT_NUMBER"  formatindex="59">
+<FormatCode>[NatNum1]0,00%</FormatCode>
+<DefaultName></DefaultName>
+</FormatElement>
+
+<!--End of Khmer percentage extensions -->
+
 <FormatElement msgid="ScientificFormatskey1" default="true" type="medium" usage="SCIENTIFIC_NUMBER"  formatindex="6">
 <FormatCode>0,00E+000</FormatCode>
 <DefaultName></DefaultName>
@@ -232,7 +282,7 @@
 </SearchOptions>
 </LC_SEARCH>
 <LC_INDEX>
-<IndexKey unoid="alphanumeric" default="true" phonetic="false">ក-្</IndexKey>
+<IndexKey unoid="alphanumeric" default="true" phonetic="false">ក-វ ស-អ</IndexKey>
 <UnicodeScript>35</UnicodeScript>
 <FollowPageWord>p.</FollowPageWord>
 <FollowPageWord>pp.</FollowPageWord>
@@ -384,6 +434,72 @@
 <quarter4Abbreviation>ត្រី៤</quarter4Abbreviation>
 </ReservedWords>
 </LC_MISC>
-<LC_NumberingLevel ref="en_US"/>
-<LC_OutLineNumberingLevel ref="en_US"/>
+<LC_NumberingLevel>
+<NumberingLevel Prefix=" " NumType="12" Suffix="." />
+<NumberingLevel Prefix=" " NumType="12" Suffix=")" />
+<NumberingLevel Prefix=" " NumType="4" Suffix="." />
+<NumberingLevel Prefix=" " NumType="4" Suffix=")" />
+<NumberingLevel Prefix=" " NumType="0" Suffix="." />
+<NumberingLevel Prefix=" " NumType="0" Suffix=")" />
+<NumberingLevel Prefix="(" NumType="1" Suffix=")" />
+<NumberingLevel Prefix=" " NumType="2" Suffix=")" />
+</LC_NumberingLevel>
+<LC_OutLineNumberingLevel>
+<OutlineStyle>
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="1" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="2" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="3" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="4" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+</OutlineStyle>
+<OutlineStyle>
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+</OutlineStyle>
+<OutlineStyle>
+<OutLineNumberingLevel Prefix=" " NumType="12" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="12" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="1" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="12" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="2" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="12" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="3" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="12" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="4" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+</OutlineStyle>
+<OutlineStyle>
+<OutLineNumberingLevel Prefix=" " NumType="12" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="12" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="12" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="12" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="12" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+</OutlineStyle>
+<OutlineStyle>
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="1" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="1" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+</OutlineStyle>
+<OutlineStyle>
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix="(" NumType="1" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="3" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="0" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix="." BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+</OutlineStyle>
+<OutlineStyle>
+<OutLineNumberingLevel Prefix=" " NumType="2" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="0" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="3" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="1" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+</OutlineStyle>
+<OutlineStyle>
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="27A2"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="E006"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=")" BulletChar="E004"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+</OutlineStyle>
+</LC_OutLineNumberingLevel>
 </Locale>
