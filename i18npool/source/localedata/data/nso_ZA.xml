@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<Locale versionDTD="2.0" allowUpdateFromCLDR="no" version="0.2">
+  <LC_INFO>
+    <Language>
+      <LangID>nso</LangID>
+      <DefaultName>Northern Sotho</DefaultName>
+    </Language>
+    <Country>
+      <CountryID>ZA</CountryID>
+      <DefaultName>South Africa</DefaultName>
+    </Country>
+  </LC_INFO>
+  <LC_CTYPE ref="en_ZA"/>
+  <LC_FORMAT ref="en_ZA" replaceTo="[$R-46C]"/>
+  <LC_COLLATION ref="en_US"/>
+  <LC_SEARCH ref="en_US"/>
+  <LC_INDEX ref="en_US"/>
+  <LC_CALENDAR>
+    <Calendar unoid="gregorian" default="true">
+      <DaysOfWeek>
+        <Day>
+          <DayID>sun</DayID>
+          <DefaultAbbrvName>Son</DefaultAbbrvName>
+          <DefaultFullName>Sontaga</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>mon</DayID>
+          <DefaultAbbrvName>Mos</DefaultAbbrvName>
+          <DefaultFullName>Mosupalogo</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>tue</DayID>
+          <DefaultAbbrvName>Bed</DefaultAbbrvName>
+          <DefaultFullName>Labobedi</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>wed</DayID>
+          <DefaultAbbrvName>Rar</DefaultAbbrvName>
+          <DefaultFullName>Laboraro</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>thu</DayID>
+          <DefaultAbbrvName>Ne</DefaultAbbrvName>
+          <DefaultFullName>Labone</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>fri</DayID>
+          <DefaultAbbrvName>Hla</DefaultAbbrvName>
+          <DefaultFullName>Labohlano</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>sat</DayID>
+          <DefaultAbbrvName>Mok</DefaultAbbrvName>
+          <DefaultFullName>Mokibelo</DefaultFullName>
+        </Day>
+      </DaysOfWeek>
+      <MonthsOfYear>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>Jan</DefaultAbbrvName>
+          <DefaultFullName>Janaware</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>Feb</DefaultAbbrvName>
+          <DefaultFullName>Feberware</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>Mat</DefaultAbbrvName>
+          <DefaultFullName>Matšhe</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>Apo</DefaultAbbrvName>
+          <DefaultFullName>Aporele</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>Mei</DefaultAbbrvName>
+          <DefaultFullName>Mei</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>Jun</DefaultAbbrvName>
+          <DefaultFullName>June</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>Jul</DefaultAbbrvName>
+          <DefaultFullName>Julae</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>Ago</DefaultAbbrvName>
+          <DefaultFullName>Agostose</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>Set</DefaultAbbrvName>
+          <DefaultFullName>Setemere</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>Okt</DefaultAbbrvName>
+          <DefaultFullName>Oktobore</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>Nof</DefaultAbbrvName>
+          <DefaultFullName>Nofemere</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>Dis</DefaultAbbrvName>
+          <DefaultFullName>Disemere</DefaultFullName>
+        </Month>
+      </MonthsOfYear>
+      <Eras>
+        <Era>
+          <EraID>bc</EraID>
+          <DefaultAbbrvName>BC</DefaultAbbrvName>
+          <DefaultFullName>BC</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>ad</EraID>
+          <DefaultAbbrvName>AD</DefaultAbbrvName>
+          <DefaultFullName>AD</DefaultFullName>
+        </Era>
+      </Eras>
+      <StartDayOfWeek>
+        <DayID>sun</DayID>
+      </StartDayOfWeek>
+      <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+    </Calendar>
+  </LC_CALENDAR>
+  <LC_CURRENCY ref="en_ZA"/>
+  <LC_TRANSLITERATION ref="en_US"/>
+  <LC_MISC ref="en_US"/>
+  <LC_NumberingLevel ref="en_US"/>
+  <LC_OutLineNumberingLevel ref="en_US"/>
+</Locale>
