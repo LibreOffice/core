@@ -285,14 +285,14 @@
       </MonthsOfYear>
       <Eras>
         <Era>
-          <EraID>ad</EraID>
-          <DefaultAbbrvName>d.C.</DefaultAbbrvName>
-          <DefaultFullName>d.C.</DefaultFullName>
-        </Era>
-        <Era>
           <EraID>bc</EraID>
           <DefaultAbbrvName>a.C.</DefaultAbbrvName>
           <DefaultFullName>a.C.</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>ad</EraID>
+          <DefaultAbbrvName>d.C.</DefaultAbbrvName>
+          <DefaultFullName>d.C.</DefaultFullName>
         </Era>
       </Eras>
       <StartDayOfWeek>
