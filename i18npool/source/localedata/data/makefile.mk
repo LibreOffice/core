@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.27 $
+#*  $Revision: 1.28 $
 #*
-#*  last change: $Author: hr $ $Date: 2005-06-09 14:42:08 $
+#*  last change: $Author: obo $ $Date: 2005-07-21 14:35:38 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -95,6 +95,8 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_az_AZ.cxx  \
     $(MISC)$/localedata_be_BY.cxx  \
     $(MISC)$/localedata_bg_BG.cxx  \
+    $(MISC)$/localedata_bn_IN.cxx  \
+    $(MISC)$/localedata_bn_BD.cxx  \
     $(MISC)$/localedata_bs_BA.cxx  \
     $(MISC)$/localedata_ca_ES.cxx  \
     $(MISC)$/localedata_cs_CZ.cxx  \
@@ -105,6 +107,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_de_DE.cxx  \
     $(MISC)$/localedata_de_LI.cxx  \
     $(MISC)$/localedata_de_LU.cxx  \
+    $(MISC)$/localedata_dz_BT.cxx  \
     $(MISC)$/localedata_el_GR.cxx  \
     $(MISC)$/localedata_en_AU.cxx  \
     $(MISC)$/localedata_en_BZ.cxx  \
@@ -119,6 +122,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_en_US.cxx  \
     $(MISC)$/localedata_en_ZA.cxx  \
     $(MISC)$/localedata_en_ZW.cxx  \
+    $(MISC)$/localedata_eo.cxx     \
     $(MISC)$/localedata_es_AR.cxx  \
     $(MISC)$/localedata_es_BO.cxx  \
     $(MISC)$/localedata_es_CL.cxx  \
@@ -172,10 +176,12 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_mr_IN.cxx  \
     $(MISC)$/localedata_ms_MY.cxx  \
     $(MISC)$/localedata_nb_NO.cxx  \
+    $(MISC)$/localedata_ne_NP.cxx  \
     $(MISC)$/localedata_nl_BE.cxx  \
     $(MISC)$/localedata_nl_NL.cxx  \
     $(MISC)$/localedata_nn_NO.cxx  \
     $(MISC)$/localedata_no_NO.cxx  \
+    $(MISC)$/localedata_nso_ZA.cxx \
     $(MISC)$/localedata_pa_IN.cxx  \
     $(MISC)$/localedata_pl_PL.cxx  \
     $(MISC)$/localedata_pt_BR.cxx  \
@@ -199,7 +205,8 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_zh_HK.cxx  \
     $(MISC)$/localedata_zh_MO.cxx  \
     $(MISC)$/localedata_zh_SG.cxx  \
-    $(MISC)$/localedata_zh_TW.cxx
+    $(MISC)$/localedata_zh_TW.cxx  \
+    $(MISC)$/localedata_zu_ZA.cxx
 
 
 # English Locales
@@ -344,6 +351,10 @@ SHL4OBJS= \
     $(SLO)$/localedata_ar_SA.obj \
     $(SLO)$/localedata_ar_TN.obj \
     $(SLO)$/localedata_az_AZ.obj \
+    $(SLO)$/localedata_bn_IN.obj \
+    $(SLO)$/localedata_bn_BD.obj \
+     $(SLO)$/localedata_dz_BT.obj \
+    $(SLO)$/localedata_eo.obj    \
     $(SLO)$/localedata_gu_IN.obj \
     $(SLO)$/localedata_he_IL.obj \
     $(SLO)$/localedata_hi_IN.obj \
@@ -358,6 +369,8 @@ SHL4OBJS= \
     $(SLO)$/localedata_mn_MN.obj \
     $(SLO)$/localedata_mr_IN.obj \
     $(SLO)$/localedata_ms_MY.obj \
+    $(SLO)$/localedata_ne_NP.obj \
+    $(SLO)$/localedata_nso_ZA.obj \
     $(SLO)$/localedata_pa_IN.obj \
     $(SLO)$/localedata_rw_RW.obj \
     $(SLO)$/localedata_sw_TZ.obj \
@@ -368,7 +381,8 @@ SHL4OBJS= \
     $(SLO)$/localedata_zh_HK.obj \
     $(SLO)$/localedata_zh_MO.obj \
     $(SLO)$/localedata_zh_SG.obj \
-    $(SLO)$/localedata_zh_TW.obj
+    $(SLO)$/localedata_zh_TW.obj \
+    $(SLO)$/localedata_zu_ZA.obj
 
 LIB4TARGET=	$(SLB)$/$(SHL4TARGET).lib
 LIB4OBJFILES=$(SHL4OBJS)
