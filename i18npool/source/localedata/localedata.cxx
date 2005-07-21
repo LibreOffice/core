@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2005-06-09 14:35:11 $
+ *  last change: $Author: obo $ $Date: 2005-07-21 14:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,8 @@ static const struct {
         { "gu_IN",  lcl_DATA_OTHERS, "gu" },
         { "mr_IN",  lcl_DATA_OTHERS, "mr" },
         { "pa_IN",  lcl_DATA_OTHERS, "pa" },
+        { "bn_IN",  lcl_DATA_OTHERS, NULL },
+        { "bn_BD",  lcl_DATA_OTHERS, "bn" },
         { "th_TH",  lcl_DATA_OTHERS, "th" },
 
         { "af_ZA",  lcl_DATA_OTHERS, "af" },
@@ -216,6 +218,11 @@ static const struct {
         { "km_KH",  lcl_DATA_OTHERS, "km" },
         { "lo_LA",  lcl_DATA_OTHERS, "lo" },
         { "rw_RW",  lcl_DATA_OTHERS, "rw" },
+        { "eo",     lcl_DATA_OTHERS, "eo" },
+        { "dz_BT",  lcl_DATA_OTHERS, "dz" },
+        { "ne_NP",  lcl_DATA_OTHERS, "ne" },
+        { "zu_ZA",  lcl_DATA_OTHERS, "zu" },
+        { "nso_ZA", lcl_DATA_OTHERS, "nso" },
 
 //      { "br_AE",  lcl_DATA, "br" },
 
