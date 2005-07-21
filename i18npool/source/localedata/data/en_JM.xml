@@ -282,14 +282,14 @@
       </MonthsOfYear>
       <Eras>
         <Era>
-          <EraID>ad</EraID>
-          <DefaultAbbrvName>AD</DefaultAbbrvName>
-          <DefaultFullName>AD</DefaultFullName>
-        </Era>
-        <Era>
           <EraID>bc</EraID>
           <DefaultAbbrvName>BC</DefaultAbbrvName>
           <DefaultFullName>BC</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>ad</EraID>
+          <DefaultAbbrvName>AD</DefaultAbbrvName>
+          <DefaultFullName>AD</DefaultFullName>
         </Era>
       </Eras>
       <StartDayOfWeek>
