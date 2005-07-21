@@ -17,7 +17,7 @@
 <ThousandSeparator>,</ThousandSeparator>
 <DecimalSeparator>.</DecimalSeparator>
 <TimeSeparator>:</TimeSeparator>
-<Time100SecSeparator>:</Time100SecSeparator>
+<Time100SecSeparator>.</Time100SecSeparator>
 <ListSeparator>,</ListSeparator>
 <LongDateDayOfWeekSeparator> </LongDateDayOfWeekSeparator>
 <LongDateDaySeparator> </LongDateDaySeparator>
@@ -67,7 +67,7 @@
 <FormatCode>DD-MM-YY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
-<FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="19">
+<FormatElement msgid="DateFormatskey9" default="false" type="medium" usage="DATE" formatindex="19">
 <FormatCode>NNNNDD MMMM GGGE</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
