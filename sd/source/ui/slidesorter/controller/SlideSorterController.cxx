@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2005-07-14 10:15:53 $
+ *  last change: $Author: obo $ $Date: 2005-07-21 13:44:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,7 +632,10 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
             switch (pEvent->GetId())
             {
                 case VCLEVENT_WINDOW_GETFOCUS:
-                    GetFocusManager().ShowFocus();
+                    // Show focus but only when the focus was not set to the
+                    // window as a result of a mouse click.
+                    if (pWindow->GetPointerState().mnState==0)
+                        GetFocusManager().ShowFocus();
                     break;
 
                 case VCLEVENT_WINDOW_LOSEFOCUS:
