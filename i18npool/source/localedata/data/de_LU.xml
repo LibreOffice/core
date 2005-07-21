@@ -282,14 +282,14 @@
       </MonthsOfYear>
       <Eras>
         <Era>
-          <EraID>ad</EraID>
-          <DefaultAbbrvName>n. Chr.</DefaultAbbrvName>
-          <DefaultFullName>nach Christus</DefaultFullName>
-        </Era>
-        <Era>
           <EraID>bc</EraID>
           <DefaultAbbrvName>v. Chr.</DefaultAbbrvName>
           <DefaultFullName>vor Christus</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>ad</EraID>
+          <DefaultAbbrvName>n. Chr.</DefaultAbbrvName>
+          <DefaultFullName>nach Christus</DefaultFullName>
         </Era>
       </Eras>
       <StartDayOfWeek>
