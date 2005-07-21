@@ -160,7 +160,7 @@
 <StartDayOfWeek>
 <DayID>sun</DayID>
 </StartDayOfWeek>
-<MinimalDaysInFirstWeek></MinimalDaysInFirstWeek>
+<MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
 </Calendar>
 </LC_CALENDAR>
 <LC_CURRENCY ref="en_ZA"/>
