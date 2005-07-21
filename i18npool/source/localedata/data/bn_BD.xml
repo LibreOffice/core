@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<Locale versionDTD="2.0" allowUpdateFromCLDR="no" version="1.2">
+  <LC_INFO>
+    <Language>
+      <LangID>bn</LangID>
+      <DefaultName>Bengali</DefaultName>
+    </Language>
+    <Country>
+      <CountryID>BD</CountryID>
+      <DefaultName>Bangladesh</DefaultName>
+    </Country>
+  </LC_INFO>
+  <LC_CTYPE ref="bn_IN" />
+  <LC_FORMAT ref="bn_IN" replaceFrom="[CURRENCY]" replaceTo="[$৳-845]" />
+  <LC_COLLATION ref="en_US" />
+  <LC_SEARCH ref="en_US"/>
+  <LC_INDEX>
+    <IndexKey phonetic="false" default="true" unoid="alphanumeric">ক-ন প-র ল শ-হ</IndexKey>
+    <UnicodeScript>15</UnicodeScript>
+    <FollowPageWord>পরবর্তী পৃষ্ঠা</FollowPageWord>
+    <FollowPageWord>শেষ পৃষ্ঠা</FollowPageWord>
+  </LC_INDEX>
+  <LC_CALENDAR>
+    <Calendar unoid="gregorian" default="true">
+      <DaysOfWeek>
+        <Day>
+          <DayID>sun</DayID>
+          <DefaultAbbrvName>রবি</DefaultAbbrvName>
+          <DefaultFullName>রবিবার</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>mon</DayID>
+          <DefaultAbbrvName>সোম</DefaultAbbrvName>
+          <DefaultFullName>সোমবার</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>tue</DayID>
+          <DefaultAbbrvName>মঙ্গল</DefaultAbbrvName>
+          <DefaultFullName>মঙ্গলবার</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>wed</DayID>
+          <DefaultAbbrvName>বুধ</DefaultAbbrvName>
+          <DefaultFullName>বুধবার</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>thu</DayID>
+          <DefaultAbbrvName>বৃহঃ</DefaultAbbrvName>
+          <DefaultFullName>বৃহস্পতিবার</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>fri</DayID>
+          <DefaultAbbrvName>শুক্র</DefaultAbbrvName>
+          <DefaultFullName>শুক্রবার</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>sat</DayID>
+          <DefaultAbbrvName>শনি</DefaultAbbrvName>
+          <DefaultFullName>শনিবার</DefaultFullName>
+        </Day>
+      </DaysOfWeek>
+      <MonthsOfYear>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>জানু</DefaultAbbrvName>
+          <DefaultFullName>জানুয়ারি</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>ফেব্রু</DefaultAbbrvName>
+          <DefaultFullName>ফেব্রুয়ারি</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>মার্চ</DefaultAbbrvName>
+          <DefaultFullName>মার্চ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>এপ্রি</DefaultAbbrvName>
+          <DefaultFullName>এপ্রিল</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>মে</DefaultAbbrvName>
+          <DefaultFullName>মে</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>জুন</DefaultAbbrvName>
+          <DefaultFullName>জুন</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>জুল</DefaultAbbrvName>
+          <DefaultFullName>জুলাই</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>আগ</DefaultAbbrvName>
+          <DefaultFullName>আগস্ট</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>সেপ্টে</DefaultAbbrvName>
+          <DefaultFullName>সেপ্টেম্বর</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>অক্টো</DefaultAbbrvName>
+          <DefaultFullName>অক্টোবর</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>নভে</DefaultAbbrvName>
+          <DefaultFullName>নভেম্বর</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>ডিসে</DefaultAbbrvName>
+          <DefaultFullName>ডিসেম্বর</DefaultFullName>
+        </Month>
+      </MonthsOfYear>
+      <Eras>
+        <Era>
+          <EraID>bc</EraID>
+          <DefaultAbbrvName>খৃঃ</DefaultAbbrvName>
+          <DefaultFullName>খৃস্ট-পূর্ব</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>ad</EraID>
+          <DefaultAbbrvName>খ্রিঃ</DefaultAbbrvName>
+          <DefaultFullName>খ্রিস্টাব্দ</DefaultFullName>
+        </Era>
+      </Eras>
+      <StartDayOfWeek>
+        <DayID>sat</DayID>
+      </StartDayOfWeek>
+      <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+    </Calendar>
+  </LC_CALENDAR>
+  <LC_CURRENCY>
+    <Currency default="true" usedInCompatibleFormatCodes="true">
+      <CurrencyID>BDT</CurrencyID>
+      <CurrencySymbol>৳</CurrencySymbol>
+      <BankSymbol>BDT</BankSymbol>
+      <CurrencyName>Bangladeshi Taka</CurrencyName>
+      <DecimalPlaces>2</DecimalPlaces>
+    </Currency>
+  </LC_CURRENCY>
+  <LC_TRANSLITERATION ref="en_US"/>
+  <LC_MISC>
+    <ReservedWords>
+      <trueWord>সত্য</trueWord>
+      <falseWord>মিথ্যা</falseWord>
+      <quarter1Word>প্রথম তিন মাস</quarter1Word>
+      <quarter2Word>দ্বিতীয় তিন মাস</quarter2Word>
+      <quarter3Word>তৃতীয় তিন মাস</quarter3Word>
+      <quarter4Word>চতুর্থ তিন মাস</quarter4Word>
+      <aboveWord>উপর</aboveWord>
+      <belowWord>নিচ</belowWord>
+      <quarter1Abbreviation>১ম ৩ মাস</quarter1Abbreviation>
+      <quarter2Abbreviation>২য় ৩ মাস</quarter2Abbreviation>
+      <quarter3Abbreviation>৩য় ৩ মাস</quarter3Abbreviation>
+      <quarter4Abbreviation>৪র্থ ৩ মাস</quarter4Abbreviation>
+    </ReservedWords>
+  </LC_MISC>
+  <LC_NumberingLevel ref="bn_IN" />
+  <LC_OutLineNumberingLevel ref="en_US"/>
+</Locale>
