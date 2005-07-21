@@ -16,6 +16,19 @@
     i18npool/source/localedata/data/ directory:
     java -cp <your_path>/XMLValidator.jar com.ibm.icu.dev.tool.cldr.XMLValidator your_data.xml
 
+
+    A second possiblity is:
+
+    - temporarily change the DOCTYPE of your file to read (all on one line)
+      <!DOCTYPE Locale SYSTEM "http://l10n.openoffice.org/unbranded-source/browse/*checkout*/l10n/i18npool/source/localedata/data/locale.dtd">
+
+    - upload it to the form available at http://www.validome.org/
+
+    This will validate the file against the HEAD revision of locale.dtd, for
+    other revisions you'll have to specify the revision as in
+    http://l10n.openoffice.org/unbranded-source/browse/*checkout*/l10n/i18npool/source/localedata/data/locale.dtd?rev=1.14.4.3
+
+
     Please test locale data files either in a non-product (!) build, which
     implements some checks and pops up assertion message boxes if the tests
     fail, or by setting the environment variable OOO_ENABLE_LOCALE_DATA_CHECKS
@@ -98,9 +111,9 @@
 
 <!ELEMENT FormatElement   ( FormatCode, DefaultName?)>
 <!ATTLIST FormatElement    %MessageID;>
-<!ATTLIST FormatElement    default CDATA #REQUIRED >
-<!ATTLIST FormatElement    type    CDATA #REQUIRED >
-<!--    short   medium  long
+<!ATTLIST FormatElement    default  (true|false)        #REQUIRED >
+<!ATTLIST FormatElement    type     (short|medium|long) #REQUIRED >
+<!--
     There may be up to three groups (type="short", type="medium", type="long")
     for each usage category defined. Each group, if defined, needs excactly one
     default. The type roughly determines the display string length, for example
@@ -110,11 +123,7 @@
     usage category by looking at the medium, long, and short default formats,
     in that very particular order.
 -->
-<!ATTLIST FormatElement    usage    CDATA #REQUIRED >
-<!--
-Can be 	FIXED_NUMBER, FRACTION_NUMBER, PERCENT_NUMBER, SCIENTIFIC_NUMBER,
-    CURRENCY, DATE, TIME, DATE_TIME
--->
+<!ATTLIST FormatElement    usage    (FIXED_NUMBER|FRACTION_NUMBER|PERCENT_NUMBER|SCIENTIFIC_NUMBER|CURRENCY|DATE|TIME|DATE_TIME) #REQUIRED >
 <!ATTLIST FormatElement formatindex  CDATA #REQUIRED>
 <!--
     The following FormatElements must follow specific rules:
@@ -181,7 +190,7 @@ Can be 	FIXED_NUMBER, FRACTION_NUMBER, PERCENT_NUMBER, SCIENTIFIC_NUMBER,
 -->
 <!ELEMENT FormatCode      (#PCDATA)>
 
-<!-- Depricated
+<!-- Deprecated
 <!ELEMENT DateFormats     (FormatElement+)>
 <!ELEMENT TimeFormats     (FormatElement+)>
 <!ELEMENT NumberFormats   (FormatElement+)>
@@ -194,7 +203,7 @@ Can be 	FIXED_NUMBER, FRACTION_NUMBER, PERCENT_NUMBER, SCIENTIFIC_NUMBER,
 <!ELEMENT Calendar (DaysOfWeek, MonthsOfYear, Eras, StartDayOfWeek, MinimalDaysInFirstWeek) >
 <!ATTLIST Calendar %UNOModule;>
 <!-- the unoid of a gregorian calendar MUST be lower case "gregorian" -->
-<!ATTLIST Calendar default CDATA #REQUIRED >
+<!ATTLIST Calendar default (true|false) #REQUIRED >
 <!ELEMENT DaysOfWeek (Day*)>
 <!ATTLIST DaysOfWeek %RefLocale;>
 <!-- Sequence of days is important, MUST start with Sunday -->
@@ -212,22 +221,30 @@ Can be 	FIXED_NUMBER, FRACTION_NUMBER, PERCENT_NUMBER, SCIENTIFIC_NUMBER,
 <!ATTLIST Eras %RefLocale;>
 <!ELEMENT Era (EraID, DefaultAbbrvName, DefaultFullName)>
 <!ELEMENT EraID (#PCDATA)>
-<!-- if a calendar has special eras (like zh_TW ROC or ja_JP Gengou calendar)
+<!-- If a calendar has special eras (like zh_TW ROC or ja_JP Gengou calendar)
      and a date before those eras is undefined, a leading (first) dummy era
      with EraID="Dummy" has to be defined to enable the number formatter to
      fall back to a gregorian calendar for those date values if the XCalendar
      implementation returns an era value of 0.
 -->
+
 <!ELEMENT StartDayOfWeek (DayID)>
 <!-- MUST exactly match (case significant!) one of the DayID of DaysOfWeek -->
+
 <!ELEMENT MinimalDaysInFirstWeek (#PCDATA)>
+<!-- The number of days of a week that must reside in the beginning of a year
+     to make a week the first week of the year. For example, a value of 4 means
+     that at least 4 days of a week must be in the new year. So if the week
+     starts on Monday, the first week of a year will be the week where Thursday
+     is in the new year.
+-->
 
 <!ELEMENT LC_CURRENCY (Currency* ) >
 <!ATTLIST LC_CURRENCY %RefLocale;>
 <!ELEMENT Currency (CurrencyID, CurrencySymbol, BankSymbol, CurrencyName, DecimalPlaces)>
-<!ATTLIST Currency  default CDATA #REQUIRED >
-<!ATTLIST Currency  usedInCompatibleFormatCodes CDATA #REQUIRED >
-<!-- if this currency is the one used in compatible number format codes with
+<!ATTLIST Currency  default (true|false) #REQUIRED >
+<!ATTLIST Currency  usedInCompatibleFormatCodes (true|false) #REQUIRED >
+<!-- If this currency is the one used in compatible number format codes with
      <member>FormatElement::formatIndex</member> values in the range 12..17.
      Those format codes are used to generate some old style currency format
      codes for compatibility with StarOffice5 and StarOffice4.
@@ -268,7 +285,7 @@ Can be 	FIXED_NUMBER, FRACTION_NUMBER, PERCENT_NUMBER, SCIENTIFIC_NUMBER,
 <!ATTLIST LC_COLLATION %RefLocale;>
 <!ELEMENT Collator EMPTY>
 <!ATTLIST Collator  %UNOModule;>
-<!ATTLIST Collator  default CDATA #REQUIRED >
+<!ATTLIST Collator  default (true|false) #REQUIRED >
 <!ELEMENT CollationOptions (TransliterationModules+)>
 <!ELEMENT TransliterationModules (#PCDATA)>
 
@@ -285,8 +302,8 @@ http://oss.software.ibm.com/icu/charts/collation/
 -->
 <!ELEMENT IndexKey (#PCDATA)>
 <!ATTLIST IndexKey  %UNOModule;>
-<!ATTLIST IndexKey  default CDATA #REQUIRED >
-<!ATTLIST IndexKey  phonetic CDATA #REQUIRED >
+<!ATTLIST IndexKey  default (true|false) #REQUIRED >
+<!ATTLIST IndexKey  phonetic (true|false) #REQUIRED >
 <!--
 The Unicode script types are those of
 offapi/com/sun/star/i18n/UnicodeScript.idl, they define the code range for the
