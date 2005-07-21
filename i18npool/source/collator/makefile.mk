@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.6 $
+#*  $Revision: 1.7 $
 #*
-#*  last change: $Author: hr $ $Date: 2005-06-09 14:34:18 $
+#*  last change: $Author: obo $ $Date: 2005-07-21 14:27:20 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -79,6 +79,7 @@ SLOFILES=   \
         $(SLO)$/chaptercollator.obj \
         $(SLO)$/collator_unicode.obj \
         $(SLO)$/collator_zh_pinyin.obj \
+        $(SLO)$/collator_dz_charset.obj \
         $(SLO)$/collator_zh_radical.obj \
         $(SLO)$/collator_zh_stroke.obj \
         $(SLO)$/collator_zh_charset.obj \
@@ -86,6 +87,7 @@ SLOFILES=   \
         $(SLO)$/collator_zh_TW_radical.obj \
         $(SLO)$/collator_zh_TW_stroke.obj \
         $(SLO)$/collator_zh_TW_charset.obj \
+        $(SLO)$/collator_ne_charset.obj \
         $(SLO)$/collator_ko_charset.obj \
         $(SLO)$/collator_km_charset.obj \
         $(SLO)$/collator_ja_charset.obj \
