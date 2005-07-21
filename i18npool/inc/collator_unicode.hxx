@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collator_unicode.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-06-09 14:34:06 $
+ *  last change: $Author: obo $ $Date: 2005-07-21 14:26:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ public:\
     Collator_##algorithm(); \
 };
 
+COLLATOR( dz_charset )
 COLLATOR( zh_pinyin )
 COLLATOR( zh_radical )
 COLLATOR( zh_stroke )
@@ -126,6 +127,7 @@ COLLATOR( zh_zhuyin )
 COLLATOR( zh_TW_radical )
 COLLATOR( zh_TW_stroke )
 COLLATOR( zh_TW_charset )
+COLLATOR( ne_charset )
 COLLATOR( ko_charset )
 COLLATOR( km_charset )
 COLLATOR( ja_charset )
