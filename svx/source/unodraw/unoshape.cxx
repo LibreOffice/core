@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.134 $
+ *  $Revision: 1.135 $
  *
- *  last change: $Author: kz $ $Date: 2005-07-14 10:49:53 $
+ *  last change: $Author: obo $ $Date: 2005-07-21 15:04:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,6 +296,13 @@ struct SvxShapeImpl
     sal_uInt32      mnObjId;
     SvxShapeMaster* mpMaster;
     bool            mbTemporaryShape; // this is true if we own the SdrObject
+
+    /** CL, OD 2005-07-19 #i52126# - this is initially 0 and set when
+     *  a SvxShape::Create() call is executed. It is then set to the created
+     *  SdrObject so a multiple call to SvxShape::Create() with same SdrObject
+     *  is prohibited.
+     */
+    SdrObject*      mpCreatedObj;
 };
 
 //UNO3_GETIMPLEMENTATION_IMPL( SvxShape );
@@ -464,7 +471,6 @@ SvxShape* SvxShape::GetShapeForSdrObj( SdrObject* pObj ) throw()
     return getImplementation( pObj->getUnoShape() );
 }
 
-//----------------------------------------------------------------------
 void SvxShape::Init() throw()
 {
     if( NULL == mpImpl )
@@ -474,6 +480,9 @@ void SvxShape::Init() throw()
         mpImpl->mpMaster = NULL;
         mpImpl->mnObjId = 0;
         mpImpl->mbTemporaryShape = sal_False;
+        // --> CL, OD 2005-07-19 #i52126#
+        mpImpl->mpCreatedObj = NULL;
+        // <--
     }
 
     mbIsMultiPropertyCall = sal_False;
@@ -534,9 +543,16 @@ void SvxShape::Init() throw()
 //----------------------------------------------------------------------
 void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage ) throw()
 {
-    if( pNewObj && ( (pObj != pNewObj) || (pModel == NULL) ) )
+    DBG_ASSERT( mpImpl, "svx::SvxShape::Create(), no mpImpl!" );
+
+    // --> CL, OD 2005-07-19 #i52126# - correct condition
+    if ( pNewObj && (mpImpl && (mpImpl->mpCreatedObj != pNewObj) ) )
+    // <--
     {
         DBG_ASSERT( pNewObj->GetModel(), "no model for SdrObject?" );
+        // --> CL, OD 2005-07-19 #i52126#
+        mpImpl->mpCreatedObj = pNewObj;
+        // <--
 
         if( pObj && pObj->GetModel() )
         {
@@ -588,9 +604,14 @@ void SvxShape::ChangeModel( SdrModel* pNewModel )
         {
             EndListening( *pObj->GetModel() );
         }
-        if( pNewModel )
-            StartListening( *pNewModel );
     }
+
+    // --> CL, OD 2005-07-19 #i52126# - always listen to new model
+    if( pNewModel )
+    {
+        StartListening( *pNewModel );
+    }
+    // <--
 
     pModel = pNewModel;
 }
