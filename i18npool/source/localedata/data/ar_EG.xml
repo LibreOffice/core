@@ -293,14 +293,14 @@
       </MonthsOfYear>
       <Eras>
         <Era>
-          <EraID>ad</EraID>
-          <DefaultAbbrvName>م</DefaultAbbrvName>
-          <DefaultFullName>ميلادي</DefaultFullName>
-        </Era>
-        <Era>
           <EraID>bc</EraID>
           <DefaultAbbrvName>ق.م</DefaultAbbrvName>
           <DefaultFullName>قبل الميلاد</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>ad</EraID>
+          <DefaultAbbrvName>م</DefaultAbbrvName>
+          <DefaultFullName>ميلادي</DefaultFullName>
         </Era>
       </Eras>
       <StartDayOfWeek>
@@ -410,14 +410,14 @@
       </MonthsOfYear>
       <Eras>
         <Era>
-          <EraID>AfterHijra</EraID>
-          <DefaultAbbrvName/>
-          <DefaultFullName>هجري</DefaultFullName>
-        </Era>
-        <Era>
           <EraID>BeforeHijra</EraID>
           <DefaultAbbrvName>ه‍</DefaultAbbrvName>
           <DefaultFullName>قبل الهجرة</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>AfterHijra</EraID>
+          <DefaultAbbrvName/>
+          <DefaultFullName>هجري</DefaultFullName>
         </Era>
       </Eras>
       <StartDayOfWeek>
@@ -428,7 +428,7 @@
   </LC_CALENDAR>
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
-      <CurrencyID>ج.م.‏</CurrencyID>
+      <CurrencyID>EGP</CurrencyID>
       <CurrencySymbol>ج.م.‏</CurrencySymbol>
       <BankSymbol>EGP</BankSymbol>
       <CurrencyName>EGP</CurrencyName>
