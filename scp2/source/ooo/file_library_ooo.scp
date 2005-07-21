@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.133 $
+*  $Revision: 1.134 $
 *
-*  last change: $Author: obo $ $Date: 2005-07-20 12:51:29 $
+*  last change: $Author: obo $ $Date: 2005-07-21 14:38:07 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -800,7 +800,7 @@ File gid_File_Lib_I18nutil
     Name = STRING(CONCAT3(i18nutil,COMID,.dll));
   #endif
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 
 File gid_File_Lib_Icudata
