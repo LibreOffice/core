@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:53:56 $
+ *  last change: $Author: obo $ $Date: 2005-07-22 09:00:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XLOADEVENTLISTENER_HPP_
 #include <com/sun/star/frame/XLoadEventListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
+#include <com/sun/star/util/XCloseable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XVIEWSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
@@ -680,10 +683,17 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
         case SID_DB_QUERY_PREVIEW:
             try
             {
-                Reference<XFrame> xXFrame( getContainer()->getPreviewFrame());
-                if ( xXFrame.is() )
+                Reference< ::com::sun::star::util::XCloseable > xCloseFrame( getContainer()->getPreviewFrame(), UNO_QUERY );
+                if ( xCloseFrame.is() )
                 {
-                    ::comphelper::disposeComponent( xXFrame );
+                    try
+                    {
+                        xCloseFrame->close( sal_True );
+                    }
+                    catch( const Exception& )
+                    {
+                        OSL_ENSURE( sal_False, "OQueryController::Execute(SID_DB_QUERY_PREVIEW): *nobody* is expected to veto closing the preview frame!" );
+                    }
                 }
                 else
                     Execute(ID_BROWSER_QUERY_EXECUTE,Sequence< PropertyValue >());
