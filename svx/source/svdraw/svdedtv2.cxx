@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-18 11:03:53 $
+ *  last change: $Author: obo $ $Date: 2005-07-22 09:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,27 +176,23 @@ void SdrEditView::MovMarkedToTop()
             ULONG nNowPos=pObj->GetOrdNumDirect();
             const Rectangle& rBR=pObj->GetCurrentBoundRect();
             ULONG nCmpPos=nNowPos+1;
-            // --> OD 2004-08-24 #110810#
-//          SdrObject* pMaxObj=GetMaxToTopObj(pObj);
-//          if (pMaxObj!=NULL) {
-//              ULONG nMaxPos=pMaxObj->GetOrdNum();
-//              if (nMaxPos!=0) nMaxPos--;
-//              if (nNewPos>nMaxPos) nNewPos=nMaxPos; // diesen nicht ueberholen.
-//              if (nNewPos<nNowPos) nNewPos=nNowPos; // aber dabei auch nicht in die falsche Richtung schieben
-//          }
-            // <--
+            SdrObject* pMaxObj=GetMaxToTopObj(pObj);
+            if (pMaxObj!=NULL) {
+                ULONG nMaxPos=pMaxObj->GetOrdNum();
+                if (nMaxPos!=0) nMaxPos--;
+                if (nNewPos>nMaxPos) nNewPos=nMaxPos; // diesen nicht ueberholen.
+                if (nNewPos<nNowPos) nNewPos=nNowPos; // aber dabei auch nicht in die falsche Richtung schieben
+            }
             BOOL bEnd=FALSE;
             while (nCmpPos<nNewPos && !bEnd) {
                 SdrObject* pCmpObj=pOL->GetObj(nCmpPos);
                 if (pCmpObj==NULL) {
                     DBG_ERROR("MovMarkedToTop(): Vergleichsobjekt nicht gefunden");
                     bEnd=TRUE;
-                // --> OD 2004-08-24 #110810#
-//              } else if (pCmpObj==pMaxObj) {
-//                  nNewPos=nCmpPos;
-//                  nNewPos--;
-//                  bEnd=TRUE;
-                // <--
+                } else if (pCmpObj==pMaxObj) {
+                    nNewPos=nCmpPos;
+                    nNewPos--;
+                    bEnd=TRUE;
                 } else if (rBR.IsOver(pCmpObj->GetCurrentBoundRect())) {
                     nNewPos=nCmpPos;
                     bEnd=TRUE;
@@ -262,14 +258,12 @@ void SdrEditView::MovMarkedToBtm()
             ULONG nNowPos=pObj->GetOrdNumDirect();
             const Rectangle& rBR=pObj->GetCurrentBoundRect();
             ULONG nCmpPos=nNowPos; if (nCmpPos>0) nCmpPos--;
-            // --> OD 2004-08-24 #110810#
-//          SdrObject* pMaxObj=GetMaxToBtmObj(pObj);
-//          if (pMaxObj!=NULL) {
-//              ULONG nMinPos=pMaxObj->GetOrdNum()+1;
-//              if (nNewPos<nMinPos) nNewPos=nMinPos; // diesen nicht ueberholen.
-//              if (nNewPos>nNowPos) nNewPos=nNowPos; // aber dabei auch nicht in die falsche Richtung schieben
-//          }
-            // <--
+            SdrObject* pMaxObj=GetMaxToBtmObj(pObj);
+            if (pMaxObj!=NULL) {
+                ULONG nMinPos=pMaxObj->GetOrdNum()+1;
+                if (nNewPos<nMinPos) nNewPos=nMinPos; // diesen nicht ueberholen.
+                if (nNewPos>nNowPos) nNewPos=nNowPos; // aber dabei auch nicht in die falsche Richtung schieben
+            }
             BOOL bEnd=FALSE;
             // nNewPos ist an dieser Stelle noch die maximale Position,
             // an der das Obj hinruecken darf, ohne seinen Vorgaenger
@@ -279,12 +273,10 @@ void SdrEditView::MovMarkedToBtm()
                 if (pCmpObj==NULL) {
                     DBG_ERROR("MovMarkedToBtm(): Vergleichsobjekt nicht gefunden");
                     bEnd=TRUE;
-                // --> OD 2004-08-24 #110810#
-//              } else if (pCmpObj==pMaxObj) {
-//                  nNewPos=nCmpPos;
-//                  nNewPos++;
-//                  bEnd=TRUE;
-                // <--
+                } else if (pCmpObj==pMaxObj) {
+                    nNewPos=nCmpPos;
+                    nNewPos++;
+                    bEnd=TRUE;
                 } else if (rBR.IsOver(pCmpObj->GetCurrentBoundRect())) {
                     nNewPos=nCmpPos;
                     bEnd=TRUE;
@@ -373,15 +365,13 @@ void SdrEditView::PutMarkedInFrontOfObj(const SdrObject* pRefObj)
                     pOL0=pOL;
                 }
                 ULONG nNowPos=pObj->GetOrdNumDirect();
-                // --> OD 2004-08-24 #110810#
-//              SdrObject* pMaxObj=GetMaxToTopObj(pObj);
-//              if (pMaxObj!=NULL) {
-//                  ULONG nMaxOrd=pMaxObj->GetOrdNum(); // geht leider nicht anders
-//                  if (nMaxOrd>0) nMaxOrd--;
-//                  if (nNewPos>nMaxOrd) nNewPos=nMaxOrd; // nicht ueberholen.
-//                  if (nNewPos<nNowPos) nNewPos=nNowPos; // aber dabei auch nicht in die falsche Richtung schieben
-//              }
-                // <--
+                SdrObject* pMaxObj=GetMaxToTopObj(pObj);
+                if (pMaxObj!=NULL) {
+                    ULONG nMaxOrd=pMaxObj->GetOrdNum(); // geht leider nicht anders
+                    if (nMaxOrd>0) nMaxOrd--;
+                    if (nNewPos>nMaxOrd) nNewPos=nMaxOrd; // nicht ueberholen.
+                    if (nNewPos<nNowPos) nNewPos=nNowPos; // aber dabei auch nicht in die falsche Richtung schieben
+                }
                 if (pRefObj!=NULL) {
                     if (pRefObj->GetObjList()==pObj->GetObjList()) {
                         ULONG nMaxOrd=pRefObj->GetOrdNum(); // geht leider nicht anders
@@ -459,14 +449,12 @@ void SdrEditView::PutMarkedBehindObj(const SdrObject* pRefObj)
                     pOL0=pOL;
                 }
                 ULONG nNowPos=pObj->GetOrdNumDirect();
-                // --> OD 2004-08-24 #110810#
-//              SdrObject* pMinObj=GetMaxToBtmObj(pObj);
-//              if (pMinObj!=NULL) {
-//                  ULONG nMinOrd=pMinObj->GetOrdNum()+1; // geht leider nicht anders
-//                  if (nNewPos<nMinOrd) nNewPos=nMinOrd; // nicht ueberholen.
-//                  if (nNewPos>nNowPos) nNewPos=nNowPos; // aber dabei auch nicht in die falsche Richtung schieben
-//              }
-                // <--
+                SdrObject* pMinObj=GetMaxToBtmObj(pObj);
+                if (pMinObj!=NULL) {
+                    ULONG nMinOrd=pMinObj->GetOrdNum()+1; // geht leider nicht anders
+                    if (nNewPos<nMinOrd) nNewPos=nMinOrd; // nicht ueberholen.
+                    if (nNewPos>nNowPos) nNewPos=nNowPos; // aber dabei auch nicht in die falsche Richtung schieben
+                }
                 if (pRefObj!=NULL) {
                     if (pRefObj->GetObjList()==pObj->GetObjList()) {
                         ULONG nMinOrd=pRefObj->GetOrdNum(); // geht leider nicht anders
