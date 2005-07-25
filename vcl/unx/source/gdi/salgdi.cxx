@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:17:05 $
+ *  last change: $Author: hr $ $Date: 2005-07-25 14:23:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,12 +272,9 @@ GC X11SalGraphics::SelectPen()
 {
     Display *pDisplay = GetXDisplay();
 
-    DBG_ASSERT( nPenColor_ != 0xFFFFFFFF, "Pen Transparent" );
-
     if( !pPenGC_ )
     {
         XGCValues values;
-        //values.subwindow_mode     = IncludeInferiors;
         values.subwindow_mode       = ClipByChildren;
         values.fill_rule            = EvenOddRule;      // Pict import/ Gradient
         values.graphics_exposures   = True;
@@ -289,7 +286,8 @@ GC X11SalGraphics::SelectPen()
 
     if( !bPenGC_ )
     {
-        XSetForeground( pDisplay, pPenGC_, nPenPixel_ );
+        if( nPenColor_ != 0xFFFFFFFF )
+            XSetForeground( pDisplay, pPenGC_, nPenPixel_ );
         XSetFunction  ( pDisplay, pPenGC_, bXORMode_ ? GXxor : GXcopy );
         SetClipRegion( pPenGC_ );
         bPenGC_ = TRUE;
