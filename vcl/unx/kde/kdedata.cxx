@@ -2,9 +2,9 @@
  *
  *  $RCSfile: kdedata.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-18 08:05:42 $
+ *  last change: $Author: hr $ $Date: 2005-07-25 14:22:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,6 +261,24 @@ void KDEData::Init()
 extern "C" {
     VCL_DLLPUBLIC SalInstance* create_SalInstance( oslModule pModule )
     {
+        rtl::OString aVersion( qVersion() );
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "qt version string is \"%s\"\n", aVersion.getStr() );
+#endif
+        sal_Int32 nIndex = 0, nMajor = 0, nMinor = 0, nMicro = 0;
+        nMajor = aVersion.getToken( 0, '.', nIndex ).toInt32();
+        if( nIndex > 0 )
+            nMinor = aVersion.getToken( 0, '.', nIndex ).toInt32();
+        if( nIndex > 0 )
+            nMicro = aVersion.getToken( 0, '.', nIndex ).toInt32();
+        if( nMajor != 3 || nMinor < 2 || (nMinor == 2 && nMicro < 2) )
+        {
+#if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, "unsuitable qt version %d.%d.%d\n", nMajor, nMinor, nMicro );
+#endif
+            return NULL;
+        }
+
         KDESalInstance* pInstance = new KDESalInstance( new SalYieldMutex() );
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "created KDESalInstance 0x%p\n", pInstance );
