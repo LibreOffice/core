@@ -2,9 +2,9 @@
 *
 *  $RCSfile: Finalizer.java,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: vg $ $Date: 2005-03-08 15:42:40 $
+*  last change: $Author: hr $ $Date: 2005-07-25 14:16:46 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -102,118 +102,120 @@ public class Finalizer{
 
 
     public Finalizer(TableWizard _CurUnoDialog, TableDescriptor _curtabledescriptor) {
-        this.CurUnoDialog = _CurUnoDialog;
-        this.curtabledescriptor = _curtabledescriptor;
-        curtabindex = (short) (TableWizard.SOFINALPAGE * 100);
-        Integer IFINALSTEP = new Integer(TableWizard.SOFINALPAGE);
-        String slblTableName = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 34);
-        String slblProceed = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 36);
-        String sWorkWithTable = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 38);
-        String sStartFormWizard = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 39);
-        String sModifyTable = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 37);
-        String sCongratulations  = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 35);
-        String slblCatalog = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 49);
-        String slblSchema = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 50);
-        String[] sCatalogNames = curtabledescriptor.getCatalogNames();
-        String[] sSchemaNames = curtabledescriptor.getSchemaNames();
-        int nListBoxPosX = 97;
-        int ndiffPosY = 0;
-        CurUnoDialog.insertLabel("lblTableName",
-          new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "Width"},
-          new Object[] { UIConsts.INTEGERS[8], slblTableName, new Integer(97), new Integer(25), IFINALSTEP, new Integer(200)}
-        );
-        txtTableName = CurUnoDialog.insertTextField("txtTableName", SETCOMPLETIONFLAG, this,
-          new String[] {"Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Text", "Width"},
-          new Object[] { UIConsts.INTEGER_12, "HID:41240", new Integer(97), new Integer(35),IFINALSTEP, new Short(curtabindex++),"", new Integer(183)}
-        );
-        txtTableName.addTextListener(CurUnoDialog);
-        txtTableName.setMaxTextLen((short) this.curtabledescriptor.getMaxTableNameLength());
+        try {
+            this.CurUnoDialog = _CurUnoDialog;
+            this.curtabledescriptor = _curtabledescriptor;
+            curtabindex = (short) (TableWizard.SOFINALPAGE * 100);
+            Integer IFINALSTEP = new Integer(TableWizard.SOFINALPAGE);
+            String slblTableName = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 34);
+            String slblProceed = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 36);
+            String sWorkWithTable = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 38);
+            String sStartFormWizard = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 39);
+            String sModifyTable = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 37);
+            String sCongratulations  = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 35);
+            String slblCatalog = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 49);
+            String slblSchema = CurUnoDialog.oResource.getResText(UIConsts.RID_TABLE + 50);
+            String[] sCatalogNames = curtabledescriptor.getCatalogNames();
+            String[] sSchemaNames = curtabledescriptor.getSchemaNames();
+            int nListBoxPosX = 97;
+            int ndiffPosY = 0;
+            boolean bsupportsSchemata = false;
+            boolean bsupportsCatalogs = false;
 
-        if (sCatalogNames != null){
-            if (sCatalogNames.length > 0){
-                String sCatalog = "";
-                try {
-                    sCatalog = curtabledescriptor.DBConnection.getCatalog();
-                } catch (SQLException e1) {
-                    e1.printStackTrace(System.out);
-                }
-                CurUnoDialog.insertLabel("lblCatalog",
-                        new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                        new Object[] {new Integer(8), slblCatalog, new Integer(nListBoxPosX), new Integer(52), IFINALSTEP, new Short(curtabindex++), new Integer(100) });
+            CurUnoDialog.insertLabel("lblTableName",
+              new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "Width"},
+              new Object[] { UIConsts.INTEGERS[8], slblTableName, new Integer(97), new Integer(25), IFINALSTEP, new Integer(200)}
+            );
+            txtTableName = CurUnoDialog.insertTextField("txtTableName", SETCOMPLETIONFLAG, this,
+              new String[] {"Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Text", "Width"},
+              new Object[] { UIConsts.INTEGER_12, "HID:41240", new Integer(97), new Integer(35),IFINALSTEP, new Short(curtabindex++),"", new Integer(183)}
+            );
+            txtTableName.addTextListener(CurUnoDialog);
+            txtTableName.setMaxTextLen((short) this.curtabledescriptor.getMaxTableNameLength());
+            if (this.curtabledescriptor.xDBMetaData.supportsCatalogsInTableDefinitions()){
+                if (sCatalogNames != null){
+                    if (sCatalogNames.length > 0){
+                        bsupportsCatalogs = true;
+                        String sCatalog = "";
+                        try {
+                            sCatalog = curtabledescriptor.DBConnection.getCatalog();
+                        } catch (SQLException e1) {
+                            e1.printStackTrace(System.out);
+                        }
+                        CurUnoDialog.insertLabel("lblCatalog",
+                                new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
+                                new Object[] {new Integer(8), slblCatalog, new Integer(nListBoxPosX), new Integer(52), IFINALSTEP, new Short(curtabindex++), new Integer(100) });
 
-                try {
-                    xCatalogListBox = CurUnoDialog.insertListBox("lstCatalog", null, null,
-                        new String[] { "Dropdown", "Height", "HelpURL", "LineCount", "PositionX", "PositionY", "Step", "StringItemList", "TabIndex", "Width" },
-                        new Object[] { Boolean.TRUE, new Integer(12), "HID:41244", new Short("7"), new Integer(nListBoxPosX), new Integer(62), IFINALSTEP, sCatalogNames, new Short(curtabindex++), new Integer(80)});
-                    int isel = JavaTools.FieldInList(sCatalogNames, sCatalog);
-                    if (isel < 0)
-                        isel = 0;
-                    CurUnoDialog.setControlProperty("lstCatalog", "SelectedItems", new short[]{(short) isel});
-                } catch (Exception e) {
-                    e.printStackTrace(System.out);
-                }
-                nListBoxPosX = 200;
-            }
-        }
-
-        if (sSchemaNames != null){
-            if (sSchemaNames.length > 0){
-                String sSchema = "";
-                try {
-                    sSchema = (String) curtabledescriptor.xDataSourcePropertySet.getPropertyValue("User");
-                } catch (Exception e1) {
-                    e1.printStackTrace(System.out);
-                }
-                CurUnoDialog.insertLabel("lblSchema",
-                        new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                        new Object[] {new Integer(8), slblSchema, new Integer(nListBoxPosX), new Integer(52), IFINALSTEP, new Short(curtabindex++), new Integer(80) });
-
-                try {
-                    xSchemaListBox = CurUnoDialog.insertListBox("lstSchema", null, null,
+                        try {
+                            xCatalogListBox = CurUnoDialog.insertListBox("lstCatalog", null, null,
                                 new String[] { "Dropdown", "Height", "HelpURL", "LineCount", "PositionX", "PositionY", "Step", "StringItemList", "TabIndex", "Width" },
-                                new Object[] { Boolean.TRUE, new Integer(12), "HID:41245", new Short("7"), new Integer(nListBoxPosX), new Integer(62), IFINALSTEP, sSchemaNames, new Short(curtabindex++), new Integer(80)});
-                    int isel = JavaTools.FieldInList(sSchemaNames, sSchema);
-                    if (isel < 0)
-                        isel = 0;
-                    CurUnoDialog.setControlProperty("lstSchema", "SelectedItems", new short[]{(short) isel});
-                } catch (Exception e){
-                    e.printStackTrace(System.out);
+                                new Object[] { Boolean.TRUE, new Integer(12), "HID:41244", new Short("7"), new Integer(nListBoxPosX), new Integer(62), IFINALSTEP, sCatalogNames, new Short(curtabindex++), new Integer(80)});
+                            int isel = JavaTools.FieldInList(sCatalogNames, sCatalog);
+                            if (isel < 0)
+                                isel = 0;
+                            CurUnoDialog.setControlProperty("lstCatalog", "SelectedItems", new short[]{(short) isel});
+                        } catch (Exception e) {
+                            e.printStackTrace(System.out);
+                        }
+                        nListBoxPosX = 200;
+                    }
                 }
             }
-        }
+            if (this.curtabledescriptor.xDBMetaData.supportsSchemasInTableDefinitions()){
+                if (sSchemaNames != null){
+                    if (sSchemaNames.length > 0){
+                        bsupportsSchemata = true;
+                        String sSchema = "";
+                        try {
+                            sSchema = (String) curtabledescriptor.xDataSourcePropertySet.getPropertyValue("User");
+                        } catch (Exception e1) {
+                            e1.printStackTrace(System.out);
+                        }
+                        CurUnoDialog.insertLabel("lblSchema",
+                                new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
+                                new Object[] {new Integer(8), slblSchema, new Integer(nListBoxPosX), new Integer(52), IFINALSTEP, new Short(curtabindex++), new Integer(80) });
 
-        if ((sCatalogNames == null) && (sSchemaNames == null)){
-            CurUnoDialog.insertLabel("lblcongratulations",
-                  new String[] {"Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-                  new Object[] { new Integer(16), sCongratulations, Boolean.TRUE, new Integer(97), new Integer(62),IFINALSTEP, new Short(curtabindex++), new Integer(206)});
-        }
-        else{
-            if ((sCatalogNames.length == 0) && (sSchemaNames.length == 0)){
-                CurUnoDialog.insertLabel("lblcongratulations",
-                          new String[] {"Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-                          new Object[] { new Integer(16), sCongratulations, Boolean.TRUE, new Integer(97), new Integer(62),IFINALSTEP, new Short(curtabindex++), new Integer(206)});
+                        try {
+                            xSchemaListBox = CurUnoDialog.insertListBox("lstSchema", null, null,
+                                        new String[] { "Dropdown", "Height", "HelpURL", "LineCount", "PositionX", "PositionY", "Step", "StringItemList", "TabIndex", "Width" },
+                                        new Object[] { Boolean.TRUE, new Integer(12), "HID:41245", new Short("7"), new Integer(nListBoxPosX), new Integer(62), IFINALSTEP, sSchemaNames, new Short(curtabindex++), new Integer(80)});
+                            int isel = JavaTools.FieldInList(sSchemaNames, sSchema);
+                            if (isel < 0)
+                                isel = 0;
+                            CurUnoDialog.setControlProperty("lstSchema", "SelectedItems", new short[]{(short) isel});
+                        } catch (Exception e){
+                            e.printStackTrace(System.out);
+                        }
+                    }
+                }
             }
-            else
+            if ((!bsupportsCatalogs) && (!bsupportsSchemata)) {
+                CurUnoDialog.insertLabel("lblcongratulations",
+                      new String[] {"Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
+                      new Object[] { new Integer(16), sCongratulations, Boolean.TRUE, new Integer(97), new Integer(62),IFINALSTEP, new Short(curtabindex++), new Integer(206)});
+            }
+            else{
                 ndiffPosY = 10;
+            }
+            CurUnoDialog.insertLabel("lblProceed",
+              new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
+              new Object[] { UIConsts.INTEGERS[8], slblProceed, new Integer(97), new Integer(82+ndiffPosY),IFINALSTEP, new Short(curtabindex++), new Integer(207)}
+            );
+            optWorkWithTable = CurUnoDialog.insertRadioButton("optWorkWithTable", null,
+              new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
+              new Object[] { UIConsts.INTEGERS[8], "HID:41242", sWorkWithTable, new Integer(101), new Integer(97+ndiffPosY), new Short((short)1),IFINALSTEP, new Short(curtabindex++), new Integer(157)}
+            );
+            optModifyTable = CurUnoDialog.insertRadioButton("optModifyTable", null,
+              new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
+              new Object[] { UIConsts.INTEGERS[8], "HID:41241", sModifyTable, new Integer(101), new Integer(109+ndiffPosY),IFINALSTEP, new Short(curtabindex++), new Integer(157)}
+            );
+            optStartFormWizard = CurUnoDialog.insertRadioButton("optStartFormWizard", null,
+              new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
+              new Object[] { UIConsts.INTEGERS[8], "HID:41243", sStartFormWizard, new Integer(101), new Integer(121+ndiffPosY),IFINALSTEP, new Short(curtabindex++), new Integer(157)}
+            );
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
         }
-
-
-        CurUnoDialog.insertLabel("lblProceed",
-          new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-          new Object[] { UIConsts.INTEGERS[8], slblProceed, new Integer(97), new Integer(82+ndiffPosY),IFINALSTEP, new Short(curtabindex++), new Integer(207)}
-        );
-        optWorkWithTable = CurUnoDialog.insertRadioButton("optWorkWithTable", null,
-          new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"},
-          new Object[] { UIConsts.INTEGERS[8], "HID:41242", sWorkWithTable, new Integer(101), new Integer(97+ndiffPosY), new Short((short)1),IFINALSTEP, new Short(curtabindex++), new Integer(157)}
-        );
-        optModifyTable = CurUnoDialog.insertRadioButton("optModifyTable", null,
-          new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-          new Object[] { UIConsts.INTEGERS[8], "HID:41241", sModifyTable, new Integer(101), new Integer(109+ndiffPosY),IFINALSTEP, new Short(curtabindex++), new Integer(157)}
-        );
-        optStartFormWizard = CurUnoDialog.insertRadioButton("optStartFormWizard", null,
-          new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-          new Object[] { UIConsts.INTEGERS[8], "HID:41243", sStartFormWizard, new Integer(101), new Integer(121+ndiffPosY),IFINALSTEP, new Short(curtabindex++), new Integer(157)}
-        );
     }
 
     public void initialize(String _firsttablename){
