@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-22 11:28:47 $
+ *  last change: $Author: hr $ $Date: 2005-07-27 15:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,6 +232,8 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
                 {
                     Reference<XContentProviderManager> xCPM =
                         cb->getContentProviderManagerInterface();
+#if 0
+
                     Reference<XContentProviderFactory> xCPF(
                         xServiceFactory->createInstance(
                             rtl::OUString::createFromAscii(
@@ -246,6 +248,24 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
                             ),
                             rtl::OUString::createFromAscii(".*"),
                             false);
+#else
+
+            // Workaround for P1 #124597#.  Instanciate GNOME-VFS-UCP in the thread that initialized
+             // GNOME in order to avoid a deadlock that may occure in case UCP gets initialized from
+            // a different thread. The latter may happen when calling the Office remotely via UNO.
+            // THIS IS NOT A FIX, JUST A WORKAROUND!
+
+                    Reference<XContentProvider> xCP(
+                        xServiceFactory->createInstance(
+                            rtl::OUString::createFromAscii(
+                                "com.sun.star.ucb.GnomeVFSContentProvider")),
+                        UNO_QUERY);
+                    if(xCP.is())
+                        xCPM->registerContentProvider(
+                            xCP,
+                            rtl::OUString::createFromAscii(".*"),
+                            false);
+#endif
                 }
             }
         } catch (RuntimeException e) {
