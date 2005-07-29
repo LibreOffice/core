@@ -2,9 +2,9 @@
 #
 #   $RCSfile: work.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-18 08:42:45 $
+#   last change: $Author: rt $ $Date: 2005-07-29 15:15:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -238,6 +238,7 @@ sub start_build_server
 
         generate_makefile($tempdir, $makefilepath, $prjroot, $target, \@targetlines);
 
+        sleep 5;
         do_broadcast($tempdir, $prjname, $prj, $platform, $prjdep);
         push @targetdirs, $tempdir;
     }
