@@ -12627,3 +12627,16 @@ _real@bff0000000000000
 ?iquery_throw@BaseReference@uno@star@sun@com@@KAPAVXInterface@2345@PAV62345@ABVType@2345@@Z
 _TI2?AVRuntimeException@uno@star@sun@com@@
 ??0SchXMLSeriesContext@@QAE@AAVSchXMLImportHelper@@AAVSvXMLImport@@ABVOUString@rtl@@AAV?$Reference@VXDiagram@chart@star@sun@com@@@uno@star@sun@com@@AAV?$vector@USchXMLAxis@@V?$allocator@USchXMLAxis@@@_STL@@@_STL@@AAUChartSeriesAddress@chart@789@AAV?$list@UDataRowPointStyle@chartxml@@V?$allocator@UDataRowPointStyle@chartxml@@@_STL@@@_STL@@JAAJ77AAE@Z
+?aTokenList@token@xmloff@@3PAUXMLTokenEntry@?A0x7ad1c449@12@A
+??0StringCompare@?A0x48140593@xmloff@@QAE@ABU012@@Z
+??0StringCompare@?A0x48140593@xmloff@@QAE@ABVOUString@rtl@@@Z
+??1StringCompare@?A0x48140593@xmloff@@QAE@XZ
+??RStringCompare@?A0x48140593@xmloff@@QAE_NABVOUString@rtl@@@Z
+?__find_if@_STL@@YAPBVOUString@rtl@@PBV23@0UStringCompare@?A0x48140593@xmloff@@ABUrandom_access_iterator_tag@1@@Z
+?find_if@_STL@@YAPBVOUString@rtl@@PBV23@0UStringCompare@?A0x48140593@xmloff@@@Z
+?getDocument@?A0x48140593@xmloff@@YA?AV?$Reference@VXModel@frame@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXInterface@uno@star@sun@com@@@4567@@Z
+?getDrawPage@?A0x48140593@xmloff@@YA?AV?$Reference@VXDrawPage@drawing@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXInterface@uno@star@sun@com@@@4567@@Z
+?getTypedModelNode@?$@VXDrawPage@drawing@star@sun@com@@@?A0x48140593@xmloff@@YA?AV?$Reference@VXDrawPage@drawing@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXInterface@uno@star@sun@com@@@4567@@Z
+?getTypedModelNode@?$@VXModel@frame@star@sun@com@@@?A0x48140593@xmloff@@YA?AV?$Reference@VXModel@frame@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXInterface@uno@star@sun@com@@@4567@@Z
+?isAsciiLetter@?A0x48140593@xmloff@@YA_NG@Z
+?toUpperAscii@?A0x48140593@xmloff@@YAGG@Z
