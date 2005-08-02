@@ -429,7 +429,7 @@ sub check_updatepack
 
                     # try to write into $shipdrive
 
-                    $directory = $installer::globals::product . "_" . $installer::globals::compiler . "_" . $installer::globals::buildid . "_" . $installer::globals::languageproducts[0] . "_test";
+                    $directory = $installer::globals::product . "_" . $installer::globals::compiler . "_" . $installer::globals::buildid . "_" . $installer::globals::languageproducts[0] . "_test_$$";
                     $directory = $shipdrive . $installer::globals::separator . $directory;
 
                     $infoline = "Try to create directory: $directory\n";
