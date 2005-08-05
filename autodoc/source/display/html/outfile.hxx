@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outfile.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 08:58:53 $
+ *  last change: $Author: hr $ $Date: 2005-08-05 14:25:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ class HtmlDocuFile
     uintt               nDepth;
 
     Html::Body          aBodyData;
+    StreamStr           aBuffer;
 };
 
 
