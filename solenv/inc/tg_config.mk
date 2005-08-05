@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_config.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-15 13:00:23 $
+#   last change: $Author: hr $ $Date: 2005-08-05 14:00:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,10 @@
 
 PACKAGEDIR*:=$(subst,.,$/ $(PACKAGE))
 
+#
 # --- XCS ---
+#
+
 .IF "$(XCSFILES)"!=""
 # remove unnecessary info from the component schemas
 XCS_TRIM=$(MISC)$/registry$/schema$/$(PACKAGEDIR)$/{$(XCSFILES)}
@@ -132,7 +135,16 @@ $(PROCESSOUT)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/%.properties :| $(
                 $(XSLDIR)$/resource.xsl $<
 .ENDIF
 
+# 
 # --- XCU ---
+#
+
+.IF "$(XCUFILES)"!=""
+XCU_DEFAULT =$(PROCESSOUT)$/registry$/data$/$(PACKAGEDIR)$/{$(XCUFILES)}
+XCU_MODULES =$(foreach,i,$(MODULEFILES) $(PROCESSOUT)$/registry$/spool$/$(PACKAGEDIR)$/$(i))
+XCU_LANG    =$(foreach,i,$(LOCALIZEDFILES) $(PROCESSOUT)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/$(i))
+.ENDIF			# "$(XCUFILES)"!=""
+
 .IF "$(XCU_DEFAULT)" != ""
 $(XCU_DEFAULT) : $(PRJ)$/registry$/component-update.dtd \
                  $(XSLDIR)$/data_val.xsl \
@@ -236,10 +248,6 @@ $(PROCESSOUT)$/registry$/spool$/$(PACKAGEDIR)$/%.xcu :| $$(@:b:s/-/./:b).xcu
     +$(RM) $(@:d)$(@:f:s/.xcu/.tmp/) > $(NULLDEV)
 
 .IF "$(XCUFILES)"!=""
-XCU_DEFAULT =$(PROCESSOUT)$/registry$/data$/$(PACKAGEDIR)$/{$(XCUFILES)}
-XCU_MODULES =$(foreach,i,$(MODULEFILES) $(PROCESSOUT)$/registry$/spool$/$(PACKAGEDIR)$/$(i))
-XCU_LANG    =$(foreach,i,$(LOCALIZEDFILES) $(PROCESSOUT)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/$(i))
-
 ALLTAR: \
     $(XCU_DEFAULT) \
     $(XCU_MODULES) \
@@ -247,8 +255,5 @@ ALLTAR: \
 
 $(XCU_DEFAULT) : $$(@:d:s!$(PROCESSOUT)$/registry$/data$/!$(XCSROOT)$/registry$/schema$/!)$$(@:f:s/.xcu/.xcs/)
 
-.IF "$(XCU_LANG)"!=""
-$(XCU_LANG) : localize.sdf
-.ENDIF			# "$(XCU_LANG)"!=""
 .ENDIF			# "$(XCUFILES)"!=""
 
