@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontconfig.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:22:03 $
+ *  last change: $Author: hr $ $Date: 2005-08-05 12:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,7 +345,7 @@ bool PrintFontManager::initFontconfig()
                                                     FC_FILE,
                                                     FC_OUTLINE,
                                                     FC_INDEX,
-                                                    NULL );
+                                                    (void *) NULL );
     FcPattern* pPattern = rWrapper.FcPatternCreate();
     FcFontSet* pFSet = rWrapper.FcFontList( pConfig, pPattern, pOSet );
 
