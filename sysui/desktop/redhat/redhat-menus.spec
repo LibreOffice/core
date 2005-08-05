@@ -36,15 +36,15 @@ for dir in *; do
   ln -sf $iconname-oasis-master-document.png  gnome-mime-application-vnd.oasis.opendocument.text-master.png
   ln -sf $iconname-oasis-presentation.png     gnome-mime-application-vnd.oasis.opendocument.presentation.png
   ln -sf $iconname-oasis-presentation-template.png gnome-mime-application-vnd.oasis.opendocument.presentation-template.png
-  ln -sf $iconname-oasis-sfpreadsheet.png           gnome-mime-application-vnd.oasis.opendocument.spreadsheet.png
-  ln -sf $iconname-oasis-sfpreadsheet-template.png  gnome-mime-application-vnd.oasis.opendocument.spreadsheet-template.png
+  ln -sf $iconname-oasis-spreadsheet.png           gnome-mime-application-vnd.oasis.opendocument.spreadsheet.png
+  ln -sf $iconname-oasis-spreadsheet-template.png  gnome-mime-application-vnd.oasis.opendocument.spreadsheet-template.png
   ln -sf $iconname-oasis-text.png             gnome-mime-application-vnd.oasis.opendocument.text.png
   ln -sf $iconname-oasis-text-template.png    gnome-mime-application-vnd.oasis.opendocument.text-template.png
   ln -sf $iconname-oasis-web-template.png     gnome-mime-application-vnd.oasis.opendocument.text-web.png
   ln -sf $iconname-presentation.png           gnome-mime-application-vnd.sun.xml.impress.png
   ln -sf $iconname-presentation-template.png  gnome-mime-application-vnd.sun.xml.impress.template.png
-  ln -sf $iconname-sfpreadsheet.png            gnome-mime-application-vnd.sun.xml.calc.png
-  ln -sf $iconname-sfpreadsheet-template.png   gnome-mime-application-vnd.sun.xml.calc.template.png
+  ln -sf $iconname-spreadsheet.png            gnome-mime-application-vnd.sun.xml.calc.png
+  ln -sf $iconname-spreadsheet-template.png   gnome-mime-application-vnd.sun.xml.calc.template.png
   ln -sf $iconname-text.png                   gnome-mime-application-vnd.sun.xml.writer.png
   ln -sf $iconname-text-template.png          gnome-mime-application-vnd.sun.xml.writer.template.png
   cd ../..  
@@ -61,7 +61,7 @@ do
   echo \$TARGET | grep '/var/lib/rpm' && TARGET=""
 done
 if [ -x /usr/bin/update-desktop-database ]; then
-  update-desktop-database /usr/share/applications
+  update-desktop-database -q /usr/share/applications
 fi
 rm -f /tmp/install.$$
 EOF
@@ -70,7 +70,7 @@ EOF
 
 %triggerin -- openofficeorg-writer, openofficeorg-calc, openofficeorg-draw, openofficeorg-impress, openofficeorg-base, openofficeorg-math
 if [ -x /usr/bin/update-desktop-database -a -h /etc/%unixfilename ]; then
-  update-desktop-database /usr/share/applications
+  update-desktop-database -q /usr/share/applications
 fi
 
 %triggerun -- openofficeorg-writer, openofficeorg-calc, openofficeorg-draw, openofficeorg-impress, openofficeorg-base, openofficeorg-math
@@ -81,7 +81,7 @@ fi
 if [ "$2" = "0" ] ; then  
   # the triggering package gets removed
   if [ -x /usr/bin/update-desktop-database ]; then
-    update-desktop-database /usr/share/applications
+    update-desktop-database -q /usr/share/applications
   fi
 fi
 
@@ -254,7 +254,7 @@ fi
 # previously or updates already handled by triggers.
 if [ "$1" = 0 ] ; then 
   if [ -x /usr/bin/update-desktop-database ]; then
-    update-desktop-database /usr/share/applications
+    update-desktop-database -q /usr/share/applications
   fi
   if [ -x /usr/bin/update-mime-database ]; then
     update-mime-database /usr/share/mime
