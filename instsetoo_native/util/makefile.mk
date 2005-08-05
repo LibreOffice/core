@@ -135,6 +135,10 @@ updatepack:
 
 openoffice: $(foreach,i,$(alllangiso) openoffice_$i)
 
+openofficewithjre: $(foreach,i,$(alllangiso) openofficewithjre_$i)
+
+ooolanguagepack : $(foreach,i,$(alllangiso) ooolanguagepack_$i)
+
 MSIOFFICETEMPLATESOURCE=$(PRJ)$/inc_openoffice$/windows$/msi_templates
 MSILANGPACKTEMPLATESOURCE=$(PRJ)$/inc_ooolangpack$/windows$/msi_templates
 .IF "$(BUILD_SPECIAL)"!=""
@@ -148,12 +152,10 @@ ADDDEPS=$(NOLOGOSPLASH) hack_msitemplates
 
 $(foreach,i,$(alllangiso) openoffice_$i) : $(ADDDEPS)
 
-openofficewithjre: $(foreach,i,$(alllangiso) openofficewithjre_$i)
 $(foreach,i,$(alllangiso) openofficewithjre_$i) : $(ADDDEPS)
-.ENDIF			# "$(BUILD_SPECIAL)"!=""
 
-ooolanguagepack : $(foreach,i,$(alllangiso) ooolanguagepack_$i)
 $(foreach,i,$(alllangiso) ooolanguagepack_$i) : $(ADDDEPS)
+.ENDIF			# "$(BUILD_SPECIAL)"!=""
 
 openoffice_%:
     +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(@:s/openoffice_//) -p OpenOffice -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -addsystemintegration $(PKGFORMATSWITCH)
@@ -291,6 +293,8 @@ hack_msitemplates .PHONY:
     +-$(MKDIRHIER) $(MSILANGPACKTEMPLATEDIR)
     $(GNUCOPY) -ua $(MSIOFFICETEMPLATESOURCE) $(MSIOFFICETEMPLATEDIR:d:d)
     $(GNUCOPY) -ua $(MSILANGPACKTEMPLATESOURCE) $(MSILANGPACKTEMPLATEDIR:d:d)
+    +$(RM) $(MSIOFFICETEMPLATEDIR)$/Binary$/Image.bmp
+    +$(RM) $(MSILANGPACKTEMPLATEDIR)$/Binary$/Image.bmp
     +$(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSIOFFICETEMPLATEDIR)$/Binary$/Image.bmp
     +$(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSILANGPACKTEMPLATEDIR)$/Binary$/Image.bmp
 
