@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-12 12:20:27 $
+ *  last change: $Author: hr $ $Date: 2005-08-05 12:55:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -537,7 +537,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
             && pProperty
             )
         {
-            m_nDesktops = *(sal_uInt32*)pProperty;
+            m_nDesktops = *(long*)pProperty;
             XFree( pProperty );
             pProperty = NULL;
             // get work areas
@@ -558,7 +558,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                 )
             {
                 m_aWMWorkAreas = ::std::vector< Rectangle > ( m_nDesktops );
-                sal_uInt32* pValues = (sal_uInt32*)pProperty;
+                long* pValues = (long*)pProperty;
                 for( int i = 0; i < m_nDesktops; i++ )
                 {
                     Point aPoint( pValues[4*i],
@@ -578,6 +578,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                              m_aWMWorkAreas[i].Top() );
 #endif
                 }
+                XFree( pProperty );
             }
             else
             {
@@ -795,7 +796,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
             && pProperty
             )
         {
-            m_nDesktops = *(sal_uInt32*)pProperty;
+            m_nDesktops = *(long*)pProperty;
             XFree( pProperty );
             pProperty = NULL;
         }
@@ -1222,7 +1223,7 @@ void NetWMAdaptor::setNetWMState( X11SalFrame* pFrame ) const
                     && pProperty
                     )
                 {
-                    nCurrent = *(sal_Int32*)pProperty;
+                    nCurrent = *(long*)pProperty;
                     XFree( pProperty );
                 }
                 else if( pProperty )
@@ -1338,7 +1339,7 @@ void GnomeWMAdaptor::setGnomeWMState( X11SalFrame* pFrame ) const
                     && pProperty
                     )
                 {
-                    nCurrent = *(sal_Int32*)pProperty;
+                    nCurrent = *(long*)pProperty;
                     XFree( pProperty );
                 }
                 else if( pProperty )
