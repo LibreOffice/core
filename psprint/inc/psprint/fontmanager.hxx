@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2005-08-05 12:52:53 $
+ *  last change: $Author: hr $ $Date: 2005-08-05 13:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,6 +247,8 @@ class FontCache;
 
 // a class to manage printable fonts
 // aims are type1 and truetype fonts
+
+class FontCache;
 
 class PrintFontManager
 {
