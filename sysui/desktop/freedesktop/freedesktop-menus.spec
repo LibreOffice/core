@@ -101,7 +101,7 @@ ln -snf \$coreprefix /etc/%unixfilename
 # needed here as as well since execution of this one is delayed, the link is
 # not intact when the other triggers are run before this one
 if (which update-desktop-database); then
-  update-desktop-database /usr/share/applications
+  update-desktop-database -q /usr/share/applications
 fi
 rm -f /tmp/install.$$
 EOF
@@ -120,7 +120,7 @@ EOF
 # http://rhn.redhat.com/errata/RHBA-2004-098.html
 # https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=100509
 if (which update-desktop-database); then
-  update-desktop-database /usr/share/applications
+  update-desktop-database -q /usr/share/applications
 fi
 
 %triggerun -- openofficeorg-writer, openofficeorg-calc, openofficeorg-draw, openofficeorg-impress, openofficeorg-math
@@ -131,7 +131,7 @@ fi
 if [ "$2" = "0" ] ; then  
   # the triggering package gets removed
   if (which update-desktop-database); then
-    update-desktop-database /usr/share/applications
+    update-desktop-database -q /usr/share/applications
   fi
 fi
 
@@ -276,7 +276,7 @@ fi
 %postun 
 if [ "$1" = 0 ] ; then # only run when erasing the package - other cases handled by the triggers
   if (which update-desktop-database); then
-    update-desktop-database /usr/share/applications
+    update-desktop-database -q /usr/share/applications
   fi
 fi
 # run always - both when upgrading as well as when erasing the package
