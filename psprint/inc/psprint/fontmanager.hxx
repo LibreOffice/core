@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 08:58:54 $
+ *  last change: $Author: hr $ $Date: 2005-08-05 12:52:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,6 +243,8 @@ struct KernPair
     KernPair() : first( 0 ), second( 0 ), kern_x( 0 ), kern_y( 0 ) {}
 };
 
+class FontCache;
+
 // a class to manage printable fonts
 // aims are type1 and truetype fonts
 
@@ -434,7 +436,7 @@ class PrintFontManager
 
     PrintFont* getFont( fontID nID ) const
     {
-        std::hash_map< int, PrintFont* >::const_iterator it;
+        std::hash_map< fontID, PrintFont* >::const_iterator it;
         it = m_aFonts.find( nID );
         return it == m_aFonts.end() ? NULL : it->second;
     }
