@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_dep.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-18 10:14:00 $
+#   last change: $Author: hr $ $Date: 2005-08-05 14:00:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,14 +113,13 @@ ALLDPC: \
 .IF "$(CFILES)$(CXXFILES)"!=""
 .IF "$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)"==""
     @echo ++++++++++++++++++++++++++++++++++++++++++++++++
-    @echo 		da stimmt was nicht!!
-    @echo 		source files aber keine obj
+    @echo 		something is wrong!!
+    @echo 		source files but no obj
     @echo ++++++++++++++++++++++++++++++++++++++++++++++++
-#	@quit
+    force_dmake_to_error
 .ENDIF
 .ENDIF
 .IF "$(HDBDEPNTARGET)$(OBJFILES)$(SLOFILES)$(DEPOBJFILES)$(RCFILES)$(PARFILES)"!=""
-#	@+$(IFEXIST) $(MISC)$/$(TARGET).dpr $(THEN) $(RM) $(MISC)$/$(TARGET).dpr >& $(NULLDEV)
     @+$(IFEXIST) $(MISC)$/$(TARGET).dpj $(THEN) $(RM) $(MISC)$/$(TARGET).dpj >& $(NULLDEV)
     @+$(IFEXIST) $(MISC)$/genjava.mk $(THEN) $(RM) $(MISC)$/genjava.mk >& $(NULLDEV)
     +$(TOUCH) $(MISC)$/$(TARGET).dpc
@@ -142,7 +141,7 @@ ALLDPC: \
     @echo ttt: ppp > $(MISC)$/$(TARGET).dpc
 .ENDIF			# "$(HDBDEPNTARGET)$(OBJFILES)$(SLOFILES)$(DEPOBJFILES)$(RCFILES)"!=""
 .ENDIF			# "$(nodep)"!=""
-.ELSE		# irgendwas abhaengiges
+.ELSE		# anything requiring dependencies
 
 
 ALLDPC:
