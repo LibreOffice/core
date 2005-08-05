@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-12 12:11:17 $
+ *  last change: $Author: hr $ $Date: 2005-08-05 12:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1409,7 +1409,7 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, bo
 fontID PrintFontManager::findFontBuiltinID( int nPSNameAtom ) const
 {
     fontID nID = 0;
-    ::std::hash_map< int, PrintFont* >::const_iterator it;
+    ::std::hash_map< fontID, PrintFont* >::const_iterator it;
     for( it = m_aFonts.begin(); nID == 0 && it != m_aFonts.end(); ++it )
     {
         if( it->second->m_eType == fonttype::Builtin &&
@@ -1430,7 +1430,7 @@ fontID PrintFontManager::findFontFileID( int nDirID, const OString& rFontFile ) 
     {
         for( ::std::set< fontID >::const_iterator font_it = set_it->second.begin(); font_it != set_it->second.end() && ! nID; ++font_it )
         {
-            ::std::hash_map< int, PrintFont* >::const_iterator it = m_aFonts.find( *font_it );
+            ::std::hash_map< fontID, PrintFont* >::const_iterator it = m_aFonts.find( *font_it );
             if( it != m_aFonts.end() )
             {
                 switch( it->second->m_eType )
