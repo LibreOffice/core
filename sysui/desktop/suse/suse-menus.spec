@@ -63,7 +63,7 @@ do
   echo \$TARGET | grep '/var/lib/rpm' && TARGET=""
 done
 if [ -x /opt/gnome/bin/update-desktop-database ]; then
-  /opt/gnome/bin/update-desktop-database /usr/share/applications
+  /opt/gnome/bin/update-desktop-database -q /usr/share/applications
 fi 
 rm -f /tmp/install.$$
 EOF
@@ -73,7 +73,7 @@ EOF
 
 %triggerin -- openofficeorg-writer, openofficeorg-calc, openofficeorg-draw, openofficeorg-impress, openofficeorg-base, openofficeorg-math
 if [ -x /opt/gnome/bin/update-desktop-database -a -h /etc/%unixfilename ]; then
-  /opt/gnome/bin/update-desktop-database /usr/share/applications
+  /opt/gnome/bin/update-desktop-database -q /usr/share/applications
 fi 
 
 %triggerun -- openofficeorg-writer, openofficeorg-calc, openofficeorg-draw, openofficeorg-impress, openofficeorg-base, openofficeorg-math
@@ -84,7 +84,7 @@ fi
 if [ "$2" = "0" ] ; then  
   # the triggering package gets removed
   if [ -x /opt/gnome/bin/update-desktop-database ]; then
-    /opt/gnome/bin/update-desktop-database /usr/share/applications
+    /opt/gnome/bin/update-desktop-database -q /usr/share/applications
   fi 
 fi
 
@@ -257,7 +257,7 @@ fi
 # previously or updates already handled by triggers.
 if [ "$1" = 0 ] ; then 
   if [ -x /opt/gnome/bin/update-desktop-database ]; then
-    /opt/gnome/bin/update-desktop-database /usr/share/applications
+    /opt/gnome/bin/update-desktop-database -q /usr/share/applications
   fi 
   if [ -x /usr/bin/update-mime-database ]; then
     update-mime-database /usr/share/mime
