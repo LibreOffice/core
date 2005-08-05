@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:28:20 $
+ *  last change: $Author: hr $ $Date: 2005-08-05 12:55:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@
 
 // forward declaration
 namespace psp { class PrinterInfoManager; }
+class Printer;
 
 namespace padmin {
 
