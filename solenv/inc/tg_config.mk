@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_config.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2005-08-05 14:00:44 $
+#   last change: $Author: hr $ $Date: 2005-08-05 15:05:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,7 @@ $(XCS_TRIM) :   $(PRJ)$/registry$/component-schema.dtd \
 $(PROCESSOUT)$/registry$/schema$/$(PACKAGEDIR)$/%.xcs : %.xcs
     @+echo -------------+ validating and stripping schema files
     -$(MKDIRHIER) $(@:d)
-.IF "$(SOLAR_JAVA)"!=""
+.IF "$(XSLTPROC)"=="NO_XSLTPROC"
 .IF "$(NO_INSPECTION)"==""
     $(JAVAI) $(JAVACPS) $(SOLARBINDIR)$/jaxp.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(PROCESSORDIR)$/cfgimport.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.configuration.Inspector $<
 .ENDIF			# "$(NO_INSPECTION)"==""
@@ -127,7 +127,7 @@ $(XCS_RESOURCES) :   $(XSLDIR)$/resource.xsl
 $(PROCESSOUT)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/%.properties :| $(PROCESSOUT)$/merge$/$(PACKAGEDIR)$/%.xcs
     @+echo -------------+ creating locale dependent resource bundles
     -$(MKDIRHIER) $(@:d)
-.IF "$(SOLAR_JAVA)"!=""
+.IF "$(XSLTPROC)"=="NO_XSLTPROC"
     $(JAVAI) $(JAVACPS) $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/resource.xsl $@ locale={$(subst,$/$(PACKAGEDIR)$/$(@:f), $(subst,$(PROCESSOUT)$/registry$/res$/, $@))}
 .ELSE
     $(XSLTPROC) -o $@ \
@@ -154,7 +154,7 @@ $(XCU_DEFAULT) : $(PRJ)$/registry$/component-update.dtd \
 $(PROCESSOUT)$/registry$/data$/$(PACKAGEDIR)$/%.xcu : %.xcu
     @+echo -------------+ validating and creating a locale independent file
     -$(MKDIRHIER) $(@:d) 
-.IF "$(SOLAR_JAVA)"!=""
+.IF "$(XSLTPROC)"=="NO_XSLTPROC"
 .IF "$(NO_INSPECTION)"==""
     $(JAVAI) $(JAVACPS) $(SOLARBINDIR)$/jaxp.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(PROCESSORDIR)$/cfgimport.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.configuration.Inspector $<
 .ENDIF			# "$(NO_INSPECTION)"==""
@@ -196,7 +196,7 @@ $(XCU_LANG) : $(XSLDIR)$/alllang.xsl
 $(PROCESSOUT)$/registry$/res$/{$(alllangiso)}$/$(PACKAGEDIR)$/%.xcu :| $(PROCESSOUT)$/merge$/$(PACKAGEDIR)$/%.xcu
     @+echo -------------+ creating locale dependent entries
     -$(MKDIRHIER) $(@:d)
-.IF "$(SOLAR_JAVA)"!=""
+.IF "$(XSLTPROC)"=="NO_XSLTPROC"
     $(JAVAI) $(JAVACPS) $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(PROCESSORDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/alllang.xsl $(@:d)$*.tmp xcs=$(XCSROOT)$/registry$/schema$/$(PACKAGEDIR)$/$*.xcs schemaRoot=$(XCSROOT)$/registry$/schema locale={$(subst,$/$(PACKAGEDIR)$/$(@:f), $(subst,$(PROCESSOUT)$/registry$/res$/, $@))}	
     $(JAVAI) $(JAVACPS) $(SOLARBINDIR)$/jaxp.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(PROCESSORDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$*.tmp $@
 .ELSE
@@ -232,7 +232,7 @@ $(XCU_MODULES) : $(XSLDIR)$/alllang.xsl
 $(PROCESSOUT)$/registry$/spool$/$(PACKAGEDIR)$/%.xcu :| $$(@:b:s/-/./:b).xcu
     @+echo -------------+ creating a module file
     -$(MKDIRHIER) $(@:d) 
-.IF "$(SOLAR_JAVA)"!=""
+.IF "$(XSLTPROC)"=="NO_XSLTPROC"
     $(JAVAI) $(JAVACPS) $(SOLARBINDIR)$/xt.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(PROCESSORDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(XSLDIR)$/alllang.xsl $(@:d)$(@:f:s/.xcu/.tmp/) xcs=$(XCSROOT)$/registry$/schema$/$(PACKAGEDIR)$/$(<:b).xcs schemaRoot=$(XCSROOT)$/registry$/schema module={$(subst,$(<:b)-, $(*))}
     $(JAVAI) $(JAVACPS) $(SOLARBINDIR)$/jaxp.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/parser.jar$(PATH_SEPERATOR)$(PROCESSORDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$(@:f:s/.xcu/.tmp/) $@
 .ELSE
