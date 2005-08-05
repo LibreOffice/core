@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2005-06-22 08:39:28 $
+#   last change: $Author: hr $ $Date: 2005-08-05 13:56:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -163,6 +163,7 @@ SHL3STDLIBS+= \
 
 SHL3DEF=        $(MISC)$/$(SHL3TARGET).def
 SHL3LIBS=       $(SLB)$/communi.lib 
+SHL3DEPN=$(SHL2TARGETN)
 
 DEF3NAME        =$(SHL3TARGET)
 DEF3DEPN        =       \
@@ -237,7 +238,10 @@ APP1LIBS=\
         $(LIBPRE) $(LB)$/testtool.lib
 
 APP1DEPN=\
-        $(LB)$/testtool.lib
+        $(LB)$/testtool.lib \
+        $(SHL2TARGETN) \
+        $(SHL3TARGETN)
+
 
 APP1OBJS=       $(OBJ)$/testbasi.obj \
                 $(OBJ)$/cmdbasestream.obj \
