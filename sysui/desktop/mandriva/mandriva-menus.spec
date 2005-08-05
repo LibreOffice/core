@@ -219,7 +219,7 @@ GenerateMenu() {
 mimetypes_item=
 [ "$7" != "" ] && mimetypes_item="mimetypes=\"$7\""
 cat >> $RPM_BUILD_ROOT%{_menudir}/%{name} << EOF
-?package(openofficeorg-$6): needs=x11 section="$2" icon="%iconprefix-$3.png" title="$4" longtitle="$5" command="$1 %U" \
+?package(openofficeorg-$6): needs=x11 section="$2" icon="%iconprefix-$3.png" title="$4" longtitle="$5" command="$1" \
 $mimetypes_item kde_opt="InitialPreference=100" startup_notify="true"
 EOF
 }
@@ -229,7 +229,7 @@ EOF
 # until new group will be created
 #
 GenerateMenu "%unixfilename -base" \
-	"Applications/Databases" \
+	"More Applications/Databases" \
 	"base" \
 	"OpenOffice.org %{menuversion} Base" \
 	"OpenOffice.org %{menuversion} Database" \
