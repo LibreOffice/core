@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfile.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 09:05:00 $
+ *  last change: $Author: hr $ $Date: 2005-08-05 14:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,8 @@ DocuFile_Html::DocuFile_Html()
         sStyle(),
         sCssFile(),
         sCopyright(),
-        aBodyData()
+        aBodyData(),
+        aBuffer(60000) // Grows dynamically, when necessary.
 {
 }
 
@@ -149,15 +150,17 @@ DocuFile_Html::CreateFile()
 void
 DocuFile_Html::WriteHeader( csv::File & io_aFile )
 {
+    aBuffer.reset();
+
     static const char s1[] =
         "<html>\n<head>\n<title>";
     static const char s2[] =
         "</title>\n"
         "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n";
 
-    io_aFile.write( s1 );
-    io_aFile.write( sTitle );
-    io_aFile.write( s2 );
+    aBuffer.write( s1 );
+    aBuffer.write( sTitle );
+    aBuffer.write( s2 );
 
 
     if (NOT sCssFile.empty())
@@ -167,9 +170,9 @@ DocuFile_Html::WriteHeader( csv::File & io_aFile )
         static const char s4[] =
             "\">\n";
 
-        io_aFile.write(s3);
-        io_aFile.write(sCssFile);
-        io_aFile.write(s4);
+        aBuffer.write(s3);
+        aBuffer.write(sCssFile);
+        aBuffer.write(s4);
     }
 
     if (NOT sStyle.empty())
@@ -179,19 +182,23 @@ DocuFile_Html::WriteHeader( csv::File & io_aFile )
         static const char s6[] =
             "</style>\n";
 
-        io_aFile.write(s5);
-        io_aFile.write(sStyle);
-        io_aFile.write(s6);
+        aBuffer.write(s5);
+        aBuffer.write(sStyle);
+        aBuffer.write(s6);
     }
 
     static const char s7[] =
         "</head>\n";
-    io_aFile.write(s7);
+    aBuffer.write(s7);
+
+    io_aFile.write(aBuffer.c_str(), aBuffer.size());
 }
 
 void
 DocuFile_Html::WriteBody( csv::File & io_aFile )
 {
+    aBuffer.reset();
+
     aBodyData
         >> *new html::Link( "#_top_" )
                 << "Top of Page";
@@ -207,7 +214,9 @@ DocuFile_Html::WriteBody( csv::File & io_aFile )
                     << new xml::AnAttribute( "align", "center" )
                     << new xml::XmlCode(sCopyright);
     }
-    aBodyData.WriteOut(io_aFile);
+    aBodyData.WriteOut(aBuffer);
+
+    io_aFile.write(aBuffer.c_str(), aBuffer.size());
 }
 
 
