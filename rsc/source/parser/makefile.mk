@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2002-11-22 18:30:39 $
+#   last change: $Author: hr $ $Date: 2005-08-05 12:57:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,4 +106,5 @@ $(OBJ)$/rscibas.obj : $(YACCTARGET)
 $(OBJ)$/rscinit.obj : $(YACCTARGET)
 $(OBJ)$/rscicpx.obj : $(YACCTARGET)
 $(OBJ)$/rsclex.obj  : $(YACCTARGET)
+$(OBJ)$/rscyacc.obj : $(YACCTARGET)
 
