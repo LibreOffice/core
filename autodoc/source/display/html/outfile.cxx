@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outfile.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 08:58:31 $
+ *  last change: $Author: hr $ $Date: 2005-08-05 14:25:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,8 @@ HtmlDocuFile::HtmlDocuFile()
         sTitle(),
         sCopyright(),
         nDepth(0),
-        aBodyData()
+        aBodyData(),
+        aBuffer(60000)  // Grows dynamically when necessary.
 {
 }
 
@@ -275,6 +276,8 @@ HtmlDocuFile::WriteCssFile( const csv::ploc::Path & i_rFilePath )
 void
 HtmlDocuFile::WriteHeader( csv::File & io_aFile )
 {
+    aBuffer.reset();
+
     static const char s1[] =
         "<html>\n<head>\n"
         "<title>";
@@ -284,17 +287,21 @@ HtmlDocuFile::WriteHeader( csv::File & io_aFile )
     static const char s3[] =
         "\">\n</head>\n";
 
-    io_aFile.write( s1 );
-    io_aFile.write( sTitle );
-    io_aFile.write( s2 );
-    io_aFile.write( output::get_UpLink(nDepth) );
-    io_aFile.write( C_sHFN_Css );
-    io_aFile.write( s3 );
+    aBuffer.write( s1 );
+    aBuffer.write( sTitle );
+    aBuffer.write( s2 );
+    aBuffer.write( output::get_UpLink(nDepth) );
+    aBuffer.write( C_sHFN_Css );
+    aBuffer.write( s3 );
+
+    io_aFile.write(aBuffer.c_str(), aBuffer.size());
 }
 
 void
 HtmlDocuFile::WriteBody( csv::File & io_aFile )
 {
+    aBuffer.reset();
+
     aBodyData
         >> *new html::Link( "#_top_" )
                 << new html::ClassAttr( "objchapter" )
@@ -316,5 +323,7 @@ HtmlDocuFile::WriteBody( csv::File & io_aFile )
                     << new xml::AnAttribute( "align", "center" )
                     << new xml::XmlCode(sCopyright);
     }
-    aBodyData.WriteOut(io_aFile);
+    aBodyData.WriteOut(aBuffer);
+
+    io_aFile.write(aBuffer.c_str(), aBuffer.size());
 }
