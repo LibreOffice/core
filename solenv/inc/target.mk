@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.154 $
+#   $Revision: 1.155 $
 #
-#   last change: $Author: kz $ $Date: 2005-07-01 12:16:49 $
+#   last change: $Author: hr $ $Date: 2005-08-05 14:00:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,13 +95,7 @@ INCLUDE!:=-I. $(ENVINCPRE) $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) -I$(INC) -I$
 #needed for initial build of dpc files
 .IF "$(MAKEFILERC)"!=""
 PRJ=$(TEMP)
-#TARGET=makefilerc
-#PRJNAME=makefilerc
 DPCTARGET=
-.ELSE
-#.IF "$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)$(PARFILES)" != ""
-DPCTARGET=$(MISC)$/$(TARGET).dpc
-#.ENDIF          # "$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)$(PARFILES)" != ""
 .ENDIF
 .IF "$(RC_SUBDIRS)"!=""
 SUBDIRS:=$(RC_SUBDIRS)
@@ -2233,9 +2227,10 @@ $(COMMONPRJHIDOTHERTARGET) : $(PRJHIDOTHERTARGET)
 .IF "$(CXXFILES)$(CFILES)$(RCFILES)$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)$(PARFILES)" != ""
 .IF "$(DEPFILES)" != ""
 .INCLUDE : $(DEPFILES)
-.ENDIF			# "$(DEPFILES)" != ""
+DPCTARGET=$(MISC)$/$(TARGET).dpc
 .INCLUDE : $(MISC)$/$(TARGET).dpc
-.ENDIF
+.ENDIF			# "$(DEPFILES)" != ""
+.ENDIF			# "$(CXXFILES)$(CFILES)$(RCFILES)$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)$(PARFILES)" != ""
 .ELSE		# MAKEFILERC
 .ENDIF		# MAKEFILERC
 
