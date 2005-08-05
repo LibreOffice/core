@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: obo $ $Date: 2005-05-06 09:35:57 $
+#   last change: $Author: hr $ $Date: 2005-08-05 12:52:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,8 @@ TARFILE_ROOTDIR=icu
 PATCH_FILE_NAME=icu-2.6.patch
 
 ADDITIONAL_FILES= \
+    source$/layout$/TibetanLayoutEngine.cpp \
+    source$/layout$/TibetanLayoutEngine.h \
     source$/layout$/KhmerLayoutEngine.cpp \
     source$/layout$/KhmerLayoutEngine.h \
     source$/layout$/KhmerReordering.cpp \
