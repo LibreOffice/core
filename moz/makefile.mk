@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2005-07-20 09:49:11 $
+#   last change: $Author: hr $ $Date: 2005-08-05 12:58:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -155,7 +155,7 @@ CONFIGURE_ACTION=sh -c "./configure $(MOZILLA_CONFIGURE_FLAGS)"
 
 BUILD_DIR=
 .IF "$(USE_SHELL)"!="4nt"
-BUILD_ACTION:=$(GNUMAKE)
+BUILD_ACTION:=$(GNUMAKE) -j$(EXTMAXPROCESS)
 .ELSE
 # This construct is needed because unitools.mk defines GNUMAKE using $ENV_TOOLS.
 # $ENV_TOOLS doesn't exist for OOo builds and the cygwin make is needed.
@@ -201,15 +201,18 @@ CXX:=cl.exe
 MOZTOOLSUNPACK:=$(MISC)$/build$/moztoolsunpack
 MOZTOOLSINST:=$(MISC)$/build$/moztoolsinst
 .IF "$(USE_SHELL)"!="4nt"
-MOZ_TOOLS:=$(shell cygpath -ad "$(MISC)")\build\moztoolsinst
-PATH!:=$(shell cygpath $(MOZ_TOOLS))/vc71/bin:$(shell cygpath $(MOZ_TOOLS))/bin:$(PATH)
+MOZ_TOOLS_DOS:=$(shell cygpath -ad "$(MISC)")\build\moztoolsinst
+PATH!:=$(shell cygpath $(MOZ_TOOLS_DOS))/vc71/bin:$(shell cygpath $(MOZ_TOOLS_DOS))/bin:$(PATH)
+SET_MOZ_TOOLS_INSTALL_BAT:=setenv MOZ_TOOLS "$(MOZ_TOOLS_DOS)"
 .ELSE # "$(USE_SHELL)"!="4nt"
 # MOZ_TOOLS must contain an absolute path
-MOZ_TOOLS:=$(shell +echo %@SFN[$(MISC)])\build\moztoolsinst
-PATH!:=$(MOZ_TOOLS)\vc71\bin;$(MOZ_TOOLS)\bin;$(PATH)
+MOZ_TOOLS_DOS:=$(shell +echo %@SFN[$(MISC)])\build\moztoolsinst
+PATH!:=$(MOZ_TOOLS_DOS)\vc71\bin;$(MOZ_TOOLS_DOS)\bin;$(PATH)
+SET_MOZ_TOOLS_INSTALL_BAT:=set MOZ_TOOLS=$(MOZ_TOOLS_DOS)
 .ENDIF # "$(USE_SHELL)"!="4nt"
-GLIB_PREFIX:=$(MOZ_TOOLS)\vc71
-LIBIDL_PREFIX:=$(MOZ_TOOLS)\vc71
+MOZ_TOOLS:=$(subst,\,/ $(MOZ_TOOLS_DOS))
+GLIB_PREFIX:=$(MOZ_TOOLS)/vc71
+LIBIDL_PREFIX:=$(MOZ_TOOLS)/vc71
 
 .EXPORT : PATH MOZ_TOOLS GLIB_PREFIX LIBIDL_PREFIX
 .ENDIF # "$(GUI)"=="WNT"
@@ -255,7 +258,7 @@ $(MISC)$/build$/wintools.unpack : $(PRJ)$/download$/$(WINTOOLS_ZIPFILE_NAME)
     +$(TOUCH) $(MISC)$/build$/wintools.unpack
 
 $(MISC)$/build$/wintools.install : $(MISC)$/build$/wintools.unpack
-    +cd $(MOZTOOLSUNPACK)$/buildtools$/windows && cmd /c install.bat
+    +cd $(MOZTOOLSUNPACK)$/buildtools$/windows && $(SET_MOZ_TOOLS_INSTALL_BAT) && cmd /c install.bat
     +$(TOUCH) $(MISC)$/build$/wintools.install
 
 $(MISC)$/build$/wintools.complete : \
