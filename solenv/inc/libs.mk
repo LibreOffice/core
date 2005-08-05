@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.91 $
+#   $Revision: 1.92 $
 #
-#   last change: $Author: rt $ $Date: 2005-06-20 15:27:27 $
+#   last change: $Author: hr $ $Date: 2005-08-05 15:04:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,7 @@
 #
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.91 $$"
+LIBSMKREV!:="$$Revision: 1.92 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -206,7 +206,11 @@ ZLIB3RDLIB=-lzlib
 .IF "$(SYSTEM_JPEG)"=="YES"
 .IF "$(SOLAR_JAVA)" != ""
 #i34482# Blackdown jdk is in the libsearch patch and has a libjpeg
+.IF "$(OS)" == "FREEBSD"
+JPEG3RDLIB=/usr/local/lib/libjpeg.so
+.ELSE
 JPEG3RDLIB=/usr/lib/libjpeg.so
+.ENDIF
 .ELSE
 JPEG3RDLIB=-ljpeg
 .ENDIF
