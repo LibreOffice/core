@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:18:58 $
+ *  last change: $Author: hr $ $Date: 2005-08-05 12:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,19 +290,14 @@ float IcuFontFromServerFont::getYPixelsPerEm() const
 
 float IcuFontFromServerFont::getScaleFactorX() const
 {
-    const ImplFontSelectData& r = mrServerFont.GetFontSelData();
-    float fXScale = r.mnWidth ? r.mnWidth : r.mnHeight;
-    fXScale /= mrServerFont.GetEmUnits();
-    return fXScale;
+    return 1.0;
 }
 
 // -----------------------------------------------------------------------
 
 float IcuFontFromServerFont::getScaleFactorY() const
 {
-    float fYScale = mrServerFont.GetFontSelData().mnHeight;
-    fYScale /= mrServerFont.GetEmUnits();
-    return fYScale; //TODO
+    return 1.0;
 }
 
 // -----------------------------------------------------------------------
