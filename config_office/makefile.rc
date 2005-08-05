@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.48 $
+#   $Revision: 1.49 $
 #
-#   last change: $Author: rt $ $Date: 2004-10-28 08:53:25 $
+#   last change: $Author: hr $ $Date: 2005-08-05 14:01:22 $
 #
 #   Bugs:  'update' tag will not change you from one release to another.
 #          See webpages to checkout OpenOffice.org from you office directory.
@@ -90,104 +90,178 @@ all_subdirs : $(BUILD_SUBDIRS)
 # 
 
 BUILD_SUBDIRS =  \
+	MathMLDTD \
 	UnoControls \
 	XmlSearch \
+	accessibility \
+	animations \
+	autodoc \
 	automation \
+	avmedia \
 	basctl \
+	basegfx \
 	basic \
+	bean \
+	beanshell \
+	berkeleydb \
+	binfilter \
+	bitstream_vera_fonts \
+	boost \
 	bridges \
-	chaos \
+	canvas \
+	chart2 \
+	cli_ure \
 	codemaker \
 	comphelper \
+	config_office \
 	configmgr \
 	connectivity \
+	cosv \
+	cppcanvas \
 	cppu \
 	cppuhelper \
 	cpputools \
+	crashrep \
+	curl \
 	dbaccess \
+	default_images \
 	desktop \
-	drafts \
+	dictionaries \
+	dmake \
 	dtrans \
+	embeddedobj \
+	embedserv \
+	epm \
 	eventattacher \
+	expat \
 	extensions \
-	extras \
 	external \
+	extras \
 	fileaccess \
+	filter \
 	forms \
+	fpicker \
 	framework \
+	freetype \
 	goodies \
-	i18n \
+	helpcontent2 \
+	hsqldb \
+	hwpfilter \
+	i18npool \
+	i18nutil \
+	icu \
 	idl \
 	idlc \
-	inet \
+	instsetoo_native \
 	io \
 	javaunohelper \
-	jtools \
+	jpeg \
 	jurt \
 	jut \
-	ldapber \
-	lingu \
+	jvmaccess \
+	jvmfwk \
+	libwpd \
+	libxml2 \
+	libxmlsec \
+	lingucomponent \
 	linguistic \
+	moz \
+	msfontextract \
+	nas \
+	neon \
+	netbeans_integration \
+	np_sdk \
+	odk \
 	offapi \
 	officecfg \
-	offmgr \
 	offuh \
+	ooo_custom_images \
 	package \
 	padmin \
+	portaudio \
+	postprocess \
 	psprint \
+	psprint_config \
+	python \
+	pyuno \
+	qadevOOo \
 	rdbmaker \
-	readlicense \
+	readlicense_oo \
+	regexp \
 	registry \
 	remotebridges \
-	res \
+	rhino \
 	ridljar \
 	rsc \
+	rvpapi \
+	sablot \
 	sal \
 	salhelper \
 	sandbox \
+	sane \
 	sax \
 	sc \
 	scaddins \
 	sch \
-	scp \
-	scptools \
+	scp2 \
+	scripting \
 	sd \
-	setup2 \
+	sdk_oo \
+	setup_native \
 	sfx2 \
 	shell \
 	sj2 \
+	slideshow \
+	smoketestoo_native \
+	sndfile \
 	so3 \
+	solenv \
 	soltools \
 	sot \
-	berkeleydb \
 	starmath \
+	stlport \
 	stoc \
 	store \
 	svtools \
-	sysui \
 	svx \
 	sw \
 	sysui \
+	testshl \
+	testshl2 \
+	testtools \
 	toolkit \
 	tools \
 	transex3 \
+	twain \
 	ucb \
 	ucbhelper \
 	udkapi \
+	udm \
+	unixODBC \
 	unoil \
 	unotools \
+	unoxml \
 	unzip \
+	ure \
 	uui \
 	vcl \
 	vos \
 	wizards \
+	writerperfect \
+	x11_extensions \
+	xalan \
+	xmerge \
 	xml2cmp \
 	xmlhelp \
 	xmloff \
 	xmlscript \
+	xmlsecurity \
 	zlib
 
-build_all .SETDIR=instsetoo_native/prj:
+build_all .SEQUENTIAL : $(BUILD_SUBDIRS) build_instsetoo_native
+	@+echo Checking module list
+
+build_instsetoo_native .SETDIR=instsetoo_native/prj:
 	@+perl $(SOLARENV)$/bin$/build.pl --all $(PROFULLSWITCH)
 
 depend .SETDIR=instsetoo_native/prj:
