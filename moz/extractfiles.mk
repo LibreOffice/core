@@ -2,9 +2,9 @@
 #
 #   $RCSfile: extractfiles.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2005-07-20 09:48:53 $
+#   last change: $Author: hr $ $Date: 2005-08-05 12:58:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -193,7 +193,7 @@ REG_SUBFIX=
 
 # --- Targets ------------------------------------------------------
 
-extract_mozab_files:	\
+extract_mozab_files:	$(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) \
     make_temp_dir	\
     $(MISC)$/build$/so_moz_runtime_files	\
     $(MISC)$/build$/so_moz_include_files	\
@@ -210,7 +210,7 @@ make_temp_dir:
     +-$(MKDIR)	$(RUNTIME_DIR)$/res	>& $(NULLDEV)
 .ENDIF
 
-$(OUT)$/bin$/mozruntime.zip:
+$(OUT)$/bin$/mozruntime.zip: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) 
     +echo $@>& $(NULLDEV)
 
 $(MISC)$/build$/so_moz_runtime_files: 	$(OUT)$/bin$/mozruntime.zip
@@ -265,7 +265,7 @@ $(MISC)$/build$/so_moz_runtime_files: 	$(OUT)$/bin$/mozruntime.zip
     
     +$(TOUCH) $@
 
-$(INCCOM)$/nsBuildID.h:
+$(INCCOM)$/nsBuildID.h: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) 
     @+-echo "You can delete $(INCCOM) to force it copy all include files again."
     
 $(MISC)$/build$/so_moz_include_files: $(INCCOM)$/nsBuildID.h
@@ -297,19 +297,19 @@ $(MISC)$/build$/so_moz_lib_files:		$(foreach,file,$(LIBLIST) $(LIB_DIR)$/$(file)
 .ENDIF
     +$(TOUCH) $@
     
-$(BIN_RUNTIMELIST):
+$(BIN_RUNTIMELIST): $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) 
     @+$(COPY) $(MOZ_BIN_DIR)$/$(DLLPRE)$@$(DLLPOST) $(RUNTIME_DIR)$/$(DLLPRE)$@$(DLLPOST)
 
-$(COMPONENT_RUNTIMELIST):
+$(COMPONENT_RUNTIMELIST): $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) 
     @+$(COPY) $(MOZ_BIN_DIR)$/components$/$(DLLPRE)$@$(DLLPOST) $(RUNTIME_DIR)$/components$/$(DLLPRE)$@$(DLLPOST)
     
-$(COMREGISTRY_FILELIST):
+$(COMREGISTRY_FILELIST): $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) 
     @+$(COPY) $(MOZ_BIN_DIR)$/components$/$@ $(RUNTIME_DIR)$/components$/$@
 
-$(DEFAULTS_RUNTIMELIST):
+$(DEFAULTS_RUNTIMELIST): $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) 
     @+$(COPY) $(MOZ_BIN_DIR)$/$@ $(RUNTIME_DIR)$/$@
 
-RES_FILELIST:
+RES_FILELIST: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) 
 .IF "$(OS)"=="SOLARIS"
     @+$(COPY) $(MOZ_BIN_DIR)$/res$/charsetalias.properties $(RUNTIME_DIR)$/res$/charsetalias.properties
 .ELSE
@@ -317,7 +317,7 @@ RES_FILELIST:
 .ENDIF
 
     
-$(LIB_DIR)$/%:
+$(LIB_DIR)$/%: $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) 
     +echo  >& $(NULLDEV)
 
 $(MISC)$/CREATETARBALL:	extract_mozab_files
