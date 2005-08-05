@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printergfx.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 14:00:04 $
+ *  last change: $Author: hr $ $Date: 2005-08-05 12:53:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,7 @@ public:
  * forward declarations
  */
 
+class Font3;
 class GlyphSet;
 class PrinterJob;
 class PrintFontManager;
