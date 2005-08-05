@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2005-07-14 11:26:15 $
+ *  last change: $Author: hr $ $Date: 2005-08-05 12:54:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2479,7 +2479,6 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext* pContext, gpo
     }
 
     bool bEndPreedit = (!pText || !*pText) && pThis->m_aInputEvent.mpTextAttr != NULL;
-
     pThis->m_aInputEvent.mnTime             = 0;
     pThis->m_aInputEvent.maText             = String( pText, RTL_TEXTENCODING_UTF8 );
     pThis->m_aInputEvent.mnCursorPos        = nCursorPos;
@@ -2545,7 +2544,6 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext* pContext, gpo
     vcl::DeletionListener aDel( pThis->m_pFrame );
 
     pThis->m_pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&pThis->m_aInputEvent);
-
     if( bEndPreedit && ! aDel.isDeleted() )
         pThis->doCallEndExtTextInput();
     if( ! aDel.isDeleted() )
