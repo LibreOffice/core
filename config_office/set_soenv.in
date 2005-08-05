@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.70 $
-# Date:        $Date: 2005-07-14 13:45:49 $
+# Version:     $Revision: 1.71 $
+# Date:        $Date: 2005-08-05 15:06:12 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1619,6 +1619,7 @@ if ( $platform =~ m/cygwin/ )
 }
 ToFile( "PERL",              $PERL,              "e" );
 ToFile( "RPM",               "@RPM@",            "e" );
+ToFile( "NO_BRP_STALE_LINK_ERROR", "yes",       "e" );
 ToFile( "GNUMAKE",           "@GNUMAKE@",        "e" );
 ToFile( "UPD",               $UPD,               "e" );
 ToFile( "SOLARUPD",          $SOLARUPD,          "e" );
