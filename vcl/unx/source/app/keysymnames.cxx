@@ -2,9 +2,9 @@
  *
  *  $RCSfile: keysymnames.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 10:06:00 $
+ *  last change: $Author: obo $ $Date: 2005-08-09 11:02:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,17 +130,17 @@ namespace vcl_sal {
         { XK_Left, "Links" },
         { XK_Up, "Oben" },
         { XK_Down, "Unten" },
-        { XK_BackSpace, "Rückschritt" },
+        { XK_BackSpace, "Rï¿½ckschritt" },
         { XK_Return, "Eingabe" },
-        { XK_slash, "Schrägstrich" },
+        { XK_slash, "Schrï¿½gstrich" },
         { XK_space, "Leertaste" },
         { SunXK_Stop,  "Stop" },
         { SunXK_Again, "Wiederholen" },
         { SunXK_Props, "Eigenschaften" },
-        { SunXK_Undo,  "Zurücknehmen" },
+        { SunXK_Undo,  "Zurï¿½cknehmen" },
         { SunXK_Front, "Vordergrund" },
         { SunXK_Copy,  "Kopieren" },
-        { SunXK_Open,  "Öffnen" },
+        { SunXK_Open,  "ï¿½ffnen" },
         { SunXK_Paste, "Einsetzen" },
         { SunXK_Find,  "Suchen" },
         { SunXK_Cut,   "Ausschneiden" }
@@ -150,11 +150,11 @@ namespace vcl_sal {
     {
         { XK_Shift_L, "Maj" },
         { XK_Shift_R, "Maj" },
-        { XK_Page_Up, "Pg. Préc" },
+        { XK_Page_Up, "Pg. Prï¿½c" },
         { XK_Page_Down, "Pg. Suiv" },
         { XK_End, "Fin" },
         { XK_Home, "Origine" },
-        { XK_Insert, "Insérer" },
+        { XK_Insert, "Insï¿½rer" },
         { XK_Delete, "Suppr" },
         { XK_Escape, "Esc" },
         { XK_Right, "Droite" },
@@ -163,7 +163,7 @@ namespace vcl_sal {
         { XK_Down, "Bas" },
         { XK_BackSpace, "Ret. Arr" },
         { XK_Return, "Retour" },
-        { XK_KP_Enter, "Entrée" },
+        { XK_KP_Enter, "Entrï¿½e" },
         { SunXK_Stop,  "Stop" },
         { SunXK_Again, "Encore" },
         { SunXK_Props, "Props" },
@@ -195,7 +195,7 @@ namespace vcl_sal {
         { XK_space, "Spaziatrice" },
         { SunXK_Stop,  "Stop" },
         { SunXK_Again, "Ancora" },
-        { SunXK_Props, "Proprietà" },
+        { SunXK_Props, "Proprietï¿½" },
         { SunXK_Undo,  "Annulla" },
         { SunXK_Front, "Davanti" },
         { SunXK_Copy,  "Copia" },
@@ -248,9 +248,9 @@ namespace vcl_sal {
         { SunXK_Undo,  "Angre" },
         { SunXK_Front, "Front" },
         { SunXK_Copy,  "Kopi" },
-        { SunXK_Open,  "Åpne" },
+        { SunXK_Open,  "ï¿½pne" },
         { SunXK_Paste, "Lim" },
-        { SunXK_Find,  "Søk" },
+        { SunXK_Find,  "Sï¿½k" },
         { SunXK_Cut,   "Klipp" }
     };
 
@@ -261,8 +261,8 @@ namespace vcl_sal {
         { XK_Page_Up, "PageUp" },
         { XK_Page_Down, "PageDown" },
         { XK_Escape, "Esc" },
-        { XK_Right, "Höger" },
-        { XK_Left, "Vänster" },
+        { XK_Right, "Hï¿½ger" },
+        { XK_Left, "Vï¿½nster" },
         { XK_Up, "Up" },
         { XK_Down, "Ned" },
         { XK_BackSpace, "Backsteg" },
@@ -271,12 +271,12 @@ namespace vcl_sal {
         { SunXK_Stop,  "Avbryt" },
         { SunXK_Again, "Upprepa" },
         { SunXK_Props, "Egenskaper" },
-        { SunXK_Undo,  "Ångra" },
+        { SunXK_Undo,  "ï¿½ngra" },
         { SunXK_Front, "Fram" },
         { SunXK_Copy,  "Kopiera" },
-        { SunXK_Open,  "Öppna" },
+        { SunXK_Open,  "ï¿½ppna" },
         { SunXK_Paste, "Klistra in" },
-        { SunXK_Find,  "Sök" },
+        { SunXK_Find,  "Sï¿½k" },
         { SunXK_Cut,   "Klipp ut" }
     };
 
@@ -308,8 +308,8 @@ namespace vcl_sal {
     {
         { XK_Shift_L, "Mayos" },
         { XK_Shift_R, "Mayos" },
-        { XK_Page_Up, "RePág" },
-        { XK_Page_Down, "AvPág" },
+        { XK_Page_Up, "RePï¿½g" },
+        { XK_Page_Down, "AvPï¿½g" },
         { XK_End, "Fin" },
         { XK_Home, "Inicio" },
         { XK_Delete, "Supr" },
@@ -646,7 +646,7 @@ const char* SalDisplay::GetKeyboardName( BOOL bRefresh )
                 for( i = 0; i < XkbNumKbdGroups; i++ )
                     PRINT_ATOM_2( groups );
 #endif
-                XkbFreeKeyboard( pXkbDesc, 0, True );
+                XkbFreeKeyboard( pXkbDesc, XkbAllComponentsMask, True );
             }
         }
         if( ! m_aKeyboardName.Len() )
