@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcache.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2005-06-06 16:07:21 $
+ *  last change: $Author: obo $ $Date: 2005-08-09 10:59:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@
 #endif
 
 #define FONTCACHEFILE "/user/psprint/pspfontcache"
-#define CACHE_MAGIC "PspFontCacheFile format 1"
+#define CACHE_MAGIC "PspFontCacheFile format 2"
 
 using namespace std;
 using namespace rtl;
@@ -177,22 +177,13 @@ void FontCache::flush()
             if( rEntry.begin() == rEntry.end() )
                 continue;
 
-            struct stat aStat;
-            ByteString aFileName( aDirectory );
-            aFileName.Append( '/' );
-            aFileName.Append( ByteString( entry_it->first ) );
-            if( stat( aFileName.GetBuffer(), &aStat ) )
-                continue;
-
             aLine = "File:";
             aLine.Append( ByteString( entry_it->first ) );
             aStream.WriteLine( aLine );
 
             int nEntrySize = entry_it->second.m_aEntry.size();
-            // write: type;mtime;nfonts
+            // write: type;nfonts
             aLine = ByteString::CreateFromInt32( rEntry.front()->m_eType );
-            aLine.Append( ';' );
-            aLine.Append( ByteString::CreateFromInt64( aStat.st_mtime ) );
             aLine.Append( ';' );
             aLine.Append( ByteString::CreateFromInt32( nEntrySize ) );
             aStream.WriteLine( aLine );
@@ -370,13 +361,7 @@ void FontCache::read()
             if( nIndex == STRING_NOTFOUND )
                 continue;
 
-            sal_Int64 nTime = aLine.GetToken( 0, ';', nIndex ).ToInt64();
-            if( nIndex == STRING_NOTFOUND )
-                continue;
-
             sal_Int32 nFonts = aLine.GetToken( 0, ';', nIndex ).ToInt32();
-
-            (*pDir)[ aFile ].m_nTimestamp = nTime;
             for( int n = 0; n < nFonts; n++ )
             {
                 aStream.ReadLine( aLine );
@@ -781,9 +766,6 @@ void FontCache::updateFontCacheEntry( const PrintFontManager::PrintFont* pFont, 
         ByteString aPath = rManager.getDirectory( nDirID );
         aPath.Append( '/' );
         aPath.Append( ByteString( aFile ) );
-        struct stat aStat;
-        if( ! stat( aPath.GetBuffer(), &aStat ) )
-            m_aCache[nDirID].m_aEntries[aFile].m_nTimestamp = (sal_Int64)aStat.st_mtime;
         m_bDoFlush = true;
     }
     if( bFlush )
