@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontconfig.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-08-05 12:53:19 $
+ *  last change: $Author: obo $ $Date: 2005-08-09 10:59:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,8 @@ class FontCfgWrapper
     void*           m_pLib;
     FcConfig*       m_pDefConfig;
 
-    FcConfig*       (*m_pFcInitLoadConfigAndFonts)();
+    FcBool          (*m_pFcInit)();
+    FcConfig*       (*m_pFcConfigGetCurrent)();
     FcObjectSet*    (*m_pFcObjectSetVaBuild)(const char*,va_list);
     void            (*m_pFcObjectSetDestroy)(FcObjectSet* pSet);
     FcPattern*      (*m_pFcPatternCreate)();
@@ -140,9 +141,13 @@ public:
 
     FcConfig* getDefConfig() { return m_pDefConfig; }
 
+    FcBool FcInit()
+    { return m_pFcInit(); }
 
-    FcConfig* FcInitLoadConfigAndFonts()
-    { return m_pFcInitLoadConfigAndFonts(); }
+    FcConfig* FcConfigGetCurrent()
+    {
+        return m_pFcConfigGetCurrent();
+    }
 
     FcObjectSet* FcObjectSetBuild( const char* first, ... )
     {
@@ -227,8 +232,10 @@ FontCfgWrapper::FontCfgWrapper()
         return;
     }
 
-    m_pFcInitLoadConfigAndFonts = (FcConfig*(*)())
-        loadSymbol( "FcInitLoadConfigAndFonts" );
+    m_pFcInit = (FcBool(*)())
+        loadSymbol( "FcInit" );
+    m_pFcConfigGetCurrent = (FcConfig *(*)())
+        loadSymbol( "FcConfigGetCurrent" );
     m_pFcObjectSetVaBuild = (FcObjectSet*(*)(const char*,va_list))
         loadSymbol( "FcObjectSetVaBuild" );
     m_pFcObjectSetDestroy = (void(*)(FcObjectSet*))
@@ -265,7 +272,8 @@ FontCfgWrapper::FontCfgWrapper()
         loadSymbol( "FcPatternAddString" );
 
     if( ! (
-            m_pFcInitLoadConfigAndFonts     &&
+            m_pFcInit                       &&
+            m_pFcConfigGetCurrent           &&
             m_pFcObjectSetVaBuild           &&
             m_pFcObjectSetDestroy           &&
             m_pFcPatternCreate              &&
@@ -284,15 +292,16 @@ FontCfgWrapper::FontCfgWrapper()
             m_pFcPatternAddInteger          &&
             m_pFcPatternAddString
             ) )
-     {
-         osl_unloadModule( m_pLib );
-         m_pLib = NULL;
-#if OSL_DEBUG_LEVEL > 1
-         fprintf( stderr, "not all needed symbols were found in libfontconfig\n" );
-#endif
-     }
+    {
+        osl_unloadModule( m_pLib );
+        m_pLib = NULL;
+        #if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "not all needed symbols were found in libfontconfig\n" );
+        #endif
+    }
 
-    m_pDefConfig = FcInitLoadConfigAndFonts();
+    FcInit();
+    m_pDefConfig = FcConfigGetCurrent();
     if( ! m_pDefConfig )
     {
         osl_unloadModule( m_pLib );
