@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 08:14:49 $
+ *  last change: $Author: obo $ $Date: 2005-08-09 11:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,6 +403,7 @@ bool psp::convertPfbToPfa( ::osl::File& rInFile, ::osl::File& rOutFile )
 void psp::normPath( OString& rPath )
 {
     char buf[PATH_MAX];
+
     ByteString aPath( rPath );
 
     // double slashes and slash at end are probably
@@ -413,10 +414,16 @@ void psp::normPath( OString& rPath )
     if( aPath.Len() > 0 && aPath.GetChar( aPath.Len()-1 ) == '/' )
         aPath.Erase( aPath.Len()-1 );
 
-    if( realpath( aPath.GetBuffer(), buf ) )
+    if( ( aPath.Search( "./" ) != STRING_NOTFOUND ||
+          aPath.Search( "~" ) != STRING_NOTFOUND )
+        && realpath( aPath.GetBuffer(), buf ) )
+    {
         rPath = buf;
+    }
     else
+    {
         rPath = aPath;
+    }
 }
 
 void psp::splitPath( OString& rPath, OString& rDir, OString& rBase )
