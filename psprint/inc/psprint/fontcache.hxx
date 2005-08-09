@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcache.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 08:58:41 $
+ *  last change: $Author: obo $ $Date: 2005-08-09 10:59:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,6 @@ class FontCache
     typedef std::list< PrintFontManager::PrintFont* > FontCacheEntry;
     struct FontFile
     {
-        sal_Int64           m_nTimestamp;
         FontCacheEntry      m_aEntry;
     };
 
