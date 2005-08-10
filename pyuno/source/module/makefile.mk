@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-16 16:45:24 $
+#   last change: $Author: obo $ $Date: 2005-08-10 11:36:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -145,16 +145,20 @@ $(DLLDEST)$/%.py: %.py
 .IF "$(GUI)" == "UNX"
 $(PYUNO_MODULE) : $(SLO)$/pyuno_dlopenwrapper.obj
 .IF "$(OS)" == "LINUX"
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHLCUI) -ldl -o $@ $(SLO)$/pyuno_dlopenwrapper.o
+    @+ echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHLCUI) -ldl -o $@ $(SLO)$/pyuno_dlopenwrapper.o > $(MISC)$/$(@:b).cmd
 .ELIF "$(OS)" == "SOLARIS"
-    ld -G -ldl -o $@ $(SLO)$/pyuno_dlopenwrapper.o
+    @+ echo ld -G -ldl -o $@ $(SLO)$/pyuno_dlopenwrapper.o > $(MISC)$/$(@:b).cmd
 .ELIF "$(OS)" == "FREEBSD"
-    ld -shared -o $@ $(SLO)$/pyuno_dlopenwrapper.o
+    @+ echo ld -shared -o $@ $(SLO)$/pyuno_dlopenwrapper.o > $(MISC)$/$(@:b).cmd
 .ELIF "$(OS)" == "NETBSD"
-    $(LINK) $(LINKFLAGSSHLCUI) -o $@ $(SLO)$/pyuno_dlopenwrapper.o
+    @+ echo $(LINK) $(LINKFLAGSSHLCUI) -o $@ $(SLO)$/pyuno_dlopenwrapper.o > $(MISC)$/$(@:b).cmd
 .ELIF "$(OS)" == "MACOSX"
-    $(CC) -dynamiclib -ldl -o $@ $(SLO)$/pyuno_dlopenwrapper.o
+    @+ echo $(CC) -dynamiclib -ldl -o $@ $(SLO)$/pyuno_dlopenwrapper.o > $(MISC)$/$(@:b).cmd
+.ELSE
+    @+ echo $(LINK) $(LINKFLAGSSHLCUI) -o $@ $(SLO)$/pyuno_dlopenwrapper.o > $(MISC)$/$(@:b).cmd
 .ENDIF
+    cat $(MISC)$/$(@:b).cmd
+    @source $(MISC)$/$(@:b).cmd
 .ENDIF
 
 
