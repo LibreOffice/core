@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: kz $ $Date: 2004-10-04 19:15:35 $
+#   last change: $Author: obo $ $Date: 2005-08-10 11:35:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,8 +85,6 @@ SLOFILES =  \
 
 EXCEPTIONSFILES = \
                 $(SLO)$/fltini.obj
-
-OBJFILES = $(OBJ)$/w4wflt.obj
 
 # --- Tagets -------------------------------------------------------
 
