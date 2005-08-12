@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicatorfactory.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-04 00:13:03 $
+ *  last change: $Author: obo $ $Date: 2005-08-12 16:23:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,6 +324,9 @@ class StatusIndicatorFactory : public  css::lang::XTypeProvider
 
         /** enable/disable automatic showing of our parent window. */
         sal_Bool m_bAllowParentShow;
+
+        /** enable/disable rescheduling. Default=enabled*/
+        sal_Bool m_bDisableReschedule;
 
         /** prevent recursive calling of Application::Reschedule(). */
         static sal_Int32 m_nInReschedule;
