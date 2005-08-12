@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2005-06-28 15:33:36 $
+ *  last change: $Author: obo $ $Date: 2005-08-12 16:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -840,11 +840,13 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
         // #96090# added Undo/Redo handling
         case SID_UNDO :
         {
+            OutlineViewPageChangesGuard aGuard(pOlView);
             ImpSidUndo(FALSE, rReq);
         }
         break;
         case SID_REDO :
         {
+            OutlineViewPageChangesGuard aGuard(pOlView);
             ImpSidRedo(FALSE, rReq);
         }
         break;
