@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewTabBar.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 15:13:37 $
+ *  last change: $Author: obo $ $Date: 2005-08-12 16:25:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #include "sdresid.hxx"
 #include "strings.hrc"
 #include "helpids.h"
+#ifndef SD_CLIENT_HXX
+#include "Client.hxx"
+#endif
 #include <vcl/tabpage.hxx>
 
 namespace {
@@ -168,57 +171,95 @@ ViewTabBar::~ViewTabBar (void)
 
 void ViewTabBar::ActivatePage (void)
 {
-    TabControl::ActivatePage ();
-    ViewShell::ShellType eType (
-        mrViewShellBase.GetPaneManager().GetViewShellType(
-            PaneManager::PT_CENTER));
-    PageKind ePageKind (PK_STANDARD);
-    switch (GetCurPageId())
+    Client* pIPClient = dynamic_cast<Client*>(mrViewShellBase.GetIPClient());
+    if (pIPClient==NULL || ! pIPClient->IsObjectInPlaceActive())
     {
-        case VTBE_EDIT_VIEW:
-            eType = ViewShell::ST_IMPRESS;
-            ePageKind = PK_STANDARD;
-            break;
-
-        case VTBE_OUTLINE_VIEW:
-            eType = ViewShell::ST_OUTLINE;
-            break;
-
-        case VTBE_NOTES_VIEW:
-            eType = ViewShell::ST_NOTES;
-            ePageKind = PK_NOTES;
-            break;
-
-        case VTBE_HANDOUT_VIEW:
-            eType = ViewShell::ST_HANDOUT;
-            ePageKind = PK_HANDOUT;
-            break;
-
-        case VTBE_SLIDE_VIEW:
-            eType = ViewShell::ST_SLIDE_SORTER;
-            break;
-
-        default:
-            eType = ViewShell::ST_NONE;
-            break;
-    }
-
-    ViewShell* pViewShell = mrViewShellBase.GetMainViewShell();
-    if (pViewShell != NULL)
-    {
-        FrameView* pFrameView = pViewShell->GetFrameView();
-        if (pFrameView != NULL)
+        // Call the parent so that the correct tab is highlighted.
+        TabControl::ActivatePage ();
+        ViewShell::ShellType eType (
+            mrViewShellBase.GetPaneManager().GetViewShellType(
+                PaneManager::PT_CENTER));
+        PageKind ePageKind (PK_STANDARD);
+        switch (GetCurPageId())
         {
-            pFrameView->SetViewShEditMode (EM_PAGE, pFrameView->GetPageKind());
-            DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(pViewShell);
-            if (pDrawViewShell != NULL)
+            case VTBE_EDIT_VIEW:
+                eType = ViewShell::ST_IMPRESS;
+                ePageKind = PK_STANDARD;
+                break;
+
+            case VTBE_OUTLINE_VIEW:
+                eType = ViewShell::ST_OUTLINE;
+                break;
+
+            case VTBE_NOTES_VIEW:
+                eType = ViewShell::ST_NOTES;
+                ePageKind = PK_NOTES;
+                break;
+
+            case VTBE_HANDOUT_VIEW:
+                eType = ViewShell::ST_HANDOUT;
+                ePageKind = PK_HANDOUT;
+                break;
+
+            case VTBE_SLIDE_VIEW:
+                eType = ViewShell::ST_SLIDE_SORTER;
+                break;
+
+            default:
+                eType = ViewShell::ST_NONE;
+                break;
+        }
+
+        ViewShell* pViewShell = mrViewShellBase.GetMainViewShell();
+        if (pViewShell != NULL)
+        {
+            FrameView* pFrameView = pViewShell->GetFrameView();
+            if (pFrameView != NULL)
             {
-                pFrameView->SetLayerMode (pDrawViewShell->IsLayerModeActive());
-                pFrameView->SetViewShEditMode(EM_PAGE, ePageKind);
+                pFrameView->SetViewShEditMode (EM_PAGE, pFrameView->GetPageKind());
+                DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(pViewShell);
+                if (pDrawViewShell != NULL)
+                {
+                    pFrameView->SetLayerMode (pDrawViewShell->IsLayerModeActive());
+                    pFrameView->SetViewShEditMode(EM_PAGE, ePageKind);
+                }
             }
         }
+        mrViewShellBase.GetPaneManager().RequestMainViewShellChange (eType);
     }
-    mrViewShellBase.GetPaneManager().RequestMainViewShellChange (eType);
+    else
+    {
+        // When we run into this else branch then we have an active OLE
+        // object.  We ignore the request to switch views.  Additionally we
+        // put the active tab back to the one for the current view.
+        ViewTabBarEntry eActiveView = VTBE_EDIT_VIEW;
+        switch (mrViewShellBase.GetPaneManager().GetViewShellType (
+            PaneManager::PT_CENTER))
+        {
+            case ViewShell::ST_DRAW:
+            case ViewShell::ST_IMPRESS:
+                eActiveView = VTBE_EDIT_VIEW;
+                break;
+
+            case ViewShell::ST_OUTLINE:
+                eActiveView = VTBE_OUTLINE_VIEW;
+                break;
+
+            case ViewShell::ST_SLIDE_SORTER:
+                eActiveView = VTBE_SLIDE_VIEW;
+                break;
+
+            case ViewShell::ST_NOTES:
+                eActiveView = VTBE_NOTES_VIEW;
+                break;
+
+            case ViewShell::ST_HANDOUT:
+                eActiveView = VTBE_HANDOUT_VIEW;
+                break;
+        }
+        SetCurPageId (eActiveView);
+        TabControl::ActivatePage ();
+    }
 }
 
 
