@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2005-05-02 13:19:44 $
+ *  last change: $Author: obo $ $Date: 2005-08-12 16:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,6 +534,8 @@ Paragraph* OutlineView::GetNextTitle(const Paragraph* pPara)
 
 IMPL_LINK( OutlineView, ParagraphInsertedHdl, ::Outliner *, pOutliner )
 {
+    OutlineViewPageChangesGuard aGuard(this);
+
     Paragraph* pPara = pOutliner->GetHdlParagraph();
 
     if ( pOutliner->GetDepth( (USHORT) pOutliner->GetAbsPos( pPara ) ) == 0 )
