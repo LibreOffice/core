@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ipclient.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2005-07-12 12:26:48 $
+ *  last change: $Author: obo $ $Date: 2005-08-12 16:26:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,11 +89,23 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
 #ifndef _COM_SUN_STAR_EMBED_XSTATECHANGELISTENER_HPP_
 #include <com/sun/star/embed/XStateChangeListener.hpp>
 #endif
 #ifndef _COM_SUN_STAR_EMBED_STATECHANGEINPROGRESSEXCEPTION_HPP_
 #include <com/sun/star/embed/StateChangeInProgressException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
+#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATOR_HPP_
+#include <com/sun/star/task/XStatusIndicator.hpp>
 #endif
 
 #include <svtools/embedhlp.hxx>
@@ -125,7 +137,7 @@
 #include <tools/gen.hxx>
 #include <svtools/rectitem.hxx>
 #include <svtools/soerr.hxx>
-
+#include <comphelper/processfactory.hxx>
 
 #define SFX_CLIENTACTIVATE_TIMEOUT 100
 
@@ -258,6 +270,56 @@ void SAL_CALL SfxInPlaceClient_Impl::saveObject()
     if ( !xPersist.is() )
         throw uno::RuntimeException();
 
+    uno::Reference< frame::XFrame >              xFrame;
+    uno::Reference< task::XStatusIndicator >     xStatusIndicator;
+    uno::Reference< frame::XModel >              xModel( m_xObject->getComponent(), uno::UNO_QUERY );
+    uno::Reference< lang::XMultiServiceFactory > xSrvMgr( ::comphelper::getProcessServiceFactory() );
+
+    if ( xModel.is() )
+    {
+        uno::Reference< frame::XController > xController = xModel->getCurrentController();
+        if ( xController.is() )
+            xFrame = xController->getFrame();
+    }
+
+    if ( xSrvMgr.is() && xFrame.is() )
+    {
+        // set non-reschedule progress to prevent problems when asynchronous calls are made
+        // during storing of the embedded object
+        uno::Reference< lang::XInitialization > xInit(
+            xSrvMgr->createInstance(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.framework.StatusIndicatorFactory" ))),
+            uno::UNO_QUERY_THROW );
+        beans::PropertyValue aProperty;
+        uno::Sequence< uno::Any > aArgs( 2 );
+        aProperty.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableReschedule" ));
+        aProperty.Value = uno::makeAny( sal_True );
+        aArgs[0] = uno::makeAny( aProperty );
+        aProperty.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
+        aProperty.Value = uno::makeAny( xFrame );
+        aArgs[1] = uno::makeAny( aProperty );
+
+        xInit->initialize( aArgs );
+
+        uno::Reference< beans::XPropertySet > xPropSet( xFrame, uno::UNO_QUERY );
+        if ( xPropSet.is() )
+        {
+            try
+            {
+                uno::Reference< task::XStatusIndicatorFactory > xStatusIndicatorFactory( xInit, uno::UNO_QUERY_THROW );
+                xStatusIndicator = xStatusIndicatorFactory->createStatusIndicator();
+                xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IndicatorInterception" )), uno::makeAny( xStatusIndicator ));
+            }
+            catch ( uno::RuntimeException& e )
+            {
+                throw e;
+            }
+            catch ( uno::Exception& )
+            {
+            }
+        }
+    }
+
     try
     {
         xPersist->storeOwn();
@@ -266,6 +328,24 @@ void SAL_CALL SfxInPlaceClient_Impl::saveObject()
     catch ( uno::Exception& )
     {
         //TODO/LATER: what should happen if object can't be saved?!
+    }
+
+    // reset status indicator interception after storing
+    try
+    {
+        uno::Reference< beans::XPropertySet > xPropSet( xFrame, uno::UNO_QUERY );
+        if ( xPropSet.is() )
+        {
+            xStatusIndicator.clear();
+            xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IndicatorInterception" )), uno::makeAny( xStatusIndicator ));
+        }
+    }
+    catch ( uno::RuntimeException& e )
+    {
+        throw e;
+    }
+    catch ( uno::Exception& )
+    {
     }
 
     // the client can exist only in case there is a view shell
