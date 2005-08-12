@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-21 13:44:21 $
+ *  last change: $Author: obo $ $Date: 2005-08-12 16:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -836,7 +836,7 @@ void SlideSorterController::GetCtrlState (SfxItemSet& rSet)
         SfxViewFrame* pSlideViewFrame = SFX_APP()->GetViewFrame();
         DBG_ASSERT(pSlideViewFrame!=NULL,
             "SlideSorterController::GetCtrlState: ViewFrame not found");
-        if (pSlideViewFrame->ISA(SfxTopViewFrame))
+        if( (pSlideViewFrame != 0) && (pSlideViewFrame->ISA(SfxTopViewFrame)) )
         {
             pSlideViewFrame->GetSlotState (SID_RELOAD, NULL, &rSet);
         }
@@ -852,33 +852,36 @@ void SlideSorterController::GetCtrlState (SfxItemSet& rSet)
         ||rSet.GetItemState(SID_OUTPUT_QUALITY_BLACKWHITE)==SFX_ITEM_AVAILABLE
         ||rSet.GetItemState(SID_OUTPUT_QUALITY_CONTRAST)==SFX_ITEM_AVAILABLE)
     {
-        ULONG nMode = GetViewShell().GetActiveWindow()->GetDrawMode();
-        UINT16 nQuality = 0;
-
-        switch (nMode)
+        if( GetViewShell().GetActiveWindow() )
         {
-            case ViewShell::OUTPUT_DRAWMODE_COLOR:
-                nQuality = 0;
-                break;
-            case ViewShell::OUTPUT_DRAWMODE_GRAYSCALE:
-                nQuality = 1;
-                break;
-            case ViewShell::OUTPUT_DRAWMODE_BLACKWHITE:
-                nQuality = 2;
-                break;
-            case ViewShell::OUTPUT_DRAWMODE_CONTRAST:
-                nQuality = 3;
-                break;
-        }
+            ULONG nMode = GetViewShell().GetActiveWindow()->GetDrawMode();
+            UINT16 nQuality = 0;
 
-        rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_COLOR,
-                (BOOL)(nQuality==0)));
-        rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_GRAYSCALE,
-                (BOOL)(nQuality==1)));
-        rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_BLACKWHITE,
-                (BOOL)(nQuality==2)));
-        rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_CONTRAST,
-                (BOOL)(nQuality==3)));
+            switch (nMode)
+            {
+                case ViewShell::OUTPUT_DRAWMODE_COLOR:
+                    nQuality = 0;
+                    break;
+                case ViewShell::OUTPUT_DRAWMODE_GRAYSCALE:
+                    nQuality = 1;
+                    break;
+                case ViewShell::OUTPUT_DRAWMODE_BLACKWHITE:
+                    nQuality = 2;
+                    break;
+                case ViewShell::OUTPUT_DRAWMODE_CONTRAST:
+                    nQuality = 3;
+                    break;
+            }
+
+            rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_COLOR,
+                    (BOOL)(nQuality==0)));
+            rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_GRAYSCALE,
+                    (BOOL)(nQuality==1)));
+            rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_BLACKWHITE,
+                    (BOOL)(nQuality==2)));
+            rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_CONTRAST,
+                    (BOOL)(nQuality==3)));
+        }
     }
 
     if (rSet.GetItemState(SID_MAIL_SCROLLBODY_PAGEDOWN) == SFX_ITEM_AVAILABLE)
