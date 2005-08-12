@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicatorfactory.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 12:48:24 $
+ *  last change: $Author: obo $ $Date: 2005-08-12 16:24:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,7 @@ StatusIndicatorFactory::StatusIndicatorFactory(const css::uno::Reference< css::l
     , m_pWakeUp           (0        )
     , m_bAllowReschedule  (sal_False)
     , m_bAllowParentShow  (sal_False)
+    , m_bDisableReschedule(sal_False)
 {
 }
 
@@ -227,9 +228,10 @@ void SAL_CALL StatusIndicatorFactory::initialize(const css::uno::Sequence< css::
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
 
-    m_xFrame           = lArgs.getUnpackedValueOrDefault(STATUSINDICATORFACTORY_PROPNAME_FRAME          , css::uno::Reference< css::frame::XFrame >());
-    m_xPluggWindow     = lArgs.getUnpackedValueOrDefault(STATUSINDICATORFACTORY_PROPNAME_WINDOW         , css::uno::Reference< css::awt::XWindow >() );
-    m_bAllowParentShow = lArgs.getUnpackedValueOrDefault(STATUSINDICATORFACTORY_PROPNAME_ALLOWPARENTSHOW, (sal_Bool)sal_False                        );
+    m_xFrame             = lArgs.getUnpackedValueOrDefault(STATUSINDICATORFACTORY_PROPNAME_FRAME            , css::uno::Reference< css::frame::XFrame >());
+    m_xPluggWindow       = lArgs.getUnpackedValueOrDefault(STATUSINDICATORFACTORY_PROPNAME_WINDOW           , css::uno::Reference< css::awt::XWindow >() );
+    m_bAllowParentShow   = lArgs.getUnpackedValueOrDefault(STATUSINDICATORFACTORY_PROPNAME_ALLOWPARENTSHOW  , (sal_Bool)sal_False                        );
+    m_bDisableReschedule = lArgs.getUnpackedValueOrDefault(STATUSINDICATORFACTORY_PROPNAME_DISABLERESCHEDULE, (sal_Bool)sal_False                        );
 
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
@@ -569,6 +571,13 @@ void StatusIndicatorFactory::impl_reschedule(sal_Bool bForce)
 {
     const sal_Int32 MAX_RESCHEDULE = 1000;
 
+    // SAFE ->
+    ReadGuard aReadLock(m_aLock);
+    if (m_bDisableReschedule)
+        return;
+    aReadLock.unlock();
+    // <- SAFE
+
     sal_Bool bReschedule = bForce;
     if (!bReschedule)
     {
@@ -609,6 +618,10 @@ void StatusIndicatorFactory::impl_startWakeUpThread()
 {
     // SAFE ->
     WriteGuard aWriteLock(m_aLock);
+
+    if (m_bDisableReschedule)
+        return;
+
     if (!m_pWakeUp)
     {
         m_pWakeUp = new WakeUpThread(this);
