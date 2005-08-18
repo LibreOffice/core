@@ -38,8 +38,9 @@ done
 
 INSTALL_DIR=$MY_ROOT`pkginfo -R $MY_ROOT -r $COREPKG01`
 
-# Restore original bootstraprc
+# Restore original bootstraprc and sofficerc
 mv -f $INSTALL_DIR/program/bootstraprc.orig $INSTALL_DIR/program/bootstraprc
+mv -f $INSTALL_DIR/program/soffice.orig $INSTALL_DIR/program/soffice
 
 for i in $PKGLIST $COREPKG; do
   LD_PRELOAD=$GETUID_SO /usr/sbin/pkgrm -n -R $MY_ROOT $i
