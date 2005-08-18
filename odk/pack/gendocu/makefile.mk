@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2005-06-17 09:38:52 $
+#   last change: $Author: rt $ $Date: 2005-08-18 12:02:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -144,5 +144,5 @@ $(JAVA_SRC_DIR)$/%.zip : $(SOLARCOMMONBINDIR)$/%.zip
 .IF "$(SOLAR_JAVA)"!=""
 $(JAVA_DOCU_INDEX_FILE) : $(JAVA_SRC_FILES)
     +-$(MKDIRHIER) $(@:d)        
-    $(WRAPCMD) javadoc -J-Xmx120m $(JAVADOCPARAMS) > $(JAVADOCLOG)
+    $(WRAPCMD) $(JAVADOC) -J-Xmx120m $(JAVADOCPARAMS) > $(JAVADOCLOG)
 .ENDIF
