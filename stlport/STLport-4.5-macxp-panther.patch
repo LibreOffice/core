@@ -111,7 +111,7 @@
 ! 
 ! WARNING_FLAGS= -Wall -W -Wno-sign-compare -Wno-unused -Wno-uninitialized -ftemplate-depth-32
 ! 
-! CXXFLAGS_COMMON = -I${STLPORT_DIR} -DGXX_INCLUDE_PATH=${GXX_INCLUDE_PATH} ${WARNING_FLAGS}
+! CXXFLAGS_COMMON = -I${STLPORT_DIR} -DGXX_INCLUDE_PATH=${GXX_INCLUDE_PATH} ${WARNING_FLAGS} ${ARCH_FLAGS}
 ! 
 ! CXXFLAGS_RELEASE_static = $(CXXFLAGS_COMMON) ${CXXFLAGS}
 ! CXXFLAGS_RELEASE_dynamic = $(CXXFLAGS_COMMON) ${CXXFLAGS} -fPIC
@@ -176,7 +176,7 @@
 ! 
 ! WARNING_FLAGS= -Wall -W -Wno-sign-compare -Wno-unused -Wno-uninitialized -Wno-long-double
 ! 
-! CXXFLAGS_COMMON =  ${ENVCDEFS} -I${STLPORT_DIR} -DGXX_INCLUDE_PATH=${GXX_INCLUDE_PATH} -D_REENTRANT -D_PTHREADS -ftemplate-depth-32 -malign-natural -no-cpp-precomp -fexceptions ${WARNING_FLAGS}
+! CXXFLAGS_COMMON =  ${ENVCDEFS} -I${STLPORT_DIR} -DGXX_INCLUDE_PATH=${GXX_INCLUDE_PATH} -D_REENTRANT -D_PTHREADS -ftemplate-depth-32 -malign-natural -no-cpp-precomp -fexceptions ${WARNING_FLAGS} ${ARCH_FLAGS}
 ! 
 ! CXXFLAGS_RELEASE_static = $(CXXFLAGS_COMMON) -O2 -fPIC
 ! CXXFLAGS_RELEASE_dynamic = $(CXXFLAGS_COMMON) -O2 -fPIC
@@ -241,7 +241,7 @@
 ! 
 ! WARNING_FLAGS= -Wall -W -Wno-sign-compare -Wno-unused -Wno-uninitialized -ftemplate-depth-32
 ! 
-! CXXFLAGS_COMMON =  -D_REENTRANT -DGXX_INCLUDE_PATH=${GXX_INCLUDE_PATH} -fexceptions -I${STLPORT_DIR} ${WARNING_FLAGS}
+! CXXFLAGS_COMMON =  -D_REENTRANT -DGXX_INCLUDE_PATH=${GXX_INCLUDE_PATH} -fexceptions -I${STLPORT_DIR} ${WARNING_FLAGS} ${ARCH_FLAGS}
 ! 
 ! CXXFLAGS_RELEASE_static = $(CXXFLAGS_COMMON) -O2 -fPIC
 ! CXXFLAGS_RELEASE_dynamic = $(CXXFLAGS_COMMON) -O2 -fPIC
@@ -306,7 +306,7 @@
   
   WARNING_FLAGS= -Wall -W -Wno-sign-compare -Wno-unused -Wno-uninitialized -ftemplate-depth-32
   
-! CXXFLAGS_COMMON = -I${STLPORT_DIR} ${WARNING_FLAGS}
+! CXXFLAGS_COMMON = -I${STLPORT_DIR} ${WARNING_FLAGS} ${ARCH_FLAGS}
   
 ! CXXFLAGS_RELEASE_static = $(CXXFLAGS_COMMON) -O2
 ! CXXFLAGS_RELEASE_dynamic = $(CXXFLAGS_COMMON) -O2 -fPIC
@@ -317,7 +317,7 @@
   
   WARNING_FLAGS= -Wall -W -Wno-sign-compare -Wno-unused -Wno-uninitialized -ftemplate-depth-32
   
-! CXXFLAGS_COMMON = -I${STLPORT_DIR} -DGXX_INCLUDE_PATH=${GXX_INCLUDE_PATH} ${WARNING_FLAGS}
+! CXXFLAGS_COMMON = -I${STLPORT_DIR} -DGXX_INCLUDE_PATH=${GXX_INCLUDE_PATH} ${WARNING_FLAGS} ${ARCH_FLAGS}
   
 ! CXXFLAGS_RELEASE_static = $(CXXFLAGS_COMMON) ${CXXFLAGS}
 ! CXXFLAGS_RELEASE_dynamic = $(CXXFLAGS_COMMON) ${CXXFLAGS} -fPIC
