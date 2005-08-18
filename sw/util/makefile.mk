@@ -2,9 +2,10 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.49 $
+#   $Revision: 1.50 $
+
 #
-#   last change: $Author: obo $ $Date: 2005-08-10 11:35:42 $
+#   last change: $Author: rt $ $Date: 2005-08-18 12:37:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -194,7 +195,7 @@ SHL2STDLIBS= \
 SHL2OBJS=   $(SLO)$/swdetect.obj \
         $(SLO)$/swdet2.obj \
         $(SLO)$/detreg.obj  \
-            $(SLO)$/w4wflt.obj
+            $(SLO)$/w4wflt_detect.obj
 
 .IF "$(product)"==""
 SHL2OBJS+=  \
