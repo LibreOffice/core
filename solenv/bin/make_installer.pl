@@ -1091,6 +1091,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             my $linkaddon = "";
             $installer::globals::add_required_package = "";
+            $installer::globals::linuxlinkrpmprocess = 0;
 
             if ( $installer::globals::makelinuxlinkrpm )
             {
@@ -1101,6 +1102,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 my $savestring = $oldpackagename . "\t" . $packagename;
                 push(@installer::globals::linkrpms, $savestring);
                 $linkaddon = "_links";
+                $installer::globals::linuxlinkrpmprocess = 1;
             }
 
             ###########################################
@@ -1207,7 +1209,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # Searching for files in $filesinpackage with flag LINUXLINK
             ###############################################################
 
-            if (( $installer::globals::islinuxrpmbuild ) && ( ! $installer::globals::simple ))
+            if (( $installer::globals::islinuxbuild ) && ( ! $installer::globals::simple )) # for rpms and debian packages
             {
                 # special handling for all RPMs in $installer::globals::linuxlinkrpms
 
@@ -1342,7 +1344,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
                         installer::logger::print_message( "... starting patched epm ... \n" );
 
-                        installer::epmfile::call_epm($epmexecutable, $completeepmfilename, $packagename);
+                        installer::epmfile::call_epm($epmexecutable, $completeepmfilename, $packagename, $includepatharrayref);
 
                         my $newepmdir = installer::epmfile::prepare_packages($loggingdir, $packagename, $staticpath, $relocatablepath, $onepackage, $allvariableshashref, $filesinpackage, $languagestringref); # adding the line for Prefix / Basedir, include rpmdir
 
@@ -1372,9 +1374,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
                         installer::logger::print_message( "... starting unpatched epm ... \n" );
 
-                        if ( $installer::globals::call_epm ) { installer::epmfile::call_epm($epmexecutable, $completeepmfilename, $packagename); }
+                        if ( $installer::globals::call_epm ) { installer::epmfile::call_epm($epmexecutable, $completeepmfilename, $packagename, $includepatharrayref); }
 
-                        if (($installer::globals::islinuxrpmbuild) || ($installer::globals::issolarispkgbuild))
+                        if (($installer::globals::islinuxrpmbuild) || ($installer::globals::issolarispkgbuild) || ($installer::globals::debian))
                         {
                             $installer::globals::postprocess_standardepm = 1;
                         }
@@ -1410,7 +1412,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             if ($installer::globals::addchildprojects) { installer::epmfile::put_childprojects_into_installset($installer::globals::subdir, $allvariableshashref); }
 
             # Creating installation set for Unix language packs, that are not part of multi lingual installation sets
-            if ( ( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi ) ) { installer::languagepack::build_installer_for_languagepack($installer::globals::subdir, $allvariableshashref, $includepatharrayref, $languagesarrayref); }
+            if ( ( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi ) && ( ! $installer::globals::debian ) ) { installer::languagepack::build_installer_for_languagepack($installer::globals::subdir, $allvariableshashref, $includepatharrayref, $languagesarrayref); }
 
             # Finalizing patch installation sets
             if (( $installer::globals::patch ) && ( $installer::globals::issolarispkgbuild )) { installer::epmfile::finalize_patch($installer::globals::subdir, $allvariableshashref); }
@@ -1438,7 +1440,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             if ($installer::globals::addlicensefile) { installer::worker::put_scpactions_into_installset("."); }
 
             # Creating installation set for Unix language packs, that are not part of multi lingual installation sets
-            if ( ( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi ) ) { installer::languagepack::build_installer_for_languagepack($newepmdir, $allvariableshashref, $includepatharrayref, $languagesarrayref); }
+            if ( ( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi ) && ( ! $installer::globals::debian ) ) { installer::languagepack::build_installer_for_languagepack($newepmdir, $allvariableshashref, $includepatharrayref, $languagesarrayref); }
 
             chdir($currentdir); # changing back into start directory
         }
