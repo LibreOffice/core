@@ -272,7 +272,10 @@ sub create_epm_header
     if ( $variableshashref->{'PACKAGEVERSION'} ) { $installer::globals::packageversion = $variableshashref->{'PACKAGEVERSION'}; }
     if ( $variableshashref->{'PACKAGEREVISION'} ) { $installer::globals::packagerevision = $variableshashref->{'PACKAGEREVISION'}; }
 
-    $line = "%version" . " " . $installer::globals::packageversion . " " . $installer::globals::packagerevision . "\n";
+    $line = "%version" . " " . $installer::globals::packageversion . "\n";
+    push(@epmheader, $line);
+
+    $line = "%release" . " " . $installer::globals::packagerevision . "\n";
     push(@epmheader, $line);
 
     # Description, Copyright and Vendor are multilingual and are defined in
@@ -355,6 +358,53 @@ sub create_epm_header
         installer::exiter::exit_program("ERROR: Could not find readme file $readmefilename", "create_epm_header");
     }
 
+    # including %replaces
+
+    my $replaces = "";
+
+    if (( $installer::globals::issolarispkgbuild ) && ( ! $installer::globals::patch ))
+    {
+        $replaces = "solarisreplaces";   # the name in the packagelist
+    }
+    elsif (( $installer::globals::islinuxbuild ) && ( ! $installer::globals::patch ))
+    {
+        $replaces = "linuxreplaces";    # the name in the packagelist
+    }
+
+    if (( $replaces ) && ( ! $installer::globals::patch ))
+    {
+        if ( $onepackage->{$replaces} )
+        {
+            my $replacesstring = $onepackage->{$replaces};
+
+            my $allreplaces = installer::converter::convert_stringlist_into_array(\$replacesstring, ",");
+
+            for ( my $i = 0; $i <= $#{$allreplaces}; $i++ )
+            {
+                my $onereplaces = ${$allreplaces}[$i];
+                $onereplaces =~ s/\s*$//;
+                installer::packagelist::resolve_packagevariables(\$onereplaces, $variableshashref, 1);
+                if ( $installer::globals::linuxlinkrpmprocess ) { $onereplaces = $onereplaces . "u"; }
+                $line = "%replaces" . " " . $onereplaces . "\n";
+                push(@epmheader, $line);
+
+                # Force the openofficeorg packages to get removed,
+                # see http://www.debian.org/doc/debian-policy/ch-relationships.html
+                # 7.5.2 Replacing whole packages, forcing their removal
+
+                if ( $installer::globals::debian )
+                {
+                    $line = "%incompat" . " " . $onereplaces . "\n";
+                    push(@epmheader, $line);
+                    $line = "%provides" . " openoffice.org-unbundled\n";
+                    push(@epmheader, $line);
+                    $line = "%incompat" . " openoffice.org-bundled\n";
+                    push(@epmheader, $line);
+                }
+            }
+        }
+    }
+
     # including the directives for %requires and %provides
 
     my $provides = "";
@@ -386,7 +436,9 @@ sub create_epm_header
         for ( my $i = 0; $i <= $#{$allprovides}; $i++ )
         {
             my $oneprovides = ${$allprovides}[$i];
+            $oneprovides =~ s/\s*$//;
             installer::packagelist::resolve_packagevariables(\$oneprovides, $variableshashref, 1);
+            if ( $installer::globals::linuxlinkrpmprocess ) { $oneprovides = $oneprovides . "u"; }
             $line = "%provides" . " " . $oneprovides . "\n";
             push(@epmheader, $line);
         }
@@ -403,6 +455,7 @@ sub create_epm_header
         for ( my $i = 0; $i <= $#{$allrequires}; $i++ )
         {
             my $onerequires = ${$allrequires}[$i];
+            $onerequires =~ s/\s*$//;
             installer::packagelist::resolve_packagevariables(\$onerequires, $variableshashref, 1);
             $line = "%requires" . " " . $onerequires . "\n";
             push(@epmheader, $line);
@@ -419,6 +472,7 @@ sub create_epm_header
             for ( my $i = 0; $i <= $#{$allrequires}; $i++ )
             {
                 my $onerequires = ${$allrequires}[$i];
+                $onerequires =~ s/\s*$//;
                 installer::packagelist::resolve_packagevariables(\$onerequires, $variableshashref, 1);
                 $line = "%requires" . " " . $onerequires . "\n";
                 push(@epmheader, $line);
@@ -487,7 +541,7 @@ sub replace_many_variables_in_shellscripts
     {
         my $value = $variableshashref->{$key};
         $value = lc($value);    # lowercase !
-        $value =~ s/\.org/org/g;    # openofficeorg instead of openoffice.org
+        if ( $installer::globals::issolarisbuild) { $value =~ s/\.org/org/g; }  # openofficeorg instead of openoffice.org
         replace_variable_in_shellscripts($scriptref, $value, $key);
     }
 }
@@ -596,21 +650,49 @@ sub set_patch_state
 }
 
 #################################################
+# LD_PRELOAD string for Debian packages
+#################################################
+
+sub get_ld_preload_string
+{
+    my ($includepatharrayref) = @_;
+
+    my $getuidlibraryname = "getuid.so";
+
+    my $getuidlibraryref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$getuidlibraryname, $includepatharrayref, 0);
+    if ($$getuidlibraryref eq "") { installer::exiter::exit_program("ERROR: Could not find $getuidlibraryname!", "get_ld_preload_string"); }
+
+    my $ldpreloadstring = "LD_PRELOAD=" . $$getuidlibraryref;
+
+    return $ldpreloadstring;
+}
+
+#################################################
 # Calling epm to create the installation sets
 #################################################
 
 sub call_epm
 {
-    my ($epmname, $epmlistfilename, $packagename) = @_;
+    my ($epmname, $epmlistfilename, $packagename, $includepatharrayref) = @_;
 
     installer::logger::include_header_into_logfile("epm call for $packagename");
 
     my $packageformat = $installer::globals::packageformat;
 
+    my $localpackagename = $packagename;
+    # Debian allows only lowercase letters in package name
+    if ( $installer::globals::debian ) { $localpackagename = lc($localpackagename); }
+
     my $outdirstring = "";
     if ( $installer::globals::epmoutpath ne "" ) { $outdirstring = " --output-dir $installer::globals::epmoutpath"; }
 
-    my $systemcall = $epmname . " -f " . $packageformat . " " . $packagename . " " . $epmlistfilename . $outdirstring . " 2\>\&1 |";
+    # Debian package build needs a LD_PRELOAD for correct rights
+
+    my $ldpreloadstring = "";
+
+    if ( $installer::globals::debian ) { $ldpreloadstring = get_ld_preload_string($includepatharrayref) . " "; }
+
+    my $systemcall = $ldpreloadstring . $epmname . " -f " . $packageformat . " " . $localpackagename . " " . $epmlistfilename . $outdirstring . " -v " . " 2\>\&1 |";
 
     installer::logger::print_message( "... $systemcall ...\n" );
 
@@ -893,34 +975,6 @@ sub set_topdir_in_specfile
 
     if (! $inserted_line) { installer::exiter::exit_program("ERROR: Did not find string \"Prefix:\" in file: $filename", "set_topdir_in_specfile"); }
 
-}
-
-#####################################################################
-# Setting the release number in the spec file
-#####################################################################
-
-sub set_releaseversion_in_specfile
-{
-    my ($changefile, $variableshashref) = @_;
-
-    my $releasenumber = $installer::globals::packagerevision;
-#   if ( $variableshashref->{'RELEASENUMBER'} ) { $releasenumber = $variableshashref->{'RELEASENUMBER'}; }
-
-    for ( my $i = 0; $i <= $#{$changefile}; $i++ )
-    {
-        if ( ${$changefile}[$i] =~ /^\s*Release\s*:\s*(\d+)\s*$/ )
-        {
-            my $number = $1;
-
-            if ( $number != $releasenumber )
-            {
-                ${$changefile}[$i] =~ s/$number/$releasenumber/;
-                my $infoline = "Info: Changed release number in spec file from $number to $releasenumber!\n";
-                push( @installer::globals::logfileinfo, $infoline);
-                last;
-            }
-        }
-    }
 }
 
 #####################################################################
@@ -1385,7 +1439,6 @@ sub prepare_packages
     if ( $installer::globals::islinuxrpmbuild )
     {
         set_topdir_in_specfile($changefile, $filename, $newepmdir);
-        set_releaseversion_in_specfile($changefile, $variableshashref);
         set_autoprovreq_in_specfile($changefile, $onepackage->{'findrequires'}, "$installer::globals::unpackpath" . "/bin");
         set_packager_in_specfile($changefile);
         set_license_in_specfile($changefile, $variableshashref);
@@ -2029,12 +2082,12 @@ sub put_systemintegration_into_installset
     {
         my $productversion = $variables->{'PRODUCTVERSION'};
 
-        if ($installer::globals::product =~ /OpenOffice/i && $ENV{'PKGFORMAT'} eq "rpm")
+        if ($installer::globals::product =~ /OpenOffice/i)
         {
-            push(@systemfiles, "openofficeorg-redhat-menus-$productversion-1.noarch.rpm");
-            push(@systemfiles, "openofficeorg-suse-menus-$productversion-1.noarch.rpm");
-            push(@systemfiles, "openofficeorg-mandriva-menus-$productversion-1.noarch.rpm");
-            push(@systemfiles, "openofficeorg-freedesktop-menus-$productversion-1.noarch.rpm");
+            push(@systemfiles, "openoffice.org-redhat-menus-$productversion-1.noarch.rpm");
+            push(@systemfiles, "openoffice.org-suse-menus-$productversion-1.noarch.rpm");
+            push(@systemfiles, "openoffice.org-mandriva-menus-$productversion-1.noarch.rpm");
+            push(@systemfiles, "openoffice.org-freedesktop-menus-$productversion-1.noarch.rpm");
 
             # i46530 create desktop-integration subdirectory
             $destdir = "$destdir/desktop-integration";
@@ -2048,12 +2101,20 @@ sub put_systemintegration_into_installset
         }
     }
 
-    my $deb = 'openofficeorg-debian-menus_' . $variables->{'PRODUCTVERSION'} . '-1_all.deb';
-    my $debref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$deb, $includepatharrayref, 0);
-
-    if ( $$debref ne "" )
+    if ($installer::globals::product =~ /OpenOffice/i)
     {
-         push(@systemfiles, $deb);
+        my $deb = 'openoffice.org-debian-menus_' . $variables->{'PRODUCTVERSION'} . '-1_all.deb';
+        my $debref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$deb, $includepatharrayref, 0);
+
+        if ( $$debref ne "" )
+        {
+             push(@systemfiles, $deb);
+        }
+    }
+    elsif ($installer::globals::debian)
+    {
+        my $productname = $variables->{'UNIXPRODUCTNAME'};
+        push(@systemfiles, $productname . "-desktop-integration_" . $installer::globals::packageversion . "-" . $installer::globals::packagerevision . "_all.deb");
     }
 
     for ( my $i = 0; $i <= $#systemfiles; $i++ )
@@ -2302,7 +2363,7 @@ sub finalize_linux_patch
 
     my $productname = $allvariables->{'PRODUCTNAME'};
     $productname = lc($productname);
-    $productname =~ s/\.//g;    # openoffice.org -> openofficeorg
+#   $productname =~ s/\.//g;    # openoffice.org -> openofficeorg
 
     $infoline = "Adding productname $productname into Linux patch script\n";
     push( @installer::globals::logfileinfo, $infoline);
