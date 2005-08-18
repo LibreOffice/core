@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-15 09:05:23 $
+#   last change: $Author: rt $ $Date: 2005-08-18 07:23:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,7 @@
 
 # --- Targets ------------------------------------------------------
 
-.IF "$(SOLAR_JAVA)"==""
+.IF "$(XSLTPROC)"=="NO_XSLTPROC"
 # FIXME: Java-disabled case not parallel-build safe yet
 MAXPROCESS=1
 .ENDIF
@@ -96,7 +96,7 @@ $(MISC)$/$(GUI)$/readme% : $(MISC)$/readme%
    
 $(MISC)$/readme%.html :
     @+-$(MKDIR) $(@:d)
-.IF "$(SOLAR_JAVA)"!=""
+.IF "$(XSLTPROC)"=="NO_XSLTPROC"
     $(JAVAI) $(JAVACPS) $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $(subst,_$(@:b:s/_/./:e:s/.//), $(COMMONMISC)$/$(TARGET)$/$(@:b).xrm) ..$/readme.xsl os1=$(OS) gui1=$(GUI) cp1=$(CPUNAME) com1=$(COM) lang1=$(@:b:s/_/./:e:s/.//) type=html file=$@
 .ELSE
     sed 's|xmlns:xt="http://www.jclark.com/xt"||;s|extension-element-prefixes="xt"||;s|.*xt:document.*||;s|<xsl:output method = "HTML" doctype-public = "-//W3C//DTD HTML 3.2//EN" />|<xsl:output method="html" doctype-public="-//W3C//DTD HTML 3.2//EN" />|' < ..$/readme.xsl > ..$/readme2.xsl
@@ -114,7 +114,7 @@ $(MISC)$/readme%.html :
 
 $(MISC)$/readme%.txt :
     @+-$(MKDIR) $(@:d)
-.IF "$(SOLAR_JAVA)"!=""
+.IF "$(XSLTPROC)"=="NO_XSLTPROC"
     $(JAVAI) $(JAVACPS) $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $(subst,_$(@:b:s/_/./:e:s/.//), $(COMMONMISC)$/$(TARGET)$/$(@:b).xrm) ..$/readme.xsl os1=$(OS) gui1=$(GUI) cp1=$(CPUNAME) com1=$(COM) lang1=$(@:b:s/_/./:e:s/.//) type=text file=$@
 .ELSE
     sed 's|xmlns:xt="http://www.jclark.com/xt"||;s|extension-element-prefixes="xt"||;s|.*xt:document.*||;s|<xsl:output method = "HTML" doctype-public = "-//W3C//DTD HTML 3.2//EN" />|<xsl:output method="text" />|' < ..$/readme.xsl > ..$/readme2.xsl
