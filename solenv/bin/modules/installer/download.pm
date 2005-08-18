@@ -2,9 +2,9 @@
 #
 #   $RCSfile: download.pm,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2005-06-29 09:42:16 $
+#   last change: $Author: rt $ $Date: 2005-08-18 12:47:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1039,7 +1039,9 @@ sub remove_english_for_nsis_installer
     my ($languagestringref, $languagesarrayref) = @_;
 
     # $$languagestringref =~ s/en-US_//;
-    shift(@{$languagesarrayref});
+    # shift(@{$languagesarrayref});
+
+    @{$languagesarrayref} = ("en-US");  # only english for NSIS installer!
 }
 
 ####################################################
