@@ -104,7 +104,7 @@ LOCALPYFILES= \
 # aix - AIX software distribution
 # bsd - FreeBSD, NetBSD, or OpenBSD software distribution
 # depot or swinstall - HP-UX software distribution
-# dpkg - Debian software distribution
+# deb - Debian software distribution
 # inst or tardist - IRIX software distribution
 # osx - MacOS X software distribution
 # pkg - Solaris software distribution
@@ -124,8 +124,12 @@ ALLTAR : updatepack
 .ENDIF			# "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
 .ENDIF			# "$(GUI)"!="WNT" && "$(EPM)"=="NO" && "$(USE_PACKAGER)"==""
 
+.IF "$(MAKETARGETS:e)"!=""
+PKGFORMAT+=$(MAKETARGETS:e:s/.//)
+.ENDIF			# "$(MAKETARGETS:e)"!=""
+
 .IF "$(PKGFORMAT)"!=""
-PKGFORMATSWITCH=-format $(PKGFORMAT)
+PKGFORMATSWITCH=-format xxx
 .ENDIF			# "$(PKGFORMAT)"!=""
 
 updatepack:
@@ -157,14 +161,29 @@ $(foreach,i,$(alllangiso) openofficewithjre_$i) : $(ADDDEPS)
 $(foreach,i,$(alllangiso) ooolanguagepack_$i) : $(ADDDEPS)
 .ENDIF			# "$(BUILD_SPECIAL)"!=""
 
-openoffice_%:
-    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(@:s/openoffice_//) -p OpenOffice -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -addsystemintegration $(PKGFORMATSWITCH)
+.IF "$(PKGFORMAT)"!=""
+$(foreach,i,$(alllangiso) openoffice_$i) : $$@{$(PKGFORMAT:^".")}
+openoffice_%{$(PKGFORMAT:^".")} :
+.ELSE			# "$(PKGFORMAT)"!=""
+openoffice_% :
+.ENDIF			# "$(PKGFORMAT)"!=""
+    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OpenOffice -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -addsystemintegration $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH))
 
-openofficewithjre_%:
-    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(@:s/openofficewithjre_//) -p OpenOffice_wJRE -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -addchildprojects -addsystemintegration $(PKGFORMATSWITCH)
+.IF "$(PKGFORMAT)"!=""
+$(foreach,i,$(alllangiso) openofficewithjre_$i) : $$@{$(PKGFORMAT:^".")}
+openofficewithjre_%{$(PKGFORMAT:^".")} :
+.ELSE			# "$(PKGFORMAT)"!=""
+openofficewithjre_% :
+.ENDIF			# "$(PKGFORMAT)"!=""
+    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OpenOffice_wJRE -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -addchildprojects -addsystemintegration $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH))
 
-ooolanguagepack_%:
-    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(@:s/ooolanguagepack_//) -p OpenOffice -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist_language.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(MSILANGPACKTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -languagepack $(PKGFORMATSWITCH)
+.IF "$(PKGFORMAT)"!=""
+$(foreach,i,$(alllangiso) ooolanguagepack_$i) : $$@{$(PKGFORMAT:^".")}
+ooolanguagepack_%{$(PKGFORMAT:^".")} :
+.ELSE			# "$(PKGFORMAT)"!=""
+ooolanguagepack_% :
+.ENDIF			# "$(PKGFORMAT)"!=""
+    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OpenOffice -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist_language.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(MSILANGPACKTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -languagepack $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH))
 
 .ELSE			# "$(alllangiso)"!=""
 openoffice:
@@ -172,9 +191,14 @@ openoffice:
 
 .ENDIF			# "$(alllangiso)"!=""
 
+.IF "$(PKGFORMAT)"!=""
+ure_en-US: ure_en-US{$(PKGFORMAT:^".")}
+ure_en-US{$(PKGFORMAT:^".")} : $(MISC)$/ure$/services.rdb
+.ELSE			# "$(PKGFORMAT)"!=""
 ure_en-US: $(MISC)$/ure$/services.rdb
+.ENDIF			# "$(PKGFORMAT)"!=""
     +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst \
-        -l en-US -p URE -u $(OUT) -buildid $(BUILD) $(PKGFORMATSWITCH) \
+        -l en-US -p URE -u $(OUT) -buildid $(BUILD) $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH)) \
         -packagelist $(PRJ)$/inc_ure$/unix$/packagelist.txt \
         -msitemplate $(PRJ)$/inc_ure$/windows$/msi_templates \
         -msilanguage $(COMMONMISC)$/win_ulffiles
@@ -273,7 +297,11 @@ $(MISC)$/ure$/services.rdb .ERRREMOVE:
         -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
 
 .IF "$(LOCALPYFILES)"!=""
+.IF "$(PKGFORMAT)"==""
 $(foreach,i,$(alllangiso) openoffice_$i openofficewithjre_$i ooolanguagepack_$i) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py
+.ELSE			# "$(PKGFORMAT)"==""
+$(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".")} openofficewithjre_$i{$(PKGFORMAT:^".")} ooolanguagepack_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py
+.ENDIF			# "$(PKGFORMAT)"==""
 .ENDIF			# "$(LOCALPYFILES)"!=""
 
 $(BIN)$/%.py : $(SOLARSHAREDBIN)$/pyuno$/%.py
