@@ -2,9 +2,9 @@
 #
 #   $RCSfile: work.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-07-29 15:15:26 $
+#   last change: $Author: rt $ $Date: 2005-08-18 12:52:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -238,10 +238,10 @@ sub start_build_server
 
         generate_makefile($tempdir, $makefilepath, $prjroot, $target, \@targetlines);
 
-        sleep 5;
         do_broadcast($tempdir, $prjname, $prj, $platform, $prjdep);
         push @targetdirs, $tempdir;
     }
+    sleep 5;
     @targetlines = ();
     if ( defined $ENV{USE_SHELL} && $ENV{USE_SHELL} eq "4nt" ) {
         push( @targetlines, "RMRECURSIVEFLAGS=/sxyz\n" );
