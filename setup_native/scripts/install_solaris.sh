@@ -155,8 +155,9 @@ then
 
   INSTALL_DIR=${INSTALL_ROOT}`pkgparam -f ${INSTALL_ROOT}/var/sadm/pkg/*core01/pkginfo BASEDIR`
 
-  # restore original "bootstraprc" prior to patching
+  # restore original "bootstraprc" and "soffice" prior to patching
   mv -f ${INSTALL_DIR}/program/bootstraprc.orig ${INSTALL_DIR}/program/bootstraprc
+  mv -f ${INSTALL_DIR}/program/soffice.orig ${INSTALL_DIR}/program/soffice
 
   # copy INST_RELEASE file
   if [ ! -f ${INSTALL_ROOT}/var/sadm/system/admin/INST_RELEASE ]
@@ -195,11 +196,6 @@ else
   echo "Path to the installation   : " $INSTALL_ROOT
 
   LD_PRELOAD_32=$GETUID_SO /usr/sbin/pkgadd -d ${PACKAGE_PATH} -R ${INSTALL_ROOT} ${PKG_LIST} ${GNOMEPKG} >/dev/null
-
-  # Create symlinks in the program directory for all libraries installed to /usr
-  for i in `cd ${INSTALL_ROOT}; find usr -name '*.so.*'`; do
-    ln -s ../../../$i ${INSTALL_DIR}/program/`basename $i`
-  done
 fi
 
 rm -f $GETUID_SO
@@ -227,8 +223,14 @@ fi
 
 # patch the "bootstraprc" to create a self-containing installation
 mv ${INSTALL_DIR}/program/bootstraprc ${INSTALL_DIR}/program/bootstraprc.orig
-sed 's/UserInstallation=$SYSUSERCONFIG\/.staroffice8/UserInstallation=$ORIGIN\/..\/UserInstallation/g' \
+sed 's/UserInstallation=$SYSUSERCONFIG.*/UserInstallation=$ORIGIN\/..\/UserInstallation/g' \
 ${INSTALL_DIR}/program/bootstraprc.orig > ${INSTALL_DIR}/program/bootstraprc
+
+# patch the LD_LIBRARY_PATH in the "soffice" script so that it finds a suitable libfreetype
+mv ${INSTALL_DIR}/program/soffice ${INSTALL_DIR}/program/soffice.orig
+sed 's| LD_LIBRARY_PATH=\"\$sd_prog\"| LD_LIBRARY_PATH=/usr/sfw/lib:"$sd_prog":"$sd_prog/../../../usr/sfw/lib"|' \
+${INSTALL_DIR}/program/soffice.orig > ${INSTALL_DIR}/program/soffice
+chmod a+x ${INSTALL_DIR}/program/soffice
 
 echo
 echo "Installation done ..."
