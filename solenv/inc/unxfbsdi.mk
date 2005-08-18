@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxfbsdi.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: kz $ $Date: 2005-07-11 15:50:11 $
+#   last change: $Author: rt $ $Date: 2005-08-18 12:04:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,12 +91,7 @@ JAVA_RUNTIME=-ljava_g
 
 # architecture dependent flags for the C and C++ compiler that can be changed by
 # exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
-.IF "$(GCCNUMVER)">="000300040000"
 ARCH_FLAGS*=-mtune=pentiumpro
-.ELSE
-ARCH_FLAGS*=-mcpu=pentiumpro
-.ENDIF
-
 
 # name of C++ Compiler
 CXX*=g++
@@ -124,10 +119,9 @@ CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 # Flags for disabling exception handling
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
+# -fpermissive should be removed as soon as possible
 CFLAGSCXX= -pipe $(ARCH_FLAGS)
 CFLAGSCXX+= -Wno-ctor-dtor-privacy
-
-# instruction scheduling 
 PICSWITCH:=-fpic
 .IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
 CFLAGSCXX += -fvisibility-inlines-hidden
