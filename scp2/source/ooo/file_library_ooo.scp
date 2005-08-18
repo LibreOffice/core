@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.136 $
+*  $Revision: 1.137 $
 *
-*  last change: $Author: hr $ $Date: 2005-08-05 12:55:52 $
+*  last change: $Author: rt $ $Date: 2005-08-18 08:12:56 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -636,7 +636,6 @@ End
 #ifdef UNX
 #ifdef ENABLE_GTK
 #ifdef GTK_TWO_FOUR
-#ifndef MACOSX
 File gid_File_Lib_Fps_Gnome
     TXT_FILE_BODY;
     Styles = (PACKED,PATCH);
@@ -645,7 +644,6 @@ File gid_File_Lib_Fps_Gnome
     Name = SPECIAL_COMPONENT_LIB_NAME(fps_gnome.uno);
     Regmergefile = "fps-gnome-ucd.txt";
 End
-#endif
 #endif
 #endif
 #endif
@@ -1378,14 +1376,12 @@ End
 
 #ifdef UNX
 #ifdef ENABLE_GTK
-#ifndef MACOSX
 File gid_File_Lib_Vclplug_Gtk
     Name = LIBNAME(vclplug_gtk);
     TXT_FILE_BODY;
     Styles = (PACKED,PATCH);
     Dir = gid_Dir_Program;
 End
-#endif
 #endif
 #ifdef ENABLE_KDE
 #ifndef MACOSX
