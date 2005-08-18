@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localebackend.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:13:51 $
+ *  last change: $Author: rt $ $Date: 2005-08-18 08:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,9 @@
 
 #include <stdio.h>
 
-#ifdef UNX
-#include <rtl/ustrbuf.hxx>
+#if defined(LINUX) || defined(SOLARIS) || defined(IRIX) || defined(NETBSD) || defined(FREEBSD)
 
+#include <rtl/ustrbuf.hxx>
 #include <locale.h>
 #include <string.h>
 
@@ -126,7 +126,104 @@ static rtl::OUString ImplGetLocale(int category)
     return aLocaleBuffer.makeStringAndClear();
 }
 
-#endif // UNX
+#elif defined(MACOSX)
+
+#include <rtl/ustrbuf.hxx>
+#include <locale.h>
+#include <string.h>
+
+#include <premac.h>
+#include <CoreServices/CoreServices.h>
+#include <CoreFoundation/CoreFoundation.h>
+#include <postmac.h>
+
+namespace /* private */
+{
+
+    void OUStringBufferAppendCFString(rtl::OUStringBuffer& buffer, const CFStringRef s)
+    {
+        CFIndex lstr = CFStringGetLength(s);
+        for (CFIndex i = 0; i < lstr; i++)
+            buffer.append(CFStringGetCharacterAtIndex(s, i));
+    }
+
+    template <typename T>
+    class CFGuard
+    {
+    public:
+        explicit CFGuard(T* pT) : pT_(pT) {}
+        ~CFGuard() { if (pT_) CFRelease(*pT_); }
+    private:
+        T* pT_;
+    };
+
+    typedef CFGuard<CFArrayRef> CFArrayGuard;
+    typedef CFGuard<CFStringRef> CFStringGuard;
+    typedef CFGuard<CFTypeRef> CFTypeRefGuard;
+
+    /* For more information on the Apple locale concept please refer to
+    http://developer.apple.com/documentation/CoreFoundation/Conceptual/CFLocales/Articles/CFLocaleConcepts.html
+    According to this documentation a locale identifier has the format: language[_country][_variant]*
+    e.g. es_ES_PREEURO -> spain prior Euro support
+    Note: The calling code should be able to handle locales with only language information e.g. 'en' for certain
+    UI languages just the language code will be returned.
+    */
+
+    CFStringRef ImplGetAppPreference(const char* pref)
+    {
+        CFStringRef csPref = CFStringCreateWithCString(NULL, pref, kCFStringEncodingASCII);
+        CFStringGuard csRefGuard(&csPref);
+
+        CFTypeRef ref = CFPreferencesCopyAppValue(csPref, kCFPreferencesCurrentApplication);
+        CFTypeRefGuard refGuard(&ref);
+
+        if (ref == NULL)
+            return NULL;
+
+        CFStringRef sref = (CFGetTypeID(ref) == CFArrayGetTypeID()) ? (CFStringRef)CFArrayGetValueAtIndex((CFArrayRef)ref, 0) : (CFStringRef)ref;
+
+        CFRetain(sref); // caller is responsible for releasing reference
+        return sref;
+    }
+
+    rtl::OUString ImplGetLocale(const char* pref)
+    {
+        CFStringRef sref = ImplGetAppPreference(pref);
+        CFStringGuard srefGuard(&sref);
+
+        rtl::OUStringBuffer aLocaleBuffer;
+        aLocaleBuffer.appendAscii("en-US"); // initialize with fallback value
+
+        if (sref != NULL)
+        {
+            // split the string into substrings; the first two (if there are two) substrings
+            // are language and country
+            CFArrayRef subs = CFStringCreateArrayBySeparatingStrings(NULL, sref, CFSTR("_"));
+            CFArrayGuard subsGuard(&subs);
+
+            if (subs != NULL)
+            {
+                aLocaleBuffer.setLength(0); // clear buffer which still contains fallback value
+
+                CFStringRef lang = (CFStringRef)CFArrayGetValueAtIndex(subs, 0);
+                OUStringBufferAppendCFString(aLocaleBuffer, lang);
+
+                // country also available? Assumption: if the array contains more than one
+                // value the second value is always the country!
+                if (CFArrayGetCount(subs) > 1)
+                {
+                    aLocaleBuffer.appendAscii("-");
+                    CFStringRef country = (CFStringRef)CFArrayGetValueAtIndex(subs, 1);
+                    OUStringBufferAppendCFString(aLocaleBuffer, country);
+                }
+            }
+        }
+        return aLocaleBuffer.makeStringAndClear();
+    }
+
+} // namespace /* private */
+
+#endif
 
 // -------------------------------------------------------------------------------
 
@@ -187,8 +284,10 @@ LocaleBackend* LocaleBackend::createInstance(
 
 rtl::OUString LocaleBackend::getLocale(void)
 {
-#ifdef UNX
+#if defined(LINUX) || defined(SOLARIS) || defined(IRIX) || defined(NETBSD) || defined(FREEBSD)
     return ImplGetLocale(LC_CTYPE);
+#elif defined (MACOSX)
+    return ImplGetLocale("AppleLocale");
 #elif defined WNT
     return ImplGetLocale( GetUserDefaultLCID() );
 #endif
@@ -198,8 +297,10 @@ rtl::OUString LocaleBackend::getLocale(void)
 
 rtl::OUString LocaleBackend::getUILocale(void)
 {
-#ifdef UNX
+#if defined(LINUX) || defined(SOLARIS) || defined(IRIX) || defined(NETBSD) || defined(FREEBSD)
     return ImplGetLocale(LC_MESSAGES);
+#elif defined(MACOSX)
+    return ImplGetLocale("AppleLanguages");
 #elif defined WNT
     return ImplGetLocale( MAKELCID(GetUserDefaultUILanguage(), SORT_DEFAULT) );
 #endif
