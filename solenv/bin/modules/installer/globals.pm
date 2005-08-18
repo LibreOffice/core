@@ -133,6 +133,8 @@ BEGIN
     $packagerevision = 1;
     $rpmcommand = "";
     $rpmquerycommand = "";
+    $debian = "";
+    $debiancompileraddon = "_DEBIAN";
 
     $is_special_epm = 0;
     $epm_in_path = 0;
@@ -149,6 +151,7 @@ BEGIN
     $alllanguagesinproductarrayref = "";
     $shiptestdirectory = "";
     $makelinuxlinkrpm = 0;
+    $linuxlinkrpmprocess = 0;
     $add_required_package = "";
     $linuxrespin = 0;
     @linuxpatchfiles = ();
