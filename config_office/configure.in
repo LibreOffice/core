@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-08-18 07:24:10 $
+dnl * Date: $Date: 2005-08-18 08:21:16 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.131 $ )
+AC_REVISION( $Revision: 1.132 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -1782,6 +1782,15 @@ if test "$_os" = "Linux" && test "$build_cpu" = "powerpc"; then
    export JITC_PROCESSOR_TYPE
 fi
 
+LANG=""
+if test "$_os" = "Linux" && echo $build_cpu | grep -E 'i[[3456]]86' 2>/dev/null >/dev/null; then
+   # avoid IBM JRE bailout when runnig in UTF-8 shells
+   LANG="en_US"
+   export LANG
+fi
+AC_SUBST(LANG)
+
+
 dnl ===================================================================
 dnl Checks for java
 dnl ===================================================================
@@ -1839,7 +1848,33 @@ if test "$SOLAR_JAVA" != ""; then
         AC_MSG_WARN([EXPERIMENTAL: gij/gcj is not a full JDK replacement - some projects will fail to compile])
         echo "EXPERIMENTAL: gij/gcj is not a full JDK replacement - some projects will fail to compile" >>warn
         JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*$WITH_JAVA,,p"`
-      else
+
+      elif test `$JAVAINTERPRETER -version 2>&1 | awk '{ print }' | grep -c "IBM"` -gt 0; then
+        JDK=ibm
+
+        dnl IBM JDK specific tests
+        _jdk=`$JAVAINTERPRETER -version 2>&1 | $AWK -F'"' '{ print \$2 }' | $SED s/[[-A-Za-z]]*//`
+        _jdk_ver=`echo "$_jdk" | $AWK -F. '{ print (($1 * 100) + $2) * 100 + $3;}'`
+   
+        if test "$_jdk_ver" -lt 10301; then
+             AC_MSG_ERROR([IBM JDK is too old, you need at least 1.3.1])
+        fi
+        if test "$_jdk_ver" -gt 10402; then
+             AC_MSG_WARN([IBM JDK might be too recent, maximum version tested is 1.4.2])
+             echo "IBM JDK might be too recent, maximum version tested is 1.4.2" >>warn
+        fi
+
+        AC_MSG_RESULT([checked (IBM JDK $_jdk)])
+
+        if test "$with_jdk_home" = ""; then
+             AC_MSG_ERROR([In order to successfully build OpenOffice.org using the IBM JDK,])
+	     AC_MSG_ERROR([you must use the "--with-jdk-home" configure option explicitly])
+        fi
+
+        JAVA_HOME=$with_jdk_home
+	
+      else	
+
         dnl SUN JDK specific tests
         _jdk=`$JAVAINTERPRETER -version 2>&1 | $AWK -F'"' '{ print \$2 }' | $SED s/[[-A-Za-z]]*//`
         _jdk_ver=`echo "$_jdk" | $AWK -F. '{ print (($1 * 100) + $2) * 100 + $3;}'`
