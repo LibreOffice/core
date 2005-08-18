@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2005-04-04 15:29:01 $
+ *  last change: $Author: rt $ $Date: 2005-08-18 08:10:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,6 +270,8 @@ using namespace ::sfx2;
 #define INET_SEARCH_TOKEN   '"'
 #define RET_ALL             ((short)200)
 #define CFG_READONLY_DEFAULT    FALSE
+
+#include <sal/config.h>
 
 SV_IMPL_PTRARR( SfxFilterPtrArr, SfxFilterPtr )
 
@@ -1757,7 +1759,7 @@ BOOL MozPluginTabPage::isInstalled()
     char lnkReferFilePath[NPP_PATH_MAX] = {0};
     char* pHome = getpwuid(getuid())->pw_dir;
     strcat(lnkFilePath, pHome);
-    strcat(lnkFilePath, "/.mozilla/plugins/libnpsoplugin.so");
+    strcat(lnkFilePath, "/.mozilla/plugins/libnpsoplugin" SAL_DLLEXTENSION);
 
     struct stat sBuf;
     if (0 > lstat(lnkFilePath, &sBuf))
@@ -1775,7 +1777,7 @@ BOOL MozPluginTabPage::isInstalled()
     ::rtl::OString tempString;
     tempString = getDllURL();
     strncpy(realFilePath, tempString.getStr(), NPP_PATH_MAX);
-    strcat(realFilePath, "/libnpsoplugin.so");
+    strcat(realFilePath, "/libnpsoplugin" SAL_DLLEXTENSION);
 
     if (0 != strcmp(lnkReferFilePath, realFilePath))
         return false;
@@ -1803,7 +1805,7 @@ BOOL MozPluginTabPage::installPlugin()
     char lnkFilePath[NPP_PATH_MAX] = {0};
     char* pHome = getpwuid(getuid())->pw_dir;
     strcat(lnkFilePath, pHome);
-    strcat(lnkFilePath, "/.mozilla/plugins/libnpsoplugin.so");
+    strcat(lnkFilePath, "/.mozilla/plugins/libnpsoplugin" SAL_DLLEXTENSION);
     remove(lnkFilePath);
 
     // create the dirs if necessary
@@ -1822,7 +1824,7 @@ BOOL MozPluginTabPage::installPlugin()
     ::rtl::OString tempString;
     tempString = getDllURL();
     strncpy(realFilePath, tempString.getStr(), NPP_PATH_MAX);
-    strcat(realFilePath, "/libnpsoplugin.so");
+    strcat(realFilePath, "/libnpsoplugin" SAL_DLLEXTENSION);
 
     // create the link
     if (0 != symlink(realFilePath, lnkFilePath))
@@ -1848,7 +1850,7 @@ BOOL MozPluginTabPage::uninstallPlugin()
     char lnkFilePath[NPP_PATH_MAX] = {0};
     char* pHome = getpwuid(getuid())->pw_dir;
     strcat(lnkFilePath, pHome);
-    strcat(lnkFilePath, "/.mozilla/plugins/libnpsoplugin.so");
+    strcat(lnkFilePath, "/.mozilla/plugins/libnpsoplugin" SAL_DLLEXTENSION);
 
     if(0 > remove(lnkFilePath))
         return false;
