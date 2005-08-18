@@ -192,7 +192,7 @@ fi
 
 # patch the "bootstraprc" to create a self-containing installation
 mv $INSTALLDIR/program/bootstraprc $INSTALLDIR/program/bootstraprc.orig
-sed 's/UserInstallation=$SYSUSERCONFIG\/.staroffice8/UserInstallation=$ORIGIN\/..\/UserInstallation/g' $INSTALLDIR/program/bootstraprc.orig > $INSTALLDIR/program/bootstraprc
+sed 's/UserInstallation=$SYSUSERCONFIG.*/UserInstallation=$ORIGIN\/..\/UserInstallation/g' $INSTALLDIR/program/bootstraprc.orig > $INSTALLDIR/program/bootstraprc
 
 echo
 echo "Installation done ..."
