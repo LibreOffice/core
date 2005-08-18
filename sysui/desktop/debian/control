@@ -1,7 +1,7 @@
-Package: openofficeorg-debian-menus
+Package: openoffice.org-debian-menus
 Description: OpenOffice.org desktop integration
 Maintainer: OpenOffice.org
 Architecture: all
-Provides: openofficeorg-desktop-integration
-Conflicts: openofficeorg-desktop-integration
-Replaces: openofficeorg-desktop-integration
+Provides: openoffice.org-desktop-integration, openoffice.org-unbundled, openofficeorg-desktop-integration, openofficeorg-debian-menus
+Conflicts: openofficeorg-desktop-integration, openoffice.org-bundled, openofficeorg-debian-menus
+Replaces: openofficeorg-desktop-integration, openofficeorg-debian-menus
