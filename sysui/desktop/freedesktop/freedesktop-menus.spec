@@ -2,13 +2,14 @@
 Version: %version
 Release: %release
 Summary: OpenOffice.org desktop integration
-Name: openofficeorg-freedesktop-menus
+Name: openoffice.org-freedesktop-menus
 BuildRoot: %_tmppath/%name-%version-build%unique
 #BuildRequires: sed
 #BuildRequires: perl
 Group: Office
 License: LGPL / SISSL
-Provides: openofficeorg-desktop-integration
+Provides: openoffice.org-desktop-integration, openofficeorg-freedesktop-menus
+Obsoletes: openofficeorg-freedesktop-menus
 BuildArch: noarch
 AutoReqProv: no
 
@@ -16,7 +17,7 @@ AutoReqProv: no
 OpenOffice.org desktop integration for desktop-environments that implement 
 the menu- and mime-related specifications from http://www.freedesktop.org
 Install this package if you're using a distribution not covered by any of 
-the other openofficeorg-<distribution>-menus packages.
+the other openoffice.org-<distribution>-menus packages.
 
 %prep
 # create & change to rpm-Build-Dir
@@ -88,11 +89,11 @@ export NO_BRP_STALE_LINK_ERROR=yes
 cd ..
 rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%name-%version-build%unique
 
-%triggerin -- openofficeorg-core01
+%triggerin -- openoffice.org-core01
 # create file in /etc that contains the office installation path
 cat > /tmp/install.$$ << EOF
 sleep 2
-coreprefix=\`rpm -q --qf '%{INSTALLPREFIX}' openofficeorg-core01\`
+coreprefix=\`rpm -q --qf '%{INSTALLPREFIX}' openoffice.org-core01\`
 # non-patched epm cannot create relocatable packages
 if [ \$coreprefix == "(none)" ]; then 
 	coreprefix="/opt/openoffice.org%version"
@@ -108,7 +109,7 @@ EOF
 
 /bin/sh /tmp/install.$$ &
 
-%triggerin -- openofficeorg-writer, openofficeorg-calc, openofficeorg-draw, openofficeorg-impress, openofficeorg-math
+%triggerin -- openoffice.org-writer, openoffice.org-calc, openoffice.org-draw, openoffice.org-impress, openoffice.org-math
 # this is run when one of the above packages is already installed and the menu
 # package gets installed OR when the menu-package is already installed and one
 # of the above listed packages gets installed
@@ -123,7 +124,7 @@ if (which update-desktop-database); then
   update-desktop-database -q /usr/share/applications
 fi
 
-%triggerun -- openofficeorg-writer, openofficeorg-calc, openofficeorg-draw, openofficeorg-impress, openofficeorg-math
+%triggerun -- openoffice.org-writer, openoffice.org-calc, openoffice.org-draw, openoffice.org-impress, openoffice.org-math
 if [ "$1" = "0" ] ; then  
   # the menu-package gets uninstalled/updated - postun will run the command
   exit 0
