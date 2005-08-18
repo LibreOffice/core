@@ -708,9 +708,13 @@
 ***************
 *** 1 ****
 ! dummy
---- 1,44 ----
+--- 1,48 ----
 ! #! /bin/sh
 ! 
+! if test "$SYSTEM_LIBXML" = "YES"
+! then xml2-config "$@"; exit 0
+! fi
+!
 ! prefix=${SOLARVERSION}/${INPATH}
 ! includedir=${SOLARVERSION}/${INPATH}/inc${UPDMINOREXT}/external
 ! libdir=${SOLARVERSION}/${INPATH}/lib${UPDMINOREXT}
