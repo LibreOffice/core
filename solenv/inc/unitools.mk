@@ -67,8 +67,6 @@ CFGEX*=cfgex
 ULFCONV*=ulfconv
 
 MAKEDEPEND*=$(WRAPCMD) $(SOLARBINDIR)$/makedepend
-ADJUSTVISIBILITY*:=$(WRAPCMD) adjustvisibility
-CONVERT*:=$(PERL) $(SOLARENV)$/bin$/leconvert.pl
 
 EXECTEST:= $(PERL) -w $(SOLARENV)$/bin$/exectest.pl
 
@@ -199,3 +197,6 @@ ECHONL=echo
 .ENDIF			# "$(GUI)"=="UNX"
 
 RM+=$(RMFLAGS)
+ADJUSTVISIBILITY*:=$(WRAPCMD) adjustvisibility
+CONVERT*:=$(PERL) $(SOLARENV)$/bin$/leconvert.pl
+
