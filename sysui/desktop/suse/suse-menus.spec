@@ -2,17 +2,18 @@
 Version: %version
 Release: %release
 Summary: OpenOffice.org desktop integration
-Name: openofficeorg-suse-menus
+Name: openoffice.org-suse-menus
 Group: Office
 License: LGPL, SISSL
 Vendor: OpenOffice.org
 AutoReqProv: no
 BuildArch: noarch
 # /etc/SuSE-release for SuSE, SLES and Novell Linux Desktop ..
-Requires: openofficeorg-core01, /etc/SuSE-release
+Requires: openoffice.org-core01, /etc/SuSE-release
 # .. but not for Sun JDS
 Conflicts: SunDesktopVersion
-Provides: openofficeorg-desktop-integration
+Provides: openoffice.org-desktop-integration, openofficeorg-suse-menus
+Obsoletes: openofficeorg-suse-menus
 %define _unpackaged_files_terminate_build 0
 %description 
 OpenOffice.org desktop integration
@@ -52,13 +53,13 @@ for dir in *; do
   ln -sf ../../../gnome/$dir/mimetypes/$iconname-text-template.png          ../hicolor/$dir/mimetypes/gnome-mime-application-vnd.sun.xml.writer.template.png
 done
 
-%triggerin -- openofficeorg-core01
+%triggerin -- openoffice.org-core01
 # create file in /etc that contains the office installation path
 cat > /tmp/install.$$ << EOF
 while [ "\$TARGET" == "" ]
 do
   sleep 2
-  TARGET=\`rpm -q --qf '%{INSTALLPREFIX}' openofficeorg-core01 2>&1\` && ln -snf \$TARGET /etc/%unixfilename
+  TARGET=\`rpm -q --qf '%{INSTALLPREFIX}' openoffice.org-core01 2>&1\` && ln -snf \$TARGET /etc/%unixfilename
   # some rpm versions do not wait for the shared lock
   echo \$TARGET | grep '/var/lib/rpm' && TARGET=""
 done
@@ -71,12 +72,12 @@ EOF
 /bin/sh /tmp/install.$$ &
 
 
-%triggerin -- openofficeorg-writer, openofficeorg-calc, openofficeorg-draw, openofficeorg-impress, openofficeorg-base, openofficeorg-math
+%triggerin -- openoffice.org-writer, openoffice.org-calc, openoffice.org-draw, openoffice.org-impress, openoffice.org-base, openoffice.org-math
 if [ -x /opt/gnome/bin/update-desktop-database -a -h /etc/%unixfilename ]; then
   /opt/gnome/bin/update-desktop-database -q /usr/share/applications
 fi 
 
-%triggerun -- openofficeorg-writer, openofficeorg-calc, openofficeorg-draw, openofficeorg-impress, openofficeorg-base, openofficeorg-math
+%triggerun -- openoffice.org-writer, openoffice.org-calc, openoffice.org-draw, openoffice.org-impress, openoffice.org-base, openoffice.org-math
 if [ "$1" = "0" ] ; then  
   # the menu-package gets uninstalled/updated - postun will run the command
   exit 0
