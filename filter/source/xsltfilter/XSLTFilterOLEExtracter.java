@@ -58,8 +58,9 @@ import java.io.FileWriter;
 import java.util.*;
 import java.util.zip.Inflater;
 import java.util.zip.Deflater;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+
+// Base64 class in xercesImpl.jar package
+import org.apache.xerces.impl.dv.util.Base64;
 
 //StarOffice Interfaces and UNO
 import com.sun.star.bridge.XBridgeFactory;
@@ -161,7 +162,7 @@ public class XSLTFilterOLEExtracter {
                 byte oledata[][]=new byte[1][oleLength];
                 xInput.readBytes(oledata,oleLength);
                 //return the base64 encoded string
-                return new sun.misc.BASE64Encoder().encodeBuffer(oledata[0]);
+                return Base64.encode(oledata[0]);
             }catch( Exception ex )
             {
                 ex.printStackTrace();
@@ -225,7 +226,7 @@ public class XSLTFilterOLEExtracter {
             decompresser.end();
 
             //return the base64 string of the uncompressed data
-            return new sun.misc.BASE64Encoder().encodeBuffer(result);
+            return Base64.encode(result);
         }catch( Exception ex )
         {
             ex.printStackTrace();
@@ -255,7 +256,7 @@ public class XSLTFilterOLEExtracter {
         try
         {
             //Decode and write the data to an temp stream
-            byte[] oledata = new sun.misc.BASE64Decoder().decodeBuffer(aBase64);
+            byte[] oledata = Base64.decode(aBase64);
             m_RootStream = CreateTempFileStream( m_xMSF );
             XOutputStream xOutput = m_RootStream.getOutputStream();
             xOutput.writeBytes(oledata);
@@ -308,7 +309,7 @@ public class XSLTFilterOLEExtracter {
         try
         {
             //decode the base64 string
-            byte[] oledata = new sun.misc.BASE64Decoder().decodeBuffer(aBase64);
+            byte[] oledata = Base64.decode(aBase64);
             //create a temp stream to write data to
             XStream subStream = CreateTempFileStream( m_xMSF );
             XInputStream xInput = subStream.getInputStream();
@@ -346,9 +347,6 @@ public class XSLTFilterOLEExtracter {
             xTransact.commit();
             xTransact = null;
 
-        }catch(java.io.IOException ex)
-        {
-              ex.printStackTrace();
         }
         catch( Exception e )
         {
