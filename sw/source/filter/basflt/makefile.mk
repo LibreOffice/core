@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2005-08-10 11:35:28 $
+#   last change: $Author: rt $ $Date: 2005-08-18 11:59:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,11 +77,12 @@ CDEFS+=-Dmydebug
 
 # --- Files --------------------------------------------------------
 
-SLOFILES =  \
+SLOFILES = \
         $(SLO)$/docfact.obj \
         $(SLO)$/fltini.obj \
         $(SLO)$/shellio.obj \
-        $(SLO)$/w4wflt.obj
+        $(SLO)$/w4wflt.obj \
+        $(SLO)$/w4wflt_detect.obj 
 
 EXCEPTIONSFILES = \
                 $(SLO)$/fltini.obj
