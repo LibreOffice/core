@@ -192,6 +192,7 @@ sub getparameter
         elsif ($param eq "-copyproject") { $installer::globals::is_copy_only_project = 1; }
         elsif ($param eq "-languagepack") { $installer::globals::languagepack = 1; }
         elsif ($param eq "-patch") { $installer::globals::patch = 1; }
+        elsif ($param eq "-debian") { $installer::globals::debian = 1; }
         elsif ($param eq "-addchildprojects") { $installer::globals::addchildprojects = 1; }
         elsif ($param eq "-addsystemintegration") { $installer::globals::addsystemintegration = 1; }
         elsif ($param eq "-destdir")    # new parameter for simple installer
@@ -329,6 +330,18 @@ sub setglobalvariables
             $installer::globals::islinuxrpmbuild = 1;
             $installer::globals::epmoutpath = "RPMS";
         }
+
+        # Creating Debian packages ?
+        if (( $installer::globals::packageformat eq "deb" ) || ( $installer::globals::debian ))
+        {
+            $installer::globals::debian = 1;
+            $installer::globals::packageformat = "deb";
+            my $message = "Creating Debian packages";
+            installer::logger::print_message( $message );
+            push(@installer::globals::globallogfileinfo, $message);
+            $installer::globals::islinuxrpmbuild = 0;
+            $installer::globals::epmoutpath = "DEBS";
+        }
     }
 
     # Defaulting to native package format for epm
@@ -365,6 +378,12 @@ sub setglobalvariables
     if (!($installer::globals::unpackpath eq ""))
     {
         make_path_absolute(\$installer::globals::unpackpath);
+    }
+
+    if ( $installer::globals::debian )
+    {
+        $installer::globals::unpackpath =~ s/\Q$installer::globals::separator\E\s*$//;
+        $installer::globals::unpackpath = $installer::globals::unpackpath . $installer::globals::debiancompileraddon;
     }
 
     if (! -d $installer::globals::unpackpath )  # create unpackpath
@@ -622,6 +641,7 @@ sub outputparameter
     if ( $installer::globals::addsystemintegration ) { push(@output, "Adding system integration packages\n"); }
     if ( $installer::globals::debug ) { push(@output, "Debug is activated\n"); }
     if ( $installer::globals::tab ) { push(@output, "TAB version\n"); }
+    if ( $installer::globals::debian ) { push(@output, "Linux: Creating Debian packages\n"); }
     if ( $installer::globals::dounzip ) { push(@output, "Unzip ARCHIVE files\n"); }
     else  { push(@output, "Not unzipping ARCHIVE files\n"); }
     if ( $installer::globals::servicesrdb_can_be_created ) { push(@output, "services.rdb can be created\n"); }
