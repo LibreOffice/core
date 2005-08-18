@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.71 $
-# Date:        $Date: 2005-08-05 15:06:12 $
+# Version:     $Revision: 1.72 $
+# Date:        $Date: 2005-08-18 08:21:30 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -371,9 +371,18 @@ elsif ( $platform =~ m/linux-gnu/ )
       $CPU            = "I";
       $CPUNAME        = "INTEL";
       $DLLSUFFIX      = "li";
+      
+      if ($JDK =~ m/^[Ii][Bb][Mm]/)
+      { $JRELIBDIR     = '$JAVA_HOME'.$ds."jre".$ds."bin";
+        $JRETOOLKITDIR = '$JAVA_HOME'.$ds."jre".$ds."bin".$ds."classic";
+        $JRETHREADDIR  = '$JAVA_HOME'.$ds."jre".$ds."bin"; }
+
+      else {      
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
+      }
+
       if( @GCCVER@ >= 30401 ) {
          $OUTPATH     = "unxlngi6";
       	 $CVER        = "C341";
@@ -1484,6 +1493,9 @@ ToFile( "DEFAULT_MOZILLA_TOOLKIT", $MOZILLA_TOOLKIT, "e" );
 ToFile( "BUILD_VER_STRING",  "@BUILD_VER_STRING@", "e" );
 if ($platform =~ m/linux-gnu/ && $platform =~ m/powerpc/) {
 ToFile( "JITC_PROCESSOR_TYPE","6",                 "e" );
+}
+if ($JDK =~ m/^[Ii][Bb][Mm]/ && $platform =~ m/linux-gnu/ && $platform =~ m/^i[3456]86/) {
+ToFile( "LANG", "@LANG@", "e");
 }
 ToFile( "DEFAULT_TO_ENGLISH_FOR_PACKING",  "yes", "e" );
 ToFile( "ENABLE_GTK",        "@ENABLE_GTK@",       "e" );
