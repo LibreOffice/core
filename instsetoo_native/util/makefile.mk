@@ -212,12 +212,14 @@ $(MISC)$/ure$/services.rdb .ERRREMOVE:
     + $(REGCOMP) -register -r $@ -c \
         $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/invocation.uno$(DLLPOST)$(MY_Q) \
         -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
+.IF "$(SOLAR_JAVA)"!=""
     + $(REGCOMP) -register -r $@ -c \
         $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/javaloader.uno$(DLLPOST)$(MY_Q) \
         -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
     + $(REGCOMP) -register -r $@ -c \
         $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/javavm.uno$(DLLPOST)$(MY_Q) \
         -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
+.ENDIF
     + $(REGCOMP) -register -r $@ -c \
         $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/namingservice.uno$(DLLPOST)$(MY_Q) \
         -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
