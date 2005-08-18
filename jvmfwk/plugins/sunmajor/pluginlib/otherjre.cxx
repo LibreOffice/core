@@ -2,9 +2,9 @@
  *
  *  $RCSfile: otherjre.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-05-31 17:06:09 $
+ *  last change: $Author: rt $ $Date: 2005-08-18 08:21:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,16 +98,13 @@ char const* const* OtherInfo::getRuntimePaths(int * size)
         "/bin/hotspot/jvm.dll",
         "/bin/classic/jvm.dll"
 #elif UNX
-#if defined(LINUX) && defined(POWERPC)
-    "/bin/classic/libjvm.so",
-    "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so", // for Blackdown PPC
-    "/lib/" JFW_PLUGIN_ARCH "/classic/libjvm.so" // for Blackdown PPC
-#elif defined(MACOSX)
+#ifdef MACOSX
         "/../../../JavaVM"
 #else
-
-        "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so",
-        "/lib/" JFW_PLUGIN_ARCH "/classic/libjvm.so"
+        "/bin/classic/libjvm.so", // for IBM Java
+        "/jre/bin/classic/libjvm.so", // for IBM Java
+        "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so", // for Blackdown PPC
+        "/lib/" JFW_PLUGIN_ARCH "/classic/libjvm.so" // for Blackdown PPC
 #endif
 #endif
 
@@ -125,19 +122,14 @@ char const* const* OtherInfo::getLibraryPaths(int* size)
         "/../Libraries",
         "/lib"
 #else
-#if defined(LINUX) && defined(POWERPC)
-    "/bin",
-    "/jre/bin",
-    "/bin/classic",
+        "/bin",
+        "/jre/bin",
+        "/bin/classic",
+        "/jre/bin/classic",
         "/lib/" JFW_PLUGIN_ARCH "/client",
         "/lib/" JFW_PLUGIN_ARCH "/classic",
         "/lib/" JFW_PLUGIN_ARCH "/native_threads",
         "/lib/" JFW_PLUGIN_ARCH
-#else
-        "/lib/" JFW_PLUGIN_ARCH "/client",
-        "/lib/" JFW_PLUGIN_ARCH "/native_threads",
-        "/lib/" JFW_PLUGIN_ARCH
-#endif
 #endif
     };
 
