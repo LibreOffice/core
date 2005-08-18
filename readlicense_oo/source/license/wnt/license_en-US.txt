@@ -9,6 +9,6 @@ All trademarks and registered trademarks mentioned herein are the property of th
 
 
 ------------------------------------
-Copyright 2002 Sun Microsystems, Inc.
+Copyright 2002,2005 Sun Microsystems, Inc.
 
 This product has been created with contributions from the OpenOffice.org community, of which Sun Microsystems Inc. is the founding member. OpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.
