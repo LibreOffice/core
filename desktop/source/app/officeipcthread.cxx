@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-18 14:43:23 $
+ *  last change: $Author: rt $ $Date: 2005-08-18 12:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,6 +376,10 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         }
         else
         {
+            OPipe::TPipeError eReason = pThread->maPipe.getError();
+            if ((eReason == OPipe::E_ConnectionRefused) || (eReason == OPipe::E_invalidError))
+                return IPC_STATUS_BOOTSTRAP_ERROR;
+
             // Wait for second office to be ready
             TimeValue aTimeValue;
             aTimeValue.Seconds = 0;
