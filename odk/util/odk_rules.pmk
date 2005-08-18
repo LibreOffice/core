@@ -2,9 +2,9 @@
 #
 #   $RCSfile: odk_rules.pmk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2005-03-07 17:31:28 $
+#   last change: $Author: rt $ $Date: 2005-08-18 12:02:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,7 @@ $(DESTDIRDOCUIMAGES)$/% : $(PRJ)$/docs$/images$/%
     +-rm -f $@ >& $(NULLDEV)
     $(MY_COPY) $< $@
 
-$(DESTDIRDOCU)$/DevStudioWizards$/images$/% : $(PRJ)$/docs$/DevStudioWizards$/images$/% 
+$(DESTDIRDOCU)$/DevStudioWizards$/images$/% : $(PRJ)$/docs$/DevStudioWizards$/images$/%
     +-rm -f $@ >& $(NULLDEV)
     $(MY_COPY) $< $@
 
@@ -139,7 +139,11 @@ $(DESTDIR)$/cfgWin.js : $(PRJ)$/cfgWin.js
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/cfgWin.js $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.sxw : $(PRJ)$/examples$/%.sxw 
+$(DESTDIREXAMPLES)$/%.sxw : $(PRJ)$/examples$/%.sxw
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_COPY) $< $@
+
+$(DESTDIREXAMPLES)$/%.sxd : $(PRJ)$/examples$/%.sxd
     +-rm -f $@ >& $(NULLDEV)
     $(MY_COPY) $< $@
 
@@ -155,43 +159,43 @@ $(DESTDIREXAMPLES)$/%.odg : $(PRJ)$/examples$/%.odg
     +-rm -f $@ >& $(NULLDEV)
     $(MY_COPY) $< $@
 
-$(DESTDIREXAMPLES)$/%.odp : $(PRJ)$/examples$/%.odp 
+$(DESTDIREXAMPLES)$/%.odp : $(PRJ)$/examples$/%.odp
     +-rm -f $@ >& $(NULLDEV)
     $(MY_COPY) $< $@
 
-$(DESTDIREXAMPLES)$/%.xlb : $(PRJ)$/examples$/%.xlb 
+$(DESTDIREXAMPLES)$/%.xlb : $(PRJ)$/examples$/%.xlb
     +-rm -f $@ >& $(NULLDEV)
     $(MY_COPY) $< $@
 
-$(DESTDIREXAMPLES)$/%.xdl : $(PRJ)$/examples$/%.xdl 
+$(DESTDIREXAMPLES)$/%.xdl : $(PRJ)$/examples$/%.xdl
     +-rm -f $@ >& $(NULLDEV)
     $(MY_COPY) $< $@
 
-$(DESTDIREXAMPLES)$/%.gif : $(PRJ)$/examples$/%.gif 
+$(DESTDIREXAMPLES)$/%.gif : $(PRJ)$/examples$/%.gif
     +-rm -f $@ >& $(NULLDEV)
     $(MY_COPY) $< $@
 
-$(DESTDIREXAMPLES)$/%.jpg : $(PRJ)$/examples$/%.jpg 
+$(DESTDIREXAMPLES)$/%.jpg : $(PRJ)$/examples$/%.jpg
     +-rm -f $@ >& $(NULLDEV)
     $(MY_COPY) $< $@
 
-$(DESTDIREXAMPLES)$/%.wmf : $(PRJ)$/examples$/%.wmf 
+$(DESTDIREXAMPLES)$/%.wmf : $(PRJ)$/examples$/%.wmf
     +-rm -f $@ >& $(NULLDEV)
     $(MY_COPY) $< $@
 
-$(DESTDIREXAMPLES)$/%.nsf : $(PRJ)$/examples$/%.nsf 
+$(DESTDIREXAMPLES)$/%.nsf : $(PRJ)$/examples$/%.nsf
     +-rm -f $@ >& $(NULLDEV)
     $(MY_COPY) $< $@
 
-$(DESTDIREXAMPLES)$/%.pdf : $(PRJ)$/examples$/%.pdf 
+$(DESTDIREXAMPLES)$/%.pdf : $(PRJ)$/examples$/%.pdf
     +-rm -f $@ >& $(NULLDEV)
     $(MY_COPY) $< $@
 
-$(DESTDIREXAMPLES)$/%.xba : $(PRJ)$/examples$/%.xba 
+$(DESTDIREXAMPLES)$/%.xba : $(PRJ)$/examples$/%.xba
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.cxx : $(PRJ)$/examples$/%.cxx 
+$(DESTDIREXAMPLES)$/%.cxx : $(PRJ)$/examples$/%.cxx
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
@@ -199,95 +203,95 @@ $(DESTDIREXAMPLES)$/%.c : $(PRJ)$/examples$/%.c
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.hxx : $(PRJ)$/examples$/%.hxx 
+$(DESTDIREXAMPLES)$/%.hxx : $(PRJ)$/examples$/%.hxx
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.java : $(PRJ)$/examples$/%.java 
+$(DESTDIREXAMPLES)$/%.java : $(PRJ)$/examples$/%.java
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.idl : $(PRJ)$/examples$/%.idl 
+$(DESTDIREXAMPLES)$/%.idl : $(PRJ)$/examples$/%.idl
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.dxp : $(PRJ)$/examples$/%.dxp 
+$(DESTDIREXAMPLES)$/%.dxp : $(PRJ)$/examples$/%.dxp
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.xml : $(PRJ)$/examples$/%.xml 
+$(DESTDIREXAMPLES)$/%.xml : $(PRJ)$/examples$/%.xml
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.xcu : $(PRJ)$/examples$/%.xcu 
+$(DESTDIREXAMPLES)$/%.xcu : $(PRJ)$/examples$/%.xcu
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.html : $(PRJ)$/examples$/%.html 
+$(DESTDIREXAMPLES)$/%.html : $(PRJ)$/examples$/%.html
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.txt : $(PRJ)$/examples$/%.txt 
+$(DESTDIREXAMPLES)$/%.txt : $(PRJ)$/examples$/%.txt
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%$/Makefile : $(PRJ)$/examples$/%$/Makefile 
+$(DESTDIREXAMPLES)$/%Makefile : $(PRJ)$/examples$/%Makefile
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%$/README : $(PRJ)$/examples$/%$/README 
+$(DESTDIREXAMPLES)$/%README : $(PRJ)$/examples$/%README
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.cpp : $(PRJ)$/examples$/%.cpp 
+$(DESTDIREXAMPLES)$/%.cpp : $(PRJ)$/examples$/%.cpp
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.h : $(PRJ)$/examples$/%.h 
+$(DESTDIREXAMPLES)$/%.h : $(PRJ)$/examples$/%.h
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.def : $(PRJ)$/examples$/%.def 
+$(DESTDIREXAMPLES)$/%.def : $(PRJ)$/examples$/%.def
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.rc : $(PRJ)$/examples$/%.rc 
+$(DESTDIREXAMPLES)$/%.rc : $(PRJ)$/examples$/%.rc
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.rgs : $(PRJ)$/examples$/%.rgs 
+$(DESTDIREXAMPLES)$/%.rgs : $(PRJ)$/examples$/%.rgs
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.dpr : $(PRJ)$/examples$/%.dpr 
+$(DESTDIREXAMPLES)$/%.dpr : $(PRJ)$/examples$/%.dpr
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.res : $(PRJ)$/examples$/%.res 
+$(DESTDIREXAMPLES)$/%.res : $(PRJ)$/examples$/%.res
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.pas : $(PRJ)$/examples$/%.pas 
+$(DESTDIREXAMPLES)$/%.pas : $(PRJ)$/examples$/%.pas
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.dfm : $(PRJ)$/examples$/%.dfm 
+$(DESTDIREXAMPLES)$/%.dfm : $(PRJ)$/examples$/%.dfm
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.vbs : $(PRJ)$/examples$/%.vbs 
+$(DESTDIREXAMPLES)$/%.vbs : $(PRJ)$/examples$/%.vbs
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.vb : $(PRJ)$/examples$/%.vb 
+$(DESTDIREXAMPLES)$/%.vb : $(PRJ)$/examples$/%.vb
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.cs : $(PRJ)$/examples$/%.cs 
+$(DESTDIREXAMPLES)$/%.cs : $(PRJ)$/examples$/%.cs
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIREXAMPLES)$/%.mk : $(PRJ)$/examples$/%.mk 
+$(DESTDIREXAMPLES)$/%.mk : $(PRJ)$/examples$/%.mk
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
@@ -302,6 +306,11 @@ $(DESTDIREXAMPLES)$/%.bas : $(PRJ)$/examples$/%.bas
 $(DESTDIREXAMPLES)$/%.mf : $(PRJ)$/examples$/%.mf
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+# catch all otheres and fail
+$(DESTDIREXAMPLES)$/% : $(PRJ)$/examples$/%
+    @+echo now way to build $@
+    force_dmake_to_error
 
 $(DESTDIRCLASSES)$/oosupport.nbm : $(OUT)$/class$/oosupport.nbm
     +-rm -f $@ >& $(NULLDEV)
@@ -318,10 +327,10 @@ $(DESTDIRSETTINGS)$/%.mk : $(PRJ)$/settings$/%.mk
 $(DESTDIRCOMMONDOCU)$/spec$/xml_format$/xml_specification.pdf : xml_specification.pdf
     +-rm -f $@ >& $(NULLDEV)
     $(GNUCOPY) xml_specification.pdf $@
-        
+
 $(DESTDIRXML)$/module-description.dtd : $(XMLOUT)$/module-description.dtd
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(XMLOUT)$/module-description.dtd $(MY_TEXTCOPY_TARGETPRE) $@  
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(XMLOUT)$/module-description.dtd $(MY_TEXTCOPY_TARGETPRE) $@
 $(DESTDIRXML)$/%.xml : $(XMLOUT)$/%.xml
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
@@ -330,14 +339,14 @@ $(DESTDIRBIN)$/%$(EXEPOSTFIX) : $(BINOUT)$/%$(EXEPOSTFIX)
     +-rm -f $@ >& $(NULLDEV)
     $(GNUCOPY) $(BINOUT)$/$(@:f) $@
 .IF "$(GUI)"=="UNX"
-    +-strip $@    
+    +-strip $@
 .ENDIF
 
 $(DESTDIRBIN)$/%.bin : $(BINOUT)$/%.bin
     +-rm -f $@ >& $(NULLDEV)
     $(GNUCOPY) $(BINOUT)$/$(@:f) $@
 .IF "$(GUI)"=="UNX"
-    +-strip $@    
+    +-strip $@
 .ENDIF
 
 $(DESTDIRBIN)$/regcomp : $(BINOUT)$/regcomp
@@ -351,7 +360,7 @@ $(DESTDIRBIN)$/unoapploader$(EXEPOSTFIX) : $(BIN)$/unoapploader$(EXEPOSTFIX)
     +-rm -f $@ >& $(NULLDEV)
     $(GNUCOPY) $(BIN)$/$(@:f) $@
 .IF "$(GUI)"=="UNX"
-    +-strip $@    
+    +-strip $@
 .ENDIF
 
 # special rule for special Java UNO native library
@@ -359,7 +368,7 @@ $(DESTDIRBIN)$/unoapploader$(EXEPOSTFIX) : $(BIN)$/unoapploader$(EXEPOSTFIX)
 $(DESTDIRJAR)$/win$/unowinreg.dll : $(PRJ)$/bin$/win$/unowinreg.dll
     +-rm -f $@ >& $(NULLDEV)
     $(GNUCOPY) $< $@
-    
+
 $(DESTDIRDLL)$/%$(MY_DLLPOSTFIX) : $(DLLOUT)$/%$(MY_DLLPOSTFIX)
     +-rm -f $@ >& $(NULLDEV)
     $(GNUCOPY) $(DLLOUT)$/$(@:f) $@
@@ -367,7 +376,7 @@ $(DESTDIRDLL)$/%$(MY_DLLPOSTFIX) : $(DLLOUT)$/%$(MY_DLLPOSTFIX)
 $(DESTDIRJAR)$/com$/sun$/star$/lib$/loader$/%.class : $(CLASSDIR)$/com$/sun$/star$/lib$/loader$/%.class
     +-$(RM) $(@:db)*.class >& $(NULLDEV)
     +$(COPY) $(<:db)*.class $(@:d)
-    
+
 $(DESTDIRIDL)$/% : $(IDLOUT)$/%
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
@@ -380,7 +389,7 @@ $(DESTDIRINC)$/udkversion.mk :
     @echo UDK_MINOR=$(UDK_MINOR) >> $@
     @echo #micro >> $@
     @echo UDK_MICRO=$(UDK_MICRO) >> $@
-    
+
 $(DESTDIRINC)$/% : $(INCOUT)$/%
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
@@ -391,15 +400,11 @@ $(DESTDIRLIB)$/%.lib : $(LIBOUT)$/%.lib
 $(DIR_CREATE_FLAG) :
 .IF "$(USE_SHELL)" != "4nt"
     +$(TYPE) $(mktmp $(DIR_DIRECTORY_LIST)) | xargs -n 20 $(MKDIRHIER) && echo "dirs created" > $@ && touch $@
+    +sleep 2
 .ELSE
     +$(TYPE) $(mktmp $(DIR_DIRECTORY_LIST:s/\/\\/)) | xargs -n 10 $(COMSPEC) -c $(PERL) $(SOLARENV)$/bin/mkdir.pl && echo "dirs created" > $@ && touch $@
+    +delay 2
 .ENDIF
-    
-$(DIR_FILE_LIST) : $(DIR_CREATE_FLAG)
-    
-$(DIR_FILE_FLAG) : $(DIR_FILE_LIST)
-    @echo "must be zipped" > $@
-
 
 $(DESTDIRSETTINGS)$/component.uno.def : $(PRJ)$/settings$/component.uno.def
     +-rm -f $@ >& $(NULLDEV)
@@ -413,3 +418,10 @@ $(DESTDIRSETTINGS)$/component.uno.map : $(SOLARENV)$/bin$/addsym.awk $(SOLARENV)
     +tr -d "\015" < $(SOLARENV)$/src$/component.map | sed -e 's/component_getDescriptionFunc;//' > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
+
+$(DIR_FILE_LIST) : $(DIR_CREATE_FLAG)
+
+$(DIR_FILE_FLAG) : $(DIR_FILE_LIST)
+    @echo "must be zipped" > $@
+
+
