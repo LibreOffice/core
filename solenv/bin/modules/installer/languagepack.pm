@@ -110,7 +110,7 @@ sub select_language_items
             {
                 $oneitem->{'modules'} = "gid_Module_Root";   # all files in a language pack are root files
 
-                if (( $installer::globals::islinuxrpmbuild ) || ( $installer::globals::issolarispkgbuild ))
+                if (( $installer::globals::islinuxbuild ) || ( $installer::globals::issolarispkgbuild ))
                 {
                     if ( $oneitem->{'Dir'} )
                     {
