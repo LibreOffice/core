@@ -72,7 +72,7 @@ diff -Naur ./src/gcc-apple-macosx.mak ./src/gcc-apple-macosx.mak
 +
 +WARNING_FLAGS= -W -Wno-sign-compare -Wno-unused -Wno-uninitialized -Wno-long-double
 +
-+CXXFLAGS_COMMON = -I${STLPORT_DIR} ${WARNING_FLAGS} -D_REENTRANT -D_PTHREADS
++CXXFLAGS_COMMON = -I${STLPORT_DIR} ${WARNING_FLAGS} ${ARCH_FLAGS} -D_REENTRANT -D_PTHREADS
 +
 +ifneq ("$(shell uname -r)", "1.2")
 +CXXFLAGS_COMMON += -fno-coalesce
