@@ -2,9 +2,9 @@
  *
  *  $RCSfile: so_env.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-05-31 17:09:26 $
+ *  last change: $Author: rt $ $Date: 2005-08-18 08:13:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@
 #include <errno.h>
 #include "so_env.hxx"
 #include "ns_debug.hxx"
+#include <sal/config.h>
 
 #define PLUGIN_NAME         "OpenOffice.org"
 
@@ -159,9 +160,9 @@ int findReadSversion(void** aResult, int bWnt, const char* tag, const char* entr
     // Filename of lnk file, eg. "soffice"
     char lnkFileName[NPP_PATH_MAX] = {0};
     char* pTempZero = NULL;
-    sprintf(lnkFileName, "%s/.mozilla/plugins/%s", getenv("HOME"), "libnpsoplugin.so");
+    sprintf(lnkFileName, "%s/.mozilla/plugins/libnpsoplugin%s", getenv("HOME"), SAL_DLLEXTENSION);
     if ((0 > readlink(lnkFileName, realFileName, NPP_PATH_MAX)) ||
-       (NULL == (pTempZero = strstr(realFileName, "/program/libnpsoplugin.so"))))
+       (NULL == (pTempZero = strstr(realFileName, "/program/libnpsoplugin" SAL_DLLEXTENSION))))
     {
         *realFileName = 0;
         return -1;
