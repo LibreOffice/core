@@ -153,7 +153,7 @@ KDEICONLIST = \
 
 .IF "$(DPKG)"!=""
 
-PKGNAME=openofficeorg-$(TARGET)-menus
+PKGNAME=openoffice.org-$(TARGET)-menus
 DEBFILE=$(BIN)/$(PKGNAME)_$(PKGVERSION)-$(PKGREV)_all.deb
 DEBDEPN = \
     $(MISC)/$(TARGET)/$(DEBFILE:f)/etc/$(UNIXFILENAME) \
@@ -271,16 +271,16 @@ $(MISC)/$(TARGET)/$(DEBFILE:f)/etc/$(UNIXFILENAME) :
 # --- packaging ---------------------------------------------------
 
 # getuid.so fakes the user/group for us	
-$(DEBFILE) : $(DEBDEPN)
+.PHONY $(DEBFILE) : $(DEBDEPN)
     @$(MKDIRHIER) $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN
     @cat control | tr -d "\015" > $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/control
-    @echo "Version: $(PKGVERSION)" >> $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/control
+    @echo "Version: $(PKGVERSION)-$(PKGREV)" >> $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/control
     @cat postinst | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" > $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/postinst
     @cat postrm | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" > $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/postrm
     @cat prerm | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" > $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/prerm
     @chmod -R g-w $(MISC)/$(TARGET)/$(DEBFILE:f)
     @chmod a+rx $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/post* $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/pre*
     /bin/bash -c "LD_PRELOAD=$(SOLARBINDIR)/getuid.so dpkg-deb --build $(MISC)/$(TARGET)/$(@:f) $@"
-    @chmod -R g+w $(MISC)/$(TARGET)/$(@:f)
+    @$(RM) -r $(MISC)/$(TARGET)/$(@:f)
 
 .ENDIF
