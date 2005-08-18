@@ -7,7 +7,7 @@ if [ "$1" = "configure" ] ; then  # first install
   fi
   # update desktop database
   if [ -x /usr/bin/update-desktop-database ]; then
-    update-desktop-database /usr/share/applications
+    update-desktop-database -q /usr/share/applications
   fi
   # update debian style menus
   if [ -x /usr/bin/update-menus ]; then

@@ -6,7 +6,7 @@ if [ "$1" != "purge" ]; then
     update-mime-database /usr/share/mime
   fi
   if [ -x /usr/bin/update-desktop-database ]; then
-    update-desktop-database /usr/share/applications
+    update-desktop-database -q /usr/share/applications
   fi
   if [ -x /usr/bin/update-menus ]; then
     update-menus
