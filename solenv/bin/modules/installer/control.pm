@@ -384,8 +384,11 @@ sub determine_ship_directory
     if (( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi )) { $productstring = $productstring . "_languagepack"; }
     if ( $installer::globals::patch ) { $productstring = $productstring . "_patch"; }
 
+    my $compileraddon = "";
+    if ( $installer::globals::debian ) { $compileraddon = $installer::globals::debiancompileraddon; }
+
     my $destdir = $shipdrive . $installer::globals::separator . $installer::globals::compiler .
-                $installer::globals::productextension . $installer::globals::separator .
+                $installer::globals::productextension . $compileraddon . $installer::globals::separator .
                 $productstring . $installer::globals::separator .
                 $installer::globals::build . "_" . $installer::globals::lastminor . "_" .
                 "native_inprogress-number_" . $languagestring . "\." . $installer::globals::buildid;
