@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-31 16:25:52 $
+#   last change: $Author: rt $ $Date: 2005-08-18 12:02:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,7 +88,6 @@ DRAWING_FILES=\
     $(DESTDIRDEVGUIDEEXAMPLES)$/Drawing$/Makefile \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Drawing$/ObjectTransformationDemo.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Drawing$/Organigram.java \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/Drawing$/Organigram.sxd \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Drawing$/PageHelper.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Drawing$/PresentationDemo.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Drawing$/ShapeHelper.java \
