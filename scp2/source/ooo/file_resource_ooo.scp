@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_resource_ooo.scp,v $
 *
-*  $Revision: 1.24 $
+*  $Revision: 1.25 $
 *
-*  last change: $Author: obo $ $Date: 2005-07-18 12:31:30 $
+*  last change: $Author: rt $ $Date: 2005-08-18 08:13:08 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -126,11 +126,7 @@ STD_RES_FILE( gid_File_Res_Productregistration, productregistration)
 
 #ifdef UNX
 
-#ifndef MACOSX
-
 STD_RES_FILE( gid_File_Res_San, san )
-
-#endif
 
 #endif
 
