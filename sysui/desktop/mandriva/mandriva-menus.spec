@@ -2,7 +2,7 @@
 Version: %version
 Release: %release
 Summary: OpenOffice.org desktop integration
-Name: openofficeorg-mandriva-menus
+Name: openoffice.org-mandriva-menus
 Group: Office
 License: LGPL, SISSL
 AutoReqProv: no
@@ -12,9 +12,9 @@ BuildArch: noarch
 #        which provides 'mandrake-release'. We should leave 'mandrake-release'
 #        here and check for the 'mandriva-release' in the future (next year).
 #
-Requires: openofficeorg-core01, mandrake-release
-Provides: openofficeorg-mandrakelinux-menus, openofficeorg-desktop-integration
-Obsoletes: openofficeorg-mandrakelinux-menus
+Requires: openoffice.org-core01, mandrake-release
+Provides: openoffice.org-desktop-integration, openofficeorg-mandrakelinux-menus, openofficeorg-mandriva-menus
+Obsoletes: openofficeorg-mandrakelinux-menus, openofficeorg-mandriva-menus
 
 %define _unpackaged_files_terminate_build 0
 
@@ -25,13 +25,13 @@ Obsoletes: openofficeorg-mandrakelinux-menus
 %description 
 OpenOffice.org desktop integration
 
-%triggerin -- openofficeorg-core01
+%triggerin -- openoffice.org-core01
 # create file in /etc that contains the office installation path
 cat > /tmp/install.$$ << EOF
 while [ "\$TARGET" == "" ]
 do
   sleep 2
-  TARGET=\`rpm -q --qf '%{INSTALLPREFIX}' openofficeorg-core01 2>&1\` && ln -sf \$TARGET /etc/%unixfilename
+  TARGET=\`rpm -q --qf '%{INSTALLPREFIX}' openoffice.org-core01 2>&1\` && ln -sf \$TARGET /etc/%unixfilename
   # some rpm versions do not wait for the shared lock
   echo \$TARGET | grep '/var/lib/rpm' && TARGET=""
 done
@@ -45,7 +45,7 @@ EOF
 # - core01 for base
 # - core02 for spadmin (printeradmin)
 #
-%triggerin -- openofficeorg-core01 openofficeorg-calc openofficeorg-draw openofficeorg-impress openofficeorg-writer openofficeorg-math openofficeorg-core02
+%triggerin -- openoffice.org-core01 openoffice.org-calc openoffice.org-draw openoffice.org-impress openoffice.org-writer openoffice.org-math openoffice.org-core02
 %{update_menus}
 
 # Update menus
@@ -53,7 +53,7 @@ EOF
 # - core01 for base
 # - core02 for spadmin (printeradmin)
 #
-%triggerpostun -- openofficeorg-core01 openofficeorg-calc openofficeorg-draw openofficeorg-impress openofficeorg-writer openofficeorg-math openofficeorg-core02
+%triggerpostun -- openoffice.org-core01 openoffice.org-calc openoffice.org-draw openoffice.org-impress openoffice.org-writer openoffice.org-math openoffice.org-core02
 %{trigger_clean_menus}
 
 %post
@@ -219,7 +219,7 @@ GenerateMenu() {
 mimetypes_item=
 [ "$7" != "" ] && mimetypes_item="mimetypes=\"$7\""
 cat >> $RPM_BUILD_ROOT%{_menudir}/%{name} << EOF
-?package(openofficeorg-$6): needs=x11 section="$2" icon="%iconprefix-$3.png" title="$4" longtitle="$5" command="$1" \
+?package(openoffice.org-$6): needs=x11 section="$2" icon="%iconprefix-$3.png" title="$4" longtitle="$5" command="$1" \
 $mimetypes_item kde_opt="InitialPreference=100" startup_notify="true"
 EOF
 }
