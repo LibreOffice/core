@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-17 13:02:52 $
+#   last change: $Author: rt $ $Date: 2005-08-18 08:11:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,6 @@ DLLPRE =
 
 # --- Files ---
 
-
 SLOFILES=\
     $(SLO)$/localebecdef.obj \
     $(SLO)$/localebackend.obj \
@@ -92,10 +91,15 @@ SHL1OBJS=$(SLOFILES)
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 
 SHL1IMPLIB=i$(SHL1TARGET)
+
 SHL1STDLIBS=    \
         $(CPPUHELPERLIB) \
         $(CPPULIB) \
         $(SALLIB)
+
+.IF "$(OS)"=="MACOSX"
+SHL1STDLIBS+= -framework CoreServices
+.ENDIF
 
 SHL1VERSIONMAP=exports.map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
