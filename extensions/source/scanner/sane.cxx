@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sane.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:14:24 $
+ *  last change: $Author: rt $ $Date: 2005-08-18 08:13:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 #include <sys/types.h>
+#include <sal/config.h>
 
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
 #include <stdarg.h>
@@ -213,12 +214,12 @@ Sane::~Sane()
 
 void Sane::Init()
 {
-    pSaneLib = dlopen( "libsane.so", RTLD_LAZY );
+    pSaneLib = dlopen( "libsane" SAL_DLLEXTENSION, RTLD_LAZY );
     if( ! pSaneLib )
-        pSaneLib = dlopen( "libsane.so.1", RTLD_LAZY );
+        pSaneLib = dlopen( "libsane" SAL_DLLEXTENSION ".1", RTLD_LAZY );
     // try reasonable places that might not be in the library search path
     if( ! pSaneLib )
-        pSaneLib = dlopen( "/usr/local/lib/libsane.so", RTLD_LAZY );
+        pSaneLib = dlopen( "/usr/local/lib/libsane" SAL_DLLEXTENSION, RTLD_LAZY );
     if( pSaneLib )
     {
         bSaneSymbolLoadFailed = FALSE;
@@ -268,7 +269,7 @@ void Sane::Init()
     }
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
     else
-        fprintf( stderr, "libsane.so could not be opened: %s\n",
+        fprintf( stderr, "libsane%s could not be opened: %s\n", SAL_DLLEXTENSION,
                  dlerror() );
 #endif
 }
