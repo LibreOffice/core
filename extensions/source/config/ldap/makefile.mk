@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-03-30 11:41:38 $
+#   last change: $Author: rt $ $Date: 2005-08-18 12:03:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -122,7 +122,7 @@ SHL1STDLIBS=    \
 SHL1STDLIBS+=-lcompat
 # workaround for FreeBSD, which needs -llber50, too
 .IF "$(WITH_OPENLDAP)" != "YES"
-SHL1STDLIBS+=-llber50
+SHL1STDLIBS+=-Wl,-Bstatic -llber50
 .ENDIF
 .ENDIF
 
