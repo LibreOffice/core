@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: hr $ $Date: 2005-08-05 12:52:18 $
+#   last change: $Author: rt $ $Date: 2005-08-18 12:04:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,7 +93,7 @@ CXX:=$(COMPATH)$/bin$/CC
 
 CONFIGURE_DIR=source
 
-CONFIGURE_ACTION=sh -c 'CFLAGS=-O CXXFLAGS=-O ./configure --enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no'
+CONFIGURE_ACTION=sh -c 'CFLAGS="-O $(ARCH_FLAGS)"  CXXFLAGS="-O $(ARCH_FLAGS)" ./configure --enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no'
 
 #CONFIGURE_FLAGS=--enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no
 CONFIGURE_FLAGS=
