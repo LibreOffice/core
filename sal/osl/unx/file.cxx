@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-05-31 17:07:41 $
+ *  last change: $Author: rt $ $Date: 2005-08-18 08:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,9 +167,6 @@ static const sal_Char* MOUNTTAB="/etc/mtab";
 #include <sys/param.h>
 #include <sys/mount.h>
 #define HAVE_STATFS_H
-
-
-#define osl_getThreadTextEncoding() RTL_TEXTENCODING_UTF8
 
 // add MACOSX Time Value
 
