@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_config.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2005-08-05 15:05:02 $
+#   last change: $Author: hjs $ $Date: 2005-08-19 09:56:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ ALLTAR: \
 .ENDIF			# "$(XCSFILES)"!=""
 
 .IF "$(XCS_TRIM)" != ""
-$(XCS_TRIM) :   $(PRJ)$/registry$/component-schema.dtd \
+$(XCS_TRIM) :   $(DTDDIR)$/registry$/component-schema.dtd \
                 $(XSLDIR)$/schema_val.xsl \
                 $(XSLDIR)$/sanity.xsl \
                 $(XSLDIR)$/schema_trim.xsl 
@@ -146,7 +146,7 @@ XCU_LANG    =$(foreach,i,$(LOCALIZEDFILES) $(PROCESSOUT)$/registry$/res$/{$(alll
 .ENDIF			# "$(XCUFILES)"!=""
 
 .IF "$(XCU_DEFAULT)" != ""
-$(XCU_DEFAULT) : $(PRJ)$/registry$/component-update.dtd \
+$(XCU_DEFAULT) : $(DTDDIR)$/registry$/component-update.dtd \
                  $(XSLDIR)$/data_val.xsl \
                  $(XSLDIR)$/alllang.xsl 
 .ENDIF
