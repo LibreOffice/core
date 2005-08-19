@@ -2,9 +2,9 @@
 #
 #   $RCSfile: work.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-08-18 12:52:00 $
+#   last change: $Author: rt $ $Date: 2005-08-19 14:34:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -224,6 +224,8 @@ sub start_build_server
     if ( ! $ENV{'PRJNAME'} ) { packager::exiter::exit_program("ERROR: Environment variable PRJNAME not set!", "do_broadcast"); }
     my $prjname = $ENV{PRJNAME};
 
+    my $pkgformat = $ENV{PKGFORMAT};
+
     my $prjdep = $prjname . "\\" . "util";  # always windows like path
     my @targetdirs;
     my @targetlines = ();
@@ -235,6 +237,10 @@ sub start_build_server
         $tempdir = packager::files::create_unique_directory ($tempdir);
         @targetlines=();
         push( @targetlines, "\ngenerated_target : $target\n\n");    # to be included into the makefile.mk
+
+        if ( defined $pkgformat ) {
+            push( @targetlines, "\n$target : ".'$$@{$(PKGFORMAT:^".")}'."\n\n");    # to be included into the makefile.mk
+        }
 
         generate_makefile($tempdir, $makefilepath, $prjroot, $target, \@targetlines);
 
