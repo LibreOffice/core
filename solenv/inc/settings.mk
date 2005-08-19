@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.172 $
+#   $Revision: 1.173 $
 #
-#   last change: $Author: kz $ $Date: 2005-07-11 15:27:47 $
+#   last change: $Author: hjs $ $Date: 2005-08-19 10:31:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -206,7 +206,7 @@ JAVACOMPILER=javac
 .ENDIF
 
 #if javadoc is not already set
-.IF $(JAVADOC)==""
+.IF "$(JAVADOC)"==""
 JAVADOC=javadoc -J-Xmx120m
 .ENDIF
 
