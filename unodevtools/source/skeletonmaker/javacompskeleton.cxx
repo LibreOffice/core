@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javacompskeleton.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2005-08-23 08:30:10 $
+ *  last change: $Author: jsc $ $Date: 2005-08-23 11:23:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,7 +290,7 @@ void generateClassDefinition(std::ostream& o,
 
     // check property helper
     if (propertyhelper.getLength() > 1) {
-        o << "    private final PropertySetMixin m_prophlp;";
+        o << "    private final PropertySetMixin m_prophlp;\n";
     }
 
     o << "    private static final java.lang.String m_implementationName = "
