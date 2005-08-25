@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: kz $ $Date: 2005-07-12 12:31:33 $
+ *  last change: $Author: kz $ $Date: 2005-08-25 16:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ ZipPackageFolder::ZipPackageFolder ( const Reference< XMultiServiceFactory >& xF
 {
     OSL_ENSURE( m_xFactory.is(), "No factory is provided to the package folder!" );
 
-    ZipPackageEntry::mbAllowRemoveOnInsert = bAllowRemoveOnInsert;
+    this->mbAllowRemoveOnInsert = bAllowRemoveOnInsert;
 
     SetFolder ( sal_True );
     aEntry.nVersion     = -1;
