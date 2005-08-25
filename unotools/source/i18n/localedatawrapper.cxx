@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2005-06-09 14:31:46 $
+ *  last change: $Author: kz $ $Date: 2005-08-25 13:12:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -844,7 +844,7 @@ void LocaleDataWrapper::scanCurrFormatImpl( const String& rCode,
                         p = pStop;
                 break;
                 default:
-                    if ( nSym == STRING_NOTFOUND && rCode.Equals( aCurrSymbol, p-pStr, aCurrSymbol.Len() ) )
+                    if ( !nInSection && nSym == STRING_NOTFOUND && rCode.Equals( aCurrSymbol, p-pStr, aCurrSymbol.Len() ) )
                     {   // currency symbol not surrounded by [$...]
                         nSym = p - pStr;
                         if ( nBlank == STRING_NOTFOUND && pStr < p && *(p-1) == ' ' )
