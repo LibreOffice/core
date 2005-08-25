@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WWD_Startup.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $  $Date: 2005-07-05 10:19:16 $
+ *  last change: $Author: kz $  $Date: 2005-08-25 13:14:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,6 @@ package com.sun.star.wizards.web;
 //import com.sun.star.awt.ItemEvent;
 //import com.sun.star.awt.XItemListener;
 
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.io.FileNotFoundException;
 import java.util.Comparator;
 import java.util.List;
@@ -73,6 +71,7 @@ import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.WindowClass;
 import com.sun.star.awt.WindowDescriptor;
 import com.sun.star.awt.XControl;
+import com.sun.star.awt.XItemListener;
 import com.sun.star.awt.XListBox;
 import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
@@ -151,8 +150,9 @@ import com.sun.star.wizards.web.data.CGStyle;
  *
  */
 
-public abstract class WWD_Startup extends WWD_General {
+public abstract class WWD_Startup extends WWD_General implements XItemListener{
 
+    SimpleDataAware sda = null;
     /**
      * This is currently not used.
      * It should have been a Listener which invoces
@@ -567,6 +567,15 @@ public abstract class WWD_Startup extends WWD_General {
         Helper.setUnoPropertyValue(getModel(lstLoadSettings), "SelectedItems", new short[] { (short) selectedSession } );
 
     }
+
+
+    public void itemStateChanged(com.sun.star.awt.ItemEvent itemEvent) {
+        sda.updateData();
+        //TODO xf uncomment
+        //refresh.eventPerformed(ie);
+    }
+
+
     /**
      * attaches to each ui-data-control (like checkbox, groupbox or
      * textbox, no buttons though), a DataObject's JavaBean Property,
@@ -595,17 +604,9 @@ public abstract class WWD_Startup extends WWD_General {
 
         //page 3 : Layout
         Object design = settings.cp_DefaultSession.cp_Design;
-        final SimpleDataAware sda = new SimpleDataAware(design,
-                new DataAware.PropertyValue("Layout",design), ilLayouts,
-                new DataAware.PropertyValue("Selected",ilLayouts));
-            ilLayouts.addItemListener(new ItemListener() {
-                public void itemStateChanged(ItemEvent ie) {
-                    sda.updateData();
-                    //TODO xf uncomment
-                    //refresh.eventPerformed(ie);
-                }
-            });
-            designAware.add(sda);
+        sda = new SimpleDataAware(design, new DataAware.PropertyValue("Layout",design), ilLayouts, new DataAware.PropertyValue("Selected",ilLayouts));
+        ilLayouts.addItemListener(this);
+        designAware.add(sda);
 
         //page 4 : layout 2
         designAware.add(UnoDataAware.attachCheckBox(design, "cp_DisplayDescription", chbDocDesc, refresh, true));
