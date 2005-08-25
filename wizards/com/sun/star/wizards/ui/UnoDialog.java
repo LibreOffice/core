@@ -2,9 +2,9 @@
 *
 *  $RCSfile: UnoDialog.java,v $
 *
-*  $Revision: 1.9 $
+*  $Revision: 1.10 $
 *
-*  last change: $Author: obo $ $Date: 2005-07-05 10:18:16 $
+*  last change: $Author: kz $ $Date: 2005-08-25 13:13:46 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -78,7 +78,6 @@ import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.ui.event.*;
 
-import java.awt.Color;
 import java.util.Hashtable;
 
 public class UnoDialog implements EventNames {
@@ -866,10 +865,10 @@ public class UnoDialog implements EventNames {
                     e.printStackTrace(System.out);
                     return false;
                 }
-                Color aColor = new Color(nUIColor);
-                int nRed = aColor.getRed();
-                int nGreen = aColor.getGreen();
-                int nBlue = aColor.getBlue();
+                //TODO: The following methods could be wrapped in an own class implementation
+                int nRed = getRedColorShare(nUIColor);
+                int nGreen = getGreenColorShare(nUIColor);
+                int nBlue = getBlueColorShare(nUIColor);
                 int nLuminance = (( nBlue*28 + nGreen*151 + nRed*77 ) / 256 );
                 boolean bisactivated = (nLuminance <= 25);
                 BisHighContrastModeActivated = new Boolean(bisactivated);
@@ -880,6 +879,31 @@ public class UnoDialog implements EventNames {
         }
         else
             return false;
+    }
+
+    public static int getRedColorShare(int _nColor){
+        int nRed = (int) _nColor/65536;
+        int nRedModulo = _nColor % 65536;
+        int nGreen = (int) (nRedModulo / 256);
+        int nGreenModulo = (nRedModulo % 256);
+        int nBlue = nGreenModulo;
+        return nRed;
+    }
+
+    public static int getGreenColorShare(int _nColor){
+        int nRed = (int) _nColor/65536;
+        int nRedModulo = _nColor % 65536;
+        int nGreen = (int) (nRedModulo / 256);
+        return nGreen;
+    }
+
+    public static int getBlueColorShare(int _nColor){
+        int nRed = (int) _nColor/65536;
+        int nRedModulo = _nColor % 65536;
+        int nGreen = (int) (nRedModulo / 256);
+        int nGreenModulo = (nRedModulo % 256);
+        int nBlue = nGreenModulo;
+        return nBlue;
     }
 
 
