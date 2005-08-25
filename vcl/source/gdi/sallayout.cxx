@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: kz $ $Date: 2005-08-25 15:37:51 $
+ *  last change: $Author: kz $ $Date: 2005-08-25 16:15:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1340,11 +1340,14 @@ void GenericSalLayout::SortGlyphItems()
         // keep data of misplaced item
         GlyphItem aGI = *pGR;
         // make room for misplaced item
-        do  pGL[1] = pGL[0];
-        while( (--pGL >= mpGlyphItems) && (nXPos < pGL->maLinearPos.X()) );
+        do {
+            pGL[1] = pGL[0];
+            pGL[1].mnFlags |= GlyphItem::IS_IN_CLUSTER;
+        } while( (--pGL >= mpGlyphItems) && (nXPos < pGL->maLinearPos.X()) );
         // move misplaced item to proper slot
         pGL[1] = aGI;
         // TODO: fix glyph cluster start flags
+        pGL[1].mnFlags &= ~GlyphItem::IS_IN_CLUSTER;
     }
 }
 
