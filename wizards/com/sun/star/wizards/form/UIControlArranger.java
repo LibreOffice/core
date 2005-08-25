@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UIControlArranger.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $  $Date: 2005-03-18 16:18:31 $
+ *  last change: $Author: kz $  $Date: 2005-08-25 13:13:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,11 +58,12 @@
  *
  */
 package com.sun.star.wizards.form;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import com.sun.star.awt.ItemEvent;
 
 import com.sun.star.awt.Size;
 import com.sun.star.awt.XControl;
+import com.sun.star.awt.XItemEventBroadcaster;
+import com.sun.star.awt.XItemListener;
 import com.sun.star.awt.XRadioButton;
 import com.sun.star.lang.EventObject;
 import com.sun.star.wizards.common.FileAccess;
@@ -200,7 +201,7 @@ public class UIControlArranger {
     }
 
 
-    private class ArrangeImageList implements ItemListener{
+    private class ArrangeImageList implements XItemListener{
         int formindex;
         ImageList ilLayouts = new ImageList();
 
