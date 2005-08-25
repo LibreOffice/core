@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnmon.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:34:57 $
+ *  last change: $Author: kz $ $Date: 2005-08-25 16:13:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,12 +401,21 @@ IMPL_LINK_INLINE_START( SfxPrintProgress, PrintErrorNotify, void *, pvoid )
 {
     if ( pImp->pMonitor )
         pImp->pMonitor->Hide();
+    // AbortJob calls EndPrint hdl, so do not delete pImp just now
+    BOOL bWasDeleteOnEndPrint = pImp->bDeleteOnEndPrint;
+    pImp->bDeleteOnEndPrint = FALSE;
     pImp->pPrinter->AbortJob();
     InfoBox( pImp->GetViewShell()->GetWindow(),
              String( SfxResId(STR_ERROR_PRINT) ) ).Execute();
     if ( pImp->bRestoreFlag && pImp->pViewShell->GetObjectShell()->IsEnableSetModified() != pImp->bOldFlag )
         pImp->pViewShell->GetObjectShell()->EnableSetModified( pImp->bOldFlag );
     pImp->GetViewShell()->GetObjectShell()->Broadcast( SfxPrintingHint( com::sun::star::view::PrintableState_JOB_FAILED, NULL, NULL ) );
+    // now we can clean up like normally EndPrint hdl does
+    if( bWasDeleteOnEndPrint )
+    {
+        DELETEZ(pImp->pMonitor);
+        delete this;
+    }
     return 0;
 }
 IMPL_LINK_INLINE_END( SfxPrintProgress, PrintErrorNotify, void *, pvoid )
