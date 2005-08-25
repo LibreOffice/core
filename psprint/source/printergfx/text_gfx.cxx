@@ -2,9 +2,9 @@
   *
   *  $RCSfile: text_gfx.cxx,v $
   *
-  *  $Revision: 1.23 $
+  *  $Revision: 1.24 $
   *
-  *  last change: $Author: obo $ $Date: 2004-03-17 10:52:41 $
+  *  last change: $Author: kz $ $Date: 2005-08-25 15:36:18 $
   *
   *  The Contents of this file are made available subject to the terms of
   *  either of the following licenses
@@ -136,9 +136,13 @@ static int getVerticalDeltaAngle( sal_Unicode nChar )
         ( nChar >= 0xff00 && nChar < 0xff64 )
         )
     {
-        if( nChar == 0x2010 || nChar == 0x2015 ||
-            nChar == 0x2016 || nChar == 0x2026 ||
-            ( nChar >= 0x3008 && nChar < 0x3019 && nChar != 0x3012 ) ||
+        /* #i52932# remember:
+         nChar == 0x2010 || nChar == 0x2015
+         nChar == 0x2016 || nChar == 0x2026
+
+         are nAngle = 0 also, but already handled in the first if
+        */
+        if( ( nChar >= 0x3008 && nChar < 0x3019 && nChar != 0x3012 ) ||
             nChar == 0xff3b || nChar == 0xff3d ||
             (nChar >= 0xff6b && nChar < 0xff64 ) ||
             nChar == 0xffe3
