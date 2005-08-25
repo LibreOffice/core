@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.72 $
+#   $Revision: 1.73 $
 #
-#   last change: $Author: kz $ $Date: 2005-08-25 15:38:18 $
+#   last change: $Author: kz $ $Date: 2005-08-25 16:16:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -327,13 +327,13 @@ SHL2STDLIBS += -framework CoreAudio -framework AudioToolbox
 SHL2STDLIBS += -lsndfile -lportaudio
 .ENDIF # ENABLE_PASF
 
-.IF "$(OS)"=="LINUX" || "$(OS)"=="SOLARIS" || "$(OS)"=="FREEBSD"
+.IF "$(ENABLE_NAS)" != ""
 SHL2STDLIBS += -laudio
 .IF "$(OS)"=="SOLARIS"
 # needed by libaudio.a
 SHL2STDLIBS += -ldl -lnsl -lsocket
 .ENDIF # SOLARIS
-.ENDIF # "$(OS)"=="LINUX" || "$(OS)"=="SOLARIS" || "$(OS)"=="FREEBSD"
+.ENDIF
 
 .IF "$(GUIBASE)"=="unx"
 
@@ -342,6 +342,10 @@ SHL2STDLIBS+=$(LIBSN_LIBS)
 .ENDIF
 
 SHL2STDLIBS += -lXext -lSM -lICE -lX11
+.IF "$(OS)"!="MACOSX" && "$(OS)"!="FREEBSD"
+# needed by salprnpsp.cxx
+SHL2STDLIBS+= -ldl
+.ENDIF
 
 .ENDIF          # "$(GUIBASE)"=="unx"
 
@@ -410,6 +414,7 @@ LIB5FILES=$(SLB)$/kdeplug.lib
 SHL5TARGET=vclplug_kde$(UPD)$(DLLPOSTFIX)
 SHL5IMPLIB=ikde_plug_
 SHL5LIBS=$(LIB5TARGET)
+SHL5DEPN=$(SHL2TARGETN)
 # libs for KDE plugin
 SHL5STDLIBS=$(KDE_LIBS)
 SHL5STDLIBS+=-l$(SHL2TARGET)
