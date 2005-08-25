@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageList.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $  $Date: 2005-07-05 10:18:03 $
+ *  last change: $Author: kz $  $Date: 2005-08-25 13:13:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,6 @@ import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.Renderer;
 import com.sun.star.wizards.ui.event.*;
 
-import java.awt.ItemSelectable;
-import java.awt.event.ItemListener;
 
 //import com.sun.star.awt.ItemEvent;
 //import com.sun.star.awt.XItemListener;
@@ -80,7 +78,7 @@ import javax.swing.event.ListDataListener;
  *
  * @author  rpiterman
  */
-    public class ImageList implements ListDataListener, ItemSelectable {
+    public class ImageList implements XItemEventBroadcaster, ListDataListener{
 
     private XControl imgContainer;
     private XFixedText lblImageText;
@@ -403,7 +401,7 @@ import javax.swing.event.ListDataListener;
      * @param listener The listener to register.
      *
      */
-    public synchronized void addItemListener(ItemListener listener) {
+    public synchronized void addItemListener(XItemListener listener) {
         if (itemListenerList == null)
             itemListenerList = new java.util.ArrayList();
 
@@ -414,7 +412,7 @@ import javax.swing.event.ListDataListener;
      * @param listener The listener to remove.
      *
      */
-    public synchronized void removeItemListener(ItemListener listener) {
+    public synchronized void removeItemListener(XItemListener listener) {
         if (itemListenerList != null) {
             itemListenerList.remove(listener);
         }
@@ -426,8 +424,8 @@ import javax.swing.event.ListDataListener;
      *
      */
     private void fireItemSelected() {
-        java.awt.event.ItemEvent event = new java.awt.event.ItemEvent(this, 0,
-            getSelectedObject(), java.awt.event.ItemEvent.SELECTED);
+//      java.awt.event.ItemEvent event = new java.awt.event.ItemEvent(this, 0,
+//          getSelectedObject(), java.awt.event.ItemEvent.SELECTED);
         java.util.ArrayList list;
         synchronized (this) {
             if (itemListenerList == null)
@@ -435,7 +433,7 @@ import javax.swing.event.ListDataListener;
             list = (java.util.ArrayList) itemListenerList.clone();
         }
         for (int i = 0; i < list.size(); i++) {
-            ((java.awt.event.ItemListener) list.get(i)).itemStateChanged(event);
+            ((com.sun.star.awt.XItemListener) list.get(i)).itemStateChanged(null);
         }
     }
 
@@ -690,9 +688,6 @@ import javax.swing.event.ListDataListener;
         }
     }
 
-    /* (non-Javadoc)
-     * @see java.awt.ItemSelectable#getSelectedObjects()
-     */
     public Object[] getSelectedObjects() {
         return new Object[] { getListModel().getElementAt(selected)};
     }
