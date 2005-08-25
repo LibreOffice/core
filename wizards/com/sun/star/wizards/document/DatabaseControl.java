@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseControl.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $  $Date: 2005-02-21 13:55:10 $
+ *  last change: $Author: kz $  $Date: 2005-08-25 13:12:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ public class DatabaseControl extends Control {
             if (FormHandler.oControlData[i].DataType == this.ifieldtype)
                 return FormHandler.oControlData[i].GridColumnName;
         }
-        return null;
+        return "";
     }
 
 
