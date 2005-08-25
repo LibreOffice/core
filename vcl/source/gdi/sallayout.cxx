@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 09:07:17 $
+ *  last change: $Author: kz $ $Date: 2005-08-25 15:37:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,9 +104,13 @@ int GetVerticalFlags( sal_Unicode nChar )
      || (nChar >= 0xfe20 && nChar <= 0xfe6f)    // CJK compatibility
      || (nChar >= 0xff00 && nChar <= 0xfffd) )  // other CJK
     {
-        if( nChar == 0x2010 || nChar == 0x2015
-        ||  nChar == 0x2016 || nChar == 0x2026
-        || (nChar >= 0x3008 && nChar <= 0x301C && nChar != 0x3012)
+        /* #i52932# remember:
+         nChar == 0x2010 || nChar == 0x2015
+         nChar == 0x2016 || nChar == 0x2026
+
+         are GF_NONE also, but already handled in the first if
+        */
+        if((nChar >= 0x3008 && nChar <= 0x301C && nChar != 0x3012)
         ||  nChar == 0xFF3B || nChar == 0xFF3D
         || (nChar >= 0xFF5B && nChar <= 0xFF9F) // halfwidth forms
         ||  nChar == 0xFFE3 )
