@@ -13,7 +13,7 @@
   </LC_INFO>
   <LC_CTYPE unoid="generic">
     <Separators>
-      <DateSeparator>/</DateSeparator>
+      <DateSeparator>-</DateSeparator>
       <ThousandSeparator>,</ThousandSeparator>
       <DecimalSeparator>.</DecimalSeparator>
       <TimeSeparator>:</TimeSeparator>
@@ -36,19 +36,19 @@
   </LC_CTYPE>
   <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$Nu-628]">
     <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
-      <FormatCode>DD/MM/YY</FormatCode>
+      <FormatCode>[NatNum1]YY-MM-DD</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey2" default="false" type="medium" usage="DATE" formatindex="28">
-      <FormatCode>NN DD/MMM YY</FormatCode>
+      <FormatCode>[NatNum1]NN YY-MMM DD</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey3" default="false" type="medium" usage="DATE" formatindex="34">
-      <FormatCode>MM/YY</FormatCode>
+      <FormatCode>[NatNum1]YY-MM</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey4" default="false" type="medium" usage="DATE" formatindex="35">
-      <FormatCode>DD/MMM</FormatCode>
+      <FormatCode>[NatNum1]MMM-DD</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey5" default="false" type="medium" usage="DATE" formatindex="36">
@@ -56,46 +56,46 @@
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey6" default="false" type="medium" usage="DATE" formatindex="37">
-      <FormatCode>QQ YY</FormatCode>
+      <FormatCode>[NatNum1]QQ YY</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="21">
-      <FormatCode>DD/MM/YYYY</FormatCode>
+      <FormatCode>[NatNum1]YYYY-MM-DD</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey8" default="true" type="medium" usage="DATE" formatindex="20">
-      <FormatCode>DD/MM/YY</FormatCode>
+      <FormatCode>[NatNum1]YY-MM-DD</FormatCode>
       <DefaultName></DefaultName>
       </FormatElement><FormatElement msgid="DateFormatskey9" default="true" type="long" usage="DATE" formatindex="19">
-      <FormatCode>"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD</FormatCode>
+      <FormatCode>[NatNum1]"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey10" default="false" type="long" usage="DATE" formatindex="22">
-      <FormatCode>"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD</FormatCode>
+      <FormatCode>[NatNum1]"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey11" default="false" type="long" usage="DATE" formatindex="23">
-      <FormatCode>"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD</FormatCode>
+      <FormatCode>[NatNum1]"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey12" default="false" type="long" usage="DATE" formatindex="25">
-      <FormatCode>"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD</FormatCode>
+      <FormatCode>[NatNum1]"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey13" default="false" type="long" usage="DATE" formatindex="27">
-      <FormatCode>"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD</FormatCode>
+      <FormatCode>[NatNum1]"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey14" default="false" type="long" usage="DATE" formatindex="29">
-      <FormatCode>"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD</FormatCode>
+      <FormatCode>[NatNum1]"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="30">
-      <FormatCode>"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD</FormatCode>
+      <FormatCode>[NatNum1]"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey16" default="false" type="long" usage="DATE" formatindex="24">
-      <FormatCode>"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD</FormatCode>
+      <FormatCode>[NatNum1]"སྤྱི་ལོ" YYYY "ཟླ་" M "ཚེས་" DD</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey17" default="false" type="long" usage="DATE" formatindex="26">
@@ -129,11 +129,11 @@
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey3" default="true" type="short" usage="TIME"  formatindex="41">
-      <FormatCode>HH:MM AM/PM</FormatCode>
+      <FormatCode>[NatNum1]HH:MM AM/PM</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey4" default="true" type="medium" usage="TIME"  formatindex="42">
-      <FormatCode>HH:MM:SS AM/PM</FormatCode>
+      <FormatCode>[NatNum1]HH:MM:SS AM/PM</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey5" default="false" type="medium" usage="TIME"  formatindex="43">
@@ -141,7 +141,7 @@
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey6" default="false" type="short" usage="TIME"  formatindex="44">
-      <FormatCode>HH:MM:SS.00</FormatCode>
+      <FormatCode>[NatNum1]HH:MM:SS.00</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey7" default="false" type="medium" usage="TIME"  formatindex="45">
@@ -153,7 +153,7 @@
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey2" default="false" type="medium" usage="DATE_TIME" formatindex="47">
-      <FormatCode>DD/MM/YYYY HH:MM:SS</FormatCode>
+      <FormatCode>[NatNum1]DD-MM-YYYY HH:MM:SS</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER"  formatindex="0">
@@ -161,11 +161,11 @@
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey2" default="true" type="short" usage="FIXED_NUMBER"  formatindex="1">
-      <FormatCode>0</FormatCode>
+      <FormatCode>[NatNum1]0</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey3" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="2">
-      <FormatCode>0.00</FormatCode>
+      <FormatCode>[NatNum1]0.00</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey4" default="false" type="short" usage="FIXED_NUMBER"  formatindex="3">
@@ -173,43 +173,95 @@
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey5" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="4">
-      <FormatCode>#,##0.00</FormatCode>
+      <FormatCode>[NatNum1]#,##0.00</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey6" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="5">
       <FormatCode>[NatNum1]#,###.00</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
+<FormatElement msgid="FixedFormatskey7" default="false" type="short" usage="FIXED_NUMBER"  formatindex="59">
+      <FormatCode>0</FormatCode>
+      <DefaultName></DefaultName>
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey8" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="60">
+      <FormatCode>0.00</FormatCode>
+      <DefaultName></DefaultName>
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey9" default="false" type="short" usage="FIXED_NUMBER"  formatindex="61">
+      <FormatCode>#,##0</FormatCode>
+      <DefaultName></DefaultName>
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey10" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="62">
+      <FormatCode>#,##0.00</FormatCode>
+      <DefaultName></DefaultName>
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey11" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="63">
+      <FormatCode>#,###.00</FormatCode>
+      <DefaultName></DefaultName>
+    </FormatElement>
     <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY"  formatindex="12">
-      <FormatCode>[CURRENCY]#,##0;-[CURRENCY]#,##0</FormatCode>
+      <FormatCode>[NatNum1][CURRENCY]#,##0;[NatNum1]-[CURRENCY]#,##0</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY"  formatindex="13">
-      <FormatCode>[CURRENCY]#,##0.00;-[CURRENCY]#,##0.00</FormatCode>
+      <FormatCode>[NatNum1][CURRENCY]#,##0.00;[NatNum1]-[CURRENCY]#,##0.00</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY"  formatindex="14">
-      <FormatCode>[CURRENCY]#,##0;[RED]-[CURRENCY]#,##0</FormatCode>
+      <FormatCode>[NatNum1][CURRENCY]#,##0;[NatNum1][RED]-[CURRENCY]#,##0</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY"  formatindex="15">
-      <FormatCode>[CURRENCY]#,##0.00;[RED]-[CURRENCY]#,##0.00</FormatCode>
+      <FormatCode>[NatNum1][CURRENCY]#,##0.00;[NatNum1][RED]-[CURRENCY]#,##0.00</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY"  formatindex="16">
-      <FormatCode>#,##0.00 CCC</FormatCode>
+      <FormatCode>[NatNum1]#,##0.00 CCC</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY"  formatindex="17">
+      <FormatCode>[NatNum1][CURRENCY]#,##0.--;[NatNum1][RED]-[CURRENCY]#,##0.--</FormatCode>
+      <DefaultName></DefaultName>
+    </FormatElement>
+ <FormatElement msgid="CurrencyFormatskey7" default="false" type="short" usage="CURRENCY"  formatindex="50">
+      <FormatCode>[CURRENCY]#,##0;-[CURRENCY]#,##0</FormatCode>
+      <DefaultName></DefaultName>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey8" default="false" type="medium" usage="CURRENCY"  formatindex="51">
+      <FormatCode>[CURRENCY]#,##0.00;-[CURRENCY]#,##0.00</FormatCode>
+      <DefaultName></DefaultName>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey9" default="false" type="medium" usage="CURRENCY"  formatindex="52">
+      <FormatCode>[CURRENCY]#,##0;[RED]-[CURRENCY]#,##0</FormatCode>
+      <DefaultName></DefaultName>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey10" default="false" type="medium" usage="CURRENCY"  formatindex="53">
+      <FormatCode>[CURRENCY]#,##0.00;[RED]-[CURRENCY]#,##0.00</FormatCode>
+      <DefaultName></DefaultName>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey11" default="false" type="medium" usage="CURRENCY"  formatindex="54">
+      <FormatCode>#,##0.00 CCC</FormatCode>
+      <DefaultName></DefaultName>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey12" default="false" type="medium" usage="CURRENCY"  formatindex="55">
       <FormatCode>[CURRENCY]#,##0.--;[RED]-[CURRENCY]#,##0.--</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER"  formatindex="8">
-      <!-- Percentage formats other than % soign are not possible in 2.0  0 "བརྒྱ་ཆ་་" is replaced by % -->
-      <FormatCode>0%</FormatCode>
+      <!-- Percentage formats other than % sign are not possible in 2.0  0 "བརྒྱ་ཆ་་" is replaced by % -->
+      <FormatCode>[NatNum1]0%</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
     <FormatElement msgid="PercentFormatskey2" default="true" type="long" usage="PERCENT_NUMBER"  formatindex="9">
+      <FormatCode>[NatNum1]0.00%</FormatCode>
+      <DefaultName></DefaultName>
+    </FormatElement>
+<FormatElement msgid="PercentFormatskey3" default="false" type="short" usage="PERCENT_NUMBER"  formatindex="56">
+     <FormatCode>0%</FormatCode>
+      <DefaultName></DefaultName>
+    </FormatElement>
+    <FormatElement msgid="PercentFormatskey4" default="false" type="long" usage="PERCENT_NUMBER"  formatindex="57">
       <FormatCode>0.00%</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
@@ -221,6 +273,11 @@
       <FormatCode>0.00E+00</FormatCode>
       <DefaultName></DefaultName>
     </FormatElement>
+   <FormatElement msgid="ScientificFormatskey3" default="false" type="medium" usage="SCIENTIFIC_NUMBER"  formatindex="58">
+      <FormatCode>[NatNum1]0.00E+00</FormatCode>
+      <DefaultName></DefaultName>
+    </FormatElement>
+
   </LC_FORMAT>
   <LC_COLLATION>
     <Collator unoid="charset" default="true"/>
@@ -230,7 +287,7 @@
   </LC_COLLATION>
   <LC_SEARCH ref="en_US"/>
   <LC_INDEX>
-    <IndexKey unoid="alphanumeric" default="true" phonetic="false">ཀ-ཨ</IndexKey>
+    <IndexKey unoid="alphanumeric" default="true" phonetic="false">ཀ-ག ང-ཇ ཉ ཏ-ད ན-བ མ-ཛ ཝ-ཤ ས-ཨ</IndexKey>
     <UnicodeScript>26</UnicodeScript>
     <FollowPageWord>p.</FollowPageWord>
     <FollowPageWord>pp.</FollowPageWord>
@@ -348,7 +405,7 @@
           <DefaultFullName>Anno Domini</DefaultFullName>
         </Era>
       </Eras>
-      <StartDayOfWeek><DayID>mon</DayID></StartDayOfWeek>
+      <StartDayOfWeek><DayID>sat</DayID></StartDayOfWeek>
       <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
     </Calendar>
   </LC_CALENDAR>
@@ -380,7 +437,73 @@
       <quarter4Abbreviation>བཞི་དཔྱ་༤</quarter4Abbreviation>
     </ReservedWords>
   </LC_MISC>
-  <LC_NumberingLevel ref="en_US"/>
-  <LC_OutLineNumberingLevel ref="en_US"/>
+   <LC_NumberingLevel>
+    <NumberingLevel Prefix=" " NumType="12" Suffix="." />
+    <NumberingLevel Prefix=" " NumType="12" Suffix=")" />
+    <NumberingLevel Prefix=" " NumType="4" Suffix="." />
+    <NumberingLevel Prefix=" " NumType="4" Suffix=")" />
+    <NumberingLevel Prefix=" " NumType="0" Suffix="." />
+    <NumberingLevel Prefix=" " NumType="0" Suffix=")" />
+    <NumberingLevel Prefix="(" NumType="1" Suffix=")" />
+    <NumberingLevel Prefix=" " NumType="2" Suffix=")" />
+   </LC_NumberingLevel>
+   <LC_OutLineNumberingLevel>
+    <OutlineStyle>
+    <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="0"    LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="1" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="2" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="3" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="4" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+    </OutlineStyle>
+    <OutlineStyle>
+    <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+    </OutlineStyle>
+    <OutlineStyle>
+    <OutLineNumberingLevel Prefix=" " NumType="12" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="12" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="1" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="12" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="2" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="12" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="3" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="12" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="4" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+    </OutlineStyle>
+    <OutlineStyle>
+    <OutLineNumberingLevel Prefix=" " NumType="12" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="12" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="12" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="12" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="12" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+    </OutlineStyle>
+    <OutlineStyle>
+    <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="1" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="1" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+    </OutlineStyle>
+    <OutlineStyle>
+    <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix="(" NumType="1" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="3" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="0" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="6" Suffix="." BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+    </OutlineStyle>
+    <OutlineStyle>
+    <OutLineNumberingLevel Prefix=" " NumType="2" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="0" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="3" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="1" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+    </OutlineStyle>
+    <OutlineStyle>
+    <OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="27A2"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="E006"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="6" Suffix=")" BulletChar="E004"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
+    <OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
+    </OutlineStyle>
+   </LC_OutLineNumberingLevel>
 </Locale>
 
