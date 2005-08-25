@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salcvt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:59:55 $
+ *  last change: $Author: kz $ $Date: 2005-08-25 15:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,12 @@ SalConverterCache::EncodingHasChar( rtl_TextEncoding nEncoding,
 
         case RTL_TEXTENCODING_MS_1252:
         case RTL_TEXTENCODING_ISO_8859_1:
-            bMatch =    ( nChar >= 0x0000 && nChar <= 0x00ff )
+        case RTL_TEXTENCODING_ISO_8859_15:
+        // handle iso8859-15 and iso8859-1 the same (and both with euro)
+        // handle them also like ms1252
+        // this is due to the fact that so many X fonts say they are iso8859-1
+        // but have the other glyphs anyway because they are really ms1252
+            bMatch =    ( /*nChar >= 0x0000 &&*/ nChar <= 0x00ff )
                 ||  ( nChar == 0x20ac )
                 ||  ( nChar == 0x201a )
                 ||  ( nChar == 0x0192 )
@@ -250,12 +255,14 @@ SalConverterCache::EncodingHasChar( rtl_TextEncoding nEncoding,
                     ||  ( nChar >= 0x2019 && nChar <= 0x201e );
             break;
 
+        /* real case for RTL_TEXTENCODING_ISO_8859_15
         case RTL_TEXTENCODING_ISO_8859_15:
             bMatch =    ( nChar >= 0x0020 && nChar <= 0x007e )
                     ||  ( nChar >= 0x00a0 && nChar <= 0x00ff )
                     ||  ( nChar >= 0x0152 && nChar <= 0x017e )
                     ||  ( nChar == 0x20ac );
             break;
+        */
 
         case RTL_TEXTENCODING_JIS_X_0201:
             bMatch =    ( nChar >= 0x0020 && nChar <= 0x007e )
@@ -268,8 +275,7 @@ SalConverterCache::EncodingHasChar( rtl_TextEncoding nEncoding,
                     ||  ( nChar >= 0x0401 && nChar <= 0x045f )
                     ||  ( nChar >= 0x0490 && nChar <= 0x0491 )
                     ||  ( nChar >= 0x2013 && nChar <= 0x203a )
-                    ||  ( nChar >= 0x2116 && nChar <= 0x2122 )
-                    ||  ( nChar == 0xfffe );
+                    ||  ( nChar >= 0x2116 && nChar <= 0x2122 );
             break;
 
         case RTL_TEXTENCODING_KOI8_R:
