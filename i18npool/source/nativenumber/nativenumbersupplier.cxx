@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nativenumbersupplier.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-21 14:36:56 $
+ *  last change: $Author: kz $ $Date: 2005-08-25 13:14:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,13 +467,14 @@ static Number natnum10 = { NumberChar_Hangul_ko, MultiplierChar_6_CJK[Multiplier
 static Number natnum11 = { NumberChar_Hangul_ko, MultiplierChar_6_CJK[Multiplier_Hangul_ko], NUMBER_OMIT_ALL,
                 ExponentCount_6_CJK, MultiplierExponent_6_CJK };
 
-static const sal_Char *natnum1Locales[] = { "zh_CN", "zh_TW", "ja", "ko", "he", "ar", "th", "hi", "or", "mr", "bn", "pa", "gu", "ta", "te", "kn", "ml", "lo", "bo", "my", "km", "mn", "ne" };
+static const sal_Char *natnum1Locales[] = { "zh_CN", "zh_TW", "ja", "ko", "he", "ar", "th", "hi", "or", "mr", "bn", "pa", "gu", "ta", "te", "kn", "ml", "lo", "bo", "my", "km", "mn", "ne","dz" };
 static sal_Int16 nbOfLocale = sizeof(natnum1Locales)/sizeof(natnum1Locales[0]);
 
 static sal_Int16 natnum1[] = { NumberChar_Lower_zh, NumberChar_Lower_zh, NumberChar_Modern_ja, NumberChar_Lower_ko, NumberChar_he,
                 NumberChar_Indic_ar, NumberChar_th, NumberChar_hi, NumberChar_or, NumberChar_mr, NumberChar_bn,
                 NumberChar_pa, NumberChar_gu, NumberChar_ta, NumberChar_te, NumberChar_kn, NumberChar_ml,
-                NumberChar_lo, NumberChar_bo, NumberChar_my, NumberChar_km, NumberChar_mn, NumberChar_ne };
+               NumberChar_lo, NumberChar_bo, NumberChar_my, NumberChar_km, NumberChar_mn, NumberChar_ne,
+NumberChar_dz };
 static sal_Int16 sizeof_natnum1 = sizeof(natnum1)/sizeof(natnum1[0]);
 static sal_Int16 natnum2[] = { NumberChar_Upper_zh, NumberChar_Upper_zh_TW, NumberChar_Traditional_ja,
                 NumberChar_Upper_ko, NumberChar_he };
