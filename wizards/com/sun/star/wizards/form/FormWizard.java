@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormWizard.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $  $Date: 2005-04-06 11:38:24 $
+ *  last change: $Author: kz $  $Date: 2005-08-25 13:12:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,8 +199,8 @@ public class FormWizard extends WizardDialog{
         if(xLocMSF != null){
             System.out.println("Connected to "+ ConnectStr);
             curproperties = new PropertyValue[1];
-            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyDocAssign.odb"); //Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb MyDBase.odb; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
-            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///x:/bc/LDAP Directory.odb"); //Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb MyDBase.odb; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
+            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/New Database3.odb"); //MyDocAssign.odb; Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb MyDBase.odb; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
+//          curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///x:/bc/LDAP Directory.odb"); //Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb MyDBase.odb; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
             CurFormWizard.startFormWizard(xLocMSF, curproperties);
         }
     }
