@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2005-05-31 17:02:11 $
+ *  last change: $Author: kz $ $Date: 2005-08-25 16:10:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1240,8 +1240,7 @@ FILE* PrinterInfoManager::startSpool( const OUString& rPrintername )
 
 int PrinterInfoManager::endSpool( const OUString& rPrintername, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData )
 {
-    pclose( pFile );
-    return 0; // job id ?
+    return (0 == pclose( pFile ));
 }
 
 void PrinterInfoManager::setupJobContextData( JobData& rData )
