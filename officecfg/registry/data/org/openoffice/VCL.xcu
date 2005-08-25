@@ -3,9 +3,9 @@
  *
  *  $RCSfile: VCL.xcu,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-21 14:22:30 $
+ *  last change: $Author: kz $ $Date: 2005-08-25 13:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -661,24 +661,44 @@
         <value>썬굴림;SunGulim;Cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
     </node>
-    <node oor:name="dz" oor:op="replace">
+    <node oor:name="bn" oor:op="replace">
       <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
-        <value>Joyig;Tsuyig;Tashi</value>
+        <value>Mukti Narrow;Lohit Bengali;Vrinda;Tahoma;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;clearlyU;Interface User;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany AMT;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Nimbus Sans L;Helmet;Interface System;Sans Serif</value>
       </prop>
       <prop oor:name="CTL_DISPLAY" oor:op="replace" oor:type="xs:string">
-        <value>Joyig;Tsuyig;Tashi</value>
+        <value>Mukti Narrow;Lohit Bengali;Vrinda;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
       </prop>
       <prop oor:name="CTL_HEADING" oor:op="replace" oor:type="xs:string">
-        <value>Joyig;Tsuyig;Tashi</value>
+        <value>Mukti Narrow;Lohit Bengali;Vrinda;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
       </prop>
       <prop oor:name="CTL_PRESENTATION" oor:op="replace" oor:type="xs:string">
-        <value>Joyig;Tsuyig;Tashi</value>
+        <value>Mukti Narrow;Lohit Bengali;Vrinda;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
       </prop>
       <prop oor:name="CTL_SPREADSHEET" oor:op="replace" oor:type="xs:string">
-        <value>Joyig;Tsuyig;Tashi</value>
+        <value>Mukti Narrow;Lohit Bengali;Vrinda;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
       </prop>
       <prop oor:name="CTL_TEXT" oor:op="replace" oor:type="xs:string">
-        <value>Joyig;Tsuyig;Tashi</value>
+        <value>Mukti Narrow;Lohit Bengali;Vrinda;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+    </node>
+    <node oor:name="dz" oor:op="replace">
+      <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
+        <value>Wangdi;Dzongkha Machine Uni;Tibetan Machine Uni;Wagdi29;Uchen_05;Tsuig_03;XTashi</value>
+      </prop>
+      <prop oor:name="CTL_DISPLAY" oor:op="replace" oor:type="xs:string">
+        <value>Wangdi;Dzongkha Machine Uni;Wagdi29;Uchen_05;Tsuig_03;XTashi;Tibetan Machine Uni</value>
+      </prop>
+      <prop oor:name="CTL_HEADING" oor:op="replace" oor:type="xs:string">
+        <value>Wangdi;Dzongkha Machine Uni;Wagdi29;Uchen_05;Tsuig_03;XTashi;Tibetan Machine Uni</value>
+      </prop>
+      <prop oor:name="CTL_PRESENTATION" oor:op="replace" oor:type="xs:string">
+        <value>Wangdi;Dzongkha Machine Uni;Wagdi29;Uchen_05;Tsuig_03;XTashi;Tibetan Machine Uni</value>
+      </prop>
+      <prop oor:name="CTL_SPREADSHEET" oor:op="replace" oor:type="xs:string">
+        <value>Wangdi;Dzongkha Machine Uni;Wagdi29;Uchen_05;Tsuig_03;XTashi;Tibetan Machine Uni</value>
+      </prop>
+      <prop oor:name="CTL_TEXT" oor:op="replace" oor:type="xs:string">
+        <value>Wangdi;Dzongkha Machine Uni;Wagdi29;Uchen_05;Tsuig_03;XTashi;Tibetan Machine Uni</value>
       </prop>
     </node>
     <node oor:name="km" oor:op="replace">
@@ -723,22 +743,22 @@
     </node>
     <node oor:name="ne" oor:op="replace">
       <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
-        <value>Kalimati;Samanata;Kanjirowa;Thyaka Rabison</value>
+        <value>Lohit Nepali;Kalimati;Samanata;Sans</value>
       </prop>
       <prop oor:name="CTL_DISPLAY" oor:op="replace" oor:type="xs:string">
-        <value>Kalimati;Samanata;Kanjirowa;Thyaka Rabison</value>
+        <value>Lohit Nepali;Kalimati;Samanata;Sans</value>
       </prop>
       <prop oor:name="CTL_HEADING" oor:op="replace" oor:type="xs:string">
-        <value>Kalimati;Samanata;Kanjirowa;Thyaka Rabison</value>
+        <value>Lohit Nepali;Kalimati;Samanata;Sans</value>
       </prop>
       <prop oor:name="CTL_PRESENTATION" oor:op="replace" oor:type="xs:string">
-        <value>Kalimati;Samanata;Kanjirowa;Thyaka Rabison</value>
+        <value>Lohit Nepali;Kalimati;Samanata;Sans</value>
       </prop>
       <prop oor:name="CTL_SPREADSHEET" oor:op="replace" oor:type="xs:string">
-        <value>Kalimati;Samanata;Kanjirowa;Thyaka Rabison</value>
+        <value>Lohit Nepali;Kalimati;Samanata;Sans</value>
       </prop>
       <prop oor:name="CTL_TEXT" oor:op="replace" oor:type="xs:string">
-        <value>Kalimati;Samanata;Kanjirowa;Thyaka Rabison</value>
+        <value>Lohit Nepali;Kalimati;Samanata;Sans</value>
       </prop>
     </node>
     <node oor:name="hi-IN" oor:op="replace">
@@ -779,6 +799,26 @@
       </prop>
       <prop oor:name="CTL_TEXT" oor:op="replace" oor:type="xs:string">
         <value>Lohit Gujarati;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+    </node>
+    <node oor:name="or-IN" oor:op="replace">
+      <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
+        <value>utkal;Tahoma;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;clearlyU;Interface User;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany AMT;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Nimbus Sans L;Helmet;Interface System;Sans Serif</value>
+      </prop>
+      <prop oor:name="CTL_DISPLAY" oor:op="replace" oor:type="xs:string">
+        <value>utkal;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+      <prop oor:name="CTL_HEADING" oor:op="replace" oor:type="xs:string">
+        <value>utkal;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+      <prop oor:name="CTL_PRESENTATION" oor:op="replace" oor:type="xs:string">
+        <value>utkal;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+      <prop oor:name="CTL_SPREADSHEET" oor:op="replace" oor:type="xs:string">
+        <value>utkal;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+      </prop>
+      <prop oor:name="CTL_TEXT" oor:op="replace" oor:type="xs:string">
+        <value>utkal;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
       </prop>
     </node>
     <node oor:name="pa-IN" oor:op="replace">
