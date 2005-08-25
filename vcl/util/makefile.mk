@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.71 $
+#   $Revision: 1.72 $
 #
-#   last change: $Author: obo $ $Date: 2005-07-18 14:10:12 $
+#   last change: $Author: kz $ $Date: 2005-08-25 15:38:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -298,29 +298,27 @@ SHL2STDLIBS=\
             $(SALLIB)
 
 # prepare linking of Xinerama
-.IF "$(USE_XINERAMA)" != "no"
+.IF "$(USE_XINERAMA)" != "NO"
 
 .IF "$(OS)"=="MACOSX"
 XINERAMALIBS=-lXinerama
 .ELSE
 .IF "$(OS)" != "SOLARIS"
-.IF "$(CPU)" == "I"
 .IF "$(XINERAMA_LINK)" == "dynamic"
 XINERAMALIBS= -lXinerama
 .ELSE
 XINERAMALIBS= -Wl,-Bstatic -lXinerama -Wl,-Bdynamic 
 .ENDIF # XINERAMA_LINK == dynamic
-.ENDIF # CPU == I
 .ENDIF # OS == SOLARIS
 .ENDIF # OS == MACOSX
 
 SHL2STDLIBS += $(XINERAMALIBS)
+.ENDIF # USE_XINERAMA != NO
 
 .IF "$(XRENDER_LINK)" == "YES"
 SHL2STDLIBS+=`pkg-config --libs xrender`
 .ENDIF
 
-.ENDIF # USE_XINERAMA != no
 
 .IF "$(ENABLE_PASF)" != ""
 .IF "$(OS)"=="MACOSX"
