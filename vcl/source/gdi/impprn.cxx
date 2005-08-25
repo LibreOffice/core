@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impprn.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:36:32 $
+ *  last change: $Author: kz $ $Date: 2005-08-25 16:14:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,13 +339,16 @@ IMPL_LINK( ImplQPrinter, ImplPrintHdl, Timer*, EMPTYARG )
     // Druck-Job zuende?
     QueuePage* pActPage = (QueuePage*) mpQueue->Get();
 
+
+    vcl::DeletionListener aDel( this );
     if ( pActPage->mbEndJob )
     {
         maTimer.Stop();
         delete pActPage;
         if( ! EndJob() )
             mpParent->Error();
-        mpParent->ImplEndPrint();
+        if( ! aDel.isDeleted() )
+            mpParent->ImplEndPrint();
     }
     else
     {
