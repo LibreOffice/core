@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-06 09:21:01 $
+ *  last change: $Author: kz $ $Date: 2005-08-25 16:14:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1394,8 +1394,11 @@ void Printer::ImplEndPrint()
     mbPrinting      = FALSE;
     mnCurPrintPage  = 0;
     maJobName.Erase();
-    mpQPrinter->Destroy();
-    mpQPrinter = NULL;
+    if( mpQPrinter ) // not necessarily filled e.g. after AbortJob
+    {
+        mpQPrinter->Destroy();
+        mpQPrinter = NULL;
+    }
     EndPrint();
 }
 
@@ -1526,8 +1529,9 @@ BOOL Printer::StartJob( const XubString& rJobName )
 
 BOOL Printer::EndJob()
 {
+    BOOL bRet = FALSE;
     if ( !IsJobActive() )
-        return FALSE;
+        return bRet;
 
     DBG_ASSERT( !mbInPrintPage, "Printer::EndJob() - StartPage() without EndPage() called" );
 
@@ -1539,6 +1543,8 @@ BOOL Printer::EndJob()
 
         mnCurPage = 0;
 
+        bRet = TRUE;
+
         if ( mpPrinter )
         {
             mbPrinting      = FALSE;
@@ -1546,7 +1552,7 @@ BOOL Printer::EndJob()
             maJobName.Erase();
 
             mbDevOutput = FALSE;
-            mpPrinter->EndJob();
+            bRet = mpPrinter->EndJob();
             // Hier den Drucker nicht asyncron zerstoeren, da es
             // W95 nicht verkraftet, wenn gleichzeitig gedruckt wird
             // und ein Druckerobjekt zerstoert wird
@@ -1556,11 +1562,9 @@ BOOL Printer::EndJob()
         }
         else
             mpQPrinter->EndQueuePrint();
-
-        return TRUE;
     }
 
-    return FALSE;
+    return bRet;
 }
 
 // -----------------------------------------------------------------------
