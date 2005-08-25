@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2005-08-05 12:54:45 $
+ *  last change: $Author: kz $ $Date: 2005-08-25 16:15:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,7 +439,14 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
             break;
 
         // find matching script
-        le_int32 eScriptCode = uscript_getScript( pIcuChars[nMinRunPos], &rcI18n );
+        // TODO: split up bidi run into script runs
+        le_int32 eScriptCode = -1;
+        for( int i = nMinRunPos; i < nEndRunPos; ++i )
+        {
+            eScriptCode = uscript_getScript( pIcuChars[i], &rcI18n );
+            if( (eScriptCode > 0) && (eScriptCode != latnScriptCode) )
+                break;
+        }
         if( eScriptCode < 0 )   // TODO: handle errors better
             eScriptCode = latnScriptCode;
 
@@ -519,7 +526,7 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
             // heuristic to detect group clusters using the "smoothed" char positions
             long nGlyphFlags = 0;
             if( nLastCharPos != -1 )
-                if( (nCharPos == nLastCharPos) || (nGlyphWidth == 0) )
+                if( (nCharPos == nLastCharPos) || (nGlyphWidth <= 0) )
                     nGlyphFlags = GlyphItem::IS_IN_CLUSTER;
             if( bRightToLeft )
                 nGlyphFlags |= GlyphItem::IS_RTL_GLYPH;
