@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tencinfo.c,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-08 09:49:47 $
+ *  last change: $Author: kz $ $Date: 2005-08-25 15:48:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -572,7 +572,9 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const sal_Char* pU
     static ImplStrCharsetDef const aUnixCharsetTIS620Tab[] =
     {
         { "0", RTL_TEXTENCODING_TIS_620 },
-        { NULL, RTL_TEXTENCODING_DONTKNOW }
+        { "2529", RTL_TEXTENCODING_TIS_620 },
+        { "2533", RTL_TEXTENCODING_TIS_620 },
+        { NULL, RTL_TEXTENCODING_TIS_620 }
     };
     static ImplStrCharsetDef const aUnixCharsetTIS6202529Tab[] =
     {
