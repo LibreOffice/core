@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javacompskeleton.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2005-08-23 11:23:43 $
+ *  last change: $Author: jsc $ $Date: 2005-08-25 15:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,81 @@ void generateXServiceInfoBodies(std::ostream& o)
       << "        return m_serviceNames;\n    }\n\n";
 }
 
+void generateXPropertySetBodies(std::ostream& o)
+{
+    o << "    /* com.sun.star.lang.XPropertySet */\n";
+    o << "    public com.sun.star.beans.XPropertySetInfo getPropertySetInfo()\n"
+      "    {\n        return m_prophlp.getPropertySetInfo();\n    }\n\n";
+
+    o << "    public void setPropertyValue(java.lang.String aPropertyName, "
+      "java.lang.Object aValue) throws com.sun.star.beans.UnknownPropertyException, "
+      "com.sun.star.beans.PropertyVetoException, "
+      "com.sun.star.lang.IllegalArgumentException,"
+      "com.sun.star.lang.WrappedTargetException\n    {\n        "
+      "m_prophlp.setPropertyValue(aPropertyName, aValue);\n    }\n\n";
+
+    o << "    public java.lang.Object getPropertyValue(java.lang.String aPropertyName) "
+      "throws com.sun.star.beans.UnknownPropertyException, "
+      "com.sun.star.lang.WrappedTargetException\n    {\n        return "
+      "m_prophlp.getPropertyValue(aPropertyName);\n    }\n\n";
+
+    o << "    public void addPropertyChangeListener(java.lang.String aPropertyName, "
+      "com.sun.star.beans.XPropertyChangeListener xListener) throws "
+      "com.sun.star.beans.UnknownPropertyException, "
+      "com.sun.star.lang.WrappedTargetException\n    {\n        "
+      "m_prophlp.addPropertyChangeListener(aPropertyName, xListener);\n    }\n\n";
+
+    o << "    public void removePropertyChangeListener(java.lang.String aPropertyName, "
+      "com.sun.star.beans.XPropertyChangeListener xListener) throws "
+      "com.sun.star.beans.UnknownPropertyException, "
+      "com.sun.star.lang.WrappedTargetException\n    {\n        "
+      "m_prophlp.removePropertyChangeListener(aPropertyName, xListener);\n    }\n\n";
+
+    o << "    public void addVetoableChangeListener(java.lang.String aPropertyName, "
+      "com.sun.star.beans.XVetoableChangeListener xListener) throws "
+      "com.sun.star.beans.UnknownPropertyException, "
+      "com.sun.star.lang.WrappedTargetException\n    {\n        "
+      "m_prophlp.addVetoableChangeListener(aPropertyName, xListener);\n    }\n\n";
+
+    o << "    public void removeVetoableChangeListener(java.lang.String aPropertyName, "
+        "com.sun.star.beans.XVetoableChangeListener xListener) throws "
+        "com.sun.star.beans.UnknownPropertyException, "
+        "com.sun.star.lang.WrappedTargetException\n    {\n        "
+        "m_prophlp.removeVetoableChangeListener(aPropertyName, xListener);\n }\n\n";
+}
+
+void generateXFastPropertySetBodies(std::ostream& o)
+{
+    o << "    /* com.sun.star.lang.XFastPropertySet */\n";
+
+    o << "    public void setFastPropertyValue(int nHandle, java.lang.Object aValue) "
+        "throws com.sun.star.beans.UnknownPropertyException, "
+        "com.sun.star.beans.PropertyVetoException, "
+        "com.sun.star.lang.IllegalArgumentException, "
+        "com.sun.star.lang.WrappedTargetException\n    {\n        "
+        "m_prophlp.setFastPropertyValue(nHandle, aValue);\n    }\n\n";
+
+    o << "    public java.lang.Object getFastPropertyValue(int nHandle) throws "
+        "com.sun.star.beans.UnknownPropertyException, "
+        "com.sun.star.lang.WrappedTargetException\n    {\n        return "
+        "m_prophlp.getFastPropertyValue(nHandle);\n    }\n\n";
+}
+
+void generateXPropertyAccessBodies(std::ostream& o)
+{
+    o << "    /* com.sun.star.lang.XPropertyAccess */\n";
+
+    o << "    public com.sun.star.beans.PropertyValue[] getPropertyValues()\n    {\n"
+      << "        return m_prophlp.getPropertyValues();\n    }\n\n";
+
+    o << "    public void setPropertyValues(com.sun.star.beans.PropertyValue[] aProps) "
+        "throws com.sun.star.beans.UnknownPropertyException, "
+        "com.sun.star.beans.PropertyVetoException, "
+        "com.sun.star.lang.IllegalArgumentException, "
+        "com.sun.star.lang.WrappedTargetException\n    {\n        "
+        "m_prophlp.setPropertyValues(aProps);\n    }\n\n";
+}
+
 
 bool checkAttribute(rtl::OStringBuffer& attributeValue, sal_uInt16 attribute) {
     bool cast = false;
@@ -236,8 +311,9 @@ void registerProperties(std::ostream& o,
 void generateMethodBodies(std::ostream& o,
          ProgramOptions const & options,
          TypeManager const & manager,
+         StringPairHashMap& attributes,
          const std::hash_set< rtl::OString, rtl::OStringHash >& interfaces,
-         const rtl::OString& indentation)
+         const rtl::OString& indentation, bool usepropertymixin)
 {
     std::hash_set< rtl::OString, rtl::OStringHash >::const_iterator iter =
         interfaces.begin();
@@ -247,12 +323,17 @@ void generateMethodBodies(std::ostream& o,
                 generateXServiceInfoBodies(o);
         } else {
             typereg::Reader reader(manager.getTypeReader((*iter).replace('.','/')));
-            printMethods(o, options, manager, reader, generated, "_",
-                         indentation, true);
+            printMethods(o, options, manager, reader, attributes, generated, "_",
+                         indentation, true, usepropertymixin);
         }
         iter++;
     }
 }
+
+static const char* propcomment=
+"        // use the last parameter of the PropertySetMixin constructor\n"
+"        // for your optional attributes if necessary. See the documentation\n"
+"        // of the PropertySetMixin helper for further information\n";
 
 void generateClassDefinition(std::ostream& o,
          ProgramOptions const & options,
@@ -315,9 +396,9 @@ void generateClassDefinition(std::ostream& o,
         registerProperties(o, manager, properties, "        ");
     } else {
         if (propertyhelper.getLength() > 1) {
-            o << "        m_prophlp = new PropertySetMixin(\n"
-              << "            m_context, this, new Type(" << propertyhelper
-              << ".class));\n";
+            o << propcomment
+              << "        m_prophlp = new PropertySetMixin(m_context, this,\n"
+              << "            new Type(" << propertyhelper << ".class), null);\n";
         }
     }
     o << "    };\n\n";
@@ -325,11 +406,15 @@ void generateClassDefinition(std::ostream& o,
     if (!services.empty())
         generateCompFunctions(o, classname);
 
-    generateMethodBodies(o, options, manager, interfaces, "    ");
+    StringPairHashMap attributes;
+    generateMethodBodies(o, options, manager, attributes, interfaces,
+                         "    ", propertyhelper.getLength() > 1);
+
 
     if (!properties.empty()) {
         StringPairHashMap::const_iterator iter =
             properties.begin();
+        o << "    // properties\n";
         while (iter != properties.end()) {
             o << "    protected ";
             printType(o, options, manager, iter->second.first.replace('.','/'),
@@ -337,7 +422,19 @@ void generateClassDefinition(std::ostream& o,
             o << " m_" << iter->first << ";\n";
             iter++;
         }
+    } else if (!attributes.empty()) {
+        StringPairHashMap::const_iterator iter =
+            attributes.begin();
+        o << "    // attributes\n";
+        while (iter != attributes.end()) {
+            o << "    protected ";
+            printType(o, options, manager, iter->second.first.replace('.','/'),
+                      false, false);
+            o << " m_" << iter->first << ";\n";
+            iter++;
+        }
     }
+
 
     // end of class definition
     o << "}\n";

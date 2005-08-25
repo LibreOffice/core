@@ -2,9 +2,9 @@
  *
  *  $RCSfile: skeletonjava.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2005-08-23 08:31:23 $
+ *  last change: $Author: jsc $ $Date: 2005-08-25 15:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,10 +106,12 @@ void printExceptionSpecification(std::ostream & o,
 void printMethods(std::ostream & o,
                   ProgramOptions const & options, TypeManager const & manager,
                   typereg::Reader const & reader,
+                  StringPairHashMap& attributes,
                   codemaker::GeneratedTypeSet & generated,
                   rtl::OString const & delegate,
                   rtl::OString const & indentation=rtl::OString(),
-                  bool defaultvalue=false);
+                  bool defaultvalue=false,
+                  bool usepropertymixin=false);
 
 void printConstructionMethods(std::ostream & o,
                               ProgramOptions const & options,

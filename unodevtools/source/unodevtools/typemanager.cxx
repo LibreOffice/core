@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemanager.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2005-08-23 08:26:44 $
+ *  last change: $Author: jsc $ $Date: 2005-08-25 15:30:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,68 +116,6 @@ static RTTypeClass mapTypeClass(TypeClass typeclass) {
     return RT_TYPE_INVALID;
 }
 
-
-// TypeManager::TypeManager()
-// {
-//  m_pImpl = new TypeManagerImpl();
-//  acquire();
-// }
-
-// TypeManager::~TypeManager()
-// {
-//  release();
-// }
-
-// sal_Int32 TypeManager::acquire()
-// {
-//  return osl_incrementInterlockedCount(&m_pImpl->m_refCount);
-// }
-
-// sal_Int32 TypeManager::release()
-// {
-//  sal_Int32 refCount = 0;
-//  if (0 == (refCount = osl_decrementInterlockedCount(&m_pImpl->m_refCount)) )
-//  {
-//      delete m_pImpl;
-//  }
-//  return refCount;;
-// }
-
-// sal_Bool TypeManager::isBaseType(const ::rtl::OString& name)
-// {
-//  if ( name.equals(OString("short")) )
-//      return sal_True;
-//  if ( name.equals(OString("unsigned short")) )
-//      return sal_True;
-//  if ( name.equals(OString("long")) )
-//      return sal_True;
-//  if ( name.equals(OString("unsigned long")) )
-//      return sal_True;
-//  if ( name.equals(OString("hyper")) )
-//      return sal_True;
-//  if ( name.equals(OString("unsigned hyper")) )
-//      return sal_True;
-//  if ( name.equals(OString("string")) )
-//      return sal_True;
-//  if ( name.equals(OString("boolean")) )
-//      return sal_True;
-//  if ( name.equals(OString("char")) )
-//      return sal_True;
-//  if ( name.equals(OString("byte")) )
-//      return sal_True;
-//  if ( name.equals(OString("any")) )
-//      return sal_True;
-//  if ( name.equals(OString("type")) )
-//      return sal_True;
-//  if ( name.equals(OString("float")) )
-//      return sal_True;
-//  if ( name.equals(OString("double")) )
-//      return sal_True;
-//  if ( name.equals(OString("void")) )
-//      return sal_True;
-
-//  return sal_False;
-// }
 
 UnoTypeManager::UnoTypeManager()
 {

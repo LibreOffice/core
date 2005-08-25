@@ -2,9 +2,9 @@
  *
  *  $RCSfile: skeletoncommon.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2005-08-23 08:30:44 $
+ *  last change: $Author: jsc $ $Date: 2005-08-25 15:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ void checkType(TypeManager const & manager,
     switch (reader.getTypeClass()) {
     case RT_TYPE_INTERFACE:
     {
-        // com/sun/star/lang/XComponent should also not in the list
+        // com/sun/star/lang/XComponent should be also not in the list
         // but it will be used for checking the impl helper and will be
         // removed later if necessary.
         if ( binType.equals("com/sun/star/lang/XTypeProvider") ||
@@ -151,11 +151,6 @@ void checkType(TypeManager const & manager,
                         codemaker::convertString(reader.getFieldTypeName(i)).
                         replace('/', '.'));
 
-//                     std::pair<rtl::OString, sal_Int16> prop(
-//                               fieldType, reader.getFieldFlags(i));
-
-//                     properties[fieldName] = std::pair<rtl::OString, sal_Int16>(
-//                               fieldType, reader.getFieldFlags(i));
                     properties.insert(StringPairHashMap::value_type(fieldName,
                         std::pair<rtl::OString, sal_Int16>(
                              fieldType, reader.getFieldFlags(i))));
@@ -182,13 +177,13 @@ void checkDefaultInterfaces(
             interfaces.insert("com.sun.star.lang.XServiceInfo");
     }
 
-    if (propertyhelper.getLength() > 0) {
+    if (propertyhelper.equals("_")) {
         if (interfaces.find("com.sun.star.beans.XPropertySet") != interfaces.end())
             interfaces.erase("com.sun.star.beans.XPropertySet");
         if (interfaces.find("com.sun.star.beans.XFastPropertySet") != interfaces.end())
             interfaces.erase("com.sun.star.beans.XFastPropertySet");
-        if (interfaces.find("com.sun.star.beans.XMultiPropertySet") != interfaces.end())
-            interfaces.erase("com.sun.star.beans.XMultiPropertySet");
+        if (interfaces.find("com.sun.star.beans.XPropertyAccess") != interfaces.end())
+            interfaces.erase("com.sun.star.beans.XPropertyAccess");
     }
 }
 

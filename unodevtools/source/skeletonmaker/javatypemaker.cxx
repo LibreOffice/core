@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javatypemaker.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2005-08-23 08:30:21 $
+ *  last change: $Author: jsc $ $Date: 2005-08-25 15:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,11 +259,61 @@ void printExceptionSpecification(std::ostream & o,
     }
 }
 
+
+void generateXPropertySetBodies(std::ostream& o);
+void generateXFastPropertySetBodies(std::ostream& o);
+void generateXPropertyAccessBodies(std::ostream& o);
+
+void printSetPropertyMixinBody(std::ostream & o,
+                               typereg::Reader const & reader,
+                               sal_uInt16 fieldno,
+                               rtl::OString const & indentation)
+{
+    RTFieldAccess fieldAccess = reader.getFieldFlags(fieldno);
+    rtl::OString fieldname = codemaker::convertString(reader.getFieldName(fieldno));
+    bool bound = (fieldAccess & RT_ACCESS_BOUND ? true : false);
+
+    o << "\n" << indentation << "{\n";
+
+    if (bound) {
+        o << indentation << "    PropertySetMixin.BoundListeners l = "
+            "new PropertySetMixin.BoundListeners();\n\n";
+    }
+
+    if (fieldAccess & RT_ACCESS_CONSTRAINED ||
+        fieldAccess & RT_ACCESS_MAYBEDEFAULT ||
+        fieldAccess & RT_ACCESS_MAYBEAMBIGUOUS ||
+        fieldAccess & RT_ACCESS_MAYBEVOID ) {
+
+        // TODO
+
+    } else {
+        o << indentation << "    m_prophlp.prepareSet(\""
+          << fieldname << "\", ";
+        if (bound)
+            o << "l";
+        else
+            o << "null";
+        o << ");\n";
+    }
+
+    o << indentation << "    synchronized (this) {\n"
+      << indentation << "        m_" << fieldname
+      << " = the_value;\n" << indentation << "    }\n";
+
+    if (bound) {
+        o << indentation << "    l.notifyListeners();\n";
+    }
+    o  << indentation << "}\n\n";
+}
+
 void printMethods(std::ostream & o,
     ProgramOptions const & options, TypeManager const & manager,
-    typereg::Reader const & reader, codemaker::GeneratedTypeSet & generated,
+    typereg::Reader const & reader,
+    StringPairHashMap& attributes,
+    codemaker::GeneratedTypeSet & generated,
     rtl::OString const & delegate, rtl::OString const & indentation,
-    bool defaultvalue)
+    bool defaultvalue, bool usepropertymixin)
 {
     rtl::OString type(codemaker::convertString(reader.getTypeName()));
     if (generated.contains(type) || type == "com/sun/star/uno/XInterface" ||
@@ -272,6 +322,22 @@ void printMethods(std::ostream & o,
            type.equals("com/sun/star/lang/XTypeProvider") ||
            type.equals("com/sun/star/uno/XWeak")) ) ) {
         return;
+    }
+
+    if (usepropertymixin) {
+        if ( type.equals("com/sun/star/beans/XPropertySet")) {
+            generated.add(type);
+            generateXPropertySetBodies(o);
+            return;
+        } else if ( type.equals("com/sun/star/beans/XFastPropertySet")) {
+            generated.add(type);
+            generateXFastPropertySetBodies(o);
+            return;
+        } else if ( type.equals("com/sun/star/beans/XPropertyAccess")) {
+            generated.add(type);
+            generateXPropertyAccessBodies(o);
+            return;
+        }
     }
 
     static rtl::OString sd(RTL_CONSTASCII_STRINGPARAM("_"));
@@ -291,8 +357,8 @@ void printMethods(std::ostream & o,
                     + codemaker::convertString(
                         reader.getSuperTypeName(i)));
             }
-            printMethods(o, options, manager, super, generated, delegate,
-                         indentation, defaultvalue);
+            printMethods(o, options, manager, super, attributes, generated, delegate,
+                         indentation, defaultvalue, usepropertymixin);
         }
         if (reader.getFieldCount() > 0 || reader.getMethodCount() > 0) {
             o << indentation << "/* ";
@@ -302,6 +368,17 @@ void printMethods(std::ostream & o,
     }
     sal_uInt16 method = 0;
     for (sal_uInt16 i = 0; i < reader.getFieldCount(); ++i) {
+        rtl::OString fieldName(
+            codemaker::convertString(reader.getFieldName(i)).
+            replace('/', '.'));
+        rtl::OString fieldType(
+            codemaker::convertString(reader.getFieldTypeName(i)).
+            replace('/', '.'));
+        attributes.insert(StringPairHashMap::value_type(fieldName,
+                              std::pair<rtl::OString, sal_Int16>(
+                                  fieldType, reader.getFieldFlags(i))));
+
+
         o << indentation << "public ";
         printType(o,
             options, manager,
@@ -317,12 +394,18 @@ void printMethods(std::ostream & o,
         }
         if (body) {
             if (defaultbody) {
-                o << "\n" << indentation << "{\n" << indentation << "    return ";
-                printType(o,
-                    options, manager,
-                    codemaker::convertString(reader.getFieldTypeName(i)),
-                    false, defaultvalue);
-                o << ";\n" << indentation << "}\n\n";
+                if (usepropertymixin) {
+                    o << "\n" << indentation << "{\n" << indentation << "    return m_"
+                      << codemaker::convertString(reader.getFieldName(i)).getStr()
+                      << ";\n" << indentation << "}\n\n";
+                } else {
+                    o << "\n" << indentation << "{\n" << indentation << "    return ";
+                    printType(o,
+                              options, manager,
+                              codemaker::convertString(reader.getFieldTypeName(i)),
+                              false, defaultvalue);
+                    o << ";\n" << indentation << "}\n\n";
+                }
             } else {
                 o << "\n" << indentation << "    { return "
                   << delegate.getStr() << "get"
@@ -353,7 +436,11 @@ void printMethods(std::ostream & o,
             }
             if (body) {
                 if (defaultbody) {
-                    o << "\n" << indentation << "{\n\n" << indentation << "}\n\n";
+                    if (usepropertymixin) {
+                        printSetPropertyMixinBody(o, reader, i, indentation);
+                    } else {
+                        o << "\n" << indentation << "{\n\n" << indentation << "}\n\n";
+                    }
                 } else {
                     o << "\n" << indentation << "    { "
                       << delegate.getStr() << "set"
@@ -610,7 +697,8 @@ void generateDocumentation(std::ostream & o,
                     << "; " << (options.all ? "all" : "direct")
                     << " methods:\n";
                 codemaker::GeneratedTypeSet generated;
-                printMethods(o, options, manager, reader, generated,
+                StringPairHashMap attributes;
+                printMethods(o, options, manager, reader, attributes, generated,
                              "", "", false);
             }
             break;
