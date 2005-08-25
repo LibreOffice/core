@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2005-07-12 12:31:48 $
+ *  last change: $Author: kz $ $Date: 2005-08-25 16:16:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ ZipPackageStream::ZipPackageStream ( ZipPackage & rNewPackage,
 {
     OSL_ENSURE( m_xFactory.is(), "No factory is provided to ZipPackageStream!\n" );
 
-    ZipPackageEntry::mbAllowRemoveOnInsert = bAllowRemoveOnInsert;
+    this->mbAllowRemoveOnInsert = bAllowRemoveOnInsert;
 
     SetFolder ( sal_False );
     aEntry.nVersion     = -1;
