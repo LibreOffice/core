@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.72 $
-# Date:        $Date: 2005-08-18 08:21:30 $
+# Version:     $Revision: 1.73 $
+# Date:        $Date: 2005-08-25 16:11:37 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1757,6 +1757,7 @@ ToFile( "CURL_LIBS",         "@CURL_LIBS@",        "e" );
 ToFile( "SYSTEM_BOOST",      "@SYSTEM_BOOST@",     "e" );
 ToFile( "SYSTEM_NAS",        "@SYSTEM_NAS@",       "e" );
 ToFile( "NAS_INCLUDES",      "@NAS_INCLUDES@",     "e" );
+ToFile( "ENABLE_NAS",        "@ENABLE_NAS@",       "e" );
 ToFile( "ENABLE_PASF",       "@ENABLE_PASF@",      "e" );
 ToFile( "SYSTEM_SNDFILE",    "@SYSTEM_SNDFILE@",   "e" );
 ToFile( "SYSTEM_PORTAUDIO",  "@SYSTEM_PORTAUDIO@", "e" );
