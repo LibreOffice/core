@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-18 10:31:27 $
+#   last change: $Author: kz $ $Date: 2005-08-25 16:15:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,14 +108,20 @@ SLOFILES+=\
             $(SLO)$/rptpsound.obj		\
             $(SLO)$/nassound.obj		
 
+
+
+.IF "$(ENABLE_NAS)" != ""
+CDEFS+=-DUSE_NAS
+.ENDIF
+
 .IF "$(ENABLE_PASF)" != ""
-CFLAGS+=-DUSE_PASF
+CDEFS+=-DUSE_PASF
 SLOFILES+=$(SLO)$/pasfsound.obj
 .IF "$(SYSTEM_SNDFILE)" == "YES"
-CFLAGS+=-DSYSTEM_SNDFILE
+CDEFS+=-DSYSTEM_SNDFILE
 .ENDIF
 .IF "$(SYSTEM_PORTAUDIO)" == "YES"
-CFLAGS+=-DSYSTEM_PORTAUDIO
+CDEFS+=-DSYSTEM_PORTAUDIO
 .ENDIF
 .ENDIF
 
