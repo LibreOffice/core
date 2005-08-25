@@ -2,9 +2,9 @@
  *
  *  $RCSfile: languageoptions.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 10:48:29 $
+ *  last change: $Author: kz $ $Date: 2005-08-25 13:11:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,6 +275,7 @@ sal_uInt16 SvtLanguageOptions::GetScriptTypeOfLanguage( sal_uInt16 nLang )
         case LANGUAGE_ARABIC_QATAR:
         case LANGUAGE_ASSAMESE:
         case LANGUAGE_BENGALI:
+        case LANGUAGE_BENGALI_BANGLADESH:
         case LANGUAGE_FARSI:
         case LANGUAGE_HEBREW:
         case LANGUAGE_MARATHI:
@@ -308,7 +309,7 @@ sal_uInt16 SvtLanguageOptions::GetScriptTypeOfLanguage( sal_uInt16 nLang )
         case LANGUAGE_USER_DZONGKHA:
         case LANGUAGE_USER_KURDISH_IRAQ:
         case LANGUAGE_USER_KURDISH_IRAN:
-        case LANGUAGE_VIETNAMESE: // not included in langtab.src?
+        case LANGUAGE_VIETNAMESE:
             nScript = SCRIPTTYPE_COMPLEX;
             break;
 
