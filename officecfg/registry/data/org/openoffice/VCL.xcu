@@ -3,9 +3,9 @@
  *
  *  $RCSfile: VCL.xcu,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2005-08-25 13:12:21 $
+ *  last change: $Author: kz $ $Date: 2005-08-25 16:10:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -610,55 +610,55 @@
     </node>
     <node oor:name="ko-kr" oor:op="replace">
       <prop oor:name="LATIN_FIXED" oor:type="xs:string" oor:op="replace">
-        <value>썬굴림;SunGulim;Cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+        <value>썬굴림;SunGulim;굴림;Gulim;Cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
       <prop oor:name="LATIN_DISPLAY" oor:type="xs:string" oor:op="replace">
-        <value>썬돋움;SunDotum;썬굴림;SunGulim;Gulim;Roundgothic;Albany;Arial;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>썬돋움;SunDotum;돋움;Dotum;썬굴림;SunGulim;굴림;Gulim;Roundgothic;Albany;Arial;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="LATIN_HEADING" oor:type="xs:string" oor:op="replace">
-        <value>썬바탕;SunBatang;Batang;Myeongjo;썬굴림;SunGulim;Gulim;Roundgothic;Albany;Arial;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>썬바탕;SunBatang;바탕;Batang;Myeongjo;썬굴림;SunGulim;굴림;Gulim;Roundgothic;Albany;Arial;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="LATIN_PRESENTATION" oor:type="xs:string" oor:op="replace">
-        <value>썬굴림;SunGulim;Batang;Myeongjo;Gulim;Roundgothic;Thorndale;Times New Roman;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>썬굴림;SunGulim;굴림;Gulim;Batang;Myeongjo;Gulim;Roundgothic;Thorndale;Times New Roman;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="LATIN_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>썬돋움;SunDotum;Batang;Myeongjo;썬굴림;SunGulim;Gulim;Roundgothic;Albany;Arial;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>썬돋움;SunDotum;돋움;Dotum;백묵돋움;BaekmukDotum;Batang;Myeongjo;썬굴림;SunGulim;Gulim;Roundgothic</value>
       </prop>
       <prop oor:name="LATIN_TEXT" oor:type="xs:string" oor:op="replace">
         <value>썬바탕;SunBatang;Batang;Myeongjo;썬굴림;SunGulim;Gulim;Roundgothic;Thorndale;Times New Roman;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="SANS" oor:type="xs:string" oor:op="replace">
-        <value>썬돋움;SunDotum;Batang;Myeongjo;썬굴림;SunGulim;Gulim;Roundgothic;Albany;Arial;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>썬돋움;SunDotum;돋움;Dotum;바탕;Batang;Myeongjo;썬굴림;SunGulim;굴림;Gulim;Roundgothic;Albany;Arial;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="SANS_UNICODE" oor:type="xs:string" oor:op="replace">
-        <value>썬굴림;SunGulim;Gulim;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma;Albany;Arial;Helvetica;Lucida;Geneva;Helmet;SansSerif</value>
+        <value>썬굴림;SunGulim;굴림;Gulim;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma;Albany;Arial;Helvetica;Lucida;Geneva;Helmet;SansSerif</value>
       </prop>
       <prop oor:name="SERIF" oor:type="xs:string" oor:op="replace">
-        <value>썬굴림;SunGulim;Batang;Myeongjo;Gulim;Roundgothic;Thorndale;Times New Roman;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>썬굴림;SunGulim;굴림;Gulim;Batang;Myeongjo;Gulim;Roundgothic;Thorndale;Times New Roman;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
       </prop>
       <prop oor:name="CJK_DISPLAY" oor:type="xs:string" oor:op="replace">
-        <value>썬굴림;SunGulim;Gulim;Roundgothic;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>썬굴림;SunGulim;굴림;Gulim;Roundgothic;Andale Sans UI;Arial Unicode MS</value>
       </prop>
       <prop oor:name="CJK_HEADING" oor:type="xs:string" oor:op="replace">
-        <value>썬바탕;SunBatang;Batang;Myeongjo;썬굴림;SunGulim;Andale Sans UI;Gulim;Roundgothic;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>썬바탕;SunBatang;바탕;Batang;Myeongjo;썬굴림;SunGulim;Andale Sans UI;Gulim;Roundgothic;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode</value>
       </prop>
       <prop oor:name="CJK_PRESENTATION" oor:type="xs:string" oor:op="replace">
-        <value>썬굴림;SunGulim;Batang;Myeongjo;Andale Sans UI;Gulim;Roundgothic;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>썬굴림;SunGulim;굴림;Gulim;바탕;Batang;Myeongjo;Andale Sans UI;Gulim;Roundgothic;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode</value>
       </prop>
       <prop oor:name="CJK_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>썬돋움;SunDotum;Batang;Myeongjo;썬굴림;SunGulim;Andale Sans UI;Gulim;Roundgothic;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>썬돋움;SunDotum;돋움;Dotum;바탕;Batang;Myeongjo;썬굴림;SunGulim;Andale Sans UI;Gulim;Roundgothic;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode</value>
       </prop>
       <prop oor:name="CJK_TEXT" oor:type="xs:string" oor:op="replace">
-        <value>썬바탕;SunBatang;Batang;Myeongjo;썬굴림;SunGulim;Andale Sans UI;Gulim;Roundgothic;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>썬바탕;SunBatang;바탕;Batang;Myeongjo;썬굴림;SunGulim;Andale Sans UI;Gulim;Roundgothic;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode</value>
       </prop>
       <prop oor:name="UI_FIXED" oor:type="xs:string" oor:op="replace">
-        <value>썬굴림;SunGulim;Cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+        <value>썬굴림;SunGulim;굴림;Gulim;Cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
       <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
-        <value>썬굴림;sungulim;gulim;roundgothic;arialunicodems;lucidasansunicode;andalesansui;gnu-unifont</value>
+        <value>썬굴림;sungulim;굴림;Gulim;RoundGothic;Arial Unicode MS;Lucida Sans Unicode;AndaleSansUI;GNU-Unifont</value>
       </prop>
       <prop oor:name="FIXED" oor:type="xs:string" oor:op="replace">
-        <value>썬굴림;SunGulim;Cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+        <value>썬굴림;SunGulim;;굴림;Gulim;Cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
     </node>
     <node oor:name="bn" oor:op="replace">
@@ -861,7 +861,25 @@
         <value>Lohit Tamil;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
       </prop>
     </node>
+    <node oor:name="af" oor:op="replace">
+    </node>
+    <node oor:name="nr" oor:op="replace">
+    </node>
+    <node oor:name="nso" oor:op="replace">
+    </node>
     <node oor:name="sw" oor:op="replace">
+    </node>
+    <node oor:name="ts" oor:op="replace">
+    </node>
+    <node oor:name="tn" oor:op="replace">
+    </node>
+    <node oor:name="ss" oor:op="replace">
+    </node>
+    <node oor:name="st" oor:op="replace">
+    </node>
+    <node oor:name="xh" oor:op="replace">
+    </node>
+    <node oor:name="zu" oor:op="replace">
     </node>
   </node>
   <node oor:name="FontSubstitutions">
