@@ -396,11 +396,15 @@ sub create_epm_header
                 {
                     $line = "%incompat" . " " . $onereplaces . "\n";
                     push(@epmheader, $line);
-                    $line = "%provides" . " openoffice.org-unbundled\n";
-                    push(@epmheader, $line);
-                    $line = "%incompat" . " openoffice.org-bundled\n";
-                    push(@epmheader, $line);
                 }
+            }
+
+            if ( $installer::globals::debian )
+            {
+                $line = "%provides" . " openoffice.org-unbundled\n";
+                push(@epmheader, $line);
+                $line = "%incompat" . " openoffice.org-bundled\n";
+                push(@epmheader, $line);
             }
         }
     }
