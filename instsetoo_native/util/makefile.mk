@@ -159,10 +159,20 @@ $(foreach,i,$(alllangiso) openoffice_$i) : $(ADDDEPS)
 $(foreach,i,$(alllangiso) openofficewithjre_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) ooolanguagepack_$i) : $(ADDDEPS)
+
+.IF "$(MAKETARGETS)"!=""
+$(MAKETARGETS) : $(ADDDEPS)
+.ENDIF			# "$(MAKETARGETS)"!=""
 .ENDIF			# "$(BUILD_SPECIAL)"!=""
 
 .IF "$(PKGFORMAT)"!=""
 $(foreach,i,$(alllangiso) openoffice_$i) : $$@{$(PKGFORMAT:^".")}
+.IF "$(MAKETARGETS)"!="" && "$(PKGFORMAT)"!=""
+.IF "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)"
+$(MAKETARGETS) : $$@{$(PKGFORMAT:^".")}
+$(MAKETARGETS){$(PKGFORMAT:^".")} : $(ADDDEPS)
+.ENDIF			# "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)"
+.ENDIF			# "$(MAKETARGETS)"!="" && "$(PKGFORMAT)"!=""
 openoffice_%{$(PKGFORMAT:^".")} :
 .ELSE			# "$(PKGFORMAT)"!=""
 openoffice_% :
