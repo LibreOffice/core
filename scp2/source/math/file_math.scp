@@ -57,6 +57,7 @@
 
 #include "macros.inc"
 
+#ifndef WITHOUT_MATHMLDTD
 File gid_File_Html_W3c_Ipr
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -70,6 +71,7 @@ File gid_File_Dtd_Math
     Dir = gid_Dir_Share_Dtd_Math_1_01;
     Name = "math.dtd";
 End
+#endif
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sm , sm)
 
