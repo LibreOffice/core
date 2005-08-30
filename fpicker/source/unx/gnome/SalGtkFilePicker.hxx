@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SalGtkFilePicker.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-07-12 11:59:09 $
+ *  last change: $Author: rt $ $Date: 2005-08-30 09:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,6 +357,8 @@ class SalGtkFilePicker :
         GtkWidget *m_pLists[ LIST_LAST ];
         GtkWidget *m_pListLabels[ LIST_LAST ];
         bool mbListVisibility[ LIST_LAST ];
+        gulong mnHID_FolderChange;
+        gulong mnHID_SelectionChange;
 
         ::rtl::OUString m_aCurrentFilter;
 
@@ -364,6 +366,7 @@ class SalGtkFilePicker :
 
         void SetCurFilter( const OUString& rFilter );
         void SetFilters();
+        void UpdateFilterfromUI();
 
         void implChangeType( GtkTreeSelection *selection );
         int implAddFilter( const OUString& rFilter, const OUString& rType);
