@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SalGtkFilePicker.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-07-12 11:58:49 $
+ *  last change: $Author: rt $ $Date: 2005-08-30 09:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,9 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFact
     mbPreviewState( sal_False ),
     m_pPreview( NULL ),
     m_PreviewImageWidth( 256 ),
-    m_PreviewImageHeight( 256 )
+    m_PreviewImageHeight( 256 ),
+    mnHID_FolderChange( 0 ),
+    mnHID_SelectionChange( 0 )
 {
     int i;
 
@@ -785,17 +787,13 @@ void SalGtkFilePicker::updateCurrentFilterFromName(const gchar* filtername)
     }
 }
 
-rtl::OUString SAL_CALL SalGtkFilePicker::getCurrentFilter() throw( uno::RuntimeException )
+void SalGtkFilePicker::UpdateFilterfromUI()
 {
-    OSL_ASSERT( m_pDialog != NULL );
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    // TODO return m_pImpl->getCurrentFilter();
-
-    OSL_TRACE( "GetCURRENTfilter\n" );
-
     // Update the filtername from the users selection if they have had a chance to do so.
     // If the user explicitly sets a type then use that, if not then take the implicit type
     // from the filter of the files glob on which he is currently searching
+    if (!mnHID_FolderChange || !mnHID_SelectionChange)
+        return;
     GtkTreeSelection* selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(m_pFilterView));
     GtkTreeIter iter;
     GtkTreeModel *model;
@@ -810,6 +808,16 @@ rtl::OUString SAL_CALL SalGtkFilePicker::getCurrentFilter() throw( uno::RuntimeE
     {
         updateCurrentFilterFromName(gtk_file_filter_get_name( filter ));
     }
+}
+
+rtl::OUString SAL_CALL SalGtkFilePicker::getCurrentFilter() throw( uno::RuntimeException )
+{
+    OSL_ASSERT( m_pDialog != NULL );
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    OSL_TRACE( "GetCURRENTfilter\n" );
+
+    UpdateFilterfromUI();
 
     OSL_TRACE( "Returning current filter of %s\n",
         OUStringToOString( m_aCurrentFilter, RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -955,7 +963,9 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getFiles() throw( uno::R
             FilterList::iterator aListIter = ::std::find_if(
                 m_pFilterList->begin(), m_pFilterList->end(), FilterTitleMatch(sFilterName) );
 
-            OUString aFilter = aListIter->getFilter();
+            OUString aFilter;
+            if (aListIter != m_pFilterList->end())
+                aFilter = aListIter->getFilter();
 
             OSL_TRACE( "turned into %s\n",
                 OUStringToOString( aFilter, RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -1021,15 +1031,15 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
 
     sal_Int16 retVal = 0;
 
-    gulong nHID_FolderChange =
+    SetFilters();
+
+    mnHID_FolderChange =
         g_signal_connect( GTK_FILE_CHOOSER( m_pDialog ), "current-folder-changed",
             G_CALLBACK( folder_changed_cb ), ( gpointer )this );
 
-    gulong nHID_SelectionChange =
+    mnHID_SelectionChange =
         g_signal_connect( GTK_FILE_CHOOSER( m_pDialog ), "selection-changed",
             G_CALLBACK( selection_changed_cb ), ( gpointer )this );
-
-    SetFilters();
 
     int btn = GTK_RESPONSE_NO;
     int nRes = GTK_RESPONSE_CANCEL;
@@ -1088,10 +1098,10 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
         }
     }
 
-    if (nHID_FolderChange)
-        g_signal_handler_disconnect(GTK_FILE_CHOOSER( m_pDialog ), nHID_FolderChange);
-    if (nHID_SelectionChange)
-        g_signal_handler_disconnect(GTK_FILE_CHOOSER( m_pDialog ), nHID_SelectionChange);
+    if (mnHID_FolderChange)
+        g_signal_handler_disconnect(GTK_FILE_CHOOSER( m_pDialog ), mnHID_FolderChange);
+    if (mnHID_SelectionChange)
+        g_signal_handler_disconnect(GTK_FILE_CHOOSER( m_pDialog ), mnHID_SelectionChange);
 
     return retVal;
 }
