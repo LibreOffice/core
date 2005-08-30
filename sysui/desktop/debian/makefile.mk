@@ -275,6 +275,7 @@ $(MISC)/$(TARGET)/$(DEBFILE:f)/etc/$(UNIXFILENAME) :
     @$(MKDIRHIER) $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN
     @cat control | tr -d "\015" > $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/control
     @echo "Version: $(PKGVERSION)-$(PKGREV)" >> $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/control
+    @du -k -s $(MISC)/$(TARGET)/$(DEBFILE:f) | awk -F ' ' '{ printf "Installed-Size: %s\n", $$1 ; }' >> $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/control
     @cat postinst | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" > $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/postinst
     @cat postrm | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" > $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/postrm
     @cat prerm | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" > $(MISC)/$(TARGET)/$(DEBFILE:f)/DEBIAN/prerm
