@@ -12,7 +12,7 @@ BuildArch: noarch
 Requires: openoffice.org-core01, /etc/SuSE-release
 # .. but not for Sun JDS
 Conflicts: SunDesktopVersion
-Provides: openoffice.org-desktop-integration, openofficeorg-suse-menus
+Provides: openoffice.org-desktop-integration
 Obsoletes: openofficeorg-suse-menus
 %define _unpackaged_files_terminate_build 0
 %description 
