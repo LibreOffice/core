@@ -13,7 +13,7 @@ BuildArch: noarch
 #        here and check for the 'mandriva-release' in the future (next year).
 #
 Requires: openoffice.org-core01, mandrake-release
-Provides: openoffice.org-desktop-integration, openofficeorg-mandrakelinux-menus, openofficeorg-mandriva-menus
+Provides: openoffice.org-desktop-integration
 Obsoletes: openofficeorg-mandrakelinux-menus, openofficeorg-mandriva-menus
 
 %define _unpackaged_files_terminate_build 0
