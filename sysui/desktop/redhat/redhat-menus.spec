@@ -9,7 +9,7 @@ Vendor: OpenOffice.org
 AutoReqProv: no
 BuildArch: noarch
 Requires: openoffice.org-core01, redhat-release
-Provides: openoffice.org-desktop-integration, openofficeorg-redhat-menus
+Provides: openoffice.org-desktop-integration
 Obsoletes: openofficeorg-redhat-menus
 %define _unpackaged_files_terminate_build 0
 %description 
