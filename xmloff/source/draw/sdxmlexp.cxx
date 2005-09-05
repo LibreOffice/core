@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-18 13:02:13 $
+ *  last change: $Author: obo $ $Date: 2005-09-05 14:54:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -601,7 +601,7 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
     const OUString aEmpty;
 
     // prepare factory parts
-    mpSdPropHdlFactory = new XMLSdPropHdlFactory( GetModel(), this );
+    mpSdPropHdlFactory = new XMLSdPropHdlFactory( GetModel(), *this );
     if(mpSdPropHdlFactory)
     {
         // set lock to avoid deletion
