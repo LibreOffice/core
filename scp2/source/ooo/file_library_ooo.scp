@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.137 $
+*  $Revision: 1.138 $
 *
-*  last change: $Author: rt $ $Date: 2005-08-18 08:12:56 $
+*  last change: $Author: rt $ $Date: 2005-09-05 09:09:32 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1710,6 +1710,31 @@ File gid_File_Lib_Stlport
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Program;
+  #ifdef _STLP_DEBUG
+  #ifdef UNX
+  #if defined(_gcc3) || defined(_GCC)
+  #ifdef IRIX
+    Name = STRING(CONCAT3(libstlport_,gcc_stldebug,.so.4.5));
+  #else
+    Name = STRING(CONCAT3(libstlport_,gcc_stldebug,UNXSUFFIX));
+  #endif
+  #else
+  #ifdef SOLARIS
+    Name = STRING(CONCAT3(libstlport_,sunpro_debug,.so));
+  #else
+    Name = STRING(CONCAT4(libstlport_,COMNAME,_debug,.so));
+  #endif
+  #endif
+  #else
+  #ifdef M1300
+    Name = STRING(CONCAT3(stlport_,vc74_stldebug5,.dll));
+  #elif defined(M1310)
+    Name = STRING(CONCAT3(stlport_,vc71_stldebug45,.dll));
+  #else
+    Name = STRING(CONCAT3(stlport_,vc6_stldebug,.dll));
+  #endif
+  #endif
+  #else
   #ifdef UNX
   #if defined(_gcc3) || defined(_GCC)
   #ifdef IRIX
@@ -1731,6 +1756,7 @@ File gid_File_Lib_Stlport
     Name = STRING(CONCAT3(stlport_,vc7145,.dll));
   #else
     Name = STRING(CONCAT3(stlport_,vc6,.dll));
+  #endif
   #endif
   #endif
 End
