@@ -34,7 +34,7 @@
     <TimePM>ཕྱི་ཆ</TimePM>
     <MeasurementSystem>UK</MeasurementSystem>
   </LC_CTYPE>
-  <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$Nu-628]">
+  <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$Nu-851]">
     <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
       <FormatCode>[NatNum1]YY-MM-DD</FormatCode>
       <DefaultName></DefaultName>
