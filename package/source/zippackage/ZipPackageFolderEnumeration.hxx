@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolderEnumeration.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 21:10:22 $
+ *  last change: $Author: rt $ $Date: 2005-09-05 09:08:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ class ZipPackageFolderEnumeration : public cppu::WeakImplHelper2
 >
 {
 protected:
-    ContentHash rContents;
+    ContentHash& rContents;
     ContentHash::const_iterator aIterator;
 public:
     //ZipPackageFolderEnumeration (std::hash_map < rtl::OUString, com::sun::star::uno::Reference < com::sun::star::container::XNamed >, hashFunc, eqFunc > &rInput);
