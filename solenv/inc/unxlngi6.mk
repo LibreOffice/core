@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngi6.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: kz $ $Date: 2005-07-11 15:31:14 $
+#   last change: $Author: rt $ $Date: 2005-09-05 09:03:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -217,8 +217,13 @@ STDSHLCUIST=-ldl -lm
 
 LIBSALCPPRT*=-Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
 
+.IF "$(USE_STLP_DEBUG)" != ""
+LIBSTLPORT=$(DYNAMIC) -lstlport_gcc_stldebug
+LIBSTLPORTST=$(STATIC) -lstlport_gcc_stldebug $(DYNAMIC)
+.ELSE # "$(USE_STLP_DEBUG)" != ""
 LIBSTLPORT=$(DYNAMIC) -lstlport_gcc
 LIBSTLPORTST=$(STATIC) -lstlport_gcc $(DYNAMIC)
+.ENDIF # "$(USE_STLP_DEBUG)" != ""
 
 #FILLUPARC=$(STATIC) -lsupc++ $(DYNAMIC)
 
