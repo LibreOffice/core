@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: obo $ $Date: 2005-04-13 09:29:06 $
+ *  last change: $Author: obo $ $Date: 2005-09-05 14:52:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#endif
 
 #ifndef _TOOLS_DEBUG_HXX //autogen wg. DBG_ASSERT
 #include <tools/debug.hxx>
@@ -174,6 +178,8 @@
 #endif
 
 #define LOGFILE_AUTHOR "unknown"
+
+using ::com::sun::star::beans::XPropertySetInfo;
 
 using namespace ::rtl;
 using namespace ::osl;
@@ -1814,3 +1820,33 @@ void SvXMLImport::initXForms()
 {
     // dummy method; to be implemented by derived classes supporting XForms
 }
+
+bool SvXMLImport::getBuildIds( sal_Int32& rMaster, sal_Int32& rMinor) const
+{
+    bool bRet = false;
+    if( xImportInfo.is() ) try
+    {
+        const OUString aPropName(RTL_CONSTASCII_USTRINGPARAM("BuildId"));
+        Reference< XPropertySetInfo > xSetInfo( xImportInfo->getPropertySetInfo() );
+        if( xSetInfo.is() && xSetInfo->hasPropertyByName( aPropName ) )
+        {
+            OUString aBuildId;
+            xImportInfo->getPropertyValue( aPropName ) >>= aBuildId;
+            if( aBuildId.getLength() )
+            {
+                sal_Int32 nIndex = aBuildId.indexOf('m');
+                if( nIndex != -1 )
+                {
+                    rMaster = aBuildId.copy( 0, nIndex ).toInt32();
+                    rMinor = aBuildId.copy( nIndex+1 ).toInt32();
+                    bRet = true;
+                }
+            }
+        }
+    }
+    catch( Exception& e )
+    {
+    }
+    return bRet;
+}
+
