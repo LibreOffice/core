@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatedata.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-18 10:35:48 $
+ *  last change: $Author: rt $ $Date: 2005-09-05 09:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ void NodeUpdate::removePropertyByName  (OUString const & _aName)
     OSL_ENSURE(it != m_aProperties.end(),
                 "NodeUpdate: Property being removed is not in this node.");
 
-    if (it != m_aNodes.end())
+    if (it != m_aProperties.end())
     {
         m_aRemovedElements.insert(*it);
         m_aProperties.erase(it);
