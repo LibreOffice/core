@@ -7,8 +7,8 @@
 			<Text id="a" xml:lang="de">Willkommen</Text>
 		</Paragraph>
 		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US">Last updated $Date: 2005-07-21 14:46:06 $</Text>
-			<Text id="a" xml:lang="de">Letztes Update $Date: 2005-07-21 14:46:06 $</Text>
+			<Text id="a" xml:lang="en-US">Last updated $Date: 2005-09-05 10:14:10 $</Text>
+			<Text id="a" xml:lang="de">Letztes Update $Date: 2005-09-05 10:14:10 $</Text>
 		</Paragraph>
 		<Paragraph id="A3" style="H1">
 			<Text id="a" xml:lang="en-US">OpenOffice.org 2.0 ReadMe</Text>
@@ -17,8 +17,8 @@
 		<Paragraph id="A4">
 			<Text id="a" xml:lang="en-US" url="ahead">For latest updates to this readme file, see </Text>
 			<Text id="a" xml:lang="de" url="ahead">Letzte Änderungen finden Sie unter </Text>
-		<Text id="b" xml:lang="en-US" url="true" path="url">www.openoffice.org/welcome/readme.html</Text>
-        	<Text id="b" xml:lang="de" url="true" path="url">http://de.openoffice.org/readme.html</Text>
+            <Text id="b" xml:lang="en-US" url="true">http://www.openoffice.org/welcome/readme.html</Text>
+        <Text id="b" xml:lang="de" url="true">http://de.openoffice.org/readme.html</Text>
 		</Paragraph>
         <Paragraph/>
         <Paragraph id="A5">
@@ -34,8 +34,8 @@
         	<Text id="a" xml:lang="de" url="ahead">Die OpenOffice.org-Gemeinschaft, die für die Entwicklung dieses Programms verantwortlich ist, lädt Sie ein, als Mitglied an diesem Prozess teilzunehmen. Als neuer Anwender finden Sie hilfreiche Informationen auf den Webseiten von OpenOffice.org unter </Text>
 			</Paragraph>
         <Paragraph id="A8">
-            <Text id="empty" xml:lang="en-US"/><Text id="b" xml:lang="en-US" url="true" path="url">www.openoffice.org/about_us/introduction.html </Text>
-        	<Text id="b" xml:lang="de" url="true" path="url">www.openoffice.org/about_us/introduction.html </Text>
+            <Text id="empty" xml:lang="en-US"/><Text id="b" xml:lang="en-US" url="true">http://www.openoffice.org/about_us/introduction.html </Text>
+            <Text id="b" xml:lang="de" url="true">http://www.openoffice.org/about_us/introduction.html </Text>
 			</Paragraph>
          <Paragraph id="A9">
              <Text id="empty" xml:lang="en-US"/><Text id="c" xml:lang="en-US">Also read the sections below about getting involved in the OpenOffice.org project. </Text>
@@ -421,8 +421,8 @@
 		<Paragraph id="A3">
 			<Text id="a" xml:lang="en-US" url="ahead">As a user, you are already a valuable part of the suite&apos;s development process and we would like to encourage you to take an even more active role with a view to being a long-term contributor to the community. Please join and check out the user page at: </Text>
 			<Text id="a" xml:lang="de" url="ahead">Als Anwender sind Sie bereits ein wertvoller Teil des Entwicklungsprozesses. Wir möchten Sie jedoch ausdrücklich ermuntern, eine aktivere Rolle zu übernehmen mit dem Ziel, ein ständiger Mitarbeiter der Gemeinschaft zu werden.</Text>
-		<Text id="b" xml:lang="en-US" url="true" path="url">www.openoffice.org </Text>
-			<Text id="b" xml:lang="de" url="true" path="url">www.openoffice.org </Text>
+            <Text id="b" xml:lang="en-US" url="true">http://www.openoffice.org </Text>
+            <Text id="b" xml:lang="de" url="true" >http://www.openoffice.org </Text>
 		</Paragraph>
 		<Paragraph id="A4"/>
 	</Section>
@@ -434,8 +434,8 @@
 		<Paragraph id="A2">
 			<Text id="a" xml:lang="en-US" url="ahead">Please take a little time to complete the minimal Product Registration process when you install the software. While registration is optional, we encourage you to register, since the information enables the community to make an even better software suite and address user needs directly. Through its Privacy Policy, the OpenOffice.org Community takes every precaution to safeguard your personal data. If you missed the registration at installation, you can return and register at any time at </Text>
 			<Text id="a" xml:lang="de" url="ahead">Bitte nehmen Sie sich ein wenig Zeit, die minimal gehaltene Produkt-Registrierung während der Installation der Software durchzuführen. Auch wenn die Registrierung freiwillig ist, so bitten wir Sie dennoch, die Registrierung durchzuführen, denn diese Information hilft der Gemeinschaft, ein besseres Softwareprodukt herzustellen und den Anwenderbedürfnissen unmittelbarer zu entsprechen. Unsere Datenschutzrichtlinien verpflichten die OpenOffice.org-Gemeinschaft jede Vorkehrung zu nutzen, die den Schutz Ihrer Daten gewährleistet. Wenn Sie die Registrierung während der Installation nicht durchführen wollen, lässt sich die Registrierung jederzeit nachholen unter </Text>
-		<Text id="b" xml:lang="en-US" url="true" path="url">www.openoffice.org/welcome/registration-site.html </Text>
-			<Text id="b" xml:lang="de" url="true" path="url">www.openoffice.org/welcome/registration-site.html </Text>
+            <Text id="b" xml:lang="en-US" url="true" >http://www.openoffice.org/welcome/regis"tration-site.html </Text>
+            <Text id="b" xml:lang="de" url="true" >http://www.openoffice.org/welcome/registration-site.html </Text>
 		</Paragraph>
 	</Section>
 	<Section id="UserSurvey">
@@ -466,8 +466,8 @@
 		<Paragraph id="A2">
 			<Text id="a" xml:lang="en-US" url="ahead">Here are a few of the Project mailing lists to which you can subscribe at </Text>
 			<Text id="a" xml:lang="de" url="ahead">Hier finden Sie eine Auswahl von Projektmailinglisten, die Sie abonnieren können</Text>
-		<Text id="b" xml:lang="en-US" url="true" path="url">www.openoffice.org/mail_list.html</Text>
-			<Text id="b" xml:lang="de" url="true" path="url">www.openoffice.org/mail_list.html</Text>
+            <Text id="b" xml:lang="en-US" url="true" >http://www.openoffice.org/mail_list.html</Text>
+            <Text id="b" xml:lang="de" url="true" >http://www.openoffice.org/mail_list.html</Text>
 		</Paragraph>
 		<Paragraph id="A3">
 			<List>
@@ -505,7 +505,7 @@
 			<Text id="a" xml:lang="en-US" url="ahead">You can help by joining the Marketing Communications &amp; Information Network here: </Text>
 			<Text id="a" xml:lang="de" url="ahead">Helfen Sie mit, indem Sie sich dem Marketing-Kommunikations- &amp; Informationsnetzwerk anschließen: </Text>
 		<Text id="b" xml:lang="en-US" url="true">http://marketing.openoffice.org/contacts.html </Text>
-			<Text id="b" xml:lang="de" url="true">http://marketing.openoffice.org/contacts.html (englisch)</Text>
+			<Text id="b" xml:lang="de" url="true">http://marketing.openoffice.org/contacts.html </Text>
 		<Text id="c" xml:lang="en-US"> where you can provide point communication contact with press, media, government agencies, consultants, schools, Linux Users Groups and developers in your country and local community.</Text>
 			<Text id="c" xml:lang="de">wo Sie landesweit oder regional interessante Kontakte mit Presse, Medien, Regierungsbehörden, Beratern, Schulen, Linux User Gruppen und Entwicklern knüpfen und pflegen können.</Text>
 		</Paragraph>
@@ -518,8 +518,8 @@
 		<Paragraph id="A2">
 			<Text id="a" xml:lang="en-US" url="ahead">For help with the OpenOffice.org 2.0 office suite, take a look at the archives to find questions already answered on the &apos;users@openoffice.org&apos; mailing list at </Text>
 			<Text id="a" xml:lang="de" url="ahead">Um Hilfe zu der OpenOffice.org 2.0 Bürosuite zu bekommen, werfen Sie einen Blick in die Archive der &apos;users@de.openoffice.org&apos;-Mailingliste, denn viele Fragen sind dort schon beantwortet worden: </Text>
-		<Text id="b" xml:lang="en-US" url="true" path="url">www.openoffice.org/mail_list.html</Text>
-			<Text id="b" xml:lang="de" url="true" path="url">http://de.openoffice.org/about-users-mailinglist.html</Text>
+            <Text id="b" xml:lang="en-US" url="true" >http://www.openoffice.org/mail_list.html</Text>
+			<Text id="b" xml:lang="de" url="true" >http://de.openoffice.org/about-users-mailinglist.html</Text>
 		<Text id="c" xml:lang="en-US">. Alternatively, you can send in your questions to users@openoffice.org. Remember to subscribe to the list to get an email response.</Text>
 			<Text id="c" xml:lang="de">. Alternativ besteht auch die Möglichkeit, Fragen direkt an die Liste users@de.openoffice.org (deutsch) oder users@openoffice.org (englisch) zu senden. Beachten Sie, dass Sie die Liste abonnieren müssen, um eine Antwort zu erhalten.</Text>
 		</Paragraph>
@@ -538,8 +538,8 @@
 		<Paragraph id="A2">
 			<Text id="a" xml:lang="en-US" url="ahead">The best way to start contributing is to subscribe to one or more of the mailing lists, lurk for a while, and gradually use the mail archives to familiarize yourself with many of the topics covered since the OpenOffice.org source code was released back in October 2000. When you&apos;re comfortable, all you need to do is send an email self-introduction and jump right in. If you are familiar with Open Source Projects, check out our To-Dos list and see if there is anything you would like to help with at </Text>
             	<Text id="a" xml:lang="de" url="ahead">Der beste Weg, am Entwicklungsprozess teilzunehmen, ist eine oder mehrere der angebotenen Mailinglisten zu abonnieren und dort eine Weile mitzulesen oder in den Archiven zu blättern, um mit den Themen vertraut zu werden, die seit der Veröffentlichung des Quelltextes von OpenOffice.org im Oktober 2000 abgedeckt wurden. Fühlen Sie sich in der Lage mitzumachen, dann ist alles, was sie tun müssen, eine kleine Selbstvorstellung per Email zu senden und loszulegen. Einen Überblick darüber wie, was und wo starten, was zu tun ist und mehr für zukünftige Helfer bieten unsere OpenOffice.org-Seiten auf</Text>
-		<Text id="b" xml:lang="en-US" url="true" path="url">http://development.openoffice.org/todo.html</Text>
-			<Text id="b" xml:lang="de" url="true" path="url">http://www.eschkitai.de/openoffice/index.html</Text>
+		<Text id="b" xml:lang="en-US" url="true" >http://development.openoffice.org/todo.html</Text>
+			<Text id="b" xml:lang="de" url="true" >http://www.eschkitai.de/openoffice/index.html</Text>
 		<Text id="c" xml:lang="en-US">.</Text>
 			<Text id="c" xml:lang="de">.</Text>
 		</Paragraph>
