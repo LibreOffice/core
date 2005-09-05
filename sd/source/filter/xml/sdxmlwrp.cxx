@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-18 13:05:07 $
+ *  last change: $Author: obo $ $Date: 2005-09-05 14:58:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -580,6 +580,9 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
               &::getCppuType( (OUString *)0 ),
               ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
         { MAP_LEN( "StreamName" ), 0,
+              &::getCppuType( (OUString *)0 ),
+              ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "BuildId" ), 0,
               &::getCppuType( (OUString *)0 ),
               ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
         { NULL, 0, 0, NULL, 0, 0 }
