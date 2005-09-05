@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:31:10 $
+ *  last change: $Author: rt $ $Date: 2005-09-05 08:57:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,6 +242,8 @@ namespace dbaccess
         virtual sal_Bool    isModification( );
         virtual sal_Bool    isModified( );
         virtual sal_Bool    isNew( );
+
+        virtual ~ORowSet();
 
     public:
         ORowSet(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
