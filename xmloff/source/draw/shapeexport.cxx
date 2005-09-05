@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-13 07:56:46 $
+ *  last change: $Author: obo $ $Date: 2005-09-05 14:54:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
     msStarBasic( RTL_CONSTASCII_USTRINGPARAM("StarBasic") )
 {
     // construct PropertyHandlerFactory
-    xSdPropHdlFactory = new XMLSdPropHdlFactory( rExport.GetModel(), &rExp );
+    xSdPropHdlFactory = new XMLSdPropHdlFactory( rExport.GetModel(), rExp );
 
     // construct PropertySetMapper
     xPropertySetMapper = CreateShapePropMapper( rExport );
@@ -994,7 +994,7 @@ void XMLShapeExport::exportAutoStyles()
 SvXMLExportPropertyMapper* XMLShapeExport::CreateShapePropMapper(
     SvXMLExport& rExport )
 {
-    UniReference< XMLPropertyHandlerFactory > xFactory = new XMLSdPropHdlFactory( rExport.GetModel(), &rExport );
+    UniReference< XMLPropertyHandlerFactory > xFactory = new XMLSdPropHdlFactory( rExport.GetModel(), rExport );
     UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( xFactory );
     SvXMLExportPropertyMapper* pResult =
         new XMLShapeExportPropertyMapper( xMapper,
