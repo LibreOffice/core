@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Cws.pm,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-06-02 09:06:24 $
+#   last change: $Author: rt $ $Date: 2005-09-05 09:27:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -422,6 +422,41 @@ sub is_milestone
 
     return $self->is_milestone_registered_with_eis($master, $milestone);
 }
+
+# Check if this cws contains new ui
+sub is_uirelevant
+{
+    my $self      = shift;
+
+    return $self->is_uirelevant_from_eis();
+}
+
+# Check if this cws contains new online help
+sub is_helprelevant
+{
+    my $self      = shift;
+
+    return $self->is_helprelevant_from_eis();
+}
+
+#Get the l10n status
+sub set_l10n_status
+{
+    my $self        = shift;
+    my $status      = shift;
+
+    return $self->set_l10n_status_from_eis( $status );
+}
+
+# Get the l10n status
+sub get_l10n_status
+{
+    my $self        = shift;
+
+    return $self->get_l10n_status_from_eis();
+}
+
+
 
 # Query master milestone combination for being used by an
 # active CWS
@@ -1225,6 +1260,94 @@ sub get_public_flag_from_eis
     }
     return $result;
 }
+
+sub is_uirelevant_from_eis
+{
+    my $self        = shift;
+
+    # check if child workspace is valid
+    my $id = $self->eis_id();
+    if ( !$id ) {
+        carp("ERROR: Childworkspace not (yet) registered with EIS.\n");
+        return undef;
+    }
+
+    my $eis = Cws::eis();
+    my $result;
+    eval { $result = $eis->isUIRelevant($id) };
+    if ( $@ ) {
+        carp("ERROR: is_uirelevant_from_eis(): EIS database transaction failed. Reason:\n$@\n");
+    }
+
+    return $result;
+}
+
+sub is_helprelevant_from_eis
+{
+    my $self        = shift;
+
+    # check if child workspace is valid
+    my $id = $self->eis_id();
+    if ( !$id ) {
+        carp("ERROR: Childworkspace not (yet) registered with EIS.\n");
+        return undef;
+    }
+
+    my $eis = Cws::eis();
+    my $result;
+    eval { $result = $eis->isHelpRelevant( $id ) };
+    if ( $@ ) {
+        carp("ERROR: is_helprelevant_from_eis(): EIS database transaction failed. Reason:\n$@\n");
+    }
+
+    return $result;
+}
+
+sub get_l10n_status_from_eis
+{
+    my $self        = shift;
+
+    # check if child workspace is valid
+    my $id = $self->eis_id();
+    if ( !$id ) {
+        carp("ERROR: Childworkspace not (yet) registered with EIS.\n");
+        return undef;
+    }
+
+    my $eis = Cws::eis();
+    my $result;
+    eval { $result = $eis->getL10n( $id ) };
+    if ( $@ ) {
+        carp("ERROR: get_l10n_status_from_eis(): EIS database transaction failed. Reason:\n$@\n");
+    }
+
+    return $result;
+}
+
+sub set_l10n_status_from_eis
+{
+    my $self        = shift;
+    my $status      = Eis::to_string( shift );
+
+    # check if child workspace is valid
+    my $id = $self->eis_id();
+    if ( !$id ) {
+        carp("ERROR: Childworkspace not (yet) registered with EIS.\n");
+        return undef;
+    }
+
+    my $eis = Cws::eis();
+    my $result;
+
+    eval { $result = $eis->setL10n( $id , $status ) };
+    if ( $@ ) {
+        carp("ERROR: set_l10n_status_from_eis(): EIS database transaction failed. Reason:\n$@\n");
+    }
+
+    return $result;
+}
+
+
 
 #logging
 sub set_log_entry_in_eis
