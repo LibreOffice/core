@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pngwrite.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-28 16:23:56 $
+ *  last change: $Author: rt $ $Date: 2005-09-05 09:01:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,8 @@ sal_Bool PNGWriterImpl::Write( SvStream& rOStm )
             nCRC = rtl_crc32( nCRC, &aBeg->aData[ 0 ], nDataSize );
         rOStm << nDataSize
               << aBeg->nType;
-        rOStm.Write( &aBeg->aData[ 0 ], nDataSize );
+        if ( nDataSize )
+            rOStm.Write( &aBeg->aData[ 0 ], nDataSize );
         rOStm << nCRC;
         aBeg++;
     }
