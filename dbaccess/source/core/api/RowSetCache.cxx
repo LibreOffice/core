@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-18 10:05:15 $
+ *  last change: $Author: rt $ $Date: 2005-09-05 08:57:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,7 +431,7 @@ void ORowSetCache::setMaxRowSize(sal_Int32 _nSize)
         for(;aCacheIter != m_aCacheIterators.end();++aCacheIter)
         {
             aCacheIterToChange[aCacheIter->first] = sal_False;
-            if(!aCacheIter->second.aIterator)
+            if ( aCacheIter->second.aIterator == m_pMatrix->end() )
                 continue;
             if(aCacheIter->second.aIterator != m_aInsertRow && !m_bInserted && !m_bModified)
             {
@@ -979,14 +979,14 @@ sal_Bool ORowSetCache::moveWindow()
                 ORowSetCacheMap::iterator aCacheIter = m_aCacheIterators.begin();
                 for(;aCacheIter != m_aCacheIterators.end();++aCacheIter)
                 {
-                    if (    aCacheIter->second.aIterator
+                    if (    aCacheIter->second.aIterator != m_pMatrix->end()
                         &&  aCacheIter->second.aIterator != m_aInsertRow
                         && !m_bInserted && !m_bModified )
                     {
                         sal_Int16 nDist = (aCacheIter->second.aIterator - m_pMatrix->begin());
                         if ( nDist >= nNewDist )
                         {
-                            aCacheIter->second.aIterator = NULL;
+                            aCacheIter->second.aIterator = m_pMatrix->end();
                         }
                         else
                         {
@@ -1417,11 +1417,11 @@ void ORowSetCache::cancelRowModification()
     ORowSetCacheMap::iterator aCacheIter = m_aCacheIterators.begin();
     for(;aCacheIter != m_aCacheIterators.end();++aCacheIter)
     {
-        if(aCacheIter->second.aIterator)
+        if ( aCacheIter->second.aIterator != m_pMatrix->end() )
         {
             ORowSetMatrix::iterator aOldIter = aCacheIter->second.aIterator;
             if(aOldIter == m_aInsertRow)
-                aCacheIter->second.aIterator = NULL;
+                aCacheIter->second.aIterator = m_pMatrix->end();
         }
     }
 }
@@ -1596,12 +1596,12 @@ void ORowSetCache::rotateCacheIterator(sal_Int16 _nDist)
         ORowSetCacheMap::iterator aCacheIter = m_aCacheIterators.begin();
         for(;aCacheIter != m_aCacheIterators.end();++aCacheIter)
         {
-            if(aCacheIter->second.aIterator && aCacheIter->second.aIterator != m_aInsertRow && !m_bInserted && !m_bModified)
+            if ( aCacheIter->second.aIterator != m_pMatrix->end() && aCacheIter->second.aIterator != m_aInsertRow && !m_bInserted && !m_bModified)
             {
                 sal_Int16 nDist = (aCacheIter->second.aIterator - m_pMatrix->begin());
                 if(nDist < _nDist)
                 {
-                    aCacheIter->second.aIterator = NULL;
+                    aCacheIter->second.aIterator = m_pMatrix->end();
                 }
                 else
                 {
