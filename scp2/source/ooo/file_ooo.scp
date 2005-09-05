@@ -1815,9 +1815,12 @@ File gid_File_Registry_Spool_Oo_Common_Ctl_Xcu
     Name (gu-IN) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
     Name (ar) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
     Name (he) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
+    Name (lo) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
+    Name (dz) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
     Name (vi) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
     Name (km) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
     Name (gu-IN) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
+    Name (or) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_Writer_Cjk_Xcu
