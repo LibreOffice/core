@@ -45,10 +45,13 @@ sq    1250  1052   # Albanian
 hy       0  1067   # Armenian
 eu    1252  1069   # Basque
 be-BY 1251  1059   # Belarusian
-bn       0  1093   # Bengali
+bn       0  2117   # Bengali
+bn-BD    0  2117   # Bengali Bangladesh
+bn-IN    0  1093   # Bengali India
 bg    1251  1026   # Bulgarian
 is    1252  1039   # Icelandic
 id    1252  1057   # Indonesian
+lo       0  1108   # Lao
 lv    1257  1062   # Latvian
 lt    1257  1063   # Lithuanian
 mt       0  1082   # Maltese
@@ -66,6 +69,7 @@ sl    1250  1060   # Slovenian
 sb       0  1070   # Sorbian
 sx       0  1072   # Sutu
 sw    1252  1089   # Swahili
+sw-TZ 1252  1089   # Swahili
 ta       0  1097   # Tamil
 tt    1251  1092   # Tatar
 ts       0  1073   # Tsonga
@@ -77,3 +81,11 @@ ns       0  1132   # Northern Sotho (Sepedi)
 yi       0  1085   # Yiddish
 zu       0  1077   # Zulu
 gu-IN    0  1095   # Gujarati
+or       0  1096   # Oriya
+ne       0  1121   # Nepali
+sh-YU    0  2074   # Serbian Latin
+sr-CS    0  3098   # Serbian Cyrillic
+nr       0  1580   # Ndebele South
+ss       0  1579   # Swazi
+st       0  1072   # Southern Sotho
+ve       0  1075   # Venda
