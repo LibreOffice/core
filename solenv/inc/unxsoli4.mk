@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxsoli4.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kz $ $Date: 2005-07-11 15:34:40 $
+#   last change: $Author: rt $ $Date: 2005-09-05 09:03:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -195,9 +195,13 @@ STDSHLGUIMT+=-lX11
 # LIBSALCPPRT*=-z allextract -lsalcpprt -z defaultextract
 LIBSALCPPRT=
 
+.IF "$(USE_STLP_DEBUG)" != ""
+LIBSTLPORT=$(DYNAMIC) -lstlport_sunpro_debug
+LIBSTLPORTST=$(STATIC) -lstlport_sunpro_debug $(DYNAMIC)
+.ELSE
 LIBSTLPORT=$(DYNAMIC) -lstlport_sunpro
 LIBSTLPORTST=$(STATIC) -lstlport_sunpro $(DYNAMIC)
-
+.ENDIF # "$(USE_STLP_DEBUG)" != ""
 
 LIBMGR=CC
 LIBFLAGS=-xar -o
