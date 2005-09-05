@@ -67,7 +67,7 @@ BEGIN
 {
     $prog="make_installer.pl";
 
-    @noMSLocaleLangs = ("km","rw");
+    @noMSLocaleLangs = ( "dz", "km", "nr", "ns", "rw", "ss", "st", "ts", "tn", "ve", "xh", "zu" , "ne" , "bn" );
 
     $ziplistname = "";
     $pathfilename = "";
