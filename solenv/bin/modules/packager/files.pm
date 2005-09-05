@@ -2,9 +2,9 @@
 #
 #   $RCSfile: files.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-18 08:41:47 $
+#   last change: $Author: obo $ $Date: 2005-09-05 16:23:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,11 @@ sub read_file
 {
     my ($localfile) = @_;
 
-    open( IN, $localfile ) || packager::exiter::exit_program("ERROR: Cannot open file: $localfile", "read_file");
+    if ( ! open( IN, $localfile ) ) {
+        # try again - sometimes we get errors caused by race conditions in parallel builds
+        sleep 1;
+        open( IN, $localfile ) or packager::exiter::exit_program("ERROR: Cannot open file: $localfile", "read_file");
+    }
     my @localfile = <IN>;
     close( IN );
 
