@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCacheIterator.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-13 06:56:59 $
+ *  last change: $Author: rt $ $Date: 2005-09-05 08:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,7 @@ ORowSetCacheIterator::ORowSetCacheIterator(const ORowSetCacheIterator& _rRH)
 // -----------------------------------------------------------------------------
 ORowSetCacheIterator::operator ORowSetMatrix::iterator()
 {
-    if(m_aIter->second.aIterator == NULL ||
-       m_aIter->second.aIterator == m_pCache->m_pMatrix->end())
+    if ( m_aIter->second.aIterator == m_pCache->m_pMatrix->end() )
     {
 //      OSL_ENSURE(m_aIter->second.aBookmark.hasValue(),"bookmark has no value!");
 //      m_pCache->moveToBookmark(m_aIter->second.aBookmark);
@@ -108,8 +107,7 @@ ORowSetRow& ORowSetCacheIterator::operator *()
 // -----------------------------------------------------------------------------
 const ORowSetRow& ORowSetCacheIterator::operator *() const
 {
-    if(m_aIter->second.aIterator == NULL ||
-       m_aIter->second.aIterator == m_pCache->m_pMatrix->end())
+    if ( m_aIter->second.aIterator == m_pCache->m_pMatrix->end() )
     {
         OSL_ENSURE(m_aIter->second.aBookmark.hasValue(),"bookmark has no value!");
         m_pCache->moveToBookmark(m_aIter->second.aBookmark);
@@ -125,8 +123,7 @@ ORowSetMatrix::iterator& ORowSetCacheIterator::operator ->()
 // -----------------------------------------------------------------------------
 const ORowSetMatrix::iterator& ORowSetCacheIterator::operator ->() const
 {
-    if(m_aIter->second.aIterator == NULL ||
-       m_aIter->second.aIterator == m_pCache->m_pMatrix->end())
+    if ( m_aIter->second.aIterator == m_pCache->m_pMatrix->end() )
     {
         OSL_ENSURE(m_aIter->second.aBookmark.hasValue(),"bookmark has no value!");
         m_pCache->moveToBookmark(m_aIter->second.aBookmark);
@@ -155,7 +152,7 @@ void ORowSetCacheIterator::setBookmark(const ::com::sun::star::uno::Any&    _rBo
     m_aIter->second.aBookmark = _rBookmark;
 }
 // -----------------------------------------------------------------------------
-
-
-
-
+sal_Bool ORowSetCacheIterator::isNull() const
+{
+    return !m_pCache || m_aIter == m_pCache->m_aCacheIterators.end() || m_aIter->second.aIterator == m_pCache->m_pMatrix->end();
+}
