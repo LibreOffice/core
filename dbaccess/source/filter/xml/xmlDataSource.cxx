@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlDataSource.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:39:17 $
+ *  last change: $Author: rt $ $Date: 2005-09-05 08:58:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,7 +276,7 @@ void OXMLDataSource::EndElement()
     {
         try
         {
-            xDataSource->setPropertyValue(PROPERTY_INFO,makeAny(Sequence<PropertyValue>(m_aInfoSequence.begin(),m_aInfoSequence.size())));
+            xDataSource->setPropertyValue(PROPERTY_INFO,makeAny(Sequence<PropertyValue>(&(*m_aInfoSequence.begin()),m_aInfoSequence.size())));
         }
         catch(Exception)
         {

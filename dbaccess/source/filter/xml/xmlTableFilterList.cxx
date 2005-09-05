@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlTableFilterList.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:41:01 $
+ *  last change: $Author: rt $ $Date: 2005-09-05 08:59:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,9 +148,9 @@ void OXMLTableFilterList::EndElement()
     if ( xDataSource.is() )
     {
         if ( !m_aPatterns.empty() )
-            xDataSource->setPropertyValue(PROPERTY_TABLEFILTER,makeAny(Sequence< ::rtl::OUString>(m_aPatterns.begin(),m_aPatterns.size())));
+            xDataSource->setPropertyValue(PROPERTY_TABLEFILTER,makeAny(Sequence< ::rtl::OUString>(&(*m_aPatterns.begin()),m_aPatterns.size())));
         if ( !m_aTypes.empty() )
-            xDataSource->setPropertyValue(PROPERTY_TABLETYPEFILTER,makeAny(Sequence< ::rtl::OUString>(m_aTypes.begin(),m_aTypes.size())));
+            xDataSource->setPropertyValue(PROPERTY_TABLETYPEFILTER,makeAny(Sequence< ::rtl::OUString>(&(*m_aTypes.begin()),m_aTypes.size())));
     }
 }
 //----------------------------------------------------------------------------
