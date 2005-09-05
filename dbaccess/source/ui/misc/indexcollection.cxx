@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexcollection.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:53 $
+ *  last change: $Author: rt $ $Date: 2005-09-05 09:00:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,12 +141,12 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------
-    OIndexCollection::const_iterator OIndexCollection::find(const String& _rName) const
+    Indexes::const_iterator OIndexCollection::find(const String& _rName) const
     {
         ::rtl::OUString sNameCompare(_rName);
 
         // loop'n'compare
-        const_iterator aSearch = m_aIndexes.begin();
+        Indexes::const_iterator aSearch = m_aIndexes.begin();
         for (; aSearch != m_aIndexes.end(); ++aSearch)
             if (aSearch->sName == sNameCompare)
                 break;
@@ -155,12 +155,12 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------
-    OIndexCollection::iterator OIndexCollection::find(const String& _rName)
+    Indexes::iterator OIndexCollection::find(const String& _rName)
     {
         ::rtl::OUString sNameCompare(_rName);
 
         // loop'n'compare
-        iterator aSearch = m_aIndexes.begin();
+        Indexes::iterator aSearch = m_aIndexes.begin();
         for (; aSearch != m_aIndexes.end(); ++aSearch)
             if (aSearch->sName == sNameCompare)
                 break;
@@ -169,12 +169,12 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------
-    OIndexCollection::const_iterator OIndexCollection::findOriginal(const String& _rName) const
+    Indexes::const_iterator OIndexCollection::findOriginal(const String& _rName) const
     {
         ::rtl::OUString sNameCompare(_rName);
 
         // loop'n'compare
-        const_iterator aSearch = m_aIndexes.begin();
+        Indexes::const_iterator aSearch = m_aIndexes.begin();
         for (; aSearch != m_aIndexes.end(); ++aSearch)
             if (aSearch->getOriginalName() == sNameCompare)
                 break;
@@ -183,12 +183,12 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------
-    OIndexCollection::iterator OIndexCollection::findOriginal(const String& _rName)
+    Indexes::iterator OIndexCollection::findOriginal(const String& _rName)
     {
         ::rtl::OUString sNameCompare(_rName);
 
         // loop'n'compare
-        iterator aSearch = m_aIndexes.begin();
+        Indexes::iterator aSearch = m_aIndexes.begin();
         for (; aSearch != m_aIndexes.end(); ++aSearch)
             if (aSearch->getOriginalName() == sNameCompare)
                 break;
@@ -197,7 +197,7 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------
-    void OIndexCollection::commitNewIndex(const iterator& _rPos) SAL_THROW((SQLException))
+    void OIndexCollection::commitNewIndex(const Indexes::iterator& _rPos) SAL_THROW((SQLException))
     {
         OSL_ENSURE(_rPos->isNew(), "OIndexCollection::commitNewIndex: index must be new!");
 
@@ -268,7 +268,7 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------
-    sal_Bool OIndexCollection::dropNoRemove(const iterator& _rPos) SAL_THROW((SQLException))
+    sal_Bool OIndexCollection::dropNoRemove(const Indexes::iterator& _rPos) SAL_THROW((SQLException))
     {
         try
         {
@@ -294,7 +294,7 @@ namespace dbaui
         }
 
         // adjust the OIndex structure
-        iterator aDropped = findOriginal(_rPos->getOriginalName());
+        Indexes::iterator aDropped = findOriginal(_rPos->getOriginalName());
         OSL_ENSURE(aDropped != m_aIndexes.end(), "OIndexCollection::drop: invalid original name, but successfull commit?!");
         aDropped->flagAsNew(GrantIndexAccess());
 
@@ -302,7 +302,7 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------
-    sal_Bool OIndexCollection::drop(const iterator& _rPos) SAL_THROW((SQLException))
+    sal_Bool OIndexCollection::drop(const Indexes::iterator& _rPos) SAL_THROW((SQLException))
     {
         OSL_ENSURE((_rPos >= m_aIndexes.begin()) && (_rPos < m_aIndexes.end()),
             "OIndexCollection::drop: invalid position (fasten your seatbelt .... this will crash)!");
@@ -355,10 +355,10 @@ namespace dbaui
 
             const ::rtl::OUString* pFieldNames = aFieldNames.getConstArray();
             const ::rtl::OUString* pFieldNamesEnd = pFieldNames + aFieldNames.getLength();
-            OIndexField* pCopyTo = _rIndex.aFields.begin();
+            IndexFields::iterator aCopyTo = _rIndex.aFields.begin();
 
             Reference< XPropertySet > xIndexColumn;
-            for (;pFieldNames < pFieldNamesEnd; ++pFieldNames, ++pCopyTo)
+            for (;pFieldNames < pFieldNamesEnd; ++pFieldNames, ++aCopyTo)
             {
                 // extract the column
                 xIndexColumn.clear();
@@ -366,22 +366,22 @@ namespace dbaui
                 if (!xIndexColumn.is())
                 {
                     OSL_ENSURE(sal_False, "OIndexCollection::implFillIndexInfo: invalid index column!");
-                    --pCopyTo;
+                    --aCopyTo;
                     continue;
                 }
 
                 // get the relevant properties
-                pCopyTo->sFieldName = *pFieldNames;
-                pCopyTo->bSortAscending = ::cppu::any2bool(xIndexColumn->getPropertyValue(s_sSortPropertyName));
+                aCopyTo->sFieldName = *pFieldNames;
+                aCopyTo->bSortAscending = ::cppu::any2bool(xIndexColumn->getPropertyValue(s_sSortPropertyName));
             }
 
-            _rIndex.aFields.resize(pCopyTo - _rIndex.aFields.begin());
+            _rIndex.aFields.resize(aCopyTo - _rIndex.aFields.begin());
                 // (just in case some fields were invalid ...)
         }
     }
 
     //------------------------------------------------------------------
-    void OIndexCollection::resetIndex(const iterator& _rPos) SAL_THROW((SQLException))
+    void OIndexCollection::resetIndex(const Indexes::iterator& _rPos) SAL_THROW((SQLException))
     {
         OSL_ENSURE(_rPos >= m_aIndexes.begin() && _rPos < m_aIndexes.end(),
             "OIndexCollection::resetIndex: invalid position!");
@@ -405,7 +405,7 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------
-    OIndexCollection::iterator OIndexCollection::insert(const String& _rName)
+    Indexes::iterator OIndexCollection::insert(const String& _rName)
     {
         OSL_ENSURE(end() == find(_rName), "OIndexCollection::insert: invalid new name!");
         String tmpName;
