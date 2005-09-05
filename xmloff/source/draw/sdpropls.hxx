@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:36:13 $
+ *  last change: $Author: obo $ $Date: 2005-09-05 14:53:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,15 +279,18 @@ extern SvXMLEnumMapEntry aXML_CircleKind_EnumMap[];
 // factory for own graphic properties
 
 class SvXMLExport;
+class SvXMLImport;
 
 class XMLSdPropHdlFactory : public XMLPropertyHandlerFactory
 {
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxModel;
     SvXMLExport* mpExport;
+    SvXMLImport* mpImport;
 
 public:
-    XMLSdPropHdlFactory( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >, SvXMLExport* pExport );
+    XMLSdPropHdlFactory( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >, SvXMLExport& rExport );
+    XMLSdPropHdlFactory( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >, SvXMLImport& rImport );
     virtual ~XMLSdPropHdlFactory();
     virtual const XMLPropertyHandler* GetPropertyHandler( sal_Int32 nType ) const;
 };
