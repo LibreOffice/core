@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: kz $ $Date: 2005-07-12 11:42:22 $
+ *  last change: $Author: rt $ $Date: 2005-09-05 08:53:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2316,13 +2316,13 @@ void SwTabFrmPainter::PaintLines( OutputDevice& rDev, const SwRect& rRect ) cons
 
     while ( true )
     {
-        if ( aIter == maHoriLines.end() )
+        if ( bHori && aIter == maHoriLines.end() )
         {
             aIter = maVertLines.begin();
             bHori = false;
         }
 
-        if ( aIter == maVertLines.end() )
+        if ( !bHori && aIter == maVertLines.end() )
             break;
 
         const SwLineEntry& rEntry = (*aIter).second;
