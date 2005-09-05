@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:04:11 $
+ *  last change: $Author: obo $ $Date: 2005-09-05 15:12:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,6 +479,8 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
             { MAP_LEN( "BaseURI" ), 0, &::getCppuType( (rtl::OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
             { MAP_LEN( "StreamRelPath" ), 0, &::getCppuType( (rtl::OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
             { MAP_LEN( "StreamName" ), 0, &::getCppuType( (rtl::OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+            { MAP_LEN( "BuildId" ), 0, &::getCppuType( (OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+
             { NULL, 0, 0, NULL, 0, 0 }
         };
         uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aImportInfoMap ) ) );
