@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2005-07-14 11:41:07 $
+ *  last change: $Author: obo $ $Date: 2005-09-05 15:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,6 +576,9 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, co
         { "ShapePositionInHoriL2R", sizeof("ShapePositionInHoriL2R")-1, 0,
               &::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "BuildId", sizeof("BuildId")-1, 0,
+              &::getCppuType( (OUString *)0 ),
+              ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
         // <--
         { NULL, 0, 0, NULL, 0, 0 }
     };
