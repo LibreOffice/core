@@ -2,9 +2,9 @@
  *
  *  $RCSfile: languageoptions.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2005-08-25 13:11:39 $
+ *  last change: $Author: rt $ $Date: 2005-09-05 13:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,11 +302,10 @@ sal_uInt16 SvtLanguageOptions::GetScriptTypeOfLanguage( sal_uInt16 nLang )
         case LANGUAGE_TELUGU:
         case LANGUAGE_THAI:
         case LANGUAGE_TIBETAN:
-        case LANGUAGE_TIBETAN_BHUTAN:
+        case LANGUAGE_DZONGKHA:
         case LANGUAGE_URDU:
         case LANGUAGE_URDU_PAKISTAN:
         case LANGUAGE_URDU_INDIA:
-        case LANGUAGE_USER_DZONGKHA:
         case LANGUAGE_USER_KURDISH_IRAQ:
         case LANGUAGE_USER_KURDISH_IRAN:
         case LANGUAGE_VIETNAMESE:
