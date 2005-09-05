@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.142 $
+#   $Revision: 1.143 $
 #
-#   last change: $Author: vg $ $Date: 2005-06-24 10:28:05 $
+#   last change: $Author: rt $ $Date: 2005-09-05 07:51:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,7 +104,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.142 $ ';
+    $id_str = ' $Revision: 1.143 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -168,6 +168,7 @@
 #    %module_announced = ();
     $prepare = ''; # prepare for following incompatible build
     $ignore = '';
+    $html = '';
     @ignored_errors = ();
     %incompatibles = ();
     $only_platform = ''; # the only platform to prepare
@@ -186,10 +187,25 @@
     %windows_procs = ();
     @warnings = (); # array of warnings to be shown at the end of the process
     @errors = (); # array of errors to be shown at the end of the process
-
+    %html_info = (); # hash containing all necessary info for generating of html page
+    %module_by_hash = (); # hash containing all modules names as values and correspondent hashes as keys
+    %build_in_progress = (); # hash of modules currently being built
+    %build_is_finished = (); # hash of already built modules
+    %modules_with_errors = (); # hash of modules with build errors
+    %build_in_progress_shown = ();  # hash of modules being built,
+                                    # and shown last time (to keep order)
+    $build_time = time;
+    $html_last_updated = 0;
+    %jobs_hash = ();
+    $html_path = undef;
+    $html_file = CorrectPath($ENV{SRC_ROOT} . '/' . $ENV{INPATH}. '.build.html');
+    $build_finished = 0;
+    %had_error = (); # hack for misteriuos windows problems - try run dmake 2 times if first time there was an error
 ### main ###
 
     get_options();
+
+    $html_file = CorrectPath($html_path . '/' . $ENV{INPATH}. '.build.html') if (defined $html_path);
     get_build_modes();
     %deliver_env = ();
     if ($prepare) {
@@ -340,39 +356,53 @@ sub BuildAll {
             prepare_build_from_opt(\%global_deps_hash);
         };
         $modules_number = scalar keys %global_deps_hash;
+        initialize_html_info($_) foreach (keys %global_deps_hash);
         if ($QuantityToBuild) {
             build_multiprocessing();
             return;
         };
         while ($Prj = PickPrjToBuild(\%global_deps_hash)) {
             if (!defined $dead_parents{$Prj}) {
-#                if (!defined $module_announced{$Prj}) {
-                    print $new_line;
-                    if (scalar keys %broken_build) {
-                        print $echo . "Skipping project $Prj because of error(s)\n";
-                        RemoveFromDependencies($Prj, \%global_deps_hash);
-                        next;
-                    };
+                print $new_line;
+                if (scalar keys %broken_build) {
+                    print $echo . "Skipping project $Prj because of error(s)\n";
+                    RemoveFromDependencies($Prj, \%global_deps_hash);
+                    $build_is_finished{$Prj}++;
+                    next;
+                };
 
-#&print_announce($Prj);
-#                    if ($modules_types{$Prj} eq 'mod') {
-                        $PrjDir = CorrectPath($StandDir.$Prj);
-                        get_deps_hash($Prj, \%LocalDepsHash);
-                        BuildDependent(\%LocalDepsHash);
-                        print $check_error_string;
-#                    };
-#                };
+                $PrjDir = CorrectPath($StandDir.$Prj);
+                get_deps_hash($Prj, \%LocalDepsHash);
+                my $info_hash = $html_info{$Prj};
+                $$info_hash{DIRS} = check_deps_hash(\%LocalDepsHash, $Prj);
+                $module_by_hash{\%LocalDepsHash} = $Prj;
+                BuildDependent(\%LocalDepsHash);
+                print $check_error_string;
             };
 
             RemoveFromDependencies($Prj, \%global_deps_hash);
+            $build_is_finished{$Prj}++;
             $no_projects = 0;
         };
     } else {
         store_build_list_content($CurrentPrj);
         get_deps_hash($CurrentPrj, \%LocalDepsHash);
+        initialize_html_info($CurrentPrj);
+        my $info_hash = $html_info{$CurrentPrj};
+        $$info_hash{DIRS} = check_deps_hash(\%LocalDepsHash, $CurrentPrj);
+        $module_by_hash{\%LocalDepsHash} = $CurrentPrj;
         BuildDependent(\%LocalDepsHash);
     };
 };
+
+sub initialize_html_info {
+    my $module = shift;
+    return if (defined $dead_parents{$module});
+    $html_info{$module} = { 'DIRS' => [],
+                            'ERRORFUL' => [],
+                            'SUCCESSFUL' => [],
+                            'BUILD_TIME' => 0};
+}
 
 #
 # Start build on a given project
@@ -380,21 +410,16 @@ sub BuildAll {
 sub dmake_dir {
     my ($new_BuildDir, $OldBuildDir, $error_code);
     my $BuildDir = shift;
+    $jobs_hash{$BuildDir}->{START_TIME} = time();
+    $jobs_hash{$BuildDir}->{STATUS} = 'building';
     if ($BuildDir =~ /(\s)/o) {
         announce_module($`) if ($' eq $pre_job);
-        deliver_module($`) if ($' eq $post_job);
+        $error_code = deliver_module($`) if ($' eq $post_job);
         RemoveFromDependencies($BuildDir, \%LocalDepsHash);
+        html_store_dmake_dir_info(\%LocalDepsHash, $BuildDir, $error_code);
         return;
     };
-#    if ((!(-d $BuildDir)) && (defined $ENV{CWS_WORK_STAMP} && defined($log))) {
-#        $OldBuildDir = $BuildDir;
-#        my $modified_path = $PathHash{$folder_nick};
-#        $modified_path =~ s/^([^\\\/]+)/$1\.lnk/;
-#        $BuildDir = &CorrectPath($StandDir . $modified_path);
-#    };
-#    my $missing_dir;
-#    $missing_dir = $OldBuildDir if ($OldBuildDir);
-#    $missing_dir = $BuildDir if (!$missing_dir);
+    html_store_dmake_dir_info(\%LocalDepsHash, $BuildDir);
     print_error("$BuildDir not found!!\n") if (!-d $BuildDir);
     if (!(-d $BuildDir)) {
         $new_BuildDir = $BuildDir;
@@ -420,6 +445,7 @@ sub dmake_dir {
         chdir $BuildDir;
         cwd();
         $error_code = system ("$dmake");
+        html_store_dmake_dir_info(\%LocalDepsHash, $BuildDir, $error_code) if (!$child);
         if ($error_code && $ignore) {
             push(@ignored_errors, $BuildDir);
             $error_code = 0;
@@ -611,13 +637,13 @@ sub get_deps_hash {
         };
         foreach my $alias (keys %DeadDependencies) {
             next if defined $AliveDependencies{$alias};
-            if (!&IsHashNative($alias)) {
+            if (!IsHashNative($alias)) {
                 RemoveFromDependencies($alias, $dependencies_hash);
                 delete $DeadDependencies{$alias};
             };
         };
     };
-    check_deps_hash($dependencies_hash);
+#    check_deps_hash($dependencies_hash);
     resolve_aliases($dependencies_hash, \%PathHash);
     if (!$prepare) {
         add_pre_job($dependencies_hash, $module_to_build);
@@ -802,6 +828,7 @@ sub PickPrjToBuild {
     handle_dead_children() if ($QuantityToBuild);
     my $Prj = FindIndepPrj($DepsHash);
     delete $$DepsHash{$Prj};
+    generate_html_file();
     return $Prj;
 };
 
@@ -851,7 +878,8 @@ sub RemoveFromDependencies {
 # Check the hash for consistency
 #
 sub check_deps_hash {
-    my $deps_hash_ref = shift;
+    my ($deps_hash_ref, $module) = @_;
+    my @possible_order;
     return if (!scalar keys %$deps_hash_ref);
     my %deps_hash = %$deps_hash_ref;
     my $consistent;
@@ -859,19 +887,47 @@ sub check_deps_hash {
         my %values_hash = %{$$deps_hash_ref{$key}};
         $deps_hash{$key} = \%values_hash;
     };
+    my $string;
+    my $build_number = 0;
 
     do {
         $consistent = '';
-        foreach $key (keys %deps_hash) {
+        foreach $key (sort keys %deps_hash) {
             $local_deps_ref = $deps_hash{$key};
             if (!scalar keys %$local_deps_ref) {
+                if (defined $module) {
+                    $build_number++;
+                    $string = undef;
+                    if ($key =~ /(\s)/o) {
+                        $string = $key;
+#                        if ($' eq $pre_job) {
+#                            push(@possible_order, $key . '<br>');
+#                        } else {
+#                            push(@possible_order, '<br>' . $key);
+#                        };
+                    } else {
+                        if (length($key) == length($StandDir . $module)) {
+                            $string = './';
+                        } else {
+                            $string = substr($key, length($StandDir . $module) + 1);
+                            $string =~ s/\\/\//go;
+                        };
+                    };
+                    push(@possible_order, $key);
+                    $jobs_hash{$key} = {    SHORT_NAME => $string,
+                                            BUILD_NUMBER => $build_number,
+                                            STATUS => 'waiting',
+                                            START_TIME => 0,
+                                            FINISH_TIME => 0
+                    };
+                };
                 RemoveFromDependencies($key, \%deps_hash);
                 delete $deps_hash{$key};
-                $consistent = 1;
+                $consistent++;
             };
         };
     } while ($consistent && (scalar keys %deps_hash));
-    return if ($consistent);
+    return \@possible_order if ($consistent);
     print STDERR "Fatal error:";
     foreach (keys %deps_hash) {
         print STDERR "\n\t$_ depends on: ";
@@ -981,6 +1037,7 @@ sub finish_logging {
 
 sub print_error {
     my $message = shift;
+    my $force = shift;
     rmtree(CorrectPath($tmp_dir), 0, 1) if ($tmp_dir);
     $modules_number -= scalar keys %global_deps_hash;
     $modules_number -= 1;
@@ -990,11 +1047,12 @@ sub print_error {
     close CMD_FILE if ($cmd_file);
     unlink ($cmd_file);
     do_exit(1) if (!$child);
+    do_exit(1) if (defined $force);
 };
 
 sub usage {
     print STDERR "\nbuild\n";
-    print STDERR "Syntax:    build    [--all|-a[:prj_name]]|[--from|-f prj_name1[:prj_name2] [prj_name3 [...]]]|[--since|-c prj_name] [--with_branches|-b]|[--prepare|-p][:platform]] [--deliver|-d [--dlv_switch deliver_switch]]] [-P processes] [--show|-s] [--help|-h] [--file|-F] [--ignore|-i] [--version|-V] [--mode|-m OOo[,SO[,EXT]] [-- dmake_options] \n";
+    print STDERR "Syntax:    build    [--all|-a[:prj_name]]|[--from|-f prj_name1[:prj_name2] [prj_name3 [...]]]|[--since|-c prj_name] [--with_branches|-b]|[--prepare|-p][:platform]] [--deliver|-d [--dlv_switch deliver_switch]]] [-P processes] [--show|-s] [--help|-h] [--file|-F] [--ignore|-i] [--version|-V] [--mode|-m OOo[,SO[,EXT]] [--html [--html_path html_file_path]] [-- dmake_options] \n";
     print STDERR "Example:    build --from sfx2\n";
     print STDERR "                     - build projects including current one from sfx2\n";
     print STDERR "Example:    build --all:sfx2\n";
@@ -1012,6 +1070,9 @@ sub usage {
     print STDERR "        --dlv_switch - use deliver with the switch specified\n";
     print STDERR "        --help       - print help info\n";
     print STDERR "        --ignore     - force tool to ignore errors\n";
+    print STDERR "        --html       - generate html page with build status\n";
+    print STDERR "                       file named \$INPATH.build.html will be generated in \$SRC_ROOT\n";
+    print STDERR "        --html_path  - html page path\n";
     print STDERR "Default:             - build current project\n";
     print STDERR "Keys that are not listed above would be passed to dmake\n";
 };
@@ -1074,6 +1135,8 @@ sub get_options {
         $arg =~ /^--help$/        and usage()                            and do_exit(0);
         $arg =~ /^-h$/        and usage()                            and do_exit(0);
         $arg =~ /^--ignore$/        and $ignore = 1                            and next;
+        $arg =~ /^--html$/        and $html = 1                            and next;
+        $arg =~ /^--html-path$/ and $html_path = shift @ARGV  and next;
         $arg =~ /^-i$/        and $ignore = 1                            and next;
         $arg =~ /^--version$/   and do_exit(0);
         $arg =~ /^-V$/          and do_exit(0);
@@ -1097,13 +1160,14 @@ sub get_options {
         print_error("--prepare is for use with --from switch only!\n");
     };
     if ($QuantityToBuild) {
-        if ($ignore) {
+        if ($ignore && !$html) {
             print_error("Cannot ignore errors in multiprocessing build");
         };
         if (!$enable_multiprocessing) {
             print_error("Cannot load Win32::Process module for multiprocessing build");
         };
     };
+#    $ignore++ if ($html);
     if ($only_platform) {
         $only_common = 'common';
         $only_common .= '.pro' if ($only_platform =~ /\.pro$/);
@@ -1146,10 +1210,11 @@ sub get_switch_options {
 sub cancel_build {
     $modules_number -= scalar keys %global_deps_hash;
     my $log_string = 'FAILURE. Build is broken in modules: ';
-    if ($BuildAllParents) {
-        $modules_number -= scalar @broken_modules_names;
+    my $broken_modules_number = scalar @broken_modules_names;
+    if ($broken_modules_number) {
+        $modules_number -= $broken_modules_number;
         print "\n";
-        print scalar @broken_modules_names;
+        print $broken_modules_number;
         print " module(s): ";
         foreach (@broken_modules_names) {
             print "\n\t$_";
@@ -1186,8 +1251,15 @@ sub cancel_build {
 sub store_error {
     my ($pid, $error_code) = @_;
     my $child_nick = $processes_hash{$pid};
+    if ($ENV{GUI} eq 'WNT' && !$cygwin) {
+        if (!defined $had_error{$child_nick}) {
+            $had_error{$child_nick}++;
+            return 1;
+        };
+    };
     $broken_modules_hashes{$folders_hashes{$child_nick}}++;
     $broken_build{$child_nick} = $error_code;
+    return 0;
 };
 
 #
@@ -1203,9 +1275,19 @@ sub handle_dead_children {
                 my $proc_obj = $windows_procs{$pid};
                 $proc_obj->GetExitCode($exit_code);
                 if ( $exit_code != 259 ) {
-                    store_error($pid, $exit_code) if ($exit_code);
-                    clear_from_child($pid);
+                    my $try_once_more = 0;
+                    $try_once_more  = store_error($pid, $exit_code) if ($exit_code);
                     delete $windows_procs{$pid};
+                    if ($try_once_more) {
+                        # A malicious hack for misterious windows problems - try 2 times
+                        # to run dmake in the same directory if errors occurs
+                        my $child_nick = $processes_hash{$pid};
+                        $running_children{$folders_hashes{$child_nick}}--;
+                        delete $processes_hash{$pid};
+                        start_child($child_nick, $folders_hashes{$child_nick});
+                    } else {
+                        clear_from_child($pid);
+                    };
                 };
             }
         } else {
@@ -1221,8 +1303,12 @@ sub handle_dead_children {
 sub clear_from_child {
     my $pid = shift;
     my $child_nick = $processes_hash{$pid};
-      RemoveFromDependencies($child_nick,
+    RemoveFromDependencies($child_nick,
                             $folders_hashes{$child_nick});
+    my $error_code = 0;
+    $error_code = $broken_build{$child_nick} if (defined $broken_build{$child_nick});
+    my $module = $module_by_hash{$folders_hashes{$child_nick}};
+    html_store_dmake_dir_info($folders_hashes{$child_nick}, $child_nick, $error_code);
     $running_children{$folders_hashes{$child_nick}}--;
     delete $processes_hash{$pid};
     $only_dependent = 0;
@@ -1240,7 +1326,7 @@ sub BuildDependent {
         if (($QuantityToBuild)) { # multiprocessing not for $BuildAllParents (-all etc)!!
             do {
                 handle_dead_children();
-                if (defined $broken_modules_hashes{$dependencies_hash}) {
+                if (defined $broken_modules_hashes{$dependencies_hash} && !$ignore) {
                     return if ($BuildAllParents);
                     last;
                 };
@@ -1258,6 +1344,9 @@ sub BuildDependent {
                 handle_dead_children();
                 sleep 1;
             };
+#            if (defined $last_module) {
+#                $build_is_finished{$last_module}++ if (!defined $modules_with_errors{$last_module});
+#            };
 
             if (defined $broken_modules_hashes{$dependencies_hash}) {
                 cancel_build();
@@ -1276,12 +1365,17 @@ sub children_number {
 
 sub start_child {
     my ($child_nick, $dependencies_hash) = @_;
+    $jobs_hash{$child_nick}->{START_TIME} = time();
+    $jobs_hash{$child_nick}->{STATUS} = 'building';
     if ($child_nick =~ /(\s)/o) {
+        my $error_code = undef;
         announce_module($`) if ($' eq $pre_job);
-        deliver_module($`) if ($' eq $post_job);
+        $error_code = deliver_module($`) if ($' eq $post_job);
+        html_store_dmake_dir_info($dependencies_hash, $child_nick, $error_code);
         RemoveFromDependencies($child_nick, $dependencies_hash);
         return;
     };
+    html_store_dmake_dir_info($dependencies_hash, $child_nick);
     my $pid = undef;
     my $children_running;
     my $oldfh = select STDOUT;
@@ -1329,49 +1423,48 @@ sub build_multiprocessing {
         while ($Prj = PickPrjToBuild(\%global_deps_hash)) {
             my $module_type = $modules_types{$Prj};
 
-            if (($module_type eq 'lnk') || ($module_type eq 'img')) {
-#                print_announce($Prj);
-                RemoveFromDependencies($Prj, \%global_deps_hash);
-                next;
-            };
+#            if (($module_type eq 'lnk') || ($module_type eq 'img')) {
+#                RemoveFromDependencies($Prj, \%global_deps_hash);
+#                next;
+#            };
 
             push @build_queue, $Prj;
             $projects_deps_hash{$Prj} = {};
             get_deps_hash($Prj, $projects_deps_hash{$Prj});
+            my $info_hash = $html_info{$Prj};
+            $$info_hash{DIRS} = check_deps_hash($projects_deps_hash{$Prj}, $Prj);
+            $module_by_hash{$projects_deps_hash{$Prj}} = $Prj;
         };
         if (!$Prj || !defined $projects_deps_hash{$Prj}) {
             cancel_build() if (!scalar @build_queue && !children_number());
             sleep(1);
         }
         build_actual_queue(\@build_queue);
-#        if (scalar keys %broken_modules_hashes) {
-#            do {
-#                sleep(1);
-#                handle_dead_children();
-#                build_actual_queue(\@build_queue);
-#            } while (children_number());
-#            cancel_build();
-#        };
     } while (scalar (keys %global_deps_hash));
     # Let the last module be built till the end
-    if (scalar @build_queue) {
-        $BuildAllParents = '';
-        my $last_deps_hash = $projects_deps_hash{$build_queue[0]};
-        while (scalar keys %$last_deps_hash) {
-            sleep 1;
-            handle_dead_children();
-            BuildDependent($last_deps_hash);
-        }
+    while (scalar @build_queue) {
+        build_actual_queue(\@build_queue);
+        handle_dead_children();
+        sleep 1;
     };
-#    while (scalar @build_queue) {
-#        sleep 1;
-#        build_actual_queue(\@build_queue);
+#    if (scalar @build_queue) {
+#        $last_module = $build_queue[0];
+#        $BuildAllParents = '';
+#        my $last_deps_hash = $projects_deps_hash{$last_module};
+#        while (scalar keys %$last_deps_hash) {
+#            sleep 1;
+#            handle_dead_children();
+#            BuildDependent($last_deps_hash);
+#        }
 #    };
     # Let all children finish their work
     while (children_number()) {
         handle_dead_children();
         sleep 1;
-    }
+    };
+#    if (defined $last_module) {
+#        $build_is_finished{$last_module}++ if (!defined $modules_with_errors{$last_module});
+#    };
     cancel_build() if (scalar keys %broken_build);
     mp_success_exit();
 };
@@ -1391,24 +1484,27 @@ sub build_actual_queue {
     do {
         while ($i <= (scalar(@$build_queue) - 1)) {
             $Prj = $$build_queue[$i];
-            if (defined $broken_modules_hashes{$projects_deps_hash{$Prj}}) {
+            if (defined $broken_modules_hashes{$projects_deps_hash{$Prj}} && !$ignore) {
                 push (@broken_modules_names, $Prj);
                 splice (@$build_queue, $i, 1);
+#                RemoveFromDependencies($Prj, \%global_deps_hash);
+#                $build_is_finished{$Prj}++;
                 next;
             };
-#            announce_module($Prj) if (!(defined $module_announced{$Prj}));
             $only_dependent = 0;
             $no_projects = 0;
             BuildDependent($projects_deps_hash{$Prj});
             handle_dead_children();
             if ($no_projects &&
-                !$running_children{$projects_deps_hash{$Prj}} &&
-                !defined $broken_modules_hashes{$projects_deps_hash{$Prj}})
-            {
-                chdir(&CorrectPath($StandDir.$Prj));
-                RemoveFromDependencies($Prj, \%global_deps_hash);
-                splice (@$build_queue, $i, 1);
-                next;
+                !$running_children{$projects_deps_hash{$Prj}}) {
+                if (!defined $broken_modules_hashes{$projects_deps_hash{$Prj}} || $ignore)
+                {
+#                    chdir(&CorrectPath($StandDir.$Prj));
+                    RemoveFromDependencies($Prj, \%global_deps_hash);
+                    $build_is_finished{$Prj}++;
+                    splice (@$build_queue, $i, 1);
+                    next;
+                };
             };
             $i++;
         };
@@ -1421,8 +1517,8 @@ sub build_actual_queue {
 #
 sub announce_module {
     my $Prj = shift;
+    $build_in_progress{$Prj}++;
     print_announce($Prj);
-#    $module_announced{$Prj}++;
 };
 
 sub print_announce {
@@ -1432,9 +1528,11 @@ sub print_announce {
     my $text;
     if ($prj_type eq 'lnk') {
         $text = "Skipping link to $Prj\n";
+        $build_is_finished{$Prj}++;
     } elsif ($prj_type eq 'img') {
 #        return if (defined $module_announced{$`});
         $text = "Skipping incomplete $Prj\n";
+        $build_is_finished{$Prj}++;
     } else {
         $text = "Building project $Prj\n";
     };
@@ -1544,20 +1642,6 @@ sub modules_classify {
         };
         $modules_types{$module} = 'img';
     };
-#    opendir DIRHANDLE, $StandDir.$Prj;
-#    my @dir_content = readdir(DIRHANDLE);
-#    closedir(DIRHANDLE);
-#    # Check if there only 2 entries: CVS & prj
-#    # dirty, but must work
-#    if (scalar(@dir_content) <= 4) {
-#        foreach (@dir_content) {
-#            return 'mod' if ( ($_ ne 'CVS') &&
-#                            ($_ ne 'prj') &&
-#                            (!(/^\.+$/o))   );
-#        };
-#        return 'img';
-#   };
-#    return 'mod';
 };
 
 #
@@ -2171,13 +2255,11 @@ sub pick_for_build_type {
     print_error("Wrongly written dependencies string:\n $modules\n") if ($mod_array[$#mod_array] ne 'NULL');
     pop @mod_array;
     my @modules_to_build;
-#my $new_modules = '';
     foreach (@mod_array) {
         if (/(\w+):(\S+)/o) {
             push(@modules_to_build, $2) if (defined $build_modes{$1});
             next;
         };
-#next if (/^NULL$/);
         push(@modules_to_build, $_);
     };
     return @modules_to_build;
@@ -2185,25 +2267,462 @@ sub pick_for_build_type {
 
 sub do_exit {
     my $exit_code = shift;
+    $build_finished++;
+    generate_html_file(1);
     rmtree(CorrectPath($tmp_dir), 0, 1) if ($tmp_dir);
-    if ($exit_code) {
+#    if ($exit_code) {
 #        finish_logging("error occured");
-    } else {
+#    } else {
 #        finish_logging;
-    };
+#    };
     exit($exit_code);
 };
 
 sub deliver_module {
     return if ($show);
     my $module = shift;
+    delete $build_in_progress{$module};
     $module_path = CorrectPath($StandDir.$module);
+    my $error_code = undef;
     if ($cmd_file) {
         print "chdir $module_path";
         print "$deliver_commando\n";
     } else {
         chdir $module_path;
         cwd();
-        system ("$deliver_commando");
+        $error_code = system ("$deliver_commando");
     };
+    $build_is_finished{$module}++ if (!defined $modules_with_errors{$module});
+    return $error_code;
+};
+
+#
+# Procedure sorts module in user-frendly order
+#
+sub sort_modules_appearance {
+    foreach (keys %dead_parents) {
+        delete $build_is_finished{$_} if (defined $build_is_finished{$_});
+        delete $build_in_progress{$_} if (defined $build_in_progress{$_});
+    };
+    foreach (keys %build_is_finished) {
+        delete $build_in_progress{$_} if (defined $build_in_progress{$_});
+        delete $build_in_progress_shown{$_} if (defined $build_in_progress_shown{$_});
+    };
+    @modules_order = sort keys %modules_with_errors;
+    foreach (keys %modules_with_errors) {
+        delete $build_in_progress{$_} if (defined $build_in_progress{$_});
+        delete $build_is_finished{$_} if (defined $build_is_finished{$_});
+        delete $build_in_progress_shown{$_} if (defined $build_in_progress_shown{$_});
+    };
+    $build_in_progress_shown{$_}++ foreach (keys %build_in_progress);
+    push(@modules_order, $_) foreach (sort keys %build_in_progress_shown);
+    push(@modules_order, $_) foreach (sort keys %build_is_finished);
+    foreach(sort keys %html_info) {
+        next if (defined $build_is_finished{$_} || defined $build_in_progress{$_} || defined $modules_with_errors{$_});
+        push(@modules_order, $_);
+    };
+    return @modules_order;
+};
+
+sub generate_html_file {
+    return if (!$html);
+    my $force_update = shift;
+#    $force_update = 1;
+#    my $html_file = CorrectPath($ENV{HOME} . '/work/' . $ENV{INPATH}. '.build.html');
+    my $write_secs = (stat($html_file))[9];
+    my @stat = stat($html_file);
+    if (defined $write_secs) {
+        # Regular update no often than once in 5 sec
+        return if (!$force_update && (time - $html_last_updated < 5));
+    }
+    $html_last_updated = time;
+    my @modules_order = sort_modules_appearance();
+    my ($successes_percent, $errors_percent) = get_progress_percentage(scalar keys %html_info, scalar keys %build_is_finished, scalar keys %modules_with_errors);
+    my $build_duration = get_time_line(time - $build_time);
+    die("Cannot open $html_file") if (!open(HTML, ">$html_file"));
+    print HTML '<html><head>';
+    print HTML '<TITLE>' . $ENV{INPATH} . '</TITLE>';
+    print HTML '<script type="text/javascript">';
+    print HTML 'initFrames();';
+    print HTML 'function loadFrame_0() {';
+    print HTML 'document.write("<html>");';
+    print HTML 'document.write("<head>");';
+    if (!$build_finished) {
+        print HTML 'document.write("<meta http-equiv=\'refresh\' content=\'10;\'/>" );';
+    };
+    print HTML 'document.write("</head>");';
+    print HTML 'document.write("<body>");';
+    if ($build_finished) {
+        print HTML 'document.write("<h3 align=center style=\"color:red\">Build process is finished</h3>");';
+    } else {
+        print HTML 'document.write("<h3 align=center>Build process progress status</h3>");';
+    };
+    if ($BuildAllParents) {
+        print HTML 'document.write("<table valign=top cellpadding=0 hspace=0 vspace=0 cellspacing=0 border=0>");';
+        print HTML 'document.write("    <tr>");';
+        print HTML 'document.write("<td><a id=ErroneousModules href=\"javascript:top.Error(\'\', \'';
+        print HTML join('<br>', sort keys %modules_with_errors);
+        print HTML '\', \'\')\"); title=\"';
+        print HTML scalar keys %modules_with_errors;
+        print HTML ' module(s) with errors\">Total Progress:</a></td>");';
+        print HTML 'document.write("        <td height=8* width=';
+        print HTML $successes_percent + $errors_percent;
+        if (scalar keys %modules_with_errors) {
+            print HTML '* bgcolor=red valign=top></td>");';
+        } else {
+            print HTML '* bgcolor=#25A528 valign=top></td>");';
+        };
+        print HTML 'document.write("        <td width=';
+        print HTML 100 - ($successes_percent + $errors_percent);
+        print HTML '* bgcolor=lightgrey valign=top></td>");';
+        print HTML 'document.write("        <td align=right>&nbsp Build time: ' . $build_duration .'</td>");';
+        print HTML 'document.write("    </tr>");';
+        print HTML 'document.write("</table>");';
+    };
+
+    print HTML 'document.write("<table width=100% bgcolor=white>");';
+    print HTML 'document.write("    <tr>");';
+    print HTML 'document.write("        <td width=30% align=\"center\"><strong style=\"color:blue\">Module</strong></td>");';
+    print HTML 'document.write("        <td width=* align=\"center\"><strong style=\"color:blue\">Status</strong></td>");';
+    print HTML 'document.write("        <td width=15% align=\"center\"><strong style=\"color:blue\">CPU Time</strong></td>");';
+    print HTML 'document.write("    </tr>");';
+
+    foreach (@modules_order) {
+        my ($errors_info_line, $dirs_info_line, $errors_number, $successes_percent, $errors_percent, $time) = get_html_info($_, 'full_info');
+#<one module>
+        print HTML 'document.write("<tr><td width=*>");';
+        print HTML 'document.write("<a id=';
+        print HTML $_;
+        print HTML ' href=\"javascript:top.Error(\'';
+        print HTML $_ , '\', ' ;
+        print HTML $errors_info_line;
+        print HTML ',';
+        print HTML $dirs_info_line;
+        print HTML ')\"); title=\"';
+        print HTML $errors_number;
+        print HTML ' error(s)\">', $_, '</a>");';
+        print HTML 'document.write("</td><td><table width=100% valign=top cellpadding=0 hspace=0 vspace=0 cellspacing=0 border=0><tr>");';
+        print HTML 'document.write("<td height=15* width=';
+
+        print HTML $successes_percent + $errors_percent;
+        if ($errors_number) {
+            print HTML '* bgcolor=red valign=top></td>");';
+        } else {
+            print HTML '* bgcolor=#25A528 valign=top></td>");';
+        };
+#        print HTML $successes_percent;
+#        print HTML '* bgcolor=#25A528 valign=top></td>");';
+#        print HTML 'document.write("<td width=';
+#        print HTML $errors_percent;
+#        print HTML '* bgcolor=red valign=top></td>");';
+        print HTML 'document.write("<td width=';
+
+        print HTML 100 - ($successes_percent + $errors_percent);
+        print HTML '* bgcolor=lightgrey valign=top></td>");';
+        print HTML 'document.write("</tr></table></td>");';
+        print HTML 'document.write("<td align=\"center\">', $time, '</td>");';
+        print HTML 'document.write("</tr>");';
+# </one module>
+    }
+    print HTML 'document.write("</table>");';
+    print HTML 'document.write("</body>");';
+    print HTML 'document.write("</html>");';
+    print HTML 'document.close();';
+    print HTML 'refreshInfoFrames();';
+    print HTML '}';
+
+    print HTML '    function refreshInfoFrames() {';
+    print HTML '        var ModuleNameObj = top.frames[2].document.getElementById("ModuleErrors");';
+    print HTML '        if (ModuleNameObj != null) {';
+    print HTML '            var ModuleName = ModuleNameObj.getAttribute(\'name\');';
+    print HTML '            var ModuleHref = top.frames[0].document.getElementById(ModuleName).getAttribute(\'href\');';
+    print HTML '            eval(ModuleHref);';
+    print HTML '        } else if (top.frames[2].document.getElementById("ErroneousModules") != null) {';
+    print HTML '            var ModuleHref = top.frames[0].document.getElementById("ErroneousModules").getAttribute(\'href\');';
+    print HTML '            eval(ModuleHref);';
+    print HTML '            if (top.frames[1].document.getElementById("ModuleJobs") != null) {';
+    print HTML '                var ModuleName = top.frames[1].document.getElementById("ModuleJobs").getAttribute(\'name\');';
+    print HTML '                ModuleHref = top.frames[0].document.getElementById(ModuleName).getAttribute(\'href\');';
+    print HTML '                var HrefString = ModuleHref.toString();';
+    print HTML '                var RefEntries = HrefString.split(",");';
+    print HTML '                var RefreshParams = new Array();';
+
+    print HTML '                for (i = 0; i < RefEntries.length; i++) {';
+    print HTML '                    RefreshParams[i] = RefEntries[i].substring(RefEntries[i].indexOf("\'") + 1, RefEntries[i].lastIndexOf("\'"));';
+    print HTML '                };';
+    print HTML '                FillFrame_1(RefreshParams[0], RefreshParams[1], RefreshParams[2]);';
+    print HTML '            }';
+    print HTML '        };';
+    print HTML '    }';
+
+    print HTML '    function loadFrame_1() {';
+    print HTML '        document.write("<h3 align=center>Jobs</h3>");';
+    print HTML '        document.write("Click on the project of interest");';
+    print HTML '        document.close();';
+    print HTML '    }';
+
+    print HTML '    function loadFrame_2() {';
+    print HTML '        document.write("<tr bgcolor=lightgrey<td><h3>Errors</h3></pre></td></tr>");';
+    print HTML '        document.write("Click on the project of interest");';
+    print HTML '        document.close();';
+    print HTML '    }';
+
+    print HTML '    function getStatusInnerHTML(Status) {';
+    print HTML '        var StatusInnerHtml;';
+    print HTML '        if (Status == "success") {';
+    print HTML '            StatusInnerHtml = "<em style=color:green>";';
+    print HTML '        } else if (Status == "building") {';
+    print HTML '            StatusInnerHtml = "<em style=color:blue>";';
+    print HTML '        } else if (Status == "error") {';
+    print HTML '            StatusInnerHtml = "<em style=color:red>";';
+    print HTML '        } else {';
+    print HTML '            StatusInnerHtml = "<em style=color:gray>";';
+    print HTML '        };';
+    print HTML '        StatusInnerHtml += Status + "</em>";';
+    print HTML '        return StatusInnerHtml;';
+    print HTML '    }';
+
+    print HTML '    function FillFrame_1(Module, Message1, Message2) {';
+    print HTML '        var FullUpdate = 1;';
+    print HTML '        if (top.frames[1].document.getElementById("ModuleJobs") != null) {';
+    print HTML '            var ModuleName = top.frames[1].document.getElementById("ModuleJobs").getAttribute(\'name\');';
+
+    print HTML '            if (Module == ModuleName) FullUpdate = 0;';
+    print HTML '        }';
+
+    print HTML '        if (FullUpdate) {';
+#    print HTML '            alert("Update!! Module " + Module + " ModuleShown " + ModuleName);';
+    print HTML '            top.frames[1].document.write("<h3 align=center>Jobs in module " + Module + ":</h3>");';
+    print HTML '            top.frames[1].document.write("<table id=ModuleJobs  name=" + Module + " width=100% bgcolor=white>");';
+    print HTML '            top.frames[1].document.write("    <tr>");';
+    print HTML '            top.frames[1].document.write("        <td width=* align=center><strong style=color:blue>Status</strong></td>");';
+    print HTML '            top.frames[1].document.write("        <td width=* align=center><strong style=color:blue>Job</strong></td>");';
+    print HTML '            top.frames[1].document.write("        <td width=* align=center><strong style=color:blue>Start Time</strong></td>");';
+    print HTML '            top.frames[1].document.write("        <td width=* align=center><strong style=color:blue>Finish Time</strong></td>");';
+    print HTML '            top.frames[1].document.write("    </tr>");';
+# <one module jobs>
+    print HTML '            var dir_info_strings = Message2.split("<br><br>");';
+    print HTML '            for (i = 0; i < dir_info_strings.length; i++) {';
+    print HTML '                var dir_info_array = dir_info_strings[i].split("<br>");';
+    print HTML '                top.frames[1].document.write("    <tr status=" + dir_info_array[0] + ">");';
+    print HTML '                top.frames[1].document.write("        <td align=center>");';
+    print HTML '                top.frames[1].document.write(               getStatusInnerHTML(dir_info_array[0]));';
+    print HTML '                top.frames[1].document.write("        </td>");';
+    print HTML '                top.frames[1].document.write("        <td style=white-space:nowrap>&nbsp " + dir_info_array[1] + "</td>");';
+    print HTML '                top.frames[1].document.write("        <td align=center>" + dir_info_array[2] + "</td>");';
+    print HTML '                top.frames[1].document.write("        <td align=center>" + dir_info_array[3] + "</td>");';
+    print HTML '                top.frames[1].document.write("    </tr>");';
+    print HTML '            };';
+# <one module jobs>
+    print HTML '            top.frames[1].document.write("</table>");';
+    print HTML '        } else {';
+    print HTML '            var dir_info_strings = Message2.split("<br><br>");';
+    print HTML '            var ModuleRows = top.frames[1].document.getElementById("ModuleJobs").rows;';
+#    print HTML '            alert("Rows in table" + ModuleRows.length);';
+    print HTML '            for (i = 0; i < dir_info_strings.length; i++) {';
+    print HTML '                var dir_info_array = dir_info_strings[i].split("<br>");';
+    print HTML '                var OldStatus = ModuleRows[i + 1].getAttribute(\'status\');';
+    print HTML '                if(dir_info_array[0] != OldStatus) {';
+    print HTML '                    var DirectoryInfos = ModuleRows[i + 1].cells;';
+#    print HTML '            alert("DirectoryInfos " + DirectoryInfos + "Length" + DirectoryInfos.length);';
+    print HTML '                    DirectoryInfos[0].innerHTML = getStatusInnerHTML(dir_info_array[0]);';
+    print HTML '                    DirectoryInfos[1].innerHTML = "&nbsp " + dir_info_array[1];';
+    print HTML '                    DirectoryInfos[2].innerHTML = dir_info_array[2];';
+    print HTML '                    DirectoryInfos[3].innerHTML = dir_info_array[3];';
+    print HTML '                };';
+    print HTML '            };';
+    print HTML '        };';
+    print HTML '        top.frames[1].document.close();';
+    print HTML '    };';
+
+    print HTML '    function Error(Module, Message1, Message2) {';
+    print HTML '        if (Module == \'\') {';
+    print HTML '            if (Message1 != \'\') {';
+    print HTML '                var erroneous_modules = Message1.split("<br>");';
+    print HTML '                var ErrorsNumber = erroneous_modules.length;';
+    print HTML '                var ErroneousModulesObj = top.frames[2].document.getElementById("ErroneousModules");';
+    print HTML '                var OldErrors = null;';
+    print HTML '                if (ErroneousModulesObj) {';
+    print HTML '                   OldErrors = ErroneousModulesObj.getAttribute(\'errors\');';
+    print HTML '                }';
+    print HTML '                if ((OldErrors == null) || (OldErrors != ErrorsNumber)) {';
+    print HTML '                    top.frames[2].document.write("<h3 id=ErroneousModules errors=" + erroneous_modules.length + ">Modules with errors:</h3>");';
+    print HTML '                    for (i = 0; i < erroneous_modules.length; i++) {';
+    print HTML '                        top.frames[2].document.write("<a href=\"");';
+    print HTML '                        top.frames[2].document.write(top.frames[0].document.getElementById(erroneous_modules[i]).getAttribute(\'href\'));';
+    print HTML '                        top.frames[2].document.write("\"); title=\"");';
+    print HTML '                        top.frames[2].document.write(top.frames[0].document.getElementById(erroneous_modules[i]).getAttribute(\'title\'));';
+    print HTML '                        top.frames[2].document.write("\">" + erroneous_modules[i] + "</a>&nbsp ");';
+    print HTML '                    }';
+    print HTML '                    top.frames[2].document.close();';
+    print HTML '                }';
+    print HTML '            }';
+    print HTML '        } else {';
+    print HTML '            var ModuleNameObj = top.frames[2].document.getElementById("ModuleErrors");';
+    print HTML '            var OldErrors = null;';
+    print HTML '            var ErrorsNumber = Message1.split("<br>").length;';
+    print HTML '            if ((ModuleNameObj != null) && (Module == ModuleNameObj.getAttribute(\'name\')) ) {';
+    print HTML '               OldErrors = ModuleNameObj.getAttribute(\'errors\');';
+    print HTML '            }';
+    print HTML '            if ((OldErrors == null) || (OldErrors != ErrorsNumber)) {';
+    print HTML '                top.frames[2].document.write("<h3 id=ModuleErrors errors=" + ErrorsNumber + " name=\"" + Module + "\">Errors in module " + Module + ":</h3>");';
+    print HTML '                top.frames[2].document.write(Message1);';
+    print HTML '                top.frames[2].document.close();';
+    print HTML '            }';
+    print HTML '            FillFrame_1(Module, Message1, Message2);';
+    print HTML '        }';
+    print HTML '    }';
+
+    print HTML 'function initFrames() {';
+    print HTML '    var urlquery = location.href.split("?");';
+    print HTML '    if (urlquery.length == 1) {';
+    print HTML '        document.write(\'    <frameset rows="80%,20%\">\');';
+    print HTML '        document.write(\'        <frameset cols="70%,30%">\');';
+    print HTML '        document.write(\'            <frame src="\');';
+    print HTML '        document.write(urlquery);';
+    print HTML '        document.write(\'?initFrame0"/>\');';
+    print HTML '        document.write(\'            <frame src="\');';
+    print HTML '        document.write(urlquery);';
+    print HTML '        document.write(\'?initFrame1"/>\');';
+    print HTML '        document.write(\'        </frameset>\');';
+    print HTML '        document.write(\'            <frame src="\');';
+    print HTML '        document.write(urlquery);';
+    print HTML '        document.write(\'?initFrame2"/>\');';
+    print HTML '        document.write(\'    </frameset>\');';
+    print HTML '    } else {';
+    print HTML '        if (urlquery[1] == "initFrame0" ) {';
+    print HTML '          loadFrame_0();';
+    print HTML '        } else if (urlquery[1] == "initFrame1" ) {';
+    print HTML '          loadFrame_1();';
+    print HTML '        } else if (urlquery[1] == "initFrame2" ) {';
+    print HTML '          loadFrame_2();';
+    print HTML '        }';
+    print HTML '    };';
+    print HTML '};';
+
+    print HTML '</script>';
+    print HTML '<noscript>Your browser doesn\'t support JavaScript!</noscript>';
+    print HTML '</head></html>';
+    close HTML;
+};
+
+sub get_local_time_line {
+    my $epoch_time = shift;
+    my $local_time_line;
+    my @time_array;
+    if ($epoch_time) {
+        @time_array = localtime($epoch_time);
+        $local_time_line = sprintf("%02d.%02d.%02d", $time_array[2], $time_array[1], $time_array[0]);
+    } else {
+        $local_time_line = '-';
+    };
+    return $local_time_line;
+};
+
+sub get_dirs_info_line {
+    my $module = shift;
+    my $dirs_info_line = $jobs_hash{$module}->{STATUS} . '<br>';
+    my @time_array;
+    $dirs_info_line .= $jobs_hash{$module}->{SHORT_NAME} . '<br>';
+    $dirs_info_line .= get_local_time_line($jobs_hash{$module}->{START_TIME}) . '<br>';
+    $dirs_info_line .= get_local_time_line($jobs_hash{$module}->{FINISH_TIME}) . '<br>';
+    return $dirs_info_line;
+};
+
+sub get_html_info {
+    my ($module, $full_info) = @_;
+    my $module_info_hash = $html_info{$module};
+    my $dirs = $$module_info_hash{DIRS};
+    my $dirs_number = scalar @$dirs;
+    my $dirs_info_line = '\'';
+    if ($dirs_number) {
+        my %dirs_sorted_by_order = ();
+        foreach (@$dirs) {
+            $dirs_sorted_by_order{$jobs_hash{$_}->{BUILD_NUMBER}} = $_;
+        }
+        foreach (sort {$a <=> $b} keys %dirs_sorted_by_order) {
+            $dirs_info_line .= get_dirs_info_line($dirs_sorted_by_order{$_}) . '<br>';
+        }
+    } else {
+        $dirs_info_line .= 'No information available yet';
+    };
+    $dirs_info_line =~ s/(<br>)*$//o;
+    $dirs_info_line .= '\'';
+    $dirs = $$module_info_hash{SUCCESSFUL};
+    my $successful_number = scalar @$dirs;
+    $dirs = $$module_info_hash{ERRORFUL};
+    my $errorful_number = scalar @$dirs;
+    my $errors_info_line = '\'';
+    if ($errorful_number) {
+        $errors_info_line .= $_ . '<br>' foreach (@$dirs);
+    } else {
+        $errors_info_line .= 'No errors';
+    };
+    $errors_info_line .= '\'';
+    if (defined $full_info) {
+    my $time_line = get_time_line($$module_info_hash{BUILD_TIME});
+        my ($successes_percent, $errors_percent) = get_progress_percentage($dirs_number, $successful_number, $errorful_number);
+        return($errors_info_line, $dirs_info_line, $errorful_number, $successes_percent, $errors_percent, $time_line);
+    } else {
+        return($errors_info_line, $dirs_info_line, $errorful_number);
+    };
+};
+
+sub get_time_line {
+    use integer;
+    my $seconds = shift;
+    my $hours = $seconds/3600;
+    my $minits = ($seconds/60)%60;
+    $seconds -= ($hours*3600 + $minits*60);
+    return(sprintf("%02d\.%02d\.%02d" , $hours, $minits, $seconds));
+};
+
+sub get_progress_percentage {
+    use integer;
+    my ($dirs_number, $successful_number, $errorful_number) = @_;
+    return (0 ,0) if (!$dirs_number);
+    my $errors_percent = ($errorful_number * 100)/ $dirs_number;
+    my $successes_percent;
+    if ($dirs_number == ($successful_number + $errorful_number)) {
+        $successes_percent = 100 - $errors_percent;
+    } else {
+        $successes_percent = ($successful_number * 100)/ $dirs_number;
+    };
+    return ($successes_percent, $errors_percent);
+};
+
+#
+# This procedure stores the dmake result in %html_info
+#
+sub html_store_dmake_dir_info {
+    return if (!$html);
+    my ($deps_hash, $build_dir, $error_code) = @_;
+    my $force_update = 0;
+    if ($build_dir =~ /(\s)/o) {
+        $error_code = 0 if (!defined $error_code);
+    } else {
+        $force_update++;
+    }
+    my $module = $module_by_hash{$deps_hash};
+    my $module_info_hash = $html_info{$module};
+#    $$module_info_hash{BUILD_TIME} += $jobs_hash{$build_dir}->{FINISH_TIME} - $jobs_hash{$build_dir}->{START_TIME};
+    if (defined $error_code) {
+        $jobs_hash{$build_dir}->{FINISH_TIME} = time();
+        $$module_info_hash{BUILD_TIME} += $jobs_hash{$build_dir}->{FINISH_TIME} - $jobs_hash{$build_dir}->{START_TIME};
+    }
+    my $dmake_array;
+    if (defined $error_code) {
+        if ($error_code) {
+            $jobs_hash{$build_dir}->{STATUS} = 'error';
+            $dmake_array = $$module_info_hash{ERRORFUL};
+            $build_dir =~ s/\\/\//g;
+            $modules_with_errors{$module}++;
+        } else {
+            $jobs_hash{$build_dir}->{STATUS} = 'success';
+            $dmake_array = $$module_info_hash{SUCCESSFUL};
+        };
+        push (@$dmake_array, $build_dir);
+    };
+    generate_html_file($force_update);
+#    generate_html_file();
 };
