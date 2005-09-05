@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-08 10:36:39 $
+ *  last change: $Author: rt $ $Date: 2005-09-05 08:58:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -506,7 +506,7 @@ namespace dbaccess
                     }
                 }
 
-                return Sequence< PropertyValue >(aRet.begin(),aRet.size());
+                return Sequence< PropertyValue >(&(*aRet.begin()),aRet.size());
             }
             return Sequence< PropertyValue >();
         }
