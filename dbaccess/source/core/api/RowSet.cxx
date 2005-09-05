@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:30:55 $
+ *  last change: $Author: rt $ $Date: 2005-09-05 08:57:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,6 +370,17 @@ ORowSet::ORowSet(const Reference< ::com::sun::star::lang::XMultiServiceFactory >
 
     m_aParameterRow.clear(); // because it was constructed with one element as default
 }
+
+ORowSet::~ORowSet()
+{
+    if ( !m_rBHelper.bDisposed && !m_rBHelper.bInDispose )
+    {
+        OSL_ENSURE(0, "Please check who doesn't dispose this component!");
+        osl_incrementInterlockedCount( &m_refCount );
+        dispose();
+    }
+}
+
 // -----------------------------------------------------------------------------
 Any ORowSet::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
 {
@@ -1152,7 +1163,7 @@ void SAL_CALL ORowSet::deleteRow(  ) throw(SQLException, RuntimeException)
         notifyClonesRowDeleted(m_aBookmark);
 
         m_aBookmark     = Any();
-        m_aCurrentRow   = NULL;
+        m_aCurrentRow   = ORowSetCacheIterator();
         m_aCurrentRow.setBookmark(Any());
 
         ORowSetNotifier aNotifier( this );
@@ -1371,7 +1382,7 @@ const ORowSetValue& ORowSet::getInsertValue(sal_Int32 columnIndex)
     if ( m_pCache && ( m_pCache->m_bInserted || m_bModified) )
         return  (*(*m_pCache->m_aInsertRow))[m_nLastColumnIndex = columnIndex];
 
-    OSL_ENSURE(m_pCache->m_aInsertRow != m_aCurrentRow,"Current row stand on the insert row but all flags are wrong!");
+    OSL_ENSURE(m_aCurrentRow != m_pCache->m_aInsertRow,"Current row stand on the insert row but all flags are wrong!");
     return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
@@ -2511,7 +2522,7 @@ void ORowSet::checkUpdateIterator()
 // -----------------------------------------------------------------------------
 void ORowSet::checkUpdateConditions(sal_Int32 columnIndex)
 {
-    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd() || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
+    if(!m_pCache || columnIndex <= 0 || m_aCurrentRow.isNull() || m_aCurrentRow == m_pCache->getEnd() || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throwFunctionSequenceException(*this);
 }
 // -----------------------------------------------------------------------------
@@ -2757,7 +2768,7 @@ void ORowSetClone::rowDeleted(const ::com::sun::star::uno::Any& _rBookmark)
     if(compareBookmarks(_rBookmark,m_aBookmark) == 0)
     {
         m_aBookmark     = Any();
-        m_aCurrentRow   = NULL;
+        m_aCurrentRow   = ORowSetCacheIterator();
         m_aCurrentRow.setBookmark(Any());
     }
 }
