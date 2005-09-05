@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexcollection.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:40 $
+ *  last change: $Author: rt $ $Date: 2005-09-05 08:59:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,29 +126,29 @@ namespace dbaui
         typedef OIndex const* const_iterator;
 
         /// get access to the first element of the index collection
-        const_iterator begin() const { return m_aIndexes.begin(); }
+        Indexes::const_iterator begin() const { return m_aIndexes.begin(); }
         /// get access to the first element of the index collection
-        iterator begin() { return m_aIndexes.begin(); }
+        Indexes::iterator begin() { return m_aIndexes.begin(); }
         /// get access to the (last + 1st) element of the index collection
-        const_iterator end() const { return m_aIndexes.end(); }
+        Indexes::const_iterator end() const { return m_aIndexes.end(); }
         /// get access to the (last + 1st) element of the index collection
-        iterator end() { return m_aIndexes.end(); }
+        Indexes::iterator end() { return m_aIndexes.end(); }
 
         // searching
-        const_iterator find(const String& _rName) const;
-        iterator find(const String& _rName);
-        const_iterator findOriginal(const String& _rName) const;
-        iterator findOriginal(const String& _rName);
+        Indexes::const_iterator find(const String& _rName) const;
+        Indexes::iterator find(const String& _rName);
+        Indexes::const_iterator findOriginal(const String& _rName) const;
+        Indexes::iterator findOriginal(const String& _rName);
 
         // inserting without committing
         // the OriginalName of the newly inserted index will be empty, thus indicating that it's new
-        iterator insert(const String& _rName);
+        Indexes::iterator insert(const String& _rName);
         // commit a new index, which is already part if the collection, but does not have an equivalent in the
         // data source, yet
-        void commitNewIndex(const iterator& _rPos) SAL_THROW((::com::sun::star::sdbc::SQLException));
+        void commitNewIndex(const Indexes::iterator& _rPos) SAL_THROW((::com::sun::star::sdbc::SQLException));
 
         // reset the data for the given index
-        void resetIndex(const iterator& _rPos) SAL_THROW((::com::sun::star::sdbc::SQLException));
+        void resetIndex(const Indexes::iterator& _rPos) SAL_THROW((::com::sun::star::sdbc::SQLException));
 
         // attach to a new key container
         void attach(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxIndexes);
@@ -161,9 +161,9 @@ namespace dbaui
         sal_Int32   size() const { return m_aIndexes.size(); }
 
         /// drop an index, and remove it from the collection
-        sal_Bool    drop(const iterator& _rPos) SAL_THROW((::com::sun::star::sdbc::SQLException));
+        sal_Bool    drop(const Indexes::iterator& _rPos) SAL_THROW((::com::sun::star::sdbc::SQLException));
         /// simply drop the index described by the name, but don't remove the descriptor from the collection
-        sal_Bool    dropNoRemove(const iterator& _rPos) SAL_THROW((::com::sun::star::sdbc::SQLException));
+        sal_Bool    dropNoRemove(const Indexes::iterator& _rPos) SAL_THROW((::com::sun::star::sdbc::SQLException));
 
     protected:
         void implConstructFrom(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxIndexes);
