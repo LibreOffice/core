@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StyleOASISTContext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-18 09:45:24 $
+ *  last change: $Author: obo $ $Date: 2005-09-05 14:56:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -607,6 +607,24 @@ void XMLPropertiesTContext_Impl::StartElement(
                         SvXMLUnitConverter::convertPercent( nValue, rAttrValue );
                         const double fValue = ((double)nValue) / 100.0;
                         pAttrList->AddAttribute( rAttrName, OUString::valueOf( fValue ) );
+                    }
+                    break;
+                case XML_ATACTION_OPACITY_FIX:
+                    {
+                        sal_Int32 nValue;
+                        if( rAttrValue.indexOf( sal_Unicode('%') ) != -1 )
+                        {
+                            SvXMLUnitConverter::convertPercent( nValue, rAttrValue );
+                        }
+                        else
+                        {
+                            nValue = sal_Int32( rAttrValue.toDouble() * 100.0 );
+                        }
+                        nValue = 100 - nValue;
+
+                        rtl::OUStringBuffer aOut;
+                        SvXMLUnitConverter::convertPercent( aOut, nValue );
+                        pAttrList->AddAttribute( rAttrName, aOut.makeStringAndClear() );
                     }
                     break;
                 default:
