@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolderEnumeration.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-15 20:30:34 $
+ *  last change: $Author: rt $ $Date: 2005-09-05 09:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ using rtl::OUString;
 
 ZipPackageFolderEnumeration::ZipPackageFolderEnumeration ( ContentHash &rInput)
 : rContents (rInput)
-, aIterator (rInput.begin())
+, aIterator (rContents.begin())
 {
 }
 
