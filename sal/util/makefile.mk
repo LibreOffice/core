@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: obo $ $Date: 2005-06-17 09:32:21 $
+#   last change: $Author: rt $ $Date: 2005-09-05 09:07:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -161,6 +161,12 @@ SHL1STDLIBS+= -z allextract -staticlib=Crun -z defaultextract
 SHL1STDLIBS= -lexc
 .ENDIF
 .ENDIF # UNX
+
+# If we compile sal with STLport checking iterators
+# we need to link against the STLport
+.IF "$(USE_STLP_DEBUG)" != ""
+SHL1STDLIBS+=$(LIBSTLPORT)
+.ENDIF
 
 #The irony that using the system STL instead of
 #stlport requires that we link libsal with the
