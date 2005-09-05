@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-18 10:05:00 $
+ *  last change: $Author: rt $ $Date: 2005-09-05 08:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,7 @@ sal_Bool SAL_CALL ORowSetBase::wasNull(  ) throw(SQLException, RuntimeException)
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
 
-    return ((m_nLastColumnIndex != -1) && m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd() && !m_aCurrentRow.isNull() && m_aCurrentRow->isValid()) ? (*(*m_aCurrentRow))[m_nLastColumnIndex].isNull() : sal_True;
+    return ((m_nLastColumnIndex != -1) && !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->isValid()) ? (*(*m_aCurrentRow))[m_nLastColumnIndex].isNull() : sal_True;
 }
 // -----------------------------------------------------------------------------
 const ORowSetValue& ORowSetBase::getValue(sal_Int32 columnIndex)
@@ -273,26 +273,26 @@ const ORowSetValue& ORowSetBase::getValue(sal_Int32 columnIndex)
     checkCache();
     OSL_ENSURE(!(m_bBeforeFirst || m_bAfterLast),"ORowSetBase::getValue: Illegal call here (we're before first or after last)!");
 
-    if ( m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd() && !m_aCurrentRow.isNull() && m_aCurrentRow->isValid() )
+    if ( !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->isValid() )
     {
 #if OSL_DEBUG_LEVEL > 0
         ORowSetMatrix::iterator aCacheEnd = m_pCache->getEnd();
         ORowSetMatrix::iterator aCurrentRow = m_aCurrentRow;
 #endif
-        OSL_ENSURE(m_aCurrentRow && m_aCurrentRow <= m_pCache->getEnd(),"Invalid iterator set for currentrow!");
+        OSL_ENSURE(!m_aCurrentRow.isNull() && m_aCurrentRow <= m_pCache->getEnd(),"Invalid iterator set for currentrow!");
         return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
     }
     else
     {   // currentrow is null when the clone move the window
-        if(!m_aCurrentRow || m_aCurrentRow.isNull())
+        if ( m_aCurrentRow.isNull() )
         {
             positionCache();
             m_aCurrentRow   = m_pCache->m_aMatrixIter;
 
-            OSL_ENSURE(m_aCurrentRow,"ORowSetBase::getValue: we don't stand on a valid row! Row is null.");
+            OSL_ENSURE(!m_aCurrentRow.isNull(),"ORowSetBase::getValue: we don't stand on a valid row! Row is null.");
             return getValue(columnIndex);
         }
-        OSL_ENSURE(m_aCurrentRow && (m_bBeforeFirst || m_bAfterLast),"ORowSetBase::getValue: we don't stand on a valid row! Row is equal to end of matrix");
+        OSL_ENSURE(!m_aCurrentRow.isNull() && (m_bBeforeFirst || m_bAfterLast),"ORowSetBase::getValue: we don't stand on a valid row! Row is equal to end of matrix");
     }
     // we should normally never reach this here
     return m_aEmptyValue;
@@ -363,18 +363,18 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getBinaryS
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
 
-    if(m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd())
+    if( !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd())
         return new ::comphelper::SequenceInputStream((*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex].getSequence());
     else
     {
-        if(m_aCurrentRow)
+        if(!m_aCurrentRow.isNull())
             OSL_ENSURE((m_bBeforeFirst || m_bAfterLast),"ORowSetBase::getValue: we don't stand on a valid row! Row is equal to end of matrix");
         else
         {
             positionCache();
             m_aCurrentRow   = m_pCache->m_aMatrixIter;
 
-            OSL_ENSURE(m_aCurrentRow,"ORowSetBase::getValue: we don't stand on a valid row! Row is null.");
+            OSL_ENSURE(!m_aCurrentRow.isNull(),"ORowSetBase::getValue: we don't stand on a valid row! Row is null.");
             return getBinaryStream(columnIndex);
         }
     }
@@ -1046,7 +1046,7 @@ void ORowSetBase::setCurrentRow(sal_Bool _bMoved,const ORowSetRow& _rOldValues,:
         m_aBookmark     = m_pCache->getBookmark();
         OSL_ENSURE(m_aBookmark.hasValue(),"Bookmark has no value!");
         m_aCurrentRow   = m_pCache->m_aMatrixIter;
-        OSL_ENSURE(m_aCurrentRow,"CurrentRow is null!");
+        OSL_ENSURE(!m_aCurrentRow.isNull(),"CurrentRow is null!");
         m_aCurrentRow.setBookmark(m_aBookmark);
         OSL_ENSURE(!m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd(),"Position of matrix iterator isn't valid!");
         OSL_ENSURE(m_aCurrentRow->isValid(),"Currentrow isn't valid");
@@ -1057,7 +1057,7 @@ void ORowSetBase::setCurrentRow(sal_Bool _bMoved,const ORowSetRow& _rOldValues,:
         sal_Int32 nNewRow = m_pCache->getRow();
         OSL_ENSURE(nOldRow == nNewRow,"Old position is not equal to new postion");
         m_aCurrentRow   = m_pCache->m_aMatrixIter;
-        OSL_ENSURE(m_aCurrentRow,"CurrentRow is nul after positionCache!");
+        OSL_ENSURE(!m_aCurrentRow.isNull(),"CurrentRow is nul after positionCache!");
     }
     else
     {
@@ -1075,7 +1075,7 @@ void ORowSetBase::setCurrentRow(sal_Bool _bMoved,const ORowSetRow& _rOldValues,:
         {
             positionCache();
             m_aCurrentRow   = m_pCache->m_aMatrixIter;
-            OSL_ENSURE(m_aCurrentRow,"CurrentRow is nul after positionCache!");
+            OSL_ENSURE(!m_aCurrentRow.isNull(),"CurrentRow is nul after positionCache!");
         }
     }
 
