@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propimp0.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:13:45 $
+ *  last change: $Author: obo $ $Date: 2005-09-05 14:52:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@
 #include <xmluconv.hxx>
 #endif
 
+#ifndef _XMLOFF_XMLIMP_HXX
+#include <xmlimp.hxx>
+#endif
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
@@ -145,6 +149,11 @@ sal_Bool XMLDurationPropertyHdl::exportXML(
 // implementation of an opacity property handler
 
 
+XMLOpacityPropertyHdl::XMLOpacityPropertyHdl( SvXMLImport* pImport )
+: mpImport( pImport )
+{
+}
+
 XMLOpacityPropertyHdl::~XMLOpacityPropertyHdl()
 {
 }
@@ -160,17 +169,38 @@ sal_Bool XMLOpacityPropertyHdl::importXML(
     if( rStrImpValue.indexOf( sal_Unicode('%') ) != -1 )
     {
         if( rUnitConverter.convertPercent( nValue, rStrImpValue ) )
-        {
-            rValue <<= sal_uInt16( nValue );
             bRet = sal_True;
-        }
     }
     else
     {
-        const String aStr( rStrImpValue );
-        double fVal = aStr.ToDouble() * 100.0;
-        rValue <<= sal_uInt16( fVal );
+        nValue = sal_Int32( rStrImpValue.toDouble() * 100.0 );
         bRet = sal_True;
+    }
+
+    if( bRet )
+    {
+        // check ranges
+        if( nValue < 0 )
+            nValue = 0;
+        if( nValue > 100 )
+            nValue = 100;
+
+        // convert xml opacity to api transparency
+        nValue = 100 - nValue;
+
+        // #i42959#
+        if( mpImport )
+        {
+            sal_Int32 nMajor, nMinor;
+            if( mpImport->getBuildIds( nMajor, nMinor ) )
+            {
+                // correct import of documents written with StarOffice 8 Final
+                if( (nMajor == 680) && (nMinor < 125) )
+                    nValue = 100 - nValue;
+            }
+        }
+
+        rValue <<= sal_uInt16(nValue);
     }
 
     return bRet;
@@ -188,6 +218,7 @@ sal_Bool XMLOpacityPropertyHdl::exportXML(
     {
         OUStringBuffer aOut;
 
+        nVal = 100 - nVal;
         rUnitConverter.convertPercent( aOut, nVal );
         rStrExpValue = aOut.makeStringAndClear();
         bRet = sal_True;
