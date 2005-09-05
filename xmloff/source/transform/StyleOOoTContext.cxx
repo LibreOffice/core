@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StyleOOoTContext.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-18 09:45:40 $
+ *  last change: $Author: obo $ $Date: 2005-09-05 14:56:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1000,6 +1000,24 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                 SvXMLUnitConverter::convertPercent( aOut, nValue );
                 OUString aAttrValue( aOut.makeStringAndClear() );
                 pContext->AddAttribute( sAttrName, aAttrValue );
+            }
+            break;
+        case XML_ATACTION_OPACITY_FIX:
+            {
+                sal_Int32 nValue;
+                if( sAttrValue.indexOf( sal_Unicode('%') ) != -1 )
+                {
+                    SvXMLUnitConverter::convertPercent( nValue, sAttrValue );
+                }
+                else
+                {
+                    nValue = sal_Int32( sAttrValue.toDouble() * 100.0 );
+                }
+                nValue = 100 - nValue;
+
+                rtl::OUStringBuffer aOut;
+                SvXMLUnitConverter::convertPercent( aOut, nValue );
+                pContext->AddAttribute( sAttrName, aOut.makeStringAndClear() );
             }
             break;
         default:
