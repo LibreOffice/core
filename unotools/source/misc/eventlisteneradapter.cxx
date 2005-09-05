@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventlisteneradapter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-19 16:13:35 $
+ *  last change: $Author: rt $ $Date: 2005-09-05 09:05:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,24 +169,23 @@ namespace utl
     //---------------------------------------------------------------------
     void OEventListenerAdapter::stopComponentListening( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _rxComp )
     {
-        for (   ::std::vector< void* >::iterator aDisposeLoop = m_pImpl->aListeners.begin();
-                aDisposeLoop != m_pImpl->aListeners.end();
-                ++aDisposeLoop
-            )
-        {
-            OEventListenerImpl* pListenerImpl = static_cast< OEventListenerImpl* >(*aDisposeLoop);
-            if (pListenerImpl->getComponent().get() == _rxComp.get())
-            {
-                ::std::vector< void* >::iterator aPrevious(aDisposeLoop);
-                --aPrevious;
+        if ( m_pImpl->aListeners.empty() )
+            return;
 
+        ::std::vector< void* >::iterator dispose = m_pImpl->aListeners.begin();
+        do
+        {
+            OEventListenerImpl* pListenerImpl = static_cast< OEventListenerImpl* >( *dispose );
+            if ( pListenerImpl->getComponent().get() == _rxComp.get() )
+            {
                 pListenerImpl->dispose();
                 pListenerImpl->release();
-                m_pImpl->aListeners.erase(aDisposeLoop);
-
-                aDisposeLoop = aPrevious;
+                dispose = m_pImpl->aListeners.erase( dispose );
             }
+            else
+                ++dispose;
         }
+        while ( dispose != m_pImpl->aListeners.end() );
     }
 
     //---------------------------------------------------------------------
@@ -221,11 +220,3 @@ namespace utl
 //.........................................................................
 }   // namespace utl
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 19.04.01 16:26:16  fs
- ************************************************************************/
-
