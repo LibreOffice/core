@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:20:09 $
+ *  last change: $Author: rt $ $Date: 2005-09-05 09:01:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2191,10 +2191,10 @@ void ToolBox::ImplUpdateCustomMenu()
     }
 
     // add menu items, starting from the end and inserting at pos 0
-    if ( mpData->m_aItems.size() > 0 )
+    if ( !mpData->m_aItems.empty() )
     {
-        std::vector< ImplToolItem >::const_iterator it = mpData->m_aItems.end();
-        while ( --it >= mpData->m_aItems.begin() )
+        for ( std::vector< ImplToolItem >::reverse_iterator it(mpData->m_aItems.rbegin());
+                it != mpData->m_aItems.rend(); ++it)
         {
             if( it->IsClipped() )
             {
