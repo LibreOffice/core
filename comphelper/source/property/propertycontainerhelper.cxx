@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertycontainerhelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:49:15 $
+ *  last change: $Author: rt $ $Date: 2005-09-05 09:06:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,34 +188,60 @@ sal_Bool OPropertyContainerHelper::isRegisteredProperty( sal_Int32 _nHandle ) co
 }
 
 //--------------------------------------------------------------------------
+namespace
+{
+    struct ComparePropertyWithHandle
+    {
+        bool operator()( const OPropertyContainerHelper::PropertyDescription& _rLHS, sal_Int32 _nRHS ) const
+        {
+            return _rLHS.nHandle < _nRHS;
+        }
+        bool operator()( sal_Int32 _nLHS, const OPropertyContainerHelper::PropertyDescription& _rRHS ) const
+        {
+            return _nLHS < _rRHS.nHandle;
+        }
+    };
+}
+
+//--------------------------------------------------------------------------
 void OPropertyContainerHelper::implPushBackProperty(const PropertyDescription& _rProp)
 {
 #ifdef DBG_UTIL
-    for (   const PropertyDescription* pCheckConflicts = m_aProperties.begin();
-            pCheckConflicts != m_aProperties.end();
-            ++pCheckConflicts
+    for (   PropertiesIterator checkConflicts = m_aProperties.begin();
+            checkConflicts != m_aProperties.end();
+            ++checkConflicts
         )
     {
-        OSL_ENSURE(pCheckConflicts->sName != _rProp.sName, "OPropertyContainerHelper::implPushBackProperty: name already exists!");
-        OSL_ENSURE(pCheckConflicts->nHandle != _rProp.nHandle, "OPropertyContainerHelper::implPushBackProperty: name already exists!");
+        OSL_ENSURE(checkConflicts->sName != _rProp.sName, "OPropertyContainerHelper::implPushBackProperty: name already exists!");
+        OSL_ENSURE(checkConflicts->nHandle != _rProp.nHandle, "OPropertyContainerHelper::implPushBackProperty: name already exists!");
     }
 #endif
 
     // need one more element
-    sal_Int32 nOldLen = m_aProperties.size();
+/*  sal_Int32 nOldLen = m_aProperties.size();
     m_aProperties.resize(nOldLen + 1);
     PropertiesIterator aIter = m_aProperties.begin() + nOldLen - 1;
 
     // search the corect position, shifting the elements to the tail if needed
     sal_Int32 nPos = nOldLen;
-    while (nPos && (_rProp.nHandle < aIter->nHandle))
+    while ( nPos )
     {
+        if ( _rProp.nHandle > aIter->nHandle )
+            break;
+
         *(aIter+1) = *aIter;
         --aIter;
         --nPos;
     }
 
     m_aProperties[nPos] = _rProp;
+*/
+
+    PropertiesIterator pos = ::std::lower_bound( m_aProperties.begin(), m_aProperties.end(), _rProp.nHandle, ComparePropertyWithHandle() );
+//    if ( pos == m_aProperties.end() )
+//        pos = m_aProperties.begin();
+
+    m_aProperties.insert( pos, _rProp );
 }
 
 //--------------------------------------------------------------------------
