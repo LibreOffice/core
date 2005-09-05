@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmetai.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:02:27 $
+ *  last change: $Author: obo $ $Date: 2005-09-05 14:55:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,12 @@
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include "xmluconv.hxx"
 #endif
+
+using ::rtl::OUString;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::beans::XPropertySetInfo;
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;
@@ -164,6 +170,7 @@ enum SfxXMLMetaElemTokens
     XML_TOK_META_EDITINGDURATION,
     XML_TOK_META_USERDEFINED,
     XML_TOK_META_DOCUMENT_STATISTIC,
+    XML_TOK_META_GENERATOR,
     XML_TOK_META_ELEM_END = XML_TOK_UNKNOWN
 };
 
@@ -187,6 +194,7 @@ static __FAR_DATA SvXMLTokenMapEntry aMetaElemTokenMap[] =
     { XML_NAMESPACE_META,   XML_EDITING_DURATION,  XML_TOK_META_EDITINGDURATION },
     { XML_NAMESPACE_META,   XML_USER_DEFINED,      XML_TOK_META_USERDEFINED },
     { XML_NAMESPACE_META,   XML_DOCUMENT_STATISTIC,XML_TOK_META_DOCUMENT_STATISTIC },
+    { XML_NAMESPACE_META,   XML_GENERATOR,         XML_TOK_META_GENERATOR },
     XML_TOKEN_MAP_END
 };
 
@@ -632,6 +640,40 @@ void SfxXMLMetaElementContext::EndElement()
             }
             break;
         case XML_TOK_META_DOCUMENT_STATISTIC:
+            break;
+        case XML_TOK_META_GENERATOR:
+            {
+                // skip to second product
+                sal_Int32 nBegin = sContent.indexOf( ' ' );
+                if( nBegin == -1 )
+                    break;
+
+                // skip to build information
+                nBegin = sContent.indexOf( '/', nBegin );
+                if( nBegin == -1 )
+                    break;
+
+                // cut off build id
+                sal_Int32 nEnd = sContent.indexOf( '$', nBegin );
+                if( nEnd == -1 )
+                    break;
+
+                OUString sBuild( sContent.copy( nBegin+1, nEnd-nBegin-1 ) );
+                try
+                {
+                    Reference< XPropertySet > xSet( GetImport().getImportInfo() );
+                    if( xSet.is() )
+                    {
+                        const OUString aPropName(RTL_CONSTASCII_USTRINGPARAM("BuildId"));
+                        Reference< XPropertySetInfo > xSetInfo( xSet->getPropertySetInfo() );
+                        if( xSetInfo.is() && xSetInfo->hasPropertyByName( aPropName ) )
+                            xSet->setPropertyValue( aPropName, uno::makeAny( sBuild ) );
+                    }
+                }
+                catch( Exception& e )
+                {
+                }
+            }
             break;
         default:
             DBG_ERROR("wrong element");
