@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyActionsOASIS.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:54:08 $
+ *  last change: $Author: obo $ $Date: 2005-09-05 14:55:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,7 @@ XMLTransformerActionInit aGraphicPropertyOASISAttrActionTable[] =
     { XML_NAMESPACE_STYLE, XML_PROTECT, XML_ATACTION_DECODE_PROTECT, 0 },
     { XML_NAMESPACE_STYLE, XML_MIRROR, XML_ATACTION_DRAW_MIRROR_OASIS, 0 },
     { XML_NAMESPACE_DRAW, XML_GAMMA, XML_ATACTION_GAMMA_OASIS, 0 },
+    { XML_NAMESPACE_SVG, XML_STROKE_OPACITY, XML_ATACTION_OPACITY_FIX, NO_PARAMS },
 
     { XML_NAMESPACE_STYLE, XML_FLOW_WITH_TEXT, XML_ATACTION_REMOVE,
         NO_PARAMS },
