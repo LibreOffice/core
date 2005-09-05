@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:13:48 $
+ *  last change: $Author: obo $ $Date: 2005-09-05 14:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -986,8 +986,13 @@ sal_Bool XMLSdHeaderFooterVisibilityTypeHdl::exportXML(
 
 //////////////////////////////////////////////////////////////////////////////
 
-XMLSdPropHdlFactory::XMLSdPropHdlFactory( uno::Reference< frame::XModel > xModel, SvXMLExport* pExport )
-: mxModel( xModel ), mpExport( pExport )
+XMLSdPropHdlFactory::XMLSdPropHdlFactory( uno::Reference< frame::XModel > xModel, SvXMLImport& rImport )
+: mxModel( xModel ), mpImport( &rImport ), mpExport(0)
+{
+}
+
+XMLSdPropHdlFactory::XMLSdPropHdlFactory( uno::Reference< frame::XModel > xModel, SvXMLExport& rExport )
+: mxModel( xModel ), mpExport( &rExport ), mpImport(0)
 {
 }
 
@@ -1054,7 +1059,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             }
             case XML_SD_TYPE_OPACITY :
             {
-                pHdl = new XMLOpacityPropertyHdl();
+                pHdl = new XMLOpacityPropertyHdl(mpImport);
                 break;
             }
             case XML_SD_TYPE_WRITINGMODE :
