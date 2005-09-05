@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DbAdminImpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-06-30 16:30:42 $
+ *  last change: $Author: rt $ $Date: 2005-09-05 08:59:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,7 +361,7 @@ sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< Propert
                                 makeAny(::rtl::OUString(sPassword)), PropertyState_DIRECT_VALUE));
     }
 
-    _rDriverParam = Sequence< PropertyValue >(aReturn.begin(), aReturn.size());
+    _rDriverParam = Sequence< PropertyValue >(&(*aReturn.begin()), aReturn.size());
 
     // append all the other stuff (charset etc.)
     fillDatasourceInfo(*m_pItemSetHelper->getOutputSet(), _rDriverParam);
