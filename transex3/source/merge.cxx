@@ -2,9 +2,9 @@
  *
  *  $RCSfile: merge.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 19:17:53 $
+ *  last change: $Author: rt $ $Date: 2005-09-05 11:21:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,9 +258,6 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFi
     ByteString sQHTEXT;
     ByteString sTITLE;
 
-//  fprintf( stdout, "Scanning File %s ...\n", rFileName.GetBuffer());
-
-    ULONG nFileFormat = FFORMAT_UNKNOWN;
     if( !aInputStream.IsOpen() ) {
         printf("ERROR : Can't open %s\n", rFileName.GetBuffer());
         exit( -1 );
@@ -270,14 +267,12 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFi
         sLine = sLine.Convert( RTL_TEXTENCODING_MS_1252, aCharSet );
 
         if ( sLine.GetTokenCount( '\t' ) == 15  ) {
-            if ( nFileFormat != FFORMAT_NEW ) {
-                nFileFormat = FFORMAT_NEW;
-            }
-            // Merge While Build speedup
-            if(
-                 ( sLine.GetToken( 1 ,'\t').Search( sFile ) != STRING_NOTFOUND )
-                 //( sLine.GetToken( 1 ,'\t').Search( sFile ) > 0 )
-                ){
+            // Skip all wrong filenames
+            ByteString filename = sLine.GetToken( 1 , '\t' );
+            filename = filename.Copy( filename.SearchCharBackward( "\\" )+1 , filename.Len() );
+
+            if( filename.Equals( sFile ) )
+            {
                 sTYP = sLine.GetToken( 3, '\t' );
                 sGID = sLine.GetToken( 4, '\t' );
                 sLID = sLine.GetToken( 5, '\t' );
@@ -285,9 +280,6 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFi
                 sPFO = ByteString("HACK");
                 nLANG = sLine.GetToken( 9, '\t' );
 
-    /*          if ( bUTF8 )
-                    sLine = UTF8Converter::ConvertFromUTF8( sLine, Export::GetCharSet( nLANG ));
-    */
                 sTEXT = sLine.GetToken( 10, '\t' );
     //            printf("%s\n",sTEXT.GetBuffer());
     //            Quote( sTEXT );
@@ -296,7 +288,6 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFi
                 sQHTEXT = sLine.GetToken( 12, '\t' );
                 sTITLE = sLine.GetToken( 13, '\t' );
 
-                //if (( nLANG != 49 ) && ( LANGUAGE_ALLOWED( GetLangIndex( nLANG ))))
                 nLANG.EraseLeadingAndTrailingChars();
                 if (  !nLANG.EqualsIgnoreCaseAscii("en-US")  ){
                     InsertEntry( sTYP, sGID, sLID, sPFO, nLANG, sTEXT, sQHTEXT, sTITLE );
@@ -306,67 +297,17 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFi
                             if( aLanguages[ x ].Equals( nLANG ) )
                                 bFound = true;
                         }
+                        // Remember read languages for -l all switch
                         if( !bFound )   aLanguages.push_back( nLANG );
                     }
                 }
             }
         }
         else if ( sLine.GetTokenCount( '\t' ) == 10 ){
-            if ( nFileFormat != FFORMAT_OLD ) {
-                nFileFormat = FFORMAT_OLD;
-            }
-            sTYP = sLine.GetToken( 1, '\t' );
-                sTYP = sTYP.Copy( 1 ); sTYP.Erase( sTYP.Len() - 1 );
-            sGID = sLine.GetToken( 2, '\t' );
-                sGID = sGID.Copy( 1 ); sGID.Erase( sGID.Len() - 1 );
-            sLID = sLine.GetToken( 3, '\t' );
-                sLID = sLID.Copy( 1 ); sLID.Erase( sLID.Len() - 1 );
-            sPFO = sLine.GetToken( 4, '\t' );
-                sPFO = sPFO.Copy( 1 ); sPFO.Erase( sPFO.Len() - 1 );
-            nLANG = sLine.GetToken( 5, '\t' );
-
-//          if ( bUTF8 )
-//              sLine = UTF8Converter::ConvertFromUTF8( sLine, Export::GetCharSet( nLANG ));
-
-            if (( nLANG.EqualsIgnoreCaseAscii( JAPANESE_ISO ))) // == JAPANESE )
-            {
-                String sSLine( sLine, RTL_TEXTENCODING_UTF8 );
-                ConvertHalfwitdhToFullwidth( sSLine );
-                sLine = ByteString( sSLine, RTL_TEXTENCODING_UTF8 );
-            }
-
-            sTEXT = sLine.GetToken( 6, '\t' );
-                sTEXT = sTEXT.Copy( 1 ); sTEXT.Erase( sTEXT.Len() - 1 );
-       //     Quote( sTEXT );
-
-            sQHTEXT = sLine.GetToken( 8, '\t' );
-                sQHTEXT = sQHTEXT.Copy( 1 ); sQHTEXT.Erase( sQHTEXT.Len() - 1 );
-            sTITLE = sLine.GetToken( 9, '\t' );
-                sTITLE = sTITLE.Copy( 1 ); sTITLE.Erase( sTITLE.Len() - 1 );
-
-            //if (( nLANG != 49 ) && ( LANGUAGE_ALLOWED( GetLangIndex( nLANG ))))
-            nLANG.EraseLeadingAndTrailingChars();
-            if ( !nLANG.EqualsIgnoreCaseAscii("en-US") ){
-                InsertEntry( sTYP, sGID, sLID, sPFO, nLANG, sTEXT, sQHTEXT, sTITLE );
-                if( nLANG.Len() > 0 ){
-                    bool bFound = false;
-                    for( int x = 0; x < aLanguages.size(); x++ ){
-                        if( aLanguages[ x ].Equals( nLANG ) )
-                            bFound = true;
-                     }
-                     if( !bFound )   aLanguages.push_back( nLANG );
-
-                }
-            }
+            printf("ERROR: File format is obsolete and no longer supported!\n");
         }
     }
     aInputStream.Close();
-//  fprintf( stdout, "Merging ...\n" );
-/*   for( ByteStringSet::const_iterator pos = LanguagesBeginIter();
-    pos != LanguagesEndIter(); ++pos){
-      ByteString sCur = *pos;
-      printf(", %s ",sCur.GetBuffer());
-    }*/
 }
 /*****************************************************************************/
 MergeDataFile::~MergeDataFile()
@@ -378,38 +319,9 @@ MergeDataFile::~MergeDataFile()
 void MergeDataFile::WriteErrorLog( const ByteString &rFileName )
 /*****************************************************************************/
 {
-// Ivo
-    /*  if ( bErrorLog ) {
-        DirEntry aDirEntry( String( rFileName, RTL_TEXTENCODING_ASCII_US ));
-        aDirEntry.SetExtension( String( "err", RTL_TEXTENCODING_ASCII_US ));
-        sErrorLog = ByteString( aDirEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
-    }
-    for ( ULONG i = 0; i < Count(); i++ ) {
-        MergeData *pData = GetObject( i );
-
-        for ( ULONG j = 0; j < pData->Count(); j++ ) {
-            PFormEntrys *pEntrys = pData->GetObject( j );
-            for ( USHORT nLangIndex = 0; nLangIndex < LANGUAGES; nLangIndex++ ) {
-                if ( pEntrys->sText[ nLangIndex ].Len() ||
-                    pEntrys->sQuickHelpText[ nLangIndex ].Len() ||
-                    pEntrys->sTitle[ nLangIndex ].Len())
-                {
-                    ByteString sLine( "0\t" );
-                    sLine += pData->sTyp; sLine += "\t";
-                    sLine += pData->sGID; sLine += "\t";
-                    sLine += pData->sLID; sLine += "\t";
-                    sLine += ByteString::CreateFromInt64( Export::LangId[ nLangIndex ] ); sLine += "\t";
-                    sLine += pEntrys->sText[ nLangIndex ]; sLine += "\t\t";
-                    sLine += pEntrys->sQuickHelpText[ nLangIndex ]; sLine += "\t";
-                    sLine += pEntrys->sTitle[ nLangIndex ];
-                    WriteError( sLine );
-                }
-            }
-        }
-    }
-    if ( aErrLog.IsOpen())
-        aErrLog.Close(); */
+// DEAD
 }
+
 ByteString MergeDataFile::Dump(){
     ByteString sRet( "MergeDataFile\n" );
 
