@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AttrTransformerAction.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-05-18 09:44:48 $
+ *  last change: $Author: obo $ $Date: 2005-09-05 14:55:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,7 @@ enum XMLAttrTransformerAction
     XML_ATACTION_GAMMA_OASIS,            // converts percentage to double value
     XML_ATACTION_GAMMA_OOO,              // converts double value to percentage
     XML_ATACTION_DECODE_ID,              // converts strings with non numeric characters to only numeric character ids
+    XML_ATACTION_OPACITY_FIX,            // converts transparency to opacity and back
     XML_ATACTION_USER_DEFINED=0x80000000,// user defined actions start here
     XML_ATACTION_END=XML_TACTION_END
 };
