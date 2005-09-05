@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2005-07-01 11:47:09 $
+ *  last change: $Author: rt $ $Date: 2005-09-05 09:01:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2908,14 +2908,13 @@ void SalDisplay::deregisterFrame( SalFrame* pFrame )
 {
     if( osl_acquireMutex( hEventGuard_ ) )
     {
-        for( std::list< SalUserEvent >::iterator it = m_aUserEvents.begin();
-             it != m_aUserEvents.end(); ++it )
+        std::list< SalUserEvent >::iterator it = m_aUserEvents.begin();
+        while ( it != m_aUserEvents.end() )
         {
             if( it->m_pFrame == pFrame )
-            {
-                std::list< SalUserEvent >::iterator rit = it++;
-                m_aUserEvents.erase( rit );
-            }
+                it = m_aUserEvents.erase( it );
+            else
+                ++it;
         }
         osl_releaseMutex( hEventGuard_ );
     }
