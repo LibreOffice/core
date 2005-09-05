@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.173 $
+#   $Revision: 1.174 $
 #
-#   last change: $Author: hjs $ $Date: 2005-08-19 10:31:50 $
+#   last change: $Author: rt $ $Date: 2005-09-05 09:02:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -969,6 +969,10 @@ DATESTRING:=$(shell +echo %@IF[%@LEN[%_DAY%]==1,0%_DAY%,%_DAY%]%@IF[%@LEN[%_MONT
 SCPDEFS+=-DSCP_DATESTRING=$(DATESTRING)
 
 
+.IF "$(USE_STLP_DEBUG)" != ""
+SCPCDEFS+=-D_STLP_DEBUG
+.ENDIF
+
 .IF "$(UDK_MAJOR)"!=""
 SCPDEFS+=-DUDK_MAJOR=$(UDK_MAJOR)
 .ENDIF			# "$(UDK_MAJOR)"!=""
@@ -996,6 +1000,10 @@ UNOIDLINC+=-I. -I.. -I$(PRJ) -I$(PRJ)$/inc -I$(PRJ)$/$(INPATH)$/idl -I$(OUT)$/in
 CDEFS= -D$(OS) -D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -D$(CPUNAME) -D$(REMOTEDEF)
 .ELSE
 CDEFS= -D$(OS) -D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -D$(CPUNAME)
+.ENDIF
+
+.IF "$(USE_STLP_DEBUG)" != ""
+CDEFS+=-D_STLP_DEBUG
 .ENDIF
 
 .IF "$(CDEFS_PRESET)" != ""
