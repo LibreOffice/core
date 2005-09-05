@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: obo $ $Date: 2005-07-06 09:21:30 $
+ *  last change: $Author: rt $ $Date: 2005-09-05 09:01:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6164,7 +6164,7 @@ BOOL ToolBox::ImplChangeHighlightUpDn( BOOL bUp, BOOL bNoCycle )
             }
 
             // select the menu button if a clipped item would be selected
-            if( &(*it) == ImplGetFirstClippedItem( this ) && IsMenuEnabled() )
+            if( (it != mpData->m_aItems.end() && &(*it) == ImplGetFirstClippedItem( this )) && IsMenuEnabled() )
             {
                 ImplChangeHighlight( NULL );
                 ImplDrawMenubutton( this, TRUE );
