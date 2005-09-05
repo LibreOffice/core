@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 09:48:55 $
+ *  last change: $Author: rt $ $Date: 2005-09-05 08:59:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,7 +301,7 @@ namespace dbaui
 //      }
 
         // if all of the indexes have an empty description, we're not interested in displaying it
-        OIndexCollection::const_iterator aCheck;
+        Indexes::const_iterator aCheck;
 
         for (   aCheck = m_pIndexes->begin();
                 aCheck != m_pIndexes->end();
@@ -352,7 +352,7 @@ namespace dbaui
         if (pSelected)
         {
             // is the current entry modified?
-            OIndexCollection::const_iterator aSelectedPos = reinterpret_cast<OIndexCollection::const_iterator>(pSelected->GetUserData());
+            Indexes::const_iterator aSelectedPos = m_pIndexes->begin() + reinterpret_cast<sal_Int32>(pSelected->GetUserData());
             m_aActions.EnableItem(ID_INDEX_SAVE, aSelectedPos->isModified() || aSelectedPos->isNew());
             m_aActions.EnableItem(ID_INDEX_RESET, aSelectedPos->isModified() || aSelectedPos->isNew());
             bSelectedAnything = bSelectedAnything && !aSelectedPos->bPrimaryKey;
@@ -373,8 +373,8 @@ namespace dbaui
         Image aPKeyIcon(ModuleRes( bHiContrast ? IMG_PKEYICON_SCH : IMG_PKEYICON));
         // fill the list with the index names
         m_aIndexes.Clear();
-        OIndexCollection::iterator aIndexLoop = m_pIndexes->begin();
-        OIndexCollection::iterator aEnd = m_pIndexes->end();
+        Indexes::iterator aIndexLoop = m_pIndexes->begin();
+        Indexes::iterator aEnd = m_pIndexes->end();
         for (; aIndexLoop != aEnd; ++aIndexLoop)
         {
             SvLBoxEntry* pNewEntry = NULL;
@@ -383,7 +383,7 @@ namespace dbaui
             else
                 pNewEntry = m_aIndexes.InsertEntry(aIndexLoop->sName);
 
-            pNewEntry->SetUserData(aIndexLoop);
+            pNewEntry->SetUserData(reinterpret_cast< void* >(sal_Int32(aIndexLoop - m_pIndexes->begin())));
         }
 
         OnIndexSelected(&m_aIndexes);
@@ -406,7 +406,7 @@ namespace dbaui
     {
         DBG_ASSERT(_pEntry, "DbaIndexDialog::implCommit: invalid entry!");
 
-        OIndexCollection::iterator aCommitPos = static_cast< OIndexCollection::iterator >(_pEntry->GetUserData());
+        Indexes::iterator aCommitPos = m_pIndexes->begin() + reinterpret_cast< sal_Int32 >(_pEntry->GetUserData());
 
         // if it's not a new index, remove it
         // (we can't modify indexes, only drop'n'insert)
@@ -465,16 +465,16 @@ namespace dbaui
         }
 
         SvLBoxEntry* pNewEntry = m_aIndexes.InsertEntry(sNewIndexName);
-        OIndexCollection::iterator aIndexDescriptor = m_pIndexes->insert(sNewIndexName);
+        Indexes::iterator aIndexDescriptor = m_pIndexes->insert(sNewIndexName);
 //      pNewEntry->SetUserData(aIndexDescriptor);
 
         // update the user data on the entries in the list box:
         // they're iterators of the index collection, and thus they have changed when removing the index
         for (SvLBoxEntry* pAdjust = m_aIndexes.First(); pAdjust; pAdjust = m_aIndexes.Next(pAdjust))
         {
-            OIndexCollection::iterator aAfterInsertPos = m_pIndexes->find(m_aIndexes.GetEntryText(pAdjust));
+            Indexes::iterator aAfterInsertPos = m_pIndexes->find(m_aIndexes.GetEntryText(pAdjust));
             DBG_ASSERT(aAfterInsertPos != m_pIndexes->end(), "DbaIndexDialog::OnNewIndex: problems with on of the entries!");
-            pAdjust->SetUserData(aAfterInsertPos);
+            pAdjust->SetUserData(reinterpret_cast< void* >(sal_Int32(aAfterInsertPos - m_pIndexes->begin())));
         }
 
         // select the entry and start in-place editing
@@ -514,7 +514,7 @@ namespace dbaui
     sal_Bool DbaIndexDialog::implDropIndex(SvLBoxEntry* _pEntry, sal_Bool _bRemoveFromCollection)
     {
         // do the drop
-        OIndexCollection::iterator aDropPos = static_cast< OIndexCollection::iterator >(_pEntry->GetUserData());
+        Indexes::iterator aDropPos = m_pIndexes->begin() + reinterpret_cast< sal_Int32 >(_pEntry->GetUserData());
         DBG_ASSERT(aDropPos != m_pIndexes->end(), "DbaIndexDialog::OnDropIndex: did not find the index in my collection!");
 
         SQLExceptionInfo aExceptionInfo;
@@ -545,9 +545,9 @@ namespace dbaui
             // they're iterators of the index collection, and thus they have changed when removing the index
             for (SvLBoxEntry* pAdjust = m_aIndexes.First(); pAdjust; pAdjust = m_aIndexes.Next(pAdjust))
             {
-                OIndexCollection::iterator aAfterDropPos = m_pIndexes->find(m_aIndexes.GetEntryText(pAdjust));
+                Indexes::iterator aAfterDropPos = m_pIndexes->find(m_aIndexes.GetEntryText(pAdjust));
                 DBG_ASSERT(aAfterDropPos != m_pIndexes->end(), "DbaIndexDialog::OnDropIndex: problems with on of the remaining entries!");
-                pAdjust->SetUserData(aAfterDropPos);
+                pAdjust->SetUserData(reinterpret_cast< void* >(sal_Int32(aAfterDropPos - m_pIndexes->begin())));
             }
 
             // if the remvoved entry was the selected on ...
@@ -596,7 +596,7 @@ namespace dbaui
         SvLBoxEntry* pSelected = m_aIndexes.FirstSelected();
         DBG_ASSERT(pSelected, "DbaIndexDialog::OnResetIndex: invalid call!");
 
-        OIndexCollection::iterator aResetPos = static_cast< OIndexCollection::iterator >(pSelected->GetUserData());
+        Indexes::iterator aResetPos = m_pIndexes->begin() + reinterpret_cast< sal_Int32 >(pSelected->GetUserData());
 
         if (aResetPos->isNew())
         {
@@ -669,7 +669,8 @@ namespace dbaui
         if (pSelected)
         {
             // the descriptor
-            OIndexCollection::const_iterator aSelected = static_cast<OIndexCollection::iterator>(pSelected->GetUserData());
+            Indexes::const_iterator aSelected = m_pIndexes->begin() + reinterpret_cast<sal_Int32>(pSelected->GetUserData());
+
             if (aSelected->isModified() || aSelected->isNew())
             {
                 QueryBox aQuestion(this, ModuleRes(QUERY_SAVE_CURRENT_INDEX));
@@ -705,13 +706,14 @@ namespace dbaui
     //------------------------------------------------------------------
     IMPL_LINK( DbaIndexDialog, OnEntryEdited, SvLBoxEntry*, _pEntry )
     {
-        OIndexCollection::iterator aPosition = static_cast< OIndexCollection::iterator >(_pEntry->GetUserData());
+        Indexes::iterator aPosition = m_pIndexes->begin() + reinterpret_cast<sal_Int32>(_pEntry->GetUserData());
+
         DBG_ASSERT(aPosition >= m_pIndexes->begin() && aPosition < m_pIndexes->end(),
             "DbaIndexDialog::OnEntryEdited: invalid entry!");
 
         String sNewName = m_aIndexes.GetEntryText(_pEntry);
 
-        OIndexCollection::const_iterator aSameName = m_pIndexes->find(sNewName);
+        Indexes::const_iterator aSameName = m_pIndexes->find(sNewName);
         if ((aSameName != aPosition) && (m_pIndexes->end() != aSameName))
         {
             String sError(ModuleRes(STR_INDEX_NAME_ALREADY_USED));
@@ -753,7 +755,7 @@ namespace dbaui
             if (m_pFields->IsModified() && !m_pFields->SaveModified())
                 return sal_False;
 
-            OIndexCollection::iterator aPreviouslySelected = static_cast<OIndexCollection::iterator>(m_pPreviousSelection->GetUserData());
+            Indexes::iterator aPreviouslySelected = m_pIndexes->begin() + reinterpret_cast<sal_Int32>(m_pPreviousSelection->GetUserData());
 
             // the unique flag
             aPreviouslySelected->bUnique = m_aUnique.IsChecked();
@@ -814,7 +816,7 @@ namespace dbaui
     {
         if (m_pPreviousSelection)
         {
-            OIndexCollection::iterator aPreviouslySelected = static_cast<OIndexCollection::iterator>(m_pPreviousSelection->GetUserData());
+            Indexes::iterator aPreviouslySelected = m_pIndexes->begin() + reinterpret_cast<sal_Int32>(m_pPreviousSelection->GetUserData());
 
             if (!implSaveModified())
                 return sal_False;
@@ -831,7 +833,7 @@ namespace dbaui
     IMPL_LINK( DbaIndexDialog, OnModified, void*, NOTINTERESTEDIN )
     {
         DBG_ASSERT(m_pPreviousSelection, "DbaIndexDialog, OnModified: invalid call!");
-        OIndexCollection::iterator aPosition = static_cast< OIndexCollection::iterator >(m_pPreviousSelection->GetUserData());
+        Indexes::iterator aPosition = m_pIndexes->begin() + reinterpret_cast<sal_Int32>(m_pPreviousSelection->GetUserData());
 
         aPosition->setModified(sal_True);
         updateToolbox();
@@ -845,7 +847,7 @@ namespace dbaui
         if (_pEntry)
         {
             // the descriptor of the selected index
-            OIndexCollection::const_iterator aSelectedIndex = static_cast<OIndexCollection::iterator>(_pEntry->GetUserData());
+            Indexes::const_iterator aSelectedIndex = m_pIndexes->begin() + reinterpret_cast<sal_Int32>(_pEntry->GetUserData());
 
             // fill the controls
             m_aUnique.Check(aSelectedIndex->bUnique);
