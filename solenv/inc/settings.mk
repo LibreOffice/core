@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.174 $
+#   $Revision: 1.175 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-05 09:02:49 $
+#   last change: $Author: rt $ $Date: 2005-09-07 16:08:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1011,6 +1011,7 @@ CDEFS+=$(CDEFS_PRESET)
 .ENDIF
 
 .IF "$(COM)"=="GCC"
+GXX_INCLUDE_PATH*=$(COMPATH)$/include$/c++$/$(CCVER)
 CDEFS+= -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH)
 .ENDIF
 
