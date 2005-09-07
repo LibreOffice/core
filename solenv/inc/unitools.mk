@@ -92,7 +92,7 @@ IFEXIST:=if ( -e
 THEN:= )
 
 # iz31658
-CHECKZIPRESULT:=|| if ("$$status" != "12") exit $$status && echo "Nothing to update for zip"
+CHECKZIPRESULT:=|| if ("$$status" != "12" && "$$status" != "1") exit $$status && echo "Nothing to update for zip"
 
 .ELSE # "$(USE_SHELL)"!="4nt"
 # (\\ at line end is \)
@@ -108,7 +108,7 @@ IFEXIST:=if exist
 THEN:=
 
 # iz31658
-CHECKZIPRESULT:=^ iff errorlevel == 12 then ( echo Nothing to update for zip ^ set somedummyvar=%somedummyvar)
+CHECKZIPRESULT:=^ iff errorlevel == 12 .and. errorlevel == 12 then ( echo Nothing to update for zip ^ set somedummyvar=%somedummyvar)
 
 .ENDIF # "$(USE_SHELL)"!="4nt"
 
