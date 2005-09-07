@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.155 $
+#   $Revision: 1.156 $
 #
-#   last change: $Author: hr $ $Date: 2005-08-05 14:00:27 $
+#   last change: $Author: rt $ $Date: 2005-09-07 16:08:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2009,8 +2009,11 @@ $(SCP_PRODUCT_TYPE):
 
 .IF "$(COMPVERMK)"!=""
 .IF "$(UPDATER)"!=""
+.IF "$(COMPATH)"!="$(COMPATH_STORED)"
+COMPVERMK_PHONY:=.PHONY
+.ENDIF			# "$(COMPATH)"!="$(COMPATH_STORED)"
 COMPVTMP:=$(mktmp iii)
-"$(COMPVERMK)" : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg
+"$(COMPVERMK)" $(COMPVERMK_PHONY): $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg
 .IF "$(CCNUMVER)"!=""
     @echo COMNAME:=$(COMNAME) > $(COMPVTMP)
     @echo COMID:=$(COMID) >> $(COMPVTMP)
@@ -2018,7 +2021,9 @@ COMPVTMP:=$(mktmp iii)
     @echo SHORTSTDCPP3:=$(SHORTSTDCPP3) >> $(COMPVTMP)
 .ENDIF
     @echo CCNUMVER:=$(CCNUMVER) >> $(COMPVTMP)
+    @echo CCVER:=$(CCVER:s/-/ /:1) >> $(COMPVTMP)
     @echo CDEFS+=-DCPPU_ENV=$(COMNAME) >> $(COMPVTMP)
+    @echo COMPATH_STORED:=$(COMPATH) >> $(COMPVTMP)
     @+-$(RM) $@ >& $(NULLDEV)
     @+-$(RENAME) $(COMPVTMP) $@
 .ELSE           # "$(CCNUMVER)"!=""
