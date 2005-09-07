@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: hr $ $Date: 2005-04-04 12:51:02 $
+#   last change: $Author: rt $ $Date: 2005-09-07 16:18:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -162,6 +162,7 @@ DEFLIB1NAME=$(TARGET)
 SHL2TARGET= cui$(UPD)$(DLLPOSTFIX)
 SHL2VERSIONMAP= cui.map
 SHL2IMPLIB=icui
+SHL2DEPN=$(SHL1TARGETN)
 
 SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=	$(SHL2TARGET)
