@@ -7,8 +7,8 @@
 			<Text id="a" xml:lang="de">Willkommen</Text>
 		</Paragraph>
 		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US">Last updated $Date: 2005-09-05 10:14:10 $</Text>
-			<Text id="a" xml:lang="de">Letztes Update $Date: 2005-09-05 10:14:10 $</Text>
+			<Text id="a" xml:lang="en-US">Last updated $Date: 2005-09-08 07:33:13 $</Text>
+			<Text id="a" xml:lang="de">Letztes Update $Date: 2005-09-08 07:33:13 $</Text>
 		</Paragraph>
 		<Paragraph id="A3" style="H1">
 			<Text id="a" xml:lang="en-US">OpenOffice.org 2.0 ReadMe</Text>
@@ -434,7 +434,7 @@
 		<Paragraph id="A2">
 			<Text id="a" xml:lang="en-US" url="ahead">Please take a little time to complete the minimal Product Registration process when you install the software. While registration is optional, we encourage you to register, since the information enables the community to make an even better software suite and address user needs directly. Through its Privacy Policy, the OpenOffice.org Community takes every precaution to safeguard your personal data. If you missed the registration at installation, you can return and register at any time at </Text>
 			<Text id="a" xml:lang="de" url="ahead">Bitte nehmen Sie sich ein wenig Zeit, die minimal gehaltene Produkt-Registrierung während der Installation der Software durchzuführen. Auch wenn die Registrierung freiwillig ist, so bitten wir Sie dennoch, die Registrierung durchzuführen, denn diese Information hilft der Gemeinschaft, ein besseres Softwareprodukt herzustellen und den Anwenderbedürfnissen unmittelbarer zu entsprechen. Unsere Datenschutzrichtlinien verpflichten die OpenOffice.org-Gemeinschaft jede Vorkehrung zu nutzen, die den Schutz Ihrer Daten gewährleistet. Wenn Sie die Registrierung während der Installation nicht durchführen wollen, lässt sich die Registrierung jederzeit nachholen unter </Text>
-            <Text id="b" xml:lang="en-US" url="true" >http://www.openoffice.org/welcome/regis"tration-site.html </Text>
+            <Text id="b" xml:lang="en-US" url="true" >http://www.openoffice.org/welcome/registration-site.html </Text>
             <Text id="b" xml:lang="de" url="true" >http://www.openoffice.org/welcome/registration-site.html </Text>
 		</Paragraph>
 	</Section>
