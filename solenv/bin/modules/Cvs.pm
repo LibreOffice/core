@@ -4,9 +4,9 @@
 #
 #   $RCSfile: Cvs.pm,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 08:54:31 $
+#   last change: $Author: rt $ $Date: 2005-09-08 09:48:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -501,7 +501,12 @@ sub execute
         close(CVS);
 
         foreach ( @response ) {
-            /unrecognized auth response/ && ++$authtimeout;
+            if ( /unrecognized auth response/ ) {
+                # don't get fooled by comment of rev. 1.14
+                /#i25646#: catch 'unrecognized auth response' from OOo CVS server/ && next;
+                # ok, seems to be a real timeout
+                ++$authtimeout;
+            }
         }
         last if !$authtimeout;
     }
