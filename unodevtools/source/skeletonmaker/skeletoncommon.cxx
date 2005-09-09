@@ -1,88 +1,66 @@
 /*************************************************************************
  *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
  *  $RCSfile: skeletoncommon.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2005-08-25 15:30:33 $
+ *  last change: $Author: jsc $ $Date: 2005-09-09 13:50:32 $
  *
- *  The Contents of this file are made available subject to the terms of
- *  either of the following licenses
- *
- *         - GNU Lesser General Public License Version 2.1
- *         - Sun Industry Standards Source License Version 1.1
- *
- *  Sun Microsystems Inc., October, 2000
- *
- *  GNU Lesser General Public License Version 2.1
- *  =============================================
- *  Copyright 2000 by Sun Microsystems, Inc.
- *  901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License version 2.1, as published by the Free Software Foundation.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *  MA  02111-1307  USA
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
  *
  *
- *  Sun Industry Standards Source License Version 1.1
- *  =================================================
- *  The contents of this file are subject to the Sun Industry Standards
- *  Source License Version 1.1 (the "License"); You may not use this file
- *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
  *
- *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
- *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
- *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
- *  See the License for the specific provisions governing your rights and
- *  obligations concerning the Software.
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
  *
- *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
  *
- *  Copyright: 2000 by Sun Microsystems, Inc.
- *
- *  All Rights Reserved.
- *
- *  Contributor(s): _______________________________________
- *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
  *
  ************************************************************************/
 
 #include <osl/thread.hxx>
-#include "skeletonmaker.hxx"
+
+#include <codemaker/commonjava.hxx>
+#include <codemaker/commoncpp.hxx>
+
 #include "skeletoncommon.hxx"
 
+using namespace ::rtl;
 using namespace ::codemaker::cpp;
 
 namespace skeletonmaker {
 
 codemaker::UnoType::Sort decomposeResolveAndCheck(
-    TypeManager const & manager, rtl::OString const & type,
+    TypeManager const & manager, OString const & type,
     bool resolveTypedefs, bool allowVoid, bool allowExtraEntities,
-    RTTypeClass * typeClass, rtl::OString * name, sal_Int32 * rank,
-    std::vector< rtl::OString > * arguments)
+    RTTypeClass * typeClass, OString * name, sal_Int32 * rank,
+    std::vector< OString > * arguments)
 {
     codemaker::UnoType::Sort sort = codemaker::decomposeAndResolve(
         manager, type, resolveTypedefs, allowVoid, allowExtraEntities,
         typeClass, name, rank, arguments);
-    for (std::vector< rtl::OString >::iterator i(arguments->begin());
+    for (std::vector< OString >::iterator i(arguments->begin());
          i != arguments->end(); ++i)
     {
         RTTypeClass typeClass2;
-        rtl::OString name2;
+        OString name2;
         sal_Int32 rank2;
-        std::vector< rtl::OString > arguments2;
+        std::vector< OString > arguments2;
         decomposeResolveAndCheck(
             manager, *i, true, false, false, &typeClass2, &name2, &rank2,
             &arguments2);
@@ -90,14 +68,55 @@ codemaker::UnoType::Sort decomposeResolveAndCheck(
     return sort;
 }
 
-void checkType(TypeManager const & manager,
-               rtl::OString const & type,
-               std::hash_set< rtl::OString, rtl::OStringHash >& interfaceTypes,
-               std::hash_set< rtl::OString, rtl::OStringHash >& serviceTypes,
-               StringPairHashMap& properties,
-               bool& attributes) {
+// collect attributes including inherited attributes
+void checkAttributes(TypeManager const & manager,
+                     const typereg::Reader& reader,
+                     StringPairHashMap& attributes,
+                     std::hash_set< OString, OStringHash >& propinterfaces)
+{
+    OString typeName = codemaker::convertString(reader.getTypeName());
+    if (typeName.equals("com/sun/star/beans/XPropertySet") ||
+        typeName.equals("com/sun/star/beans/XFastPropertySet") ||
+        typeName.equals("com/sun/star/beans/XMultiPropertySet") ||
+        typeName.equals("com/sun/star/beans/XPropertyAccess") )
+    {
+        propinterfaces.insert(typeName);
+    }
 
-    rtl::OString binType(type.replace('.', '/'));
+    for (sal_uInt16 i = 0; i < reader.getSuperTypeCount(); ++i) {
+        typereg::Reader supertype(manager.getTypeReader(
+                                  codemaker::convertString(
+                                      reader.getSuperTypeName(i))));
+        if (!supertype.isValid()) {
+            throw CannotDumpException(
+                "Bad type library entity "
+                + codemaker::convertString(reader.getSuperTypeName(i)));
+        }
+        checkAttributes(manager, supertype, attributes, propinterfaces);
+    }
+
+    for (sal_uInt16 i = 0; i < reader.getFieldCount(); ++i) {
+        OString fieldName(
+            codemaker::convertString(reader.getFieldName(i)).
+            replace('/', '.'));
+        OString fieldType(
+            codemaker::convertString(reader.getFieldTypeName(i)).
+            replace('/', '.'));
+        attributes.insert(StringPairHashMap::value_type(
+                              fieldName,
+                              std::pair<OString, sal_Int16>(
+                                  fieldType, reader.getFieldFlags(i))));
+    }
+}
+
+void checkType(TypeManager const & manager,
+               OString const & type,
+               std::hash_set< OString, OStringHash >& interfaceTypes,
+               std::hash_set< OString, OStringHash >& serviceTypes,
+               StringPairHashMap& properties)
+{
+
+    OString binType(type.replace('.', '/'));
     typereg::Reader reader(manager.getTypeReader(binType));
     if (!reader.isValid()) {
         throw CannotDumpException("Bad type library entity " + binType);
@@ -114,8 +133,6 @@ void checkType(TypeManager const & manager,
             return;
         if (interfaceTypes.find(type) == interfaceTypes.end()) {
             interfaceTypes.insert(type);
-            if (reader.getFieldCount() > 0)
-                attributes |= true;
         }
     }
         break;
@@ -124,35 +141,53 @@ void checkType(TypeManager const & manager,
             serviceTypes.insert(binType);
 
             if (reader.getSuperTypeCount() > 0) {
-                rtl::OString superType(codemaker::convertString(
+                OString supername(codemaker::convertString(
                     reader.getSuperTypeName(0).replace('/', '.')));
-                if (interfaceTypes.find(superType) == interfaceTypes.end())
-                    interfaceTypes.insert(superType);
+                if (interfaceTypes.find(supername) == interfaceTypes.end()) {
+                    interfaceTypes.insert(supername);
+
+                    typereg::Reader supertype(manager.getTypeReader(
+                                  codemaker::convertString(
+                                      reader.getSuperTypeName(0))));
+                    if (!supertype.isValid()) {
+                        throw CannotDumpException(
+                            "Bad type library entity "
+                            + codemaker::convertString(reader.getSuperTypeName(0)));
+                    }
+                }
+
+                // check if constructors are specified, if yes automatically
+                // support of XInitialization
+                if (reader.getMethodCount() > 0) {
+                    OString s("com.sun.star.lang.XInitialization");
+                    if (interfaceTypes.find(s) == interfaceTypes.end())
+                        interfaceTypes.insert(s);
+                }
             } else {
                 for (sal_uInt16 i = 0; i < reader.getReferenceCount(); ++i) {
-                    rtl::OString referenceType(
+                    OString referenceType(
                         codemaker::convertString(
                             reader.getReferenceTypeName(i)).replace('/', '.'));
 
                     if ( reader.getReferenceSort(i) == RT_REF_SUPPORTS ) {
                         checkType(manager, referenceType, interfaceTypes,
-                                  serviceTypes, properties, attributes);
+                                  serviceTypes, properties);
                     } else if ( reader.getReferenceSort(i) == RT_REF_EXPORTS ) {
                         checkType(manager, referenceType, interfaceTypes,
-                                  serviceTypes, properties, attributes);
+                                  serviceTypes, properties);
                     }
                 }
 
                 for (sal_uInt16 i = 0; i < reader.getFieldCount(); ++i) {
-                    rtl::OString fieldName(
+                    OString fieldName(
                         codemaker::convertString(reader.getFieldName(i)).
                         replace('/', '.'));
-                    rtl::OString fieldType(
+                    OString fieldType(
                         codemaker::convertString(reader.getFieldTypeName(i)).
                         replace('/', '.'));
 
                     properties.insert(StringPairHashMap::value_type(fieldName,
-                        std::pair<rtl::OString, sal_Int16>(
+                        std::pair<OString, sal_Int16>(
                              fieldType, reader.getFieldFlags(i))));
                 }
             }
@@ -165,9 +200,9 @@ void checkType(TypeManager const & manager,
 }
 
 void checkDefaultInterfaces(
-         std::hash_set< rtl::OString, rtl::OStringHash >& interfaces,
-         const std::hash_set< rtl::OString, rtl::OStringHash >& services,
-       const rtl::OString & propertyhelper)
+         std::hash_set< OString, OStringHash >& interfaces,
+         const std::hash_set< OString, OStringHash >& services,
+       const OString & propertyhelper)
 {
     if (services.empty()) {
         if (interfaces.find("com.sun.star.lang.XServiceInfo") != interfaces.end())
@@ -178,38 +213,46 @@ void checkDefaultInterfaces(
     }
 
     if (propertyhelper.equals("_")) {
-        if (interfaces.find("com.sun.star.beans.XPropertySet") != interfaces.end())
+        if (interfaces.find("com.sun.star.beans.XPropertySet")
+            != interfaces.end())
             interfaces.erase("com.sun.star.beans.XPropertySet");
-        if (interfaces.find("com.sun.star.beans.XFastPropertySet") != interfaces.end())
+        if (interfaces.find("com.sun.star.beans.XFastPropertySet")
+            != interfaces.end())
             interfaces.erase("com.sun.star.beans.XFastPropertySet");
-        if (interfaces.find("com.sun.star.beans.XPropertyAccess") != interfaces.end())
+        if (interfaces.find("com.sun.star.beans.XPropertyAccess")
+            != interfaces.end())
             interfaces.erase("com.sun.star.beans.XPropertyAccess");
     }
 }
 
-rtl::OString checkPropertyHelper(TypeManager const & manager,
-         const std::hash_set< rtl::OString, rtl::OStringHash >& services)
+OString checkPropertyHelper(
+    TypeManager const & manager,
+    const std::hash_set< OString, OStringHash >& services,
+    StringPairHashMap& attributes,
+    std::hash_set< OString, OStringHash >& propinterfaces)
 {
-    std::hash_set< rtl::OString, rtl::OStringHash >::const_iterator iter =
+    std::hash_set< OString, OStringHash >::const_iterator iter =
         services.begin();
     bool oldStyleWithProperties = false;
     while (iter != services.end()) {
         typereg::Reader reader(manager.getTypeReader((*iter).replace('.', '/')));
 
         if (reader.getSuperTypeCount() > 0) {
-            typereg::Reader super(
+            typereg::Reader supertype(
                 manager.getTypeReader(
                     codemaker::convertString(
                         reader.getSuperTypeName(0))));
-            if (!super.isValid()) {
+            if (!supertype.isValid()) {
                 throw CannotDumpException(
                     "Bad type library entity "
                     + codemaker::convertString(
                         reader.getSuperTypeName(0)));
             }
 
-            if (super.getFieldCount() > 0)
-                return rtl::OUStringToOString(super.getTypeName().replace('/', '.'),
+            checkAttributes(manager, supertype, attributes, propinterfaces);
+
+            if (!(attributes.empty() || propinterfaces.empty()))
+                return OUStringToOString(supertype.getTypeName().replace('/', '.'),
                                               osl_getThreadTextEncoding());
         } else {
             if (reader.getFieldCount() > 0)
@@ -225,7 +268,8 @@ rtl::OString checkPropertyHelper(TypeManager const & manager,
 bool checkXComponentSupport(TypeManager const & manager,
                             typereg::Reader const & reader)
 {
-    static rtl::OUString s(RTL_CONSTASCII_USTRINGPARAM("com/sun/star/lang/XComponent"));
+    static OUString s(RTL_CONSTASCII_USTRINGPARAM(
+                               "com/sun/star/lang/XComponent"));
     if (reader.getTypeName().equals(s))
         return true;
 
@@ -251,12 +295,12 @@ bool checkXComponentSupport(TypeManager const & manager,
 // if XComponent is directly specified, return true and remove it from the
 // supported interfaces list
 bool checkXComponentSupport(TypeManager const & manager,
-         std::hash_set< rtl::OString, rtl::OStringHash >& interfaces)
+         std::hash_set< OString, OStringHash >& interfaces)
 {
     if (interfaces.empty())
         return false;
 
-    std::hash_set< rtl::OString, rtl::OStringHash >::const_iterator iter =
+    std::hash_set< OString, OStringHash >::const_iterator iter =
         interfaces.begin();
     while (iter != interfaces.end()) {
         if ((*iter).equals("com.sun.star.lang.XComponent")) {
@@ -270,6 +314,47 @@ bool checkXComponentSupport(TypeManager const & manager,
     }
 
     return false;
+}
+
+sal_uInt16 checkAdditionalPropertyFlags(typereg::Reader const & reader,
+                                        sal_uInt16 field, sal_uInt16 method)
+{
+    sal_uInt16 flags = 0;
+    bool getterSupportsUnknown = false;
+
+    OUString su(RTL_CONSTASCII_USTRINGPARAM(
+                   "com/sun/star/beans/UnknownPropertyException"));
+    if (method < reader.getMethodCount()
+        && reader.getMethodFlags(method) == RT_MODE_ATTRIBUTE_GET
+        && reader.getMethodName(method) == reader.getFieldName(field))
+    {
+        if (reader.getMethodExceptionCount(method) > 0) {
+            for (sal_uInt16 i = 0; i < reader.getMethodExceptionCount(method); ++i)
+            {
+                if (su.equals(reader.getMethodExceptionTypeName(method, i)))
+                    getterSupportsUnknown = true;
+            }
+        }
+        method++;
+    }
+    if (method < reader.getMethodCount()
+        && reader.getMethodFlags(method) == RT_MODE_ATTRIBUTE_SET
+        && reader.getMethodName(method) == reader.getFieldName(field))
+    {
+        if (reader.getMethodExceptionCount(method) > 0) {
+            OUString s(RTL_CONSTASCII_USTRINGPARAM(
+                           "com/sun/star/beans/PropertyVetoException"));
+            for (sal_uInt16 i = 0; i < reader.getMethodExceptionCount(method); ++i)
+            {
+                if (s.equals(reader.getMethodExceptionTypeName(method, i)))
+                    flags |= RT_ACCESS_CONSTRAINED;
+                if (getterSupportsUnknown &&
+                    su.equals(reader.getMethodExceptionTypeName(method, i)))
+                    flags |= RT_ACCESS_OPTIONAL;
+            }
+        }
+    }
+    return flags;
 }
 
 }

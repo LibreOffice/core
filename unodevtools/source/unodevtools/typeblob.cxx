@@ -1,61 +1,35 @@
 /*************************************************************************
  *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
  *  $RCSfile: typeblob.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2005-08-23 08:26:55 $
+ *  last change: $Author: jsc $ $Date: 2005-09-09 13:50:40 $
  *
- *  The Contents of this file are made available subject to the terms of
- *  either of the following licenses
- *
- *         - GNU Lesser General Public License Version 2.1
- *         - Sun Industry Standards Source License Version 1.1
- *
- *  Sun Microsystems Inc., October, 2000
- *
- *  GNU Lesser General Public License Version 2.1
- *  =============================================
- *  Copyright 2000 by Sun Microsystems, Inc.
- *  901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License version 2.1, as published by the Free Software Foundation.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *  MA  02111-1307  USA
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
  *
  *
- *  Sun Industry Standards Source License Version 1.1
- *  =================================================
- *  The contents of this file are subject to the Sun Industry Standards
- *  Source License Version 1.1 (the "License"); You may not use this file
- *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
  *
- *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
- *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
- *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
- *  See the License for the specific provisions governing your rights and
- *  obligations concerning the Software.
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
  *
- *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
  *
- *  Copyright: 2000 by Sun Microsystems, Inc.
- *
- *  All Rights Reserved.
- *
- *  Contributor(s): _______________________________________
- *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
  *
  ************************************************************************/
 
@@ -254,6 +228,32 @@ void writeMethodData( typereg::Writer& rWriter, sal_uInt32 calculatedMemberOffse
     }
 }
 
+void writeAttributeMethodData(
+    typereg::Writer& rWriter, sal_uInt16& methodindex, RTMethodMode methodmode,
+    const Reference<XInterfaceAttributeTypeDescription2>& xAttr)
+{
+    Sequence<Reference<XCompoundTypeDescription> > seqExcp;
+    if (methodmode == RT_MODE_ATTRIBUTE_GET)
+        seqExcp = xAttr->getGetExceptions();
+    else
+        seqExcp = xAttr->getSetExceptions();
+
+    if (seqExcp.getLength() > 0) {
+        rWriter.setMethodData(methodindex, OUString(), methodmode,
+                              xAttr->getMemberName(),
+                              rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("void")),
+                              0, (sal_uInt16)seqExcp.getLength());
+
+        for (sal_Int32 i=0; i < seqExcp.getLength(); i++)
+        {
+            rWriter.setMethodExceptionTypeName(
+                methodindex, (sal_uInt16)i,
+                seqExcp[i]->getName().replace('.', '/'));
+        }
+        ++methodindex;
+    }
+}
+
 RTFieldAccess checkParameterizedTypeFlag(const Sequence< OUString >& typeParams,
                                          const OUString & memberType)
 {
@@ -403,7 +403,7 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
         sal_uInt16 baseCount = (sal_uInt16)baseTypes.getLength();
         sal_uInt16 optBaseCount = (sal_uInt16)optBaseTypes.getLength();
         sal_uInt16 memberCount = (sal_uInt16)memberTypes.getLength();
-        sal_uInt16 attrCount = 0;
+        sal_uInt16 attrCount = 0, attrmethods = 0;
         sal_uInt16 inheritedMemberCount = 0;
         sal_uInt16 i;
 
@@ -411,8 +411,15 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
         {
             xAttr = Reference< XInterfaceAttributeTypeDescription2 >(
                 memberTypes[i], UNO_QUERY);
-            if ( xAttr.is() )
+            if ( xAttr.is() ) {
                 attrCount++;
+
+                if (xAttr->getGetExceptions().getLength() > 0)
+                    attrmethods++;
+
+                if (xAttr->getSetExceptions().getLength() > 0)
+                    attrmethods++;
+            }
         }
 
         // check inherited members count
@@ -426,7 +433,7 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
         typereg::Writer writer(TYPEREG_VERSION_1, OUString(), OUString(),
                                RT_TYPE_INTERFACE, xPublished->isPublished(),
                                uTypeName.replace('.', '/'),
-                               baseCount, attrCount, memberCount-attrCount,
+                               baseCount, attrCount, memberCount-attrCount+attrmethods,
                                (sal_uInt16)optBaseTypes.getLength());
 
         // set super types
@@ -447,6 +454,7 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
         fieldAccess = RT_ACCESS_READWRITE;
         // reset attrCount, used for method index calculation
         attrCount = 0;
+        attrmethods = 0;
         for (i=0; i < memberCount; i++)
         {
             xAttr = Reference< XInterfaceAttributeTypeDescription2 >(
@@ -462,13 +470,18 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
                 if (xAttr->isBound())
                     fieldAccess |= RT_ACCESS_BOUND;
 
-
                 writer.setFieldData((sal_uInt16)memberTypes[i]->getPosition()
                                     - inheritedMemberCount,
                                     OUString(), OUString(), fieldAccess,
                                     memberTypes[i]->getMemberName(),
                                     xAttr->getType()->getName().replace('.','/'),
                                     RTConstValue());
+
+                writeAttributeMethodData(writer, attrmethods,
+                                         RT_MODE_ATTRIBUTE_GET, xAttr);
+                writeAttributeMethodData(writer, attrmethods,
+                                         RT_MODE_ATTRIBUTE_SET, xAttr);
+
                 continue;
             }
 
@@ -476,7 +489,7 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
                 memberTypes[i], UNO_QUERY);
             if ( xMethod.is() )
             {
-                writeMethodData(writer, attrCount+inheritedMemberCount,
+                writeMethodData(writer, attrCount+attrmethods+inheritedMemberCount,
                                 xMethod);
             }
         }
@@ -625,7 +638,7 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
         typereg::Writer writer(TYPEREG_VERSION_1, OUString(), OUString(),
                                RT_TYPE_TYPEDEF, xPublished->isPublished(),
                                uTypeName.replace('.', '/'),
-                               0, 0, 0, 0);
+                               1, 0, 0, 0);
 
         writer.setSuperTypeName(0, xTD->getReferencedType()
                                 ->getName().replace('.','/'));
