@@ -4,7 +4,7 @@ Release: %release
 Summary: OpenOffice.org desktop integration
 Name: openoffice.org-suse-menus
 Group: Office
-License: LGPL, SISSL
+License: LGPL
 Vendor: OpenOffice.org
 AutoReqProv: no
 BuildArch: noarch
