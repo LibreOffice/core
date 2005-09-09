@@ -4,7 +4,7 @@ Release: %release
 Summary: OpenOffice.org desktop integration
 Name: openoffice.org-mandriva-menus
 Group: Office
-License: LGPL, SISSL
+License: LGPL
 AutoReqProv: no
 BuildArch: noarch
 #
