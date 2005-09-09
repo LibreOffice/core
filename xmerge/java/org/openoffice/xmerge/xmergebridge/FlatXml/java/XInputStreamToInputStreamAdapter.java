@@ -1,61 +1,35 @@
 /*************************************************************************
  *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
  *  $RCSfile: XInputStreamToInputStreamAdapter.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aidan $ $Date: 2002-07-17 15:03:16 $
+ *  last change: $Author: rt $ $Date: 2005-09-09 11:47:34 $
  *
- *  The Contents of this file are made available subject to the terms of
- *  either of the following licenses
- *
- *         - GNU Lesser General Public License Version 2.1
- *         - Sun Industry Standards Source License Version 1.1
- *
- *  Sun Microsystems Inc., October, 2000
- *
- *  GNU Lesser General Public License Version 2.1
- *  =============================================
- *  Copyright 2000 by Sun Microsystems, Inc.
- *  901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License version 2.1, as published by the Free Software Foundation.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *  MA  02111-1307  USA
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
  *
  *
- *  Sun Industry Standards Source License Version 1.1
- *  =================================================
- *  The contents of this file are subject to the Sun Industry Standards
- *  Source License Version 1.1 (the "License"); You may not use this file
- *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
  *
- *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
- *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
- *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
- *  See the License for the specific provisions governing your rights and
- *  obligations concerning the Software.
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
  *
- *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
  *
- *  Copyright: 2000 by Sun Microsystems, Inc.
- *
- *  All Rights Reserved.
- *
- *  Contributor(s): _______________________________________
- *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
  *
  ************************************************************************/
 //package com.sun.star.lib.uno.adapter;
@@ -77,15 +51,15 @@ import java.io.InputStream;
  */
 public class XInputStreamToInputStreamAdapter extends InputStream {
 
-    /** 
+    /**
      *  Internal handle to the XInputStream
      */
     private XInputStream xin;
- 
+
     /**
      *  Constructor.
      *
-     *  @param  in  The <code>XInputStream</code> to be 
+     *  @param  in  The <code>XInputStream</code> to be
      *              accessed as an <code>InputStream</code>.
      */
     public XInputStreamToInputStreamAdapter (XInputStream in) {
@@ -113,12 +87,12 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
         }
     }
 
-    public int read () throws IOException { 
-        byte [][] tmp = new byte [1][1]; 
+    public int read () throws IOException {
+        byte [][] tmp = new byte [1][1];
     //System.out.println("read1\n");
         try {
             long bytesRead = xin.readBytes(tmp, 1);
-      
+
             if (bytesRead <= 0) {
                return (-1);
             } else {
@@ -135,8 +109,8 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
     }
 
     public int read (byte[] b) throws IOException {
-    
-        byte [][] tmp = new byte [1][b.length]; 
+
+        byte [][] tmp = new byte [1][b.length];
         int bytesRead;
     //System.out.println("read2\n");
         try {
@@ -162,7 +136,7 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
         try {
             long bytesRead = xin.readBytes(tmp,len);
             // Casting bytesRead to an int is okay, since the user can
-            // only pass in an integer length to read, so the bytesRead 
+            // only pass in an integer length to read, so the bytesRead
             // must <= len.
             //
             if (bytesRead <= 0) {
@@ -172,10 +146,10 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
         } else {
                 System.arraycopy(tmp[0], 0, b, off, len);
         }
-        
+
         return ((int)bytesRead);
-        
-        
+
+
         } catch (Exception e) {
             throw new IOException("reader error: "+e.toString());
         }
@@ -201,7 +175,7 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
                tmpIntVal = (int)tmpLongVal;
             }
             tmpLongVal -= tmpIntVal;
- 
+
             try {
                 xin.skipBytes(tmpIntVal);
             } catch (Exception e) {
