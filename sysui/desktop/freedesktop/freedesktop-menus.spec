@@ -7,8 +7,8 @@ BuildRoot: %_tmppath/%name-%version-build%unique
 #BuildRequires: sed
 #BuildRequires: perl
 Group: Office
-License: LGPL / SISSL
-Provides: openoffice.org-desktop-integration
+License: LGPL
+Provides: openoffice.org-desktop-integration, openofficeorg-freedesktop-menus
 Obsoletes: openofficeorg-freedesktop-menus
 BuildArch: noarch
 AutoReqProv: no
