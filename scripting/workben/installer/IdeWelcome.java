@@ -33,9 +33,9 @@ public class IdeWelcome extends javax.swing.JPanel implements ActionListener {
     private void initComponents() {//GEN-BEGIN:initComponents
         welcomePanel = new javax.swing.JPanel();
         area = new javax.swing.JTextArea();
-        
+
         setLayout(new java.awt.BorderLayout());
-        
+
         welcomePanel.setLayout(new java.awt.BorderLayout());
         //area.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         area.setEditable(false);
@@ -47,22 +47,22 @@ public class IdeWelcome extends javax.swing.JPanel implements ActionListener {
     }
     //if( InstUtil.hasJeditInstallation() ) {
     //  area.append("\n \tA version of jEdit has been detected.");
-    //} 
-        
+    //}
+
         welcomePanel.add(area, java.awt.BorderLayout.CENTER);
         add(welcomePanel, java.awt.BorderLayout.CENTER);
         NavPanel nav = new NavPanel(wizard, false, true, true, "", InstallWizard.IDEVERSIONS);
         nav.setNextListener(this);
         add(nav, java.awt.BorderLayout.SOUTH);
-        
+
         //Banner br = new Banner();
         //add(br, java.awt.BorderLayout.WEST);
-        
+
     }//GEN-END:initComponents
 
     public java.awt.Dimension getPreferredSize() {
         return new java.awt.Dimension(InstallWizard.DEFWIDTH, InstallWizard.DEFHEIGHT);
-    }    
+    }
 
     public void actionPerformed(ActionEvent ev)
     {
@@ -74,6 +74,6 @@ public class IdeWelcome extends javax.swing.JPanel implements ActionListener {
     private javax.swing.JPanel welcomePanel;
     private javax.swing.JTextArea area;
     private InstallWizard wizard;
-    
+
     // End of variables declaration//GEN-END:variables
 }
