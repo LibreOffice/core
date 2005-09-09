@@ -252,7 +252,8 @@ sub walkThroughJobFile
     {
         chomp($line);
         # DOS Hack grrrr...
-        while ($line =~ /$/)
+        while ($line =~ /
+$/)
         {
             $line = substr($line, 0, -1);
         }
