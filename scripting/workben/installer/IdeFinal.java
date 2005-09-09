@@ -17,7 +17,7 @@ import java.net.*;
 import javax.swing.*;
 
 public class IdeFinal extends javax.swing.JPanel implements ActionListener, InstallListener {
-    
+
     /** Creates new form Welcome */
     public IdeFinal(InstallWizard wizard) {
         this.wizard = wizard;
@@ -25,7 +25,7 @@ public class IdeFinal extends javax.swing.JPanel implements ActionListener, Inst
     ideupdater = null;
         initComponents();
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -35,14 +35,14 @@ public class IdeFinal extends javax.swing.JPanel implements ActionListener, Inst
         statusPanel = new javax.swing.JPanel();
     statusPanel.setBackground(java.awt.Color.white);
         statusLine = new javax.swing.JLabel("Ready", javax.swing.JLabel.CENTER);
-        
+
         setLayout(new java.awt.BorderLayout());
-        
+
         statusPanel.setLayout(new java.awt.BorderLayout());
-        
+
         statusLine.setText("Waiting to install IDE support.");
         statusPanel.add(statusLine, java.awt.BorderLayout.CENTER);
-        
+
         add(statusPanel, java.awt.BorderLayout.CENTER);
     nav = new NavPanel(wizard, true, true, true, InstallWizard.IDEVERSIONS, "");
     nav.setNextListener(this);
@@ -51,11 +51,11 @@ public class IdeFinal extends javax.swing.JPanel implements ActionListener, Inst
     nav.navNext.setText("Install");
     add(nav, java.awt.BorderLayout.SOUTH);
     }//GEN-END:initComponents
-    
+
     public java.awt.Dimension getPreferredSize() {
         return new java.awt.Dimension(InstallWizard.DEFWIDTH, InstallWizard.DEFHEIGHT);
     }
-    
+
     public void actionPerformed(ActionEvent e) {
     // navNext is "Install"
         if (e.getSource() == nav.navNext)
@@ -75,9 +75,9 @@ public class IdeFinal extends javax.swing.JPanel implements ActionListener, Inst
             String classespath=null;
             for (int i =0;i<locations.size();i++){
                 path= (String)locations.get(i);
-        
+
             //InstallWizard.currentPath = path;
-            ideupdater = new IdeUpdater( path, statusLine, progressBar );   
+            ideupdater = new IdeUpdater( path, statusLine, progressBar );
         ideupdater.addInstallListener(this);
         InstallWizard.setInstallStarted(true);
         //InstallWizard.setPatchedTypes(false);
@@ -86,22 +86,22 @@ public class IdeFinal extends javax.swing.JPanel implements ActionListener, Inst
         ideupdater.start();
             }
         }
-    
+
     // set to "Exit" at end of installation process
     if (e.getSource() == nav.navCancel) {
         int answer = JOptionPane.showConfirmDialog(wizard, "Are you sure you want to exit?");
-        if (answer == JOptionPane.YES_OPTION) 
+        if (answer == JOptionPane.YES_OPTION)
         {
             wizard.exitForm(null);
-        } 
-        else 
+        }
+        else
         {
             return;
         }
     }
     }// actionPerformed
-    
-    
+
+
     public void installationComplete(InstallationEvent ev) {
         //System.out.println("Detected installation complete");
     //if( InstUtil.hasNetbeansInstallation() || InstUtil.hasJeditInstallation() ) {
@@ -112,7 +112,7 @@ public class IdeFinal extends javax.swing.JPanel implements ActionListener, Inst
         nav.enableCancel(true);
         ideupdater = null;
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel statusPanel;
     private javax.swing.JLabel statusLine;
