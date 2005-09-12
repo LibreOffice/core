@@ -7,14 +7,14 @@ TARGET=gcc3_specific
 # ------------------------------------------------------------------
 
 
-.IF "$(COMID)"=="gcc3"
+.IF "$(SYSTEM_STDLIBS)" != "YES" && "$(COMID)"=="gcc3"
 
 .IF "$(OS)"!="MACOSX"
 .IF "$(OS)"!="IRIX"
 .IF "$(OS)"!="FREEBSD"
 
 
-all : $(SOLARLIBDIR)$/libstdc++.so.$(SHORTSTDCPP3) $(SOLARLIBDIR)$/libgcc_s.so.1 $(SOLARLIBDIR)$/libgcc_s.so 
+all .SEQUENTIAL : $(SOLARLIBDIR)$/libstdc++.so.$(SHORTSTDCPP3) $(SOLARLIBDIR)$/libgcc_s.so.1 $(SOLARLIBDIR)$/libgcc_s.so 
 
 
 $(SOLARLIBDIR)$/libstdc++.so.$(SHORTSTDCPP3) :
