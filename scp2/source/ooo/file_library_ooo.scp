@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.140 $
+ *  $Revision: 1.141 $
  *
- *  last change: $Author: kz $ $Date: 2005-09-13 10:33:11 $
+ *  last change: $Author: kz $ $Date: 2005-09-13 10:49:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2073,12 +2073,6 @@ STD_UNO_LIB_FILE( gid_File_Lib_Xmlfd, xmlfd )
 #ifdef SOLAR_JAVA
 UNO_JAR_FILE( gid_File_Jar_Xsltfilter, XSLTFilter )
 UNO_JAR_FILE( gid_File_Jar_Xsltvalidate, XSLTValidate )
-#endif
-
-#ifdef UNX
-
-STD_LIB_FILE( gid_File_Lib_Zip, zip )
-
 #endif
 
 #ifndef SYSTEM_LIBXML
