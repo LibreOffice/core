@@ -1,4 +1,4 @@
-This product is made available subject to the terms of GNU Lesser General Public License Version 2.1. A copy of the LGPL license can be found http://www.openoffice.org/project/www/license.html
+This product is made available subject to the terms of GNU Lesser General Public License Version 2.1. A copy of the LGPL license can be found at http://www.openoffice.org/project/www/license.html
 
 ------------------------------------
 Third Party Code. Additional copyright notices and license terms applicable to portions of the Software are set forth in the THIRDPARTYLICENSEREADME.html file.
