@@ -1,8 +1,7 @@
 OpenOffice
-{
+e
 	Settings
 	{
-		downloadname OOo_{productversion}_{os}_install_{languages}
 		variables
 		{
 			PRODUCTNAME OpenOffice.org
@@ -73,6 +72,7 @@ OpenOffice_wJRE
 		active			1
 		compression		5
 		script			setup_osljre
+		downloadname	OOo_{productversion}_{os}_installwjre_{languages}
 		include			.,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/bin.{minor}/$(LANG),{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/en-US/,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor},{solarcommonpath}/bin.{minor}/$(LANG),{solarpath}/bin.{minor}/$(LANG)/osl,{solarcommonpath}/bin.{minor}/$(LANG)/fat,{solarcommonpath}/bin.{minor}/en-US/,{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},{solarcommonpath}/xml.{minor}/office/instance,{solarcommonpath}/xml,../../external/common,{solarenvpath}/{os}/OOo_external,.
 		fail sun.star.releng.pack.errors@staroffice-news.germany.sun.com
 		mailinfo ms-eham02-01,packager,packager
