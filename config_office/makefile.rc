@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.50 $
+#   $Revision: 1.51 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 03:02:12 $
+#   last change: $Author: kz $ $Date: 2005-09-16 15:20:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -210,7 +210,6 @@ BUILD_SUBDIRS =  \
 	unoil \
 	unotools \
 	unoxml \
-	unzip \
 	ure \
 	uui \
 	vcl \
