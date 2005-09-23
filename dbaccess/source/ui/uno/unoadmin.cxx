@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoadmin.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:53:12 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:47:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,7 @@ namespace dbaui
     using namespace ::com::sun::star::beans;
 
 //=========================================================================
+DBG_NAME(ODatabaseAdministrationDialog)
 //-------------------------------------------------------------------------
 ODatabaseAdministrationDialog::ODatabaseAdministrationDialog(const Reference< XMultiServiceFactory >& _rxORB)
     :ODatabaseAdministrationDialogBase(_rxORB)
@@ -93,6 +94,8 @@ ODatabaseAdministrationDialog::ODatabaseAdministrationDialog(const Reference< XM
     ,m_pItemPoolDefaults(NULL)
     ,m_pCollection(NULL)
 {
+    DBG_CTOR(ODatabaseAdministrationDialog,NULL);
+
     m_pCollection = new ODsnTypeCollection();
     m_pCollection->initUserDriverTypes(m_xORB);
     ODbAdminDialog::createItemSet(m_pDatasourceItems, m_pItemPool, m_pItemPoolDefaults, m_pCollection);
@@ -112,6 +115,8 @@ ODatabaseAdministrationDialog::~ODatabaseAdministrationDialog()
 
     delete m_pCollection;
     m_pCollection = NULL;
+
+    DBG_DTOR(ODatabaseAdministrationDialog,NULL);
 }
 //-------------------------------------------------------------------------
 void ODatabaseAdministrationDialog::destroyDialog()
