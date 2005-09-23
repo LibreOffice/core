@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolboxcontroller.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:37:20 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:24:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,10 +186,6 @@ namespace dbaui
 
             // check if paste special is allowed, when not don't add DROPDOWN
             pToolBox->SetItemBits(m_nToolBoxId,pToolBox->GetItemBits(m_nToolBoxId) | TIB_DROPDOWN);
-
-            // refresh needs a different toolbox item style!
-            if ( m_aCommandURL.equalsAscii( ".uno:Refresh" ))
-                pToolBox->SetItemBits( m_nToolBoxId, pToolBox->GetItemBits( m_nToolBoxId ) | TIB_DROPDOWNONLY );
         }
     }
     // -----------------------------------------------------------------------------
