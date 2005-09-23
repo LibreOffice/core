@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formlinkdialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:12:45 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:52:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -486,11 +486,7 @@ namespace pcr
         if ( !_rxFormProps.is() )
             return;
 
-        _rxConnection.clear();
-        if ( !::dbtools::isEmbeddedInDatabase( _rxFormProps, _rxConnection ) )
-            _rxFormProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= _rxConnection;
-        if ( !_rxConnection.is() )
-            _rxConnection = ::dbtools::connectRowset( Reference< XRowSet >( _rxFormProps, UNO_QUERY ), m_xORB, sal_True );
+        _rxConnection = ::dbtools::connectRowset( Reference< XRowSet >( _rxFormProps, UNO_QUERY ), m_xORB, sal_True );
     }
 
     //------------------------------------------------------------------------
