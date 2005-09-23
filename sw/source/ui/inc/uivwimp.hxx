@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uivwimp.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:12:27 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:07:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,6 +144,11 @@ class SwView_Impl
     SwMailMergeConfigItem*      pConfigItem;
     sal_uInt16                  nMailMergeRestartPage;
     sal_Bool                    bMailMergeSourceView;
+
+    Point                       m_aEditingPosition;
+    bool                        m_bSelectObject;
+    bool                        m_bEditingPositionSet;
+
 public:
     SwView_Impl(SwView* pShell);
     ~SwView_Impl();
@@ -176,6 +181,21 @@ public:
     SwMailMergeConfigItem*  GetMailMergeConfigItem() {return pConfigItem;}
     sal_uInt16              GetMailMergeRestartPage() const {return nMailMergeRestartPage;}
     sal_Bool                IsMailMergeSourceView() const { return bMailMergeSourceView;  }
+
+    //#i33307# restore editing position
+    void                    SetRestorePosition(const Point& rCrsrPos, bool bSelectObj)
+                            {
+                                m_aEditingPosition = rCrsrPos;
+                                m_bSelectObject = bSelectObj;
+                                m_bEditingPositionSet = true;
+                            }
+    bool                    GetRestorePosition(Point& rCrsrPos, bool& rbSelectObj)
+                            {
+                                rCrsrPos = m_aEditingPosition;
+                                rbSelectObj = m_bSelectObject;
+                                return m_bEditingPositionSet;
+                            }
+
 };
 #endif
 
