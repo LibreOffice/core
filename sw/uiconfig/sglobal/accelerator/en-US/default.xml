@@ -93,7 +93,8 @@
     <accel:item accel:code="KEY_BACKSPACE" accel:shift="true" xlink:href=".uno:ShiftBackspace"/>
     <accel:item accel:code="KEY_UP" accel:shift="true" accel:mod1="true" xlink:href=".uno:GoToStartOfTable"/>
     <accel:item accel:code="KEY_DOWN" accel:shift="true" accel:mod1="true" xlink:href=".uno:GoToEnd"/>
-    <accel:item accel:code="KEY_F5" accel:shift="true" xlink:href=".uno:JumpToNextFrame"/>
+    <accel:item accel:code="KEY_F4" accel:shift="true" xlink:href=".uno:JumpToNextFrame"/>
+    <accel:item accel:code="KEY_F5" accel:shift="true" xlink:href=".uno:RestoreEditingView"/>
     <accel:item accel:code="KEY_PAGEUP" accel:mod1="true" xlink:href=".uno:JumpToHeader"/>
     <accel:item accel:code="KEY_PAGEDOWN" accel:mod1="true" xlink:href=".uno:JumpToFooter"/>
     <accel:item accel:code="KEY_PAGEDOWN" accel:shift="true" accel:mod1="true" xlink:href=".uno:JumpToFootnoteArea"/>
