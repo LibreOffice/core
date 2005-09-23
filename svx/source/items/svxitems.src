@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:41:09 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:57:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -305,7 +305,7 @@ String RID_SVXITEMS_COLOR_BLUE
 };
 String RID_SVXITEMS_COLOR_GREEN
 {
-    Text [ de ] = "Gr¸n" ;
+    Text [ de ] = "Gr√ºn" ;
     Text [ en-US ] = "Green" ;
     Text [ x-comment ] = " ";
 };
@@ -353,7 +353,7 @@ String RID_SVXITEMS_COLOR_LIGHTBLUE
 };
 String RID_SVXITEMS_COLOR_LIGHTGREEN
 {
-    Text [ de ] = "Hellgr¸n" ;
+    Text [ de ] = "Hellgr√ºn" ;
     Text [ en-US ] = "Light Green" ;
     Text [ x-comment ] = " ";
 };
@@ -383,7 +383,7 @@ String RID_SVXITEMS_COLOR_YELLOW
 };
 String RID_SVXITEMS_COLOR_WHITE
 {
-    Text [ de ] = "Weiﬂ" ;
+    Text [ de ] = "Wei√ü" ;
     Text [ en-US ] = "White" ;
     Text [ x-comment ] = " ";
 };
@@ -456,7 +456,7 @@ String RID_SVXITEMS_ITALIC_NONE
 };
 String RID_SVXITEMS_ITALIC_OBLIQUE
 {
-    Text [ de ] = "Schr‰ger kursiv" ;
+    Text [ de ] = "Schr√§ger kursiv" ;
     Text [ en-US ] = "Oblique italic" ;
     Text [ x-comment ] = " ";
 };
@@ -473,13 +473,13 @@ String RID_SVXITEMS_WEIGHT_DONTKNOW
 };
 String RID_SVXITEMS_WEIGHT_THIN
 {
-    Text [ de ] = "d¸nn" ;
+    Text [ de ] = "d√ºnn" ;
     Text [ en-US ] = "thin" ;
     Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_WEIGHT_ULTRALIGHT
 {
-    Text [ de ] = "ultra d¸nn" ;
+    Text [ de ] = "ultra d√ºnn" ;
     Text [ en-US ] = "ultra thin" ;
     Text [ x-comment ] = " ";
 };
@@ -710,7 +710,7 @@ String RID_SVXITEMS_CASEMAP_TITEL
 };
 String RID_SVXITEMS_CASEMAP_KAPITAELCHEN
 {
-    Text [ de ] = "Kapit‰lchen" ;
+    Text [ de ] = "Kapit√§lchen" ;
     Text [ en-US ] = "Small caps" ;
     Text [ x-comment ] = " ";
 };
@@ -802,7 +802,7 @@ String RID_SVXITEMS_TAB_DECIMAL_CHAR
 };
 String RID_SVXITEMS_TAB_FILL_CHAR
 {
-    Text [ de ] = "F¸llzeichen:" ;
+    Text [ de ] = "F√ºllzeichen:" ;
     Text [ en-US ] = "Fill character:" ;
     Text [ x-comment ] = " ";
 };
@@ -839,7 +839,7 @@ String RID_SVXITEMS_TAB_ADJUST_DEFAULT
  // Typ-Namen der SlotIds ----------------------------------------------------
 String RID_ATTR_ZOOM
 {
-    Text [ de ] = "Maﬂstab" ;
+    Text [ de ] = "Ma√üstab" ;
     Text [ en-US ] = "Scale" ;
     Text [ x-comment ] = " ";
 };
@@ -887,7 +887,7 @@ String RID_ATTR_CHAR_POSTURE
 };
 String RID_ATTR_CHAR_WEIGHT
 {
-    Text [ de ] = "Schriftst‰rke" ;
+    Text [ de ] = "Schriftst√§rke" ;
     Text [ en-US ] = "Font weight" ;
     Text [ x-comment ] = " ";
 };
@@ -929,7 +929,7 @@ String RID_ATTR_CHAR_FONTHEIGHT
 };
 String RID_ATTR_CHAR_PROPSIZE
 {
-    Text [ de ] = "Rel. Schriftgrˆﬂe" ;
+    Text [ de ] = "Rel. Schriftgr√∂√üe" ;
     Text [ en-US ] = "Rel. Font Size" ;
     Text [ x-comment ] = " ";
 };
@@ -1179,7 +1179,7 @@ String RID_ATTR_PARA_MODEL
 };
 String RID_ATTR_PARA_KEEP
 {
-    Text [ de ] = "Abs‰tze zusammenhalten" ;
+    Text [ de ] = "Abs√§tze zusammenhalten" ;
     Text [ en-US ] = "Keep with next paragraph" ;
     Text [ x-comment ] = " ";
 };
@@ -1220,7 +1220,7 @@ String RID_ATTR_CHAR_CJK_POSTURE
 };
 String RID_ATTR_CHAR_CJK_WEIGHT
 {
-    Text [ de ] = "Schriftst‰rke asiatische Schrift" ;
+    Text [ de ] = "Schriftst√§rke asiatische Schrift" ;
     Text [ en-US ] = "Weight of Asian fonts" ;
 };
 String RID_ATTR_CHAR_CTL_FONT
@@ -1245,7 +1245,7 @@ String RID_ATTR_CHAR_CTL_POSTURE
 };
 String RID_ATTR_CHAR_CTL_WEIGHT
 {
-    Text [ de ] = "Schriftst‰rke komplexe Skripte" ;
+    Text [ de ] = "Schriftst√§rke komplexe Skripte" ;
     Text [ en-US ] = "Weight of complex scripts" ;
 };
 String RID_ATTR_CHAR_TWO_LINES
@@ -1265,7 +1265,7 @@ String RID_ATTR_PARA_SCRIPTSPACE
 };
 String RID_ATTR_PARA_HANGPUNCTUATION
 {
-    Text [ de ] = "H‰ngende Interpunktion" ;
+    Text [ de ] = "H√§ngende Interpunktion" ;
     Text [ en-US ] = "Hanging punctuation";
 };
 String RID_ATTR_PARA_FORBIDDEN_RULES
@@ -1301,7 +1301,7 @@ String RID_SINGLE_LINE0
 };
 String RID_SINGLE_LINE1
 {
-    Text [ de ] = "Einfach, d¸nn" ;
+    Text [ de ] = "Einfach, d√ºnn" ;
     Text [ en-US ] = "Single, thin" ;
     Text [ x-comment ] = " ";
 };
@@ -1331,61 +1331,61 @@ String RID_DOUBLE_LINE0
 };
 String RID_DOUBLE_LINE1
 {
-    Text [ de ] = "Doppelt, Haarlinie, Abstand: groﬂ" ;
+    Text [ de ] = "Doppelt, Haarlinie, Abstand: gro√ü" ;
     Text [ en-US ] = "Double, fine line, spacing: large" ;
     Text [ x-comment ] = " ";
 };
 String RID_DOUBLE_LINE2
 {
-    Text [ de ] = "Doppelt, d¸nn, Abstand: klein" ;
+    Text [ de ] = "Doppelt, d√ºnn, Abstand: klein" ;
     Text [ en-US ] = "Double, thin, spacing: small" ;
     Text [ x-comment ] = " ";
 };
 String RID_DOUBLE_LINE3
 {
-    Text [ de ] = "Doppelt, dick, Abstand: groﬂ" ;
+    Text [ de ] = "Doppelt, dick, Abstand: gro√ü" ;
     Text [ en-US ] = "Double, thick, spacing: large" ;
     Text [ x-comment ] = " ";
 };
 String RID_DOUBLE_LINE4
 {
-    Text [ de ] = "Doppelt, Innen: Haarlinie, Auﬂen: d¸nn, Abstand: groﬂ" ;
+    Text [ de ] = "Doppelt, Innen: Haarlinie, Au√üen: d√ºnn, Abstand: gro√ü" ;
     Text [ en-US ] = "Double, inside: fine lines, outside: thin, spacing: large" ;
     Text [ x-comment ] = " ";
 };
 String RID_DOUBLE_LINE5
 {
-    Text [ de ] = "Doppelt, Innen: Haarlinie, Auﬂen: dick, Abstand: groﬂ" ;
+    Text [ de ] = "Doppelt, Innen: Haarlinie, Au√üen: dick, Abstand: gro√ü" ;
     Text [ en-US ] = "Double, inside: fine lines, outside: thick, spacing: large" ;
     Text [ x-comment ] = " ";
 };
 String RID_DOUBLE_LINE6
 {
-    Text [ de ] = "Doppelt, Innen: Haarlinie, Auﬂen: sehr dick, Abstand: groﬂ" ;
+    Text [ de ] = "Doppelt, Innen: Haarlinie, Au√üen: sehr dick, Abstand: gro√ü" ;
     Text [ en-US ] = "Double, inside: fine lines, outside: very thick, spacing: large" ;
     Text [ x-comment ] = " ";
 };
 String RID_DOUBLE_LINE7
 {
-    Text [ de ] = "Doppelt, Innen: d¸nn, Auﬂen: dick, Abstand: groﬂ" ;
+    Text [ de ] = "Doppelt, Innen: d√ºnn, Au√üen: dick, Abstand: gro√ü" ;
     Text [ en-US ] = "Double, inside: thin, outside: thick, spacing: large" ;
     Text [ x-comment ] = " ";
 };
 String RID_DOUBLE_LINE8
 {
-    Text [ de ] = "Doppelt, Innen: dick, Auﬂen: d¸nn, Abstand: klein" ;
+    Text [ de ] = "Doppelt, Innen: dick, Au√üen: d√ºnn, Abstand: klein" ;
     Text [ en-US ] = "Double, inside: thick, outside: thin, spacing: small" ;
     Text [ x-comment ] = " ";
 };
 String RID_DOUBLE_LINE9
 {
-    Text [ de ] = "Doppelt, Innen: dick, Auﬂen: sehr dick, Abstand: groﬂ" ;
+    Text [ de ] = "Doppelt, Innen: dick, Au√üen: sehr dick, Abstand: gro√ü" ;
     Text [ en-US ] = "Double, inside: thick, outside: very thick, spacing: large" ;
     Text [ x-comment ] = " ";
 };
 String RID_DOUBLE_LINE10
 {
-    Text [ de ] = "Doppelt, Innen: sehr dick, Auﬂen: dick, Abstand: groﬂ" ;
+    Text [ de ] = "Doppelt, Innen: sehr dick, Au√üen: dick, Abstand: gro√ü" ;
     Text [ en-US ] = "Double, inside: very thick, outside: thick, Spacing: large" ;
     Text [ x-comment ] = " ";
 };
@@ -1493,7 +1493,7 @@ String RID_SVXITEMS_ORI_BOTTOMTOP
 };
 String RID_SVXITEMS_ORI_STACKED
 {
-    Text [ de ] = "‹bereinander" ;
+    Text [ de ] = "√úbereinander" ;
     Text [ en-US ] = "Stacked" ;
     Text [ x-comment ] = " ";
 };
@@ -1600,13 +1600,13 @@ String RID_SVXITEMS_OPAQUE_FALSE
 };
 String RID_SVXITEMS_FMTKEEP_TRUE
 {
-    Text [ de ] = "Abs‰tze zusammenhalten" ;
+    Text [ de ] = "Abs√§tze zusammenhalten" ;
     Text [ en-US ] = "Keep with next paragraph" ;
     Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_FMTKEEP_FALSE
 {
-    Text [ de ] = "Abs‰tze nicht zusammenhalten" ;
+    Text [ de ] = "Abs√§tze nicht zusammenhalten" ;
     Text [ en-US ] = "Don't Keep Paragraphs Together" ;
     Text [ x-comment ] = " ";
 };
@@ -1624,37 +1624,37 @@ String RID_SVXITEMS_FMTSPLIT_FALSE
 };
 String RID_SVXITEMS_PROT_CONTENT_TRUE
 {
-    Text [ de ] = "Inhalt gesch¸tzt" ;
+    Text [ de ] = "Inhalt gesch√ºtzt" ;
     Text [ en-US ] = "Contents protected" ;
     Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_PROT_CONTENT_FALSE
 {
-    Text [ de ] = "Inhalt nicht gesch¸tzt" ;
+    Text [ de ] = "Inhalt nicht gesch√ºtzt" ;
     Text [ en-US ] = "Contents not protected" ;
     Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_PROT_SIZE_TRUE
 {
-    Text [ de ] = "Grˆﬂe gesch¸tzt" ;
+    Text [ de ] = "Gr√∂√üe gesch√ºtzt" ;
     Text [ en-US ] = "Size protected" ;
     Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_PROT_SIZE_FALSE
 {
-    Text [ de ] = "Grˆﬂe nicht gesch¸tzt" ;
+    Text [ de ] = "Gr√∂√üe nicht gesch√ºtzt" ;
     Text [ en-US ] = "Size not protected" ;
     Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_PROT_POS_TRUE
 {
-    Text [ de ] = "Position gesch¸tzt" ;
+    Text [ de ] = "Position gesch√ºtzt" ;
     Text [ en-US ] = "Position protected" ;
     Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_PROT_POS_FALSE
 {
-    Text [ de ] = "Position nicht gesch¸tzt" ;
+    Text [ de ] = "Position nicht gesch√ºtzt" ;
     Text [ en-US ] = "Position not protected" ;
     Text [ x-comment ] = " ";
 };
@@ -1762,7 +1762,7 @@ String RID_SVXITEMS_SIZE_WIDTH
 };
 String RID_SVXITEMS_SIZE_HEIGHT
 {
-    Text [ de ] = "Hˆhe: " ;
+    Text [ de ] = "H√∂he: " ;
     Text [ en-US ] = "Height: " ;
     Text [ x-comment ] = " ";
 };
@@ -1851,7 +1851,7 @@ String RID_SVXITEMS_PAGE_COMPLETE
 };
 String RID_SVXITEMS_PAGE_NUM_CHR_UPPER
 {
-    Text [ de ] = "Groﬂbuchstaben" ;
+    Text [ de ] = "Gro√übuchstaben" ;
     Text [ en-US ] = "Capitals" ;
     Text [ x-comment ] = " ";
 };
@@ -1863,13 +1863,13 @@ String RID_SVXITEMS_PAGE_NUM_CHR_LOWER
 };
 String RID_SVXITEMS_PAGE_NUM_ROM_UPPER
 {
-    Text [ de ] = "Rˆmisch groﬂ" ;
+    Text [ de ] = "R√∂misch gro√ü" ;
     Text [ en-US ] = "Uppercase Roman" ;
     Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_PAGE_NUM_ROM_LOWER
 {
-    Text [ de ] = "Rˆmisch klein" ;
+    Text [ de ] = "R√∂misch klein" ;
     Text [ en-US ] = "Lowercase Roman" ;
     Text [ x-comment ] = " ";
 };
@@ -2044,7 +2044,7 @@ String RID_SVXITEMS_EMPHASIS_CIRCLE_STYLE
 String RID_SVXITEMS_EMPHASIS_DISC_STYLE
 {
 // ??? disc == filled ring
-    Text [ de ] = "gef¸llter Kreis ";
+    Text [ de ] = "gef√ºllter Kreis ";
     Text [ en-US ] = "Filled circle ";
 };
 String RID_SVXITEMS_EMPHASIS_ACCENT_STYLE
@@ -2055,7 +2055,7 @@ String RID_SVXITEMS_EMPHASIS_ACCENT_STYLE
 
 String RID_SVXITEMS_EMPHASIS_ABOVE_POS
 {
-    Text [ de ] = "Dar¸ber";
+    Text [ de ] = "Dar√ºber";
     Text [ en-US ] = "Above";
 };
 String RID_SVXITEMS_EMPHASIS_BELOW_POS
@@ -2088,23 +2088,23 @@ String RID_SVXITEMS_SCRPTSPC_ON
 
 String RID_SVXITEMS_HNGPNCT_OFF
 {
-    Text [ de ] = "Keine h‰ngende Interpunktion am Zeilenende";
+    Text [ de ] = "Keine h√§ngende Interpunktion am Zeilenende";
     Text [ en-US ] = "No hanging punctuation at line end";
 };
 String RID_SVXITEMS_HNGPNCT_ON
 {
-    Text [ de ] = "H‰ngende Interpunktion am Zeilenende";
+    Text [ de ] = "H√§ngende Interpunktion am Zeilenende";
     Text [ en-US ] = "Hanging punctuation at line end";
 };
 String RID_SVXITEMS_FORBIDDEN_RULE_OFF
 {
-    Text [ de ] = "Verbotene Zeichen an Zeilenanfang und -ende ber¸cksichtigen";
+    Text [ de ] = "Verbotene Zeichen an Zeilenanfang und -ende ber√ºcksichtigen";
     Text [ en-US ] = "Apply list of forbidden characters to beginning and end of lines";
 };
 
 String RID_SVXITEMS_FORBIDDEN_RULE_ON
 {
-    Text [ de ] = "Verbotene Zeichen an Zeilenanfang und -ende nicht ber¸cksichtigen";
+    Text [ de ] = "Verbotene Zeichen an Zeilenanfang und -ende nicht ber√ºcksichtigen";
     Text [ en-US ] = "Don't apply list of forbidden characters to beginning and end of lines";
 };
 
@@ -2116,7 +2116,7 @@ String RID_SVXITEMS_CHARROTATE_OFF
 };
 String RID_SVXITEMS_CHARROTATE
 {
-    Text [ de ] = "Zeichen um $(ARG1)∞ gedreht";
+    Text [ de ] = "Zeichen um $(ARG1)¬∞ gedreht";
     Text [ en-US ] = "Character rotated by $(ARG1)¬∞";
 };
 String RID_SVXITEMS_CHARROTATE_FITLINE
@@ -2198,7 +2198,7 @@ String RID_SVXITEMS_FRMDIR_VERT_TOP_LEFT
 };
 String RID_SVXITEMS_FRMDIR_ENVIRONMENT
 {
-    Text [ de ] = "Textfluss-Einstellung des ¸bergeordneten Objektes verwenden";
+    Text [ de ] = "Textfluss-Einstellung des √ºbergeordneten Objektes verwenden";
     Text [ en-US ] = "Use superordinate object text direction setting";
 };
 
