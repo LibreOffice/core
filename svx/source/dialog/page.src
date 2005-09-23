@@ -4,9 +4,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:50:34 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:45:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@ TabPage RID_SVXPAGE_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 48 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
-        Text [ de ] = "Höh~e" ;
+        Text [ de ] = "HÃ¶h~e" ;
         Text [ en-US ] = "~Height" ;
         Left = TRUE ;
         Text [ x-comment ] = " ";
@@ -181,7 +181,7 @@ TabPage RID_SVXPAGE_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 90 ) ;
         Size = MAP_APPFONT ( 95 , 8 ) ;
-        Text [ de ] = "Seitenränder" ;
+        Text [ de ] = "SeitenrÃ¤nder" ;
         Text [ en-US ] = "Margins";
     };
     FixedText FT_LEFT_MARGIN
@@ -438,13 +438,13 @@ TabPage RID_SVXPAGE_PAGE
     };
     String STR_OUTSIDE
     {
-        Text [ de ] = "Au~ßen" ;
+        Text [ de ] = "Au~ÃŸen" ;
         Text [ en-US ] = "O~uter" ;
         Text [ x-comment ] = " ";
     };
     String STR_QUERY_PRINTRANGE
     {
-        Text [ de ] = "Ihre Einstellungen für die Ränder liegen außerhalb des Druckbereichs.\n\nWollen Sie trotzdem diese Einstellungen übernehmen?" ;
+        Text [ de ] = "Ihre Einstellungen fÃ¼r die RÃ¤nder liegen auÃŸerhalb des Druckbereichs.\n\nWollen Sie trotzdem diese Einstellungen Ã¼bernehmen?" ;
         Text [ en-US ] = "The margin settings are out of print range.\n\nDo you still want to apply these settings?";
         Text [ x-comment ] = " ";
     };
@@ -639,7 +639,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_STD
         < "C6" ; PAPERSIZE_C6 ; > ;
         < "C65" ; PAPERSIZE_C65 ; > ;
         < "DL" ; PAPERSIZE_DL ; > ;
-        < "Env. #6¾" ; PAPERSIZE_COM675; > ;
+        < "Env. #6Â¾" ; PAPERSIZE_COM675; > ;
         < "Env. Monarch" ; PAPERSIZE_MONARCH; > ;
         < "Env. #9" ; PAPERSIZE_COM9; > ;
         < "Env. #10" ; PAPERSIZE_COM10; > ;
@@ -647,7 +647,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_STD
         < "Env. #12" ; PAPERSIZE_COM12; > ;
         < "16 kai" ; PAPERSIZE_KAI16; > ;
         < "32 kai" ; PAPERSIZE_KAI32; > ;
-        < "32 kai groß" ; PAPERSIZE_KAI32BIG; > ;
+        < "32 kai groÃŸ" ; PAPERSIZE_KAI32BIG; > ;
     };
     ItemList [ x-comment ] =
     {
@@ -739,7 +739,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "Bildschirm" ; PAPERSIZE_SCREEN ; > ;
         < "16 kai" ; PAPERSIZE_KAI16; > ;
         < "32 kai" ; PAPERSIZE_KAI32; > ;
-        < "32 kai groß" ; PAPERSIZE_KAI32BIG; > ;
+        < "32 kai groÃŸ" ; PAPERSIZE_KAI32BIG; > ;
     };
     ItemList [ x-comment ] =
     {
