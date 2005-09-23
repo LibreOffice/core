@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:11:49 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:58:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@ CheckBox CB_READ_ONLY
 String STR_LINKEDIT_TEXT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Verknüpfungen bearbeiten : Verkn³pfungen bearbeiten */
-    Text [ de ] = "Verknüpfungen bearbeiten" ;
+    Text [ de ] = "VerknÃ¼pfungen bearbeiten" ;
     Text [ en-US ] = "Edit links" ;
     Text [ x-comment ] = " ";
 };
@@ -78,12 +78,12 @@ QueryBox RID_QB_SPELL_CONTINUE
 {
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_YES ;
-    MESSAGE [ de ]= "Überprüfung am Anfang des Dokumentes fortsetzen?" ;
+    MESSAGE [ de ]= "ÃœberprÃ¼fung am Anfang des Dokumentes fortsetzen?" ;
     MESSAGE [ en-US ] = "Continue checking at beginning of document?" ;
 };
 String STR_SPELLING_COMPLETED
 {
-    Text [ de ]= "Die Rechtschreibprüfung ist abgeschlossen!" ;
+    Text [ de ]= "Die RechtschreibprÃ¼fung ist abgeschlossen!" ;
     Text [ en-US ] = "The spellcheck is complete." ;
 };
 
