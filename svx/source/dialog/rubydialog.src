@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rubydialog.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:58:14 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:46:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,7 +197,7 @@ ModelessDialog RID_SVXDLG_RUBY
     {
         Pos = MAP_APPFONT ( 80 , 82 ) ;
         Size = MAP_APPFONT ( 89 , 8 ) ;
-        Text [ de ] = "~Zeichenvorlage f¸r Ruby-Text" ;
+        Text [ de ] = "~Zeichenvorlage f√ºr Ruby-Text" ;
         Text [ en-US ] = "Character Style for ruby text";
     };
     ListBox LB_CHAR_STYLE
@@ -233,14 +233,14 @@ ModelessDialog RID_SVXDLG_RUBY
         DefButton = TRUE;
         Pos = MAP_APPFONT ( 65 , 175 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~‹bernehmen" ;
+        Text [ de ] = "~√úbernehmen" ;
         Text [ en-US ] = "~Apply";
     };
     PushButton PB_CLOSE
     {
         Pos = MAP_APPFONT (  118, 175 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Sch~lieﬂen" ;
+        Text [ de ] = "Sch~lie√üen" ;
         Text [ en-US ] = "~Close";
     };
     HelpButton PB_HELP
