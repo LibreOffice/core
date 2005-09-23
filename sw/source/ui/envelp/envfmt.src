@@ -4,9 +4,9 @@
  *
  *  $RCSfile: envfmt.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:25:11 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:01:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ TabPage TP_ENV_FMT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Empfänger" ;
+        Text [ de ] = "EmpfÃ¤nger" ;
         Text [ en-US ] = "Addressee" ;
         Text [ x-comment ] = " ";
     };
@@ -217,7 +217,7 @@ TabPage TP_ENV_FMT
     {
         Pos = MAP_APPFONT ( 6 , 109 ) ;
         Size = MAP_APPFONT ( 148 , 8 ) ;
-        Text [ de ] = "Größe" ;
+        Text [ de ] = "GrÃ¶ÃŸe" ;
         Text [ en-US ] = "Size" ;
         Text [ x-comment ] = " ";
     };
@@ -269,7 +269,7 @@ TabPage TP_ENV_FMT
         Pos = MAP_APPFONT ( 12 , 154 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Left = TRUE ;
-        Text [ de ] = "~Höhe" ;
+        Text [ de ] = "~HÃ¶he" ;
         Text [ en-US ] = "~Height" ;
         Text [ x-comment ] = " ";
     };
