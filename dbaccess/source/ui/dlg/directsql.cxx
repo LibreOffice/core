@@ -4,9 +4,9 @@
  *
  *  $RCSfile: directsql.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:58:32 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:30:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,8 @@ namespace dbaui
     //====================================================================
     //= DirectSQLDialog
     //====================================================================
-    //--------------------------------------------------------------------
+DBG_NAME(DirectSQLDialog)
+//--------------------------------------------------------------------
     DirectSQLDialog::DirectSQLDialog( Window* _pParent, const Reference< XConnection >& _rxConn )
         :ModalDialog(_pParent, ModuleRes(DLG_DIRECTSQL))
         ,m_aFrame               (this, ResId(FL_SQL))
@@ -119,6 +120,8 @@ namespace dbaui
         ,m_nStatusCount(1)
         ,m_xConnection(_rxConn)
     {
+        DBG_CTOR(DirectSQLDialog,NULL);
+
         FreeResource();
 
         m_aSQL.GrabFocus();
@@ -146,6 +149,8 @@ namespace dbaui
             stopAllComponentListening();
         }
         delete m_pSQLHistory;
+
+        DBG_DTOR(DirectSQLDialog,NULL);
     }
 
     //--------------------------------------------------------------------
