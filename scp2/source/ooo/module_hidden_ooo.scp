@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:40:09 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:55:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -434,6 +434,8 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Cli_Uno,
 	gid_File_Lib_Cli_Ure,
 	gid_File_Lib_Cli_Ure_Assembly,
+	gid_File_Lib_Policy_Cli_Types_Assembly,
+	gid_File_Lib_Policy_Cli_Types_Config,
 	gid_File_Lib_Dl,
 	gid_File_Lib_Dnd,
 	gid_File_Lib_Dtrans,
