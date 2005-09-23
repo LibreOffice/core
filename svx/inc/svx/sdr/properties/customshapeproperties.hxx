@@ -4,9 +4,9 @@
  *
  *  $RCSfile: customshapeproperties.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:04:53 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:49:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,9 @@ namespace sdr
 
             // Clone() operator, normally just calls the local copy constructor
             virtual BaseProperties& Clone(SdrObject& rObj) const;
+
+            // This is the notifyer from SfxListener
+            virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
         };
     } // end of namespace properties
 } // end of namespace sdr
