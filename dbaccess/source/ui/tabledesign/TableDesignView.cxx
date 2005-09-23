@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableDesignView.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:41:11 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:46:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,10 +88,13 @@ using namespace ::com::sun::star::beans;
 
 //==================================================================
 // class OTableBorderWindow
+DBG_NAME(OTableBorderWindow)
 //==================================================================
 OTableBorderWindow::OTableBorderWindow(Window* pParent) : Window(pParent,WB_BORDER)
     ,m_aHorzSplitter( this )
 {
+    DBG_CTOR(OTableBorderWindow,NULL);
+
     ImplInitSettings( sal_True, sal_True, sal_True );
     //////////////////////////////////////////////////////////////////////
     // Childs erzeugen
@@ -125,6 +128,8 @@ OTableBorderWindow::~OTableBorderWindow()
         ::std::auto_ptr<Window> aTemp(m_pFieldDescWin);
         m_pFieldDescWin = NULL;
     }
+
+    DBG_DTOR(OTableBorderWindow,NULL);
 }
 // -----------------------------------------------------------------------------
 void OTableBorderWindow::Resize()
