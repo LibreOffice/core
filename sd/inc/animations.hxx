@@ -11,10 +11,10 @@ struct AfterEffectNode
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > mxNode;
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > mxMaster;
-    sal_Int32 mnMasterRel;
+    bool mbOnNextEffect;
 
-    AfterEffectNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xMaster, sal_Int32 nMasterRel )
-        : mxNode( xNode ), mxMaster( xMaster ), mnMasterRel( nMasterRel ) {}
+    AfterEffectNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xMaster, bool bOnNextEffect )
+        : mxNode( xNode ), mxMaster( xMaster ), mbOnNextEffect( bOnNextEffect ) {}
 };
 
 typedef std::list< AfterEffectNode > AfterEffectNodeList;
