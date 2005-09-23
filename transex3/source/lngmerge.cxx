@@ -4,9 +4,8 @@
  *
  *  $RCSfile: lngmerge.cxx,v $
  *
- *  $Revision: 1.21 $
- *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:01:13 $
+ *  $Revision: 1.22 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:30:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +93,8 @@ void LngParser::FillInFallbacks( ByteStringHashMap Text )
     for( long int n = 0; n < aLanguages.size(); n++ ){
         sCur = aLanguages[ n ];
 
-        if( !sCur.EqualsIgnoreCaseAscii("de") && !sCur.EqualsIgnoreCaseAscii("en-US") ){
+        if( Export::isAllowed( sCur ) ){
+            //!sCur.EqualsIgnoreCaseAscii("de") && !sCur.EqualsIgnoreCaseAscii("en-US") ){
         //if( !sCur.Equals(ByteString("de")) && !sCur.Equals(ByteString("en-US"))){
             ByteString sFallbackLang = Export::GetFallbackLanguage( sCur );
             if( sFallbackLang.Len() ){
@@ -189,8 +189,8 @@ BOOL LngParser::CreateSDF(
             //if( sCur.EqualsIgnoreCaseAscii("de") ){
             //    sOutput = UTF8Converter::ConvertToUTF8( sOutput , RTL_TEXTENCODING_MS_1252 );
             //}
-
-            aSDFStream.WriteLine( sOutput );
+            if( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && !Export::isMergingGermanAllowed( rPrj ) ) )
+                aSDFStream.WriteLine( sOutput );
         }
     }
  }
@@ -311,7 +311,8 @@ BOOL LngParser::Merge(
                         if ( sNewText.Len()) {
                             ByteString *pLine = pLines->GetObject( nPos );
 
-                            if( !sLang.EqualsIgnoreCaseAscii("de") && !sLang.EqualsIgnoreCaseAscii("en-US") ){
+                            if( Export::isAllowed( sLang ) ) {
+                                    //!sLang.EqualsIgnoreCaseAscii("de") && !sLang.EqualsIgnoreCaseAscii("en-US") ){
                                 ByteString sText( sLang );
                                 sText += " = \"";
                                 sText += sNewText;
@@ -339,10 +340,17 @@ BOOL LngParser::Merge(
             for( long int n = 0; n < aLanguages.size(); n++ ){
                 sCur = aLanguages[ n ];
 
-                if( ( !sCur.EqualsIgnoreCaseAscii("de") || ( sCur.EqualsIgnoreCaseAscii("de") && Export::isMergingGermanAllowed( rPrj ) ) )
+//<<<<<<< lngmerge.cxx
+                if( Export::isAllowed( sCur ) && ( !sCur.EqualsIgnoreCaseAscii("de") || ( sCur.EqualsIgnoreCaseAscii("de") && Export::isMergingGermanAllowed( rPrj ) ) )
                     &&!sCur.EqualsIgnoreCaseAscii("en-US") && !Text[ sCur ].Len() && pEntrys ){
 
                     ByteString sNewText;
+//=======
+//                if( ( !sCur.EqualsIgnoreCaseAscii("de") || ( sCur.EqualsIgnoreCaseAscii("de") && Export::isMergingGermanAllowed( rPrj ) ) )
+//                    &&!sCur.EqualsIgnoreCaseAscii("en-US") && !Text[ sCur ].Len() && pEntrys ){
+//
+//                    ByteString sNewText;
+//>>>>>>> 1.20
                     pEntrys->GetText( sNewText, STRING_TYP_TEXT, sCur, TRUE );
                     if (( sNewText.Len()) &&
                         !(( sCur.Equals("x-comment") ) && ( sNewText == "-" )))
