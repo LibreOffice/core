@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ttmsg.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:22:57 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:39:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,12 +64,12 @@ String S_READING_FILE
 };
 String S_CANNOT_OPEN_FILE
 {
-    Text [ de ] = "Kann Datei nicht öffnen: ($Arg1)";
+    Text [ de ] = "Kann Datei nicht Ã¶ffnen: ($Arg1)";
     Text[ en-US ] = "File cannot be opened: ($Arg1)";
 };
 String S_INVALID_LINE
 {
-    Text [ de ] = "Zeile \"($Arg1)\" Ist ungültig.";
+    Text [ de ] = "Zeile \"($Arg1)\" Ist ungÃ¼ltig.";
     Text[ en-US ] = "Line \"($Arg1)\" is invalid.";
 };
 String S_SHORTNAME_UNKNOWN
@@ -84,7 +84,7 @@ String S_LONGNAME_UNKNOWN
 };
 String S_FIRST_SHORTNAME_REQ_ASTRX
 {
-    Text [ de ] = "Erster Kurzname muss mit * beginnen. Überspringe.";
+    Text [ de ] = "Erster Kurzname muss mit * beginnen. Ãœberspringe.";
     Text[ en-US ] = "First short-name must start with * . Ignoring.";
 };
 String S_TIMOUT_WAITING
@@ -164,7 +164,7 @@ String S_RETURNED_VALUE_ID_MISSMATCH
 };
 String S_RETURNED_VALUE_NO_RECEIVER
 {
-    Text [ de ] = "Returnwert Empfangen aber kein Empfänger definiert";
+    Text [ de ] = "Returnwert Empfangen aber kein EmpfÃ¤nger definiert";
     Text[ en-US ] = "Return value received but no receiver defined";
 };
 String S_UNKNOWN_METHOD
