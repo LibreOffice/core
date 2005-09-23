@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:42:18 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:44:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1299,12 +1299,11 @@ BOOL lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
 }
 
 //  used in ScCellRangeObj::getFormulaArray and ScCellObj::GetInputString_Impl
-String lcl_GetInputString( ScDocShell* pDocSh, const ScAddress& rPosition, BOOL bEnglish )
+String lcl_GetInputString( ScDocument* pDoc, const ScAddress& rPosition, BOOL bEnglish )
 {
     String aVal;
-    if ( pDocSh )
+    if ( pDoc )
     {
-        ScDocument* pDoc = pDocSh->GetDocument();
         ScBaseCell* pCell = pDoc->GetCell( rPosition );
         if ( pCell && pCell->GetCellType() != CELLTYPE_NOTE )
         {
@@ -5095,7 +5094,7 @@ uno::Sequence< uno::Sequence<rtl::OUString> > SAL_CALL ScCellRangeObj::getFormul
             uno::Sequence<rtl::OUString> aColSeq( nColCount );
             rtl::OUString* pColAry = aColSeq.getArray();
             for (SCCOL nColIndex = 0; nColIndex < nColCount; nColIndex++)
-                pColAry[nColIndex] = lcl_GetInputString( pDocSh,
+                pColAry[nColIndex] = lcl_GetInputString( pDocSh->GetDocument(),
                                     ScAddress( nStartCol+nColIndex, nStartRow+nRowIndex, nTab ), TRUE );
 
             pRowAry[nRowIndex] = aColSeq;
@@ -5986,16 +5985,21 @@ uno::Sequence<sal_Int8> SAL_CALL ScCellObj::getImplementationId() throw(uno::Run
 
 String ScCellObj::GetInputString_Impl(BOOL bEnglish) const      // fuer getFormula / FormulaLocal
 {
-    return lcl_GetInputString( GetDocShell(), aCellPos, bEnglish );
+    if (GetDocShell())
+        return lcl_GetInputString( GetDocShell()->GetDocument(), aCellPos, bEnglish );
+    return String();
 }
 
-String ScCellObj::GetOutputString_Impl() const
+String ScCellObj::GetInputString_Impl(ScDocument* pDoc, const ScAddress& aPos, BOOL bEnglish)       // fuer getFormula / FormulaLocal
 {
-    ScDocShell* pDocSh = GetDocShell();
+    return lcl_GetInputString( pDoc, aPos, bEnglish );
+}
+
+String ScCellObj::GetOutputString_Impl(ScDocument* pDoc, const ScAddress& aCellPos)
+{
     String aVal;
-    if ( pDocSh )
+    if ( pDoc )
     {
-        ScDocument* pDoc = pDocSh->GetDocument();
         ScBaseCell* pCell = pDoc->GetCell( aCellPos );
         if ( pCell && pCell->GetCellType() != CELLTYPE_NOTE )
         {
@@ -6022,6 +6026,15 @@ String ScCellObj::GetOutputString_Impl() const
             }
         }
     }
+    return aVal;
+}
+
+String ScCellObj::GetOutputString_Impl() const
+{
+    ScDocShell* pDocSh = GetDocShell();
+    String aVal;
+    if ( pDocSh )
+        aVal = GetOutputString_Impl(pDocSh->GetDocument(), aCellPos);
     return aVal;
 }
 
