@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexfieldscontrol.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:06:06 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:31:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,8 @@ namespace dbaui
     //==================================================================
     //= IndexFieldsControl
     //==================================================================
-    //------------------------------------------------------------------
+DBG_NAME(IndexFieldsControl)
+//------------------------------------------------------------------
     IndexFieldsControl::IndexFieldsControl( Window* _pParent, const ResId& _rId ,sal_Int32 _nMaxColumnsInIndex)
         :EditBrowseBox(_pParent, _rId, EBBF_SMART_TAB_TRAVEL | EBBF_ACTIVATE_ON_BUTTONDOWN, BROWSER_STANDARD_FLAGS)
         ,m_aSeekRow(m_aFields.end())
@@ -133,6 +134,8 @@ namespace dbaui
         ,m_pFieldNameCell(NULL)
         ,m_nMaxColumnsInIndex(_nMaxColumnsInIndex)
     {
+        DBG_CTOR(IndexFieldsControl,NULL);
+
         SetUniqueId( UID_DLGINDEX_INDEXDETAILS_BACK );
         GetDataWindow().SetUniqueId( UID_DLGINDEX_INDEXDETAILS_MAIN );
     }
@@ -142,6 +145,8 @@ namespace dbaui
     {
         delete m_pSortingCell;
         delete m_pFieldNameCell;
+
+        DBG_DTOR(IndexFieldsControl,NULL);
     }
 
     //------------------------------------------------------------------
