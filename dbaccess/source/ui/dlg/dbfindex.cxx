@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbfindex.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:56:14 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:29:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,7 @@ const ByteString aGroupIdent("dBase III");
 
 //////////////////////////////////////////////////////////////////////////
 // Klasse ODbaseIndexDialog
+DBG_NAME(ODbaseIndexDialog)
 //-------------------------------------------------------------------------
 ODbaseIndexDialog::ODbaseIndexDialog( Window * pParent, String aDataSrcName )
     : ModalDialog( pParent, ModuleRes(DLG_DBASE_INDEXES) ),
@@ -106,6 +107,8 @@ ODbaseIndexDialog::ODbaseIndexDialog( Window * pParent, String aDataSrcName )
     m_aDSN(aDataSrcName),
     m_bCaseSensitiv(sal_True)
 {
+    DBG_CTOR(ODbaseIndexDialog,NULL);
+
     aCB_Tables.SetSelectHdl( LINK(this, ODbaseIndexDialog, TableSelectHdl) );
     aIB_Add.SetClickHdl( LINK(this, ODbaseIndexDialog, AddClickHdl) );
     aIB_Remove.SetClickHdl( LINK(this, ODbaseIndexDialog, RemoveClickHdl) );
@@ -131,6 +134,8 @@ ODbaseIndexDialog::ODbaseIndexDialog( Window * pParent, String aDataSrcName )
 //-------------------------------------------------------------------------
 ODbaseIndexDialog::~ODbaseIndexDialog()
 {
+
+    DBG_DTOR(ODbaseIndexDialog,NULL);
 }
 
 //-------------------------------------------------------------------------
