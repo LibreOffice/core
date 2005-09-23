@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stdtext.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:19:32 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:41:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 
 String SV_STDTEXT_SERVICENOTAVAILABLE
 {
-    Text [ de ] = "Eine Komponente (%s) konnte nicht geladen werden.\nBitte starten Sie das Setup und führen Sie eine Reparatur durch.";
+    Text [ de ] = "Eine Komponente (%s) konnte nicht geladen werden.\nBitte starten Sie das Setup und fÃ¼hren Sie eine Reparatur durch.";
     Text [ en-US ] = "The component (%s) could not be loaded.\nPlease start setup with the repair option.";
     Text [ x-comment ] = " ";
 };
@@ -72,13 +72,13 @@ String SV_ACCESSERROR_WRONG_VERSION
 
 String SV_ACCESSERROR_BRIDGE_MSG
 {
-    Text [ de ] = "%PRODUCTNAME %PRODUCTVERSION benötigt eine Java Access Bridge 1.0.3 oder höhere Version, um Zugänglichkeit zu unterstützen.";
+    Text [ de ] = "%PRODUCTNAME %PRODUCTVERSION benÃ¶tigt eine Java Access Bridge 1.0.3 oder hÃ¶here Version, um ZugÃ¤nglichkeit zu unterstÃ¼tzen.";
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.0.3 or later version to support accessibility.";
 };
 
 String SV_ACCESSERROR_OK_CANCEL_MSG
 {
-    Text [ de ] = "Klicken Sie '%OK', um %PRODUCTNAME %PRODUCTVERSION ohne Unterstützung der Zugänglichkeit zu starten, oder klicken Sie '%CANCEL' um %PRODUCTNAME %PRODUCTVERSION zu beenden.";
+    Text [ de ] = "Klicken Sie '%OK', um %PRODUCTNAME %PRODUCTVERSION ohne UnterstÃ¼tzung der ZugÃ¤nglichkeit zu starten, oder klicken Sie '%CANCEL' um %PRODUCTNAME %PRODUCTVERSION zu beenden.";
     Text [ en-US ] = "Click '%OK' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL' to exit %PRODUCTNAME %PRODUCTVERSION.";
 };
 
@@ -96,7 +96,7 @@ String SV_ACCESSERROR_FAULTY_JAVA
 
 String SV_ACCESSERROR_JAVA_MSG
 {
-    Text [ de ] = "%PRODUCTNAME %PRODUCTVERSION benötigt Java 1.4.0_02 oder höhere Version, um Zugänglichkeit zu unterstützen.";
+    Text [ de ] = "%PRODUCTNAME %PRODUCTVERSION benÃ¶tigt Java 1.4.0_02 oder hÃ¶here Version, um ZugÃ¤nglichkeit zu unterstÃ¼tzen.";
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION requires Java 1.4.0_02 or later version to support accessibility.";
 };
 
