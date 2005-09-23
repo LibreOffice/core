@@ -219,11 +219,11 @@ FaxWizardDialogResources resources;
     );
     optReceiverPlaceholder = insertRadioButton("optReceiverPlaceholder", OPTRECEIVERPLACEHOLDER_ITEM_CHANGED,
       new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-      new Object[] { INTEGERS[8],OPTRECEIVERPLACEHOLDER_HID,resources.resoptReceiverPlaceholder_value,new Integer(104),new Integer(148),INTEGERS[3],new Short((short)23),new Integer(149)}
+      new Object[] { INTEGERS[8],OPTRECEIVERPLACEHOLDER_HID,resources.resoptReceiverPlaceholder_value,new Integer(104),new Integer(148),INTEGERS[3],new Short((short)23),new Integer(200)}
     );
     optReceiverDatabase = insertRadioButton("optReceiverDatabase", OPTRECEIVERDATABASE_ITEM_CHANGED,
       new String[] {"Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-      new Object[] { INTEGERS[8],OPTRECEIVERDATABASE_HID,resources.resoptReceiverDatabase_value,new Integer(104),new Integer(160),INTEGERS[3],new Short((short)24),new Integer(149)}
+      new Object[] { INTEGERS[8],OPTRECEIVERDATABASE_HID,resources.resoptReceiverDatabase_value,new Integer(104),new Integer(160),INTEGERS[3],new Short((short)24),new Integer(200)}
     );
     lblSenderAddress = insertLabel("lblSenderAddress",
       new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
