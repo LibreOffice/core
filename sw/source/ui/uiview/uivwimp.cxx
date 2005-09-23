@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uivwimp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:10:50 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:07:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,9 @@ SwView_Impl::SwView_Impl(SwView* pShell) :
         eShellMode(SEL_TEXT),
         pConfigItem(0),
         nMailMergeRestartPage(0),
-        bMailMergeSourceView(sal_True)
+        bMailMergeSourceView(sal_True),
+        m_bSelectObject(false),
+        m_bEditingPositionSet(false)
 {
     *pxXTextView = new SwXTextView(pView);
     xDisProvInterceptor = new SwXDispatchProviderInterceptor(*pView);
