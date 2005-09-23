@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:17:51 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:03:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -388,7 +388,7 @@ String SCSTR_CONTENT_NOTE
 };
 String SCSTR_CONTENT_AREALINK
 {
-    Text [ de ] = "Verknüpfte Bereiche" ;
+    Text [ de ] = "VerknÃ¼pfte Bereiche" ;
     Text [ en-US ] = "Linked areas" ;
     Text [ x-comment ] = " ";
 };
@@ -406,7 +406,7 @@ Menu RID_POPUP_DROPMODE
         {
             Identifier = RID_DROPMODE_URL ;
             HelpId = HID_SC_DROPMODE_URL ;
-            Text [ de ] = "Als Hyperlink einfügen" ;
+            Text [ de ] = "Als Hyperlink einfÃ¼gen" ;
             Text [ en-US ] = "Insert as Hyperlink" ;
             Text [ x-comment ] = " ";
         };
@@ -414,7 +414,7 @@ Menu RID_POPUP_DROPMODE
         {
             Identifier = RID_DROPMODE_LINK ;
             HelpId = HID_SC_DROPMODE_LINK ;
-            Text [ de ] = "Als Verknüpfung einfügen" ;
+            Text [ de ] = "Als VerknÃ¼pfung einfÃ¼gen" ;
             Text [ en-US ] = "Insert as Link" ;
             Text [ x-comment ] = " ";
         };
@@ -422,7 +422,7 @@ Menu RID_POPUP_DROPMODE
         {
             Identifier = RID_DROPMODE_COPY ;
             HelpId = HID_SC_DROPMODE_COPY ;
-            Text [ de ] = "Als Kopie einfügen" ;
+            Text [ de ] = "Als Kopie einfÃ¼gen" ;
             Text [ en-US ] = "Insert as Copy" ;
             Text [ x-comment ] = " ";
         };
@@ -436,7 +436,7 @@ Menu RID_POPUP_NAVIPI_SCENARIO
         {
             Identifier = RID_NAVIPI_SCENARIO_DELETE ;
             HelpId = HID_SC_SCENARIO_DELETE ;
-            Text [ de ] = "Löschen" ;
+            Text [ de ] = "LÃ¶schen" ;
             Text [ en-US ] = "Delete" ;
             Text [ x-comment ] = " ";
         };
