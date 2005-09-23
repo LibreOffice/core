@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:17:14 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:51:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,7 +194,7 @@ BOOL SfxDockingWindow::PrepareToggleFloatingMode()
 
         // Testen, ob das Workwindow gerade ein Andocken erlaubt
         SfxWorkWindow *pWorkWin = pBindings->GetWorkWindow_Impl();
-        if ( !pWorkWin->IsDockingAllowed() )
+        if ( !pWorkWin->IsDockingAllowed() || !pWorkWin->IsInternalDockingAllowed() )
             return FALSE;
     }
 
@@ -347,7 +347,8 @@ BOOL SfxDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
         return IsFloatingMode();
     }
 
-    if ( pImp->bDockingPrevented )
+    SfxWorkWindow *pWorkWin = pBindings->GetWorkWindow_Impl();
+    if ( pImp->bDockingPrevented || !pWorkWin->IsInternalDockingAllowed() )
         return FALSE;
 
     BOOL bFloatMode = FALSE;
@@ -718,7 +719,7 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
     if ( GetAlignment() != SFX_ALIGN_NOALIGNMENT )
     {
         // check if SfxWorkWindow is able to allow docking at its border
-        if ( !pWorkWin->IsDockingAllowed() || ( GetFloatStyle() & WB_STANDALONE )
+        if ( !pWorkWin->IsDockingAllowed() || !pWorkWin->IsInternalDockingAllowed() || ( GetFloatStyle() & WB_STANDALONE )
             && Application::IsInModalMode() )
             SetAlignment( SFX_ALIGN_NOALIGNMENT );
     }
