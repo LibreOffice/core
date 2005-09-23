@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationPane.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:35:57 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:26:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ Control DLG_CUSTOMANIMATIONPANE
         TabStop = TRUE;
         Size = MAP_APPFONT( 50, 14 );
 
-        Text [ de ] = "~Hinzufügen...";
+        Text [ de ] = "~HinzufÃ¼gen...";
         Text [ en-US ] = "~Add...";
     };
 
@@ -74,7 +74,7 @@ Control DLG_CUSTOMANIMATIONPANE
         TabStop = TRUE;
         Size = MAP_APPFONT( 50, 14 );
 
-        Text [ de ] = "~Ändern...";
+        Text [ de ] = "~Ã„ndern...";
         Text [ en-US ] = "~Change...";
     };
 
@@ -94,7 +94,7 @@ Control DLG_CUSTOMANIMATIONPANE
         OutputSize = TRUE;
         Size = MAP_APPFONT( 260, 8 );
 
-        Text [ de ] = "Effekt ändern";
+        Text [ de ] = "Effekt Ã¤ndern";
         Text [ en-US ] = "Modify effect";
     };
 
@@ -191,7 +191,7 @@ Control DLG_CUSTOMANIMATIONPANE
         OutputSize = TRUE;
         Size = MAP_APPFONT( 42, 8 );
 
-        Text [ de ] = "Reihenfolge ändern:";
+        Text [ de ] = "Reihenfolge Ã¤ndern:";
         Text [ en-US ] = "Change order:";
     };
 
@@ -233,7 +233,7 @@ Control DLG_CUSTOMANIMATIONPANE
         Size = MAP_APPFONT ( 80 , 14 ) ;
         TabStop = TRUE;
 
-        Text [ de ] = "~Bildschirmpräsentation";
+        Text [ de ] = "~BildschirmprÃ¤sentation";
         Text [ en-US ] = "Slide Sho~w";
     };
 
