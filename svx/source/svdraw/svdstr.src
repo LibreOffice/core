@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:40:20 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:01:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -246,7 +246,7 @@ String STR_ObjNameSingulCARC
 };
 String STR_ObjNamePluralCARC
 {
-    Text [ de ] = "Kreisbögen" ;
+    Text [ de ] = "KreisbÃ¶gen" ;
     Text [ en-US ] = "Arcs" ;
     Text [ x-comment ] = " ";
 };
@@ -294,7 +294,7 @@ String STR_ObjNameSingulCARCE
 };
 String STR_ObjNamePluralCARCE
 {
-    Text [ de ] = "Ellipsenbögen" ;
+    Text [ de ] = "EllipsenbÃ¶gen" ;
     Text [ en-US ] = "Elliptical arcs" ;
     Text [ x-comment ] = " ";
 };
@@ -349,25 +349,25 @@ String STR_ObjNamePluralPLIN
 };
 String STR_ObjNameSingulPATHLINE
 {
-    Text [ de ] = "Bézierkurve" ;
+    Text [ de ] = "BÃ©zierkurve" ;
     Text [ en-US ] = "BÃ©zier curve" ;
     Text [ x-comment ] = " ";
 };
 String STR_ObjNamePluralPATHLINE
 {
-    Text [ de ] = "Bézierkurven" ;
+    Text [ de ] = "BÃ©zierkurven" ;
     Text [ en-US ] = "BÃ©zier curves" ;
     Text [ x-comment ] = " ";
 };
 String STR_ObjNameSingulPATHFILL
 {
-    Text [ de ] = "Bézierkurve" ;
+    Text [ de ] = "BÃ©zierkurve" ;
     Text [ en-US ] = "BÃ©zier curve" ;
     Text [ x-comment ] = " ";
 };
 String STR_ObjNamePluralPATHFILL
 {
-    Text [ de ] = "Bézierkurven" ;
+    Text [ de ] = "BÃ©zierkurven" ;
     Text [ en-US ] = "BÃ©zier curves" ;
     Text [ x-comment ] = " ";
 };
@@ -422,13 +422,13 @@ String STR_ObjNamePluralCOMBFILL
  ////////////////////////////////////////////////////////////////////////////////////////////////////
 String STR_ObjNameSingulNATSPLN
 {
-    Text [ de ] = "Natürlicher Spline" ;
+    Text [ de ] = "NatÃ¼rlicher Spline" ;
     Text [ en-US ] = "Natural Spline" ;
     Text [ x-comment ] = " ";
 };
 String STR_ObjNamePluralNATSPLN
 {
-    Text [ de ] = "Natürliche Splines" ;
+    Text [ de ] = "NatÃ¼rliche Splines" ;
     Text [ en-US ] = "Natural Splines" ;
     Text [ x-comment ] = " ";
 };
@@ -459,13 +459,13 @@ String STR_ObjNamePluralTEXT
 };
 String STR_ObjNameSingulTEXTLNK
 {
-    Text [ de ] = "verknüpfter Textrahmen" ;
+    Text [ de ] = "verknÃ¼pfter Textrahmen" ;
     Text [ en-US ] = "Linked text frame" ;
     Text [ x-comment ] = " ";
 };
 String STR_ObjNamePluralTEXTLNK
 {
-    Text [ de ] = "verknüpfte Textrahmen" ;
+    Text [ de ] = "verknÃ¼pfte Textrahmen" ;
     Text [ en-US ] = "Linked text frames" ;
     Text [ x-comment ] = " ";
 };
@@ -562,13 +562,13 @@ String STR_ObjNamePluralGRAF
 };
 String STR_ObjNameSingulGRAFLNK
 {
-    Text [ de ] = "verknüpfte Grafik" ;
+    Text [ de ] = "verknÃ¼pfte Grafik" ;
     Text [ en-US ] = "Linked graphic" ;
     Text [ x-comment ] = " ";
 };
 String STR_ObjNamePluralGRAFLNK
 {
-    Text [ de ] = "verknüpfte Grafiken" ;
+    Text [ de ] = "verknÃ¼pfte Grafiken" ;
     Text [ en-US ] = "Linked graphics" ;
     Text [ x-comment ] = " ";
 };
@@ -586,13 +586,13 @@ String STR_ObjNamePluralGRAFNONE
 };
 String STR_ObjNameSingulGRAFNONELNK
 {
-    Text [ de ] = "leeres verknüpftes Grafikobjekt" ;
+    Text [ de ] = "leeres verknÃ¼pftes Grafikobjekt" ;
     Text [ en-US ] = "Blank linked graphic" ;
     Text [ x-comment ] = " ";
 };
 String STR_ObjNamePluralGRAFNONELNK
 {
-    Text [ de ] = "leere verknüpfte Grafikobjekte" ;
+    Text [ de ] = "leere verknÃ¼pfte Grafikobjekte" ;
     Text [ en-US ] = "Blank linked graphics" ;
     Text [ x-comment ] = " ";
 };
@@ -610,13 +610,13 @@ String STR_ObjNamePluralGRAFMTF
 };
 String STR_ObjNameSingulGRAFMTFLNK
 {
-    Text [ de ] = "verknüpftes Metafile" ;
+    Text [ de ] = "verknÃ¼pftes Metafile" ;
     Text [ en-US ] = "Linked Metafile" ;
     Text [ x-comment ] = " ";
 };
 String STR_ObjNamePluralGRAFMTFLNK
 {
-    Text [ de ] = "verknüpfte Metafiles" ;
+    Text [ de ] = "verknÃ¼pfte Metafiles" ;
     Text [ en-US ] = "Linked Metafiles" ;
     Text [ x-comment ] = " ";
 };
@@ -633,13 +633,13 @@ String STR_ObjNameSingulGRAFBMPTRANS
 };
 String STR_ObjNameSingulGRAFBMPLNK
 {
-    Text [ de ] = "verknüpfte Bitmap" ;
+    Text [ de ] = "verknÃ¼pfte Bitmap" ;
     Text [ en-US ] = "Linked Bitmap" ;
     Text [ x-comment ] = " ";
 };
 String STR_ObjNameSingulGRAFBMPTRANSLNK
 {
-    Text [ de ] = "verknüpfte Bitmap mit Transparenz" ;
+    Text [ de ] = "verknÃ¼pfte Bitmap mit Transparenz" ;
     Text [ en-US ] = "Linked bitmap with transparency" ;
 };
 String STR_ObjNamePluralGRAFBMP
@@ -655,13 +655,13 @@ String STR_ObjNamePluralGRAFBMPTRANS
 };
 String STR_ObjNamePluralGRAFBMPLNK
 {
-    Text [ de ] = "verknüpfte Bitmaps" ;
+    Text [ de ] = "verknÃ¼pfte Bitmaps" ;
     Text [ en-US ] = "Linked bitmaps" ;
     Text [ x-comment ] = " ";
 };
 String STR_ObjNamePluralGRAFBMPTRANSLNK
 {
-    Text [ de ] = "verknüpfte Bitmaps mit Transparenz" ;
+    Text [ de ] = "verknÃ¼pfte Bitmaps mit Transparenz" ;
     Text [ en-US ] = "Linked bitmaps with transparency" ;
 };
 String STR_ObjNameSingulCUSTOMSHAPE
@@ -688,13 +688,13 @@ String STR_ObjNamePluralGRAFMAC
 };
 String STR_ObjNameSingulGRAFMACLNK
 {
-    Text [ de ] = "verknüpfte Mac-Grafiken" ;
+    Text [ de ] = "verknÃ¼pfte Mac-Grafiken" ;
     Text [ en-US ] = "Linked Mac graphic" ;
     Text [ x-comment ] = " ";
 };
 String STR_ObjNamePluralGRAFMACLNK
 {
-    Text [ de ] = "verknüpfte Mac-Grafik" ;
+    Text [ de ] = "verknÃ¼pfte Mac-Grafik" ;
     Text [ en-US ] = "Linked Mac graphics" ;
     Text [ x-comment ] = " ";
 };
@@ -725,13 +725,13 @@ String STR_ObjNamePluralUno
 };
 String STR_ObjNameSingulOLE2LNK
 {
-    Text [ de ] = "verknüpftes eingebettetes Objekt (OLE)" ;
+    Text [ de ] = "verknÃ¼pftes eingebettetes Objekt (OLE)" ;
     Text [ en-US ] = "linked embedded object (OLE)" ;
     Text [ x-comment ] = " ";
 };
 String STR_ObjNamePluralOLE2LNK
 {
-    Text [ de ] = "verknüpfte eingebettete Objekte (OLE)" ;
+    Text [ de ] = "verknÃ¼pfte eingebettete Objekte (OLE)" ;
     Text [ en-US ] = "Linked embedded objects (OLE)" ;
     Text [ x-comment ] = " ";
 };
@@ -802,7 +802,7 @@ String STR_ObjNameSingulMEASURE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Bemaßungsobjekt : Bema˜ungsobjekt */
     /* ### ACHTUNG: Neuer Text in Resource? Bemaßungsobjekt : Bema˜ungsobjekt */
-    Text [ de ] = "Bemaßungsobjekt" ;
+    Text [ de ] = "BemaÃŸungsobjekt" ;
     Text [ en-US ] = "Dimension line" ;
     Text [ x-comment ] = " ";
 };
@@ -810,7 +810,7 @@ String STR_ObjNamePluralMEASURE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Bemaßungsobjekte : Bema˜ungsobjekte */
     /* ### ACHTUNG: Neuer Text in Resource? Bemaßungsobjekte : Bema˜ungsobjekte */
-    Text [ de ] = "Bemaßungsobjekte" ;
+    Text [ de ] = "BemaÃŸungsobjekte" ;
     Text [ en-US ] = "Dimensioning objects" ;
     Text [ x-comment ] = " ";
 };
@@ -846,14 +846,14 @@ String STR_ObjNameSingulPlural
 // Neu ab 537: Namen fuer 3D-Objekte
 String STR_ObjNameSingulCube3d
 {
-    Text [ de ] = "3D Würfel" ;
+    Text [ de ] = "3D WÃ¼rfel" ;
     Text [ en-US ] = "3D cube";
     Text [ x-comment ] = " ";
 };
 
 String STR_ObjNamePluralCube3d
 {
-    Text [ de ] = "3D Würfel" ;
+    Text [ de ] = "3D WÃ¼rfel" ;
     Text [ en-US ] = "3D cubes";
     Text [ x-comment ] = " ";
 };
@@ -964,7 +964,7 @@ String STR_EditPosSize
 {
     /* ### ACHTUNG: Neuer Text in Resource? Position und Größe für %O setzen : Position und Gr÷˜e f³r %O setzen */
     /* ### ACHTUNG: Neuer Text in Resource? Position und Größe für %O setzen : Position und Gr÷˜e f³r %O setzen */
-    Text [ de ] = "Position und Größe für %O setzen" ;
+    Text [ de ] = "Position und GrÃ¶ÃŸe fÃ¼r %O setzen" ;
     Text [ en-US ] = "Set position and size for %O" ;
     Text [ x-comment ] = " ";
 };
@@ -972,7 +972,7 @@ String STR_EditDelete
 {
     /* ### ACHTUNG: Neuer Text in Resource? %O löschen : %O l÷schen */
     /* ### ACHTUNG: Neuer Text in Resource? %O löschen : %O l÷schen */
-    Text [ de ] = "%O löschen" ;
+    Text [ de ] = "%O lÃ¶schen" ;
     Text [ en-US ] = "Delete %O" ;
     Text [ x-comment ] = " ";
 };
@@ -1016,7 +1016,7 @@ String STR_EditResize
 {
     /* ### ACHTUNG: Neuer Text in Resource? Größe von %O ändern : Gr÷˜e von %O õndern */
     /* ### ACHTUNG: Neuer Text in Resource? Größe von %O ändern : Gr÷˜e von %O õndern */
-    Text [ de ] = "Größe von %O ändern" ;
+    Text [ de ] = "GrÃ¶ÃŸe von %O Ã¤ndern" ;
     Text [ en-US ] = "Resize %O" ;
     Text [ x-comment ] = " ";
 };
@@ -1054,7 +1054,7 @@ String STR_EditShear
 {
     /* ### ACHTUNG: Neuer Text in Resource? %O verzerren (schrägstellen) : %O verzerren (schrõgstellen) */
     /* ### ACHTUNG: Neuer Text in Resource? %O verzerren (schrägstellen) : %O verzerren (schrõgstellen) */
-    Text [ de ] = "%O verzerren (schräg stellen)" ;
+    Text [ de ] = "%O verzerren (schrÃ¤g stellen)" ;
     Text [ en-US ] = "Distort %O (slant)" ;
     Text [ x-comment ] = " ";
 };
@@ -1068,7 +1068,7 @@ String STR_EditCrookContortion
 {
     /* ### ACHTUNG: Neuer Text in Resource? %O kreisförmig verbiegen : %O kreisf÷rmig verbiegen */
     /* ### ACHTUNG: Neuer Text in Resource? %O kreisförmig verbiegen : %O kreisf÷rmig verbiegen */
-    Text [ de ] = "%O kreisförmig verbiegen" ;
+    Text [ de ] = "%O kreisfÃ¶rmig verbiegen" ;
     Text [ en-US ] = "Curve %O in circle" ;
     Text [ x-comment ] = " ";
 };
@@ -1088,7 +1088,7 @@ String STR_EditSetPointsSmooth
 {
     /* ### ACHTUNG: Neuer Text in Resource? Béziereigenschaften von %O ändern : BÚziereigenschaften von %O õndern */
     /* ### ACHTUNG: Neuer Text in Resource? Béziereigenschaften von %O ändern : BÚziereigenschaften von %O õndern */
-    Text [ de ] = "Béziereigenschaften von %O ändern" ;
+    Text [ de ] = "BÃ©ziereigenschaften von %O Ã¤ndern" ;
     Text [ en-US ] = "Modify bÃ©zier properties of %O" ;
     Text [ x-comment ] = " ";
 };
@@ -1096,7 +1096,7 @@ String STR_EditSetSegmentsKind
 {
     /* ### ACHTUNG: Neuer Text in Resource? Béziereigenschaften von %O ändern : BÚziereigenschaften von %O õndern */
     /* ### ACHTUNG: Neuer Text in Resource? Béziereigenschaften von %O ändern : BÚziereigenschaften von %O õndern */
-    Text [ de ] = "Béziereigenschaften von %O ändern" ;
+    Text [ de ] = "BÃ©ziereigenschaften von %O Ã¤ndern" ;
     Text [ en-US ] = "Modify bÃ©zier properties of %O" ;
     Text [ x-comment ] = " ";
 };
@@ -1104,7 +1104,7 @@ String STR_EditShut
 {
     /* ### ACHTUNG: Neuer Text in Resource? %O schließen : %O schlie˜en */
     /* ### ACHTUNG: Neuer Text in Resource? %O schließen : %O schlie˜en */
-    Text [ de ] = "%O schließen" ;
+    Text [ de ] = "%O schlieÃŸen" ;
     Text [ en-US ] = "Close %O" ;
     Text [ x-comment ] = " ";
 };
@@ -1112,7 +1112,7 @@ String STR_EditSetGlueEscDir
 {
     /* ### ACHTUNG: Neuer Text in Resource? Austrittsrichtung für %O setzen : Austrittsrichtung f³r %O setzen */
     /* ### ACHTUNG: Neuer Text in Resource? Austrittsrichtung für %O setzen : Austrittsrichtung f³r %O setzen */
-    Text [ de ] = "Austrittsrichtung für %O setzen" ;
+    Text [ de ] = "Austrittsrichtung fÃ¼r %O setzen" ;
     Text [ en-US ] = "Set exit direction for %O" ;
     Text [ x-comment ] = " ";
 };
@@ -1120,7 +1120,7 @@ String STR_EditSetGluePercent
 {
     /* ### ACHTUNG: Neuer Text in Resource? Relativattribut für %O setzen : Relativattribut f³r %O setzen */
     /* ### ACHTUNG: Neuer Text in Resource? Relativattribut für %O setzen : Relativattribut f³r %O setzen */
-    Text [ de ] = "Relativattribut für %O setzen" ;
+    Text [ de ] = "Relativattribut fÃ¼r %O setzen" ;
     Text [ en-US ] = "Set relative attribute at %O" ;
     Text [ x-comment ] = " ";
 };
@@ -1128,7 +1128,7 @@ String STR_EditSetGlueAlign
 {
     /* ### ACHTUNG: Neuer Text in Resource? Bezugspunkt für %O setzen : Bezugspunkt f³r %O setzen */
     /* ### ACHTUNG: Neuer Text in Resource? Bezugspunkt für %O setzen : Bezugspunkt f³r %O setzen */
-    Text [ de ] = "Bezugspunkt für %O setzen" ;
+    Text [ de ] = "Bezugspunkt fÃ¼r %O setzen" ;
     Text [ en-US ] = "Set reference point for %O" ;
     Text [ x-comment ] = " ";
 };
@@ -1142,7 +1142,7 @@ String STR_EditUngroup
 {
     /* ### ACHTUNG: Neuer Text in Resource? %O auflösen : %O aufl÷sen */
     /* ### ACHTUNG: Neuer Text in Resource? %O auflösen : %O aufl÷sen */
-    Text [ de ] = "%O auflösen" ;
+    Text [ de ] = "%O auflÃ¶sen" ;
     Text [ en-US ] = "Ungroup %O" ;
     Text [ x-comment ] = " ";
 };
@@ -1208,7 +1208,7 @@ String STR_EditAlignVTop
 {
     /* ### ACHTUNG: Neuer Text in Resource? %O kopfbündig ausrichten : %O kopfb³ndig ausrichten */
     /* ### ACHTUNG: Neuer Text in Resource? %O kopfbündig ausrichten : %O kopfb³ndig ausrichten */
-    Text [ de ] = "%O kopfbündig ausrichten" ;
+    Text [ de ] = "%O kopfbÃ¼ndig ausrichten" ;
     Text [ en-US ] = "Align %O to top" ;
     Text [ x-comment ] = " ";
 };
@@ -1216,7 +1216,7 @@ String STR_EditAlignVBottom
 {
     /* ### ACHTUNG: Neuer Text in Resource? %O fußbündig ausrichten : %O fu˜b³ndig ausrichten */
     /* ### ACHTUNG: Neuer Text in Resource? %O fußbündig ausrichten : %O fu˜b³ndig ausrichten */
-    Text [ de ] = "%O fußbündig ausrichten" ;
+    Text [ de ] = "%O fuÃŸbÃ¼ndig ausrichten" ;
     Text [ en-US ] = "Align %O to bottom" ;
     Text [ x-comment ] = " ";
 };
@@ -1230,7 +1230,7 @@ String STR_EditAlignHLeft
 {
     /* ### ACHTUNG: Neuer Text in Resource? %O linksbündig ausrichten : %O linksb³ndig ausrichten */
     /* ### ACHTUNG: Neuer Text in Resource? %O linksbündig ausrichten : %O linksb³ndig ausrichten */
-    Text [ de ] = "%O linksbündig ausrichten" ;
+    Text [ de ] = "%O linksbÃ¼ndig ausrichten" ;
     Text [ en-US ] = "Align %O to left" ;
     Text [ x-comment ] = " ";
 };
@@ -1238,7 +1238,7 @@ String STR_EditAlignHRight
 {
     /* ### ACHTUNG: Neuer Text in Resource? %O rechtsbündig ausrichten : %O rechtsb³ndig ausrichten */
     /* ### ACHTUNG: Neuer Text in Resource? %O rechtsbündig ausrichten : %O rechtsb³ndig ausrichten */
-    Text [ de ] = "%O rechtsbündig ausrichten" ;
+    Text [ de ] = "%O rechtsbÃ¼ndig ausrichten" ;
     Text [ en-US ] = "Align %O to right" ;
     Text [ x-comment ] = " ";
 };
@@ -1327,7 +1327,7 @@ String STR_ExchangePaste
 {
     /* ### ACHTUNG: Neuer Text in Resource? Objekt(e) einfügen : Objekt(e) einf³gen */
     /* ### ACHTUNG: Neuer Text in Resource? Objekt(e) einfügen : Objekt(e) einf³gen */
-    Text [ de ] = "Objekt(e) einfügen" ;
+    Text [ de ] = "Objekt(e) einfÃ¼gen" ;
     Text [ en-US ] = "Insert object(s)" ;
     Text [ x-comment ] = " ";
 };
@@ -1341,7 +1341,7 @@ String STR_ExchangeClpPaste
 {
     /* ### ACHTUNG: Neuer Text in Resource? Zwischenablage einfügen : Zwischenablage einf³gen */
     /* ### ACHTUNG: Neuer Text in Resource? Zwischenablage einfügen : Zwischenablage einf³gen */
-    Text [ de ] = "Zwischenablage einfügen" ;
+    Text [ de ] = "Zwischenablage einfÃ¼gen" ;
     Text [ en-US ] = "Paste Clipboard" ;
     Text [ x-comment ] = " ";
 };
@@ -1355,7 +1355,7 @@ String STR_ExchangeDDPaste
 {
     /* ### ACHTUNG: Neuer Text in Resource? Drag&Drop einfügen : Drag&Drop einf³gen */
     /* ### ACHTUNG: Neuer Text in Resource? Drag&Drop einfügen : Drag&Drop einf³gen */
-    Text [ de ] = "Drag&Drop einfügen" ;
+    Text [ de ] = "Drag&Drop einfÃ¼gen" ;
     Text [ en-US ] = "Insert Drag and Drop" ;
     Text [ x-comment ] = " ";
 };
@@ -1363,7 +1363,7 @@ String STR_DragInsertPoint
 {
     /* ### ACHTUNG: Neuer Text in Resource? Punkt in %O einfügen : Punkt in %O einf³gen */
     /* ### ACHTUNG: Neuer Text in Resource? Punkt in %O einfügen : Punkt in %O einf³gen */
-    Text [ de ] = "Punkt in %O einfügen" ;
+    Text [ de ] = "Punkt in %O einfÃ¼gen" ;
     Text [ en-US ] = "Insert point to %O" ;
     Text [ x-comment ] = " ";
 };
@@ -1371,7 +1371,7 @@ String STR_DragInsertGluePoint
 {
     /* ### ACHTUNG: Neuer Text in Resource? Klebepunkt in %O einfügen : Klebepunkt in %O einf³gen */
     /* ### ACHTUNG: Neuer Text in Resource? Klebepunkt in %O einfügen : Klebepunkt in %O einf³gen */
-    Text [ de ] = "Klebepunkt in %O einfügen" ;
+    Text [ de ] = "Klebepunkt in %O einfÃ¼gen" ;
     Text [ en-US ] = "Insert glue point to %O" ;
     Text [ x-comment ] = " ";
 };
@@ -1385,7 +1385,7 @@ String STR_DragMethObjOwn
 {
     /* ### ACHTUNG: Neuer Text in Resource? %O geometrisch verändern : %O geometrisch verõndern */
     /* ### ACHTUNG: Neuer Text in Resource? %O geometrisch verändern : %O geometrisch verõndern */
-    Text [ de ] = "%O geometrisch verändern" ;
+    Text [ de ] = "%O geometrisch verÃ¤ndern" ;
     Text [ en-US ] = "Geometrically change %O" ;
     Text [ x-comment ] = " ";
 };
@@ -1399,7 +1399,7 @@ String STR_DragMethResize
 {
     /* ### ACHTUNG: Neuer Text in Resource? Größe von %O verändern : Gr÷˜e von %O verõndern */
     /* ### ACHTUNG: Neuer Text in Resource? Größe von %O verändern : Gr÷˜e von %O verõndern */
-    Text [ de ] = "Größe von %O verändern" ;
+    Text [ de ] = "GrÃ¶ÃŸe von %O verÃ¤ndern" ;
     Text [ en-US ] = "Resize %O" ;
     Text [ x-comment ] = " ";
 };
@@ -1435,19 +1435,19 @@ String STR_DragMethMirrorFree
 };
 String STR_DragMethGradient
 {
-    Text [ de ] = "interaktiver Farbverlauf für %O" ;
+    Text [ de ] = "interaktiver Farbverlauf fÃ¼r %O" ;
     Text [ en-US ] = "Interactive gradient for %O";
 };
 String STR_DragMethTransparence
 {
-    Text [ de ] = "interaktive Transparenz für %O" ;
+    Text [ de ] = "interaktive Transparenz fÃ¼r %O" ;
     Text [ en-US ] = "Interactive transparency for %O";
 };
 String STR_DragMethShear
 {
     /* ### ACHTUNG: Neuer Text in Resource? %O verzerren (schrägstellen) : %O verzerren (schrõgstellen) */
     /* ### ACHTUNG: Neuer Text in Resource? %O verzerren (schrägstellen) : %O verzerren (schrõgstellen) */
-    Text [ de ] = "%O verzerren (schräg stellen)" ;
+    Text [ de ] = "%O verzerren (schrÃ¤g stellen)" ;
     Text [ en-US ] = "Distort %O (slant)" ;
     Text [ x-comment ] = " ";
 };
@@ -1461,7 +1461,7 @@ String STR_DragMethCrookContortion
 {
     /* ### ACHTUNG: Neuer Text in Resource? %O kreisförmig verbiegen : %O kreisf÷rmig verbiegen */
     /* ### ACHTUNG: Neuer Text in Resource? %O kreisförmig verbiegen : %O kreisf÷rmig verbiegen */
-    Text [ de ] = "%O kreisförmig verbiegen" ;
+    Text [ de ] = "%O kreisfÃ¶rmig verbiegen" ;
     Text [ en-US ] = "Curve %O in circle" ;
     Text [ x-comment ] = " ";
 };
@@ -1475,7 +1475,7 @@ String STR_DragRectEckRad
 {
     /* ### ACHTUNG: Neuer Text in Resource? Eckenradius von %O verändern : Eckenradius von %O verõndern */
     /* ### ACHTUNG: Neuer Text in Resource? Eckenradius von %O verändern : Eckenradius von %O verõndern */
-    Text [ de ] = "Eckenradius von %O verändern" ;
+    Text [ de ] = "Eckenradius von %O verÃ¤ndern" ;
     Text [ en-US ] = "Alter radius by %O" ;
     Text [ x-comment ] = " ";
 };
@@ -1483,7 +1483,7 @@ String STR_DragPathObj
 {
     /* ### ACHTUNG: Neuer Text in Resource? %O verändern : %O verõndern */
     /* ### ACHTUNG: Neuer Text in Resource? %O verändern : %O verõndern */
-    Text [ de ] = "%O verändern" ;
+    Text [ de ] = "%O verÃ¤ndern" ;
     Text [ en-US ] = "Change %O" ;
     Text [ x-comment ] = " ";
 };
@@ -1491,7 +1491,7 @@ String STR_DragRectResize
 {
     /* ### ACHTUNG: Neuer Text in Resource? Größe von %O ändern : Gr÷˜e von %O õndern */
     /* ### ACHTUNG: Neuer Text in Resource? Größe von %O ändern : Gr÷˜e von %O õndern */
-    Text [ de ] = "Größe von %O ändern" ;
+    Text [ de ] = "GrÃ¶ÃŸe von %O Ã¤ndern" ;
     Text [ en-US ] = "Resize %O" ;
     Text [ x-comment ] = " ";
 };
@@ -1511,7 +1511,7 @@ String STR_DragCircAngle
 {
     /* ### ACHTUNG: Neuer Text in Resource? Winkel von %O ändern : Winkel von %O õndern */
     /* ### ACHTUNG: Neuer Text in Resource? Winkel von %O ändern : Winkel von %O õndern */
-    Text [ de ] = "Winkel von %O ändern" ;
+    Text [ de ] = "Winkel von %O Ã¤ndern" ;
     Text [ en-US ] = "Adjust angle by %O" ;
     Text [ x-comment ] = " ";
 };
@@ -1519,7 +1519,7 @@ String STR_DragEdgeTail
 {
     /* ### ACHTUNG: Neuer Text in Resource? %O verändern : %O verõndern */
     /* ### ACHTUNG: Neuer Text in Resource? %O verändern : %O verõndern */
-    Text [ de ] = "%O verändern" ;
+    Text [ de ] = "%O verÃ¤ndern" ;
     Text [ en-US ] = "Change %O" ;
     Text [ x-comment ] = " ";
 };
@@ -1605,7 +1605,7 @@ String STR_UndoInsertObj
 {
     /* ### ACHTUNG: Neuer Text in Resource? %O einfügen : %O einf³gen */
     /* ### ACHTUNG: Neuer Text in Resource? %O einfügen : %O einf³gen */
-    Text [ de ] = "%O einfügen" ;
+    Text [ de ] = "%O einfÃ¼gen" ;
     Text [ en-US ] = "Insert %O" ;
     Text [ x-comment ] = " ";
 };
@@ -1619,7 +1619,7 @@ String STR_UndoObjOrdNum
 {
     /* ### ACHTUNG: Neuer Text in Resource? Objektreihenfolge von %O ändern : Objektreihenfolge von %O õndern */
     /* ### ACHTUNG: Neuer Text in Resource? Objektreihenfolge von %O ändern : Objektreihenfolge von %O õndern */
-    Text [ de ] = "Objektreihenfolge von %O ändern" ;
+    Text [ de ] = "Objektreihenfolge von %O Ã¤ndern" ;
     Text [ en-US ] = "Change object order of %O" ;
     Text [ x-comment ] = " ";
 };
@@ -1633,7 +1633,7 @@ String STR_UndoNewPage
 {
     /* ### ACHTUNG: Neuer Text in Resource? Seite einfügen : Seite einf³gen */
     /* ### ACHTUNG: Neuer Text in Resource? Seite einfügen : Seite einf³gen */
-    Text [ de ] = "Seite einfügen" ;
+    Text [ de ] = "Seite einfÃ¼gen" ;
     Text [ en-US ] = "Insert page" ;
     Text [ x-comment ] = " ";
 };
@@ -1641,7 +1641,7 @@ String STR_UndoDelPage
 {
     /* ### ACHTUNG: Neuer Text in Resource? Seite löschen : Seite l÷schen */
     /* ### ACHTUNG: Neuer Text in Resource? Seite löschen : Seite l÷schen */
-    Text [ de ] = "Seite löschen" ;
+    Text [ de ] = "Seite lÃ¶schen" ;
     Text [ en-US ] = "Delete page" ;
     Text [ x-comment ] = " ";
 };
@@ -1655,7 +1655,7 @@ String STR_UndoMovPage
 {
     /* ### ACHTUNG: Neuer Text in Resource? Reihenfolge der Seiten verändern : Reihenfolge der Seiten verõndern */
     /* ### ACHTUNG: Neuer Text in Resource? Reihenfolge der Seiten verändern : Reihenfolge der Seiten verõndern */
-    Text [ de ] = "Reihenfolge der Seiten verändern" ;
+    Text [ de ] = "Reihenfolge der Seiten verÃ¤ndern" ;
     Text [ en-US ] = "Change order of pages" ;
     Text [ x-comment ] = " ";
 };
@@ -1681,7 +1681,7 @@ String STR_UndoChgPageMasterDscr
 {
     /* ### ACHTUNG: Neuer Text in Resource? Hintergrundseitenzuordnung ändern : Hintergrundseitenzuordnung õndern */
     /* ### ACHTUNG: Neuer Text in Resource? Hintergrundseitenzuordnung ändern : Hintergrundseitenzuordnung õndern */
-    Text [ de ] = "Hintergrundseitenzuordnung ändern" ;
+    Text [ de ] = "Hintergrundseitenzuordnung Ã¤ndern" ;
     Text [ en-US ] = "Change background page assignment" ;
     Text [ x-comment ] = " ";
 };
@@ -1689,7 +1689,7 @@ String STR_UndoMergeModel
 {
     /* ### ACHTUNG: Neuer Text in Resource? Dokument einfügen : Dokument einf³gen */
     /* ### ACHTUNG: Neuer Text in Resource? Dokument einfügen : Dokument einf³gen */
-    Text [ de ] = "Dokument einfügen" ;
+    Text [ de ] = "Dokument einfÃ¼gen" ;
     Text [ en-US ] = "Insert document" ;
     Text [ x-comment ] = " ";
 };
@@ -1697,7 +1697,7 @@ String STR_UndoNewLayer
 {
     /* ### ACHTUNG: Neuer Text in Resource? Ebene einfügen : Ebene einf³gen */
     /* ### ACHTUNG: Neuer Text in Resource? Ebene einfügen : Ebene einf³gen */
-    Text [ de ] = "Ebene einfügen" ;
+    Text [ de ] = "Ebene einfÃ¼gen" ;
     Text [ en-US ] = "Insert Layer" ;
     Text [ x-comment ] = " ";
 };
@@ -1705,7 +1705,7 @@ String STR_UndoDelLayer
 {
     /* ### ACHTUNG: Neuer Text in Resource? Ebene löschen : Ebene l÷schen */
     /* ### ACHTUNG: Neuer Text in Resource? Ebene löschen : Ebene l÷schen */
-    Text [ de ] = "Ebene löschen" ;
+    Text [ de ] = "Ebene lÃ¶schen" ;
     Text [ en-US ] = "Delete layer" ;
     Text [ x-comment ] = " ";
 };
@@ -1713,7 +1713,7 @@ String STR_UndoMovLayer
 {
     /* ### ACHTUNG: Neuer Text in Resource? Reihenfolge der Ebenen verändern : Reihenfolge der Ebenen verõndern */
     /* ### ACHTUNG: Neuer Text in Resource? Reihenfolge der Ebenen verändern : Reihenfolge der Ebenen verõndern */
-    Text [ de ] = "Reihenfolge der Ebenen verändern" ;
+    Text [ de ] = "Reihenfolge der Ebenen verÃ¤ndern" ;
     Text [ en-US ] = "Change order of layers" ;
     Text [ x-comment ] = " ";
 };
@@ -1841,7 +1841,7 @@ String STR_ItemValTEXTVADJBLOCK
 {
     /* ### ACHTUNG: Neuer Text in Resource? Ausnutzung der gesamten Höhe : Ausnutzung der gesamten H÷he */
     /* ### ACHTUNG: Neuer Text in Resource? Ausnutzung der gesamten Höhe : Ausnutzung der gesamten H÷he */
-    Text [ de ] = "Ausnutzung der gesamten Höhe" ;
+    Text [ de ] = "Ausnutzung der gesamten HÃ¶he" ;
     Text [ en-US ] = "Use entire height" ;
     Text [ x-comment ] = " ";
 };
@@ -1984,7 +1984,7 @@ String STR_ItemValMEASURE_TEXTLEFTOUTSIDE
 {
     /* ### ACHTUNG: Neuer Text in Resource? links außen : links au˜en */
     /* ### ACHTUNG: Neuer Text in Resource? links außen : links au˜en */
-    Text [ de ] = "links außen" ;
+    Text [ de ] = "links auÃŸen" ;
     Text [ en-US ] = "left outside" ;
     Text [ x-comment ] = " ";
 };
@@ -1998,7 +1998,7 @@ String STR_ItemValMEASURE_TEXTRIGHTOUTSID
 {
     /* ### ACHTUNG: Neuer Text in Resource? rechts außen : rechts au˜en */
     /* ### ACHTUNG: Neuer Text in Resource? rechts außen : rechts au˜en */
-    Text [ de ] = "rechts außen" ;
+    Text [ de ] = "rechts auÃŸen" ;
     Text [ en-US ] = "right outside" ;
     Text [ x-comment ] = " ";
 };
@@ -2164,7 +2164,7 @@ String STR_ItemNam_CAPTIONLINELEN
 {
     /* ### ACHTUNG: Neuer Text in Resource? Linienlänge : Linienlõnge */
     /* ### ACHTUNG: Neuer Text in Resource? Linienlänge : Linienlõnge */
-    Text [ de ] = "Linienlänge" ;
+    Text [ de ] = "LinienlÃ¤nge" ;
     Text [ en-US ] = "Line length" ;
     Text [ x-comment ] = " ";
 };
@@ -2172,7 +2172,7 @@ String STR_ItemNam_CAPTIONFITLINELEN
 {
     /* ### ACHTUNG: Neuer Text in Resource? Automatische Linienlänge : Automatische Linienlõnge */
     /* ### ACHTUNG: Neuer Text in Resource? Automatische Linienlänge : Automatische Linienlõnge */
-    Text [ de ] = "Automatische Linienlänge" ;
+    Text [ de ] = "Automatische LinienlÃ¤nge" ;
     Text [ en-US ] = "Auto line length" ;
     Text [ x-comment ] = " ";
 };
@@ -2227,7 +2227,7 @@ String STR_ItemNam_TEXT_AUTOGROWHEIGHT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Automatische Anpassung der Rahmenhöhe : Automatische Anpassung der Rahmenh÷he */
     /* ### ACHTUNG: Neuer Text in Resource? Automatische Anpassung der Rahmenhöhe : Automatische Anpassung der Rahmenh÷he */
-    Text [ de ] = "Automatische Anpassung der Rahmenhöhe" ;
+    Text [ de ] = "Automatische Anpassung der RahmenhÃ¶he" ;
     Text [ en-US ] = "AutoFit frame height" ;
     Text [ x-comment ] = " ";
 };
@@ -2235,7 +2235,7 @@ String STR_ItemNam_TEXT_MINFRAMEHEIGHT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Minimale Rahmenhöhe : Minimale Rahmenh÷he */
     /* ### ACHTUNG: Neuer Text in Resource? Minimale Rahmenhöhe : Minimale Rahmenh÷he */
-    Text [ de ] = "Minimale Rahmenhöhe" ;
+    Text [ de ] = "Minimale RahmenhÃ¶he" ;
     Text [ en-US ] = "Min. frame height" ;
     Text [ x-comment ] = " ";
 };
@@ -2243,7 +2243,7 @@ String STR_ItemNam_TEXT_MAXFRAMEHEIGHT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Maximale Rahmenhöhe : Maximale Rahmenh÷he */
     /* ### ACHTUNG: Neuer Text in Resource? Maximale Rahmenhöhe : Maximale Rahmenh÷he */
-    Text [ de ] = "Maximale Rahmenhöhe" ;
+    Text [ de ] = "Maximale RahmenhÃ¶he" ;
     Text [ en-US ] = "Max. frame height" ;
     Text [ x-comment ] = " ";
 };
@@ -2291,7 +2291,7 @@ String STR_ItemNam_GRAFRED
 };
 String STR_ItemNam_GRAFGREEN
 {
-    Text [ de ] = "Grünanteil";
+    Text [ de ] = "GrÃ¼nanteil";
     Text [ en-US ] = "Green";
 };
 String STR_ItemNam_GRAFBLUE
@@ -2352,7 +2352,7 @@ String STR_ItemNam_OBJSIZEPROTECT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Größenschutz : Gr÷˜enschutz */
     /* ### ACHTUNG: Neuer Text in Resource? Größenschutz : Gr÷˜enschutz */
-    Text [ de ] = "Größenschutz" ;
+    Text [ de ] = "GrÃ¶ÃŸenschutz" ;
     Text [ en-US ] = "Size Protection" ;
     Text [ x-comment ] = " ";
 };
@@ -2414,7 +2414,7 @@ String STR_ItemNam_SIZEHEIGHT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Höhe : H÷he */
     /* ### ACHTUNG: Neuer Text in Resource? Höhe : H÷he */
-    Text [ de ] = "Höhe" ;
+    Text [ de ] = "HÃ¶he" ;
     Text [ en-US ] = "Height" ;
     Text [ x-comment ] = " ";
 };
@@ -2462,7 +2462,7 @@ String SIP_XA_LINEDASH
 
 String SIP_XA_LINEWIDTH
 {
-    Text [ de ] = "Strichstärke";
+    Text [ de ] = "StrichstÃ¤rke";
     Text [ en-US ] = "Line width";
 };
 
@@ -2517,7 +2517,7 @@ String SIP_XA_LINETRANSPARENCE
 
 String SIP_XA_LINEJOINT
 {
-    Text [ de ] = "Linienübergang";
+    Text [ de ] = "LinienÃ¼bergang";
     Text [ en-US ] = "Line joint";
 };
 
@@ -2559,14 +2559,14 @@ String SIP_XATTRSET_LINE
 
 String SIP_XA_FILLSTYLE
 {
-    Text [ de ] = "Füllstil";
+    Text [ de ] = "FÃ¼llstil";
     Text [ en-US ] = "Fill style";
     Text [ x-comment ] = " ";
 };
 
 String SIP_XA_FILLCOLOR
 {
-    Text [ de ] = "Füllfarbe";
+    Text [ de ] = "FÃ¼llfarbe";
     Text [ en-US ] = "Fillcolor";
     Text [ x-comment ] = " ";
 };
@@ -2585,14 +2585,14 @@ String SIP_XA_FILLHATCH
 
 String SIP_XA_FILLBITMAP
 {
-    Text [ de ] = "Füllbitmap";
+    Text [ de ] = "FÃ¼llbitmap";
     Text [ en-US ] = "Fillbitmap";
     Text [ x-comment ] = " ";
 };
 
 String SIP_XA_FILLTRANSPARENCE
 {
-    Text [ de ] = "Flächentransparenz";
+    Text [ de ] = "FlÃ¤chentransparenz";
     Text [ en-US ] = "Transparency";
 };
 
@@ -2604,27 +2604,27 @@ String SIP_XA_GRADIENTSTEPCOUNT
 
 String SIP_XA_FILLBMP_TILE
 {
-    Text [ de ] = "Kachelfüllung";
+    Text [ de ] = "KachelfÃ¼llung";
     Text [ en-US ] = "Tile fill";
 };
 
 String SIP_XA_FILLBMP_POS
 {
-    Text [ de ] = "Füllbitmapposition";
+    Text [ de ] = "FÃ¼llbitmapposition";
     Text [ en-US ] = "Fillbitmap position";
     Text [ x-comment ] = " ";
 };
 
 String SIP_XA_FILLBMP_SIZEX
 {
-    Text [ de ] = "Füllbitmapbreite";
+    Text [ de ] = "FÃ¼llbitmapbreite";
     Text [ en-US ] = "Fillbitmap width";
     Text [ x-comment ] = " ";
 };
 
 String SIP_XA_FILLBMP_SIZEY
 {
-    Text [ de ] = "Füllbitmaphöhe";
+    Text [ de ] = "FÃ¼llbitmaphÃ¶he";
     Text [ en-US ] = "Height of fillbitmap";
     Text [ x-comment ] = " ";
 };
@@ -2637,13 +2637,13 @@ String SIP_XA_FILLFLOATTRANSPARENCE
 
 String SIP_XA_SECONDARYFILLCOLOR
 {
-    Text [ de ] = "Füllung Reserve 2";
+    Text [ de ] = "FÃ¼llung Reserve 2";
     Text [ en-US ] = "Fill reserved for 2";
 };
 
 String SIP_XA_FILLBMP_SIZELOG
 {
-    Text [ de ] = "Kachelgröße nicht in %";
+    Text [ de ] = "KachelgrÃ¶ÃŸe nicht in %";
     Text [ en-US ] = "Tile size not in %";
 };
 
@@ -2715,32 +2715,32 @@ String SIP_XA_FILLBMP_POSOFFSETY
 
 String SIP_XA_FILLBACKGROUND
 {
-    Text [ de ] = "Hintergrundfüllung";
+    Text [ de ] = "HintergrundfÃ¼llung";
     Text [ en-US ] = "Background fill";
     Text [ x-comment ] = " ";
 };
 
 String SIP_XA_FILLRESERVED10
 {
-    Text [ de ] = "Füllung Reserve 10";
+    Text [ de ] = "FÃ¼llung Reserve 10";
     Text [ en-US ] = "Fill reserved for 10";
 };
 
 String SIP_XA_FILLRESERVED11
 {
-    Text [ de ] = "Füllung Reserve 11";
+    Text [ de ] = "FÃ¼llung Reserve 11";
     Text [ en-US ] = "Fill reserved for 11";
 };
 
 String SIP_XA_FILLRESERVED_LAST
 {
-    Text [ de ] = "Füllung Reserve 12";
+    Text [ de ] = "FÃ¼llung Reserve 12";
     Text [ en-US ] = "Fill reserved for 12";
 };
 
 String SIP_XATTRSET_FILL
 {
-    Text [ de ] = "Flächenattribute";
+    Text [ de ] = "FlÃ¤chenattribute";
     Text [ en-US ] = "Area attributes";
     Text [ x-comment ] = " ";
 };
@@ -2996,13 +2996,13 @@ String SIP_SA_CAPTIONESCABS
 
 String SIP_SA_CAPTIONLINELEN
 {
-    Text [ de ] = "Legendenlinienlänge";
+    Text [ de ] = "LegendenlinienlÃ¤nge";
     Text [ en-US ] = "Legend line length";
 };
 
 String SIP_SA_CAPTIONFITLINELEN
 {
-    Text [ de ] = "Legendenlinienlängenautomatik";
+    Text [ de ] = "LegendenlinienlÃ¤ngenautomatik";
     Text [ en-US ] = "AutoLength of legend lines";
 };
 
@@ -3057,13 +3057,13 @@ String SIP_SA_ECKENRADIUS
 
 String SIP_SA_TEXT_MINFRAMEHEIGHT
 {
-    Text [ de ] = "Minimale Rahmenhöhe";
+    Text [ de ] = "Minimale RahmenhÃ¶he";
     Text [ en-US ] = "Minimal frame height";
 };
 
 String SIP_SA_TEXT_AUTOGROWHEIGHT
 {
-    Text [ de ] = "Automatische Höhenanpassung";
+    Text [ de ] = "Automatische HÃ¶henanpassung";
     Text [ en-US ] = "AutoFit height";
 };
 
@@ -3109,7 +3109,7 @@ String SIP_SA_TEXT_VERTADJUST
 
 String SIP_SA_TEXT_MAXFRAMEHEIGHT
 {
-    Text [ de ] = "Maximale Rahmenhöhe";
+    Text [ de ] = "Maximale RahmenhÃ¶he";
     Text [ en-US ] = "Maximal frame height";
 };
 
@@ -3201,7 +3201,7 @@ String SIP_SA_XMLATTRIBUTES
 
 String SIP_SA_TEXT_USEFIXEDCELLHEIGHT
 {
-    Text[ de ] = "Schriftartunabhängigen Zeilenabstand verwenden";
+    Text[ de ] = "SchriftartunabhÃ¤ngigen Zeilenabstand verwenden";
     Text [ en-US ] = "Use font-independent line spacing";
 };
 
@@ -3385,7 +3385,7 @@ String SIP_SA_MEASURELINEDIST
 
 String SIP_SA_MEASUREHELPLINEOVERHANG
 {
-    Text [ de ] = "Masshilfslinienüberhang";
+    Text [ de ] = "MasshilfslinienÃ¼berhang";
     Text [ en-US ] = "Dimension help line overhang";
 };
 
@@ -3397,13 +3397,13 @@ String SIP_SA_MEASUREHELPLINEDIST
 
 String SIP_SA_MEASUREHELPLINE1LEN
 {
-    Text [ de ] = "Masshilfslinienüberlänge 1";
+    Text [ de ] = "MasshilfslinienÃ¼berlÃ¤nge 1";
     Text [ en-US ] = "Backlog of dimension help line 1";
 };
 
 String SIP_SA_MEASUREHELPLINE2LEN
 {
-    Text [ de ] = "Masshilfslinienüberlänge 2";
+    Text [ de ] = "MasshilfslinienÃ¼berlÃ¤nge 2";
     Text [ en-US ] = "Backlog of dimension help line 2";
 };
 
@@ -3427,7 +3427,7 @@ String SIP_SA_MEASURETEXTUPSIDEDOWN
 
 String SIP_SA_MEASUREOVERHANG
 {
-    Text [ de ] = "Masslinienüberstand";
+    Text [ de ] = "MasslinienÃ¼berstand";
     Text [ en-US ] = "Dimension line overhang";
 };
 
@@ -3464,7 +3464,7 @@ String SIP_SA_MEASURETEXTAUTOANGLE
 
 String SIP_SA_MEASURETEXTAUTOANGLEVIEW
 {
-    Text [ de ] = "Winkel für Masstextwinkelautomatik";
+    Text [ de ] = "Winkel fÃ¼r Masstextwinkelautomatik";
     Text [ en-US ] = "Angle for the automatic positioning of the dimension value";
 };
 
@@ -3562,13 +3562,13 @@ String SIP_SA_CIRCRESERVE3
 
 String SIP_SA_OBJMOVEPROTECT
 {
-    Text [ de ] = "Objektposition geschützt";
+    Text [ de ] = "Objektposition geschÃ¼tzt";
     Text [ en-US ] = "Protected object position";
 };
 
 String SIP_SA_OBJSIZEPROTECT
 {
-    Text [ de ] = "Objektgröße geschützt";
+    Text [ de ] = "ObjektgrÃ¶ÃŸe geschÃ¼tzt";
     Text [ en-US ] = "Protected object size";
     Text [ x-comment ] = " ";
 };
@@ -3619,7 +3619,7 @@ String SIP_SA_ALLSIZEWIDTH
 
 String SIP_SA_ALLSIZEHEIGHT
 {
-    Text [ de ] = "Höhe gesamt";
+    Text [ de ] = "HÃ¶he gesamt";
     Text [ en-US ] = "Height, complete";
 };
 
@@ -3643,7 +3643,7 @@ String SIP_SA_ONESIZEWIDTH
 
 String SIP_SA_ONESIZEHEIGHT
 {
-    Text [ de ] = "Höhe einzeln";
+    Text [ de ] = "HÃ¶he einzeln";
     Text [ en-US ] = "Single height";
 };
 
@@ -3655,7 +3655,7 @@ String SIP_SA_LOGICSIZEWIDTH
 
 String SIP_SA_LOGICSIZEHEIGHT
 {
-    Text [ de ] = "Höhe logisch";
+    Text [ de ] = "HÃ¶he logisch";
     Text [ en-US ] = "Logical height";
 };
 
@@ -3787,42 +3787,42 @@ String SIP_EE_PARA_HYPHENATE
 
 String SIP_EE_PARA_BULLETSTATE
 {
-    Text [ de ] = "Aufzählungszeichen anzeigen";
+    Text [ de ] = "AufzÃ¤hlungszeichen anzeigen";
     Text [ en-US ] = "Display bullets";
     Text [ x-comment ] = " ";
 };
 
 String SIP_EE_PARA_OUTLLRSPACE
 {
-    Text [ de ] = "Einzüge bei Aufzählung";
+    Text [ de ] = "EinzÃ¼ge bei AufzÃ¤hlung";
     Text [ en-US ] = "Numbering indents";
     Text [ x-comment ] = " ";
 };
 
 String SIP_EE_PARA_OUTLLEVEL
 {
-    Text [ de ] = "Aufzählungsebene";
+    Text [ de ] = "AufzÃ¤hlungsebene";
     Text [ en-US ] = "Numbering level";
     Text [ x-comment ] = " ";
 };
 
 String SIP_EE_PARA_BULLET
 {
-    Text [ de ] = "Aufzählungszeichen";
+    Text [ de ] = "AufzÃ¤hlungszeichen";
     Text [ en-US ] = "Bullets and Numberings";
     Text [ x-comment ] = " ";
 };
 
 String SIP_EE_PARA_LRSPACE
 {
-    Text [ de ] = "Einzüge";
+    Text [ de ] = "EinzÃ¼ge";
     Text [ en-US ] = "Indents";
     Text [ x-comment ] = " ";
 };
 
 String SIP_EE_PARA_ULSPACE
 {
-    Text [ de ] = "Absatzabstände";
+    Text [ de ] = "AbsatzabstÃ¤nde";
     Text [ en-US ] = "Paragraph spacing";
 };
 
@@ -3907,7 +3907,7 @@ String SIP_EE_CHAR_OUTLINE
 
 String SIP_EE_CHAR_SHADOW
 {
-    Text [ de ] = "Schatten für Schrift";
+    Text [ de ] = "Schatten fÃ¼r Schrift";
     Text [ en-US ] = "Font shadow";
 };
 
@@ -3933,7 +3933,7 @@ String SIP_EE_CHAR_KERNING
 
 String SIP_EE_CHAR_WLM
 {
-    Text [ de ] = "Leerräume nicht unterstreichen";
+    Text [ de ] = "LeerrÃ¤ume nicht unterstreichen";
     Text [ en-US ] = "No underline for spaces";
     Text [ x-comment ] = " ";
 };
@@ -3970,7 +3970,7 @@ String SIP_SA_GRAFRED
 };
 String SIP_SA_GRAFGREEN
 {
-    Text [ de ] = "Grünanteil";
+    Text [ de ] = "GrÃ¼nanteil";
     Text [ en-US ] = "Green";
 };
 String SIP_SA_GRAFBLUE
