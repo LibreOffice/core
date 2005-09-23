@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undo.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:19:09 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:49:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,22 +39,22 @@
  // Undo
 String STR_CANT_UNDO
 {
-    Text [ de ] = "unmöglich" ;
+    Text [ de ] = "unmÃ¶glich" ;
     Text [ en-US ] = "not possible" ;
 };
 String STR_DELETE_UNDO
 {
-    Text [ de ] = "Löschen: $1" ;
+    Text [ de ] = "LÃ¶schen: $1" ;
     Text [ en-US ] = "Delete $1" ;
 };
 String STR_INSERT_UNDO
 {
-    Text [ de ] = "Einfügen: $1" ;
+    Text [ de ] = "EinfÃ¼gen: $1" ;
     Text [ en-US ] = "Insert $1" ;
 };
 String STR_OVR_UNDO
 {
-    Text [ de ] = "Überschreiben: $1" ;
+    Text [ de ] = "Ãœberschreiben: $1" ;
     Text [ en-US ] = "Overwrite: $1" ;
 };
 String STR_SPLITNODE_UNDO
@@ -80,32 +80,32 @@ String STR_SETFMTCOLL_UNDO
 };
 String STR_RESET_ATTR_UNDO
 {
-    Text [ de ] = "Attribute zurücksetzen" ;
+    Text [ de ] = "Attribute zurÃ¼cksetzen" ;
     Text [ en-US ] = "Reset attributes" ;
 };
 String STR_INSFMT_ATTR_UNDO
 {
-    Text [ de ] = "Formatvorlage Ã¤ndern: $1" ;
+    Text [ de ] = "Formatvorlage ÃƒÂ¤ndern: $1" ;
     Text [ en-US ] = "Change style: $1" ;
 };
 String STR_INSERT_DOC_UNDO
 {
-    Text [ de ] = "Datei einfügen" ;
+    Text [ de ] = "Datei einfÃ¼gen" ;
     Text [ en-US ] = "Insert file" ;
 };
 String STR_INSERT_GLOSSARY
 {
-    Text [ de ] = "AutoText einfügen" ;
+    Text [ de ] = "AutoText einfÃ¼gen" ;
     Text [ en-US ] = "Insert AutoText" ;
 };
 String STR_DELBOOKMARK
 {
-    Text [ de ] = "Textmarke löschen: $1" ;
+    Text [ de ] = "Textmarke lÃ¶schen: $1" ;
     Text [ en-US ] = "Delete bookmark: $1" ;
 };
 String STR_INSBOOKMARK
 {
-    Text [ de ] = "Textmarke einfügen: $1" ;
+    Text [ de ] = "Textmarke einfÃ¼gen: $1" ;
     Text [ en-US ] = "Insert bookmark: $1" ;
 };
 String STR_SORT_TBL
@@ -120,7 +120,7 @@ String STR_SORT_TXT
 };
 String STR_INSTABLE_UNDO
 {
-    Text [ de ] = "Tabelle einfügen: $1$2$3" ;
+    Text [ de ] = "Tabelle einfÃ¼gen: $1$2$3" ;
     Text [ en-US ] = "Insert table: $1$2$3" ;
 };
 String STR_TEXTTOTABLE_UNDO
@@ -145,12 +145,12 @@ String STR_REPLACE_UNDO
 };
 String STR_INSERT_PAGE_BREAK_UNDO
 {
-    Text [ de ] = "Seitenumbruch einfügen" ;
+    Text [ de ] = "Seitenumbruch einfÃ¼gen" ;
     Text [ en-US ] = "Insert page break" ;
 };
 String STR_INSERT_COLUMN_BREAK_UNDO
 {
-    Text [ de ] = "Spaltenumbruch einfügen" ;
+    Text [ de ] = "Spaltenumbruch einfÃ¼gen" ;
     Text [ en-US ] = "Insert column break" ;
 };
 String STR_PLAY_MACRO_UNDO
@@ -160,7 +160,7 @@ String STR_PLAY_MACRO_UNDO
 };
 String STR_INSERT_ENV_UNDO
 {
-    Text [ de ] = "Briefumschlag einfügen" ;
+    Text [ de ] = "Briefumschlag einfÃ¼gen" ;
     Text [ en-US ] = "Insert Envelope" ;
 };
 String STR_DRAG_AND_COPY
@@ -175,22 +175,22 @@ String STR_DRAG_AND_MOVE
 };
 String STR_INSERT_RULER
 {
-    Text [ de ] = "Horizontale Linie einfügen" ;
+    Text [ de ] = "Horizontale Linie einfÃ¼gen" ;
     Text [ en-US ] = "Insert horizontal ruler" ;
 };
 String STR_INSERT_CHART
 {
-    Text [ de ] = "%PRODUCTNAME Chart einfügen" ;
+    Text [ de ] = "%PRODUCTNAME Chart einfÃ¼gen" ;
     Text [ en-US ] = "Insert %PRODUCTNAME Chart" ;
 };
 String STR_INSERTFLY
 {
-    Text [ de ] = "Rahmen einfügen" ;
+    Text [ de ] = "Rahmen einfÃ¼gen" ;
     Text [ en-US ] = "Insert frame" ;
 };
 String STR_DELETEFLY
 {
-    Text [ de ] = "Rahmen löschen" ;
+    Text [ de ] = "Rahmen lÃ¶schen" ;
     Text [ en-US ] = "Delete frame" ;
 };
 String STR_AUTOFORMAT
@@ -200,7 +200,7 @@ String STR_AUTOFORMAT
 };
 String STR_TABLEHEADLINE
 {
-    Text [ de ] = "Tabellenüberschrift" ;
+    Text [ de ] = "TabellenÃ¼berschrift" ;
     Text [ en-US ] = "Table heading" ;
 };
 String STR_REPLACE
@@ -210,27 +210,27 @@ String STR_REPLACE
 };
 String STR_INSERTSECTION
 {
-    Text [ de ] = "Bereich einfügen" ;
+    Text [ de ] = "Bereich einfÃ¼gen" ;
     Text [ en-US ] = "Insert section" ;
 };
 String STR_DELETESECTION
 {
-    Text [ de ] = "Bereich löschen" ;
+    Text [ de ] = "Bereich lÃ¶schen" ;
     Text [ en-US ] = "Delete section" ;
 };
 String STR_CHANGESECTION
 {
-    Text [ de ] = "Bereich ändern" ;
+    Text [ de ] = "Bereich Ã¤ndern" ;
     Text [ en-US ] = "Modify section" ;
 };
 String STR_CHANGESECTPASSWD
 {
-    Text [ de ] = "Passwortschutz ändern" ;
+    Text [ de ] = "Passwortschutz Ã¤ndern" ;
     Text [ en-US ] = "Change password protection" ;
 };
 String STR_CHANGEDEFATTR
 {
-    Text [ de ] = "Standardwerte ändern" ;
+    Text [ de ] = "Standardwerte Ã¤ndern" ;
     Text [ en-US ] = "Modify default values" ;
 };
 String STR_REPLACE_STYLE
@@ -250,12 +250,12 @@ String STR_OUTLINE_UD
 };
 String STR_INSNUM
 {
-    Text [ de ] = "Nummerierung einfügen" ;
+    Text [ de ] = "Nummerierung einfÃ¼gen" ;
     Text [ en-US ] = "Insert numbering" ;
 };
 String STR_NUMUP
 {
-    Text [ de ] = "Ebene erhöhen" ;
+    Text [ de ] = "Ebene erhÃ¶hen" ;
     Text [ en-US ] = "Promote level" ;
 };
 String STR_NUMDOWN
@@ -265,12 +265,12 @@ String STR_NUMDOWN
 };
 String STR_MOVENUM
 {
-    Text [ de ] = "Absätze verschieben" ;
+    Text [ de ] = "AbsÃ¤tze verschieben" ;
     Text [ en-US ] = "Move paragraphs" ;
 };
 String STR_INSERTDRAW
 {
-    Text [ de ] = "Zeichenobjekt einfügen: $1" ;
+    Text [ de ] = "Zeichenobjekt einfÃ¼gen: $1" ;
     Text [ en-US ] = "Insert drawing object: $1" ;
 };
 String STR_NUMORNONUM
@@ -280,7 +280,7 @@ String STR_NUMORNONUM
 };
 String STR_INC_LEFTMARGIN
 {
-    Text [ de ] = "Einzug vergrößern" ;
+    Text [ de ] = "Einzug vergrÃ¶ÃŸern" ;
     Text [ en-US ] = "Increase Indent" ;
 };
 String STR_DEC_LEFTMARGIN
@@ -290,7 +290,7 @@ String STR_DEC_LEFTMARGIN
 };
 String STR_INSERTLABEL
 {
-    Text [ de ] = "Beschriftung einfügen: $1" ;
+    Text [ de ] = "Beschriftung einfÃ¼gen: $1" ;
     Text [ en-US ] = "Insert caption: $1" ;
 };
 String STR_SETNUMRULESTART
@@ -300,7 +300,7 @@ String STR_SETNUMRULESTART
 };
 String STR_CHANGEFTN
 {
-    Text [ de ] = "Fußnote ändern" ;
+    Text [ de ] = "FuÃŸnote Ã¤ndern" ;
     Text [ en-US ] = "Modify footnote" ;
 };
 String STR_REDLINE
@@ -310,12 +310,12 @@ String STR_REDLINE
 };
 String STR_ACCEPT_REDLINE
 {
-    Text [ de ] = "Änderung akzeptieren: $1" ;
+    Text [ de ] = "Ã„nderung akzeptieren: $1" ;
     Text [ en-US ] = "Accept change: $1" ;
 };
 String STR_REJECT_REDLINE
 {
-    Text [ de ] = "Änderung ablehnen: $1" ;
+    Text [ de ] = "Ã„nderung ablehnen: $1" ;
     Text [ en-US ] = "Reject change: $1" ;
 };
 String STR_SPLIT_TABLE
@@ -341,13 +341,13 @@ String STR_MERGE_TABLE
 
 String STR_TRANSLITERATE
 {
-    Text [ de ] = "Groß-/Kleinschreibung" ;
+    Text [ de ] = "GroÃŸ-/Kleinschreibung" ;
     Text [ en-US ] = "Case/Characters";
 };
 
 String STR_DELNUM
 {
-    Text [ de ] = "Nummerierung löschen" ;
+    Text [ de ] = "Nummerierung lÃ¶schen" ;
     Text [ en-US ] = "Delete numbering" ;
 };
 String STR_DRAWUNDO
@@ -362,12 +362,12 @@ String STR_DRAWGROUP
 };
 String STR_DRAWUNGROUP
 {
-    Text [ de ] = "Gruppenobjekt auflösen" ;
+    Text [ de ] = "Gruppenobjekt auflÃ¶sen" ;
     Text [ en-US ] = "Ungroup drawing objects" ;
 };
 String STR_DRAWDELETE
 {
-    Text [ de ] = "Zeichenobjekte löschen" ;
+    Text [ de ] = "Zeichenobjekte lÃ¶schen" ;
     Text [ en-US ] = "Delete drawing objects" ;
 };
 String STR_REREAD
@@ -377,12 +377,12 @@ String STR_REREAD
 };
 String STR_DELGRF
 {
-    Text [ de ] = "Grafik löschen" ;
+    Text [ de ] = "Grafik lÃ¶schen" ;
     Text [ en-US ] = "Delete graphics" ;
 };
 String STR_DELOLE
 {
-    Text [ de ] = "Objekt löschen" ;
+    Text [ de ] = "Objekt lÃ¶schen" ;
     Text [ en-US ] = "Delete object" ;
 };
 String STR_TABLE_ATTR
@@ -397,27 +397,27 @@ String STR_TABLE_AUTOFMT
 };
 String STR_TABLE_INSCOL
 {
-    Text [ de ] = "Spalte einfügen" ;
+    Text [ de ] = "Spalte einfÃ¼gen" ;
     Text [ en-US ] = "Insert Column" ;
 };
 String STR_TABLE_INSROW
 {
-    Text [ de ] = "Zeile einfügen" ;
+    Text [ de ] = "Zeile einfÃ¼gen" ;
     Text [ en-US ] = "Insert Row" ;
 };
 String STR_TABLE_DELBOX
 {
-    Text [ de ] = "Zeile/Spalte löschen" ;
+    Text [ de ] = "Zeile/Spalte lÃ¶schen" ;
     Text [ en-US ] = "Delete row/column" ;
 };
 String STR_UNDO_COL_DELETE
 {
-    Text [ de ] = "Spalte löschen" ;
+    Text [ de ] = "Spalte lÃ¶schen" ;
     Text [ en-US ] = "Delete column" ;
 };
 String STR_UNDO_ROW_DELETE
 {
-    Text [ de ] = "Zeile löschen" ;
+    Text [ de ] = "Zeile lÃ¶schen" ;
     Text [ en-US ] = "Delete row" ;
 };
 String STR_TABLE_SPLIT
@@ -437,12 +437,12 @@ String STR_TABLE_NUMFORMAT
 };
 String STR_INSERT_TOX
 {
-    Text [ de ] = "Verzeichnis einfügen" ;
+    Text [ de ] = "Verzeichnis einfÃ¼gen" ;
     Text [ en-US ] = "Insert index/table" ;
 };
 String STR_CLEAR_TOX_RANGE
 {
-    Text [ de ] = "Verzeichnis löschen" ;
+    Text [ de ] = "Verzeichnis lÃ¶schen" ;
     Text [ en-US ] = "Remove index/table" ;
 };
 String STR_TABLE_TBLCPYTBL{
@@ -466,17 +466,17 @@ String STR_UNDO_CHAIN
 };
 String STR_UNDO_UNCHAIN
 {
-    Text [ de ] = "Textrahmenverbindung lösen" ;
+    Text [ de ] = "Textrahmenverbindung lÃ¶sen" ;
     Text [ en-US ] = "Unlink text frames" ;
 };
 String STR_UNDO_FTNINFO
 {
-    Text [ de ] = "Fußnoteneinstellungen ändern" ;
+    Text [ de ] = "FuÃŸnoteneinstellungen Ã¤ndern" ;
     Text [ en-US ] = "Modify footnote options" ;
 };
 String STR_UNDO_ENDNOTEINFO
 {
-    Text [ de ] = "Endnoteneinstellungen ändern" ;
+    Text [ de ] = "Endnoteneinstellungen Ã¤ndern" ;
     Text [ en-US ] = "Modify endnote settings" ;
 };
 String STR_UNDO_COMPAREDOC
@@ -502,17 +502,17 @@ String STR_UNDO_TMPAUTOCORR
 };
 String STR_INSERT_FOOTNOTE
 {
-    Text [ de ] = "Fußnote einfügen" ;
+    Text [ de ] = "FuÃŸnote einfÃ¼gen" ;
     Text [ en-US ] = "Insert footnote" ;
 };
 String STR_INSERT_URLBTN
 {
-    Text [ de ] = "URL Button einfügen" ;
+    Text [ de ] = "URL Button einfÃ¼gen" ;
     Text [ en-US ] = "insert URL button";
 };
 String STR_INSERT_URLTXT
 {
-    Text [ de ] = "Hyperlink einfügen" ;
+    Text [ de ] = "Hyperlink einfÃ¼gen" ;
     Text [ en-US ] = "Insert Hyperlink";
 };
 String STR_DELETE_INVISIBLECNTNT
@@ -522,7 +522,7 @@ String STR_DELETE_INVISIBLECNTNT
 };
 String STR_TOXCHANGE
 {
-    Text [ de ] = "Verzeichnis geändert";
+    Text [ de ] = "Verzeichnis geÃ¤ndert";
     Text [ en-US ] = "Table/index changed";
 };
 String STR_START_QUOTE
@@ -557,7 +557,7 @@ String STR_TYPING_UNDO
 };
 String STR_PASTE_CLIPBOARD_UNDO
 {
-    Text [ de ] ="Zwischenablage einfügen";
+    Text [ de ] ="Zwischenablage einfÃ¼gen";
     Text [ en-US ] = "Paste clipboard";
 };
 String STR_YIELDS
@@ -577,7 +577,7 @@ String STR_UNDO_TABS
 };
 String STR_UNDO_NLS
 {
-    Text [ de ] = "$1 Zeilenumbrüche";
+    Text [ de ] = "$1 ZeilenumbrÃ¼che";
     Text[ en-US ] = "$1 line break(s)";
 };
 String STR_UNDO_PAGEBREAKS
@@ -592,7 +592,7 @@ String STR_UNDO_COLBRKS
 };
 String STR_REDLINE_INSERT
 {
-    Text [ de ] = "$1 einfügen";
+    Text [ de ] = "$1 einfÃ¼gen";
     Text [ en-US ] = "Insert $1";
 };
 String STR_REDLINE_DELETE
@@ -602,32 +602,32 @@ String STR_REDLINE_DELETE
 };
 String STR_REDLINE_FORMAT
 {
-    Text [ de ] = "Attribute geändert";
+    Text [ de ] = "Attribute geÃ¤ndert";
     Text [ en-US ] = "Attributes changed";
 };
 String STR_REDLINE_TABLE
 {
-    Text [ de ] = "Tabelle geändert: ";
+    Text [ de ] = "Tabelle geÃ¤ndert: ";
     Text [ en-US ] = "Table changed";
 };
 String STR_REDLINE_FMTCOLL
 {
-    Text [ de ] = "Formatvorlage geändert";
+    Text [ de ] = "Formatvorlage geÃ¤ndert";
     Text [ en-US ] = "Style changed";
 };
 String STR_REDLINE_MULTIPLE
 {
-    Text [ de ] = "Mehrere Änderungen";
+    Text [ de ] = "Mehrere Ã„nderungen";
     Text [ en-US ] = "multiple changes";
 };
 String STR_N_REDLINES
 {
-    Text [ de ] = "$1 Änderungen";
+    Text [ de ] = "$1 Ã„nderungen";
     Text [ en-US ] = "$1 changes";
 };
 String STR_UNDO_PAGEDESC
 {
-    Text [ de ] = "Seitenvorlage ändern: $1";
+    Text [ de ] = "Seitenvorlage Ã¤ndern: $1";
     Text [ en-US ] = "Change page style: $1";
 };
 String STR_UNDO_PAGEDESC_CREATE
@@ -637,7 +637,7 @@ String STR_UNDO_PAGEDESC_CREATE
 };
 String STR_UNDO_PAGEDESC_DELETE
 {
-    Text [ de ] = "Seitenvorlage löschen: $1";
+    Text [ de ] = "Seitenvorlage lÃ¶schen: $1";
     Text [ en-US ] = "Delete page style: $1";
 };
 String STR_UNDO_PAGEDESC_RENAME
@@ -647,12 +647,12 @@ String STR_UNDO_PAGEDESC_RENAME
 };
 String STR_UNDO_HEADER_FOOTER
 {
-    Text [ de ] = "Kopf-/Fußzeile geändert";
+    Text [ de ] = "Kopf-/FuÃŸzeile geÃ¤ndert";
     Text [ en-US ] = "Header/footer changed";
 };
 String STR_UNDO_FIELD
 {
-    Text [ de ] = "Feld geändert";
+    Text [ de ] = "Feld geÃ¤ndert";
     Text [ en-US ] = "Field changed";
 };
 String STR_UNDO_TXTFMTCOL_CREATE
@@ -662,7 +662,7 @@ String STR_UNDO_TXTFMTCOL_CREATE
 };
 String STR_UNDO_TXTFMTCOL_DELETE
 {
-    Text [ de ] = "Absatzformat löschen: $1";
+    Text [ de ] = "Absatzformat lÃ¶schen: $1";
     Text [ en-US ] = "Delete paragraph style: $1";
 };
 String STR_UNDO_TXTFMTCOL_RENAME
@@ -677,7 +677,7 @@ String STR_UNDO_CHARFMT_CREATE
 };
 String STR_UNDO_CHARFMT_DELETE
 {
-    Text [ de ] = "Zeichenformat löschen: $1";
+    Text [ de ] = "Zeichenformat lÃ¶schen: $1";
     Text [ en-US ] = "Delete character style: $1";
 };
 String STR_UNDO_CHARFMT_RENAME
@@ -692,7 +692,7 @@ String STR_UNDO_FRMFMT_CREATE
 };
 String STR_UNDO_FRMFMT_DELETE
 {
-    Text [ de ] = "Rahmenformat löschen: $1";
+    Text [ de ] = "Rahmenformat lÃ¶schen: $1";
     Text [ en-US ] = "Delete frame style: $1";
 };
 String STR_UNDO_FRMFMT_RENAME
@@ -707,7 +707,7 @@ String STR_UNDO_NUMRULE_CREATE
 };
 String STR_UNDO_NUMRULE_DELETE
 {
-    Text [ de ] = "Listenformatvorlage löschen: $1";
+    Text [ de ] = "Listenformatvorlage lÃ¶schen: $1";
     Text [ en-US ] = "Delete numbering style: $1";
 };
 String STR_UNDO_NUMRULE_RENAME
@@ -722,12 +722,12 @@ String STR_UNDO_BOOKMARK_RENAME
 };
 String STR_UNDO_INDEX_ENTRY_INSERT
 {
-    Text [ de ] = "Verzeichniseintrag enfügen";
+    Text [ de ] = "Verzeichniseintrag enfÃ¼gen";
     Text[ en-US ] = "Insert index entry";
 };
 String STR_UNDO_INDEX_ENTRY_DELETE
 {
-    Text [ de ] = "Verzeichniseintrag löschen";
+    Text [ de ] = "Verzeichniseintrag lÃ¶schen";
     Text[ en-US ] = "Delete index entry";
 };
 String STR_FIELD
@@ -737,7 +737,7 @@ String STR_FIELD
 };
 String STR_PARAGRAPHS
 {
-    Text [ de ] = "Absätze" ;
+    Text [ de ] = "AbsÃ¤tze" ;
     Text [ en-US ] = "Paragraphs" ;
 };
 String STR_FRAME
@@ -787,7 +787,7 @@ String STR_SPECIALCHAR
 };
 String STR_FOOTNOTE
 {
-    Text [ de ] = "Fußnote";
+    Text [ de ] = "FuÃŸnote";
     Text[ en-US ] = "footnote";
 };
 String STR_GRAPHIC
