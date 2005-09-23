@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabstpge.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:13:36 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:50:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,7 +149,7 @@ TabPage RID_SVXPAGE_TABULATOR
     {
         Pos = MAP_APPFONT ( 60 , 86 ) ;
         Size = MAP_APPFONT ( 138 , 8 ) ;
-        Text [ de ] = "Füllzeichen" ;
+        Text [ de ] = "FÃ¼llzeichen" ;
         Text [ en-US ] = "Fill character" ;
         Text [ x-comment ] = " ";
     };
@@ -207,7 +207,7 @@ TabPage RID_SVXPAGE_TABULATOR
     {
         Pos = MAP_APPFONT ( 204 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Alle löschen" ;
+        Text [ de ] = "~Alle lÃ¶schen" ;
         Text [ en-US ] = "Delete ~All" ;
         Text [ x-comment ] = " ";
     };
@@ -215,7 +215,7 @@ TabPage RID_SVXPAGE_TABULATOR
     {
         Pos = MAP_APPFONT ( 204 , 40 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Lö~schen" ;
+        Text [ de ] = "LÃ¶~schen" ;
         Text [ en-US ] = "~Delete" ;
         Text [ x-comment ] = " ";
     };
