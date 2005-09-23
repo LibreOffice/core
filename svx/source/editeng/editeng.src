@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editeng.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:27:48 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:53:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 String RID_EDITUNDO_DEL
 {
-    Text [ de ] = "Löschen" ;
+    Text [ de ] = "LÃ¶schen" ;
     Text [ en-US ] = "Delete" ;
 };
 
@@ -50,7 +50,7 @@ String RID_EDITUNDO_MOVE
 
 String RID_EDITUNDO_INSERT
 {
-    Text [ de ] = "Einfügen" ;
+    Text [ de ] = "EinfÃ¼gen" ;
     Text [ en-US ] = "Insert" ;
 };
 
@@ -68,13 +68,13 @@ String RID_EDITUNDO_SETATTRIBS
 
 String RID_EDITUNDO_RESETATTRIBS
 {
-    Text [ de ] = "Attribute zurücksetzen" ;
+    Text [ de ] = "Attribute zurÃ¼cksetzen" ;
     Text [ en-US ] = "Reset attributes" ;
 };
 
 String RID_EDITUNDO_INDENT
 {
-    Text [ de ] = "Einrücken" ;
+    Text [ de ] = "EinrÃ¼cken" ;
     Text [ en-US ] = "Indent" ;
 };
 
@@ -86,7 +86,7 @@ String RID_EDITUNDO_SETSTYLE
 
 String RID_EDITUNDO_TRANSLITERATE
 {
-    Text [ de ] = "Groß-/Kleinschreibung";
+    Text [ de ] = "GroÃŸ-/Kleinschreibung";
     Text [ en-US ] = "Case/Characters";
     Text [ x-comment ] = "; nk03.04.01: hier passt Englisch Uebesetzung besser.";
 };
@@ -100,7 +100,7 @@ Menu RID_MENU_SPELL
         {
             Identifier = MN_SPELLING ;
             HelpId = HID_EDITENG_SPELLER_START;
-            Text [ de ] = "~Rechtschreibprüfung..." ;
+            Text [ de ] = "~RechtschreibprÃ¼fung..." ;
             Text [ en-US ] = "~Spellcheck..." ;
             Text [ x-comment ] = "; triple dots (...) are required now at the end of the text";
         };
