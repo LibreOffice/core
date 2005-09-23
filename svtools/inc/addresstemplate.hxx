@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addresstemplate.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:05:56 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:53:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,9 @@
 #ifndef _COM_SUN_STAR_UTIL_ALIASPROGRAMMATICPAIR_HPP_
 #include <com/sun/star/util/AliasProgrammaticPair.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
+#include <com/sun/star/sdbc/XDataSource.hpp>
+#endif
 #ifndef _UTL_CONFIGITEM_HXX_
 #include <unotools/configitem.hxx>
 #endif
@@ -121,14 +124,29 @@ namespace svt
         AddressBookSourceDialog( Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB );
 
-        // if you use this ctor, the dialog
-        // * will not store it's data in the configuration (nor initially retrieve it from there)
-        // * will not allow to change the data source name
-        // * will not allow to change the table name
-        // * will not allow to call the data source administration dialog
+        /** if you use this ctor, the dialog
+            <ul><li>will not store it's data in the configuration (nor initially retrieve it from there)</li>
+                <li>will not allow to change the data source name</li>
+                <li>will not allow to change the table name</li>
+                <li>will not allow to call the data source administration dialog</li>
+            </ul>
+
+            @param _rxORB
+                a service factory to use for various UNO related needs
+            @param _rxTransientDS
+                the data source to obtain connections from
+            @param _rDataSourceName
+                the to-be name of _rxTransientDS. This is only for displaying this
+                name to the user, since the dialog completely works on _rxTransientDS,
+                and doesn't allow to change this.
+            @param _rTable
+                the table name to display. It must refer to a valid table, relative to a connection
+                obtained from <arg>_rxTransientDS</arg>
+        */
         AddressBookSourceDialog( Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
-            const ::rtl::OUString& _rDS,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource >& _rxTransientDS,
+            const ::rtl::OUString& _rDataSourceName,
             const ::rtl::OUString& _rTable,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::util::AliasProgrammaticPair >& _rMapping
         );
