@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cookiedg.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:18:47 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:12:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ ModalDialog DLG_COOKIES
     {
         Pos = MAP_APPFONT ( 12 , 171 ) ;
         Size = MAP_APPFONT ( 52 , 10 ) ;
-        Text [ de ] = "Üb~ermitteln" ;
+        Text [ de ] = "Ãœb~ermitteln" ;
         Text [ en-US ] = "~Send" ;
     };
     RadioButton RB_INFUTURE_IGNORE
@@ -97,7 +97,7 @@ ModalDialog DLG_COOKIES
     {
         Pos = MAP_APPFONT ( 6 , 160 ) ;
         Size = MAP_APPFONT ( 174 , 27 ) ;
-        Text [ de ] = "Zukünftige Handhabung für diese Cookies" ;
+        Text [ de ] = "ZukÃ¼nftige Handhabung fÃ¼r diese Cookies" ;
         Text [ en-US ] = "Future Cookie Handling" ;
     };
     PushButton BTN_COOKIES_CANCEL
@@ -112,14 +112,14 @@ ModalDialog DLG_COOKIES
         Pos = MAP_APPFONT ( 239 , 173 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         DefButton = TRUE ;
-        Text [ de ] = "Ü~bermitteln" ;
+        Text [ de ] = "Ãœ~bermitteln" ;
         Text [ en-US ] = "~Send" ;
     };
 };
 
 String STR_COOKIES_RECV_START
 {
-    Text [ de ] = "Der Server '${HOST}' möchte ein oder mehrere Cookies setzen.\nCookies sind Informationen, die sich auf bestimmte Klassen von URLs beziehen. Fordert %PRODUCTNAME später ein Dokument an, welches der URL nach einer Klasse eines vorher empfangenen Cookies entspricht, wird diese Information von %PRODUCTNAME an den Server gesendet. So können sich Server den Zustand einer WWW Anwendung (z.B. in den Warenkorb gelegte Artikel in einem Einkaufssystem) merken.\n\nFolgende Cookies sollen gesetzt werden:\n\n" ;
+    Text [ de ] = "Der Server '${HOST}' mÃ¶chte ein oder mehrere Cookies setzen.\nCookies sind Informationen, die sich auf bestimmte Klassen von URLs beziehen. Fordert %PRODUCTNAME spÃ¤ter ein Dokument an, welches der URL nach einer Klasse eines vorher empfangenen Cookies entspricht, wird diese Information von %PRODUCTNAME an den Server gesendet. So kÃ¶nnen sich Server den Zustand einer WWW Anwendung (z.B. in den Warenkorb gelegte Artikel in einem Einkaufssystem) merken.\n\nFolgende Cookies sollen gesetzt werden:\n\n" ;
     Text [ en-US ] = "The '${HOST}' server wishes to set one or more cookies.\nCookies contain information referring to certain URL classes. If %PRODUCTNAME later requests a document with a URL corresponding to the class of a previously set cookie, %PRODUCTNAME will send this information to the server. This allows a server to recognize the status of a WWW application, e.g., when shopping online.\n\nThe following Cookies should be set:\n\n" ;
 };
 
@@ -137,7 +137,7 @@ String STR_COOKIES_RECV_TITLE
 
 String STR_COOKIES_SEND_START
 {
-    Text [ de ] = "%PRODUCTNAME hat für den Server '${HOST}' Cookies gespeichert, die beim Anfordern des Dokumentes ${PATH} verschickt werden sollen.\nCookies sind Informationen, die sich auf bestimmte Klassen von URLs beziehen. Sie werden von manchen Servern beim Aufruf bestimmter Dokumente an %PRODUCTNAME geschickt und dort gespeichert. Fordert %PRODUCTNAME später ein Dokument an, welches der URL nach einer Klasse eines vorher empfangenen Cookies entspricht, wird diese Information von %PRODUCTNAME an den Server gesendet. So können sich Server den Zustand einer WWW Anwendung (z.B. in den Warenkorb gelegte Artikel in einem Einkaufssystem) merken.\n\nFolgende Cookies sollen gesetzt werden:\n\n" ;
+    Text [ de ] = "%PRODUCTNAME hat fÃ¼r den Server '${HOST}' Cookies gespeichert, die beim Anfordern des Dokumentes ${PATH} verschickt werden sollen.\nCookies sind Informationen, die sich auf bestimmte Klassen von URLs beziehen. Sie werden von manchen Servern beim Aufruf bestimmter Dokumente an %PRODUCTNAME geschickt und dort gespeichert. Fordert %PRODUCTNAME spÃ¤ter ein Dokument an, welches der URL nach einer Klasse eines vorher empfangenen Cookies entspricht, wird diese Information von %PRODUCTNAME an den Server gesendet. So kÃ¶nnen sich Server den Zustand einer WWW Anwendung (z.B. in den Warenkorb gelegte Artikel in einem Einkaufssystem) merken.\n\nFolgende Cookies sollen gesetzt werden:\n\n" ;
     Text [ en-US ] = "%PRODUCTNAME has saved cookies for the server '${HOST}' which will be sent when requesting the document ${PATH}.\nCookies contain information which refers to certain URL classes. They are sent by some servers to %PRODUCTNAME where they are saved when certain documents are accessed. If %PRODUCTNAME loads a document that, according to the URL, corresponds to a class of one of the previously received Cookies, %PRODUCTNAME will send this information to that server. This enables a server to keep track of the status of a WWW application, e.g., when shopping online.\n\nThe following Cookies should be set:\n\n" ;
 };
 
