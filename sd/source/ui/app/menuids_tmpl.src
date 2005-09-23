@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menuids_tmpl.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:42:32 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:28:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@
         /* ### ACHTUNG: Neuer Text in Resource? ~Bildschirmpräsentation : ~Bildschirmpräsentation... */\
         /* ### ACHTUNG: Neuer Text in Resource? ~Bildschirmpräsentation : ~Bildschirmpräsentation... */\
         /* ### ACHTUNG: Neuer Text in Resource? ~Bildschirmpräsentation : ~Bildschirmprõsentation */\
-        Text [ de ] = "~Bildschirmpräsentation" ; \
+        Text [ de ] = "~BildschirmprÃ¤sentation" ; \
         Text [ en-US ] = "Slide Sho~w" ; \
         /* ### ACHTUNG: Neuer Text in Resource? Bildschirmpräsentation starten : Bildschirmprõsentation starten */\
         Text [ x-comment ] = " ";\
@@ -102,7 +102,7 @@
         Identifier = SID_CAPTUREPOINT ; \
         HelpID = SID_CAPTUREPOINT ; \
         /* ### ACHTUNG: Neuer Text in Resource? F~angpunkt/-linie einfügen... : F~angpunkt/-linie einf³gen... */\
-        Text [ de ] = "F~angpunkt/-linie einfügen..." ; \
+        Text [ de ] = "F~angpunkt/-linie einfÃ¼gen..." ; \
         /* ### ACHTUNG: Neuer Text in Resource? Fangpunkt oder -linie einfügen : Fangpunkt oder -linie einf³gen */\
         Text [ en-US ] = "~Insert Snap Point/Line..." ; \
         Text [ x-comment ] = " ";\
@@ -125,7 +125,7 @@
         Identifier = SID_DELETE_SNAPITEM ; \
         HelpID = SID_DELETE_SNAPITEM ; \
         /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */\
-        Text [ de ] = "~Löschen" ; \
+        Text [ de ] = "~LÃ¶schen" ; \
         /* ### ACHTUNG: Neuer Text in Resource? Fangobjekt löschen : Fangobjekt l÷schen */\
         Text [ en-US ] = "~Delete" ; \
         Text [ x-comment ] = " ";\
@@ -263,7 +263,7 @@
     {\
         Identifier = SID_DELETE_PAGE ; \
         HelpID = SID_DELETE_PAGE ; \
-        Text [ de ] = "Folie ~löschen" ; \
+        Text [ de ] = "Folie ~lÃ¶schen" ; \
         Text [ en-US ] = "D~elete Slide" ; \
         Text [ x-comment ] = " ";\
     };
@@ -273,7 +273,7 @@
     {\
         Identifier = SID_DELETE_MASTER_PAGE ; \
         HelpID = SID_DELETE_MASTER_PAGE ; \
-        Text [ de ] = "Master ~löschen" ; \
+        Text [ de ] = "Master ~lÃ¶schen" ; \
         Text [ en-US ] = "D~elete Master" ; \
         Text [ x-comment ] = " ";\
     };
@@ -285,7 +285,7 @@
     {\
         Identifier = SID_DELETE_PAGE ; \
         HelpID = SID_DELETE_PAGE ; \
-        Text [ de ] = "Seite ~löschen" ; \
+        Text [ de ] = "Seite ~lÃ¶schen" ; \
         Text [ en-US ] = "D~elete Page" ; \
         Text [ x-comment ] = " ";\
     };
@@ -337,7 +337,7 @@
         Identifier = SID_ATTRIBUTES_AREA ; \
         HelpID = SID_ATTRIBUTES_AREA ; \
         /* ### ACHTUNG: Neuer Text in Resource? ~Fläche... : ~Flõche... */\
-        Text [ de ] = "~Fläche..." ; \
+        Text [ de ] = "~FlÃ¤che..." ; \
         Text [ en-US ] = "A~rea..." ; \
         /* ### ACHTUNG: Neuer Text in Resource? Flächen bearbeiten und definieren : Flõchen bearbeiten und definieren */\
         Text [ x-comment ] = " ";\
@@ -370,7 +370,7 @@
         Identifier = SID_CONNECTION_NEW_ROUTING ; \
         HelpID = SID_CONNECTION_NEW_ROUTING ; \
         /* ### ACHTUNG: Neuer Text in Resource? Linienverlauf ~zurücksetzen : Linienverlauf ~zur³cksetzen */\
-        Text [ de ] = "Linienverlauf ~zurücksetzen" ; \
+        Text [ de ] = "Linienverlauf ~zurÃ¼cksetzen" ; \
         Text [ en-US ] = "Reset ~Routing" ; \
         Text [ x-comment ] = " ";\
     };
@@ -381,7 +381,7 @@
         Identifier = SID_MEASURE_DLG ; \
         HelpID = SID_MEASURE_DLG ; \
         /* ### ACHTUNG: Neuer Text in Resource? Bema~ßung... : Bema~˜ung... */\
-        Text [ de ] = "Bema~ßung..." ; \
+        Text [ de ] = "Bema~ÃŸung..." ; \
         Text [ en-US ] = "Dimen~sions..." ; \
         Text [ x-comment ] = " ";\
     };
@@ -392,7 +392,7 @@
         Identifier = SID_ATTR_TRANSFORM ; \
         HelpID = SID_ATTR_TRANSFORM ; \
         /* ### ACHTUNG: Neuer Text in Resource? P~osition und Größe... : P~osition und Gr÷˜e... */\
-        Text [ de ] = "P~osition und Größe..." ; \
+        Text [ de ] = "P~osition und GrÃ¶ÃŸe..." ; \
         Text [ en-US ] = "Position and Si~ze..." ; \
         /* ### ACHTUNG: Neuer Text in Resource? Position, Größe und Winkel der selektierten Objekte ändern : Position, Gr÷˜e und Winkel der selektierten Objekte õndern */\
         Text [ x-comment ] = " ";\
@@ -526,7 +526,7 @@
         Identifier = SID_ATTR_CHAR_FONTHEIGHT ; \
         HelpID = SID_ATTR_CHAR_FONTHEIGHT ; \
         /* ### ACHTUNG: Neuer Text in Resource? ~Größe : ~Gr÷˜e */\
-        Text [ de ] = "~Größe" ; \
+        Text [ de ] = "~GrÃ¶ÃŸe" ; \
         Text [ en-US ] = "~Size" ; \
         Text [ x-comment ] = " ";\
     };\
@@ -773,7 +773,7 @@
         Identifier = SID_OBJECT_CLOSE ; \
         HelpID = SID_OBJECT_CLOSE ; \
         /* ### ACHTUNG: Neuer Text in Resource? ~Objekt schließen : ~Objekt schlie˜en */\
-        Text [ de ] = "Obje~kt schließen" ; \
+        Text [ de ] = "Obje~kt schlieÃŸen" ; \
         Text [ en-US ] = "Close ~Object" ; \
         Text [ x-comment ] = " ";\
     };
@@ -801,7 +801,7 @@
         Identifier = SID_BEZIER_INSERT ; \
         HelpID = SID_BEZIER_INSERT ; \
         /* ### ACHTUNG: Neuer Text in Resource? Punkte ~einfügen : Punkte ~einf³gen */\
-        Text [ de ] = "Punkte ~einfügen" ; \
+        Text [ de ] = "Punkte ~einfÃ¼gen" ; \
         Text [ en-US ] = "Insert ~Points" ; \
         Text [ x-comment ] = " ";\
     };\
@@ -810,7 +810,7 @@
         Identifier = SID_BEZIER_DELETE ; \
         HelpID = SID_BEZIER_DELETE ; \
         /* ### ACHTUNG: Neuer Text in Resource? Punkte l~öschen : Punkte l~÷schen */\
-        Text [ de ] = "Punkte l~öschen" ; \
+        Text [ de ] = "Punkte l~Ã¶schen" ; \
         Text [ en-US ] = "~Delete Points" ; \
         Text [ x-comment ] = " ";\
     };\
@@ -820,7 +820,7 @@
         Identifier = SID_BEZIER_CLOSE ; \
         HelpID = SID_BEZIER_CLOSE ; \
         /* ### ACHTUNG: Neuer Text in Resource? ~Objekt schließen : ~Objekt schlie˜en */\
-        Text [ de ] = "~Objekt schließen" ; \
+        Text [ de ] = "~Objekt schlieÃŸen" ; \
         Text [ en-US ] = "Close ~Object" ; \
         Text [ x-comment ] = " ";\
     };\
@@ -956,7 +956,7 @@
     {\
         Identifier = SID_REHEARSE_TIMINGS ; \
         HelpID = SID_REHEARSE_TIMINGS ; \
-        Text [ de ] = "Bildschirmp~räsentation mit Zeitnahme" ; \
+        Text [ de ] = "Bildschirmp~rÃ¤sentation mit Zeitnahme" ; \
         Text [ en-US ] = "~Rehearse Timings" ; \
     };
 
@@ -986,7 +986,7 @@
         Identifier = SID_PRESENTATIONOBJECT ; \
         HelpID = SID_PRESENTATIONOBJECT ; \
         /* ### ACHTUNG: Neuer Text in Resource? ~Präsentationsobjekt... : ~Prõsentationsobjekt... */\
-        Text [ de ] = "~Präsentationsobjekt..." ; \
+        Text [ de ] = "~PrÃ¤sentationsobjekt..." ; \
         /* ### ACHTUNG: Neuer Text in Resource? Selektiertes Präsentationsobjekt bearbeiten : Selektiertes Prõsentationsobjekt bearbeiten */\
         Text [ en-US ] = "Presentation ~Object..." ; \
         Text [ x-comment ] = " ";\
@@ -999,7 +999,7 @@
         Identifier = SID_DELETE ; \
         HelpID = SID_DELETE ; \
         /* ### ACHTUNG: Neuer Text in Resource? L~öschen : L~÷schen */\
-        Text [ de ] = "L~öschen" ; \
+        Text [ de ] = "L~Ã¶schen" ; \
         Text [ en-US ] = "~Delete" ; \
         /* ### ACHTUNG: Neuer Text in Resource? Alle selektierten Objekte löschen : Alle selektierten Objekte l÷schen */\
         Text [ x-comment ] = " ";\
@@ -1040,7 +1040,7 @@
     {\
         Identifier = SID_ORIGINAL_SIZE ; \
         HelpID = SID_ORIGINAL_SIZE ; \
-        Text [ de ] = "Origi~nalgröße" ; \
+        Text [ de ] = "Origi~nalgrÃ¶ÃŸe" ; \
         Text [ en-US ] = "Original ~Size" ; \
         Text [ x-comment ] = " ";\
     };
@@ -1071,7 +1071,7 @@
         Identifier = SID_GLUE_INSERT_POINT ; \
         HelpID = SID_GLUE_INSERT_POINT ; \
         /* ### ACHTUNG: Neuer Text in Resource? ~Punkt einfügen : ~Punkt einf³gen */\
-        Text [ de ] = "~Punkt einfügen" ; \
+        Text [ de ] = "~Punkt einfÃ¼gen" ; \
         Text [ en-US ] = "Insert ~Point" ; \
         Text [ x-comment ] = " ";\
     };
@@ -1376,7 +1376,7 @@
         Identifier = DUMMY + 4 ; \
         Command = ".uno:ColorResMenu" ; \
         /* ### ACHTUNG: Neuer Text in Resource? ~Farbauflösung : ~Farbaufl÷sung */\
-        Text [ de ] = "~Farbauflösung" ; \
+        Text [ de ] = "~FarbauflÃ¶sung" ; \
         SubMenu = Menu\
         {\
             ItemList = \
@@ -1518,21 +1518,21 @@
                 {\
                     Identifier = SID_INSERTLAYER ; \
                     HelpID = SID_INSERTLAYER ; \
-                    Text [ de ] = "~Einfügen";\
+                    Text [ de ] = "~EinfÃ¼gen";\
                     Text [ en-US ] = "~Insert";\
                 };\
                 MenuItem \
                 {\
                     Identifier = SID_MODIFYLAYER ; \
                     HelpID = SID_MODIFYLAYER ; \
-                    Text [ de ] = "~Ändern";\
+                    Text [ de ] = "~Ã„ndern";\
                     Text [ en-US ] = "~Modify";\
                 };\
                 MenuItem \
                 {\
                     Identifier = SID_DELETE_LAYER ; \
                     HelpID = SID_DELETE_LAYER ; \
-                    Text [ de ] = "~Löschen";\
+                    Text [ de ] = "~LÃ¶schen";\
                     Text [ en-US ] = "Delete";\
                 };\
                 MenuItem \
