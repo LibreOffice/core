@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.136 $
+ *  $Revision: 1.137 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:02:55 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:36:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1137,7 +1137,7 @@ void SAL_CALL ORowSet::deleteRow(  ) throw(SQLException, RuntimeException)
         notifyClonesRowDeleted(m_aBookmark);
 
         m_aBookmark     = Any();
-        m_aCurrentRow   = ORowSetCacheIterator();
+        m_aCurrentRow   = m_pCache->getEnd();
         m_aCurrentRow.setBookmark(Any());
 
         ORowSetNotifier aNotifier( this );
@@ -2745,7 +2745,7 @@ void ORowSetClone::rowDeleted(const ::com::sun::star::uno::Any& _rBookmark)
     if(compareBookmarks(_rBookmark,m_aBookmark) == 0)
     {
         m_aBookmark     = Any();
-        m_aCurrentRow   = ORowSetCacheIterator();
+        m_aCurrentRow   = m_pCache->getEnd();
         m_aCurrentRow.setBookmark(Any());
     }
 }
