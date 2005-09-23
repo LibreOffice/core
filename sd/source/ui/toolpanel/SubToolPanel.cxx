@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SubToolPanel.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:32:35 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:31:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,7 @@ void SubToolPanel::AddControl (
         rTitle,
         TitleBar::TBT_SUB_CONTROL_HEADLINE);
     pTitledControl->GetWindow()->SetParent(this);
-    pTitledControl->GetTitleBar()->SetHelpId(nHelpId);
+    pTitledControl->GetWindow()->SetHelpId(nHelpId);
     ::std::auto_ptr<TreeNode> pChild (pTitledControl);
 
     // Add a down link only for the first control so that when
@@ -129,7 +129,6 @@ void SubToolPanel::AddControl (
     FocusManager::Instance().RegisterUpLink(pTitledControl->GetWindow(), GetParent());
 
     mpControlContainer->AddControl (pChild);
-
 }
 
 
@@ -147,7 +146,6 @@ void SubToolPanel::AddControl (::std::auto_ptr<TreeNode> pControl)
     FocusManager::Instance().RegisterUpLink(pControl->GetWindow(), GetParent());
 
     mpControlContainer->AddControl (pControl);
-
 }
 
 
