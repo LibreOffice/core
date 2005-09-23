@@ -4,9 +4,9 @@
  *
  *  $RCSfile: validate.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:43:49 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:00:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@ TabDialog TAB_DLG_VALIDATION
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text [ de ] = "Gültigkeit" ;
+    Text [ de ] = "GÃ¼ltigkeit" ;
     Moveable = TRUE ;
     TabControl 1
     {
@@ -105,7 +105,7 @@ TabPage TP_VALIDATION_VALUES
             < "Zeit" ; SC_VALIDDLG_ALLOW_TIME ; > ;
             < "Zellbereich" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
             < "Liste" ; SC_VALIDDLG_ALLOW_LIST ; > ;
-            < "Textlänge" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
+            < "TextlÃ¤nge" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
         };
         StringList [ en-US ] =
         {
@@ -138,9 +138,9 @@ TabPage TP_VALIDATION_VALUES
         {
             < "gleich" ; SC_VALIDDLG_DATA_EQUAL ; > ;
             < "kleiner als" ; SC_VALIDDLG_DATA_LESS ; > ;
-            < "größer als" ; SC_VALIDDLG_DATA_GREATER ; > ;
+            < "grÃ¶ÃŸer als" ; SC_VALIDDLG_DATA_GREATER ; > ;
             < "kleiner oder gleich" ; SC_VALIDDLG_DATA_EQLESS ; > ;
-            < "größer oder gleich" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
+            < "grÃ¶ÃŸer oder gleich" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
             < "ungleich" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
             < "zwischen" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
             < "nicht zwischen" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
@@ -214,7 +214,7 @@ TabPage TP_VALIDATION_VALUES
         Pos = MAP_APPFONT ( 90 , 58 ) ;
         Size = MAP_APPFONT ( 164 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Ein~träge aufsteigend sortieren" ;
+        Text [ de ] = "Ein~trÃ¤ge aufsteigend sortieren" ;
         Text [ en-US ] = "Sor~t entries ascending" ;
     };
     FixedText FT_SOURCEHINT
@@ -222,7 +222,7 @@ TabPage TP_VALIDATION_VALUES
         Pos = MAP_APPFONT ( 80 , 90 ) ;
         Size = MAP_APPFONT ( 174 , 64 ) ;
         WordBreak = TRUE ;
-        Text [ de ] = "Als Quelle ist nur eine zusammenhängende Auswahl in einer Spalte oder einer Zeile erlaubt. Bei anderer Auswahl wird nur die erste Spalte des ersten, ausgewählten Bereichs zur Auswertung herangezogen." ;
+        Text [ de ] = "Als Quelle ist nur eine zusammenhÃ¤ngende Auswahl in einer Spalte oder einer Zeile erlaubt. Bei anderer Auswahl wird nur die erste Spalte des ersten, ausgewÃ¤hlten Bereichs zur Auswertung herangezogen." ;
         Text [ en-US ] = "A valid source can only consist of a contiguous selection in a single row or single column. If several selections are made, only the first column of the first selected range will be used for validation." ;
     };
 };
@@ -297,7 +297,7 @@ TabPage TP_VALIDATION_ERROR
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
-        Text [ de ] = "Fehler~meldung bei Eingabe ungültiger Werte anzeigen" ;
+        Text [ de ] = "Fehler~meldung bei Eingabe ungÃ¼ltiger Werte anzeigen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Show error ~message when invalid values are entered" ;
     };
