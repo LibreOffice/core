@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chartins.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:56:50 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:12:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ ModelessDialog DLG_INSERT_CHART
     {
         Pos = MAP_APPFONT ( 6 , 72 ) ;
         Size = MAP_APPFONT ( 285 , 62 ) ;
-        Text [ de ] = "Falls die ausgewählten Zellen nicht die gewünschten Daten enthalten, wählen Sie jetzt den Bereich aus.\n\nBeziehen Sie die Zellen mit Spalten- bzw. Zeilenbeschriftungen mit ein, wenn Sie diese in Ihrer Grafik dargestellt haben möchten." ;
+        Text [ de ] = "Falls die ausgewÃ¤hlten Zellen nicht die gewÃ¼nschten Daten enthalten, wÃ¤hlen Sie jetzt den Bereich aus.\n\nBeziehen Sie die Zellen mit Spalten- bzw. Zeilenbeschriftungen mit ein, wenn Sie diese in Ihrer Grafik dargestellt haben mÃ¶chten." ;
         Text [ en-US ] = "If the selected cells do not contain the desired data, select the data range now.\n\nInclude the cells containing column and row labels if you want them to be included in your chart." ;
         WordBreak = TRUE ;
     };
@@ -114,7 +114,7 @@ ModelessDialog DLG_INSERT_CHART
         Size = MAP_APPFONT ( 50 , 14 ) ;
          // ### ACHTUNG: Neuer Text in Resource? << ~Zurück : << Zurück
         /* ### ACHTUNG: Neuer Text in Resource? << ~Zurück : << ~Zur³ck */
-        Text [ de ] = "<< Z~urück" ;
+        Text [ de ] = "<< Z~urÃ¼ck" ;
         TabStop = TRUE ;
         Disable = TRUE ;
         Text [ en-US ] = "<< ~Back" ;
