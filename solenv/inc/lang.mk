@@ -4,9 +4,9 @@
 #
 #   $RCSfile: lang.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:34:12 $
+#   last change: $Author: hr $ $Date: 2005-09-23 14:27:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ LANG_GUI=$(GUI)
 #
 ###################################################
 
-deut$(LANG_GUI)*=-CHARSET_microsoft-cp1252
+#deut$(LANG_GUI)*=-CHARSET_microsoft-cp1252
 
 ###################################################
 #
