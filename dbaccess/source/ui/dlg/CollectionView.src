@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CollectionView.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:43:43 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:11:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ ModalDialog DLG_COLLECTION_VIEW
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( WIN_X - UNRELATED_CONTROLS - IMG_SIZE, UNRELATED_CONTROLS ) ;
         Size = MAP_APPFONT ( IMG_SIZE , IMG_SIZE ) ;
-        QuickHelpText [ de ] = "Aufwärts" ;
+        QuickHelpText [ de ] = "AufwÃ¤rts" ;
         QuickHelpText [ en-US ] = "Up One Level" ;
     };
 
@@ -177,7 +177,7 @@ Image IMG_NAVIGATION_CREATEFOLDER_SCH
 
 String STR_ALREADYEXISTOVERWRITE
 {
-    Text [ de ] = "Die Datei existiert bereits. Soll sie überschrieben werden?" ;
+    Text [ de ] = "Die Datei existiert bereits. Soll sie Ã¼berschrieben werden?" ;
     Text [ en-US ] = "The file already exists. Overwrite?" ;
 };
 
