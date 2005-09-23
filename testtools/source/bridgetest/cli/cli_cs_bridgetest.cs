@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cli_cs_bridgetest.cs,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:23:50 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:48:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -981,9 +981,9 @@ static bool raiseException(XBridgeTest xLBT )
        bRet = check( raiseOnewayException( xLBT ), "oneway exception test" ) && bRet;
        bRet = check( testObjectMethodsImplemention(xLBT), "object methods test") && bRet;
        bRet = performQueryForUnknownType( xLBT ) && bRet;
-        if (! bRet)
+        if ( ! bRet)
         {
-            throw new unoidl.com.sun.star.uno.RuntimeException( "error: test failed!", null);
+            throw new unoidl.com.sun.star.uno.RuntimeException( "error (cli_cs_bridgetest.cs): test failed!", null);
         }
     }
 
@@ -994,34 +994,39 @@ static bool raiseException(XBridgeTest xLBT )
 
     private XComponentContext m_xContext;
 
-    public int run( String [] args )
-    {
-        Debug.AutoFlush = true;
+	public int run( String [] args )
+	{
+		Debug.AutoFlush = true;
+//		System.Diagnostics.Debugger.Launch();
+		try
+		{
+			if (args.Length < 1)
+			{
+				throw new RuntimeException(
+					"missing argument for bridgetest!", this );
+			}
+			Object test_obj =
+				m_xContext.getServiceManager().createInstanceWithContext(
+				args[ 0 ], m_xContext );
 
-        try
-        {
-            if (args.Length < 1)
-            {
-                throw new RuntimeException(
-                    "missing argument for bridgetest!", this );
-            }
-            Object test_obj =
-                m_xContext.getServiceManager().createInstanceWithContext(
-                    args[ 0 ], m_xContext );
+			Debug.WriteLine(
+				"Calling object: {0}", test_obj.ToString() );
 
-            Debug.WriteLine(
-                "Calling object: {0}", test_obj.ToString() );
-
-            XBridgeTest xTest = (XBridgeTest) test_obj ;
-            perform_test( xTest );
-            Console.WriteLine( "\n### cli_uno C# bridgetest succeeded." );
-            return 0;
-        }
-        catch (System.Exception exc)
-        {
-			Console.WriteLine( "\n### unexpected exception occured: {0}", exc );
-            return 1;
-        }
+			XBridgeTest xTest = (XBridgeTest) test_obj ;
+			perform_test( xTest );
+			Console.WriteLine( "\n### cli_uno C# bridgetest succeeded." );
+			return 0;
+		}
+		catch (unoidl.com.sun.star.uno.RuntimeException)
+		{
+			throw;
+		}
+		catch (System.Exception exc)
+		{	
+			throw new unoidl.com.sun.star.uno.RuntimeException(
+				"cli_cs_bridgetest.cs: unexpected exception occured in XMain::run. Original exception: " +
+				exc.GetType().Name + "\n Message: " + exc.Message , null);
+		}
     }
 }
 
