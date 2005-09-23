@@ -117,6 +117,7 @@ CSOActiveX::CSOActiveX()
 , mbViewOnly( TRUE )
 , mpDispatchInterceptor( NULL )
 , mnVersion( SO_NOT_DETECTED )
+, mbReadyForActivation( FALSE )
 {
     CLSID clsFactory = {0x82154420,0x0FBF,0x11d4,{0x83, 0x13,0x00,0x50,0x04,0x52,0x6A,0xB4}};
     HRESULT hr = CoCreateInstance( clsFactory, NULL, CLSCTX_ALL, __uuidof(IDispatch), (void**)&mpDispFactory);
@@ -165,6 +166,9 @@ HRESULT CSOActiveX::Cleanup()
         }
     }
     */
+
+    mpDispTempFile = CComPtr< IDispatch >();
+    mbReadyForActivation = FALSE;
 
     if( mpDispFrame )
     {
@@ -280,10 +284,19 @@ STDMETHODIMP CSOActiveX::Load( LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog )
     if( !mpDispFactory )
         return hr;
 
-    mbLoad = TRUE;
+    mbReadyForActivation = FALSE;
+    hr = CBindStatusCallback<CSOActiveX>::Download( this, CallbackCreateXInputStream, mCurFileUrl, m_spClientSite, FALSE );
+    if ( hr == MK_S_ASYNCHRONOUS )
+        hr = S_OK;
 
-    Invalidate();
-    UpdateWindow();
+    if ( !SUCCEEDED( hr ) )
+    {
+        // trigger initialization without stream
+        mbLoad = TRUE;
+
+        Invalidate();
+        UpdateWindow();
+    }
 
     return hr;
 }
@@ -511,14 +524,94 @@ HRESULT CSOActiveX::CallDispatchMethod( OLECHAR* sUrl,
     return S_OK;
 }
 
+void CSOActiveX::CallbackCreateXInputStream( CBindStatusCallback<CSOActiveX>* pbsc, BYTE* pBytes, DWORD dwSize )
+{
+    if ( mbReadyForActivation )
+        return;
+
+    BOOL bSuccess = FALSE;
+    BOOL bFinishDownload = FALSE;
+    if ( !pBytes )
+    {
+        // means the download is finished, dwSize contains hresult
+        bFinishDownload = TRUE;
+        if ( SUCCEEDED( dwSize ) )
+            bSuccess = TRUE;
+    }
+    else
+    {
+        HRESULT hr = S_OK;
+
+        if ( !mpDispTempFile )
+        {
+            hr = GetIDispByFunc( mpDispFactory,
+                                 L"createInstance",
+                                 &CComVariant( L"com.sun.star.io.TempFile" ),
+                                 1,
+                                 mpDispTempFile );
+        }
+
+        if( SUCCEEDED( hr ) && mpDispTempFile )
+        {
+            SAFEARRAY FAR* pDataArray = SafeArrayCreateVector( VT_I1, 0, dwSize );
+
+            if ( pDataArray )
+            {
+                hr = SafeArrayLock( pDataArray );
+                if ( SUCCEEDED( hr ) )
+                {
+                    for( DWORD ix = 0; ix < dwSize; ix++ )
+                        ((BYTE*)(pDataArray->pvData))[ix] = pBytes[ix];
+                    hr = SafeArrayUnlock( pDataArray );
+                    if ( SUCCEEDED( hr ) )
+                    {
+                        CComVariant aArgs[1];
+                        aArgs[0].vt = VT_ARRAY | VT_I1; aArgs[0].parray = pDataArray;
+                        CComVariant dummyResult;
+                        hr = ExecuteFunc( mpDispTempFile, L"writeBytes", aArgs, 1, &dummyResult );
+                        if( SUCCEEDED( hr ) )
+                            bSuccess = TRUE;
+                    }
+                }
+            }
+        }
+    }
+
+    if ( !bSuccess )
+    {
+        // the download failed, let StarOffice download
+        bFinishDownload = TRUE;
+        mpDispTempFile = CComPtr< IDispatch >();
+    }
+
+    if ( bFinishDownload )
+    {
+        // trigger the loading now
+        mbLoad = TRUE;
+        mbReadyForActivation = TRUE;
+
+        Invalidate();
+        UpdateWindow();
+    }
+}
+
 HRESULT CSOActiveX::LoadURLToFrame( )
 {
-    CComVariant aArgNames[3] = { L"ReadOnly", L"ViewOnly", L"AsTemplate" };
-    CComVariant aArgVals[3];
+    CComVariant aArgNames[4] = { L"ReadOnly", L"ViewOnly", L"AsTemplate", L"InputStream" };
+    CComVariant aArgVals[4];
+    unsigned int nCount = 3; // the 4-th argument is used only if the stream can be retrieved
+
     aArgVals[0].vt = VT_BOOL; aArgVals[0].boolVal = mbViewOnly ? VARIANT_TRUE : VARIANT_FALSE;
     aArgVals[1].vt = VT_BOOL; aArgVals[1].boolVal = mbViewOnly ? VARIANT_TRUE : VARIANT_FALSE;
     aArgVals[2].vt = VT_BOOL; aArgVals[2].boolVal = VARIANT_FALSE;
-    HRESULT hr = CallDispatchMethod( mCurFileUrl, aArgNames, aArgVals, 3 );
+
+    if ( mpDispTempFile )
+    {
+        aArgVals[3] = CComVariant( mpDispTempFile );
+        nCount = 4;
+    }
+
+    HRESULT hr = CallDispatchMethod( mCurFileUrl, aArgNames, aArgVals, nCount );
     if( !SUCCEEDED( hr ) ) return hr;
 
     CComVariant aBarName( L"MenuBarVisible" );
@@ -638,7 +731,7 @@ SOVersion CSOActiveX::GetVersionConnected()
 
 HRESULT CSOActiveX::OnDrawAdvanced( ATL_DRAWINFO& di )
 {
-    if( m_spInPlaceSite && mCurFileUrl )
+    if( m_spInPlaceSite && mCurFileUrl && mbReadyForActivation )
     {
         HWND hwnd;
         HRESULT hr = m_spInPlaceSite->GetWindow( &hwnd );
@@ -719,18 +812,39 @@ HRESULT CSOActiveX::OnDrawAdvanced( ATL_DRAWINFO& di )
         if( mbLoad )
         {
             hr = LoadURLToFrame();
+            mbLoad = FALSE;
             if( !SUCCEEDED( hr ) )
             {
                 OutputError_Impl( mOffWin, STG_E_ABNORMALAPIEXIT );
+
+                if( ::IsWindow( mOffWin ) )
+                {
+                    ::DestroyWindow( mOffWin );
+                    mOffWin = NULL;
+                }
+
+                mbReadyForActivation = FALSE;
                 return hr;
             }
-            mbLoad = FALSE;
         }
+    }
+    else
+    {
+        // activate the fallback
+        CComControl<CSOActiveX>::OnDrawAdvanced( di );
     }
 
     return S_OK;
 }
 
+HRESULT CSOActiveX::OnDraw( ATL_DRAWINFO& di )
+{
+    // fallback that is activated by the parent class
+    if ( di.hdcDraw )
+        FillRect( di.hdcDraw, (RECT*)di.prcBounds, (HBRUSH)COLOR_BACKGROUND );
+
+    return S_OK;
+}
 
 STDMETHODIMP CSOActiveX::SetClientSite( IOleClientSite* aClientSite )
 {
