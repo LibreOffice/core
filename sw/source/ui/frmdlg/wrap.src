@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrap.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:55:40 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:06:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,7 @@ TabPage TP_FRM_WRAP
     {
         Pos = MAP_APPFONT ( 139 , 153 ) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
-        Text [ de ] = "~Nur auﬂen" ;
+        Text [ de ] = "~Nur au√üen" ;
         Hide = TRUE ;
         Text [ en-US ] = "Outside only" ;
     };
@@ -246,7 +246,7 @@ TabPage TP_FRM_WRAP
     {
         Pos = MAP_APPFONT ( 6 , 100 ) ;
         Size = MAP_APPFONT ( 121 , 8 ) ;
-        Text [ de ] = "Abst‰nde" ;
+        Text [ de ] = "Abst√§nde" ;
         Text [ en-US ] = "Spacing" ;
     };
 #define WRAP_IDLIST \
