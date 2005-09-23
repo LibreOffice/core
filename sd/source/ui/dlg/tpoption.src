@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:25:39 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:37:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #include "helpids.h"
 
 #define SCALE_TEXT \
-        Text [ de ] = "Maﬂstab" ;                              \
+        Text [ de ] = "Ma√üstab" ;                              \
         Text [ en-US ] = "Scale" ;                 \
         Text [ x-comment ] = " ";   \
 
@@ -200,7 +200,7 @@ TabPage TP_OPTIONS_MISC
         Pos = MAP_APPFONT ( 12 , 80  ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Cache f¸r Hintergrund benutzen" ;
+        Text [ de ] = "~Cache f√ºr Hintergrund benutzen" ;
         Text [ en-US ] = "Use background cache" ;
         Text [ x-comment ] = " ";
     };
@@ -236,7 +236,7 @@ TabPage TP_OPTIONS_MISC
     {
         Pos = MAP_APPFONT ( 12 , 119 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "~Maﬂeinheit" ;
+        Text [ de ] = "~Ma√üeinheit" ;
         Text [ en-US ] = "Unit of ~measurement" ;
         Text [ x-comment ] = " ";
     };
@@ -277,7 +277,7 @@ TabPage TP_OPTIONS_MISC
     {
         Pos = MAP_APPFONT ( 6 , 134  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Starten der Pr‰sentation" ;
+        Text [ de ] = "Starten der Pr√§sentation" ;
         Text [ en-US ] = "Start presentation" ;
         Text [ x-comment ] = " ";
     };
@@ -294,7 +294,7 @@ TabPage TP_OPTIONS_MISC
     {
         Pos = MAP_APPFONT ( 6 , 160 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Kompatibilit‰t" ;
+        Text [ de ] = "Kompatibilit√§t" ;
         Text [ en-US ] = "Compatibility" ;
     };
     CheckBox CB_USE_PRINTER_METRICS
@@ -304,14 +304,14 @@ TabPage TP_OPTIONS_MISC
         // translation to work on.
         Pos = MAP_APPFONT ( 12 , 184 ) ;
         Size = MAP_APPFONT ( 242, 10 ) ;
-        Text [ de ] = "Druckermaﬂe f¸r Dokumentformatierung verwenden";
+        Text [ de ] = "Druckerma√üe f√ºr Dokumentformatierung verwenden";
         Text [ en-US ] = "Us~e printer metrics for document formatting";
     };
     CheckBox CB_MERGE_PARA_DIST
     {
         Pos = MAP_APPFONT ( 12 , 171 ) ;
         Size = MAP_APPFONT ( 242, 10 ) ;
-        Text [ de ] = "Alle Absatz- und Tabellenabst‰nde addieren (aktuelles ~Dokument)";
+        Text [ de ] = "Alle Absatz- und Tabellenabst√§nde addieren (aktuelles ~Dokument)";
         Text [ en-US ] = "Add ~spacing between paragraphs and tables (in current document)";
     };
     FixedLine GRP_SCALE
@@ -342,7 +342,7 @@ TabPage TP_OPTIONS_MISC
         Hide = TRUE;
         Pos = MAP_APPFONT ( 12 , 149 ) ;
         Size = MAP_APPFONT ( 56 , 8 ) ;
-        Text [ de ] = "Zeichn~ungsmaﬂstab" ;
+        Text [ de ] = "Zeichn~ungsma√üstab" ;
         Text [ en-US ] = "~Drawing scale";
     };
     ComboBox CB_SCALE
@@ -391,7 +391,7 @@ TabPage TP_OPTIONS_MISC
         Hide = TRUE;
         Pos = MAP_APPFONT ( 105 , 165 ) ;
         Size = MAP_APPFONT ( 49 , 8 ) ;
-        Text [ de ] = "Se~itenhˆhe" ;
+        Text [ de ] = "Se~itenh√∂he" ;
         Text [ en-US ] = "Page ~height" ;
         Text [ x-comment ] = " ";
     };
