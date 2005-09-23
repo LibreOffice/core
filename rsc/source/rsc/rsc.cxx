@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rsc.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:57:45 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:17:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -944,8 +944,8 @@ ERRTYPE RscCompiler::Link()
             pTC->pEH->StdOut( "Generating .rc file\n" );
 
             rtl_TextEncoding aEnc = RTL_TEXTENCODING_UTF8;
-            if( it->aLangName.CompareIgnoreCaseToAscii( "de", 2 ) == COMPARE_EQUAL )
-                aEnc = RTL_TEXTENCODING_MS_1252;
+            //if( it->aLangName.CompareIgnoreCaseToAscii( "de", 2 ) == COMPARE_EQUAL )
+            //    aEnc = RTL_TEXTENCODING_MS_1252;
 
             // Schreibe Datei
             sal_Char cSearchDelim = ByteString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US ).GetChar( 0 );
