@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbloader2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:59:57 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:07:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -331,16 +331,21 @@ public:
 private:
     sal_Bool impl_executeNewDatabaseWizard( Reference< XModel >& _rxModel, sal_Bool& _bShouldStartTableWizard );
 };
+DBG_NAME(DBContentLoader)
 
 DBContentLoader::DBContentLoader(const Reference< XMultiServiceFactory >& _rxFactory)
     :m_xServiceFactory(_rxFactory)
     ,m_nStartWizard(0)
 {
+    DBG_CTOR(DBContentLoader,NULL);
+
 }
 // -------------------------------------------------------------------------
 
 DBContentLoader::~DBContentLoader()
 {
+
+    DBG_DTOR(DBContentLoader,NULL);
 }
 // -------------------------------------------------------------------------
 
@@ -558,7 +563,6 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         if ( bSuccess = xController.is() )
         {
             xController->attachModel(xModel);
-            xModel->connectController( xController );
             xModel->setCurrentController(xController);
 
             ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -628,6 +632,9 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         if ( rListener.is() )
             rListener->loadCancelled( this );
     }
+
+    if ( !bSuccess )
+        ::comphelper::disposeComponent(xModel);
 }
 
 // -----------------------------------------------------------------------
