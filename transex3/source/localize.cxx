@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:01:29 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:31:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -719,6 +719,12 @@ BOOL SourceTreeLocalizer::ExecuteMerge( )
         ByteString sFile( sFileKey.GetToken( 1, '#' ));
         ByteString sSDFFile( aFile.GetFileName(), RTL_TEXTENCODING_ASCII_US );
 
+        //printf("localize test sPrj = %s , sFile = %s , sSDFFile = %s sOutputFileName = %s\n",sPrj.GetBuffer(), sFile.GetBuffer() , sSDFFile.GetBuffer() , sOutputFileName.GetBuffer() );
+
+        // Test
+        bLocal = true;
+        // Test
+
         if( bLocal ){
             int nPos = sFile.SearchBackward( '\\' );
             ByteString sTmp = sFile.Copy( nPos+1 , sFile.Len()-nPos-1 );
@@ -733,13 +739,12 @@ BOOL SourceTreeLocalizer::ExecuteMerge( )
                     if ( !MergeSingleFile( sPrj, sFile, sSDFFile ))
                         bReturn = FALSE;
                 //}
-            }/*else{
+            }else{
                 bMerged = true;
-                printf("d\n");
-                printf("MergeSingleFile('%s','%s','%s')\n",sPrj.GetBuffer(),sFile.GetBuffer(),sSDFFile.GetBuffer());
+                //printf("MergeSingleFile('%s','%s','%s')\n",sPrj.GetBuffer(),sFile.GetBuffer(),sSDFFile.GetBuffer());
                 if ( !MergeSingleFile( sPrj, sFile, sSDFFile ))
                     bReturn = FALSE;
-            }*/
+            }
         }
     }
     //}
@@ -1114,7 +1119,7 @@ int _cdecl main( int argc, char *argv[] )
         DirEntry aEntry( String( sFileName, RTL_TEXTENCODING_ASCII_US ));
         if ( !aEntry.Exists())
             return FALSE;
-
+        printf("%s\n",sFileName.GetBuffer());
         aIter.Merge( sFileName , sOutput );
     }
 
