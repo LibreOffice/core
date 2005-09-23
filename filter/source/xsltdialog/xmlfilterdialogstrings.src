@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfilterdialogstrings.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:18:05 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:21:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,43 +114,43 @@ String STR_APPL_NAME_OASIS_DRAW
 
 String STR_WARN_DELETE
 {
-    Text [ de ] = "Wollen Sie wirklich den XML-Filter '%s' löschen? Diese Aktion kann nicht rückgängig gemacht werden.";
+    Text [ de ] = "Wollen Sie wirklich den XML-Filter '%s' lÃ¶schen? Diese Aktion kann nicht rÃ¼ckgÃ¤ngig gemacht werden.";
     Text [ en-US ]      = "Do you really want to delete the XML Filter '%s'? This action cannot be undone.";
 };
 
 String STR_ERROR_FILTER_NAME_EXISTS
 {
-    Text [ de ] = "Es existiert bereits ein XML-Filter mit dem Namen '%s'. Bitte wählen Sie einen anderen Namen.";
+    Text [ de ] = "Es existiert bereits ein XML-Filter mit dem Namen '%s'. Bitte wÃ¤hlen Sie einen anderen Namen.";
     Text [ en-US ]  = "An XML filter with the name '%s' already exists. Please enter a different name.";
 };
 
 String STR_ERROR_TYPE_NAME_EXISTS
 {
-    Text [ de ] = "Der Name auf der  Benutzeroberfläche '%s1' wird bereits von dem XML-Filter '%s2' verwendet. Bitte wählen Sie einen anderen Namen.";
+    Text [ de ] = "Der Name auf der  BenutzeroberflÃ¤che '%s1' wird bereits von dem XML-Filter '%s2' verwendet. Bitte wÃ¤hlen Sie einen anderen Namen.";
     Text [ en-US ]  = "The name for  the user interface '%s1' is already used by the XML filter '%s2'. Please enter a different name.";
 };
 
 String STR_ERROR_DTD_NOT_FOUND
 {
-    Text [ de ] = "Die DTD konnte nicht gefunden werden. Bitte geben Sie einen gültigen Pfad ein.";
+    Text [ de ] = "Die DTD konnte nicht gefunden werden. Bitte geben Sie einen gÃ¼ltigen Pfad ein.";
     Text [ en-US ]  = "The DTD could not be found. Please enter a valid path.";
 };
 
 String STR_ERROR_EXPORT_XSLT_NOT_FOUND
 {
-    Text [ de ] = "Die Export-XSLT konnte nicht gefunden werden. Bitte geben Sie einen gültigen Pfad ein.";
+    Text [ de ] = "Die Export-XSLT konnte nicht gefunden werden. Bitte geben Sie einen gÃ¼ltigen Pfad ein.";
     Text [ en-US ]  = "The XSLT for export cannot be found. Please enter a valid path.";
 };
 
 String STR_ERROR_IMPORT_XSLT_NOT_FOUND
 {
-    Text [ de ] = "Die Import-XSLT konnte nicht gefunden werden. Bitte geben Sie einen gültigen Pfad ein.";
+    Text [ de ] = "Die Import-XSLT konnte nicht gefunden werden. Bitte geben Sie einen gÃ¼ltigen Pfad ein.";
     Text [ en-US ]  = "The XSLT for import cannot be found. Please enter a valid path.";
 };
 
 String STR_ERROR_IMPORT_TEMPLATE_NOT_FOUND
 {
-    Text [ de ] = "Die angegebene Import-Dokumentvorlage konnte nicht gefunden werden. Bitte geben Sie einen gültigen Pfad ein.";
+    Text [ de ] = "Die angegebene Import-Dokumentvorlage konnte nicht gefunden werden. Bitte geben Sie einen gÃ¼ltigen Pfad ein.";
     Text [ en-US ]  = "The given import template cannot be found. Please enter a valid path.";
 };
 
@@ -220,7 +220,7 @@ String STR_FILTERS_INSTALLED
 
 String STR_NO_FILTERS_FOUND
 {
-    Text [ de ] = "Es wurde kein XML-Filter installiert, weil das Paket '%s' keine XML-Filter enthält.";
+    Text [ de ] = "Es wurde kein XML-Filter installiert, weil das Paket '%s' keine XML-Filter enthÃ¤lt.";
     Text [ en-US ]  = "No XML filter could be installed because the package '%s' does not contain any XML filters.";
 };
 
