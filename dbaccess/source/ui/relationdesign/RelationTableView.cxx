@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationTableView.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:37:01 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:45:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,7 +182,7 @@ void ORelationTableView::ReSync()
             delete pTabWin;
             arrInvalidTables.push_back(pData->GetTableName());
 
-            pTabWinDataList->erase( ::std::find(pTabWinDataList->begin(),pTabWinDataList->end(),*aIter) );
+            pTabWinDataList->erase( ::std::remove(pTabWinDataList->begin(),pTabWinDataList->end(),*aIter) ,pTabWinDataList->end());
             delete pData;
             continue;
         }
@@ -212,7 +212,7 @@ void ORelationTableView::ReSync()
 
             if (bInvalid)
             {   // nein -> Pech gehabt, die Connection faellt weg
-                pTabConnDataList->erase( ::std::find(pTabConnDataList->begin(),pTabConnDataList->end(),*aConIter) );
+                pTabConnDataList->erase( ::std::remove(pTabConnDataList->begin(),pTabConnDataList->end(),*aConIter),pTabConnDataList->end() );
                 delete pTabConnData;
                 continue;
             }
