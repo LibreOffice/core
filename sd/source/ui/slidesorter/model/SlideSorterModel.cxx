@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterModel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:23:41 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:30:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,12 +252,10 @@ SlideSorterModel::Enumeration
 void SlideSorterModel::Resync (void)
 {
     ::osl::MutexGuard aGuard (maMutex);
-    OSL_TRACE("Resync in");
     DUMP_MODEL;
     ClearDescriptorList ();
     AdaptSize();
     DUMP_MODEL;
-    OSL_TRACE("Resync out");
 }
 
 
