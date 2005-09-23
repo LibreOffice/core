@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoifac2.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:56:16 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:55:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ Menu RID_CONTEXTMENU
         {
             Identifier = RID_OPEN_LINK ;
             HelpId = HID_TEXTCPNT_OPEN_LINK ;
-            Text [ de ] = "Öff~nen" ;
+            Text [ de ] = "Ã–ff~nen" ;
             Text [ en-US ] = "~Open";
             Text [ x-comment ] = " ";
         };
@@ -56,7 +56,7 @@ Menu RID_CONTEXTMENU
         {
             Identifier = RID_OPEN_LINK_NEW ;
             HelpId = HID_TEXTCPNT_OPEN_LINK_NEW ;
-            Text [ de ] = "Öffnen in neuem ~Fenster" ;
+            Text [ de ] = "Ã–ffnen in neuem ~Fenster" ;
             Text [ en-US ] = "Open in New ~Window";
             Text [ x-comment ] = " ";
         };
@@ -76,7 +76,7 @@ Menu RID_CONTEXTMENU
         {
             Identifier = RID_ADD_BOOKMARK ;
             HelpId = HID_TEXTCPNT_ADD_BOOKMARK ;
-            Text [ de ] = "Verknüpfung ~hinzufügen" ;
+            Text [ de ] = "VerknÃ¼pfung ~hinzufÃ¼gen" ;
             Text [ en-US ] = "Add ~Link";
             Text [ x-comment ] = " ";
         };
