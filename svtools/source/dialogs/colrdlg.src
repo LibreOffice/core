@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colrdlg.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:12:03 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:51:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,7 +172,7 @@ ModalDialog DLG_COLOR
     {
         Pos = MAP_APPFONT ( 72 , 136 + DIFF ) ;
         Size = MAP_APPFONT ( 33 , 10 ) ;
-        Text [ de ] = "~Grün" ;
+        Text [ de ] = "~GrÃ¼n" ;
         Text [ en-US ] = "~Green" ;
         Text [ x-comment ] = " ";
     };
@@ -240,7 +240,7 @@ ModalDialog DLG_COLOR
     {
         Pos = MAP_APPFONT ( 135 , 136 + DIFF ) ;
         Size = MAP_APPFONT ( 34 , 10 ) ;
-        Text [ de ] = "~Sättigung" ;
+        Text [ de ] = "~SÃ¤ttigung" ;
         Text [ en-US ] = "~Saturation" ;
         Text [ x-comment ] = " ";
     };
