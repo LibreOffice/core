@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryDesignFieldUndoAct.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:23:52 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:42:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,8 +131,8 @@ namespace dbaui
     class OTabFieldDelUndoAct : public OTabFieldUndoAct
     {
     protected:
-        virtual void Undo() { pOwner->InsertColumn(pDescr, m_nColumnPostion); }
-        virtual void Redo() { pOwner->RemoveColumn(pDescr->GetColumnId()); }
+        virtual void Undo() { pOwner->EnterUndoMode();pOwner->InsertColumn(pDescr, m_nColumnPostion);pOwner->LeaveUndoMode(); }
+        virtual void Redo() { pOwner->EnterUndoMode();pOwner->RemoveColumn(pDescr->GetColumnId());pOwner->LeaveUndoMode(); }
 
     public:
         OTabFieldDelUndoAct(OSelectionBrowseBox* pSelBrwBox) : OTabFieldUndoAct(pSelBrwBox, STR_QUERY_UNDO_TABFIELDDELETE) { }
@@ -144,8 +144,8 @@ namespace dbaui
     class OTabFieldCreateUndoAct : public OTabFieldUndoAct
     {
     protected:
-        virtual void Undo() { pOwner->RemoveColumn(pDescr->GetColumnId());}
-        virtual void Redo() { pOwner->InsertColumn(pDescr, m_nColumnPostion);}
+        virtual void Undo() { pOwner->EnterUndoMode();pOwner->RemoveColumn(pDescr->GetColumnId());pOwner->LeaveUndoMode();}
+        virtual void Redo() { pOwner->EnterUndoMode();pOwner->InsertColumn(pDescr, m_nColumnPostion);pOwner->LeaveUndoMode();}
 
     public:
         OTabFieldCreateUndoAct(OSelectionBrowseBox* pSelBrwBox) : OTabFieldUndoAct(pSelBrwBox, STR_QUERY_UNDO_TABFIELDCREATE) { }
