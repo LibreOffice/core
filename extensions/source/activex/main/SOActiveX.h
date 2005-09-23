@@ -66,6 +66,9 @@ protected:
 
     SODispatchInterceptor*  mpDispatchInterceptor;
     SOVersion               mnVersion;
+
+    BOOL                    mbReadyForActivation;
+    CComPtr<IDispatch>      mpDispTempFile;
 public:
     CSOActiveX();
     ~CSOActiveX();
@@ -136,7 +139,7 @@ public:
     STDMETHOD(Load) ( LPSTREAM pStm );
     STDMETHOD(InitNew) ();
     HRESULT OnDrawAdvanced(ATL_DRAWINFO& di);
-    HRESULT OnDraw(ATL_DRAWINFO& di) { return S_OK; }
+    HRESULT OnDraw(ATL_DRAWINFO& di);
 
     HRESULT CreateFrameOldWay( HWND hwnd, int width, int height );
     HRESULT GetUnoStruct( OLECHAR* sStructName, CComPtr<IDispatch>& pdispResult );
@@ -147,6 +150,9 @@ public:
     HRESULT Cleanup();
     HRESULT CSOActiveX::GetURL( const OLECHAR* url,
                                 const OLECHAR* target );
+
+    void CallbackCreateXInputStream( CBindStatusCallback<CSOActiveX>* pbsc, BYTE* pBytes, DWORD dwSize );
+
 
     SOVersion GetVersionConnected();
 };
