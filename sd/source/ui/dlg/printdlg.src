@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:14:34 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:36:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,7 @@ ModalDialog DLG_PRINT_WARNINGS
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 134 , 25 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Die Seiteneinstellungen stimmen nicht mit dem Druckbereich überein.\nSie können folgende Optionen wählen : Die Seiteneinstellungen stimmen nicht mit dem Druckbereich ³berein.\nSie k÷nnen folgende Optionen wõhlen */
-        Text [ de ] = "Die Seiteneinstellungen stimmen nicht mit dem Druckbereich überein.\nSie können folgende Optionen wählen" ;
+        Text [ de ] = "Die Seiteneinstellungen stimmen nicht mit dem Druckbereich Ã¼berein.\nSie kÃ¶nnen folgende Optionen wÃ¤hlen" ;
         Text [ en-US ] = "The page settings do not match the print range.\nChoose one of the following options" ;
         WordBreak = TRUE ;
         Text [ x-comment ] = " ";
