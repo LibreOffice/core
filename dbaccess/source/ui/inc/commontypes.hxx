@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commontypes.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:45:30 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:34:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,15 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
+#ifndef UNOTOOLS_INC_SHAREDUNOCOMPONENT_HXX
+#include <unotools/sharedunocomponent.hxx>
+#endif
+
+namespace com { namespace sun { namespace star {
+    namespace sdbc {
+        class XConnection;
+    }
+} } }
 
 //.........................................................................
 namespace dbaui
@@ -48,6 +57,8 @@ namespace dbaui
     DECLARE_STL_STDKEY_SET( ::rtl::OUString, StringBag );
     DECLARE_STL_VECTOR( sal_Int8, ByteVector );
     DECLARE_STL_VECTOR( ::rtl::OUString, StringArray );
+
+    typedef ::utl::SharedUNOComponent< ::com::sun::star::sdbc::XConnection > SharedConnection;
 
 //.........................................................................
 }   // namespace dbaui
