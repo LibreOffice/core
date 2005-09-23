@@ -4,9 +4,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:27:42 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:01:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,11 +41,11 @@
 // ----- defined strings -----------------------------------------------------
 #define LABEL_STRING                                    \
     Text [ de ] = "Etiketten" ;                                \
-    Text [ en-US ] = "Labels" ;
+    Text [ en-US ] = "Labels" ;                    \
 
 #define BUSINESS_CARD_STRING \
     Text [ de ] = "Visitenkarten" ;                         \
-    Text [ en-US ] = "Business Cards";
+    Text [ en-US ] = "Business Cards";              \
 
  // DLG_LAB ------------------------------------------------------------------
 TabDialog DLG_LAB
@@ -77,7 +77,7 @@ TabDialog DLG_LAB
             {
                 Identifier = TP_BUSINESS_DATA;
                 PageResID = TP_BUSINESS_DATA;
-                Text [ de ] = "Gesch‰ft" ;
+                Text [ de ] = "Gesch√§ft" ;
                 Text [ en-US ] = "Business";
                 Text [ x-comment ] = " ";
             };
@@ -92,7 +92,7 @@ TabDialog DLG_LAB
             PageItem
             {
                 Identifier = TP_LAB_PRT ;
-                Text [ de ] = "Zus‰tze" ;
+                Text [ de ] = "Zus√§tze" ;
                 PageResID = TP_LAB_PRT ;
                 Text [ en-US ] = "Options" ;
                 Text [ x-comment ] = " ";
@@ -381,7 +381,7 @@ TabPage TP_PRIVATE_DATA
     {
         Pos = MAP_APPFONT ( 12 ,  16) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "~Vor-/Name/K¸rzel" ;
+        Text [ de ] = "~Vor-/Name/K√ºrzel" ;
         Text [ en-US ] = "First/Last ~name/Initials";
         Text [ x-comment ] = " ";
     };
@@ -407,7 +407,7 @@ TabPage TP_PRIVATE_DATA
     {
         Pos = MAP_APPFONT ( 12 ,  32) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "~Vor-/Name/K¸rzel 2" ;
+        Text [ de ] = "~Vor-/Name/K√ºrzel 2" ;
         Text [ en-US ] = "First / Last ~Name / Initials 2";
     };
     Edit ED_FIRSTNAME_2
@@ -432,7 +432,7 @@ TabPage TP_PRIVATE_DATA
     {
         Pos = MAP_APPFONT ( 12 ,  48) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "~Straﬂe" ;
+        Text [ de ] = "~Stra√üe" ;
         Text [ en-US ] = "S~treet";
         Text [ x-comment ] = " ";
     };
@@ -565,7 +565,7 @@ TabPage TP_BUSINESS_DATA
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Gesch‰ftliche Daten" ;
+        Text [ de ] = "Gesch√§ftliche Daten" ;
         Text [ en-US ] = "Business data";
         Text [ x-comment ] = " ";
     };
@@ -615,7 +615,7 @@ TabPage TP_BUSINESS_DATA
     {
         Pos = MAP_APPFONT ( 12 ,  64) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "~Straﬂe" ;
+        Text [ de ] = "~Stra√üe" ;
         Text [ en-US ] = "Street";
         Text [ x-comment ] = " ";
     };
