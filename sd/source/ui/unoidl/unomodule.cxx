@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodule.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:51:38 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 10:46:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,8 +144,12 @@ REFERENCE< XDISPATCH > SAL_CALL SdUnoModule::queryDispatch( const UNOURL& aURL, 
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     SdDLL::Init();
     const SfxSlot* pSlot = SD_MOD()->GetInterface()->GetSlot( aURL.Complete );
+
+    REFERENCE< XDISPATCH > xSlot;
     if ( pSlot )
-        return this;
+        xSlot = this;
+
+    return xSlot;
 }
 
 // XServiceInfo
