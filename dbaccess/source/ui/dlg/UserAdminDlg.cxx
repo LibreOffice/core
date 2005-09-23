@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UserAdminDlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:51:00 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:27:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,8 @@ namespace dbaui
 
     //========================================================================
     //= OUserAdminDlg
-    //========================================================================
+DBG_NAME(OUserAdminDlg)
+//========================================================================
     OUserAdminDlg::OUserAdminDlg(Window* _pParent
                                             , SfxItemSet* _pItems
                                             ,const Reference< XMultiServiceFactory >& _rxORB
@@ -113,6 +114,8 @@ namespace dbaui
         ,m_xConnection(_xConnection)
         ,m_bOwnConnection(!_xConnection.is())
     {
+        DBG_CTOR(OUserAdminDlg,NULL);
+
         m_pImpl = ::std::auto_ptr<ODbDataSourceAdministrationHelper>(new ODbDataSourceAdministrationHelper(_rxORB,_pParent,this));
         m_pImpl->setDataSourceOrName(_aDataSourceName);
         Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
@@ -141,6 +144,8 @@ namespace dbaui
 
         SetInputSet(NULL);
         DELETEZ(pExampleSet);
+
+        DBG_DTOR(OUserAdminDlg,NULL);
     }
     // -----------------------------------------------------------------------
     short OUserAdminDlg::Execute()
