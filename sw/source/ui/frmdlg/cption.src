@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:50:25 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:05:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -343,7 +343,7 @@ ModalDialog DLG_SEQUENCE_OPTION
         Pos = MAP_APPFONT ( 12 , 84 ) ;
         Size = MAP_APPFONT ( 136 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Umrandung und Schatten übernehmen" ;
+        Text [ de ] = "~Umrandung und Schatten Ã¼bernehmen" ;
         Text [ en-US ] = "~Apply border and shadow";
         Text [ x-comment ] = " ";
    };
