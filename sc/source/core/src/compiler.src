@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:36:31 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:58:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -264,7 +264,7 @@ Resource RID_SC_FUNCTION_NAMES
     };
     String SC_OPCODE_FACT
     {
-        Text [ de ] = "FAKULTÄT" ;
+        Text [ de ] = "FAKULTÃ„T" ;
         Text [ en-US ] = "FACT" ;
         Text [ x-comment ] = " ";
     };
@@ -441,7 +441,7 @@ Resource RID_SC_FUNCTION_NAMES
     };
     String SC_OPCODE_TRIM
     {
-        Text [ de ] = "GLÄTTEN" ;
+        Text [ de ] = "GLÃ„TTEN" ;
         Text [ en-US ] = "TRIM" ;
         Text [ x-comment ] = " ";
     };
@@ -465,7 +465,7 @@ Resource RID_SC_FUNCTION_NAMES
     };
     String SC_OPCODE_LEN
     {
-        Text [ de ] = "LÄNGE" ;
+        Text [ de ] = "LÃ„NGE" ;
         Text [ en-US ] = "LEN" ;
         Text [ x-comment ] = " ";
     };
@@ -482,7 +482,7 @@ Resource RID_SC_FUNCTION_NAMES
     };
     String SC_OPCODE_CLEAN
     {
-        Text [ de ] = "SÄUBERN" ;
+        Text [ de ] = "SÃ„UBERN" ;
         Text [ en-US ] = "CLEAN" ;
         Text [ x-comment ] = " ";
     };
@@ -594,7 +594,7 @@ Resource RID_SC_FUNCTION_NAMES
     };
     String SC_OPCODE_TRUNC
     {
-        Text [ de ] = "KÜRZEN" ;
+        Text [ de ] = "KÃœRZEN" ;
         Text [ en-US ] = "TRUNC" ;
         Text [ x-comment ] = " ";
     };
@@ -1112,7 +1112,7 @@ Resource RID_SC_FUNCTION_NAMES
     };
     String SC_OPCODE_COUNT_IF
     {
-        Text [ de ] = "ZÄHLENWENN" ;
+        Text [ de ] = "ZÃ„HLENWENN" ;
         Text [ en-US ] = "COUNTIF" ;
         Text [ x-comment ] = " ";
     };
@@ -1419,7 +1419,7 @@ Resource RID_SC_FUNCTION_NAMES
     };
     String SC_OPCODE_LARGE
     {
-        Text [ de ] = "KGRÖSSTE" ;
+        Text [ de ] = "KGRÃ–SSTE" ;
         Text [ en-US ] = "LARGE" ;
         Text [ x-comment ] = " ";
     };
@@ -1431,7 +1431,7 @@ Resource RID_SC_FUNCTION_NAMES
     };
     String SC_OPCODE_FREQUENCY
     {
-        Text [ de ] = "HÄUFIGKEIT" ;
+        Text [ de ] = "HÃ„UFIGKEIT" ;
         Text [ en-US ] = "FREQUENCY" ;
         Text [ x-comment ] = " ";
     };
@@ -1539,7 +1539,7 @@ Resource RID_SC_FUNCTION_NAMES
     };
     String SC_OPCODE_FORECAST
     {
-        Text [ de ] = "SCHÄTZER" ;
+        Text [ de ] = "SCHÃ„TZER" ;
         Text [ en-US ] = "FORECAST" ;
         Text [ x-comment ] = " ";
     };
@@ -1658,7 +1658,7 @@ Resource RID_SC_FUNCTION_NAMES
     };
     String SC_OPCODE_ROMAN
     {
-        Text [ de ] = "RÖMISCH";
+        Text [ de ] = "RÃ–MISCH";
         Text [ en-US ] = "ROMAN";
     };
     String SC_OPCODE_HYPERLINK
