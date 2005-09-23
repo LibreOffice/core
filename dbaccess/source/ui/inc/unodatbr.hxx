@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:06:04 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:36:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,9 @@
 #ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
 #endif
@@ -81,6 +83,9 @@
 #endif
 #ifndef DBUI_TABLECOPYHELPER_HXX
 #include "TableCopyHelper.hxx"
+#endif
+#ifndef _DBAUI_COMMON_TYPES_HXX_
+#include "commontypes.hxx"
 #endif
 
 // =========================================================================
@@ -156,7 +161,6 @@ namespace dbaui
         sal_Bool                m_bShowMenu;            // if TRUE the menu should be visible otherwise not
         sal_Bool                m_bInSuspend;
         sal_Bool                m_bEnableBrowser;
-        sal_Bool                m_bOwnConnection;
 
 
         /** updateTitle will be called when a new frame is attached
@@ -235,6 +239,9 @@ namespace dbaui
         virtual sal_Bool InitializeForm(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > & xForm);
         virtual sal_Bool InitializeGridModel(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > & xGrid);
 
+        virtual sal_Bool preReloadForm();
+        virtual void     postReloadForm();
+
 #if defined(_MSC_VER) && (_MSC_VER >= 1310 )
         typedef ::com::sun::star::frame::XStatusListener xstlist_type;
         typedef ::com::sun::star::uno::Reference< xstlist_type > xlister_type;
@@ -309,8 +316,8 @@ namespace dbaui
         */
         void implAddDatasource(const String& _rDbName, Image& _rDbImage,
                 String& _rQueryName, Image& _rQueryImage,
-                String& _rTableName, Image& _rTableImage
-                ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
+                String& _rTableName, Image& _rTableImage,
+                const SharedConnection& _rxConnection
             );
 
         /// clears the tree list box
@@ -339,8 +346,8 @@ namespace dbaui
         */
         SvLBoxEntry* getEntryFromContainer(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxNameAccess);
         // return true when there is connection available
-        sal_Bool ensureConnection(SvLBoxEntry* _pDSEntry,void * pDSData,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
-        sal_Bool ensureConnection(SvLBoxEntry* _pAnyEntry, ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
+        sal_Bool ensureConnection(SvLBoxEntry* _pDSEntry, void * pDSData, SharedConnection& _rConnection );
+        sal_Bool ensureConnection(SvLBoxEntry* _pAnyEntry, SharedConnection& _rConnection );
 
         void    implAdministrate( SvLBoxEntry* _pApplyTo );
         void    implDirectSQL( SvLBoxEntry* _pApplyTo );
@@ -385,13 +392,18 @@ namespace dbaui
         sal_Bool implSelect(const ::svx::ODataAccessDescriptor& _rDescriptor,sal_Bool _bSelectDirect = sal_False);
 
         /// selects the entry given and loads the grid control with the object's data
-        sal_Bool implSelect(const ::rtl::OUString& _rDataSourceName, const ::rtl::OUString& _rCommand,
-            const sal_Int32 _nCommandType, const sal_Bool _bEscapeProcessing,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection=NULL
-            ,sal_Bool _bSelectDirect = sal_False);
+        sal_Bool implSelect(
+            const ::rtl::OUString& _rDataSourceName,
+            const ::rtl::OUString& _rCommand,
+            const sal_Int32 _nCommandType,
+            const sal_Bool _bEscapeProcessing,
+            const SharedConnection& _rxConnection,
+            sal_Bool _bSelectDirect = sal_False
+        );
 
         /// loads the grid control with the data object specified (which may be a table, a query or a command)
         sal_Bool implLoadAnything(const ::rtl::OUString& _rDataSourceName, const ::rtl::OUString& _rCommand,
-            const sal_Int32 _nCommandType, const sal_Bool _bEscapeProcessing, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection = NULL);
+            const sal_Int32 _nCommandType, const sal_Bool _bEscapeProcessing, const SharedConnection& _rxConnection = SharedConnection() );
 
         /** retrieves the tree entry for the object described by <arg>_rDescriptor</arg>
             @param _rDescriptor
@@ -427,7 +439,7 @@ namespace dbaui
             const ::rtl::OUString& _rDataSource, const ::rtl::OUString& _rCommand, sal_Int32 _nCommandType,
             SvLBoxEntry** _ppDataSourceEntry = NULL, SvLBoxEntry** _ppContainerEntry = NULL,
             sal_Bool _bExpandAncestors = sal_True,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection = NULL
+            const SharedConnection& _rxConnection = SharedConnection()
         );
 
         /// checks if m_aDocumentDataSource describes a known object
@@ -446,6 +458,13 @@ namespace dbaui
         // sets a frame title
         void setDefaultTitle();
 
+        // checks whether the given tree entry denotes a data source
+        bool impl_isDataSourceEntry( SvLBoxEntry* _pEntry ) const;
+
+        /// retrieves the database document to which a given connection belongs
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+            impl_nf_getDBDocumentForConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection );
+
         /// retrieves the data source URL/name for the given entry representing a data source
         String  getDataSourceAcessor( SvLBoxEntry* _pDataSourceEntry ) const;
 
@@ -460,7 +479,6 @@ namespace dbaui
 
         void copyEntry(SvLBoxEntry* _pEntry);
 
-        void ensureObjectExists(SvLBoxEntry* _pApplyTo);
         // remove all grid columns and dispose them
         void clearGridColumns(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _xColContainer);
 
