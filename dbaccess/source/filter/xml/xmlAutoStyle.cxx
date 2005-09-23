@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlAutoStyle.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:00:34 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:08:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,9 @@
 #ifndef _XMLOFF_FAMILIES_HXX_
 #include <xmloff/families.hxx>
 #endif
-
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 namespace dbaxml
 {
     using namespace ::com::sun::star::uno;
@@ -90,15 +92,20 @@ void OXMLAutoStylePoolP::exportStyleAttributes(
         }
     }
 }
+DBG_NAME(OXMLAutoStylePoolP)
 // -----------------------------------------------------------------------------
 OXMLAutoStylePoolP::OXMLAutoStylePoolP(ODBExport& rTempODBExport):
     SvXMLAutoStylePoolP(rTempODBExport),
     rODBExport(rTempODBExport)
 {
+    DBG_CTOR(OXMLAutoStylePoolP,NULL);
+
 }
 // -----------------------------------------------------------------------------
 OXMLAutoStylePoolP::~OXMLAutoStylePoolP()
 {
+
+    DBG_DTOR(OXMLAutoStylePoolP,NULL);
 }
 // -----------------------------------------------------------------------------
 
