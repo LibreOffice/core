@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfx.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:46:41 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:21:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ String STR_NONE
 
 String STR_CLOSE
 {
-    Text [ de ] = "Schließen" ;
+    Text [ de ] = "SchlieÃŸen" ;
     Text [ en-US ] = "Close" ;
 };
 
@@ -129,7 +129,7 @@ String STR_GB
 String STR_UNDO
 {
     /* ### ACHTUNG: Neuer Text in Resource? Rückgängig:  : R³ckgõngig:  */
-    Text [ de ] = "Rückgängig: " ;
+    Text [ de ] = "RÃ¼ckgÃ¤ngig: " ;
     Text [ en-US ] = "Undo: " ;
 };
 
@@ -155,7 +155,7 @@ QueryBox MSG_QUERY_LASTVERSION
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
     /* ### ACHTUNG: Neuer Text in Resource? Alle Änderungen aufheben? : Alle Žnderungen aufheben? */
-    Message [ de ] = "Alle Änderungen aufheben?" ;
+    Message [ de ] = "Alle Ã„nderungen aufheben?" ;
     Message [ en-US ] = "Cancel all changes?" ;
 };
 
