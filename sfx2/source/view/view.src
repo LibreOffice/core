@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:31:42 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:32:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,19 +41,19 @@
  // Strings ---------------------------------------------------------------
 String STR_NODEFPRINTER
 {
-    Text [ de ] = "Kein Standarddrucker gefunden.\nBitte wählen Sie einen Drucker aus und versuchen Sie es noch einmal." ;
+    Text [ de ] = "Kein Standarddrucker gefunden.\nBitte wÃ¤hlen Sie einen Drucker aus und versuchen Sie es noch einmal." ;
     Text [ en-US ] = "No default printer found.\nPlease choose a printer and try again." ;
     Text [ x-comment ] = " ";
 };
 String STR_NOSTARTPRINTER
 {
-    Text [ de ] = "Der Drucker konnte nicht gestartet werden.\nBitte überprüfen Sie Ihre Druckerkonfiguration." ;
+    Text [ de ] = "Der Drucker konnte nicht gestartet werden.\nBitte Ã¼berprÃ¼fen Sie Ihre Druckerkonfiguration." ;
     Text [ en-US ] = "Could not start printer.\nPlease check your printer configuration." ;
     Text [ x-comment ] = " ";
 };
 String STR_PRINTER_NOTAVAIL
 {
-    Text [ de ] = "Das Dokument wurde für den Drucker $1 formatiert. Der Drucker ist nicht vorhanden.\nSoll der Standarddrucker $2 verwendet werden?" ;
+    Text [ de ] = "Das Dokument wurde fÃ¼r den Drucker $1 formatiert. Der Drucker ist nicht vorhanden.\nSoll der Standarddrucker $2 verwendet werden?" ;
     Text [ en-US ] = "This document has been formatted for the printer $1. The specified printer is not available. \nDo you want to use the standard printer $2 ?" ;
     Text [ x-comment ] = " ";
 };
@@ -65,13 +65,13 @@ String STR_MENU_NEWMAIL
 };
 String STR_PRINT_OPTIONS
 {
-    Text [ de ] = "Zusätze..." ;
+    Text [ de ] = "ZusÃ¤tze..." ;
     Text [ en-US ] = "Options..." ;
     Text [ x-comment ] = " ";
 };
 String STR_PRINT_OPTIONS_TITLE
 {
-    Text [ de ] = "Drucker Zusätze" ;
+    Text [ de ] = "Drucker ZusÃ¤tze" ;
     Text [ en-US ] = "Printer Options" ;
     Text [ x-comment ] = " ";
 };
@@ -113,24 +113,24 @@ String STR_ERROR_SAVE_TEMPLATE
 };
 String STR_READONLY
 {
-    Text [ de ] = " (schreibgeschützt)" ;
+    Text [ de ] = " (schreibgeschÃ¼tzt)" ;
     Text [ en-US ] = " (read-only)" ;
     Text [ x-comment ] = " ";
 };
 String STR_PRINT_NEWORI
 {
-    Text [ de ] = "Sie haben die Seitenorientierungseinstellung geändert.\nSollen die geänderten Einstellungen in das Dokument\nübernommen werden?" ;
+    Text [ de ] = "Sie haben die Seitenorientierungseinstellung geÃ¤ndert.\nSollen die geÃ¤nderten Einstellungen in das Dokument\nÃ¼bernommen werden?" ;
     Text [ en-US ] = "The page size and orientation have been modified.\nWould you like to save the new settings in the\nactive document?" ;
 };
 String STR_PRINT_NEWSIZE
 {
-    Text [ de ] = "Sie haben die Seitengröße geändert.\nSollen die geänderten Einstellungen in das\nDokument übernommen werden?" ;
+    Text [ de ] = "Sie haben die SeitengrÃ¶ÃŸe geÃ¤ndert.\nSollen die geÃ¤nderten Einstellungen in das\nDokument Ã¼bernommen werden?" ;
     Text [ en-US ] = "The page size has been modified.\nShould the new settings be saved\nin the active document?" ;
     Text [ x-comment ] = " ";
 };
 String STR_PRINT_NEWORISIZE
 {
-    Text [ de ] = "Sie haben die Seitengröße und die\nSeitenorientierung geändert. Sollen\ndie geänderten Einstellungen in das\nDokument übernommen werden?" ;
+    Text [ de ] = "Sie haben die SeitengrÃ¶ÃŸe und die\nSeitenorientierung geÃ¤ndert. Sollen\ndie geÃ¤nderten Einstellungen in das\nDokument Ã¼bernommen werden?" ;
     Text [ en-US ] = "The page size and orientation have been modified.\nWould you like to save the new settings in the\nactive document?" ;
     Text [ x-comment ] = " ";
 };
@@ -173,7 +173,7 @@ String STR_EXPLORERVIEW
  // -----------------------------------------------------------------------
 InfoBox MSG_CANT_CLOSE
 {
-    Message [ de ] = "Das Dokument kann zur Zeit nicht geschlossen werden,\nda noch ein Druckauftrag läuft." ;
+    Message [ de ] = "Das Dokument kann zur Zeit nicht geschlossen werden,\nda noch ein Druckauftrag lÃ¤uft." ;
     Message [ en-US ] = "The document cannot be closed because a\n print job is being carried out." ;
     Message [ x-comment ] = " ";
 };
@@ -181,7 +181,7 @@ InfoBox MSG_CANT_CLOSE
 
 #define DLG_PRINTMONITOR_TEXT \
     Text [ de ] = "Druckmonitor" ; \
-    Text [ en-US ] = "Print Monitor" ;
+    Text [ en-US ] = "Print Monitor" ; \
 
 ModelessDialog DLG_PRINTMONITOR
 {
@@ -232,7 +232,7 @@ InfoBox MSG_ERROR_SEND_MAIL
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message [ de ] = "Fehler beim Versenden der Nachricht. Mögliche Fehler sind ein fehlendes Benutzerkonto oder ein fehlerhaftes Setup.\nBitte überprüfen Sie die Einstellungen von %PRODUCTNAME oder die ihres e-mail Programms." ;
+    Message [ de ] = "Fehler beim Versenden der Nachricht. MÃ¶gliche Fehler sind ein fehlendes Benutzerkonto oder ein fehlerhaftes Setup.\nBitte Ã¼berprÃ¼fen Sie die Einstellungen von %PRODUCTNAME oder die ihres e-mail Programms." ;
     Message [ en-US ] = "An error occurred in sending the message. Possible errors could be a missing user account or a defective setup.\nPlease check the %PRODUCTNAME settings or your e-mail program settings." ;
     Message [ x-comment ] = " ";
 };
@@ -246,7 +246,7 @@ ErrorBox ERRBOX_SFX_INVALID_MERGEOPT
     DEFBUTTON = WB_DEF_OK ;
     /* ### ACHTUNG: Neuer Text in Resource? Um eine Nachricht über das Internet zu verschicken,\nwird Ihre Email-Adresse und ein SMTP-Server zum Versand benötigt.\nBitte tragen Sie diese Einstellungen unter\n\"Extras\\Optionen\\Allgemein...\\Benutzerdaten\\Email\" und\n\"Extras\\Optionen\\Internet\\Mail/News\\Nachrichtenversand\" ein,\nbevor Sie erneut eine Nachricht verschicken wollen. : Um eine Nachricht über das Internet zu verschicken,\nwird Ihre Email-Adresse und ein SMTP-Server zum Versand benötigt.\nBitte tragen Sie diese Einstellungen unter\n\"Extras\\Optionen\\Allgemein...\\Allgemeines\\Email\" und\n\"Extras\\Optionen\\Internet\\Mail/News\\Nachrichtenversand\" ein,\nbevor Sie erneut eine Nachricht verschicken wollen. */
     /* ### ACHTUNG: Neuer Text in Resource? Um eine Nachricht über das Internet zu verschicken,\nwird Ihre Email-Adresse und ein SMTP-Server zum Versand benötigt.\nBitte tragen Sie diese Einstellungen unter\n\"Extras\\Optionen\\Allgemein...\\Benutzerdaten\\Email\" und\n\"Extras\\Optionen\\Internet\\Mail/News\\Nachrichtenversand\" ein,\nbevor Sie erneut eine Nachricht verschicken wollen. : Um eine Nachricht ³ber das Internet zu verschicken,\nwird Ihre Email-Adresse und ein SMTP-Server zum Versand ben÷tigt.\nBitte tragen Sie diese Einstellungen unter\n\"Extras\\Optionen\\Allgemein...\\Benutzerdaten\\Email\" und\n\"Extras\\Optionen\\Internet\\Mail/News\\Nachrichtenversand\" ein,\nbevor Sie erneut eine Nachricht verschicken wollen. */
-    Message [ de ] = "Um eine Nachricht über das Internet zu verschicken,\nwird Ihre E-Mail-Adresse und ein SMTP-Server zum Versand benötigt.\nBitte tragen Sie diese Einstellungen unter\n\"Extras\\Optionen\\Allgemein...\\Benutzerdaten\\E-Mail\" und\n\"Extras\\Optionen\\Internet\\Mail/News\\Nachrichtenversand\" ein,\nbevor Sie erneut eine Nachricht verschicken wollen." ;
+    Message [ de ] = "Um eine Nachricht Ã¼ber das Internet zu verschicken,\nwird Ihre E-Mail-Adresse und ein SMTP-Server zum Versand benÃ¶tigt.\nBitte tragen Sie diese Einstellungen unter\n\"Extras\\Optionen\\Allgemein...\\Benutzerdaten\\E-Mail\" und\n\"Extras\\Optionen\\Internet\\Mail/News\\Nachrichtenversand\" ein,\nbevor Sie erneut eine Nachricht verschicken wollen." ;
     Message [ en-US ] = "Before sending mail or news messages, you must\nspecify your e-mail address and an SMTP server.\nPlease enter the required settings under \n\"Tools\\Options\\General...\\User Data\\E-Mail\" and\n\"Tools\\Options\\Internet\\Mail/News\\Outgoing Mail\".\nThen try sending this message again." ;
     Message [ x-comment ] = " ";
 };
@@ -254,7 +254,7 @@ ErrorBox ERRBOX_SFX_NO_OUTBOX
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message [ de ] = "Für die von Ihnen gewählte Aktion wird ein Ausgangskorb benötigt.\nBitte legen Sie einen Ausgangskorb an, bevor Sie diese Aktion erneut ausführen." ;
+    Message [ de ] = "FÃ¼r die von Ihnen gewÃ¤hlte Aktion wird ein Ausgangskorb benÃ¶tigt.\nBitte legen Sie einen Ausgangskorb an, bevor Sie diese Aktion erneut ausfÃ¼hren." ;
     Message [ en-US ] = "To perform this action an outbox is required.\nPlease create an outbox prior to executing this action again." ;
     Message [ x-comment ] = " ";
 };
@@ -269,7 +269,7 @@ QueryBox MSG_QUERY_OPENASTEMPLATE
 };
 String STR_FRAMESIZE
 {
-    Text [ de ] = "Frame-Größe" ;
+    Text [ de ] = "Frame-GrÃ¶ÃŸe" ;
     Text [ en-US ] = "Frame Size" ;
     Text [ x-comment ] = " ";
 };
