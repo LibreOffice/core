@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:50:16 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:01:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1396,7 +1396,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                     // Verb zuweisen
                     pView->UnmarkAll();
                     pView->MarkObj(pObj, pView->GetPageViewPvNum(0), FALSE, FALSE);
-                    pDrViewSh->DoVerb(pInfo->nVerb);
+                    pDrViewSh->DoVerb((sal_Int16)pInfo->nVerb);
                     bAnimated = TRUE;
                 }
                 break;
