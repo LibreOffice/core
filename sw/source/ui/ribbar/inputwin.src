@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputwin.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:45:00 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:11:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ ToolBox RID_TBX_FORMULA
             Identifier = FN_FORMULA_APPLY ;
             HelpID = FN_FORMULA_APPLY ;
             /* ### ACHTUNG: Neuer Text in Resource? Übernehmen : šbernehmen */
-            Text [ de ] = "Übernehmen" ;
+            Text [ de ] = "Ãœbernehmen" ;
             Text [ en-US ] = "Apply" ;
             /* ### ACHTUNG: Neuer Text in Resource? Formel einfügen : Formel einf³gen */
         };
@@ -175,7 +175,7 @@ Menu MN_CALC_POPUP
                         Identifier = MN_CALC_GEQ ;
                         HelpID = HID_MN_CALC_GEQ ;
                         /* ### ACHTUNG: Neuer Text in Resource? Gr~ößer Gleich : Gr~÷˜er Gleich */
-                        Text [ de ] = "Gr~ößer Gleich" ;
+                        Text [ de ] = "Gr~Ã¶ÃŸer Gleich" ;
                         Text [ en-US ] = "Greater Than or Equal" ;
                     };
                     MenuItem
@@ -190,7 +190,7 @@ Menu MN_CALC_POPUP
                         Identifier = MN_CALC_GRE ;
                         HelpID = HID_MN_CALC_GRE ;
                         /* ### ACHTUNG: Neuer Text in Resource? G~rößer : G~r÷˜er */
-                        Text [ de ] = "G~rößer" ;
+                        Text [ de ] = "G~rÃ¶ÃŸer" ;
                         Text [ en-US ] = "Greater" ;
                     };
                     MenuItem
@@ -348,7 +348,7 @@ String STR_FORMULA
         Identifier = FN_FORMULA_APPLY ; \
         HelpID = FN_FORMULA_APPLY ; \
         /* ### ACHTUNG: Neuer Text in Resource? Übernehmen : šbernehmen */\
-        Text [ de ] = "Übernehmen" ; \
+        Text [ de ] = "Ãœbernehmen" ; \
         Text [ en-US ] = "Apply" ; \
         /* ### ACHTUNG: Neuer Text in Resource? Formel einfügen : Formel einf³gen */\
     };
