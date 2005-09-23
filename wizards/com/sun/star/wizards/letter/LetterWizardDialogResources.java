@@ -145,7 +145,6 @@ public class LetterWizardDialogResources extends Resource {
         loadRoadmapResources();
         loadSalutationResources();
         loadGreetingResources();
-        loadLanguageResources();
         loadCommonResources();
     }
 
@@ -172,10 +171,4 @@ public class LetterWizardDialogResources extends Resource {
         }
     }
 
-    private void loadLanguageResources() {
-        for (int i = 1; i < 17; i++) {
-            LanguageLabels[i-1] = getResText(RID_LETTERWIZARDLANGUAGE_START + i);
-        }
-
-    }
 }
