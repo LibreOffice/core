@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.147 $
+ *  $Revision: 1.148 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:54:42 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:13:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@
         Size    = MAP_APPFONT ( ADVANCED_PAGE_X -12  , CHECKBOX_HEIGHT ) ;                          \
         TabStop = TRUE ;                                                            \
         HelpId = HID_DSADMIN_APPENDTABLEALIAS;                                      \
-        Text [ de ] = "Den Alias Namen von Tabellen im SELECT Ausdruck anhängen";           \
+        Text [ de ] = "Den Alias Namen von Tabellen im SELECT Ausdruck anhÃ¤ngen";          \
         Text[ en-US ] = "Append the table alias name on SELECT statements"; \
     };
 
@@ -107,7 +107,7 @@
         Group   = TRUE ;                                                            \
         TabStop = TRUE ;                                                            \
         HelpId = HID_DSADMIN_ENABLEOUTERJOIN;                                       \
-        Text [ de ] = "Für Outer Joins die Syntax '{OJ }' verwenden";                       \
+        Text [ de ] = "FÃ¼r Outer Joins die Syntax '{OJ }' verwenden";                      \
         Text [ en-US ] = "Use Outer Join syntax '{OJ }'";                       \
     };
 
@@ -229,7 +229,7 @@
         Size    = MAP_APPFONT ( ADVANCED_PAGE_X -12 , CHECKBOX_HEIGHT ) ;                           \
         TabStop = TRUE ;                                                            \
         HelpId = HID_DSADMIN_SQL92CHECK;                                            \
-        Text [ de ] = "SQL92 Namensbeschränkung verwenden";                             \
+        Text [ de ] = "SQL92 NamensbeschrÃ¤nkung verwenden";                                \
         Text[ en-US ] = "Use SQL92 naming constraints";                     \
     };
 
@@ -275,7 +275,7 @@
         Size    = MAP_APPFONT ( ADVANCED_PAGE_X - 2*UNRELATED_CONTROLS , CHECKBOX_HEIGHT ) ;                    \
         TabStop = TRUE ;                                                    \
         HelpId = HID_DSADMIN_AUTORETRIEVEENABLED;                           \
-        Text [ de ] = "Generierte Werte ~berücksichtigen";                          \
+        Text [ de ] = "Generierte Werte ~berÃ¼cksichtigen";                         \
         Text [ en-US ] = "Re~trieve generated values";\
     };                                                                      \
                                                                             \
@@ -420,7 +420,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
     };
     String STR_PAGETITLE_ADVANCED
     {
-        Text [ de ] = "Zusätzliche Einstellungen" ;
+        Text [ de ] = "ZusÃ¤tzliche Einstellungen" ;
         Text [ en-US ] = "Additional Settings" ;
     };
     String STR_PAGETITLE_CONNECTION
@@ -489,7 +489,7 @@ TabPage PAGE_GENERAL
     {
         Pos = MAP_APPFONT (START_X , 27 );
         Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - 6, 5* FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Benutzen sie den Datenbank-Assistenten, um eine neue Datenbank anzulegen, eine bestehende Datenbankdatei zu öffnen, oder eine Verbindung zu einer Server-Datenbank herzustellen.";
+        Text [ de ] = "Benutzen sie den Datenbank-Assistenten, um eine neue Datenbank anzulegen, eine bestehende Datenbankdatei zu Ã¶ffnen, oder eine Verbindung zu einer Server-Datenbank herzustellen.";
         Text [ en-US ]  = "Use the Database Wizard to create a new database, open an existing database file, or connect to a database stored on a server." ;
         WordBreak = TRUE ;
     };
@@ -498,7 +498,7 @@ TabPage PAGE_GENERAL
     {
         Pos = MAP_APPFONT ( START_X , 73 ) ;
         Size = MAP_APPFONT ( WIZARD_PAGE_X - 12 , FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Wie möchten Sie fortfahren?";
+        Text [ de ] = "Wie mÃ¶chten Sie fortfahren?";
         Text [ en-US ] = "What do you want to do?";
     };
 
@@ -516,7 +516,7 @@ TabPage PAGE_GENERAL
     {
         Pos = MAP_APPFONT (START_X + 6 , 97 );
         Size = MAP_APPFONT ( 206 , 8 ) ;
-        Text [ de ] = "~Bestehende Datenbankdatei öffnen";
+        Text [ de ] = "~Bestehende Datenbankdatei Ã¶ffnen";
         Text [ en-US ]  = "Open an existing database ~file" ;
     };
 
@@ -557,7 +557,7 @@ TabPage PAGE_GENERAL
     {
         Pos = MAP_APPFONT ( 6 , UNRELATED_CONTROLS ) ;
         Size = MAP_APPFONT ( WIZARD_PAGE_X - 12 , 3*FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Bitte wählen Sie den Type der Datenbank aus, zu der eine Verbindung aufgebaut werden soll.";
+        Text [ de ] = "Bitte wÃ¤hlen Sie den Type der Datenbank aus, zu der eine Verbindung aufgebaut werden soll.";
         Text [ en-US ] = "Select the type of database to which you want to establish a connection.";
     };
 
@@ -593,7 +593,7 @@ TabPage PAGE_GENERAL
     {
         Pos = MAP_APPFONT ( 6 , 4*UNRELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + RELATED_CONTROLS ) ;
         Size = MAP_APPFONT ( WIZARD_PAGE_X - 12 , 4*FIXEDTEXT_HEIGHT ) ;
-        Text [ de ]= "Auf den nächsten Seiten können Sie dann detaillierte Verbindungs-Einstellungen vornehmen.\n\nBitte beachten Sie dabei,dass diese neuen Einstellungen Ihre existierenden überschreiben.";
+        Text [ de ]= "Auf den nÃ¤chsten Seiten kÃ¶nnen Sie dann detaillierte Verbindungs-Einstellungen vornehmen.\n\nBitte beachten Sie dabei,dass diese neuen Einstellungen Ihre existierenden Ã¼berschreiben.";
         Text [ en-US ] = "On the following pages, you can make detailed settings for the connection.\n\nThe new settings you make will overwrite your existing settings.";
     };
 
@@ -618,12 +618,12 @@ TabPage PAGE_GENERAL
     };
     String STR_COULDNOTLOAD_ODBCLIB
     {
-        Text [ de ] = "Die Programmbibliothek #lib# konnte nicht geladen werden oder ist defekt. Die ODBC-Datenquellen-Auswahl ist nicht verfügbar.";
+        Text [ de ] = "Die Programmbibliothek #lib# konnte nicht geladen werden oder ist defekt. Die ODBC-Datenquellen-Auswahl ist nicht verfÃ¼gbar.";
         Text [ en-US ] = "Could not load the program library #lib# or it is corrupted. The ODBC data source selection is not available.";
     };
     String STR_UNSUPPORTED_DATASOURCE_TYPE
     {
-        Text [ de ] = "Dieser Datenquellen-Typ wird auf dieser Plattform nicht unterstützt.\nSie können die Einstellungen verändern, werden aber vermutlich keine Verbindung zu der Datenbank herstellen können.";
+        Text [ de ] = "Dieser Datenquellen-Typ wird auf dieser Plattform nicht unterstÃ¼tzt.\nSie kÃ¶nnen die Einstellungen verÃ¤ndern, werden aber vermutlich keine Verbindung zu der Datenbank herstellen kÃ¶nnen.";
         Text [ en-US ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably will not be able to connect to the database.";
     };
     Text [ de ]= "Allgemein" ;
@@ -656,7 +656,7 @@ TabPage PAGE_DBASE
         Size = MAP_APPFONT ( 200 , CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
         HelpId = HID_DSADMIN_SHOWDELETED;
-        Text [ de ]= "Auch gelöschte Datensätze anzeigen" ;
+        Text [ de ]= "Auch gelÃ¶schte DatensÃ¤tze anzeigen" ;
         Text [ en-US ] = "Display deleted records as well" ;
     };
 
@@ -666,7 +666,7 @@ TabPage PAGE_DBASE
         WordBreak = TRUE;
         Pos = MAP_APPFONT ( 6 , 3*UNRELATED_CONTROLS + 2*RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT) ;
         Size = MAP_APPFONT ( PAGE_X - 12 , 2*FIXEDTEXT_HEIGHT ) ;
-        Text [ de ]= "Achtung: Wenn gelöschte und daher inaktive Datensätze angezeigt werden, können Sie keine Datensätze aus der Datenquelle löschen." ;
+        Text [ de ]= "Achtung: Wenn gelÃ¶schte und daher inaktive DatensÃ¤tze angezeigt werden, kÃ¶nnen Sie keine DatensÃ¤tze aus der Datenquelle lÃ¶schen." ;
         Text [ en-US ] = "Note: When deleted, and thus inactive, records are  displayed, you will not be able to delete records from the data source." ;
     };
 
@@ -1051,7 +1051,7 @@ TabPage PAGE_ADABAS
     {
         Pos = MAP_APPFONT ( 6 , 2*UNRELATED_CONTROLS + RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT ) ;
         Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Daten~puffergröße (MB)" ;
+        Text [ de ] = "Daten~puffergrÃ¶ÃŸe (MB)" ;
         Text[ en-US ] = "Data ~buffer size (MB)";
     };
     NumericField NF_CACHE_SIZE
@@ -1069,7 +1069,7 @@ TabPage PAGE_ADABAS
     {
         Pos = MAP_APPFONT ( 6 , 3*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT ) ;
         Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Zu~wachsgröße (MB)" ;
+        Text [ de ] = "Zu~wachsgrÃ¶ÃŸe (MB)" ;
         Text[ en-US ] = "~Data increment (MB)";
     };
     NumericField NF_DATA_INCREMENT
@@ -1289,7 +1289,7 @@ TabPage PAGE_LDAP
     {
         Pos = MAP_APPFONT ( 6 , 4*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT ) ;
         Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Maximale Anzahl der ~Datensätze" ;
+        Text [ de ] = "Maximale Anzahl der ~DatensÃ¤tze" ;
         Text[ en-US ] = "Maximum number of ~records";
     };
     NumericField NF_LDAPROWCOUNT
