@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:55:35 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:41:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,9 @@
 #endif
 #ifndef _SC_XMLSTYLESEXPORTHELPER_HXX
 #include "XMLStylesExportHelper.hxx"
+#endif
+#ifndef SC_DOCUMENT_HXX
+#include "document.hxx"
 #endif
 
 #include <algorithm>
@@ -693,10 +696,28 @@ void ScMyNotEmptyCellsIterator::SetMatrixCellData( ScMyCell& rMyCell )
     rMyCell.bIsMatrixBase = sal_False;
 
     sal_Bool bIsMatrixBase(sal_False);
-    rMyCell.nType = rMyCell.xCell->getType();
+
+    ScAddress aScAddress;
+    ScUnoConversion::FillScAddress( aScAddress, rMyCell.aCellAddress );
+    CellType eCalcType = rExport.GetDocument()->GetCellType( aScAddress );
+    switch (eCalcType)
+    {
+        case CELLTYPE_VALUE:
+            rMyCell.nType = table::CellContentType_VALUE;
+            break;
+        case CELLTYPE_STRING:
+        case CELLTYPE_EDIT:
+            rMyCell.nType = table::CellContentType_TEXT;
+            break;
+        case CELLTYPE_FORMULA:
+            rMyCell.nType = table::CellContentType_FORMULA;
+            break;
+        default:
+            rMyCell.nType = table::CellContentType_EMPTY;
+    }
+
     if (rMyCell.nType == table::CellContentType_FORMULA)
-        if( rExport.IsMatrix( rMyCell.xCell, xTable, rMyCell.aCellAddress.Column, rMyCell.aCellAddress.Row,
-                rMyCell.aMatrixRange, bIsMatrixBase ) )
+        if( rExport.IsMatrix( aScAddress, rMyCell.aMatrixRange, bIsMatrixBase ) )
         {
             rMyCell.bIsMatrixBase = bIsMatrixBase;
             rMyCell.bIsMatrixCovered = !bIsMatrixBase;
@@ -723,8 +744,10 @@ void ScMyNotEmptyCellsIterator::HasAnnotation(ScMyCell& aCell)
             aAnnotations.erase(aItr);
         }
     }
-    if (xCellRange.is())
-        aCell.xCell.set(xCellRange->getCellByPosition(aCell.aCellAddress.Column, aCell.aCellAddress.Row));
+
+    // test - bypass the API
+    // if (xCellRange.is())
+    //  aCell.xCell.set(xCellRange->getCellByPosition(aCell.aCellAddress.Column, aCell.aCellAddress.Row));
 }
 
 void ScMyNotEmptyCellsIterator::SetCurrentTable(const SCTAB nTable,
