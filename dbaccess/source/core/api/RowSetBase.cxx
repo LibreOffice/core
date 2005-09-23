@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:01:01 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:03:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,6 +130,7 @@ connectivity::sdbcx::ObjectType OEmptyCollection::createObject(const ::rtl::OUSt
 // =========================================================================
 // = ORowSetBase
 // =========================================================================
+DBG_NAME(ORowSetBase)
 // -------------------------------------------------------------------------
 ORowSetBase::ORowSetBase(::cppu::OBroadcastHelper   &_rBHelper,::osl::Mutex* _pMutex)
             : OPropertyStateContainer(_rBHelper)
@@ -147,6 +148,8 @@ ORowSetBase::ORowSetBase(::cppu::OBroadcastHelper   &_rBHelper,::osl::Mutex* _pM
             , m_nLastColumnIndex(-1)
             , m_pEmptyCollection( NULL )
 {
+    DBG_CTOR(ORowSetBase,NULL);
+
     sal_Int32 nRBT  = PropertyAttribute::READONLY   | PropertyAttribute::BOUND      | PropertyAttribute::TRANSIENT;
 
     registerProperty(PROPERTY_ROWCOUNT,             PROPERTY_ID_ROWCOUNT,               nRBT,                           &m_nRowCount,           ::getCppuType(reinterpret_cast< sal_Int32*>(NULL)));
@@ -166,6 +169,8 @@ ORowSetBase::~ORowSetBase()
 
     if ( m_pEmptyCollection )
         delete m_pEmptyCollection;
+
+    DBG_DTOR(ORowSetBase,NULL);
 }
 // com::sun::star::lang::XTypeProvider
 //--------------------------------------------------------------------------
@@ -1224,6 +1229,7 @@ Any ORowSetBase::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
     return Any();
 }
 // =============================================================================
+DBG_NAME(ORowSetNotifier)
 // -----------------------------------------------------------------------------
 ORowSetNotifier::ORowSetNotifier( ORowSetBase* _pRowSet )
     :m_pRowSet( _pRowSet )
@@ -1233,6 +1239,8 @@ ORowSetNotifier::ORowSetNotifier( ORowSetBase* _pRowSet )
     ,m_bNotifyCalled( sal_False )
 #endif
 {
+    DBG_CTOR(ORowSetNotifier,NULL);
+
     OSL_ENSURE( m_pRowSet, "ORowSetNotifier::ORowSetNotifier: invalid row set. This wil crash." );
 
     // remember the "inserted" and "modified" state for later firing
@@ -1247,6 +1255,8 @@ ORowSetNotifier::ORowSetNotifier( ORowSetBase* _pRowSet )
 // -----------------------------------------------------------------------------
 ORowSetNotifier::~ORowSetNotifier( )
 {
+
+    DBG_DTOR(ORowSetNotifier,NULL);
 }
 
 // -----------------------------------------------------------------------------
