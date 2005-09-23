@@ -4,9 +4,9 @@
  *
  *  $RCSfile: certificatechooser.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:10:31 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:10:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,14 +45,14 @@ ModalDialog RID_XMLSECDLG_CERTCHOOSER
     Moveable = TRUE;
     SVLook = TRUE;
 
-    Text [ de ] ="Zertifikat auswählen";
+    Text [ de ] ="Zertifikat auswÃ¤hlen";
     Text [ en-US ] = "Select Certificate";
 
     FixedText FT_HINT_SELECT
     {
         Pos = MAP_APPFONT( CS_COL_0, CS_ROW_0 );
         Size = MAP_APPFONT( CS_COL_2-CS_COL_0, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text [ de ] ="Wählen Sie das Zertifikat aus, das Sie zum Signieren benutzen möchten.";
+        Text [ de ] ="WÃ¤hlen Sie das Zertifikat aus, das Sie zum Signieren benutzen mÃ¶chten.";
         Text [ en-US ] = "Select the certificate you want to use for signing";
     };
     Control LB_SIGNATURES
@@ -65,7 +65,7 @@ ModalDialog RID_XMLSECDLG_CERTCHOOSER
     };
     String STR_HEADERBAR
     {
-        Text [ de ] ="Ausgestellt für\tAusgestellt durch\tAblaufdatum";
+        Text [ de ] ="Ausgestellt fÃ¼r\tAusgestellt durch\tAblaufdatum";
         Text [ en-US ] = "Issued to\tIssued by\tExpiration date";
     };
     PushButton BTN_VIEWCERT
