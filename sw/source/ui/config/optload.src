@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:45:42 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:52:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ TabPage TP_OPTLOAD_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 115 , 8 ) ;
-        Text [ de ] = "Verknüpfungen beim Laden aktualisieren" ;
+        Text [ de ] = "VerknÃ¼pfungen beim Laden aktualisieren" ;
         Text [ en-US ] = "Update links when loading";
     };
     RadioButton RB_ALWAYS
@@ -123,7 +123,7 @@ TabPage TP_OPTLOAD_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 79 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "~Maßeinheit";
+        Text [ de ] = "~MaÃŸeinheit";
         Text [ en-US ] = "Measurement unit";
         Text [ x-comment ] = " ";
     };
@@ -178,7 +178,7 @@ TabPage TP_OPTCAPTION_PAGE
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 106 , 20 ) ;
         WordBreak = TRUE ;
-        Text [ de ] = "Automatische Beschriftung\nbeim Einfügen von:" ;
+        Text [ de ] = "Automatische Beschriftung\nbeim EinfÃ¼gen von:" ;
         Text [ en-US ] = "Add captions automatically\nwhen inserting:" ;
         Text [ x-comment ] = " ";
     };
@@ -434,7 +434,7 @@ StringArray STR_ARR_METRIC
         < "Meter" ; FUNIT_M ; > ;
         < "Kilometer" ; FUNIT_KM ; > ;
         < "Zoll" ; FUNIT_INCH ; > ;
-        < "Fuß" ; FUNIT_FOOT ; > ;
+        < "FuÃŸ" ; FUNIT_FOOT ; > ;
         < "Meilen" ; FUNIT_MILE ; > ;
         < "Pica" ; FUNIT_PICA ; > ;
         < "Point" ; FUNIT_POINT ; > ;
