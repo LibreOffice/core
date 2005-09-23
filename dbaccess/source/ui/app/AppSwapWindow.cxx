@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppSwapWindow.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:21:52 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:17:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,12 +76,15 @@ using namespace ::com::sun::star::container;
 
 //==================================================================
 // class OApplicationSwapWindow
+DBG_NAME(OApplicationSwapWindow)
 //==================================================================
 OApplicationSwapWindow::OApplicationSwapWindow(Window* _pParent,OAppBorderWindow* _pBorderWindow) : Control(_pParent,WB_DIALOGCONTROL )
     ,m_aIconControl(this)
     ,m_pBorderWin(_pBorderWindow)
     ,m_eLastType(E_NONE)
 {
+    DBG_CTOR(OApplicationSwapWindow,NULL);
+
     ImplInitSettings( sal_True, sal_True, sal_True );
 
     m_aIconControl.SetClickHdl(LINK(this, OApplicationSwapWindow, OnContainerSelectHdl));
@@ -93,6 +96,8 @@ OApplicationSwapWindow::OApplicationSwapWindow(Window* _pParent,OAppBorderWindow
 // -----------------------------------------------------------------------------
 OApplicationSwapWindow::~OApplicationSwapWindow()
 {
+
+    DBG_DTOR(OApplicationSwapWindow,NULL);
 }
 // -----------------------------------------------------------------------------
 void OApplicationSwapWindow::Resize()
