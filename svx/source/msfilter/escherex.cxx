@@ -4,9 +4,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:44:13 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:51:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,6 +191,12 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_XGRAPHICS_HPP_
 #include <com/sun/star/awt/XGraphics.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_FONTSLANT_HPP_
+#include <com/sun/star/awt/FontSlant.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_FONTWEIGHT_HPP_
+#include <com/sun/star/awt/FontWeight.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_COLORMODE_HPP_
 #include <com/sun/star/drawing/ColorMode.hpp>
@@ -2950,6 +2956,30 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         nTextPathFlags |= 0x1000;
                                     else
                                         nTextPathFlags &=~0x1000;
+                                }
+                            }
+                            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "CharPosture" ) ), sal_True ) )
+                            {
+                                awt::FontSlant eFontSlant;
+                                if ( aAny >>= eFontSlant )
+                                {
+                                    nTextPathFlags |= 0x100010;
+                                    if ( eFontSlant != awt::FontSlant_NONE )
+                                        nTextPathFlags |= 0x10;
+                                    else
+                                        nTextPathFlags &=~0x10;
+                                }
+                            }
+                            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "CharWeight" ) ), sal_True ) )
+                            {
+                                float fFontWidth;
+                                if ( aAny >>= fFontWidth )
+                                {
+                                    nTextPathFlags |= 0x200020;
+                                    if ( fFontWidth > awt::FontWeight::NORMAL )
+                                        nTextPathFlags |= 0x20;
+                                    else
+                                        nTextPathFlags &=~0x20;
                                 }
                             }
                         }
