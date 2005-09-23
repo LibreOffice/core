@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationEffect.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:08:51 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 10:41:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,7 +186,7 @@ CustomAnimationEffect::CustomAnimationEffect( const ::com::sun::star::uno::Refer
     mfBegin(-1.0),
     mfDuration(-1.0),
     mfAbsoluteDuration(-1.0),
-    mnMasterRel(2),
+    mbAfterEffectOnNextEffect(false),
     mbHasAfterEffect(false),
     mfIterateInterval(0.0),
     mnIterateType(0),
@@ -989,7 +989,7 @@ Reference< XAnimationNode > CustomAnimationEffect::createAfterEffectNode() const
     }
 
     Any aBegin;
-    if( mnMasterRel == 2 ) // sameClick
+    if( !mbAfterEffectOnNextEffect ) // sameClick
     {
         Event aEvent;
 
@@ -1896,7 +1896,7 @@ void EffectSequenceHelper::implRebuild()
                         if( pEffect->hasAfterEffect() )
                         {
                             Reference< XAnimationNode > xAfterEffect( pEffect->createAfterEffectNode() );
-                            AfterEffectNode a( xAfterEffect, xEffectNode, pEffect->getMasterRel() );
+                            AfterEffectNode a( xAfterEffect, xEffectNode, pEffect->IsAfterEffectOnNext() );
                             aAfterEffects.push_back( a );
                         }
 
@@ -2003,7 +2003,7 @@ void stl_process_after_effect_node_func(AfterEffectNode& rNode)
             // insert after effect node into timeline
             Reference< XTimeContainer > xContainer( rNode.mxMaster->getParent(), UNO_QUERY_THROW );
 
-            if( rNode.mnMasterRel != 0 ) // sameClick
+            if( !rNode.mbOnNextEffect ) // sameClick
             {
                 // insert the aftereffect after its effect is animated
                 xContainer->insertAfter( rNode.mxNode, rNode.mxMaster );
@@ -2080,6 +2080,23 @@ void stl_process_after_effect_node_func(AfterEffectNode& rNode)
 
                 if( xNextContainer.is() )
                 {
+                    // find begin time of first element
+                    Reference< XEnumerationAccess > xEnumerationAccess( xNextContainer, UNO_QUERY_THROW );
+                    Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+                    if( xEnumeration->hasMoreElements() )
+                    {
+                        Reference< XAnimationNode > xChild;
+                        // the next container is the first child container
+                        xEnumeration->nextElement() >>= xChild;
+                        if( xChild.is() )
+                        {
+                            Any aBegin( xChild->getBegin() );
+                            double fBegin;
+                            if( (aBegin >>= fBegin) && (fBegin >= 0.0))
+                                rNode.mxNode->setBegin( aBegin );
+                        }
+                    }
+
                     xNextContainer->appendChild( rNode.mxNode );
                 }
             }
@@ -2935,14 +2952,14 @@ void EffectSequenceHelper::processAfterEffect( const Reference< XAnimationNode >
                     // its a dim
                     Reference< XAnimate > xAnimate( xNode, UNO_QUERY_THROW );
                     pMasterEffect->setDimColor( xAnimate->getTo() );
-                    pMasterEffect->setMasterRel( 2 );
+                    pMasterEffect->setAfterEffectOnNext( true );
                 }
                 else
                 {
                     // its a hide
                     Reference< XChild > xNodeChild( xNode, UNO_QUERY_THROW );
                     Reference< XChild > xMasterChild( xMaster, UNO_QUERY_THROW );
-                    pMasterEffect->setMasterRel( xNodeChild->getParent() == xMasterChild->getParent() ? 2 : 0 );
+                    pMasterEffect->setAfterEffectOnNext( xNodeChild->getParent() != xMasterChild->getParent() );
                 }
             }
         }
