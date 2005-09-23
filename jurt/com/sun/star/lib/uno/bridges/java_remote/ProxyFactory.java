@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ProxyFactory.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:56:59 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:50:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,6 +129,9 @@ final class ProxyFactory {
                 return "[Proxy:" + System.identityHashCode(proxy) + "," + oid
                     + "," + type + "]";
             } else if (method.equals(METHOD_QUERY_INTERFACE)) {
+                // See the comment in java_remote_bridge.mapInterfaceTo for one
+                // reason why this implementation must not satisfy a request for
+                // a super-interface with a proxy itself:
                 return args[0].equals(type) ? proxy
                     : request("queryInterface", args);
             } else if (method.equals(METHOD_GET_OID)) {
