@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:23:46 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:04:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,7 +162,7 @@ TabPage RID_SCPAGE_PROTECTION
         Pos = MAP_APPFONT ( 114 , 14 ) ;
         Size = MAP_APPFONT ( 137 , 56 ) ;
         WordBreak = TRUE ;
-        Text [ de ] = "Der Schutz von Zellen wird nur dann wirksam, wenn die aktive Tabelle geschützt ist.\n\nWählen Sie hierzu aus dem Menü 'Extras' den Befehl 'Dokument schützen' und dann den Befehl 'Tabelle'." ;
+        Text [ de ] = "Der Schutz von Zellen wird nur dann wirksam, wenn die aktive Tabelle geschÃ¼tzt ist.\n\nWÃ¤hlen Sie hierzu aus dem MenÃ¼ 'Extras' den Befehl 'Dokument schÃ¼tzen' und dann den Befehl 'Tabelle'." ;
         Text [ en-US ] = "Cell protection is only effective after the current sheet has been protected. \n\nSelect 'Protect Document' from the 'Tools' menu, and specify 'Sheet'." ;
         Text [ x-comment ] = " ";
     };
@@ -178,7 +178,7 @@ TabPage RID_SCPAGE_PROTECTION
     {
         Pos = MAP_APPFONT ( 12 , 87 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text [ de ] = "Für Aus~druck ausblenden" ;
+        Text [ de ] = "FÃ¼r Aus~druck ausblenden" ;
         Text [ en-US ] = "Hide ~when printing" ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
