@@ -123,24 +123,23 @@ Sub ShowON()
 End Sub
 
 Sub ShowOFF()
-	On Local Error Goto NOPROPERTYSETINFO:
+	&apos;On Local Error Goto NOPROPERTYSETINFO:
 		oWnd.setVisible(False)
 		oWnd2.setVisible(False)
 		oWnd3.setVisible(False)
-		oDoc.dispose()
+		&apos;oDoc.dispose()
 	Exit Sub
-	NOPROPERTYSETINFO:
-
+	&apos;NOPROPERTYSETINFO:
 End Sub
 
 Sub DisposeIDialog()
-    On Local Error Goto NOPROPERTYSETINFO:	
+    &apos;On Local Error Goto NOPROPERTYSETINFO:	
 		oWnd3.dispose
 		oWnd2.dispose
 		oWnd.dispose
 		oDoc.dispose()	
 	Exit Sub
-	NOPROPERTYSETINFO:
+	&apos;NOPROPERTYSETINFO:
 End Sub
 
 sub setImage(whatever as Object) 

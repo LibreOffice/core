@@ -6,7 +6,7 @@
  </dlg:styles>
  <dlg:bulletinboard>
   <dlg:button dlg:id="yesButton" dlg:tab-index="1" dlg:left="24" dlg:top="20" dlg:width="50" dlg:height="14" dlg:value="Yes">
-   <script:event script:event-name="on-mouseup" script:location="application" script:macro-name="Tutorials.TutorialClose.CloseYes" script:language="StarBasic"/>
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:Tutorials.TutorialClose.CloseYes?language=Basic&amp;location=application" script:language="Script"/>
   </dlg:button>
   <dlg:button dlg:id="noButton" dlg:tab-index="0" dlg:left="76" dlg:top="20" dlg:width="50" dlg:height="14" dlg:value="No" dlg:button-type="cancel"/>
   <dlg:text dlg:style-id="0" dlg:id="Label1" dlg:tab-index="2" dlg:left="6" dlg:top="6" dlg:width="120" dlg:height="8" dlg:value="Do you want to close this Tutorial?." dlg:align="center"/>

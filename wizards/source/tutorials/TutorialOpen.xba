@@ -80,8 +80,13 @@ End Sub
 
 Sub OpenTutorial(aEvent)
 	completPath = files(Ubound(files()) - oListBox.getSelectedItemPos())	
-	Dim NoArgs() as new com.sun.star.beans.PropertyValue
-	StarDesktop.LoadComponentFromURL(completPath,&quot;_default&quot;,0, NoArgs())
+	Dim Args(2) as new com.sun.star.beans.PropertyValue
+	Args(1).Name = &quot;MacroExecutionMode&quot;
+	Args(1).Value = com.sun.star.document.MacroExecMode.ALWAYS_EXECUTE
+	Args(2).Name = &quot;AsTemplate&quot;
+	Args(2).Value = true
+
+	StarDesktop.LoadComponentFromURL(completPath,&quot;_default&quot;,0, Args())
 	myOpenDialog.endExecute()
 End Sub
 
