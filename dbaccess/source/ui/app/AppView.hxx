@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppView.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:23:13 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:18:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ namespace dbaui
         // Window
         virtual void DataChanged( const DataChangedEvent& rDCEvt );
     public:
-        OAppBorderWindow(OApplicationView* _pParent);
+        OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePreviewMode);
         virtual ~OAppBorderWindow();
 
         // window overloads
@@ -149,6 +149,7 @@ namespace dbaui
                             ,IContainerFoundListener*           _pContainerListener
                             ,IViewChangeListener*               _pViewChangeListener
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController>& _xController
+                            ,PreviewMode _ePreviewMode
                             );
         virtual ~OApplicationView();
 
