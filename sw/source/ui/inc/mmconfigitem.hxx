@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmconfigitem.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:50:59 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:48:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,8 +50,8 @@
 #ifndef INCLUDED_SWDLLAPI_H
 #include "swdllapi.h"
 #endif
-#ifndef SW_SHARED_UNO_COMPONENT_HXX
-#include "sharedunocomponent.hxx"
+#ifndef SW_UI_SHARED_CONNECTION_HXX
+#include "sharedconnection.hxx"
 #endif
 
 namespace com{namespace sun{namespace star{
