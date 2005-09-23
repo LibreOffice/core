@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HtmlReader.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:07:06 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:36:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,7 +191,7 @@ DBG_NAME(OHTMLReader);
 // ==========================================================================
 // OHTMLReader
 // ==========================================================================
-OHTMLReader::OHTMLReader(SvStream& rIn,const Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+OHTMLReader::OHTMLReader(SvStream& rIn,const SharedConnection& _rxConnection,
                         const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                         const TColumnVector* pList,
