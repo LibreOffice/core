@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:00:37 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 10:39:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -905,11 +905,22 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUStr
 
 sal_Bool SdXMLShapeContext::isPresentationShape() const
 {
-    return (XML_STYLE_FAMILY_SD_PRESENTATION_ID == mnStyleFamily) &&
-           maPresentationClass.getLength() &&
-           (const_cast<SdXMLShapeContext*>(this))->GetImport().GetShapeImport()->IsPresentationShapesSupported();
-}
+    if( maPresentationClass.getLength() && (const_cast<SdXMLShapeContext*>(this))->GetImport().GetShapeImport()->IsPresentationShapesSupported() )
+    {
+        if(XML_STYLE_FAMILY_SD_PRESENTATION_ID == mnStyleFamily)
+        {
+            return sal_True;
+        }
 
+        if( IsXMLToken( maPresentationClass, XML_HEADER ) || IsXMLToken( maPresentationClass, XML_FOOTER ) ||
+            IsXMLToken( maPresentationClass, XML_PAGE_NUMBER ) || IsXMLToken( maPresentationClass, XML_DATE_TIME ) )
+        {
+            return sal_True;
+        }
+    }
+
+    return sal_False;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
