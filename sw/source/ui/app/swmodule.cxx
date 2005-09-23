@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:33:36 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:29:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -619,14 +619,14 @@ void SwDLL::RegisterControls()
     SvxIMapDlgChildWindow::RegisterChildWindow( sal_False, pMod );
     SvxSearchDialogWrapper::RegisterChildWindow( sal_False, pMod );
     SvxHlinkDlgWrapper::RegisterChildWindow( sal_False, pMod );
-    SvxHyperlinkDlgWrapper::RegisterChildWindow( sal_False, pMod );
+    SvxHyperlinkDlgWrapper::RegisterChildWindow( sal_False, pMod, SFX_CHILDWIN_FORCEDOCK );
     SvxFontWorkChildWindow::RegisterChildWindow( sal_False, pMod );
     SwFldDlgWrapper::RegisterChildWindow( sal_False, pMod );
     SwFldDataOnlyDlgWrapper::RegisterChildWindow( sal_False, pMod );
     SvxContourDlgChildWindow::RegisterChildWindow( sal_False, pMod );
     SwInsertChartChild::RegisterChildWindow( sal_False, pMod );
     SwNavigationChild::RegisterChildWindowContext( pMod );
-    SwInputChild::RegisterChildWindow( sal_False, pMod );
+    SwInputChild::RegisterChildWindow( sal_False, pMod, SFX_CHILDWIN_FORCEDOCK );
     SwRedlineAcceptChild::RegisterChildWindow( sal_False, pMod );
     SwSyncChildWin::RegisterChildWindow( sal_True, pMod );
     SwMailMergeChildWindow::RegisterChildWindow( sal_False, pMod );
