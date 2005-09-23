@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prltempl.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:15:52 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:36:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text [ de ] = "Pr‰sentationslayout" ;
+    Text [ de ] = "Pr√§sentationslayout" ;
     Text [ en-US ] = "Presentation Layout" ;
     Moveable = TRUE ;
     TabControl 1
@@ -62,7 +62,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
             PageItem
             {
                 Identifier = RID_SVXPAGE_AREA ;
-                Text [ de ] = "Fl‰che" ;
+                Text [ de ] = "Fl√§che" ;
                 Text [ en-US ] = "Area" ;
                 PageResID = RID_SVXPAGE_AREA ;
                 Text [ x-comment ] = " ";
@@ -100,7 +100,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
             PageItem
             {
                 Identifier = RID_SVXPAGE_STD_PARAGRAPH ;
-                Text [ de ] = "Einz¸ge und Abst‰nde" ;
+                Text [ de ] = "Einz√ºge und Abst√§nde" ;
                 Text [ en-US ] = "Indents & Spacing" ;
                 PageResID = RID_SVXPAGE_STD_PARAGRAPH ;
                 Text [ x-comment ] = " ";
@@ -169,7 +169,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_2
             PageItem
             {
                 Identifier = RID_SVXPAGE_AREA ;
-                Text [ de ] = "Fl‰che" ;
+                Text [ de ] = "Fl√§che" ;
                 Text [ en-US ] = "Area" ;
                 PageResID = RID_SVXPAGE_AREA ;
                 Text [ x-comment ] = " ";
@@ -209,7 +209,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
             PageItem
             {
                 Identifier = RID_SVXPAGE_STD_PARAGRAPH ;
-                Text [ de ] = "Einz¸ge und Abst‰nde" ;
+                Text [ de ] = "Einz√ºge und Abst√§nde" ;
                 Text [ en-US ] = "Indents & Spacing" ;
                 PageResID = RID_SVXPAGE_STD_PARAGRAPH ;
                 Text [ x-comment ] = " ";
