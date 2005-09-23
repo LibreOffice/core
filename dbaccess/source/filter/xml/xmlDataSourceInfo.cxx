@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlDataSourceInfo.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:02:51 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:09:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
-
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 #include <vector>
 
 namespace dbaxml
@@ -67,6 +69,7 @@ namespace dbaxml
     using namespace ::rtl;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xml::sax;
+DBG_NAME(OXMLDataSourceInfo)
 
 OXMLDataSourceInfo::OXMLDataSourceInfo( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
@@ -76,6 +79,8 @@ OXMLDataSourceInfo::OXMLDataSourceInfo( ODBFilter& rImport
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
     ,m_rParent(_rParent)
 {
+    DBG_CTOR(OXMLDataSourceInfo,NULL);
+
     OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
     const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
     const SvXMLTokenMap& rTokenMap = rImport.GetDataSourceInfoElemTokenMap();
@@ -135,6 +140,8 @@ OXMLDataSourceInfo::OXMLDataSourceInfo( ODBFilter& rImport
 
 OXMLDataSourceInfo::~OXMLDataSourceInfo()
 {
+
+    DBG_DTOR(OXMLDataSourceInfo,NULL);
 }
 // -----------------------------------------------------------------------------
 //----------------------------------------------------------------------------
