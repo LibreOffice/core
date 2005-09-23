@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:35:25 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:41:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1167,14 +1167,17 @@ sal_Bool SAL_CALL OResultSet::moveToBookmark( const  Any& bookmark ) throw( SQLE
     {
         SQLRETURN nReturn = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_FETCH_BOOKMARK_PTR,m_aBookmark.getArray(),SQL_IS_POINTER); // SQL_LEN_BINARY_ATTR(aBookmark.getLength())
 
-        m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_BOOKMARK,0);
-        OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
-        TBookmarkPosMap::iterator aFind = m_aPosToBookmarks.find(m_aBookmark);
-        if(aFind != m_aPosToBookmarks.end())
-            m_nRowPos = aFind->second;
-        else
-            m_nRowPos = -1;
-        return m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
+        if ( SQL_INVALID_HANDLE != nReturn && SQL_ERROR != nReturn )
+        {
+            m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_BOOKMARK,0);
+            OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+            TBookmarkPosMap::iterator aFind = m_aPosToBookmarks.find(m_aBookmark);
+            if(aFind != m_aPosToBookmarks.end())
+                m_nRowPos = aFind->second;
+            else
+                m_nRowPos = -1;
+            return m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO;
+        }
     }
     return sal_False;
 }
