@@ -4,9 +4,9 @@
  *
  *  $RCSfile: align.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:32:34 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:32:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
             < "Zentriert" ; ALIGNDLG_HORALIGN_CENTER ; > ;
             < "Rechts" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
             < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
-            < "Ausgefüllt" ; ALIGNDLG_HORALIGN_FILL ; > ;
+            < "AusgefÃ¼llt" ; ALIGNDLG_HORALIGN_FILL ; > ;
         };
         StringList [ en-US ] =
         {
@@ -229,7 +229,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
     {
         Pos = MAP_APPFONT( 12, 152 );
         Size = MAP_APPFONT( 236, 10 );
-        Text [ de ] = "~An Zellgröße anpassen";
+        Text [ de ] = "~An ZellgrÃ¶ÃŸe anpassen";
         Text [ en-US ] = "~Shrink to fit cell size";
     };
     FixedText FT_TEXTFLOW
