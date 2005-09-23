@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optspell.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:55:25 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:00:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@ TabPage RID_SFXPAGE_SPELL
     HelpId = HID_OPTIONS_SPELL ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 221 , 185 ) ;
-    Text [ de ] = "Rechtschreibprüfung" ;
+    Text [ de ] = "RechtschreibprÃ¼fung" ;
     Text [ en-US ] = "Spellcheck" ;
     PushButton BTN_BOOK
     {
@@ -69,7 +69,7 @@ TabPage RID_SFXPAGE_SPELL
         Size = MAP_APPFONT ( 115 , 66 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Wörterbücher : W÷rterb³cher */
         /* ### ACHTUNG: Neuer Text in Resource? Wörterbücher : W÷rterb³cher */
-        Text [ de ] = "Wörterbücher" ;
+        Text [ de ] = "WÃ¶rterbÃ¼cher" ;
         Text [ en-US ] = "Dictionaries" ;
         Text [ x-comment ] = " ";
     };
@@ -79,7 +79,7 @@ TabPage RID_SFXPAGE_SPELL
         Size = MAP_APPFONT ( 103 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Großgeschriebene Wörter : ~Gro˜geschriebene W÷rter */
         /* ### ACHTUNG: Neuer Text in Resource? ~Großgeschriebene Wörter : ~Gro˜geschriebene W÷rter */
-        Text [ de ] = "~Großgeschriebene Wörter" ;
+        Text [ de ] = "~GroÃŸgeschriebene WÃ¶rter" ;
         Text [ en-US ] = "~Capital words" ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -90,7 +90,7 @@ TabPage RID_SFXPAGE_SPELL
         Size = MAP_APPFONT ( 103 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Wörter mit Ziffern  : ~W÷rter mit Ziffern  */
         /* ### ACHTUNG: Neuer Text in Resource? ~Wörter mit Ziffern  : ~W÷rter mit Ziffern  */
-        Text [ de ] = "~Wörter mit Ziffern " ;
+        Text [ de ] = "~WÃ¶rter mit Ziffern " ;
         Text [ en-US ] = "~Words with numbers " ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -101,7 +101,7 @@ TabPage RID_SFXPAGE_SPELL
         Size = MAP_APPFONT ( 103 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Groß- u. ~Kleinschreibung  : Gro˜- u. ~Kleinschreibung  */
         /* ### ACHTUNG: Neuer Text in Resource? Groß- u. ~Kleinschreibung  : Gro˜- u. ~Kleinschreibung  */
-        Text [ de ] = "Groß- u. ~Kleinschreibung " ;
+        Text [ de ] = "GroÃŸ- u. ~Kleinschreibung " ;
         Text [ en-US ] = "~Case sensitive " ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -112,7 +112,7 @@ TabPage RID_SFXPAGE_SPELL
         Size = MAP_APPFONT ( 115 , 53 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Prüfen : Pr³fen */
         /* ### ACHTUNG: Neuer Text in Resource? Prüfen : Pr³fen */
-        Text [ de ] = "Prüfen" ;
+        Text [ de ] = "PrÃ¼fen" ;
         Text [ en-US ] = "Check" ;
         Text [ x-comment ] = " ";
     };
