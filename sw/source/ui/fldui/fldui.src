@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:42:32 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:04:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,7 @@ String STR_GETFLD
 };
 String STR_FORMELFLD
 {
-    Text [ de ] = "Formel einfügen" ;
+    Text [ de ] = "Formel einfÃ¼gen" ;
     Text [ en-US ] = "Insert Formula" ;
     Text [ x-comment ] = " ";
 };
@@ -169,7 +169,7 @@ String STR_DDEFLD
 };
 String STR_MACROFLD
 {
-    Text [ de ] = "Makro ausführen" ;
+    Text [ de ] = "Makro ausfÃ¼hren" ;
     Text [ en-US ] = "Execute macro" ;
     Text [ x-comment ] = " ";
 };
@@ -224,7 +224,7 @@ String STR_SETREFFLD
 };
 String STR_GETREFFLD
 {
-    Text [ de ] = "Referenz einfügen" ;
+    Text [ de ] = "Referenz einfÃ¼gen" ;
     Text [ en-US ] = "Insert Reference" ;
     Text [ x-comment ] = " ";
 };
@@ -239,7 +239,7 @@ String STR_DBFLD
 };
 String STR_DBNEXTSETFLD
 {
-    Text [ de ] = "Nächster Datensatz" ;
+    Text [ de ] = "NÃ¤chster Datensatz" ;
     Text [ en-US ] = "Next record" ;
     Text [ x-comment ] = " ";
 };
@@ -263,7 +263,7 @@ String STR_PREVPAGEFLD
 };
 String STR_NEXTPAGEFLD
 {
-    Text [ de ] = "Nächste Seite" ;
+    Text [ de ] = "NÃ¤chste Seite" ;
     Text [ en-US ] = "Next page" ;
     Text [ x-comment ] = " ";
 };
@@ -359,13 +359,13 @@ String FLD_STAT_CHAR
 };
 String FLD_STAT_WORD
 {
-    Text [ de ] = "Wörter" ;
+    Text [ de ] = "WÃ¶rter" ;
     Text [ en-US ] = "Words" ;
     Text [ x-comment ] = " ";
 };
 String FLD_STAT_PARA
 {
-    Text [ de ] = "Absätze" ;
+    Text [ de ] = "AbsÃ¤tze" ;
     Text [ en-US ] = "Paragraphs" ;
     Text [ x-comment ] = " ";
 };
@@ -428,13 +428,13 @@ String FLD_EU_NAME
 };
 String FLD_EU_ABK
 {
-    Text [ de ] = "Kürzel" ;
+    Text [ de ] = "KÃ¼rzel" ;
     Text [ en-US ] = "Initials" ;
     Text [ x-comment ] = " ";
 };
 String FLD_EU_STRASSE
 {
-    Text [ de ] = "Straße" ;
+    Text [ de ] = "StraÃŸe" ;
     Text [ en-US ] = "Street" ;
     Text [ x-comment ] = " ";
 };
@@ -476,7 +476,7 @@ String FLD_EU_TELPRIV
 };
 String FLD_EU_TELFIRMA
 {
-    Text [ de ] = "Tel. (Geschäft)" ;
+    Text [ de ] = "Tel. (GeschÃ¤ft)" ;
     Text [ en-US ] = "Tel. (Work)" ;
     Text [ x-comment ] = " ";
 };
@@ -596,13 +596,13 @@ String FMT_NUM_SABC_N
 };
 String FMT_NUM_ROMAN
 {
-    Text [ de ] = "Römisch (I II III)" ;
+    Text [ de ] = "RÃ¶misch (I II III)" ;
     Text [ en-US ] = "Roman (I II III)" ;
     Text [ x-comment ] = " ";
 };
 String FMT_NUM_SROMAN
 {
-    Text [ de ] = "Römisch (i ii iii)" ;
+    Text [ de ] = "RÃ¶misch (i ii iii)" ;
     Text [ en-US ] = "Roman (i ii iii)" ;
     Text [ x-comment ] = " ";
 };
@@ -635,7 +635,7 @@ String FMT_AUTHOR_NAME
 };
 String FMT_AUTHOR_SCUT
 {
-    Text [ de ] = "Kürzel" ;
+    Text [ de ] = "KÃ¼rzel" ;
     Text [ en-US ] = "Initials" ;
     Text [ x-comment ] = " ";
 };
@@ -813,7 +813,7 @@ String STR_ALL
 };
 String STR_INSERT
 {
-    Text [ de ] = "Einfügen" ;
+    Text [ de ] = "EinfÃ¼gen" ;
     Text [ en-US ] = "Insert" ;
     Text [ x-comment ] = " ";
 };
