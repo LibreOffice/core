@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationDialog.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:33:37 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 10:45:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1373,7 +1373,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
     mpLBTextAnim->SetSelectHdl( LINK( this, CustomAnimationEffectTabPage, implSelectHdl ) );
 
     if( (pSet->getPropertyState( nHandleHasAfterEffect ) != STLPropertyState_AMBIGUOUS) &&
-        (pSet->getPropertyState( nHandleMasterRel ) != STLPropertyState_AMBIGUOUS) &&
+        (pSet->getPropertyState( nHandleAfterEffectOnNextEffect ) != STLPropertyState_AMBIGUOUS) &&
         (pSet->getPropertyState( nHandleDimColor ) != STLPropertyState_AMBIGUOUS))
     {
         sal_Bool bHasAfterEffect;
@@ -1384,8 +1384,8 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
         {
             nPos++;
 
-            sal_Int32 nMasterRel;
-            pSet->getPropertyValue( nHandleMasterRel ) >>= nMasterRel;
+            sal_Bool bAfterEffectOnNextClick;
+            pSet->getPropertyValue( nHandleAfterEffectOnNextEffect ) >>= bAfterEffectOnNextClick;
             Any aDimColor( pSet->getPropertyValue( nHandleDimColor ) );
 
             if( aDimColor.hasValue() )
@@ -1403,7 +1403,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
             else
             {
                 nPos++;
-                if( nMasterRel == 2 )
+                if( bAfterEffectOnNextClick )
                     nPos++;
             }
         }
@@ -1656,14 +1656,14 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
             (mpSet->getPropertyValue( nHandleDimColor ) != aDimColor) )
             pSet->setPropertyValue( nHandleDimColor, makeAny( aDimColor ) );
 
-        sal_Int32 nMasterRel = nPos == 2 ? 0 : 2;
-        sal_Int32 nOldMasterRel = nMasterRel + 1;
+        sal_Bool bAfterEffectOnNextEffect = nPos != 2 ? sal_True : sal_False;
+        sal_Bool bOldAfterEffectOnNextEffect = !bAfterEffectOnNextEffect;
 
-        if( mpSet->getPropertyState( nHandleMasterRel ) != STLPropertyState_AMBIGUOUS)
-            mpSet->getPropertyValue( nHandleMasterRel ) >>= nOldMasterRel;
+        if( mpSet->getPropertyState( nHandleAfterEffectOnNextEffect ) != STLPropertyState_AMBIGUOUS)
+            mpSet->getPropertyValue( nHandleAfterEffectOnNextEffect ) >>= bOldAfterEffectOnNextEffect;
 
-        if( nMasterRel != nOldMasterRel )
-            pSet->setPropertyValue( nHandleMasterRel, makeAny( (sal_Int32) nMasterRel ) );
+        if( bAfterEffectOnNextEffect != bOldAfterEffectOnNextEffect )
+            pSet->setPropertyValue( nHandleAfterEffectOnNextEffect, makeAny( bAfterEffectOnNextEffect ) );
     }
 
     // ---
@@ -2484,7 +2484,7 @@ STLPropertySet* CustomAnimationDialog::createDefaultSet()
     pSet->setPropertyDefaultValue( nHandleMaxParaDepth, makeAny( (sal_Int32)-1 ) );
 
     pSet->setPropertyDefaultValue( nHandleHasAfterEffect, makeAny( (sal_Bool)sal_False ) );
-    pSet->setPropertyDefaultValue( nHandleMasterRel, makeAny( (sal_Int32)2 ) );
+    pSet->setPropertyDefaultValue( nHandleAfterEffectOnNextEffect, makeAny( (sal_Bool)sal_False ) );
     pSet->setPropertyDefaultValue( nHandleDimColor, aEmpty );
     pSet->setPropertyDefaultValue( nHandleIterateType, makeAny( (sal_Int16)0 ) );
     pSet->setPropertyDefaultValue( nHandleIterateInterval, makeAny( (double)0.0 ) );
