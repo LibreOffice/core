@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:51:53 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:46:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
 {
     HelpId = HID_FORMAT_PARAGRAPH_STD ;
     Hide = TRUE ;
-    Text [ de ] = "Einzüge und Abstände" ;
+    Text [ de ] = "EinzÃ¼ge und AbstÃ¤nde" ;
     Text [ en-US ] = "Indents and Spacing" ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedText FT_LEFTINDENT
@@ -139,7 +139,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Pos = MAP_APPFONT ( 12 , 90 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Left = TRUE ;
-        Text [ de ] = "Über Absatz" ;
+        Text [ de ] = "Ãœber Absatz" ;
         Text [ en-US ] = "Ab~ove paragraph" ;
     };
     MetricField ED_TOPDIST
@@ -293,7 +293,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
     {
         Pos = MAP_APPFONT ( 12 , 162 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
-        Text [ de ] = "Berü~cksichtigen" ;
+        Text [ de ] = "BerÃ¼~cksichtigen" ;
         Hide = TRUE ;
         Text [ en-US ] = "A~ctivate" ;
         Text [ x-comment ] = " ";
@@ -592,7 +592,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     {   // is moved one section deeper to not raise unnecessary translations
         Pos = MAP_APPFONT ( 6 , 116 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Zusätze" ;
+        Text [ de ] = "ZusÃ¤tze" ;
         Text [ en-US ] = "Options" ;
         Group = TRUE ;
         Text [ x-comment ] = " ";
@@ -601,7 +601,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     {
         Pos = MAP_APPFONT ( 6 , 73 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Umbrüche" ;
+        Text [ de ] = "UmbrÃ¼che" ;
         Text [ en-US ] = "Breaks" ;
         Group = TRUE ;
     };
@@ -610,7 +610,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
          //         Disable = TRUE;
         Pos = MAP_APPFONT ( 12 , 86 ) ;
         Size = MAP_APPFONT ( 61 , 10 ) ;
-        Text [ de ] = "Einfügen" ;
+        Text [ de ] = "EinfÃ¼gen" ;
         Text [ en-US ] = "Insert" ;
         Group = TRUE ;
     };
@@ -726,7 +726,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     {
         Pos = MAP_APPFONT ( 12, 141 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
-        Text [ de ] = "Absä~tze zusammenhalten" ;
+        Text [ de ] = "AbsÃ¤~tze zusammenhalten" ;
         Text [ en-US ] = "~Keep with next paragraph" ;
         Text [ x-comment ] = " ";
     };
@@ -825,21 +825,21 @@ TabPage RID_SVXPAGE_PARA_ASIAN
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text [ de ] = "~Liste der verbotenen Zeichen an Zeilenanfang und -ende berücksichtigen" ;
+        Text [ de ] = "~Liste der verbotenen Zeichen an Zeilenanfang und -ende berÃ¼cksichtigen" ;
         Text [ en-US ] = "Apply list of forbidden characters to the beginning and end of lines";
     };
     TriStateBox CB_AS_ALLOW_WORD_BREAK
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text [ de ] = "~Textumbruch innerhalb von Wötern im lateinischen Text zulassen" ;
+        Text [ de ] = "~Textumbruch innerhalb von WÃ¶tern im lateinischen Text zulassen" ;
         Text [ en-US ] = "Allow ~breaks in words in Latin text";
     };
     TriStateBox CB_AS_HANG_PUNC
     {
         Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text [ de ] = "Hängende ~Interpunktion zulassen" ;
+        Text [ de ] = "HÃ¤ngende ~Interpunktion zulassen" ;
         Text [ en-US ] = "Allow hanging punctuation";
     };
     FixedLine FL_AS_CHAR_DIST
