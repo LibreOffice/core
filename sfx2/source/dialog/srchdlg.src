@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:32:24 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:26:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ ModelessDialog RID_DLG_SEARCH
         Pos = MAP_APPFONT( 6, 29 );
         Size = MAP_APPFONT( 150, 10 );
         Text[ language_user1 ] = "";
-        Text [ de ]= "Nur ganze ~Wörter" ;
+        Text [ de ]= "Nur ganze ~WÃ¶rter" ;
         Text [ en-US ] = "~Whole words only" ;
         TabStop = TRUE;
     };
@@ -102,7 +102,7 @@ ModelessDialog RID_DLG_SEARCH
         Pos = MAP_APPFONT( 6, 68 );
         Size = MAP_APPFONT( 150, 10 );
         Text[ x-comment ] = "";
-        Text [ de ]= "~Rückwärts" ;
+        Text [ de ]= "~RÃ¼ckwÃ¤rts" ;
         Text [ en-US ] = "~Backwards" ;
         TabStop = TRUE;
     };
@@ -121,7 +121,7 @@ ModelessDialog RID_DLG_SEARCH
         Pos = MAP_APPFONT( 162, 23 );
         Size = MAP_APPFONT( 50, 14 );
         Text[ x-comment ] = "";
-        Text [ de ]= "S~chließen" ;
+        Text [ de ]= "S~chlieÃŸen" ;
         Text [ en-US ] = "~Close" ;
         TabStop = TRUE;
     };
