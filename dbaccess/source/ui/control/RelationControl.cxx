@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationControl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:32:04 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:23:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,9 @@
 #endif
 #ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
+#endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
 #endif
 
 #include <algorithm>
@@ -494,8 +497,11 @@ namespace dbaui
     }
     //========================================================================
     // class OTableListBoxControl
-    //========================================================================
-    OTableListBoxControl::OTableListBoxControl(Window* _pParent,
+DBG_NAME(OTableListBoxControl)
+
+//========================================================================
+
+OTableListBoxControl::OTableListBoxControl(Window* _pParent,
                                                const ResId& _rResId,
                                                const OJoinTableView::OTableWindowMap* _pTableMap,
                                                IRelationControlInterface* _pParentDialog)
@@ -528,6 +534,7 @@ namespace dbaui
         m_lmbRightTable.SetSelectHdl(aLink);
 
         FreeResource();
+        DBG_CTOR(OTableListBoxControl,NULL);
     }
     // -----------------------------------------------------------------------------
     OTableListBoxControl::~OTableListBoxControl()
@@ -535,6 +542,8 @@ namespace dbaui
         ORelationControl* pTemp = m_pRC_Tables;
         m_pRC_Tables = NULL;
         delete pTemp;
+
+        DBG_DTOR(OTableListBoxControl,NULL);
     }
     // -----------------------------------------------------------------------------
     void OTableListBoxControl::fillListBoxes()
