@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfedtdlg.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:20:44 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:04:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,39 +35,39 @@
 /* StarView ressource file */
 #include "hfedtdlg.hrc"
 #define HFEDIT_DLGTITLE \
-    Text [ de ] = "Kopf-/Fuﬂzeilen" ; \
+    Text [ de ] = "Kopf-/Fu√üzeilen" ; \
     Text [ en-US ] = "Headers/Footers" ; \
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " ";\
 
 #define HEADER \
     Text [ de ] = "Kopfzeile" ; \
     Text [ en-US ] = "Header" ; \
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " ";\
 
 #define FOOTER \
-    Text [ de ] = "Fuﬂzeile" ; \
+    Text [ de ] = "Fu√üzeile" ; \
     Text [ en-US ] = "Footer" ; \
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " ";\
 
 #define HEADER_RIGHT \
     Text [ de ] = "Kopfzeile (rechts)" ; \
     Text [ en-US ] = "Header (right)" ; \
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " ";\
 
 #define HEADER_LEFT \
     Text [ de ] = "Kopfzeile (links)" ; \
     Text [ en-US ] = "Header (left)" ; \
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " ";\
 
 #define FOOTER_RIGHT \
-    Text [ de ] = "Fuﬂzeile (rechts)" ; \
+    Text [ de ] = "Fu√üzeile (rechts)" ; \
     Text [ en-US ] = "Footer (right)" ; \
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " ";\
 
 #define FOOTER_LEFT \
-    Text [ de ] = "Fuﬂzeile (links)" ; \
+    Text [ de ] = "Fu√üzeile (links)" ; \
     Text [ en-US ] = "Footer (left)" ; \
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " ";\
 
  //------------------------------------------------------------------------
  // Bearbeiten vom Seitendialog aus aufgerufen
@@ -110,7 +110,7 @@ TabDialog RID_SCDLG_HFED_FOOTER
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 270 , 140 ) ;
-    Text [ de ] = "Fuﬂzeilen" ;
+    Text [ de ] = "Fu√üzeilen" ;
     Text [ en-US ] = "Footers" ;
     Moveable = TRUE ;
      // Closeable = TRUE;
@@ -713,7 +713,7 @@ TabPage RID_HFBASE
         Pos = MAP_APPFONT ( 12 , 155 ) ;
         Size = MAP_APPFONT ( 240 , 24 ) ;
         WordBreak = TRUE ;
-        Text [ de ] = "Benutzen Sie die Schaltfl‰chen, um die Schriftart zu ver‰ndern oder Feldbefehle wie Datum, Uhrzeit, etc. einzuf¸gen." ;
+        Text [ de ] = "Benutzen Sie die Schaltfl√§chen, um die Schriftart zu ver√§ndern oder Feldbefehle wie Datum, Uhrzeit, etc. einzuf√ºgen." ;
         Text [ en-US ] = "Use the buttons to change the font or insert field commands such as date, time, etc." ;
         Text [ x-comment ] = " ";
     };
