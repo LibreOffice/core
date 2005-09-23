@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prntopts.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:17:01 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:36:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ TabPage TP_PRINT_OPTIONS
     {
         Pos = MAP_APPFONT ( 130 , 3  ) ;
         Size = MAP_APPFONT ( 124 , 8 ) ;
-        Text [ de ] = "Ausgabequalit‰t" ;
+        Text [ de ] = "Ausgabequalit√§t" ;
         Text [ en-US ] = "Quality" ;
         Text [ x-comment ] = " ";
     };
@@ -123,7 +123,7 @@ TabPage TP_PRINT_OPTIONS
     {
         Pos = MAP_APPFONT ( 136 , 42  ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text [ de ] = "Schwarz~weiﬂ" ;
+        Text [ de ] = "Schwarz~wei√ü" ;
         Text [ en-US ] = "Black & ~white" ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -200,7 +200,7 @@ TabPage TP_PRINT_OPTIONS
     {
         Pos = MAP_APPFONT ( 136 , 97  ) ;
         Size = MAP_APPFONT ( 110 , 10 ) ;
-        Text [ de ] = "An ~Seitengrˆﬂe anpassen" ;
+        Text [ de ] = "An ~Seitengr√∂√üe anpassen" ;
         Text [ en-US ] = "~Fit to page" ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -236,7 +236,7 @@ TabPage TP_PRINT_OPTIONS
     {
         Pos = MAP_APPFONT ( 202 , 139  ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text [ de ] = "R~¸ckseite" ;
+        Text [ de ] = "R~√ºckseite" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Ba~ck" ;
         Text [ x-comment ] = " ";
