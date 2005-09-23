@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:52:53 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:59:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,7 +224,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     {
         Pos = MAP_APPFONT ( 12 , GB_TYPES_TOP + 77 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Kein Proxy für" ;
+        Text [ de ] = "~Kein Proxy fÃ¼r" ;
         Text [ en-US ] = "~No proxy for:" ;
         Text [ x-comment ] = " ";
     };
@@ -277,13 +277,13 @@ TabPage RID_SVXPAGE_INET_PROXY
     };
     String ST_MSG_255_0
     {
-        Text [ de ] = " ist kein gültiger Eintrag für dieses Feld. Bitte geben sie einen Wert zwischen 0 und 255 an." ;
+        Text [ de ] = " ist kein gÃ¼ltiger Eintrag fÃ¼r dieses Feld. Bitte geben sie einen Wert zwischen 0 und 255 an." ;
         Text [ en-US ] = "is not a valid entry for this field. Please specify a value between 0 and 255." ;
         Text [ x-comment ] = " ";
     };
     String ST_MSG_255_1
     {
-        Text [ de ] = " ist kein gültiger Eintrag für dieses Feld. Bitte geben sie einen Wert zwischen 1 und 255 an." ;
+        Text [ de ] = " ist kein gÃ¼ltiger Eintrag fÃ¼r dieses Feld. Bitte geben sie einen Wert zwischen 1 und 255 an." ;
         Text [ en-US ] = "is not a valid entry for this field. Please specify a value between 1 and 255." ;
         Text [ x-comment ] = " ";
     };
@@ -374,7 +374,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
     {
         Pos = MAP_APPFONT ( LABEL_START_XPOS , GB_SEARCH_TOP + 41 ) ;
         Size = MAP_APPFONT ( LABEL_LEN , 8 ) ;
-        Text [ de ] = "~Präfix" ;
+        Text [ de ] = "~PrÃ¤fix" ;
         Text [ en-US ] = "~Prefix" ;
         Text [ x-comment ] = " ";
     };
@@ -429,7 +429,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         StringList [ de ] =
         {
             < "Keiner" ; > ;
-            < "Groß"; > ;
+            < "GroÃŸ"; > ;
             < "Klein" ; > ;
         };
         StringList [ en-US ] =
@@ -450,14 +450,14 @@ TabPage RID_SVXPAGE_INET_SEARCH
     {
         Pos = MAP_APPFONT ( 92 , 158 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "H~inzufügen" ;
+        Text [ de ] = "H~inzufÃ¼gen" ;
         Text [ en-US ] = "~Add" ;
     };
     PushButton PB_CHANGE
     {
         Pos = MAP_APPFONT ( 145 , 158 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Ändern" ;
+        Text [ de ] = "~Ã„ndern" ;
         Text [ en-US ] = "~Modify" ;
         Text [ x-comment ] = " ";
     };
@@ -465,13 +465,13 @@ TabPage RID_SVXPAGE_INET_SEARCH
     {
         Pos = MAP_APPFONT ( 198 , 158 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Löschen" ;
+        Text [ de ] = "~LÃ¶schen" ;
         Text [ en-US ] = "~Delete" ;
         Text [ x-comment ] = " ";
     };
     String MSG_MODIFY
     {
-        Text [ de ] = "Möchten Sie die aktuelle Änderung übernehmen?" ;
+        Text [ de ] = "MÃ¶chten Sie die aktuelle Ã„nderung Ã¼bernehmen?" ;
         Text [ en-US ] = "Do you want to accept the current modification?";
     };
 };
@@ -504,7 +504,7 @@ TabPage RID_SVXPAGE_INET_SECURITY
         Pos = MAP_APPFONT( COL_1, ROW_1 );
         Size = MAP_APPFONT( COL_5-COL_1, 2*RSC_CD_FIXEDLINE_HEIGHT );
         Wordbreak = TRUE;
-        Text [ de ] = "Wenn ein Dokument aufgezeichnete Änderungen, Versionen, versteckte Informationen oder Notizen enthält, warnen beim:";
+        Text [ de ] = "Wenn ein Dokument aufgezeichnete Ã„nderungen, Versionen, versteckte Informationen oder Notizen enthÃ¤lt, warnen beim:";
         Text [ en-US ] = "Warn if document contains recorded changes, versions, hidden information or notes:";
     };
     FixedImage FI_SEC_SAVEORSENDDOCS
@@ -564,7 +564,7 @@ TabPage RID_SVXPAGE_INET_SECURITY
     {
         Pos = MAP_APPFONT( COL_1, ROW_4 );
         Size = MAP_APPFONT( COL_5-COL_1, RSC_CD_CHECKBOX_HEIGHT );
-        Text [ de ] = "Persönliche Informationen beim Speichern aus Dateien entfernen";
+        Text [ de ] = "PersÃ¶nliche Informationen beim Speichern aus Dateien entfernen";
         Text [ en-US ] = "Remove personal information on saving";
     };
     FixedImage FI_SEC_RECOMMPASSWD
@@ -591,7 +591,7 @@ TabPage RID_SVXPAGE_INET_SECURITY
         Pos = MAP_APPFONT( COL_1, ROW_7 );
         Size = MAP_APPFONT( COL_3-COL_1, ROW_9 - ROW_7 - RSC_SP_FLGR_SPACE_Y );
         Wordbreak = TRUE;
-        Text [ de ] = "Anpassen der Sicherheitsstufe für das Ausführen von Makros und Definieren der vertrauenswürdigen Makro-Entwickler.";
+        Text [ de ] = "Anpassen der Sicherheitsstufe fÃ¼r das AusfÃ¼hren von Makros und Definieren der vertrauenswÃ¼rdigen Makro-Entwickler.";
         Text [ en-US ] = "Adjust the security level for executing macros and specify trusted macro developers.";
     };
     PushButton PB_SEC_MACROSEC
@@ -605,21 +605,21 @@ TabPage RID_SVXPAGE_INET_SECURITY
     {
         Pos = MAP_APPFONT( COL_0, ROW_9 );
         Size = MAP_APPFONT( COL_6-COL_0, RSC_CD_FIXEDLINE_HEIGHT );
-        Text [ de ] = "Optionen für gemeinsame Benutzung des Dokumentes";
+        Text [ de ] = "Optionen fÃ¼r gemeinsame Benutzung des Dokumentes";
         Text [ en-US ] = "File sharing options for this document";
     };
     CheckBox CB_SEC_RECOMMREADONLY
     {
         Pos = MAP_APPFONT( COL_1, ROW_10 );
         Size = MAP_APPFONT( COL_5-COL_1, RSC_CD_CHECKBOX_HEIGHT );
-        Text [ de ] = "Dieses Dokument schreibgeschützt öffnen";
+        Text [ de ] = "Dieses Dokument schreibgeschÃ¼tzt Ã¶ffnen";
         Text [ en-US ] = "Open this document in read-only mode";
     };
     CheckBox CB_SEC_RECORDCHANGES
     {
         Pos = MAP_APPFONT( COL_1, ROW_11 );
         Size = MAP_APPFONT( COL_5-COL_1, RSC_CD_CHECKBOX_HEIGHT );
-        Text [ de ] = "Änderungen aufzeichnen";
+        Text [ de ] = "Ã„nderungen aufzeichnen";
         Text [ en-US ] = "Record changes";
     };
     PushButton PB_SEC_PROTRECORDS
@@ -629,7 +629,7 @@ TabPage RID_SVXPAGE_INET_SECURITY
     };
     String STR_SEC_PROTRECORDS
     {
-        Text [ de ] = "Schützen...";
+        Text [ de ] = "SchÃ¼tzen...";
         Text [ en-US ] = "Protect...";
     };
     String STR_SEC_UNPROTRECORDS
@@ -642,7 +642,7 @@ TabPage RID_SVXPAGE_INET_SECURITY
 ErrorBox RID_SVXERR_OPT_PROXYPORTS
 {
     BUTTONS = WB_OK ;
-    Message [ de ] = "Ungültiger Wert!\n\nDer Höchstwert einer Portnummer ist 65535.";
+    Message [ de ] = "UngÃ¼ltiger Wert!\n\nDer HÃ¶chstwert einer Portnummer ist 65535.";
     Message [ en-US ] = "Invalid value!\n\nThe maximum value for a port number is 65535.";
     Message [ x-comment ] = " ";
 };
