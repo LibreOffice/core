@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationDialog.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:34:27 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:25:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -388,7 +388,7 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
             < "Nicht abblenden" ; > ;
             < "Mit Farbe abblenden" ; > ;
             < "Nach Animation ausblenden" ; > ;
-            < "Mit nächster Animation ausblenden" ; > ;
+            < "Mit nÃ¤chster Animation ausblenden" ; > ;
         };
         StringList [ en-US ] =
         {
@@ -454,7 +454,7 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
         Pos = MAP_APPFONT ( 51 + 42 + 3, 66  ) ;
         Size = MAP_APPFONT( 120, 8 );
 
-        Text [ de ] = "verzögerung zwischen Buchstaben";
+        Text [ de ] = "verzÃ¶gerung zwischen Buchstaben";
         Text [ en-US ] = "delay between characters";
     };
 
@@ -522,7 +522,7 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
         Pos = MAP_APPFONT ( 6 , 20  ) ;
         Size = MAP_APPFONT( 42, 8 );
 
-        Text [ de ] = "Verzögerung";
+        Text [ de ] = "VerzÃ¶gerung";
         Text [ en-US ] = "Delay";
     };
 
@@ -587,7 +587,7 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
         Pos = MAP_APPFONT ( 6 , 66  ) ;
         Size = MAP_APPFONT ( 168 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Nach der Wiedergabe zurückspulen" ;
+        Text [ de ] = "Nach der Wiedergabe zurÃ¼ckspulen" ;
         Text [ en-US ] = "Rewind when done playing" ;
     };
 
@@ -597,7 +597,7 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
         Pos = MAP_APPFONT ( 6 , 79  ) ;
         Size = MAP_APPFONT( 168, 8 );
 
-        Text [ de ] = "Auslösen";
+        Text [ de ] = "AuslÃ¶sen";
         Text [ en-US ] = "Trigger";
     };
 
@@ -657,7 +657,7 @@ TabPage RID_TP_CUSTOMANIMATION_TEXT
         StringList [ de ] =
         {
             < "Als einzelnes Objekt" ; > ;
-            < "Alle Absätze auf einmal" ; > ;
+            < "Alle AbsÃ¤tze auf einmal" ; > ;
             < "Nach 1. Abschnittsebene" ; > ;
             < "Nach 2. Abschnittsebene" ; > ;
             < "Nach 3. Abschnittsebene" ; > ;
@@ -709,7 +709,7 @@ TabPage RID_TP_CUSTOMANIMATION_TEXT
         Pos = MAP_APPFONT ( 6 , 33  ) ;
         Size = MAP_APPFONT ( 168 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Angefügte Form animieren" ;
+        Text [ de ] = "AngefÃ¼gte Form animieren" ;
         Text [ en-US ] = "Animate attached shape" ;
     };
 
