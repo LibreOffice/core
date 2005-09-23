@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScrollHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:32:18 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:23:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,17 +36,27 @@
 #ifndef DBAUI_SCROLLHELPER_HXX
 #include "ScrollHelper.hxx"
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 #define LISTBOX_SCROLLING_AREA  12
 namespace dbaui
 {
-    // -----------------------------------------------------------------------------
+DBG_NAME(OScrollHelper)
+
+// -----------------------------------------------------------------------------
+
+
     OScrollHelper::OScrollHelper()
     {
+        DBG_CTOR(OScrollHelper,NULL);
     }
     // -----------------------------------------------------------------------------
     OScrollHelper::~OScrollHelper()
     {
+
+        DBG_DTOR(OScrollHelper,NULL);
     }
     // -----------------------------------------------------------------------------
     void OScrollHelper::scroll(const Point& _rPoint, const Size& _rOutputSize)
