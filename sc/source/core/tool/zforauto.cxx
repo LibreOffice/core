@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforauto.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:52:38 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:17:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,14 +33,6 @@
  *
  ************************************************************************/
 
-#ifdef PCH
-#include "core_pch.hxx"
-#endif
-
-#pragma hdrstop
-
-//------------------------------------------------------------------------
-
 #include <svtools/zforlist.hxx>
 #include <svtools/zformat.hxx>
 #ifndef _SV_SVAPP_HXX
@@ -56,16 +48,16 @@ static const sal_Char __FAR_DATA pStandardName[] = "Standard";
 //------------------------------------------------------------------------
 
 ScNumFormatAbbrev::ScNumFormatAbbrev() :
+    sFormatstring   ( RTL_CONSTASCII_USTRINGPARAM( pStandardName ) ),
     eLnge           (LANGUAGE_SYSTEM),
-    eSysLnge        (LANGUAGE_GERMAN),      // sonst passt "Standard" nicht
-    sFormatstring   ( RTL_CONSTASCII_USTRINGPARAM( pStandardName ) )
+    eSysLnge        (LANGUAGE_GERMAN)       // sonst passt "Standard" nicht
 {
 }
 
 ScNumFormatAbbrev::ScNumFormatAbbrev(const ScNumFormatAbbrev& aFormat) :
+    sFormatstring   (aFormat.sFormatstring),
     eLnge           (aFormat.eLnge),
-    eSysLnge        (aFormat.eSysLnge),
-    sFormatstring   (aFormat.sFormatstring)
+    eSysLnge        (aFormat.eSysLnge)
 {
 }
 
@@ -113,33 +105,9 @@ void ScNumFormatAbbrev::PutFormatIndex(ULONG nFormat,
 
 ULONG ScNumFormatAbbrev::GetFormatIndex( SvNumberFormatter& rFormatter)
 {
-    //  #62389# leerer Formatstring (vom Writer) -> Standardformat
-    if ( !sFormatstring.Len() )
-        return rFormatter.GetStandardIndex( eLnge );
-
-    if ( eLnge == LANGUAGE_SYSTEM && eSysLnge != Application::GetSettings().GetLanguage() )
-    {
-        ULONG nOrig = rFormatter.GetEntryKey( sFormatstring, eSysLnge );
-        if ( nOrig != NUMBERFORMAT_ENTRY_NOT_FOUND )
-            return rFormatter.GetFormatForLanguageIfBuiltIn( nOrig, Application::GetSettings().GetLanguage() );
-        else
-            return rFormatter.GetStandardIndex( eLnge );    // geht nicht -> Standard
-    }
-
-    xub_StrLen nCheckPos;
     short nType;
-    ULONG nKey = rFormatter.GetEntryKey(sFormatstring, eLnge);
-    if (nKey == NUMBERFORMAT_ENTRY_NOT_FOUND)
-    {
-        BOOL res = rFormatter.PutEntry(sFormatstring,
-                                       nCheckPos, nType, nKey, eLnge);
-        if (nCheckPos > 0)
-            DBG_ERROR("SCNumFormatAbbrev:: unkorrekter Formatstring");
-    }
-    return nKey;
+    BOOL bNewInserted;
+    xub_StrLen nCheckPos;
+    return rFormatter.GetIndexPuttingAndConverting( sFormatstring, eLnge,
+            eSysLnge, nType, bNewInserted, nCheckPos);
 }
-
-
-
-
-
