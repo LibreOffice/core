@@ -3,10 +3,10 @@
 <dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="TutorialOpenDialog" dlg:left="158" dlg:top="58" dlg:width="250" dlg:height="200" dlg:closeable="true" dlg:moveable="true">
  <dlg:bulletinboard>
   <dlg:button dlg:id="Open" dlg:tab-index="1" dlg:left="141" dlg:top="180" dlg:width="50" dlg:height="14" dlg:value="Open">
-   <script:event script:event-name="on-mouseup" script:location="application" script:macro-name="Tutorials.TutorialOpen.OpenTutorial" script:language="StarBasic"/>
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:Tutorials.TutorialOpen.OpenTutorial?language=Basic&amp;location=application" script:language="Script"/>
   </dlg:button>
   <dlg:button dlg:id="Cancel" dlg:tab-index="2" dlg:left="194" dlg:top="180" dlg:width="50" dlg:height="14" dlg:value="Cancel">
-   <script:event script:event-name="on-mouseup" script:location="application" script:macro-name="Tutorials.TutorialOpen.Cancel" script:language="StarBasic"/>
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:Tutorials.TutorialOpen.Cancel?language=Basic&amp;location=application" script:language="Script"/>
   </dlg:button>
   <dlg:menulist dlg:id="ListBox" dlg:tab-index="0" dlg:left="8" dlg:top="17" dlg:width="98" dlg:height="155">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="Tutorials.TutorialOpen.OpenTutorial" script:language="StarBasic"/>
