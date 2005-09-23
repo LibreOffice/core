@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.27 2004-08-02 17:16:32 hr Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.28 2005-09-23 11:42:24 hr Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -10,7 +10,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: hr $ $Date: 2004-08-02 17:16:32 $ $Revision: 1.27 $
+//	$Author: hr $ $Date: 2005-09-23 11:42:24 $ $Revision: 1.28 $
 //
 // Description:
 //
@@ -307,8 +307,8 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 [Uu][Nn][Ii][Oo][Nn]							{SQL_NEW_KEYWORD(SQL_TOKEN_UNION); return SQL_TOKEN_UNION; }
 [Uu][Nn][Ii][Qq][Uu][Ee]						{SQL_NEW_KEYWORD(SQL_TOKEN_UNIQUE); return SQL_TOKEN_UNIQUE; }
 [Uu][Nn][Kk][Nn][Oo][Ww][Nn]					{SQL_NEW_KEYWORD(SQL_TOKEN_UNKNOWN); return SQL_TOKEN_UNKNOWN; }
-[Uu][Pp][Pp][Ee][Rr]							{SQL_NEW_KEYWORD(SQL_TOKEN_UPPER); return SQL_TOKEN_UPPER; }
 [Uu][Pp][Dd][Aa][Tt][Ee]						{SQL_NEW_KEYWORD(SQL_TOKEN_UPDATE); return SQL_TOKEN_UPDATE; }
+[Uu][Pp][Pp][Ee][Rr]							{SQL_NEW_KEYWORD(SQL_TOKEN_UPPER); return SQL_TOKEN_UPPER; }
 [Uu][Ss][Aa][Gg][Ee]							{SQL_NEW_KEYWORD(SQL_TOKEN_USAGE); return SQL_TOKEN_USAGE; }
 [Uu][Ss][Ee][Rr]								{SQL_NEW_KEYWORD(SQL_TOKEN_USER); return SQL_TOKEN_USER; }
 [Uu][Ss][Ii][Nn][Gg]							{SQL_NEW_KEYWORD(SQL_TOKEN_USING); return SQL_TOKEN_USING; }
@@ -336,7 +336,9 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 
 [-+*/:(),.;?{}]    { return SQLyytext[0]; }
 
-<SQL>[A-Za-z][A-Za-z0-9_]*		{return gatherName( SQLyytext);}
+
+
+<SQL>[A-Za-z\200-\277\300-\337\340-\357\360-\367\370-\373\374-\375][A-Za-z\200-\277\300-\337\340-\357\360-\367\370-\373\374-\375_0-9]*		{return gatherName( SQLyytext);}
 
 <SQL>([0-9]+) | 
 <SQL>([0-9]+"."[0-9]*) | 
@@ -346,7 +348,7 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 <SQL>[0-9]+"."[0-9]*[eE][+-]?[0-9]+ |
 <SQL>"."[0-9]*[eE][+-]?[0-9]+		{SQL_NEW_APPROXNUM; return SQL_TOKEN_APPROXNUM; }
 
-<PREDICATE_GER,PREDICATE_ENG,DATE>[A-Za-z][A-Za-z0-9_%.,*?]* {return gatherNamePre(SQLyytext);}
+<PREDICATE_GER,PREDICATE_ENG,DATE>[A-Za-z\200-\277\300-\337\340-\357\360-\367\370-\373\374-\375][A-Za-z0-9_%.,*?\200-\277\300-\337\340-\357\360-\367\370-\373\374-\375]* {return gatherNamePre(SQLyytext);}
 
 <PREDICATE_GER,PREDICATE_ENG>([0-9]+)		{SQL_NEW_INTNUM; return SQL_TOKEN_INTNUM;}
 <PREDICATE_ENG>([0-9]{1,3}(","[0-9]{3})+) 	{SQL_NEW_INTNUM; return SQL_TOKEN_INTNUM;}
