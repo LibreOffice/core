@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_PointGeometry.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:16:27 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:46:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ TabPage TP_LAYOUT
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Balken/Säulen Form" ;
+        Text [ de ] = "Balken/SÃ¤ulen Form" ;
         Text [ en-US ] = "Bar/column shape";
         Text [ x-comment ] = " ";
     };
