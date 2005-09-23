@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexdialog.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:05:06 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:31:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,7 +208,8 @@ namespace dbaui
     //==================================================================
     //= DbaIndexDialog
     //==================================================================
-    //------------------------------------------------------------------
+DBG_NAME(DbaIndexDialog)
+//------------------------------------------------------------------
     DbaIndexDialog::DbaIndexDialog( Window* _pParent, const Sequence< ::rtl::OUString >& _rFieldNames,
                                     const Reference< XNameAccess >& _rxIndexes,
                                     const Reference< XConnection >& _rxConnection,
@@ -231,6 +232,8 @@ namespace dbaui
         ,m_bEditAgain(sal_False)
         ,m_xORB(_rxORB)
     {
+        DBG_CTOR(DbaIndexDialog,NULL);
+
         FreeResource();
 
         m_aActions.SetSelectHdl(LINK(this, DbaIndexDialog, OnIndexAction));
@@ -373,6 +376,8 @@ namespace dbaui
         // save our geometry settings
 //      Point aPos = GetPosPixel();
 //      m_aGeometrySettings.SetPosition(aPos.X(), aPos.Y());
+
+        DBG_DTOR(DbaIndexDialog,NULL);
     }
 
     //------------------------------------------------------------------
