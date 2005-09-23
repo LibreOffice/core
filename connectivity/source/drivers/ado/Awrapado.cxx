@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Awrapado.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:33:14 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:38:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,10 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+
 
 namespace connectivity
 {
@@ -1994,40 +1998,49 @@ ADORecordset* WpADOConnection::getTables( const ::com::sun::star::uno::Any& cata
 {
     // Create elements used in the array
     HRESULT hr = S_OK;
-    SAFEARRAYBOUND rgsabound[1];
-    SAFEARRAY *psa = NULL;
     OLEVariant varCriteria[4];
 
-    // Create SafeArray Bounds and initialize the array
-    rgsabound[0].lLbound   = 0;
-    rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
-    psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
-
     sal_Int32 nPos=0;
-    if(catalog.hasValue())
-        varCriteria[nPos].setString(::comphelper::getString(catalog));
+    ::rtl::OUString sCatalog;
+    if ( catalog.hasValue() && (catalog >>= sCatalog) )
+        varCriteria[nPos].setString(sCatalog);
 
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
+    ++nPos;
     if(schemaPattern.getLength() && schemaPattern.toChar() != '%')
         varCriteria[nPos].setString(schemaPattern);
 
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
+    ++nPos;
     if(tableNamePattern.toChar() != '%')
         varCriteria[nPos].setString(tableNamePattern);
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
 
-    ::rtl::OUString aTypes,aComma = ::rtl::OUString::createFromAscii(",");
-    const ::rtl::OUString* pBegin = types.getConstArray();
-    const ::rtl::OUString* pEnd = pBegin + types.getLength();
-    for(;pBegin != pEnd;++pBegin)
-        aTypes = aTypes + *pBegin + aComma;
+    ++nPos;
+    ::rtl::OUStringBuffer aTypes;
+    ::rtl::OUString aComma = ::rtl::OUString::createFromAscii(",");
+    const ::rtl::OUString* pIter = types.getConstArray();
+    const ::rtl::OUString* pEnd = pIter + types.getLength();
+    for( ; pIter != pEnd ; ++pIter)
+    {
+        if ( aTypes.getLength() )
+            aTypes.append(aComma);
+        aTypes.append(*pIter);
+    }
 
-    if(aTypes.getLength())
-        varCriteria[nPos].setString(aTypes);
-    //  else
-        //  varCriteria[nPos].setString(::rtl::OUString::createFromAscii("TABLE"));
+    ::rtl::OUString sTypeNames = aTypes.makeStringAndClear();
+    if ( sTypeNames.getLength() )
+        varCriteria[nPos].setString(sTypeNames);
 
-    hr = SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_TYPE
+    // Create SafeArray Bounds and initialize the array
+    const sal_Int32 nCrit = sizeof varCriteria / sizeof varCriteria[0];
+    SAFEARRAYBOUND rgsabound[1];
+    rgsabound[0].lLbound   = 0;
+    rgsabound[0].cElements = nCrit;
+    SAFEARRAY *psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
+
+    // Set the values for each element of the array
+    for( long i = 0 ; i < nCrit && SUCCEEDED( hr );i++)
+    {
+        hr  = SafeArrayPutElement(psa, &i,&varCriteria[i]);
+    }
 
     OLEVariant  vtEmpty;
     vtEmpty.setNoArg();
