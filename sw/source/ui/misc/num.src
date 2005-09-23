@@ -4,9 +4,9 @@
  *
  *  $RCSfile: num.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:36:39 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:09:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ TabPage TP_NUM_POSITION
     {
         Pos = MAP_APPFONT ( 53 , 16 ) ;
         Size = MAP_APPFONT ( 132 , 10 ) ;
-        Text [ de ] = "Ein~rückung";
+        Text [ de ] = "Ein~rÃ¼ckung";
         Text [ en-US ] = "Indent" ;
         Text [ x-comment ] = " ";
     };
@@ -222,7 +222,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Nummerierung und Aufzählungszeichen" ;
+    Text [ de ] = "Nummerierung und AufzÃ¤hlungszeichen" ;
     Text [ en-US ] = "Bullets and Numbering";
     Moveable = TRUE ;
     TabControl 1
