@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:51:23 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:44:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2008,7 +2008,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                         }
                                         presentation::FadeEffect eFe;
                                         aAny = xPagePropSet->getPropertyValue( sEffect );
-                                        vcl::PDFWriter::PageTransition eType = vcl::PDFWriter::Dissolve;
+                                        vcl::PDFWriter::PageTransition eType = vcl::PDFWriter::Regular;
                                         if ( aAny >>= eFe )
                                         {
                                             switch( eFe )
@@ -2063,10 +2063,11 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                                 case presentation::FadeEffect_FADE_TO_CENTER : eType = vcl::PDFWriter::BoxInward; break;
                                                 case presentation::FadeEffect_FADE_FROM_CENTER : eType = vcl::PDFWriter::BoxOutward; break;
 
+                                                case presentation::FadeEffect_NONE : eType = vcl::PDFWriter::Regular; break;
+
                                                 case presentation::FadeEffect_RANDOM :
                                                 case presentation::FadeEffect_DISSOLVE :
                                                 default: eType = vcl::PDFWriter::Dissolve; break;
-
                                             }
                                         }
                                         pPDFExtOutDevData->SetPageTransition( eType, nTime, -1 );
