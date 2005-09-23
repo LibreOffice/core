@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:28:33 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:49:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ String STR_PRINT_MERGE_MACRO
 
 String STR_PAGE_COUNT_MACRO
 {
-    Text [ de ] = "Änderung der Seitenanzahl" ;
+    Text [ de ] = "Ã„nderung der Seitenanzahl" ;
     Text [ en-US ] = "Changing the page count" ;
     Text [ x-comment ] = " ";
 };
@@ -324,7 +324,7 @@ String STR_WRITER_DOCUMENT_FULLTYPE
 
 String STR_CANTOPEN
 {
-    Text [ de ] = "Kann das Dokument nicht öffnen." ;
+    Text [ de ] = "Kann das Dokument nicht Ã¶ffnen." ;
     Text [ en-US ] = "Cannot open document." ;
     Text [ x-comment ] = " ";
 };
@@ -502,7 +502,7 @@ String STR_STATSTR_LETTER
 
 String STR_STATSTR_SPELL
 {
-    Text [ de ] = "Rechtschreibprüfung..." ;
+    Text [ de ] = "RechtschreibprÃ¼fung..." ;
     Text [ en-US ] = "Spellcheck..." ;
     Text [ x-comment ] = " ";
 };
@@ -516,7 +516,7 @@ String STR_STATSTR_HYPHEN
 
 String STR_STATSTR_TOX_INSERT
 {
-    Text [ de ] = "Verzeichnis wird eingefügt..." ;
+    Text [ de ] = "Verzeichnis wird eingefÃ¼gt..." ;
     Text [ en-US ] = "Inserting Index..." ;
     Text [ x-comment ] = " ";
 };
@@ -547,7 +547,7 @@ QueryBox MSG_COMCORE_ASKSEARCH
 {
     Buttons = WB_YES_NO_CANCEL ;
     DefButton = WB_DEF_YES ;
-    Message [ de ] = "Zum Fortsetzen des Vorgangs, muss die Rückgängig-Funktion abgeschaltet werden. Wollen Sie die Rückgängig-Funktion abschalten?";
+    Message [ de ] = "Zum Fortsetzen des Vorgangs, muss die RÃ¼ckgÃ¤ngig-Funktion abgeschaltet werden. Wollen Sie die RÃ¼ckgÃ¤ngig-Funktion abschalten?";
     Message [ en-US ] = "To proceed with this action, you must first turn off the \"undo\" function. Do you want to turn off the \"undo\" function?" ;
     Message [ x-comment ] = " ";
 };
@@ -611,7 +611,7 @@ QueryBox MSG_CLPBRD_CLEAR
 {
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
-    Message [ de ] = "Sie haben größere Datenmengen in die Zwischenablage gestellt.\nSoll der Inhalt der Zwischenablage anderen Applikationen zur Verfügung gestellt werden?" ;
+    Message [ de ] = "Sie haben grÃ¶ÃŸere Datenmengen in die Zwischenablage gestellt.\nSoll der Inhalt der Zwischenablage anderen Applikationen zur VerfÃ¼gung gestellt werden?" ;
     Message [ en-US ] = "You have a large amount of data saved in the clipboard.\nShould the clipboard contents remain available for other applications?" ;
     Message [ x-comment ] = " ";
 };
@@ -620,7 +620,7 @@ QueryBox MSG_SAVE_HTML_QUERY
 {
     BUTTONS = WB_YES_NO_CANCEL ;
     DEFBUTTON = WB_DEF_YES ;
-    Message [ de ] = "Die Umwandlung in das HTML-Format \nkann Informationsverlust verursachen. \nMöchten Sie das Dokument speichern?" ;
+    Message [ de ] = "Die Umwandlung in das HTML-Format \nkann Informationsverlust verursachen. \nMÃ¶chten Sie das Dokument speichern?" ;
     Message [ en-US ] = "Conversion into HTML format \nmay cause information loss. \nDo you want to save the document?" ;
     Message [ x-comment ] = " ";
 };
@@ -628,7 +628,7 @@ QueryBox MSG_SAVEAS_HTML_QUERY
 {
     BUTTONS = WB_YES_NO;
     DEFBUTTON = WB_DEF_NO ;
-    Message [ de ] = "Die Quelltextansicht kann nur angezeigt werden, wenn das Dokument im HTML-Format gespeichert wurde.\nMöchten Sie das Dokument jetzt im HTML-Format speichern?" ;
+    Message [ de ] = "Die Quelltextansicht kann nur angezeigt werden, wenn das Dokument im HTML-Format gespeichert wurde.\nMÃ¶chten Sie das Dokument jetzt im HTML-Format speichern?" ;
     Message [ en-US ] = "The source code can only be displayed if the document is saved in HTML format.\nWould you like to save the document as HTML?";
 };
 String STR_ABSTRACT_TITLE
@@ -684,7 +684,7 @@ WarningBox MSG_DISABLE_UNDO_QUESTION
 {
     BUTTONS = WB_YES_NO_CANCEL;
     DEFBUTTON = WB_DEF_YES ;
-    Message [ de ] = "Diese Aktion löscht die Liste der Arbeitsschritte, die rückgängig gemacht werden können. Bisher gemachte Änderungen am Dokument bleiben erhalten, können jedoch nicht mehr rückgängig gemacht werden. Wollen Sie mit der Formatierung fortfahren?";
+    Message [ de ] = "Diese Aktion lÃ¶scht die Liste der Arbeitsschritte, die rÃ¼ckgÃ¤ngig gemacht werden kÃ¶nnen. Bisher gemachte Ã„nderungen am Dokument bleiben erhalten, kÃ¶nnen jedoch nicht mehr rÃ¼ckgÃ¤ngig gemacht werden. Wollen Sie mit der Formatierung fortfahren?";
     Message [ en-US ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
 };
 /*QueryBox MSG_INS_MERGE_FIELDS
@@ -701,7 +701,7 @@ QueryBox MSG_PRINT_AS_MERGE
     HelpId = HID_PRINT_AS_MERGE;
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_YES ;
-    Message [ de ] = "Ihr Dokument enthält Adressdatenbank-Felder. Möchten Sie einen Serienbrief drucken?";
+    Message [ de ] = "Ihr Dokument enthÃ¤lt Adressdatenbank-Felder. MÃ¶chten Sie einen Serienbrief drucken?";
     Message [ en-US ] = "Your document contains address database fields. Do you want to print a form letter?";
 };
 WarningBox MSG_MERGE_SOURCE_UNAVAILABLE
@@ -709,14 +709,14 @@ WarningBox MSG_MERGE_SOURCE_UNAVAILABLE
     HelpId = HID_MERGE_SOURCE_UNAVAILABLE;
     Buttons = WB_OK ;
     DefButton = WB_DEF_YES ;
-    Message [ de ] = "Die Datenquelle \'%1\' konnte nicht gefunden werden.\nÜberprüfen Sie die Einstellungen in \'Extras - Datenquellen...\'";
+    Message [ de ] = "Die Datenquelle \'%1\' konnte nicht gefunden werden.\nÃœberprÃ¼fen Sie die Einstellungen in \'Extras - Datenquellen...\'";
     Message [ en-US ] = "The data source \'%1\' was not found.\nCheck the settings in \'Tools - Data Sources...\'";
 };
 WarningBox MSG_DATA_SOURCES_UNAVAILABLE
 {
     HelpId = HID_DATA_SOURCES_UNAVAILABLE;
     Buttons = WB_OK_CANCEL;
-    Message [ de ] = "Es wurde noch keine Datenquelle eingerichtet. Sie benötigen eine Datenquelle, um Daten (z.B. Namen und Adressen aus einer Datenbank) an die Felder zu liefern.";
+    Message [ de ] = "Es wurde noch keine Datenquelle eingerichtet. Sie benÃ¶tigen eine Datenquelle, um Daten (z.B. Namen und Adressen aus einer Datenbank) an die Felder zu liefern.";
     Message [ en-US ] = "No data source has been set up yet. You need a data source, such as a database, to supply data (for example, names and addresses) for the fields.";
 };
 
@@ -813,7 +813,7 @@ WarningBox MSG_DISABLE_READLINE_QUESTION
 {
     BUTTONS = WB_YES_NO;
     DEFBUTTON = WB_DEF_YES ;
-    Message [ de ] = "Im aktuellen Dokument werden Änderungen aufgezeichnet aber nicht als Solche angezeigt. In umfangreichen Dokumenten, kann es dadurch zu Verzögerungen beim Bearbeiten des Dokumentes kommen. Wollen Sie die Änderungen anzeigen, um Wartezeiten zu vermeiden?";
+    Message [ de ] = "Im aktuellen Dokument werden Ã„nderungen aufgezeichnet aber nicht als Solche angezeigt. In umfangreichen Dokumenten, kann es dadurch zu VerzÃ¶gerungen beim Bearbeiten des Dokumentes kommen. Wollen Sie die Ã„nderungen anzeigen, um Wartezeiten zu vermeiden?";
     Message [ en-US ] = "In the current document, changes are being recorded but not shown as such. In large documents, delays can occur when the document is edited. Do you want to show the changes to avoid delays?";
 };
 
