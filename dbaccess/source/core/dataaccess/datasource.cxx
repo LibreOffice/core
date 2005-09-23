@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:28:51 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:05:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1169,7 +1169,9 @@ void SAL_CALL ODatabaseSource::flush(  ) throw (RuntimeException)
     {
         ResettableMutexGuard _rGuard(m_aMutex);
         ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
-        Reference< css::frame::XStorable> xStorable(getModelWithPossibleLeak(),UNO_QUERY);
+
+        SharedModel xModel( impl_getModel( true ) );
+        Reference< css::frame::XStorable> xStorable( xModel, UNO_QUERY );
         if ( xStorable.is() )
             xStorable->store();
 
@@ -1209,28 +1211,14 @@ void SAL_CALL ODatabaseSource::elementReplaced( const ContainerEvent& Event ) th
         m_pImpl->setModified(sal_True);
 }
 // -----------------------------------------------------------------------------
-Reference< XModel > ODatabaseSource::getModelWithPossibleLeak()
+ODatabaseSource::SharedModel ODatabaseSource::impl_getModel( bool _bTakeOwnershipIfNewlyCreated )
 {
-    Reference< XModel > xModel;
+    SharedModel xModel;
     if ( m_pImpl.is() )
     {
-        xModel = m_pImpl->getModel_noCreate();
+        xModel.reset( m_pImpl->getModel_noCreate(), SharedModel::NoTakeOwnership );
         if ( !xModel.is() )
-        {
-            // In the course of #i50905#, the ownership of a XModel instance was more clearly
-            // defined and respected throughout all involved implementations. This place
-            // here is the last one where a fix wasn't easily possible within the restrictions
-            // which applied to the fix (time frame, risk)
-            //
-            // There's a pretty large comment in ODatabaseDocument::disconnectController
-            // explaining how this dilemma could be solved (which in fact suggests to
-            // get completely rid of the "sole ownership" concept, and replace it with
-            // shared ownership, and vetoable closing).
-            //
-            // #i50905# / 2005-06-20 / frank.schoenheit@sun.com
-            DBG_ERROR( "ODatabaseSource::getModelWithPossibleLeak: creating a model instance with undefined ownership! Probably a resource leak!" );
-            xModel = m_pImpl->createNewModel_deliverOwnership();
-        }
+            xModel.reset( m_pImpl->createNewModel_deliverOwnership(), _bTakeOwnershipIfNewlyCreated ? SharedModel::TakeOwnership : SharedModel::NoTakeOwnership );
     }
     return xModel;
 }
@@ -1238,7 +1226,11 @@ Reference< XModel > ODatabaseSource::getModelWithPossibleLeak()
 // XDocumentDataSource
 Reference< XOfficeDatabaseDocument > SAL_CALL ODatabaseSource::getDatabaseDocument() throw (RuntimeException)
 {
-    return Reference< XOfficeDatabaseDocument >( getModelWithPossibleLeak(), UNO_QUERY );
+    return Reference< XOfficeDatabaseDocument >( impl_getModel( false ), UNO_QUERY );
+    // by definition, clients of getDatabaseDocument are responsible for the model they obtain,
+    // including responsibility for (attempting to) close the model when they don't need it anymore.
+    // Thus the "false" parameter in the call to impl_getModel: We don't take the ownership
+    // of the model, even if it had to be newly created during this call.
 }
 // -----------------------------------------------------------------------------
 //........................................................................
