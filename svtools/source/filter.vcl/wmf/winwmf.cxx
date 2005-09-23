@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winwmf.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:46:55 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:40:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -410,7 +410,8 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
 
         case W_META_EXTTEXTOUT:
         {
-            sal_uInt16  i, nLen, nOptions, nData;
+            sal_Int16   nDx, nDxTmp;
+            sal_uInt16  i, nLen, nOptions;
             sal_Int32   nRecordPos, nRecordSize, nOriginalTextLen, nNewTextLen;
             Point       aPosition;
             Rectangle   aRect;
@@ -459,19 +460,23 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
                         {
                             if ( pWMF->Tell() >= nMaxStreamPos )
                                 break;
-                            *pWMF >> nData;
+                            *pWMF >> nDx;
                             if ( nNewTextLen != nOriginalTextLen )
                             {
                                 ByteString aTmp( aText.GetChar( i ), pOut->GetCharSet() );
                                 if ( aTmp.Len() > 1 )
                                 {
-                                    sal_Int32 nToSkip = ( aTmp.Len() - 1 ) << 1;
-                                    if ( ( nToSkip + pWMF->Tell() ) > nMaxStreamPos )
+                                    sal_Int32 nDxCount = aTmp.Len() - 1;
+                                    if ( ( ( nDxCount * 2 ) + pWMF->Tell() ) > nMaxStreamPos )
                                         break;
-                                    pWMF->SeekRel( nToSkip );
+                                    while ( nDxCount-- )
+                                    {
+                                        *pWMF >> nDxTmp;
+                                        nDx += nDxTmp;
+                                    }
                                 }
                             }
-                            pDXAry[ i ] = nData;
+                            pDXAry[ i ] = nDx;
                         }
                         if ( i == nNewTextLen )
                             bUseDXAry = TRUE;
