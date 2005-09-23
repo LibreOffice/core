@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optpath.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:54:43 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:00:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,7 @@ ErrorBox RID_SVXERR_OPT_DOUBLEPATHS
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message [ de ] = "Die Verzeichnisse für die Konfiguration und des Nachrichtenspeichers\nmüssen verschieden sein.\nBitte wählen Sie einen neuen Pfad aus." ;
+    Message [ de ] = "Die Verzeichnisse fÃ¼r die Konfiguration und des Nachrichtenspeichers\nmÃ¼ssen verschieden sein.\nBitte wÃ¤hlen Sie einen neuen Pfad aus." ;
     Message [ en-US ] = "The configuration and mail directories must be specified as separate directories.\nPlease choose a new path." ;
     Message [ x-comment ] = " ";
 };
@@ -173,7 +173,7 @@ String RID_SVXSTR_KEY_GLOSSARY_PATH
 };
 String RID_SVXSTR_KEY_DICTIONARY_PATH
 {
-    Text [ de ] = "Wörterbücher" ;
+    Text [ de ] = "WÃ¶rterbÃ¼cher" ;
     Text [ en-US ] = "Dictionaries" ;
 };
 String RID_SVXSTR_KEY_HELP_DIR
@@ -194,7 +194,7 @@ String RID_SVXSTR_KEY_STORAGE_DIR
 };
 String RID_SVXSTR_KEY_TEMP_PATH
 {
-    Text [ de ] = "Temporäre Dateien" ;
+    Text [ de ] = "TemporÃ¤re Dateien" ;
     Text [ en-US ] = "Temporary files";
 };
 String RID_SVXSTR_KEY_PLUGINS_PATH
@@ -224,7 +224,7 @@ String RID_SVXSTR_KEY_USERCONFIG_PATH
 };
 String RID_SVXSTR_KEY_USERDICTIONARY_DIR
 {
-    Text [ de ] = "Benutzerwörterbücher" ;
+    Text [ de ] = "BenutzerwÃ¶rterbÃ¼cher" ;
     Text [ en-US ] = "User-defined dictionaries";
 };
 String RID_SVXSTR_KEY_AUTOCORRECT_DIR
