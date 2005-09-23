@@ -1,6 +1,6 @@
  //--------------------------------------------------------------------------
  //
- // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.38 2004-06-26 17:28:38 hjs Exp $
+ // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.39 2005-09-23 14:12:11 hr Exp $
  //
  // (c) Copyright 1997 by Star Division GmbH, Hamburg.
  //
@@ -8,7 +8,7 @@
  //  AWO
  //
  // Letzte Aenderung:
- //  $Author: hjs $ $Date: 2004-06-26 17:28:38 $ $Revision: 1.38 $
+ //  $Author: hr $ $Date: 2005-09-23 14:12:11 $ $Revision: 1.39 $
  //
  //--------------------------------------------------------------------------
 #ifndef DBAUI_RELATIONDIALOG_HRC
@@ -128,7 +128,7 @@ ModalDialog DLG_REL_PROPERTIES
     {
         Pos = MAP_APPFONT ( 96 , 114 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
-        Text [ de ] = "Löschoptionen" ;
+        Text [ de ] = "LÃ¶schoptionen" ;
         Text [ en-US ] = "Delete options" ;
         Text [ x-comment ] = " ";
     };
@@ -147,7 +147,7 @@ ModalDialog DLG_REL_PROPERTIES
         Pos = MAP_APPFONT ( 102 , 139 ) ;
         Size = MAP_APPFONT ( 72 , 10 ) ;
         HelpId  = HID_DLG_REL_CASC_DEL ;
-        Text [ de ] = "Ka~sk. Löschen" ;
+        Text [ de ] = "Ka~sk. LÃ¶schen" ;
         Text [ en-US ] = "Delete ~cascade" ;
         Text [ x-comment ] = " ";
     };
