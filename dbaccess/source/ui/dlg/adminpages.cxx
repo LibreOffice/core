@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:51:54 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:28:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,8 @@ namespace dbaui
     //=========================================================================
     //= OGenericAdministrationPage
     //=========================================================================
-    //-------------------------------------------------------------------------
+DBG_NAME(OGenericAdministrationPage)
+//-------------------------------------------------------------------------
     OGenericAdministrationPage::OGenericAdministrationPage(Window* _pParent, const ResId& _rId, const SfxItemSet& _rAttrSet)
         :SfxTabPage(_pParent, _rId, _rAttrSet)
         ,m_pAdminDialog(NULL)
@@ -133,6 +134,8 @@ namespace dbaui
         ,m_pFT_HeaderText(NULL)
         ,m_abEnableRoadmap(sal_False)
     {
+        DBG_CTOR(OGenericAdministrationPage,NULL);
+
         SetExchangeSupport(sal_True);
     }
 
@@ -140,6 +143,8 @@ namespace dbaui
     OGenericAdministrationPage::~OGenericAdministrationPage()
     {
         DELETEZ(m_pFT_HeaderText);
+
+        DBG_DTOR(OGenericAdministrationPage,NULL);
     }
 
     //-------------------------------------------------------------------------
