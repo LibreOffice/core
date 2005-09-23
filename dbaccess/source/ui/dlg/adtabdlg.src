@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adtabdlg.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:53:35 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:12:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ ModelessDialog DLG_JOIN_TABADD
     HelpID = DLG_JOIN_TABADD ;
     Size = MAP_APPFONT ( 178 , 147 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Tabellen hinzufügen : Tabellen hinzuf³gen */
-    Text [ de ] = "Tabellen hinzufügen" ;
+    Text [ de ] = "Tabellen hinzufÃ¼gen" ;
     Text [ en-US ] = "Add Tables" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -75,7 +75,7 @@ ModelessDialog DLG_JOIN_TABADD
         Pos = MAP_APPFONT ( 123 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Hinzu~fügen : Hinzu~f³gen */
-        Text [ de ] = "Hinzu~fügen" ;
+        Text [ de ] = "Hinzu~fÃ¼gen" ;
         Text [ en-US ] = "~Add" ;
         TabStop = TRUE ;
         DefButton = TRUE ;
@@ -87,7 +87,7 @@ ModelessDialog DLG_JOIN_TABADD
         Size = MAP_APPFONT ( 50 , 14 ) ;
         HelpId = HID_JOINSH_ADDTAB_CLOSE;
         /* ### ACHTUNG: Neuer Text in Resource? Schließen : Schlie˜en */
-        Text [ de ] = "S~chließen" ;
+        Text [ de ] = "S~chlieÃŸen" ;
         Text [ en-US ] = "~Close" ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
