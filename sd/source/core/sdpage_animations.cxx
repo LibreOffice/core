@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpage_animations.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:14:24 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 10:43:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,9 +216,10 @@ void SdPage::cloneAnimations( SdPage& rTargetPage ) const
     if( mxAnimationNode.is() )
     {
         Reference< XAnimationNode > xClonedNode(
-            ::sd::Clone( mxAnimationNode, this, &rTargetPage ) );
+            clone( mxAnimationNode, this, &rTargetPage ) );
 
         if( xClonedNode.is() )
             rTargetPage.setAnimationNode( xClonedNode );
     }
 }
+
