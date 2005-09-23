@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addresstemplate.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:10:49 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:51:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -233,7 +233,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         };
     String STR_FIELD_STREET
     {
-        Text [ de ] = "Straße";
+        Text [ de ] = "StraÃŸe";
         Text [ en-US ] = "Street";
         };
     String STR_FIELD_COUNTRY
@@ -268,12 +268,12 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         };
     String STR_FIELD_INITIALS
     {
-        Text [ de ] = "Kürzel";
+        Text [ de ] = "KÃ¼rzel";
         Text [ en-US ] = "Initials";
         };
     String STR_FIELD_SALUTATION
     {
-        Text [ de ] = "Grußformel";
+        Text [ de ] = "GruÃŸformel";
         Text [ en-US ] = "Complimentary close";
         };
     String STR_FIELD_HOMETEL
@@ -340,7 +340,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         };
     String STR_FIELD_OFFICETEL
     {
-        Text [ de ] = "Telefon Büro";
+        Text [ de ] = "Telefon BÃ¼ro";
         Text [ en-US ] = "Tel: Office";
         };
     String STR_FIELD_PAGER
