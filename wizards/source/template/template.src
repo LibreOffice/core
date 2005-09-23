@@ -4,9 +4,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:11:23 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:17:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 // --------------------------------------------------------------------
 String SAMPLES
 {
-    Text [ de ] = "Damit die volle Funktionalität dieses Beispiels zur Verfügung steht, muss ein neues Dokument auf Basis dieser Vorlage erstellt werden.";
+    Text [ de ] = "Damit die volle FunktionalitÃ¤t dieses Beispiels zur VerfÃ¼gung steht, muss ein neues Dokument auf Basis dieser Vorlage erstellt werden.";
     Text [ en-US ] = "In order to use the full functionality of this sample, create a document that is based on this template.";
 };
 
@@ -68,7 +68,7 @@ String STYLES
 
 String STYLES + 1
 {
-    Text [ de ] = "Fehler beim Zwischenspeichern des aktuellen Dokumentes! Die folgende Aktion kann nicht rückgängig gemacht werden.";
+    Text [ de ] = "Fehler beim Zwischenspeichern des aktuellen Dokumentes! Die folgende Aktion kann nicht rÃ¼ckgÃ¤ngig gemacht werden.";
     Text [ en-US ] = "Error while saving the document to the clipboard! The following action cannot be undone.";
 };
 
@@ -95,7 +95,7 @@ String AgendaDlgName
 
 String AgendaDlgNoCancel
 {
-    Text [ de ] = "Es muss eine Option bestätigt werden.";
+    Text [ de ] = "Es muss eine Option bestÃ¤tigt werden.";
     Text [ en-US ] = "An option must be confirmed.";
 };
 
@@ -126,7 +126,7 @@ String CorrespondenceNoTextmark
 
 String CorrespondenceNoTextmark+1
 {
-    Text [ de ] = "Serienbrieffelder können nicht eingefügt werden.";
+    Text [ de ] = "Serienbrieffelder kÃ¶nnen nicht eingefÃ¼gt werden.";
     Text [ en-US ] = "Form letter fields can not be included.";
 };
 
@@ -138,20 +138,20 @@ String CorrespondenceMsgError
 
 String CorrespondenceDialog
 {
-    Text [ de ] = "Empfänger";
+    Text [ de ] = "EmpfÃ¤nger";
     Text [ en-US ] = "Addressee";
 };
 
 String CorrespondenceDialog+1
 {
-    Text [ de ] = "Ein Empfänger";
+    Text [ de ] = "Ein EmpfÃ¤nger";
     Text [ en-US ] = "One recipient";
     Text [ x-comment ] = " ";
 };
 
 String CorrespondenceDialog+2
 {
-    Text [ de ] = "Mehrere Empfänger (Adressdatenbank)";
+    Text [ de ] = "Mehrere EmpfÃ¤nger (Adressdatenbank)";
     Text [ en-US ] = "Several recipients (address database)";
 };
 
@@ -164,7 +164,7 @@ String CorrespondenceDialog+3
 
 String CorrespondenceFields
 {
-    Text [ de ] = "Platzhalter anklicken und überschreiben";
+    Text [ de ] = "Platzhalter anklicken und Ã¼berschreiben";
     Text [ en-US ] = "Click placeholder and overwrite";
     Text [ x-comment ] = "; Platzhalter-Hinweistext";
 };
@@ -199,7 +199,7 @@ String CorrespondenceFields+4
 
 String CorrespondenceFields+5
 {
-    Text [ de ] = "Straße";
+    Text [ de ] = "StraÃŸe";
     Text [ en-US ] = "Street";
     Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
@@ -252,7 +252,7 @@ String CorrespondenceFields+11
 
 String CorrespondenceFields+12
 {
-    Text [ de ] = "Kürzel";
+    Text [ de ] = "KÃ¼rzel";
     Text [ en-US ] = "Initials";
     Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
@@ -364,7 +364,7 @@ String CorrespondenceFields+25
 
 String CorrespondenceFields+26
 {
-    Text [ de ] = "Tel. Büro";
+    Text [ de ] = "Tel. BÃ¼ro";
     Text [ en-US ] = "Office Phone";
     Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
