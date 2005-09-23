@@ -17,6 +17,9 @@
     <prop oor:name="Visible" oor:type="xs:boolean">
      <value>true</value>
     </prop>
+    <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+     <value>true</value>
+    </prop>
    </node>
    <node oor:name="private:resource/toolbar/sqlobjectbar" oor:op="replace">
     <prop oor:name="Docked" oor:type="xs:boolean">
@@ -32,8 +35,14 @@
     <prop oor:name="Visible" oor:type="xs:boolean">
      <value>true</value>
     </prop>
+    <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+     <value>true</value>
+    </prop>
    </node>
    <node oor:name="private:resource/toolbar/toolbar" oor:op="replace">
+    <prop oor:name="DockPos" oor:type="xs:string">
+     <value>0,0</value>
+    </prop>
     <prop oor:name="Docked" oor:type="xs:boolean">
      <value>true</value>
     </prop>
@@ -45,6 +54,9 @@
      <value xml:lang="de">Abfrageentwurf</value>
     </prop>
     <prop oor:name="Visible" oor:type="xs:boolean">
+     <value>true</value>
+    </prop>
+    <prop oor:name="ContextSensitive" oor:type="xs:boolean">
      <value>true</value>
     </prop>
    </node>
