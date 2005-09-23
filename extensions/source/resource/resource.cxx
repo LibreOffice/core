@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resource.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:34:46 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:28:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,12 +43,16 @@
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/reflection/InvocationTargetException.hpp>
 #include <com/sun/star/beans/XExactName.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/PropertyState.hpp>
 
 #include <tools/resmgr.hxx>
 #include <tools/rcid.h>
+#include <tools/resary.hxx>
 #include <vcl/svapp.hxx>
 
 #include <rtl/ustring.hxx>
+#include <rtl/strbuf.hxx>
 
 using namespace vos;
 using namespace rtl;
@@ -167,7 +171,7 @@ Reference< XTypeConverter > ResourceService::getTypeConverter() const
 Reference< XInvocation > ResourceService::getDefaultInvocation() const
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    /* führt zur Zeit noch zu einer rekursion
+    /* fï¿½hrt zur Zeit noch zu einer rekursion
     if( xSMgr.is() )
     {
         Reference< XSingleServiceFactory > xFact( xSMgr->createInstance( OUString::createFromAscii("com.sun.star.script.Invocation") ), UNO_QUERY );
@@ -199,6 +203,10 @@ OUString    SAL_CALL ResourceService::getExactName( const OUString & Approximate
         return OUString(RTL_CONSTASCII_USTRINGPARAM("hasString"));
     else if( aName.equalsAscii("hasstrings") )
         return OUString(RTL_CONSTASCII_USTRINGPARAM("hasStrings"));
+    else if( aName.equalsAscii("getstringlist") )
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("getStringList"));
+    else if( aName.equalsAscii("hasStringList") )
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("hasStringList"));
     Reference< XExactName > xEN( getDefaultInvocation(), UNO_QUERY );
     if( xEN.is() )
         return xEN->getExactName( ApproximateName );
@@ -298,6 +306,58 @@ Any SAL_CALL ResourceService::invoke
         else
             aRet <<= aBools;
     }
+    else if( FunctionName.equalsAscii("getStringList") || FunctionName.equalsAscii("hasStringList" ) )
+    {
+        if( Params.getLength() != 1 )
+            throw IllegalArgumentException();
+        Reference< XTypeConverter > xC = getTypeConverter();
+        OGuard aGuard( Application::GetSolarMutex() );
+
+        sal_Int32 nId;
+        if( !(Params.getConstArray()[0] >>= nId) )
+        {
+            if( xC.is() )
+            {
+                xC->convertToSimpleType( Params.getConstArray()[0], TypeClass_LONG ) >>= nId;
+            }
+            else
+                throw CannotConvertException();
+        }
+
+        if( FunctionName.equalsAscii("getStringList") )
+        {
+            ResId aId( (USHORT)nId, pResMgr );
+            aId.SetRT( RSC_STRINGARRAY );
+            if( pResMgr->IsAvailable( aId ) )
+            {
+                ResStringArray aStr( aId );
+                int nEntries = aStr.Count();
+                Sequence< PropertyValue > aPropSeq( nEntries );
+                PropertyValue* pOut = aPropSeq.getArray();
+                for( int i = 0; i < nEntries; i++ )
+                {
+                    pOut[i].Name        = aStr.GetString( i );
+                    pOut[i].Handle      = -1;
+                    pOut[i].Value     <<= aStr.GetValue( i );
+                    pOut[i].State       = PropertyState_DIRECT_VALUE;
+                }
+                aRet <<= aPropSeq;
+            }
+            else
+                throw IllegalArgumentException();
+        }
+        else // hasStringList
+        {
+            sal_Bool bRet = sal_False;
+            if( pResMgr )
+            {
+                ResId aId( (USHORT)nId, pResMgr );
+                aId.SetRT( RSC_STRINGARRAY );
+                bRet = pResMgr->IsAvailable( aId );
+            }
+            aRet <<= bRet;
+        }
+    }
     else
     {
         Reference< XInvocation > xI = getDefaultInvocation();
@@ -313,7 +373,7 @@ Any SAL_CALL ResourceService::invoke
 void SAL_CALL ResourceService::setValue(const OUString& PropertyName, const Any& Value)
     throw(UnknownPropertyException, CannotConvertException, InvocationTargetException, RuntimeException)
 {
-    if( PropertyName == OUString(RTL_CONSTASCII_USTRINGPARAM("FileName")) )
+    if( PropertyName.equalsAscii("FileName") )
     {
         OUString aName;
         if( !(Value >>= aName) )
@@ -326,16 +386,16 @@ void SAL_CALL ResourceService::setValue(const OUString& PropertyName, const Any&
         }
 
         OGuard aGuard( Application::GetSolarMutex() );
-        aName = aName + OUString( OUString::valueOf( (sal_Int32)SUPD ).getStr() );
-        String aTmpString( aName );
-        ByteString a( aTmpString, gsl_getSystemTextEncoding() );
-        ResMgr * pRM = ResMgr::CreateResMgr( a.GetBuffer() );
+        OStringBuffer aBuf( aName.getLength()+8 );
+        aBuf.append( OUStringToOString( aName, osl_getThreadTextEncoding() ) );
+        aBuf.append( sal_Int32(SUPD) );
+        ResMgr * pRM = ResMgr::CreateResMgr( aBuf.getStr() );
         if( !pRM )
             throw InvocationTargetException();
         if( pResMgr )
             delete pResMgr;
         pResMgr = pRM;
-        aFileName = aName;
+        aFileName = OStringToOUString( aBuf.makeStringAndClear(), osl_getThreadTextEncoding() );
     }
     else
     {
@@ -369,7 +429,13 @@ Any SAL_CALL ResourceService::getValue(const OUString& PropertyName)
 BOOL SAL_CALL ResourceService::hasMethod(const OUString& Name)
     throw(RuntimeException)
 {
-    if( Name.equalsAscii("getString") || Name.equalsAscii("getStrings") || Name.equalsAscii("hasString") )
+    if( Name.equalsAscii("getString")     ||
+        Name.equalsAscii("getStrings")    ||
+        Name.equalsAscii("hasString")     ||
+        Name.equalsAscii("hasStrings")    ||
+        Name.equalsAscii("getStringList") ||
+        Name.equalsAscii("hasStringList")
+        )
         return TRUE;
     else
     {
