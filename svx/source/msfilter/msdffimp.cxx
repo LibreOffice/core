@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:46:35 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:51:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3724,23 +3724,47 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
         }
         else    // SYSCOLOR
         {
-//          UINT16 nParameter = (BYTE)( nColorCode >> 16);      // SJ: nice compiler optimization bug on windows, though downcasting
+            const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+
+//          UINT16 nParameter = (BYTE)( nColorCode >> 16);                  // SJ: nice compiler optimization bug on windows, though downcasting
             UINT16 nParameter = sal_uInt16(( nColorCode >> 16 ) & 0x00ff);  // the HiByte of nParameter is not zero, an exclusive AND is helping :o
             UINT16 nFunctionBits = (UINT16)( ( nColorCode & 0x00000f00 ) >> 8 );
             UINT16 nAdditionalFlags = (UINT16)( ( nColorCode & 0x0000f000) >> 8 );
             UINT16 nColorIndex = sal_uInt16(nColorCode & 0x00ff);
             UINT32 nPropColor;
 
-            sal_uInt16  nCProp = DFF_Prop_lineColor;
+            sal_uInt16  nCProp = 0;
+
             switch ( nColorIndex )
             {
-                case 0xf0 : // msocolorFillColor
+                case mso_syscolorButtonFace :           aColor = rStyleSettings.GetFaceColor(); break;
+                case mso_syscolorWindowText :           aColor = rStyleSettings.GetWindowTextColor(); break;
+                case mso_syscolorMenu :                 aColor = rStyleSettings.GetMenuColor(); break;
+                case mso_syscolor3DLight :
+                case mso_syscolorButtonHighlight :
+                case mso_syscolorHighlight :            aColor = rStyleSettings.GetHighlightColor(); break;
+                case mso_syscolorHighlightText :        aColor = rStyleSettings.GetHighlightTextColor(); break;
+                case mso_syscolorCaptionText :          aColor = rStyleSettings.GetMenuTextColor(); break;
+                case mso_syscolorActiveCaption :        aColor = rStyleSettings.GetHighlightColor(); break;
+                case mso_syscolorButtonShadow :         aColor = rStyleSettings.GetShadowColor(); break;
+                case mso_syscolorButtonText :           aColor = rStyleSettings.GetButtonTextColor(); break;
+                case mso_syscolorGrayText :             aColor = rStyleSettings.GetDeactiveColor(); break;
+                case mso_syscolorInactiveCaption :      aColor = rStyleSettings.GetDeactiveColor(); break;
+                case mso_syscolorInactiveCaptionText :  aColor = rStyleSettings.GetDeactiveColor(); break;
+                case mso_syscolorInfoBackground :       aColor = rStyleSettings.GetFaceColor(); break;
+                case mso_syscolorInfoText :             aColor = rStyleSettings.GetInfoTextColor(); break;
+                case mso_syscolorMenuText :             aColor = rStyleSettings.GetMenuTextColor(); break;
+                case mso_syscolorScrollbar :            aColor = rStyleSettings.GetFaceColor(); break;
+                case mso_syscolorWindow :               aColor = rStyleSettings.GetWindowColor(); break;
+                case mso_syscolorWindowFrame :          aColor = rStyleSettings.GetWindowColor(); break;
+
+                case mso_colorFillColor :
                 {
                     nPropColor = GetPropertyValue( DFF_Prop_fillColor, 0xffffff );
                     nCProp = DFF_Prop_fillColor;
                 }
                 break;
-                case 0xf1 : // msocolorLineOrFillColor ( use the line color only if there is a line )
+                case mso_colorLineOrFillColor :     // ( use the line color only if there is a line )
                 {
                     if ( GetPropertyValue( DFF_Prop_fNoLineDrawDash ) & 8 )
                     {
@@ -3754,51 +3778,52 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
                     }
                 }
                 break;
-                case 0xf2 : // msocolorLineColor
+                case mso_colorLineColor :
                 {
                     nPropColor = GetPropertyValue( DFF_Prop_lineColor, 0 );
                     nCProp = DFF_Prop_lineColor;
                 }
                 break;
-                case 0xf3 : // msocolorShadowColor
+                case mso_colorShadowColor :
                 {
                     nPropColor = GetPropertyValue( DFF_Prop_shadowColor, 0x808080 );
                     nCProp = DFF_Prop_shadowColor;
                 }
                 break;
-                case 0xf4 : // msocolorThis ( use this color ... )
+                case mso_colorThis :                // ( use this color ... )
                 {
                     nPropColor = GetPropertyValue( DFF_Prop_fillColor, 0xffffff );  //?????????????
                     nCProp = DFF_Prop_fillColor;
                 }
                 break;
-                case 0xf5 : // msocolorFillBackColor
+                case mso_colorFillBackColor :
                 {
                     nPropColor = GetPropertyValue( DFF_Prop_fillBackColor, 0xffffff );
                     nCProp = DFF_Prop_fillBackColor;
                 }
                 break;
-                case 0xf6 : // msocolorLineBackColor
+                case mso_colorLineBackColor :
                 {
                     nPropColor = GetPropertyValue( DFF_Prop_lineBackColor, 0xffffff );
                     nCProp = DFF_Prop_lineBackColor;
                 }
                 break;
-                case 0xf7 : // msocolorFillThenLine ( use the fillcolor unless no fill and line )
+                case mso_colorFillThenLine :        // ( use the fillcolor unless no fill and line )
                 {
                     nPropColor = GetPropertyValue( DFF_Prop_fillColor, 0xffffff );  //?????????????
                     nCProp = DFF_Prop_fillColor;
                 }
                 break;
-                case 0xff : // msocolorIndexMask ( extract the color index )
+                case mso_colorIndexMask :           // ( extract the color index ) ?
                 {
                     nPropColor = GetPropertyValue( DFF_Prop_fillColor, 0xffffff );  //?????????????
                     nCProp = DFF_Prop_fillColor;
                 }
                 break;
             }
-            if ( ( nPropColor & 0x10000000 ) == 0 ) // beware of looping recursive
+            if ( nCProp && ( nPropColor & 0x10000000 ) == 0 )       // beware of looping recursive
                 aColor = MSO_CLR_ToColor( nPropColor, nCProp );
+
             if( nAdditionalFlags & 0x80 )           // make color gray
             {
                 UINT8 nZwi = aColor.GetLuminance();
@@ -4864,10 +4889,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
             sal_uInt32  nSpFlags = aObjData.nSpFlags;
 
             if ( bGraphic )
-            {
-                pRet = ImportGraphic( rSt, aSet, aBoundRect, aObjData );
-                nSpFlags &=~ ( SP_FFLIPH | SP_FFLIPV );         // #68396#
-            }
+                pRet = ImportGraphic( rSt, aSet, aBoundRect, aObjData );        // SJ: #68396# is no longer true (fixed in ppt2000)
             else
             {
                 // Check if we are using our new as shape type. This is done by
@@ -4906,6 +4928,13 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                 MSDFFReadZString( rSt, aFontName, GetPropertyValue( DFF_Prop_gtextFont ), TRUE );
                                 aSet.Put( SvxFontItem( aLatin.GetFamily(), aFontName, aLatin.GetStyleName() ) );
                             }
+
+                            // SJ: applying fontattributes for Fontwork :
+                            if ( IsHardAttribute( DFF_Prop_gtextFItalic ) )
+                                aSet.Put( SvxPostureItem( ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x0010 ) != 0 ? ITALIC_NORMAL : ITALIC_NONE ) );
+
+                            if ( IsHardAttribute( DFF_Prop_gtextFBold ) )
+                                aSet.Put( SvxWeightItem( ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x0020 ) != 0 ? WEIGHT_BOLD : WEIGHT_NORMAL ) );
 
                             // SJ TODO: Vertical Writing is not correct, instead this should be
                             // replaced through "CharacterRotation" by 90°, therefore a new Item has to be
