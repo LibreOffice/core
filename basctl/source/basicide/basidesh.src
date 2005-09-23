@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:58:54 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:19:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,13 +74,13 @@ String RID_STR_SAVE
 String RID_STR_SOURCETOBIG
 {
     /* ### ACHTUNG: Neuer Text in Resource? Der Quelltext ist zu groß und kann weder gespeichert noch compiliert werden.\nLöschen Sie einige Kommentare oder übertragen Sie einige Methoden in ein anderes Modul. : Der Quelltext ist zu gro˜ und kann weder gespeichert noch compiliert werden.\nL÷schen Sie einige Kommentare oder ³bertragen Sie einige Methoden in ein anderes Modul. */
-    Text [ de ] = "Der Quelltext ist zu groß und kann weder gespeichert noch compiliert werden.\nLöschen Sie einige Kommentare oder übertragen Sie einige Methoden in ein anderes Modul." ;
+    Text [ de ] = "Der Quelltext ist zu groÃŸ und kann weder gespeichert noch compiliert werden.\nLÃ¶schen Sie einige Kommentare oder Ã¼bertragen Sie einige Methoden in ein anderes Modul." ;
     Text [ en-US ] = "The source text is too large and can be neither compiled nor saved.\nDelete some of the comments or transfer some methods into another module." ;
 };
 String RID_STR_ERROROPENSTORAGE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Fehler beim Öffnen der Datei : Fehler beim Íffnen der Datei */
-    Text [ de ] = "Fehler beim Öffnen der Datei" ;
+    Text [ de ] = "Fehler beim Ã–ffnen der Datei" ;
     Text [ en-US ] = "Error opening file" ;
 };
 String RID_STR_ERROROPENLIB
@@ -91,13 +91,13 @@ String RID_STR_ERROROPENLIB
 String RID_STR_NOLIBINSTORAGE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Die Datei enthält keine BASIC-Bibliotheken : Die Datei enthõlt keine BASIC-Bibliotheken */
-    Text [ de ] = "Die Datei enthält keine BASIC-Bibliotheken" ;
+    Text [ de ] = "Die Datei enthÃ¤lt keine BASIC-Bibliotheken" ;
     Text [ en-US ] = "The file does not contain any BASIC libraries" ;
 };
 String RID_STR_BADSBXNAME
 {
     /* ### ACHTUNG: Neuer Text in Resource? Ungültiger Bezeichner : Ung³ltiger Bezeichner */
-    Text [ de ] = "Ungültiger Bezeichner" ;
+    Text [ de ] = "UngÃ¼ltiger Bezeichner" ;
     Text [ en-US ] = "Invalid Name" ;
 };
 String RID_STR_LIBNAMETOLONG
@@ -112,7 +112,7 @@ String RID_STR_ERRORCHOOSEMACRO
 };
 String RID_STR_LIBISREADONLY
 {
-    Text [ de ] = "Diese Bibliothek ist schreibgeschützt.";
+    Text [ de ] = "Diese Bibliothek ist schreibgeschÃ¼tzt.";
     Text [ en-US ] = "This library is read-only.";
 };
 String RID_STR_REPLACELIB
@@ -122,17 +122,17 @@ String RID_STR_REPLACELIB
 };
 String RID_STR_IMPORTNOTPOSSIBLE
 {
-    Text [ de ] = "Hinzufügen von 'XX' nicht möglich." ;
+    Text [ de ] = "HinzufÃ¼gen von 'XX' nicht mÃ¶glich." ;
     Text [ en-US ] = "'XX' cannot be added.";
 };
 String RID_STR_NOIMPORT
 {
-    Text [ de ] = "'XX' wurde nicht hinzugefügt." ;
+    Text [ de ] = "'XX' wurde nicht hinzugefÃ¼gt." ;
     Text [ en-US ] = "'XX' was not added.";
 };
 String RID_STR_ENTERPASSWORD
 {
-    Text [ de ] = "Kennwort eingeben für 'XX'" ;
+    Text [ de ] = "Kennwort eingeben fÃ¼r 'XX'" ;
     Text [ en-US ] = "Enter password for 'XX'";
 };
 String RID_STR_SBXNAMEALLREADYUSED
@@ -158,13 +158,13 @@ String RID_STR_FILEEXISTS
 };
 String RID_STR_CANNOTRUNMACRO
 {
-    Text [ de ] = "Aus Sicherheitsgründen ist dieses Makro nicht ausführbar.\n\nFür weitere Informationen überprüfen Sie die Sicherheitseinstellungen." ;
+    Text [ de ] = "Aus SicherheitsgrÃ¼nden ist dieses Makro nicht ausfÃ¼hrbar.\n\nFÃ¼r weitere Informationen Ã¼berprÃ¼fen Sie die Sicherheitseinstellungen." ;
     Text [ en-US ] = "For security reasons, you cannot run this macro.\n\nFor more information, check the security settings." ;
 };
 String RID_STR_COMPILEERROR
 {
     /* ### ACHTUNG: Neuer Text in Resource? Übersetzungs-Fehler:  : šbersetzungs-Fehler:  */
-    Text [ de ] = "Übersetzungs-Fehler: " ;
+    Text [ de ] = "Ãœbersetzungs-Fehler: " ;
     Text [ en-US ] = "Compile Error: " ;
 };
 String RID_STR_RUNTIMEERROR
@@ -180,7 +180,7 @@ String RID_STR_SEARCHNOTFOUND
 String RID_STR_SEARCHFROMSTART
 {
     /* ### ACHTUNG: Neuer Text in Resource? Es wurde bis zum letzten Modul gesucht. Möchten Sie die Suche beim ersten Modul fortsetzen? : Es wurde bis zum letzten Modul gesucht. M÷chten Sie die Suche beim ersten Modul fortsetzen? */
-    Text [ de ] = "Es wurde bis zum letzten Modul gesucht. Möchten Sie die Suche beim ersten Modul fortsetzen?" ;
+    Text [ de ] = "Es wurde bis zum letzten Modul gesucht. MÃ¶chten Sie die Suche beim ersten Modul fortsetzen?" ;
     Text [ en-US ] = "Search to last module complete. Continue at first module?" ;
 };
 String RID_STR_SEARCHREPLACES
@@ -201,13 +201,13 @@ String RID_STR_COULDNTWRITE
 String RID_STR_CANNOTCHANGENAMESTDLIB
 {
     /* ### ACHTUNG: Neuer Text in Resource? Der Name der Standard-Bibliothek kann nicht geändert werden : Der Name der Standard-Bibliothek kann nicht geõndert werden */
-    Text [ de ] = "Der Name der Standard-Bibliothek kann nicht geändert werden" ;
+    Text [ de ] = "Der Name der Standard-Bibliothek kann nicht geÃ¤ndert werden" ;
     Text [ en-US ] = "The name of the default library cannot be changed." ;
 };
 String RID_STR_CANNOTCHANGENAMEREFLIB
 {
     /* ### ACHTUNG: Neuer Text in Resource? Der Name einer referenzierten Bibliothek kann nicht geändert werden : Der Name einer referenzierten Bibliothek kann nicht geõndert werden */
-    Text [ de ] = "Der Name einer referenzierten Bibliothek kann nicht geändert werden" ;
+    Text [ de ] = "Der Name einer referenzierten Bibliothek kann nicht geÃ¤ndert werden" ;
     Text [ en-US ] = "The name of a referenced library cannot be changed." ;
 };
 String RID_STR_CANNOTUNLOADSTDLIB
@@ -228,37 +228,37 @@ String RID_STR_FILENAME
 String RID_STR_APPENDLIBS
 {
     /* ### ACHTUNG: Neuer Text in Resource? Bibliotheken hinzufügen : Bibliotheken hinzuf³gen */
-    Text [ de ] = "Bibliotheken hinzufügen" ;
+    Text [ de ] = "Bibliotheken hinzufÃ¼gen" ;
     Text [ en-US ] = "Append Libraries" ;
 };
 String RID_STR_QUERYDELMACRO
 {
     /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie das Makro XX löschen ? : M÷chten Sie das Makro XX l÷schen ? */
-    Text [ de ] = "Möchten Sie das Makro XX löschen ?" ;
+    Text [ de ] = "MÃ¶chten Sie das Makro XX lÃ¶schen ?" ;
     Text [ en-US ] = "Do you want to delete the macro XX ?" ;
 };
 String RID_STR_QUERYDELDIALOG
 {
     /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie den Dialog XX löschen ? : M÷chten Sie den Dialog XX l÷schen ? */
-    Text [ de ] = "Möchten Sie den Dialog XX löschen ?" ;
+    Text [ de ] = "MÃ¶chten Sie den Dialog XX lÃ¶schen ?" ;
     Text [ en-US ] = "Do you want to delete the XX dialog?" ;
 };
 String RID_STR_QUERYDELLIB
 {
     /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie die Bibliothek XX löschen ? : M÷chten Sie die Bibliothek XX l÷schen ? */
-    Text [ de ] = "Möchten Sie die Bibliothek XX löschen ?" ;
+    Text [ de ] = "MÃ¶chten Sie die Bibliothek XX lÃ¶schen ?" ;
     Text [ en-US ] = "Do you want to delete the XX library?" ;
 };
 String RID_STR_QUERYDELLIBREF
 {
     /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie die Referenz auf die Bibliothek XX löschen ? : M÷chten Sie die Referenz auf die Bibliothek XX l÷schen ? */
-    Text [ de ] = "Möchten Sie die Referenz auf die Bibliothek XX löschen ?" ;
+    Text [ de ] = "MÃ¶chten Sie die Referenz auf die Bibliothek XX lÃ¶schen ?" ;
     Text [ en-US ] = "Do you want to delete the reference to the XX library?" ;
 };
 String RID_STR_QUERYDELMODULE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie das Modul XX löschen ? : M÷chten Sie das Modul XX l÷schen ? */
-    Text [ de ] = "Möchten Sie das Modul XX löschen ?" ;
+    Text [ de ] = "MÃ¶chten Sie das Modul XX lÃ¶schen ?" ;
     Text [ en-US ] = "Do you want to delete the XX module?" ;
 };
 String RID_STR_OBJNOTFOUND
@@ -297,7 +297,7 @@ String RID_BASICIDE_OBJECTBAR
 String RID_STR_CANNOTCLOSE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Das Fenster kann nicht geschlossen werden,\nwährend das BASIC-Programm läuft. : Das Fenster kann nicht geschlossen werden,\nwõhrend das BASIC-Programm lõuft. */
-    Text [ de ] = "Das Fenster kann nicht geschlossen werden,\nwährend das BASIC-Programm läuft." ;
+    Text [ de ] = "Das Fenster kann nicht geschlossen werden,\nwÃ¤hrend das BASIC-Programm lÃ¤uft." ;
     Text [ en-US ] = "The window cannot be closed while BASIC is running." ;
 };
 String RID_STR_REPLACESTDLIB
@@ -309,7 +309,7 @@ String RID_STR_REFNOTPOSSIBLE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Referenz auf 'XX' nicht möglich. : Referenz auf ''XX'' nicht möglich. */
     /* ### ACHTUNG: Neuer Text in Resource? Referenz auf 'XX' nicht möglich. : Referenz auf 'XX' nicht m÷glich. */
-    Text [ de ] = "Referenz auf 'XX' nicht möglich." ;
+    Text [ de ] = "Referenz auf 'XX' nicht mÃ¶glich." ;
     Text [ en-US ] = "Reference to 'XX' not possible." ;
 };
 String RID_STR_WATCHNAME
@@ -391,7 +391,7 @@ String RID_STR_MACRONAMEREQ
 String RID_STR_WILLSTOPPRG
 {
     /* ### ACHTUNG: Neuer Text in Resource? Sie müssen nach dieser Änderung Ihr Programm neu starten.\nForfahren? : Sie m³ssen nach dieser Žnderung Ihr Programm neu starten.\nForfahren? */
-    Text [ de ] = "Sie müssen nach dieser Änderung Ihr Programm neu starten.\nForfahren?" ;
+    Text [ de ] = "Sie mÃ¼ssen nach dieser Ã„nderung Ihr Programm neu starten.\nForfahren?" ;
     Text [ en-US ] = "You will have to restart the program after this edit.\nContinue?" ;
 };
 String RID_STR_SEARCHALLMODULES
@@ -522,7 +522,7 @@ Menu RID_POPUP_TABBAR
         {
             Identifier = RID_INSERT ;
             /* ### ACHTUNG: Neuer Text in Resource? Einfügen : Einf³gen */
-            Text [ de ] = "Einfügen" ;
+            Text [ de ] = "EinfÃ¼gen" ;
             Text [ en-US ] = "Insert" ;
             Submenu = Menu
             {
@@ -551,7 +551,7 @@ Menu RID_POPUP_TABBAR
             Identifier = SID_BASICIDE_DELETECURRENT ;
             HelpId = SID_BASICIDE_DELETECURRENT ;
             /* ### ACHTUNG: Neuer Text in Resource? Löschen : L÷schen */
-            Text [ de ] = "Löschen" ;
+            Text [ de ] = "LÃ¶schen" ;
             Text [ en-US ] = "Delete" ;
             /* ### ACHTUNG: Neuer Text in Resource? Modul oder Dialog löschen : Modul oder Dialog l÷schen */
         };
@@ -722,7 +722,7 @@ Image RID_IMG_DIALOG_HC
 };
 String RID_STR_QUERYREPLACEMACRO
 {
-    Text [ de ] = "Möchten Sie das Makro XX überschreiben ?" ;
+    Text [ de ] = "MÃ¶chten Sie das Makro XX Ã¼berschreiben ?" ;
     Text [ en-US ] = "Do you want to overwrite the XX macro?" ;
 };
 
