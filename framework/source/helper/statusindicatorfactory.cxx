@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statusindicatorfactory.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:26:59 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:41:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -441,6 +441,20 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
     if (bIsVisible)
         return;
 
+    // Check if the layout manager has been set to invisible state. It this case we are also
+    // not allowed to set the frame visible!
+    css::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, css::uno::UNO_QUERY);
+    if (xPropSet.is())
+    {
+        css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
+        xPropSet->getPropertyValue(FRAME_PROPNAME_LAYOUTMANAGER) >>= xLayoutManager;
+        if (xLayoutManager.is())
+        {
+            if ( !xLayoutManager->isVisible() )
+                return;
+        }
+    }
+
     // Ok the window should be made visible ... becuase it isnt currently visible.
     // BUT ..!
     // We need a Hack for our applications: They get her progress from the frame directly
@@ -472,8 +486,6 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
     // Show it and bring it to front.
     // But before we have to be sure, that our internal used helper progress
     // is visible too.
-
-    css::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, css::uno::UNO_QUERY);
     if (xPropSet.is())
     {
         css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
