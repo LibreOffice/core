@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:05:41 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:48:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
             PageItem
             {
                 Identifier = RID_SVXPAGE_STD_PARAGRAPH ;
-                Text [ de ] = "Einzüge und Abstände" ;
+                Text [ de ] = "EinzÃ¼ge und AbstÃ¤nde" ;
                 Text [ en-US ] = "Indents & Spacing" ;
                 Text [ x-comment ] = " ";
             };
@@ -164,7 +164,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 178 , 76 ) ;
-    Text [ de ] = "Ähnlichkeitssuche" ;
+    Text [ de ] = "Ã„hnlichkeitssuche" ;
     Text [ en-US ] = "Similarity Search" ;
     Moveable = TRUE ;
     FixedText FT_OTHER
@@ -194,7 +194,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     {
         Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text [ de ] = "Z~eichen hinzufügen" ;
+        Text [ de ] = "Z~eichen hinzufÃ¼gen" ;
         Text [ en-US ] = "~Add characters" ;
         Text [ x-comment ] = " ";
     };
