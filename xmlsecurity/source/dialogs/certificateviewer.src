@@ -4,9 +4,9 @@
  *
  *  $RCSfile: certificateviewer.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:11:00 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:11:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,7 +140,7 @@ TabPage RID_XMLSECTP_GENERAL
     {
         Pos = MAP_APPFONT( CW_COL_1, CW_ROW_6 );
         Size = MAP_APPFONT( CW_COL_4-CW_COL_1-1, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text [ de ] = "Ausgestellt für:";
+        Text [ de ] = "Ausgestellt fÃ¼r:";
         Text [ en-US ] = "Issued to:";
     };
     FixedText FI_ISSTO
@@ -164,7 +164,7 @@ TabPage RID_XMLSECTP_GENERAL
     {
         Pos = MAP_APPFONT( CW_COL_1, CW_ROW_8 );
         Size = MAP_APPFONT( CW_COL_5-CW_COL_1-1, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text [ de ] = "Gültig von %SDATE% bis %EDATE%";
+        Text [ de ] = "GÃ¼ltig von %SDATE% bis %EDATE%";
         Text [ en-US ] = "Valid from %SDATE% to %EDATE%";
     };
     FixedImage IMG_KEY
@@ -181,7 +181,7 @@ TabPage RID_XMLSECTP_GENERAL
     {
         Pos = MAP_APPFONT( CW_COL_1a, CW_ROW_10 );
         Size = MAP_APPFONT( CW_COL_5-CW_COL_1a, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text [ de ] = "Sie haben einen privaten Schlüssel, der mit diesem Zertifikat korrespondiert.";
+        Text [ de ] = "Sie haben einen privaten SchlÃ¼ssel, der mit diesem Zertifikat korrespondiert.";
         Text [ en-US ] = "You have a private key that corresponds to this certificate.";
     };
 };
@@ -241,12 +241,12 @@ TabPage RID_XMLSECTP_DETAILS
     };
     String STR_VALIDFROM
     {
-        Text [ de ] = "Gültig von";
+        Text [ de ] = "GÃ¼ltig von";
         Text [ en-US ] = "Valid From";
     };
     String STR_VALIDTO
     {
-        Text [ de ] = "Gültig bis";
+        Text [ de ] = "GÃ¼ltig bis";
         Text [ en-US ] = "Valid to";
     };
     String STR_SUBJECT
@@ -266,7 +266,7 @@ TabPage RID_XMLSECTP_DETAILS
     };
     String STR_SUBJECT_PUBKEY_VAL
     {
-        Text [ de ] = "Öffentlicher Schlüssel";
+        Text [ de ] = "Ã–ffentlicher SchlÃ¼ssel";
         Text [ en-US ] = "Public Key";
     };
     String STR_SIGNATURE_ALGO
