@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotools.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:32:58 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:16:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ ModalDialog DLG_RENAME_XNAMED
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 152 , 8 ) ;
-        Text [ de ] = "Name ändern";
+        Text [ de ] = "Name Ã¤ndern";
         Text [ en-US ] = "Change name";
         Text [ x-comment ] = " ";
     };
@@ -94,7 +94,7 @@ ModalDialog DLG_RENAME_XNAMED
 };
 String STR_SERVICE_UNAVAILABLE
 {
-    Text [ de ] = "Der folgende Service ist nicht verfügbar: " ;
+    Text [ de ] = "Der folgende Service ist nicht verfÃ¼gbar: " ;
     Text [ en-US ] = "The following service is not available: ";
     Text [ x-comment ] = " ";
 };
@@ -104,7 +104,7 @@ Resource RES_FRMEX_MENU
     {
         ItemList [ de ] =
         {
-            < "~Maßstab" ;      ST_MENU_ZOOM; > ;
+            < "~MaÃŸstab" ;         ST_MENU_ZOOM; > ;
             < "Nach ~oben" ;    ST_MENU_UP;     > ;
             < "Nach ~unten" ;   ST_MENU_DOWN; > ;
         };
