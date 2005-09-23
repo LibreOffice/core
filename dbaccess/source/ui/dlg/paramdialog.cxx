@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paramdialog.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:07:59 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:31:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,12 +116,15 @@ namespace dbaui
 
 
     //------------------------------------------------------------------------------
+DBG_NAME(OParameterDialog)
 
     OParameterDialog::OParameterDialog(
             Window* pParent, const Reference< XIndexAccess > & rParamContainer,
             const Reference< XConnection > & _rxConnection, const Reference< XMultiServiceFactory >& _rxORB)
         INIT_MEMBERS()
     {
+        DBG_CTOR(OParameterDialog,NULL);
+
         if (_rxORB.is())
             m_xFormatter = Reference< XNumberFormatter>(_rxORB->createInstance(
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"))), UNO_QUERY);
@@ -184,6 +187,8 @@ namespace dbaui
             m_aResetVisitFlag.Stop();
 
         delete (ByteVector*)m_pVisitedParams;
+
+        DBG_DTOR(OParameterDialog,NULL);
     }
 
     //------------------------------------------------------------------------------
