@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlex.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:22:04 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 10:44:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,6 +193,8 @@ class HtmlExport
     String m_aURLPath;
     String m_aCGIPath;
     PublishingScript m_eScript;
+
+    const String m_aHTMLHeader;
 
     SdrTextObj* GetLayoutTextObject(SdrPage* pPage);
 
