@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scdll.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:23:59 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:48:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -315,7 +315,7 @@ void ScDLL::Init()
     //  Child-Windows
 
     // Hack: Eingabezeile mit 42 registrieren, damit sie im PlugIn immer sichtbar ist
-    ScInputWindowWrapper        ::RegisterChildWindow(42, pMod, SFX_CHILDWIN_TASK);
+    ScInputWindowWrapper        ::RegisterChildWindow(42, pMod, SFX_CHILDWIN_TASK|SFX_CHILDWIN_FORCEDOCK);
     ScNavigatorDialogWrapper    ::RegisterChildWindowContext(pMod);
     ScSolverDlgWrapper          ::RegisterChildWindow(FALSE, pMod);
     ScNameDlgWrapper            ::RegisterChildWindow(FALSE, pMod);
@@ -342,7 +342,7 @@ void ScDLL::Init()
     SvxSearchDialogWrapper      ::RegisterChildWindow(FALSE, pMod);
     SvxHlinkDlgWrapper          ::RegisterChildWindow(FALSE, pMod);
     SvxFontWorkChildWindow      ::RegisterChildWindow(FALSE, pMod);
-    SvxHyperlinkDlgWrapper      ::RegisterChildWindow(FALSE, pMod);
+    SvxHyperlinkDlgWrapper      ::RegisterChildWindow(FALSE, pMod, SFX_CHILDWIN_FORCEDOCK);
     SvxIMapDlgChildWindow       ::RegisterChildWindow(FALSE, pMod);
     GalleryChildWindow          ::RegisterChildWindow(FALSE, pMod);
     ScSpellDialogChildWindow    ::RegisterChildWindow(FALSE, pMod);
