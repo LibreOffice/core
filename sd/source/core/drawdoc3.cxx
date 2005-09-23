@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:11:22 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 10:42:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -938,6 +938,9 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
         USHORT nSdPageStart = (nInsertPos - 1) / 2;
         USHORT nSdPageEnd = GetSdPageCount(PK_STANDARD) - nSdPageCount +
                             nSdPageStart - 1;
+        const bool bRemoveEmptyPresObj = pBookmarkDoc &&
+                (pBookmarkDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS) &&
+                (GetDocumentType() == DOCUMENT_TYPE_DRAW);
 
         if( bReplace )
         {
@@ -983,6 +986,9 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
             pPage->SetBorder(nLeft, nUpper, nRight, nLower);
             pPage->SetOrientation( eOrient );
 
+            if( bRemoveEmptyPresObj )
+                pPage->RemoveEmptyPresentationObjects();
+
             pPage = GetSdPage(nSdPage, PK_NOTES);
 
             // update layout and referred master page
@@ -998,6 +1004,9 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
             pPage->SetSize(aNSize);
             pPage->SetBorder(nNLeft, nNUpper, nNRight, nNLower);
             pPage->SetOrientation( eNOrient );
+
+            if( bRemoveEmptyPresObj )
+                pPage->RemoveEmptyPresentationObjects();
         }
 
         for (USHORT nPage = nMPageCount; nPage < nNewMPageCount; nPage++)
@@ -1025,6 +1034,9 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
                 pPage->SetBorder(nNLeft, nNUpper, nNRight, nNLower);
                 pPage->SetOrientation( eNOrient );
             }
+
+            if( bRemoveEmptyPresObj )
+                pPage->RemoveEmptyPresentationObjects();
         }
     }
 
@@ -1923,7 +1935,15 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
                 pReplData = (StyleReplaceData*)pReplList->Next();
             }
             delete pReplList;
-       }
+
+
+            if( (pSourceDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS) &&
+                (GetDocumentType() == DOCUMENT_TYPE_DRAW) )
+            {
+                pMaster->RemoveEmptyPresentationObjects();
+                pNotesMaster->RemoveEmptyPresentationObjects();
+            }
+        }
     }
     else
     {
