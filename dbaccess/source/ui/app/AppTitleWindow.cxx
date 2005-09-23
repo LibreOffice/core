@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppTitleWindow.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:22:27 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:17:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,14 @@
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 namespace dbaui
 {
+
+DBG_NAME(OTitleWindow)
 OTitleWindow::OTitleWindow(Window* _pParent,USHORT _nTitleId,WinBits _nBits,BOOL _bShift)
 : Window(_pParent,_nBits | WB_DIALOGCONTROL)
 , m_aSpace1(this)
@@ -53,6 +58,8 @@ OTitleWindow::OTitleWindow(Window* _pParent,USHORT _nTitleId,WinBits _nBits,BOOL
 , m_pChild(NULL)
 , m_bShift(_bShift)
 {
+    DBG_CTOR(OTitleWindow,NULL);
+
     setTitle(_nTitleId);
     SetBorderStyle(WINDOW_BORDER_MONO);
     ImplInitSettings( sal_True, sal_True, sal_True );
@@ -72,6 +79,8 @@ OTitleWindow::~OTitleWindow()
         ::std::auto_ptr<Window> aTemp(m_pChild);
         m_pChild = NULL;
     }
+
+    DBG_DTOR(OTitleWindow,NULL);
 }
 // -----------------------------------------------------------------------------
 void OTitleWindow::setChildWindow(Window* _pChild)
