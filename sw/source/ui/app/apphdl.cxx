@@ -4,9 +4,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:29:04 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:47:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -979,7 +979,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
                             if(xChild.is())
                                 xSource = uno::Reference<sdbc::XDataSource>(
                                                             xChild->getParent(), uno::UNO_QUERY);
-                            pMMConfig->SetCurrentConnection( xSource, SharedConnection( xConnection, false ),
+                            pMMConfig->SetCurrentConnection( xSource, SharedConnection( xConnection, SharedConnection::NoTakeOwnership ),
                                                 xColumnsSupplier, aDBData);
                         }
                     }
