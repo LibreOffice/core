@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addresstemplate.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:10:04 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:54:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDB_XCOMPLETEDCONNECTION_HPP_
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #endif
@@ -113,6 +116,12 @@
 #endif
 #ifndef _SVTOOLS_LOCALRESACCESS_HXX_
 #include "localresaccess.hxx"
+#endif
+#ifndef SVTOOLS_FILENOTATION_HXX_
+#include "filenotation.hxx"
+#endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
 #endif
 
 #include <algorithm>
@@ -183,13 +192,15 @@ namespace svt
     class AssigmentTransientData : public IAssigmentData
     {
     protected:
-        ::rtl::OUString         m_sDSName;
-        ::rtl::OUString         m_sTableName;
-        MapString2String        m_aAliases;
+        Reference< XDataSource >    m_xDataSource;
+        ::rtl::OUString             m_sDSName;
+        ::rtl::OUString             m_sTableName;
+        MapString2String            m_aAliases;
 
-    public:
+public:
         AssigmentTransientData(
-            const ::rtl::OUString& _rDSName,
+            const Reference< XDataSource >& _rxDataSource,
+            const ::rtl::OUString& _rDataSourceName,
             const ::rtl::OUString& _rTableName,
             const Sequence< AliasProgrammaticPair >& _rFields
         );
@@ -209,10 +220,12 @@ namespace svt
     };
 
     // -------------------------------------------------------------------
-    AssigmentTransientData::AssigmentTransientData( const ::rtl::OUString& _rDSName,
-            const ::rtl::OUString& _rTableName, const Sequence< AliasProgrammaticPair >& _rFields )
-        :m_sDSName(_rDSName)
-        ,m_sTableName(_rTableName)
+    AssigmentTransientData::AssigmentTransientData( const Reference< XDataSource >& _rxDataSource,
+            const ::rtl::OUString& _rDataSourceName, const ::rtl::OUString& _rTableName,
+            const Sequence< AliasProgrammaticPair >& _rFields )
+        :m_xDataSource( _rxDataSource )
+        ,m_sDSName( _rDataSourceName )
+        ,m_sTableName( _rTableName )
     {
         // fill our aliaes structure
         // first collect all known programmatic names
@@ -295,13 +308,13 @@ namespace svt
     // -------------------------------------------------------------------
     void AssigmentTransientData::setDatasourceName(const ::rtl::OUString& _rName)
     {
-        m_sDSName = _rName;
+        DBG_ERROR( "AssigmentTransientData::setDatasourceName: cannot be implemented for transient data!" );
     }
 
     // -------------------------------------------------------------------
     void AssigmentTransientData::setCommand(const ::rtl::OUString& _rCommand)
     {
-        m_sTableName = _rCommand;
+        DBG_ERROR( "AssigmentTransientData::setCommand: cannot be implemented for transient data!" );
     }
 
     // ===================================================================
@@ -516,6 +529,9 @@ namespace svt
         FixedText*      pFieldLabels[FIELD_PAIRS_VISIBLE * 2];
         ListBox*        pFields[FIELD_PAIRS_VISIBLE * 2];
 
+        /// when working transient, we need the data source
+        Reference< XDataSource >
+                        m_xTransientDataSource;
         /// current scroll pos in the field list
         sal_Int32       nFieldScrollPos;
         /// the index within m_pFields of the last visible list box. This is redundant, it could be extracted from other members
@@ -545,13 +561,14 @@ namespace svt
         }
 
         // ................................................................
-        AddressBookSourceDialogData( const ::rtl::OUString& _rDSName, const ::rtl::OUString& _rTableName,
-            const Sequence< AliasProgrammaticPair >& _rFields )
-            :nFieldScrollPos(0)
+        AddressBookSourceDialogData( const Reference< XDataSource >& _rxTransientDS, const ::rtl::OUString& _rDataSourceName,
+            const ::rtl::OUString& _rTableName, const Sequence< AliasProgrammaticPair >& _rFields )
+            :m_xTransientDataSource( _rxTransientDS )
+            ,nFieldScrollPos(0)
             ,nLastVisibleListIndex(0)
             ,bOddFieldNumber(sal_False)
             ,bWorkingPersistent( sal_False )
-            ,pConfigData( new AssigmentTransientData( _rDSName, _rTableName, _rFields ) )
+            ,pConfigData( new AssigmentTransientData( m_xTransientDataSource, _rDataSourceName, _rTableName, _rFields ) )
         {
         }
 
@@ -593,10 +610,10 @@ namespace svt
 
     // -------------------------------------------------------------------
     AddressBookSourceDialog::AddressBookSourceDialog( Window* _pParent, const Reference< XMultiServiceFactory >& _rxORB,
-        const ::rtl::OUString& _rDS, const ::rtl::OUString& _rTable,
-        const Sequence< AliasProgrammaticPair >& _rMapping )
+        const Reference< XDataSource >& _rxTransientDS, const ::rtl::OUString& _rDataSourceName,
+        const ::rtl::OUString& _rTable, const Sequence< AliasProgrammaticPair >& _rMapping )
         :INIT_FIELDS()
-        ,m_pImpl( new AddressBookSourceDialogData( _rDS, _rTable, _rMapping ) )
+        ,m_pImpl( new AddressBookSourceDialogData( _rxTransientDS, _rDataSourceName, _rTable, _rMapping ) )
     {
         implConstruct();
     }
@@ -612,7 +629,7 @@ namespace svt
                 m_pImpl->pFieldLabels[row * 2 + column] = new FixedText(&m_aFieldsFrame, ResId((USHORT)(FT_FIELD_BASE + row * 2 + column)));
                 // the listbox
                 m_pImpl->pFields[row * 2 + column] = new ListBox(&m_aFieldsFrame, ResId((USHORT)(LB_FIELD_BASE + row * 2 + column)));
-                m_pImpl->pFields[row * 2 + column]->SetDropDownLineCount(8);
+                m_pImpl->pFields[row * 2 + column]->SetDropDownLineCount(15);
                 m_pImpl->pFields[row * 2 + column]->SetSelectHdl(LINK(this, AddressBookSourceDialog, OnFieldSelect));
 
                 m_pImpl->pFields[row * 2 + column]->SetHelpId(HID_ADDRTEMPL_FIELD_ASSIGNMENT);
@@ -696,7 +713,7 @@ namespace svt
         m_aDatasource.SetSelectHdl(LINK(this, AddressBookSourceDialog, OnComboSelect));
         m_aOK.SetClickHdl(LINK(this, AddressBookSourceDialog, OnOkClicked));
 
-        m_aDatasource.SetDropDownLineCount(10);
+        m_aDatasource.SetDropDownLineCount(15);
 
         // initialize the field controls
         resetFields();
@@ -764,7 +781,15 @@ namespace svt
     // -------------------------------------------------------------------
     void AddressBookSourceDialog::loadConfiguration()
     {
-        m_aDatasource.SetText(m_pImpl->pConfigData->getDatasourceName());
+        ::rtl::OUString sName = m_pImpl->pConfigData->getDatasourceName();
+        INetURLObject aURL( sName );
+        if( aURL.GetProtocol() != INET_PROT_NOT_VALID )
+        {
+            OFileNotation aFileNotation( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+            sName = aFileNotation.get(OFileNotation::N_SYSTEM);
+        }
+
+        m_aDatasource.SetText(sName);
         m_aTable.SetText(m_pImpl->pConfigData->getCommand());
         // we ignore the CommandType: only tables are supported
 
@@ -874,28 +899,38 @@ namespace svt
 
         // get the tables of the connection
         Sequence< ::rtl::OUString > aTableNames;
-        String sSelectedDS = m_aDatasource.GetText();
         Any aException;
         try
         {
-            Reference< XConnection > xConn;
-            // get the data source the user has chosen and let it build a connection
-            if (m_xDatabaseContext->hasByName(sSelectedDS))
+            Reference< XCompletedConnection > xDS;
+            if ( m_pImpl->bWorkingPersistent )
             {
-                // build the connection
-                Reference< XCompletedConnection > xDS;
-                ::cppu::extractInterface(xDS, m_xDatabaseContext->getByName(sSelectedDS));
-                if (xDS.is())
-                    xConn = xDS->connectWithCompletion(xHandler);
+                String sSelectedDS = m_aDatasource.GetText();
+                OFileNotation aFileNotation( sSelectedDS ,OFileNotation::N_SYSTEM);
+                sSelectedDS = aFileNotation.get(OFileNotation::N_URL);
 
-                // get the table names
-                Reference< XTablesSupplier > xSupplTables(xConn, UNO_QUERY);
-                if (xSupplTables.is())
-                {
-                    m_xCurrentDatasourceTables = Reference< XNameAccess >(xSupplTables->getTables(), UNO_QUERY);
-                    if (m_xCurrentDatasourceTables.is())
-                        aTableNames = m_xCurrentDatasourceTables->getElementNames();
-                }
+                // get the data source the user has chosen and let it build a connection
+                INetURLObject aURL( sSelectedDS );
+                if ( aURL.GetProtocol() != INET_PROT_NOT_VALID || m_xDatabaseContext->hasByName(sSelectedDS) )
+                    m_xDatabaseContext->getByName( sSelectedDS ) >>= xDS;
+            }
+            else
+            {
+                xDS = xDS.query( m_pImpl->m_xTransientDataSource );
+            }
+
+            // build the connection
+            Reference< XConnection > xConn;
+            if (xDS.is())
+                xConn = xDS->connectWithCompletion(xHandler);
+
+            // get the table names
+            Reference< XTablesSupplier > xSupplTables(xConn, UNO_QUERY);
+            if (xSupplTables.is())
+            {
+                m_xCurrentDatasourceTables = Reference< XNameAccess >(xSupplTables->getTables(), UNO_QUERY);
+                if (m_xCurrentDatasourceTables.is())
+                    aTableNames = m_xCurrentDatasourceTables->getElementNames();
             }
         }
         catch(SQLContext& e) { aException <<= e; }
@@ -1188,8 +1223,14 @@ namespace svt
     // -------------------------------------------------------------------
     IMPL_LINK(AddressBookSourceDialog, OnOkClicked, Button*, _pButton)
     {
-        m_pImpl->pConfigData->setDatasourceName(m_aDatasource.GetText());
-        m_pImpl->pConfigData->setCommand(m_aTable.GetText());
+        String sSelectedDS = m_aDatasource.GetText();
+        OFileNotation aFileNotation( sSelectedDS ,OFileNotation::N_SYSTEM);
+        sSelectedDS = aFileNotation.get(OFileNotation::N_URL);
+        if ( m_pImpl->bWorkingPersistent )
+        {
+            m_pImpl->pConfigData->setDatasourceName(sSelectedDS);
+            m_pImpl->pConfigData->setCommand(m_aTable.GetText());
+        }
 
         // set the field assignments
         ConstStringArrayIterator aLogical = m_pImpl->aLogicalFieldNames.begin();
@@ -1209,12 +1250,11 @@ namespace svt
     IMPL_LINK(AddressBookSourceDialog, OnAdministrateDatasources, void*, EMPTYARG)
     {
         // collect some initial arguments for the dialog
-        Sequence< Any > aArgs(2);
-        aArgs[0] <<= PropertyValue(::rtl::OUString::createFromAscii("InitialSelection"), 0, makeAny(::rtl::OUString(m_aDatasource.GetText())), PropertyState_DIRECT_VALUE);
-        aArgs[1] <<= PropertyValue(::rtl::OUString::createFromAscii("ParentWindow"), 0, makeAny(VCLUnoHelper::GetInterface(this)), PropertyState_DIRECT_VALUE);
+        Sequence< Any > aArgs(1);
+        aArgs[0] <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow")), 0, makeAny(VCLUnoHelper::GetInterface(this)), PropertyState_DIRECT_VALUE);
 
         // create the dialog object
-        const String sDialogServiceName = String::CreateFromAscii("com.sun.star.sdb.DatasourceAdministrationDialog");
+        const String sDialogServiceName = String::CreateFromAscii("com.sun.star.ui.dialogs.AddressBookSourcePilot");
         Reference< XExecutableDialog > xAdminDialog;
         try
         {
@@ -1230,7 +1270,29 @@ namespace svt
         // excute the dialog
         try
         {
-            xAdminDialog->execute();
+            if ( xAdminDialog->execute() == RET_OK )
+            {
+                Reference<XPropertySet> xProp(xAdminDialog,UNO_QUERY);
+                if ( xProp.is() )
+                {
+                    String sOldDS = m_aDatasource.GetText();
+                    ::rtl::OUString sName;
+                    xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataSourceName"))) >>= sName;
+
+                    INetURLObject aURL( sName );
+                    if( aURL.GetProtocol() != INET_PROT_NOT_VALID )
+                    {
+                        OFileNotation aFileNotation( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+                        sName = aFileNotation.get(OFileNotation::N_SYSTEM);
+                    }
+                    m_aDatasource.InsertEntry(sName);
+                    delete m_pImpl->pConfigData;
+                    m_pImpl->pConfigData = new AssignmentPersistentData();
+                    loadConfiguration();
+                    resetTables();
+                    // will reset the fields implicitly
+                }
+            }
         }
         catch(Exception&)
         {
@@ -1239,10 +1301,8 @@ namespace svt
 
         // re-fill the data source list
         // try to preserve the current selection
-        String sOldDS = m_aDatasource.GetText();
-        initializeDatasources();
-        resetTables();
-            // will reset the fields implicitly
+
+//      initializeDatasources();
 
         return 0L;
     }
