@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmview.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:14:10 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:00:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -228,6 +228,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         eStandardEditMode = pFrameView->GetViewShEditMode(PK_STANDARD);
         eNotesEditMode = pFrameView->GetViewShEditMode(PK_NOTES);
         eHandoutEditMode = pFrameView->GetViewShEditMode(PK_HANDOUT);
+        SetViewShEditModeOnLoad(pFrameView->GetViewShEditModeOnLoad());
         bLayerMode = pFrameView->IsLayerMode();
         bQuickEdit = pFrameView->IsQuickEdit();
 
@@ -242,6 +243,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         nDrawMode = pFrameView->GetDrawMode();
         nTabCtrlPercent = pFrameView->GetTabCtrlPercent();
         SetPreviousViewShellType (pFrameView->GetPreviousViewShellType());
+        SetViewShellTypeOnLoad (pFrameView->GetViewShellTypeOnLoad());
     }
     else
     {
@@ -264,6 +266,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         eStandardEditMode = EM_PAGE;
         eNotesEditMode = EM_PAGE;
         eHandoutEditMode = EM_MASTERPAGE;
+        SetViewShEditModeOnLoad(EM_PAGE);
         bLayerMode = FALSE;
         SetEliminatePolyPoints(FALSE);
 
@@ -273,6 +276,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         }
         nTabCtrlPercent = 0.0;
         SetPreviousViewShellType (ViewShell::ST_NONE);
+        SetViewShellTypeOnLoad (ViewShell::ST_IMPRESS);
 
         // get default for design mode
         sal_Bool bInitDesignMode = pDrawDoc->GetOpenInDesignMode();
@@ -682,6 +686,25 @@ EditMode FrameView::GetViewShEditMode(PageKind eKind)
     return (eMode);
 }
 
+
+
+
+void FrameView::SetViewShEditModeOnLoad (EditMode eMode)
+{
+    meEditModeOnLoad = eMode;
+}
+
+
+
+
+EditMode FrameView::GetViewShEditModeOnLoad (void) const
+{
+    return meEditModeOnLoad;
+}
+
+
+
+
 static OUString createHelpLinesString( const SdrHelpLineList& rHelpLines )
 {
     OUStringBuffer aLines;
@@ -928,6 +951,10 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
         sal_Int32 aSnapGridWidthYNum = GetSnapGridWidthY().GetNumerator();
         sal_Int32 aSnapGridWidthYDom = GetSnapGridWidthY().GetDenominator();
 
+        EditMode eStandardEditMode;
+        EditMode eNotesEditMode;
+        EditMode eHandoutEditMode;
+
         const com::sun::star::beans::PropertyValue *pValue = rSequence.getConstArray();
         for (sal_Int16 i = 0 ; i < nLength; i++, pValue++ )
         {
@@ -1066,21 +1093,30 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
             {
                 if( pValue->Value >>= nInt32 )
                 {
-                    SetViewShEditMode( (EditMode)nInt32, PK_STANDARD );
+                    SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
+                    if( pDoc && pDoc->GetDocSh() && ( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
+                        SetViewShEditMode( (EditMode)nInt32, PK_STANDARD );
+                    eStandardEditMode = (EditMode)nInt32;
                 }
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_EditModeNotes ) ) )
             {
                 if( pValue->Value >>= nInt32 )
                 {
-                    SetViewShEditMode( (EditMode)nInt32, PK_NOTES );
+                    SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
+                    if( pDoc && pDoc->GetDocSh() && ( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
+                        SetViewShEditMode( (EditMode)nInt32, PK_NOTES );
+                    eNotesEditMode = (EditMode)nInt32;
                 }
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_EditModeHandout ) ) )
             {
                 if( pValue->Value >>= nInt32 )
                 {
-                    SetViewShEditMode( (EditMode)nInt32, PK_HANDOUT );
+                    SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
+                    if( pDoc && pDoc->GetDocSh() && ( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
+                        SetViewShEditMode( (EditMode)nInt32, PK_HANDOUT );
+                    eHandoutEditMode = (EditMode)nInt32;
                 }
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_VisibleAreaTop ) ) )
@@ -1374,6 +1410,14 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
             }
         }
 
+        switch (GetPageKindOnLoad())
+        {
+            case PK_STANDARD: SetViewShEditModeOnLoad(eStandardEditMode); break;
+            case PK_NOTES: SetViewShEditModeOnLoad(eNotesEditMode); break;
+            case PK_HANDOUT: SetViewShEditModeOnLoad(eHandoutEditMode); break;
+            default: SetViewShEditModeOnLoad(EM_PAGE); break;
+        }
+
         const Fraction aSnapGridWidthX( aSnapGridWidthXNum, aSnapGridWidthXDom );
         const Fraction aSnapGridWidthY( aSnapGridWidthYNum, aSnapGridWidthYDom );
 
@@ -1396,6 +1440,23 @@ ViewShell::ShellType FrameView::GetPreviousViewShellType (void) const
 {
     return mePreviousViewShellType;
 }
+
+
+
+
+void FrameView::SetViewShellTypeOnLoad (ViewShell::ShellType eType)
+{
+    meViewShellTypeOnLoad = eType;
+}
+
+
+
+
+ViewShell::ShellType FrameView::GetViewShellTypeOnLoad (void) const
+{
+    return meViewShellTypeOnLoad;
+}
+
 
 
 
