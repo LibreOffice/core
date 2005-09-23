@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmrge.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:32:25 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:02:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 
 #define _MAIL_MERGE_STRING_ \
     Text [ de ] = "Seriendruck" ;\
-    Text [ en-US ] = "Mail Merge" ;
+    Text [ en-US ] = "Mail Merge" ; \
 
 ModalDialog DLG_MAILMERGE
 {
@@ -69,7 +69,7 @@ ModalDialog DLG_MAILMERGE
     {
         Pos = MAP_APPFONT ( 12 , 110 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text [ de ] = "Markierte ~Datensätze" ;
+        Text [ de ] = "Markierte ~DatensÃ¤tze" ;
         Text [ en-US ] = "~Selected records" ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -116,7 +116,7 @@ ModalDialog DLG_MAILMERGE
     {
         Pos = MAP_APPFONT ( 6 , 86 ) ;
         Size = MAP_APPFONT ( 126 , 8 ) ;
-        Text [ de ] = "Datensätze" ;
+        Text [ de ] = "DatensÃ¤tze" ;
         Text [ en-US ] = "Records" ;
         Text [ x-comment ] = " ";
     };
@@ -264,7 +264,7 @@ ModalDialog DLG_MAILMERGE
         Pos = MAP_APPFONT ( 144 , 140 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
         Disable = TRUE ;
-        Text [ de ] = "Anhänge" ;
+        Text [ de ] = "AnhÃ¤nge" ;
         Text [ en-US ] = "Attachments" ;
         Text [ x-comment ] = " ";
     };
@@ -448,7 +448,7 @@ ModalDialog DLG_MERGE_FIELD_CONNECTIONS
         Pos = MAP_APPFONT ( 6 , 41 ) ;
         Size = MAP_APPFONT ( 141 , 50 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "Serienbriefe benötigen für eine Personalisierung Felder. Felder sind in diesem Falle Platzhalter für Daten, die aus einer Datenquelle stammen, z.B. aus einer Datenbank. Die Felder in dem Serienbrief müssen mit der Datenquelle verbunden sein. " ;
+        Text [ de ] = "Serienbriefe benÃ¶tigen fÃ¼r eine Personalisierung Felder. Felder sind in diesem Falle Platzhalter fÃ¼r Daten, die aus einer Datenquelle stammen, z.B. aus einer Datenbank. Die Felder in dem Serienbrief mÃ¼ssen mit der Datenquelle verbunden sein. " ;
         Text [ en-US ] = "Fields are used to personalize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source." ;
     };
     OKButton BT_OK
