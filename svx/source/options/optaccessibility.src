@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optaccessibility.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:50:27 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:57:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Pos = MAP_APPFONT( COL1, ROWA_1 );
         Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
         WordBreak = TRUE;
-        Text [ de ] = "Unterstützung ~behindertengerechter Zugangsprogramme (Programmneustart erforderlich)" ;
+        Text [ de ] = "UnterstÃ¼tzung ~behindertengerechter Zugangsprogramme (Programmneustart erforderlich)" ;
         Text [ en-US ] = "Support ~assistive technology tools (program restart required)";
     };
     CheckBox CB_TEXTSELECTION
@@ -65,7 +65,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         TabStop = TRUE ;
         Pos = MAP_APPFONT( COL1, ROWA_2 );
         Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
-        Text [ de ] = "Te~xtauswahlcursor in schreibgeschützten Textdokumenten verwenden" ;
+        Text [ de ] = "Te~xtauswahlcursor in schreibgeschÃ¼tzten Textdokumenten verwenden" ;
         Text [ en-US ] = "Use te~xt selection cursor in read-only text documents";
     };
     CheckBox CB_ANIMATED_GRAPHICS
@@ -116,7 +116,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
     {
         Pos = MAP_APPFONT ( COL0, ROWB_0 ) ;
         Size = MAP_APPFONT ( GB_WIDTH , RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ de ] = "Optionen für die Kontrastdarstellung" ;
+        Text [ de ] = "Optionen fÃ¼r die Kontrastdarstellung" ;
         Text [ en-US ] = "Options for high contrast appearance";
     };
     CheckBox CB_AUTO_DETECT_HC
@@ -132,7 +132,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         TabStop = TRUE ;
         Pos = MAP_APPFONT( COL1, ROWB_2 );
         Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
-        Text [ de ] = "Automatische Schrift~farbe für Bildschirmdarstellung verwenden" ;
+        Text [ de ] = "Automatische Schrift~farbe fÃ¼r Bildschirmdarstellung verwenden" ;
         Text [ en-US ] = "Use automatic font ~color for screen display";
     };
     CheckBox CB_PAGE_PREVIEWS
@@ -140,7 +140,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         TabStop = TRUE ;
         Pos = MAP_APPFONT( COL1, ROWB_3 );
         Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
-        Text [ de ] = "Systemfarben für Seitenvorschau ~verwenden" ;
+        Text [ de ] = "Systemfarben fÃ¼r Seitenvorschau ~verwenden" ;
         Text [ en-US ] = "~Use system colors for page previews";
     };
 };
