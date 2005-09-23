@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AgendaTemplate.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:15:02 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:28:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,6 @@ import com.sun.star.util.XNumberFormatsSupplier;
 import com.sun.star.util.XNumberFormatter;
 import com.sun.star.util.XSearchDescriptor;
 import com.sun.star.util.XSearchable;
-import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.FileAccess;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
