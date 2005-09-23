@@ -4,9 +4,9 @@
  *
  *  $RCSfile: intercept.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:30:40 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:06:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,9 @@
 #include "intercept.hxx"
 #endif
 #include "dbastrings.hrc"
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 
 namespace dbaccess
@@ -129,6 +132,7 @@ void SAL_CALL OInterceptor::dispose()
 }
 
 
+DBG_NAME(OInterceptor)
 
 OInterceptor::OInterceptor( ODocumentDefinition* _pContentHolder,sal_Bool _bAllowEditDoc )
     : m_pContentHolder( _pContentHolder )
@@ -137,6 +141,8 @@ OInterceptor::OInterceptor( ODocumentDefinition* _pContentHolder,sal_Bool _bAllo
       ,m_aInterceptedURL(7)
       ,m_bAllowEditDoc(_bAllowEditDoc)
 {
+    DBG_CTOR(OInterceptor,NULL);
+
     OSL_ENSURE(DISPATCH_RELOAD < m_aInterceptedURL.getLength(),"Illegal size.");
 
     m_aInterceptedURL[DISPATCH_SAVEAS]      = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SaveAs"));
@@ -155,6 +161,8 @@ OInterceptor::~OInterceptor()
 
     if(m_pStatCL)
         delete m_pStatCL;
+
+    DBG_DTOR(OInterceptor,NULL);
 }
 
 
@@ -209,16 +217,19 @@ OInterceptor::dispatch(
                 || _URL.Complete == m_aInterceptedURL[DISPATCH_CLOSEFRAME]
                 )
         {
-            if ( m_pContentHolder->isModified() )
+            if ( m_pContentHolder->prepareClose() )
             {
-                if ( !m_pContentHolder->save(sal_True) )
-                    return;
-            }
+                Reference< XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(
+                    _URL, ::rtl::OUString::createFromAscii( "_self" ), 0 );
+                if ( xDispatch.is() )
+                {
+                    Reference< ::com::sun::star::document::XEventBroadcaster> xEvtB(m_pContentHolder->getComponent(),UNO_QUERY);
+                    if ( xEvtB.is() )
+                        xEvtB->removeEventListener(this);
 
-            Reference< XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(
-                _URL, ::rtl::OUString::createFromAscii( "_self" ), 0 );
-            if ( xDispatch.is() )
-                xDispatch->dispatch( _URL, Arguments );
+                    xDispatch->dispatch( _URL, Arguments );
+                }
+            }
         }
 }
 
