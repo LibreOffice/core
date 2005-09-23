@@ -4,9 +4,9 @@
  *
  *  $RCSfile: singledoccontroller.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:16:54 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:41:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -339,17 +339,10 @@ namespace dbaui
         m_aUndoManager.Clear();
 
         disconnect();
-        Reference<XDocumentDataSource> xDocumentDataSource(m_xDataSource,UNO_QUERY);
-        if ( xDocumentDataSource.is() )
-        {
-            Reference<XModel> xModel(xDocumentDataSource->getDatabaseDocument(),UNO_QUERY);
-            if ( xModel.is() )
-                xModel->disconnectController( this );
-        }
 
-        Reference < XFrame > xFrame;
-        attachFrame( xFrame );
+        m_aModelConnector.clear();
 
+        attachFrame( Reference < XFrame >() );
 
         m_xDataSource.clear();
     }
@@ -536,12 +529,18 @@ namespace dbaui
         return NULL;//Reference< XModel >(m_xDataSource,UNO_QUERY); // OJ: i31891
     }
     // -----------------------------------------------------------------------------
-    sal_Bool SAL_CALL OSingleDocumentController::attachModel(const Reference< XModel > & xModel) throw( RuntimeException )
+    sal_Bool SAL_CALL OSingleDocumentController::attachModel(const Reference< XModel > & _rxModel) throw( RuntimeException )
     {
-        ::osl::MutexGuard aGuard(m_aMutex);
-        Reference<XOfficeDatabaseDocument> xOfficeDoc(xModel,UNO_QUERY);
-        m_xDataSource.set(xOfficeDoc.is() ? xOfficeDoc->getDataSource() : Reference<XDataSource>(),UNO_QUERY);
-        return m_xDataSource.is();
+        ::osl::MutexGuard aGuard( m_aMutex );
+
+        Reference< XOfficeDatabaseDocument > xOfficeDoc( _rxModel, UNO_QUERY );
+        m_xDataSource.set( xOfficeDoc.is() ? xOfficeDoc->getDataSource() : Reference<XDataSource>(), UNO_QUERY );
+
+        m_aModelConnector.clear();
+        if ( m_xDataSource.is() )
+            m_aModelConnector = ModelControllerConnector( _rxModel, this );
+
+        return sal_True;
     }
     // -----------------------------------------------------------------------------
      ::rtl::OUString OSingleDocumentController::getDataSourceName() const
