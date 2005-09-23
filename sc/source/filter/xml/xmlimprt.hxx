@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:09:24 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:43:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -779,6 +779,7 @@ class ScXMLImport: public SvXMLImport
     rtl::OUString           sPrevStyleName;
     rtl::OUString           sPrevCurrency;
     sal_uInt32              nSolarMutexLocked;
+    sal_Int32               nProgressCount;
     sal_uInt16              nStyleFamilyMask;// Mask of styles to load
     sal_Int16               nPrevCellType;
     sal_Bool                bLoadDoc;   // Load doc or styles only
@@ -961,6 +962,9 @@ public:
         sal_Int32& rNumberFormat,
         const sal_Int16 nCellType,
         const rtl::OUString& rCurrency);
+
+    void ProgressBarIncrement(sal_Bool bEditCell, sal_Int32 nInc = 1);
+
 private:
     void AddStyleRange(const com::sun::star::table::CellRangeAddress& rCellRange);
     void SetStyleToRanges();
