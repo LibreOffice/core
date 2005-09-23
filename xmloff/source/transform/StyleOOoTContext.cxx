@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleOOoTContext.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:55:51 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 10:39:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1031,7 +1031,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
         }
 
         const OUString& rSize = GetXMLToken( XML_SIZE );
-        if( bMoveProtect && -1 == aProtectAttrValue.indexOf( rSize ) )
+        if( bSizeProtect && -1 == aProtectAttrValue.indexOf( rSize ) )
         {
             if( aProtectAttrValue.getLength() )
                 aProtectAttrValue += OUString::valueOf( sal_Unicode( ' ' ) );
