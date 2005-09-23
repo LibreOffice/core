@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:07:03 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:56:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,7 +214,7 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
     {
         Pos = MAP_APPFONT ( 6 , 98 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
-        Text [ de ] = "Geändert am:" ;
+        Text [ de ] = "GeÃ¤ndert am:" ;
         LeftLabel = TRUE ;
         Text [ en-US ] = "Modified:" ;
         Text [ x-comment ] = " ";
@@ -272,7 +272,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
     {
         Pos = MAP_APPFONT ( 184 , 24  ) ;
         Size = MAP_APPFONT ( 70 , 14 ) ;
-        Text [ de ] = "~Hinzufügen" ;
+        Text [ de ] = "~HinzufÃ¼gen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Add" ;
         Text [ x-comment ] = " ";
@@ -281,7 +281,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
     {
         Pos = MAP_APPFONT ( 184 , 42 ) ;
         Size = MAP_APPFONT ( 70 , 14 ) ;
-        Text [ de ] = "~Alle hinzufügen" ;
+        Text [ de ] = "~Alle hinzufÃ¼gen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "A~dd All" ;
         Text [ x-comment ] = " ";
@@ -425,7 +425,7 @@ ModalDialog RID_SVXDLG_GALLERY_TAKE_PROGRESS
     Border = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 124 , 56 ) ;
-    Text [ de ] = "Übernehmen" ;
+    Text [ de ] = "Ãœbernehmen" ;
     Text [ en-US ] = "Apply" ;
     Text [ x-comment ] = " ";
     Moveable = TRUE ;
@@ -546,7 +546,7 @@ String RID_SVXSTR_GALLERY_ACTUALIZE_PROGRESS
 };
 String RID_SVXSTR_GALLERY_FOPENERROR
 {
-    Text [ de ] = "Diese Datei kann nicht geöffnet werden" ;
+    Text [ de ] = "Diese Datei kann nicht geÃ¶ffnet werden" ;
     Text [ en-US ] = "This file cannot be opened" ;
     Text [ x-comment ] = " ";
 };
@@ -558,19 +558,19 @@ String RID_SVXSTR_GALLERY_NOFILES
 };
 String RID_SVXSTR_GALLERY_NOTHEME
 {
-    Text [ de ] = "Der Themenname ist ungültig!" ;
+    Text [ de ] = "Der Themenname ist ungÃ¼ltig!" ;
     Text [ en-US ] = "Invalid Theme Name!" ;
     Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERY_DELETEOBJ
 {
-    Text [ de ] = "Möchten Sie dieses Objekt\nwirklich löschen?" ;
+    Text [ de ] = "MÃ¶chten Sie dieses Objekt\nwirklich lÃ¶schen?" ;
     Text [ en-US ] = "Do you really want to\ndelete this object?" ;
     Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERY_DELETETHEME
 {
-    Text [ de ] = "Möchten Sie dieses Thema\nwirklich löschen?" ;
+    Text [ de ] = "MÃ¶chten Sie dieses Thema\nwirklich lÃ¶schen?" ;
     Text [ en-US ] = "Do you really want to\ndelete this theme?" ;
 };
 String RID_SVXSTR_EXTFORMAT1_SYS
@@ -610,31 +610,31 @@ String RID_SVXSTR_GALLERY_FILTER
 };
 String RID_SVXSTR_GALLERY_LENGTH
 {
-    Text [ de ] = "Länge:" ;
+    Text [ de ] = "LÃ¤nge:" ;
     Text [ en-US ] = "Length:" ;
     Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERY_SIZE
 {
-    Text [ de ] = "Größe:" ;
+    Text [ de ] = "GrÃ¶ÃŸe:" ;
     Text [ en-US ] = "Size:" ;
     Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERY_DELETEDD
 {
-    Text [ de ] = "Möchten Sie die verknüpfte Datei löschen?" ;
+    Text [ de ] = "MÃ¶chten Sie die verknÃ¼pfte Datei lÃ¶schen?" ;
     Text [ en-US ] = "Do you want to delete the linked file?" ;
     Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERY_SEARCH
 {
-    Text [ de ] = "Möchten Sie die Dateiliste aktualisieren?" ;
+    Text [ de ] = "MÃ¶chten Sie die Dateiliste aktualisieren?" ;
     Text [ en-US ] = "Do you want to update the file list?" ;
     Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERY_SGIERROR
 {
-    Text [ de ] = "Diese Datei kann nicht geöffnet werden.\nMöchten Sie einen anderen Suchpfad angeben? " ;
+    Text [ de ] = "Diese Datei kann nicht geÃ¶ffnet werden.\nMÃ¶chten Sie einen anderen Suchpfad angeben? " ;
     Text [ en-US ] = "This file cannot be opened.\nDo you want to enter a different search path? " ;
     Text [ x-comment ] = " ";
 };
@@ -652,7 +652,7 @@ String RID_SVXSTR_GALLERY_BROWSER
 };
 String RID_SVXSTR_GALLERY_THEMEERR
 {
-    Text [ de ] = "Dieser Themenname existiert bereits.\nBitte wählen Sie einen anderen Namen." ;
+    Text [ de ] = "Dieser Themenname existiert bereits.\nBitte wÃ¤hlen Sie einen anderen Namen." ;
     Text [ en-US ] = "This theme name already exists.\nPlease choose a different one." ;
     Text [ x-comment ] = " ";
 };
@@ -688,7 +688,7 @@ String RID_SVXSTR_GALLERY_CREATETHEME
 };
 String RID_SVXSTR_GALLERY_READONLY
 {
-    Text [ de ] = " (schreibgeschützt)" ;
+    Text [ de ] = " (schreibgeschÃ¼tzt)" ;
     Text [ en-US ] = " (read-only)" ;
     Text [ x-comment ] = " ";
 };
@@ -866,7 +866,7 @@ Menu RID_SVXMN_GALLERY1
         {
             Identifier = MN_DELETE ;
             HelpId = HID_GALLERY_MN_DELETE ;
-            Text [ de ] = "~Löschen" ;
+            Text [ de ] = "~LÃ¶schen" ;
             Text [ en-US ] = "~Delete" ;
             Text [ x-comment ] = " ";
         };
@@ -914,7 +914,7 @@ Menu RID_SVXMN_GALLERY2
         {
             Identifier = MN_ADDMENU ;
             HelpId = HID_GALLERY_MN_ADDMENU ;
-            Text [ de ] = "~Hinzufügen" ;
+            Text [ de ] = "~HinzufÃ¼gen" ;
             Text [ en-US ] = "~Insert" ;
             Text [ x-comment ] = " ";
             SubMenu = Menu
@@ -933,7 +933,7 @@ Menu RID_SVXMN_GALLERY2
                     {
                         Identifier = MN_ADD_LINK ;
                         HelpId = HID_GALLERY_MN_ADD_LINK ;
-                        Text [ de ] = "~Verknüpfung" ;
+                        Text [ de ] = "~VerknÃ¼pfung" ;
                         Text [ en-US ] = "Link" ;
                         Text [ x-comment ] = " ";
                     };
@@ -983,7 +983,7 @@ Menu RID_SVXMN_GALLERY2
         {
             Identifier = MN_DELETE ;
             HelpId = HID_GALLERY_MN_DELETE ;
-            Text [ de ] = "~Löschen" ;
+            Text [ de ] = "~LÃ¶schen" ;
             Text [ en-US ] = "~Delete" ;
             Text [ x-comment ] = " ";
         };
@@ -1002,7 +1002,7 @@ Menu RID_SVXMN_GALLERY2
         {
             Identifier = MN_PASTECLIPBOARD;
             HelpId = HID_GALLERY_MN_PASTECLIPBOARD;
-            Text [ de ] = "~Einfügen" ;
+            Text [ de ] = "~EinfÃ¼gen" ;
             Text [ en-US ] = "~Insert" ;
         };
     };
