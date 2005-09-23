@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbnamdlg.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:25:08 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:05:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Pos = MAP_APPFONT ( 12 , 153 ) ;
         Size = MAP_APPFONT ( 145 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "enthält ~Spaltenbeschriftungen" ;
+        Text [ de ] = "enthÃ¤lt ~Spaltenbeschriftungen" ;
         Text [ en-US ] = "Co~ntains column labels" ;
     };
     CheckBox BTN_SIZE
@@ -106,7 +106,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 12 , 167 ) ;
         Size = MAP_APPFONT ( 145 , 10 ) ;
-        Text [ de ] = "Zellen ~einfügen/löschen" ;
+        Text [ de ] = "Zellen ~einfÃ¼gen/lÃ¶schen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Insert or delete ~cells" ;
         Text [ x-comment ] = " ";
@@ -165,7 +165,7 @@ ModelessDialog RID_SCDLG_DBNAMES
     {
         Pos = MAP_APPFONT ( 166 , 74 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Hin~zufügen" ;
+        Text [ de ] = "Hin~zufÃ¼gen" ;
         Text [ en-US ] = "~Add" ;
         TabStop = TRUE ;
         DefButton = TRUE ;
@@ -175,7 +175,7 @@ ModelessDialog RID_SCDLG_DBNAMES
     {
         Pos = MAP_APPFONT ( 166 , 92 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Löschen" ;
+        Text [ de ] = "~LÃ¶schen" ;
         Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -196,19 +196,19 @@ ModelessDialog RID_SCDLG_DBNAMES
     };
     String STR_ADD
     {
-        Text [ de ] = "Hinzu~fügen" ;
+        Text [ de ] = "Hinzu~fÃ¼gen" ;
         Text [ en-US ] = "~Add" ;
         Text [ x-comment ] = " ";
     };
     String STR_MODIFY
     {
-        Text [ de ] = "~Ändern" ;
+        Text [ de ] = "~Ã„ndern" ;
         Text [ en-US ] = "M~odify" ;
         Text [ x-comment ] = " ";
     };
     String STR_DB_INVALID
     {
-        Text [ de ] = "Ungültiger Bereich" ;
+        Text [ de ] = "UngÃ¼ltiger Bereich" ;
         Text [ en-US ] = "Invalid range" ;
         Text [ x-comment ] = " ";
     };
