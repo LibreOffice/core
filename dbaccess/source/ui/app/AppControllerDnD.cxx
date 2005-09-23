@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppControllerDnD.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:19:23 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:14:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -592,7 +592,7 @@ void OApplicationController::getElements(ElementType _eType,::std::vector< ::rtl
 // -----------------------------------------------------------------------------
 void OApplicationController::impl_initialize( const Sequence< Any >& aArguments )
 {
-    sal_Bool bInteractive = sal_False;
+#if OSL_DEBUG_LEVEL > 0
     const Any* pIter = aArguments.getConstArray();
     const Any* pEnd   = pIter + aArguments.getLength();
     PropertyValue aProp;
@@ -600,60 +600,14 @@ void OApplicationController::impl_initialize( const Sequence< Any >& aArguments 
     {
         if ( (*pIter >>= aProp) && aProp.Name == URL_INTERACTIVE )
         {
-            aProp.Value >>= bInteractive;
+            DBG_ERROR( "OApplicationController::impl_initialize: who's still using the 'Interactive' flag?" );
             break;
         }
     }
+#endif
 
     Reference<XModifiable> xModi(m_xModel,UNO_QUERY);
     m_bCurrentlyModified = (xModi.is() && xModi->isModified());
-    sal_Bool bNew = sal_False;
-    if ( bInteractive && m_xModel.is() && !m_xModel->getURL().getLength() && getView() )
-    {
-        WinBits nBits(WB_STDMODAL|WB_SAVEAS);
-        ::sfx2::FileDialogHelper aFileDlg( ::sfx2::FILESAVE_AUTOEXTENSION,static_cast<sal_uInt32>(nBits) ,getView());
-        aFileDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
-
-        const SfxFilter* pFilter = getStandardDatabaseFilter();
-        if ( pFilter )
-        {
-            aFileDlg.AddFilter(pFilter->GetUIName(),pFilter->GetDefaultExtension());
-            aFileDlg.SetCurrentFilter(pFilter->GetUIName());
-        }
-
-        Reference< XNameAccess > xDatabaseContext(getORB()->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
-        if ( xDatabaseContext.is() )
-        {
-            if ( aFileDlg.Execute() == ERRCODE_NONE )
-            {
-                INetURLObject aURL( aFileDlg.GetPath() );
-                if( aURL.GetProtocol() != INET_PROT_NOT_VALID )
-                {
-                    ::rtl::OUString sFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
-                    if ( ::utl::UCBContentHelper::IsDocument(sFileName) )
-                        ::utl::UCBContentHelper::Kill(sFileName);
-                    try
-                    {
-                        Sequence< PropertyValue > aArgs;
-                        m_xModel->attachResource(sFileName,aArgs);
-                        attachModel(m_xModel);
-                        Reference<XStorable> xStr(m_xModel,UNO_QUERY);
-                        if ( xStr.is() )
-                            xStr->store();
-
-                        Execute(SID_DB_APP_DSCONNECTION_TYPE,Sequence<PropertyValue>());
-                        getContainer()->disableControls(isDataSourceReadOnly());
-                    }
-                    catch(Exception)
-                    {
-                    }
-                }
-            }
-            else
-                throw Exception();
-        }
-
-    }
 }
 // -----------------------------------------------------------------------------
 void OApplicationController::getSelectionElementNames(::std::vector< ::rtl::OUString>& _rNames)
@@ -745,18 +699,19 @@ TransferableHelper* OApplicationController::copyObject()
                     xMetaData = xConnection->getMetaData();
 
                 ::rtl::OUString sName = getContainer()->getQualifiedName(NULL,xMetaData);
-                OSL_ENSURE(sName.getLength(),"NO name given!");
-                ::rtl::OUString sDataSource = getDatabaseName();
-
-                if ( eType == E_TABLE )
+                if ( sName.getLength() )
                 {
-                    pData = new ODataClipboard(sDataSource, CommandType::TABLE, sName, xConnection, getNumberFormatter(xConnection,getORB()), getORB());
-                }
-                else
-                {
-                    pData = new ODataClipboard(sDataSource, CommandType::QUERY, sName, getNumberFormatter(xConnection,getORB()), getORB());
-                }
+                    ::rtl::OUString sDataSource = getDatabaseName();
 
+                    if ( eType == E_TABLE )
+                    {
+                        pData = new ODataClipboard(sDataSource, CommandType::TABLE, sName, xConnection, getNumberFormatter(xConnection,getORB()), getORB());
+                    }
+                    else
+                    {
+                        pData = new ODataClipboard(sDataSource, CommandType::QUERY, sName, getNumberFormatter(xConnection,getORB()), getORB());
+                    }
+                }
             }
                 break;
             case E_FORM:
@@ -765,7 +720,7 @@ TransferableHelper* OApplicationController::copyObject()
                 ::std::vector< ::rtl::OUString> aList;
                 getSelectionElementNames(aList);
                 Reference< XHierarchicalNameAccess > xElements(getElements(eType),UNO_QUERY);
-                if ( xElements.is() )
+                if ( xElements.is() && !aList.empty() )
                 {
                     Reference< XContent> xContent(xElements->getByHierarchicalName(*aList.begin()),UNO_QUERY);
                     pData = new OComponentTransferable(m_sDatabaseName,xContent);
@@ -792,7 +747,6 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
 {
     try
     {
-        ::rtl::OUString sDataSourceName = _rPasteData.getDataSource();
         if ( _eType == E_QUERY )
         {
             sal_Int32 nCommandType = CommandType::TABLE;
@@ -812,6 +766,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
 
                 // plausibility check
                 sal_Bool bValidDescriptor = sal_False;
+                ::rtl::OUString sDataSourceName = _rPasteData.getDataSource();
                 if (CommandType::QUERY == nCommandType)
                     bValidDescriptor = sDataSourceName.getLength() && sCommand.getLength();
                 else if (CommandType::COMMAND == nCommandType)
@@ -922,7 +877,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                 OSL_TRACE("There should be a sequence in it!");
             return sal_True;
         }
-        else // forms or reports
+        else if ( _rPasteData.has(daComponent) ) // forms or reports
         {
             Reference<XContent> xContent;
             _rPasteData[daComponent] >>= xContent;
@@ -981,7 +936,10 @@ sal_Bool OApplicationController::copyTagTable(OTableCopyHelper::DropDescriptor& 
     if ( !xDestConnection.is() )
         return sal_False;
 
-    return m_aTableCopyHelper.copyTagTable(_rDesc, _bCheck,xDestConnection);
+    SharedConnection xConnection( xDestConnection, SharedConnection::NoTakeOwnership );
+    // TODO: migrate ensureConnection to the SharedConnection-API
+
+    return m_aTableCopyHelper.copyTagTable( _rDesc, _bCheck, xConnection );
 }
 // -----------------------------------------------------------------------------
 IMPL_LINK( OApplicationController, OnAsyncDrop, void*, NOTINTERESTEDIN )
@@ -995,8 +953,12 @@ IMPL_LINK( OApplicationController, OnAsyncDrop, void*, NOTINTERESTEDIN )
     {
         Reference<XConnection> xDestConnection;  // supports the service sdb::connection
         ensureConnection( xDestConnection);
+
+        SharedConnection xConnection( xDestConnection, SharedConnection::NoTakeOwnership );
+        // TODO: migrate ensureConnection to the SharedConnection-API
+
         if ( xDestConnection.is() )
-            m_aTableCopyHelper.asyncCopyTagTable(m_aAsyncDrop,getDatabaseName(),xDestConnection);
+            m_aTableCopyHelper.asyncCopyTagTable( m_aAsyncDrop, getDatabaseName(), xConnection );
     }
     else
     {
