@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:30:27 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:21:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1851,10 +1851,10 @@ IMPL_LINK(SbaGridControl, AsynchDropEvent, void*, EMPTY_ARG)
         Reference< XResultSetUpdate > xResultSetUpdate(xDataSource,UNO_QUERY);
         ODatabaseImportExport* pImExport = new ORowSetImportExport(this,xResultSetUpdate,m_aDataDescriptor,getServiceManager());
         Reference<XEventListener> xHolder = pImExport;
-        pImExport->initialize(m_aDataDescriptor);
         Hide();
         try
         {
+            pImExport->initialize(m_aDataDescriptor);
             BeforeDrop();
             if(!pImExport->Read())
             {
