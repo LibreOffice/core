@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scerrors.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:33:13 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:09:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@ Resource RID_ERRHDLSC
     String SCERR_IMPORT_OPEN & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Die Datei konnte nicht geöffnet werden. : Die Datei konnte nicht ge÷ffnet werden. */
-        Text [ de ] = "Die Datei konnte nicht geöffnet werden." ;
+        Text [ de ] = "Die Datei konnte nicht geÃ¶ffnet werden." ;
         Text [ en-US ] = "File could not be opened." ;
         Text [ x-comment ] = " ";
     };
@@ -81,14 +81,14 @@ Resource RID_ERRHDLSC
     String SCERR_IMPORT_NI & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Für diesen Dateityp ist kein Filter implementiert. : F³r diesen Dateityp ist kein Filter implementiert. */
-        Text [ de ] = "Für diesen Dateityp ist kein Filter implementiert." ;
+        Text [ de ] = "FÃ¼r diesen Dateityp ist kein Filter implementiert." ;
         Text [ en-US ] = "There is no filter available for this file type." ;
         Text [ x-comment ] = " ";
     };
     String SCERR_IMPORT_UNKNOWN_BIFF & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Nicht unterstütztes oder unbekanntes Excel-Dateiformat. : Nicht unterst³tztes oder unbekanntes Excel-Dateiformat. */
-        Text [ de ] = "Nicht unterstütztes oder unbekanntes Excel-Dateiformat." ;
+        Text [ de ] = "Nicht unterstÃ¼tztes oder unbekanntes Excel-Dateiformat." ;
         Text [ en-US ] = "Unknown or unsupported Excel file format." ;
         Text [ x-comment ] = " ";
     };
@@ -101,7 +101,7 @@ Resource RID_ERRHDLSC
     String SCERR_IMPORT_FILEPASSWD & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Die Datei ist durch ein Kennwort geschützt. : Die Datei ist durch ein Kennwort gesch³tzt. */
-        Text [ de ] = "Die Datei ist durch ein Kennwort geschützt." ;
+        Text [ de ] = "Die Datei ist durch ein Kennwort geschÃ¼tzt." ;
         Text [ en-US ] = "This file is password-protected." ;
         Text [ x-comment ] = " ";
     };
@@ -114,7 +114,7 @@ Resource RID_ERRHDLSC
     String SCERR_IMPORT_8K_LIMIT & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Die Datei enthält Daten unterhalb von Zeile 8192 und kann daher nicht gelesen werden. : Die Datei enthõlt Daten unterhalb von Zeile 8192 und kann daher nicht gelesen werden. */
-        Text [ de ] = "Die Datei enthält Daten unterhalb von Zeile 8192 und kann daher nicht gelesen werden." ;
+        Text [ de ] = "Die Datei enthÃ¤lt Daten unterhalb von Zeile 8192 und kann daher nicht gelesen werden." ;
         Text [ en-US ] = "The file contains data after row 8192 and therefore can not be read." ;
         Text [ x-comment ] = " ";
     };
@@ -156,57 +156,57 @@ Resource RID_ERRHDLSC
     String SCWARN_IMPORT_RANGE_OVERFLOW & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Die Maximalanzahl von Zeilen wurde überschritten. Überzählige Zeilen wurden nicht mitimportiert! : Die Maximalanzahl von Zeilen wurde ³berschritten. šberzõhlige Zeilen wurden nicht mitimportiert! */
-        Text [ de ] = "Die Maximalanzahl von Zeilen wurde überschritten. Überzählige Zeilen wurden nicht mitimportiert!" ;
+        Text [ de ] = "Die Maximalanzahl von Zeilen wurde Ã¼berschritten. ÃœberzÃ¤hlige Zeilen wurden nicht mitimportiert!" ;
         Text [ en-US ] = "The maximum number of rows has been exceeded. Excess rows were not imported!" ;
         Text [ x-comment ] = " ";
     };
     String SCWARN_IMPORT_ROW_OVERFLOW & ERRCODE_RES_MASK
     {
-        Text [ de ] = "Die Daten konnten nicht vollständig geladen werden, da die maximale Anzahl von Tabellenzeilen überschritten wurde." ;
+        Text [ de ] = "Die Daten konnten nicht vollstÃ¤ndig geladen werden, da die maximale Anzahl von Tabellenzeilen Ã¼berschritten wurde." ;
         Text [ en-US ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded." ;
     };
     String SCWARN_IMPORT_COLUMN_OVERFLOW & ERRCODE_RES_MASK
     {
-        Text [ de ] = "Die Daten konnten nicht vollständig geladen werden, da die maximale Anzahl von Tabellenspalten überschritten wurde." ;
+        Text [ de ] = "Die Daten konnten nicht vollstÃ¤ndig geladen werden, da die maximale Anzahl von Tabellenspalten Ã¼berschritten wurde." ;
         Text [ en-US ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded." ;
     };
     String SCWARN_IMPORT_SHEET_OVERFLOW & ERRCODE_RES_MASK
     {
-        Text [ de ] = "Einige Tabellen konnten nicht geladen werden, da die maximale Anzahl von Tabellen überschritten wurde." ;
+        Text [ de ] = "Einige Tabellen konnten nicht geladen werden, da die maximale Anzahl von Tabellen Ã¼berschritten wurde." ;
         Text [ en-US ] = "Some sheets could not be loaded because the maximum number of sheets was exceeded." ;
     };
     String SCWARN_IMPORT_OPEN_FM3 & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Zugehörige FM3-Datei konnte nicht geöffnet werden. : Zugeh÷rige FM3-Datei konnte nicht ge÷ffnet werden. */
-        Text [ de ] = "Zugehörige FM3-Datei konnte nicht geöffnet werden." ;
+        Text [ de ] = "ZugehÃ¶rige FM3-Datei konnte nicht geÃ¶ffnet werden." ;
         Text [ en-US ] = "Corresponding FM3-File could not be opened." ;
         Text [ x-comment ] = " ";
     };
     String SCWARN_IMPORT_WRONG_FM3 & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Fehler in Dateistruktur der zugehörigen FM3-Datei. : Fehler in Dateistruktur der zugeh÷rigen FM3-Datei. */
-        Text [ de ] = "Fehler in Dateistruktur der zugehörigen FM3-Datei." ;
+        Text [ de ] = "Fehler in Dateistruktur der zugehÃ¶rigen FM3-Datei." ;
         Text [ en-US ] = "Error in file structure of corresponding FM3-File." ;
         Text [ x-comment ] = " ";
     };
     String SCWARN_CORE_HARD_RECALC & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Dokument zu komplex für automatische Berechnung. Neuberechnung mit F9. : Dokument zu komplex f³r automatische Berechnung. Neuberechnung mit F9. */
-        Text [ de ] = "Dokument zu komplex für automatische Berechnung. Neuberechnung mit F9." ;
+        Text [ de ] = "Dokument zu komplex fÃ¼r automatische Berechnung. Neuberechnung mit F9." ;
         Text [ en-US ] = "Document too complex for automatic calculation. Press F9 to recalculate." ;
         Text [ x-comment ] = " ";
     };
     String SCWARN_EXPORT_MAXROW & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Das Dokument enthält mehr Zeilen, als das Ausgabeformat unterstützt.\nÜberzählige Zeilen wurden nicht gespeichert. : Das Dokument enthõlt mehr Zeilen, als das Ausgabeformat unterst³tzt.\nšberzõhlige Zeilen wurden nicht gespeichert. */
-        Text [ de ] = "Das Dokument enthält mehr Zeilen, als das Ausgabeformat unterstützt.\nÜberzählige Zeilen wurden nicht gespeichert." ;
+        Text [ de ] = "Das Dokument enthÃ¤lt mehr Zeilen, als das Ausgabeformat unterstÃ¼tzt.\nÃœberzÃ¤hlige Zeilen wurden nicht gespeichert." ;
         Text [ en-US ] = "The document contains more rows than supported in the selected format.\nAdditional rows were not saved." ;
         Text [ x-comment ] = " ";
     };
     String SCWARN_IMPORT_INFOLOST & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Das Dokument enthält Informationen, die dieser Programmversion unbekannt sind.\nBei erneutem Speichern gehen diese Informationen verloren! : Das Dokument enthõlt Informationen, die dieser Programmversion unbekannt sind.\nBei erneutem Speichern gehen diese Informationen verloren! */
-        Text [ de ] = "Das Dokument enthält Informationen, die dieser Programmversion unbekannt sind.\nBei erneutem Speichern gehen diese Informationen verloren!" ;
+        Text [ de ] = "Das Dokument enthÃ¤lt Informationen, die dieser Programmversion unbekannt sind.\nBei erneutem Speichern gehen diese Informationen verloren!" ;
         Text [ en-US ] = "The document contains information not recognized by this program version.\nResaving the document will delete this information!" ;
         Text [ x-comment ] = " ";
     };
@@ -218,7 +218,7 @@ Resource RID_ERRHDLSC
     };
     String SCWARN_EXPORT_NONCONVERTIBLE_CHARS & ERRCODE_RES_MASK
     {
-        Text [ de ] = "Die folgenden Zeichen konnten nicht in den gewählten Zeichensatz konvertiert werden\nund wurden in &#1234; Ersatzdarstellung geschrieben:\n\n$(ARG1)";
+        Text [ de ] = "Die folgenden Zeichen konnten nicht in den gewÃ¤hlten Zeichensatz konvertiert werden\nund wurden in &#1234; Ersatzdarstellung geschrieben:\n\n$(ARG1)";
         Text [ en-US ] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
     };
     String SCWARN_IMPORT_FILE_ROWCOL & ERRCODE_RES_MASK
