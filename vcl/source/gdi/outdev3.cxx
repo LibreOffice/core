@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.204 $
+ *  $Revision: 1.205 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:06:26 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:28:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -6312,34 +6312,10 @@ xub_StrLen OutputDevice::GetTextBreak( const String& rStr, long nTextWidth,
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::DrawText( const Rectangle& rRect,
-                             const String& rOrigStr, USHORT nStyle,
-                             MetricVector* pVector, String* pDisplayText )
-
+void OutputDevice::ImplDrawText( const Rectangle& rRect,
+                                 const String& rOrigStr, USHORT nStyle,
+                                 MetricVector* pVector, String* pDisplayText )
 {
-    if( mpOutDevData && mpOutDevData->mpRecordLayout )
-    {
-        pVector = &mpOutDevData->mpRecordLayout->m_aUnicodeBoundRects;
-        pDisplayText = &mpOutDevData->mpRecordLayout->m_aDisplayText;
-    }
-
-    DBG_TRACE( "OutputDevice::DrawText( const Rectangle& )" );
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-
-    if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaTextRectAction( rRect, rOrigStr, nStyle ) );
-
-    if ( ( !IsDeviceOutputNecessary() && ! pVector ) || !rOrigStr.Len() || rRect.IsEmpty() )
-        return;
-
-    // we need a graphics
-    if( !mpGraphics && !ImplGetGraphics() )
-        return;
-    if( mbInitClipRegion )
-        ImplInitClipRegion();
-    if( mbOutputClipped )
-        return;
-
     Color aOldTextColor;
     Color aOldTextFillColor;
     BOOL  bRestoreFillColor = false;
@@ -6601,6 +6577,85 @@ void OutputDevice::DrawText( const Rectangle& rRect,
         if ( bRestoreFillColor )
             SetTextFillColor( aOldTextFillColor );
     }
+}
+
+// -----------------------------------------------------------------------
+
+void OutputDevice::AddTextRectActions( const Rectangle& rRect,
+                                       const String&    rOrigStr,
+                                       USHORT           nStyle,
+                                       GDIMetaFile&     rMtf )
+{
+    DBG_TRACE( "OutputDevice::AddTextRectActions( const Rectangle& )" );
+    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
+
+    if ( !rOrigStr.Len() || rRect.IsEmpty() )
+        return;
+
+    // we need a graphics
+    if( !mpGraphics && !ImplGetGraphics() )
+        return;
+    if( mbInitClipRegion )
+        ImplInitClipRegion();
+
+    // temporarily swap in passed mtf for action generation, and
+    // disable output generation.
+    const BOOL bOutputEnabled( IsOutputEnabled() );
+    GDIMetaFile* pMtf = mpMetaFile;
+
+    mpMetaFile = &rMtf;
+    EnableOutput( FALSE );
+
+    // #i47157# Factored out to ImplDrawTextRect(), to be shared
+    // between us and DrawText()
+    ImplDrawText( rRect, rOrigStr, nStyle, NULL, NULL );
+
+    // and restore again
+    EnableOutput( bOutputEnabled );
+    mpMetaFile = pMtf;
+}
+
+// -----------------------------------------------------------------------
+
+void OutputDevice::DrawText( const Rectangle& rRect,
+                             const String& rOrigStr, USHORT nStyle,
+                             MetricVector* pVector, String* pDisplayText )
+
+{
+    if( mpOutDevData && mpOutDevData->mpRecordLayout )
+    {
+        pVector = &mpOutDevData->mpRecordLayout->m_aUnicodeBoundRects;
+        pDisplayText = &mpOutDevData->mpRecordLayout->m_aDisplayText;
+    }
+
+    DBG_TRACE( "OutputDevice::DrawText( const Rectangle& )" );
+    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
+
+    if ( mpMetaFile )
+        mpMetaFile->AddAction( new MetaTextRectAction( rRect, rOrigStr, nStyle ) );
+
+    if ( ( !IsDeviceOutputNecessary() && ! pVector ) || !rOrigStr.Len() || rRect.IsEmpty() )
+        return;
+
+    // we need a graphics
+    if( !mpGraphics && !ImplGetGraphics() )
+        return;
+    if( mbInitClipRegion )
+        ImplInitClipRegion();
+    if( mbOutputClipped )
+        return;
+
+    // temporarily disable mtf action generation (ImplDrawText _does_
+    // create META_TEXT_ACTIONs otherwise)
+    GDIMetaFile* pMtf = mpMetaFile;
+    mpMetaFile = NULL;
+
+    // #i47157# Factored out to ImplDrawTextRect(), to be used also
+    // from AddTextRectActions()
+    ImplDrawText( rRect, rOrigStr, nStyle, pVector, pDisplayText );
+
+    // and enable again
+    mpMetaFile = pMtf;
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawText( rRect, rOrigStr, nStyle, pVector, pDisplayText );
