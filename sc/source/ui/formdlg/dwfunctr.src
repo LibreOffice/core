@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dwfunctr.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:01:40 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:01:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,7 +157,7 @@ DockingWindow FID_FUNCTION_BOX
             MaskColor = STD_MASKCOLOR;
         };
         DefButton = TRUE ;
-        QuickHelpText [ de ] = "Funktion in Rechenblatt einfügen" ;
+        QuickHelpText [ de ] = "Funktion in Rechenblatt einfÃ¼gen" ;
         QuickHelpText [ en-US ] = "Insert Function into calculation sheet" ;
         QuickHelpText [ x-comment ] = " ";
     };
