@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSlotManager.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:02:01 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:29:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,15 +151,6 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
                     mrController,
                     rRequest));
             rShell.Cancel();
-            break;
-
-        case SID_ATTR_ZOOM:
-        case SID_ZOOM_OUT:
-        case SID_SIZE_REAL:
-        case SID_ZOOM_IN:
-        case SID_SIZE_ALL:
-        case SID_SIZE_PAGE:
-            HandleSizeSlots (rRequest);
             break;
 
         case SID_PAGES_PER_ROW:
@@ -391,11 +382,6 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
             rRequest.Done();
             break;
 
-        case SID_ZOOM_PREV:
-        case SID_ZOOM_NEXT:
-            HandleSizeSlots (rRequest);
-            break;
-
         case SID_UNDO :
             rShell.ImpSidUndo (FALSE, rRequest);
             break;
@@ -589,35 +575,11 @@ void SlotManager::GetMenuState ( SfxItemSet& rSet)
 
     // Vorlagenkatalog darf nicht aufgerufen werden
     rSet.DisableItem(SID_STYLE_CATALOG);
-    //  rSet.DisableItem(SID_SIZE_ALL);
+
     if (rShell.IsMainViewShell())
     {
         rSet.DisableItem(SID_SPELL_DIALOG);
         rSet.DisableItem(SID_SEARCH_DLG);
-    }
-
-    if ( ! rShell.GetZoomList()->IsNextPossible())
-    {
-        rSet.DisableItem(SID_ZOOM_NEXT);
-    }
-    if ( ! rShell.GetZoomList()->IsPreviousPossible())
-    {
-        rSet.DisableItem(SID_ZOOM_PREV);
-    }
-
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ZOOM_IN ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ZOOM_OUT ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_SIZE_REAL ) )
-    {
-        BOOL bUIActive = pDocShell->IsUIActive();
-
-        ::sd::Window* pWindow = rShell.GetActiveWindow();
-        if( pWindow->GetZoom() <= pWindow->GetMinZoom() || bUIActive )
-            rSet.DisableItem( SID_ZOOM_IN );
-        if( pWindow->GetZoom() >= pWindow->GetMaxZoom() || bUIActive )
-            rSet.DisableItem( SID_ZOOM_OUT );
-        if( 100 >= pWindow->GetMaxZoom() || bUIActive )
-            rSet.DisableItem( SID_SIZE_REAL );
     }
 
     if (SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_EXPAND_PAGE))
@@ -792,25 +754,6 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
 {
     SlideSorterViewShell& rShell (mrController.GetViewShell());
 
-    // Zoom-Item
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ATTR_ZOOM ) )
-    {
-        SvxZoomItem* pZoomItem;
-        UINT16 nZoom = (UINT16) rShell.GetActiveWindow()->GetZoom();
-
-        pZoomItem = new SvxZoomItem( SVX_ZOOM_PERCENT, nZoom );
-
-        // Bereich einschraenken
-        USHORT nZoomValues = SVX_ZOOM_ENABLE_ALL;
-        nZoomValues &= ~SVX_ZOOM_ENABLE_OPTIMAL;
-        nZoomValues &= ~SVX_ZOOM_ENABLE_PAGEWIDTH;
-        nZoomValues &= ~(SVX_ZOOM_ENABLE_100|SVX_ZOOM_ENABLE_150|SVX_ZOOM_ENABLE_200);
-
-        pZoomItem->SetValueSet( nZoomValues );
-        rSet.Put( *pZoomItem );
-        delete pZoomItem;
-    }
-
     // Seitenanzeige und Layout
     /*
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_STATUS_PAGE ) ||
@@ -846,195 +789,6 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
 
     rSet.Put( SfxStringItem( SID_STATUS_PAGE, aPageStr ) );
     rSet.Put( SfxStringItem( SID_STATUS_LAYOUT, aLayoutStr ) );
-}
-
-
-
-
-void SlotManager::HandleSizeSlots (SfxRequest& rRequest)
-{
-    SlideSorterViewShell& rShell (mrController.GetViewShell());
-    bool bRequestRepaint = true;
-    ::sd::Window* pWindow = mrController.GetView().GetWindow();
-
-    switch (rRequest.GetSlot())
-    {
-        case SID_ATTR_ZOOM:
-        {
-            const SfxItemSet* pArgs = rRequest.GetArgs();
-
-            if (pArgs != NULL)
-            {
-                SvxZoomType aZoomType = static_cast<const SvxZoomItem&>(
-                    pArgs->Get(SID_ATTR_ZOOM)).GetType();
-                switch (aZoomType)
-                {
-                    case SVX_ZOOM_PERCENT:
-                        rShell.SetZoom (
-                            (long)static_cast<const SvxZoomItem&> (
-                                pArgs->Get(SID_ATTR_ZOOM)).GetValue());
-                        break;
-
-                    case SVX_ZOOM_WHOLEPAGE:
-                        rShell.GetViewFrame()->GetDispatcher()->Execute(
-                            SID_SIZE_PAGE,
-                            SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
-                        break;
-                }
-                rShell.Invalidate (SID_ATTR_ZOOM);
-                rRequest.Done();
-            }
-            else
-            {
-                rShell.SetCurrentFunction (
-                    new FuScale (
-                        &rShell,
-                        pWindow,
-                        &mrController.GetView(),
-                        mrController.GetModel().GetDocument(),
-                        rRequest));
-            }
-            rShell.Cancel();
-        }
-        break;
-
-        case SID_ZOOM_OUT:
-            rShell.SetCurrentFunction (
-                new FuZoom (
-                    &rShell,
-                    pWindow,
-                    &mrController.GetView(),
-                    mrController.GetModel().GetDocument(),
-                    rRequest));
-            rRequest.Done();
-            break;
-
-        case SID_ZOOM_IN:
-            rShell.SetZoom( Max(
-                (long) ( pWindow->GetZoom() / 2 ),
-                (long) pWindow->GetMinZoom() ) );
-            rShell.GetZoomList()->InsertZoomRect(
-                pWindow->PixelToLogic(
-                    Rectangle(
-                        Point(0,0),
-                        pWindow->GetOutputSizePixel())));
-            rShell.Invalidate (SID_ATTR_ZOOM);
-            rShell.Invalidate (SID_ZOOM_OUT);
-            rShell.Invalidate (SID_ZOOM_IN);
-            rShell.Invalidate (SID_SIZE_REAL);
-            rShell.Cancel();
-            rRequest.Done();
-            break;
-
-        case SID_SIZE_REAL:
-            rShell.SetZoom (100);
-            rShell.GetZoomList()->InsertZoomRect (
-                pWindow->PixelToLogic(
-                    Rectangle(
-                        Point(0,0),
-                        pWindow->GetOutputSizePixel())));
-            rShell.Invalidate (SID_ATTR_ZOOM);
-            rShell.Invalidate (SID_ZOOM_OUT);
-            rShell.Invalidate (SID_ZOOM_IN);
-            rShell.Invalidate (SID_SIZE_REAL);
-
-            rShell.Cancel();
-            rRequest.Done();
-            break;
-
-        case SID_SIZE_ALL:
-        case SID_SIZE_PAGE:
-        {
-            // The zoom is set so that
-            // a) for SID_SIZE_PAGE the first page is fully visible and as
-            // large as possible,
-            // b) for SID_SIZE_ALL and non-empty selection that all selected
-            // pages are visible,
-            // c) for SID_SIZE_ALL and empty selection that all pages are
-            // visible.
-            Rectangle aZoomRect;
-            int nPageCount = mrController.GetModel().GetPageCount();
-
-            if (nPageCount > 0)
-            {
-                // a) Use the bounding box of the first page.
-                if (rRequest.GetSlot() == SID_SIZE_PAGE)
-                    aZoomRect = mrController.GetView().GetPageBoundingBox(
-                        0,
-                        view::SlideSorterView::CS_MODEL,
-                        view::SlideSorterView::BBT_INFO);
-                else
-                {
-                    // b) and c) use the enumeration of the selected pages,
-                    // or if that is empty, the enumeration of all pages to
-                    // create the union of their bounding boxes.
-                    model::SlideSorterModel::Enumeration aPages (
-                        mrController.GetModel().GetSelectedPagesEnumeration());
-                    if ( ! aPages.HasMoreElements())
-                        aPages =
-                            mrController.GetModel().GetAllPagesEnumeration();
-                    while (aPages.HasMoreElements())
-                    {
-                        aZoomRect.Union (
-                            mrController.GetView().GetPageBoundingBox(
-                                aPages.GetNextElement(),
-                                view::SlideSorterView::CS_MODEL,
-                                view::SlideSorterView::BBT_INFO));
-                    }
-                }
-            }
-
-            // Add some extra space at the borders and set the new zoom
-            // rectangle.
-            if ( ! aZoomRect.IsEmpty())
-            {
-                Point aPagePosition (aZoomRect.Center());
-                Size aPageSize (aZoomRect.GetSize());
-                aPageSize.Width()  = aPageSize.Width()  * 11 / 10;
-                aPageSize.Height() = aPageSize.Height() * 11 / 10;
-                aPagePosition.X() -= aPageSize.Width() / 2;
-                aPagePosition.Y() -= aPageSize.Height() / 2;
-
-                rShell.SetZoomRect (Rectangle(aPagePosition, aPageSize));
-
-                Rectangle aVisibleArea = pWindow->PixelToLogic(
-                    Rectangle(
-                        Point(0,0),
-                        pWindow->GetOutputSizePixel()));
-                rShell.GetZoomList()->InsertZoomRect (aVisibleArea);
-            }
-
-            rShell.Invalidate (SID_ATTR_ZOOM);
-            rShell.Cancel();
-            rRequest.Done();
-        }
-        break;
-
-        case SID_ZOOM_PREV:
-            if (rShell.GetZoomList()->IsPreviousPossible())
-            {
-                // Go to previous zoom rectangle.
-                rShell.SetZoomRect (
-                    rShell.GetZoomList()->GetPreviousZoomRect());
-            }
-            rRequest.Done ();
-            break;
-
-        case SID_ZOOM_NEXT:
-            if (rShell.GetZoomList()->IsNextPossible())
-            {
-                // Go to next zoom rectangle.
-                rShell.SetZoomRect (
-                    rShell.GetZoomList()->GetNextZoomRect());
-            }
-            rRequest.Done ();
-            break;
-
-        default:
-            bRequestRepaint = false;
-    }
-    if (bRequestRepaint)
-        mrController.GetView().RequestRepaint ();
 }
 
 
