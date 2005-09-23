@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optlingu.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:54:28 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:00:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
     {
         Pos = MAP_APPFONT ( 246 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Schließen" ;
+        Text [ de ] = "SchlieÃŸen" ;
         Text [ en-US ] = "Close";
     };
     HelpButton PB_HELP
@@ -114,7 +114,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Pos = MAP_APPFONT ( 187 , 66 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Zurück" ;
+        Text [ de ] = "~ZurÃ¼ck" ;
         Text [ en-US ] = "~Back";
     };
 
@@ -197,7 +197,7 @@ ModalDialog RID_SVXDLG_LNG_ED_NUM_PREBREAK
     };
     String STR_NUM_MIN_WORDLEN_DLG
     {
-        Text [ de ] = "Minimale Wortlänge" ;
+        Text [ de ] = "Minimale WortlÃ¤nge" ;
         Text [ en-US ] = "Minimal word length";
     };
 };
@@ -222,7 +222,7 @@ TabPage RID_SFXPAGE_LINGU
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 175 , 8 ) ;
-        Text [ de ] = "~Verfügbare Sprachmodule" ;
+        Text [ de ] = "~VerfÃ¼gbare Sprachmodule" ;
         Text [ en-US ] = "Available language modules";
     };
     Control CLB_LINGU_MODULES
@@ -245,7 +245,7 @@ TabPage RID_SFXPAGE_LINGU
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 59 ) ;
         Size = MAP_APPFONT ( 175 , 8 ) ;
-        Text [ de ] = "Ben~utzerwörterbücher" ;
+        Text [ de ] = "Ben~utzerwÃ¶rterbÃ¼cher" ;
         Text [ en-US ] = "User-defined dictionaries";
     };
     Control CLB_LINGU_DICS
@@ -276,7 +276,7 @@ TabPage RID_SFXPAGE_LINGU
         Pos = MAP_APPFONT ( 198 , 104 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Löschen" ;
+        Text [ de ] = "~LÃ¶schen" ;
         Text [ en-US ] = "Dele~te";
     };
     FixedText FT_LINGU_OPTIONS
@@ -305,32 +305,32 @@ TabPage RID_SFXPAGE_LINGU
 
     String STR_CAPITAL_WORDS
     {
-        Text [ de ] = "Großgeschriebene Wörter prüfen" ;
+        Text [ de ] = "GroÃŸgeschriebene WÃ¶rter prÃ¼fen" ;
         Text [ en-US ] = "Check uppercase words";
     };
     String STR_WORDS_WITH_DIGITS
     {
-        Text [ de ] = "Wörter mit Ziffern prüfen" ;
+        Text [ de ] = "WÃ¶rter mit Ziffern prÃ¼fen" ;
         Text [ en-US ] = "Check words with numbers ";
     };
     String STR_CAPITALIZATION
     {
-        Text [ de ] = "Groß-/Kleinschreibung prüfen" ;
+        Text [ de ] = "GroÃŸ-/Kleinschreibung prÃ¼fen" ;
         Text [ en-US ] = "Check capitalization";
     };
     String STR_SPELL_SPECIAL
     {
-        Text [ de ] = "Sonderbereiche prüfen" ;
+        Text [ de ] = "Sonderbereiche prÃ¼fen" ;
         Text [ en-US ] = "Check special regions";
     };
     String STR_ALL_LANGUAGES
     {
-        Text [ de ] = "In allen Sprachen prüfen" ;
+        Text [ de ] = "In allen Sprachen prÃ¼fen" ;
         Text [ en-US ] = "Check in all languages";
     };
     String STR_SPELL_AUTO
     {
-        Text [ de ] = "Rechtschreibung während der Eingabe überprüfen" ;
+        Text [ de ] = "Rechtschreibung wÃ¤hrend der Eingabe Ã¼berprÃ¼fen" ;
         Text [ en-US ] = "Check spelling as you type";
     };
     String STR_HIDE_MARKINGS
@@ -345,7 +345,7 @@ TabPage RID_SFXPAGE_LINGU
     };
     String STR_NUM_MIN_WORDLEN
     {
-        Text [ de ] = "Minimale Wortlänge für Silbentrennung: " ;
+        Text [ de ] = "Minimale WortlÃ¤nge fÃ¼r Silbentrennung: " ;
         Text [ en-US ] = "Minimal number of characters for hyphenation: ";
     };
     String STR_NUM_PRE_BREAK
@@ -388,7 +388,7 @@ QueryBox RID_SFXQB_DELDICT
      // ### ACHTUNG: Neuer Text in Resource? Möchten Sie das Wörterbuch löschen? : Wollen sie das Wörterbuch löschen?
     /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie das Wörterbuch löschen? : M÷chten Sie das W÷rterbuch l÷schen? */
     /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie das Wörterbuch löschen? : M÷chten Sie das W÷rterbuch l÷schen? */
-    Message [ de ] = "Möchten Sie das Wörterbuch löschen?" ;
+    Message [ de ] = "MÃ¶chten Sie das WÃ¶rterbuch lÃ¶schen?" ;
     Message [ en-US ] = "Do you want to delete the dictionary?" ;
 };
  // RID_SFXQB_DEL_IGNORELIST ----------------------------------------------
@@ -399,7 +399,7 @@ QueryBox RID_SFXQB_DEL_IGNORELIST
      // ### ACHTUNG: Neuer Text in Resource? Möchten Sie die Ignorieren-Liste löschen? : Wollen sie die Ignorieren-Liste löschen?
     /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie die Ignorieren-Liste löschen? : M÷chten Sie die Ignorieren-Liste l÷schen? */
     /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie die Ignorieren-Liste löschen? : M÷chten Sie die Ignorieren-Liste l÷schen? */
-    Message [ de ] = "Möchten Sie die Ignorieren-Liste löschen?" ;
+    Message [ de ] = "MÃ¶chten Sie die Ignorieren-Liste lÃ¶schen?" ;
     Message [ en-US ] = "Do you want to delete the ignore list?" ;
 };
  // ******************************************************************* EOF
