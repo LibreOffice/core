@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uicommanddescription.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:59:35 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:42:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -450,82 +450,89 @@ sal_Bool ConfigurationAccess_UICommand::fillCache()
     if ( m_bCacheFilled )
         return sal_True;
 
-    sal_Int32 i( 0 );
-    Any       a;
-    Sequence< OUString > aNameSeq = m_xConfigAccess->getElementNames();
+    sal_Int32               i( 0 );
+    Any                     a;
     std::vector< OUString > aImageCommandVector;
     std::vector< OUString > aImageRotateVector;
     std::vector< OUString > aImageMirrorVector;
+    Sequence< OUString >    aNameSeq;
 
-    for ( i = 0; i < aNameSeq.getLength(); i++ )
+    if ( m_xConfigAccess.is() )
     {
-        try
+        aNameSeq = m_xConfigAccess->getElementNames();
+        for ( i = 0; i < aNameSeq.getLength(); i++ )
         {
-            Reference< XNameAccess > xNameAccess;
-            a = m_xConfigAccess->getByName( aNameSeq[i] );
-            if ( a >>= xNameAccess )
+            try
             {
-                CmdToInfoMap aCmdToInfo;
+                Reference< XNameAccess > xNameAccess;
+                a = m_xConfigAccess->getByName( aNameSeq[i] );
+                if ( a >>= xNameAccess )
+                {
+                    CmdToInfoMap aCmdToInfo;
 
-                a = xNameAccess->getByName( m_aPropUILabel );
-                a >>= aCmdToInfo.aLabel;
-                a = xNameAccess->getByName( m_aPropUIContextLabel );
-                a >>= aCmdToInfo.aContextLabel;
-                a = xNameAccess->getByName( m_aPropProperties );
-                a >>= aCmdToInfo.nProperties;
+                    a = xNameAccess->getByName( m_aPropUILabel );
+                    a >>= aCmdToInfo.aLabel;
+                    a = xNameAccess->getByName( m_aPropUIContextLabel );
+                    a >>= aCmdToInfo.aContextLabel;
+                    a = xNameAccess->getByName( m_aPropProperties );
+                    a >>= aCmdToInfo.nProperties;
 
-                m_aCmdInfoCache.insert( CommandToInfoCache::value_type( aNameSeq[i], aCmdToInfo ));
+                    m_aCmdInfoCache.insert( CommandToInfoCache::value_type( aNameSeq[i], aCmdToInfo ));
 
-                if ( aCmdToInfo.nProperties & COMMAND_PROPERTY_IMAGE )
-                    aImageCommandVector.push_back( aNameSeq[i] );
-                if ( aCmdToInfo.nProperties & COMMAND_PROPERTY_ROTATE )
-                    aImageRotateVector.push_back( aNameSeq[i] );
-                if ( aCmdToInfo.nProperties & COMMAND_PROPERTY_MIRROR )
-                    aImageMirrorVector.push_back( aNameSeq[i] );
+                    if ( aCmdToInfo.nProperties & COMMAND_PROPERTY_IMAGE )
+                        aImageCommandVector.push_back( aNameSeq[i] );
+                    if ( aCmdToInfo.nProperties & COMMAND_PROPERTY_ROTATE )
+                        aImageRotateVector.push_back( aNameSeq[i] );
+                    if ( aCmdToInfo.nProperties & COMMAND_PROPERTY_MIRROR )
+                        aImageMirrorVector.push_back( aNameSeq[i] );
+                }
             }
-        }
-        catch ( com::sun::star::lang::WrappedTargetException& )
-        {
-        }
-        catch ( com::sun::star::container::NoSuchElementException& )
-        {
+            catch ( com::sun::star::lang::WrappedTargetException& )
+            {
+            }
+            catch ( com::sun::star::container::NoSuchElementException& )
+            {
+            }
         }
     }
 
-    aNameSeq = m_xConfigAccessPopups->getElementNames();
-    for ( i = 0; i < aNameSeq.getLength(); i++ )
+    if ( m_xConfigAccessPopups.is() )
     {
-        try
+        aNameSeq = m_xConfigAccessPopups->getElementNames();
+        for ( i = 0; i < aNameSeq.getLength(); i++ )
         {
-            Reference< XNameAccess > xNameAccess;
-            a = m_xConfigAccessPopups->getByName( aNameSeq[i] );
-            if ( a >>= xNameAccess )
+            try
             {
-                CmdToInfoMap aCmdToInfo;
+                Reference< XNameAccess > xNameAccess;
+                a = m_xConfigAccessPopups->getByName( aNameSeq[i] );
+                if ( a >>= xNameAccess )
+                {
+                    CmdToInfoMap aCmdToInfo;
 
-                aCmdToInfo.bPopup = sal_True;
-                a = xNameAccess->getByName( m_aPropUILabel );
-                a >>= aCmdToInfo.aLabel;
-                a = xNameAccess->getByName( m_aPropUIContextLabel );
-                a >>= aCmdToInfo.aContextLabel;
-                a = xNameAccess->getByName( m_aPropProperties );
-                a >>= aCmdToInfo.nProperties;
+                    aCmdToInfo.bPopup = sal_True;
+                    a = xNameAccess->getByName( m_aPropUILabel );
+                    a >>= aCmdToInfo.aLabel;
+                    a = xNameAccess->getByName( m_aPropUIContextLabel );
+                    a >>= aCmdToInfo.aContextLabel;
+                    a = xNameAccess->getByName( m_aPropProperties );
+                    a >>= aCmdToInfo.nProperties;
 
-                m_aCmdInfoCache.insert( CommandToInfoCache::value_type( aNameSeq[i], aCmdToInfo ));
+                    m_aCmdInfoCache.insert( CommandToInfoCache::value_type( aNameSeq[i], aCmdToInfo ));
 
-                if ( aCmdToInfo.nProperties & COMMAND_PROPERTY_IMAGE )
-                    aImageCommandVector.push_back( aNameSeq[i] );
-                if ( aCmdToInfo.nProperties & COMMAND_PROPERTY_ROTATE )
-                    aImageRotateVector.push_back( aNameSeq[i] );
-                if ( aCmdToInfo.nProperties & COMMAND_PROPERTY_MIRROR )
-                    aImageMirrorVector.push_back( aNameSeq[i] );
+                    if ( aCmdToInfo.nProperties & COMMAND_PROPERTY_IMAGE )
+                        aImageCommandVector.push_back( aNameSeq[i] );
+                    if ( aCmdToInfo.nProperties & COMMAND_PROPERTY_ROTATE )
+                        aImageRotateVector.push_back( aNameSeq[i] );
+                    if ( aCmdToInfo.nProperties & COMMAND_PROPERTY_MIRROR )
+                        aImageMirrorVector.push_back( aNameSeq[i] );
+                }
             }
-        }
-        catch ( com::sun::star::lang::WrappedTargetException& )
-        {
-        }
-        catch ( com::sun::star::container::NoSuchElementException& )
-        {
+            catch ( com::sun::star::lang::WrappedTargetException& )
+            {
+            }
+            catch ( com::sun::star::container::NoSuchElementException& )
+            {
+            }
         }
     }
 
