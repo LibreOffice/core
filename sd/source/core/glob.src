@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:23:55 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:23:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -616,7 +616,7 @@ String STR_3DOBJECTBARSHELL
 };
 String STR_FONTWORKOBJECTBARSHELL
 {
-    Text [ de ] = "FontWork" ;
-    Text [ en-US ] = "FontWork" ;
+    Text [ de ] = "Fontwork" ;
+    Text [ en-US ] = "Fontwork" ;
 };
 
