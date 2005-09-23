@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontwork.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:07:19 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:38:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,7 +152,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 HelpId = HID_FONTWORK_TBI_ADJUST_LEFT ;
                 /* ### ACHTUNG: Neuer Text in Resource? Linksbündig : Linksb³ndig */
                 /* ### ACHTUNG: Neuer Text in Resource? Linksbündig : Linksb³ndig */
-                Text [ de ] = "Linksbündig" ;
+                Text [ de ] = "LinksbÃ¼ndig" ;
                 Text [ en-US ] = "Align Left" ;
                 Text [ x-comment ] = " ";
             };
@@ -174,7 +174,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 HelpId = HID_FONTWORK_TBI_ADJUST_RIGHT ;
                 /* ### ACHTUNG: Neuer Text in Resource? Rechtsbündig : Rechtsb³ndig */
                 /* ### ACHTUNG: Neuer Text in Resource? Rechtsbündig : Rechtsb³ndig */
-                Text [ de ] = "Rechtsbündig" ;
+                Text [ de ] = "RechtsbÃ¼ndig" ;
                 Text [ en-US ] = "Align Right" ;
                 Text [ x-comment ] = " ";
             };
@@ -186,7 +186,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 HelpId = HID_FONTWORK_TBI_ADJUST_AUTOSIZE ;
                 /* ### ACHTUNG: Neuer Text in Resource? Auto-Textgröße : Auto-Textgr÷˜e */
                 /* ### ACHTUNG: Neuer Text in Resource? Auto-Textgröße : Auto-Textgr÷˜e */
-                Text [ de ] = "Auto-Textgröße" ;
+                Text [ de ] = "Auto-TextgrÃ¶ÃŸe" ;
                 Text [ en-US ] = "AutoSize Text" ;
                 Text [ x-comment ] = " ";
             };
