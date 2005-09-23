@@ -4,9 +4,9 @@
  *
  *  $RCSfile: definitioncontainer.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:29:22 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:05:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -566,7 +566,31 @@ void ODefinitionContainer::implReplace(const ::rtl::OUString& _rName, const Refe
 // -----------------------------------------------------------------------------
 sal_Bool ODefinitionContainer::approveNewObject(const ::rtl::OUString& _sName,const Reference< XContent >& _rxObject) const
 {
-    return _rxObject.is();
+    Reference<XUnoTunnel> xUnoTunnel(_rxObject,UNO_QUERY);
+    ::rtl::Reference<OContentHelper> pContent = NULL;
+    sal_Bool bRet = sal_False;
+    ODefinitionContainer_Impl* pItem = static_cast<ODefinitionContainer_Impl*>(m_pImpl.get());
+    ODefinitionContainer_Impl::Documents::iterator aFind = pItem->m_aDocumentMap.find(_sName);
+    if ( aFind == pItem->m_aDocumentMap.end() )
+    {
+        if ( bRet = xUnoTunnel.is() )
+        {
+            pContent = reinterpret_cast<OContentHelper*>(xUnoTunnel->getSomething(OContentHelper::getUnoTunnelImplementationId()));
+            TContentPtr pImpl = pContent->getImpl();
+            ODefinitionContainer_Impl::Documents::iterator aIter =
+                ::std::find_if(
+                    pItem->m_aDocumentMap.begin(),
+                    pItem->m_aDocumentMap.end(),
+                    ::std::compose1(
+                        ::std::bind2nd(::std::equal_to<TContentPtr>(), pImpl),
+                        ::std::select2nd<ODefinitionContainer_Impl::Documents::value_type>()
+                    )
+                );
+
+            bRet = aIter == pItem->m_aDocumentMap.end();
+        }
+    }
+    return bRet;
 }
 // -----------------------------------------------------------------------------
 // XPropertyChangeListener
