@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sanedlg.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:38:14 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:06:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ ModalDialog RID_SANE_DIALOG
     {
         Pos = MAP_APPFONT ( THIRD_COLUMN , 44 ) ;
         Size = MAP_APPFONT ( 55 , 22 ) ;
-        Text [ de ] = "Ger‰te-\n~information" ;
+        Text [ de ] = "Ger√§te-\n~information" ;
         Text [ en-US ] = "About\n Dev~ice" ;
     };
     PushButton RID_PREVIEW_BTN
@@ -148,7 +148,7 @@ ModalDialog RID_SANE_DIALOG
     {
         Pos = MAP_APPFONT ( SECOND_COLUMN , 8 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text [ de ] = "Verwendetes ~Ger‰t:" ;
+        Text [ de ] = "Verwendetes ~Ger√§t:" ;
         Text [ en-US ] = "Device used:" ;
     };
     ListBox RID_DEVICE_BOX
@@ -163,7 +163,7 @@ ModalDialog RID_SANE_DIALOG
     {
         Pos = MAP_APPFONT ( SECOND_COLUMN , 25 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text [ de ] = "Auflˆsung [~DPI]" ;
+        Text [ de ] = "Aufl√∂sung [~DPI]" ;
         Text [ en-US ] = "Resolution [~DPI]" ;
     };
     NumericBox RID_SCAN_RESOLUTION_BOX
@@ -276,17 +276,17 @@ ModalDialog RID_SANE_DIALOG
 };
 String RID_SANE_DEVICEINFO_TXT
 {
-    Text [ de ] = "Ger‰t: %s\nHersteller: %s\nModell: %s\nTyp: %s" ;
+    Text [ de ] = "Ger√§t: %s\nHersteller: %s\nModell: %s\nTyp: %s" ;
     Text [ en-US ] = "Device: %s\nVendor: %s\nModel: %s\nType: %s" ;
 };
 String RID_SANE_SCANERROR_TXT
 {
-    Text [ de ] = "W‰hrend des Scans ist ein Fehler aufgetreten." ;
+    Text [ de ] = "W√§hrend des Scans ist ein Fehler aufgetreten." ;
     Text [ en-US ] = "An error occurred while scanning." ;
 };
 String RID_SANE_NORESOLUTIONOPTION_TXT
 {
-    Text [ de ] = "Das Ger‰t ist nicht auf die Erzeugung einer Vorschau eingerichtet. Statt dessen wird als Vorschau ein normaler Scan verwendet. Dieser kann deutlich l‰nger dauern." ;
+    Text [ de ] = "Das Ger√§t ist nicht auf die Erzeugung einer Vorschau eingerichtet. Statt dessen wird als Vorschau ein normaler Scan verwendet. Dieser kann deutlich l√§nger dauern." ;
     Text [ en-US ] = "The device does not offer a preview option. Therefore, a normal scan will be used as a preview instead. This may take a considerable amount of time." ;
 };
 String RID_SANE_NOSANELIB_TXT
