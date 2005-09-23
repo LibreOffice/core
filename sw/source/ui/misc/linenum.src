@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linenum.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:34:56 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:09:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,7 +113,7 @@ TabPage TP_LINENUMBERING
             < "Links" ; > ;
             < "Rechts" ; > ;
             < "Innen" ; > ;
-            < "Außen" ; > ;
+            < "AuÃŸen" ; > ;
         };
         StringList [ en-US ] =
         {
@@ -280,7 +280,7 @@ TabPage TP_LINENUMBERING
     {
         Pos = MAP_APPFONT ( 133 , 110 ) ;
         Size = MAP_APPFONT ( 121 , 8 ) ;
-        Text [ de ] = "Zählen" ;
+        Text [ de ] = "ZÃ¤hlen" ;
         Text [ en-US ] = "Count" ;
         Text [ x-comment ] = " ";
     };
