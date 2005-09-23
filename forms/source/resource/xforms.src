@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xforms.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:03:48 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:18:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,13 +46,13 @@ String RID_STR_XFORMS_NO_BINDING_EXPRESSION
 
 String RID_STR_XFORMS_INVALID_BINDING_EXPRESSION
 {
-    Text [ de ] = "Ungültiger Bindungsausdruck.";
+    Text [ de ] = "UngÃ¼ltiger Bindungsausdruck.";
     Text [ en-US ] = "This is an invalid binding expression.";
 };
 
 String RID_STR_XFORMS_INVALID_VALUE
 {
-    Text [ de ] = "Wert ist ungültig.";
+    Text [ de ] = "Wert ist ungÃ¼ltig.";
     Text [ en-US ] = "Value is invalid.";
 };
 
@@ -88,31 +88,31 @@ String RID_STR_XFORMS_VALUE_MAX_EXCL
 
 String RID_STR_XFORMS_VALUE_MIN_INCL
 {
-    Text [ de ] = "Wert muss größer als oder gleich $2 sein.";
+    Text [ de ] = "Wert muss grÃ¶ÃŸer als oder gleich $2 sein.";
     Text [ en-US ] = "The value must be greater than or equal to $2.";
 };
 
 String RID_STR_XFORMS_VALUE_MIN_EXCL
 {
-    Text [ de ] = "Wert muss größer als $2 sein.";
+    Text [ de ] = "Wert muss grÃ¶ÃŸer als $2 sein.";
     Text [ en-US ] = "The value must be greater than $2.";
 };
 
 String RID_STR_XFORMS_VALUE_PATTERN
 {
-    Text [ de ] = "Wert paßt nicht auf dem Muster '$2'.";
+    Text [ de ] = "Wert paÃŸt nicht auf dem Muster '$2'.";
     Text [ en-US ] = "The value does not match the pattern '$2'.";
 };
 
 String RID_STR_XFORMS_VALUE_TOTAL_DIGITS
 {
-    Text [ de ] = "Höchstens $2 Ziffern erlaubt.";
+    Text [ de ] = "HÃ¶chstens $2 Ziffern erlaubt.";
     Text [ en-US ] = "$2 digits allowed at most.";
 };
 
 String RID_STR_XFORMS_VALUE_FRACTION_DIGITS
 {
-    Text [ de ] = "Höchstens $2 Nachkommastellen erlaubt.";
+    Text [ de ] = "HÃ¶chstens $2 Nachkommastellen erlaubt.";
     Text [ en-US ] = "$2 fraction digits allowed at most.";
 };
 
@@ -130,7 +130,7 @@ String RID_STR_XFORMS_VALUE_MIN_LENGTH
 
 String RID_STR_XFORMS_VALUE_MAX_LENGTH
 {
-    Text [ de ] = "Zeichenkette darf höchstens $2 Zeichen lang sein.";
+    Text [ de ] = "Zeichenkette darf hÃ¶chstens $2 Zeichen lang sein.";
     Text [ en-US ] = "The string can only be $2 characters long at most.";
 };
 
@@ -160,13 +160,13 @@ String RID_STR_DATATYPE_DECIMAL
 
 String RID_STR_DATATYPE_FLOAT
 {
-    Text [ de ] = "Fließkomma";
+    Text [ de ] = "FlieÃŸkomma";
     Text [ en-US ] = "Floating point";
 };
 
 String RID_STR_DATATYPE_DOUBLE
 {
-    Text [ de ] = "Fließkomma (doppelt genau)";
+    Text [ de ] = "FlieÃŸkomma (doppelt genau)";
     Text [ en-US ] = "Double";
 };
 
@@ -226,7 +226,7 @@ String RID_STR_XFORMS_CANT_EVALUATE
 
 String RID_STR_XFORMS_PATTERN_DOESNT_MATCH
 {
-    Text [ de ] = "Die Zeichenkette '$1' entspricht nicht dem geforderten regulären Ausdruck '$2'.";
+    Text [ de ] = "Die Zeichenkette '$1' entspricht nicht dem geforderten regulÃ¤ren Ausdruck '$2'.";
     Text [ en-US ] = "The string '$1' does not match the required regular expression '$2'.";
 };
 
