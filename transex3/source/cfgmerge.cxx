@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:59:02 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:28:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -719,12 +719,7 @@ void CfgExport::WorkOnRessourceEnd()
         {
             pStackData->FillInFallbacks();
 
-            //ByteString sFallback = pStackData->sText[ GERMAN_INDEX ];
             ByteString sFallback = pStackData->sText[ ByteString("de") ];
-            /*if ( pStackData->sText[ ENGLISH_US_INDEX ].Len())
-                sFallback = pStackData->sText[ ENGLISH_US_INDEX ];
-            else if ( pStackData->sText[ ENGLISH_INDEX ].Len())
-                sFallback = pStackData->sText[ ENGLISH_INDEX ];*/
 
             if ( pStackData->sText[ ByteString("en-US") ].Len())
                 sFallback = pStackData->sText[ ByteString("en-US") ];
@@ -771,7 +766,7 @@ void CfgExport::WorkOnRessourceEnd()
                    // if( sCur.EqualsIgnoreCaseAscii("de") ){
                    //   sOutput = UTF8Converter::ConvertToUTF8( sOutput, RTL_TEXTENCODING_MS_1252 );
                    // }
-
+                    if( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && !Export::isMergingGermanAllowed( sPrj ) ) )
                     pOutputStream->WriteLine( sOutput );
             //  }
             }
@@ -871,17 +866,19 @@ void CfgMerge::WorkOnText(
         PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
         if ( pEntrys ) {
             ByteString sContent;
-//          if (( nLangIndex != GERMAN_INDEX ) &&
-//              ( nLangIndex != ENGLISH_INDEX ) &&
-            if (( !nLangIndex.EqualsIgnoreCaseAscii("de")) &&
-                ( !nLangIndex.EqualsIgnoreCaseAscii("en-US") ) &&
+            pEntrys->GetText( sContent, STRING_TYP_TEXT, nLangIndex );
 
-                ( pEntrys->GetText(
-                    sContent, STRING_TYP_TEXT, nLangIndex )) &&
+            if ( Export::isAllowed( nLangIndex ) &&
+//                    ( !nLangIndex.EqualsIgnoreCaseAscii("de")) &&
+//              ( !nLangIndex.EqualsIgnoreCaseAscii("en-US") ) &&
+
+                //(  &&
                 ( sContent != "-" ) && ( sContent.Len()))
             {
-//              rText = UTF8Converter::ConvertToUTF8(
-//                  sContent, Export::GetCharSet( Export::LangId[ nLangIndex ]));
+#ifdef MERGE_SOURCE_LANGUAGES
+                    if( nLangIndex.EqualsIgnoreCaseAscii("de") || nLangIndex.EqualsIgnoreCaseAscii("en-US") )
+                        rText = sContent;
+#endif
                 Export::QuotHTML( rText );
             }
         }
@@ -909,20 +906,14 @@ void CfgMerge::WorkOnRessourceEnd()
             for( long int n = 0; n < aLanguages.size(); n++ ){
                 sCur = aLanguages[ n ];
 
-//            for ( ULONG nIndex = 0; nIndex < LANGUAGES; nIndex++ ) {
                 ByteString sContent;
-/*              if (( nIndex != GERMAN_INDEX ) &&
-                    ( nIndex != ENGLISH_INDEX ) &&
-                    ( LANGUAGE_ALLOWED( nIndex )) &&*/
-                if (( !sCur.EqualsIgnoreCaseAscii("de") ) &&
-                    ( !sCur.EqualsIgnoreCaseAscii("de") ) &&
+                pEntrys->GetText( sContent, STRING_TYP_TEXT, sCur , TRUE );
+                if (
+                    ( !sCur.EqualsIgnoreCaseAscii("de") )    &&
+                    ( !sCur.EqualsIgnoreCaseAscii("en-US") ) &&
 
-                    ( pEntrys->GetText(
-                        sContent, STRING_TYP_TEXT, sCur , TRUE )) &&
                     ( sContent != "-" ) && ( sContent.Len()))
                 {
-/*                  ByteString sText = UTF8Converter::ConvertToUTF8(
-                        sContent, Export::GetCharSet( Export::LangId[ nIndex ]));*/
 
                     ByteString sText = sContent;
                     Export::QuotHTML( sText );
