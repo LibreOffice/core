@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:25:56 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:30:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,7 @@
 #include "SdUnoSlideView.hxx"
 #include "PaneManager.hxx"
 #include "DrawDocShell.hxx"
+#include "ObjectBarManager.hxx"
 
 #include <sfx2/app.hxx>
 #include <sfx2/msg.hxx>
@@ -326,6 +327,27 @@ controller::SlideSorterController* SlideSorterViewShell::CreateController (void)
             *mpSlideSorterView);
     pController->Init();
     return pController;
+}
+
+
+
+
+SfxUndoManager* SlideSorterViewShell::ImpGetUndoManager (void) const
+{
+    SfxShell* pObjectBar = GetObjectBarManager().GetTopObjectBar();
+    if (pObjectBar != NULL)
+    {
+        // When it exists then return the undo manager of the currently
+        // active object bar.  The object bar is missing when the
+        // SlideSorterViewShell is not the main view shell.
+        return pObjectBar->GetUndoManager();
+    }
+    else
+    {
+        // Return the undo manager of this  shell when there is no object or
+        // tool bar.
+        return const_cast<SlideSorterViewShell*>(this)->GetUndoManager();
+    }
 }
 
 
@@ -732,7 +754,9 @@ BOOL SlideSorterViewShell::HasUIFeature (ULONG nFeature)
 
 void SlideSorterViewShell::SetZoom (long int nZoom)
 {
-    mpSlideSorterController->SetZoom (nZoom);
+    // Ignored.
+    // The zoom scale is adapted internally to fit a number of columns in
+    // the window.
 }
 
 
