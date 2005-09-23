@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:01:25 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:35:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,9 @@
 #endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
+#endif
+#ifndef UNOTOOLS_INC_SHAREDUNOCOMPONENT_HXX
+#include <unotools/sharedunocomponent.hxx>
 #endif
 
 namespace com { namespace sun { namespace star {
@@ -95,6 +98,8 @@ namespace task {
 //.........................................................................
 namespace dbtools
 {
+    typedef ::utl::SharedUNOComponent< ::com::sun::star::sdbc::XConnection > SharedConnection;
+
     enum EComposeRule
     {
         eInTableDefinitions,
@@ -133,6 +138,8 @@ namespace dbtools
         <nl>
             <li>If the rowset already has an ActiveConnection (means a non-<NULL/> value vor this property),
                 this one is used.</li>
+            <li>If row set is part of a database form document (see ->isEmbeddedInDatabase),
+                a connection for the respective database is used.</li>
             <li>If in the parent hierarchy of the row set, there is an object supporting
                 the XConnection interface, this one is returned.</li>
             <li>If the DataSourceName property of the row set is not empty, a connection for this
@@ -151,9 +158,9 @@ namespace dbtools
             If <TRUE/>, the calculated connection is set as ActiveConnection property on the rowset.
 
             If the connection was newly created by the method, and this parameter is <TRUE/>, then
-            the ownership of the conneciton is delivered to a temporary object, which observes the
+            the ownership of the connection is delivered to a temporary object, which observes the
             row set: As soon as a connection-relevant property of the row set changes, or as soon
-            as if somebody else sets another ActiveConnection at the row set, the original
+            as somebody else sets another ActiveConnection at the row set, the original
             connection (the one which this function calculated) is disposed and discarded. At this
             very moment, also the temporary observer object dies. This way, it is ensured that
             there's no resource leak from an un-owned connection object.
@@ -162,6 +169,37 @@ namespace dbtools
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
         sal_Bool _bSetAsActiveConnection
+    )   SAL_THROW ( ( ::com::sun::star::sdbc::SQLException
+                    , ::com::sun::star::lang::WrappedTargetException
+                    , ::com::sun::star::uno::RuntimeException ) );
+
+    /** ensures that a row set has a valid ActiveConnection, if possible
+
+        This function does nearly the same as ->connectRowset. In fact, it is to be preferred over
+        ->connectRowset, if possible.
+
+        There are a few differences:
+        <ul><li>If a connection could be determined for the given RowSet, it is always
+                set as ActiveConnection.</li>
+            <li>Definition of the ownership of the created connection allows for more scenarios:
+                <ul><li>If the connection was not newly created, the returned ->SharedConnection
+                        instance will not have the ownership, since in this case it's assumed
+                        that there already is an instance which has the ownership.</li>
+                    <li>If the connection was newly created, and ->_bUseAutoConnectionDisposer
+                        is <TRUE/>, then the returned SharedConnection instance will <em>not</em>
+                        be the owner of the connection. Instead, the ownership will be delivered
+                        to a temporary object as described for connectRowset.</li>
+                    <li>If the connection was newly created, and ->_bUseAutoConnectionDisposer
+                        is <FALSE/>, then the returned SharedConnection instance will have the
+                        ownership of the XConnection.</li>
+                </ul>
+            </li>
+        </ul>
+    */
+    SharedConnection    ensureRowSetConnection(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
+        bool _bUseAutoConnectionDisposer
     )   SAL_THROW ( ( ::com::sun::star::sdbc::SQLException
                     , ::com::sun::star::lang::WrappedTargetException
                     , ::com::sun::star::uno::RuntimeException ) );
