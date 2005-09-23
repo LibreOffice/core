@@ -4,9 +4,9 @@
  *
  *  $RCSfile: consdlg.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:31:28 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:59:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -261,7 +261,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     {
         Pos = MAP_APPFONT ( 224 , 114 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Löschen" ;
+        Text [ de ] = "~LÃ¶schen" ;
         Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -270,7 +270,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     {
         Pos = MAP_APPFONT ( 224 , 96 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Hinzu~fügen" ;
+        Text [ de ] = "Hinzu~fÃ¼gen" ;
         Text [ en-US ] = "~Add" ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
