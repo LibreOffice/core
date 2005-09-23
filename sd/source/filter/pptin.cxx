@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:15:50 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:44:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2781,14 +2781,12 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                                             pMediaObj->SetMergedItemSet( pObj->GetMergedItemSet() );
 
                                             //--remove object from aAnimations list and add the new object instead
-                                            bool bHasAnimation = false;
                                             Ppt97AnimationPtr pAnimation;
                                             {
                                                 tAnimationMap::iterator aFound = aAnimations.find( pObj );
                                                 if( aFound != aAnimations.end() )
                                                 {
-                                                    bHasAnimation =true;
-                                                    pAnimation = Ppt97AnimationPtr( aAnimations[pObj].get() );
+                                                    pAnimation = (*aFound).second;
                                                     aAnimations.erase(aFound);
                                                 }
                                                 aAnimations[pMediaObj] = pAnimation;
