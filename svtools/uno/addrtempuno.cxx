@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addrtempuno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:57:37 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:54:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,10 @@
 #include <comphelper/property.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
+#include <com/sun/star/sdbc/XDataSource.hpp>
+#endif
+
 class SfxItemSet;
 class SfxItemPool;
 class SfxPoolItem;
@@ -65,6 +69,7 @@ namespace svt
     using namespace com::sun::star::lang;
     using namespace com::sun::star::util;
     using namespace com::sun::star::beans;
+    using namespace com::sun::star::sdbc;
 
     //=========================================================================
     //= OAddressBookSourceDialogUno
@@ -76,7 +81,8 @@ namespace svt
     {
     protected:
         Sequence< AliasProgrammaticPair >   m_aAliases;
-        ::rtl::OUString                     m_sDataSource;
+        Reference< XDataSource >            m_xDataSource;
+        ::rtl::OUString                     m_sDataSourceName;
         ::rtl::OUString                     m_sTable;
 
     protected:
@@ -210,8 +216,18 @@ namespace svt
 #if OSL_DEBUG_LEVEL > 0
                 sal_Bool bSuccess =
 #endif
-                aVal.Value >>= m_sDataSource;
+                aVal.Value >>= m_xDataSource;
                 OSL_ENSURE( bSuccess, "OAddressBookSourceDialogUno::implInitialize: invalid type for DataSource!" );
+                return;
+            }
+
+            if (0 == aVal.Name.compareToAscii("DataSourceName"))
+            {
+#if OSL_DEBUG_LEVEL > 0
+                sal_Bool bSuccess =
+#endif
+                aVal.Value >>= m_sDataSourceName;
+                OSL_ENSURE( bSuccess, "OAddressBookSourceDialogUno::implInitialize: invalid type for DataSourceName!" );
                 return;
             }
 
@@ -232,8 +248,8 @@ namespace svt
     //------------------------------------------------------------------------------
     Dialog* OAddressBookSourceDialogUno::createDialog(Window* _pParent)
     {
-        if ( m_sDataSource.getLength() && m_sTable.getLength() )
-            return new AddressBookSourceDialog(_pParent, m_xORB, m_sDataSource, m_sTable, m_aAliases );
+        if ( m_xDataSource.is() && m_sTable.getLength() )
+            return new AddressBookSourceDialog(_pParent, m_xORB, m_xDataSource, m_sDataSourceName, m_sTable, m_aAliases );
         else
             return new AddressBookSourceDialog( _pParent, m_xORB );
     }
