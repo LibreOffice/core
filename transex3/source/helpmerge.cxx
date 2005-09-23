@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpmerge.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:00:38 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:30:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -257,7 +257,9 @@ bool HelpParser::CreateSDF(
                       sBuffer.append( GSI_SEQUENCE4 );      //"\t\t\t\t";
                     sBuffer.append( sOUTimeStamp );
                     ByteString sOut( sBuffer.makeStringAndClear().getStr() , RTL_TEXTENCODING_UTF8 );
-                    if( data.getLength() > 0 ) aSDFStream.WriteLine( sOut );
+                    if( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && !Export::isMergingGermanAllowed( rPrj_in ) ) ){
+                        if( data.getLength() > 0 ) aSDFStream.WriteLine( sOut );
+                    }
                     pXMLElement=NULL;
                 }else fprintf(stdout,"\nDBG: NullPointer in HelpParser::CreateSDF , Language %s\n",sCur.GetBuffer() );
             }
@@ -494,7 +496,12 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , ByteString& sCur , ResData 
     ByteString sGId;
 
     pEntrys = NULL;
+
+#ifdef MERGE_SOURCE_LANGUAGES
+    if( true ){                  // Merge en-US!
+#else
     if( !sCur.EqualsIgnoreCaseAscii("en-US") ){
+#endif
         pXMLElement = (*aLangHM)[ "en-US" ];
         if( pXMLElement == NULL ){
             printf("Error: Can't find en-US entry");
@@ -545,7 +552,12 @@ void HelpParser::Process( LangHashMap* aLangHM , ByteString& sCur , ResData *pRe
     ByteString sGId;
 
     pEntrys = NULL;
+
+#ifdef MERGE_SOURCE_LANGUAGES
+    if( true ){                  // Merge en-US!
+#else
     if( !sCur.EqualsIgnoreCaseAscii("en-US") ){
+#endif
         pXMLElement = (*aLangHM)[ sCur ];
         if( pXMLElement == NULL ){
             FillInFallbacks( *aLangHM , sCur );
