@@ -4,9 +4,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:33:20 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:17:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
 {
     String STR_AUTOFMTREDL_DEL_EMPTY_PARA+1
     {
-        Text [ de ] = "Leere Absätze entfernen" ;
+        Text [ de ] = "Leere AbsÃ¤tze entfernen" ;
         Text [ en-US ] = "Remove empty paragraphs" ;
         Text [ x-comment ] = " ";
     };
@@ -56,20 +56,20 @@ Resource RID_SHELLRES_AUTOFMTSTRS
     String STR_AUTOFMTREDL_CPTL_STT_WORD+1
     {
         /* ### ACHTUNG: Neuer Text in Resource? ZWei Großbuchstaben am WOrtanfang korrigieren : ZWei Gro˜buchstaben am WOrtanfang korrigieren */
-        Text [ de ] = "ZWei Großbuchstaben am WOrtanfang korrigieren" ;
+        Text [ de ] = "ZWei GroÃŸbuchstaben am WOrtanfang korrigieren" ;
         Text [ en-US ] = "Correct TWo INitial CApitals" ;
         Text [ x-comment ] = " ";
     };
     String STR_AUTOFMTREDL_CPTL_STT_SENT+1
     {
         /* ### ACHTUNG: Neuer Text in Resource? Jeden Satz mit einem Großbuchstaben beginnen : Jeden Satz mit einem Gro˜buchstaben beginnen */
-        Text [ de ] = "Jeden Satz mit einem Großbuchstaben beginnen" ;
+        Text [ de ] = "Jeden Satz mit einem GroÃŸbuchstaben beginnen" ;
         Text [ en-US ] = "Capitalize first letter of sentences" ;
         Text [ x-comment ] = " ";
     };
     String STR_AUTOFMTREDL_TYPO+1
     {
-        Text [ de ] = "\"Gerade\" Anführungszeichen durch %1typografische%2 ersetzen" ;
+        Text [ de ] = "\"Gerade\" AnfÃ¼hrungszeichen durch %1typografische%2 ersetzen" ;
         Text [ en-US ] = "Replace \"standard\" quotes with %1custom%2 quotes" ;
     };
     String STR_AUTOFMTREDL_USER_STYLE+1
@@ -98,7 +98,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
     };
     String STR_AUTOFMTREDL_FRACTION+1
     {
-        Text [ de ] = "1/2 ... durch ½ ... ersetzen" ;
+        Text [ de ] = "1/2 ... durch Â½ ... ersetzen" ;
         Text [ en-US ] = "Replace 1/2 ... with Â½ ..." ;
         Text [ x-comment ] = " ";
     };
@@ -122,51 +122,51 @@ Resource RID_SHELLRES_AUTOFMTSTRS
     };
     String STR_AUTOFMTREDL_RIGHT_MARGIN+1
     {
-        Text [ de ] = "Zusammenfassen von einzeiligen Absätzen" ;
+        Text [ de ] = "Zusammenfassen von einzeiligen AbsÃ¤tzen" ;
         Text [ en-US ] = "Combine single line paragraphs";
         Text [ x-comment ] = " ";
     };
 
     String STR_AUTOFMTREDL_SET_TMPL_TEXT +1
     {
-        Text [ de ] = "Setze Vorlage \"Textkörper\"" ;
+        Text [ de ] = "Setze Vorlage \"TextkÃ¶rper\"" ;
         Text [ en-US ] = "Set \"Text body\" Style";
         Text [ x-comment ] = " ";
     };
     String STR_AUTOFMTREDL_SET_TMPL_INDENT  +1
     {
-        Text [ de ] = "Setze Vorlage \"Textkörper Einzug\"" ;
+        Text [ de ] = "Setze Vorlage \"TextkÃ¶rper Einzug\"" ;
         Text [ en-US ] = "Set \"Text body indent\" Style";
         Text [ x-comment ] = " ";
     };
     String STR_AUTOFMTREDL_SET_TMPL_NEG_INDENT  +1
     {
-        Text [ de ] = "Setze Vorlage \"Textkörper Einzug negativ\"" ;
+        Text [ de ] = "Setze Vorlage \"TextkÃ¶rper Einzug negativ\"" ;
         Text [ en-US ] = "Set \"Hanging indent\" Style";
         Text [ x-comment ] = " ";
     };
     String STR_AUTOFMTREDL_SET_TMPL_TEXT_INDENT +1
     {
-        Text [ de ] = "Setze Vorlage \"Textkörper Einrückung\"" ;
+        Text [ de ] = "Setze Vorlage \"TextkÃ¶rper EinrÃ¼ckung\"" ;
         Text [ en-US ] = "Set \"Text body indent\" Style";
         Text [ x-comment ] = " ";
     };
     String STR_AUTOFMTREDL_SET_TMPL_HEADLINE +1
     {
-        Text [ de ] = "Setze Vorlage \"Überschrift $(ARG1)\"" ;
+        Text [ de ] = "Setze Vorlage \"Ãœberschrift $(ARG1)\"" ;
         Text [ en-US ] = "Set \"Heading $(ARG1)\" Style";
         Text [ x-comment ] = " ";
     };
     String STR_AUTOFMTREDL_SET_NUMBULET +1
     {
-        Text [ de ] = "Setze Vorlage \"Aufzählung\" oder \"Nummerierung\"" ;
+        Text [ de ] = "Setze Vorlage \"AufzÃ¤hlung\" oder \"Nummerierung\"" ;
         Text [ en-US ] = "Set \"Bullet\" or \"Numbering\" Style";
         Text [ x-comment ] = " ";
     };
 
     String STR_AUTOFMTREDL_DEL_MORELINES +1
     {
-        Text [ de ] = "Zusammenfassen von Absätzen" ;
+        Text [ de ] = "Zusammenfassen von AbsÃ¤tzen" ;
         Text [ en-US ] = "Combine paragraphs";
         Text [ x-comment ] = " ";
     };
@@ -185,35 +185,35 @@ String STR_EVENT_OBJECT_SELECT
 String STR_EVENT_START_INS_GLOSSARY
 {
     /* ### ACHTUNG: Neuer Text in Resource? Vor AutoText einfügen : Vor AutoText einf³gen */
-    Text [ de ] = "Vor Einfügen des AutoTextes" ;
+    Text [ de ] = "Vor EinfÃ¼gen des AutoTextes" ;
     Text [ en-US ] = "Before inserting AutoText";
     Text [ x-comment ] = " ";
 };
 String STR_EVENT_END_INS_GLOSSARY
 {
     /* ### ACHTUNG: Neuer Text in Resource? Nach AutoText einfügen : Nach AutoText einf³gen */
-    Text [ de ] = "Nach Einfügen des AutoTextes" ;
+    Text [ de ] = "Nach EinfÃ¼gen des AutoTextes" ;
     Text [ en-US ] = "After inserting AutoText";
     Text [ x-comment ] = " ";
 };
 String STR_EVENT_MOUSEOVER_OBJECT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Maus über Objekt : Maus ³ber Objekt */
-    Text [ de ] = "Maus über Objekt" ;
+    Text [ de ] = "Maus Ã¼ber Objekt" ;
     Text [ en-US ] = "Mouse over object" ;
     Text [ x-comment ] = " ";
 };
 String STR_EVENT_MOUSECLICK_OBJECT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Hyperlink auslösen : Hyperlink ausl÷sen */
-    Text [ de ] = "Hyperlink auslösen" ;
+    Text [ de ] = "Hyperlink auslÃ¶sen" ;
     Text [ en-US ] = "Trigger hyperlink" ;
     Text [ x-comment ] = " ";
 };
 String STR_EVENT_MOUSEOUT_OBJECT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Maus verläßt Objekt : Maus verlõ˜t Objekt */
-    Text [ de ] = "Maus verlässt Objekt" ;
+    Text [ de ] = "Maus verlÃ¤sst Objekt" ;
     Text [ en-US ] = "Mouse leaves object" ;
     Text [ x-comment ] = " ";
 };
@@ -250,7 +250,7 @@ String STR_EVENT_FRM_KEYINPUT_NOA
 String STR_EVENT_FRM_RESIZE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Rahmengröße verändern : Rahmengr÷˜e verõndern */
-    Text [ de ] = "Rahmengröße verändern" ;
+    Text [ de ] = "RahmengrÃ¶ÃŸe verÃ¤ndern" ;
     Text [ en-US ] = "Resize frame" ;
     Text [ x-comment ] = " ";
 };
@@ -263,7 +263,7 @@ String STR_EVENT_FRM_MOVE
 String STR_CONTENT_TYPE_OUTLINE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Überschriften : šberschriften */
-    Text [ de ] = "Überschriften" ;
+    Text [ de ] = "Ãœberschriften" ;
     Text [ en-US ] = "Headings" ;
     Text [ x-comment ] = " ";
 };
@@ -336,7 +336,7 @@ String STR_CONTENT_TYPE_POSTIT
 String STR_CONTENT_TYPE_SINGLE_OUTLINE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Überschrift : šberschrift */
-    Text [ de ] = "Überschrift" ;
+    Text [ de ] = "Ãœberschrift" ;
     Text [ en-US ] = "Heading" ;
     Text [ x-comment ] = " ";
 };
@@ -419,7 +419,7 @@ String RID_STR_SYSTEM
 };
 String STR_MULT_INTERACT_SPELL_WARN
 {
-    Text [ de ] = "Die Interaktive Rechschreibprüfung ist\nbereits in anderem Dokument aktiv" ;
+    Text [ de ] = "Die Interaktive RechschreibprÃ¼fung ist\nbereits in anderem Dokument aktiv" ;
     Text [ en-US ] = "The interactive spellcheck is already active\nin a different document";
 };
 String STR_MULT_INTERACT_HYPH_WARN
@@ -429,7 +429,7 @@ String STR_MULT_INTERACT_HYPH_WARN
 };
 String STR_SPELL_TITLE
 {
-    Text [ de ] = "Rechtschreibprüfung" ;
+    Text [ de ] = "RechtschreibprÃ¼fung" ;
     Text [ en-US ] = "Spellcheck";
 };
 String STR_HYPH_TITLE
