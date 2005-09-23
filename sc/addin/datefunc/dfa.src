@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dfa.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:18:02 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:58:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,18 +78,18 @@ Resource RID_SC_ADDIN_DFA
     };
     String DFA_WEEK_PAR1_DESC // Description of Parameter 1
     {
-        Text [ de ] = "Jüngeres Datum für die Wochendifferenz" ;
+        Text [ de ] = "JÃ¼ngeres Datum fÃ¼r die Wochendifferenz" ;
         Text [ x-comment ] = "; J?geres Datum ist das Gegenteil von older date";
         Text [ en-US ] = "The end date for calculating the difference in weeks";
     };
     String DFA_WEEK_PAR2_DESC // Description of Parameter 2
     {
-        Text [ de ] = "Älteres Datum für die Wochendifferenz" ;
+        Text [ de ] = "Ã„lteres Datum fÃ¼r die Wochendifferenz" ;
         Text [ en-US ] = "The start date for calculating the difference weeks";
     };
     String DFA_WEEK_PAR3_DESC // Description of Parameter 3
     {
-        Text [ de ] = "Art der Differenzbildung Art=0 heißt Intervall, Art=1 heißt in Kalenderwochen" ;
+        Text [ de ] = "Art der Differenzbildung Art=0 heiÃŸt Intervall, Art=1 heiÃŸt in Kalenderwochen" ;
         Text [ en-US ] = "Type of difference calculation: mode=0 means the interval, mode=1 means calendar weeks";
     };
 
@@ -107,17 +107,17 @@ Resource RID_SC_ADDIN_DFA
     };
     String DFA_MONTHS_PAR1_DESC // Description of Parameter 1
     {
-        Text [ de ] = "Jüngeres Datum für die Monatsdifferenz" ;
+        Text [ de ] = "JÃ¼ngeres Datum fÃ¼r die Monatsdifferenz" ;
         Text [ en-US ] = "The end date for calculating the difference in months";
     };
     String DFA_MONTHS_PAR2_DESC // Description of Parameter 2
     {
-        Text [ de ] = "Älteres Datum für die Monatsdifferenz" ;
+        Text [ de ] = "Ã„lteres Datum fÃ¼r die Monatsdifferenz" ;
         Text [ en-US ] = "The start date for calculating the difference in months";
     };
     String DFA_MONTHS_PAR3_DESC // Description of Parameter 2
     {
-        Text [ de ] = "Art der Differenzbildung Art=0 heißt Intervall, Art=1 heißt in Kalendermonaten" ;
+        Text [ de ] = "Art der Differenzbildung Art=0 heiÃŸt Intervall, Art=1 heiÃŸt in Kalendermonaten" ;
         Text [ en-US ] = "Type of difference calculation: Mode = 0 means interval, mode = 1 means in calendar months";
     };
 
@@ -135,17 +135,17 @@ Resource RID_SC_ADDIN_DFA
     };
     String DFA_YEARS_PAR1_DESC // Description of Parameter 1
     {
-        Text [ de ] = "Jüngeres Datum für die Jahresdifferenz" ;
+        Text [ de ] = "JÃ¼ngeres Datum fÃ¼r die Jahresdifferenz" ;
         Text [ en-US ] = "The end date for calculating the difference in years";
     };
     String DFA_YEARS_PAR2_DESC // Description of Parameter 2
     {
-        Text [ de ] = "Älteres Datum für die Jahresdifferenz" ;
+        Text [ de ] = "Ã„lteres Datum fÃ¼r die Jahresdifferenz" ;
         Text [ en-US ] = "The start date for calculating the difference in years";
     };
     String DFA_YEARS_PAR3_DESC // Description of Parameter 2
     {
-        Text [ de ] = "Art der Differenzbildung Art=0 heißt Intervall, Art=1 heißt in Kalenderjahren" ;
+        Text [ de ] = "Art der Differenzbildung Art=0 heiÃŸt Intervall, Art=1 heiÃŸt in Kalenderjahren" ;
         Text [ en-US ] = "Type of difference calculation: Mode=0 means interval, mode=1 means in calendar years.";
     };
 
