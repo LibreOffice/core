@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:29:16 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:21:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,6 +150,7 @@ const ::rtl::OUString& getConfirmDeletionURL()
     return sConfirmDeletionURL;
 }
 
+DBG_NAME(OGenericUnoController)
 // -------------------------------------------------------------------------
 OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFactory >& _rM)
     :OGenericUnoController_COMPBASE(m_aMutex)
@@ -165,6 +166,8 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
     ,m_bDescribingSupportedFeatures( false )
 #endif
 {
+    DBG_CTOR(OGenericUnoController,NULL);
+
     try
     {
         m_xUrlTransformer = Reference< XURLTransformer > (_rM->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer")), UNO_QUERY);
@@ -177,6 +180,8 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
 // -----------------------------------------------------------------------------
 OGenericUnoController::~OGenericUnoController()
 {
+
+    DBG_DTOR(OGenericUnoController,NULL);
 }
 
 // -----------------------------------------------------------------------------
@@ -249,7 +254,7 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
     {
         if ( ( *pIter >>= aValue ) && ( 0 == aValue.Name.compareToAscii( "Frame" ) ) )
         {
-            aValue.Value >>= xFrame;
+            xFrame.set(aValue.Value,UNO_QUERY_THROW);
         }
         /* #i42316#
         else if ( ( *pIter >>= aValue ) && ( 0 == aValue.Name.compareToAscii( "ReadOnly" ) ) )
@@ -276,6 +281,8 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
             }
 
             Construct( pParentWin );
+            if ( !getView() )
+                throw Exception(::rtl::OUString::createFromAscii("Window is null"),*this);
         }
         else
         {
@@ -707,6 +714,13 @@ void OGenericUnoController::setMasterDispatchProvider(const Reference< XDispatch
 // -----------------------------------------------------------------------
 void OGenericUnoController::dispatch(const URL& _aURL, const Sequence< PropertyValue >& aArgs) throw(RuntimeException)
 {
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    // Since the fix for #123967#, the SolarMutex is not locked anymore when the framework calls into
+    // here. So, lock it ourself. The real solution would be to lock it only in the places
+    // where it's needed, but a) this might turn out difficult, since we then also need to care
+    // for locking in the proper order (SolarMutex and m_aMutex), and b) this would be too many places
+    // for the time frame of the fix.
+    // #i52602# / frank.schoenheit@sun.com / 2005-07-29
     executeUnChecked(_aURL,aArgs);
 }
 
@@ -786,6 +800,10 @@ void OGenericUnoController::disposing()
     // check out from all the objects we are listening
     // the frame
     stopFrameListening( );
+    m_xMasterDispatcher = NULL;
+    m_xSlaveDispatcher = NULL;
+    m_xCurrentFrame = NULL;
+    m_xMultiServiceFacatory = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -1283,7 +1301,8 @@ Sequence< ::sal_Int16 > SAL_CALL OGenericUnoController::getSupportedCommandGroup
             aIter != m_aSupportedFeatures.end();
             ++aIter
         )
-        aCmdHashMap.insert( CommandHashMap::value_type( aIter->second.GroupId, 0 ));
+        if ( aIter->second.GroupId != CommandGroup::INTERNAL )
+            aCmdHashMap.insert( CommandHashMap::value_type( aIter->second.GroupId, 0 ));
 
     Sequence< sal_Int16 > aCommandGroups( aCmdHashMap.size() );
     ::std::transform( aCmdHashMap.begin(),
