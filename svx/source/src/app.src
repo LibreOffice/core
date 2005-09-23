@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:16:59 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:01:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@
 ErrorBox RID_ERRBOX_MODULENOTINSTALLED
 {
     Buttons = WB_OK ;
-    Message [ de ] = "Die Aktion konnte nicht ausgeführt werden. Das dafür benötigte %PRODUCTNAME Modul ist momentan nicht installiert." ;
+    Message [ de ] = "Die Aktion konnte nicht ausgefÃ¼hrt werden. Das dafÃ¼r benÃ¶tigte %PRODUCTNAME Modul ist momentan nicht installiert." ;
     Message [ en-US ] = "The action could not be executed. The %PRODUCTNAME program module needed for this action is currently not installed.";
 };
 
