@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:55:38 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:55:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,7 +186,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     {
         Pos = MAP_APPFONT( 105, 158 );
         Size = MAP_APPFONT( 85, 10 );
-        Text [ de ] = "R¸c~kw‰rts suchen";
+        Text [ de ] = "R√ºc~kw√§rts suchen";
         TabStop = TRUE;
         HelpId = HID_SEARCH_BACKWARD;
         Text [ en-US ] = "Search backwards";
@@ -216,7 +216,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     {
         Pos = MAP_APPFONT( 190, 171 );
         Size = MAP_APPFONT( 100, 10 );
-        Text [ de ] = "Re~gul‰rer Ausdruck";
+        Text [ de ] = "Re~gul√§rer Ausdruck";
         TabStop = TRUE;
         HelpId = HID_SEARCH_REGULAR;
         Text [ en-US ] = "Regular expression";
@@ -226,7 +226,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     {
         Pos = MAP_APPFONT( 190, 184 );
         Size = MAP_APPFONT( 84, 20 );
-        Text [ de ] = "~ƒhnlichkeitssuche";
+        Text [ de ] = "~√Ñhnlichkeitssuche";
         TabStop = TRUE;
         WordBreak = TRUE;
         HelpId = HID_SEARCH_APPROX;
@@ -248,7 +248,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Pos = MAP_APPFONT( 105, 209 );
         Size = MAP_APPFONT( 85, 10 );
         TabStop = TRUE ;
-        Text [ de ] = "Zeichenbreite ber¸cksichtigen" ;
+        Text [ de ] = "Zeichenbreite ber√ºcksichtigen" ;
         Text [ en-US ] = "Match character width" ;
     };
     CheckBox CB_SOUNDSLIKECJK
@@ -256,7 +256,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Pos = MAP_APPFONT( 190, 209 );
         Size = MAP_APPFONT( 84, 10 );
         TabStop = TRUE ;
-        Text [ de ] = "ƒhnl. Schreibweise (Jap.)" ;
+        Text [ de ] = "√Ñhnl. Schreibweise (Jap.)" ;
         Text [ en-US ] = "Sounds like (Japanese)";
     };
     PushButton PB_SOUNDSLIKESETTINGS
@@ -310,7 +310,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Pos = MAP_APPFONT( 244, 26 );
         Size = MAP_APPFONT( 50, 14 );
         HelpId = HID_SEARCH_BTN_CLOSE;
-        Text [ de ] = "S~chlieﬂen";
+        Text [ de ] = "S~chlie√üen";
         TabStop = TRUE;
         Text [ en-US ] = "~Close";
         Text [ x-comment ] = " ";
@@ -344,7 +344,7 @@ String RID_STR_RECORDSEARCH_BUTTONS
 ErrorBox RID_SVXERR_SEARCH_NORECORD
 {
     Buttons = WB_OK;
-    Message [ de ] = "Es wurden keine Datens‰tze, die zu Ihren Angaben passen, gefunden !" ;
+    Message [ de ] = "Es wurden keine Datens√§tze, die zu Ihren Angaben passen, gefunden !" ;
     Message [ en-US ] = "No records corresponding to your data found!";
     Message [ x-comment ] = " ";
 };
@@ -352,21 +352,21 @@ ErrorBox RID_SVXERR_SEARCH_NORECORD
 ErrorBox RID_SVXERR_SEARCH_GENERAL_ERROR
 {
     Buttons = WB_OK;
-    Message [ de ] = "Es trat ein nicht n‰her bekannter Fehler auf. Die Suche konnte nicht beendet werden !" ;
+    Message [ de ] = "Es trat ein nicht n√§her bekannter Fehler auf. Die Suche konnte nicht beendet werden !" ;
     Message [ en-US ] = "An unknown error occurred. The search could  not be terminated!";
     Message [ x-comment ] = " ";
 };
 
 String RID_STR_SEARCH_OVERFLOW
 {
-    Text [ de ] = "‹berlauf, Suche wurde am Anfang fortgesetzt;‹berlauf, Suche wurde am Ende fortgesetzt" ;
+    Text [ de ] = "√úberlauf, Suche wurde am Anfang fortgesetzt;√úberlauf, Suche wurde am Ende fortgesetzt" ;
     Text [ en-US ] = "Overflow, search continued at the beginning;Overflow, search continued at the end";
     Text [ x-comment ] = " ";
 };
 
 String RID_STR_SEARCH_COUNTING
 {
-    Text [ de ] = "z‰hle Datens‰tze" ;
+    Text [ de ] = "z√§hle Datens√§tze" ;
     Text [ en-US ] = "counting records";
     Text [ x-comment ] = " ";
 };
