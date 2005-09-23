@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationDialog.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:34:12 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 10:45:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ const sal_Int32 nHandleDuration = 6;
 const sal_Int32 nHandleRepeat = 7;
 const sal_Int32 nHandleRewind = 8;
 const sal_Int32 nHandleEnd = 9;
-const sal_Int32 nHandleMasterRel = 10;
+const sal_Int32 nHandleAfterEffectOnNextEffect = 10;
 const sal_Int32 nHandleDimColor = 11;
 const sal_Int32 nHandleMaxParaDepth = 12;
 const sal_Int32 nHandlePresetId = 13;
