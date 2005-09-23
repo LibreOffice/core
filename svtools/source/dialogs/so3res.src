@@ -4,9 +4,9 @@
  *
  *  $RCSfile: so3res.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:19:29 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:53:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,19 +90,19 @@ Resource RID_SO_ERROR_HANDLER
     };
     String ERRCODE_SO_MK_CONNECT_MANUALLY&S_MAX
     {
-        Text [ de ] = "OLE konnte sich nicht mit einem Gerät im Netzwerk (Server) verbinden" ;
+        Text [ de ] = "OLE konnte sich nicht mit einem GerÃ¤t im Netzwerk (Server) verbinden" ;
         Text [ en-US ] = "OLE could not connect to a network device (server)" ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_INTERMEDIATE_INTERFACE_NOT_SUPPORTED&S_MAX
     {
-        Text [ de ] = "Das gefundene Objekt unterstützt nicht die gewünschten Funktionen" ;
+        Text [ de ] = "Das gefundene Objekt unterstÃ¼tzt nicht die gewÃ¼nschten Funktionen" ;
         Text [ en-US ] = "The object found does not support the interface required for the desired operation" ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_NO_INTERFACE&S_MAX
     {
-        Text [ de ] = "Die Schnittstelle wird nicht unterstützt" ;
+        Text [ de ] = "Die Schnittstelle wird nicht unterstÃ¼tzt" ;
         Text [ en-US ] = "Interface not supported" ;
         Text [ x-comment ] = " ";
     };
@@ -181,13 +181,13 @@ Resource RID_SO_ERROR_HANDLER
     };
     String ERRCODE_SO_MK_NEED_GENERIC&S_MAX
     {
-        Text [ de ] = "Moniker können nur generisch zusammengesetzt werden" ;
+        Text [ de ] = "Moniker kÃ¶nnen nur generisch zusammengesetzt werden" ;
         Text [ en-US ] = "Monikers must be composed generically" ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_PENDING&S_MAX
     {
-        Text [ de ] = "Die Daten sind zur Zeit nicht verfügbar" ;
+        Text [ de ] = "Die Daten sind zur Zeit nicht verfÃ¼gbar" ;
         Text [ en-US ] = "Data not available at this time" ;
         Text [ x-comment ] = " ";
     };
@@ -201,55 +201,55 @@ Resource RID_SO_ERROR_HANDLER
     String ERRCODE_SO_LINDEX & S_MAX
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ungültiger Index : Ung³ltiger Index */
-        Text [ de ] = "Ungültiger Index" ;
+        Text [ de ] = "UngÃ¼ltiger Index" ;
         Text [ en-US ] = "Invalid index" ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_CANNOT_DOVERB_NOW & S_MAX
     {
         /* ### ACHTUNG: Neuer Text in Resource? Das Objekt kann die Aktion im momentanen Zustand nicht ausführen : Das Objekt kann die Aktion im momentanen Zustand nicht ausf³hren */
-        Text [ de ] = "Das Objekt kann die Aktion im momentanen Zustand nicht ausführen" ;
+        Text [ de ] = "Das Objekt kann die Aktion im momentanen Zustand nicht ausfÃ¼hren" ;
         Text [ en-US ] = "The action cannot be executed in the object's current state." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_OLEOBJ_INVALIDHWND & S_MAX
     {
         /* ### ACHTUNG: Neuer Text in Resource? Bei der Aktivierung wurde ein ungültiges Fenster ist übergeben : Bei der Aktivierung wurde ein ung³ltiges Fenster ist ³bergeben */
-        Text [ de ] = "Bei der Aktivierung wurde ein ungültiges Fenster übergeben" ;
+        Text [ de ] = "Bei der Aktivierung wurde ein ungÃ¼ltiges Fenster Ã¼bergeben" ;
         Text [ en-US ] = "An invalid window was passed when activated." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_NOVERBS & S_MAX
     {
         /* ### ACHTUNG: Neuer Text in Resource? Das Objekt unterstützt keine Aktionen : Das Objekt unterst³tzt keine Aktionen */
-        Text [ de ] = "Das Objekt unterstützt keine Aktionen" ;
+        Text [ de ] = "Das Objekt unterstÃ¼tzt keine Aktionen" ;
         Text [ en-US ] = "The object does not support any actions" ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_INVALIDVERB & S_MAX
     {
         /* ### ACHTUNG: Neuer Text in Resource? Die Aktion ist nicht definiert. Es wird die Default Aktion ausgelöst : Die Aktion ist nicht definiert. Es wird die Default Aktion ausgel÷st */
-        Text [ de ] = "Die Aktion ist nicht definiert. Es wird die Default Aktion ausgelöst" ;
+        Text [ de ] = "Die Aktion ist nicht definiert. Es wird die Default Aktion ausgelÃ¶st" ;
         Text [ en-US ] = "The action is not defined. The default action will be executed." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_CONNECT & S_MAX
     {
         /* ### ACHTUNG: Neuer Text in Resource? Eine Verknüpfung auf das Netzwerk konnte nicht wieder hergestellt werden : Eine Verkn³pfung auf das Netzwerk, die nicht wieder hergestellt werden konnte */
-        Text [ de ] = "Eine Verknüpfung auf das Netzwerk konnte nicht wieder hergestellt werden" ;
+        Text [ de ] = "Eine VerknÃ¼pfung auf das Netzwerk konnte nicht wieder hergestellt werden" ;
         Text [ en-US ] = "A link to the network could not be re-established." ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_NOTIMPL & S_MAX
     {
         /* ### ACHTUNG: Neuer Text in Resource? Das Objekt unterstützt diese Aktion nicht : Das Objekt unterst³tzt diese Aktion nicht */
-        Text [ de ] = "Das Objekt unterstützt diese Aktion nicht" ;
+        Text [ de ] = "Das Objekt unterstÃ¼tzt diese Aktion nicht" ;
         Text [ en-US ] = "Object does not support this action" ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_CANTOPENFILE & S_MAX
     {
-        Text [ de ] = "Die angegebene Datei konnte nicht geöffnet werden" ;
+        Text [ de ] = "Die angegebene Datei konnte nicht geÃ¶ffnet werden" ;
         Text [ en-US ] = "The specified file could not be opened." ;
         Text [ x-comment ] = " ";
     };
@@ -272,61 +272,61 @@ Resource RID_SO_ERRCTX
 };
 String STR_INS_OBJECT
 {
-    Text [ de ] = "Fügt ein neues %1-Objekt in Ihr Dokument ein." ;
+    Text [ de ] = "FÃ¼gt ein neues %1-Objekt in Ihr Dokument ein." ;
     Text [ en-US ] = "Inserts a new %1-Object into your document." ;
     Text [ x-comment ] = " ";
 };
 String STR_INS_OBJECT_ICON
 {
-    Text [ de ] = "Fügt ein neues %1-Objekt als Symbol in Ihr Dokument ein." ;
+    Text [ de ] = "FÃ¼gt ein neues %1-Objekt als Symbol in Ihr Dokument ein." ;
     Text [ en-US ] = "Inserts a new %1-Object into your document as a symbol." ;
     Text [ x-comment ] = " ";
 };
 String STR_INS_FILE
 {
-    Text [ de ] = "Fügt den Inhalt der Datei in Ihr Dokument ein, so dass eine spätere Bearbeitung in der Ursprungsanwendung erfolgt." ;
+    Text [ de ] = "FÃ¼gt den Inhalt der Datei in Ihr Dokument ein, so dass eine spÃ¤tere Bearbeitung in der Ursprungsanwendung erfolgt." ;
     Text [ en-US ] = "Inserts the contents of the file into your document to enable later editing in the original application." ;
     Text [ x-comment ] = " ";
 };
 String STR_INS_PLUGIN
 {
-    Text [ de ] = "Fügt ein PlugIn-Objekt in Ihr Dokument ein. In dem Objekt steht ein Verweis auf die Daten eines PlugIn. Wird das Objekt aktiviert, wird das PlugIn gestartet." ;
+    Text [ de ] = "FÃ¼gt ein PlugIn-Objekt in Ihr Dokument ein. In dem Objekt steht ein Verweis auf die Daten eines PlugIn. Wird das Objekt aktiviert, wird das PlugIn gestartet." ;
     Text [ en-US ] = "Inserts a plug-in object into your document with a reference to the plug-in data. When the object is activated, the plug-in is automatically executed." ;
     Text [ x-comment ] = " ";
 };
 String STR_INS_APPLET
 {
-    Text [ de ] = "Fügt ein Applet-Objekt in Ihr Dokument ein. In dem Objekt steht ein Verweis auf die Daten eines Applet. Wird das Objekt aktiviert, wird das Applet gestartet." ;
+    Text [ de ] = "FÃ¼gt ein Applet-Objekt in Ihr Dokument ein. In dem Objekt steht ein Verweis auf die Daten eines Applet. Wird das Objekt aktiviert, wird das Applet gestartet." ;
     Text [ en-US ] = "Inserts an applet object into your document. When the object is activated, the applet is automatically executed." ;
     Text [ x-comment ] = " ";
 };
 String STR_INS_FILE_ICON
 {
-    Text [ de ] = "Fügt ein Symbol, das den Inhalt der Datei repräsentiert, in Ihr Dokument ein." ;
+    Text [ de ] = "FÃ¼gt ein Symbol, das den Inhalt der Datei reprÃ¤sentiert, in Ihr Dokument ein." ;
     Text [ en-US ] = "Inserts the contents of the file as an icon into your document ." ;
     Text [ x-comment ] = " ";
 };
 String STR_INS_FILE_LINK
 {
-    Text [ de ] = "Fügt den Inhalt der Datei in Ihr Dokument ein und stellt eine Verknüpfung zur Quelldatei her. Änderungen in der Quelldatei erscheinen auch in Ihrem Dokument." ;
+    Text [ de ] = "FÃ¼gt den Inhalt der Datei in Ihr Dokument ein und stellt eine VerknÃ¼pfung zur Quelldatei her. Ã„nderungen in der Quelldatei erscheinen auch in Ihrem Dokument." ;
     Text [ en-US ] = "Inserts the contents of the file into your document and creates a link to the source file. Changes made to the source file will be reflected in your document." ;
     Text [ x-comment ] = " ";
 };
 String STR_INS_FILE_ICON_LINK
 {
-    Text [ de ] = "Fügt ein Symbol, das den Inhalt der Datei repräsentiert, in Ihr Dokument ein. Änderungen in der Quelldatei erscheinen auch in Ihrem Dokument." ;
+    Text [ de ] = "FÃ¼gt ein Symbol, das den Inhalt der Datei reprÃ¤sentiert, in Ihr Dokument ein. Ã„nderungen in der Quelldatei erscheinen auch in Ihrem Dokument." ;
     Text [ en-US ] = "Inserts an icon into your document representing the file. Changes made to the source file will be reflected in your document." ;
     Text [ x-comment ] = " ";
 };
 String STR_PASTE
 {
-    Text [ de ] = "Fügt den Inhalt der Zwischenablage als %1 in Ihr Dokument ein." ;
+    Text [ de ] = "FÃ¼gt den Inhalt der Zwischenablage als %1 in Ihr Dokument ein." ;
     Text [ en-US ] = "Pastes the contents of the clipboard as %1 in your document." ;
     Text [ x-comment ] = " ";
 };
 String STR_CONVERT_TO
 {
-    Text [ de ] = "Ändert das markierte %1-Objekt entgültig in den Objekttyp %2." ;
+    Text [ de ] = "Ã„ndert das markierte %1-Objekt entgÃ¼ltig in den Objekttyp %2." ;
     Text [ en-US ] = "Converts the selected %1object to the object type %2." ;
     Text [ x-comment ] = " ";
 };
@@ -338,7 +338,7 @@ String STR_ACTIVATE_AS
 };
 String STR_VERB_OPEN
 {
-    Text [ de ] = "~Öffnen" ;
+    Text [ de ] = "~Ã–ffnen" ;
     Text [ en-US ] = "~Open" ;
     Text [ x-comment ] = " ";
 };
@@ -356,31 +356,31 @@ String STR_PLUGIN_CANT_SHOW
 };
 String STR_ERROR_DDE
 {
-    Text [ de ] = "DDE Verknüpfung zu % für % Bereich % kann nicht erzeugt werden." ;
+    Text [ de ] = "DDE VerknÃ¼pfung zu % fÃ¼r % Bereich % kann nicht erzeugt werden." ;
     Text [ en-US ] = "DDE link to % for % area % are not available." ;
     Text [ x-comment ] = " ";
 };
 String STR_ERROR_OBJNOCREATE
 {
-    Text [ de ] = "Objekt % kann nicht eingefügt werden." ;
+    Text [ de ] = "Objekt % kann nicht eingefÃ¼gt werden." ;
     Text [ en-US ] = "Object % could not be inserted." ;
     Text [ x-comment ] = "% wird durch Objektnamen ersetzt" ;
 };
 String STR_ERROR_OBJNOCREATE_FROM_FILE
 {
-    Text [ de ] = "Objekt aus Datei % kann nicht eingefügt werden." ;
+    Text [ de ] = "Objekt aus Datei % kann nicht eingefÃ¼gt werden." ;
     Text [ en-US ] = "Object from file % could not be inserted." ;
     Text [ x-comment ] = "% wird durch Dateinamen ersetzt" ;
 };
 String STR_ERROR_OBJNOCREATE_PLUGIN
 {
-    Text [ de ] = "PlugIn aus Dokument % kann nicht eingefügt werden." ;
+    Text [ de ] = "PlugIn aus Dokument % kann nicht eingefÃ¼gt werden." ;
     Text [ en-US ] = "Plug-in from document % could not be inserted." ;
     Text [ x-comment ] = "% wird durch URL-Namen ersetzt" ;
 };
 String STR_QUERYUPDATELINKS
 {
-    Text [ de ] = "Sollen alle Verknüpfungen aktualisiert werden?" ;
+    Text [ de ] = "Sollen alle VerknÃ¼pfungen aktualisiert werden?" ;
     Text [ en-US ] = "Update all links?" ;
     Text [ x-comment ] = " ";
 };
