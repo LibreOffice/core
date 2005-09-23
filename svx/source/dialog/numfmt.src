@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numfmt.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:36:28 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:43:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
             < "Zahl" ; Default ; > ;
             < "Prozent" ; Default ; > ;
             /* ### ACHTUNG: Neuer Eintrag in Liste? 5 : Währung*/
-            < "Währung" ; Default ; > ;
+            < "WÃ¤hrung" ; Default ; > ;
             < "Datum" ; Default ; > ;
             < "Zeit" ; Default ; > ;
             < "Wissenschaft" ; Default ; > ;
@@ -197,7 +197,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Pos = MAP_APPFONT ( 12 , 120 ) ;
         Size = MAP_APPFONT ( 69 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Führende ~Nullen : F³hrende ~Nullen */
-        Text [ de ] = "Führende ~Nullen" ;
+        Text [ de ] = "FÃ¼hrende ~Nullen" ;
         Text [ en-US ] = "Leading ~zeroes" ;
         Text [ x-comment ] = " ";
     };
@@ -274,7 +274,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Pos = MAP_APPFONT ( 208 , 146 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         HelpId = HID_NUMBERFORMAT_TBI_ADD ;
-        QuickHelpText [ de ] = "Hinzufügen" ;
+        QuickHelpText [ de ] = "HinzufÃ¼gen" ;
         QuickHelpText [ en-US ] = "Add" ;
         QuickHelpText [ x-comment ] = " ";
         QuickHelpText [ x-comment ] = " ";
@@ -298,7 +298,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Pos = MAP_APPFONT ( 224 , 146 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         HelpId = HID_NUMBERFORMAT_TBI_INFO ;
-        QuickHelpText [ de ] = "Kommentar ändern" ;
+        QuickHelpText [ de ] = "Kommentar Ã¤ndern" ;
         QuickHelpText [ en-US ] = "Edit Comment" ;
         QuickHelpText [ x-comment ] = " ";
         QuickHelpText [ x-comment ] = " ";
