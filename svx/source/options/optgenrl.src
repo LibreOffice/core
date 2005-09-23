@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:51:47 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:59:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@ TabPage RID_SFXPAGE_GENERAL
         Pos = MAP_APPFONT ( LEFT , FLINE ( 1 ) ) ;
         Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
-        Text [ de ] = "~Vor-/Name/Kürzel" ;
+        Text [ de ] = "~Vor-/Name/KÃ¼rzel" ;
         Text [ en-US ] = "First/Last ~name/Initials" ;
         Text [ x-comment ] = " ";
     };
@@ -82,7 +82,7 @@ TabPage RID_SFXPAGE_GENERAL
         Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
         Hide = TRUE;
-        Text [ de ] = "~Vor-/Vaters-/Name/Kürzel" ;
+        Text [ de ] = "~Vor-/Vaters-/Name/KÃ¼rzel" ;
         Text [ en-US ] = "First name/Father's name/Last name/Initials";
     };
     Edit ED_FATHERNAME
@@ -115,7 +115,7 @@ TabPage RID_SFXPAGE_GENERAL
         Pos = MAP_APPFONT ( LEFT , FLINE ( 2 ) ) ;
         Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
-        Text [ de ] = "~Straße" ;
+        Text [ de ] = "~StraÃŸe" ;
         Text [ en-US ] = "~Street" ;
         Text [ x-comment ] = " ";
     };
@@ -125,7 +125,7 @@ TabPage RID_SFXPAGE_GENERAL
         Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
         Hide = TRUE;
-        Text [ de ] = "~Straße/Wohnungsnummer" ;
+        Text [ de ] = "~StraÃŸe/Wohnungsnummer" ;
         Text [ en-US ] = "Street/Apartment number";
     };
     Edit ED_STREET
@@ -271,7 +271,7 @@ TabPage RID_SFXPAGE_GENERAL
         Pos = MAP_APPFONT ( 6 , 122 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Hide = TRUE;
-        Text [ de ] = "~Daten für Dokumenteigenschaften verwenden" ;
+        Text [ de ] = "~Daten fÃ¼r Dokumenteigenschaften verwenden" ;
         Text [ en-US ] = "Use data for document properties";
         Text [ x-comment ] = " ";
     };
@@ -285,7 +285,7 @@ TabPage RID_SFXPAGE_GENERAL
     };
     String STR_QUERY_REG
     {
-        Text [ de ] = "Bitte beachten Sie, dass Straße, Postleitzahl und Ort für die Berechnung des Registrierungsschlüssels herangezogen werden. Bis zur Registrierung können diese Benutzerdaten nicht mehr geändert werden.  Wollen Sie diese Benutzerdaten jetzt noch ändern?" ;
+        Text [ de ] = "Bitte beachten Sie, dass StraÃŸe, Postleitzahl und Ort fÃ¼r die Berechnung des RegistrierungsschlÃ¼ssels herangezogen werden. Bis zur Registrierung kÃ¶nnen diese Benutzerdaten nicht mehr geÃ¤ndert werden.  Wollen Sie diese Benutzerdaten jetzt noch Ã¤ndern?" ;
         Text [ en-US ] = "Note that street, Zip code and city are used to generate the registration key. You will not be able to change the user data again until the registration has been carried out. Do you want to modify the user data now?";
         Text [ x-comment ] = " ";
     };
@@ -298,7 +298,7 @@ QueryBox RID_SVXQB_CHANGEDATA
 {
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
-    Message [ de ] = "Sie haben die Benutzerdaten geändert.\nBitte bedenken Sie, dass dadurch die Registrierung verfällt.\nSie benötigen einen neuen Registrierungsschlüssel, der innerhalb der nächsten 30 Tage eingegeben werden muss.\nDas Registrierungsformular finden Sie im Menü Hilfe - Registrierung...\nWollen Sie die Benutzerdaten wirklich ändern?";
+    Message [ de ] = "Sie haben die Benutzerdaten geÃ¤ndert.\nBitte bedenken Sie, dass dadurch die Registrierung verfÃ¤llt.\nSie benÃ¶tigen einen neuen RegistrierungsschlÃ¼ssel, der innerhalb der nÃ¤chsten 30 Tage eingegeben werden muss.\nDas Registrierungsformular finden Sie im MenÃ¼ Hilfe - Registrierung...\nWollen Sie die Benutzerdaten wirklich Ã¤ndern?";
     Message [ en-US ] = "The User Data have been changed.\nNote that, if you continue, the registration key will become invalid.\nTherefore, a new registration key is needed within 30 days.\nYou can find the registration form in the menu Help - Registration...\nDo you really want to change your User Data?";
     Message [ x-comment ] = " ";
 };
@@ -314,7 +314,7 @@ StringArray RID_SVXSTR_FIELDUNIT_TABLE
         < "Meter" ; FUNIT_M ; > ;
         < "Kilometer" ; FUNIT_KM ; > ;
         < "Zoll" ; FUNIT_INCH ; > ;
-        < "Fuß" ; FUNIT_FOOT ; > ;
+        < "FuÃŸ" ; FUNIT_FOOT ; > ;
         < "Meilen" ; FUNIT_MILE ; > ;
         < "Pica" ; FUNIT_PICA ; > ;
         < "Point" ; FUNIT_POINT ; > ;
