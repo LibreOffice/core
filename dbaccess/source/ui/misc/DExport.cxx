@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DExport.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:06:47 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:36:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,7 +218,7 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
     SetColumnTypes(pList,_pInfoMap);
 }
 //---------------------------------------------------------------------------
-ODatabaseExport::ODatabaseExport(const Reference< XConnection >& _rxConnection,
+ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
                                  const Reference< XNumberFormatter >& _rxNumberF,
                                  const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                                  const TColumnVector* pList,
@@ -314,7 +314,7 @@ void ODatabaseExport::insertValueIntoColumn()
         OFieldDescription* pField = m_vDestVector[m_nColumnPos]->second;
         if(pField)
         {
-            OSL_ENSURE((m_bIsAutoIncrement ? m_nColumnPos+1 : m_nColumnPos) < m_vColumns.size(),"Illegal index for vector");
+            OSL_ENSURE((m_bIsAutoIncrement ? m_nColumnPos+1 : m_nColumnPos) < static_cast<sal_Int32>(m_vColumns.size()),"Illegal index for vector");
             sal_Int32 nPos = m_vColumns[m_bIsAutoIncrement ? m_nColumnPos+1 : m_nColumnPos].first;
             if(nPos != CONTAINER_ENTRY_NOTFOUND)
             {
@@ -327,7 +327,7 @@ void ODatabaseExport::insertValueIntoColumn()
                 {
                     sal_Int32 nNumberFormat = 0;
                     double fOutNumber = 0.0;
-                    OSL_ENSURE((m_bIsAutoIncrement ? m_nColumnPos+1 : m_nColumnPos) < m_vColumnTypes.size(),"Illegal index for vector");
+                    OSL_ENSURE((m_bIsAutoIncrement ? m_nColumnPos+1 : m_nColumnPos) < static_cast<sal_Int32>(m_vColumnTypes.size()),"Illegal index for vector");
                     if (m_vColumnTypes[m_bIsAutoIncrement ? m_nColumnPos+1 : m_nColumnPos] != DataType::VARCHAR)
                     {
                         Reference<XNumberFormatTypes> xNumType(m_xFormatter->getNumberFormatsSupplier()->getNumberFormats(),UNO_QUERY);
@@ -398,7 +398,7 @@ sal_Int32 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int32 _nOl
         fOutNumber = m_xFormatter->convertStringToNumber(nFormat,aCheckToken);
 
         {
-            OSL_ENSURE((m_nColumnPos) < m_vColumns.size(),"Illegal index for vector");
+            OSL_ENSURE((m_nColumnPos) < static_cast<sal_Int32>(m_vColumns.size()),"Illegal index for vector");
             m_vFormatKey[m_vColumns[m_nColumnPos].first] = nFormat; // wird sp"ater f"ur die Column gebraucht
             switch(nType)
             {
@@ -500,7 +500,7 @@ sal_Int32 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int32 _nOl
     }
     catch(Exception&)
     {
-        OSL_ENSURE((m_nColumnPos) < m_vColumns.size(),"Illegal index for vector");
+        OSL_ENSURE((m_nColumnPos) < static_cast<sal_Int32>(m_vColumns.size()),"Illegal index for vector");
         m_vFormatKey[m_vColumns[m_nColumnPos].first] =  100;
         nFormat = NumberFormat::TEXT; // Text "uberschreibt alles
     }
@@ -630,7 +630,7 @@ sal_Bool ODatabaseExport::createRowSet()
     {
         ::rtl::OUString sDestName = ::dbtools::composeTableName(m_xConnection->getMetaData(),m_xTable,sal_False,::dbtools::eInDataManipulation);
 
-        xProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,makeAny(m_xConnection));
+        xProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,makeAny(m_xConnection.getTyped()));
         xProp->setPropertyValue(PROPERTY_COMMANDTYPE,makeAny(CommandType::TABLE));
         xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(sDestName));
         xProp->setPropertyValue(PROPERTY_IGNORERESULT,::cppu::bool2any(sal_True));
