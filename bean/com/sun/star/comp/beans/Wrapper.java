@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Wrapper.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:03:19 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:53:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,10 @@ import com.sun.star.uno.UnoRuntime;
  */
 class Wrapper
     implements
+        com.sun.star.lib.uno.Proxy,
+            // see the comment in com.sun.star.lib.uno.bridges.java_remote
+            // .java_remote_bridge.mapInterfaceTo for the consequences of this
+            // hack
         com.sun.star.uno.IQueryInterface,
         com.sun.star.lang.XComponent
 {
