@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olmenu.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:26:33 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:07:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ Menu MN_SPELL_POPUP
         {
             Identifier = MN_SPELLING ;
             HelpID = HID_LINGU_SPELLING_DLG ;
-            Text [ de ] = "~Rechtschreibprüfung..." ;
+            Text [ de ] = "~RechtschreibprÃ¼fung..." ;
             Text [ x-comment ] = "; triple dots (...) are required now at the end of the text";
             Text [ en-US ] = "~Spellcheck..." ;
         };
@@ -98,7 +98,7 @@ String STR_PARAGRAPH
 String STR_SPELL_OK
 {
     /* ### ACHTUNG: Neuer Text in Resource? Die Rechtschreibprüfung ist abgeschlossen! : Die Rechtschreibpr³fung ist abgeschlossen! */
-    Text [ de ] = "Die Rechtschreibprüfung ist abgeschlossen!" ;
+    Text [ de ] = "Die RechtschreibprÃ¼fung ist abgeschlossen!" ;
     Text [ en-US ] = "The spellcheck is complete." ;
     Text [ x-comment ] = " ";
 };
