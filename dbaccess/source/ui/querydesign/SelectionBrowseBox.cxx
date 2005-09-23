@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:27:44 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:43:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,6 +178,7 @@ OSelectionBrowseBox::OSelectionBrowseBox( Window* pParent )
                    ,m_bStopTimer(sal_False)
                    ,m_bWasEditing(sal_False)
                    ,m_bDisableErrorBox(sal_False)
+                   ,m_bInUndoMode(sal_False)
 {
     DBG_CTOR(OSelectionBrowseBox,NULL);
     SetHelpId(HID_CTL_QRYDGNCRIT);
@@ -352,7 +353,7 @@ void OSelectionBrowseBox::ColumnMoved( USHORT nColId,BOOL _bCreateUndo )
         rFields.insert(rFields.begin() + nNewPos - 1,pOldEntry);
 
         // create the undo action
-        if ( _bCreateUndo )
+        if ( !m_bInUndoMode && _bCreateUndo )
         {
             OTabFieldMovedUndoAct* pUndoAct = new OTabFieldMovedUndoAct(this);
             pUndoAct->SetColumnPosition( nOldPos + 1);
@@ -985,7 +986,8 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                     {
                         strOldCellContents = pEntry->GetField();
                         bListAction = sal_True;
-                        static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
+                        if ( !m_bInUndoMode )
+                            static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
 
                         USHORT nPos = m_pFieldCell->GetEntryPos(aFieldName);
                         if ( nPos != COMBOBOX_ENTRY_NOTFOUND && aFieldName.GetTokenCount('.') > 1 )
@@ -1013,7 +1015,8 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                 if ( bError )
                 {
                     sNewValue = aFieldName;
-                    static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->LeaveListAction();
+                    if ( !m_bInUndoMode )
+                        static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->LeaveListAction();
                     bListAction = sal_False;
                 }
                 else
@@ -1246,7 +1249,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
         CheckFreeColumns(nDummy);
     }
 
-    if ( bListAction )
+    if ( bListAction && !m_bInUndoMode )
         static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->LeaveListAction();
 
     return pEntry != NULL && !bError;
@@ -1351,10 +1354,13 @@ void OSelectionBrowseBox::RemoveField(sal_uInt16 nColumnId, sal_Bool bActivate)
     pDesc->SetColWidth( (sal_uInt16)GetColumnWidth(nColumnId) );    // hat er sich vorher leider nicht gemerkt
 
     // UndoAction erzeugen
-    OTabFieldDelUndoAct* pUndoAction = new OTabFieldDelUndoAct( this );
-    pUndoAction->SetTabFieldDescr(pDesc);
-    pUndoAction->SetColumnPosition(nPos);
-    pController->addUndoActionAndInvalidate( pUndoAction );
+    if ( !m_bInUndoMode )
+    {
+        OTabFieldDelUndoAct* pUndoAction = new OTabFieldDelUndoAct( this );
+        pUndoAction->SetTabFieldDescr(pDesc);
+        pUndoAction->SetColumnPosition(nPos);
+        pController->addUndoActionAndInvalidate( pUndoAction );
+    }
 
     RemoveColumn(nColumnId);
 
@@ -1678,11 +1684,14 @@ OTableFieldDescRef OSelectionBrowseBox::InsertField(const OTableFieldDescRef& _r
     // Spalte einfuegen
     InsertColumn( pEntry, _nColumnPostion );
 
-    // UndoAction erzeugen
-    OTabFieldCreateUndoAct* pUndoAction = new OTabFieldCreateUndoAct( this );
-    pUndoAction->SetTabFieldDescr( pEntry );
-    pUndoAction->SetColumnPosition(_nColumnPostion);
-    getDesignView()->getController()->addUndoActionAndInvalidate( pUndoAction );
+    if ( !m_bInUndoMode )
+    {
+        // UndoAction erzeugen
+        OTabFieldCreateUndoAct* pUndoAction = new OTabFieldCreateUndoAct( this );
+        pUndoAction->SetTabFieldDescr( pEntry );
+        pUndoAction->SetColumnPosition(_nColumnPostion);
+        getDesignView()->getController()->addUndoActionAndInvalidate( pUndoAction );
+    }
 
     return pEntry;
 }
@@ -2271,7 +2280,7 @@ String OSelectionBrowseBox::GetCellContents(sal_Int32 nCellIndex, USHORT nColId)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     //  DBG_ASSERT(nCellIndex < (GetRowCount()-1),"CellIndex ist zu gross");
-    if ( GetCurColumnId() == nColId )
+    if ( GetCurColumnId() == nColId && !m_bInUndoMode )
         SaveModified();
 
     USHORT nPos = GetColumnPos(nColId);
@@ -2393,13 +2402,16 @@ void OSelectionBrowseBox::ColumnResized(sal_uInt16 nColId)
     static_cast<OQueryController*>(getDesignView()->getController())->setModified();
     EditBrowseBox::ColumnResized(nColId);
 
-    if (pEntry.isValid())
+    if ( pEntry.isValid())
     {
-        // create the undo action
-        OTabFieldSizedUndoAct* pUndo = new OTabFieldSizedUndoAct(this);
-        pUndo->SetColumnPosition( nPos );
-        pUndo->SetOriginalWidth(pEntry->GetColWidth());
-        getDesignView()->getController()->addUndoActionAndInvalidate(pUndo);
+        if ( !m_bInUndoMode )
+        {
+            // create the undo action
+            OTabFieldSizedUndoAct* pUndo = new OTabFieldSizedUndoAct(this);
+            pUndo->SetColumnPosition( nPos );
+            pUndo->SetOriginalWidth(pEntry->GetColWidth());
+            getDesignView()->getController()->addUndoActionAndInvalidate(pUndo);
+        }
         pEntry->SetColWidth(sal_uInt16(GetColumnWidth(nColId)));
     }
 }
@@ -2522,7 +2534,7 @@ void OSelectionBrowseBox::copy()
 // -----------------------------------------------------------------------------
 void OSelectionBrowseBox::appendUndoAction(const String& _rOldValue,const String& _rNewValue,sal_Int32 _nRow,sal_Bool& _bListAction)
 {
-    if ( !_rNewValue.Equals(_rOldValue) )
+    if ( !m_bInUndoMode && !_rNewValue.Equals(_rOldValue) )
     {
         if ( !_bListAction )
         {
@@ -2535,7 +2547,7 @@ void OSelectionBrowseBox::appendUndoAction(const String& _rOldValue,const String
 // -----------------------------------------------------------------------------
 void OSelectionBrowseBox::appendUndoAction(const String& _rOldValue,const String& _rNewValue,sal_Int32 _nRow)
 {
-    if ( !_rNewValue.Equals(_rOldValue) )
+    if ( !m_bInUndoMode && !_rNewValue.Equals(_rOldValue) )
     {
         OTabFieldCellModifiedUndoAct* pUndoAct = new OTabFieldCellModifiedUndoAct(this);
         pUndoAct->SetCellIndex(_nRow);
