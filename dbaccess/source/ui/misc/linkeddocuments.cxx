@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkeddocuments.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:14:53 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:40:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,6 +184,7 @@ namespace dbaui
     //==================================================================
     //= OLinkedDocumentsAccess
     //==================================================================
+    DBG_NAME(OLinkedDocumentsAccess)
     //------------------------------------------------------------------
     OLinkedDocumentsAccess::OLinkedDocumentsAccess(Window* _pDialogParent
                                                     , const Reference< XMultiServiceFactory >& _rxORB
@@ -197,8 +198,14 @@ namespace dbaui
         ,m_xConnection(_xConnection)
         ,m_sDataSourceName(_sDataSourceName)
     {
+        DBG_CTOR(OLinkedDocumentsAccess,NULL);
         OSL_ENSURE(m_xORB.is(), "OLinkedDocumentsAccess::OLinkedDocumentsAccess: invalid service factory!");
         OSL_ENSURE(m_pDialogParent, "OLinkedDocumentsAccess::OLinkedDocumentsAccess: really need a dialog parent!");
+    }
+    //------------------------------------------------------------------
+    OLinkedDocumentsAccess::~OLinkedDocumentsAccess()
+    {
+        DBG_DTOR(OLinkedDocumentsAccess,NULL);
     }
     //------------------------------------------------------------------
     void OLinkedDocumentsAccess::implDrop(const ::rtl::OUString& _rLinkName)
@@ -280,21 +287,30 @@ namespace dbaui
                 aDesc[::svx::daCommand] <<= _rObjectName;
             if ( m_xConnection.is() )
                 aDesc[::svx::daConnection] <<= m_xConnection;
+            Sequence<Any> aSeq = aDesc.createAnySequence();
+            sal_Int32 nPos = aSeq.getLength();
+            aSeq.realloc(nPos+1);
+            PropertyValue aProp;
+            aProp.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentDefinition"));
+            aSeq[nPos] <<= aProp;
 
             Reference< XJobExecutor > xFormWizard;
             {
                 WaitObject aWaitCursor( m_pDialogParent );
-                xFormWizard.set(m_xORB->createInstanceWithArguments(::rtl::OUString::createFromAscii(_pWizardService),aDesc.createAnySequence()),UNO_QUERY);
+                xFormWizard.set(m_xORB->createInstanceWithArguments(::rtl::OUString::createFromAscii(_pWizardService),aSeq),UNO_QUERY);
             }
             if ( xFormWizard.is() )
             {
                 xFormWizard->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("start")));
-                Reference<XPropertySet> xProp(xFormWizard,UNO_QUERY_THROW);
-                Reference<XPropertySetInfo> xInfo = xProp->getPropertySetInfo();
-                if ( xInfo->hasPropertyByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Document"))) )
+                Reference<XPropertySet> xProp(xFormWizard,UNO_QUERY);
+                if ( xProp.is() )
                 {
-                    _xDefinition.set(xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentDefinition"))),UNO_QUERY);
-                    xRet.set(xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Document"))),UNO_QUERY);
+                    Reference<XPropertySetInfo> xInfo = xProp->getPropertySetInfo();
+                    if ( xInfo->hasPropertyByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Document"))) )
+                    {
+                        _xDefinition.set(xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentDefinition"))),UNO_QUERY);
+                        xRet.set(xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Document"))),UNO_QUERY);
+                    }
                 }
             }
         }
