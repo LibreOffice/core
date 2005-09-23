@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_manager.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:21:01 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:34:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ String RID_STR_COPYING_PACKAGE
 String RID_STR_ERROR_WHILE_ADDING
 {
     Text [ en-US ] = "Error while adding package: ";
-    Text [ de ] = "Fehler beim Hinzufügen des Package: ";
+    Text [ de ] = "Fehler beim HinzufÃ¼gen des Package: ";
 };
 
 String RID_STR_ERROR_WHILE_REMOVING
