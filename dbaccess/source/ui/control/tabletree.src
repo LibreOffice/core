@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabletree.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:37:01 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:10:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,23 +107,23 @@ String STR_COULDNOTCREATE_DRIVERMANAGER
 
 String STR_NOREGISTEREDDRIVER
 {
-    Text [ de ] = "Es ist kein Treiber für die URL #connurl# registriert!";
+    Text [ de ] = "Es ist kein Treiber fÃ¼r die URL #connurl# registriert!";
     Text [ en-US ] = "A driver is not registered for the URL #connurl#.";
 };
 
 String STR_COULDNOTCONNECT
 {
-    Text [ de ] = "Es konnte keine Verbindung für den URL #connurl# aufgebaut werden.";
+    Text [ de ] = "Es konnte keine Verbindung fÃ¼r den URL #connurl# aufgebaut werden.";
     Text [ en-US ] = "No connection could be established for the URL #connurl#.";
 };
 String STR_COULDNOTCONNECT_PLEASECHECK
 {
-    Text [ de ] = "Bitte überprüfen Sie die aktuellen Einstellungen, zum Beispiel hinsichtlich Benutzername und Kennwort.";
+    Text [ de ] = "Bitte Ã¼berprÃ¼fen Sie die aktuellen Einstellungen, zum Beispiel hinsichtlich Benutzername und Kennwort.";
     Text [ en-US ] = "Please check the current settings, for example user name and password.";
 };
 String STR_NOTABLEINFO
 {
-    Text [ de ] = "Die Verbindung wurde erfolgreich hergestellt, aber es konnten keine Informationen über Tabellen in der Datenbank ermittelt werden.";
+    Text [ de ] = "Die Verbindung wurde erfolgreich hergestellt, aber es konnten keine Informationen Ã¼ber Tabellen in der Datenbank ermittelt werden.";
     Text [ en-US ] = "Successfully connected, but information about database tables is not available.";
 };
 String STR_ALL_TABLES
