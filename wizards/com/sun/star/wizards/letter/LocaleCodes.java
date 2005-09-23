@@ -1,6 +1,29 @@
 package com.sun.star.wizards.letter;
 
-public class LocaleCodes {
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.wizards.common.Resource;
+import com.sun.star.beans.PropertyValue;
+
+public class LocaleCodes extends Resource {
+
+    final static String UNIT_NAME = "svxres";
+    final static String MODULE_NAME = "svx";
+    PropertyValue [] allLanguageStrings;
+
+    public LocaleCodes (XMultiServiceFactory xmsf) {
+        super(xmsf, UNIT_NAME, MODULE_NAME);
+        allLanguageStrings = getStringList(10310);
+    }
+
+    public String getLanguageString(String MSID) {
+        String LS = "unknown Language";
+        for (int i=0; i < allLanguageStrings.length; i++) {
+            if (allLanguageStrings[i].Value.toString().equalsIgnoreCase(MSID)) {
+                LS = allLanguageStrings[i].Name;
+            }
+        }
+        return LS;
+    }
 
     public String[] getIDs() {
         String []Ids = new String [133];
