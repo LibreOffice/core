@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:28:29 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:20:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,10 +116,10 @@ namespace dbaui
             ::rtl::OUString aDSName = getDataSourceAcessor( m_pTreeView->getListBox()->GetRootLevelParent( _pApplyTo ) );
 
             ODataClipboard* pData = NULL;
-            Reference<XConnection> xConnection;  // supports the service sdb::connection
+            SharedConnection xConnection;
             if ( CommandType::QUERY != _nCommandType )
             {
-                if (_bAllowConnection && !ensureConnection(_pApplyTo, xConnection))
+                if ( _bAllowConnection && !ensureConnection( _pApplyTo, xConnection) )
                     return NULL;
                 pData = new ODataClipboard(aDSName, _nCommandType, aName, xConnection, getNumberFormatter(), getORB());
             }
@@ -149,11 +149,11 @@ namespace dbaui
         {
             // it must be a container
             EntryType eEntryType = getEntryType( pHitEntry );
-            Reference<XConnection> xConnection;
-            if ( eEntryType == etTableContainer && ensureConnection(pHitEntry,xConnection) && xConnection.is() )
+            SharedConnection xConnection;
+            if ( eEntryType == etTableContainer && ensureConnection( pHitEntry, xConnection ) && xConnection.is() )
             {
                 Reference<XChild> xChild(xConnection,UNO_QUERY);
-                Reference<XStorable> xStore(xChild.is() ? xChild->getParent() : Reference<XInterface>(),UNO_QUERY);
+                Reference<XStorable> xStore(xChild.is() ? getDataSourceOrModel(xChild->getParent()) : Reference<XInterface>(),UNO_QUERY);
                 // check for the concrete type
                 if ( xStore.is() && !xStore->isReadonly() && ::std::find_if(_rFlavors.begin(),_rFlavors.end(),TAppSupportedSotFunctor(E_TABLE,sal_True)) != _rFlavors.end())
                     return DND_ACTION_COPY;
@@ -205,8 +205,11 @@ namespace dbaui
         }
         else
         {
-            Reference<XConnection> xDestConnection;  // supports the service sdb::connection
-            if ( ensureConnection(pHitEntry, xDestConnection) && xDestConnection.is() && m_aTableCopyHelper.copyTagTable(aDroppedData,m_aAsyncDrop,xDestConnection) )
+            SharedConnection xDestConnection;
+            if (  ensureConnection( pHitEntry, xDestConnection )
+               && xDestConnection.is()
+               && m_aTableCopyHelper.copyTagTable( aDroppedData, m_aAsyncDrop, xDestConnection )
+               )
             {
                 m_aAsyncDrop.pDroppedAt = pHitEntry;
 
@@ -283,11 +286,11 @@ namespace dbaui
         // first get the dest connection
         ::osl::MutexGuard aGuard(m_aMutex);
 
-        Reference<XConnection> xDestConnection;  // supports the service sdb::connection
-        if (!ensureConnection(_rDesc.pDroppedAt, xDestConnection) )
+        SharedConnection xDestConnection;
+        if ( !ensureConnection( _rDesc.pDroppedAt, xDestConnection ) )
             return sal_False;
 
-        return m_aTableCopyHelper.copyTagTable(_rDesc, _bCheck,xDestConnection);
+        return m_aTableCopyHelper.copyTagTable( _rDesc, _bCheck, xDestConnection );
     }
     // -----------------------------------------------------------------------------
     IMPL_LINK( SbaTableQueryBrowser, OnAsyncDrop, void*, NOTINTERESTEDIN )
@@ -299,11 +302,11 @@ namespace dbaui
 
         if ( m_aAsyncDrop.nType == E_TABLE )
         {
-            Reference<XConnection> xDestConnection;  // supports the service sdb::connection
-            if ( ensureConnection(m_aAsyncDrop.pDroppedAt, xDestConnection) && xDestConnection.is() )
+            SharedConnection xDestConnection;
+            if ( ensureConnection( m_aAsyncDrop.pDroppedAt, xDestConnection ) && xDestConnection.is() )
             {
                 SvLBoxEntry* pDataSourceEntry = m_pTreeView->getListBox()->GetRootLevelParent(m_aAsyncDrop.pDroppedAt);
-                m_aTableCopyHelper.asyncCopyTagTable(m_aAsyncDrop,getDataSourceAcessor( pDataSourceEntry ),xDestConnection);
+                m_aTableCopyHelper.asyncCopyTagTable( m_aAsyncDrop, getDataSourceAcessor( pDataSourceEntry ), xDestConnection );
             }
         }
 
@@ -324,24 +327,25 @@ namespace dbaui
                 if(pData)
                 {
                     pEntryLoop->SetUserData(NULL);
-                    Reference< XContainer > xContainer(pData->xObject, UNO_QUERY);
+                    Reference< XContainer > xContainer(pData->xContainer, UNO_QUERY);
                     if (xContainer.is())
                         xContainer->removeContainerListener(this);
 
-                    Reference<XConnection> xCon(pData->xObject,UNO_QUERY);
-                    if(xCon.is())
+                    if ( pData->xConnection.is() )
                     {
-                        Reference< XComponent >  xComponent(xCon, UNO_QUERY);
+                        DBG_ASSERT( impl_isDataSourceEntry( pEntryLoop ), "SbaTableQueryBrowser::clearTreeModel: no data source entry, but a connection?" );
+                        // without this, pData->aController might not really be a valid ModelControllerConnector
+
+                        Reference< XComponent >  xComponent( pData->xConnection, UNO_QUERY );
                         if (xComponent.is())
                         {
                             Reference< ::com::sun::star::lang::XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
                             xComponent->removeEventListener(xEvtL);
                         }
-                        if ( m_bOwnConnection )
-                            ::comphelper::disposeComponent(pData->xObject);
                     }
 
-                    pData->xObject.clear();
+                    pData->xConnection.clear();
+                    pData->aController.clear();
                     delete pData;
                 }
                 pEntryLoop = m_pTreeModel->Next(pEntryLoop);
