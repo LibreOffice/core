@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ToolBoxHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:08:40 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:38:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,11 +57,14 @@
 
 namespace dbaui
 {
+    DBG_NAME(OToolBoxHelper)
     OToolBoxHelper::OToolBoxHelper()
         : m_bIsHiContrast(sal_False)
         ,m_pToolBox(NULL)
         ,m_nBitmapSet(-1 )
     {
+        DBG_CTOR(OToolBoxHelper,NULL);
+
         OSL_ENSURE(m_nBitmapSet != getCurrentSymbolSet(),"BitmapSet should not be identical");
         SvtMiscOptions().AddListener( LINK( this, OToolBoxHelper, ConfigOptionsChanged ) );
         Application::AddEventListener( LINK( this, OToolBoxHelper, SettingsChanged ) );
@@ -71,6 +74,8 @@ namespace dbaui
     {
         SvtMiscOptions().RemoveListener( LINK( this, OToolBoxHelper, ConfigOptionsChanged ) );
         Application::RemoveEventListener( LINK( this, OToolBoxHelper, SettingsChanged ) );
+
+        DBG_DTOR(OToolBoxHelper,NULL);
     }
     // -----------------------------------------------------------------------------
     sal_Int16 OToolBoxHelper::getCurrentSymbolSet()
