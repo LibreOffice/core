@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctempl.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:41:05 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:27:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,14 +59,14 @@ StringArray TEMPLATE_LONG_NAMES_ARY
     ItemList [ de ] =
     {
         < "Meine Vorlagen" ; > ;
-        < "Geschäftliche Korrespondenz" ; > ;
-        < "Sonstige geschäftliche Dokumente" ; > ;
+        < "GeschÃ¤ftliche Korrespondenz" ; > ;
+        < "Sonstige geschÃ¤ftliche Dokumente" ; > ;
         < "Private Korrespondenz und Dokumente" ; > ;
-        < "Formulare und Verträge" ; > ;
+        < "Formulare und VertrÃ¤ge" ; > ;
         < "Finanzen" ; > ;
         < "Bildung" ; > ;
-        < "Präsentationshintergründe" ; > ;
-        < "Präsentationen" ; > ;
+        < "PrÃ¤sentationshintergrÃ¼nde" ; > ;
+        < "PrÃ¤sentationen" ; > ;
         < "Diverses" ; > ;
     };
     ItemList [ en-US ] =
@@ -100,7 +100,7 @@ ItemList [ x-comment ] =
 
 String RID_CNT_STR_WAITING
 {
-    Text [ de ] = "Die Vorlagen werden jetzt für die erstmalige Benutzung einmal initialisiert." ;
+    Text [ de ] = "Die Vorlagen werden jetzt fÃ¼r die erstmalige Benutzung einmal initialisiert." ;
     Text [ en-US ] = "The templates are being initialized for first-time usage." ;
     Text [ x-comment ] = " ";
 };
