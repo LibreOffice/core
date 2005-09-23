@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AsyncronousLink.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:25:00 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:18:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,10 +38,15 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+
 //==================================================================
 //= OAsyncronousLink
 //==================================================================
 using namespace dbaui;
+DBG_NAME(OAsyncronousLink)
 //------------------------------------------------------------------
 OAsyncronousLink::OAsyncronousLink(const Link& _rHandler, ::vos::OMutex* _pEventSafety, ::vos::OMutex* _pDestructionSafety)
     :m_aHandler(_rHandler)
@@ -50,6 +55,8 @@ OAsyncronousLink::OAsyncronousLink(const Link& _rHandler, ::vos::OMutex* _pEvent
     ,m_bOwnMutexes(FALSE)
     ,m_nEventId(0)
 {
+    DBG_CTOR(OAsyncronousLink,NULL);
+
     if (_pEventSafety && _pDestructionSafety)
     {
         m_pEventSafety = _pEventSafety;
@@ -88,6 +95,8 @@ OAsyncronousLink::~OAsyncronousLink()
     }
     m_pEventSafety = NULL;
     m_pDestructionSafety = NULL;
+
+    DBG_DTOR(OAsyncronousLink,NULL);
 }
 
 
