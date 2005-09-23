@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmpreparemergepage.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:07:07 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:57:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@ TabPage DLG_MM_PREPAREMERGE_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Kontrollieren Sie das Dokument und ‰ndern sie es falls notwendig" ;
+        Text [ de ] = "Kontrollieren Sie das Dokument und √§ndern sie es falls notwendig" ;
         Text[ en-US ] = "Preview and edit the document";
     };
 
@@ -62,7 +62,7 @@ TabPage DLG_MM_PREPAREMERGE_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 53 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Empf‰nger" ;
+        Text [ de ] = "~Empf√§nger" ;
         Text[ en-US ] = "~Recipient";
     };
 
@@ -99,7 +99,7 @@ TabPage DLG_MM_PREPAREMERGE_PAGE
         Pos = MAP_APPFONT ( 144 , 50 ) ;
         Size = MAP_APPFONT ( 20 , 14 ) ;
         Text = ">" ;
-        QuickHelpText [de] = "N‰chster";
+        QuickHelpText [de] = "N√§chster";
         QuickHelpText [en-US] = "Next";
     };
     PushButton  PB_LAST
@@ -114,7 +114,7 @@ TabPage DLG_MM_PREPAREMERGE_PAGE
     {
         Pos = MAP_APPFONT ( 75, 72 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
-        Text [ de ] = "Diesen Empf‰nger ausschlieﬂen" ;
+        Text [ de ] = "Diesen Empf√§nger ausschlie√üen" ;
         Text[ en-US ] = "E~xclude this recipient";
     };
     FixedLine   FL_NOTEHEADER
@@ -129,7 +129,7 @@ TabPage DLG_MM_PREPAREMERGE_PAGE
         Pos = MAP_APPFONT ( 12 , 117 ) ;
         Size = MAP_APPFONT ( 248 , 60 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "Sie kˆnnen jetzt das Dokument erstellen oder bearbeiten. Die Ver‰nderungen wirken sich auf alle Serienbriefdokumente aus.\n\nEin Klick auf die Schaltfl‰che 'Dokument bearbeiten...' schlieﬂt vor¸bergehend den Assistenten. Durch Klicken der 'Zur¸ck zum Seriendruck-Assistenten'-Schaltfl‰che - sichtbar in einem kleinen Fenster - gelangen Sie zur¸ck zum Assistenten." ;
+        Text [ de ] = "Sie k√∂nnen jetzt das Dokument erstellen oder bearbeiten. Die Ver√§nderungen wirken sich auf alle Serienbriefdokumente aus.\n\nEin Klick auf die Schaltfl√§che 'Dokument bearbeiten...' schlie√üt vor√ºbergehend den Assistenten. Durch Klicken der 'Zur√ºck zum Seriendruck-Assistenten'-Schaltfl√§che - sichtbar in einem kleinen Fenster - gelangen Sie zur√ºck zum Assistenten." ;
         Text[ en-US ] = "Write or edit your document now if you have not already done so. The changes will effect all merged documents.\n\nClicking 'Edit Document...' will temporarily reduce the wizard to a small window so you can edit the mail merge document. After editing the document, return to the wizard by clicking 'Return to Mail Merge Wizard' in the small window." ;
     };
     PushButton  PB_EDIT

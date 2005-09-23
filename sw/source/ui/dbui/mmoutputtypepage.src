@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmoutputtypepage.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:05:48 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:57:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,14 +46,14 @@ TabPage DLG_MM_OUTPUTTYPE_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Bitte wählen Sie einen Dokumenttyp" ;
+        Text [ de ] = "Bitte wÃ¤hlen Sie einen Dokumenttyp" ;
         Text[ en-US ] = "Select a document type";
     };
     FixedText FT_TYPE
     {
         Pos = MAP_APPFONT ( 6 , 27 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Was für ein Dokument möchten Sie erstellen?" ;
+        Text [ de ] = "Was fÃ¼r ein Dokument mÃ¶chten Sie erstellen?" ;
         Text[ en-US ] = "What type of document do you want to create?";
     };
     RadioButton RB_LETTER
@@ -93,12 +93,12 @@ TabPage DLG_MM_OUTPUTTYPE_PAGE
     };
     String    ST_LETTERHINT
     {
-        Text [ de ] = "Die Briefe werden an eine Liste von Empfängern verschickt. Sie können einen Adressblock und eine Anredezeile enthalten. Die Briefe können auch für jeden Empfänger personalisiert werden." ;
+        Text [ de ] = "Die Briefe werden an eine Liste von EmpfÃ¤ngern verschickt. Sie kÃ¶nnen einen Adressblock und eine Anredezeile enthalten. Die Briefe kÃ¶nnen auch fÃ¼r jeden EmpfÃ¤nger personalisiert werden." ;
         Text[ en-US ] = "Send letters to a group of recipients. The letters can contain an address block and a salutation. The letters can be personalized for each recipient.";
     };
     String    ST_MAILHINT
     {
-        Text [ de ] = "Die E-Mail-Nachrichten werden an eine Liste von Empfängern verschickt. Die Nachrichten können eine Anredezeile enthalten. Sie können auch für jeden Empfänger personalisiert werden" ;
+        Text [ de ] = "Die E-Mail-Nachrichten werden an eine Liste von EmpfÃ¤ngern verschickt. Die Nachrichten kÃ¶nnen eine Anredezeile enthalten. Sie kÃ¶nnen auch fÃ¼r jeden EmpfÃ¤nger personalisiert werden" ;
         Text[ en-US ] = "Send e-mail messages to a group of recipients. The e-mail messages can contain a salutation. The e-mail messages can be personalized for each recipient.";
     };
     FixedText FT_NOMAILHINT
@@ -107,7 +107,7 @@ TabPage DLG_MM_OUTPUTTYPE_PAGE
         Size = MAP_APPFONT ( 242 , 26 ) ;
         WordBreak = TRUE;
         Hide = TRUE;
-        Text [ de ] = "%PRODUCTNAME konnte auf Ihrem System keine Java Mail Anbindung finden. Um Nachrichten mit %PRODUCTNAME versenden zu können, muss die aktuellste Version von Java Mail installiert sein. Weitere Informationen zu Java Mail finden Sie im Internet unter 'http://java.sun.com/products/javamail/'." ;
+        Text [ de ] = "%PRODUCTNAME konnte auf Ihrem System keine Java Mail Anbindung finden. Um Nachrichten mit %PRODUCTNAME versenden zu kÃ¶nnen, muss die aktuellste Version von Java Mail installiert sein. Weitere Informationen zu Java Mail finden Sie im Internet unter 'http://java.sun.com/products/javamail/'." ;
         Text[ en-US ] = "%PRODUCTNAME was unable to find a Java Mail connection. In order to send e-mail with %PRODUCTNAME, you need to install the latest version of Java Mail. You can find further information about Java Mail on the internet at 'http://java.sun.com/products/javamail/'.";
     };
 };
