@@ -4,9 +4,9 @@
 #
 #   $RCSfile: file.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:16:23 $
+#   last change: $Author: hr $ $Date: 2005-09-23 11:49:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ use installer::windows::language;
 
 sub get_file_component_name
 {
-    my ($fileref) = @_;
+    my ($fileref, $filesref) = @_;
 
     # In this function exists the rule to create components from files
     # Rule:
@@ -111,6 +111,29 @@ sub get_file_component_name
     $componentname =~ s/_basicidecommands_/_baic_/g;
     $componentname =~ s/_genericcommands_/_genc_/g;
     $componentname =~ s/_bibliographycommands_/_bibc_/g;
+
+    # All this is not necessary for files, which have the flag ASSIGNCOMPOMENT
+
+    my $styles = "";
+    if ( $fileref->{'Styles'} ) { $styles = $fileref->{'Styles'}; }
+    if ( $styles =~ /\bASSIGNCOMPOMENT\b/ ) { $componentname = get_component_from_assigned_file($fileref->{'AssignComponent'}, $filesref); }
+
+    return $componentname;
+}
+
+####################################################################
+# Returning the component name for a defined file gid.
+# This is necessary for files with flag ASSIGNCOMPOMENT
+####################################################################
+
+sub get_component_from_assigned_file
+{
+    my ($gid, $filesref) = @_;
+
+    my $onefile = installer::existence::get_specified_file($filesref, $gid);
+    my $componentname = "";
+    if ( $onefile->{'componentname'} ) { $componentname = $onefile->{'componentname'}; }
+    else { installer::exiter::exit_program("ERROR: No component defined for file: $gid", "get_component_from_assigned_file"); }
 
     return $componentname;
 }
@@ -329,7 +352,7 @@ sub create_files_table
 
         $onefile->{'uniquename'} = $file{'File'};
 
-        $file{'Component_'} = get_file_component_name($onefile);
+        $file{'Component_'} = get_file_component_name($onefile, $filesref);
 
         $onefile->{'componentname'} = $file{'Component_'};
 
