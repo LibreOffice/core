@@ -4,9 +4,9 @@
  *
  *  $RCSfile: masterlayoutdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:07:58 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:33:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ ModalDialog RID_SD_DLG_MASTER_LAYOUT
         Size = MAP_APPFONT( 134 , 10 );
         TabStop = TRUE;
 
-        Text [ de ] = "Fuﬂzeile";
+        Text [ de ] = "Fu√üzeile";
         Text [ en-US ] = "Footer";
     };
 
