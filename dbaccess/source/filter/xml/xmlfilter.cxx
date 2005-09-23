@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfilter.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:11:18 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:13:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,6 +122,9 @@
 #endif
 #ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/helper/vclunohelper.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -293,11 +296,15 @@ sal_Int32 ReadThroughComponent(
 // -------------
 // - ODBFilter -
 // -------------
+DBG_NAME(ODBFilter)
 
 ODBFilter::ODBFilter( const Reference< XMultiServiceFactory >& _rxMSF )
     :SvXMLImport(_rxMSF)
 {
+    DBG_CTOR(ODBFilter,NULL);
+
     GetMM100UnitConverter().setCoreMeasureUnit(MAP_10TH_MM);
+    GetMM100UnitConverter().setXMLMeasureUnit(MAP_CM);
     GetNamespaceMap().Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__db) ),
                         GetXMLToken(XML_N_DB),
                         XML_NAMESPACE_DB );
@@ -311,6 +318,8 @@ ODBFilter::ODBFilter( const Reference< XMultiServiceFactory >& _rxMSF )
 
 ODBFilter::~ODBFilter() throw()
 {
+
+    DBG_DTOR(ODBFilter,NULL);
 }
 // -----------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO1_STATIC( ODBFilter, "com.sun.star.comp.sdb.DBFilter", "com.sun.star.document.ImportFilter")
@@ -318,17 +327,27 @@ IMPLEMENT_SERVICE_INFO1_STATIC( ODBFilter, "com.sun.star.comp.sdb.DBFilter", "co
 sal_Bool SAL_CALL ODBFilter::filter( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException)
 {
-    Window*     pFocusWindow = Application::GetFocusWindow();
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xWindow;
+    {
+        ::vos::OGuard aGuard(Application::GetSolarMutex());
+        Window*     pFocusWindow = Application::GetFocusWindow();
+        xWindow = VCLUnoHelper::GetInterface( pFocusWindow );
+        if( pFocusWindow )
+            pFocusWindow->EnterWait();
+    }
     sal_Bool    bRet = sal_False;
-
-    if( pFocusWindow )
-        pFocusWindow->EnterWait();
 
     if ( GetModel().is() )
         bRet = implImport( rDescriptor );
 
-    if ( pFocusWindow )
-        pFocusWindow->LeaveWait();
+    if ( xWindow.is() )
+    {
+        ::vos::OGuard aGuard(Application::GetSolarMutex());
+        Window* pFocusWindow = VCLUnoHelper::GetWindow( xWindow );
+        if ( pFocusWindow )
+            pFocusWindow->LeaveWait();
+    }
+
 
     return bRet;
 }
