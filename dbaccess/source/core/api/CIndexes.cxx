@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CIndexes.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:52:19 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:01:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,10 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+
 
 using namespace connectivity;
 using namespace connectivity::sdbcx;
