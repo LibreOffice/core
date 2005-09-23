@@ -4,9 +4,9 @@
  *
  *  $RCSfile: morphdlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:08:57 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:34:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ ModalDialog DLG_MORPH
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 196 , 68 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Überblenden : šberblenden */
-    Text [ de ] = "Überblenden" ;
+    Text [ de ] = "Ãœberblenden" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     OKButton BTN_OK
@@ -103,7 +103,7 @@ ModalDialog DLG_MORPH
         Pos = MAP_APPFONT ( 12 , 29 ) ;
         Size = MAP_APPFONT ( 121 , 12 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Attributierung überblenden : Attributierung ³berblenden */
-        Text [ de ] = "Attributierung überblenden" ;
+        Text [ de ] = "Attributierung Ã¼berblenden" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Cross-fade attributes" ;
         Text [ x-comment ] = " ";
