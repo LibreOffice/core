@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pvfundlg.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:40:01 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:00:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,7 +184,7 @@ ModalDialog RID_SCDLG_DPDATAFIELD
         StringList [ de ] =
         {
             < "- vorhergehendes Element -"; Default; >;
-            < "- nächstes Element -"; Default; >;
+            < "- nÃ¤chstes Element -"; Default; >;
         };
         StringList [ en-US ] =
         {
@@ -561,7 +561,7 @@ ModalDialog RID_SCDLG_DPSHOWDETAIL
         Pos = MAP_APPFONT( 6, 3 );
         Size = MAP_APPFONT( 132, 24 );
         WordBreak = TRUE;
-        Text [ de ]  = "~Wählen Sie das Feld, dessen Detail Sie hinzufügen möchten";
+        Text [ de ]  = "~WÃ¤hlen Sie das Feld, dessen Detail Sie hinzufÃ¼gen mÃ¶chten";
         Text [ en-US ] = "~Choose the field containing the detail you want to show";
     };
     ListBox LB_DIMS
