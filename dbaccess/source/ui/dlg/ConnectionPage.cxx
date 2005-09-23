@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionPage.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:44:34 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:25:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,6 +243,7 @@ namespace dbaui
         m_eType = m_pAdminDialog->getDatasourceType(_rSet);
         OConnectionHelper::implInitControls( _rSet, _bSaveValue);
 
+        sal_Bool bShowUser = sal_True;
         OLocalResourceAccess aLocRes( PAGE_CONNECTION, RSC_TABPAGE );
         switch( m_eType )
         {
@@ -257,6 +258,7 @@ namespace dbaui
             case DST_CALC:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_CALC_PATH_OR_FILE)));
                 m_aET_Connection.SetHelpId(HID_DSADMIN_CALC_PATH);
+                bShowUser = sal_False;
                 break;
             case DST_ADABAS:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_ADABAS_DATABASE_NAME)));
@@ -318,9 +320,11 @@ namespace dbaui
         m_aPB_Connection.SetHelpId(HID_DSADMIN_BROWSECONN);
         BOOL bShowUserAuthenfication = m_pCollection->hasAuthentication(m_eType);
         m_aFL2.Show(bShowUserAuthenfication);
-        m_aUserNameLabel.Show(bShowUserAuthenfication);
-        m_aUserName.Show(bShowUserAuthenfication);
+        m_aUserNameLabel.Show(bShowUser && bShowUserAuthenfication);
+        m_aUserName.Show(bShowUser && bShowUserAuthenfication);
         m_aPasswordRequired.Show(bShowUserAuthenfication);
+        if ( !bShowUser && bShowUserAuthenfication )
+            m_aPasswordRequired.SetPosPixel(m_aUserNameLabel.GetPosPixel());
 
         // collect the items
         SFX_ITEMSET_GET(_rSet, pUidItem, SfxStringItem, DSID_USER, sal_True);
