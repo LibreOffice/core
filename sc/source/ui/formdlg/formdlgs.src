@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formdlgs.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:02:32 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:01:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ TabPage RID_SCTAB_FUNCTION
     {
         Hide = TRUE ;
          //@new
-        QuickHelpText [ de ] = "Funktion übernehmen" ;
+        QuickHelpText [ de ] = "Funktion Ã¼bernehmen" ;
         Pos = MAP_APPFONT ( 81 , 29 ) ;
         Size = MAP_APPFONT ( 13 , 13 ) ;
         TabStop = TRUE ;
@@ -327,7 +327,7 @@ ModelessDialog RID_SCDLG_FORMULA
     };
     ImageButton RB_REF
     {
-        QuickHelpText [ de ] = "Vergrößern" ;
+        QuickHelpText [ de ] = "VergrÃ¶ÃŸern" ;
         Pos = MAP_APPFONT ( 144 , 205 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -352,7 +352,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Pos = MAP_APPFONT ( 171 , 208 ) ;
         Size = MAP_APPFONT ( 45 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "<< ~Zurück" ;
+        Text [ de ] = "<< ~ZurÃ¼ck" ;
         Text [ en-US ] = "<< ~Back" ;
     };
     PushButton BTN_FORWARD
