@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:25:25 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:52:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1429,17 +1429,21 @@ void SfxFrame::CreateWorkWindow_Impl()
         Reference < XModel > xParent( xChild->getParent(), UNO_QUERY );
         if ( xParent.is() )
         {
-            Reference < XFrame > xFrame( xParent->getCurrentController()->getFrame() );
-            SfxFrame* pFr = SfxFrame::GetFirst();
-            while ( pFr )
+            Reference< XController > xParentCtrler = xParent->getCurrentController();
+            if ( xParentCtrler.is() )
             {
-                if ( pFr->GetFrameInterface() == xFrame )
+                Reference < XFrame > xFrame( xParentCtrler->getFrame() );
+                SfxFrame* pFr = SfxFrame::GetFirst();
+                while ( pFr )
                 {
-                    pFrame = pFr;
-                    break;
-                }
+                    if ( pFr->GetFrameInterface() == xFrame )
+                    {
+                        pFrame = pFr;
+                        break;
+                    }
 
-                pFr = SfxFrame::GetNext( *pFr );
+                    pFr = SfxFrame::GetNext( *pFr );
+                }
             }
         }
     }
