@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:53:09 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:55:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Identifier = SID_FM_CHANGECONTROLTYPE ;
             HelpID = SID_FM_CHANGECONTROLTYPE ;
             Text [ en-US ] = "Replace with";
+            Text[ de ] = "Ersetzen durch";
         };
         MenuItem { ITEM_EDIT_CUT };
         MenuItem { ITEM_EDIT_COPY };
@@ -85,7 +86,7 @@ Menu RID_FMEXPLORER_POPUPMENU
         {
             Identifier = SID_FM_DELETE ;
             HelpID = SID_FM_DELETE ;
-            Text [ de ] = "~Löschen" ;
+            Text [ de ] = "~LÃ¶schen" ;
             Text [ en-US ] = "~Delete" ;
             Text [ x-comment ] = " ";
         };
@@ -117,7 +118,7 @@ Menu RID_FMEXPLORER_POPUPMENU
         {
             Identifier = SID_FM_OPEN_READONLY ;
             HelpID = SID_FM_OPEN_READONLY ;
-            Text [ de ] = "Im Ent~wurfsmodus öffnen" ;
+            Text [ de ] = "Im Ent~wurfsmodus Ã¶ffnen" ;
             Text [ en-US ] = "Open in Design Mode" ;
             Text [ x-comment ] = " ";
         };
@@ -149,7 +150,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Identifier = SID_FM_CONVERTTO_BUTTON ;
             HelpID = SID_FM_CONVERTTO_BUTTON ;
             Command = ".uno:ConvertToButton" ;
-            Text [ de ] = "~Schältfläche" ;
+            Text [ de ] = "~SchÃ¤ltflÃ¤che" ;
             Text [ en-US ] = "~Button";
         };
         MenuItem
@@ -208,7 +209,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Identifier = SID_FM_CONVERTTO_IMAGEBUTTON ;
             HelpID = SID_FM_CONVERTTO_IMAGEBUTTON ;
             Command = ".uno:ConvertToImageBtn" ;
-            Text [ de ] = "~Grafische Schaltfläche" ;
+            Text [ de ] = "~Grafische SchaltflÃ¤che" ;
             Text [ en-US ] = "I~mage Button";
         };
         MenuItem
@@ -252,7 +253,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Identifier = SID_FM_CONVERTTO_CURRENCY ;
             HelpID = SID_FM_CONVERTTO_CURRENCY ;
             Command = ".uno:ConvertToCurrency" ;
-            Text [ de ] = "~Währungsfeld" ;
+            Text [ de ] = "~WÃ¤hrungsfeld" ;
             Text [ en-US ] = "C~urrency Field";
         };
         MenuItem
