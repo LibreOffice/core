@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:03:06 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:33:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -890,16 +890,18 @@ void ViewShellBase::ReadUserDataSequence (
 
 
 
-void ViewShellBase::Activate (BOOL IsMDIActivate)
+void ViewShellBase::Activate (BOOL bIsMDIActivate)
 {
+    SfxViewShell::Activate(bIsMDIActivate);
     GetPaneManager().InitPanes ();
 }
 
 
 
 
-void ViewShellBase::Deactivate (BOOL IsMDIActivate)
+void ViewShellBase::Deactivate (BOOL bIsMDIActivate)
 {
+    SfxViewShell::Deactivate(bIsMDIActivate);
 }
 
 
