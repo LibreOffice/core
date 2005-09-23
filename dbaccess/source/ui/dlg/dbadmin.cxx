@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:53:50 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:29:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,6 +106,7 @@ using namespace com::sun::star::container;
 //=========================================================================
 //= ODbAdminDialog
 //=========================================================================
+DBG_NAME(ODbAdminDialog)
 //-------------------------------------------------------------------------
 ODbAdminDialog::ODbAdminDialog(Window* _pParent
                                , SfxItemSet* _pItems
@@ -116,6 +117,8 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent
     ,m_bApplied(sal_False)
     ,m_bUIEnabled( sal_True )
 {
+    DBG_CTOR(ODbAdminDialog,NULL);
+
     m_pImpl = ::std::auto_ptr<ODbDataSourceAdministrationHelper>(new ODbDataSourceAdministrationHelper(_rxORB,this,this));
     // add the initial tab page
     AddTabPage(PAGE_CONNECTION, String(ResId(STR_PAGETITLE_GENERAL)), OConnectionTabPage::Create, NULL);
@@ -131,6 +134,8 @@ ODbAdminDialog::~ODbAdminDialog()
 {
     SetInputSet(NULL);
     DELETEZ(pExampleSet);
+
+    DBG_DTOR(ODbAdminDialog,NULL);
 }
 //-------------------------------------------------------------------------
 short ODbAdminDialog::Ok()
