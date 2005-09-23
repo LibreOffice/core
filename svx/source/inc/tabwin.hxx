@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabwin.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:27:15 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:00:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,8 @@ class SAL_DLLPRIVATE FmFieldWin :public SfxFloatingWindow
     ::osl::Mutex        m_aMutex;
     FmFieldWinListBox* pListBox;
     FmFieldWinData*    pData;
+    ::svxform::SharedConnection
+                       m_aConnection;
     ::rtl::OUString    m_aDatabaseName,
                        m_aObjectName;
     sal_Int32          m_nObjectType;
@@ -140,9 +142,10 @@ public:
     sal_Bool Update(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > &);
     void FillInfo( SfxChildWinInfo& rInfo ) const;
 
-    const ::rtl::OUString&  GetDatabaseName() const { return m_aDatabaseName; }
-    const ::rtl::OUString&  GetObjectName() const { return m_aObjectName; }
-    sal_Int32               GetObjectType() const { return m_nObjectType; }
+    const ::rtl::OUString&      GetDatabaseName() const { return m_aDatabaseName; }
+    ::svxform::SharedConnection GetConnection() const { return m_aConnection; }
+    const ::rtl::OUString&      GetObjectName() const { return m_aObjectName; }
+    sal_Int32                   GetObjectType() const { return m_nObjectType; }
 
     sal_Bool    createSelectionControls( );
 
