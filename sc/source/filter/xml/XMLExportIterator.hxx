@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLExportIterator.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:56:00 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:41:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -322,8 +322,8 @@ public:
 // contains data to export for the current cell position
 struct ScMyCell
 {
-    com::sun::star::uno::Reference<com::sun::star::table::XCell> xCell;
-    com::sun::star::uno::Reference<com::sun::star::text::XText> xText;
+//  com::sun::star::uno::Reference<com::sun::star::table::XCell> xCell;
+//  com::sun::star::uno::Reference<com::sun::star::text::XText> xText;
     com::sun::star::uno::Reference<com::sun::star::sheet::XSheetAnnotation> xAnnotation;
     com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xNoteShape;
     com::sun::star::table::CellAddress      aCellAddress;
