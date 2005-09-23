@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:51:15 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:45:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -512,6 +512,13 @@ HRESULT DocumentHolder::InPlaceActivate(
         }
     }
 
+    // TODO/cd: Workaround for status indicator bug. It always makes the
+    // document window visible, when someone tries to use the status
+    // indicator. As we save our document when we get the deactivation
+    // from OLE this conflict to hide floating windows.
+    if(m_xLayoutManager.is())
+        m_xLayoutManager->setVisible(true);
+
     // get document border and resize rects according to border
     GetDocumentBorder( &m_aBorder );
     SetObjectRects( &rcPos, &rcClip );
@@ -545,6 +552,13 @@ void DocumentHolder::InPlaceDeactivate(void)
         ShowWindow(m_hWndxWinCont,SW_HIDE);
         SetParent(m_hWndxWinCont,0);
     }
+
+    // TODO/cd: Workaround for status indicator bug. It always makes the
+    // document window visible, when someone tries to use the status
+    // indicator. As we save our document when we get the deactivation
+    // from OLE this conflict to hide floating windows.
+    if (m_xLayoutManager.is())
+        m_xLayoutManager->setVisible(false);
 
     if (NULL!=m_pIOleIPSite)
         m_pIOleIPSite->OnInPlaceDeactivate();
