@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableDesignControl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:40:34 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:46:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,7 @@ using namespace ::com::sun::star::util;
 //--- Defines
 #define HANDLE_ID 0
 
+DBG_NAME(OTableRowView)
 //------------------------------------------------------------------------
 OTableRowView::OTableRowView(Window* pParent)
                    :EditBrowseBox(pParent, ModuleRes(RID_DB_TAB_EDITOR),EBBF_NONE,
@@ -81,11 +82,15 @@ OTableRowView::OTableRowView(Window* pParent)
                    ,m_bClipboardFilled(FALSE)
                    ,m_nCurUndoActId(0)
 {
+    DBG_CTOR(OTableRowView,NULL);
+
 }
 
 //------------------------------------------------------------------------
 OTableRowView::~OTableRowView()
 {
+
+    DBG_DTOR(OTableRowView,NULL);
 }
 
 //------------------------------------------------------------------------
@@ -131,7 +136,7 @@ void OTableRowView::KeyInput( const KeyEvent& rEvt )
         if( rEvt.GetKeyCode().GetCode() == KEY_F2 )
         {
             ::com::sun::star::util::URL aUrl;
-            aUrl.Complete =::rtl::OUString::createFromAscii(".uno:DBSlots/EditDoc");
+            aUrl.Complete =::rtl::OUString::createFromAscii(".uno:DSBEditDoc");
             GetView()->getController()->dispatch( aUrl,Sequence< PropertyValue >() );
         }
     }
