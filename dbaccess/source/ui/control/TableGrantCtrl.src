@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableGrantCtrl.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:33:02 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:10:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,25 +45,25 @@ String STR_TABLE_PRIV_NAME
 
 String STR_TABLE_PRIV_INSERT
 {
-    Text [ de ] = "Daten einfügen";
+    Text [ de ] = "Daten einfÃ¼gen";
     Text [ en-US ] = "Insert data";
 };
 
 String STR_TABLE_PRIV_DELETE
 {
-    Text [ de ] = "Daten löschen";
+    Text [ de ] = "Daten lÃ¶schen";
     Text [ en-US ] = "Delete data";
 };
 
 String STR_TABLE_PRIV_UPDATE
 {
-    Text [ de ] = "Daten ändern";
+    Text [ de ] = "Daten Ã¤ndern";
     Text [ en-US ] = "Modify data";
 };
 
 String STR_TABLE_PRIV_ALTER
 {
-    Text [ de ] = "Struktur ändern";
+    Text [ de ] = "Struktur Ã¤ndern";
     Text [ en-US ] = "Alter structure";
 };
 String STR_TABLE_PRIV_SELECT
@@ -74,13 +74,13 @@ String STR_TABLE_PRIV_SELECT
 
 String STR_TABLE_PRIV_REFERENCE
 {
-    Text [ de ] = "References ändern";
+    Text [ de ] = "References Ã¤ndern";
     Text [ en-US ] = "Modify references";
 };
 
 String STR_TABLE_PRIV_DROP
 {
-    Text [ de ] = "Struktur löschen";
+    Text [ de ] = "Struktur lÃ¶schen";
     Text [ en-US ] = "Drop structure";
 };
 
