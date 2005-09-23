@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optcolor.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:50:58 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:58:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
     {
         Pos = MAP_APPFONT ( 198 , 13 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Löschen" ;
+        Text [ de ] = "LÃ¶schen" ;
         Text [ en-US ] = "Delete";
     };
     FixedLine FL_CUSTOMCOLORS
@@ -110,7 +110,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
         };
         String ST_UIELEM
         {
-            Text [ de ] = "Elemente der Benutzeroberfläche" ;
+            Text [ de ] = "Elemente der BenutzeroberflÃ¤che" ;
             Text [ en-US ] = "User interface elements";
         };
         String ST_COLSET
@@ -220,7 +220,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
             CheckBox CB_LINKS
             {
                 CB_POS_SIZE( 7 );
-                Text [ de ] = "Unbesuchte Verknüpfungen" ;
+                Text [ de ] = "Unbesuchte VerknÃ¼pfungen" ;
                 Text [ en-US ] = "Unvisited links";
             };
             LB_WN( LINKS, 7 )
@@ -228,7 +228,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
             CheckBox CB_LINKSVISITED
             {
                 CB_POS_SIZE( 8 );
-                Text [ de ] = "Besuchte Verknüpfungen" ;
+                Text [ de ] = "Besuchte VerknÃ¼pfungen" ;
                 Text [ en-US ] = "Visited links";
             };
             LB_WN( LINKSVISITED, 8 )
@@ -236,7 +236,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_SPELL
             {
                 FT_POS_SIZE( 9 );
-                Text [ de ] = "AutoRechtschreibprüfung" ;
+                Text [ de ] = "AutoRechtschreibprÃ¼fung" ;
                 Text [ en-US ] = "AutoSpellcheck";
             };
             LB_WN( SPELL, 9 )
@@ -299,7 +299,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_WRITERPAGEBREAKS
             {
                 FT_POS_SIZE( 17 );
-                Text [ de ] = "Seiten- und Spaltenumbrüche" ;
+                Text [ de ] = "Seiten- und SpaltenumbrÃ¼che" ;
                 Text [ en-US ] = "Page and column breaks";
             };
             LB_WN( WRITERPAGEBREAKS, 17 )
@@ -338,7 +338,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_HTMLKEYWORD
             {
                 FT_POS_SIZE( 22 );
-                Text [ de ] = "Schlüsselwort-Hervorhebung" ;
+                Text [ de ] = "SchlÃ¼sselwort-Hervorhebung" ;
                 Text [ en-US ] = "Keyword highlighting";
             };
             LB_WN( HTMLKEYWORD, 22 )
@@ -369,7 +369,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_CALCPAGEBREAK
             {
                 FT_POS_SIZE( 26 );
-                Text [ de ] = "Seitenumbrüche" ;
+                Text [ de ] = "SeitenumbrÃ¼che" ;
                 Text [ en-US ] = "Page breaks";
             };
             LB_WN( CALCPAGEBREAK, 26 )
@@ -377,7 +377,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_CALCPAGEBREAKMANUAL
             {
                 FT_POS_SIZE( 27 );
-                Text [ de ] = "Manuelle Seitenumbrüche" ;
+                Text [ de ] = "Manuelle SeitenumbrÃ¼che" ;
                 Text [ en-US ] = "Manual page breaks";
             };
             LB_WN( CALCPAGEBREAKMANUAL, 27 )
@@ -385,7 +385,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_CALCPAGEBREAKAUTO
             {
                 FT_POS_SIZE( 28 );
-                Text [ de ] = "Automatische Seitenumbrüche" ;
+                Text [ de ] = "Automatische SeitenumbrÃ¼che" ;
                 Text [ en-US ] = "Automatic page breaks";
             };
             LB_WN( CALCPAGEBREAKAUTO, 28 )
@@ -425,7 +425,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_DRAW
             {
                 FT_SEP_POS_SIZE( 33 );
-                Text [ de ] = "Zeichnung / Präsentation" ;
+                Text [ de ] = "Zeichnung / PrÃ¤sentation" ;
                 Text [ en-US ] = "Drawing / Presentation";
             };
 
@@ -508,12 +508,12 @@ QueryBox RID_SVXQB_DELETE_COLOR_CONFIG
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message [ de ] = "Soll das Farbschema wirklich gelöscht werden?" ;
+    Message [ de ] = "Soll das Farbschema wirklich gelÃ¶scht werden?" ;
     Message [ en-US ] = "Do you really want to delete the color scheme?" ;
 };
 String RID_SVXSTR_COLOR_CONFIG_DELETE
 {
-    Text [ de ] = "Löschen des Schemas bestätigen" ;
+    Text [ de ] = "LÃ¶schen des Schemas bestÃ¤tigen" ;
     Text [ en-US ] = "Color Scheme Deletion" ;
 };
 String RID_SVXSTR_COLOR_CONFIG_SAVE1
