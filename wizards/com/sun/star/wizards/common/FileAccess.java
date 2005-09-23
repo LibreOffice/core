@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FileAccess.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:19:51 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:29:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,7 +148,8 @@ public class FileAccess {
                     iPos = CurPath.length() - EndLength;
                     if ((CurPath.indexOf(sType) > 0) || (CurPath.indexOf(EndString) == iPos)) {
                         ResultPath = deleteLastSlashfromUrl(CurPath);
-                        break;
+                        if (xSimpleFileAccess.exists(ResultPath))
+                                break;
                     }
                 }
             } else
