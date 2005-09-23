@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSlotManager.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:16:58 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:02:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -819,21 +819,21 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
     SdPage* pPage      = NULL;
     SdPage* pFirstPage = NULL;
     USHORT  nFirstPage;
-    USHORT  nSelectedPages = 0;
-    String  aPageStr, aLayoutStr;
+    USHORT  nSelectedPages = mrController.GetPageSelector().GetSelectedPageCount();
+    String aPageStr;
+    String aLayoutStr;
 
-    model::SlideSorterModel::Enumeration aSelectedPages (
-        mrController.GetModel().GetSelectedPagesEnumeration());
-    if (aSelectedPages.HasMoreElements())
+    if (nSelectedPages > 0)
+        aPageStr = String(SdResId(STR_SD_PAGE));
+
+    if (nSelectedPages == 1)
     {
+        model::SlideSorterModel::Enumeration aSelectedPages (
+            mrController.GetModel().GetSelectedPagesEnumeration());
         pPage = aSelectedPages.GetNextElement().GetPage();
         nFirstPage = pPage->GetPageNum()/2;
         pFirstPage = pPage;
-    }
 
-    if( nSelectedPages == 1 )
-    {
-        aPageStr = String(SdResId( STR_SD_PAGE ));
         aPageStr += sal_Unicode(' ');
         aPageStr += String::CreateFromInt32( nFirstPage + 1 );
         aPageStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " / " ));
@@ -843,6 +843,7 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
         aLayoutStr = pFirstPage->GetLayoutName();
         aLayoutStr.Erase( aLayoutStr.SearchAscii( SD_LT_SEPARATOR ) );
     }
+
     rSet.Put( SfxStringItem( SID_STATUS_PAGE, aPageStr ) );
     rSet.Put( SfxStringItem( SID_STATUS_LAYOUT, aLayoutStr ) );
 }
