@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Resource.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:21:26 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:30:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.script.XInvocation;
+import com.sun.star.beans.PropertyValue;
 
 public class Resource {
     XInvocation xInvocation;
@@ -59,6 +60,21 @@ public class Resource {
             nIDArray[0] = new Integer(nID);
             String IDString = (String) xInvocation.invoke("getString", nIDArray, PointerArray, DummyArray);
             return IDString;
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            throw new java.lang.IllegalArgumentException("Resource with ID not" + String.valueOf(nID) + "not found");
+        }
+    }
+
+    public PropertyValue[] getStringList(int nID) {
+        try {
+            short[][] PointerArray = new short[1][];
+            Object[][] DummyArray = new Object[1][];
+            Object[] nIDArray = new Object[1];
+            nIDArray[0] = new Integer(nID);
+            //Object bla = xInvocation.invoke("getStringList", nIDArray, PointerArray, DummyArray);
+            PropertyValue [] ResProp = (PropertyValue []) xInvocation.invoke("getStringList", nIDArray, PointerArray, DummyArray);
+            return ResProp;
         } catch (Exception exception) {
             exception.printStackTrace();
             throw new java.lang.IllegalArgumentException("Resource with ID not" + String.valueOf(nID) + "not found");
