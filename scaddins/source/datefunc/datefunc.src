@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datefunc.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:24:11 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:08:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
         };
         String 7 // description of parameter 3  DiffWeeks
         {
-            Text [ de ] = "Art der Berechnung: Art=0 für Wochenanzahl im Intervall, Art=1 für Kalenderwochen.";
+            Text [ de ] = "Art der Berechnung: Art=0 fÃ¼r Wochenanzahl im Intervall, Art=1 fÃ¼r Kalenderwochen.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Type of calculation: Type=0 means the time interval, Type=1 means calendar weeks.";
         };
@@ -125,7 +125,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
         };
         String 7 // description of parameter 3  DiffMonths
         {
-            Text [ de ] = "Art der Berechnung: Art=0 für Monatsanzahl im Intervall, Art=1 für Kalendermonate.";
+            Text [ de ] = "Art der Berechnung: Art=0 fÃ¼r Monatsanzahl im Intervall, Art=1 fÃ¼r Kalendermonate.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Type of calculation: Type=0 means the time interval, Type=1 means calendar months.";
         };
@@ -171,7 +171,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
         };
         String 7 // description of parameter 3  DiffYears
         {
-            Text [ de ] = "Art der Berechnung: Art=0 für Jahresanzahl im Intervall, Art=1 für Kalenderjahre.";
+            Text [ de ] = "Art der Berechnung: Art=0 fÃ¼r Jahresanzahl im Intervall, Art=1 fÃ¼r Kalenderjahre.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Type of calculation: Type=0 means the time interval, Typee=1 means calendar years.";
         };
@@ -181,7 +181,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
     {
         String 1    // description              IsLeapYear
         {
-            Text [ de ] = "Gibt 1 (WAHR) zurück, wenn das angegebene Datum in einem Schaltjahr liegt, sonst 0 (FALSCH).";
+            Text [ de ] = "Gibt 1 (WAHR) zurÃ¼ck, wenn das angegebene Datum in einem Schaltjahr liegt, sonst 0 (FALSCH).";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns 1 (TRUE) if the date is a day of a leap year, otherwise 0 (FALSE).";
         };
@@ -193,7 +193,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
         };
         String 3 // description of parameter 1  IsLeapYear
         {
-            Text [ de ] = "Ein beliebiger Tag im gewünschten Jahr.";
+            Text [ de ] = "Ein beliebiger Tag im gewÃ¼nschten Jahr.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Any day in the desired year";
         };
@@ -203,7 +203,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
     {
         String 1    // description              DaysInMonth
         {
-            Text [ de ] = "Gibt die Anzahl der Tage des Monats zurück, in dem das angegebene Datum liegt.";
+            Text [ de ] = "Gibt die Anzahl der Tage des Monats zurÃ¼ck, in dem das angegebene Datum liegt.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the number of days of the month in which the date entered occurs";
         };
@@ -215,7 +215,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
         };
         String 3 // description of parameter 1  DaysInMonth
         {
-            Text [ de ] = "Ein beliebiger Tag im gewünschten Monat.";
+            Text [ de ] = "Ein beliebiger Tag im gewÃ¼nschten Monat.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Any day in the desired month";
         };
@@ -225,7 +225,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
     {
         String 1    // description              DaysInYear
         {
-            Text [ de ] = "Gibt die Anzahl der Tage des Jahres zurück, in dem das angegebene Datum liegt.";
+            Text [ de ] = "Gibt die Anzahl der Tage des Jahres zurÃ¼ck, in dem das angegebene Datum liegt.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the number of days of the year in which the date entered occurs.";
         };
@@ -237,7 +237,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
         };
         String 3 // description of parameter 1  DaysInYear
         {
-            Text [ de ] = "Ein beliebiger Tag im gewünschten Jahr.";
+            Text [ de ] = "Ein beliebiger Tag im gewÃ¼nschten Jahr.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Any day in the desired year";
         };
@@ -247,7 +247,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
     {
         String 1    // description              WeeksInYear
         {
-            Text [ de ] = "Gibt die Anzahl der Wochen des Jahres zurück, in dem das angegebene Datum liegt.";
+            Text [ de ] = "Gibt die Anzahl der Wochen des Jahres zurÃ¼ck, in dem das angegebene Datum liegt.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the number of weeks of the year in which the date entered occurs";
         };
@@ -259,7 +259,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
         };
         String 3 // description of parameter 1  WeeksInYear
         {
-            Text [ de ] = "Ein beliebiger Tag im gewünschten Jahr.";
+            Text [ de ] = "Ein beliebiger Tag im gewÃ¼nschten Jahr.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Any day in the desired year";
         };
@@ -269,7 +269,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
     {
         String 1    // description              Rot13
         {
-            Text [ de ] = "Verschlüsselt oder entschlüsselt einen Text mit Hilfe des ROT13-Algorithmus.";
+            Text [ de ] = "VerschlÃ¼sselt oder entschlÃ¼sselt einen Text mit Hilfe des ROT13-Algorithmus.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Encrypts or decrypts a text using the ROT13 algorithm";
         };
@@ -281,7 +281,7 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
         };
         String 3 // description of parameter 1  Rot13
         {
-            Text [ de ] = "Zu verschlüsselnder oder verschlüsselter Text.";
+            Text [ de ] = "Zu verschlÃ¼sselnder oder verschlÃ¼sselter Text.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Text to be encrypted or text already encrypted";
         };
