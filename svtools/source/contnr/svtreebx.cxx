@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:56:38 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:44:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1646,26 +1646,24 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,USHORT nTabFlags,
             int bSelTab = nFlags & SV_LBOXTAB_SHOW_SELECTION;
             USHORT nItemType = pItem->IsA();
 
-            if( pViewDataEntry->IsSelected() && bSelTab &&
-                !pViewDataEntry->IsCursored() )
+            if ( pViewDataEntry->IsSelected() && bSelTab && !pViewDataEntry->IsCursored() )
             {
-                if( !bInUse || nItemType != SV_ITEM_ID_LBOXCONTEXTBMP )
+                Color aNewWallColor = rSettings.GetHighlightColor();
+                if ( !bInUse || nItemType != SV_ITEM_ID_LBOXCONTEXTBMP )
                 {
                     // if the face color is bright then the deactive color is also bright
                     // -> so you can't see any deactive selection
-                    if( bHideSelection && !rSettings.GetFaceColor().IsBright() )
-                        aWallpaper.SetColor( rSettings.GetDeactiveColor() );
-                    else
-                        aWallpaper.SetColor( rSettings.GetHighlightColor() );
+                    if ( bHideSelection && !rSettings.GetFaceColor().IsBright() &&
+                         aWallpaper.GetColor().IsBright() != rSettings.GetDeactiveColor().IsBright() )
+                        aNewWallColor = rSettings.GetDeactiveColor();
                     // set font color to highlight
-                    if( !bCurFontIsSel && nItemType == SV_ITEM_ID_LBOXSTRING )
+                    if ( !bCurFontIsSel && nItemType == SV_ITEM_ID_LBOXSTRING )
                     {
                         Control::SetFont( aHiliteFont );
                         bCurFontIsSel = TRUE;
                     }
                 }
-                else // ContextBitmap + InUse-Emphasis + Selektiert
-                    aWallpaper.SetColor( rSettings.GetHighlightColor() );
+                aWallpaper.SetColor( aNewWallColor );
             }
             else  // keine Selektion
             {
