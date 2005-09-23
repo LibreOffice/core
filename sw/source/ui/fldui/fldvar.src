@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldvar.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:43:42 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:04:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,7 +220,7 @@ TabPage TP_FLD_VAR
                     ImageBitmap = Bitmap{ File = "sc20558.bmp" ;};
                     MaskColor = IMAGE_MASK_COLOR ;
                 };
-                Text [ de ] = "Übernehmen" ;
+                Text [ de ] = "Ãœbernehmen" ;
                 Text [ en-US ] = "Apply" ;
                 Text [ x-comment ] = " ";
             };
@@ -233,7 +233,7 @@ TabPage TP_FLD_VAR
                     ImageBitmap = Bitmap{ File = "sc20557.bmp" ;};
                     MaskColor = IMAGE_MASK_COLOR ;
                 };
-                Text [ de ] = "Löschen" ;
+                Text [ de ] = "LÃ¶schen" ;
                 Text [ en-US ] = "Delete" ;
                 Text [ x-comment ] = " ";
             };
