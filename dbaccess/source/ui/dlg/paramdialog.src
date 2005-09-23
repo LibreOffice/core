@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paramdialog.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:08:38 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:15:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ ModalDialog DLG_PARAMETERS
     {
         Pos = MAP_APPFONT ( 4 + 3 + LIST_WIDTH + 3 + 6 , 12 + LIST_HEIGHT + 4 + 8 + 3 + ( 12 - BUTTON_HEIGHT ) / 2) ;
         Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
-        Text [ de ] = "~nächster";
+        Text [ de ] = "~nÃ¤chster";
         TabStop = TRUE ;
         Text [ en-US ] = "~Next";
     };
@@ -108,7 +108,7 @@ ModalDialog DLG_PARAMETERS
 
     String STR_COULD_NOT_CONVERT_PARAM
     {
-        Text [ de ] = "Die Eingabe konnte nicht in einen gültigen Wert für die Spalte \"$name$\" umgewandelt werden";
+        Text [ de ] = "Die Eingabe konnte nicht in einen gÃ¼ltigen Wert fÃ¼r die Spalte \"$name$\" umgewandelt werden";
         Text [ en-US ] = "The entry could not be converted to a valid value for the \"$name$\"column";
     };
 };
