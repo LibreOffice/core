@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:38:10 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:58:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -927,7 +927,7 @@ End
 
 File gid_File_Oo_Office_Ui_Basicidewindowstate_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/BasicIDEWindowState.xcu";
 End
@@ -1005,7 +1005,7 @@ End
 
 File gid_File_Oo_Office_Ui_Chartwindowstate_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/ChartWindowState.xcu";
 End
@@ -1152,7 +1152,7 @@ End
 
 File gid_File_Oo_Office_Ui_Basewindowstate_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/BaseWindowState.xcu";
 End
@@ -1166,7 +1166,7 @@ End
 
 File gid_File_Oo_Office_Ui_Dbtablewindowstate_xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/DbTableWindowState.xcu";
 End
@@ -1180,7 +1180,7 @@ End
 
 File gid_File_Oo_Office_Ui_Dbbrowserwindowstate_xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/DbBrowserWindowState.xcu";
 End
@@ -1195,7 +1195,7 @@ End
 
 File gid_File_Oo_Office_Ui_Dbquerywindowstate_xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/DbQueryWindowState.xcu";
 End
@@ -1209,7 +1209,7 @@ End
 
 File gid_File_Oo_Office_Ui_Dbrelationwindowstate_xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/DbRelationWindowState.xcu";
 End
@@ -1412,7 +1412,7 @@ End
 
 File gid_File_Oo_Office_Ui_Startmodulewindowstate_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/StartModuleWindowState.xcu";
 End
