@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numpara.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:39:09 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:51:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,7 +130,7 @@ TabPage TP_NUMPARA
     {
         Pos = MAP_APPFONT ( 12 , 86 ) ;
         Size = MAP_APPFONT ( 160 , 10 ) ;
-        Text [ de ] = "~Die Zeilen dieses Absatzes mitz‰hlen" ;
+        Text [ de ] = "~Die Zeilen dieses Absatzes mitz√§hlen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Include this paragraph in line numbering" ;
         Text [ x-comment ] = " ";
