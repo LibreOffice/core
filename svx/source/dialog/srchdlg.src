@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:04:38 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:48:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 
 String RID_SVXSTR_SEARCH_STYLES
 {
-    Text [ de ] = "einschließlich ~Vorlagen" ;
+    Text [ de ] = "einschlieÃŸlich ~Vorlagen" ;
     Text [ en-US ] = "Including Styles" ;
     Text [ x-comment ] = " ";
 };
@@ -199,7 +199,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 12 , 114 ) ;
         Size = MAP_APPFONT ( 126 , 10 ) ;
-        Text [ de ] = "Nur ganze W~örter" ;
+        Text [ de ] = "Nur ganze W~Ã¶rter" ;
         Text [ en-US ] = "Whole wor~ds only" ;
         TabStop = TRUE ;
     };
@@ -227,7 +227,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 144 , 135 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "S~chließen" ;
+        Text [ de ] = "S~chlieÃŸen" ;
         Text [ en-US ] = "~Close" ;
         TabStop = TRUE ;
     };
@@ -250,7 +250,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 12 , 176 ) ;
         Size = MAP_APPFONT ( 126 , 10 ) ;
-        Text [ de ] = "Rüc~kwärts" ;
+        Text [ de ] = "RÃ¼c~kwÃ¤rts" ;
         Text [ en-US ] = "Bac~kwards" ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -259,7 +259,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 12 , 189 ) ;
         Size = MAP_APPFONT ( 126 , 10 ) ;
-        Text [ de ] = "Re~gulärer Ausdruck" ;
+        Text [ de ] = "Re~gulÃ¤rer Ausdruck" ;
         Text [ en-US ] = "Regular e~xpressions" ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -268,7 +268,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 12 , 204 ) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
-        Text [ de ] = "~Ähnlichkeitssuche" ;
+        Text [ de ] = "~Ã„hnlichkeitssuche" ;
         Text [ en-US ] = "S~imilarity search" ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -295,7 +295,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Pos = MAP_APPFONT ( 12 , 232 ) ;
         Size = MAP_APPFONT ( 126 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Zeichenbreite berücksichtigen" ;
+        Text [ de ] = "Zeichenbreite berÃ¼cksichtigen" ;
         Text [ en-US ] = "Match character width";
         Hide = TRUE ;
     };
@@ -304,7 +304,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Pos = MAP_APPFONT ( 12 , 247 ) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Ähnliche Schreibweise (Japanisch)" ;
+        Text [ de ] = "Ã„hnliche Schreibweise (Japanisch)" ;
         Text [ en-US ] = "Sounds like (Japanese)";
         Hide = TRUE ;
     };
