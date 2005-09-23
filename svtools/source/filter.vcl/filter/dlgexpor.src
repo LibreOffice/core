@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgexpor.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:37:10 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:53:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ ModalDialog DLG_EXPORT_PIX
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 110 , 8 ) ;
-        Text [ de ] = "Farbauflösung" ;
+        Text [ de ] = "FarbauflÃ¶sung" ;
         Text [ en-US ] = "Color resolution" ;
         Text [ x-comment ] = " ";
     };
@@ -122,7 +122,7 @@ ModalDialog DLG_EXPORT_PIX
     {
         Pos = MAP_APPFONT ( 12 , 73 ) ;
         Size = MAP_APPFONT ( 55 , 10 ) ;
-        Text [ de ] = "~Auflösung" ;
+        Text [ de ] = "~AuflÃ¶sung" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Resolution" ;
         Text [ x-comment ] = " ";
@@ -145,7 +145,7 @@ ModalDialog DLG_EXPORT_PIX
     {
         Pos = MAP_APPFONT ( 12 , 87 ) ;
         Size = MAP_APPFONT ( 98 , 10 ) ;
-        Text [ de ] = "~Größe" ;
+        Text [ de ] = "~GrÃ¶ÃŸe" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Size" ;
         Text [ x-comment ] = " ";
@@ -196,7 +196,7 @@ ModalDialog DLG_EXPORT_PIX
     {
         Pos = MAP_APPFONT ( 18 , 118 ) ;
         Size = MAP_APPFONT ( 41 , 10 ) ;
-        Text [ de ] = "Höhe" ;
+        Text [ de ] = "HÃ¶he" ;
         Text [ en-US ] = "Height" ;
         Text [ x-comment ] = " ";
     };
@@ -249,7 +249,7 @@ ModalDialog DLG_EXPORT_VEC
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 98 , 10 ) ;
-        Text [ de ] = "~Größe" ;
+        Text [ de ] = "~GrÃ¶ÃŸe" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Size" ;
         Text [ x-comment ] = " ";
@@ -258,7 +258,7 @@ ModalDialog DLG_EXPORT_VEC
     {
         Pos = MAP_APPFONT ( 6 , 44 ) ;
         Size = MAP_APPFONT ( 110 , 8 ) ;
-        Text [ de ] = "Größe" ;
+        Text [ de ] = "GrÃ¶ÃŸe" ;
         Text [ en-US ] = "Size" ;
         Text [ x-comment ] = " ";
     };
@@ -291,7 +291,7 @@ ModalDialog DLG_EXPORT_VEC
     {
         Pos = MAP_APPFONT ( 12 , 72 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text [ de ] = "Höhe" ;
+        Text [ de ] = "HÃ¶he" ;
         Text [ en-US ] = "Height" ;
         Text [ x-comment ] = " ";
     };
