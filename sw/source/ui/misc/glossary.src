@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glossary.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:31:47 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:08:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@ ModalDialog DLG_GLOSSARY
         Disable = TRUE ;
         Pos = MAP_APPFONT ( 143 , 31 ) ;
         Size = MAP_APPFONT ( 57 , 8 ) ;
-        Text [ de ] = "~Kürzel" ;
+        Text [ de ] = "~KÃ¼rzel" ;
         Text [ en-US ] = "~Shortcut" ;
         Right = TRUE ;
         Text [ x-comment ] = " ";
@@ -102,7 +102,7 @@ ModalDialog DLG_GLOSSARY
          //        CurPos = 0 ;
         String ST_READONLY
         {
-            Text [ de ] = "schreibgeschützt" ;
+            Text [ de ] = "schreibgeschÃ¼tzt" ;
             Text [ en-US ] = "read-only";
         };
     };
@@ -110,7 +110,7 @@ ModalDialog DLG_GLOSSARY
     {
         Pos = MAP_APPFONT (    6 , 134 ) ;
         Size = MAP_APPFONT ( 221 , 8 ) ;
-        Text [ de ] = "Verknüpfungen relativ speichern";
+        Text [ de ] = "VerknÃ¼pfungen relativ speichern";
         Text [ en-US ] = "Save links relative to";
         Text [ x-comment ] = " ";
     };
@@ -155,7 +155,7 @@ ModalDialog DLG_GLOSSARY
         Pos = MAP_APPFONT ( 319 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Einfügen : ~Einf³gen */
-        Text [ de ] = "~Einfügen" ;
+        Text [ de ] = "~EinfÃ¼gen" ;
         Text [ en-US ] = "~Insert" ;
         /* ### ACHTUNG: Neuer Text in Resource? Fügt den aktuellen Textblock ein und schließt das Dialogfeld : F³gt den aktuellen Textblock ein und schlie˜t das Dialogfeld */
         TabStop = TRUE ;
@@ -167,7 +167,7 @@ ModalDialog DLG_GLOSSARY
         Pos = MAP_APPFONT ( 319 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Schließen : ~Schlie˜en */
-        Text [ de ] = "~Schließen" ;
+        Text [ de ] = "~SchlieÃŸen" ;
         Text [ en-US ] = "~Close" ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -206,7 +206,7 @@ ModalDialog DLG_GLOSSARY
     };
     String ST_READONLY_PATH
     {
-        Text [ de ] = "Für die Verzeichnisse für 'AutoText' sind sind keine Schreibrechte vorhanden. Möchten Sie den Pfaddialog aufrufen?" ;
+        Text [ de ] = "FÃ¼r die Verzeichnisse fÃ¼r 'AutoText' sind sind keine Schreibrechte vorhanden. MÃ¶chten Sie den Pfaddialog aufrufen?" ;
         Text [ en-US ] = "The 'AutoText' directories are read-only. Do you want to call the path settings dialog?";
     };
     Menu MNU_EDIT
@@ -266,7 +266,7 @@ ModalDialog DLG_GLOSSARY
                 Identifier = FN_GL_DELETE ;
                 HelpID = HID_MD_GLOS_DELETE ;
                 /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
-                Text [ de ] = "~Löschen" ;
+                Text [ de ] = "~LÃ¶schen" ;
                 Text [ en-US ] = "~Delete" ;
                 Text [ x-comment ] = " ";
             };
@@ -312,7 +312,7 @@ ModalDialog DLG_GLOSSARY
 InfoBox MSG_DOUBLE_SHORTNAME
 {
     /* ### ACHTUNG: Neuer Text in Resource? Kürzel wird bereits verwendet. Bitte einen anderen Namen vergeben! : K³rzel wird bereits verwendet. Bitte einen anderen Namen vergeben! */
-    Message [ de ] = "Kürzel wird bereits verwendet. Bitte einen anderen Namen vergeben!" ;
+    Message [ de ] = "KÃ¼rzel wird bereits verwendet. Bitte einen anderen Namen vergeben!" ;
     Message [ en-US ] = "Shortcut name already exists. Please choose another name." ;
     Message [ x-comment ] = " ";
 };
@@ -321,7 +321,7 @@ QueryBox MSG_QUERY_DELETE
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
     /* ### ACHTUNG: Neuer Text in Resource? Soll der AutoText gelöscht werden? : Soll der AutoText gel÷scht werden? */
-    Message [ de ] = "Soll der AutoText gelöscht werden?" ;
+    Message [ de ] = "Soll der AutoText gelÃ¶scht werden?" ;
     Message [ en-US ] = "Delete AutoText?" ;
     Message [ x-comment ] = " ";
 };
@@ -334,7 +334,7 @@ String STR_QUERY_DELETE_GROUP1
 String STR_QUERY_DELETE_GROUP2
 {
     /* ### ACHTUNG: Neuer Text in Resource?  gelöscht werden? :  gel÷scht werden? */
-    Text [ de ] = " gelöscht werden?" ;
+    Text [ de ] = " gelÃ¶scht werden?" ;
     Text [ en-US ] = "?" ;
     Text [ x-comment ] = " ";
 };
@@ -385,7 +385,7 @@ ModalDialog DLG_RENAME_GLOS
     {
         Pos = MAP_APPFONT ( 147 , 14 ) ;
         Size = MAP_APPFONT ( 52 , 8 ) ;
-        Text [ de ] = "Kü~rzel" ;
+        Text [ de ] = "KÃ¼~rzel" ;
         Text [ en-US ] = "Short~cut" ;
         Text [ x-comment ] = " ";
     };
@@ -417,7 +417,7 @@ ModalDialog DLG_RENAME_GLOS
     {
         Pos = MAP_APPFONT ( 147 , 29 ) ;
         Size = MAP_APPFONT ( 52 , 8 ) ;
-        Text [ de ] = "~Kürzel" ;
+        Text [ de ] = "~KÃ¼rzel" ;
         Text [ en-US ] = "~Shortcut" ;
         Text [ x-comment ] = " ";
     };
@@ -444,7 +444,7 @@ String STR_SAVE_GLOSSARY
 };
 InfoBox MSG_NO_GLOSSARIES
 {
-    Message [ de ] = "Diese Datei enthält keinen AutoText." ;
+    Message [ de ] = "Diese Datei enthÃ¤lt keinen AutoText." ;
     Message [ en-US ] = "There is no AutoText in this file.";
 };
 
