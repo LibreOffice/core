@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:37:44 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:43:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,7 +143,7 @@ TabPage RID_SVXPAGE_PICK_BMP
     };
     CheckBox CB_LINKED
     {
-        Text [ de ] = "Grafiken ~verknüpfen" ;
+        Text [ de ] = "Grafiken ~verknÃ¼pfen" ;
         Pos = MAP_APPFONT ( 9 , 169 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
@@ -223,7 +223,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
             < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
             < "Bullet" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
             < "Grafik" ;                    8/*SVX_NUM_BITMAP              */; > ;
-            < "Grafik verknüpft" ;          0x88/*SVX_NUM_BITMAP|0x80      */; > ;
+            < "Grafik verknÃ¼pft" ;             0x88/*SVX_NUM_BITMAP|0x80      */; > ;
             < "Keine" ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
         };
         StringList [ en-US ] =
@@ -327,7 +327,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     {
         Pos = MAP_APPFONT ( 50 , 91 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Relative Größe" ;
+        Text [ de ] = "~Relative GrÃ¶ÃŸe" ;
         Hide = TRUE;
         Text [ en-US ] = "~Relative size";
         Text [ x-comment ] = " ";
@@ -352,7 +352,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     {
         Pos = MAP_APPFONT ( 50 , 91 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "V~ollständig" ;
+        Text [ de ] = "V~ollstÃ¤ndig" ;
         Text [ en-US ] = "Show sublevels" ;
         Text [ x-comment ] = " ";
     };
@@ -526,7 +526,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 50 , 77 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "H~öhe" ;
+        Text [ de ] = "H~Ã¶he" ;
         Text [ en-US ] = "Height" ;
         Text [ x-comment ] = " ";
     };
@@ -682,7 +682,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
     {
         Pos = MAP_APPFONT ( 50 , 27 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
-        Text [ de ] = "Ein~rückung";
+        Text [ de ] = "Ein~rÃ¼ckung";
         Text [ en-US ] = "Indent" ;
         Text [ x-comment ] = " ";
     };
@@ -815,7 +815,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
 
 String RID_STR_EDIT_GRAPHIC
 {
-    Text [ de ] = "Verknüpfen" ;
+    Text [ de ] = "VerknÃ¼pfen" ;
     Text [ en-US ] = "Link" ;
     Text [ x-comment ] = " ";
 };
