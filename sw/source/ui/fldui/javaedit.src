@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javaedit.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:45:29 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:04:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,7 @@ ModalDialog DLG_JAVAEDIT
     String STR_JAVA_INSERT
     {
         /* ### ACHTUNG: Neuer Text in Resource? Script einfügen : Script einf³gen */
-        Text [ de ] = "Script einfügen" ;
+        Text [ de ] = "Script einfÃ¼gen" ;
         Text [ en-US ] = "Insert Script" ;
         Text [ x-comment ] = " ";
     };
