@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bookmark.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:28:36 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:07:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@ ModalDialog DLG_INSERT_BOOKMARK
     OUTPUTSIZE = TRUE ;
     Size = MAP_APPFONT ( 179 , 96 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Textmarke einfügen : Textmarke einf³gen */
-    Text [ de ] = "Textmarke einfügen" ;
+    Text [ de ] = "Textmarke einfÃ¼gen" ;
     Text [ en-US ] = "Insert Bookmark" ;
     MOVEABLE = TRUE ;
     SVLOOK = TRUE ;
@@ -74,7 +74,7 @@ ModalDialog DLG_INSERT_BOOKMARK
         Pos = MAP_APPFONT ( 123 , 40 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
-        Text [ de ] = "~Löschen" ;
+        Text [ de ] = "~LÃ¶schen" ;
         Text [ en-US ] = "~Delete" ;
         TABSTOP = TRUE ;
         DISABLE = TRUE ;
@@ -89,7 +89,7 @@ ModalDialog DLG_INSERT_BOOKMARK
 };
 String STR_REMOVE_WARNING
 {
-    Text [ de ] = "Die folgenden Zeichen sind nicht zulässig und wurden deshalb entfernt: ";
+    Text [ de ] = "Die folgenden Zeichen sind nicht zulÃ¤ssig und wurden deshalb entfernt: ";
     Text [ en-US ] = "The following characters are not valid and have been removed: ";
 };
 
