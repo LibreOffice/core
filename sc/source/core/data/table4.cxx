@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table4.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:31:05 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:25:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -557,7 +557,8 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         ULONG nAtSrc = nISrcStart;
         ScPatternAttr* pNewPattern = NULL;
         BOOL bGetPattern = TRUE;
-        for (rInner = nIStart;;)
+        rInner = nIStart;
+        while (true)        // #i53728# with "for (;;)" old solaris/x86 compiler mis-optimizes
         {
             const ScStyleSheet* pStyleSheet;
             if ( bGetPattern )
@@ -675,7 +676,8 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 }
             }
 
-            for (rInner = nIStart;;)
+            rInner = nIStart;
+            while (true)        // #i53728# with "for (;;)" old solaris/x86 compiler mis-optimizes
             {
                 if (bPositive)
                 {
@@ -716,7 +718,8 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             ScBaseCell* pSrcCell;
             CellType eCellType;
 
-            for (rInner = nIStart;;)
+            rInner = nIStart;
+            while (true)        // #i53728# with "for (;;)" old solaris/x86 compiler mis-optimizes
             {
                 if ( bGetCell )
                 {
@@ -1301,7 +1304,8 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 BOOL bOverflow = FALSE;
 
                 USHORT nDayOfMonth = 0;
-                for (rInner = nIStart;;)
+                rInner = nIStart;
+                while (true)        // #i53728# with "for (;;)" old solaris/x86 compiler mis-optimizes
                 {
                     if (!bError && !bOverflow)
                     {
@@ -1387,7 +1391,8 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     BOOL bError = FALSE;
                     BOOL bOverflow = FALSE;
 
-                    for (rInner = nIStart;;)
+                    rInner = nIStart;
+                    while (true)        // #i53728# with "for (;;)" old solaris/x86 compiler mis-optimizes
                     {
                         if (!bError && !bOverflow)
                         {
