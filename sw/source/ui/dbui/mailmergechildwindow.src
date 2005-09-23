@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmergechildwindow.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:54:53 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:55:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,11 +41,11 @@
 #define HEIGHT 16
 
 #define WORKAROUND \
-    Text [ de ] = "Zurück zum Serienbrief-Assistenten" ; \
+    Text [ de ] = "ZurÃ¼ck zum Serienbrief-Assistenten" ; \
     Text [ en-US ] = "Return to Mail Merge Wizard" ; \
 
 
-FloatingWindow DLG_MAILMERGECHILD
+FloatingWindow DLG_MAILMERGECHILD\
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
@@ -56,15 +56,15 @@ FloatingWindow DLG_MAILMERGECHILD
     Zoomable = TRUE ;
     HelpID = HID_MAILMERGECHILD ;
     Hide = TRUE ;
-    Text [ de ] = "Serienbrief-Assistent";
-    Text [ en-US ] = "Mail Merge Wizard";
-    ToolBox TB_BACK
+    Text [ de ] = "Serienbrief-Assistent";\
+    Text [ en-US ] = "Mail Merge Wizard";\
+    ToolBox TB_BACK\
     {
         MenuStrings = TRUE ;
         SVLook = TRUE ;
         ItemList =
         {
-            ToolBoxItem
+            ToolBoxItem\
             {
                 Identifier = 1;
                 HelpID = HID_RETURN_TO_MAILMERGE ;
@@ -132,7 +132,7 @@ ModelessDialog /*ModalDialog*/ DLG_MM_SENDMAILS
     {
         Pos = MAP_APPFONT ( 6 , 28 ) ;
         Size = MAP_APPFONT ( 238 , 8 ) ;
-        Text [ de ] = "Übertragungsstatus" ;
+        Text [ de ] = "Ãœbertragungsstatus" ;
         Text[ en-US ] = "Transfer status";
     };
     FixedText  FT_TRANSFERSTATUS
@@ -198,7 +198,7 @@ ModelessDialog /*ModalDialog*/ DLG_MM_SENDMAILS
     {
         Pos = MAP_APPFONT ( 194 , 201 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Schließen" ;
+        Text [ de ] = "SchlieÃŸen" ;
         Text[ en-US ] = "C~lose";
     };
     String     ST_CONTINUE
@@ -249,12 +249,12 @@ ModelessDialog /*ModalDialog*/ DLG_MM_SENDMAILS
     };
     String ST_FAILED
     {
-        Text [ de ] = "Fehlgeschlagen (ungültige Adresse)" ;
+        Text [ de ] = "Fehlgeschlagen (ungÃ¼ltige Adresse)" ;
         Text[ en-US ] = "Sending failed (invalid address)";
     };
     String ST_TERMINATEQUERY
     {
-        Text [ de ] = "In Ihrem %PRODUCTNAME Postausgang sind noch Nachrichten zu versenden.\nMöchten Sie das Programm trotzdem beenden?" ;
+        Text [ de ] = "In Ihrem %PRODUCTNAME Postausgang sind noch Nachrichten zu versenden.\nMÃ¶chten Sie das Programm trotzdem beenden?" ;
         Text[ en-US ] = "There are still e-mail messages in your %PRODUCTNAME Outbox.\nWould you like to exit anyway?";
     };
 };
