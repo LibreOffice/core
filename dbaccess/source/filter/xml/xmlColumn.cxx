@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlColumn.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:01:07 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:08:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,9 @@
 #ifndef DBA_XMLSTYLEIMPORT_HXX
 #include "xmlStyleImport.hxx"
 #endif
-
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 namespace dbaxml
 {
@@ -81,6 +83,7 @@ namespace dbaxml
     using namespace ::com::sun::star::sdbcx;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::xml::sax;
+DBG_NAME(OXMLColumn)
 
 OXMLColumn::OXMLColumn( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
@@ -92,6 +95,8 @@ OXMLColumn::OXMLColumn( ODBFilter& rImport
     ,m_xParentContainer(_xParentContainer)
     ,m_bHidden(sal_False)
 {
+    DBG_CTOR(OXMLColumn,NULL);
+
     OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
     const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
     const SvXMLTokenMap& rTokenMap = rImport.GetColumnElemTokenMap();
@@ -136,6 +141,8 @@ OXMLColumn::OXMLColumn( ODBFilter& rImport
 
 OXMLColumn::~OXMLColumn()
 {
+
+    DBG_DTOR(OXMLColumn,NULL);
 }
 // -----------------------------------------------------------------------------
 void OXMLColumn::EndElement()
