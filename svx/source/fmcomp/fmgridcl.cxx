@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:45:23 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:58:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -408,9 +408,15 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     if (aColumn.has(daColumnObject))aColumn[daColumnObject] >>= xField;
     if (aColumn.has(daConnection))  aColumn[daConnection]   >>= xConnection;
 
-    if (!sFieldName.getLength() || !sCommand.getLength() || !sDatasouce.getLength())
+    if  (   !sFieldName.getLength()
+        ||  !sCommand.getLength()
+        ||  (   !sDatasouce.getLength()
+            &&  !sDatabaseLocation.getLength()
+            &&  !xConnection.is()
+            )
+        )
     {
-        DBG_ERROR("FmGridHeader::ExecuteDrop: somebody started a nonsense drag operation!!");
+        DBG_ERROR( "FmGridHeader::ExecuteDrop: somebody started a nonsense drag operation!!" );
         return DND_ACTION_NONE;
     }
 
@@ -421,7 +427,8 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
         {   // the transferable did not contain the connection -> build an own one
             try
             {
-                xConnection = OStaticDataAccessTools().getConnection_withFeedback(sDatasouce, ::rtl::OUString(),::rtl::OUString(),static_cast<FmGridControl*>(GetParent())->getServiceManager());
+                ::rtl::OUString sSignificantSource( sDatasouce.getLength() ? sDatasouce : sDatabaseLocation );
+                xConnection = OStaticDataAccessTools().getConnection_withFeedback(sSignificantSource, ::rtl::OUString(),::rtl::OUString(),static_cast<FmGridControl*>(GetParent())->getServiceManager());
             }
             catch(NoSuchElementException&)
             {   // allowed, means sDatasouce isn't a valid data source name ....
