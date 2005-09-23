@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prnsetup.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:18:20 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:52:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ String STR_SVT_PRNDLG_PAUSED
 };
 String STR_SVT_PRNDLG_PENDING
 {
-    Text [ de ] = "Löschen anstehend" ;
+    Text [ de ] = "LÃ¶schen anstehend" ;
     Text [ en-US ] = "Pending deletion" ;
     Text [ x-comment ] = " ";
 };
@@ -169,7 +169,7 @@ String STR_SVT_PRNDLG_USER_INTERVENTION
 };
 String STR_SVT_PRNDLG_OUT_OF_MEMORY
 {
-    Text [ de ] = "Nicht genügend Speicher" ;
+    Text [ de ] = "Nicht genÃ¼gend Speicher" ;
     Text [ en-US ] = "Insufficient memory" ;
     Text [ x-comment ] = " ";
 };
