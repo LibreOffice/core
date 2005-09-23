@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formats.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:14:01 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:52:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -289,7 +289,7 @@ String STR_FORMAT_ID_SYLK
 };
 String STR_FORMAT_ID_LINK
 {
-    Text [ de ] = "DDE Verknüpfung" ;
+    Text [ de ] = "DDE VerknÃ¼pfung" ;
     Text [ en-US ] = "DDE link" ;
     Text [ x-comment ] = " ";
 };
