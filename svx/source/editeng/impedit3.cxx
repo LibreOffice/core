@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:33:54 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:51:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2834,15 +2834,39 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
         {
             String aActualParaText;
             pPDFExtOutDevData->BeginStructureElement( vcl::PDFWriter::Paragraph );
-            sal_uInt16 i, j, nPortions, nLines = pPortion->GetLines().Count();
+
+            sal_uInt16 i, nLines = pPortion->GetLines().Count();
             for ( i = 0; i < nLines; i++ )
             {
-                pLine = pPortion->GetLines().GetObject( i );
-                nPortions = pPortion->GetTextPortions().Count();
-                for ( j = 0; j < nPortions; j++ )
+                if ( pPortion->IsVisible() )
                 {
-                    TextPortion* pTextPortion = pPortion->GetTextPortions().GetObject( j );
-                    aActualParaText.Append( *pPortion->GetNode() );
+                    pLine = pPortion->GetLines().GetObject( i );
+                    sal_uInt16 nIndex = pLine->GetStart();
+                    for ( sal_uInt16 y = pLine->GetStartPortion(); y <= pLine->GetEndPortion(); y++ )
+                    {
+                        TextPortion* pTextPortion = pPortion->GetTextPortions().GetObject( y );
+                        switch ( pTextPortion->GetKind() )
+                        {
+                            case PORTIONKIND_TEXT:
+                            {
+                                String aText( *pPortion->GetNode(), nIndex, pTextPortion->GetLen() );
+                                aActualParaText.Append( aText );
+                            }
+                            break;
+                            case PORTIONKIND_FIELD:
+                            {
+                                EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature( nIndex );
+                                if ( pAttr && pAttr->GetItem()->ISA( SvxFieldItem ) )
+                                    aActualParaText.Append( ((EditCharAttribField*)pAttr)->GetFieldValue() );
+                            }
+                            break;
+                            case PORTIONKIND_LINEBREAK :
+                            {
+                                aActualParaText.Append( String( (sal_Unicode)0xd ) );
+                            }
+                            break;
+                         }
+                    }
                 }
             }
             pPDFExtOutDevData->SetActualText( aActualParaText );
