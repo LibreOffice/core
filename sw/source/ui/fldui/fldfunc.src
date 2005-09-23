@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldfunc.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:38:33 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:03:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,7 +201,7 @@ TabPage TP_FLD_FUNC
         Pos = MAP_APPFONT ( 170 , 29 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Hide = TRUE;
-        Text [ de ] = "Hi~nzufügen" ;
+        Text [ de ] = "Hi~nzufÃ¼gen" ;
         Text [ en-US ] = "~Add" ;
     };
     FixedText FT_LISTITEMS
@@ -209,7 +209,7 @@ TabPage TP_FLD_FUNC
         Pos = MAP_APPFONT ( 170 , 46 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
         Hide = TRUE;
-        Text [ de ] = "Listeneinträge" ;
+        Text [ de ] = "ListeneintrÃ¤ge" ;
         Text [ en-US ] = "Items on ~list" ;
     };
     ListBox LB_LISTITEMS
