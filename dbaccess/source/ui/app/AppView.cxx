@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppView.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:22:57 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:17:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,11 +133,14 @@ using namespace ::com::sun::star::container;
 
 //==================================================================
 // class OAppBorderWindow
+DBG_NAME(OAppBorderWindow)
 //==================================================================
-OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent) : Window(_pParent,WB_DIALOGCONTROL)
+OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePreviewMode) : Window(_pParent,WB_DIALOGCONTROL)
     ,m_pView(_pParent)
     ,m_pPanel(NULL)
 {
+    DBG_CTOR(OAppBorderWindow,NULL);
+
     SetBorderStyle(WINDOW_BORDER_MONO);
 
     m_pPanel = new OTitleWindow(this,STR_DATABASE,WB_BORDER | WB_DIALOGCONTROL ,FALSE);
@@ -150,7 +153,7 @@ OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent) : Window(_pParent
     m_pPanel->SetUniqueId(UID_APP_DATABASE_VIEW);
     m_pPanel->Show();
 
-    m_pDetailView = new OApplicationDetailView(this);
+    m_pDetailView = new OApplicationDetailView(this,_ePreviewMode);
     m_pDetailView->Show();
 
     ImplInitSettings();
@@ -172,6 +175,8 @@ OAppBorderWindow::~OAppBorderWindow()
         ::std::auto_ptr<Window> aTemp(m_pDetailView);
         m_pDetailView = NULL;
     }
+
+    DBG_DTOR(OAppBorderWindow,NULL);
 }
 // -----------------------------------------------------------------------------
 void OAppBorderWindow::GetFocus()
@@ -241,6 +246,7 @@ OApplicationView::OApplicationView( Window* pParent
                                     ,IContainerFoundListener* _pContainerListener
                                     ,IViewChangeListener* _pViewChangeListener
                                     ,const Reference< XController>& _xController
+                                    ,PreviewMode _ePreviewMode
                                    ) :
     ODataView( pParent ,_pIController,_rxOrb,WB_DIALOGCONTROL )
     ,m_pElementNotification( _pController )
@@ -260,7 +266,7 @@ OApplicationView::OApplicationView( Window* pParent
     {
     }
 
-    m_pWin = new OAppBorderWindow(this);
+    m_pWin = new OAppBorderWindow(this,_ePreviewMode);
     m_pWin->SetUniqueId(UID_APP_VIEW_BORDER_WIN);
     m_pWin->Show();
 
