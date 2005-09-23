@@ -4,9 +4,9 @@
  *
  *  $RCSfile: changedb.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:34:46 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:02:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ ModalDialog DLG_CHANGE_DB
     {
         Pos = MAP_APPFONT ( 118 , 14 ) ;
         Size = MAP_APPFONT ( 90 ,  8 ) ;
-        Text [ de ] = "Verfügbare Datenbanken" ;
+        Text [ de ] = "VerfÃ¼gbare Datenbanken" ;
         Left = TRUE ;
         Text [ en-US ] = "Available Databases" ;
         Text [ x-comment ] = " ";
@@ -98,7 +98,7 @@ ModalDialog DLG_CHANGE_DB
     {
         Pos = MAP_APPFONT ( 12 , 110 ) ;
         Size = MAP_APPFONT ( 210 , 45 ) ;
-        Text [ de ] = "In diesem Dialog können Sie Datenbanken, auf die Sie in Ihrem Dokument über Datenbankfelder zugreifen, durch andere Datenbanken austauschen. Sie können nur eine Änderung pro Arbeitsgang durchführen. In der linken Liste ist Mehrfachselektion möglich.\n Benutzen Sie die Durchsuchen Schaltfläche, um eine Datenbankdatei auszuwählen." ;
+        Text [ de ] = "In diesem Dialog kÃ¶nnen Sie Datenbanken, auf die Sie in Ihrem Dokument Ã¼ber Datenbankfelder zugreifen, durch andere Datenbanken austauschen. Sie kÃ¶nnen nur eine Ã„nderung pro Arbeitsgang durchfÃ¼hren. In der linken Liste ist Mehrfachselektion mÃ¶glich.\n Benutzen Sie die Durchsuchen SchaltflÃ¤che, um eine Datenbankdatei auszuwÃ¤hlen." ;
         WordBreak = TRUE ;
         Left = TRUE ;
         Text [ en-US ] = "Use this dialog to replace the databases you access in your document via database fields, with other databases. You can only make one change at a time. Multiple selection is possible in the list on the left.\nUse the browse button to select a database file." ;
@@ -137,7 +137,7 @@ ModalDialog DLG_CHANGE_DB
         Pos = MAP_APPFONT ( 230 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Schließen" ;
+        Text [ de ] = "~SchlieÃŸen" ;
         Text [ en-US ] = "~Close" ;
     };
     HelpButton BT_HELP
