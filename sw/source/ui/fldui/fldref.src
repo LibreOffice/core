@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldref.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:41:11 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:03:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,7 @@ TabPage TP_FLD_REF
     };
     String STR_REFFOOTNOTE
     {
-        Text [ de ] = "Fuﬂnoten" ;
+        Text [ de ] = "Fu√ünoten" ;
         Text [ en-US ] = "Footnotes" ;
         Text [ x-comment ] = " ";
     };
