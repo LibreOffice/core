@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:30:10 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:06:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -453,6 +453,7 @@ ODocumentDefinition::ODocumentDefinition(const Reference< XInterface >& _rxConta
     ,m_pClientHelper(NULL)
     ,m_bForm(_bForm)
     ,m_bOpenInDesign(sal_False)
+    ,m_bInExecute(sal_False)
 {
     DBG_CTOR(ODocumentDefinition, NULL);
     registerProperties();
@@ -547,84 +548,87 @@ IPropertyArrayHelper* ODocumentDefinition::createArrayHelper( ) const
     describeProperties(aProps);
     return new OPropertyArrayHelper(aProps);
 }
+class OExecuteImpl
+{
+    sal_Bool& m_rbSet;
+public:
+    OExecuteImpl(sal_Bool& _rbSet) : m_rbSet(_rbSet){ m_rbSet=sal_True; }
+    ~OExecuteImpl(){ m_rbSet = sal_False; }
+};
+// -----------------------------------------------------------------------------
+namespace
+{
+    bool lcl_extractOpenMode( const Any& _rValue, sal_Int32& /* [out] */ _rMode )
+    {
+        OpenCommandArgument aOpenCommand;
+        if ( _rValue >>= aOpenCommand )
+            _rMode = aOpenCommand.Mode;
+        else
+        {
+            OpenCommandArgument2 aOpenCommand;
+            if ( _rValue >>= aOpenCommand )
+                _rMode = aOpenCommand.Mode;
+            else
+                return false;
+        }
+        return true;
+    }
+}
+
 // -----------------------------------------------------------------------------
 Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 CommandId, const Reference< XCommandEnvironment >& Environment ) throw (Exception, CommandAbortedException, RuntimeException)
 {
     Any aRet;
     ::osl::MutexGuard aGuard(m_aMutex);
-    sal_Bool bOpenInDesign = aCommand.Name.equalsAscii("openDesign");
-    sal_Bool bOpenForMail = aCommand.Name.equalsAscii("openForMail");
-    if ( aCommand.Name.compareToAscii( "open" ) == 0 || bOpenInDesign || bOpenForMail )
+    if ( !m_bInExecute )
     {
-        //////////////////////////////////////////////////////////////////
-        // open command for a folder content
-        //////////////////////////////////////////////////////////////////
-        Reference< XConnection> xConnection;
-        OpenCommandArgument2 aOpenCommand;
-          if ( !( aCommand.Argument >>= aOpenCommand ) )
+        OExecuteImpl aExecuteGuard(m_bInExecute);
+        sal_Bool bOpenInDesign = aCommand.Name.equalsAscii("openDesign");
+        sal_Bool bOpenForMail = aCommand.Name.equalsAscii("openForMail");
+        if ( aCommand.Name.compareToAscii( "open" ) == 0 || bOpenInDesign || bOpenForMail )
         {
-            sal_Bool bFound = sal_False;
-            Sequence< PropertyValue > aSeq;
-            if ( aCommand.Argument >>= aSeq )
+            //////////////////////////////////////////////////////////////////
+            // open command for a folder content
+            //////////////////////////////////////////////////////////////////
+            Reference< XConnection> xConnection;
+            sal_Int32 nOpenMode = OpenMode::DOCUMENT;
+
+            lcl_extractOpenMode( aCommand.Argument, nOpenMode );
+
+            Sequence< PropertyValue > aArguments;
+            if ( aCommand.Argument >>= aArguments )
             {
-                const PropertyValue* pIter = aSeq.getConstArray();
-                const PropertyValue* pEnd  = pIter + aSeq.getLength();
+                const PropertyValue* pIter = aArguments.getConstArray();
+                const PropertyValue* pEnd  = pIter + aArguments.getLength();
                 for(;pIter != pEnd;++pIter)
                 {
                     if ( pIter->Name == PROPERTY_ACTIVECONNECTION )
                         xConnection.set(pIter->Value,UNO_QUERY);
-                    else if ( !bFound )
-                        bFound = ( pIter->Value >>= aOpenCommand );
+                    else
+                        lcl_extractOpenMode( pIter->Value, nOpenMode );
                 }
             }
-            if ( !bFound )
+
+            if ( xConnection.is() )
+                m_xLastKnownConnection = xConnection;
+
+            if  (   ( nOpenMode == OpenMode::ALL )
+                ||  ( nOpenMode == OpenMode::FOLDERS )
+                ||  ( nOpenMode == OpenMode::DOCUMENTS )
+                ||  ( nOpenMode == OpenMode::DOCUMENT_SHARE_DENY_NONE )
+                ||  ( nOpenMode == OpenMode::DOCUMENT_SHARE_DENY_WRITE )
+                )
             {
-                OSL_ENSURE( sal_False, "Wrong argument type!" );
+                // opening as folder is not supported
                 ucbhelper::cancelCommandExecution(
-                    makeAny( IllegalArgumentException(
+                        makeAny( UnsupportedOpenModeException(
                                         rtl::OUString(),
                                         static_cast< cppu::OWeakObject * >( this ),
-                                        -1 ) ),
-                    Environment );
-                // Unreachable
-            }
-        }
-        sal_Bool bOpenFolder =
-            ( ( aOpenCommand.Mode == OpenMode::ALL ) ||
-              ( aOpenCommand.Mode == OpenMode::FOLDERS ) ||
-              ( aOpenCommand.Mode == OpenMode::DOCUMENTS ) );
-        if ( xConnection.is() )
-            m_xLastKnownConnection = xConnection;
-
-        if ( bOpenFolder )
-        {
-            // open as folder - return result set
-
-            ucbhelper::cancelCommandExecution(
-                    makeAny( UnsupportedOpenModeException(
-                                    rtl::OUString(),
-                                    static_cast< cppu::OWeakObject * >( this ),
-                                    sal_Int16( aOpenCommand.Mode ) ) ),
-                    Environment );
-                // Unreachable
-          }
-        else
-        {
-            // Check open mode
-            if ( ( aOpenCommand.Mode
-                    == OpenMode::DOCUMENT_SHARE_DENY_NONE ) ||
-                 ( aOpenCommand.Mode
-                    == OpenMode::DOCUMENT_SHARE_DENY_WRITE ) )
-            {
-                // Unsupported.
-                ucbhelper::cancelCommandExecution(
-                    makeAny( UnsupportedOpenModeException(
-                                    rtl::OUString(),
-                                    static_cast< cppu::OWeakObject * >( this ),
-                                    sal_Int16( aOpenCommand.Mode ) ) ),
-                    Environment );
-                // Unreachable
-            }
+                                        sal_Int16( nOpenMode ) ) ),
+                        Environment );
+                    // Unreachable
+                DBG_ERROR( "unreachable" );
+              }
 
             Reference<XModel> xModel;
             if ( m_pImpl->m_aProps.sPersistentName.getLength() )
@@ -768,76 +772,76 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
                 }
             }
         }
-    }
-    else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "copyTo" ) ) )
-    {
-        Sequence<Any> aIni;
-        aCommand.Argument >>= aIni;
-        if ( aIni.getLength() != 2 )
+        else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "copyTo" ) ) )
         {
-            OSL_ENSURE( sal_False, "Wrong argument type!" );
-            ucbhelper::cancelCommandExecution(
-                makeAny( IllegalArgumentException(
-                                    rtl::OUString(),
-                                    static_cast< cppu::OWeakObject * >( this ),
-                                    -1 ) ),
-                Environment );
-            // Unreachable
+            Sequence<Any> aIni;
+            aCommand.Argument >>= aIni;
+            if ( aIni.getLength() != 2 )
+            {
+                OSL_ENSURE( sal_False, "Wrong argument type!" );
+                ucbhelper::cancelCommandExecution(
+                    makeAny( IllegalArgumentException(
+                                        rtl::OUString(),
+                                        static_cast< cppu::OWeakObject * >( this ),
+                                        -1 ) ),
+                    Environment );
+                // Unreachable
+            }
+            Reference< XStorage> xStorage(aIni[0],UNO_QUERY);
+            ::rtl::OUString sPersistentName;
+            aIni[1] >>= sPersistentName;
+            loadEmbeddedObject( Sequence< sal_Int8 >(), Reference< XConnection >(), sal_False );
+            Reference<XEmbedPersist> xPersist(m_xEmbeddedObject,UNO_QUERY);
+            if ( xPersist.is() )
+            {
+                xPersist->storeToEntry(xStorage,sPersistentName,Sequence<PropertyValue>(),Sequence<PropertyValue>());
+                xPersist->storeOwn();
+            }
+            else
+                throw CommandAbortedException();
         }
-        Reference< XStorage> xStorage(aIni[0],UNO_QUERY);
-        ::rtl::OUString sPersistentName;
-        aIni[1] >>= sPersistentName;
-        loadEmbeddedObject( Sequence< sal_Int8 >(), Reference< XConnection >(), sal_False );
-        Reference<XEmbedPersist> xPersist(m_xEmbeddedObject,UNO_QUERY);
-        if ( xPersist.is() )
+        else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "preview" ) ) )
         {
-            xPersist->storeToEntry(xStorage,sPersistentName,Sequence<PropertyValue>(),Sequence<PropertyValue>());
-            xPersist->storeOwn();
+            generateNewImage(aRet);
+        }
+        else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "insert" ) ) )
+        {
+            Sequence<Any> aIni;
+            aCommand.Argument >>= aIni;
+            if ( aIni.getLength() > 0 && aIni.getLength() < 2 )
+            {
+                OSL_ENSURE( sal_False, "Wrong argument type!" );
+                ucbhelper::cancelCommandExecution(
+                    makeAny( IllegalArgumentException(
+                                        rtl::OUString(),
+                                        static_cast< cppu::OWeakObject * >( this ),
+                                        -1 ) ),
+                    Environment );
+                // Unreachable
+            }
+            ::rtl::OUString sURL;
+            aIni[0] >>= sURL;
+            insert(sURL,Environment);
+        }
+        else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "getdocumentinfo" ) ) )
+        {
+            fillDocumentInfo(aRet);
+        }
+        else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "delete" ) ) )
+        {
+            //////////////////////////////////////////////////////////////////
+            // delete
+            //////////////////////////////////////////////////////////////////
+            closeObject();
+            Reference< XStorage> xStorage = getStorage();
+            if ( xStorage.is() )
+                xStorage->removeElement(m_pImpl->m_aProps.sPersistentName);
+
+            dispose();
         }
         else
-            throw CommandAbortedException();
+            aRet = OContentHelper::execute(aCommand,CommandId,Environment);
     }
-    else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "preview" ) ) )
-    {
-        generateNewImage(aRet);
-    }
-    else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "insert" ) ) )
-    {
-        Sequence<Any> aIni;
-        aCommand.Argument >>= aIni;
-        if ( aIni.getLength() > 0 && aIni.getLength() < 2 )
-        {
-            OSL_ENSURE( sal_False, "Wrong argument type!" );
-            ucbhelper::cancelCommandExecution(
-                makeAny( IllegalArgumentException(
-                                    rtl::OUString(),
-                                    static_cast< cppu::OWeakObject * >( this ),
-                                    -1 ) ),
-                Environment );
-            // Unreachable
-        }
-        ::rtl::OUString sURL;
-        aIni[0] >>= sURL;
-        insert(sURL,Environment);
-    }
-    else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "getdocumentinfo" ) ) )
-    {
-        fillDocumentInfo(aRet);
-    }
-    else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "delete" ) ) )
-    {
-        //////////////////////////////////////////////////////////////////
-        // delete
-        //////////////////////////////////////////////////////////////////
-        closeObject();
-        Reference< XStorage> xStorage = getStorage();
-        if ( xStorage.is() )
-            xStorage->removeElement(m_pImpl->m_aProps.sPersistentName);
-
-        dispose();
-    }
-    else
-        aRet = OContentHelper::execute(aCommand,CommandId,Environment);
     return aRet;
 }
 // -----------------------------------------------------------------------------
@@ -911,6 +915,8 @@ void SAL_CALL ODocumentDefinition::saveObject(  ) throw (ObjectSaveVetoException
 sal_Bool ODocumentDefinition::save(sal_Bool _bApprove)
 {
     // default handling: instantiate an interaction handler and let it handle the parameter request
+    if ( !m_bOpenInDesign )
+        return sal_False;
     try
     {
 
@@ -1302,6 +1308,48 @@ sal_Bool ODocumentDefinition::isModified()
     return bRet;
 }
 // -----------------------------------------------------------------------------
+bool ODocumentDefinition::prepareClose()
+{
+    if ( !m_xEmbeddedObject.is() )
+        return true;
+
+    try
+    {
+        // suspend the controller. Embedded objects are not allowed to rais
+        // own UI on their own decision, instead, this has always to be triggered
+        // by the embedding component. Thus, we do the suspend call here.
+        // #i49370# / 2005-06-09 / frank.schoenheit@sun.com
+
+        Reference< XModel > xModel( getComponent(), UNO_QUERY );
+        Reference< XController > xController;
+        if ( xModel.is() )
+            xController = xModel->getCurrentController();
+        OSL_ENSURE( xController.is(), "ODocumentDefinition::prepareClose: no controller!" );
+        if ( !xController.is() )
+            return sal_False;
+
+        sal_Bool bCouldSuspend = xController->suspend( sal_True );
+        if ( !bCouldSuspend )
+            // controller vetoed the closing
+            return false;
+
+        if ( isModified() && !save( sal_True ) )
+        {
+            if ( bCouldSuspend )
+                // revert suspension
+                xController->suspend( sal_False );
+            // saving failed or was cancelled
+            return false;
+        }
+    }
+    catch( const Exception& )
+    {
+        OSL_ENSURE( sal_False, "ODocumentDefinition::prepareClose: caught an exception!" );
+    }
+
+    return true;
+}
+// -----------------------------------------------------------------------------
 void ODocumentDefinition::setModelReadOnly(sal_Bool _bReadOnly)
 {
     Reference<XModel> xModel(getComponent(),UNO_QUERY);
@@ -1322,7 +1370,6 @@ void ODocumentDefinition::fillReportData(sal_Bool _bFill)
 {
     if ( !m_bForm && _bFill && m_pImpl->m_aProps.bAsTemplate && !m_bOpenInDesign ) // open a report in alive mode, so we need to fill it
     {
-        // setModelReadOnly(sal_False);
         Sequence<Any> aArgs(2);
         PropertyValue aValue;
         aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TextDocument"));
@@ -1335,7 +1382,6 @@ void ODocumentDefinition::fillReportData(sal_Bool _bFill)
         Reference< XJobExecutor > xExecuteable(m_xORB->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.wizards.report.CallReportWizard")),aArgs),UNO_QUERY);
         if ( xExecuteable.is() )
             xExecuteable->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("fill")));
-//      setModelReadOnly(sal_True);
     }
 }
 // -----------------------------------------------------------------------------
