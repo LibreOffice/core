@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailView.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:20:59 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:16:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,7 +164,7 @@ namespace dbaui
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt);
     public:
-        OApplicationDetailView(OAppBorderWindow* _pParent);
+        OApplicationDetailView(OAppBorderWindow* _pParent,PreviewMode _ePreviewMode);
         virtual ~OApplicationDetailView();
         // window overloads
         //  virtual void Resize();
