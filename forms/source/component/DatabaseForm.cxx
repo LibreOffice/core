@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:36:22 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:50:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1766,9 +1766,14 @@ void ODatabaseForm::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const A
 
         case PROPERTY_ID_ACTIVE_CONNECTION:
         {
-            Reference< XConnection > xSomeConnection;
-            if ( ::dbtools::isEmbeddedInDatabase( getParent(), xSomeConnection ) )
-                throw PropertyVetoException();
+            Reference< XConnection > xOuterConnection;
+            if ( ::dbtools::isEmbeddedInDatabase( getParent(), xOuterConnection ) )
+            {
+                if ( xOuterConnection != Reference< XConnection >( rValue, UNO_QUERY ) )
+                    // somebody's trying to set a connection which is not equal the connection
+                    // implied by the database we're embedded in
+                    throw PropertyVetoException();
+            }
         }
         // NO break!
 
@@ -2811,8 +2816,6 @@ sal_Bool ODatabaseForm::implEnsureConnection()
 
         if (m_xAggregateSet.is())
         {
-            // do we have a connection in the hierarchy than take that connection
-            // this overwrites all the other connnections
             Reference< XConnection >  xConnection = connectRowset(
                 Reference<XRowSet> (m_xAggregate, UNO_QUERY),
                 m_xServiceFactory,
