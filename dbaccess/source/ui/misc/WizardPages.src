@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WizardPages.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:11:29 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:17:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ String STR_RTF_TITLE
 
 String STR_WIZ_COLUMN_SELECT_TITEL
 {
-    Text [ de ] = "Spaltenübernahme" ;
+    Text [ de ] = "SpaltenÃ¼bernahme" ;
     Text [ en-US ] = "Apply columns";
 };
 
@@ -79,7 +79,7 @@ String STR_WIZ_TYPE_SELECT_TITEL
 
 String STR_WIZ_PKEY_ALREADY_DEFINED
 {
-    Text [ de ] = "Es sind bereits folgende Felder als Primärschlüssel gesetzt:\n" ;
+    Text [ de ] = "Es sind bereits folgende Felder als PrimÃ¤rschlÃ¼ssel gesetzt:\n" ;
     Text [ en-US ] = "The following fields have already been set as primary keys:\n";
 };
 
@@ -120,7 +120,7 @@ ModalDialog WIZ_RTFCOPYTABLE
     {
         TabStop             = TRUE ;
         Size                = MAP_APPFONT ( BUTTON_SIZE_X , BUTTON_SIZE_Y ) ;
-        Text [ de ] = "<~Zurück" ;
+        Text [ de ] = "<~ZurÃ¼ck" ;
         Text [ en-US ] = "< ~Back";
     };
     PushButton PB_NEXT
@@ -345,7 +345,7 @@ Menu RID_SBA_RTF_PKEYPOPUP
             Identifier      = SID_TABLEDESIGN_TABED_PRIMARYKEY ;
             HelpID          = SID_TABLEDESIGN_TABED_PRIMARYKEY ;
             Checkable       = TRUE ;
-            Text [ de ] = "Primärschlüssel" ;
+            Text [ de ] = "PrimÃ¤rschlÃ¼ssel" ;
             Text [ en-US ] = "Primary Key" ;
         };
     };
@@ -552,7 +552,7 @@ TabPage TAB_WIZ_COPYTABLE
     {
         Pos                 = MAP_APPFONT ( 12, 77 ) ;
         Size                = MAP_APPFONT ( 73 , 10 ) ;
-        Text [ de ] = "Daten a~nhängen" ;
+        Text [ de ] = "Daten a~nhÃ¤ngen" ;
         Text [ en-US ] = "Attach ~data" ;
     };
 
@@ -560,7 +560,7 @@ TabPage TAB_WIZ_COPYTABLE
     {
         Pos                 = MAP_APPFONT ( 12, 93 ) ;
         Size                = MAP_APPFONT ( 90 , 10 ) ;
-        Text [ de ] = "~Primärschlüssel erzeugen" ;
+        Text [ de ] = "~PrimÃ¤rschlÃ¼ssel erzeugen" ;
         Text [ en-US ] = "Crea~te primary key";
     };
     FixedText FT_KEYNAME
@@ -599,19 +599,19 @@ String STR_COPYTABLE_TITLE_MOVE
 };
 ErrorBox ERROR_INVALID_TABLE_NAME
 {
-    Message [ de ] = "In der aktuellen Datenbank ist dies kein gültiger Tabellenname.";
+    Message [ de ] = "In der aktuellen Datenbank ist dies kein gÃ¼ltiger Tabellenname.";
     Buttons = WB_OK;
     Message [ en-US ] = "This table name is not valid in the current database.";
 };
 String STR_ERR_DUPL_TABLENAME
 {
-    Text [ de ] = "Der Tabellenname \'$name$\' existiert bereits.\nSie können einen neuen Namen angeben\noder die Daten an die existierende Tabelle anhängen." ;
+    Text [ de ] = "Der Tabellenname \'$name$\' existiert bereits.\nSie kÃ¶nnen einen neuen Namen angeben\noder die Daten an die existierende Tabelle anhÃ¤ngen." ;
     Text [ en-US ] = "The table name \'$name$\' already exists.\nYou may enter a new name\nor append the data to the existing table." ;
 };
 
 ErrorBox ERROR_INVALID_TABLE_NAME_LENGTH
 {
-    Message [ de ] = "Bitte ändern Sie den Tabellenname. Er ist zu lang.";
+    Message [ de ] = "Bitte Ã¤ndern Sie den Tabellenname. Er ist zu lang.";
     Buttons = WB_OK;
     Message [ en-US ] = "Please change the table name. It is too long.";
 };
