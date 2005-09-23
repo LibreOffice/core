@@ -153,7 +153,7 @@ Dim DateFormatString as String
 				DateFormatString = &quot;DD-MMM&quot;
 			End If		
 		Case cLANGUAGE_DUTCH
-			DateFormatString = &quot;DD-MMM&quot;
+			DateFormatString = &quot;DD/MMM&quot;
 		Case cLANGUAGE_SWEDISH
 			DateFormatString = &quot;MMM DD&quot;
 		Case cLANGUAGE_DANISH
