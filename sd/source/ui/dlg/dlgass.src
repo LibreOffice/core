@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgass.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:27:16 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:31:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@ ModalDialog DLG_ASS
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 272 , 190 ) ;
-    Text [ de ] = "Pr‰sentations-Assistent" ;
+    Text [ de ] = "Pr√§sentations-Assistent" ;
     Text[ en-US ] = "Presentation Wizard";
 
     HelpId = HID_SD_AUTOPILOT_PAGE1 ;
@@ -100,7 +100,7 @@ ModalDialog DLG_ASS
     {
         Pos = MAP_APPFONT ( 12 , 48  );
         Size = MAP_APPFONT ( 130 , 10 );
-        Text [ de ] = "~Leere Pr‰sentation";
+        Text [ de ] = "~Leere Pr√§sentation";
         TabStop = TRUE;
         Text [ en-US ] = "~Empty presentation";
         Text [ x-comment ] = " ";
@@ -119,7 +119,7 @@ ModalDialog DLG_ASS
     {
         Pos = MAP_APPFONT ( 12 , 76  );
         Size = MAP_APPFONT ( 130 , 10 );
-        Text [ de ] = "~÷ffnen einer vorhandenen Pr‰sentation";
+        Text [ de ] = "~√ñffnen einer vorhandenen Pr√§sentation";
         Text [ en-US ] = "~Open existing presentation";
         Text [ x-comment ] = " ";
     };
@@ -176,7 +176,7 @@ ModalDialog DLG_ASS
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 6 , 37  ) ;
         Size = MAP_APPFONT ( 132 , 8 ) ;
-        Text [ de ] = "W‰hlen Sie eine ~Seitenvorlage" ;
+        Text [ de ] = "W√§hlen Sie eine ~Seitenvorlage" ;
         Text [ en-US ] = "~Select a slide design" ;
         Text [ x-comment ] = " ";
     };
@@ -203,7 +203,7 @@ ModalDialog DLG_ASS
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 6 , 110  ) ;
         Size = MAP_APPFONT ( 132 , 8 ) ;
-        Text [ de ] = "W‰hlen Sie ein Ausgabemedium" ;
+        Text [ de ] = "W√§hlen Sie ein Ausgabemedium" ;
         Text [ en-US ] = "Select an output medium" ;
         Text [ x-comment ] = " ";
     };
@@ -277,7 +277,7 @@ ModalDialog DLG_ASS
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 6 , 37  );
         Size = MAP_APPFONT ( 132 , 8 );
-        Text [ de ] = "W‰hlen Sie einen Folienwechsel";
+        Text [ de ] = "W√§hlen Sie einen Folienwechsel";
         Text [ en-US ] = "Select a slide transition";
         Text [ x-comment ] = " ";
     };
@@ -327,7 +327,7 @@ ModalDialog DLG_ASS
         OutputSize = TRUE;
         Pos = MAP_APPFONT ( 6 , 83  );
         Size = MAP_APPFONT ( 132 , 8 );
-        Text [ de ] = "W‰hlen Sie die Art der Pr‰sentation";
+        Text [ de ] = "W√§hlen Sie die Art der Pr√§sentation";
         Text [ en-US ] = "Select the presentation type";
         Text [ x-comment ] = " ";
     };
@@ -477,7 +477,7 @@ ModalDialog DLG_ASS
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 12 , 77 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Was ist der Themenbereich Ihrer Pr‰sentation?" ;
+        Text [ de ] = "Was ist der Themenbereich Ihrer Pr√§sentation?" ;
         Text [ en-US ] = "What is the subject of your presentation?" ;
         Text [ x-comment ] = " ";
     };
@@ -525,7 +525,7 @@ ModalDialog DLG_ASS
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 6 , 39 );
         Size = MAP_APPFONT ( 132 , 8 );
-        Text [ de ] = "~W‰hlen Sie die gew¸nschten Seiten";
+        Text [ de ] = "~W√§hlen Sie die gew√ºnschten Seiten";
         Text [ en-US ] = "Ch~oose your pages";
         Text [ x-comment ] = " ";
     };
@@ -572,7 +572,7 @@ ModalDialog DLG_ASS
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 112 , 170 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "<< ~Zur¸ck" ;
+        Text [ de ] = "<< ~Zur√ºck" ;
         TabStop = TRUE ;
         Text [ en-US ] = "<< ~Back" ;
         Text [ x-comment ] = " ";
