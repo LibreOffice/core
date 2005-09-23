@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgrid.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:52:37 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:59:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ TabPage RID_SVXPAGE_GRID
     {
         Pos = MAP_APPFONT ( 6 , 45 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
-        Text [ de ] = "Auflˆsung" ;
+        Text [ de ] = "Aufl√∂sung" ;
         Text [ en-US ] = "Resolution" ;
         Text [ x-comment ] = " ";
     };
@@ -228,7 +228,7 @@ TabPage RID_SVXPAGE_GRID
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 125  ) ;
         Size = MAP_APPFONT ( 106 , 10 ) ;
-        Text [ de ] = "An den Se~itenr‰ndern" ;
+        Text [ de ] = "An den Se~itenr√§ndern" ;
         Text [ en-US ] = "To the ~page margins" ;
         Text [ x-comment ] = " ";
     };
@@ -312,7 +312,7 @@ TabPage RID_SVXPAGE_GRID
         Size = MAP_APPFONT ( 112 , 10 ) ;
         Hide = TRUE;
         TabStop = TRUE ;
-        Text [ de ] = "~L‰ngere Kantenl‰nge" ;
+        Text [ de ] = "~L√§ngere Kantenl√§nge" ;
         Text [ en-US ] = "~Extend edges" ;
         Text [ x-comment ] = " ";
     };
