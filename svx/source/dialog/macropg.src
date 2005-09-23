@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macropg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:32:38 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:43:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,13 +111,13 @@ String RID_SVXSTR_EVENT_CLOSEDOC
 
 String RID_SVXSTR_EVENT_PREPARECLOSEDOC
 {
-    Text [ de ] = "Dokument schließen" ;
+    Text [ de ] = "Dokument schlieÃŸen" ;
     Text [ en-US ] = "Close Document" ;
 };
 
 String RID_SVXSTR_EVENT_OPENDOC
 {
-    Text [ de ] = "Dokument öffnen" ;
+    Text [ de ] = "Dokument Ã¶ffnen" ;
     Text [ en-US ] = "Open Document" ;
 };
 
@@ -165,7 +165,7 @@ String RID_SVXSTR_EVENT_PRINTDOC
 
 String RID_SVXSTR_EVENT_MODIFYCHANGED
 {
-    Text [ de ] = "'Geändert'-Status wurde geändert" ;
+    Text [ de ] = "'GeÃ¤ndert'-Status wurde geÃ¤ndert" ;
     Text [ en-US ] = "'Modified' status was changed" ;
 };
 String RID_SVXSTR_EVENT_MAILMERGE
@@ -175,17 +175,17 @@ String RID_SVXSTR_EVENT_MAILMERGE
 };
 String RID_SVXSTR_EVENT_PAGECOUNTCHANGE
 {
-    TEXT [ de ] = "Änderung der Seitenanzahl" ;
+    TEXT [ de ] = "Ã„nderung der Seitenanzahl" ;
     Text [ en-US ] = "Changing the page count" ;
 };
 String RID_SVXSTR_EVENT_APPROVEPARAMETER
 {
-    Text [ de ] = "Parameter füllen" ;
+    Text [ de ] = "Parameter fÃ¼llen" ;
     Text [ en-US ] = "Fill parameters" ;
 };
 String RID_SVXSTR_EVENT_ACTIONPERFORMED
 {
-    Text [ de ] = "Beim Auslösen" ;
+    Text [ de ] = "Beim AuslÃ¶sen" ;
     Text [ en-US ] = "When initiating" ;
 };
 String RID_SVXSTR_EVENT_AFTERUPDATE
@@ -210,7 +210,7 @@ String RID_SVXSTR_EVENT_ROWCHANGE
 };
 String RID_SVXSTR_EVENT_CONFIRMDELETE
 {
-    Text [ de ] = "Löschen bestätigen" ;
+    Text [ de ] = "LÃ¶schen bestÃ¤tigen" ;
     Text [ en-US ] = "Confirm deletion" ;
 };
 String RID_SVXSTR_EVENT_ERROROCCURED
@@ -235,12 +235,12 @@ String RID_SVXSTR_EVENT_FOCUSLOST
 };
 String RID_SVXSTR_EVENT_ITEMSTATECHANGED
 {
-    Text [ de ] = "Status geändert" ;
+    Text [ de ] = "Status geÃ¤ndert" ;
     Text [ en-US ] = "Item status changed" ;
 };
 String RID_SVXSTR_EVENT_KEYTYPED
 {
-    Text [ de ] = "Taste gedrückt" ;
+    Text [ de ] = "Taste gedrÃ¼ckt" ;
     Text [ en-US ] = "Key pressed" ;
 };
 String RID_SVXSTR_EVENT_KEYUP
@@ -285,7 +285,7 @@ String RID_SVXSTR_EVENT_MOUSEMOVED
 };
 String RID_SVXSTR_EVENT_MOUSEPRESSED
 {
-    Text [ de ] = "Maustaste gedrückt" ;
+    Text [ de ] = "Maustaste gedrÃ¼ckt" ;
     Text [ en-US ] = "Mouse button pressed" ;
 };
 String RID_SVXSTR_EVENT_MOUSERELEASED
@@ -305,17 +305,17 @@ String RID_SVXSTR_EVENT_POSITIONED
 };
 String RID_SVXSTR_EVENT_RESETTED
 {
-    Text [ de ] = "Nach dem Zurücksetzen" ;
+    Text [ de ] = "Nach dem ZurÃ¼cksetzen" ;
     Text [ en-US ] = "After resetting" ;
 };
 String RID_SVXSTR_EVENT_APPROVERESETTED
 {
-    Text [ de ] = "Vor dem Zurücksetzen" ;
+    Text [ de ] = "Vor dem ZurÃ¼cksetzen" ;
     Text [ en-US ] = "Prior to reset" ;
 };
 String RID_SVXSTR_EVENT_APPROVEACTIONPERFORMED
 {
-    Text [ de ] = "Vor dem Auslösen" ;
+    Text [ de ] = "Vor dem AuslÃ¶sen" ;
     Text [ en-US ] = "Before commencing" ;
 };
 String RID_SVXSTR_EVENT_SUBMITTED
