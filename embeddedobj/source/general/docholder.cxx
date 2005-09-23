@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:37:19 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:44:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -307,15 +307,16 @@ void DocumentHolder::CloseFrame()
 //---------------------------------------------------------------------------
 void DocumentHolder::FreeOffice()
 {
-    // the following code is commented out since for now there is still no completely correct way to detect
-    // whether the office can be terminated, so it is better to have unnecessary process running than
-    // to loose any data
-//  const ::rtl::OUString aServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.frame.Desktop" ) );
-//  uno::Reference< frame::XDesktop > xDesktop( m_xFactory->createInstance( aServiceName ), uno::UNO_QUERY );
-//  if ( xDesktop.is() )
-//  {
-//        xDesktop->removeTerminateListener( this );
-//
+    const ::rtl::OUString aServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.frame.Desktop" ) );
+    uno::Reference< frame::XDesktop > xDesktop( m_xFactory->createInstance( aServiceName ), uno::UNO_QUERY );
+    if ( xDesktop.is() )
+    {
+        xDesktop->removeTerminateListener( this );
+
+        // the following code is commented out since for now there is still no completely correct way to detect
+        // whether the office can be terminated, so it is better to have unnecessary process running than
+        // to loose any data
+
 //      uno::Reference< frame::XFramesSupplier > xFramesSupplier( xDesktop, uno::UNO_QUERY );
 //      if ( xFramesSupplier.is() )
 //      {
@@ -330,7 +331,7 @@ void DocumentHolder::FreeOffice()
 //              {}
 //          }
 //      }
-//  }
+    }
 }
 
 //---------------------------------------------------------------------------
