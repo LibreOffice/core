@@ -4,9 +4,9 @@
  *
  *  $RCSfile: customizeaddresslistdialog.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:50:21 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:54:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,14 +68,14 @@ ModalDialog DLG_MM_CUSTOMIZE_ADDRESS_LIST
     {
         Pos = MAP_APPFONT ( 144 , 3 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Hinzufügen...";
+        Text [ de ] = "HinzufÃ¼gen...";
         Text [ en-US ] = "~Add...";
     };
     PushButton              PB_DELETE
     {
         Pos = MAP_APPFONT ( 144 , 20 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Löschen";
+        Text [ de ] = "LÃ¶schen";
         Text [ en-US ] = "~Delete";
     };
     PushButton              PB_RENAME
@@ -134,7 +134,7 @@ ModalDialog DLG_MM_ADD_RENAME_ENTRY
     Size = MAP_APPFONT ( 188 , 60 ) ;
     Moveable = TRUE ;
 
-    Text [ de ] = "Element hinzufügen";
+    Text [ de ] = "Element hinzufÃ¼gen";
     Text [ en-US ] = "Add Element";
 
     FixedText  FT_FIELDNAME
