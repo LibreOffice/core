@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testtool.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:39:49 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:55:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ class FlagToolBoxState
         };
     ToolBoxItem  {
             Identifier = TT_SEND_DATA;
-            Text [ de ] = "Zum TestTool Übertragen";
+            Text [ de ] = "Zum TestTool Ãœbertragen";
             ItemBitmap = Bitmap  {
                 File = "ttremote.bmp";
             };
@@ -129,7 +129,7 @@ WorkWindow TT_INLINE_TRANSLATION {
     GroupBox TT_GB_TRANSLATION {
             Pos = MAP_APPFONT( 2, 3 );
             Size = MAP_APPFONT( 173, 44 );
-            Text [ de ] = "Übersetzung";
+            Text [ de ] = "Ãœbersetzung";
         Text[ en-US ] = "Translation";
     };
     Edit TT_E_NEW {
@@ -144,7 +144,7 @@ WorkWindow TT_INLINE_TRANSLATION {
     FixedText TT_FT_OLD {
             Pos = MAP_APPFONT( 7, 33 );
             Size = MAP_APPFONT( 162, 10 );
-            Text [ de ] = "Ursprünglicher Text";
+            Text [ de ] = "UrsprÃ¼nglicher Text";
         Text[ en-US ] = "Original Text";
     };
     GroupBox TT_GB_COMMENT {
@@ -166,7 +166,7 @@ WorkWindow TT_INLINE_TRANSLATION {
             Pos = MAP_APPFONT( Control_Border, 89 );
             Size = MAP_APPFONT( ButtonWidth, 12 );
             TabStop = TRUE;
-            Text [ de ] = "~Auswählen";
+            Text [ de ] = "~AuswÃ¤hlen";
         Text[ en-US ] = "~Select";
     };
     PushButton TT_PB_RESTORE {
@@ -189,7 +189,7 @@ WorkWindow TT_INLINE_TRANSLATION {
             Pos = MAP_APPFONT( Control_Border + 3*(ButtonWidth + Button_Button), 89 );
             Size = MAP_APPFONT( ButtonWidth, 12 );
             TabStop = TRUE;
-            Text [ de ] = "~Nächster";
+            Text [ de ] = "~NÃ¤chster";
         Text[ en-US ] = "~Next";
     };
     Text[ en-US ] = "Inplace Translation";
@@ -198,14 +198,14 @@ WorkWindow TT_INLINE_TRANSLATION {
 MessBox TT_DISCARD_CHANGED_DATA {
     Buttons = WB_YES_NO;
     DefButton = WB_DEF_YES;
-    Message [ de ] = "Die Übersetzung wird verloren gehen. Fortfahren?";
+    Message [ de ] = "Die Ãœbersetzung wird verloren gehen. Fortfahren?";
     Message[ en-US ] = "The Translation will be lost. Proceed anyway?";
 };
 
 ErrorBox TT_NO_CONTROL {
     Buttons = WB_OK;
     DefButton = WB_DEF_OK;
-    Message [ de ] = "Das Control ist nicht mehr gültig. Die Übersetzung kann nicht gespeichert werden.";
+    Message [ de ] = "Das Control ist nicht mehr gÃ¼ltig. Die Ãœbersetzung kann nicht gespeichert werden.";
     Message[ en-US ] = "The Control is no longer valid. The Translation cannot be saved.";
 };
 
