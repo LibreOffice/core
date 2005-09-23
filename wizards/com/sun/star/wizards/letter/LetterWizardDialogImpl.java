@@ -2,7 +2,6 @@ package com.sun.star.wizards.letter;
 
 import java.util.Vector;
 import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.Locale;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.Configuration;
@@ -21,7 +20,6 @@ import com.sun.star.document.XDocumentInfoSupplier;
 import com.sun.star.ucb.CommandAbortedException;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
-import com.sun.star.uno.RuntimeException;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.text.*;
 import com.sun.star.wizards.common.*;
@@ -34,13 +32,14 @@ import com.sun.star.wizards.document.*;
 import com.sun.star.wizards.ui.*;
 import com.sun.star.wizards.ui.event.*;
 import com.sun.star.wizards.common.Helper;
-import com.sun.star.wizards.common.Resource;
 
 
 public class LetterWizardDialogImpl extends LetterWizardDialog {
 
     static LetterDocument myLetterDoc;
     static boolean running;
+
+    XMultiServiceFactory xmsf;
 
     XTextDocument xTextDocument;
     PathSelection myPathSelection;
@@ -82,6 +81,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
 
     public LetterWizardDialogImpl(XMultiServiceFactory xmsf) {
         super(xmsf);
+        this.xmsf = xmsf;
     }
 
     public static void main(String args[]) {
@@ -287,6 +287,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
         lstBusinessStyleItemChanged();
         enableSenderReceiver();
         setPossibleFooter(true);
+        if(myPathSelection.xSaveTextBox.getText().equalsIgnoreCase("")) {myPathSelection.initializePath();}
     }
 
     public void optPrivOfficialLetterItemChanged() {
@@ -302,6 +303,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
         disableBusinessPaper();
         enableSenderReceiver();
         setPossibleFooter(true);
+        if(myPathSelection.xSaveTextBox.getText().equalsIgnoreCase("")) {myPathSelection.initializePath();}
     }
 
     public void optPrivateLetterItemChanged() {
@@ -317,6 +319,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
         disableBusinessPaper();
         disableSenderReceiver();
         setPossibleFooter(false);
+        if(myPathSelection.xSaveTextBox.getText().equalsIgnoreCase("")) {myPathSelection.initializePath();}
     }
 
     public void optSenderPlaceholderItemChanged() {
@@ -368,24 +371,27 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
         myLetterDoc.xTextDocument.lockControllers();
         initializeElements();
         chkBusinessPaperItemChanged();
-        setElements();
+        setElements(false);
         myLetterDoc.xTextDocument.unlockControllers();
+        activate();
     }
 
     public void lstPrivOfficialStyleItemChanged() {
         xTextDocument = myLetterDoc.loadAsPreview(OfficialFiles[1][lstPrivOfficialStyle.getSelectedItemPos()] , false );
         myLetterDoc.xTextDocument.lockControllers();
         initializeElements();
-        setElements();
+        setElements(false);
         myLetterDoc.xTextDocument.unlockControllers();
+        activate();
     }
 
     public void lstPrivateStyleItemChanged() {
         xTextDocument = myLetterDoc.loadAsPreview(PrivateFiles[1][lstPrivateStyle.getSelectedItemPos()] , false );
         myLetterDoc.xTextDocument.lockControllers();
         initializeElements();
-        setElements();
+        setElements(true);
         myLetterDoc.xTextDocument.unlockControllers();
+        activate();
     }
 
     public void numLogoHeightTextChanged() {
@@ -849,51 +855,68 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
     }
 
     public void initializeNorms() {
-        //To add new Languages please modify this method and LetterWizardDialogResources.java
-        //I know, this is ugly. I will implement a more elegant solution in Product Update 1
 
-        String ProdName = Configuration.getProductName(xMSF);
+        LocaleCodes lc = new LocaleCodes(xmsf);
+        String [] allLocales = lc.getIDs();
+        String[] nameList = {"",""};
+        String sLetterSubPath = "/wizard/letter/";
 
-        if (ProdName.startsWith("Open")) {
-            //Add Languages for OpenOffice.org
-            Norms = new String[16];
+        try {
+            sLetterPath = FileAccess.deleteLastSlashfromUrl(sTemplatePath);
+            String [] PathParts = sLetterPath.split("/");
+            String nuString ="";
+            for (int i=0; i<(PathParts.length -1); i++) {
+                nuString = nuString + PathParts[i] + "/";
+            }
+            sLetterPath = nuString;
+            sLetterPath = FileAccess.deleteLastSlashfromUrl(sLetterPath);
+            sLetterPath = sLetterPath + sLetterSubPath;
+            sLetterLangPackPath = FileAccess.combinePaths(xMSF, sTemplatePath, sLetterSubPath);
 
-            Norms[0] = "en-US";
-            Norms[1] = "de";
-            Norms[2] = "fr";
-            Norms[3] = "es";
-            Norms[4] = "it";
-            Norms[5] = "pt-BR";
-            Norms[6] = "sv";
-            Norms[7] = "ja";
-            Norms[8] = "ko";
-            Norms[9] = "zh-CN";
-            Norms[10] = "zh-TW";
-            Norms[11] = "cs";
-            Norms[12] = "bg";
-            Norms[13] = "da";
-            Norms[14] = "hu";
-            Norms[15] = "hr";
-        } else {
-            Norms = new String[11];
-
-            Norms[0] = "en-US";
-            Norms[1] = "de";
-            Norms[2] = "fr";
-            Norms[3] = "es";
-            Norms[4] = "it";
-            Norms[5] = "pt-BR";
-            Norms[6] = "sv";
-            Norms[7] = "ja";
-            Norms[8] = "ko";
-            Norms[9] = "zh-CN";
-            Norms[10] = "zh-TW";
+            XInterface xInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
+            com.sun.star.ucb.XSimpleFileAccess xSimpleFileAccess = (com.sun.star.ucb.XSimpleFileAccess) UnoRuntime.queryInterface(com.sun.star.ucb.XSimpleFileAccess.class, xInterface);
+            nameList = xSimpleFileAccess.getFolderContents(sLetterPath, true);
+        } catch (CommandAbortedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (NoValidPathException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
 
+        Norms = new String[nameList.length];
         String [] LanguageLabels;
         LanguageLabels = new String[Norms.length];
-        for (int i=0;i < Norms.length; i++) {
-            LanguageLabels[i] = resources.LanguageLabels[i];
+
+        boolean found = false;
+        String cIsoCode = "";
+        String MSID = "";
+        for (int i=0; i < nameList.length; i++) {
+            found = false;
+            cIsoCode = FileAccess.getFilename(nameList[i]);
+            for (int t=0; t < allLocales.length; t++) {
+                String [] aLang = allLocales[t].split(";");
+                if (cIsoCode.equalsIgnoreCase(aLang[1])) {
+                    MSID= aLang[2];
+                    found = true;
+                    t = allLocales.length;
+                }
+            }
+            if (!found) {
+                for (int t=0; t < allLocales.length; t++) {
+                    String [] aLang = allLocales[t].split(";");
+                    if (cIsoCode.equalsIgnoreCase(aLang[1].substring(0,2))) {
+                        MSID= aLang[2];
+                        found = true;
+                        t = allLocales.length;
+                    }
+                }
+            }
+            Norms[i] = cIsoCode;
+            LanguageLabels[i] = lc.getLanguageString(MSID);
         }
 
         setControlProperty("lstLetterNorm", "StringItemList", LanguageLabels);
@@ -970,7 +993,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
         }
     }
 
-    public void setElements() {
+    public void setElements(boolean privLetter) {
         //UI relevant:
         if (optSenderDefine.getState())  {optSenderDefineItemChanged();}
         if (optSenderPlaceholder.getState())  {optSenderPlaceholderItemChanged();}
@@ -983,8 +1006,8 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
         txtTemplateNameTextChanged();
 
         //not UI relevant:
-        if (optReceiverDatabase.getState())  {optReceiverDatabaseItemChanged();}
-        if (optReceiverPlaceholder.getState())  {optReceiverPlaceholderItemChanged();}
+        if (optReceiverDatabase.getState() && !privLetter)  {optReceiverDatabaseItemChanged();}
+        if (optReceiverPlaceholder.getState() && !privLetter)  {optReceiverPlaceholderItemChanged();}
         if (optCreateLetter.getState())  {optCreateLetterItemChanged();}
         if (optMakeChanges.getState())  {optMakeChangesItemChanged();}
     }
