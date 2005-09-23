@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srtdlg.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:41:41 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:10:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ ModalDialog DLG_SORTING
         Pos = MAP_APPFONT ( 101, 12 ) ;
         Size = MAP_APPFONT ( 48 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Schlüsseltyp : Schl³sseltyp */
-        Text [ de ] = "Schlüsseltyp" ;
+        Text [ de ] = "SchlÃ¼sseltyp" ;
         Text [ en-US ] = "Key type" ;
         Left = TRUE ;
         Text [ x-comment ] = " ";
@@ -98,7 +98,7 @@ ModalDialog DLG_SORTING
         Pos = MAP_APPFONT ( 12 , 25 ) ;
         Size = MAP_APPFONT ( 49 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Schlüssel ~1 : Schl³ssel ~1 */
-        Text [ de ] = "Schlüssel ~1" ;
+        Text [ de ] = "SchlÃ¼ssel ~1" ;
         Text [ en-US ] = "Key ~1" ;
         Check = TRUE ;
         Text [ x-comment ] = " ";
@@ -158,7 +158,7 @@ ModalDialog DLG_SORTING
         Pos = MAP_APPFONT ( 12 , 52 ) ;
         Size = MAP_APPFONT ( 49 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Schlüssel ~2 : Schl³ssel ~2 */
-        Text [ de ] = "Schlüssel ~2" ;
+        Text [ de ] = "SchlÃ¼ssel ~2" ;
         Text [ en-US ] = "Key ~2" ;
         Text [ x-comment ] = " ";
     };
@@ -211,7 +211,7 @@ ModalDialog DLG_SORTING
         Pos = MAP_APPFONT ( 12 , 81 ) ;
         Size = MAP_APPFONT ( 49 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Schlüssel ~3 : Schl³ssel ~3 */
-        Text [ de ] = "Schlüssel ~3" ;
+        Text [ de ] = "SchlÃ¼ssel ~3" ;
         Text [ en-US ] = "Key ~3" ;
         Text [ x-comment ] = " ";
     };
