@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 11:28:07 $
+#   last change: $Author: hr $ $Date: 2005-09-23 11:49:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,8 +59,7 @@ SRC1FILES =  \
 
 EXCEPTIONSFILES= \
         $(SLO)$/unotools.obj	\
-        $(SLO)$/swrenamexnameddlg.obj \
-        $(SLO)$/sharedunocomponent.obj
+        $(SLO)$/swrenamexnameddlg.obj
 
 SLOFILES =  $(EXCEPTIONSFILES) \
         $(SLO)$/bookctrl.obj \
