@@ -4,9 +4,9 @@
  *
  *  $RCSfile: export.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:55:13 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:27:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 #ifndef _EXPORT_HXX
 #define _EXPORT_HXX
+
+// #define MERGE_SOURCE_LANGUAGES <- To merge en-US and de resource
 
 #include <tools/string.hxx>
 #include <tools/list.hxx>
@@ -293,7 +295,6 @@ private:
     static bool isInitialized;
 
 
-
 public:
     ParserQueue* pParseQueue; // public ?
     static ByteString sLanguages; // public ?
@@ -316,6 +317,8 @@ public:
     static ByteString GetIsoLangByIndex( USHORT nIndex );
     static void QuotHTML( ByteString &rString );
     static void UnquotHTML( ByteString &rString );
+
+    static bool isAllowed( ByteString &sLanguage );
     static bool isMergingGermanAllowed( const ByteString& rPrj );
 
     static bool LanguageAllowed( const ByteString &nLanguage );
