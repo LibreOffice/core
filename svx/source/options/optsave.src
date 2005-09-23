@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:55:03 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:00:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
  // SID_SFXPAGE_SAVE ------------------------------------------------------
 #define TEXT_SAVEPAGE \
     Text [ de ] = "Speichern" ; \
-    Text [ en-US ] = "Save" ;
+    Text [ en-US ] = "Save" ;\
 
 TabPage RID_SFXPAGE_SAVE
 {
@@ -130,7 +130,7 @@ TabPage RID_SFXPAGE_SAVE
     {
         Pos = MAP_APPFONT ( 12 , 74 ) ;
         Size = MAP_APPFONT ( 236 , 8 ) ;
-        Text [ de ] = "XML-Format auf Größe optimieren" ;
+        Text [ de ] = "XML-Format auf GrÃ¶ÃŸe optimieren" ;
         Text [ en-US ] = "Size optimization for XML format" ;
     };
 
@@ -199,7 +199,7 @@ TabPage RID_SFXPAGE_SAVE
             < "HTML-Dokument" ;    APP_WRITER_WEB;  > ;
             < "Globaldokument" ;    APP_WRITER_GLOBAL;  > ;
             < "Tabellendokument" ; APP_CALC      ; > ;
-            < "Präsentation" ;     APP_IMPRESS   ; > ;
+            < "PrÃ¤sentation" ;     APP_IMPRESS   ; > ;
             < "Zeichnung" ;        APP_DRAW      ; > ;
             < "Formel" ;           APP_MATH      ; > ;
         };
@@ -233,7 +233,7 @@ TabPage RID_SFXPAGE_SAVE
         Pos = MAP_APPFONT ( 12 , 166 ) ;
         Size = MAP_APPFONT ( 250 , 16 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "Hinweis: Wenn Sie nicht OpenDocument als Standardformat verwenden, kann dies zum Verlust von Formatierungen oder Inhalten führen." ;
+        Text [ de ] = "Hinweis: Wenn Sie nicht OpenDocument als Standardformat verwenden, kann dies zum Verlust von Formatierungen oder Inhalten fÃ¼hren." ;
         Text [ en-US ] = "Note: Not using OpenDocument as the default format may cause formatting or content to be lost.";
     };
 };
@@ -258,7 +258,7 @@ ModalDialog RID_SVXDLG_FILTER_WARNING
         Pos = MAP_APPFONT( 39, 6 );
         Size = MAP_APPFONT( 175, 4 * 9 );
         Wordbreak = TRUE;
-        Text [ de ] = "Verwenden von \"%1\" als Standard-Dateiformat kann zu Informationsverlust führen.\n"\
+        Text [ de ] = "Verwenden von \"%1\" als Standard-Dateiformat kann zu Informationsverlust fÃ¼hren.\n"\
         "Sollen die Dateiformatänderungen übernommen werden?" ;
         Text [ en-US ] = "Using \"%1\" as default file format may cause information loss.\n";
     };
