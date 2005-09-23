@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:13:29 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:17:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,19 +236,19 @@ Text [ en-US ] = "Error during creation";
 
 String STR_UNEXPECTED_ERROR
 {
-Text [ de ] = "Ein unerwarteter Fehler ist aufgetreten. Die operation kann nicht ausgeführt werden.";
+Text [ de ] = "Ein unerwarteter Fehler ist aufgetreten. Die operation kann nicht ausgefÃ¼hrt werden.";
 Text [ en-US ] = "An unexpected error occurred. The operation could not be performed.";
 };
 
 String STR_COULDNOTOPEN_LINKEDDOC
 {
-Text [ de ] = "Das Dokument\n\n$file$\n\nkonnte nicht geöffnet werden.";
+Text [ de ] = "Das Dokument\n\n$file$\n\nkonnte nicht geÃ¶ffnet werden.";
 Text [ en-US ] = "The document\n\n$file$\n\ncould not be opened.";
 };
 
 String STR_MISSING_TABLES_XDROP
 {
-Text [ de ] = "Die Tabelle kann nicht gelöscht werden, da die Datenbankverbindung diese nicht unterstützt.";
+Text [ de ] = "Die Tabelle kann nicht gelÃ¶scht werden, da die Datenbankverbindung diese nicht unterstÃ¼tzt.";
 Text [ en-US ] = "The table cannot be deleted because the database connection does not support this.";
 };
 
@@ -261,7 +261,7 @@ Text [ en-US ] = "~All";
 
 String STR_UNDO_COLON
 {
-Text [ de ] = "Rückgängig:" ;
+Text [ de ] = "RÃ¼ckgÃ¤ngig:" ;
 Text [ en-US ] = "Undo:";
 };
 
@@ -273,7 +273,7 @@ Text [ en-US ] = "Redo:";
 
 String STR_UNKNOWN_TYPE_FOUND
 {
-    Text [ de ] = "Für die Spalte '#1' konnte kein passender Spaltentyp gefunden werden." ;
+    Text [ de ] = "FÃ¼r die Spalte '#1' konnte kein passender Spaltentyp gefunden werden." ;
     Text [ en-US ] = "No corresponding column type could be found for column '#1'." ;
 };
 
