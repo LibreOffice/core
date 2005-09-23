@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:46:05 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:29:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 String STR_SOLID
 {
     /* ### ACHTUNG: Neuer Text in Resource? Durchgängig : Durchgõngig */
-    Text [ de ] = "Durchgängig" ;
+    Text [ de ] = "DurchgÃ¤ngig" ;
     Text [ en-US ] = "Continuous" ;
     Text [ x-comment ] = " ";
 };
@@ -50,28 +50,28 @@ String STR_GRADIENT
 String STR_DESC_GRADIENT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für den neuen Farbverlauf ein: : Geben Sie hier bitte den Namen f³r den neuen Farbverlauf ein: */
-    Text [ de ] = "Geben Sie hier bitte den Namen für den neuen Farbverlauf ein:" ;
+    Text [ de ] = "Geben Sie hier bitte den Namen fÃ¼r den neuen Farbverlauf ein:" ;
     Text [ en-US ] = "Please enter a name for the new gradient:" ;
     Text [ x-comment ] = " ";
 };
 String STR_DEL_GRADIENT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Farbverlauf löschen : Farbverlauf l÷schen */
-    Text [ de ] = "Farbverlauf löschen" ;
+    Text [ de ] = "Farbverlauf lÃ¶schen" ;
     Text [ en-US ] = "Delete gradient" ;
     Text [ x-comment ] = " ";
 };
 String STR_ASK_DEL_GRADIENT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Soll der Farbverlauf wirklich gelöscht werden? : Soll der Farbverlauf wirklich gel÷scht werden? */
-    Text [ de ] = "Soll der Farbverlauf wirklich gelöscht werden?" ;
+    Text [ de ] = "Soll der Farbverlauf wirklich gelÃ¶scht werden?" ;
     Text [ en-US ] = "Do you want to delete the gradient?" ;
     Text [ x-comment ] = " ";
 };
 String STR_ASK_CHANGE_GRADIENT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Der Farbverlauf wurde geändert und nicht gesichert. \nSie können den selektierten Farbverlauf ändern \noder einen neuen Farbverlauf hinzufügen. : Der Farbverlauf wurde geõndert und nicht gesichert. \nSie k÷nnen den selektierten Farbverlauf õndern \noder einen neuen Farbverlauf hinzuf³gen. */
-    Text [ de ] = "Der Farbverlauf wurde geändert und nicht gesichert. \nSie können den selektierten Farbverlauf ändern \noder einen neuen Farbverlauf hinzufügen." ;
+    Text [ de ] = "Der Farbverlauf wurde geÃ¤ndert und nicht gesichert. \nSie kÃ¶nnen den selektierten Farbverlauf Ã¤ndern \noder einen neuen Farbverlauf hinzufÃ¼gen." ;
     Text [ en-US ] = "The gradient was modified without saving. \nYou can change the selected gradient \nor add a new one." ;
     Text [ x-comment ] = " ";
 };
@@ -84,35 +84,35 @@ String STR_BITMAP
 String STR_DESC_NEW_BITMAP
 {
     /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für die neue Bitmap ein: : Geben Sie hier bitte den Namen f³r die neue Bitmap ein: */
-    Text [ de ] = "Geben Sie hier bitte den Namen für die neue Bitmap ein:" ;
+    Text [ de ] = "Geben Sie hier bitte den Namen fÃ¼r die neue Bitmap ein:" ;
     Text [ en-US ] = "Please enter a name for the new bitmap:" ;
     Text [ x-comment ] = "; :";
 };
 String STR_DESC_EXT_BITMAP
 {
     /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für die externe Bitmap ein: : Geben Sie hier bitte den Namen f³r die externe Bitmap ein: */
-    Text [ de ] = "Geben Sie hier bitte den Namen für die externe Bitmap ein:" ;
+    Text [ de ] = "Geben Sie hier bitte den Namen fÃ¼r die externe Bitmap ein:" ;
     Text [ en-US ] = "Please enter the name of the external bitmap:" ;
     Text [ x-comment ] = "; :";
 };
 String STR_DEL_BITMAP
 {
     /* ### ACHTUNG: Neuer Text in Resource? Bitmap löschen : Bitmap l÷schen */
-    Text [ de ] = "Bitmap löschen" ;
+    Text [ de ] = "Bitmap lÃ¶schen" ;
     Text [ en-US ] = "Delete bitmap" ;
     Text [ x-comment ] = " ";
 };
 String STR_ASK_DEL_BITMAP
 {
     /* ### ACHTUNG: Neuer Text in Resource? Soll die Bitmap wirklich gelöscht werden? : Soll die Bitmap wirklich gel÷scht werden? */
-    Text [ de ] = "Soll die Bitmap wirklich gelöscht werden?" ;
+    Text [ de ] = "Soll die Bitmap wirklich gelÃ¶scht werden?" ;
     Text [ en-US ] = "Do you want to delete the bitmap?" ;
     Text [ x-comment ] = " ";
 };
 String STR_ASK_CHANGE_BITMAP
 {
     /* ### ACHTUNG: Neuer Text in Resource? Die Bitmap wurde geändert und nicht gesichert. \nSie können die selektierte Bitmap ändern \noder eine neue Bitmap hinzufügen. : Die Bitmap wurde geõndert und nicht gesichert. \nSie k÷nnen die selektierte Bitmap õndern \noder eine neue Bitmap hinzuf³gen. */
-    Text [ de ] = "Die Bitmap wurde geändert und nicht gesichert. \nSie können die selektierte Bitmap ändern \noder eine neue Bitmap hinzufügen." ;
+    Text [ de ] = "Die Bitmap wurde geÃ¤ndert und nicht gesichert. \nSie kÃ¶nnen die selektierte Bitmap Ã¤ndern \noder eine neue Bitmap hinzufÃ¼gen." ;
     Text [ en-US ] = "The bitmap was modified without saving. \nYou can change the selected bitmap \\or add a new one." ;
     Text [ x-comment ] = " ";
 };
@@ -125,28 +125,28 @@ String STR_LINESTYLE
 String STR_DESC_LINESTYLE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für den neuen Linienstil ein: : Geben Sie hier bitte den Namen f³r den neuen Linienstil ein: */
-    Text [ de ] = "Geben Sie hier bitte den Namen für den neuen Linienstil ein:" ;
+    Text [ de ] = "Geben Sie hier bitte den Namen fÃ¼r den neuen Linienstil ein:" ;
     Text [ en-US ] = "Please enter a name for the new line style:" ;
     Text [ x-comment ] = "; :";
 };
 String STR_DEL_LINESTYLE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Linienstil löschen : Linienstil l÷schen */
-    Text [ de ] = "Linienstil löschen" ;
+    Text [ de ] = "Linienstil lÃ¶schen" ;
     Text [ en-US ] = "Delete line style" ;
     Text [ x-comment ] = " ";
 };
 String STR_ASK_DEL_LINESTYLE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Soll der Linienstil wirklich gelöscht werden? : Soll der Linienstil wirklich gel÷scht werden? */
-    Text [ de ] = "Soll der Linienstil wirklich gelöscht werden?" ;
+    Text [ de ] = "Soll der Linienstil wirklich gelÃ¶scht werden?" ;
     Text [ en-US ] = "Do you want to delete the line style?" ;
     Text [ x-comment ] = " ";
 };
 String STR_ASK_CHANGE_LINESTYLE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Der Linienstil wurde geändert und nicht gesichert. \nSie können den selektierten Linienstil ändern \noder einen neuen Linienstil hinzufügen. : Der Linienstil wurde geõndert und nicht gesichert. \nSie k÷nnen den selektierten Linienstil õndern \noder einen neuen Linienstil hinzuf³gen. */
-    Text [ de ] = "Der Linienstil wurde geändert und nicht gesichert. \nSie können den selektierten Linienstil ändern \noder einen neuen Linienstil hinzufügen." ;
+    Text [ de ] = "Der Linienstil wurde geÃ¤ndert und nicht gesichert. \nSie kÃ¶nnen den selektierten Linienstil Ã¤ndern \noder einen neuen Linienstil hinzufÃ¼gen." ;
     Text [ en-US ] = "The line style was modified without saving. \nYou can change the selected line style \nor add a new one." ;
     Text [ x-comment ] = " ";
 };
@@ -171,14 +171,14 @@ String STR_HATCH
 String STR_CHANGE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Ändern : Žndern */
-    Text [ de ] = "Ändern" ;
+    Text [ de ] = "Ã„ndern" ;
     Text [ en-US ] = "Modify" ;
     Text [ x-comment ] = " ";
 };
 String STR_ADD
 {
     /* ### ACHTUNG: Neuer Text in Resource? Hinzufügen : Hinzuf³gen */
-    Text [ de ] = "Hinzufügen" ;
+    Text [ de ] = "HinzufÃ¼gen" ;
     Text [ en-US ] = "Add" ;
     Text [ x-comment ] = " ";
 };
@@ -197,25 +197,25 @@ String STR_SAR_NOT_FOUND
 
 String STR_SAR_WRAP_FORWARD
 {
-    Text [ de ] = "%PRODUCTNAME Impress hat bis zum Ende der Präsentation gesucht. Möchten Sie die Suche am Anfang fortsetzen?" ;
+    Text [ de ] = "%PRODUCTNAME Impress hat bis zum Ende der PrÃ¤sentation gesucht. MÃ¶chten Sie die Suche am Anfang fortsetzen?" ;
     Text [ en-US ] = "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?";
 };
 
 String STR_SAR_WRAP_BACKWARD
 {
-    Text [ de ] = "%PRODUCTNAME Impress hat bis zum Anfang der Präsentation gesucht. Möchten Sie die Suche am Ende fortsetzen?" ;
+    Text [ de ] = "%PRODUCTNAME Impress hat bis zum Anfang der PrÃ¤sentation gesucht. MÃ¶chten Sie die Suche am Ende fortsetzen?" ;
     Text [ en-US ] = "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?";
 };
 
 String STR_SAR_WRAP_FORWARD_DRAW
 {
-    Text [ de ] = "%PRODUCTNAME Draw hat bis zum Ende des Dokuments gesucht. Möchten Sie die Suche am Anfang fortsetzen?" ;
+    Text [ de ] = "%PRODUCTNAME Draw hat bis zum Ende des Dokuments gesucht. MÃ¶chten Sie die Suche am Anfang fortsetzen?" ;
     Text [ en-US ] = "%PRODUCTNAME Draw has searched to the end of the document. Do you want to continue at the beginning?";
 };
 
 String STR_SAR_WRAP_BACKWARD_DRAW
 {
-    Text [ de ] = "%PRODUCTNAME Draw hat bis zum Anfang des Dokuments gesucht. Möchten Sie die Suche am Ende fortsetzen?" ;
+    Text [ de ] = "%PRODUCTNAME Draw hat bis zum Anfang des Dokuments gesucht. MÃ¶chten Sie die Suche am Ende fortsetzen?" ;
     Text [ en-US ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?";
 };
 
