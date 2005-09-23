@@ -4,9 +4,9 @@
  *
  *  $RCSfile: res_bmp.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:43:54 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:28:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1319,11 +1319,11 @@ Image IMG_SLIDE_MANU_H
 
 #define SfxStyleFamiliesRes1\
     Text [ de ] = "Grafikobjektvorlagen" ;\
-    Text [ en-US ] = "Graphics Styles" ;
+    Text [ en-US ] = "Graphics Styles" ;\
 
 #define SfxStyleFamiliesRes2\
-    Text [ de ] = "Pr‰sentationsobjektvorlagen" ;\
-    Text [ en-US ] = "Presentation Styles" ;
+    Text [ de ] = "Pr√§sentationsobjektvorlagen" ;\
+    Text [ en-US ] = "Presentation Styles" ;\
 
 SfxStyleFamilies DLG_STYLE_DESIGNER
 {
