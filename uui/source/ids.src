@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:20:48 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:12:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@ Resource RID_UUI_ERRHDL
 {
     String (ERRCODE_UUI_IO_ABORT & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "Die auf $(ARG1) ausgeführte Aktion wurde abgebrochen";
+        Text [ de ] = "Die auf $(ARG1) ausgefÃ¼hrte Aktion wurde abgebrochen";
         Text [ en-US ] = "The operation executed on $(ARG1) was aborted";
     };
 
@@ -79,7 +79,7 @@ Resource RID_UUI_ERRHDL
 
     String (ERRCODE_UUI_IO_BADCRC & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "Die Daten von $(ARG1) haben eine inkorrekte Prüfsumme";
+        Text [ de ] = "Die Daten von $(ARG1) haben eine inkorrekte PrÃ¼fsumme";
         Text [ en-US ] = "The data from $(ARG1) has an incorrect checksum";
     };
 
@@ -97,25 +97,25 @@ Resource RID_UUI_ERRHDL
 
     String (ERRCODE_UUI_IO_CANTSEEK & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "Die Seek-Operation auf $(ARG1) konnte nicht ausgeführt werden";
+        Text [ de ] = "Die Seek-Operation auf $(ARG1) konnte nicht ausgefÃ¼hrt werden";
         Text [ en-US ] = "The seek operation on $(ARG1) could not be performed";
     };
 
     String (ERRCODE_UUI_IO_CANTTELL & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "Die Tell-Operation auf $(ARG1) konnte nicht ausgeführt werden";
+        Text [ de ] = "Die Tell-Operation auf $(ARG1) konnte nicht ausgefÃ¼hrt werden";
         Text [ en-US ] = "The tell operation on $(ARG1) could not be performed";
     };
 
     String (ERRCODE_UUI_IO_CANTWRITE & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "Daten für $(ARG1) konnten nicht geschrieben werden";
+        Text [ de ] = "Daten fÃ¼r $(ARG1) konnten nicht geschrieben werden";
         Text [ en-US ] = "Data for $(ARG1) could not be written";
     };
 
     String (ERRCODE_UUI_IO_CURRENTDIR & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "Aktion unmöglich: $(ARG1) ist das aktuelle Verzeichnis";
+        Text [ de ] = "Aktion unmÃ¶glich: $(ARG1) ist das aktuelle Verzeichnis";
         Text [ en-US ] = "Action impossible: $(ARG1) is the current directory";
     };
 
@@ -127,7 +127,7 @@ Resource RID_UUI_ERRHDL
 
     String (ERRCODE_UUI_IO_NOTSAMEDEVICE & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "Aktion unmöglich: $(ARG1) und $(ARG2) sind verschiedene Geräte (Laufwerke)";
+        Text [ de ] = "Aktion unmÃ¶glich: $(ARG1) und $(ARG2) sind verschiedene GerÃ¤te (Laufwerke)";
         Text [ en-US ] = "Action impossible: $(ARG1) and $(ARG2) are different devices (drives)";
     };
 
@@ -139,37 +139,37 @@ Resource RID_UUI_ERRHDL
 
     String (ERRCODE_UUI_IO_INVALIDACCESS & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "Es wurde versucht, in ungültiger Weise auf $(ARG1) zuzugreifen";
+        Text [ de ] = "Es wurde versucht, in ungÃ¼ltiger Weise auf $(ARG1) zuzugreifen";
         Text [ en-US ] = "An attempt was made to access $(ARG1) in an invalid way";
     };
 
     String (ERRCODE_UUI_IO_INVALIDCHAR & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "$(ARG1) enthält unzulässige Zeichen";
+        Text [ de ] = "$(ARG1) enthÃ¤lt unzulÃ¤ssige Zeichen";
         Text [ en-US ] = "$(ARG1) contains invalid characters";
     };
 
     String (ERRCODE_UUI_IO_INVALIDDEVICE & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "Das Gerät (Laufwerk) $(ARG1) ist ungültig";
+        Text [ de ] = "Das GerÃ¤t (Laufwerk) $(ARG1) ist ungÃ¼ltig";
         Text [ en-US ] = "The device (drive) $(ARG1) is invalid";
     };
 
     String (ERRCODE_UUI_IO_INVALIDLENGTH & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "Die Daten von $(ARG1) haben eine ungültige Länge";
+        Text [ de ] = "Die Daten von $(ARG1) haben eine ungÃ¼ltige LÃ¤nge";
         Text [ en-US ] = "The data from $(ARG1) has an invalid length";
     };
 
     String (ERRCODE_UUI_IO_INVALIDPARAMETER & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "Die Operation auf $(ARG1) wurde mit einem ungültigen Parameter gestartet";
+        Text [ de ] = "Die Operation auf $(ARG1) wurde mit einem ungÃ¼ltigen Parameter gestartet";
         Text [ en-US ] = "The operation on $(ARG1) was started with an invalid parameter";
     };
 
     String (ERRCODE_UUI_IO_ISWILDCARD & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "Die Operation kann nicht ausgeführt werden, weil $(ARG1) Wildcards enthält";
+        Text [ de ] = "Die Operation kann nicht ausgefÃ¼hrt werden, weil $(ARG1) Wildcards enthÃ¤lt";
         Text [ en-US ] = "The operation cannot be performed because $(ARG1) contains wildcards";
     };
 
@@ -181,13 +181,13 @@ Resource RID_UUI_ERRHDL
 
     String (ERRCODE_UUI_IO_MISPLACEDCHAR & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "$(ARG1) enthält Zeichen an unzulässiger Position";
+        Text [ de ] = "$(ARG1) enthÃ¤lt Zeichen an unzulÃ¤ssiger Position";
         Text [ en-US ] = "$(ARG1) contains misplaced characters";
     };
 
     String (ERRCODE_UUI_IO_NAMETOOLONG & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "Der Name $(ARG1) enthält zu viele Zeichen";
+        Text [ de ] = "Der Name $(ARG1) enthÃ¤lt zu viele Zeichen";
         Text [ en-US ] = "The name $(ARG1) contains too many characters";
     };
 
@@ -205,7 +205,7 @@ Resource RID_UUI_ERRHDL
 
     String (ERRCODE_UUI_IO_NOTSUPPORTED & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "Die Operation auf $(ARG1) wird auf dem vorliegenden Betriebssystem nicht unterstützt";
+        Text [ de ] = "Die Operation auf $(ARG1) wird auf dem vorliegenden Betriebssystem nicht unterstÃ¼tzt";
         Text [ en-US ] = "The operation on $(ARG1) is not supported on this operating system";
     };
 
@@ -223,19 +223,19 @@ Resource RID_UUI_ERRHDL
 
     String (ERRCODE_UUI_IO_OUTOFSPACE & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "Auf dem Gerät $(ARG1) ist kein Platz mehr vorhanden";
+        Text [ de ] = "Auf dem GerÃ¤t $(ARG1) ist kein Platz mehr vorhanden";
         Text [ en-US ] = "There is no space left on device $(ARG1)";
     };
 
     String (ERRCODE_UUI_IO_TOOMANYOPENFILES & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "Die Operation auf $(ARG1) kann nicht ausgeführt werden, da bereits zu viele Dateien geöffnet sind";
+        Text [ de ] = "Die Operation auf $(ARG1) kann nicht ausgefÃ¼hrt werden, da bereits zu viele Dateien geÃ¶ffnet sind";
         Text [ en-US ] = "The operation on $(ARG1) cannot be performed because too many files are already open";
     };
 
     String (ERRCODE_UUI_IO_OUTOFMEMORY & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "Die Operation auf $(ARG1) kann nicht ausgeführt werden, da kein Speicher mehr zur Verfügung steht";
+        Text [ de ] = "Die Operation auf $(ARG1) kann nicht ausgefÃ¼hrt werden, da kein Speicher mehr zur VerfÃ¼gung steht";
         Text [ en-US ] = "The operation on $(ARG1) cannot be performed because there is no more memory available";
     };
 
@@ -259,7 +259,7 @@ Resource RID_UUI_ERRHDL
 
     String (ERRCODE_UUI_IO_WRITEPROTECTED & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "$(ARG1) ist schreibgeschützt";
+        Text [ de ] = "$(ARG1) ist schreibgeschÃ¼tzt";
         Text [ en-US ] = "$(ARG1) is write protected";
     };
 
@@ -289,24 +289,24 @@ Resource RID_UUI_ERRHDL
 
     String (ERRCODE_UUI_WRONGJAVA & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "Die vorhandene Java-Version wird nicht unterstützt";
+        Text [ de ] = "Die vorhandene Java-Version wird nicht unterstÃ¼tzt";
         Text [ en-US ] = "The installed Java version is not supported";
     };
 
     String (ERRCODE_UUI_WRONGJAVA_VERSION & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "Die vorhandene Java-Version $(ARG1) wird nicht unterstützt";
+        Text [ de ] = "Die vorhandene Java-Version $(ARG1) wird nicht unterstÃ¼tzt";
         Text [ en-US ] = "The installed Java version $(ARG1) is not supported";
     };
     String (ERRCODE_UUI_WRONGJAVA_MIN & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "Die vorhandene Java-Version wird nicht unterstützt, es wird mindestens Version $(ARG1) benötigt";
+        Text [ de ] = "Die vorhandene Java-Version wird nicht unterstÃ¼tzt, es wird mindestens Version $(ARG1) benÃ¶tigt";
         Text [ en-US ] = "The installed Java version is not supported, at least version $(ARG1) is required";
     };
 
     String (ERRCODE_UUI_WRONGJAVA_VERSION_MIN & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "Die vorhandene Java-Version $(ARG1) wird nicht unterstützt, es wird mindestens Version $(ARG2) benötigt";
+        Text [ de ] = "Die vorhandene Java-Version $(ARG1) wird nicht unterstÃ¼tzt, es wird mindestens Version $(ARG2) benÃ¶tigt";
         Text [ en-US ] = "The installed Java version $(ARG1) is not supported, at least version $(ARG2) is required";
     };
 
@@ -342,7 +342,7 @@ Resource RID_UUI_ERRHDL
 
     String (ERRCODE_UUI_WRONGMEDIUM & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "Legen Sie bitte den Datenträger $(ARG1) ein";
+        Text [ de ] = "Legen Sie bitte den DatentrÃ¤ger $(ARG1) ein";
         Text [ en-US ] = "Please insert disk $(ARG1)";
     };
 
@@ -354,49 +354,49 @@ Resource RID_UUI_ERRHDL
 
     String (ERRCODE_UUI_IO_UNSUPPORTEDOVERWRITE & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "%PRODUCTNAME kann das Überschreiben von Dateien unter dem verwendeten Übertragungsprotokoll nicht verhindern. Möchten Sie trotzdem fortfahren";
+        Text [ de ] = "%PRODUCTNAME kann das Ãœberschreiben von Dateien unter dem verwendeten Ãœbertragungsprotokoll nicht verhindern. MÃ¶chten Sie trotzdem fortfahren";
         Text [ en-US ] = "%PRODUCTNAME cannot keep files from being overwritten when this transmission protocol is used. Do you want to continue anyway?";
     };
 
     String (ERRCODE_UUI_IO_BROKENPACKAGE & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "Die Datei '$(ARG1)' ist beschadigt und kann deshalb nicht geöffnet werden. Soll %PRODUCTNAME eine Reparatur durchfÜhren?";
+        Text [ de ] = "Die Datei '$(ARG1)' ist beschadigt und kann deshalb nicht geÃ¶ffnet werden. Soll %PRODUCTNAME eine Reparatur durchfÃœhren?";
         Text [ en-US ] = "The file '$(ARG1)' is corrupt and therefore cannot be opened. Should %PRODUCTNAME repair the file?";
     };
 
     String (ERRCODE_UUI_IO_BROKENPACKAGE_CANTREPAIR & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "Die Datei '$(ARG1)' konnte nicht repariert werden und kann deshalb nicht geöffnet werden.";
+        Text [ de ] = "Die Datei '$(ARG1)' konnte nicht repariert werden und kann deshalb nicht geÃ¶ffnet werden.";
         Text [ en-US ] = "The file '$(ARG1)' could not be repaired and therefore cannot be opened.";
     };
 
     String (ERRCODE_UUI_CONFIGURATION_BROKENDATA_NOREMOVE & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "Konfigurationsdaten aus '$(ARG1)' sind beschädigt. Ohne diese beschädigten Daten können einige Funktionen nicht korrekt ausgeführt werden.\nSoll %PRODUCTNAME ohne die beschädigten Konfigurationsdaten starten?";
+        Text [ de ] = "Konfigurationsdaten aus '$(ARG1)' sind beschÃ¤digt. Ohne diese beschÃ¤digten Daten kÃ¶nnen einige Funktionen nicht korrekt ausgefÃ¼hrt werden.\nSoll %PRODUCTNAME ohne die beschÃ¤digten Konfigurationsdaten starten?";
         Text [ en-US ] = "Configuration data in '$(ARG1)' is corrupted. Without this data some functions may not operate correctly.\nDo you want to continue startup of %PRODUCTNAME without the corrupted configuration data?";
     };
 
     String (ERRCODE_UUI_CONFIGURATION_BROKENDATA_WITHREMOVE & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "Die persönliche Konfigurationsdatei '$(ARG1)' ist beschädigt und muss gelöscht werden. Einige Ihrer persönlichen Einstellungen gehen dabei verloren.\nSoll %PRODUCTNAME ohne die beschädigten Konfigurationsdaten starten?";
+        Text [ de ] = "Die persÃ¶nliche Konfigurationsdatei '$(ARG1)' ist beschÃ¤digt und muss gelÃ¶scht werden. Einige Ihrer persÃ¶nlichen Einstellungen gehen dabei verloren.\nSoll %PRODUCTNAME ohne die beschÃ¤digten Konfigurationsdaten starten?";
         Text [ en-US ] = "The personal configuration file '$(ARG1)' is corrupted and must be deleted to continue. Some of your personal settings may be lost.\nDo you want to continue startup of %PRODUCTNAME without the corrupted configuration data?";
     };
 
     String (ERRCODE_UUI_CONFIGURATION_BACKENDMISSING & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "Die Konfigurationsdatenquelle '$(ARG1)' ist nicht verfügbar. Ohne diese fehlenden Daten können einige Funktionen nicht korrekt ausgeführt werden.";
+        Text [ de ] = "Die Konfigurationsdatenquelle '$(ARG1)' ist nicht verfÃ¼gbar. Ohne diese fehlenden Daten kÃ¶nnen einige Funktionen nicht korrekt ausgefÃ¼hrt werden.";
         Text [ en-US ] = "The configuration data source '$(ARG1)' is unavailable. Without this data some functions may not operate correctly.";
     };
 
     String (ERRCODE_UUI_CONFIGURATION_BACKENDMISSING_WITHRECOVER & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "Die Konfigurationsdatenquelle '$(ARG1)' ist nicht verfügbar. Ohne diese fehlenden Daten können einige Funktionen nicht korrekt ausgeführt werden.\nSoll %PRODUCTNAME ohne die fehlenden Konfigurationsdaten starten?";
+        Text [ de ] = "Die Konfigurationsdatenquelle '$(ARG1)' ist nicht verfÃ¼gbar. Ohne diese fehlenden Daten kÃ¶nnen einige Funktionen nicht korrekt ausgefÃ¼hrt werden.\nSoll %PRODUCTNAME ohne die fehlenden Konfigurationsdaten starten?";
         Text [ en-US ] = "The configuration data source '$(ARG1)' is unavailable. Without this data some functions may not operate correctly.\nDo you want to continue startup of %PRODUCTNAME without the missing configuration data?";
     };
 
     STRING (ERRCODE_UUI_INVALID_XFORMS_SUBMISSION_DATA & ERRCODE_RES_MASK)
     {
-        Text [ de ] = "Das Formular enthält ungültige Daten. Möchten Sie trotzdem fortfahren?";
+        Text [ de ] = "Das Formular enthÃ¤lt ungÃ¼ltige Daten. MÃ¶chten Sie trotzdem fortfahren?";
         Text [ en-US ] = "The form contains invalid data. Do you still want to continue?";
     };
 };
