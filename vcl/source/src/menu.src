@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:19:17 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:41:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 
 String SV_RESID_STRING_NOSELECTIONPOSSIBLE
 {
-    Text [ de ] ="<Keine Auswahl möglich>";
+    Text [ de ] ="<Keine Auswahl mÃ¶glich>";
     Text [ en-US ] = "<No selection possible>";
 };
 
@@ -50,7 +50,7 @@ Menu SV_RESID_MENU_EDIT
         MenuItem
         {
             Identifier = SV_MENU_EDIT_UNDO ;
-            Text [ de ] = "~Rückgängig" ;
+            Text [ de ] = "~RÃ¼ckgÃ¤ngig" ;
             Text [ en-US ] = "~Undo" ;
             Text [ x-comment ] = " ";
         };
@@ -72,14 +72,14 @@ Menu SV_RESID_MENU_EDIT
         MenuItem
         {
             Identifier = SV_MENU_EDIT_PASTE ;
-            Text [ de ] = "~Einfügen" ;
+            Text [ de ] = "~EinfÃ¼gen" ;
             Text [ en-US ] = "~Paste" ;
             Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = SV_MENU_EDIT_DELETE ;
-            Text [ de ] = "~Löschen" ;
+            Text [ de ] = "~LÃ¶schen" ;
             Text [ en-US ] = "~Delete" ;
             Text [ x-comment ] = " ";
         };
@@ -87,7 +87,7 @@ Menu SV_RESID_MENU_EDIT
         MenuItem
         {
             Identifier = SV_MENU_EDIT_SELECTALL ;
-            Text [ de ] = "Alles aus~wählen" ;
+            Text [ de ] = "Alles aus~wÃ¤hlen" ;
             Text [ en-US ] = "Select ~All" ;
             Text [ x-comment ] = " ";
         };
@@ -95,7 +95,7 @@ Menu SV_RESID_MENU_EDIT
         MenuItem
         {
             Identifier = SV_MENU_EDIT_INSERTSYMBOL;
-            Text [ de ] = "~Sonderzeichen einfügen...";
+            Text [ de ] = "~Sonderzeichen einfÃ¼gen...";
             Text [ en-US ] = "~Special Character...";
 
             Text [ x-comment ] = " ";
