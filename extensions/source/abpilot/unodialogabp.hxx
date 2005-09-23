@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodialogabp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:10:59 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:50:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@ namespace abp
             ,public OABSPilotUno_PBase
             ,public OModuleResourceClient
     {
+        ::rtl::OUString m_sDataSourceName;
         OABSPilotUno(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
 
     public:
@@ -106,6 +107,7 @@ namespace abp
     protected:
     // OGenericUnoDialog overridables
         virtual Dialog* createDialog(Window* _pParent);
+        virtual void executedDialog(sal_Int16 _nExecutionResult);
     };
 
 //.........................................................................
