@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizard.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:39:40 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:35:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ String STR_STATE_LICENSE
 };
 String STR_STATE_MIGRATION
 {
-    Text [ de ]    = "Persönliche Daten";
+    Text [ de ]    = "PersÃ¶nliche Daten";
     Text [ en-US ] = "Personal Data";
 };
 String STR_STATE_USER
@@ -87,24 +87,24 @@ String STR_STATE_REGISTRATION
 
 String STR_WELCOME_MIGRATION
 {
-    Text [ de ]    = "Dieser Assistent wird Sie durch die Lizenzbedingungen, dem Übertragen von Benutzer Daten aus %OLD_VERSION und die Registrierung von %PRODUCTNAME führen.\n\nKlicken Sie auf 'Weiter', um fortzufahren.";
+    Text [ de ]    = "Dieser Assistent wird Sie durch die Lizenzbedingungen, dem Ãœbertragen von Benutzer Daten aus %OLD_VERSION und die Registrierung von %PRODUCTNAME fÃ¼hren.\n\nKlicken Sie auf 'Weiter', um fortzufahren.";
     Text [ en-US ] = "This wizard will guide you through the license agreement, the transfer of user data from %OLD_VERSION and the registration of %PRODUCTNAME.\n\nClick 'Next' to continue.";
 
 };
 String STR_WELCOME_OEM
 {
-    Text [ de ]    = "Dieser Assistent wird Sie durch die Lizenzbedingungen und die Registrierung von %PRODUCTNAME führen.\n\nIn der Readme-Datei im %PRODUCTNAME-Produktverzeichnis finden Sie wichtige Hinweise zum Programm. Bitte lesen Sie diese Hinweise aufmerksam durch.\n\nDes weiteren finden Sie ausführliche Informationen auf der Internetseite von Sun unter\n\nhttp://www.sun.com/%PRODUCTNAME.\n\nKlicken Sie auf 'Weiter', um fortzufahren.";
+    Text [ de ]    = "Dieser Assistent wird Sie durch die Lizenzbedingungen und die Registrierung von %PRODUCTNAME fÃ¼hren.\n\nIn der Readme-Datei im %PRODUCTNAME-Produktverzeichnis finden Sie wichtige Hinweise zum Programm. Bitte lesen Sie diese Hinweise aufmerksam durch.\n\nDes weiteren finden Sie ausfÃ¼hrliche Informationen auf der Internetseite von Sun unter\n\nhttp://www.sun.com/%PRODUCTNAME.\n\nKlicken Sie auf 'Weiter', um fortzufahren.";
     Text [ en-US ] = "This wizard will guide you through the license agreement and the registration of %PRODUCTNAME.\n\nImportant information is contained in the readme file which is located in the %PRODUCTNAME product directory. Please read this file carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/%PRODUCTNAME.\n\nClick 'Next' to continue.";
 };
 String STR_WELCOME_OEM_EXT
 {
-    Text [ de ]    = "Dieser Assistent wird Sie durch die Lizenzbedingungen und  die Registrierung von %PRODUCTNAME führen.\n\nIn der Readme-Datei im %PRODUCTNAME-Produktverzeichnis finden Sie wichtige Hinweise zum Programm. Bitte lesen Sie diese Hinweise aufmerksam durch. Des weiteren finden Sie ausführliche Informationen auf der Internetseite von Sun unter\n\nhttp://www.sun.com/%PRODUCTNAME.\n\nSupport und Schulung:\n\nNutzen Sie die Möglichkeit des kostenlosen Software-Supports für 60 Tage ab Kaufdatum. Auch eine kostenlose, Web-basierte %PRODUCTNAME-Schulung des Sun(tm) Web Learning Centers wartet auf Sie. Dieses Schulungsangebot ist 90 Tage ab Registrierung gültig. Besuchen Sie folgende Webseite für weitere Details.\n\nhttp://www.sun.com/star/service\n\nKlicken Sie auf 'Weiter', um fortzufahren.";
+    Text [ de ]    = "Dieser Assistent wird Sie durch die Lizenzbedingungen und  die Registrierung von %PRODUCTNAME fÃ¼hren.\n\nIn der Readme-Datei im %PRODUCTNAME-Produktverzeichnis finden Sie wichtige Hinweise zum Programm. Bitte lesen Sie diese Hinweise aufmerksam durch. Des weiteren finden Sie ausfÃ¼hrliche Informationen auf der Internetseite von Sun unter\n\nhttp://www.sun.com/%PRODUCTNAME.\n\nSupport und Schulung:\n\nNutzen Sie die MÃ¶glichkeit des kostenlosen Software-Supports fÃ¼r 60 Tage ab Kaufdatum. Auch eine kostenlose, Web-basierte %PRODUCTNAME-Schulung des Sun(tm) Web Learning Centers wartet auf Sie. Dieses Schulungsangebot ist 90 Tage ab Registrierung gÃ¼ltig. Besuchen Sie folgende Webseite fÃ¼r weitere Details.\n\nhttp://www.sun.com/star/service\n\nKlicken Sie auf 'Weiter', um fortzufahren.";
     Text [ en-US ] = "This wizard will guide you through the license agreement and the registration of %PRODUCTNAME.\n\nImportant information is contained in the readme files which are located in the %PRODUCTNAME product directory. Please read these files carefully. You can also find detailed information on the Sun website \n\nhttp://www.sun.com/&PRODUCTNAME.\n\nSupport and Training:\n\nGet FREE software support valid for 60 days from date of purchase and FREE access to a web-based %PRODUCTNAME course available through the Sun(tm) Web Learning Center (valid for 90 days from the date of registration). To take advantage of this offer, visit the website below.\n\nhttp://www.sun.com/star/service\n\nClick 'Next' to continue.";
 };
 
 String STR_WELCOME_EVAL
 {
-    Text [ de ]    = "Dieser Assistent wird Sie durch die Lizenzbedingungen und die Registrierung von %PRODUCTNAME führen.\n\n Diese Version von %PRODUCTNAME ermöglicht Ihnen die Evaluierung des Produktes und enthält den vollen Funktionsumfang. Bitte beachten Sie, dass diese Version nach Installation nur %EVALDAYS Tage lauffähig ist. Informationen rund um %PRODUCTNAME erhalten Sie unter: www.sun.com/%PRODUCTNAME\n\nKlicken Sie auf 'Weiter', um fortzufahren.";
+    Text [ de ]    = "Dieser Assistent wird Sie durch die Lizenzbedingungen und die Registrierung von %PRODUCTNAME fÃ¼hren.\n\n Diese Version von %PRODUCTNAME ermÃ¶glicht Ihnen die Evaluierung des Produktes und enthÃ¤lt den vollen Funktionsumfang. Bitte beachten Sie, dass diese Version nach Installation nur %EVALDAYS Tage lauffÃ¤hig ist. Informationen rund um %PRODUCTNAME erhalten Sie unter: www.sun.com/%PRODUCTNAME\n\nKlicken Sie auf 'Weiter', um fortzufahren.";
     Text [ en-US ] = "This wizard will guide you through the license agreement and the registration of %PRODUCTNAME.\n\nThis version lets you evaluate the full functionality. However, since it is an evaluation version, you will be able to start it within %EVALDAYS days after installation. To find out more about the %PRODUCTNAME product, visit www.sun.com/%PRODUCTNAME\n\nClick 'Next' to continue.";
 };
 
@@ -119,7 +119,7 @@ ErrorBox ERRBOX_REG_NOSYSBROWSER
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
 
-    Message [ de ] = "Fehler beim Starten des Webbrowsers.\nBitte überprüfen Sie die Einstellungen von %PRODUCTNAME und die des Webbrowsers." ;
+    Message [ de ] = "Fehler beim Starten des Webbrowsers.\nBitte Ã¼berprÃ¼fen Sie die Einstellungen von %PRODUCTNAME und die des Webbrowsers." ;
     Message [ en-US ] = "An error occurred in starting the web browser.\nPlease check the %PRODUCTNAME and web browser settings.";
 };
 
@@ -164,7 +164,7 @@ TabPage TP_WELCOME
         Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP + 2*ROWHEIGHT);
         Size = MAP_APPFONT( BODYWIDTH, BODYHEIGHT-MARGINTOP - 2*ROWHEIGHT );
         WordBreak = TRUE;
-        Text [ de ]    = "Dieser Assistent wird Sie durch die Lizenzbedingungen und die Registrierung von %PRODUCTNAME führen.\n\nKlicken Sie auf 'Weiter', um fortzufahren.";
+        Text [ de ]    = "Dieser Assistent wird Sie durch die Lizenzbedingungen und die Registrierung von %PRODUCTNAME fÃ¼hren.\n\nKlicken Sie auf 'Weiter', um fortzufahren.";
         Text [ en-US ] = "This wizard will guide you through the license agreement and the registration of %PRODUCTNAME.\n\nClick 'Next' to continue.";
     };
 };
@@ -198,7 +198,7 @@ TabPage TP_LICENSE
         WordBreak = TRUE;
         NoLabel = TRUE;
         Text [ en-US ] = "View the complete License Agreement. Please use the scrollbar or the '%PAGEDOWN' button in this dialog to view the entire license text.";
-        Text [ de ]    = "Lesen Sie den gesamten Lizenzvertrag. Verwenden Sie die Bildlaufleiste oder die '%PAGEDOWN' Schaltfläche in diesem Dialog, um den gesamten Text sichtbar zu machen.";
+        Text [ de ]    = "Lesen Sie den gesamten Lizenzvertrag. Verwenden Sie die Bildlaufleiste oder die '%PAGEDOWN' SchaltflÃ¤che in diesem Dialog, um den gesamten Text sichtbar zu machen.";
     };
     FixedText FT_LICENSE_BODY_2
     {
@@ -229,7 +229,7 @@ TabPage TP_LICENSE
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( TP_WIDTH-MARGINRIGHT-50 , TP_HEIGHT-MARGINBOTTOM-15 ) ;
         Size = MAP_APPFONT ( 50, 15 ) ;
-        Text [ de ] = "Blätt~ern";
+        Text [ de ] = "BlÃ¤tt~ern";
         Text [ en-US ] = "Scroll Do~wn";
     };
 };
@@ -259,7 +259,7 @@ TabPage TP_MIGRATION
         Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP);
         Size = MAP_APPFONT( BODYWIDTH, ROWHEIGHT );
         Text [ en-US ] = "Transfer personal data";
-        Text [ de ]    = "Übernahme persönlicher Daten";
+        Text [ de ]    = "Ãœbernahme persÃ¶nlicher Daten";
 
     };
 
@@ -270,7 +270,7 @@ TabPage TP_MIGRATION
         Size = MAP_APPFONT(BODYWIDTH, ROWHEIGHT*8);
         WordBreak = TRUE;
         Text [ en-US ] = "Most personal data from %OLDPRODUCT installation can be reused in %PRODUCTNAME %PRODUCTVERSION.\n\nIf you do not want to reuse any settings in %PRODUCTNAME %PRODUCTVERSION, unmark the check box.";
-        Text [ de ]    = "Für %PRODUCTNAME %PRODUCTVERSION können die meisten persönlichen Daten aus %OLDPRODUCT übernommen werden.\n\nUm die Einstellungen nicht nach %PRODUCTNAME %PRODUCTVERSION zu übernehmen, deaktivieren Sie das Markierfeld.";
+        Text [ de ]    = "FÃ¼r %PRODUCTNAME %PRODUCTVERSION kÃ¶nnen die meisten persÃ¶nlichen Daten aus %OLDPRODUCT Ã¼bernommen werden.\n\nUm die Einstellungen nicht nach %PRODUCTNAME %PRODUCTVERSION zu Ã¼bernehmen, deaktivieren Sie das Markierfeld.";
 
     };
 
@@ -280,7 +280,7 @@ TabPage TP_MIGRATION
         Size = MAP_APPFONT(BODYWIDTH, ROWHEIGHT*2);
         Check = TRUE;
         Text [ en-US ] = "Transfer personal data";
-        Text [ de ]    = "Persönliche Daten übernehmen";
+        Text [ de ]    = "PersÃ¶nliche Daten Ã¼bernehmen";
     };
 };
 
@@ -302,7 +302,7 @@ TabPage TP_USER
         Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP);
         Size = MAP_APPFONT( BODYWIDTH, ROWHEIGHT );
         Text [ en-US ] = "Provide your full name and initials below";
-        Text [ de ]    = "Bitte geben Sie ihren Vor- und Nachnamen sowie Ihr Kürzel an";
+        Text [ de ]    = "Bitte geben Sie ihren Vor- und Nachnamen sowie Ihr KÃ¼rzel an";
 
     };
 
@@ -313,7 +313,7 @@ TabPage TP_USER
         Size = MAP_APPFONT(BODYWIDTH, ROWHEIGHT*3);
         WordBreak = TRUE;
         Text [ en-US ] = "The user name will be used in the document properties, templates and when you record changes made to documents.";
-        Text [ de ]    = "Der Benutzername wird in den Dokumenteigenschaften sowie Dokumentvorlagen verwendet und wenn Sie Änderungen an Dokumenten aufzeichnen.";
+        Text [ de ]    = "Der Benutzername wird in den Dokumenteigenschaften sowie Dokumentvorlagen verwendet und wenn Sie Ã„nderungen an Dokumenten aufzeichnen.";
     };
 
 
@@ -348,7 +348,7 @@ TabPage TP_USER
         Pos = MAP_APPFONT(MARGINLEFT, MARGINTOP+ROWHEIGHT*11+FTADD);
         Size = MAP_APPFONT(USERINDENT, ROWHEIGHT);
         Text [ en-US ] = "~Initials";
-        Text [ de ]    = "~Kürzel";
+        Text [ de ]    = "~KÃ¼rzel";
     };
     Edit ED_USER_INITIALS
     {
@@ -406,7 +406,7 @@ TabPage TP_REGISTRATION
     {
         NoLabel = TRUE;
         Text [ en-US ] = "You now have the opportunity to register as a %PRODUCTNAME user. Registration is voluntary and is without obligation.\n\nIf you register, we can inform you about new developments concerning this product.";
-        Text [ de ]    = "Sie haben jetzt die Möglichkeit, sich als %PRODUCTNAME Anwender registrieren zu lassen.  Die Registrierung ist freiwillig und für Sie unverbindlich.\n\nWenn Sie sich registrieren, können wir Sie über Produktneuheiten informieren.";
+        Text [ de ]    = "Sie haben jetzt die MÃ¶glichkeit, sich als %PRODUCTNAME Anwender registrieren zu lassen.  Die Registrierung ist freiwillig und fÃ¼r Sie unverbindlich.\n\nWenn Sie sich registrieren, kÃ¶nnen wir Sie Ã¼ber Produktneuheiten informieren.";
         WordBreak = TRUE;
         Pos = MAP_APPFONT(MARGINLEFT+INDENT2, MARGINTOP+ROWHEIGHT*2);
         Size = MAP_APPFONT(BODYWIDTH-INDENT2, ROWHEIGHT*7);
@@ -415,7 +415,7 @@ TabPage TP_REGISTRATION
     RadioButton RB_REGISTRATION_NOW
     {
         Text [ en-US ] = "I want to register ~now";
-        Text [ de ]    = "Ich möchte mich jetzt ~registrieren";
+        Text [ de ]    = "Ich mÃ¶chte mich jetzt ~registrieren";
         Pos = MAP_APPFONT(MARGINLEFT+INDENT2, ROWHEIGHT*11);
         Size = MAP_APPFONT(BODYWIDTH-INDENT2, ROWHEIGHT*2);
         Check = TRUE;
@@ -423,14 +423,14 @@ TabPage TP_REGISTRATION
     RadioButton RB_REGISTRATION_LATER
     {
         Text [ en-US ] = "I want to register ~later";
-        Text [ de ]    = "Ich möchte mich ~später registrieren";
+        Text [ de ]    = "Ich mÃ¶chte mich ~spÃ¤ter registrieren";
         Pos = MAP_APPFONT(MARGINLEFT+INDENT2, ROWHEIGHT*13);
         Size = MAP_APPFONT(BODYWIDTH-INDENT2, ROWHEIGHT*2);
     };
     RadioButton RB_REGISTRATION_NEVER
     {
         Text [ en-US ] = "I do not want to ~register";
-        Text [ de ]    = "Ich möchte mich ~nicht registrieren";
+        Text [ de ]    = "Ich mÃ¶chte mich ~nicht registrieren";
         Pos = MAP_APPFONT(MARGINLEFT+INDENT2, ROWHEIGHT*15);
         Size = MAP_APPFONT(BODYWIDTH-INDENT2, ROWHEIGHT*2);
     };
@@ -452,7 +452,7 @@ TabPage TP_REGISTRATION
     {
         NoLabel = TRUE;
         Text [ en-US ] = "We hope you enjoy working with %PRODUCTNAME.\n\nTo exit the wizard, click 'Finish'.";
-        Text [ de ]    = "Wir wünschen Ihnen viel Spaß und Erfolg mit %PRODUCTNAME.\n\nKlicken Sie auf 'Fertig', um den Assistenten zu beenden.";
+        Text [ de ]    = "Wir wÃ¼nschen Ihnen viel SpaÃŸ und Erfolg mit %PRODUCTNAME.\n\nKlicken Sie auf 'Fertig', um den Assistenten zu beenden.";
         Pos = MAP_APPFONT(MARGINLEFT, TP_HEIGHT-MARGINBOTTOM-ROWHEIGHT*4);
         Size = MAP_APPFONT(BODYWIDTH, ROWHEIGHT*4);
     };
