@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmaddressblockpage.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:57:18 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:56:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Adressblock einfügen";
+        Text [ de ] = "Adressblock einfÃ¼gen";
         Text [ en-US ] = "Insert address block";
     };
 
@@ -66,19 +66,19 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
         Pos = MAP_APPFONT ( 6 , 27 ) ;
         Size = MAP_APPFONT ( 248 , 20 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "1. Wählen Sie, aus welcher Adressenliste die Adressdaten bezogen werden sollen. Die Daten der Adressenliste werden für den Adressblock benötigt." ;
+        Text [ de ] = "1. WÃ¤hlen Sie, aus welcher Adressenliste die Adressdaten bezogen werden sollen. Die Daten der Adressenliste werden fÃ¼r den Adressblock benÃ¶tigt." ;
         Text[ en-US ] = "1. Select the address list containing the address data you want to use. This data is needed to create the address block.";
     };
     PushButton      PB_ADDRESSLIST
     {
         Pos = MAP_APPFONT ( 12 , 48 ) ;
         Size = MAP_APPFONT ( 100 , 14 ) ;
-        Text [ de ] = "Adressenliste auswählen..." ;
+        Text [ de ] = "Adressenliste auswÃ¤hlen..." ;
         Text[ en-US ] = "Select A~ddress List...";
     };
     String STR_CHANGEADDRESS
     {
-        Text [ de ] = "Andere Adressenliste auswählen..." ;
+        Text [ de ] = "Andere Adressenliste auswÃ¤hlen..." ;
         Text[ en-US ] = "Select Different A~ddress List...";
     };
     FixedText   FI_CURRENTADDRESS
@@ -93,7 +93,7 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 77 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "2. Wählen Sie den Adressblock, der in das Dokument eingefügt werden soll." ;
+        Text [ de ] = "2. WÃ¤hlen Sie den Adressblock, der in das Dokument eingefÃ¼gt werden soll." ;
         Text[ en-US ] = "2. Select the address block you want inserted in the document";
     };
     CheckBox        CB_ADDRESS
@@ -121,7 +121,7 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 151 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "3. Überprüfen Sie, ob alle Adressdaten verfügbar sind." ;
+        Text [ de ] = "3. ÃœberprÃ¼fen Sie, ob alle Adressdaten verfÃ¼gbar sind." ;
         Text[ en-US ] = "3. Check if the address data matches correctly.";
     };
     Window          WIN_PREVIEW
@@ -156,7 +156,7 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
         Pos = MAP_APPFONT ( 178 , 209 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         SYMBOL = IMAGEBUTTON_NEXT ;
-        QuickHelpText [ de ] = "Adressblock des nächsten Dokuments ansehen" ;
+        QuickHelpText [ de ] = "Adressblock des nÃ¤chsten Dokuments ansehen" ;
         QuickHelpText[ en-US ] = "Preview Next Address Block";
     };
     String STR_DOCUMENT
@@ -177,14 +177,14 @@ ModalDialog DLG_MM_SELECTADDRESSBLOCK
     Size = MAP_APPFONT ( 260 , 219 ) ;
     Moveable = TRUE ;
 
-    Text [ de ] = "Adressblock wählen";
+    Text [ de ] = "Adressblock wÃ¤hlen";
     Text [ en-US ] = "Select Address Block";
 
     FixedText       FT_SELECT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 150 , 8 ) ;
-        Text [ de ] = "Bitte wählen Sie einen Adressblock" ;
+        Text [ de ] = "Bitte wÃ¤hlen Sie einen Adressblock" ;
         Text[ en-US ] = "~Select your preferred address block";
     };
     Window WIN_PREVIEW
@@ -213,7 +213,7 @@ ModalDialog DLG_MM_SELECTADDRESSBLOCK
         Pos = MAP_APPFONT ( 204 , 48 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Group = FALSE;
-        Text [ de ] = "Löschen" ;
+        Text [ de ] = "LÃ¶schen" ;
         Text[ en-US ] = "~Delete";
     };
 
@@ -228,21 +228,21 @@ ModalDialog DLG_MM_SELECTADDRESSBLOCK
     {
         Pos = MAP_APPFONT ( 12 , 131 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
-        Text [ de ] = "Land/Region niemals in Adresse einfügen" ;
+        Text [ de ] = "Land/Region niemals in Adresse einfÃ¼gen" ;
         Text[ en-US ] = "N~ever include the country/region";
     };
     RadioButton     RB_ALWAYS
     {
         Pos = MAP_APPFONT ( 12 , 145 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
-        Text [ de ] = "Immer Land/Region in Adresse einfügen" ;
+        Text [ de ] = "Immer Land/Region in Adresse einfÃ¼gen" ;
         Text[ en-US ] = "~Always include the country/region";
     };
     RadioButton     RB_DEPENDENT
     {
         Pos = MAP_APPFONT ( 12 , 159 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
-        Text [ de ] = "Land/Region nur dann einfügen, wenn anders als:" ;
+        Text [ de ] = "Land/Region nur dann einfÃ¼gen, wenn anders als:" ;
         Text[ en-US ] = "Only ~include the country/region if it is not:";
     };
     Edit ED_COUNTRY
@@ -302,12 +302,12 @@ ModalDialog DLG_MM_CUSTOMIZEADDRESSBLOCK
 
     String ST_TITLE_MALE
     {
-        Text [ de ] = "Eigene Briefanrede (männliche Empfänger)";
+        Text [ de ] = "Eigene Briefanrede (mÃ¤nnliche EmpfÃ¤nger)";
         Text [ en-US ] = "Custom Salutation (Male Recipients)";
     };
     String ST_TITLE_FEMALE
     {
-        Text [ de ] = "Eigene Briefanrede (weibliche Empfängerinnen)";
+        Text [ de ] = "Eigene Briefanrede (weibliche EmpfÃ¤ngerinnen)";
         Text [ en-US ] = "Custom Salutation (Female Recipients)";
     };
     FixedText       FT_ADDRESSELEMENTS
@@ -334,12 +334,12 @@ ModalDialog DLG_MM_CUSTOMIZEADDRESSBLOCK
         Pos = MAP_APPFONT ( 80 , 29 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         Symbol = IMAGEBUTTON_ARROW_RIGHT;
-        QuickHelpText [ de ] = "In Adresse übernehmen" ;
+        QuickHelpText [ de ] = "In Adresse Ã¼bernehmen" ;
         QuickHelpText[ en-US ] = "Add to address";
     };
     String ST_INSERTSALUTATIONFIELD
     {
-        Text [ de ] = "In Briefanrede übernehmen" ;
+        Text [ de ] = "In Briefanrede Ã¼bernehmen" ;
         Text[ en-US ] = "Add to salutation";
     };
     ImageButton     IB_REMOVEFIELD
