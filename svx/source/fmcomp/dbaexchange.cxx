@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbaexchange.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:44:53 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:58:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,34 @@ namespace svx
         :m_nFormatFlags(_nFormats)
     {
         implConstruct(_rDatasource,_rConnectionResource,_nCommandType, _rCommand, _rFieldName);
+    }
+
+    //--------------------------------------------------------------------
+    OColumnTransferable::OColumnTransferable(const ODataAccessDescriptor& _rDescriptor, sal_Int32 _nFormats )
+        :m_nFormatFlags(_nFormats)
+    {
+        ::rtl::OUString sDataSource, sDatabaseLocation, sConnectionResource, sCommand, sFieldName;
+        if ( _rDescriptor.has( daDataSource ) )         _rDescriptor[ daDataSource ] >>= sDataSource;
+        if ( _rDescriptor.has( daDatabaseLocation ) )   _rDescriptor[ daDatabaseLocation ] >>= sDatabaseLocation;
+        if ( _rDescriptor.has( daConnectionResource ) ) _rDescriptor[ daConnectionResource ] >>= sConnectionResource;
+        if ( _rDescriptor.has( daCommand ) )            _rDescriptor[ daCommand ] >>= sCommand;
+        if ( _rDescriptor.has( daColumnName ) )         _rDescriptor[ daColumnName ] >>= sFieldName;
+
+        sal_Int32 nCommandType = CommandType::TABLE;
+        OSL_VERIFY( _rDescriptor[ daCommandType ] >>= nCommandType );
+
+
+        implConstruct(
+            sDataSource.getLength() ? sDataSource : sDatabaseLocation,
+            sConnectionResource, nCommandType, sCommand, sFieldName );
+
+        if ( m_nFormatFlags & CTF_COLUMN_DESCRIPTOR )
+        {
+            if ( _rDescriptor.has( daConnection ) )
+                m_aDescriptor[ daConnection ] = _rDescriptor[ daConnection ];
+            if ( _rDescriptor.has( daColumnObject ) )
+                m_aDescriptor[ daColumnObject ] = _rDescriptor[ daColumnObject ];
+        }
     }
 
     //--------------------------------------------------------------------
