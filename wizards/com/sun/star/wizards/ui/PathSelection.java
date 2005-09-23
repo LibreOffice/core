@@ -48,7 +48,8 @@ public class PathSelection {
         CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblSaveAs", new String[] { "Enabled", "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" }, new Object[] { new Boolean(Enabled), new Integer(8), LabelText, new Integer(XPos), new Integer(YPos), new Integer(DialogStep), new Short(CurTabIndex), new Integer(Width)});
 
         xSaveTextBox = CurUnoDialog.insertTextField("txtSavePath", "callXPathSelectionListener", this, new String[] { "Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width" }, new Object[] { new Boolean(Enabled), new Integer(12), TxtHelpURL, new Integer(XPos), new Integer(YPos + 10), new Integer(DialogStep), new Short((short)(CurTabIndex + 1)), new Integer(Width - 26)});
-
+        //CurUnoDialog.setControlProperty("txtSavePath", "ReadOnly", Boolean.TRUE);
+        CurUnoDialog.setControlProperty("txtSavePath", "Enabled", Boolean.FALSE);
         CurUnoDialog.insertButton("cmdSelectPath", "triggerPathPicker", this, new String[] { "Enabled", "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" }, new Object[] { new Boolean(Enabled), new Integer(14), BtnHelpURL, "...", new Integer(XPos + Width - 16), new Integer(YPos + 9), new Integer(DialogStep), new Short((short)(CurTabIndex + 2)), new Integer(16)});
 
     }
