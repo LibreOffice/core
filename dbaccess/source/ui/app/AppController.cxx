@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:18:46 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:14:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -318,6 +318,7 @@ struct XContainerFunctor : public ::std::unary_function< OApplicationController:
 //====================================================================
 //= OApplicationController
 //====================================================================
+DBG_NAME(OApplicationController)
 //--------------------------------------------------------------------
 OApplicationController::OApplicationController(const Reference< XMultiServiceFactory >& _rxORB)
     :OApplicationController_CBASE( _rxORB )
@@ -330,6 +331,8 @@ OApplicationController::OApplicationController(const Reference< XMultiServiceFac
     ,m_eOldType(E_NONE)
     ,m_aTableCopyHelper(this)
 {
+    DBG_CTOR(OApplicationController,NULL);
+
     m_aTypeCollection.initUserDriverTypes(_rxORB);
 }
 //------------------------------------------------------------------------------
@@ -344,6 +347,8 @@ OApplicationController::~OApplicationController()
     }
     ::std::auto_ptr< Window> aTemp(m_pView);
     m_pView = NULL;
+
+    DBG_DTOR(OApplicationController,NULL);
 }
 //--------------------------------------------------------------------
 IMPLEMENT_FORWARD_XTYPEPROVIDER2(OApplicationController,OApplicationController_CBASE,OApplicationController_Base)
@@ -404,7 +409,7 @@ void SAL_CALL OApplicationController::disposing()
             m_xDataSource = NULL;
         }
 
-        Reference< XModifyBroadcaster >  xBroadcaster(m_xModel, UNO_QUERY);
+        Reference< XModifyBroadcaster > xBroadcaster( m_xModel, UNO_QUERY );
         if ( xBroadcaster.is() )
             xBroadcaster->removeModifyListener(static_cast<XModifyListener*>(this));
 
@@ -426,11 +431,10 @@ void SAL_CALL OApplicationController::disposing()
                         getStrippedDatabaseName(),
                         ::rtl::OUString() );
             }
-            m_xModel->disconnectController( this );
-            // forces the data source to reload
-        }
 
-        m_xModel = NULL;
+            m_aModelConnector.clear();
+            m_xModel.clear();
+        }
     }
     catch(Exception)
     {
@@ -443,7 +447,7 @@ void SAL_CALL OApplicationController::disposing()
 //--------------------------------------------------------------------
 sal_Bool OApplicationController::Construct(Window* _pParent)
 {
-    m_pView = new OApplicationView(_pParent,getORB(),this,this,this,this,this,this);
+    m_pView = new OApplicationView(_pParent,getORB(),this,this,this,this,this,this,m_ePreviewMode);
     m_pView->SetUniqueId(UID_APP_VIEW);
 
     // late construction
@@ -471,12 +475,6 @@ sal_Bool OApplicationController::Construct(Window* _pParent)
     DBG_ASSERT( getView(), "OApplicationController::Construct: have no view!" );
     if ( getView() )
         getView()->enableSeparator( );
-
-    if ( getContainer() && m_ePreviewMode != getContainer()->getPreviewMode() )
-        getContainer()->switchPreview(m_ePreviewMode);
-
-//  if ( getContainer() && m_xDataSource.is() )
-//      getContainer()->setStatusInformations(m_xDataSource);
 
     // now that we have a view we can create the clipboard listener
     m_aSystemClipboard = TransferableDataHelper::CreateFromSystemClipboard( getView() );
@@ -516,7 +514,8 @@ void SAL_CALL OApplicationController::disposing(const EventObject& _rSource) thr
     }
     else if ( _rSource.Source == m_xModel )
     {
-        m_xModel = NULL;
+        m_xModel.clear();
+        m_aModelConnector.clear();
     }
     else if ( _rSource.Source == m_xDataSource )
     {
@@ -627,7 +626,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                         aReturn.bEnabled = !isDataSourceReadOnly() && getViewClipboard().HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY);
                         break;
                     default:
-                        aReturn.bEnabled = !isDataSourceReadOnly() && OComponentTransferable::canExtractComponentDescriptor(getViewClipboard().GetDataFlavorExVector());
+                        aReturn.bEnabled = !isDataSourceReadOnly() && OComponentTransferable::canExtractComponentDescriptor(getViewClipboard().GetDataFlavorExVector(),getContainer()->getElementType() == E_FORM);
                 }
                 break;
             case SID_DB_APP_PASTE_SPECIAL:
@@ -773,16 +772,14 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
             case SID_DB_APP_DSPROPS:
                 if ( aReturn.bEnabled = m_xDataSource.is() )
                 {
-                    static ODsnTypeCollection aTypeCollection;
-                    DATASOURCE_TYPE eType = aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
+                    DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
                     aReturn.bEnabled = DST_EMBEDDED != eType && DST_MOZILLA != eType && DST_EVOLUTION != eType && DST_OUTLOOK != eType && DST_OUTLOOKEXP != eType;
                 }
                 break;
             case SID_DB_APP_DSCONNECTION_TYPE:
                 if ( aReturn.bEnabled = !isDataSourceReadOnly() && m_xDataSource.is() )
                 {
-                    static ODsnTypeCollection aTypeCollection;
-                    DATASOURCE_TYPE eType = aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
+                    DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
                     aReturn.bEnabled = DST_EMBEDDED != eType;
                 }
                 break;
@@ -957,11 +954,16 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                             {
                                 Reference<XConnection> xDestConnection;
                                 ensureConnection(xDestConnection);
-                                m_aTableCopyHelper.pasteTable( aTransferData , getDatabaseName() , xDestConnection);
+
+                                SharedConnection xConnection( xDestConnection, SharedConnection::NoTakeOwnership );
+                                // TODO: migrate ensureConnection to the SharedConnection-API
+
+                                m_aTableCopyHelper.pasteTable( aTransferData , getDatabaseName(), xConnection );
                             }
                             break;
                         case E_QUERY:
-                            paste( E_QUERY,ODataAccessObjectTransferable::extractObjectDescriptor(aTransferData) );
+                            if ( getViewClipboard().HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY) )
+                                paste( E_QUERY,ODataAccessObjectTransferable::extractObjectDescriptor(aTransferData) );
                             break;
                         default:
                             {
@@ -1342,8 +1344,6 @@ void OApplicationController::describeSupportedFeatures()
                                                                                         CommandGroup::INSERT );
     implDescribeSupportedFeature( ".uno:DBNewView",          ID_NEW_VIEW_DESIGN,        CommandGroup::INSERT );
     implDescribeSupportedFeature( ".uno:DBNewViewSQL",       SID_DB_NEW_VIEW_SQL,       CommandGroup::INSERT );
-    implDescribeSupportedFeature( ".uno:DBNewViewAutoPilot", ID_NEW_VIEW_DESIGN_AUTO_PILOT,
-                                                                                        CommandGroup::INSERT );
 
     implDescribeSupportedFeature( ".uno:DBDelete",           SID_DB_APP_DELETE,         CommandGroup::EDIT );
     implDescribeSupportedFeature( ".uno:Delete",             SID_DB_APP_DELETE,         CommandGroup::EDIT );
@@ -1400,16 +1400,16 @@ void OApplicationController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:DBShowDocPreview",   SID_DB_APP_VIEW_DOC_PREVIEW,
                                                                                         CommandGroup::VIEW );
 
-    implDescribeSupportedFeature( ".uno:DBDSImport",        SID_DB_APP_DSIMPORT);
-    implDescribeSupportedFeature( ".uno:DBDSExport",        SID_DB_APP_DSEXPORT);
-
-    implDescribeSupportedFeature( ".uno:DBDBAdmin",         SID_DB_APP_DBADMIN);
+    // this one should not appear under Tools->Customize->Keyboard
+    implDescribeSupportedFeature( ".uno:DBDSImport",        SID_DB_APP_DSIMPORT, CommandGroup::INTERNAL);
+    implDescribeSupportedFeature( ".uno:DBDSExport",        SID_DB_APP_DSEXPORT, CommandGroup::INTERNAL);
+    implDescribeSupportedFeature( ".uno:DBDBAdmin",         SID_DB_APP_DBADMIN, CommandGroup::INTERNAL);
 
     // status info
-    implDescribeSupportedFeature( ".uno:DBStatusType",      SID_DB_APP_STATUS_TYPE);
-    implDescribeSupportedFeature( ".uno:DBStatusDBName",    SID_DB_APP_STATUS_DBNAME);
-    implDescribeSupportedFeature( ".uno:DBStatusUserName",  SID_DB_APP_STATUS_USERNAME);
-    implDescribeSupportedFeature( ".uno:DBStatusHostName",  SID_DB_APP_STATUS_HOSTNAME);
+    implDescribeSupportedFeature( ".uno:DBStatusType",      SID_DB_APP_STATUS_TYPE, CommandGroup::INTERNAL);
+    implDescribeSupportedFeature( ".uno:DBStatusDBName",    SID_DB_APP_STATUS_DBNAME, CommandGroup::INTERNAL);
+    implDescribeSupportedFeature( ".uno:DBStatusUserName",  SID_DB_APP_STATUS_USERNAME, CommandGroup::INTERNAL);
+    implDescribeSupportedFeature( ".uno:DBStatusHostName",  SID_DB_APP_STATUS_HOSTNAME, CommandGroup::INTERNAL);
 }
 // -----------------------------------------------------------------------------
 OApplicationView*   OApplicationController::getContainer() const
@@ -1633,10 +1633,10 @@ void OApplicationController::onEntryDoubleClick(SvTreeListBox* _pTree)
     {
         ElementType eType = getContainer()->getElementType();
 
+        Reference<XConnection> xConnection;
         Reference<XDatabaseMetaData> xMetaData;
         if ( eType == E_TABLE )
         {
-            Reference<XConnection> xConnection;
             ensureConnection(xConnection);
             if ( xConnection.is() )
             {
@@ -1871,6 +1871,8 @@ void OApplicationController::renameEntry()
 
     Reference< XNameAccess > xContainer = getElements(getContainer()->getElementType());
     OSL_ENSURE(aList.size() == 1,"Invalid rename call here. More than one element!");
+  if ( aList.empty() )
+    return;
 
     try
     {
@@ -2196,7 +2198,7 @@ sal_Int8 OApplicationController::queryDrop( const AcceptDropEvent& _rEvt, const 
                 return DND_ACTION_COPY;
             if ( eType == E_FORM || eType == E_REPORT )
             {
-                sal_Int8 nAction = OComponentTransferable::canExtractComponentDescriptor(_rFlavors) ? DND_ACTION_COPY : DND_ACTION_NONE;
+                sal_Int8 nAction = OComponentTransferable::canExtractComponentDescriptor(_rFlavors,eType == E_FORM) ? DND_ACTION_COPY : DND_ACTION_NONE;
                 if ( nAction != DND_ACTION_NONE )
                 {
                     SvLBoxEntry* pHitEntry = pView->getEntry(_rEvt.maPosPixel);
@@ -2217,8 +2219,9 @@ sal_Int8 OApplicationController::queryDrop( const AcceptDropEvent& _rEvt, const 
                                 nAction = DND_ACTION_NONE;
                         }
                     }
-                    else
+                    /*else
                         nAction = nActionAskedFor & DND_ACTION_COPYMOVE;
+                    */
                 }
                 return nAction;
             }
@@ -2266,7 +2269,7 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
         m_nAsyncDrop = Application::PostUserEvent(LINK(this, OApplicationController, OnAsyncDrop));
         return DND_ACTION_COPY;
     }
-    else if ( OComponentTransferable::canExtractComponentDescriptor(aDroppedData.GetDataFlavorExVector()) )
+    else if ( OComponentTransferable::canExtractComponentDescriptor(aDroppedData.GetDataFlavorExVector(),m_aAsyncDrop.nType == E_FORM) )
     {
         m_aAsyncDrop.aDroppedData = OComponentTransferable::extractComponentDescriptor(aDroppedData);
         SvLBoxEntry* pHitEntry = pView->getEntry(_rEvt.maPosPixel);
@@ -2321,7 +2324,11 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
     {
         Reference<XConnection> xDestConnection;  // supports the service sdb::connection
         ensureConnection( xDestConnection);
-        if ( xDestConnection.is() && m_aTableCopyHelper.copyTagTable(aDroppedData,m_aAsyncDrop,xDestConnection) )
+
+        SharedConnection xConnection( xDestConnection, SharedConnection::NoTakeOwnership );
+        // TODO: migrate ensureConnection to the SharedConnection-API
+
+        if ( xDestConnection.is() && m_aTableCopyHelper.copyTagTable( aDroppedData, m_aAsyncDrop, xConnection ) )
         {
             // asyncron because we some dialogs and we aren't allowed to show them while in D&D
             m_nAsyncDrop = Application::PostUserEvent(LINK(this, OApplicationController, OnAsyncDrop));
@@ -2337,13 +2344,30 @@ Reference< XModel >  SAL_CALL OApplicationController::getModel(void) throw( Runt
     return m_xModel;
 }
 // -----------------------------------------------------------------------------
-sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > & xModel) throw( RuntimeException )
+sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > & _rxModel) throw( RuntimeException )
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
-    m_xModel = xModel;
-    Reference<XOfficeDatabaseDocument> xOfficeDoc(m_xModel,UNO_QUERY);
+    ::osl::MutexGuard aGuard( m_aMutex );
+    Reference< XOfficeDatabaseDocument > xOfficeDoc( _rxModel, UNO_QUERY );
+    if ( !xOfficeDoc.is() && _rxModel.is() )
+    {
+        DBG_ERROR( "OApplicationController::attachModel: invalid model!" );
+        return sal_False;
+    }
+
+    DBG_ASSERT( !( m_xModel.is() && ( m_xModel != _rxModel ) ),
+        "OApplicationController::attachModel: missing implementation: setting a new model while we have another one!" );
+        // at least: remove as property change listener from the old model/data source
+
+    m_xModel = _rxModel;
+    if ( _rxModel.is() )
+        m_aModelConnector = ModelControllerConnector( _rxModel, this );
+    else
+        m_aModelConnector.clear();
+
     m_xDataSource.set(xOfficeDoc.is() ? xOfficeDoc->getDataSource() : Reference<XDataSource>(),UNO_QUERY);
-    if ( m_xDataSource.is() )
+    if ( !m_xDataSource.is() )
+        m_sDatabaseName = ::rtl::OUString();
+    else
     {
         try
         {
@@ -2378,10 +2402,11 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
         }
         catch(Exception)
         {
-            OSL_ENSURE(0,"Exception catched while set property listener");
+            OSL_ENSURE( false, "OApplicationController::attachModel: caught an exception while doing the property stuff!" );
         }
     }
-    return m_sDatabaseName.getLength() != 0;
+
+    return sal_True;
 }
 // -----------------------------------------------------------------------------
 void OApplicationController::containerFound( const Reference< XContainer >& _xContainer)
