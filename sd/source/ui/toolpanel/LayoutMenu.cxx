@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LayoutMenu.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:31:06 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:31:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -686,7 +686,7 @@ SfxRequest LayoutMenu::CreateRequest (
         SetOfByte aVisibleLayers (pPage->TRG_GetMasterPageVisibleLayers());
 
         aRequest.AppendItem(
-            SfxStringItem (ID_VAL_PAGENAME, pPage->GetName()));
+            SfxStringItem (ID_VAL_PAGENAME, String()));//pPage->GetName()));
         aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATLAYOUT, aLayout));
         aRequest.AppendItem(
             SfxBoolItem(ID_VAL_ISPAGEBACK, aVisibleLayers.IsSet(aBackground)));
