@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HTable.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:04:21 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:39:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -382,6 +382,28 @@ void OHSQLTable::executeStatement(const ::rtl::OUString& _rStatement )
     }
 }
 // -----------------------------------------------------------------------------
+Sequence< Type > SAL_CALL OHSQLTable::getTypes(  ) throw(RuntimeException)
+{
+    if ( ! m_Type.compareToAscii("VIEW") )
+    {
+        Sequence< Type > aTypes = OTableHelper::getTypes();
+        ::std::vector<Type> aOwnTypes;
+        aOwnTypes.reserve(aTypes.getLength());
+        const Type* pIter = aTypes.getConstArray();
+        const Type* pEnd = pIter + aTypes.getLength();
+        for(;pIter != pEnd;++pIter)
+        {
+            if( *pIter != ::getCppuType((const Reference<XRename>*)0) )
+            {
+                aOwnTypes.push_back(*pIter);
+            }
+        }
+        Type *pTypes = aOwnTypes.empty() ? 0 : &aOwnTypes[0];
+        return Sequence< Type >(pTypes, aOwnTypes.size());
+    }
+    return OTableHelper::getTypes();
+}
+// -------------------------------------------------------------------------
 // XRename
 void SAL_CALL OHSQLTable::rename( const ::rtl::OUString& newName ) throw(SQLException, ElementExistException, RuntimeException)
 {
@@ -422,6 +444,13 @@ void SAL_CALL OHSQLTable::rename( const ::rtl::OUString& newName ) throw(SQLExce
         ::dbtools::qualifiedNameComponents(getMetaData(),newName,m_CatalogName,m_SchemaName,m_Name,::dbtools::eInTableDefinitions);
 }
 
+// -------------------------------------------------------------------------
+Any SAL_CALL OHSQLTable::queryInterface( const Type & rType ) throw(RuntimeException)
+{
+    if( !m_Type.compareToAscii("VIEW") && rType == ::getCppuType((const Reference<XRename>*)0) )
+        return Any();
 
-
+    return OTableHelper::queryInterface(rType);
+}
+// -------------------------------------------------------------------------
 
