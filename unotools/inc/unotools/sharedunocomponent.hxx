@@ -1,0 +1,305 @@
+/*************************************************************************
+ *
+ *  $RCSfile: sharedunocomponent.hxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:55:07 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef UNOTOOLS_INC_SHAREDUNOCOMPONENT_HXX
+#define UNOTOOLS_INC_SHAREDUNOCOMPONENT_HXX
+
+#ifndef INCLUDED_UNOTOOLSDLLAPI_H
+#include "unotoolsdllapi.h"
+#endif
+
+#include <boost/shared_ptr.hpp>
+
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include <com/sun/star/uno/Reference.hxx>
+#endif
+
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
+#endif
+
+namespace com { namespace sun { namespace star {
+    namespace lang {
+        class XComponent;
+    }
+} } }
+//............................................................................
+namespace utl
+{
+//............................................................................
+
+    //========================================================================
+    //= DisposableComponent
+    //========================================================================
+    /** is a class which controls lifetime of an UNO component via ->XComponent::dispose
+
+        You'll usually never use this class directly, but only as parameter for a
+        ->SharedUNOComponent class.
+    */
+    class UNOTOOLS_DLLPUBLIC DisposableComponent
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+            m_xComponent;
+
+    public:
+        /** constructs a ->DisposableComponent instance
+
+        @param _rxComponent
+            the component whose life time should be controlled by the instance. Must not be <NULL/>.
+        */
+        DisposableComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
+
+        /** disposes the component represented by the instance
+
+            The component is queried for ->XComponent(which <em>must</em> be supported),
+            and ->XComponent::dispose is invoked. A failure of this invocation (e.g. a thrown
+            exception) is silenced in release builds, and reported in debug builds.
+        */
+        ~DisposableComponent();
+
+    private:
+        DisposableComponent();                                          // never implemented
+        DisposableComponent( const DisposableComponent& );              // never implemented
+        DisposableComponent& operator=( const DisposableComponent& );   // never implemented
+    };
+
+    //========================================================================
+    //= CloseableComponent
+    //========================================================================
+    class CloseableComponentImpl;
+    /** is a class which controls lifetime of an UNO component via ->XCloseable::close
+
+        You'll usually never use this class directly, but only as parameter for a
+        ->SharedUNOComponent class.
+    */
+    class UNOTOOLS_DLLPUBLIC CloseableComponent
+    {
+    private:
+        /** Our IMPL class.
+        */
+        ::rtl::Reference< CloseableComponentImpl >  m_pImpl;
+
+    public:
+        /** constructs a ->CloseableComponent instance
+
+        @param _rxComponent
+            the component whose life time should be controlled by the instance. Must not be <NULL/>.
+        */
+        CloseableComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
+
+        /** destroys resources associated with this instance, and disposes the component
+
+            The component is queried for ->XCloseable (which <em>must</em> be supported),
+            and ->XCloseable::close is invoked, with delivering the ownership.
+            If the invocation fails with a ->CloseVetoException, this is ignored, since in
+            this case the vetoing instance took the ownership.
+
+            Any other failure will be reported in a debug version via assertion mechanisms,
+            and silenced in release builds.
+        */
+        ~CloseableComponent();
+
+    private:
+        CloseableComponent();                                           // never implemented
+        CloseableComponent( const CloseableComponent& );                // never implemented
+        CloseableComponent& operator=( const CloseableComponent& );     // never implemented
+    };
+
+    //========================================================================
+    //= SharedUNOComponent
+    //========================================================================
+    /** is a helper class for sharing ownership of a UNO component
+
+        If you need to share an UNO component, which normally needs a dedicated owner,
+        and is lifetime controlled by an explicit disposal action (not necessarily ->XComponent::dispose,
+        but <em>any</em> explicit method call, after which the object is considered
+        to be disposed), between different classes, ->SharedUNOComponent is what you need.
+
+        Instead of passing around a <code>Reference&lt; XFoo &gt;</code>, and bothering
+        with ownership and disposal, you just use a <code>SharedUNOComponent&lt; XFoo &gt;</code>.
+        This instance can be passed around, including copying, and in nearly all respects behaves
+        like the original <code>Reference&lt; XFoo &gt;</code>. However, when the last
+        ->SharedUNOComponent referencing a certain <code>Reference&lt; XFoo &gt;</code> dies, it
+        will automatically get rid of the object held by this reference.
+
+    @param INTERFACE
+        the UNO interface type as which the component should be held
+
+    @param COMPONENT_HOLDER
+        a class which can be used to represent and dispose a UNO component.
+        The class must support (maybe explicit only) construction from a
+        <code>Reference&lt; INTERFACE &gt;</code>, and destruction. Upon destruction,
+        the class must dispose (by any suitable means) the component instance it was
+        constructed with.
+    */
+    template < class INTERFACE, class COMPONENT = DisposableComponent >
+    class SharedUNOComponent
+    {
+    private:
+        typedef COMPONENT                           Component;
+        typedef ::boost::shared_ptr< Component >    ComponentPointer;
+
+    private:
+        ComponentPointer                                m_pComponent;
+        ::com::sun::star::uno::Reference< INTERFACE >   m_xTypedComponent;
+
+    public:
+        enum AssignmentMode
+        {
+            TakeOwnership,
+            NoTakeOwnership
+        };
+
+    public:
+        inline  SharedUNOComponent()
+        {
+        }
+
+        explicit inline  SharedUNOComponent( const ::com::sun::star::uno::Reference< INTERFACE >& _rxComponent, AssignmentMode eMode = TakeOwnership )
+        {
+            reset( _rxComponent, eMode );
+        }
+
+//        SharedUNOComponent& operator=( const ::com::sun::star::uno::Reference< INTERFACE >& _rxComponent );
+        // this operator is not implemented by intention. There is no canonic ownership after this operatoer
+        // would hvae been applied: Should the SharedUNOComponent have the ownership of the component,
+        // or shouldn't it? Hard to guess, and probably wrong in 50 percent of all cases, anyway. So,
+        // instead of tempting clients of this class to use such a dangerous operator, we do
+        // not offer it at all. If you need to assign a Reference< INTERFACE > to your SharedUNOComponent,
+        // use the ->reset method.
+
+        /** assigns a new component, and releases the old one
+        */
+        void reset( const ::com::sun::star::uno::Reference< INTERFACE >& _rxComponent, AssignmentMode _eMode = TakeOwnership );
+
+        INTERFACE* SAL_CALL operator->() const;
+
+        inline operator const ::com::sun::star::uno::Reference< INTERFACE >&() const
+        {
+            return m_xTypedComponent;
+        }
+
+        inline const ::com::sun::star::uno::Reference< INTERFACE >& getTyped() const
+        {
+            return m_xTypedComponent;
+        }
+
+        inline bool is() const
+        {
+            return m_xTypedComponent.is();
+        }
+
+        inline void clear()
+        {
+            m_pComponent.reset();
+            m_xTypedComponent.clear();
+        }
+    };
+
+    //-------------------------------------------------------------------------
+    template < class INTERFACE, class COMPONENT >
+    INTERFACE* SAL_CALL SharedUNOComponent< INTERFACE, COMPONENT >::operator->() const
+    {
+        return m_xTypedComponent.operator->();
+    }
+
+    //-------------------------------------------------------------------------
+    // assignments
+    template < class INTERFACE, class COMPONENT >
+    void SharedUNOComponent< INTERFACE, COMPONENT >::reset( const ::com::sun::star::uno::Reference< INTERFACE >& _rxComponent, AssignmentMode _eMode )
+    {
+        m_pComponent.reset( _eMode == TakeOwnership ? new COMPONENT( _rxComponent ) : NULL );
+        m_xTypedComponent = _rxComponent;
+    }
+
+    //-------------------------------------------------------------------------
+    // comparison operators
+    template < class INTERFACE, class COMPONENT >
+    bool operator==( const ::com::sun::star::uno::Reference< INTERFACE >& _rLHS, const SharedUNOComponent< INTERFACE, COMPONENT >& _rRHS )
+    {
+        return _rLHS == _rRHS.getTyped();
+    }
+
+    template < class INTERFACE, class COMPONENT >
+    bool operator==( const SharedUNOComponent< INTERFACE, COMPONENT >& _rLHS, const ::com::sun::star::uno::Reference< INTERFACE >& _rRHS )
+    {
+        return _rLHS.getTyped() == _rRHS;
+    }
+
+    //-------------------------------------------------------------------------
+    // conversion to Any
+    template < class INTERFACE, class COMPONENT >
+    inline void SAL_CALL operator <<= ( ::com::sun::star::uno::Any & rAny, const SharedUNOComponent< INTERFACE, COMPONENT >& value ) SAL_THROW( () )
+    {
+        rAny <<= value.getTyped();
+    }
+
+    template < class INTERFACE, class COMPONENT >
+    inline ::com::sun::star::uno::Any SAL_CALL makeAny( const SharedUNOComponent< INTERFACE, COMPONENT >& value ) SAL_THROW( () )
+    {
+        return makeAny( value.getTyped() );
+    }
+
+//............................................................................
+}   // namespace utl
+//............................................................................
+
+#endif // UNOTOOLS_INC_SHAREDUNOCOMPONENT_HXX
