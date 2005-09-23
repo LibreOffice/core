@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:30:24 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:06:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,7 @@ class ODocumentDefinition
     OInterceptor*                                                                       m_pInterceptor;
     sal_Bool                                                                            m_bForm; // <TRUE/> if it is a form
     sal_Bool                                                                            m_bOpenInDesign;
+    sal_Bool                                                                            m_bInExecute;
     OEmbeddedClientHelper*                                                              m_pClientHelper;
 
 private:
@@ -185,6 +186,17 @@ public:
     void closeObject();
     sal_Bool isModified();
     void fillReportData(sal_Bool _bFill = sal_True);
+
+    /** prepares closing the document component
+
+        The method suspends the controller associated with the document, and saves the document
+        if necessary.
+
+        @return
+            <TRUE/> if and only if the document component can be closed
+    */
+    bool prepareClose();
+
 protected:
     // OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
