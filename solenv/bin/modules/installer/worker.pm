@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:13:04 $
+#   last change: $Author: hr $ $Date: 2005-09-23 11:49:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1165,6 +1165,10 @@ sub prepare_windows_patchfiles
 
         my $filename = $onefile->{'Name'};
         if (( $filename eq $patchfilename ) || ( $filename eq $patchfilename2 )) { next; }
+
+        my $styles = "";
+        if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
+        if ( $styles =~ /\bDONTRENAMEINPATCH\b/ ) { next; }
 
         my $olddestination = $onefile->{'destination'};
         my $newdestination = $olddestination . "." . $installer::globals::windowsfilespatchlevel;
