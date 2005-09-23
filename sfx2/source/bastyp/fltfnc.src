@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltfnc.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:53:19 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:22:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #include "helpid.hrc"
 String STR_FILTER_CHANNELON_OFFLINE
 {
-    Text [ de ] = "Dieses Abonnement soll gemäß Einstellung im Offline Modus gelesen werden.\n\nDas %PRODUCTNAME befindet sich aber im Online Modus. Möchten Sie %PRODUCTNAME jetzt in den Offline Modus umschalten?" ;
+    Text [ de ] = "Dieses Abonnement soll gemÃ¤ÃŸ Einstellung im Offline Modus gelesen werden.\n\nDas %PRODUCTNAME befindet sich aber im Online Modus. MÃ¶chten Sie %PRODUCTNAME jetzt in den Offline Modus umschalten?" ;
     Text [ en-US ] = "This subscription is set to be read in the offline mode.\n\n%PRODUCTNAME is presently in the online mode. Switch to offline mode now?" ;
     Text [ x-comment ] = " ";
 };
@@ -58,14 +58,14 @@ String STR_FILTER_COMPONENT
 
 String STR_FILTER_NOT_INSTALLED
 {
-    Text [ de ] = "Der ausgewählte Filter $(FILTER) ist nicht installiert.\nMöchten Sie das nachholen?";
+    Text [ de ] = "Der ausgewÃ¤hlte Filter $(FILTER) ist nicht installiert.\nMÃ¶chten Sie das nachholen?";
     Text [ en-US ] = "The selected filter $(FILTER) has not been installed.\nWould you like to do this now?";
     Text [ x-comment ] = " ";
 };
 
 String STR_FILTER_CONSULT_SERVICE
 {
-    Text [ de ] = "Der ausgewählte Filter $(FILTER) ist in Ihrer Edition nicht enthalten.\nInformationen zu Bestellmöglichkeiten finden Sie auf unserer Homepage.";
+    Text [ de ] = "Der ausgewÃ¤hlte Filter $(FILTER) ist in Ihrer Edition nicht enthalten.\nInformationen zu BestellmÃ¶glichkeiten finden Sie auf unserer Homepage.";
     Text [ en-US ] = "The selected filter $(FILTER) is not included in your edition.\nYou can find information about orders on our homepage.";
     Text [ x-comment ] = " ";
 };
