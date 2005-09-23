@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:26:48 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:43:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -372,7 +372,7 @@ void OQueryTableView::ReSync()
             delete pTabWin;
             arrInvalidTables.push_back(pData->GetAliasName());
 
-            pTabWinDataList->erase( ::std::find(pTabWinDataList->begin(),pTabWinDataList->end(),*aIter) );
+            pTabWinDataList->erase( ::std::remove(pTabWinDataList->begin(),pTabWinDataList->end(),*aIter) ,pTabWinDataList->end());
             delete pData;
             continue;
         }
@@ -401,7 +401,7 @@ void OQueryTableView::ReSync()
 
         if (bInvalid)
         {   // nein -> Pech gehabt, die Connection faellt weg
-            pTabConnDataList->erase( ::std::find(pTabConnDataList->begin(),pTabConnDataList->end(),*aConIter) );
+            pTabConnDataList->erase( ::std::remove(pTabConnDataList->begin(),pTabConnDataList->end(),*aConIter) ,pTabConnDataList->end());
             delete pTabConnData;
             continue;
         }
@@ -943,7 +943,7 @@ void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
 
         // die Daten zum TabWin muessen auch aus meiner Verantwortung entlassen werden
         ::std::vector< OTableWindowData*>* pTabWinDataList = m_pView->getController()->getTableWindowData();
-        pTabWinDataList->erase( ::std::find(pTabWinDataList->begin(),pTabWinDataList->end(),pTabWin->GetData()));
+        pTabWinDataList->erase( ::std::remove(pTabWinDataList->begin(),pTabWinDataList->end(),pTabWin->GetData()),pTabWinDataList->end());
             // NICHT loeschen, da ja das TabWin selber - das noch lebt - sie auch noch braucht
             // Entweder geht es irgendwann wieder in meine Verantwortung ueber, (ueber ShowTabWin), dann fuege ich
             // auch die Daten wieder ein, oder die Undo-Action, die im Augenblick die alleinige Verantwortung fuer das Fenster
