@@ -4,9 +4,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:25:41 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:06:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,14 +42,14 @@ Resource RID_GLOBSTR
     String STR_UNDO_INSERTCELLS
     {
         /* ### ACHTUNG: Neuer Text in Resource? Einfügen : Einf³gen */
-        Text [ de ] = "Einfügen" ;
+        Text [ de ] = "EinfÃ¼gen" ;
         Text [ en-US ] = "Insert" ;
         Text [ x-comment ] = " ";
     };
     String STR_UNDO_DELETECELLS
     {
         /* ### ACHTUNG: Neuer Text in Resource? Löschen : L÷schen */
-        Text [ de ] = "Löschen" ;
+        Text [ de ] = "LÃ¶schen" ;
         Text [ en-US ] = "Delete" ;
         Text [ x-comment ] = " ";
     };
@@ -62,7 +62,7 @@ Resource RID_GLOBSTR
     String STR_UNDO_PASTE
     {
         /* ### ACHTUNG: Neuer Text in Resource? Einfügen : Einf³gen */
-        Text [ de ] = "Einfügen" ;
+        Text [ de ] = "EinfÃ¼gen" ;
         Text [ en-US ] = "Insert" ;
         Text [ x-comment ] = " ";
     };
@@ -87,7 +87,7 @@ Resource RID_GLOBSTR
     String STR_UNDO_DELETECONTENTS
     {
         /* ### ACHTUNG: Neuer Text in Resource? Löschen : L÷schen */
-        Text [ de ] = "Löschen" ;
+        Text [ de ] = "LÃ¶schen" ;
         Text [ en-US ] = "Delete" ;
         Text [ x-comment ] = " ";
     };
@@ -118,21 +118,21 @@ Resource RID_GLOBSTR
     String STR_UNDO_ROWHEIGHT
     {
         /* ### ACHTUNG: Neuer Text in Resource? Zeilenhöhe : Zeilenh÷he */
-        Text [ de ] = "Zeilenhöhe" ;
+        Text [ de ] = "ZeilenhÃ¶he" ;
         Text [ en-US ] = "Row height" ;
         Text [ x-comment ] = " ";
     };
     String STR_UNDO_OPTROWHEIGHT
     {
         /* ### ACHTUNG: Neuer Text in Resource? optimale Zeilenhöhe : optimale Zeilenh÷he */
-        Text [ de ] = "optimale Zeilenhöhe" ;
+        Text [ de ] = "optimale ZeilenhÃ¶he" ;
         Text [ en-US ] = "Optimal Row Height" ;
         Text [ x-comment ] = " ";
     };
     String STR_UNDO_AUTOFILL
     {
         /* ### ACHTUNG: Neuer Text in Resource? Füllen : F³llen */
-        Text [ de ] = "Füllen" ;
+        Text [ de ] = "FÃ¼llen" ;
         Text [ en-US ] = "Fill" ;
         Text [ x-comment ] = " ";
     };
@@ -176,28 +176,28 @@ Resource RID_GLOBSTR
     String STR_UNDO_INSCOLBREAK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Spaltenumbruch einfügen : Spaltenumbruch einf³gen */
-        Text [ de ] = "Spaltenumbruch einfügen" ;
+        Text [ de ] = "Spaltenumbruch einfÃ¼gen" ;
         Text [ en-US ] = "Insert Column Break" ;
         Text [ x-comment ] = " ";
     };
     String STR_UNDO_DELCOLBREAK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Spaltenumbruch löschen : Spaltenumbruch l÷schen */
-        Text [ de ] = "Spaltenumbruch löschen" ;
+        Text [ de ] = "Spaltenumbruch lÃ¶schen" ;
         Text [ en-US ] = "Delete column break" ;
         Text [ x-comment ] = " ";
     };
     String STR_UNDO_INSROWBREAK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Zeilenumbruch einfügen : Zeilenumbruch einf³gen */
-        Text [ de ] = "Zeilenumbruch einfügen" ;
+        Text [ de ] = "Zeilenumbruch einfÃ¼gen" ;
         Text [ en-US ] = "Insert Row Break" ;
         Text [ x-comment ] = " ";
     };
     String STR_UNDO_DELROWBREAK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Zeilenumbruch löschen : Zeilenumbruch l÷schen */
-        Text [ de ] = "Zeilenumbruch löschen" ;
+        Text [ de ] = "Zeilenumbruch lÃ¶schen" ;
         Text [ en-US ] = "Delete row break" ;
         Text [ x-comment ] = " ";
     };
@@ -228,7 +228,7 @@ Resource RID_GLOBSTR
     String STR_UNDO_OUTLINELEVEL
     {
         /* ### ACHTUNG: Neuer Text in Resource? Gliederungsebene auswählen : Gliederungsebene auswõhlen */
-        Text [ de ] = "Gliederungsebene auswählen" ;
+        Text [ de ] = "Gliederungsebene auswÃ¤hlen" ;
         Text [ en-US ] = "Select outline level" ;
         Text [ x-comment ] = " ";
     };
@@ -278,7 +278,7 @@ Resource RID_GLOBSTR
     String STR_UNDO_DBDATA
     {
         /* ### ACHTUNG: Neuer Text in Resource? Datenbankbereiche ändern : Datenbankbereiche õndern */
-        Text [ de ] = "Datenbankbereiche ändern" ;
+        Text [ de ] = "Datenbankbereiche Ã¤ndern" ;
         Text [ en-US ] = "Change Database Range" ;
         Text [ x-comment ] = " ";
     };
@@ -321,7 +321,7 @@ Resource RID_GLOBSTR
     String STR_UNDO_PIVOT_DELETE
     {
         /* ### ACHTUNG: Neuer Text in Resource? Datenpilot-Tabelle löschen : Datenpilot-Tabelle l÷schen */
-        Text [ de ] = "Datenpilot-Tabelle löschen" ;
+        Text [ de ] = "Datenpilot-Tabelle lÃ¶schen" ;
         Text [ en-US ] = "Delete DataPilot Table" ;
         Text [ x-comment ] = " ";
     };
@@ -373,14 +373,14 @@ Resource RID_GLOBSTR
     String STR_UNDO_DETADDPRED
     {
         /* ### ACHTUNG: Neuer Text in Resource? Spur zum Vorgänger : Spur zum Vorgõnger */
-        Text [ de ] = "Spur zum Vorgänger" ;
+        Text [ de ] = "Spur zum VorgÃ¤nger" ;
         Text [ en-US ] = "Trace Precedents" ;
         Text [ x-comment ] = " ";
     };
     String STR_UNDO_DETDELPRED
     {
         /* ### ACHTUNG: Neuer Text in Resource? Spur zum Vorgänger entfernen : Spur zum Vorgõnger entfernen */
-        Text [ de ] = "Spur zum Vorgänger entfernen" ;
+        Text [ de ] = "Spur zum VorgÃ¤nger entfernen" ;
         Text [ en-US ] = "Remove Precedent" ;
         Text [ x-comment ] = " ";
     };
@@ -411,7 +411,7 @@ Resource RID_GLOBSTR
     String STR_UNDO_DETINVALID
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ungültige Daten einkreisen : Ung³ltige Daten einkreisen */
-        Text [ de ] = "Ungültige Daten einkreisen" ;
+        Text [ de ] = "UngÃ¼ltige Daten einkreisen" ;
         Text [ en-US ] = "Mark invalid data" ;
         Text [ x-comment ] = " ";
     };
@@ -424,42 +424,42 @@ Resource RID_GLOBSTR
     String STR_UNDO_CHARTDATA
     {
         /* ### ACHTUNG: Neuer Text in Resource? Datenbereich von Diagramm ändern : Datenbereich von Diagramm õndern */
-        Text [ de ] = "Datenbereich von Diagramm ändern" ;
+        Text [ de ] = "Datenbereich von Diagramm Ã¤ndern" ;
         Text [ en-US ] = "Modify chart data range" ;
         Text [ x-comment ] = " ";
     };
     String STR_UNDO_ORIGINALSIZE
     {
         /* ### ACHTUNG: Neuer Text in Resource? Originalgröße : Originalgr÷˜e */
-        Text [ de ] = "Originalgröße" ;
+        Text [ de ] = "OriginalgrÃ¶ÃŸe" ;
         Text [ en-US ] = "Original Size" ;
         Text [ x-comment ] = " ";
     };
     String STR_UNDO_UPDATELINK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Verknüpfung aktualisieren : Verkn³pfung aktualisieren */
-        Text [ de ] = "Verknüpfung aktualisieren" ;
+        Text [ de ] = "VerknÃ¼pfung aktualisieren" ;
         Text [ en-US ] = "Update Link" ;
         Text [ x-comment ] = " ";
     };
     String STR_UNDO_REMOVELINK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Verknüpfung aufheben : Verkn³pfung aufheben */
-        Text [ de ] = "Verknüpfung aufheben" ;
+        Text [ de ] = "VerknÃ¼pfung aufheben" ;
         Text [ en-US ] = "Unlink" ;
         Text [ x-comment ] = " ";
     };
     String STR_UNDO_INSERTAREALINK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Verknüpfung einfügen : Verkn³pfung einf³gen */
-        Text [ de ] = "Verknüpfung einfügen" ;
+        Text [ de ] = "VerknÃ¼pfung einfÃ¼gen" ;
         Text [ en-US ] = "Insert Link" ;
         Text [ x-comment ] = " ";
     };
     String STR_UNDO_ENTERMATRIX
     {
         /* ### ACHTUNG: Neuer Text in Resource? Matrixformel einfügen : Matrixformel einf³gen */
-        Text [ de ] = "Matrixformel einfügen" ;
+        Text [ de ] = "Matrixformel einfÃ¼gen" ;
         Text [ en-US ] = "Insert Array Formula" ;
         Text [ x-comment ] = " ";
     };
@@ -490,14 +490,14 @@ Resource RID_GLOBSTR
     String STR_UNDO_INC_INDENT
     {
         /* ### ACHTUNG: Neuer Text in Resource? Einzug erhöhen : Einzug erh÷hen */
-        Text [ de ] = "Einzug erhöhen" ;
+        Text [ de ] = "Einzug erhÃ¶hen" ;
         Text [ en-US ] = "Increase Indent" ;
         Text [ x-comment ] = " ";
     };
     String STR_UNDO_PROTECT_TAB
     {
         /* ### ACHTUNG: Neuer Text in Resource? Tabelle schützen : Tabelle sch³tzen */
-        Text [ de ] = "Tabelle schützen" ;
+        Text [ de ] = "Tabelle schÃ¼tzen" ;
         Text [ en-US ] = "Protect sheet" ;
         Text [ x-comment ] = " ";
     };
@@ -510,7 +510,7 @@ Resource RID_GLOBSTR
     String STR_UNDO_PROTECT_DOC
     {
         /* ### ACHTUNG: Neuer Text in Resource? Dokument schützen : Dokument sch³tzen */
-        Text [ de ] = "Dokument schützen" ;
+        Text [ de ] = "Dokument schÃ¼tzen" ;
         Text [ en-US ] = "Protect document" ;
         Text [ x-comment ] = " ";
     };
@@ -529,14 +529,14 @@ Resource RID_GLOBSTR
     String STR_UNDO_REMOVEBREAKS
     {
         /* ### ACHTUNG: Neuer Text in Resource? Seitenumbrüche löschen : Seitenumbr³che l÷schen */
-        Text [ de ] = "Seitenumbrüche löschen" ;
+        Text [ de ] = "SeitenumbrÃ¼che lÃ¶schen" ;
         Text [ en-US ] = "Delete Page Breaks" ;
         Text [ x-comment ] = " ";
     };
     String STR_UNDO_PRINTSCALE
     {
         /* ### ACHTUNG: Neuer Text in Resource? Skalierung ändern : Skalierung õndern */
-        Text [ de ] = "Skalierung ändern" ;
+        Text [ de ] = "Skalierung Ã¤ndern" ;
         Text [ en-US ] = "Change Scale" ;
         Text [ x-comment ] = " ";
     };
@@ -554,7 +554,7 @@ Resource RID_GLOBSTR
     };
     String STR_UNDO_TRANSLITERATE
     {
-        Text [ de ] = "Groß-/Kleinschreibung" ;
+        Text [ de ] = "GroÃŸ-/Kleinschreibung" ;
         Text [ en-US ] = "Case/Characters";
         Text [ x-comment ] = "; nk03.04.01: hier passt Englisch Uebesetzung besser.";
     };
@@ -579,28 +579,28 @@ Resource RID_GLOBSTR
     String STR_MSSG_DOSUBTOTALS_1
     {
         /* ### ACHTUNG: Neuer Text in Resource? Daten löschen? : Daten l÷schen? */
-        Text [ de ] = "Daten löschen?" ;
+        Text [ de ] = "Daten lÃ¶schen?" ;
         Text [ en-US ] = "Delete data?" ;
         Text [ x-comment ] = " ";
     };
     String STR_MSSG_DOSUBTOTALS_2
     {
         /* ### ACHTUNG: Neuer Text in Resource? Kann keine Zeilen einfügen : Kann keine Zeilen einf³gen */
-        Text [ de ] = "Kann keine Zeilen einfügen" ;
+        Text [ de ] = "Kann keine Zeilen einfÃ¼gen" ;
         Text [ en-US ] = "Unable to insert rows" ;
         Text [ x-comment ] = " ";
     };
     String STR_MSSG_REPEATDB_0
     {
         /* ### ACHTUNG: Neuer Text in Resource? Keine Operationen auszuführen : Keine Operationen auszuf³hren */
-        Text [ de ] = "Keine Operationen auszuführen" ;
+        Text [ de ] = "Keine Operationen auszufÃ¼hren" ;
         Text [ en-US ] = "No operations to execute" ;
         Text [ x-comment ] = " ";
     };
     String STR_MSSG_MAKEAUTOFILTER_0
     {
         /* ### ACHTUNG: Neuer Text in Resource? Der Bereich enthält keine Spaltenköpfe.\nSoll die erste Zeile als Spaltenköpfe verwendet werden? : Der Bereich enthõlt keine Spaltenk÷pfe.\nSoll die erste Zeile als Spaltenk÷pfe verwendet werden? */
-        Text [ de ] = "Der Bereich enthält keine Spaltenköpfe.\nSoll die erste Zeile als Spaltenköpfe verwendet werden?" ;
+        Text [ de ] = "Der Bereich enthÃ¤lt keine SpaltenkÃ¶pfe.\nSoll die erste Zeile als SpaltenkÃ¶pfe verwendet werden?" ;
         Text [ en-US ] = "The range does not contain column headers.\nDo you want the first line to be used as column header?" ;
         Text [ x-comment ] = " ";
     };
@@ -612,13 +612,13 @@ Resource RID_GLOBSTR
     };
     String STR_DATABASE_NOTFOUND
     {
-        Text [ de ] = "Die Datenbank '#' konnte nicht geöffnet werden." ;
+        Text [ de ] = "Die Datenbank '#' konnte nicht geÃ¶ffnet werden." ;
         Text [ en-US ] = "The database '#' could not be opened." ;
         Text [ x-comment ] = " ";
     };
     String STR_QUERY_NOTFOUND
     {
-        Text [ de ] = "Die Abfrage '#' konnte nicht geöffnet werden." ;
+        Text [ de ] = "Die Abfrage '#' konnte nicht geÃ¶ffnet werden." ;
         Text [ en-US ] = "The query '#' could not be opened." ;
         Text [ x-comment ] = " ";
     };
@@ -631,28 +631,28 @@ Resource RID_GLOBSTR
     String STR_PROGRESS_IMPORT
     {
         /* ### ACHTUNG: Neuer Text in Resource? # Datensätze importiert... : # Datensõtze importiert... */
-        Text [ de ] = "# Datensätze importiert..." ;
+        Text [ de ] = "# DatensÃ¤tze importiert..." ;
         Text [ en-US ] = "# records imported..." ;
         Text [ x-comment ] = " ";
     };
     String STR_MSSG_MAKEOUTLINE_0
     {
         /* ### ACHTUNG: Neuer Text in Resource? Gruppierung nicht möglich : Gruppierung nicht m÷glich */
-        Text [ de ] = "Gruppierung nicht möglich" ;
+        Text [ de ] = "Gruppierung nicht mÃ¶glich" ;
         Text [ en-US ] = "Grouping not possible" ;
         Text [ x-comment ] = " ";
     };
     String STR_MSSG_REMOVEOUTLINE_0
     {
         /* ### ACHTUNG: Neuer Text in Resource? Aufheben nicht möglich : Aufheben nicht m÷glich */
-        Text [ de ] = "Aufheben nicht möglich" ;
+        Text [ de ] = "Aufheben nicht mÃ¶glich" ;
         Text [ en-US ] = "Ungrouping not possible" ;
         Text [ x-comment ] = " ";
     };
     String STR_MSSG_PASTEFROMCLIP_0
     {
         /* ### ACHTUNG: Neuer Text in Resource? Einfügen auf Mehrfachselektion nicht möglich : Einf³gen auf Mehrfachselektion nicht m÷glich */
-        Text [ de ] = "Einfügen auf Mehrfachselektion nicht möglich" ;
+        Text [ de ] = "EinfÃ¼gen auf Mehrfachselektion nicht mÃ¶glich" ;
         Text [ en-US ] = "Insert into multiple selection not possible" ;
         Text [ x-comment ] = " ";
     };
@@ -677,14 +677,14 @@ Resource RID_GLOBSTR
     String STR_MSSG_INSERTCELLS_0
     {
         /* ### ACHTUNG: Neuer Text in Resource? Kann nicht in zusammengefaßte Bereiche einfügen : Kann nicht in zusammengefa˜te Bereiche einf³gen */
-        Text [ de ] = "Kann nicht in zusammengefasste Bereiche einfügen" ;
+        Text [ de ] = "Kann nicht in zusammengefasste Bereiche einfÃ¼gen" ;
         Text [ en-US ] = "Inserting into merged ranges not possible" ;
         Text [ x-comment ] = " ";
     };
     String STR_MSSG_DELETECELLS_0
     {
         /* ### ACHTUNG: Neuer Text in Resource? Kann nicht aus zusammengefaßten Bereichen löschen : Kann nicht aus zusammengefa˜ten Bereichen l÷schen */
-        Text [ de ] = "Kann nicht aus zusammengefassten Bereichen löschen" ;
+        Text [ de ] = "Kann nicht aus zusammengefassten Bereichen lÃ¶schen" ;
         Text [ en-US ] = "Deleting in merged ranges not possible" ;
         Text [ x-comment ] = " ";
     };
@@ -697,7 +697,7 @@ Resource RID_GLOBSTR
     String STR_SORT_ERR_MERGED
     {
         /* ### ACHTUNG: Neuer Text in Resource? Bereiche mit zusammengefaßten Zellen können nur ohne Formate sortiert werden. : Bereiche mit zusammengefa˜ten Zellen k÷nnen nur ohne Formate sortiert werden. */
-        Text [ de ] = "Bereiche mit zusammengefassten Zellen können nur ohne Formate sortiert werden." ;
+        Text [ de ] = "Bereiche mit zusammengefassten Zellen kÃ¶nnen nur ohne Formate sortiert werden." ;
         Text [ en-US ] = "Ranges containing merged cells can only be sorted without formats." ;
         Text [ x-comment ] = " ";
     };
@@ -722,7 +722,7 @@ Resource RID_GLOBSTR
     String STR_MSSG_SOLVE_2
     {
         /* ### ACHTUNG: Neuer Text in Resource? ) in die aktuelle Zelle übernommen werden? : ) in die aktuelle Zelle ³bernommen werden? */
-        Text [ de ] = ") in die aktuelle Zelle übernommen werden?" ;
+        Text [ de ] = ") in die aktuelle Zelle Ã¼bernommen werden?" ;
         Text [ en-US ] = ") into current cell?" ;
         Text [ x-comment ] = " ";
     };
@@ -741,14 +741,14 @@ Resource RID_GLOBSTR
     String STR_MSSG_SOLVE_5
     {
         /* ### ACHTUNG: Neuer Text in Resource? Soll die beste Näherung ( : Soll die beste Nõherung ( */
-        Text [ de ] = "Soll die beste Näherung (" ;
+        Text [ de ] = "Soll die beste NÃ¤herung (" ;
         Text [ en-US ] = "Insert closest value (" ;
         Text [ x-comment ] = " ";
     };
     String STR_MSSG_SOLVE_6
     {
         /* ### ACHTUNG: Neuer Text in Resource? ) übernommen werden? : ) ³bernommen werden? */
-        Text [ de ] = ") übernommen werden?" ;
+        Text [ de ] = ") Ã¼bernommen werden?" ;
         Text [ en-US ] = ")?" ;
         Text [ x-comment ] = " ";
     };
@@ -823,7 +823,7 @@ Resource RID_GLOBSTR
     String STR_PIVOT_MOVENOTALLOWED
     {
         /* ### ACHTUNG: Neuer Text in Resource? Der Datenbereich kann nicht gelöscht werden. : Der Datenbereich kann nicht gel÷scht werden. */
-        Text [ de ] = "Der Datenbereich kann nicht gelöscht werden." ;
+        Text [ de ] = "Der Datenbereich kann nicht gelÃ¶scht werden." ;
         Text [ en-US ] = "The data range can not be deleted." ;
         Text [ x-comment ] = " ";
     };
@@ -836,20 +836,20 @@ Resource RID_GLOBSTR
     String STR_PIVOT_OVERLAP
     {
         /* ### ACHTUNG: Neuer Text in Resource? Datenpilot-Tabellen dürfen sich nicht überlappen. : Datenpilot-Tabellen d³rfen sich nicht ³berlappen. */
-        Text [ de ] = "Datenpilot-Tabellen dürfen sich nicht überlappen." ;
+        Text [ de ] = "Datenpilot-Tabellen dÃ¼rfen sich nicht Ã¼berlappen." ;
         Text [ en-US ] = "DataPilot tables can not overlap." ;
         Text [ x-comment ] = " ";
     };
     String STR_PIVOT_NOTEMPTY
     {
         /* ### ACHTUNG: Neuer Text in Resource? Der Zielbereich ist nicht leer. Soll er überschrieben werden? : Der Zielbereich ist nicht leer. Soll er ³berschrieben werden? */
-        Text [ de ] = "Der Zielbereich ist nicht leer. Soll er überschrieben werden?" ;
+        Text [ de ] = "Der Zielbereich ist nicht leer. Soll er Ã¼berschrieben werden?" ;
         Text [ en-US ] = "The destination range is not empty. Overwrite existing contents?" ;
         Text [ x-comment ] = " ";
     };
     String STR_DATAPILOT_SUBTOTAL
     {
-        Text [ de ] = "Der Quellbereich enthält Teilergebnisse, die das Ergebnis verfälschen können. Soll er trotzdem verwendet werden?";
+        Text [ de ] = "Der Quellbereich enthÃ¤lt Teilergebnisse, die das Ergebnis verfÃ¤lschen kÃ¶nnen. Soll er trotzdem verwendet werden?";
         Text [ en-US ] = "The source range contains subtotals which may distort the results. Use it anyway?";
     };
     String STR_PIVOT_PROGRESS
@@ -981,42 +981,42 @@ Resource RID_GLOBSTR
     String STR_AREA_ALREADY_INSERTED
     {
         /* ### ACHTUNG: Neuer Text in Resource? Dieser Bereich wurde bereits eingefügt. : Dieser Bereich wurde bereits eingef³gt. */
-        Text [ de ] = "Dieser Bereich wurde bereits eingefügt." ;
+        Text [ de ] = "Dieser Bereich wurde bereits eingefÃ¼gt." ;
         Text [ en-US ] = "This range has already been inserted." ;
         Text [ x-comment ] = " ";
     };
     String STR_INVALID_TABREF
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ungültiger Tabellenbezug. : Ung³ltiger Tabellenbezug. */
-        Text [ de ] = "Ungültiger Tabellenbezug." ;
+        Text [ de ] = "UngÃ¼ltiger Tabellenbezug." ;
         Text [ en-US ] = "Invalid sheet reference." ;
         Text [ x-comment ] = " ";
     };
     String STR_INVALID_QUERYAREA
     {
         /* ### ACHTUNG: Neuer Text in Resource? Dieser Bereich enthält keine gültige Abfrage. : Dieser Bereich enthõlt keine g³ltige Abfrage. */
-        Text [ de ] = "Dieser Bereich enthält keine gültige Abfrage." ;
+        Text [ de ] = "Dieser Bereich enthÃ¤lt keine gÃ¼ltige Abfrage." ;
         Text [ en-US ] = "This range does not contain a valid query." ;
         Text [ x-comment ] = " ";
     };
     String STR_REIMPORT_EMPTY
     {
         /* ### ACHTUNG: Neuer Text in Resource? Dieser Bereich enthält keine importierten Daten. : Dieser Bereich enthõlt keine importierten Daten. */
-        Text [ de ] = "Dieser Bereich enthält keine importierten Daten." ;
+        Text [ de ] = "Dieser Bereich enthÃ¤lt keine importierten Daten." ;
         Text [ en-US ] = "This range does not contain imported data." ;
         Text [ x-comment ] = " ";
     };
     String STR_NOMULTISELECT
     {
         /* ### ACHTUNG: Neuer Text in Resource? Diese Funktion läßt sich nicht auf Mehrfachselektionen anwenden. : Diese Funktion lõ˜t sich nicht auf Mehrfachselektionen anwenden. */
-        Text [ de ] = "Diese Funktion lässt sich nicht auf Mehrfachselektionen anwenden." ;
+        Text [ de ] = "Diese Funktion lÃ¤sst sich nicht auf Mehrfachselektionen anwenden." ;
         Text [ en-US ] = "This function cannot be used with multiple selections." ;
         Text [ x-comment ] = " ";
     };
     String STR_FILL_SERIES_PROGRESS
     {
         /* ### ACHTUNG: Neuer Text in Resource? Reihe Auffüllen... : Reihe Auff³llen... */
-        Text [ de ] = "Reihe Auffüllen..." ;
+        Text [ de ] = "Reihe AuffÃ¼llen..." ;
         Text [ en-US ] = "Fill Row..." ;
         Text [ x-comment ] = " ";
     };
@@ -1053,7 +1053,7 @@ Resource RID_GLOBSTR
     String STR_FILL_TAB
     {
         /* ### ACHTUNG: Neuer Text in Resource? Tabellen füllen : Tabellen f³llen */
-        Text [ de ] = "Tabellen füllen" ;
+        Text [ de ] = "Tabellen fÃ¼llen" ;
         Text [ en-US ] = "Fill Sheets" ;
         Text [ x-comment ] = " ";
     };
@@ -1072,7 +1072,7 @@ Resource RID_GLOBSTR
     String STR_ERR_NEWSCENARIO
     {
         /* ### ACHTUNG: Neuer Text in Resource? Zum Anlegen eines Szenarios müssen die Szenariobereiche markiert werden. : Zum Anlegen eines Szenarios m³ssen die Szenariobereiche markiert werden. */
-        Text [ de ] = "Zum Anlegen eines Szenarios müssen die Szenariobereiche markiert werden." ;
+        Text [ de ] = "Zum Anlegen eines Szenarios mÃ¼ssen die Szenariobereiche markiert werden." ;
         Text [ en-US ] = "The scenario ranges must be selected in order to be able to create a new scenario." ;
         Text [ x-comment ] = " ";
     };
@@ -1091,7 +1091,7 @@ Resource RID_GLOBSTR
     String STR_INVALIDTABNAME
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ungültiger Tabellenname. : Ung³ltiger Tabellenname. */
-        Text [ de ] = "Ungültiger Tabellenname." ;
+        Text [ de ] = "UngÃ¼ltiger Tabellenname." ;
         Text [ en-US ] = "Invalid sheet name." ;
         Text [ x-comment ] = " ";
     };
@@ -1209,7 +1209,7 @@ Resource RID_GLOBSTR
     String STR_PRINT_INVALID_AREA
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ungültiger Druckbereich : Ung³ltiger Druckbereich */
-        Text [ de ] = "Ungültiger Druckbereich" ;
+        Text [ de ] = "UngÃ¼ltiger Druckbereich" ;
         Text [ en-US ] = "Invalid print range" ;
         Text [ x-comment ] = " ";
     };
@@ -1228,7 +1228,7 @@ Resource RID_GLOBSTR
     String STR_FOOTER
     {
         /* ### ACHTUNG: Neuer Text in Resource? Fußzeile : Fu˜zeile */
-        Text [ de ] = "Fußzeile" ;
+        Text [ de ] = "FuÃŸzeile" ;
         Text [ en-US ] = "Footer" ;
         Text [ x-comment ] = " ";
     };
@@ -1283,20 +1283,20 @@ Resource RID_GLOBSTR
     String STR_PROTECTIONERR
     {
         /* ### ACHTUNG: Neuer Text in Resource? Gesperrte Zellen können nicht geändert werden. : Gesperrte Zellen k÷nnen nicht geõndert werden. */
-        Text [ de ] = "Gesperrte Zellen können nicht geändert werden." ;
+        Text [ de ] = "Gesperrte Zellen kÃ¶nnen nicht geÃ¤ndert werden." ;
         Text [ en-US ] = "Protected cells can not be modified." ;
         Text [ x-comment ] = " ";
     };
     String STR_READONLYERR
     {
-        Text [ de ] = "Dokument ist nur zum Lesen geöffnet." ;
+        Text [ de ] = "Dokument ist nur zum Lesen geÃ¶ffnet." ;
         Text [ en-US ] = "Document opened in read-only mode.";
         Text [ x-comment ] = " ";
     };
     String STR_MATRIXFRAGMENTERR
     {
         /* ### ACHTUNG: Neuer Text in Resource? Teil einer Matrix kann nicht geändert werden. : Teil einer Matrix kann nicht geõndert werden. */
-        Text [ de ] = "Sie können nicht nur einen Teil einer Matrix ändern." ;
+        Text [ de ] = "Sie kÃ¶nnen nicht nur einen Teil einer Matrix Ã¤ndern." ;
         Text [ en-US ] = "You cannot change only part of an array." ;
         Text [ x-comment ] = "; EM Dec 2002: In other words, you can only change the whole thing.";
     };
@@ -1309,14 +1309,14 @@ Resource RID_GLOBSTR
     String STR_PAGEFOOTER
     {
         /* ### ACHTUNG: Neuer Text in Resource? Fußzeile : Fu˜zeile */
-        Text [ de ] = "Fußzeile" ;
+        Text [ de ] = "FuÃŸzeile" ;
         Text [ en-US ] = "Footer" ;
         Text [ x-comment ] = " ";
     };
     String STR_LONG_ERR_ILL_ARG
     {
         /* ### ACHTUNG: Neuer Text in Resource? Fehler: Ungültiges Argument : Fehler: Ung³ltiges Argument */
-        Text [ de ] = "Fehler: Ungültiges Argument" ;
+        Text [ de ] = "Fehler: UngÃ¼ltiges Argument" ;
         Text [ en-US ] = "Error: Invalid argument" ;
         Text [ x-comment ] = " ";
     };
@@ -1329,21 +1329,21 @@ Resource RID_GLOBSTR
     String STR_LONG_ERR_ILL_FPO
     {
         /* ### ACHTUNG: Neuer Text in Resource? Fehler: Ungültige Gleitkommaoperation : Fehler: Ung³ltige Gleitkommaoperation */
-        Text [ de ] = "Fehler: Ungültige Gleitkommaoperation" ;
+        Text [ de ] = "Fehler: UngÃ¼ltige Gleitkommaoperation" ;
         Text [ en-US ] = "Error: Invalid floating point operation" ;
         Text [ x-comment ] = " ";
     };
     String STR_LONG_ERR_ILL_CHAR
     {
         /* ### ACHTUNG: Neuer Text in Resource? Fehler: Ungültiges Zeichen : Fehler: Ung³ltiges Zeichen */
-        Text [ de ] = "Fehler: Ungültiges Zeichen" ;
+        Text [ de ] = "Fehler: UngÃ¼ltiges Zeichen" ;
         Text [ en-US ] = "Error: Invalid character" ;
         Text [ x-comment ] = " ";
     };
     String STR_LONG_ERR_ILL_SEP
     {
         /* ### ACHTUNG: Neuer Text in Resource? Fehler: ungültiges Semikolon : Fehler: ung³ltiges Semikolon */
-        Text [ de ] = "Fehler: ungültiges Semikolon" ;
+        Text [ de ] = "Fehler: ungÃ¼ltiges Semikolon" ;
         Text [ en-US ] = "Error: Invalid semicolon" ;
         Text [ x-comment ] = " ";
     };
@@ -1380,7 +1380,7 @@ Resource RID_GLOBSTR
     String STR_LONG_ERR_STACK_OVF
     {
         /* ### ACHTUNG: Neuer Text in Resource? Fehler: Interner Überlauf : Fehler: Interner šberlauf */
-        Text [ de ] = "Fehler: Interner Überlauf" ;
+        Text [ de ] = "Fehler: Interner Ãœberlauf" ;
         Text [ en-US ] = "Error: Internal overflow" ;
         Text [ x-comment ] = " ";
     };
@@ -1393,14 +1393,14 @@ Resource RID_GLOBSTR
     String STR_LONG_ERR_CIRC_REF
     {
         /* ### ACHTUNG: Neuer Text in Resource? Fehler: Zirkuläre Referenz : Fehler: Zirkulõre Referenz */
-        Text [ de ] = "Fehler: Zirkuläre Referenz" ;
+        Text [ de ] = "Fehler: ZirkulÃ¤re Referenz" ;
         Text [ en-US ] = "Error: Circular reference" ;
         Text [ x-comment ] = " ";
     };
     String STR_LONG_ERR_NO_NAME
     {
         /* ### ACHTUNG: Neuer Text in Resource? Fehler: Ungültiger Name : Fehler: Ung³ltiger Name */
-        Text [ de ] = "Fehler: Ungültiger Name" ;
+        Text [ de ] = "Fehler: UngÃ¼ltiger Name" ;
         Text [ en-US ] = "Error: Invalid name" ;
         Text [ x-comment ] = " ";
     };
@@ -1419,7 +1419,7 @@ Resource RID_GLOBSTR
     String STR_LONG_ERR_NO_REF
     {
         /* ### ACHTUNG: Neuer Text in Resource? Fehler: Ungültiger Bezug : Fehler: Ung³ltiger Bezug */
-        Text [ de ] = "Fehler: Ungültiger Bezug" ;
+        Text [ de ] = "Fehler: UngÃ¼ltiger Bezug" ;
         /*
 */
         Text [ en-US ] = "Error: Not a valid reference" ;
@@ -1440,7 +1440,7 @@ Resource RID_GLOBSTR
     String STR_LONG_ERR_NV
     {
         /* ### ACHTUNG: Neuer Text in Resource? Fehler: Wert nicht verfügbar : Fehler: Wert nicht verf³gbar */
-        Text [ de ] = "Fehler: Wert nicht verfügbar" ;
+        Text [ de ] = "Fehler: Wert nicht verfÃ¼gbar" ;
         Text [ en-US ] = "Error: Value not available" ;
         Text [ x-comment ] = " ";
     };
@@ -1477,7 +1477,7 @@ Resource RID_GLOBSTR
     String STR_INVALID_EPS
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ungültige Schrittweite : Ung³ltige Schrittweite */
-        Text [ de ] = "Ungültige Schrittweite" ;
+        Text [ de ] = "UngÃ¼ltige Schrittweite" ;
         Text [ en-US ] = "Invalid increment" ;
         Text [ x-comment ] = " ";
     };
@@ -1498,7 +1498,7 @@ Resource RID_GLOBSTR
         /* ### ACHTUNG: Neuer Text in Resource? Sie haben einen ungültigen Namen angegeben.\nDas AutoFormat konnte nicht angelegt werden.\nWählen Sie einen anderen Namen. : Sie haben einen ungültigen Namen angegeben.\nDas Autoformat konnte nicht angelegt werden.\nWählen Sie einen anderen Namen. */
         /* ### ACHTUNG: Neuer Text in Resource? Sie haben einen ungültigen Namen angegeben.\nDas AutoFormat konnte nicht angelegt werden.\nWählen Sie einen anderen Namen. : Sie haben einen ungültigen Namen angegeben.\nDas Autoformat konnte nicht angelegt werden.\nWählen Sie einen anderen Namen. */
         /* ### ACHTUNG: Neuer Text in Resource? Sie haben einen ungültigen Namen angegeben.\nDas AutoFormat konnte nicht angelegt werden.\nWählen Sie einen anderen Namen. : Sie haben einen ung³ltigen Namen angegeben.\nDas AutoFormat konnte nicht angelegt werden.\nWõhlen Sie einen anderen Namen. */
-        Text [ de ] = "Sie haben einen ungültigen Namen angegeben.\nDas AutoFormat konnte nicht angelegt werden.\nWählen Sie einen anderen Namen." ;
+        Text [ de ] = "Sie haben einen ungÃ¼ltigen Namen angegeben.\nDas AutoFormat konnte nicht angelegt werden.\nWÃ¤hlen Sie einen anderen Namen." ;
         Text [ en-US ] = "You have entered an invalid name.\nAutoFormat could not be created. \nTry again using a different name." ;
         Text [ x-comment ] = " ";
     };
@@ -1549,7 +1549,7 @@ Resource RID_GLOBSTR
         /* ### ACHTUNG: Neuer Text in Resource? Um das AutoFormat anwenden zu können,\nmuß ein Tabellenbereich von mindestens\n3x3 Zellen markiert sein. : Um das Autoformat anwenden zu können,\nmuß ein Tabellenbereich von mindestens\n3x3 Zellen markiert sein. */
         /* ### ACHTUNG: Neuer Text in Resource? Um das AutoFormat anwenden zu können,\nmuß ein Tabellenbereich von mindestens\n3x3 Zellen markiert sein. : Um das Autoformat anwenden zu können,\nmuß ein Tabellenbereich von mindestens\n3x3 Zellen markiert sein. */
         /* ### ACHTUNG: Neuer Text in Resource? Um das AutoFormat anwenden zu können,\nmuß ein Tabellenbereich von mindestens\n3x3 Zellen markiert sein. : Um das AutoFormat anwenden zu k÷nnen,\nmu˜ ein Tabellenbereich von mindestens\n3x3 Zellen markiert sein. */
-        Text [ de ] = "Um das AutoFormat anwenden zu können,\nmuß ein Tabellenbereich von mindestens\n3x3 Zellen markiert sein." ;
+        Text [ de ] = "Um das AutoFormat anwenden zu kÃ¶nnen,\nmuÃŸ ein Tabellenbereich von mindestens\n3x3 Zellen markiert sein." ;
         Text [ en-US ] = "To apply an AutoFormat,\na table range of at least\n3x3 cells must be selected." ;
         Text [ x-comment ] = " ";
     };
@@ -1574,7 +1574,7 @@ Resource RID_GLOBSTR
     String STR_INVALID
     {
         /* ### ACHTUNG: Neuer Text in Resource? ungültig : ung³ltig */
-        Text [ de ] = "ungültig" ;
+        Text [ de ] = "ungÃ¼ltig" ;
         Text [ en-US ] = "invalid" ;
         Text [ x-comment ] = " ";
     };
@@ -1593,27 +1593,27 @@ Resource RID_GLOBSTR
     String STR_QUERY_DELTAB
     {
         /* ### ACHTUNG: Neuer Text in Resource? Wollen Sie die aktuelle Tabelle(n) löschen? : Wollen Sie die aktuelle Tabelle endg³ltig l÷schen? */
-        Text [ de ] = "Wollen Sie die ausgewählten Tabellen löschen?" ;
+        Text [ de ] = "Wollen Sie die ausgewÃ¤hlten Tabellen lÃ¶schen?" ;
         Text [ en-US ] = "Are you sure you want to permanently delete the current sheet(s)?" ;
         Text [ x-comment ] = " ";
     };
     String STR_QUERY_DELSCENARIO
     {
-        Text [ de ] = "Wollen Sie das ausgewählte Szenario löschen?" ;
+        Text [ de ] = "Wollen Sie das ausgewÃ¤hlte Szenario lÃ¶schen?" ;
         Text [ en-US ] = "Are you sure you want to delete the selected scenario?" ;
         Text [ x-comment ] = " ";
     };
     String STR_EXPORT_ASCII_WARNING
     {
         /* ### ACHTUNG: Neuer Text in Resource? Der Thesaurus ist nicht verfügbar : Der Thesaurus ist nicht verf³gbar */
-        Text [ de ] = "Der Thesaurus ist nicht verfügbar" ;
+        Text [ de ] = "Der Thesaurus ist nicht verfÃ¼gbar" ;
         Text [ en-US ] = "Thesaurus is not available" ;
         Text [ x-comment ] = " ";
     };
     String STR_IMPORT_ERROR
     {
         /* ### ACHTUNG: Neuer Text in Resource? Die Rechtschreibprüfung ist nicht verfügbar : Die Rechtschreibpr³fung ist nicht verf³gbar */
-        Text [ de ] = "Die Rechtschreibprüfung ist nicht verfügbar" ;
+        Text [ de ] = "Die RechtschreibprÃ¼fung ist nicht verfÃ¼gbar" ;
         Text [ en-US ] = "Spellcheck not available" ;
         Text [ x-comment ] = " ";
     };
@@ -1679,14 +1679,14 @@ Resource RID_GLOBSTR
     String STR_STYLENAME_HEADLINE
     {
         /* ### ACHTUNG: Neuer Text in Resource? Überschrift : šberschrift */
-        Text [ de ] = "Überschrift" ;
+        Text [ de ] = "Ãœberschrift" ;
         Text [ en-US ] = "Heading" ;
         Text [ x-comment ] = " ";
     };
     String STR_STYLENAME_HEADLINE1
     {
         /* ### ACHTUNG: Neuer Text in Resource? Überschrift1 : šberschrift1 */
-        Text [ de ] = "Überschrift1" ;
+        Text [ de ] = "Ãœberschrift1" ;
         Text [ en-US ] = "Heading1" ;
         Text [ x-comment ] = " ";
     };
@@ -1705,35 +1705,35 @@ Resource RID_GLOBSTR
     String STR_IMPORT_EXCEL_WARNING
     {
         /* ### ACHTUNG: Neuer Text in Resource?  ist für die Prüfung nicht verfügbar. \nÜberprüfen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewünschte Sprache :  ist f³r die Pr³fung nicht verf³gbar. \nšberpr³fen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gew³nschte Sprache */
-        Text [ de ] = " ist für die Prüfung nicht verfügbar. \nÜberprüfen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewünschte Sprache" ;
+        Text [ de ] = " ist fÃ¼r die PrÃ¼fung nicht verfÃ¼gbar. \nÃœberprÃ¼fen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewÃ¼nschte Sprache" ;
         Text [ en-US ] = "is not available for spellchecking\nPlease check your installation and install \nthe desired language if necessary" ;
         Text [ x-comment ] = " ";
     };
     String STR_THESAURUS_NO_STRING
     {
         /* ### ACHTUNG: Neuer Text in Resource? Thesaurus nur in Textzellen möglich! : Thesaurus nur in Textzellen m÷glich! */
-        Text [ de ] = "Thesaurus nur in Textzellen möglich!" ;
+        Text [ de ] = "Thesaurus nur in Textzellen mÃ¶glich!" ;
         Text [ en-US ] = "Thesaurus can only be used in text cells!" ;
         Text [ x-comment ] = " ";
     };
     String STR_SPELLING_BEGIN_TAB
     {
         /* ### ACHTUNG: Neuer Text in Resource? Soll die Rechtschreibprüfung am Tabellenanfang fortgesetzt werden? : Soll die Rechtschreibpr³fung am Tabellenanfang fortgesetzt werden? */
-        Text [ de ] = "Soll die Rechtschreibprüfung am Tabellenanfang fortgesetzt werden?" ;
+        Text [ de ] = "Soll die RechtschreibprÃ¼fung am Tabellenanfang fortgesetzt werden?" ;
         Text [ en-US ] = "Should the spellcheck be continued at the beginning of the current sheet?" ;
         Text [ x-comment ] = " ";
     };
     String STR_SPELLING_NO_LANG
     {
         /* ### ACHTUNG: Neuer Text in Resource?  ist für den Thesaurus nicht verfügbar. \nÜberprüfen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewünschte Sprache :  ist f³r den Thesaurus nicht verf³gbar. \nšberpr³fen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gew³nschte Sprache */
-        Text [ de ] = " ist für den Thesaurus nicht verfügbar. \nÜberprüfen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewünschte Sprache" ;
+        Text [ de ] = " ist fÃ¼r den Thesaurus nicht verfÃ¼gbar. \nÃœberprÃ¼fen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewÃ¼nschte Sprache" ;
         Text [ en-US ] = "is not available for the thesaurus.\nPlease check your installation and install \nthe desired language if necessary" ;
         Text [ x-comment ] = " ";
     };
     String STR_SPELLING_STOP_OK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Die Rechtschreibprüfung dieser Tabelle ist abgeschlossen! : Die Rechtschreibpr³fung dieser Tabelle ist abgeschlossen! */
-        Text [ de ] = "Die Rechtschreibprüfung dieser Tabelle ist abgeschlossen!" ;
+        Text [ de ] = "Die RechtschreibprÃ¼fung dieser Tabelle ist abgeschlossen!" ;
         Text [ en-US ] = "The spellcheck of this sheet has been completed." ;
         Text [ x-comment ] = " ";
     };
@@ -1746,14 +1746,14 @@ Resource RID_GLOBSTR
     String STR_UNDO_INSERT_TAB
     {
         /* ### ACHTUNG: Neuer Text in Resource? Tabelle einfügen : Tabelle einf³gen */
-        Text [ de ] = "Tabellen einfügen" ;
+        Text [ de ] = "Tabellen einfÃ¼gen" ;
         Text [ en-US ] = "Insert Sheet" ;
         Text [ x-comment ] = " ";
     };
     String STR_UNDO_DELETE_TAB
     {
         /* ### ACHTUNG: Neuer Text in Resource? Tabelle löschen : Tabelle l÷schen */
-        Text [ de ] = "Tabellen löschen" ;
+        Text [ de ] = "Tabellen lÃ¶schen" ;
         Text [ en-US ] = "Delete Sheets" ;
         Text [ x-comment ] = " ";
     };
@@ -1778,7 +1778,7 @@ Resource RID_GLOBSTR
     String STR_UNDO_APPEND_TAB
     {
         /* ### ACHTUNG: Neuer Text in Resource? Tabelle anhängen : Tabelle anhõngen */
-        Text [ de ] = "Tabelle anhängen" ;
+        Text [ de ] = "Tabelle anhÃ¤ngen" ;
         Text [ en-US ] = "Append sheet" ;
         Text [ x-comment ] = " ";
     };
@@ -1832,35 +1832,35 @@ Resource RID_GLOBSTR
     String STR_ABSREFLOST
     {
         /* ### ACHTUNG: Neuer Text in Resource? Die neue Tabelle enthält absolute Referenzen auf andere Tabellen, die nicht mehr stimmen müssen! : Die neue Tabelle enthõlt absolute Referenzen auf andere Tabellen, die nicht mehr stimmen m³ssen! */
-        Text [ de ] = "Die neue Tabelle enthält absolute Referenzen auf andere Tabellen, die nicht mehr stimmen müssen!" ;
+        Text [ de ] = "Die neue Tabelle enthÃ¤lt absolute Referenzen auf andere Tabellen, die nicht mehr stimmen mÃ¼ssen!" ;
         Text [ en-US ] = "The new table contains absolute references to other tables which may be incorrect!" ;
         Text [ x-comment ] = " ";
     };
     String STR_NAMECONFLICT
     {
         /* ### ACHTUNG: Neuer Text in Resource? Wegen einer Namensgleichheit wurde im Zieldokument ein bestehender Bereichsname verändert! : Wegen einer Namensgleichheit wurde im Zieldokument ein bestehender Bereichsname verõndert! */
-        Text [ de ] = "Wegen einer Namensgleichheit wurde im Zieldokument ein bestehender Bereichsname verändert!" ;
+        Text [ de ] = "Wegen einer Namensgleichheit wurde im Zieldokument ein bestehender Bereichsname verÃ¤ndert!" ;
         Text [ en-US ] = "Due to identical names, an existing range name in the destination document has been altered!" ;
         Text [ x-comment ] = " ";
     };
     String STR_ERR_AUTOFILTER
     {
         /* ### ACHTUNG: Neuer Text in Resource? AutoFilter nicht möglich : AutoFilter nicht m÷glich */
-        Text [ de ] = "AutoFilter nicht möglich" ;
+        Text [ de ] = "AutoFilter nicht mÃ¶glich" ;
         Text [ en-US ] = "AutoFilter not possible" ;
         Text [ x-comment ] = " ";
     };
     String STR_MSSG_SEARCHANDREPLACE_1
     {
         /* ### ACHTUNG: Neuer Text in Resource? StarCalc hat bis zum Anfang der Tabelle gesucht. Möchten Sie die Suche am Tabellenende fortsetzen? : StarCalc hat bis zum Anfang der Tabelle gesucht. M÷chten Sie die Suche am Tabellenende fortsetzen? */
-        Text [ de ] = "%PRODUCTNAME Calc hat bis zum Anfang der Tabelle gesucht. Möchten Sie die Suche am Tabellenende fortsetzen?" ;
+        Text [ de ] = "%PRODUCTNAME Calc hat bis zum Anfang der Tabelle gesucht. MÃ¶chten Sie die Suche am Tabellenende fortsetzen?" ;
         Text [ en-US ] = "%PRODUCTNAME Calc has searched to the beginning of the sheet. Do you want to continue at the end?" ;
         Text [ x-comment ] = " ";
     };
     String STR_MSSG_SEARCHANDREPLACE_2
     {
         /* ### ACHTUNG: Neuer Text in Resource? StarCalc hat bis zum Ende der Tabelle gesucht. Möchten Sie die Suche am Tabellenanfang fortsetzen? : StarCalc hat bis zum Ende der Tabelle gesucht. M÷chten Sie die Suche am Tabellenanfang fortsetzen? */
-        Text [ de ] = "%PRODUCTNAME Calc hat bis zum Ende der Tabelle gesucht. Möchten Sie die Suche am Tabellenanfang fortsetzen?" ;
+        Text [ de ] = "%PRODUCTNAME Calc hat bis zum Ende der Tabelle gesucht. MÃ¶chten Sie die Suche am Tabellenanfang fortsetzen?" ;
         Text [ en-US ] = "%PRODUCTNAME Calc has searched to the end of the sheet. Do you want to continue at the beginning?" ;
         Text [ x-comment ] = " ";
     };
@@ -1872,13 +1872,13 @@ Resource RID_GLOBSTR
     };
     String STR_MSSG_SEARCHANDREPLACE_4
     {
-        Text [ de ] = "%PRODUCTNAME Calc hat bis zum Anfang des Dokuments gesucht. Möchten Sie die Suche am Dokumentende fortsetzen?" ;
+        Text [ de ] = "%PRODUCTNAME Calc hat bis zum Anfang des Dokuments gesucht. MÃ¶chten Sie die Suche am Dokumentende fortsetzen?" ;
         Text [ en-US ] = "%PRODUCTNAME Calc has searched to the beginning of the document. Do you want to continue at the end?" ;
         Text [ x-comment ] = " ";
     };
     String STR_MSSG_SEARCHANDREPLACE_5
     {
-        Text [ de ] = "%PRODUCTNAME Calc hat bis zum Ende des Dokuments gesucht. Möchten Sie die Suche am Dokumentanfang fortsetzen?" ;
+        Text [ de ] = "%PRODUCTNAME Calc hat bis zum Ende des Dokuments gesucht. MÃ¶chten Sie die Suche am Dokumentanfang fortsetzen?" ;
         Text [ en-US ] = "%PRODUCTNAME Calc has searched to the end of the document. Do you want to continue at the beginning?" ;
         Text [ x-comment ] = " ";
     };
@@ -1891,14 +1891,14 @@ Resource RID_GLOBSTR
     String STR_CREATENAME_MARKERR
     {
         /* ### ACHTUNG: Neuer Text in Resource? Falsche Markierung für Bereichsnamen : Falsche Markierung f³r Bereichsnamen */
-        Text [ de ] = "Falsche Markierung für Bereichsnamen" ;
+        Text [ de ] = "Falsche Markierung fÃ¼r Bereichsnamen" ;
         Text [ en-US ] = "Invalid selection for range names" ;
         Text [ x-comment ] = " ";
     };
     String STR_CONSOLIDATE_ERR1
     {
         /* ### ACHTUNG: Neuer Text in Resource? Verbindungen können nicht oberhalb der Quelldaten eingefügt werden. : Verbindungen k÷nnen nicht oberhalb der Quelldaten eingef³gt werden. */
-        Text [ de ] = "Verbindungen können nicht oberhalb der Quelldaten eingefügt werden." ;
+        Text [ de ] = "Verbindungen kÃ¶nnen nicht oberhalb der Quelldaten eingefÃ¼gt werden." ;
         Text [ en-US ] = "References can not be inserted above the source data." ;
         Text [ x-comment ] = " ";
     };
@@ -1911,7 +1911,7 @@ Resource RID_GLOBSTR
     String STR_QUERY_DELENTRY
     {
         /* ### ACHTUNG: Neuer Text in Resource? Wollen Sie den Eintrag # wirklich löschen? : Wollen Sie den Eintrag # wirklich l÷schen? */
-        Text [ de ] = "Wollen Sie den Eintrag # wirklich löschen?" ;
+        Text [ de ] = "Wollen Sie den Eintrag # wirklich lÃ¶schen?" ;
         Text [ en-US ] = "Do you really want to delete the entry #?" ;
         Text [ x-comment ] = " ";
     };
@@ -1978,7 +1978,7 @@ Resource RID_GLOBSTR
     String STR_SCATTR_PAGE_HEADERS
     {
         /* ### ACHTUNG: Neuer Text in Resource? Zeilen- & Spaltenköpfe : Zeilen- & Spaltenk÷pfe */
-        Text [ de ] = "Zeilen- & Spaltenköpfe" ;
+        Text [ de ] = "Zeilen- & SpaltenkÃ¶pfe" ;
         Text [ en-US ] = "Row & Column Headers" ;
         Text [ x-comment ] = " ";
     };
@@ -2008,7 +2008,7 @@ Resource RID_GLOBSTR
     };
     String STR_SCATTR_PAGE_SCALE
     {
-        Text [ de ] = "Ausdruck verkleinern/vergrößern" ;
+        Text [ de ] = "Ausdruck verkleinern/vergrÃ¶ÃŸern" ;
         Text [ en-US ] = "Reduce/enlarge printout" ;
     };
     String STR_SCATTR_PAGE_SCALETOPAGES
@@ -2019,7 +2019,7 @@ Resource RID_GLOBSTR
     };
     String STR_SCATTR_PAGE_SCALETO
     {
-        Text [ de ] = "Druckbereich(e) auf Breite/Höhe anpassen" ;
+        Text [ de ] = "Druckbereich(e) auf Breite/HÃ¶he anpassen" ;
         Text [ en-US ] = "Fit print range(s) to width/height" ;
     };
     String STR_SCATTR_PAGE_SCALE_WIDTH
@@ -2029,7 +2029,7 @@ Resource RID_GLOBSTR
     };
     String STR_SCATTR_PAGE_SCALE_HEIGHT
     {
-        Text [ de ] = "Höhe" ;
+        Text [ de ] = "HÃ¶he" ;
         Text [ en-US ] = "Height" ;
     };
     String STR_SCATTR_PAGE_SCALE_PAGES
@@ -2051,7 +2051,7 @@ Resource RID_GLOBSTR
     String STR_LINKERROR
     {
         /* ### ACHTUNG: Neuer Text in Resource? Die Verknüpfung konnte nicht aktualisiert werden. : Die Verkn³pfung konnte nicht aktualisiert werden. */
-        Text [ de ] = "Die Verknüpfung konnte nicht aktualisiert werden." ;
+        Text [ de ] = "Die VerknÃ¼pfung konnte nicht aktualisiert werden." ;
         Text [ en-US ] = "The link could not be updated." ;
         Text [ x-comment ] = " ";
     };
@@ -2070,7 +2070,7 @@ Resource RID_GLOBSTR
     String STR_OVERVIEW
     {
         /* ### ACHTUNG: Neuer Text in Resource? Übersicht : šbersicht */
-        Text [ de ] = "Übersicht" ;
+        Text [ de ] = "Ãœbersicht" ;
         Text [ en-US ] = "Overview" ;
         Text [ x-comment ] = " ";
     };
@@ -2089,7 +2089,7 @@ Resource RID_GLOBSTR
     String STR_DOC_MODIFIED
     {
         /* ### ACHTUNG: Neuer Text in Resource? Verändert : Verõndert */
-        Text [ de ] = "Verändert" ;
+        Text [ de ] = "VerÃ¤ndert" ;
         Text [ en-US ] = "Modified" ;
         Text [ x-comment ] = " ";
     };
@@ -2108,7 +2108,7 @@ Resource RID_GLOBSTR
     String STR_DOC_KEYWORDS
     {
         /* ### ACHTUNG: Neuer Text in Resource? Schlüsselworte : Schl³sselworte */
-        Text [ de ] = "Schlüsselworte" ;
+        Text [ de ] = "SchlÃ¼sselworte" ;
         Text [ en-US ] = "Key words" ;
         Text [ x-comment ] = " ";
     };
@@ -2134,14 +2134,14 @@ Resource RID_GLOBSTR
     {
          // ### ACHTUNG: Neuer Text in Resource? Diese Datei enthält Verknüpfungen zu anderen Dateien.\nSollen diese aktualisiert werden? : Diese Datei enthält verknüpfte Tabellen.\nSollen diese aktualisiert werden?
         /* ### ACHTUNG: Neuer Text in Resource? Diese Datei enthält Verknüpfungen zu anderen Dateien.\nSollen diese aktualisiert werden? : Diese Datei enthõlt Verkn³pfungen zu anderen Dateien.\nSollen diese aktualisiert werden? */
-        Text [ de ] = "Diese Datei enthält Verknüpfungen zu anderen Dateien.\nSollen diese aktualisiert werden?" ;
+        Text [ de ] = "Diese Datei enthÃ¤lt VerknÃ¼pfungen zu anderen Dateien.\nSollen diese aktualisiert werden?" ;
         Text [ en-US ] = "This file contains links to other files.\nShould they be updated?" ;
         Text [ x-comment ] = " ";
     };
     String STR_REIMPORT_AFTER_LOAD
     {
         /* ### ACHTUNG: Neuer Text in Resource? Diese Datei enthält Abfragen, deren Ergebnisse nicht mitgespeichert wurden.\nSollen diese Abfragen wiederholt werden? : Diese Datei enthõlt Abfragen, deren Ergebnisse nicht mitgespeichert wurden.\nSollen diese Abfragen wiederholt werden? */
-        Text [ de ] = "Diese Datei enthält Abfragen, deren Ergebnisse nicht mitgespeichert wurden.\nSollen diese Abfragen wiederholt werden?" ;
+        Text [ de ] = "Diese Datei enthÃ¤lt Abfragen, deren Ergebnisse nicht mitgespeichert wurden.\nSollen diese Abfragen wiederholt werden?" ;
         Text [ en-US ] = "This file contains queries. The results of these queries were not saved.\nDo you want these queries to be repeated?" ;
         Text [ x-comment ] = " ";
     };
@@ -2154,40 +2154,40 @@ Resource RID_GLOBSTR
     String STR_INSERT_FULL
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ausgefüllte Zellen können nicht über\ndas Blatt hinaus verschoben werden. : Ausgef³llte Zellen k÷nnen nicht ³ber\ndas Blatt hinaus verschoben werden. */
-        Text [ de ] = "Ausgefüllte Zellen können nicht über\ndas Blatt hinaus verschoben werden." ;
+        Text [ de ] = "AusgefÃ¼llte Zellen kÃ¶nnen nicht Ã¼ber\ndas Blatt hinaus verschoben werden." ;
         Text [ en-US ] = "Filled cells cannot be shifted\nbeyond the sheet." ;
         Text [ x-comment ] = " ";
     };
     String STR_TABINSERT_ERROR
     {
         /* ### ACHTUNG: Neuer Text in Resource? Die Tabelle konnte nicht eingefügt werden. : Die Tabelle konnte nicht eingef³gt werden. */
-        Text [ de ] = "Die Tabelle konnte nicht eingefügt werden." ;
+        Text [ de ] = "Die Tabelle konnte nicht eingefÃ¼gt werden." ;
         Text [ en-US ] = "The table could not be inserted." ;
         Text [ x-comment ] = " ";
     };
     String STR_TABREMOVE_ERROR
     {
-        Text [ de ] = "Die Tabellen konnten nicht gelöscht werden." ;
+        Text [ de ] = "Die Tabellen konnten nicht gelÃ¶scht werden." ;
         Text [ en-US ] = "The sheets could not be deleted." ;
         Text [ x-comment ] = " ";
     };
     String STR_PASTE_ERROR
     {
         /* ### ACHTUNG: Neuer Text in Resource? Der Inhalt der Zwischenablage konnte nicht eingefügt werden. : Der Inhalt der Zwischenablage konnte nicht eingef³gt werden. */
-        Text [ de ] = "Der Inhalt der Zwischenablage konnte nicht eingefügt werden." ;
+        Text [ de ] = "Der Inhalt der Zwischenablage konnte nicht eingefÃ¼gt werden." ;
         Text [ en-US ] = "The contents of the clipboard could not be pasted." ;
         Text [ x-comment ] = " ";
     };
     String STR_PASTE_FULL
     {
         /* ### ACHTUNG: Neuer Text in Resource? Es kann nicht über das Blatt hinaus eingefügt werden. : Es kann nicht ³ber das Blatt hinaus eingef³gt werden. */
-        Text [ de ] = "Es kann nicht über das Blatt hinaus eingefügt werden." ;
+        Text [ de ] = "Es kann nicht Ã¼ber das Blatt hinaus eingefÃ¼gt werden." ;
         Text [ en-US ] = "There is not enough space on the sheet to insert here." ;
         Text [ x-comment ] = " ";
     };
     String STR_PASTE_BIGGER
     {
-        Text [ de ] = "Der Inhalt der Zwischenablage ist größer als der ausgewählte Bereich.\nMöchten Sie trotzdem einfügen?" ;
+        Text [ de ] = "Der Inhalt der Zwischenablage ist grÃ¶ÃŸer als der ausgewÃ¤hlte Bereich.\nMÃ¶chten Sie trotzdem einfÃ¼gen?" ;
         Text [ en-US ] = "The content of the clipboard is bigger than the range selected.\nDo you want to insert it anyway?";
         Text [ x-comment ] = " ";
     };
@@ -2200,7 +2200,7 @@ Resource RID_GLOBSTR
     String STR_ERR_LINKOVERLAP
     {
         /* ### ACHTUNG: Neuer Text in Resource? Quell- und Zielbereich dürfen sich nicht überlappen. : Quell- und Zielbereich d³rfen sich nicht ³berlappen. */
-        Text [ de ] = "Quell- und Zielbereich dürfen sich nicht überlappen." ;
+        Text [ de ] = "Quell- und Zielbereich dÃ¼rfen sich nicht Ã¼berlappen." ;
         Text [ en-US ] = "Source and destination must not overlap." ;
         Text [ x-comment ] = " ";
     };
@@ -2213,7 +2213,7 @@ Resource RID_GLOBSTR
     String STR_INVALIDNAME
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ungültiger Name. : Ung³ltiger Name. */
-        Text [ de ] = "Ungültiger Name." ;
+        Text [ de ] = "UngÃ¼ltiger Name." ;
         Text [ en-US ] = "Invalid name." ;
         Text [ x-comment ] = " ";
     };
@@ -2226,7 +2226,7 @@ Resource RID_GLOBSTR
     String STR_VALID_DEFERROR
     {
         /* ### ACHTUNG: Neuer Text in Resource? Der eingegebene Wert ist ungültig. : Der eingegebene Wert ist ung³ltig. */
-        Text [ de ] = "Der eingegebene Wert ist ungültig." ;
+        Text [ de ] = "Der eingegebene Wert ist ungÃ¼ltig." ;
         Text [ en-US ] = "Invalid value." ;
         Text [ x-comment ] = " ";
     };
@@ -2245,7 +2245,7 @@ Resource RID_GLOBSTR
     String STR_PROGRESS_HEIGHTING
     {
         /* ### ACHTUNG: Neuer Text in Resource? Zeilenhöhen anpassen : Zeilenh÷hen anpassen */
-        Text [ de ] = "Zeilenhöhen anpassen" ;
+        Text [ de ] = "ZeilenhÃ¶hen anpassen" ;
         Text [ en-US ] = "Adapt row height" ;
         Text [ x-comment ] = " ";
     };
@@ -2258,14 +2258,14 @@ Resource RID_GLOBSTR
     String STR_DETINVALID_OVERFLOW
     {
         /* ### ACHTUNG: Neuer Text in Resource? Die maximale Anzahl ungültiger Zellen wurde überschritten.\nEs wurden nicht alle ungültigen Zellen markiert. : Die maximale Anzahl ung³ltiger Zellen wurde ³berschritten.\nEs wurden nicht alle ung³ltigen Zellen markiert. */
-        Text [ de ] = "Die maximale Anzahl ungültiger Zellen wurde überschritten.\nEs wurden nicht alle ungültigen Zellen markiert." ;
+        Text [ de ] = "Die maximale Anzahl ungÃ¼ltiger Zellen wurde Ã¼berschritten.\nEs wurden nicht alle ungÃ¼ltigen Zellen markiert." ;
         Text [ en-US ] = "The maximum number of invalid cells has been exceeded.\nNot all invalid cells have been marked." ;
         Text [ x-comment ] = " ";
     };
     String STR_QUICKHELP_DELETE
     {
         /* ### ACHTUNG: Neuer Text in Resource? Inhalte löschen : Inhalte l÷schen */
-        Text [ de ] = "Inhalte löschen" ;
+        Text [ de ] = "Inhalte lÃ¶schen" ;
         Text [ en-US ] = "Delete contents" ;
         Text [ x-comment ] = " ";
     };
@@ -2284,7 +2284,7 @@ Resource RID_GLOBSTR
     String STR_ERR_INVALID_AREA
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ungültiger Bereich : Ung³ltiger Bereich */
-        Text [ de ] = "Ungültiger Bereich" ;
+        Text [ de ] = "UngÃ¼ltiger Bereich" ;
         Text [ en-US ] = "Invalid range" ;
         Text [ x-comment ] = " ";
     };
@@ -2364,7 +2364,7 @@ Resource RID_GLOBSTR
     String STR_TIP_HEIGHT
     {
         /* ### ACHTUNG: Neuer Text in Resource? Höhe: : H÷he: */
-        Text [ de ] = "Höhe:" ;
+        Text [ de ] = "HÃ¶he:" ;
         Text [ en-US ] = "Height:" ;
         Text [ x-comment ] = " ";
     };
@@ -2376,7 +2376,7 @@ Resource RID_GLOBSTR
     };
     String STR_ERR_INSERTOBJ
     {
-        Text [ de ] = "Das Objekt konnte nicht eingefügt werden." ;
+        Text [ de ] = "Das Objekt konnte nicht eingefÃ¼gt werden." ;
         Text [ en-US ] = "The object could not be inserted." ;
         Text [ x-comment ] = " ";
     };
@@ -2388,19 +2388,19 @@ Resource RID_GLOBSTR
     };
     String STR_CHANGED_CELL
     {
-        Text [ de ] = "Zelle #1 von '#2' zu '#3' geändert" ;
+        Text [ de ] = "Zelle #1 von '#2' zu '#3' geÃ¤ndert" ;
         Text [ en-US ] = "Cell #1 changed from '#2' to '#3'" ;
         Text [ x-comment ] = " ";
     };
     String STR_CHANGED_INSERT
     {
-        Text [ de ] = "#1 eingefügt" ;
+        Text [ de ] = "#1 eingefÃ¼gt" ;
         Text [ en-US ] = "#1 inserted" ;
         Text [ x-comment ] = " ";
     };
     String STR_CHANGED_DELETE
     {
-        Text [ de ] = "#1 gelöscht" ;
+        Text [ de ] = "#1 gelÃ¶scht" ;
         Text [ en-US ] = "#1deleted" ;
         Text [ x-comment ] = " ";
     };
@@ -2418,13 +2418,13 @@ Resource RID_GLOBSTR
     };
     String STR_END_REDLINING
     {
-        Text [ de ] = "Mit dieser Aktion wird die Aufzeichnung von Änderungen beendet.\nDie Information über Änderungen geht hierdurch verloren.\n\nAufzeichnung beenden?\n\n" ;
+        Text [ de ] = "Mit dieser Aktion wird die Aufzeichnung von Ã„nderungen beendet.\nDie Information Ã¼ber Ã„nderungen geht hierdurch verloren.\n\nAufzeichnung beenden?\n\n" ;
         Text [ en-US ] = "This action will exit the change recording mode.\nAny information about changes will be lost.\n\nExit change recording mode?\n\n" ;
         Text [ x-comment ] = " ";
     };
     String STR_CLOSE_ERROR_LINK
     {
-        Text [ de ] = "Das Dokument kann nicht geschlossen werden, während eine Verknüpfung aktualisiert wird." ;
+        Text [ de ] = "Das Dokument kann nicht geschlossen werden, wÃ¤hrend eine VerknÃ¼pfung aktualisiert wird." ;
         Text [ en-US ] = "The document can not be closed while a link is being updated." ;
         Text [ x-comment ] = " ";
     };
@@ -2442,7 +2442,7 @@ Resource RID_GLOBSTR
     };
     String STR_MACRO_WARNING
     {
-        Text [ de ] = "Das Dokument enthält Makro-Aufrufe.\nSollen diese ausgeführt werden?";
+        Text [ de ] = "Das Dokument enthÃ¤lt Makro-Aufrufe.\nSollen diese ausgefÃ¼hrt werden?";
         Text [ en-US ] = "This document contains macro function calls.\nDo you want to run them?";
         Text [ x-comment ] = " ";
     };
@@ -2455,17 +2455,17 @@ Resource RID_GLOBSTR
 
     String STR_NAME_INPUT_CELL
     {
-        Text [ de ]  = "Zelle auswählen";
+        Text [ de ]  = "Zelle auswÃ¤hlen";
         Text [ en-US ] = "Select Cell";
     };
     String STR_NAME_INPUT_RANGE
     {
-        Text [ de ]  = "Bereich auswählen";
+        Text [ de ]  = "Bereich auswÃ¤hlen";
         Text [ en-US ] = "Select Range";
     };
     String STR_NAME_INPUT_DBRANGE
     {
-        Text [ de ]  = "Datenbankbereich auswählen";
+        Text [ de ]  = "Datenbankbereich auswÃ¤hlen";
         Text [ en-US ] = "Select Database Range";
     };
     String STR_NAME_INPUT_ROW
@@ -2485,24 +2485,24 @@ Resource RID_GLOBSTR
     };
     String STR_NAME_ERROR_SELECTION
     {
-        Text [ de ]  = "Der ausgewählte Bereich muss rechteckig sein, um ihn benennen zu können.";
+        Text [ de ]  = "Der ausgewÃ¤hlte Bereich muss rechteckig sein, um ihn benennen zu kÃ¶nnen.";
         Text [ en-US ] = "The selection needs to be rectangular in order to name it.";
     };
     String STR_NAME_ERROR_NAME
     {
-        Text [ de ]  = "Sie müssen entweder einen gültigen Zellbezug oder einen gültigen Namen für den ausgewählten Bereich angeben.";
+        Text [ de ]  = "Sie mÃ¼ssen entweder einen gÃ¼ltigen Zellbezug oder einen gÃ¼ltigen Namen fÃ¼r den ausgewÃ¤hlten Bereich angeben.";
         Text [ en-US ] = "You must enter a valid reference or type a valid name for the selected range.";
     };
 
     String STR_CHANGED_MOVE_REJECTION_WARNING
     {
-        Text [ de ] = "ACHTUNG: Diese Aktion kann zu unbeabsichtigten Änderungen von Zellreferenzen in Formeln geführt haben!";
+        Text [ de ] = "ACHTUNG: Diese Aktion kann zu unbeabsichtigten Ã„nderungen von Zellreferenzen in Formeln gefÃ¼hrt haben!";
         Text[ en-US ] = "WARNING: This action may have resulted in unintended changes to cell references in formulas.";
     };
 
     String STR_CHANGED_DELETE_REJECTION_WARNING
     {
-        Text [ de ] = "ACHTUNG: Diese Aktion kann dazu geführt haben, dass Referenzen auf den gelöschten Bereich nicht wieder hergestellt wurden.";
+        Text [ de ] = "ACHTUNG: Diese Aktion kann dazu gefÃ¼hrt haben, dass Referenzen auf den gelÃ¶schten Bereich nicht wieder hergestellt wurden.";
         Text[ en-US ] = "WARNING: This action may have resulted in references to the deleted area not being restored.";
     };
 
@@ -2552,13 +2552,13 @@ Resource RID_GLOBSTR
 
     String STR_UNDO_CHINESE_TRANSLATION
     {
-        Text [ de ]= "Chinesische Übersetzung";
+        Text [ de ]= "Chinesische Ãœbersetzung";
         Text [ en-US ] = "Chinese translation";
     };
 
     String STR_ERR_DATAPILOT_INPUT
     {
-        Text [ de ] = "Sie können diesen Teil der Datenpilot-Tabelle nicht ändern.";
+        Text [ de ] = "Sie kÃ¶nnen diesen Teil der Datenpilot-Tabelle nicht Ã¤ndern.";
         Text[ en-US ] = "You cannot change this part of the DataPilot table.";
     };
 
