@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:16:29 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:29:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -441,19 +441,6 @@ BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
             bResult = TRUE;
             break;
 
-        case KEY_ADD:
-            // Scale up by 3/2 of the current zoom scale.  Round so that
-            // even with the smallest zoom scale of 1 the scale is
-            // increased.
-            pViewShell->SetZoom ((pWindow->GetZoom() * 3 + 1) / 2);
-            bResult = TRUE;
-            break;
-
-        case KEY_SUBTRACT:
-            pViewShell->SetZoom(pWindow->GetZoom() * 2 / 3);
-            bResult = TRUE;
-            break;
-
         case KEY_DELETE:
         {
             int nSelectedPagesCount = 0;
@@ -771,13 +758,14 @@ void SelectionFunction::ProcessMouseEvent (sal_uInt32 nEventType, const MouseEve
     // 2. Compute a numerical code that describes the event and that is used
     // for fast look-up of the associated reaction.
     pEventDescriptor->mnEventCode = EncodeMouseEvent(*pEventDescriptor, rEvent);
-    OSL_TRACE ("EventCode is %x", pEventDescriptor->mnEventCode);
-    TRACE_EVENT_CODE(pEventDescriptor->mnEventCode);
 
     // 3. Process the event.
     EventPreprocessing(*pEventDescriptor);
     if ( ! EventProcessing(*pEventDescriptor))
+    {
         OSL_TRACE ("can not handle event code %x", pEventDescriptor->mnEventCode);
+        TRACE_EVENT_CODE(pEventDescriptor->mnEventCode);
+    }
     EventPostprocessing(*pEventDescriptor);
 
     if (nEventType == BUTTON_UP)
