@@ -4,9 +4,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:22:27 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:07:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 
 #define     IDX_PHONETIC_LISTBOX_DESCRIPTION \
 Text [ de ] = "Phonetische Lesart"; \
-Text [ en-US ] = "Phonetic reading";
+Text [ en-US ] = "Phonetic reading";    \
 
 #define IDX_DIALOG_WINDOW \
     Window WIN_DLG                                                  \
@@ -54,7 +54,7 @@ Text [ en-US ] = "Phonetic reading";
             Size = MAP_APPFONT ( 50 , RSC_CD_PUSHBUTTON_HEIGHT ) ;                        \
             TabStop = TRUE ;                                        \
             DefButton = TRUE ;                                      \
-            Text [ de ] = "Einfügen";                                      \
+            Text [ de ] = "EinfÃ¼gen";                                      \
             Text [ en-US ] = "Insert";\
             Text [ x-comment ] = " ";\
         };                                                          \
@@ -62,7 +62,7 @@ Text [ en-US ] = "Phonetic reading";
         {                                                           \
             Pos = MAP_APPFONT ( COL_BUTTONS , 23 ) ;                        \
             Size = MAP_APPFONT ( 50 , RSC_CD_PUSHBUTTON_HEIGHT ) ;                        \
-            Text [ de ] = "Schließen";                                     \
+            Text [ de ] = "SchlieÃŸen";                                     \
             Text [ en-US ] = "Close";\
             Text [ x-comment ] = " ";\
         };                                                          \
@@ -75,7 +75,7 @@ Text [ en-US ] = "Phonetic reading";
         {                                                           \
             Pos = MAP_APPFONT ( COL_BUTTONS , 63 ) ;                        \
             Size = MAP_APPFONT ( 50 , RSC_CD_PUSHBUTTON_HEIGHT ) ;                        \
-            Text [ de ] = "L~öschen" ;                                     \
+            Text [ de ] = "L~Ã¶schen" ;                                     \
             Text [ en-US ] = "~Delete" ;                       \
             TabStop = TRUE ;                                        \
             Text [ x-comment ] = " ";\
@@ -165,7 +165,7 @@ Text [ en-US ] = "Phonetic reading";
             Disable = TRUE ;                                        \
             Pos = MAP_APPFONT ( IDX_COL1 , IDX_ROW_3_TEXT ) ;                         \
             Size = MAP_APPFONT ( 42 , RSC_CD_FIXEDTEXT_HEIGHT ) ;                         \
-            Text [ de ] = "~1. Schlüssel" ;                                \
+            Text [ de ] = "~1. SchlÃ¼ssel" ;                                \
             Text [ en-US ] = "~1st key" ;                      \
             Left = TRUE ;                                           \
             Text [ x-comment ] = " ";\
@@ -183,7 +183,7 @@ Text [ en-US ] = "Phonetic reading";
             Disable = TRUE ;                                        \
             Pos = MAP_APPFONT ( IDX_COL1 , IDX_ROW_4_TEXT ) ;                         \
             Size = MAP_APPFONT ( 42 , RSC_CD_FIXEDTEXT_HEIGHT ) ;                         \
-            Text [ de ] = "~2. Schlüssel" ;                                \
+            Text [ de ] = "~2. SchlÃ¼ssel" ;                                \
             Text [ en-US ] = "~2nd key" ;                      \
             Left = TRUE ;                                           \
             Text [ x-comment ] = " ";\
@@ -297,7 +297,7 @@ Text [ en-US ] = "Phonetic reading";
         {                                                                       \
             Pos = MAP_APPFONT ( 21 , 118 ) ;                                     \
             Size = MAP_APPFONT ( 131 , 12 ) ;                                   \
-            Text [ de ] = "Nur ganze ~Wörter" ;                       \
+            Text [ de ] = "Nur ganze ~WÃ¶rter" ;                       \
             Hide = TRUE;\
             Text [ en-US ] = "~Whole words only";\
         };                                                                      \
@@ -450,7 +450,7 @@ String STR_IDXMRK_EDIT
 String STR_IDXMRK_INSERT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Verzeichniseintrag einfügen : Verzeichniseintrag einf³gen */
-    Text [ de ] = "Verzeichniseintrag einfügen" ;
+    Text [ de ] = "Verzeichniseintrag einfÃ¼gen" ;
     Text [ en-US ] = "Insert Index Entry" ;
     Text [ x-comment ] = " ";
 };
@@ -540,7 +540,7 @@ String STR_IDXMRK_INSERT
             Size = MAP_APPFONT ( 50 , 14 ) ;            \
             TabStop = TRUE ;                            \
             DefButton = TRUE ;                          \
-            Text [ de ] = "Einfügen";                          \
+            Text [ de ] = "EinfÃ¼gen";                          \
             Text [ en-US ] = "Insert";\
             Text [ x-comment ] = " ";\
         };                                              \
@@ -548,7 +548,7 @@ String STR_IDXMRK_INSERT
         {                                               \
             Pos = MAP_APPFONT ( 162 , 23 ) ;            \
             Size = MAP_APPFONT ( 50 , 14 ) ;            \
-            Text [ de ] = "Schließen";                         \
+            Text [ de ] = "SchlieÃŸen";                         \
             Text [ en-US ] = "Close";\
             Text [ x-comment ] = " ";\
         };                                              \
@@ -574,7 +574,7 @@ String STR_IDXMRK_INSERT
         };                                              \
         String ST_CHANGE                                \
         {                                               \
-            Text [ de ] = "Ändern";                            \
+            Text [ de ] = "Ã„ndern";                            \
             Text [ en-US ] = "Modify";\
             Text [ x-comment ] = " ";\
         };                                              \
@@ -650,7 +650,7 @@ String STR_AUTHMRK_EDIT
 };
 String STR_AUTHMRK_INSERT
 {
-    Text [ de ] = "Literaturverzeichniseintrag einfügen" ;
+    Text [ de ] = "Literaturverzeichniseintrag einfÃ¼gen" ;
 
     Text [ en-US ] = "Insert Bibliography Entry";
     Text [ x-comment ] = "; EM28; EM28.9.01: MODALDIALOG title";
@@ -659,7 +659,7 @@ QueryBox DLG_CHANGE_AUTH_ENTRY
 {
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
-    Message [ de ] = "Der Bibliographie-Eintrag ist bereits mit abweichenden Daten im Dokument enthalten. Möchten sie die bereits enthaltenen Einträge anpassen?" ;
+    Message [ de ] = "Der Bibliographie-Eintrag ist bereits mit abweichenden Daten im Dokument enthalten. MÃ¶chten sie die bereits enthaltenen EintrÃ¤ge anpassen?" ;
     Message [ en-US ] = "The document already contains the bibliography entry but with different data. Do you want to adjust the existing entries?";
 };
 
