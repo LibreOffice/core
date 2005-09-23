@@ -4,9 +4,9 @@
  *
  *  $RCSfile: labdlg.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:25:02 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:42:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,7 +202,7 @@ TabPage RID_SVXPAGE_CAPTION
         Size = MAP_APPFONT ( 42 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Länge : ~Lõnge */
         /* ### ACHTUNG: Neuer Text in Resource? ~Länge : ~Lõnge */
-        Text [ de ] = "~Länge" ;
+        Text [ de ] = "~LÃ¤nge" ;
         Text [ en-US ] = "~Length" ;
         Text [ x-comment ] = " ";
     };
@@ -302,25 +302,25 @@ TabPage RID_SVXPAGE_CAPTION
  // RID_SVXDLG_CAPTION ----------------------------------------------------
 
 #define  _POS_SIZE_TEXT \
-                Text [ de ] = "Position und Größe" ;                           \
+                Text [ de ] = "Position und GrÃ¶ÃŸe" ;                           \
                 Text [ en-US ] = "Position and Size" ;             \
 
-TabDialog RID_SVXDLG_CAPTION
+TabDialog RID_SVXDLG_CAPTION\
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 237 , 161 ) ;
-    Text [ de ] = "Legende" ;
-    Text [ en-US ] = "Callouts" ;
+    Text [ de ] = "Legende" ;\
+    Text [ en-US ] = "Callouts" ;\
     Moveable = TRUE ;
-    TabControl TAB_CONTROL
+    TabControl TAB_CONTROL\
     {
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 3 , 3 ) ;
         Size = MAP_APPFONT ( 189 , 97 ) ;
         PageList =
         {
-            PageItem
+            PageItem\
             {
                 Identifier = RID_SVXPAGE_POSITION_SIZE ;
                 PageResID = RID_SVXPAGE_POSITION_SIZE ;
