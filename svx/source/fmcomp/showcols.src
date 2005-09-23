@@ -4,9 +4,9 @@
  *
  *  $RCSfile: showcols.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:47:21 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:54:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@ ModalDialog RID_SVX_DLG_SHOWGRIDCOLUMNS
         Pos = MAP_APPFONT( 6, 6 );
         Size = MAP_APPFONT( 188, 30 );
         WordBreak = TRUE;
-        Text [ de ] = "Folgende Spalten sind augenblicklich versteckt. Markieren Sie bitte die wieder einzublendenden und w‰hlen Sie OK";
+        Text [ de ] = "Folgende Spalten sind augenblicklich versteckt. Markieren Sie bitte die wieder einzublendenden und w√§hlen Sie OK";
         Text [ en-US ] = "The following columns are currently hidden. Please mark the fields you want to show and choose OK.";
     };
 
