@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:33:17 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:59:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,7 @@
 #include "PrintManager.hxx"
 #endif
 #include "UpdateLockManager.hxx"
+#include "FrameView.hxx"
 #ifndef _SFXEVENT_HXX
 #include <sfx2/event.hxx>
 #endif
@@ -126,6 +127,12 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESSUPPLIER_HPP_
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XMASTERPAGESSUPPLIER_HPP_
+#include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
+#endif
 
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -158,6 +165,18 @@ using namespace ::com::sun::star::uno;
 
 
 namespace sd {
+
+class ViewShellBase::Implementation
+{
+public:
+    Implementation (ViewShellBase& rBase);
+
+    void ProcessRestoreEditingViewSlot ();
+
+private:
+    ViewShellBase& mrBase;
+};
+
 
 
 
@@ -221,6 +240,7 @@ ViewShellBase::ViewShellBase (
         | SFX_VIEW_HAS_PRINTOPTIONS),
       maMutex(),
       mpViewTabBar (NULL),
+      mpImpl(new Implementation(*this)),
       mpViewShellManager (NULL),
       mpPaneManager (NULL),
       mpDocShell (NULL),
@@ -325,7 +345,14 @@ void ViewShellBase::LateInit (void)
     if (GetMainViewShell() != NULL)
         GetMainViewShell()->GetController();
 
-    //    GetMainViewShell()->GetController();
+    // Remember the type of the current main view shell in the frame view.
+    ViewShell* pViewShell = GetMainViewShell();
+    if (pViewShell != NULL)
+    {
+        FrameView* pFrameView = pViewShell->GetFrameView();
+        if (pFrameView != NULL)
+            pFrameView->SetViewShellTypeOnLoad(pViewShell->GetShellType());
+    }
 }
 
 
@@ -810,6 +837,10 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
             }
         }
 
+        case SID_RESTORE_EDITING_VIEW:
+            mpImpl->ProcessRestoreEditingViewSlot();
+            break;
+
         default:
             // Ignore any other slot.
             rRequest.Ignore ();
@@ -1145,6 +1176,87 @@ tools::EventMultiplexer& ViewShellBase::GetEventMultiplexer (void)
 UpdateLockManager& ViewShellBase::GetUpdateLockManager (void) const
 {
     return *mpUpdateLockManager;
+}
+
+
+
+
+//===== ViewShellBase::Implementation =========================================
+
+ViewShellBase::Implementation::Implementation (ViewShellBase& rBase)
+    : mrBase(rBase)
+{
+}
+
+
+
+
+void ViewShellBase::Implementation::ProcessRestoreEditingViewSlot (void)
+{
+    FrameView* pFrameView = NULL;
+    SfxViewFrame* pViewFrame = NULL;
+
+    if (mrBase.GetMainViewShell() != NULL)
+    {
+        pFrameView = mrBase.GetMainViewShell()->GetFrameView();
+        pViewFrame = mrBase.GetMainViewShell()->GetViewFrame();
+    }
+
+    if (pFrameView!=NULL && pViewFrame!=NULL)
+    {
+        PageKind ePageKind (pFrameView->GetPageKindOnLoad());
+
+        ViewShell* pViewShell = mrBase.GetMainViewShell();
+        if (pViewShell != NULL)
+        {
+            FrameView* pFrameView = pViewShell->GetFrameView();
+            if (pFrameView != NULL)
+            {
+                // Set view shell, edit mode, and page kind.
+                pFrameView->SetViewShEditMode(
+                    pFrameView->GetViewShEditModeOnLoad(),
+                    pFrameView->GetPageKindOnLoad());
+                pFrameView->SetPageKind(
+                    pFrameView->GetPageKindOnLoad());
+                mrBase.GetPaneManager().RequestMainViewShellChange(
+                    pFrameView->GetViewShellTypeOnLoad(),
+                    PaneManager::CM_SYNCHRONOUS);
+
+                try
+                {
+                    // Get the current page either from the
+                    // DrawPagesSupplier or the MasterPagesSupplier.
+                    Any aPage;
+                    if (pFrameView->GetViewShEditModeOnLoad() == EM_PAGE)
+                    {
+                        Reference<drawing::XDrawPagesSupplier> xPagesSupplier (
+                            mrBase.GetController()->getModel(), UNO_QUERY_THROW);
+                        Reference<container::XIndexAccess> xPages (
+                            xPagesSupplier->getDrawPages(), UNO_QUERY_THROW);
+                        aPage = xPages->getByIndex(pFrameView->GetSelectedPageOnLoad());
+                    }
+                    else
+                    {
+                        Reference<drawing::XMasterPagesSupplier> xPagesSupplier (
+                            mrBase.GetController()->getModel(), UNO_QUERY_THROW);
+                        Reference<container::XIndexAccess> xPages (
+                            xPagesSupplier->getMasterPages(), UNO_QUERY_THROW);
+                        aPage = xPages->getByIndex(pFrameView->GetSelectedPageOnLoad());
+                    }
+                    // Switch to the page last edited by setting the
+                    // CurrentPage property.
+                    Reference<beans::XPropertySet> xSet (mrBase.GetController(), UNO_QUERY_THROW);
+                    xSet->setPropertyValue (String::CreateFromAscii("CurrentPage"), aPage);
+                }
+                catch (RuntimeException aException)
+                {
+                    // We have not been able to set the current page at the main view.
+                    // This is sad but still leaves us in a valid state.  Therefore,
+                    // this exception is silently ignored.
+                }
+            }
+        }
+    }
 }
 
 
