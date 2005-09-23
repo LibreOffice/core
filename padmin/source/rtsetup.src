@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtsetup.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:29:51 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:17:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ TabDialog RID_RTS_RTSDIALOG
             PageItem
             {
                 Identifier = RID_RTS_DEVICEPAGE;
-                Text [ de ] = "Gerät";
+                Text [ de ] = "GerÃ¤t";
                 Text [ en-US ] = "Device";
             };
             PageItem
@@ -290,7 +290,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
     {
         Pos = MAP_APPFONT( 5, 125 );
         Size = MAP_APPFONT( 107, 12 );
-        Text [ de ] = "~Hinzufügen";
+        Text [ de ] = "~HinzufÃ¼gen";
         Text [ en-US ] = "~Add";
     };
     PushButton RID_RTS_FS_REMOVE_BTN
@@ -348,7 +348,7 @@ TabPage RID_RTS_COMMANDPAGE
     {
         Pos = MAP_APPFONT ( 6 , 44 ) ;
         Size = MAP_APPFONT ( 220 , 8 ) ;
-        Text [ de ] = "Kommando auswählen" ;
+        Text [ de ] = "Kommando auswÃ¤hlen" ;
         Text [ en-US ] = "Select command";
     };
     String RID_RTS_CMD_STR_CONFIGURE_PRINTER
@@ -443,17 +443,17 @@ TabPage RID_RTS_COMMANDPAGE
     };
     String RID_RTS_CMD_STR_PDFHELP
     {
-        Text [ de ] = "Die Kommandozeile bei PDF-Konvertern wird wie folgt verarbeitet: bei jedem gedruckten Dokument wird in der Kommandozeile jeweils \"(TMP)\" durch eine temporäre Datei und \"(OUTFILE)\" durch die zu erzeugende PDF Datei ersetzt. Wenn \"(TMP)\" in der Kommandozeile vorkommt wird der PostScript-code in einer Datei übergeben, andernfalls über die Standardeingabe (d.h. als Pipe)." ;
+        Text [ de ] = "Die Kommandozeile bei PDF-Konvertern wird wie folgt verarbeitet: bei jedem gedruckten Dokument wird in der Kommandozeile jeweils \"(TMP)\" durch eine temporÃ¤re Datei und \"(OUTFILE)\" durch die zu erzeugende PDF Datei ersetzt. Wenn \"(TMP)\" in der Kommandozeile vorkommt wird der PostScript-code in einer Datei Ã¼bergeben, andernfalls Ã¼ber die Standardeingabe (d.h. als Pipe)." ;
         Text [ en-US ] = "The command line for PDF converters is executed as follows: for each document printed, \"(TMP)\" in the command line is replaced by a temporary file and \"(OUTFILE)\" in the command line is replaced by the target PDF file name. If \"(TMP)\" is in the command line, the PostScript code will be supplied via a file, otherwise via standard input (i.e. as a pipe).";
     };
     String RID_RTS_CMD_STR_PRINTERHELP
     {
-        Text [ de ] = "Die Kommandozeile bei Druckern wird wie folgt verarbeitet: der erzeugte PostScript-code wird der Kommandozeile als Standardeingabe (d.h. als Pipe) übergeben.";
+        Text [ de ] = "Die Kommandozeile bei Druckern wird wie folgt verarbeitet: der erzeugte PostScript-code wird der Kommandozeile als Standardeingabe (d.h. als Pipe) Ã¼bergeben.";
         Text [ en-US ] = "The command line for printer devices is executed as follows: the generated PostScript code is supplied as standard input (i.e. as a pipe) to the command line.";
     };
     String RID_RTS_CMD_STR_FAXHELP
     {
-        Text [ de ] = "Die Kommandozeile bei Faxgeräten wird wie folgt verarbeitet: bei jedem gesendeten Fax wird in der Kommandozeile jeweils \"(TMP)\" durch eine temporäre Datei und \"(PHONE)\" durch die Faxnummer ersetzt. Wenn \"(TMP)\" in der Kommandozeile vorkommt wird der PostScript-code in einer Datei übergeben, andernfalls über die Standardeingabe (d.h. als Pipe)." ;
+        Text [ de ] = "Die Kommandozeile bei FaxgerÃ¤ten wird wie folgt verarbeitet: bei jedem gesendeten Fax wird in der Kommandozeile jeweils \"(TMP)\" durch eine temporÃ¤re Datei und \"(PHONE)\" durch die Faxnummer ersetzt. Wenn \"(TMP)\" in der Kommandozeile vorkommt wird der PostScript-code in einer Datei Ã¼bergeben, andernfalls Ã¼ber die Standardeingabe (d.h. als Pipe)." ;
         Text [ en-US ] = "The command line for fax devices is executed as follows: for each fax sent, \"(TMP)\" in the command line is replaced by a temporary file and \"(PHONE)\" in the command line is replaced by the fax number. If \"(TMP)\" appears in the command line, the PostScript code will be supplied via a file, otherwise it is passed as standard input (i.e. as a pipe).";
     };
 };
@@ -574,7 +574,7 @@ ModalDialog RID_RTS_PWDIALOG
         Pos = MAP_APPFONT( 5, 5 );
         Size = MAP_APPFONT( 140, 20 );
         WordBreak = TRUE;
-        Text [ de ] = "Bitte geben Sie die Authentifizierungsdaten für den Server %s ein";
+        Text [ de ] = "Bitte geben Sie die Authentifizierungsdaten fÃ¼r den Server %s ein";
         Text [ en-US ] = "Please enter your authentication data for server %s";
     };
     FixedText RID_RTS_PWDIALOG_USER_TXT
