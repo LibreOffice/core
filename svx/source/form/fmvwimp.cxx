@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:59:28 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:59:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1286,39 +1286,58 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
     if ( !m_pView->IsDesignMode() )
         return NULL;
 
-    // the very basic information
     ::rtl::OUString sCommand, sFieldName;
     sal_Int32 nCommandType = CommandType::COMMAND;
+    SharedConnection xConnection;
 
     ::rtl::OUString sDataSource = _rColumnDescriptor.getDataSource();
     _rColumnDescriptor[ daCommand ]     >>= sCommand;
     _rColumnDescriptor[ daColumnName ]  >>= sFieldName;
     _rColumnDescriptor[ daCommandType ] >>= nCommandType;
+    {
+        Reference< XConnection > xExternalConnection;
+        _rColumnDescriptor[ daConnection ]  >>= xExternalConnection;
+        xConnection.reset( xExternalConnection, SharedConnection::NoTakeOwnership );
+    }
 
-    if ( !sDataSource.getLength() || !sCommand.getLength() || !sFieldName.getLength() )
-        return NULL;
+    if  (   !sCommand.getLength()
+        ||  !sFieldName.getLength()
+        ||  (   !sDataSource.getLength()
+            &&  !xConnection.is()
+            )
+        )
+    {
+        DBG_ERROR( "FmXFormView::implCreateFieldControl: nonsense!" );
+    }
 
-    // additional (and optional) information
-    Reference< XConnection > xConnection;
-    if ( _rColumnDescriptor.has( daConnection ) )
-        _rColumnDescriptor[ daConnection ]  >>= xConnection;
-
-    // did we get the connection from outside (no need to dispose it then)?
-    sal_Bool bForeignConnection = xConnection.is();
-
-    // obtain the data source
     Reference< XDataSource > xDataSource;
     SQLErrorEvent aError;
     try
     {
-        xDataSource = OStaticDataAccessTools().getDataSource(sDataSource, getORB());
+        if ( xConnection.is() && !xDataSource.is() && !sDataSource.getLength() )
+        {
+            Reference< XChild > xChild( xConnection, UNO_QUERY );
+            if ( xChild.is() )
+                xDataSource = xDataSource.query( xChild->getParent() );
+        }
+
+        // obtain the data source
+        if ( !xDataSource.is() )
+            xDataSource = OStaticDataAccessTools().getDataSource(sDataSource, getORB());
+
         // and the connection, if necessary
-        if ( !bForeignConnection )
-            xConnection = OStaticDataAccessTools().getConnection_withFeedback(sDataSource,::rtl::OUString(),::rtl::OUString(), getORB());
+        if ( !xConnection.is() )
+            xConnection.reset( OStaticDataAccessTools().getConnection_withFeedback(
+                sDataSource,
+                ::rtl::OUString(),
+                ::rtl::OUString(),
+                getORB()
+            ) );
     }
     catch(const SQLContext& e) { aError.Reason <<= e; }
     catch(const SQLWarning& e) { aError.Reason <<= e; }
     catch(const SQLException& e) { aError.Reason <<= e; }
+    catch( const Exception& ) { /* will be asserted below */ }
     if (aError.Reason.hasValue())
     {
         displayAsyncErrorMessage( aError );
@@ -1331,13 +1350,6 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
         DBG_ERROR("FmXFormView::implCreateFieldControl : could not retrieve the data source or the connection!");
         return NULL;
     }
-
-    // from now on, if something goes wrong, automatically dispose the connection
-    Reference< XInterface > xAutoDisposee;
-    if ( !bForeignConnection )
-        xAutoDisposee = xConnection.get();
-    OAutoDispose aDisposeConnection( xAutoDisposee );
-
 
     OStaticDataAccessTools aDBATools;
     Reference< XComponent > xKeepFieldsAlive;
@@ -1484,6 +1496,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
             sDataSource, sCommand, nCommandType), UNO_QUERY);
         if (xContainer.is())
             xContainer->insertByIndex(xContainer->getCount(), makeAny(xContent));
+        implInitializeNewControlModel( Reference< XPropertySet >( xContent, UNO_QUERY ), pLabel );
 
         //////////////////////////////////////////////////////////////////////
         // Objekte gruppieren
@@ -1615,6 +1628,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
             Reference< XIndexContainer >  xContainer(rPage.GetImpl()->placeInFormComponentHierarchy( xContent ), UNO_QUERY);
             if (xContainer.is())
                 xContainer->insertByIndex(xContainer->getCount(), makeAny(xContent));
+            implInitializeNewControlModel( Reference< XPropertySet >( xContent, UNO_QUERY ), pControl );
 
             xContent = Reference< XFormComponent > (pControl->GetUnoControlModel(), UNO_QUERY);
             xContainer = Reference< XIndexContainer > (rPage.GetImpl()->placeInFormComponentHierarchy( xContent ), UNO_QUERY);
