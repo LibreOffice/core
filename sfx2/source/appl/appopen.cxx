@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:35:43 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:51:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1204,7 +1204,8 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                     osl::Directory aDir( aURL.Main );
                     sal_Bool bIsDir = ( aDir.open() == osl::Directory::E_None );
 
-                    if ( !bIsDir && !aExtendedSecurityOptions.IsSecureHyperlink( aURL.Complete ))
+/*!!! pb: #i49802# no security warning any longer
+                    if ( !bIsDir && !aExtendedSecurityOptions.IsSecureHyperlink( aURL.Complete ) )
                     {
                         // Security check for local files depending on the extension
                         vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -1226,6 +1227,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                         if( aSecurityWarningBox.Execute() == RET_NO )
                             return;
                     }
+*/
                 }
             }
             else if ( eMode == SvtExtendedSecurityOptions::OPEN_NEVER )
