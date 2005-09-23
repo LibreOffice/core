@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chinese_translationdialog.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:58:30 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:05:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,14 +72,14 @@ ModalDialog DLG_CHINESETRANSLATION
     Moveable = TRUE ;
     SVLook = TRUE;
 
-    Text [ de ] = "Chinesische Übersetzung";
+    Text [ de ] = "Chinesische Ãœbersetzung";
     Text [ en-US ] = "Chinese Translation";
 
     FixedLine FL_DIRECTION
     {
         Pos = MAP_APPFONT ( COL_1 , ROW_1 ) ;
         Size = MAP_APPFONT ( FULL_WIDTH - COL_1 - RSC_SP_DLG_INNERBORDER_RIGHT, RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ de ] = "Übersetzungsrichtung";
+        Text [ de ] = "Ãœbersetzungsrichtung";
         Text [ en-US ] = "Translation direction";
     };
 
@@ -107,7 +107,7 @@ ModalDialog DLG_CHINESETRANSLATION
         Pos = MAP_APPFONT( COL_2, ROW_6 );
         Size = MAP_APPFONT ( COL_4 - COL_2, RSC_CD_CHECKBOX_HEIGHT ) ;
 
-        Text [ de ] = "Allgemeine Begriffe übersetzen";
+        Text [ de ] = "Allgemeine Begriffe Ã¼bersetzen";
         Text [ en-US ] = "Translate ~common terms";
     };
 
