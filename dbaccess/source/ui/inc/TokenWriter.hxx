@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TokenWriter.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:39:55 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:34:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,9 @@
 #ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
 #include <com/sun/star/lang/XEventListener.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
@@ -74,8 +77,8 @@
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
 #endif
-#ifndef CONNECTIVITY_DATASOURCEHOLDER_HXX
-#include <connectivity/DataSourceHolder.hxx>
+#ifndef _DBAUI_COMMON_TYPES_HXX_
+#include "commontypes.hxx"
 #endif
 #include <memory>
 
@@ -88,24 +91,30 @@ namespace dbaui
     typedef ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener> ODatabaseImportExport_BASE;
     class ODatabaseImportExport : public ODatabaseImportExport_BASE
     {
+    private:
         void disposing();
+
+    protected:
+        typedef ::utl::SharedUNOComponent   <   ::com::sun::star::frame::XModel
+                                            ,   ::utl::CloseableComponent
+                                            >   SharedModel;
+
     protected:
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>                    m_aSelection;
         SvStream*                                                                       m_pStream;
         ::com::sun::star::awt::FontDescriptor                                           m_aFont;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xObject;      // table/query
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xConnection;  //
+        SharedConnection                                                                m_xConnection;  //
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >          m_xResultSet;   //
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >                m_xRow; //
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xResultSetMetaData;   //
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xFactory;
-        ::std::auto_ptr< ::dbtools::ODataSourceHolder>                                  m_aDataSourceHolder;
+        SharedModel                                                                     m_aKeepModelAlive;
 
         ::rtl::OUString m_sName;
         ::rtl::OUString m_sDataSourceName;
         sal_Int32       m_nCommandType;
-        sal_Bool        m_bDisposeConnection;
 
 #if defined UNX || defined MAC
         static const char __FAR_DATA sNewLine;
@@ -125,7 +134,7 @@ namespace dbaui
                                 const String& rExchange = String());
 
         // import data
-        ODatabaseImportExport(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+        ODatabaseImportExport(  const SharedConnection& _rxConnection,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
 
@@ -144,6 +153,9 @@ namespace dbaui
 
         void enableCheckOnly() { m_bCheckOnly = sal_True; }
         sal_Bool isCheckEnabled() const { return m_bCheckOnly; }
+
+    private:
+        void impl_initFromDescriptor( const ::svx::ODataAccessDescriptor& _aDataDescriptor, bool _bPlusDefaultInit );
     };
 
     // =========================================================================
@@ -162,7 +174,7 @@ namespace dbaui
                             : ODatabaseImportExport(_aDataDescriptor,_rM,_rxNumberF,rExchange) {};
 
         // import data
-        ORTFImportExport(   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+        ORTFImportExport(   const SharedConnection& _rxConnection,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
                         : ODatabaseImportExport(_rxConnection,_rxNumberF,_rM)
@@ -206,7 +218,7 @@ namespace dbaui
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                             const String& rExchange = String());
         // import data
-        OHTMLImportExport(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+        OHTMLImportExport(  const SharedConnection& _rxConnection,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
                         : ODatabaseImportExport(_rxConnection,_rxNumberF,_rM)
@@ -244,11 +256,12 @@ namespace dbaui
                             const String& rExchange = String());
 
         // import data
-        ORowSetImportExport(    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+        ORowSetImportExport(const SharedConnection& _rxConnection,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                             const String& rExchange = String())
                         : ODatabaseImportExport(_rxConnection,NULL,_rM)
-        {}
+        {
+}
 
 
         virtual BOOL Write();
