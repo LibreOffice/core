@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menuids2_tmpl.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:41:53 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:27:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,14 +126,14 @@
     HelpID = 20 ; \
     Command = ".uno:EditMenu"; \
     Text [ de ] = "~Bearbeiten" ; \
-    Text [ en-US ] = "~Edit" ;
+    Text [ en-US ] = "~Edit" ; \
 
 #define MN_PASTE2 \
     MenuItem\
     {\
         Identifier = SID_PASTE2 ; \
         HelpID = SID_PASTE2 ; \
-        Text [ de ] = "In~halte einf¸gen..." ; \
+        Text [ de ] = "In~halte einf√ºgen..." ; \
         Text [ en-US ] = "Paste ~Special..." ; \
         };
 
@@ -151,7 +151,7 @@
     {\
         Identifier = SID_POLYGON_MORPHING ; \
         HelpID = SID_POLYGON_MORPHING ; \
-        Text [ de ] = "~‹berblenden..." ; \
+        Text [ de ] = "~√úberblenden..." ; \
         Text [ en-US ] = "Cross-fading..." ; \
     };
 
@@ -169,7 +169,7 @@
     {\
         Identifier = SID_DELETE_LAYER ; \
         HelpID = SID_DELETE_LAYER ; \
-        Text [ de ] = "~Ebene lˆschen" ; \
+        Text [ de ] = "~Ebene l√∂schen" ; \
         Text [ en-US ] = "Delete ~Layer..." ; \
     };
 
@@ -178,7 +178,7 @@
     {\
         Identifier = SID_MANAGE_LINKS ; \
         HelpID = SID_MANAGE_LINKS ; \
-        Text [ de ] = "~Verkn¸pfungen..." ; \
+        Text [ de ] = "~Verkn√ºpfungen..." ; \
         Text [ en-US ] = "Lin~ks..." ; \
     };
  //
@@ -214,7 +214,7 @@
     {\
         Identifier = SID_TOGGLECOMMONTASKBAR ; \
         HelpID = SID_TOGGLECOMMONTASKBAR ; \
-        Text [ de ] = "Pr‰~sentation" ; \
+        Text [ de ] = "Pr√§~sentation" ; \
         Text [ en-US ] = "~Presentation" ; \
     };
 
@@ -448,7 +448,7 @@
     Identifier = 21 ; \
     HelpID = 21 ; \
     Command = ".uno:InsertMenu" ; \
-    Text [ de ] = "~Einf¸gen" ; \
+    Text [ de ] = "~Einf√ºgen" ; \
     Text [ en-US ] = "~Insert" ; \
 
 #define MN_INSERTPAGE \
@@ -492,7 +492,7 @@
     {\
         Identifier = SID_SUMMARY_PAGE ; \
         HelpID = SID_SUMMARY_PAGE ; \
-        Text [ de ] = "~‹bersichtsseite" ; \
+        Text [ de ] = "~√úbersichtsseite" ; \
         Text [ en-US ] = "Su~mmary Slide" ; \
     };
 
@@ -573,7 +573,7 @@
     {\
         Identifier = SID_TWAIN_SELECT ; \
         HelpID = SID_TWAIN_SELECT ; \
-        Text [ de ] = "~Quelle ausw‰hlen..." ; \
+        Text [ de ] = "~Quelle ausw√§hlen..." ; \
         Text [ en-US ] = "~Select Source..." ; \
     };
 
@@ -703,7 +703,7 @@
     HelpID = 22 ; \
     Command = ".uno:FormatMenu" ; \
     Text [ de ] = "~Format" ; \
-    Text [ en-US ] = "F~ormat" ;
+    Text [ en-US ] = "F~ormat" ; \
 
 #define MN_TEXTATTR_DLG \
     MenuItem\
@@ -719,7 +719,7 @@
     {\
         Identifier = SID_MEASURE_DLG ; \
         HelpID = SID_MEASURE_DLG ; \
-        Text [ de ] = "Bema~ﬂung..." ; \
+        Text [ de ] = "Bema~√üung..." ; \
         Text [ en-US ] = "Dimen~sions..." ; \
     };
 
@@ -747,7 +747,7 @@
     {\
         Identifier = SID_MODIFYPAGE ; \
         HelpID = SID_MODIFYPAGE ; \
-        Text [ de ] = "S~eitenlayout ‰ndern..." ; \
+        Text [ de ] = "S~eitenlayout √§ndern..." ; \
         Text [ en-US ] = "Modify ~Layout..." ; \
     };
 
@@ -777,7 +777,7 @@
     HelpID = 25 ; \
     Command = ".uno:ToolsMenu" ; \
     Text [ de ] = "E~xtras" ; \
-    Text [ en-US ] = "~Tools" ;
+    Text [ en-US ] = "~Tools" ; \
 
  //
  // Praesentations-Menu
@@ -787,15 +787,15 @@
     Identifier = 26 ; \
     HelpID = 26 ; \
     Command = ".uno:SlideShowMenu" ; \
-    Text [ de ] = "Bildschirm~pr‰sentation" ; \
-    Text [ en-US ] = "~Slide Show" ;
+    Text [ de ] = "Bildschirm~pr√§sentation" ; \
+    Text [ en-US ] = "~Slide Show" ; \
 
 #define MN_SPELLING \
     MenuItem\
     {\
         Identifier = SID_SPELL_DIALOG ; \
         HelpID = SID_SPELL_DIALOG ; \
-        Text [ de ] = "~Pr¸fen..." ; \
+        Text [ de ] = "~Pr√ºfen..." ; \
         Text [ en-US ] = "~Check..." ; \
     };
 
@@ -804,7 +804,7 @@
     {\
         Identifier = SID_AUTOSPELL_CHECK ; \
         HelpID = SID_AUTOSPELL_CHECK ; \
-        Text [ de ] = "~Automatisch pr¸fen" ; \
+        Text [ de ] = "~Automatisch pr√ºfen" ; \
         Text [ en-US ] = "~AutoSpellcheck" ; \
     };
 
@@ -841,7 +841,7 @@
     {\
         Identifier = SID_PRESENTATION_DLG ; \
         HelpID = SID_PRESENTATION_DLG ; \
-        Text [ de ] = "Bildschirm~pr‰sentationseinstellungen..." ; \
+        Text [ de ] = "Bildschirm~pr√§sentationseinstellungen..." ; \
         Text [ en-US ] = "~Slide Show Settings..." ; \
     };
 
@@ -851,7 +851,7 @@
     {\
         Identifier = SID_CUSTOMSHOW_DLG ; \
         HelpID = SID_CUSTOMSHOW_DLG ; \
-        Text [ de ] = "I~ndividuelle Bildschirmpr‰sentation..." ; \
+        Text [ de ] = "I~ndividuelle Bildschirmpr√§sentation..." ; \
         Text [ en-US ] = "~Custom Slide Show..." ; \
     };
 
@@ -879,7 +879,7 @@
         Identifier = MN_SUB_SPELLING ; \
         HelpID = MN_SUB_SPELLING ; \
         Command = ".uno:SpellingMenu" ; \
-        Text [ de ] = "~Rechtschreibpr¸fung" ; \
+        Text [ de ] = "~Rechtschreibpr√ºfung" ; \
         Text [ en-US ] = "~Spellcheck" ; \
         SubMenu = Menu\
         {\
@@ -897,8 +897,8 @@
     Identifier = 24 ; \
     HelpID = 24 ; \
     Command = ".uno:ModifyMenu" ; \
-    Text [ de ] = "ƒ~ndern" ; \
-    Text [ en-US ] = "~Modify" ;
+    Text [ de ] = "√Ñ~ndern" ; \
+    Text [ en-US ] = "~Modify" ; \
 
 #define MN_MOREFRONT \
     MenuItem\
@@ -989,7 +989,7 @@
         Identifier = SID_OUTPUT_QUALITY_BLACKWHITE ; \
         HelpID = SID_OUTPUT_QUALITY_BLACKWHITE ; \
         RadioCheck = TRUE ; \
-        Text [ de ] = "~Schwarzweiﬂ" ; \
+        Text [ de ] = "~Schwarzwei√ü" ; \
         Text [ en-US ] = "~Black and White" ; \
     };
 
@@ -1029,7 +1029,7 @@
         Identifier = SID_PREVIEW_QUALITY_BLACKWHITE ; \
         HelpID = SID_PREVIEW_QUALITY_BLACKWHITE ; \
         RadioCheck = TRUE ; \
-        Text [ de ] = "~Schwarzweiﬂ" ; \
+        Text [ de ] = "~Schwarzwei√ü" ; \
         Text [ en-US ] = "~Black and White" ; \
     };
 
@@ -1093,7 +1093,7 @@
         Identifier = MN_SUB_OUTPUT_QUALITY ; \
         HelpID = MN_SUB_OUTPUT_QUALITY ; \
         Command = ".uno:DisplayQualityMenu" ; \
-        Text [ de ] = "An~zeigequalit‰t" ; \
+        Text [ de ] = "An~zeigequalit√§t" ; \
         SubMenu = Menu\
         {\
             ItemList = \
@@ -1113,7 +1113,7 @@
         Identifier = MN_SUB_PREVIEW_OUTPUT_QUALITY ; \
         HelpID = MN_SUB_PREVIEW_OUTPUT_QUALITY ; \
         Command = ".uno:PreviewDisplayQualityMenu" ; \
-        Text [ de ] = "V~orschau Anzeigequalit‰t" ; \
+        Text [ de ] = "V~orschau Anzeigequalit√§t" ; \
         SubMenu = Menu\
         {\
             ItemList = \
