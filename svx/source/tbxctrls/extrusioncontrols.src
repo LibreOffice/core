@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extrusioncontrols.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:47:13 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:02:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,17 +205,17 @@ FloatingWindow RID_SVXFLOAT_EXTRUSION_DIRECTION
     };
     String STR_DIRECTION + DIRECTION_SW
     {
-        Text [ de ] = "Extrusion nach Südwesten";
+        Text [ de ] = "Extrusion nach SÃ¼dwesten";
         Text [ en-US ] = "Extrusion South-West";
     };
     String STR_DIRECTION + DIRECTION_S
     {
-        Text [ de ] = "Extrusion nach Süden";
+        Text [ de ] = "Extrusion nach SÃ¼den";
         Text [ en-US ] = "Extrusion South";
     };
     String STR_DIRECTION + DIRECTION_SE
     {
-        Text [ de ] = "Extrusion nach Südosten";
+        Text [ de ] = "Extrusion nach SÃ¼dosten";
         Text [ en-US ] = "Extrusion South-East";
     };
 };
@@ -642,7 +642,7 @@ FloatingWindow RID_SVXFLOAT_EXTRUSION_SURFACE
     Closeable = TRUE ;
     Zoomable = TRUE ;
 
-    Text [ de ] = "Extrusionsoberfläche" ;
+    Text [ de ] = "ExtrusionsoberflÃ¤che" ;
     Text [ en-US ] = "Extrusion Surface" ;
 
     String STR_WIREFRAME

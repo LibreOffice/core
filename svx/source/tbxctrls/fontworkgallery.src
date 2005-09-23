@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontworkgallery.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:48:00 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:02:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ ModalDialog RID_SVX_MDLG_FONTWORK_GALLERY
     {
         Pos = MAP_APPFONT ( 3 , 3 ) ;
         Size = MAP_APPFONT ( WIDTH - 6 , 8 ) ;
-        Text [ de ] = "Wählen Sie einen Fontwork Stil" ;
+        Text [ de ] = "WÃ¤hlen Sie einen Fontwork Stil" ;
         Text [ en-US ] = "Select a Fontwork style:" ;
     };
     Control CTL_FAVORITES
@@ -117,7 +117,7 @@ FloatingWindow RID_SVXFLOAT_FONTWORK_ALIGNMENT
 
     String STR_ALIGN_LEFT
     {
-        Text [ de ] = "~Linksbündig";
+        Text [ de ] = "~LinksbÃ¼ndig";
         Text [ en-US ] = "~Left Align";
     };
     String STR_ALIGN_CENTER
@@ -127,7 +127,7 @@ FloatingWindow RID_SVXFLOAT_FONTWORK_ALIGNMENT
     };
     String STR_ALIGN_RIGHT
     {
-        Text [ de ] = "~Rechtsbündig";
+        Text [ de ] = "~RechtsbÃ¼ndig";
         Text [ en-US ] = "~Right Align";
     };
     String STR_ALIGN_WORD
