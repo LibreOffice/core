@@ -4,9 +4,9 @@
  *
  *  $RCSfile: abstract.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:10:13 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:58:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Abs‰tze je Kapitel : Absıtze je Kapitel */
-        Text [ de ] = "Abs‰tze je Kapitel" ;
+        Text [ de ] = "Abs√§tze je Kapitel" ;
         Text [ en-US ] = "Subpoints per level" ;
     };
     NumericField NF_PARA
@@ -105,7 +105,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Pos = MAP_APPFONT ( 12 , 43 ) ;
         Size = MAP_APPFONT ( 165 , 16 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Im Abstrakt erscheint die ausgew‰hlte Anzahl von Abs‰tzen aus den einbezogenen Kapitelebenen. : Im Abstrakt erscheint die ausgewıhlte Anzahl von Absıtzen aus den einbezogenen Kapitelebenen. */
-        Text [ de ] = "Im Abstrakt erscheint die ausgew‰hlte Anzahl von Abs‰tzen aus den einbezogenen Kapitelebenen." ;
+        Text [ de ] = "Im Abstrakt erscheint die ausgew√§hlte Anzahl von Abs√§tzen aus den einbezogenen Kapitelebenen." ;
         WordBreak = TRUE ;
         Text [ en-US ] = "The abstract contains the selected number of paragraphs from the included outline levels." ;
     };
