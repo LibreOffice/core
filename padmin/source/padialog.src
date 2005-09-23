@@ -4,9 +4,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:27:00 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:17:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
     Size = MAP_APPFONT ( 230 , 185 );
     Moveable = TRUE ;
     Closeable = TRUE ;
-    Text [ de ] = "Schriften hinzufügen" ;
+    Text [ de ] = "Schriften hinzufÃ¼gen" ;
 
     ListBox RID_FIMP_BOX_NEWFONTS
     {
@@ -57,7 +57,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Pos = MAP_APPFONT( 5, 155 );
         Size = MAP_APPFONT( 220, 24 );
         WordBreak=TRUE;
-        Text [ de ] = "Bitte wählen Sie zunächst den Ordner aus dem Sie Schriften importieren möchten an. Starten Sie dann das Hinzufügen der selektierten Schriften mit der OK-Schaltfläche.";
+        Text [ de ] = "Bitte wÃ¤hlen Sie zunÃ¤chst den Ordner aus dem Sie Schriften importieren mÃ¶chten an. Starten Sie dann das HinzufÃ¼gen der selektierten Schriften mit der OK-SchaltflÃ¤che.";
         Text [ en-US ] = "Please select the folder from which you want to import fonts. Add the selected fonts by clicking the OK button.";
     };
     FixedLine RID_FIMP_FL_FROM
@@ -98,7 +98,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
     {
         Pos = MAP_APPFONT( 10, 140 );
         Size = MAP_APPFONT( 145, 10 );
-        Text [ de ] = "Beim Hinzufügen nur ~Softlinks anlegen";
+        Text [ de ] = "Beim HinzufÃ¼gen nur ~Softlinks anlegen";
         Text [ x-comment ] = "ZL: well, Softlinks? I suppose only a Link is added in. ";
         Text [ en-US ] = "Create ~soft links only";
     };
@@ -122,12 +122,12 @@ ModalDialog RID_FONTIMPORT_DIALOG
     };
     String RID_FIMP_STR_IMPORTOP
     {
-        Text [ de ] = "Füge Schriften hinzu";
+        Text [ de ] = "FÃ¼ge Schriften hinzu";
         Text [ en-US ] = "Add fonts";
     };
     String RID_FIMP_STR_QUERYOVERWRITE
     {
-        Text [ de ] = "Wollen Sie die Schriftdatei\n   %s\n wirklich überschreiben ?";
+        Text [ de ] = "Wollen Sie die Schriftdatei\n   %s\n wirklich Ã¼berschreiben ?";
         Text [ en-US ] = "Do you really want to overwrite this font file?\n   %s";
     };
     String RID_FIMP_STR_OVERWRITEALL
@@ -143,7 +143,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
 
     String RID_FIMP_STR_NOAFM
     {
-        Text [ de ] = "Zu der Sriftdatei\n%s\nwurde keine Formatdatei ( mit Endung .afm ) gefunden, weshalb sie nicht installiert werden kann. Formatdateien können z.B. mit ghostscript erstellt werden und müssen im gleichen Verzeichnis wie die Schriftdateien oder in dessen Unterverzeichnis afm stehen." ;
+        Text [ de ] = "Zu der Sriftdatei\n%s\nwurde keine Formatdatei ( mit Endung .afm ) gefunden, weshalb sie nicht installiert werden kann. Formatdateien kÃ¶nnen z.B. mit ghostscript erstellt werden und mÃ¼ssen im gleichen Verzeichnis wie die Schriftdateien oder in dessen Unterverzeichnis afm stehen." ;
         Text [ en-US ] = "A format file (with an .afm extension) has not been found for the font\n%s\ntherefore, the font cannot be installed. Format files can be created with ghostscript, for example, and have to be located in the same directory as the font files or its afm subdirectory.";
     };
     String RID_FIMP_STR_AFMCOPYFAILED
@@ -158,12 +158,12 @@ ModalDialog RID_FONTIMPORT_DIALOG
     };
     String RID_FIMP_STR_NOWRITEABLEFONTSDIR
     {
-        Text [ de ] = "Es wurde kein Verzeichnis im Fontpath gefunden, welches eine screibbare fonts.dir Datei enthält. Es können keine Schriften installiert werden.";
+        Text [ de ] = "Es wurde kein Verzeichnis im Fontpath gefunden, welches eine screibbare fonts.dir Datei enthÃ¤lt. Es kÃ¶nnen keine Schriften installiert werden.";
         Text [ en-US ] = "A directory containing a writable fonts.dir file is not located in the Fontpath. Therefore, fonts cannot be installed.";
     };
     String RID_FIMP_STR_NUMBEROFFONTSIMPORTED
     {
-        Text [ de ] = "Es wurden %d neue Schriften hinzugefügt.";
+        Text [ de ] = "Es wurden %d neue Schriften hinzugefÃ¼gt.";
         Text [ en-US ] = "%d new fonts were added.";
     };
     Text [ en-US ] = "Add Fonts";
@@ -188,7 +188,7 @@ ModalDialog RID_PADIALOG
         DefButton = TRUE;
         Pos = MAP_APPFONT( 190, 150 );
         Size = MAP_APPFONT( 60, 12 );
-        Text [ de ] = "Schließen";
+        Text [ de ] = "SchlieÃŸen";
         Text [ en-US ] = "Close";
     };
 
@@ -361,13 +361,13 @@ ModalDialog RID_STRINGQUERYDLG
 
 String RID_ERR_NOPRINTER
 {
-    Text [ de ] = "Der Drucker %s konnte nicht geöffnet werden." ;
+    Text [ de ] = "Der Drucker %s konnte nicht geÃ¶ffnet werden." ;
     Text [ en-US ] = "Could not open printer %s.";
 };
 
 String RID_PA_TXT_TESTPAGE_PRINTED
 {
-    Text [ de ] = "Die Testseite wurde erfolgreich gedruckt. Bitte prüfen Sie das Ergebnis." ;
+    Text [ de ] = "Die Testseite wurde erfolgreich gedruckt. Bitte prÃ¼fen Sie das Ergebnis." ;
     Text [ en-US ] = "The test page was printed succesfully. Please check the result.";
 };
 
@@ -427,7 +427,7 @@ ModalDialog RID_FONTNAMEDIALOG
         DefButton = TRUE ;
         Pos = MAP_APPFONT ( 196 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
-        Text [ de ] = "Schließen" ;
+        Text [ de ] = "SchlieÃŸen" ;
         Text [ en-US ] = "Close";
     };
     PushButton RID_FNTNM_BTN_RENAME
@@ -448,7 +448,7 @@ ModalDialog RID_FONTNAMEDIALOG
     {
         Pos = MAP_APPFONT ( 196 , 65 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
-        Text [ de ] = "~Hinzufügen...";
+        Text [ de ] = "~HinzufÃ¼gen...";
         Text [ en-US ] = "~Add...";
     };
     ListBox RID_FNTNM_LB_FONTS
@@ -464,17 +464,17 @@ ModalDialog RID_FONTNAMEDIALOG
         Pos = MAP_APPFONT ( 6 , 81 ) ;
         Size = MAP_APPFONT ( 175 , 24 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "Hinweis: Die Schriften sind nur für die Applikation verfügbar";
+        Text [ de ] = "Hinweis: Die Schriften sind nur fÃ¼r die Applikation verfÃ¼gbar";
         Text [ en-US ] = "Note: The fonts are only available to the applications.";
     };
     String RID_FNTNM_STR_RENAME
     {
-        Text [ de ] = "~Neuer Name für %s";
+        Text [ de ] = "~Neuer Name fÃ¼r %s";
         Text [ en-US ] = "~New name for %s";
     };
     String RID_FNTNM_STR_TTCRENAME
     {
-        Text [ de ] = "~Neuer Name für %s (%d1 von %d2)";
+        Text [ de ] = "~Neuer Name fÃ¼r %s (%d1 von %d2)";
         Text [ en-US ] = "~New name for %s (%d1 of %d2)";
     };
     String RID_FNTNM_STR_NOTRENAMABLE
@@ -533,17 +533,17 @@ String RID_AFMERROR_OK
 };
 String RID_AFMERROR_NO_FONT_NAME
 {
-    Text [ de ] = "Die Metrik enthält keinen 'FontName' Eintrag." ;
+    Text [ de ] = "Die Metrik enthÃ¤lt keinen 'FontName' Eintrag." ;
     Text [ en-US ] = "The metric does not contain a 'FontName' entry.";
 };
 String RID_AFMERROR_NO_FULL_NAME
 {
-    Text [ de ] = "Die Metrik enthält keinen 'FullName' Eintrag." ;
+    Text [ de ] = "Die Metrik enthÃ¤lt keinen 'FullName' Eintrag." ;
     Text [ en-US ] = "The metric does not contain a 'FullName' entry.";
 };
 String RID_AFMERROR_NO_FAMILY_NAME
 {
-    Text [ de ] = "Die Metrik enthält keinen 'FamilyName' Eintrag." ;
+    Text [ de ] = "Die Metrik enthÃ¤lt keinen 'FamilyName' Eintrag." ;
     Text [ en-US ] = "The metric does not contain a 'FamilyName' entry.";
 };
 String RID_AFMERROR_MOVETO_FAILED
@@ -558,12 +558,12 @@ String RID_AFMERROR_STREAM_READ_FAILED
 };
 String RID_AFMERROR_STREAM_WRITE_FAILED
 {
-    Text [ de ] = "Es konnte keine temporäre Datei erzeugt werden." ;
+    Text [ de ] = "Es konnte keine temporÃ¤re Datei erzeugt werden." ;
     Text [ en-US ] = "A temporary file could not be created.";
 };
 STRING RID_AFMERROR_NOT_A_METRIC
 {
-    Text [ de ] = "Die Datei enthält keine Metrik." ;
+    Text [ de ] = "Die Datei enthÃ¤lt keine Metrik." ;
     Text [ en-US ] = "The file does not contain a metric.";
 };
 String RID_AFMERROR_BOX_TXT
@@ -641,7 +641,7 @@ ModalDialog RID_PPDIMPORT_DLG
     {
         Pos = MAP_APPFONT( 10, 33 );
         Size = MAP_APPFONT( 190, 8 );
-        Text [ de ] = "Bitte wählen Sie das Verzeichnis mit den Treiberdateien aus.";
+        Text [ de ] = "Bitte wÃ¤hlen Sie das Verzeichnis mit den Treiberdateien aus.";
         Text [ en-US ] = "Please select the driver directory.";
     };
     ComboBox RID_PPDIMP_LB_PATH
@@ -682,7 +682,7 @@ ModalDialog RID_PPDIMPORT_DLG
         Pos = MAP_APPFONT( 10, 195 );
         Size = MAP_APPFONT( 190, 60 );
         WordBreak = TRUE;
-        Text [ de ] = "Bitte wählen Sie die gewünschten Treiber aus und bestätigen mit der Schaltfläche \"%s\".";
+        Text [ de ] = "Bitte wÃ¤hlen Sie die gewÃ¼nschten Treiber aus und bestÃ¤tigen mit der SchaltflÃ¤che \"%s\".";
         Text [ en-US ] = "Please select the drivers to install and press \"%s\".";
     };
     String RID_PPDIMP_STR_LOADINGPPD
@@ -719,7 +719,7 @@ String RID_QUERY_REMOVEPRINTER
 
 String RID_QUERY_REMOVEFONTFROMLIST
 {
-    Text [ de ] = "Wollen Sie die ausgewählten Schriften wirklich entfernen ?";
+    Text [ de ] = "Wollen Sie die ausgewÃ¤hlten Schriften wirklich entfernen ?";
     Text [ en-US ] = "Do you really want to remove the selected fonts ?";
 };
 
@@ -737,7 +737,7 @@ String RID_ERR_REMOVESGENPRT
 
 String RID_ERR_REMOVEDRIVERFAILED
 {
-    Text [ de ] = "Der Treiber \"%s1\" konnte nicht entfernt werden. Das Löschen der Datei\n\n%s2\n\nist fehlgeschlagen.";
+    Text [ de ] = "Der Treiber \"%s1\" konnte nicht entfernt werden. Das LÃ¶schen der Datei\n\n%s2\n\nist fehlgeschlagen.";
     Text [ en-US ] = "The driver \"%s1\" could not be removed. It was not possible to remove the file\n\n%s2.";
 };
 
@@ -761,13 +761,13 @@ String RID_TXT_PRINTERALREADYEXISTS
 
 String RID_TXT_PRINTERWITHOUTCOMMAND
 {
-    Text [ de ] = "Der Drucker \"%s\" ist unvollständig konfiguriert und kann daher nicht importiert werden.";
+    Text [ de ] = "Der Drucker \"%s\" ist unvollstÃ¤ndig konfiguriert und kann daher nicht importiert werden.";
     Text [ en-US ] = "The printer \"%s\" has no valid configuration and, therefore, cannot be imported.";
 };
 
 String RID_TXT_DRIVERDOESNOTEXIST
 {
-    Text [ de ] = "Der Treiber für den Drucker \"%s1\" (%s2) ist nicht installiert. Daher kann der Drucker nicht importiert werden.";
+    Text [ de ] = "Der Treiber fÃ¼r den Drucker \"%s1\" (%s2) ist nicht installiert. Daher kann der Drucker nicht importiert werden.";
     Text [ en-US ] = "The driver for the printer \"%s1\" (%s2) is not installed. Therefore the printer cannot be imported.";
 };
 
@@ -784,7 +784,7 @@ ModalDialog RID_ADD_PRINTER_DIALOG
     Size = MAP_APPFONT ( 240 , 172 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    Text [ de ] = "Drucker hinzufügen" ;
+    Text [ de ] = "Drucker hinzufÃ¼gen" ;
 
     Control RID_ADDP_CTRL_TITLE
     {
@@ -819,7 +819,7 @@ ModalDialog RID_ADD_PRINTER_DIALOG
     {
         Pos = MAP_APPFONT( 75, 155 );
         Size = MAP_APPFONT( 50, 12 );
-        Text [ de ] = "<< ~Zurück";
+        Text [ de ] = "<< ~ZurÃ¼ck";
         Text [ en-US ] = "<< ~Back";
     };
     Text [ en-US ] = "Add Printer";
@@ -832,14 +832,14 @@ TabPage RID_ADDP_PAGE_CHOOSEDRIVER
     Size = MAP_APPFONT( 240, 120 );
     String RID_ADDP_STR_TITLE
     {
-        Text [ de ] = "Einen Treiber auswählen";
+        Text [ de ] = "Einen Treiber auswÃ¤hlen";
         Text [ en-US ] = "Choose a driver";
     };
     FixedText RID_ADDP_CHDRV_TXT_DRIVER
     {
         Pos = MAP_APPFONT( 5, 5 );
         Size = MAP_APPFONT( 230, 8 );
-        Text [ de ] = "Bitte wählen Sie einen passenden ~Treiber aus";
+        Text [ de ] = "Bitte wÃ¤hlen Sie einen passenden ~Treiber aus";
         Text [ en-US ] = "Please select a s~uitable driver.";
     };
     ListBox RID_ADDP_CHDRV_BOX_DRIVER
@@ -860,12 +860,12 @@ TabPage RID_ADDP_PAGE_CHOOSEDRIVER
     {
         Pos = MAP_APPFONT( 185, 32 );
         Size = MAP_APPFONT( 50, 12 );
-        Text [ de ] = "~Löschen";
+        Text [ de ] = "~LÃ¶schen";
         Text [ en-US ] = "~Delete";
     };
     String RID_ADDP_CHDRV_STR_REMOVE
     {
-        Text [ de ] = "Treiber löschen";
+        Text [ de ] = "Treiber lÃ¶schen";
         Text [ en-US ] = "Delete driver";
     };
 };
@@ -877,14 +877,14 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
     Size = MAP_APPFONT( 240, 120 );
     String RID_ADDP_STR_TITLE
     {
-        Text [ de ] = "Einen Gerätetyp auswählen";
+        Text [ de ] = "Einen GerÃ¤tetyp auswÃ¤hlen";
         Text [ en-US ] = "Choose a device type";
     };
     FixedText RID_ADDP_CHDEV_TXT_OVER
     {
         Pos = MAP_APPFONT( 40, 25 );
         Size = MAP_APPFONT( 180, 8 );
-        Text [ de ] = "Möchten Sie";
+        Text [ de ] = "MÃ¶chten Sie";
         Text [ en-US ] = "Do you want to";
     };
     RadioButton RID_ADDP_CHDEV_BTN_PRINTER
@@ -898,7 +898,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
     {
         Pos = MAP_APPFONT ( 40, 50 );
         Size = MAP_APPFONT( 180, 10 );
-        Text [ de ] = "eine Fa~xlösung anbinden";
+        Text [ de ] = "eine Fa~xlÃ¶sung anbinden";
         Text [ en-US ] = "Connect a fa~x device";
     };
     RadioButton RID_ADDP_CHDEV_BTN_PDF
@@ -924,28 +924,28 @@ TabPage RID_ADDP_PAGE_NAME
     Size = MAP_APPFONT( 240, 120 );
     String RID_ADDP_STR_TITLE
     {
-        Text [ de ] = "Einen Namen auswählen";
+        Text [ de ] = "Einen Namen auswÃ¤hlen";
         Text [ en-US ] = "Choose a name";
     };
     FixedText RID_ADDP_NAME_TXT_NAME
     {
         Pos = MAP_APPFONT( 40, 25 );
         Size = MAP_APPFONT( 220, 8 );
-        Text [ de ] = "Bitte geben Sie einen ~Namen für den Drucker ein";
+        Text [ de ] = "Bitte geben Sie einen ~Namen fÃ¼r den Drucker ein";
         Text [ en-US ] = "Please enter a name for the printer.";
     };
     FixedText RID_ADDP_NAME_TXT_FAXNAME
     {
         Pos = MAP_APPFONT( 40, 25 );
         Size = MAP_APPFONT( 220, 8 );
-        Text [ de ] = "Bitte geben Sie einen ~Namen für die Faxanbindung ein";
+        Text [ de ] = "Bitte geben Sie einen ~Namen fÃ¼r die Faxanbindung ein";
         Text [ en-US ] = "Please enter a name for the fax connection.";
     };
     FixedText RID_ADDP_NAME_TXT_PDFNAME
     {
         Pos = MAP_APPFONT( 40, 25 );
         Size = MAP_APPFONT( 220, 8 );
-        Text [ de ] = "Bitte geben Sie einen ~Namen für die PDF Anbindung ein";
+        Text [ de ] = "Bitte geben Sie einen ~Namen fÃ¼r die PDF Anbindung ein";
         Text [ en-US ] = "Please enter a name for the PDF connection.";
     };
     Edit RID_ADDP_NAME_EDT_NAME
@@ -993,7 +993,7 @@ TabPage RID_ADDP_PAGE_COMMAND
     Size = MAP_APPFONT( 240, 120 );
     String RID_ADDP_STR_TITLE
     {
-        Text [ de ] = "Eine Kommandozeile auswählen";
+        Text [ de ] = "Eine Kommandozeile auswÃ¤hlen";
         Text [ en-US ] = "Choose a command line";
     };
     FixedText RID_ADDP_CMD_TXT_COMMAND
@@ -1001,7 +1001,7 @@ TabPage RID_ADDP_PAGE_COMMAND
         Pos = MAP_APPFONT( 10, 2 );
         Size = MAP_APPFONT( 160, 24 );
         WordBreak = TRUE;
-        Text [ de ] = "Geben Sie bitte eine ~Kommandozeile ein, mit der dieses Gerät angesprochen werden kann";
+        Text [ de ] = "Geben Sie bitte eine ~Kommandozeile ein, mit der dieses GerÃ¤t angesprochen werden kann";
         Text [ en-US ] = "Please enter a c~ommand line appropriate for this device.";
     };
     ComboBox RID_ADDP_CMD_BOX_COMMAND
@@ -1044,12 +1044,12 @@ TabPage RID_ADDP_PAGE_COMMAND
     };
     String RID_ADDP_CMD_STR_PDFHELP
     {
-        Text [ de ] = "Die Kommandozeile bei PDF Konvertern wird wie folgt verarbeitet: bei jedem gedruckten Dokument wird in der Kommandozeile jeweils \"(TMP)\" durch eine temporäre Datei und \"(OUTFILE)\" durch die zu erzeugende PDF Datei ersetzt. Wenn \"(TMP)\" in der Kommandozeile vorkommt wird der PostScript-code in einer Datei übergeben, andernfalls über die Standardeingabe (d.h. als Pipe)." ;
+        Text [ de ] = "Die Kommandozeile bei PDF Konvertern wird wie folgt verarbeitet: bei jedem gedruckten Dokument wird in der Kommandozeile jeweils \"(TMP)\" durch eine temporÃ¤re Datei und \"(OUTFILE)\" durch die zu erzeugende PDF Datei ersetzt. Wenn \"(TMP)\" in der Kommandozeile vorkommt wird der PostScript-code in einer Datei Ã¼bergeben, andernfalls Ã¼ber die Standardeingabe (d.h. als Pipe)." ;
         Text [ en-US ] = "The command line for PDF converters is executed as follows: for each document printed, \"(TMP)\" in the command line is replaced by a temporary file and \"(OUTFILE)\" in the command line is replaced by the target PDF file name. If \"(TMP)\" is in the command line, the PostScript code will be supplied via a file, otherwise via standard input (i.e. as a pipe).";
     };
     String RID_ADDP_CMD_STR_FAXHELP
     {
-        Text [ de ] = "Die Kommandozeile bei Faxanbindungen wird wie folgt verarbeitet: bei jedem gesendeten Fax wird in der Kommandozeile jeweils \"(TMP)\" durch eine temporäre Datei und \"(PHONE)\" durch die Faxnummer ersetzt. Wenn \"(TMP)\" in der Kommandozeile vorkommt wird der PostScript-code in einer Datei übergeben, andernfalls über die Standardeingabe (d.h. als Pipe)." ;
+        Text [ de ] = "Die Kommandozeile bei Faxanbindungen wird wie folgt verarbeitet: bei jedem gesendeten Fax wird in der Kommandozeile jeweils \"(TMP)\" durch eine temporÃ¤re Datei und \"(PHONE)\" durch die Faxnummer ersetzt. Wenn \"(TMP)\" in der Kommandozeile vorkommt wird der PostScript-code in einer Datei Ã¼bergeben, andernfalls Ã¼ber die Standardeingabe (d.h. als Pipe)." ;
         Text [ en-US ] = "The command line for fax connections is executed as follows: for each fax sent, \"(TMP)\" in the command line is replaced by a temporary file and \"(PHONE)\" in the command line is replaced by the fax number. If \"(TMP)\" appears in the command line, the PostScript code will be supplied via a file, otherwise it is passed as standard input (i.e. as a pipe).";
     };
 };
@@ -1061,7 +1061,7 @@ TabPage RID_ADDP_PAGE_OLDPRINTERS
     Size = MAP_APPFONT( 240, 120 );
     String RID_ADDP_STR_TITLE
     {
-        Text [ de ] = "Drucker älterer Versionen importieren";
+        Text [ de ] = "Drucker Ã¤lterer Versionen importieren";
         Text [ en-US ] = "Import printers from old versions";
     };
     FixedText RID_ADDP_OLD_TXT_PRINTERS
@@ -1069,7 +1069,7 @@ TabPage RID_ADDP_PAGE_OLDPRINTERS
         Pos = MAP_APPFONT( 10, 10 );
         Size = MAP_APPFONT( 165, 25 );
         WordBreak = TRUE;
-        Text [ de ] = "~Diese Drucker können importiert werden. Bitte wählen Sie diejenigen, die Sie importieren möchten.";
+        Text [ de ] = "~Diese Drucker kÃ¶nnen importiert werden. Bitte wÃ¤hlen Sie diejenigen, die Sie importieren mÃ¶chten.";
         Text [ en-US ] = "~These printers can be imported. Please select the ones you want to import.";
     };
     MultiListBox RID_ADDP_OLD_BOX_PRINTERS
@@ -1082,7 +1082,7 @@ TabPage RID_ADDP_PAGE_OLDPRINTERS
     {
         Pos = MAP_APPFONT( 180, 35 );
         Size = MAP_APPFONT( 50, 12 );
-        Text [ de ] = "~Alle auswählen";
+        Text [ de ] = "~Alle auswÃ¤hlen";
         Text [ en-US ] = "~Select All";
     };
 };
@@ -1094,7 +1094,7 @@ TabPage RID_ADDP_PAGE_FAXDRIVER
     Size = MAP_APPFONT( 240, 120 );
     String RID_ADDP_STR_TITLE
     {
-        Text [ de ] = "Einen Treiber auswählen";
+        Text [ de ] = "Einen Treiber auswÃ¤hlen";
         Text [ en-US ] = "Choose a driver";
     };
     FixedText RID_ADDP_FAXDRV_TXT_DRIVER
@@ -1102,7 +1102,7 @@ TabPage RID_ADDP_PAGE_FAXDRIVER
         Pos = MAP_APPFONT( 40, 20 );
         Size = MAP_APPFONT( 160, 19 );
         WordBreak = TRUE;
-        Text [ de ] = "Für diese Faxanbindung soll folgender Treiber verwendet werden";
+        Text [ de ] = "FÃ¼r diese Faxanbindung soll folgender Treiber verwendet werden";
         Text [ en-US ] = "Use the following driver for this fax connection";
     };
     RadioButton RID_ADDP_FAXDRV_BTN_DEFAULT
@@ -1128,7 +1128,7 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
     Size = MAP_APPFONT( 240, 120 );
     String RID_ADDP_STR_TITLE
     {
-        Text [ de ] = "Einen Treiber auswählen";
+        Text [ de ] = "Einen Treiber auswÃ¤hlen";
         Text [ en-US ] = "Choose a driver";
     };
     FixedText RID_ADDP_PDFDRV_TXT_DRIVER
@@ -1136,7 +1136,7 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Pos = MAP_APPFONT( 40, 20 );
         Size = MAP_APPFONT( 160, 19 );
         WordBreak = TRUE;
-        Text [ de ] = "Für diesen PDF-Konverter soll folgender Treiber verwendet werden";
+        Text [ de ] = "FÃ¼r diesen PDF-Konverter soll folgender Treiber verwendet werden";
         Text [ en-US ] = "Use the following driver for this PDF converter";
     };
     RadioButton RID_ADDP_PDFDRV_BTN_DEFAULT
@@ -1170,13 +1170,13 @@ String RID_TXT_FONT_ITALIC
 
 String RID_TXT_FONT_OBLIQUE
 {
-    Text [ de ] = "Schräg";
+    Text [ de ] = "SchrÃ¤g";
     Text [ en-US ] = "Oblique";
 };
 
 String RID_TXT_FONT_THIN
 {
-    Text [ de ] = "Dünn";
+    Text [ de ] = "DÃ¼nn";
     Text [ en-US ] = "Thin";
 };
 
