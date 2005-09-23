@@ -4,9 +4,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:32:54 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:18:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,7 @@ ImageList IMG_JOINS_H
 String STR_QUERY_UNDO_TABWINSHOW
 {
     /* ### ACHTUNG: Neuer Text in Resource? Tabellenfenster hinzufügen : Tabellenfenster hinzufügen */
-    Text [ de ] = "Tabellenfenster hinzufügen" ;
+    Text [ de ] = "Tabellenfenster hinzufÃ¼gen" ;
     Text [ en-US ] = "Add Table Window" ;
     Text [ x-comment ] = " ";
 };
@@ -148,28 +148,28 @@ String STR_QUERY_UNDO_MOVETABWIN
 };
 String STR_QUERY_UNDO_INSERTCONNECTION
 {
-    Text [ de ] = "Verknüpfung einfügen" ;
+    Text [ de ] = "VerknÃ¼pfung einfÃ¼gen" ;
     Text [ en-US ] = "Insert Join" ;
     Text [ x-comment ] = " ";
 };
 
 String STR_QUERY_UNDO_REMOVECONNECTION
 {
-    Text [ de ] = "Verknüpfung löschen" ;
+    Text [ de ] = "VerknÃ¼pfung lÃ¶schen" ;
     Text [ en-US ] = "Delete Join" ;
     Text [ x-comment ] = " ";
 };
 
 String STR_QUERY_UNDO_SIZETABWIN
 {
-    Text [ de ] = "Tabellenfenster - Größe aendern" ;
+    Text [ de ] = "Tabellenfenster - GrÃ¶ÃŸe aendern" ;
     Text [ en-US ] = "Resize table window" ;
     Text [ x-comment ] = " ";
 };
 String STR_QUERY_UNDO_TABFIELDDELETE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Spalte löschen : Spalte löschen */
-    Text [ de ] = "Spalte löschen" ;
+    Text [ de ] = "Spalte lÃ¶schen" ;
     Text [ en-US ] = "Delete Column" ;
     Text [ x-comment ] = " ";
 };
@@ -184,26 +184,26 @@ String STR_QUERY_UNDO_TABFIELDMOVED
 String STR_QUERY_UNDO_TABFIELDCREATE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Spalte hinzufügen : Spalte hinzufügen */
-    Text [ de ] = "Spalte hinzufügen" ;
+    Text [ de ] = "Spalte hinzufÃ¼gen" ;
     Text [ en-US ] = "Add Column" ;
     Text [ x-comment ] = " ";
 };
 String RID_STR_TABLE_DOESNT_EXIST
 {
-    Text [ de ] = "Der Ausdruck ist ungültig, da keine Tabelle '$name$' existiert !";
+    Text [ de ] = "Der Ausdruck ist ungÃ¼ltig, da keine Tabelle '$name$' existiert !";
     Text [ en-US ] = "Invalid expression, table '$name$' does not exist!";
     Text [ x-comment ] = " ";
 };
 
 String RID_STR_FIELD_DOESNT_EXIST
 {
-    Text [ de ] = "Der Ausdruck ist ungültig, da der Feldname '$name$' nicht zugeordnet werden kann!";
+    Text [ de ] = "Der Ausdruck ist ungÃ¼ltig, da der Feldname '$name$' nicht zugeordnet werden kann!";
     Text [ en-US ] = "Invalid expression, field name '$name$' does not exist.";
     Text [ x-comment ] = " ";
 };
 String RID_STR_TOMUCHTABLES
 {
-    Text [ de ] = "Die Abfrage enthält #num# Tabellen. Der aktuelle Datenbanktyp kann aber maximal #maxnum# Tabelle(n) pro Statement verarbeiten !";
+    Text [ de ] = "Die Abfrage enthÃ¤lt #num# Tabellen. Der aktuelle Datenbanktyp kann aber maximal #maxnum# Tabelle(n) pro Statement verarbeiten !";
     Text [ en-US ] = "The query covers #num# tables. The selected database type, however, can only process a maximum of #maxnum# table(s) per statement!";
     Text [ x-comment ] = " ";
 };
@@ -211,20 +211,20 @@ String RID_STR_TOMUCHTABLES
 String STR_QUERY_UNDO_TABWINDELETE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Tabellenfenster löschen : Tabellenfenster löschen */
-    Text [ de ] = "Tabellenfenster löschen" ;
+    Text [ de ] = "Tabellenfenster lÃ¶schen" ;
     Text [ en-US ] = "Delete Table Window" ;
     Text [ x-comment ] = " ";
 };
 
 String STR_QUERY_UNDO_MODIFY_CELL
 {
-    Text [ de ] = "Spaltenbeschreibung ändern" ;
+    Text [ de ] = "Spaltenbeschreibung Ã¤ndern" ;
     Text [ en-US ] = "Edit Column Description";
     Text [ x-comment ] = " ";
 };
 String STR_QUERY_UNDO_SIZE_COLUMN
 {
-    Text [ de ] = "Spaltenbreite ändern" ;
+    Text [ de ] = "Spaltenbreite Ã¤ndern" ;
     Text [ en-US ] = "Adjust column width";
     Text [ x-comment ] = " ";
 };
@@ -250,7 +250,7 @@ String STR_QUERY_NOTABLE
 };
 String STR_QRY_ORDERBY_UNRELATED
 {
-    Text [ de ] = "Die Datenbank unterstützt die Sortierung nur für sichtbare Felder.";
+    Text [ de ] = "Die Datenbank unterstÃ¼tzt die Sortierung nur fÃ¼r sichtbare Felder.";
     Text [ en-US ] = "The database only supports sorting for visible fields.";
     Text [ x-comment ] = " ";
 };
@@ -317,7 +317,7 @@ String STR_QRY_TOO_MANY_COLUMNS
 ErrorBox ERR_QRY_CRITERIA_ON_ASTERISK
 {
     /* ### ACHTUNG: Neuer Text in Resource? Eine Bedingung für Feld [*] ist nicht möglich : Eine Bedingung für Feld [*] ist nicht möglich */
-    Message [ de ] = "Eine Bedingung für Feld [*] ist nicht möglich" ;
+    Message [ de ] = "Eine Bedingung fÃ¼r Feld [*] ist nicht mÃ¶glich" ;
     Message [ en-US ] = "A condition cannot be applied to field [*]" ;
 };
 String STR_QRY_TOO_LONG_STATEMENT
@@ -376,7 +376,7 @@ String STR_QRY_TOO_MANY_TABLES
 String STR_QRY_NATIVE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Bei Anfrage im SQL-Dialekt der Datenbank wird das Statement nicht übernommen : Bei Anfrage im SQL-Dialekt der Datenbank wird das Statement nicht übernommen */
-    Text [ de ] = "Bei Anfrage im SQL-Dialekt der Datenbank wird das Statement nicht übernommen" ;
+    Text [ de ] = "Bei Anfrage im SQL-Dialekt der Datenbank wird das Statement nicht Ã¼bernommen" ;
     Text [ en-US ] = "The statement will not be applied when querying in the SQL dialect of the database." ;
     Text [ x-comment ] = " ";
 };
@@ -389,14 +389,14 @@ ErrorBox ERR_QRY_AMB_FIELD
 String STR_QRY_ILLEGAL_JOIN
 {
     /* ### ACHTUNG: Neuer Text in Resource? Verknüpfung konnte nicht ausgeführt werden : Verknüpfung konnte nicht ausgeführt werden */
-    Text [ de ] = "Verknüpfung konnte nicht ausgeführt werden" ;
+    Text [ de ] = "VerknÃ¼pfung konnte nicht ausgefÃ¼hrt werden" ;
     Text [ en-US ] = "Join could not be processed" ;
     Text [ x-comment ] = " ";
 };
 
 String STR_QUERY_SAVEMODIFIED
 {
-    Text [ de ] = "$object$ wurde geändert.\nSollen die Änderungen gespeichert werden?" ;
+    Text [ de ] = "$object$ wurde geÃ¤ndert.\nSollen die Ã„nderungen gespeichert werden?" ;
     Text [ en-US ] = "$object$ has been changed.\nDo you want to save the changes?" ;
 };
 
@@ -434,13 +434,13 @@ String STR_SVT_SQL_SYNTAX_ERROR
 
 String STR_QUERYDESIGN_NO_VIEW_SUPPORT
 {
-    Text [ de ] = "Diese Datenbank unterstützt keine Tabellenansichten!";
+    Text [ de ] = "Diese Datenbank unterstÃ¼tzt keine Tabellenansichten!";
     Text [ en-US ] = "This database does not support table views!";
 };
 
 String STR_QUERYDESIGN_NO_VIEW_ASK
 {
-    Text [ de ] = "Möchten Sie statt dessen eine Abfrage erzeugen?";
+    Text [ de ] = "MÃ¶chten Sie statt dessen eine Abfrage erzeugen?";
     Text [ en-US ] = "Do you want to create a query instead?";
 };
 
@@ -452,7 +452,7 @@ ErrorBox ERR_QRY_NOSTATEMENT
 
 ErrorBox ERR_QRY_NOCRITERIA
 {
-    Message [ de ] = "Es konnte keine Abfrage erstellt werden, da keine Felder ausgewählt wurden!" ;
+    Message [ de ] = "Es konnte keine Abfrage erstellt werden, da keine Felder ausgewÃ¤hlt wurden!" ;
     Message [ en-US ] = "No query could be created because no fields were selected.";
 };
 
@@ -462,7 +462,7 @@ ErrorBox ERR_QRY_NOCRITERIA
 
 String STR_DATASOURCE_DELETED
 {
-    Text [ de ] = "Die zugehörige Datenquelle wurde gelöscht. Es können keine dies bezüglichen Daten gespeichert werden.";
+    Text [ de ] = "Die zugehÃ¶rige Datenquelle wurde gelÃ¶scht. Es kÃ¶nnen keine dies bezÃ¼glichen Daten gespeichert werden.";
     Text [ en-US ] = "The corresponding data source has been deleted. Therefore, data relevant to that data source cannot be saved.";
 };
 
@@ -474,7 +474,7 @@ String STR_QRY_COLUMN_NOT_FOUND
 
 String STR_QRY_JOIN_COLUMN_COMPARE
 {
-    Text [ de ] = "Spalten dürfen nur mit '=' verglichen werden!";
+    Text [ de ] = "Spalten dÃ¼rfen nur mit '=' verglichen werden!";
     Text [ en-US ] = "Columns can only be compared using '='.";
 };
 
