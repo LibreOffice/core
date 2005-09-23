@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:07:43 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 10:46:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -436,7 +436,10 @@ bool SlideshowImpl::startPreview(
         }
 
         if( mpView )
+        {
             mpView->AddWin( mpShowWindow );
+            mpView->SetAnimationPause( TRUE );
+        }
 
         // call resize handler
         if( pParent )
@@ -660,7 +663,10 @@ bool SlideshowImpl::startShow( PresentationSettings* pPresSettings )
 */
 
         if( mpView )
+        {
             mpView->AddWin( mpShowWindow );
+            mpView->SetAnimationPause( TRUE );
+        }
 
         SfxBindings& rBindings = getViewFrame()->GetBindings();
         rBindings.Invalidate( SID_PRESENTATION );
@@ -863,6 +869,9 @@ void SlideshowImpl::stopShow()
     // der DrawView das Praesentationfenster wegnehmen und ihr dafuer ihre alten Fenster wiedergeben
     if( mpShowWindow && mpView )
         mpView->DelWin( mpShowWindow );
+
+    if( mpView )
+        mpView->SetAnimationPause( FALSE );
 
     if( mpViewShell )
     {
@@ -1241,7 +1250,7 @@ void SlideshowImpl::gotoPreviousSlide()
         if( mpShowWindow->GetShowWindowMode() == SHOWWINDOWMODE_END )
         {
             const sal_Int32 nLastPageIndex = mpAnimationPageList->getPageIndexCount() - 1;
-            if( nLastPageIndex > 0 )
+            if( nLastPageIndex >= 0 )
                 mpShowWindow->RestartShow( nLastPageIndex );
         }
         else if( mpAnimationPageList->getCurrentPageIndex() > 0 )
