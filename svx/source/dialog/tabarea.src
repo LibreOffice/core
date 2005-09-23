@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:11:40 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:49:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -294,7 +294,7 @@ TabPage RID_SVXPAGE_AREA
     Size = MAP_APPFONT ( 260 , 185 ) ;
     HelpID = HID_AREA_AREA ;
     Hide = TRUE ;
-    Text [ de ] = "Fläche" ;
+    Text [ de ] = "FlÃ¤che" ;
     Text [ en-US ] = "Area" ;
     Text [ x-comment ] = " ";
 
@@ -302,7 +302,7 @@ TabPage RID_SVXPAGE_AREA
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 120, 8 ) ;
-        Text [ de ] = "Füllung" ;
+        Text [ de ] = "FÃ¼llung" ;
         Text [ en-US ] = "Fill";
     };
     ListBox LB_AREA_TYPE
@@ -436,7 +436,7 @@ TabPage RID_SVXPAGE_AREA
     {
         Pos = MAP_APPFONT ( 132 , 3  ) ;
         Size = MAP_APPFONT ( 122 , 8 ) ;
-        Text [ de ] = "Größe" ;
+        Text [ de ] = "GrÃ¶ÃŸe" ;
         Text [ en-US ] = "Size" ;
         Text [ x-comment ] = " ";
     };
@@ -488,7 +488,7 @@ TabPage RID_SVXPAGE_AREA
     {
         Pos = MAP_APPFONT ( 187 , 31  ) ;
         Size = MAP_APPFONT ( 24 , 8 ) ;
-        Text [ de ] = "H~öhe" ;
+        Text [ de ] = "H~Ã¶he" ;
         Text [ en-US ] = "H~eight" ;
         Text [ x-comment ] = " ";
     };
@@ -884,7 +884,7 @@ TabPage RID_SVXPAGE_HATCH
     {
         Pos = MAP_APPFONT ( 197 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "H~inzufügen..." ;
+        Text [ de ] = "H~inzufÃ¼gen..." ;
         Text [ en-US ] = "~Add..." ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -893,7 +893,7 @@ TabPage RID_SVXPAGE_HATCH
     {
         Pos = MAP_APPFONT ( 197 , 32  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Ändern..." ;
+        Text [ de ] = "~Ã„ndern..." ;
         Text [ en-US ] = "~Modify..." ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -902,7 +902,7 @@ TabPage RID_SVXPAGE_HATCH
     {
         Pos = MAP_APPFONT ( 197 , 68  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Löschen..." ;
+        Text [ de ] = "~LÃ¶schen..." ;
         Text [ en-US ] = "~Delete..." ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -1035,7 +1035,7 @@ TabPage RID_SVXPAGE_BITMAP
     {
         Pos = MAP_APPFONT ( 197 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "H~inzufügen..." ;
+        Text [ de ] = "H~inzufÃ¼gen..." ;
         Text [ en-US ] = "~Add..." ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -1044,7 +1044,7 @@ TabPage RID_SVXPAGE_BITMAP
     {
         Pos = MAP_APPFONT ( 197 , 32  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Ändern..." ;
+        Text [ de ] = "~Ã„ndern..." ;
         Text [ en-US ] = "~Modify..." ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -1062,7 +1062,7 @@ TabPage RID_SVXPAGE_BITMAP
     {
         Pos = MAP_APPFONT ( 197 , 68 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Löschen..." ;
+        Text [ de ] = "~LÃ¶schen..." ;
         Text [ en-US ] = "~Delete..." ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -1108,7 +1108,7 @@ TabPage RID_SVXPAGE_GRADIENT
 {
     HelpID = HID_AREA_GRADIENT ;
     Hide = TRUE ;
-    Text [ de ] = "Farbverläufe" ;
+    Text [ de ] = "FarbverlÃ¤ufe" ;
     Text [ en-US ] = "Gradients" ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedLine FL_PROP
@@ -1335,7 +1335,7 @@ TabPage RID_SVXPAGE_GRADIENT
     {
         Pos = MAP_APPFONT ( 197 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "H~inzufügen..." ;
+        Text [ de ] = "H~inzufÃ¼gen..." ;
         Text [ en-US ] = "~Add..." ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -1344,7 +1344,7 @@ TabPage RID_SVXPAGE_GRADIENT
     {
         Pos = MAP_APPFONT ( 197 , 32  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Ändern..." ;
+        Text [ de ] = "~Ã„ndern..." ;
         Text [ en-US ] = "~Modify..." ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -1353,7 +1353,7 @@ TabPage RID_SVXPAGE_GRADIENT
     {
         Pos = MAP_APPFONT ( 197 , 68 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Löschen..." ;
+        Text [ de ] = "~LÃ¶schen..." ;
         Text [ en-US ] = "~Delete..." ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -1575,7 +1575,7 @@ TabPage RID_SVXPAGE_COLOR
     {
         Pos = MAP_APPFONT ( 197 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "H~inzufügen" ;
+        Text [ de ] = "H~inzufÃ¼gen" ;
         Text [ en-US ] = "~Add" ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -1593,7 +1593,7 @@ TabPage RID_SVXPAGE_COLOR
     {
         Pos = MAP_APPFONT ( 197 , 68  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Löschen..." ;
+        Text [ de ] = "~LÃ¶schen..." ;
         Text [ en-US ] = "~Delete..." ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -1602,7 +1602,7 @@ TabPage RID_SVXPAGE_COLOR
     {
         Pos = MAP_APPFONT ( 197, 32  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Ändern" ;
+        Text [ de ] = "~Ã„ndern" ;
         Text [ en-US ] = "~Modify" ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -1649,7 +1649,7 @@ TabDialog RID_SVXDLG_AREA
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text [ de ] = "Fläche" ;
+    Text [ de ] = "FlÃ¤che" ;
     Text [ en-US ] = "Area" ;
     Moveable = TRUE ;
     TabControl 1
@@ -1661,7 +1661,7 @@ TabDialog RID_SVXDLG_AREA
             PageItem
             {
                 Identifier = RID_SVXPAGE_AREA ;
-                Text [ de ] = "Fläche" ;
+                Text [ de ] = "FlÃ¤che" ;
                 Text [ en-US ] = "Area" ;
                 PageResID = RID_SVXPAGE_AREA ;
                 Text [ x-comment ] = " ";
@@ -1691,7 +1691,7 @@ TabDialog RID_SVXDLG_AREA
             PageItem
             {
                 Identifier = RID_SVXPAGE_GRADIENT ;
-                Text [ de ] = "Farbverläufe" ;
+                Text [ de ] = "FarbverlÃ¤ufe" ;
                 Text [ en-US ] = "Gradients" ;
                 PageResID = RID_SVXPAGE_GRADIENT ;
                 Text [ x-comment ] = " ";
