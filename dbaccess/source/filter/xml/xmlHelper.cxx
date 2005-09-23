@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:06:46 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:11:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,18 +62,26 @@
 #ifndef _COM_SUN_STAR_AWT_TEXTALIGN_HPP_
 #include <com/sun/star/awt/TextAlign.hpp>
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 namespace dbaxml
 {
     using namespace ::xmloff::token;
     using namespace ::com::sun::star::awt;
+DBG_NAME(OPropertyHandlerFactory)
 
 OPropertyHandlerFactory::OPropertyHandlerFactory()
 {
+    DBG_CTOR(OPropertyHandlerFactory,NULL);
+
 }
 // -----------------------------------------------------------------------------
 OPropertyHandlerFactory::~OPropertyHandlerFactory()
 {
+
+    DBG_DTOR(OPropertyHandlerFactory,NULL);
 }
 // -----------------------------------------------------------------------------
 const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 _nType) const
@@ -150,7 +158,7 @@ UniReference < XMLPropertySetMapper > OXMLHelper::GetColumnStylesPropertySetMapp
     {
         MAP_CONST( PROPERTY_WIDTH,          XML_NAMESPACE_STYLE,    XML_COLUMN_WIDTH,       XML_TYPE_PROP_TABLE_COLUMN|XML_TYPE_MEASURE, 0),
         MAP_CONST( PROPERTY_HIDDEN,         XML_NAMESPACE_TABLE,    XML_DISPLAY,            XML_TYPE_PROP_TABLE_COLUMN|XML_DB_TYPE_EQUAL|MID_FLAG_SPECIAL_ITEM, CTF_DB_ISVISIBLE ),
-        MAP_CONST( PROPERTY_ALIGN,          XML_NAMESPACE_STYLE,    XML_TEXT_ALIGN,         XML_TYPE_PROP_TABLE_COLUMN|XML_TYPE_TEXT_ALIGN, 0 ),
+        MAP_CONST( PROPERTY_ALIGN,          XML_NAMESPACE_FO,       XML_TEXT_ALIGN,         XML_TYPE_PROP_TABLE_COLUMN|XML_TYPE_TEXT_ALIGN, CTF_DB_COLUMN_TEXT_ALIGN ),
         MAP_CONST( PROPERTY_NUMBERFORMAT,   XML_NAMESPACE_STYLE,    XML_DATA_STYLE_NAME,    XML_TYPE_PROP_TABLE_COLUMN|XML_TYPE_NUMBER|MID_FLAG_SPECIAL_ITEM, CTF_DB_NUMBERFORMAT),
         MAP_END()
     };
