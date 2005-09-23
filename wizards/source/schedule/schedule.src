@@ -4,9 +4,9 @@
  *
  *  $RCSfile: schedule.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:10:15 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:16:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ Text [ en-US ] = "%PRODUCTNAME Calendar";
 
 String  dlgCalTitleBack
 {
-Text [ de ] = "Zurück";
+Text [ de ] = "ZurÃ¼ck";
 Text [ en-US ] = "Back";
 };
 
@@ -129,7 +129,7 @@ Text [ en-US ] = "Calendar";
 
 String  dlgCalOptionYear
 {
-Text [ de ] = "~Jahresübersicht";
+Text [ de ] = "~JahresÃ¼bersicht";
 Text [ en-US ] = "~Year Overview";
 };
 
@@ -141,7 +141,7 @@ Text [ en-US ] = "~Month";
 
 String dlgSchdlDescription
 {
-Text [ de ] = "Feiertagsberechnung für";
+Text [ de ] = "Feiertagsberechnung fÃ¼r";
 Text [ en-US ] = "Add holidays for";
     Text [ x-comment ] = " ";
 };
@@ -187,7 +187,7 @@ Text [ en-US ] = "Personal Data";
 
 String dlgCalInsert
 {
-Text [ de ] = "~Einfügen";
+Text [ de ] = "~EinfÃ¼gen";
 Text [ en-US ] = "~Insert";
 };
 
@@ -272,7 +272,7 @@ Text [ en-US ] = "February";
 
 String dlgMonth+2
 {
-Text [ de ] = "März";
+Text [ de ] = "MÃ¤rz";
 Text [ en-US ] = "March";
 };
 
@@ -346,13 +346,13 @@ Text [ en-US ] = "An error occurred while creating the calendar.";
 
 String msgCalRemoveTitle
 {
-Text [ de ] = "Ereigniseinträge entfernen";
+Text [ de ] = "EreigniseintrÃ¤ge entfernen";
 Text [ en-US ] = "Delete event entries";
 };
 
 String msgCalRemove
 {
-Text [ de ] = "Sollen die selektierten Einträge entfernt werden?";
+Text [ de ] = "Sollen die selektierten EintrÃ¤ge entfernt werden?";
 Text [ en-US ] = "Delete the selected entries?";
     Text [ x-comment ] = " ";
 };
