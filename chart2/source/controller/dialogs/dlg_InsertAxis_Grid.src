@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_InsertAxis_Grid.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:07:15 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:44:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ ModalDialog DLG_AXIS_OR_GRID
     {
         Pos = MAP_APPFONT ( 6 , 58  ) ;
         Size = MAP_APPFONT ( 92 , 8 ) ;
-        Text [ de ] = "Sekund‰re Achse" ;
+        Text [ de ] = "Sekund√§re Achse" ;
         Text [ en-US ] = "Secondary axis" ;
     };
     FixedLine FL_SECONDARY_GRID
