@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FValue.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:09:54 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:36:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1761,5 +1761,83 @@ void ORowSetValue::setSigned(sal_Bool _bMod)
     }
 }
 // -----------------------------------------------------------------------------
-
+void ORowSetValue::fill(sal_Int32 _nPos,
+                     sal_Int32 _nType,
+                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>& _xRow)
+{
+    sal_Bool bReadData = sal_True;
+    switch(_nType)
+    {
+    case DataType::CHAR:
+    case DataType::VARCHAR:
+    case DataType::DECIMAL:
+    case DataType::NUMERIC:
+    case DataType::LONGVARCHAR:
+        (*this) = _xRow->getString(_nPos);
+        break;
+    case DataType::BIGINT:
+        if ( isSigned() )
+            (*this) = _xRow->getLong(_nPos);
+        else
+            (*this) = _xRow->getString(_nPos);
+        break;
+    case DataType::FLOAT:
+        (*this) = _xRow->getFloat(_nPos);
+        break;
+    case DataType::DOUBLE:
+    case DataType::REAL:
+        (*this) = _xRow->getDouble(_nPos);
+        break;
+    case DataType::DATE:
+        (*this) = _xRow->getDate(_nPos);
+        break;
+    case DataType::TIME:
+        (*this) = _xRow->getTime(_nPos);
+        break;
+    case DataType::TIMESTAMP:
+        (*this) = _xRow->getTimestamp(_nPos);
+        break;
+    case DataType::BINARY:
+    case DataType::VARBINARY:
+    case DataType::LONGVARBINARY:
+        (*this) = _xRow->getBytes(_nPos);
+        break;
+    case DataType::BIT:
+    case DataType::BOOLEAN:
+        (*this) = _xRow->getBoolean(_nPos);
+        break;
+    case DataType::TINYINT:
+        if ( isSigned() )
+            (*this) = _xRow->getByte(_nPos);
+        else
+            (*this) = _xRow->getShort(_nPos);
+        break;
+    case DataType::SMALLINT:
+        if ( isSigned() )
+            (*this) = _xRow->getShort(_nPos);
+        else
+            (*this) = _xRow->getInt(_nPos);
+        break;
+    case DataType::INTEGER:
+        if ( isSigned() )
+            (*this) = _xRow->getInt(_nPos);
+        else
+            (*this) = _xRow->getLong(_nPos);
+        break;
+    case DataType::CLOB:
+        (*this) = ::com::sun::star::uno::makeAny(_xRow->getCharacterStream(_nPos));
+        setTypeKind(DataType::CLOB);
+        break;
+    case DataType::BLOB:
+        (*this) = ::com::sun::star::uno::makeAny(_xRow->getBinaryStream(_nPos));
+        setTypeKind(DataType::BLOB);
+        break;
+    default:
+        bReadData = sal_False;
+        break;
+    }
+    if ( bReadData && _xRow->wasNull() )
+        setNull();
+    setTypeKind(_nType);
+}
 
