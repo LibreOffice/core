@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldtdlg.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:42:12 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:03:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,13 +101,13 @@ TabDialog DLG_FLD_INSERT
     };
     String STR_FLD_INSERT
     {
-        Text [ de ] = "~Einf¸gen" ;
+        Text [ de ] = "~Einf√ºgen" ;
         Text [ en-US ] = "~Insert" ;
         Text [ x-comment ] = " ";
     };
     String STR_FLD_CLOSE
     {
-        Text [ de ] = "~Schlieﬂen" ;
+        Text [ de ] = "~Schlie√üen" ;
         Text [ en-US ] = "~Close" ;
         Text [ x-comment ] = " ";
     };
