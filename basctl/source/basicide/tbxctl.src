@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxctl.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:12:18 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:21:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_PUSHBUTTON ;
             Identifier = SID_INSERT_PUSHBUTTON ;
             RadioCheck = TRUE ;
-            Text [ de ] = "Schaltfläche" ;
+            Text [ de ] = "SchaltflÃ¤che" ;
             Text [ en-US ] = "Button" ;
             /* ### ACHTUNG: Neuer Text in Resource? CommandButton einfügen : CommandButton einf³gen */
             Text [ x-comment ] = " ";
@@ -247,7 +247,7 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_CURRENCYFIELD ;
             Identifier = SID_INSERT_CURRENCYFIELD ;
             RadioCheck = TRUE ;
-            Text [ de ] = "Währungsfeld" ;
+            Text [ de ] = "WÃ¤hrungsfeld" ;
             Text [ en-US ] = "Currency Field";
         };
         ToolBoxItem
