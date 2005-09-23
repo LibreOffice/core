@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CacheSet.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:57:28 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:01:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,12 +90,7 @@ namespace dbaccess
         sal_Bool                                    m_bUpdated;
         sal_Bool                                    m_bDeleted;
 
-        OCacheSet()
-            :m_bInserted(sal_False)
-            ,m_bUpdated(sal_False)
-            ,m_bDeleted(sal_False)
-        {
-        }
+        OCacheSet();
         virtual ~OCacheSet();
 
         void setParameter(sal_Int32 nPos
@@ -109,19 +104,6 @@ namespace dbaccess
                             ,::rtl::OUString& _sParameter
                             ,::std::list< sal_Int32>& _rOrgValues);
         void fillTableName(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-
-        /**
-            fetchValue fetches a single value out of the current row
-            @param _nPos    the current column position
-            @param _nType   the type of the current column
-            @param _xRow    the row where to fetch the data from
-
-            @param _rValue  out - value which was fetched
-        */
-        void fetchValue(sal_Int32 _nPos,
-                        sal_Int32 _nType,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>& _xRow,
-                        ::connectivity::ORowSetValue& _rValue);
 
         ::rtl::OUString getIdentifierQuoteString() const;
     public:
