@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:46:18 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:39:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,6 +178,16 @@ void WinMtfPathObj::AddPolyPolygon( const PolyPolygon& rPolyPoly )
 
 void WinMtfPathObj::ClosePath()
 {
+    if ( Count() )
+    {
+        Polygon& rPoly = ((PolyPolygon&)*this)[ Count() - 1 ];
+        if ( rPoly.GetSize() > 2 )
+        {
+            Point aFirst( rPoly[ 0 ] );
+            if ( aFirst != rPoly[ rPoly.GetSize() - 1 ] )
+                rPoly.Insert( rPoly.GetSize(), aFirst, POLY_NORMAL );
+        }
+    }
     bClosed = sal_True;
 }
 
@@ -1420,7 +1430,9 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry
 
     VirtualDevice* pVDev = NULL;
 
-    rPosition = ImplMap( nGfxMode == GM_ADVANCED ? Point() : rPosition );
+//  rPosition = ImplMap( nGfxMode == GM_ADVANCED ? Point() : rPosition );
+    rPosition = ImplMap( rPosition );
+
     sal_Int32 nOldGfxMode = GetGfxMode();
     SetGfxMode( GM_COMPATIBLE );
     if ( pDXArry )
@@ -1494,20 +1506,23 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry
 
     if ( nGfxMode == GM_ADVANCED )
     {
+        // check whether there is a font rotation applied via transformation
         Point aP1( ImplMap( Point() ) );
-        Point aP2( ImplMap( Point( 0, aTmp.GetHeight() ) ) );
+        Point aP2( ImplMap( Point( 0, 100 ) ) );
         aP2.X() -= aP1.X();
         aP2.Y() -= aP1.Y();
         double fX = aP2.X();
         double fY = aP2.Y();
-        double fHeight = sqrt( fX * fX + fY * fY );
-        aTmp.SetHeight( (sal_Int32)fHeight );
-
-        double fOrientation = acos( fX / sqrt( fX * fX + fY * fY ) ) * 57.29577951308;
-        if ( fY > 0 )
-            fOrientation = 360 - fOrientation;
-        fOrientation += 90;
-        aTmp.SetOrientation( sal_Int16( fOrientation * 10.0 ) );
+        if ( fX )
+        {
+            double fOrientation = acos( fX / sqrt( fX * fX + fY * fY ) ) * 57.29577951308;
+            if ( fY > 0 )
+                fOrientation = 360 - fOrientation;
+            fOrientation += 90;
+            fOrientation *= 10;
+            fOrientation += aTmp.GetOrientation();
+            aTmp.SetOrientation( sal_Int16( fOrientation ) );
+        }
     }
 
     if( mnTextAlign & ( TA_UPDATECP | TA_RIGHT_CENTER ) )
