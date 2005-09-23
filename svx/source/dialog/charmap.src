@@ -4,9 +4,9 @@
  *
  *  $RCSfile: charmap.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:41:47 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:35:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,7 @@ ModalDialog RID_SVXDLG_CHARMAP
     {
         Pos = MAP_APPFONT ( 242 , 63 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Lˆschen";
+        Text [ de ] = "~L√∂schen";
         Text [ en-US ] = "~Delete";
         Text [ x-comment ] = " ";
     };
@@ -219,7 +219,7 @@ String RID_SUBSETSTR_CYRILLIC
     };
 String RID_SUBSETSTR_CYRILLIC_SUPPL
 {
-    Text [ de ] = "Erg‰nztes Kyrillische";
+    Text [ de ] = "Erg√§nztes Kyrillische";
     Text [ en-US ] = "Cyrillic Supplementary";
     };
 String RID_SUBSETSTR_ARMENIAN
@@ -229,12 +229,12 @@ String RID_SUBSETSTR_ARMENIAN
     };
 String RID_SUBSETSTR_BASIC_HEBREW
 {
-    Text [ de ] = "Basis Hebr‰isch" ;
+    Text [ de ] = "Basis Hebr√§isch" ;
     Text [ en-US ] = "Basic Hebrew";
     };
 String RID_SUBSETSTR_HEBREW_EXTENDED
 {
-    Text [ de ] = "Erweitertes Hebr‰isch" ;
+    Text [ de ] = "Erweitertes Hebr√§isch" ;
     Text [ en-US ] = "Hebrew Extended";
     };
 String RID_SUBSETSTR_BASIC_ARABIC
@@ -296,7 +296,7 @@ String RID_SUBSETSTR_MALAYALAM
     };
 String RID_SUBSETSTR_THAI
 {
-    Text [ de ] = "Thail‰ndisch" ;
+    Text [ de ] = "Thail√§ndisch" ;
     Text [ en-US ] = "Thai";
     };
 String RID_SUBSETSTR_LAO
@@ -321,7 +321,7 @@ String RID_SUBSETSTR_HANGUL_JAMO
     };
 String RID_SUBSETSTR_LATIN_EXTENDED_ADDS
 {
-    Text [ de ] = "Latein Erweiterte Zuf¸gungen" ;
+    Text [ de ] = "Latein Erweiterte Zuf√ºgungen" ;
     Text [ en-US ] = "Latin Extended Additionals";
     };
 String RID_SUBSETSTR_GREEK_EXTENDED
@@ -341,7 +341,7 @@ String RID_SUBSETSTR_SUB_SUPER_SCRIPTS
     };
 String RID_SUBSETSTR_CURRENCY_SYMBOLS
 {
-    Text [ de ] = "W‰hrungssymbole" ;
+    Text [ de ] = "W√§hrungssymbole" ;
     Text [ en-US ] = "Currency Symbols";
     };
 String RID_SUBSETSTR_COMB_DIACRITIC_SYMS
@@ -454,7 +454,7 @@ String RID_SUBSETSTR_ENCLOSED_CJK_LETTERS
     };
 String RID_SUBSETSTR_CJK_COMPATIBILITY
 {
-    Text [ de ] = "CJK Kompatibilit‰t" ;
+    Text [ de ] = "CJK Kompatibilit√§t" ;
     Text [ en-US ] = "CJK Compatibility";
 
     };
@@ -485,12 +485,12 @@ String RID_SUBSETSTR_CJK_COMPAT_IDGRAPHS
     };
 String RID_SUBSETSTR_ALPHA_PRESENTATION
 {
-    Text [ de ] = "Alphabetische Pr‰sentations Formen" ;
+    Text [ de ] = "Alphabetische Pr√§sentations Formen" ;
     Text [ en-US ] = "Alphabetic Presentation Forms";
     };
 String RID_SUBSETSTR_ARABIC_PRESENT_A
 {
-    Text [ de ] = "Arabische Pr‰sentations Formen-A" ;
+    Text [ de ] = "Arabische Pr√§sentations Formen-A" ;
     Text [ en-US ] = "Arabic Presentation Forms-A";
 
     };
@@ -501,7 +501,7 @@ String RID_SUBSETSTR_COMBINING_HALF_MARKS
     };
 String RID_SUBSETSTR_CJK_COMPAT_FORMS
 {
-    Text [ de ] = "CJK Kompatibilit‰ts-Formen" ;
+    Text [ de ] = "CJK Kompatibilit√§ts-Formen" ;
     Text [ en-US ] = "CJK Compatibility Forms";
     };
 String RID_SUBSETSTR_SMALL_FORM_VARIANTS
@@ -512,7 +512,7 @@ String RID_SUBSETSTR_SMALL_FORM_VARIANTS
     };
 String RID_SUBSETSTR_ARABIC_PRESENT_B
 {
-    Text [ de ] = "Arabische Pr‰sentationsformen-B" ;
+    Text [ de ] = "Arabische Pr√§sentationsformen-B" ;
     Text [ en-US ] = "Arabic Presentation Forms-B";
     };
 String RID_SUBSETSTR_HALFW_FULLW_FORMS
@@ -642,7 +642,7 @@ String RID_SUBSETSTR_THAANA
     };
 String RID_SUBSETSTR_ETHIOPIC
 {
-    Text [ de ] = "ƒthiopisch" ;
+    Text [ de ] = "√Ñthiopisch" ;
     Text [ en-US ] = "Ethiopic";
     };
 String RID_SUBSETSTR_CHEROKEE
@@ -669,7 +669,7 @@ String RID_SUBSETSTR_MISC_MATH_SYMS_A
 
 String RID_SUBSETSTR_SUPPL_ARROWS_A
 {
-    Text [ de ] = "Erg‰nzende Pfeile-A" ;
+    Text [ de ] = "Erg√§nzende Pfeile-A" ;
     Text [ en-US ] = "Supplemental Arrows-A";
     };
 
@@ -681,7 +681,7 @@ String RID_SUBSETSTR_BRAILLE_PATTERNS
 
 String RID_SUBSETSTR_SUPPL_ARROWS_B
 {
-    Text [ de ] = "Erg‰nzende Pfeile-B" ;
+    Text [ de ] = "Erg√§nzende Pfeile-B" ;
     Text [ en-US ] = "Supplemental Arrows-B";
     };
 
@@ -693,7 +693,7 @@ String RID_SUBSETSTR_MISC_MATH_SYMS_B
 
 String RID_SUBSETSTR_CJK_RADICAL_SUPPL
 {
-    Text [ de ] = "Erg‰nzte CJK Radikale";
+    Text [ de ] = "Erg√§nzte CJK Radikale";
     Text [ en-US ] = "CJK Radical Supplement";
     };
 
