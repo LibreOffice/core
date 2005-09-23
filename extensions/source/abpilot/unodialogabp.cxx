@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodialogabp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:10:42 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:50:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,12 +45,16 @@
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
+#endif
 
 extern "C" void SAL_CALL createRegistryInfo_OABSPilotUno()
 {
     static ::abp::OMultiInstanceAutoRegistration< ::abp::OABSPilotUno > aAutoRegistration;
 }
 
+#define PROPERTY_ID_DATASOURCENAME  3
 //.........................................................................
 namespace abp
 {
@@ -68,6 +72,8 @@ namespace abp
     OABSPilotUno::OABSPilotUno(const Reference< XMultiServiceFactory >& _rxORB)
         :OGenericUnoDialog(_rxORB)
     {
+        registerProperty( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataSourceName")), PROPERTY_ID_DATASOURCENAME, PropertyAttribute::READONLY ,
+            &m_sDataSourceName, ::getCppuType( &m_sDataSourceName ) );
     }
 
     //--------------------------------------------------------------------------
@@ -189,6 +195,15 @@ namespace abp
         lProtocol[0].Name    = ::rtl::OUString::createFromAscii("Deactivate");
         lProtocol[0].Value <<= sal_True;
         return makeAny( lProtocol );
+    }
+    // -----------------------------------------------------------------------------
+    void OABSPilotUno::executedDialog(sal_Int16 _nExecutionResult)
+    {
+        if ( _nExecutionResult == RET_OK )
+        {
+            const AddressSettings& aSettings = static_cast<OAddessBookSourcePilot*>(m_pDialog)->getSettings();
+            m_sDataSourceName = aSettings.bRegisterDataSource ? aSettings.sRegisteredDataSourceName : aSettings.sDataSourceName;
+        }
     }
 
 //.........................................................................
