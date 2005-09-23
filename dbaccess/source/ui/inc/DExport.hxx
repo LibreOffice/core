@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DExport.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:16:32 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:32:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,6 @@
 #ifndef DBAUI_DATABASEEXPORT_HXX
 #define DBAUI_DATABASEEXPORT_HXX
 
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
-#include <com/sun/star/sdbc/XConnection.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #endif
@@ -78,6 +75,9 @@
 #ifndef DBAUI_TYPEINFO_HXX
 #include "TypeInfo.hxx"
 #endif
+#ifndef _DBAUI_COMMON_TYPES_HXX_
+#include "commontypes.hxx"
+#endif
 
 namespace com { namespace sun { namespace star { namespace awt
 {
@@ -109,7 +109,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xColumns;     // container
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTable;       // dest table
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xTables;      // container
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xConnection;  // dest conn
+        SharedConnection                                                                m_xConnection;  // dest conn
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >          m_xResultSet;   //
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >    m_xResultSetUpdate; //
@@ -156,7 +156,7 @@ namespace dbaui
 
         virtual ~ODatabaseExport();
     public:
-        ODatabaseExport(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+        ODatabaseExport(const SharedConnection& _rxConnection,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                         const TColumnVector* rList = 0,
