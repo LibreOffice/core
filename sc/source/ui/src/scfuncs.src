@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:33:36 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:09:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Zählt alle Zellen eines Datenbereichs, deren Inhalte den Suchkriterien entsprechen. : Zõhlt alle Zellen eines Datenbereichs, deren Inhalte den Suchkriterien entsprechen. */
-            Text [ de ] = "Zählt alle Zellen eines Datenbereichs, deren Inhalte den Suchkriterien entsprechen." ;
+            Text [ de ] = "ZÃ¤hlt alle Zellen eines Datenbereichs, deren Inhalte den Suchkriterien entsprechen." ;
             Text [ en-US ] = "Counts the cells of a data range whose contents match the search criteria." ;
             Text [ x-comment ] = " ";
         };
@@ -109,7 +109,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Legt das Datenbankfeld (Spalte) für die Suchkriterien fest. : Legt das Datenbankfeld (Spalte) f³r die Suchkriterien fest. */
-            Text [ de ] = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
+            Text [ de ] = "Legt das Datenbankfeld (Spalte) fÃ¼r die Suchkriterien fest." ;
             Text [ en-US ] = "Indicates which database field (column) is to be used for the search criteria." ;
             Text [ x-comment ] = " ";
         };
@@ -131,7 +131,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Zählt alle nichtleeren Zellen eines Datenbereichs, deren Inhalte den Suchkriterien entsprechen. : Zõhlt alle nichtleeren Zellen eines Datenbereichs, deren Inhalte den Suchkriterien entsprechen. */
-            Text [ de ] = "Zählt alle nicht leeren Zellen eines Datenbereichs, deren Inhalte den Suchkriterien entsprechen." ;
+            Text [ de ] = "ZÃ¤hlt alle nicht leeren Zellen eines Datenbereichs, deren Inhalte den Suchkriterien entsprechen." ;
             Text [ en-US ] = "Counts all non-blank cells of a data range where the content corresponds to the search criteria." ;
             Text [ x-comment ] = " ";
         };
@@ -162,7 +162,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Legt das Datenbankfeld (Spalte) für die Suchkriterien fest. : Legt das Datenbankfeld (Spalte) f³r die Suchkriterien fest. */
-            Text [ de ] = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
+            Text [ de ] = "Legt das Datenbankfeld (Spalte) fÃ¼r die Suchkriterien fest." ;
             Text [ en-US ] = "Indicates which database field (column) is to be used for the search criteria." ;
             Text [ x-comment ] = " ";
         };
@@ -215,7 +215,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Legt das Datenbankfeld (Spalte) für die Suchkriterien fest. : Legt das Datenbankfeld (Spalte) f³r die Suchkriterien fest. */
-            Text [ de ] = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
+            Text [ de ] = "Legt das Datenbankfeld (Spalte) fÃ¼r die Suchkriterien fest." ;
             Text [ en-US ] = "Indicates which database field (column) is to be used for the search criteria." ;
             Text [ x-comment ] = " ";
         };
@@ -268,7 +268,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Legt das Datenbankfeld (Spalte) für die Suchkriterien fest. : Legt das Datenbankfeld (Spalte) f³r die Suchkriterien fest. */
-            Text [ de ] = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
+            Text [ de ] = "Legt das Datenbankfeld (Spalte) fÃ¼r die Suchkriterien fest." ;
             Text [ en-US ] = "Indicates which database field (column) is to be used for the search criteria." ;
             Text [ x-comment ] = " ";
         };
@@ -321,7 +321,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Legt das Datenbankfeld (Spalte) für die Suchkriterien fest. : Legt das Datenbankfeld (Spalte) f³r die Suchkriterien fest. */
-            Text [ de ] = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
+            Text [ de ] = "Legt das Datenbankfeld (Spalte) fÃ¼r die Suchkriterien fest." ;
             Text [ en-US ] = "Indicates which database field (column) is to be used for the search criteria." ;
             Text [ x-comment ] = " ";
         };
@@ -374,7 +374,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Legt das Datenbankfeld (Spalte) für die Suchkriterien fest. : Legt das Datenbankfeld (Spalte) f³r die Suchkriterien fest. */
-            Text [ de ] = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
+            Text [ de ] = "Legt das Datenbankfeld (Spalte) fÃ¼r die Suchkriterien fest." ;
             Text [ en-US ] = "Indicates which database field (column) is to be used for the search criteria." ;
             Text [ x-comment ] = " ";
         };
@@ -427,7 +427,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Legt das Datenbankfeld (Spalte) für die Suchkriterien fest. : Legt das Datenbankfeld (Spalte) f³r die Suchkriterien fest. */
-            Text [ de ] = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
+            Text [ de ] = "Legt das Datenbankfeld (Spalte) fÃ¼r die Suchkriterien fest." ;
             Text [ en-US ] = "Indicates which database field (column) is to be used for the search criteria." ;
             Text [ x-comment ] = " ";
         };
@@ -480,7 +480,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Legt das Datenbankfeld (Spalte) für die Suchkriterien fest. : Legt das Datenbankfeld (Spalte) f³r die Suchkriterien fest. */
-            Text [ de ] = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
+            Text [ de ] = "Legt das Datenbankfeld (Spalte) fÃ¼r die Suchkriterien fest." ;
             Text [ en-US ] = "Indicates which database field (column) is to be used for the search criteria." ;
             Text [ x-comment ] = " ";
         };
@@ -533,7 +533,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Legt das Datenbankfeld (Spalte) für die Suchkriterien fest. : Legt das Datenbankfeld (Spalte) f³r die Suchkriterien fest. */
-            Text [ de ] = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
+            Text [ de ] = "Legt das Datenbankfeld (Spalte) fÃ¼r die Suchkriterien fest." ;
             Text [ en-US ] = "Indicates which database field (column) is to be used for the search criteria." ;
             Text [ x-comment ] = " ";
         };
@@ -586,7 +586,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Legt das Datenbankfeld (Spalte) für die Suchkriterien fest. : Legt das Datenbankfeld (Spalte) f³r die Suchkriterien fest. */
-            Text [ de ] = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
+            Text [ de ] = "Legt das Datenbankfeld (Spalte) fÃ¼r die Suchkriterien fest." ;
             Text [ en-US ] = "Indicates which database field (column) is to be used for the search criteria." ;
             Text [ x-comment ] = " ";
         };
@@ -639,7 +639,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Legt das Datenbankfeld (Spalte) für die Suchkriterien fest. : Legt das Datenbankfeld (Spalte) f³r die Suchkriterien fest. */
-            Text [ de ] = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
+            Text [ de ] = "Legt das Datenbankfeld (Spalte) fÃ¼r die Suchkriterien fest." ;
             Text [ en-US ] = "Indicates which database field (column) is to be used for the search criteria." ;
             Text [ x-comment ] = " ";
         };
@@ -692,7 +692,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Legt das Datenbankfeld (Spalte) für die Suchkriterien fest. : Legt das Datenbankfeld (Spalte) f³r die Suchkriterien fest. */
-            Text [ de ] = "Legt das Datenbankfeld (Spalte) für die Suchkriterien fest." ;
+            Text [ de ] = "Legt das Datenbankfeld (Spalte) fÃ¼r die Suchkriterien fest." ;
             Text [ en-US ] = "Indicates which database field (column) is to be used for the search criteria." ;
             Text [ x-comment ] = " ";
         };
@@ -715,7 +715,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Liefert die interne Zahl für das angegebene Datum. : Liefert die interne Zahl f³r das angegebene Datum. */
-            Text [ de ] = "Liefert die interne Zahl für das angegebene Datum." ;
+            Text [ de ] = "Liefert die interne Zahl fÃ¼r das angegebene Datum." ;
             Text [ en-US ] = "Provides an internal number for the date given." ;
             Text [ x-comment ] = " ";
         };
@@ -734,7 +734,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Eine ganze Zahl zwischen 1583 und 9956, oder 0 und 99 (19xx oder 20xx gemäß eingestellter Option). : Eine ganze Zahl zwischen 1600 und 3000, 0 und 19 (-> 2000 bis 2019) oder 20 und 99 (-> 1920 - 1999). */
-            Text [ de ] = "Eine ganze Zahl zwischen 1583 und 9956, oder 0 und 99 (19xx oder 20xx gemäß eingestellter Option)." ;
+            Text [ de ] = "Eine ganze Zahl zwischen 1583 und 9956, oder 0 und 99 (19xx oder 20xx gemÃ¤ÃŸ eingestellter Option)." ;
             Text [ en-US ] = "An integer between 1583 and 9956 or 0 and 99 (19xx or 20xx depending on the defined option)." ;
             Text [ x-comment ] = " ";
         };
@@ -747,7 +747,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Eine ganze Zahl zwischen 1 und 12 für den Monat. : Eine ganze Zahl zwischen 1 und 12 f³r den Monat. */
-            Text [ de ] = "Eine ganze Zahl zwischen 1 und 12 für den Monat." ;
+            Text [ de ] = "Eine ganze Zahl zwischen 1 und 12 fÃ¼r den Monat." ;
             Text [ en-US ] = "An integer between 1 and 12 representing the month." ;
             Text [ x-comment ] = " ";
         };
@@ -760,7 +760,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 7 // Description of Parameter 3
         {
             /* ### ACHTUNG: Neuer Text in Resource? Eine ganze Zahl zwischen 1 und 31 für den Tag. : Eine ganze Zahl zwischen 1 und 31 f³r den Tag. */
-            Text [ de ] = "Eine ganze Zahl zwischen 1 und 31 für den Tag." ;
+            Text [ de ] = "Eine ganze Zahl zwischen 1 und 31 fÃ¼r den Tag." ;
             Text [ en-US ] = "An integer between 1 and 31 representing the day of the month." ;
             Text [ x-comment ] = " ";
         };
@@ -771,7 +771,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Bestimmt aus einem Text in einem möglichen Datumseingabeformat eine interne Zahl. : Bestimmt aus einem Text in einem m÷glichen Datumseingabeformat eine interne Zahl. */
-            Text [ de ] = "Bestimmt aus einem Text in einem möglichen Datumseingabeformat eine interne Zahl." ;
+            Text [ de ] = "Bestimmt aus einem Text in einem mÃ¶glichen Datumseingabeformat eine interne Zahl." ;
             Text [ en-US ] = "Returns an internal number for a text having a possible date format." ;
             Text [ x-comment ] = " ";
         };
@@ -790,7 +790,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Ein in Anführungszeichen eingeschlossener Text, der ein Datum in einem StarCalc Datumsformat wiedergibt. : Ein in Anf³hrungszeichen eingeschlossener Text, der ein Datum in einem StarCalc Datumsformat wiedergibt. */
-            Text [ de ] = "Ein in Anführungszeichen eingeschlossener Text, der ein Datum in einem %PRODUCTNAME Datumsformat wiedergibt." ;
+            Text [ de ] = "Ein in AnfÃ¼hrungszeichen eingeschlossener Text, der ein Datum in einem %PRODUCTNAME Datumsformat wiedergibt." ;
             Text [ en-US ] = "A text enclosed in quotation marks which returns a date in a %PRODUCTNAME date format." ;
             Text [ x-comment ] = " ";
         };
@@ -846,7 +846,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            Text [ de ] = "Früheres Datum für die Tagesdifferenz." ;
+            Text [ de ] = "FrÃ¼heres Datum fÃ¼r die Tagesdifferenz." ;
             Text [ en-US ] = "The start date for calculating the difference in days." ;
             Text [ x-comment ] = " ";
         };
@@ -858,7 +858,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            Text [ de ] = "Späteres Datum für die Tagesdifferenz." ;
+            Text [ de ] = "SpÃ¤teres Datum fÃ¼r die Tagesdifferenz." ;
             Text [ en-US ] = "The end date for calculating the difference in days." ;
             Text [ x-comment ] = " ";
         };
@@ -870,7 +870,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 7 // Description of Parameter 3
         {
-            Text [ de ] = "Art der Differenzbildung. Art = 0 heißt US-Methode (NASD), Art = 1 heißt europäische Methode." ;
+            Text [ de ] = "Art der Differenzbildung. Art = 0 heiÃŸt US-Methode (NASD), Art = 1 heiÃŸt europÃ¤ische Methode." ;
             Text [ en-US ] = "Method used to form differences: Type = 0 denotes US method (NASD), Type = 1 denotes the European method." ;
             Text [ x-comment ] = " ";
         };
@@ -1009,7 +1009,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Bestimmt einen Zeitwert aus Zahlangaben für Stunde, Minute und Sekunde : Bestimmt einen Zeitwert aus Zahlangaben f³r Stunde, Minute und Sekunde */
-            Text [ de ] = "Bestimmt einen Zeitwert aus Zahlangaben für Stunde, Minute und Sekunde" ;
+            Text [ de ] = "Bestimmt einen Zeitwert aus Zahlangaben fÃ¼r Stunde, Minute und Sekunde" ;
             Text [ en-US ] = "Determines a time value from the details for hour, minute and second." ;
             Text [ x-comment ] = " ";
         };
@@ -1028,7 +1028,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Ganze Zahl für die Stunde. : Ganze Zahl f³r die Stunde. */
-            Text [ de ] = "Ganze Zahl für die Stunde." ;
+            Text [ de ] = "Ganze Zahl fÃ¼r die Stunde." ;
             Text [ en-US ] = "The integer for the hour." ;
             Text [ x-comment ] = " ";
         };
@@ -1041,7 +1041,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Ganze Zahl für die Minute. : Ganze Zahl f³r die Minute. */
-            Text [ de ] = "Ganze Zahl für die Minute." ;
+            Text [ de ] = "Ganze Zahl fÃ¼r die Minute." ;
             Text [ en-US ] = "The integer for the minute." ;
             Text [ x-comment ] = " ";
         };
@@ -1054,7 +1054,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 7 // Description of Parameter 3
         {
             /* ### ACHTUNG: Neuer Text in Resource? Ganze Zahl für die Sekunde. : Ganze Zahl f³r die Sekunde. */
-            Text [ de ] = "Ganze Zahl für die Sekunde." ;
+            Text [ de ] = "Ganze Zahl fÃ¼r die Sekunde." ;
             Text [ en-US ] = "The integer for the second." ;
             Text [ x-comment ] = " ";
         };
@@ -1065,7 +1065,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Bestimmt aus einem Text in einem möglichen Zeiteingabeformat eine fortlaufende Zahl. : Bestimmt aus einem Text in einem m÷glichen Zeiteingabeformat eine fortlaufende Zahl. */
-            Text [ de ] = "Bestimmt aus einem Text in einem möglichen Zeiteingabeformat eine fortlaufende Zahl." ;
+            Text [ de ] = "Bestimmt aus einem Text in einem mÃ¶glichen Zeiteingabeformat eine fortlaufende Zahl." ;
             Text [ en-US ] = "Returns a sequential number for a text shown in a possible time entry format." ;
             Text [ x-comment ] = " ";
         };
@@ -1084,7 +1084,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Ein in Anführungszeichen eingeschlossener Text, der eine Zeitangabe in einem StarCalc Zeitformat wiedergibt. : Ein in Anf³hrungszeichen eingeschlossener Text, der eine Zeitangabe in einem StarCalc Zeitformat wiedergibt. */
-            Text [ de ] = "Ein in Anführungszeichen eingeschlossener Text, der eine Zeitangabe in einem %PRODUCTNAME Zeitformat wiedergibt." ;
+            Text [ de ] = "Ein in AnfÃ¼hrungszeichen eingeschlossener Text, der eine Zeitangabe in einem %PRODUCTNAME Zeitformat wiedergibt." ;
             Text [ en-US ] = "A text enclosed in quotation marks which returns a time in a %PRODUCTNAME time format." ;
             Text [ x-comment ] = " ";
         };
@@ -1196,7 +1196,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            Text [ de ] = "Späteres Datum für die Tagesdifferenz." ;
+            Text [ de ] = "SpÃ¤teres Datum fÃ¼r die Tagesdifferenz." ;
             Text [ en-US ] = "The end date for calculating the difference in days." ;
             Text [ x-comment ] = " ";
         };
@@ -1208,7 +1208,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            Text [ de ] = "Früheres Datum für die Tagesdifferenz." ;
+            Text [ de ] = "FrÃ¼heres Datum fÃ¼r die Tagesdifferenz." ;
             Text [ en-US ] = "The start date for calculating the difference in days." ;
             Text [ x-comment ] = " ";
         };
@@ -1276,7 +1276,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            Text [ de ] = "Eine ganze Zahl zwischen 1583 und 9956, oder 0 und 99 (19xx oder 20xx gemäß eingestellter Option)." ;
+            Text [ de ] = "Eine ganze Zahl zwischen 1583 und 9956, oder 0 und 99 (19xx oder 20xx gemÃ¤ÃŸ eingestellter Option)." ;
             Text [ en-US ] = "An interger between 1583 and 9956, or 0 and 99 (19xx or 20xx depending on the option set).";
             Text [ x-comment ] = " ";
         };
@@ -1317,7 +1317,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird. : Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuitõt (Rente) gezahlt wird. */
-            Text [ de ] = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird." ;
+            Text [ de ] = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die AnnuitÃ¤t (Rente) gezahlt wird." ;
             Text [ en-US ] = "The payment period. The total number of periods in which the annuity is paid." ;
             Text [ x-comment ] = " ";
         };
@@ -1330,7 +1330,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 7 // Description of Parameter 3
         {
             /* ### ACHTUNG: Neuer Text in Resource? Regelmäßige Zahlung. Die konstante Annuität, die in jeder Periode gezahlt wird. : Regelmõ˜ige Zahlung. Die konstante Annuitõt, die in jeder Periode gezahlt wird. */
-            Text [ de ] = "Regelmäßige Zahlung. Die konstante Annuität, die in jeder Periode gezahlt wird." ;
+            Text [ de ] = "RegelmÃ¤ÃŸige Zahlung. Die konstante AnnuitÃ¤t, die in jeder Periode gezahlt wird." ;
             Text [ en-US ] = "Regular payments. The constant amount of annuity that is paid in each period." ;
             Text [ x-comment ] = " ";
         };
@@ -1343,7 +1343,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 9 // Description of Parameter 4
         {
             /* ### ACHTUNG: Neuer Text in Resource? Zukünftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll. : Zuk³nftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll. */
-            Text [ de ] = "Zukünftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll." ;
+            Text [ de ] = "ZukÃ¼nftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll." ;
             Text [ en-US ] = "Future value. The value (final value) to be attained after the last payment." ;
             Text [ x-comment ] = " ";
         };
@@ -1356,7 +1356,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 11 // Description of Parameter 5
         {
             /* ### ACHTUNG: Neuer Text in Resource? Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende. : Fõlligkeit. F = 1 hei˜t Fõlligkeit am Anfang einer Periode, F = 0 am Ende. */
-            Text [ de ] = "Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende." ;
+            Text [ de ] = "FÃ¤lligkeit. F = 1 heiÃŸt FÃ¤lligkeit am Anfang einer Periode, F = 0 am Ende." ;
             Text [ en-US ] = "Type = 1 denotes due at the beginning of the period, = 0 at the end." ;
             Text [ x-comment ] = " ";
         };
@@ -1367,7 +1367,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Zukünftiger Wert. Berechnet den Endwert einer Investition bei regelmäßigen Zahlungen und konstantem Zinssatz. : Zuk³nftiger Wert. Berechnet den Endwert einer Investition bei regelmõ˜igen Zahlungen und konstantem Zinssatz. */
-            Text [ de ] = "Zukünftiger Wert. Berechnet den Endwert einer Investition bei regelmäßigen Zahlungen und konstantem Zinssatz." ;
+            Text [ de ] = "ZukÃ¼nftiger Wert. Berechnet den Endwert einer Investition bei regelmÃ¤ÃŸigen Zahlungen und konstantem Zinssatz." ;
             Text [ en-US ] = "Future value. Returns the future value of an investment based on regular payments and a constant interest rate." ;
             Text [ x-comment ] = " ";
         };
@@ -1398,7 +1398,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird. : Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuitõt (Rente) gezahlt wird. */
-            Text [ de ] = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird." ;
+            Text [ de ] = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die AnnuitÃ¤t (Rente) gezahlt wird." ;
             Text [ en-US ] = "Payment period. The total number of periods in which the annuity (pension) is paid." ;
             Text [ x-comment ] = " ";
         };
@@ -1411,7 +1411,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 7 // Description of Parameter 3
         {
             /* ### ACHTUNG: Neuer Text in Resource? Regelmäßige Zahlung. Die konstante Annuität, die in jeder Periode gezahlt wird. : Regelmõ˜ige Zahlung. Die konstante Annuitõt, die in jeder Periode gezahlt wird. */
-            Text [ de ] = "Regelmäßige Zahlung. Die konstante Annuität, die in jeder Periode gezahlt wird." ;
+            Text [ de ] = "RegelmÃ¤ÃŸige Zahlung. Die konstante AnnuitÃ¤t, die in jeder Periode gezahlt wird." ;
             Text [ en-US ] = "Regular payments. The constant annuity to be paid in each period." ;
             Text [ x-comment ] = " ";
         };
@@ -1436,7 +1436,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 11 // Description of Parameter 5
         {
             /* ### ACHTUNG: Neuer Text in Resource? Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende. : Fõlligkeit. F = 1 hei˜t Fõlligkeit am Anfang einer Periode, F = 0 am Ende. */
-            Text [ de ] = "Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende." ;
+            Text [ de ] = "FÃ¤lligkeit. F = 1 heiÃŸt FÃ¤lligkeit am Anfang einer Periode, F = 0 am Ende." ;
             Text [ en-US ] = "Type = 1 denotes due at the beginning of the period, = 0 at the end." ;
             Text [ x-comment ] = " ";
         };
@@ -1447,7 +1447,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Zahlungszeitraum. Berechnet die Anzahl der Zahlungsperioden einer Investition bei regelmäßigen Zahlungen und konstantem Zinssatz. : Zahlungszeitraum. Berechnet die Anzahl der Zahlungsperioden einer Investition bei regelmõ˜igen Zahlungen und konstantem Zinssatz. */
-            Text [ de ] = "Zahlungszeitraum. Berechnet die Anzahl der Zahlungsperioden einer Investition bei regelmäßigen Zahlungen und konstantem Zinssatz." ;
+            Text [ de ] = "Zahlungszeitraum. Berechnet die Anzahl der Zahlungsperioden einer Investition bei regelmÃ¤ÃŸigen Zahlungen und konstantem Zinssatz." ;
             Text [ en-US ] = "Payment period. Calculates the number of payment periods for an investment based on regular payments and a constant interest rate." ;
             Text [ x-comment ] = " ";
         };
@@ -1478,7 +1478,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Regelmäßige Zahlung. Die konstante Annuität, die in jeder Periode gezahlt wird. : Regelmõ˜ige Zahlung. Die konstante Annuitõt, die in jeder Periode gezahlt wird. */
-            Text [ de ] = "Regelmäßige Zahlung. Die konstante Annuität, die in jeder Periode gezahlt wird." ;
+            Text [ de ] = "RegelmÃ¤ÃŸige Zahlung. Die konstante AnnuitÃ¤t, die in jeder Periode gezahlt wird." ;
             Text [ en-US ] = "Regular payments. The constant annuity to be paid in each period." ;
             Text [ x-comment ] = " ";
         };
@@ -1503,7 +1503,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 9 // Description of Parameter 4
         {
             /* ### ACHTUNG: Neuer Text in Resource? Zukünftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll. : Zuk³nftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll. */
-            Text [ de ] = "Zukünftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll." ;
+            Text [ de ] = "ZukÃ¼nftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll." ;
             Text [ en-US ] = "Future value. The value (end value) to be attained after the final payment." ;
             Text [ x-comment ] = " ";
         };
@@ -1516,7 +1516,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 11 // Description of Parameter 5
         {
             /* ### ACHTUNG: Neuer Text in Resource? Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende. : Fõlligkeit. F = 1 hei˜t Fõlligkeit am Anfang einer Periode, F = 0 am Ende. */
-            Text [ de ] = "Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende." ;
+            Text [ de ] = "FÃ¤lligkeit. F = 1 heiÃŸt FÃ¤lligkeit am Anfang einer Periode, F = 0 am Ende." ;
             Text [ en-US ] = "Type = 1 denotes due at the beginning of the period, = 0 at the end." ;
             Text [ x-comment ] = " ";
         };
@@ -1527,7 +1527,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Regelmäßige Zahlungen. Berechnet die regelmäßigen Zahlungen (Annuität) für eine Investition bei konstantem Zinssatz. : Regelmõ˜ige Zahlungen. Berechnet die regelmõ˜igen Zahlungen (Annuitõt) f³r eine Investition bei konstantem Zinssatz. */
-            Text [ de ] = "Regelmäßige Zahlungen. Berechnet die regelmäßigen Zahlungen (Annuität) für eine Investition bei konstantem Zinssatz." ;
+            Text [ de ] = "RegelmÃ¤ÃŸige Zahlungen. Berechnet die regelmÃ¤ÃŸigen Zahlungen (AnnuitÃ¤t) fÃ¼r eine Investition bei konstantem Zinssatz." ;
             Text [ en-US ] = "Regular payments. Returns the periodic payment of an annuity, based on regular payments and a fixed periodic interest rate." ;
             Text [ x-comment ] = " ";
         };
@@ -1558,7 +1558,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird. : Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuitõt (Rente) gezahlt wird. */
-            Text [ de ] = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird." ;
+            Text [ de ] = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die AnnuitÃ¤t (Rente) gezahlt wird." ;
             Text [ en-US ] = "Payment period. The total number of periods in which the annuity (pension) is paid." ;
             Text [ x-comment ] = " ";
         };
@@ -1583,7 +1583,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 9 // Description of Parameter 4
         {
             /* ### ACHTUNG: Neuer Text in Resource? Zukünftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll. : Zuk³nftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll. */
-            Text [ de ] = "Zukünftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll." ;
+            Text [ de ] = "ZukÃ¼nftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll." ;
             Text [ en-US ] = "Future value. The value (end value) to be attained after the final payment." ;
             Text [ x-comment ] = " ";
         };
@@ -1596,7 +1596,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 11 // Description of Parameter 5
         {
             /* ### ACHTUNG: Neuer Text in Resource? Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende. : Fõlligkeit. F = 1 hei˜t Fõlligkeit am Anfang einer Periode, F = 0 am Ende. */
-            Text [ de ] = "Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende." ;
+            Text [ de ] = "FÃ¤lligkeit. F = 1 heiÃŸt FÃ¤lligkeit am Anfang einer Periode, F = 0 am Ende." ;
             Text [ en-US ] = "Type = 1 denotes due at the beginning of the period, = 0 at the end." ;
             Text [ x-comment ] = " ";
         };
@@ -1607,7 +1607,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Berechnet den konstanten Zinssatz einer Investition bei regelmäßigen Zahlungen. : Berechnet den konstanten Zinssatz einer Investition bei regelmõ˜igen Zahlungen. */
-            Text [ de ] = "Berechnet den konstanten Zinssatz einer Investition bei regelmäßigen Zahlungen." ;
+            Text [ de ] = "Berechnet den konstanten Zinssatz einer Investition bei regelmÃ¤ÃŸigen Zahlungen." ;
             Text [ en-US ] = "Calculates the constant interest rate of an investment with regular payments." ;
             Text [ x-comment ] = " ";
         };
@@ -1626,7 +1626,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird. : Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuitõt (Rente) gezahlt wird. */
-            Text [ de ] = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird." ;
+            Text [ de ] = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die AnnuitÃ¤t (Rente) gezahlt wird." ;
             Text [ en-US ] = "Payment period. The total number of periods in which the annuity (pension) is paid." ;
             Text [ x-comment ] = " ";
         };
@@ -1639,7 +1639,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Regelmäßige Zahlung. Die konstante Annuität, die in jeder Periode gezahlt wird. : Regelmõ˜ige Zahlung. Die konstante Annuitõt, die in jeder Periode gezahlt wird. */
-            Text [ de ] = "Regelmäßige Zahlung. Die konstante Annuität, die in jeder Periode gezahlt wird." ;
+            Text [ de ] = "RegelmÃ¤ÃŸige Zahlung. Die konstante AnnuitÃ¤t, die in jeder Periode gezahlt wird." ;
             Text [ en-US ] = "Regular payments. The constant annuity to be paid in each period." ;
             Text [ x-comment ] = " ";
         };
@@ -1664,7 +1664,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 9 // Description of Parameter 4
         {
             /* ### ACHTUNG: Neuer Text in Resource? Zukünftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll. : Zuk³nftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll. */
-            Text [ de ] = "Zukünftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll." ;
+            Text [ de ] = "ZukÃ¼nftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll." ;
             Text [ en-US ] = "Future value. The value (end value) to be attained after the final payment." ;
             Text [ x-comment ] = " ";
         };
@@ -1677,7 +1677,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 11 // Description of Parameter 5
         {
             /* ### ACHTUNG: Neuer Text in Resource? Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende. : Fõlligkeit. F = 1 hei˜t Fõlligkeit am Anfang einer Periode, F = 0 am Ende. */
-            Text [ de ] = "Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende." ;
+            Text [ de ] = "FÃ¤lligkeit. F = 1 heiÃŸt FÃ¤lligkeit am Anfang einer Periode, F = 0 am Ende." ;
             Text [ en-US ] = "Type = 1 denotes due at the beginning of the period, = 0 at the end." ;
             Text [ x-comment ] = " ";
         };
@@ -1690,7 +1690,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 13 // Description of Parameter 6
         {
             /* ### ACHTUNG: Neuer Text in Resource? Schätzwert. Schätzwert des Zinses für das iterative Berechnungsverfahren. : Schõtzwert. Schõtzwert des Zinses f³r das iterative Berechnungsverfahren. */
-            Text [ de ] = "Schätzwert. Schätzwert des Zinses für das iterative Berechnungsverfahren." ;
+            Text [ de ] = "SchÃ¤tzwert. SchÃ¤tzwert des Zinses fÃ¼r das iterative Berechnungsverfahren." ;
             Text [ en-US ] = "Guess. The estimate of the interest rate for the iterative calculating method." ;
             Text [ x-comment ] = " ";
         };
@@ -1701,7 +1701,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Zinseszins. Berechnet den Zinsbetrag einer Periode für eine Investition bei regelmäßigen Zahlungen und konstantem Zinssatz. : Zinseszins. Berechnet den Zinsbetrag einer Periode f³r eine Investition bei regelmõ˜igen Zahlungen und konstantem Zinssatz. */
-            Text [ de ] = "Zinseszins. Berechnet den Zinsbetrag einer Periode für eine Investition bei regelmäßigen Zahlungen und konstantem Zinssatz." ;
+            Text [ de ] = "Zinseszins. Berechnet den Zinsbetrag einer Periode fÃ¼r eine Investition bei regelmÃ¤ÃŸigen Zahlungen und konstantem Zinssatz." ;
             Text [ en-US ] = "Compounded interest. Calculates the interest payment on the principal for an investment with regular payments and a constant interest rate for a given period." ;
             Text [ x-comment ] = " ";
         };
@@ -1732,7 +1732,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Periode. Die Periode, für die die Zinseszinsen berechnet werden. P = 1 heißt für die erste Periode, P = ZZR für die letzte. : Periode. Die Periode, f³r die die Zinseszinsen berechnet werden. P = 1 hei˜t f³r die erste Periode, P = ZZR f³r die letzte. */
-            Text [ de ] = "Periode. Die Periode, für die die Zinseszinsen berechnet werden. P = 1 heißt für die erste Periode, P = ZZR für die letzte." ;
+            Text [ de ] = "Periode. Die Periode, fÃ¼r die die Zinseszinsen berechnet werden. P = 1 heiÃŸt fÃ¼r die erste Periode, P = ZZR fÃ¼r die letzte." ;
             Text [ en-US ] = "Periods. The periods for which the compounded interest is to be calculated. P = 1 denotes for the first period, P = NPER for the last one." ;
             Text [ x-comment ] = " ";
         };
@@ -1745,7 +1745,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 7 // Description of Parameter 3
         {
             /* ### ACHTUNG: Neuer Text in Resource? Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird. : Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuitõt (Rente) gezahlt wird. */
-            Text [ de ] = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird." ;
+            Text [ de ] = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die AnnuitÃ¤t (Rente) gezahlt wird." ;
             Text [ en-US ] = "Payment period. The total number of periods in which the annuity (pension) is paid." ;
             Text [ x-comment ] = " ";
         };
@@ -1770,7 +1770,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 11 // Description of Parameter 5
         {
             /* ### ACHTUNG: Neuer Text in Resource? Zukünftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll. : Zuk³nftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll. */
-            Text [ de ] = "Zukünftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll." ;
+            Text [ de ] = "ZukÃ¼nftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll." ;
             Text [ en-US ] = "Future value. The value (end value) to be attained after the final payment." ;
             Text [ x-comment ] = " ";
         };
@@ -1783,7 +1783,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 13 // Description of Parameter 6
         {
             /* ### ACHTUNG: Neuer Text in Resource? Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende. : Fõlligkeit. F = 1 hei˜t Fõlligkeit am Anfang einer Periode, F = 0 am Ende. */
-            Text [ de ] = "Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende." ;
+            Text [ de ] = "FÃ¤lligkeit. F = 1 heiÃŸt FÃ¤lligkeit am Anfang einer Periode, F = 0 am Ende." ;
             Text [ en-US ] = "Type = 1 denotes due at the beginning of the period, = 0 at the end." ;
             Text [ x-comment ] = " ";
         };
@@ -1794,7 +1794,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Tilgung. Berechnet den Tilgungsbetrag einer Periode für eine Investition bei regelmäßigen Zahlungen und konstantem Zinssatz. : Tilgung. Berechnet den Tilgungsbetrag einer Periode f³r eine Investition bei regelmõ˜igen Zahlungen und konstantem Zinssatz. */
-            Text [ de ] = "Tilgung. Berechnet den Tilgungsbetrag einer Periode für eine Investition bei regelmäßigen Zahlungen und konstantem Zinssatz." ;
+            Text [ de ] = "Tilgung. Berechnet den Tilgungsbetrag einer Periode fÃ¼r eine Investition bei regelmÃ¤ÃŸigen Zahlungen und konstantem Zinssatz." ;
             Text [ en-US ] = "Repayment. Calculates the repayment amount for a period for an investment whereby the payments are at regular intervals and the interest rate constant." ;
             Text [ x-comment ] = " ";
         };
@@ -1825,7 +1825,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Periode. Die Periode, für die die Tilgung berechnet wird. P = 1 heißt für die erste Periode, P = ZZR für die letzte. : Periode. Die Periode, f³r die die Tilgung berechnet wird. P = 1 hei˜t f³r die erste Periode, P = ZZR f³r die letzte. */
-            Text [ de ] = "Periode. Die Periode, für die die Tilgung berechnet wird. P = 1 heißt für die erste Periode, P = ZZR für die letzte." ;
+            Text [ de ] = "Periode. Die Periode, fÃ¼r die die Tilgung berechnet wird. P = 1 heiÃŸt fÃ¼r die erste Periode, P = ZZR fÃ¼r die letzte." ;
             Text [ en-US ] = "Period. The period for which the repayments are to be calculated. Per = 1 denotes for the first period, P = NPER for the last" ;
             Text [ x-comment ] = " ";
         };
@@ -1838,7 +1838,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 7 // Description of Parameter 3
         {
             /* ### ACHTUNG: Neuer Text in Resource? Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird. : Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuitõt (Rente) gezahlt wird. */
-            Text [ de ] = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird." ;
+            Text [ de ] = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die AnnuitÃ¤t (Rente) gezahlt wird." ;
             Text [ en-US ] = "The payment period. The total number of periods in which the annuity (pension) is paid." ;
             Text [ x-comment ] = " ";
         };
@@ -1863,7 +1863,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 11 // Description of Parameter 5
         {
             /* ### ACHTUNG: Neuer Text in Resource? Zukünftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll. : Zuk³nftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll. */
-            Text [ de ] = "Zukünftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll." ;
+            Text [ de ] = "ZukÃ¼nftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll." ;
             Text [ en-US ] = "Future value. The value (end value) attained after the last payment has been made." ;
             Text [ x-comment ] = " ";
         };
@@ -1876,7 +1876,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 13 // Description of Parameter 6
         {
             /* ### ACHTUNG: Neuer Text in Resource? Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende. : Fõlligkeit. F = 1 hei˜t Fõlligkeit am Anfang einer Periode, F = 0 am Ende. */
-            Text [ de ] = "Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende." ;
+            Text [ de ] = "FÃ¤lligkeit. F = 1 heiÃŸt FÃ¤lligkeit am Anfang einer Periode, F = 0 am Ende." ;
             Text [ en-US ] = "Type = 1 denotes due at the beginning of the period, = 0 at the end." ;
             Text [ x-comment ] = " ";
         };
@@ -1887,7 +1887,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Kumuliertes Kapitel. Berechnet den Gesamtbetrag der Tilgungsanteile in einem Zeitraum für eine Investition bei konstantem Zinssatz. : Kumuliertes Kapitel. Berechnet den Gesamtbetrag der Tilgungsanteile in einem Zeitraum f³r eine Investition bei konstantem Zinssatz. */
-            Text [ de ] = "Kumuliertes Kapital. Berechnet den Gesamtbetrag der Tilgungsanteile in einem Zeitraum für eine Investition bei konstantem Zinssatz." ;
+            Text [ de ] = "Kumuliertes Kapital. Berechnet den Gesamtbetrag der Tilgungsanteile in einem Zeitraum fÃ¼r eine Investition bei konstantem Zinssatz." ;
             Text [ en-US ] = "Cumulative Capital. Calculates the total amount of the repayment share in a period for an investment with constant interest rate." ;
             Text [ x-comment ] = " ";
         };
@@ -1918,7 +1918,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird. : Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuitõt (Rente) gezahlt wird. */
-            Text [ de ] = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird." ;
+            Text [ de ] = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die AnnuitÃ¤t (Rente) gezahlt wird." ;
             Text [ en-US ] = "Payment period. The total number of periods in which the annuity (pension) is paid." ;
             Text [ x-comment ] = " ";
         };
@@ -1943,7 +1943,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 9 // Description of Parameter 4
         {
             /* ### ACHTUNG: Neuer Text in Resource? Anfangsperiode. Die erste Periode, die berücksichtigt wird. A = 1 heißt die allerserte Periode. : Anfangsperiode. Die erste Periode, die ber³cksichtigt wird. A = 1 hei˜t die allerserte Periode. */
-            Text [ de ] = "Anfangsperiode. Die erste Periode, die berücksichtigt wird. A = 1 heißt die allerserte Periode." ;
+            Text [ de ] = "Anfangsperiode. Die erste Periode, die berÃ¼cksichtigt wird. A = 1 heiÃŸt die allerserte Periode." ;
             Text [ en-US ] = "The start period. The first period to be taken into account. A = 1 denotes the very first period." ;
             Text [ x-comment ] = " ";
         };
@@ -1956,7 +1956,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 11 // Description of Parameter 5
         {
             /* ### ACHTUNG: Neuer Text in Resource? Endperiode. Die letzte Periode, die berücksichtigt wird. : Endperiode. Die letzte Periode, die ber³cksichtigt wird. */
-            Text [ de ] = "Endperiode. Die letzte Periode, die berücksichtigt wird." ;
+            Text [ de ] = "Endperiode. Die letzte Periode, die berÃ¼cksichtigt wird." ;
             Text [ en-US ] = "End period. The last period to be taken into account." ;
             Text [ x-comment ] = " ";
         };
@@ -1969,7 +1969,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 13 // Description of Parameter 6
         {
             /* ### ACHTUNG: Neuer Text in Resource? Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende. : Fõlligkeit. F = 1 hei˜t Fõlligkeit am Anfang einer Periode, F = 0 am Ende. */
-            Text [ de ] = "Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende." ;
+            Text [ de ] = "FÃ¤lligkeit. F = 1 heiÃŸt FÃ¤lligkeit am Anfang einer Periode, F = 0 am Ende." ;
             Text [ en-US ] = "Type = 1 denotes due at the beginning of the period, = 0 at the end." ;
             Text [ x-comment ] = " ";
         };
@@ -1980,7 +1980,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Kumulierte Zinseszinsen. Berechnet den Gesamtbetrag der Zinsanteile in einem Zeitraum für eine Investition bei konstantem Zinssatz. : Kumulierte Zinseszinsen. Berechnet den Gesamtbetrag der Zinsanteile in einem Zeitraum f³r eine Investition bei konstantem Zinssatz. */
-            Text [ de ] = "Kumulierte Zinseszinsen. Berechnet den Gesamtbetrag der Zinsanteile in einem Zeitraum für eine Investition bei konstantem Zinssatz." ;
+            Text [ de ] = "Kumulierte Zinseszinsen. Berechnet den Gesamtbetrag der Zinsanteile in einem Zeitraum fÃ¼r eine Investition bei konstantem Zinssatz." ;
             Text [ en-US ] = "Cumulative compounded interest. Calculates the total amount of the interest share in a period for an investment with a constant interest rate." ;
             Text [ x-comment ] = " ";
         };
@@ -2011,7 +2011,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird. : Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuitõt (Rente) gezahlt wird. */
-            Text [ de ] = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird." ;
+            Text [ de ] = "Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die AnnuitÃ¤t (Rente) gezahlt wird." ;
             Text [ en-US ] = "Payment period. The total number of periods in which the annuity (pension) is paid." ;
             Text [ x-comment ] = " ";
         };
@@ -2036,7 +2036,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 9 // Description of Parameter 4
         {
             /* ### ACHTUNG: Neuer Text in Resource? Anfangsperiode. Die erste Periode, die berücksichtigt wird. A = 1 ist die allererste Periode. : Anfangsperiode. Die erste Periode, die ber³cksichtigt wird. A = 1 ist die allererste Periode. */
-            Text [ de ] = "Anfangsperiode. Die erste Periode, die berücksichtigt wird. A = 1 ist die allererste Periode." ;
+            Text [ de ] = "Anfangsperiode. Die erste Periode, die berÃ¼cksichtigt wird. A = 1 ist die allererste Periode." ;
             Text [ en-US ] = "The start period. The first period to be taken into account. A = 1 denotes the very first period." ;
             Text [ x-comment ] = " ";
         };
@@ -2049,7 +2049,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 11 // Description of Parameter 5
         {
             /* ### ACHTUNG: Neuer Text in Resource? Endperiode. Die letzte Periode, die berücksichtigt wird. : Endperiode. Die letzte Periode, die ber³cksichtigt wird. */
-            Text [ de ] = "Endperiode. Die letzte Periode, die berücksichtigt wird." ;
+            Text [ de ] = "Endperiode. Die letzte Periode, die berÃ¼cksichtigt wird." ;
             Text [ en-US ] = "The end period. The last period to be taken into account." ;
             Text [ x-comment ] = " ";
         };
@@ -2062,7 +2062,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 13 // Description of Parameter 6
         {
             /* ### ACHTUNG: Neuer Text in Resource? Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende. : Fõlligkeit. F = 1 hei˜t Fõlligkeit am Anfang einer Periode, F = 0 am Ende. */
-            Text [ de ] = "Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende." ;
+            Text [ de ] = "FÃ¤lligkeit. F = 1 heiÃŸt FÃ¤lligkeit am Anfang einer Periode, F = 0 am Ende." ;
             Text [ en-US ] = "Type = 1 denotes due at the beginning of the period, = 0 at the end." ;
             Text [ x-comment ] = " ";
         };
@@ -2073,7 +2073,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Berechnet die arithmetisch-degressive Abschreibung für eine bestimmte Periode : Berechnet die arithmetisch-degressive Abschreibung f³r eine bestimmte Periode */
-            Text [ de ] = "Berechnet die arithmetisch-degressive Abschreibung für eine bestimmte Periode" ;
+            Text [ de ] = "Berechnet die arithmetisch-degressive Abschreibung fÃ¼r eine bestimmte Periode" ;
             Text [ en-US ] = "Calulates the arithmetically declining value of an asset (depreciation) for a specified period." ;
             Text [ x-comment ] = " ";
         };
@@ -2116,7 +2116,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 7 // Description of Parameter 3
         {
             /* ### ACHTUNG: Neuer Text in Resource? Nutzungsdauer. Die Anzahl der Perioden, über die das Wirtschaftsgut abgeschrieben wird. : Nutzungsdauer. Die Anzahl der Perioden, ³ber die das Wirtschaftsgut abgeschrieben wird. */
-            Text [ de ] = "Nutzungsdauer. Die Anzahl der Perioden, über die das Wirtschaftsgut abgeschrieben wird." ;
+            Text [ de ] = "Nutzungsdauer. Die Anzahl der Perioden, Ã¼ber die das Wirtschaftsgut abgeschrieben wird." ;
             Text [ en-US ] = "Useful life. The number of periods in the useful life of the asset." ;
             Text [ x-comment ] = " ";
         };
@@ -2181,7 +2181,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 7 // Description of Parameter 3
         {
             /* ### ACHTUNG: Neuer Text in Resource? Nutzungsdauer. Die Anzahl der Perioden, über die das Wirtschaftsgut abgeschrieben wird. : Nutzungsdauer. Die Anzahl der Perioden, ³ber die das Wirtschaftsgut abgeschrieben wird. */
-            Text [ de ] = "Nutzungsdauer. Die Anzahl der Perioden, über die das Wirtschaftsgut abgeschrieben wird." ;
+            Text [ de ] = "Nutzungsdauer. Die Anzahl der Perioden, Ã¼ber die das Wirtschaftsgut abgeschrieben wird." ;
             Text [ en-US ] = "Useful life. The number of periods in the useful life of the asset." ;
             Text [ x-comment ] = " ";
         };
@@ -2192,7 +2192,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Berechnet die arithmetisch-degressive Abschreibung für eine bestimmte Periode : Berechnet die arithmetisch-degressive Abschreibung f³r eine bestimmte Periode */
-            Text [ de ] = "Berechnet die arithmetisch-degressive Abschreibung für eine bestimmte Periode" ;
+            Text [ de ] = "Berechnet die arithmetisch-degressive Abschreibung fÃ¼r eine bestimmte Periode" ;
             Text [ en-US ] = "Calculates the depreciation of an asset for a specific period using the double-declining balance method or declining balance factor." ;
             Text [ x-comment ] = " ";
         };
@@ -2235,7 +2235,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 7 // Description of Parameter 3
         {
             /* ### ACHTUNG: Neuer Text in Resource? Nutzungsdauer. Die Anzahl der Perioden, über die das Wirtschaftsgut abgeschrieben wird. : Nutzungsdauer. Die Anzahl der Perioden, ³ber die das Wirtschaftsgut abgeschrieben wird. */
-            Text [ de ] = "Nutzungsdauer. Die Anzahl der Perioden, über die das Wirtschaftsgut abgeschrieben wird." ;
+            Text [ de ] = "Nutzungsdauer. Die Anzahl der Perioden, Ã¼ber die das Wirtschaftsgut abgeschrieben wird." ;
             Text [ en-US ] = "Useful life. The number of periods in the useful life of the asset." ;
             Text [ x-comment ] = " ";
         };
@@ -2260,7 +2260,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 11 // Description of Parameter 5
         {
             /* ### ACHTUNG: Neuer Text in Resource? Faktor. Faktor für die Abnahme der Abschreibung. F = 2 heißt Doppelraten-Abschreibung. : Faktor. Faktor f³r die Abnahme der Abschreibung. F = 2 hei˜t Doppelraten-Abschreibung. */
-            Text [ de ] = "Faktor. Faktor für die Abnahme der Abschreibung. F = 2 heißt Doppelraten-Abschreibung." ;
+            Text [ de ] = "Faktor. Faktor fÃ¼r die Abnahme der Abschreibung. F = 2 heiÃŸt Doppelraten-Abschreibung." ;
             Text [ en-US ] = "Factor. The factor for balance decline. F = 2 means a double declining balance factor" ;
             Text [ x-comment ] = " ";
         };
@@ -2271,7 +2271,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Berechnet die geometrisch-degressive Abschreibung für eine bestimmte Periode : Berechnet die geometrisch-degressive Abschreibung f³r eine bestimmte Periode */
-            Text [ de ] = "Berechnet die geometrisch-degressive Abschreibung für eine bestimmte Periode" ;
+            Text [ de ] = "Berechnet die geometrisch-degressive Abschreibung fÃ¼r eine bestimmte Periode" ;
             Text [ en-US ] = "Returns the real depreciation of an asset for a specified period using the fixed-declining balance method." ;
             Text [ x-comment ] = " ";
         };
@@ -2314,7 +2314,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 7 // Description of Parameter 3
         {
             /* ### ACHTUNG: Neuer Text in Resource? Nutzungsdauer. Die Anzahl der Perioden, über die das Wirtschaftsgut abgeschrieben wird. : Nutzungsdauer. Die Anzahl der Perioden, ³ber die das Wirtschaftsgut abgeschrieben wird. */
-            Text [ de ] = "Nutzungsdauer. Die Anzahl der Perioden, über die das Wirtschaftsgut abgeschrieben wird." ;
+            Text [ de ] = "Nutzungsdauer. Die Anzahl der Perioden, Ã¼ber die das Wirtschaftsgut abgeschrieben wird." ;
             Text [ en-US ] = "Useful life. The number of periods in the useful life of the asset." ;
             Text [ x-comment ] = " ";
         };
@@ -2349,7 +2349,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Variable declining balance. Berechnet die arithmetisch-degressive Abschreibung für eine bestimmte Periode : Variable declining balance. Berechnet die arithmetisch-degressive Abschreibung f³r eine bestimmte Periode */
-            Text [ de ] = "Variable declining balance. Berechnet die arithmetisch-degressive Abschreibung für eine bestimmte Periode" ;
+            Text [ de ] = "Variable declining balance. Berechnet die arithmetisch-degressive Abschreibung fÃ¼r eine bestimmte Periode" ;
             Text [ en-US ] = "Variable declining balance. Returns the declining balance depreciation for a particular period." ;
             Text [ x-comment ] = " ";
         };
@@ -2392,7 +2392,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 7 // Description of Parameter 3
         {
             /* ### ACHTUNG: Neuer Text in Resource? Nutzungsdauer. Die Anzahl der Perioden, über die das Wirtschaftsgut abgeschrieben wird. : Nutzungsdauer. Die Anzahl der Perioden, ³ber die das Wirtschaftsgut abgeschrieben wird. */
-            Text [ de ] = "Nutzungsdauer. Die Anzahl der Perioden, über die das Wirtschaftsgut abgeschrieben wird." ;
+            Text [ de ] = "Nutzungsdauer. Die Anzahl der Perioden, Ã¼ber die das Wirtschaftsgut abgeschrieben wird." ;
             Text [ en-US ] = "Useful life. The number of periods in the useful life of the asset." ;
             Text [ x-comment ] = " ";
         };
@@ -2429,7 +2429,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 13 // Description of Parameter 6
         {
             /* ### ACHTUNG: Neuer Text in Resource? Faktor. Faktor für die Abnahme der Abschreibung. F = 2 heißt Doppelraten-Abschreibung. : Faktor. Faktor f³r die Abnahme der Abschreibung. F = 2 hei˜t Doppelraten-Abschreibung. */
-            Text [ de ] = "Faktor. Faktor für die Abnahme der Abschreibung. F = 2 heißt Doppelraten-Abschreibung." ;
+            Text [ de ] = "Faktor. Faktor fÃ¼r die Abnahme der Abschreibung. F = 2 heiÃŸt Doppelraten-Abschreibung." ;
             Text [ en-US ] = "Factor. The factor for the reduction of the depreciation. F = 2 denotes double rate depreciation." ;
             Text [ x-comment ] = " ";
         };
@@ -2442,7 +2442,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 15 // Description of Parameter 7
         {
             /* ### ACHTUNG: Neuer Text in Resource? Nicht wechseln. Art = 1 heißt Umschalten auf lineare Abschreibung, Art = 0 heißt kein Umschalten. : Nicht wechseln. Art = 1 hei˜t Umschalten auf lineare Abschreibung, Art = 0 hei˜t kein Umschalten. */
-            Text [ de ] = "Nicht wechseln. Art = 1 heißt Umschalten auf lineare Abschreibung, Art = 0 heißt kein Umschalten." ;
+            Text [ de ] = "Nicht wechseln. Art = 1 heiÃŸt Umschalten auf lineare Abschreibung, Art = 0 heiÃŸt kein Umschalten." ;
             Text [ en-US ] = "Do not alter. Type = 1 denotes switch to linear depreciation, type = 0 do not switch." ;
             Text [ x-comment ] = " ";
         };
@@ -2453,7 +2453,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Berechnet die jährliche Effektivverzinsung zu einer Nominalverzinsung. : Berechnet die jõhrliche Effektivverzinsung zu einer Nominalverzinsung. */
-            Text [ de ] = "Berechnet die jährliche Effektivverzinsung zu einer Nominalverzinsung." ;
+            Text [ de ] = "Berechnet die jÃ¤hrliche Effektivverzinsung zu einer Nominalverzinsung." ;
             Text [ en-US ] = "Calculates the annual net interest rate for a nominal interest rate." ;
             Text [ x-comment ] = " ";
         };
@@ -2494,7 +2494,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Berechnet die jährlichen Nominalzinsen zu einer Effektivverzinsung. : Berechnet die jõhrlichen Nominalzinsen zu einer Effektivverzinsung. */
-            Text [ de ] = "Berechnet die jährlichen Nominalzinsen zu einer Effektivverzinsung." ;
+            Text [ de ] = "Berechnet die jÃ¤hrlichen Nominalzinsen zu einer Effektivverzinsung." ;
             Text [ en-US ] = "Calculates the yearly nominal interest rate as an effective interest rate." ;
             Text [ x-comment ] = " ";
         };
@@ -2553,7 +2553,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Abzinsungssatz für eine Periode. : Der Abzinsungssatz f³r eine Periode. */
-            Text [ de ] = "Der Abzinsungssatz für eine Periode." ;
+            Text [ de ] = "Der Abzinsungssatz fÃ¼r eine Periode." ;
             Text [ en-US ] = "The rate of discount for one period." ;
             Text [ x-comment ] = " ";
         };
@@ -2566,7 +2566,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Wert 1;Wert 2;... Sind 1 bis 30 Werte für Ein- oder Auszahlungen. : Wert 1;Wert 2;... Sind 1 bis 30 Werte f³r Ein- oder Auszahlungen. */
-            Text [ de ] = "Wert 1;Wert 2;... Sind 1 bis 30 Werte für Ein- oder Auszahlungen." ;
+            Text [ de ] = "Wert 1;Wert 2;... Sind 1 bis 30 Werte fÃ¼r Ein- oder Auszahlungen." ;
             Text [ en-US ] = "Value 1, value 2,... are 1 to 30 arguments representing payments and income." ;
             Text [ x-comment ] = " ";
         };
@@ -2577,7 +2577,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Berechnet den internen Zinsfuß einer Investition ohne Kosten oder Gewinne. : Berechnet den internen Zinsfu˜ einer Investition ohne Kosten oder Gewinne. */
-            Text [ de ] = "Berechnet den internen Zinsfuß einer Investition ohne Kosten oder Gewinne." ;
+            Text [ de ] = "Berechnet den internen ZinsfuÃŸ einer Investition ohne Kosten oder Gewinne." ;
             Text [ en-US ] = "Returns the actuarial rate of interest of an investment excluding costs or profits." ;
             Text [ x-comment ] = " ";
         };
@@ -2608,7 +2608,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Schätzwert. Startwert des Zinsfußes für das Iterationsverfahren. : Schõtzwert. Startwert des Zinsfu˜es f³r das Iterationsverfahren. */
-            Text [ de ] = "Schätzwert. Startwert des Zinsfußes für das Iterationsverfahren." ;
+            Text [ de ] = "SchÃ¤tzwert. Startwert des ZinsfuÃŸes fÃ¼r das Iterationsverfahren." ;
             Text [ en-US ] = "Guess. An estimated value of the rate of return to be used for the iteration calculation." ;
             Text [ x-comment ] = " ";
         };
@@ -2618,7 +2618,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            Text [ de ] = "Berechnet den modifizierten internen Zinsfuß einer Reihe von Investitionen." ;
+            Text [ de ] = "Berechnet den modifizierten internen ZinsfuÃŸ einer Reihe von Investitionen." ;
             Text [ en-US ] = "Returns the modified internal rate of return for a series of investments.";
         };
         ExtraData =
@@ -2644,7 +2644,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            Text [ de ] = "Zinsfuß der Investitionen (die negativen Werte der Matrix)." ;
+            Text [ de ] = "ZinsfuÃŸ der Investitionen (die negativen Werte der Matrix)." ;
             Text [ en-US ] = "Interest rate for investments (the negative values in the array).";
         };
         String 6 // Name of Parameter 3
@@ -2654,7 +2654,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 7 // Description of Parameter 3
         {
-            Text [ de ] = "Zinsfuß der Reinvestitionen (die positiven Werte der Matrix)." ;
+            Text [ de ] = "ZinsfuÃŸ der Reinvestitionen (die positiven Werte der Matrix)." ;
             Text [ en-US ] = "interest rate for reinvestments (the positive values in the array).";
         };
     };
@@ -2663,7 +2663,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            Text [ de ] = "Berechnet die Höhe der Zinsen bei gleich bleibenden Tilgungsraten." ;
+            Text [ de ] = "Berechnet die HÃ¶he der Zinsen bei gleich bleibenden Tilgungsraten." ;
             Text [ en-US ] = "Returns the amount of interest for constant amortization rates.";
         };
         ExtraData =
@@ -2679,7 +2679,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            Text [ de ] = "Zinssatz für eine Tilgungsrate." ;
+            Text [ de ] = "Zinssatz fÃ¼r eine Tilgungsrate." ;
             Text [ en-US ] = "Interest rate for a single amortization rate.";
         };
         String 4 // Name of Parameter 2
@@ -2689,7 +2689,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            Text [ de ] = "Anzahl der Tilgungszeiträume für die Berechnung der Zinsen." ;
+            Text [ de ] = "Anzahl der TilgungszeitrÃ¤ume fÃ¼r die Berechnung der Zinsen." ;
             Text [ en-US ] = "Number of amortization periods for the calculation of the interest.";
         };
         String 6 // Name of Parameter 3
@@ -2699,7 +2699,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 7 // Description of Parameter 3
         {
-            Text [ de ] = "Gesamtanzahl der Tilgungszeiträume." ;
+            Text [ de ] = "Gesamtanzahl der TilgungszeitrÃ¤ume." ;
             Text [ en-US ] = "Sum total of amortization periods.";
         };
         String 8 // Name of Parameter 4
@@ -2718,7 +2718,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            Text [ de ] = "Laufzeit. Berechnet die Anzahl der Perioden, die eine Investition benötigt, um auf einen angestrebten Wert zu kommen." ;
+            Text [ de ] = "Laufzeit. Berechnet die Anzahl der Perioden, die eine Investition benÃ¶tigt, um auf einen angestrebten Wert zu kommen." ;
             Text [ en-US ] = "Duration. Calculates the number of periods required by an investment to attain the desired value." ;
             Text [ x-comment ] = " ";
         };
@@ -2761,7 +2761,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 7 // Description of Parameter 3
         {
             /* ### ACHTUNG: Neuer Text in Resource? Zukünftiger Wert der Einlage. : Zuk³nftiger Wert der Einlage. */
-            Text [ de ] = "Zukünftiger Wert der Investition." ;
+            Text [ de ] = "ZukÃ¼nftiger Wert der Investition." ;
             Text [ en-US ] = "The future value of the investment." ;
             Text [ x-comment ] = " ";
         };
@@ -2790,7 +2790,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Anzahl der Perioden für die Berechnung : Anzahl der Perioden f³r die Berechnung */
-            Text [ de ] = "Anzahl der Perioden für die Berechnung" ;
+            Text [ de ] = "Anzahl der Perioden fÃ¼r die Berechnung" ;
             Text [ en-US ] = "The number of periods used in the calculation." ;
             Text [ x-comment ] = " ";
         };
@@ -2815,7 +2815,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 7 // Description of Parameter 3
         {
             /* ### ACHTUNG: Neuer Text in Resource? Zukünftiger Wert der Einlage. : Zuk³nftiger Wert der Einlage. */
-            Text [ de ] = "Zukünftiger Wert der Investition." ;
+            Text [ de ] = "ZukÃ¼nftiger Wert der Investition." ;
             Text [ en-US ] = "The future value of the investment." ;
             Text [ x-comment ] = " ";
         };
@@ -2844,7 +2844,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Wert, der geprüft werden soll. : Der Wert, der gepr³ft werden soll. */
-            Text [ de ] = "Der Wert, der geprüft werden soll." ;
+            Text [ de ] = "Der Wert, der geprÃ¼ft werden soll." ;
             Text [ en-US ] = "The value to be tested." ;
             Text [ x-comment ] = " ";
         };
@@ -2873,7 +2873,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Wert, der geprüft werden soll. : Der Wert, der gepr³ft werden soll. */
-            Text [ de ] = "Der Wert, der geprüft werden soll." ;
+            Text [ de ] = "Der Wert, der geprÃ¼ft werden soll." ;
             Text [ en-US ] = "The value to be tested." ;
             Text [ x-comment ] = " ";
         };
@@ -2902,7 +2902,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Wert, der geprüft werden soll. : Der Wert, der gepr³ft werden soll. */
-            Text [ de ] = "Der Wert, der geprüft werden soll." ;
+            Text [ de ] = "Der Wert, der geprÃ¼ft werden soll." ;
             Text [ en-US ] = "The value to be tested." ;
             Text [ x-comment ] = " ";
         };
@@ -2931,7 +2931,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Wert, der geprüft werden soll. : Der Wert, der gepr³ft werden soll. */
-            Text [ de ] = "Der Wert, der geprüft werden soll." ;
+            Text [ de ] = "Der Wert, der geprÃ¼ft werden soll." ;
             Text [ en-US ] = "The value to be tested." ;
             Text [ x-comment ] = " ";
         };
@@ -2942,7 +2942,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Liefert WAHR, wenn der Wert ein logisches Zahlformat trägt. : Liefert WAHR, wenn der Wert ein logisches Zahlformat trõgt. */
-            Text [ de ] = "Liefert WAHR, wenn der Wert ein logisches Zahlformat trägt." ;
+            Text [ de ] = "Liefert WAHR, wenn der Wert ein logisches Zahlformat trÃ¤gt." ;
             Text [ en-US ] = "Returns TRUE if the value carries a logical number format." ;
             Text [ x-comment ] = " ";
         };
@@ -2961,7 +2961,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Wert, der geprüft werden soll. : Der Wert, der gepr³ft werden soll. */
-            Text [ de ] = "Der Wert, der geprüft werden soll." ;
+            Text [ de ] = "Der Wert, der geprÃ¼ft werden soll." ;
             Text [ en-US ] = "The value to be tested." ;
             Text [ x-comment ] = " ";
         };
@@ -2990,7 +2990,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Wert, der geprüft werden soll. : Der Wert, der gepr³ft werden soll. */
-            Text [ de ] = "Der Wert, der geprüft werden soll." ;
+            Text [ de ] = "Der Wert, der geprÃ¼ft werden soll." ;
             Text [ en-US ] = "The value to be tested." ;
             Text [ x-comment ] = " ";
         };
@@ -3019,7 +3019,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Wert, der geprüft werden soll. : Der Wert, der gepr³ft werden soll. */
-            Text [ de ] = "Der Wert, der geprüft werden soll." ;
+            Text [ de ] = "Der Wert, der geprÃ¼ft werden soll." ;
             Text [ en-US ] = "The value to be tested." ;
             Text [ x-comment ] = " ";
         };
@@ -3048,7 +3048,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Wert, der geprüft werden soll. : Der Wert, der gepr³ft werden soll. */
-            Text [ de ] = "Der Wert, der geprüft werden soll." ;
+            Text [ de ] = "Der Wert, der geprÃ¼ft werden soll." ;
             Text [ en-US ] = "The value to be tested." ;
             Text [ x-comment ] = " ";
         };
@@ -3077,7 +3077,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Wert, der geprüft werden soll. : Der Wert, der gepr³ft werden soll. */
-            Text [ de ] = "Der Wert, der geprüft werden soll." ;
+            Text [ de ] = "Der Wert, der geprÃ¼ft werden soll." ;
             Text [ en-US ] = "The value to be tested." ;
             Text [ x-comment ] = " ";
         };
@@ -3106,7 +3106,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Die Zelle, die überprüft werden soll. : Die Zelle, die ³berpr³ft werden soll. */
-            Text [ de ] = "Die Zelle, die überprüft werden soll." ;
+            Text [ de ] = "Die Zelle, die Ã¼berprÃ¼ft werden soll." ;
             Text [ en-US ] = "The cell to be checked." ;
             Text [ x-comment ] = " ";
         };
@@ -3170,7 +3170,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Nicht verfügbar. Setzt eine Zelle auf den Fehlerwert #NV. : Nicht verf³gbar. Setzt eine Zelle auf den Fehlerwert #NV. */
-            Text [ de ] = "Nicht verfügbar. Setzt eine Zelle auf den Fehlerwert #NV." ;
+            Text [ de ] = "Nicht verfÃ¼gbar. Setzt eine Zelle auf den Fehlerwert #NV." ;
             Text [ en-US ] = "Not available. Returns the error value #N/A." ;
             Text [ x-comment ] = " ";
         };
@@ -3214,7 +3214,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            Text [ de ] = "Ermittelt Informationen über Adresse, Formatierung oder Inhalt einer Zelle." ;
+            Text [ de ] = "Ermittelt Informationen Ã¼ber Adresse, Formatierung oder Inhalt einer Zelle." ;
             Text [ en-US ] = "Determines information about address, formatting or contents of a cell.";
         };
         ExtraData =
@@ -3326,7 +3326,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Gibt eine Wahrheitsprüfung an, die durchgeführt werden soll. : Gibt eine Wahrheitspr³fung an, die durchgef³hrt werden soll. */
-            Text [ de ] = "Gibt eine Wahrheitsprüfung an, die durchgeführt werden soll." ;
+            Text [ de ] = "Gibt eine WahrheitsprÃ¼fung an, die durchgefÃ¼hrt werden soll." ;
             Text [ en-US ] = "Specifies a logical test to be performed." ;
             Text [ x-comment ] = " ";
         };
@@ -3339,7 +3339,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 2 // Name of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Prüfung : Pr³fung */
-            Text [ de ] = "Prüfung" ;
+            Text [ de ] = "PrÃ¼fung" ;
             Text [ en-US ] = "Test" ;
             Text [ x-comment ] = " ";
         };
@@ -3358,7 +3358,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Das Resultat der Funktion, wenn die Wahrheitsprüfung WAHR ergibt. : Das Resultat der Funktion, wenn die Wahrheitspr³fung WAHR ergibt. */
-            Text [ de ] = "Das Resultat der Funktion, wenn die Wahrheitsprüfung WAHR ergibt." ;
+            Text [ de ] = "Das Resultat der Funktion, wenn die WahrheitsprÃ¼fung WAHR ergibt." ;
             Text [ en-US ] = "The result of the function if the logical test returns a TRUE." ;
             Text [ x-comment ] = " ";
         };
@@ -3371,7 +3371,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 7 // Description of Parameter 3
         {
             /* ### ACHTUNG: Neuer Text in Resource? Das Resultat der Funktion, wenn die Wahrheitsprüfung FALSCH ergibt. : Das Resultat der Funktion, wenn die Wahrheitspr³fung FALSCH ergibt. */
-            Text [ de ] = "Das Resultat der Funktion, wenn die Wahrheitsprüfung FALSCH ergibt." ;
+            Text [ de ] = "Das Resultat der Funktion, wenn die WahrheitsprÃ¼fung FALSCH ergibt." ;
             Text [ en-US ] = "The result of the function if the logical test returns FALSE." ;
             Text [ x-comment ] = " ";
         };
@@ -3400,7 +3400,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Wahrheitswert 1;Wahrheitswert 2;... sind 1 bis 30 Bedingungen, die Überprüft werden sollen und jeweils entweder WAHR oder FALSCH liefern. : Wahrheitswert 1;Wahrheitswert 2;... sind 1 bis 30 Bedingungen, die šberpr³ft werden sollen und jeweils entweder WAHR oder FALSCH liefern. */
-            Text [ de ] = "Wahrheitswert 1;Wahrheitswert 2;... sind 1 bis 30 Bedingungen, die Überprüft werden sollen und jeweils entweder WAHR oder FALSCH liefern." ;
+            Text [ de ] = "Wahrheitswert 1;Wahrheitswert 2;... sind 1 bis 30 Bedingungen, die ÃœberprÃ¼ft werden sollen und jeweils entweder WAHR oder FALSCH liefern." ;
             Text [ en-US ] = "Logical value 1, logical value 2,... are 1 to 30 conditions to be tested and which return either TRUE or FALSE." ;
             Text [ x-comment ] = " ";
         };
@@ -3429,7 +3429,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Wahrheitswert 1;Wahrheitswert 2;... sind 1 bis 30 Bedingungen, die Überprüft werden sollen und jeweils entweder WAHR oder FALSCH liefern. : Wahrheitswert 1;Wahrheitswert 2;... sind 1 bis 30 Bedingungen, die šberpr³ft werden sollen und jeweils entweder WAHR oder FALSCH liefern. */
-            Text [ de ] = "Wahrheitswert 1;Wahrheitswert 2;... sind 1 bis 30 Bedingungen, die Überprüft werden sollen und jeweils entweder WAHR oder FALSCH liefern." ;
+            Text [ de ] = "Wahrheitswert 1;Wahrheitswert 2;... sind 1 bis 30 Bedingungen, die ÃœberprÃ¼ft werden sollen und jeweils entweder WAHR oder FALSCH liefern." ;
             Text [ en-US ] = "Logical value 1, logical value 2;...are 1 to 30 conditions to be tested and each returns either TRUE or FALSE." ;
             Text [ x-comment ] = " ";
         };
@@ -3507,7 +3507,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            Text [ de ] = "Zählt die leeren Zellen in einem Bereich." ;
+            Text [ de ] = "ZÃ¤hlt die leeren Zellen in einem Bereich." ;
             Text [ en-US ] = "Counts the blank cells in a specified range." ;
             Text [ x-comment ] = " ";
         };
@@ -3525,7 +3525,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            Text [ de ] = "Bereich in dem leere Zellen gezählt werden." ;
+            Text [ de ] = "Bereich in dem leere Zellen gezÃ¤hlt werden." ;
             Text [ en-US ] = "The range in which empty cells are to be counted." ;
             Text [ x-comment ] = " ";
         };
@@ -3636,7 +3636,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Summiert die Argumente, die den Bedingungen genügen. : Summiert die Argumente, die den Bedingungen gen³gen. */
-            Text [ de ] = "Summiert die Argumente, die den Bedingungen genügen." ;
+            Text [ de ] = "Summiert die Argumente, die den Bedingungen genÃ¼gen." ;
             Text [ en-US ] = "Totals the arguments that meet the conditions." ;
             Text [ x-comment ] = " ";
         };
@@ -3689,7 +3689,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Zählt die Argumente, die den Bedingungen genügen. : Zõhlt die Argumente, die den Bedingungen gen³gen. */
-            Text [ de ] = "Zählt die Argumente, die den Bedingungen genügen." ;
+            Text [ de ] = "ZÃ¤hlt die Argumente, die den Bedingungen genÃ¼gen." ;
             Text [ en-US ] = "Counts the arguments which meet the set conditions." ;
             Text [ x-comment ] = " ";
         };
@@ -3794,7 +3794,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Wert, der geprüft werden soll. : Der Wert, der gepr³ft werden soll. */
-            Text [ de ] = "Der Wert, der geprüft werden soll." ;
+            Text [ de ] = "Der Wert, der geprÃ¼ft werden soll." ;
             Text [ en-US ] = "The value to be tested." ;
             Text [ x-comment ] = " ";
         };
@@ -3823,7 +3823,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Wert, der geprüft werden soll. : Der Wert, der gepr³ft werden soll. */
-            Text [ de ] = "Der Wert, der geprüft werden soll." ;
+            Text [ de ] = "Der Wert, der geprÃ¼ft werden soll." ;
             Text [ en-US ] = "The value to be tested." ;
             Text [ x-comment ] = " ";
         };
@@ -3994,7 +3994,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Ein Wert größer oder gleich 1, dessen Areakosinus berechnet werden soll. : Der hyperbolische Cosinuswert */
             /* ### ACHTUNG: Neuer Text in Resource? Ein Wert größer oder gleich 1, dessen Areakosinus berechnet werden soll. : Ein Wert gr÷˜er oder gleich 1, dessen Areakosinus berechnet werden soll. */
-            Text [ de ] = "Ein Wert größer oder gleich 1, dessen Areakosinus berechnet werden soll." ;
+            Text [ de ] = "Ein Wert grÃ¶ÃŸer oder gleich 1, dessen Areakosinus berechnet werden soll." ;
             Text [ en-US ] = "A value greater than or equal to 1 for which the hyperbolic cosine is to be returned." ;
             Text [ x-comment ] = " ";
         };
@@ -4115,7 +4115,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Ein Wert kleiner als -1 oder größer als 1, dessen Areakotanges berechnet werden soll. : Der hyperbolische Cotangenswert */
             /* ### ACHTUNG: Neuer Text in Resource? Ein Wert kleiner als -1 oder größer als 1, dessen Areakotanges berechnet werden soll. : Ein Wert kleiner als -1 oder gr÷˜er als 1, dessen Areakotanges berechnet werden soll. */
-            Text [ de ] = "Ein Wert kleiner als -1 oder größer als 1, dessen Areakotanges berechnet werden soll." ;
+            Text [ de ] = "Ein Wert kleiner als -1 oder grÃ¶ÃŸer als 1, dessen Areakotanges berechnet werden soll." ;
             Text [ en-US ] = "A value smaller than -1 or greater than 1 for which the inverse hyperbolic cotangent is to be returned." ;
             Text [ x-comment ] = " ";
         };
@@ -4175,7 +4175,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Winkel im Bogenmaß (Radiant), dessen Kosinus berechnet werden soll. : Der Winkel im Bogenma˜ (Radiant), dessen Kosinus berechnet werden soll. */
-            Text [ de ] = "Der Winkel im Bogenmaß (Radiant), dessen Kosinus berechnet werden soll." ;
+            Text [ de ] = "Der Winkel im BogenmaÃŸ (Radiant), dessen Kosinus berechnet werden soll." ;
             Text [ en-US ] = "The angle in the radians for which the cosine is to be returned." ;
             Text [ x-comment ] = " ";
         };
@@ -4205,7 +4205,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Winkel im Bogenmaß (Radiant), dessen Sinus berechnet werden soll. : Der Winkel im Bogenma˜ (Radiant), dessen Sinus berechnet werden soll. */
-            Text [ de ] = "Der Winkel im Bogenmaß (Radiant), dessen Sinus berechnet werden soll." ;
+            Text [ de ] = "Der Winkel im BogenmaÃŸ (Radiant), dessen Sinus berechnet werden soll." ;
             Text [ en-US ] = "The angle in radians for which the sine is to be calculated." ;
             Text [ x-comment ] = " ";
         };
@@ -4235,7 +4235,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Winkel im Bogenmaß (Radiant), dessen Kotangens berechnet werden soll. : Der Winkel im Bogenma˜ (Radiant), dessen Kotangens berechnet werden soll. */
-            Text [ de ] = "Der Winkel im Bogenmaß (Radiant), dessen Kotangens berechnet werden soll." ;
+            Text [ de ] = "Der Winkel im BogenmaÃŸ (Radiant), dessen Kotangens berechnet werden soll." ;
             Text [ en-US ] = "The angle in radians whose cotangent value is to be returned." ;
             Text [ x-comment ] = " ";
         };
@@ -4265,7 +4265,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Winkel im Bogenmaß (Radiant), dessen Tangens berechnet werden soll. : Der Winkel im Bogenma˜ (Radiant), dessen Tangens berechnet werden soll. */
-            Text [ de ] = "Der Winkel im Bogenmaß (Radiant), dessen Tangens berechnet werden soll." ;
+            Text [ de ] = "Der Winkel im BogenmaÃŸ (Radiant), dessen Tangens berechnet werden soll." ;
             Text [ en-US ] = "The angle in radians for which the tangent is to be calculated." ;
             Text [ x-comment ] = " ";
         };
@@ -4415,7 +4415,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Wert für die X-Koordinate. : Wert f³r die X-Koordinate. */
-            Text [ de ] = "Wert für die X-Koordinate." ;
+            Text [ de ] = "Wert fÃ¼r die X-Koordinate." ;
             Text [ en-US ] = "The value for the x coordinate." ;
             Text [ x-comment ] = " ";
         };
@@ -4428,7 +4428,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Wert für die Y-Koordinate. : Wert f³r die Y-Koordinate. */
-            Text [ de ] = "Wert für die Y-Koordinate." ;
+            Text [ de ] = "Wert fÃ¼r die Y-Koordinate." ;
             Text [ en-US ] = "The value for the y coordinate." ;
             Text [ x-comment ] = " ";
         };
@@ -4439,7 +4439,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Wandelt Bogenmaß (Radiant) in Grad um. : Wandelt Bogenma˜ (Radiant) in Grad um. */
-            Text [ de ] = "Wandelt Bogenmaß (Radiant) in Grad um." ;
+            Text [ de ] = "Wandelt BogenmaÃŸ (Radiant) in Grad um." ;
             Text [ en-US ] = "Converts a radian to degrees" ;
             Text [ x-comment ] = " ";
         };
@@ -4458,7 +4458,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Winkel im Bogenmaß (Radiant). : Der Winkel im Bogenma˜ (Radiant). */
-            Text [ de ] = "Der Winkel im Bogenmaß (Radiant)." ;
+            Text [ de ] = "Der Winkel im BogenmaÃŸ (Radiant)." ;
             Text [ en-US ] = "The angle in a radian" ;
             Text [ x-comment ] = " ";
         };
@@ -4469,7 +4469,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Wandelt Grad in Bogenmaß (Radiant) um. : Wandelt Grad in Bogenma˜ (Radiant) um. */
-            Text [ de ] = "Wandelt Grad in Bogenmaß (Radiant) um." ;
+            Text [ de ] = "Wandelt Grad in BogenmaÃŸ (Radiant) um." ;
             Text [ en-US ] = "Converts degrees to radians" ;
             Text [ x-comment ] = " ";
         };
@@ -4546,7 +4546,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Ein Wert größer als 0, dessen Logarithmus berechnet wird. : Ein Wert gr÷˜er als 0, dessen Logarithmus berechnet wird. */
-            Text [ de ] = "Ein Wert größer als 0, dessen Logarithmus berechnet wird." ;
+            Text [ de ] = "Ein Wert grÃ¶ÃŸer als 0, dessen Logarithmus berechnet wird." ;
             Text [ en-US ] = "A value greater than 0 for which the logarithm is to be calculated." ;
             Text [ x-comment ] = " ";
         };
@@ -4559,7 +4559,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Die Basis für die Logarithmusberechnung. : Die Basis f³r die Logarithmusberechnung. */
-            Text [ de ] = "Die Basis für die Logarithmusberechnung." ;
+            Text [ de ] = "Die Basis fÃ¼r die Logarithmusberechnung." ;
             Text [ en-US ] = "The base of the logarithm." ;
             Text [ x-comment ] = " ";
         };
@@ -4570,7 +4570,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Berechnet den natürlichen Logarithmus einer Zahl. : Berechnet den nat³rlichen Logarithmus einer Zahl. */
-            Text [ de ] = "Berechnet den natürlichen Logarithmus einer Zahl." ;
+            Text [ de ] = "Berechnet den natÃ¼rlichen Logarithmus einer Zahl." ;
             Text [ en-US ] = "Calculates the natural logarithm of a number." ;
             Text [ x-comment ] = " ";
         };
@@ -4589,7 +4589,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Ein Wert größer als 0, dessen natürlicher Logarithmus berechnet wird. : Ein Wert gr÷˜er als 0, dessen nat³rlicher Logarithmus berechnet wird. */
-            Text [ de ] = "Ein Wert größer als 0, dessen natürlicher Logarithmus berechnet wird." ;
+            Text [ de ] = "Ein Wert grÃ¶ÃŸer als 0, dessen natÃ¼rlicher Logarithmus berechnet wird." ;
             Text [ en-US ] = "A value greater than 0 for which the natural logarithm is to be calculated." ;
             Text [ x-comment ] = " ";
         };
@@ -4619,7 +4619,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Ein Wert größer als 0, dessen Logarithmus berechnet wird. : Ein Wert gr÷˜er als 0, dessen Logarithmus berechnet wird. */
-            Text [ de ] = "Ein Wert größer als 0, dessen Logarithmus berechnet wird." ;
+            Text [ de ] = "Ein Wert grÃ¶ÃŸer als 0, dessen Logarithmus berechnet wird." ;
             Text [ en-US ] = "A value greater than 0 for which the logarithm is to be calculated." ;
             Text [ x-comment ] = " ";
         };
@@ -4630,7 +4630,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Berechnet die Fakultät einer Zahl. : Berechnet die Fakultõt einer Zahl. */
-            Text [ de ] = "Berechnet die Fakultät einer Zahl." ;
+            Text [ de ] = "Berechnet die FakultÃ¤t einer Zahl." ;
             Text [ en-US ] = "Calculates the factorial of a number." ;
             Text [ x-comment ] = " ";
         };
@@ -4649,7 +4649,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Die Zahl, deren Fakultät berechnet wird. : Die Zahl, deren Fakultõt berechnet wird. */
-            Text [ de ] = "Die Zahl, deren Fakultät berechnet wird." ;
+            Text [ de ] = "Die Zahl, deren FakultÃ¤t berechnet wird." ;
             Text [ en-US ] = "The number for which the factorial is to be calculated." ;
             Text [ x-comment ] = " ";
         };
@@ -4747,7 +4747,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Funktionsindex. Ist ein Index auf die möglichen Funktion Summe, Max, ... : Funktionsindex. Ist ein Index auf die m÷glichen Funktion Summe, Max, ... */
-            Text [ de ] = "Funktionsindex. Ist ein Index auf die möglichen Funktion Summe, Max, ..." ;
+            Text [ de ] = "Funktionsindex. Ist ein Index auf die mÃ¶glichen Funktion Summe, Max, ..." ;
             Text [ en-US ] = "Function index. Is an index of the possible functions Total, Max, ..." ;
             Text [ x-comment ] = " ";
         };
@@ -4760,7 +4760,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Bereich, dessen Zellen berücksichtigt werden. : Der Bereich, dessen Zellen ber³cksichtigt werden. */
-            Text [ de ] = "Der Bereich, dessen Zellen berücksichtigt werden." ;
+            Text [ de ] = "Der Bereich, dessen Zellen berÃ¼cksichtigt werden." ;
             Text [ en-US ] = "The cells of the range which are to be taken into account." ;
             Text [ x-comment ] = " ";
         };
@@ -4771,7 +4771,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Rundet eine Zahl auf die nächst kleinere ganze Zahl ab. : Rundet eine Zahl auf die nõchst kleinere ganze Zahl ab. */
-            Text [ de ] = "Rundet eine Zahl auf die nächst kleinere ganze Zahl ab." ;
+            Text [ de ] = "Rundet eine Zahl auf die nÃ¤chst kleinere ganze Zahl ab." ;
             Text [ en-US ] = "Rounds a number down to the nearest integer." ;
             Text [ x-comment ] = " ";
         };
@@ -4960,7 +4960,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Rundet eine Zahl auf die nächste gerade ganze Zahl auf. : Rundet eine Zahl auf die nõchste gerade ganze Zahl auf. */
-            Text [ de ] = "Rundet eine Zahl auf die nächste gerade ganze Zahl auf." ;
+            Text [ de ] = "Rundet eine Zahl auf die nÃ¤chste gerade ganze Zahl auf." ;
             Text [ en-US ] = "Rounds a number up to the nearest even integer." ;
             Text [ x-comment ] = " ";
         };
@@ -4989,7 +4989,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Rundet eine Zahl auf die nächste ungerade ganze Zahl auf. : Rundet eine Zahl auf die nõchste ungerade ganze Zahl auf. */
-            Text [ de ] = "Rundet eine Zahl auf die nächste ungerade ganze Zahl auf." ;
+            Text [ de ] = "Rundet eine Zahl auf die nÃ¤chste ungerade ganze Zahl auf." ;
             Text [ en-US ] = "Rounds a number up to the nearest odd integer." ;
             Text [ x-comment ] = " ";
         };
@@ -5018,7 +5018,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Rundet eine Zahl auf das nächste Vielfache der Schrittweite auf. : Rundet eine Zahl auf das nõchste Vielfache der Schrittweite auf. */
-            Text [ de ] = "Rundet eine Zahl auf das nächste Vielfache der Schrittweite auf." ;
+            Text [ de ] = "Rundet eine Zahl auf das nÃ¤chste Vielfache der Schrittweite auf." ;
             Text [ en-US ] = "Rounds a number up to the nearest multiple of significance." ;
             Text [ x-comment ] = " ";
         };
@@ -5060,7 +5060,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 7 // Description of Parameter 3
         {
-            Text [ de ] = "Wenn angegeben und ungleich Null wird bei negativer Zahl und Schrittweite betragsmäßig aufgerundet." ;
+            Text [ de ] = "Wenn angegeben und ungleich Null wird bei negativer Zahl und Schrittweite betragsmÃ¤ÃŸig aufgerundet." ;
             Text [ en-US ] = "If given and not equal to zero then rounded up according to amount when a negative number and significance." ;
             Text [ x-comment ] = " ";
         };
@@ -5071,7 +5071,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Rundet eine Zahl auf das nächste Vielfache der Schrittweite ab. : Rundet eine Zahl auf das nõchste Vielfache der Schrittweite ab. */
-            Text [ de ] = "Rundet eine Zahl auf das nächste Vielfache der Schrittweite ab." ;
+            Text [ de ] = "Rundet eine Zahl auf das nÃ¤chste Vielfache der Schrittweite ab." ;
             Text [ en-US ] = "Rounds number down to the nearest multiple of significance." ;
             Text [ x-comment ] = " ";
         };
@@ -5113,7 +5113,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 7 // Description of Parameter 3
         {
-            Text [ de ] = "Wenn angegeben und ungleich Null wird bei negativer Zahl und Schrittweite betragsmäßig abgerundet." ;
+            Text [ de ] = "Wenn angegeben und ungleich Null wird bei negativer Zahl und Schrittweite betragsmÃ¤ÃŸig abgerundet." ;
             Text [ en-US ] = "If given and not equal to zero then rounded down according to amount when a negative number and significance." ;
             Text [ x-comment ] = " ";
         };
@@ -5124,7 +5124,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Größter gemeinsamer Teiler. : Gr÷˜ter gemeinsamer Teiler. */
-            Text [ de ] = "Größter gemeinsamer Teiler." ;
+            Text [ de ] = "GrÃ¶ÃŸter gemeinsamer Teiler." ;
             Text [ en-US ] = "Greatest Common Divisor" ;
             Text [ x-comment ] = " ";
         };
@@ -5143,7 +5143,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Ganzzahl 1;Ganzzahl 2,... sind ganze Zahlen, deren größter gemeinsamer Teiler berechnet wird. : Ganzzahl 1;Ganzzahl 2,... sind ganze Zahlen, deren gr÷˜ter gemeinsamer Teiler berechnet wird. */
-            Text [ de ] = "Ganzzahl 1;Ganzzahl 2,... sind ganze Zahlen, deren größter gemeinsamer Teiler berechnet wird." ;
+            Text [ de ] = "Ganzzahl 1;Ganzzahl 2,... sind ganze Zahlen, deren grÃ¶ÃŸter gemeinsamer Teiler berechnet wird." ;
             Text [ en-US ] = "Integer 1; integer 2,... are integers for which the greatest common divisor is to be calculated." ;
             Text [ x-comment ] = " ";
         };
@@ -5228,7 +5228,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Die erste Matrix für das Matrixprodukt. : Die erste Matrix f³r das Matrixprodukt. */
-            Text [ de ] = "Die erste Matrix für das Matrixprodukt." ;
+            Text [ de ] = "Die erste Matrix fÃ¼r das Matrixprodukt." ;
             Text [ en-US ] = "The first array for the array product." ;
             Text [ x-comment ] = " ";
         };
@@ -5307,7 +5307,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Bestimmt die quadratische Einheitsmatrix einer bestimmten Größe. : Bestimmt die quadratische Einheitsmatrix einer bestimmten Gr÷˜e. */
-            Text [ de ] = "Bestimmt die quadratische Einheitsmatrix einer bestimmten Größe." ;
+            Text [ de ] = "Bestimmt die quadratische Einheitsmatrix einer bestimmten GrÃ¶ÃŸe." ;
             Text [ en-US ] = "Returns the unitary square array of a certain size." ;
             Text [ x-comment ] = " ";
         };
@@ -5326,7 +5326,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Die Größe der Einheitsmatrix. : Die Gr÷˜e der Einheitsmatrix. */
-            Text [ de ] = "Die Größe der Einheitsmatrix." ;
+            Text [ de ] = "Die GrÃ¶ÃŸe der Einheitsmatrix." ;
             Text [ en-US ] = "The size of the unitary array." ;
             Text [ x-comment ] = " ";
         };
@@ -5490,7 +5490,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Erstellt eine Häufigkeitsverteilung als Spaltenmatrix. : Erstellt eine Hõufigkeitsverteilung als Spaltenmatrix. */
-            Text [ de ] = "Erstellt eine Häufigkeitsverteilung als Spaltenmatrix." ;
+            Text [ de ] = "Erstellt eine HÃ¤ufigkeitsverteilung als Spaltenmatrix." ;
             Text [ en-US ] = "Returns a frequency distribution as a vertical array." ;
             Text [ x-comment ] = " ";
         };
@@ -5531,7 +5531,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Berechnet Kenngrößen der linearen Regression als Matrix. : Berechnet Kenngr÷˜en der linearen Regression als Matrix. */
-            Text [ de ] = "Berechnet Kenngrößen der linearen Regression als Matrix." ;
+            Text [ de ] = "Berechnet KenngrÃ¶ÃŸen der linearen Regression als Matrix." ;
             Text [ en-US ] = "Calculates parameters of the linear regression as an array." ;
             Text [ x-comment ] = " ";
         };
@@ -5580,14 +5580,14 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 8 // Name of Parameter 4
         {
             /* ### ACHTUNG: Neuer Text in Resource? Kenngrößen : Kenngr÷˜en */
-            Text [ de ] = "Kenngrößen" ;
+            Text [ de ] = "KenngrÃ¶ÃŸen" ;
             Text [ en-US ] = "stats" ;
             Text [ x-comment ] = " ";
         };
         String 9 // Description of Parameter 4
         {
             /* ### ACHTUNG: Neuer Text in Resource? Ist Kenngrößen=0, so werden nur die Regressionskoeffizienten berechnet, sonst noch weitere Werte. : Ist Kenngr÷˜en=0, so werden nur die Regressionskoeffizienten berechnet, sonst noch weitere Werte. */
-            Text [ de ] = "Ist Kenngrößen=0, so werden nur die Regressionskoeffizienten berechnet, sonst noch weitere Werte." ;
+            Text [ de ] = "Ist KenngrÃ¶ÃŸen=0, so werden nur die Regressionskoeffizienten berechnet, sonst noch weitere Werte." ;
             Text [ en-US ] = "If parameter = 0 then only the regression coefficient will be calculated, otherwise other values as well." ;
             Text [ x-comment ] = " ";
         };
@@ -5598,7 +5598,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Berechnet Kenngrößen der exponentiellen Regression als Matrix. : Berechnet Kenngr÷˜en der exponentiellen Regression als Matrix. */
-            Text [ de ] = "Berechnet Kenngrößen der exponentiellen Regression als Matrix." ;
+            Text [ de ] = "Berechnet KenngrÃ¶ÃŸen der exponentiellen Regression als Matrix." ;
             Text [ en-US ] = "Calculates the parameters of the exponential regression curve as an array." ;
             Text [ x-comment ] = " ";
         };
@@ -5647,14 +5647,14 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 8 // Name of Parameter 4
         {
             /* ### ACHTUNG: Neuer Text in Resource? Kenngrößen : Kenngr÷˜en */
-            Text [ de ] = "Kenngrößen" ;
+            Text [ de ] = "KenngrÃ¶ÃŸen" ;
             Text [ en-US ] = "stats" ;
             Text [ x-comment ] = " ";
         };
         String 9 // Description of Parameter 4
         {
             /* ### ACHTUNG: Neuer Text in Resource? Ist Kenngrößen=0, so werden nur die Regressionskoeffizienten berechnet, sonst noch weitere Werte. : Ist Kenngr÷˜en=0, so werden nur die Regressionskoeffizienten berechnet, sonst noch weitere Werte. */
-            Text [ de ] = "Ist Kenngrößen=0, so werden nur die Regressionskoeffizienten berechnet, sonst noch weitere Werte." ;
+            Text [ de ] = "Ist KenngrÃ¶ÃŸen=0, so werden nur die Regressionskoeffizienten berechnet, sonst noch weitere Werte." ;
             Text [ en-US ] = "If parameter = 0 then only the regression coefficient will be calculated, otherwise other values as well." ;
             Text [ x-comment ] = " ";
         };
@@ -5793,7 +5793,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Zählt, wie viele Zahlen eine Liste von Argumenten enthält. : Zõhlt, wie viele Zahlen eine Liste von Argumenten enthõlt. */
-            Text [ de ] = "Zählt, wie viele Zahlen eine Liste von Argumenten enthält." ;
+            Text [ de ] = "ZÃ¤hlt, wie viele Zahlen eine Liste von Argumenten enthÃ¤lt." ;
             Text [ en-US ] = "Counts how many numbers are in the list of arguments." ;
             Text [ x-comment ] = " ";
         };
@@ -5812,7 +5812,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Wert 1; Wert 2;... sind 1 bis 30 Argumente mit unterschiedlichen Datentypen, wobei nur Zahlen in die Zählung eingehen. : Wert 1; Wert 2;... sind 1 bis 30 Argumente mit unterschiedlichen Datentypen, wobei nur Zahlen in die Zõhlung eingehen. */
-            Text [ de ] = "Wert 1; Wert 2;... sind 1 bis 30 Argumente mit unterschiedlichen Datentypen, wobei nur Zahlen in die Zählung eingehen." ;
+            Text [ de ] = "Wert 1; Wert 2;... sind 1 bis 30 Argumente mit unterschiedlichen Datentypen, wobei nur Zahlen in die ZÃ¤hlung eingehen." ;
             Text [ en-US ] = "Value 1, value 2, ... are 1 to 30 arguments containing different data types but where only numbers are counted." ;
             Text [ x-comment ] = " ";
         };
@@ -5823,7 +5823,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Zählt, wie viele Werte eine Liste von Argumenten enthält. : Zõhlt, wie viele Werte eine Liste von Argumenten enthõlt. */
-            Text [ de ] = "Zählt, wie viele Werte eine Liste von Argumenten enthält." ;
+            Text [ de ] = "ZÃ¤hlt, wie viele Werte eine Liste von Argumenten enthÃ¤lt." ;
             Text [ en-US ] = "Counts how many values are in the list of arguments." ;
             Text [ x-comment ] = " ";
         };
@@ -5842,7 +5842,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Wert 1; Wert 2;... sind 1 bis 30 Argumente, die den zu zählenden Werten entsprechen. : Wert 1; Wert 2;... sind 1 bis 30 Argumente, die den zu zõhlenden Werten entsprechen. */
-            Text [ de ] = "Wert 1; Wert 2;... sind 1 bis 30 Argumente, die den zu zählenden Werten entsprechen." ;
+            Text [ de ] = "Wert 1; Wert 2;... sind 1 bis 30 Argumente, die den zu zÃ¤hlenden Werten entsprechen." ;
             Text [ en-US ] = "Value 1, value 2, ... are 1 to 30 arguments representing the values to be counted." ;
             Text [ x-comment ] = " ";
         };
@@ -5853,7 +5853,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Liefert die größte Zahl einer Argumentliste. : Liefert die gr÷˜te Zahl einer Argumentliste. */
-            Text [ de ] = "Liefert die größte Zahl einer Argumentliste." ;
+            Text [ de ] = "Liefert die grÃ¶ÃŸte Zahl einer Argumentliste." ;
             Text [ en-US ] = "Returns the maximum value in a list of arguments." ;
             Text [ x-comment ] = " ";
         };
@@ -5872,7 +5872,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, deren größte Zahl bestimmt werden soll. : Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, deren gr÷˜te Zahl bestimmt werden soll. */
-            Text [ de ] = "Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, deren größte Zahl bestimmt werden soll." ;
+            Text [ de ] = "Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, deren grÃ¶ÃŸte Zahl bestimmt werden soll." ;
             Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 numerical arguments for which the largest number is to be determined." ;
             Text [ x-comment ] = " ";
         };
@@ -5882,7 +5882,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            Text [ de ] = "Liefert den größten Wert einer Argumentliste. Text wird als Null gewertet." ;
+            Text [ de ] = "Liefert den grÃ¶ÃŸten Wert einer Argumentliste. Text wird als Null gewertet." ;
             Text [ en-US ] = "Returns the maximum value in a list of arguments. Text is evaluated as Zero.";
             Text [ x-comment ] = " ";
         };
@@ -5900,7 +5900,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            Text [ de ] = "Wert 1; Wert 2;... sind 1 bis 30 Argumente, deren größter Wert bestimmt werden soll." ;
+            Text [ de ] = "Wert 1; Wert 2;... sind 1 bis 30 Argumente, deren grÃ¶ÃŸter Wert bestimmt werden soll." ;
             Text [ en-US ] = "Value 1, value 2,    are 1 to 30 arguments whose largest value is to be determined.";
             Text [ x-comment ] = " ";
         };
@@ -6419,7 +6419,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Berechnet den häufigsten Wert in einer Stichprobe. : Berechnet den hõufigsten Wert in einer Stichprobe. */
-            Text [ de ] = "Berechnet den häufigsten Wert in einer Stichprobe." ;
+            Text [ de ] = "Berechnet den hÃ¤ufigsten Wert in einer Stichprobe." ;
             Text [ en-US ] = "Returns the most common value in a sample." ;
             Text [ x-comment ] = " ";
         };
@@ -6556,7 +6556,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Berechnet den k-größten Wert einer Stichprobe. : Berechnet den k-gr÷˜ten Wert einer Stichprobe. */
-            Text [ de ] = "Berechnet den k-größten Wert einer Stichprobe." ;
+            Text [ de ] = "Berechnet den k-grÃ¶ÃŸten Wert einer Stichprobe." ;
             Text [ en-US ] = "Returns the k-th largest value of a sample." ;
             Text [ x-comment ] = " ";
         };
@@ -6762,7 +6762,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Prozentsatz der Randdaten, die nicht berücksichtigt werden. : Der Prozentsatz der Randdaten, die nicht ber³cksichtigt werden. */
-            Text [ de ] = "Der Prozentsatz der Randdaten, die nicht berücksichtigt werden." ;
+            Text [ de ] = "Der Prozentsatz der Randdaten, die nicht berÃ¼cksichtigt werden." ;
             Text [ en-US ] = "The percentage of marginal data that is not to be taken into account." ;
             Text [ x-comment ] = " ";
         };
@@ -6803,7 +6803,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Die Matrix der dazugehörigen Wahrscheinlichkeiten. : Die Matrix der dazugeh÷rigen Wahrscheinlichkeiten. */
-            Text [ de ] = "Die Matrix der dazugehörigen Wahrscheinlichkeiten." ;
+            Text [ de ] = "Die Matrix der dazugehÃ¶rigen Wahrscheinlichkeiten." ;
             Text [ en-US ] = "The array of the associated probabilities." ;
             Text [ x-comment ] = " ";
         };
@@ -7004,7 +7004,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Wert, der rücktransformiert wird. : Der Wert, der r³cktransformiert wird. */
-            Text [ de ] = "Der Wert, der rücktransformiert wird." ;
+            Text [ de ] = "Der Wert, der rÃ¼cktransformiert wird." ;
             Text [ en-US ] = "The value that is to be transformed back." ;
             Text [ x-comment ] = " ";
         };
@@ -7174,7 +7174,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 7 // Description of Parameter 3
         {
             /* ### ACHTUNG: Neuer Text in Resource? Die Grenzwahrscheinlichkeit, die erreicht oder überschritten wird. : Die Grenzwahrscheinlichkeit, die erreicht oder ³berschritten wird. */
-            Text [ de ] = "Die Grenzwahrscheinlichkeit, die erreicht oder überschritten wird." ;
+            Text [ de ] = "Die Grenzwahrscheinlichkeit, die erreicht oder Ã¼berschritten wird." ;
             Text [ en-US ] = "The border probability that is attained or exceeded." ;
             Text [ x-comment ] = " ";
         };
@@ -7699,7 +7699,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Wert, zu dem der natürliche Logarithmus der Gamma-Funktion berechnet werden soll. : Der Wert, zu dem der nat³rliche Logarithmus der Gamma-Funktion berechnet werden soll. */
-            Text [ de ] = "Der Wert, zu dem der natürliche Logarithmus der Gamma-Funktion berechnet werden soll." ;
+            Text [ de ] = "Der Wert, zu dem der natÃ¼rliche Logarithmus der Gamma-Funktion berechnet werden soll." ;
             Text [ en-US ] = "The value for which the natural logarithm of the gamma function is to be calculated." ;
             Text [ x-comment ] = " ";
         };
@@ -7764,7 +7764,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 9 // Description of Parameter 4
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Anfangswert für das Werteintervall der Verteilung. : Der Anfangswert f³r das Werteintervall der Verteilung. */
-            Text [ de ] = "Der Anfangswert für das Werteintervall der Verteilung." ;
+            Text [ de ] = "Der Anfangswert fÃ¼r das Werteintervall der Verteilung." ;
             Text [ en-US ] = "The starting value for the value interval of the distribution." ;
             Text [ x-comment ] = " ";
         };
@@ -7777,7 +7777,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 11 // Description of Parameter 5
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Endwert für das Werteintervall der Verteilung. : Der Endwert f³r das Werteintervall der Verteilung. */
-            Text [ de ] = "Der Endwert für das Werteintervall der Verteilung." ;
+            Text [ de ] = "Der Endwert fÃ¼r das Werteintervall der Verteilung." ;
             Text [ en-US ] = "The final value for the value interval of the distribution." ;
             Text [ x-comment ] = " ";
         };
@@ -7842,7 +7842,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 9 // Description of Parameter 4
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Anfangswert für das Werteintervall der Verteilung. : Der Anfangswert f³r das Werteintervall der Verteilung. */
-            Text [ de ] = "Der Anfangswert für das Werteintervall der Verteilung." ;
+            Text [ de ] = "Der Anfangswert fÃ¼r das Werteintervall der Verteilung." ;
             Text [ en-US ] = "The starting value for the value interval of the distribution." ;
             Text [ x-comment ] = " ";
         };
@@ -7855,7 +7855,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 11 // Description of Parameter 5
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Endwert für das Werteintervall der Verteilung. : Der Endwert f³r das Werteintervall der Verteilung. */
-            Text [ de ] = "Der Endwert für das Werteintervall der Verteilung." ;
+            Text [ de ] = "Der Endwert fÃ¼r das Werteintervall der Verteilung." ;
             Text [ en-US ] = "The final value for the value interval of the distribution." ;
             Text [ x-comment ] = " ";
         };
@@ -7960,7 +7960,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Die Größe der Stichprobe. : Die Gr÷˜e der Stichprobe. */
-            Text [ de ] = "Die Größe der Stichprobe." ;
+            Text [ de ] = "Die GrÃ¶ÃŸe der Stichprobe." ;
             Text [ en-US ] = "The size of the sample." ;
             Text [ x-comment ] = " ";
         };
@@ -7985,7 +7985,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 9 // Description of Parameter 4
         {
             /* ### ACHTUNG: Neuer Text in Resource? Die Größe der Grundgesamtheit. : Die Gr÷˜e der Grundgesamtheit. */
-            Text [ de ] = "Die Größe der Grundgesamtheit." ;
+            Text [ de ] = "Die GrÃ¶ÃŸe der Grundgesamtheit." ;
             Text [ en-US ] = "The population size." ;
             Text [ x-comment ] = " ";
         };
@@ -8120,7 +8120,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Die Freiheitsgrade im Zähler der F-Verteilung. : Die Freiheitsgrade im Zõhler der F-Verteilung. */
-            Text [ de ] = "Die Freiheitsgrade im Zähler der F-Verteilung." ;
+            Text [ de ] = "Die Freiheitsgrade im ZÃ¤hler der F-Verteilung." ;
             Text [ en-US ] = "The degrees of freedom in the numerator of the F distribution." ;
             Text [ x-comment ] = " ";
         };
@@ -8173,7 +8173,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Die Freiheitsgrade im Zähler der F-Verteilung. : Die Freiheitsgrade im Zõhler der F-Verteilung. */
-            Text [ de ] = "Die Freiheitsgrade im Zähler der F-Verteilung." ;
+            Text [ de ] = "Die Freiheitsgrade im ZÃ¤hler der F-Verteilung." ;
             Text [ en-US ] = "The degrees of freedom in the numerator of the F distribution." ;
             Text [ x-comment ] = " ";
         };
@@ -8450,7 +8450,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 7 // Description of Parameter 3
         {
             /* ### ACHTUNG: Neuer Text in Resource? Die Größe der Grundgesamtheit. : Die Gr÷˜e der Grundgesamtheit. */
-            Text [ de ] = "Die Größe der Grundgesamtheit." ;
+            Text [ de ] = "Die GrÃ¶ÃŸe der Grundgesamtheit." ;
             Text [ en-US ] = "The size of the population." ;
             Text [ x-comment ] = " ";
         };
@@ -8461,7 +8461,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? (Gauss-Test) Berechnet die zweiseitige Prüfstatistik zur Normalverteilung. : (Gauss-Test) Berechnet die zweiseitige Pr³fstatistik zur Normalverteilung. */
-            Text [ de ] = "(Gauss-Test) Berechnet die zweiseitige Prüfstatistik zur Normalverteilung." ;
+            Text [ de ] = "(Gauss-Test) Berechnet die zweiseitige PrÃ¼fstatistik zur Normalverteilung." ;
             Text [ en-US ] = "Returns the two-tailed P value of a z test." ;
             Text [ x-comment ] = " ";
         };
@@ -8514,7 +8514,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Berechnet den Chi-Quadrat-Unabhängigkeitstest. : Berechnet den Chi-Quadrat-Unabhõngigkeitstest. */
-            Text [ de ] = "Berechnet den Chi-Quadrat-Unabhängigkeitstest." ;
+            Text [ de ] = "Berechnet den Chi-Quadrat-UnabhÃ¤ngigkeitstest." ;
             Text [ en-US ] = "Returns the chi square independence test." ;
             Text [ x-comment ] = " ";
         };
@@ -9055,7 +9055,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Bestimmt die Anzahl der Einzelbereiche, die zu einem (Mehrfach-)Bereich gehören. : Bestimmt die Anzahl der Einzelbereiche, die zu einem (Mehrfach-)Bereich geh÷ren. */
-            Text [ de ] = "Bestimmt die Anzahl der Einzelbereiche, die zu einem (Mehrfach-)Bereich gehören." ;
+            Text [ de ] = "Bestimmt die Anzahl der Einzelbereiche, die zu einem (Mehrfach-)Bereich gehÃ¶ren." ;
             Text [ en-US ] = "Returns the number of individual ranges that belong to a (multiple) range." ;
             Text [ x-comment ] = " ";
         };
@@ -9084,7 +9084,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Wählt einen Wert aus bis zu 30 Argumenten. : Wõhlt einen Wert aus bis zu 30 Argumenten. */
-            Text [ de ] = "Wählt einen Wert aus bis zu 30 Argumenten." ;
+            Text [ de ] = "WÃ¤hlt einen Wert aus bis zu 30 Argumenten." ;
             Text [ en-US ] = "Selects a value from a list of up to 30 value arguments." ;
             Text [ x-comment ] = " ";
         };
@@ -9103,7 +9103,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Index des Wertes (1..30), der ausgewählt wird. : Der Index des Wertes (1..30), der ausgewõhlt wird. */
-            Text [ de ] = "Der Index des Wertes (1..30), der ausgewählt wird." ;
+            Text [ de ] = "Der Index des Wertes (1..30), der ausgewÃ¤hlt wird." ;
             Text [ en-US ] = "The index of the value (1..30) selected." ;
             Text [ x-comment ] = " ";
         };
@@ -9116,7 +9116,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Wert 1; Wert 2;... Die Liste der Argumente, aus der ein Wert ausgewählt wird. : Wert 1; Wert 2;... Die Liste der Argumente, aus der ein Wert ausgewõhlt wird. */
-            Text [ de ] = "Wert 1; Wert 2;... Die Liste der Argumente, aus der ein Wert ausgewählt wird." ;
+            Text [ de ] = "Wert 1; Wert 2;... Die Liste der Argumente, aus der ein Wert ausgewÃ¤hlt wird." ;
             Text [ en-US ] = "Value 1, value 2,... The list of arguments from which a value is chosen." ;
             Text [ x-comment ] = " ";
         };
@@ -9266,7 +9266,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            Text [ de ] = "Bestimmt die Anzahl Tabellen eines Bezugs. Ist kein Parameter angegeben, wird die Anzahl Tabellen des Dokuments zurückgegeben." ;
+            Text [ de ] = "Bestimmt die Anzahl Tabellen eines Bezugs. Ist kein Parameter angegeben, wird die Anzahl Tabellen des Dokuments zurÃ¼ckgegeben." ;
             Text [ en-US ] = "Returns the number of sheets of a given reference. If no parameter has been entered, the total number of sheets in the document is returned." ;
             Text [ x-comment ] = " ";
         };
@@ -9326,7 +9326,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Die Matrix oder der Bereich für den Verweis. : Die Matrix oder der Bereich f³r den Verweis. */
-            Text [ de ] = "Die Matrix oder der Bereich für den Verweis." ;
+            Text [ de ] = "Die Matrix oder der Bereich fÃ¼r den Verweis." ;
             Text [ en-US ] = "The array or the range for the reference." ;
             Text [ x-comment ] = " ";
         };
@@ -9392,7 +9392,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Die Matrix oder der Bereich für den Verweis. : Die Matrix oder der Bereich f³r den Verweis. */
-            Text [ de ] = "Die Matrix oder der Bereich für den Verweis." ;
+            Text [ de ] = "Die Matrix oder der Bereich fÃ¼r den Verweis." ;
             Text [ en-US ] = "The array or range for referencing." ;
             Text [ x-comment ] = " ";
         };
@@ -9624,7 +9624,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Bestimmt einen Bezug, der gegenüber dem Ausgangspunkt verschoben ist. : Bestimmt einen Bezug, der gegen³ber dem Ausgangspunkt verschoben ist. */
-            Text [ de ] = "Bestimmt einen Bezug, der gegenüber dem Ausgangspunkt verschoben ist." ;
+            Text [ de ] = "Bestimmt einen Bezug, der gegenÃ¼ber dem Ausgangspunkt verschoben ist." ;
             Text [ en-US ] = "Returns a reference which has been moved in relation to the starting point." ;
             Text [ x-comment ] = " ";
         };
@@ -9673,7 +9673,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 8 // Name of Parameter 4
         {
             /* ### ACHTUNG: Neuer Text in Resource? Höhe : H÷he */
-            Text [ de ] = "Höhe" ;
+            Text [ de ] = "HÃ¶he" ;
             Text [ en-US ] = "height" ;
             Text [ x-comment ] = " ";
         };
@@ -9760,7 +9760,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Die Zeit (in Sekunden), die die Vorlage gültig bleibt. : Die Zeit (in Sekunden), die die Vorlage g³ltig bleibt. */
-            Text [ de ] = "Die Zeit (in Sekunden), die die Vorlage gültig bleibt." ;
+            Text [ de ] = "Die Zeit (in Sekunden), die die Vorlage gÃ¼ltig bleibt." ;
             Text [ en-US ] = "The time (in seconds) that the Style is to remain valid." ;
             Text [ x-comment ] = "; All ; All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
         };
@@ -9783,7 +9783,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Ergebnis einer DDE-Verknüpfung. : Ergebnis einer DDE-Verkn³pfung. */
-            Text [ de ] = "Ergebnis einer DDE-Verknüpfung." ;
+            Text [ de ] = "Ergebnis einer DDE-VerknÃ¼pfung." ;
             Text [ en-US ] = "Result of a DDE link." ;
             Text [ x-comment ] = " ";
         };
@@ -9901,7 +9901,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Ist der Text, für den der Code des ersten Zeichens ermittelt werden soll. : Ist der Text, f³r den der Code des ersten Zeichens ermittelt werden soll. */
-            Text [ de ] = "Ist der Text, für den der Code des ersten Zeichens ermittelt werden soll." ;
+            Text [ de ] = "Ist der Text, fÃ¼r den der Code des ersten Zeichens ermittelt werden soll." ;
             Text [ en-US ] = "This is the text for which the code of the first character is to be found." ;
             Text [ x-comment ] = " ";
         };
@@ -9912,7 +9912,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Wandelt einen Zahlenwert in einen Text im Währungsformat um. : Wandelt einen Zahlenwert in einen Text im Wõhrungsformat um. */
-            Text [ de ] = "Wandelt einen Zahlenwert in einen Text im Währungsformat um." ;
+            Text [ de ] = "Wandelt einen Zahlenwert in einen Text im WÃ¤hrungsformat um." ;
             Text [ en-US ] = "Converts a number to text in currency format." ;
             Text [ x-comment ] = " ";
         };
@@ -9931,7 +9931,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Wert ist eine Zahl, ein Bezug auf eine Zelle, die eine Zahl enthält, oder eine Formel, die eine Zahl ergibt. : Wert ist eine Zahl, ein Bezug auf eine Zelle, die eine Zahl enthõlt, oder eine Formel, die eine Zahl ergibt. */
-            Text [ de ] = "Wert ist eine Zahl, ein Bezug auf eine Zelle, die eine Zahl enthält, oder eine Formel, die eine Zahl ergibt." ;
+            Text [ de ] = "Wert ist eine Zahl, ein Bezug auf eine Zelle, die eine Zahl enthÃ¤lt, oder eine Formel, die eine Zahl ergibt." ;
             Text [ en-US ] = "Value is a number, a reference to a cell containing a number or a formula that results in a number." ;
             Text [ x-comment ] = " ";
         };
@@ -9972,7 +9972,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Codewert für das Zeichen : Der Codewert f³r das Zeichen */
-            Text [ de ] = "Der Codewert für das Zeichen" ;
+            Text [ de ] = "Der Codewert fÃ¼r das Zeichen" ;
             Text [ en-US ] = "The code value for the character." ;
             Text [ x-comment ] = " ";
         };
@@ -9983,7 +9983,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Löscht nichtdruckbare Zeichen aus dem Text. : L÷scht nichtdruckbare Zeichen aus dem Text. */
-            Text [ de ] = "Löscht Nicht druckbare Zeichen aus dem Text." ;
+            Text [ de ] = "LÃ¶scht Nicht druckbare Zeichen aus dem Text." ;
             Text [ en-US ] = "Removes all nonprintable characters from text." ;
             Text [ x-comment ] = " ";
         };
@@ -10030,7 +10030,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Text für die Textverkettung. : Text f³r die Textverkettung. */
-            Text [ de ] = "Text für die Textverkettung." ;
+            Text [ de ] = "Text fÃ¼r die Textverkettung." ;
             Text [ en-US ] = "Text for the concatentation." ;
             Text [ x-comment ] = " ";
         };
@@ -10059,7 +10059,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der erste Text für den Textvergleich. : Der erste Text f³r den Textvergleich. */
-            Text [ de ] = "Der erste Text für den Textvergleich." ;
+            Text [ de ] = "Der erste Text fÃ¼r den Textvergleich." ;
             Text [ en-US ] = "The first text to be used for comparing texts." ;
             Text [ x-comment ] = " ";
         };
@@ -10072,7 +10072,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der zweite Text für den Textvergleich. : Der zweite Text f³r den Textvergleich. */
-            Text [ de ] = "Der zweite Text für den Textvergleich." ;
+            Text [ de ] = "Der zweite Text fÃ¼r den Textvergleich." ;
             Text [ en-US ] = "The second text for comparing texts." ;
             Text [ x-comment ] = " ";
         };
@@ -10083,7 +10083,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Sucht ein Teilwort in einem Text unter Berücksichtigung von Groß- und Kleinschreibung. : Sucht ein Teilwort in einem Text unter Ber³cksichtigung von Gro˜- und Kleinschreibung. */
-            Text [ de ] = "Sucht ein Teilwort in einem Text unter Berücksichtigung von Groß- und Kleinschreibung." ;
+            Text [ de ] = "Sucht ein Teilwort in einem Text unter BerÃ¼cksichtigung von GroÃŸ- und Kleinschreibung." ;
             Text [ en-US ] = "Looks for a string of text within another (case sensitive)" ;
             Text [ x-comment ] = " ";
         };
@@ -10136,7 +10136,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Sucht ein Teilwort in einem Text ohne Berücksichtigung von Groß- und Kleinschreibung. : Sucht ein Teilwort in einem Text ohne Ber³cksichtigung von Gro˜- und Kleinschreibung. */
-            Text [ de ] = "Sucht ein Teilwort in einem Text ohne Berücksichtigung von Groß- und Kleinschreibung." ;
+            Text [ de ] = "Sucht ein Teilwort in einem Text ohne BerÃ¼cksichtigung von GroÃŸ- und Kleinschreibung." ;
             Text [ en-US ] = "Looks for one text value within another (not case-sensitive)." ;
             Text [ x-comment ] = " ";
         };
@@ -10189,7 +10189,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Löscht überflüssige Leerzeichen zwischen Worten. : L÷scht ³berfl³ssige Leerzeichen zwischen Worten. */
-            Text [ de ] = "Löscht überflüssige Leerzeichen zwischen Worten." ;
+            Text [ de ] = "LÃ¶scht Ã¼berflÃ¼ssige Leerzeichen zwischen Worten." ;
             Text [ en-US ] = "Removes extra spaces from text." ;
             Text [ x-comment ] = " ";
         };
@@ -10208,7 +10208,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Text, in dem überflüssige Leerzeichen zwischen Worten gelöscht werden. : Der Text, in dem ³berfl³ssige Leerzeichen zwischen Worten gel÷scht werden. */
-            Text [ de ] = "Der Text, in dem überflüssige Leerzeichen zwischen Worten gelöscht werden." ;
+            Text [ de ] = "Der Text, in dem Ã¼berflÃ¼ssige Leerzeichen zwischen Worten gelÃ¶scht werden." ;
             Text [ en-US ] = "The text in which extra spaces between words are to be deleted." ;
             Text [ x-comment ] = " ";
         };
@@ -10219,7 +10219,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Wandelt alle Wortanfänge in Großbuchstaben um. : Wandelt alle Wortanfõnge in Gro˜buchstaben um. */
-            Text [ de ] = "Wandelt alle Wortanfänge in Großbuchstaben um." ;
+            Text [ de ] = "Wandelt alle WortanfÃ¤nge in GroÃŸbuchstaben um." ;
             Text [ en-US ] = "Capitalizes the first letter in all words." ;
             Text [ x-comment ] = " ";
         };
@@ -10238,7 +10238,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Text, in dem Wortanfänge durch Großbuchstaben ersetzt werden. : Der Text, in dem Wortanfõnge durch Gro˜buchstaben ersetzt werden. */
-            Text [ de ] = "Der Text, in dem Wortanfänge durch Großbuchstaben ersetzt werden." ;
+            Text [ de ] = "Der Text, in dem WortanfÃ¤nge durch GroÃŸbuchstaben ersetzt werden." ;
             Text [ en-US ] = "The text in which the beginning of words are to be replaced by capital letters." ;
             Text [ x-comment ] = " ";
         };
@@ -10249,7 +10249,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Wandelt alle Buchstaben eines Textes in Großbuchstaben um. : Wandelt alle Buchstaben eines Textes in Gro˜buchstaben. */
-            Text [ de ] = "Wandelt alle Buchstaben eines Textes in Großbuchstaben um." ;
+            Text [ de ] = "Wandelt alle Buchstaben eines Textes in GroÃŸbuchstaben um." ;
             Text [ en-US ] = "Converts text to uppercase." ;
             Text [ x-comment ] = " ";
         };
@@ -10268,7 +10268,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Text, in dem Kleinbuchstaben durch Großbuchstaben ersetzt werden. : Der Text, in dem Kleinbuchstaben durch Gro˜buchstaben ersetzt werden. */
-            Text [ de ] = "Der Text, in dem Kleinbuchstaben durch Großbuchstaben ersetzt werden." ;
+            Text [ de ] = "Der Text, in dem Kleinbuchstaben durch GroÃŸbuchstaben ersetzt werden." ;
             Text [ en-US ] = "The text in which lower case letters are to be converted to capitals." ;
             Text [ x-comment ] = " ";
         };
@@ -10297,7 +10297,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Text, in dem Großbuchstaben durch Kleinbuchstaben ersetzt werden. : Der Text, in dem Gro˜buchstaben durch Kleinbuchstaben ersetzt werden. */
-            Text [ de ] = "Der Text, in dem Großbuchstaben durch Kleinbuchstaben ersetzt werden." ;
+            Text [ de ] = "Der Text, in dem GroÃŸbuchstaben durch Kleinbuchstaben ersetzt werden." ;
             Text [ en-US ] = "The text in which capitals are converted to lower case letters." ;
             Text [ x-comment ] = " ";
         };
@@ -10336,7 +10336,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Wandelt eine Zahl gemäß einer Formatangabe in einen Text. : Wandelt eine Zahl gemõ˜ einer Formatangabe in einen Text. */
-            Text [ de ] = "Wandelt eine Zahl gemäß einer Formatangabe in einen Text um." ;
+            Text [ de ] = "Wandelt eine Zahl gemÃ¤ÃŸ einer Formatangabe in einen Text um." ;
             Text [ en-US ] = "Converts a number to text according to a given format." ;
             Text [ x-comment ] = " ";
         };
@@ -10441,7 +10441,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 6 // Name of Parameter 3
         {
             /* ### ACHTUNG: Neuer Text in Resource? Länge : Lõnge */
-            Text [ de ] = "Länge" ;
+            Text [ de ] = "LÃ¤nge" ;
             Text [ en-US ] = "length" ;
             Text [ x-comment ] = " ";
         };
@@ -10522,7 +10522,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 1 // Description
         {
             /* ### ACHTUNG: Neuer Text in Resource? Berechnet die Länge eines Textes. : Berechnet die Lõnge eines Textes. */
-            Text [ de ] = "Berechnet die Länge eines Textes." ;
+            Text [ de ] = "Berechnet die LÃ¤nge eines Textes." ;
             Text [ en-US ] = "Calculates length of a text string." ;
             Text [ x-comment ] = " ";
         };
@@ -10541,7 +10541,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 3 // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Der Text, dessen Länge bestimmt wird. : Der Text, dessen Lõnge bestimmt wird. */
-            Text [ de ] = "Der Text, dessen Länge bestimmt wird." ;
+            Text [ de ] = "Der Text, dessen LÃ¤nge bestimmt wird." ;
             Text [ en-US ] = "The text in which the length is to be determined." ;
             Text [ x-comment ] = " ";
         };
@@ -10582,7 +10582,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Die Anzahl der Zeichen für das Anfangsteilwort. : Die Anzahl der Zeichen f³r das Anfangsteilwort. */
-            Text [ de ] = "Die Anzahl der Zeichen für das Anfangsteilwort." ;
+            Text [ de ] = "Die Anzahl der Zeichen fÃ¼r das Anfangsteilwort." ;
             Text [ en-US ] = "The number of characters for the start text." ;
             Text [ x-comment ] = " ";
         };
@@ -10623,7 +10623,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 5 // Description of Parameter 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Die Anzahl der Zeichen für das Endteilwort. : Die Anzahl der Zeichen f³r das Endteilwort. */
-            Text [ de ] = "Die Anzahl der Zeichen für das Endteilwort." ;
+            Text [ de ] = "Die Anzahl der Zeichen fÃ¼r das Endteilwort." ;
             Text [ en-US ] = "The number of characters for the end text." ;
             Text [ x-comment ] = " ";
         };
@@ -10676,7 +10676,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 7 // Description of Parameter 3
         {
             /* ### ACHTUNG: Neuer Text in Resource? Die Anzahl der Zeichen für das Teilwort. : Die Anzahl der Zeichen f³r das Teilwort. */
-            Text [ de ] = "Die Anzahl der Zeichen für das Teilwort." ;
+            Text [ de ] = "Die Anzahl der Zeichen fÃ¼r das Teilwort." ;
             Text [ en-US ] = "The number of characters for the text." ;
             Text [ x-comment ] = " ";
         };
@@ -10826,13 +10826,13 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 6 // Name of Parameter 3
         {
-            Text [ de ] = "Mindestlänge" ;
+            Text [ de ] = "MindestlÃ¤nge" ;
             Text [ en-US ] = "Minimum length" ;
             Text [ x-comment ] = " ";
         };
         String 7 // Description of Parameter 3
         {
-            Text [ de ] = "Wenn der Text kürzer ist, wird er links mit Nullen aufgefüllt." ;
+            Text [ de ] = "Wenn der Text kÃ¼rzer ist, wird er links mit Nullen aufgefÃ¼llt." ;
             Text [ en-US ] = "If the text is shorter than the specified length, zeros are added to the left of the string." ;
             Text [ x-comment ] = " ";
         };
@@ -10912,7 +10912,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 5 // Description of Parameter 2
         {
-            Text [ de ] = "Einheit, aus der umgerechnet wird, Groß-/Kleinschreibung ist relevant." ;
+            Text [ de ] = "Einheit, aus der umgerechnet wird, GroÃŸ-/Kleinschreibung ist relevant." ;
             Text [ en-US ] = "Unit into which something is converted, case-sensitive.";
             Text [ x-comment ] = " ";
         };
@@ -10924,7 +10924,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 7 // Description of Parameter 3
         {
-            Text [ de ] = "Einheit, in die umgerechnet wird, Groß-/Kleinschreibung ist relevant." ;
+            Text [ de ] = "Einheit, in die umgerechnet wird, GroÃŸ-/Kleinschreibung ist relevant." ;
             Text [ en-US ] = "Unit into which something is converted, case-sensitive.";
             Text [ x-comment ] = " ";
         };
@@ -10934,7 +10934,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            Text [ de ] = "Wandelt eine Zahl in eine römische Zahl um." ;
+            Text [ de ] = "Wandelt eine Zahl in eine rÃ¶mische Zahl um." ;
             Text [ en-US ] = "Converts a number to a Roman numeral.";
         };
         ExtraData =
@@ -10950,7 +10950,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            Text [ de ] = "Die Zahl, die in eine römische Zahl umgewandelt werden soll, muss im Bereich 0 - 3999 liegen." ;
+            Text [ de ] = "Die Zahl, die in eine rÃ¶mische Zahl umgewandelt werden soll, muss im Bereich 0 - 3999 liegen." ;
             Text [ en-US ] = "The number to be converted to a Roman numeral must be in the 0 - 3999 range.";
         };
         String 4 // Name of Parameter 2
@@ -10960,7 +10960,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 5 // Description of Parameter 2
         {
-            Text [ de ] = "Je höher dieser Wert ist, desto mehr wird die römische Zahl vereinfacht. Der Wert muss im Bereich 0 - 4 liegen." ;
+            Text [ de ] = "Je hÃ¶her dieser Wert ist, desto mehr wird die rÃ¶mische Zahl vereinfacht. Der Wert muss im Bereich 0 - 4 liegen." ;
             Text [ en-US ] = "The more this value increases, the more the Roman numeral is simplified. The value must be in the 0 - 4 range.";
         };
     };
@@ -10969,7 +10969,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            Text [ de ] = "Berechnet den Wert einer römischen Zahl." ;
+            Text [ de ] = "Berechnet den Wert einer rÃ¶mischen Zahl." ;
             Text [ en-US ] = "Calculates the value of a Roman numeral.";
         };
         ExtraData =
@@ -10985,7 +10985,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            Text [ de ] = "Der Text, der eine römische Zahl darstellt." ;
+            Text [ de ] = "Der Text, der eine rÃ¶mische Zahl darstellt." ;
             Text [ en-US ] = "The text that represents a Roman numeral.";
         };
     };
