@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iconcdlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:20:05 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:41:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 
 String RID_SVXSTR_ICONCHOICEDLG_RESETBUT
 {
-    Text [ de ] = "~Zurück" ;
+    Text [ de ] = "~ZurÃ¼ck" ;
     Text [ en-US ] = "~Back" ;
     Text [ x-comment ] = " ";
 };
