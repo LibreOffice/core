@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adtabdlg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:52:57 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:28:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,10 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
+#endif
+
 #include <algorithm>
 
 
@@ -132,6 +136,7 @@ OAddTableDlg::OAddTableDlg( Window* pParent,OJoinTableView* _pTableView)
 OAddTableDlg::~OAddTableDlg()
 {
     DBG_DTOR(OAddTableDlg,NULL);
+    ::dbaui::notifySystemWindow(m_pTableView->getDesignView(),this,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
 }
 
 //------------------------------------------------------------------------------
@@ -231,6 +236,7 @@ IMPL_LINK( OAddTableDlg, CloseClickHdl, Button*, pButton )
 //------------------------------------------------------------------------------
 BOOL OAddTableDlg::Close()
 {
+    ::dbaui::notifySystemWindow(m_pTableView->getDesignView(),this,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
     m_pTableView->getDesignView()->getController()->InvalidateFeature(ID_BROWSER_ADDTABLE);
     m_pTableView->getDesignView()->getController()->getView()->GrabFocus();
     return ModelessDialog::Close();
