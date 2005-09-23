@@ -4,9 +4,9 @@
  *
  *  $RCSfile: internationaloptions.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:24:01 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:41:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ TabPage RID_OFA_TP_INTERNATIONAL
     {
         Pos = MAP_APPFONT( COL_2, ROW_5 );
         Size = MAP_APPFONT( WIDTH2END( COL_2 ), HEIGHT_CB );
-        Text [ de ] = "Nur für ~aktuelles Dokument";
+        Text [ de ] = "Nur fÃ¼r ~aktuelles Dokument";
         Text [ en-US ] = "~Current document only";
     };
 };
