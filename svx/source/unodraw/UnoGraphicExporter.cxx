@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:00:29 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 10:49:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1009,7 +1009,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                 INetURLObject aURLObject( aURL.Complete );
                 DBG_ASSERT( aURLObject.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-                bRet = XOutBitmap::ExportGraphic( aGraphic, aURLObject, *pFilter, nFilter, FALSE, &aFilterData );
+                bRet = XOutBitmap::ExportGraphic( aGraphic, aURLObject, *pFilter, nFilter, FALSE, &aFilterData ) == GRFILTER_OK;
             }
         }
     }
