@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 05:19:20 $
+#   last change: $Author: hr $ $Date: 2005-09-23 11:37:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,7 @@ SHL1STDLIBS=\
     $(VOSLIB)					\
     $(OSLLIB)					\
     $(SALLIB)					\
+    $(UNOTOOLSLIB)				\
     $(JVMACCESSLIB)				\
     $(COMPHELPERLIB)
 
