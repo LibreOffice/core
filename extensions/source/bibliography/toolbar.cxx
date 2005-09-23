@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbar.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:21:06 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:51:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,9 @@
 #ifndef BIBTOOLS_HXX
 #include "bibtools.hxx"
 #endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -103,6 +106,7 @@ void BibToolBarListener::statusChanged(const ::com::sun::star::frame::FeatureSta
 {
     if(rEvt.FeatureURL.Complete == aCommand)
     {
+        vos::OGuard aGuard(Application::GetSolarMutex());
         pToolBar->EnableItem(nIndex,rEvt.IsEnabled);
 
         ::com::sun::star::uno::Any aState=rEvt.State;
@@ -150,6 +154,7 @@ void BibTBListBoxListener::statusChanged(const ::com::sun::star::frame::FeatureS
 {
     if(rEvt.FeatureURL.Complete == GetCommand())
     {
+        vos::OGuard aGuard(Application::GetSolarMutex());
         pToolBar->EnableSourceList(rEvt.IsEnabled);
 
         Any aState = rEvt.State;
@@ -189,6 +194,7 @@ void BibTBQueryMenuListener::statusChanged(const frame::FeatureStateEvent& rEvt)
 {
     if(rEvt.FeatureURL.Complete == GetCommand())
     {
+        vos::OGuard aGuard(Application::GetSolarMutex());
         pToolBar->EnableSourceList(rEvt.IsEnabled);
 
         uno::Any aState=rEvt.State;
@@ -226,6 +232,7 @@ void BibTBEditListener::statusChanged(const frame::FeatureStateEvent& rEvt)throw
 {
     if(rEvt.FeatureURL.Complete == GetCommand())
     {
+        vos::OGuard aGuard(Application::GetSolarMutex());
         pToolBar->EnableQuery(rEvt.IsEnabled);
 
         uno::Any aState=rEvt.State;
