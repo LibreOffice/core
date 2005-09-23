@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cstitem.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:03:29 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:54:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,19 +42,19 @@ String STR_CSTAT_NEVER_UPD
 };
 String STR_CSTAT_IN_UPD
 {
-    Text [ de ] = "Aktualisierung läuft" ;
+    Text [ de ] = "Aktualisierung lÃ¤uft" ;
     Text [ en-US ] = "Updating in progress" ;
     Text [ x-comment ] = " ";
 };
 String STR_CSTAT_UPD_NEWER
 {
-    Text [ de ] = "Änderungen festgestellt" ;
+    Text [ de ] = "Ã„nderungen festgestellt" ;
     Text [ en-US ] = "Changes discovered" ;
     Text [ x-comment ] = " ";
 };
 String STR_CSTAT_UPD_NOT_NEWER
 {
-    Text [ de ] = "Keine Änderung festgestellt" ;
+    Text [ de ] = "Keine Ã„nderung festgestellt" ;
     Text [ en-US ] = "No changes discovered" ;
     Text [ x-comment ] = " ";
 };
