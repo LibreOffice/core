@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:44:29 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:18:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,13 +64,13 @@ String STR_TABLEDESIGN_DBFIELDTYPES
     //Text [ de ] ="Unbekannt;Text;Zahl;Datum/Zeit;Datum;Zeit;Ja/Nein;Währung;Memo;Zähler;Bild;Text (fix);Dezimal;Binärfeld (fix);Binärfeld;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Objekt;Distinct;Struktur;Feld;BLOB;CLOB;REF;OTHER" ;
 
 
-    Text [ de ] = "Unbekannt;Text;Zahl;Datum/Zeit;Datum;Zeit;Ja/Nein;Währung;Memo;Zähler;Bild;Text (fix);Dezimal;Binärfeld (fix);Binärfeld;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Objekt;Distinct;Struktur;Feld;BLOB;CLOB;REF;OTHER" ;
+    Text [ de ] = "Unbekannt;Text;Zahl;Datum/Zeit;Datum;Zeit;Ja/Nein;WÃ¤hrung;Memo;ZÃ¤hler;Bild;Text (fix);Dezimal;BinÃ¤rfeld (fix);BinÃ¤rfeld;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Objekt;Distinct;Struktur;Feld;BLOB;CLOB;REF;OTHER" ;
     Text [ en-US ] = "Unknown;Text;Number;Date/Time;Date;Time;Yes/No;Currency;Memo;Counter;Image;Text (fix);Decimal;Binary (fix);Binary;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Object;Distinct;Structure;Field;BLOB;CLOB;REF;OTHER";
 };
 
 String STR_TABLEDESIGN_UNDO_PRIMKEY
 {
-    Text [ de ] = "Primärschlüssel einfügen/entfernen" ;
+    Text [ de ] = "PrimÃ¤rschlÃ¼ssel einfÃ¼gen/entfernen" ;
     Text [ en-US ] = "Insert/remove primary key" ;
 };
 
@@ -113,7 +113,7 @@ String STR_TAB_FIELD_DATATYPE
 };
 String STR_TAB_FIELD_LENGTH
 {
-    Text [ de ] = "Feldlänge" ;
+    Text [ de ] = "FeldlÃ¤nge" ;
     Text [ en-US ] = "Field length" ;
 };
 String STR_TAB_FIELD_DESCR
@@ -193,7 +193,7 @@ Menu RID_TABLEDESIGNROWPOPUPMENU
     {
         Identifier = SID_TABLEDESIGN_INSERTROWS ;
         HelpID = SID_TABLEDESIGN_INSERTROWS ;
-        Text [ de ] = "Zeilen einfügen" ;
+        Text [ de ] = "Zeilen einfÃ¼gen" ;
         Text [ en-US ] = "Insert Rows" ;
         };
     MenuItem
@@ -205,39 +205,39 @@ Menu RID_TABLEDESIGNROWPOPUPMENU
         Identifier = SID_TABLEDESIGN_TABED_PRIMARYKEY ;
         HelpID = SID_TABLEDESIGN_TABED_PRIMARYKEY ;
         Checkable = TRUE ;
-        Text [ de ] = "Primärschlüssel" ;
+        Text [ de ] = "PrimÃ¤rschlÃ¼ssel" ;
         Text [ en-US ] = "Primary Key" ;
         };
     };
 };
 String STR_TABED_UNDO_CELLMODIFIED
 {
-    Text [ de ] = "Zelle ändern" ;
+    Text [ de ] = "Zelle Ã¤ndern" ;
     Text [ en-US ] = "Modify cell" ;
 };
 String STR_TABED_UNDO_ROWDELETED
 {
-    Text [ de ] = "Zeile löschen" ;
+    Text [ de ] = "Zeile lÃ¶schen" ;
     Text [ en-US ] = "Delete row" ;
 };
 String STR_TABED_UNDO_TYPE_CHANGED
 {
-    Text [ de ] = "Feldtype ändern" ;
+    Text [ de ] = "Feldtype Ã¤ndern" ;
     Text [ en-US ] = "Modify Field Type";
 };
 String STR_TABED_UNDO_ROWINSERTED
 {
-    Text [ de ] = "Zeile einfügen" ;
+    Text [ de ] = "Zeile einfÃ¼gen" ;
     Text [ en-US ] = "Insert row" ;
 };
 String STR_TABED_UNDO_NEWROWINSERTED
 {
-    Text [ de ] = "Neue Zeile einfügen" ;
+    Text [ de ] = "Neue Zeile einfÃ¼gen" ;
     Text [ en-US ] = "Insert new row" ;
 };
 String STR_TABED_UNDO_PRIMKEY
 {
-    Text [ de ] = "Primärschlüssel einfügen/entfernen" ;
+    Text [ de ] = "PrimÃ¤rschlÃ¼ssel einfÃ¼gen/entfernen" ;
     Text [ en-US ] = "Insert/remove primary key" ;
 };
 
@@ -253,7 +253,7 @@ String STR_FIELD_REQUIRED
 };
 String STR_TEXT_LENGTH
 {
-    Text [ de ] = "~Länge" ;
+    Text [ de ] = "~LÃ¤nge" ;
     Text [ en-US ] = "~Length" ;
 };
 String STR_NUMERIC_TYPE
@@ -263,7 +263,7 @@ String STR_NUMERIC_TYPE
 };
 String STR_LENGTH
 {
-    Text [ de ] = "~Länge" ;
+    Text [ de ] = "~LÃ¤nge" ;
     Text [ en-US ] = "~Length" ;
 };
 String STR_SCALE
@@ -278,12 +278,12 @@ String STR_FORMAT
 };
 String STR_HELP_BOOL_DEFAULT
 {
-    Text [ de ] = "Wählen Sie einen Wert, der in jedem neu eingefügten Datensatz als Standard erscheinen soll.\nWählen Sie den leeren String, wenn das Feld keinen solchen Standardwert haben soll." ;
+    Text [ de ] = "WÃ¤hlen Sie einen Wert, der in jedem neu eingefÃ¼gten Datensatz als Standard erscheinen soll.\nWÃ¤hlen Sie den leeren String, wenn das Feld keinen solchen Standardwert haben soll." ;
     Text [ en-US ] = "Select a value that is to appear in all new records as default.\nIf the field is not to have a default value, select the empty string.";
 };
 String STR_HELP_DEFAULT_VALUE
 {
-    Text [ de ] = "Geben Sie hier einen Standardwert für das Feld an.\n\nWenn Sie später Daten in die Tabelle eingeben, wird in jedem neuen Datensatz diese Zeichenkette für das aktuelle Feld verwendet. Sie sollte deshalb der weiter unten einzugebenden Zellenformatierung genügen." ;
+    Text [ de ] = "Geben Sie hier einen Standardwert fÃ¼r das Feld an.\n\nWenn Sie spÃ¤ter Daten in die Tabelle eingeben, wird in jedem neuen Datensatz diese Zeichenkette fÃ¼r das aktuelle Feld verwendet. Sie sollte deshalb der weiter unten einzugebenden Zellenformatierung genÃ¼gen." ;
     Text [ en-US ] = "Enter a default value for this field.\n\nWhen you later enter data in the table, this string will be used in each new record for the field selected. It should, therefore, correspond to the cell format that needs to be entered below." ;
 };
 String STR_HELP_FIELD_REQUIRED
@@ -293,7 +293,7 @@ String STR_HELP_FIELD_REQUIRED
 };
 String STR_HELP_TEXT_LENGTH
 {
-    Text [ de ] = "Geben Sie die maximal zulässige Textlänge an." ;
+    Text [ de ] = "Geben Sie die maximal zulÃ¤ssige TextlÃ¤nge an." ;
     Text [ en-US ] = "Enter the maximum text length permittted." ;
 };
 String STR_HELP_NUMERIC_TYPE
@@ -303,7 +303,7 @@ String STR_HELP_NUMERIC_TYPE
 };
 String STR_HELP_LENGTH
 {
-    Text [ de ] = "Geben Sie die Länge für Daten in diesem Feld an.\n\nFür Dezimal-Felder ist das die maximale Länge der eingegebenen Zahl, für Binärfelder die Länge des Datenblockes.\nWenn der Wert größer ist als der maximal für diese Datenbank zulässige, wird er entsprechend korrigiert." ;
+    Text [ de ] = "Geben Sie die LÃ¤nge fÃ¼r Daten in diesem Feld an.\n\nFÃ¼r Dezimal-Felder ist das die maximale LÃ¤nge der eingegebenen Zahl, fÃ¼r BinÃ¤rfelder die LÃ¤nge des Datenblockes.\nWenn der Wert grÃ¶ÃŸer ist als der maximal fÃ¼r diese Datenbank zulÃ¤ssige, wird er entsprechend korrigiert." ;
     Text [ en-US ] = "Determine the length data can have in this field.\n\nIf decimal fields, then the maximum length of the number to be entered, if binary fields, then the length of the data block.\nThe value will be corrected accordingly when it exceeds the maximum for this database." ;
 };
 String STR_HELP_SCALE
@@ -313,17 +313,17 @@ String STR_HELP_SCALE
 };
 String STR_HELP_FORMAT_CODE
 {
-    Text [ de ] = "Hier sehen Sie, wie die Daten der aktuellen Spalte mit dem aktuell eingestellten Format - das Sie mittels des nebenstehenden Buttons ändern können - formatiert werden würden.";
+    Text [ de ] = "Hier sehen Sie, wie die Daten der aktuellen Spalte mit dem aktuell eingestellten Format - das Sie mittels des nebenstehenden Buttons Ã¤ndern kÃ¶nnen - formatiert werden wÃ¼rden.";
     Text [ en-US ] = "This is where you see how the data would be displayed in the current format (use the button on the right to modify the format).";
 };
 String STR_HELP_FORMAT_BUTTON
 {
-    Text [ de ] = "Hiermit können Sie festlegen, wie die Daten der Tabelle bei der Ausgabe formatiert werden sollen.";
+    Text [ de ] = "Hiermit kÃ¶nnen Sie festlegen, wie die Daten der Tabelle bei der Ausgabe formatiert werden sollen.";
     Text [ en-US ] = "This is where you determine the output format of the data.";
 };
 String STR_HELP_AUTOINCREMENT
 {
-    Text [ de ] = "Wählen Sie, ob dieses Feld Auto-Inkrement-Werte enthalten soll.\n\nSie können in ihm dann keine Daten direkt eingeben, sondern jeder neue Datensatz bekommt automatisch einen eigenen Wert (der sich durch Inkrementieren aus dem des vorigen Datensatzes ergibt) zugewiesen." ;
+    Text [ de ] = "WÃ¤hlen Sie, ob dieses Feld Auto-Inkrement-Werte enthalten soll.\n\nSie kÃ¶nnen in ihm dann keine Daten direkt eingeben, sondern jeder neue Datensatz bekommt automatisch einen eigenen Wert (der sich durch Inkrementieren aus dem des vorigen Datensatzes ergibt) zugewiesen." ;
     Text [ en-US ] = "Choose if this field should contain AutoIncrement values.\n\nYou can not enter data in fields of this type. An intrinsic value will be assigned to each new record automatically (resulting from the increment of the previous record)." ;
 };
 PushButton PB_FORMAT
@@ -339,12 +339,12 @@ String STR_TABLEDESIGN_DUPLICATE_NAME
 };
 String STR_TBL_COLUMN_IS_KEYCOLUMN
 {
-    Text [ de ] = "Die Spalten \"$column$\" gehört zum Primärschlüssel. Falls sie gelöscht wird, wird auch der Primärschlüssel gelöscht.Wollen Sie sie fortfahren?";
+    Text [ de ] = "Die Spalten \"$column$\" gehÃ¶rt zum PrimÃ¤rschlÃ¼ssel. Falls sie gelÃ¶scht wird, wird auch der PrimÃ¤rschlÃ¼ssel gelÃ¶scht.Wollen Sie sie fortfahren?";
     Text [ en-US ] = "The column \"$column$\" belongs to the primary key. If the column is deleted, the primary key will also be deleted. Do you really want to continue?";
 };
 String STR_TBL_COLUMN_IS_KEYCOLUMN_TITLE
 {
-    Text [ de ] = "Primärschlüssel betroffen";
+    Text [ de ] = "PrimÃ¤rschlÃ¼ssel betroffen";
     Text [ en-US ] = "Primary Key Affected";
 };
 String STR_COLUMN_NAME
@@ -366,13 +366,13 @@ QueryBox TABLE_DESIGN_SAVEMODIFIED
 {
     Buttons = WB_YES_NO_CANCEL ;
     DefButton = WB_DEF_YES ;
-    Message [ de ] = "Die Tabelle wurde geändert.\nSollen die Änderungen gespeichert werden?" ;
+    Message [ de ] = "Die Tabelle wurde geÃ¤ndert.\nSollen die Ã„nderungen gespeichert werden?" ;
     Message [ en-US ] = "The table has been changed.\nDo you want to save the changes?" ;
 };
 QueryBox TABLE_QUERY_CONNECTION_LOST
 {
     Buttons = WB_YES_NO ;
-    Message [ de ] = "Die Verbindung zur Datenbank wurde gelöscht! Ohne sie kann der Tabellenentwurf nur eingeschränkt benutzt werden.\nSoll die Verbindung zur Datenbank wieder aufgebaut werden?" ;
+    Message [ de ] = "Die Verbindung zur Datenbank wurde gelÃ¶scht! Ohne sie kann der Tabellenentwurf nur eingeschrÃ¤nkt benutzt werden.\nSoll die Verbindung zur Datenbank wieder aufgebaut werden?" ;
     Message [ en-US ] = "The connection to the database was lost! The table design can only be used with limited functionality without a connection.\nReconnect?" ;
 };
 String STR_TABLEDESIGN_CONNECTION_MISSING
@@ -382,26 +382,25 @@ String STR_TABLEDESIGN_CONNECTION_MISSING
 };
 String STR_TABLEDESIGN_DATASOURCE_DELETED
 {
-    Text [ de ] = "Der Tabellenfilter konnte nicht angepasst werden, da die Datenquelle gelöscht wurde.";
+    Text [ de ] = "Der Tabellenfilter konnte nicht angepasst werden, da die Datenquelle gelÃ¶scht wurde.";
     Text [ en-US ] = "The table filter could not be adjusted because the data source has been deleted.";
 };
 
 QueryBox QUERY_SAVE_TABLE_EDIT_INDEXES
 {
-    Message [ de ] = "Bevor Sie die Indizies einer Tabelle ändern können, muss diese gespeichert werden.\n"
-        "Wollen Sie Ihre Änderungen an der Tabellenstruktur jetzt speichern?";
+    Message [ de ] = "Bevor Sie die Indizies einer Tabelle Ã¤ndern kÃ¶nnen, muss diese gespeichert werden.\nWollen Sie Ihre Ã„nderungen an der Tabellenstruktur jetzt speichern?";
     Message [ en-US ] = "Before you can edit the indexes of a table, you have to save it.\nDo you want to save the changes now?";
 
     Buttons = WB_YES_NO ;
 };
 String STR_TABLEDESIGN_NO_PRIM_KEY_HEAD
 {
-    Text [ de ] = "Kein Primärschlüssel" ;
+    Text [ de ] = "Kein PrimÃ¤rschlÃ¼ssel" ;
     Text [ en-US ] = "No primary key" ;
 };
 String STR_TABLEDESIGN_NO_PRIM_KEY
 {
-    Text [ de ] = "In dieser Datenbank wird zur Datensatz-Identifizierung ein eindeutiger Index oder ein Primärschlüssel benötigt.\nSie werden erst dann Daten in die Tabelle eingeben können, wenn sie eine dieser beiden Struktur-Bedingungen erfüllt.\n\nSoll jetzt ein Primärschlüssel erzeugt werden ?" ;
+    Text [ de ] = "In dieser Datenbank wird zur Datensatz-Identifizierung ein eindeutiger Index oder ein PrimÃ¤rschlÃ¼ssel benÃ¶tigt.\nSie werden erst dann Daten in die Tabelle eingeben kÃ¶nnen, wenn sie eine dieser beiden Struktur-Bedingungen erfÃ¼llt.\n\nSoll jetzt ein PrimÃ¤rschlÃ¼ssel erzeugt werden ?" ;
     Text [ en-US ] = "A unique index or primary key is required for data record identification in this database.\nYou can only enter data into this table when one of these two structural conditions has been met.\n\nShould a primary key be created now?" ;
 };
 String STR_TABLEDESIGN_TITLE
@@ -416,7 +415,7 @@ String STR_TABLEDESIGN_TITLE
 
 String STR_TABLEDESIGN_ALTER_ERROR
 {
-    Text [ de ] = "Die Spalte \"$column$\" konnte nicht geändert werden. Soll sie statt dessen gelöscht und das neue Format angehängt werden?" ;
+    Text [ de ] = "Die Spalte \"$column$\" konnte nicht geÃ¤ndert werden. Soll sie statt dessen gelÃ¶scht und das neue Format angehÃ¤ngt werden?" ;
     Text [ en-US ] = "The column \"$column$\" could not be changed. Should the column instead be deleted and the new format appended?" ;
 };
 
@@ -424,7 +423,7 @@ QueryBox TABLE_DESIGN_ALL_ROWS_DELETED
 {
     Buttons = WB_YES_NO_CANCEL ;
     DefButton = WB_DEF_YES ;
-    Message [ de ] = "Sie versuchen alle Spalten der Tabelle zu löschen. Ohne Spalten kann eine Tabelle nicht bestehen. Soll die Tabelle aus der Datenbank gelöscht werden? Falls nicht, bleibt die Tabelle unverändert." ;
+    Message [ de ] = "Sie versuchen alle Spalten der Tabelle zu lÃ¶schen. Ohne Spalten kann eine Tabelle nicht bestehen. Soll die Tabelle aus der Datenbank gelÃ¶scht werden? Falls nicht, bleibt die Tabelle unverÃ¤ndert." ;
     Message [ en-US ] = "You are trying to delete all the columns in the table. A table cannot exist without columns. Should the table be deleted from the database? If not, the table will remain unchanged.";
 };
 
@@ -435,37 +434,37 @@ String STR_AUTOINCREMENT_VALUE
 };
 String STR_HELP_AUTOINCREMENT_VALUE
 {
-    Text [ de ] = "Geben Sie hier einen SQL Ausdruck für das Auto-Increment-Feld an.\n\nDieser Ausdruck wird beim Erzeugen der Tabelle direkt an die Datenbank übertragen." ;
+    Text [ de ] = "Geben Sie hier einen SQL Ausdruck fÃ¼r das Auto-Increment-Feld an.\n\nDieser Ausdruck wird beim Erzeugen der Tabelle direkt an die Datenbank Ã¼bertragen." ;
     Text [ en-US ] = "Enter an SQL statement for the auto-increment field.\n\nThis statement will be directly transferred to the database when the table is created.";
 };
 
 String STR_NO_TYPE_INFO_AVAILABLE
 {
-    Text [ de ] = "Es konnten keine Typinformationen von der Datenbank ermittelt werden.\nDer Tabellenentwurfmodus ist für diese Datenquelle nicht verfügbar.";
+    Text [ de ] = "Es konnten keine Typinformationen von der Datenbank ermittelt werden.\nDer Tabellenentwurfmodus ist fÃ¼r diese Datenquelle nicht verfÃ¼gbar.";
     Text [ en-US ] = "No type information could be retrieved from the database.\nThe table design mode is not available for this data source.";
 };
 
 String STR_CHANGE_COLUMN_NAME
 {
-    Text [ de ] = "Feldnamen ändern";
+    Text [ de ] = "Feldnamen Ã¤ndern";
     Text [ en-US ] = "change field name";
 };
 
 String STR_CHANGE_COLUMN_TYPE
 {
-    Text [ de ] = "Feldtyp ändern";
+    Text [ de ] = "Feldtyp Ã¤ndern";
     Text [ en-US ] = "change field type";
 };
 
 String STR_CHANGE_COLUMN_DESCRIPTION
 {
-    Text [ de ] = "Feldbeschreibung ändern";
+    Text [ de ] = "Feldbeschreibung Ã¤ndern";
     Text [ en-US ] = "change field description";
 };
 
 String STR_CHANGE_COLUMN_ATTRIBUTE
 {
-    Text [ de ] = "Feldattribut ändern";
+    Text [ de ] = "Feldattribut Ã¤ndern";
     Text [ en-US ] = "change field attribute";
 };
 
