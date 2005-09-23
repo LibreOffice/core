@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ToolPanel.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:36:25 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:32:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,7 @@ sal_uInt32 ToolPanel::AddControl (
         rFocusManager.RegisterLink(pChild->GetWindow(),pFirst, KEY_DOWN);
     }
 
-    pTitledControl->GetTitleBar()->SetHelpId(nHelpId);
+    pTitledControl->GetWindow()->SetHelpId(nHelpId);
 
     return mpControlContainer->AddControl (pChild);
 }
