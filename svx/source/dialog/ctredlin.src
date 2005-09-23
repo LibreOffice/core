@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctredlin.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:49:09 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:36:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -364,7 +364,7 @@ TabPage SID_REDLIN_VIEW_PAGE
     PushButton PB_UNDO
     {
         HelpId = HID_REDLINING_VIEW_PB_UNDO ;
-        Text [ de ] = "~Rückgängig" ;
+        Text [ de ] = "~RÃ¼ckgÃ¤ngig" ;
         Hide = TRUE;
         Pos  = MAP_APPFONT ( 279 , 69 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
