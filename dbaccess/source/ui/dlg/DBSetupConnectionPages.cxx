@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DBSetupConnectionPages.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:46:27 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:26:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,10 +162,13 @@ namespace dbaui
     //========================================================================
     //= OTextConnectionPageSetup
     //========================================================================
-    //------------------------------------------------------------------------
+DBG_NAME(OTextConnectionPageSetup)
+//------------------------------------------------------------------------
     OTextConnectionPageSetup::OTextConnectionPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OConnectionTabPageSetup(pParent, PAGE_DBWIZARD_TEXT, _rCoreAttrs, STR_TEXT_HELPTEXT, STR_TEXT_HEADERTEXT, STR_TEXT_PATH_OR_FILE)
     {
+        DBG_CTOR(OTextConnectionPageSetup,NULL);
+
         m_pTextConnectionHelper = new OTextConnectionHelper(this, PAGE_DBWIZARD_TEXT, sal_True);
         m_pTextConnectionHelper->SetClickHandler(LINK( this, OTextConnectionPageSetup, ImplGetExtensionHdl ) );
 
@@ -185,6 +188,8 @@ namespace dbaui
     OTextConnectionPageSetup::~OTextConnectionPageSetup()
     {
         DELETEZ(m_pTextConnectionHelper);
+
+        DBG_DTOR(OTextConnectionPageSetup,NULL);
     }
 
     IMPL_LINK(OTextConnectionPageSetup, ImplGetExtensionHdl, OTextConnectionHelper*, _pTextConnectionHelper)
@@ -359,6 +364,7 @@ namespace dbaui
         return ( new OMySQLIntroPageSetup( _pParent, _rAttrSet) );
     }
 
+DBG_NAME(OMySQLIntroPageSetup)
 
     OMySQLIntroPageSetup::OMySQLIntroPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs )
             :OGenericAdministrationPage(pParent, ModuleRes(PAGE_DBWIZARD_MYSQL_INTRO), _rCoreAttrs)
@@ -368,6 +374,8 @@ namespace dbaui
             , m_aRB_ODBCDatabase(this, ResId(RB_CONNECTVIAODBC))
             , m_aRB_JDBCDatabase(this, ResId(RB_CONNECTVIAJDBC))
     {
+        DBG_CTOR(OMySQLIntroPageSetup,NULL);
+
         SetControlFontWeight(&m_aFT_Headertext);
            m_aRB_JDBCDatabase.SetToggleHdl(LINK(this, OMySQLIntroPageSetup, OnSetupModeSelected));
         m_aRB_JDBCDatabase.SetState(sal_True);
@@ -382,6 +390,8 @@ namespace dbaui
     // -----------------------------------------------------------------------
     OMySQLIntroPageSetup::~OMySQLIntroPageSetup()
     {
+
+        DBG_DTOR(OMySQLIntroPageSetup,NULL);
     }
 
 
@@ -678,7 +688,7 @@ namespace dbaui
             {
 // TODO chage jvmaccess
                 ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM(m_pAdminDialog->getORB());
-                bSuccess = ::connectivity::existsJavaClassByName(xJVM,m_aETDriverClass.GetText());
+                bSuccess = xJVM.is() && ::connectivity::existsJavaClassByName(xJVM,m_aETDriverClass.GetText());
             }
         }
         catch(::com::sun::star::uno::Exception&)
@@ -711,11 +721,14 @@ namespace dbaui
         return ( new OSpreadSheetConnectionPageSetup( pParent, _rAttrSet ) );
     }
 
+DBG_NAME(OSpreadSheetConnectionPageSetup)
 
     OSpreadSheetConnectionPageSetup::OSpreadSheetConnectionPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OConnectionTabPageSetup(pParent, PAGE_DBWIZARD_SPREADSHEET, _rCoreAttrs, STR_SPREADSHEET_HELPTEXT, STR_SPREADSHEET_HEADERTEXT, STR_SPREADSHEETPATH)
             , m_aCBPasswordrequired(this, ResId(CB_SPREADSHEETPASSWORDREQUIRED))
     {
+        DBG_CTOR(OSpreadSheetConnectionPageSetup,NULL);
+
            m_aCBPasswordrequired.SetToggleHdl(getControlModifiedLink());
         FreeResource();
     }
@@ -724,6 +737,8 @@ namespace dbaui
     // -----------------------------------------------------------------------
     OSpreadSheetConnectionPageSetup::~OSpreadSheetConnectionPageSetup()
     {
+
+        DBG_DTOR(OSpreadSheetConnectionPageSetup,NULL);
     }
 
 
@@ -758,6 +773,7 @@ namespace dbaui
         return ( new OAuthentificationPageSetup( pParent, _rAttrSet) );
     }
 
+DBG_NAME(OAuthentificationPageSetup)
 
     OAuthentificationPageSetup::OAuthentificationPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OGenericAdministrationPage(pParent, ModuleRes(PAGE_DBWIZARD_AUTHENTIFICATION), _rCoreAttrs )
@@ -768,6 +784,8 @@ namespace dbaui
         , m_aCBPasswordRequired     (this, ResId(CB_GENERALPASSWORDREQUIRED))
         , m_aPBTestConnection       (this, ResId(PB_TESTCONNECTION))
     {
+        DBG_CTOR(OAuthentificationPageSetup,NULL);
+
         SetControlFontWeight(&m_aFTHeaderText);
         m_aETUserName.SetModifyHdl(getControlModifiedLink());
         m_aCBPasswordRequired.SetClickHdl(getControlModifiedLink());
@@ -779,6 +797,8 @@ namespace dbaui
     // -----------------------------------------------------------------------
     OAuthentificationPageSetup::~OAuthentificationPageSetup()
     {
+
+        DBG_DTOR(OAuthentificationPageSetup,NULL);
     }
 
 
@@ -832,6 +852,7 @@ namespace dbaui
         return ( new OFinalDBPageSetup( pParent, _rAttrSet) );
     }
 
+DBG_NAME(OFinalDBPageSetup)
 
     OFinalDBPageSetup::OFinalDBPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs )
     :OGenericAdministrationPage(pParent, ModuleRes(PAGE_DBWIZARD_FINAL), _rCoreAttrs )
@@ -844,9 +865,11 @@ namespace dbaui
     , m_aCBStartTableWizard         (this, ResId(CB_STARTTABLEWIZARD))
     , m_aFTFinalText                (this, ResId(FT_FINALTEXT))
     {
+        DBG_CTOR(OFinalDBPageSetup,NULL);
+
         String stext = m_aFTFinalHeader.GetText();
         SetControlFontWeight(&m_aFTFinalHeader);
-        m_aCBOpenAfterwards.SetClickHdl(getControlModifiedLink());
+        m_aCBOpenAfterwards.SetClickHdl(LINK(this, OFinalDBPageSetup, OnOpenSelected));
         m_aCBStartTableWizard.SetClickHdl(getControlModifiedLink());
         FreeResource();
     }
@@ -855,6 +878,8 @@ namespace dbaui
     // -----------------------------------------------------------------------
     OFinalDBPageSetup::~OFinalDBPageSetup()
     {
+
+        DBG_DTOR(OFinalDBPageSetup,NULL);
     }
 
     sal_Bool OFinalDBPageSetup::IsDatabaseDocumentToBeRegistered()
@@ -908,6 +933,15 @@ namespace dbaui
         sal_Bool bChangedSomething = sal_True;
         return bChangedSomething;
     }
+    // -----------------------------------------------------------------------------
+    IMPL_LINK(OFinalDBPageSetup, OnOpenSelected, CheckBox*, _pBox)
+    {
+        m_aCBStartTableWizard.Enable( _pBox->IsEnabled() && _pBox->IsChecked() );
+        callModifiedHdl();
+        // outta here
+        return 0L;
+    }
 //.........................................................................
-}   // namespace dbaui
+}
+// namespace dbaui
 //.........................................................................
