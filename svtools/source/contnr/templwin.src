@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:57:57 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:50:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,7 +130,7 @@ ToolBox TB_SVT_FILEVIEW
         {
             Identifier = TI_DOCTEMPLATE_BACK;
             HelpId = HID_TEMPLATEDLG_TB_BACK;
-            Text [ de ] = "Zurück" ;
+            Text [ de ] = "ZurÃ¼ck" ;
             Text [ en-US ] = "Back" ;
             Text [ x-comment ] = " ";
         };
@@ -319,7 +319,7 @@ ModalDialog DLG_DOCTEMPLATE
         Pos = MAP_APPFONT( 158, 214 );
         Size = MAP_APPFONT( 50, 14 );
         DefButton = TRUE;
-        Text [ de ] = "Ö~ffnen";
+        Text [ de ] = "Ã–~ffnen";
         Text [ en-US ] = "~Open";
     };
     CancelButton BTN_DOCTEMPLATE_CANCEL
@@ -341,15 +341,15 @@ StringArray STRARY_SVT_DOCINFO
         < "Titel" ; DI_TITLE ; > ;
         < "Von" ; DI_FROM ; > ;
         < "Datum" ; DI_DATE ; > ;
-        < "Schlüsselwörter" ; DI_KEYWORDS ; > ;
+        < "SchlÃ¼sselwÃ¶rter" ; DI_KEYWORDS ; > ;
         < "Beschreibung" ; DI_DESCRIPTION ; > ;
         < "Inhaltstyp" ; DI_MIMETYPE ; > ;
-        < "Änderungdatum" ; DI_MODIFIEDDATE ; > ;
-        < "Geändert von" ; DI_MODIFIEDBY ; > ;
+        < "Ã„nderungdatum" ; DI_MODIFIEDDATE ; > ;
+        < "GeÃ¤ndert von" ; DI_MODIFIEDBY ; > ;
         < "Druckdatum" ; DI_PRINTDATE ; > ;
         < "Gedruckt von" ; DI_PRINTBY ; > ;
         < "Thema" ; DI_THEME ; > ;
-        < "Größe" ; DI_SIZE ; > ;
+        < "GrÃ¶ÃŸe" ; DI_SIZE ; > ;
     };
     ItemList [ en-US ] =
     {
@@ -385,22 +385,22 @@ StringArray STRARY_SVT_DOCINFO
 
 String STR_SVT_NEWDOC_HELP
 {
-    Text [ de ] = "Von hier können Sie neue Dokumente erstellen.";
+    Text [ de ] = "Von hier kÃ¶nnen Sie neue Dokumente erstellen.";
     Text [ en-US ] = "Click here to create new documents.";
 };
 String STR_SVT_MYDOCS_HELP
 {
-    Text [ de ] = "Enthält Ihre Briefe, Berichte und andere Dokumente";
+    Text [ de ] = "EnthÃ¤lt Ihre Briefe, Berichte und andere Dokumente";
     Text [ en-US ] = "Contains your letters, reports and other documents";
 };
 String STR_SVT_TEMPLATES_HELP
 {
-    Text [ de ] = "Enthält Vorlagen aus denen Sie neue Dokumente erstellen können";
+    Text [ de ] = "EnthÃ¤lt Vorlagen aus denen Sie neue Dokumente erstellen kÃ¶nnen";
     Text [ en-US ] = "Contains templates for creating new documents";
 };
 String STR_SVT_SAMPLES_HELP
 {
-    Text [ de ] = "Enthält Beispieldokumente für Briefe, Berichte und andere Dokumente";
+    Text [ de ] = "EnthÃ¤lt Beispieldokumente fÃ¼r Briefe, Berichte und andere Dokumente";
     Text [ en-US ] = "Contains a selection of sample letters, reports and other documents";
 };
 
