@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetDrop.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:07:32 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:37:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,8 +91,8 @@ void ORowSetImportExport::initialize()
     OSL_ENSURE(xColumnLocate.is(),"The rowset normally should support this");
 
     m_xTargetResultSetMetaData = Reference<XResultSetMetaDataSupplier>(m_xTargetResultSetUpdate,UNO_QUERY)->getMetaData();
-    if(!m_xTargetResultSetMetaData.is() || !xColumnLocate.is())
-        return;
+    if(!m_xTargetResultSetMetaData.is() || !xColumnLocate.is() || !m_xResultSetMetaData.is() )
+        throw SQLException(String(ModuleRes(STR_UNEXPECTED_ERROR)),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")) ,0,Any());
 
     sal_Int32 nCount = m_xTargetResultSetMetaData->getColumnCount();
     m_aColumnMapping.reserve(nCount);
