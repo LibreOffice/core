@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:13:37 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:23:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ ImageList LOGO_IMAGELIST
 };
 String STR_RESET
 {
-    Text [ de ] = "~Zurück" ;
+    Text [ de ] = "~ZurÃ¼ck" ;
     Text [ en-US ] = "~Reset" ;
     Text [ x-comment ] = " ";
 };
@@ -150,7 +150,7 @@ InfoBox MSG_ERROR_PASSWD
 };
 String STR_FILEDLG_INSERT
 {
-    Text [ de ] = "Datei einfügen" ;
+    Text [ de ] = "Datei einfÃ¼gen" ;
     Text [ en-US ] = "Insert File" ;
     Text [ x-comment ] = " ";
 };
@@ -164,7 +164,7 @@ InfoBox MSG_TABPAGE_INVALIDNAME
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message [ de ] = "Der Name wird bereits für eine Vorlage verwendet." ;
+    Message [ de ] = "Der Name wird bereits fÃ¼r eine Vorlage verwendet." ;
     Message [ en-US ] = "This name is already in use." ;
     Message [ x-comment ] = " ";
 };
@@ -180,7 +180,7 @@ InfoBox MSG_TABPAGE_INVALIDPARENT
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message [ de ] = "Diese Vorlage kann nicht als Basisvorlage verwendet werden,\nda eine Rekursion entstehen würde." ;
+    Message [ de ] = "Diese Vorlage kann nicht als Basisvorlage verwendet werden,\nda eine Rekursion entstehen wÃ¼rde." ;
     Message [ en-US ] = "This Style cannot be used as a base Style,\nbecause it would result in a recursive reference." ;
     Message [ x-comment ] = " ";
 };
@@ -194,19 +194,19 @@ QueryBox MSG_OVERWRITE_STYLE
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message [ de ] = "Vorlage existiert bereits. Überschreiben?" ;
+    Message [ de ] = "Vorlage existiert bereits. Ãœberschreiben?" ;
     Message [ en-US ] = "Style already exists. Overwrite?" ;
     Message [ x-comment ] = " ";
 };
 String STR_DELETE_STYLE
 {
-    Text [ de ] = "Wollen Sie die Vorlage $1 wirklich löschen?" ;
+    Text [ de ] = "Wollen Sie die Vorlage $1 wirklich lÃ¶schen?" ;
     Text [ en-US ] = "Do you really want to delete Style $1?" ;
     Text [ x-comment ] = "; All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
 };
 String STR_DELETE_STYLE_USED
 {
-    Text [ de ] = "Sie löschen eine benutzte Vorlage!\n" ;
+    Text [ de ] = "Sie lÃ¶schen eine benutzte Vorlage!\n" ;
     Text [ en-US ] = "You are deleting an applied Style!\n" ;
     Text [ x-comment ] = "; All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
 };
@@ -255,7 +255,7 @@ Menu MN_CONTEXT_TEMPLDLG
         MenuItem
         {
             Identifier = ID_EDIT ;
-            Text [ de ] = "Ändern..." ;
+            Text [ de ] = "Ã„ndern..." ;
             Text [ en-US ] = "Modify..." ;
             HelpId = HID_STYLIST_EDIT ;
             Text [ x-comment ] = " ";
@@ -263,7 +263,7 @@ Menu MN_CONTEXT_TEMPLDLG
         MenuItem
         {
             Identifier = ID_DELETE ;
-            Text [ de ] = "Löschen..." ;
+            Text [ de ] = "LÃ¶schen..." ;
             Text [ en-US ] = "Delete..." ;
             HelpId = HID_STYLIST_DELETE ;
             Text [ x-comment ] = " ";
@@ -386,7 +386,7 @@ ErrorBox MSG_ERROR_WRONG_CONFIRM
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message [ de ] = "Fehlerhafte Bestätigung des Passwortes" ;
+    Message [ de ] = "Fehlerhafte BestÃ¤tigung des Passwortes" ;
     Message [ en-US ] = "Faulty password confirmation";
     Message [ x-comment ] = " ";
 };
