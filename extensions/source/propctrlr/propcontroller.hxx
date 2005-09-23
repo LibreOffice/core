@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propcontroller.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:23:26 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:52:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,6 @@
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
 #endif
-// #95343# -----------------
 #ifndef _COM_SUN_STAR_AWT_XLAYOUTCONSTRAINS_HPP_
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 #endif
@@ -120,6 +119,9 @@
 #endif
 #ifndef _VCL_FLDUNIT_HXX
 #include <vcl/fldunit.hxx>
+#endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
 #endif
 
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_PROPERTYHANDLER_HXX
@@ -194,8 +196,8 @@ namespace pcr
 
         /** if we connect the rowset ourself, we own the connection, and are responsible for it
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
-                            m_xOwnedRowsetConnection;
+        ::dbtools::SharedConnection
+                            m_xRowsetConnection;
 
         // <properties>
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
@@ -444,12 +446,14 @@ namespace pcr
         void SetStringSeq(const ::com::sun::star::beans::Property& rProperty, OLineDescriptor& _rUIData);
 
 
-        bool        connectRowset();
         void        cleanupRowsetConnection();
         bool        isRowsetConnected( ) const;
 
+        bool        ensureRowsetConnection();
+        bool        ensureRowsetConnection( ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rConnection );
+
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
-                    ensureRowsetConnection();
+                    ensureAndGetRowsetConnection();
 
         /// create an empty top-level frame, which does not belong to the desktop's frame list
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
