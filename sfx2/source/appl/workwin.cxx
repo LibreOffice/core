@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:49:16 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:51:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,12 @@
 #ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGEREVENTBROADCASTER_HPP_
+#include <com/sun/star/frame/XLayoutManagerEventBroadcaster.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_LAYOUTMANAGEREVENTS_HPP_
+#include <com/sun/star/frame/LayoutManagerEvents.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -88,6 +94,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+namespace css = ::com::sun::star;
 
 struct ResIdToResName
 {
@@ -169,6 +176,143 @@ DBG_NAME(SfxWorkWindow);
 //
 
 // Hilfe, um die "Anderungen am Alignment kompatibal zu machen!
+
+
+SFX_IMPL_XINTERFACE_3( LayoutManagerListener, OWeakObject, ::com::sun::star::frame::XLayoutManagerListener, ::com::sun::star::lang::XEventListener, ::com::sun::star::lang::XComponent )
+SFX_IMPL_XTYPEPROVIDER_3( LayoutManagerListener, ::com::sun::star::frame::XLayoutManagerListener, ::com::sun::star::lang::XEventListener, ::com::sun::star::lang::XComponent )
+
+LayoutManagerListener::LayoutManagerListener(
+    SfxWorkWindow* pWrkWin ) :
+    m_pWrkWin( pWrkWin ),
+    m_bHasFrame( sal_False ),
+    m_aLayoutManagerPropName( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ))
+{
+}
+
+LayoutManagerListener::~LayoutManagerListener()
+{
+}
+
+void LayoutManagerListener::setFrame( const css::uno::Reference< css::frame::XFrame >& xFrame )
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( m_pWrkWin && !m_bHasFrame )
+    {
+        m_xFrame    = xFrame;
+        m_bHasFrame = sal_True;
+
+        if ( xFrame.is() )
+        {
+            css::uno::Reference< css::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
+            css::uno::Reference< css::frame::XLayoutManagerEventBroadcaster > xLayoutManager;
+            if ( xPropSet.is() )
+            {
+                try
+                {
+                    Any aValue = xPropSet->getPropertyValue( m_aLayoutManagerPropName );
+                    aValue >>= xLayoutManager;
+
+                    if ( xLayoutManager.is() )
+                        xLayoutManager->addLayoutManagerEventListener(
+                            css::uno::Reference< css::frame::XLayoutManagerListener >(
+                                static_cast< OWeakObject* >( this ), css::uno::UNO_QUERY ));
+                }
+                catch ( css::uno::RuntimeException& e )
+                {
+                    throw e;
+                }
+                catch ( css::uno::Exception& )
+                {
+                }
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------------------------------------------------------
+//  XComponent
+//---------------------------------------------------------------------------------------------------------
+void SAL_CALL LayoutManagerListener::addEventListener(
+    const css::uno::Reference< css::lang::XEventListener >& xListener )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    // do nothing, only internal class
+}
+
+void SAL_CALL LayoutManagerListener::removeEventListener(
+    const css::uno::Reference< css::lang::XEventListener >& aListener )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    // do nothing, only internal class
+}
+
+void SAL_CALL LayoutManagerListener::dispose()
+throw( css::uno::RuntimeException )
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    // reset member
+    m_pWrkWin = 0;
+
+    css::uno::Reference< css::frame::XFrame > xFrame( m_xFrame.get(), css::uno::UNO_QUERY );
+    if ( xFrame.is() )
+    {
+        css::uno::Reference< css::beans::XPropertySet > xPropSet( xFrame, css::uno::UNO_QUERY );
+        css::uno::Reference< css::frame::XLayoutManagerEventBroadcaster > xLayoutManager;
+        if ( xPropSet.is() )
+        {
+            try
+            {
+                css::uno::Any aValue = xPropSet->getPropertyValue( m_aLayoutManagerPropName );
+                aValue >>= xLayoutManager;
+
+                // remove as listener from layout manager
+                if ( xLayoutManager.is() )
+                    xLayoutManager->removeLayoutManagerEventListener(
+                        css::uno::Reference< css::frame::XLayoutManagerListener >(
+                            static_cast< OWeakObject* >( this ), css::uno::UNO_QUERY ));
+            }
+            catch ( css::uno::RuntimeException& e )
+            {
+                throw e;
+            }
+            catch ( css::uno::Exception& )
+            {
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------------------------------------------------------
+//  XEventListener
+//---------------------------------------------------------------------------------------------------------
+void SAL_CALL LayoutManagerListener::disposing(
+    const css::lang::EventObject& aEvent )
+throw( css::uno::RuntimeException )
+{
+    // do nothing
+}
+
+//---------------------------------------------------------------------------------------------------------
+// XLayoutManagerEventListener
+//---------------------------------------------------------------------------------------------------------
+void SAL_CALL LayoutManagerListener::layoutEvent(
+    const css::lang::EventObject& aSource,
+    ::sal_Int16                   eLayoutEvent,
+    const css::uno::Any&          aInfo )
+throw (css::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( m_pWrkWin )
+    {
+        if ( eLayoutEvent == css::frame::LayoutManagerEvents::VISIBLE )
+            m_pWrkWin->ShowChilds_Impl();
+        else if ( eLayoutEvent == css::frame::LayoutManagerEvents::INVISIBLE )
+            m_pWrkWin->HideChilds_Impl();
+    }
+}
+
+//====================================================================
 
 typedef std::hash_map< sal_Int32, rtl::OUString > ToolBarResIdToResourceURLMap;
 
@@ -494,6 +638,14 @@ SfxWorkWindow::SfxWorkWindow( Window *pWin, SfxBindings& rB, SfxWorkWindow* pPar
     SfxChild_Impl* pChild=0;
     for (USHORT n=0; n < SFX_OBJECTBAR_MAX; ++n)
         pChilds->Insert(0,pChild);
+
+    // create and initialize layout manager listener
+    Reference< com::sun::star::frame::XFrame > xFrame = GetFrameInterface();
+    LayoutManagerListener* pLayoutManagerListener = new LayoutManagerListener( this );
+    m_xLayoutManagerListener = css::uno::Reference< css::lang::XComponent >(
+                                    static_cast< cppu::OWeakObject* >( pLayoutManagerListener ),
+                                        css::uno::UNO_QUERY );
+    pLayoutManagerListener->setFrame( xFrame );
 }
 
 //====================================================================
@@ -516,6 +668,9 @@ SfxWorkWindow::~SfxWorkWindow()
     DBG_ASSERT( pChilds->Count() == 0, "dangling childs" );
     delete pChilds;
     delete pChildWins;
+
+    if ( m_xLayoutManagerListener.is() )
+        m_xLayoutManagerListener->dispose();
 }
 
 SystemWindow* SfxWorkWindow::GetTopWindow() const
@@ -589,29 +744,29 @@ void SfxWorkWindow::DeleteControllers_Impl()
     {
         SfxChildWin_Impl* pCW = (*pChildWins)[n];
            SfxChildWindow *pChild = pCW->pWin;
-    if (pChild)
-    {
+        if (pChild)
+        {
 /*
             BOOL bTask = ( pCW->aInfo.nFlags & SFX_CHILDWIN_TASK ) != 0;
-        pCW->aInfo = pChild->GetInfo();
-        if ( bTask )
-        pCW->aInfo.nFlags |= SFX_CHILDWIN_TASK;
-        SaveStatus_Impl(pChild, pCW->aInfo);
+            pCW->aInfo = pChild->GetInfo();
+            if ( bTask )
+            pCW->aInfo.nFlags |= SFX_CHILDWIN_TASK;
+            SaveStatus_Impl(pChild, pCW->aInfo);
 */
-        pChild->Hide();
+            pChild->Hide();
 
-        // Wenn das ChildWindow ein direktes Childfenster ist und nicht
-        // in einem SplitWindow liegt, am WorkWindow abmelden.
-        // Nach TH ist eine Abmeldung am Splitwindow nicht erforderlich,
-        // wenn dieses auch gleich mit zerst"ort wird (s.u.).
-        if (pCW->pCli)
-            ReleaseChild_Impl(*pChild->GetWindow());
-        pCW->pWin = 0;
-        pWorkWin->GetSystemWindow()->GetTaskPaneList()->RemoveWindow( pChild->GetWindow() );
-        pChild->Destroy();
+            // Wenn das ChildWindow ein direktes Childfenster ist und nicht
+            // in einem SplitWindow liegt, am WorkWindow abmelden.
+            // Nach TH ist eine Abmeldung am Splitwindow nicht erforderlich,
+            // wenn dieses auch gleich mit zerst"ort wird (s.u.).
+            if (pCW->pCli)
+                ReleaseChild_Impl(*pChild->GetWindow());
+            pCW->pWin = 0;
+            pWorkWin->GetSystemWindow()->GetTaskPaneList()->RemoveWindow( pChild->GetWindow() );
+            pChild->Destroy();
         }
-    delete pCW->pControl;
-    delete pCW;
+        delete pCW->pControl;
+        delete pCW;
     }
 
     pChildWins->Remove((USHORT)0, nCount);
@@ -1426,7 +1581,16 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
             // ist es auch eingeschaltet ?
             if ( pChildWin == 0 && pCW->bCreate )
             {
-                if ( !IsDockingAllowed() || bIsFullScreen || !bInternalDockingAllowed )
+                // Internal docking is only used for embedding into another
+                // container. We force the floating state of all floatable
+                // child windows.
+                if ( !bInternalDockingAllowed )
+                {
+                    // Special case for all non-floatable child windows. We have
+                    // to prevent the creation here!
+                    bCreate = !( pCW->aInfo.nFlags & SFX_CHILDWIN_FORCEDOCK );
+                }
+                else if ( !IsDockingAllowed() || bIsFullScreen ) // || !bInternalDocking )
                 {
                     // im PresentationMode oder FullScreen nur FloatingWindows
                     SfxChildAlignment eAlign;
@@ -2133,7 +2297,15 @@ void SfxWorkWindow::ToggleChildWindow_Impl(USHORT nId, BOOL bSetFocus)
         SfxChildWin_Impl *pCW = (*pChildWins)[n];
         SfxChildWindow *pChild = pCW->pWin;
 
-        if ( pChild && pCW->bCreate )
+        bool bCreationAllowed( sal_True );
+        if ( !bInternalDockingAllowed )
+        {
+            // Special case for all non-floatable child windows. We have
+            // to prevent the creation here!
+            bCreationAllowed = !( pCW->aInfo.nFlags & SFX_CHILDWIN_FORCEDOCK );
+        }
+
+        if ( pChild && pCW->bCreate && bCreationAllowed )
         {
             if ( pChild->QueryClose() )
             {
@@ -2163,11 +2335,11 @@ void SfxWorkWindow::ToggleChildWindow_Impl(USHORT nId, BOOL bSetFocus)
                 }
             }
         }
-        else if ( pCW->bCreate )
+        else if ( pCW->bCreate && bCreationAllowed )
         {
             pCW->bCreate = FALSE;
         }
-        else
+        else if ( bCreationAllowed )
         {
             pCW->bCreate = TRUE;
 
@@ -2188,7 +2360,7 @@ void SfxWorkWindow::ToggleChildWindow_Impl(USHORT nId, BOOL bSetFocus)
         ArrangeChilds_Impl();
         ShowChilds_Impl();
 
-        if ( pCW->bCreate )
+        if ( pCW->bCreate && bCreationAllowed )
         {
             if ( !pCW->pCli )
             {
@@ -2591,6 +2763,8 @@ void SfxWorkWindow::InitializeChild_Impl(SfxChildWin_Impl *pCW)
                 pCW->aInfo.nFlags |= SFX_CHILDWIN_TASK;
             if ( nFlags & SFX_CHILDWIN_CANTGETFOCUS )
                 pCW->aInfo.nFlags |= SFX_CHILDWIN_CANTGETFOCUS;
+            if ( nFlags & SFX_CHILDWIN_FORCEDOCK )
+                pCW->aInfo.nFlags |= SFX_CHILDWIN_FORCEDOCK;
             pFact->aInfo = pCW->aInfo;
             return;
         }
@@ -2618,6 +2792,8 @@ void SfxWorkWindow::InitializeChild_Impl(SfxChildWin_Impl *pCW)
                         pCW->aInfo.nFlags |= SFX_CHILDWIN_TASK;
                     if ( nFlags & SFX_CHILDWIN_CANTGETFOCUS )
                         pCW->aInfo.nFlags |= SFX_CHILDWIN_CANTGETFOCUS;
+                    if ( nFlags & SFX_CHILDWIN_FORCEDOCK )
+                        pCW->aInfo.nFlags |= SFX_CHILDWIN_FORCEDOCK;
                     pFact->aInfo = pCW->aInfo;
                     return;
                 }
