@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:13:03 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:38:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,7 @@ ModalDialog IDD_TT_ABOUT_DIALOG {
     Size = MAP_APPFONT( 120, 81 );
     SVLook = TRUE;
     MOVEABLE = TRUE;
-    Text [ de ] = "Über VCLTestTool";
+    Text [ de ] = "Ãœber VCLTestTool";
     FixedText 1 {
             Pos = MAP_APPFONT( 5, 10 );
             Size = MAP_APPFONT( 110, 10 );
@@ -137,7 +137,7 @@ ModalDialog IDD_TT_ABOUT_DIALOG {
     FixedText 4 {
             Pos = MAP_APPFONT( 5, 40 );
             Size = MAP_APPFONT( 110, 10 );
-            TEXT [ de ] = "©1995-2005 Sun Microsystems, Inc.";
+            TEXT [ de ] = "Â©1995-2005 Sun Microsystems, Inc.";
             CENTER = TRUE;
         TEXT[ en-US ] = "Â©1995-2005 Sun Microsystems, Inc.";
     };
@@ -237,7 +237,7 @@ ModalDialog IDD_REPLACE_DIALOG {
 };
 
 InfoBox IDS_NOPRINTERERROR {
-    MESSAGE [ de ] = "Drucken steht nicht zur Verfügung!";
+    MESSAGE [ de ] = "Drucken steht nicht zur VerfÃ¼gung!";
     MESSAGE[ en-US ] = "The print function is not available!";
 };
 ErrorBox IDS_CANTLOAD {
@@ -254,7 +254,7 @@ ErrorBox IDS_CANTSAVE {
 };
 ErrorBox IDS_NOMAINPGM {
     TITLE [ de ] = "Testtool-Fehler";
-    MESSAGE [ de ] = "Dieses Fenster enthält kein Hauptprogramm!";
+    MESSAGE [ de ] = "Dieses Fenster enthÃ¤lt kein Hauptprogramm!";
     MESSAGE[ en-US ] = "This window does not contain a main program!";
     Title[ en-US ] = "Testtool Error";
 };
@@ -278,52 +278,58 @@ ErrorBox IDS_PATTERNNOTFOUND {
 };
 ErrorBox IDS_INVALID_VALUE {
     TITLE [ de ] = "Testtool-Fehler";
-    MESSAGE [ de ] = "Der Wert ist ungültig und kann daher nicht gesetzt werden.";
+    MESSAGE [ de ] = "Der Wert ist ungÃ¼ltig und kann daher nicht gesetzt werden.";
     MESSAGE[ en-US ] = "The value is invalid and cannot be set.";
     Title[ en-US ] = "Testtool Error";
 };
 
 QueryBox IDS_ASKSAVEERROR {
     TITLE = "Testtool";
-    MESSAGE [ de ] = "Fehler beim Speichern der Dateien! Trotzdem ausführen?";
+    MESSAGE [ de ] = "Fehler beim Speichern der Dateien! Trotzdem ausfÃ¼hren?";
     BUTTONS = WB_YES_NO;
     MESSAGE[ en-US ] = "Error saving files! Run anyway?";
     Title[ en-US ] = "Testtool";
+    Title[ de ] = "Testtool";
 };
 QueryBox IDS_ASK_DIRTY_SAVE {
     TITLE = "Testtool";
-    MESSAGE [ de ] = "Datei ist geändert worden. Abspeichern?";
+    MESSAGE [ de ] = "Datei ist geÃ¤ndert worden. Abspeichern?";
     BUTTONS = WB_YES_NO_CANCEL;
     MESSAGE[ en-US ] = "File has been changed. Save?";
     Title[ en-US ] = "Testtool";
+    Title[ de ] = "Testtool";
 };
 QueryBox IDS_ASK_DIRTY_AND_DISKCHANGE_SAVE {
     TITLE = "Testtool";
-    MESSAGE [ de ] = "Datei ist auf dem Datenträger und\nim Editor geändert worden. Abspeichern?";
+    MESSAGE [ de ] = "Datei ist auf dem DatentrÃ¤ger und\nim Editor geÃ¤ndert worden. Abspeichern?";
     BUTTONS = WB_YES_NO_CANCEL;
     MESSAGE[ en-US ] = "File has been changed on data medium\nand in the Editor. Save?";
     Title[ en-US ] = "Testtool";
+    Title[ de ] = "Testtool";
 };
 QueryBox IDS_ASK_DISKCHANGE_SAVE {
     TITLE = "Testtool";
-    MESSAGE [ de ] = "Datei ist auf dem Datenträger geändert worden.\nÜberschreiben?";
+    MESSAGE [ de ] = "Datei ist auf dem DatentrÃ¤ger geÃ¤ndert worden.\nÃœberschreiben?";
     BUTTONS = WB_YES_NO_CANCEL;
     MESSAGE[ en-US ] = "File has been changed on data medium.\nOverwrite?";
     Title[ en-US ] = "Testtool";
+    Title[ de ] = "Testtool";
 };
 QueryBox IDS_ASKRELOAD {
     TITLE = "Testtool";
-    MESSAGE [ de ] = "Datei ist auf dem Datenträger geändert worden. Erneut Laden?";
+    MESSAGE [ de ] = "Datei ist auf dem DatentrÃ¤ger geÃ¤ndert worden. Erneut Laden?";
     BUTTONS = WB_YES_NO;
     MESSAGE[ en-US ] = "File has been changed on data medium. Reload?";
     Title[ en-US ] = "Testtool";
+    Title[ de ] = "Testtool";
 };
 QueryBox IDS_ASKDIRTYRELOAD {
     TITLE = "Testtool";
-    MESSAGE [ de ] = "Datei ist auf dem Datenträger und\nim Editor geändert worden. Erneut Laden?";
+    MESSAGE [ de ] = "Datei ist auf dem DatentrÃ¤ger und\nim Editor geÃ¤ndert worden. Erneut Laden?";
     BUTTONS = WB_YES_NO;
     MESSAGE[ en-US ] = "File has been changed on data medium\nand in the Editor. Reload?";
     Title[ en-US ] = "Testtool";
+    Title[ de ] = "Testtool";
 };
 QueryBox IDS_RUNNING {
     TITLE = "Testtool";
@@ -331,6 +337,7 @@ QueryBox IDS_RUNNING {
     BUTTONS = WB_YES_NO;
     MESSAGE[ en-US ] = "BASIC is still running! Exit anyway?";
     Title[ en-US ] = "Testtool";
+    Title[ de ] = "Testtool";
 };
 QueryBox IDS_LOSS_OF_INFORMATION {
     TITLE = "Testtool";
@@ -338,6 +345,7 @@ QueryBox IDS_LOSS_OF_INFORMATION {
     BUTTONS = WB_OK_CANCEL;
     MESSAGE[ en-US ] = "Saving in an external format causes information loss.";
     Title[ en-US ] = "Testtool";
+    Title[ de ] = "Testtool";
 };
 
 InfoBox IDS_NOT_YET_IMPLEMENTED
@@ -556,7 +564,7 @@ Menu RID_FILE {
         };
     MenuItem  {
         Identifier = RID_FILEOPEN;
-        TEXT [ de ] = "Ö~ffnen...";
+        TEXT [ de ] = "Ã–~ffnen...";
         AccelKey = KeyCode { Function = KEYFUNC_OPEN; };
             TEXT[ en-US ] = "~Open...";
         };
@@ -565,7 +573,7 @@ Menu RID_FILE {
         };
     MenuItem  {
         Identifier = RID_FILECLOSE;
-        TEXT [ de ] = "S~chließen";
+        TEXT [ de ] = "S~chlieÃŸen";
         TEXT[ en-US ] = "~Close";
         AccelKey = KeyCode { Function = KEYFUNC_CLOSE; };
         };
@@ -622,7 +630,7 @@ Menu RID_EDIT {
     ITEMLIST = {
     MenuItem  {
         Identifier = RID_EDITUNDO;
-        TEXT [ de ] = "~Rückgängig";
+        TEXT [ de ] = "~RÃ¼ckgÃ¤ngig";
 //      AccelKey = KeyCode { Function = KEYFUNC_CUT; };
             TEXT[ en-US ] = "~Undo";
         };
@@ -649,13 +657,13 @@ Menu RID_EDIT {
         };
     MenuItem  {
         Identifier = RID_EDITPASTE;
-        TEXT [ de ] = "E~infügen";
+        TEXT [ de ] = "E~infÃ¼gen";
         AccelKey = KeyCode { Function = KEYFUNC_PASTE; };
             TEXT[ en-US ] = "~Paste";
         };
     MenuItem  {
         Identifier = RID_EDITDEL;
-        TEXT [ de ] = "~Löschen";
+        TEXT [ de ] = "~LÃ¶schen";
         AccelKey = KeyCode { Function = KEYFUNC_DELETE; };
             TEXT[ en-US ] = "~Delete";
         };
@@ -708,7 +716,7 @@ Menu RID_RUN {
         };
     MenuItem  {
         Identifier = RID_RUNSTEPOVER;
-        TEXT [ de ] = "Einzelschritt über ~Prozeduren";
+        TEXT [ de ] = "Einzelschritt Ã¼ber ~Prozeduren";
         AccelKey = KeyCode { Code = KEY_F10; };
             TEXT[ en-US ] = "Si~ngle Step over Procedure";
         };
@@ -719,7 +727,7 @@ Menu RID_RUN {
 //      };
     MenuItem  {
         Identifier = RID_TOGLEBRKPNT;
-        TEXT [ de ] = "Brechpunkt setzen/löschen";
+        TEXT [ de ] = "Brechpunkt setzen/lÃ¶schen";
         AccelKey = KeyCode { Code = KEY_F9; };
             TEXT[ en-US ] = "Set / Delete Break Point";
         };
@@ -737,7 +745,7 @@ Menu RID_RUN {
         };
     MenuItem  {
         Identifier = RID_RUNNEXTERR;
-        TEXT [ de ] = "~Nächster Fehler";
+        TEXT [ de ] = "~NÃ¤chster Fehler";
         AccelKey = KeyCode { Code = KEY_F8; Shift = TRUE; };
             TEXT[ en-US ] = "~Next Error";
         };
@@ -780,7 +788,7 @@ Menu RID_WINDOW {
     ITEMLIST = {
     MenuItem  {
             Identifier = RID_WINCASCADE;
-            TEXT [ de ] = "~Überlappend";
+            TEXT [ de ] = "~Ãœberlappend";
             TEXT[ en-US ] = "~Cascade";
         };
     MenuItem  {
@@ -945,7 +953,7 @@ TabPage RID_TP_GENERIC {
     PushButton RID_PD_DEL_AREA {
             Pos = MAP_APPFONT( 188, 12 );
             Size = MAP_APPFONT( 40, 12 );
-            Text [ de ] = "Löschen";
+            Text [ de ] = "LÃ¶schen";
             TabStop = TRUE;
         Text[ en-US ] = "Delete";
     };
@@ -974,7 +982,7 @@ TabPage RID_TP_GENERIC {
     PushButton RID_PB_DEL_VALUE {
             Pos = MAP_APPFONT( 188, 64 );
             Size = MAP_APPFONT( 40, 12 );
-            Text [ de ] = "Löschen";
+            Text [ de ] = "LÃ¶schen";
             TabStop = TRUE;
         Text[ en-US ] = "Delete";
     };
@@ -1011,7 +1019,7 @@ TabPage RID_TP_PROFILE {
     PushButton RID_PD_DEL_PROFILE {
             Pos = MAP_APPFONT( 188, 2 );
             Size = MAP_APPFONT( 40, 12 );
-            Text [ de ] = "Löschen";
+            Text [ de ] = "LÃ¶schen";
             TabStop = TRUE;
         Text[ en-US ] = "Delete";
     };
@@ -1087,7 +1095,7 @@ TabPage RID_TP_PROFILE {
     CheckBox CB_AUTOSAVE {
             Pos = MAP_APPFONT( 7, 87 );
             Size = MAP_APPFONT( 115, 12 );
-            Text [ de ] = "Speichern vor Ausführen";
+            Text [ de ] = "Speichern vor AusfÃ¼hren";
         Text[ en-US ] = "Save before execute";
     };
     CheckBox CB_STOPONSYNTAXERRORS {
@@ -1232,7 +1240,7 @@ TabPage RID_TP_FONT {
     FixedText FT_FONTSIZE {
         Pos = MAP_APPFONT( 200, 2 );
         Size = MAP_APPFONT( 29, 8 );
-        Text [ de ] = "Größe";
+        Text [ de ] = "GrÃ¶ÃŸe";
         Text[ en-US ] = "Size";
     };
     MetricBox MB_FONTSIZE {
@@ -1321,7 +1329,7 @@ FloatingWindow IDD_DISPLAY_HID {
     OKButton RID_OK_CLOSE {
             Pos = MAP_APPFONT( 216, 144 );
             Size = MAP_APPFONT( 40, 12 );
-            Text [ de ] = "Schließen";
+            Text [ de ] = "SchlieÃŸen";
             TabStop = TRUE;
         Text[ en-US ] = "Close";
     };
