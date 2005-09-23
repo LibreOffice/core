@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlTableFilterList.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:10:08 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:13:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,9 @@
 #ifndef DBA_XMLFILTER_HXX
 #include "xmlfilter.hxx"
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 namespace dbaxml
 {
@@ -73,6 +76,7 @@ namespace dbaxml
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::xml::sax;
+DBG_NAME(OXMLTableFilterList)
 
 OXMLTableFilterList::OXMLTableFilterList( SvXMLImport& rImport,
                 sal_uInt16 nPrfx
@@ -80,11 +84,14 @@ OXMLTableFilterList::OXMLTableFilterList( SvXMLImport& rImport,
                 ,sal_Bool _bNameFilter) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
 {
+    DBG_CTOR(OXMLTableFilterList,NULL);
+
 }
 // -----------------------------------------------------------------------------
 
 OXMLTableFilterList::~OXMLTableFilterList()
 {
+    DBG_DTOR(OXMLTableFilterList,NULL);
 }
 // -----------------------------------------------------------------------------
 
