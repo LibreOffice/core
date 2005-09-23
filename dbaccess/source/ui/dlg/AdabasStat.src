@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AdabasStat.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:40:22 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:11:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,7 @@ ModalDialog DLG_ADABASSTAT
     {
         Pos                 = MAP_APPFONT ( 6 , 99 ) ;
         Size                = MAP_APPFONT ( WINDOW_SIZE_X - 12 , 8 ) ;
-        Text [ de ] = "Datenbankgrößen" ;
+        Text [ de ] = "DatenbankgrÃ¶ÃŸen" ;
         Text [ en-US ] = "Database sizes";
     };
 
@@ -123,7 +123,7 @@ ModalDialog DLG_ADABASSTAT
     {
         Pos                 = MAP_APPFONT ( 12 , 110 ) ;
         Size                = MAP_APPFONT ( 102 , 10 ) ;
-        Text [ de ] = "~Gesamtgröße (MB):" ;
+        Text [ de ] = "~GesamtgrÃ¶ÃŸe (MB):" ;
         Text [ en-US ] = "S~ize (MB):";
     };
 
@@ -184,31 +184,31 @@ ModalDialog DLG_ADABASSTAT
 
 String STR_ADABAS_HELP_SYSDEVSPACE
 {
-    Text [ de ] = "Enthält die Systemtabellen" ;
+    Text [ de ] = "EnthÃ¤lt die Systemtabellen" ;
     Text [ en-US ] = "Contains the system tables";
 };
 
 String STR_ADABAS_HELP_TRANSACT
 {
-    Text [ de ] = "Enthält Information über Transaktion" ;
+    Text [ de ] = "EnthÃ¤lt Information Ã¼ber Transaktion" ;
     Text [ en-US ] = "Contains information about transaction";
 };
 
 String STR_ADABAS_HELP_DATADEVSPACES
 {
-    Text [ de ] = "Enthält alle Daten Dateien" ;
+    Text [ de ] = "EnthÃ¤lt alle Daten Dateien" ;
     Text [ en-US ] = "Contains all data files";
 };
 
 String STR_ADABAS_HELP_SIZE
 {
-    Text [ de ] = "Gesamt Größe der Datenbank Dateien" ;
+    Text [ de ] = "Gesamt GrÃ¶ÃŸe der Datenbank Dateien" ;
     Text [ en-US ] = "Total size of the database files";
 };
 
 String STR_ADABAS_HELP_FREESIZE
 {
-    Text [ de ] = "Noch zur Verfügung stehender Speicher bevor eine neue Datadev Datei erzeugt wird." ;
+    Text [ de ] = "Noch zur VerfÃ¼gung stehender Speicher bevor eine neue Datadev Datei erzeugt wird." ;
     Text [ en-US ] = "Currently available space before a new datadev file is created.";
 };
 
@@ -220,7 +220,7 @@ String STR_ADABAS_HELP_MEMORYUSING
 
 String STR_ADABAS_ERROR_SYSTEMTABLES
 {
-    Text [ de ] = "Es können keine Informationen angezeigt werden, da keine Zugriffsberechtigung auf die benötigten Systemtabellen besteht!" ;
+    Text [ de ] = "Es kÃ¶nnen keine Informationen angezeigt werden, da keine Zugriffsberechtigung auf die benÃ¶tigten Systemtabellen besteht!" ;
     Text [ en-US ] = "No information could be displayed because no access rights exist for the required system tables.";
 };
 
