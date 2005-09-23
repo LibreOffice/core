@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:29:08 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:05:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,6 +145,9 @@
 #ifndef _DBA_COREDATAACCESS_MODELIMPL_HXX_
 #include "ModelImpl.hxx"
 #endif
+#ifndef UNOTOOLS_INC_SHAREDUNOCOMPONENT_HXX
+#include <unotools/sharedunocomponent.hxx>
+#endif
 
 //........................................................................
 namespace dbaccess
@@ -185,15 +188,19 @@ class ODatabaseSource   :public ::comphelper::OBaseMutex
     friend ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
         ODatabaseSource_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
-protected:
+private:
+    typedef ::utl::SharedUNOComponent< ::com::sun::star::frame::XModel, ::utl::CloseableComponent >
+                                                SharedModel;
+
     ::rtl::Reference<ODatabaseModelImpl>    m_pImpl;
     OBookmarkContainer                      m_aBookmarks;
     ::cppu::OInterfaceContainerHelper       m_aFlushListeners;
 
     void setMeAsParent(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xName);
 
-protected:
+private:
     virtual ~ODatabaseSource();
+
 public:
     ODatabaseSource(const ::rtl::Reference<ODatabaseModelImpl>& _pImpl);
 
@@ -277,7 +284,7 @@ public:
     // XDocumentDataSource
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XOfficeDatabaseDocument > SAL_CALL getDatabaseDocument() throw (::com::sun::star::uno::RuntimeException);
 
-protected:
+private:
 // helper
     /** open a connection for the current settings. this is the simple connection we get from the driver
         manager, so it can be used as a master for a "high level" sdb connection.
@@ -290,9 +297,17 @@ protected:
         const rtl::OUString& user, const rtl::OUString& password
         );
 
-    /// see the implementation for an explanation for the method's name ...
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
-        getModelWithPossibleLeak();
+    /** retrieves the model we belong to
+
+        If the model does not yet exist, it is created (->OModelImpl::createNewModel_deliverOwnership).
+        Using the SharedModel implies that when <arg>_bTakeOwnershipIfNewlyCreated</arg> is <TRUE/>, then when the
+        returned SharedModel dies (and has not been shared with other SharedModels in the meantime),
+        then a close attempt for the XModel is made.
+
+        If there already exists a model, <arg>_bTakeOwnershipIfNewlyCreated</arg> is ignored,
+        and ownership of the model is not taken.
+    */
+    SharedModel impl_getModel( bool _bTakeOwnershipIfNewlyCreated );
 
 // other stuff
     void    flushTables();
