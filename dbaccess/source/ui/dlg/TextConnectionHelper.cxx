@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextConnectionHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:49:15 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:27:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,7 +164,8 @@ namespace dbaui
     //========================================================================
     //= OTextConnectionPageSetup
     //========================================================================
-    //------------------------------------------------------------------------
+DBG_NAME(OTextConnectionHelper)
+//------------------------------------------------------------------------
     OTextConnectionHelper::OTextConnectionHelper( Window* pParent, USHORT nResId, sal_Bool _bWizardMode )
         :Control(pParent)
         ,m_aLineFormat              (pParent, ResId(FL_AUTOSEPARATOR2))
@@ -187,6 +188,8 @@ namespace dbaui
         ,m_aTextSeparatorList       (ResId(STR_AUTOTEXTSEPARATORLIST))
         ,m_aTextNone                (ResId(STR_AUTOTEXT_FIELD_SEP_NONE))
     {
+        DBG_CTOR(OTextConnectionHelper,NULL);
+
         m_bWizardMode = _bWizardMode;
         xub_StrLen nCnt = m_aFieldSeparatorList.GetTokenCount( '\t' );
         xub_StrLen i;
@@ -220,6 +223,8 @@ namespace dbaui
     // -----------------------------------------------------------------------
     OTextConnectionHelper::~OTextConnectionHelper()
     {
+
+        DBG_DTOR(OTextConnectionHelper,NULL);
     }
 
 
