@@ -4,9 +4,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:12:56 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:25:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,7 +131,7 @@ ModalDialog RID_FONTSIZEDIALOG
     HelpID = SID_FONTSIZE ;
     Size = MAP_APPFONT ( 171 , 120 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Schriftgrößen : Schriftgrößen */
-    Text [ de ] = "Schriftgrößen" ;
+    Text [ de ] = "SchriftgrÃ¶ÃŸen" ;
     Text [ en-US ] = "Font Sizes" ;
     FixedText 1
     {
@@ -139,7 +139,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Pos = MAP_APPFONT ( 12 , 7 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Basisgröße: : ~Basisgröße: */
-        Text [ de ] = "~Basisgröße" ;
+        Text [ de ] = "~BasisgrÃ¶ÃŸe" ;
         Text [ en-US ] = "Base ~size";
     };
     MetricField 1
@@ -270,7 +270,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Pos = MAP_APPFONT ( 6 , 24 ) ;
         Size = MAP_APPFONT ( 99 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? relative Größen : relative Größen */
-        Text [ de ] = "relative Größen" ;
+        Text [ de ] = "relative GrÃ¶ÃŸen" ;
         Text [ en-US ] = "Relative sizes" ;
         Text [ x-comment ] = " ";
     };
@@ -455,7 +455,7 @@ ModalDialog RID_FONTTYPEDIALOG
         ButtonMenu = Menu , RID_FONTMENU ;
         Pos = MAP_APPFONT ( 225 , 48 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Ä~ndern" ;
+        Text [ de ] = "Ã„~ndern" ;
         Text [ en-US ] = "~Modify" ;
         Text [ x-comment ] = " ";
     };
@@ -479,7 +479,7 @@ ModalDialog RID_DISTANCEDIALOG
     HelpID = SID_DISTANCE ;
     Size = MAP_APPFONT ( 240 , 90 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Abstände : Abstände */
-    Text [ de ] = "Abstände" ;
+    Text [ de ] = "AbstÃ¤nde" ;
     Text [ en-US ] = "Spacing" ;
     FixedText 1
     {
@@ -625,7 +625,7 @@ ModalDialog RID_DISTANCEDIALOG
         String 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Abstände : Abstände */
-            Text [ de ] = "Abstände" ;
+            Text [ de ] = "AbstÃ¤nde" ;
             Text [ en-US ] = "Spacing" ;
             Text [ x-comment ] = " ";
         };
@@ -708,14 +708,14 @@ ModalDialog RID_DISTANCEDIALOG
         String 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Brüche : Br³che */
-            Text [ de ] = "Brüche" ;
+            Text [ de ] = "BrÃ¼che" ;
             Text [ en-US ] = "Fractions" ;
             Text [ x-comment ] = " ";
         };
         String 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? ~Zählerhöhe: : ~Zählerhöhe: */
-            Text [ de ] = "~Zählerhöhe" ;
+            Text [ de ] = "~ZÃ¤hlerhÃ¶he" ;
             Text [ en-US ] = "~Numerator";
         };
         Bitmap 20
@@ -751,7 +751,7 @@ ModalDialog RID_DISTANCEDIALOG
         String 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? ~Überlänge: : ~šberlänge: */
-            Text [ de ] = "~Überlänge" ;
+            Text [ de ] = "~ÃœberlÃ¤nge" ;
             Text [ en-US ] = "~Excess length";
         };
         Bitmap 20
@@ -765,7 +765,7 @@ ModalDialog RID_DISTANCEDIALOG
         String 3
         {
             /* ### ACHTUNG: Neuer Text in Resource? ~Strichstärke: : ~Strichstärke: */
-            Text [ de ] = "~Strichstärke" ;
+            Text [ de ] = "~StrichstÃ¤rke" ;
             Text [ en-US ] = "~Weight";
         };
         Bitmap 30
@@ -788,7 +788,7 @@ ModalDialog RID_DISTANCEDIALOG
         String 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? Grenz~höhe: : Grenz~höhe: */
-            Text [ de ] = "Grenz~höhe" ;
+            Text [ de ] = "Grenz~hÃ¶he" ;
             Text [ en-US ] = "~Upper limit";
         };
         Bitmap 20
@@ -823,7 +823,7 @@ ModalDialog RID_DISTANCEDIALOG
         };
         String 2
         {
-            Text [ de ] = "~left/right Übergröße" ;
+            Text [ de ] = "~left/right ÃœbergrÃ¶ÃŸe" ;
             Text [ en-US ] = "~Excess size (left/right)";
         };
         Bitmap 20
@@ -849,7 +849,7 @@ ModalDialog RID_DISTANCEDIALOG
         };
         String 5
         {
-            Text [ de ] = "~Übergröße" ;
+            Text [ de ] = "~ÃœbergrÃ¶ÃŸe" ;
             Text [ en-US ] = "~Excess size";
         };
         Bitmap 50
@@ -907,7 +907,7 @@ ModalDialog RID_DISTANCEDIALOG
         String 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? ~Primärhöhe: : ~Primärhöhe: */
-            Text [ de ] = "~Primärhöhe" ;
+            Text [ de ] = "~PrimÃ¤rhÃ¶he" ;
             Text [ en-US ] = "~Primary height";
         };
         Bitmap 20
@@ -943,7 +943,7 @@ ModalDialog RID_DISTANCEDIALOG
         String 2
         {
             /* ### ACHTUNG: Neuer Text in Resource? ~Übergröße: : ~šbergröße: */
-            Text [ de ] = "~Übergröße" ;
+            Text [ de ] = "~ÃœbergrÃ¶ÃŸe" ;
             Text [ en-US ] = "~Excess size";
         };
         Bitmap 20
@@ -972,7 +972,7 @@ ModalDialog RID_DISTANCEDIALOG
     {
         String 1
         {
-            Text [ de ] = "Ränder" ;
+            Text [ de ] = "RÃ¤nder" ;
             Text [ en-US ] = "Borders";
             Text [ x-comment ] = " ";
         };
@@ -1158,7 +1158,7 @@ TabPage RID_PRINTOPTIONPAGE
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 69 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
-        Text [ de ] = "~Originalgröße" ;
+        Text [ de ] = "~OriginalgrÃ¶ÃŸe" ;
         Text [ en-US ] = "O~riginal size" ;
         Text [ x-comment ] = " ";
     };
@@ -1270,7 +1270,7 @@ ModalDialog RID_SYMBOLDIALOG
         Size = MAP_APPFONT ( 56 , 14 ) ;
         DefButton = TRUE ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Übernehmen : ~šbernehmen */
-        Text [ de ] = "~Übernehmen" ;
+        Text [ de ] = "~Ãœbernehmen" ;
         Text [ en-US ] = "~Insert" ;
         Text [ x-comment ] = " ";
     };
@@ -1279,7 +1279,7 @@ ModalDialog RID_SYMBOLDIALOG
         Pos = MAP_APPFONT ( 177 , 24 ) ;
         Size = MAP_APPFONT ( 56 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Schließe~n" ;
+        Text [ de ] = "SchlieÃŸe~n" ;
         Text [ en-US ] = "~Close";
         Text [ x-comment ] = " ";
     };
@@ -1480,7 +1480,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 305 , 195 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "H~inzufügen" ;
+        Text [ de ] = "H~inzufÃ¼gen" ;
         Text [ en-US ] = "~Add" ;
         Text [ x-comment ] = " ";
     };
@@ -1489,7 +1489,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 245 , 195 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Ä~ndern" ;
+        Text [ de ] = "Ã„~ndern" ;
         Text [ en-US ] = "~Modify" ;
         Text [ x-comment ] = " ";
     };
@@ -1498,7 +1498,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 185 , 195 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Löschen" ;
+        Text [ de ] = "~LÃ¶schen" ;
         Text [ en-US ] = "~Delete" ;
         Text [ x-comment ] = " ";
     };
@@ -1529,7 +1529,7 @@ QueryBox RID_DEFAULTSAVEQUERY
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_YES ;
     /* ### ACHTUNG: Neuer Text in Resource? Sollen die Änderungen als Standard gespeichert werden ?\n\nDiese Änderungen wirken sich auf alle neuen Formeln aus. : Sollen die Žnderungen als Standard gespeichert werden ?\n\nDiese Žnderungen wirken sich auf alle neuen Formeln aus. */
-    Message [ de ] = "Sollen die Änderungen als Standard gespeichert werden ?\n\nDiese Änderungen wirken sich auf alle neuen Formeln aus." ;
+    Message [ de ] = "Sollen die Ã„nderungen als Standard gespeichert werden ?\n\nDiese Ã„nderungen wirken sich auf alle neuen Formeln aus." ;
     Message [ en-US ] = "Should the changes be saved as defaults?\n\nThese changes will apply for all new formulas." ;
     Message [ x-comment ] = " ";
 };
@@ -1609,7 +1609,7 @@ Menu RID_VIEWMENU
             Identifier = SID_ZOOMIN ;
             HelpID = SID_ZOOMIN ;
             /* ### ACHTUNG: Neuer Text in Resource? Vergrößern : Vergrößern */
-            Text [ de ] = "~Vergrößern" ;
+            Text [ de ] = "~VergrÃ¶ÃŸern" ;
             Text [ en-US ] = "~Zoom In" ;
             Text [ x-comment ] = " ";
         };
@@ -1650,7 +1650,7 @@ Menu RID_DISTANCEMENU
         MenuItem
         {
             Identifier = WORKARROUND_1 ;
-            Text [ de ] = "Abstände" ;
+            Text [ de ] = "AbstÃ¤nde" ;
             Text [ en-US ] = "Spacing" ;
             Text [ x-comment ] = " ";
         };
@@ -1663,7 +1663,7 @@ Menu RID_DISTANCEMENU
         MenuItem
         {
             Identifier = WORKARROUND_3 ;
-            Text [ de ] = "Brüche" ;
+            Text [ de ] = "BrÃ¼che" ;
             Text [ en-US ] = "Fractions" ;
         };
         MenuItem
@@ -1706,7 +1706,7 @@ Menu RID_DISTANCEMENU
         MenuItem
         {
             Identifier = WORKARROUND_10 ;
-            Text [ de ] = "Ränder" ;
+            Text [ de ] = "RÃ¤nder" ;
             Text [ en-US ] = "Borders";
         };
     };
@@ -1905,7 +1905,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_XSYMDIVIDEY ;
                 HelpId = HID_SMA_XSYMDIVIDEY ;
-                Text [ de ] = "Division (Schrägstrich)" ;
+                Text [ de ] = "Division (SchrÃ¤gstrich)" ;
                 Text [ en-US ] = "Division (Slash)" ;
                 Text [ x-comment ] = " ";
             };
@@ -1962,7 +1962,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_XAPPROXY ;
                 HelpId = HID_SMA_XAPPROXY ;
-                Text [ de ] = "ist ungefähr gleich" ;
+                Text [ de ] = "ist ungefÃ¤hr gleich" ;
                 Text [ en-US ] = "Is Approximately Equal" ;
                 Text [ x-comment ] = " ";
             };
@@ -1998,7 +1998,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_XGTY ;
                 HelpId = HID_SMA_XGTY ;
-                Text [ de ] = "ist größer als" ;
+                Text [ de ] = "ist grÃ¶ÃŸer als" ;
                 Text [ en-US ] = "Is Greater Than" ;
                 Text [ x-comment ] = " ";
             };
@@ -2007,7 +2007,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Identifier = RID_XSIMEQY ;
                 HelpId = HID_SMA_XSIMEQY ;
                 /* ### ACHTUNG: Neuer Text in Resource? ist ähnlich oder gleich : ist ähnlich oder glech */
-                Text [ de ] = "ist ähnlich oder gleich" ;
+                Text [ de ] = "ist Ã¤hnlich oder gleich" ;
                 Text [ en-US ] = "Is Similar Or Equal" ;
                 Text [ x-comment ] = " ";
             };
@@ -2036,7 +2036,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Identifier = RID_XLESLANTY ;
                 HelpId = HID_SMA_XLESLANTY ;
                 /* ### ACHTUNG: Neuer Text in Resource? ist kleiner gleich (schräg) : ist keiner gleich */
-                Text [ de ] = "ist kleiner gleich (schräg)" ;
+                Text [ de ] = "ist kleiner gleich (schrÃ¤g)" ;
                 Text [ en-US ] = "Is Less Than Or Equal To" ;
                 Text [ x-comment ] = " ";
             };
@@ -2044,7 +2044,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_XGESLANTY ;
                 HelpId = HID_SMA_XGESLANTY ;
-                Text [ de ] = "ist größer gleich (schräg)" ;
+                Text [ de ] = "ist grÃ¶ÃŸer gleich (schrÃ¤g)" ;
                 Text [ en-US ] = "Is Greater Than Or Equal To" ;
                 Text [ x-comment ] = " ";
             };
@@ -2052,7 +2052,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_XSIMY ;
                 HelpId = HID_SMA_XSIMY ;
-                Text [ de ] = "ist ähnlich zu" ;
+                Text [ de ] = "ist Ã¤hnlich zu" ;
                 Text [ en-US ] = "Is Similar To" ;
                 Text [ x-comment ] = " ";
             };
@@ -2084,7 +2084,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_XGEY ;
                 HelpId = HID_SMA_XGEY ;
-                Text [ de ] = "ist größer gleich" ;
+                Text [ de ] = "ist grÃ¶ÃŸer gleich" ;
                 Text [ en-US ] = "Is Greater Than Or Equal To" ;
                 Text [ x-comment ] = " ";
             };
@@ -2169,7 +2169,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_XOWNSY ;
                 HelpId = HID_SMA_XOWNSY ;
-                Text [ de ] = "enthält" ;
+                Text [ de ] = "enthÃ¤lt" ;
                 Text [ en-US ] = "Owns" ;
                 Text [ x-comment ] = " ";
             };
@@ -2317,7 +2317,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_SETN ;
                 HelpId = HID_SMA_SETN ;
-                Text [ de ] = "Menge der natürlichen Zahlen" ;
+                Text [ de ] = "Menge der natÃ¼rlichen Zahlen" ;
                 Text [ en-US ] = "Natural Numbers Set";
                 Text [ x-comment ] = " ";
             };
@@ -2379,7 +2379,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_LNX ;
                 HelpId = HID_SMA_LNX ;
-                Text [ de ] = "natürlicher Logarithmus" ;
+                Text [ de ] = "natÃ¼rlicher Logarithmus" ;
                 Text [ en-US ] = "Natural Logarithm" ;
                 Text [ x-comment ] = " ";
             };
@@ -2579,7 +2579,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_FACTX ;
                 HelpId = HID_SMA_FACTX ;
-                Text [ de ] = "Fakultät" ;
+                Text [ de ] = "FakultÃ¤t" ;
                 Text [ en-US ] = "Factorial" ;
                 Text [ x-comment ] = " ";
             };
@@ -2799,7 +2799,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_BARX ;
                 HelpId = HID_SMA_BARX ;
-                Text [ de ] = "Überstrich" ;
+                Text [ de ] = "Ãœberstrich" ;
                 Text [ en-US ] = "Line Above" ;
                 Text [ x-comment ] = " ";
             };
@@ -2859,7 +2859,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_OVERLINEX ;
                 HelpId = HID_SMA_OVERLINEX ;
-                Text [ de ] = "Linie über" ;
+                Text [ de ] = "Linie Ã¼ber" ;
                 Text [ en-US ] = "Line Over" ;
                 Text [ x-comment ] = " ";
             };
@@ -2923,7 +2923,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_SIZEXY ;
                 HelpId = HID_SMA_SIZEXY ;
-                Text [ de ] = "Größe ändern" ;
+                Text [ de ] = "GrÃ¶ÃŸe Ã¤ndern" ;
                 Text [ en-US ] = "Resize" ;
                 Text [ x-comment ] = " ";
             };
@@ -2931,7 +2931,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_FONTXY ;
                 HelpId = HID_SMA_FONTXY ;
-                Text [ de ] = "Font ändern" ;
+                Text [ de ] = "Font Ã¤ndern" ;
                 Text [ en-US ] = "Change Font" ;
                 Text [ x-comment ] = " ";
             };
@@ -3225,7 +3225,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_ALIGNLX ;
                 HelpId = HID_SMA_ALIGNLX ;
-                Text [ de ] = "linksbündig ausrichten" ;
+                Text [ de ] = "linksbÃ¼ndig ausrichten" ;
                 Text [ en-US ] = "Align Left" ;
                 Text [ x-comment ] = " ";
             };
@@ -3242,7 +3242,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_ALIGNRX ;
                 HelpId = HID_SMA_ALIGNRX ;
-                Text [ de ] = "rechtsbündig ausrichten" ;
+                Text [ de ] = "rechtsbÃ¼ndig ausrichten" ;
                 Text [ en-US ] = "Align Right" ;
                 Text [ x-comment ] = " ";
             };
@@ -3311,7 +3311,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_FORALL ;
                 HelpId = HID_SMA_FORALL ;
-                Text [ de ] = "Für alle" ;
+                Text [ de ] = "FÃ¼r alle" ;
                 Text [ en-US ] = "For All";
                 Text [ x-comment ] = " ";
             };
@@ -3347,7 +3347,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_IM ;
                 HelpId = HID_SMA_IM ;
-                Text [ de ] = "Imaginärteil" ;
+                Text [ de ] = "ImaginÃ¤rteil" ;
                 Text [ en-US ] = "Imaginary Part";
                 Text [ x-comment ] = " ";
             };
@@ -3459,7 +3459,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_UNBINOPS_CAT ;
                 HelpId = HID_SMA_UNBINOPS_CAT ;
-                Text [ de ] = "Unäre/Binäre Operatoren" ;
+                Text [ de ] = "UnÃ¤re/BinÃ¤re Operatoren" ;
                 Text [ en-US ] = "Unary/Binary Operators" ;
                 Text [ x-comment ] = " ";
             };
@@ -3549,7 +3549,7 @@ FloatingWindow RID_TOOLBOXWINDOW
     Text [ en-US ] = "Commands" ;              \
     Text [ x-comment ] = " ";                   \
 
-DockingWindow RID_CMDBOXWINDOW
+DockingWindow RID_CMDBOXWINDOW\
 {
     HelpId = HID_SMA_COMMAND_WIN ;
     Moveable = TRUE ;
@@ -4049,7 +4049,7 @@ String RID_ERR_FUNCEXPECTED
 String RID_ERR_UNOPEREXPECTED
 {
     /* ### ACHTUNG: Neuer Text in Resource?     Unärer Operator erwartet : Un§rer Operator erwartet */
-    Text [ de ] = "Unärer Operator erwartet" ;
+    Text [ de ] = "UnÃ¤rer Operator erwartet" ;
     Text [ en-US ] = "Unary operator expected" ;
     Text [ x-comment ] = " ";
 };
@@ -4057,7 +4057,7 @@ String RID_ERR_UNOPEREXPECTED
 String RID_ERR_BINOPEREXPECTED
 {
     /* ### ACHTUNG: Neuer Text in Resource? Binärer Operator erwartet : Bin§rer Operator erwartet */
-    Text [ de ] = "Binärer Operator erwartet" ;
+    Text [ de ] = "BinÃ¤rer Operator erwartet" ;
     Text [ en-US ] = "Binary operator expected" ;
     Text [ x-comment ] = " ";
 };
@@ -4144,7 +4144,7 @@ ToolBox RID_MATH_TOOLBOX
             Identifier = SID_ZOOMIN ;
             HelpID = SID_ZOOMIN ;
             /* ### ACHTUNG: Neuer Text in Resource? Größer : Größer */
-            Text [ de ] = "Größer" ;
+            Text [ de ] = "GrÃ¶ÃŸer" ;
             Text [ en-US ] = "Zoom In" ;
             /* ### ACHTUNG: Neuer Text in Resource? Stellt den Ausschnitt vergrößert dar : Stellt den Ausschnitt vergrößert dar */
             Text [ x-comment ] = " ";
