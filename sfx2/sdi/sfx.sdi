@@ -4674,6 +4674,32 @@ SfxBoolItem Navigator SID_NAVIGATOR
     ToolBoxConfig = TRUE,
     GroupId = GID_NAVIGATOR;
 ]
+//--------------------------------------------------------------------------
+SfxVoidItem RestoreEditingView SID_RESTORE_EDITING_VIEW
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_VIEW;
+]
 
 //--------------------------------------------------------------------------
 SfxVoidItem NewDialog SID_BASICIDE_NEWDIALOG
