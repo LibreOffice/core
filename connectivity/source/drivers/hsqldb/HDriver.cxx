@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HDriver.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:03:14 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:39:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -481,8 +481,9 @@ namespace connectivity
         }
         if ( bLastOne )
         {
-            Reference<XTransactionListener> xListener(*this,UNO_QUERY);
-            StorageContainer::revokeStorage(_aIter->second.first,xListener);
+            // Reference<XTransactionListener> xListener(*this,UNO_QUERY);
+            // a shutdown should commit all changes to the db files
+            StorageContainer::revokeStorage(_aIter->second.first,NULL);
         }
         if ( !m_bInShutDownConnections )
             m_aConnections.erase(_aIter);
@@ -544,34 +545,37 @@ namespace connectivity
 
         Reference< XStorage> xStorage(aEvent.Source,UNO_QUERY);
         ::rtl::OUString sKey = StorageContainer::getRegisteredKey(xStorage);
-        TWeakPairVector::iterator i = ::std::find_if(m_aConnections.begin(),m_aConnections.end(),::std::compose1(
-                         ::std::bind2nd(::std::equal_to< ::rtl::OUString >(),sKey)
-                        ,::std::compose1(::std::select1st<TWeakConnectionPair>(),::std::select2nd< TWeakPair >())));
-        OSL_ENSURE( i != m_aConnections.end(), "ODriverDelegator::preCommit: they're committing a storage which I do not know!" );
-        if ( i != m_aConnections.end() )
+        if ( sKey.getLength() )
         {
-            try
+            TWeakPairVector::iterator i = ::std::find_if(m_aConnections.begin(),m_aConnections.end(),::std::compose1(
+                            ::std::bind2nd(::std::equal_to< ::rtl::OUString >(),sKey)
+                            ,::std::compose1(::std::select1st<TWeakConnectionPair>(),::std::select2nd< TWeakPair >())));
+            OSL_ENSURE( i != m_aConnections.end(), "ODriverDelegator::preCommit: they're committing a storage which I do not know!" );
+            if ( i != m_aConnections.end() )
             {
-                Reference<XConnection> xConnection(i->first,UNO_QUERY);
-                if ( xConnection.is() )
+                try
                 {
-                    Reference< XStatement> xStmt = xConnection->createStatement();
-                    OSL_ENSURE( xStmt.is(), "ODriverDelegator::preCommit: no statement!" );
-                    if ( xStmt.is() )
-                        xStmt->execute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SET WRITE_DELAY 0" ) ) );
+                    Reference<XConnection> xConnection(i->first,UNO_QUERY);
+                    if ( xConnection.is() )
+                    {
+                        Reference< XStatement> xStmt = xConnection->createStatement();
+                        OSL_ENSURE( xStmt.is(), "ODriverDelegator::preCommit: no statement!" );
+                        if ( xStmt.is() )
+                            xStmt->execute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SET WRITE_DELAY 0" ) ) );
 
-                    sal_Bool bPreviousAutoCommit = xConnection->getAutoCommit();
-                    xConnection->setAutoCommit( sal_False );
-                    xConnection->commit();
-                    xConnection->setAutoCommit( bPreviousAutoCommit );
+                        sal_Bool bPreviousAutoCommit = xConnection->getAutoCommit();
+                        xConnection->setAutoCommit( sal_False );
+                        xConnection->commit();
+                        xConnection->setAutoCommit( bPreviousAutoCommit );
 
-                    if ( xStmt.is() )
-                        xStmt->execute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SET WRITE_DELAY 60" ) ) );
+                        if ( xStmt.is() )
+                            xStmt->execute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SET WRITE_DELAY 60" ) ) );
+                    }
                 }
-            }
-            catch(Exception&)
-            {
-                OSL_ENSURE( false, "ODriverDelegator::preCommit: caught an exception!" );
+                catch(Exception&)
+                {
+                    OSL_ENSURE( false, "ODriverDelegator::preCommit: caught an exception!" );
+                }
             }
         }
     }
