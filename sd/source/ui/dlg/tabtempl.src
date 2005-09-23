@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabtempl.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:22:57 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:37:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ TabDialog TAB_TEMPLATE
             {
                 Identifier = RID_SVXPAGE_AREA ;
                 /* ### ACHTUNG: Neuer Text in Resource? Fläche : Flõche */
-                Text [ de ] = "Fläche" ;
+                Text [ de ] = "FlÃ¤che" ;
                 Text [ en-US ] = "Area" ;
                 PageResID = RID_SVXPAGE_AREA ;
                 Text [ x-comment ] = " ";
@@ -102,7 +102,7 @@ TabDialog TAB_TEMPLATE
             {
                 Identifier = RID_SVXPAGE_STD_PARAGRAPH ;
                 /* ### ACHTUNG: Neuer Text in Resource? Einzüge und Abstände : Einz³ge und Abstõnde */
-                Text [ de ] = "Einzüge und Abstände" ;
+                Text [ de ] = "EinzÃ¼ge und AbstÃ¤nde" ;
                 Text [ en-US ] = "Indents & Spacing" ;
                 PageResID = RID_SVXPAGE_STD_PARAGRAPH ;
                 Text [ x-comment ] = " ";
@@ -127,7 +127,7 @@ TabDialog TAB_TEMPLATE
             {
                 Identifier = RID_SVXPAGE_MEASURE ;
                 /* ### ACHTUNG: Neuer Text in Resource? Bemaßung : Bema˜ung */
-                Text [ de ] = "Bemaßung" ;
+                Text [ de ] = "BemaÃŸung" ;
                 Text [ en-US ] = "Dimensioning" ;
                 PageResID = RID_SVXPAGE_MEASURE ;
                 Text [ x-comment ] = " ";
@@ -186,7 +186,7 @@ TabDialog TAB_TEMPLATE
         Pos = MAP_APPFONT ( 169 , 151 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Zurück : Zur³ck */
-        Text [ de ] = "Zurück" ;
+        Text [ de ] = "ZurÃ¼ck" ;
         Text [ en-US ] = "Back" ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
