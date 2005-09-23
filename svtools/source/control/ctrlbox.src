@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:00:02 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:50:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,7 @@ String STR_SVT_COLLATE_CHARSET
 String STR_SVT_COLLATE_DICTIONARY
 {
     /* german dictionary word order / sorting */
-    Text [ de ] = "Wörterbuch" ;
+    Text [ de ] = "WÃ¶rterbuch" ;
     Text [ en-US ] = "Dictionary";
 };
 
@@ -177,7 +177,7 @@ String STR_SVT_INDEXENTRY_ALPHANUMERIC
 String STR_SVT_INDEXENTRY_DICTIONARY
 {
     /* korean dictionary indexentry algorithm */
-    Text [ de ] = "Wörterbuch" ;
+    Text [ de ] = "WÃ¶rterbuch" ;
     Text [ en-US ] = "Dictionary";
 };
 
