@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:01:42 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:03:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,9 @@
 #ifndef _COM_SUN_STAR_SDBCX_COMPAREBOOKMARK_HPP_
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 #include <algorithm>
 
@@ -121,6 +124,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::cppu;
 using namespace ::osl;
 
+DBG_NAME(ORowSetCache)
 // -------------------------------------------------------------------------
 ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                            const Reference< XSingleSelectQueryAnalyzer >& _xAnalyzer,
@@ -149,6 +153,8 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     ,m_pInsertMatrix(NULL)
     ,m_pCacheSet(NULL)
 {
+    DBG_CTOR(ORowSetCache,NULL);
+
     // check if all keys of the updateable table are fetched
     sal_Bool bAllKeysFound = sal_False;
     sal_Int32 nTablesCount = 0;
@@ -222,7 +228,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                                 Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
                                 OColumnNamePos aColumnNames(xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers() ? true : false);
                                 ::dbaccess::getColumnPositions(xSelColumns,xColumns,aUpdateTableName,aColumnNames);
-                                bAllKeysFound = sal_Int32(aColumnNames.size()) == xColumns->getElementNames().getLength();
+                                bAllKeysFound = !aColumnNames.empty() && sal_Int32(aColumnNames.size()) == xColumns->getElementNames().getLength();
                             }
                         }
                     }
@@ -377,6 +383,8 @@ ORowSetCache::~ORowSetCache()
     m_xSet          = WeakReference< XResultSet>();
     m_xMetaData     = NULL;
     m_aUpdateTable  = NULL;
+
+    DBG_DTOR(ORowSetCache,NULL);
 }
 
 // -------------------------------------------------------------------------
