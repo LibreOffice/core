@@ -4,9 +4,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:38:03 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:18:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 
 String STR_QUERY_REL_EDIT_RELATION
 {
-    Text [ de ] = "Diese Relation existiert bereits. Möchten Sie sie bearbeiten?" ;
+    Text [ de ] = "Diese Relation existiert bereits. MÃ¶chten Sie sie bearbeiten?" ;
     Text [ en-US ] = "This relation already exsits. Do you want to edit it?" ;
 };
 String STR_RELATIONDESIGN
@@ -60,14 +60,14 @@ String STR_RELATIONDESIGN
 };
 String STR_RELATIONDESIGN_NOT_AVAILABLE
 {
-    Text [ de ] = "Die Datenbank unterstützt keine Relationen!" ;
+    Text [ de ] = "Die Datenbank unterstÃ¼tzt keine Relationen!" ;
     Text [ en-US ] = "The database does not support relations." ;
 };
 QueryBox RELATION_DESIGN_SAVEMODIFIED
 {
     Buttons = WB_YES_NO_CANCEL ;
     DefButton = WB_DEF_YES ;
-    Message [ de ] = "Der Relationeneentwurf wurde geändert.\nSollen die Änderungen gespeichert werden?" ;
+    Message [ de ] = "Der Relationeneentwurf wurde geÃ¤ndert.\nSollen die Ã„nderungen gespeichert werden?" ;
     Message [ en-US ] = "The relation design has been changed.\nDo you want to save the changes?" ;
 };
 
@@ -77,7 +77,7 @@ QueryBox RELATION_DESIGN_SAVEMODIFIED
 
 String STR_QUERY_REL_DELETE_WINDOW
 {
-    Text [ de ] = "Wenn Sie diese Tabelle löschen werden alle zugehörigen Relationen ebenfalls gelöscht. Fortfahren?" ;
+    Text [ de ] = "Wenn Sie diese Tabelle lÃ¶schen werden alle zugehÃ¶rigen Relationen ebenfalls gelÃ¶scht. Fortfahren?" ;
     Text [ en-US ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
 };
 
