@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pgfnote.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:39:10 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:10:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ TabPage TP_FOOTNOTE_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 132 , 10 ) ;
-        Text [ de ] = "Hˆhe maximal wie ~Seite" ;
+        Text [ de ] = "H√∂he maximal wie ~Seite" ;
         Text [ en-US ] = "~Not larger than page area" ;
         TabStop = TRUE ;
         Group = TRUE ;
@@ -55,7 +55,7 @@ TabPage TP_FOOTNOTE_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 132 , 10 ) ;
-        Text [ de ] = "Ma~x. Hˆhe der Fuﬂnote" ;
+        Text [ de ] = "Ma~x. H√∂he der Fu√ünote" ;
         Text [ en-US ] = "Maximum footnote ~height" ;
         Text [ x-comment ] = " ";
     };
@@ -82,7 +82,7 @@ TabPage TP_FOOTNOTE_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 44 ) ;
         Size = MAP_APPFONT ( 132 , 8 ) ;
-        Text [ de ] = "~Abstand zum Textkˆrper" ;
+        Text [ de ] = "~Abstand zum Textk√∂rper" ;
         Text [ en-US ] = "Space to text" ;
         Left = TRUE ;
         Text [ x-comment ] = " ";
@@ -108,7 +108,7 @@ TabPage TP_FOOTNOTE_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Fuﬂnotenbereich" ;
+        Text [ de ] = "Fu√ünotenbereich" ;
         Text [ en-US ] = "Footnote area" ;
         Text [ x-comment ] = " ";
     };
@@ -152,7 +152,7 @@ TabPage TP_FOOTNOTE_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 89 ) ;
         Size = MAP_APPFONT ( 132 , 8 ) ;
-        Text [ de ] = "St‰r~ke" ;
+        Text [ de ] = "St√§r~ke" ;
         Group = TRUE ;
         Left = TRUE ;
         Text [ en-US ] = "~Weight" ;
@@ -172,7 +172,7 @@ TabPage TP_FOOTNOTE_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 105 ) ;
         Size = MAP_APPFONT ( 132 , 8 ) ;
-        Text [ de ] = "L‰n~ge" ;
+        Text [ de ] = "L√§n~ge" ;
         Left = TRUE ;
         Text [ en-US ] = "~Length" ;
         Text [ x-comment ] = " ";
@@ -197,7 +197,7 @@ TabPage TP_FOOTNOTE_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 121 ) ;
         Size = MAP_APPFONT ( 132 , 8 ) ;
-        Text [ de ] = "Abstan~d zum Fuﬂnoteninhalt" ;
+        Text [ de ] = "Abstan~d zum Fu√ünoteninhalt" ;
         Text [ en-US ] = "~Spacing to footnote contents" ;
         Left = TRUE ;
         Text [ x-comment ] = " ";
