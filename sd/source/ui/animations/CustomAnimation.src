@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimation.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:32:22 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:25:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,13 +101,13 @@ Menu RID_CUSTOMANIMATION_FONTSIZE_POPUP
         MenuItem
         {
             Identifier = CM_SIZE_150 ;
-            Text [ de ] = "Grˆﬂer" ;
+            Text [ de ] = "Gr√∂√üer" ;
             Text [ en-US ] = "Larger" ;
         };
         MenuItem
         {
             Identifier = CM_SIZE_400 ;
-            Text [ de ] = "Riesengroﬂ" ;
+            Text [ de ] = "Riesengro√ü" ;
             Text [ en-US ] = "Extra large" ;
         };
     };
@@ -132,13 +132,13 @@ Menu RID_CUSTOMANIMATION_SCALE_POPUP
         MenuItem
         {
             Identifier = CM_SIZE_150 ;
-            Text [ de ] = "Grˆﬂer" ;
+            Text [ de ] = "Gr√∂√üer" ;
             Text [ en-US ] = "Larger" ;
         };
         MenuItem
         {
             Identifier = CM_SIZE_400 ;
-            Text [ de ] = "Riesengroﬂ" ;
+            Text [ de ] = "Riesengro√ü" ;
             Text [ en-US ] = "Extra large" ;
         };
         MenuItem
@@ -279,7 +279,7 @@ String STR_CUSTOMANIMATION_REPEAT_NONE
 
 String STR_CUSTOMANIMATION_REPEAT_UNTIL_NEXT_CLICK
 {
-    Text [ de ] = "Bis zum n‰chsten Klick";
+    Text [ de ] = "Bis zum n√§chsten Klick";
     Text [ en-US ] = "Until next click";
 };
 
@@ -321,7 +321,7 @@ String STR_CUSTOMANIMATION_SECOND_COLOR_PROPERTY
 
 String STR_CUSTOMANIMATION_FILL_COLOR_PROPERTY
 {
-    Text [ de ] = "F¸llfarbe";
+    Text [ de ] = "F√ºllfarbe";
     Text [ en-US ] = "Fill color";
 };
 
@@ -369,7 +369,7 @@ String STR_CUSTOMANIMATION_SIZE_PROPERTY
 
 String STR_CUSTOMANIMATION_SCALE_PROPERTY
 {
-    Text [ de ] = "Grˆﬂe";
+    Text [ de ] = "Gr√∂√üe";
     Text [ en-US ] = "Size";
 };
 
@@ -453,13 +453,13 @@ String STR_CUSTOMANIMATION_GRADUAL
 
 String STR_CUSTOMANIMATION_TRIGGER
 {
-    Text [ de ] = "Auslˆser";
+    Text [ de ] = "Ausl√∂ser";
     Text [ en-US ] = "Trigger";
 };
 
 String STR_CUSTOMANIMATION_LIST_HELPTEXT
 {
-    Text [ de ] = "Erst ein Element auf dieser Folie ausw‰hlen und dann auf 'Hinzuf¸gen...' klicken, um die Animation hinzuzuf¸gen.";
+    Text [ de ] = "Erst ein Element auf dieser Folie ausw√§hlen und dann auf 'Hinzuf√ºgen...' klicken, um die Animation hinzuzuf√ºgen.";
     Text [ en-US ] = "First select the slide element and then click 'Add...' to add an animation effect.";
 };
 
