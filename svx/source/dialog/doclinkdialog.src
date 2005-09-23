@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doclinkdialog.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:01:44 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:37:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,12 +132,12 @@ ModalDialog DLG_DOCUMENTLINK
 
     String STR_EDIT_LINK
     {
-        Text [ de ] =  "Datenbankverknüpfung bearbeiten";
+        Text [ de ] =  "DatenbankverknÃ¼pfung bearbeiten";
         Text [ en-US ] = "Edit Database Link";
     };
     String STR_NEW_LINK
     {
-        Text [ de ] =  "Neue Datenbankverknüpfung anlegen";
+        Text [ de ] =  "Neue DatenbankverknÃ¼pfung anlegen";
         Text [ en-US ] = "Create Database Link";
     };
 };
@@ -150,13 +150,13 @@ String STR_LINKEDDOC_DOESNOTEXIST
 
 String STR_NAME_CONFLICT
 {
-    Text [ de ] =  "Der Name '$file$' wird bereits für eine andere Datenbank verwendet.\nBitte wählen Sie einen anderen Namen.";
+    Text [ de ] =  "Der Name '$file$' wird bereits fÃ¼r eine andere Datenbank verwendet.\nBitte wÃ¤hlen Sie einen anderen Namen.";
     Text [ en-US ] = "The name '$file$' is already used for another database.\nPlease choose a different name.";
 };
 
 QueryBox QUERY_DELETE_CONFIRM
 {
     Buttons = WB_YES_NO ;
-    Message [ de ] = "Soll der Eintrag gelöscht werden?" ;
+    Message [ de ] = "Soll der Eintrag gelÃ¶scht werden?" ;
     Message [ en-US ] = "Do you want to delete the entry?" ;
 };
