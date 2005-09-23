@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:15:24 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:27:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,6 +266,11 @@ protected:
         the controller do exist.  Test their pointers when in doubt.
     */
     virtual controller::SlideSorterController* CreateController (void);
+
+    /** This method is overloaded to handle a missing tool bar correctly.
+        This is the case when the slide sorter is not the main view shell.
+    */
+    virtual SfxUndoManager* ImpGetUndoManager (void) const;
 
 private:
     ::std::auto_ptr<TabBar> mpTabBar;
