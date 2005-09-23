@@ -4,9 +4,9 @@
  *
  *  $RCSfile: test.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:13:51 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:50:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,7 +216,7 @@ TabPage RID_SVXPAGE_POSITION
         Size = MAP_APPFONT ( 60 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Sch~Åtzen : Sch~¸tzen */
         /* ### ACHTUNG: Neuer Text in Resource? Sch~Åtzen : Sch~¸tzen */
-        Text [ de ] = "Sch~¸tzen" ;
+        Text [ de ] = "Sch~√ºtzen" ;
         Text [ en-US ] = "Pr~otect" ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -230,7 +230,7 @@ TabPage RID_SVXPAGE_SIZE
     Hide = TRUE ;
     /* ### ACHTUNG: Neuer Text in Resource? Grî·e : Grˆﬂe */
     /* ### ACHTUNG: Neuer Text in Resource? Grî·e : Grˆﬂe */
-    Text [ de ] = "Grˆﬂe" ;
+    Text [ de ] = "Gr√∂√üe" ;
     Text [ en-US ] = "Size" ;
     Size = MAP_APPFONT ( 189 , 97 ) ;
     FixedText FT_WIDTH
@@ -247,7 +247,7 @@ TabPage RID_SVXPAGE_SIZE
         Size = MAP_APPFONT ( 23 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? H~îhe : H~ˆhe */
         /* ### ACHTUNG: Neuer Text in Resource? H~îhe : H~ˆhe */
-        Text [ de ] = "H~ˆhe" ;
+        Text [ de ] = "H~√∂he" ;
         Text [ en-US ] = "H~eight" ;
         Text [ x-comment ] = " ";
     };
@@ -307,7 +307,7 @@ TabPage RID_SVXPAGE_SIZE
         Size = MAP_APPFONT ( 105 , 42 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Grî·e : Grˆﬂe */
         /* ### ACHTUNG: Neuer Text in Resource? Grî·e : Grˆﬂe */
-        Text [ de ] = "Grˆﬂe" ;
+        Text [ de ] = "Gr√∂√üe" ;
         Text [ en-US ] = "Size" ;
         Text [ x-comment ] = " ";
     };
@@ -317,7 +317,7 @@ TabPage RID_SVXPAGE_SIZE
         Size = MAP_APPFONT ( 60 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Sch~Åtzen : Sch~¸tzen */
         /* ### ACHTUNG: Neuer Text in Resource? Sch~Åtzen : Sch~¸tzen */
-        Text [ de ] = "Sch~¸tzen" ;
+        Text [ de ] = "Sch~√ºtzen" ;
         Text [ en-US ] = "Pr~otect" ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -337,7 +337,7 @@ TabPage RID_SVXPAGE_SIZE
         Size = MAP_APPFONT ( 95 , 12 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Hîh~e an Text anpassen : Hˆh~e an Text anpassen */
         /* ### ACHTUNG: Neuer Text in Resource? Hîh~e an Text anpassen : Hˆh~e an Text anpassen */
-        Text [ de ] = "Hˆh~e an Text anpassen" ;
+        Text [ de ] = "H√∂h~e an Text anpassen" ;
         Text [ en-US ] = "Fit ~height to text" ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -469,7 +469,7 @@ TabPage RID_SVXPAGE_SLANT
     Size = MAP_APPFONT ( 189 , 97 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? SchrÑgstellen / Eckenradius : Schr‰gstellen / Eckenradius */
     /* ### ACHTUNG: Neuer Text in Resource? SchrÑgstellen / Eckenradius : Schr‰gstellen / Eckenradius */
-    Text [ de ] = "Schr‰gstellen / Eckenradius" ;
+    Text [ de ] = "Schr√§gstellen / Eckenradius" ;
     Text [ en-US ] = "Slant / Corner Radius" ;
     FixedText FT_RADIUS
     {
@@ -545,7 +545,7 @@ TabPage RID_SVXPAGE_SLANT
         Size = MAP_APPFONT ( 105 , 41 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? SchrÑgstellen : Schr‰gstellen */
         /* ### ACHTUNG: Neuer Text in Resource? SchrÑgstellen : Schr‰gstellen */
-        Text [ de ] = "Schr‰gstellen" ;
+        Text [ de ] = "Schr√§gstellen" ;
         Text [ en-US ] = "Slant" ;
         Text [ x-comment ] = " ";
     };
@@ -569,7 +569,7 @@ TabDialog RID_SVXDLG_TRANSFORM
     Size = MAP_APPFONT ( 237 , 161 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Position und Grî·e : Position und Grˆﬂe */
     /* ### ACHTUNG: Neuer Text in Resource? Position und Grî·e : Position und Grˆﬂe */
-    Text [ de ] = "Position und Grˆﬂe" ;
+    Text [ de ] = "Position und Gr√∂√üe" ;
     Text [ en-US ] = "Position and Size" ;
     Moveable = TRUE ;
     TabControl TAB_CONTROL
@@ -592,7 +592,7 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Identifier = RID_SVXPAGE_SIZE ;
                 /* ### ACHTUNG: Neuer Text in Resource? Grî·e : Grˆﬂe */
                 /* ### ACHTUNG: Neuer Text in Resource? Grî·e : Grˆﬂe */
-                Text [ de ] = "Grˆﬂe" ;
+                Text [ de ] = "Gr√∂√üe" ;
                 Text [ en-US ] = "Size" ;
                 PageResID = RID_SVXPAGE_SIZE ;
                 Text [ x-comment ] = " ";
@@ -610,7 +610,7 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Identifier = RID_SVXPAGE_SLANT ;
                 /* ### ACHTUNG: Neuer Text in Resource? SchrÑgstellen / Eckenradius : Schr‰gstellen / Eckenradius */
                 /* ### ACHTUNG: Neuer Text in Resource? SchrÑgstellen / Eckenradius : Schr‰gstellen / Eckenradius */
-                Text [ de ] = "Schr‰gstellen / Eckenradius" ;
+                Text [ de ] = "Schr√§gstellen / Eckenradius" ;
                 PageResID = RID_SVXPAGE_SLANT ;
                 Text [ en-US ] = "Slant / Corner Radius" ;
                 Text [ x-comment ] = " ";
