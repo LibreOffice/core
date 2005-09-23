@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workwin.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:15:54 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:52:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,9 @@
 #ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATOR_HPP_
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGERLISTENER_HPP_
+#include <com/sun/star/frame/XLayoutManagerListener.hpp>
+#endif
 
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
@@ -79,7 +82,6 @@ class SfxInPlaceEnv_Impl;
 class SfxPlugInEnv_Impl;
 class SfxSplitWindow;
 class SfxWorkWindow;
-
 
 //====================================================================
 // Dieser struct h"alt alle relevanten Informationen "uber Toolboxen bereit.
@@ -230,6 +232,43 @@ struct SfxSplitWin_Impl
 
 //--------------------------------------------------------------------
 
+class LayoutManagerListener : public ::com::sun::star::frame::XLayoutManagerListener,
+                              public ::com::sun::star::lang::XTypeProvider,
+                              public ::com::sun::star::lang::XComponent,
+                              public ::cppu::OWeakObject
+{
+    public:
+        LayoutManagerListener( SfxWorkWindow* pWrkWin );
+        virtual ~LayoutManagerListener();
+
+        SFX_DECL_XINTERFACE_XTYPEPROVIDER
+
+        void setFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
+
+        //---------------------------------------------------------------------------------------------------------
+        //  XComponent
+        //---------------------------------------------------------------------------------------------------------
+        virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException );
+
+        //---------------------------------------------------------------------------------------------------------
+        //  XEventListener
+        //---------------------------------------------------------------------------------------------------------
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw( ::com::sun::star::uno::RuntimeException );
+
+        //---------------------------------------------------------------------------------------------------------
+        // XLayoutManagerEventListener
+        //---------------------------------------------------------------------------------------------------------
+        virtual void SAL_CALL layoutEvent( const ::com::sun::star::lang::EventObject& aSource, ::sal_Int16 eLayoutEvent, const ::com::sun::star::uno::Any& aInfo ) throw (::com::sun::star::uno::RuntimeException);
+
+    private:
+        sal_Bool                                                                m_bHasFrame;
+        SfxWorkWindow*                                                          m_pWrkWin;
+        ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XFrame > m_xFrame;
+        rtl::OUString                                                           m_aLayoutManagerPropName;
+};
+
 class SfxWorkWindow
 {
     friend class UIElementWrapper;
@@ -262,6 +301,7 @@ protected:
     rtl::OUString           m_aLayoutManagerPropName;
     rtl::OUString           m_aTbxTypeName;
     rtl::OUString           m_aProgressBarResName;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > m_xLayoutManagerListener;
 
 protected:
     void                    CreateChildWin_Impl(SfxChildWin_Impl*,BOOL);
@@ -291,6 +331,8 @@ public:
                             { bInternalDockingAllowed = bSet; }
     BOOL                    IsDockingAllowed() const
                             { return bDockingAllowed; }
+    BOOL                    IsInternalDockingAllowed() const
+                            { return bInternalDockingAllowed; }
     SfxWorkWindow*          GetParent_Impl() const
                             { return pParent; }
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >          CreateDispatch( const String& );
