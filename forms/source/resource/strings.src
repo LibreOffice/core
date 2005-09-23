@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:03:33 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:18:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ String RID_BASELISTBOX_ERROR_FILLLIST
 
 String RID_STR_IMPORT_GRAPHIC
 {
-    Text [ de ] = "Grafik einfügen" ;
+    Text [ de ] = "Grafik einfÃ¼gen" ;
     Text [ en-US ] = "Insert graphics" ;
 };
 
@@ -88,7 +88,7 @@ String RID_ERR_REFRESHING_FORM
 
 String RID_STR_ERR_INSERTRECORD
 {
-    Text [ de ] = "Fehler beim Einfügen des neuen Datensatzs";
+    Text [ de ] = "Fehler beim EinfÃ¼gen des neuen Datensatzs";
     Text [ en-US ] = "Error inserting the new record";
 };
 
@@ -100,13 +100,13 @@ String RID_STR_ERR_UPDATERECORD
 
 String RID_STR_ERR_DELETERECORD
 {
-    Text [ de ] = "Fehler beim Löschen des aktuellen Datensatzes";
+    Text [ de ] = "Fehler beim LÃ¶schen des aktuellen Datensatzes";
     Text [ en-US ] = "Error deleting the current record";
 };
 
 String RID_STR_ERR_DELETERECORDS
 {
-    Text [ de ] = "Fehler beim Löschen der angegebenen Datensätze";
+    Text [ de ] = "Fehler beim LÃ¶schen der angegebenen DatensÃ¤tze";
     Text [ en-US ] = "Error deleting the specified records";
 };
 
@@ -118,7 +118,7 @@ String RID_STR_NEED_NON_NULL_OBJECT
 
 String RID_STR_OPEN_GRAPHICS
 {
-    Text [ de ] = "Grafik einfügen aus...";
+    Text [ de ] = "Grafik einfÃ¼gen aus...";
     Text [ en-US ] = "Insert graphics from...";
 };
 
@@ -131,7 +131,7 @@ String RID_STR_CLEAR_GRAPHICS
 
 String RID_STR_INVALIDSTREAM
 {
-    Text [ de ] = "Die übergebene Stream-Komponente ist ungültig.";
+    Text [ de ] = "Die Ã¼bergebene Stream-Komponente ist ungÃ¼ltig.";
     Text [ en-US ] = "The given stream is invalid.";
 };
 
@@ -143,7 +143,7 @@ String RID_STR_SYNTAXERROR
 
 String RID_STR_INCOMPATIBLE_TYPES
 {
-    Text [ de ] = "Die von dem Binding unterstützten Typen können nicht zum Datenaustausch mit diesem Kontrollfeld benutzt werden.";
+    Text [ de ] = "Die von dem Binding unterstÃ¼tzten Typen kÃ¶nnen nicht zum Datenaustausch mit diesem Kontrollfeld benutzt werden.";
     Text [ en-US ] = "The value types supported by the binding cannot be used for exchanging data with this control.";
 };
 
@@ -155,7 +155,7 @@ String RID_STR_LABEL_RECORD
 
 String RID_STR_INVALID_VALIDATOR
 {
-    Text [ de ] = "Das Kontrollfeld hat eine Bindung an einen externen Wert, welche gleichzeitig als Validator fungiert. Diese Bindung muß gelöst werden, bevor ein neuer Validator eingesetzt werden kann.";
+    Text [ de ] = "Das Kontrollfeld hat eine Bindung an einen externen Wert, welche gleichzeitig als Validator fungiert. Diese Bindung muÃŸ gelÃ¶st werden, bevor ein neuer Validator eingesetzt werden kann.";
     Text [ en-US ] = "The control is connected to an external value binding, which at the same time acts as validator. You need to revoke the value binding, before you can set a new validator.";
 };
 
