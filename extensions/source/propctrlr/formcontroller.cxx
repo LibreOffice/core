@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:12:08 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:51:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,9 +176,6 @@
 #include <com/sun/star/awt/VisualEffect.hpp>
 #endif
 
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
-#include <connectivity/dbtools.hxx>
-#endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
@@ -798,7 +795,7 @@ class EventsNameReplace_Impl:
                 ::rtl::OUString aDatabaseName = ::comphelper::getString(xFormSet->getPropertyValue(PROPERTY_DATASOURCE));
                 sal_Int32 nObjectType = ::comphelper::getINT32(xFormSet->getPropertyValue(PROPERTY_COMMANDTYPE));
 
-                Reference< XConnection > xConnection = ensureRowsetConnection();
+                Reference< XConnection > xConnection = ensureAndGetRowsetConnection();
                 Sequence< ::rtl::OUString > aFields;
                 if ( xConnection.is() )
                     aFields = getFieldNamesByCommandDescriptor( xConnection, nObjectType, aObjectName );
@@ -826,7 +823,7 @@ class EventsNameReplace_Impl:
             Reference< XTablesSupplier >  xTables;
             try
             {
-                xTables = Reference< XTablesSupplier >( ensureRowsetConnection( ), UNO_QUERY );
+                xTables = Reference< XTablesSupplier >( ensureAndGetRowsetConnection( ), UNO_QUERY );
             }
             catch (Exception&)
             {
@@ -865,7 +862,7 @@ class EventsNameReplace_Impl:
             Reference< XQueriesSupplier >  xSupplyQueries;
             try
             {
-                xSupplyQueries = Reference< XQueriesSupplier >( ensureRowsetConnection(), UNO_QUERY );
+                xSupplyQueries = Reference< XQueriesSupplier >( ensureAndGetRowsetConnection(), UNO_QUERY );
             }
             catch (Exception&)
             {
@@ -895,33 +892,83 @@ class EventsNameReplace_Impl:
     //------------------------------------------------------------------------
     void OPropertyBrowserController::cleanupRowsetConnection()
     {
-        Reference< XComponent > xConnComp( m_xOwnedRowsetConnection, UNO_QUERY );
-        if ( xConnComp.is() )
-            xConnComp->dispose();
-        m_xOwnedRowsetConnection.clear();
+        m_xRowsetConnection.clear();
+        // will automatically dispose it, if and only if it had the ownership
     }
 
     //------------------------------------------------------------------------
-    Reference< XConnection > OPropertyBrowserController::ensureRowsetConnection()
+    Reference< XConnection > OPropertyBrowserController::ensureAndGetRowsetConnection()
     {
-        Reference< XConnection > xReturn;
+        Reference< XConnection > xConnection;
+        ensureRowsetConnection( xConnection );
+        return xConnection;
+    }
 
-        // get the row set we're working for
-        Reference< XPropertySet > xProps( getRowSet( ), UNO_QUERY );
-        if ( xProps.is() )
+    //------------------------------------------------------------------------
+    bool OPropertyBrowserController::ensureRowsetConnection()
+    {
+        Reference< XConnection > xNotInterestedIn;
+        return ensureRowsetConnection( xNotInterestedIn );
+    }
+
+    //------------------------------------------------------------------------
+    bool OPropertyBrowserController::ensureRowsetConnection( Reference< XConnection >& _rConnection )
+    {
+        _rConnection.clear();
+
+        cleanupRowsetConnection();
+
+        Reference< XRowSet > xRowSet( getRowSet() );
+        Reference< XPropertySet > xRowSetProps( xRowSet, UNO_QUERY );
+
+        // connect the row set - this is delegated to elsewhere - while observing errors
+        SQLExceptionInfo aError;
+        try
         {
-            // get it's current active connection
-            xProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xReturn;
-            // do we need to connect?
-            if ( !xReturn.is() && !::dbtools::isEmbeddedInDatabase( getRowSet(), xReturn ) && connectRowset() )
+            if ( xRowSetProps.is() )
             {
-                // get the property again
-                xProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xReturn;
+                ::std::auto_ptr< WaitObject > pWaitCursor;
+                if ( m_pView )
+                    pWaitCursor.reset( new WaitObject( m_pView ) );
+
+                m_xRowsetConnection = ::dbtools::ensureRowSetConnection( xRowSet, m_xORB, false );
             }
         }
+        catch (SQLContext& e) { aError = e; }
+        catch (SQLWarning& e) { aError = e; }
+        catch (SQLException& e) { aError = e; }
+        catch (WrappedTargetException& e ) { aError = SQLExceptionInfo( e.TargetException ); }
+        catch (Exception&) { }
 
-        // outta here
-        return xReturn;
+        // report errors, if necessary
+        if ( aError.isValid() && haveView() )
+        {
+            ::rtl::OUString sDataSourceName;
+            try
+            {
+                Reference< XPropertySet > xRSP( getRowSet(), UNO_QUERY );
+                if ( xRSP.is() )
+                    xRSP->getPropertyValue( PROPERTY_DATASOURCE ) >>= sDataSourceName;
+            }
+            catch( const Exception& )
+            {
+                DBG_ERROR( "OPropertyBrowserController::ensureRowsetConnection: caught an exception during error handling!" );
+            }
+            // additional info about what happended
+            String sInfo( ModuleRes( RID_STR_UNABLETOCONNECT ) );
+            INetURLObject aParser( sDataSourceName );
+            if ( aParser.GetProtocol() != INET_PROT_NOT_VALID )
+                sDataSourceName = aParser.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+            sInfo.SearchAndReplaceAllAscii( "$name$", sDataSourceName );
+
+            SQLContext aContext;
+            aContext.Message = sInfo;
+            aContext.NextException = aError.get();
+            showError( aContext, VCLUnoHelper::GetInterface( m_pView ), m_xORB);
+        }
+
+        xRowSetProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= _rConnection;
+        return _rConnection.is();
     }
 
     //------------------------------------------------------------------------
@@ -944,80 +991,6 @@ class EventsNameReplace_Impl:
         }
         DBG_ASSERT( xRowSet.is(), "OPropertyBrowserController::getRowSet: could not obtain the rowset for the introspectee!" );
         return xRowSet;
-    }
-
-    //------------------------------------------------------------------------
-    bool OPropertyBrowserController::connectRowset()
-    {
-        // if we have an own previous connection, dispose it
-        cleanupRowsetConnection();
-
-        SQLExceptionInfo aError;
-        try
-        {
-            // the rowset
-            Reference< XRowSet > xRowSet( getRowSet() );
-            Reference< XPropertySet > xRowSetProps( xRowSet, UNO_QUERY );
-            if (xRowSetProps.is())
-            {
-                // does the rowset already have a connection?
-                Reference< XConnection > xConnection;
-                xRowSetProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xConnection;
-
-                if ( !xConnection.is() )
-                {   // no -> calculate one
-                    if (m_pView)
-                    {
-                        WaitObject aWaitCursor(m_pView);
-                        xConnection = ::dbtools::connectRowset( xRowSet, m_xORB, sal_False );
-                    }
-                    else
-                    {
-                        xConnection = ::dbtools::connectRowset( xRowSet, m_xORB, sal_False );
-                    }
-
-                    // set on the row set
-                    xRowSetProps->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( xConnection ) );
-
-                    // remember for later disposal
-                    // (we opened the connection, thus we own it)
-                    m_xOwnedRowsetConnection = xConnection;
-                }
-            }
-        }
-        catch (SQLContext& e) { aError = e; }
-        catch (SQLWarning& e) { aError = e; }
-        catch (SQLException& e) { aError = e; }
-        catch (WrappedTargetException& e ) { aError = SQLExceptionInfo( e.TargetException ); }
-        catch (Exception&) { }
-
-        if ( aError.isValid() && haveView() )
-        {
-            ::rtl::OUString sDataSourceName;
-            try
-            {
-                Reference< XPropertySet > xRSP( getRowSet(), UNO_QUERY );
-                if ( xRSP.is() )
-                    xRSP->getPropertyValue( PROPERTY_DATASOURCE ) >>= sDataSourceName;
-            }
-            catch( const Exception& )
-            {
-                DBG_ERROR( "OPropertyBrowserController::connectRowset: caught an exception during error handling!" );
-            }
-            // additional info about what happended
-            String sInfo( ModuleRes( RID_STR_UNABLETOCONNECT ) );
-            INetURLObject aParser( sDataSourceName );
-            if ( aParser.GetProtocol() != INET_PROT_NOT_VALID )
-                sDataSourceName = aParser.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
-            sInfo.SearchAndReplaceAllAscii( "$name$", sDataSourceName );
-
-            SQLContext aContext;
-            aContext.Message = sInfo;
-            aContext.NextException = aError.get();
-            showError( aContext, VCLUnoHelper::GetInterface( m_pView ), m_xORB);
-        }
-
-        return isRowsetConnected();
     }
 
     //------------------------------------------------------------------------
@@ -1047,7 +1020,7 @@ class EventsNameReplace_Impl:
                 aProperty.sValue = GetPropertyValueStringRep( PROPERTY_COMMAND );
 
             ////////////////////////////////////////////////////////////
-            if ( _bConnect ? connectRowset() : isRowsetConnected() )
+            if ( _bConnect ? ensureRowsetConnection() : isRowsetConnected() )
             {
                 sal_Int32 nCommandType = CommandType::COMMAND;
                 GetUnoPropertyValue( PROPERTY_COMMANDTYPE ) >>= nCommandType;
@@ -3921,7 +3894,7 @@ class EventsNameReplace_Impl:
         SQLExceptionInfo aErrorInfo;
         try
         {
-            Reference< XConnection > xConnection = ensureRowsetConnection();
+            Reference< XConnection > xConnection = ensureAndGetRowsetConnection();
             if ( !xConnection.is() )
                 return;
 
@@ -4022,7 +3995,7 @@ class EventsNameReplace_Impl:
                 return;
             }
 
-            Reference< XConnection > xConnection = ensureRowsetConnection();
+            Reference< XConnection > xConnection = ensureAndGetRowsetConnection();
             if ( !xConnection.is() )
                 return;
 
