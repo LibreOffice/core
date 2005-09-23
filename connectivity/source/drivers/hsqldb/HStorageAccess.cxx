@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HStorageAccess.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:03:54 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:39:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ using namespace ::connectivity::hsqldb;
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_openStream
   (JNIEnv * env, jobject obj_this,jstring name, jstring key, jint mode)
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
     {
         OperationLogFile( env, name, "data" ).logOperation( "openStream" );
         LogFile( env, name, "data" ).create();
@@ -91,7 +91,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_o
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_close
   (JNIEnv * env, jobject obj_this,jstring name, jstring key)
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
     {
         ::rtl::OUString sKey = StorageContainer::jstring2ustring(env,key);
         ::rtl::OUString sName = StorageContainer::jstring2ustring(env,name);
@@ -108,7 +108,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_c
         {
             OSL_ENSURE( false, "NativeStorageAccess::close: caught an exception while flushing!" );
         }
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
     {
         OperationLogFile aOpLog( env, name, "data" );
         aOpLog.logOperation( "close" );
@@ -130,7 +130,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_c
 JNIEXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_getFilePointer
   (JNIEnv * env, jobject obj_this,jstring name, jstring key)
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
     OperationLogFile aOpLog( env, name, "data" );
     aOpLog.logOperation( "getFilePointer" );
 #endif
@@ -139,7 +139,7 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_
     OSL_ENSURE(pHelper.get(),"No stream helper!");
 
     jlong nReturn = pHelper.get() ? pHelper->getSeek()->getPosition() : jlong(0);
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
     aOpLog.logReturn( nReturn );
 #endif
     return nReturn;
@@ -154,7 +154,7 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_
 JNIEXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_length
   (JNIEnv * env, jobject obj_this,jstring name, jstring key)
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
     OperationLogFile aOpLog( env, name, "data" );
     aOpLog.logOperation( "length" );
 #endif
@@ -163,7 +163,7 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_
     OSL_ENSURE(pHelper.get(),"No stream helper!");
 
     jlong nReturn = pHelper.get() ? pHelper->getSeek()->getLength() :jlong(0);
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
     aOpLog.logReturn( nReturn );
 #endif
     return nReturn;
@@ -200,7 +200,7 @@ jint read_from_storage_stream( JNIEnv * env, jobject obj_this, jstring name, jst
             if (tmpInt < 0 )
                 tmpInt = 256 +tmpInt;
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
             if ( logger )
                 logger->write( tmpInt );
 #endif
@@ -220,7 +220,7 @@ jint read_from_storage_stream( JNIEnv * env, jobject obj_this, jstring name, jst
 JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_read__Ljava_lang_String_2Ljava_lang_String_2
   (JNIEnv* env, jobject obj_this, jstring name, jstring key)
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
     OperationLogFile aOpLog( env, name, "data" );
     aOpLog.logOperation( "read" );
 
@@ -235,7 +235,7 @@ JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_r
 
 jint read_from_storage_stream_into_buffer( JNIEnv * env, jobject obj_this,jstring name, jstring key, jbyteArray buffer, jint off, jint len, DataLogFile* logger )
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
     {
         ::rtl::OUString sKey = StorageContainer::jstring2ustring(env,key);
         ::rtl::OUString sName = StorageContainer::jstring2ustring(env,name);
@@ -271,7 +271,7 @@ jint read_from_storage_stream_into_buffer( JNIEnv * env, jobject obj_this,jstrin
             return -1;
         env->SetByteArrayRegion(buffer,off,nBytesRead,&aData[0]);
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
         if ( logger )
             logger->write( aData.getConstArray(), nBytesRead );
 #endif
@@ -292,7 +292,7 @@ jint read_from_storage_stream_into_buffer( JNIEnv * env, jobject obj_this,jstrin
 JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_read__Ljava_lang_String_2Ljava_lang_String_2_3BII
   (JNIEnv * env, jobject obj_this,jstring name, jstring key, jbyteArray buffer, jint off, jint len)
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
     OperationLogFile aOpLog( env, name, "data" );
     aOpLog.logOperation( "read( byte[], int, int )" );
 
@@ -313,7 +313,7 @@ JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_r
 JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_readInt
   (JNIEnv * env, jobject obj_this,jstring name, jstring key)
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
     OperationLogFile aOpLog( env, name, "data" );
     aOpLog.logOperation( "readInt" );
 #endif
@@ -358,7 +358,7 @@ JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_r
             return -1;
         }
         jint nRet = ((ch[0] << 24) + (ch[1] << 16) + (ch[2] << 8) + (ch[3] << 0));
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
         DataLogFile aDataLog( env, name, "data" );
         aDataLog.write( nRet );
 
@@ -381,7 +381,7 @@ JNIEXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_r
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_seek
   (JNIEnv * env, jobject obj_this,jstring name, jstring key, jlong position)
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
     OperationLogFile aOpLog( env, name, "data" );
     aOpLog.logOperation( "seek", position );
 #endif
@@ -392,7 +392,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_s
     OSL_ENSURE(xSeek.is(),"No Seekable stream!");
     if ( xSeek.is() )
     {
-    #if OSL_DEBUG_LEVEL > 1
+    #ifdef HSQLDB_DBG
         DataLogFile aDataLog( env, name, "data" );
     #endif
 
@@ -400,7 +400,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_s
         if ( nLen < position)
         {
             static ::sal_Int64 BUFFER_SIZE = 9192;
-        #if OSL_DEBUG_LEVEL > 1
+        #ifdef HSQLDB_DBG
             aDataLog.seek( nLen );
         #endif
             xSeek->seek(nLen);
@@ -424,7 +424,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_s
                 Sequence< ::sal_Int8 > aData(n);
                 memset(aData.getArray(),0,n);
                 xOut->writeBytes(aData);
-            #if OSL_DEBUG_LEVEL > 1
+            #ifdef HSQLDB_DBG
                 aDataLog.write( aData.getConstArray(), n );
             #endif
             }
@@ -432,7 +432,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_s
         xSeek->seek(position);
         OSL_ENSURE(xSeek->getPosition() == position,"Wrong position after seeking the stream");
 
-    #if OSL_DEBUG_LEVEL > 1
+    #ifdef HSQLDB_DBG
         aDataLog.seek( position );
         OSL_ENSURE( xSeek->getPosition() == aDataLog.tell(), "Wrong position after seeking the stream" );
     #endif
@@ -451,7 +451,7 @@ void write_to_storage_stream_from_buffer( JNIEnv* env, jobject obj_this, jstring
         if ( xOut.is() )
         {
             jbyte *buf = env->GetByteArrayElements(buffer,NULL);
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
             OSL_ENSURE(len <= env->GetArrayLength(buffer),"Length is greater than the buffer!");
 #endif
 
@@ -466,7 +466,7 @@ void write_to_storage_stream_from_buffer( JNIEnv* env, jobject obj_this, jstring
                 Sequence< ::sal_Int8 > aData(buf + off,len);
                 xOut->writeBytes(aData);
                 env->ReleaseByteArrayElements(buffer, buf, JNI_ABORT);
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
                 if ( logger )
                     logger->write( aData.getConstArray(), len );
 #endif
@@ -496,7 +496,7 @@ void write_to_storage_stream_from_buffer( JNIEnv* env, jobject obj_this, jstring
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_write
   (JNIEnv * env, jobject obj_this,jstring name, jstring key, jbyteArray buffer, jint off, jint len)
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
     OperationLogFile aOpLog( env, name, "data" );
     aOpLog.logOperation( "write( byte[], int, int )" );
 
@@ -524,7 +524,7 @@ void write_to_storage_stream( JNIEnv* env, jobject obj_this, jstring name, jstri
             oneByte[3] = (sal_Int8) ((v >>  0) & 0xFF);
 
             xOut->writeBytes(oneByte);
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
             if ( logger )
                 logger->write( oneByte.getConstArray(), 4 );
 #endif
@@ -553,7 +553,7 @@ void write_to_storage_stream( JNIEnv* env, jobject obj_this, jstring name, jstri
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAccess_writeInt
   (JNIEnv * env, jobject obj_this,jstring name, jstring key, jint v)
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
     OperationLogFile aOpLog( env, name, "data" );
     aOpLog.logOperation( "writeInt" );
 
