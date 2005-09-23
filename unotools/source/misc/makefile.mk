@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 09:47:29 $
+#   last change: $Author: hr $ $Date: 2005-09-23 12:55:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,8 @@ UNOTYPES+= com.sun.star.util.XAtomServer
 SLOFILES=	$(SLO)$/atom.obj \
             $(SLO)$/datetime.obj \
             $(SLO)$/eventlisteneradapter.obj \
-            $(SLO)$/desktopterminationobserver.obj
+            $(SLO)$/desktopterminationobserver.obj \
+            $(SLO)$/sharedunocomponent.obj
 
 # --- Targets ----------------------------------
 
