@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeDatabaseDocument.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:19:38 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:54:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,9 @@
 
 #ifndef __com_sun_star_sdb_XOfficeDatabaseDocument_idl__
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.idl>
+#endif
+#ifndef __com_sun_star_util_XCloseable_idl__
+#include <com/sun/star/util/XCloseable.idl>
 #endif
 
 module com {  module sun {  module star {  module sdb {
@@ -79,6 +82,21 @@ service OfficeDatabaseDocument
     service com::sun::star::document::OfficeDocument;
 
     interface XOfficeDatabaseDocument;
+
+    /** implements life time control
+
+        <p>Whoever retrieves a <type>OfficeDatabaseDocument</type> should be aware of
+        life time issues, since a document needs to be closed when nobody needs it anymore.</p>
+
+        <p>This implies that clients of a document need to ensure that as soon as they don't
+        need, they invoke <member scope="com::sun::star::util">XCloseable::close</member>.</p>
+
+        <p>Since this can be done by multiple clients, every client is additionally required
+        to register itself as <type scope="com::sun::star::util">XCloseListener</type> at
+        the document, to prevent some other client closing the model while it's still needed
+        by the first client.</p>
+    */
+    interface com::sun::star::util::XCloseable;
 };
 
 //=============================================================================
