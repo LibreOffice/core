@@ -4,9 +4,9 @@
  *
  *  $RCSfile: string3d.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:43:08 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:53:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ String RID_SVX_3D_UNDO_EXCHANGE_PASTE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Objekt(e) einfügen : Objekt(e) einf³gen */
     /* ### ACHTUNG: Neuer Text in Resource? Objekt(e) einfügen : Objekt(e) einf³gen */
-    Text [ de ] = "Objekt(e) einfügen" ;
+    Text [ de ] = "Objekt(e) einfÃ¼gen" ;
     Text [ en-US ] = "Insert object(s)" ;
     Text [ x-comment ] = " ";
 };
@@ -91,7 +91,7 @@ String RID_SVX_3D_UNDO_LATHE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Rotationskörper erstellen : Rotationsk÷rper erstellen */
     /* ### ACHTUNG: Neuer Text in Resource? Rotationskörper erstellen : Rotationsk÷rper erstellen */
-    Text [ de ] = "Rotationskörper erstellen" ;
+    Text [ de ] = "RotationskÃ¶rper erstellen" ;
     Text [ en-US ] = "Create rotation object" ;
     Text [ x-comment ] = " ";
 };
