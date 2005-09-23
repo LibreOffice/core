@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datanavi.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:49:14 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:54:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,21 +56,21 @@ TabPage RID_SVX_XFORMS_TABPAGES
             {
                 Identifier = TBI_ITEM_ADD ;
                 HelpId = HID_XFORMS_TOOLBOX_ITEM_ADD ;
-                Text [ de ] = "Objekt hinzufügen" ;
+                Text [ de ] = "Objekt hinzufÃ¼gen" ;
                 Text [ en-US ] = "Add Item" ;
             };
             ToolBoxItem
             {
                 Identifier = TBI_ITEM_ADD_ELEMENT ;
                 HelpId = HID_XFORMS_TOOLBOX_ITEM_ADD_ELEMENT ;
-                Text [ de ] = "Element hinzufügen" ;
+                Text [ de ] = "Element hinzufÃ¼gen" ;
                 Text [ en-US ] = "Add Element" ;
             };
             ToolBoxItem
             {
                 Identifier = TBI_ITEM_ADD_ATTRIBUTE ;
                 HelpId = HID_XFORMS_TOOLBOX_ITEM_ADD_ATTRIBUTE ;
-                Text [ de ] = "Attribute hinzufügen" ;
+                Text [ de ] = "Attribute hinzufÃ¼gen" ;
                 Text [ en-US ] = "Add Attribute" ;
             };
             ToolBoxItem
@@ -88,7 +88,7 @@ TabPage RID_SVX_XFORMS_TABPAGES
             {
                 Identifier = TBI_ITEM_REMOVE ;
                 HelpId = HID_XFORMS_TOOLBOX_ITEM_REMOVE ;
-                Text [ de ] = "Löschen" ;
+                Text [ de ] = "LÃ¶schen" ;
                 Text [ en-US ] = "Delete" ;
             };
         };
@@ -159,7 +159,7 @@ Window RID_SVXWIN_DATANAVIGATOR
                 {
                     Identifier = MID_MODELS_ADD ;
                     HelpId = HID_MN_XFORMS_MODELS_ADD ;
-                    Text [ de ] = "~Hinzufügen..." ;
+                    Text [ de ] = "~HinzufÃ¼gen..." ;
                     Text [ en-US ] = "~Add..." ;
                 };
                 MenuItem
@@ -221,7 +221,7 @@ Window RID_SVXWIN_DATANAVIGATOR
                 {
                     Identifier = MID_INSTANCES_ADD ;
                     HelpId = HID_MN_XFORMS_INSTANCES_ADD ;
-                    Text [ de ] = "~Hinzufügen..." ;
+                    Text [ de ] = "~HinzufÃ¼gen..." ;
                     Text [ en-US ] = "~Add..." ;
                 };
                 MenuItem
@@ -283,7 +283,7 @@ QueryBox RID_QRY_REMOVE_MODEL
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message [ de ] = "Das Löschen des Modells '$MODELNAME' wirkt  sich auf alle Kontrollfelder aus, die mit diesem verbunden sind.\nMöchten Sie das Modell wirklich löschen?" ;
+    Message [ de ] = "Das LÃ¶schen des Modells '$MODELNAME' wirkt  sich auf alle Kontrollfelder aus, die mit diesem verbunden sind.\nMÃ¶chten Sie das Modell wirklich lÃ¶schen?" ;
     Message [ en-US ] = "Deleting the model '$MODELNAME' affects all controls currently bound to this model.\nDo you really want to delete this model?" ;
 };
 
@@ -291,7 +291,7 @@ QueryBox RID_QRY_REMOVE_INSTANCE
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message [ de ] = "Das Löschen der Instanz '$INSTANCENAME' wirkt sich auf alle Kontrollfelder aus, die mit dieser Instanz verbunden sind.\nMöchten Sie die Instanz wirklich löschen?" ;
+    Message [ de ] = "Das LÃ¶schen der Instanz '$INSTANCENAME' wirkt sich auf alle Kontrollfelder aus, die mit dieser Instanz verbunden sind.\nMÃ¶chten Sie die Instanz wirklich lÃ¶schen?" ;
     Message [ en-US ] = "Deleting the instance '$INSTANCENAME' affects all controls currently bound to this instance.\nDo you really want to delete this instance?" ;
 };
 
@@ -299,7 +299,7 @@ QueryBox RID_QRY_REMOVE_ELEMENT
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message [ de ] = "Das Löschen des Elements '$ELEMENTNAME' wirkt sich auf alle Kontrollfelder aus, die mit mit diesem verbunden sind.\nMöchten Sie das Element wirklich löschen?" ;
+    Message [ de ] = "Das LÃ¶schen des Elements '$ELEMENTNAME' wirkt sich auf alle Kontrollfelder aus, die mit mit diesem verbunden sind.\nMÃ¶chten Sie das Element wirklich lÃ¶schen?" ;
     Message [ en-US ] = "Deleting the element '$ELEMENTNAME' affects all controls currently bound to this element.\nDo you really want to delete this element?" ;
 };
 
@@ -307,7 +307,7 @@ QueryBox RID_QRY_REMOVE_ATTRIBUTE
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message [ de ] = "Möchten Sie das Attribut '$ATTRIBUTENAME' wirklich löschen?" ;
+    Message [ de ] = "MÃ¶chten Sie das Attribut '$ATTRIBUTENAME' wirklich lÃ¶schen?" ;
     Message [ en-US ] = "Do you really want to delete the attribute '$ATTRIBUTENAME'?" ;
 };
 
@@ -315,7 +315,7 @@ QueryBox RID_QRY_REMOVE_SUBMISSION
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message [ de ] = "Das Löschen der Submission '$SUBMISSIONNAME' wirkt sich auf alle Kontrollfelder aus, die damit verbunden sind.\n\nMöchten Sie die Submission wirklich löschen?" ;
+    Message [ de ] = "Das LÃ¶schen der Submission '$SUBMISSIONNAME' wirkt sich auf alle Kontrollfelder aus, die damit verbunden sind.\n\nMÃ¶chten Sie die Submission wirklich lÃ¶schen?" ;
     Message [ en-US ] = "Deleting the submission '$SUBMISSIONNAME' affects all controls currently bound to this submission.\n\nDo you really want to delete this submission?" ;
 };
 
@@ -323,14 +323,14 @@ QueryBox RID_QRY_REMOVE_BINDING
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message [ de ] = "Das Löschen der Binding '$BINDINGNAME' wirkt sich auf alle Kontrollfelder aus, die damit verbunden sind.\n\nMöchten Sie die Binding wirklich löschen?" ;
+    Message [ de ] = "Das LÃ¶schen der Binding '$BINDINGNAME' wirkt sich auf alle Kontrollfelder aus, die damit verbunden sind.\n\nMÃ¶chten Sie die Binding wirklich lÃ¶schen?" ;
     Message [ en-US ] = "Deleting the binding '$BINDINGNAME' affects all controls currently bound to this binding.\n\nDo you really want to delete this binding?" ;
 };
 
 MessBox RID_QRY_LINK_WARNING
 {
     Buttons = 0 ;
-    Message [ de ] = "Diese Instanz ist mit dem Formular verknüpft.\n\nÄnderungen an dieser Instanz gehen nach dem Neuladen des Formulars verloren.\n\nWie möchten Sie fortfahren?" ;
+    Message [ de ] = "Diese Instanz ist mit dem Formular verknÃ¼pft.\n\nÃ„nderungen an dieser Instanz gehen nach dem Neuladen des Formulars verloren.\n\nWie mÃ¶chten Sie fortfahren?" ;
     Message [ en-US ] = "This instance is linked with the form.\n\nThe changes you make to this instance will be lost when the form is reloaded.\n\nHow do you want to proceed?" ;
 };
 
@@ -344,7 +344,7 @@ ErrorBox RID_ERR_INVALID_XMLNAME
 ErrorBox RID_ERR_INVALID_XMLPREFIX
 {
     Buttons = WB_OK ;
-    Message [ de ] = "Der angegebene Präfix '%1' ist nicht XML konform. Bitte geben Sie einen anderen Präfix ein." ;
+    Message [ de ] = "Der angegebene PrÃ¤fix '%1' ist nicht XML konform. Bitte geben Sie einen anderen PrÃ¤fix ein." ;
     Message [ en-US ] = "The prefix '%1' is not valid in XML. Please enter a different prefix." ;
 };
 
@@ -487,7 +487,7 @@ ModalDialog RID_SVXDLG_ADD_DATAITEM
         Pos = MAP_APPFONT ( 6 , 123 ) ;
         Size = MAP_APPFONT ( 69 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Schreibgeschützt" ;
+        Text [ de ] = "~SchreibgeschÃ¼tzt" ;
         Text [ en-US ] = "Read-~only" ;
     };
     PushButton PB_READONLY
@@ -568,7 +568,7 @@ Menu RID_MENU_DATANAVIGATOR
         {
             Identifier = MID_INSERT_CONTROL ;
             HelpId = HID_XFORMS_MID_INSERT_CONTROL ;
-            Text [ de ] = "Kontrollfeld einfügen" ;
+            Text [ de ] = "Kontrollfeld einfÃ¼gen" ;
             Text [ en-US ] = "Insert Control" ;
         };
         MenuItem
@@ -579,21 +579,21 @@ Menu RID_MENU_DATANAVIGATOR
         {
             Identifier = TBI_ITEM_ADD ;
             HelpId = HID_XFORMS_TOOLBOX_ITEM_ADD ;
-            Text [ de ] = "Objekt hinzufügen" ;
+            Text [ de ] = "Objekt hinzufÃ¼gen" ;
             Text [ en-US ] = "Add Item" ;
         };
         MenuItem
         {
             Identifier = TBI_ITEM_ADD_ELEMENT ;
             HelpId = HID_XFORMS_TOOLBOX_ITEM_ADD_ELEMENT ;
-            Text [ de ] = "Element hinzufügen" ;
+            Text [ de ] = "Element hinzufÃ¼gen" ;
             Text [ en-US ] = "Add Element" ;
         };
         MenuItem
         {
             Identifier = TBI_ITEM_ADD_ATTRIBUTE ;
             HelpId = HID_XFORMS_TOOLBOX_ITEM_ADD_ATTRIBUTE ;
-            Text [ de ] = "Attribute hinzufügen" ;
+            Text [ de ] = "Attribute hinzufÃ¼gen" ;
             Text [ en-US ] = "Add Attribute" ;
         };
         MenuItem
@@ -611,7 +611,7 @@ Menu RID_MENU_DATANAVIGATOR
         {
             Identifier = TBI_ITEM_REMOVE ;
             HelpId = HID_XFORMS_TOOLBOX_ITEM_REMOVE ;
-            Text [ de ] = "Löschen" ;
+            Text [ de ] = "LÃ¶schen" ;
             Text [ en-US ] = "Delete" ;
         };
     };
@@ -623,7 +623,7 @@ ModalDialog RID_SVXDLG_ADD_CONDITION
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 210 , 150 ) ;
-    Text [ de ] = "Bedingung hinzufügen" ;
+    Text [ de ] = "Bedingung hinzufÃ¼gen" ;
     Text [ en-US ] = "Add Condition" ;
     Moveable = TRUE ;
     FixedText FT_CONDITION
@@ -665,7 +665,7 @@ ModalDialog RID_SVXDLG_ADD_CONDITION
         Pos = MAP_APPFONT ( 132 , 102 ) ;
         Size = MAP_APPFONT ( 72 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Namensräume bearbeiten..." ;
+        Text [ de ] = "~NamensrÃ¤ume bearbeiten..." ;
         Text [ en-US ] = "~Edit Namespaces..." ;
     };
     FixedLine FL_DATANAV_BTN
@@ -700,7 +700,7 @@ ModalDialog RID_SVXDLG_NAMESPACE_ITEM
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 240 , 120 ) ;
-    Text [ de ] = "Namensräume für Formulare" ;
+    Text [ de ] = "NamensrÃ¤ume fÃ¼r Formulare" ;
     Text [ en-US ] = "Namespaces for Forms" ;
     Moveable = TRUE ;
     FixedText FT_NAMESPACES
@@ -708,7 +708,7 @@ ModalDialog RID_SVXDLG_NAMESPACE_ITEM
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 228 , 8 ) ;
         LeftLabel = TRUE ;
-        Text [ de ] = "~Namensräume" ;
+        Text [ de ] = "~NamensrÃ¤ume" ;
         Text [ en-US ] = "~Namespaces" ;
     };
     Control LB_NAMESPACES
@@ -724,7 +724,7 @@ ModalDialog RID_SVXDLG_NAMESPACE_ITEM
         Pos = MAP_APPFONT ( 184 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Hinzufügen..." ;
+        Text [ de ] = "~HinzufÃ¼gen..." ;
         Text [ en-US ] = "~Add..." ;
     };
     PushButton PB_EDIT_NAMESPACE
@@ -740,7 +740,7 @@ ModalDialog RID_SVXDLG_NAMESPACE_ITEM
         Pos = MAP_APPFONT ( 184 , 48 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Löschen" ;
+        Text [ de ] = "~LÃ¶schen" ;
         Text [ en-US ] = "~Delete" ;
     };
     FixedLine FL_DATANAV_BTN
@@ -769,7 +769,7 @@ ModalDialog RID_SVXDLG_NAMESPACE_ITEM
     };
     String STR_HEADER_PREFIX
     {
-        Text [ de ] = "Präfix" ;
+        Text [ de ] = "PrÃ¤fix" ;
         Text [ en-US ] = "Prefix" ;
     };
     String STR_HEADER_URL
@@ -785,7 +785,7 @@ ModalDialog RID_SVXDLG_MANAGE_NAMESPACE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 210 , 60 ) ;
-    Text [ de ] = "Namensraum hinzufügen" ;
+    Text [ de ] = "Namensraum hinzufÃ¼gen" ;
     Text [ en-US ] = "Add Namespace" ;
     Moveable = TRUE ;
     FixedText FT_PREFIX
@@ -793,7 +793,7 @@ ModalDialog RID_SVXDLG_MANAGE_NAMESPACE
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 45 , 8 ) ;
         LeftLabel = TRUE ;
-        Text [ de ] = "~Präfix" ;
+        Text [ de ] = "~PrÃ¤fix" ;
         Text [ en-US ] = "~Prefix" ;
     };
     Edit ED_PREFIX
@@ -853,7 +853,7 @@ ModalDialog RID_SVXDLG_ADD_SUBMISSION
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 180 , 136 ) ;
-    Text [ de ] = "Submission hinzufügen" ;
+    Text [ de ] = "Submission hinzufÃ¼gen" ;
     Text [ en-US ] = "Add Submission" ;
     Moveable = TRUE ;
     FixedLine FL_SUBMISSION
@@ -1021,7 +1021,7 @@ ModalDialog RID_SVXDLG_ADD_MODEL
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 180 , 60 ) ;
-    Text [ de ] = "Modell hinzufügen" ;
+    Text [ de ] = "Modell hinzufÃ¼gen" ;
     Text [ en-US ] = "Add Model" ;
     Moveable = TRUE ;
     FixedLine FL_INSTANCE
@@ -1082,7 +1082,7 @@ ModalDialog RID_SVXDLG_ADD_INSTANCE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 210 , 88 ) ;
-    Text [ de ] = "Instanz hinzufügen" ;
+    Text [ de ] = "Instanz hinzufÃ¼gen" ;
     Text [ en-US ] = "Add Instance" ;
     Moveable = TRUE ;
     FixedLine FL_INSTANCE
@@ -1133,7 +1133,7 @@ ModalDialog RID_SVXDLG_ADD_INSTANCE
         Pos = MAP_APPFONT ( 6 , 44 ) ;
         Size = MAP_APPFONT ( 198 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Instanz verknüpfen" ;
+        Text [ de ] = "~Instanz verknÃ¼pfen" ;
         Text [ en-US ] = "~Link instance" ;
     };
     FixedLine FL_DATANAV_BTN
@@ -1204,7 +1204,7 @@ String RID_STR_DATANAV_SUBM_REPLACE
 };
 String RID_STR_DATANAV_ADD_ELEMENT
 {
-    Text [ de ] = "Element hinzufügen" ;
+    Text [ de ] = "Element hinzufÃ¼gen" ;
     Text [ en-US ] = "Add Element" ;
 };
 String RID_STR_DATANAV_EDIT_ELEMENT
@@ -1214,12 +1214,12 @@ String RID_STR_DATANAV_EDIT_ELEMENT
 };
 String RID_STR_DATANAV_REMOVE_ELEMENT
 {
-    Text [ de ] = "Element löschen" ;
+    Text [ de ] = "Element lÃ¶schen" ;
     Text [ en-US ] = "Delete Element" ;
 };
 String RID_STR_DATANAV_ADD_ATTRIBUTE
 {
-    Text [ de ] = "Attribut hinzufügen" ;
+    Text [ de ] = "Attribut hinzufÃ¼gen" ;
     Text [ en-US ] = "Add Attribute" ;
 };
 String RID_STR_DATANAV_EDIT_ATTRIBUTE
@@ -1229,12 +1229,12 @@ String RID_STR_DATANAV_EDIT_ATTRIBUTE
 };
 String RID_STR_DATANAV_REMOVE_ATTRIBUTE
 {
-    Text [ de ] = "Attribut löschen" ;
+    Text [ de ] = "Attribut lÃ¶schen" ;
     Text [ en-US ] = "Delete Attribute" ;
 };
 String RID_STR_DATANAV_ADD_BINDING
 {
-    Text [ de ] = "Bindung hinzufügen" ;
+    Text [ de ] = "Bindung hinzufÃ¼gen" ;
     Text [ en-US ] = "Add Binding" ;
 };
 String RID_STR_DATANAV_EDIT_BINDING
@@ -1244,12 +1244,12 @@ String RID_STR_DATANAV_EDIT_BINDING
 };
 String RID_STR_DATANAV_REMOVE_BINDING
 {
-    Text [ de ] = "Bindung löschen" ;
+    Text [ de ] = "Bindung lÃ¶schen" ;
     Text [ en-US ] = "Delete Binding" ;
 };
 String RID_STR_DATANAV_ADD_SUBMISSION
 {
-    Text [ de ] = "Submission hinzufügen" ;
+    Text [ de ] = "Submission hinzufÃ¼gen" ;
     Text [ en-US ] = "Add Submission" ;
 };
 String RID_STR_DATANAV_EDIT_SUBMISSION
@@ -1259,7 +1259,7 @@ String RID_STR_DATANAV_EDIT_SUBMISSION
 };
 String RID_STR_DATANAV_REMOVE_SUBMISSION
 {
-    Text [ de ] = "Submission löschen" ;
+    Text [ de ] = "Submission lÃ¶schen" ;
     Text [ en-US ] = "Delete Submission" ;
 };
 String RID_STR_DATANAV_LINKWARN_BUTTON
