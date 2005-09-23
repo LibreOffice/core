@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crnrdlg.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:24:52 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:05:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Pos = MAP_APPFONT ( 20 , 121 ) ;
         Size = MAP_APPFONT ( 171 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "enthält ~Spaltenbeschriftungen" ;
+        Text [ de ] = "enthÃ¤lt ~Spaltenbeschriftungen" ;
         Text [ en-US ] = "Contains ~column labels" ;
     };
     RadioButton BTN_ROWHEAD
@@ -88,14 +88,14 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Pos = MAP_APPFONT ( 20 , 135 ) ;
         Size = MAP_APPFONT ( 171 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "enthält ~Zeilenbeschriftungen" ;
+        Text [ de ] = "enthÃ¤lt ~Zeilenbeschriftungen" ;
         Text [ en-US ] = "Contains ~row labels" ;
     };
     FixedText FT_DATA_LABEL
     {
         Pos = MAP_APPFONT ( 12 , 151 ) ;
         Size = MAP_APPFONT ( 179 , 8 ) ;
-        Text [ de ] = "für ~Datenbereich" ;
+        Text [ de ] = "fÃ¼r ~Datenbereich" ;
         Text [ en-US ] = "For ~data range" ;
         Text [ x-comment ] = " ";
     };
@@ -131,7 +131,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     {
         Pos = MAP_APPFONT ( 200 , 104 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Hinzu~fügen" ;
+        Text [ de ] = "Hinzu~fÃ¼gen" ;
         Text [ en-US ] = "~Add" ;
         TabStop = TRUE ;
         DefButton = TRUE ;
@@ -141,7 +141,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     {
         Pos = MAP_APPFONT ( 200 , 122 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Löschen" ;
+        Text [ de ] = "~LÃ¶schen" ;
         Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
