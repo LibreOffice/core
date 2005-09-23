@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabwin.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:03:14 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:00:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,13 +211,15 @@ void FmFieldWinListBox::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
         // no drag without a field
         return;
 
+    ::svx::ODataAccessDescriptor aDescriptor;
+    aDescriptor[ daDataSource ] <<= pTabWin->GetDatabaseName();
+    aDescriptor[ daConnection ] <<= pTabWin->GetConnection().getTyped();
+    aDescriptor[ daCommand ]    <<= pTabWin->GetObjectName();
+    aDescriptor[ daCommandType ]<<= pTabWin->GetObjectType();
+    aDescriptor[ daColumnName ] <<= ::rtl::OUString( GetEntryText( pSelected ) );
+
     TransferableHelper* pTransferColumn = new OColumnTransferable(
-        pTabWin->GetDatabaseName(),
-        ::rtl::OUString(),
-        pTabWin->GetObjectType(),
-        pTabWin->GetObjectName(),
-        GetEntryText( pSelected),
-        CTF_FIELD_DESCRIPTOR | CTF_CONTROL_EXCHANGE
+        aDescriptor, CTF_FIELD_DESCRIPTOR | CTF_CONTROL_EXCHANGE | CTF_COLUMN_DESCRIPTOR
     );
     Reference< XTransferable> xEnsureDelete = pTransferColumn;
     if (pTransferColumn)
@@ -298,6 +300,8 @@ sal_Bool FmFieldWin::createSelectionControls( )
         // build a descriptor for the currently selected field
         ODataAccessDescriptor aDescr;
         aDescr.setDataSource(GetDatabaseName());
+
+        aDescr[ daConnection ]  <<= GetConnection().getTyped();
 
         aDescr[ daCommand ]     <<= GetObjectName();
         aDescr[ daCommandType ] <<= GetObjectType();
@@ -400,12 +404,18 @@ sal_Bool FmFieldWin::Update(const ::com::sun::star::uno::Reference< ::com::sun::
 
         // get the connection of the form
         OStaticDataAccessTools aTools;
-        Reference< XConnection > xConnection = aTools.connectRowset(
-            Reference< XRowSet >( xForm, UNO_QUERY ), ::comphelper::getProcessServiceFactory(), sal_True );
-        Sequence< ::rtl::OUString> aFieldNames;
+        m_aConnection.reset(
+            aTools.connectRowset( Reference< XRowSet >( xForm, UNO_QUERY ), ::comphelper::getProcessServiceFactory(), sal_True ),
+            SharedConnection::NoTakeOwnership
+        );
+        // TODO: When incompatible changes (such as extending the "virtualdbtools" interface by ensureRowSetConnection)
+        // are allowed, again, we should change this: dbtools should consistently use SharedConnection all over
+        // the place, and connectRowset should be replaced with ensureRowSetConnection
+
         // get the fields of the object
-        if ( xConnection.is() && m_aObjectName.getLength() )
-            aFieldNames = getFieldNamesByCommandDescriptor( xConnection, m_nObjectType, m_aObjectName );
+        Sequence< ::rtl::OUString> aFieldNames;
+        if ( m_aConnection.is() && m_aObjectName.getLength() )
+            aFieldNames = getFieldNamesByCommandDescriptor( m_aConnection, m_nObjectType, m_aObjectName );
 
         // put them into the list
         const ::rtl::OUString* pFieldNames = aFieldNames.getConstArray();
@@ -451,7 +461,7 @@ sal_Bool FmFieldWin::Update(const ::com::sun::star::uno::Reference< ::com::sun::
     }
     catch( const Exception& )
     {
-        DBG_ERROR( "FmTabWin::Update: caught an excepiton!" );
+        DBG_ERROR( "FmTabWin::Update: caught an exception!" );
     }
 
     return sal_True;
