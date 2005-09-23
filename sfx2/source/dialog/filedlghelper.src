@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlghelper.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:18:31 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:24:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,13 +56,13 @@ String STR_SFX_EXPLORERFILE_EXPORT
 
 String STR_SFX_EXPLORERFILE_INSERT
 {
-    Text [ de ] = "Einfügen" ;
+    Text [ de ] = "EinfÃ¼gen" ;
     Text [ en-US ] = "Insert" ;
 };
 
 String STR_SFX_EXPLORERFILE_BUTTONINSERT
 {
-    Text [ de ] = "~Einfügen" ;
+    Text [ de ] = "~EinfÃ¼gen" ;
     Text [ en-US ] = "~Insert" ;
 };
 
@@ -88,7 +88,7 @@ String STR_CB_SELECTION
 
 String STR_CB_INSERT_AS_LINK
 {
-    Text [ de ] = "~Verknüpfen" ;
+    Text [ de ] = "~VerknÃ¼pfen" ;
     Text [ en-US ] = "~Link" ;
     Text [ x-comment ] = " ";
 };
@@ -132,7 +132,7 @@ String STR_PB_STOP
 
 String STR_PB_OPEN
 {
-    Text [ de ] = "Ö~ffnen" ;
+    Text [ de ] = "Ã–~ffnen" ;
     Text [ en-US ] = "~Open" ;
 };
 
