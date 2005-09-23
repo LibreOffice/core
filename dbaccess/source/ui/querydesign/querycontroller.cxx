@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:33:27 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:44:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -748,32 +748,36 @@ void OQueryController::impl_initialize( const Sequence< Any >& aArguments )
     OJoinController::impl_initialize(aArguments);
 
     PropertyValue aValue;
-    const Any* pBegin   = aArguments.getConstArray();
-    const Any* pEnd     = pBegin + aArguments.getLength();
+    const Any* pIter    = aArguments.getConstArray();
+    const Any* pEnd     = pIter + aArguments.getLength();
 
-    for(;pBegin != pEnd;++pBegin)
+    for(;pIter != pEnd;++pIter)
     {
-        if (!(*pBegin >>= aValue))
-            continue;
+        if (!(*pIter >>= aValue))
+            throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid type in argument list. PropertyValue expected.")),*this);
 
         if (0 == aValue.Name.compareToAscii(PROPERTY_ACTIVECONNECTION))
         {
             Reference< XConnection > xConn;
-            aValue.Value >>= xConn;
+            if ( !(aValue.Value >>= xConn) )
+                throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for ActiveConnection.")),*this);
             if ( xConn.is() )
                 initializeConnection( xConn );
         }
         else if(0 == aValue.Name.compareToAscii(PROPERTY_CURRENTQUERY))
         {
-            aValue.Value >>= m_sName;
+            if ( !(aValue.Value >>= m_sName) )
+                throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for CurrentQuery.")),*this);
         }
         else if(0 == aValue.Name.compareToAscii(PROPERTY_QUERYDESIGNVIEW))
         {
-            m_bDesign = ::cppu::any2bool(aValue.Value);
+            if ( !(aValue.Value >>= m_bDesign) )
+                throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for QueryDesignView.")),*this);
         }
         else if(0 == aValue.Name.compareToAscii(PROPERTY_CREATEVIEW))
         {
-            m_bCreateView = ::cppu::any2bool(aValue.Value);
+            if ( !(aValue.Value >>= m_bCreateView) )
+                throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for CreateView.")),*this);
         }
         else if ( 0 == aValue.Name.compareToAscii( PARAM_INDEPENDENT_SQL_COMMAND ) )
         {
@@ -781,7 +785,8 @@ void OQueryController::impl_initialize( const Sequence< Any >& aArguments )
             m_bEsacpeProcessing = sal_True;
 
             ::rtl::OUString sNewStatement;
-            aValue.Value >>= sNewStatement;
+            if ( !(aValue.Value >>= sNewStatement) )
+                throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for IndependentSQLCommand.")),*this);
             setStatement_fireEvent( sNewStatement );
         }
     }
@@ -915,7 +920,7 @@ void OQueryController::setQueryComposer()
     {
         Reference< XSQLQueryComposerFactory >  xFactory(getConnection(), UNO_QUERY);
         OSL_ENSURE(xFactory.is(),"Connection doesn't support a querycomposer");
-        if (xFactory.is())
+        if ( xFactory.is() && getContainer() )
         {
             try
             {
