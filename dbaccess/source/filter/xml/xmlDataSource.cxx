@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlDataSource.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:02:13 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:09:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,18 +68,24 @@
 #ifndef DBACCESS_SHARED_XMLSTRINGS_HRC
 #include "xmlstrings.hrc"
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 namespace dbaxml
 {
     using namespace ::rtl;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xml::sax;
+DBG_NAME(OXMLDataSource)
 
 OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
                 sal_uInt16 nPrfx, const OUString& _sLocalName,
                 const Reference< XAttributeList > & _xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
 {
+    DBG_CTOR(OXMLDataSource,NULL);
+
     OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
     const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
     const SvXMLTokenMap& rTokenMap = rImport.GetDataSourceElemTokenMap();
@@ -194,6 +200,8 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
 
 OXMLDataSource::~OXMLDataSource()
 {
+
+    DBG_DTOR(OXMLDataSource,NULL);
 }
 // -----------------------------------------------------------------------------
 
