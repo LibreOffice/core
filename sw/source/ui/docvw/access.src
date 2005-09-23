@@ -4,9 +4,9 @@
  *
  *  $RCSfile: access.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:20:08 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:00:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ String STR_ACCESS_DOC_DESC
 };
 String STR_ACCESS_HEADING_WITH_NUM_DESC
 {
-    Text [ de ] = "‹berschrift Nummer $(ARG2): $(ARG1)" ;
+    Text [ de ] = "√úberschrift Nummer $(ARG2): $(ARG1)" ;
     Text [ en-US ] = "Heading number $(ARG2): $(ARG1)";
 };
 String STR_ACCESS_HEADER_NAME
@@ -62,22 +62,22 @@ String STR_ACCESS_HEADER_DESC
 };
 String STR_ACCESS_FOOTER_NAME
 {
-    Text [ de ] = "Fuﬂzeile $(ARG1)" ;
+    Text [ de ] = "Fu√üzeile $(ARG1)" ;
     Text [ en-US ] = "Footer $(ARG1)";
 };
 String STR_ACCESS_FOOTER_DESC
 {
-    Text [ de ] = "Fuﬂzeile Seite $(ARG1)" ;
+    Text [ de ] = "Fu√üzeile Seite $(ARG1)" ;
     Text [ en-US ] = "Footer page $(ARG1)";
 };
 String STR_ACCESS_FOOTNOTE_NAME
 {
-    Text [ de ] = "Fuﬂnote $(ARG1)" ;
+    Text [ de ] = "Fu√ünote $(ARG1)" ;
     Text [ en-US ] = "Footnote $(ARG1)";
 };
 String STR_ACCESS_FOOTNOTE_DESC
 {
-    Text [ de ] = "Fuﬂnote $(ARG1)" ;
+    Text [ de ] = "Fu√ünote $(ARG1)" ;
     Text [ en-US ] = "Footnote $(ARG1)";
 };
 String STR_ACCESS_ENDNOTE_NAME
