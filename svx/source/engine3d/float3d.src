@@ -4,9 +4,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:39:01 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:53:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,7 +199,7 @@ DockingWindow RID_SVXFLOAT_3D
     {
         Pos = MAP_APPFONT ( 9 + BUTTON_WIDTH + 1 , 200 - BUTTON_HEIGHT ) ;
         Size = IMG_BUTTON_SIZE;
-        QuickHelpText [ de ] = "Umwandeln in Rotationskörper" ;
+        QuickHelpText [ de ] = "Umwandeln in RotationskÃ¶rper" ;
         TabStop = TRUE ;
         ButtonImage = Image
         {
@@ -422,7 +422,7 @@ DockingWindow RID_SVXFLOAT_3D
     {
         Pos = MAP_APPFONT ( FT_INDENT + (1+BUTTON_WIDTH) * 2 , NORMALS_BT_START_Y ) ;
         Size = IMG_BUTTON_SIZE;
-        QuickHelpText [ de ] = "Kugelförmig" ;
+        QuickHelpText [ de ] = "KugelfÃ¶rmig" ;
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "normsphe.bmp" ; };
@@ -587,7 +587,7 @@ DockingWindow RID_SVXFLOAT_3D
     {
         Pos = MAP_APPFONT ( FT_INDENT , CAMERA_START_Y + 11 + FT_OFFSET_NEXT ) ;
         Size = MAP_APPFONT ( FT_WIDTH_LONG , FT_HEIGHT ) ;
-        Text [ de ] = "~Entfernung" ;
+        Text [ de ] = "~Brennweite" ;
         Text [ de ] = "~Brennweite" ;
         Text [ en-US ] = "~Focal length" ;
     };
@@ -796,7 +796,7 @@ DockingWindow RID_SVXFLOAT_3D
     {
         Pos = MAP_APPFONT ( 137 , FIRST_FT_START_Y + 11 ) ;
         Size = MAP_APPFONT ( 12 , 14 ) ;
-        QuickHelpText [ de ] = "Farbe über Farbdialog wählen" ;
+        QuickHelpText [ de ] = "Farbe Ã¼ber Farbdialog wÃ¤hlen" ;
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "colordlg.bmp" ; };
@@ -824,7 +824,7 @@ DockingWindow RID_SVXFLOAT_3D
     {
         Pos = MAP_APPFONT ( 137 , FIRST_FT_START_Y + 53 ) ;
         Size = MAP_APPFONT ( 12 , 14 ) ;
-        QuickHelpText [ de ] = "Farbe über Farbdialog wählen" ;
+        QuickHelpText [ de ] = "Farbe Ã¼ber Farbdialog wÃ¤hlen" ;
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "colordlg.bmp" ; };
@@ -854,7 +854,7 @@ DockingWindow RID_SVXFLOAT_3D
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1,
                             FIRST_FT_START_Y - 2 ) ;
         Size = IMG_BUTTON_SIZE;
-        QuickHelpText [ de ] = "Schwarzweiß" ;
+        QuickHelpText [ de ] = "SchwarzweiÃŸ" ;
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "luminanc.bmp" ; };
@@ -966,7 +966,7 @@ DockingWindow RID_SVXFLOAT_3D
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 + 2*BUTTON_WIDTH,
                             FIRST_FT_START_Y + 2*IMG_BUTTON_NEXT - 2 ) ;
         Size = IMG_BUTTON_SIZE;
-        QuickHelpText [ de ] = "Kreisförmig" ;
+        QuickHelpText [ de ] = "KreisfÃ¶rmig" ;
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "sphere3d.bmp" ; };
@@ -1015,7 +1015,7 @@ DockingWindow RID_SVXFLOAT_3D
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 + 2*BUTTON_WIDTH,
                             FIRST_FT_START_Y + 3*IMG_BUTTON_NEXT - 2 ) ;
         Size = IMG_BUTTON_SIZE;
-        QuickHelpText [ de ] = "Kreisförmig" ;
+        QuickHelpText [ de ] = "KreisfÃ¶rmig" ;
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "sphere3d.bmp" ; };
@@ -1128,7 +1128,7 @@ DockingWindow RID_SVXFLOAT_3D
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 72 ,
                             FIRST_FT_START_Y + FT_OFFSET_NEXT - 2 ) ;
         Size = MAP_APPFONT ( 12, 14 ) ;
-        QuickHelpText [ de ] = "Farbe über Farbdialog wählen" ;
+        QuickHelpText [ de ] = "Farbe Ã¼ber Farbdialog wÃ¤hlen" ;
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "colordlg.bmp" ; };
@@ -1158,7 +1158,7 @@ DockingWindow RID_SVXFLOAT_3D
         Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 72 ,
                             FIRST_FT_START_Y + 2*FT_OFFSET_NEXT - 2 ) ;
         Size = MAP_APPFONT ( 12, 14 ) ;
-        QuickHelpText [ de ] = "Farbe über Farbdialog wählen" ;
+        QuickHelpText [ de ] = "Farbe Ã¼ber Farbdialog wÃ¤hlen" ;
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "colordlg.bmp" ; };
@@ -1194,7 +1194,7 @@ DockingWindow RID_SVXFLOAT_3D
     {
         Pos = MAP_APPFONT ( 137 , SPECULAR_START_Y + 13 - 2 ) ;
         Size = MAP_APPFONT ( 12, 14 ) ;
-        QuickHelpText [ de ] = "Farbe über Farbdialog wählen" ;
+        QuickHelpText [ de ] = "Farbe Ã¼ber Farbdialog wÃ¤hlen" ;
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "colordlg.bmp" ; };
@@ -1207,7 +1207,7 @@ DockingWindow RID_SVXFLOAT_3D
     {
         Pos = MAP_APPFONT ( FT_INDENT , SPECULAR_START_Y + 13 + FT_OFFSET_NEXT ) ;
         Size = MAP_APPFONT ( FT_WIDTH_SHORT , FT_HEIGHT ) ;
-        Text [ de ] = "~Intensität" ;
+        Text [ de ] = "~IntensitÃ¤t" ;
         Text [ en-US ] = "I~ntensity" ;
     };
     MetricField MTR_MAT_SPECULAR_INTENSITY
