@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediatyp.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:28:18 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:55:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 //
 //  Internet Media Type Presentations
 //
-// $Author: rt $ $Date: 2005-09-08 16:28:18 $ $Revision: 1.3 $
+// $Author: hr $ $Date: 2005-09-23 14:55:18 $ $Revision: 1.4 $
 //============================================================================
 
 #ifndef _SVTOOLS_HRC
@@ -45,7 +45,7 @@
 
 String STR_SVT_MIMETYPE_APP_OCTSTREAM
 {
-    Text [ de ] = "Bin‰rdatei" ;
+    Text [ de ] = "Bin√§rdatei" ;
     Text [ en-US ] = "Binary file" ;
     Text [ x-comment ] = " ";
 };
@@ -241,14 +241,14 @@ String STR_SVT_MIMETYPE_X_VRML
 
 String STR_SVT_MIMETYPE_APP_STARIMPRESS
 {
-    Text [ de ] = "%PRODUCTNAME Pr‰sentation" ;
+    Text [ de ] = "%PRODUCTNAME Pr√§sentation" ;
     Text [ en-US ] = "%PRODUCTNAME Presentation" ;
     Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_APP_IMPRESSPACKED
 {
-    Text [ de ] = "%PRODUCTNAME Pr‰sentation (gepackt)" ;
+    Text [ de ] = "%PRODUCTNAME Pr√§sentation (gepackt)" ;
     Text [ en-US ] = "%PRODUCTNAME Presentation (packed)";
 };
 
@@ -367,7 +367,7 @@ String STR_SVT_MIMETYPE_CNT_FTPFILE
 
 String STR_SVT_MIMETYPE_CNT_FTPLINK
 {
-    Text [ de ] = "FTP-Verkn¸pfung" ;
+    Text [ de ] = "FTP-Verkn√ºpfung" ;
     Text [ en-US ] = "FTP Link" ;
     Text [ x-comment ] = " ";
 };
@@ -402,7 +402,7 @@ String STR_SVT_MIMETYPE_CNT_FSYSFILE
 
 String STR_SVT_MIMETYPE_CNT_FSYSURLFILE
 {
-    Text [ de ] = "Verkn¸pfung" ;
+    Text [ de ] = "Verkn√ºpfung" ;
     Text [ en-US ] = "Link" ;
     Text [ x-comment ] = " ";
 };
@@ -472,7 +472,7 @@ String STR_SVT_MIMETYPE_CNT_TRASHBOX
 
 String STR_SVT_MIMETYPE_CNT_TRASH
 {
-    Text [ de ] = "Gelˆschtes Objekt" ;
+    Text [ de ] = "Gel√∂schtes Objekt" ;
     Text [ en-US ] = "Deleted Object" ;
     Text [ x-comment ] = " ";
 };
@@ -769,7 +769,7 @@ String STR_SVT_MIMETYPE_APP_SXWRITER
 
 String STR_SVT_MIMETYPE_APP_SXIMPRESS
 {
-    Text [ de ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Pr‰sentation" ;
+    Text [ de ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Pr√§sentation" ;
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Presentation" ;
 };
 
@@ -781,7 +781,7 @@ String STR_SVT_MIMETYPE_APP_SXGLOBAL
 
 String STR_SVT_MIMETYPE_APP_SXIPACKED
 {
-    Text [ de ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Pr‰sentation (gepackt)" ;
+    Text [ de ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Pr√§sentation (gepackt)" ;
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Presentation (packed)" ;
 };
 
