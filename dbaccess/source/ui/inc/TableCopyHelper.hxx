@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableCopyHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:35:46 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:33:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,9 @@
 
 #ifndef DBAUI_APPELEMENTTYPE_HXX
 #include "AppElementType.hxx"
+#endif
+#ifndef _DBAUI_COMMON_TYPES_HXX_
+#include "commontypes.hxx"
 #endif
 #ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
 #include <svx/dataaccessdescriptor.hxx>
@@ -120,7 +123,7 @@ namespace dbaui
         */
         void pasteTable( const TransferableDataHelper& _rTransData
                         ,const ::rtl::OUString& _sDestDataSourceName
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
+                        ,const SharedConnection& _xConnection);
 
         /** pastes a table into the data source
             @param  _nFormatId
@@ -133,7 +136,7 @@ namespace dbaui
         void pasteTable( SotFormatStringId _nFormatId
                         ,const TransferableDataHelper& _rTransData
                         ,const ::rtl::OUString& _sDestDataSourceName
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
+                        ,const SharedConnection& _xConnection);
 
         /** pastes a table into the data source
             @param  _rPasteData
@@ -143,7 +146,7 @@ namespace dbaui
         */
         void pasteTable( ::svx::ODataAccessDescriptor& _rPasteData
                         ,const ::rtl::OUString& _sDestDataSourceName
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xDestConnection);
+                        ,const SharedConnection& _xDestConnection);
 
         /** insert a table into the data source. The source can eihter be a table or a query
             @param  _nCommandType
@@ -181,9 +184,9 @@ namespace dbaui
             @param  _xConnection
                 The connection
         */
-        sal_Bool copyTagTable(  DropDescriptor& _rDesc
-                                , sal_Bool _bCheck
-                                ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
+        sal_Bool copyTagTable(  DropDescriptor& _rDesc,
+                                sal_Bool _bCheck,
+                                const SharedConnection& _xConnection);
 
         /** copies a table which was constructed by tags like HTML or RTF
             @param  _rDesc
@@ -195,7 +198,7 @@ namespace dbaui
         */
         void asyncCopyTagTable(  DropDescriptor& _rDesc
                                 ,const ::rtl::OUString& _sDestDataSourceName
-                                ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
+                                ,const SharedConnection& _xConnection);
 
         /** copies a table which was constructed by tags like HTML or RTF
             @param  _aDroppedData
@@ -205,9 +208,9 @@ namespace dbaui
             @param  _xConnection
                 The connection
         */
-        sal_Bool copyTagTable(const TransferableDataHelper& _aDroppedData
-                              ,DropDescriptor& _rAsyncDrop
-                              ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
+        sal_Bool copyTagTable(const TransferableDataHelper& _aDroppedData,
+                              DropDescriptor& _rAsyncDrop,
+                              const SharedConnection& _xConnection);
 
         /// returns <TRUE/> if the clipboard supports a table format, otherwise <FALSE/>.
         sal_Bool isTableFormat(const TransferableDataHelper& _rClipboard) const;
