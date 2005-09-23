@@ -4,9 +4,9 @@
  *
  *  $RCSfile: selectdbtabledialog.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:08:50 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:58:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ ModalDialog DLG_MM_SELECTDBTABLEDDIALOG
     Size = MAP_APPFONT ( 250 , 135 ) ;
     Moveable = TRUE ;
 
-    Text [ de ] = "Tabelle ausw‰hlen";
+    Text [ de ] = "Tabelle ausw√§hlen";
     Text [ en-US ] = "Select Table";
 
     FixedText       FI_SELECT
@@ -53,7 +53,7 @@ ModalDialog DLG_MM_SELECTDBTABLEDDIALOG
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 238 , 24 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "Die von Ihnen gew‰hlte Datei beinhaltet mehrere Tabellen. Bitte w‰hlen Sie die Tabelle mit der Adressenliste, die Sie verwenden mˆchten.";
+        Text [ de ] = "Die von Ihnen gew√§hlte Datei beinhaltet mehrere Tabellen. Bitte w√§hlen Sie die Tabelle mit der Adressenliste, die Sie verwenden m√∂chten.";
         Text [ en-US ] = "The file you have selected contains more than one table. Please select the table containing the address list you want to use.";
     };
     Control LB_TABLE
