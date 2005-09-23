@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optdict.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:51:32 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:58:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ ModalDialog RID_SFXDLG_NEWDICT
     Moveable = TRUE ;
     /* ### ACHTUNG: Neuer Text in Resource? Benutzerwörterbuch anlegen : Benutzerw÷rterbuch anlegen */
     /* ### ACHTUNG: Neuer Text in Resource? Benutzerwörterbuch anlegen : Benutzerw÷rterbuch anlegen */
-    Text [ de ] = "Benutzerwörterbuch anlegen" ;
+    Text [ de ] = "BenutzerwÃ¶rterbuch anlegen" ;
     Text [ en-US ] = "New Dictionary" ;
     Text [ x-comment ] = " ";
     FixedText FT_DICTNAME
@@ -98,7 +98,7 @@ ModalDialog RID_SFXDLG_NEWDICT
         Size = MAP_APPFONT ( 145 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Wörterbuch : W÷rterbuch */
         /* ### ACHTUNG: Neuer Text in Resource? Wörterbuch : W÷rterbuch */
-        Text [ de ] = "Wörterbuch" ;
+        Text [ de ] = "WÃ¶rterbuch" ;
         Text [ en-US ] = "Dictionary" ;
         Text [ x-comment ] = " ";
     };
@@ -131,7 +131,7 @@ ModalDialog RID_SFXDLG_EDITDICT
 
     /* ### ACHTUNG: Neuer Text in Resource? Benutzerwörterbuch bearbeiten : Benutzerw÷rterbuch bearbeiten */
     /* ### ACHTUNG: Neuer Text in Resource? Benutzerwörterbuch bearbeiten : Benutzerw÷rterbuch bearbeiten */
-    Text [ de ] = "Benutzerwörterbuch bearbeiten" ;
+    Text [ de ] = "BenutzerwÃ¶rterbuch bearbeiten" ;
     Text [ en-US ] = "Edit Custom Dictionary" ;
 
     Moveable = TRUE ;
@@ -218,7 +218,7 @@ ModalDialog RID_SFXDLG_EDITDICT
     {
         Pos = MAP_APPFONT ( 209 , 71 ) ;
         Size = MAP_APPFONT ( 55 , 12 ) ;
-        Text [ de ] = "~Löschen" ;
+        Text [ de ] = "~LÃ¶schen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Delete" ;
         Text [ x-comment ] = " ";
@@ -253,7 +253,7 @@ ModalDialog RID_SFXDLG_EDITDICT
 
         /* ### ACHTUNG: Neuer Text in Resource? ~Schließen : ~Schlie˜en */
         /* ### ACHTUNG: Neuer Text in Resource? ~Schließen : ~Schlie˜en */
-        Text [ de ] = "~Schließen" ;
+        Text [ de ] = "~SchlieÃŸen" ;
         Text [ en-US ] = "~Close" ;
         Text [ x-comment ] = " ";
     };
@@ -276,7 +276,7 @@ QueryBox RID_SFXQB_SET_LANGUAGE
     /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie die Sprache des Wörterbuches '%1' ändern? : Möchten Sie die Sprache des Wörterbuches ''%1'' ändern? */
     /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie die Sprache des Wörterbuches '%1' ändern? : M÷chten Sie die Sprache des W÷rterbuches '%1' õndern? */
     /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie die Sprache des Wörterbuches '%1' ändern? : M÷chten Sie die Sprache des W÷rterbuches '%1' õndern? */
-    Message [ de ] = "Möchten Sie die Sprache des Wörterbuches '%1' ändern?" ;
+    Message [ de ] = "MÃ¶chten Sie die Sprache des WÃ¶rterbuches '%1' Ã¤ndern?" ;
     Message [ en-US ] = "Do you want to change the '%1' dictionary language?" ;
     Message [ x-comment ] = " ";
 };
