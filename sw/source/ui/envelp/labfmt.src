@@ -4,9 +4,9 @@
  *
  *  $RCSfile: labfmt.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:29:36 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:01:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,7 +130,7 @@ TabPage TP_LAB_FMT
     {
         Pos = MAP_APPFONT ( 6 , 67 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "H~öhe" ;
+        Text [ de ] = "H~Ã¶he" ;
         Text [ en-US ] = "~Height" ;
         Left = TRUE ;
         Text [ x-comment ] = " ";
@@ -267,7 +267,7 @@ String STR_WIDTH
 };
 String STR_HEIGHT
 {
-    Text [ de ] = "Höhe" ;
+    Text [ de ] = "HÃ¶he" ;
     Text [ en-US ] = "Height" ;
     Text [ x-comment ] = " ";
 };
@@ -367,7 +367,7 @@ ModalDialog DLG_SAVE_LABEL
     {
         Buttons = WB_YES_NO ;
         DefButton = WB_DEF_CANCEL ;
-        Message [ de ] = "Das Etikett \"%1 / %2\" ist bereits vorhanden.\nMöchten Sie die Daten überschreiben?" ;
+        Message [ de ] = "Das Etikett \"%1 / %2\" ist bereits vorhanden.\nMÃ¶chten Sie die Daten Ã¼berschreiben?" ;
         Message [ en-US ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?";
     };
     Text [ en-US ] = "Save Label Format";
