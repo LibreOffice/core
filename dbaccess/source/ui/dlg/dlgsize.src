@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgsize.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:02:13 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:14:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
  // JN
  //
  // Letzte Aenderung:
- // $Author: rt $ $Date: 2005-09-08 15:02:13 $ $Revision: 1.29 $
+ // $Author: hr $ $Date: 2005-09-23 14:14:44 $ $Revision: 1.30 $
  //
  //---------------------------------------------------------------------------
 
@@ -60,14 +60,14 @@ ModalDialog DLG_ROWHEIGHT
     SVLook = TRUE ;
     HelpId = HID_DLG_ROWHEIGHT ;
     Size = MAP_APPFONT ( 159 , 59 ) ;
-    Text [ de ] = "Zeilenhöhe" ;
+    Text [ de ] = "ZeilenhÃ¶he" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     FixedText FT_VALUE
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 23 , 10 ) ;
-        Text [ de ] = "H~öhe" ;
+        Text [ de ] = "H~Ã¶he" ;
         Text [ en-US ] = "~Height" ;
     };
     MetricField MF_VALUE
