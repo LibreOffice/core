@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stbctrls.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:19:50 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:01:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ String RID_SVXSTR_INSERT_TEXT
 String RID_SVXSTR_OVERWRITE_TEXT
 {
      // '"Uberschreiben' bzw. 'Overwrite' abgek"urzt auf h"ochstens 5 Zeichen
-    Text [ de ] = "ÜBER" ;
+    Text [ de ] = "ÃœBER" ;
     Text [ en-US ] = "OVER" ;
     Text [ x-comment ] = " ";
 };
