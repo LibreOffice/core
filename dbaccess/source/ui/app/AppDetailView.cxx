@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailView.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:20:42 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:16:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -481,7 +481,7 @@ void OTasksWindow::Clear()
 // class OApplicationDetailView
 //==================================================================
 DBG_NAME(OApplicationDetailView)
-OApplicationDetailView::OApplicationDetailView(OAppBorderWindow* _pParent) : OSplitterView(_pParent,sal_False )
+OApplicationDetailView::OApplicationDetailView(OAppBorderWindow* _pParent,PreviewMode _ePreviewMode) : OSplitterView(_pParent,sal_False )
     ,m_aHorzSplitter(this)
     ,m_aTasks(this,STR_TASKS,WB_BORDER | WB_DIALOGCONTROL )
     ,m_aContainer(this,0,WB_BORDER | WB_DIALOGCONTROL )
@@ -491,7 +491,7 @@ OApplicationDetailView::OApplicationDetailView(OAppBorderWindow* _pParent) : OSp
     SetUniqueId(UID_APP_DETAIL_VIEW);
     ImplInitSettings( sal_True, sal_True, sal_True );
 
-    m_pControlHelper = new OAppDetailPageHelper(&m_aContainer,_pParent);
+    m_pControlHelper = new OAppDetailPageHelper(&m_aContainer,_pParent,_ePreviewMode);
     m_pControlHelper->Show();
     m_aContainer.setChildWindow(m_pControlHelper);
 
