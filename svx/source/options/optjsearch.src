@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optjsearch.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:53:25 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:59:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     SVLook = TRUE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text [ de ] = "Suchoptionen f¸r Japanisch" ;
+    Text [ de ] = "Suchoptionen f√ºr Japanisch" ;
     FixedLine FL_TREAT_AS_EQUAL
     {
         Pos = MAP_APPFONT( 6, 3 );
@@ -58,7 +58,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text [ de ] = "~Groﬂ-/Kleinschreibung" ;
+        Text [ de ] = "~Gro√ü-/Kleinschreibung" ;
         Text [ en-US ] = "~uppercase/lowercase";
         Text [ x-comment ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
@@ -178,7 +178,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     {
         Pos = MAP_APPFONT ( 136 , 112 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text [ de ] = "Verl~‰ngerte Vokale (ka-/kaa)" ;
+        Text [ de ] = "Verl~√§ngerte Vokale (ka-/kaa)" ;
         Text [ en-US ] = "Prolon~ged vowels (ka-/kaa)";
     };
     FixedLine FL_IGNORE
