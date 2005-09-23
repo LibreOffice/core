@@ -4,9 +4,9 @@
  *
  *  $RCSfile: analysis_funcnames.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:19:28 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:07:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,7 +150,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
 
     String ANALYSIS_FUNCNAME_Pricemat
     {
-        Text [ de ] = "KURSFÄLLIG";
+        Text [ de ] = "KURSFÃ„LLIG";
         Text [ en-US ] = "PRICEMAT";
     };
 
@@ -192,13 +192,13 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
 
     String ANALYSIS_FUNCNAME_Yieldmat
     {
-        Text [ de ] = "RENDITEFÄLL";
+        Text [ de ] = "RENDITEFÃ„LL";
         Text [ en-US ] = "YIELDMAT";
     };
 
     String ANALYSIS_FUNCNAME_Tbilleq
     {
-        Text [ de ] = "TBILLÄQUIV";
+        Text [ de ] = "TBILLÃ„QUIV";
         Text [ en-US ] = "TBILLEQ";
     };
 
@@ -468,7 +468,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
 
     String ANALYSIS_FUNCNAME_Imaginary
     {
-        Text [ de ] = "IMAGINÄRTEIL";
+        Text [ de ] = "IMAGINÃ„RTEIL";
         Text [ en-US ] = "IMAGINARY";
     };
 
@@ -594,7 +594,7 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
 
     String ANALYSIS_FUNCNAME_Factdouble
     {
-        Text [ de ] = "ZWEIFAKULTÄT";
+        Text [ de ] = "ZWEIFAKULTÃ„T";
         Text [ en-US ] = "FACTDOUBLE";
     };
 
