@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlg2.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:13:36 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:51:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #include <filedlg2.hrc>
 String STR_FILEDLG_SELECT
 {
-    Text [ de ] = "Verzeichnis auswählen" ;
+    Text [ de ] = "Verzeichnis auswÃ¤hlen" ;
     Text [ en-US ] = "Select Directory" ;
     Text [ x-comment ] = " ";
 };
@@ -48,7 +48,7 @@ String STR_FILEDLG_CANTCHDIR
 };
 String STR_FILEDLG_OPEN
 {
-    Text [ de ] = "Öffnen" ;
+    Text [ de ] = "Ã–ffnen" ;
     Text [ en-US ] = "Open" ;
     Text [ x-comment ] = " ";
 };
@@ -72,25 +72,25 @@ String STR_FILEDLG_TYPE
 };
 String STR_FILEDLG_CANTOPENFILE
 {
-    Text [ de ] = "Kann Datei nicht öffnen" ;
+    Text [ de ] = "Kann Datei nicht Ã¶ffnen" ;
     Text [ en-US ] = "Can't open file" ;
     Text [ x-comment ] = " ";
 };
 String STR_FILEDLG_CANTOPENDIR
 {
-    Text [ de ] = "Kann Verzeichnis nicht öffnen" ;
+    Text [ de ] = "Kann Verzeichnis nicht Ã¶ffnen" ;
     Text [ en-US ] = "Can't open directory" ;
     Text [ x-comment ] = " ";
 };
 String STR_FILEDLG_OVERWRITE
 {
-    Text [ de ] = "Datei existiert. \nDatei überschreiben?" ;
+    Text [ de ] = "Datei existiert. \nDatei Ã¼berschreiben?" ;
     Text [ en-US ] = "This file already exists. \nOverwrite ?" ;
     Text [ x-comment ] = " ";
 };
 String STR_FILEDLG_GOUP
 {
-    Text [ de ] = "Eine Ebene höher" ;
+    Text [ de ] = "Eine Ebene hÃ¶her" ;
     Text [ en-US ] = "Up One Level" ;
     Text [ x-comment ] = " ";
 };
