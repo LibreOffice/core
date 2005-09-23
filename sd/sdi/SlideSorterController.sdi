@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterController.sdi,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:04:24 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:26:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,11 +143,6 @@ interface SlideSorterView : Object
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
-    SID_ATTR_ZOOM // ole : no, status : ?
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetStatusBarState ;
-    ]
     SID_HIDE_SLIDE // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
@@ -158,47 +153,12 @@ interface SlideSorterView : Object
         ExecMethod = FuPermanent ;
         StateMethod = GetMenuState ;
     ]
-    SID_ZOOM_NEXT // ole : no, status : play rec
-    [
-        ExecMethod = FuSupport ;
-        StateMethod = GetMenuState ;
-    ]
-    SID_ZOOM_PREV // ole : no, status : play rec
-    [
-        ExecMethod = FuSupport ;
-        StateMethod = GetMenuState ;
-    ]
     SID_ZOOM_TOOLBOX // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
-    SID_ZOOM_OUT // ole : no, status : play rec
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
-    SID_ZOOM_IN // ole : no, status : play rec
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
-    SID_SIZE_REAL // ole : no, status : play rec
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
     SID_SIZE_VISAREA // ole : no, status : no
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
-    SID_SIZE_PAGE // ole : no, status : play rec
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
-    SID_SIZE_ALL // ole : no, status : play rec
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
