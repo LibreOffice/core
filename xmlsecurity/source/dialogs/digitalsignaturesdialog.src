@@ -4,9 +4,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:11:42 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:11:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,7 @@ ModalDialog RID_XMLSECDLG_DIGSIG
         Pos = MAP_APPFONT( DS_COL_0, DS_ROW_2A );
         Size = MAP_APPFONT( DS_COL_7-DS_COL_0, RSC_CD_FIXEDTEXT_HEIGHT );
         Hide = TRUE;
-        Text [ de ] = "Die Signaturen in diesem Dokument sind gültig.";
+        Text [ de ] = "Die Signaturen in diesem Dokument sind gÃ¼ltig.";
         Text [ en-US ] = "The signatures in this document are valid";
     };
     FixedImage IMG_STATE_BROKEN
@@ -118,7 +118,7 @@ ModalDialog RID_XMLSECDLG_DIGSIG
         Pos = MAP_APPFONT( DS_COL_0, DS_ROW_2A );
         Size = MAP_APPFONT( DS_COL_7-DS_COL_0, RSC_CD_FIXEDTEXT_HEIGHT );
         Hide = TRUE;
-        Text [ de ] = "Die Signaturen in diesem Dokument sind ungültig.";
+        Text [ de ] = "Die Signaturen in diesem Dokument sind ungÃ¼ltig.";
         Text [ en-US ] = "The signatures in this document are invalid";
     };
     PushButton BTN_VIEWCERT
@@ -132,7 +132,7 @@ ModalDialog RID_XMLSECDLG_DIGSIG
     {
         Pos = MAP_APPFONT( DS_COL_3, DS_ROW_3 );
         Size = MAP_APPFONT( DS_COL_4-DS_COL_3, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text [ de ] = "Hinzufügen...";
+        Text [ de ] = "HinzufÃ¼gen...";
         Text [ en-US ] = "Add...";
     };
     PushButton BTN_REMOVECERT
