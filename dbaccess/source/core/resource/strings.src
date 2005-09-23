@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:58:39 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:09:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 
 String RID_STR_TRIED_OPEN_TABLE
 {
-    Text [ de ] = "Es wurde versucht, die Tabelle $name$ zu öffnen.";
+    Text [ de ] = "Es wurde versucht, die Tabelle $name$ zu Ã¶ffnen.";
     Text [ en-US ] = "Tried to open the table $name$.";
 };
 String RID_STR_CONNECTION_INVALID
@@ -67,7 +67,7 @@ String RID_STR_COULDNOTCONNECT_UNSPECIFIED
 
 String RID_STR_COULDNOTCONNECT_NODRIVER
 {
-    Text [ de ] = "Die Verbindung zur externen Datenquelle konnte nicht hergestellt werden. Es wurde kein SDBC-Treiber für die angegebene URL gefunden.";
+    Text [ de ] = "Die Verbindung zur externen Datenquelle konnte nicht hergestellt werden. Es wurde kein SDBC-Treiber fÃ¼r die angegebene URL gefunden.";
     Text [ en-US ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
 };
 
@@ -101,42 +101,42 @@ String RID_STR_ONLY_QUERY
 };
 String RID_STR_NO_VALUE_CHANGED
 {
-    Text [ de ] = "Es wurden keine Werte verändert.";
+    Text [ de ] = "Es wurden keine Werte verÃ¤ndert.";
     Text [ en-US ] = "No values were modified.";
 };
 String RID_STR_NO_XROWUPDATE
 {
-    Text [ de ] = "Es konnten keine Werte eingefügt werden. Die XRowUpdate-Schnittstelle wird nicht vom ResultSet unterstützt.";
+    Text [ de ] = "Es konnten keine Werte eingefÃ¼gt werden. Die XRowUpdate-Schnittstelle wird nicht vom ResultSet unterstÃ¼tzt.";
     Text [ en-US ] = "Values could not be inserted. The XRowUpdate interface is not supported by ResultSet.";
 };
 String RID_STR_NO_XRESULTSETUPDATE
 {
-    Text [ de ] = "Es konnten keine Werte eingefügt werden. Die XResultSetUpdate-Schnittstelle wird nicht vom ResultSet unterstützt.";
+    Text [ de ] = "Es konnten keine Werte eingefÃ¼gt werden. Die XResultSetUpdate-Schnittstelle wird nicht vom ResultSet unterstÃ¼tzt.";
     Text [ en-US ] = "Values could not be inserted. The XResultSetUpdate interface is not supported by ResultSet.";
 };
 String RID_STR_NO_UPDATE_MISSING_CONDITION
 {
-    Text [ de ] = "Die Werte konnten nicht verändert, auf Grund einer fehlenden Bedingung.";
+    Text [ de ] = "Die Werte konnten nicht verÃ¤ndert, auf Grund einer fehlenden Bedingung.";
     Text [ en-US ] = "Values could not be modified, due to a missing condition statement.";
 };
 String RID_STR_NO_COLUMN_ADD
 {
-    Text [ de ] = "Das Hinzufügen von Spalten wird nicht unterstützt.";
+    Text [ de ] = "Das HinzufÃ¼gen von Spalten wird nicht unterstÃ¼tzt.";
     Text [ en-US ] = "The adding of columns is not supported.";
 };
 String RID_STR_NO_COLUMN_DROP
 {
-    Text [ de ] = "Das Löschen von Spalten wird nicht unterstützt.";
+    Text [ de ] = "Das LÃ¶schen von Spalten wird nicht unterstÃ¼tzt.";
     Text [ en-US ] = "The dropping of columns is not supported.";
 };
 String RID_STR_NO_CONDITION_FOR_PK
 {
-    Text [ de ] = "Es konnte keine WHERE-Bedingung für den Primärschlüssel erstellt werden.";
+    Text [ de ] = "Es konnte keine WHERE-Bedingung fÃ¼r den PrimÃ¤rschlÃ¼ssel erstellt werden.";
     Text [ en-US ] = "The WHERE condition could not be created for the primary key.";
 };
 String RID_STR_COLUMN_UNKNOWN_PROP
 {
-    Text [ de ] = "Die Spalte unterstützt die Eigenschaft '%value' nicht.";
+    Text [ de ] = "Die Spalte unterstÃ¼tzt die Eigenschaft '%value' nicht.";
     Text [ en-US ] = "The column does not support the property '%value'.";
 };
 String RID_STR_COLUMN_NOT_SEARCHABLE
@@ -151,22 +151,22 @@ String RID_STR_NOT_SEQUENCE_INT8
 };
 String RID_STR_COLUMN_NOT_VALID
 {
-    Text [ de ] = "Die Spalte ist nicht gültig.";
+    Text [ de ] = "Die Spalte ist nicht gÃ¼ltig.";
     Text [ en-US ] = "The column is not valid.";
 };
 String RID_STR_COLUMN_MUST_VISIBLE
 {
-    Text [ de ] = "Die Spalte '%name' muß als Spalte sichtbar sein.";
+    Text [ de ] = "Die Spalte '%name' muÃŸ als Spalte sichtbar sein.";
     Text [ en-US ] = "The column '%name' must be visible as a column.";
 };
 String RID_STR_NO_XQUERIESSUPPLIER
 {
-    Text [ de ] = "Die Schnittstelle XQueriesSupplier ist nicht verfügbar.";
+    Text [ de ] = "Die Schnittstelle XQueriesSupplier ist nicht verfÃ¼gbar.";
     Text [ en-US ] = "The interface XQueriesSupplier is not available.";
 };
 String RID_STR_NOT_SUPPORTED_BY_DRIVER
 {
-    Text [ de ] = "Der Treiber unterstützt diese Funktion nicht.";
+    Text [ de ] = "Der Treiber unterstÃ¼tzt diese Funktion nicht.";
     Text [ en-US ] = "The driver does not support this function.";
 };
 String RID_STR_NO_ABS_ZERO
@@ -186,37 +186,37 @@ String RID_STR_NO_REFESH_AFTERLAST
 };
 String RID_STR_NO_MOVETOINSERTROW_CALLED
 {
-    Text [ de ] = "Das Einfügen einer neuen Zeile ist nicht erlaubt, wenn das ResultSet sich nicht vorher auf die Einfügezeile bewegt.";
+    Text [ de ] = "Das EinfÃ¼gen einer neuen Zeile ist nicht erlaubt, wenn das ResultSet sich nicht vorher auf die EinfÃ¼gezeile bewegt.";
     Text [ en-US ] = "A new row cannot be inserted when the ResultSet is not first moved to the insert row.";
 };
 String RID_STR_NO_UPDATEROW
 {
-    Text [ de ] = "Eine Zeile kann in diesem Status nicht verändert werden.";
+    Text [ de ] = "Eine Zeile kann in diesem Status nicht verÃ¤ndert werden.";
     Text [ en-US ] = "A row cannot be modified in this state";
 };
 String RID_STR_NO_DELETEROW
 {
-    Text [ de ] = "Eine Zeile kann in diesem Status nicht gelöscht werden.";
+    Text [ de ] = "Eine Zeile kann in diesem Status nicht gelÃ¶scht werden.";
     Text [ en-US ] = "A row cannot be deleted in this state.";
 };
 String RID_STR_NO_TABLE_RENAME
 {
-    Text [ de ] = "Der Treiber unterstützt das Umbenennen einer Tabelle nicht.";
+    Text [ de ] = "Der Treiber unterstÃ¼tzt das Umbenennen einer Tabelle nicht.";
     Text [ en-US ] = "The driver does not support table renaming.";
 };
 String RID_STR_NO_ALTER_COLUMN_DEF
 {
-    Text [ de ] = "Der Treiber unterstützt das Verändern einer Spaltendefinition nicht.";
+    Text [ de ] = "Der Treiber unterstÃ¼tzt das VerÃ¤ndern einer Spaltendefinition nicht.";
     Text [ en-US ] = "The driver does not support the modification of column descriptions.";
 };
 String RID_STR_COLUMN_ALTER_BY_NAME
 {
-    Text [ de ] = "Der Treiber unterstützt das Verändern einer Spaltendefinition, anhand des Namens, nicht.";
+    Text [ de ] = "Der Treiber unterstÃ¼tzt das VerÃ¤ndern einer Spaltendefinition, anhand des Namens, nicht.";
     Text [ en-US ] = "The driver does not support the modification of column descriptions by changing the name.";
 };
 String RID_STR_COLUMN_ALTER_BY_INDEX
 {
-    Text [ de ] = "Der Treiber unterstützt das Verändern einer Spaltendefinition, anhand des Indexes, nicht.";
+    Text [ de ] = "Der Treiber unterstÃ¼tzt das VerÃ¤ndern einer Spaltendefinition, anhand des Indexes, nicht.";
     Text [ en-US ] = "The driver does not support the modification of column descriptions by changing the index.";
 };
 String RID_STR_FILE_DOES_NOT_EXIST
