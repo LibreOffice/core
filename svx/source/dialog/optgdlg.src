@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:43:39 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:44:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ TabPage OFA_TP_MISC
     {
         Pos = MAP_APPFONT( COL2, ROW4 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text [ de ] = "Office-Assistent z~urücksetzen";
+        Text [ de ] = "Office-Assistent z~urÃ¼cksetzen";
         Text [ en-US ] = "~Reset Help Agent";
     };
     FixedText FT_HELPFORMAT
@@ -105,7 +105,7 @@ TabPage OFA_TP_MISC
             < "Kontrast #1" ; > ;
             < "Kontrast #2" ; > ;
             < "Kontrast Schwarz" ; > ;
-            < "Kontrast Weiß" ; > ;
+            < "Kontrast WeiÃŸ" ; > ;
         };
         StringList [ en-US ] =
         {
@@ -120,7 +120,7 @@ TabPage OFA_TP_MISC
     {
         Pos = MAP_APPFONT( COL0, ROW6 );
         Size = MAP_APPFONT( WHOLE_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
-        Text [ de ] = "Öffnen/Speichern-Dialoge" ;
+        Text [ de ] = "Ã–ffnen/Speichern-Dialoge" ;
         Text [ en-US ] = "Open/Save dialogs";
     };
     CheckBox CB_FILEDLG
@@ -141,7 +141,7 @@ TabPage OFA_TP_MISC
     {
         Pos = MAP_APPFONT( COL1, ROW9 );
         Size = MAP_APPFONT( WHOLE_WIDTH - COL1, RSC_CD_CHECKBOX_HEIGHT );
-        Text [ de ] = "~Drucken setzt \"Dokument geändert\" Status" ;
+        Text [ de ] = "~Drucken setzt \"Dokument geÃ¤ndert\" Status" ;
         Text [ en-US ] = "~Printing sets \"document modified\" status";
     };
     FixedLine FL_TWOFIGURE
@@ -195,7 +195,7 @@ TabPage OFA_TP_VIEW
     {
         Pos = MAP_APPFONT ( 6 , ROW0 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
-        Text [ de ] = "Benutzeroberfläche" ;
+        Text [ de ] = "BenutzeroberflÃ¤che" ;
         Text [ en-US ] = "User Interface" ;
     };
     FixedText FT_WINDOWSIZE
@@ -227,7 +227,7 @@ TabPage OFA_TP_VIEW
     {
         Pos = MAP_APPFONT ( 12 , ROW_FT_ICONSIZE  ) ;
         Size = MAP_APPFONT ( 114 , 8 ) ;
-        Text [ de ] = "Symbolgröße" ;
+        Text [ de ] = "SymbolgrÃ¶ÃŸe" ;
         Text [ en-US ] = "Icon size" ;
     };
     ListBox LB_ICONSIZE
@@ -241,7 +241,7 @@ TabPage OFA_TP_VIEW
         {
             < "Automatisch" ; > ;
             < "Klein" ; > ;
-            < "Groß" ; > ;
+            < "GroÃŸ" ; > ;
         };
         StringList [ en-US ] =
         {
@@ -256,7 +256,7 @@ TabPage OFA_TP_VIEW
         Pos = MAP_APPFONT( 12, ROW_CB_SYSTEM_FONT );
         Size = MAP_APPFONT( 110, 24 );
         WordBreak = TRUE;
-        Text[ de ] = "~Systemschriftart für die Benutzeroberfläche verwenden" ;
+        Text[ de ] = "~Systemschriftart fÃ¼r die BenutzeroberflÃ¤che verwenden" ;
         Text[ en-US ] = "Use system ~font for user interface";
     };
 
@@ -265,7 +265,7 @@ TabPage OFA_TP_VIEW
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , ROW_CB_FONTANTIALIASING ) ;
         Size = MAP_APPFONT ( 110 , 8 ) ;
-        Text [ de ] = "Bildschirmschriften glätten" ;
+        Text [ de ] = "Bildschirmschriften glÃ¤tten" ;
         Text [ en-US ] = "Screen font antialiasing" ;
     };
     FixedText FT_POINTLIMIT_LABEL
@@ -298,7 +298,7 @@ TabPage OFA_TP_VIEW
     {
         Pos = MAP_APPFONT ( 6, ROW_FL_MENU ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
-        Text [ de ] = "Menü" ;
+        Text [ de ] = "MenÃ¼" ;
         Text [ en-US ] = "Menu" ;
     };
     CheckBox CB_MENU_ICONS
@@ -306,14 +306,14 @@ TabPage OFA_TP_VIEW
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , ROW_CB_MENU_ICONS ) ;
         Size = MAP_APPFONT ( 118 , 8 ) ;
-        Text [ de ] = "Icons in Menüs ~anzeigen" ;
+        Text [ de ] = "Icons in MenÃ¼s ~anzeigen" ;
         Text [ en-US ] = "Show icons in menus";
     };
     CheckBox CB_SHOW_INACTIVE
     {
         Pos = MAP_APPFONT ( 12, ROW_CB_SHOW_INACTIVE ) ;
         Size = MAP_APPFONT ( 118 , 8 ) ;
-        Text [ de ] = "I~naktive Menüeinträge anzeigen" ;
+        Text [ de ] = "I~naktive MenÃ¼eintrÃ¤ge anzeigen" ;
         Text [ en-US ] = "Show i~nactive menu items" ;
     };
     FixedLine FL_FONTLISTS
@@ -372,7 +372,7 @@ TabPage OFA_TP_VIEW
     {
         Pos = MAP_APPFONT ( 139 , 27 ) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
-        Text [ de ] = "Ge~öffnete Fenster" ;
+        Text [ de ] = "Ge~Ã¶ffnete Fenster" ;
         Text [ en-US ] = "Open ~windows" ;
     };
     FixedLine FL_3D
@@ -434,7 +434,7 @@ TabPage OFA_TP_VIEW
         TabStop = TRUE ;
         StringList [ de ] =
         {
-            < "Vorgegebene Schaltfläche" ; > ;
+            < "Vorgegebene SchaltflÃ¤che" ; > ;
             < "Dialog Mitte" ; > ;
             < "Keine automatische Positionierung" ; > ;
         };
@@ -463,7 +463,7 @@ TabPage OFA_TP_VIEW
         {
             < "Keine Funktion" ; > ;
             < "Automatischer Bildlauf" ; > ;
-            < "Zwischenablage einfügen" ; > ;
+            < "Zwischenablage einfÃ¼gen" ; > ;
         };
         StringList [ en-US ] =
         {
@@ -486,7 +486,7 @@ TabPage OFA_TP_LANGUAGES
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Sprache für" ;
+        Text [ de ] = "Sprache fÃ¼r" ;
         Text [ en-US ] = "Language of";
     };
     FixedImage FI_USERINTERFACE
@@ -499,7 +499,7 @@ TabPage OFA_TP_LANGUAGES
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
-        Text [ de ] = "Benutzeroberfläche" ;
+        Text [ de ] = "BenutzeroberflÃ¤che" ;
         Text [ en-US ] = "~User interface";
     };
     ListBox LB_USERINTERFACE
@@ -557,7 +557,7 @@ TabPage OFA_TP_LANGUAGES
     {
         Pos = MAP_APPFONT ( 12 , 61 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
-        Text [ de ] = "~Standardwährung" ;
+        Text [ de ] = "~StandardwÃ¤hrung" ;
         Text [ en-US ] = "~Default currency";
     };
     ListBox LB_CURRENCY
@@ -647,14 +647,14 @@ TabPage OFA_TP_LANGUAGES
     {
         Pos = MAP_APPFONT ( 135 , 135 ) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
-        Text [ de ] = "~Nur für das aktuelle Dokument" ;
+        Text [ de ] = "~Nur fÃ¼r das aktuelle Dokument" ;
         Text [ en-US ] = "For the current document only";
     };
     FixedLine FL_ENHANCED
     {
         Pos = MAP_APPFONT ( 6 , 145 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Erweiterte Sprachunterstützung";
+        Text [ de ] = "Erweiterte SprachunterstÃ¼tzung";
         Text [ en-US ] = "Enhanced language support";
     };
     FixedImage FI_ASIANSUPPORT
@@ -667,7 +667,7 @@ TabPage OFA_TP_LANGUAGES
     {
         Pos = MAP_APPFONT ( 12 , 158 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
-        Text [ de ] = "Unterstützung von asiatischen Sprachen aktiviert" ;
+        Text [ de ] = "UnterstÃ¼tzung von asiatischen Sprachen aktiviert" ;
         Text [ en-US ] = "E~nabled for Asian languages";
     };
     FixedImage FI_CTLSUPPORT
@@ -680,14 +680,14 @@ TabPage OFA_TP_LANGUAGES
     {
         Pos = MAP_APPFONT ( 12 , 173 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
-        Text [ de ] = "Unterstützung von 'Complex Text Layout' (CTL) aktiviert" ;
+        Text [ de ] = "UnterstÃ¼tzung von 'Complex Text Layout' (CTL) aktiviert" ;
         Text [ en-US ] = "Ena~bled for complex text layout (CTL)";
     };
 };
 
 InfoBox RID_SVX_MSGBOX_LANGUAGE_RESTART
 {
-    Message [ de ] = "Die Spracheinstellung der Benutzeroberfläche wurde geändert und wird beim nächsten Start von %PRODUCTNAME %PRODUCTVERSION wirksam";
+    Message [ de ] = "Die Spracheinstellung der BenutzeroberflÃ¤che wurde geÃ¤ndert und wird beim nÃ¤chsten Start von %PRODUCTNAME %PRODUCTVERSION wirksam";
     Message [ en-US ] = "The language setting of the user interface has been updated and will take effect the next time you start %PRODUCTNAME %PRODUCTVERSION";
 };
 
