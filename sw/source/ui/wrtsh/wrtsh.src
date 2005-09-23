@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:40:21 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:17:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,12 +51,12 @@ String STR_DDEERROR_DATA1
 };
 String STR_DDEERROR_DATA2
 {
-    Text[ de ] = "] können nicht ermittelt werden" ;
+    Text[ de ] = "] kÃ¶nnen nicht ermittelt werden" ;
     Text[ en-US ] = "] cannot be obtained" ;
 };
 String STR_DDEERROR_LINK1
 {
-    Text[ de ]  = "Die Verknüpfung zu [" ;
+    Text[ de ]  = "Die VerknÃ¼pfung zu [" ;
     Text[ en-US ] = "Link to [" ;
 };
 String STR_DDEERROR_LINK2
