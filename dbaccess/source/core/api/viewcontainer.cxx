@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontainer.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:12:50 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:03:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,6 +127,7 @@ OViewContainer::OViewContainer(::cppu::OWeakObject& _rParent,
                                  IWarningsContainer* _pWarningsContainer)
     :OFilteredContainer(_rParent,_rMutex,_xCon,_bCase,_pRefreshListener,_pWarningsContainer)
 {
+    DBG_CTOR(OViewContainer, NULL);
 }
 
 //------------------------------------------------------------------------------
