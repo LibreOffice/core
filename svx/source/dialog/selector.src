@@ -4,9 +4,9 @@
  *
  *  $RCSfile: selector.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:01:58 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:48:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,12 +40,12 @@
     Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 
 #define FIXEDTEXT_DIALOG_DESCRIPTION \
-Text [ de ]  = "Wählen Sie zuerst die Bibliothek, die das gewünschte Makro enthält. Dann wählen Sie das Makro unter 'Name des Makros'." ; \
-Text [ en-US ] = "Select the library that contains the macro you want. Then select the macro under 'Macro name'." ;
+Text [ de ]  = "WÃ¤hlen Sie zuerst die Bibliothek, die das gewÃ¼nschte Makro enthÃ¤lt. Dann wÃ¤hlen Sie das Makro unter 'Name des Makros'." ; \
+Text [ en-US ] = "Select the library that contains the macro you want. Then select the macro under 'Macro name'." ;\
 
 String STR_SELECTOR_ADD_COMMANDS
 {
-  TEXT [ de ]  = "Befehle hinzufügen" ;
+  TEXT [ de ]  = "Befehle hinzufÃ¼gen" ;
   TEXT [ en-US ] = "Add Commands" ;
 };
 
@@ -69,27 +69,27 @@ String STR_SELECTOR_COMMANDS
 
 String STR_SELECTOR_ADD
 {
-  TEXT [ de ]  = "Hinzufügen" ;
+  TEXT [ de ]  = "HinzufÃ¼gen" ;
   TEXT [ en-US ] = "Add" ;
 };
 
 String STR_SELECTOR_RUN
 {
-  TEXT [ de ]  = "Ausführen" ;
+  TEXT [ de ]  = "AusfÃ¼hren" ;
   TEXT [ en-US ] = "Run" ;
 
 };
 
 String STR_SELECTOR_CLOSE
 {
-  TEXT [ de ]  = "Schließen" ;
+  TEXT [ de ]  = "SchlieÃŸen" ;
   TEXT [ en-US ] = "Close" ;
 
 };
 
 String STR_SELECTOR_ADD_COMMANDS_DESCRIPTION
 {
-  TEXT[ de ] = "Um Befehle einer Symbolleiste hinzuzufügen, wählen Sie zuerst eine Kategorie und dann den Befehl. Ziehen Sie den Befehl direkt auf die gewünschte Symbolleiste. Alternativ ziehen Sie den Befehl in die Befehlsliste auf der Registerseite 'Symbolleisten' im Dialog 'Anpassen'.";
+  TEXT[ de ] = "Um Befehle einer Symbolleiste hinzuzufÃ¼gen, wÃ¤hlen Sie zuerst eine Kategorie und dann den Befehl. Ziehen Sie den Befehl direkt auf die gewÃ¼nschte Symbolleiste. Alternativ ziehen Sie den Befehl in die Befehlsliste auf der Registerseite 'Symbolleisten' im Dialog 'Anpassen'.";
   TEXT [ en-US ] = "To add a command to a toolbar, select the category and then the command. Then drag the command to where you want it on the desired toolbar. Alternatively, you can drag the command to the Commands list of the Toolbars tab page in the Customize dialog.";
 };
 
