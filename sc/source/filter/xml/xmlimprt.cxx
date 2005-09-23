@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:09:05 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:43:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1540,7 +1540,8 @@ ScXMLImport::ScXMLImport(
     nPrevCellType(0),
     nSolarMutexLocked(0),
     pScUnoGuard(NULL),
-    bSelfImportingXMLSet(sal_False)
+    bSelfImportingXMLSet(sal_False),
+    nProgressCount(0)
 
 //  pParaItemMapper( 0 ),
 {
@@ -2568,5 +2569,15 @@ void ScXMLImport::SetRangeOverflowType(sal_uInt32 nType)
 
     if ( pDoc )
         pDoc->SetRangeOverflowType( nType );
+}
+
+void ScXMLImport::ProgressBarIncrement(sal_Bool bEditCell, sal_Int32 nInc)
+{
+    nProgressCount += nInc;
+    if (bEditCell || nProgressCount > 100)
+    {
+        GetProgressBarHelper()->Increment(nProgressCount);
+        nProgressCount = 0;
+    }
 }
 
