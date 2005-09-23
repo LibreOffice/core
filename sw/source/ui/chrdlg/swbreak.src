@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swbreak.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:40:07 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:51:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ ModalDialog DLG_BREAK
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 161 , 114 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Umbruch einfügen : Umbruch einf³gen */
-    Text [ de ] = "Umbruch einfügen" ;
+    Text [ de ] = "Umbruch einfÃ¼gen" ;
     Text [ en-US ] = "Insert Break" ;
     Moveable = TRUE ;
     OKButton BT_OK
@@ -142,7 +142,7 @@ ModalDialog DLG_BREAK
         Pos = MAP_APPFONT ( 12 , 79 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Seitennummer ~ändern : Seitennummer ~õndern */
-        Text [ de ] = "Seitennummer ~ändern" ;
+        Text [ de ] = "Seitennummer ~Ã¤ndern" ;
         Text [ en-US ] = "Change page ~number" ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
