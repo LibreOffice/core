@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgimport.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:58:53 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:07:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,6 +152,9 @@
 #ifndef _COM_SUN_STAR_FORM_XFORMSSUPPLIER_HPP_
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 
 extern "C" void SAL_CALL createRegistryInfo_OCfgImport( )
@@ -201,17 +204,22 @@ using namespace dbacfg;
 // -------------
 // - OCfgImport -
 // -------------
+DBG_NAME(OCfgImport)
 
 OCfgImport::OCfgImport( const Reference< XMultiServiceFactory >& _rxMSF )
     :m_xORB( _rxMSF )
     ,m_bPropertyMayBeVoid(sal_True)
 {
+    DBG_CTOR(OCfgImport,NULL);
+
 }
 
 // -----------------------------------------------------------------------------
 
 OCfgImport::~OCfgImport() throw()
 {
+
+    DBG_DTOR(OCfgImport,NULL);
 }
 // -----------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO1_STATIC( OCfgImport, "com.sun.star.comp.sdb.DataSourceMigration", "com.sun.star.sdb.DataSourceMigration")
