@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:19:02 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:14:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,9 @@
 #ifndef _DBAUI_LINKEDDOCUMENTS_HXX_
 #include "linkeddocuments.hxx"
 #endif
+#ifndef DBACCESS_SOURCE_UI_INC_DOCUMENTCONTROLLER_HXX
+#include "documentcontroller.hxx"
+#endif
 
 #include <memory>
 
@@ -124,9 +127,12 @@ namespace dbaui
     {
         friend class OConnectionChangeBroadcaster;
     public:
-        typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer > > TContainerVector;
-        typedef ::std::map< ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
-                , ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > > TDocuments;
+        typedef ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer > TContainer;
+        typedef ::std::vector< TContainer >                                                 TContainerVector;
+
+        typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >      TComponent;
+        typedef ::std::map< TComponent, TComponent >                                        TDocuments;
+
     private:
 
         DECLARE_STL_USTRINGACCESS_MAP(::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,TDataSourceConnections);
@@ -135,7 +141,10 @@ namespace dbaui
         TDataSourceConnections  m_aDataSourceConnections;
         TransferableDataHelper  m_aSystemClipboard;     // content of the clipboard
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xDataSource;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >         m_xModel;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+                                m_xModel;
+        ModelControllerConnector
+                                m_aModelConnector;
         TContainerVector        m_aCurrentContainers;   // the containers where we are listener on
         TDocuments              m_aDocuments;
         ODsnTypeCollection      m_aTypeCollection;
