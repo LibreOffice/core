@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:10:56 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:45:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ PageItem \
 { \
     Identifier = RID_SVXPAGE_AREA ; \
     PageResID = RID_SVXPAGE_AREA ; \
-    Text [ de ] = "Fl‰che" ; \
+    Text [ de ] = "Fl√§che" ; \
     Text [ en-US ] = "Area" ; \
     Text [ x-comment ] = " "; \
 };
@@ -185,7 +185,7 @@ PushButton 1 \
     Pos = MAP_APPFONT ( 169 , 151 ) ; \
     Size = MAP_APPFONT ( 50 , 14 ) ; \
     TabStop = TRUE ; \
-    Text [ de ] = "Zur¸ck" ; \
+    Text [ de ] = "Zur√ºck" ; \
     Text [ en-US ] = "Back" ; \
     Text [ x-comment ] = " "; \
 };
@@ -676,7 +676,7 @@ TabDialog TAB_DIAGRAM_AREA
      // HelpID = SID_DIAGRAM_AREA ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Diagrammfl‰che" ;
+    Text [ de ] = "Diagrammfl√§che" ;
     Text [ en-US ] = "Chart Area" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
