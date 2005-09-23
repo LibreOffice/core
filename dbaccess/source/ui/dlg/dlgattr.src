@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgattr.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:59:39 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:14:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@ TabDialog DLG_ATTR
     {
         TabStop = TRUE ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
-        Text [ de ] = "~Zurück" ;
+        Text [ de ] = "~ZurÃ¼ck" ;
         Text [ en-US ] = "Bac~k" ;
     };
     String TP_ATTR_CHAR
