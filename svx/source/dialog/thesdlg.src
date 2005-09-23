@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thesdlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:16:41 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:51:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,7 +169,7 @@ ModalDialog RID_SVXDLG_THES_LANGUAGE
     Size = MAP_APPFONT ( 170 , 86 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Sprache ausw‰hlen : Sprache auswıhlen */
     /* ### ACHTUNG: Neuer Text in Resource? Sprache ausw‰hlen : Sprache auswıhlen */
-    Text [ de ] = "Sprache ausw‰hlen" ;
+    Text [ de ] = "Sprache ausw√§hlen" ;
     Text [ en-US ] = "Select Language" ;
     Moveable = TRUE ;
     ListBox LB_THES_LANGUAGE
