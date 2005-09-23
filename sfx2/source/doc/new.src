@@ -4,9 +4,9 @@
  *
  *  $RCSfile: new.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:45:53 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:28:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,7 @@ ModalDialog DLG_NEW_FILE
     {
         Pos = MAP_APPFONT ( 274 , 70 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Zusätze" ;
+        Text [ de ] = "~ZusÃ¤tze" ;
         Text [ en-US ] = "~More" ;
         Delta = 148 ;
         MapUnit = MAP_APPFONT ;
@@ -169,7 +169,7 @@ ModalDialog DLG_NEW_FILE
         Pos = MAP_APPFONT ( 222 , 94 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Hide = TRUE;
-        Text [ de ] = "Üb~erschreiben" ;
+        Text [ de ] = "Ãœb~erschreiben" ;
         Text [ en-US ] = "~Overwrite" ;
     };
     PushButton PB_LOAD_FILE
@@ -223,7 +223,7 @@ ModalDialog DLG_NEW_FILE
     {
         Pos = MAP_APPFONT ( 145 , 162 ) ;
         Size = MAP_APPFONT ( 175 , 10 ) ;
-        Text [ de ] = "S~chlüsselworte" ;
+        Text [ de ] = "S~chlÃ¼sselworte" ;
         Text [ en-US ] = "~Key words" ;
         Hide = TRUE ;
         Text [ x-comment ] = " ";
