@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:57:07 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:39:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -351,6 +351,7 @@ Reference< XResultSet > SAL_CALL OStatement::executeQuery( const ::rtl::OUString
     OResultSet* pResult = createResultSet();
     xRS = pResult;
     initializeResultSet(pResult);
+    m_xResultSet = Reference<XResultSet>(pResult);
 
     pResult->OpenImpl();
 
