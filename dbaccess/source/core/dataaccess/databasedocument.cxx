@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 12:02:43 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:04:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -367,41 +367,6 @@ void SAL_CALL ODatabaseDocument::disconnectController( const Reference< XControl
     m_pImpl->m_aControllers.erase(::std::find(m_pImpl->m_aControllers.begin(),m_pImpl->m_aControllers.end(),_xController));
     if ( m_pImpl->m_xCurrentController == _xController )
         m_pImpl->m_xCurrentController = NULL;
-
-    // TODO: The below fragment is conceptually wrong.
-    //
-    // There are more clients of a database document (aka XModel) than its controllers.
-    // In particular, people might programmatically obtain a DataSource from the
-    // DatabaseContext, script it, and at some point obtain the document from
-    // the data source (XDocumentDataSource::getDatabaseDocument). All this might happen
-    // without any controller being involved, which means the document gets never disposed,
-    // which imlpies a resource leak.
-    //
-    // You might argue that the scripter who obtained the model is responsible for disposing
-    // it. However, she cannot know whether the model she just got from getDatabaseDocument
-    // is really hers (since it was newly created), or already owned by somebody else. So,
-    // she cannot know whether she is really allowed to dispose it.
-    //
-    // There is a pattern which could prevent this dilemma: closing with ownership delivery
-    // (XCloseable::close). With this pattern, every client of a component (here: the model)
-    // adds itself as XCloseListener to the component. When the client dies, it tries to
-    // close the component, with the DeliverOwnership parameter set to <TRUE/>. If there is
-    // another client of the component, it will veto the closing, and take the ownership
-    // (and in turn do an own close attempt later on). If there is no other client, closing
-    // will succeed.
-    //
-    // We should implement this for models, too. Then, controllers would be clients of the
-    // model, and do a close attempt when they disconnect. The model would never dispose
-    // itself (as it does now), but it would automatically be closed when the last client
-    // dies (provided that all clients respect this pattern). It turn, it would not be
-    // allowed to dispose a model directly.
-    //
-    // #i50905# / 2005-06-21 / frank.schoenheit@sun.com
-    if ( m_pImpl.is() && m_pImpl->m_aControllers.empty() )
-    {
-        aGuard.clear();
-        dispose();
-    }
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseDocument::lockControllers(  ) throw (RuntimeException)
@@ -717,32 +682,50 @@ void SAL_CALL ODatabaseDocument::print( const Sequence< PropertyValue >& xOption
 {
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL ODatabaseDocument::close( sal_Bool bDeliverOwnership ) throw (::com::sun::star::util::CloseVetoException, RuntimeException)
+void ODatabaseDocument::impl_closeControllerFrames( sal_Bool _bDeliverOwnership )
+{
+    ::std::vector< Reference< XController> > aCopy = m_pImpl->m_aControllers;
+
+    ::std::vector< Reference< XController> >::iterator aIter = aCopy.begin();
+    ::std::vector< Reference< XController> >::iterator aEnd = aCopy.end();
+    for ( ;aIter != aEnd ; ++aIter )
+    {
+        if ( aIter->is() )
+        {
+            try
+            {
+                Reference< XCloseable> xFrame( (*aIter)->getFrame(), UNO_QUERY );
+                if ( xFrame.is() )
+                    xFrame->close( _bDeliverOwnership );
+            }
+            catch( const CloseVetoException& ) { throw; }
+            catch( const Exception& )
+            {
+                OSL_ENSURE( sal_False, "ODatabaseDocument::impl_closeControllerFrames: caught an unexpected exception!" );
+            }
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+void SAL_CALL ODatabaseDocument::close( sal_Bool _bDeliverOwnership ) throw (::com::sun::star::util::CloseVetoException, RuntimeException)
 {
     ResettableMutexGuard _rGuard(m_aMutex);
     ::connectivity::checkDisposed(ODatabaseDocument_OfficeDocument::rBHelper.bDisposed);
 
     lang::EventObject aEvt( static_cast< ::cppu::OWeakObject* >( this ) );
-    NOTIFY_LISTERNERS1(m_aCloseListener,com::sun::star::util::XCloseListener,queryClosing,bDeliverOwnership);
-
-    ::std::vector< Reference< XController> > aCopy = m_pImpl->m_aControllers;
-    ::std::vector< Reference< XController> >::iterator aIter = aCopy.begin();
-    ::std::vector< Reference< XController> >::iterator aEnd = aCopy.end();
-    for (;aIter != aEnd ; ++aIter)
     {
-        if ( aIter->is() )
-        {
-            Reference< XCloseable> xFrame((*aIter)->getFrame(),UNO_QUERY);
-            if ( xFrame.is() )
-                xFrame->close(bDeliverOwnership);
-        }
+        NOTIFY_LISTERNERS1(m_aCloseListener,com::sun::star::util::XCloseListener,queryClosing,_bDeliverOwnership);
     }
-    if ( m_pImpl.is() )
-         m_pImpl->m_aControllers.clear();
-    dispose();
+
+    DBG_ASSERT( m_pImpl->m_aControllers.empty(), "ODatabaseDocument::close: aren't controllers expected to veto the closing?" );
+    impl_closeControllerFrames( _bDeliverOwnership );
+
     {
         NOTIFY_LISTERNERS(m_aCloseListener,com::sun::star::util::XCloseListener,notifyClosing);
     }
+
+    dispose();
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseDocument::addCloseListener( const Reference< ::com::sun::star::util::XCloseListener >& Listener ) throw (RuntimeException)
@@ -1073,6 +1056,12 @@ void ODatabaseDocument::notifyEvent(const ::rtl::OUString& _sEventName)
 //------------------------------------------------------------------------------
 void ODatabaseDocument::disposing()
 {
+    DBG_ASSERT( m_pImpl->m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
+        // normally, nobody should explicitly dispose, but only XCloseable::close the document. And controllers
+        // are expected to veto the closing, so when we're here, there shouldn't be any controllers anymore.
+    if ( m_pImpl.is() )
+         m_pImpl->m_aControllers.clear();
+
     Reference< XModel > xHoldAlive( this );
     {
         notifyEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnUnload")));
