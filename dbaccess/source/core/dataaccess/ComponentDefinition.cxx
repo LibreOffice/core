@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ComponentDefinition.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:13:11 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:04:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,9 @@
 #endif
 #ifndef _DBACORE_DEFINITIONCOLUMN_HXX_
 #include "definitioncolumn.hxx"
+#endif
+#ifndef DBA_COREDATAACCESS_CHILDHELPER_HXX
+#include "ChildHelper.hxx"
 #endif
 
 
@@ -276,7 +279,10 @@ void OComponentDefinition::columnCloned(const Reference< XPropertySet >& _xClone
 
     Reference<XChild> xChild(xProp,UNO_QUERY);
     if ( xChild.is() )
-        xChild->setParent(static_cast<XChild*>(static_cast<TXChild*>((m_pColumns.get()))));
+    {
+        Reference<XChild> xParent = new OChildHelper_Impl(static_cast<XChild*>(static_cast<TXChild*>((m_pColumns.get()))));
+        xChild->setParent(xParent);
+    }
 
     // helptext etc. may be modified
     notifyDataSourceModified();
