@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:31:50 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:22:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,6 +239,7 @@ OFieldDescControl::OFieldDescControl( Window* pParent, const ResId& rResId, OTab
     ,m_pActFocusWindow(NULL)
     ,m_bRight(sal_False)
     ,m_nWidth(50)
+    ,m_bAdded(sal_False)
 {
     DBG_CTOR(OFieldDescControl,NULL);
 
@@ -299,6 +300,7 @@ OFieldDescControl::OFieldDescControl( Window* pParent, OTableDesignHelpBar* pHel
     ,m_pActFocusWindow(NULL)
     ,m_bRight(sal_False)
     ,m_nWidth(50)
+    ,m_bAdded(sal_False)
 {
     DBG_CTOR(OFieldDescControl,NULL);
 
@@ -334,6 +336,8 @@ OFieldDescControl::~OFieldDescControl()
         ::std::auto_ptr<Window> aTemp(m_pHorzScroll);
         m_pHorzScroll    = NULL;
     }
+    if ( m_bAdded )
+        ::dbaui::notifySystemWindow(this,this,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
     pLastFocusWindow = NULL;
 
     //////////////////////////////////////////////////////////////////////
@@ -453,7 +457,7 @@ void OFieldDescControl::CheckScrollBars()
         nLastVisible = static_cast<sal_uInt16>((szOverallSize.Height() - CONTROL_SPACING_Y - nHScrollHeight) / (CONTROL_SPACING_Y + CONTROL_HEIGHT));
     else
         nLastVisible = static_cast<sal_uInt16>((szOverallSize.Height() - CONTROL_SPACING_Y) / (CONTROL_SPACING_Y + CONTROL_HEIGHT));
-    bNeedVScrollBar = nActive > nLastVisible;
+    bNeedVScrollBar = nActive>nLastVisible;
 
     if (bNeedVScrollBar)
     {
@@ -843,8 +847,6 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
     {
         TOTypeInfoSP pTypeInfo = getTypeInfo(m_pType->GetSelectEntryPos());
         pActFieldDescr->FillFromTypeInfo(pTypeInfo,sal_True,sal_False); // SetType(pTypeInfo);
-        if ( pTypeInfo.get() )
-            pActFieldDescr->SetTypeName(pTypeInfo->getDBName());
 
         DisplayData(pActFieldDescr);
         CellModified(-1, m_pType->GetPos());
@@ -1503,11 +1505,19 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         //////////////////////////////////////////////////////////////////////
         // Zeiger des gespeicherten Focus zuruecksetzen
         pLastFocusWindow = NULL;
-        ::dbaui::notifySystemWindow(this,this,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
+        if ( m_bAdded )
+        {
+            ::dbaui::notifySystemWindow(this,this,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
+            m_bAdded = sal_False;
+        }
         return;
     }
 
-    ::dbaui::notifySystemWindow(this,this,::comphelper::mem_fun(&TaskPaneList::AddWindow));
+    if ( !m_bAdded )
+    {
+        ::dbaui::notifySystemWindow(this,this,::comphelper::mem_fun(&TaskPaneList::AddWindow));
+        m_bAdded = sal_True;
+    }
 
     TOTypeInfoSP pFieldType;
     if( pFieldDescr )
@@ -1938,7 +1948,7 @@ void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
         sal_uInt32 nFormatKey;
         try
         {
-            if ( isTextFormat(pFieldDescr,nFormatKey) )
+            if ( isTextFormat(pFieldDescr,nFormatKey) || pBoolDefault )
             {
                 pFieldDescr->SetControlDefault(makeAny(sDefault));
             }
@@ -1962,7 +1972,9 @@ void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
         catch(const Exception&)
         {
         }
-    }
+    } // if ( sDefault.getLength() )
+    else
+        pFieldDescr->SetControlDefault(Any());
 
     if((pRequired && pRequired->GetSelectEntryPos() == 0) || pFieldDescr->IsPrimaryKey() || (pBoolDefault && pBoolDefault->GetEntryCount() == 2))  // yes
         pFieldDescr->SetIsNullable( ColumnValue::NO_NULLS );
