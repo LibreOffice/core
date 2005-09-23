@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlehelp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:36:19 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:44:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,50 +128,55 @@ void SvXMLExportHelper::AddLength( long nValue, MapUnit eValueUnit,
         nFac = 1;
         eUnit = XML_UNIT_PT;
         break;
-
+    case MAP_10TH_MM:
     case MAP_100TH_MM:
-        switch( eOutUnit )
         {
-        case MAP_100TH_MM:
-        case MAP_10TH_MM:
-            DBG_ASSERT( MAP_INCH == eOutUnit,
-                        "output unit not supported for 1/100mm values" );
-        case MAP_MM:
-            // 0.01mm = 1 mm/100 (exactly)
-            nMul = 10;
-            nDiv = 1;
-            nFac = 100;
-            eUnit = XML_UNIT_MM;
-            break;
+            long nFac2 = (MAP_100TH_MM == eValueUnit) ? 100 : 10;
+            switch( eOutUnit )
+            {
+            case MAP_100TH_MM:
+            case MAP_10TH_MM:
+                DBG_ASSERT( MAP_INCH == eOutUnit,
+                            "output unit not supported for 1/100mm values" );
+            case MAP_MM:
+                // 0.01mm = 1 mm/100 (exactly)
+                nMul = 10;
+                nDiv = 1;
+                nFac = nFac2;
+                eUnit = XML_UNIT_MM;
+                break;
 
-        case MAP_CM:
-            // 0.001mm = 1 mm/100 (exactly)
-            nMul = 10;
-            nDiv = 1;   // 72 * 20;
-            nFac = 1000;
-            eUnit = XML_UNIT_CM;
-            break;
+            case MAP_CM:
+                // 0.001mm = 1 mm/100 (exactly)
+                nMul = 10;
+                nDiv = 1;   // 72 * 20;
+                nFac = 10*nFac2;
+                eUnit = XML_UNIT_CM;
+                break;
 
-        case MAP_POINT:
-            // 0.01pt = 0.35 mm/100 (exactly)
-            nMul = 72000;
-            nDiv = 2540;
-            nFac = 100;
-            eUnit = XML_UNIT_PT;
-            break;
+            case MAP_POINT:
+                // 0.01pt = 0.35 mm/100 (exactly)
+                nMul = 72000;
+                nDiv = 2540;
+                nFac = nFac2;
+                eUnit = XML_UNIT_PT;
+                break;
 
-        case MAP_INCH:
-        default:
-            DBG_ASSERT( MAP_INCH == eOutUnit,
-                        "output unit not supported for 1/100mm values" );
-            // 0.0001in = 0.254 mm/100 (exactly)
-            nMul = 100000;
-            nDiv = 2540;
-            nFac = 10000;
-            eUnit = XML_UNIT_INCH;
+            case MAP_INCH:
+            default:
+                DBG_ASSERT( MAP_INCH == eOutUnit,
+                            "output unit not supported for 1/100mm values" );
+                // 0.0001in = 0.254 mm/100 (exactly)
+                nMul = 100000;
+                nDiv = 2540;
+                nFac = 100*nFac2;
+                eUnit = XML_UNIT_INCH;
+                break;
+            }
             break;
         }
-        break;
+           break;
+
     }
 
 
@@ -401,6 +406,48 @@ double SvXMLExportHelper::GetConversionFactor(::rtl::OUStringBuffer& rUnit,
                         fRetval = ( 1.0 / 72.0 );
                         eUnit = XML_UNIT_INCH;
                         break;
+                }
+                break;
+            }
+            case MAP_10TH_MM:
+            {
+                switch(eDestUnit)
+                {
+                    case MAP_100TH_MM:
+                    case MAP_10TH_MM:
+                    {
+                        DBG_ASSERT(MAP_INCH == eDestUnit, "output unit not supported for 1/100mm values");
+                    }
+                    case MAP_MM:
+                    {
+                        // 0.01mm = 1 mm/100 (exactly)
+                        fRetval = ((10.0 / 1.0) / 100.0);
+                        eUnit = XML_UNIT_MM;
+                        break;
+                    }
+                    case MAP_CM:
+                    {
+                        // 0.001mm = 1 mm/100 (exactly)
+                        fRetval = ((10.0 / 1.0) / 1000.0);
+                        eUnit = XML_UNIT_CM;
+                        break;
+                    }
+                    case MAP_POINT:
+                    {
+                        // 0.01pt = 0.35 mm/100 (exactly)
+                        fRetval = ((72000.0 / 2540.0) / 100.0);
+                        eUnit = XML_UNIT_PT;
+                        break;
+                    }
+                    case MAP_INCH:
+                    default:
+                    {
+                        DBG_ASSERT(MAP_INCH == eDestUnit, "output unit not supported for 1/100mm values");
+                        // 0.0001in = 0.254 mm/100 (exactly)
+                        fRetval = ((100000.0 / 2540.0) / 10000.0);
+                        eUnit = XML_UNIT_INCH;
+                        break;
+                    }
                 }
                 break;
             }
