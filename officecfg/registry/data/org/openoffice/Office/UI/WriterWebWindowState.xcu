@@ -5,9 +5,9 @@
  *
  *  $RCSfile: WriterWebWindowState.xcu,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:00:22 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:20:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,9 @@
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
                     <value>false</value>
                 </prop>
+                <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
             </node>
             <node oor:name="private:resource/toolbar/textobjectbar" oor:op="replace">
                 <prop oor:name="DockPos" oor:type="xs:string">
@@ -75,6 +78,9 @@
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
                 </prop>
+                <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
             </node>
             <node oor:name="private:resource/toolbar/toolbar" oor:op="replace">
                 <prop oor:name="Docked" oor:type="xs:boolean">
@@ -86,6 +92,9 @@
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Tools</value>
                     <value xml:lang="de">Werkzeuge</value>
+                </prop>
+                <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+                    <value>true</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/oleobjectbar" oor:op="replace">
@@ -108,6 +117,9 @@
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
                     <value>false</value>
                 </prop>
+                <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
             </node>
             <node oor:name="private:resource/toolbar/tableobjectbar" oor:op="replace">
                 <prop oor:name="Docked" oor:type="xs:boolean">
@@ -120,6 +132,9 @@
                     <value xml:lang="en-US">Table</value>
                     <value xml:lang="de">Tabelle</value>
                 </prop>
+                <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
             </node>
             <node oor:name="private:resource/toolbar/frameobjectbar" oor:op="replace">
                 <prop oor:name="UIName" oor:type="xs:string">
@@ -130,6 +145,9 @@
                     <value>true</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="ContextSensitive" oor:type="xs:boolean">
                     <value>true</value>
                 </prop>
             </node>
@@ -146,6 +164,9 @@
                 </prop>
                 <prop oor:name="DockPos" oor:type="xs:string">
                     <value>0,1</value>
+                </prop>
+                <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+                    <value>true</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/drawtextobjectbar" oor:op="replace">
@@ -168,6 +189,9 @@
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
                     <value>false</value>
                 </prop>
+                <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
             </node>
             <node oor:name="private:resource/toolbar/drawingobjectbar" oor:op="replace">
                 <prop oor:name="DockPos" oor:type="xs:string">
@@ -189,6 +213,9 @@
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
                     <value>false</value>
                 </prop>
+                <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
             </node>
             <node oor:name="private:resource/toolbar/bezierobjectbar" oor:op="replace">
                 <prop oor:name="Docked" oor:type="xs:boolean">
@@ -202,6 +229,9 @@
                     <value>true</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="ContextSensitive" oor:type="xs:boolean">
                     <value>true</value>
                 </prop>
             </node>
@@ -218,6 +248,9 @@
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
                     <value>false</value>
+                </prop>
+                <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+                    <value>true</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/fontworkshapetypes" oor:op="replace">
@@ -249,6 +282,9 @@
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
                     <value>true</value>
                 </prop>
+                <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
             </node>
             <node oor:name="private:resource/toolbar/formsfilterbar" oor:op="replace">
                 <prop oor:name="UIName" oor:type="xs:string">
@@ -262,6 +298,9 @@
                     <value>true</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="ContextSensitive" oor:type="xs:boolean">
                     <value>true</value>
                 </prop>
             </node>
@@ -283,6 +322,9 @@
                     <value>false</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="ContextSensitive" oor:type="xs:boolean">
                     <value>true</value>
                 </prop>
             </node>
@@ -345,6 +387,9 @@
                 <prop oor:name="NoClose" oor:type="xs:boolean">
                     <value>true</value>
                 </prop>
+                <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
             </node>
             <node oor:name="private:resource/toolbar/graffilterbar" oor:op="replace">
                 <prop oor:name="Docked" oor:type="xs:boolean">
@@ -355,18 +400,21 @@
                     <value xml:lang="de">Grafikfilter</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
-                    <value>true</value>
+                    <value>false</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
                     <value>true</value>
                 </prop>
             </node>
-                        <node oor:name="private:resource/toolbar/insertbar" oor:op="replace">
-                                <prop oor:name="UIName" oor:type="xs:string">
-                                        <value xml:lang="en-US">Insert</value>
-                                        <value xml:lang="de">Einfügen</value>
-                                </prop>
-                        </node>
+            <node oor:name="private:resource/toolbar/insertbar" oor:op="replace">
+                <prop oor:name="UIName" oor:type="xs:string">
+                    <value xml:lang="en-US">Insert</value>
+                    <value xml:lang="de">Einfügen</value>
+                </prop>
+                <prop oor:name="Visible" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
+            </node>
             <node oor:name="private:resource/toolbar/numobjectbar" oor:op="replace">
                 <prop oor:name="Docked" oor:type="xs:boolean">
                     <value>false</value>
@@ -380,6 +428,9 @@
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
                     <value>false</value>
+                </prop>
+                <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+                    <value>true</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/previewobjectbar" oor:op="replace">
@@ -405,6 +456,9 @@
                 <prop oor:name="NoClose" oor:type="xs:boolean">
                     <value>true</value>
                 </prop>
+                <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
             </node>
             <node oor:name="private:resource/toolbar/viewerbar" oor:op="replace">
                 <prop oor:name="DockingArea" oor:type="xs:int">
@@ -426,6 +480,9 @@
                 <prop oor:name="NoClose" oor:type="xs:boolean">
                     <value>true</value>
                 </prop>
+                <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
             </node>
             <node oor:name="private:resource/toolbar/mediaobjectbar" oor:op="replace">
                 <prop oor:name="DockPos" oor:type="xs:string">
@@ -444,13 +501,16 @@
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
                 </prop>
+                <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
             </node>
             <node oor:name="private:resource/toolbar/colorbar" oor:op="replace">
                 <prop oor:name="Docked" oor:type="xs:boolean">
                     <value>false</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
-                    <value>true</value>
+                    <value>false</value>
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Color</value>
