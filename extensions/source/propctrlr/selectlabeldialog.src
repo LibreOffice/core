@@ -4,9 +4,9 @@
  *
  *  $RCSfile: selectlabeldialog.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:28:01 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:06:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ ModalDialog RID_DLG_SELECTLABELCONTROL
     {
         Pos = MAP_APPFONT( 6, 6 );
         Size = MAP_APPFONT( 188, 20 );
-        Text [ de ] = "Dies sind alle Kontrollfelder, die dem $control_class$ $control_name$ als Beschriftungsfeld zugeordnet werden können.";
+        Text [ de ] = "Dies sind alle Kontrollfelder, die dem $control_class$ $control_name$ als Beschriftungsfeld zugeordnet werden kÃ¶nnen.";
         WordBreak = TRUE;
         Text [ en-US ] = "These are control fields that can be used as label fields for the $control_class$ $control_name$.";
     };
