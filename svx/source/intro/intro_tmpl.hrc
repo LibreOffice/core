@@ -4,9 +4,9 @@
  *
  *  $RCSfile: intro_tmpl.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:30:59 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:56:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1224,7 +1224,7 @@ ItemList = \
 
 #define TEXT_DEFAULTABOUT \
     Text [ x-comment ] = "PB: ; PB: only %PRODUCTNAME"; \
-    Text [ de ] = "Über %PRODUCTNAME" ; \
+    Text [ de ] = "Ãœber %PRODUCTNAME" ; \
     Text [ en-US ] = "About %PRODUCTNAME" ; \
 
 // ******************************************************************* EOF
