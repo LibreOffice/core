@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabline.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:12:27 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:50:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -282,7 +282,7 @@ TabPage RID_SVXPAGE_LINE
             < "Abgerundet" ; Default ; > ;
             < "- kein -" ; > ;
             < "Gehrung" ; > ;
-            < "Abgeschrägt" ; > ;
+            < "AbgeschrÃ¤gt" ; > ;
         };
         StringList [ en-US ] =
         {
@@ -405,7 +405,7 @@ TabPage RID_SVXPAGE_LINE
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 130 , 48  ) ;
         Size = MAP_APPFONT ( 57 , 8 ) ;
-        Text [ de ] = "~Höhe" ;
+        Text [ de ] = "~HÃ¶he" ;
         Text [ en-US ] = "Height" ;
         Text [ x-comment ] = " ";
     };
@@ -552,7 +552,7 @@ TabPage RID_SVXPAGE_LINE_DEF
     {
         Pos = MAP_APPFONT ( 12 , 66  ) ;
         Size = MAP_APPFONT ( 52 , 8 ) ;
-        Text [ de ] = "Län~ge" ;
+        Text [ de ] = "LÃ¤n~ge" ;
         Text [ en-US ] = "~Length" ;
         Text [ x-comment ] = " ";
     };
@@ -655,7 +655,7 @@ TabPage RID_SVXPAGE_LINE_DEF
     {
         Pos = MAP_APPFONT ( 198 , 14  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "H~inzufügen..." ;
+        Text [ de ] = "H~inzufÃ¼gen..." ;
         Text [ en-US ] = "~Add..." ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -664,7 +664,7 @@ TabPage RID_SVXPAGE_LINE_DEF
     {
         Pos = MAP_APPFONT ( 198 , 34  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Ändern..." ;
+        Text [ de ] = "~Ã„ndern..." ;
         Text [ en-US ] = "~Modify..." ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -673,7 +673,7 @@ TabPage RID_SVXPAGE_LINE_DEF
     {
         Pos = MAP_APPFONT ( 198 , 54  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Löschen..." ;
+        Text [ de ] = "~LÃ¶schen..." ;
         Text [ en-US ] = "~Delete..." ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -746,7 +746,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
     {
         Pos = MAP_APPFONT ( 6 , 123  ) ;
         Size = MAP_APPFONT ( 252 , 8 ) ;
-        Text [ de ] = "Neue Linienenden erhalten Sie durch Hinzufügen eines selektierten Objektes." ;
+        Text [ de ] = "Neue Linienenden erhalten Sie durch HinzufÃ¼gen eines selektierten Objektes." ;
         Text [ en-US ] = "Add a selected object to create new arrow styles." ;
         WordBreak = TRUE ;
         Text [ x-comment ] = " ";
@@ -788,7 +788,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
     {
         Pos = MAP_APPFONT ( 198 , 14  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "H~inzufügen..." ;
+        Text [ de ] = "H~inzufÃ¼gen..." ;
         Text [ en-US ] = "~Add..." ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -797,7 +797,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
     {
         Pos = MAP_APPFONT ( 198 , 34  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Ändern..." ;
+        Text [ de ] = "~Ã„ndern..." ;
         Text [ en-US ] = "~Modify..." ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -806,7 +806,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
     {
         Pos = MAP_APPFONT ( 198 , 54  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Löschen..." ;
+        Text [ de ] = "~LÃ¶schen..." ;
         Text [ en-US ] = "~Delete..." ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
