@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlTableFilterPattern.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:10:44 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:13:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,12 +38,16 @@
 #ifndef DBA_XMLTABLEFILTERLIST_HXX
 #include "xmlTableFilterList.hxx"
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 namespace dbaxml
 {
     using namespace ::rtl;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xml::sax;
+DBG_NAME(OXMLTableFilterPattern)
 
 OXMLTableFilterPattern::OXMLTableFilterPattern( SvXMLImport& rImport,
                 sal_uInt16 nPrfx
@@ -54,11 +58,15 @@ OXMLTableFilterPattern::OXMLTableFilterPattern( SvXMLImport& rImport,
         ,m_bNameFilter(_bNameFilter)
         ,m_rParent(_rParent)
 {
+    DBG_CTOR(OXMLTableFilterPattern,NULL);
+
 }
 // -----------------------------------------------------------------------------
 
 OXMLTableFilterPattern::~OXMLTableFilterPattern()
 {
+
+    DBG_DTOR(OXMLTableFilterPattern,NULL);
 }
 // -----------------------------------------------------------------------------
 void OXMLTableFilterPattern::Characters( const ::rtl::OUString& rChars )
