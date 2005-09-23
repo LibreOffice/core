@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:08:27 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:56:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ String RID_GALLERYSTR_THEME_BULLETS
 
 String RID_GALLERYSTR_THEME_OFFICE
 {
-    Text [ de ] = "Büro";
+    Text [ de ] = "BÃ¼ro";
     Text [ en-US ] = "Office";
     Text [ x-comment ] = " ";
 };
@@ -111,7 +111,7 @@ String RID_GALLERYSTR_THEME_PHOTOS
 
 String RID_GALLERYSTR_THEME_BACKGROUNDS
 {
-    Text [ de ] = "Hintergründe";
+    Text [ de ] = "HintergrÃ¼nde";
     Text [ en-US ] = "Backgrounds";
     Text [ x-comment ] = " ";
 };
@@ -156,7 +156,7 @@ String RID_GALLERYSTR_THEME_PEOPLE
 
 String RID_GALLERYSTR_THEME_SURFACES
 {
-    Text [ de ] = "Oberflächen";
+    Text [ de ] = "OberflÃ¤chen";
     Text [ en-US ] = "Surfaces";
     Text [ x-comment ] = " ";
 };
@@ -190,7 +190,7 @@ String RID_GALLERYSTR_THEME_RULERS
 
 String RID_GALLERYSTR_THEME_SOUNDS
 {
-    Text [ de ] = "Klänge";
+    Text [ de ] = "KlÃ¤nge";
     Text [ en-US ] = "Sounds";
     Text [ x-comment ] = " ";
 };
@@ -256,7 +256,7 @@ String RID_GALLERYSTR_THEME_TIME
 
 String RID_GALLERYSTR_THEME_PRESENTATION
 {
-    Text [ de ] = "Präsentation";
+    Text [ de ] = "PrÃ¤sentation";
     Text [ en-US ] = "Presentation";
 };
 
@@ -320,7 +320,7 @@ String RID_GALLERYSTR_THEME_EDUCATION
 
 String RID_GALLERYSTR_THEME_TROUBLE
 {
-    Text [ de ] = "Problemlösungen";
+    Text [ de ] = "ProblemlÃ¶sungen";
     Text [ en-US ] = "Problem Solving";
 };
 
