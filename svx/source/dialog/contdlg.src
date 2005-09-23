@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contdlg.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:47:24 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:36:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,7 +152,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
             {
                 Identifier = TBI_POLYINSERT ;
                 HelpId = HID_CONTDLG_POLYINSERT ;
-                Text [ de ] = "Punkte einfügen" ;
+                Text [ de ] = "Punkte einfÃ¼gen" ;
                 Text [ en-US ] = "Insert Points" ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
@@ -162,7 +162,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
             {
                 Identifier = TBI_POLYDELETE ;
                 HelpId = HID_CONTDLG_POLYDELETE ;
-                Text [ de ] = "Punkte löschen" ;
+                Text [ de ] = "Punkte lÃ¶schen" ;
                 Text [ en-US ] = "Delete Points" ;
                 Text [ x-comment ] = " ";
             };
@@ -187,7 +187,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Identifier = TBI_UNDO ;
                 HelpId = HID_CONTDLG_UNDO ;
 
-                Text [ de ] = "Rückgängig " ;
+                Text [ de ] = "RÃ¼ckgÃ¤ngig " ;
                 Text [ en-US ] = "Undo " ;
                 Text [ x-comment ] = " ";
             };
@@ -274,25 +274,25 @@ FloatingWindow RID_SVXDLG_CONTOUR
 /******************************************************************************/
 String STR_CONTOURDLG_MODIFY
 {
-    Text [ de ] = "Die Kontur wurde geändert.\nSollen die Änderungen übernommen werden?" ;
+    Text [ de ] = "Die Kontur wurde geÃ¤ndert.\nSollen die Ã„nderungen Ã¼bernommen werden?" ;
     Text [ en-US ] = "The contour has been modified.\nDo you want to save the changes?" ;
     Text [ x-comment ] = " ";
 };
 String STR_CONTOURDLG_NEWPIPETTE
 {
-    Text [ de ] = "Möchten Sie eine neue Kontur erzeugen?" ;
+    Text [ de ] = "MÃ¶chten Sie eine neue Kontur erzeugen?" ;
     Text [ en-US ] = "Do you want to create a new contour?" ;
     Text [ x-comment ] = " ";
 };
 String STR_CONTOURDLG_WORKPLACE
 {
-    Text [ de ] = "Das Setzen eines neuen Arbeitsbereiches\nführt zu einem Löschen der Kontur.\nMöchten sie wirklich fortfahren?" ;
+    Text [ de ] = "Das Setzen eines neuen Arbeitsbereiches\nfÃ¼hrt zu einem LÃ¶schen der Kontur.\nMÃ¶chten sie wirklich fortfahren?" ;
     Text [ en-US ] = "Setting a new workspace will\ncause the contour to be deleted.\nAre you sure you want to continue?" ;
     Text [ x-comment ] = " ";
 };
 String STR_CONTOURDLG_LINKED
 {
-    Text [ de ] = "Diese Grafik ist mit dem Dokument verknüpft. Möchten Sie die Verknüpfung aufheben, um die Grafik zu bearbeiten?" ;
+    Text [ de ] = "Diese Grafik ist mit dem Dokument verknÃ¼pft. MÃ¶chten Sie die VerknÃ¼pfung aufheben, um die Grafik zu bearbeiten?" ;
     Text [ en-US ] = "This graphic object is linked to the document. Do you want to unlink the graphics in order to edit it?" ;
     Text [ x-comment ] = " ";
 };
