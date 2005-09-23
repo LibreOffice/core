@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:28:00 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:44:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,7 @@ namespace dbaui
         sal_Bool                            m_bStopTimer;
         sal_Bool                            m_bWasEditing;
         sal_Bool                            m_bDisableErrorBox;
+        sal_Bool                            m_bInUndoMode;
 
         DECL_LINK(OnInvalidateTimer, void*);
     public:                         OSelectionBrowseBox( Window* pParent );
@@ -172,6 +173,13 @@ namespace dbaui
 
         void                        Fill();
         void                        PreFill();
+
+        /** Disables the generation of undo actions
+        */
+        inline void                 EnterUndoMode() { m_bInUndoMode = sal_True; }
+        /** Enables the generation of undo actions
+        */
+        inline void                 LeaveUndoMode() { m_bInUndoMode = sal_False; }
 
         /** GetCellText returns the text at the given position
             @param  _nRow
