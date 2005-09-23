@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:19:54 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:56:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,6 +148,16 @@ void ZipPackageStream::setZipEntry( const ZipEntry &rInEntry)
     aEntry.sName = rInEntry.sName;
     aEntry.nNameLen = rInEntry.nNameLen;
     aEntry.nExtraLen = rInEntry.nExtraLen;
+}
+
+//--------------------------------------------------------------------------
+void ZipPackageStream::CloseOwnStreamIfAny()
+{
+    if ( xStream.is() )
+    {
+        xStream->closeInput();
+        xStream = uno::Reference< io::XInputStream >();
+    }
 }
 
 //--------------------------------------------------------------------------
