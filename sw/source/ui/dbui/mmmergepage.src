@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmmergepage.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:03:16 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:57:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ TabPage DLG_MM_MERGE_PAGE
         Pos = MAP_APPFONT ( 6 , 27 ) ;
         Size = MAP_APPFONT ( 248 , 28 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "Sie kˆnnen jetzt die Dokumente personalisieren. Ein Klick auf die Schaltfl‰che '%1' schlieﬂt vor¸bergehend den Assistenten. Durch Klicken der 'Zur¸ck zum Seriendruck-Assistenten' Schaltfl‰che - sichtbar in einem kleinen Fenster - gelangen Sie zur¸ck zum Assistenten.";
+        Text [ de ] = "Sie k√∂nnen jetzt die Dokumente personalisieren. Ein Klick auf die Schaltfl√§che '%1' schlie√üt vor√ºbergehend den Assistenten. Durch Klicken der 'Zur√ºck zum Seriendruck-Assistenten' Schaltfl√§che - sichtbar in einem kleinen Fenster - gelangen Sie zur√ºck zum Assistenten.";
         Text [ en-US ] = "You can personalize particular documents. Clicking '%1' will temporarily reduce the wizard to a small window so you can edit your document. After editing the document, return to the wizard by clicking 'Return to Mail Merge Wizard' in the small window.";
     };
     PushButton PB_EDIT
@@ -109,7 +109,7 @@ TabPage DLG_MM_MERGE_PAGE
     {
         Pos = MAP_APPFONT ( 55 , 157 ) ;
         Size = MAP_APPFONT ( 180 , 10 ) ;
-        Text [ de ] = "~Groﬂ-/Kleinschreibung";
+        Text [ de ] = "~Gro√ü-/Kleinschreibung";
         Text [ en-US ] = "Ma~tch case";
     };
 };

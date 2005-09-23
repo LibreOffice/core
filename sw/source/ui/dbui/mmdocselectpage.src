@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmdocselectpage.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:59:38 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:56:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,14 +45,14 @@ TabPage DLG_MM_DOCSELECT_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Wählen Sie das Ausgangsdokument des Serienbriefes";
+        Text [ de ] = "WÃ¤hlen Sie das Ausgangsdokument des Serienbriefes";
         Text [ en-US ] = "Select starting document for the mail merge";
     };
     FixedText   FT_HOWTO
     {
         Pos = MAP_APPFONT ( 6 , 27 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Wählen Sie auf welchem Dokument der Serienbrief basieren soll";
+        Text [ de ] = "WÃ¤hlen Sie auf welchem Dokument der Serienbrief basieren soll";
         Text [ en-US ] = "Select the document upon which to base the mail merge document";
     };
     RadioButton RB_CURRENTDOC
