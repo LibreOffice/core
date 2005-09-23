@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbcontrl.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:52:05 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:03:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ ImageList RID_SVXIL_FRAME_HC
 };
 String RID_SVXSTR_TRANSPARENT
 {
-    Text [ de ] = "Keine Füllung" ;
+    Text [ de ] = "Keine FÃ¼llung" ;
     Text [ en-US ] = "No Fill" ;
     Text [ x-comment ] = " ";
 };
@@ -201,7 +201,7 @@ Image RID_SVXIMG_GRAF_TRANSPARENCE_H
 };
 String RID_SVXSTR_CLEARFORM
 {
-    Text [ de ] = "Formatierung löschen";
+    Text [ de ] = "Formatierung lÃ¶schen";
     Text [ en-US ] = "Clear formatting";
 };
 String RID_SVXSTR_MORE
@@ -214,13 +214,13 @@ StringArray RID_SVXSTRARRAY_DEFAULTSTYLES
     ItemList [ de ] =
     {
         < "Standard" ; 0 ; > ;
-        < "Überschrift 1" ; 0 ; > ;
-        < "Überschrift 2" ; 0 ; > ;
-        < "Überschrift 3" ; 0 ; > ;
-        < "Textkörper" ; 0 ; > ;
+        < "Ãœberschrift 1" ; 0 ; > ;
+        < "Ãœberschrift 2" ; 0 ; > ;
+        < "Ãœberschrift 3" ; 0 ; > ;
+        < "TextkÃ¶rper" ; 0 ; > ;
         < "Standard" ; 1 ; > ;
-        < "Überschrift 1" ; 1 ; > ;
-        < "Überschrift 2" ; 1 ; > ;
+        < "Ãœberschrift 1" ; 1 ; > ;
+        < "Ãœberschrift 2" ; 1 ; > ;
         < "Ergebnis" ; 1 ; > ;
         < "Ergebnis2" ; 1 ; > ;
     };
