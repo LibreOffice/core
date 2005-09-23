@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlQuery.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:08:28 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:12:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 namespace dbaxml
 {
@@ -71,6 +74,7 @@ namespace dbaxml
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::xml::sax;
 
+DBG_NAME(OXMLQuery)
 
 OXMLQuery::OXMLQuery( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
@@ -81,6 +85,8 @@ OXMLQuery::OXMLQuery( ODBFilter& rImport
     OXMLTable( rImport, nPrfx, _sLocalName,_xAttrList,_xParentContainer,SERVICE_SDB_COMMAND_DEFINITION )
         ,m_bEscapeProcessing(sal_True)
 {
+    DBG_CTOR(OXMLQuery,NULL);
+
     OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
     const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
     const SvXMLTokenMap& rTokenMap = rImport.GetQueryElemTokenMap();
@@ -109,6 +115,8 @@ OXMLQuery::OXMLQuery( ODBFilter& rImport
 
 OXMLQuery::~OXMLQuery()
 {
+
+    DBG_DTOR(OXMLQuery,NULL);
 }
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLQuery::CreateChildContext(
