@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomailmerge.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:21:35 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:49:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,37 +213,12 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::text;
-using namespace rtl;
+using ::rtl::OUString;
 using namespace SWUnoHelper;
 
 ////////////////////////////////////////////////////////////
 
-class DisposeHelper
-{
-    uno::Reference< XComponent > xC;
-
-    // disallow use of copy c-tor and assignment operator
-    DisposeHelper( const DisposeHelper & );
-    DisposeHelper & operator = ( const DisposeHelper & );
-
-public:
-    DisposeHelper() {}
-#if OSL_DEBUG_LEVEL > 1
-    ~DisposeHelper();
-#else
-    ~DisposeHelper()    { if (xC.is()) xC->dispose(); }
-#endif
-
-    BOOL    SetInterface( uno::Reference< XInterface > &rxRef )  { return (xC = uno::Reference< XComponent >( rxRef, UNO_QUERY )).is(); }
-};
-
-#if OSL_DEBUG_LEVEL > 1
-DisposeHelper::~DisposeHelper()
-{
-    if (xC.is())
-        xC->dispose();
-}
-#endif
+typedef ::utl::SharedUNOComponent< XInterface > SharedComponent;
 
 ////////////////////////////////////////////////////////////
 
@@ -777,7 +752,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     if (pView && aCurDocumentURL.getLength())
         pView->AttrChangedNotify( &pView->GetWrtShell() );//Damit SelectShell gerufen wird.
 
-    DisposeHelper aRowSetDisposeHelper;
+    SharedComponent aRowSetDisposeHelper;
     if (!xCurResultSet.is())
     {
         if (!aCurDataSourceName.getLength() || !aCurDataCommand.getLength() )
@@ -794,7 +769,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         {
             Reference< XInterface > xInstance = xMgr->createInstance(
                     C2U( "com.sun.star.sdb.RowSet" ));
-            aRowSetDisposeHelper.SetInterface( xInstance );
+            aRowSetDisposeHelper.reset( xInstance, SharedComponent::TakeOwnership );
             Reference< XPropertySet > xRowSetPropSet( xInstance, UNO_QUERY );
             DBG_ASSERT( xRowSetPropSet.is(), "failed to get XPropertySet interface from RowSet" );
             if (xRowSetPropSet.is())
