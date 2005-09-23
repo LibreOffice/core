@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dapitype.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:33:47 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:59:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@ ModalDialog RID_SCDLG_DAPITYPE
     HelpId = HID_DATAPILOT_TYPE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 241 , 63 ) ;
-    Text [ de ] = "Quelle ausw‰hlen" ;
+    Text [ de ] = "Quelle ausw√§hlen" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
     OKButton BTN_OK
@@ -235,7 +235,7 @@ ModalDialog RID_SCDLG_DAPIDATA
     HelpId = HID_DATAPILOT_DATABASE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 241 , 63 ) ;
-    Text [ de ] = "Datenquelle ausw‰hlen" ;
+    Text [ de ] = "Datenquelle ausw√§hlen" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
     OKButton BTN_OK
