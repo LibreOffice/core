@@ -4,9 +4,9 @@
  *
  *  $RCSfile: masterlayoutdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:07:28 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 10:45:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,20 +65,16 @@ MasterLayoutDialog::MasterLayoutDialog( Window* pParent, SdDrawDocument* pDoc, S
     mpDoc( pDoc ),
     mpCurrentPage( pCurrentPage )
 {
+    if( mpCurrentPage && !mpCurrentPage->IsMasterPage() )
+    {
+        mpCurrentPage = (SdPage*)(&(mpCurrentPage->TRG_GetMasterPage()));
+    }
+
     if( mpCurrentPage == 0 )
     {
         mpCurrentPage = pDoc->GetMasterSdPage( 0, PK_STANDARD );
         DBG_ERROR( "MasterLayoutDialog::MasterLayoutDialog() - no current page?" );
     }
-    else if( !mpCurrentPage->IsMasterPage() )
-    {
-        //      mpCurrentPage = (SdPage*)(&(mpCurrentPage->TRG_GetMasterPage()));
-        maCBHeader.Enable( FALSE );
-        maCBDate.Enable( FALSE );
-        maCBFooter.Enable( FALSE );
-        maCBPageNumber.Enable( FALSE );
-    }
-
 
     switch( mpCurrentPage->GetPageKind() )
     {
