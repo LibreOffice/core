@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acredlin.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:06:13 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:02:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@ ModelessDialog RID_SCDLG_CHANGES
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 282 , 142 ) ;
-    Text [ de ] = "Änderungen akzeptieren oder verwerfen" ;
+    Text [ de ] = "Ã„nderungen akzeptieren oder verwerfen" ;
     Moveable = TRUE ;
     Sizeable = TRUE ;
     Closeable = TRUE ;
@@ -80,7 +80,7 @@ ModelessDialog RID_SCDLG_CHANGES
     ImageButton RB_ASSIGN
     {
         Hide = TRUE ;
-        QuickHelpText [ de ] = "Verkleinern/Vergrößern" ;
+        QuickHelpText [ de ] = "Verkleinern/VergrÃ¶ÃŸern" ;
         Pos = MAP_APPFONT ( 142 , 118 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -89,37 +89,37 @@ ModelessDialog RID_SCDLG_CHANGES
     };
     String STR_INSERT_COLS
     {
-        Text [ de ] = "Spalte eingefügt" ;
+        Text [ de ] = "Spalte eingefÃ¼gt" ;
         Text [ en-US ] = "Column inserted" ;
         Text [ x-comment ] = " ";
     };
     String STR_INSERT_ROWS
     {
-        Text [ de ] = "Zeile eingefügt" ;
+        Text [ de ] = "Zeile eingefÃ¼gt" ;
         Text [ en-US ] = "Row inserted " ;
         Text [ x-comment ] = " ";
     };
     String STR_INSERT_TABS
     {
-        Text [ de ] = "Tabelle eingefügt" ;
+        Text [ de ] = "Tabelle eingefÃ¼gt" ;
         Text [ en-US ] = "Sheet inserted " ;
         Text [ x-comment ] = " ";
     };
     String STR_DELETE_COLS
     {
-        Text [ de ] = "Spalte gelöscht" ;
+        Text [ de ] = "Spalte gelÃ¶scht" ;
         Text [ en-US ] = "Column deleted" ;
         Text [ x-comment ] = " ";
     };
     String STR_DELETE_ROWS
     {
-        Text [ de ] = "Zeile gelöscht" ;
+        Text [ de ] = "Zeile gelÃ¶scht" ;
         Text [ en-US ] = "Row deleted" ;
         Text [ x-comment ] = " ";
     };
     String STR_DELETE_TABS
     {
-        Text [ de ] = "Tabelle gelöscht" ;
+        Text [ de ] = "Tabelle gelÃ¶scht" ;
         Text [ en-US ] = "Sheet deleted" ;
         Text [ x-comment ] = " ";
     };
@@ -131,19 +131,19 @@ ModelessDialog RID_SCDLG_CHANGES
     };
     String STR_CONTENT
     {
-        Text [ de ] = "Inhaltsänderung" ;
+        Text [ de ] = "InhaltsÃ¤nderung" ;
         Text [ en-US ] = "Changed contents" ;
         Text [ x-comment ] = " ";
     };
     String STR_CONTENT_WITH_CHILD
     {
-        Text [ de ] = "Inhaltsänderung" ;
+        Text [ de ] = "InhaltsÃ¤nderung" ;
         Text [ en-US ] = "Changed contents" ;
         Text [ x-comment ] = " ";
     };
     String STR_CHILD_CONTENT
     {
-        Text [ de ] = "Änderung zu " ;
+        Text [ de ] = "Ã„nderung zu " ;
         Text [ en-US ] = "Changed to " ;
         Text [ x-comment ] = " ";
     };
@@ -155,7 +155,7 @@ ModelessDialog RID_SCDLG_CHANGES
     };
     String STR_REJECT
     {
-        Text [ de ] = "Änderung verworfen" ;
+        Text [ de ] = "Ã„nderung verworfen" ;
         Text [ en-US ] = "Changes rejected" ;
         Text [ x-comment ] = " ";
     };
