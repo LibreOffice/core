@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:57:09 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:01:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,9 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 using namespace comphelper;
 
@@ -103,6 +106,16 @@ using namespace ::com::sun::star::io;
 //  using namespace ::cppu;
 using namespace ::osl;
 
+DBG_NAME(OCacheSet)
+// -------------------------------------------------------------------------
+OCacheSet::OCacheSet()
+            :m_bInserted(sal_False)
+            ,m_bUpdated(sal_False)
+            ,m_bDeleted(sal_False)
+{
+    DBG_CTOR(OCacheSet,NULL);
+
+}
 // -------------------------------------------------------------------------
 ::rtl::OUString OCacheSet::getIdentifierQuoteString() const
 {
@@ -160,12 +173,14 @@ OCacheSet::~OCacheSet()
     {
         OSL_ENSURE(0,"Unknown Exception occured");
     }
+
+    DBG_DTOR(OCacheSet,NULL);
 }
 // -----------------------------------------------------------------------------
 void OCacheSet::fillTableName(const Reference<XPropertySet>& _xTable)  throw(SQLException, RuntimeException)
 {
     OSL_ENSURE(_xTable.is(),"OCacheSet::fillTableName: PropertySet is empty!");
-    if(!m_aComposedTableName.getLength())
+    if(!m_aComposedTableName.getLength() && _xTable.is() )
     {
         Reference<XDatabaseMetaData> xMeta(m_xConnection->getMetaData());
         composeTableName(xMeta
@@ -570,7 +585,7 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
     {
         sal_Int32 nType = m_xSetMetaData->getColumnType(i);
         aIter->setSigned(m_aSignedFlags[i-1]);
-        fetchValue(i,nType,this,*aIter);
+        aIter->fill(i,nType,this);
     }
 }
 // -----------------------------------------------------------------------------
@@ -773,83 +788,3 @@ Reference< XInterface > SAL_CALL OCacheSet::getStatement(  ) throw(SQLException,
     return m_xDriverSet->getStatement();
 }
 // -----------------------------------------------------------------------------
-void OCacheSet::fetchValue(sal_Int32 _nPos,sal_Int32 _nType,const Reference<XRow>& _xRow,ORowSetValue& _rValue)
-{
-    sal_Bool bReadData = sal_True;
-    switch(_nType)
-    {
-    case DataType::CHAR:
-    case DataType::VARCHAR:
-    case DataType::DECIMAL:
-    case DataType::NUMERIC:
-    case DataType::LONGVARCHAR:
-        _rValue = _xRow->getString(_nPos);
-        break;
-    case DataType::BIGINT:
-        if ( _rValue.isSigned() )
-            _rValue = _xRow->getLong(_nPos);
-        else
-            _rValue = _xRow->getString(_nPos);
-        break;
-    case DataType::FLOAT:
-        _rValue = _xRow->getFloat(_nPos);
-        break;
-    case DataType::DOUBLE:
-    case DataType::REAL:
-        _rValue = _xRow->getDouble(_nPos);
-        break;
-    case DataType::DATE:
-        _rValue = _xRow->getDate(_nPos);
-        break;
-    case DataType::TIME:
-        _rValue = _xRow->getTime(_nPos);
-        break;
-    case DataType::TIMESTAMP:
-        _rValue = _xRow->getTimestamp(_nPos);
-        break;
-    case DataType::BINARY:
-    case DataType::VARBINARY:
-    case DataType::LONGVARBINARY:
-        _rValue = _xRow->getBytes(_nPos);
-        break;
-    case DataType::BIT:
-    case DataType::BOOLEAN:
-        _rValue = _xRow->getBoolean(_nPos);
-        break;
-    case DataType::TINYINT:
-        if ( _rValue.isSigned() )
-            _rValue = _xRow->getByte(_nPos);
-        else
-            _rValue = _xRow->getShort(_nPos);
-        break;
-    case DataType::SMALLINT:
-        if ( _rValue.isSigned() )
-            _rValue = _xRow->getShort(_nPos);
-        else
-            _rValue = _xRow->getInt(_nPos);
-        break;
-    case DataType::INTEGER:
-        if ( _rValue.isSigned() )
-            _rValue = _xRow->getInt(_nPos);
-        else
-            _rValue = _xRow->getLong(_nPos);
-        break;
-    case DataType::CLOB:
-        _rValue = makeAny(_xRow->getCharacterStream(_nPos));
-        _rValue.setTypeKind(DataType::CLOB);
-        break;
-    case DataType::BLOB:
-        _rValue = makeAny(_xRow->getBinaryStream(_nPos));
-        _rValue.setTypeKind(DataType::BLOB);
-        break;
-    default:
-        bReadData = sal_False;
-        break;
-    }
-    if ( bReadData && _xRow->wasNull() )
-        _rValue.setNull();
-    _rValue.setTypeKind(_nType);
-}
-// -----------------------------------------------------------------------------
-
-
