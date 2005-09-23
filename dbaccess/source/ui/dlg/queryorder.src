@@ -4,9 +4,9 @@
  *
  *  $RCSfile: queryorder.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:10:34 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:16:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,7 +179,7 @@ ModalDialog DLG_ORDERCRIT
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 46 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Verknüpfung : Verkn³pfung */
-        Text [ de ] = "Verknüpfung" ;
+        Text [ de ] = "VerknÃ¼pfung" ;
         Text [ en-US ] = "Operator" ;
         Text [ x-comment ] = " ";
     };
