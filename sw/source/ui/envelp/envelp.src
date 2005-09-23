@@ -4,9 +4,9 @@
  *
  *  $RCSfile: envelp.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:23:58 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:00:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
  // Strings ******************************************************************
 String STR_DATABASE_NOT_OPENED
 {
-    Text [ de ] = "Datenbank konnte nicht geöffnet werden." ;
+    Text [ de ] = "Datenbank konnte nicht geÃ¶ffnet werden." ;
     Text [ en-US ] = "Database could not be opened." ;
     Text [ x-comment ] = " ";
 };
