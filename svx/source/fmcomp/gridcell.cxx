@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:45:57 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:59:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -789,15 +789,8 @@ void DbCellControl::implAdjustReadOnly( const Reference< XPropertySet >& _rxMode
     DBG_ASSERT( _rxModel.is(), "DbCellControl::implAdjustReadOnly: invalid model!" );
     if ( m_pWindow && _rxModel.is() )
     {
-        WindowType eType = m_pWindow->GetType();
-        if  (   ( WINDOW_EDIT == eType )
-            ||  ( WINDOW_COMBOBOX == eType )
-            ||  ( WINDOW_DATEFIELD == eType )
-            ||  ( WINDOW_TIMEFIELD == eType )
-            ||  ( WINDOW_NUMERICFIELD == eType )
-            ||  ( WINDOW_PATTERNFIELD == eType )
-            ||  ( WINDOW_CURRENCYFIELD == eType )
-            )
+        Edit* pEditWindow = dynamic_cast< Edit* >( m_pWindow );
+        if ( pEditWindow )
         {
             sal_Bool bReadOnly = sal_True;
             _rxModel->getPropertyValue( FM_PROP_READONLY ) >>= bReadOnly;
