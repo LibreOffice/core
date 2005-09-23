@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmconfigitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:57:38 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:48:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,7 @@
 #include <svtools/svstdarr.hxx>
 
 using namespace utl;
-using namespace rtl;
+using ::rtl::OUString;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -989,8 +989,10 @@ Reference< XResultSet>   SwMailMergeConfigItem::GetResultSet()
 {
     if(!m_pImpl->xConnection.is() && m_pImpl->aDBData.sDataSource.getLength())
     {
-        m_pImpl->xConnection = SharedConnection( SwNewDBMgr::GetConnection(
-                                    m_pImpl->aDBData.sDataSource, m_pImpl->xSource), true );
+        m_pImpl->xConnection.reset(
+            SwNewDBMgr::GetConnection( m_pImpl->aDBData.sDataSource, m_pImpl->xSource ),
+            SharedConnection::TakeOwnership
+        );
     }
     if(!m_pImpl->xResultSet.is() && m_pImpl->xConnection.is())
     {
