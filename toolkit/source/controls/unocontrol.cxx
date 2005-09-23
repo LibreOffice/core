@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:19:43 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:43:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -438,7 +438,8 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
         DECLARE_STL_VECTOR( PropertyValue, PropertyValueVector);
         PropertyValueVector     aPeerPropertiesToSet;
         sal_Int32               nIndependentPos = 0;
-            // position where to insert the independent properties, dependent ones are inserted at the end of the vector
+            // position where to insert the independent properties into aPeerPropertiesToSet,
+            // dependent ones are inserted at the end of the vector
 
         sal_Bool bNeedNewPeer = sal_False;
             // some properties require a re-creation of the peer, 'cause they can't be changed on the fly
@@ -488,9 +489,26 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
                 }
                 else
                 {
-                    aPeerPropertiesToSet.insert(aPeerPropertiesToSet.begin() + nIndependentPos,
-                        PropertyValue(pEvents->PropertyName, 0, pEvents->NewValue, PropertyState_DIRECT_VALUE));
-                    ++nIndependentPos;
+                    if ( nPType == BASEPROPERTY_NATIVE_WIDGET_LOOK )
+                    {
+                        // since *a lot* of other properties might be overruled by this one, we need
+                        // a special handling:
+                        // NativeWidgetLook needs to be set first: If it is set to ON, all other
+                        // properties describing the look (e.g. BackgroundColor) are ignored, anyway.
+                        // If it is switched OFF, then we need to do it first because else it will
+                        // overrule other look-related properties, and re-initialize them from system
+                        // defaults.
+                        aPeerPropertiesToSet.insert(
+                            aPeerPropertiesToSet.begin(),
+                            PropertyValue( pEvents->PropertyName, 0, pEvents->NewValue, PropertyState_DIRECT_VALUE ) );
+                        ++nIndependentPos;
+                    }
+                    else
+                    {
+                        aPeerPropertiesToSet.insert(aPeerPropertiesToSet.begin() + nIndependentPos,
+                            PropertyValue(pEvents->PropertyName, 0, pEvents->NewValue, PropertyState_DIRECT_VALUE));
+                        ++nIndependentPos;
+                    }
                 }
             }
         }
