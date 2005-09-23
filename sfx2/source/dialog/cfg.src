@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:12:59 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:23:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,47 +44,47 @@
 #define PUSHBUTTON_TEXT_SAVE \
     Text [ de ] = "~Speichern..." ; \
     Text [ en-US ] = "~Save..." ; \
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " ";\
 
 #define PUSHBUTTON_TEXT_RESET \
-    Text [ de ] = "Zur~ücksetzen" ; \
+    Text [ de ] = "Zur~Ã¼cksetzen" ; \
     Text [ en-US ] = "R~eset" ; \
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " ";\
 
 #define PUSHBUTTON_TEXT_LOAD \
     Text [ de ] = "La~den..." ; \
     Text [ en-US ] = "~Load..." ; \
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " ";\
 
 #define PUSHBUTTON_TEXT_REMOVE \
-    Text [ de ] = "~Löschen" ; \
+    Text [ de ] = "~LÃ¶schen" ; \
     Text [ en-US ] = "~Delete" ; \
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " ";\
 
 #define PUSHBUTTON_TEXT_CHANGE \
-    Text [ de ] = "~Ändern" ; \
+    Text [ de ] = "~Ã„ndern" ; \
     Text [ en-US ] = "~Modify" ; \
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " ";\
 
 #define PUSHBUTTON_TEXT_NEW \
     Text [ de ] = "~Neu" ; \
     Text [ en-US ] = "~New" ; \
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " ";\
 
 #define FIXEDTEXT_TEXT_GROUP \
     Text [ de ] = "~Bereich" ; \
     Text [ en-US ] = "~Category" ; \
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " ";\
 
 #define FIXEDTEXT_TEXT_FUNCTION \
     Text [ de ] = "~Funktion" ; \
     Text [ en-US ] = "Function" ; \
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " ";\
 
 #define GROUPBOX_TEXT_FUNCTIONS \
     Text [ de ] = "Funktionen" ; \
     Text [ en-US ] = "Functions" ; \
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " ";\
 
  // TP_CONFIG_MENU --------------------------------------------------------
 TabPage TP_CONFIG_MENU
@@ -96,7 +96,7 @@ TabPage TP_CONFIG_MENU
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 214 , 8 ) ;
-        Text [ de ] = "Menüeinträge" ;
+        Text [ de ] = "MenÃ¼eintrÃ¤ge" ;
         Text [ en-US ] = "Menu entries";
     };
     PushButton BTN_MN_NEW
@@ -110,7 +110,7 @@ TabPage TP_CONFIG_MENU
     {
         Pos = MAP_APPFONT ( 226 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Neues ~Menü" ;
+        Text [ de ] = "Neues ~MenÃ¼" ;
         Text [ en-US ] = "New Men~u" ;
         Text [ x-comment ] = " ";
     };
@@ -471,7 +471,7 @@ TabDialog DLG_CONFIG
             PageItem
             {
                 Identifier = TP_CONFIG_MENU ;
-                Text [ de ] = "Menü" ;
+                Text [ de ] = "MenÃ¼" ;
                 PageResID = 300 ;
                 Text [ en-US ] = "Menu" ;
                 Text [ x-comment ] = " ";
@@ -521,7 +521,7 @@ String STR_NEW
 };
 String STR_OPEN
 {
-    Text [ de ] = "Öffnen" ;
+    Text [ de ] = "Ã–ffnen" ;
     Text [ en-US ] = "Open" ;
     Text [ x-comment ] = " ";
 };
@@ -563,13 +563,13 @@ String STR_COPY
 };
 String STR_PASTE
 {
-    Text [ de ] = "Einfügen" ;
+    Text [ de ] = "EinfÃ¼gen" ;
     Text [ en-US ] = "Paste" ;
     Text [ x-comment ] = " ";
 };
 String STR_DELETE
 {
-    Text [ de ] = "Löschen" ;
+    Text [ de ] = "LÃ¶schen" ;
     Text [ en-US ] = "Delete" ;
     Text [ x-comment ] = " ";
 };
@@ -581,7 +581,7 @@ String STR_FIND
 };
 String STR_FINDBACKWARD
 {
-    Text [ de ] = "Rückwärts suchen" ;
+    Text [ de ] = "RÃ¼ckwÃ¤rts suchen" ;
     Text [ en-US ] = "Search backward" ;
     Text [ x-comment ] = " ";
 };
@@ -602,7 +602,7 @@ QueryBox QBX_MNUCFG_UNDEFINED_FUNCTIONS
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message [ de ] = "Es existieren noch undefinierte Funktionen (???).\n\nWollen Sie diese Konfiguration trotzdem übernehmen?" ;
+    Message [ de ] = "Es existieren noch undefinierte Funktionen (???).\n\nWollen Sie diese Konfiguration trotzdem Ã¼bernehmen?" ;
     Message [ en-US ] = "There are still undefined functions (???).\n\nDo you want to accept the configuration anyway?" ;
     Message [ x-comment ] = " ";
 };
@@ -610,7 +610,7 @@ QueryBox QBX_MNUCFG_POPUP_FUNCTIONS
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message [ de ] = "Es existieren noch Einträge mit Funktionen, die nur Popups zugewiesen werden können.\n\nWollen Sie diese Konfiguration trotzdem übernehmen?" ;
+    Message [ de ] = "Es existieren noch EintrÃ¤ge mit Funktionen, die nur Popups zugewiesen werden kÃ¶nnen.\n\nWollen Sie diese Konfiguration trotzdem Ã¼bernehmen?" ;
     Message [ en-US ] = "There are still entries with functions that can only be assigned to pop-ups.\n\nContinue anyway?" ;
     Message [ x-comment ] = " ";
 };
@@ -622,13 +622,13 @@ InfoBox IBX_MNUCFG_ALREADY_INCLUDED
 };
 String STR_LOADMENUCONFIG
 {
-    Text [ de ] = "Menükonfiguration laden" ;
+    Text [ de ] = "MenÃ¼konfiguration laden" ;
     Text [ en-US ] = "Load Menu Configuration" ;
     Text [ x-comment ] = " ";
 };
 String STR_SAVEMENUCONFIG
 {
-    Text [ de ] = "Menükonfiguration speichern" ;
+    Text [ de ] = "MenÃ¼konfiguration speichern" ;
     Text [ en-US ] = "Save Menu Configuration" ;
 };
 String STR_LOADACCELCONFIG
@@ -655,7 +655,7 @@ String STR_SAVESTATBARCONFIG
 };
 String STR_MENU
 {
-    Text [ de ] = "Menü" ;
+    Text [ de ] = "MenÃ¼" ;
     Text [ en-US ] = "Menu" ;
     Text [ x-comment ] = " ";
 };
@@ -673,7 +673,7 @@ String STR_TOOLBAR_SPACE
 
 String STR_FUNCTION_ALREADY_IN_TOOLBOX
 {
-    Text [ de ] = "Die gewünschte Funktion ist bereits in der aktuellen Symbolleiste vorhanden." ;
+    Text [ de ] = "Die gewÃ¼nschte Funktion ist bereits in der aktuellen Symbolleiste vorhanden." ;
     Text [ en-US ] = "The selected function is already on the current toolbar.";
 };
  // ********************************************************************** EOF
