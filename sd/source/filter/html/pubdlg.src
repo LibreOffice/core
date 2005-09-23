@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pubdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:23:04 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:24:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT ( 168 , 75 ) ;
         Size = MAP_APPFONT ( 92 , 14 ) ;
-        Text [ de ] = "Markiertes Design ~löschen" ;
+        Text [ de ] = "Markiertes Design ~lÃ¶schen" ;
         TabStop = TRUE ;
         DefButton = TRUE ;
         Text [ en-US ] = "Delete Selected Design";
@@ -109,7 +109,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT ( 12 , 142 ) ;
         Size = MAP_APPFONT ( 258 , 8 ) ;
-        Text [ de ] = "Wählen Sie ein existierendes Design, oder erstellen Sie ein neues" ;
+        Text [ de ] = "WÃ¤hlen Sie ein existierendes Design, oder erstellen Sie ein neues" ;
         Text [ en-US ] = "Select an existing design or create a new one";
         Text [ x-comment ] = " ";
     };
@@ -133,7 +133,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT ( 6, 38 ) ;
         Size = MAP_APPFONT ( 124, 8 ) ;
-        Text [ de ] = "Art der Veröffentlichung" ;
+        Text [ de ] = "Art der VerÃ¶ffentlichung" ;
         Text [ en-US ] = "Publication type";
         Text [ x-comment ] = " ";
     };
@@ -221,7 +221,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 138, 38 );
         Size = MAP_APPFONT( 128, 8 );
-        Text [ de ] = "Zusätze" ;
+        Text [ de ] = "ZusÃ¤tze" ;
         Text [ en-US ] = "Options";
     };
 
@@ -356,7 +356,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 154, 76 );
         Size = MAP_APPFONT( 105, 10 );
-        Text [ de ] = "~URL für Zuhörer";
+        Text [ de ] = "~URL fÃ¼r ZuhÃ¶rer";
         Text [ en-US ] = "~URL for listeners";
         Text [ x-comment ] = " ";
     };
@@ -373,7 +373,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos  = MAP_APPFONT( 154, 104 );
         Size = MAP_APPFONT( 105, 10 );
-        Text [ de ] = "URL für ~Präsentation:";
+        Text [ de ] = "URL fÃ¼r ~PrÃ¤sentation:";
         Text [ en-US ] = "URL for ~presentation:";
         Text [ x-comment ] = " ";
     };
@@ -390,7 +390,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos  = MAP_APPFONT( 154, 132 );
         Size = MAP_APPFONT( 105, 10 );
-        Text [ de ] = "URL für ~Perl Skripte:";
+        Text [ de ] = "URL fÃ¼r ~Perl Skripte:";
         Text [ en-US ] = "URL for ~Perl scripts:";
     };
 
@@ -457,7 +457,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 49, 79 );
         Size = MAP_APPFONT( 79, 10 );
-        Text [ de ] = "Qualität";
+        Text [ de ] = "QualitÃ¤t";
         Text [ en-US ] = "Quality";
     };
 
@@ -476,7 +476,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 138, 38 );
         Size = MAP_APPFONT( 128, 8 );
-        Text [ de ] = "Monitorauflösung";
+        Text [ de ] = "MonitorauflÃ¶sung";
         Text [ en-US ] = "Monitor resolution";
     };
 
@@ -484,7 +484,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 144, 49 );
         Size = MAP_APPFONT( 116, 10 );
-        Text [ de ] = "Niedrige Auflösung (~640x480 Pixel)";
+        Text [ de ] = "Niedrige AuflÃ¶sung (~640x480 Pixel)";
         Text [ en-US ] = "Low resolution (~640x480 pixels)";
     };
 
@@ -492,7 +492,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 144, 63 );
         Size = MAP_APPFONT( 116, 10 );
-        Text [ de ] = "Mittlere Auflösung (~800x600 Pixel)";
+        Text [ de ] = "Mittlere AuflÃ¶sung (~800x600 Pixel)";
         Text [ en-US ] = "Medium resolution (~800x600 pixels)";
     };
 
@@ -500,7 +500,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT ( 144, 77 ) ;
         Size = MAP_APPFONT ( 116 , 10 ) ;
-        Text [ de ] = "Hohe Auflösung (~1024x768 Pixel)";
+        Text [ de ] = "Hohe AuflÃ¶sung (~1024x768 Pixel)";
         Text [ en-US ] = "High resolution (~1024x768 pixels)";
     };
 
@@ -521,7 +521,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT ( 12, 111 );
         Size = MAP_APPFONT ( 252, 10 );
-        Text [ de ] = "~Klänge beim Seitenwechsel exportieren" ;
+        Text [ de ] = "~KlÃ¤nge beim Seitenwechsel exportieren" ;
         Text [ en-US ] = "~Export sounds when slide advances" ;
 
     };
@@ -543,7 +543,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT ( 6 , 38 ) ;
         Size = MAP_APPFONT ( 258 , 8 ) ;
-        Text [ de ] = "Informationen für die Titelseite" ;
+        Text [ de ] = "Informationen fÃ¼r die Titelseite" ;
         Text [ en-US ] = "Information for the title page";
     };
 
@@ -620,7 +620,7 @@ ModalDialog DLG_PUBLISHING
         Pos = MAP_APPFONT ( 12 , 149 ) ;
         Size = MAP_APPFONT ( 252 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Link auf Kopie der ~Originalpräsentation" ;
+        Text [ de ] = "Link auf Kopie der ~OriginalprÃ¤sentation" ;
         Text [ en-US ] = "Link to a copy of the ~original presentation";
     };
 
@@ -650,7 +650,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT ( 6 , 38 ) ;
         Size = MAP_APPFONT ( 258 , 8 ) ;
-        Text [ de ] = "Schaltflächenstil auswählen" ;
+        Text [ de ] = "SchaltflÃ¤chenstil auswÃ¤hlen" ;
         Text [ en-US ] = "Select button style";
         Text [ x-comment ] = " ";
     };
@@ -689,7 +689,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT ( 6 , 38 ) ;
         Size = MAP_APPFONT ( 258 , 8 ) ;
-        Text [ de ] = "Farbschema auswählen" ;
+        Text [ de ] = "Farbschema auswÃ¤hlen" ;
         Text [ en-US ] = "Select color scheme";
         Text [ x-comment ] = " ";
     };
@@ -698,7 +698,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 12, 50 );
         Size = MAP_APPFONT( 246, 10 );
-        Text [ de ] = "Farbschema aus Dokument ü~bernehmen";
+        Text [ de ] = "Farbschema aus Dokument Ã¼~bernehmen";
         Text [ en-US ] = "~Apply color scheme from document";
         Text [ x-comment ] = " ";
     };
@@ -782,7 +782,7 @@ ModalDialog DLG_PUBLISHING
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 112 , 170 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "<< ~Zurück" ;
+        Text [ de ] = "<< ~ZurÃ¼ck" ;
         TabStop = TRUE ;
         Text [ en-US ] = "<< Back" ;
         Text [ x-comment ] = " ";
