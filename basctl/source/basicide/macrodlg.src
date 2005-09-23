@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macrodlg.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:06:26 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:20:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,7 @@ ModalDialog RID_MACROCHOOSER
         Size = MAP_APPFONT ( 50 , 14 ) ;
         DefButton = TRUE;
         /* ### ACHTUNG: Neuer Text in Resource? Aus~führen : Aus~f³hren */
-        Text [ de ] = "Aus~führen" ;
+        Text [ de ] = "Aus~fÃ¼hren" ;
         Text [ en-US ] = "R~un" ;
         TabStop = TRUE ;
     };
@@ -124,7 +124,7 @@ ModalDialog RID_MACROCHOOSER
         Pos = MAP_APPFONT ( 231 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Schließen" ;
+        Text [ de ] = "SchlieÃŸen" ;
         Text [ en-US ] = "Close";
     };
 
@@ -163,7 +163,7 @@ ModalDialog RID_MACROCHOOSER
         Pos = MAP_APPFONT ( 231 , 94 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Löschen... : ~L÷schen... */
-        Text [ de ] = "~Löschen" ;
+        Text [ de ] = "~LÃ¶schen" ;
         Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
     };
@@ -198,7 +198,7 @@ String RID_STR_STDMACRONAME
 String RID_STR_BTNDEL
 {
     /* ### ACHTUNG: Neuer Text in Resource? ~Löschen... : ~L÷schen... */
-    Text [ de ] = "~Löschen" ;
+    Text [ de ] = "~LÃ¶schen" ;
     Text [ en-US ] = "~Delete" ;
 };
 String RID_STR_BTNNEW
@@ -209,19 +209,19 @@ String RID_STR_BTNNEW
 String RID_STR_CLOSE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Schließen : Schlie˜en */
-    Text [ de ] = "Schließen" ;
+    Text [ de ] = "SchlieÃŸen" ;
     Text [ en-US ] = "Close" ;
 };
 String RID_STR_CHOOSE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Auswählen : Auswõhlen */
-    Text [ de ] = "Auswählen" ;
+    Text [ de ] = "AuswÃ¤hlen" ;
     Text [ en-US ] = "Choose" ;
 };
 String RID_STR_RUN
 {
     /* ### ACHTUNG: Neuer Text in Resource? Ausführen : Ausf³hren */
-    Text [ de ] = "Ausführen" ;
+    Text [ de ] = "AusfÃ¼hren" ;
     Text [ en-US ] = "Run" ;
 };
 
