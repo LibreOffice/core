@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:32:11 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:08:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ TabPage RID_SCPAGE_CALC
     {
         Pos = MAP_APPFONT ( 20 , 42 ) ;
         Size = MAP_APPFONT ( 58 , 16 ) ;
-        Text [ de ] = "Minimaler Änderungs~wert" ;
+        Text [ de ] = "Minimaler Ã„nderungs~wert" ;
         Text [ en-US ] = "~Minimum Change" ;
         WordBreak = TRUE ;
         Text [ x-comment ] = " ";
@@ -92,7 +92,7 @@ TabPage RID_SCPAGE_CALC
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 121 , 8 ) ;
-        Text [ de ] = "Zirkuläre Referenzen" ;
+        Text [ de ] = "ZirkulÃ¤re Referenzen" ;
         Text [ en-US ] = "Iterative references" ;
         Text [ x-comment ] = " ";
     };
@@ -167,7 +167,7 @@ TabPage RID_SCPAGE_CALC
     {
         Pos = MAP_APPFONT ( 12 , 77 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
-        Text [ de ] = "~Groß-/Kleinschreibung beachten" ;
+        Text [ de ] = "~GroÃŸ-/Kleinschreibung beachten" ;
         Text [ en-US ] = "Case se~nsitive" ;
         Text [ x-comment ] = " ";
     };
@@ -183,7 +183,7 @@ TabPage RID_SCPAGE_CALC
     {
         Pos = MAP_APPFONT ( 12 , 105 ) ;
         Size = MAP_APPFONT ( 239 , 10 ) ;
-        Text [ de ] = "Suchkri~terien = und <> müssen auf ganze Zellen zutreffen" ;
+        Text [ de ] = "Suchkri~terien = und <> mÃ¼ssen auf ganze Zellen zutreffen" ;
         Text [ en-US ] = "Search criteria = and <> must apply to ~whole cells" ;
         Text [ x-comment ] = " ";
     };
@@ -191,7 +191,7 @@ TabPage RID_SCPAGE_CALC
     {
         Pos = MAP_APPFONT ( 12 , 119 ) ;
         Size = MAP_APPFONT ( 239 , 10 ) ;
-        Text [ de ] = "Reguläre Ausdrücke in ~Formeln ermöglichen" ;
+        Text [ de ] = "RegulÃ¤re AusdrÃ¼cke in ~Formeln ermÃ¶glichen" ;
         Text [ en-US ] = "~Enable regular expressions in formulas" ;
         Text [ x-comment ] = " ";
     };
@@ -237,7 +237,7 @@ TabPage RID_SCPAGE_USERLISTS
         Pos = MAP_APPFONT ( 105 , 3 ) ;
         Size = MAP_APPFONT ( 93 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Ein~träge : Ein~trõge */
-        Text [ de ] = "Ein~träge" ;
+        Text [ de ] = "Ein~trÃ¤ge" ;
         Text [ en-US ] = "~Entries" ;
         Text [ x-comment ] = " ";
     };
@@ -277,7 +277,7 @@ TabPage RID_SCPAGE_USERLISTS
         Pos = MAP_APPFONT ( 204 , 36 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Hinzufügen : ~Hinzuf³gen */
-        Text [ de ] = "~Hinzufügen" ;
+        Text [ de ] = "~HinzufÃ¼gen" ;
         Text [ en-US ] = "~Add" ;
         Disable = TRUE ;
         Text [ x-comment ] = " ";
@@ -287,7 +287,7 @@ TabPage RID_SCPAGE_USERLISTS
         Pos = MAP_APPFONT ( 204 , 54 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
-        Text [ de ] = "~Löschen" ;
+        Text [ de ] = "~LÃ¶schen" ;
         Text [ en-US ] = "~Delete" ;
         Text [ x-comment ] = " ";
     };
@@ -308,7 +308,7 @@ TabPage RID_SCPAGE_USERLISTS
     String STR_QUERYREMOVE
     {
         /* ### ACHTUNG: Neuer Text in Resource? Soll der Eintrag\n#\ngelöscht werden? : Soll der Eintrag\n#\ngel÷scht werden? */
-        Text [ de ] = "Soll der Eintrag\n#\ngelöscht werden?" ;
+        Text [ de ] = "Soll der Eintrag\n#\ngelÃ¶scht werden?" ;
         Text [ en-US ] = "Should the entry\n#\nbe deleted?" ;
         Text [ x-comment ] = " ";
     };
@@ -380,7 +380,7 @@ TabPage RID_SCPAGE_CONTENT
     {
         Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 112 , 10 ) ;
-        Text [ de ] = "~Seitenumbrüche" ;
+        Text [ de ] = "~SeitenumbrÃ¼che" ;
         Text [ en-US ] = "~Page breaks" ;
         Text [ x-comment ] = " ";
     };
@@ -388,7 +388,7 @@ TabPage RID_SCPAGE_CONTENT
     {
         Pos = MAP_APPFONT ( 12 , 56 ) ;
         Size = MAP_APPFONT ( 112 , 10 ) ;
-        Text [ de ] = "H~ilfslinien während der Bewegung" ;
+        Text [ de ] = "H~ilfslinien wÃ¤hrend der Bewegung" ;
         Text [ en-US ] = "Guides ~while moving";
     };
     CheckBox CB_HANDLES
@@ -403,7 +403,7 @@ TabPage RID_SCPAGE_CONTENT
     {
         Pos = MAP_APPFONT ( 12 , 84 ) ;
         Size = MAP_APPFONT ( 112 , 10 ) ;
-        Text [ de ] = "Gr~oße Griffe" ;
+        Text [ de ] = "Gr~oÃŸe Griffe" ;
         Text [ en-US ] = "~Large handles";
         Text [ x-comment ] = " ";
     };
@@ -464,7 +464,7 @@ TabPage RID_SCPAGE_CONTENT
     {
         Pos = MAP_APPFONT ( 139 , 79 ) ;
         Size = MAP_APPFONT ( 112 , 10 ) ;
-        Text [ de ] = "~Textüberlauf" ;
+        Text [ de ] = "~TextÃ¼berlauf" ;
         Text [ en-US ] = "Te~xt overflow" ;
         Text [ x-comment ] = " ";
     };
@@ -584,7 +584,7 @@ TabPage RID_SCPAGE_CONTENT
     {
         Pos = MAP_APPFONT ( 139 , 119 ) ;
         Size = MAP_APPFONT ( 112 , 10 ) ;
-        Text [ de ] = "Zeilen- und Spaltenk~öpfe" ;
+        Text [ de ] = "Zeilen- und Spaltenk~Ã¶pfe" ;
         Text [ en-US ] = "Colu~mn/row headers" ;
         Text [ x-comment ] = " ";
     };
@@ -647,7 +647,7 @@ TabPage RID_SCPAGE_LAYOUT
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "~Maßeinheit" ;
+        Text [ de ] = "~MaÃŸeinheit" ;
         Text [ en-US ] = "Measurement ~unit";
     };
     ListBox LB_UNIT
@@ -666,7 +666,7 @@ TabPage RID_SCPAGE_LAYOUT
             < "Meter" ; FUNIT_M ; > ;
             < "Kilometer" ; FUNIT_KM ; > ;
             < "Zoll" ; FUNIT_INCH ; > ;
-            < "Fuß" ; FUNIT_FOOT ; > ;
+            < "FuÃŸ" ; FUNIT_FOOT ; > ;
             < "Meilen" ; FUNIT_MILE ; > ;
             < "Pica" ; FUNIT_PICA ; > ;
             < "Point" ; FUNIT_POINT ; > ;
@@ -736,7 +736,7 @@ TabPage RID_SCPAGE_LAYOUT
     {
         Pos = MAP_APPFONT ( 133 , 14 ) ;
         Size = MAP_APPFONT ( 121 , 8 ) ;
-        Text [ de ] = "Verknüpfungen beim Laden aktualisieren" ;
+        Text [ de ] = "VerknÃ¼pfungen beim Laden aktualisieren" ;
         Text [ en-US ] = "Update links when opening";
         Text [ x-comment ] = " ";
     };
@@ -778,7 +778,7 @@ TabPage RID_SCPAGE_LAYOUT
     {
         Pos = MAP_APPFONT ( 12 , 82 ) ;
         Size = MAP_APPFONT ( 175 , 10 ) ;
-        Text [ de ] = "Eingabebestätigung setzt die ~Selektion nach" ;
+        Text [ de ] = "EingabebestÃ¤tigung setzt die ~Selektion nach" ;
         Text [ en-US ] = "Press Enter to ~move selection" ;
         Text [ x-comment ] = " ";
     };
@@ -831,7 +831,7 @@ TabPage RID_SCPAGE_LAYOUT
     {
         Pos = MAP_APPFONT ( 12 , 124 ) ;
         Size = MAP_APPFONT ( 239 , 10 ) ;
-        Text [ de ] = "~Referenzen beim Spalten-/Zeileneinfügen an deren Rändern ausdehnen" ;
+        Text [ de ] = "~Referenzen beim Spalten-/ZeileneinfÃ¼gen an deren RÃ¤ndern ausdehnen" ;
         Text [ en-US ] = "Expand ~references when new columns/rows are inserted" ;
         Text [ x-comment ] = " ";
     };
@@ -839,7 +839,7 @@ TabPage RID_SCPAGE_LAYOUT
     {
         Pos = MAP_APPFONT ( 12 , 138 ) ;
         Size = MAP_APPFONT ( 239 , 10 ) ;
-        Text [ de ] = "Se~lektion in Spalten-/Zeilenköpfen hervorheben" ;
+        Text [ de ] = "Se~lektion in Spalten-/ZeilenkÃ¶pfen hervorheben" ;
         Text [ en-US ] = "Highlight sele~ction in column/row headers" ;
         Text [ x-comment ] = " ";
     };
@@ -847,14 +847,14 @@ TabPage RID_SCPAGE_LAYOUT
     {
         Pos = MAP_APPFONT ( 12 , 152 ) ;
         Size = MAP_APPFONT ( 239 , 10 ) ;
-        Text [ de ] = "~Druckermaße für Textformatierung verwenden" ;
+        Text [ de ] = "~DruckermaÃŸe fÃ¼r Textformatierung verwenden" ;
         Text [ en-US ] = "Use printer metrics for text formatting";
     };
     CheckBox CB_REPLWARN
     {
         Pos = MAP_APPFONT ( 12 , 166 ) ;
         Size = MAP_APPFONT ( 239 , 10 ) ;
-        Text [ de ] = "~Überschreibwarnung beim Einfügen von Daten anzeigen" ;
+        Text [ de ] = "~Ãœberschreibwarnung beim EinfÃ¼gen von Daten anzeigen" ;
         Text [ en-US ] = "Show overwrite ~warning when pasting data";
     };
 };
@@ -883,7 +883,7 @@ TabPage RID_SCPAGE_PRINT
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 239 , 10 ) ;
-        Text [ de ] = "~Ausgabe leerer Seiten unterdrücken" ;
+        Text [ de ] = "~Ausgabe leerer Seiten unterdrÃ¼cken" ;
         Text [ en-US ] = "~Suppress output of empty pages";
     };
     FixedLine FL_SHEETS
@@ -897,7 +897,7 @@ TabPage RID_SCPAGE_PRINT
     {
         Pos = MAP_APPFONT ( 12 , 41 ) ;
         Size = MAP_APPFONT ( 239 , 10 ) ;
-        Text [ de ] = "~Nur ausgewählte Tabellen drucken" ;
+        Text [ de ] = "~Nur ausgewÃ¤hlte Tabellen drucken" ;
         Text [ en-US ] = "~Print only selected sheets";
     };
 };
