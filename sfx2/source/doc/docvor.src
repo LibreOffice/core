@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docvor.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:42:13 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:28:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ ModalDialog DLG_ORGANIZE
         Size = MAP_APPFONT ( 60 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Schließen : Schlie˜en */
         /* ### ACHTUNG: Neuer Text in Resource? Schließen : Schlie˜en */
-        Text [ de ] = "Schließen" ;
+        Text [ de ] = "SchlieÃŸen" ;
         Text [ en-US ] = "Close" ;
         TabStop = TRUE ;
         DefButton = TRUE ;
@@ -203,7 +203,7 @@ ModalDialog DLG_ORGANIZE
                     HelpId = HID_ORGANIZE_DELETE ;
                     /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
                     /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
-                    Text [ de ] = "~Löschen" ;
+                    Text [ de ] = "~LÃ¶schen" ;
                     Text [ en-US ] = "~Delete" ;
                     AccelKey = KeyCode
                     {
@@ -286,7 +286,7 @@ ModalDialog DLG_ORGANIZE
                 {
                     Identifier = ID_RESET_DEFAULT_TEMPLATE ;
                     HelpId = HID_ORGANIZE_STDTEMPLATE_DEL ;
-                    Text [ de ] = "~Standardvorlage zurücksetzen" ;
+                    Text [ de ] = "~Standardvorlage zurÃ¼cksetzen" ;
                     Text [ en-US ] = "Reset Default Template" ;
                 };
             };
