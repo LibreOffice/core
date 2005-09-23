@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:12:05 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:23:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ String STR_LAYER_CONTROLS
 String STR_LAYER_MEASURELINES
 {
     /* ### ACHTUNG: Neuer Text in Resource? Maßlinien : Ma˜linien */
-    Text [ de ] = "Maßlinien" ;
+    Text [ de ] = "MaÃŸlinien" ;
     Text [ en-US ] = "Dimension Lines" ;
     Text [ x-comment ] = " ";
 };
@@ -138,7 +138,7 @@ String STR_PRESOBJ_MPOUTLLAYER4
 String STR_PRESOBJ_MPOUTLLAYER5
 {
     /* ### ACHTUNG: Neuer Text in Resource? Fünfte Gliederungsebene : F³nfte Gliederungsebene */
-    Text [ de ] = "Fünfte Gliederungsebene" ;
+    Text [ de ] = "FÃ¼nfte Gliederungsebene" ;
     Text [ en-US ] = "Fifth Outline Level" ;
     Text [ x-comment ] = " ";
 };
@@ -181,63 +181,63 @@ String STR_PRESOBJ_MPNOTESTEXT
 String STR_PRESOBJ_TITLE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Titel durch Klicken hinzufügen : Titel durch Klicken hinzuf³gen */
-    Text [ de ] = "Titel durch Klicken hinzufügen" ;
+    Text [ de ] = "Titel durch Klicken hinzufÃ¼gen" ;
     Text [ en-US ] = "Click to add title" ;
     Text [ x-comment ] = " ";
 };
 String STR_PRESOBJ_OUTLINE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Gliederung durch Klicken hinzufügen : Gliederung durch Klicken hinzuf³gen */
-    Text [ de ] = "Gliederung durch Klicken hinzufügen" ;
+    Text [ de ] = "Gliederung durch Klicken hinzufÃ¼gen" ;
     Text [ en-US ] = "Click to add an outline" ;
     Text [ x-comment ] = " ";
 };
 String STR_PRESOBJ_TEXT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Text durch Klicken hinzufügen : Text durch Klicken hinzuf³gen */
-    Text [ de ] = "Text durch Klicken hinzufügen" ;
+    Text [ de ] = "Text durch Klicken hinzufÃ¼gen" ;
     Text [ en-US ] = "Click to add text" ;
     Text [ x-comment ] = " ";
 };
 String STR_PRESOBJ_NOTESTEXT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Notizen durch Klicken hinzufügen : Notizen durch Klicken hinzuf³gen */
-    Text [ de ] = "Notizen durch Klicken hinzufügen" ;
+    Text [ de ] = "Notizen durch Klicken hinzufÃ¼gen" ;
     Text [ en-US ] = "Click to add notes" ;
     Text [ x-comment ] = " ";
 };
 String STR_PRESOBJ_GRAPHIC
 {
     /* ### ACHTUNG: Neuer Text in Resource? Graphik durch Doppelklicken hinzufügen : Graphik durch Doppelklicken hinzuf³gen */
-    Text [ de ] = "Grafik durch Doppelklicken hinzufügen" ;
+    Text [ de ] = "Grafik durch Doppelklicken hinzufÃ¼gen" ;
     Text [ en-US ] = "Double-click to add graphics" ;
     Text [ x-comment ] = " ";
 };
 String STR_PRESOBJ_OBJECT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Objekt durch Doppelklicken hinzufügen : Objekt durch Doppelklicken hinzuf³gen */
-    Text [ de ] = "Objekt durch Doppelklicken hinzufügen" ;
+    Text [ de ] = "Objekt durch Doppelklicken hinzufÃ¼gen" ;
     Text [ en-US ] = "Double-click to add an object" ;
     Text [ x-comment ] = " ";
 };
 String STR_PRESOBJ_CHART
 {
     /* ### ACHTUNG: Neuer Text in Resource? Diagramm durch Doppelklicken hinzufügen : Diagramm durch Doppelklicken hinzuf³gen */
-    Text [ de ] = "Diagramm durch Doppelklicken hinzufügen" ;
+    Text [ de ] = "Diagramm durch Doppelklicken hinzufÃ¼gen" ;
     Text [ en-US ] = "Double-click to add a chart" ;
     Text [ x-comment ] = " ";
 };
 String STR_PRESOBJ_ORGCHART
 {
     /* ### ACHTUNG: Neuer Text in Resource? Organisationsdiagramm durch Doppelklicken hinzufügen : Organisationsdiagramm durch Doppelklicken hinzuf³gen */
-    Text [ de ] = "Organisationsdiagramm durch Doppelklicken hinzufügen" ;
+    Text [ de ] = "Organisationsdiagramm durch Doppelklicken hinzufÃ¼gen" ;
     Text [ en-US ] = "Double-click to add an organization chart" ;
     Text [ x-comment ] = " ";
 };
 String STR_PRESOBJ_TABLE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Tabelle durch Doppelklicken hinzufügen : Tabelle durch Doppelklicken hinzuf³gen */
-    Text [ de ] = "Tabelle durch Doppelklicken hinzufügen" ;
+    Text [ de ] = "Tabelle durch Doppelklicken hinzufÃ¼gen" ;
     Text [ en-US ] = "Double-click to add a spreadsheet" ;
     Text [ x-comment ] = " ";
 };
@@ -261,7 +261,7 @@ String STR_DRAWVIEWSHELL
 };
 String STR_PRESVIEWSHELL
 {
-    Text [ de ] = "Präsentationsmodus" ;
+    Text [ de ] = "PrÃ¤sentationsmodus" ;
     Text [ en-US ] = "Presentation mode" ;
 };
 String STR_PREVIEWVIEWSHELL
@@ -284,7 +284,7 @@ String STR_STDOBJECTBARSHELL
 String STR_BEZIEROBJECTBARSHELL
 {
     /* ### ACHTUNG: Neuer Text in Resource? Béziermodus : BÚziermodus */
-    Text [ de ] = "Béziermodus" ;
+    Text [ de ] = "BÃ©ziermodus" ;
     Text [ en-US ] = "BÃ©zier mode" ;
     Text [ x-comment ] = " ";
 };
@@ -349,7 +349,7 @@ String STR_STANDARD_STYLESHEET_NAME
 String STR_BAD_PASSWORD_OR_FILE_CORRUPTED
 {
     /* ### ACHTUNG: Neuer Text in Resource? Das Paßwort ist falsch oder die Datei beschädigt. : Das Pa˜wort ist falsch oder die Datei beschõdigt. */
-    Text [ de ] = "Das Kennwort ist falsch oder die Datei beschädigt." ;
+    Text [ de ] = "Das Kennwort ist falsch oder die Datei beschÃ¤digt." ;
     Text [ en-US ] = "The password is incorrect or the file is damaged." ;
     Text [ x-comment ] = " ";
 };
@@ -378,7 +378,7 @@ String STR_POOLSHEET_MEASURE_NT
 String STR_POOLSHEET_MEASURE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Maßlinie : Ma˜linie */
-    Text [ de ]= "Maßlinie" ;
+    Text [ de ]= "MaÃŸlinie" ;
     Text [ en-US ] = "Dimension Line" ;
     Text [ x-comment ] = " ";
 };
@@ -401,7 +401,7 @@ String STR_POOLSHEET_OBJWITHOUTFILL_NT
 String STR_POOLSHEET_OBJWITHOUTFILL
 {
     /* ### ACHTUNG: Neuer Text in Resource? Objekt ohne Füllung : Objekt ohne F³llung */
-    Text [ de ]= "Objekt ohne Füllung" ;
+    Text [ de ]= "Objekt ohne FÃ¼llung" ;
     Text [ en-US ] = "Object without fill" ;
     Text [ x-comment ] = " ";
 };
@@ -418,7 +418,7 @@ String STR_POOLSHEET_TEXTBODY_NT
 String STR_POOLSHEET_TEXTBODY
 {
     /* ### ACHTUNG: Neuer Text in Resource? Textkörper : Textk÷rper */
-    Text [ de ]= "Textkörper" ;
+    Text [ de ]= "TextkÃ¶rper" ;
     Text [ en-US ] = "Text body" ;
     Text [ x-comment ] = " ";
 };
@@ -429,7 +429,7 @@ String STR_POOLSHEET_TEXTBODY_JUSTIFY_NT
 String STR_POOLSHEET_TEXTBODY_JUSTIFY
 {
     /* ### ACHTUNG: Neuer Text in Resource? Textkörper Blocksatz : Textk÷rper Blocksatz */
-    Text [ de ]= "Textkörper Blocksatz" ;
+    Text [ de ]= "TextkÃ¶rper Blocksatz" ;
     Text [ en-US ] = "Text body justified" ;
     Text [ x-comment ] = " ";
 };
@@ -440,7 +440,7 @@ String STR_POOLSHEET_TEXTBODY_INDENT_NT
 String STR_POOLSHEET_TEXTBODY_INDENT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Textkörper Einzug : Textk÷rper Einzug */
-    Text [ de ]= "Textkörper Einzug" ;
+    Text [ de ]= "TextkÃ¶rper Einzug" ;
     Text [ en-US ] = "First line indent" ;
     Text [ x-comment ] = " ";
 };
@@ -469,7 +469,7 @@ String STR_POOLSHEET_HEADLINE_NT
 String STR_POOLSHEET_HEADLINE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Überschrift : šberschrift */
-    Text [ de ]= "Überschrift" ;
+    Text [ de ]= "Ãœberschrift" ;
     Text [ en-US ] = "Heading" ;
     Text [ x-comment ] = " ";
 };
@@ -480,7 +480,7 @@ String STR_POOLSHEET_HEADLINE1_NT
 String STR_POOLSHEET_HEADLINE1
 {
     /* ### ACHTUNG: Neuer Text in Resource? Überschrift1 : šberschrift1 */
-    Text [ de ]= "Überschrift1" ;
+    Text [ de ]= "Ãœberschrift1" ;
     Text [ en-US ] = "Heading1" ;
     Text [ x-comment ] = " ";
 };
@@ -491,7 +491,7 @@ String STR_POOLSHEET_HEADLINE2_NT
 String STR_POOLSHEET_HEADLINE2
 {
     /* ### ACHTUNG: Neuer Text in Resource? Überschrift2 : šberschrift2 */
-    Text [ de ]= "Überschrift2" ;
+    Text [ de ]= "Ãœberschrift2" ;
     Text [ en-US ] = "Heading2" ;
     Text [ x-comment ] = " ";
 };
@@ -559,7 +559,7 @@ String STR_POWERPOINT_IMPORT
 String STR_PRESOBJ_IMAGE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Bild durch Doppelklicken hinzufügen : Bild durch Doppelklicken hinzuf³gen */
-    Text [ de ] = "Bild durch Doppelklicken hinzufügen" ;
+    Text [ de ] = "Bild durch Doppelklicken hinzufÃ¼gen" ;
     Text [ en-US ] = "Double-click to add an image" ;
     Text [ x-comment ] = " ";
 };
