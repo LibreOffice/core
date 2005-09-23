@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attrdesc.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:24:06 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:15:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 String STR_DROP_OVER
 {
     /* ### ACHTUNG: Neuer Text in Resource? Initialen über : Initialen ³ber */
-    Text [ de ] = "Initialen über" ;
+    Text [ de ] = "Initialen Ã¼ber" ;
     Text [ en-US ] = "Drop Caps over" ;
     Text [ x-comment ] = " ";
 };
@@ -108,14 +108,14 @@ String STR_NO_CHARFMT
 String STR_FOOTER
 {
     /* ### ACHTUNG: Neuer Text in Resource? Fußzeile : Fu˜zeile */
-    Text [ de ] = "Fußzeile" ;
+    Text [ de ] = "FuÃŸzeile" ;
     Text [ en-US ] = "Footer" ;
     Text [ x-comment ] = " ";
 };
 String STR_NO_FOOTER
 {
     /* ### ACHTUNG: Neuer Text in Resource? keine Fußzeile : keine Fu˜zeile */
-    Text [ de ] = "keine Fußzeile" ;
+    Text [ de ] = "keine FuÃŸzeile" ;
     Text [ en-US ] = "No footer" ;
     Text [ x-comment ] = " ";
 };
@@ -182,7 +182,7 @@ String STR_SURROUND_INSIDE
 String STR_SURROUND_OUTSIDE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Umlauf außen : Umlauf au˜en */
-    Text [ de ] = "Umlauf außen" ;
+    Text [ de ] = "Umlauf auÃŸen" ;
     Text [ en-US ] = "Outer wrap" ;
     Text [ x-comment ] = " ";
 };
@@ -201,14 +201,14 @@ String STR_FRM_WIDTH
 String STR_FRM_FIXEDHEIGHT
 {
     /* ### ACHTUNG: Neuer Text in Resource? feste Höhe: : feste H÷he: */
-    Text [ de ] = "feste Höhe:" ;
+    Text [ de ] = "feste HÃ¶he:" ;
     Text [ en-US ] = "Fixed height:" ;
     Text [ x-comment ] = " ";
 };
 String STR_FRM_MINHEIGHT
 {
     /* ### ACHTUNG: Neuer Text in Resource? min. Höhe: : min. H÷he: */
-    Text [ de ] = "min. Höhe:" ;
+    Text [ de ] = "min. HÃ¶he:" ;
     Text [ en-US ] = "Min. height:" ;
     Text [ x-comment ] = " ";
 };
@@ -317,7 +317,7 @@ String STR_HORI_INSIDE
 String STR_HORI_OUTSIDE
 {
     /* ### ACHTUNG: Neuer Text in Resource? außen : au˜en */
-    Text [ de ] = "außen" ;
+    Text [ de ] = "auÃŸen" ;
     Text [ en-US ] = "outside" ;
     Text [ x-comment ] = " ";
 };
@@ -342,7 +342,7 @@ String STR_LINE_WIDTH
 String STR_MAX_FTN_HEIGHT
 {
     /* ### ACHTUNG: Neuer Text in Resource? max. Fußnotenbereich: : max. Fu˜notenbereich: */
-    Text [ de ] = "max. Fußnotenbereich:" ;
+    Text [ de ] = "max. FuÃŸnotenbereich:" ;
     Text [ en-US ] = "Max. footnote area:" ;
     Text [ x-comment ] = " ";
 };
@@ -354,7 +354,7 @@ String STR_EDIT_IN_READONLY
     /* ### ACHTUNG: Neuer Text in Resource? editierbar im schreibgeschütztem Dokument : editierbar im Schreibeschütztem Dokument */
     /* ### ACHTUNG: Neuer Text in Resource? editierbar im schreibgeschütztem Dokument : editierbar im Schreibeschütztem Dokument */
     /* ### ACHTUNG: Neuer Text in Resource? editierbar im schreibgeschütztem Dokument : editierbar im schreibgesch³tztem Dokument */
-    Text [ de ] = "editierbar im schreibgeschütztem Dokument" ;
+    Text [ de ] = "editierbar im schreibgeschÃ¼tztem Dokument" ;
     Text [ en-US ] = "Editable in read-only document" ;
     Text [ x-comment ] = " ";
 };
@@ -390,19 +390,19 @@ String STR_CONNECT2
 };
 String STR_LINECOUNT
 {
-    Text [ de ] = "Zeilen zählen" ;
+    Text [ de ] = "Zeilen zÃ¤hlen" ;
     Text [ en-US ] = "Count lines" ;
     Text [ x-comment ] = " ";
 };
 String STR_DONTLINECOUNT
 {
-    Text [ de ] = "Zeilen nicht zählen" ;
+    Text [ de ] = "Zeilen nicht zÃ¤hlen" ;
     Text [ en-US ] = "don't count lines" ;
     Text [ x-comment ] = " ";
 };
 String STR_LINCOUNT_START
 {
-    Text [ de ] = "Zeilenzähler starten mit: " ;
+    Text [ de ] = "ZeilenzÃ¤hler starten mit: " ;
     Text [ en-US ] = "restart line count with: " ;
     Text [ x-comment ] = " ";
 };
@@ -421,7 +421,7 @@ String STR_CHANNELR
 
 String STR_CHANNELG
 {
-    Text [ de ] = "Grünanteil: ";
+    Text [ de ] = "GrÃ¼nanteil: ";
     Text [ en-US ] = "Green: ";
 };
 
@@ -478,7 +478,7 @@ String STR_DRAWMODE_GREY
 };
 String STR_DRAWMODE_BLACKWHITE
 {
-    Text [ de ] = "Schwarz/Weiß";
+    Text [ de ] = "Schwarz/WeiÃŸ";
     Text [ en-US ] = "Black & White";
 };
 String STR_DRAWMODE_WATERMARK
