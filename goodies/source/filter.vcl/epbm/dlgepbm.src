@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgepbm.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:35:33 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:13:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ ModalDialog DLG_EXPORT_EPBM
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text [ de ] = "~Bin‰r" ;
+        Text [ de ] = "~Bin√§r" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Binary";
         Text [ x-comment ] = " ";
