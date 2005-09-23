@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShell.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:19:07 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:27:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -593,7 +593,7 @@ protected:
     ::std::auto_ptr<Implementation> mpImpl;
 
     // #96090# Support methods for centralized UNDO/REDO
-    SfxUndoManager* ImpGetUndoManager (void) const;
+    virtual SfxUndoManager* ImpGetUndoManager (void) const;
     void ImpGetUndoStrings(SfxItemSet &rSet) const;
     void ImpGetRedoStrings(SfxItemSet &rSet) const;
     void ImpSidUndo(BOOL bDrawViewShell, SfxRequest& rReq);
