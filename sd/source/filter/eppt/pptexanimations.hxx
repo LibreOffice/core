@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptexanimations.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:20:36 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 10:43:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,10 @@
 #include <stdio.h>
 #endif
 
+#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
+#include <boost/shared_ptr.hpp>
+#endif
+
 #include <list>
 
 class DffRecordHeader;
@@ -65,12 +69,28 @@ class SvStream;
 namespace ppt
 {
 
+    struct AfterEffectNode
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > mxNode;
+        ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > mxMaster;
+
+        AfterEffectNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode,
+                         const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xMaster )
+                         : mxNode( xNode ), mxMaster( xMaster ) {}
+    };
+
+    typedef boost::shared_ptr< AfterEffectNode > AfterEffectNodePtr;
+
 typedef sal_uInt32 TranslateMode;
 #define TRANSLATE_NONE              0
 #define TRANSLATE_VALUE             1
 #define TRANSLATE_ATTRIBUTE         2
 #define TRANSLATE_MEASURE           4
 #define TRANSLATE_NUMBER_TO_STRING  8
+
+const int AFTEREFFECT_NONE = 0;
+const int AFTEREFFECT_COLOR = 1;
+const int AFTEREFFECT_SET = 2;
 
 class AnimationExporter
 {
@@ -90,11 +110,11 @@ class AnimationExporter
     void exportAnimNode( SvStream& rStrm, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >* pParent, const sal_Int32 nGroupLevel, const sal_Int16 nFillDefault );
     void exportAnimate( SvStream& rStrm, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
-    void exportAnimateTarget( SvStream& rStrm, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode, const sal_uInt32 nForceAttributeName = 0 );
-    void exportAnimateSet( SvStream& rStrm, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >&  xNode );
+    void exportAnimateTarget( SvStream& rStrm, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode, const sal_uInt32 nForceAttributeName = 0, int nAfterEffectType = AFTEREFFECT_NONE );
+    void exportAnimateSet( SvStream& rStrm, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >&  xNode, int nAfterEffectType );
     void exportAnimAction( SvStream& rStrm, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
     void exportAnimEvent( SvStream& rStrm, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode, const sal_Int32 nFlags = 0 );
-    void exportNode( SvStream& rStrm, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode,
+    void exportNode( SvStream& rStrm, ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > xNode,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >* xParent,
                             const sal_uInt16 nContainerRecType, const sal_uInt16 nInstance, const sal_Int32 nGroupLevel, const sal_Bool bTakeBackInteractiveSequenceTiming,
                                 const sal_Int16 nFillDefault );
@@ -104,14 +124,25 @@ class AnimationExporter
     void exportTransitionFilter( SvStream& rStrm, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
     void exportAnimateMotion( SvStream& rStrm, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
     void exportAnimateTransform( SvStream& rStrm, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
-    void exportAnimateColor( SvStream& rStrm, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
+    void exportAnimateColor( SvStream& rStrm, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode, int nAfterEffectType );
     void exportIterate( SvStream& rStrm, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
     const EscherSolverContainer& mrSolverContainer;
+    void processAfterEffectNodes( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
+
+    bool isAfterEffectNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode ) const;
+    bool hasAfterEffectNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode, ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xAfterEffectNode ) const;
+    bool isEmptyNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode ) const;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > AnimationExporter::createAfterEffectNodeClone( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode ) const;
+
+    std::list< AfterEffectNodePtr > maAfterEffectNodes;
 
 public:
     AnimationExporter( const EscherSolverContainer& rSolverContainer );
 
     void doexport( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage, SvStream& rStrm );
+
+    sal_Int32 mnCurrentGroup;
 };
 
 }; // namespace ppt
