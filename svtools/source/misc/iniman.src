@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iniman.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:20:20 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:55:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 ErrorBox ERRBOX_CHECK_PLZ
 {
     BUTTONS = WB_OK ;
-    Message [ de ] = "Die eingegebene Postleitzahl ist ungültig.\nSie muss mit einer Ziffer oder einem Buchstabe anfangen und\ndarf nur Ziffern, Buchstaben, Leerzeichen und Trennstriche enthalten.";
+    Message [ de ] = "Die eingegebene Postleitzahl ist ungÃ¼ltig.\nSie muss mit einer Ziffer oder einem Buchstabe anfangen und\ndarf nur Ziffern, Buchstaben, Leerzeichen und Trennstriche enthalten.";
     Message [ en-US ] = "The ZIP code specified is invalid.\nA ZIP code should begin with a number (or in some cases a letter) and\ncan only contain numbers, letters, spaces and dashes.";
     Message [ x-comment ] = " ";
 };
