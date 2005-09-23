@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tautofmt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:07:10 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:19:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -773,26 +773,11 @@ MAKENUMSTR:
                 String sFmt; LanguageType eLng, eSys;
                 aCurData.GetBoxFmt( (BYTE)nNum ).GetValueFormat( sFmt, eLng, eSys );
 
-                ULONG nKey = 0;
-                if ( eLng == LANGUAGE_SYSTEM && eSys != ::GetAppLanguage() )
-                {
-                    //  #53381# wenn System beim Speichern etwas anderes war,
-                    //  muss konvertiert werden (geht nur mit eingebauten Formaten)
-                    ULONG nOrig = pNumFmt->GetEntryKey( sFmt, eSys );
-                    if ( nOrig != NUMBERFORMAT_ENTRY_NOT_FOUND )
-                        nKey = pNumFmt->GetFormatForLanguageIfBuiltIn( nOrig,
-                                                        ::GetAppLanguage() );
-                }
-                else    // sonst einfach suchen oder anlegen
-                {
-                    nKey = pNumFmt->GetEntryKey( sFmt, eLng );
-                    if( NUMBERFORMAT_ENTRY_NOT_FOUND == nKey )
-                    {
-                        xub_StrLen nCheckPos;
-                        short nType;
-                        pNumFmt->PutEntry( sFmt, nCheckPos, nType, nKey, eLng );
-                    }
-                }
+                short nType;
+                BOOL bNew;
+                xub_StrLen nCheckPos;
+                ULONG nKey = pNumFmt->GetIndexPuttingAndConverting( sFmt, eLng,
+                        eSys, nType, bNew, nCheckPos);
                 Color* pDummy;
                 pNumFmt->GetOutputString( nVal, nKey, cellString, &pDummy );
             }
