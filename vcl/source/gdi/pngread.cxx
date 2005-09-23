@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pngread.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:09:18 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:55:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -643,6 +643,7 @@ void PNGReaderImpl::ImplReadTransparent()
                     mnTransRed = ImplScaleColor();
                     mnTransGreen = ImplScaleColor();
                     mnTransBlue = ImplScaleColor();
+                    mbTransparent = sal_True;
                 }
             }
             break;
