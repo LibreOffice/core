@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_Scale.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:17:12 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:46:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,7 +207,7 @@ TabPage TP_SCALE_Y
     {
         Pos = MAP_APPFONT ( 6 , 116  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text[ de ] = "Marken für Hauptintervalle" ;
+        Text[ de ] = "Marken fÃ¼r Hauptintervalle" ;
         Text[ en-US ] = "Major interval marks";
     };
 
@@ -223,7 +223,7 @@ TabPage TP_SCALE_Y
         {
             Pos = MAP_APPFONT ( 93 , 127  ) ;
             Size = MAP_APPFONT ( 78 , 10 ) ;
-            Text [ de ] = "au~ßen";
+            Text [ de ] = "au~ÃŸen";
             Text [ en-US ] = "~outer";
         Text [ x-comment ] = " ";
     };
@@ -232,7 +232,7 @@ TabPage TP_SCALE_Y
     {
         Pos = MAP_APPFONT ( 6 , 149  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text[ de ] = "Marken für Teilintervalle" ;
+        Text[ de ] = "Marken fÃ¼r Teilintervalle" ;
         Text[ en-US ] = "Minor interval marks";
     };
 
@@ -248,7 +248,7 @@ TabPage TP_SCALE_Y
         {
             Pos = MAP_APPFONT ( 93 , 160  ) ;
             Size = MAP_APPFONT ( 78 , 10 ) ;
-            Text [ de ] = "auße~n";
+            Text [ de ] = "auÃŸe~n";
             Text [ en-US ] = "o~uter";
         Text [ x-comment ] = " ";
     };
