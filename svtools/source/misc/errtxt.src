@@ -4,9 +4,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:16:28 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:54:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,7 +147,7 @@ Resource RID_ERRHDL
     };
     String ERRCODE_CLASS_PATH
     {
-        Text [ de ] = "Unzulässiger Pfad" ;
+        Text [ de ] = "UnzulÃ¤ssiger Pfad" ;
         Text [ en-US ] = "Inadmissible path" ;
     };
     String ERRCODE_CLASS_LOCKING
@@ -163,12 +163,12 @@ Resource RID_ERRHDL
     };
     String ERRCODE_CLASS_SPACE
     {
-        Text [ de ] = "Resource erschöpft" ;
+        Text [ de ] = "Resource erschÃ¶pft" ;
         Text [ en-US ] = "Resource exhausted" ;
     };
     String ERRCODE_CLASS_NOTSUPPORTED
     {
-        Text [ de ] = "Aktion nicht unterstützt" ;
+        Text [ de ] = "Aktion nicht unterstÃ¼tzt" ;
         Text [ en-US ] = "Action not supported" ;
     };
     String ERRCODE_CLASS_READ
@@ -209,7 +209,7 @@ Resource RID_ERRHDL
     };
     String ERRCODE_CLASS_SBX
     {
-        Text [ de ] = "Unzulässiger Wert oder Datentyp" ;
+        Text [ de ] = "UnzulÃ¤ssiger Wert oder Datentyp" ;
         Text [ en-US ] = "Inadmissible value or data type" ;
     };
     String ERRCODE_CLASS_RUNTIME
@@ -235,7 +235,7 @@ Resource RID_ERRHDL
     };
     String ERRCODE_IO_MISPLACEDCHAR
     {
-        Text [ de ] = "Der Name der Datei ist ungültig" ;
+        Text [ de ] = "Der Name der Datei ist ungÃ¼ltig" ;
         Text [ en-US ] = "Invalid file name" ;
         Text [ x-comment ] = " ";
     };
@@ -262,7 +262,7 @@ Resource RID_ERRHDL
     };
     String ERRCODE_IO_INVALIDDEVICE
     {
-        Text [ de ] = "Das angegebene Gerät ist ungültig" ;
+        Text [ de ] = "Das angegebene GerÃ¤t ist ungÃ¼ltig" ;
         Text [ en-US ] = "The specified device is invalid" ;
     };
     String ERRCODE_IO_ACCESSDENIED
@@ -277,22 +277,22 @@ Resource RID_ERRHDL
     };
     String ERRCODE_IO_OUTOFSPACE
     {
-        Text [ de ] = "Auf dem Gerät ist kein Platz mehr verfügbar" ;
+        Text [ de ] = "Auf dem GerÃ¤t ist kein Platz mehr verfÃ¼gbar" ;
         Text [ en-US ] = "No more space on device" ;
     };
     String ERRCODE_IO_ISWILDCARD
     {
-        Text [ de ] = "Die Operation kann nicht auf Dateien, welche\nWildcards enthalten, ausgeführt werden" ;
+        Text [ de ] = "Die Operation kann nicht auf Dateien, welche\nWildcards enthalten, ausgefÃ¼hrt werden" ;
         Text [ en-US ] = "This operation cannot be run on\nfiles containing wildcards" ;
     };
     String ERRCODE_IO_NOTSUPPORTED
     {
-        Text [ de ] = "Die Operation wird auf dem vorliegenden Betriebssystem nicht unterstützt" ;
+        Text [ de ] = "Die Operation wird auf dem vorliegenden Betriebssystem nicht unterstÃ¼tzt" ;
         Text [ en-US ] = "This operation is not supported on this operating system" ;
     };
     String ERRCODE_IO_TOOMANYOPENFILES
     {
-        Text [ de ] = "Es sind bereits zu viele Dateien geöffnet" ;
+        Text [ de ] = "Es sind bereits zu viele Dateien geÃ¶ffnet" ;
         Text [ en-US ] = "There are too many files open" ;
     };
     String ERRCODE_IO_CANTREAD
@@ -308,17 +308,17 @@ Resource RID_ERRHDL
     };
     String ERRCODE_IO_OUTOFMEMORY
     {
-        Text [ de ] = "Die Operation konnte wegen Speichermangels nicht ausgeführt werden" ;
+        Text [ de ] = "Die Operation konnte wegen Speichermangels nicht ausgefÃ¼hrt werden" ;
         Text [ en-US ] = "The operation could not be run due to insufficient memory." ;
     };
     String ERRCODE_IO_CANTSEEK
     {
-        Text [ de ] = "Die Seekoperation konnte nicht ausgeführt werden" ;
+        Text [ de ] = "Die Seekoperation konnte nicht ausgefÃ¼hrt werden" ;
         Text [ en-US ] = "The seek operation could not be run" ;
     };
     String ERRCODE_IO_CANTTELL
     {
-        Text [ de ] = "Die Telloperation konnte nicht ausgeführt werden" ;
+        Text [ de ] = "Die Telloperation konnte nicht ausgefÃ¼hrt werden" ;
         Text [ en-US ] = "The tell operation could not be run" ;
     };
     String ERRCODE_IO_WRONGVERSION
@@ -333,7 +333,7 @@ Resource RID_ERRHDL
     };
     String ERRCODE_IO_INVALIDCHAR
     {
-        Text [ de ] = "Der Dateiname enthält unzulässige Zeichen" ;
+        Text [ de ] = "Der Dateiname enthÃ¤lt unzulÃ¤ssige Zeichen" ;
         Text [ en-US ] = "The file name contains invalid characters" ;
     };
     String ERRCODE_IO_UNKNOWN
@@ -343,7 +343,7 @@ Resource RID_ERRHDL
     };
     String ERRCODE_IO_INVALIDACCESS
     {
-        Text [ de ] = "Es wurde versucht, in ungültiger Weise auf die Datei zuzugreifen" ;
+        Text [ de ] = "Es wurde versucht, in ungÃ¼ltiger Weise auf die Datei zuzugreifen" ;
         Text [ en-US ] = "An invalid attempt was made to access the file" ;
     };
     String ERRCODE_IO_CANTCREATE
@@ -353,7 +353,7 @@ Resource RID_ERRHDL
     };
     String ERRCODE_IO_INVALIDPARAMETER
     {
-        Text [ de ] = "Die Operation wurde mit einem ungültigen Parameter gestartet" ;
+        Text [ de ] = "Die Operation wurde mit einem ungÃ¼ltigen Parameter gestartet" ;
         Text [ en-US ] = "The operation was started under an invalid parameter" ;
     };
     String ERRCODE_IO_ABORT
@@ -373,7 +373,7 @@ Resource RID_ERRHDL
     };
     String ERRCODE_SFX_NOSTDTEMPLATE
     {
-        Text [ de ] = "Die Standardvorlage konnte nicht geöffnet werden" ;
+        Text [ de ] = "Die Standardvorlage konnte nicht geÃ¶ffnet werden" ;
         Text [ en-US ] = "The default template could not be opened" ;
     };
     String ERRCODE_SFX_TEMPLATENOTFOUND
@@ -393,7 +393,7 @@ Resource RID_ERRHDL
     };
     String ERRCODE_SFX_ALREADYOPEN
     {
-        Text [ de ] = "Das Dokument ist bereits zur Bearbeitung geöffnet" ;
+        Text [ de ] = "Das Dokument ist bereits zur Bearbeitung geÃ¶ffnet" ;
         Text [ en-US ] = "This document has already been opened for editing" ;
     };
     String ERRCODE_SFX_WRONGPASSWORD
@@ -410,7 +410,7 @@ Resource RID_ERRHDL
     };
     String ERRCODE_SFX_DOCUMENTREADONLY
     {
-        Text [ de ] = "Das Dokument wurde zum Lesen geöffnet" ;
+        Text [ de ] = "Das Dokument wurde zum Lesen geÃ¶ffnet" ;
         Text [ en-US ] = "The document was opened as read-only" ;
     };
     String ERRCODE_SFX_OLEGENERAL
@@ -421,7 +421,7 @@ Resource RID_ERRHDL
     };
     String ERRCODE_INET_NAME_RESOLVE
     {
-        Text [ de ] = "Der Rechnername $(ARG1) konnte nicht aufgelöst werden" ;
+        Text [ de ] = "Der Rechnername $(ARG1) konnte nicht aufgelÃ¶st werden" ;
         Text [ en-US ] = "The host name $(ARG1) could not be resolved" ;
     };
     String ERRCODE_INET_CONNECT
@@ -431,13 +431,13 @@ Resource RID_ERRHDL
     };
     String ERRCODE_INET_READ
     {
-        Text [ de ] = "Daten konnten nicht über das Internet gelesen werden.\nServerfehlermeldung: $(ARG1)" ;
+        Text [ de ] = "Daten konnten nicht Ã¼ber das Internet gelesen werden.\nServerfehlermeldung: $(ARG1)" ;
         Text [ en-US ] = "Error reading data from the Internet\n.Server error message: $(ARG1)" ;
         Text [ x-comment ] = " ";
     };
     String ERRCODE_INET_WRITE
     {
-        Text [ de ] = "Daten konnten nicht ins Internet übertragen werden.\nServerfehlermeldung: $(ARG1)" ;
+        Text [ de ] = "Daten konnten nicht ins Internet Ã¼bertragen werden.\nServerfehlermeldung: $(ARG1)" ;
         Text [ en-US ] = "Error transferring data to the Internet.\nServer error message: $(ARG1)" ;
         Text [ x-comment ] = " ";
     };
@@ -448,7 +448,7 @@ Resource RID_ERRHDL
     };
     String ERRCODE_INET_OFFLINE
     {
-        Text [ de ] = "Die angeforderten Internetdaten liegen nicht im Cache und können nicht übertragen werden, da der Onlinemodus nicht aktiv ist" ;
+        Text [ de ] = "Die angeforderten Internetdaten liegen nicht im Cache und kÃ¶nnen nicht Ã¼bertragen werden, da der Onlinemodus nicht aktiv ist" ;
         Text [ en-US ] = "The requested Internet data is not available in the cache and cannot be transmitted as the Online mode has not be activated" ;
     };
     String ERRCODE_SFXMSG_STYLEREPLACE
@@ -476,17 +476,17 @@ Resource RID_ERRHDL
     };
     String ERRCODE_SFX_CANTCREATELINK
     {
-        Text [ de ] = "Die Verknüpfung konnte nicht erzeugt werden" ;
+        Text [ de ] = "Die VerknÃ¼pfung konnte nicht erzeugt werden" ;
         Text [ en-US ] = "The link could not be created." ;
     };
     String ERRCODE_SFX_WRONGBMKFORMAT
     {
-        Text [ de ] = "Das Format der Verknüpfung ist ungültig" ;
+        Text [ de ] = "Das Format der VerknÃ¼pfung ist ungÃ¼ltig" ;
         Text [ en-US ] = "The link format is invalid." ;
     };
     String ERRCODE_SFX_WRONGICONFILE
     {
-        Text [ de ] = "Die Konfiguration der Symbolanzeige ist ungültig" ;
+        Text [ de ] = "Die Konfiguration der Symbolanzeige ist ungÃ¼ltig" ;
         Text [ en-US ] = "The configuration of the icon display is invalid." ;
     };
     String ERRCODE_SFX_CANTWRITEICONFILE
@@ -496,7 +496,7 @@ Resource RID_ERRHDL
     };
     String ERRCODE_SFX_CANTDELICONFILE
     {
-        Text [ de ] = "Die Konfiguration der Symbolanzeige konnte nicht gelöscht werden" ;
+        Text [ de ] = "Die Konfiguration der Symbolanzeige konnte nicht gelÃ¶scht werden" ;
         Text [ en-US ] = "The configuration of the icon display could not be deleted." ;
     };
     String ERRCODE_SFX_CANTRENAMECONTENT
@@ -506,7 +506,7 @@ Resource RID_ERRHDL
     };
     String ERRCODE_SFX_INVALIDBMKPATH
     {
-        Text [ de ] = "Der Bookmarkordner ist ungültig" ;
+        Text [ de ] = "Der Bookmarkordner ist ungÃ¼ltig" ;
         Text [ en-US ] = "The bookmark folder is invalid." ;
     };
     String ERRCODE_SFX_CANTWRITEURLCFGFILE
@@ -516,7 +516,7 @@ Resource RID_ERRHDL
     };
     String ERRCODE_SFX_WRONGURLCFGFORMAT
     {
-        Text [ de ] = "Das Format der Konfiguration der lokal zu speichernden URLs ist ungültig" ;
+        Text [ de ] = "Das Format der Konfiguration der lokal zu speichernden URLs ist ungÃ¼ltig" ;
         Text [ en-US ] = "The configuration format of the URLs to be saved locally is invalid" ;
     };
     String ERRCODE_SFX_NODOCUMENT
@@ -527,12 +527,12 @@ Resource RID_ERRHDL
     };
     String ERRCODE_SFX_INVALIDLINK
     {
-        Text [ de ] = "Die Verknüpfung verweist auf ein ungültiges Ziel" ;
+        Text [ de ] = "Die VerknÃ¼pfung verweist auf ein ungÃ¼ltiges Ziel" ;
         Text [ en-US ] = "The link refers to an invalid target" ;
     };
     String ERRCODE_SFX_INVALIDTRASHPATH
     {
-        Text [ de ] = "Der Pfad für den Papierkorb ist ungültig" ;
+        Text [ de ] = "Der Pfad fÃ¼r den Papierkorb ist ungÃ¼ltig" ;
         Text [ en-US ] = "The Recycle Bin path is invalid" ;
     };
     String ERRCODE_SFX_NOTRESTORABLE
@@ -542,17 +542,17 @@ Resource RID_ERRHDL
     };
     String ERRCODE_IO_NAMETOOLONG
     {
-        Text [ de ] = "Der Dateiname ist für das Ziel-Dateisystem zu lang." ;
+        Text [ de ] = "Der Dateiname ist fÃ¼r das Ziel-Dateisystem zu lang." ;
         Text [ en-US ] = "The file name is too long for the target file system." ;
     };
     String ERRCODE_SFX_CONSULTUSER
     {
-        Text [ de ] = "Die Angaben zum Ausführen der Funktion sind unvollständig." ;
+        Text [ de ] = "Die Angaben zum AusfÃ¼hren der Funktion sind unvollstÃ¤ndig." ;
         Text [ en-US ] = "The details for running the function are incomplete." ;
     };
     String ERRCODE_SFX_INVALIDSYNTAX
     {
-        Text [ de ] = "Die Syntax der Eingabe ist ungültig." ;
+        Text [ de ] = "Die Syntax der Eingabe ist ungÃ¼ltig." ;
         Text [ en-US ] = "The input syntax is invalid." ;
     };
     String ERRCODE_SFX_CANTCREATEFOLDER
@@ -568,7 +568,7 @@ Resource RID_ERRHDL
     };
     String ERRCODE_SFX_WRONG_CDF_FORMAT
     {
-        Text [ de ] = "Das Channeldokument hat kein gültiges Format." ;
+        Text [ de ] = "Das Channeldokument hat kein gÃ¼ltiges Format." ;
         Text [ en-US ] = "The channel document has an invalid format." ;
     };
     String ERRCODE_SFX_EMPTY_SERVER
@@ -578,49 +578,49 @@ Resource RID_ERRHDL
     };
     String ERRCODE_SFX_NO_ABOBOX
     {
-        Text [ de ] = "Sie benötigen einen Abonnements Ordner, wenn Sie einen Channel installieren wollen." ;
+        Text [ de ] = "Sie benÃ¶tigen einen Abonnements Ordner, wenn Sie einen Channel installieren wollen." ;
         Text [ en-US ] = "A subscription folder is required to install a Channel." ;
     };
     String ERRCODE_IO_NOTSTORABLEINBINARYFORMAT
     {
-        Text [ de ] = "Dieses Dokument enthält Attribute die nicht im gewählten Format gespeichert werden können.\nBitte speichern Sie das Dokument in einem %PRODUCTNAME %PRODUCTVERSION Dateiformat.";
+        Text [ de ] = "Dieses Dokument enthÃ¤lt Attribute die nicht im gewÃ¤hlten Format gespeichert werden kÃ¶nnen.\nBitte speichern Sie das Dokument in einem %PRODUCTNAME %PRODUCTVERSION Dateiformat.";
         Text [ en-US ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME %PRODUCTVERSION file format.";
     };
     String ERRCODE_SFX_TARGETFILECORRUPTED
     {
-        Text [ de ] = "Die Datei $(FILENAME) konnte nicht gespeichert werden. Bitte überprüfen Sie Ihre Systemeinstellungen. Eine automatisch erstellte Sicherungsdatei finden Sie unter dem Namen $(BACKUPNAME) im Ordner $(PATH).";
+        Text [ de ] = "Die Datei $(FILENAME) konnte nicht gespeichert werden. Bitte Ã¼berprÃ¼fen Sie Ihre Systemeinstellungen. Eine automatisch erstellte Sicherungsdatei finden Sie unter dem Namen $(BACKUPNAME) im Ordner $(PATH).";
         Text [ en-US ] = "The file $(FILENAME) cannot be saved. Please check your system settings. You can find an automatically generated backup copy of this file in folder $(PATH) named $(BACKUPNAME).";
     };
 
 #ifdef ERRCODE_IO_INVALIDLENGTH
     String ERRCODE_IO_INVALIDLENGTH
     {
-        Text [ de ] = "Ungültige Datenlänge." ;
+        Text [ de ] = "UngÃ¼ltige DatenlÃ¤nge." ;
         Text [ en-US ] = "Invalid data length." ;
     };
     String ERRCODE_IO_CURRENTDIR
     {
-        Text [ de ] = "Funktion unmöglich: Pfad enthält aktuelles Verzeichnis" ;
+        Text [ de ] = "Funktion unmÃ¶glich: Pfad enthÃ¤lt aktuelles Verzeichnis" ;
         Text [ en-US ] = "Function not possible: path contains current directory." ;
     };
     String ERRCODE_IO_NOTSAMEDEVICE
     {
-        Text [ de ] = "Funktion unmöglich: Nicht dasselbe Gerät (Laufwerk)." ;
+        Text [ de ] = "Funktion unmÃ¶glich: Nicht dasselbe GerÃ¤t (Laufwerk)." ;
         Text [ en-US ] = "Function not possible: device (drive) not identical." ;
     };
     String ERRCODE_IO_DEVICENOTREADY
     {
-        Text [ de ] = "Gerät (Laufwerk) nicht bereit." ;
+        Text [ de ] = "GerÃ¤t (Laufwerk) nicht bereit." ;
         Text [ en-US ] = "Device (drive) not ready." ;
     };
     String ERRCODE_IO_BADCRC
     {
-        Text [ de ] = "Falsche Prüfsumme." ;
+        Text [ de ] = "Falsche PrÃ¼fsumme." ;
         Text [ en-US ] = "Wrong check amount." ;
     };
     String ERRCODE_IO_WRITEPROTECTED
     {
-        Text [ de ] = "Funktion unmöglich: Schreibgeschützt." ;
+        Text [ de ] = "Funktion unmÃ¶glich: SchreibgeschÃ¼tzt." ;
         Text [ en-US ] = "Function not possible: write protected." ;
     };
 #endif
