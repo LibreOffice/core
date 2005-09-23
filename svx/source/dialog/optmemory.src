@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optmemory.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:48:06 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:45:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ TabPage OFA_TP_MEMORY
     {
         Pos = MAP_APPFONT( COL0, ROW0 );
         Size = MAP_APPFONT( WHOLE_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
-        Text [ de ] = "Rückgängig" ;
+        Text [ de ] = "RÃ¼ckgÃ¤ngig" ;
         Text [ en-US ] = "Undo" ;
     };
     FixedText FT_UNDO
@@ -87,7 +87,7 @@ TabPage OFA_TP_MEMORY
     {
         Pos = MAP_APPFONT( COL1, OFFS_TEXTBOX_FIXEDTEXT( ROW3 ) );
         Size = MAP_APPFONT( WIDTH1, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text [ de ] = "Verwenden für %PRODUCTNAME" ;
+        Text [ de ] = "Verwenden fÃ¼r %PRODUCTNAME" ;
         Text [ en-US ] = "Use for %PRODUCTNAME";
     };
     NumericField NF_GRAPHICCACHE
@@ -186,7 +186,7 @@ TabPage OFA_TP_MEMORY
     {
         Pos = MAP_APPFONT( COL0, ROW6 );
         Size = MAP_APPFONT( WHOLE_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
-        Text [ de ] = "Cache für eingefügte Objekte" ;
+        Text [ de ] = "Cache fÃ¼r eingefÃ¼gte Objekte" ;
         Text [ en-US ] = "Cache for inserted objects";
     };
     FixedText FT_OLECACHE
