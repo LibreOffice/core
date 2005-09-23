@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryTabWinUndoAct.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:26:17 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:43:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,7 @@ OQueryTabWinUndoAct::~OQueryTabWinUndoAct()
 //------------------------------------------------------------------------------
 void OTabFieldCellModifiedUndoAct::Undo()
 {
+    pOwner->EnterUndoMode();
     OSL_ENSURE(m_nColumnPostion != BROWSER_INVALIDID,"Column position was not set add the undo action!");
     OSL_ENSURE(m_nColumnPostion < pOwner->GetColumnCount(),"Position outside the column count!");
     if ( m_nColumnPostion != BROWSER_INVALIDID )
@@ -120,11 +121,13 @@ void OTabFieldCellModifiedUndoAct::Undo()
         pOwner->SetCellContents(m_nCellIndex, nColumnId, m_strNextCellContents);
         m_strNextCellContents = strNext;
     }
+    pOwner->LeaveUndoMode();
 }
 
 //------------------------------------------------------------------------------
 void OTabFieldSizedUndoAct::Undo()
 {
+    pOwner->EnterUndoMode();
     OSL_ENSURE(m_nColumnPostion != BROWSER_INVALIDID,"Column position was not set add the undo action!");
     if ( m_nColumnPostion != BROWSER_INVALIDID )
     {
@@ -133,10 +136,12 @@ void OTabFieldSizedUndoAct::Undo()
         pOwner->SetColWidth(nColumnId, m_nNextWidth);
         m_nNextWidth = nNextWidth;
     }
+    pOwner->LeaveUndoMode();
 }
 // -----------------------------------------------------------------------------
 void OTabFieldMovedUndoAct::Undo()
 {
+    pOwner->EnterUndoMode();
     OSL_ENSURE(m_nColumnPostion != BROWSER_INVALIDID,"Column position was not set add the undo action!");
     if ( m_nColumnPostion != BROWSER_INVALIDID )
     {
@@ -146,6 +151,7 @@ void OTabFieldMovedUndoAct::Undo()
         pOwner->ColumnMoved(nId,FALSE);
         m_nColumnPostion = nOldPos;
     }
+    pOwner->LeaveUndoMode();
 }
 // -----------------------------------------------------------------------------
 
