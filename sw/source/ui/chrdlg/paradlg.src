@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paradlg.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:39:37 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:51:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ TabDialog DLG_PARA
             {
                 Identifier = TP_PARA_STD ;
                 /* ### ACHTUNG: Neuer Text in Resource? Einzüge und Abstände : Einz³ge und Abstõnde */
-                Text [ de ] = "Einzüge und Abstände" ;
+                Text [ de ] = "EinzÃ¼ge und AbstÃ¤nde" ;
                 Text [ en-US ] = "Indents & Spacing" ;
                 PageResID = TP_PARA_STD ;
                 Text [ x-comment ] = " ";
@@ -141,7 +141,7 @@ TabDialog DLG_DRAWPARA
             {
                 Identifier = TP_PARA_STD ;
                 /* ### ACHTUNG: Neuer Text in Resource? Einzüge und Abstände : Einz³ge und Abstõnde */
-                Text [ de ] = "Einzüge und Abstände" ;
+                Text [ de ] = "EinzÃ¼ge und AbstÃ¤nde" ;
                 Text [ en-US ] = "Indents & Spacing" ;
                 PageResID = TP_PARA_STD ;
                 Text [ x-comment ] = " ";
