@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resource.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:14:06 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:09:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ String STR_CLOSEDOC_ANDRETURN
 {
     /* ### ACHTUNG: Neuer Text in Resource? S~chlieﬂen & zur¸ck zu  : S~chlieòen & zur≥ck zu  */
     /* ### ACHTUNG: Neuer Text in Resource? S~chlieﬂen & zur¸ck zu  : S~chlieòen & zur≥ck zu  */
-    Text [ de ] = "S~chlieﬂen & zur¸ck zu " ;
+    Text [ de ] = "S~chlie√üen & zur√ºck zu " ;
     Text [ en-US ] = "~Close & Return to " ;
     Text [ x-comment ] = " ";
 };
@@ -84,7 +84,7 @@ Menu POPUPMENU_TOOLBAR_QUICKCUSTOMIZATION
             SubMenu = Menu
             {
             };
-            Text[ de ] = "Sichtbare ~Schaltfl‰chen";
+            Text[ de ] = "Sichtbare ~Schaltfl√§chen";
             Text[ en-US ] = "Visible ~Buttons";
         };
         MenuItem
@@ -206,7 +206,7 @@ ModalDialog DLG_LICENSE
         WordBreak = TRUE ;
         Pos = MAP_APPFONT ( LICENSE_COL_1 , LICENSE_ROW_2 ) ;
         Size = MAP_APPFONT ( LICENSE_WIDTH , FT_HEIGHT ) ;
-        Text [ de ] = "Bitte f¸hren Sie die folgenden Schritte aus, um mit der Installation fortzufahren:" ;
+        Text [ de ] = "Bitte f√ºhren Sie die folgenden Schritte aus, um mit der Installation fortzufahren:" ;
         Text [ en-US ] = "Please follow these steps to proceed with the installation:" ;
     };
 
@@ -238,7 +238,7 @@ ModalDialog DLG_LICENSE
         WordBreak = TRUE ;
         Pos = MAP_APPFONT ( LICENSE_COL_3 , LICENSE_ROW_3 ) ;
         Size = MAP_APPFONT ( COL3_WIDTH, 3*FT_HEIGHT ) ;
-        Text [ de ] = "Lesen Sie den gesamten Lizenzvertrag. Verwenden Sie die Bildlaufleiste oder die %PAGEDOWN Schaltfl‰che in diesem Dialog um den gesamten Text sichtbar zu machen." ;
+        Text [ de ] = "Lesen Sie den gesamten Lizenzvertrag. Verwenden Sie die Bildlaufleiste oder die %PAGEDOWN Schaltfl√§che in diesem Dialog um den gesamten Text sichtbar zu machen." ;
         Text [ en-US ] = "View the complete License Agreement. Please use the scroll bar or the '%PAGEDOWN' button in this dialog to view the entire license text." ;
     };
 
@@ -247,7 +247,7 @@ ModalDialog DLG_LICENSE
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( LICENSE_COL_4 , LICENSE_ROW_3 ) ;
         Size = MAP_APPFONT ( PD_WIDTH , PB_HEIGHT ) ;
-        Text [ de ] = "Bl‰ttern" ;
+        Text [ de ] = "Bl√§ttern" ;
         Text [ en-US ] = "Scroll Down" ;
     };
 
