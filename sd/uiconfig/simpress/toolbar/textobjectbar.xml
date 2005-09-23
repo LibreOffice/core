@@ -15,8 +15,8 @@
  <toolbar:toolbaritem xlink:href=".uno:RightPara" toolbar:helpid="10029"/>
  <toolbar:toolbaritem xlink:href=".uno:JustifyPara" toolbar:helpid="10031"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight" toolbar:visible="false" toolbar:helpid="10950"/>
- <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft" toolbar:visible="false" toolbar:helpid="10951"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight" toolbar:helpid="10950"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft" toolbar:helpid="10951"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ParaspaceIncrease" toolbar:visible="false" toolbar:helpid="27346"/>
  <toolbar:toolbaritem xlink:href=".uno:ParaspaceDecrease" toolbar:visible="false" toolbar:helpid="27347"/>
