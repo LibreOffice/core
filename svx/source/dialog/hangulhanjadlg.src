@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hangulhanjadlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:12:35 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:39:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,7 +218,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_OPT
     {
         Pos = MAP_APPFONT ( HHO_COL_1 , HHO_ROW_1 ) ;
         Size = MAP_APPFONT ( HHO_COL_2 - HHO_COL_1, 8 ) ;
-        Text [ de ] = "Benutzerwörterbücher";
+        Text [ de ] = "BenutzerwÃ¶rterbÃ¼cher";
         Text[ en-US ] = "User-defined dictionaries";
     };
     Control LB_DICTS
@@ -247,14 +247,14 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_OPT
     {
         Pos = MAP_APPFONT ( HHO_COL_1a, HHO_ROW_11 ) ;
         Size = MAP_APPFONT ( HHO_COL_6 - HHO_COL_1a , 12 ) ;
-        Text [ de ] = "Zuletzt benutzte Einträge zuerst zeigen" ;
+        Text [ de ] = "Zuletzt benutzte EintrÃ¤ge zuerst zeigen" ;
         Text [ en-US ] = "Show recently used entries first";
     };
     CheckBox CB_AUTOREPLACEUNIQUE
     {
         Pos = MAP_APPFONT ( HHO_COL_1a, HHO_ROW_12 ) ;
         Size = MAP_APPFONT ( HHO_COL_6 - HHO_COL_1a , 12 ) ;
-        Text [ de ] = "Alle eindeutigen Einträge automatisch ersetzen" ;
+        Text [ de ] = "Alle eindeutigen EintrÃ¤ge automatisch ersetzen" ;
         Text [ en-US ] = "Replace all unique entries automatically";
     };
     PushButton PB_HHO_NEW
@@ -275,7 +275,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_OPT
     {
         Pos = MAP_APPFONT ( HHO_COL_3 , HHO_ROW_6 ) ;
         Size = MAP_APPFONT ( HHO_COL_4 - HHO_COL_3 , 14 ) ;
-        Text [ de ] = "Löschen" ;
+        Text [ de ] = "LÃ¶schen" ;
         Text [ en-US ] = "Delete";
     };
     OKButton PB_HHO_OK
@@ -306,14 +306,14 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_NEWDICT
     Size = MAP_APPFONT ( 213 , 66 ) ;
     Moveable = TRUE ;
 
-    Text [ de ] = "Benutzerwörterbuch anlegen" ;
+    Text [ de ] = "BenutzerwÃ¶rterbuch anlegen" ;
     Text [ en-US ] = "New Dictionary" ;
 
     FixedLine FL_NEWDICT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 145 , 8 ) ;
-        Text [ de ] = "Wörterbuch" ;
+        Text [ de ] = "WÃ¶rterbuch" ;
         Text [ en-US ] = "Dictionary" ;
     };
     FixedText FT_DICTNAME
@@ -359,7 +359,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_EDIT
     HelpId = HID_HANGULHANJA_EDIT_DLG;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( HHE_DLGWIDTH , HHx_DLGHIGHT ) ;
-    Text[ de ] = "Benutzerwörterbuch bearbeiten" ;
+    Text[ de ] = "BenutzerwÃ¶rterbuch bearbeiten" ;
     Text [ en-US ] = "Edit Custom Dictionary" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -401,7 +401,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_EDIT
     {
         Pos = MAP_APPFONT ( HHE_COL_1 , HHE_ROW_10 ) ;
         Size = MAP_APPFONT ( HHE_COL_4 - HHE_COL_1, 8 ) ;
-        Text [ de ] = "Vorschläge (max. 8)";
+        Text [ de ] = "VorschlÃ¤ge (max. 8)";
         Text [ en-US ] = "Suggestions (max. 8)";
     };
     Edit ED_1
@@ -450,7 +450,7 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_EDIT
     {
         Pos = MAP_APPFONT ( HHE_COL_5 , HHE_ROW_a3 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        Text [ de ] = "Löschen" ;
+        Text [ de ] = "LÃ¶schen" ;
         Text [ en-US ] = "Delete";
     };
     HelpButton PB_HHE_HELP
