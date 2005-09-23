@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:18:23 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:29:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 String STR_MENU_CFGITEM
 {
-    Text [ de ] = "Menü" ;
+    Text [ de ] = "MenÃ¼" ;
     Text [ en-US ] = "Configuration Menu" ;
 };
 
@@ -70,7 +70,7 @@ Menu MN_CLIPBOARDFUNCS
         {
             Identifier = SID_PASTE ;
             HelpID = SID_PASTE ;
-            Text [ de ] = "E~infügen" ;
+            Text [ de ] = "E~infÃ¼gen" ;
             Text [ en-US ] = "~Paste" ;
         };
     };
