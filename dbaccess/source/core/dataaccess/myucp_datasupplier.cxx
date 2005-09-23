@@ -4,9 +4,9 @@
  *
  *  $RCSfile: myucp_datasupplier.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:31:22 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:07:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -149,18 +152,23 @@ DataSupplier_Impl::~DataSupplier_Impl()
 //
 //=========================================================================
 //=========================================================================
+DBG_NAME(DataSupplier)
 
 DataSupplier::DataSupplier( const Reference< XMultiServiceFactory >& rxSMgr,
                            const rtl::Reference< ODocumentContainer >& rContent,
                             sal_Int32 nOpenMode )
 : m_pImpl( new DataSupplier_Impl( rxSMgr, rContent,nOpenMode ) )
 {
+    DBG_CTOR(DataSupplier,NULL);
+
 }
 
 //=========================================================================
 // virtual
 DataSupplier::~DataSupplier()
 {
+
+    DBG_DTOR(DataSupplier,NULL);
 }
 
 //=========================================================================
