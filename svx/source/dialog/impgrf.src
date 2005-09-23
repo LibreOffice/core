@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impgrf.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:22:20 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:41:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
     };
     String STR_GRFILTER_OPENERROR
     {
-        Text [ de ] = "Grafikdatei kann nicht geöffnet werden" ;
+        Text [ de ] = "Grafikdatei kann nicht geÃ¶ffnet werden" ;
         Text [ en-US ] = "Graphics file cannot be opened" ;
         Text [ x-comment ] = " ";
     };
@@ -106,7 +106,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
     };
     String STR_GRFILTER_VERSIONERROR
     {
-        Text [ de ] = "Die Version der Grafikdatei wird nicht unterstützt" ;
+        Text [ de ] = "Die Version der Grafikdatei wird nicht unterstÃ¼tzt" ;
         Text [ en-US ] = "Cannot support version of graphic file" ;
         Text [ x-comment ] = " ";
     };
@@ -118,7 +118,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
     };
     String STR_GRFILTER_TOOBIG
     {
-        Text [ de ] = "Nicht genug Speicher zum Einfügen der Grafik" ;
+        Text [ de ] = "Nicht genug Speicher zum EinfÃ¼gen der Grafik" ;
         Text [ en-US ] = "Not enough memory to insert graphic" ;
         Text [ x-comment ] = " ";
     };
@@ -136,7 +136,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
     };
     String STR_LINK
     {
-        Text [ de ] = "~Verknüpfen" ;
+        Text [ de ] = "~VerknÃ¼pfen" ;
         Text [ en-US ] = "~Link" ;
         Text [ x-comment ] = " ";
     };
