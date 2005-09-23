@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:21:33 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:06:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ TabDialog DLG_MULTI_TOX
     HelpID = HID_MULTI_TOX_DLG;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Verzeichnis einfügen" ;
+    Text [ de ] = "Verzeichnis einfÃ¼gen" ;
 
     Moveable = TRUE ;
 
@@ -90,7 +90,7 @@ TabDialog DLG_MULTI_TOX
             {
                 Identifier =  TP_TOX_ENTRY;
                 PageResID = TP_TOX_ENTRY;
-                Text [ de ] = "Einträge";
+                Text [ de ] = "EintrÃ¤ge";
                 Text [ en-US ] = "Entries";
                 Text [ x-comment ] = " ";
             };
@@ -217,7 +217,7 @@ TabPage TP_TOX_SELECT
     {
         Pos = MAP_APPFONT ( 51 , 46 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
-        Text [ de ] = "G~eschützt vor manuellen Änderungen" ;
+        Text [ de ] = "G~eschÃ¼tzt vor manuellen Ã„nderungen" ;
         Check = TRUE;
         Text [ en-US ] = "Protected against manual changes";
         Text [ x-comment ] = " ";
@@ -233,7 +233,7 @@ TabPage TP_TOX_SELECT
     {
         Pos = MAP_APPFONT ( 12 , 72 ) ;
         Size = MAP_APPFONT (  30, 8 ) ;
-        Text [ de ] = "Für" ;
+        Text [ de ] = "FÃ¼r" ;
         Text [ en-US ] = "for";
     };
     ListBox         LB_AREA
@@ -401,7 +401,7 @@ TabPage TP_TOX_SELECT
     {
         Pos = MAP_APPFONT ( 12 , 98 ) ;
         Size = MAP_APPFONT ( 121 , 10 ) ;
-        Text [ de ] = "Zusammenfassen ~gleicher Einträge" ;
+        Text [ de ] = "Zusammenfassen ~gleicher EintrÃ¤ge" ;
         Text [ en-US ] = "Combine identical entries";
     };
     CheckBox        CB_USEFF
@@ -422,7 +422,7 @@ TabPage TP_TOX_SELECT
     {
         Pos = MAP_APPFONT ( 18 , 137 ) ;
         Size = MAP_APPFONT ( 115 , 10 ) ;
-        Text [ de ] = "Groß- und ~Kleinschreibung beachten" ;
+        Text [ de ] = "GroÃŸ- und ~Kleinschreibung beachten" ;
         Text [ en-US ] = "Case sensitive";
         Text [ x-comment ] = " ";
     };
@@ -430,7 +430,7 @@ TabPage TP_TOX_SELECT
     {
         Pos = MAP_APPFONT ( 136 , 98 ) ;
         Size = MAP_APPFONT ( 115 , 10 ) ;
-        Text [ de ] = "Einträge ~automatisch großschreiben";
+        Text [ de ] = "EintrÃ¤ge ~automatisch groÃŸschreiben";
         Text [ en-US ] = "AutoCapitalize entries";
         Text [ x-comment ] = " ";
     };
@@ -438,7 +438,7 @@ TabPage TP_TOX_SELECT
     {
         Pos = MAP_APPFONT ( 136, 111 ) ;
         Size = MAP_APPFONT ( 115 , 10 ) ;
-        Text [ de ] = "~Schlüssel als eigener Eintrag" ;
+        Text [ de ] = "~SchlÃ¼ssel als eigener Eintrag" ;
         Text [ en-US ] = "Keys as separate entries";
     };
     CheckBox    CB_FROMFILE
@@ -461,7 +461,7 @@ TabPage TP_TOX_SELECT
                 MenuItem
                 {
                     Identifier = MN_AUTOMARK_OPEN ;
-                    Text [ de ] = "Öffnen";
+                    Text [ de ] = "Ã–ffnen";
                     Text [ en-US ] = "Open";
                 };
                 MenuItem
@@ -523,7 +523,7 @@ TabPage TP_TOX_SELECT
     {
         Pos = MAP_APPFONT ( 6 , 87 ) ;
         Size = MAP_APPFONT ( 248, 8 ) ;
-        Text [ de ] = "Zusätze" ;
+        Text [ de ] = "ZusÃ¤tze" ;
         Text [ en-US ] = "Options";
         Text [ x-comment ] = " ";
     };
@@ -584,7 +584,7 @@ TabPage TP_TOX_SELECT
     {
         Pos = MAP_APPFONT ( 12, 70) ;
         Size = MAP_APPFONT ( 100, 10 ) ;
-        Text [ de ] = "~Einträge nummerieren" ;
+        Text [ de ] = "~EintrÃ¤ge nummerieren" ;
         Text [ en-US ] = "~Number entries";
         Text [ x-comment ] = " ";
     };
@@ -619,13 +619,13 @@ TabPage TP_TOX_SELECT
     {
         Pos = MAP_APPFONT ( 6 , 59) ;
         Size = MAP_APPFONT ( 248, 8 ) ;
-        Text [ de ] = "Formatierung der Einträge" ;
+        Text [ de ] = "Formatierung der EintrÃ¤ge" ;
         Text [ en-US ] = "Formatting of the entries";
         Text [ x-comment ] = " ";
     };
     String ST_AUTOMARK_TYPE
     {
-        Text [ de ] = "Markierungsdatei für Stichwortverzeichnis (*.sdi)" ;
+        Text [ de ] = "Markierungsdatei fÃ¼r Stichwortverzeichnis (*.sdi)" ;
         Text [ en-US ] = "Selection file for the alphabetical index (*.sdi)";
     };
     FixedLine FL_SORTOPTIONS
@@ -653,7 +653,7 @@ TabPage TP_TOX_SELECT
     {
         Pos = MAP_APPFONT ( 130, 163) ;
         Size = MAP_APPFONT ( 50, 8 ) ;
-        Text [ de ] = "Schlüsseltyp";
+        Text [ de ] = "SchlÃ¼sseltyp";
         Text [ en-US ] = "Key type";
     };
     ListBox LB_SORTALG
@@ -899,7 +899,7 @@ TabPage TP_TOX_ENTRY
     {
         Pos = MAP_APPFONT ( 99 , 32 ) ;
         Size = MAP_APPFONT ( 39, 14 ) ;
-        Text [ de ] = "~Einfügen" ;
+        Text [ de ] = "~EinfÃ¼gen" ;
         Text [ en-US ] = "~Insert";
         Text [ x-comment ] = " ";
     };
@@ -938,7 +938,7 @@ TabPage TP_TOX_ENTRY
     {
         Pos = MAP_APPFONT ( 37 , 71 ) ;
         Size = MAP_APPFONT (60 , 8 ) ;
-        Text [ de ] = "~Füllzeichen" ;
+        Text [ de ] = "~FÃ¼llzeichen" ;
         Text [ en-US ] = "Fill character";
         Text [ x-comment ] = " ";
     };
@@ -1012,7 +1012,7 @@ TabPage TP_TOX_ENTRY
     {
         Pos = MAP_APPFONT ( 143 , 86 ) ;
         Size = MAP_APPFONT ( 100, 10 ) ;
-        Text [ de ] = "Rechtsbündig" ;
+        Text [ de ] = "RechtsbÃ¼ndig" ;
         Text [ en-US ] = "Align right";
         Text [ x-comment ] = " ";
     };
@@ -1036,7 +1036,7 @@ TabPage TP_TOX_ENTRY
     {
         Pos = MAP_APPFONT ( 37 , 112 ) ;
         Size = MAP_APPFONT ( 116, 8 ) ;
-        Text [ de ] = "Zeichenvorla~ge für Haupteinträge" ;
+        Text [ de ] = "Zeichenvorla~ge fÃ¼r HaupteintrÃ¤ge" ;
         Text [ en-US ] = "Character Style for main entries";
         Text [ x-comment ] = " ";
     };
@@ -1061,7 +1061,7 @@ TabPage TP_TOX_ENTRY
     {
         Pos = MAP_APPFONT ( 37 , 140 ) ;
         Size = MAP_APPFONT ( 105, 10 ) ;
-        Text [ de ] = "S~chlüssel kommasepariert" ;
+        Text [ de ] = "S~chlÃ¼ssel kommasepariert" ;
         Text [ en-US ] = "Key separated by commas";
         Text [ x-comment ] = " ";
     };
@@ -1248,7 +1248,7 @@ TabPage TP_TOX_ENTRY
     {
         Pos = MAP_APPFONT ( 34 , 126) ;
         Size = MAP_APPFONT ( 220, 8  ) ;
-        Text [ de ] = "Sortierschlüssel" ;
+        Text [ de ] = "SortierschlÃ¼ssel" ;
         Text [ en-US ] = "Sort keys";
         Text [ x-comment ] = " ";
     };
@@ -1490,12 +1490,12 @@ ModalDialog DLG_CREATE_AUTOMARK
         };
         String ST_PRIMKEY
         {
-            Text [ de ] = "1. Schlüssel" ;
+            Text [ de ] = "1. SchlÃ¼ssel" ;
             Text [ en-US ] = "1st key";
         };
         String ST_SECKEY
         {
-            Text [ de ] = "2. Schlüssel" ;
+            Text [ de ] = "2. SchlÃ¼ssel" ;
             Text [ en-US ] = "2nd key";
         };
         String ST_COMMENT
@@ -1510,7 +1510,7 @@ ModalDialog DLG_CREATE_AUTOMARK
         };
         String ST_WORDONLY
         {
-            Text [ de ] = "Ganze Wörter" ;
+            Text [ de ] = "Ganze WÃ¶rter" ;
             Text [ en-US ] = "Word only";
         };
         String ST_TRUE
@@ -1528,7 +1528,7 @@ ModalDialog DLG_CREATE_AUTOMARK
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 288, 8 ) ;
-        Text [ de ] = "Einträge" ;
+        Text [ de ] = "EintrÃ¤ge" ;
         Text [ en-US ] = "Entries";
     };
 
