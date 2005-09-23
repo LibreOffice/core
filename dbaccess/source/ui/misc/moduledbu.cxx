@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduledbu.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:15:54 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:41:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,9 @@
 #ifndef _SOLAR_HRC
 #include <svtools/solar.hrc>
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 #define ENTER_MOD_METHOD()  \
     ::osl::MutexGuard aGuard(s_aMutex); \
@@ -71,10 +74,13 @@ public:
     ResMgr* getResManager();
 };
 
+DBG_NAME(OModuleImpl)
 //-------------------------------------------------------------------------
 OModuleImpl::OModuleImpl()
     :m_pRessources(NULL)
 {
+    DBG_CTOR(OModuleImpl,NULL);
+
 }
 
 //-------------------------------------------------------------------------
@@ -82,6 +88,8 @@ OModuleImpl::~OModuleImpl()
 {
     if (m_pRessources)
         delete m_pRessources;
+
+    DBG_DTOR(OModuleImpl,NULL);
 }
 
 //-------------------------------------------------------------------------
