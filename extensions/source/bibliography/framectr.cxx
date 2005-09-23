@@ -4,9 +4,9 @@
  *
  *  $RCSfile: framectr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:17:39 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:51:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_COMMANDGROUP_HPP_
 #include <com/sun/star/frame/CommandGroup.hpp>
+#endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
 #endif
 
 using namespace osl;
@@ -238,6 +241,7 @@ void BibFrameCtrl_Impl::frameAction(const FrameActionEvent& aEvent) throw( uno::
 void BibFrameCtrl_Impl::disposing( const lang::EventObject& Source )
     throw (::com::sun::star::uno::RuntimeException)
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     if ( pController )
         pController->getFrame()->removeFrameActionListener( this );
 }
@@ -497,6 +501,7 @@ void BibFrameController_Impl::dispatch(const util::URL& aURL, const uno::Sequenc
 {
     if ( !bDisposing )
     {
+        vos::OGuard aGuard(Application::GetSolarMutex());
         Window* pParent = VCLUnoHelper::GetWindow( xWindow );
         WaitObject aWaitObject( pParent );
 
