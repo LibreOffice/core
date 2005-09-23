@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:30:42 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:09:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ Menu RID_SBA_GRID_ROWCTXMENU
         {
             Identifier = ID_BROWSER_ROWHEIGHT ;
             HelpID = HID_BROWSER_ROWHEIGHT ;
-            Text [ de ] = "Zeilenhöhe..." ;
+            Text [ de ] = "ZeilenhÃ¶he..." ;
             Text [ en-US ] = "Row Height..." ;
         };
     };
@@ -98,7 +98,7 @@ Menu RID_SBA_GRID_ROWCTXMENU
 
 String RID_STR_UNDO_MODIFY_RECORD
 {
-    Text [ de ] = "Rückgängig: Dateneingabe" ;
+    Text [ de ] = "RÃ¼ckgÃ¤ngig: Dateneingabe" ;
     Text [ en-US ] = "Undo: Data Input";
 };
 
@@ -135,7 +135,7 @@ String STR_OBJECT_ALREADY_EXISTS
 
 String STR_NO_COLUMNNAME_MATCHING
 {
-    Text [ de ] = "Es konnten keine übereinstimmenden Spaltennamen gefunden werden!" ;
+    Text [ de ] = "Es konnten keine Ã¼bereinstimmenden Spaltennamen gefunden werden!" ;
     Text [ en-US ] = "No matching column names were found.";
 };
 
@@ -153,7 +153,7 @@ String STR_DATASOURCE_GRIDCONTROL_NAME
 
 String STR_DATASOURCE_GRIDCONTROL_DESC
 {
-    Text [ de ] = "Zeigt die ausgewählte Tabelle oder Abfrage an." ;
+    Text [ de ] = "Zeigt die ausgewÃ¤hlte Tabelle oder Abfrage an." ;
     Text [ en-US ] = "Shows the selected table or query.";
 };
 
