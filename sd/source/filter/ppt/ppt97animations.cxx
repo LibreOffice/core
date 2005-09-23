@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ppt97animations.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:23:45 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 10:44:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -744,7 +744,7 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
         if( this->HasAfterEffect_ChangeColor() )
             pEffect->setDimColor( uno::makeAny( this->GetDimColor() ) );
         else
-            pEffect->setMasterRel( this->HasAfterEffect_DimAtNextEffect() ? 0 : 2 );
+            pEffect->setAfterEffectOnNext( this->HasAfterEffect_DimAtNextEffect() );
     }
 
     // set sound effect
