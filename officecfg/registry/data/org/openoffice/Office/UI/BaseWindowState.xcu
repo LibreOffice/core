@@ -20,6 +20,9 @@
     <prop oor:name="Visible" oor:type="xs:boolean">
      <value>true</value>
     </prop>
+    <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+     <value>true</value>
+    </prop>
    </node>
    <node oor:name="private:resource/toolbar/queryobjectbar" oor:op="replace">
     <prop oor:name="DockPos" oor:type="xs:string">
@@ -36,6 +39,9 @@
      <value xml:lang="de">Abfrage</value>
     </prop>
     <prop oor:name="Visible" oor:type="xs:boolean">
+     <value>true</value>
+    </prop>
+    <prop oor:name="ContextSensitive" oor:type="xs:boolean">
      <value>true</value>
     </prop>
    </node>
@@ -56,6 +62,9 @@
     <prop oor:name="Visible" oor:type="xs:boolean">
      <value>true</value>
     </prop>
+    <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+     <value>true</value>
+    </prop>
    </node>
    <node oor:name="private:resource/toolbar/formobjectbar" oor:op="replace">
     <prop oor:name="DockPos" oor:type="xs:string">
@@ -74,6 +83,9 @@
     <prop oor:name="Visible" oor:type="xs:boolean">
      <value>true</value>
     </prop>
+    <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+     <value>true</value>
+    </prop>
    </node>
    <node oor:name="private:resource/toolbar/toolbar" oor:op="replace">
     <prop oor:name="DockPos" oor:type="xs:string">
@@ -90,6 +102,9 @@
      <value xml:lang="de">Standard</value>
     </prop>
     <prop oor:name="Visible" oor:type="xs:boolean">
+     <value>true</value>
+    </prop>
+    <prop oor:name="ContextSensitive" oor:type="xs:boolean">
      <value>true</value>
     </prop>
    </node>
