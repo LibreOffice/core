@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svuidlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:07:23 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:49:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@ ModalDialog MD_PASTE_OBJECT
     SVLook = TRUE ;
     Moveable = TRUE ;
     Size = MAP_APPFONT ( 282 , 135 ) ;  // 12 under listbox
-    Text [ de ] = "Inhalt einfügen" ;
+    Text [ de ] = "Inhalt einfÃ¼gen" ;
     Text [ en-US ] = "Paste Special" ;
     FixedText FT_SOURCE
     {
@@ -62,7 +62,7 @@ ModalDialog MD_PASTE_OBJECT
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 12 , 48 ) ;
         Size = MAP_APPFONT ( 63 , 10 ) ;
-        Text [ de ] = "~Einfügen als" ;
+        Text [ de ] = "~EinfÃ¼gen als" ;
         Text [ en-US ] = "~Insert as" ;
         Check = TRUE ;
     };
@@ -71,7 +71,7 @@ ModalDialog MD_PASTE_OBJECT
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 78 , 48 ) ;
         Size = MAP_APPFONT ( 63 , 10 ) ;
-        Text [ de ] = "Verknüpfen mit" ;
+        Text [ de ] = "VerknÃ¼pfen mit" ;
         Text [ en-US ] = "Link to" ;
     };
     ListBox LB_INSERT_LIST
@@ -140,7 +140,7 @@ ModalDialog MD_UPDATE_BASELINKS
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 337 , 166 ) ;
-    Text [ de ] = "Verknüpfungen bearbeiten" ;
+    Text [ de ] = "VerknÃ¼pfungen bearbeiten" ;
     Text [ en-US ] = "Edit Links" ;
     Moveable = TRUE ;
     FixedText FT_FILES
@@ -176,7 +176,7 @@ ModalDialog MD_UPDATE_BASELINKS
     {
         Pos = MAP_APPFONT ( 275 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Schließen" ;
+        Text [ de ] = "~SchlieÃŸen" ;
         Text [ en-US ] = "~Close" ;
     };
     HelpButton 1
@@ -195,21 +195,21 @@ ModalDialog MD_UPDATE_BASELINKS
     {
         Pos = MAP_APPFONT ( 275 , 60 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Öffnen" ;
+        Text [ de ] = "~Ã–ffnen" ;
         Text [ en-US ] = "~Open" ;
     };
     PushButton PB_CHANGE_SOURCE
     {
         Pos = MAP_APPFONT ( 275 , 77 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Än~dern..." ;
+        Text [ de ] = "Ã„n~dern..." ;
         Text [ en-US ] = "~Modify..." ;
     };
     PushButton PB_BREAK_LINK
     {
         Pos = MAP_APPFONT ( 275 , 94 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Lösen" ;
+        Text [ de ] = "~LÃ¶sen" ;
         Text [ en-US ] = "~Break Link" ;
     };
     FixedText FT_FILES2
@@ -282,7 +282,7 @@ ModalDialog MD_UPDATE_BASELINKS
     };
     String STR_BROKENLINK
     {
-        Text [ de ] = "Nicht verfügbar" ;
+        Text [ de ] = "Nicht verfÃ¼gbar" ;
         Text [ en-US ] = "Not available" ;
     };
     String STR_GRAPHICLINK
@@ -292,17 +292,17 @@ ModalDialog MD_UPDATE_BASELINKS
     };
     String STR_BUTTONCLOSE
     {
-        Text [ de ] = "~Schließen" ;
+        Text [ de ] = "~SchlieÃŸen" ;
         Text [ en-US ] = "~Close" ;
     };
     String STR_CLOSELINKMSG
     {
-        Text [ de ] = "Soll die selektierte Verbindung wirklich gelöst werden?" ;
+        Text [ de ] = "Soll die selektierte Verbindung wirklich gelÃ¶st werden?" ;
         Text [ en-US ] = "Are you sure you want to remove the selected link?" ;
     };
     String STR_CLOSELINKMSG_MULTI
     {
-        Text [ de ] = "Sollen die selektierten Verbindungen wirklich gelöst werden?" ;
+        Text [ de ] = "Sollen die selektierten Verbindungen wirklich gelÃ¶st werden?" ;
         Text [ en-US ] = "Are you sure you want to remove the selected link?" ;
     };
     String STR_WAITINGLINK
@@ -316,7 +316,7 @@ ModalDialog MD_LINKEDIT
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 222 , 58 ) ;
-    Text [ de ] = "Verknüpfung ändern" ;
+    Text [ de ] = "VerknÃ¼pfung Ã¤ndern" ;
     Text [ en-US ] = "Modify Link" ;
     Moveable = TRUE ;
     OKButton 1
@@ -358,7 +358,7 @@ ModalDialog MD_INSERT_OLEOBJECT
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 284 , 105 ) ;
-    Text [ de ] = "OLE-Objekt einfügen" ;
+    Text [ de ] = "OLE-Objekt einfÃ¼gen" ;
     Moveable = TRUE ;
     RadioButton RB_NEW_OBJECT
     {
@@ -397,7 +397,7 @@ ModalDialog MD_INSERT_OLEOBJECT
     {
         Pos = MAP_APPFONT ( 12 , 48 ) ;
         Size = MAP_APPFONT ( 138 , 10 ) ;
-        Text [ de ] = "~Mit Datei verknüpfen" ;
+        Text [ de ] = "~Mit Datei verknÃ¼pfen" ;
         Text [ en-US ] = "~Link to file" ;
     };
     FixedLine GB_OBJECT
@@ -438,7 +438,7 @@ ModalDialog MD_INSERT_OBJECT_PLUGIN
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 284 , 123 ) ;
-    Text [ de ] = "PlugIn einfügen" ;
+    Text [ de ] = "PlugIn einfÃ¼gen" ;
     Moveable = TRUE ;
     Edit ED_FILEURL
     {
@@ -498,7 +498,7 @@ ModalDialog MD_INSERT_OBJECT_APPLET
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 284 , 164 ) ;
-    Text [ de ] = "Applet einfügen" ;
+    Text [ de ] = "Applet einfÃ¼gen" ;
     Moveable = TRUE ;
     FixedText FT_CLASSFILE
     {
@@ -517,7 +517,7 @@ ModalDialog MD_INSERT_OBJECT_APPLET
     {
         Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 204 , 10 ) ;
-        Text [ de ] = "~Speicherort für Class-Datei" ;
+        Text [ de ] = "~Speicherort fÃ¼r Class-Datei" ;
         Text [ en-US ] = "Class ~Location" ;
     };
     Edit ED_CLASSLOCATION
@@ -733,7 +733,7 @@ ModalDialog MD_INSERT_OBJECT_IFRAME
     {
         Pos = MAP_APPFONT ( 136 , 74 ) ;
         Size = MAP_APPFONT ( 28 , 10 ) ;
-        Text [ de ] = "Höh~e" ;
+        Text [ de ] = "HÃ¶h~e" ;
         Text [ en-US ] = "H~eight" ;
     };
     NumericField NM_MARGINHEIGHT
@@ -773,7 +773,7 @@ ModalDialog MD_INSERT_OBJECT_IFRAME
 
 String MD_INSERT_OBJECT_IFRAME
 {
-    Text [ de ] = "Datei für Frame auswählen" ;
+    Text [ de ] = "Datei fÃ¼r Frame auswÃ¤hlen" ;
     Text [ en-US ] = "Select File for Floating Frame" ;
 };
 
