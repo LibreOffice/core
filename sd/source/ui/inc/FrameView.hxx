@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FrameView.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:05:14 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:59:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,17 @@ public:
     const USHORT GetSelectedPageOnLoad (void) const { return nSelectedPageOnLoad; }
 
     void SetViewShEditMode(EditMode eMode, PageKind eKind);
-    EditMode GetViewShEditMode(PageKind eKind);
+    EditMode GetViewShEditMode (PageKind eKind);
+
+    /** Remember the edit mode of the main view shell at the time when the
+        document is loaded.
+    */
+    void SetViewShEditModeOnLoad (const EditMode eMode);
+
+    /** Return the value of the edit mode as it was when the document was
+        loaded.
+    */
+    EditMode GetViewShEditModeOnLoad (void) const;
 
     void SetLayerMode(BOOL bMode)
                  { bLayerMode = bMode; }
@@ -163,6 +173,13 @@ public:
         frame view.
     */
     ViewShell::ShellType GetPreviousViewShellType (void) const;
+
+    /** Remember the type of the view shell at the time when the document is
+        loaded or, rather, when the ViewShellBase is constructed.
+    */
+    void SetViewShellTypeOnLoad (ViewShell::ShellType eType);
+
+    ViewShell::ShellType GetViewShellTypeOnLoad (void) const;
 
     void SetPresentationViewShellId(USHORT nId)
                  { nPresViewShellId = nId; }
@@ -206,6 +223,7 @@ private:
     EditMode        eStandardEditMode; // Editmode im Zeichenmodus (Page/MasterPage)
     EditMode        eNotesEditMode;    // Editmode im Notizen-Modus (Page/MasterPage)
     EditMode        eHandoutEditMode;  // Editmode im Handzettel-Modus (Page/MasterPage)
+    EditMode        meEditModeOnLoad;
     BOOL            bLayerMode;        // Layer an/aus
     BOOL            bQuickEdit;        // QuickEdit an/aus
     BOOL            bDragWithCopy;     // Verschieben mit Kopie (Ctrl-Taste)
@@ -224,6 +242,8 @@ private:
         restored.
     */
     ViewShell::ShellType mePreviousViewShellType;
+
+    ViewShell::ShellType meViewShellTypeOnLoad;
 };
 
 } // end of namespace sd
