@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlHierarchyCollection.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:07:17 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:11:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 
 namespace dbaxml
@@ -77,6 +80,7 @@ namespace dbaxml
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::xml::sax;
+DBG_NAME(OXMLHierarchyCollection)
 
 OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
@@ -90,6 +94,8 @@ OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
     ,m_sCollectionServiceName(_sCollectionServiceName)
     ,m_sComponentServiceName(_sComponentServiceName)
 {
+    DBG_CTOR(OXMLHierarchyCollection,NULL);
+
     const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
     const SvXMLTokenMap& rTokenMap = rImport.GetComponentElemTokenMap();
 
@@ -148,11 +154,14 @@ OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
     ,m_xContainer(_xContainer)
 {
+    DBG_CTOR(OXMLHierarchyCollection,NULL);
 }
 // -----------------------------------------------------------------------------
 
 OXMLHierarchyCollection::~OXMLHierarchyCollection()
 {
+
+    DBG_DTOR(OXMLHierarchyCollection,NULL);
 }
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLHierarchyCollection::CreateChildContext(
