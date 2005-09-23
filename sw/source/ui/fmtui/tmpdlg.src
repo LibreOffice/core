@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tmpdlg.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:48:18 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:05:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,7 @@ TabDialog DLG_TEMPLATE_2
             {
                 Identifier = TP_PARA_STD ;
                 /* ### ACHTUNG: Neuer Text in Resource? Einz¸ge und Abst‰nde : Einz≥ge und Abstınde */
-                Text [ de ] = "Einz¸ge und Abst‰nde" ;
+                Text [ de ] = "Einz√ºge und Abst√§nde" ;
                 Text [ en-US ] = "Indents & Spacing" ;
                 PageResID = TP_PARA_STD ;
                 Text [ x-comment ] = " ";
@@ -315,7 +315,7 @@ String STR_PAGE_HEADER
 String STR_PAGE_FOOTER
 {
     /* ### ACHTUNG: Neuer Text in Resource? Fuﬂzeile : Fuòzeile */
-    Text [ de ]= "Fuﬂzeile" ;
+    Text [ de ]= "Fu√üzeile" ;
     Text [ en-US ] = "Footer" ;
     Text [ x-comment ] = " ";
 };
@@ -334,7 +334,7 @@ String STR_PAGE_COLUMN
 String STR_PAGE_FOOTNOTE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Fuﬂnote : Fuònote */
-    Text [ de ]= "Fuﬂnote" ;
+    Text [ de ]= "Fu√ünote" ;
     Text [ en-US ] = "Footnote" ;
     Text [ x-comment ] = " ";
 };
@@ -373,7 +373,7 @@ TabDialog DLG_TEMPLATE_3
                 Identifier = TP_FRM_ADD ;
                 PageResID = TP_FRM_ADD ;
                 /* ### ACHTUNG: Neuer Text in Resource? Zus‰tze : Zusıtze */
-                Text [ de ] = "Zus‰tze" ;
+                Text [ de ] = "Zus√§tze" ;
                 Text [ en-US ] = "Options" ;
                 Text [ x-comment ] = " ";
             };
