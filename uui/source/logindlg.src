@@ -4,9 +4,9 @@
  *
  *  $RCSfile: logindlg.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:22:19 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:13:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ ModalDialog DLG_UUI_LOGIN
         Pos = MAP_APPFONT ( 12 , 55 ) ;
         Size = MAP_APPFONT ( 185 , 18 ) ;
         WordBreak = TRUE ;
-        Text [ de ] = "Bitte geben Sie hier Benutzernamen und Kennwort für %1 ein." ;
+        Text [ de ] = "Bitte geben Sie hier Benutzernamen und Kennwort fÃ¼r %1 ein." ;
         Text [ en-US ] = "Enter the user name and password for %1 here." ;
     };
     FixedText FT_LOGIN_PATH
@@ -177,7 +177,7 @@ ModalDialog DLG_UUI_LOGIN
     };
     String STR_LOGIN_REALM
     {
-        Text [ de ] = "Bitte geben Sie hier Benutzernamen und Kennwort für \"%2\" auf %1 ein." ;
+        Text [ de ] = "Bitte geben Sie hier Benutzernamen und Kennwort fÃ¼r \"%2\" auf %1 ein." ;
         Text [ en-US ] = "Please enter user name and password for \"%2\" on %1 here." ;
     };
     Text [ en-US ] = "User Name and Password Required" ;
