@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:20:23 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:15:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -209,7 +209,7 @@ namespace dbaui
         inline OAppBorderWindow* getBorderWin() const { return m_pBorderWin; }
 
     public:
-        OAppDetailPageHelper(Window* _pParent,OAppBorderWindow* _pBorderWin);
+        OAppDetailPageHelper(Window* _pParent,OAppBorderWindow* _pBorderWin,PreviewMode _ePreviewMode);
         virtual ~OAppDetailPageHelper();
 
         // window overloads
