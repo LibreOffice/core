@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hlmarkwn.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:15:51 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:40:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ ModalDialog RID_SVXFLOAT_HYPERLINK_MARKWND
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
-        Text [ de ] = "‹bernehmen";
+        Text [ de ] = "√úbernehmen";
         Text [ en-US ] = "Apply" ;
         Text [ x-comment ] = " ";
     };
@@ -66,7 +66,7 @@ ModalDialog RID_SVXFLOAT_HYPERLINK_MARKWND
         HelpId = HID_HYPERLINK_MARKWND_CLOSE;
         Pos = MAP_APPFONT ( 56 , 168 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Schlieﬂen";
+        Text [ de ] = "Schlie√üen";
         Text [ en-US ] = "Close" ;
         Text [ x-comment ] = " ";
     };
@@ -88,7 +88,7 @@ String RID_SVXSTR_HYPDLG_ERR_LERR_NOENTRIES
 
 String RID_SVXSTR_HYPDLG_ERR_LERR_DOCNOTOPEN
 {
-    Text [ de ] = "Das Dokument konnte nicht geˆffnet werden.";
+    Text [ de ] = "Das Dokument konnte nicht ge√∂ffnet werden.";
     Text [ en-US ] = "Couldn't open the document." ;
 };
 
