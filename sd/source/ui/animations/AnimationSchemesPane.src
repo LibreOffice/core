@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AnimationSchemesPane.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:31:55 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:24:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ Control DLG_ANIMATION_SCHEMES_PANE
     FixedLine FL_APPLY_SCHEME
     {
         Size = MAP_APPFONT( 1, RSC_CD_FIXEDLINE_HEIGHT );
-        Text [ de ] = "Für ausgewählte Folien übernehmen";
+        Text [ de ] = "FÃ¼r ausgewÃ¤hlte Folien Ã¼bernehmen";
         Text [ en-US ] = "Apply to selected slides ";
     };
 
@@ -78,7 +78,7 @@ Control DLG_ANIMATION_SCHEMES_PANE
         Size = MAP_APPFONT( 1, RSC_CD_PUSHBUTTON_HEIGHT );
         TabStop = TRUE ;
 
-        Text [ de ] = "Für alle Folien übernehmen";
+        Text [ de ] = "FÃ¼r alle Folien Ã¼bernehmen";
         Text [ en-US ] = "Apply to All Slides";
     };
 
@@ -99,7 +99,7 @@ Control DLG_ANIMATION_SCHEMES_PANE
         Size = MAP_APPFONT( 1, RSC_CD_PUSHBUTTON_HEIGHT );
         TabStop = TRUE ;
 
-        Text [ de ] = "Bildschirmpräsentation";
+        Text [ de ] = "BildschirmprÃ¤sentation";
         Text [ en-US ] = "Slide Show";
     };
 
