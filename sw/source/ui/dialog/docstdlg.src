@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docstdlg.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:12:37 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:58:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ TabPage TP_DOC_STAT
     {
         Pos = MAP_APPFONT ( 6 , 54 ) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "Anzahl Absätze:" ;
+        Text [ de ] = "Anzahl AbsÃ¤tze:" ;
         Text [ en-US ] = "Number of Paragraphs:" ;
         Left = TRUE ;
         Text [ x-comment ] = " ";
@@ -91,7 +91,7 @@ TabPage TP_DOC_STAT
     {
         Pos = MAP_APPFONT ( 6 , 68 ) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "Anzahl Wörter:" ;
+        Text [ de ] = "Anzahl WÃ¶rter:" ;
         Text [ en-US ] = "Number of Words:" ;
         Left = TRUE ;
         Text [ x-comment ] = " ";
