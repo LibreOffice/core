@@ -4,9 +4,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:13:26 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:35:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@ ModalDialog DLG_START_PRESENTATION
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 256, 177 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Bildschirmpr‰sentation : Bildschirmprısentation */
-    Text [ de ] = "Bildschirmpr‰sentation" ;
+    Text [ de ] = "Bildschirmpr√§sentation" ;
     Text [ en-US ] = "Slide Show" ;
     Moveable = TRUE ;
 
@@ -107,7 +107,7 @@ ModalDialog DLG_START_PRESENTATION
     {
         Pos = MAP_APPFONT ( 12 , 38 ) ;
         Size = MAP_APPFONT ( 130 , 12 ) ;
-        Text [ de ] = "~Individuelle Bildschirmpr‰sentation" ;
+        Text [ de ] = "~Individuelle Bildschirmpr√§sentation" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Custom Slide Show" ;
         Text [ x-comment ] = " ";
@@ -269,7 +269,7 @@ ModalDialog DLG_START_PRESENTATION
         Pos = MAP_APPFONT ( 108, 156 ) ;
         Size = MAP_APPFONT ( 145, 12 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Pr‰sentation immer im ~Vordergrund : Prısentation immer im ~Vordergrund */
-        Text [ de ] = "Bildschirmpr‰sentation immer im ~Vordergrund" ;
+        Text [ de ] = "Bildschirmpr√§sentation immer im ~Vordergrund" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Presentation always ~on top" ;
         Text [ x-comment ] = " ";
