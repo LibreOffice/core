@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:56:28 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:59:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3879,10 +3879,8 @@ IMPL_LINK( FmXFormShell, OnFirstTimeActivation, void*, NOTINTERESTEDIN )
 {
     m_nActivationEvent = 0;
     SfxObjectShell* pDocument = m_pShell ? m_pShell->GetObjectShell() : NULL;
-    SfxMedium* pMedium = pDocument ? pDocument->GetMedium() : NULL;
-    String sDocumentName = pMedium ? pMedium->GetName() : String();
 
-    if  ( !sDocumentName.Len() )
+    if  ( pDocument && !pDocument->HasName() )
     {
         switch ( getDocumentType() )
         {
