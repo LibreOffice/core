@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Strings_ChartTypes.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:04:55 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:44:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@ String STR_LINES
 };
 String STR_COLUMNS
 {
-    Text [ de ] = "Säulen" ;
+    Text [ de ] = "SÃ¤ulen" ;
     Text [ en-US ] = "Columns" ;
 };
 String STR_BARS
@@ -52,7 +52,7 @@ String STR_BARS
 };
 String STR_AREAS
 {
-    Text [ de ] = "Flächen" ;
+    Text [ de ] = "FlÃ¤chen" ;
     Text [ en-US ] = "Areas" ;
 };
 String STR_CIRCLES
@@ -145,12 +145,12 @@ String STR_LINE_SYMBOLS
 
 String STR_LINE_COLUMN
 {
-    Text [ de ] = "Verbunddiagramm: Linie und Säulen" ;
+    Text [ de ] = "Verbunddiagramm: Linie und SÃ¤ulen" ;
     Text [ en-US ] = "Combination Chart: Lines and Columns" ;
 };
 String STR_LINE_STACKEDCOLUMN
 {
-    Text [ de ] = "Verbunddiagramm: Linie und gestapelte Säulen" ;
+    Text [ de ] = "Verbunddiagramm: Linie und gestapelte SÃ¤ulen" ;
     Text [ en-US ] = "Combination Chart: Lines and stacked columns" ;
 };
 String STR_NET
@@ -225,43 +225,43 @@ String STR_STOCK_4
 //-----------------------------------
 String STR_SAEULE_3D_1
 {
-    Text [ de ] = "Runde Säulen" ;
+    Text [ de ] = "Runde SÃ¤ulen" ;
     Text [ en-US ] = "Cylinder";
 };
 String STR_SAEULE_3D_2
 {
-    Text [ de ] = "Runde, gestapelte Säulen" ;
+    Text [ de ] = "Runde, gestapelte SÃ¤ulen" ;
     Text [ en-US ] = "Cylinder, stacked";
 };
 String STR_SAEULE_3D_3
 {
-    Text [ de ] = "Runde Säulen, Prozent";
+    Text [ de ] = "Runde SÃ¤ulen, Prozent";
     Text [ en-US ] = "Cylinder, percent";
 };
 String STR_SAEULE_3D_4
 {
-    Text [ de ] = "Runde Säulen, Tief" ;
+    Text [ de ] = "Runde SÃ¤ulen, Tief" ;
     Text [ en-US ] = "Cylinder, deep";
 };
 //-----------------------------------
 String STR_ROEHRE_3D_1
 {
-    Text [ de ] = "Röhren" ;
+    Text [ de ] = "RÃ¶hren" ;
     Text [ en-US ] = "Tubes";
 };
 String STR_ROEHRE_3D_2
 {
-    Text [ de ] = "Gestapelte Röhren" ;
+    Text [ de ] = "Gestapelte RÃ¶hren" ;
     Text [ en-US ] = "Tubes, stacked";
 };
 String STR_ROEHRE_3D_3
 {
-    Text [ de ] = "Röhren, Prozent";
+    Text [ de ] = "RÃ¶hren, Prozent";
     Text [ en-US ] = "Tubes, percent";
 };
 String STR_ROEHRE_3D_4
 {
-    Text [ de ] = "Röhren, Tief" ;
+    Text [ de ] = "RÃ¶hren, Tief" ;
     Text [ en-US ] = "Tubes, deep";
 };
 String STR_PYRAMID_3D_1
