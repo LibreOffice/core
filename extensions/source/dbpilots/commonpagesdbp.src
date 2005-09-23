@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commonpagesdbp.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:26:30 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:03:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,9 +57,7 @@ TabPage RID_PAGE_TABLESELECTION
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10 , WINDOW_SIZE_Y - 21 ) ;
         WordBreak = TRUE;
         Group = TRUE;
-        Text [ de ] = "Das Formular, zu dem das Kontrollfeld gehört, ist im Augenblick noch nicht (oder noch nicht vollständig) an eine Datenquelle gebunden.\n\n"
-            "Bitte wählen Sie eine Datenquelle und eine Tabelle aus.\n\n\n"
-            "Bitte beachten Sie, dass die Einstellungen, die sie auf dieser Seiter für das Formular vornehmen, sofort beim Verlassen der Seite wirksam werden.";
+        Text [ de ] = "Das Formular, zu dem das Kontrollfeld gehÃ¶rt, ist im Augenblick noch nicht (oder noch nicht vollstÃ¤ndig) an eine Datenquelle gebunden.\n\nBitte wÃ¤hlen Sie eine Datenquelle und eine Tabelle aus.\n\n\nBitte beachten Sie, dass die Einstellungen, die sie auf dieser Seiter fÃ¼r das Formular vornehmen, sofort beim Verlassen der Seite wirksam werden.";
         Text [ en-US ] = "Currently, the form the control belongs to is not (or not completely) bound to a data source.\n\nPlease choose a data source and a table.\n\n\nPlease note that the settings made on this page will take effect immediately upon leaving the page.";
     };
     FixedText FT_DATASOURCE
@@ -155,7 +153,7 @@ TabPage RID_PAGE_OPTION_DBFIELD
         Pos = MAP_APPFONT ( 7 , 34  ) ;
         Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 16 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "Möchten Sie den Wert in einem Datenbankfeld speichern?";
+        Text [ de ] = "MÃ¶chten Sie den Wert in einem Datenbankfeld speichern?";
         Text [ en-US ] = "Do you want to save the value in a database field?";
     };
     RadioButton RB_STOREINFIELD_YES
@@ -182,7 +180,7 @@ TabPage RID_PAGE_OPTION_DBFIELD
         Pos = MAP_APPFONT ( 7 , 68 ) ;
         Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 10 ) ;
         TabStop = FALSE;
-        Text [ de ] = "~Nein, ich möchte den Wert nur im Formular speichern.";
+        Text [ de ] = "~Nein, ich mÃ¶chte den Wert nur im Formular speichern.";
         Text [ en-US ] = "~No, I only want to save the value in the form.";
     };
 };
