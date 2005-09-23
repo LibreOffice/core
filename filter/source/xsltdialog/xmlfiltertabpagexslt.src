@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfiltertabpagexslt.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:22:54 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:22:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Pos                 = MAP_APPFONT ( SECOND_ROW_X + SECOND_ROW_WIDTH - BROWSE_WIDTH , FIRST_ROW_Y + 1 * ROW_HEIGHT + 1 * SPACING ) ;
         Size                = MAP_APPFONT ( BROWSE_WIDTH , 14 ) ;
         HelpId              = HID_XML_FILTER_DTD_BROWSE;
-        Text [ de ] = "Ausw‰hlen...";
+        Text [ de ] = "Ausw√§hlen...";
         Text [ en-US ]  = "Browse...";
     };
 
@@ -133,7 +133,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Pos                 = MAP_APPFONT ( SECOND_ROW_X + SECOND_ROW_WIDTH - BROWSE_WIDTH , FIRST_ROW_Y + 2 * ROW_HEIGHT + 2 * SPACING ) ;
         Size                = MAP_APPFONT ( BROWSE_WIDTH , 14 ) ;
         HelpId              = HID_XML_FILTER_EXPORT_XSLT_BROWSE;
-        Text [ de ] = "Ausw‰hlen...";
+        Text [ de ] = "Ausw√§hlen...";
         Text [ en-US ]  = "Browse...";
     };
 
@@ -160,7 +160,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Pos                 = MAP_APPFONT ( SECOND_ROW_X + SECOND_ROW_WIDTH - BROWSE_WIDTH , FIRST_ROW_Y + 3 * ROW_HEIGHT + 3 * SPACING ) ;
         Size                = MAP_APPFONT ( BROWSE_WIDTH , 14 ) ;
         HelpId              = HID_XML_FILTER_IMPORT_XSLT_BROWSE;
-        Text [ de ] = "Ausw‰hlen...";
+        Text [ de ] = "Ausw√§hlen...";
         Text [ en-US ]  = "Browse...";
     };
 
@@ -187,7 +187,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Pos                 = MAP_APPFONT ( SECOND_ROW_X + SECOND_ROW_WIDTH - BROWSE_WIDTH , FIRST_ROW_Y + 4 * ROW_HEIGHT + 4 * SPACING ) ;
         Size                = MAP_APPFONT ( BROWSE_WIDTH , 14 ) ;
         HelpId              = HID_XML_FILTER_IMPORT_TEMPLATE_BROWSE;
-        Text [ de ] = "Ausw‰hlen...";
+        Text [ de ] = "Ausw√§hlen...";
         Text [ en-US ]  = "Browse...";
     };
 };
