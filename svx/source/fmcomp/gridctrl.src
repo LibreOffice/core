@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridctrl.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:46:40 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:53:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ Menu RID_SVXMNU_ROWS
         {
             Identifier = SID_FM_DELETEROWS ;
             HelpID = SID_FM_DELETEROWS ;
-            Text [ de ] = "Zeilen löschen" ;
+            Text [ de ] = "Zeilen lÃ¶schen" ;
             Text [ en-US ] = "Delete Rows" ;
         };
         MenuItem
@@ -59,7 +59,7 @@ Menu RID_SVXMNU_ROWS
         {
             Identifier = SID_FM_RECORD_UNDO ;
             HelpID = SID_FM_RECORD_UNDO ;
-            Text [ de ] = "Rückgängig: Dateneingabe" ;
+            Text [ de ] = "RÃ¼ckgÃ¤ngig: Dateneingabe" ;
             Text [ en-US ] = "Undo: Data entry" ;
         };
     };
@@ -72,7 +72,7 @@ Menu RID_SVXMNU_COLS
         {
             Identifier = SID_FM_INSERTCOL ;
             HelpID = SID_FM_INSERTCOL ;
-            Text [ de ] = "~Spalte einfügen" ;
+            Text [ de ] = "~Spalte einfÃ¼gen" ;
             Text [ en-US ] = "Insert ~Column" ;
             SubMenu = Menu
             {
@@ -131,7 +131,7 @@ Menu RID_SVXMNU_COLS
                     {
                         Identifier = SID_FM_CURRENCYFIELD ;
                         HelpID = SID_FM_CURRENCYFIELD ;
-                        Text [ de ] = "Währungsfeld" ;
+                        Text [ de ] = "WÃ¤hrungsfeld" ;
                         Text [ en-US ] = "Currency Field" ;
                     };
                     MenuItem
@@ -171,7 +171,7 @@ Menu RID_SVXMNU_COLS
         {
             Identifier = SID_FM_DELETECOL ;
             HelpID = SID_FM_DELETECOL ;
-            Text [ de ] = "Spalte ~löschen" ;
+            Text [ de ] = "Spalte ~lÃ¶schen" ;
             Text [ en-US ] = "Delete Column" ;
         };
         MenuItem
