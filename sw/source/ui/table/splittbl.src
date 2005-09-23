@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splittbl.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:04:38 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:13:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ ModalDialog DLG_SPLIT_TABLE
     {
         Pos = MAP_APPFONT ( 12 , 15 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
-        Text [ de ] = "~Überschrift kopieren" ;
+        Text [ de ] = "~Ãœberschrift kopieren" ;
         Check = TRUE ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Copy heading" ;
@@ -86,7 +86,7 @@ ModalDialog DLG_SPLIT_TABLE
     {
         Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
-        Text [ de ] = "~Eigene Überschrift, mit Vorlage" ;
+        Text [ de ] = "~Eigene Ãœberschrift, mit Vorlage" ;
         Text [ en-US ] = "C~ustom heading (apply Style)" ;
         Text [ x-comment ] = "; All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
     };
@@ -94,7 +94,7 @@ ModalDialog DLG_SPLIT_TABLE
     {
         Pos = MAP_APPFONT ( 12 , 45 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
-        Text [ de ] = "E~igene Überschrift" ;
+        Text [ de ] = "E~igene Ãœberschrift" ;
         Text [ en-US ] = "Cu~stom heading" ;
         Text [ x-comment ] = " ";
     };
@@ -102,7 +102,7 @@ ModalDialog DLG_SPLIT_TABLE
     {
         Pos = MAP_APPFONT ( 12 , 60 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
-        Text [ de ] = "~Keine Überschrift" ;
+        Text [ de ] = "~Keine Ãœberschrift" ;
         Text [ en-US ] = "~No heading" ;
         Text [ x-comment ] = " ";
     };
