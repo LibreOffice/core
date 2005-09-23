@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionHelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:44:00 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:25:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,6 +190,7 @@ namespace dbaui
     using namespace ::svt;
 
 
+DBG_NAME(OConnectionHelper)
 
     OConnectionHelper::OConnectionHelper( Window* pParent, const ResId& _rId, const SfxItemSet& _rCoreAttrs)
         :OGenericAdministrationPage(pParent, _rId, _rCoreAttrs)
@@ -197,6 +198,8 @@ namespace dbaui
            ,m_aET_Connection(this, ResId(ET_AUTOBROWSEURL))
         ,m_aPB_Connection(this, ResId(PB_AUTOBROWSEURL))
     {
+        DBG_CTOR(OConnectionHelper,NULL);
+
         // extract the datasource type collection from the item set
         DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rCoreAttrs.GetItem(DSID_TYPECOLLECTION));
         if (pCollectionItem)
@@ -208,6 +211,8 @@ namespace dbaui
 
     OConnectionHelper::~OConnectionHelper()
     {
+
+        DBG_DTOR(OConnectionHelper,NULL);
     }
 
 
