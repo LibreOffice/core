@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridpages.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:29:29 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:04:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@ TabPage RID_PAGE_GW_FIELDSELECTION
     {
         Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + ITEM_BUTTON_SIZE_X / 2 + 6, 52 );
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 13, 8 );
-        Text [ de ] = "Ausgew‰hlte Felder";
+        Text [ de ] = "Ausgew√§hlte Felder";
         Text [ en-US ] = "Selected fields";
     };
     ListBox LB_SELECTED_FIELDS
