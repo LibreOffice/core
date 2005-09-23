@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backgrnd.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:35:18 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:33:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,9 @@
 #include "backgrnd.hrc"
  // define ----------------------------------------------------------------
 #define UNLINKED_IMAGE                      \
-    Text [ de ] = "unverknüpfte Grafik" ; \
+    Text [ de ] = "unverknÃ¼pfte Grafik" ; \
     Text [ en-US ] = "Unlinked graphic" ; \
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " ";   \
 
  // pragma ----------------------------------------------------------------
 
@@ -93,7 +93,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Hide = TRUE ;
         LeftLabel = TRUE ;
         /* ### ACHTUNG: Neuer Text in Resource? Fü~r : F³~r */
-        Text [ de ] = "Fü~r" ;
+        Text [ de ] = "FÃ¼~r" ;
         Text [ en-US ] = "F~or" ;
         Text [ x-comment ] = " ";
     };
@@ -218,7 +218,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 6 + RSC_SP_FLGR_INNERBORDER_LEFT , 23 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ de ] = "Au~swählen..." ;
+        Text [ de ] = "Au~swÃ¤hlen..." ;
         Text [ en-US ] = "~Browse..." ;
         Text [ x-comment ] = " ";
     };
@@ -227,7 +227,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 6 + RSC_SP_FLGR_INNERBORDER_LEFT + 60 + 2*RSC_SP_CTRL_X, 23 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP + 3 ) ;
         Size = MAP_APPFONT ( 78 , 10 ) ;
-        Text [ de ] = "~Verknüpfen" ;
+        Text [ de ] = "~VerknÃ¼pfen" ;
         Text [ en-US ] = "~Link" ;
         Text [ x-comment ] = " ";
     };
@@ -262,7 +262,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Pos = MAP_APPFONT ( 12 , 103 ) ;
         Size = MAP_APPFONT ( 49 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Fläche : ~Flõche */
-        Text [ de ] = "~Fläche" ;
+        Text [ de ] = "~FlÃ¤che" ;
         Text [ en-US ] = "Ar~ea" ;
         Text [ x-comment ] = " ";
     };
