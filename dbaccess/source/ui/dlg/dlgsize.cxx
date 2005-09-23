@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgsize.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:01:34 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:30:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@ namespace dbaui
 #define DEF_ROW_HEIGHT  45
 #define DEF_COL_WIDTH   227
 
+DBG_NAME(DlgSize)
 //==================================================================
 DlgSize::DlgSize( Window* pParent, sal_Int32 nVal, sal_Bool bRow, sal_Int32 _nAlternativeStandard )
         :ModalDialog( pParent, ModuleRes(bRow ? DLG_ROWHEIGHT : DLG_COLWIDTH))
@@ -66,6 +67,8 @@ DlgSize::DlgSize( Window* pParent, sal_Int32 nVal, sal_Bool bRow, sal_Int32 _nAl
         ,m_nPrevValue(nVal)
         ,m_nStandard(bRow ? DEF_ROW_HEIGHT : DEF_COL_WIDTH)
 {
+    DBG_CTOR(DlgSize,NULL);
+
     if ( _nAlternativeStandard > 0 )
         m_nStandard = _nAlternativeStandard;
     aCB_STANDARD.SetClickHdl(LINK(this,DlgSize,CbClickHdl));
@@ -86,6 +89,8 @@ DlgSize::DlgSize( Window* pParent, sal_Int32 nVal, sal_Bool bRow, sal_Int32 _nAl
 //------------------------------------------------------------------------------
 DlgSize::~DlgSize()
 {
+
+    DBG_DTOR(DlgSize,NULL);
 }
 
 //------------------------------------------------------------------------------
