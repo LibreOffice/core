@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:07:50 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:43:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,9 @@
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HDL_
 #include <com/sun/star/drawing/XShapes.hdl>
 #endif
+#ifndef _COM_SUN_STAR_TABLE_XCELLRANGE_HPP_
+#include <com/sun/star/table/XCellRange.hpp>
+#endif
 
 class ScOutlineArray;
 class SvXMLExportPropertyMapper;
@@ -76,6 +79,7 @@ class ScMyDefaultStyles;
 class XMLNumberFormatAttributesExportHelper;
 class ScChartListener;
 class SfxItemPool;
+class ScAddress;
 
 typedef std::vector< com::sun::star::uno::Reference < com::sun::star::drawing::XShapes > > ScMyXShapesVec;
 
@@ -83,6 +87,7 @@ class ScXMLExport : public SvXMLExport
 {
     ScDocument*                 pDoc;
     com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheet> xCurrentTable;
+    com::sun::star::uno::Reference <com::sun::star::table::XCellRange> xCurrentTableCellRange;
 
     UniReference < XMLPropertyHandlerFactory >  xScPropHdlFactory;
     UniReference < XMLPropertySetMapper >       xCellStylesPropertySetMapper;
@@ -126,6 +131,7 @@ class ScXMLExport : public SvXMLExport
     rtl::OUString               sElemTab;
     rtl::OUString               sElemP;
     sal_Int32                   nOpenRow;
+    sal_Int32                   nProgressCount;
     sal_uInt16                  nCurrentTable;
     sal_Bool                    bHasRowHeader;
     sal_Bool                    bRowHeaderOpen;
@@ -182,7 +188,7 @@ class ScXMLExport : public SvXMLExport
     sal_Bool GetMerged (const com::sun::star::table::CellRangeAddress* pCellRange,
         const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheet>& xTable);
 
-    sal_Bool GetCellText (ScMyCell& rMyCell) const;
+    sal_Bool GetCellText (ScMyCell& rMyCell, const ScAddress& aPos) const;
 
     void WriteCell (ScMyCell& aCell);
     void WriteAreaLink(const ScMyCell& rMyCell);
@@ -211,6 +217,8 @@ class ScXMLExport : public SvXMLExport
     void WriteConsolidation();  // core implementation
 
     void CollectUserDefinedNamespaces(const SfxItemPool* pPool, sal_uInt16 nAttrib);
+
+    void IncrementProgressBar(sal_Bool bEditCell, sal_Int32 nInc = 1);
 protected:
     virtual SvXMLAutoStylePoolP* CreateAutoStylePool();
     virtual XMLPageExport* CreatePageExport();
@@ -231,9 +239,7 @@ public:
         const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheet>& xTable,
         const sal_Int32 nCol, const sal_Int32 nRow,
         com::sun::star::table::CellRangeAddress& aCellAddress, sal_Bool& bIsFirst) const;
-    sal_Bool IsMatrix (const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell,
-        const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheet>& xTable,
-        const sal_Int32 nCol, const sal_Int32 nRow,
+    sal_Bool IsMatrix (const ScAddress& aCell,
         com::sun::star::table::CellRangeAddress& aCellAddress, sal_Bool& bIsFirst) const;
 
     UniReference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() { return xCellStylesPropertySetMapper; }
