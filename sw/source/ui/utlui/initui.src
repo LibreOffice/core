@@ -4,9 +4,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:26:57 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:15:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ Resource RID_SW_SHELLRES
     {
         Text [ en-US ] = "** Square function overflow **" ;
         /* ### ACHTUNG: Neuer Text in Resource? ** Überlauf in Quadratfunktion ** : ** šberlauf in Quadratfunktion ** */
-        Text [ de ] = "** Überlauf in Quadratfunktion **" ;
+        Text [ de ] = "** Ãœberlauf in Quadratfunktion **" ;
         Text [ x-comment ] = " ";
     };
     String STR_CALC_VARNFND
@@ -96,7 +96,7 @@ Resource RID_SW_SHELLRES
     {
         Text [ en-US ] = "** Overflow **" ;
         /* ### ACHTUNG: Neuer Text in Resource? ** Überlauf ** : ** šberlauf ** */
-        Text [ de ] = "** Überlauf **" ;
+        Text [ de ] = "** Ãœberlauf **" ;
         Text [ x-comment ] = " ";
     };
     String STR_CALC_WRONGTIME
@@ -211,7 +211,7 @@ Resource RID_SW_SHELLRES
     String FLD_DOCINFO_KEYS
     {
         /* ### ACHTUNG: Neuer Text in Resource? Schlüsselwörter : Schl³sselw÷rter */
-        Text [ de ] = "Schlüsselwörter" ;
+        Text [ de ] = "SchlÃ¼sselwÃ¶rter" ;
         Text [ en-US ] = "Keywords" ;
         Text [ x-comment ] = " ";
     };
@@ -252,7 +252,7 @@ Resource RID_SW_SHELLRES
     };
     String FLD_DOCINFO_CHANGE
     {
-        Text [ de ] = "Geändert am" ;
+        Text [ de ] = "GeÃ¤ndert am" ;
         Text [ en-US ] = "Modified" ;
     };
     String FLD_DOCINFO_PRINT
@@ -307,7 +307,7 @@ String STR_AUTH_TYPE_BOOK
 };
 String STR_AUTH_TYPE_BOOKLET
 {
-    Text [ de ] = "Broschüre" ;
+    Text [ de ] = "BroschÃ¼re" ;
     Text [ en-US ] = "Brochures";
     Text [ x-comment ] = " ";
 };
@@ -379,7 +379,7 @@ String STR_AUTH_TYPE_TECHREPORT
 };
 String STR_AUTH_TYPE_UNPUBLISHED
 {
-    Text [ de ] = "Unveröffentlicht" ;
+    Text [ de ] = "UnverÃ¶ffentlicht" ;
     Text [ en-US ] = "Unpublished";
     Text [ x-comment ] = " ";
 };
@@ -533,7 +533,7 @@ String STR_AUTH_FIELD_PUBLISHER
 };
 String STR_AUTH_FIELD_SCHOOL
 {
-    Text [ de ] = "Hochschule/Universität" ;
+    Text [ de ] = "Hochschule/UniversitÃ¤t" ;
     Text [ en-US ] = "University";
     Text [ x-comment ] = " ";
 };
