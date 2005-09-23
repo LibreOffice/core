@@ -4,9 +4,9 @@
  *
  *  $RCSfile: measure.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:34:15 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:43:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ TabPage RID_SVXPAGE_MEASURE
     HelpId = HID_PAGE_MEASURE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text [ de ] = "Bemaﬂung" ;
+    Text [ de ] = "Bema√üung" ;
     Text [ en-US ] = "Dimensioning" ;
 
     FixedLine FL_LINE
@@ -83,7 +83,7 @@ TabPage RID_SVXPAGE_MEASURE
     {
         Pos = MAP_APPFONT ( 12 , 32  ) ;
         Size = MAP_APPFONT ( 65 , 8 ) ;
-        Text [ de ] = "Hilfslinien~¸berhang" ;
+        Text [ de ] = "Hilfslinien~√ºberhang" ;
         Text [ en-US ] = "Guide ~overhang" ;
         Text [ x-comment ] = " ";
     };
@@ -180,7 +180,7 @@ TabPage RID_SVXPAGE_MEASURE
         Pos = MAP_APPFONT ( 12 , 96  ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Maﬂlinie u~nterhalb des Objekts" ;
+        Text [ de ] = "Ma√ülinie u~nterhalb des Objekts" ;
         Text [ en-US ] = "Measure ~below object";
     };
     FixedText FT_DECIMALPLACES
