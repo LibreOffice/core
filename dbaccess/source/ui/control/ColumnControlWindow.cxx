@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ColumnControlWindow.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:31:35 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:22:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,7 @@ using namespace ::com::sun::star::lang;
 
 //========================================================================
 // OColumnControlWindow
+DBG_NAME(OColumnControlWindow)
 //========================================================================
 OColumnControlWindow::OColumnControlWindow(Window* pParent
                                            ,const Reference<XMultiServiceFactory>& _rxFactory)
@@ -70,6 +71,8 @@ OColumnControlWindow::OColumnControlWindow(Window* pParent
             , m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
             , m_bAutoIncrementEnabled(sal_True)
 {
+    DBG_CTOR(OColumnControlWindow,NULL);
+
     m_bRight = sal_True;
     try
     {
@@ -82,6 +85,8 @@ OColumnControlWindow::OColumnControlWindow(Window* pParent
 // -----------------------------------------------------------------------------
 OColumnControlWindow::~OColumnControlWindow()
 {
+
+    DBG_DTOR(OColumnControlWindow,NULL);
 }
 // -----------------------------------------------------------------------
 void OColumnControlWindow::ActivateAggregate( EControlType eType )
