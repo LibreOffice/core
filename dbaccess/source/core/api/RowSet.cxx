@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.135 $
+ *  $Revision: 1.136 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:00:22 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:02:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1073,7 +1073,7 @@ void SAL_CALL ORowSet::updateRow(  ) throw(SQLException, RuntimeException)
     ::connectivity::checkDisposed(ORowSet_BASE1::rBHelper.bDisposed);
     // not allowed when standing on insert row
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
-    if(!m_pCache || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY || m_bNew)
+    if ( !m_pCache || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY || m_bNew || ((m_pCache->m_nPrivileges & Privilege::UPDATE ) != Privilege::UPDATE) )
         throwFunctionSequenceException(*this);
 
     if(m_bModified)
@@ -1117,7 +1117,7 @@ void SAL_CALL ORowSet::deleteRow(  ) throw(SQLException, RuntimeException)
     // after the last row
     // stands on the insert row
     // the concurrency is read only
-    if(!m_pCache || m_bBeforeFirst || m_bAfterLast || m_bNew || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
+    if(!m_pCache || m_bBeforeFirst || m_bAfterLast || m_bNew || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY || ((m_pCache->m_nPrivileges & Privilege::DELETE ) != Privilege::DELETE))
         throwFunctionSequenceException(*this);
 
     // this call position the cache indirect
@@ -1275,6 +1275,9 @@ void SAL_CALL ORowSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
 
     ::osl::ResettableMutexGuard aGuard( *m_pMutex );
     checkPositioningAllowed();
+    if ((m_pCache->m_nPrivileges & Privilege::INSERT ) != Privilege::INSERT)
+        throwFunctionSequenceException(*this);
+
 
     if(notifyAllListenersCursorBeforeMove(aGuard))
     {
