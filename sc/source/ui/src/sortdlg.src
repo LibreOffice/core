@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sortdlg.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:34:55 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:10:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
     {
         Pos = MAP_APPFONT ( 6 , 44 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "~Anschlieﬂend nach" ;
+        Text [ de ] = "~Anschlie√üend nach" ;
         Text [ en-US ] = "Then b~y" ;
         Text [ x-comment ] = " ";
     };
@@ -137,7 +137,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
     {
         Pos = MAP_APPFONT ( 6 , 85 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "A~nschlieﬂend nach" ;
+        Text [ de ] = "A~nschlie√üend nach" ;
         Text [ en-US ] = "T~hen by" ;
         Text [ x-comment ] = " ";
     };
@@ -153,7 +153,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     {
         Pos = MAP_APPFONT ( 12 , 6 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text [ de ] = "~Groﬂ-/Kleinschreibung beachten" ;
+        Text [ de ] = "~Gro√ü-/Kleinschreibung beachten" ;
         Text [ en-US ] = "Case ~sensitive" ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -166,19 +166,19 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     };
     String STR_COL_LABEL
     {
-        Text [ de ] = "Bereich ~enth‰lt Spaltenbeschriftungen" ;
+        Text [ de ] = "Bereich ~enth√§lt Spaltenbeschriftungen" ;
         Text [ en-US ] = "Range contains column la~bels" ;
     };
     String STR_ROW_LABEL
     {
-        Text [ de ] = "Bereich ~enth‰lt Zeilenbeschriftungen" ;
+        Text [ de ] = "Bereich ~enth√§lt Zeilenbeschriftungen" ;
         Text [ en-US ] = "Range contains ~row labels" ;
     };
     CheckBox BTN_FORMATS
     {
         Pos = MAP_APPFONT ( 12 , 34 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text [ de ] = "~Formate einschlieﬂen" ;
+        Text [ de ] = "~Formate einschlie√üen" ;
         Text [ en-US ] = "Include ~formats" ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
