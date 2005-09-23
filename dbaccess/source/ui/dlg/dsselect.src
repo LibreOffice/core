@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsselect.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:03:33 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:14:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 154 , 10 ) ;
-        Text [ de ] = "Wählen Sie eine Datenquelle:";
+        Text [ de ] = "WÃ¤hlen Sie eine Datenquelle:";
         Text [ en-US ] = "Choose a data source:";
     };
     ListBox LB_DATASOURCE
@@ -115,12 +115,12 @@ ModalDialog DLG_DATASOURCE_SELECTION
     };
     String STR_DESCRIPTION2
     {
-        Text [ de ]= "Wählen Sie eine Datenbank";
+        Text [ de ]= "WÃ¤hlen Sie eine Datenbank";
         Text [ en-US ] = "Choose a database";
     };
     String STR_COULDNOTLOAD_CONFIGLIB
     {
-        Text [ de ] = "Die Programmbibliothek #lib# konnte nicht geladen werden oder ist defekt. Die ODBC-Datenquellen-Konfiguration ist nicht verfügbar.";
+        Text [ de ] = "Die Programmbibliothek #lib# konnte nicht geladen werden oder ist defekt. Die ODBC-Datenquellen-Konfiguration ist nicht verfÃ¼gbar.";
         Text [ en-US ] = "Could not load the program library #lib# or it is corrupted. The ODBC data source configuration is not available.";
     };
 };
