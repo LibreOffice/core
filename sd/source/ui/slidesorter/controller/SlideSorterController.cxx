@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:13:07 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 10:56:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -810,7 +810,7 @@ void SlideSorterController::GetCtrlState (SfxItemSet& rSet)
         SfxViewFrame* pSlideViewFrame = SFX_APP()->GetViewFrame();
         DBG_ASSERT(pSlideViewFrame!=NULL,
             "SlideSorterController::GetCtrlState: ViewFrame not found");
-        if( (pSlideViewFrame != 0) && (pSlideViewFrame->ISA(SfxTopViewFrame)) )
+        if (pSlideViewFrame && pSlideViewFrame->ISA(SfxTopViewFrame))
         {
             pSlideViewFrame->GetSlotState (SID_RELOAD, NULL, &rSet);
         }
