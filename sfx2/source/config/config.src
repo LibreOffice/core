@@ -4,9 +4,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:01:35 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:22:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,33 +51,33 @@ String STR_FILTERNAME_CFG
 QueryBox DLG_MACROQUERY
 {
     Buttons = WB_OK_CANCEL;
-    Title [ de ] = "Makro ausführen" ;
+    Title [ de ] = "Makro ausfÃ¼hren" ;
     Title [ en-US ] = "Run Macro" ;
     Title [ x-comment ] = " ";
 
-    Message [ de ] = "Es wurde ein Ereignis ausgelöst, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
+    Message [ de ] = "Es wurde ein Ereignis ausgelÃ¶st, auf das das Makro $(MACRO) konfiguriert ist. $(TEXT)";
     Message [ en-US ] = "An event was triggered to which the macro $(MACRO) belongs. $(TEXT)";
 
     String BTN_OK
     {
-        Text [ de ] = "Ausführen" ;
+        Text [ de ] = "AusfÃ¼hren" ;
         Text [ en-US ] = "Run" ;
         Text [ x-comment ] = " ";
     };
     String BTN_CANCEL
     {
-        Text [ de ] = "Nicht Ausführen" ;
+        Text [ de ] = "Nicht AusfÃ¼hren" ;
         Text [ en-US ] = "Do Not Run" ;
         Text [ x-comment ] = " ";
     };
     String FT_CANCEL
     {
-        Text [ de ] = "Nach den Sicherheitseinstellungen soll dieses Makro nicht ausgeführt werden. Möchten Sie es trotzdem ausführen?";
+        Text [ de ] = "Nach den Sicherheitseinstellungen soll dieses Makro nicht ausgefÃ¼hrt werden. MÃ¶chten Sie es trotzdem ausfÃ¼hren?";
         Text [ en-US ] = "According to the security settings, this macro should not be run. Do you want to run it anyway?";
     };
     String FT_OK
     {
-        Text [ de ] = "Möchten Sie dieses Makro ausführen?";
+        Text [ de ] = "MÃ¶chten Sie dieses Makro ausfÃ¼hren?";
         Text [ en-US ] = "Do you want to run the macro?";
     };
 };
