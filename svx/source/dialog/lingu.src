@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lingu.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:26:32 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:42:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ QueryBox RID_SVXQB_CONTINUE
     DEFBUTTON = WB_DEF_YES ;
     /* ### ACHTUNG: Neuer Text in Resource? Überprüfung am Anfang des Dokumentes fortsetzen? : šberpr³fung am Anfang des Dokumentes fortsetzen? */
     /* ### ACHTUNG: Neuer Text in Resource? Überprüfung am Anfang des Dokumentes fortsetzen? : šberpr³fung am Anfang des Dokumentes fortsetzen? */
-    Message [ de ] = "Überprüfung am Anfang des Dokumentes fortsetzen?" ;
+    Message [ de ] = "ÃœberprÃ¼fung am Anfang des Dokumentes fortsetzen?" ;
     Message [ en-US ] = "Continue checking at beginning of document?" ;
     Message [ x-comment ] = " ";
 };
@@ -62,7 +62,7 @@ QueryBox RID_SVXQB_BW_CONTINUE
     DEFBUTTON = WB_DEF_YES ;
     /* ### ACHTUNG: Neuer Text in Resource? Überprüfung am Ende des Dokumentes fortsetzen? : šberpr³fung am Ende des Dokumentes fortsetzen? */
     /* ### ACHTUNG: Neuer Text in Resource? Überprüfung am Ende des Dokumentes fortsetzen? : šberpr³fung am Ende des Dokumentes fortsetzen? */
-    Message [ de ] = "Überprüfung am Ende des Dokumentes fortsetzen?" ;
+    Message [ de ] = "ÃœberprÃ¼fung am Ende des Dokumentes fortsetzen?" ;
     Message [ en-US ] = "Continue checking at end of document?" ;
     Message [ x-comment ] = " ";
 };
@@ -73,7 +73,7 @@ QueryBox RID_SVXQB_BODYTEXT
      // ### ACHTUNG: Neuer Text in Resource? Möchten Sie den Haupttext prüfen? : Wollen Sie den Haupttext prüfen?
     /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie den Haupttext prüfen? : M÷chten Sie den Haupttext pr³fen? */
     /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie den Haupttext prüfen? : M÷chten Sie den Haupttext pr³fen? */
-    Message [ de ] = "Möchten Sie den Haupttext prüfen?" ;
+    Message [ de ] = "MÃ¶chten Sie den Haupttext prÃ¼fen?" ;
     Message [ en-US ] = "Do you want to check the main text?" ;
     Message [ x-comment ] = " ";
 };
@@ -83,7 +83,7 @@ QueryBox RID_SVXQB_SPECIAL
     DEFBUTTON = WB_DEF_NO ;
     /* ### ACHTUNG: Neuer Text in Resource? Sonderbereiche prüfen? : Sonderbereiche pr³fen? */
     /* ### ACHTUNG: Neuer Text in Resource? Sonderbereiche prüfen? : Sonderbereiche pr³fen? */
-    Message [ de ] = "Sonderbereiche prüfen?" ;
+    Message [ de ] = "Sonderbereiche prÃ¼fen?" ;
     Message [ en-US ] = "Do you want check the special regions?" ;
     Message [ x-comment ] = " ";
 };
@@ -93,7 +93,7 @@ QueryBox RID_SVXQB_SPECIAL_FORCED
     DEFBUTTON = WB_DEF_NO ;
     /* ### ACHTUNG: Neuer Text in Resource? Sonderbereichprüfung ist ausgeschaltet, Trotzdem prüfen? : Sonderbereichpr³fung ist ausgeschaltet, Trotzdem pr³fen? */
     /* ### ACHTUNG: Neuer Text in Resource? Sonderbereichprüfung ist ausgeschaltet, Trotzdem prüfen? : Sonderbereichpr³fung ist ausgeschaltet, Trotzdem pr³fen? */
-    Message [ de ] = "Sonderbereichprüfung ist ausgeschaltet, Trotzdem prüfen?" ;
+    Message [ de ] = "SonderbereichprÃ¼fung ist ausgeschaltet, Trotzdem prÃ¼fen?" ;
     Message [ en-US ] = "Check special regions is deactivated. Check anyway?" ;
     Message [ x-comment ] = " ";
 };
@@ -120,20 +120,20 @@ String RID_SVXSTR_HMSTATUS_CAPERROR
 {
     /* ### ACHTUNG: Neuer Text in Resource? Groß- / Kleinschreibungs - Fehler : Gro˜- / Kleinschreibungs - Fehler */
     /* ### ACHTUNG: Neuer Text in Resource? Groß- / Kleinschreibungs - Fehler : Gro˜- / Kleinschreibungs - Fehler */
-    Text [ de ] = "Groß- / Kleinschreibungs - Fehler" ;
+    Text [ de ] = "GroÃŸ- / Kleinschreibungs - Fehler" ;
     Text [ en-US ] = "Capitalization error" ;
     Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_HMSTATUS_INVALID_LANG
 {
-    Text [ de ] = "Sprache wird nicht unterstützt" ;
+    Text [ de ] = "Sprache wird nicht unterstÃ¼tzt" ;
     Text [ en-US ] = "Language not supported";
 };
 String RID_SVXSTR_HMERR_CHECKINSTALL
 {
     /* ### ACHTUNG: Neuer Text in Resource?  ist für die Prüfung nicht verfügbar. \nÜberprüfen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewünschte Sprache :  ist f³r die Pr³fung nicht verf³gbar. \nšberpr³fen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gew³nschte Sprache */
     /* ### ACHTUNG: Neuer Text in Resource?  ist für die Prüfung nicht verfügbar. \nÜberprüfen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewünschte Sprache :  ist f³r die Pr³fung nicht verf³gbar. \nšberpr³fen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gew³nschte Sprache */
-    Text [ de ] = " ist für die Prüfung nicht verfügbar. \nÜberprüfen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewünschte Sprache" ;
+    Text [ de ] = " ist fÃ¼r die PrÃ¼fung nicht verfÃ¼gbar. \nÃœberprÃ¼fen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewÃ¼nschte Sprache" ;
     Text [ en-US ] = "is not available for spellchecking\nPlease check your installation and install the desired language\n" ;
     Text [ x-comment ] = " ";
 };
@@ -141,7 +141,7 @@ String RID_SVXSTR_HMERR_ADDWORD
 {
     /* ### ACHTUNG: Neuer Text in Resource? Das Wort konnte nicht ins Wörterbuch aufgenommen werden. : Das Wort konnte nicht ins W÷rterbuch aufgenommen werden. */
     /* ### ACHTUNG: Neuer Text in Resource? Das Wort konnte nicht ins Wörterbuch aufgenommen werden. : Das Wort konnte nicht ins W÷rterbuch aufgenommen werden. */
-    Text [ de ] = "Das Wort konnte nicht ins Wörterbuch aufgenommen werden." ;
+    Text [ de ] = "Das Wort konnte nicht ins WÃ¶rterbuch aufgenommen werden." ;
     Text [ en-US ] = "The word could not be added to dictionary" ;
     Text [ x-comment ] = " ";
 };
@@ -149,7 +149,7 @@ String RID_SVXSTR_HMERR_HYPH
 {
     /* ### ACHTUNG: Neuer Text in Resource? Die Trennhilfe ist nicht verfügbar : Die Trennhilfe ist nicht verf³gbar */
     /* ### ACHTUNG: Neuer Text in Resource? Die Trennhilfe ist nicht verfügbar : Die Trennhilfe ist nicht verf³gbar */
-    Text [ de ] = "Die Trennhilfe ist nicht verfügbar" ;
+    Text [ de ] = "Die Trennhilfe ist nicht verfÃ¼gbar" ;
     Text [ en-US ] = "Hyphenation not available" ;
     Text [ x-comment ] = " ";
 };
@@ -157,23 +157,23 @@ String RID_SVXSTR_HMERR_THESAURUS
 {
     /* ### ACHTUNG: Neuer Text in Resource? Ein Thesaurus für die eingestellte Sprache ist nicht verfügbar. \nÜberprüfen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewünschte Sprache : Ein Thesaurus f³r die eingestellte Sprache ist nicht verf³gbar. \nšberpr³fen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gew³nschte Sprache */
     /* ### ACHTUNG: Neuer Text in Resource? Ein Thesaurus für die eingestellte Sprache ist nicht verfügbar. \nÜberprüfen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewünschte Sprache : Ein Thesaurus f³r die eingestellte Sprache ist nicht verf³gbar. \nšberpr³fen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gew³nschte Sprache */
-    Text [ de ] = "Ein Thesaurus für die eingestellte Sprache ist nicht verfügbar. \nÜberprüfen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewünschte Sprache" ;
+    Text [ de ] = "Ein Thesaurus fÃ¼r die eingestellte Sprache ist nicht verfÃ¼gbar. \nÃœberprÃ¼fen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewÃ¼nschte Sprache" ;
     Text [ en-US ] = "No thesaurus is available for the selected language. \nPlease check your installation and install the desired language\n" ;
     Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_DIC_ERR_UNKNOWN
 {
-    Text [ de ] = "Das Wort konnte aus einem unbekanntem Grund\nnicht ins Wörterbuch aufgenommen werden." ;
+    Text [ de ] = "Das Wort konnte aus einem unbekanntem Grund\nnicht ins WÃ¶rterbuch aufgenommen werden." ;
     Text [ en-US ] = "Word cannot be added to dictionary\ndue to unknown reason.";
 };
 String RID_SVXSTR_DIC_ERR_FULL
 {
-    Text [ de ] = "Das Wörterbuch ist bereits voll." ;
+    Text [ de ] = "Das WÃ¶rterbuch ist bereits voll." ;
     Text [ en-US ] = "The dictionary is already full.";
 };
 String RID_SVXSTR_DIC_ERR_READONLY
 {
-    Text [ de ] = "Das Wörterbuch ist schreibgeschützt." ;
+    Text [ de ] = "Das WÃ¶rterbuch ist schreibgeschÃ¼tzt." ;
     Text [ en-US ] = "The dictionary is read-only.";
 };
 
