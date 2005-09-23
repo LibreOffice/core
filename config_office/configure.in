@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-08-30 09:34:09 $
+dnl * Date: $Date: 2005-09-23 13:48:01 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.135 $ )
+AC_REVISION( $Revision: 1.136 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -714,6 +714,7 @@ if test "$enable_crashdump" = "yes" -o "$enable_crashdump" = "TRUE"; then
       enable_symbols="yes"
    fi
    AC_MSG_RESULT([yes])
+   BUILD_TYPE="$BUILD_TYPE CRASHREP"
 else
    if test "$enable_crashdump" = "STATIC"; then
       ENABLE_CRASHDUMP="STATIC"
@@ -721,6 +722,7 @@ else
          enable_symbols="yes"
       fi
       AC_MSG_RESULT([yes, STATIC])
+      BUILD_TYPE="$BUILD_TYPE CRASHREP"
    else
       if test "$enable_crashdump" = "" -o "$enable_crashdump" = "no"; then
          ENABLE_CRASHDUMP=""
@@ -2603,6 +2605,7 @@ int main(int argc, char **argv) {
 else
     AC_MSG_RESULT([internal])
     SYSTEM_DB=NO
+    BUILD_TYPE="$BUILD_TYPE BERKELEYDB"
 fi
 AC_SUBST(SYSTEM_DB)
 AC_SUBST(DB_VERSION)
@@ -2628,6 +2631,7 @@ if test -n "$with_system_sablot" -o -n "$with_system_libs" && \
 else
    AC_MSG_RESULT([internal])
    SYSTEM_SABLOT=NO
+   BUILD_TYPE="$BUILD_TYPE SABLOT"
 fi
 AC_SUBST(SYSTEM_SABLOT)
 AC_SUBST(SABLOT_LIBS)
