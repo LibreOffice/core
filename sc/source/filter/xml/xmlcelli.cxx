@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:03:51 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:42:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,7 @@
 #include "scerrors.hxx"
 #endif
 #include "editutil.hxx"
+#include "cell.hxx"
 
 #include <xmloff/xmltkmap.hxx>
 #ifndef _XMLOFF_XMLTOKEN_HXX
@@ -604,7 +605,7 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
             if (pContext)
             {
                 bIsEmpty = sal_False;
-                rXMLImport.GetProgressBarHelper()->Increment();
+                rXMLImport.ProgressBarIncrement(sal_False);
             }
         }
     }
@@ -739,7 +740,7 @@ void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCe
     }
 }
 
-void ScXMLTableRowCellContext::SetAnnotation(const uno::Reference<table::XCell>& xCell)
+void ScXMLTableRowCellContext::SetAnnotation(const table::CellAddress& aCellAddress)
 {
     /*uno::Reference<sheet::XSheetAnnotationAnchor> xSheetAnnotationAnchor(xCell, uno::UNO_QUERY);
     if (xSheetAnnotationAnchor.is())
@@ -756,73 +757,68 @@ void ScXMLTableRowCellContext::SetAnnotation(const uno::Reference<table::XCell>&
     }*/
     if( pMyAnnotation )
     {
-        uno::Reference<sheet::XCellAddressable> xCellAddressable(xCell, uno::UNO_QUERY);
-        if (xCellAddressable.is())
+        double fDate;
+        rXMLImport.GetMM100UnitConverter().convertDateTime(fDate, pMyAnnotation->sCreateDate);
+        ScDocument* pDoc = rXMLImport.GetDocument();
+        if (pDoc)
         {
-            table::CellAddress aCellAddress = xCellAddressable->getCellAddress();
-            double fDate;
-            rXMLImport.GetMM100UnitConverter().convertDateTime(fDate, pMyAnnotation->sCreateDate);
-            ScDocument* pDoc = rXMLImport.GetDocument();
-            if (pDoc)
+            LockSolarMutex();
+            SvNumberFormatter* pNumForm = pDoc->GetFormatTable();
+            sal_uInt32 nfIndex = pNumForm->GetFormatIndex(NF_DATE_SYS_DDMMYYYY, LANGUAGE_SYSTEM);
+            String sDate;
+            Color* pColor = NULL;
+            Color** ppColor = &pColor;
+            pNumForm->GetOutputString(fDate, nfIndex, sDate, ppColor);
+            ScPostIt aNote(String(pMyAnnotation->sText),pDoc);
+            aNote.SetDate(sDate);
+            aNote.SetAuthor(String(pMyAnnotation->sAuthor));
+            aNote.SetShown(pMyAnnotation->bDisplay);
+            if (pMyAnnotation->pRect)
+                aNote.SetRectangle(*pMyAnnotation->pRect);
+            else
+                aNote.SetRectangle(aNote.DefaultRectangle(ScAddress(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), aCellAddress.Sheet)));
+            if (pMyAnnotation->pItemSet)
+                aNote.SetItemSet(*(pMyAnnotation->pItemSet));
+            else
+                aNote.SetItemSet(aNote.DefaultItemSet());
+            if ( pMyAnnotation->pOPO )
             {
-                LockSolarMutex();
-                SvNumberFormatter* pNumForm = pDoc->GetFormatTable();
-                sal_uInt32 nfIndex = pNumForm->GetFormatIndex(NF_DATE_SYS_DDMMYYYY, LANGUAGE_SYSTEM);
-                String sDate;
-                Color* pColor = NULL;
-                Color** ppColor = &pColor;
-                pNumForm->GetOutputString(fDate, nfIndex, sDate, ppColor);
-                ScPostIt aNote(String(pMyAnnotation->sText),pDoc);
-                aNote.SetDate(sDate);
-                aNote.SetAuthor(String(pMyAnnotation->sAuthor));
-                aNote.SetShown(pMyAnnotation->bDisplay);
-                if (pMyAnnotation->pRect)
-                    aNote.SetRectangle(*pMyAnnotation->pRect);
-                else
-                    aNote.SetRectangle(aNote.DefaultRectangle(ScAddress(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), aCellAddress.Sheet)));
-                if (pMyAnnotation->pItemSet)
-                    aNote.SetItemSet(*(pMyAnnotation->pItemSet));
-                else
-                    aNote.SetItemSet(aNote.DefaultItemSet());
-                if ( pMyAnnotation->pOPO )
-                {
-                    ScNoteEditEngine& aEngine = pDoc->GetNoteEngine();
-                    aEngine.SetText(pMyAnnotation->pOPO->GetTextObject());
-                    // No ItemSet and Rectangle indicates notes with simple text.
-                    // i.e. created with calc 1.x sxc file format
-                    if (pMyAnnotation->pItemSet && pMyAnnotation->pRect)
-                     {
-                        const EditTextObject& rTextObj = pMyAnnotation->pOPO->GetTextObject();
-                        sal_uInt16 nCount = aEngine.GetParagraphCount();
-                        for( sal_uInt16 nPara = 0; nPara < nCount; ++nPara )
-                        {
-                            String aParaText( aEngine.GetText( nPara ) );
-                            if( aParaText.Len() )
-                            {
-                                SfxItemSet aSet( rTextObj.GetParaAttribs( nPara));
-                                aEngine.SetParaAttribs(nPara, aSet);
-                            }
-                        }
-                     }
-                     ::std::auto_ptr< EditTextObject > pEditText( aEngine.CreateTextObject());
-                    aNote.SetEditTextObject(pEditText.get());    // if pEditText is NULL, then aNote.mpEditObj will be reset().
-                }
-                if (pMyAnnotation->pRect)
-                    aNote.SetRectangle(*pMyAnnotation->pRect);
-                else
-                    aNote.SetRectangle(aNote.MimicOldRectangle(ScAddress(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), aCellAddress.Sheet)));
-                pDoc->SetNote(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), aCellAddress.Sheet, aNote);
-                if (pMyAnnotation->bDisplay)
-                {
-                    ScDetectiveFunc aDetFunc(pDoc, aCellAddress.Sheet);
-                    aDetFunc.ShowComment(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), sal_False);
-                    uno::Reference<container::XIndexAccess> xShapesIndex (rXMLImport.GetTables().GetCurrentXShapes(), uno::UNO_QUERY); // make draw page
-                    if (xShapesIndex.is())
+                ScNoteEditEngine& aEngine = pDoc->GetNoteEngine();
+                aEngine.SetText(pMyAnnotation->pOPO->GetTextObject());
+                // No ItemSet and Rectangle indicates notes with simple text.
+                // i.e. created with calc 1.x sxc file format
+                if (pMyAnnotation->pItemSet && pMyAnnotation->pRect)
+                 {
+                    const EditTextObject& rTextObj = pMyAnnotation->pOPO->GetTextObject();
+                    sal_uInt16 nCount = aEngine.GetParagraphCount();
+                    for( sal_uInt16 nPara = 0; nPara < nCount; ++nPara )
                     {
-                        sal_Int32 nShapes = xShapesIndex->getCount();
-                        uno::Reference < drawing::XShape > xShape;
-                        rXMLImport.GetShapeImport()->shapeWithZIndexAdded(xShape, nShapes);
+                        String aParaText( aEngine.GetText( nPara ) );
+                        if( aParaText.Len() )
+                        {
+                            SfxItemSet aSet( rTextObj.GetParaAttribs( nPara));
+                            aEngine.SetParaAttribs(nPara, aSet);
+                        }
                     }
+                 }
+                 ::std::auto_ptr< EditTextObject > pEditText( aEngine.CreateTextObject());
+                aNote.SetEditTextObject(pEditText.get());    // if pEditText is NULL, then aNote.mpEditObj will be reset().
+            }
+            if (pMyAnnotation->pRect)
+                aNote.SetRectangle(*pMyAnnotation->pRect);
+            else
+                aNote.SetRectangle(aNote.MimicOldRectangle(ScAddress(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), aCellAddress.Sheet)));
+            pDoc->SetNote(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), aCellAddress.Sheet, aNote);
+            if (pMyAnnotation->bDisplay)
+            {
+                ScDetectiveFunc aDetFunc(pDoc, aCellAddress.Sheet);
+                aDetFunc.ShowComment(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), sal_False);
+                uno::Reference<container::XIndexAccess> xShapesIndex (rXMLImport.GetTables().GetCurrentXShapes(), uno::UNO_QUERY); // make draw page
+                if (xShapesIndex.is())
+                {
+                    sal_Int32 nShapes = xShapesIndex->getCount();
+                    uno::Reference < drawing::XShape > xShape;
+                    rXMLImport.GetShapeImport()->shapeWithZIndexAdded(xShape, nShapes);
                 }
             }
         }
@@ -876,6 +872,14 @@ void ScXMLTableRowCellContext::SetCellRangeSource( const table::CellAddress& rPo
             pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, pCellRangeSource->sURL, &sFilterName, &sSourceStr );
         }
     }
+}
+
+bool lcl_IsEmptyOrNote( ScDocument* pDoc, const table::CellAddress& rCurrentPos )
+{
+    ScAddress aScAddress;
+    ScUnoConversion::FillScAddress( aScAddress, rCurrentPos );
+    ScBaseCell* pCell = pDoc->GetCell( aScAddress );
+    return ( !pCell || pCell->GetCellType() == CELLTYPE_NOTE );
 }
 
 void ScXMLTableRowCellContext::EndElement()
@@ -939,7 +943,7 @@ void ScXMLTableRowCellContext::EndElement()
                                 bIsEmpty = sal_True;
                 }
                 sal_Bool bWasEmpty = bIsEmpty;
-                uno::Reference <table::XCell> xCell;
+//              uno::Reference <table::XCell> xCell;
                 table::CellAddress aCurrentPos( aCellPos );
                 if ((pContentValidationName && pContentValidationName->getLength()) ||
                     pMyAnnotation || pDetectiveObjVec || pCellRangeSource)
@@ -961,20 +965,24 @@ void ScXMLTableRowCellContext::EndElement()
                             }
                             if (CellExists(aCurrentPos))
                             {
-                                if (xBaseCell.is() && (aCurrentPos == aCellPos))
-                                    xCell.set(xBaseCell);
-                                else
-                                {
-                                    try
-                                    {
-                                        xCell.set(xCellRange->getCellByPosition(aCurrentPos.Column, aCurrentPos.Row));
-                                    }
-                                    catch (lang::IndexOutOfBoundsException&)
-                                    {
-                                        DBG_ERRORFILE("It seems here are to many columns or rows");
-                                    }
-                                }
-                                if ((!(bIsCovered) || (xCell->getType() == table::CellContentType_EMPTY)))
+                                // test - bypass the API
+                                // if (xBaseCell.is() && (aCurrentPos == aCellPos))
+                                //     xCell.set(xBaseCell);
+                                // else
+                                // {
+                                //     try
+                                //     {
+                                //      xCell.set(xCellRange->getCellByPosition(aCurrentPos.Column, aCurrentPos.Row));
+                                //     }
+                                //     catch (lang::IndexOutOfBoundsException&)
+                                //     {
+                                //         DBG_ERRORFILE("It seems here are to many columns or rows");
+                                //     }
+                                // }
+
+                                // test - bypass the API
+                                // if ((!(bIsCovered) || (xCell->getType() == table::CellContentType_EMPTY)))
+                                if ((!(bIsCovered) || lcl_IsEmptyOrNote( rXMLImport.GetDocument(), aCurrentPos )))
                                 {
                                     switch (nCellType)
                                     {
@@ -984,17 +992,35 @@ void ScXMLTableRowCellContext::EndElement()
                                             if (rXMLImport.GetTables().IsPartOfMatrix(aCurrentPos.Column, aCurrentPos.Row))
                                             {
                                                 LockSolarMutex();
-                                                ScCellObj* pCellObj = (ScCellObj*)ScCellRangesBase::getImplementation(xCell);
-                                                if (pCellObj)
+                                                // test - bypass the API
+                                                // ScCellObj* pCellObj = (ScCellObj*)ScCellRangesBase::getImplementation(xCell);
+                                                // if (pCellObj)
+                                                // {
+                                                //     if(pOUTextValue && pOUTextValue->getLength())
+                                                //         pCellObj->SetFormulaResultString(*pOUTextValue);
+                                                //     else if (pOUTextContent && pOUTextContent->getLength())
+                                                //         pCellObj->SetFormulaResultString(*pOUTextContent);
+                                                //     else if ( i > 0 && pOUText && pOUText->getLength() )
+                                                //     {
+                                                //         pCellObj->SetFormulaResultString(*pOUText);
+                                                //     }
+                                                //     else
+                                                //         bDoIncrement = sal_False;
+                                                // }
+                                                // else
+                                                //     bDoIncrement = sal_False;
+                                                ScAddress aScAddress;
+                                                ScUnoConversion::FillScAddress( aScAddress, aCurrentPos );
+                                                ScBaseCell* pCell = rXMLImport.GetDocument()->GetCell( aScAddress );
+                                                if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
                                                 {
-                                                    if(pOUTextValue && pOUTextValue->getLength())
-                                                        pCellObj->SetFormulaResultString(*pOUTextValue);
+                                                    ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
+                                                    if (pOUTextValue && pOUTextValue->getLength())
+                                                        pFCell->SetString( *pOUTextValue );
                                                     else if (pOUTextContent && pOUTextContent->getLength())
-                                                        pCellObj->SetFormulaResultString(*pOUTextContent);
+                                                        pFCell->SetString( *pOUTextContent );
                                                     else if ( i > 0 && pOUText && pOUText->getLength() )
-                                                    {
-                                                        pCellObj->SetFormulaResultString(*pOUText);
-                                                    }
+                                                        pFCell->SetString( *pOUText );
                                                     else
                                                         bDoIncrement = sal_False;
                                                 }
@@ -1003,23 +1029,41 @@ void ScXMLTableRowCellContext::EndElement()
                                             }
                                             else
                                             {
-                                                uno::Reference <text::XText> xText (xCell, uno::UNO_QUERY);
-                                                if (xText.is())
+                                                // test - bypass the API
+                                                // uno::Reference <text::XText> xText (xCell, uno::UNO_QUERY);
+                                                // if (xText.is())
+                                                // {
+                                                //     if(pOUTextValue && pOUTextValue->getLength())
+                                                //         xText->setString(*pOUTextValue);
+                                                //     else if (pOUTextContent && pOUTextContent->getLength())
+                                                //         xText->setString(*pOUTextContent);
+                                                //     else if ( i > 0 && pOUText && pOUText->getLength() )
+                                                //     {
+                                                //         xText->setString(*pOUText);
+                                                //     }
+                                                //     else
+                                                //         bDoIncrement = sal_False;
+                                                // }
+                                                LockSolarMutex();
+                                                ScBaseCell* pNewCell = NULL;
+                                                ScDocument* pDoc = rXMLImport.GetDocument();
+                                                if (pOUTextValue && pOUTextValue->getLength())
+                                                    pNewCell = ScBaseCell::CreateTextCell( *pOUTextValue, pDoc );
+                                                else if (pOUTextContent && pOUTextContent->getLength())
+                                                    pNewCell = ScBaseCell::CreateTextCell( *pOUTextContent, pDoc );
+                                                else if ( i > 0 && pOUText && pOUText->getLength() )
+                                                    pNewCell = ScBaseCell::CreateTextCell( *pOUText, pDoc );
+                                                if ( pNewCell )
                                                 {
-                                                    if(pOUTextValue && pOUTextValue->getLength())
-                                                        xText->setString(*pOUTextValue);
-                                                    else if (pOUTextContent && pOUTextContent->getLength())
-                                                        xText->setString(*pOUTextContent);
-                                                    else if ( i > 0 && pOUText && pOUText->getLength() )
-                                                    {
-                                                        xText->setString(*pOUText);
-                                                    }
-                                                    else
-                                                        bDoIncrement = sal_False;
+                                                    ScAddress aScAddress;
+                                                    ScUnoConversion::FillScAddress( aScAddress, aCurrentPos );
+                                                    pDoc->PutCell( aScAddress, pNewCell );
                                                 }
+                                                else
+                                                    bDoIncrement = sal_False;
                                             }
                                             if (bDoIncrement || bHasTextImport)
-                                                rXMLImport.GetProgressBarHelper()->Increment();
+                                                rXMLImport.ProgressBarIncrement(sal_True);
                                         }
                                         break;
                                     case util::NumberFormat::NUMBER:
@@ -1032,15 +1076,26 @@ void ScXMLTableRowCellContext::EndElement()
                                             if (rXMLImport.GetTables().IsPartOfMatrix(aCurrentPos.Column, aCurrentPos.Row))
                                             {
                                                 LockSolarMutex();
-                                                ScCellObj* pCellObj = (ScCellObj*)ScCellRangesBase::getImplementation(xCell);
-                                                if (pCellObj)
-                                                    pCellObj->SetFormulaResultDouble(fValue);
+                                                // test - bypass the API
+                                                // ScCellObj* pCellObj = (ScCellObj*)ScCellRangesBase::getImplementation(xCell);
+                                                // if (pCellObj)
+                                                //     pCellObj->SetFormulaResultDouble(fValue);
+                                                ScAddress aScAddress;
+                                                ScUnoConversion::FillScAddress( aScAddress, aCurrentPos );
+                                                ScBaseCell* pCell = rXMLImport.GetDocument()->GetCell( aScAddress );
+                                                if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
+                                                    static_cast<ScFormulaCell*>(pCell)->SetDouble( fValue );
                                             }
                                             else
                                             {
-                                                xCell->setValue(fValue);
+                                                // test - bypass the API
+                                                // xCell->setValue(fValue);
+                                                LockSolarMutex();
+                                                rXMLImport.GetDocument()->SetValue(
+                                                    aCurrentPos.Column, aCurrentPos.Row, aCurrentPos.Sheet,
+                                                    fValue );
                                             }
-                                            rXMLImport.GetProgressBarHelper()->Increment();
+                                            rXMLImport.ProgressBarIncrement(sal_False);
                                         }
                                         break;
                                     default:
@@ -1050,7 +1105,8 @@ void ScXMLTableRowCellContext::EndElement()
                                         break;
                                     }
                                 }
-                                SetAnnotation(xCell);
+
+                                SetAnnotation(aCurrentPos);
                                 SetDetectiveObj( aCurrentPos );
                                 SetCellRangeSource( aCurrentPos );
                             }
@@ -1069,7 +1125,7 @@ void ScXMLTableRowCellContext::EndElement()
                     else
                     {
                         if (bHasTextImport)
-                            rXMLImport.GetProgressBarHelper()->Increment();
+                            rXMLImport.ProgressBarIncrement(sal_False);
                         if ((i == 0) && (aCellPos.Column == 0))
                             for (sal_Int32 j = 1; j < nRepeatedRows; ++j)
                             {
@@ -1093,7 +1149,11 @@ void ScXMLTableRowCellContext::EndElement()
                 else if (CellExists(aCellPos))
                 {
                     rXMLImport.GetStylesImportHelper()->AddCell(aCellPos);
-                    SetCellProperties(xCell); // set now only the validation
+
+                    // test - bypass the API
+                    // SetCellProperties(xCell); // set now only the validation
+                    SetCellProperties(xCellRange, aCellPos);
+
                     //SetType(xTempCell);
                 }
                 if (pOUText)
@@ -1144,10 +1204,10 @@ void ScXMLTableRowCellContext::EndElement()
                                                 aCellPos.Column + nMatrixCols - 1, aCellPos.Row + nMatrixRows - 1, *pOUFormula);
                             }
                         }
-                        SetAnnotation(xCell);
+                        SetAnnotation( aCellPos );
                         SetDetectiveObj( aCellPos );
                         SetCellRangeSource( aCellPos );
-                        rXMLImport.GetProgressBarHelper()->Increment();
+                        rXMLImport.ProgressBarIncrement(sal_False);
                     }
                 }
                 else
