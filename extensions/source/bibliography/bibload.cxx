@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bibload.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:13:38 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:50:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -373,6 +373,7 @@ void BibliographyLoader::load(const Reference< XFrame > & rFrame, const rtl::OUS
 {
     //!
 
+    vos::OGuard aGuard(Application::GetSolarMutex());
     m_pBibMod = OpenBibModul();
 
     String aURLStr( rURL );
@@ -395,6 +396,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const rtl:
         const Sequence< PropertyValue >& rArgs,
         const Reference< XLoadEventListener > & rListener)
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     //!
     if(!m_pBibMod)
         m_pBibMod = OpenBibModul();
