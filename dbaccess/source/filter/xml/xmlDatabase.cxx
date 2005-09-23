@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlDatabase.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:04:33 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:10:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,9 @@
 #ifndef DBACCESS_SHARED_XMLSTRINGS_HRC
 #include "xmlstrings.hrc"
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 namespace dbaxml
 {
@@ -76,17 +79,22 @@ namespace dbaxml
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::sdbcx;
     using namespace ::com::sun::star::xml::sax;
+DBG_NAME(OXMLDatabase)
 
 OXMLDatabase::OXMLDatabase( ODBFilter& rImport,
                 sal_uInt16 nPrfx, const OUString& rLName,
                 const Reference< XAttributeList > & xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
+    DBG_CTOR(OXMLDatabase,NULL);
+
 }
 // -----------------------------------------------------------------------------
 
 OXMLDatabase::~OXMLDatabase()
 {
+
+    DBG_DTOR(OXMLDatabase,NULL);
 }
 // -----------------------------------------------------------------------------
 
