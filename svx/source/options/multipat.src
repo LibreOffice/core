@@ -4,9 +4,9 @@
  *
  *  $RCSfile: multipat.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:50:13 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:57:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
     HelpId = HID_MULTIPATH ;
     OutputSize = TRUE ;
     Size = MAP_APPFONT ( 256 , 90 ) ;
-    Text [ de ] = "Pfade auswählen" ;
+    Text [ de ] = "Pfade auswÃ¤hlen" ;
     Text [ en-US ] = "Select Paths" ;
     Text [ x-comment ] = " ";
     Moveable = TRUE ;
@@ -60,7 +60,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
     {
         Pos = MAP_APPFONT ( 138 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Hi~nzufügen..." ;
+        Text [ de ] = "Hi~nzufÃ¼gen..." ;
         Text [ en-US ] = "~Add..." ;
         Text [ x-comment ] = " ";
     };
@@ -68,7 +68,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
     {
         Pos = MAP_APPFONT ( 138 , 31 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Löschen" ;
+        Text [ de ] = "~LÃ¶schen" ;
         Text [ en-US ] = "~Delete" ;
         Text [ x-comment ] = " ";
     };
@@ -105,7 +105,7 @@ String RID_MULTIPATH_DBL_ERR
 };
 String RID_SVXSTR_FILE_TITLE
 {
-    Text [ de ] = "Dateien auswählen" ;
+    Text [ de ] = "Dateien auswÃ¤hlen" ;
     Text [ en-US ] = "Select files" ;
     Text [ x-comment ] = " ";
 };
@@ -117,7 +117,7 @@ String RID_SVXSTR_FILE_HEADLINE
 };
 String RID_SVXSTR_ARCHIVE_TITLE
 {
-    Text [ de ] = "Archive auswählen" ;
+    Text [ de ] = "Archive auswÃ¤hlen" ;
     Text [ en-US ] = "Select Archives" ;
 };
 String RID_SVXSTR_ARCHIVE_HEADLINE
