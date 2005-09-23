@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EventMultiplexer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:44:14 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:32:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -393,7 +393,6 @@ void EventMultiplexer::Implementation::ConnectToController (void)
     // time may be destroyed.)
     Reference<frame::XController> xController = mrBase.GetController();
     mxControllerWeak = mrBase.GetController();
-    OSL_TRACE("EventMultiplexer %x connecting to controller %x", this,mxControllerWeak.get());
 
     try
     {
@@ -450,7 +449,6 @@ void EventMultiplexer::Implementation::DisconnectFromController (void)
     {
         mbListeningToController = false;
 
-        OSL_TRACE("EventMultiplexer %x disconnecting from controller %x", this,mxControllerWeak.get());
         Reference<frame::XController> xController = mxControllerWeak;
 
         Reference<beans::XPropertySet> xSet (xController, UNO_QUERY);
@@ -531,10 +529,6 @@ void SAL_CALL EventMultiplexer::Implementation::propertyChange (
         RTL_CONSTASCII_USTRINGPARAM("CurrentPage"));
     static const ::rtl::OUString sEditModePropertyName (
         RTL_CONSTASCII_USTRINGPARAM("IsMasterPageMode"));
-
-    OSL_TRACE ("property changed: %s",
-        ::rtl::OUStringToOString(rEvent.PropertyName,
-            RTL_TEXTENCODING_UTF8).getStr());
 
     if (rEvent.PropertyName.equals (sCurrentPagePropertyName))
     {
