@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bastyp.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:50:32 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:21:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
  // == Error Strings ====================================================================
 String ERR_INET_NAME_RESOLVE
 {
-    Text [ de ] = "Der Rechnername konnte nicht aufgelöst werden\n" ;
+    Text [ de ] = "Der Rechnername konnte nicht aufgelÃ¶st werden\n" ;
     Text [ en-US ] = "The computer name could not be resolved\n" ;
 };
 String ERR_INET_CONNECT
@@ -50,12 +50,12 @@ String ERR_INET_CONNECT
 };
 String ERR_INET_READ
 {
-    Text [ de ] = "Daten konnten nicht über das Internet gelesen werden.\nServerfehlermeldung: $(ARG1)" ;
+    Text [ de ] = "Daten konnten nicht Ã¼ber das Internet gelesen werden.\nServerfehlermeldung: $(ARG1)" ;
     Text [ en-US ] = "Error reading data from the internet\n.Server error message: $(ARG1)" ;
 };
 String ERR_INET_WRITE
 {
-    Text [ de ] = "Daten konnten nicht ins Internet übertragen werden.\nServerfehlermeldung: $(ARG1)" ;
+    Text [ de ] = "Daten konnten nicht ins Internet Ã¼bertragen werden.\nServerfehlermeldung: $(ARG1)" ;
     Text [ en-US ] = "Error transferring data to the internet.\nServer error message: $(ARG1)" ;
 };
 String ERR_INET_GENERAL
@@ -85,12 +85,12 @@ String ERR_FILEISLOCAL
 };
 String ERR_FILENAMECHECK83
 {
-    Text [ de ] = "Der eingegebene Dateiname ist ungültig.\nBitte beachten sie, dass der Dateiname maximal 8 Zeichen\nund die Dateierweiterung maximal 3 Zeichen lang sein dürfen." ;
+    Text [ de ] = "Der eingegebene Dateiname ist ungÃ¼ltig.\nBitte beachten sie, dass der Dateiname maximal 8 Zeichen\nund die Dateierweiterung maximal 3 Zeichen lang sein dÃ¼rfen." ;
     Text [ en-US ] = "The file name entered is invalid.\nPlease note that file names may not exceed 8 characters\n and the file extension may only consist of 3 characters." ;
 };
 String ERR_INSUFFICIENTDISKSPACE
 {
-    Text [ de ] = "Die Datei %1 wird größer als der zur Verfügung stehende Plattenplatz.\nWollen Sie fortfahren ?\n" ;
+    Text [ de ] = "Die Datei %1 wird grÃ¶ÃŸer als der zur VerfÃ¼gung stehende Plattenplatz.\nWollen Sie fortfahren ?\n" ;
     Text [ en-US ] = "The file %1 exceeds the available disk space.\nDo you want to continue anyway?\n" ;
 };
 //= Texte "downloadcontroller" =================================================================
