@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbaobjectex.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:45:06 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:58:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,35 +97,51 @@ namespace svx
 
 
     //--------------------------------------------------------------------
-    sal_uInt32 OComponentTransferable::getDescriptorFormatId()
+    sal_uInt32 OComponentTransferable::getDescriptorFormatId(sal_Bool _bExtractForm)
     {
-        static sal_uInt32 s_nFormat = (sal_uInt32)-1;
-        if ((sal_uInt32)-1 == s_nFormat)
+        static sal_uInt32 s_nReportFormat = (sal_uInt32)-1;
+        static sal_uInt32 s_nFormFormat = (sal_uInt32)-1;
+        if ( _bExtractForm && (sal_uInt32)-1 == s_nFormFormat )
         {
-            s_nFormat = SotExchange::RegisterFormatName(String::CreateFromAscii("application/x-openoffice;windows_formatname=\"dbaccess.ComponentDescriptorTransfer\""));
-            OSL_ENSURE((sal_uInt32)-1 != s_nFormat, "OComponentTransferable::getDescriptorFormatId: bad exchange id!");
+            s_nFormFormat = SotExchange::RegisterFormatName(String::CreateFromAscii("application/x-openoffice;windows_formatname=\"dbaccess.FormComponentDescriptorTransfer\"" ));
+            OSL_ENSURE((sal_uInt32)-1 != s_nFormFormat, "OComponentTransferable::getDescriptorFormatId: bad exchange id!");
         }
-        return s_nFormat;
+        else if ( !_bExtractForm && (sal_uInt32)-1 == s_nReportFormat)
+        {
+            s_nReportFormat = SotExchange::RegisterFormatName(String::CreateFromAscii("application/x-openoffice;windows_formatname=\"dbaccess.ReportComponentDescriptorTransfer\""));
+            OSL_ENSURE((sal_uInt32)-1 != s_nReportFormat, "OComponentTransferable::getDescriptorFormatId: bad exchange id!");
+        }
+        return _bExtractForm ? s_nFormFormat : s_nReportFormat;
     }
 
     //--------------------------------------------------------------------
     void OComponentTransferable::AddSupportedFormats()
     {
-        AddFormat(getDescriptorFormatId());
+        sal_Bool bForm = sal_True;
+        try
+        {
+            Reference<XPropertySet> xProp;
+            m_aDescriptor[daComponent] >>= xProp;
+            if ( xProp.is() )
+                xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsForm"))) >>= bForm;
+        }
+        catch(Exception)
+        {}
+        AddFormat(getDescriptorFormatId(bForm));
     }
 
     //--------------------------------------------------------------------
     sal_Bool OComponentTransferable::GetData( const DataFlavor& _rFlavor )
     {
         const sal_uInt32 nFormatId = SotExchange::GetFormat(_rFlavor);
-        if ( nFormatId == getDescriptorFormatId() )
+        if ( nFormatId == getDescriptorFormatId(sal_True) || nFormatId == getDescriptorFormatId(sal_False) )
             return SetAny( makeAny( m_aDescriptor.createPropertyValueSequence() ), _rFlavor );
 
         return sal_False;
     }
 
     //--------------------------------------------------------------------
-    sal_Bool OComponentTransferable::canExtractComponentDescriptor(const DataFlavorExVector& _rFlavors )
+    sal_Bool OComponentTransferable::canExtractComponentDescriptor(const DataFlavorExVector& _rFlavors,sal_Bool _bForm )
     {
         DataFlavorExVector::const_iterator aEnd = _rFlavors.end();
         for (   DataFlavorExVector::const_iterator aCheck = _rFlavors.begin();
@@ -133,7 +149,7 @@ namespace svx
                 ++aCheck
             )
         {
-            if ( getDescriptorFormatId() == aCheck->mnSotId )
+            if ( getDescriptorFormatId(_bForm) == aCheck->mnSotId )
                 return sal_True;
         }
 
@@ -143,7 +159,8 @@ namespace svx
     //--------------------------------------------------------------------
     ODataAccessDescriptor OComponentTransferable::extractComponentDescriptor(const TransferableDataHelper& _rData)
     {
-        if ( _rData.HasFormat(getDescriptorFormatId()) )
+        sal_Bool bForm;
+        if ( (bForm = _rData.HasFormat(getDescriptorFormatId(sal_True))) || _rData.HasFormat(getDescriptorFormatId(sal_False)) )
         {
             // the object has a real descriptor object (not just the old compatible format)
 
@@ -152,7 +169,7 @@ namespace svx
 #if OSL_DEBUG_LEVEL > 0
             sal_Bool bSuccess =
 #endif
-            SotExchange::GetFormatDataFlavor(getDescriptorFormatId(), aFlavor);
+            SotExchange::GetFormatDataFlavor(getDescriptorFormatId(bForm), aFlavor);
             OSL_ENSURE(bSuccess, "OComponentTransferable::extractColumnDescriptor: invalid data format (no flavor)!");
 
             Any aDescriptor = _rData.GetAny(aFlavor);
@@ -174,10 +191,11 @@ namespace svx
 
     //--------------------------------------------------------------------
     sal_Bool OComponentTransferable::extractComponentDescriptor(const TransferableDataHelper& _rData
+        ,sal_Bool _bExtractForm
         , ::rtl::OUString&  _rDatasourceOrLocation
         , ::com::sun::star::uno::Reference< XContent>& _xContent)
     {
-        if (_rData.HasFormat(getDescriptorFormatId()))
+        if ( _rData.HasFormat( getDescriptorFormatId(_bExtractForm)) )
         {
             ODataAccessDescriptor aDescriptor = extractComponentDescriptor(_rData);
             _rDatasourceOrLocation = aDescriptor.getDataSource();
