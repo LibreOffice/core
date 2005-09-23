@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptinanimations.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:24:56 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 10:44:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -359,8 +359,8 @@ AnimationImporter::AnimationImporter( ImplSdPPTImport* pPPTImport, SvStream& rSt
 void AnimationImporter::import( const Reference< XDrawPage >& xPage, const DffRecordHeader& rProgTagContentHd )
 {
 #ifdef DBG_ANIM_LOG
-    // mpFile = fopen( "d:\\output.xml", "w+" );
-    mpFile = stdout;
+    mpFile = fopen( "c:\\output.xml", "w+" );
+    //mpFile = stdout;
 #endif
     dump("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 
@@ -913,14 +913,22 @@ bool AnimationImporter::convertAnimationNode( const Reference< XAnimationNode >&
     // position, so return false in this case
     if( bAfterEffect )
     {
-        // remove "after-effect" entry from user data
+        // remove "after-effect" entry and "master-rel" from user data
         NamedValue* pValue = aUserData.getArray();
         NamedValue* pLastValue = 0;
-        sal_Int32 nLength = aUserData.getLength();
+        sal_Int32 nLength = aUserData.getLength(), nRemoved = 0;
         while( nLength-- )
         {
             if( pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("after-effect") ) )
-                break;
+            {
+                nRemoved++;
+                continue;
+            }
+            if( pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("master-rel") ) )
+            {
+                nRemoved++;
+                continue;
+            }
 
             pLastValue = pValue;
             pValue++;
@@ -929,11 +937,22 @@ bool AnimationImporter::convertAnimationNode( const Reference< XAnimationNode >&
         while( pLastValue && nLength-- )
             *pLastValue++ = *pValue++;
 
-        aUserData.realloc( aUserData.getLength() - 1 );
+        aUserData.realloc( aUserData.getLength() - nRemoved );
         xNode->setUserData( aUserData );
 
+        if( nMasterRel != 2 )
+        {
+            Event aEvent;
+
+            aEvent.Source <<= xParent;
+            aEvent.Trigger = EventTrigger::END_EVENT;
+            aEvent.Repeat = 0;
+
+            xNode->setBegin( makeAny( aEvent ) );
+        }
+
         // add to after effect nodes for later processing
-        sd::AfterEffectNode aNode( xNode, xParent, nMasterRel );
+        sd::AfterEffectNode aNode( xNode, xParent, nMasterRel == 2 );
         maAfterEffectNodes.push_back( aNode );
         return false;
     }
