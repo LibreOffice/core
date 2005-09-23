@@ -4,9 +4,9 @@
  *
  *  $RCSfile: odbcconfig.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:07:25 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:31:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,9 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
-
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 #ifdef HAVE_ODBC_SUPPORT
 
@@ -121,10 +123,13 @@ typedef SQLRETURN (SQL_API* TSQLDataSources) (SQLHENV EnvironmentHandle, SQLUSMA
 //=========================================================================
 //= OOdbcLibWrapper
 //=========================================================================
+DBG_NAME(OOdbcLibWrapper)
 //-------------------------------------------------------------------------
 OOdbcLibWrapper::OOdbcLibWrapper()
     :m_pOdbcLib(NULL)
 {
+    DBG_CTOR(OOdbcLibWrapper,NULL);
+
 }
 
 //-------------------------------------------------------------------------
@@ -160,6 +165,8 @@ void* OOdbcLibWrapper::loadSymbol(const sal_Char* _pFunctionName)
 OOdbcLibWrapper::~OOdbcLibWrapper()
 {
     unload();
+
+    DBG_DTOR(OOdbcLibWrapper,NULL);
 }
 
 //=========================================================================
@@ -174,6 +181,7 @@ struct OdbcTypesImpl
     void*       pDummy;
 #endif
 };
+DBG_NAME(OOdbcEnumeration)
 //-------------------------------------------------------------------------
 OOdbcEnumeration::OOdbcEnumeration()
 #ifdef HAVE_ODBC_SUPPORT
@@ -183,6 +191,8 @@ OOdbcEnumeration::OOdbcEnumeration()
     ,m_pImpl(new OdbcTypesImpl)
 #endif
 {
+    DBG_CTOR(OOdbcEnumeration,NULL);
+
     sal_Bool bLoaded = load(ODBC_LIBRARY);
 #ifdef ODBC_LIBRARY_1
     if ( !bLoaded )
@@ -213,6 +223,8 @@ OOdbcEnumeration::~OOdbcEnumeration()
 {
     freeEnv();
     delete m_pImpl;
+
+    DBG_DTOR(OOdbcEnumeration,NULL);
 }
 
 //-------------------------------------------------------------------------
