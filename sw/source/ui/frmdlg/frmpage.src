@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:51:40 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:05:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ TabDialog DLG_FRM_STD
             {
                 Identifier = TP_FRM_ADD ;
                 PageResID = TP_FRM_ADD ;
-                Text [ de ] = "Zusätze" ;
+                Text [ de ] = "ZusÃ¤tze" ;
                 Text [ en-US ] = "Options" ;
             };
             PageItem
@@ -131,7 +131,7 @@ TabDialog DLG_FRM_GRF
             {
                 Identifier = TP_FRM_ADD ;
                 PageResID = TP_FRM_ADD ;
-                Text [ de ] = "Zusätze" ;
+                Text [ de ] = "ZusÃ¤tze" ;
                 Text [ en-US ] = "Options" ;
             };
             PageItem
@@ -208,7 +208,7 @@ TabDialog DLG_FRM_OLE
             {
                 Identifier = TP_FRM_ADD ;
                 PageResID = TP_FRM_ADD ;
-                Text [ de ] = "Zusätze" ;
+                Text [ de ] = "ZusÃ¤tze" ;
                 Text [ en-US ] = "Options" ;
             };
             PageItem
@@ -318,7 +318,7 @@ TabPage TP_FRM_STD
         Pos = MAP_APPFONT ( SWFRMPG_COL_1 , SWFRMPG_ROW_6 ) ;
         Size = MAP_APPFONT ( (SWFRMPG_COL_3-SWFRMPG_COL_1-1) , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Left = TRUE ;
-        Text [ de ] = "H~öhe" ;
+        Text [ de ] = "H~Ã¶he" ;
         Text [ en-US ] = "H~eight" ;
     };
     FixedText FT_HEIGHT_AUTO
@@ -326,7 +326,7 @@ TabPage TP_FRM_STD
         Pos = MAP_APPFONT ( SWFRMPG_COL_1 , SWFRMPG_ROW_6 ) ;
         Size = MAP_APPFONT ( (SWFRMPG_COL_3-SWFRMPG_COL_1-1) , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Left = TRUE ;
-        Text [ de ] = "Höhe (mindestens)" ;
+        Text [ de ] = "HÃ¶he (mindestens)" ;
         Text [ en-US ] = "H~eight (at least)" ;
     };
     MetricField ED_HEIGHT
@@ -359,7 +359,7 @@ TabPage TP_FRM_STD
         Pos = MAP_APPFONT ( SWFRMPG_COL_2 , SWFRMPG_ROW_8 ) ;
         Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_2) , RSC_CD_CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Au~tom. Größe" ;
+        Text [ de ] = "Au~tom. GrÃ¶ÃŸe" ;
         Text [ en-US ] = "AutoSize";
         Text [ x-comment ] = " ";
     };
@@ -377,14 +377,14 @@ TabPage TP_FRM_STD
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
-        Text [ de ] = "~Originalgröße" ;
+        Text [ de ] = "~OriginalgrÃ¶ÃŸe" ;
         Text [ en-US ] = "~Original Size" ;
     };
     FixedLine FL_SIZE
     {
         Pos = MAP_APPFONT ( SWFRMPG_COL_0 , SWFRMPG_ROW_0 ) ;
         Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_0) , RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ de ] = "Größe" ;
+        Text [ de ] = "GrÃ¶ÃŸe" ;
         Text [ en-US ] = "Size" ;
     };
     FixedLine FL_TYPE_SEP
@@ -592,7 +592,7 @@ TabPage TP_GRF_EXT
     {
         Pos = MAP_APPFONT ( 6 , 87 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Verknüpfung" ;
+        Text [ de ] = "VerknÃ¼pfung" ;
         Text [ en-US ] = "Link" ;
     };
     FixedText FT_CONNECT
@@ -679,7 +679,7 @@ TabPage TP_GRF_EXT
 };
 String STR_EDIT_GRF
 {
-    Text [ de ] = "Verknüpfen" ;
+    Text [ de ] = "VerknÃ¼pfen" ;
     Text [ en-US ] = "Link" ;
 };
 
@@ -740,7 +740,7 @@ TabPage TP_FRM_URL
         Pos = MAP_APPFONT ( 198 , 13 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Auswählen..." ;
+        Text [ de ] = "~AuswÃ¤hlen..." ;
         Text [ en-US ] = "~Browse..." ;
     };
     FixedLine FL_HYPERLINK
@@ -811,7 +811,7 @@ TabPage TP_FRM_ADD
     {
         Pos = MAP_APPFONT ( 12 , 48 ) ;
         Size = MAP_APPFONT ( 75 , 8 ) ;
-        Text [ de ] = "~Vorgänger" ;
+        Text [ de ] = "~VorgÃ¤nger" ;
         Text [ en-US ] = "~Previous link" ;
     };
     ListBox LB_PREV
@@ -889,14 +889,14 @@ TabPage TP_FRM_ADD
         Pos = MAP_APPFONT ( 12 , 119 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Größe" ;
+        Text [ de ] = "~GrÃ¶ÃŸe" ;
         Text [ en-US ] = "~Size" ;
     };
     FixedLine FL_PROTECT
     {
         Pos = MAP_APPFONT ( 6 , 80 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Schützen" ;
+        Text [ de ] = "SchÃ¼tzen" ;
         Text [ en-US ] = "Protect" ;
     };
     CheckBox CB_EDIT_IN_READONLY
@@ -904,7 +904,7 @@ TabPage TP_FRM_ADD
         Pos = MAP_APPFONT ( 12 , 146 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Editierbar in schreibgeschütztem Dokument" ;
+        Text [ de ] = "~Editierbar in schreibgeschÃ¼tztem Dokument" ;
         Text [ en-US ] = "~Editable in read-only document" ;
     };
     CheckBox CB_PRINT_FRAME
@@ -945,7 +945,7 @@ TabPage TP_FRM_ADD
             < "Rechts-nach-links (horizontal)" ; 1; > ;
             < "Rechts-nach-links (vertikal)" ; 2; > ;
 //          < "Links-nach-rechts (vertikal)" ; 3; > ;
-            < "Einstellungen des übergeordneten Objektes verwenden" ; 4; > ;
+            < "Einstellungen des Ã¼bergeordneten Objektes verwenden" ; 4; > ;
         };
     StringList [ en-US ] =
     {
