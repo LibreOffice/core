@@ -4,9 +4,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:59:33 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:29:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -298,6 +298,12 @@ void Export::RemoveUTF8ByteOrderMarkerFromFile( const ByteString &rFilename ){
 
 // Merge it into source code!
 bool Export::isMergingGermanAllowed( const ByteString& rPrj ){
+    static ByteStringBoolHashMap aHash;
+
+    if( aHash.find( rPrj ) != aHash.end() ){
+        return aHash[ rPrj ];
+    }
+
     ByteString sFile = GetEnv( "SRC_ROOT" ) ;
     sFile.Append("/");
     sFile.Append( rPrj );
@@ -306,7 +312,9 @@ bool Export::isMergingGermanAllowed( const ByteString& rPrj ){
     sFile.SearchAndReplaceAll('/','\\');
 #endif
     DirEntry aFlagfile( sFile );
-    return !aFlagfile.Exists();
+
+    aHash[ rPrj ] = !aFlagfile.Exists();
+    return aHash[ rPrj ];
 }
 /*****************************************************************************/
 void Export::UnquotHTML( ByteString &rString )
@@ -341,7 +349,14 @@ void Export::UnquotHTML( ByteString &rString )
     }
     rString = sReturn;
 }
-
+bool Export::isAllowed( ByteString &sLanguage ){
+    // CAREFUL, ONLY MERGE SOURCE LANGUAGES IF YOUR KNOW WHAT YOU DO!!!
+#ifdef MERGE_SOURCE_LANGUAGES
+    return true;
+#else
+    return ! ( sLanguage.EqualsIgnoreCaseAscii("de") || sLanguage.EqualsIgnoreCaseAscii("en-US") );
+#endif
+}
 /*****************************************************************************/
 bool Export::LanguageAllowed( const ByteString &nLanguage )
 /*****************************************************************************/
@@ -360,7 +375,8 @@ void Export::InitLanguages( bool bMergeMode ){
         for ( USHORT x = 0; x < sLanguages.GetTokenCount( ',' ); x++ ){
             sTmp = sLanguages.GetToken( x, ',' ).GetToken( 0, '=' );
             sTmp.EraseLeadingAndTrailingChars();
-            if( bMergeMode && ( sTmp.EqualsIgnoreCaseAscii("de") || sTmp.EqualsIgnoreCaseAscii("en-US") )){}
+            if( bMergeMode && !isAllowed( sTmp ) ){}
+            //if( bMergeMode && ( sTmp.EqualsIgnoreCaseAscii("de") || sTmp.EqualsIgnoreCaseAscii("en-US") )){}
             else if( !( (sTmp.GetChar(0)=='x' || sTmp.GetChar(0)=='X') && sTmp.GetChar(1)=='-' ) ){
                 aLanguages.push_back( sTmp );
             }
@@ -377,7 +393,8 @@ void Export::InitForcedLanguages( bool bMergeMode ){
     for ( USHORT x = 0; x < sForcedLanguages.GetTokenCount( ',' ); x++ ){
         sTmp = sForcedLanguages.GetToken( x, ',' ).GetToken( 0, '=' );
         sTmp.EraseLeadingAndTrailingChars();
-        if( bMergeMode && ( sTmp.EqualsIgnoreCaseAscii("de") || sTmp.EqualsIgnoreCaseAscii("en-US") )){}
+        if( bMergeMode && isAllowed( sTmp ) ){}
+        //if( bMergeMode && ( sTmp.EqualsIgnoreCaseAscii("de") || sTmp.EqualsIgnoreCaseAscii("en-US") )){}
         else if( !( (sTmp.GetChar(0)=='x' || sTmp.GetChar(0)=='X') && sTmp.GetChar(1)=='-' ) )
             aForcedLanguages.push_back( sTmp );
     }
@@ -399,7 +416,8 @@ void Export::FillInFallbacks( ResData *pResData )
     ByteString sCur;
     for( long int n = 0; n < aLanguages.size(); n++ ){
         sCur = aLanguages[ n ];
-        if( !sCur.EqualsIgnoreCaseAscii("de") && !sCur.EqualsIgnoreCaseAscii("en-US") ){
+        if( isAllowed( sCur )  ){
+        //if( !sCur.EqualsIgnoreCaseAscii("de") && !sCur.EqualsIgnoreCaseAscii("en-US") ){
             ByteString nFallbackIndex = GetFallbackLanguage( sCur );
             if( nFallbackIndex.Len() ){
                 if ( !pResData->sText[ sCur ].Len())
