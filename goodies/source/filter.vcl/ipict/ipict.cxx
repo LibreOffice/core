@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipict.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:00:24 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:45:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -766,7 +766,11 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
             if ( nRowBytes < 8 || nPackType == 1 )
             {
                 for ( i = 0; i < nRowBytes; i++ )
-                    SETBYTE;
+                {
+                    *pPict >> nDat;
+                    if ( nx < nWidth )
+                        SETBYTE;
+                }
                 nDataSize += nRowBytes;
             }
             else
