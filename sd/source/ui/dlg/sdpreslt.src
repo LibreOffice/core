@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpreslt.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:20:26 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:37:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ ModalDialog DLG_PRESLT
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 110 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Wählen Sie eine ~Seitenvorlage : Wõhlen Sie eine ~Seitenvorlage */
-        Text [ de ] = "Wählen Sie eine ~Seitenvorlage" ;
+        Text [ de ] = "WÃ¤hlen Sie eine ~Seitenvorlage" ;
         Text [ en-US ] = "~Select a slide design" ;
         Text [ x-comment ] = " ";
     };
@@ -86,7 +86,7 @@ ModalDialog DLG_PRESLT
     {
         Pos = MAP_APPFONT ( 6 , 170 ) ;
         Size = MAP_APPFONT ( 140 , 12 ) ;
-        Text [ de ] = "Nicht ~verwendete Hintergrundseiten löschen" ;
+        Text [ de ] = "Nicht ~verwendete Hintergrundseiten lÃ¶schen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Delete unused backgrounds";
         Text [ x-comment ] = " ";
