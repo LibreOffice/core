@@ -4,9 +4,9 @@
  *
  *  $RCSfile: apitools.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:15:00 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:14:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,9 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -59,16 +62,21 @@ using namespace dbaccess;
 //============================================================
 //= OSubComponent
 //============================================================
+DBG_NAME(OSubComponent)
 //--------------------------------------------------------------------------
 OSubComponent::OSubComponent(Mutex& _rMutex, const Reference< XInterface > & xParent)
               :OComponentHelper(_rMutex)
               ,m_xParent(xParent)
 {
+    DBG_CTOR(OSubComponent,NULL);
+
 }
 // -----------------------------------------------------------------------------
 OSubComponent::~OSubComponent()
 {
     m_xParent = NULL;
+
+    DBG_DTOR(OSubComponent,NULL);
 }
 
 // com::sun::star::lang::XTypeProvider
