@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hlmarkwn.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:15:35 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:50:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,11 +302,21 @@ BOOL SvxHlinkDlgMarkWnd::RefreshFromDoc( OUString aURL )
                 uno::Reference< frame::XComponentLoader > xLoader( xDesktop, uno::UNO_QUERY );
                 if( xLoader.is() )
                 {
-                    uno::Sequence< beans::PropertyValue > aArg(1);
-                    aArg.getArray()[0].Name = OUString::createFromAscii( "Hidden" );
-                    aArg.getArray()[0].Value <<= (sal_Bool) TRUE;
-                    xComp = xLoader->loadComponentFromURL( aURL, OUString::createFromAscii( "_blank" ), 0,
-                                                           aArg );
+                    try
+                    {
+                        uno::Sequence< beans::PropertyValue > aArg(1);
+                        aArg.getArray()[0].Name = OUString::createFromAscii( "Hidden" );
+                        aArg.getArray()[0].Value <<= (sal_Bool) TRUE;
+                        xComp = xLoader->loadComponentFromURL( aURL, OUString::createFromAscii( "_blank" ), 0, aArg );
+                    }
+                    catch( const io::IOException& )
+                    {
+
+                    }
+                    catch( const lang::IllegalArgumentException& )
+                    {
+
+                    }
                 }
             }
             else
