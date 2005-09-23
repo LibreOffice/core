@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sb.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:26:15 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:39:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,21 +62,21 @@ Resource RID_BASIC_START
     String SbERR_BAD_ARGUMENT & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ung≥ltiger Prozeduraufruf : UngÅltiger Prozeduraufruf */
-        Text [ de ] = "Ung¸ltiger Prozeduraufruf" ;
+        Text [ de ] = "Ung√ºltiger Prozeduraufruf" ;
         Text [ en-US ] = "Invalid procedure call" ;
         Text [ x-comment ] = " ";
     };
     String SbERR_MATH_OVERFLOW & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? öberlauf : ‹berlauf */
-        Text [ de ] = "‹berlauf" ;
+        Text [ de ] = "√úberlauf" ;
         Text [ en-US ] = "Overflow" ;
         Text [ x-comment ] = " ";
     };
     String SbERR_NO_MEMORY & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Nicht gen≥gend Speicher : Nicht genÅgend Speicher */
-        Text [ de ] = "Nicht gen¸gend Speicher" ;
+        Text [ de ] = "Nicht gen√ºgend Speicher" ;
         Text [ en-US ] = "Not enough memory" ;
         Text [ x-comment ] = " ";
     };
@@ -89,7 +89,7 @@ Resource RID_BASIC_START
     String SbERR_OUT_OF_RANGE & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Index auòerhalb des definierten Bereichs : Index auˇerhalb des definierten Bereichs */
-        Text [ de ] = "Index auﬂerhalb des definierten Bereichs" ;
+        Text [ de ] = "Index au√üerhalb des definierten Bereichs" ;
         Text [ en-US ] = "Index out of defined range" ;
         Text [ x-comment ] = " ";
     };
@@ -114,14 +114,14 @@ Resource RID_BASIC_START
     String SbERR_CONVERSION & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Datentypen unvertrıglich : Datentypen unvertrßglich */
-        Text [ de ] = "Datentypen unvertr‰glich" ;
+        Text [ de ] = "Datentypen unvertr√§glich" ;
         Text [ en-US ] = "Data type mismatch" ;
         Text [ x-comment ] = " ";
     };
     String SbERR_BAD_PARAMETER & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ung≥ltiger Parameter : UngÅltiger Parameter */
-        Text [ de ] = "Ung¸ltiger Parameter" ;
+        Text [ de ] = "Ung√ºltiger Parameter" ;
         Text [ en-US ] = "Invalid parameter" ;
         Text [ x-comment ] = " ";
     };
@@ -140,7 +140,7 @@ Resource RID_BASIC_START
     String SbERR_STACK_OVERFLOW & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Nicht gen≥gend Stapelspeicher : Nicht genÅgend Stapelspeicher */
-        Text [ de ] = "Nicht gen¸gend Stapelspeicher" ;
+        Text [ de ] = "Nicht gen√ºgend Stapelspeicher" ;
         Text [ en-US ] = "Not enough stack memory" ;
         Text [ x-comment ] = " ";
     };
@@ -189,14 +189,14 @@ Resource RID_BASIC_START
     String SbERR_FILE_ALREADY_OPEN & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Datei bereits ge˜ffnet : Datei bereits geîffnet */
-        Text [ de ] = "Datei bereits geˆffnet" ;
+        Text [ de ] = "Datei bereits ge√∂ffnet" ;
         Text [ en-US ] = "File already open" ;
         Text [ x-comment ] = " ";
     };
     String SbERR_IO_ERROR & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Gerıte-E/A-Fehler : Gerßte-E/A-Fehler */
-        Text [ de ] = "Ger‰te-E/A-Fehler" ;
+        Text [ de ] = "Ger√§te-E/A-Fehler" ;
         Text [ en-US ] = "Device I/O error" ;
         Text [ x-comment ] = " ";
     };
@@ -209,7 +209,7 @@ Resource RID_BASIC_START
     String SbERR_BAD_RECORD_LENGTH & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Falsche Datensatzlınge : Falsche Datensatzlßnge */
-        Text [ de ] = "Falsche Datensatzl‰nge" ;
+        Text [ de ] = "Falsche Datensatzl√§nge" ;
         Text [ en-US ] = "Incorrect record length" ;
         Text [ x-comment ] = " ";
     };
@@ -222,7 +222,7 @@ Resource RID_BASIC_START
     String SbERR_READ_PAST_EOF & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Lesen ≥ber das Ende der Datei hinaus : Lesen Åber das Ende der Datei hinaus */
-        Text [ de ] = "Lesen ¸ber das Ende der Datei hinaus" ;
+        Text [ de ] = "Lesen √ºber das Ende der Datei hinaus" ;
         Text [ en-US ] = "Reading exceeds EOF" ;
         Text [ x-comment ] = " ";
     };
@@ -241,7 +241,7 @@ Resource RID_BASIC_START
     String SbERR_NO_DEVICE & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Gerıt nicht verf≥gbar : Gerßt nicht verfÅgbar */
-        Text [ de ] = "Ger‰t nicht verf¸gbar" ;
+        Text [ de ] = "Ger√§t nicht verf√ºgbar" ;
         Text [ en-US ] = "Device not available" ;
         Text [ x-comment ] = " ";
     };
@@ -266,7 +266,7 @@ Resource RID_BASIC_START
     String SbERR_DIFFERENT_DRIVE & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Umbenennen auf verschiedenen Laufwerken nicht m˜glich : Umbenennen auf verschiedenen Laufwerken nicht mîglich */
-        Text [ de ] = "Umbenennen auf verschiedenen Laufwerken nicht mˆglich" ;
+        Text [ de ] = "Umbenennen auf verschiedenen Laufwerken nicht m√∂glich" ;
         Text [ en-US ] = "Renaming on different drives impossible" ;
         Text [ x-comment ] = " ";
     };
@@ -291,14 +291,14 @@ Resource RID_BASIC_START
     String SbERR_BAD_PATTERN & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Zeichenfolgenmuster unzulıssig : Zeichenfolgenmuster unzulßssig */
-        Text [ de ] = "Zeichenfolgenmuster unzul‰ssig" ;
+        Text [ de ] = "Zeichenfolgenmuster unzul√§ssig" ;
         Text [ en-US ] = "Invalid string pattern" ;
         Text [ x-comment ] = " ";
     };
     String SBERR_IS_NULL & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Verwendung von Null unzulıssig : Verwendung von Null unzulßssig */
-        Text [ de ] = "Verwendung von Null unzul‰ssig" ;
+        Text [ de ] = "Verwendung von Null unzul√§ssig" ;
         Text [ en-US ] = "Use of zero not permitted" ;
         Text [ x-comment ] = " ";
     };
@@ -317,7 +317,7 @@ Resource RID_BASIC_START
     String SbERR_DDE_OUTOFCHANNELS & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Keine freien DDE-Kanıle : Keine freien DDE-Kanßle */
-        Text [ de ] = "Keine freien DDE-Kan‰le" ;
+        Text [ de ] = "Keine freien DDE-Kan√§le" ;
         Text [ en-US ] = "No DDE channels available" ;
         Text [ x-comment ] = " ";
     };
@@ -342,21 +342,21 @@ Resource RID_BASIC_START
     String SbERR_DDE_NOTPROCESSED & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Fremdapplikation kann DDE-Operation nicht ausf≥hren : Fremdapplikation kann DDE-Operation nicht ausfÅhren */
-        Text [ de ] = "Fremdapplikation kann DDE-Operation nicht ausf¸hren" ;
+        Text [ de ] = "Fremdapplikation kann DDE-Operation nicht ausf√ºhren" ;
         Text [ en-US ] = "External application cannot execute DDE operation" ;
         Text [ x-comment ] = " ";
     };
     String SbERR_DDE_TIMEOUT & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Zeit≥berschreitung wıhrend des Wartens auf DDE-Antwort : ZeitÅberschreitung wßhrend des Wartens auf DDE-Antwort */
-        Text [ de ] = "Zeit¸berschreitung w‰hrend des Wartens auf DDE-Antwort" ;
+        Text [ de ] = "Zeit√ºberschreitung w√§hrend des Wartens auf DDE-Antwort" ;
         Text [ en-US ] = "Timeout while waiting for DDE response" ;
         Text [ x-comment ] = " ";
     };
     String SbERR_DDE_USER_INTERRUPT & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Benutzer dr≥ckte ESCAPE wıhrend der DDE-Operation : Benutzer drÅckte ESCAPE wßhrend der DDE-Operation */
-        Text [ de ] = "Benutzer dr¸ckte ESCAPE w‰hrend der DDE-Operation" ;
+        Text [ de ] = "Benutzer dr√ºckte ESCAPE w√§hrend der DDE-Operation" ;
         Text [ en-US ] = "User pressed ESCAPE during DDE operation." ;
         Text [ x-comment ] = " ";
     };
@@ -387,7 +387,7 @@ Resource RID_BASIC_START
     String SbERR_DDE_CONV_CLOSED & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? DDE-Verbindung ist unterbrochen oder geındert worden : DDE-Verbindung ist unterbrochen oder geßndert worden */
-        Text [ de ] = "DDE-Verbindung ist unterbrochen oder ge‰ndert worden" ;
+        Text [ de ] = "DDE-Verbindung ist unterbrochen oder ge√§ndert worden" ;
         Text [ en-US ] = "DDE connection interrupted or modified" ;
         Text [ x-comment ] = " ";
     };
@@ -400,7 +400,7 @@ Resource RID_BASIC_START
     String SbERR_DDE_INVALID_LINK & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ung≥ltiges DDE-Linkformat : UngÅltiges DDE-Linkformat */
-        Text [ de ] = "Ung¸ltiges DDE-Linkformat" ;
+        Text [ de ] = "Ung√ºltiges DDE-Linkformat" ;
         Text [ en-US ] = "Invalid DDE link format" ;
         Text [ x-comment ] = " ";
     };
@@ -413,70 +413,70 @@ Resource RID_BASIC_START
     String SbERR_DDE_LINK_ALREADY_EST & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Paste Link bereits durchgef≥hrt : Paste Link bereits durchgefÅhrt */
-        Text [ de ] = "Paste Link bereits durchgef¸hrt" ;
+        Text [ de ] = "Paste Link bereits durchgef√ºhrt" ;
         Text [ en-US ] = "Paste link already performed" ;
         Text [ x-comment ] = " ";
     };
     String SbERR_DDE_LINK_INV_TOPIC & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? LinkMode kann wegen ung≥ltigen Link-Topics nicht gesetzt werden : LinkMode kann wegen ungÅltigen Link-Topics nicht gesetzt werden */
-        Text [ de ] = "LinkMode kann wegen ung¸ltigen Link-Topics nicht gesetzt werden" ;
+        Text [ de ] = "LinkMode kann wegen ung√ºltigen Link-Topics nicht gesetzt werden" ;
         Text [ en-US ] = "Link mode cannot be set due to invalid link topic" ;
         Text [ x-comment ] = " ";
     };
     String SbERR_DDE_DLL_NOT_FOUND & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? F≥r DDE wird DDEML.DLL ben˜tigt : FÅr DDE wird DDEML.DLL benîtigt */
-        Text [ de ] = "F¸r DDE wird DDEML.DLL benˆtigt" ;
+        Text [ de ] = "F√ºr DDE wird DDEML.DLL ben√∂tigt" ;
         Text [ en-US ] = "DDE requires the DDEML.DLL file" ;
         Text [ x-comment ] = " ";
     };
     String SbERR_CANNOT_LOAD & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Das Modul kann nicht geladen werden, ung≥ltiges Format : Das Modul kann nicht geladen werden, ungÅltiges Format */
-        Text [ de ] = "Das Modul kann nicht geladen werden, ung¸ltiges Format" ;
+        Text [ de ] = "Das Modul kann nicht geladen werden, ung√ºltiges Format" ;
         Text [ en-US ] = "Module cannot be loaded; invalid format" ;
         Text [ x-comment ] = " ";
     };
     String SbERR_BAD_INDEX & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ung≥ltiger Objektindex : UngÅltiger Objektindex */
-        Text [ de ] = "Ung¸ltiger Objektindex" ;
+        Text [ de ] = "Ung√ºltiger Objektindex" ;
         Text [ en-US ] = "Invalid object index" ;
         Text [ x-comment ] = " ";
     };
     String SbERR_NO_ACTIVE_OBJECT & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Objekt ist nicht verf≥gbar : Objekt ist nicht verfÅgbar */
-        Text [ de ] = "Objekt ist nicht verf¸gbar" ;
+        Text [ de ] = "Objekt ist nicht verf√ºgbar" ;
         Text [ en-US ] = "Object is not available" ;
         Text [ x-comment ] = " ";
     };
     String SbERR_BAD_PROP_VALUE & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Falscher Wert f≥r Eigenschaft : Falscher Wert fÅr Eigenschaft */
-        Text [ de ] = "Falscher Wert f¸r Eigenschaft" ;
+        Text [ de ] = "Falscher Wert f√ºr Eigenschaft" ;
         Text [ en-US ] = "Incorrect property value" ;
         Text [ x-comment ] = " ";
     };
     String SbERR_PROP_READONLY & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Eigenschaft ist schreibgesch≥tzt : Eigenschaft ist schreibgeschÅtzt */
-        Text [ de ] = "Eigenschaft ist schreibgesch¸tzt" ;
+        Text [ de ] = "Eigenschaft ist schreibgesch√ºtzt" ;
         Text [ en-US ] = "This property is read-only" ;
         Text [ x-comment ] = " ";
     };
     String SbERR_PROP_WRITEONLY & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Eigenschaft ist lesegesch≥tzt : Eigenschaft ist lesegeschÅtzt */
-        Text [ de ] = "Eigenschaft ist lesegesch¸tzt" ;
+        Text [ de ] = "Eigenschaft ist lesegesch√ºtzt" ;
         Text [ en-US ] = "This property is write only" ;
         Text [ x-comment ] = " ";
     };
     String SbERR_INVALID_OBJECT & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ung≥ltige Objektreferenz : UngÅltige Objektreferenz */
-        Text [ de ] = "Ung¸ltige Objektreferenz" ;
+        Text [ de ] = "Ung√ºltige Objektreferenz" ;
         Text [ en-US ] = "Invalid object reference" ;
         Text [ x-comment ] = " ";
     };
@@ -501,14 +501,14 @@ Resource RID_BASIC_START
     String SbERR_NO_OLE & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? OLE-Automatisierung wird von diesem Objekt nicht unterst≥tzt : OLE-Automatisierung wird von diesem Objekt nicht unterstÅtzt */
-        Text [ de ] = "OLE-Automatisierung wird von diesem Objekt nicht unterst¸tzt" ;
+        Text [ de ] = "OLE-Automatisierung wird von diesem Objekt nicht unterst√ºtzt" ;
         Text [ en-US ] = "OLE Automation is not supported by this object" ;
         Text [ x-comment ] = " ";
     };
     String SbERR_BAD_METHOD & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Objekt unterst≥tzt diese Eigenschaft oder Methode nicht : Objekt unterstÅtzt diese Eigenschaft oder Methode nicht */
-        Text [ de ] = "Objekt unterst¸tzt diese Eigenschaft oder Methode nicht" ;
+        Text [ de ] = "Objekt unterst√ºtzt diese Eigenschaft oder Methode nicht" ;
         Text [ en-US ] = "This property or method is not supported by the object" ;
         Text [ x-comment ] = " ";
     };
@@ -521,21 +521,21 @@ Resource RID_BASIC_START
     String SbERR_BAD_ACTION & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Diese Aktion wird vom angegebenen Objekt nicht unterst≥tzt : Diese Aktion wird vom angegebenen Objekt nicht unterstÅtzt */
-        Text [ de ] = "Diese Aktion wird vom angegebenen Objekt nicht unterst¸tzt" ;
+        Text [ de ] = "Diese Aktion wird vom angegebenen Objekt nicht unterst√ºtzt" ;
         Text [ en-US ] = "This action is not supported by given object" ;
         Text [ x-comment ] = " ";
     };
     String SbERR_NO_NAMED_ARGS & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Benannte Argumente werden vom angegebenen Objekt nicht unterst≥tzt : Benannte Argumente werden vom angegebenen Objekt nicht unterstÅtzt */
-        Text [ de ] = "Benannte Argumente werden vom angegebenen Objekt nicht unterst¸tzt" ;
+        Text [ de ] = "Benannte Argumente werden vom angegebenen Objekt nicht unterst√ºtzt" ;
         Text [ en-US ] = "Named arguments are not supported by given object" ;
         Text [ x-comment ] = " ";
     };
     String SbERR_BAD_LOCALE & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Das aktuelle Gebietsschema wird vom angegebenen Objekt nicht unterst≥tzt : Das aktuelle Gebietsschema wird vom angegebenen Objekt nicht unterstÅtzt */
-        Text [ de ] = "Das aktuelle Gebietsschema wird vom angegebenen Objekt nicht unterst¸tzt" ;
+        Text [ de ] = "Das aktuelle Gebietsschema wird vom angegebenen Objekt nicht unterst√ºtzt" ;
         Text [ en-US ] = "The current locale setting is not supported by the given object" ;
         Text [ x-comment ] = " ";
     };
@@ -566,7 +566,7 @@ Resource RID_BASIC_START
     String SbERR_BAD_ORDINAL & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ordnungszahl ung≥ltig : Ordnungszahl ungÅltig */
-        Text [ de ] = "Ordnungszahl ung¸ltig" ;
+        Text [ de ] = "Ordnungszahl ung√ºltig" ;
         Text [ en-US ] = "Invalid ordinal number" ;
         Text [ x-comment ] = " ";
     };
@@ -579,7 +579,7 @@ Resource RID_BASIC_START
     String SbERR_BAD_CLIPBD_FORMAT & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ung≥ltiges Clipboard-Format : UngÅltiges Clipboard-Format */
-        Text [ de ] = "Ung¸ltiges Zwischenablagen-Format" ;
+        Text [ de ] = "Ung√ºltiges Zwischenablagen-Format" ;
         Text [ en-US ] = "Invalid clipboard format" ;
         Text [ x-comment ] = " ";
     };
@@ -604,14 +604,14 @@ Resource RID_BASIC_START
     String SbERR_BAD_NUMBER_OF_ARGS & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ung≥ltige Anzahl von Argumenten : UngÅltige Anzahl von Argumenten */
-        Text [ de ] = "Ung¸ltige Anzahl von Argumenten" ;
+        Text [ de ] = "Ung√ºltige Anzahl von Argumenten" ;
         Text [ en-US ] = "Invalid number of arguments" ;
         Text [ x-comment ] = " ";
     };
     String SbERR_METHOD_FAILED & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Fehler in Ausf≥hrung einer Methode : Fehler in AusfÅhrung einer Methode */
-        Text [ de ] = "Fehler in Ausf¸hrung einer Methode" ;
+        Text [ de ] = "Fehler in Ausf√ºhrung einer Methode" ;
         Text [ en-US ] = "Error executing a method" ;
         Text [ x-comment ] = " ";
     };
@@ -745,7 +745,7 @@ Resource RID_BASIC_START
     String SbERR_BAD_CHAR_IN_NUMBER & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ung≥ltiges Zeichen in Zahl : UngÅltiges Zeichen in Zahl */
-        Text [ de ] = "Ung¸ltiges Zeichen in Zahl" ;
+        Text [ de ] = "Ung√ºltiges Zeichen in Zahl" ;
         Text [ en-US ] = "Invalid character in number" ;
         Text [ x-comment ] = " ";
     };
@@ -765,14 +765,14 @@ Resource RID_BASIC_START
     String SbERR_NOT_IN_SUBR & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? $(ARG1) innerhalb einer Prozedur unzulıssig : $(ARG1) innerhalb einer Prozedur unzulßssig */
-        Text [ de ] = "$(ARG1) innerhalb einer Prozedur unzul‰ssig" ;
+        Text [ de ] = "$(ARG1) innerhalb einer Prozedur unzul√§ssig" ;
         Text [ en-US ] = "$(ARG1) not allowed within a procedure" ;
         Text [ x-comment ] = " ";
     };
     String SbERR_NOT_IN_MAIN & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? $(ARG1) auòerhalb einer Prozedur unzulıssig : $(ARG1) auˇerhalb einer Prozedur unzulßssig */
-        Text [ de ] = "$(ARG1) auﬂerhalb einer Prozedur unzul‰ssig" ;
+        Text [ de ] = "$(ARG1) au√üerhalb einer Prozedur unzul√§ssig" ;
         Text [ en-US ] = "$(ARG1) not allowed outside a procedure" ;
         Text [ x-comment ] = " ";
     };
@@ -797,14 +797,14 @@ Resource RID_BASIC_START
     String SbERR_PROG_TOO_LARGE & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Programm ist zu groò : Programm ist zu groˇ */
-        Text [ de ] = "Programm ist zu groﬂ" ;
+        Text [ de ] = "Programm ist zu gro√ü" ;
         Text [ en-US ] = "Program too large" ;
         Text [ x-comment ] = " ";
     };
     String SbERR_NO_STRINGS_ARRAYS & ERRCODE_RES_MASK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Strings oder Arrays unzulıssig : Strings oder Arrays unzulßssig */
-        Text [ de ] = "Strings oder Arrays unzul‰ssig" ;
+        Text [ de ] = "Strings oder Arrays unzul√§ssig" ;
         Text [ en-US ] = "Strings or arrays not permitted" ;
         Text [ x-comment ] = " ";
     };
