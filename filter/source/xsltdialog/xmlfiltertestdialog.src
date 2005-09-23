@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfiltertestdialog.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:23:58 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:22:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Size                = MAP_APPFONT ( COLUMN_WIDTH , 14 ) ;
         TabStop             = TRUE ;
         HelpId              = HID_XML_FILTER_TEST_EXPORT_BROWSE;
-        Text [ de ] = "~Ausw‰hlen...";
+        Text [ de ] = "~Ausw√§hlen...";
         Text [ en-US ]  = "~Browse...";
     };
 
@@ -184,7 +184,7 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Size                = MAP_APPFONT ( COLUMN_WIDTH , 14 ) ;
         HelpId              = HID_XML_FILTER_TEST_IMPORT_BROWSE;
         TabStop             = TRUE ;
-        Text [ de ] = "A~usw‰hlen...";
+        Text [ de ] = "A~usw√§hlen...";
         Text [ en-US ]  = "B~rowse...";
     };
 
@@ -212,7 +212,7 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Size                = MAP_APPFONT ( 50 , 14 ) ;
         HelpId              = HID_XML_FILTER_TEST_CLOSE;
         TabStop             = TRUE ;
-        Text [ de ] = "~Schlieﬂen";
+        Text [ de ] = "~Schlie√üen";
         Text [ en-US ]  = "~Close";
     };
 
