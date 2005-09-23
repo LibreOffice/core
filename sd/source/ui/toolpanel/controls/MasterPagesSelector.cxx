@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterPagesSelector.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:41:10 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:32:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,7 @@
 #ifndef _SFXITEMPOOL_HXX //autogen
 #include <svtools/itempool.hxx>
 #endif
+#include "undoback.hxx"
 
 using namespace ::sd::toolpanel::controls;
 #define MasterPagesSelector
@@ -525,7 +526,14 @@ void MasterPagesSelector::AssignMasterPageToPage (
 
     if ( ! pPage->IsMasterPage())
     {
-        // 1. Assign master pages to regular slide.
+        // 1. Remove the background object (so that that, if it exists, does
+        // not override the new master page) and assign the master page to
+        // the regular slide.
+        mrDocument.GetDocSh()->GetUndoManager()->AddUndoAction(
+            new SdBackgroundObjUndoAction(mrDocument, *pPage, pPage->GetBackgroundObj()),
+                TRUE);
+        pPage->SetBackgroundObj(NULL);
+
         mrDocument.SetMasterPage (
             (pPage->GetPageNum()-1)/2,
             rsBaseLayoutName,
