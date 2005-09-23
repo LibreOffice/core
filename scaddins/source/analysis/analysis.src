@@ -4,9 +4,9 @@
  *
  *  $RCSfile: analysis.src,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:18:56 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:07:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,7 +137,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 7 // description of parameter 3  Yearfrac
         {
-            Text [ de ] = "Basis für die Bestimmung der Zinstage";
+            Text [ de ] = "Basis fÃ¼r die Bestimmung der Zinstage";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Basis for determining the interest days";
         };
@@ -185,7 +185,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Weeknum_add
         {
-            Text [ de ] = "Liefert eine Zahl, die angibt, in welche Woche eines Jahres das angegebene Datum fällt.";
+            Text [ de ] = "Liefert eine Zahl, die angibt, in welche Woche eines Jahres das angegebene Datum fÃ¤llt.";
             Text [ en-US ] = "Returns the number of the calendar week in which the specified date occurs.";
         };
 
@@ -203,7 +203,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 4 // name of parameter 2         Weeknum_add
         {
-            Text [ de ] = "Rückgabetyp";
+            Text [ de ] = "RÃ¼ckgabetyp";
             Text [ en-US ] = "Return type";
         };
 
@@ -218,7 +218,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description EoMonth
         {
-            Text[ de ] = "Liefert die fortlaufende Zahl des Datums, das den letzten Tag des Monats repräsentiert, der eine bestimmte Anzahl von Monaten vor oder nach dem Ausgangsdatum liegt.";
+            Text[ de ] = "Liefert die fortlaufende Zahl des Datums, das den letzten Tag des Monats reprÃ¤sentiert, der eine bestimmte Anzahl von Monaten vor oder nach dem Ausgangsdatum liegt.";
             Text[ en-US ] = "Returns the serial number of the last day of the month that comes a certain number of months before or after the start date";
         };
 
@@ -307,7 +307,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Iseven_add
         {
-            Text [ de ] = "Gibt den Wert WAHR zurück, wenn die Zahl gerade ist.";
+            Text [ de ] = "Gibt den Wert WAHR zurÃ¼ck, wenn die Zahl gerade ist.";
             Text [ en-US ] = "Returns the value 'true' if the number is even";
         };
 
@@ -328,7 +328,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Isodd_add
         {
-            Text [ de ] = "Gibt den Wert WAHR zurück, wenn die Zahl ungerade ist.";
+            Text [ de ] = "Gibt den Wert WAHR zurÃ¼ck, wenn die Zahl ungerade ist.";
             Text [ en-US ] = "Returns the value 'true' if the number is odd";
         };
 
@@ -387,7 +387,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 3 // description of parameter 1  Seriessum
         {
-            Text [ de ] = "Unabhängige Variable der Potenzreihe.";
+            Text [ de ] = "UnabhÃ¤ngige Variable der Potenzreihe.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The independent variable of the power series";
         };
@@ -415,7 +415,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 7 // description of parameter 3  Seriessum
         {
-            Text [ de ] = "Inkrement, um das n in jedem Glied der Reihe vergrößert werden soll.";
+            Text [ de ] = "Inkrement, um das n in jedem Glied der Reihe vergrÃ¶ÃŸert werden soll.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The increment by which to increase n for each term in the series";
         };
@@ -439,21 +439,21 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Quotient
         {
-            Text [ de ] = "Gibt den ganzzahligen Anteil einer Division zurück.";
+            Text [ de ] = "Gibt den ganzzahligen Anteil einer Division zurÃ¼ck.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the integer portion of a division";
         };
 
         String 2 // name of parameter 1         Quotient
         {
-            Text [ de ] = "Zähler";
+            Text [ de ] = "ZÃ¤hler";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Numerator";
         };
 
         String 3 // description of parameter 1  Quotient
         {
-            Text [ de ] = "Zähler (Dividend)";
+            Text [ de ] = "ZÃ¤hler (Dividend)";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The dividend";
         };
@@ -560,14 +560,14 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 4 // name of parameter 2         Randbetween
         {
-            Text [ de ] = "Größte Zahl";
+            Text [ de ] = "GrÃ¶ÃŸte Zahl";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Top";
         };
 
         String 5 // description of parameter 2  Randbetween
         {
-            Text [ de ] = "Die größte Zahl, die geliefert werden soll.";
+            Text [ de ] = "Die grÃ¶ÃŸte Zahl, die geliefert werden soll.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The largest integer returned";
         };
@@ -577,7 +577,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Gcd_add
         {
-            Text [ de ] = "Liefert den größten gemeinsamen Teiler.";
+            Text [ de ] = "Liefert den grÃ¶ÃŸten gemeinsamen Teiler.";
             Text [ en-US ] = "Returns the greatest common divisor";
         };
 
@@ -633,7 +633,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 3 // description of parameter 1  BesselI
         {
-            Text [ de ] = "Der Wert, für den die Funktion berechnet werden soll.";
+            Text [ de ] = "Der Wert, fÃ¼r den die Funktion berechnet werden soll.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The value at which the function is to be evaluated";
         };
@@ -671,7 +671,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 3 // description of parameter 1  BesselJ
         {
-            Text [ de ] = "Der Wert, für den die Funktion berechnet werden soll.";
+            Text [ de ] = "Der Wert, fÃ¼r den die Funktion berechnet werden soll.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The value at which the function is to be evaluated";
         };
@@ -709,7 +709,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 3 // description of parameter 1  BesselK
         {
-            Text [ de ] = "Der Wert, für den die Funktion berechnet werden soll.";
+            Text [ de ] = "Der Wert, fÃ¼r den die Funktion berechnet werden soll.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The value at which the function is to be evaluated";
         };
@@ -747,7 +747,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 3 // description of parameter 1  BesselY
         {
-            Text [ de ] = "Der Wert, für den die Funktion berechnet werden soll.";
+            Text [ de ] = "Der Wert, fÃ¼r den die Funktion berechnet werden soll.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The value at which the function is to be evaluated";
         };
@@ -771,7 +771,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Bin2Oct
         {
-            Text [ de ] = "Wandelt eine (Binär-) Dualzahl in eine Oktalzahl um.";
+            Text [ de ] = "Wandelt eine (BinÃ¤r-) Dualzahl in eine Oktalzahl um.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Converts a binary number to an octal number";
         };
@@ -809,7 +809,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Bin2Dec
         {
-            Text [ de ] = "Wandelt eine (Binär-) Dualzahl in eine Dezimalzahl um.";
+            Text [ de ] = "Wandelt eine (BinÃ¤r-) Dualzahl in eine Dezimalzahl um.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Converts a binary number to a decimal number";
         };
@@ -833,7 +833,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Bin2Hex
         {
-            Text [ de ] = "Wandelt eine (Binär-) Dualzahl in eine Hexadezimalzahl um.";
+            Text [ de ] = "Wandelt eine (BinÃ¤r-) Dualzahl in eine Hexadezimalzahl um.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Converts a binary number to a hexadecimal number";
         };
@@ -871,7 +871,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Oct2Bin
         {
-            Text [ de ] = "Wandelt eine Oktalzahl in eine (Binär-) Dualzahl um.";
+            Text [ de ] = "Wandelt eine Oktalzahl in eine (BinÃ¤r-) Dualzahl um.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Converts an octal number to a binary number";
         };
@@ -971,7 +971,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Dec2Bin
         {
-            Text [ de ] = "Wandelt eine Dezimalzahl in eine (Binär-) Dualzahl um.";
+            Text [ de ] = "Wandelt eine Dezimalzahl in eine (BinÃ¤r-) Dualzahl um.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Converts a decimal number to a binary number";
         };
@@ -1080,7 +1080,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Hex2Bin
         {
-            Text [ de ] = "Wandelt eine Hexadezimalzahl in eine (Binär-) Dualzahl um.";
+            Text [ de ] = "Wandelt eine Hexadezimalzahl in eine (BinÃ¤r-) Dualzahl um.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Converts a hexadecimal number to a binary number";
         };
@@ -1180,7 +1180,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Delta
         {
-            Text [ de ] = "Überprüft, ob zwei Werte gleich sind.";
+            Text [ de ] = "ÃœberprÃ¼ft, ob zwei Werte gleich sind.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Tests whether two values are equal";
         };
@@ -1280,7 +1280,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description GeStep
         {
-            Text [ de ] = "Überprüft, ob eine Zahl größer als ein Schwellenwert ist.";
+            Text [ de ] = "ÃœberprÃ¼ft, ob eine Zahl grÃ¶ÃŸer als ein Schwellenwert ist.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Tests whether a number is greater than a threshold value";
         };
@@ -1294,7 +1294,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 3 // description of parameter 1  GeStep
         {
-            Text [ de ] = "An Schwellenwert zu überprüfender Wert.";
+            Text [ de ] = "An Schwellenwert zu Ã¼berprÃ¼fender Wert.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The value to test against step";
         };
@@ -1318,7 +1318,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Factdouble
         {
-            Text [ de ] = "Liefert die Fakultät zu Zahl mit der Schrittlänge 2.";
+            Text [ de ] = "Liefert die FakultÃ¤t zu Zahl mit der SchrittlÃ¤nge 2.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the double factorial of Number";
         };
@@ -1366,7 +1366,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Imaginary
         {
-            Text [ de ] = "Liefert den Imaginärteil einer komplexen Zahl.";
+            Text [ de ] = "Liefert den ImaginÃ¤rteil einer komplexen Zahl.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the imaginary coefficient of a complex number";
         };
@@ -1428,7 +1428,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Imargument
         {
-            Text [ de ] = "Liefert den Winkel im Bogenmaß zur Darstellung der komplexen Zahl in trigonometrischer Schreibweise.";
+            Text [ de ] = "Liefert den Winkel im BogenmaÃŸ zur Darstellung der komplexen Zahl in trigonometrischer Schreibweise.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the argument theta, an angle expressed in radians";
         };
@@ -1483,14 +1483,14 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 2 // name of parameter 1         Imdiv
         {
-            Text [ de ] = "Zähler";
+            Text [ de ] = "ZÃ¤hler";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Numerator";
         };
 
         String 3 // description of parameter 1  Imdiv
         {
-            Text [ de ] = "Zähler (Dividend)";
+            Text [ de ] = "ZÃ¤hler (Dividend)";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The dividend";
         };
@@ -1562,7 +1562,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Imln
         {
-            Text [ de ] = "Liefert den natürlichen Logarithmus einer komplexen Zahl.";
+            Text [ de ] = "Liefert den natÃ¼rlichen Logarithmus einer komplexen Zahl.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the natural logarithm of a complex number";
         };
@@ -1807,7 +1807,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Complex
         {
-            Text [ de ] = "Wandelt den Real- und Imaginärteil in eine komplexe Zahl um.";
+            Text [ de ] = "Wandelt den Real- und ImaginÃ¤rteil in eine komplexe Zahl um.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Converts real and imaginary coefficients into a complex number";
         };
@@ -1828,14 +1828,14 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 4 // name of parameter 2         Complex
         {
-            Text [ de ] = "Imaginärteil";
+            Text [ de ] = "ImaginÃ¤rteil";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "I num";
         };
 
         String 5 // description of parameter 2  Complex
         {
-            Text [ de ] = "Imaginärteil";
+            Text [ de ] = "ImaginÃ¤rteil";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The imaginary coefficient";
         };
@@ -1859,7 +1859,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Convert_add
         {
-            Text [ de ] = "Wandelt eine Zahl von einem Maßsystem in ein anderes um.";
+            Text [ de ] = "Wandelt eine Zahl von einem MaÃŸsystem in ein anderes um.";
             Text [ en-US ] = "Converts a number from one measurement system to another";
         };
 
@@ -1877,25 +1877,25 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 4 // name of parameter 2         Convert_add
         {
-            Text [ de ] = "Von-Maßeinheit";
+            Text [ de ] = "Von-MaÃŸeinheit";
             Text [ en-US ] = "From unit";
         };
 
         String 5 // description of parameter 2  Convert_add
         {
-            Text [ de ] = "Maßeinheit von Zahl.";
+            Text [ de ] = "MaÃŸeinheit von Zahl.";
             Text [ en-US ] = "Unit of measure for number";
         };
 
         String 6 // name of parameter 3         Convert_add
         {
-            Text [ de ] = "In-Maßeinheit";
+            Text [ de ] = "In-MaÃŸeinheit";
             Text [ en-US ] = "To unit";
         };
 
         String 7 // description of parameter 3  Convert_add
         {
-            Text [ de ] = "Maßeinheit des Ergebnisses.";
+            Text [ de ] = "MaÃŸeinheit des Ergebnisses.";
             Text [ en-US ] = "Unit of measure for the result";
         };
     };
@@ -1904,7 +1904,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Amordegrc
         {
-            Text [ de ] = "Liefert den für eine Abrechnungsperiode anzusetzenden Abschreibungsbetrag auf Basis des französischen Buchführungssystems.";
+            Text [ de ] = "Liefert den fÃ¼r eine Abrechnungsperiode anzusetzenden Abschreibungsbetrag auf Basis des franzÃ¶sischen BuchfÃ¼hrungssystems.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the prorated linear depreciation of an asset for each accounting period";
         };
@@ -2012,7 +2012,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Amorlinc
         {
-            Text [ de ] = "Liefert den für eine Abrechnungsperiode anzusetzenden Abschreibungsbetrag auf Basis des französischen Buchführungssystems.";
+            Text [ de ] = "Liefert den fÃ¼r eine Abrechnungsperiode anzusetzenden Abschreibungsbetrag auf Basis des franzÃ¶sischen BuchfÃ¼hrungssystems.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the prorated linear depreciation of an asset for each accounting period";
         };
@@ -2120,7 +2120,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Accrint
         {
-            Text [ de ] = "Liefert die aufgelaufenen Zinsen (Stückzinsen) eines Wertpapieres mit periodischer Zinszahlung.";
+            Text [ de ] = "Liefert die aufgelaufenen Zinsen (StÃ¼ckzinsen) eines Wertpapieres mit periodischer Zinszahlung.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the accrued interest for a security that pays periodic interest";
         };
@@ -2197,14 +2197,14 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 12 // name of parameter 6        Accrint
         {
-            Text [ de ] = "Häufigkeit";
+            Text [ de ] = "HÃ¤ufigkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Frequency";
         };
 
         String 13 // description of parameter 6 Accrint
         {
-            Text [ de ] = "Häufigkeit";
+            Text [ de ] = "HÃ¤ufigkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The frequency";
         };
@@ -2228,7 +2228,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Accrintm
         {
-            Text [ de ] = "Liefert die aufgelaufenen Zinsen (Stückzinsen) eines Wertpapieres, die bei Fälligkeit ausgezahlt werden.";
+            Text [ de ] = "Liefert die aufgelaufenen Zinsen (StÃ¼ckzinsen) eines Wertpapieres, die bei FÃ¤lligkeit ausgezahlt werden.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the accrued interest for a security that pays interest at maturity";
         };
@@ -2308,7 +2308,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Received
         {
-            Text [ de ] = "Liefert den Auszahlungsbetrag eines voll investierten Wertpapiers am Fälligkeitstermin.";
+            Text [ de ] = "Liefert den Auszahlungsbetrag eines voll investierten Wertpapiers am FÃ¤lligkeitstermin.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the amount paid out at maturity for a fully invested security";
         };
@@ -2329,14 +2329,14 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 4 // name of parameter 2         Received
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Maturity";
         };
 
         String 5 // description of parameter 2  Received
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The maturity";
         };
@@ -2409,14 +2409,14 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 4 // name of parameter 2         Disc
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Maturity";
         };
 
         String 5 // description of parameter 2  Disc
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The maturity";
         };
@@ -2437,14 +2437,14 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 8 // name of parameter 4         Disc
         {
-            Text [ de ] = "Rückzahlung";
+            Text [ de ] = "RÃ¼ckzahlung";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Redemption";
         };
 
         String 9 // description of parameter 4  Disc
         {
-            Text [ de ] = "Rückzahlung";
+            Text [ de ] = "RÃ¼ckzahlung";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The redemption value";
         };
@@ -2468,7 +2468,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Duration
         {
-            Text [ de ] = "Liefert die jährliche Macaulay Laufzeit eines Wertpapieres mit periodischer Zinszahlung.";
+            Text [ de ] = "Liefert die jÃ¤hrliche Macaulay Laufzeit eines Wertpapieres mit periodischer Zinszahlung.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the annual Macaulay duration of a security with periodic interest payments";
         };
@@ -2489,14 +2489,14 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 4 // name of parameter 2         Duration
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Maturity";
         };
 
         String 5 // description of parameter 2  Duration
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The maturity";
         };
@@ -2531,14 +2531,14 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 10 // name of parameter 5        Duration
         {
-            Text [ de ] = "Häufigkeit";
+            Text [ de ] = "HÃ¤ufigkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Frequency";
         };
 
         String 11 // description of parameter 5 Duration
         {
-            Text [ de ] = "Häufigkeit";
+            Text [ de ] = "HÃ¤ufigkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The frequency";
         };
@@ -2562,7 +2562,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Effect_add
         {
-            Text [ de ] = "Liefert die jährliche Effektivverzinsung.";
+            Text [ de ] = "Liefert die jÃ¤hrliche Effektivverzinsung.";
             Text [ en-US ] = "Returns the effective annual interest rate";
         };
 
@@ -2668,7 +2668,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 13 // description of parameter 6 Cumprinc_add
         {
-            Text [ de ] = "Typ der Fälligkeit";
+            Text [ de ] = "Typ der FÃ¤lligkeit";
             Text [ en-US ] = "The type of maturity";
         };
     };
@@ -2749,7 +2749,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 13 // description of parameter 6 Cumipmt_add
         {
-            Text [ de ] = "Typ der Fälligkeit";
+            Text [ de ] = "Typ der FÃ¤lligkeit";
             Text [ en-US ] = "The type of maturity";
         };
     };
@@ -2758,7 +2758,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Price
         {
-            Text [ de ] = "Liefert den Kurs pro 100 Währungseinheiten Nennwert eines Wertpapiers, das periodische Zinsen auszahlt.";
+            Text [ de ] = "Liefert den Kurs pro 100 WÃ¤hrungseinheiten Nennwert eines Wertpapiers, das periodische Zinsen auszahlt.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the price per 100 currency units face value of a security that pays periodic interest";
         };
@@ -2779,14 +2779,14 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 4 // name of parameter 2         Price
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Maturity";
         };
 
         String 5 // description of parameter 2  Price
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The maturity";
         };
@@ -2821,28 +2821,28 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 10 // name of parameter 5        Price
         {
-            Text [ de ] = "Rückzahlung";
+            Text [ de ] = "RÃ¼ckzahlung";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Redemption";
         };
 
         String 11 // description of parameter 5 Price
         {
-            Text [ de ] = "Rückzahlung";
+            Text [ de ] = "RÃ¼ckzahlung";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The redemption value";
         };
 
         String 12 // name of parameter 6        Price
         {
-            Text [ de ] = "Häufigkeit";
+            Text [ de ] = "HÃ¤ufigkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Frequency";
         };
 
         String 13 // description of parameter 6 Price
         {
-            Text [ de ] = "Häufigkeit";
+            Text [ de ] = "HÃ¤ufigkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The frequency";
         };
@@ -2866,7 +2866,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Pricedisc
         {
-            Text [ de ] = "Liefert den Kurs pro 100 Währungseinheiten Nennwert eines unverzinslichen Werpapiers.";
+            Text [ de ] = "Liefert den Kurs pro 100 WÃ¤hrungseinheiten Nennwert eines unverzinslichen Werpapiers.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the price per 100 currency units face value of a discounted security";
         };
@@ -2887,14 +2887,14 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 4 // name of parameter 2         Pricedisc
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Maturity";
         };
 
         String 5 // description of parameter 2  Pricedisc
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The maturity";
         };
@@ -2915,14 +2915,14 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 8 // name of parameter 4         Pricedisc
         {
-            Text [ de ] = "Rückzahlung";
+            Text [ de ] = "RÃ¼ckzahlung";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Redemption";
         };
 
         String 9 // description of parameter 4  Pricedisc
         {
-            Text [ de ] = "Rückzahlung";
+            Text [ de ] = "RÃ¼ckzahlung";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The redemption value";
         };
@@ -2946,7 +2946,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Pricemat
         {
-            Text [ de ] = "Liefert den Kurs pro 100 Währungseinheiten Nennwert eines Wertpapiers, das Zinsen am Fälligkeitsdatum auszahlt.";
+            Text [ de ] = "Liefert den Kurs pro 100 WÃ¤hrungseinheiten Nennwert eines Wertpapiers, das Zinsen am FÃ¤lligkeitsdatum auszahlt.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the price per 100 currency units face value of a security that pays interest at maturity";
         };
@@ -2967,14 +2967,14 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 4 // name of parameter 2         Pricemat
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Maturity";
         };
 
         String 5 // description of parameter 2  Pricemat
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The maturity";
         };
@@ -3040,7 +3040,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Mduration
         {
-            Text [ de ] = "Liefert die modifizierte Macaulay-Duration eines Wertpapiers mit 100 Währungseinheiten Nennwert.";
+            Text [ de ] = "Liefert die modifizierte Macaulay-Duration eines Wertpapiers mit 100 WÃ¤hrungseinheiten Nennwert.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the Macaulay modified duration for a security with an assumed par value of 100 currency units";
         };
@@ -3061,14 +3061,14 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 4 // name of parameter 2         Mduration
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Maturity";
         };
 
         String 5 // description of parameter 2  Mduration
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The maturity";
         };
@@ -3103,14 +3103,14 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 10 // name of parameter 5        Mduration
         {
-            Text [ de ] = "Häufigkeit";
+            Text [ de ] = "HÃ¤ufigkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Frequency";
         };
 
         String 11 // description of parameter 5 Mduration
         {
-            Text [ de ] = "Häufigkeit";
+            Text [ de ] = "HÃ¤ufigkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The frequency";
         };
@@ -3134,7 +3134,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Nominal_add
         {
-            Text [ de ] = "Liefert die jährliche Nominalverzinsung.";
+            Text [ de ] = "Liefert die jÃ¤hrliche Nominalverzinsung.";
             Text [ en-US ] = "Returns the annual nominal interest rate";
         };
 
@@ -3264,14 +3264,14 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 4 // name of parameter 2         Yield
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Maturity";
         };
 
         String 5 // description of parameter 2  Yield
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The maturity";
         };
@@ -3306,28 +3306,28 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 10 // name of parameter 5        Yield
         {
-            Text [ de ] = "Rückzahlung";
+            Text [ de ] = "RÃ¼ckzahlung";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Redemption";
         };
 
         String 11 // description of parameter 5 Yield
         {
-            Text [ de ] = "Rückzahlung";
+            Text [ de ] = "RÃ¼ckzahlung";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The redemption value";
         };
 
         String 12 // name of parameter 6        Yield
         {
-            Text [ de ] = "Häufigkeit";
+            Text [ de ] = "HÃ¤ufigkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Frequency";
         };
 
         String 13 // description of parameter 6 Yield
         {
-            Text [ de ] = "Häufigkeit";
+            Text [ de ] = "HÃ¤ufigkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The frequency";
         };
@@ -3351,7 +3351,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Yielddisc
         {
-            Text [ de ] = "Liefert die jährliche Rendite eines diskontierten Wertpapiers.";
+            Text [ de ] = "Liefert die jÃ¤hrliche Rendite eines diskontierten Wertpapiers.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the annual yield for a discounted security";
         };
@@ -3372,14 +3372,14 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 4 // name of parameter 2         Yielddisc
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Maturity";
         };
 
         String 5 // description of parameter 2  Yielddisc
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The maturity";
         };
@@ -3400,14 +3400,14 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 8 // name of parameter 4         Yielddisc
         {
-            Text [ de ] = "Rückzahlung";
+            Text [ de ] = "RÃ¼ckzahlung";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Redemption";
         };
 
         String 9 // description of parameter 4  Yielddisc
         {
-            Text [ de ] = "Rückzahlung";
+            Text [ de ] = "RÃ¼ckzahlung";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The redemption value";
         };
@@ -3431,7 +3431,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Yieldmat
         {
-            Text [ de ] = "Liefert die jährliche Rendite eines Wertpapiers, das Zinsen am Fälligkeitsdatum auszahlt.";
+            Text [ de ] = "Liefert die jÃ¤hrliche Rendite eines Wertpapiers, das Zinsen am FÃ¤lligkeitsdatum auszahlt.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the annual yield of a security that pays interest at maturity";
         };
@@ -3452,14 +3452,14 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 4 // name of parameter 2         Yieldmat
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Maturity";
         };
 
         String 5 // description of parameter 2  Yieldmat
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The maturity";
         };
@@ -3525,7 +3525,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Tbilleq
         {
-            Text [ de ] = "Rechnet die Verzinsung eines Schatzwechsels in die für Anleihen übliche einfache jährliche Verzinsung um.";
+            Text [ de ] = "Rechnet die Verzinsung eines Schatzwechsels in die fÃ¼r Anleihen Ã¼bliche einfache jÃ¤hrliche Verzinsung um.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the bond-equivalent yield for a treasury bill";
         };
@@ -3546,14 +3546,14 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 4 // name of parameter 2         Tbilleq
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Maturity";
         };
 
         String 5 // description of parameter 2  Tbilleq
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The maturity";
         };
@@ -3577,7 +3577,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Tbillprice
         {
-            Text [ de ] = "Liefert den Kurs pro 100 Währungseinheiten Nennwert eines Schatzwechsels.";
+            Text [ de ] = "Liefert den Kurs pro 100 WÃ¤hrungseinheiten Nennwert eines Schatzwechsels.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the price of 100 currency units face value for a treasury bill";
         };
@@ -3598,14 +3598,14 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 4 // name of parameter 2         Tbillprice
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Maturity";
         };
 
         String 5 // description of parameter 2  Tbillprice
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The maturity";
         };
@@ -3650,14 +3650,14 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 4 // name of parameter 2         Tbillyield
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Maturity";
         };
 
         String 5 // description of parameter 2  Tbillyield
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The maturity";
         };
@@ -3681,7 +3681,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Oddfprice
         {
-            Text [ de ] = "Liefert den Kurs pro 100 Währungseinheiten Nennwert eines Wertpapiers mit einem unregelmäßigen ersten Zinstermin.";
+            Text [ de ] = "Liefert den Kurs pro 100 WÃ¤hrungseinheiten Nennwert eines Wertpapiers mit einem unregelmÃ¤ÃŸigen ersten Zinstermin.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the price per $100 face value of a security with an odd first period";
         };
@@ -3702,14 +3702,14 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 4 // name of parameter 2         Oddfprice
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Maturity";
         };
 
         String 5 // description of parameter 2  Oddfprice
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The maturity";
         };
@@ -3772,28 +3772,28 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 14 // name of parameter 7        Oddfprice
         {
-            Text [ de ] = "Rückzahlung";
+            Text [ de ] = "RÃ¼ckzahlung";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Redemption";
         };
 
         String 15 // description of parameter 7 Oddfprice
         {
-            Text [ de ] = "Rückzahlung";
+            Text [ de ] = "RÃ¼ckzahlung";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The redemption value";
         };
 
         String 16 // name of parameter 8        Oddfprice
         {
-            Text [ de ] = "Häufigkeit";
+            Text [ de ] = "HÃ¤ufigkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Frequency";
         };
 
         String 17 // description of parameter 8 Oddfprice
         {
-            Text [ de ] = "Häufigkeit";
+            Text [ de ] = "HÃ¤ufigkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The frequency";
         };
@@ -3817,7 +3817,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Oddfyield
         {
-            Text [ de ] = "Liefert die Rendite eines Wertpapiers mit einem unregelmäßigen ersten Zinstermin.";
+            Text [ de ] = "Liefert die Rendite eines Wertpapiers mit einem unregelmÃ¤ÃŸigen ersten Zinstermin.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the yield of a security with an odd first period";
         };
@@ -3838,14 +3838,14 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 4 // name of parameter 2         Oddfyield
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Maturity";
         };
 
         String 5 // description of parameter 2  Oddfyield
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The maturity";
         };
@@ -3908,28 +3908,28 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 14 // name of parameter 7        Oddfyield
         {
-            Text [ de ] = "Rückzahlung";
+            Text [ de ] = "RÃ¼ckzahlung";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Redemption";
         };
 
         String 15 // description of parameter 7 Oddfyield
         {
-            Text [ de ] = "Rückzahlung";
+            Text [ de ] = "RÃ¼ckzahlung";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The redemption value";
         };
 
         String 16 // name of parameter 8        Oddfyield
         {
-            Text [ de ] = "Häufigkeit";
+            Text [ de ] = "HÃ¤ufigkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Frequency";
         };
 
         String 17 // description of parameter 8 Oddfyield
         {
-            Text [ de ] = "Häufigkeit";
+            Text [ de ] = "HÃ¤ufigkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The frequency";
         };
@@ -3953,7 +3953,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Oddlprice
         {
-            Text [ de ] = "Liefert den Kurs pro 100 Währungseinheiten Nennwert eines Wertpapiers mit einem unregelmäßigen letzten Zinstermin.";
+            Text [ de ] = "Liefert den Kurs pro 100 WÃ¤hrungseinheiten Nennwert eines Wertpapiers mit einem unregelmÃ¤ÃŸigen letzten Zinstermin.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the price per $100 face value of a security with an odd last period";
         };
@@ -3974,14 +3974,14 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 4 // name of parameter 2         Oddlprice
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Maturity";
         };
 
         String 5 // description of parameter 2  Oddlprice
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The maturity";
         };
@@ -4030,28 +4030,28 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 12 // name of parameter 6        Oddlprice
         {
-            Text [ de ] = "Rückzahlung";
+            Text [ de ] = "RÃ¼ckzahlung";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Redemption";
         };
 
         String 13 // description of parameter 6 Oddlprice
         {
-            Text [ de ] = "Rückzahlung";
+            Text [ de ] = "RÃ¼ckzahlung";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The redemption value";
         };
 
         String 14 // name of parameter 7        Oddlprice
         {
-            Text [ de ] = "Häufigkeit";
+            Text [ de ] = "HÃ¤ufigkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Frequency";
         };
 
         String 15 // description of parameter 7 Oddlprice
         {
-            Text [ de ] = "Häufigkeit";
+            Text [ de ] = "HÃ¤ufigkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The frequency";
         };
@@ -4075,7 +4075,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Oddlyield
         {
-            Text [ de ] = "Liefert die Rendite eines Wertpapiers mit einem unregelmäßigen letzten Zinstermin.";
+            Text [ de ] = "Liefert die Rendite eines Wertpapiers mit einem unregelmÃ¤ÃŸigen letzten Zinstermin.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the yield of a security with an odd last period";
         };
@@ -4096,14 +4096,14 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 4 // name of parameter 2         Oddlyield
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Maturity";
         };
 
         String 5 // description of parameter 2  Oddlyield
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The maturity";
         };
@@ -4152,28 +4152,28 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 12 // name of parameter 6        Oddlyield
         {
-            Text [ de ] = "Rückzahlung";
+            Text [ de ] = "RÃ¼ckzahlung";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Redemption";
         };
 
         String 13 // description of parameter 6 Oddlyield
         {
-            Text [ de ] = "Rückzahlung";
+            Text [ de ] = "RÃ¼ckzahlung";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The redemption value";
         };
 
         String 14 // name of parameter 7        Oddlyield
         {
-            Text [ de ] = "Häufigkeit";
+            Text [ de ] = "HÃ¤ufigkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Frequency";
         };
 
         String 15 // description of parameter 7 Oddlyield
         {
-            Text [ de ] = "Häufigkeit";
+            Text [ de ] = "HÃ¤ufigkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The frequency";
         };
@@ -4197,7 +4197,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Xirr
         {
-            Text [ de ] = "Liefert den internen Zinsfuß einer Reihe nicht periodisch anfallender Zahlungen.";
+            Text [ de ] = "Liefert den internen ZinsfuÃŸ einer Reihe nicht periodisch anfallender Zahlungen.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the internal rate of return for a non-periodic schedule of payments";
         };
@@ -4232,14 +4232,14 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 6 // name of parameter 3         Xirr
         {
-            Text [ de ] = "Schätzwert";
+            Text [ de ] = "SchÃ¤tzwert";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Guess";
         };
 
         String 7 // description of parameter 3  Xirr
         {
-            Text [ de ] = "Schätzwert";
+            Text [ de ] = "SchÃ¤tzwert";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The guess";
         };
@@ -4322,14 +4322,14 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 4 // name of parameter 2         Intrate
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Maturity";
         };
 
         String 5 // description of parameter 2  Intrate
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The maturity";
         };
@@ -4350,14 +4350,14 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 8 // name of parameter 4         Intrate
         {
-            Text [ de ] = "Rückzahlung";
+            Text [ de ] = "RÃ¼ckzahlung";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Redemption";
         };
 
         String 9 // description of parameter 4  Intrate
         {
-            Text [ de ] = "Rückzahlung";
+            Text [ de ] = "RÃ¼ckzahlung";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The redemption value";
         };
@@ -4402,28 +4402,28 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 4 // name of parameter 2         Coupncd
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Maturity";
         };
 
         String 5 // description of parameter 2  Coupncd
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The maturity";
         };
 
         String 6 // name of parameter 3         Coupncd
         {
-            Text [ de ] = "Häufigkeit";
+            Text [ de ] = "HÃ¤ufigkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Frequency";
         };
 
         String 7 // description of parameter 3  Coupncd
         {
-            Text [ de ] = "Häufigkeit";
+            Text [ de ] = "HÃ¤ufigkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The frequency";
         };
@@ -4447,7 +4447,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Coupdays
         {
-            Text [ de ] = "Liefert die Anzahl Tage der Zinsperiode, die den Abrechnungstermin einschließt.";
+            Text [ de ] = "Liefert die Anzahl Tage der Zinsperiode, die den Abrechnungstermin einschlieÃŸt.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the number of days in the coupon period containing the settlement date";
         };
@@ -4468,28 +4468,28 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 4 // name of parameter 2         Coupdays
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Maturity";
         };
 
         String 5 // description of parameter 2  Coupdays
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The maturity";
         };
 
         String 6 // name of parameter 3         Coupdays
         {
-            Text [ de ] = "Häufigkeit";
+            Text [ de ] = "HÃ¤ufigkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Frequency";
         };
 
         String 7 // description of parameter 3  Coupdays
         {
-            Text [ de ] = "Häufigkeit";
+            Text [ de ] = "HÃ¤ufigkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The frequency";
         };
@@ -4513,7 +4513,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Coupdaysnc
         {
-            Text [ de ] = "Liefert die Anzahl der Tage vom Abrechnungstermin bis zum nächsten Zinstermin.";
+            Text [ de ] = "Liefert die Anzahl der Tage vom Abrechnungstermin bis zum nÃ¤chsten Zinstermin.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the number of days from the settlement date to the next coupon date";
         };
@@ -4534,28 +4534,28 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 4 // name of parameter 2         Coupdaysnc
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Maturity";
         };
 
         String 5 // description of parameter 2  Coupdaysnc
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The maturity";
         };
 
         String 6 // name of parameter 3         Coupdaysnc
         {
-            Text [ de ] = "Häufigkeit";
+            Text [ de ] = "HÃ¤ufigkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Frequency";
         };
 
         String 7 // description of parameter 3  Coupdaysnc
         {
-            Text [ de ] = "Häufigkeit";
+            Text [ de ] = "HÃ¤ufigkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The frequency";
         };
@@ -4600,28 +4600,28 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 4 // name of parameter 2         Coupdaybs
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Maturity";
         };
 
         String 5 // description of parameter 2  Coupdaybs
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The maturity";
         };
 
         String 6 // name of parameter 3         Coupdaybs
         {
-            Text [ de ] = "Häufigkeit";
+            Text [ de ] = "HÃ¤ufigkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Frequency";
         };
 
         String 7 // description of parameter 3  Coupdaybs
         {
-            Text [ de ] = "Häufigkeit";
+            Text [ de ] = "HÃ¤ufigkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The frequency";
         };
@@ -4666,28 +4666,28 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 4 // name of parameter 2         Couppcd
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Maturity";
         };
 
         String 5 // description of parameter 2  Couppcd
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The maturity";
         };
 
         String 6 // name of parameter 3         Couppcd
         {
-            Text [ de ] = "Häufigkeit";
+            Text [ de ] = "HÃ¤ufigkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Frequency";
         };
 
         String 7 // description of parameter 3  Couppcd
         {
-            Text [ de ] = "Häufigkeit";
+            Text [ de ] = "HÃ¤ufigkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The frequency";
         };
@@ -4711,7 +4711,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Coupnum
         {
-            Text [ de ] = "Liefert die Anzahl der Zinstermine zwischen Abrechnungs- und Fälligkeitsdatum.";
+            Text [ de ] = "Liefert die Anzahl der Zinstermine zwischen Abrechnungs- und FÃ¤lligkeitsdatum.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the number of coupons payable between the settlement and maturity dates";
         };
@@ -4732,28 +4732,28 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
 
         String 4 // name of parameter 2         Coupnum
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Maturity";
         };
 
         String 5 // description of parameter 2  Coupnum
         {
-            Text [ de ] = "Fälligkeit";
+            Text [ de ] = "FÃ¤lligkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The maturity";
         };
 
         String 6 // name of parameter 3         Coupnum
         {
-            Text [ de ] = "Häufigkeit";
+            Text [ de ] = "HÃ¤ufigkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Frequency";
         };
 
         String 7 // description of parameter 3  Coupnum
         {
-            Text [ de ] = "Häufigkeit";
+            Text [ de ] = "HÃ¤ufigkeit";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "The frequency";
         };
@@ -4777,7 +4777,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Fvschedule
         {
-            Text [ de ] = "Liefert den aufgezinsten Wert des Anfangskapitals für eine Reihe periodisch unterschiedlicher Zinssätze.";
+            Text [ de ] = "Liefert den aufgezinsten Wert des Anfangskapitals fÃ¼r eine Reihe periodisch unterschiedlicher ZinssÃ¤tze.";
             Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the future value of the initial principal after a series of compound interest rates are applied";
         };
