@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:20:49 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:41:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ ModelessDialog RID_SVXDLG_IMAP
             {
                 Identifier = TBI_OPEN ;
                 HelpId = HID_IMAPDLG_OPEN ;
-                Text [ de ] = "Öffnen..." ;
+                Text [ de ] = "Ã–ffnen..." ;
                 Text [ en-US ] = "Open..." ;
                 Text [ x-comment ] = " ";
             };
@@ -165,7 +165,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 HelpId = HID_IMAPDLG_POLYINSERT ;
                 /* ### ACHTUNG: Neuer Text in Resource? Punkte einfügen : Punkte einf³gen */
                 /* ### ACHTUNG: Neuer Text in Resource? Punkte einfügen : Punkte einf³gen */
-                Text [ de ] = "Punkte einfügen" ;
+                Text [ de ] = "Punkte einfÃ¼gen" ;
                 Text [ en-US ] = "Insert Points" ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
@@ -177,7 +177,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 HelpId = HID_IMAPDLG_POLYDELETE ;
                 /* ### ACHTUNG: Neuer Text in Resource? Punkte löschen : Punkte l÷schen */
                 /* ### ACHTUNG: Neuer Text in Resource? Punkte löschen : Punkte l÷schen */
-                Text [ de ] = "Punkte löschen" ;
+                Text [ de ] = "Punkte lÃ¶schen" ;
                 Text [ en-US ] = "Delete Points" ;
                 Text [ x-comment ] = " ";
             };
@@ -189,7 +189,7 @@ ModelessDialog RID_SVXDLG_IMAP
             {
                 Identifier = TBI_UNDO ;
                 HelpId = HID_IMAPDLG_UNDO ;
-                Text [ de ] = "Rückgängig " ;
+                Text [ de ] = "RÃ¼ckgÃ¤ngig " ;
                 Text [ en-US ] = "Undo " ;
                 Text [ x-comment ] = " ";
             };
@@ -413,7 +413,7 @@ Menu RID_SVXMN_IMAP
             Identifier = MN_MARK_ALL ;
             /* ### ACHTUNG: Neuer Text in Resource? Alles ausw~ählen : Alles ausw~õhlen */
             /* ### ACHTUNG: Neuer Text in Resource? Alles ausw~ählen : Alles ausw~õhlen */
-            Text [ de ] = "Alles ausw~ählen" ;
+            Text [ de ] = "Alles ausw~Ã¤hlen" ;
             Text [ en-US ] = "Select ~All" ;
             Text [ x-comment ] = " ";
         };
@@ -422,7 +422,7 @@ Menu RID_SVXMN_IMAP
             Identifier = MN_DELETE ;
             /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
             /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
-            Text [ de ] = "~Löschen" ;
+            Text [ de ] = "~LÃ¶schen" ;
             Text [ en-US ] = "~Delete" ;
             /* ### ACHTUNG: Neuer Text in Resource? Die Selektion löschen : Die Selektion l÷schen */
             Text [ x-comment ] = " ";
@@ -531,7 +531,7 @@ ModalDialog RID_SVXDLG_IMAPURL
 /******************************************************************************/
 String STR_IMAPDLG_SAVE
 {
-    Text [ de ] = "Die ImageMap wurde geändert.\nSollen die Änderungen gespeichert werden?";
+    Text [ de ] = "Die ImageMap wurde geÃ¤ndert.\nSollen die Ã„nderungen gespeichert werden?";
     Text [ en-US ] = "The ImageMap has been modified.\nDo you want to save the changes?";
     /* ### ACHTUNG: Neuer Text in Resource? Die ImageMap wurde geändert.\nSollen die Änderungen gespeichert werden? : Die ImageMap wurde geõndert.\nSollen die Žnderungen gespeichert werden? */
     /* ### ACHTUNG: Neuer Text in Resource? Die ImageMap wurde geändert.\nSollen die Änderungen gespeichert werden? : Die ImageMap wurde geõndert.\nSollen die Žnderungen gespeichert werden? */
@@ -541,7 +541,7 @@ String STR_IMAPDLG_MODIFY
 {
     /* ### ACHTUNG: Neuer Text in Resource? Die ImageMap wurde geändert.\nSollen die Änderungen übernommen werden? : Die ImageMap wurde geõndert.\nSollen die Žnderungen ³bernommen werden? */
     /* ### ACHTUNG: Neuer Text in Resource? Die ImageMap wurde geändert.\nSollen die Änderungen übernommen werden? : Die ImageMap wurde geõndert.\nSollen die Žnderungen ³bernommen werden? */
-    Text [ de ] = "Die ImageMap wurde geändert.\nSollen die Änderungen übernommen werden?" ;
+    Text [ de ] = "Die ImageMap wurde geÃ¤ndert.\nSollen die Ã„nderungen Ã¼bernommen werden?" ;
     Text [ en-US ] = "The ImageMap has been modified.\nDo you want to save the changes?" ;
     Text [ x-comment ] = " ";
 };
