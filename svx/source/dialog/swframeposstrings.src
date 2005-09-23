@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swframeposstrings.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:09:40 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:49:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ Resource RID_SVXSW_FRAMEPOSITIONS
     };
     String STR_MIR_RIGHT
     {
-        Text [ de ] = "Auﬂen" ;
+        Text [ de ] = "Au√üen" ;
         Text [ en-US ] = "Outside" ;
     };
     String STR_CENTER_VERT
@@ -142,7 +142,7 @@ Resource RID_SVXSW_FRAMEPOSITIONS
     };
     String STR_MIR_REL_PG_RIGHT
     {
-        Text [ de ] = "Seitenrand auﬂen" ;
+        Text [ de ] = "Seitenrand au√üen" ;
         Text [ en-US ] = "Outer page border" ;
     };
     String STR_REL_FRM_LEFT
@@ -162,7 +162,7 @@ Resource RID_SVXSW_FRAMEPOSITIONS
     };
     String STR_MIR_REL_FRM_RIGHT
     {
-        Text [ de ] = "Absatzrand auﬂen" ;
+        Text [ de ] = "Absatzrand au√üen" ;
         Text [ en-US ] = "Outer paragraph border" ;
     };
     String STR_REL_PG_FRAME
@@ -257,7 +257,7 @@ Resource RID_SVXSW_FRAMEPOSITIONS
     };
     String STR_FLY_MIR_REL_PG_RIGHT
     {
-        Text [ de ] = "Rahmenrand auﬂen" ;
+        Text [ de ] = "Rahmenrand au√üen" ;
         Text [ en-US ] = "Outer frame border" ;
     };
     String STR_FLY_REL_PG_FRAME
