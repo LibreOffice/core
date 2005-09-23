@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AutoControls.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:42:29 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:11:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,7 @@ String STR_MSACCESS_MDB_FILE
 
 String STR_NO_ADDITIONAL_SETTINGS
 {
-    Text [ de ] ="Es werden keine weiteren Einstellungen benötigt. Um die Verbindung zu prüfen, klicken Sie auf die Schaltfläche '%test'." ;
+    Text [ de ] ="Es werden keine weiteren Einstellungen benÃ¶tigt. Um die Verbindung zu prÃ¼fen, klicken Sie auf die SchaltflÃ¤che '%test'." ;
     Text[ en-US ] = "No more settings are necessary. To verify that the connection is working, click the '%test' button.";
 };
 
