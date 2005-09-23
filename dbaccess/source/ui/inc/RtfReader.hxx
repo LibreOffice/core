@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RtfReader.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:33:45 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:33:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ namespace dbaui
         ~ORTFReader();
     public:
         ORTFReader( SvStream& rIn,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+                    const SharedConnection& _rxConnection,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                     const TColumnVector* rList = 0,
