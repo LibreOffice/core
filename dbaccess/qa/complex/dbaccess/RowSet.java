@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:48:35 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:01:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,14 +115,15 @@ public class RowSet extends ComplexTestCase {
 
         }
         try{
-            /*
+
                 XOfficeDatabaseDocument xDoc = (XOfficeDatabaseDocument)UnoRuntime.queryInterface(XOfficeDatabaseDocument.class,
                                                 ((XMultiServiceFactory)param.getMSF()).createInstance("com.sun.star.sdb.OfficeDatabaseDocument"));
-              */
-                xDoc = (XDataSource)UnoRuntime.queryInterface(XDataSource.class,
+
+            /*    xDoc = (XDataSource)UnoRuntime.queryInterface(XDataSource.class,
                                                 ((XMultiServiceFactory)param.getMSF()).createInstance("com.sun.star.sdb.OfficeDatabaseDocument"));
-                // XDataSource xDs = xDoc.getDataSource();
-                XDataSource xDs = xDoc;
+            */
+                XDataSource xDs = xDoc.getDataSource();
+                //XDataSource xDs = xDoc;
                 XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class,xDs);
                 xProp.setPropertyValue("URL", "sdbc:embedded:hsqldb");
                 XStorable xStore = (XStorable)UnoRuntime.queryInterface(XStorable.class,xDoc);
