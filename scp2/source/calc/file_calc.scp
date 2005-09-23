@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_calc.scp,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:20:22 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:50:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,11 +41,11 @@ STD_UNO_LIB_FILE( gid_File_Lib_Calc, calc)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Date, date)
 
-STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sc , sc)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sc, sc)
 
 STD_LIB_FILE( gid_File_Lib_Scui, scui)
 
-STD_UNO_LIB_FILE( gid_File_Lib_Scd , scd)
+STD_UNO_LIB_FILE( gid_File_Lib_Scd, scd)
 
 STD_LIB_FILE( gid_File_Lib_Tfu, tfu)
 
