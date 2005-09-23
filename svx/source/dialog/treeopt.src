@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:21:07 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:52:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ ModalDialog RID_OFADLG_OPTIONS_TREE
         Pos = MAP_APPFONT ( COL_10, ROW_3 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Zurück" ;
+        Text [ de ] = "~ZurÃ¼ck" ;
         Text [ en-US ] = "~Back" ;
         Text [ x-comment ] = " ";
     };
@@ -120,7 +120,7 @@ ModalDialog RID_OFADLG_OPTIONS_TREE
     };
     String ST_LOAD_ERROR
     {
-        Text [ de ] = "Das ausgewählte Modul konnte nicht geladen werden.";
+        Text [ de ] = "Das ausgewÃ¤hlte Modul konnte nicht geladen werden.";
         Text [ en-US ] = "The selected module could not be loaded.";
         Text [ x-comment ] = " ";
     };
@@ -128,18 +128,18 @@ ModalDialog RID_OFADLG_OPTIONS_TREE
     {
         ItemList [ de ] =
         {
-            < "Hier nehmen Sie allgemeine Einstellungen für Ihre Arbeit mit %PRODUCTNAME vor. Sie können Ihre Benutzerdaten hinterlegen, allgemeine Speichervorgaben festlegen und Pfade zu wichtigen Verzeichnissen einstellen. Diese Einstellungen werden automatisch gespeichert, so dass sie bei der nächsten Sitzung wieder gelten."; SID_GENERAL_OPTIONS; > ;
-            < "Hier nehmen Sie Sprach- und Linguistikeinstellungen für Ihre Arbeit mit %PRODUCTNAME vor."; SID_LANGUAGE_OPTIONS; > ;
-            < "Hier konfigurieren Sie %PRODUCTNAME für das Internet. Sie können Suchmaschinen festlegen oder Ihre Proxy-Einstellungen speichern." ; SID_INET_DLG; > ;
-            < "Hier können Sie verschiedene Einstellungen für Textdokumente vornehmen, die global in Ihrem %PRODUCTNAME festlegen, wie Textdokumente behandelt werden. Die Einstellungen gelten für alle %PRODUCTNAME Writer-Dokumente, die Sie neu erstellen. Einige Einstellungen können Sie auch für das aktuelle Textdokument festlegen, wenn Sie es anschließend speichern." ; SID_SW_EDITOPTIONS; > ;
-            < "Hier treffen Sie grundlegende Einstellungen für %PRODUCTNAME-Dokumente im Format HTML. Sie wählen unter anderem, welche Inhalte am Bildschirm oder auf dem Drucker zu sehen sein sollen, ob die Seiten am Bildschirm weich scrollen, in welchen Farben Sie die Schlüsselwörter in den Quelltexten sehen wollen und mehr." ; SID_SW_ONLINEOPTIONS; > ;
-            < "Hier können Sie verschiedene globale Einstellungen für Tabellendokumente vornehmen. Sie legen unter anderem fest, welche Inhalte zu sehen sein sollen und in welche Richtung der Cursor nach einer Zell-Eingabe weitergeht. Sie definieren Sortierlisten, bestimmen die generelle Anzahl der Nachkommastellen für die Ansicht und mehr." ; SID_SC_EDITOPTIONS; > ;
-            < "Legen Sie hier die Einstellungen fest, die für alle neu gespeicherten Präsentationsdokumente gelten sollen. Unter anderem bestimmen Sie, welche Inhalte Sie auf den Seiten sehen wollen, welche Maßeinheit allgemein gilt, ob und wie am Raster ausgerichtet wird und ob Sie z. B. immer auch Notizen und Handzettel drucken wollen." ; SID_SD_EDITOPTIONS; > ;
-            < "Hier können Sie verschiedene globale Einstellungen für Zeichnungsdokumente vornehmen. Unter anderem legen Sie fest, welche Inhalte Sie auf den Seiten sehen wollen, welcher Maßstab allgemein gilt, ob und wie am Raster ausgerichtet wird und welche Inhalte standardmäßig gedruckt werden." ; SID_SD_GRAPHIC_OPTIONS; > ;
-            < "Hier wählen Sie Druckformat und Druckoptionen für alle neu gespeicherten Formeldokumente. Diese Optionen gelten für den Fall, dass Sie eine Formel direkt aus %PRODUCTNAME Math drucken möchten." ; SID_SM_EDITOPTIONS; > ;
-            < "Hier legen Sie allgemeine Voreinstellungen für Ihre %PRODUCTNAME Chart-Diagramme fest. Bestimmen Sie hier die Grundfarben für alle neu angelegten Diagramme." ; SID_SCH_EDITOPTIONS; > ;
-            < "Treffen Sie hier allgemeine Festlegungen für den Zugriff auf externen Datenquellen."; SID_SB_STARBASEOPTIONS; >;
-            < "Hier bestimmen Sie allgemeine Einstellungen für das Öffnen und Speichern von Dokumenten in Fremdformaten. Sie können das Verhalten von Makros oder OLE-Objekten in Microsoft Office-Dokumenten steuern oder Einstellungen für HTML-Dokumente festlegen." ; SID_FILTER_DLG; > ;
+            < "Hier nehmen Sie allgemeine Einstellungen fÃ¼r Ihre Arbeit mit %PRODUCTNAME vor. Sie kÃ¶nnen Ihre Benutzerdaten hinterlegen, allgemeine Speichervorgaben festlegen und Pfade zu wichtigen Verzeichnissen einstellen. Diese Einstellungen werden automatisch gespeichert, so dass sie bei der nÃ¤chsten Sitzung wieder gelten."; SID_GENERAL_OPTIONS; > ;
+            < "Hier nehmen Sie Sprach- und Linguistikeinstellungen fÃ¼r Ihre Arbeit mit %PRODUCTNAME vor."; SID_LANGUAGE_OPTIONS; > ;
+            < "Hier konfigurieren Sie %PRODUCTNAME fÃ¼r das Internet. Sie kÃ¶nnen Suchmaschinen festlegen oder Ihre Proxy-Einstellungen speichern." ; SID_INET_DLG; > ;
+            < "Hier kÃ¶nnen Sie verschiedene Einstellungen fÃ¼r Textdokumente vornehmen, die global in Ihrem %PRODUCTNAME festlegen, wie Textdokumente behandelt werden. Die Einstellungen gelten fÃ¼r alle %PRODUCTNAME Writer-Dokumente, die Sie neu erstellen. Einige Einstellungen kÃ¶nnen Sie auch fÃ¼r das aktuelle Textdokument festlegen, wenn Sie es anschlieÃŸend speichern." ; SID_SW_EDITOPTIONS; > ;
+            < "Hier treffen Sie grundlegende Einstellungen fÃ¼r %PRODUCTNAME-Dokumente im Format HTML. Sie wÃ¤hlen unter anderem, welche Inhalte am Bildschirm oder auf dem Drucker zu sehen sein sollen, ob die Seiten am Bildschirm weich scrollen, in welchen Farben Sie die SchlÃ¼sselwÃ¶rter in den Quelltexten sehen wollen und mehr." ; SID_SW_ONLINEOPTIONS; > ;
+            < "Hier kÃ¶nnen Sie verschiedene globale Einstellungen fÃ¼r Tabellendokumente vornehmen. Sie legen unter anderem fest, welche Inhalte zu sehen sein sollen und in welche Richtung der Cursor nach einer Zell-Eingabe weitergeht. Sie definieren Sortierlisten, bestimmen die generelle Anzahl der Nachkommastellen fÃ¼r die Ansicht und mehr." ; SID_SC_EDITOPTIONS; > ;
+            < "Legen Sie hier die Einstellungen fest, die fÃ¼r alle neu gespeicherten PrÃ¤sentationsdokumente gelten sollen. Unter anderem bestimmen Sie, welche Inhalte Sie auf den Seiten sehen wollen, welche MaÃŸeinheit allgemein gilt, ob und wie am Raster ausgerichtet wird und ob Sie z. B. immer auch Notizen und Handzettel drucken wollen." ; SID_SD_EDITOPTIONS; > ;
+            < "Hier kÃ¶nnen Sie verschiedene globale Einstellungen fÃ¼r Zeichnungsdokumente vornehmen. Unter anderem legen Sie fest, welche Inhalte Sie auf den Seiten sehen wollen, welcher MaÃŸstab allgemein gilt, ob und wie am Raster ausgerichtet wird und welche Inhalte standardmÃ¤ÃŸig gedruckt werden." ; SID_SD_GRAPHIC_OPTIONS; > ;
+            < "Hier wÃ¤hlen Sie Druckformat und Druckoptionen fÃ¼r alle neu gespeicherten Formeldokumente. Diese Optionen gelten fÃ¼r den Fall, dass Sie eine Formel direkt aus %PRODUCTNAME Math drucken mÃ¶chten." ; SID_SM_EDITOPTIONS; > ;
+            < "Hier legen Sie allgemeine Voreinstellungen fÃ¼r Ihre %PRODUCTNAME Chart-Diagramme fest. Bestimmen Sie hier die Grundfarben fÃ¼r alle neu angelegten Diagramme." ; SID_SCH_EDITOPTIONS; > ;
+            < "Treffen Sie hier allgemeine Festlegungen fÃ¼r den Zugriff auf externen Datenquellen."; SID_SB_STARBASEOPTIONS; >;
+            < "Hier bestimmen Sie allgemeine Einstellungen fÃ¼r das Ã–ffnen und Speichern von Dokumenten in Fremdformaten. Sie kÃ¶nnen das Verhalten von Makros oder OLE-Objekten in Microsoft Office-Dokumenten steuern oder Einstellungen fÃ¼r HTML-Dokumente festlegen." ; SID_FILTER_DLG; > ;
         };
         ItemList [ x-comment ] =
         {
@@ -199,9 +199,9 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Schriftarten" ; RID_SVX_FONT_SUBSTITUTION ; > ;
             < "Sicherheit" ; RID_SVXPAGE_INET_SECURITY ; > ;
             < "Darstellung" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
-            < "Zugänglichkeit" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
+            < "ZugÃ¤nglichkeit" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
             < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
-            < "Netzwerkidentität" ; RID_SVXPAGE_SSO ; > ;
+            < "NetzwerkidentitÃ¤t" ; RID_SVXPAGE_SSO ; > ;
         };
         ItemList [ x-comment ] =
         {
@@ -245,7 +245,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Spracheinstellungen" ; 0; > ;
             < "Sprachen"; OFA_TP_LANGUAGES; >;
             < "Linguistik" ; RID_SFXPAGE_LINGU; > ;
-            < "Suchoptionen für Japanisch" ;  RID_SVXPAGE_JSEARCH_OPTIONS; >;
+            < "Suchoptionen fÃ¼r Japanisch" ;  RID_SVXPAGE_JSEARCH_OPTIONS; >;
             < "Asiatisches Layout" ;  RID_SVXPAGE_ASIAN_LAYOUT; >;
             < "Complex Text Layout" ;  RID_SVXPAGE_OPTIONS_CTL; >;
         };
@@ -311,8 +311,8 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Grundschriften (CTL)" ;      RID_SW_TP_STD_FONT_CTL       ; > ;
             < "Drucken" ;       RID_SW_TP_OPTPRINT_PAGE  ; > ;
             < "Tabelle" ;       RID_SW_TP_OPTTABLE_PAGE  ; > ;
-            < "Änderungen" ;    RID_SW_TP_REDLINE_OPT    ; > ;
-            < "Kompatibilität" ; RID_SW_TP_OPTCOMPATIBILITY_PAGE    ; > ;
+            < "Ã„nderungen" ;    RID_SW_TP_REDLINE_OPT    ; > ;
+            < "KompatibilitÃ¤t" ; RID_SW_TP_OPTCOMPATIBILITY_PAGE    ; > ;
             < "AutoBeschriftung" ; RID_SW_TP_OPTCAPTION_PAGE ; > ;
             < "Serienbrief-E-Mail" ; RID_SW_TP_MAILCONFIG ; >;
         };
@@ -385,7 +385,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "International" ;     RID_OFA_TP_INTERNATIONAL    ;> ;
             < "Berechnen" ;         SID_SC_TP_CALC              ;> ;
             < "Sortierlisten" ;     SID_SC_TP_USERLISTS         ;> ;
-            < "Änderungen" ;        SID_SC_TP_CHANGES           ;> ;
+            < "Ã„nderungen" ;       SID_SC_TP_CHANGES           ;> ;
             < "Raster" ;            SID_SC_TP_GRID              ;> ;
             < "Drucken" ;           RID_SC_TP_PRINT             ;> ;
         };
@@ -466,7 +466,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Allgemein" ;  RID_SFXPAGE_SAVE; > ;
             < "VBA-Eigenschaften" ;  SID_OPTFILTER_MSOFFICE; > ;
             < "Microsoft Office" ;  RID_OFAPAGE_MSFILTEROPT2; > ;
-            < "HTML-Kompatibilität" ; RID_OFAPAGE_HTMLOPT ; > ;
+            < "HTML-KompatibilitÃ¤t" ; RID_OFAPAGE_HTMLOPT ; > ;
         };
         ItemList [ x-comment ] =
         {
@@ -509,7 +509,7 @@ String RID_RIDER_SLL_SITE
 };
 String RID_RIDER_SLL_PERSONAL
 {
-    Text [ de ] = "Persönliche Zertifikate" ;
+    Text [ de ] = "PersÃ¶nliche Zertifikate" ;
     Text [ en-US ] = "Personal certificates" ;
     Text [ x-comment ] = " ";
 };
@@ -532,7 +532,7 @@ ModalDialog RID_OFADLG_OPTIONS_TREE_HINT
         Pos = MAP_APPFONT( 39, 6 );
         Size = MAP_APPFONT( 195, 60 );
         WordBreak = TRUE;
-        Text [ de ] = "Bitte beachten Sie, dass eine oder alle der angezeigten Einstellungen sich auf den internen Browser von %PRODUCTNAME (den %PRODUCTNAME Writer/Web) beziehen. Sie haben unter \"Extras - Optionen - Browser - Externer Browser\" die Verwendung eines anderen Browsers aktiviert. Damit die angezeigten Einstellungen auch für den anderen Browser benutzt werden, müssen Sie diese in den Einstellungen des externen Browsers vornehmen.";
+        Text [ de ] = "Bitte beachten Sie, dass eine oder alle der angezeigten Einstellungen sich auf den internen Browser von %PRODUCTNAME (den %PRODUCTNAME Writer/Web) beziehen. Sie haben unter \"Extras - Optionen - Browser - Externer Browser\" die Verwendung eines anderen Browsers aktiviert. Damit die angezeigten Einstellungen auch fÃ¼r den anderen Browser benutzt werden, mÃ¼ssen Sie diese in den Einstellungen des externen Browsers vornehmen.";
         Text [ en-US ] = "Please note: the settings displayed refer to the internal browser of %PRODUCTNAME (%PRODUCTNAME Writer/Web). In \"Tools - Options - Browser - External Browser\" the use of a different browser has been activated. In order to be able to use the same settings in other browsers you need to define these in the external browser settings.";
         Text [ x-comment ] = "; ÄÄ: ÌÞêï?";
     };
