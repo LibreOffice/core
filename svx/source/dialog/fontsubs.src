@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontsubs.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:06:30 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:37:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,7 @@ TabPage RID_SVX_FONT_SUBSTITUTION
             {
                 Identifier = BT_SUBSTAPPLY ;
                 HelpID = HID_OFA_SUBST_APPLY ;
-                Text [ de ] = "Übernehmen" ;
+                Text [ de ] = "Ãœbernehmen" ;
                 Text [ en-US ] = "Apply" ;
                 Text [ x-comment ] = " ";
             };
@@ -137,7 +137,7 @@ TabPage RID_SVX_FONT_SUBSTITUTION
             {
                 Identifier = BT_SUBSTDELETE ;
                 HelpID = HID_OFA_SUBST_DELETE ;
-                Text [ de ] = "Löschen" ;
+                Text [ de ] = "LÃ¶schen" ;
                 Text [ en-US ] = "Delete" ;
                 Text [ x-comment ] = " ";
             };
@@ -154,7 +154,7 @@ TabPage RID_SVX_FONT_SUBSTITUTION
     {
         Pos = MAP_APPFONT ( 6 , 129 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Schrifteinstellungen für HTML- und Basic-Quelltexte" ;
+        Text [ de ] = "Schrifteinstellungen fÃ¼r HTML- und Basic-Quelltexte" ;
         Text [ en-US ] = "Font settings for HTML and Basic sources" ;
     };
     FixedText FT_FONTNAME
@@ -184,7 +184,7 @@ TabPage RID_SVX_FONT_SUBSTITUTION
     {
         Pos = MAP_APPFONT ( 6 , 171 ) ;
         Size = MAP_APPFONT ( 57 , 8 ) ;
-        Text [ de ] = "~Größe";
+        Text [ de ] = "~GrÃ¶ÃŸe";
         Text [ en-US ] ="~Size";
     };
     ListBox LB_FONTHEIGHT
