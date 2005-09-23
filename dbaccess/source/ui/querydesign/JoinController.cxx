@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:19:20 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:41:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -282,7 +282,7 @@ void OJoinController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& 
                 m_pAddTabDlg = getJoinView()->getAddTableDialog();
             if(m_pAddTabDlg->IsVisible())
             {
-                ::dbaui::notifySystemWindow(getView(),m_pAddTabDlg,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
+                // ::dbaui::notifySystemWindow(getView(),m_pAddTabDlg,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
                 m_pAddTabDlg->Show(!m_pAddTabDlg->IsVisible());
                 m_pView->GrabFocus();
             }
@@ -320,7 +320,7 @@ void OJoinController::SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabW
 // -----------------------------------------------------------------------------
 void OJoinController::removeConnectionData(OTableConnectionData* _pData)
 {
-    m_vTableConnectionData.erase( ::std::find(m_vTableConnectionData.begin(),m_vTableConnectionData.end(),_pData));
+    m_vTableConnectionData.erase( ::std::remove(m_vTableConnectionData.begin(),m_vTableConnectionData.end(),_pData),m_vTableConnectionData.end());
 }
 // -----------------------------------------------------------------------------
 void OJoinController::describeSupportedFeatures()
