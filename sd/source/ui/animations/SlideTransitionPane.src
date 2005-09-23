@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideTransitionPane.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:38:06 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:27:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,13 +49,13 @@ Control DLG_SLIDE_TRANSITION_PANE
     DialogControl = TRUE;
     Size = MAP_APPFONT( 1, 1 );
 
-    Text [ de ] = "Folienübergang";
+    Text [ de ] = "FolienÃ¼bergang";
     Text [ en-US ] = "Slide Transition";
 
     FixedLine FL_APPLY_TRANSITION
     {
         Size = MAP_APPFONT( 1, RSC_CD_FIXEDLINE_HEIGHT );
-        Text [ de ] = "Für ausgewählte Folien übernehmen";
+        Text [ de ] = "FÃ¼r ausgewÃ¤hlte Folien Ã¼bernehmen";
         Text [ en-US ] = "Apply to selected slides";
     };
 
@@ -72,7 +72,7 @@ Control DLG_SLIDE_TRANSITION_PANE
     Fixedline FL_MODIFY_TRANSITION
     {
         Size = MAP_APPFONT( 1, RSC_CD_FIXEDLINE_HEIGHT );
-        Text [ de ] = "Übergang ändern";
+        Text [ de ] = "Ãœbergang Ã¤ndern";
         Text [ en-US ] = "Modify transition";
     };
 
@@ -141,14 +141,14 @@ Control DLG_SLIDE_TRANSITION_PANE
         Size = MAP_APPFONT( 1, RSC_CD_CHECKBOX_HEIGHT );
         TabStop = TRUE ;
 
-        Text [ de ] = "Wiederholen bis zum nächsten Klang";
+        Text [ de ] = "Wiederholen bis zum nÃ¤chsten Klang";
         Text [ en-US ] = "Loop until next sound";
     };
 
     Fixedline FL_ADVANCE_SLIDE
     {
         Size = MAP_APPFONT( 1, RSC_CD_FIXEDLINE_HEIGHT );
-        Text [ de ] = "Nächste Folie";
+        Text [ de ] = "NÃ¤chste Folie";
         Text [ en-US ] = "Advance slide";
     };
 
@@ -204,7 +204,7 @@ Control DLG_SLIDE_TRANSITION_PANE
         Size = MAP_APPFONT( 1, RSC_CD_PUSHBUTTON_HEIGHT );
         TabStop = TRUE ;
 
-        Text [ de ] = "Für alle Folien übernehmen";
+        Text [ de ] = "FÃ¼r alle Folien Ã¼bernehmen";
         Text [ en-US ] = "Apply to All Slides";
     };
 
@@ -225,7 +225,7 @@ Control DLG_SLIDE_TRANSITION_PANE
         Size = MAP_APPFONT( 1, RSC_CD_PUSHBUTTON_HEIGHT );
         TabStop = TRUE ;
 
-        Text [ de ] = "Bildschirmpräsentation";
+        Text [ de ] = "BildschirmprÃ¤sentation";
         Text [ en-US ] = "Slide Show";
     };
 
@@ -248,7 +248,7 @@ Control DLG_SLIDE_TRANSITION_PANE
 
     String STR_NO_TRANSITION
     {
-        Text [ de ] = "Ohne übergang";
+        Text [ de ] = "Ohne Ã¼bergang";
         Text [ en-US ] = "No Transition";
     };
 };
