@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:58:56 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:02:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,9 @@
 #ifndef DBACCESS_SOURCE_CORE_INC_COMPOSERTOOLS_HXX
 #include "composertools.hxx"
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 using namespace dbaccess;
 using namespace connectivity;
@@ -142,6 +145,7 @@ namespace
         }
     }
 }
+DBG_NAME(OKeySet)
 // -------------------------------------------------------------------------
 OKeySet::OKeySet(const connectivity::OSQLTable& _xTable,
                  const ::rtl::OUString& _rUpdateTableName,    // this can be the alias or the full qualified name
@@ -153,6 +157,8 @@ OKeySet::OKeySet(const connectivity::OSQLTable& _xTable,
             ,m_pKeyColumnNames(NULL)
             ,m_pColumnNames(NULL)
 {
+    DBG_CTOR(OKeySet,NULL);
+
 }
 // -----------------------------------------------------------------------------
 OKeySet::~OKeySet()
@@ -172,6 +178,8 @@ OKeySet::~OKeySet()
     m_xComposer = NULL;
     delete m_pKeyColumnNames;
     delete m_pColumnNames;
+
+    DBG_DTOR(OKeySet,NULL);
 }
 // -----------------------------------------------------------------------------
 void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
@@ -618,8 +626,8 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
                         ::rtl::OUString sColumnName( xMd->getColumnName(i) );
 #endif
                         OColumnNamePos::iterator aFind = m_pKeyColumnNames->find(*aAutoIter);
-                        if(aFind != m_pKeyColumnNames->end())
-                            fetchValue(i,aFind->second.second.first,xRow,(*_rInsertRow)[aFind->second.first]);
+                        if ( aFind != m_pKeyColumnNames->end() )
+                            (*_rInsertRow)[aFind->second.first].fill(i,aFind->second.second.first,xRow);
                     }
                     bAutoValuesFetched = sal_True;
                 }
@@ -672,7 +680,7 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
                         // we will only fetch values which are keycolumns
                         OColumnNamePos::iterator aFind = m_pKeyColumnNames->find(*aAutoIter);
                         if(aFind != m_pKeyColumnNames->end())
-                            fetchValue(i,aFind->second.second.first,xRow,(*_rInsertRow)[aFind->second.first]);
+                            (*_rInsertRow)[aFind->second.first].fill(i,aFind->second.second.first,xRow);
                     }
                 }
                 ::comphelper::disposeComponent(xStatement);
@@ -1037,7 +1045,7 @@ sal_Bool OKeySet::fetchRow()
         for(;aPosIter != (*m_pKeyColumnNames).end();++aPosIter,++aIter)
         {
             const TPositionTypePair& rPair = aPosIter->second;
-            fetchValue(rPair.first,rPair.second.first,m_xDriverRow,*aIter);
+            aIter->fill(rPair.first,rPair.second.first,m_xDriverRow);
         }
         m_aKeyIter = m_aKeyMap.insert(OKeySetMatrix::value_type(m_aKeyMap.rbegin()->first+1,OKeySetValue(aKeyRow,0))).first;
     }
@@ -1271,5 +1279,3 @@ namespace dbaccess
         }
     }
 }
-
-
