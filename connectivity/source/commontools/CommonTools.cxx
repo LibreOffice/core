@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CommonTools.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:08:16 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:35:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -305,15 +305,18 @@ namespace connectivity
     {
         sal_Bool bRet = sal_False;
 #ifdef SOLAR_JAVA
-        jvmaccess::VirtualMachine::AttachGuard aGuard(_pJVM);
-        JNIEnv* pEnv = aGuard.getEnvironment();
-        if( pEnv )
+        if ( _pJVM.is() )
         {
-            ::rtl::OString sClassName = ::rtl::OUStringToOString(_sClassName, RTL_TEXTENCODING_ASCII_US);
-            sClassName = sClassName.replace('.','/');
-            jobject out = pEnv->FindClass(sClassName);
-            bRet = out != NULL;
-            pEnv->DeleteLocalRef( out );
+            jvmaccess::VirtualMachine::AttachGuard aGuard(_pJVM);
+            JNIEnv* pEnv = aGuard.getEnvironment();
+            if( pEnv )
+            {
+                ::rtl::OString sClassName = ::rtl::OUStringToOString(_sClassName, RTL_TEXTENCODING_ASCII_US);
+                sClassName = sClassName.replace('.','/');
+                jobject out = pEnv->FindClass(sClassName);
+                bRet = out != NULL;
+                pEnv->DeleteLocalRef( out );
+            }
         }
 #endif
         return bRet;
