@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsClipboard.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:18:35 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:29:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,7 +180,37 @@ private:
         transferable is not accepted.  The reason is the missing
         implementation of proper handling master pages copy-and-paste.
     */
-    bool IsDropAccepted (void) const;
+    enum DropType { DT_PAGE, DT_SHAPE, DT_NONE };
+    DropType IsDropAccepted (void) const;
+
+    /** This method contains the code for AcceptDrop() and ExecuteDrop() shapes.
+        There are only minor differences for the two cases at this level.
+        @param eCommand
+            This parameter specifies whether to do a AcceptDrop() or
+            ExecuteDrop().
+        @param rPosition
+            Since the event is given as void pointer we can not take the
+            mouse position from it.  The caller has to supply it in this
+            parameter.
+        @param pDropEvent
+            Event though the AcceptDropEvent and ExecuteDropEvent are very
+            similar they do not have a common base class.  Because of that
+            we have to use a void* to pase these structs.
+        @param nPage
+            When the page number is given as 0xffff then it is replaced by
+            the number of the page at the mouse position.  If the mouse is
+            not over a page then neither AcceptDrop() nor ExecuteDrop() are
+            executed.
+    */
+    enum DropCommand { DC_ACCEPT, DC_EXECUTE };
+    sal_Int8 ExecuteOrAcceptShapeDrop (
+        DropCommand eCommand,
+        const Point& rPosition,
+        const void* pDropEvent ,
+        DropTargetHelper& rTargetHelper,
+        ::sd::Window* pTargetWindow,
+        USHORT nPage,
+        USHORT nLayer);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller
