@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbinsdlg.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:51:04 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:54:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     OUTPUTSIZE = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( 291 , 189 ) ;
-    Text [ de ] = "Datenbankspalten einfügen" ;
+    Text [ de ] = "Datenbankspalten einfÃ¼gen" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     SVLOOK = TRUE ;
@@ -51,7 +51,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 66 , 8 ) ;
-        Text [ de ] = "Daten einfügen als:" ;
+        Text [ de ] = "Daten einfÃ¼gen als:" ;
         Text [ en-US ] = "Insert data as:" ;
     };
     RadioButton RB_AS_TABLE
@@ -285,7 +285,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     {
         Pos = MAP_APPFONT ( 111 , 128 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text [ de ] = "Tabellenüberschrift einfügen" ;
+        Text [ de ] = "TabellenÃ¼berschrift einfÃ¼gen" ;
         TabStop = TRUE ;
         Check = TRUE ;
         Text [ en-US ] = "Insert table heading";
@@ -294,7 +294,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     {
         Pos = MAP_APPFONT ( 120 , 142 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
-        Text [ de ] = "S~paltenamen übernehmen" ;
+        Text [ de ] = "S~paltenamen Ã¼bernehmen" ;
         TabStop = TRUE ;
         Check = TRUE ;
         Text [ en-US ] = "Apply column ~name";
