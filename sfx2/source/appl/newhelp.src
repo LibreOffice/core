@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:45:41 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:21:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,7 +151,7 @@ TabPage TP_HELP_SEARCH
     {
         Pos = MAP_APPFONT ( 6, 34 ) ;
         Size = MAP_APPFONT ( 128 , 10 ) ;
-        Text [ de ] = "~Nur ganze Wörter" ;
+        Text [ de ] = "~Nur ganze WÃ¶rter" ;
         Text [ en-US ] = "~Complete words only";
     };
     CheckBox CB_SCOPE
@@ -322,7 +322,7 @@ String STR_HELP_BUTTON_PREV
 };
 String STR_HELP_BUTTON_NEXT
 {
-    Text [ de ] = "Nächste Seite";
+    Text [ de ] = "NÃ¤chste Seite";
     Text [ en-US ] = "Next Page";
 };
 String STR_HELP_BUTTON_PRINT
@@ -332,7 +332,7 @@ String STR_HELP_BUTTON_PRINT
 };
 String STR_HELP_BUTTON_ADDBOOKMARK
 {
-    Text [ de ] = "Lesezeichen hinzufügen...";
+    Text [ de ] = "Lesezeichen hinzufÃ¼gen...";
     Text [ en-US ] = "Add to Bookmarks...";
 };
 String STR_HELP_BUTTON_SEARCHDIALOG
@@ -357,7 +357,7 @@ String STR_HELP_FIRST_HTML
 };
 String STR_HELP_MENU_TEXT_SELECTION_MODE
 {
-    Text [ de ] = "Text auswählen";
+    Text [ de ] = "Text auswÃ¤hlen";
     Text [ en-US ] = "Select Text";
 };
 String STR_HELP_MENU_TEXT_COPY
@@ -368,7 +368,7 @@ String STR_HELP_MENU_TEXT_COPY
 ModalDialog DLG_HELP_ADDBOOKMARK
 {
     Size = MAP_APPFONT ( 208 , 43 ) ;
-    Text [ de ] = "Lesezeichen hinzufügen" ;
+    Text [ de ] = "Lesezeichen hinzufÃ¼gen" ;
     Text [ en-US ] = "Add to Bookmarks";
     MOVEABLE = TRUE ;
     CLOSEABLE = TRUE ;
@@ -445,7 +445,7 @@ Menu MENU_HELP_BOOKMARKS
         {
             Identifier = MID_DELETE ;
             HelpId = HID_HELP_BOOKMARKS_DELETE;
-            Text [ de ] = "Löschen" ;
+            Text [ de ] = "LÃ¶schen" ;
             Text [ en-US ] = "Delete";
         };
     };
