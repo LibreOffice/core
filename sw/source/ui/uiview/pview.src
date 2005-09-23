@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pview.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:09:37 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:14:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 32 ) ;
         Size = MAP_APPFONT ( 150 , 8 ) ;
-        Text [ de ] = "Ränder" ;
+        Text [ de ] = "RÃ¤nder" ;
 
         Text [ en-US ] = "Margins";
         Text [ x-comment ] = " ";
