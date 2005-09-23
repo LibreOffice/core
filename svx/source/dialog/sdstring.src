@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:00:56 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:47:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@ String RID_SVXSTR_SOLID
 {
     /* ### ACHTUNG: Neuer Text in Resource? Durchgängig : Durchgõngig */
     /* ### ACHTUNG: Neuer Text in Resource? Durchgängig : Durchgõngig */
-    Text [ de ] = "Durchgängig" ;
+    Text [ de ] = "DurchgÃ¤ngig" ;
     Text [ en-US ] = "Continuous" ;
     Text [ x-comment ] = " ";
 };
@@ -55,7 +55,7 @@ String RID_SVXSTR_DESC_GRADIENT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für den Farbverlauf ein: : Geben Sie hier bitte den Namen f³r den Farbverlauf ein: */
     /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für den Farbverlauf ein: : Geben Sie hier bitte den Namen f³r den Farbverlauf ein: */
-    Text [ de ] = "Geben Sie hier bitte den Namen für den Farbverlauf ein:" ;
+    Text [ de ] = "Geben Sie hier bitte den Namen fÃ¼r den Farbverlauf ein:" ;
     Text [ en-US ] = "Please enter a name for the gradient:" ;
     Text [ x-comment ] = " ";
 };
@@ -63,7 +63,7 @@ String RID_SVXSTR_DEL_GRADIENT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Farbverlauf löschen : Farbverlauf l÷schen */
     /* ### ACHTUNG: Neuer Text in Resource? Farbverlauf löschen : Farbverlauf l÷schen */
-    Text [ de ] = "Farbverlauf löschen" ;
+    Text [ de ] = "Farbverlauf lÃ¶schen" ;
     Text [ en-US ] = "Delete gradient" ;
     Text [ x-comment ] = " ";
 };
@@ -71,7 +71,7 @@ String RID_SVXSTR_ASK_DEL_GRADIENT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Soll der Farbverlauf wirklich gelöscht werden? : Soll der Farbverlauf wirklich gel÷scht werden? */
     /* ### ACHTUNG: Neuer Text in Resource? Soll der Farbverlauf wirklich gelöscht werden? : Soll der Farbverlauf wirklich gel÷scht werden? */
-    Text [ de ] = "Soll der Farbverlauf wirklich gelöscht werden?" ;
+    Text [ de ] = "Soll der Farbverlauf wirklich gelÃ¶scht werden?" ;
     Text [ en-US ] = "Do you want to delete the gradient?" ;
     Text [ x-comment ] = " ";
 };
@@ -79,7 +79,7 @@ String RID_SVXSTR_ASK_CHANGE_GRADIENT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Der Farbverlauf wurde geändert und nicht gesichert. \nSie können den selektierten Farbverlauf ändern \noder einen neuen Farbverlauf hinzufügen. : Der Farbverlauf wurde geõndert und nicht gesichert. \nSie k÷nnen den selektierten Farbverlauf õndern \noder einen neuen Farbverlauf hinzuf³gen. */
     /* ### ACHTUNG: Neuer Text in Resource? Der Farbverlauf wurde geändert und nicht gesichert. \nSie können den selektierten Farbverlauf ändern \noder einen neuen Farbverlauf hinzufügen. : Der Farbverlauf wurde geõndert und nicht gesichert. \nSie k÷nnen den selektierten Farbverlauf õndern \noder einen neuen Farbverlauf hinzuf³gen. */
-    Text [ de ] = "Der Farbverlauf wurde geändert und nicht gesichert. \nSie können den selektierten Farbverlauf ändern \noder einen neuen Farbverlauf hinzufügen." ;
+    Text [ de ] = "Der Farbverlauf wurde geÃ¤ndert und nicht gesichert. \nSie kÃ¶nnen den selektierten Farbverlauf Ã¤ndern \noder einen neuen Farbverlauf hinzufÃ¼gen." ;
     Text [ en-US ] = "The gradient was modified without saving. \nModify the selected gradient or add a new gradient." ;
     Text [ x-comment ] = " ";
 };
@@ -92,7 +92,7 @@ String RID_SVXSTR_DESC_NEW_BITMAP
 {
     /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für die Bitmap ein: : Geben Sie hier bitte den Namen f³r die Bitmap ein: */
     /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für die Bitmap ein: : Geben Sie hier bitte den Namen f³r die Bitmap ein: */
-    Text [ de ] = "Geben Sie hier bitte den Namen für die Bitmap ein:" ;
+    Text [ de ] = "Geben Sie hier bitte den Namen fÃ¼r die Bitmap ein:" ;
     Text [ en-US ] = "Please enter a name for the bitmap:" ;
     Text [ x-comment ] = " ";
 };
@@ -100,7 +100,7 @@ String RID_SVXSTR_DESC_EXT_BITMAP
 {
     /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für die externe Bitmap ein: : Geben Sie hier bitte den Namen f³r die externe Bitmap ein: */
     /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für die externe Bitmap ein: : Geben Sie hier bitte den Namen f³r die externe Bitmap ein: */
-    Text [ de ] = "Geben Sie hier bitte den Namen für die externe Bitmap ein:" ;
+    Text [ de ] = "Geben Sie hier bitte den Namen fÃ¼r die externe Bitmap ein:" ;
     Text [ en-US ] = "Please enter a name for the external bitmap:" ;
     Text [ x-comment ] = " ";
 };
@@ -108,7 +108,7 @@ String RID_SVXSTR_DEL_BITMAP
 {
     /* ### ACHTUNG: Neuer Text in Resource? Bitmap löschen : Bitmap l÷schen */
     /* ### ACHTUNG: Neuer Text in Resource? Bitmap löschen : Bitmap l÷schen */
-    Text [ de ] = "Bitmap löschen" ;
+    Text [ de ] = "Bitmap lÃ¶schen" ;
     Text [ en-US ] = "Delete bitmap" ;
     Text [ x-comment ] = " ";
 };
@@ -116,7 +116,7 @@ String RID_SVXSTR_ASK_DEL_BITMAP
 {
     /* ### ACHTUNG: Neuer Text in Resource? Soll die Bitmap wirklich gelöscht werden? : Soll die Bitmap wirklich gel÷scht werden? */
     /* ### ACHTUNG: Neuer Text in Resource? Soll die Bitmap wirklich gelöscht werden? : Soll die Bitmap wirklich gel÷scht werden? */
-    Text [ de ] = "Soll die Bitmap wirklich gelöscht werden?" ;
+    Text [ de ] = "Soll die Bitmap wirklich gelÃ¶scht werden?" ;
     Text [ en-US ] = "Are you sure you want to delete the bitmap?" ;
     Text [ x-comment ] = " ";
 };
@@ -124,7 +124,7 @@ String RID_SVXSTR_ASK_CHANGE_BITMAP
 {
     /* ### ACHTUNG: Neuer Text in Resource? Die Bitmap wurde geändert und nicht gesichert. \nSie können die selektierte Bitmap ändern \noder eine neue Bitmap hinzufügen. : Die Bitmap wurde geõndert und nicht gesichert. \nSie k÷nnen die selektierte Bitmap õndern \noder eine neue Bitmap hinzuf³gen. */
     /* ### ACHTUNG: Neuer Text in Resource? Die Bitmap wurde geändert und nicht gesichert. \nSie können die selektierte Bitmap ändern \noder eine neue Bitmap hinzufügen. : Die Bitmap wurde geõndert und nicht gesichert. \nSie k÷nnen die selektierte Bitmap õndern \noder eine neue Bitmap hinzuf³gen. */
-    Text [ de ] = "Die Bitmap wurde geändert und nicht gesichert. \nSie können die selektierte Bitmap ändern \noder eine neue Bitmap hinzufügen." ;
+    Text [ de ] = "Die Bitmap wurde geÃ¤ndert und nicht gesichert. \nSie kÃ¶nnen die selektierte Bitmap Ã¤ndern \noder eine neue Bitmap hinzufÃ¼gen." ;
     Text [ en-US ] = "The bitmap was modified without saving. \nModify the selected bitmap or add a new bitmap." ;
     Text [ x-comment ] = " ";
 };
@@ -138,7 +138,7 @@ String RID_SVXSTR_DESC_LINESTYLE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für den Linienstil ein: : Geben Sie hier bitte den Namen f³r den Linienstil ein: */
     /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für den Linienstil ein: : Geben Sie hier bitte den Namen f³r den Linienstil ein: */
-    Text [ de ] = "Geben Sie hier bitte den Namen für den Linienstil ein:" ;
+    Text [ de ] = "Geben Sie hier bitte den Namen fÃ¼r den Linienstil ein:" ;
     Text [ en-US ] = "Please enter a name for the line style:" ;
     Text [ x-comment ] = " ";
 };
@@ -146,7 +146,7 @@ String RID_SVXSTR_DEL_LINESTYLE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Linienstil löschen : Linienstil l÷schen */
     /* ### ACHTUNG: Neuer Text in Resource? Linienstil löschen : Linienstil l÷schen */
-    Text [ de ] = "Linienstil löschen" ;
+    Text [ de ] = "Linienstil lÃ¶schen" ;
     Text [ en-US ] = "Delete line style" ;
     Text [ x-comment ] = " ";
 };
@@ -154,7 +154,7 @@ String RID_SVXSTR_ASK_DEL_LINESTYLE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Soll der Linienstil wirklich gelöscht werden? : Soll der Linienstil wirklich gel÷scht werden? */
     /* ### ACHTUNG: Neuer Text in Resource? Soll der Linienstil wirklich gelöscht werden? : Soll der Linienstil wirklich gel÷scht werden? */
-    Text [ de ] = "Soll der Linienstil wirklich gelöscht werden?" ;
+    Text [ de ] = "Soll der Linienstil wirklich gelÃ¶scht werden?" ;
     Text [ en-US ] = "Do you want to delete the line style?" ;
     Text [ x-comment ] = " ";
 };
@@ -162,7 +162,7 @@ String RID_SVXSTR_ASK_CHANGE_LINESTYLE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Der Linienstil wurde geändert und nicht gesichert. \nSie können den selektierten Linienstil ändern \noder einen neuen Linienstil hinzufügen. : Der Linienstil wurde geõndert und nicht gesichert. \nSie k÷nnen den selektierten Linienstil õndern \noder einen neuen Linienstil hinzuf³gen. */
     /* ### ACHTUNG: Neuer Text in Resource? Der Linienstil wurde geändert und nicht gesichert. \nSie können den selektierten Linienstil ändern \noder einen neuen Linienstil hinzufügen. : Der Linienstil wurde geõndert und nicht gesichert. \nSie k÷nnen den selektierten Linienstil õndern \noder einen neuen Linienstil hinzuf³gen. */
-    Text [ de ] = "Der Linienstil wurde geändert und nicht gesichert. \nSie können den selektierten Linienstil ändern \noder einen neuen Linienstil hinzufügen." ;
+    Text [ de ] = "Der Linienstil wurde geÃ¤ndert und nicht gesichert. \nSie kÃ¶nnen den selektierten Linienstil Ã¤ndern \noder einen neuen Linienstil hinzufÃ¼gen." ;
     Text [ en-US ] = "The line style was modified without saving. \nModify the selected line style or add a new line style." ;
     Text [ x-comment ] = " ";
 };
@@ -188,7 +188,7 @@ String RID_SVXSTR_DESC_HATCH
 {
     /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für die Schraffur ein: : Geben Sie hier bitte den Namen f³r die Schraffur ein: */
     /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für die Schraffur ein: : Geben Sie hier bitte den Namen f³r die Schraffur ein: */
-    Text [ de ] = "Geben Sie hier bitte den Namen für die Schraffur ein:" ;
+    Text [ de ] = "Geben Sie hier bitte den Namen fÃ¼r die Schraffur ein:" ;
     Text [ en-US ] = "Please enter a name for the hatching:" ;
     Text [ x-comment ] = " ";
 };
@@ -196,7 +196,7 @@ String RID_SVXSTR_DEL_HATCH
 {
     /* ### ACHTUNG: Neuer Text in Resource? Schraffur löschen : Schraffur l÷schen */
     /* ### ACHTUNG: Neuer Text in Resource? Schraffur löschen : Schraffur l÷schen */
-    Text [ de ] = "Schraffur löschen" ;
+    Text [ de ] = "Schraffur lÃ¶schen" ;
     Text [ en-US ] = "Delete hatching" ;
     Text [ x-comment ] = " ";
 };
@@ -204,7 +204,7 @@ String RID_SVXSTR_ASK_DEL_HATCH
 {
     /* ### ACHTUNG: Neuer Text in Resource? Soll die Schraffur wirklich gelöscht werden? : Soll die Schraffur wirklich gel÷scht werden? */
     /* ### ACHTUNG: Neuer Text in Resource? Soll die Schraffur wirklich gelöscht werden? : Soll die Schraffur wirklich gel÷scht werden? */
-    Text [ de ] = "Soll die Schraffur wirklich gelöscht werden?" ;
+    Text [ de ] = "Soll die Schraffur wirklich gelÃ¶scht werden?" ;
     Text [ en-US ] = "Do you want to delete the hatching?" ;
     Text [ x-comment ] = " ";
 };
@@ -212,7 +212,7 @@ String RID_SVXSTR_ASK_CHANGE_HATCH
 {
     /* ### ACHTUNG: Neuer Text in Resource? Die Schraffur wurde geändert und nicht gesichert. \nSie können die selektierte Schraffur ändern \noder eine neue Schraffur hinzufügen. : Die Schraffur wurde geõndert und nicht gesichert. \nSie k÷nnen die selektierte Schraffur õndern \noder eine neue Schraffur hinzuf³gen. */
     /* ### ACHTUNG: Neuer Text in Resource? Die Schraffur wurde geändert und nicht gesichert. \nSie können die selektierte Schraffur ändern \noder eine neue Schraffur hinzufügen. : Die Schraffur wurde geõndert und nicht gesichert. \nSie k÷nnen die selektierte Schraffur õndern \noder eine neue Schraffur hinzuf³gen. */
-    Text [ de ] = "Die Schraffur wurde geändert und nicht gesichert. \nSie können die selektierte Schraffur ändern \noder eine neue Schraffur hinzufügen." ;
+    Text [ de ] = "Die Schraffur wurde geÃ¤ndert und nicht gesichert. \nSie kÃ¶nnen die selektierte Schraffur Ã¤ndern \noder eine neue Schraffur hinzufÃ¼gen." ;
     Text [ en-US ] = "The hatching type was modified but not saved. \nModify the selected hatching type or add a new hatching type." ;
     Text [ x-comment ] = " ";
 };
@@ -220,7 +220,7 @@ String RID_SVXSTR_CHANGE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Ändern : Žndern */
     /* ### ACHTUNG: Neuer Text in Resource? Ändern : Žndern */
-    Text [ de ] = "Ändern" ;
+    Text [ de ] = "Ã„ndern" ;
     Text [ en-US ] = "Modify" ;
     Text [ x-comment ] = " ";
 };
@@ -228,7 +228,7 @@ String RID_SVXSTR_ADD
 {
     /* ### ACHTUNG: Neuer Text in Resource? Hinzufügen : Hinzuf³gen */
     /* ### ACHTUNG: Neuer Text in Resource? Hinzufügen : Hinzuf³gen */
-    Text [ de ] = "Hinzufügen" ;
+    Text [ de ] = "HinzufÃ¼gen" ;
     Text [ en-US ] = "Add" ;
     Text [ x-comment ] = " ";
 };
@@ -236,7 +236,7 @@ String RID_SVXSTR_DESC_COLOR
 {
     /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für die neue Farbe ein: : Geben Sie hier bitte den Namen f³r die neue Farbe ein: */
     /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für die neue Farbe ein: : Geben Sie hier bitte den Namen f³r die neue Farbe ein: */
-    Text [ de ] = "Geben Sie hier bitte den Namen für die neue Farbe ein:" ;
+    Text [ de ] = "Geben Sie hier bitte den Namen fÃ¼r die neue Farbe ein:" ;
     Text [ en-US ] = "Please enter a name for the new color:" ;
     Text [ x-comment ] = " ";
 };
@@ -244,7 +244,7 @@ String RID_SVXSTR_DEL_COLOR
 {
     /* ### ACHTUNG: Neuer Text in Resource? Farbe löschen : Farbe l÷schen */
     /* ### ACHTUNG: Neuer Text in Resource? Farbe löschen : Farbe l÷schen */
-    Text [ de ] = "Farbe löschen" ;
+    Text [ de ] = "Farbe lÃ¶schen" ;
     Text [ en-US ] = "Delete color" ;
     Text [ x-comment ] = " ";
 };
@@ -252,7 +252,7 @@ String RID_SVXSTR_ASK_DEL_COLOR
 {
     /* ### ACHTUNG: Neuer Text in Resource? Soll die Farbe wirklich gelöscht werden? : Soll die Farbe wirklich gel÷scht werden? */
     /* ### ACHTUNG: Neuer Text in Resource? Soll die Farbe wirklich gelöscht werden? : Soll die Farbe wirklich gel÷scht werden? */
-    Text [ de ] = "Soll die Farbe wirklich gelöscht werden?" ;
+    Text [ de ] = "Soll die Farbe wirklich gelÃ¶scht werden?" ;
     Text [ en-US ] = "Do you want to delete the color?" ;
     Text [ x-comment ] = " ";
 };
@@ -260,7 +260,7 @@ String RID_SVXSTR_ASK_CHANGE_COLOR
 {
     /* ### ACHTUNG: Neuer Text in Resource? Die Farbe wurde geändert und nicht gesichert. \nSie können die selektierte Farbe ändern \noder eine neue Farbe hinzufügen. : Die Farbe wurde geõndert und nicht gesichert. \nSie k÷nnen die selektierte Farbe õndern \noder eine neue Farbe hinzuf³gen. */
     /* ### ACHTUNG: Neuer Text in Resource? Die Farbe wurde geändert und nicht gesichert. \nSie können die selektierte Farbe ändern \noder eine neue Farbe hinzufügen. : Die Farbe wurde geõndert und nicht gesichert. \nSie k÷nnen die selektierte Farbe õndern \noder eine neue Farbe hinzuf³gen. */
-    Text [ de ] = "Die Farbe wurde geändert und nicht gesichert. \nSie können die selektierte Farbe ändern \noder eine neue Farbe hinzufügen." ;
+    Text [ de ] = "Die Farbe wurde geÃ¤ndert und nicht gesichert. \nSie kÃ¶nnen die selektierte Farbe Ã¤ndern \noder eine neue Farbe hinzufÃ¼gen." ;
     Text [ en-US ] = "The color was modified without saving.\nModify the selected color or add a new color." ;
     Text [ x-comment ] = " ";
 };
@@ -286,7 +286,7 @@ String RID_SVXSTR_WARN_TABLE_OVERWRITE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Die Tabelle wurde geändert und nicht gespeichert. \nSoll die Tabelle gespeichert werden? : Die Tabelle wurde geõndert und nicht gespeichert. \nSoll die Tabelle gespeichert werden? */
     /* ### ACHTUNG: Neuer Text in Resource? Die Tabelle wurde geändert und nicht gespeichert. \nSoll die Tabelle gespeichert werden? : Die Tabelle wurde geõndert und nicht gespeichert. \nSoll die Tabelle gespeichert werden? */
-    Text [ de ] = "Die Tabelle wurde geändert und nicht gespeichert. \nSoll die Tabelle gespeichert werden?" ;
+    Text [ de ] = "Die Tabelle wurde geÃ¤ndert und nicht gespeichert. \nSoll die Tabelle gespeichert werden?" ;
     Text [ en-US ] = "The list was modified without saving. Would you like to save the list now?" ;
     Text [ x-comment ] = " ";
 };
@@ -306,7 +306,7 @@ String RID_SVXSTR_DESC_LINEEND
 {
     /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für das neue Linienende ein: : Geben Sie hier bitte den Namen f³r das neue Linienende ein: */
     /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für das neue Linienende ein: : Geben Sie hier bitte den Namen f³r das neue Linienende ein: */
-    Text [ de ] = "Geben Sie hier bitte den Namen für das neue Linienende ein:" ;
+    Text [ de ] = "Geben Sie hier bitte den Namen fÃ¼r das neue Linienende ein:" ;
     Text [ en-US ] = "Please enter a name for the new arrowhead:" ;
     Text [ x-comment ] = " ";
 };
@@ -314,7 +314,7 @@ String RID_SVXSTR_DEL_LINEEND
 {
     /* ### ACHTUNG: Neuer Text in Resource? Linienende löschen : Linienende l÷schen */
     /* ### ACHTUNG: Neuer Text in Resource? Linienende löschen : Linienende l÷schen */
-    Text [ de ] = "Linienende löschen" ;
+    Text [ de ] = "Linienende lÃ¶schen" ;
     Text [ en-US ] = "Delete line ends" ;
     Text [ x-comment ] = " ";
 };
@@ -322,7 +322,7 @@ String RID_SVXSTR_ASK_DEL_LINEEND
 {
     /* ### ACHTUNG: Neuer Text in Resource? Soll das Linienende wirklich gelöscht werden? : Soll das Linienende wirklich gel÷scht werden? */
     /* ### ACHTUNG: Neuer Text in Resource? Soll das Linienende wirklich gelöscht werden? : Soll das Linienende wirklich gel÷scht werden? */
-    Text [ de ] = "Soll das Linienende wirklich gelöscht werden?" ;
+    Text [ de ] = "Soll das Linienende wirklich gelÃ¶scht werden?" ;
     Text [ en-US ] = "Do you want to delete the arrowhead?" ;
     Text [ x-comment ] = " ";
 };
@@ -330,7 +330,7 @@ String RID_SVXSTR_ASK_CHANGE_LINEEND
 {
     /* ### ACHTUNG: Neuer Text in Resource? Das Linienende wurde geändert und nicht gesichert. \nMöchten Sie das Linienende jetzt sichern? : Das Linienende wurde geõndert und nicht gesichert. \nM÷chten Sie das Linienende jetzt sichern? */
     /* ### ACHTUNG: Neuer Text in Resource? Das Linienende wurde geändert und nicht gesichert. \nMöchten Sie das Linienende jetzt sichern? : Das Linienende wurde geõndert und nicht gesichert. \nM÷chten Sie das Linienende jetzt sichern? */
-    Text [ de ] = "Das Linienende wurde geändert und nicht gesichert. \nMöchten Sie das Linienende jetzt sichern?" ;
+    Text [ de ] = "Das Linienende wurde geÃ¤ndert und nicht gesichert. \nMÃ¶chten Sie das Linienende jetzt sichern?" ;
     Text [ en-US ] = "The arrowhead was modified without saving.\nWould you like to save the arrowhead now?" ;
     Text [ x-comment ] = " ";
 };
@@ -338,7 +338,7 @@ String RID_SVXSTR_CLOSE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Schließen : Schlie˜en */
     /* ### ACHTUNG: Neuer Text in Resource? Schließen : Schlie˜en */
-    Text [ de ] = "Schließen" ;
+    Text [ de ] = "SchlieÃŸen" ;
     Text [ en-US ] = "Close" ;
     Text [ x-comment ] = " ";
 };
@@ -358,7 +358,7 @@ String RID_SVXSTR_GREEN
 {
     /* ### ACHTUNG: Neuer Text in Resource? Grün : Gr³n */
     /* ### ACHTUNG: Neuer Text in Resource? Grün : Gr³n */
-    Text [ de ] = "Grün" ;
+    Text [ de ] = "GrÃ¼n" ;
     Text [ en-US ] = "Green" ;
     Text [ x-comment ] = " ";
 };
@@ -366,7 +366,7 @@ String RID_SVXSTR_CYAN
 {
     /* ### ACHTUNG: Neuer Text in Resource? Türkis : T³rkis */
     /* ### ACHTUNG: Neuer Text in Resource? Türkis : T³rkis */
-    Text [ de ] = "Türkis" ;
+    Text [ de ] = "TÃ¼rkis" ;
     Text [ en-US ] = "Turquoise" ;
     Text [ x-comment ] = " ";
 };
@@ -411,7 +411,7 @@ String RID_SVXSTR_LIGHTGREEN
 {
     /* ### ACHTUNG: Neuer Text in Resource? Hellgrün : Hellgr³n */
     /* ### ACHTUNG: Neuer Text in Resource? Hellgrün : Hellgr³n */
-    Text [ de ] = "Hellgrün" ;
+    Text [ de ] = "HellgrÃ¼n" ;
     Text [ en-US ] = "Light green" ;
     Text [ x-comment ] = " ";
 };
@@ -419,7 +419,7 @@ String RID_SVXSTR_LIGHTCYAN
 {
     /* ### ACHTUNG: Neuer Text in Resource? Helltürkis : Hellt³rkis */
     /* ### ACHTUNG: Neuer Text in Resource? Helltürkis : Hellt³rkis */
-    Text [ de ] = "Helltürkis" ;
+    Text [ de ] = "HelltÃ¼rkis" ;
     Text [ en-US ] = "Light cyan" ;
     Text [ x-comment ] = " ";
 };
@@ -446,7 +446,7 @@ String RID_SVXSTR_WHITE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Weiß : Wei˜ */
     /* ### ACHTUNG: Neuer Text in Resource? Weiß : Wei˜ */
-    Text [ de ] = "Weiß" ;
+    Text [ de ] = "WeiÃŸ" ;
     Text [ en-US ] = "White" ;
     Text [ x-comment ] = " ";
 };
@@ -517,7 +517,7 @@ String RID_SVXSTR_GRAFMODE_GREYS
 };
 String RID_SVXSTR_GRAFMODE_MONO
 {
-    Text [ de ] = "Schwarz/Weiß";
+    Text [ de ] = "Schwarz/WeiÃŸ";
     Text [ en-US ] = "Black/White";
 };
 String RID_SVXSTR_GRAFMODE_WATERMARK
@@ -533,7 +533,7 @@ String STR_INSERT_VIDEO_EXTFILTER_IVF
 
 String STR_INSERT_VIDEO_EXTFILTER_AVI
 {
-    Text [ de ] = "Video für Windows (*.avi)" ;
+    Text [ de ] = "Video fÃ¼r Windows (*.avi)" ;
     Text [ en-US ] = "Video for Windows (*.avi)" ;
 };
 
@@ -557,14 +557,14 @@ String STR_EXTFILTER_ALL
 
 String STR_INSERT_SOUND_TITLE
 {
-    Text [ de ] = "Klang einfügen" ;
+    Text [ de ] = "Klang einfÃ¼gen" ;
     Text [ en-US ] = "Insert sound" ;
     Text [ x-comment ] = " ";
 };
 
 String STR_INSERT_VIDEO_TITLE
 {
-    Text [ de ] = "Video einfügen" ;
+    Text [ de ] = "Video einfÃ¼gen" ;
     Text [ en-US ] = "Insert video" ;
 };
 
@@ -591,7 +591,7 @@ String RID_SVXSTR_PALE_YELLOW
 
 String RID_SVXSTR_PALE_GREEN
 {
-    Text [ de ] = "Blassgrün";
+    Text [ de ] = "BlassgrÃ¼n";
     Text [ en-US ] = "Pale green";
 };
 
@@ -651,27 +651,27 @@ String RID_SVXSTR_TBLAFMT_BROWN
 };
 String RID_SVXSTR_TBLAFMT_CURRENCY
 {
-    Text [ de ] = "Währung";
+    Text [ de ] = "WÃ¤hrung";
     Text [ en-US ] = "Currency";
 };
 String RID_SVXSTR_TBLAFMT_CURRENCY_3D
 {
-    Text [ de ] = "Währung 3D";
+    Text [ de ] = "WÃ¤hrung 3D";
     Text [ en-US ] = "Currency 3D";
 };
 String RID_SVXSTR_TBLAFMT_CURRENCY_GRAY
 {
-    Text [ de ] = "Währung Grau";
+    Text [ de ] = "WÃ¤hrung Grau";
     Text [ en-US ] = "Currency Gray";
 };
 String RID_SVXSTR_TBLAFMT_CURRENCY_LAVENDER
 {
-    Text [ de ] = "Währung Flieder";
+    Text [ de ] = "WÃ¤hrung Flieder";
     Text [ en-US ] = "Currency Lavender";
 };
 String RID_SVXSTR_TBLAFMT_CURRENCY_TURQUOISE
 {
-    Text [ de ] = "Währung Türkis";
+    Text [ de ] = "WÃ¤hrung TÃ¼rkis";
     Text [ en-US ] = "Currency Turquoise";
 };
 String RID_SVXSTR_TBLAFMT_GRAY
@@ -681,7 +681,7 @@ String RID_SVXSTR_TBLAFMT_GRAY
 };
 String RID_SVXSTR_TBLAFMT_GREEN
 {
-    Text [ de ] = "Grün";
+    Text [ de ] = "GrÃ¼n";
     Text [ en-US ] = "Green";
 };
 String RID_SVXSTR_TBLAFMT_LAVENDER
@@ -696,7 +696,7 @@ String RID_SVXSTR_TBLAFMT_RED
 };
 String RID_SVXSTR_TBLAFMT_TURQUOISE
 {
-    Text [ de ] = "Türkis";
+    Text [ de ] = "TÃ¼rkis";
     Text [ en-US ] = "Turquoise";
 };
 String RID_SVXSTR_TBLAFMT_YELLOW
@@ -707,28 +707,28 @@ String RID_SVXSTR_TBLAFMT_YELLOW
 
 String RID_SVXSTR_LINEJOINT_MIDDLE
 {
-    Text [ de ] = "Linienübergang gemittelt";
+    Text [ de ] = "LinienÃ¼bergang gemittelt";
     Text [ en-US ] = "Line joint averaged";
 };
 String RID_SVXSTR_LINEJOINT_BEVEL
 {
-    Text [ de ] = "Linienübergang verbunden";
+    Text [ de ] = "LinienÃ¼bergang verbunden";
     Text [ en-US ] = "Line joint bevel";
 };
 String RID_SVXSTR_LINEJOINT_MITER
 {
-    Text [ de ] = "Linienübergang geschnitten";
+    Text [ de ] = "LinienÃ¼bergang geschnitten";
     Text [ en-US ] = "Line joint miter";
 };
 String RID_SVXSTR_LINEJOINT_ROUND
 {
-    Text [ de ] = "Linienübergang rund";
+    Text [ de ] = "LinienÃ¼bergang rund";
     Text [ en-US ] = "Line joint round";
 };
 
 String RID_SVXSTR_GRFILTER_OPENERROR
 {
-    Text [ de ] = "Grafikdatei kann nicht geöffnet werden" ;
+    Text [ de ] = "Grafikdatei kann nicht geÃ¶ffnet werden" ;
     Text [ en-US ] = "Graphics file cannot be opened" ;
     Text [ x-comment ] = " ";
 };
@@ -746,7 +746,7 @@ String RID_SVXSTR_GRFILTER_FORMATERROR
 };
 String RID_SVXSTR_GRFILTER_VERSIONERROR
 {
-    Text [ de ] = "Die Version der Grafikdatei wird nicht unterstützt" ;
+    Text [ de ] = "Die Version der Grafikdatei wird nicht unterstÃ¼tzt" ;
     Text [ en-US ] = "This version of the graphics file is not supported" ;
     Text [ x-comment ] = " ";
 };
@@ -758,7 +758,7 @@ String RID_SVXSTR_GRFILTER_FILTERERROR
 };
 String RID_SVXSTR_GRFILTER_TOOBIG
 {
-    Text [ de ] = "Nicht genug Speicher zum Einfügen der Grafik" ;
+    Text [ de ] = "Nicht genug Speicher zum EinfÃ¼gen der Grafik" ;
     Text [ en-US ] = "Not enough memory to insert graphic" ;
     Text [ x-comment ] = " ";
 };
@@ -964,12 +964,12 @@ String RID_SVXSTR_GRDT0
 };
 String RID_SVXSTR_GRDT1
 {
-    Text [ de ] = "Linear Blau/weiß";
+    Text [ de ] = "Linear Blau/weiÃŸ";
     Text [ en-US ] = "Linear blue/white";
 };
 String RID_SVXSTR_GRDT2
 {
-    Text [ de ] = "Linear violett/grün";
+    Text [ de ] = "Linear violett/grÃ¼n";
     Text [ en-US ] = "Linear magenta/green";
 };
 String RID_SVXSTR_GRDT3
@@ -979,7 +979,7 @@ String RID_SVXSTR_GRDT3
 };
 String RID_SVXSTR_GRDT4
 {
-    Text [ de ] = "Radial grün/schwarz";
+    Text [ de ] = "Radial grÃ¼n/schwarz";
     Text [ en-US ] = "Radial green/black";
 };
 String RID_SVXSTR_GRDT5
@@ -989,12 +989,12 @@ String RID_SVXSTR_GRDT5
 };
 String RID_SVXSTR_GRDT6
 {
-    Text [ de ] = "Rechteck rot/weiß";
+    Text [ de ] = "Rechteck rot/weiÃŸ";
     Text [ en-US ] = "Rectangular red/white";
 };
 String RID_SVXSTR_GRDT7
 {
-    Text [ de ] = "Quadratisch gelb/weiß";
+    Text [ de ] = "Quadratisch gelb/weiÃŸ";
     Text [ en-US ] = "Square yellow/white";
 };
 String RID_SVXSTR_GRDT8
@@ -1004,7 +1004,7 @@ String RID_SVXSTR_GRDT8
 };
 String RID_SVXSTR_GRDT9
 {
-    Text [ de ] = "Axial hellrot/weiß";
+    Text [ de ] = "Axial hellrot/weiÃŸ";
     Text [ en-US ] = "Axial light red/white";
 };
 
@@ -1260,7 +1260,7 @@ String RID_SVXSTR_BMP2
 };
 String RID_SVXSTR_BMP3
 {
-    Text [ de ] = "Grobkörnig";
+    Text [ de ] = "GrobkÃ¶rnig";
     Text [ en-US ] = "Coarse grained";
 };
 String RID_SVXSTR_BMP4
@@ -1330,7 +1330,7 @@ String RID_SVXSTR_BMP16
 };
 String RID_SVXSTR_BMP17
 {
-    Text [ de ] = "Gänseblümchen";
+    Text [ de ] = "GÃ¤nseblÃ¼mchen";
     Text [ en-US ] = "Daisy";
 };
 String RID_SVXSTR_BMP18
@@ -1564,7 +1564,7 @@ String RID_SVXSTR_LEND2
 };
 String RID_SVXSTR_LEND3
 {
-    Text [ de ] = "Bemaßungsenden";
+    Text [ de ] = "BemaÃŸungsenden";
     Text [ en-US ] = "Dimension lines";
 };
 String RID_SVXSTR_LEND4
@@ -1621,7 +1621,7 @@ String RID_SVXSTR_TRASNGR0_DEF
 
 String RID_SVXSTR_TRASNGR0
 {
-    Text [ de ] = "Flächentransparenz";
+    Text [ de ] = "FlÃ¤chentransparenz";
     Text [ en-US ] = "Transparency";
 };
 
