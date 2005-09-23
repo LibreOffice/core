@@ -4,9 +4,9 @@
  *
  *  $RCSfile: globlmn_tmpl.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:31:11 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:37:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@
     Identifier = SID_FONTWORK ; \
     Command = ".uno:FontWork" ; \
     HelpID = SID_FONTWORK ; \
-    Text [ de ] = "Font~Work" ; \
+    Text [ de ] = "Font~work" ; \
     Text [ en-US ] = "F~ontwork" ;\
     Text [ x-comment ] = " ";   \
 
@@ -403,7 +403,7 @@
         Identifier = SID_AUTOPILOTMENU ; \
         Command = ".uno:AutoPilotMenu" ; \
         HelpID = SID_AUTOPILOTMENU ; \
-        Text [ de ] = "~AutoPilot" ; \
+        Text [ de ] = "~Assistent" ; \
         Text [ en-US ] = "A~utoPilot" ; \
         Text [ x-comment ] = " ";\
     };
