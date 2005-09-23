@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shells.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:52:32 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:11:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@ InfoBox MSG_NO_RULER
 };
 String STR_GRFILTER_OPENERROR
 {
-    Text [ de ] = "Grafikdatei kann nicht geöffnet werden" ;
+    Text [ de ] = "Grafikdatei kann nicht geÃ¶ffnet werden" ;
     Text [ en-US ] = "Graphics file cannot be opened" ;
     Text [ x-comment ] = " ";
 };
@@ -64,7 +64,7 @@ String STR_GRFILTER_FORMATERROR
 };
 String STR_GRFILTER_VERSIONERROR
 {
-    Text [ de ] = "Die Version der Grafikdatei wird nicht unterstützt" ;
+    Text [ de ] = "Die Version der Grafikdatei wird nicht unterstÃ¼tzt" ;
     Text [ en-US ] = "This graphic file version is not supported" ;
     Text [ x-comment ] = " ";
 };
@@ -76,13 +76,13 @@ String STR_GRFILTER_FILTERERROR
 };
 String STR_GRFILTER_TOOBIG
 {
-    Text [ de ] = "Nicht genug Speicher zum Einfügen des Bildes" ;
+    Text [ de ] = "Nicht genug Speicher zum EinfÃ¼gen des Bildes" ;
     Text [ en-US ] = "Not enough memory to insert the picture." ;
     Text [ x-comment ] = " ";
 };
 String STR_INSERT_GRAPHIC
 {
-    Text [ de ] = "Bild einfügen" ;
+    Text [ de ] = "Bild einfÃ¼gen" ;
     Text [ en-US ] = "Insert picture" ;
 };
 String STR_NO_ADDRESSBOOK
@@ -93,7 +93,7 @@ String STR_NO_ADDRESSBOOK
 };
 String STR_NOTIZ_INSERT
 {
-    Text [ de ] = "Notiz einfügen" ;
+    Text [ de ] = "Notiz einfÃ¼gen" ;
     Text [ en-US ] = "Insert Note" ;
     Text [ x-comment ] = " ";
 };
@@ -105,13 +105,13 @@ String STR_REDLINE_COMMENT
 };
 String STR_REDLINE_INSERTED
 {
-    Text [ de ] = "Einfügung" ;
+    Text [ de ] = "EinfÃ¼gung" ;
     Text [ en-US ] = "Insertion" ;
     Text [ x-comment ] = " ";
 };
 String STR_REDLINE_DELETED
 {
-    Text [ de ] = "Löschung" ;
+    Text [ de ] = "LÃ¶schung" ;
     Text [ en-US ] = "Deletion" ;
     Text [ x-comment ] = " ";
 };
@@ -129,7 +129,7 @@ String STR_REDLINE_FORMATED
 };
 String STR_REDLINE_TABLECHG
 {
-    Text [ de ] = "Tabellenänderung" ;
+    Text [ de ] = "TabellenÃ¤nderung" ;
     Text [ en-US ] = "Table Changes" ;
     Text [ x-comment ] = " ";
 };
@@ -147,7 +147,7 @@ String STR_REDLINE_TITLE
 };
 String STR_REDLINE_MSG
 {
-    Text [ de ] = "Das AutoFormat ist beendet.\nSie können jetzt alle Änderungen annehmen oder ablehnen,\noder sie einzeln annehmen oder ablehnen." ;
+    Text [ de ] = "Das AutoFormat ist beendet.\nSie kÃ¶nnen jetzt alle Ã„nderungen annehmen oder ablehnen,\noder sie einzeln annehmen oder ablehnen." ;
     Text [ en-US ] = "AutoFormat completed.\nYou can accept or reject all changes,\nor accept or reject particular changes.";
     Text [ x-comment ] = " ";
 };
@@ -165,7 +165,7 @@ String STR_REDLINE_REJECT_ALL
 };
 String STR_REDLINE_EDIT
 {
-    Text [ de ] = "Änderungen ~bearbeiten" ;
+    Text [ de ] = "Ã„nderungen ~bearbeiten" ;
     Text [ en-US ] = "Edit Changes";
     Text [ x-comment ] = " ";
 };
@@ -173,7 +173,7 @@ QueryBox DLG_IMPORT_DBNAME
 {
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
-    Message [ de ] = "Soll der Datenbankname als Standarddatenbank für das Dokument übernommen werden?" ;
+    Message [ de ] = "Soll der Datenbankname als Standarddatenbank fÃ¼r das Dokument Ã¼bernommen werden?" ;
     Message [ en-US ] = "Use database name as default database for the document?" ;
     Message [ x-comment ] = " ";
 };
@@ -1189,7 +1189,7 @@ String STR_SWBG_HEADER
 };
 String STR_SWBG_FOOTER
 {
-    Text [ de ] = "Fußzeile" ;
+    Text [ de ] = "FuÃŸzeile" ;
     Text [ en-US ] = "Footer" ;
     Text [ x-comment ] = " ";
 };
