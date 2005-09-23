@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:37:03 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:41:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -727,7 +727,7 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
 
             implts_createCustomToolBars();
             implts_createAddonsToolBars();
-//            implts_createNonContextSensitiveToolBars();
+            implts_createNonContextSensitiveToolBars();
             implts_sortUIElements();
         }
         else
@@ -3078,6 +3078,13 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
     }
 
     doLayout();
+
+    // notify listeners
+    css::uno::Any a;
+    if ( bSetVisible )
+        implts_notifyListeners( css::frame::LayoutManagerEvents::VISIBLE, a );
+    else
+        implts_notifyListeners( css::frame::LayoutManagerEvents::INVISIBLE, a );
 }
 
 void LayoutManager::implts_destroyStatusBar()
@@ -6029,6 +6036,8 @@ throw (::com::sun::star::uno::RuntimeException)
             rUIElement.m_aFloatingData = aUIDockingElement.m_aFloatingData;
             css::awt::Rectangle aTmpRect = xWindow->getPosSize();
             rUIElement.m_aFloatingData.m_aPos = ::Point( aTmpRect.X, aTmpRect.Y );
+            // make changes also for our local data as we use it to make data persistent
+            aUIDockingElement.m_aFloatingData = rUIElement.m_aFloatingData;
         }
         else
         {
