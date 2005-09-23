@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlTable.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:09:39 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:12:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,9 @@
 #ifndef _COMPHELPER_NAMECONTAINER_HXX_
 #include <comphelper/namecontainer.hxx>
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 namespace dbaxml
 {
@@ -78,6 +81,7 @@ namespace dbaxml
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdbcx;
     using namespace ::com::sun::star::xml::sax;
+DBG_NAME(OXMLTable)
 
 OXMLTable::OXMLTable( ODBFilter& _rImport
                 ,sal_uInt16 nPrfx
@@ -92,6 +96,8 @@ OXMLTable::OXMLTable( ODBFilter& _rImport
     ,m_bApplyOrder(sal_False)
     ,m_sServiceName(_sServiceName)
 {
+    DBG_CTOR(OXMLTable,NULL);
+
     OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
     const SvXMLNamespaceMap& rMap = GetOwnImport().GetNamespaceMap();
     const SvXMLTokenMap& rTokenMap = GetOwnImport().GetQueryElemTokenMap();
@@ -143,6 +149,8 @@ OXMLTable::OXMLTable( ODBFilter& _rImport
 
 OXMLTable::~OXMLTable()
 {
+
+    DBG_DTOR(OXMLTable,NULL);
 }
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLTable::CreateChildContext(
