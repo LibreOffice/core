@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TokenWriter.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:08:22 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:37:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,9 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
+#include <com/sun/star/sdbc/XConnection.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #endif
@@ -70,6 +73,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
+#include <com/sun/star/sdbc/XDataSource.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_FONTWEIGHT_HPP_
 #include <com/sun/star/awt/FontWeight.hpp>
@@ -131,6 +137,8 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::util;
+using ::com::sun::star::frame::XModel;
 
 #if defined(MAC)
 const char __FAR_DATA ODatabaseImportExport::sNewLine = '\015';
@@ -158,7 +166,6 @@ ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor&
     ,m_xFormatter(_rxNumberF)
     ,m_xFactory(_rM)
     ,m_nCommandType(CommandType::TABLE)
-    ,m_bDisposeConnection(sal_False)
     ,m_bInInitialize(sal_False)
     ,m_bCheckOnly(sal_False)
 {
@@ -166,26 +173,7 @@ ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor&
     DBG_CTOR(ODatabaseImportExport,NULL);
 
     osl_incrementInterlockedCount( &m_refCount );
-    // get the information we need
-    m_sDataSourceName = _aDataDescriptor.getDataSource();
-    _aDataDescriptor[daCommandType] >>= m_nCommandType;
-    _aDataDescriptor[daCommand]     >>= m_sName;
-    // some additonal information
-    if(_aDataDescriptor.has(daConnection))
-        _aDataDescriptor[daConnection]  >>= m_xConnection;
-    if(_aDataDescriptor.has(daSelection))
-        _aDataDescriptor[daSelection]   >>= m_aSelection;
-
-    sal_Bool bBookmarkSelection = sal_True; // the default if not present
-    if ( _aDataDescriptor.has( daBookmarkSelection ) )
-    {
-        _aDataDescriptor[ daBookmarkSelection ] >>= bBookmarkSelection;
-        DBG_ASSERT( !bBookmarkSelection, "ODatabaseImportExport::ODatabaseImportExport: bookmarked selection not yet supported!" );
-    }
-
-
-    if(_aDataDescriptor.has(daCursor))
-        _aDataDescriptor[daCursor]  >>= m_xResultSet;
+    impl_initFromDescriptor( _aDataDescriptor, false );
 
     xub_StrLen nCount = rExchange.GetTokenCount(char(11));
     if( nCount > SBA_FORMAT_SELECTION_COUNT && rExchange.GetToken(4).Len())
@@ -197,16 +185,14 @@ ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor&
 }
 // -----------------------------------------------------------------------------
 // import data
-ODatabaseImportExport::ODatabaseImportExport(   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
+ODatabaseImportExport::ODatabaseImportExport( const ::dbtools::SharedConnection& _rxConnection,
+        const Reference< XNumberFormatter >& _rxNumberF, const Reference< XMultiServiceFactory >& _rM )
     : m_xConnection(_rxConnection)
     ,m_pReader(NULL)
     ,m_pRowMarker(NULL)
     ,m_xFormatter(_rxNumberF)
     ,m_xFactory(_rM)
     ,m_nCommandType(::com::sun::star::sdb::CommandType::TABLE)
-    ,m_bDisposeConnection(sal_False)
     ,m_bInInitialize(sal_False)
     ,m_bCheckOnly(sal_False)
 {
@@ -235,18 +221,16 @@ void ODatabaseImportExport::disposing()
         Reference< XEventListener> xEvt((::cppu::OWeakObject*)this,UNO_QUERY);
         xComponent->removeEventListener(xEvt);
     }
-    if(m_bDisposeConnection)
-        ::comphelper::disposeComponent(m_xConnection);
+    m_xConnection.clear();
 
     ::comphelper::disposeComponent(m_xRow);
 
     m_xObject               = NULL;
-    m_xConnection           = NULL;
     m_xResultSetMetaData    = NULL;
     m_xResultSet            = NULL;
     m_xRow                  = NULL;
 
-    m_aDataSourceHolder.reset();
+    m_aKeepModelAlive.clear();
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseImportExport::disposing( const EventObject& Source ) throw(::com::sun::star::uno::RuntimeException)
@@ -255,25 +239,32 @@ void SAL_CALL ODatabaseImportExport::disposing( const EventObject& Source ) thro
     Reference<XConnection> xCon(Source.Source,UNO_QUERY);
     if(m_xConnection.is() && m_xConnection == xCon)
     {
-        m_xConnection = NULL;
+        m_xConnection.clear();
         disposing();
         if(!m_bInInitialize)
             initialize();
-        m_bDisposeConnection = m_xConnection.is();
     }
 }
 // -----------------------------------------------------------------------------
-void ODatabaseImportExport::initialize(const ODataAccessDescriptor& _aDataDescriptor)
+void ODatabaseImportExport::initialize( const ODataAccessDescriptor& _aDataDescriptor )
+{
+    impl_initFromDescriptor( _aDataDescriptor, true );
+}
+
+// -----------------------------------------------------------------------------
+void ODatabaseImportExport::impl_initFromDescriptor( const ODataAccessDescriptor& _aDataDescriptor, bool _bPlusDefaultInit)
 {
     DBG_CHKTHIS(ODatabaseImportExport,NULL);
-    // get the information we need
     m_sDataSourceName = _aDataDescriptor.getDataSource();
     _aDataDescriptor[daCommandType] >>= m_nCommandType;
     _aDataDescriptor[daCommand]     >>= m_sName;
     // some additonal information
-    if ( _aDataDescriptor.has(daConnection) )
-        _aDataDescriptor[daConnection]  >>= m_xConnection;
-    if ( _aDataDescriptor.has(daSelection) )
+    if(_aDataDescriptor.has(daConnection))
+    {
+        Reference< XConnection > xPureConn( _aDataDescriptor[daConnection], UNO_QUERY );
+        m_xConnection.reset( xPureConn, SharedConnection::NoTakeOwnership );
+    }
+    if(_aDataDescriptor.has(daSelection))
         _aDataDescriptor[daSelection]   >>= m_aSelection;
 
     sal_Bool bBookmarkSelection = sal_True; // the default if not present
@@ -284,10 +275,11 @@ void ODatabaseImportExport::initialize(const ODataAccessDescriptor& _aDataDescri
     }
 
 
-    if ( _aDataDescriptor.has(daCursor) )
+    if(_aDataDescriptor.has(daCursor))
         _aDataDescriptor[daCursor]  >>= m_xResultSet;
 
-    initialize();
+    if ( _bPlusDefaultInit )
+        initialize();
 }
 // -----------------------------------------------------------------------------
 void ODatabaseImportExport::initialize()
@@ -302,13 +294,21 @@ void ODatabaseImportExport::initialize()
 
         try
         {
-            m_aDataSourceHolder.reset(new ODataSourceHolder(Reference< com::sun::star::util::XCloseable>(xDatabaseContext->getByName(m_sDataSourceName),UNO_QUERY)));
+            Reference< XDataSource > xDataSource( xDatabaseContext->getByName( m_sDataSourceName ), UNO_QUERY_THROW );
+            Reference< XModel > xDocument( getDataSourceOrModel( xDataSource ), UNO_QUERY_THROW );
+            m_aKeepModelAlive = SharedModel( xDocument );
         }
-        catch(Exception)
+        catch( const Exception& )
         {
+            OSL_ENSURE( sal_False, "ODatabaseImportExport::initialize: could not obtaine the document model!" );
         }
+
         Reference< XEventListener> xEvt((::cppu::OWeakObject*)this,UNO_QUERY);
-        SQLExceptionInfo aInfo = ::dbaui::createConnection(m_sDataSourceName,xDatabaseContext,m_xFactory,xEvt,m_xConnection);
+
+        Reference< XConnection > xConnection;
+        SQLExceptionInfo aInfo = ::dbaui::createConnection( m_sDataSourceName, xDatabaseContext, m_xFactory, xEvt, xConnection );
+        m_xConnection.reset( xConnection );
+
         if(aInfo.isValid() && aInfo.getType() == SQLExceptionInfo::SQL_EXCEPTION)
             throw *static_cast<const SQLException*>(aInfo);
     }
@@ -364,7 +364,7 @@ void ODatabaseImportExport::initialize()
                 Reference<XPropertySet > xProp(m_xResultSet,UNO_QUERY);
                 if(xProp.is())
                 {
-                    xProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,makeAny(m_xConnection));
+                    xProp->setPropertyValue( PROPERTY_ACTIVECONNECTION, makeAny( m_xConnection.getTyped() ) );
                     xProp->setPropertyValue(PROPERTY_COMMANDTYPE,makeAny(m_nCommandType));
                     xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(m_sName));
                     Reference<XRowSet> xRowSet(xProp,UNO_QUERY);
@@ -464,7 +464,7 @@ BOOL ORTFImportExport::Write()
     sal_Int32 nColor = 0;
     if(m_xObject.is())
         m_xObject->getPropertyValue(PROPERTY_TEXTCOLOR) >>= nColor;
-    Color aColor(nColor);
+    ::Color aColor(nColor);
 
     ByteString aFonts(String(m_aFont.Name),eDestEnc);
     if(!aFonts.Len())
@@ -768,7 +768,7 @@ void OHTMLImportExport::WriteBody()
     sal_Int32 nColor = 0;
     if(m_xObject.is())
         m_xObject->getPropertyValue(PROPERTY_TEXTCOLOR) >>= nColor;
-    Color aColor(nColor);
+    ::Color aColor(nColor);
     HTMLOutFuncs::Out_Color( (*m_pStream), aColor );
 
     ::rtl::OString sOut( ' ' );
@@ -1045,7 +1045,7 @@ void OHTMLImportExport::FontOn()
     sal_Int32 nColor = 0;
     if(m_xObject.is())
         m_xObject->getPropertyValue(PROPERTY_TEXTCOLOR) >>= nColor;
-    Color aColor(nColor);
+    ::Color aColor(nColor);
 
     HTMLOutFuncs::Out_Color( (*m_pStream), aColor );
     (*m_pStream) << ">";
