@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblafmt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:19:33 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:19:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -756,26 +756,11 @@ void SwTableAutoFmt::UpdateToSet( BYTE nPos, SfxItemSet& rSet,
             rChg.GetValueFormat( sFmt, eLng, eSys );
             if( sFmt.Len() )
             {
-                ULONG nKey = 0;
-                if ( eLng == LANGUAGE_SYSTEM && eSys != ::GetAppLanguage() )
-                {
-                    //  #53381# wenn System beim Speichern etwas anderes war,
-                    //  muss konvertiert werden (geht nur mit eingebauten Formaten)
-                    ULONG nOrig = pNFmtr->GetEntryKey( sFmt, eSys );
-                    if ( nOrig != NUMBERFORMAT_ENTRY_NOT_FOUND )
-                        nKey = pNFmtr->GetFormatForLanguageIfBuiltIn( nOrig,
-                                        ::GetAppLanguage() );
-                }
-                else    // sonst einfach suchen oder anlegen
-                {
-                    nKey = pNFmtr->GetEntryKey( sFmt, eLng );
-                    if( NUMBERFORMAT_ENTRY_NOT_FOUND == nKey )
-                    {
-                        xub_StrLen nCheckPos;
-                        short nType;
-                        pNFmtr->PutEntry( sFmt, nCheckPos, nType, nKey, eLng );
-                    }
-                }
+                short nType;
+                BOOL bNew;
+                xub_StrLen nCheckPos;
+                ULONG nKey = pNFmtr->GetIndexPuttingAndConverting( sFmt, eLng,
+                        eSys, nType, bNew, nCheckPos);
                 rSet.Put( SwTblBoxNumFormat( nKey ));
             }
             else
