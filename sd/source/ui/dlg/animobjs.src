@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animobjs.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:51:04 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:30:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ DockingWindow FLT_WIN_ANIMATION
         Size = MIN_BUTTON_SIZE
         Symbol = IMAGEBUTTON_REVERSEPLAY ;
         /* ### ACHTUNG: Neuer Text in Resource? Rückwärts : R³ckwõrts */
-        QuickHelpText [ de ] = "Rückwärts" ;
+        QuickHelpText [ de ] = "RÃ¼ckwÃ¤rts" ;
         QuickHelpText [ en-US ] = "Backwards" ;
         QuickHelpText [ x-comment ] = " ";
     };
@@ -205,7 +205,7 @@ DockingWindow FLT_WIN_ANIMATION
             < "Max." ; > ;
         };
         /* ### ACHTUNG: Neuer Text in Resource? Anzahl der Durchläufe : Anzahl der Durchlõufe */
-        QuickHelpText [ de ] = "Anzahl der Durchläufe" ;
+        QuickHelpText [ de ] = "Anzahl der DurchlÃ¤ufe" ;
         QuickHelpText [ en-US ] = "Loop Count" ;
         QuickHelpText [ x-comment ] = " ";
     StringList [ x-comment ] =
@@ -245,7 +245,7 @@ DockingWindow FLT_WIN_ANIMATION
         };
         TabStop = TRUE ;
         /* ### ACHTUNG: Neuer Text in Resource? Objekt übernehmen : Objekt ³bernehmen */
-        QuickHelpText [ de ] = "Objekt übernehmen" ;
+        QuickHelpText [ de ] = "Objekt Ã¼bernehmen" ;
         QuickHelpText [ en-US ] = "Apply Object" ;
         QuickHelpText [ x-comment ] = " ";
     };
@@ -263,7 +263,7 @@ DockingWindow FLT_WIN_ANIMATION
         };
         TabStop = TRUE ;
         /* ### ACHTUNG: Neuer Text in Resource? Objekte einzeln übernehmen : Objekte einzeln ³bernehmen */
-        QuickHelpText [ de ] = "Objekte einzeln übernehmen" ;
+        QuickHelpText [ de ] = "Objekte einzeln Ã¼bernehmen" ;
         QuickHelpText [ en-US ] = "Apply Objects Individually" ;
         QuickHelpText [ x-comment ] = " ";
     };
@@ -281,7 +281,7 @@ DockingWindow FLT_WIN_ANIMATION
         };
         TabStop = TRUE ;
         /* ### ACHTUNG: Neuer Text in Resource? Aktuelles Bild löschen : Aktuelles Bild l÷schen */
-        QuickHelpText [ de ] = "Aktuelles Bild löschen" ;
+        QuickHelpText [ de ] = "Aktuelles Bild lÃ¶schen" ;
         QuickHelpText [ en-US ] = "Delete Current Image" ;
         QuickHelpText [ x-comment ] = " ";
     };
@@ -299,7 +299,7 @@ DockingWindow FLT_WIN_ANIMATION
         };
         TabStop = TRUE ;
         /* ### ACHTUNG: Neuer Text in Resource? Alle Bilder löschen : Alle Bilder l÷schen */
-        QuickHelpText [ de ] = "Alle Bilder löschen" ;
+        QuickHelpText [ de ] = "Alle Bilder lÃ¶schen" ;
         QuickHelpText [ en-US ] = "Delete All Images" ;
         QuickHelpText [ x-comment ] = " ";
     };
