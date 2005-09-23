@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgattr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:59:25 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:30:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,11 +94,14 @@
 
 using namespace dbaui;
 
+DBG_NAME(SbaSbAttrDlg)
 //==================================================================
 SbaSbAttrDlg::SbaSbAttrDlg(Window* pParent, const SfxItemSet* pCellAttrs, SvNumberFormatter* pFormatter, USHORT nFlags, BOOL bRow)
              : SfxTabDialog(pParent, ModuleRes( DLG_ATTR ), pCellAttrs )
              ,aTitle(ResId(ST_ROW))
 {
+    DBG_CTOR(SbaSbAttrDlg,NULL);
+
     pNumberInfoItem = new SvxNumberInfoItem( pFormatter );
 
     if (bRow)
@@ -117,6 +120,8 @@ SbaSbAttrDlg::SbaSbAttrDlg(Window* pParent, const SfxItemSet* pCellAttrs, SvNumb
 SbaSbAttrDlg::~SbaSbAttrDlg()
 {
     delete pNumberInfoItem;
+
+    DBG_DTOR(SbaSbAttrDlg,NULL);
 }
 
 // -----------------------------------------------------------------------
