@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scwarngs.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:34:12 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:10:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ Resource RID_WRNHDLSC
     String ERRCODE_SC_IMPORT_WRN_RNGOVRFLW & SH_MAX
     {
         /* ### ACHTUNG: Neuer Text in Resource? Die Maximalanzahl von Zeilen wurde überschritten. überzählige Zeilen wurden nicht mitimportiert! : Die Maximalanzahl von Zeilen wurde ³berschritten. ³berzõhlige Zeilen wurden nicht mitimportiert! */
-        Text [ de ] = "Die Maximalanzahl von Zeilen wurde überschritten. überzählige Zeilen wurden nicht mitimportiert!" ;
+        Text [ de ] = "Die Maximalanzahl von Zeilen wurde Ã¼berschritten. Ã¼berzÃ¤hlige Zeilen wurden nicht mitimportiert!" ;
         Text [ en-US ] = "The number of rows exceeded the maximum. Additional rows were not imported!" ;
         Text [ x-comment ] = " ";
     };
