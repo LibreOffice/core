@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RtfReader.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:07:50 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:37:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,7 @@ DBG_NAME(ORTFReader);
 // ORTFReader
 // ==========================================================================
 ORTFReader::ORTFReader( SvStream& rIn,
-                        const Reference< XConnection >& _rxConnection,
+                        const SharedConnection& _rxConnection,
                         const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                         const TColumnVector* pList,
