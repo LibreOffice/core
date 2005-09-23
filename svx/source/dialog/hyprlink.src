@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyprlink.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:19:20 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:40:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ ToolBox RID_SVXDLG_HYPERLINK
     Scroll = TRUE ;
     HelpID = HID_OFA_HYPERLINK_DLG ;
 
-    Text [ de ] = "Hyperlink einfügen" ;
+    Text [ de ] = "Hyperlink einfÃ¼gen" ;
     Text [ en-US ] = "Insert Hyperlink" ;
 
     ComboBox CB_NAME
@@ -95,7 +95,7 @@ ToolBox RID_SVXDLG_HYPERLINK
         AutoSize = TRUE ;
         AutoHScroll = TRUE ;
         DDExtraWidth = TRUE ;
-        QuickHelpText [ de ] = "Sammelbox für Internet-URLs" ;
+        QuickHelpText [ de ] = "Sammelbox fÃ¼r Internet-URLs" ;
         QuickHelpText [ en-US ] = "Internet URLs" ;
         QuickHelpText [ x-comment ] = " ";
         QuickHelpText [ x-comment ] = " ";
@@ -131,7 +131,7 @@ ToolBox RID_SVXDLG_HYPERLINK
             Identifier = BTN_INSERT_BOOKMARK ;
             Disable = TRUE ;
             Hide = TRUE;
-            Text [ de ] = "Verknüpfung" ;
+            Text [ de ] = "VerknÃ¼pfung" ;
             Text [ en-US ] = "Link" ;
             Text [ x-comment ] = " ";
         };
@@ -191,7 +191,7 @@ QueryBox RID_SVXQB_DONTEXIST
 {
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_YES ;
-    Message [ de ] = "Der URL existiert nicht.\nSoll er trotzdem eingefügt werden?" ;
+    Message [ de ] = "Der URL existiert nicht.\nSoll er trotzdem eingefÃ¼gt werden?" ;
     Message [ en-US ] = "This URL does not exist.\nInsert anyway?" ;
 };
 
