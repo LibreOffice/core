@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querydlg.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:34:31 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:18:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,7 @@ ModalDialog DLG_QRY_JOIN
             < "Innerer" ; Default; > ;
             < "Linker" ; Default; > ;
             < "Rechter" ; Default; > ;
-            < "Vollst‰ndiger"  ; Default; > ;
+            < "Vollst√§ndiger"  ; Default; > ;
         };
         DropDown        = TRUE;
         DDExtraWidth    = TRUE;
@@ -179,27 +179,27 @@ ModalDialog DLG_QRY_JOIN
 
 String STR_JOIN_TYPE_HINT
 {
-    Text [ de ] = "Bitte beachten Sie, daﬂ einige Datenbanken eventuell diese Art der Verkn¸pfung nicht unterst¸tzen.";
+    Text [ de ] = "Bitte beachten Sie, da√ü einige Datenbanken eventuell diese Art der Verkn√ºpfung nicht unterst√ºtzen.";
     Text [ en-US ] = "Please note that some databases may not support this join type.";
 };
 
 String STR_QUERY_INNER_JOIN
 {
-    Text [ de ] = "Beinhaltet nur die Datens‰tze, bei denen die Inhalte der verkn¸pften Felder beider Tabellen gleich sind.";
+    Text [ de ] = "Beinhaltet nur die Datens√§tze, bei denen die Inhalte der verkn√ºpften Felder beider Tabellen gleich sind.";
     Text [ en-US ] = "Includes only records for which the contents of the related fields of both tables are identical.";
     Text [ x-comment ] = " ";
 };
 
 String STR_QUERY_LEFTRIGHT_JOIN
 {
-    Text [ de ] = "Beinhaltet ALLE Datens‰tze aus '%1' und nur die Datens‰tze aus '%2', bei denen die Inhalte der verkn¸pften Felder beider Tabellen gleich sind.";
+    Text [ de ] = "Beinhaltet ALLE Datens√§tze aus '%1' und nur die Datens√§tze aus '%2', bei denen die Inhalte der verkn√ºpften Felder beider Tabellen gleich sind.";
     Text [ en-US ] = "Contains ALL records from table '%1' but only records from table '%2' where the values in the related fields are matching.";
     Text [ x-comment ] = " ";
 };
 
 String STR_QUERY_FULL_JOIN
 {
-    Text [ de ] = "Beinhaltet ALLE Datens‰tze aus '%1' und aus '%2'.";
+    Text [ de ] = "Beinhaltet ALLE Datens√§tze aus '%1' und aus '%2'.";
     Text [ en-US ] = "Contains ALL records from '%1' and from '%2'.";
     Text [ x-comment ] = " ";
 };
