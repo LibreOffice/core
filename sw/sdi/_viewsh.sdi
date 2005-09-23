@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _viewsh.sdi,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:35:07 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:06:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -586,6 +586,11 @@ interface BaseTextEditView : View
         StateMethod = GetState ;
     ]
     SID_ALIGN_ANY_BOTTOM
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_RESTORE_EDITING_VIEW
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
