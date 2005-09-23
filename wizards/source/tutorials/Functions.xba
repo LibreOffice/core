@@ -127,12 +127,12 @@ Sub InitRoadMap()
 End Sub
 
 Sub Destroy()
-	myDialog.dispose		
+	&apos;myDialog.dispose		
 	wait 1000				
     ShowInfoDialog.DisposeIDialog()
     
     &apos; HIER WIRD DAS DOCUMENT GESCHLOSSEN!!!!!!!! GPF
-    &apos;thisComponent.CurrentController.Frame.close(True)    
+    thisComponent.CurrentController.Frame.close(True)    
 	
 End Sub
 
@@ -285,7 +285,7 @@ Sub CheckForStepNextButtonStatus()
 End Sub
 
 Sub Show(aEvent)
-	ShowInfoMain()
+	&apos;ShowInfoMain()
 	If( myDialog.model.show.Label = &quot;Tutorials&quot;) Then
 		oOpenDialogFlag = True
 		DialogVisible = False
@@ -313,8 +313,8 @@ End Sub
 
 Function MousePoints(aEvent)
 	Dim position(1) As Integer
-	position(0) = myDialog.getControl(&quot;show&quot;).AccessibleContext.LocationOnScreen.X + aEvent.X	
-	position(1) = myDialog.getControl(&quot;show&quot;).AccessibleContext.LocationOnScreen.Y + aEvent.Y
+	position(0) = myDialog.getControl(&quot;show&quot;).AccessibleContext.LocationOnScreen.X + aEvent.Source.Model.PositionX	
+	position(1) = myDialog.getControl(&quot;show&quot;).AccessibleContext.LocationOnScreen.Y + aEvent.Source.Model.PositionY
 	MousePoints = position()	
 End Function
 
