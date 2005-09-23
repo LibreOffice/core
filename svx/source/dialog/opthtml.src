@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opthtml.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:44:57 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:44:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ TabPage RID_OFAPAGE_HTMLOPT
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ de ] = "Größe ~1" ;
+        Text [ de ] = "GrÃ¶ÃŸe ~1" ;
         Text [ en-US ] = "Size ~1" ;
         Text [ x-comment ] = " ";
     };
@@ -73,7 +73,7 @@ TabPage RID_OFAPAGE_HTMLOPT
     {
         Pos = MAP_APPFONT ( 12 , 32 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ de ] = "Größe ~2" ;
+        Text [ de ] = "GrÃ¶ÃŸe ~2" ;
         Text [ en-US ] = "Size ~2" ;
         Text [ x-comment ] = " ";
     };
@@ -97,7 +97,7 @@ TabPage RID_OFAPAGE_HTMLOPT
     {
         Pos = MAP_APPFONT ( 12 , 48 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ de ] = "Größe ~3" ;
+        Text [ de ] = "GrÃ¶ÃŸe ~3" ;
         Text [ en-US ] = "Size ~3" ;
         Text [ x-comment ] = " ";
     };
@@ -121,7 +121,7 @@ TabPage RID_OFAPAGE_HTMLOPT
     {
         Pos = MAP_APPFONT ( 12 , 64 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ de ] = "Größe ~4" ;
+        Text [ de ] = "GrÃ¶ÃŸe ~4" ;
         Text [ en-US ] = "Size ~4" ;
         Text [ x-comment ] = " ";
     };
@@ -145,7 +145,7 @@ TabPage RID_OFAPAGE_HTMLOPT
     {
         Pos = MAP_APPFONT ( 12 , 80 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ de ] = "Größe ~5" ;
+        Text [ de ] = "GrÃ¶ÃŸe ~5" ;
         Text [ en-US ] = "Size ~5" ;
         Text [ x-comment ] = " ";
     };
@@ -169,7 +169,7 @@ TabPage RID_OFAPAGE_HTMLOPT
     {
         Pos = MAP_APPFONT ( 12 , 96 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ de ] = "Größe ~6" ;
+        Text [ de ] = "GrÃ¶ÃŸe ~6" ;
         Text [ en-US ] = "Size ~6" ;
         Text [ x-comment ] = " ";
     };
@@ -193,7 +193,7 @@ TabPage RID_OFAPAGE_HTMLOPT
     {
         Pos = MAP_APPFONT ( 12 , 112 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ de ] = "Größe ~7" ;
+        Text [ de ] = "GrÃ¶ÃŸe ~7" ;
         Text [ en-US ] = "Size ~7" ;
         Text [ x-comment ] = " ";
     };
@@ -217,7 +217,7 @@ TabPage RID_OFAPAGE_HTMLOPT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 75 , 8 ) ;
-        Text [ de ] = "Schriftgrößen" ;
+        Text [ de ] = "SchriftgrÃ¶ÃŸen" ;
         Text [ en-US ] = "Font sizes" ;
         Text [ x-comment ] = " ";
     };
