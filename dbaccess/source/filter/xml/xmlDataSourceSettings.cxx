@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlDataSourceSettings.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:03:58 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:09:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 #include <vector>
 
@@ -67,6 +70,7 @@ namespace dbaxml
     using namespace ::rtl;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xml::sax;
+DBG_NAME(OXMLDataSourceSettings)
 
 OXMLDataSourceSettings::OXMLDataSourceSettings( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
@@ -76,11 +80,15 @@ OXMLDataSourceSettings::OXMLDataSourceSettings( ODBFilter& rImport
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
     ,m_rParent(_rParent)
 {
+    DBG_CTOR(OXMLDataSourceSettings,NULL);
+
 }
 // -----------------------------------------------------------------------------
 
 OXMLDataSourceSettings::~OXMLDataSourceSettings()
 {
+
+    DBG_DTOR(OXMLDataSourceSettings,NULL);
 }
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLDataSourceSettings::CreateChildContext(
