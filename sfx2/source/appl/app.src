@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:31:33 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:20:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ ErrorBox MSG_ERR_OPEN_CFG
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message [ de ] = "Fehler beim Öffnen der Konfiguration." ;
+    Message [ de ] = "Fehler beim Ã–ffnen der Konfiguration." ;
     Message [ en-US ] = "Error opening configuration file." ;
     Message [ x-comment ] = " " ;
 };
@@ -111,7 +111,7 @@ ErrorBox MSG_SIGNAL
 {
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_YES ;
-    Message [ de ] = "Es ist ein unerwarter Anwendungsfehler aufgetreten!\nSie können jetzt auf eigene Gefahr hin versuchen,\nalle offenen Dokumente zu sichern!\n\nSoll versucht werden, Ihre Arbeit zu sichern, bevor die Applikation beendet wird?" ;
+    Message [ de ] = "Es ist ein unerwarter Anwendungsfehler aufgetreten!\nSie kÃ¶nnen jetzt auf eigene Gefahr hin versuchen,\nalle offenen Dokumente zu sichern!\n\nSoll versucht werden, Ihre Arbeit zu sichern, bevor die Applikation beendet wird?" ;
     Message [ en-US ] = "An unexpected program error has occurred.\n\nDo you want to try to save your changes in all open documents before the program is terminated?" ;
     Message [ x-comment ] = " " ;
 };
@@ -120,7 +120,7 @@ ErrorBox MSG_ERR_NO_WEBBROWSER_FOUND
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message [ de ] = "%PRODUCTNAME konnte auf Ihrem Rechner keinen Web-Browser finden. Bitte überprüfen Sie Ihre Arbeitsplatz-Einstellungen, oder installieren Sie einen Web-Browser (z.B. Mozilla) an die von dem Web-Browser vorgeschriebene Stelle." ;
+    Message [ de ] = "%PRODUCTNAME konnte auf Ihrem Rechner keinen Web-Browser finden. Bitte Ã¼berprÃ¼fen Sie Ihre Arbeitsplatz-Einstellungen, oder installieren Sie einen Web-Browser (z.B. Mozilla) an die von dem Web-Browser vorgeschriebene Stelle." ;
     Message[ en-US ] = "%PRODUCTNAME could not find a web browser on your system. Please check your Desktop Preferences or install a web browser (for example, Mozilla) in the default  location requested during the browser installation." ;
 };
 
@@ -199,7 +199,7 @@ WarningBox RID_WARN_POST_MAILTO
 {
     BUTTONS = WB_OK_CANCEL ;
     DEFBUTTON = WB_DEF_OK ;
-    Message [ de ] = "Ein Formular soll per E-Mail versendet werden.\nDadurch wird dem Empfänger Ihre E-Mail-Adresse bekannt." ;
+    Message [ de ] = "Ein Formular soll per E-Mail versendet werden.\nDadurch wird dem EmpfÃ¤nger Ihre E-Mail-Adresse bekannt." ;
     Message [ en-US ] = "A form is to be sent by e-mail.\nThis means that the receiver will get to see your e-mail address." ;
     Message [ x-comment ] = " " ;
 };
@@ -283,7 +283,7 @@ String GID_NAVIGATOR
 
 String GID_INSERT
 {
-    Text [ de ] = "Einfügen" ;
+    Text [ de ] = "EinfÃ¼gen" ;
     Text [ en-US ] = "Insert" ;
     Text [ x-comment ] = " " ;
 };
@@ -381,7 +381,7 @@ String GID_CONNECTOR
 
 String GID_MODIFY
 {
-    Text [ de ] = "Ändern" ;
+    Text [ de ] = "Ã„ndern" ;
     Text [ en-US ] = "Modify" ;
     Text [ x-comment ] = " " ;
 };
@@ -443,7 +443,7 @@ TabDialog SID_OPTIONS
             PageItem
             {
                 Identifier = RID_SFXPAGE_SPELL ;
-                Text [ de ] = "Rechtschreibprüfung" ;
+                Text [ de ] = "RechtschreibprÃ¼fung" ;
                 Text [ en-US ] = "Spellcheck" ;
                 PageResID = 259 ;
                 Text [ x-comment ] = " " ;
@@ -455,7 +455,7 @@ TabDialog SID_OPTIONS
 
 InfoBox MSG_CANT_QUIT
 {
-    Message [ de ] = "Die Anwendung kann zur Zeit nicht beendet werden.\nBitte warten Sie das Ende aller Druckaufträge und/oder\nOLE-Aktivierungen ab und schließen Sie alle Dialoge." ;
+    Message [ de ] = "Die Anwendung kann zur Zeit nicht beendet werden.\nBitte warten Sie das Ende aller DruckauftrÃ¤ge und/oder\nOLE-Aktivierungen ab und schlieÃŸen Sie alle Dialoge." ;
     Message [ en-US ] = "The application cannot be terminated at the moment.\nPlease wait until all print jobs and/or\nOLE actions have finished and close all dialogs." ;
     Message [ x-comment ] = " " ;
 };
@@ -478,7 +478,7 @@ String STR_NODOUBLE
 
 String STR_NOPRINTER
 {
-    Text [ de ] = "Einige %PRODUCTNAME-Funktionen können ohne Druckertreiber nicht korrekt arbeiten.\nBitte installieren Sie einen Druckertreiber." ;
+    Text [ de ] = "Einige %PRODUCTNAME-Funktionen kÃ¶nnen ohne Druckertreiber nicht korrekt arbeiten.\nBitte installieren Sie einen Druckertreiber." ;
     Text [ en-US ] = "Some %PRODUCTNAME functions will not work properly without a printer driver.\nPlease install a printer driver." ;
     Text [ x-comment ] = " " ;
 };
@@ -486,7 +486,7 @@ String STR_NOPRINTER
 String STR_ISMODIFIED
 {
     Text [ x-comment ] = " ; PB: ; PB: waren frueher zwei String" ;
-    Text [ de ] = "Sollen Änderungen in %1 gespeichert werden?" ;
+    Text [ de ] = "Sollen Ã„nderungen in %1 gespeichert werden?" ;
     Text [ en-US ] = "Do you want to save the changes to %1?" ;
 };
 
@@ -499,20 +499,20 @@ String STR_AUTOSAVE
 
 String STR_RESWARNING
 {
-    Text [ de ] = "Die Systemresourcen werden knapp. Bitte beenden Sie andere Applikationen oder schließen Sie einige Fenster, bevor Sie weiterarbeiten." ;
+    Text [ de ] = "Die Systemresourcen werden knapp. Bitte beenden Sie andere Applikationen oder schlieÃŸen Sie einige Fenster, bevor Sie weiterarbeiten." ;
     Text [ en-US ] = "Limited system resources. Please quit other applications or close some windows before continuing." ;
     Text [ x-comment ] = " " ;
 };
 String STR_RESEXCEPTION
 {
-    Text [ de ] = "Wichtige Programmteile nicht gefunden. Bitte überprüfen Sie Ihre Installation." ;
+    Text [ de ] = "Wichtige Programmteile nicht gefunden. Bitte Ã¼berprÃ¼fen Sie Ihre Installation." ;
     Text [ en-US ] = "There are files missing. Please check application setup." ;
     Text [ x-comment ] = " " ;
 };
 
 String STR_DOUBLEEXCEPTION
 {
-    Text [ de ] = "Während der Alarmdatensicherung ist ein weiterer Systemfehler aufgetreten.\nDie Daten sind evtl. unvollständig gesichert." ;
+    Text [ de ] = "WÃ¤hrend der Alarmdatensicherung ist ein weiterer Systemfehler aufgetreten.\nDie Daten sind evtl. unvollstÃ¤ndig gesichert." ;
     Text [ en-US ] = "Another error occurred during the save recovery.\nPossibly, the data could not be entirely saved." ;
     Text [ x-comment ] = " " ;
 };
@@ -547,7 +547,7 @@ String MSG_IOERR_PATH_NOT_FOUND
 
 String MSG_IOERR_TOO_MANY_OPEN_FILES
 {
-    Text [ de ] = "Die Datei $(FILE) konnte nicht geöffnet werden,\nda zur Zeit zu viele Dateien offen sind.\nSchließen Sie einige Dateien und versuchen Sie es erneut." ;
+    Text [ de ] = "Die Datei $(FILE) konnte nicht geÃ¶ffnet werden,\nda zur Zeit zu viele Dateien offen sind.\nSchlieÃŸen Sie einige Dateien und versuchen Sie es erneut." ;
     Text [ en-US ] = "The file $(FILE) could not be opened,\nbecause too many files are open.\nPlease close some files and try again." ;
     Text [ x-comment ] = " " ;
 };
@@ -568,7 +568,7 @@ String MSG_IOERR_INVALID_ACCESS
 
 String MSG_IOERR_INVALID_HANDLE
 {
-    Text [ de ] = "Die Datei $(FILE) konnte wegen einer ungültiger Dateidescriptors nicht geöffnet werden." ;
+    Text [ de ] = "Die Datei $(FILE) konnte wegen einer ungÃ¼ltiger Dateidescriptors nicht geÃ¶ffnet werden." ;
     Text [ en-US ] = "The file $(FILE) could not be opened due to an invalid file handle." ;
     Text [ x-comment ] = " " ;
 };
@@ -665,14 +665,14 @@ String STR_EVENT_CLOSEDOC
 
 String STR_EVENT_PREPARECLOSEDOC
 {
-    Text [ de ] = "Dokument schließen" ;
+    Text [ de ] = "Dokument schlieÃŸen" ;
     Text [ en-US ] = "Close Document" ;
     Text [ x-comment ] = " " ;
 };
 
 String STR_EVENT_OPENDOC
 {
-    Text [ de ] = "Dokument öffnen" ;
+    Text [ de ] = "Dokument Ã¶ffnen" ;
     Text [ en-US ] = "Open Document" ;
     Text [ x-comment ] = " " ;
 };
@@ -728,7 +728,7 @@ String STR_EVENT_PRINTDOC
 
 String STR_EVENT_MODIFYCHANGED
 {
-    Text [ de ] = "'Geändert'-Status wurde geändert" ;
+    Text [ de ] = "'GeÃ¤ndert'-Status wurde geÃ¤ndert" ;
     Text [ en-US ] = "'Modified' status was changed" ;
 };
 
@@ -741,7 +741,7 @@ String STR_ERR_NOTEMPLATE
 
 String STR_ERR_NOFILE
 {
-    Text [ de ] = "Die Datei $ kann nicht geöffnet werden." ;
+    Text [ de ] = "Die Datei $ kann nicht geÃ¶ffnet werden." ;
     Text [ en-US ] = "Can't open file $." ;
     Text [ x-comment ] = " " ;
 };
@@ -756,14 +756,14 @@ String STR_QUITAPP
 
 String STR_EXITANDRETURN
 {
-    Text [ de ] = "~Beenden & zurück zu " ;
+    Text [ de ] = "~Beenden & zurÃ¼ck zu " ;
     Text [ en-US ] = "E~xit & return to " ;
     Text [ x-comment ] = " " ;
 };
 
 String STR_EXTHELPSTATUS
 {
-    Text [ de ] = "Wählen Sie einen Befehl oder klicken Sie, um ein Thema auszuwählen." ;
+    Text [ de ] = "WÃ¤hlen Sie einen Befehl oder klicken Sie, um ein Thema auszuwÃ¤hlen." ;
     Text [ en-US ] = "Select a command or click to select a theme." ;
     Text [ x-comment ] = " " ;
 };
@@ -1158,7 +1158,7 @@ String STR_KEY_GLOSSARY_PATH
 };
 String STR_KEY_DICTIONARY_PATH
 {
-    Text [ de ] = "Wörterbücher" ;
+    Text [ de ] = "WÃ¶rterbÃ¼cher" ;
     Text [ en-US ] = "Dictionaries" ;
     Text [ x-comment ] = " " ;
 };
@@ -1183,7 +1183,7 @@ String STR_KEY_STORAGE_DIR
 };
 String STR_KEY_TEMP_PATH
 {
-    Text [ de ] = "Temporäre Dateien" ;
+    Text [ de ] = "TemporÃ¤re Dateien" ;
     Text [ en-US ] = "Temporary files" ;
 };
 String STR_KEY_PLUGINS_PATH
@@ -1217,7 +1217,7 @@ String STR_KEY_USERCONFIG_PATH
 };
 String STR_KEY_USERDICTIONARY_DIR
 {
-    Text [ de ] = "Benutzerwörterbücher" ;
+    Text [ de ] = "BenutzerwÃ¶rterbÃ¼cher" ;
     Text [ en-US ] = "User-defined dictionaries" ;
     Text [ x-comment ] = " " ;
 };
@@ -1250,7 +1250,7 @@ String STR_QUICKSTART_TIP
 };
 String STR_QUICKSTART_FILEOPEN
 {
-    Text [ de ] = "Dokument öffnen" ;
+    Text [ de ] = "Dokument Ã¶ffnen" ;
     Text [ en-US ] = "Open Document" ;
     Text [ x-comment ] = " " ;
 };
@@ -1275,14 +1275,14 @@ String STR_QUICKSTART_LNKNAME
 
 String STR_QUERY_UPDATE_LINKS
 {
-    Text [ de ] = "Sollen alle Verknüpfungen aktualisiert werden?" ;
+    Text [ de ] = "Sollen alle VerknÃ¼pfungen aktualisiert werden?" ;
     Text [ en-US ] = "Update all links?" ;
     Text [ x-comment ] = " " ;
 };
 
 String STR_DDE_ERROR
 {
-    Text [ de ] = "DDE Verknüpfung zu % für % Bereich % kann nicht erzeugt werden." ;
+    Text [ de ] = "DDE VerknÃ¼pfung zu % fÃ¼r % Bereich % kann nicht erzeugt werden." ;
     Text [ en-US ] = "DDE link to % for % area % are not available." ;
     Text [ x-comment ] = " " ;
 };
@@ -1292,7 +1292,7 @@ WarningBox RID_SECURITY_WARNING_HYPERLINK
     HelpId = HID_WARNING_SECURITY_HYPERLINK;
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message [ de ] = "Dieser Hyperlink wird \"%s\" öffnen. Wollen Sie fortfahren?" ;
+    Message [ de ] = "Dieser Hyperlink wird \"%s\" Ã¶ffnen. Wollen Sie fortfahren?" ;
     Message [ en-US ] = "This hyperlink is going to open \"%s\". Do you want to proceed?" ;
 };
 
@@ -1306,7 +1306,7 @@ String RID_SECURITY_WARNING_TITLE
 ErrorBox RID_INVALID_URL_MSG
 {
     Buttons = WB_OK ;
-    Message [ de ] = "Der URL ist ungültig." ;
+    Message [ de ] = "Der URL ist ungÃ¼ltig." ;
     Message [ en-US ] = "The URL is not valid." ;
     Message [ x-comment ] = " " ;
 };
@@ -1326,9 +1326,9 @@ WarningBox RID_XMLSEC_WARNING_BROKENSIGNATURE
 //    HelpId = HID_XMLSEC_WARNING_BROKENSIGNATURE;
     Buttons = WB_OK ;
     DefButton = WB_DEF_OK ;
-    Title [ de ] = "Ungültige Dokumentsignatur" ;
+    Title [ de ] = "UngÃ¼ltige Dokumentsignatur" ;
     Title [ en-US ] = "Invalid Document Signature" ;
-    Message [ de ] = "Der digital signierte Dokumentinhalt und/oder die Makros stimmen nicht mit der aktuellen Dokumentsignatur überein.\n\nDieses deutet auf eine Dokumentmanipulation oder einen Übertragungsfehler hin.\nWir empfehlen Ihnen, dem aktuellen Dokumentinhalt nicht zu trauen.\n\nDas Ausführen von Makros ist für dieses Dokument deaktiviert.\n " ;
+    Message [ de ] = "Der digital signierte Dokumentinhalt und/oder die Makros stimmen nicht mit der aktuellen Dokumentsignatur Ã¼berein.\n\nDieses deutet auf eine Dokumentmanipulation oder einen Ãœbertragungsfehler hin.\nWir empfehlen Ihnen, dem aktuellen Dokumentinhalt nicht zu trauen.\n\nDas AusfÃ¼hren von Makros ist fÃ¼r dieses Dokument deaktiviert.\n " ;
     Message [ en-US ] = "The digitally signed document content and/or macros do not match the current document signature.\n\nThis could be the result of document manipulation or of structural document damage due to data transmission.\n\nWe recommend that you do not trust the content of the current document.\nExecution of macros is disabled for this document.\n " ;
 };
 
@@ -1337,7 +1337,7 @@ WarningBox RID_WARNING_MACROSDISABLED
 //    HelpId = HID_WARNING_MACROSDISABLED;
     Buttons = WB_OK ;
     DefButton = WB_DEF_OK ;
-    Message [ de ] = "Dieses Dokument enthält Makros.\nDas Ausführen dieses Makros wird gemäß der aktuellen Makro-Sicherheitseinstellungen  unterbunden. Deshalb könnten einige Funktionen nicht verfügbar sein." ;
+    Message [ de ] = "Dieses Dokument enthÃ¤lt Makros.\nDas AusfÃ¼hren dieses Makros wird gemÃ¤ÃŸ der aktuellen Makro-Sicherheitseinstellungen  unterbunden. Deshalb kÃ¶nnten einige Funktionen nicht verfÃ¼gbar sein." ;
     Message [ en-US ] = "This document contains macros.\nExecution of this macros is disabled due to the current macro security setting. Therefore, some functionality may not be available." ;
 };
 
@@ -1346,7 +1346,7 @@ QueryBox RID_XMLSEC_QUERY_LOSINGSIGNATURE
 //    HelpId = HID_XMLSEC_QUERY_LOSINGSIGNATURE;
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message [ de ] = "Speichern in diesem Format entfernt alle existierenden Signaturen.\nMöchten Sie mit dem Speichern fortfahren?\n" ;
+    Message [ de ] = "Speichern in diesem Format entfernt alle existierenden Signaturen.\nMÃ¶chten Sie mit dem Speichern fortfahren?\n" ;
     Message [ en-US ] = "Saving will remove all existing signatures.\nDo you want to continue saving the document?\n" ;
 };
 
@@ -1355,7 +1355,7 @@ QueryBox RID_XMLSEC_QUERY_SAVEBEFORESIGN
 //    HelpId = HID_XMLSEC_QUERY_SAVEBEFORESIGN;
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_YES ;
-    Message [ de ] = "Das Dokument muss gespeichert werden bevor es signiert werden kann.\nMöchten Sie das Dokument jetzt speichern?" ;
+    Message [ de ] = "Das Dokument muss gespeichert werden bevor es signiert werden kann.\nMÃ¶chten Sie das Dokument jetzt speichern?" ;
     Message [ en-US ] = "The document has to be saved before it can be signed.\nDo you want to save the document?" ;
 };
 
