@@ -375,11 +375,11 @@ LetterWizardDialogResources resources;
     );
     optReceiverPlaceholder = insertRadioButton("optReceiverPlaceholder", OPTRECEIVERPLACEHOLDER_ITEM_CHANGED,
       new String[] {"Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-      new Object[] { INTEGERS[8],"HID:" + ( HID + 39 ),resources.resoptReceiverPlaceholder_value,"optReceiverPlaceholder",new Integer(104),new Integer(145),INTEGERS[4],new Short((short)39),new Integer(149)}
+      new Object[] { INTEGERS[8],"HID:" + ( HID + 39 ),resources.resoptReceiverPlaceholder_value,"optReceiverPlaceholder",new Integer(104),new Integer(145),INTEGERS[4],new Short((short)39),new Integer(200)}
     );
     optReceiverDatabase = insertRadioButton("optReceiverDatabase", OPTRECEIVERDATABASE_ITEM_CHANGED,
       new String[] {"Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-      new Object[] { INTEGERS[8],"HID:" + ( HID + 40 ),resources.resoptReceiverDatabase_value,"optReceiverDatabase",new Integer(104),new Integer(157),INTEGERS[4],new Short((short)40),new Integer(149)}
+      new Object[] { INTEGERS[8],"HID:" + ( HID + 40 ),resources.resoptReceiverDatabase_value,"optReceiverDatabase",new Integer(104),new Integer(157),INTEGERS[4],new Short((short)40),new Integer(200)}
     );
     lblSenderAddress = insertLabel("lblSenderAddress",
       new String[] {"Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
@@ -449,7 +449,7 @@ LetterWizardDialogResources resources;
     );
     lblFinalExplanation1 = insertLabel("lblFinalExplanation1",
       new String[] {"Height", "Label", "MultiLine", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-      new Object[] { new Integer(28),resources.reslblFinalExplanation1_value,Boolean.TRUE,"lblFinalExplanation1",new Integer(97),new Integer(28),INTEGERS[6],new Short((short)52),new Integer(205)}
+      new Object[] { new Integer(26),resources.reslblFinalExplanation1_value,Boolean.TRUE,"lblFinalExplanation1",new Integer(97),new Integer(28),INTEGERS[6],new Short((short)52),new Integer(205)}
     );
     lblProceed = insertLabel("lblProceed",
       new String[] {"Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
