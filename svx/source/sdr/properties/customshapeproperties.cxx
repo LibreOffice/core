@@ -4,9 +4,9 @@
  *
  *  $RCSfile: customshapeproperties.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:11:38 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:52:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,12 @@
 #include <svx/sdr/properties/customshapeproperties.hxx>
 #endif
 
+#ifndef _SFXITEMSET_HXX
+#include <svtools/itemset.hxx>
+#endif
+#ifndef _SFXSTYLE_HXX
+#include <svtools/style.hxx>
+#endif
 #ifndef _SVDOASHP_HXX
 #include <svdoashp.hxx>
 #endif
@@ -51,6 +57,9 @@
 #endif
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
+#endif
+#ifndef _SFXSMPLHINT_HXX
+#include <svtools/smplhint.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -193,6 +202,36 @@ namespace sdr
         BaseProperties& CustomShapeProperties::Clone(SdrObject& rObj) const
         {
             return *(new CustomShapeProperties(*this, rObj));
+        }
+        void CustomShapeProperties::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+        {
+            TextProperties::Notify( rBC, rHint );
+
+            sal_Bool bRemoveRenderGeometry = sal_False;
+
+            const SfxStyleSheetHint *pStyleHint = PTR_CAST( SfxStyleSheetHint, &rHint );
+            const SfxSimpleHint *pSimpleHint = PTR_CAST( SfxSimpleHint, &rHint );
+            if ( pStyleHint && pStyleHint->GetStyleSheet() == GetStyleSheet() )
+            {
+                switch( pStyleHint->GetHint() )
+                {
+                    case SFX_STYLESHEET_MODIFIED :
+                    case SFX_STYLESHEET_CHANGED  :
+                        bRemoveRenderGeometry = sal_True;
+                    break;
+                };
+            }
+            else if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DATACHANGED )
+            {
+                bRemoveRenderGeometry = sal_True;
+            }
+            if ( bRemoveRenderGeometry )
+            {
+                // local changes, removing cached objects
+                SdrObjCustomShape& rObj = (SdrObjCustomShape&)GetSdrObject();
+                rObj.InvalidateRenderGeometry();
+            }
+
         }
     } // end of namespace properties
 } // end of namespace sdr
