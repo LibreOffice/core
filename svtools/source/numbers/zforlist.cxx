@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:35:55 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:16:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -648,6 +648,76 @@ BOOL SvNumberFormatter::PutandConvertEntrySystem(String& rString,
     bRes = PutEntry(rString, nCheckPos, nType, nKey, eLnge);
     pFormatScanner->SetConvertMode(FALSE);
     return bRes;
+}
+
+
+ULONG SvNumberFormatter::GetIndexPuttingAndConverting( String & rString,
+        LanguageType eLnge, LanguageType eSysLnge, short & rType,
+        BOOL & rNewInserted, xub_StrLen & rCheckPos )
+{
+    ULONG nKey = NUMBERFORMAT_ENTRY_NOT_FOUND;
+    rNewInserted = FALSE;
+    rCheckPos = 0;
+
+    // #62389# empty format string (of Writer) => General standard format
+    if (!rString.Len())
+        ;   // nothing
+    else if (eLnge == LANGUAGE_SYSTEM && eSysLnge !=
+            Application::GetSettings().GetLanguage())
+    {
+        ULONG nOrig = GetEntryKey( rString, eSysLnge );
+        if (nOrig == NUMBERFORMAT_ENTRY_NOT_FOUND)
+            nKey = nOrig;   // none avaliable, maybe user-defined
+        else
+            nKey = GetFormatForLanguageIfBuiltIn( nOrig,
+                    Application::GetSettings().GetLanguage());
+        if (nKey == nOrig)
+        {
+            // Not a builtin format, convert.
+            // The format code string may get modified and adapted to the real
+            // language and wouldn't match eSysLnge anymore, do that on a copy.
+            String aTmp( rString);
+            rNewInserted = PutandConvertEntrySystem( aTmp, rCheckPos, rType,
+                    nKey, eLnge, Application::GetSettings().GetLanguage());
+            if (rCheckPos > 0)
+            {
+                DBG_ERRORFILE("SvNumberFormatter::GetIndexPuttingAndConverting: bad format code string for current locale");
+                nKey = NUMBERFORMAT_ENTRY_NOT_FOUND;
+            }
+        }
+    }
+    else
+    {
+        nKey = GetEntryKey( rString, eLnge);
+        if (nKey == NUMBERFORMAT_ENTRY_NOT_FOUND)
+        {
+            rNewInserted = PutEntry( rString, rCheckPos, rType, nKey, eLnge);
+            if (rCheckPos > 0)
+            {
+                DBG_ERRORFILE("SvNumberFormatter::GetIndexPuttingAndConverting: bad format code string for specified locale");
+                nKey = NUMBERFORMAT_ENTRY_NOT_FOUND;
+            }
+        }
+    }
+    if (nKey == NUMBERFORMAT_ENTRY_NOT_FOUND)
+        nKey = GetStandardIndex( eLnge);
+    rType = GetType( nKey);
+    // Convert any (!) old "automatic" currency format to new fixed currency
+    // default format.
+    if ((rType & NUMBERFORMAT_CURRENCY) != 0)
+    {
+        const SvNumberformat* pFormat = GetEntry( nKey);
+        if (!pFormat->HasNewCurrency())
+        {
+            if (rNewInserted)
+            {
+                DeleteEntry( nKey);     // don't leave trails of rubbish
+                rNewInserted = FALSE;
+            }
+            nKey = GetStandardFormat( NUMBERFORMAT_CURRENCY, eLnge);
+        }
+    }
+    return nKey;
 }
 
 
