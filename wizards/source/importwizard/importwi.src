@@ -4,9 +4,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:08:24 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:16:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,7 +142,7 @@ String sCancelButton
 
 String sBackButton
 {
-    Text [ de ] = "<< ~Zurück";
+    Text [ de ] = "<< ~ZurÃ¼ck";
     Text [ en-US ] = "<< ~Back";
 };
 
@@ -160,7 +160,7 @@ String sBeginButton
 
 String sCloseButton
 {
-    Text [ de ] = "~Schließen";
+    Text [ de ] = "~SchlieÃŸen";
     Text [ en-US ] = "~Close";
 };
 
@@ -172,14 +172,14 @@ String sWelcometextLabel1
 
 String sWelcometextLabel2
 {
-    Text [ de ] = "Bitte beachten Sie, dass beim Konvertieren der Microsoft - Dokumente angehängte VBA-Makros ihre Funktionalität verlieren";
+    Text [ de ] = "Bitte beachten Sie, dass beim Konvertieren der Microsoft - Dokumente angehÃ¤ngte VBA-Makros ihre FunktionalitÃ¤t verlieren";
     Text [ en-US ] = "Please note that when converting Microsoft documents any attached VBA macros lose their functionality.";
     Text [ x-comment ] = "; VBA = Visual Basics for Applications TSM 01.12.00";
 };
 
 String sWelcometextLabel3
 {
-    Text [ de ] = "Wählen Sie die umzuwandelnden Dokumenttypen aus:";
+    Text [ de ] = "WÃ¤hlen Sie die umzuwandelnden Dokumenttypen aus:";
     Text [ en-US ] = "Select the document type for conversion:";
 };
 
@@ -316,7 +316,7 @@ String sQueryfornewCreation
 
 String sFileExists
 {
-    Text [ de ] = "Die Datei '<1>' existiert bereits.<CR>Möchten Sie sie überschreiben?";
+    Text [ de ] = "Die Datei '<1>' existiert bereits.<CR>MÃ¶chten Sie sie Ã¼berschreiben?";
     Text [ en-US ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
 };
 
@@ -329,14 +329,14 @@ String sMorePathsError3
 
 String sOverwriteallFiles
 {
-    Text [ de ] = "Möchten Sie, dass Dokumente ohne Abfrage überschrieben werden?";
+    Text [ de ] = "MÃ¶chten Sie, dass Dokumente ohne Abfrage Ã¼berschrieben werden?";
     Text [ en-US ] = "Do you want to overwrite documents without being asked?";
 };
 
 
 String sreeditMacro
 {
-    Text [ de ] = "Dokumentenmakro muss überarbeitet werden";
+    Text [ de ] = "Dokumentenmakro muss Ã¼berarbeitet werden";
     Text [ en-US ] = "Document macro has to be revised.";
 };
 
@@ -349,7 +349,7 @@ String scouldNotsaveDocument
 
 String scouldNotopenDocument
 {
-    Text [ de ] = "Dokument '<1>' konnte nicht geöffnet werden";
+    Text [ de ] = "Dokument '<1>' konnte nicht geÃ¶ffnet werden";
     Text [ en-US ] = "Document '<1>' could not be opened.";
 };
 
@@ -357,7 +357,7 @@ String scouldNotopenDocument
 
 String sConvertError1
 {
-    Text [ de ] = "Möchten Sie das Konvertieren an dieser Stelle wirklich abbrechen ?";
+    Text [ de ] = "MÃ¶chten Sie das Konvertieren an dieser Stelle wirklich abbrechen ?";
     Text [ en-US ] = "Do you really want to terminate conversion at this point?";
 };
 
@@ -382,7 +382,7 @@ String sRTErrorHeader
 
 String sPathDialogMessage
 {
-    Text [ de ] = "Wählen Sie ein Verzeichnis aus";
+    Text [ de ] = "WÃ¤hlen Sie ein Verzeichnis aus";
     Text [ en-US ] = "Select a directory";
 };
 
@@ -446,7 +446,7 @@ String sXMLTemplateCheckbox_2_
 
 String sXMLTemplateCheckbox_3_
 {
-    Text [ de ] = "Zeichnungs/Präsentationsvorlagen";
+    Text [ de ] = "Zeichnungs/PrÃ¤sentationsvorlagen";
     Text [ en-US ] = "Drawing/presentation templates";
 };
 
@@ -471,7 +471,7 @@ String sXMLDocumentCheckbox_2_
 
 String sXMLDocumentCheckbox_3_
 {
-    Text [ de ] = "Zeichnungs/Präsentationsdokumente";
+    Text [ de ] = "Zeichnungs/PrÃ¤sentationsdokumente";
     Text [ en-US ] = "Drawing/presentation documents";
 };
 
@@ -540,7 +540,7 @@ String sshowLogfile
 
 String sSumInclusiveSubDir
 {
-    Text [ de ] = "Es werden alle Unterverzeichnisse berücksichtigt";
+    Text [ de ] = "Es werden alle Unterverzeichnisse berÃ¼cksichtigt";
     Text [ en-US ] = "All subdirectories will be taken into account";
 };
 
@@ -567,7 +567,7 @@ String sSumSOTableDocuments
 
 String sSumSODrawDocuments
 {
-    Text [ de ] = "Alle %PRODUCTNAME Zeichnungs- und Präsentationsdokumente aus dem folgenden Verzeichnis werden importiert:";
+    Text [ de ] = "Alle %PRODUCTNAME Zeichnungs- und PrÃ¤sentationsdokumente aus dem folgenden Verzeichnis werden importiert:";
     Text [ en-US ] = "All %PRODUCTNAME drawing and presentation documents contained in the following directory will be imported:";
 };
 
@@ -595,7 +595,7 @@ String sSumSOTableTemplates
 
 String sSumSODrawTemplates
 {
-    Text [ de ] = "Alle %PRODUCTNAME Zeichnungs- und Präsentationsvorlagen aus dem folgenden Verzeichnis werden importiert:";
+    Text [ de ] = "Alle %PRODUCTNAME Zeichnungs- und PrÃ¤sentationsvorlagen aus dem folgenden Verzeichnis werden importiert:";
     Text [ en-US ] = "All %PRODUCTNAME drawing and presentation templates contained in the following directory will be imported:";
 };
 
