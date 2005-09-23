@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optcomp.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:44:31 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:52:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,14 +48,14 @@ TabPage TP_OPTCOMPATIBILITY_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Kompatibilitätsoptionen für %DOCNAME" ;
+        Text [ de ] = "KompatibilitÃ¤tsoptionen fÃ¼r %DOCNAME" ;
         Text [ en-US ] = "Compatibility options for %DOCNAME";
     };
     FixedText FT_FORMATTING
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 236 , 8 ) ;
-        Text [ de ] = "Empfohlen ~Formatierungsoptionen für" ;
+        Text [ de ] = "Empfohlen ~Formatierungsoptionen fÃ¼r" ;
         Text [ en-US ] = "Recommended ~formatting options for";
     };
     ListBox LB_FORMATTING
@@ -83,7 +83,7 @@ TabPage TP_OPTCOMPATIBILITY_PAGE
     {
         Pos = MAP_APPFONT ( 125 , 165 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ de ] = "~Zurücksetzen" ;
+        Text [ de ] = "~ZurÃ¼cksetzen" ;
         Text [ en-US ] = "~Reset";
     };
     PushButton PB_DEFAULT
@@ -102,7 +102,7 @@ TabPage TP_OPTCOMPATIBILITY_PAGE
 
     String STR_QRYBOX_USEASDEFAULT
     {
-        Text [ de ] = "Möchten Sie die Kompatibiltätsoptionen der Standard-Vorlage ändern?\nDiese Änderungen wirken sich auf alle neuen Dokumente aus, die auf der Standard-Vorlage basieren.";
+        Text [ de ] = "MÃ¶chten Sie die KompatibiltÃ¤tsoptionen der Standard-Vorlage Ã¤ndern?\nDiese Ã„nderungen wirken sich auf alle neuen Dokumente aus, die auf der Standard-Vorlage basieren.";
         Text [ en-US ] = "Do you want to change the compatibility options of the default template?\nThis will affect all new documents based on the default template.";
     };
 
@@ -110,17 +110,17 @@ TabPage TP_OPTCOMPATIBILITY_PAGE
 
     String STR_PRINTER_METRICS
     {
-        Text [ de ] = "Druckermaße für Dokumentformatierung verwenden";
+        Text [ de ] = "DruckermaÃŸe fÃ¼r Dokumentformatierung verwenden";
         Text [ en-US ] = "Use printer metrics for document formatting";
     };
     String STR_MERGE_PARA_DIST
     {
-        Text [ de ] = "Alle Absatz- und Tabellenabstände addieren (aktuelles Dokument)";
+        Text [ de ] = "Alle Absatz- und TabellenabstÃ¤nde addieren (aktuelles Dokument)";
         Text [ en-US ] = "Add spacing between paragraphs and tables (in current document)";
     };
     String STR_MERGE_PARA_DIST_PAGESTART
     {
-        Text [ de ] = "Absatz- und Tabellenabstände an Seitenanfängen addieren (aktuelles Dokument)";
+        Text [ de ] = "Absatz- und TabellenabstÃ¤nde an SeitenanfÃ¤ngen addieren (aktuelles Dokument)";
         Text [ en-US ] = "Add paragraph and table spacing at tops of pages (in current document)";
     };
     String STR_TAB_ALIGNMENT
@@ -131,7 +131,7 @@ TabPage TP_OPTCOMPATIBILITY_PAGE
     };
     String STR_EXTERNAL_LEADING
     {
-        Text [ de ] = "Keinen zusätzlichen Leerraum zwischen Textzeilen hinzufügen";
+        Text [ de ] = "Keinen zusÃ¤tzlichen Leerraum zwischen Textzeilen hinzufÃ¼gen";
         Text [ en-US ] = "Do not add leading (extra space) between lines of text";
     };
     String STR_LINE_SPACING
@@ -142,7 +142,7 @@ TabPage TP_OPTCOMPATIBILITY_PAGE
     };
     String STR_ADD_TABLESPACING
     {
-        Text [ de ] = "Absatz- und Tabellenabstände am Ende von Tabellenzellen hinzufügen";
+        Text [ de ] = "Absatz- und TabellenabstÃ¤nde am Ende von Tabellenzellen hinzufÃ¼gen";
         Text [ en-US ] = "Add paragraph and table spacing at bottom of table cells";
     };
     String STR_USE_OBJPOSITIONING
@@ -160,7 +160,7 @@ TabPage TP_OPTCOMPATIBILITY_PAGE
     String STR_CONSIDER_WRAPPINGSTYLE
     {
         Text [ x-comment ] = "";
-        Text [ de ] = "Umbruchart bei der Positionierung von Objekten berücksichtigen";
+        Text [ de ] = "Umbruchart bei der Positionierung von Objekten berÃ¼cksichtigen";
         Text [ en-US ] = "Consider wrapping style when positioning objects";
     };
 };
