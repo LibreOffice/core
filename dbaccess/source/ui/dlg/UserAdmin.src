@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UserAdmin.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:50:44 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:12:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ TabPage TAB_PAGE_USERADMIN
         TabStop             = TRUE ;
         DefButton           = TRUE ;
         HelpId              = HID_TAB_PAGE_PBUSER ;
-        Text [ de ] = "Benutzer ~hinzufügen...";
+        Text [ de ] = "Benutzer ~hinzufÃ¼gen...";
         Text [ en-US ] = "~Add User...";
     };
 
@@ -100,7 +100,7 @@ TabPage TAB_PAGE_USERADMIN
         TabStop             = TRUE ;
         DefButton           = TRUE ;
         HelpId              = HID_TAB_PAGE_PBCHGPWD ;
-        Text [ de ] = "~Passwort ändern...";
+        Text [ de ] = "~Passwort Ã¤ndern...";
         Text [ en-US ] = "Change ~Password...";
     };
 
@@ -111,7 +111,7 @@ TabPage TAB_PAGE_USERADMIN
         TabStop             = TRUE ;
         DefButton           = TRUE ;
         HelpId              = HID_TAB_PAGE_PBUSERDELETE ;
-        Text [ de ] = "Benut~zer löschen...";
+        Text [ de ] = "Benut~zer lÃ¶schen...";
         Text [ en-US ] = "~Delete User...";
     };
 
@@ -119,7 +119,7 @@ TabPage TAB_PAGE_USERADMIN
     {
         Pos                 = MAP_APPFONT ( 6 , 52  ) ;
         Size                = MAP_APPFONT ( WINDOW_SIZE_X - 8, 8) ;
-        Text [ de ] = "Zugriffsrechte für ausgewählten Benutzer" ;
+        Text [ de ] = "Zugriffsrechte fÃ¼r ausgewÃ¤hlten Benutzer" ;
         Text [ en-US ] = "Access rights for selected user";
     };
 
@@ -136,13 +136,13 @@ TabPage TAB_PAGE_USERADMIN
 QueryBox QUERY_USERADMIN_DELETE_USER
 {
     Buttons = WB_YES_NO ;
-    Message [ de ] = "Soll der Benutzer wirklich gelöscht werden?" ;
+    Message [ de ] = "Soll der Benutzer wirklich gelÃ¶scht werden?" ;
     Message [ en-US ] = "Do you really want to delete the user?";
 };
 
 String STR_USERADMIN_NOT_AVAILABLE
 {
-    Text [ de ] ="Die Datenbank unterstützt keine Benutzerverwaltung!" ;
+    Text [ de ] ="Die Datenbank unterstÃ¼tzt keine Benutzerverwaltung!" ;
     Text [ en-US ] = "The database does not support user administration." ;
 };
 
@@ -159,7 +159,7 @@ ModalDialog DLG_PASSWORD
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( WIN_X , WIN_Y ) ;
-    Text [ de ] = "Kennwort ändern";
+    Text [ de ] = "Kennwort Ã¤ndern";
 
     FixedLine FL_USER
     {
@@ -202,7 +202,7 @@ ModalDialog DLG_PASSWORD
     {
         Pos = MAP_APPFONT ( 6 , 52 ) ;
         Size = MAP_APPFONT ( FT_SIZE_X , 10 ) ;
-        Text [ de ] = "Kennwort ~bestätigen" ;
+        Text [ de ] = "Kennwort ~bestÃ¤tigen" ;
         Text [ en-US ] = "~Confirm  password";
     };
     Edit ED_PASSWORD_REPEAT
@@ -234,7 +234,7 @@ ModalDialog DLG_PASSWORD
 
 String STR_ERROR_PASSWORDS_NOT_IDENTICAL
 {
-    Text [ de ] = "Die beiden Kennwörter stimmen nicht überein, bitte noch einmal eingeben!" ;
+    Text [ de ] = "Die beiden KennwÃ¶rter stimmen nicht Ã¼berein, bitte noch einmal eingeben!" ;
     Text [ en-US ] = "The passwords do not match. Please enter the password again.";
 };
 
