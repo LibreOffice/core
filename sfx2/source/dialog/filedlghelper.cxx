@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:18:08 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:54:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1498,7 +1498,7 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
             {
                 Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0 );
                 sal_Bool bSelection = sal_False;
-                if ( ( aValue >>= bSelection ) && bSelection )
+                if ( aValue >>= bSelection )
                     rpSet->Put( SfxBoolItem( SID_SELECTION, bSelection ) );
             }
             catch( IllegalArgumentException )
