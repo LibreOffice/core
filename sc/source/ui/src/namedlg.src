@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namedlg.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:31:42 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:07:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ ModelessDialog RID_SCDLG_NAMES
         Pos = MAP_APPFONT ( 166 , 74 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Hinzu~fügen : Hinzu~f³gen */
-        Text [ de ] = "Hinzu~fügen" ;
+        Text [ de ] = "Hinzu~fÃ¼gen" ;
         Text [ en-US ] = "~Add" ;
         TabStop = TRUE ;
         DefButton = TRUE ;
@@ -79,7 +79,7 @@ ModelessDialog RID_SCDLG_NAMES
         Pos = MAP_APPFONT ( 166 , 92 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
-        Text [ de ] = "~Löschen" ;
+        Text [ de ] = "~LÃ¶schen" ;
         Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -179,21 +179,21 @@ ModelessDialog RID_SCDLG_NAMES
     String STR_ADD
     {
         /* ### ACHTUNG: Neuer Text in Resource? Hinzu~fügen : Hinzu~f³gen */
-        Text [ de ] = "Hinzu~fügen" ;
+        Text [ de ] = "Hinzu~fÃ¼gen" ;
         Text [ en-US ] = "~Add" ;
         Text [ x-comment ] = " ";
     };
     String STR_MODIFY
     {
         /* ### ACHTUNG: Neuer Text in Resource? ~Ändern : ~Žndern */
-        Text [ de ] = "~Ändern" ;
+        Text [ de ] = "~Ã„ndern" ;
         Text [ en-US ] = "Mod~ify" ;
         Text [ x-comment ] = " ";
     };
     String STR_INVALIDSYMBOL
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ungültiger Ausdruck : Ung³ltiger Ausdruck */
-        Text [ de ] = "Ungültiger Ausdruck" ;
+        Text [ de ] = "UngÃ¼ltiger Ausdruck" ;
         Text [ en-US ] = "Invalid expression" ;
         Text [ x-comment ] = " ";
     };
