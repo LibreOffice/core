@@ -4,9 +4,9 @@
  *
  *  $RCSfile: redlndlg.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:40:57 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:10:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ ModelessDialog DLG_REDLINE_ACCEPT
 {
     HelpID = HID_REDLINE_ACCEPT ;
     /* ### ACHTUNG: Neuer Text in Resource? Änderungen akzeptieren oder verwerfen : Redlining */
-    Text [ de ] = "Änderungen akzeptieren oder verwerfen" ;
+    Text [ de ] = "Ã„nderungen akzeptieren oder verwerfen" ;
     Text [ en-US ] = "Accept or Reject Changes" ;
     REDLNDLG
     Text [ x-comment ] = " ";
@@ -70,7 +70,7 @@ ModelessDialog DLG_REDLINE_ACCEPT
 ModalDialog DLG_MOD_REDLINE_ACCEPT
 {
     HelpID = HID_REDLINE_AUTOFMT_ACCEPT ;
-    Text [ de ] = "AutoFormat: Änderungen akzeptieren oder verwerfen" ;
+    Text [ de ] = "AutoFormat: Ã„nderungen akzeptieren oder verwerfen" ;
     REDLNDLG
     Text [ en-US ] = "Accept or Reject AutoFormat Changes";
     Text [ x-comment ] = " ";
