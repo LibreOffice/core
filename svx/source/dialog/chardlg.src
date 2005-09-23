@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:40:57 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:34:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     {
         Pos = MAP_APPFONT ( 6 , 3  );
         Size = MAP_APPFONT ( 248 , 8 );
-        Text [ de ] = "Schriftart für westlichen Text";
+        Text [ de ] = "Schriftart fÃ¼r westlichen Text";
         Text [ en-US ] = "Western text font";
     };
     FixedText FT_WEST_NAME
@@ -228,7 +228,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     {
         Pos = MAP_APPFONT ( 6 , 43 );
         Size = MAP_APPFONT ( 248 , 8 );
-        Text [ de ] = "Schriftart für asiatischen Text";
+        Text [ de ] = "Schriftart fÃ¼r asiatischen Text";
         Text [ en-US ] = "Asian text font";
     };
     FixedText FT_EAST_NAME
@@ -317,7 +317,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
     {
         Pos = MAP_APPFONT ( 6 , 83 );
         Size = MAP_APPFONT ( 248 , 8 );
-        Text [ de ] = "Schriftart für CTL";
+        Text [ de ] = "Schriftart fÃ¼r CTL";
         Text [ en-US ] = "CTL font";
     };
     FixedText FT_CTL_NAME
@@ -655,7 +655,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         DropDown = TRUE;
         StringList [ de ] =
         {
-            < "Über Text" ; CHRDLG_POSITION_OVER ; > ;
+            < "Ãœber Text" ; CHRDLG_POSITION_OVER ; > ;
             < "Unter Text" ; CHRDLG_POSITION_UNDER ; > ;
         };
         StringList [ en-US ] =
@@ -702,7 +702,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
             < "Versalien" ; Default ; > ;
             < "Gemeine" ; Default ; > ;
             < "Titelschrift" ; Default ; > ;
-            < "Kapitälchen" ; Default ; > ;
+            < "KapitÃ¤lchen" ; Default ; > ;
         };
         StringList [ en-US ] =
         {
@@ -812,7 +812,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
     };
     String STR_EFFECTS_SMALL
     {
-        Text [ de ] = "Kapitälchen";
+        Text [ de ] = "KapitÃ¤lchen";
         Text [ en-US ] = "Small Capitals" ;
     };
     String STR_EFFECTS_OUTLINE
@@ -911,7 +911,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     {
         Pos = MAP_APPFONT ( 74 , 32 );
         Size = MAP_APPFONT ( 58 , 8 );
-        Text [ de ] = "~Schriftgröße rel.";
+        Text [ de ] = "~SchriftgrÃ¶ÃŸe rel.";
         Text [ en-US ] = "Relative font size" ;
     };
     MetricField ED_FONTSIZE
@@ -1100,7 +1100,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
     {
         Pos = MAP_APPFONT ( 6 , 30 );
         Size = MAP_APPFONT ( 248 , 8 );
-        Text [ de ] = "Einschließende Zeichen";
+        Text [ de ] = "EinschlieÃŸende Zeichen";
         Text [ en-US ] = "Enclosing character" ;
     };
     FixedText FT_STARTBRACKET
