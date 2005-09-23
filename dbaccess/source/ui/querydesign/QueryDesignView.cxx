@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:24:29 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:43:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2337,6 +2337,7 @@ namespace
     //------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
 } // end of anonymouse namespace
+DBG_NAME(OQueryDesignView)
 
 OQueryDesignView::OQueryDesignView( OQueryContainerWindow* _pParent,
                                     OQueryController* _pController,
@@ -2347,6 +2348,8 @@ OQueryDesignView::OQueryDesignView( OQueryContainerWindow* _pParent,
     ,m_bInKeyEvent(sal_False)
     ,m_bInSplitHandler( sal_False )
 {
+    DBG_CTOR(OQueryDesignView,NULL);
+
     try
     {
         SvtSysLocale aSysLocale;
@@ -2373,6 +2376,8 @@ OQueryDesignView::~OQueryDesignView()
         ::dbaui::notifySystemWindow(this,m_pTableView,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
     ::std::auto_ptr<Window> aTemp(m_pSelectionBox);
     m_pSelectionBox = NULL;
+
+    DBG_DTOR(OQueryDesignView,NULL);
 }
 //------------------------------------------------------------------------------
 IMPL_LINK( OQueryDesignView, SplitHdl, void*, p )
