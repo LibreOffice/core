@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:57:16 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:55:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,13 +43,13 @@ String RID_ERR_CONTEXT_ADDFORM
 };
 String RID_ERR_FIELDREQUIRED
 {
-    Text [ de ] = "Für das Feld '#' ist eine Eingabe erforderlich.\nGeben Sie dort einen Wert ein!" ;
+    Text [ de ] = "FÃ¼r das Feld '#' ist eine Eingabe erforderlich.\nGeben Sie dort einen Wert ein!" ;
     Text [ en-US ] = "Input required in field '#'. Please enter a value." ;
     Text [ x-comment ] = " ";
 };
 String RID_ERR_DUPLICATE_NAME
 {
-    Text [ de ] = "Eintrag existiert bereits.\nBitte wählen Sie einen anderen Namen." ;
+    Text [ de ] = "Eintrag existiert bereits.\nBitte wÃ¤hlen Sie einen anderen Namen." ;
     Text [ en-US ] = "Entry already exists.\nPlease choose another name." ;
     Text [ x-comment ] = " ";
 };
@@ -223,7 +223,7 @@ String RID_STR_REC_FROM_TEXT
 };
 String RID_STR_FIELDSELECTION
 {
-    Text [ de ] = "Feld hinzufügen:";
+    Text [ de ] = "Feld hinzufÃ¼gen:";
     Text [ en-US ] = "Add field:";
 };
 String RID_STR_WRITEERROR
@@ -241,26 +241,26 @@ String RID_STR_SYNTAXERROR
 
 String RID_STR_DELETECONFIRM_RECORD
 {
-    Text [ de ] = "Sie beabsichtigen, 1 Datensatz zu löschen." ;
+    Text [ de ] = "Sie beabsichtigen, 1 Datensatz zu lÃ¶schen." ;
     Text [ en-US ] = "You intend to delete 1 record." ;
     Text [ x-comment ] = " ";
 };
 String RID_STR_DELETECONFIRM_RECORDS
 {
-    Text [ de ] = "Sie beabsichtigen # Datensätze zu löschen." ;
+    Text [ de ] = "Sie beabsichtigen # DatensÃ¤tze zu lÃ¶schen." ;
     Text [ en-US ] = "# records will be deleted." ;
     Text [ x-comment ] = " ";
 };
 String RID_STR_DELETECONFIRM
 {
-    Text [ de ] = "Wenn Ja ausgewählt wird, kann die Operation nicht mehr rückgängig gemacht werden!\nWollen Sie trotzdem fortfahren?" ;
+    Text [ de ] = "Wenn Ja ausgewÃ¤hlt wird, kann die Operation nicht mehr rÃ¼ckgÃ¤ngig gemacht werden!\nWollen Sie trotzdem fortfahren?" ;
     Text [ en-US ] = "If you click Yes, you won't be able to undo this operation!\nDo you want to continue anyway?" ;
     Text [ x-comment ] = " ";
 };
 
 String RID_ERR_NO_ELEMENT
 {
-    Text [ de ] = "Wählen Sie ein Element der Liste aus oder geben Sie Text ein, der mit einem der aufgelisteten Elemente übereinstimmt." ;
+    Text [ de ] = "WÃ¤hlen Sie ein Element der Liste aus oder geben Sie Text ein, der mit einem der aufgelisteten Elemente Ã¼bereinstimmt." ;
     Text [ en-US ] = "Choose an entry from the list or enter a text corresponding to one of the list items." ;
     Text [ x-comment ] = " ";
 };
@@ -296,19 +296,19 @@ String RID_STR_UNDO_PROPERTY
 };
 String RID_STR_UNDO_CONTAINER_INSERT
 {
-    Text [ de ] = "Einfügen in Container" ;
+    Text [ de ] = "EinfÃ¼gen in Container" ;
     Text [ en-US ] = "Insert in container" ;
     Text [ x-comment ] = " ";
 };
 String RID_STR_UNDO_CONTAINER_REMOVE
 {
-    Text [ de ] = "# löschen" ;
+    Text [ de ] = "# lÃ¶schen" ;
     Text [ en-US ] = "Delete #" ;
     Text [ x-comment ] = " ";
 };
 String RID_STR_UNDO_CONTAINER_REMOVE_MULTIPLE
 {
-    Text [ de ] = "# Objekte löschen" ;
+    Text [ de ] = "# Objekte lÃ¶schen" ;
     Text [ en-US ] = "Delete # objects" ;
     Text [ x-comment ] = " ";
 };
@@ -320,7 +320,7 @@ String RID_STR_UNDO_CONTAINER_REPLACE
 };
 String RID_STR_UNDO_DELETE_LOGICAL
 {
-    Text [ de ] = "Struktur löschen" ;
+    Text [ de ] = "Struktur lÃ¶schen" ;
     Text [ en-US ] = "Delete structure" ;
     Text [ x-comment ] = " ";
 };
@@ -343,7 +343,7 @@ String RID_STR_TIME
 };
 String RID_STR_PROPTITLE_PUSHBUTTON
 {
-    Text [ de ] = "Schaltfläche" ;
+    Text [ de ] = "SchaltflÃ¤che" ;
     Text [ en-US ] = "Button" ;
     Text [ x-comment ] = " ";
 };
@@ -403,7 +403,7 @@ String RID_STR_PROPTITLE_COMBOBOX
 };
 String RID_STR_PROPTITLE_IMAGEBUTTON
 {
-    Text [ de ] = "Grafische Schaltfläche" ;
+    Text [ de ] = "Grafische SchaltflÃ¤che" ;
     Text [ en-US ] = "Image Button" ;
     Text [ x-comment ] = " ";
 };
@@ -439,7 +439,7 @@ String RID_STR_PROPTITLE_NUMERICFIELD
 };
 String RID_STR_PROPTITLE_CURRENCYFIELD
 {
-    Text [ de ] = "Währungsfeld" ;
+    Text [ de ] = "WÃ¤hrungsfeld" ;
     Text [ en-US ] = "Currency Field" ;
     Text [ x-comment ] = " ";
 };
@@ -478,7 +478,7 @@ String RID_STR_PROPTITLE_MULTISELECT
 };
 String RID_STR_NODATACONTROLS
 {
-    Text [ de ] = "Es existieren keine an ein gültiges Tabellenfeld gebundenen Controls im aktuellen Formular !" ;
+    Text [ de ] = "Es existieren keine an ein gÃ¼ltiges Tabellenfeld gebundenen Controls im aktuellen Formular !" ;
     Text [ en-US ] = "No data-related controls in the current form!" ;
     Text [ x-comment ] = " ";
 };
@@ -510,7 +510,7 @@ String RID_STR_FILTER_FILTER_OR
 
 String RID_STR_NOCONTROLS_FOR_EXTERNALDISPLAY
 {
-    Text [ de ] = "Im aktuellen Formular existieren keine gültig gebundenen Controls, die für die Tabellenansicht verwendet werden könnten!";
+    Text [ de ] = "Im aktuellen Formular existieren keine gÃ¼ltig gebundenen Controls, die fÃ¼r die Tabellenansicht verwendet werden kÃ¶nnten!";
     Text [ en-US ] = "Valid bound controls which can be used in the table view do not exist in the current form.";
     Text [ x-comment ] = " ";
 };
@@ -524,7 +524,7 @@ QueryBox RID_QRY_SAVEMODIFIED
 {
     Buttons = WB_YES_NO_CANCEL ;
     DefButton = WB_DEF_YES ;
-    Message [ de ] = "Der Inhalt des aktuellen Formulars wurde geändert.\nSollen die Änderungen gespeichert werden?" ;
+    Message [ de ] = "Der Inhalt des aktuellen Formulars wurde geÃ¤ndert.\nSollen die Ã„nderungen gespeichert werden?" ;
     Message [ en-US ] = "The content of the current form has been modified.\nDo you want to save your changes?" ;
     Message [ x-comment ] = " ";
 };
@@ -577,7 +577,7 @@ String RID_STR_SVT_SQL_SYNTAX_NO_NUM
 
 String RID_STR_SVT_SQL_SYNTAX_ACCESS_DAT_NO_VALID
 {
-    Text [ de ] = "Der eingegebene Wert ist kein gültiges Datum. Bitte geben Sie ein Datum in einem gültigen Format ein, z.B. TT.MM.JJ.";
+    Text [ de ] = "Der eingegebene Wert ist kein gÃ¼ltiges Datum. Bitte geben Sie ein Datum in einem gÃ¼ltigen Format ein, z.B. TT.MM.JJ.";
     Text [ en-US ] = "The value entered is not a valid date. Please enter a date in a valid format, for example, MM/DD/YY.";
 };
 
@@ -598,7 +598,7 @@ String RID_STR_SVT_SQL_SYNTAX_COLUMN
 };
 String RID_STR_SVT_SQL_SYNTAX_REAL_NO_VALID
 {
-    Text [ de ] = "Das Feld kann nicht mit einer Fließkommazahl verglichen werden!";
+    Text [ de ] = "Das Feld kann nicht mit einer FlieÃŸkommazahl verglichen werden!";
     Text [ en-US ] = "The field cannot be compared with a floating point number.";
 };
 
