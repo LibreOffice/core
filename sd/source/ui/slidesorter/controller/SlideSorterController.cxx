@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 10:56:04 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:28:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -463,6 +463,15 @@ bool SlideSorterController::Command (
             if (pPage == NULL)
                 GetView().GetOverlay().GetInsertionIndicatorOverlay().Hide();
             bEventHasBeenHandled = true;
+        }
+        break;
+
+        case COMMAND_WHEEL:
+        {
+            // We ignore zooming with control+mouse wheel.
+            const CommandWheelData* pData = rEvent.GetWheelData();
+            if (pData!=NULL && pData->IsMod1())
+                bEventHasBeenHandled = true;
         }
         break;
     }
