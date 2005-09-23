@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationPane.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:35:11 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 10:45:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1219,7 +1219,7 @@ STLPropertySet* CustomAnimationPane::createSelectionSet()
         }
 
         addValue( pSet, nHandleHasAfterEffect, makeAny( pEffect->hasAfterEffect() ) );
-        addValue( pSet, nHandleMasterRel, makeAny( pEffect->getMasterRel() ) );
+        addValue( pSet, nHandleAfterEffectOnNextEffect, makeAny( pEffect->IsAfterEffectOnNext() ? sal_True : sal_False ) );
         addValue( pSet, nHandleDimColor, pEffect->getDimColor() );
         addValue( pSet, nHandleIterateType, makeAny( pEffect->getIterateType() ) );
 
@@ -1435,12 +1435,12 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
             }
         }
 
-        if( pResultSet->getPropertyState( nHandleMasterRel ) == STLPropertyState_DIRECT )
+        if( pResultSet->getPropertyState( nHandleAfterEffectOnNextEffect ) == STLPropertyState_DIRECT )
         {
-            sal_Int32 nMasterRel;
-            if( (pResultSet->getPropertyValue( nHandleMasterRel ) >>= nMasterRel) && (pEffect->getMasterRel() != nMasterRel) )
+            sal_Bool bAfterEffectOnNextEffect;
+            if( (pResultSet->getPropertyValue( nHandleAfterEffectOnNextEffect ) >>= bAfterEffectOnNextEffect) && ((pEffect->IsAfterEffectOnNext() ? sal_True : sal_False) != bAfterEffectOnNextEffect) )
             {
-                pEffect->setMasterRel( nMasterRel );
+                pEffect->setAfterEffectOnNext( bAfterEffectOnNextEffect );
                 bChanged = true;
             }
         }
@@ -1691,6 +1691,13 @@ bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape, std::
         Reference< XTextRange > xStart( xSelectedText->getStart() );
         Reference< XTextRange > xEnd( xSelectedText->getEnd() );
 
+        if( xTextRangeCompare->compareRegionEnds( xStart, xEnd ) < 0 )
+        {
+            Reference< XTextRange > xTemp( xStart );
+            xStart = xEnd;
+            xEnd = xTemp;
+        }
+
         sal_Int16 nPara = 0;
         while( xParaEnum->hasMoreElements() )
         {
@@ -1774,7 +1781,6 @@ void CustomAnimationPane::onChange( bool bCreate )
         else if ( maViewSelection.getValueType() == ::getCppuType((const Reference< XTextCursor >*)0) )
         {
             Reference< XShape > xShape;
-            sal_Int16 nFirstPara, nLastPara;
             std::list< sal_Int16 > aParaList;
             if( getTextSelection( maViewSelection, xShape, aParaList ) )
             {
