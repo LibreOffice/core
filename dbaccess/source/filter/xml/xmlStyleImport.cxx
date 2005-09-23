@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlStyleImport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:09:00 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:12:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,10 @@
 #ifndef DBA_XMLHELPER_HXX
 #include "xmlHelper.hxx"
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+
 
 #define XML_LINE_LEFT 0
 #define XML_LINE_RIGHT 1
@@ -104,6 +108,7 @@ using namespace xmloff::token;
 // -----------------------------------------------------------------------------
 TYPEINIT1( OTableStyleContext, XMLPropStyleContext );
 TYPEINIT1( OTableStylesContext, SvXMLStylesContext );
+DBG_NAME(OTableStyleContext)
 
 OTableStyleContext::OTableStyleContext( ODBFilter& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
@@ -116,11 +121,15 @@ OTableStyleContext::OTableStyleContext( ODBFilter& rImport,
     bParentSet(sal_False),
     bConditionalFormatCreated(sal_False)
 {
+    DBG_CTOR(OTableStyleContext,NULL);
+
 }
 // -----------------------------------------------------------------------------
 
 OTableStyleContext::~OTableStyleContext()
 {
+
+    DBG_DTOR(OTableStyleContext,NULL);
 }
 // -----------------------------------------------------------------------------
 
@@ -199,6 +208,7 @@ ODBFilter& OTableStyleContext::GetOwnImport()
     return static_cast<ODBFilter&>(GetImport());
 }
 // -----------------------------------------------------------------------------
+DBG_NAME(OTableStylesContext)
 
 OTableStylesContext::OTableStylesContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx ,
@@ -211,11 +221,15 @@ OTableStylesContext::OTableStylesContext( SvXMLImport& rImport,
     m_nNumberFormatIndex(-1),
     bAutoStyles(bTempAutoStyles)
 {
+    DBG_CTOR(OTableStylesContext,NULL);
+
 }
 // -----------------------------------------------------------------------------
 
 OTableStylesContext::~OTableStylesContext()
 {
+
+    DBG_DTOR(OTableStylesContext,NULL);
 }
 // -----------------------------------------------------------------------------
 
