@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmoutputpage.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:04:40 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:57:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ TabPage DLG_MM_OUTPUT_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 27 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Wählen Sie eine der Optionen:" ;
+        Text [ de ] = "WÃ¤hlen Sie eine der Optionen:" ;
         Text[ en-US ] = "Select one of the options below:";
     };
     RadioButton RB_SAVESTARTDOC
@@ -317,7 +317,7 @@ TabPage DLG_MM_OUTPUT_PAGE
     };
     String ST_SUBJECTQUERY
     {
-        Text [ de ] = "Sie haben kein Betreff für diese Nachricht angegeben. Wenn Sie einen angeben wollen, dann geben Sie ihn jetzt ein." ;
+        Text [ de ] = "Sie haben kein Betreff fÃ¼r diese Nachricht angegeben. Wenn Sie einen angeben wollen, dann geben Sie ihn jetzt ein." ;
         Text[ en-US ] = "You did not specify a subject for this message. If you would like to provide one, please type it now.";
     };
     String ST_NOSUBJECT
@@ -327,12 +327,12 @@ TabPage DLG_MM_OUTPUT_PAGE
     };
     String ST_NOATTACHMENTNAME
     {
-        Text [ de ] = "Sie haben keinen neuen Namen für den Anhang angegeben. Wenn Sie einen festlegen wollen, dann geben Sie ihn jetzt ein." ;
+        Text [ de ] = "Sie haben keinen neuen Namen fÃ¼r den Anhang angegeben. Wenn Sie einen festlegen wollen, dann geben Sie ihn jetzt ein." ;
         Text[ en-US ] = "You did not specify a new name for the attachment. If you would like to provide one, please type it now.";
     };
     String ST_CONFIGUREMAIL
     {
-        Text [ de ] = "Damit Serienbriefe per E-Mail versendet werden können, benötigt %PRODUCTNAME Informationen über das E-Mail-Konto, von dem aus Sie E-Mails versenden möchten.\n\nMöchten Sie jetzt die Konto-Informationen eingeben?" ;
+        Text [ de ] = "Damit Serienbriefe per E-Mail versendet werden kÃ¶nnen, benÃ¶tigt %PRODUCTNAME Informationen Ã¼ber das E-Mail-Konto, von dem aus Sie E-Mails versenden mÃ¶chten.\n\nMÃ¶chten Sie jetzt die Konto-Informationen eingeben?" ;
         Text[ en-US ] = "In order to be able to send mail merge documents by e-mail, %PRODUCTNAME requires information about the e-mail account to be used.\n\n Do you want to enter e-mail account information now?";
     };
 };
@@ -431,7 +431,7 @@ ModalDialog DLG_MM_SAVEWARNING
         Pos = MAP_APPFONT ( 40 , 3 ) ;
         Size = MAP_APPFONT ( 150 , 30 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "Ein Dokument mit dem Namen '%1' existiert bereits. Bitte wählen Sie einen anderen Namen." ;
+        Text [ de ] = "Ein Dokument mit dem Namen '%1' existiert bereits. Bitte wÃ¤hlen Sie einen anderen Namen." ;
         Text[ en-US ] = "A document with the name '%1' already exists. Please save this document under a different name.";
     };
     FixedText   FT_FILENAME
