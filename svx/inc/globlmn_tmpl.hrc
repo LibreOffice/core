@@ -4,9 +4,9 @@
  *
  *  $RCSfile: globlmn_tmpl.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:51:09 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:31:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,7 +131,7 @@
     Identifier = SID_DELETE ; \
     Command = ".uno:Delete" ; \
     HelpID = SID_DELETE ; \
-    Text [ de ] = "~Lˆschen" ; \
+    Text [ de ] = "~L√∂schen" ; \
     Text [ en-US ] = "~Delete" ;\
 
 #define ITEM_FORMAT_ATTR_CHAR_FONT \
@@ -146,7 +146,7 @@
     Identifier = SID_ATTR_CHAR_FONTHEIGHT ; \
     Command = ".uno:FontHeight" ; \
     HelpID = SID_ATTR_CHAR_FONTHEIGHT ; \
-    Text [ de ] = "~Grˆﬂe" ; \
+    Text [ de ] = "~Gr√∂√üe" ; \
     Text [ en-US ] = "Size" ;\
     Text [ x-comment ] = " ";   \
 
@@ -340,14 +340,14 @@
     Identifier = SID_ATTRIBUTES_AREA ; \
     Command = ".uno:FormatArea" ; \
     HelpID = SID_ATTRIBUTES_AREA ; \
-    Text [ de ] = "~Fl‰che..." ; \
+    Text [ de ] = "~Fl√§che..." ; \
     Text [ en-US ] = "A~rea..." ;\
 
 #define ITEM_FORMAT_ATTR_TRANSFORM \
     Identifier = SID_ATTR_TRANSFORM ; \
     Command = ".uno:TransformDialog" ; \
     HelpID = SID_ATTR_TRANSFORM ; \
-    Text [ de ] = "P~osition und Grˆﬂe..." ; \
+    Text [ de ] = "P~osition und Gr√∂√üe..." ; \
     Text [ en-US ] = "Position and Si~ze..." ;\
     Text [ x-comment ] = " ";   \
 
@@ -392,7 +392,7 @@
     Identifier = SID_OPENDOC ; \
     Command = ".uno:Open" ; \
     HelpID = SID_OPENDOC ; \
-    Text [ de ] = "÷~ffnen..." ; \
+    Text [ de ] = "√ñ~ffnen..." ; \
     Text [ en-US ] = "~Open..." ;\
     Text [ x-comment ] = " ";   \
 
@@ -412,7 +412,7 @@
     Identifier = SID_CLOSEDOC ; \
     Command = ".uno:CloseDoc" ; \
     HelpID = SID_CLOSEDOC ; \
-    Text [ de ] = "S~chlieﬂen" ; \
+    Text [ de ] = "S~chlie√üen" ; \
     Text [ en-US ] = "~Close" ;\
     Text [ x-comment ] = " ";   \
 
@@ -582,7 +582,7 @@
     Identifier = SID_BACKTOWEBTOP ; \
     Command = ".uno:BackToWebtop" ; \
     HelpID = SID_BACKTOWEBTOP ; \
-    Text [ de ] = "Zur¸ck zum Webtop" ; \
+    Text [ de ] = "Zur√ºck zum Webtop" ; \
     Text [ en-US ] = "Back to Webtop";  \
     Text [ x-comment ] = "ZL: SUN ONE Webtop";  \
 
@@ -590,7 +590,7 @@
     Identifier = SID_UNDO ; \
     Command = ".uno:UndoAction" ; \
     HelpID = SID_UNDO ; \
-    Text [ de ] = "R¸ckg‰ngig unmˆglich" ; \
+    Text [ de ] = "R√ºckg√§ngig unm√∂glich" ; \
     Text [ en-US ] = "Can't Undo" ; \
     Text [ x-comment ] = " ";   \
 
@@ -598,7 +598,7 @@
     Identifier = SID_REDO ; \
     Command = ".uno:Redo" ; \
     HelpID = SID_REDO ; \
-    Text [ de ] = "Wiederherstellen unmˆglich" ; \
+    Text [ de ] = "Wiederherstellen unm√∂glich" ; \
     Text [ en-US ] = "Can't Restore" ; \
     Text [ x-comment ] = " ";   \
 
@@ -614,7 +614,7 @@
     Identifier = SID_PASTE ; \
     Command = ".uno:Paste" ; \
     HelpID = SID_PASTE ; \
-    Text [ de ] = "E~inf¸gen" ; \
+    Text [ de ] = "E~inf√ºgen" ; \
     Text [ en-US ] = "~Paste" ; \
     Text [ x-comment ] = " ";   \
 
@@ -622,7 +622,7 @@
     Identifier = SID_SELECTALL ; \
     Command = ".uno:SelectAll" ; \
     HelpID = SID_SELECTALL ; \
-    Text [ de ] = "Alles aus~w‰hlen" ; \
+    Text [ de ] = "Alles aus~w√§hlen" ; \
     Text [ en-US ] = "Select ~All" ; \
 
 #define ITEM_EDIT_SEARCH_DLG \
@@ -674,7 +674,7 @@
     Identifier = SID_ATTR_ZOOM ; \
     Command = ".uno:Zoom" ; \
     HelpID = SID_ATTR_ZOOM ; \
-    Text [ de ] = "~Maﬂstab..." ; \
+    Text [ de ] = "~Ma√üstab..." ; \
     Text [ en-US ] = "~Zoom..." ; \
     Text [ x-comment ] = " ";   \
 
@@ -786,7 +786,7 @@
         Identifier = SID_TWAIN_SELECT ; \
         Command = ".uno:TwainSelect" ; \
         HelpID = SID_TWAIN_SELECT ; \
-        Text [ de ] = "~Quelle ausw‰hlen..." ; \
+        Text [ de ] = "~Quelle ausw√§hlen..." ; \
         Text [ en-US ] = "~Select Source..." ; \
         Text [ x-comment ] = " ";\
     };
@@ -968,7 +968,7 @@
     {\
         Identifier = DEFINE_SLOTID_FOR_NUMBER_BULLETS ; \
         HelpID = DEFINE_SLOTID_FOR_NUMBER_BULLETS ; \
-        Text [ de ] = "~Nummerierung/Aufz‰hlung..." ; \
+        Text [ de ] = "~Nummerierung/Aufz√§hlung..." ; \
         Text [ en-US ] = "~Numbering/Bullets..." ; \
         Text [ x-comment ] = " ";\
     };
@@ -1096,7 +1096,7 @@
         Identifier = SID_CASCADEWINS ; \
         Command = ".uno:Cascade" ; \
         HelpID = SID_CASCADEWINS ; \
-        Text [ de ] = "‹ber~lappend" ; \
+        Text [ de ] = "√úber~lappend" ; \
         Text [ en-US ] = "~Cascade" ; \
         Text [ x-comment ] = " ";\
     };
@@ -1138,7 +1138,7 @@
     Identifier = SID_CLOSEWIN ; \
     Command = ".uno:CloseWin" ; \
     HelpID = SID_CLOSEWIN ; \
-    Text [ de ] = "Fenster schlieﬂen" ; \
+    Text [ de ] = "Fenster schlie√üen" ; \
     Text [ en-US ] = "Close Window" ; \
     Text [ x-comment ] = " ";   \
 
@@ -1263,7 +1263,7 @@
     Identifier = SID_HELPONHELP ; \
     Command = ".uno:HelpOnHelp" ; \
     HelpID = SID_HELPONHELP ; \
-    Text [ de ] = "Hilfe f¸r ~Hilfefunktionen" ; \
+    Text [ de ] = "Hilfe f√ºr ~Hilfefunktionen" ; \
     Text [ en-US ] = "Using Help" ; \
     Text [ x-comment ] = " ";   \
 
@@ -1311,7 +1311,7 @@
     Identifier = SID_ABOUT ; \
     Command = ".uno:About" ; \
     HelpID = SID_ABOUT ; \
-    Text [ de ] = "~Info ¸ber %PRODUCTNAME..." ; \
+    Text [ de ] = "~Info √ºber %PRODUCTNAME..." ; \
     Text [ en-US ] = "A~bout %PRODUCTNAME..." ; \
     Text [ x-comment ] = " ";   \
 
@@ -1589,7 +1589,7 @@
         Identifier = SID_MN_SUB_TRANSLITERATE ; \
         HelpID = SID_MN_SUB_TRANSLITERATE ; \
         Command = ".uno:TransliterateMenu" ; \
-        Text [ de ] = "Gr~oﬂ-/Kleinschreibung" ; \
+        Text [ de ] = "Gr~o√ü-/Kleinschreibung" ; \
         SubMenu = Menu\
         {\
             ItemList = \
@@ -1599,7 +1599,7 @@
                     Identifier = SID_TRANSLITERATE_UPPER ; \
                     Command = ".uno:ChangeCaseToUpper" ; \
                     HelpID = SID_TRANSLITERATE_UPPER ; \
-                    Text [ de ] = "~Groﬂbuchstaben" ; \
+                    Text [ de ] = "~Gro√übuchstaben" ; \
                     Text [ en-US ] = "~Uppercase";\
                 };\
                 MenuItem\
@@ -1651,7 +1651,7 @@
 #define ITEM_OPEN_HYPERLINK \
     Identifier = SID_OPEN_HYPERLINK ; \
     HelpID = SID_OPEN_HYPERLINK ; \
-    Text [ de ] = "H~yperlink ˆffnen" ; \
+    Text [ de ] = "H~yperlink √∂ffnen" ; \
     Text [ en-US ] = "~Open Hyperlink" ;    \
 
 #define ITEM_OPEN_XML_FILTERSETTINGS \
