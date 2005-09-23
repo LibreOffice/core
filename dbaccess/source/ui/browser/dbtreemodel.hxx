@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtreemodel.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:27:13 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:20:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,12 @@
 #ifndef _SBA_UNODATBR_HXX_
 #include "unodatbr.hxx"
 #endif
+#ifndef DBACCESS_SOURCE_UI_INC_DOCUMENTCONTROLLER_HXX
+#include "documentcontroller.hxx"
+#endif
+#ifndef _DBAUI_COMMON_TYPES_HXX_
+#include "commontypes.hxx"
+#endif
 
 // syntax of the tree                   userdata
 // datasource                           holds the connection
@@ -74,8 +80,18 @@ namespace dbaui
     public:
         struct DBTreeListUserData
         {
+            /// if the entry denotes a table or query, this is the respective UNO object
+            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                                            xObjectProperties;
+            /// if the entry denotes a object container, this is the UNO interface for this container
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                                            xObject;
+                                            xContainer;
+            /// if the entry denotes a data source, this is the connection for this data source (if already connection)
+            SharedConnection                xConnection;
+            /** if the entry denotes a data source, this is the connector between the model and the controller,
+                keeping the model alive as long as necessary
+            */
+            ModelControllerConnector        aController;
             SbaTableQueryBrowser::EntryType eType;
             String                          sAccessor;
 
