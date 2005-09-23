@@ -93,12 +93,12 @@ String RID_SVXSTR_UNDO_APPLY_EXTRUSION_ROTATE_RIGHT
 };
 String RID_SVXSTR_UNDO_APPLY_EXTRUSION_DEPTH
 {
-    Text [ de ] = "Extrusions Tiefe ‰ndern";
+    Text [ de ] = "Extrusions Tiefe √§ndern";
     Text [ en-US ] = "Change Extrusion Depth";
 };
 String RID_SVXSTR_UNDO_APPLY_EXTRUSION_ORIENTATION
 {
-    Text [ de ] = "Richtung ‰ndern";
+    Text [ de ] = "Richtung √§ndern";
     Text [ en-US ] = "Change Orientation";
 };
 String RID_SVXSTR_UNDO_APPLY_EXTRUSION_PROJECTION
@@ -108,17 +108,17 @@ String RID_SVXSTR_UNDO_APPLY_EXTRUSION_PROJECTION
 };
 String RID_SVXSTR_UNDO_APPLY_EXTRUSION_LIGHTING
 {
-    Text [ de ] = "Bel‰uchtung ‰ndern";
+    Text [ de ] = "Bel√§uchtung √§ndern";
     Text [ en-US ] = "Change Lighting";
 };
 String RID_SVXSTR_UNDO_APPLY_EXTRUSION_BRIGHTNESS
 {
-    Text [ de ] = "Helligkeit ‰ndern";
+    Text [ de ] = "Helligkeit √§ndern";
     Text [ en-US ] = "Change Brightness";
 };
 String RID_SVXSTR_UNDO_APPLY_EXTRUSION_SURFACE
 {
-    Text [ de ] = "Oberfl‰che ‰ndern";
+    Text [ de ] = "Oberfl√§che √§ndern";
     Text [ en-US ] = "Change Extrusion Surface";
 };
 String RID_SVXSTR_UNDO_APPLY_EXTRUSION_COLOR
