@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fieldmappingimpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:07:28 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:49:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,10 +45,16 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
 #endif
+#ifndef EXTENSIONS_ABP_ADDRESSSETTINGS_HXX
+#include "addresssettings.hxx"
+#endif
 
 namespace com { namespace sun { namespace star {
     namespace lang {
         class XMultiServiceFactory;
+    }
+    namespace beans {
+        class XPropertySet;
     }
 } } }
 class Window;
@@ -69,20 +75,16 @@ namespace abp
                 service factory to use for creating UNO services
             @param _pParent
                 window to use as parent for the dialog and error messages
-            @param _rDataSourceName
-                name of the data source which should be used
-            @param _rTableName
-                name of the table which should be used
-            @param _rFieldAssignment
-                Upon returning from the function, this is field with the field mapping. If the user cancelled the
-                dialog, this is cleared.
+            @param _rSettings
+                current settings. Upon return, the field mapping member of this
+                structure will be filled with the settings the user did in the
+                field mapping dialog.
         */
         sal_Bool invokeDialog(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
             class Window* _pParent,
-            const ::rtl::OUString& _rDataSourceName,
-            const ::rtl::OUString& _rTableName,
-            MapString2String& /* [out] */ _rFieldAssignment
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDataSource,
+            AddressSettings& _rSettings
         ) SAL_THROW ( ( ) );
 
         //-----------------------------------------------------------------
