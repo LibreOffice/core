@@ -4,9 +4,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:04:53 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:15:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ Text [ en-US ] = "~Help";
 
 String STEP_ZERO + 2
 {
-Text [ de ] = "<<~Zurück";
+Text [ de ] = "<<~ZurÃ¼ck";
 Text [ en-US ] = "<<~Back";
 };
 
@@ -65,7 +65,7 @@ Text [ en-US ] = "~Convert";
 
 String STEP_ZERO + 4
 {
-Text [ de ] = "Hinweis: Währungsbeträge aus externen Verknüpfungen, sowie Währungsumrechnungsfaktoren in Formeln können nicht konvertiert werden.";
+Text [ de ] = "Hinweis: WÃ¤hrungsbetrÃ¤ge aus externen VerknÃ¼pfungen, sowie WÃ¤hrungsumrechnungsfaktoren in Formeln kÃ¶nnen nicht konvertiert werden.";
 Text [ en-US ] = "Note: Currency amounts from external links and currency conversion factors in formulas cannot be converted.";
 };
 
@@ -77,7 +77,7 @@ Text [ en-US ] = "First, unprotect all sheets.";
 
 String STEP_ZERO + 6
 {
-Text [ de ] = "Währungen:";
+Text [ de ] = "WÃ¤hrungen:";
 Text [ en-US ] = "Currencies:";
 };
 
@@ -91,7 +91,7 @@ Text [ en-US ] = "C~ontinue>>";
 
 String STEP_ZERO + 8
 {
-Text [ de ] = "~Schließen";
+Text [ de ] = "~SchlieÃŸen";
 Text [ en-US ] = "C~lose";
 };
 
@@ -116,37 +116,37 @@ Text [ en-US ] = "Cell S~tyles";
 
 String STEP_CONVERTER + 3
 {
-Text [ de ] = "Währungszellen im aktuellen ~Tabellenblatt";
+Text [ de ] = "WÃ¤hrungszellen im aktuellen ~Tabellenblatt";
 Text [ en-US ] = "Currency cells in the current ~sheet";
 };
 
 String STEP_CONVERTER + 4
 {
-Text [ de ] = "Währungszellen im ganzen ~Dokument";
+Text [ de ] = "WÃ¤hrungszellen im ganzen ~Dokument";
 Text [ en-US ] = "Currency cells in the entire ~document";
 };
 
 String STEP_CONVERTER + 5
 {
-Text [ de ] = "Ausgewählter ~Bereich";
+Text [ de ] = "AusgewÃ¤hlter ~Bereich";
 Text [ en-US ] = "~Selected range";
 };
 
 String STEP_CONVERTER + 6
 {
-Text [ de ] = "Zellvorlagen auswählen:";
+Text [ de ] = "Zellvorlagen auswÃ¤hlen:";
 Text [ en-US ] = "Select Cell Styles";
 };
 
 String STEP_CONVERTER + 7
 {
-Text [ de ] = "Währungszellen auswählen:";
+Text [ de ] = "WÃ¤hrungszellen auswÃ¤hlen:";
 Text [ en-US ] = "Select currency cells";
 };
 
 String STEP_CONVERTER + 8
 {
-Text [ de ] = "Währungsbereiche:";
+Text [ de ] = "WÃ¤hrungsbereiche:";
 Text [ en-US ] = "Currency ranges:";
 };
 
@@ -202,7 +202,7 @@ Text [ en-US ] = "Target directory:";
 
 String STEP_AUTOPILOT + 7
 {
-Text [ de ] = "Tabellenschutz vorübergehend ohne Rückfrage aufheben";
+Text [ de ] = "Tabellenschutz vorÃ¼bergehend ohne RÃ¼ckfrage aufheben";
 Text [ en-US ] = "Temporarily unprotect sheet without query";
 };
 
@@ -223,7 +223,7 @@ Text [ en-US ] = "Conversion status: ";
 
 String STATUSLINE + 1
 {
-Text [ de ] = "Konvertierungsfortschritt für die Zellvorlagen:";
+Text [ de ] = "Konvertierungsfortschritt fÃ¼r die Zellvorlagen:";
 Text [ en-US ] = "Conversion status of the cell templates:";
 };
 
@@ -252,7 +252,7 @@ Text [ en-US ] = "Sheet protection for each sheet will be restored...";
 
 String STATUSLINE + 5
 {
-Text [ de ] = "Konvertierung der Währungseinheiten in den Zellvorlagen...";
+Text [ de ] = "Konvertierung der WÃ¤hrungseinheiten in den Zellvorlagen...";
 Text [ en-US ] = "Conversion of the currency units in the cell templates...";
 };
 
@@ -267,21 +267,21 @@ Text [ en-US ] = "~Finish";
 
 String MESSAGES + 1
 {
-Text [ de ] = "Wählen Sie ein Verzeichnis";
+Text [ de ] = "WÃ¤hlen Sie ein Verzeichnis";
 Text [ en-US ] = "Select directory";
     Text [ x-comment ] = " ";
 };
 
 String MESSAGES + 2
 {
-Text [ de ] = "Wählen Sie eine Datei";
+Text [ de ] = "WÃ¤hlen Sie eine Datei";
 Text [ en-US ] = "Select file";
     Text [ x-comment ] = " ";
 };
 
 String MESSAGES + 3
 {
-Text [ de ] = "Wählen Sie das Zielverzeichnis";
+Text [ de ] = "WÃ¤hlen Sie das Zielverzeichnis";
 Text [ en-US ] = "Select target directory";
 };
 
@@ -302,7 +302,7 @@ Text [ en-US ] = "Euro Converter";
 
 String MESSAGES + 6
 {
-Text [ de ] = "Soll der Schutz aller Tabellen vorübergehend aufgehoben werden?";
+Text [ de ] = "Soll der Schutz aller Tabellen vorÃ¼bergehend aufgehoben werden?";
 Text [ en-US ] = "Should protected spreadsheets be temporarily unprotected?";
 };
 
@@ -323,7 +323,7 @@ Text [ en-US ] = "Wrong Password!";
 
 String MESSAGES + 9
 {
-Text [ de ] = "Geschützte Tabelle";
+Text [ de ] = "GeschÃ¼tzte Tabelle";
 Text [ en-US ] = "Protected Sheet";
 };
 
@@ -351,7 +351,7 @@ Text [ en-US ] = "Sheet cannot be unprotected";
 
 String MESSAGES + 13
 {
-Text [ de ] = "Der AutoPilot kann dieses Dokument nicht bearbeiten, da in Dokumenten mit geschützten Tabellen keine Zellvorlagen modifiziert werden können.";
+Text [ de ] = "Der AutoPilot kann dieses Dokument nicht bearbeiten, da in Dokumenten mit geschÃ¼tzten Tabellen keine Zellvorlagen modifiziert werden kÃ¶nnen.";
 Text [ en-US ] = "The AutoPilot cannot edit this document as cell formats cannot be modified in documents containing protected spreadsheets.";
 };
 
@@ -367,7 +367,7 @@ Text [ en-US ] = "Please note that the Euro Converter will, otherwise, not be ab
 
 String MESSAGES + 15
 {
-Text [ de ] = "Bitte wählen Sie zunächst eine zu konvertierende Währung aus!";
+Text [ de ] = "Bitte wÃ¤hlen Sie zunÃ¤chst eine zu konvertierende WÃ¤hrung aus!";
 Text [ en-US ] = "Please choose a currency to be converted first!";
 };
 
@@ -392,7 +392,7 @@ Text [ en-US ] = "Cancel";
 
  String MESSAGES + 19
 {
-Text [ de ] = "Bitte wählen Sie ein %PRODUCTNAME Calc-Dokument zur Bearbeitung aus!";
+Text [ de ] = "Bitte wÃ¤hlen Sie ein %PRODUCTNAME Calc-Dokument zur Bearbeitung aus!";
 Text [ en-US ] = "Please select a %PRODUCTNAME Calc document for editing!";
 };
 
@@ -406,21 +406,21 @@ Text [ en-US ] = "'<1>' is not a directory!";
 
 String MESSAGES + 21
 {
-Text [ de ] = "Dokument ist schreibgeschützt!";
+Text [ de ] = "Dokument ist schreibgeschÃ¼tzt!";
 Text [ en-US ] = "Document is read-only!";
 };
 
 
 String MESSAGES + 22
 {
-    Text [ de ] = "Die Datei '<1>' existiert bereits.<CR>Möchten Sie sie überschreiben?";
+    Text [ de ] = "Die Datei '<1>' existiert bereits.<CR>MÃ¶chten Sie sie Ã¼berschreiben?";
     Text [ en-US ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
 };
 
 
 String MESSAGES + 23
 {
-    Text [ de ] = "Möchten Sie das Konvertieren an dieser Stelle wirklich abbrechen ?";
+    Text [ de ] = "MÃ¶chten Sie das Konvertieren an dieser Stelle wirklich abbrechen ?";
     Text [ en-US ] = "Do you really want to terminate conversion at this point?";
 };
 
@@ -438,13 +438,13 @@ Text [ en-US ] = "Portuguese Escudo";
 
 String CURRENCIES + 1
 {
-Text [ de ] = "Niederländischer Gulden";
+Text [ de ] = "NiederlÃ¤ndischer Gulden";
 Text [ en-US ] = "Dutch Guilder";
 };
 
 String CURRENCIES + 2
 {
-Text [ de ] = "Französischer Francs";
+Text [ de ] = "FranzÃ¶sischer Francs";
 Text [ en-US ] = "French Franc";
 };
 
@@ -486,7 +486,7 @@ Text [ en-US ] = "Luxembourg Franc";
 
 String CURRENCIES + 9
 {
-Text [ de ] = "Österreichischer Schilling";
+Text [ de ] = "Ã–sterreichischer Schilling";
 Text [ en-US ] = "Austrian Schilling";
 };
 
@@ -504,13 +504,13 @@ Text [ en-US ] = "Greek Drachma";
 
 String CURRENCIES + 12
 {
-Text [ de ] = "Die für das Dokument eingestellte Währung ist keine Euro-Währung!";
+Text [ de ] = "Die fÃ¼r das Dokument eingestellte WÃ¤hrung ist keine Euro-WÃ¤hrung!";
 Text [ en-US ] = "The currency set for the document is not a European currency!";
 };
 
 String CURRENCIES + 13
 {
-Text [ de ] = "Die für Ihr Betriebssystem eingestellte Sprache ist keine Sprache der Europäischen Währungsunion!";
+Text [ de ] = "Die fÃ¼r Ihr Betriebssystem eingestellte Sprache ist keine Sprache der EuropÃ¤ischen WÃ¤hrungsunion!";
 Text [ en-US ] = "The language set for your operating system is not a language of the European Monetary Union.";
 };
 
