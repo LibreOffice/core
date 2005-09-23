@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:16:29 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:34:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -745,6 +745,24 @@ SdrEndTextEditKind View::EndTextEdit(BOOL bDontDeleteReally, FuPoor* pFunc)
         }
     }
 
+    // Replace the currently used undo manager by the one of the doc shell.
+    // This is necessary because, in case of an active text editing, the
+    // current undo manager belongs to the edit engine and will be destroyed
+    // together with it when the text editing is stopped.
+    if (bIsTextEdit)
+    {
+        // Get the undo manager from the doc shell and set it at the top
+        // most shell on the shell stack (this makes it the active undo
+        // manager.)
+        SfxUndoManager* pUndoMgr = pDocSh->GetUndoManager();
+        ViewShell* pViewShell = pDocSh->GetViewShell();
+        DBG_ASSERT(pViewShell, "ViewShell not found");
+        if (pViewShell != NULL)
+        {
+            pViewShell->GetViewFrame()->GetDispatcher()->GetShell(0)->SetUndoManager(pUndoMgr);
+        }
+    }
+
     if ( pFunc && pFunc->ISA(FuText) )
     {
         SdrTextObj* pTextObj = ( (FuText*) pFunc)->GetTextObj();
@@ -774,19 +792,6 @@ SdrEndTextEditKind View::EndTextEdit(BOOL bDontDeleteReally, FuPoor* pFunc)
     }
     else
         eKind = FmFormView::EndTextEdit(bDontDeleteReally);
-
-    if (bIsTextEdit)
-    {
-        // UndoManager an der obersten Shell setzen
-        SfxUndoManager* pUndoMgr = pDocSh->GetUndoManager();
-        ViewShell* pViewShell = pDocSh->GetViewShell();
-        DBG_ASSERT(pViewShell, "ViewShell nicht gefunden");
-        if (pViewShell)
-        {
-            pViewShell->GetViewFrame()->GetDispatcher()->
-                GetShell(0)->SetUndoManager(pUndoMgr);
-        }
-    }
 
     if( eKind != SDRENDTEXTEDIT_CHANGED )
         pObj = 0;
