@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageObjectViewObjectContact.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:28:11 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:02:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -240,7 +240,7 @@ void PageObjectViewObjectContact::PaintObject (DisplayInfo& rDisplayInfo)
     catch (const com::sun::star::uno::Exception&)
     {
         OSL_TRACE("PageObjectViewObjectContact::PaintObject: caught exception");
-        // Event though the object was not painted completely we set the
+        // Even though the object was not painted completely we set the
         // state flags as if that has happened.  We do this in order to
         // avoid frequent repaints because when painting failed this time it
         // may fail the next time, too.
