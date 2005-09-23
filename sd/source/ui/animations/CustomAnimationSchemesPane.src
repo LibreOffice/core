@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationSchemesPane.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:36:24 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:26:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,13 +44,13 @@ ModalDialog DLG_CUSTOMANIMATION_SCHEMES_PANE
 
     Fixedline 1
     {
-        Text [ de ] = "Für ausgewählte Folien übernehmen";
+        Text [ de ] = "FÃ¼r ausgewÃ¤hlte Folien Ã¼bernehmen";
         Text [ en-US ] = "Apply to selected slides";
     };
 
     PushButton 1
     {
-        Text [ de ] = "Für alle Folien übernehmen";
+        Text [ de ] = "FÃ¼r alle Folien Ã¼bernehmen";
         Text [ en-US ] = "Apply to All Slides";
     };
 
@@ -62,7 +62,7 @@ ModalDialog DLG_CUSTOMANIMATION_SCHEMES_PANE
 
     PushButton 3
     {
-        Text [ de ] = "Bildschirmpräsentation";
+        Text [ de ] = "BildschirmprÃ¤sentation";
         Text [ en-US ] = "Slide Show";
     };
 
