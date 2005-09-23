@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsClipboard.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:13:27 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:28:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,8 @@
 #include "controller/SlsScrollBarManager.hxx"
 #include "controller/SlsFocusManager.hxx"
 
+#include "ViewShellBase.hxx"
+#include "DrawViewShell.hxx"
 #include "Window.hxx"
 #include "fupoor.hxx"
 #include "fuslhide.hxx"
@@ -58,6 +60,7 @@
 #include "fuexpand.hxx"
 #include "fusumry.hxx"
 #include "app.hrc"
+#include "glob.hrc"
 #include "strings.hrc"
 #include "sdresid.hxx"
 #include "sdxfer.hxx"
@@ -75,6 +78,7 @@
 #include <svx/svxids.hrc>
 #include <vcl/msgbox.hxx>
 #include <tools/urlobj.hxx>
+#include <rtl/ustring.hxx>
 
 namespace sd { namespace slidesorter { namespace controller {
 
@@ -478,21 +482,36 @@ sal_Int8 Clipboard::AcceptDrop (
 {
     sal_Int8 nResult = DND_ACTION_NONE;
 
-    if (IsDropAccepted())
+    switch (IsDropAccepted())
     {
-        const SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
-        // Accept a drop.
-        nResult = rEvent.mnAction;
+        case DT_PAGE:
+        {
+            const SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
+            // Accept a drop.
+            nResult = rEvent.mnAction;
 
-        // Show the insertion marker and the substitution for a drop.
-        Point aPosition = pTargetWindow->PixelToLogic (rEvent.maPosPixel);
-        view::ViewOverlay& rOverlay (mrController.GetView().GetOverlay());
-        rOverlay.GetInsertionIndicatorOverlay().SetPosition (aPosition);
-        rOverlay.GetInsertionIndicatorOverlay().Show();
-        rOverlay.GetSubstitutionOverlay().SetPosition (aPosition);
+            // Show the insertion marker and the substitution for a drop.
+            Point aPosition = pTargetWindow->PixelToLogic (rEvent.maPosPixel);
+            view::ViewOverlay& rOverlay (mrController.GetView().GetOverlay());
+            rOverlay.GetInsertionIndicatorOverlay().SetPosition (aPosition);
+            rOverlay.GetInsertionIndicatorOverlay().Show();
+            rOverlay.GetSubstitutionOverlay().SetPosition (aPosition);
 
-        // Scroll the window when the mouse reaches the window border.
-        mrController.GetScrollBarManager().AutoScroll (rEvent.maPosPixel);
+            // Scroll the window when the mouse reaches the window border.
+            mrController.GetScrollBarManager().AutoScroll (rEvent.maPosPixel);
+        }
+        break;
+
+        case DT_SHAPE:
+            nResult = ExecuteOrAcceptShapeDrop(
+                DC_ACCEPT,
+                rEvent.maPosPixel,
+                &rEvent,
+                rTargetHelper,
+                pTargetWindow,
+                nPage,
+                nLayer);
+            break;
     }
 
     return nResult;
@@ -510,59 +529,74 @@ sal_Int8 Clipboard::ExecuteDrop (
 {
     sal_Int8 nResult = DND_ACTION_NONE;
 
-    if (IsDropAccepted())
+    switch (IsDropAccepted())
     {
-        const SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
-        const Point aEventModelPosition (
-            pTargetWindow->PixelToLogic (rEvent.maPosPixel));
-        long int nXOffset = labs (pDragTransferable->GetStartPos().X()
-            - aEventModelPosition.X());
-        long int nYOffset = labs (pDragTransferable->GetStartPos().Y()
-            - aEventModelPosition.Y());
-        const bool bContinue =
-            ( pDragTransferable->GetView() != &mrController.GetView() )
-            || ( nXOffset >= 2 && nYOffset >= 2 );
-
-        // Get insertion position and then turn off the insertion indicator.
-        view::ViewOverlay& rOverlay (mrController.GetView().GetOverlay());
-        rOverlay.GetInsertionIndicatorOverlay().SetPosition(
-            aEventModelPosition);
-        USHORT nIndex = DetermineInsertPosition (*pDragTransferable);
-        OSL_TRACE ("Clipboard::AcceptDrop() called for index %d",
-            nIndex);
-        rOverlay.GetInsertionIndicatorOverlay().Hide();
-
-        if (bContinue)
+        case DT_PAGE:
         {
-            SlideSorterController::ModelChangeLock aModelChangeLock (mrController);
+            const SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
+            const Point aEventModelPosition (
+                pTargetWindow->PixelToLogic (rEvent.maPosPixel));
+            long int nXOffset = labs (pDragTransferable->GetStartPos().X()
+                - aEventModelPosition.X());
+            long int nYOffset = labs (pDragTransferable->GetStartPos().Y()
+                - aEventModelPosition.Y());
+            const bool bContinue =
+                ( pDragTransferable->GetView() != &mrController.GetView() )
+                || ( nXOffset >= 2 && nYOffset >= 2 );
 
-            if (pDragTransferable->GetView() == &mrController.GetView()
-                && rEvent.mnAction == DND_ACTION_MOVE)
+            // Get insertion position and then turn off the insertion indicator.
+            view::ViewOverlay& rOverlay (mrController.GetView().GetOverlay());
+            rOverlay.GetInsertionIndicatorOverlay().SetPosition(
+                aEventModelPosition);
+            USHORT nIndex = DetermineInsertPosition (*pDragTransferable);
+            OSL_TRACE ("Clipboard::AcceptDrop() called for index %d",
+                nIndex);
+            rOverlay.GetInsertionIndicatorOverlay().Hide();
+
+            if (bContinue)
             {
-                // We are asked to move pages inside one view.  For this we
-                // call MoveSelectedPages() which is faster than going the
-                // generic way.
+                SlideSorterController::ModelChangeLock aModelChangeLock (mrController);
 
-                // Remember to select the moved pages afterwards.
-                maPagesToRemove.swap(maPagesToSelect);
-                maPagesToRemove.clear();
+                if (pDragTransferable->GetView() == &mrController.GetView()
+                    && rEvent.mnAction == DND_ACTION_MOVE)
+                {
+                    // We are asked to move pages inside one view.  For this we
+                    // call MoveSelectedPages() which is faster than going the
+                    // generic way.
 
-                USHORT nSdrModelIndex;
-                if (nIndex != SDRPAGE_NOTFOUND)
-                    nSdrModelIndex = nIndex / 2 - 1;
+                    // Remember to select the moved pages afterwards.
+                    maPagesToRemove.swap(maPagesToSelect);
+                    maPagesToRemove.clear();
+
+                    USHORT nSdrModelIndex;
+                    if (nIndex != SDRPAGE_NOTFOUND)
+                        nSdrModelIndex = nIndex / 2 - 1;
+                    else
+                        nSdrModelIndex = SDRPAGE_NOTFOUND;
+                    mrController.MoveSelectedPages(nSdrModelIndex);
+                    mbUpdateSelectionPending = true;
+                    nResult = DND_ACTION_NONE;
+                }
                 else
-                    nSdrModelIndex = SDRPAGE_NOTFOUND;
-                mrController.MoveSelectedPages(nSdrModelIndex);
-                mbUpdateSelectionPending = true;
-                nResult = DND_ACTION_NONE;
-            }
-            else
-            {
-                // Handle a general drop operation.
-                HandlePageDrop (*pDragTransferable);
-                nResult = rEvent.mnAction;
+                {
+                    // Handle a general drop operation.
+                    HandlePageDrop (*pDragTransferable);
+                    nResult = rEvent.mnAction;
+                }
             }
         }
+        break;
+
+        case DT_SHAPE:
+            nResult = ExecuteOrAcceptShapeDrop(
+                DC_EXECUTE,
+                rEvent.maPosPixel,
+                &rEvent,
+                rTargetHelper,
+                pTargetWindow,
+                nPage,
+                nLayer);
+            break;
     }
 
     return nResult;
@@ -620,27 +654,91 @@ USHORT Clipboard::InsertSlides (
 
 
 
-bool Clipboard::IsDropAccepted (void) const
+Clipboard::DropType Clipboard::IsDropAccepted (void) const
 {
+    DropType eResult (DT_NONE);
+
     const SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
-
-    bool bIsDropAccepted (false);
-    do
+    if (pDragTransferable != NULL)
     {
-        if (pDragTransferable == NULL)
-            break;
-
-        if ( ! pDragTransferable->IsPageTransferable())
-            break;
-
-        if (mrController.GetModel().GetEditMode() == EM_MASTERPAGE)
-            break;
-
-        bIsDropAccepted = true;
+        if (pDragTransferable->IsPageTransferable())
+        {
+            if (mrController.GetModel().GetEditMode() != EM_MASTERPAGE)
+                eResult = DT_PAGE;
+        }
+        else
+        {
+            eResult = DT_SHAPE;
+        }
     }
-    while (false);
 
-    return bIsDropAccepted;
+    return eResult;
+}
+
+
+
+
+sal_Int8 Clipboard::ExecuteOrAcceptShapeDrop (
+    DropCommand eCommand,
+    const Point& rPosition,
+    const void* pDropEvent,
+    DropTargetHelper& rTargetHelper,
+    ::sd::Window* pTargetWindow,
+    USHORT nPage,
+    USHORT nLayer)
+{
+    sal_Int8 nResult = 0;
+
+    // The dropping of a shape is accepted or executed only when there is
+    // DrawViewShell available to which we can forward this call.  This has
+    // technical reasons:  The actual code to accept or execute a shape drop
+    // is implemented in the ViewShell class and uses the page view of the
+    // main edit view.  This is not possible without a DrawViewShell.
+    DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(
+        mrController.GetViewShell().GetViewShellBase().GetMainViewShell());
+    if (pDrawViewShell != NULL
+        && (pDrawViewShell->GetShellType() == ViewShell::ST_IMPRESS
+            || pDrawViewShell->GetShellType() == ViewShell::ST_DRAW))
+    {
+        // The drop is only accepted or executed when it takes place over a
+        // page object.  Therefore we replace a missing page number by the
+        // number of the page under the mouse.
+        if (nPage == SDRPAGE_NOTFOUND)
+        {
+            model::PageDescriptor* pDescriptor
+                = mrController.GetModel().GetPageDescriptor(
+                    mrController.GetView().GetPageIndexAtPoint(rPosition));
+            if (pDescriptor != NULL && pDescriptor->GetPage()!=NULL)
+                nPage = (pDescriptor->GetPage()->GetPageNum() - 1) / 2;
+        }
+
+        // Now comes the code that is different for the Execute and Accept:
+        // We simply forward the call to the AcceptDrop() or ExecuteDrop()
+        // methods of the DrawViewShell in the center pane.
+        if (nPage != SDRPAGE_NOTFOUND)
+            switch (eCommand)
+            {
+                case DC_ACCEPT:
+                    nResult = pDrawViewShell->AcceptDrop(
+                        *reinterpret_cast<const AcceptDropEvent*>(pDropEvent),
+                        rTargetHelper,
+                        pTargetWindow,
+                        nPage,
+                        nLayer);
+                    break;
+
+                case DC_EXECUTE:
+                    nResult = pDrawViewShell->ExecuteDrop(
+                        *reinterpret_cast<const ExecuteDropEvent*>(pDropEvent),
+                        rTargetHelper,
+                        pTargetWindow,
+                        nPage,
+                        nLayer);
+                    break;
+            }
+    }
+
+    return nResult;
 }
 
 
