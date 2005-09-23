@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:33:36 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:25:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2877,7 +2877,10 @@ ULONG ImpEditEngine::CalcTextWidth( BOOL bIgnoreExtraSpace )
 ULONG ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine, BOOL bIgnoreExtraSpace )
 {
     USHORT nPara = GetEditDoc().GetPos( pPortion->GetNode() );
-    ULONG nOldLayoutMode = GetRefDevice()->GetLayoutMode();
+
+    // #114278# Saving both layout mode and language (since I'm
+    // potentially changing both)
+    GetRefDevice()->Push( PUSH_TEXTLAYOUTMODE|PUSH_TEXTLANGUAGE );
 
     ImplInitLayoutMode( GetRefDevice(), nPara, 0xFFFF );
 
@@ -2917,7 +2920,7 @@ ULONG ImpEditEngine::CalcLineWidth( ParaPortion* pPortion, EditLine* pLine, BOOL
         nPos += pTextPortion->GetLen();
     }
 
-    GetRefDevice()->SetLayoutMode( nOldLayoutMode );
+    GetRefDevice()->Pop();
 
     return nWidth;
 }
