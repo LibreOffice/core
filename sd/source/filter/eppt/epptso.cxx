@@ -4,9 +4,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:19:23 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:44:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1423,12 +1423,13 @@ sal_Bool PPTWriter::ImplGetStyleSheets()
         bRetValue = aXNamed.is() && aXNameAccess.is() && aXStyleFamiliesSupplier.is();
         if  ( bRetValue )
         {
-            for ( nInstance = EPP_TEXTTYPE_Title; nInstance <= EPP_TEXTTYPE_CenterBody; nInstance++ )
+            for ( nInstance = EPP_TEXTTYPE_Title; nInstance <= EPP_TEXTTYPE_CenterTitle; nInstance++ )
             {
                 String aStyle;
                 String aFamily;
                 switch ( nInstance )
                 {
+                    case EPP_TEXTTYPE_CenterTitle :
                     case EPP_TEXTTYPE_Title :
                     {
                         aStyle = String( RTL_CONSTASCII_USTRINGPARAM( "title" ) );
@@ -1479,9 +1480,9 @@ sal_Bool PPTWriter::ImplGetStyleSheets()
                                                 xPropSet( aXStyle, ::com::sun::star::uno::UNO_QUERY );
                                             if( xPropSet.is() )
                                                 mpStyleSheet->SetStyleSheet( xPropSet, maFontCollection, nInstance, 0 );
-                                            if ( nInstance == EPP_TEXTTYPE_Body )
+                                            for ( nLevel = 1; nLevel < 5; nLevel++ )
                                             {
-                                                for ( nLevel = 1; nLevel < 5; nLevel++ )
+                                                if ( nInstance == EPP_TEXTTYPE_Body )
                                                 {
                                                     sal_Unicode cTemp = aStyle.GetChar( aStyle.Len() - 1 );
                                                     aStyle.SetChar( aStyle.Len() - 1, ++cTemp );
@@ -1499,6 +1500,8 @@ sal_Bool PPTWriter::ImplGetStyleSheets()
                                                         }
                                                     }
                                                 }
+                                                else
+                                                    mpStyleSheet->SetStyleSheet( xPropSet, maFontCollection, nInstance, nLevel );
                                             }
                                         }
                                     }
