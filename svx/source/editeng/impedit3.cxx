@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:51:05 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:26:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,7 @@
 #include <charscaleitem.hxx>
 
 #include <svtools/colorcfg.hxx>
+#include <svtools/ctloptions.hxx>
 
 #include <forbiddencharacterstable.hxx>
 
@@ -679,7 +680,10 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
     }
 
     // SW disables TEXT_LAYOUT_COMPLEX_DISABLED, so maybe I have to enable it...
-    ULONG nOldLayoutMode = GetRefDevice()->GetLayoutMode();
+
+    // #114278# Saving both layout mode and language (since I'm
+    // potentially changing both)
+    GetRefDevice()->Push( PUSH_TEXTLAYOUTMODE|PUSH_TEXTLANGUAGE );
 
     ImplInitLayoutMode( GetRefDevice(), nPara, 0xFFFF );
 
@@ -1555,7 +1559,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
     if ( bMapChanged )
         GetRefDevice()->Pop();
 
-    GetRefDevice()->SetLayoutMode( nOldLayoutMode );
+    GetRefDevice()->Pop();
 
     return bHeightChanged;
 }
@@ -2996,7 +3000,10 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
 #endif
                                 aTmpFont.SetPhysFont( pOutDev );
 
-                                ULONG nOldLayoutMode = pOutDev->GetLayoutMode();
+                                // #114278# Saving both layout mode and language (since I'm
+                                // potentially changing both)
+                                pOutDev->Push( PUSH_TEXTLAYOUTMODE|PUSH_TEXTLANGUAGE );
+
                                 ImplInitLayoutMode( pOutDev, n, nIndex );
 
                                 XubString aText;
@@ -3247,7 +3254,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
 #endif // !SVX_LIGHT
                                 }
 
-                                pOutDev->SetLayoutMode( nOldLayoutMode );
+                                pOutDev->Pop();
 
                                 if ( pTmpDXArray )
                                     delete[] pTmpDXArray;
@@ -4074,6 +4081,21 @@ void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, USHORT nPara, USH
 
     pOutDev->SetLayoutMode( nLayoutMode );
 
+    // #114278# Also setting up digit language from Svt options
+    // (cannot reliably inherit the outdev's setting)
+    LanguageType eLang;
+
+    if( !pCTLOptions )
+        pCTLOptions = new SvtCTLOptions;
+
+    if ( SvtCTLOptions::NUMERALS_HINDI == pCTLOptions->GetCTLTextNumerals() )
+        eLang = LANGUAGE_ARABIC;
+    else if ( SvtCTLOptions::NUMERALS_ARABIC == pCTLOptions->GetCTLTextNumerals() )
+        eLang = LANGUAGE_ENGLISH;
+    else
+        eLang = (LanguageType) Application::GetSettings().GetLanguage();
+
+    pOutDev->SetDigitLanguage( eLang );
 }
 
 Reference < i18n::XBreakIterator > ImpEditEngine::ImplGetBreakIterator() const
