@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:33:12 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:52:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1067,13 +1067,18 @@ sal_Bool SdrGrafObj::DoPaintObject( XOutputDevice& rOut, const SdrPaintInfoRec& 
             // paint animated graphic?
             if(rInfoRec.mbUseBitmapEx)
             {
-                Point aDestPos = pOutDev->LogicToPixel(aLogPos);
-                Size aDestSize = pOutDev->LogicToPixel(aLogSize);
-                sal_Bool bMapModeWasEnabled(pOutDev->IsMapModeEnabled());
+                if ( pOutDev->GetConnectMetaFile() )    // SJ: #i52183#
+                    pOutDev->DrawBitmapEx( aLogPos, aLogSize, rInfoRec.maBitmapEx );
+                else
+                {
+                    Point aDestPos = pOutDev->LogicToPixel(aLogPos);
+                    Size aDestSize = pOutDev->LogicToPixel(aLogSize);
+                    sal_Bool bMapModeWasEnabled(pOutDev->IsMapModeEnabled());
 
-                pOutDev->EnableMapMode(sal_False);
-                pOutDev->DrawBitmapEx(aDestPos, aDestSize, rInfoRec.maBitmapEx);
-                pOutDev->EnableMapMode(bMapModeWasEnabled);
+                    pOutDev->EnableMapMode(sal_False);
+                    pOutDev->DrawBitmapEx(aDestPos, aDestSize, rInfoRec.maBitmapEx);
+                    pOutDev->EnableMapMode(bMapModeWasEnabled);
+                }
             }
             else
             {
