@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmgreetingspage.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:00:42 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:56:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
     {                                                                               \
         Pos = MAP_APPFONT ( 12 + LEFT_OFFSET , 17 + TOP_OFFSET ) ;                  \
         Size = MAP_APPFONT ( 226 , 10 ) ;                                           \
-        Text [ de ] = "Personalisierte Briefanrede einfügen" ;                              \
+        Text [ de ] = "Personalisierte Briefanrede einfÃ¼gen" ;                              \
         Text[ en-US ] = "Insert personalized salutation";                    \
     };                                                                              \
     FixedText   FT_FEMALE                                                           \
@@ -69,7 +69,7 @@
     {                                                                               \
         Pos = MAP_APPFONT ( 18 + LEFT_OFFSET , 49 + TOP_OFFSET ) ;                                             \
         Size = MAP_APPFONT ( 50 , 8 ) ;                                             \
-        Text [ de ] = "Männlich" ;                                                         \
+        Text [ de ] = "MÃ¤nnlich" ;                                                         \
         Text[ en-US ] = "~Male";                                                \
     };                                                                              \
     ListBox     LB_MALE                                                             \
@@ -90,7 +90,7 @@
     {                                                                               \
         Pos = MAP_APPFONT ( 18 + LEFT_OFFSET , 67 + TOP_OFFSET ) ;                                             \
         Size = MAP_APPFONT ( 225 , 8 ) ;                                            \
-        Text [ de ] = "Adresslistenwert für einen weiblichen Empfänger" ;                     \
+        Text [ de ] = "Adresslistenwert fÃ¼r einen weiblichen EmpfÃ¤nger" ;                     \
         Text[ en-US ] = "Address list field indicating a female recipient";     \
     };                                                                              \
     FixedText   FT_FEMALECOLUMN                                                     \
@@ -145,6 +145,8 @@
     };                                                                              \
 
 
+#define TOP_OFFSET 24
+#define LEFT_OFFSET 6
 TabPage DLG_MM_GREETINGS_PAGE
 {
     HelpID = HID_MM_GREETINGSPAGE ;
@@ -158,19 +160,14 @@ TabPage DLG_MM_GREETINGS_PAGE
         Text [ de ] = "Briefanrede erstellen";
         Text [ en-US ] = "Create a salutation";
     };
-    #define TOP_OFFSET 24
-    #define LEFT_OFFSET 6
-
-    CheckBox    CB_GREETINGLINE                                                     \
-    {                                                                               \
-        Pos = MAP_APPFONT ( 12 , 27 ) ;                    \
-        Size = MAP_APPFONT ( 242 , 10 ) ;                                           \
-        Text [ de ] = "Eine Briefanrede in das Dokument einfügen" ;                        \
-        Text[ en-US ] = "This document should contain a salutation";         \
-    };                                                                              \
+    CheckBox    CB_GREETINGLINE
+    {
+        Pos = MAP_APPFONT ( 12 , 27 );
+        Size = MAP_APPFONT ( 242 , 10 );
+        Text [ de ] = "Eine Briefanrede in das Dokument einfÃ¼gen" ;
+        Text[ en-US ] = "This document should contain a salutation";
+    };
     GREETINGS_BODY
-    #undef TOP_OFFSET
-    #undef LEFT_OFFSET
     FixedText       FI_PREVIEW
     {
         Pos = MAP_APPFONT ( 12 , 168 ) ;
@@ -188,7 +185,7 @@ TabPage DLG_MM_GREETINGS_PAGE
     {
         Pos = MAP_APPFONT ( 204 , 179 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Felder wählen..." ;
+        Text [ de ] = "Felder wÃ¤hlen..." ;
         Text[ en-US ] = "~Match fields...";
     };
     FixedText       FI_DOCINDEX
@@ -210,7 +207,7 @@ TabPage DLG_MM_GREETINGS_PAGE
         Pos = MAP_APPFONT ( 188 , 204 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         SYMBOL = IMAGEBUTTON_NEXT ;
-        QuickHelpText [ de ] = "Nächste Briefanrede ansehen" ;
+        QuickHelpText [ de ] = "NÃ¤chste Briefanrede ansehen" ;
         QuickHelpText[ en-US ] = "Preview Next Salutation";
     };
     String STR_DOCUMENT
@@ -219,7 +216,11 @@ TabPage DLG_MM_GREETINGS_PAGE
         Text[ en-US ] = "Document: %1";
     };
 };
+#undef TOP_OFFSET
+#undef LEFT_OFFSET
 
+#define TOP_OFFSET 0
+#define LEFT_OFFSET 0
 ModalDialog DLG_MM_MAILBODY
 {
     HelpID = HID_MM_MAILBODY;
@@ -229,14 +230,11 @@ ModalDialog DLG_MM_MAILBODY
     Moveable = TRUE ;
     Text [ de ] = "E-Mail-Nachricht";
     Text [ en-US ] = "E-Mail Message";
-
-    #define TOP_OFFSET 0
-    #define LEFT_OFFSET 0
     CheckBox    CB_GREETINGLINE
     {
         Pos = MAP_APPFONT ( 6  , 3 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text [ de ] = "Eine Briefanrede in die E-Mail-Nachrichteinfügen" ;
+        Text [ de ] = "Eine Briefanrede in die E-Mail-NachrichteinfÃ¼gen" ;
         Text[ en-US ] = "This e-mail should contain a salutation";
     };
     GREETINGS_BODY
