@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.136 $
+ *  $Revision: 1.137 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:08:28 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:52:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2471,7 +2471,7 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
                 {
                     SdrOle2Obj& aObj = *(SdrOle2Obj*)pObj;
                     Graphic* pGraphic = aObj.GetGraphic();
-                    if(pGraphic)
+                    if( pGraphic )
                     {
                         BOOL bIsWMF = FALSE;
                         if ( pGraphic->IsLink() )
@@ -2484,11 +2484,22 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
                                 aAny <<= aSeq;
                             }
                         }
-
                         if ( !bIsWMF )
                         {
+                            GDIMetaFile aMtf;
+                            if ( pGraphic->GetType() != GRAPHIC_BITMAP )
+                                aMtf = aObj.GetGraphic()->GetGDIMetaFile();
+                            else
+                            {
+                                VirtualDevice aVirDev;
+                                aMtf.Record( &aVirDev );
+                                pGraphic->Draw( &aVirDev, Point(),  pGraphic->GetPrefSize() );
+                                aMtf.Stop();
+                                aMtf.SetPrefSize( pGraphic->GetPrefSize() );
+                                aMtf.SetPrefMapMode( pGraphic->GetPrefMapMode() );
+                            }
                             SvMemoryStream aDestStrm( 65535, 65535 );
-                            ConvertGDIMetaFileToWMF( aObj.GetGraphic()->GetGDIMetaFile(), aDestStrm, NULL, NULL, sal_False );
+                            ConvertGDIMetaFileToWMF( aMtf, aDestStrm, NULL, NULL, sal_False );
                             uno::Sequence<sal_Int8> aSeq((sal_Int8*)aDestStrm.GetData(), aDestStrm.GetSize());
                             aAny <<= aSeq;
                         }
