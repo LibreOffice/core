@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:09:58 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:38:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -874,7 +874,7 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
                     if ( m_vColumnPos.end() != aPosFind )
                     {
                         aPosFind->second = nNewPos;
-                        OSL_ENSURE(m_vColumnTypes.size() > (aPosFind - m_vColumnPos.begin()),"Invalid index for vector!");
+                        OSL_ENSURE(static_cast<sal_Int32>(m_vColumnTypes.size()) > (aPosFind - m_vColumnPos.begin()),"Invalid index for vector!");
                         m_vColumnTypes[aPosFind - m_vColumnPos.begin()] = (*aFind)->second->GetType();
                     }
                 }
