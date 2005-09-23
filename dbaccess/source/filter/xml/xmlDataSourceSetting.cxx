@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlDataSourceSetting.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:03:23 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:09:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,12 +59,16 @@
 #ifndef DBACCESS_SHARED_XMLSTRINGS_HRC
 #include "xmlstrings.hrc"
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 namespace dbaxml
 {
     using namespace ::rtl;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xml::sax;
+DBG_NAME(OXMLDataSourceSetting)
 
 OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
@@ -77,6 +81,8 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
     ,m_pContainer(_pContainer)
     ,m_bIsList(sal_False)
 {
+    DBG_CTOR(OXMLDataSourceSetting,NULL);
+
     m_aPropType = ::getVoidCppuType();
 
     OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");
@@ -105,6 +111,7 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
                     {
                         s_aTypeNameMap[GetXMLToken( XML_BOOLEAN)]   = ::getBooleanCppuType();
                         s_aTypeNameMap[GetXMLToken( XML_FLOAT)]     = ::getCppuType( static_cast< double* >(NULL) );
+                        s_aTypeNameMap[GetXMLToken( XML_DOUBLE)]    = ::getCppuType( static_cast< double* >(NULL) );
                         s_aTypeNameMap[GetXMLToken( XML_STRING)]    = ::getCppuType( static_cast< ::rtl::OUString* >(NULL) );
                         s_aTypeNameMap[GetXMLToken( XML_INT)]       = ::getCppuType( static_cast< sal_Int32* >(NULL) );
                         s_aTypeNameMap[GetXMLToken( XML_SHORT)]     = ::getCppuType( static_cast< sal_Int16* >(NULL) );
@@ -128,6 +135,7 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
 
 OXMLDataSourceSetting::~OXMLDataSourceSetting()
 {
+    DBG_DTOR(OXMLDataSourceSetting,NULL);
 }
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLDataSourceSetting::CreateChildContext(
