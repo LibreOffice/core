@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:44:24 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:34:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -294,6 +294,8 @@ namespace dbaui
             // do any initialization (data source etc.) here. the form should be fully functional after that.
             // return sal_False if you didn't succeed (don't throw exceptions, they won't be catched)
 
+        virtual sal_Bool InitializeGridModel(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > & xGrid);
+
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  CreateGridModel();
             // our default implementation simply instantiates a stardiv.one.form.component.Grid service
@@ -364,7 +366,10 @@ namespace dbaui
         void initFormatter();
 
         /// loads or reloads the form
-        sal_Bool reloadForm(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >& _rxLoadable);
+        virtual sal_Bool reloadForm(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >& _rxLoadable);
+
+        virtual sal_Bool preReloadForm(){ return sal_False; }
+        virtual void postReloadForm(){}
 
     private:
         void setCurrentModified( sal_Bool _bSet );
@@ -381,6 +386,7 @@ namespace dbaui
         sal_uInt16  getCurrentColumnPosition();
         void        setCurrentColumnPosition(sal_uInt16 _nPos);
         void        deleteView();
+        void        addColumnListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & _xGridControlModel);
 
         // time to check the CUT/COPY/PASTE-slot-states
         DECL_LINK( OnInvalidateClipboard, void* );
