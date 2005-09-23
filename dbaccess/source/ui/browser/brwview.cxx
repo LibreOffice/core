@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwview.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:25:57 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:19:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,7 @@ namespace
 //= UnoDataBrowserView
 //==================================================================
 
+DBG_NAME(UnoDataBrowserView)
 // -------------------------------------------------------------------------
 UnoDataBrowserView::UnoDataBrowserView( Window* pParent,
                                         IController* _pController,
@@ -120,6 +121,8 @@ UnoDataBrowserView::UnoDataBrowserView( Window* pParent,
     ,m_pTreeView(NULL)
     ,m_pStatus(NULL)
 {
+    DBG_CTOR(UnoDataBrowserView,NULL);
+
 }
 // -------------------------------------------------------------------------
 void UnoDataBrowserView::Construct(const Reference< ::com::sun::star::awt::XControlModel >& xModel)
@@ -181,6 +184,8 @@ UnoDataBrowserView::~UnoDataBrowserView()
     }
     catch(Exception)
     {}
+
+    DBG_DTOR(UnoDataBrowserView,NULL);
 }
 // -----------------------------------------------------------------------------
 IMPL_LINK( UnoDataBrowserView, SplitHdl, void*, p )
@@ -387,10 +392,13 @@ long UnoDataBrowserView::PreNotify( NotifyEvent& rNEvt )
     return nDone ? nDone : ODataView::PreNotify(rNEvt);
 }
 
+DBG_NAME(BrowserViewStatusDisplay)
 // -----------------------------------------------------------------------------
 BrowserViewStatusDisplay::BrowserViewStatusDisplay( UnoDataBrowserView* _pView, const String& _rStatus )
     :m_pView(_pView)
 {
+    DBG_CTOR(BrowserViewStatusDisplay,NULL);
+
     if (m_pView)
         m_pView->showStatus(_rStatus);
 }
@@ -400,5 +408,7 @@ BrowserViewStatusDisplay::~BrowserViewStatusDisplay( )
 {
     if (m_pView)
         m_pView->showStatus(String());
+
+    DBG_DTOR(BrowserViewStatusDisplay,NULL);
 }
 // -----------------------------------------------------------------------------
