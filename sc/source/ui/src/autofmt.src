@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autofmt.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:24:02 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:04:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Pos = MAP_APPFONT ( 172 , 146 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Breite/Höhe anpassen : ~Breite/H÷he anpassen */
-        Text [ de ] = "Breite/Höhe an~passen" ;
+        Text [ de ] = "Breite/HÃ¶he an~passen" ;
         Text [ en-US ] = "A~utoFit width and height" ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -164,7 +164,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Pos = MAP_APPFONT ( 256 , 63 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Einfügen... : ~Einf³gen... */
-        Text [ de ] = "Hi~nzufügen..." ;
+        Text [ de ] = "Hi~nzufÃ¼gen..." ;
         Text [ en-US ] = "~Add..." ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -174,7 +174,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Pos = MAP_APPFONT ( 256 , 81 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
-        Text [ de ] = "~Löschen" ;
+        Text [ de ] = "~LÃ¶schen" ;
         Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -202,7 +202,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         /* ### ACHTUNG: Neuer Text in Resource? AutoFormat hinzufügen : Autoformat hinzufügen */
         /* ### ACHTUNG: Neuer Text in Resource? AutoFormat hinzufügen : Autoformat hinzufügen */
         /* ### ACHTUNG: Neuer Text in Resource? AutoFormat hinzufügen : AutoFormat hinzuf³gen */
-        Text [ de ] = "AutoFormat hinzufügen" ;
+        Text [ de ] = "AutoFormat hinzufÃ¼gen" ;
         Text [ en-US ] = "Add AutoFormat" ;
         Text [ x-comment ] = " ";
     };
@@ -223,21 +223,21 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     String STR_DEL_TITLE
     {
         /* ### ACHTUNG: Neuer Text in Resource? AutoFormat löschen : AutoFormat l÷schen */
-        Text [ de ] = "AutoFormat löschen" ;
+        Text [ de ] = "AutoFormat lÃ¶schen" ;
         Text [ en-US ] = "Delete AutoFormat" ;
         Text [ x-comment ] = " ";
     };
     String STR_DEL_MSG
     {
         /* ### ACHTUNG: Neuer Text in Resource? Wollen Sie das AutoFormat # wirklich löschen? : Wollen Sie das AutoFormat # wirklich l÷schen? */
-        Text [ de ] = "Wollen Sie das AutoFormat # wirklich löschen?" ;
+        Text [ de ] = "Wollen Sie das AutoFormat # wirklich lÃ¶schen?" ;
         Text [ en-US ] = "Do you really want to delete the # AutoFomat?" ;
         Text [ x-comment ] = " ";
     };
     String STR_BTN_CLOSE
     {
         /* ### ACHTUNG: Neuer Text in Resource? Schlie~ßen : Schlie~˜en */
-        Text [ de ] = "Schlie~ßen" ;
+        Text [ de ] = "Schlie~ÃŸen" ;
         Text [ en-US ] = "~Close" ;
         Text [ x-comment ] = " ";
     };
@@ -256,7 +256,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     String STR_MAR
     {
         /* ### ACHTUNG: Neuer Text in Resource? Mär : Mõr */
-        Text [ de ] = "Mär" ;
+        Text [ de ] = "MÃ¤r" ;
         Text [ en-US ] = "Mar" ;
         Text [ x-comment ] = " ";
     };
@@ -275,7 +275,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     String STR_SOUTH
     {
         /* ### ACHTUNG: Neuer Text in Resource? Süd : S³d */
-        Text [ de ] = "Süd" ;
+        Text [ de ] = "SÃ¼d" ;
         Text [ en-US ] = "South" ;
         Text [ x-comment ] = " ";
     };
