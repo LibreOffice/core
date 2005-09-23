@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docrecovery.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:02:34 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:37:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@ TabPage RID_SVXPAGE_DOCRECOVERY_SAVE
         Pos = MAP_APPFONT( SAVE_COL0 , SAVE_ROW2 );
         Size = MAP_APPFONT( SAVE_CONTROLWIDTH, (SAVE_ROW3-SAVE_ROW2-RSC_SP_CTRL_DESC_Y) );
         WordBreak = TRUE;
-        Text[ de ] = "Durch einen unerwarteten Fehler ist %PRODUCTNAME abgestürzt. Alle Dateien an denen Sie gearbeitet haben werden gespeichert. Beim nächsten Start von %PRODUCTNAME werden Ihre Dokumente automatisch wieder hergestellt.";
+        Text[ de ] = "Durch einen unerwarteten Fehler ist %PRODUCTNAME abgestÃ¼rzt. Alle Dateien an denen Sie gearbeitet haben werden gespeichert. Beim nÃ¤chsten Start von %PRODUCTNAME werden Ihre Dokumente automatisch wieder hergestellt.";
         Text[ en-US ] = "Due to an unexpected error, %PRODUCTNAME crashed. All the files you were working on will be saved now. The next time %PRODUCTNAME is launched, your files will be recovered automatically.";
     };
     FixedText FT_SAVE_FILELIST
@@ -177,7 +177,7 @@ TabPage RID_SVXPAGE_DOCRECOVERY_RECOVER
         Pos = MAP_APPFONT( RECOV_COL1, RECOV_ROW2 );
         Size = MAP_APPFONT( RECOV_CONTROLWIDTH, RECOV_DESCRHEIGHT );
         WordBreak = TRUE;
-        Text[ de ] = "Klicken Sie auf 'Wiederherstellung starten', um mit dem Wiederherstellungsprozess der weiter unten aufgelisteten Dokumente zu beginnen.\n\nBitte unterstützen Sie uns, Fehler in %PRODUCTNAME zu beheben. Von dem Absturz wurde ein Bericht erstellt der uns hilft diesen Fehler zu beseitigen.";
+        Text[ de ] = "Klicken Sie auf 'Wiederherstellung starten', um mit dem Wiederherstellungsprozess der weiter unten aufgelisteten Dokumente zu beginnen.\n\nBitte unterstÃ¼tzen Sie uns, Fehler in %PRODUCTNAME zu beheben. Von dem Absturz wurde ein Bericht erstellt der uns hilft diesen Fehler zu beseitigen.";
         Text[ en-US ] = "Press 'Start Recovery' to start the recovery process of the documents listed below.\n\nPlease help us solve the problem that caused the crash. You can do this by sending the error report created by %PRODUCTNAME. Click 'Next' to open the Error Report tool.";
     };
     FixedText FT_RECOV_PROGR
@@ -276,7 +276,7 @@ TabPage RID_SVXPAGE_DOCRECOVERY_RECOVER
     };
     String STR_RECOVINPROGR
     {
-        Text[ de ] = "Wiederherstellung wird durchgeführt";
+        Text[ de ] = "Wiederherstellung wird durchgefÃ¼hrt";
         Text[ en-US ] = "Recovery in progress";
     };
     String STR_NOTRECOVYET
@@ -308,7 +308,7 @@ ModalDialog RID_SVX_MDLG_DOCRECOVERY_BROKEN
         Pos = MAP_APPFONT( BROKEN_COL0, BROKEN_ROW0 );
         Size = MAP_APPFONT( BROKEN_CONTROLWIDTH, (5*RSC_CD_FIXEDTEXT_HEIGHT) );
         WordBreak = TRUE;
-        Text[ de ] = "Der automatische Wiederherstellungsprozess wurde abgebrochen.\n\nKlicken Sie auf 'Speichern', um die unten aufgelisteten Dokumente in den unten angegebenen Ordner zu speichern. 'Abbrechen' verlässt den Assistenten ohne zu speichern.";
+        Text[ de ] = "Der automatische Wiederherstellungsprozess wurde abgebrochen.\n\nKlicken Sie auf 'Speichern', um die unten aufgelisteten Dokumente in den unten angegebenen Ordner zu speichern. 'Abbrechen' verlÃ¤sst den Assistenten ohne zu speichern.";
         Text[ en-US ] = "The automatic recovery process was interrupted.\n\nThe documents listed below will be saved in the folder noted below if you click 'Save'. Click 'Cancel' to close the wizard without saving the documents.";
     };
     FixedText FT_BROKEN_FILELIST
@@ -342,7 +342,7 @@ ModalDialog RID_SVX_MDLG_DOCRECOVERY_BROKEN
     {
         Pos = MAP_APPFONT( BROKEN_COL3, BROKEN_ROW5 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text [ de ] =  "Ä~ndern...";
+        Text [ de ] =  "Ã„~ndern...";
         Text [ en-US ] = "Chan~ge...";
     };
     FixedLine FL_BROKEN_BOTTOM
@@ -394,7 +394,7 @@ TabPage RID_SVXPAGE_ERR_REP_WELCOME
         Pos = MAP_APPFONT( RECOV_COL1, RECOV_ROW2 );
         Size = MAP_APPFONT( RECOV_CONTROLWIDTH, (RECOV_ROW7-RECOV_ROW2-RSC_SP_CTRL_Y) );
         WordBreak = TRUE;
-        Text[ de ] = "Dieses Fehlerbericht-Programm sammelt Informationen über den Zustand von %PRODUCTNAME und übermittelt sie an Sun Microsystems, um zukünftige Versionen zu verbessern.\n\nDas Senden der Daten geht ganz einfach. Zum Versenden, klicken Sie im nächsten Dialog 'Senden'. Wenn Sie sich den Fehlerbericht ansehen wollen, klicken Sie auf 'Bericht anzeigen'. Es werden keine Daten versendet, wenn Sie 'Nicht Senden' klicken.\n\nDatenschutz\nDie gesammelten Informationen über den Zustand von %PRODUCTNAME %PRODUCTVERSION beziehen sich nur auf den Fehler der entstanden ist. Andere Informationen wie z.B. Kennwörter oder der Dokumenteninhalt werden nicht gesammelt.\n\nAlle Informationen werden ausschliesslich für die Verbesserung von %PRODUCTNAME genutzt und werden nicht an dritte weitergegeben.\n\nMehr Information zu Datenschutz-Richtlinien von Sun Microsystems finden Sie unter\nhttp://www.sun.de/Datenschutz/";
+        Text[ de ] = "Dieses Fehlerbericht-Programm sammelt Informationen Ã¼ber den Zustand von %PRODUCTNAME und Ã¼bermittelt sie an Sun Microsystems, um zukÃ¼nftige Versionen zu verbessern.\n\nDas Senden der Daten geht ganz einfach. Zum Versenden, klicken Sie im nÃ¤chsten Dialog 'Senden'. Wenn Sie sich den Fehlerbericht ansehen wollen, klicken Sie auf 'Bericht anzeigen'. Es werden keine Daten versendet, wenn Sie 'Nicht Senden' klicken.\n\nDatenschutz\nDie gesammelten Informationen Ã¼ber den Zustand von %PRODUCTNAME %PRODUCTVERSION beziehen sich nur auf den Fehler der entstanden ist. Andere Informationen wie z.B. KennwÃ¶rter oder der Dokumenteninhalt werden nicht gesammelt.\n\nAlle Informationen werden ausschliesslich fÃ¼r die Verbesserung von %PRODUCTNAME genutzt und werden nicht an dritte weitergegeben.\n\nMehr Information zu Datenschutz-Richtlinien von Sun Microsystems finden Sie unter\nhttp://www.sun.de/Datenschutz/";
         Text[ en-US ] = "This error report tool gathers information about how %PRODUCTNAME is working and sends it to Sun Microsystems to help improve future versions.\n\nIt's easy - just send the report without any further effort on your part by clicking 'Send' in the next dialog, or you can briefly describe how the error occurred and then click 'Send'. If you want to see the report, click the 'Show Report' button. No data will be sent if you click 'Do Not Send'.\n\nCustomer Privacy\nThe information gathered is limited to data concerning the state of %PRODUCTNAME %PRODUCTVERSION when the error occurred. Other information about passwords or document contents is not collected.\n\nThe information will only be used to improve the quality of %PRODUCTNAME and will not be shared with third parties.\nFor more information on Sun Microsystems' privacy policy, visit\nhttp://www.sun.com/privacy/";
     };
     FixedLine FL_RECOV_BOTTOM
@@ -406,7 +406,7 @@ TabPage RID_SVXPAGE_ERR_REP_WELCOME
     {
         Pos = MAP_APPFONT( RECOV_COL_C, RECOV_ROW9 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text[ de ] = "< ~Zurück";
+        Text[ de ] = "< ~ZurÃ¼ck";
         Text[ en-US ] = "< ~Back";
     };
     OKButton BTN_RECOV_NEXT
@@ -453,7 +453,7 @@ TabPage RID_SVXPAGE_ERR_REP_SEND
         Pos = MAP_APPFONT( ERRSEND_COL0, ERRSEND_ROW2 );
         Size = MAP_APPFONT( ERRSEND_CONTROLWIDTH2, (ERRSEND_ROW3-ERRSEND_ROW2) );
         WordBreak = TRUE;
-        Text[ de ] = "In den folgenden Feldern können Sie einen Titel für Ihren Bericht angeben sowie beschreiben, welche Aktion Sie ausgeführt haben, als der Fehler auftrat. Dann klicken Sie auf 'Senden'";
+        Text[ de ] = "In den folgenden Feldern kÃ¶nnen Sie einen Titel fÃ¼r Ihren Bericht angeben sowie beschreiben, welche Aktion Sie ausgefÃ¼hrt haben, als der Fehler auftrat. Dann klicken Sie auf 'Senden'";
         Text[ en-US ] = "In the spaces below, you can enter a title for your error report and describe the action you were trying to carry out when the error occurred. Then click 'Send'.";
     };
 
@@ -462,7 +462,7 @@ TabPage RID_SVXPAGE_ERR_REP_SEND
         Pos = MAP_APPFONT( ERRSEND_COL0, ERRSEND_ROW4 );
         Size = MAP_APPFONT( ERRSEND_CONTROLWIDTH2, 2*RSC_CD_FIXEDTEXT_HEIGHT );
         WordBreak = TRUE;
-        Text[ de ] = "~Mit welchem Dokumenttyp (z.B. Präsentation) haben Sie gearbeitet als der Fehler auftrat?";
+        Text[ de ] = "~Mit welchem Dokumenttyp (z.B. PrÃ¤sentation) haben Sie gearbeitet als der Fehler auftrat?";
         Text[ en-US ] = "~Which type of document (e.g. presentation) were you using when the error occurred?";
     };
     Edit ED_ERRSEND_DOCTYPE
@@ -530,7 +530,7 @@ TabPage RID_SVXPAGE_ERR_REP_SEND
     {
         Pos = MAP_APPFONT( ERRSEND_COL5, ERRSEND_ROW16 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text[ de ] = "< ~Zurück";
+        Text[ de ] = "< ~ZurÃ¼ck";
         Text[ en-US ] = "< ~Back";
     };
     OKButton BTN_RECOV_NEXT
@@ -627,7 +627,7 @@ ModalDialog RID_SVX_MDLG_ERR_REP_OPTIONS
         Pos = MAP_APPFONT( ERROPT_COLB, ERROPT_ROW6 );
         Size = MAP_APPFONT( ERROPT_COLF - ERROPT_COLB, ERROPT_ROW7 - ERROPT_ROW6 );
         WordBreak = TRUE;
-        Text[ de ] = "Das %PRODUCTNAME Fehlerbericht-Programm benötigt eine Verbindung zum Internet, um Fehlerberichte zu versenden.\nIn Firmen werden oft Proxy-Server in Verbindung mit einer Firewall zum Schutz des Netzwerkes eingesetzt.\nWenn dies auf Sie zutrifft, müssen Sie die Adresse und den Port des Servers angeben.";
+        Text[ de ] = "Das %PRODUCTNAME Fehlerbericht-Programm benÃ¶tigt eine Verbindung zum Internet, um Fehlerberichte zu versenden.\nIn Firmen werden oft Proxy-Server in Verbindung mit einer Firewall zum Schutz des Netzwerkes eingesetzt.\nWenn dies auf Sie zutrifft, mÃ¼ssen Sie die Adresse und den Port des Servers angeben.";
         Text[ en-US ] = "The %PRODUCTNAME Error Report tool needs to be connected to the Internet to be able to send error reports.\nCompanies often use proxy servers in conjunction with a firewall to protect the network.\nIf this applies to your situation, you have to specify the address and port for the server.";
     };
 
