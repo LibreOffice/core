@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addresslistdialog.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:47:48 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:47:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,9 +144,6 @@
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
-#ifndef SW_SHARED_UNO_COMPONENT_HXX
-#include "sharedunocomponent.hxx"
-#endif
 
 #include <addresslistdialog.hrc>
 #include <dbui.hrc>
@@ -169,7 +166,7 @@ using namespace rtl;
 #define ITEMID_NAME         1
 #define ITEMID_TABLE        2
 
-typedef SharedUNOComponent< XConnection >   SharedConnection;
+//typedef SharedUNOComponent< XConnection >   SharedConnection;
 
 static const char* cUTF8 = "UTF-8";
 /*-- 07.05.2004 14:11:34---------------------------------------------------
@@ -636,7 +633,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
             uno::Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
             uno::Reference< XInteractionHandler > xHandler(
                 xMgr->createInstance( C2U( "com.sun.star.sdb.InteractionHandler" )), UNO_QUERY);
-            pUserData->xConnection = xComplConnection->connectWithCompletion( xHandler );
+            pUserData->xConnection = SharedConnection( xComplConnection->connectWithCompletion( xHandler ) );
         }
         if(pUserData->xConnection.is())
         {
