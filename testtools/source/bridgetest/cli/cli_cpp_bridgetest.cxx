@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cli_cpp_bridgetest.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:23:32 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:48:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -971,10 +971,19 @@ static bool raiseException(XBridgeTest* xLBT )
             Console::WriteLine( "\n### cli_uno C++  bridgetest succeeded." );
             return 0;
         }
+        catch (unoidl::com::sun::star::uno::RuntimeException* )
+        {
+            throw;
+        }
         catch (System::Exception* exc)
         {
-            Console::WriteLine( "\n### unexpected exception occured: {0}", exc );
-            return 1;
+            System::Text::StringBuilder* s = new System::Text::StringBuilder();
+            s->Append(S"cli_cpp_bridgetest: unexpected exception occured in XMain::run. Original exception: ");
+            s->Append(exc->GetType()->Name);
+            s->Append(S"\n Message: ");
+            s->Append(exc->Message);
+            throw new unoidl::com::sun::star::uno::RuntimeException(
+                s->ToString(), 0);
         }
     }
 };
