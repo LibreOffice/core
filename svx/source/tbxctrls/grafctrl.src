@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grafctrl.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:49:06 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:03:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,7 @@ String RID_SVXSTR_UNDO_GRAFRED
 };
 String RID_SVXSTR_UNDO_GRAFGREEN
 {
-    Text [ de ] = "Grünanteil";
+    Text [ de ] = "GrÃ¼nanteil";
     Text [ en-US ] = "Green";
 };
 String RID_SVXSTR_UNDO_GRAFBLUE
