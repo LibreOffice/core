@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeFontWork.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:25:56 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:49:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,11 +81,19 @@
 #define ITEMID_FONT         EE_CHAR_FONTINFO
 #define ITEMID_CHARSCALE_W  EE_CHAR_FONTWIDTH
 #define ITEMID_FRAMEDIR     EE_PARA_WRITINGDIR
+#define ITEMID_POSTURE      EE_CHAR_ITALIC
+#define ITEMID_WEIGHT       EE_CHAR_WEIGHT
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <frmdiritem.hxx>
 #endif
 #ifndef _SVX_FONTITEM_HXX //autogen
 #include <fontitem.hxx>
+#endif
+#ifndef _SVX_POSTITEM_HXX
+#include <postitem.hxx>
+#endif
+#ifndef _SVX_WGHTITEM_HXX
+#include <wghtitem.hxx>
 #endif
 #ifndef _SVX_CHARSCALEITEM_HXX
 #include <charscaleitem.hxx>
@@ -181,17 +189,17 @@ sal_Bool InitializeFontWorkData( const SdrObject* pCustomShape, const sal_uInt16
             sal_Int16 nParagraphsLeft = rTextObj.GetParagraphCount();
 
             rFWData.nMaxParagraphsPerTextArea = ( ( nParagraphsLeft - 1 ) / nTextAreaCount ) + 1;
-
+            sal_Int16 j = 0;
             while( nParagraphsLeft && nTextAreaCount )
             {
                 FWTextArea aTextArea;
                 sal_Int16 i, nParagraphs = ( ( nParagraphsLeft - 1 ) / nTextAreaCount ) + 1;
-                for ( i = 0; i < nParagraphs; i++ )
+                for ( i = 0; i < nParagraphs; i++, j++ )
                 {
                     FWParagraphData aParagraphData;
-                    aParagraphData.aString = rTextObj.GetText( i );
+                    aParagraphData.aString = rTextObj.GetText( j );
 
-                    const SfxItemSet& rParaSet = rTextObj.GetParaAttribs( i );  // retrieving some paragraph attributes
+                    const SfxItemSet& rParaSet = rTextObj.GetParaAttribs( j );  // retrieving some paragraph attributes
                     aParagraphData.nFrameDirection = ((SvxFrameDirectionItem&)rParaSet.Get( EE_PARA_WRITINGDIR )).GetValue();
                     aTextArea.vParagraphs.push_back( aParagraphData );
                 }
@@ -308,6 +316,12 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
             aFont.SetFamily( rFontItem.GetFamily() );
             aFont.SetStyleName( rFontItem.GetStyleName() );
             aFont.SetOrientation( 0 );
+
+            SvxPostureItem& rPostureItem = (SvxPostureItem&)pCustomShape->GetMergedItem( EE_CHAR_ITALIC );
+            aFont.SetItalic( rPostureItem.GetPosture() );
+
+            SvxWeightItem& rWeightItem = (SvxWeightItem&)pCustomShape->GetMergedItem( EE_CHAR_WEIGHT );
+            aFont.SetWeight( rWeightItem.GetWeight() );
 
             // initializing virtual device
             VirtualDevice aVirDev( 1 );
