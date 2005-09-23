@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppIconControl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:21:20 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:16:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,7 @@
 using namespace ::dbaui;
 //==================================================================
 // class OApplicationIconControl
+DBG_NAME(OApplicationIconControl)
 //==================================================================
 OApplicationIconControl::OApplicationIconControl(Window* _pParent)
     : SvtIconChoiceCtrl(_pParent,WB_ICON | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME | /*!WB_NOSELECTION |*/
@@ -68,6 +69,8 @@ OApplicationIconControl::OApplicationIconControl(Window* _pParent)
     ,DropTargetHelper(this)
     ,m_pActionListener(NULL)
 {
+    DBG_CTOR(OApplicationIconControl,NULL);
+
     typedef ::std::pair< USHORT,USHORT> TUSHORTPair;
     typedef ::std::pair< ElementType,TUSHORTPair> TUSHORT2Pair;
     typedef ::std::pair< String,TUSHORT2Pair> TPair;
@@ -101,6 +104,8 @@ OApplicationIconControl::~OApplicationIconControl()
             pEntry->SetUserData(NULL);
         }
     }
+
+    DBG_DTOR(OApplicationIconControl,NULL);
 }
 // -----------------------------------------------------------------------------
 sal_Int8 OApplicationIconControl::AcceptDrop( const AcceptDropEvent& _rEvt )
