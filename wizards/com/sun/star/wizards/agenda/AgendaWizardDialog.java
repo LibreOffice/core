@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AgendaWizardDialog.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:15:20 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:29:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -360,11 +360,11 @@ public abstract class AgendaWizardDialog  extends WizardDialog implements Agenda
 
     lblTemplateName = insertLabel("lblTemplateName",
       PROPS_TEXT,
-      new Object[] { INTEGERS[8],resources.reslblTemplateName_value,new Integer(97),new Integer(62),INTEGERS[6],new Short((short)602),new Integer(70)}
+      new Object[] { INTEGERS[8],resources.reslblTemplateName_value,new Integer(97),new Integer(62),INTEGERS[6],new Short((short)602),new Integer(101)}
     );
     txtTemplateName = insertTextField("txtTemplateName", TXTTEMPLATENAME_TEXT_CHANGED,
       PROPS_X,
-      new Object[] { INTEGER_12,TXTTEMPLATENAME_HID,new Integer(166),new Integer(60),INTEGERS[6],new Short((short)603),new Integer(138)}
+      new Object[] { INTEGER_12,TXTTEMPLATENAME_HID,new Integer(202),new Integer(60),INTEGERS[6],new Short((short)603),new Integer(100)}
     );
     lblTemplatePath = insertLabel("lblTemplatePath",
       PROPS_TEXT,
