@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtreelistbox.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:33:59 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:23:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -327,7 +327,7 @@ sal_Int8 DBTreeListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
             if ( nDropOption & DND_ACTION_MOVE )
             {
                 if ( m_pDragedEntry == pDroppedEntry || GetEntryPosByName(GetEntryText(m_pDragedEntry),pDroppedEntry) )
-                    nDropOption = DND_ACTION_NONE;
+                    nDropOption = nDropOption & ~DND_ACTION_MOVE;//DND_ACTION_NONE;
             }
             m_aMousePos = _rEvt.maPosPixel;
             m_aScrollHelper.scroll(m_aMousePos,GetOutputSizePixel());
