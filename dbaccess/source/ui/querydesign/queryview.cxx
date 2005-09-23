@@ -4,9 +4,9 @@
  *
  *  $RCSfile: queryview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:34:47 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:44:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,14 +49,19 @@
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+DBG_NAME(OQueryView)
 // -------------------------------------------------------------------------
 OQueryView::OQueryView(Window* _pParent, OQueryController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
     :OJoinDesignView(_pParent,_pController,_rFactory)
 {
+    DBG_CTOR(OQueryView,NULL);
+
 }
 // -----------------------------------------------------------------------------
 OQueryView::~OQueryView()
 {
+
+    DBG_DTOR(OQueryView,NULL);
 }
 // -----------------------------------------------------------------------------
 
