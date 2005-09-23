@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessibility.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:22:42 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:31:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ String RID_SVXSTR_A11Y_FILLSTYLE_NONE
 };
 String RID_SVXSTR_A11Y_FILLSTYLE_SOLID
 {
-    Text [ de ] = "Ausgefüllt" ;
+    Text [ de ] = "AusgefÃ¼llt" ;
     Text [ en-US ] = "Solid" ;
 };
 String RID_SVXSTR_A11Y_FILLSTYLE_HATCH
@@ -233,7 +233,7 @@ String RID_SVXSTR_GRAPHCTRL_ACC_NAME
 
 String RID_SVXSTR_GRAPHCTRL_ACC_DESCRIPTION
 {
-    Text [ de ] = "Hier können Sie die Kontur bearbeiten." ;
+    Text [ de ] = "Hier kÃ¶nnen Sie die Kontur bearbeiten." ;
     Text [ en-US ] = "This is where you can edit the contour." ;
 };
 
@@ -251,13 +251,13 @@ String RID_SVXSTR_A11Y_PARAGRAPH_NAME
 
 String RID_SVXSTR_A11Y_IMAGEBULLET_DESCRIPTION
 {
-    Text [ de ] = "Grafisches Aufzählungszeichen in Absatz: $(ARG)" ;
+    Text [ de ] = "Grafisches AufzÃ¤hlungszeichen in Absatz: $(ARG)" ;
     Text [ en-US ] = "Image bullet in paragraph: $(ARG)" ;
 };
 
 String RID_SVXSTR_A11Y_IMAGEBULLET_NAME
 {
-    Text [ de ] = "Grafisches Aufzählungszeichen" ;
+    Text [ de ] = "Grafisches AufzÃ¤hlungszeichen" ;
     Text [ en-US ] = "Image bullet" ;
 };
 
@@ -269,7 +269,7 @@ String RID_SVXSTR_CHARACTER_SELECTION
 
 String RID_SVXSTR_CHAR_SEL_DESC
 {
-    Text [ de ] = "Wählen Sie Sonderzeichen in diesem Bereich aus." ;
+    Text [ de ] = "WÃ¤hlen Sie Sonderzeichen in diesem Bereich aus." ;
     Text [ en-US ] = "Select special characters in this area.";
 };
 
