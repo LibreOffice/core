@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datman.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:16:50 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:03:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@ ModalDialog RID_DLG_MAPPING
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 391 , 195 ) ;
     Moveable = TRUE ;
-    Text [ de ] = "Spaltenzuordnung für Tabelle %1";
+    Text [ de ] = "Spaltenzuordnung fÃ¼r Tabelle %1";
 
     OKButton BT_OK
     {
@@ -423,7 +423,7 @@ ModalDialog RID_DLG_DBCHANGE
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 291 , 131 ) ;
     Moveable = TRUE ;
-    Text [ de ] = "Datenquelle auswählen" ;
+    Text [ de ] = "Datenquelle auswÃ¤hlen" ;
     Text [ en-US ] = "Choose Data Source";
     OKButton BT_OK
     {
