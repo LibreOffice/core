@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commonlingui.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:43:26 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:35:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ Window RID_SVX_WND_COMMON_LINGU
     {
         Pos = MAP_APPFONT( 6, 48 );
         Size = MAP_APPFONT( 42, 10 );
-        Text [ de ] = "~Vorschl‰ge" ;
+        Text [ de ] = "~Vorschl√§ge" ;
         Text [ en-US ] = "~Suggestions" ;
         Text [ x-comment ] = " ";
     };
@@ -154,7 +154,7 @@ Window RID_SVX_WND_COMMON_LINGU
         Pos = MAP_APPFONT ( 209 , 153 ) ;
         Size = MAP_APPFONT ( 55 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "S~chlieﬂen" ;
+        Text [ de ] = "S~chlie√üen" ;
         Text [ en-US ] = "~Close" ;
         Text [ x-comment ] = " ";
     };
