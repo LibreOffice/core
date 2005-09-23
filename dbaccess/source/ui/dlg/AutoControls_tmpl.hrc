@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AutoControls_tmpl.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:42:47 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:11:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -258,7 +258,7 @@
     {                                                                                               \
         Pos = MAP_APPFONT ( START_X  , AUTO_Y) ;                                                    \
         Size = MAP_APPFONT ( AUTOPAGE_X - 2*START_X , FIXEDTEXT_HEIGHT ) ;                           \
-        Text [ de ] = "~Geben Sie den Dateityp an, auf den Sie zugreifen möchten" ;                 \
+        Text [ de ] = "~Geben Sie den Dateityp an, auf den Sie zugreifen mÃ¶chten" ;                 \
         Text[ en-US ]  = "Specify the type of files you want to access" ;                           \
     };                                                                                              \
                                                                                                     \
@@ -320,7 +320,7 @@
         Pos = MAP_APPFONT ( EDIT_X , AUTO_Y + 50 + FIXEDTEXT_HEIGHT + RELATED_CONTROLS + 1) ;       \
         Size = MAP_APPFONT ( 150 , CHECKBOX_HEIGHT ) ;                                              \
         HelpId = HID_DSADMIN_TEXT_HEADER;                                                           \
-        Text [ de ] = "~Text enthält Kopfzeile" ;                                                   \
+        Text [ de ] = "~Text enthÃ¤lt Kopfzeile" ;                                                   \
         Text [ en-US ] = "~Text contains headers" ;                                                 \
     };                                                                                              \
                                                                                                     \
@@ -431,12 +431,12 @@
     };                                                                                                                      \
     String STR_AUTODELIMITER_MUST_DIFFER                                                                                    \
     {                                                                                                                       \
-        Text [ de ] = "#1 und #2 müssen unterschiedlich sein." ;                                                            \
+        Text [ de ] = "#1 und #2 mÃ¼ssen unterschiedlich sein." ;                                                            \
         Text[ en-US ]  = "#1 and #2 must be different." ;                                                                   \
     };                                                                                                                      \
     String STR_AUTONO_WILDCARDS                                                                                             \
     {                                                                                                                       \
-        Text [ de ] = "Platzhalter wie *,? sind in der #1 nicht möglich." ;                                                 \
+        Text [ de ] = "Platzhalter wie *,? sind in der #1 nicht mÃ¶glich." ;                                                 \
         Text[ en-US ]  = "Wildcards such as ?,* are not allowed in #1." ;                                                   \
     };
 
