@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:35:54 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:11:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,7 @@ String SCSTR_QHELP_BTNCALC
 String SCSTR_QHELP_BTNOK
 {
     /* ### ACHTUNG: Neuer Text in Resource? Übernehmen : šbernehmen */
-    Text [ de ] = "Übernehmen" ;
+    Text [ de ] = "Ãœbernehmen" ;
     Text [ en-US ] = "Accept" ;
     Text [ x-comment ] = " ";
 };
@@ -155,7 +155,7 @@ FloatingWindow RID_TBXCTL_INSERT
     SVLook = TRUE ;
     HelpID = RID_TBXCTL_INSERT ;
     /* ### ACHTUNG: Neuer Text in Resource? Einfügen : Einf³gen */
-    Text [ de ] = "Einfügen" ;
+    Text [ de ] = "EinfÃ¼gen" ;
     Text [ en-US ] = "Insert" ;
 
     ToolBox RID_TOOLBOX_INSERT
@@ -188,7 +188,7 @@ FloatingWindow RID_TBXCTL_INSCELLS
     SVLook = TRUE ;
     HelpID = RID_TBXCTL_INSCELLS ;
     /* ### ACHTUNG: Neuer Text in Resource? Zellen einfügen : Zellen einf³gen */
-    Text [ de ] = "Zellen einfügen" ;
+    Text [ de ] = "Zellen einfÃ¼gen" ;
     Text [ en-US ] = "Insert Cells" ;
 
     ToolBox RID_TOOLBOX_INSCELLS
@@ -231,7 +231,7 @@ FloatingWindow RID_TBXCTL_INSOBJ
     SVLook = TRUE;
     HelpID = RID_TBXCTL_INSOBJ ;
     /* ### ACHTUNG: Neuer Text in Resource? Objekt einfügen : Objekt einf³gen */
-    Text [ de ] = "Objekt einfügen" ;
+    Text [ de ] = "Objekt einfÃ¼gen" ;
     Text [ en-US ] = "Insert Object" ;
     ToolBox RID_TOOLBOX_INSOBJ
     {
