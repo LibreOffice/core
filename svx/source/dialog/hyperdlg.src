@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:16:54 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:40:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,7 +214,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         StringList [ de ] =
         {
             < "Text" ; Default ; > ;
-            < "Schaltfläche" ; Default ; > ;
+            < "SchaltflÃ¤che" ; Default ; > ;
         };
         StringList [ en-US ] =
         {
@@ -314,7 +314,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
     {
         Pos = MAP_APPFONT ( 12 , 26 ) ;
         Size = MAP_APPFONT ( 39 + COL_DIFF , 8 ) ;
-        Text [ de ] = "E~mpfänger";
+        Text [ de ] = "E~mpfÃ¤nger";
         Text [ en-US ] = "Re~ceiver" ;
     };
     FixedText FT_SUBJECT
@@ -395,7 +395,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         StringList [ de ] =
         {
             < "Text" ; Default ; > ;
-            < "Schaltfläche" ; Default ; > ;
+            < "SchaltflÃ¤che" ; Default ; > ;
         };
         StringList [ en-US ] =
         {
@@ -487,8 +487,8 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Pos = MAP_APPFONT ( 235, 14 ) ;
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, HYPERDLG_IMGBUTTON_HEIGHT );
         TabStop = TRUE ;
-        Text [ de ] = "Datei öffnen" ;
-        QuickHelpText [ de ] = "Datei öffnen" ;
+        Text [ de ] = "Datei Ã¶ffnen" ;
+        QuickHelpText [ de ] = "Datei Ã¶ffnen" ;
         QuickHelpText [ en-US ] = "Open File" ;
         ButtonImage = Image
         {
@@ -603,7 +603,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         StringList [ de ] =
         {
             < "Text" ; Default ; > ;
-            < "Schaltfläche" ; Default ; > ;
+            < "SchaltflÃ¤che" ; Default ; > ;
         };
         StringList [ en-US ] =
         {
@@ -694,7 +694,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
     {
         Pos = MAP_APPFONT( 142, 13 );
         Size = MAP_APPFONT( 84, 10 );
-        Text [ de ] = "~Später bearbeiten";
+        Text [ de ] = "~SpÃ¤ter bearbeiten";
         Text [ en-US ] = "Edit ~later";
     };
     FixedText FT_PATH_NEWDOC
@@ -731,9 +731,9 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Pos = MAP_APPFONT ( 235, 24 ) ;
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, HYPERDLG_IMGBUTTON_HEIGHT );
         TabStop = TRUE ;
-        Text [ de ] = "Pfad auswählen" ;
+        Text [ de ] = "Pfad auswÃ¤hlen" ;
 
-        QuickHelpText [ de ] = "Pfad auswählen" ;
+        QuickHelpText [ de ] = "Pfad auswÃ¤hlen" ;
         QuickHelpText [ en-US ] = "Select Path" ;
         ButtonImage = Image
         {
@@ -790,7 +790,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         StringList [ de ] =
         {
             < "Text" ; Default ; > ;
-            < "Schaltfläche" ; Default ; > ;
+            < "SchaltflÃ¤che" ; Default ; > ;
         };
         StringList [ en-US ] =
         {
@@ -870,36 +870,36 @@ ModalDialog RID_SVXDLG_NEWHYPERLINK
 
 String RID_SVXSTR_HYPDLG_APPLYBUT
 {
-    Text [ de ] = "Übernehmen" ;
+    Text [ de ] = "Ãœbernehmen" ;
     Text [ en-US ] = "Apply" ;
     Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_HYPDLG_CLOSEBUT
 {
-    Text [ de ] = "Schließen" ;
+    Text [ de ] = "SchlieÃŸen" ;
     Text [ en-US ] = "Close" ;
     Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_HYPDLG_MACROACT1
 {
-    Text [ de ] = "Maus über Objekt" ;
+    Text [ de ] = "Maus Ã¼ber Objekt" ;
     Text [ en-US ] = "Mouse over object" ;
 };
 String RID_SVXSTR_HYPDLG_MACROACT2
 {
-    Text [ de ] = "Hyperlink auslösen" ;
+    Text [ de ] = "Hyperlink auslÃ¶sen" ;
     Text [ en-US ] = "Trigger hyperlink" ;
     Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_HYPDLG_MACROACT3
 {
-    Text [ de ] = "Maus verlässt Objekt" ;
+    Text [ de ] = "Maus verlÃ¤sst Objekt" ;
     Text [ en-US ] = "Mouse leaves object" ;
 };
 
 String RID_SVXSTR_HYPDLG_NOVALIDFILENAME
 {
-    Text [ de ] = "Geben Sie bitte einen gültigen Dateinamen ein.";
+    Text [ de ] = "Geben Sie bitte einen gÃ¼ltigen Dateinamen ein.";
     Text [ en-US ] = "Please type in a valid file name." ;
     Text [ x-comment ] = " ";
 };
@@ -950,7 +950,7 @@ String RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP
 
 String RID_SVXSTR_HYPERDLG_FORM_BUTTON
 {
-    Text [ de ] = "Schaltfläche" ;
+    Text [ de ] = "SchaltflÃ¤che" ;
     Text [ en-US ] = "Button" ;
 };
 
@@ -962,7 +962,7 @@ String RID_SVXSTR_HYPERDLG_FROM_TEXT
 
 String RID_SVXSTR_HYPERDLG_QUERYOVERWRITE
 {
-    Text [ de ] = "Die Datei existiert bereits. Soll sie überschrieben werden?" ;
+    Text [ de ] = "Die Datei existiert bereits. Soll sie Ã¼berschrieben werden?" ;
     Text [ en-US ] = "The file already exists. Overwrite?" ;
 };
 
