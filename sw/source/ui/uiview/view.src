@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:11:45 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:14:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ QueryBox DLG_WRAP
 {
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_YES ;
-    Message [ de ] = "Überprüfung am Anfang des Dokumentes fortsetzen?" ;
+    Message [ de ] = "ÃœberprÃ¼fung am Anfang des Dokumentes fortsetzen?" ;
     Message [ en-US ] = "Do you want to continue checking at the beginning of the document?" ;
     Message [ x-comment ] = " ";
 };
@@ -69,7 +69,7 @@ QueryBox DLG_BODY
 {
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
-    Message [ de ] = "Wollen Sie den Haupttext prüfen?" ;
+    Message [ de ] = "Wollen Sie den Haupttext prÃ¼fen?" ;
     Message [ en-US ] = "Do you want to check the main text?" ;
     Message [ x-comment ] = " ";
 };
@@ -85,7 +85,7 @@ QueryBox DLG_SPECIAL
 {
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
-    Message [ de ] = "Sonderbereiche prüfen?" ;
+    Message [ de ] = "Sonderbereiche prÃ¼fen?" ;
     Message [ en-US ] = "Do you want check the special regions?" ;
     Message [ x-comment ] = " ";
 };
@@ -101,7 +101,7 @@ QueryBox DLG_SPECIAL_FORCED
 {
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
-    Message [ de ] = "Sonderbereichprüfung ist ausgeschaltet, Trotzdem prüfen?" ;
+    Message [ de ] = "SonderbereichprÃ¼fung ist ausgeschaltet, Trotzdem prÃ¼fen?" ;
     Message [ en-US ] = "Check special regions is deactivated. Check anyway?" ;
     Message [ x-comment ] = " ";
 };
@@ -109,7 +109,7 @@ QueryBox MSG_SEARCH_END
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_YES ;
-    Message [ de ] = "%PRODUCTNAME Writer hat bis zum Ende des Dokumentes gesucht. Möchten Sie die Suche am Dokumentanfang fortsetzen?" ;
+    Message [ de ] = "%PRODUCTNAME Writer hat bis zum Ende des Dokumentes gesucht. MÃ¶chten Sie die Suche am Dokumentanfang fortsetzen?" ;
     Message [ en-US ] = "%PRODUCTNAME Writer has searched to the end of the document. Do you want to continue at the beginning?" ;
     Message [ x-comment ] = " ";
 };
@@ -117,13 +117,13 @@ QueryBox MSG_SEARCH_START
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_YES ;
-    Message [ de ] = "%PRODUCTNAME Writer hat bis zum Anfang des Dokumentes gesucht. Möchten Sie die Suche am Dokumentende fortsetzen?" ;
+    Message [ de ] = "%PRODUCTNAME Writer hat bis zum Anfang des Dokumentes gesucht. MÃ¶chten Sie die Suche am Dokumentende fortsetzen?" ;
     Message [ en-US ] = "%PRODUCTNAME Writer has searched to the beginning of the document. Do you want to continue at the end?" ;
     Message [ x-comment ] = " ";
 };
 InfoBox MSG_NO_MERGE_ENTRY
 {
-    Message [ de ] = "Es konnte nichts zusammengeführt werden." ;
+    Message [ de ] = "Es konnte nichts zusammengefÃ¼hrt werden." ;
     Message [ en-US ] = "Could not merge documents." ;
     Message [ x-comment ] = " ";
 };
@@ -175,7 +175,7 @@ InfoBox MSG_SCAN_NOSOURCE
 };
 String STR_NOGLOS1
 {
-    Text [ de ] = "AutoText zum Kürzel '" ;
+    Text [ de ] = "AutoText zum KÃ¼rzel '" ;
     Text [ en-US ] = "AutoText for Shortcut '" ;
     Text [ x-comment ] = " ";
 };
@@ -197,13 +197,13 @@ String STR_NUM_LEVEL
 };
 String STR_ERROR_NOLANG
 {
-    Text [ de ] = "Im geprüften Bereich ist keine Sprache eingestellt." ;
+    Text [ de ] = "Im geprÃ¼ften Bereich ist keine Sprache eingestellt." ;
     Text [ en-US ] = "No language is selected in the proofed section." ;
     Text [ x-comment ] = " ";
 };
 String STR_EDIT_FOOTNOTE
 {
-    Text [ de ] = "Fußnote bearbeiten" ;
+    Text [ de ] = "FuÃŸnote bearbeiten" ;
     Text [ en-US ] = "Edit Footnote" ;
     Text [ x-comment ] = " ";
 };
@@ -257,7 +257,7 @@ String STR_PRINT_SELECTION
 };
 String STR_READONLY_SEL
 {
-    Text [ de ] = "schreibgeschützt" ;
+    Text [ de ] = "schreibgeschÃ¼tzt" ;
     Text [ en-US ] = "read-only";
     Text [ x-comment ] = " ";
 };
