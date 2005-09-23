@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableCopyHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:08:06 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:37:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,9 +105,6 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XPARAMETERS_HPP_
 #include <com/sun/star/sdbc/XParameters.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATASUPPLIER_HPP_
-#include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATASUPPLIER_HPP_
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
@@ -343,6 +340,7 @@ void insertRows(const Reference<XResultSet>& xSrcRs,
                             FILL_PARAM( ::com::sun::star::util::DateTime, etTimestamp)
                             break;
                         case DataType::BIT:
+                        case DataType::BOOLEAN:
                             FILL_PARAM( sal_Bool, etBoolean)
                             break;
                         case DataType::TINYINT:
@@ -487,7 +485,7 @@ OTableCopyHelper::OTableCopyHelper(OGenericUnoController* _pControler) : m_pCont
 void OTableCopyHelper::pasteTable( SotFormatStringId _nFormatId
                                   ,const TransferableDataHelper& _rTransData
                                   ,const ::rtl::OUString& _sDestDataSourceName
-                                  ,const Reference<XConnection>& _xConnection)
+                                  ,const SharedConnection& _xConnection)
 {
     if ( _nFormatId == SOT_FORMATSTR_ID_DBACCESS_TABLE || _nFormatId == SOT_FORMATSTR_ID_DBACCESS_QUERY )
     {
@@ -526,7 +524,7 @@ void OTableCopyHelper::pasteTable( SotFormatStringId _nFormatId
 // -----------------------------------------------------------------------------
 void OTableCopyHelper::pasteTable( const TransferableDataHelper& _rTransData
                                   ,const ::rtl::OUString& _sDestDataSourceName
-                                  ,const Reference<XConnection>& _xConnection)
+                                  ,const SharedConnection& _xConnection)
 {
     if ( _rTransData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_TABLE) || _rTransData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY) )
         pasteTable( SOT_FORMATSTR_ID_DBACCESS_TABLE,_rTransData,_sDestDataSourceName,_xConnection);
@@ -540,7 +538,7 @@ void OTableCopyHelper::pasteTable( const TransferableDataHelper& _rTransData
 // -----------------------------------------------------------------------------
 void OTableCopyHelper::pasteTable( ::svx::ODataAccessDescriptor& _rPasteData
                                   ,const ::rtl::OUString& _sDestDataSourceName
-                                  ,const Reference<XConnection>& _xDestConnection)
+                                  ,const SharedConnection& _xDestConnection)
 {
     Reference<XConnection> xSrcConnection;
     Reference<XResultSet>   xSrcRs;         // the source resultset may be empty
@@ -774,7 +772,7 @@ void OTableCopyHelper::insertTable(sal_Int32 _nCommandType
     }
 }
 // -----------------------------------------------------------------------------
-sal_Bool OTableCopyHelper::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc, sal_Bool _bCheck,const Reference<XConnection>& _xConnection)
+sal_Bool OTableCopyHelper::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc, sal_Bool _bCheck,const SharedConnection& _xConnection)
 {
     Reference<XEventListener> xEvt;
     ODatabaseImportExport* pImport = NULL;
@@ -805,7 +803,7 @@ sal_Bool OTableCopyHelper::isTableFormat(const TransferableDataHelper& _rClipboa
 // -----------------------------------------------------------------------------
 sal_Bool OTableCopyHelper::copyTagTable(const TransferableDataHelper& _aDroppedData
                                         ,DropDescriptor& _rAsyncDrop
-                                        ,const Reference<XConnection>& _xConnection)
+                                        ,const SharedConnection& _xConnection)
 {
     sal_Bool bRet = sal_False;
     sal_Bool bHtml = _aDroppedData.HasFormat(SOT_FORMATSTR_ID_HTML) || _aDroppedData.HasFormat(SOT_FORMATSTR_ID_HTML_SIMPLE);
@@ -839,7 +837,7 @@ sal_Bool OTableCopyHelper::copyTagTable(const TransferableDataHelper& _aDroppedD
 // -----------------------------------------------------------------------------
 void OTableCopyHelper::asyncCopyTagTable(  DropDescriptor& _rDesc
                                 ,const ::rtl::OUString& _sDestDataSourceName
-                                ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection)
+                                ,const SharedConnection& _xConnection)
 {
     if ( _rDesc.aHtmlRtfStorage.Is() )
     {
