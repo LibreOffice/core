@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 11:34:47 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:04:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,7 +195,7 @@ Reference< XPreparedStatement >  OConnection::prepareCall(const rtl::OUString& s
     checkDisposed();
 
     Reference< XPreparedStatement > xStatement;
-    Reference< XPreparedStatement > xMasterStatement = prepareCall(sql);
+    Reference< XPreparedStatement > xMasterStatement = m_xConnection->prepareCall(sql);
     if ( xMasterStatement.is() )
     {
         xStatement = new OCallableStatement(this, xMasterStatement);
