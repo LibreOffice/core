@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optjava.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:46:29 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:44:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ TabPage RID_SVXPAGE_OPTIONS_JAVA
     {
         Pos = MAP_APPFONT ( 204 , 38 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Hinzuf¸gen..." ;
+        Text [ de ] = "~Hinzuf√ºgen..." ;
         Text [ en-US ] = "~Add..." ;
     };
     PushButton PB_PARAMETER
@@ -113,12 +113,12 @@ TabPage RID_SVXPAGE_OPTIONS_JAVA
     };
     String STR_ACCESSIBILITY
     {
-        Text [ de ] = "mit Unterst¸tzung der Zug‰nglichkeit" ;
+        Text [ de ] = "mit Unterst√ºtzung der Zug√§nglichkeit" ;
         Text [ en-US ] = "with accessibility support" ;
     };
     String STR_ADDDLGTEXT
     {
-        Text [ de ] = "Java-Laufzeitumgebung ausw‰hlen" ;
+        Text [ de ] = "Java-Laufzeitumgebung ausw√§hlen" ;
         Text [ en-US ] = "Select a Java Runtime Environment" ;
     };
     String STR_HEADER_VENDOR
@@ -249,14 +249,14 @@ ModalDialog RID_SVXDLG_JAVA_CLASSPATH
     {
         Pos = MAP_APPFONT ( 184 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Archive hinzuf¸gen..." ;
+        Text [ de ] = "~Archive hinzuf√ºgen..." ;
         Text [ en-US ] = "~Add Archive..." ;
     };
     PushButton PB_ADDPATH
     {
         Pos = MAP_APPFONT ( 184 , 31 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Ordner hinzuf¸gen..." ;
+        Text [ de ] = "~Ordner hinzuf√ºgen..." ;
         Text [ en-US ] = "Add ~Folder" ;
     };
     PushButton PB_REMOVE_PATH
@@ -293,7 +293,7 @@ ErrorBox RID_SVXERR_JRE_NOT_RECOGNIZED
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message [ de ] = "Der von Ihnen gew‰hlte Order enth‰lt keine Java-Laufzeitumgebung.\nBitte w‰hlen Sie einen anderen Ordner." ;
+    Message [ de ] = "Der von Ihnen gew√§hlte Order enth√§lt keine Java-Laufzeitumgebung.\nBitte w√§hlen Sie einen anderen Ordner." ;
     Message [ en-US ] = "The folder you selected does not contain a Java runtime environment.\nPlease select a different folder." ;
 };
 
@@ -301,7 +301,7 @@ ErrorBox RID_SVXERR_JRE_FAILED_VERSION
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message [ de ] = "Die ausgew‰hlte Java-Laufzeitumgebung hat nicht die erforderliche Version.\nBitte w‰hlen Sie einen anderen Ordner." ;
+    Message [ de ] = "Die ausgew√§hlte Java-Laufzeitumgebung hat nicht die erforderliche Version.\nBitte w√§hlen Sie einen anderen Ordner." ;
     Message [ en-US ] = "The Java runtime environment you selected is not the required version.\nPlease select a different folder." ;
 };
 
@@ -309,7 +309,7 @@ WarningBox RID_SVX_MSGBOX_JAVA_RESTART
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message [ de ] = "Damit die ausgew‰hlte Java-Laufzeitumgebung richtig funktioniert, muss %PRODUCTNAME neugestartet werden.\nBitte starten Sie %PRODUCTNAME neu." ;
+    Message [ de ] = "Damit die ausgew√§hlte Java-Laufzeitumgebung richtig funktioniert, muss %PRODUCTNAME neugestartet werden.\nBitte starten Sie %PRODUCTNAME neu." ;
     Message [ en-US ] = "For the selected Java runtime environment to work properly, %PRODUCTNAME must be restarted.\nPlease restart %PRODUCTNAME now." ;
 };
 
@@ -317,7 +317,7 @@ WarningBox RID_SVX_MSGBOX_JAVA_RESTART2
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message [ de ] = "Damit die ge‰nderten Werte benutzt werden, muss %PRODUCTNAME neugestartet werden.\nBitte starten Sie %PRODUCTNAME neu." ;
+    Message [ de ] = "Damit die ge√§nderten Werte benutzt werden, muss %PRODUCTNAME neugestartet werden.\nBitte starten Sie %PRODUCTNAME neu." ;
     Message [ en-US ] = "You have to restart %PRODUCTNAME so the new or modified values can take effect.\nPlease restart %PRODUCTNAME now." ;
 };
 
