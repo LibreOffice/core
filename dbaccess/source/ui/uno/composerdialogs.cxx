@@ -4,9 +4,9 @@
  *
  *  $RCSfile: composerdialogs.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:50:35 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:47:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,10 +89,13 @@ namespace dbaui
     //=====================================================================
     //= ComposerDialog
     //=====================================================================
-    //---------------------------------------------------------------------
+DBG_NAME(ComposerDialog)
+//---------------------------------------------------------------------
     ComposerDialog::ComposerDialog(const Reference< XMultiServiceFactory >& _rxORB)
         :ComposerDialog_BASE( _rxORB )
     {
+        DBG_CTOR(ComposerDialog,NULL);
+
         registerProperty( PROPERTY_QUERYCOMPOSER, PROPERTY_ID_QUERYCOMPOSER, PropertyAttribute::TRANSIENT,
             &m_xComposer, ::getCppuType( &m_xComposer ) );
         registerProperty( PROPERTY_ROWSET, PROPERTY_ID_ROWSET, PropertyAttribute::TRANSIENT,
@@ -102,6 +105,8 @@ namespace dbaui
     //---------------------------------------------------------------------
     ComposerDialog::~ComposerDialog()
     {
+
+        DBG_DTOR(ComposerDialog,NULL);
     }
 
     //---------------------------------------------------------------------
