@@ -4,9 +4,9 @@
  *
  *  $RCSfile: selglos.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:19:37 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:00:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@ ModalDialog DLG_SEL_GLOS
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 220 , 100 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? AutoText einfügen : AutoText einf³gen */
-    Text [ de ] = "AutoText einfügen" ;
+    Text [ de ] = "AutoText einfÃ¼gen" ;
     Text [ en-US ] = "Insert AutoText" ;
     Moveable = TRUE ;
     OKButton BT_OK
@@ -73,7 +73,7 @@ ModalDialog DLG_SEL_GLOS
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 152 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? AutoTexte zum Kürzel  : AutoTexte zum K³rzel  */
-        Text [ de ] = "AutoTexte zum Kürzel " ;
+        Text [ de ] = "AutoTexte zum KÃ¼rzel " ;
         Text [ en-US ] = "AutoTexts for shortcut " ;
         Text [ x-comment ] = " ";
     };
