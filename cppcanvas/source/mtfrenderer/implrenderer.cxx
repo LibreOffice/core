@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implrenderer.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:18:25 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:30:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -881,10 +881,6 @@ namespace cppcanvas
                 rParms.maFontLetterForm.getValue() :
                 (rFont.GetItalic() == ITALIC_NONE) ? 0 : 9;
 
-            // TODO(F2): use correct scale direction, font
-            // height might be width or anything else
-            aFontRequest.CellSize = rVDev.LogicToPixel( rFont.GetSize() ).Height();
-
             // setup state-local text transformation,
             // if the font be rotated
             const short nFontAngle( rFont.GetOrientation() );
@@ -902,17 +898,40 @@ namespace cppcanvas
             geometry::Matrix2D aFontMatrix;
             ::canvas::tools::setIdentityMatrix2D( aFontMatrix );
 
-            // check if the font is stretched or squeezed
-            long nFontWidth = rFont.GetSize().Width();
-            if( nFontWidth != 0 )
+            // TODO(F2): use correct scale direction, font
+            // height might be width or anything else
+            const ::Size rFontSizeLog( rFont.GetSize() );
+            const sal_Int32 nFontWidthLog = rFontSizeLog.Width();
+            if( nFontWidthLog != 0 )
             {
                 ::Font aTestFont = rFont;
                 aTestFont.SetWidth( 0 );
-                int nNormalWidth = rVDev.GetFontMetric( aTestFont ).GetWidth();
-                if( nNormalWidth != nFontWidth )
+                sal_Int32 nNormalWidth = rVDev.GetFontMetric( aTestFont ).GetWidth();
+                if( nNormalWidth != nFontWidthLog )
                     if( nNormalWidth )
-                        aFontMatrix.m00 = (double)nFontWidth / nNormalWidth;
+                        aFontMatrix.m00 = (double)nFontWidthLog / nNormalWidth;
             }
+
+            // #i52608# apply map mode scale also to font matrix - an
+            // anisotrophic mapmode must be reflected in an
+            // anisotrophic font matrix scale.
+            const ::Size& rScale10000(
+                rVDev.LogicToPixel( Size(100000L,
+                                         100000L) ) );
+            const sal_Int32 nWidth( rScale10000.Width() );
+            const sal_Int32 nHeight( rScale10000.Height() );
+            if( nWidth != nHeight )
+            {
+                // note: no reason to check for division by zero, we
+                // always have the value closer (or equal) to zero as
+                // the nominator.
+                if( abs(nWidth) < abs(nHeight) )
+                    aFontMatrix.m00 *= (double)nWidth / nHeight;
+                else
+                    aFontMatrix.m11 *= (double)nHeight / nWidth;
+            }
+
+            aFontRequest.CellSize = rVDev.LogicToPixel( rFontSizeLog ).Height();
 
             return rCanvas->getUNOCanvas()->createFont( aFontRequest,
                                                         uno::Sequence< beans::PropertyValue >(),
@@ -1054,10 +1073,13 @@ namespace cppcanvas
                     // to general polygon clipping here.
                     rState.clip = ::basegfx::B2DPolyPolygon(
                         ::basegfx::tools::createPolygonFromRect(
+                            // #121100# VCL rectangular clips always
+                            // include one more pixel to the right
+                            // and the bottom
                             ::basegfx::B2DRectangle( rState.clipRect.Left(),
                                                      rState.clipRect.Top(),
-                                                     rState.clipRect.Right(),
-                                                     rState.clipRect.Bottom() ) ) );
+                                                     rState.clipRect.Right()+1,
+                                                     rState.clipRect.Bottom()+1 ) ) );
                 }
 
                 rState.clip = ::basegfx::tools::correctOrientations( rState.clip );
@@ -1089,10 +1111,13 @@ namespace cppcanvas
                         rCanvas->getUNOCanvas()->getDevice(),
                         ::basegfx::B2DPolyPolygon(
                             ::basegfx::tools::createPolygonFromRect(
+                                // #121100# VCL rectangular clips
+                                // always include one more pixel to
+                                // the right and the bottom
                                 ::basegfx::B2DRectangle( rState.clipRect.Left(),
                                                          rState.clipRect.Top(),
-                                                         rState.clipRect.Right(),
-                                                         rState.clipRect.Bottom() ) ) ) );
+                                                         rState.clipRect.Right()+1,
+                                                         rState.clipRect.Bottom()+1 ) ) ) );
                 }
             }
             else
@@ -1171,10 +1196,13 @@ namespace cppcanvas
                         rCanvas->getUNOCanvas()->getDevice(),
                         ::basegfx::B2DPolyPolygon(
                             ::basegfx::tools::createPolygonFromRect(
+                                // #121100# VCL rectangular clips
+                                // always include one more pixel to
+                                // the right and the bottom
                                 ::basegfx::B2DRectangle( rState.clipRect.Left(),
                                                          rState.clipRect.Top(),
-                                                         rState.clipRect.Right(),
-                                                         rState.clipRect.Bottom() ) ) ) );
+                                                         rState.clipRect.Right()+1,
+                                                         rState.clipRect.Bottom()+1 ) ) ) );
                 }
             }
             else
@@ -1196,7 +1224,6 @@ namespace cppcanvas
             /* TODO(P2): interpret mtf-comments
                ================================
 
-               - bitmap fillings (do that via comments)
                - gradient fillings (do that via comments)
 
                - think about mapping. _If_ we do everything in logical
@@ -1530,36 +1557,46 @@ namespace cppcanvas
                     case META_EPS_ACTION:
                     {
                         MetaEPSAction*      pAct = static_cast<MetaEPSAction*>(pCurrAct);
-                        const GDIMetaFile&  pSubstitute = pAct->GetSubstitute();
+                        const GDIMetaFile&  rSubstitute = pAct->GetSubstitute();
 
-                        const Size aMtfSizePix( rVDev.LogicToPixel( pSubstitute.GetPrefSize(),
-                                                                    pSubstitute.GetPrefMapMode() ) );
+                        const Size aMtfSize( rSubstitute.GetPrefSize() );
+                        const Size aMtfSizePixPre( rVDev.LogicToPixel( aMtfSize,
+                                                                       rSubstitute.GetPrefMapMode() ) );
 
-                        // skip null-sized output
-                        if( aMtfSizePix.Width() != 0 &&
-                            aMtfSizePix.Height() != 0 )
-                        {
-                            const Point aEmptyPt;
-                            const Point aMtfOriginPix( rVDev.LogicToPixel( aEmptyPt,
-                                                                           pSubstitute.GetPrefMapMode() ) );
+                        // #i44110# correct null-sized output - there
+                        // are metafiles which have zero size in at
+                        // least one dimension
+                        const Size aMtfSizePix( ::std::max( aMtfSizePixPre.Width(), 1L ),
+                                                ::std::max( aMtfSizePixPre.Height(), 1L ) );
 
-                            // Setup local transform, such that the
-                            // metafile renders itself into the given
-                            // output rectangle
-                            pushState( rStates, PUSH_ALL );
+                        const Point aEmptyPt;
+                        const Point aMtfOriginPix( rVDev.LogicToPixel( aEmptyPt,
+                                                                       rSubstitute.GetPrefMapMode() ) );
 
-                            getState( rStates ).transform.translate( -aMtfOriginPix.X(), -aMtfOriginPix.Y() );
-                            getState( rStates ).transform.scale( 1.0 / aMtfSizePix.Width(),
-                                                                 1.0 / aMtfSizePix.Height() );
+                        // Setup local transform, such that the
+                        // metafile renders itself into the given
+                        // output rectangle
+                        pushState( rStates, PUSH_ALL );
 
-                            createActions( rCanvas, rVDev,
-                                           const_cast<GDIMetaFile&>(pAct->GetSubstitute()),
-                                           rStates, rParms,
-                                           bSubsettableActions,
-                                           io_rCurrActionIndex );
+                        const ::Point& rPos( rVDev.LogicToPixel( pAct->GetPoint() ) );
+                        const ::Size&  rSize( rVDev.LogicToPixel( pAct->GetSize() ) );
 
-                            popState( rStates );
-                        }
+                        getState( rStates ).transform.translate( rPos.X(),
+                                                                 rPos.Y() );
+                        getState( rStates ).transform.scale( (double)rSize.Width() / aMtfSizePix.Width(),
+                                                             (double)rSize.Height() / aMtfSizePix.Height() );
+
+                        rVDev.Push();
+                        rVDev.SetMapMode( rSubstitute.GetPrefMapMode() );
+
+                        createActions( rCanvas, rVDev,
+                                       const_cast<GDIMetaFile&>(pAct->GetSubstitute()),
+                                       rStates, rParms,
+                                       bSubsettableActions,
+                                       io_rCurrActionIndex );
+
+                        rVDev.Pop();
+                        popState( rStates );
                     }
                     break;
 
@@ -1850,12 +1887,22 @@ namespace cppcanvas
                     break;
 
                     case META_RECT_ACTION:
+                    {
+                        Rectangle aPixelRect(
+                            rVDev.LogicToPixel( static_cast<MetaRectAction*>(pCurrAct)->GetRect() ) );
+
+                        // #121100# OutputDevice::DrawRect() fills
+                        // rectangles Apple-like, i.e. with one
+                        // additional pixel to the right and bottom.
+                        aPixelRect.setWidth( aPixelRect.getWidth()+1 );
+                        aPixelRect.setHeight( aPixelRect.getHeight()+1 );
+
                         createFillAndStroke( ::PolyPolygon(
-                                                 ::Polygon(
-                                                     rVDev.LogicToPixel( static_cast<MetaRectAction*>(pCurrAct)->GetRect() ) ) ),
+                                                 ::Polygon( aPixelRect ) ),
                                               rCanvas, io_rCurrActionIndex,
                                               rStates );
                         break;
+                    }
 
                     case META_ROUNDRECT_ACTION:
                         createFillAndStroke( rVDev.LogicToPixel( Polygon( static_cast<MetaRoundRectAction*>(pCurrAct)->GetRect(),
@@ -2387,10 +2434,27 @@ namespace cppcanvas
                     break;
 
                     case META_TEXTRECT_ACTION:
-                        // TODO(F2): NYI
-                        OSL_ENSURE( false,
-                                    "META_TEXTRECT not yet supported" );
+                    {
+                        MetaTextRectAction* pAct = static_cast<MetaTextRectAction*>(pCurrAct);
+
+                        pushState( rStates, PUSH_ALL );
+
+                        // use the VDev to break up the text rect
+                        // action into readily formatted lines
+                        GDIMetaFile aTmpMtf;
+                        rVDev.AddTextRectActions( pAct->GetRect(),
+                                                  pAct->GetText(),
+                                                  pAct->GetStyle(),
+                                                  aTmpMtf );
+
+                        createActions( rCanvas, rVDev, aTmpMtf, rStates,
+                                       rParms, bSubsettableActions,
+                                       io_rCurrActionIndex );
+
+                        popState( rStates );
+
                         break;
+                    }
 
                     case META_STRETCHTEXT_ACTION:
                     {
