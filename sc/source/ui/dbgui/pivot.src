@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:39:15 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:59:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Pos = MAP_APPFONT ( 6 , 168 ) ;
         Size = MAP_APPFONT ( 182 , 16 ) ;
         WordBreak = TRUE ;
-        Text [ de ] = "Ziehen Sie die Felder auf der rechten Seite mit der Maus in die gewünschten Bereiche." ;
+        Text [ de ] = "Ziehen Sie die Felder auf der rechten Seite mit der Maus in die gewÃ¼nschten Bereiche." ;
         Text [ en-US ] = "Drag the fields from the right into the desired position." ;
         Text [ x-comment ] = " ";
     };
@@ -279,7 +279,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Size = MAP_APPFONT ( 124 , 10 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
-        Text [ de ] = "Fil~ter hinzufügen" ;
+        Text [ de ] = "Fil~ter hinzufÃ¼gen" ;
         Text [ en-US ] = "~Add filter" ;
     };
     CheckBox BTN_DRILLDOWN
