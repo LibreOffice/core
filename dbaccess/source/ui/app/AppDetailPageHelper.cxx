@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:19:54 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:15:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,6 +143,9 @@
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::container;
@@ -222,8 +225,9 @@ namespace
 }
 //==================================================================
 // class OAppDetailPageHelper
+DBG_NAME(OAppDetailPageHelper)
 //==================================================================
-OAppDetailPageHelper::OAppDetailPageHelper(Window* _pParent,OAppBorderWindow* _pBorderWin) : Window(_pParent,WB_DIALOGCONTROL)
+OAppDetailPageHelper::OAppDetailPageHelper(Window* _pParent,OAppBorderWindow* _pBorderWin,PreviewMode _ePreviewMode) : Window(_pParent,WB_DIALOGCONTROL)
     ,m_pBorderWin(_pBorderWin)
     ,m_aFL(this,WB_VERT)
     ,m_aTBPreview(this,WB_TABSTOP )
@@ -231,8 +235,10 @@ OAppDetailPageHelper::OAppDetailPageHelper(Window* _pParent,OAppBorderWindow* _p
     ,m_aPreview(&m_aBorder)
     ,m_aDocumentInfo(&m_aBorder,WB_LEFT | WB_VSCROLL | WB_READONLY )
     ,m_pTablePreview(NULL)
-    ,m_ePreviewMode(E_PREVIEWNONE)
+    ,m_ePreviewMode(_ePreviewMode)
 {
+    DBG_CTOR(OAppDetailPageHelper,NULL);
+
     m_aBorder.SetBorderStyle(WINDOW_BORDER_MONO);
 
     m_aMenu.reset(new PopupMenu( ModuleRes( RID_MENU_APP_PREVIEW ) ));
@@ -283,6 +289,8 @@ OAppDetailPageHelper::~OAppDetailPageHelper()
         }
 
     }
+
+    DBG_DTOR(OAppDetailPageHelper,NULL);
 }
 // -----------------------------------------------------------------------------
 int OAppDetailPageHelper::getVisibleControlIndex() const
