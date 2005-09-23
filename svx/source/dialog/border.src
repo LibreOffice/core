@@ -4,9 +4,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:38:02 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:34:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -317,7 +317,7 @@ TabPage RID_SVXPAGE_BORDER
         Pos = MAP_APPFONT ( 12 , 173 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Hide = TRUE;
-        Text [ de ] = "Mit dem n‰chsten Absatz verschmelzen" ;
+        Text [ de ] = "Mit dem n√§chsten Absatz verschmelzen" ;
         Text [ en-US ] = "~Merge with next paragraph" ;
     };
     CheckBox  CB_MERGEADJACENTBORDERS
@@ -325,7 +325,7 @@ TabPage RID_SVXPAGE_BORDER
         Pos = MAP_APPFONT ( 12 , 173 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Hide = TRUE;
-        Text [ de ] = "Be~nachbarte Linienstile zusammenf¸hren" ;
+        Text [ de ] = "Be~nachbarte Linienstile zusammenf√ºhren" ;
         Text [ en-US ] = "~Merge adjacent line styles" ;
     };
 
@@ -401,22 +401,22 @@ String RID_SVXSTR_TABLE_PRESET_NONE
 };
 String RID_SVXSTR_TABLE_PRESET_ONLYOUTER
 {
-    Text [ de ] = "Nur ‰uﬂere Umrandung zeichnen" ;
+    Text [ de ] = "Nur √§u√üere Umrandung zeichnen" ;
     Text [ en-US ] = "Set Outer Border Only" ;
 };
 String RID_SVXSTR_TABLE_PRESET_OUTERHORI
 {
-    Text [ de ] = "ƒuﬂere Umrandung und horizontale Linien zeichnen" ;
+    Text [ de ] = "√Ñu√üere Umrandung und horizontale Linien zeichnen" ;
     Text [ en-US ] = "Set Outer Border and Horizontal Lines" ;
 };
 String RID_SVXSTR_TABLE_PRESET_OUTERALL
 {
-    Text [ de ] = "ƒuﬂere Umrandung und alle inneren Linien zeichnen" ;
+    Text [ de ] = "√Ñu√üere Umrandung und alle inneren Linien zeichnen" ;
     Text [ en-US ] = "Set Outer Border and All Inner Lines" ;
 };
 String RID_SVXSTR_TABLE_PRESET_OUTERINNER
 {
-    Text [ de ] = "ƒuﬂere Umrandung zeichnen, ohne innere Linien zu ver‰ndern" ;
+    Text [ de ] = "√Ñu√üere Umrandung zeichnen, ohne innere Linien zu ver√§ndern" ;
     Text [ en-US ] = "Set Outer Border Without Changing Inner Lines" ;
 };
 String RID_SVXSTR_PARA_PRESET_DIAGONAL
