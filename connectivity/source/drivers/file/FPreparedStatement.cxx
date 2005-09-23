@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FPreparedStatement.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:56:20 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:38:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,16 +115,17 @@ void OPreparedStatement::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
+    clearMyResultSet();
+    OStatement_BASE2::disposing();
+
     if(m_pResultSet)
     {
         m_pResultSet->release();
         m_pResultSet = NULL;
     }
-    clearMyResultSet();
 
     m_xParamColumns = NULL;
 
-    OStatement_BASE2::disposing();
 
     m_xMetaData = NULL;
     if(m_aParameterRow.isValid())
