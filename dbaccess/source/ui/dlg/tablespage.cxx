@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablespage.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:11:47 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:32:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,8 @@ namespace dbaui
     //========================================================================
     //= OTableSubscriptionPage
     //========================================================================
-    //------------------------------------------------------------------------
+DBG_NAME(OTableSubscriptionPage)
+//------------------------------------------------------------------------
     OTableSubscriptionPage::OTableSubscriptionPage( Window* pParent, const SfxItemSet& _rCoreAttrs,OTableSubscriptionDialog* _pTablesDlg )
         :OGenericAdministrationPage( pParent, ModuleRes(PAGE_TABLESUBSCRIPTION), _rCoreAttrs )
         ,OContainerListener( m_aNotifierMutex )
@@ -155,6 +156,8 @@ namespace dbaui
         ,m_bCatalogAtStart      ( sal_True )
         ,m_pTablesDlg(_pTablesDlg)
     {
+        DBG_CTOR(OTableSubscriptionPage,NULL);
+
         m_aTablesList.SetCheckHandler(getControlModifiedLink());
 
         // initialize the TabListBox
@@ -182,6 +185,8 @@ namespace dbaui
         catch (RuntimeException&) { }
 
         retireNotifiers();
+
+        DBG_DTOR(OTableSubscriptionPage,NULL);
     }
 
     // -----------------------------------------------------------------------------
