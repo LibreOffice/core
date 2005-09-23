@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:20:09 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:51:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
 {
     HelpId = HID_TRANS_POSITION_SIZE ;
     Hide = TRUE ;
-    Text [ de ] = "Position und Größe" ;
+    Text [ de ] = "Position und GrÃ¶ÃŸe" ;
     Text [ en-US ] = "Position and Size" ;
     Size = MAP_APPFONT ( 260 , MA_TABPAGE_HEIGHT ) ;
 
@@ -130,7 +130,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
     {
         Pos = MAP_APPFONT ( 6 , 56  ) ;
         Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ de ] = "Größe" ;
+        Text [ de ] = "GrÃ¶ÃŸe" ;
         Text [ en-US ] = "Size" ;
         Text [ x-comment ] = " ";
     };
@@ -146,7 +146,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
     {
         Pos = MAP_APPFONT ( 12 , 32 + 61  ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ de ] = "~Höhe" ;
+        Text [ de ] = "~HÃ¶he" ;
         Text [ en-US ] = "H~eight" ;
         Text [ x-comment ] = " ";
     };
@@ -215,7 +215,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
     {
         Pos = MAP_APPFONT ( 6 , 120  ) ;
         Size = MAP_APPFONT ( 119 , RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ de ] = "Schützen" ;
+        Text [ de ] = "SchÃ¼tzen" ;
         Text [ en-US ] = "Protect" ;
     };
 
@@ -232,7 +232,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
     {
         Pos = MAP_APPFONT ( 12 , 24 + 120 ) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
-        Text [ de ] = "~Größe" ;
+        Text [ de ] = "~GrÃ¶ÃŸe" ;
         Text [ en-US ] = "~Size" ;
         TabStop = TRUE ;
     };
@@ -260,7 +260,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
     {
         Pos = MAP_APPFONT ( 12 + 121 + 8, 24 + 120 ) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
-        Text [ de ] = "Höhe a~n Text anpassen" ;
+        Text [ de ] = "HÃ¶he a~n Text anpassen" ;
         Text [ en-US ] = "Fit ~height to text" ;
         TabStop = TRUE ;
         Text [ x-comment ] = " ";
@@ -517,7 +517,7 @@ TabPage RID_SVXPAGE_SLANT
     HelpId = HID_TRANS_SLANT ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , MA_TABPAGE_HEIGHT ) ;
-    Text [ de ] = "Schräg stellen / Eckenradius" ;
+    Text [ de ] = "SchrÃ¤g stellen / Eckenradius" ;
     Text [ en-US ] = "Slant & Corner Radius" ;
     FixedLine FL_RADIUS
     {
@@ -554,7 +554,7 @@ TabPage RID_SVXPAGE_SLANT
     {
         Pos = MAP_APPFONT ( 6 , 35  ) ;
         Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ de ] = "Schräg stellen" ;
+        Text [ de ] = "SchrÃ¤g stellen" ;
         Text [ en-US ] = "Slant" ;
         Text [ x-comment ] = " ";
     };
@@ -591,26 +591,26 @@ TabPage RID_SVXPAGE_SLANT
  // RID_SVXDLG_TRANSFORM -----------------------------------------------------
 
 #define _POS_SIZE_TEXT \
-    Text [ de ] = "Position und Größe" ;                       \
+    Text [ de ] = "Position und GrÃ¶ÃŸe" ;                       \
     Text [ en-US ] = "Position and Size" ;          \
 
 
-TabDialog RID_SVXDLG_TRANSFORM
+TabDialog RID_SVXDLG_TRANSFORM\
 {
     OutputSize = TRUE ;
     SvLook = TRUE ;
     Size = MAP_APPFONT ( 289 , MA_TABPAGE_HEIGHT + 41 ) ;
-    Text [ de ] = "Position und Größe" ;
-    Text [ en-US ] = "Position and Size" ;
+    Text [ de ] = "Position und GrÃ¶ÃŸe" ;\
+    Text [ en-US ] = "Position and Size" ;\
     Moveable = TRUE ;
-    TabControl TAB_CONTROL
+    TabControl TAB_CONTROL\
     {
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 3 , 3 ) ;
         Size = MAP_APPFONT ( 260 , MA_TABPAGE_HEIGHT ) ;
         PageList =
         {
-            PageItem
+            PageItem\
             {
                 Identifier = RID_SVXPAGE_POSITION_SIZE ;
                 PageResID = RID_SVXPAGE_POSITION_SIZE ;
@@ -633,7 +633,7 @@ TabDialog RID_SVXDLG_TRANSFORM
             PageItem
             {
                 Identifier = RID_SVXPAGE_SLANT ;
-                Text [ de ] = "Schräg stellen / Eckenradius" ;
+                Text [ de ] = "SchrÃ¤g stellen / Eckenradius" ;
                 PageResID = RID_SVXPAGE_SLANT ;
                 Text [ en-US ] = "Slant & Corner Radius" ;
                 Text [ x-comment ] = " ";
