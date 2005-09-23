@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sections.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:20:52 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:03:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -277,7 +277,7 @@ TabPage RID_TP_GENERAL
     };
     String ST_TYPE_BOOKLET
     {
-        Text [ de ] = "Brosch�re" ;
+        Text [ de ] = "Broschüre" ;
         Text [ en-US ] = "Brochures";
         Text [ x-comment ] = " ";
     };
@@ -349,7 +349,7 @@ TabPage RID_TP_GENERAL
     };
     String ST_TYPE_UNPUBLISHED
     {
-        Text [ de ] = "Unver�ffentlicht" ;
+        Text [ de ] = "Unveröffentlicht" ;
         Text [ en-US ] = "Unpublished";
         Text [ x-comment ] = " ";
     };
@@ -408,6 +408,7 @@ Menu RID_POPUP_ME_VIEW
             Identifier = PU_INSERT;
             Text [ en-US ] = "Insert Section...";
             Text [ x-comment ] = " ";
+            Text[ de ] = "Abschnitt einfügen...";
         };
         MenuItem
         {
@@ -415,6 +416,7 @@ Menu RID_POPUP_ME_VIEW
             Identifier = PU_REMOVE;
             Text [ en-US ] = "Delete Section...";
             Text [ x-comment ] = " ";
+            Text[ de ] = "Abschnitt löschen...";
         };
         MenuItem
         {
@@ -422,6 +424,7 @@ Menu RID_POPUP_ME_VIEW
             Identifier = PU_CHG_NAME;
             Text [ en-US ] = "Modify Name...";
             Text [ x-comment ] = " ";
+            Text[ de ] = "Namen ändern...";
         };
     };
 };
@@ -528,7 +531,7 @@ String ST_INSTITUTION
 };
 String ST_SCHOOL
 {
-    Text [ de ] = "Hochschule/Universit~�t" ;
+    Text [ de ] = "Hochschule/Universit~ät" ;
     Text [ en-US ] = "University";
 };
 String ST_REPORT
