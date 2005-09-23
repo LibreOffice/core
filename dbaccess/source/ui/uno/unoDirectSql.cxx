@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoDirectSql.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:52:33 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:47:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,15 +83,20 @@ namespace dbaui
     //=====================================================================
     //= ODirectSQLDialog
     //=====================================================================
-    //---------------------------------------------------------------------
+DBG_NAME(ODirectSQLDialog)
+//---------------------------------------------------------------------
     ODirectSQLDialog::ODirectSQLDialog(const Reference< XMultiServiceFactory >& _rxORB)
         :ODirectSQLDialog_BASE( _rxORB )
     {
+        DBG_CTOR(ODirectSQLDialog,NULL);
+
     }
 
     //---------------------------------------------------------------------
     ODirectSQLDialog::~ODirectSQLDialog()
     {
+
+        DBG_DTOR(ODirectSQLDialog,NULL);
     }
 
     //---------------------------------------------------------------------
