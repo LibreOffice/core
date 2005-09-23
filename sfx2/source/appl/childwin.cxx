@@ -4,9 +4,9 @@
  *
  *  $RCSfile: childwin.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:37:19 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:51:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,12 +252,10 @@ SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
             {
                 if ( pBindings )
                     pBindings->ENTERREGISTRATIONS();
-                rFactInfo.nFlags |= rInfo.nFlags & SFX_CHILDWIN_FORCEDOCK;
                 SfxChildWinInfo aInfo = rFactInfo;
                 Application::SetSystemWindowMode( SYSTEMWINDOW_MODE_NOAUTOMODE );
                 pChild = pFact->pCtor( pParent, nId, pBindings, &aInfo );
                 Application::SetSystemWindowMode( nOldMode );
-                rFactInfo.nFlags &= ~(rInfo.nFlags & SFX_CHILDWIN_FORCEDOCK );
                 if ( pBindings )
                     pBindings->LEAVEREGISTRATIONS();
             }
@@ -284,12 +282,10 @@ SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
                     {
                         if ( pBindings )
                             pBindings->ENTERREGISTRATIONS();
-                        rFactInfo.nFlags |= rInfo.nFlags & SFX_CHILDWIN_FORCEDOCK;
                         SfxChildWinInfo aInfo = rFactInfo;
                         Application::SetSystemWindowMode( SYSTEMWINDOW_MODE_NOAUTOMODE );
                         pChild = pFact->pCtor( pParent, nId, pBindings, &aInfo );
                         Application::SetSystemWindowMode( nOldMode );
-                        rFactInfo.nFlags &= ~(rInfo.nFlags & SFX_CHILDWIN_FORCEDOCK );
                         if ( pBindings )
                             pBindings->LEAVEREGISTRATIONS();
                     }
