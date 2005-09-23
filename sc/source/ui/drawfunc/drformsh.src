@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drformsh.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:53:33 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:01:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,7 +207,7 @@ Menu RID_OBJECTMENU_DRAWFORM
 String RID_POPUP_DRAWFORM
 {
     /* ### ACHTUNG: Neuer Text in Resource? Popup-Menü für Zeichenobjekte : Popup-Men³ f³r Zeichenobjekte */
-    Text [ de ] = "Popup-Menü für Formularobjekte" ;
+    Text [ de ] = "Popup-MenÃ¼ fÃ¼r Formularobjekte" ;
     Text [ en-US ] = "Popup menu for form objects";
 };
  //
