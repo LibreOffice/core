@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:14:28 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:59:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,64 +45,64 @@
 #define FT_SUBREG_TEXT \
     Text [ de ] = "Berei~ch" ; \
     Text [ en-US ] = "~Section" ; \
-    Text [ x-comment ] = "ËÎ; ËÎË: –‡Á‰ÂÎ - -";
+    Text [ x-comment ] = "ËÎ; ËÎË: –‡Á‰ÂÎ - -";\
 
 #define CB_HIDE_TEXT \
     Text [ de ] = "Aus~blenden" ; \
-    Text [ en-US ] = "H~ide" ;
+    Text [ en-US ] = "H~ide" ;\
 
 #define FL_HIDE_TEXT \
     Text [ de ] = "Ausblenden" ; \
-    Text [ en-US ] = "Hide" ;
+    Text [ en-US ] = "Hide" ;\
 
 #define CB_CONDITION_TEXT  \
     Text [ de ] = "Mi~t Bedingung" ; \
-    Text [ en-US ] = "~With Condition" ;
+    Text [ en-US ] = "~With Condition" ;\
 
 #define FL_PROPERTIES_TEXT \
     Text [ de ] = "Eigenschaften" ; \
-    Text [ en-US ] = "Properties" ;
+    Text [ en-US ] = "Properties" ;\
 
 #define CB_EDIT_IN_READONLY_TEXT \
-    Text [ de ] = "E~ditierbar in schreibgesch¸tztem Dokument" ; \
-    Text [ en-US ] = "E~ditable in read-only document" ;
+    Text [ de ] = "E~ditierbar in schreibgesch√ºtztem Dokument" ; \
+    Text [ en-US ] = "E~ditable in read-only document" ;\
 
 #define FL_FILE_TEXT \
-    Text [ de ] = "Verkn¸pfung" ; \
-    Text [ en-US ] = "Link" ;
+    Text [ de ] = "Verkn√ºpfung" ; \
+    Text [ en-US ] = "Link" ;\
 
 #define CB_FILE_TEXT\
-        Text [ de ] = "~Verkn¸pfen" ; \
-    Text [ en-US ] = "~Link";
+        Text [ de ] = "~Verkn√ºpfen" ; \
+    Text [ en-US ] = "~Link";\
 
 #define CB_DDE_TEXT \
     Text [ de ] = "~DDE" ; \
-    Text [ en-US ] = "DD~E" ;
+    Text [ en-US ] = "DD~E" ;\
 
 #define FT_DDE_TEXT \
     Text [ de ] = "DDE~-Befehl" ; \
-    Text [ en-US ] = "DDE ~command" ;
+    Text [ en-US ] = "DDE ~command" ;\
 
 #define FT_FILE_TEXT \
     Text [ de ] = "Dateina~me" ; \
-    Text [ en-US ] = "~File name" ;
+    Text [ en-US ] = "~File name" ;\
 
 
 #define GB_HIDE_TEXT \
     Text [ de ] = "Verstecken" ; \
-    Text [ en-US ] = "Hide";
+    Text [ en-US ] = "Hide";\
 
 #define GB_OPTIONS_TEXT \
     Text [ de ] = "Optionen" ; \
-    Text [ en-US ] = "Options" ;
+    Text [ en-US ] = "Options" ;\
 
 #define FL_PROTECT_TEXT \
         Text [ de ] = "Schreibschutz" ;\
-    Text [ en-US ] = "Write protection";
+    Text [ en-US ] = "Write protection";\
 
 #define CB_PASSWD_TEXT\
         Text [ de ] = "Mit Kenn~wort" ;\
-    Text [ en-US ] = "Wit~h password";
+    Text [ en-US ] = "Wit~h password";\
 
 /*************************************************************************
 
@@ -223,7 +223,7 @@ ModalDialog MD_EDIT_REGION
         TabStop = TRUE ;
         Disable = TRUE ;
         TriStateDisable = FALSE ;
-        Text [ de ] = "~Gesch¸tzt" ;
+        Text [ de ] = "~Gesch√ºtzt" ;
         Text [ en-US ] = "~Protected" ;
     };
     CheckBox CB_PASSWD
@@ -351,7 +351,7 @@ ModalDialog MD_EDIT_REGION
 };
 String STR_REG_DUPLICATE
 {
-    Text [ de ] = "Bereichsname ge‰ndert:" ;
+    Text [ de ] = "Bereichsname ge√§ndert:" ;
     Text [ en-US ] = "Section name changed:" ;
 };
 String STR_INFO_DUPLICATE
@@ -363,7 +363,7 @@ QueryBox QB_CONNECT
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message [ de ] = "Eine Dateiverbindung lˆscht den aktuellen Inhalt des Bereichs. Trotzdem verbinden ?" ;
+    Message [ de ] = "Eine Dateiverbindung l√∂scht den aktuellen Inhalt des Bereichs. Trotzdem verbinden ?" ;
     Message [ en-US ] = "A file connection will delete the contents of the current section. Connect anyway?" ;
 };
 InfoBox REG_WRONG_PASSWORD
@@ -384,7 +384,7 @@ InfoBox REG_WRONG_PASSWD_REPEAT
 TabDialog DLG_INSERT_SECTION
 {
     HelpId = HID_INSERT_SECTION_DLG;
-    Text [ de ] = "Bereich einf¸gen" ;
+    Text [ de ] = "Bereich einf√ºgen" ;
     Text [ en-US ] = "Insert Section" ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
@@ -412,7 +412,7 @@ TabDialog DLG_INSERT_SECTION
             {
                 Identifier = TP_SECTION_INDENTS;
                 PageResID = TP_SECTION_INDENTS;
-                Text [ de ] = "Einz¸ge" ;
+                Text [ de ] = "Einz√ºge" ;
                 Text [ en-US ] = "Indents" ;
             };
             PageItem
@@ -426,14 +426,14 @@ TabDialog DLG_INSERT_SECTION
             {
                 Identifier = TP_SECTION_FTNENDNOTES ;
                 PageResID = TP_SECTION_FTNENDNOTES ;
-                Text [ de ] = "Fuﬂ-/Endnoten" ;
+                Text [ de ] = "Fu√ü-/Endnoten" ;
                 Text [ en-US ] = "Footnotes/Endnotes";
             };
         };
     };
     String ST_INSERT
     {
-        Text [ de ] = "Einf¸gen" ;
+        Text [ de ] = "Einf√ºgen" ;
         Text [ en-US ] = "Insert" ;
     };
 };
@@ -540,7 +540,7 @@ TabPage TP_INSERT_SECTION
         Pos = MAP_APPFONT ( 96 , 87 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Sch¸tzen" ;
+        Text [ de ] = "~Sch√ºtzen" ;
         Text [ x-comment ] = "(ƒ?; (ƒƒ) –ÒÔÛÙ·ÙÂıÅE˚N; - - - -";
         Text [ en-US ] = "~Protect";
     };
@@ -626,7 +626,7 @@ TabDialog DLG_SECTION_PROPERTIES
             {
                 Identifier = TP_SECTION_INDENTS;
                 PageResID = TP_SECTION_INDENTS;
-                Text [ de ] = "Einz¸ge" ;
+                Text [ de ] = "Einz√ºge" ;
                 Text [ en-US ] = "Indents" ;
             };
             PageItem
@@ -640,7 +640,7 @@ TabDialog DLG_SECTION_PROPERTIES
             {
                 Identifier = TP_SECTION_FTNENDNOTES ;
                 PageResID = TP_SECTION_FTNENDNOTES ;
-                Text [ de ] = "Fuﬂ-/Endnoten" ;
+                Text [ de ] = "Fu√ü-/Endnoten" ;
                 Text [ en-US ] = "Footnotes/Endnotes";
             };
         };
@@ -661,7 +661,7 @@ TabPage TP_SECTION_FTNENDNOTES
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Fuﬂnoten" ;
+        Text [ de ] = "Fu√ünoten" ;
         Text [ en-US ] = "Footnotes";
     };
     CheckBox CB_FTN_AT_TXTEND
