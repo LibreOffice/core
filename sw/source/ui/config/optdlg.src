@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:44:59 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:52:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ TabPage TP_CONTENT_OPT
     {
         Pos = MAP_APPFONT ( 12 , 40 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text [ de ] = "G~roﬂe Griffe" ;
+        Text [ de ] = "G~ro√üe Griffe" ;
         Text [ en-US ] = "Large handles";
     };
     FixedLine FL_WINDOW
@@ -220,7 +220,7 @@ TabPage TP_CONTENT_OPT
     {
         Pos = MAP_APPFONT ( 136 , 135 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "~Maﬂeinheit";
+        Text [ de ] = "~Ma√üeinheit";
         Text [ en-US ] = "Measurement unit";
         Text [ x-comment ] = " ";
         Hide = TRUE;
@@ -479,7 +479,7 @@ TabPage TP_STD_FONT
     {
         Pos = MAP_APPFONT ( 12 , 32 ) ;
         Size = MAP_APPFONT ( 48 , 10 ) ;
-        Text [ de ] = "~‹berschrift" ;
+        Text [ de ] = "~√úberschrift" ;
         Text [ en-US ] = "Headin~g" ;
         Left = TRUE ;
         Text [ x-comment ] = " ";
@@ -555,7 +555,7 @@ TabPage TP_STD_FONT
     {
         Pos = MAP_APPFONT ( 12 , 100 ) ;
         Size = MAP_APPFONT ( 147 , 10 ) ;
-        Text [ de ] = "~Nur f¸r das aktuelle Dokument" ;
+        Text [ de ] = "~Nur f√ºr das aktuelle Dokument" ;
         Text [ en-US ] = "C~urrent document only" ;
         Text [ x-comment ] = " ";
     };
@@ -604,7 +604,7 @@ TabPage TP_OPTTABLE_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 107 , 10 ) ;
-        Text [ de ] = "‹be~rschrift" ;
+        Text [ de ] = "√úbe~rschrift" ;
         TabStop = TRUE ;
         Text [ en-US ] = "H~eading";
         Text [ x-comment ] = " ";
@@ -743,7 +743,7 @@ TabPage TP_OPTTABLE_PAGE
     {
         Pos = MAP_APPFONT ( 136 , 80 ) ;
         Size = MAP_APPFONT ( 110 , 8 ) ;
-        Text [ de ] = "Zelle einf¸gen" ;
+        Text [ de ] = "Zelle einf√ºgen" ;
         Text [ en-US ] = "Insert cell";
     };
     FixedText FT_ROWINSERT
@@ -798,7 +798,7 @@ TabPage TP_OPTTABLE_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 122 ) ;
         Size = MAP_APPFONT ( 230 , 8 ) ;
-        Text [ de ] = "Verhalten w‰hrend des Verschiebens" ;
+        Text [ de ] = "Verhalten w√§hrend des Verschiebens" ;
         Text [ en-US ] = "Behavior of rows/columns";
     };
     RadioButton RB_FIX
@@ -813,7 +813,7 @@ TabPage TP_OPTTABLE_PAGE
     {
         Pos = MAP_APPFONT ( 93 , 133 ) ;
         Size = MAP_APPFONT ( 155 , 16 ) ;
-        Text [ de ] = "Ver‰nderungen wirken sich nur auf den direkten Nachbarn aus" ;
+        Text [ de ] = "Ver√§nderungen wirken sich nur auf den direkten Nachbarn aus" ;
         WordBreak = TRUE ;
         Text [ x-comment ] = " ";
         Text [ en-US ] = "Changes affect the adjacent area only";
@@ -830,7 +830,7 @@ TabPage TP_OPTTABLE_PAGE
     {
         Pos = MAP_APPFONT ( 93 , 151 ) ;
         Size = MAP_APPFONT ( 155 , 16 ) ;
-        Text [ de ] = "Ver‰nderungen wirken sich auf die gesamte Tabelle aus" ;
+        Text [ de ] = "Ver√§nderungen wirken sich auf die gesamte Tabelle aus" ;
         WordBreak = TRUE ;
         Text [ x-comment ] = " ";
         Text [ en-US ] = "Changes affect the entire table";
@@ -847,7 +847,7 @@ TabPage TP_OPTTABLE_PAGE
     {
         Pos = MAP_APPFONT ( 93 , 169 ) ;
         Size = MAP_APPFONT ( 155 , 16 ) ;
-        Text [ de ] = "Ver‰nderungen wirken sich auf die Tabellengrˆﬂe aus" ;
+        Text [ de ] = "Ver√§nderungen wirken sich auf die Tabellengr√∂√üe aus" ;
         WordBreak = TRUE ;
         Text [ x-comment ] = " ";
         Text [ en-US ] = "Changes affect the table size";
@@ -903,7 +903,7 @@ TabPage TP_OPTSHDWCRSR
     {
         Pos = MAP_APPFONT ( 12 , 53 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text [ de ] = "Ge~sch¸tzte Leerzeichen" ;
+        Text [ de ] = "Ge~sch√ºtzte Leerzeichen" ;
         Text [ en-US ] = "Non-breaking s~paces" ;
         Text [ x-comment ] = " ";
     };
@@ -919,7 +919,7 @@ TabPage TP_OPTSHDWCRSR
     {
         Pos = MAP_APPFONT ( 12 , 79 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text [ de ] = "Umbr~¸che" ;
+        Text [ de ] = "Umbr~√ºche" ;
         Text [ en-US ] = "Brea~ks" ;
         Text [ x-comment ] = " ";
     };
@@ -941,7 +941,7 @@ TabPage TP_OPTSHDWCRSR
     {
         Pos = MAP_APPFONT ( 12 , 118 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text [ de ] = "Feldbefehle: ~Versteckte Abs‰tze" ;
+        Text [ de ] = "Feldbefehle: ~Versteckte Abs√§tze" ;
         Text [ en-US ] = "Fields: Hidden p~aragraphs" ;
     };
     FixedLine FL_SEPARATOR_SHDW
@@ -972,7 +972,7 @@ TabPage TP_OPTSHDWCRSR
     {
         Pos = MAP_APPFONT ( 136 , 27 ) ;
         Size = MAP_APPFONT ( 48 , 8 ) ;
-        Text [ de ] = "Einf¸gen" ;
+        Text [ de ] = "Einf√ºgen" ;
         Left = TRUE ;
         Text [ en-US ] = "Insert" ;
         Text [ x-comment ] = " ";
@@ -1015,7 +1015,7 @@ TabPage TP_OPTSHDWCRSR
     {
         Pos = MAP_APPFONT ( 130 , 96 ) ;
         Size = MAP_APPFONT ( 124 , 8 ) ;
-        Text [ de ] = "Cursor in gesch¸tzten Zonen" ;
+        Text [ de ] = "Cursor in gesch√ºtzten Zonen" ;
         Text [ en-US ] = "Cursor in protected areas";
     };
     CheckBox CB_ALLOW_IN_PROT
