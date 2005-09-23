@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EffectMigration.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:09:22 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 10:41:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -936,7 +936,7 @@ void EffectMigration::SetDimColor( SvxShape* pShape, sal_Int32 nColor )
         {
             pEffect->setHasAfterEffect( true );
             pEffect->setDimColor( makeAny( nColor ) );
-            pEffect->setMasterRel( 2 );
+            pEffect->setAfterEffectOnNext( true );
             bNeedRebuild = true;
         }
     }
@@ -1001,7 +1001,7 @@ void EffectMigration::SetDimHide( SvxShape* pShape, sal_Bool bDimHide )
             pEffect->setHasAfterEffect( bDimHide ? true : false );
             if( bDimHide )
                 pEffect->setDimColor( aEmpty );
-            pEffect->setMasterRel( bDimHide ? 0 : 2 );
+            pEffect->setAfterEffectOnNext( false );
             bNeedRebuild = true;
         }
     }
@@ -1034,7 +1034,7 @@ sal_Bool EffectMigration::GetDimHide( SvxShape* pShape )
                 {
                     bRet = pEffect->hasAfterEffect() &&
                             !pEffect->getDimColor().hasValue() &&
-                            (pEffect->getMasterRel() == 0);
+                            (!pEffect->IsAfterEffectOnNext());
                     break;
                 }
             }
@@ -1069,7 +1069,7 @@ void EffectMigration::SetDimPrevious( SvxShape* pShape, sal_Bool bDimPrevious )
             pEffect->setHasAfterEffect( bDimPrevious );
             if( !bDimPrevious || !pEffect->getDimColor().hasValue() )
                 pEffect->setDimColor( aColor );
-            pEffect->setMasterRel( 2 );
+            pEffect->setAfterEffectOnNext( true );
             bNeedRebuild = true;
         }
     }
@@ -1102,7 +1102,7 @@ sal_Bool EffectMigration::GetDimPrevious( SvxShape* pShape )
                 {
                     bRet = pEffect->hasAfterEffect() &&
                             pEffect->getDimColor().hasValue() &&
-                            (pEffect->getMasterRel() == 2);
+                            pEffect->IsAfterEffectOnNext();
                     break;
                 }
             }
