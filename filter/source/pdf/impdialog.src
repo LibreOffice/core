@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:48:11 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:21:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 
 #define WORKARROUND  \
      Text [ de ] = "PDF Optionen";    \
-    Text [ en-US ] = "PDF Options";
+    Text [ en-US ] = "PDF Options";  \
 
 ModalDialog RID_PDF_EXPORT_DLG
 {
@@ -100,14 +100,14 @@ ModalDialog RID_PDF_EXPORT_DLG
     {
         Pos = MAP_APPFONT ( 12 , 76 ) ;
         Size = MAP_APPFONT ( 156, 10 ) ;
-        Text[ de ] = "Optimiert für ~JPEG Komprimierung" ;
+        Text[ de ] = "Optimiert fÃ¼r ~JPEG Komprimierung" ;
         Text[ en-US ] = "~JPEG compression";
     };
     FixedText FT_QUALITY
     {
         Pos = MAP_APPFONT ( 30 , 88 ) ;
         Size = MAP_APPFONT ( 70, 10 ) ;
-        Text[ de ] = "~Qualität" ;
+        Text[ de ] = "~QualitÃ¤t" ;
         Text[ en-US ] = "~Quality";
     };
     MetricField NF_QUALITY
@@ -126,7 +126,7 @@ ModalDialog RID_PDF_EXPORT_DLG
         Pos = MAP_APPFONT ( 12 , 102 ) ;
         Size = MAP_APPFONT ( 103 , 10 ) ;
         TabStop = TRUE ;
-        Text[ de ] = "~Grafikauflösung verringern" ;
+        Text[ de ] = "~GrafikauflÃ¶sung verringern" ;
         Text[ en-US ] = "~Reduce image resolution";
     };
     ComboBox CO_REDUCEIMAGERESOLUTION
@@ -172,14 +172,14 @@ ModalDialog RID_PDF_EXPORT_DLG
         Pos = MAP_APPFONT ( 12 , 157 ) ;
         Size = MAP_APPFONT ( 153 , 10 ) ;
         TabStop = TRUE ;
-        Text[ de ] = "~Übergangseffekte benutzen" ;
+        Text[ de ] = "~Ãœbergangseffekte benutzen" ;
         Text[ en-US ] = "~Use transition effects";
     };
     FixedText FT_FORMSFORMAT
     {
         Pos = MAP_APPFONT ( 12 , 171 ) ;
         Size = MAP_APPFONT ( 116, 10 ) ;
-        Text[ de ] = "~Format für Formularübermittlung:" ;
+        Text[ de ] = "~Format fÃ¼r FormularÃ¼bermittlung:" ;
         Text[ en-US ] = "Submit forms in ~format:";
     };
     ListBox LB_FORMSFORMAT
