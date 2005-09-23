@@ -4,9 +4,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:31:31 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:50:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,7 +113,7 @@ Resource RID_SW_ERRHDL
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_PASSWD )
     {
-        Text [ de ] = "Dateien, die mit Kennwort geschützt sind, können nicht geöffnet werden." ;
+        Text [ de ] = "Dateien, die mit Kennwort geschÃ¼tzt sind, kÃ¶nnen nicht geÃ¶ffnet werden." ;
         Text [ en-US ] = "Password-protected files cannot be opened." ;
         Text [ x-comment ] = " ";
     };
@@ -135,13 +135,13 @@ Resource RID_SW_ERRHDL
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_WRITE_TMP_ERROR )
     {
-        Text [ de ] = "Fehler beim Schreiben der Temporärdatei" ;
+        Text [ de ] = "Fehler beim Schreiben der TemporÃ¤rdatei" ;
         Text [ en-US ] = "Error writing temporary file" ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_EXCLOT_WRONG_RANGE )
     {
-        Text [ de ] = "Einfügebereich in Ini-Datei zu groß" ;
+        Text [ de ] = "EinfÃ¼gebereich in Ini-Datei zu groÃŸ" ;
         Text [ en-US ] = "Inserted section in ini file too large" ;
         Text [ x-comment ] = " ";
     };
@@ -188,13 +188,13 @@ Resource RID_SW_ERRHDL
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_READ_TMP_ERROR )
     {
-        Text [ de ] = "Fehler beim Lesen der Temporärdatei" ;
+        Text [ de ] = "Fehler beim Lesen der TemporÃ¤rdatei" ;
         Text [ en-US ] = "Error reading temporary file" ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_LARGE_DOC_ERROR )
     {
-        Text [ de ] = "Das Dokument überschreitet die mögliche 3.1/4.0-Textdokument-Größe" ;
+        Text [ de ] = "Das Dokument Ã¼berschreitet die mÃ¶gliche 3.1/4.0-Textdokument-GrÃ¶ÃŸe" ;
         Text [ en-US ] = "The document exceeds the allowed 3.1/4.0 text document size" ;
         Text [ x-comment ] = " ";
     };
@@ -218,25 +218,25 @@ Resource RID_SW_ERRHDL
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_MEM )
     {
-        Text [ de ] = "Nicht genügend Speicher vorhanden" ;
+        Text [ de ] = "Nicht genÃ¼gend Speicher vorhanden" ;
         Text [ en-US ] = "Insufficient memory" ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_MEM )
     {
-        Text [ de ] = "Nicht genügend Speicher vorhanden" ;
+        Text [ de ] = "Nicht genÃ¼gend Speicher vorhanden" ;
         Text [ en-US ] = "Insufficient memory" ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_W4W_WRITE_FULL )
     {
-        Text [ de ] = "Nicht genügend Platz auf dem Speichermedium" ;
+        Text [ de ] = "Nicht genÃ¼gend Platz auf dem Speichermedium" ;
         Text [ en-US ] = "Not enough disk space" ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_W4W_WRITE_FULL )
     {
-        Text [ de ] = "Nicht genügend Platz auf dem Speichermedium" ;
+        Text [ de ] = "Nicht genÃ¼gend Platz auf dem Speichermedium" ;
         Text [ en-US ] = "Not enough disk space" ;
         Text [ x-comment ] = " ";
     };
@@ -266,7 +266,7 @@ Resource RID_SW_ERRHDL
     };
     String ERR_CODE ( ERRCODE_CLASS_LOCKING , ERR_TXTBLOCK_NEWFILE_ERROR )
     {
-        Text [ de ] = "$(ARG1) hat sich geändert" ;
+        Text [ de ] = "$(ARG1) hat sich geÃ¤ndert" ;
         Text [ en-US ] = "$(ARG1) has changed" ;
         Text [ x-comment ] = " ";
     };
@@ -279,20 +279,20 @@ Resource RID_SW_ERRHDL
     String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLSPLIT_ERROR )
     {
         /* ### ACHTUNG: Neuer Text in Resource? Zellen können nicht mehr geteilt werden : Zellen k÷nnen nicht mehr geteilt werden */
-        Text [ de ] = "Zellen können nicht mehr geteilt werden" ;
+        Text [ de ] = "Zellen kÃ¶nnen nicht mehr geteilt werden" ;
         Text [ en-US ] = "Cells cannot be further split" ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLINSCOL_ERROR )
     {
         /* ### ACHTUNG: Neuer Text in Resource? weitere Spalten können nicht eingefügt werden : weitere Spalten k÷nnen nicht eingef³gt werden */
-        Text [ de ] = "weitere Spalten können nicht eingefügt werden" ;
+        Text [ de ] = "weitere Spalten kÃ¶nnen nicht eingefÃ¼gt werden" ;
         Text [ en-US ] = "Additional columns cannot be inserted" ;
         Text [ x-comment ] = " ";
     };
     String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLDDECHG_ERROR )
     {
-        Text [ de ] = "Bei einer verknüpften Tabelle darf die Struktur nicht verändert werden" ;
+        Text [ de ] = "Bei einer verknÃ¼pften Tabelle darf die Struktur nicht verÃ¤ndert werden" ;
         Text [ en-US ] = "The structure of a linked table cannot be modified" ;
         Text [ x-comment ] = " ";
     };
@@ -324,34 +324,34 @@ Resource RID_SW_ERRHDL
     String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_OLE )
     {
         /* ### ACHTUNG: Neuer Text in Resource? Einige OLE-Objekte konnten nur als Grafiken übernommen werden : Einige OLE-Objekte konnten nur als Grafiken ³bernommen werden */
-        Text [ de ] = "Einige OLE-Objekte konnten nur als Grafiken übernommen werden" ;
+        Text [ de ] = "Einige OLE-Objekte konnten nur als Grafiken Ã¼bernommen werden" ;
         Text [ en-US ] = "Some OLE objects could only be loaded as graphics" ;
         Text [ x-comment ] = " ";
     };
     String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_OLE )
     {
         /* ### ACHTUNG: Neuer Text in Resource? Einige OLE-Objekte konnten nur als Grafiken übernommen werden : Einige OLE-Objekte konnten nur als Grafiken ³bernommen werden */
-        Text [ de ] = "Einige OLE-Objekte konnten nur als Grafiken übernommen werden" ;
+        Text [ de ] = "Einige OLE-Objekte konnten nur als Grafiken Ã¼bernommen werden" ;
         Text [ en-US ] = "Some OLE objects could only be saved as graphics" ;
         Text [ x-comment ] = " ";
     };
     String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_POOR_LOAD )
     {
         /* ### ACHTUNG: Neuer Text in Resource? Dokument konnte nicht vollständig geladen werden : Dokument konnte nicht vollstõndig geladen werden */
-        Text [ de ] = "Dokument konnte nicht vollständig geladen werden" ;
+        Text [ de ] = "Dokument konnte nicht vollstÃ¤ndig geladen werden" ;
         Text [ en-US ] = "Document could not be completely loaded" ;
         Text [ x-comment ] = " ";
     };
     String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_POOR_LOAD )
     {
         /* ### ACHTUNG: Neuer Text in Resource? Dokument konnte nicht vollständig gespeichert werden : Dokument konnte nicht vollstõndig gespeichert werden */
-        Text [ de ] = "Dokument konnte nicht vollständig gespeichert werden" ;
+        Text [ de ] = "Dokument konnte nicht vollstÃ¤ndig gespeichert werden" ;
         Text [ en-US ] = "Document could not be completely saved" ;
         Text [ x-comment ] = " ";
     };
     String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_HTML_NO_MACROS)
     {
-        Text [ de ] = "Das HTML-Dokument enthält %PRODUCTNAME Basic Makros.\nSie wurden mit den aktuellen Exporteinstellungen nicht gespeichert." ;
+        Text [ de ] = "Das HTML-Dokument enthÃ¤lt %PRODUCTNAME Basic Makros.\nSie wurden mit den aktuellen Exporteinstellungen nicht gespeichert." ;
         Text [ en-US ] = "This HTML document contains %PRODUCTNAME Basic macros.\nThey were not saved with the current export settings.";
         Text [ x-comment ] = " ";
     };
