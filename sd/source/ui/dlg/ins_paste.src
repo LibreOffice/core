@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ins_paste.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:04:03 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:33:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@ ModalDialog DLG_INSERT_PASTE
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 148 , 90 ) ;
     Moveable = TRUE ;
-    Text [ de ] = "Dias einfügen" ;
+    Text [ de ] = "Dias einfÃ¼gen" ;
     OKButton BTN_OK
     {
         Pos = MAP_APPFONT ( 92 , 6 ) ;
