@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentcontainer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:29:36 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:06:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,10 +235,8 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
         {
             pElementImpl.reset( new OContentHelper_Impl );
             if ( !bNew )
-            {
-                pItem->m_aDocumentMap.insert(ODefinitionContainer_Impl::Documents::value_type(sName,ODefinitionContainer_Impl::Documents::mapped_type(pElementImpl)));
                 pElementImpl->m_aProps.aTitle = sName;
-            }
+
             pElementImpl->m_aProps.sPersistentName = sPersistentName;
             pElementImpl->m_aProps.bAsTemplate = bAsTemplate;
             pElementImpl->m_pDataSource = m_pImpl->m_pDataSource;
