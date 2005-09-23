@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationDlg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:48:26 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:27:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,7 @@ using namespace ::dbtools;
 
 //========================================================================
 // class ORelationDialog
+DBG_NAME(ORelationDialog)
 //========================================================================
 ORelationDialog::ORelationDialog( OJoinTableView* pParent,
                                  ORelationTableConnectionData* pConnectionData,
@@ -119,6 +120,8 @@ ORelationDialog::ORelationDialog( OJoinTableView* pParent,
     ,m_pTableMap(pParent->GetTabWinMap())
     ,m_pConnData(NULL)
 {
+    DBG_CTOR(ORelationDialog,NULL);
+
     m_xConnection = pParent->getDesignView()->getController()->getConnection();
 
     //////////////////////////////////////////////////////////////////////
@@ -193,6 +196,8 @@ ORelationDialog::~ORelationDialog()
 {
     delete m_pTableControl;
     delete m_pConnData;
+
+    DBG_DTOR(ORelationDialog,NULL);
 }
 
 //------------------------------------------------------------------------
