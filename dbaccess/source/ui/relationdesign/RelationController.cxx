@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:36:25 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:45:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -298,15 +298,18 @@ void ORelationController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue
 void ORelationController::impl_initialize( const Sequence< Any >& aArguments )
 {
     PropertyValue aValue;
-    const Any* pBegin   = aArguments.getConstArray();
-    const Any* pEnd     = pBegin + aArguments.getLength();
+    const Any* pIter    = aArguments.getConstArray();
+    const Any* pEnd     = pIter + aArguments.getLength();
 
-    for(;pBegin != pEnd;++pBegin)
+    for(;pIter != pEnd;++pIter)
     {
-        if((*pBegin >>= aValue) && (0 == aValue.Name.compareToAscii(PROPERTY_ACTIVECONNECTION)))
+        if (!(*pIter >>= aValue))
+            throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid type in argument list. PropertyValue expected.")),*this);
+        if ( 0 == aValue.Name.compareToAscii(PROPERTY_ACTIVECONNECTION) )
         {
             Reference< XConnection > xConn;
-            aValue.Value >>= xConn;
+            if ( !(aValue.Value >>= xConn) )
+                throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for ActiveConnection.")),*this);
             initializeConnection( xConn );
             break;
         }
@@ -428,13 +431,13 @@ void ORelationController::loadData()
 
         Reference< XDatabaseMetaData> xMetaData = getConnection()->getMetaData();
         Sequence< ::rtl::OUString> aNames = m_xTables->getElementNames();
-        const ::rtl::OUString* pBegin = aNames.getConstArray();
-        const ::rtl::OUString* pEnd = pBegin + aNames.getLength();
-        for(;pBegin != pEnd;++pBegin)
+        const ::rtl::OUString* pIter = aNames.getConstArray();
+        const ::rtl::OUString* pEnd = pIter + aNames.getLength();
+        for(;pIter != pEnd;++pIter)
         {
             ::rtl::OUString sCatalog,sSchema,sTable;
             ::dbtools::qualifiedNameComponents(xMetaData,
-                                                *pBegin,
+                                                *pIter,
                                                 sCatalog,
                                                 sSchema,
                                                 sTable,
@@ -445,7 +448,7 @@ void ORelationController::loadData()
 
             Reference< XResultSet > xResult = xMetaData->getImportedKeys(aCatalog, sSchema,sTable);
             if ( xResult.is() && xResult->next() )
-                loadTableData(m_xTables->getByName(*pBegin));
+                loadTableData(m_xTables->getByName(*pIter));
         }
     }
     catch(SQLException& e)
@@ -510,13 +513,13 @@ void ORelationController::loadTableData(const Any& _aTable)
                     OSL_ENSURE(xColsSup.is(),"Key is no XColumnsSupplier!");
                     Reference<XNameAccess> xColumns     = xColsSup->getColumns();
                     Sequence< ::rtl::OUString> aNames   = xColumns->getElementNames();
-                    const ::rtl::OUString* pBegin   = aNames.getConstArray();
-                    const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
+                    const ::rtl::OUString* pIter    = aNames.getConstArray();
+                    const ::rtl::OUString* pEnd     = pIter + aNames.getLength();
                     ::rtl::OUString sColumnName,sRelatedName;
-                    for(sal_uInt16 j=0;pBegin != pEnd;++pBegin,++j)
+                    for(sal_uInt16 j=0;pIter != pEnd;++pIter,++j)
                     {
                         Reference<XPropertySet> xPropSet;
-                        xColumns->getByName(*pBegin) >>= xPropSet;
+                        xColumns->getByName(*pIter) >>= xPropSet;
                         OSL_ENSURE(xPropSet.is(),"Invalid column found in KeyColumns!");
                         xPropSet->getPropertyValue(PROPERTY_NAME)           >>= sColumnName;
                         xPropSet->getPropertyValue(PROPERTY_RELATEDCOLUMN)  >>= sRelatedName;
