@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:14:48 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:05:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ String RID_STR_ENABLED
 };
 String RID_STR_AUTOCOMPLETE
 {
-    Text [ de ] = "Automatisch füllen" ;
+    Text [ de ] = "Automatisch fÃ¼llen" ;
     Text [ en-US ] = "AutoFill" ;
 };
 String RID_STR_LINECOUNT
@@ -72,7 +72,7 @@ String RID_STR_LINECOUNT
 };
 String RID_STR_MAXTEXTLEN
 {
-    Text [ de ] = "Max. Textlänge" ;
+    Text [ de ] = "Max. TextlÃ¤nge" ;
     Text [ en-US ] = "Max. text length" ;
 };
 String RID_STR_SPIN
@@ -82,7 +82,7 @@ String RID_STR_SPIN
 };
 String RID_STR_STRICTFORMAT
 {
-    Text [ de ] = "Formatüberprüfung" ;
+    Text [ de ] = "FormatÃ¼berprÃ¼fung" ;
     Text [ en-US ] = "Strict format" ;
 };
 String RID_STR_SHOWTHOUSANDSEP
@@ -122,7 +122,7 @@ String RID_STR_TAG
 };
 String RID_STR_ECHO_CHAR
 {
-    Text [ de ] = "Zeichen für Passwörter" ;
+    Text [ de ] = "Zeichen fÃ¼r PasswÃ¶rter" ;
     Text [ en-US ] = "Password character" ;
 };
 
@@ -153,7 +153,7 @@ String RID_STR_DEFAULT_SELECT_SEQ
 };
 String RID_STR_DEFAULT_BUTTON
 {
-    Text [ de ] = "Standardschaltfläche" ;
+    Text [ de ] = "StandardschaltflÃ¤che" ;
     Text [ en-US ] = "Default button" ;
 };
 String RID_STR_LABELCONTROL
@@ -214,12 +214,12 @@ String RID_STR_BORDER
 };
 String RID_STR_ICONSIZE
 {
-    Text [ de ] = "Symbolgröße" ;
+    Text [ de ] = "SymbolgrÃ¶ÃŸe" ;
     Text [ en-US ] = "Icon size" ;
 };
 String RID_STR_ICONSIZE_TYPE
 {
-    Text [ de ] = "Klein;Groß" ;
+    Text [ de ] = "Klein;GroÃŸ" ;
     Text [ en-US ] = "Small;Large" ;
 };
 String RID_STR_SHOW_POSITION
@@ -349,22 +349,22 @@ String RID_STR_CURSORSOURCETYPE
 };
 String RID_STR_ALLOW_ADDITIONS
 {
-    Text [ de ] = "Daten hinzufügen" ;
+    Text [ de ] = "Daten hinzufÃ¼gen" ;
     Text [ en-US ] = "Allow additions" ;
 };
 String RID_STR_ALLOW_DELETIONS
 {
-    Text [ de ] = "Daten löschen" ;
+    Text [ de ] = "Daten lÃ¶schen" ;
     Text [ en-US ] = "Allow deletions" ;
 };
 String RID_STR_ALLOW_EDITS
 {
-    Text [ de ] = "Daten ändern" ;
+    Text [ de ] = "Daten Ã¤ndern" ;
     Text [ en-US ] = "Allow modifications" ;
 };
 String RID_STR_DATAENTRY
 {
-    Text [ de ] = "Nur Daten hinzufügen" ;
+    Text [ de ] = "Nur Daten hinzufÃ¼gen" ;
     Text [ en-US ] = "Add data only" ;
 };
 String RID_STR_DATASOURCE
@@ -374,12 +374,12 @@ String RID_STR_DATASOURCE
 };
 String RID_STR_MASTERFIELDS
 {
-    Text [ de ] = "Verknüpfen von" ;
+    Text [ de ] = "VerknÃ¼pfen von" ;
     Text [ en-US ] = "Link master fields" ;
 };
 String RID_STR_SLAVEFIELDS
 {
-    Text [ de ] = "Verknüpfen nach" ;
+    Text [ de ] = "VerknÃ¼pfen nach" ;
     Text [ en-US ] = "Link slave fields" ;
 };
 String RID_STR_VALUEMIN
@@ -399,7 +399,7 @@ String RID_STR_VALUESTEP
 };
 String RID_STR_CURRENCYSYMBOL
 {
-    Text [ de ] = "Währungssymbol" ;
+    Text [ de ] = "WÃ¤hrungssymbol" ;
     Text [ en-US ] = "Currency symbol" ;
 };
 String RID_STR_DATEMIN
@@ -459,7 +459,7 @@ String RID_STR_CLASSID
 };
 String RID_STR_HEIGHT
 {
-    Text [ de ] = "Höhe" ;
+    Text [ de ] = "HÃ¶he" ;
     Text [ en-US ] = "Height" ;
 };
 String RID_STR_WIDTH
@@ -474,12 +474,12 @@ String RID_STR_LISTINDEX
 };
 String RID_STR_ROWHEIGHT
 {
-    Text [ de ] = "Zeilenhöhe" ;
+    Text [ de ] = "ZeilenhÃ¶he" ;
     Text [ en-US ] = "Row height" ;
 };
 String RID_STR_FILLCOLOR
 {
-    Text [ de ] = "Füllfarbe" ;
+    Text [ de ] = "FÃ¼llfarbe" ;
     Text [ en-US ] = "Fill color" ;
 };
 String RID_STR_LINECOLOR
@@ -499,7 +499,7 @@ String RID_STR_UNCHECKEDREFVALUE
 };
 String RID_STR_STRINGITEMLIST
 {
-    Text [ de ] = "Listen-Einträge" ;
+    Text [ de ] = "Listen-EintrÃ¤ge" ;
     Text [ en-US ] = "List entries" ;
 };
 String RID_STR_BUTTONTYPE
@@ -569,7 +569,7 @@ String RID_STR_ALIGNMENT
 };
 String RID_STR_ENUM_BUTTONTYPE
 {
-    Text [ de ] = "Keine;Formular übertragen;Formular zurücksetzen;Dokument/Webseite öffnen;Erster Datensatz;Vorheriger Datensatz;Nächster Datensatz;Letzter Datensatz;Datensatz speichern;Rückgängig: Dateneingabe;Neuer Datensatz;Datensatz löschen;Formular aktualisieren";
+    Text [ de ] = "Keine;Formular Ã¼bertragen;Formular zurÃ¼cksetzen;Dokument/Webseite Ã¶ffnen;Erster Datensatz;Vorheriger Datensatz;NÃ¤chster Datensatz;Letzter Datensatz;Datensatz speichern;RÃ¼ckgÃ¤ngig: Dateneingabe;Neuer Datensatz;Datensatz lÃ¶schen;Formular aktualisieren";
     Text [ en-US ] = "None;Submit form;Reset form;Open document/web page;First record;Previous record;Next record;Last record;Save record;Undo data entry;New record;Delete record;Refresh form";
 };
 String RID_STR_ENUM_SUBMIT_METHOD
@@ -594,17 +594,17 @@ String RID_STR_TIMEFORMAT_LIST
 };
 String RID_STR_ENUM_CHECKED
 {
-    Text [ de ] = "Nicht ausgewählt;Ausgewählt;Unbestimmt" ;
+    Text [ de ] = "Nicht ausgewÃ¤hlt;AusgewÃ¤hlt;Unbestimmt" ;
     Text [ en-US ] = "Not Selected;Selected;Not Defined" ;
 };
 String RID_STR_ENUM_CYCLE
 {
-    Text [ de ] = "Alle Datensätze;Aktueller Datensatz;Aktuelle Seite" ;
+    Text [ de ] = "Alle DatensÃ¤tze;Aktueller Datensatz;Aktuelle Seite" ;
     Text [ en-US ] = "All records;Active record;Current page" ;
 };
 String RID_STR_ENUM_NAVIGATION
 {
-    Text [ de ] = "Nein;Ja;Übergeordnetes Formular" ;
+    Text [ de ] = "Nein;Ja;Ãœbergeordnetes Formular" ;
     Text [ en-US ] = "No;Yes;Parent Form";
 };
 String RID_STR_ENUM_SUBMIT_TARGET
@@ -613,12 +613,12 @@ String RID_STR_ENUM_SUBMIT_TARGET
 };
 String RID_STR_EVT_APPROVEPARAMETER
 {
-    Text [ de ] = "Parameter füllen" ;
+    Text [ de ] = "Parameter fÃ¼llen" ;
     Text [ en-US ] = "Fill parameters" ;
 };
 String RID_STR_EVT_ACTIONPERFORMED
 {
-    Text [ de ] = "Beim Auslösen" ;
+    Text [ de ] = "Beim AuslÃ¶sen" ;
     Text [ en-US ] = "When initiating" ;
 };
 String RID_STR_EVT_AFTERUPDATE
@@ -643,7 +643,7 @@ String RID_STR_EVT_ROWCHANGE
 };
 String RID_STR_EVT_CONFIRMDELETE
 {
-    Text [ de ] = "Löschen bestätigen" ;
+    Text [ de ] = "LÃ¶schen bestÃ¤tigen" ;
     Text [ en-US ] = "Confirm deletion" ;
 };
 String RID_STR_EVT_ERROROCCURED
@@ -663,12 +663,12 @@ String RID_STR_EVT_FOCUSLOST
 };
 String RID_STR_EVT_ITEMSTATECHANGED
 {
-    Text [ de ] = "Status geändert" ;
+    Text [ de ] = "Status geÃ¤ndert" ;
     Text [ en-US ] = "Item status changed" ;
 };
 String RID_STR_EVT_KEYTYPED
 {
-    Text [ de ] = "Taste gedrückt" ;
+    Text [ de ] = "Taste gedrÃ¼ckt" ;
     Text [ en-US ] = "Key pressed" ;
 };
 String RID_STR_EVT_KEYUP
@@ -713,7 +713,7 @@ String RID_STR_EVT_MOUSEMOVED
 };
 String RID_STR_EVT_MOUSEPRESSED
 {
-    Text [ de ] = "Maustaste gedrückt" ;
+    Text [ de ] = "Maustaste gedrÃ¼ckt" ;
     Text [ en-US ] = "Mouse button pressed" ;
 };
 String RID_STR_EVT_MOUSERELEASED
@@ -733,17 +733,17 @@ String RID_STR_EVT_POSITIONED
 };
 String RID_STR_EVT_RESETTED
 {
-    Text [ de ] = "Nach dem Zurücksetzen" ;
+    Text [ de ] = "Nach dem ZurÃ¼cksetzen" ;
     Text [ en-US ] = "After resetting" ;
 };
 String RID_STR_EVT_APPROVERESETTED
 {
-    Text [ de ] = "Vor dem Zurücksetzen" ;
+    Text [ de ] = "Vor dem ZurÃ¼cksetzen" ;
     Text [ en-US ] = "Prior to reset" ;
 };
 String RID_STR_EVT_APPROVEACTIONPERFORMED
 {
-    Text [ de ] = "Vor dem Auslösen" ;
+    Text [ de ] = "Vor dem AuslÃ¶sen" ;
     Text [ en-US ] = "Before commencing" ;
 };
 String RID_STR_EVT_SUBMITTED
@@ -838,17 +838,17 @@ String RID_STR_DEFAULT_SCROLLVALUE
 };
 String RID_STR_LINEINCREMENT
 {
-    Text [ de ] = "Kleine Änderung" ;
+    Text [ de ] = "Kleine Ã„nderung" ;
     Text [ en-US ] = "Small change";
 };
 String RID_STR_BLOCKINCREMENT
 {
-    Text [ de ] = "Große Änderung" ;
+    Text [ de ] = "GroÃŸe Ã„nderung" ;
     Text [ en-US ] = "Large change";
 };
 String RID_STR_REPEAT_DELAY
 {
-    Text [ de ] = "Verzögerung" ;
+    Text [ de ] = "VerzÃ¶gerung" ;
     Text [ en-US ] = "Delay";
 };
 String RID_STR_REPEAT
@@ -858,7 +858,7 @@ String RID_STR_REPEAT
 };
 String RID_STR_VISIBLESIZE
 {
-    Text [ de ] = "Sichtbare Größe" ;
+    Text [ de ] = "Sichtbare GrÃ¶ÃŸe" ;
     Text [ en-US ] = "Visible size";
 };
 String RID_STR_ORIENTATION
@@ -898,7 +898,7 @@ String RID_STR_SCALEIMAGE
 };
 String RID_STR_PUSHBUTTONTYPE
 {
-    Text [ de ] = "Art der Schaltfläche" ;
+    Text [ de ] = "Art der SchaltflÃ¤che" ;
     Text [ en-US ] = "Button type";
 };
 String RID_STR_ENUM_PUSHBUTTONTYPE
@@ -919,7 +919,7 @@ String RID_STR_TEXT
 
 String RID_STR_BOUND_CELL
 {
-    Text [ de ] = "Verknüpfte Zelle";
+    Text [ de ] = "VerknÃ¼pfte Zelle";
     Text [ en-US ] = "Linked cell";
 };
 
@@ -931,13 +931,13 @@ String RID_STR_LIST_CELL_RANGE
 
 String RID_STR_CELL_EXCHANGE_TYPE
 {
-    Text [ de ] = "Inhalt der verknüpften Zelle";
+    Text [ de ] = "Inhalt der verknÃ¼pften Zelle";
     Text [ en-US ] = "Contents of the linked cell";
 };
 
 String RID_STR_ENUM_CELL_EXCHANGE_TYPE
 {
-    Text [ de ] = "Der ausgewählte Eintrag;Position des ausgewählten Eintrags";
+    Text [ de ] = "Der ausgewÃ¤hlte Eintrag;Position des ausgewÃ¤hlten Eintrags";
     Text [ en-US ] = "The selected entry;Position of the selected entry";
 };
 
@@ -1184,7 +1184,7 @@ String RID_STR_XSD_REQUIRED
 
 String RID_STR_LIST_BINDING
 {
-    Text [ de ] = "Listeneinträge aus";
+    Text [ de ] = "ListeneintrÃ¤ge aus";
     Text [ en-US ] = "List entry source";
 };
 
@@ -1196,7 +1196,7 @@ String RID_STR_XSD_RELEVANT
 
 String RID_STR_XSD_READONLY
 {
-    Text [ de ] = "Schreibgeschützt";
+    Text [ de ] = "SchreibgeschÃ¼tzt";
     Text [ en-US ] = "Read-only";
 };
 
@@ -1251,19 +1251,19 @@ String RID_STR_XSD_PATTERN
 
 String RID_STR_XSD_LENGTH
 {
-    Text [ de ] = "Länge";
+    Text [ de ] = "LÃ¤nge";
     Text [ en-US ] = "Length";
 };
 
 String RID_STR_XSD_MIN_LENGTH
 {
-    Text [ de ] = "Länge (mindestens)";
+    Text [ de ] = "LÃ¤nge (mindestens)";
     Text [ en-US ] = "Length (at least)";
 };
 
 String RID_STR_XSD_MAX_LENGTH
 {
-    Text [ de ] = "Länge (höchstens)";
+    Text [ de ] = "LÃ¤nge (hÃ¶chstens)";
     Text [ en-US ] = "Length (at most)";
 };
 
