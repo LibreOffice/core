@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:14:45 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:36:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -474,84 +474,136 @@ Reference< XConnection> getConnection(const Reference< XRowSet>& _rxRowSet) thro
 }
 
 //------------------------------------------------------------------------------
-Reference< XConnection> connectRowset(const Reference< XRowSet>& _rxRowSet, const Reference< XMultiServiceFactory>& _rxFactory,
-    sal_Bool _bSetAsActiveConnection )  SAL_THROW ( ( SQLException, WrappedTargetException, RuntimeException ) )
+// helper function which allows to implement both the connectRowset and the ensureRowSetConnection semantics
+// if connectRowset (which is deprecated) is removed, this function and one of its parameters are
+// not needed anymore, the whole implementation can be moved into ensureRowSetConnection then)
+SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const Reference< XMultiServiceFactory>& _rxFactory,
+        bool _bSetAsActiveConnection, bool _bAttachAutoDisposer )
+    SAL_THROW ( ( SQLException, WrappedTargetException, RuntimeException ) )
 {
-    Reference< XConnection> xReturn;
-    Reference< XPropertySet> xRowSetProps(_rxRowSet, UNO_QUERY);
-    if (xRowSetProps.is())
+    SharedConnection xConnection;
+
+    do
     {
-        Any aConn( xRowSetProps->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ActiveConnection"))) );
-        aConn >>= xReturn;
+        Reference< XPropertySet> xRowSetProps(_rxRowSet, UNO_QUERY);
+        if ( !xRowSetProps.is() )
+            break;
 
-        if (!xReturn.is())
+        // 1. already connected?
+        Reference< XConnection > xExistingConn(
+            xRowSetProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ActiveConnection" ) ) ),
+            UNO_QUERY );
+
+        if  (   xExistingConn.is()
+            // 2. embedded in a database?
+            ||  isEmbeddedInDatabase( _rxRowSet, xExistingConn )
+            // 3. is there a connection in the parent hierarchy?
+            ||  ( xExistingConn = findConnection( _rxRowSet ) ).is()
+            )
         {
-            // first look if there is a connection in the parent hierarchy
-            xReturn = findConnection(_rxRowSet);
-            if (!xReturn.is())
+            if ( _bSetAsActiveConnection )
             {
-                static const ::rtl::OUString s_sUserProp = ::rtl::OUString::createFromAscii("User");
-                // the row set didn't supply a connection -> build one with it's current settings
-                ::rtl::OUString sDataSourceName;
-                xRowSetProps->getPropertyValue(::rtl::OUString::createFromAscii("DataSourceName")) >>= sDataSourceName;
-                ::rtl::OUString sURL;
-                xRowSetProps->getPropertyValue(::rtl::OUString::createFromAscii("URL")) >>= sURL;
-                if (sDataSourceName.getLength())
-                {   // the row set's data source property is set
-                    // -> try to connect, get user and pwd setting for that
-                    ::rtl::OUString sUser, sPwd;
-
-                    if (hasProperty(s_sUserProp, xRowSetProps))
-                        xRowSetProps->getPropertyValue(s_sUserProp) >>= sUser;
-                    if (hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD), xRowSetProps))
-                        xRowSetProps->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)) >>= sPwd;
-                    xReturn = getConnection_allowException(sDataSourceName, sUser, sPwd, _rxFactory);
-                }
-                else if (sURL.getLength())
-                {   // the row set has no data source, but a connection url set
-                    // -> try to connection with that url
-                    Reference< XDriverManager > xDriverManager(
-                        _rxFactory->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.sdbc.ConnectionPool")), UNO_QUERY);
-                    if (xDriverManager.is())
-                    {
-                        ::rtl::OUString sUser, sPwd;
-                        if (hasProperty(s_sUserProp, xRowSetProps))
-                            xRowSetProps->getPropertyValue(s_sUserProp) >>= sUser;
-                        if (hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD), xRowSetProps))
-                            xRowSetProps->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)) >>= sPwd;
-                        if (sUser.getLength())
-                        {   // use user and pwd together with the url
-                            Sequence< PropertyValue> aInfo(2);
-                            aInfo.getArray()[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user"));
-                            aInfo.getArray()[0].Value <<= sUser;
-                            aInfo.getArray()[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("password"));
-                            aInfo.getArray()[1].Value <<= sPwd;
-                            xReturn = xDriverManager->getConnectionWithInfo(sURL, aInfo);
-                        }
-                        else
-                            // just use the url
-                            xReturn = xDriverManager->getConnection(sURL);
-                    }
-                }
+                xRowSetProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ActiveConnection" ) ), makeAny( xExistingConn ) );
+                // no auto disposer needed, since we did not create the connection
             }
 
-            // now if we got a connection, forward it to the row set
-            if (xReturn.is() && _bSetAsActiveConnection)
+            xConnection.reset( xExistingConn, SharedConnection::NoTakeOwnership );
+            break;
+        }
+
+        // build a connection with it's current settings (4. data source name, or 5. URL)
+
+        const ::rtl::OUString sUserProp = ::rtl::OUString::createFromAscii("User");
+        ::rtl::OUString sDataSourceName;
+        xRowSetProps->getPropertyValue(::rtl::OUString::createFromAscii("DataSourceName")) >>= sDataSourceName;
+        ::rtl::OUString sURL;
+        xRowSetProps->getPropertyValue(::rtl::OUString::createFromAscii("URL")) >>= sURL;
+
+        Reference< XConnection > xPureConnection;
+        if (sDataSourceName.getLength())
+        {   // the row set's data source property is set
+            // -> try to connect, get user and pwd setting for that
+            ::rtl::OUString sUser, sPwd;
+
+            if (hasProperty(sUserProp, xRowSetProps))
+                xRowSetProps->getPropertyValue(sUserProp) >>= sUser;
+            if (hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD), xRowSetProps))
+                xRowSetProps->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)) >>= sPwd;
+
+            xPureConnection = getConnection_allowException( sDataSourceName, sUser, sPwd, _rxFactory );
+        }
+        else if (sURL.getLength())
+        {   // the row set has no data source, but a connection url set
+            // -> try to connection with that url
+            Reference< XDriverManager > xDriverManager(
+                _rxFactory->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.sdbc.ConnectionPool")), UNO_QUERY);
+            if (xDriverManager.is())
             {
-                try
+                ::rtl::OUString sUser, sPwd;
+                if (hasProperty(sUserProp, xRowSetProps))
+                    xRowSetProps->getPropertyValue(sUserProp) >>= sUser;
+                if (hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD), xRowSetProps))
+                    xRowSetProps->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)) >>= sPwd;
+                if (sUser.getLength())
+                {   // use user and pwd together with the url
+                    Sequence< PropertyValue> aInfo(2);
+                    aInfo.getArray()[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user"));
+                    aInfo.getArray()[0].Value <<= sUser;
+                    aInfo.getArray()[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("password"));
+                    aInfo.getArray()[1].Value <<= sPwd;
+                    xPureConnection = xDriverManager->getConnectionWithInfo( sURL, aInfo );
+                }
+                else
+                    // just use the url
+                    xPureConnection = xDriverManager->getConnection( sURL );
+            }
+        }
+        xConnection.reset(
+            xPureConnection,
+            _bAttachAutoDisposer ? SharedConnection::NoTakeOwnership : SharedConnection::TakeOwnership
+            /* take ownership if and only if we're *not* going to auto-dispose the connection */
+        );
+
+        // now if we created a connection, forward it to the row set
+        if ( xConnection.is() && _bSetAsActiveConnection )
+        {
+            try
+            {
+                if ( _bAttachAutoDisposer )
                 {
-                    OAutoConnectionDisposer* pAutoDispose = new OAutoConnectionDisposer(_rxRowSet, xReturn);
+                    OAutoConnectionDisposer* pAutoDispose = new OAutoConnectionDisposer( _rxRowSet, xConnection );
                     Reference< XPropertyChangeListener > xEnsureDelete(pAutoDispose);
                 }
-                catch(Exception&)
-                {
-                    OSL_ENSURE(0,"EXception when we set the new active connection!");
-                }
+                else
+                    xRowSetProps->setPropertyValue(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ActiveConnection" ) ),
+                        makeAny( xConnection.getTyped() )
+                    );
+            }
+            catch(Exception&)
+            {
+                OSL_ENSURE(0,"EXception when we set the new active connection!");
             }
         }
     }
+    while ( false );
 
-    return xReturn;
+    return xConnection;
+}
+
+//------------------------------------------------------------------------------
+Reference< XConnection> connectRowset(const Reference< XRowSet>& _rxRowSet, const Reference< XMultiServiceFactory>& _rxFactory,
+    sal_Bool _bSetAsActiveConnection )  SAL_THROW ( ( SQLException, WrappedTargetException, RuntimeException ) )
+{
+    SharedConnection xConnection = lcl_connectRowSet( _rxRowSet, _rxFactory, _bSetAsActiveConnection, true );
+    return xConnection.getTyped();
+}
+
+//------------------------------------------------------------------------------
+SharedConnection ensureRowSetConnection(const Reference< XRowSet>& _rxRowSet, const Reference< XMultiServiceFactory>& _rxFactory,
+    bool _bUseAutoConnectionDisposer )  SAL_THROW ( ( SQLException, WrappedTargetException, RuntimeException ) )
+{
+    return lcl_connectRowSet( _rxRowSet, _rxFactory, true, _bUseAutoConnectionDisposer );
 }
 
 //------------------------------------------------------------------------------
@@ -1182,9 +1234,7 @@ Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)
     ::rtl::OUString sStatement;
     try
     {
-        Reference< XConnection> xConn;
-        if ( !isEmbeddedInDatabase( _rxRowSet, xConn ) )
-            xConn = connectRowset( Reference< XRowSet >( _rxRowSet, UNO_QUERY ), _rxFactory, sal_True );
+        Reference< XConnection> xConn = connectRowset( Reference< XRowSet >( _rxRowSet, UNO_QUERY ), _rxFactory, sal_True );
         if ( xConn.is() )       // implies _rxRowSet.is()
         {
             // build the statement the row set is based on (can't use the ActiveCommand property of the set
@@ -1424,6 +1474,8 @@ void composeTableName(  const Reference< XDatabaseMetaData >& _rxMetaData,
                         , sal_Bool _bUseSchemaInSelect)
 {
     OSL_ENSURE(_rxMetaData.is(), "composeTableName : invalid meta data !");
+    if ( !_rxMetaData.is() )
+        return; // just to be save here
     OSL_ENSURE(_rName.getLength(), "composeTableName : at least the name should be non-empty !");
 
     ::std::mem_fun_t<bool,OMetaDataWrapper> aCatalogCall = ::std::mem_fun(&OMetaDataWrapper::supportsCatalogsInDataManipulation);
