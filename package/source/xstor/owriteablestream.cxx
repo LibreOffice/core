@@ -4,9 +4,9 @@
  *
  *  $RCSfile: owriteablestream.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:07:57 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:54:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -365,8 +365,6 @@ void OWriteStream_Impl::SetDecrypted()
     // let the stream be modified
     GetFilledTempFile();
     m_bHasDataToFlush = sal_True;
-    if ( m_pParent )
-        m_pParent->SetModifiedInternally( sal_True );
 
     // remove encryption
     m_bForceEncrypted = sal_False;
@@ -388,8 +386,6 @@ void OWriteStream_Impl::SetEncryptedWithPass( const ::rtl::OUString& aPass )
     // let the stream be modified
     GetFilledTempFile();
     m_bHasDataToFlush = sal_True;
-    if ( m_pParent )
-        m_pParent->SetModifiedInternally( sal_True );
 
     // introduce encryption info
     for ( sal_Int32 nInd = 0; nInd < m_aProps.getLength(); nInd++ )
@@ -402,7 +398,6 @@ void OWriteStream_Impl::SetEncryptedWithPass( const ::rtl::OUString& aPass )
 
     m_bHasCachedPassword = sal_True;
     m_aPass = aPass;
-    m_bHasDataToFlush = sal_True;
 }
 
 //-----------------------------------------------
@@ -862,8 +857,10 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
                 {
                     GetFilledTempFile();
                     m_bHasDataToFlush = sal_True;
+
+                    // TODO/LATER: should the notification be done?
                     if ( m_pParent )
-                        m_pParent->SetModifiedInternally( sal_True );
+                        m_pParent->m_bIsModified = sal_True;
                 }
             }
             catch( packages::WrongPasswordException& )
@@ -993,6 +990,10 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
 
             m_bHasDataToFlush = sal_True;
 
+            // this call is triggered by the parent and it will recognize the change of the state
+            if ( m_pParent )
+                m_pParent->m_bIsModified = sal_True;
+
             xStream = GetTempFileAsStream();
         }
         else
@@ -1001,6 +1002,10 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
             {
                 // The stream does not exist in the storage
                 m_bHasDataToFlush = sal_True;
+
+                // this call is triggered by the parent and it will recognize the change of the state
+                if ( m_pParent )
+                    m_pParent->m_bIsModified = sal_True;
             }
 
             xStream = GetTempFileAsStream();
@@ -1331,6 +1336,22 @@ void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStrea
 }
 
 //-----------------------------------------------
+void OWriteStream::ModifyParentUnlockMutex_Impl( ::osl::ResettableMutexGuard& aGuard )
+{
+    if ( m_pImpl->m_pParent )
+    {
+        if ( m_pImpl->m_pParent->m_pAntiImpl )
+        {
+            uno::Reference< util::XModifiable > xParentModif( (util::XModifiable*)(m_pImpl->m_pParent->m_pAntiImpl) );
+            aGuard.clear();
+            xParentModif->setModified( sal_True );
+        }
+        else
+            m_pImpl->m_pParent->m_bIsModified = sal_True;
+    }
+}
+
+//-----------------------------------------------
 sal_Int32 SAL_CALL OWriteStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
         throw ( io::NotConnectedException,
                 io::BufferSizeExceededException,
@@ -1463,7 +1484,7 @@ void SAL_CALL OWriteStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
                 io::IOException,
                 uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
         throw lang::DisposedException();
@@ -1473,8 +1494,8 @@ void SAL_CALL OWriteStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
 
     m_xOutStream->writeBytes( aData );
     m_pImpl->m_bHasDataToFlush = sal_True;
-    if ( m_pImpl->m_pParent )
-        m_pImpl->m_pParent->SetModifiedInternally( sal_True );
+
+    ModifyParentUnlockMutex_Impl( aGuard );
 }
 
 //-----------------------------------------------
@@ -1596,7 +1617,7 @@ void SAL_CALL OWriteStream::truncate()
         throw ( io::IOException,
                 uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
         throw lang::DisposedException();
@@ -1615,8 +1636,8 @@ void SAL_CALL OWriteStream::truncate()
     xTruncate->truncate();
 
     m_pImpl->m_bHasDataToFlush = sal_True;
-    if ( m_pImpl->m_pParent )
-        m_pImpl->m_pParent->SetModifiedInternally( sal_True );
+
+    ModifyParentUnlockMutex_Impl( aGuard );
 }
 
 //-----------------------------------------------
@@ -1625,7 +1646,7 @@ void SAL_CALL OWriteStream::dispose()
 {
     // should be an internal method since it can be called only from parent storage
 
-    ::osl::MutexGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
         throw lang::DisposedException();
@@ -1652,7 +1673,7 @@ void SAL_CALL OWriteStream::addEventListener(
             const uno::Reference< lang::XEventListener >& xListener )
         throw ( uno::RuntimeException )
 {
-    ::osl::MutexGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
         throw lang::DisposedException();
@@ -1665,7 +1686,7 @@ void SAL_CALL OWriteStream::removeEventListener(
             const uno::Reference< lang::XEventListener >& xListener )
         throw ( uno::RuntimeException )
 {
-    ::osl::MutexGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
         throw lang::DisposedException();
@@ -1678,7 +1699,7 @@ void SAL_CALL OWriteStream::setEncryptionPassword( const ::rtl::OUString& aPass 
     throw ( uno::RuntimeException,
             io::IOException )
 {
-    ::osl::MutexGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
         throw lang::DisposedException();
@@ -1686,6 +1707,8 @@ void SAL_CALL OWriteStream::setEncryptionPassword( const ::rtl::OUString& aPass 
     OSL_ENSURE( m_pImpl->m_xPackageStream.is(), "No package stream is set!\n" );
 
     m_pImpl->SetEncryptedWithPass( aPass );
+
+    ModifyParentUnlockMutex_Impl( aGuard );
 }
 
 //-----------------------------------------------
@@ -1693,7 +1716,7 @@ void SAL_CALL OWriteStream::removeEncryption()
     throw ( uno::RuntimeException,
             io::IOException )
 {
-    ::osl::MutexGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
         throw lang::DisposedException();
@@ -1701,6 +1724,8 @@ void SAL_CALL OWriteStream::removeEncryption()
     OSL_ENSURE( m_pImpl->m_xPackageStream.is(), "No package stream is set!\n" );
 
     m_pImpl->SetDecrypted();
+
+    ModifyParentUnlockMutex_Impl( aGuard );
 }
 
 //-----------------------------------------------
@@ -1721,7 +1746,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
                 lang::WrappedTargetException,
                 uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
         throw lang::DisposedException();
@@ -1763,8 +1788,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
         throw beans::UnknownPropertyException(); // TODO
 
     m_pImpl->m_bHasDataToFlush = sal_True;
-    if ( m_pImpl->m_pParent )
-        m_pImpl->m_pParent->SetModifiedInternally( sal_True );
+    ModifyParentUnlockMutex_Impl( aGuard );
 }
 
 
