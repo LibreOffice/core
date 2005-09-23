@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:08:58 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:38:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,12 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATASUPPLIER_HPP_
+#include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATA_HPP_
+#include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #endif
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -286,6 +292,10 @@
 #ifndef _SVT_FILEVIEW_HXX
 #include <svtools/fileview.hxx>
 #endif
+#ifndef _CONNECTIVITY_FILE_VALUE_HXX_
+#include <connectivity/FValue.hxx>
+#endif
+
 // .........................................................................
 namespace dbaui
 {
@@ -683,26 +693,73 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
     {
         static const ::rtl::OUString aB1 = ::rtl::OUString::createFromAscii(" [ ");
         static const ::rtl::OUString aB2 = ::rtl::OUString::createFromAscii(" ]");
+        Reference<XResultSetMetaData> xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(xRs,UNO_QUERY)->getMetaData();
+        ::connectivity::ORowSetValue aValue;
+        ::std::vector<sal_Int32> aTypes;
         // Loop on the result set until we reach end of file
         while (xRs->next())
         {
             TOTypeInfoSP pInfo(new OTypeInfo());
-            pInfo->aTypeName        = xRow->getString (1);
-            pInfo->nType            = xRow->getShort (2);
-            pInfo->nPrecision       = xRow->getInt (3);
-            pInfo->aLiteralPrefix   = xRow->getString (4);
-            pInfo->aLiteralSuffix   = xRow->getString (5);
-            pInfo->aCreateParams    = xRow->getString (6);
-            pInfo->bNullable        = xRow->getInt (7) == ColumnValue::NULLABLE;
-            pInfo->bCaseSensitive   = xRow->getBoolean (8);
-            pInfo->nSearchType      = xRow->getShort (9);
-            pInfo->bUnsigned        = xRow->getBoolean (10);
-            pInfo->bCurrency        = xRow->getBoolean (11);
-            pInfo->bAutoIncrement   = xRow->getBoolean (12);
-            pInfo->aLocalTypeName   = xRow->getString (13);
-            pInfo->nMinimumScale    = xRow->getShort (14);
-            pInfo->nMaximumScale    = xRow->getShort (15);
-            pInfo->nNumPrecRadix    = xRow->getInt (18);
+            sal_Int32 nPos = 1;
+            if ( aTypes.empty() )
+            {
+                sal_Int32 nCount = xResultSetMetaData->getColumnCount();
+                if ( nCount < 1 )
+                    nCount = 18;
+                aTypes.reserve(nCount+1);
+                aTypes.push_back(-1);
+                for (sal_Int32 j = 1; j <= nCount ; ++j)
+                    aTypes.push_back(xResultSetMetaData->getColumnType(j));
+            }
+
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            pInfo->aTypeName        = aValue;
+            ++nPos;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            pInfo->nType            = aValue;
+            ++nPos;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            pInfo->nPrecision       = aValue;
+            ++nPos;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            pInfo->aLiteralPrefix   = aValue;
+            ++nPos;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            pInfo->aLiteralSuffix   = aValue;
+            ++nPos;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            pInfo->aCreateParams    = aValue;
+            ++nPos;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            pInfo->bNullable        = (sal_Int32)aValue == ColumnValue::NULLABLE;
+            ++nPos;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            pInfo->bCaseSensitive   = aValue;
+            ++nPos;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            pInfo->nSearchType      = aValue;
+            ++nPos;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            pInfo->bUnsigned        = aValue;
+            ++nPos;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            pInfo->bCurrency        = aValue;
+            ++nPos;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            pInfo->bAutoIncrement   = aValue;
+            ++nPos;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            pInfo->aLocalTypeName   = aValue;
+            ++nPos;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            pInfo->nMinimumScale    = aValue;
+            ++nPos;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            pInfo->nMaximumScale    = aValue;
+            nPos = 18;
+            aValue.fill(nPos,aTypes[nPos],xRow);
+            pInfo->nNumPrecRadix    = aValue;
+
             // check if values are less than zero like it happens in a oracle jdbc driver
             if( pInfo->nPrecision < 0)
                 pInfo->nPrecision = 0;
@@ -1476,7 +1533,7 @@ void setEvalDateFormatForFormatter(Reference< ::com::sun::star::util::XNumberFor
     Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = _rxFormatter->getNumberFormatsSupplier();
 
     Reference< XUnoTunnel > xTunnel(xSupplier,UNO_QUERY);
-    SvNumberFormatsSupplierObj* pSupplierImpl = (SvNumberFormatsSupplierObj*)xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId());
+    SvNumberFormatsSupplierObj* pSupplierImpl = reinterpret_cast<SvNumberFormatsSupplierObj*>(xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
     OSL_ENSURE(pSupplierImpl,"No Supplier!");
 
     if ( pSupplierImpl )
