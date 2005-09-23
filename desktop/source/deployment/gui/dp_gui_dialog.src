@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dialog.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:16:43 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:34:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ ModelessDialog RID_DLG_PACKAGE_MANAGER
     {
         TabStop = TRUE;
         Text [ en-US ] = "~Add...";
-        Text [ de ] = "~Hinzufügen...";
+        Text [ de ] = "~HinzufÃ¼gen...";
     };
     PushButton RID_BTN_REMOVE
     {
@@ -93,7 +93,7 @@ ModelessDialog RID_DLG_PACKAGE_MANAGER
         TabStop = TRUE;
         DefButton = TRUE;
         Text [ en-US ] = "Close";
-        Text [ de ] = "Schließen";
+        Text [ de ] = "SchlieÃŸen";
     };
     HelpButton RID_BTN_HELP
     {
@@ -184,7 +184,7 @@ String RID_STR_PACKAGE_STATUS
 String RID_STR_ADD_PACKAGES
 {
     Text [ en-US ] = "Add Package(s)...";
-    Text [ de ] = "Package(s) hinzufügen...";
+    Text [ de ] = "Package(s) hinzufÃ¼gen...";
 };
 
 String RID_STR_ENABLED
@@ -208,7 +208,7 @@ String RID_STR_UNKNOWN
 String RID_CTX_ITEM_ADD
 {
     Text [ en-US ] = "~Add...";
-    Text [ de ] = "~Hinzufügen...";
+    Text [ de ] = "~HinzufÃ¼gen...";
 };
 String RID_CTX_ITEM_REMOVE
 {
@@ -246,7 +246,7 @@ String RID_STR_EXPORT_PACKAGES
 String RID_STR_ADDING_PACKAGES
 {
     Text [ en-US ] = "Adding Package(s)";
-    Text [ de ] = "Package(s) werden hinzugefügt";
+    Text [ de ] = "Package(s) werden hinzugefÃ¼gt";
 };
 
 String RID_STR_REMOVING_PACKAGES
