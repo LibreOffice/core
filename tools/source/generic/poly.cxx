@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poly.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:21:57 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:41:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -472,24 +472,27 @@ Polygon::Polygon( const Rectangle& rRect, ULONG nHorzRound, ULONG nVertRound )
         mpImplPolygon = (ImplPolygon*)(&aStaticImplPolygon);
     else
     {
-        nHorzRound = Min( nHorzRound, (ULONG) labs( rRect.GetWidth() >> 1 ) );
-        nVertRound = Min( nVertRound, (ULONG) labs( rRect.GetHeight() >> 1 ) );
+        Rectangle aRect( rRect );
+        aRect.Justify();            // SJ: i9140
+
+        nHorzRound = Min( nHorzRound, (ULONG) labs( aRect.GetWidth() >> 1 ) );
+        nVertRound = Min( nVertRound, (ULONG) labs( aRect.GetHeight() >> 1 ) );
 
         if( !nHorzRound && !nVertRound )
         {
             mpImplPolygon = new ImplPolygon( 5 );
-            mpImplPolygon->mpPointAry[0] = rRect.TopLeft();
-            mpImplPolygon->mpPointAry[1] = rRect.TopRight();
-            mpImplPolygon->mpPointAry[2] = rRect.BottomRight();
-            mpImplPolygon->mpPointAry[3] = rRect.BottomLeft();
-            mpImplPolygon->mpPointAry[4] = rRect.TopLeft();
+            mpImplPolygon->mpPointAry[0] = aRect.TopLeft();
+            mpImplPolygon->mpPointAry[1] = aRect.TopRight();
+            mpImplPolygon->mpPointAry[2] = aRect.BottomRight();
+            mpImplPolygon->mpPointAry[3] = aRect.BottomLeft();
+            mpImplPolygon->mpPointAry[4] = aRect.TopLeft();
         }
         else
         {
-            const Point     aTL( rRect.Left() + nHorzRound, rRect.Top() + nVertRound );
-            const Point     aTR( rRect.Right() - nHorzRound, rRect.Top() + nVertRound );
-            const Point     aBR( rRect.Right() - nHorzRound, rRect.Bottom() - nVertRound );
-            const Point     aBL( rRect.Left() + nHorzRound, rRect.Bottom() - nVertRound );
+            const Point     aTL( aRect.Left() + nHorzRound, aRect.Top() + nVertRound );
+            const Point     aTR( aRect.Right() - nHorzRound, aRect.Top() + nVertRound );
+            const Point     aBR( aRect.Right() - nHorzRound, aRect.Bottom() - nVertRound );
+            const Point     aBL( aRect.Left() + nHorzRound, aRect.Bottom() - nVertRound );
             Polygon*        pEllipsePoly = new Polygon( Point(), nHorzRound, nVertRound );
             USHORT          i, nEnd, nSize4 = pEllipsePoly->GetSize() >> 2;
 
