@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fieldmappingimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:07:10 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:49:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,17 +113,20 @@ namespace abp
 
         //-----------------------------------------------------------------
         sal_Bool invokeDialog( const Reference< XMultiServiceFactory >& _rxORB, class Window* _pParent,
-            const ::rtl::OUString& _rDataSourceName, const ::rtl::OUString& _rTableName,
-                MapString2String& _rFieldAssignment ) SAL_THROW ( ( ) )
+            const Reference< XPropertySet >& _rxDataSource, AddressSettings& _rSettings ) SAL_THROW ( ( ) )
         {
-            _rFieldAssignment.clear();
+            _rSettings.aFieldMapping.clear();
 
             DBG_ASSERT( _rxORB.is(), "fieldmapping::invokeDialog: invalid service factory!" );
+            DBG_ASSERT( _rxDataSource.is(), "fieldmapping::invokeDialog: invalid data source!" );
+            if ( !_rxORB.is() || !_rxDataSource.is() )
+                return sal_False;
+
             try
             {
                 // ........................................................
                 // the parameters for creating the dialog
-                Sequence< Any > aArguments(4);
+                Sequence< Any > aArguments(5);
                 Any* pArguments = aArguments.getArray();
 
                 // the parent window
@@ -131,10 +134,11 @@ namespace abp
                 *pArguments++ <<= PropertyValue(::rtl::OUString::createFromAscii( "ParentWindow" ), -1, makeAny( xDialogParent ), PropertyState_DIRECT_VALUE);
 
                 // the data source to use
-                *pArguments++ <<= PropertyValue(::rtl::OUString::createFromAscii( "DataSource" ), -1, makeAny( _rDataSourceName ), PropertyState_DIRECT_VALUE);
+                *pArguments++ <<= PropertyValue(::rtl::OUString::createFromAscii( "DataSource" ), -1, makeAny( _rxDataSource ), PropertyState_DIRECT_VALUE);
+                *pArguments++ <<= PropertyValue(::rtl::OUString::createFromAscii( "DataSourceName" ), -1, makeAny( _rSettings.bRegisterDataSource ? _rSettings.sRegisteredDataSourceName : _rSettings.sDataSourceName ), PropertyState_DIRECT_VALUE);
 
                 // the table to use
-                *pArguments++ <<= PropertyValue(::rtl::OUString::createFromAscii( "Command" ), -1, makeAny( _rTableName ), PropertyState_DIRECT_VALUE);
+                *pArguments++ <<= PropertyValue(::rtl::OUString::createFromAscii( "Command" ), -1, makeAny( _rSettings.sSelectedTable ), PropertyState_DIRECT_VALUE);
 
                 // the title
                 ::rtl::OUString sTitle = String( ModuleRes( RID_STR_FIELDDIALOGTITLE ) );
@@ -170,7 +174,7 @@ namespace abp
                     const AliasProgrammaticPair* pMapping = aMapping.getConstArray();
                     const AliasProgrammaticPair* pMappingEnd = pMapping + aMapping.getLength();
                     for (;pMapping != pMappingEnd; ++pMapping)
-                        _rFieldAssignment[ pMapping->ProgrammaticName ] = pMapping->Alias;
+                        _rSettings.aFieldMapping[ pMapping->ProgrammaticName ] = pMapping->Alias;
 
                     return sal_True;
                 }
