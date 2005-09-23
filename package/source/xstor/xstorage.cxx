@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xstorage.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:09:30 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:55:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -741,24 +741,13 @@ void OStorage_Impl::Commit()
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
 
-    if ( !m_bListCreated )
-    {
-        // nothing was changed, but a new empty storage must be marked as commited one
-        ReadContents();
-        if ( !m_bIsRoot && !m_aChildrenList.size() )
-        {
-            // move properties to the destination package folder
-            uno::Reference< beans::XPropertySet > xProps( m_xPackageFolder, uno::UNO_QUERY_THROW );
-            xProps->setPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ), uno::makeAny( m_aMediaType ) );
-
-            m_bCommited = sal_True;
-
-            if ( m_pParent )
-                m_pParent->SetModifiedInternally( sal_True );
-        }
-
+    if ( !m_bIsModified )
         return;
-    }
+
+    // in case of a new empty storage it is possible that the contents are still not read
+    // ( the storage of course has no contents, but the initialization is postponed till the first use,
+    //   thus if a new storage was created and commited immediatelly it must be initialized here )
+    ReadContents();
 
     // if storage is commited it should have a valid Package representation
     OSL_ENSURE( m_xPackageFolder.is(), "The package representation should exist!\n" );
@@ -767,9 +756,6 @@ void OStorage_Impl::Commit()
 
     OSL_ENSURE( m_nStorageMode & embed::ElementModes::WRITE,
                 "Commit of readonly storage, should be detected before!\n" );
-
-    if ( !m_bIsModified )
-        return;
 
     uno::Reference< container::XNameContainer > xNewPackageFolder;
 
@@ -958,14 +944,8 @@ void OStorage_Impl::Commit()
         m_bCommited = sal_True;
     }
 
-    SetModifiedInternally( sal_False );
-
     // after commit the mediatype treated as the correct one
     m_bMTFallbackUsed = sal_False;
-
-    // when the storage is commited the parent is modified
-    if ( m_pParent )
-        m_pParent->SetModifiedInternally( sal_True );
 }
 
 //-----------------------------------------------
@@ -1017,23 +997,9 @@ void OStorage_Impl::Revert()
     m_aDeletedList.clear();
 
     GetStorageProperties();
-
-    SetModifiedInternally( sal_False );
 }
 
 //-----------------------------------------------
-void OStorage_Impl::SetModifiedInternally( sal_Bool bModified )
-{
-    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
-
-    OSL_ENSURE( m_aReadOnlyWrapList.empty(), "Opened for reading storage changes own modified state!\n" );
-
-    if ( m_pAntiImpl )
-        m_pAntiImpl->setModified( bModified );
-    else
-        m_bIsModified = bModified;
-}
-
 ::rtl::OUString OStorage_Impl::GetCommonRootPass()
     throw ( packages::NoEncryptionException )
 {
@@ -1099,7 +1065,7 @@ SotElement_Impl* OStorage_Impl::InsertStream( ::rtl::OUString aName, sal_Bool bE
     pNewElement->m_pStream = new OWriteStream_Impl( this, xPackageSubStream, m_xPackage, m_xFactory, bEncr );
 
     m_aChildrenList.push_back( pNewElement );
-    SetModifiedInternally( sal_True );
+    m_bIsModified = sal_True;
 
     return pNewElement;
 }
@@ -1138,7 +1104,7 @@ SotElement_Impl* OStorage_Impl::InsertRawStream( ::rtl::OUString aName, const un
     pNewElement->m_pStream->SetToBeCommited();
 
     m_aChildrenList.push_back( pNewElement );
-    SetModifiedInternally( sal_True );
+    m_bIsModified = sal_True;
 
     return pNewElement;
 }
@@ -1166,6 +1132,7 @@ SotElement_Impl* OStorage_Impl::InsertStorage( ::rtl::OUString aName, sal_Int32 
         throw uno::RuntimeException(); // TODO:
 
     pNewElement->m_pStorage = new OStorage_Impl( this, nStorageMode, xPackageSubFolder, m_xPackage, m_xFactory );
+    pNewElement->m_pStorage->m_bIsModified = sal_True;
 
     m_aChildrenList.push_back( pNewElement );
 
@@ -1536,6 +1503,7 @@ void OStorage::ChildIsDisposed( const uno::Reference< uno::XInterface >& xChild 
 //-----------------------------------------------
 void OStorage::BroadcastModified()
 {
+    // no need to lock mutex here for the checking of m_pImpl, and m_pData is alive until the object is destructed
     if ( !m_pImpl )
         throw lang::DisposedException();
 
@@ -1565,6 +1533,7 @@ void OStorage::BroadcastTransaction( sal_Int8 nMessage )
     4 - reverted
 */
 {
+    // no need to lock mutex here for the checking of m_pImpl, and m_pData is alive until the object is destructed
     if ( !m_pImpl )
         throw lang::DisposedException();
 
@@ -1845,13 +1814,15 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openStreamElement(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
         throw lang::DisposedException();
 
     if ( ( nOpenMode & embed::ElementModes::WRITE ) && m_pData->m_bReadOnlyWrap )
         throw io::IOException(); // TODO: access denied
+
+    sal_Bool bOldModified = m_pImpl->m_bIsModified;
 
     uno::Reference< io::XStream > xResult;
     try
@@ -1904,6 +1875,13 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openStreamElement(
                                                  aCaught );
     }
 
+    sal_Bool bToBroadcastModif = ( m_pImpl->m_bIsModified && m_pImpl->m_bIsModified != bOldModified );
+
+    aGuard.clear();
+
+    if ( bToBroadcastModif )
+        BroadcastModified();
+
     return xResult;
 }
 
@@ -1918,7 +1896,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStreamElement(
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
         throw lang::DisposedException();
@@ -1928,6 +1906,8 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStreamElement(
 
     if ( !aPass.getLength() )
         throw lang::IllegalArgumentException();
+
+    sal_Bool bOldModified = m_pImpl->m_bIsModified;
 
     uno::Reference< io::XStream > xResult;
     try
@@ -1983,6 +1963,13 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStreamElement(
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
     }
+
+    sal_Bool bToBroadcastModif = ( m_pImpl->m_bIsModified && m_pImpl->m_bIsModified != bOldModified );
+
+    aGuard.clear();
+
+    if ( bToBroadcastModif )
+        BroadcastModified();
 
     return xResult;
 }
@@ -2462,7 +2449,7 @@ void SAL_CALL OStorage::removeElement( const ::rtl::OUString& aElementName )
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
         throw lang::DisposedException();
@@ -2473,6 +2460,7 @@ void SAL_CALL OStorage::removeElement( const ::rtl::OUString& aElementName )
     if ( !( m_pImpl->m_nStorageMode & embed::ElementModes::WRITE ) )
         throw io::IOException(); // TODO: access denied
 
+    sal_Bool bBroadcastModif = !m_pImpl->m_bIsModified;
     try
     {
         SotElement_Impl* pElement = m_pImpl->FindElement( aElementName );
@@ -2481,7 +2469,8 @@ void SAL_CALL OStorage::removeElement( const ::rtl::OUString& aElementName )
             throw container::NoSuchElementException(); //???
 
         m_pImpl->RemoveElement( pElement );
-        m_pImpl->SetModifiedInternally( sal_True );
+
+        m_pImpl->m_bIsModified = sal_True;
     }
     catch( embed::InvalidStorageException& )
     {
@@ -2514,6 +2503,11 @@ void SAL_CALL OStorage::removeElement( const ::rtl::OUString& aElementName )
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
     }
+
+    aGuard.clear();
+
+    if ( bBroadcastModif )
+        BroadcastModified();
 }
 
 //-----------------------------------------------
@@ -2526,7 +2520,7 @@ void SAL_CALL OStorage::renameElement( const ::rtl::OUString& aElementName, cons
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
         throw lang::DisposedException();
@@ -2537,6 +2531,7 @@ void SAL_CALL OStorage::renameElement( const ::rtl::OUString& aElementName, cons
     if ( !( m_pImpl->m_nStorageMode & embed::ElementModes::WRITE ) )
         throw io::IOException(); // TODO: access denied
 
+    sal_Bool bBroadcastModif = !m_pImpl->m_bIsModified;
     try
     {
         SotElement_Impl* pRefElement = m_pImpl->FindElement( aNewName );
@@ -2548,7 +2543,8 @@ void SAL_CALL OStorage::renameElement( const ::rtl::OUString& aElementName, cons
             throw container::NoSuchElementException(); //???
 
         pElement->m_aName = aNewName;
-        m_pImpl->SetModifiedInternally( sal_True );
+
+        m_pImpl->m_bIsModified = sal_True;
     }
     catch( embed::InvalidStorageException& )
     {
@@ -2585,6 +2581,11 @@ void SAL_CALL OStorage::renameElement( const ::rtl::OUString& aElementName, cons
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
     }
+
+    aGuard.clear();
+
+    if ( bBroadcastModif )
+        BroadcastModified();
 }
 
 //-----------------------------------------------
@@ -2673,7 +2674,7 @@ void SAL_CALL OStorage::moveElementTo(  const ::rtl::OUString& aElementName,
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
         throw lang::DisposedException();
@@ -2685,6 +2686,7 @@ void SAL_CALL OStorage::moveElementTo(  const ::rtl::OUString& aElementName,
     if ( !( m_pImpl->m_nStorageMode & embed::ElementModes::WRITE ) )
         throw io::IOException(); // TODO: access denied
 
+    sal_Bool bBroadcastModif = !m_pImpl->m_bIsModified;
     try
     {
         SotElement_Impl* pElement = m_pImpl->FindElement( aElementName );
@@ -2701,7 +2703,8 @@ void SAL_CALL OStorage::moveElementTo(  const ::rtl::OUString& aElementName,
         m_pImpl->CopyStorageElement( pElement, xDest, aNewName );
 
         m_pImpl->RemoveElement( pElement );
-        m_pImpl->SetModifiedInternally( sal_True );
+
+        m_pImpl->m_bIsModified = sal_True;
     }
     catch( embed::InvalidStorageException& )
     {
@@ -2738,6 +2741,11 @@ void SAL_CALL OStorage::moveElementTo(  const ::rtl::OUString& aElementName,
                                                  uno::Reference< io::XInputStream >(),
                                                  aCaught );
     }
+
+    aGuard.clear();
+
+    if ( bBroadcastModif )
+        BroadcastModified();
 }
 
 //____________________________________________________________________________________________________
@@ -3002,17 +3010,24 @@ void SAL_CALL OStorage::commit()
                 embed::StorageWrappedTargetException,
                 uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
-
-    if ( !m_pImpl )
-        throw lang::DisposedException();
-
-    if ( m_pData->m_bReadOnlyWrap )
-        throw io::IOException(); // TODO: access_denied
+    uno::Reference< util::XModifiable > xParentModif;
 
     try {
         BroadcastTransaction( STOR_MESS_PRECOMMIT );
+
+        ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+        if ( !m_pImpl )
+            throw lang::DisposedException();
+
+        if ( m_pData->m_bReadOnlyWrap )
+            throw io::IOException(); // TODO: access_denied
+
         m_pImpl->Commit(); // the root storage initiates the storing to source
+
+        // when the storage is commited the parent is modified
+        if ( m_pImpl->m_pParent && m_pImpl->m_pParent->m_pAntiImpl )
+            xParentModif = (util::XModifiable*)m_pImpl->m_pParent->m_pAntiImpl;
     }
     catch( io::IOException& )
     {
@@ -3034,6 +3049,10 @@ void SAL_CALL OStorage::commit()
                                   aCaught );
     }
 
+    setModified( sal_False );
+    if ( xParentModif.is() )
+        xParentModif->setModified( sal_True );
+
     BroadcastTransaction( STOR_MESS_COMMITED );
 }
 
@@ -3045,7 +3064,9 @@ void SAL_CALL OStorage::revert()
 {
     // the method removes all the changes done after last commit
 
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    BroadcastTransaction( STOR_MESS_PREREVERT );
+
+    ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
         throw lang::DisposedException();
@@ -3062,8 +3083,8 @@ void SAL_CALL OStorage::revert()
         return; // nothing to do
 
     try {
-        BroadcastTransaction( STOR_MESS_PREREVERT );
         m_pImpl->Revert();
+        m_pImpl->m_bIsModified = sal_False;
     }
     catch( io::IOException& )
     {
@@ -3085,6 +3106,9 @@ void SAL_CALL OStorage::revert()
                                   aCaught );
     }
 
+    aGuard.clear();
+
+    setModified( sal_False );
     BroadcastTransaction( STOR_MESS_REVERTED );
 }
 
@@ -3143,7 +3167,7 @@ void SAL_CALL OStorage::setModified( sal_Bool bModified )
         throw ( beans::PropertyVetoException,
                 uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+    ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
         throw lang::DisposedException();
@@ -3154,7 +3178,10 @@ void SAL_CALL OStorage::setModified( sal_Bool bModified )
     if ( m_pImpl->m_bIsModified != bModified )
     {
         m_pImpl->m_bIsModified = bModified;
-        BroadcastModified();
+
+        aGuard.clear();
+        if ( bModified )
+            BroadcastModified();
     }
 }
 
@@ -3547,10 +3574,14 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
     if ( m_pData->m_bReadOnlyWrap )
         throw io::IOException(); // TODO: Access denied
 
+    sal_Bool bBroadcastModif = sal_False;
     if ( aPropertyName.equalsAscii( "MediaType" ) )
     {
         aValue >>= m_pImpl->m_aMediaType;
         m_pImpl->m_bControlMediaType = sal_True;
+
+        bBroadcastModif = !m_pImpl->m_bIsModified;
+        m_pImpl->m_bIsModified = sal_True;
     }
     else if ( m_pImpl->m_bIsRoot && ( aPropertyName.equalsAscii( "HasEncryptedEntries" )
                                     || aPropertyName.equalsAscii( "URL" )
@@ -3560,6 +3591,9 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
         throw beans::PropertyVetoException(); // TODO
     else
         throw beans::UnknownPropertyException(); // TODO
+
+    if ( bBroadcastModif )
+        BroadcastModified();
 }
 
 
