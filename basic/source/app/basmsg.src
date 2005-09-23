@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basmsg.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:14:00 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:38:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ String S_PROG_START
 };
 String S_ERROR_OUTSIDE_TESTCASE
 {
-    Text [ de ] = "Fehler auﬂerhalb eines Testcase.";
+    Text [ de ] = "Fehler au√üerhalb eines Testcase.";
     Text[ en-US ] = "Error outside of test case";
 };
 String S_WARNING_PREFIX
