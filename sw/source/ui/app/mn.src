@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mn.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:32:51 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:50:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,7 @@
                     Identifier = FN_TABLE_SET_READ_ONLY_CELLS ; \
                     HelpID = FN_TABLE_SET_READ_ONLY_CELLS ; \
                     /* ### ACHTUNG: Neuer Text in Resource? ~Schützen : ~Sch³tzen */\
-                    Text [ de ] = "~Schützen" ; \
+                    Text [ de ] = "~SchÃ¼tzen" ; \
                     Text [ en-US ] = "~Protect" ; \
                 };\
                 MenuItem\
@@ -167,7 +167,7 @@
                     Identifier = FN_TABLE_SET_ROW_HEIGHT ; \
                     HelpID = FN_TABLE_SET_ROW_HEIGHT ; \
                     /* ### ACHTUNG: Neuer Text in Resource? ~Höhe... : ~H÷he... */\
-                    Text [ de ] = "~Höhe..." ; \
+                    Text [ de ] = "~HÃ¶he..." ; \
                     Text [ en-US ] = "~Height..." ; \
                 };\
                 MenuItem\
@@ -182,7 +182,7 @@
                     Identifier = FN_TABLE_OPTIMAL_HEIGHT ; \
                     HelpID = FN_TABLE_OPTIMAL_HEIGHT ; \
                     /* ### ACHTUNG: Neuer Text in Resource? ~Optimale Höhe : ~Optimale H÷he */\
-                    Text [ de ] = "~Optimale Höhe" ; \
+                    Text [ de ] = "~Optimale HÃ¶he" ; \
                     Text [ en-US ] = "~Optimal Height" ; \
                 };\
                 MenuItem\
@@ -190,7 +190,7 @@
                     Identifier = FN_TABLE_BALANCE_ROWS ; \
                     HelpID = FN_TABLE_BALANCE_ROWS ; \
                     /* ### ACHTUNG: Neuer Text in Resource? Gleichmäßig ~verteilen : Gleichmõ˜ig ~verteilen */\
-                    Text [ de ] = "Gleichmäßig ~verteilen" ; \
+                    Text [ de ] = "GleichmÃ¤ÃŸig ~verteilen" ; \
                     Text [ en-US ] = "Space ~Equally" ; \
                 };\
                 SEPARATOR ; \
@@ -200,7 +200,7 @@
                     HelpID = FN_TABLE_SELECT_ROW ; \
                     /* ### ACHTUNG: Neuer Text in Resource? Ausw~ählen : Auswählen */\
                     /* ### ACHTUNG: Neuer Text in Resource? Ausw~ählen : Ausw~õhlen */\
-                    Text [ de ] = "Aus~wählen" ; \
+                    Text [ de ] = "Aus~wÃ¤hlen" ; \
                     Text [ en-US ] = "~Select" ; \
                 };\
                 MenuItem\
@@ -208,7 +208,7 @@
                     Identifier = FN_TABLE_INSERT_ROW_DLG ; \
                     HelpID = FN_TABLE_INSERT_ROW_DLG ; \
                     /* ### ACHTUNG: Neuer Text in Resource? ~Einfügen... : ~Einf³gen... */\
-                    Text [ de ] = "~Einfügen..." ; \
+                    Text [ de ] = "~EinfÃ¼gen..." ; \
                     Text [ en-US ] = "~Insert..." ; \
                 };\
                 MenuItem\
@@ -216,7 +216,7 @@
                     Identifier = FN_TABLE_DELETE_ROW ; \
                     HelpID = FN_TABLE_DELETE_ROW ; \
                     /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */\
-                    Text [ de ] = "~Löschen" ; \
+                    Text [ de ] = "~LÃ¶schen" ; \
                     Text [ en-US ] = "~Delete" ; \
                 };\
             };\
@@ -253,7 +253,7 @@
                     Identifier = FN_TABLE_BALANCE_CELLS ; \
                     HelpID = FN_TABLE_BALANCE_CELLS ; \
                     /* ### ACHTUNG: Neuer Text in Resource? Gleichmäßig ~verteilen : Gleichmõ˜ig ~verteilen */\
-                    Text [ de ] = "Gleichmäßig ~verteilen" ; \
+                    Text [ de ] = "GleichmÃ¤ÃŸig ~verteilen" ; \
                     Text [ en-US ] = "Space ~Equally" ; \
                 };\
                 SEPARATOR ; \
@@ -263,7 +263,7 @@
                     HelpID = FN_TABLE_SELECT_COL ; \
                     /* ### ACHTUNG: Neuer Text in Resource? Ausw~ählen : Auswählen */\
                     /* ### ACHTUNG: Neuer Text in Resource? Ausw~ählen : Ausw~õhlen */\
-                    Text [ de ] = "Aus~wählen" ; \
+                    Text [ de ] = "Aus~wÃ¤hlen" ; \
                     Text [ en-US ] = "~Select" ; \
                 };\
                 MenuItem\
@@ -271,7 +271,7 @@
                     Identifier = FN_TABLE_INSERT_COL_DLG ; \
                     HelpID = FN_TABLE_INSERT_COL_DLG ; \
                     /* ### ACHTUNG: Neuer Text in Resource? ~Einfügen... : ~Einf³gen... */\
-                    Text [ de ] = "~Einfügen..." ; \
+                    Text [ de ] = "~EinfÃ¼gen..." ; \
                     Text [ en-US ] = "~Insert..." ; \
                 };\
                 MenuItem\
@@ -279,7 +279,7 @@
                     Identifier = FN_TABLE_DELETE_COL ; \
                     HelpID = FN_TABLE_DELETE_COL ; \
                     /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */\
-                    Text [ de ] = "~Löschen" ; \
+                    Text [ de ] = "~LÃ¶schen" ; \
                     Text [ en-US ] = "~Delete" ; \
                 };\
             };\
@@ -993,7 +993,7 @@ Menu MN_PPREVIEW_POPUPMENU
             Identifier = FN_PAGEDOWN ;
             HelpID = FN_PAGEDOWN ;
             /* ### ACHTUNG: Neuer Text in Resource? Nächste Seite : Nõchste Seite */
-            Text [ de ] = "Nächste Seite" ;
+            Text [ de ] = "NÃ¤chste Seite" ;
             Text [ en-US ] = "Next Page" ;
         };
         MenuItem
@@ -1022,7 +1022,7 @@ Menu MN_PPREVIEW_POPUPMENU
         {
             Identifier = SID_PRINTPREVIEW;
             HelpID =  SID_PRINTPREVIEW;
-            Text [ de ] = "Seitenansicht schließen" ;
+            Text [ de ] = "Seitenansicht schlieÃŸen" ;
             Text [ en-US ] = "Close Preview" ;
         };
     };
