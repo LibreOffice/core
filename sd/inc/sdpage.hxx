@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpage.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:01:10 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 10:41:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -427,10 +427,13 @@ public:
         slides masterpage */
     SdStyleSheet* getPresentationStyle( sal_uInt32 nHelpId ) const;
 
+    /** removes all empty presentation objects from this slide */
+    void RemoveEmptyPresentationObjects();
+
 private:
     /** clone the animations from this and set them to rTargetPage
     */
-    void    cloneAnimations( SdPage& rTargetPage ) const;
+    void cloneAnimations( SdPage& rTargetPage ) const;
 };
 
 #endif     // _SDPAGE_HXX
