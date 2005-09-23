@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:52:49 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 10:47:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2108,6 +2108,13 @@ void SAL_CALL SdDrawPage::setName( const OUString& rName )
             }
 
             if( nPageNumber == ( ( GetPage()->GetPageNum() - 1 ) >> 1 ) + 1 )
+                aName = OUString();
+        }
+        else
+        {
+            String aDefaultPageName( SdResId(STR_PAGE) );
+            aDefaultPageName += sal_Unicode( ' ' );
+            if( aName.compareTo( aDefaultPageName, aDefaultPageName.Len() ) == 0 )
                 aName = OUString();
         }
 
