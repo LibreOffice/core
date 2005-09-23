@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpage2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:14:10 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 10:42:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -492,6 +492,19 @@ SdrPage* SdPage::Clone() const
 
     cloneAnimations( *pPage );
 
+    // fix user calls for duplicated slide
+    SdrObjListIter aSourceIter( *this, IM_DEEPWITHGROUPS );
+    SdrObjListIter aTargetIter( *pPage, IM_DEEPWITHGROUPS );
+
+    while( aSourceIter.IsMore() && aTargetIter.IsMore() )
+    {
+        SdrObject* pSource = aSourceIter.Next();
+        SdrObject* pTarget = aTargetIter.Next();
+
+        if( pSource->GetUserCall() )
+            pTarget->SetUserCall( const_cast<SdPage*>(this) );
+    }
+
     return pPage;
 }
 
@@ -551,16 +564,23 @@ void SdPage::getAlienAttributes( com::sun::star::uno::Any& rAttributes )
     }
 }
 
+void SdPage::RemoveEmptyPresentationObjects()
+{
+    SdrObjListIter  aShapeIter( *this, IM_DEEPWITHGROUPS );
 
+    SdrObject* pShape;
+    for( pShape = aShapeIter.Next(); pShape; pShape = aShapeIter.Next() )
+    {
+        if( pShape && pShape->IsEmptyPresObj() )
+            RemoveObject( pShape->GetOrdNum() );
 
+    }
+}
 
 sal_Int16 SdPage::getTransitionType (void) const
 {
     return mnTransitionType;
 }
-
-
-
 
 void SdPage::setTransitionType( sal_Int16 nTransitionType )
 {
@@ -568,16 +588,10 @@ void SdPage::setTransitionType( sal_Int16 nTransitionType )
     ActionChanged();
 }
 
-
-
-
 sal_Int16 SdPage::getTransitionSubtype (void) const
 {
     return mnTransitionSubtype;
 }
-
-
-
 
 void SdPage::setTransitionSubtype ( sal_Int16 nTransitionSubtype )
 {
@@ -585,16 +599,10 @@ void SdPage::setTransitionSubtype ( sal_Int16 nTransitionSubtype )
     ActionChanged();
 }
 
-
-
-
 sal_Bool SdPage::getTransitionDirection (void) const
 {
     return mbTransitionDirection;
 }
-
-
-
 
 void SdPage::setTransitionDirection ( sal_Bool bTransitionbDirection )
 {
@@ -602,16 +610,10 @@ void SdPage::setTransitionDirection ( sal_Bool bTransitionbDirection )
     ActionChanged();
 }
 
-
-
-
 sal_Int32 SdPage::getTransitionFadeColor (void) const
 {
     return mnTransitionFadeColor;
 }
-
-
-
 
 void SdPage::setTransitionFadeColor ( sal_Int32 nTransitionFadeColor )
 {
@@ -619,16 +621,10 @@ void SdPage::setTransitionFadeColor ( sal_Int32 nTransitionFadeColor )
     ActionChanged();
 }
 
-
-
-
 double SdPage::getTransitionDuration (void) const
 {
     return mfTransitionDuration;
 }
-
-
-
 
 void SdPage::setTransitionDuration ( double fTranstionDuration )
 {
