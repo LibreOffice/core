@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:33:53 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:09:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,7 +195,7 @@ String SCSTR_PIVOTSHELL
 
 String SCSTR_AUDITSHELL
 {
-    Text [ de ] = "Detektiv-Füll-Modus" ;
+    Text [ de ] = "Detektiv-FÃ¼ll-Modus" ;
     Text [ en-US ] = "Detective Fill Mode" ;
     Text [ x-comment ] = " ";
 };
@@ -204,7 +204,7 @@ String SCSTR_AUDITSHELL
 
 String STR_ROWHEIGHT
 {
-    Text [ de ] = "Höhe" ;
+    Text [ de ] = "HÃ¶he" ;
     Text [ en-US ] = "Height" ;
     Text [ x-comment ] = " ";
 };
@@ -216,13 +216,13 @@ String STR_OPT_ROWHEIGHT
 };
 String STR_ROWHEIGHT_TITLE
 {
-    Text [ de ] = "Zeilenhöhe" ;
+    Text [ de ] = "ZeilenhÃ¶he" ;
     Text [ en-US ] = "Row Height" ;
     Text [ x-comment ] = " ";
 };
 String STR_OPT_ROWHEIGHT_TITLE
 {
-    Text [ de ] = "Optimale Zeilenhöhe" ;
+    Text [ de ] = "Optimale ZeilenhÃ¶he" ;
     Text [ en-US ] = "Optimal Row Height" ;
     Text [ x-comment ] = " ";
 };
@@ -324,13 +324,13 @@ String SCSTR_NEW
 };
 String SCSTR_ADD
 {
-    Text [ de ] = "~Hinzufügen" ;
+    Text [ de ] = "~HinzufÃ¼gen" ;
     Text [ en-US ] = "~Add" ;
     Text [ x-comment ] = " ";
 };
 String SCSTR_REMOVE
 {
-    Text [ de ] = "~Löschen" ;
+    Text [ de ] = "~LÃ¶schen" ;
     Text [ en-US ] = "~Delete" ;
     Text [ x-comment ] = " ";
 };
@@ -342,7 +342,7 @@ String SCSTR_CANCEL
 };
 String SCSTR_MODIFY
 {
-    Text [ de ] = "~Ändern" ;
+    Text [ de ] = "~Ã„ndern" ;
     Text [ en-US ] = "Modif~y" ;
     Text [ x-comment ] = " ";
 };
@@ -362,7 +362,7 @@ String SCSTR_HIDDENTABLES
 };
 String SCSTR_SELECTDB
 {
-    Text [ de ] = "Datenbankbereich wählen" ;
+    Text [ de ] = "Datenbankbereich wÃ¤hlen" ;
     Text [ en-US ] = "Select Database Range" ;
     Text [ x-comment ] = " ";
 };
@@ -386,13 +386,13 @@ String SCSTR_NAME
 };
 String SCSTR_INSTABLE
 {
-    Text [ de ] = "Tabelle einfügen" ;
+    Text [ de ] = "Tabelle einfÃ¼gen" ;
     Text [ en-US ] = "Insert Sheet" ;
     Text [ x-comment ] = " ";
 };
 String SCSTR_APDTABLE
 {
-    Text [ de ] = "Tabelle anhängen" ;
+    Text [ de ] = "Tabelle anhÃ¤ngen" ;
     Text [ en-US ] = "Append Sheet" ;
     Text [ x-comment ] = " ";
 };
@@ -409,7 +409,7 @@ String SCSTR_RENAMEOBJECT
 };
 String STR_INSERTGRAPHIC
 {
-    Text [ de ] = "Bild einfügen" ;
+    Text [ de ] = "Bild einfÃ¼gen" ;
     Text [ en-US ] = "Insert Picture" ;
 };
 
@@ -496,7 +496,7 @@ String SCSTR_ORIENTATION_STANDARD
 
 String SCSTR_PROTECTDOC
 {
-    Text [ de ] = "Dokument schützen" ;
+    Text [ de ] = "Dokument schÃ¼tzen" ;
     Text [ en-US ] = "Protect Document" ;
     Text [ x-comment ] = " ";
 };
@@ -508,7 +508,7 @@ String SCSTR_UNPROTECTDOC
 };
 String SCSTR_PROTECTTAB
 {
-    Text [ de ] = "Tabelle schützen" ;
+    Text [ de ] = "Tabelle schÃ¼tzen" ;
     Text [ en-US ] = "Protect Sheet" ;
     Text [ x-comment ] = " ";
 };
@@ -520,7 +520,7 @@ String SCSTR_UNPROTECTTAB
 };
 String SCSTR_CHG_PROTECT
 {
-    Text [ de ] = "Aufzeichnung schützen" ;
+    Text [ de ] = "Aufzeichnung schÃ¼tzen" ;
     Text [ en-US ] = "Protect Records" ;
     Text [ x-comment ] = " ";
 };
@@ -581,7 +581,7 @@ String SCSTR_CHAR_ATTRS
 
 String SCSTR_CLPBRD_CLEAR
 {
-    Text [ de ] = "Sie haben größere Datenmengen in die Zwischenablage gestellt.\nSoll der Inhalt der Zwischenablage anderen Applikationen zur Verfügung gestellt werden?" ;
+    Text [ de ] = "Sie haben grÃ¶ÃŸere Datenmengen in die Zwischenablage gestellt.\nSoll der Inhalt der Zwischenablage anderen Applikationen zur VerfÃ¼gung gestellt werden?" ;
     Text [ en-US ] = "You have a large amount of data saved in the clipboard.\nDo you want the clipboard contents to be available in other applications?" ;
     Text [ x-comment ] = " ";
 };
@@ -657,7 +657,7 @@ String SCSTR_VALID_RANGE
 };
 String SCSTR_VALID_LIST
 {
-    Text [ de ] = "~Einträge" ;
+    Text [ de ] = "~EintrÃ¤ge" ;
     Text [ en-US ] = "~Entries" ;
 };
 
@@ -700,7 +700,7 @@ String SCSTR_FORMULA_AUTOCORRECTION
 
 String SCSTR_GRFILTER_OPENERROR
 {
-    Text [ de ] = "Grafikdatei kann nicht geöffnet werden" ;
+    Text [ de ] = "Grafikdatei kann nicht geÃ¶ffnet werden" ;
     Text [ en-US ] = "Graphics file can not be opened" ;
     Text [ x-comment ] = " ";
 };
@@ -718,7 +718,7 @@ String SCSTR_GRFILTER_FORMATERROR
 };
 String SCSTR_GRFILTER_VERSIONERROR
 {
-    Text [ de ] = "Die Version der Grafikdatei wird nicht unterstützt" ;
+    Text [ de ] = "Die Version der Grafikdatei wird nicht unterstÃ¼tzt" ;
     Text [ en-US ] = "This graphic file version is not supported" ;
     Text [ x-comment ] = " ";
 };
@@ -730,7 +730,7 @@ String SCSTR_GRFILTER_FILTERERROR
 };
 String SCSTR_GRFILTER_TOOBIG
 {
-    Text [ de ] = "Nicht genug Speicher zum Einfügen der Grafik" ;
+    Text [ de ] = "Nicht genug Speicher zum EinfÃ¼gen der Grafik" ;
     Text [ en-US ] = "Not enough memory available to insert graphics." ;
     Text [ x-comment ] = " ";
 };
@@ -751,20 +751,20 @@ String STR_CAPTION_DEFAULT_TEXT
 // Select tables dialog title
 String STR_DLG_SELECTTABLES_TITLE
 {
-    Text [ de ] = "Tabellen auswählen";
+    Text [ de ] = "Tabellen auswÃ¤hlen";
     Text [ en-US ] = "Select Sheets";
 };
 
 // Select tables dialog listbox
 String STR_DLG_SELECTTABLES_LBNAME
 {
-    Text [ de ] = "~Ausgewählte Tabellen";
+    Text [ de ] = "~AusgewÃ¤hlte Tabellen";
     Text [ en-US ] = "~Selected sheets";
 };
 
 String STR_REPLCELLSWARN
 {
-    Text [ de ] = "Die Zellen, in die Sie Daten einfügen wollen, enthalten bereits Daten.\nWollen Sie die vorhandenen Daten wirklich überschreiben?";
+    Text [ de ] = "Die Zellen, in die Sie Daten einfÃ¼gen wollen, enthalten bereits Daten.\nWollen Sie die vorhandenen Daten wirklich Ã¼berschreiben?";
     Text [ en-US ] = "You are pasting data into cells that already contain data.\nDo you really want to overwrite the existing data?";
 };
 
@@ -893,7 +893,7 @@ String STR_ACC_HEADER_DESCR
 
 String STR_ACC_FOOTER_NAME
 {
-    Text [ de ] = "Fußzeile Seite %1";
+    Text [ de ] = "FuÃŸzeile Seite %1";
     Text [ en-US ] = "Footer of page %1";
 };
 
@@ -910,7 +910,7 @@ String STR_ACC_EDITLINE_NAME
 
 String STR_ACC_EDITLINE_DESCR
 {
-    Text [ de ] = "Hier können Sie Text, Zahlen und Formeln eingeben und bearbeiten.";
+    Text [ de ] = "Hier kÃ¶nnen Sie Text, Zahlen und Formeln eingeben und bearbeiten.";
     Text [ en-US ] = "This is where you enter or edit text, numbers and formulas.";
 };
 
@@ -939,13 +939,13 @@ String STR_ACC_DATAPILOT_COL_DESCR
 
 String STR_ACC_DATAPILOT_DATA_DESCR
 {
-    Text [ de ] = "Felder, die Sie hier anordnen, werden in der fertigen Datenpilot-Tabelle für Berechnungen genutzt.";
+    Text [ de ] = "Felder, die Sie hier anordnen, werden in der fertigen Datenpilot-Tabelle fÃ¼r Berechnungen genutzt.";
     Text [ en-US ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
 };
 
 String STR_ACC_DATAPILOT_SEL_DESCR
 {
-    Text [ de ] = "Hier sind die Felder aufgelistet, die Sie in einen der drei anderen Bereiche bewegen können.";
+    Text [ de ] = "Hier sind die Felder aufgelistet, die Sie in einen der drei anderen Bereiche bewegen kÃ¶nnen.";
     Text [ x-comment ] = "EM O; EM Oct 2002: (not \"range\") In the datapilot dialog, description of controls";
     Text [ en-US ] = "Lists the fields that you can drag to one of the other three areas.";
 };
