@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessibility.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:30:34 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:24:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ String SID_SD_A11Y_D_DRAWVIEW_N
 
 String SID_SD_A11Y_D_DRAWVIEW_D
 {
-    Text [ de ] = "Hier können Sie Zeichnungen erzeugen und bearbeiten." ;
+    Text [ de ] = "Hier kÃ¶nnen Sie Zeichnungen erzeugen und bearbeiten." ;
     Text [ en-US ] = "This is where you create and edit drawings.";
 };
 
@@ -59,7 +59,7 @@ String SID_SD_A11Y_I_DRAWVIEW_N
 
 String SID_SD_A11Y_I_DRAWVIEW_D
 {
-    Text [ de ] = "Hier können Sie Seiten erzeugen und bearbeiten." ;
+    Text [ de ] = "Hier kÃ¶nnen Sie Seiten erzeugen und bearbeiten." ;
     Text [ en-US ] = "This is where you create and edit slides.";
 };
 
@@ -71,7 +71,7 @@ String SID_SD_A11Y_I_OUTLINEVIEW_N
 
 String SID_SD_A11Y_I_OUTLINEVIEW_D
 {
-    Text [ de ] = "Hier können Sie Text in der Gliederungsansicht eingeben und bearbeiten." ;
+    Text [ de ] = "Hier kÃ¶nnen Sie Text in der Gliederungsansicht eingeben und bearbeiten." ;
     Text [ en-US ] = "This is where you enter or edit text in list form.";
 };
 
@@ -83,7 +83,7 @@ String SID_SD_A11Y_I_SLIDEVIEW_N
 
 String SID_SD_A11Y_I_SLIDEVIEW_D
 {
-    Text [ de ] = "Hier können Sie Seiten sortieren." ;
+    Text [ de ] = "Hier kÃ¶nnen Sie Seiten sortieren." ;
     Text [ en-US ] = "This is where you sort slides.";
 };
 
@@ -95,7 +95,7 @@ String SID_SD_A11Y_I_NOTESVIEW_N
 
 String SID_SD_A11Y_I_NOTESVIEW_D
 {
-    Text [ de ] = "Hier können Sie Notizen eingeben und bearbeiten." ;
+    Text [ de ] = "Hier kÃ¶nnen Sie Notizen eingeben und bearbeiten." ;
     Text [ en-US ] = "This is where you enter and view notes.";
 };
 
@@ -107,7 +107,7 @@ String SID_SD_A11Y_I_HANDOUTVIEW_N
 
 String SID_SD_A11Y_I_HANDOUTVIEW_D
 {
-    Text [ de ] = "Hier können Sie das Layout der Handzettel bearbeiten." ;
+    Text [ de ] = "Hier kÃ¶nnen Sie das Layout der Handzettel bearbeiten." ;
     Text [ en-US ] = "This is where you decide on the layout for handouts.";
 };
 
