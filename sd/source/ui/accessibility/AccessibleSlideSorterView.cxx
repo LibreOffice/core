@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleSlideSorterView.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:28:55 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:26:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,7 +137,10 @@ AccessibleSlideSorterView::AccessibleSlideSorterView(
 AccessibleSlideSorterView::~AccessibleSlideSorterView (void)
 {
     if ( ! IsDisposed())
+    {
+        mpImpl->Dispose();
         Destroyed ();
+    }
 }
 
 
@@ -181,8 +184,6 @@ void AccessibleSlideSorterView::Destroyed (void)
     // Send a disposing to all listeners.
     if (mnClientId != 0)
     {
-        mpImpl->Clear();
-
         comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( mnClientId, *this );
         mnClientId = 0;
     }
@@ -800,7 +801,6 @@ AccessibleSlideSorterView::Implementation::Implementation (
 
 AccessibleSlideSorterView::Implementation::~Implementation (void)
 {
-    ReleaseListeners();
 }
 
 
