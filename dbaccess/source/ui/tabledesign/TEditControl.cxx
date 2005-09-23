@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:39:10 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:45:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,10 +163,13 @@ DBG_NAME(OTableEditorCtrl);
 
 
 //==================================================================
+DBG_NAME(ClipboardInvalidator)
 //------------------------------------------------------------------
 OTableEditorCtrl::ClipboardInvalidator::ClipboardInvalidator(ULONG nTimeout,OTableEditorCtrl* _pOwner)
 : m_pOwner(_pOwner)
 {
+    DBG_CTOR(ClipboardInvalidator,NULL);
+
     m_aInvalidateTimer.SetTimeout(nTimeout);
     m_aInvalidateTimer.SetTimeoutHdl(LINK(this, OTableEditorCtrl::ClipboardInvalidator, OnInvalidate));
     m_aInvalidateTimer.Start();
@@ -176,6 +179,8 @@ OTableEditorCtrl::ClipboardInvalidator::ClipboardInvalidator(ULONG nTimeout,OTab
 OTableEditorCtrl::ClipboardInvalidator::~ClipboardInvalidator()
 {
     m_aInvalidateTimer.Stop();
+
+    DBG_DTOR(ClipboardInvalidator,NULL);
 }
 
 //------------------------------------------------------------------
