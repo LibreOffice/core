@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeGeometry.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:27:06 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:50:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1865,10 +1865,9 @@ static const mso_CustomShape msoCircularArrow =
 
 static const SvxMSDffVertPair mso_sptCubeVert[] =
 {
-    { 0, 10 MSO_I }, { 0, 1 MSO_I }, { 2 MSO_I, 0 }, { 9 MSO_I, 0 },
-    { 9 MSO_I, 3 MSO_I }, { 4 MSO_I, 10 MSO_I }, { 0, 1 MSO_I }, { 2 MSO_I, 0 },
-    { 9 MSO_I, 0 }, { 4 MSO_I, 1 MSO_I }, { 4 MSO_I, 10 MSO_I  }, { 4 MSO_I, 1 MSO_I },
-    { 9 MSO_I, 0 }, { 9 MSO_I, 3 MSO_I }
+    { 0, 12 MSO_I }, { 0, 1 MSO_I }, { 2 MSO_I, 0 }, { 11 MSO_I, 0 }, { 11 MSO_I, 3 MSO_I }, { 4 MSO_I, 12 MSO_I },
+    { 0, 1 MSO_I }, { 2 MSO_I, 0 }, { 11 MSO_I, 0 }, { 4 MSO_I, 1 MSO_I },
+    { 4 MSO_I, 12 MSO_I  }, { 4 MSO_I, 1 MSO_I },   { 11 MSO_I, 0 }, { 11 MSO_I, 3 MSO_I }
 };
 static const sal_uInt16 mso_sptCubeSegm[] =
 {
@@ -1883,21 +1882,27 @@ static const SvxMSDffCalculationData mso_sptCubeCalc[] =
     { 0x6000, DFF_Prop_geoLeft, 0x400, 0 },
     { 0xa000, DFF_Prop_geoBottom, 0, 0x400 },
     { 0xa000, DFF_Prop_geoRight, 0, 0x400 },
-    { 0x8000,  21600, 0, 0x402 },   // 5
-    { 0x2001, 0x405, 1, 2 },        // 6
-    { 0x6000, 0x402, 0x406, 0 },    // 7
-    { 0x2001, 0x404, 1, 2 },        // 8
-    { 0x2000, DFF_Prop_geoRight, 0, 0 },    // 9
-    { 0x2000, DFF_Prop_geoBottom, 0, 0 }    //10
+    { 0xa000, DFF_Prop_geoRight, 0, 0x402 },    // 5
+    { 0x2001, 0x405, 1, 2 },                    // 6
+    { 0x6000, 0x402, 0x406, 0 },                // 7
+    { 0xa000, DFF_Prop_geoBottom, 0, 0x401 },   // 8
+    { 0x2001, 0x408, 1, 2 },                    // 9
+    { 0x6000, 0x401, 0x409, 0 },                // 10
+    { 0x2000, DFF_Prop_geoRight, 0, 0 },        // 11
+    { 0x2000, DFF_Prop_geoBottom, 0, 0 }        // 12
 };
 static const SvxMSDffTextRectangles mso_sptCubeTextRect[] =
 {
-    { { 0, 1 MSO_I }, { 4 MSO_I, 10 MSO_I } }
+    { { 0, 1 MSO_I }, { 4 MSO_I, 12 MSO_I } }
 };
 static const SvxMSDffHandle mso_sptCubeHandle[] =
 {
     {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_SWITCHED,
         0, 0x100, 10800, 10800, 0x80000000, 0x7fffffff, 0, 21600 }
+};
+static const SvxMSDffVertPair mso_sptCubeGluePoints[] =
+{
+    { 7 MSO_I, 0 }, { 6 MSO_I, 1 MSO_I }, { 0, 10 MSO_I }, { 6 MSO_I, 21600 }, { 4 MSO_I, 10 MSO_I }, { 21600, 9 MSO_I }
 };
 static const mso_CustomShape msoCube =
 {
@@ -1908,7 +1913,7 @@ static const mso_CustomShape msoCube =
     (SvxMSDffTextRectangles*)mso_sptCubeTextRect, sizeof( mso_sptCubeTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
     10800, 10800,
-    NULL, 0,
+    (SvxMSDffVertPair*)mso_sptCubeGluePoints, sizeof( mso_sptCubeGluePoints ) / sizeof( SvxMSDffVertPair ),
     (SvxMSDffHandle*)mso_sptCubeHandle, sizeof( mso_sptCubeHandle ) / sizeof( SvxMSDffHandle )
 };
 
