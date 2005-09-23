@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlDocuments.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:05:24 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:10:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,9 @@
 #ifndef DBACCESS_SHARED_XMLSTRINGS_HRC
 #include "xmlstrings.hrc"
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 namespace dbaxml
 {
@@ -69,6 +72,7 @@ namespace dbaxml
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::xml::sax;
+DBG_NAME(OXMLDocuments)
 
 OXMLDocuments::OXMLDocuments( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
@@ -81,6 +85,8 @@ OXMLDocuments::OXMLDocuments( ODBFilter& rImport
         ,m_sCollectionServiceName(_sCollectionServiceName)
         ,m_sComponentServiceName(_sComponentServiceName)
 {
+    DBG_CTOR(OXMLDocuments,NULL);
+
 }
 // -----------------------------------------------------------------------------
 OXMLDocuments::OXMLDocuments( ODBFilter& rImport
@@ -93,6 +99,7 @@ OXMLDocuments::OXMLDocuments( ODBFilter& rImport
         ,m_xContainer(_xContainer)
         ,m_sCollectionServiceName(_sCollectionServiceName)
 {
+    DBG_CTOR(OXMLDocuments,NULL);
 }
 // -----------------------------------------------------------------------------
 OXMLDocuments::OXMLDocuments( ODBFilter& rImport
@@ -101,11 +108,14 @@ OXMLDocuments::OXMLDocuments( ODBFilter& rImport
 ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
+    DBG_CTOR(OXMLDocuments,NULL);
 }
 // -----------------------------------------------------------------------------
 
 OXMLDocuments::~OXMLDocuments()
 {
+
+    DBG_DTOR(OXMLDocuments,NULL);
 }
 // -----------------------------------------------------------------------------
 
