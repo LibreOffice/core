@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsuno.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:25:00 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:41:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1050,6 +1050,8 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Int16 SAL_CALL resetActionLocks() throw(::com::sun::star::uno::RuntimeException);
 
+    static String       GetInputString_Impl(ScDocument* pDoc, const ScAddress& aPos, BOOL bEnglish);
+    static String       GetOutputString_Impl(ScDocument* pDoc, const ScAddress& aPos);
 };
 
 
