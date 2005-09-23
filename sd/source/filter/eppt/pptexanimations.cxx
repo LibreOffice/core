@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptexanimations.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:20:22 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 10:43:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,9 @@
 #endif
 #ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONVALUETYPE_HPP_
 #include <com/sun/star/animations/AnimationValueType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
+#include <com/sun/star/util/XCloneable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONADDITIVEMODE_HPP_
 #include <com/sun/star/animations/AnimationAdditiveMode.hpp>
@@ -139,6 +142,9 @@
 #ifndef _COM_SUN_STAR_PRESENTATION_TEXTANIMATIONTYPE_HPP_
 #include <com/sun/star/presentation/TextAnimationType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
+#endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -174,6 +180,8 @@ using ::std::map;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::Any;
+using ::com::sun::star::container::XChild;
+using ::com::sun::star::util::XCloneable;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
@@ -369,7 +377,7 @@ SvStream& operator<<(SvStream& rOut, AnimationNode& rNode )
 }
 
 AnimationExporter::AnimationExporter( const EscherSolverContainer& rSolverContainer ) :
-    mrSolverContainer ( rSolverContainer )
+    mrSolverContainer ( rSolverContainer ), mnCurrentGroup(0)
 {
 }
 
@@ -429,17 +437,155 @@ void AnimationExporter::doexport( const Reference< XDrawPage >& xPage, SvStream&
     Reference< XAnimationNodeSupplier > xNodeSupplier( xPage, UNO_QUERY );
     if( xNodeSupplier.is() )
     {
-        const Reference< XAnimationNode > xRootNode = xNodeSupplier->getAnimationNode();
+        const Reference< XAnimationNode > xRootNode( xNodeSupplier->getAnimationNode() );
         if( xRootNode.is() )
+        {
+            processAfterEffectNodes( xRootNode );
             exportNode( rStrm, xRootNode, NULL, DFF_msofbtAnimGroup, 1, 0, sal_False, AnimationFill::AUTO );
+        }
     }
 }
 
-void AnimationExporter::exportNode( SvStream& rStrm, const Reference< XAnimationNode >& xNode, const Reference< XAnimationNode >* pParent, const sal_uInt16 nContainerRecType,
+void AnimationExporter::processAfterEffectNodes( const Reference< XAnimationNode >& xRootNode )
+{
+    Reference< XEnumerationAccess > xEnumerationAccess( xRootNode, UNO_QUERY_THROW );
+    Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+    while( xEnumeration->hasMoreElements() )
+    {
+        Reference< XAnimationNode > xNode( xEnumeration->nextElement(), UNO_QUERY_THROW );
+
+        Reference< XEnumerationAccess > xEnumerationAccess2( xNode, UNO_QUERY_THROW );
+        Reference< XEnumeration > xEnumeration2( xEnumerationAccess2->createEnumeration(), UNO_QUERY_THROW );
+        while( xEnumeration2->hasMoreElements() )
+        {
+            Reference< XAnimationNode > xChildNode( xEnumeration2->nextElement(), UNO_QUERY_THROW );
+
+            Reference< XEnumerationAccess > xEnumerationAccess3( xChildNode, UNO_QUERY_THROW );
+            Reference< XEnumeration > xEnumeration3( xEnumerationAccess3->createEnumeration(), UNO_QUERY_THROW );
+            while( xEnumeration3->hasMoreElements() )
+            {
+                Reference< XAnimationNode > xChildNode2( xEnumeration3->nextElement(), UNO_QUERY_THROW );
+
+                Reference< XEnumerationAccess > xEnumerationAccess4( xChildNode2, UNO_QUERY_THROW );
+                Reference< XEnumeration > xEnumeration4( xEnumerationAccess4->createEnumeration(), UNO_QUERY_THROW );
+                while( xEnumeration4->hasMoreElements() )
+                {
+                    Reference< XAnimationNode > xChildNode3( xEnumeration4->nextElement(), UNO_QUERY_THROW );
+
+                    switch( xChildNode3->getType() )
+                    {
+                    // found an after effect
+                    case AnimationNodeType::SET:
+                    case AnimationNodeType::ANIMATECOLOR:
+                        {
+                            Reference< XAnimationNode > xMaster;
+
+                            Sequence< NamedValue > aUserData( xChildNode3->getUserData() );
+                            sal_Int32 nLength = aUserData.getLength();
+                            const NamedValue* p = aUserData.getConstArray();
+
+                            while( nLength-- )
+                            {
+                                if( p->Name.equalsAscii( "master-element" ) )
+                                {
+                                    p->Value >>= xMaster;
+                                    break;
+                                }
+                                p++;
+                            }
+
+                            AfterEffectNodePtr pAfterEffectNode( new AfterEffectNode( xChildNode3, xMaster ) );
+                            maAfterEffectNodes.push_back( pAfterEffectNode );
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+
+bool AnimationExporter::isAfterEffectNode( const Reference< XAnimationNode >& xNode ) const
+{
+    std::list< AfterEffectNodePtr >::const_iterator aIter( maAfterEffectNodes.begin() );
+    const std::list< AfterEffectNodePtr >::const_iterator aEnd( maAfterEffectNodes.end() );
+    while( aIter != aEnd )
+    {
+        if( (*aIter)->mxNode == xNode )
+            return true;
+        aIter++;
+    }
+
+    return false;
+}
+
+bool AnimationExporter::hasAfterEffectNode( const Reference< XAnimationNode >& xNode, Reference< XAnimationNode >& xAfterEffectNode ) const
+{
+    std::list< AfterEffectNodePtr >::const_iterator aIter( maAfterEffectNodes.begin() );
+    const std::list< AfterEffectNodePtr >::const_iterator aEnd( maAfterEffectNodes.end() );
+    while( aIter != aEnd )
+    {
+        if( (*aIter)->mxMaster == xNode )
+        {
+            xAfterEffectNode = (*aIter)->mxNode;
+            return true;
+        }
+        aIter++;
+    }
+
+    return false;
+}
+
+// check if this group only contain empty groups. this may happen when
+// after effect nodes are not exported at theire original position
+bool AnimationExporter::isEmptyNode( const Reference< XAnimationNode >& xNode ) const
+{
+    if( xNode.is() ) switch( xNode->getType() )
+    {
+    case AnimationNodeType::PAR :
+    case AnimationNodeType::SEQ :
+    case AnimationNodeType::ITERATE :
+        {
+            Reference< XEnumerationAccess > xEnumerationAccess( xNode, UNO_QUERY );
+            if( xEnumerationAccess.is() )
+            {
+                Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
+                if( xEnumeration.is() )
+                {
+                    while( xEnumeration->hasMoreElements() )
+                    {
+                        Reference< XAnimationNode > xChildNode( xEnumeration->nextElement(), UNO_QUERY );
+                        if( xChildNode.is() && !isEmptyNode( xChildNode ) )
+                            return false;
+                    }
+                }
+            }
+        }
+        break;
+
+    case AnimationNodeType::SET :
+    case AnimationNodeType::ANIMATECOLOR :
+        return isAfterEffectNode( xNode );
+    default:
+        return false;
+    }
+
+    return true;
+}
+
+void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode > xNode, const Reference< XAnimationNode >* pParent, const sal_uInt16 nContainerRecType,
                                     const sal_uInt16 nInstance, const sal_Int32 nGroupLevel, const sal_Bool bTakeBackInteractiveSequenceTiming, const sal_Int16 nFDef )
 {
+    if( (nGroupLevel == 4) && isEmptyNode( xNode ) )
+        return;
+
+    if( nContainerRecType == DFF_msofbtAnimGroup )
+        mnCurrentGroup++;
+
     sal_Bool bTakeBackInteractiveSequenceTimingForChild = sal_False;
     sal_Int16 nFillDefault = GetFillMode( xNode, nFDef );
+
+    bool bSkipChildren = false;
 
     EscherExContainer aContainer( rStrm, nContainerRecType, nInstance );
     switch( xNode->getType() )
@@ -537,11 +683,19 @@ void AnimationExporter::exportNode( SvStream& rStrm, const Reference< XAnimation
 
         case AnimationNodeType::SET :
         {
-            exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
-            exportAnimPropertySet( rStrm, xNode );
-            exportAnimateSet( rStrm, xNode );
-            exportAnimEvent( rStrm, xNode, 0 );
-            exportAnimValue( rStrm, xNode, sal_False );
+            bool bIsAfterEffectNode( isAfterEffectNode( xNode ) );
+            if( (nGroupLevel != 4) || !bIsAfterEffectNode )
+            {
+                exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
+                exportAnimPropertySet( rStrm, xNode );
+                exportAnimateSet( rStrm, xNode, bIsAfterEffectNode ? AFTEREFFECT_SET : AFTEREFFECT_NONE );
+                exportAnimEvent( rStrm, xNode, 0 );
+                exportAnimValue( rStrm, xNode, sal_False );
+            }
+            else
+            {
+                bSkipChildren = true;
+            }
         }
         break;
 
@@ -557,11 +711,22 @@ void AnimationExporter::exportNode( SvStream& rStrm, const Reference< XAnimation
 
         case AnimationNodeType::ANIMATECOLOR :
         {
-            exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
-            exportAnimPropertySet( rStrm, xNode );
-            exportAnimateColor( rStrm, xNode );
-            exportAnimEvent( rStrm, xNode, 0 );
-            exportAnimValue( rStrm, xNode, sal_False );
+            bool bIsAfterEffectNode( isAfterEffectNode( xNode ) );
+            if( (nGroupLevel != 4) || !bIsAfterEffectNode )
+            {
+                if( bIsAfterEffectNode )
+                    xNode = createAfterEffectNodeClone( xNode );
+
+                exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
+                exportAnimPropertySet( rStrm, xNode );
+                exportAnimateColor( rStrm, xNode, bIsAfterEffectNode ? AFTEREFFECT_COLOR : AFTEREFFECT_NONE );
+                exportAnimEvent( rStrm, xNode, 0 );
+                exportAnimValue( rStrm, xNode, sal_False );
+            }
+            else
+            {
+                bSkipChildren = true;
+            }
         }
         break;
 
@@ -595,24 +760,56 @@ void AnimationExporter::exportNode( SvStream& rStrm, const Reference< XAnimation
         break;
     }
 
-    Reference< XEnumerationAccess > xEnumerationAccess( xNode, UNO_QUERY );
-    if( xEnumerationAccess.is() )
+    if( !bSkipChildren )
     {
-        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
-        if( xEnumeration.is() )
+        // export after effect node if one exists for this node
+        Reference< XAnimationNode > xAfterEffectNode;
+        if( hasAfterEffectNode( xNode, xAfterEffectNode ) )
         {
-            while( xEnumeration->hasMoreElements() )
+            exportNode( rStrm, xAfterEffectNode, &xNode, DFF_msofbtAnimSubGoup, 1, nGroupLevel + 1, bTakeBackInteractiveSequenceTimingForChild, nFillDefault );
+        }
+
+        Reference< XEnumerationAccess > xEnumerationAccess( xNode, UNO_QUERY );
+        if( xEnumerationAccess.is() )
+        {
+            Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
+            if( xEnumeration.is() )
             {
-                Reference< XAnimationNode > xChildNode( xEnumeration->nextElement(), UNO_QUERY );
-                if( xChildNode.is() )
+                while( xEnumeration->hasMoreElements() )
                 {
-                    exportNode( rStrm, xChildNode, &xNode, DFF_msofbtAnimGroup, 1, nGroupLevel + 1, bTakeBackInteractiveSequenceTimingForChild, nFillDefault );
+                    Reference< XAnimationNode > xChildNode( xEnumeration->nextElement(), UNO_QUERY );
+                    if( xChildNode.is() )
+                    {
+                        exportNode( rStrm, xChildNode, &xNode, DFF_msofbtAnimGroup, 1, nGroupLevel + 1, bTakeBackInteractiveSequenceTimingForChild, nFillDefault );
+                    }
                 }
             }
         }
     }
+
     if( xNode->getType() == AnimationNodeType::ITERATE )
         aTarget = Any();
+}
+
+Reference< XAnimationNode > AnimationExporter::createAfterEffectNodeClone( const Reference< XAnimationNode >& xNode ) const
+{
+    try
+    {
+        Reference< ::com::sun::star::util::XCloneable > xClonable( xNode, UNO_QUERY_THROW );
+        Reference< XAnimationNode > xCloneNode( xClonable->createClone(), UNO_QUERY_THROW );
+
+        Any aEmpty;
+        xCloneNode->setBegin( aEmpty );
+
+
+        return xCloneNode;
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        DBG_ERROR("sd::ppt::AnimationExporter::createAfterEffectNodeClone(), could not create clone!" );
+    }
+    return xNode;
 }
 
 void AnimationExporter::exportAnimNode( SvStream& rStrm, const Reference< XAnimationNode >& xNode,
@@ -733,12 +930,15 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
     const ::com::sun::star::uno::Any* pAny[ DFF_ANIM_PROPERTY_ID_COUNT ];
     rtl_zeroMemory( pAny, sizeof( pAny ) );
 
+    Reference< XAnimationNode > xMaster;
+
+    const Any aTrue( makeAny( (sal_Bool)sal_True ) );
+    Any aMasterRel, aOverride, aRunTimeContext;
+
     // storing user data into pAny, to allow direct access later
     Sequence< NamedValue > aUserData = xNode->getUserData();
     if ( aUserData.getLength() )
     {
-        const Any aTrue( makeAny( (sal_Bool)sal_True ) );
-
         const NamedValue* p = aUserData.getConstArray();
         sal_Int32 nLength = aUserData.getLength();
         while( nLength-- )
@@ -762,15 +962,31 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
             else if ( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "master-element" ) ) )
             {
                 pAny[ DFF_ANIM_AFTEREFFECT ] = &aTrue;
-            }
-            else if ( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "master-rel" ) ) )
-            {
-                pAny[ DFF_ANIM_MASTERREL ] = &(p->Value);
+                p->Value >>= xMaster;
             }
             p++;
         }
     }
 
+    // calculate master-rel
+    if( xMaster.is() )
+    {
+        sal_Int32 nMasterRel = 2;
+        Reference< XChild > xNodeChild( xNode, UNO_QUERY );
+        Reference< XChild > xMasterChild( xMaster, UNO_QUERY );
+        if( xNodeChild.is() && xMasterChild.is() && (xNodeChild->getParent() == xMasterChild->getParent() ) )
+            nMasterRel = 0;
+
+        aMasterRel <<= nMasterRel;
+
+        pAny[ DFF_ANIM_MASTERREL ] = &aMasterRel;
+
+        aOverride <<= (sal_Int32)1;
+        pAny[ DFF_ANIM_OVERRIDE ] = &aOverride;
+
+        aRunTimeContext <<= (sal_Int32)1;
+        pAny[ DFF_ANIM_RUNTIMECONTEXT ] = &aRunTimeContext;
+    }
 
     // the order is important
     if ( pAny[ DFF_ANIM_NODE_TYPE ] )
@@ -867,39 +1083,52 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
     {
         // TODO DFF_ANIM_ID
     }
-    if ( pAny[ DFF_ANIM_RUNTIMECONTEXT ] )
-    {
-        // TODO DFF_ANIM_ID
-    }
-    if ( pAny[ DFF_ANIM_PATH_EDIT_MODE ] )
-    {
-        // TODO DFF_ANIM_ID
-    }
-    Reference< XAnimateColor > xColor( xNode, UNO_QUERY );
-    if( xColor.is() )
-    {
-//      sal_uInt32 nColorSpace = xColor->getColorSpace() == AnimationColorSpace::RGB ? 0 : 1;
-//      exportAnimPropertyuInt32( rStrm, DFF_ANIM_COLORSPACE, nColorSpace, TRANSLATE_NONE );
 
-        sal_Bool bDirection = !xColor->getDirection();
-        exportAnimPropertyuInt32( rStrm, DFF_ANIM_DIRECTION, bDirection, TRANSLATE_NONE );
-    }
-    if ( pAny[ DFF_ANIM_MASTERREL ] )
-    {
-        sal_Int32 nMasterRel;
-        if ( *pAny[ DFF_ANIM_MASTERREL ] >>= nMasterRel )
-            exportAnimPropertyByte( rStrm, DFF_ANIM_MASTERREL, (sal_uInt8)nMasterRel, TRANSLATE_NONE );
-    }
-    if ( pAny[ DFF_ANIM_OVERRIDE ] )
-    {
-        // TODO DFF_ANIM_OVERRIDE
-    }
     if ( pAny[ DFF_ANIM_AFTEREFFECT ] )
     {
         sal_Bool bAfterEffect;
         if ( *pAny[ DFF_ANIM_AFTEREFFECT ] >>= bAfterEffect )
             exportAnimPropertyByte( rStrm, DFF_ANIM_AFTEREFFECT, bAfterEffect, TRANSLATE_NONE );
     }
+
+    if ( pAny[ DFF_ANIM_RUNTIMECONTEXT ] )
+    {
+        sal_Int32 nRunTimeContext;
+        if ( *pAny[ DFF_ANIM_RUNTIMECONTEXT ] >>= nRunTimeContext )
+            exportAnimPropertyuInt32( rStrm, DFF_ANIM_RUNTIMECONTEXT, nRunTimeContext, TRANSLATE_NONE );
+    }
+    if ( pAny[ DFF_ANIM_PATH_EDIT_MODE ] )
+    {
+        // TODO DFF_ANIM_ID
+    }
+
+    if( !xMaster.is() )
+    {
+        Reference< XAnimateColor > xColor( xNode, UNO_QUERY );
+        if( xColor.is() )
+        {
+//          sal_uInt32 nColorSpace = xColor->getColorSpace() == AnimationColorSpace::RGB ? 0 : 1;
+//          exportAnimPropertyuInt32( rStrm, DFF_ANIM_COLORSPACE, nColorSpace, TRANSLATE_NONE );
+
+            sal_Bool bDirection = !xColor->getDirection();
+            exportAnimPropertyuInt32( rStrm, DFF_ANIM_DIRECTION, bDirection, TRANSLATE_NONE );
+        }
+    }
+
+    if ( pAny[ DFF_ANIM_OVERRIDE ] )
+    {
+        sal_Int32 nOverride;
+        if ( *pAny[ DFF_ANIM_OVERRIDE ] >>= nOverride )
+            exportAnimPropertyuInt32( rStrm, DFF_ANIM_OVERRIDE, nOverride, TRANSLATE_NONE );
+    }
+
+    if ( pAny[ DFF_ANIM_MASTERREL ] )
+    {
+        sal_Int32 nMasterRel;
+        if ( *pAny[ DFF_ANIM_MASTERREL ] >>= nMasterRel )
+            exportAnimPropertyuInt32( rStrm, DFF_ANIM_MASTERREL, nMasterRel, TRANSLATE_NONE );
+    }
+
 /* todo
     Reference< XAudio > xAudio( xNode, UNO_QUERY );
     if( xAudio.is() )
@@ -1124,7 +1353,7 @@ void AnimationExporter::exportAnimEvent( SvStream& rStrm, const Reference< XAnim
                         case EventTrigger::ON_BEGIN : nTrigger = 1; break;
                         case EventTrigger::ON_END : nTrigger = 2; break;
                         case EventTrigger::BEGIN_EVENT : nTrigger = 3; break;
-                        case EventTrigger::END_EVENT : nTrigger = 4; break;
+                        case EventTrigger::END_EVENT : nTrigger = 4; nU1 = 2; nU3 = mnCurrentGroup; break;
                         case EventTrigger::ON_CLICK : nTrigger = 5; break;
                         case EventTrigger::ON_DBL_CLICK : nTrigger = 6; break;
                         case EventTrigger::ON_MOUSE_ENTER : nTrigger = 7; break;
@@ -1326,7 +1555,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const rtl::
     return aRet;
 }
 
-void AnimationExporter::exportAnimateSet( SvStream& rStrm, const Reference< XAnimationNode >& xNode )
+void AnimationExporter::exportAnimateSet( SvStream& rStrm, const Reference< XAnimationNode >& xNode, int nAfterEffectType )
 {
     Reference< XAnimateSet > xSet( xNode, UNO_QUERY );
     if( xSet.is() )
@@ -1341,7 +1570,7 @@ void AnimationExporter::exportAnimateSet( SvStream& rStrm, const Reference< XAni
         Any aConvertedValue( convertAnimateValue( xSet->getTo(), xSet->getAttributeName() ) );
         if ( aConvertedValue.hasValue() )
             exportAnimProperty( rStrm, 1, aConvertedValue, TRANSLATE_NONE );
-        exportAnimateTarget( rStrm, xNode );
+        exportAnimateTarget( rStrm, xNode, 0, nAfterEffectType );
     }
 }
 
@@ -1442,7 +1671,7 @@ void AnimationExporter::exportAnimate( SvStream& rStrm, const Reference< XAnimat
     }
 }
 
-void AnimationExporter::exportAnimateTarget( SvStream& rStrm, const Reference< XAnimationNode >& xNode, const sal_uInt32 nForceAttributeNames )
+void AnimationExporter::exportAnimateTarget( SvStream& rStrm, const Reference< XAnimationNode >& xNode, const sal_uInt32 nForceAttributeNames, int nAfterEffectType )
 {
     EscherExContainer aAnimateTarget( rStrm, DFF_msofbtAnimateTarget, 0 );
     Reference< XAnimate > xAnimate( xNode, UNO_QUERY );
@@ -1503,6 +1732,17 @@ void AnimationExporter::exportAnimateTarget( SvStream& rStrm, const Reference< X
                 exportAnimPropertyString( rStrm, 0, aToken, TRANSLATE_ATTRIBUTE );
             }
             while ( nIndex >= 0 );
+        }
+
+        if( nAfterEffectType != AFTEREFFECT_NONE )
+        {
+            EscherExContainer aAnimPropertySet( rStrm, DFF_msofbtAnimPropertySet );
+            exportAnimPropertyuInt32( rStrm, 6, 1, TRANSLATE_NONE );
+            if( nAfterEffectType == AFTEREFFECT_COLOR )
+            {
+                exportAnimPropertyuInt32( rStrm, 4, 0, TRANSLATE_NONE );
+                exportAnimPropertyuInt32( rStrm, 5, 0, TRANSLATE_NONE );
+            }
         }
         exportAnimateTargetElement( rStrm, aTarget.hasValue() ? aTarget : xAnimate->getTarget(), sal_False );
     }
@@ -1858,7 +2098,7 @@ sal_Bool AnimationExporter::getColorAny( const Any& rAny, const sal_Int16 nColor
     return bIsColor;
 }
 
-void AnimationExporter::exportAnimateColor( SvStream& rStrm, const Reference< XAnimationNode >& xNode )
+void AnimationExporter::exportAnimateColor( SvStream& rStrm, const Reference< XAnimationNode >& xNode, int nAfterEffectType )
 {
     Reference< XAnimateColor > xColor( xNode, UNO_QUERY );
     if ( xColor.is() )
@@ -1902,7 +2142,7 @@ void AnimationExporter::exportAnimateColor( SvStream& rStrm, const Reference< XA
                     << nFromMode << nFromA << nFromB << nFromC
                     << nToMode << nToA << nToB << nToC;
         }
-        exportAnimateTarget( rStrm, xNode );
+        exportAnimateTarget( rStrm, xNode, 0, nAfterEffectType );
     }
 }
 
