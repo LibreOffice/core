@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JoinDesignView.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:19:55 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:42:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
+DBG_NAME(OJoinDesignView)
 
 OJoinDesignView::OJoinDesignView(Window* _pParent, OJoinController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
     :ODataView(_pParent,_pController,_rFactory)
@@ -112,6 +113,8 @@ OJoinDesignView::OJoinDesignView(Window* _pParent, OJoinController* _pController
     ,m_pTableView(NULL)
     ,m_pAddTabDlg(NULL)
 {
+    DBG_CTOR(OJoinDesignView,NULL);
+
     m_pScrollWindow = new OScrollWindowHelper(this);
 }
 // -----------------------------------------------------------------------------
@@ -125,6 +128,8 @@ OJoinDesignView::~OJoinDesignView()
     m_pTableView = NULL;
     ::std::auto_ptr<Window> aT1(m_pAddTabDlg);
     m_pAddTabDlg = NULL;
+
+    DBG_DTOR(OJoinDesignView,NULL);
 }
 // -------------------------------------------------------------------------
 void OJoinDesignView::Construct()
