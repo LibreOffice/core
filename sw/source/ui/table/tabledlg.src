@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabledlg.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:06:16 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:14:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #define TEXT_TEXTFLOW  \
     Text [ de ] = "Textfluss" ; \
     Text [ en-US ] = "Text Flow" ; \
-    Text [ x-comment ] = " ";
+    Text [ x-comment ] = " ";   \
 
 /**************************************************************************/
 /*                                                                        */
@@ -233,7 +233,7 @@ TabPage TP_FORMAT_TABLE
     {
         Pos = MAP_APPFONT ( 6 , 48 ) ;
         Size = MAP_APPFONT ( 184 , 8 ) ;
-        Text [ de ] = "Abst‰nde" ;
+        Text [ de ] = "Abst√§nde" ;
         Text [ en-US ] = "Spacing" ;
         Text [ x-comment ] = " ";
     };
@@ -365,7 +365,7 @@ TabPage TP_FORMAT_TABLE
         {
             < "Links-nach-rechts" ; 0; > ;
             < "Rechts-nach-links" ; 1; > ;
-            < "Einstellungen des ¸bergeordneten Objektes verwenden" ; 4; > ;
+            < "Einstellungen des √ºbergeordneten Objektes verwenden" ; 4; > ;
         };
     StringList [ en-US ] =
     {
@@ -405,7 +405,7 @@ TabPage TP_TABLE_COLUMN
     {
         Pos = MAP_APPFONT ( 6 , 20 ) ;
         Size = MAP_APPFONT ( 180 , 10 ) ;
-        Text [ de ] = "~Spalten gleichm‰ﬂig ‰ndern" ;
+        Text [ de ] = "~Spalten gleichm√§√üig √§ndern" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Ad~just columns proportionally" ;
         Text [ x-comment ] = " ";
@@ -414,7 +414,7 @@ TabPage TP_TABLE_COLUMN
     {
         Pos = MAP_APPFONT ( 6 , 36 ) ;
         Size = MAP_APPFONT ( 85 , 8 ) ;
-        Text [ de ] = "Noch verf¸gbarer Platz" ;
+        Text [ de ] = "Noch verf√ºgbarer Platz" ;
         Text [ en-US ] = "Remaining space" ;
         Text [ x-comment ] = " ";
     };
@@ -760,7 +760,7 @@ TabPage TP_TABLE_TEXTFLOW
         Pos = MAP_APPFONT ( 12 , 99 ) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "‹berschrift ~wiederholen" ;
+        Text [ de ] = "√úberschrift ~wiederholen" ;
         Text [ en-US ] = "R~epeat heading" ;
     };
     FixedText FT_REPEAT_HEADER
@@ -805,7 +805,7 @@ TabPage TP_TABLE_TEXTFLOW
         {
             < "Links-nach-rechts" ; 0; > ;
             < "Rechts-nach-links (vertikal)" ; 2; > ;
-            < "Einstellungen des ¸bergeordneten Objektes verwenden" ; 4; > ;
+            < "Einstellungen des √ºbergeordneten Objektes verwenden" ; 4; > ;
         };
         StringList [ en-US ] =
         {
