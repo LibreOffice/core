@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:30:12 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:09:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ QueryBox QUERY_BRW_SAVEMODIFIED
     Buttons = WB_YES_NO_CANCEL ;
     DefButton = WB_DEF_YES ;
     /* ### ACHTUNG: Neuer Text in Resource? Soll der geänderte Datensatz gespeichert werden? : Soll der geänderte Datensatz gespeichert werden? */
-    Message [ de ] = "Der aktuelle Datensatz wurde geändert.\nSollen die Änderungen gespeichert werden?" ;
+    Message [ de ] = "Der aktuelle Datensatz wurde geÃ¤ndert.\nSollen die Ã„nderungen gespeichert werden?" ;
     Message [ en-US ] = "The current record has been changed.\nDo you want to save the changes?" ;
     Message [ x-comment ] = " ";
 };
@@ -67,7 +67,7 @@ QueryBox QUERY_BRW_DELETE_ROWS
 {
     Buttons = WB_YES_NO ;
     /* ### ACHTUNG: Neuer Text in Resource? Sollen die selektierten Daten gelöscht werden? : Sollen die selektierten Daten gel÷scht werden? */
-    Message [ de ] = "Sollen die selektierten Daten gelöscht werden?" ;
+    Message [ de ] = "Sollen die selektierten Daten gelÃ¶scht werden?" ;
     Message [ en-US ] = "Do you want to delete the selected data?" ;
     Message [ x-comment ] = " ";
 };
@@ -136,19 +136,19 @@ String RID_STR_TABLES_CONTAINER
     Identifier = ID_TREE_ADMINISTRATE ; \
     HelpId = HID_BROWSER_DSADMINISTRATE ;   \
     Text [ de ] = "~Datenbankdatei bearbeiten ..." ;    \
-    Text [ en-US ] = "Edit ~Database File..." ;
+    Text [ en-US ] = "Edit ~Database File..." ;\
 
 #define MID_CLOSECONN   \
     Identifier = ID_TREE_CLOSE_CONN ;   \
     HelpId = HID_BROWSER_CLOSECONN ;    \
-    Text [ de ] = "Verbindung s~chließen" ; \
-    Text [ en-US ] = "Disco~nnect" ;
+    Text [ de ] = "Verbindung s~chlieÃŸen" ;    \
+    Text [ en-US ] = "Disco~nnect" ;    \
 
 #define MID_REFRESHCONN \
     Identifier = ID_TREE_REBUILD_CONN ; \
     HelpId = HID_BROWSER_REFRESHCONN ;  \
     Text [ de ] = "Verbindung e~rneuern" ;  \
-    Text [ en-US ] = "~Refresh Connection" ;
+    Text [ en-US ] = "~Refresh Connection" ;    \
 
 #define MITEMS_DEFAULT  \
     MenuItem    \
@@ -183,27 +183,27 @@ Menu MENU_BROWSER_DEFAULTCONTEXT
 
 String STR_TITLE_CONFIRM_DELETION
 {
-    Text [ de ] = "Löschen bestätigen" ;
+    Text [ de ] = "LÃ¶schen bestÃ¤tigen" ;
     Text [ en-US ] = "Confirm Deletion" ;
 };
 
 String STR_QUERY_DELETE_TABLE
 {
-    Text [ de ] = "Soll die Tabelle '%1' gelöscht werden?" ;
+    Text [ de ] = "Soll die Tabelle '%1' gelÃ¶scht werden?" ;
     Text [ en-US ] = "Do you want to delete the table '%1'?" ;
 };
 
 QueryBox QUERY_BRW_DELETE_QUERY_CONFIRM
 {
     Buttons = WB_YES_NO ;
-    Message [ de ] = "Die Abfrage existiert bereits. Soll sie gelöscht werden?" ;
+    Message [ de ] = "Die Abfrage existiert bereits. Soll sie gelÃ¶scht werden?" ;
     Message [ en-US ] = "The query already exists. Do you want to delete it?" ;
     };
 
 QueryBox QUERY_CONNECTION_LOST
 {
     Buttons = WB_YES_NO ;
-    Message [ de ] = "Die Verbindung zur Datenbank wurde gelöscht! Soll Sie wieder aufgebaut werden?" ;
+    Message [ de ] = "Die Verbindung zur Datenbank wurde gelÃ¶scht! Soll Sie wieder aufgebaut werden?" ;
     Message [ en-US ] = "The connection to the database has been lost. Do you want to reconnect?" ;
     };
 
