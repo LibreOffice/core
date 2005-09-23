@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationEffect.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:50:40 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 10:40:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,8 +149,8 @@ public:
     ::com::sun::star::uno::Any  getDimColor() const { return maDimColor; }
     void                        setDimColor( ::com::sun::star::uno::Any aDimColor ) { maDimColor = aDimColor; }
 
-    sal_Int32       getMasterRel() const { return mnMasterRel; }
-    void            setMasterRel( sal_Int32 nMasterRel ) { mnMasterRel = nMasterRel; }
+    bool            IsAfterEffectOnNext() const { return mbAfterEffectOnNextEffect; }
+    void            setAfterEffectOnNext( bool bOnNextEffect ) { mbAfterEffectOnNextEffect = bOnNextEffect; }
 
     sal_Int32       getParaDepth() const { return mnParaDepth; }
 
@@ -238,7 +238,7 @@ private:
 
     sal_Bool        mbHasAfterEffect;
     ::com::sun::star::uno::Any maDimColor;
-    sal_Int32       mnMasterRel;
+    bool        mbAfterEffectOnNextEffect;
 };
 
 struct stl_CustomAnimationEffect_search_node_predict
