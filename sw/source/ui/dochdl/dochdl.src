@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:17:36 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:59:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 
 String STR_NOGLOS1
 {
-    Text [ de ] = "AutoText zum Kürzel '" ;
+    Text [ de ] = "AutoText zum KÃ¼rzel '" ;
     Text [ en-US ] = "AutoText for Shortcut '" ;
     Text [ x-comment ] = " ";
 };
@@ -53,7 +53,7 @@ String STR_NOGLOS2
 
 String STR_NO_TABLE
 {
-    Text [ de ] = "Eine Tabelle kann nicht in eine andere Tabelle eingefügt werden. Sie können die Daten jedoch einfügen, wenn sich der Cursor nicht in einer Tabelle befindet." ;
+    Text [ de ] = "Eine Tabelle kann nicht in eine andere Tabelle eingefÃ¼gt werden. Sie kÃ¶nnen die Daten jedoch einfÃ¼gen, wenn sich der Cursor nicht in einer Tabelle befindet." ;
     Text [ en-US ] = "A table cannot be inserted into another table. However, you can paste the data into the document when the cursor is not in a table.";
     Text [ x-comment ] = " ";
 };
@@ -68,7 +68,7 @@ InfoBox MSG_ERR_INSERT_GLOS
 
 InfoBox MSG_CLPBRD_FORMAT_ERROR
 {
-    Message [ de ] = "Gewünschtes Zwischenablagen-Format steht nicht zur Verfügung." ;
+    Message [ de ] = "GewÃ¼nschtes Zwischenablagen-Format steht nicht zur VerfÃ¼gung." ;
     Message [ en-US ] = "Requested clipboard format is not available." ;
     Message [ x-comment ] = " ";
 };
@@ -77,7 +77,7 @@ QueryBox MSG_UPDATE_NEW_GLOS_FMT
 {
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_YES ;
-    Message [ de ] = "Der Bereich liegt in einem alten Format vor.\nEr muss konvertiert werden, um Änderungen\nspeichern zu können.\nSoll er konvertiert werden?" ;
+    Message [ de ] = "Der Bereich liegt in einem alten Format vor.\nEr muss konvertiert werden, um Ã„nderungen\nspeichern zu kÃ¶nnen.\nSoll er konvertiert werden?" ;
     Message [ en-US ] = "The section format is outdated.\nIt needs to be converted so that changes\ncan be saved.\nShould it be converted now?" ;
     Message [ x-comment ] = " ";
 };
@@ -100,7 +100,7 @@ String STR_PRIVATEOLE
 };
 String STR_DDEFORMAT
 {
-    Text [ de ] = "DDE Verknüpfung" ;
+    Text [ de ] = "DDE VerknÃ¼pfung" ;
     Text [ en-US ] = "DDE link" ;
     Text [ x-comment ] = " ";
 };
