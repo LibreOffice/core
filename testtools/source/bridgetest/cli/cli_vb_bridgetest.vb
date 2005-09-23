@@ -4,9 +4,9 @@
 '
 '   $RCSfile: cli_vb_bridgetest.vb,v $
 '
-'   $Revision: 1.5 $
+'   $Revision: 1.6 $
 '
-'   last change: $Author: rt $ $Date: 2005-09-09 12:24:44 $
+'   last change: $Author: hr $ $Date: 2005-09-23 11:48:57 $
 '
 '   The Contents of this file are made available subject to
 '   the terms of GNU Lesser General Public License Version 2.1.
@@ -854,10 +854,14 @@ Public Class BridgeTest
             perform_test( xTest )
             Console.WriteLine("### cli_uno VB bridgetest succeeded.")
             return 0
-
+	Catch e as unoidl.com.sun.star.uno.RuntimeException
+	     Throw 
         Catch e as System.Exception 
-			Console.WriteLine( "\n### unexpected exception occured: {0}", e )
-            return 1
+	      Throw New unoidl.com.sun.star.uno.RuntimeException( _
+		    "cli_vb_bridgetest.vb: unexpected exception occured in XMain::run. " _
+		    & "Original exception: " + e.GetType().Name + "\n Message: " _
+		    & e.Message , Nothing)
+
         End Try
     End Function
 
