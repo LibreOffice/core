@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StorageNativeOutputStream.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:06:44 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:40:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,7 @@ using namespace ::connectivity::hsqldb;
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_openStream
   (JNIEnv * env, jobject obj_this, jstring name, jstring key, jint mode)
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
     {
         OperationLogFile( env, name, "output" ).logOperation( "openStream" );
         LogFile( env, name, "output" ).create();
@@ -120,7 +120,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputSt
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_write__Ljava_lang_String_2Ljava_lang_String_2_3BII
   (JNIEnv * env, jobject obj_this, jstring key, jstring name, jbyteArray buffer, jint off, jint len)
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
     OperationLogFile( env, name, "output" ).logOperation( "write( byte[], int, int )" );
 
     DataLogFile aDataLog( env, name, "output" );
@@ -138,7 +138,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputSt
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_write__Ljava_lang_String_2Ljava_lang_String_2_3B
   (JNIEnv * env, jobject obj_this, jstring key, jstring name, jbyteArray buffer)
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
     OperationLogFile( env, name, "output" ).logOperation( "write( byte[] )" );
 
     DataLogFile aDataLog( env, name, "output" );
@@ -156,7 +156,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputSt
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_close
   (JNIEnv * env, jobject obj_this, jstring key, jstring name)
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
     OperationLogFile aOpLog( env, name, "output" );
     aOpLog.logOperation( "close" );
 
@@ -173,7 +173,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputSt
         catch(Exception&)
         {}
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
     aDataLog.close();
     aOpLog.close();
 #endif
@@ -188,7 +188,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputSt
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_write__Ljava_lang_String_2Ljava_lang_String_2I
   (JNIEnv * env, jobject obj_this, jstring key, jstring name,jint b)
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
     OperationLogFile( env, name, "output" ).logOperation( "write( int )" );
 
     DataLogFile aDataLog( env, name, "output" );
@@ -206,7 +206,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputSt
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_flush
   (JNIEnv * env, jobject obj_this, jstring key, jstring name)
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
     OperationLogFile( env, name, "output" ).logOperation( "flush" );
 
     ::rtl::OUString sKey = StorageContainer::jstring2ustring(env,key);
@@ -222,7 +222,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputSt
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_sync
   (JNIEnv * env, jobject obj_this, jstring key, jstring name)
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
     OperationLogFile( env, name, "output" ).logOperation( "sync" );
 #endif
     ::boost::shared_ptr< StreamHelper > pStream = StorageContainer::getRegisteredStream( env, name, key );
