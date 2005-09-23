@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:20:44 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:00:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ Menu MN_READONLY_POPUP
         {
             Identifier = MN_READONLY_OPENURL ;
             HelpID = SID_OPENDOC ;
-            Text [ de ] = "~Öffnen" ;
+            Text [ de ] = "~Ã–ffnen" ;
             Text [ en-US ] = "~Open" ;
             Text [ x-comment ] = " ";
         };
@@ -53,7 +53,7 @@ Menu MN_READONLY_POPUP
         {
             Identifier = MN_READONLY_OPENURLNEW ;
             HelpID = SID_OPENDOC ;
-            Text [ de ] = "Öffnen in neuem ~Fenster" ;
+            Text [ de ] = "Ã–ffnen in neuem ~Fenster" ;
             Text [ en-US ] = "Open in New Window" ;
             Text [ x-comment ] = " ";
         };
@@ -69,7 +69,7 @@ Menu MN_READONLY_POPUP
         {
             Identifier = MN_READONLY_SELECTION_MODE ;
             HelpID = FN_READONLY_SELECTION_MODE ;
-            Text [ de ] = "Text auswählen" ;
+            Text [ de ] = "Text auswÃ¤hlen" ;
             Text [ en-US ] = "Select Text";
         };
         MenuItem
@@ -109,7 +109,7 @@ Menu MN_READONLY_POPUP
         {
             Identifier = MN_READONLY_BROWSE_BACKWARD ;
             HelpID = SID_BROWSE_BACKWARD ;
-            Text [ de ] = "~Rückwärts" ;
+            Text [ de ] = "~RÃ¼ckwÃ¤rts" ;
             Text [ en-US ] = "Backwards" ;
             Text [ x-comment ] = "; ÁûSßóôñïöá ;";
         };
@@ -117,7 +117,7 @@ Menu MN_READONLY_POPUP
         {
             Identifier = MN_READONLY_BROWSE_FORWARD ;
             HelpID = SID_BROWSE_FORWARD ;
-            Text [ de ] = "~Vorwärts" ;
+            Text [ de ] = "~VorwÃ¤rts" ;
             Text [ en-US ] = "~Forward" ;
             Text [ x-comment ] = " ";
         };
@@ -134,7 +134,7 @@ Menu MN_READONLY_POPUP
         {
             Identifier = MN_READONLY_GRAPHICTOGALLERY ;
             HelpID = HID_MN_READONLY_GRAPHICTOGALLERY ;
-            Text [ de ] = "Grafik hinzuf~ügen" ;
+            Text [ de ] = "Grafik hinzuf~Ã¼gen" ;
             SubMenu = Menu
             {
                 ItemList =
@@ -173,7 +173,7 @@ Menu MN_READONLY_POPUP
         {
             Identifier = MN_READONLY_BACKGROUNDTOGALLERY ;
             HelpID = HID_MN_READONLY_BACKGROUNDTOGALLERY ;
-            Text [ de ] = "H~intergrund hinzufügen" ;
+            Text [ de ] = "H~intergrund hinzufÃ¼gen" ;
             SubMenu = Menu
             {
                 ItemList =
@@ -273,7 +273,7 @@ String STR_EXPORT_GRAFIK_TITLE
 };
 String STR_CHAIN_OK
 {
-    Text [ de ] = "Betätigen Sie die linke Maustaste um die Rahmen zu verketten." ;
+    Text [ de ] = "BetÃ¤tigen Sie die linke Maustaste um die Rahmen zu verketten." ;
     Text [ en-US ] = "Click the left mouse button to link the frames." ;
     Text [ x-comment ] = " ";
 };
@@ -291,7 +291,7 @@ String STR_CHAIN_IS_IN_CHAIN
 };
 String STR_CHAIN_WRONG_AREA
 {
-    Text [ de ] = "Der Zielrahmen steht in einem Bereich in dem keine Verkettung möglich ist." ;
+    Text [ de ] = "Der Zielrahmen steht in einem Bereich in dem keine Verkettung mÃ¶glich ist." ;
     Text [ en-US ] = "The target frame for the link is in an invalid area." ;
     Text [ x-comment ] = " ";
 };
@@ -309,19 +309,19 @@ String STR_CHAIN_SOURCE_CHAINED
 };
 String STR_CHAIN_SELF
 {
-    Text [ de ] = "Eine geschlossene Kette ist nicht möglich." ;
+    Text [ de ] = "Eine geschlossene Kette ist nicht mÃ¶glich." ;
     Text [ en-US ] = "A closed link is not possible." ;
     Text [ x-comment ] = " ";
 };
 String STR_REDLINE_INSERT
 {
-    Text [ de ] = "Eingefügt" ;
+    Text [ de ] = "EingefÃ¼gt" ;
     Text [ en-US ] = "Inserted" ;
     Text [ x-comment ] = " ";
 };
 String STR_REDLINE_DELETE
 {
-    Text [ de ] = "Gelöscht" ;
+    Text [ de ] = "GelÃ¶scht" ;
     Text [ en-US ] = "Deleted" ;
     Text [ x-comment ] = " ";
 };
@@ -333,7 +333,7 @@ String STR_REDLINE_FORMAT
 };
 String STR_REDLINE_TABLE
 {
-    Text [ de ] = "Tabelle verändert" ;
+    Text [ de ] = "Tabelle verÃ¤ndert" ;
     Text [ en-US ] = "Table changed" ;
     Text [ x-comment ] = " ";
 };
@@ -351,41 +351,41 @@ String STR_ENDNOTE
 };
 String STR_FTNNOTE
 {
-    Text [ de ] = "Fußnote: " ;
+    Text [ de ] = "FuÃŸnote: " ;
     Text [ en-US ] = "Footnote: " ;
     Text [ x-comment ] = " ";
 };
 
 InfoBox MSG_READONLY_CONTENT
 {
-    Message [ de ] = "Die Schreibmarke oder Selektion befindet sich an einer geschützten Position.\nEine Änderung kann deshalb nicht akzeptiert werden.";
+    Message [ de ] = "Die Schreibmarke oder Selektion befindet sich an einer geschÃ¼tzten Position.\nEine Ã„nderung kann deshalb nicht akzeptiert werden.";
     Message [ en-US ] = "Readonly content cannot be changed.\nNo modifications will be accepted";
     Message [ x-comment ] = " ";
 };
 
 String STR_TABLE_COL_ADJUST
 {
-    Text [ de ] = "Tabellenspalte ändern" ;
+    Text [ de ] = "Tabellenspalte Ã¤ndern" ;
     Text [ en-US ] = "Adjust table column" ;
 };
 String STR_TABLE_ROW_ADJUST
 {
-    Text [ de ] = "Tabellenzeile ändern" ;
+    Text [ de ] = "Tabellenzeile Ã¤ndern" ;
     Text [ en-US ] = "Adjust table row" ;
 };
 String STR_TABLE_SELECT_ALL
 {
-    Text [ de ] = "Ganze Tabelle auswählen" ;
+    Text [ de ] = "Ganze Tabelle auswÃ¤hlen" ;
     Text [ en-US ] = "Select whole table" ;
 };
 String STR_TABLE_SELECT_ROW
 {
-    Text [ de ] = "Tabellenzeile auswählen" ;
+    Text [ de ] = "Tabellenzeile auswÃ¤hlen" ;
     Text [ en-US ] = "Select table row" ;
 };
 String STR_TABLE_SELECT_COL
 {
-    Text [ de ] = "Tabellenspalte auswählen" ;
+    Text [ de ] = "Tabellenspalte auswÃ¤hlen" ;
     Text [ en-US ] = "Select table column" ;
 };
 
