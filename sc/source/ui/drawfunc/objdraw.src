@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:00:39 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:01:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,7 +217,7 @@
         Identifier = SID_ORIGINALSIZE ; \
         HelpId = SID_ORIGINALSIZE ; \
         /* ### ACHTUNG: Neuer Text in Resource? Originalgröße : Originalgr÷˜e */\
-        Text [ de ] = "Original~größe" ; \
+        Text [ de ] = "Original~grÃ¶ÃŸe" ; \
         Text [ en-US ] = "~Original Size" ; \
         Text [ x-comment ] = " ";\
     };
@@ -1319,7 +1319,7 @@ Menu RID_OBJECTMENU_DRAWTEXT
 String RID_POPUP_DRAW
 {
     /* ### ACHTUNG: Neuer Text in Resource? Popup-Menü für Zeichenobjekte : Popup-Men³ f³r Zeichenobjekte */
-    Text [ de ] = "Popup-Menü für Zeichenobjekte" ;
+    Text [ de ] = "Popup-MenÃ¼ fÃ¼r Zeichenobjekte" ;
     Text [ en-US ] = "Pop-up menu for drawing objects" ;
     Text [ x-comment ] = " ";
 };
@@ -1514,7 +1514,7 @@ Menu RID_POPUP_CHART
             Identifier = SID_OPENDLG_MODCHART ;
             HelpId = SID_OPENDLG_MODCHART ;
             /* ### ACHTUNG: Neuer Text in Resource? Datenbereich ändern... : Datenbereich õndern... */
-            Text [ de ] = "~Datenbereich ändern..." ;
+            Text [ de ] = "~Datenbereich Ã¤ndern..." ;
             Text [ en-US ] = "~Modify Data Range..." ;
             Text [ x-comment ] = " ";
         };
@@ -1532,7 +1532,7 @@ Menu RID_POPUP_CHART
 String RID_POPUP_DRAWTEXT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Popup-Menü für Text-Objekte : Popup-Men³ f³r Text-Objekte */
-    Text [ de ] = "Popup-Menü für Text-Objekte" ;
+    Text [ de ] = "Popup-MenÃ¼ fÃ¼r Text-Objekte" ;
     Text [ en-US ] = "Pop-up menu for text objects" ;
     Text [ x-comment ] = " ";
 };
