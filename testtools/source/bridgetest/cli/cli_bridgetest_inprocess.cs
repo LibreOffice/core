@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cli_bridgetest_inprocess.cs,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:23:10 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:48:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,12 +93,34 @@ public class BridgeTest
 {
     public static int Main( String [] args )
     {
+//       System.Diagnostics.Debugger.Launch();
         try
-        {
+		{
+			string bootstrap_ini = "cli_bridgetest_inprocess.ini";
+			if (args.Length > 0)
+			{
+				if (args[0] == "/?")
+				{
+					Console.WriteLine(
+						"\n\ncli_bridgetest_inprocess [bootstrap file] \n\n"
+						+ "bootstrap file \n"
+						+ "\t contains the entries UNO_TYPES and UNO_SERVICES.\n"
+						+ "\t If a file is not provided than it is assumed that a\n" 
+						+ "\t cli_bridgetest_inprocess.ini file can be found in the\n " 
+						+ "\t current working directory.\n"
+						);
+					return 0;
+				}
+				else
+				{
+					bootstrap_ini = args[0];
+				}
+			}
+
             // bootstrap native UNO
             XComponentContext xContext =
                 Bootstrap.defaultBootstrap_InitialComponentContext(
-                    "cli_bridgetest_inprocess.ini", null );
+                    bootstrap_ini, null );
         
             using (new uno.util.DisposeGuard( (XComponent) xContext ))
             {
@@ -235,7 +257,7 @@ public class BridgeTest
         {
             GC.WaitForPendingFinalizers();
             System.Console.WriteLine( exc );
-            return 1;
+            return -1;
         }
         
         GC.WaitForPendingFinalizers();
