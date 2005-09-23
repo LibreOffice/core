@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formadapter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:29:01 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:21:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,7 @@ Reference< XInterface >  SbaXFormAdapter_CreateInstance(const Reference< ::com::
 {
     return *(new SbaXFormAdapter());
 }
+DBG_NAME(SbaXFormAdapter)
 // -------------------------------------------------------------------------
 SbaXFormAdapter::SbaXFormAdapter()
             :m_aLoadListeners(*this, m_aMutex)
@@ -99,11 +100,15 @@ SbaXFormAdapter::SbaXFormAdapter()
             ,m_aContainerListeners(m_aMutex)
             ,m_nNamePropHandle(-1)
 {
+    DBG_CTOR(SbaXFormAdapter,NULL);
+
 }
 
 // -------------------------------------------------------------------------
 SbaXFormAdapter::~SbaXFormAdapter()
 {
+
+    DBG_DTOR(SbaXFormAdapter,NULL);
 }
 
 // -------------------------------------------------------------------------
