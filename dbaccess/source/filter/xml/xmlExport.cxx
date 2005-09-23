@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlExport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:06:15 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:10:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_TEXTALIGN_HPP_
+#include <com/sun/star/awt/TextAlign.hpp>
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
@@ -237,6 +240,7 @@ ODBExport::ODBExport(const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt16 
 {
     setExportFlags( EXPORT_OASIS | nExportFlag);
     GetMM100UnitConverter().setCoreMeasureUnit(MAP_10TH_MM);
+    GetMM100UnitConverter().setXMLMeasureUnit(MAP_CM);
 
     _GetNamespaceMap().Add( GetXMLToken(XML_NP_OFFICE), GetXMLToken((getExportFlags() & EXPORT_CONTENT) != 0 ? XML_N_OOO : XML_N_OFFICE), XML_NAMESPACE_OFFICE );
     _GetNamespaceMap().Add( GetXMLToken(XML_NP_OOO), GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );
@@ -244,7 +248,7 @@ ODBExport::ODBExport(const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt16 
     _GetNamespaceMap().Add( GetXMLToken(XML_NP_DB), GetXMLToken(XML_N_DB), XML_NAMESPACE_DB );
 
     if( (nExportFlag & (EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS) ) != 0 )
-        _GetNamespaceMap().Add( GetXMLToken(XML_NP_FO), GetXMLToken(XML_N_FO), XML_NAMESPACE_FO );
+        _GetNamespaceMap().Add( GetXMLToken(XML_NP_FO), GetXMLToken(XML_N_FO_COMPAT), XML_NAMESPACE_FO );
 
     if( (nExportFlag & (EXPORT_META|EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_SETTINGS) ) != 0 )
     {
@@ -587,15 +591,17 @@ void ODBExport::exportLogin()
     Reference<XPropertySet> xProp(getDataSource());
     ::rtl::OUString sValue;
     xProp->getPropertyValue(PROPERTY_USER) >>= sValue;
-    if ( sValue.getLength() )
-    {
+    sal_Bool bAddLogin = sal_False;
+    if ( bAddLogin = sValue.getLength() > 0 )
         AddAttribute(XML_NAMESPACE_DB, XML_USER_NAME,sValue);
-        sal_Bool bValue = sal_False;
-        xProp->getPropertyValue(PROPERTY_ISPASSWORDREQUIRED) >>= bValue;
+    sal_Bool bValue = sal_False;
+    if ( xProp->getPropertyValue(PROPERTY_ISPASSWORDREQUIRED) >>= bValue )
+    {
+        bAddLogin = sal_True;
         AddAttribute(XML_NAMESPACE_DB, XML_IS_PASSWORD_REQUIRED,bValue ? XML_TRUE : XML_FALSE);
-
-        SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_LOGIN, sal_True, sal_True);
     }
+    if ( bAddLogin )
+        SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_LOGIN, sal_True, sal_True);
 }
 // -----------------------------------------------------------------------------
 void ODBExport::exportCollection(const Reference< XNameAccess >& _xCollection
@@ -898,6 +904,10 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
                                 if ( aItr->maValue >>= nNumberFormat )
                                     addDataStyle(nNumberFormat);
                             }
+                            break;
+                        case CTF_DB_COLUMN_TEXT_ALIGN:
+                            if ( !aItr->maValue.hasValue() )
+                                aItr->maValue <<= ::com::sun::star::awt::TextAlign::LEFT;
                             break;
                     }
                 }
