@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workctrl.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:48:03 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:11:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ FloatingWindow RID_INSERT_CTRL
     SVLook = TRUE ;
     HelpID = HID_INSERT_CTRL ;
     /* ### ACHTUNG: Neuer Text in Resource? Einf¸gen : Einf≥gen */
-    Text [ de ] = "Einf¸gen" ;
+    Text [ de ] = "Einf√ºgen" ;
     ToolBox TBX_INSERT
     {
         MenuStrings = TRUE ;
@@ -131,7 +131,7 @@ FloatingWindow RID_INSERT_OBJ_CTRL
     SVLook = TRUE ;
     HelpID = HID_INSERT_OBJ_CTRL ;
     /* ### ACHTUNG: Neuer Text in Resource? Objekt einf¸gen : Objekt einf≥gen */
-    Text [ de ] = "Objekt einf¸gen" ;
+    Text [ de ] = "Objekt einf√ºgen" ;
     ToolBox TBX_OBJ_INSERT
     {
         MenuStrings = TRUE ;
@@ -366,7 +366,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
     String ST_OUTL
     {
         /* ### ACHTUNG: Neuer Text in Resource? ‹berschrift : öberschrift */
-        Text [ de ] = "‹berschrift" ;
+        Text [ de ] = "√úberschrift" ;
         Text [ en-US ] = "Headings" ;
         Text [ x-comment ] = " ";
     };
@@ -379,7 +379,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
     String ST_FTN
     {
         /* ### ACHTUNG: Neuer Text in Resource? Fuﬂnote : Fuònote */
-        Text [ de ] = "Fuﬂnote" ;
+        Text [ de ] = "Fu√ünote" ;
         Text [ en-US ] = "Footnote" ;
         Text [ x-comment ] = " ";
     };
@@ -461,56 +461,56 @@ String STR_IMGBTN_PREV_DOWN
 String STR_IMGBTN_TBL_DOWN
 {
     /* ### ACHTUNG: Neuer Text in Resource? N‰chste Tabelle : Nıchste Tabelle */
-    Text [ de ] = "N‰chste Tabelle" ;
+    Text [ de ] = "N√§chste Tabelle" ;
     Text [ en-US ] = "Next table" ;
     Text [ x-comment ] = " ";
 };
 String STR_IMGBTN_FRM_DOWN
 {
     /* ### ACHTUNG: Neuer Text in Resource? N‰chster Textrahmen : Nıchster Textrahmen */
-    Text [ de ] = "N‰chster Textrahmen" ;
+    Text [ de ] = "N√§chster Textrahmen" ;
     Text [ en-US ] = "Next text frame" ;
     Text [ x-comment ] = " ";
 };
 String STR_IMGBTN_PGE_DOWN
 {
     /* ### ACHTUNG: Neuer Text in Resource? N‰chste Seite : Nıchste Seite */
-    Text [ de ] = "N‰chste Seite" ;
+    Text [ de ] = "N√§chste Seite" ;
     Text [ en-US ] = "Next page" ;
     Text [ x-comment ] = " ";
 };
 String STR_IMGBTN_DRW_DOWN
 {
     /* ### ACHTUNG: Neuer Text in Resource? N‰chstes Zeichenobjekt : Nıchstes Zeichenobjekt */
-    Text [ de ] = "N‰chstes Zeichenobjekt" ;
+    Text [ de ] = "N√§chstes Zeichenobjekt" ;
     Text [ en-US ] = "Next drawing" ;
     Text [ x-comment ] = " ";
 };
 String STR_IMGBTN_CTRL_DOWN
 {
     /* ### ACHTUNG: Neuer Text in Resource? N‰chstes Kontrollfeld : Nıchstes Kontrollfeld */
-    Text [ de ] = "N‰chstes Kontrollfeld" ;
+    Text [ de ] = "N√§chstes Kontrollfeld" ;
     Text [ en-US ] = "Next control" ;
     Text [ x-comment ] = " ";
 };
 String STR_IMGBTN_REG_DOWN
 {
     /* ### ACHTUNG: Neuer Text in Resource? N‰chster Bereich : Nıchster Bereich */
-    Text [ de ] = "N‰chster Bereich" ;
+    Text [ de ] = "N√§chster Bereich" ;
     Text [ en-US ] = "Next section" ;
     Text [ x-comment ] = " ";
 };
 String STR_IMGBTN_BKM_DOWN
 {
     /* ### ACHTUNG: Neuer Text in Resource? N‰chste Textmarke : Nıchste Textmarke */
-    Text [ de ] = "N‰chste Textmarke" ;
+    Text [ de ] = "N√§chste Textmarke" ;
     Text [ en-US ] = "Next bookmark" ;
     Text [ x-comment ] = " ";
 };
 String STR_IMGBTN_GRF_DOWN
 {
     /* ### ACHTUNG: Neuer Text in Resource? N‰chste Grafik : Nıchste Grafik */
-    Text [ de ] = "N‰chste Grafik" ;
+    Text [ de ] = "N√§chste Grafik" ;
     Text [ en-US ] = "Next graphic" ;
     Text [ x-comment ] = " ";
 };
@@ -518,54 +518,54 @@ String STR_IMGBTN_OLE_DOWN
 {
     /* ### ACHTUNG: Neuer Text in Resource? N‰chstes OLE-Objekt : N‰chstes OLE object */
     /* ### ACHTUNG: Neuer Text in Resource? N‰chstes OLE-Objekt : Nıchstes OLE-Objekt */
-    Text [ de ] = "N‰chstes OLE-Objekt" ;
+    Text [ de ] = "N√§chstes OLE-Objekt" ;
     Text [ en-US ] = "Next OLE object" ;
     Text [ x-comment ] = " ";
 };
 String STR_IMGBTN_OUTL_DOWN
 {
     /* ### ACHTUNG: Neuer Text in Resource? N‰chste ‹berschrift : Nıchste öberschrift */
-    Text [ de ] = "N‰chste ‹berschrift" ;
+    Text [ de ] = "N√§chste √úberschrift" ;
     Text [ en-US ] = "Next heading" ;
     Text [ x-comment ] = " ";
 };
 String STR_IMGBTN_SEL_DOWN
 {
     /* ### ACHTUNG: Neuer Text in Resource? N‰chste Markierung : Nıchste Markierung */
-    Text [ de ] = "N‰chste Markierung" ;
+    Text [ de ] = "N√§chste Markierung" ;
     Text [ en-US ] = "Next selection" ;
     Text [ x-comment ] = " ";
 };
 String STR_IMGBTN_FTN_DOWN
 {
     /* ### ACHTUNG: Neuer Text in Resource? N‰chste Fuﬂnote : Nıchste Fuònote */
-    Text [ de ] = "N‰chste Fuﬂnote" ;
+    Text [ de ] = "N√§chste Fu√ünote" ;
     Text [ en-US ] = "Next footnote" ;
     Text [ x-comment ] = " ";
 };
 String STR_IMGBTN_MARK_DOWN
 {
     /* ### ACHTUNG: Neuer Text in Resource? N‰chster Merker : Nıchster Merker */
-    Text [ de ] = "N‰chster Merker" ;
+    Text [ de ] = "N√§chster Merker" ;
     Text [ en-US ] = "Next Reminder" ;
     Text [ x-comment ] = " ";
 };
 String STR_IMGBTN_POSTIT_DOWN
 {
     /* ### ACHTUNG: Neuer Text in Resource? N‰chste Notiz : Nıchste Notiz */
-    Text [ de ] = "N‰chste Notiz" ;
+    Text [ de ] = "N√§chste Notiz" ;
     Text [ en-US ] = "Next Note" ;
     Text [ x-comment ] = " ";
 };
 String STR_IMGBTN_SRCH_REP_DOWN
 {
-    Text [ de ] = "Vorw‰rts weitersuchen" ;
+    Text [ de ] = "Vorw√§rts weitersuchen" ;
     Text [ en-US ] = "Continue search forward" ;
     Text [ x-comment ] = " ";
 };
 String STR_IMGBTN_INDEX_ENTRY_DOWN
 {
-    Text [ de ] = "N‰chster Verzeichniseintrag" ;
+    Text [ de ] = "N√§chster Verzeichniseintrag" ;
     Text [ en-US ] = "Next index entry";
     Text [ x-comment ] = " ";
 };
@@ -635,7 +635,7 @@ String STR_IMGBTN_OLE_UP
 String STR_IMGBTN_OUTL_UP
 {
     /* ### ACHTUNG: Neuer Text in Resource? Vorige ‹berschrift : Vorige öberschrift */
-    Text [ de ] = "Vorige ‹berschrift" ;
+    Text [ de ] = "Vorige √úberschrift" ;
     Text [ en-US ] = "Previous heading" ;
     Text [ x-comment ] = " ";
 };
@@ -648,7 +648,7 @@ String STR_IMGBTN_SEL_UP
 String STR_IMGBTN_FTN_UP
 {
     /* ### ACHTUNG: Neuer Text in Resource? Vorige Fuﬂnote : Vorige Fuònote */
-    Text [ de ] = "Vorige Fuﬂnote" ;
+    Text [ de ] = "Vorige Fu√ünote" ;
     Text [ en-US ] = "Previous footnote" ;
     Text [ x-comment ] = " ";
 };
@@ -666,7 +666,7 @@ String STR_IMGBTN_POSTIT_UP
 };
 String STR_IMGBTN_SRCH_REP_UP
 {
-    Text [ de ] = "R¸ckw‰rts weitersuchen" ;
+    Text [ de ] = "R√ºckw√§rts weitersuchen" ;
     Text [ en-US ] = "Continue search backwards" ;
     Text [ x-comment ] = " ";
 };
@@ -684,7 +684,7 @@ String STR_IMGBTN_TBLFML_UP
 };
 String STR_IMGBTN_TBLFML_DOWN
 {
-    Text [ de ] = "N‰chste Tabellenformel" ;
+    Text [ de ] = "N√§chste Tabellenformel" ;
     Text [ en-US ] = "Next table formula";
     Text [ x-comment ] = " ";
 };
@@ -696,7 +696,7 @@ String STR_IMGBTN_TBLFML_ERR_UP
 };
 String STR_IMGBTN_TBLFML_ERR_DOWN
 {
-    Text [ de ] = "N‰chste fehlerhafte Tabellenformel" ;
+    Text [ de ] = "N√§chste fehlerhafte Tabellenformel" ;
     Text [ en-US ] = "Next faulty table formula";
     Text [ x-comment ] = " ";
 };
