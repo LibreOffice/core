@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vectdlg.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:27:31 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:38:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,7 @@ ModalDialog DLG_VECTORIZE
         Pos = MAP_APPFONT ( 12 , 44 ) ;
         Size = MAP_APPFONT ( 79 , 12 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Löcher füllen";
+        Text [ de ] = "~LÃ¶cher fÃ¼llen";
         Text [ en-US ] = "~Fill holes:";
         Text [ x-comment ] = " ";
     };
@@ -162,7 +162,7 @@ ModalDialog DLG_VECTORIZE
     {
         Pos = MAP_APPFONT ( 12 , 59 );
         Size = MAP_APPFONT ( 79 , 12 );
-        Text [ de ] = "~Kachelgröße:";
+        Text [ de ] = "~KachelgrÃ¶ÃŸe:";
         Text [ en-US ] = "Tile size:";
         Text [ x-comment ] = " ";
     };
