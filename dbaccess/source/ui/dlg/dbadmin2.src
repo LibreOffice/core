@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbadmin2.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:55:06 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:13:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ String STR_ENTER_CONNECTION_PASSWORD
 
 String STR_QUERY_DROP_ALL
 {
-    Text [ de ] ="Wollen Sie die alle Selektierten löschen?";
+    Text [ de ] ="Wollen Sie die alle Selektierten lÃ¶schen?";
     Text[ en-US ] = "Do you want to delete all selected items?";
 };
 
@@ -121,7 +121,7 @@ String STR_HINT_READONLY_CONNECTION
 
 String STR_HINT_CONNECTION_NOT_CAPABLE
 {
-    Text [ de ] ="(nicht unterstützt von dieser Verbindung)";
+    Text [ de ] ="(nicht unterstÃ¼tzt von dieser Verbindung)";
     Text [ en-US ] = "(Not supported by this connection)";
 };
 
@@ -144,7 +144,7 @@ ModalDialog DLG_DOMAINPASSWORD
     {
         Pos = MAP_APPFONT ( 3 , 3 ) ;
         Size = MAP_APPFONT ( WIN_X - 3 - 6 - 6 - 50 , 8 ) ;
-        Text [ de ] ="Bitte geben Sie das ~Kennwort für den Benutzer 'DOMAIN' ein" ;
+        Text [ de ] ="Bitte geben Sie das ~Kennwort fÃ¼r den Benutzer 'DOMAIN' ein" ;
         Text[ en-US ] = "Please enter the ~password for the user 'DOMAIN'.";
     };
 
@@ -209,7 +209,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Size    = MAP_APPFONT ( PAGE_X_T - 2*UNRELATED_CONTROLS , 16 ) ;
         HelpId = HID_DSADMIN_FILTER_EXPLANATION;
         WordBreak = TRUE;
-        Text [ de ] ="Markieren Sie diejenigen Tabellen, die für die Applikationen sichtbar sein sollen.";
+        Text [ de ] ="Markieren Sie diejenigen Tabellen, die fÃ¼r die Applikationen sichtbar sein sollen.";
         Text [ en-US ] = "Mark the tables that should be visible for the applications.";
     };
 };
