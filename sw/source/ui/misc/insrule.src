@@ -4,9 +4,9 @@
  *
  *  $RCSfile: insrule.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:34:11 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:08:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@ ModalDialog DLG_INSERT_RULER
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 242 , 124 ) ;
-    Text [ de ] = "Horizontale Linie einfügen" ;
+    Text [ de ] = "Horizontale Linie einfÃ¼gen" ;
     Moveable = TRUE ;
     FixedLine FL_SEL
     {
