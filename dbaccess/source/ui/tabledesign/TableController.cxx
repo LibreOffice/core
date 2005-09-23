@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:39:41 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:45:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,6 +235,7 @@ Reference< XInterface > SAL_CALL OTableController::Create(const Reference<XMulti
     return *(new OTableController(_rxFactory));
 }
 
+DBG_NAME(OTableController)
 // -----------------------------------------------------------------------------
 OTableController::OTableController(const Reference< XMultiServiceFactory >& _rM) : OTableController_BASE(_rM)
     ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
@@ -242,6 +243,8 @@ OTableController::OTableController(const Reference< XMultiServiceFactory >& _rM)
     ,m_pTypeInfo()
     ,m_bAllowAutoIncrementValue(sal_False)
 {
+    DBG_CTOR(OTableController,NULL);
+
     InvalidateAll();
     m_pTypeInfo = TOTypeInfoSP(new OTypeInfo());
     m_pTypeInfo->aUIName = m_sTypeNames.GetToken(TYPE_OTHER);
@@ -251,6 +254,8 @@ OTableController::~OTableController()
 {
     m_aTypeInfoIndex.clear();
     m_aTypeInfo.clear();
+
+    DBG_DTOR(OTableController,NULL);
 }
 
 // -----------------------------------------------------------------------------
@@ -599,22 +604,26 @@ void OTableController::impl_initialize( const Sequence< Any >& aArguments )
         OTableController_BASE::impl_initialize(aArguments);
 
         PropertyValue aValue;
-        const Any* pBegin   = aArguments.getConstArray();
-        const Any* pEnd     = pBegin + aArguments.getLength();
+        const Any* pIter    = aArguments.getConstArray();
+        const Any* pEnd     = pIter + aArguments.getLength();
 
-        for(;pBegin != pEnd;++pBegin)
+        for(;pIter != pEnd;++pIter)
         {
-            if((*pBegin >>= aValue) && (0 == aValue.Name.compareToAscii(PROPERTY_ACTIVECONNECTION)))
+            if (!(*pIter >>= aValue))
+                throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid type in argument list. PropertyValue expected.")),*this);
+            if ( 0 == aValue.Name.compareToAscii(PROPERTY_ACTIVECONNECTION) )
             {
                 Reference< XConnection > xConn;
-                aValue.Value >>= xConn;
+                if ( !(aValue.Value >>= xConn) )
+                    throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for ActiveConnection.")),*this);
                 OSL_ENSURE( xConn.is(), "OTableController::initialize: invalid connection given!!" );
                 if ( xConn.is() )
                     initializeConnection( xConn );
             }
             else if (0 == aValue.Name.compareToAscii(PROPERTY_CURRENTTABLE))
             {
-                aValue.Value >>= m_sName;
+                if ( !(aValue.Value >>= m_sName) )
+                    throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid argument type for CurrentTable.")),*this);
             }
         }
         // read autoincrement value set in the datasource
@@ -942,13 +951,13 @@ void OTableController::loadData()
         //  sal_Bool bReadOldRow = xMetaData->supportsAlterTableWithAddColumn() && xMetaData->supportsAlterTableWithDropColumn();
         sal_Bool bIsAlterAllowed = isAlterAllowed();
         Sequence< ::rtl::OUString> aColumns = xColumns->getElementNames();
-        const ::rtl::OUString* pBegin   = aColumns.getConstArray();
-        const ::rtl::OUString* pEnd     = pBegin + aColumns.getLength();
+        const ::rtl::OUString* pIter    = aColumns.getConstArray();
+        const ::rtl::OUString* pEnd     = pIter + aColumns.getLength();
 
-        for(;pBegin != pEnd;++pBegin)
+        for(;pIter != pEnd;++pIter)
         {
             Reference<XPropertySet> xColumn;
-            xColumns->getByName(*pBegin) >>= xColumn;
+            xColumns->getByName(*pIter) >>= xColumn;
             sal_Int32 nType         = 0;
             sal_Int32 nScale        = 0;
             sal_Int32 nPrecision    = 0;
@@ -1347,16 +1356,16 @@ void OTableController::alterColumns()
     if(xDrop.is())
     {
         Sequence< ::rtl::OUString> aColumnNames = xColumns->getElementNames();
-        const ::rtl::OUString* pBegin = aColumnNames.getConstArray();
-        const ::rtl::OUString* pEnd = pBegin + aColumnNames.getLength();
-        for(;pBegin != pEnd;++pBegin)
+        const ::rtl::OUString* pIter = aColumnNames.getConstArray();
+        const ::rtl::OUString* pEnd = pIter + aColumnNames.getLength();
+        for(;pIter != pEnd;++pIter)
         {
-            if(aColumns.find(*pBegin) == aColumns.end()) // found a column to delete
+            if(aColumns.find(*pIter) == aColumns.end()) // found a column to delete
             {
-                if(xKeyColumns.is() && xKeyColumns->hasByName(*pBegin)) // check if this column is a member of the primary key
+                if(xKeyColumns.is() && xKeyColumns->hasByName(*pIter)) // check if this column is a member of the primary key
                 {
                     String aMsgT(ModuleRes(STR_TBL_COLUMN_IS_KEYCOLUMN));
-                    aMsgT.SearchAndReplaceAscii("$column$",*pBegin);
+                    aMsgT.SearchAndReplaceAscii("$column$",*pIter);
                     String aTitle(ModuleRes(STR_TBL_COLUMN_IS_KEYCOLUMN_TITLE));
                     OSQLMessageBox aMsg(getView(),aTitle,aMsgT,WB_YES_NO| WB_DEF_YES);
                     if(aMsg.Execute() == RET_YES)
@@ -1371,7 +1380,7 @@ void OTableController::alterColumns()
                     }
                 }
                 Reference<XDrop> xDrop(xColumns,UNO_QUERY);
-                xDrop->dropByName(*pBegin);
+                xDrop->dropByName(*pIter);
             }
         }
     }
