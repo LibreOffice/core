@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:56:34 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:38:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,6 +203,9 @@ void OResultSet::disposing(void)
     m_xParamColumns = NULL;
     m_xColsIdx      = NULL;
 
+    Reference<XComponent> xComp = m_pTable;
+    if ( xComp.is() )
+        xComp->removeEventListener(this);
     if(m_pTable)
     {
         m_pTable->release();
@@ -460,14 +463,7 @@ void SAL_CALL OResultSet::afterLast(  ) throw(SQLException, RuntimeException)
 
 void SAL_CALL OResultSet::close(  ) throw(SQLException, RuntimeException)
 {
-//  {
-//      ::osl::MutexGuard aGuard( m_aMutex );
-//      checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-//
-//  }
-//  dispose();
-    ::osl::MutexGuard aGuard( m_aMutex );
-    clear();
+    dispose();
 }
 // -------------------------------------------------------------------------
 
