@@ -4,9 +4,9 @@
  *
  *  $RCSfile: passwd.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:28:51 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:25:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ ModalDialog DLG_PASSWD
     {
         Pos = MAP_APPFONT( 12, 45 );
         Size = MAP_APPFONT( 42, 10 );
-        Text [ de ] = "~Best‰tigen";
+        Text [ de ] = "~Best√§tigen";
         Text [ en-US ] = "~Confirm";
     };
     Edit ED_PASSWD_CONFIRM
@@ -118,7 +118,7 @@ ModalDialog DLG_PASSWD
     };
     String STR_PASSWD_CONFIRM
     {
-        Text [ de ] = "Kennwort best‰tigen" ;
+        Text [ de ] = "Kennwort best√§tigen" ;
         Text [ en-US ] = "Confirm password" ;
         Text [ x-comment ] = " ";
     };
