@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outline.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:38:21 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:09:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -344,7 +344,7 @@ TabPage TP_OUTLINE_NUM
     {
         Pos = MAP_APPFONT ( 50 , 75 ) ;
         Size = MAP_APPFONT ( 52 , 8 ) ;
-        Text [ de ] = "~Vollst‰ndig" ;
+        Text [ de ] = "~Vollst√§ndig" ;
         Text [ en-US ] = "Sho~w sublevels" ;
         Text [ x-comment ] = " ";
     };
