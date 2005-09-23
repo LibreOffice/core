@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoanim.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:15:20 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 10:43:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ UndoAnimation::UndoAnimation( SdDrawDocument* pDoc, SdPage* pThePage )
     try
     {
         if( pThePage->mxAnimationNode.is() )
-            mpImpl->mxOldNode = sd::Clone( pThePage->getAnimationNode() );
+            mpImpl->mxOldNode = sd::clone( pThePage->getAnimationNode() );
     }
     catch( Exception& e )
     {
@@ -98,13 +98,13 @@ void UndoAnimation::Undo()
         if( !mpImpl->mbNewNodeSet )
         {
             if( mpImpl->mpPage->mxAnimationNode.is() )
-                mpImpl->mxNewNode.set( sd::Clone( mpImpl->mpPage->mxAnimationNode ) );
+                mpImpl->mxNewNode.set( sd::clone( mpImpl->mpPage->mxAnimationNode ) );
             mpImpl->mbNewNodeSet = true;
         }
 
         Reference< XAnimationNode > xOldNode;
         if( mpImpl->mxOldNode.is() )
-            xOldNode = sd::Clone( mpImpl->mxOldNode );
+            xOldNode = sd::clone( mpImpl->mxOldNode );
 
         mpImpl->mpPage->setAnimationNode( xOldNode );
     }
@@ -121,7 +121,7 @@ void UndoAnimation::Redo()
     {
         Reference< XAnimationNode > xNewNode;
         if( mpImpl->mxNewNode.is() )
-            xNewNode = sd::Clone( mpImpl->mxNewNode );
+            xNewNode = sd::clone( mpImpl->mxNewNode );
         mpImpl->mpPage->setAnimationNode( xNewNode );
     }
     catch( Exception& e )
