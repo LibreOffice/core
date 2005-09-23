@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AdabasStatDlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:40:38 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:24:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,13 +92,16 @@ namespace dbaui
 
     //========================================================================
     //= OAdabasStatPageDlg
-    //========================================================================
+DBG_NAME(OAdabasStatPageDlg)
+//========================================================================
     OAdabasStatPageDlg::OAdabasStatPageDlg(Window* _pParent
                                             , SfxItemSet* _pItems
                                             ,const Reference< XMultiServiceFactory >& _rxORB
                                             ,const ::com::sun::star::uno::Any& _aDataSourceName)
         :SfxTabDialog(_pParent, ModuleRes(DLG_DATABASE_ADABASADMIN), _pItems)
     {
+        DBG_CTOR(OAdabasStatPageDlg,NULL);
+
         m_pImpl = ::std::auto_ptr<ODbDataSourceAdministrationHelper>(new ODbDataSourceAdministrationHelper(_rxORB,_pParent,this));
         m_pImpl->setDataSourceOrName(_aDataSourceName);
         Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
@@ -156,6 +159,8 @@ namespace dbaui
     {
         SetInputSet(NULL);
         DELETEZ(pExampleSet);
+
+        DBG_DTOR(OAdabasStatPageDlg,NULL);
     }
     // -----------------------------------------------------------------------
     short OAdabasStatPageDlg::Execute()
