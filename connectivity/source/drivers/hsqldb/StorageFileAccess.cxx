@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StorageFileAccess.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:06:12 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:40:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,7 @@ JNIEXPORT jboolean JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_removeElement
   (JNIEnv * env, jobject obj_this,jstring key, jstring name)
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
     {
         ::rtl::OUString sKey = StorageContainer::jstring2ustring(env,key);
         ::rtl::OUString sName = StorageContainer::jstring2ustring(env,name);
@@ -154,7 +154,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_rem
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_renameElement
   (JNIEnv * env, jobject obj_this,jstring key, jstring oldname, jstring newname)
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
     {
         ::rtl::OUString sKey = StorageContainer::jstring2ustring(env,key);
         ::rtl::OUString sNewName = StorageContainer::jstring2ustring(env,newname);
@@ -170,7 +170,7 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_ren
                 StorageContainer::removeURLPrefix(StorageContainer::jstring2ustring(env,oldname),aStoragePair.first.second),
                 StorageContainer::removeURLPrefix(StorageContainer::jstring2ustring(env,newname),aStoragePair.first.second)
             );
-#if OSL_DEBUG_LEVEL > 1
+#ifdef HSQLDB_DBG
             {
                 ::rtl::OUString sNewName = StorageContainer::removeURLPrefix(StorageContainer::jstring2ustring(env,newname),aStoragePair.first.second);
                 OSL_ENSURE(aStoragePair.first.first->isStreamElement(sNewName),"Stream could not be renamed");
