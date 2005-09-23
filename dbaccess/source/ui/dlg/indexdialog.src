@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexdialog.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:05:45 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:15:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,7 @@ ModalDialog DLG_INDEXDESIGN
                 Identifier = ID_INDEX_DROP;
                 HelpId = HID_DLGIDX_DROPINDEX;
                 Command = ".index:dropCurrent";
-                Text [ de ] = "Aktuellen Index löschen" ;
+                Text [ de ] = "Aktuellen Index lÃ¶schen" ;
                 Text [ en-US ] = "Delete Current Index" ;
             };
             ToolBoxItem
@@ -112,7 +112,7 @@ ModalDialog DLG_INDEXDESIGN
                 Identifier = ID_INDEX_RESET;
                 HelpId = HID_DLGIDX_RESETINDEX;
                 Command = ".index:resetCurrent";
-                Text [ de ] = "Aktuellen Index zurücksetzen" ;
+                Text [ de ] = "Aktuellen Index zurÃ¼cksetzen" ;
                 Text [ en-US ] = "Reset Current Index" ;
             };
         };
@@ -176,7 +176,7 @@ ModalDialog DLG_INDEXDESIGN
         Size = MAP_APPFONT ( BUTTON_SIZE_X, BUTTON_SIZE_Y );
         SVLook = TRUE;
         DefButton = TRUE;
-        Text [ de ] = "S~chließen";
+        Text [ de ] = "S~chlieÃŸen";
         Text [ en-US ] = "~Close";
     };
     HelpButton HB_HELP
@@ -209,7 +209,7 @@ String STR_ORDER_DESCENDING
 
 String STR_CONFIRM_DROP_INDEX
 {
-    Text [ de ] = "Wollen Sie den Index '$name$' wirklich löschen?";
+    Text [ de ] = "Wollen Sie den Index '$name$' wirklich lÃ¶schen?";
     Text [ en-US ] = "Do you really want to delete the index '$name$'?";
 };
 
@@ -247,7 +247,7 @@ QueryBox QUERY_SAVE_CURRENT_INDEX
     Title [ de ] = "Index-Entwurf verlassen";
     Title [ en-US ] = "Exit Index Design";
 
-    Message [ de ] = "Wollen Sie die Änderungen am aktuellen Index noch speichern?";
+    Message [ de ] = "Wollen Sie die Ã„nderungen am aktuellen Index noch speichern?";
     Message [ en-US ] = "Do you want to save the changes made to the current index?";
 
     Buttons = WB_YES_NO_CANCEL;
@@ -262,8 +262,7 @@ String STR_INDEX_NAME_ALREADY_USED
 
 String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
 {
-    Text [ de ] = "In einer Index-Definition darf jede Tabellen-Spalte höchstens einmal vorkommen, Sie jedoch haben die Spalte \"$name$\""
-        "zweimal benutzt.";
+    Text [ de ] = "In einer Index-Definition darf jede Tabellen-Spalte hÃ¶chstens einmal vorkommen, Sie jedoch haben die Spalte \"$name$\"zweimal benutzt.";
     Text [ en-US ] = "In an index definition, no table column may occur more than once. However, you have entered column \"$name$\" twice.";
 };
 
