@@ -4,9 +4,9 @@
  *
  *  $RCSfile: groupboxpages.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:30:19 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:04:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,7 +114,7 @@ TabPage RID_PAGE_DEFAULTFIELDSELECTION
         Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 24 ) ;
         WordBreak = TRUE;
 
-        Text [ de ] = "Soll ein Optionsfeld standardm‰ﬂig ausgew‰hlt sein?";
+        Text [ de ] = "Soll ein Optionsfeld standardm√§√üig ausgew√§hlt sein?";
         Text [ en-US ] = "Should one option field be selected as a default?";
     };
     RadioButton RB_DEFSELECTION_YES
@@ -142,7 +142,7 @@ TabPage RID_PAGE_DEFAULTFIELDSELECTION
         Pos = MAP_APPFONT ( 7 , 59  ) ;
         Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 10 ) ;
         TabStop = FALSE;
-        Text [ de ] = "Nein, kein Feld soll ausgew‰hlt sein.";
+        Text [ de ] = "Nein, kein Feld soll ausgew√§hlt sein.";
         Text [ en-US ] = "No, one particular field is not going to be selected.";
     };
 };
@@ -164,7 +164,7 @@ TabPage RID_PAGE_OPTIONVALUES
         Pos = MAP_APPFONT ( 7 , 15  ) ;
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 24 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "Wenn Sie eine Option ausw‰hlen, wird der Optionsgruppe ein bestimmter Wert zugewiesen.";
+        Text [ de ] = "Wenn Sie eine Option ausw√§hlen, wird der Optionsgruppe ein bestimmter Wert zugewiesen.";
         Text [ en-US ] = "When you select an option, the option group is given a specific value.";
     };
     FixedText FT_OPTIONVALUES
@@ -173,7 +173,7 @@ TabPage RID_PAGE_OPTIONVALUES
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 16 ) ;
         WordBreak = TRUE;
         Group = TRUE;
-        Text [ de ] = "Welchen ~Wert mˆchten Sie jeder Option zuweisen?";
+        Text [ de ] = "Welchen ~Wert m√∂chten Sie jeder Option zuweisen?";
         Text [ en-US ] = "Which ~value do you want to assign to each option?";
     };
     Edit ET_OPTIONVALUE
@@ -242,7 +242,7 @@ TabPage RID_PAGE_OPTIONS_FINAL
 
 String RID_STR_GROUPWIZ_DBFIELD
 {
-    Text [ de ] = "Sie kˆnnen den Wert der Optionsgruppe entweder in einem Datenbankfeld speichern oder ihn f¸r eine sp‰tere Aktion verwenden.";
+    Text [ de ] = "Sie k√∂nnen den Wert der Optionsgruppe entweder in einem Datenbankfeld speichern oder ihn f√ºr eine sp√§tere Aktion verwenden.";
     Text [ en-US ] = "You can either save the value of the option group in a database field or use it for a later action.";
 };
 
