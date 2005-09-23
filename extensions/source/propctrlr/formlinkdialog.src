@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formlinkdialog.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:13:41 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:05:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ ModalDialog RID_DLG_FORMLINKS
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 252, 110 ) ;
 
-    Text [ de ] = "Felder verknüpfen";
+    Text [ de ] = "Felder verknÃ¼pfen";
     Text [ en-US ] = "Link fields";
 
     FixedText FT_EXPLANATION
@@ -61,7 +61,7 @@ ModalDialog RID_DLG_FORMLINKS
 
         WordBreak = TRUE;
 
-        Text [ de ] = "Unterformulare können benutzt werden, um Detaildaten zu dem aktuellen Datensatz des Hauptformulars anzuzeigen. Dazu können Sie festlegen, welche Spalten sich jeweils entsprechen sollen.";
+        Text [ de ] = "Unterformulare kÃ¶nnen benutzt werden, um Detaildaten zu dem aktuellen Datensatz des Hauptformulars anzuzeigen. Dazu kÃ¶nnen Sie festlegen, welche Spalten sich jeweils entsprechen sollen.";
         Text [ en-US ] = "Subforms can be used to display detailed data about the current record of the master form. To do this, you can specify which columns in the subform match which columns in the master form.";
     };
 
