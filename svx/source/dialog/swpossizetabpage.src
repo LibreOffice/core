@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swpossizetabpage.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:10:50 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:49:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,14 +44,14 @@ TabPage RID_SVXPAGE_SWPOSSIZE
 {
     HelpId = HID_SVXPAGE_SWPOSSIZE;
     Hide = TRUE ;
-    Text [ de ] = "Position und Größe" ;
+    Text [ de ] = "Position und GrÃ¶ÃŸe" ;
     Text[ en-US ] = "Position and Size" ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedLine FL_SIZE
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 104 , 8 ) ;
-        Text [ de ] = "Größe" ;
+        Text [ de ] = "GrÃ¶ÃŸe" ;
         Text [ en-US ] = "Size" ;
     };
     FixedText FT_WIDTH
@@ -85,7 +85,7 @@ TabPage RID_SVXPAGE_SWPOSSIZE
         Pos = MAP_APPFONT ( 12 , 32 ) ;
         Size = MAP_APPFONT ( 43 , 8 ) ;
         Left = TRUE ;
-        Text [ de ] = "H~öhe" ;
+        Text [ de ] = "H~Ã¶he" ;
         Text [ en-US ] = "H~eight" ;
     };
     MetricField MF_HEIGHT
@@ -172,7 +172,7 @@ TabPage RID_SVXPAGE_SWPOSSIZE
     {
         Pos = MAP_APPFONT ( 6 , 86  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Schützen" ;
+        Text [ de ] = "SchÃ¼tzen" ;
         Text [ en-US ] = "Protect" ;
     };
     TriStateBox CB_POSITION
@@ -188,7 +188,7 @@ TabPage RID_SVXPAGE_SWPOSSIZE
         Pos = MAP_APPFONT ( 122 , 97 ) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Größe" ;
+        Text [ de ] = "~GrÃ¶ÃŸe" ;
         Text [ en-US ] = "~Size" ;
     };
     FixedLine FL_POSITION
