@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:18:08 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:55:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -269,9 +269,9 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
     sal_Bool bHaveEncryptionKey = rEncryptionKey.getLength() ? sal_True : sal_False;
 
-    if ( maContents.begin() == maContents.end() )
+    if ( maContents.begin() == maContents.end() && rPath.getLength() )
     {
-        // it is an empty folder, use workaround to store it
+        // it is an empty subfolder, use workaround to store it
         ZipEntry* pTempEntry = new ZipEntry();
         ZipPackageFolder::copyZipEntry ( *pTempEntry, aEntry );
         pTempEntry->nNameLen = (sal_Int16)rPath.getLength();
@@ -583,7 +583,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
             {
                 if ( !pStream->IsPackageMember() )
                 {
-                    xStream->closeInput();
+                    pStream->CloseOwnStreamIfAny();
                     pStream->SetPackageMember ( sal_True );
                 }
 
