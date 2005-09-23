@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: smoketest.pl,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 21:28:51 $
+#   last change: $Author: hr $ $Date: 2005-09-23 14:34:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -261,7 +261,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.14 $ ';
+$id_str = ' $Revision: 1.15 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -579,7 +579,7 @@ sub doInstall {
                     $newdir =~ s/\/\//\//;
                     createPath ($newdir, $error_setup);
                 }
-                $Command = "rpm --install --nodeps -vh --relocate $olddir=$newdir --dbpath $rpmdir $installsetpath$file";
+                $Command = "rpm --install --ignoresize --nodeps -vh --relocate $olddir=$newdir --dbpath $rpmdir $installsetpath$file";
                 execute_Command ($Command, $error_setup, $show_Message, $command_withoutErrorcheck);
             }
         }
