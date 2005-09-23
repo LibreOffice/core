@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FValue.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:57:27 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:35:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
+#include <com/sun/star/sdbc/XRow.hpp>
 #endif
 
 namespace connectivity
@@ -344,6 +347,16 @@ namespace connectivity
         // only use for anys
         ::com::sun::star::uno::Any                  getAny()        const { return *(::com::sun::star::uno::Any*)m_aValue.m_pValue; }
         ::com::sun::star::uno::Any                  makeAny()       const;
+
+        /**
+            fetches a single value out of the row
+            @param _nPos    the current column position
+            @param _nType   the type of the current column
+            @param _xRow    the row where to fetch the data from
+        */
+        void fill(sal_Int32 _nPos,
+                  sal_Int32 _nType,
+                  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>& _xRow);
     };
 
     /// ORowSetValueDecorator decorates a ORowSetValue so the value is "refcounted"
