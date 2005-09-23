@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addresslistdialog.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:48:15 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 11:47:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,8 +53,8 @@
 #ifndef _SWDBDATA_HXX
 #include <swdbdata.hxx>
 #endif
-#ifndef SW_SHARED_UNO_COMPONENT_HXX
-#include "sharedunocomponent.hxx"
+#ifndef SW_UI_SHARED_CONNECTION_HXX
+#include "sharedconnection.hxx"
 #endif
 
 
