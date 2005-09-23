@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlmessage.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:10:52 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:32:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,6 +118,7 @@ protected:
     DECL_LINK(OnExceptionSelected, void*);
 };
 
+DBG_NAME(OExceptionChainDialog)
 //------------------------------------------------------------------------------
 OExceptionChainDialog::OExceptionChainDialog(Window* pParent, const Any& _rStart)
     :ModalDialog(pParent, ModuleRes(DLG_SQLEXCEPTIONCHAIN))
@@ -128,6 +129,8 @@ OExceptionChainDialog::OExceptionChainDialog(Window* pParent, const Any& _rStart
     ,m_aExceptionText   (this, ResId(ME_DESCRIPTION))
     ,m_aOK              (this, ResId(PB_OK))
 {
+    DBG_CTOR(OExceptionChainDialog,NULL);
+
     String sErrorLabel(ResId(STR_EXCEPTION_ERROR));
     String sWarningLabel(ResId(STR_EXCEPTION_WARNING));
     String sInfoLabel(ResId(STR_EXCEPTION_INFO));
@@ -232,6 +235,8 @@ OExceptionChainDialog::~OExceptionChainDialog()
             delete static_cast<SQLExceptionInfo*>(pLoop->GetUserData());
         pLoop = m_aExceptionList.Next(pLoop);
     }
+
+    DBG_DTOR(OExceptionChainDialog,NULL);
 }
 
 //------------------------------------------------------------------------------
@@ -501,6 +506,7 @@ void OSQLMessageBox::Construct(const SQLExceptionInfo& _rException, WinBits _nSt
     Construct(sTitle, sMessage, _nStyle, _eImage);
 }
 
+DBG_NAME(OSQLMessageBox)
 //------------------------------------------------------------------------------
 OSQLMessageBox::OSQLMessageBox(Window* _pParent, const UniString& _rTitle, const SQLException& _rError, WinBits _nStyle,
                         MessageType _eImage)
@@ -511,6 +517,8 @@ OSQLMessageBox::OSQLMessageBox(Window* _pParent, const UniString& _rTitle, const
     ,m_pInfoButton(NULL)
     ,m_aNextChainElement(SQLExceptionInfo(_rError).get())
 {
+    DBG_CTOR(OSQLMessageBox,NULL);
+
     Construct(_rTitle, _rError.Message, _nStyle, _eImage);
 }
 
@@ -523,6 +531,8 @@ OSQLMessageBox::OSQLMessageBox(Window* _pParent, const SQLException& _rError, Wi
     ,m_pInfoButton(NULL)
     ,m_aNextChainElement(SQLExceptionInfo(_rError).get())
 {
+    DBG_CTOR(OSQLMessageBox,NULL);
+
     Construct(SQLExceptionInfo(_rError), _nStyle, _eImage);
 }
 
@@ -535,6 +545,8 @@ OSQLMessageBox::OSQLMessageBox(Window* _pParent, const SQLExceptionInfo& _rExcep
       ,m_pInfoButton(NULL)
       ,m_aNextChainElement(_rException.get())
 {
+    DBG_CTOR(OSQLMessageBox,NULL);
+
     Construct(_rException, _nStyle, _eImage);
 }
 
@@ -546,6 +558,8 @@ OSQLMessageBox::OSQLMessageBox(Window* pParent, const UniString& rTitle, const U
       ,m_aMessage(this,WB_WORDBREAK | WB_LEFT)
       ,m_pInfoButton(NULL)
 {
+    DBG_CTOR(OSQLMessageBox,NULL);
+
     Construct(rTitle, rMessage, nStyle, eImage);
 }
 
@@ -553,6 +567,8 @@ OSQLMessageBox::OSQLMessageBox(Window* pParent, const UniString& rTitle, const U
 OSQLMessageBox::~OSQLMessageBox()
 {
     delete m_pInfoButton;
+
+    DBG_DTOR(OSQLMessageBox,NULL);
 }
 
 //--------------------------------------------------------------------------
