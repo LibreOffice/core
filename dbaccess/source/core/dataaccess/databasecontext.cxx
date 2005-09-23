@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 11:55:59 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:04:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,7 +187,6 @@ namespace dbaccess
 
 //= ODatabaseContext
 //==========================================================================
-DBG_NAME(ODatabaseContext)
 //--------------------------------------------------------------------------
 Reference< XInterface >
 ODatabaseContext_CreateInstance(const Reference< XMultiServiceFactory >  & xServiceManager)
@@ -201,13 +200,11 @@ ODatabaseContext::ODatabaseContext(const Reference< XMultiServiceFactory >  & xS
                        ,m_xServiceManager(xServiceManager)
                        ,m_aContainerListeners(m_aMutex)
 {
-    DBG_CTOR(ODatabaseContext,NULL);
 }
 
 //--------------------------------------------------------------------------
 ODatabaseContext::~ODatabaseContext()
 {
-    DBG_DTOR(ODatabaseContext,NULL);
 }
 
 // Helper
@@ -404,11 +401,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUStrin
         // calls registerPrivate in attachResource
         xModel->attachResource(_sURL,aArgs);
 
-        // since the model has been newly created, we're its owner. However, we do not
-        // really need it, we ust used it for loading the document. So, dispose it to prevent
-        // leaks
-        // #i50905# / 2005-06-20 / frank.schoenheit@sun.com
-        ::comphelper::disposeComponent( xModel );
+        SharedUNOComponent< XModel, CloseableComponent > aEnsureClose( xModel, SharedUNOComponent< XModel, CloseableComponent >::TakeOwnership );
     }
 
     setTransientProperties(_sURL,xExistent);
