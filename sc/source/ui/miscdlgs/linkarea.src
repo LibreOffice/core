@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkarea.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:11:17 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:03:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,7 @@ ModalDialog RID_SCDLG_LINKAREA
     {
         Pos = MAP_APPFONT ( 6 , 62 ) ;
         Size = MAP_APPFONT ( 198 , 8 ) ;
-        Text [ de ] = "~Verfügbare Tabellen/Bereiche" ;
+        Text [ de ] = "~VerfÃ¼gbare Tabellen/Bereiche" ;
         Text [ en-US ] = "~Available tables/ranges";
     };
     MultiListBox LB_RANGES
