@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menuids3_tmpl.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:42:06 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:27:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@
         Identifier = SID_CONVERT_TO_3D_LATHE_FAST ; \
         HelpID = SID_CONVERT_TO_3D_LATHE_FAST ; \
         /* ### ACHTUNG: Neuer Text in Resource? In 3~D-Rotationskörper : In 3~D-Rotationsk÷rper */\
-        Text [ de ] = "In 3~D-Rotationskörper" ; \
+        Text [ de ] = "In 3~D-RotationskÃ¶rper" ; \
         Text [ en-US ] = "To 3D ~Rotation Object" ; \
         Text [ x-comment ] = " ";\
     };
@@ -151,7 +151,7 @@
     {\
         Identifier = SID_SLIDE_TRANSITIONS_PANEL ; \
         HelpID = SID_SLIDE_TRANSITIONS_PANEL ; \
-        Text [ de ] = "Folienübergang"; \
+        Text [ de ] = "FolienÃ¼bergang"; \
         Text [ en-US ] = "Slide ~Transition" ; \
         Text [ x-comment ] = " ";\
     };
