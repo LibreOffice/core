@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templdlg.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:34:05 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:26:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ ModalDialog RID_STYLECATALOG
     {
         Pos = MAP_APPFONT ( 123 , 78 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Löschen..." ;
+        Text [ de ] = "~LÃ¶schen..." ;
         Text [ en-US ] = "~Delete..." ;
         TabStop = TRUE ;
     };
@@ -105,7 +105,7 @@ ModalDialog RID_STYLECATALOG
     {
         Pos = MAP_APPFONT ( 123 , 60 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Än~dern..." ;
+        Text [ de ] = "Ã„n~dern..." ;
         Text [ en-US ] = "~Modify..." ;
         TabStop = TRUE ;
     };
@@ -193,7 +193,7 @@ DockingWindow DLG_STYLE_DESIGNER
             {
                 HelpId = HID_TEMPLDLG_WATERCAN ;
                 Identifier = SID_STYLE_WATERCAN ;
-                Text [ de ] = "Gießkannenmodus" ;
+                Text [ de ] = "GieÃŸkannenmodus" ;
                 Text [ en-US ] = "Fill Format Mode" ;
             };
             ToolBoxItem
