@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgejpg.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:34:46 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:53:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ ModalDialog DLG_EXPORT_JPG
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "Qualit‰t" ;
+        Text [ de ] = "Qualit√§t" ;
         Text [ en-US ] = "Quality" ;
         Text [ x-comment ] = " ";
     };
@@ -74,7 +74,7 @@ ModalDialog DLG_EXPORT_JPG
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 81 , 16 ) ;
-        Text [ de ] = "1: min. Qualit‰t\n100: max. Qualit‰t" ;
+        Text [ de ] = "1: min. Qualit√§t\n100: max. Qualit√§t" ;
         Text [ en-US ] = "1: min. quality\n100: max. quality" ;
         Text [ x-comment ] = " ";
     };
@@ -95,7 +95,7 @@ ModalDialog DLG_EXPORT_JPG
     {
         Pos = MAP_APPFONT ( 6 , 51 ) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "Farbauflˆsung" ;
+        Text [ de ] = "Farbaufl√∂sung" ;
         Text [ en-US ] = "Color resolution" ;
         Text [ x-comment ] = " ";
     };
