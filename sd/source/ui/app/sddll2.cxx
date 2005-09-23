@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sddll2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:44:37 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:24:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,7 +235,7 @@ void SdDLL::RegisterControllers()
     SvxBmpMaskChildWindow::RegisterChildWindow(0, pMod);
     GalleryChildWindow::RegisterChildWindow(0, pMod);
     SvxIMapDlgChildWindow::RegisterChildWindow(0, pMod);
-    SvxHyperlinkDlgWrapper::RegisterChildWindow(0, pMod);
+    SvxHyperlinkDlgWrapper::RegisterChildWindow(0, pMod, SFX_CHILDWIN_FORCEDOCK);
     SvxHlinkDlgWrapper::RegisterChildWindow(0, pMod);
     ::sd::SpellDialogChildWindow::RegisterChildWindow(0, pMod);
     ::avmedia::MediaPlayer::RegisterChildWindow(0, pMod);
