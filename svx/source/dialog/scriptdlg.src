@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scriptdlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:00:04 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 13:47:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,7 +121,7 @@ ModalDialog RID_DLG_SCRIPTORGANIZER
         Pos = MAP_APPFONT ( 144 , 6 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         DefButton = TRUE;
-        Text [ de ] = "Aus~führen" ;
+        Text [ de ] = "Aus~fÃ¼hren" ;
         Text [ en-US ] = "R~un" ;
     };
     CancelButton SF_PB_CLOSE
@@ -129,7 +129,7 @@ ModalDialog RID_DLG_SCRIPTORGANIZER
         Pos = MAP_APPFONT ( 144 , 23 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Schließen" ;
+        Text [ de ] = "SchlieÃŸen" ;
         Text [ en-US ] = "Close" ;
     };
 
@@ -160,7 +160,7 @@ ModalDialog RID_DLG_SCRIPTORGANIZER
     {
         Pos = MAP_APPFONT ( 144 , 114 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ de ] = "~Löschen..." ;
+        Text [ de ] = "~LÃ¶schen..." ;
         Text [ en-US ] = "~Delete..." ;
         TabStop = TRUE ;
     };
@@ -197,7 +197,7 @@ ModalDialog RID_DLG_NEWLIB
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 100 , 50 ) ;
         WordBreak = TRUE ;
-        Text [ de ] = "Geben Sie den Namen für die neue Bibliothek ein." ;
+        Text [ de ] = "Geben Sie den Namen fÃ¼r die neue Bibliothek ein." ;
         Text [ en-US ] = "Enter the name for the new library." ;
     };
     Edit ED_LIBNAME
@@ -219,7 +219,7 @@ ModalDialog RID_DLG_NEWLIB
     };
     String STR_FT_NEWMACRO
     {
-        Text [ de ] = "Geben Sie den Namen für das neue Makro ein." ;
+        Text [ de ] = "Geben Sie den Namen fÃ¼r das neue Makro ein." ;
         Text [ en-US ] = "Enter the name for the new macro." ;
     };
     String STR_RENAME
@@ -229,33 +229,33 @@ ModalDialog RID_DLG_NEWLIB
     };
     String STR_FT_RENAME
     {
-        Text [ de ] = "Geben Sie den Namen für das ausgewählte Objekt ein." ;
+        Text [ de ] = "Geben Sie den Namen fÃ¼r das ausgewÃ¤hlte Objekt ein." ;
         Text [ en-US ] = "Enter the new name for the selected object." ;
     };
 };
 String RID_SVXSTR_DELQUERY
 {
-    Text [ de ] = "Möchten Sie das folgende Objekt löschen?";
+    Text [ de ] = "MÃ¶chten Sie das folgende Objekt lÃ¶schen?";
     Text [ en-US ] = "Do you want to delete the following object?";
 };
 String RID_SVXSTR_DELQUERY_TITLE
 {
-    Text [ de ] = "Löschen bestätigen";
+    Text [ de ] = "LÃ¶schen bestÃ¤tigen";
     Text [ en-US ] = "Confirm Deletion";
 };
 String RID_SVXSTR_DELFAILED
 {
-    Text [ de ] = "Das ausgewälte Objekt konnte nicht gelöscht werden.";
+    Text [ de ] = "Das ausgewÃ¤lte Objekt konnte nicht gelÃ¶scht werden.";
     Text [ en-US ] = "The selected object could not be deleted.";
 };
 String RID_SVXSTR_DELFAILEDPERM
 {
-    Text [ de ] = " Sie haben keine Berechtigung zum Löschen dieses Objektes.";
+    Text [ de ] = " Sie haben keine Berechtigung zum LÃ¶schen dieses Objektes.";
     Text [ en-US ] = " You do not have permission to delete this object.";
 };
 String RID_SVXSTR_DELFAILED_TITLE
 {
-    Text [ de ] = "Fehler beim Löschen";
+    Text [ de ] = "Fehler beim LÃ¶schen";
     Text [ en-US ] = "Error Deleting Object";
 };
 String RID_SVXSTR_CREATEFAILED
@@ -302,42 +302,42 @@ String RID_SVXSTR_ERROR_TITLE
 
 String RID_SVXSTR_ERROR_LANG_NOT_SUPPORTED
 {
-    Text [ de ] = "Die Skriptsprache %LANGUAGENAME wird nicht unterstützt.";
+    Text [ de ] = "Die Skriptsprache %LANGUAGENAME wird nicht unterstÃ¼tzt.";
     Text [ en-US ] = "The scripting language %LANGUAGENAME is not supported.";
 };
 String RID_SVXSTR_ERROR_RUNNING
 {
-    Text [ de ] = "Ein Fehler trat während der Ausführung von %LANGUAGENAME script %SCRIPTNAME auf.";
+    Text [ de ] = "Ein Fehler trat wÃ¤hrend der AusfÃ¼hrung von %LANGUAGENAME script %SCRIPTNAME auf.";
     Text [ en-US ] = "An error occurred while running the %LANGUAGENAME script %SCRIPTNAME.";
 };
 
 String RID_SVXSTR_EXCEPTION_RUNNING
 {
-    Text [ de ] = "Ein Ausnahmefehler trat während der Ausführung von %LANGUAGENAME script %SCRIPTNAME auf.";
+    Text [ de ] = "Ein Ausnahmefehler trat wÃ¤hrend der AusfÃ¼hrung von %LANGUAGENAME script %SCRIPTNAME auf.";
     Text [ en-US ] = "An exception occurred while running the %LANGUAGENAME script %SCRIPTNAME.";
 };
 
 String RID_SVXSTR_ERROR_AT_LINE
 {
-    Text [ de ] = "Ein Fehler trat während der Ausführung von %LANGUAGENAME script %SCRIPTNAME in Zeile: %LINENUMBER auf.";
+    Text [ de ] = "Ein Fehler trat wÃ¤hrend der AusfÃ¼hrung von %LANGUAGENAME script %SCRIPTNAME in Zeile: %LINENUMBER auf.";
     Text [ en-US ] = "An error occurred while running the %LANGUAGENAME script %SCRIPTNAME at line: %LINENUMBER.";
 };
 
 String RID_SVXSTR_EXCEPTION_AT_LINE
 {
-    Text [ de ] = "Ein Ausnahmefehler trat während der Ausführung von %LANGUAGENAME script %SCRIPTNAME in Zeile: %LINENUMBER auf.";
+    Text [ de ] = "Ein Ausnahmefehler trat wÃ¤hrend der AusfÃ¼hrung von %LANGUAGENAME script %SCRIPTNAME in Zeile: %LINENUMBER auf.";
     Text [ en-US ] = "An exception occurred while running the %LANGUAGENAME script %SCRIPTNAME at line: %LINENUMBER.";
 };
 
 String RID_SVXSTR_FRAMEWORK_ERROR_RUNNING
 {
-    Text [ de ] = "Ein Scripting Framework Fehler trat während der Ausführung von %LANGUAGENAME script %SCRIPTNAME auf.";
+    Text [ de ] = "Ein Scripting Framework Fehler trat wÃ¤hrend der AusfÃ¼hrung von %LANGUAGENAME script %SCRIPTNAME auf.";
     Text [ en-US ] = "A Scripting Framework error occurred while running the %LANGUAGENAME script %SCRIPTNAME.";
 };
 
 String RID_SVXSTR_FRAMEWORK_ERROR_AT_LINE
 {
-    Text [ de ] = "Ein Scripting Framework Fehler trat während der Ausführung von %LANGUAGENAME script %SCRIPTNAME in Zeile: % LINENUMBER auf.";
+    Text [ de ] = "Ein Scripting Framework Fehler trat wÃ¤hrend der AusfÃ¼hrung von %LANGUAGENAME script %SCRIPTNAME in Zeile: % LINENUMBER auf.";
     Text [ en-US ] = "A Scripting Framework error occurred while running the %LANGUAGENAME script %SCRIPTNAME at line: %LINENUMBER.";
 };
 
