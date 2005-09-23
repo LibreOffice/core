@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:11:14 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:07:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1352,6 +1352,8 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
             sal_Bool bSelectObj = (0 != rUserData.GetToken( nOff, ';', nPos ).ToInt32())
                                 && pWrtShell->IsObjSelectable( aCrsrPos );
 
+            //#i33307# restore editing position
+            pViewImpl->SetRestorePosition(aCrsrPos, bSelectObj);
             // OD 11.02.2003 #100556# - set flag value to avoid macro execution.
             bool bSavedFlagValue = pWrtShell->IsMacroExecAllowed();
             pWrtShell->SetMacroExecAllowed( false );
@@ -1531,6 +1533,8 @@ void SwView::ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::s
 //!!! pb (11.08.2004): #i32536#
 // os: changed: The user data has to be read if the view is switched back from page preview
 //#i43146# go to the last editing position when opening own files
+                    //#i33307# restore editing position
+                    pViewImpl->SetRestorePosition(aCrsrPos, bSelectObj);
                     if(bOldShellWasPagePreView|| bIsOwnDocument)
                     {
                         pWrtShell->SwCrsrShell::SetCrsr( aCrsrPos, !bSelectObj );
