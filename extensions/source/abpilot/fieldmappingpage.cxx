@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fieldmappingpage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:07:52 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:49:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,7 @@ namespace abp
         AddressSettings& rSettings = getSettings();
 
         // invoke the dialog doing the mapping
-        if ( fieldmapping::invokeDialog( getORB(), this, rSettings.bRegisterDataSource ? rSettings.sRegisteredDataSourceName : rSettings.sDataSourceName, rSettings.sSelectedTable, rSettings.aFieldMapping ) )
+        if ( fieldmapping::invokeDialog( getORB(), this, getDialog()->getDataSource().getDataSource(), rSettings ) )
         {
             if ( rSettings.aFieldMapping.size() )
                 getDialog()->travelNext();
