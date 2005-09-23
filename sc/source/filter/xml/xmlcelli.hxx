@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlcelli.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:04:14 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:42:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,7 +163,7 @@ public:
         pOUTextContent = new ::rtl::OUString(rOUTempText); }
     void SetCursorOnTextImport(const rtl::OUString& rOUTempText);
 
-    void SetAnnotation(const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell);
+    void SetAnnotation(const ::com::sun::star::table::CellAddress& rPosition );
     void SetDetectiveObj( const ::com::sun::star::table::CellAddress& rPosition );
     void SetCellRangeSource( const ::com::sun::star::table::CellAddress& rPosition );
 
