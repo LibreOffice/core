@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:12:29 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 15:08:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -928,6 +928,22 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             //these slots are either re-mapped to text or object alignment
                 GetViewFrame()->GetDispatcher()->Execute(
                                 nAlias, SFX_CALLMODE_ASYNCHRON);
+        }
+        break;
+        case SID_RESTORE_EDITING_VIEW:
+        {
+            //#i33307# restore editing position
+            Point aCrsrPos;
+            bool bSelectObj;
+            if(pViewImpl->GetRestorePosition(aCrsrPos, bSelectObj))
+            {
+                pWrtShell->SwCrsrShell::SetCrsr( aCrsrPos, !bSelectObj );
+                if( bSelectObj )
+                {
+                    pWrtShell->SelectObj( aCrsrPos );
+                    pWrtShell->EnterSelFrmMode( &aCrsrPos );
+                }
+            }
         }
         break;
         default:
