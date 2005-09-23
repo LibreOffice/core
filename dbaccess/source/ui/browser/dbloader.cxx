@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbloader.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:26:46 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:19:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,15 +141,20 @@ public:
                                 const Reference< XLoadEventListener > & _rListener) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL cancel(void) throw();
 };
+DBG_NAME(DBContentLoader)
 
 DBContentLoader::DBContentLoader(const Reference< XMultiServiceFactory >& _rxFactory)
     :m_xServiceFactory(_rxFactory)
 {
+    DBG_CTOR(DBContentLoader,NULL);
+
 }
 // -------------------------------------------------------------------------
 
 DBContentLoader::~DBContentLoader()
 {
+
+    DBG_DTOR(DBContentLoader,NULL);
 }
 // -------------------------------------------------------------------------
 // -------------------------------------------------------------------------
@@ -286,7 +291,6 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
                 try
                 {
                     xController->attachModel(xModel);
-                    xModel->connectController( xController );
                     xModel->setCurrentController(xController);
                 }
                 catch( const Exception& )
@@ -326,9 +330,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
                 try
                 {
                     if ( xController.is() )
-                        xController->attachModel(NULL);
-                    if ( xModel.is() )
-                        xModel->disconnectController( xController );
+                        xController->attachModel( NULL );
                 }
                 catch( const Exception& )
                 {
