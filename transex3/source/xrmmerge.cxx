@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xrmmerge.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:04:58 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:31:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -660,8 +660,8 @@ void XRMResExport::EndOfText(
                 //if( sCur.EqualsIgnoreCaseAscii("de") ){
                //    sOutput = UTF8Converter::ConvertToUTF8( sOutput , RTL_TEXTENCODING_MS_1252 );
                 //}
-
-                pOutputStream->WriteLine( sOutput );
+                if( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && !Export::isMergingGermanAllowed( sPrj ) ) )
+                    pOutputStream->WriteLine( sOutput );
             }
         //}
     }
@@ -725,8 +725,8 @@ void XRMResMerge::WorkOnText(
                 ByteString sContent;
 /*              if (( nLang != GERMAN ) &&
                     ( nLang != ENGLISH ) &&*/
-                if (( !sLang.EqualsIgnoreCaseAscii("de") ) &&
-                    ( !sLang.EqualsIgnoreCaseAscii("en-US") ) &&
+                if ( Export::isAllowed( sLang ) && //( !sLang.EqualsIgnoreCaseAscii("de") ) &&
+//                  ( !sLang.EqualsIgnoreCaseAscii("en-US") ) &&
                     ( pEntrys->GetText(
                         //sContent, STRING_TYP_TEXT, Export::GetLangIndex( nLang ))) &&
                         sContent, STRING_TYP_TEXT, sLang )) &&
@@ -770,8 +770,8 @@ void XRMResMerge::EndOfText(
 /*              if (( nIndex != GERMAN_INDEX ) &&
                     ( nIndex != ENGLISH_INDEX ) &&
                     ( LANGUAGE_ALLOWED( nIndex )) && */
-                if (( !sCur.EqualsIgnoreCaseAscii("de") &&
-                      !sCur.EqualsIgnoreCaseAscii("en-US") )&&
+                if ( Export::isAllowed( sCur ) && //( !sCur.EqualsIgnoreCaseAscii("de") &&
+//                      !sCur.EqualsIgnoreCaseAscii("en-US") )&&
                     ( pEntrys->GetText(
                         //sContent, STRING_TYP_TEXT, nIndex, TRUE )) &&
                         sContent, STRING_TYP_TEXT, sCur, TRUE )) &&
