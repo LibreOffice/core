@@ -4,9 +4,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:59:17 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 14:28:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -694,6 +694,7 @@ int Export::Execute( int nToken, char * pToken )
                         while( sToken.SearchAndReplace( "\r", " " ) != STRING_NOTFOUND ) {};
                         while( sToken.SearchAndReplace( "\t", " " ) != STRING_NOTFOUND ) {};
                         while( sToken.SearchAndReplace( "  ", " " ) != STRING_NOTFOUND ) {};
+
                         if( sToken.EqualsIgnoreCaseAscii( "#define NO_LOCALIZE_EXPORT" ) ){
                             bSkipFile = true;
                             return 0;
@@ -1457,10 +1458,11 @@ BOOL Export::WriteData( ResData *pResData, BOOL bCreateNew )
                     sOutput += sXTitle; sOutput += "\t";
                     sOutput += sTimeStamp;
 
-                    if ( sCur.EqualsIgnoreCaseAscii("de") ) {
-                        sOutput = UTF8Converter::ConvertToUTF8( sOutput , RTL_TEXTENCODING_MS_1252 );
-                    }
-                    aOutput.WriteLine( sOutput );
+                    //if ( sCur.EqualsIgnoreCaseAscii("de") ) {
+                    //    sOutput = UTF8Converter::ConvertToUTF8( sOutput , RTL_TEXTENCODING_MS_1252 );
+                    //}
+                    if( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && !Export::isMergingGermanAllowed( sProject ) ) )
+                        aOutput.WriteLine( sOutput );
                 }
 
                 if ( bCreateNew ) {
@@ -1593,9 +1595,10 @@ BOOL Export::WriteExportList( ResData *pResData, ExportList *pExportList,
                         sOutput += sText; sOutput += "\t\t\t\t";
                         sOutput += sTimeStamp;
 
-                        if( sCur.EqualsIgnoreCaseAscii("de") ){
-                            sOutput = UTF8Converter::ConvertToUTF8( sOutput , RTL_TEXTENCODING_MS_1252 );
-                        }
+                        //if( sCur.EqualsIgnoreCaseAscii("de") ){
+                        //    sOutput = UTF8Converter::ConvertToUTF8( sOutput , RTL_TEXTENCODING_MS_1252 );
+                        //}
+                        if( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && !Export::isMergingGermanAllowed( sProject ) ) )
                         aOutput.WriteLine( sOutput );
 
                     }
@@ -1837,9 +1840,6 @@ void Export::WriteToMerged( const ByteString &rText , bool bSDFContent )
 
     if ( !bDontWriteOutput || !bUnmerge ) {
         ByteString sText( rText );
-        // Ivo
-        //sText.SearchAndReplace( "[ ENGLISH ] =" , "[ en ] =");
-        //sText.SearchAndReplace( "[ English ] =" , "[ en ] =");
         while ( sText.SearchAndReplace( " \n", "\n" ) != STRING_NOTFOUND ) {};
         if( pParseQueue->bNextIsM && bSDFContent && sText.Len() > 2 ){
             for( int n = 0 ; n < sText.Len() ; n++ ){
@@ -2114,8 +2114,10 @@ BOOL Export::PrepareTextToMerge( ByteString &rText, USHORT nTyp,
 //  printf("Dumping ResData\n");
 //  pResData->Dump();
     PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
+
 //  printf("Dumping pEntrys\n");
-    //if( pEntrys ) pEntrys->Dump();
+//  if( pEntrys ) pEntrys->Dump();
+
     pResData->sId = sOldId;
     pResData->sGId = sOldGId;
     pResData->sResTyp = sOldTyp;
@@ -2127,12 +2129,14 @@ BOOL Export::PrepareTextToMerge( ByteString &rText, USHORT nTyp,
 
     ByteString sContent;
     pEntrys->GetText( sContent, nTyp, nLangIndex );
-    if ( !sContent.Len() && ( !nLangIndex.EqualsIgnoreCaseAscii("de") )) {
+    if ( !sContent.Len() && isAllowed( nLangIndex ) ) {
+            //&& ( !nLangIndex.EqualsIgnoreCaseAscii("de") )) {
         rText = sOrigText;
         return FALSE; // no data found
     }
 
-    if ( nLangIndex.EqualsIgnoreCaseAscii("de") ) {
+    if ( !isAllowed( nLangIndex ) ){
+            //nLangIndex.EqualsIgnoreCaseAscii("de") ) {
         return FALSE;
     }
 
@@ -2198,7 +2202,8 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                         bFirst=FALSE;
                         sOutput += "\t";
                         sOutput += pResData->sTextTyp;
-                        if ( !sCur.EqualsIgnoreCaseAscii("de")) {
+                        if ( isAllowed( sCur ) ){
+                        //if ( !sCur.EqualsIgnoreCaseAscii("de")) {
                             sOutput += "[ ";
                             sOutput += sCur;
                             sOutput += " ] ";
@@ -2252,7 +2257,8 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                         sOutput += "\t";
                         sOutput += "QuickHelpText";
                         //if ( i != ByteString("de") ) {
-                        if ( !sCur.EqualsIgnoreCaseAscii("de") ) {
+                        //if ( !sCur.EqualsIgnoreCaseAscii("de") ) {
+                        if( isAllowed( sCur ) ){
                             sOutput += "[ ";
                             sOutput += sCur;
                             //sOutput += LangName[ i ];
@@ -2301,7 +2307,8 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                         sOutput += "\t";
                         sOutput += "Title";
                         //if ( i != ByteString("de") ) {
-                        if ( !sCur.EqualsIgnoreCaseAscii("de") ) {
+                        //if ( !sCur.EqualsIgnoreCaseAscii("de") ) {
+                        if( isAllowed( sCur )){
                             sOutput += "[ ";
                             sOutput += sCur;
                             //sOutput += LangName[ i ];
@@ -2372,10 +2379,11 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                         if ( pList )
                             nMaxIndex = pList->GetGermanEntryCount();
                         //if( pMergeDataFile ) pMergeDataFile->Dump();
+                            //while(( pEntrys = pMergeDataFile->GetPFormEntrys( pResData )) && ( nLIndex <= nMaxIndex )) {
                         while(( pEntrys = pMergeDataFile->GetPFormEntrys( pResData )) && ( nLIndex < nMaxIndex )) {
-                            //if( pEntrys ) pEntrys->Dump();
+                        //  if( pEntrys ) pEntrys->Dump();
                             ByteString sText;
-                            BOOL bText;
+                            bool bText;
                             bText = pEntrys->GetText( sText, STRING_TYP_TEXT, sCur, TRUE );
 
                             // Use fallback, if data is missing in sdf file
@@ -2387,7 +2395,11 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                                 bText = pResData->getFallbackData( sKey , sText );
                             }
 
+#ifdef MERGER_SOURCE_LANGUAGES
+                            if ( sText.Len()) {
+#else
                             if ( bText && sText.Len()) {
+#endif
                                 //if( pEntrys ) pEntrys->Dump();
                                 if ( nIdx == 1 ) {
                                     ByteString sHead;
