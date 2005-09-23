@@ -4,9 +4,9 @@
  *
  *  $RCSfile: custsdlg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:53:01 $
+ *  last change: $Author: hr $ $Date: 2005-09-23 12:31:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@ ModalDialog DLG_CUSTOMSHOW
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 175 + DIFF , 114 + DIFF_Y ) ;
-    Text [ de ] = "Individuelle Bildschirmpr‰sentationen" ;
+    Text [ de ] = "Individuelle Bildschirmpr√§sentationen" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     PushButton BTN_NEW
@@ -69,7 +69,7 @@ ModalDialog DLG_CUSTOMSHOW
     {
         Pos = MAP_APPFONT ( 120 + DIFF , 40 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Lˆschen" ;
+        Text [ de ] = "~L√∂schen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Delete" ;
         Text [ x-comment ] = " ";
@@ -102,7 +102,7 @@ ModalDialog DLG_CUSTOMSHOW
     {
         Pos = MAP_APPFONT ( 120 + DIFF , 94 + DIFF_Y ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Schlieﬂen" ;
+        Text [ de ] = "~Schlie√üen" ;
         TabStop = TRUE ;
         DefButton = TRUE ;
         Text [ en-US ] = "~Close" ;
@@ -119,7 +119,7 @@ ModalDialog DLG_CUSTOMSHOW
     {
         Pos = MAP_APPFONT ( 6 , 96 + DIFF_Y ) ;
         Size = MAP_APPFONT ( 112 + DIFF , 12 ) ;
-        Text [ de ] = "~Individuelle Bildschirmpr‰sentation benutzen" ;
+        Text [ de ] = "~Individuelle Bildschirmpr√§sentation benutzen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Use Custom Slide Show" ;
         Text [ x-comment ] = " ";
@@ -133,7 +133,7 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 248 , 117 ) ;
-    Text [ de ] = "Individuelle Bildschirmpr‰sentation definieren" ;
+    Text [ de ] = "Individuelle Bildschirmpr√§sentation definieren" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     OKButton BTN_OK
@@ -204,7 +204,7 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
     {
         Pos = MAP_APPFONT ( 6 , 24 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
-        Text [ de ] = "Seiten der Pr‰sentation" ;
+        Text [ de ] = "Seiten der Pr√§sentation" ;
         Text [ en-US ] = "Existing slides" ;
         Text [ x-comment ] = " ";
     };
@@ -212,7 +212,7 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
     {
         Pos = MAP_APPFONT ( 103 , 24 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text [ de ] = "Individuelle Pr‰sentation" ;
+        Text [ de ] = "Individuelle Pr√§sentation" ;
         Text [ en-US ] = "Selected slides" ;
         Text [ x-comment ] = " ";
     };
