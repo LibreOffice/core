@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:58:57 $
+ *  last change: $Author: hr $ $Date: 2005-09-26 13:27:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -625,14 +625,6 @@ void initVMConfiguration(
         OSL_TRACE("javavm.cxx: couldn't get safety settings because of >%s<", message.getStr());
 #endif
     }
-
-
-//For a non product office we use the flag -ea
-// we cannot use -Xcheck:jni, because this prevents debugging (j2re1.4.1_01, netbeans 3.4)
-#if OSL_DEBUG_LEVEL > 0
-        if(!getenv( "DISABLE_SAL_DBGBOX" ) )
-            jvm.pushProp(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-ea")));
-#endif
 
     *pjvm= jvm;
     setTimeZone(pjvm);
