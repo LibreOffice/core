@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 18:25:05 $
+#   last change: $Author: hr $ $Date: 2005-09-26 13:17:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -136,9 +136,12 @@ $(foreach,i,$(alllangiso) openofficewithjre_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) ooolanguagepack_$i) : $(ADDDEPS)
 
+$(foreach,i,$(alllangiso) ure_$i) : $(ADDDEPS)
+
 .IF "$(MAKETARGETS)"!=""
 $(MAKETARGETS) : $(ADDDEPS)
 .ENDIF			# "$(MAKETARGETS)"!=""
+
 .ENDIF			# "$(BUILD_SPECIAL)"!=""
 
 .IF "$(PKGFORMAT)"!=""
@@ -186,7 +189,7 @@ ure_en-US: $(MISC)$/ure$/services.rdb
     +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst \
         -l en-US -p URE -u $(OUT) -buildid $(BUILD) $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH)) \
         -packagelist $(PRJ)$/inc_ure$/unix$/packagelist.txt \
-        -msitemplate $(PRJ)$/inc_ure$/windows$/msi_templates \
+        -msitemplate $(MSILANGPACKTEMPLATEDIR) \
         -msilanguage $(COMMONMISC)$/win_ulffiles
 
 .IF "$(USE_SHELL)"!="4nt"
