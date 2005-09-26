@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:18:28 $
+ *  last change: $Author: hr $ $Date: 2005-09-26 10:25:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,7 +186,7 @@ Menu RID_MENU_APP_EDIT
         {
             Identifier = SID_DB_APP_PASTE_SPECIAL;
             HelpID = SID_DB_APP_PASTE_SPECIAL ;
-            Text [ de ] ="Inhalte einfügen..." ;
+            Text [ de ] ="Inhalte einfÃ¼gen..." ;
             Text[ en-US ] = "Paste Special...";
             Command = ".uno:PasteSpecial";
         };
@@ -198,7 +198,7 @@ Menu RID_MENU_APP_EDIT
         {
             Identifier = SID_DB_APP_DELETE;
             HelpID = SID_DB_APP_DELETE ;
-            Text [ de ] ="Löschen" ;
+            Text [ de ] ="LÃ¶schen" ;
             Text[ en-US ] = "Delete";
             Command = ".uno:DBDelete";
         };
@@ -222,7 +222,7 @@ Menu RID_MENU_APP_EDIT
         {
             Identifier = SID_DB_APP_OPEN;
             HelpID = SID_DB_APP_OPEN ;
-            Text [ de ] ="Öffnen" ;
+            Text [ de ] ="Ã–ffnen" ;
             Text[ en-US ] = "Open";
             Command = ".uno:DBOpen";
         };
@@ -258,7 +258,7 @@ Menu RID_MENU_APP_EDIT
         {
             Identifier = SID_SELECTALL;
             HelpID = SID_SELECTALL ;
-            Text [ de ] ="Alles auswählen" ;
+            Text [ de ] ="Alles auswÃ¤hlen" ;
             Text[ en-US ] = "Select All";
             Command = ".uno:SelectAll";
         };
@@ -307,7 +307,7 @@ Menu RID_MENU_APP_EDIT
 
 String STR_QUERY_DELETE_DATASOURCE
 {
-    Text [ de ] ="Soll die Datenquelle '%1' gelöscht werden?" ;
+    Text [ de ] ="Soll die Datenquelle '%1' gelÃ¶scht werden?" ;
     Text [ en-US ] = "Do you want to delete the data source '%1'?" ;
 };
 
@@ -319,7 +319,7 @@ String STR_APP_TITLE
 
 String RID_STR_REPORTS_HELP_TEXT_WIZARD
 {
-    Text [ de ] ="Der Assistent wird Sie durch die Schritte führen, die zur Erstellung eines Berichtes notwendig sind." ;
+    Text [ de ] ="Der Assistent wird Sie durch die Schritte fÃ¼hren, die zur Erstellung eines Berichtes notwendig sind." ;
     Text [ en-US ] = "The wizard will guide you through the steps necessary to create a report." ;
 };
 String RID_STR_FORMS_HELP_TEXT
@@ -329,7 +329,7 @@ String RID_STR_FORMS_HELP_TEXT
 };
 String RID_STR_FORMS_HELP_TEXT_WIZARD
 {
-    Text [ de ] ="Der Assistent wird Sie durch die Schritte führen, die zur Erstellung eines Formulares notwendig sind." ;
+    Text [ de ] ="Der Assistent wird Sie durch die Schritte fÃ¼hren, die zur Erstellung eines Formulares notwendig sind." ;
     Text [ en-US ] = "The wizard will guide you through the steps necessary to create a form." ;
 };
 String RID_STR_QUERIES_HELP_TEXT
@@ -344,7 +344,7 @@ String RID_STR_QUERIES_HELP_TEXT_SQL
 };
 String RID_STR_QUERIES_HELP_TEXT_WIZARD
 {
-    Text [ de ] ="Der Assistent wird Sie durch die Schritte führen, die zur Erstellung einer Abfrage notwendig sind." ;
+    Text [ de ] ="Der Assistent wird Sie durch die Schritte fÃ¼hren, die zur Erstellung einer Abfrage notwendig sind." ;
     Text [ en-US ] = "The wizard will guide you through the steps necessary to create a query." ;
 };
 String RID_STR_TABLES_HELP_TEXT_DESIGN
@@ -354,17 +354,17 @@ String RID_STR_TABLES_HELP_TEXT_DESIGN
 };
 String RID_STR_TABLES_HELP_TEXT_WIZARD
 {
-    Text [ de ] ="Wählen Sie aus geschäftlichen oder privaten Beispieltabellen aus, die Sie dann für Ihren Zweck anpassen." ;
+    Text [ de ] ="WÃ¤hlen Sie aus geschÃ¤ftlichen oder privaten Beispieltabellen aus, die Sie dann fÃ¼r Ihren Zweck anpassen." ;
     Text [ en-US ] = "Choose from a selection of business and personal table samples, which you customize to create a table." ;
 };
 String RID_STR_VIEWS_HELP_TEXT_DESIGN
 {
-    Text [ de ] ="Erstellen Sie eine Ansicht, indem Sie Tabellen und Feldnamen angeben, die Sie anzeigen möchten." ;
+    Text [ de ] ="Erstellen Sie eine Ansicht, indem Sie Tabellen und Feldnamen angeben, die Sie anzeigen mÃ¶chten." ;
     Text [ en-US ] = "Create a view by specifying the tables and field names you would like to have visible." ;
 };
 String RID_STR_VIEWS_HELP_TEXT_WIZARD
 {
-    Text [ de ] ="Öffnet den Ansichtswizard" ;
+    Text [ de ] ="Ã–ffnet den Ansichtswizard" ;
     Text [ en-US ] = "Opens the view wizard" ;
 };
 
@@ -397,14 +397,14 @@ QueryBox APP_SAVEMODIFIED
 {
     Buttons = WB_YES_NO_CANCEL ;
     DefButton = WB_DEF_YES ;
-    Message [ de ]= "Die Datenbank wurde geändert.\nMöchten Sie die Änderungen speichern?" ;
+    Message [ de ]= "Die Datenbank wurde geÃ¤ndert.\nMÃ¶chten Sie die Ã„nderungen speichern?" ;
     Message [ en-US ] = "The database has been modified.\nDo you want to save the changes?" ;
 };
 QueryBox APP_CLOSEDOCUMENTS
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_YES ;
-    Message [ de ] = "Die Verbingungsart wurde geändert.\nDamit die Änderungen wirksam werden, müssen alle Formulare, Berichte, Abfragen und Tabellen geschlossen werden.\n\nMöchten Sie jetzt alle Dokumente schließen?" ;
+    Message [ de ] = "Die Verbingungsart wurde geÃ¤ndert.\nDamit die Ã„nderungen wirksam werden, mÃ¼ssen alle Formulare, Berichte, Abfragen und Tabellen geschlossen werden.\n\nMÃ¶chten Sie jetzt alle Dokumente schlieÃŸen?" ;
     Message [ en-US ] = "The connection type has been altered.\nFor the changes to take effect, all forms, reports, queries and tables must be closed.\n\nDo you want to close all documents now?" ;
 };
 
