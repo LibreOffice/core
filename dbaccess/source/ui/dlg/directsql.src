@@ -4,9 +4,9 @@
  *
  *  $RCSfile: directsql.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:59:04 $
+ *  last change: $Author: hr $ $Date: 2005-09-26 10:27:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ ModalDialog DLG_DIRECTSQL
     {
         Pos = MAP_APPFONT( 7, 15 );
         Size = MAP_APPFONT( WINDOW_SIZE_X - 14, 8 );
-        Text [ de ] = "auszuführendes Kommando";
+        Text [ de ] = "auszufÃ¼hrendes Kommando";
         Text [ en-US ] = "Command to execute";
     };
     MultiLineEdit ME_SQL
@@ -81,7 +81,7 @@ ModalDialog DLG_DIRECTSQL
     {
         Pos = MAP_APPFONT( WINDOW_SIZE_X - BUTTON_SIZE_X - 7, 109 );
         Size = MAP_APPFONT( BUTTON_SIZE_X, BUTTON_SIZE_Y );
-        Text [ de ] = "Ausführen";
+        Text [ de ] = "AusfÃ¼hren";
         Text [ en-US ] = "Execute";
         DefButton = TRUE;
     };
@@ -129,182 +129,24 @@ ModalDialog DLG_DIRECTSQL
     {
         Pos = MAP_APPFONT( WINDOW_SIZE_X - 7 - BUTTON_SIZE_X, 207 + BUTTON_SIZE_Y );
         Size = MAP_APPFONT( BUTTON_SIZE_X, BUTTON_SIZE_Y );
-        Text [ de ] = "Schließen";
+        Text [ de ] = "SchlieÃŸen";
         Text [ en-US ] = "Close";
     };
 
-    Text [ de ] = "SQL Statement ausführen" ;
+    Text [ de ] = "SQL Statement ausfÃ¼hren" ;
     Text [ en-US ]  = "Execute SQL Statement" ;
     Text [ x-comment ] = "; zl: statement means SQL commandos which are directly executed.";
 };
 
 String STR_COMMAND_EXECUTED_SUCCESSFULLY
 {
-    Text [ de ] = "Befehl erfolgreich ausgeführt." ;
+    Text [ de ] = "Befehl erfolgreich ausgefÃ¼hrt." ;
     Text [ en-US ] = "Command successfully executed." ;
 };
 
 String STR_DIRECTSQL_CONNECTIONLOST
 {
-    Text [ de ] = "Die Verbindung zur Datenbank wurde gelöscht. Dieser Dialog wird geschlossen.";
+    Text [ de ] = "Die Verbindung zur Datenbank wurde gelÃ¶scht. Dieser Dialog wird geschlossen.";
     Text [ en-US ] = "The connection to the database has been lost. This dialog will be closed.";
 };
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.22.224.1  2005/09/05 17:33:45  rt
- *  #i54170# Change license header: remove SISSL
- *
- *  Revision 1.22  2004/06/26 17:29:36  hjs
- *  INTEGRATION: CWS mergebuild (1.20.26); FILE MERGED
- *  2004/04/21 05:47:40 hjs 1.20.26.3: RESYNC: (1.20-1.21); FILE MERGED
- *  2003/11/11 19:16:08 ihi 1.20.26.2: en -> en-US
- *  2003/11/10 16:42:03 ihi 1.20.26.1: #111234# Merge during build
- *
- *  Revision 1.20.26.3  2004/04/21 05:47:40  hjs
- *  RESYNC: (1.20-1.21); FILE MERGED
- *
- *  Revision 1.21  2003/12/17 15:14:10  vg
- *  INTEGRATION: CWS geordi2q11 (1.20.72); FILE MERGED
- *  2003/12/16 11:05:08 hr 1.20.72.1: #111934#: join CWS ooo111fix1
- *
- *  Revision 1.20.72.1  2003/12/16 11:05:08  hr
- *  #111934#: join CWS ooo111fix1
- *
- *  Revision 1.20.34.1  2003/11/24 13:10:10  ihi
- *  OOo 1.1.1 merge
- *
- *  Revision 1.20  2003/07/17 12:16:09  hr
- *  INTEGRATION: CWS mergerc3 (1.19.6); FILE MERGED
- *  2003/07/16 17:11:09 ihi 1.19.6.1: rc-3 merge all languages
- *
- *  Revision 1.19.6.1  2003/07/16 17:11:09  ihi
- *  rc-3 merge all languages
- *
- *  Revision 1.19  2003/07/03 18:00:18  hr
- *  INTEGRATION: CWS rc2merge (1.18.8); FILE MERGED
- *  2003/07/03 14:44:11 ihi 1.18.8.1: rc-2 merge all languages
- *
- *  Revision 1.18.8.1  2003/07/03 14:44:11  ihi
- *  rc-2 merge all languages
- *
- *  Revision 1.18  2003/06/13 12:52:52  hr
- *  INTEGRATION: CWS rcmerge (1.17.24); FILE MERGED
- *  2003/06/12 10:57:51 gh 1.17.24.1: final Merge RC
- *
- *  Revision 1.17.24.1  2003/06/12 10:57:51  gh
- *  final Merge RC
- *
- *  Revision 1.17  2003/04/29 17:22:32  hr
- *  INTEGRATION: CWS mergem8 (1.16.8); FILE MERGED
- *  2003/04/29 08:33:57 gh 1.16.8.2: final merge for Beta2
- *  2003/04/14 15:03:56 gh 1.16.8.1: merging all languages
- *
- *  Revision 1.16.8.2  2003/04/29 08:33:57  gh
- *  final merge for Beta2
- *
- *  Revision 1.16.8.1  2003/04/14 15:03:56  gh
- *  merging all languages
- *
- *  Revision 1.16  2003/03/19 17:52:22  hr
- *  MWS_SRX644: migrate branch mws_srx644 -> HEAD
- *
- *  Revision 1.15.2.3  2003/02/23 12:00:59  nf
- *  trasnlation 6.1 Beta / OOo 1.1 Beta / final wave
- *
- *  Revision 1.15.2.2  2003/02/23 11:00:50  nf
- *  6.1 Beta 1/OOo 1.1 Beta translation, second wave
- *
- *  Revision 1.15.2.1  2003/02/22 15:47:19  hr
- *  INTEGRATION: CWS mergep (1.15.20); FILE MERGED
- *  2003/02/22 10:44:28 nf 1.15.20.2: #107113# localization of StarOffice 6.1 Beta/OpenOffice.org 1.1 Beta. Represents content of translation database of 02/21/2003. Translation up to date for SUN big rules languages
- *  2003/01/31 12:51:11 hjs 1.15.20.1: #107113# merge on SRX644p
- *
- *  Revision 1.15.20.2  2003/02/22 10:44:28  nf
- *  #107113# localization of StarOffice 6.1 Beta/OpenOffice.org 1.1 Beta. Represents content of translation database of 02/21/2003. Translation up to date for SUN big rules languages
- *
- *  Revision 1.15.20.1  2003/01/31 12:51:11  hjs
- *  #107113# merge on SRX644p
- *
- *  Revision 1.15  2002/12/05 10:35:58  kz
- *  Merge SRX644: 12/05/02 - 11:32:03
- *
- *  Revision 1.14  2002/11/25 15:17:52  kz
- *  Merge SRX644: 25.11.02 - 16:14:03
- *
- *  Revision 1.13  2002/09/05 13:59:13  kz
- *  Merge SRX643: 05.09.02 - 15:55:55
- *
- *  Revision 1.12  2002/08/19 07:47:21  oj
- *  #99473# change string resource files
- *
- *  Revision 1.11  2001/11/16 22:42:48  kz
- *  Merge SRC638: 16.11.01 - 22:41:18
- *
- *  Revision 1.10  2001/09/26 20:28:03  kz
- *  Merge SRC638: 09/26/01 - 22:27:14
- *
- *  Revision 1.9  2001/08/29 14:06:15  kz
- *  Merge SRC638: 29.08.01 - 16:05:39
- *
- *  Revision 1.8  2001/08/24 11:09:43  kz
- *  Merge SRC638: 24.08.01 - 13:08:49
- *
- *  Revision 1.7  2001/08/21 22:16:33  kz
- *  Merge SRC638: 22.08.01 - 00:15:50
- *
- *  Revision 1.6  2001/08/13 20:56:12  kz
- *  Merge SRC638: 13.08.01 - 22:55:32
- *
- *  Revision 1.5  2001/08/10 21:03:13  kz
- *  Merge SRC638: 10.08.01 - 23:02:37
- *
- *  Revision 1.4  2001/08/07 15:00:18  kz
- *  Merge SRC638: 07.08.01 - 16:59:48
- *
- *  Revision 1.3  2001/07/13 21:08:48  kz
- *  Merge SRC638: 13.07.01 - 23:07:57
- *
- *  Revision 1.2  2001/06/29 02:21:19  kz
- *  Merge SRC633: 29.06.01 - 04:20:55
- *
- *  Revision 1.1  2001/06/19 10:54:20  fs
- *  initial checkin - dialog for executing SQL statements
- *
- *
- *  Revision 1.0 18.06.01 17:01:52  fs
- ************************************************************************/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
