@@ -4,9 +4,9 @@
 #
 #   $RCSfile: download.pm,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:01:19 $
+#   last change: $Author: hr $ $Date: 2005-09-26 13:21:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -399,7 +399,7 @@ sub put_banner_bmp_into_template
 
     my $completefilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$filename, $includepatharrayref, 0);
 
-    if ( $ENV{'USE_SHELL'} eq "tcsh" ) { $$completefilenameref =~ s/\//\\/g; }
+    if ( $^O =~ /cygwin/i ) { $$completefilenameref =~ s/\//\\/g; }
 
     if ($$completefilenameref eq "") { installer::exiter::exit_program("ERROR: Could not find download file $filename!", "put_banner_bmp_into_template"); }
 
@@ -420,7 +420,7 @@ sub put_welcome_bmp_into_template
 
     my $completefilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$filename, $includepatharrayref, 0);
 
-    if ( $ENV{'USE_SHELL'} eq "tcsh" ) { $$completefilenameref =~ s/\//\\/g; }
+    if ( $^O =~ /cygwin/i ) { $$completefilenameref =~ s/\//\\/g; }
 
     if ($$completefilenameref eq "") { installer::exiter::exit_program("ERROR: Could not find download file $filename!", "put_welcome_bmp_into_template"); }
 
@@ -441,7 +441,7 @@ sub put_setup_ico_into_template
 
     my $completefilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$filename, $includepatharrayref, 0);
 
-    if ( $ENV{'USE_SHELL'} eq "tcsh" ) { $$completefilenameref =~ s/\//\\/g; }
+    if ( $^O =~ /cygwin/i ) { $$completefilenameref =~ s/\//\\/g; }
 
     if ($$completefilenameref eq "") { installer::exiter::exit_program("ERROR: Could not find download file $filename!", "put_setup_ico_into_template"); }
 
@@ -526,7 +526,7 @@ sub get_file_list
 
         my $oneline = " " . "SetOutPath" . " " . "\"\$INSTDIR" . $relativedir . "\"" . "\n";
 
-        if ( $ENV{'USE_SHELL'} eq "tcsh" ) {
+        if ( $^O =~ /cygwin/i ) {
             $oneline =~ s/\//\\/g;
         }
         push(@filelist, $oneline);
@@ -540,7 +540,7 @@ sub get_file_list
             my $onefile = ${$files}[$j];
 
             my $fileline = "  " . "File" . " " . "\"" . $onefile . "\"" . "\n";
-            if ( $ENV{'USE_SHELL'} eq "tcsh" ) {
+            if ( $^O =~ /cygwin/i ) {
                 $fileline =~ s/\//\\/g;
             }
             push(@filelist, $fileline);
@@ -830,14 +830,14 @@ sub copy_and_translate_nsis_language_files
         my $sourcepath = $nlffilepath . $nsislanguage . "\.nlf";
         if ( ! -f $sourcepath ) { installer::exiter::exit_program("ERROR: Could not find nsis file: $sourcepath!", "copy_and_translate_nsis_language_files"); }
         my $nlffilename = $localnsisdir . $installer::globals::separator . $nsislanguage . "_pack.nlf";
-        if ( $ENV{'USE_SHELL'} eq "tcsh" ) { $nlffilename =~ s/\//\\/g; }
+        if ( $^O =~ /cygwin/i ) { $nlffilename =~ s/\//\\/g; }
         installer::systemactions::copy_one_file($sourcepath, $nlffilename);
 
         # Copying the nsh file
         $sourcepath = $nshfilepath . $nsislanguage . "\.nsh";
         if ( ! -f $sourcepath ) { installer::exiter::exit_program("ERROR: Could not find nsis file: $sourcepath!", "copy_and_translate_nsis_language_files"); }
         my $nshfilename = $localnsisdir . $installer::globals::separator . $nsislanguage . "_pack.nsh";
-        if ( $ENV{'USE_SHELL'} eq "tcsh" ) { $nshfilename =~ s/\//\\/g; }
+        if ( $^O =~ /cygwin/i ) { $nshfilename =~ s/\//\\/g; }
         installer::systemactions::copy_one_file($sourcepath, $nshfilename);
 
         # Changing the macro name in nsh file: MUI_LANGUAGEFILE_BEGIN -> MUI_LANGUAGEFILE_PACK_BEGIN
@@ -873,7 +873,7 @@ sub put_output_path_into_template
 {
     my ($templatefile, $downloaddir) = @_;
 
-    if ( $ENV{'USE_SHELL'} eq "tcsh" ) { $downloaddir =~ s/\//\\/g; }
+    if ( $^O =~ /cygwin/i ) { $downloaddir =~ s/\//\\/g; }
 
     replace_one_variable($templatefile, "OUTPUTDIRPLACEHOLDER", $downloaddir);
 }
@@ -912,9 +912,18 @@ sub get_path_to_nsis_sdk
     }
     if ( $ENV{'NSISSDK_SOURCE'} ) { $nsispath = $ENV{'NSISSDK_SOURCE'}; }   # overriding the NSIS SDK with NSISSDK_SOURCE
 
+    if( ($^O =~ /cygwin/i) and $nsispath =~ /\\/ ) {
+        # We need a POSIX path for W32-4nt-cygwin-perl
+        $nsispath =~ s/\\/\\\\/g;
+        chomp( $nsispath = qx{cygpath -u "$nsispath"} );
+    }
+
     if ( $nsispath eq "" )
     {
         installer::logger::print_message( "... no Environment variable \"ENV_ROOT\", \"NSIS_PATH\" or \"NSISSDK_SOURCE\" found and NSIS not found in path!", "get_path_to_nsis_sdk");
+    } elsif ( ! -d $nsispath )
+    {
+        installer::exiter::exit_program("ERROR: NSIS path $nsispath does not exist!", "get_path_to_nsis_sdk");
     }
 
     return $nsispath;
