@@ -7086,3 +7086,15 @@
   
   # Force applications to be built non-statically
   # when building the mozcomps meta component
+*** misc/mozilla/security/nss/lib/pki1/oiddata.h	Thu Aug 25 21:30:00 2005
+--- misc/build/mozilla/security/nss/lib/pki1/oiddata.h	Thu Aug 25 21:31:28 2005
+***************
+*** 39,44 ****
+--- 39,45 ----
+  static const char OIDDATA_CVS_ID[] = "@(#) $RCSfile$ $Revision$ $Date$ $Name$ ; @(#) $RCSfile$ $Revision$ $Date$ $Name$";
+  #endif /* DEBUG */
+  
++ #include "pki1t.h"
+  #ifndef NSSPKI1T_H
+  #include "nsspki1t.h"
+  #endif /* NSSPKI1T_H */
