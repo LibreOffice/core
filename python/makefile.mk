@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 16:49:39 $
+#   last change: $Author: hr $ $Date: 2005-09-26 13:00:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -132,22 +132,26 @@ PYVERSIONFILE=$(MISC)$/pyversion.mk
 
 # --- Targets ------------------------------------------------------
 
-.IF "$(GUI)" != "UNX"
-PYCONFIG=$(MISC)$/build$/pyconfig.h
-.ENDIF
 
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
 
 .IF "$(L10N_framework)"==""
-ALLTAR : $(PYCONFIG) $(PYVERSIONFILE) $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
-.ENDIF          # "$(L10N_framework)"==""
+.IF "$(GUI)" != "UNX"
+PYCONFIG:=$(MISC)$/build$/pyconfig.h
+$(MISC)$/build$/$(TARFILE_NAME)$/PC$/pyconfig.h : $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE)
 
+$(PACKAGE_DIR)$/$(BUILD_FLAG_FILE) : $(PYCONFIG)
 
-$(MISC)$/build$/pyconfig.h : $(MISC)$/build$/$(TARFILE_NAME)$/PC$/pyconfig.h
+$(PYCONFIG) : $(MISC)$/build$/$(TARFILE_NAME)$/PC$/pyconfig.h
     -rm -f $@
     cat $(MISC)$/build$/$(TARFILE_NAME)$/PC$/pyconfig.h > $@
+.ENDIF
+
+ALLTAR : $(PYVERSIONFILE)
+.ENDIF          # "$(L10N_framework)"==""
+
 
 $(PYVERSIONFILE) : pyversion.mk $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
     -rm -f $@
