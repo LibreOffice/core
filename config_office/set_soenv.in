@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.74 $
-# Date:        $Date: 2005-08-30 09:12:51 $
+# Version:     $Revision: 1.75 $
+# Date:        $Date: 2005-09-26 13:24:57 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -48,7 +48,7 @@ my ( $outfile, $outfile_sh, $outfile_bat, $bootfile, $newline, $comment, $commen
 #-------------------------------------------------
 #
 # Platform independent constant values.
-my @DICTIONARIES = ("DADK", "DEDE", "ENGB", "ENUS", "ITIT", "RURU" );
+my @DICTIONARIES = ("DADK", "DEDE", "ENGB", "ENUS", "ITIT", "RURU", "THTH", "SWTZ" );
 my ( $CALL_CDECL, $COMMON_OUTDIR, $NO_SRS_PATCH, $BIG_GOODIES, $BMP_WRITES_FLAG, 
      $common_build, $MK_UNROLL, $NO_REC_RES, $SO3, $SOLAR_JAVA, 
      $SOLAR_PLUGIN, $TF_PACKAGES, $TF_SDBAPI, $TF_FILEURL, $UPDATER, $BUILD_DELIVER, $USE_NEWCHARSET, $USE_NEW_RSC, $VCL, 
@@ -1433,6 +1433,7 @@ if ('@WITH_DICT@' =~ m/ALL,/s)
    {
       ToFile( "DIC_$dict",     "TRUE",          "e" );
    }
+   ToFile( "DIC_ALL",          "TRUE",          "e" );
 }
 else
 {	
