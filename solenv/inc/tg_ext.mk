@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.65 $
+#   $Revision: 1.66 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:43:58 $
+#   last change: $Author: hr $ $Date: 2005-09-26 13:22:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -259,12 +259,12 @@ $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
 .ENDIF          # "$(OUT2INC_SUBDIR)"!=""
 .ENDIF			# "$(OUT2INC)"!=""
 .IF "$(OUTDIR2INC)"!=""
-.IF "$(GUI)"=="WNT"
+.IF "$(USE_SHELL)"=="4nt"
     @$(MKDIR) $(foreach,i,$(OUTDIR2INC) $(INCCOM)$/$(i:b))
     @+echo copied $(foreach,i,$(OUTDIR2INC) $(shell +$(COPY) $(COPYRECURSE) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i$/* $(INCCOM)$/$(i:b) >& $(NULLDEV) && echo $i))
-.ELSE			# "$(GUI)"=="WNT"
+.ELSE			# "$(USE_SHELL)"=="4nt"
     +$(COPY) $(COPYRECURSE) $(foreach,i,$(OUTDIR2INC) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(INCCOM)
-.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(OUTDIR2INC)"!=""
 .IF "$(OUT2BIN)"!=""
     +$(COPY) $(foreach,i,$(OUT2BIN) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(BIN)
