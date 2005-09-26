@@ -2,15 +2,16 @@
 eval 'exec perl -wS $0 ${1+"$@"}'
     if 0;
 
+
 #*************************************************************************
 #
 #   OpenOffice.org - a multi-platform office productivity suite
 #
 #   $RCSfile: localize.pl,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 14:58:45 $
+#   last change: $Author: hr $ $Date: 2005-09-26 10:30:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +44,7 @@ use IO::Handle;
 use File::Find;
 use File::Temp;
 use File::Copy;
+use File::Glob qw(:glob csh_glob);
 use Cwd;
 
 # ver 1.1
@@ -71,10 +73,11 @@ my $bVerbose="0";
 my $srcpath = '';
 my $WIN;
 my $languages;
+my %sl_modules;     # Contains all modules where en-US and de is source language
 
-         #        (                          leftpart                                                     )        (         rightpart                                   )
-         #           prj      file     dummy     type      gid        lid        helpid   pform     width     lang      text     helptext  qhelptext  title    timestamp
-my $sdf_regex  = "((([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t])*\t([^\t]*)\t([^\t]*))\t([^\t]*)\t(([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t)([^\t]*))";
+         #         (                           leftpart                                                     )            (           rightpart                    )
+         #            prj      file      dummy     type       gid       lid      helpid    pform     width      lang       text    helptext  qhelptext   title    timestamp
+my $sdf_regex  = "((([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*))\t([^\t]*)\t(([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t)([^\t]*))";
 my $file_types = "(src|hrc|xcs|xcu|lng|ulf|xrm|xhp|xcd|xgf|xxl|xrb)";
 # Always use this date to prevent cvs conflicts
 my $default_date = "2002-02-02 02:02:02";
@@ -82,18 +85,15 @@ my $default_date = "2002-02-02 02:02:02";
 #### main ####
 parse_options();
 
-#if ( $^O eq 'MSWin32' ) {
-#   $WIN = 'TRUE';
-#}
-# else {
-#   $WIN = '';
-#}
 if ( defined $ENV{USE_SHELL} && $ENV{USE_SHELL} eq '4nt' ) {
    $WIN = 'TRUE';
 }
  else {
    $WIN = '';
 }
+
+%sl_modules = fetch_sourcelanguage_dirlist();
+
 
 if   ( $mode eq "merge"    )    {
     merge_gsicheck();
@@ -137,7 +137,6 @@ sub splitfile{
             my $gid            = defined $7 ? $7 : '';
             my $lid            = defined $8 ? $8 : '';
             my $lang           = defined $12 ? $12 : '';
-            my $text           = defined $14 ? $14 : '';
             my $plattform      = defined $10 ? $10 : '';
             my $helpid         = defined $9 ? $9 : '';
 
@@ -162,19 +161,19 @@ sub splitfile{
                 $lastFile = $currentFile; # ?
                 $last_sdffile = $cur_sdffile;
             }
-            if( $lang eq "en-US" || ( $lang eq "de" && $prj ne "helpcontent2" && $prj ne "macromigration" ) ) {  # Skip source languages
+
+            if( ( $lang eq "en-US" || ( has_two_sourcelanguages( $prj )  && $lang eq "de") ) ){}
+            elsif( $cur_sdffile eq $last_sdffile )
+            {
+                $block{ "$prj\t$file\t$type\t$gid\t$lid\t$helpid\t$plattform\t$lang" } =  $line ;
             }
-#            elsif( $currentFile eq $lastFile ){
-            elsif( $cur_sdffile eq $last_sdffile ){
-                $block{ $prj.$lang.$gid.$lid.$file.$type.$plattform.$helpid } =  $line ;
-            }else{
+            else
+            {
                 writesdf( $lastFile , \%block );
                 $lastFile = $currentFile; #?
                 $last_sdffile = $cur_sdffile;
                 %block = ();
-                if( !( $lang eq "en-US" || ( $lang eq "de" && $prj ne "helpcontent2" && $prj ne "macromigration" ) ) ){
-                    $block{ $prj.$lang.$gid.$lid.$file.$type.$plattform.$helpid } =  $line ;
-                }
+                if( !( $lang eq "en-US" || ( has_two_sourcelanguages( $prj )  && $lang eq "de") ) ){  $block{ "$prj\t$file\t$type\t$gid\t$lid\t$helpid\t$plattform\t$lang" } =  $line ; }
             }
         } #else { print STDOUT "splitfile REGEX kaputt\n";}
 
@@ -186,6 +185,41 @@ sub splitfile{
 }
 #########################################################
 
+sub fetch_sourcelanguage_dirlist
+{
+
+    my $working_path = getcwd();
+    my %sl_dirlist;
+
+    chdir $srcpath;
+    my @all_dirs = csh_glob( "*" );
+
+    foreach my $file ( @all_dirs )
+    {
+        if( -d $file )
+        {
+            my $module = $file;
+            $file .= "/prj/l10n";
+            $file =~ s/\//\\/ , if( $WIN ) ;
+
+            if( -f $file )                                        # Test file <module>/prj/l10n
+            {
+                $sl_dirlist{ $module } = 1;
+                if( $bVerbose eq "1" ) { print STDOUT "$module: de and en-US source language detected\n"; }
+            }
+        }
+    }
+
+    chdir $working_path;
+
+    return %sl_dirlist;
+}
+
+sub has_two_sourcelanguages
+{
+    my $module          = shift;
+    return defined $sl_modules{ $module } ;
+}
 sub writesdf{
 
     my $lastFile        = shift;
@@ -219,7 +253,7 @@ sub writesdf{
             my $helpid         = defined $9 ? $9 : '';
 
             chomp( $line );
-            $index{ $prj.$lang.$gid.$lid.$file.$type.$plattform.$helpid } =  $line ;
+            $index{ "$prj\t$file\t$type\t$gid\t$lid\t$helpid\t$plattform\t$lang" } =  $line ;
 
          } #else { print STDOUT "writesdf REGEX kaputt $_\n";}
 
@@ -247,7 +281,8 @@ sub writesdf{
     if( !$bVerbose ){ print STDOUT "."; }
     if( $isDirty eq "TRUE" ){
         if( open DESTFILE , "+> $localizeFile" ){
-            @mykeys = keys( %index );
+            print DESTFILE get_license_header();
+            @mykeys = sort keys( %index );
             foreach my $key( @mykeys ){
                 print DESTFILE ( $index{ $key } , "\n" );
             }
@@ -272,9 +307,9 @@ sub writesdf{
             unlink $tmpfile;
         }
     }
-    if( $no_sort eq '' ){
-        sort_outfile( $localizeFile );
-    }
+#    if( $no_sort eq '' ){
+#        sort_outfile( $localizeFile );
+#    }
 }
 
 sub get_license_header{
@@ -488,8 +523,7 @@ sub collectfiles{
 
                             if ( $lang eq $cur_lang ){
                                 # Overwrite fallback strings with collected strings
-                                if( $cur_lang ne "de" ||
-                                    $cur_lang ne "en-US" ){
+                                if( ( !has_two_sourcelanguages( $cur_lang) && $cur_lang eq "de" ) || $cur_lang ne "en-US" ){
                                      $fallbackhashhash_ref->{ $cur_lang }{ $prj.$gid.$lid.$file.$type.$plattform.$helpid } =  $line ;
                                }
 
@@ -684,7 +718,7 @@ sub remove_obsolete{
 #########################################################
 sub sort_outfile{
         my $outfile = shift;
-        print STDOUT "### Sorting ... $outfile\n";
+        print STDOUT "### Sorting ... $outfile ...";
         my @lines;
         my @sorted_lines;
 
@@ -750,6 +784,7 @@ sub sort_outfile{
             }
             close SORTEDFILE;
         } else { print STDERR "WARNING: Can't open file $outfile\n";}
+    print "done\n";
 
 }
 #########################################################
