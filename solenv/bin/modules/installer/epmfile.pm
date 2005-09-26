@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:02:05 $
+#   last change: $Author: hr $ $Date: 2005-09-26 13:21:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -2064,10 +2064,10 @@ sub put_systemintegration_into_installset
 
         if ($installer::globals::product =~ /OpenOffice/i)
         {
-            push(@systemfiles, "openoffice.org-redhat-menus-$productversion-1.noarch.rpm");
-            push(@systemfiles, "openoffice.org-suse-menus-$productversion-1.noarch.rpm");
-            push(@systemfiles, "openoffice.org-mandriva-menus-$productversion-1.noarch.rpm");
-            push(@systemfiles, "openoffice.org-freedesktop-menus-$productversion-1.noarch.rpm");
+            push(@systemfiles, "openoffice.org-redhat-menus-$installer::globals::packageversion-$installer::globals::packagerevision.noarch.rpm");
+            push(@systemfiles, "openoffice.org-suse-menus-$installer::globals::packageversion-$installer::globals::packagerevision.noarch.rpm");
+            push(@systemfiles, "openoffice.org-mandriva-menus-$installer::globals::packageversion-$installer::globals::packagerevision.noarch.rpm");
+            push(@systemfiles, "openoffice.org-freedesktop-menus-$installer::globals::packageversion-$installer::globals::packagerevision.noarch.rpm");
 
             # i46530 create desktop-integration subdirectory
             $destdir = "$destdir/desktop-integration";
@@ -2083,7 +2083,7 @@ sub put_systemintegration_into_installset
 
     if ($installer::globals::product =~ /OpenOffice/i)
     {
-        my $deb = 'openoffice.org-debian-menus_' . $variables->{'PRODUCTVERSION'} . '-1_all.deb';
+        my $deb = 'openoffice.org-debian-menus_' . $installer::globals::packageversion . '-' . $installer::globals::packagerevision . '_all.deb';
         my $debref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$deb, $includepatharrayref, 0);
 
         if ( $$debref ne "" )
