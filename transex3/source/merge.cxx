@@ -4,9 +4,9 @@
  *
  *  $RCSfile: merge.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:02:02 $
+ *  last change: $Author: hr $ $Date: 2005-09-26 10:48:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,16 +61,17 @@ BOOL PFormEntrys::GetText( ByteString &rReturn,
     USHORT nTyp, const ByteString &nLangIndex, BOOL bDel )
 /*****************************************************************************/
 {
-    //printf("DBG: PFormEntrys::GetText(nId=%s)\n",nLangIndex.GetBuffer() );
+/*  printf("DBG: PFormEntrys::GetText(nId=%s)\n",nLangIndex.GetBuffer() );
 
             // DEBUG******************
-            //ByteStringHashMap::const_iterator idbg;
-            //std::cout << "HASHKEYS : \n";
-            //for( idbg = sText.begin() ; idbg != sText.end(); ++idbg )
-            //    std::cout << (idbg->first).GetBuffer() << "\n";
-            //std::cout << "\n\n";
+            ByteStringHashMap::const_iterator idbg;
+            std::cout << "HASHKEYS : \n";
+            for( idbg = sText.begin() ; idbg != sText.end(); ++idbg )
+                std::cout << (idbg->first).GetBuffer() << "\n";
+            std::cout << "\n\n";
+            std::cout << "String sText[ nLangIndex ] = " << sText[ nLangIndex ].GetBuffer() << "\n";
             // DEBUG******************
-
+*/
 
     BOOL bReturn;
     switch ( nTyp ) {
@@ -263,7 +264,12 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFi
                 sTITLE = sLine.GetToken( 13, '\t' );
 
                 nLANG.EraseLeadingAndTrailingChars();
+
+#ifdef MERGE_SOURCE_LANGUAGES
+                if( true ){
+#else
                 if (  !nLANG.EqualsIgnoreCaseAscii("en-US")  ){
+#endif
                     InsertEntry( sTYP, sGID, sLID, sPFO, nLANG, sTEXT, sQHTEXT, sTITLE );
                     if( nLANG.Len() > 0 ){
                         bool bFound = false;
