@@ -49,11 +49,14 @@ case `uname -s` in
     ;;
 esac
 
-# special handling for mailto: uris
-if echo $1 | grep '^mailto:' > /dev/null; then
-  ( echo $1 > /tmp/$$.mailto; dtaction Open /tmp/$$.mailto; rm -f /tmp/$$.mailto ) &
+if [ -x /usr/bin/mktemp ]
+then
+  TMPFILE=`mktemp -t open-url.XXXXXX`
 else
-  ( echo $1 > /tmp/$$.url; dtaction Browse /tmp/$$.url; rm -f /tmp/$$.url ) &
+  DTTMPDIR=`xrdb -query | grep DtTmpDir`
+  TMPFILE=${DTTMPDIR:-$HOME/.dt/tmp}/open-url.$$
 fi
 
+if [ -z "$TMPFILE" ]; then exit 1; fi
+( echo $1 > "$TMPFILE"; dtaction Open "$TMPFILE"; rm -f "$TMPFILE" ) &
 exit 0
