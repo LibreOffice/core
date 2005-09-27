@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.143 $
+ *  $Revision: 1.144 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-27 12:55:34 $
+ *  last change: $Author: hr $ $Date: 2005-09-27 12:59:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ End
 
 #endif
 
-STD_UNO_LIB_FILE( gid_File_Lib_Basctl, basctl)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Basctl, basctl)
 
 File gid_File_Lib_Basprov
     TXT_FILE_BODY;
@@ -1588,7 +1588,7 @@ File gid_File_Lib_Sec
   #endif
 End
 
-STD_UNO_LIB_FILE( gid_File_Lib_Sf_Prothdlr, protocolhandler )
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sf_Prothdlr, protocolhandler )
 
 File gid_File_Lib_Sfx
     Name = LIBNAME(sfx);
