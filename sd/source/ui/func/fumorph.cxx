@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fumorph.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:44:50 $
+ *  last change: $Author: hr $ $Date: 2005-09-27 12:24:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,12 @@
 
 #include "sdabstdlg.hxx" //CHINA001
 #include "morphdlg.hrc" //CHINA001
+
+// #i48168#
+#ifndef _SVDITER_HXX
+#include <svx/svditer.hxx>
+#endif
+
 namespace sd {
 
 #define  ITEMVALUE( ItemSet, Id, Cast ) ( ( (const Cast&) (ItemSet).Get( (Id) ) ).GetValue() )
@@ -109,8 +115,8 @@ FuMorph::FuMorph (
         pCloneObj2->SetOutlinerParaObject(NULL);
 
         // Path-Objekte erzeugen
-        SdrPathObj* pPolyObj1 = (SdrPathObj*)pCloneObj1->ConvertToPolyObj(FALSE, FALSE);
-        SdrPathObj* pPolyObj2 = (SdrPathObj*)pCloneObj2->ConvertToPolyObj(FALSE, FALSE);
+        SdrObject*  pPolyObj1 = pCloneObj1->ConvertToPolyObj(FALSE, FALSE);
+        SdrObject*  pPolyObj2 = pCloneObj2->ConvertToPolyObj(FALSE, FALSE);
         //CHINA001 MorphDlg aDlg (static_cast< ::Window*>(pWindow), pObj1, pObj2);
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
         DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
@@ -119,11 +125,30 @@ FuMorph::FuMorph (
         if(pPolyObj1 && pPolyObj2 && (pDlg->Execute() == RET_OK)) //CHINA001 if(pPolyObj1 && pPolyObj2 && (aDlg.Execute() == RET_OK))
         {
             List aPolyPolyList3D;
-            PolyPolygon3D aPolyPoly1(pPolyObj1->GetPathPoly());
-            PolyPolygon3D aPolyPoly2(pPolyObj2->GetPathPoly());
+            PolyPolygon3D aPolyPoly1;
+            PolyPolygon3D aPolyPoly2;
             PolyPolygon3D* pPolyPoly;
 
             pDlg->SaveSettings(); //CHINA001 aDlg.SaveSettings();
+
+            // #i48168# Not always is the pPolyObj1/pPolyObj2 a SdrPathObj, it may also be a group object
+            // containing SdrPathObjs. To get the polygons, i add two iters here
+            SdrObjListIter aIter1(*pPolyObj1);
+            SdrObjListIter aIter2(*pPolyObj2);
+
+            while(aIter1.IsMore())
+            {
+                SdrObject* pObj = aIter1.Next();
+                if(pObj && pObj->ISA(SdrPathObj))
+                    aPolyPoly1.Insert(((SdrPathObj*)pObj)->GetPathPoly());
+            }
+
+            while(aIter2.IsMore())
+            {
+                SdrObject* pObj = aIter2.Next();
+                if(pObj && pObj->ISA(SdrPathObj))
+                    aPolyPoly2.Insert(((SdrPathObj*)pObj)->GetPathPoly());
+            }
 
             // Morphing durchfuehren
             if(aPolyPoly1.Count() && aPolyPoly2.Count())
