@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textproperties.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:16:31 $
+ *  last change: $Author: hr $ $Date: 2005-09-27 12:29:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -543,7 +543,7 @@ namespace sdr
                             }
 
                             pOutliner->SetParaAttribs(nPara, aSet);
-                            bBurnIn = sal_False;
+                            bBurnIn = sal_True; // #i51163# Flag was set wrong
                         }
                     }
 
