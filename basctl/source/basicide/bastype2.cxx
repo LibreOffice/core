@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bastype2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:00:06 $
+ *  last change: $Author: hr $ $Date: 2005-09-27 12:58:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,21 +192,12 @@ void BasicTreeListBox::ScanEntry( SfxObjectShell* pShell, LibraryLocation eLocat
     SetUpdateMode( FALSE );
 
     // level 1: BasicManager (application, document, ...)
-    String aRootName( GetRootEntryName( pShell, eLocation ) );
-    SvLBoxEntry* pShellRootEntry = FindEntry( 0, aRootName, OBJ_TYPE_SHELL );
-    if ( pShellRootEntry )
-    {
-        // #94812 For equally named documents equally named entries are required
-        BasicEntryDescriptor aDesc( GetEntryDescriptor( pShellRootEntry ) );
-        SfxObjectShell* pEntryShell = aDesc.GetShell();
-        if( pEntryShell != pShell )
-            pShellRootEntry = NULL;
-
-        if ( pShellRootEntry && IsExpanded( pShellRootEntry ) )
-            ImpCreateLibEntries( pShellRootEntry, pShell, eLocation );
-    }
+    SvLBoxEntry* pShellRootEntry = FindRootEntry( pShell, eLocation );
+    if ( pShellRootEntry && IsExpanded( pShellRootEntry ) )
+        ImpCreateLibEntries( pShellRootEntry, pShell, eLocation );
     if ( !pShellRootEntry )
     {
+        String aRootName( GetRootEntryName( pShell, eLocation ) );
         Image aImage;
         Image aImageHC;
         GetRootEntryBitmaps( pShell, aImage, aImageHC );
