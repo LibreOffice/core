@@ -6,7 +6,7 @@ URI_ENCODE="awk -f `dirname $0`/uri-encode"
 which() {
     if [ ! -z "$1" ]; then
         for i in `echo $PATH | sed -e 's/^:/.:/g' -e 's/:$/:./g' -e 's/::/:.:/g' -e 's/:/ /g'`; do
-            if [ -x "$i/$1" ]; then
+            if [ -x "$i/$1" -a ! -d "$i/$1" ]; then
                 echo "$i/$1"
                 break;
             fi
