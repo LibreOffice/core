@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:57:50 $
+ *  last change: $Author: hr $ $Date: 2005-09-27 12:56:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -905,7 +905,7 @@ void __EXPORT BasicIDEShell::GetState(SfxItemSet &rSet)
             {
                 if ( !pCurWin || !pCurWin->IsA( TYPE( ModulWindow ) ) )
                     rSet.DisableItem( nWh );
-                else if ( ( nWh == SID_BASICLOAD ) && StarBASIC::IsRunning() )
+                else if ( ( nWh == SID_BASICLOAD ) && ( StarBASIC::IsRunning() || ( pCurWin && pCurWin->IsReadOnly() ) ) )
                     rSet.DisableItem( nWh );
             }
             break;
@@ -1318,6 +1318,9 @@ void __EXPORT BasicIDEShell::Activate( BOOL bMDI )
 {
     if ( bMDI )
     {
+        if ( pCurWin )
+            SfxObjectShell::SetWorkingDocument( pCurWin->GetShell() );
+
         if( pCurWin && pCurWin->IsA( TYPE( DialogWindow ) ) )
             ((DialogWindow*)pCurWin)->UpdateBrowser();
 
@@ -1368,6 +1371,9 @@ void __EXPORT BasicIDEShell::Deactivate( BOOL bMDI )
 */
 
         ShowObjectDialog( FALSE, FALSE );
+
+        if ( pCurWin && pCurWin->GetShell() == SfxObjectShell::GetWorkingDocument() )
+            SfxObjectShell::SetWorkingDocument( 0 );
     }
 }
 
