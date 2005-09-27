@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scripthandler.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:27:10 $
+ *  last change: $Author: hr $ $Date: 2005-09-27 12:55:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,7 +216,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                         lArgs[ index ].Name.getLength() == 0 )
                    {
                        inArgs.realloc( ++argCount );
-                       inArgs[ index ] = lArgs[ index ].Value;
+                       inArgs[ argCount - 1 ] = lArgs[ index ].Value;
                    }
                }
             }
