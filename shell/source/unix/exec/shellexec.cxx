@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellexec.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:54:03 $
+ *  last change: $Author: hr $ $Date: 2005-09-27 12:53:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -233,14 +233,16 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
 
         aBuffer.append("open-url");
 #endif
-        aBuffer.append(" ");
+        aBuffer.append(" \'");
         aBuffer.append(OUStringToOString(aURL, osl_getThreadTextEncoding()));
+        aBuffer.append("\'");
 
         if ( pDesktopLaunch && *pDesktopLaunch )
         {
             aLaunchBuffer.append( pDesktopLaunch );
-            aLaunchBuffer.append( " " );
+            aLaunchBuffer.append( " \'" );
             aLaunchBuffer.append(OUStringToOString(aURL, osl_getThreadTextEncoding()));
+            aLaunchBuffer.append( "\'" );
         }
     } else {
         aBuffer.append(OUStringToOString(aCommand, osl_getThreadTextEncoding()));
