@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:38:28 $
+ *  last change: $Author: hr $ $Date: 2005-09-27 12:30:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1851,6 +1851,12 @@ void SdrPage::ActionChanged() const
 {
     // Do necessary ViewContact actions
     GetViewContact().ActionChanged();
+
+    // #i48535# also handle MasterPage change
+    if(TRG_HasMasterPage())
+    {
+        TRG_GetMasterPageDescriptorViewContact().ActionChanged();
+    }
 }
 
 // NYI: Dummy implementations for declarations in svdpage.hxx
