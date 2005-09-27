@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofsdrpage.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:06:35 $
+ *  last change: $Author: hr $ $Date: 2005-09-27 12:29:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,6 +302,7 @@ namespace sdr
                 // look if the MasterPageBackgroundObject needs to be painted, else
                 // paint page as normal
                 sal_Bool bPaintMasterObject(sal_False);
+                sal_Bool bPaintPageBackground(sal_True);
                 SdrObject* pMasterPageObjectCandidate = 0L;
 
                 if(GetSdrPage().IsMasterPage())
@@ -314,15 +315,23 @@ namespace sdr
                     {
                         bPaintMasterObject = sal_True;
                     }
+
+                    if(bPaintMasterObject)
+                    {
+                        // #i51798# when the fill mode guarantees that the full page will
+                        // be painted with PaintMasterObject, bPaintPageBackground may be
+                        // set to false. This is the case for XFILL_SOLID and XFILL_GRADIENT
+                        const SfxItemSet& rSet = pMasterPageObjectCandidate->GetMergedItemSet();
+                        const XFillStyle eFillStyle = ((const XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
+
+                        if(XFILL_SOLID == eFillStyle || XFILL_GRADIENT == eFillStyle)
+                        {
+                            bPaintPageBackground = sal_False;
+                        }
+                    }
                 }
 
-                if(bPaintMasterObject)
-                {
-                    // draw a MasterPage background for a MasterPage in MasterPage View
-                    Rectangle aRectangle;
-                    PaintBackgroundObject(*this, *pMasterPageObjectCandidate, rDisplayInfo, aRectangle, rAssociatedVOC);
-                }
-                else
+                if(bPaintPageBackground)
                 {
                     // Set page color for Paper painting
                     if(pPageView->GetApplicationDocumentColor() != COL_AUTO)
@@ -347,6 +356,13 @@ namespace sdr
                         pOut->DrawRect(aPaperRectPixel);
                         pOut->EnableMapMode(bWasEnabled);
                     }
+                }
+
+                if(bPaintMasterObject)
+                {
+                    // draw a MasterPage background for a MasterPage in MasterPage View
+                    Rectangle aRectangle;
+                    PaintBackgroundObject(*this, *pMasterPageObjectCandidate, rDisplayInfo, aRectangle, rAssociatedVOC);
                 }
 
                 // set page shadow color
