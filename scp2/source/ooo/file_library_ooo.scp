@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.142 $
+ *  $Revision: 1.143 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:27:13 $
+ *  last change: $Author: hr $ $Date: 2005-09-27 12:55:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1800,7 +1800,7 @@ File gid_File_Lib_Sysdtrans
   #endif
 End
 
-SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Syssh, syssh.uno )
+SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH( gid_File_Lib_Syssh, syssh.uno )
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Localebe, localebe1.uno )
 
 #ifdef WNT
