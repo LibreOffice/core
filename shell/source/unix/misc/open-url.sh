@@ -5,7 +5,7 @@
 which() {
   if [ ! -z "$1" ]; then
     for i in `echo $PATH | sed -e 's/^:/.:/g' -e 's/:$/:./g' -e 's/::/:.:/g' -e 's/:/ /g'`; do
-      if [ -x "$i/$1" ]; then
+      if [ -x "$i/$1" -a ! -d "$i/$1" ]; then
         echo "$i/$1"
         break;
       fi
@@ -101,9 +101,9 @@ if echo $1 | grep '^mailto:' > /dev/null; then
     exit 0
   else
     # mozilla derivates may need -remote semantics
-    for i in mozilla netscape thunderbird; do
+    for i in thunderbird mozilla netscape; do
       mailer=`which $i`
-      if [ ! -z $mailer ]; then
+      if [ ! -z "$mailer" ]; then
         run_mozilla $mailer $1
         exit 0
       fi
@@ -118,9 +118,9 @@ else
     exit 0
   else
     # mozilla derivates may need -remote semantics
-    for i in mozilla netscape firefox; do
+    for i in firefox mozilla netscape; do
       browser=`which $i`
-      if [ ! -z $browser ]; then
+      if [ ! -z "$browser" ]; then
         run_mozilla $browser $1
         exit 0
       fi
