@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh8.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:47:43 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:09:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -759,7 +759,8 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
     INetURLObject aURL;
     aURL.SetSmartProtocol( INET_PROT_FILE );
     aURL.SetSmartURL( rFullFileName );
-    String aTabName = aURL.getBase();
+    String aTabName = aURL.getBase( INetURLObject::LAST_SEGMENT, true,
+            INetURLObject::DECODE_UNAMBIGUOUS );
     String aExtension = aURL.getExtension();
     aURL.removeSegment();
     aURL.removeFinalSlash();
