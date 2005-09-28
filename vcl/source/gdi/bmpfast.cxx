@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpfast.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:55:36 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 14:43:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -543,8 +543,14 @@ inline bool ImplConvertFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc 
             return ImplConvertToBitmap<BMP_FORMAT_32BIT_TC_RGBA>( aSrcType, rDst, rSrc );
     }
 
+#ifdef DEBUG
     static int nNotAccelerated = 0;
-    DBG_ASSERT( ++nNotAccelerated!=100, "ImplConvertFromBitmap for not accelerated case" );
+    if( rSrc.mnWidth * rSrc.mnHeight >= 4000 )
+        if( ++nNotAccelerated == 100 )
+            DBG_WARNING2( "ImplConvertFromBitmap for not accelerated case (0x%04X->0x%04X)",
+                rSrc.mnFormat, rDst.mnFormat );
+#endif
+
     return false;
 }
 
@@ -654,8 +660,14 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
             return ImplConvertFromBitmap<BMP_FORMAT_32BIT_TC_RGBA>( rDst, rSrc );
     }
 
+#ifdef DEBUG
     static int nNotAccelerated = 0;
-    DBG_ASSERT( ++nNotAccelerated!=100, "ImplFastBitmapConversion for not accelerated case" );
+    if( rSrc.mnWidth * rSrc.mnHeight >= 4000 )
+        if( ++nNotAccelerated == 100 )
+            DBG_WARNING2( "ImplFastBitmapConversion for not accelerated case (0x%04X->0x%04X)",
+                rSrc.mnFormat, rDst.mnFormat );
+#endif
+
     return false;
 }
 
@@ -783,8 +795,14 @@ static bool ImplBlendFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc, c
             return ImplBlendToBitmap<BMP_FORMAT_32BIT_TC_RGBA>( aSrcType, rDst, rSrc, rMsk );
     }
 
+#ifdef DEBUG
     static int nNotAccelerated = 0;
-    DBG_ASSERT( ++nNotAccelerated!=100, "ImplConvertFromBitmap for not accelerated case" );
+    if( rSrc.mnWidth * rSrc.mnHeight >= 4000 )
+        if( ++nNotAccelerated == 100 )
+            DBG_WARNING3( "ImplBlendFromBitmap for not accelerated case (0x%04X*0x%04X->0x%04X)",
+                rSrc.mnFormat, rMsk.mnFormat, rDst.mnFormat );
+#endif
+
     return false;
 }
 
@@ -902,8 +920,14 @@ bool ImplFastBitmapBlending( BitmapWriteAccess& rDstWA,
             return ImplBlendFromBitmap<BMP_FORMAT_32BIT_TC_RGBA>( rDst, rSrc, rMsk );
     }
 
+#ifdef DEBUG
     static int nNotAccelerated = 0;
-    DBG_ASSERT( ++nNotAccelerated!=100, "ImplFastBlend invoked for not accelerated case" );
+    if( rSrc.mnWidth * rSrc.mnHeight >= 4000 )
+        if( ++nNotAccelerated == 100 )
+            DBG_WARNING3( "ImplFastBlend for not accelerated case (0x%04X*0x%04X->0x%04X)",
+                rSrc.mnFormat, rMsk.mnFormat, rDst.mnFormat );
+#endif
+
     return false;
 }
 
