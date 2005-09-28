@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:03:47 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 15:05:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,6 +134,7 @@ static const WMAdaptorProtocol aProtocolTab[] =
     { "_KDE_NET_WM_WINDOW_TYPE_OVERRIDE", WMAdaptor::KDE_NET_WM_WINDOW_TYPE_OVERRIDE },
     { "_NET_CURRENT_DESKTOP", WMAdaptor::NET_CURRENT_DESKTOP },
     { "_NET_NUMBER_OF_DESKTOPS", WMAdaptor::NET_NUMBER_OF_DESKTOPS },
+    { "_NET_WM_DESKTOP", WMAdaptor::NET_WM_DESKTOP },
     { "_NET_WM_ICON_NAME", WMAdaptor::NET_WM_ICON_NAME },
     { "_NET_WM_STATE", WMAdaptor::NET_WM_STATE },
     { "_NET_WM_STATE_ABOVE", WMAdaptor::NET_WM_STATE_STAYS_ON_TOP },
@@ -1174,37 +1175,11 @@ void NetWMAdaptor::setNetWMState( X11SalFrame* pFrame ) const
              *  get current desktop here if work areas have different size
              *  (does this happen on any platform ?)
              */
-            if( ! m_bEqualWorkAreas
-                && m_aWMAtoms[ NET_CURRENT_DESKTOP ]
-                )
+            if( ! m_bEqualWorkAreas )
             {
-                Atom                aRealType   = None;
-                int                 nFormat     = 8;
-                unsigned long       nItems      = 0;
-                unsigned long       nBytesLeft  = 0;
-                unsigned char*  pProperty   = NULL;
-                if( XGetWindowProperty( m_pDisplay,
-                                        m_pSalDisplay->GetRootWindow(),
-                                        m_aWMAtoms[ NET_CURRENT_DESKTOP ],
-                                        0, 1,
-                                        False,
-                                        XA_CARDINAL,
-                                        &aRealType,
-                                        &nFormat,
-                                        &nItems,
-                                        &nBytesLeft,
-                                        &pProperty ) == 0
-                    && pProperty
-                    )
-                {
-                    nCurrent = *(long*)pProperty;
-                    XFree( pProperty );
-                }
-                else if( pProperty )
-                {
-                    XFree( pProperty );
-                    pProperty = NULL;
-                }
+                nCurrent = getCurrentWorkArea();
+                if( nCurrent < 0 )
+                    nCurrent = 0;
             }
             Rectangle aPosSize = m_aWMWorkAreas[nCurrent];
             const SalFrameGeometry& rGeom( pFrame->GetUnmirroredGeometry() );
@@ -1290,37 +1265,11 @@ void GnomeWMAdaptor::setGnomeWMState( X11SalFrame* pFrame ) const
              *  get current desktop here if work areas have different size
              *  (does this happen on any platform ?)
              */
-            if( ! m_bEqualWorkAreas
-                && m_aWMAtoms[ NET_CURRENT_DESKTOP ]
-                )
+            if( ! m_bEqualWorkAreas )
             {
-                Atom                aRealType   = None;
-                int                 nFormat     = 8;
-                unsigned long       nItems      = 0;
-                unsigned long       nBytesLeft  = 0;
-                unsigned char*  pProperty   = NULL;
-                if( XGetWindowProperty( m_pDisplay,
-                                        m_pSalDisplay->GetRootWindow(),
-                                        m_aWMAtoms[ NET_CURRENT_DESKTOP ],
-                                        0, 1,
-                                        False,
-                                        XA_CARDINAL,
-                                        &aRealType,
-                                        &nFormat,
-                                        &nItems,
-                                        &nBytesLeft,
-                                        &pProperty ) == 0
-                    && pProperty
-                    )
-                {
-                    nCurrent = *(long*)pProperty;
-                    XFree( pProperty );
-                }
-                else if( pProperty )
-                {
-                    XFree( pProperty );
-                    pProperty = NULL;
-                }
+                nCurrent = getCurrentWorkArea();
+                if( nCurrent < 0 )
+                    nCurrent = 0;
             }
             Rectangle aPosSize = m_aWMWorkAreas[nCurrent];
             const SalFrameGeometry& rGeom( pFrame->GetUnmirroredGeometry() );
@@ -1947,6 +1896,10 @@ int NetWMAdaptor::handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEv
                            Size( rGeom.nWidth, rGeom.nHeight ) );
         }
     }
+    else if( pEvent->atom == m_aWMAtoms[ NET_WM_DESKTOP ] )
+    {
+        pFrame->m_nWorkArea = getWindowWorkArea( pFrame->GetShellWindow() );
+    }
     else
         nHandled = 0;
 
@@ -2180,6 +2133,111 @@ void NetWMAdaptor::showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const
 }
 
 /*
+ *  WMAdaptor::getCurrentWorkArea
+ */
+int WMAdaptor::getCurrentWorkArea() const
+{
+    int nCurrent = -1;
+    if( m_aWMAtoms[ NET_CURRENT_DESKTOP ] )
+    {
+        Atom                aRealType   = None;
+        int                 nFormat     = 8;
+        unsigned long       nItems      = 0;
+        unsigned long       nBytesLeft  = 0;
+        unsigned char*  pProperty   = NULL;
+        if( XGetWindowProperty( m_pDisplay,
+                                m_pSalDisplay->GetRootWindow(),
+                                m_aWMAtoms[ NET_CURRENT_DESKTOP ],
+                                0, 1,
+                                False,
+                                XA_CARDINAL,
+                                &aRealType,
+                                &nFormat,
+                                &nItems,
+                                &nBytesLeft,
+                                &pProperty ) == 0
+                                && pProperty
+        )
+        {
+            nCurrent = int(*(sal_Int32*)pProperty);
+            XFree( pProperty );
+        }
+        else if( pProperty )
+        {
+            XFree( pProperty );
+            pProperty = NULL;
+        }
+    }
+    return nCurrent;
+}
+
+/*
+ *  WMAdaptor::getWindowWorkArea
+ */
+int WMAdaptor::getWindowWorkArea( XLIB_Window aWindow ) const
+{
+    int nCurrent = -1;
+    if( m_aWMAtoms[ NET_WM_DESKTOP ] )
+    {
+        Atom                aRealType   = None;
+        int                 nFormat     = 8;
+        unsigned long       nItems      = 0;
+        unsigned long       nBytesLeft  = 0;
+        unsigned char*  pProperty   = NULL;
+        if( XGetWindowProperty( m_pDisplay,
+                                aWindow,
+                                m_aWMAtoms[ NET_WM_DESKTOP ],
+                                0, 1,
+                                False,
+                                XA_CARDINAL,
+                                &aRealType,
+                                &nFormat,
+                                &nItems,
+                                &nBytesLeft,
+                                &pProperty ) == 0
+                                && pProperty
+        )
+        {
+            nCurrent = int(*(sal_Int32*)pProperty);
+            XFree( pProperty );
+        }
+        else if( pProperty )
+        {
+            XFree( pProperty );
+            pProperty = NULL;
+        }
+    }
+    return nCurrent;
+}
+
+/*
+ *  WMAdaptor::getCurrentWorkArea
+ */
+void WMAdaptor::switchToWorkArea( int nWorkArea ) const
+{
+    if( m_aWMAtoms[ NET_CURRENT_DESKTOP ] )
+    {
+        XEvent aEvent;
+        aEvent.type                 = ClientMessage;
+        aEvent.xclient.display      = m_pDisplay;
+        aEvent.xclient.window       = m_pSalDisplay->GetRootWindow();
+        aEvent.xclient.message_type = m_aWMAtoms[ NET_CURRENT_DESKTOP ];
+        aEvent.xclient.format       = 32;
+        aEvent.xclient.data.l[0]    = nWorkArea;
+        aEvent.xclient.data.l[1]    = 0;
+        aEvent.xclient.data.l[2]    = 0;
+        aEvent.xclient.data.l[3]    = 0;
+        aEvent.xclient.data.l[4]    = 0;
+        XSendEvent( m_pDisplay,
+                    m_pSalDisplay->GetRootWindow(),
+                    False,
+                    SubstructureNotifyMask | SubstructureRedirectMask,
+                    &aEvent
+                    );
+    }
+}
+
+/*
  * WMAdaptor::frameIsMapping
  */
 void WMAdaptor::frameIsMapping( X11SalFrame* pFrame ) const
@@ -2193,3 +2251,4 @@ void NetWMAdaptor::frameIsMapping( X11SalFrame* pFrame ) const
 {
     setNetWMState( pFrame );
 }
+
