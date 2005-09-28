@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porlay.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:00:01 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:19:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,6 +236,8 @@ public:
         One value considering as-character anchored objects, one without these
         objects.
         Portions for other anchored objects aren't considered.
+        OD 2005-05-20 #i47162# - add optional parameter <_bNoFlyCntPorAndLinePor>
+        to control, if the fly content portions and line portion are considered.
 
         @param _orAscent
         output parameter - maximum ascent without as-character anchored objects
@@ -254,13 +256,18 @@ public:
         <_orObjAscent> and <_orObjDescent>, if it isn't a portion for a
         as-character anchored object or it isn't as high as the line.
 
+        @param _bNoFlyCntPorAndLinePor
+        optional input parameter - boolean, indicating that fly content portions
+        and the line portion are considered or not.
+
         @author OD
     */
     void MaxAscentDescent( SwTwips& _orAscent,
                            SwTwips& _orDescent,
                            SwTwips& _orObjAscent,
                            SwTwips& _orObjDescent,
-                           const SwLinePortion* _pDontConsiderPortion = NULL ) const;
+                           const SwLinePortion* _pDontConsiderPortion = NULL,
+                           const bool _bNoFlyCntPorAndLinePor = false ) const;
 
 #ifndef PRODUCT
     void DebugPortions( SvStream &rOs, const XubString &rTxt,
