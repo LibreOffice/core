@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiroot.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:05:50 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:50:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,6 +112,7 @@ XclImpRoot::XclImpRoot( XclImpRootData& rImpRootData ) :
     }
 
     mrImpData.mxPageSett.reset( new XclImpPageSettings( GetRoot() ) );
+    mrImpData.mxDocViewSett.reset( new XclImpDocViewSettings( GetRoot() ) );
     mrImpData.mxTabViewSett.reset( new XclImpTabViewSettings( GetRoot() ) );
 }
 
@@ -233,6 +234,11 @@ XclImpPivotTableManager& XclImpRoot::GetPivotTableManager() const
 XclImpPageSettings& XclImpRoot::GetPageSettings() const
 {
     return *mrImpData.mxPageSett;
+}
+
+XclImpDocViewSettings& XclImpRoot::GetDocViewSettings() const
+{
+    return *mrImpData.mxDocViewSett;
 }
 
 XclImpTabViewSettings& XclImpRoot::GetTabViewSettings() const
