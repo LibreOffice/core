@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftnfrm.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:14:34 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:12:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,11 @@
 #ifndef _PAM_HXX
 #include <pam.hxx>
 #endif
+// --> OD 2005-05-17 #i49383#
+#ifndef _OBJECTFORMATTER_HXX
+#include <objectformatter.hxx>
+#endif
+// <--
 
 /*************************************************************************
 |*
@@ -559,7 +564,10 @@ SwFtnFrm::SwFtnFrm( SwFrmFmt *pFmt, SwCntntFrm *pCnt, SwTxtFtn *pAt ):
     pMaster( 0 ),
     pRef( pCnt ),
     pAttr( pAt ),
-    bBackMoveLocked( FALSE )
+    bBackMoveLocked( FALSE ),
+    // --> OD 2005-08-11 #i49383#
+    mbUnlockPosOfLowerObjs( true )
+    // <--
 {
     nType = FRMC_FTN;
 }
@@ -1895,12 +1903,46 @@ void SwFtnBossFrm::AppendFtn( SwCntntFrm *pRef, SwTxtFtn *pAttr )
             pSect->InvalidateSize();
         else
         {
+            // --> OD 2005-05-18 #i49383# - disable unlock of position of
+            // lower objects during format of footnote content.
+            const bool bOldFtnFrmLocked( pNew->IsColLocked() );
+            pNew->ColLock();
+            pNew->KeepLockPosOfLowerObjs();
+            SwLayNotify* pFtnFrmNotitfy = new SwLayNotify( pNew );
+            // <--
             SwCntntFrm *pCnt = pNew->ContainsCntnt();
             while ( pCnt && pCnt->FindFtnFrm()->GetAttr() == pAttr )
             {
                 pCnt->Calc();
+                // --> OD 2005-05-17 #i49383# - format anchored objects
+                if ( pCnt->IsTxtFrm() && pCnt->IsValid() )
+                {
+                    if ( !SwObjectFormatter::FormatObjsAtFrm( *pCnt,
+                                                              *(pCnt->FindPageFrm()) ) )
+                    {
+                        // restart format with first content
+                        pCnt = pNew->ContainsCntnt();
+                        continue;
+                    }
+                }
+                // <--
                 pCnt = (SwCntntFrm*)pCnt->FindNextCnt();
             }
+            // --> OD 2005-05-18 #i49383#
+            if ( !bOldFtnFrmLocked )
+            {
+                pNew->ColUnlock();
+            }
+            pNew->Calc();
+            pNew->UnlockPosOfLowerObjs();
+            delete pFtnFrmNotitfy;
+            if ( !bOldFtnFrmLocked && !pNew->GetLower() &&
+                 !pNew->IsColLocked() && !pNew->IsBackMoveLocked() )
+            {
+                pNew->Cut();
+                delete pNew;
+            }
+            // <--
         }
         pMyPage->UpdateFtnNum();
     }
@@ -2318,10 +2360,28 @@ void SwFtnBossFrm::_MoveFtns( SvPtrarr &rFtnArr, BOOL bCalc )
                 BOOL bUnlock = !pFtn->IsBackMoveLocked();
                 pFtn->LockBackMove();
 
+                // --> OD 2005-05-18 #i49383# - disable unlock of position of
+                // lower objects during format of footnote content.
+                pFtn->KeepLockPosOfLowerObjs();
+                SwLayNotify aFtnFrmNotitfy( pFtn );
+                // <--
+
                 while ( pCnt && pCnt->FindFtnFrm()->GetAttr() == pAttr )
                 {
                     pCnt->_InvalidatePos();
                     pCnt->Calc();
+                    // --> OD 2005-05-17 #i49383# - format anchored objects
+                    if ( pCnt->IsTxtFrm() && pCnt->IsValid() )
+                    {
+                        if ( !SwObjectFormatter::FormatObjsAtFrm( *pCnt,
+                                                                  *(pCnt->FindPageFrm()) ) )
+                        {
+                            // restart format with first content
+                            pCnt = pFtn->ContainsAny();
+                            continue;
+                        }
+                    }
+                    // <--
                     if( pCnt->IsSctFrm() )
                     {   // Wenn es sich um einen nichtleeren Bereich handelt,
                         // iterieren wir auch ueber seinen Inhalt
@@ -2345,6 +2405,17 @@ void SwFtnBossFrm::_MoveFtns( SvPtrarr &rFtnArr, BOOL bCalc )
                         pFtn = 0L;
                     }
                 }
+                // --> OD 2005-05-18 #i49383#
+                if ( pFtn )
+                {
+                    pFtn->Calc();
+                    pFtn->UnlockPosOfLowerObjs();
+                }
+                else
+                {
+                    aFtnFrmNotitfy.FrmDeleted();
+                }
+                // <--
             }
         }
         else
@@ -2374,11 +2445,28 @@ void SwFtnBossFrm::_MoveFtns( SvPtrarr &rFtnArr, BOOL bCalc )
 
             BOOL bUnlock = !pNextFtn->IsBackMoveLocked();
             pNextFtn->LockBackMove();
+            // --> OD 2005-05-18 #i49383# - disable unlock of position of
+            // lower objects during format of footnote content.
+            pNextFtn->KeepLockPosOfLowerObjs();
+            SwLayNotify aFtnFrmNotitfy( pNextFtn );
+            // <--
 
             while ( pCnt && pCnt->FindFtnFrm()->GetAttr() == pAttr )
             {
                 pCnt->_InvalidatePos();
                 pCnt->Calc();
+                // --> OD 2005-05-17 #i49383# - format anchored objects
+                if ( pCnt->IsTxtFrm() && pCnt->IsValid() )
+                {
+                    if ( !SwObjectFormatter::FormatObjsAtFrm( *pCnt,
+                                                              *(pCnt->FindPageFrm()) ) )
+                    {
+                        // restart format with first content
+                        pCnt = pNextFtn->ContainsAny();
+                        continue;
+                    }
+                }
+                // <--
                 if( pCnt->IsSctFrm() )
                 {   // Wenn es sich um einen nichtleeren Bereich handelt,
                     // iterieren wir auch ueber seinen Inhalt
@@ -2395,6 +2483,10 @@ void SwFtnBossFrm::_MoveFtns( SvPtrarr &rFtnArr, BOOL bCalc )
             {
                 pNextFtn->UnlockBackMove();
             }
+            // --> OD 2005-05-18 #i49383#
+            pNextFtn->Calc();
+            pNextFtn->UnlockPosOfLowerObjs();
+            // <--
         }
     }
 }
@@ -2475,6 +2567,13 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const BOOL bLock,
             pFirst->LockBackMove();
             pFirst->Calc();
             pCntnt->Calc();
+            // --> OD 2005-05-17 #i49383# - format anchored objects
+            if ( pCntnt->IsTxtFrm() && pCntnt->IsValid() )
+            {
+                SwObjectFormatter::FormatObjsAtFrm( *pCntnt,
+                                                    *(pCntnt->FindPageFrm()) );
+            }
+            // <--
             if( bUnlock )
                 pFirst->UnlockBackMove();
         }
@@ -2487,6 +2586,13 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const BOOL bLock,
     {
         BOOL bMore = TRUE;
         BOOL bStart = pAttr == 0; // wenn kein Attribut uebergeben wird, alle bearbeiten
+        // --> OD 2005-05-18 #i49383# - disable unlock of position of
+        // lower objects during format of footnote and footnote content.
+        SwFtnFrm* pLastFtnFrm( 0L );
+        SwLayNotify* pFtnFrmNotify( 0L );
+        // footnote frame needs to be locked, if <bLock> isn't set.
+        bool bUnlockLastFtnFrm( false );
+        // <--
         do
         {
             if( !bStart )
@@ -2498,6 +2604,38 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const BOOL bLock,
                 pCnt->_InvalidateSize();
                 pCnt->Prepare( PREP_ADJUST_FRM );
                 SwFtnFrm* pFtnFrm = pCnt->FindFtnFrm();
+                // --> OD 2005-05-18 #i49383#
+                if ( pFtnFrm != pLastFtnFrm )
+                {
+                    if ( pLastFtnFrm )
+                    {
+                        if ( !bLock && bUnlockLastFtnFrm )
+                        {
+                            pLastFtnFrm->ColUnlock();
+                        }
+                        pLastFtnFrm->Calc();
+                        pLastFtnFrm->UnlockPosOfLowerObjs();
+                        delete pFtnFrmNotify;
+                        if ( !bLock && bUnlockLastFtnFrm &&
+                             !pLastFtnFrm->GetLower() &&
+                             !pLastFtnFrm->IsColLocked() &&
+                             !pLastFtnFrm->IsBackMoveLocked() )
+                        {
+                            pLastFtnFrm->Cut();
+                            delete pLastFtnFrm;
+                            pLastFtnFrm = 0L;
+                        }
+                    }
+                    if ( !bLock )
+                    {
+                        bUnlockLastFtnFrm = !pFtnFrm->IsColLocked();
+                        pFtnFrm->ColLock();
+                    }
+                    pFtnFrm->KeepLockPosOfLowerObjs();
+                    pLastFtnFrm = pFtnFrm;
+                    pFtnFrmNotify = new SwLayNotify( pLastFtnFrm );
+                }
+                // <--
                 // OD 30.10.2002 #97265# - invalidate position of footnote
                 // frame, if it's below its footnote container, in order to
                 // assure its correct position, probably calculating its previous
@@ -2516,12 +2654,31 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const BOOL bLock,
                     pFtnFrm->LockBackMove();
                     pFtnFrm->Calc();
                     pCnt->Calc();
+                    // --> OD 2005-05-17 #i49383# - format anchored objects
+                    if ( pCnt->IsTxtFrm() && pCnt->IsValid() )
+                    {
+                        if ( !SwObjectFormatter::FormatObjsAtFrm( *pCnt,
+                                                                  *(pCnt->FindPageFrm()) ) )
+                        {
+                            // restart format with first content
+                            pCnt = pFtn->ContainsAny();
+                            continue;
+                        }
+                    }
+                    // <--
                     if( bUnlock )
                     {
                         pFtnFrm->UnlockBackMove();
                         if( !pFtnFrm->Lower() &&
                             !pFtnFrm->IsColLocked() )
                         {
+                            // --> OD 2005-08-10 #i49383#
+                            ASSERT( pLastFtnFrm == pFtnFrm,
+                                    "<SwFtnBossFrm::RearrangeFtns(..)> - <pLastFtnFrm> != <pFtnFrm>" );
+                            pLastFtnFrm = 0L;
+                            pFtnFrmNotify->FrmDeleted();
+                            delete pFtnFrmNotify;
+                            // <--
                             pFtnFrm->Cut();
                             delete pFtnFrm;
                         }
@@ -2531,6 +2688,18 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const BOOL bLock,
                 {
                     pFtnFrm->Calc();
                     pCnt->Calc();
+                    // --> OD 2005-05-17 #i49383# - format anchored objects
+                    if ( pCnt->IsTxtFrm() && pCnt->IsValid() )
+                    {
+                        if ( !SwObjectFormatter::FormatObjsAtFrm( *pCnt,
+                                                                  *(pCnt->FindPageFrm()) ) )
+                        {
+                            // restart format with first content
+                            pCnt = pFtn->ContainsAny();
+                            continue;
+                        }
+                    }
+                    // <--
                 }
             }
             SwSectionFrm *pDel = NULL;
@@ -2574,6 +2743,26 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const BOOL bLock,
                     bMore = FALSE;
             }
         } while ( bMore );
+        // --> OD 2005-05-18 #i49383#
+        if ( pLastFtnFrm )
+        {
+            if ( !bLock && bUnlockLastFtnFrm )
+            {
+                pLastFtnFrm->ColUnlock();
+            }
+            pLastFtnFrm->Calc();
+            pLastFtnFrm->UnlockPosOfLowerObjs();
+            delete pFtnFrmNotify;
+            if ( !bLock && bUnlockLastFtnFrm &&
+                 !pLastFtnFrm->GetLower() &&
+                 !pLastFtnFrm->IsColLocked() &&
+                 !pLastFtnFrm->IsBackMoveLocked() )
+            {
+                pLastFtnFrm->Cut();
+                delete pLastFtnFrm;
+            }
+        }
+        // <--
     }
 }
 
