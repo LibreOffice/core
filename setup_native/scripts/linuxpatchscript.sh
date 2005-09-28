@@ -4,7 +4,7 @@ MYUID=`id | sed "s/(.*//g" | sed "s/.*=//"`
 
 if [ $MYUID -ne 0 ]
 then
-    echo You need to have super-user rights to install this language package
+    echo You need to have super-user permissions to run this patch script
     exit 1
 fi
 
@@ -21,30 +21,50 @@ else
   exit 1
 fi
 
-# Asking for the installation directory
+# Last chance to exit ..
+echo
+read -p "Patching the installation in ${PRODUCTINSTALLLOCATION}. Continue (y/n) ? " -n 1 reply leftover
+echo
+[ "$reply" == "y" ] || exit 1
 
 echo
-echo "Where do you want to install the patch ? [$PRODUCTINSTALLLOCATION] "
-read reply leftover
-if [ "x$reply" != "x" ]
-then
-  PRODUCTINSTALLLOCATION="$reply"
-fi
-
-# Unpacking
-
-echo "Installing..."
+echo "About to update the following packages ..."
 
 BASEDIR=`dirname $0`
 
 RPMLIST=""
 for i in `ls $BASEDIR/RPMS/*.rpm`
 do
-  rpm -q `rpm -qp --qf "%{NAME}\n" $i` && RPMLIST="$RPMLIST $i"
+  rpm --query `rpm --query --queryformat "%{NAME}\n" --package $i` && RPMLIST="$RPMLIST $i"
 done
 
-rpm --prefix $PRODUCTINSTALLLOCATION -U $RPMLIST
+# Save UserInstallation value
+BOOTSTRAPRC="${PRODUCTINSTALLLOCATION}/program/bootstraprc"
+USERINST=`grep UserInstallation ${BOOTSTRAPRC}`
 
-echo "Done..."
+echo
+rpm --upgrade -v --hash --prefix $PRODUCTINSTALLLOCATION --notriggers $RPMLIST
+echo
+
+# Some RPM versions have problems with -U and --prefix
+if [ ! -f ${BOOTSTRAPRC} ]; then
+  echo Update failed due to a bug in RPM, uninstalling ..
+  rpm --erase -v --nodeps --notriggers `rpm --query --queryformat "%{NAME} " --package $RPMLIST`
+  echo
+  echo Now re-installing new packages ..
+  echo
+  rpm --install -v --hash --prefix $PRODUCTINSTALLLOCATION --notriggers $RPMLIST
+  echo
+fi
+
+# Restore the UserInstallation key if necessary
+DEFUSERINST=`grep UserInstallation ${BOOTSTRAPRC}`
+if [ "${USERINST}" != "${DEFUSERINST}" ]; then
+  mv -f ${BOOTSTRAPRC} ${BOOTSTRAPRC}.$$
+  sed "s|UserInstallation.*|${USERINST}|" ${BOOTSTRAPRC}.$$ > ${BOOTSTRAPRC}
+  rm -f ${BOOTSTRAPRC}.$$
+fi
+
+echo "Done."
 
 exit 0
