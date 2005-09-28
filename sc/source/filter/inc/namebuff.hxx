@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namebuff.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:22:53 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:57:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,8 @@
 #endif
 
 #include "rangenam.hxx"
+#include <hash_map>
+#include <list>
 
 class ScDocument;
 class ScTokenArray;
@@ -186,15 +188,24 @@ inline void NameBuffer::SetBase( UINT16 nNewBase )
 
 
 
-class ShrfmlaBuffer : private List, public ExcRoot
+class ShrfmlaBuffer : public ExcRoot
 {
-private:
-    UINT16                  nBase;          // Startwert Indizierung
+    struct ScAddressHashFunc : public std::unary_function< const ScAddress &, size_t >
+    {
+        size_t operator() (const ScAddress &addr) const;
+    };
+    typedef std::hash_map <ScAddress, UINT16, ScAddressHashFunc> ShrfmlaHash;
+    typedef std::list <ScRange>                                  ShrfmlaList;
+
+    ShrfmlaHash  index_hash;
+    ShrfmlaList  index_list;
+    unsigned int cur_index;
+
 public:
                             ShrfmlaBuffer( RootData* pRD );
     virtual                 ~ShrfmlaBuffer();
     void                    Store( const ScRange& rRange, const ScTokenArray& );
-    UINT16                  Find( const ScAddress aAdress );
+    UINT16                  Find (const ScAddress & aAdress ) const;
 
     static String           CreateName( const ScRange& );
     };
