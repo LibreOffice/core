@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoredobject.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:32:40 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:02:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,7 +145,11 @@ class SwAnchoredObject
             @author OD
         */
         friend class SwObjPositioningInProgress;
-        void SetPositioningInProgress( const bool _bPosInProgress );
+        inline void SetPositioningInProgress( const bool _bPosInProgress )
+        {
+            mbPositioningInProgress = _bPosInProgress;
+        }
+
 
         /** check anchor character rectangle
 
@@ -357,7 +361,10 @@ class SwAnchoredObject
 
             @author OD
         */
-        bool IsPositioningInProgress() const;
+        inline bool IsPositioningInProgress() const
+        {
+            return mbPositioningInProgress;
+        }
 
         /** method to determine, if invalidation of position is allowed
 
@@ -600,6 +607,11 @@ class SwObjPositioningInProgress
 {
     private:
         SwAnchoredObject* mpAnchoredObj;
+        // --> OD 2005-08-09 #i52904# - introduce boolean indicating old state
+        // of anchored object regarding positioning in progress in order to
+        // consider nested usage of class <SwObjPositioningInProgress>
+        bool mbOldObjPositioningInProgress;
+        // <--
 
     public:
         SwObjPositioningInProgress( SdrObject& _rSdrObj );
