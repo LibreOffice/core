@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:26:02 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:33:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3182,6 +3182,15 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                         }
                                         else
                                         {
+                                            // --> FME 2005-06-17 #i37132# RTL portions with
+                                            // compressed blank should not paint this blank:
+                                            if ( pTextPortion->IsRightToLeft() && nTextLen >= 2 &&
+                                                 pDXArray[ nTextLen - 1 ] ==
+                                                 pDXArray[ nTextLen - 2 ] &&
+                                                 ' ' == aText.GetChar( nTextStart + nTextLen - 1 ) )
+                                                --nTextLen;
+                                            // <--
+
                                             // output directly
                                             aTmpFont.QuickDrawText( pOutDev, aRealOutPos, aText, nTextStart, nTextLen, pDXArray );
                                         }
