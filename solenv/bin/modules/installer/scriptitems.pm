@@ -4,9 +4,9 @@
 #
 #   $RCSfile: scriptitems.pm,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:10:57 $
+#   last change: $Author: hr $ $Date: 2005-09-28 13:15:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -459,6 +459,7 @@ sub replace_setup_variables
         $value =~ s/\<productmajor\>/$localbuild/;
         $value =~ s/\<productminor\>/$localminor/;
         $value =~ s/\<productbuildid\>/$installer::globals::buildid/;
+        $value =~ s/\<sourceid\>/$installer::globals::build/;
 
         $oneitem->{'Value'} = $value;
     }
