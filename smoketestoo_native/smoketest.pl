@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: smoketest.pl,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-23 14:34:47 $
+#   last change: $Author: hr $ $Date: 2005-09-28 14:43:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,7 @@ if ($gui eq "WNT") {
     $SOFFICEBIN = "soffice.exe";
     $bootstrapini = "bootstrap.ini";
     $bootstrapiniTemp = $bootstrapini . "_";
+    $packpackage = "msi";
 }
 elsif ($gui eq "UNX") {
     $is_do_deinstall = 0;
@@ -138,6 +139,7 @@ elsif ($gui eq "UNX") {
     else {
         $ENV{DBGSV_INIT} = "dbgsv.ini";
     }
+    $packpackage = $ENV{PKGFORMAT};
 }
 elsif ($gui eq $cygwin) {
     $PathSeparator = '/';
@@ -160,6 +162,7 @@ elsif ($gui eq $cygwin) {
     $CygwinLineends = $/;
     $WinLineends = "\r\n";
     &SetWinLineends();
+    $packpackage = "msi";
 }
 else {
     print_error ("not supported system\n",1);
@@ -217,7 +220,7 @@ else {
 
 $StandDir = $ENV{SOLARSRC} . $PathSeparator;
 $SHIP = defined $ENV{SHIPDRIVE} ? $ENV{SHIPDRIVE} . $PathSeparator : "shipdrive_not_set";
-$PORDUCT = "$SHIP$ENV{INPATH}$PathSeparator$PRODUCT$PathSeparator";
+$PORDUCT = "$SHIP$ENV{INPATH}$PathSeparator$PRODUCT$PathSeparator$packpackage$PathSeparator";
 $DATA="$ENV{DMAKE_WORK_DIR}$PathSeparator" . "data$PathSeparator";
 $WORK_STAMP_LC=$ENV{WORK_STAMP};
 $WORK_STAMP_LC =~ tr/A-Z/a-z/;
@@ -261,7 +264,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.15 $ ';
+$id_str = ' $Revision: 1.16 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -678,8 +681,8 @@ sub getInstset {
         $RootDir=~s/\w+$//;
         foreach $project (@install_list) {
             @DirArray=();
-            $TestDir1 = "$RootDir$project$PathSeparator$ENV{INPATH}$PathSeparator$PRODUCT$PathSeparator" . "install$PathSeparator";
-            $TestDir2 = "$StandDir$project$PathSeparator$ENV{INPATH}$PathSeparator$PRODUCT$PathSeparator" . "install$PathSeparator";
+            $TestDir1 = "$RootDir$project$PathSeparator$ENV{INPATH}$PathSeparator$PRODUCT$PathSeparator$packpackage$PathSeparator" . "install$PathSeparator";
+            $TestDir2 = "$StandDir$project$PathSeparator$ENV{INPATH}$PathSeparator$PRODUCT$PathSeparator$packpackage$PathSeparator" . "install$PathSeparator";
             if (-e "$TestDir1") {
                 $InstDir= $TestDir1;
             }
