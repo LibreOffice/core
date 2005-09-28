@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-23 11:49:28 $
+#   last change: $Author: hr $ $Date: 2005-09-28 13:16:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -430,7 +430,7 @@ sub clean_output_tree
         if ( -d $installer::globals::shiptestdirectory )
         {
             my $infoline = "Last try to remove $installer::globals::shiptestdirectory . \n";
-            push(@installer::globals::globallogfileinfo, $infoline);
+            push(@installer::globals::logfileinfo, $infoline);
             my $systemcall = "rmdir $installer::globals::shiptestdirectory";
             my $returnvalue = system($systemcall);
         }
@@ -1150,11 +1150,18 @@ sub prepare_linuxlinkfiles
 
 sub prepare_windows_patchfiles
 {
-    my ( $filesref, $languagestringref ) = @_;
+    my ( $filesref, $languagestringref, $allvariableshashref ) = @_;
 
     my @patchfiles = ();
     my $patchfilename = "patchlist.txt";
     my $patchfilename2 = "patchmsi.dll";
+
+    if ( ! $allvariableshashref->{'WINDOWSPATCHLEVEL'} ) { installer::exiter::exit_program("ERROR: No Windows patch level defined in list file (WINDOWSPATCHLEVEL) !", "prepare_windows_patchfiles"); }
+    # my $windowspatchlevel = $allvariableshashref->{'WINDOWSPATCHLEVEL'};
+    my $windowspatchlevel = $installer::globals::buildid;
+
+    # the environment variable CWS_WORK_STAMP is set only in CWS
+    if ( $ENV{'CWS_WORK_STAMP'} ) { $windowspatchlevel = $ENV{'CWS_WORK_STAMP'} . $windowspatchlevel; }
 
     my $header = "\[SwapFiles\]\n";
     push(@patchfiles, $header);
@@ -1171,11 +1178,11 @@ sub prepare_windows_patchfiles
         if ( $styles =~ /\bDONTRENAMEINPATCH\b/ ) { next; }
 
         my $olddestination = $onefile->{'destination'};
-        my $newdestination = $olddestination . "." . $installer::globals::windowsfilespatchlevel;
+        my $newdestination = $olddestination . "." . $windowspatchlevel;
         my $line = "\"" . $olddestination . "\"" . "=" . "\"" . $newdestination . "\"" . "\n";
         $onefile->{'destination'} = $newdestination;
 
-        my $newfilename = $onefile->{'Name'} . "." . $installer::globals::windowsfilespatchlevel;
+        my $newfilename = $onefile->{'Name'} . "." . $windowspatchlevel;
         $onefile->{'Name'} = $newfilename;
 
         push(@patchfiles, $line);
