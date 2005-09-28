@@ -4,9 +4,9 @@
  *
  *  $RCSfile: refupdat.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:35:13 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:35:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,14 @@ enum ScRefUpdateRes {
 class ScRefUpdate
 {
 public:
+
+    /// What type of reference is to be updated.
+    enum WhatType
+    {
+        ALL,        /// all references
+        ABSOLUTE    /// only absolute references
+    };
+
     static ScRefUpdateRes Update
         ( ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
                             SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
@@ -66,23 +74,30 @@ public:
                                 INT32 nDx, INT32 nDy, INT32 nDz,
                                 ScBigRange& rWhat );
 
+    /// Before calling, the absolute references must be up-to-date!
     static ScRefUpdateRes Update( ScDocument* pDoc,
                                   UpdateRefMode eUpdateRefMode,
                                   const ScAddress& rPos, const ScRange& rRange,
                                   SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                  ComplRefData& rRef );
+                                  ComplRefData& rRef, WhatType eWhat = ALL );
+
+    /// Before calling, the absolute references must be up-to-date!
     static ScRefUpdateRes Move( ScDocument* pDoc, const ScAddress& rPos,
                                 SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
                                 ComplRefData& rRef, BOOL bWrap, BOOL bAbsolute );
+
     static void MoveRelWrap( ScDocument* pDoc, const ScAddress& rPos,
                                 ComplRefData& rRef );
 
+    /// Before calling, the absolute references must be up-to-date!
     static ScRefUpdateRes UpdateTranspose( ScDocument* pDoc,
                                 const ScRange& rSource, const ScAddress& rDest,
                                 ComplRefData& rRef );
+
     static void DoTranspose( SCsCOL& rCol, SCsROW& rRow, SCsTAB& rTab, ScDocument* pDoc,
                                 const ScRange& rSource, const ScAddress& rDest );
 
+    /// Before calling, the absolute references must be up-to-date!
     static ScRefUpdateRes UpdateGrow(
                                 const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY,
                                 ComplRefData& rRef );
