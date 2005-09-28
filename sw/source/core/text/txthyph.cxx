@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txthyph.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:06:55 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:21:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,9 @@
 #ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
 #include <com/sun/star/i18n/WordType.hpp>
 #endif
-
+#ifndef _ENHANCEDPDFEXPORTHELPER_HXX
+#include <EnhancedPDFExportHelper.hxx>
+#endif
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>  // SwViewOptions
 #endif
@@ -459,7 +461,8 @@ sal_Bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
 sal_Bool SwHyphPortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const
 {
     // --> FME 2004-06-24 #i16816# tagged pdf support
-    const sal_Unicode cChar = rInf.GetVsh()->GetViewOptions()->IsPDFExport() ?
+    const sal_Unicode cChar = rInf.GetVsh()->GetViewOptions()->IsPDFExport() &&
+                              SwTaggedPDFHelper::IsExportTaggedPDF( *rInf.GetOut() ) ?
                               0xad :
                               '-';
     // <--
