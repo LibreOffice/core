@@ -4,9 +4,9 @@
 #
 #   $RCSfile: control.pm,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:00:07 $
+#   last change: $Author: hr $ $Date: 2005-09-28 13:11:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -409,6 +409,8 @@ sub check_updatepack
                     # try to write into $shipdrive
 
                     $directory = $installer::globals::product . "_" . $installer::globals::compiler . "_" . $installer::globals::buildid . "_" . $installer::globals::languageproducts[0] . "_test_$$";
+                    $directory =~ s/\,/\_/g;    # for the list of languages
+                    $directory =~ s/\-/\_/g;    # for en-US, pt-BR, ...
                     $directory = $shipdrive . $installer::globals::separator . $directory;
 
                     $infoline = "Try to create directory: $directory\n";
@@ -420,6 +422,8 @@ sub check_updatepack
                     if ( installer::systemactions::try_to_create_directory($directory))
                     {
                         $infoline = "Write access on Ship drive\n";
+                        push(@installer::globals::globallogfileinfo, $infoline);
+                        $infoline = "Ship test directory $installer::globals::shiptestdirectory was successfully created\n";
                         push(@installer::globals::globallogfileinfo, $infoline);
                         my $systemcall = "rmdir $directory";
                         my $returnvalue = system($systemcall);
@@ -455,6 +459,19 @@ sub check_updatepack
 
                             $installer::globals::updatepack = 1;    # That's it
                         }
+
+                        # Additional logging information for the temporary ship directory
+
+                        if ( -d $installer::globals::shiptestdirectory )
+                        {
+                            $infoline = "Ship test directory $installer::globals::shiptestdirectory still exists. Trying removal later again.\n";
+                            push(@installer::globals::globallogfileinfo, $infoline);
+                        }
+                        else
+                        {
+                            $infoline = "Ship test directory $installer::globals::shiptestdirectory was successfully removed.\n";
+                            push(@installer::globals::globallogfileinfo, $infoline);
+                        }
                     }
                     else
                     {
@@ -489,6 +506,7 @@ sub check_updatepack
     if ( $installer::globals::updatepack ) { $infoline = "Setting updatepack true\n\n"; }
     else { $infoline = "\nNo updatepack\n"; }
     push(@installer::globals::globallogfileinfo, $infoline);
+
 }
 
 #############################################################
