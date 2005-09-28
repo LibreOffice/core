@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:15:47 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:13:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1060,17 +1060,35 @@ void SwLayAction::InternalAction()
             // --> OD 2004-07-08 #i28701# - conditions, introduced by #106346#,
             // are incorrect (marcos IS_FLYS and IS_INVAFLY only works for <pPage>)
             // and are too strict.
-            while ( ( mbFormatCntntOnInterrupt && pPg->IsInvalid() ) ||
+            // --> OD 2005-06-09 #i50432# - adjust interrupt formatting to
+            // normal page formatting - see above.
+            while ( ( mbFormatCntntOnInterrupt &&
+                      ( pPg->IsInvalid() ||
+                        ( pPg->GetSortedObjs() && pPg->IsInvalidFly() ) ) ) ||
                     ( !mbFormatCntntOnInterrupt && pPg->IsInvalidLayout() ) )
             {
                 XCHECKPAGE;
+                // --> OD 2005-06-09 #i50432# - format also at-page anchored objects
+                SwObjectFormatter::FormatObjsAtFrm( *pPg, *pPg, this );
+                // <--
+                // --> OD 2005-06-09 #i50432#
+                if ( !pPg->GetSortedObjs() )
+                {
+                    pPg->ValidateFlyLayout();
+                    pPg->ValidateFlyCntnt();
+                }
+                // <--
                 while ( pPg->IsInvalidLayout() )
                 {
                     pPg->ValidateLayout();
                     FormatLayout( pPg );
                     XCHECKPAGE;
                 }
-                if ( mbFormatCntntOnInterrupt && pPg->IsInvalidCntnt() )
+                // --> OD 2005-06-09 #i50432#
+                if ( mbFormatCntntOnInterrupt &&
+                     ( pPg->IsInvalidCntnt() ||
+                       ( pPg->GetSortedObjs() && pPg->IsInvalidFly() ) ) )
+                // <--
                 {
                     pPg->ValidateFlyInCnt();
                     pPg->ValidateCntnt();
@@ -1484,6 +1502,28 @@ BOOL SwLayAction::IsShortCut( SwPageFrm *&prPage )
                         prPage = (SwPageFrm*)prPage->GetPrev();
                     }
                 }
+                // --> OD 2005-04-25 #121980# - no shortcut, if at previous page
+                // an anchored object is registered, whose anchor is <pCntnt>.
+                else if ( prPage->GetPrev() &&
+                          static_cast<SwPageFrm*>(prPage->GetPrev())->GetSortedObjs() )
+                {
+                    SwSortedObjs* pObjs =
+                        static_cast<SwPageFrm*>(prPage->GetPrev())->GetSortedObjs();
+                    if ( pObjs )
+                    {
+                        sal_uInt32 i = 0;
+                        for ( ; i < pObjs->Count(); ++i )
+                        {
+                            SwAnchoredObject* pObj = (*pObjs)[i];
+                            if ( pObj->GetAnchorFrmContainingAnchPos() == pCntnt )
+                            {
+                                bRet = FALSE;
+                                break;
+                            }
+                        }
+                    }
+                }
+                // <--
             }
         }
     }
