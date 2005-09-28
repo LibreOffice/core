@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.216 $
+ *  $Revision: 1.217 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:32:42 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 14:54:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -804,6 +804,11 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
 
         if( nStyle & WB_NOSHADOW )
             nFrameStyle |= SAL_FRAME_STYLE_NOSHADOW;
+
+        if( mpWindowImpl->mnType == WINDOW_DIALOG           ||
+            mpWindowImpl->mnType == WINDOW_MODALDIALOG     ||
+            mpWindowImpl->mnType == WINDOW_MODELESSDIALOG )
+            nFrameStyle |= SAL_FRAME_STYLE_DIALOG;
 
         SalFrame* pParentFrame = NULL;
         if ( pParent )
