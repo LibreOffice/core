@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:53:07 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:19:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1443,7 +1443,10 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                                 }
                                 break;
                             case NUMBERFORMAT_SCIENTIFIC:
-                                WriteScientificElement_Impl( nPrecision, nLeading, bThousand, nExpDigits );
+                                // #i43959# for scientific numbers, count all integer symbols ("0" and "#")
+                                // as integer digits: use nIntegerSymbols instead of nLeading
+                                // (use of '#' to select multiples in exponent might be added later)
+                                WriteScientificElement_Impl( nPrecision, nIntegerSymbols, bThousand, nExpDigits );
                                 bAnyContent = sal_True;
                                 break;
                             case NUMBERFORMAT_FRACTION:
@@ -1463,6 +1466,17 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         }
 
                         bNumWritten = sal_True;
+                    }
+                    break;
+                case NF_SYMBOLTYPE_DECSEP:
+                    if ( pElemStr && nPrecision == 0 )
+                    {
+                        //  A decimal separator after the number, without following decimal digits,
+                        //  isn't modelled as part of the number element, so it's written as text
+                        //  (the distinction between a quoted and non-quoted, locale-dependent
+                        //  character is lost here).
+
+                        AddToTextElement_Impl( *pElemStr );
                     }
                     break;
                 case NF_SYMBOLTYPE_DEL:
