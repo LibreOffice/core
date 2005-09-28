@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:36:23 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:16:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3763,7 +3763,7 @@ void SvNumberformat::GetNumForInfo( USHORT nNumFor, short& rScannedType,
                 while ( *p++ == '0' )
                     nAnzLeading++;
             }
-            else if (nType == NF_SYMBOLTYPE_DECSEP)
+            else if (nType == NF_SYMBOLTYPE_DECSEP || nType == NF_SYMBOLTYPE_EXP)
                 bStop = TRUE;
             i++;
         }
