@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:05:46 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 15:08:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,8 @@
 
 #include <vector>
 #include <set>
+
+static const int MAXFONTHEIGHT = 2048;
 
 // -----------
 // - Inlines -
@@ -337,23 +339,10 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXA& rE
     aDFA.mePitch        = ImplLogPitchToSal( rLogFont.lfPitchAndFamily );
     aDFA.mbSymbolFlag   = (rLogFont.lfCharSet == SYMBOL_CHARSET);
 
-    // get device specific font attributes
-    aDFA.mbOrientation  = (nFontType & RASTER_FONTTYPE) == 0;
-    aDFA.mbDevice       = (rMetric.tmPitchAndFamily & TMPF_DEVICE) != 0;
-    aDFA.mnQuality      = (rMetric.tmPitchAndFamily & TMPF_TRUETYPE) ? 250 : 0;
-
-    aDFA.mbEmbeddable = false;
-    aDFA.mbSubsettable = false;
-    if( (rMetric.tmPitchAndFamily & TMPF_TRUETYPE) != 0 )
-        if( (rMetric.tmPitchAndFamily & TMPF_DEVICE) == 0 )
-            // TODO: implement type1 or CFF subsetting
-            if( 0 == (rMetric.ntmFlags & (NTM_PS_OPENTYPE | NTM_TYPE1) ) )
-                aDFA.mbSubsettable = true;
-
-    // get family name
+    // get the font face name
     aDFA.maName = ImplSalGetUniString( rLogFont.lfFaceName );
 
-    // only use style name if it looks reasonable
+    // use the face's style name only if it looks reasonable
     const char* pStyleName = (const char*)rEnumFont.elfStyle;
     const char* pEnd = pStyleName + sizeof( rEnumFont.elfStyle );
     const char* p = pStyleName;
@@ -362,6 +351,50 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXA& rE
             break;
     if( p < pEnd )
         aDFA.maStyleName = ImplSalGetUniString( pStyleName );
+
+    // get device specific font attributes
+    aDFA.mbOrientation  = (nFontType & RASTER_FONTTYPE) == 0;
+    aDFA.mbDevice       = (rMetric.tmPitchAndFamily & TMPF_DEVICE) != 0;
+
+    aDFA.mbEmbeddable   = false;
+    aDFA.mbSubsettable  = false;
+    if( (rMetric.tmPitchAndFamily & TMPF_TRUETYPE) != 0 )
+        if( (rMetric.tmPitchAndFamily & TMPF_DEVICE) == 0 )
+            // TODO: implement type1 or CFF subsetting
+            if( 0 == (rMetric.ntmFlags & (NTM_PS_OPENTYPE | NTM_TYPE1) ) )
+                aDFA.mbSubsettable = true;
+    // for now we can only embed Type1 fonts
+    if( 0 != (rMetric.ntmFlags & NTM_TYPE1 ) )
+        aDFA.mbEmbeddable = true;
+
+    // heuristics for font quality
+    // -   standard-type1 > opentypeTT > truetype > non-standard-type1 > raster
+    // -   subsetting > embedding > none
+    aDFA.mnQuality = 0;
+    if( rMetric.tmPitchAndFamily & TMPF_TRUETYPE )
+        aDFA.mnQuality += 50;
+    if( rMetric.ntmFlags & NTM_TT_OPENTYPE )
+        aDFA.mnQuality += 10;
+    if( aDFA.mbSubsettable )
+        aDFA.mnQuality += 200;
+    else if( aDFA.mbEmbeddable )
+        aDFA.mnQuality += 100;
+
+    // #i38665# prefer Type1 versions of the standard postscript fonts
+    if( aDFA.mbEmbeddable )
+    {
+        if( aDFA.maName.EqualsAscii( "AvantGarde" )
+        ||  aDFA.maName.EqualsAscii( "Bookman" )
+        ||  aDFA.maName.EqualsAscii( "Courier" )
+        ||  aDFA.maName.EqualsAscii( "Helvetica" )
+        ||  aDFA.maName.EqualsAscii( "NewCenturySchlbk" )
+        ||  aDFA.maName.EqualsAscii( "Palatino" )
+        ||  aDFA.maName.EqualsAscii( "Symbol" )
+        ||  aDFA.maName.EqualsAscii( "Times" )
+        ||  aDFA.maName.EqualsAscii( "ZapfChancery" )
+        ||  aDFA.maName.EqualsAscii( "ZapfDingbats" ) )
+            aDFA.mnQuality += 500;
+    }
 
     // TODO: add alias names
 
@@ -385,23 +418,10 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rE
     aDFA.mePitch        = ImplLogPitchToSal( rLogFont.lfPitchAndFamily );
     aDFA.mbSymbolFlag   = (rLogFont.lfCharSet == SYMBOL_CHARSET);
 
-    // get device specific font attributes
-    aDFA.mbOrientation  = (nFontType & RASTER_FONTTYPE) == 0;
-    aDFA.mbDevice       = (rMetric.tmPitchAndFamily & TMPF_DEVICE) != 0;
-    aDFA.mnQuality      = (rMetric.tmPitchAndFamily & TMPF_TRUETYPE) ? 250 : 0;
-
-    aDFA.mbEmbeddable = false;
-    aDFA.mbSubsettable = false;
-    if( (rMetric.tmPitchAndFamily & TMPF_TRUETYPE) != 0 )
-        if( (rMetric.tmPitchAndFamily & TMPF_DEVICE) == 0 )
-            // TODO: implement type1 or CFF subsetting
-            if( 0 == (rMetric.ntmFlags & (NTM_PS_OPENTYPE | NTM_TYPE1) ) )
-                aDFA.mbSubsettable = true;
-
-    // get family name
+    // get the font face name
     aDFA.maName = rLogFont.lfFaceName;
 
-    // only use style name if it looks reasonable
+    // use the face's style name only if it looks reasonable
     const wchar_t* pStyleName = rEnumFont.elfStyle;
     const wchar_t* pEnd = pStyleName + sizeof(rEnumFont.elfStyle)/sizeof(*rEnumFont.elfStyle);
     const wchar_t* p = pStyleName;
@@ -411,8 +431,51 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rE
     if( p < pEnd )
         aDFA.maStyleName = pStyleName;
 
-    // TODO: add alias names
+    // get device specific font attributes
+    aDFA.mbOrientation  = (nFontType & RASTER_FONTTYPE) == 0;
+    aDFA.mbDevice       = (rMetric.tmPitchAndFamily & TMPF_DEVICE) != 0;
 
+    aDFA.mbEmbeddable   = false;
+    aDFA.mbSubsettable  = false;
+    if( (rMetric.tmPitchAndFamily & TMPF_TRUETYPE) != 0 )
+        if( (rMetric.tmPitchAndFamily & TMPF_DEVICE) == 0 )
+            // TODO: implement type1 or CFF subsetting
+            if( 0 == (rMetric.ntmFlags & (NTM_PS_OPENTYPE | NTM_TYPE1) ) )
+                aDFA.mbSubsettable = true;
+    // for now we can only embed Type1 fonts
+    if( rMetric.ntmFlags & NTM_TYPE1 )
+        aDFA.mbEmbeddable = true;
+
+    // heuristics for font quality
+    // -   standard-type1 > opentypeTT > truetype > non-standard-type1 > raster
+    // -   subsetting > embedding > none
+    aDFA.mnQuality = 0;
+    if( rMetric.tmPitchAndFamily & TMPF_TRUETYPE )
+        aDFA.mnQuality += 50;
+    if( rMetric.ntmFlags & NTM_TT_OPENTYPE )
+        aDFA.mnQuality += 10;
+    if( aDFA.mbSubsettable )
+        aDFA.mnQuality += 200;
+    else if( aDFA.mbEmbeddable )
+        aDFA.mnQuality += 100;
+
+    // #i38665# prefer Type1 versions of the standard postscript fonts
+    if( aDFA.mbEmbeddable )
+    {
+        if( aDFA.maName.EqualsAscii( "AvantGarde" )
+        ||  aDFA.maName.EqualsAscii( "Bookman" )
+        ||  aDFA.maName.EqualsAscii( "Courier" )
+        ||  aDFA.maName.EqualsAscii( "Helvetica" )
+        ||  aDFA.maName.EqualsAscii( "NewCenturySchlbk" )
+        ||  aDFA.maName.EqualsAscii( "Palatino" )
+        ||  aDFA.maName.EqualsAscii( "Symbol" )
+        ||  aDFA.maName.EqualsAscii( "Times" )
+        ||  aDFA.maName.EqualsAscii( "ZapfChancery" )
+        ||  aDFA.maName.EqualsAscii( "ZapfDingbats" ) )
+            aDFA.mnQuality += 500;
+    }
+
+    // TODO: add alias names
     return aDFA;
 }
 
@@ -1013,6 +1076,17 @@ USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
         && (ImplSalWICompareAscii( aLogFont.lfFaceName, "Courier" ) == 0) )
             lstrcpynW( aLogFont.lfFaceName, L"Courier New", 11 );
 
+        // limit font requests to MAXFONTHEIGHT
+        // TODO: share MAXFONTHEIGHT font instance
+        if( -aLogFont.lfHeight <= MAXFONTHEIGHT )
+            mfFontScale = 1.0;
+        else
+        {
+            mfFontScale = -aLogFont.lfHeight / (float)MAXFONTHEIGHT;
+            aLogFont.lfHeight = -MAXFONTHEIGHT;
+            aLogFont.lfWidth /= mfFontScale;
+        }
+
         hNewFont = CreateFontIndirectW( &aLogFont );
         if( hdcScreen )
         {
@@ -1056,6 +1130,17 @@ USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
         && bImplSalCourierNew
         && (stricmp( aLogFont.lfFaceName, "Courier" ) == 0) )
             strncpy( aLogFont.lfFaceName, "Courier New", 11 );
+
+        // limit font requests to MAXFONTHEIGHT
+        // TODO: share MAXFONTHEIGHT font instance
+        if( -aLogFont.lfHeight <= MAXFONTHEIGHT )
+            mfFontScale = 1.0;
+        else
+        {
+            mfFontScale = -aLogFont.lfHeight / (float)MAXFONTHEIGHT;
+            aLogFont.lfHeight = -MAXFONTHEIGHT;
+            aLogFont.lfWidth /= mfFontScale;
+        }
 
         hNewFont = CreateFontIndirectA( &aLogFont );
         if( hdcScreen )
@@ -1180,11 +1265,11 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
     }
 
     // transformation dependend font metrics
-    pMetric->mnWidth        = aWinMetric.tmAveCharWidth;
-    pMetric->mnIntLeading   = aWinMetric.tmInternalLeading;
-    pMetric->mnExtLeading   = aWinMetric.tmExternalLeading;
-    pMetric->mnAscent       = aWinMetric.tmAscent;
-    pMetric->mnDescent      = aWinMetric.tmDescent;
+    pMetric->mnWidth        = mfFontScale * aWinMetric.tmAveCharWidth;
+    pMetric->mnIntLeading   = mfFontScale * aWinMetric.tmInternalLeading;
+    pMetric->mnExtLeading   = mfFontScale * aWinMetric.tmExternalLeading;
+    pMetric->mnAscent       = mfFontScale * aWinMetric.tmAscent;
+    pMetric->mnDescent      = mfFontScale * aWinMetric.tmDescent;
 
     // #107888# improved metric compatibility for Asian fonts...
     // TODO: assess workaround below for CWS >= extleading
@@ -2175,7 +2260,7 @@ int ScopedTrueTypeFont::open(void * pBuffer, sal_uInt32 nLen,
 
 BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     ImplFontData* pFont, long* pGlyphIDs, sal_uInt8* pEncoding,
-    sal_Int32* pWidths, int nGlyphs, FontSubsetInfo& rInfo )
+    sal_Int32* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rInfo )
 {
     // create matching ImplFontSelectData
     // we need just enough to get to the font file data
@@ -2197,12 +2282,12 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
 #endif
 
     // get raw font file data
-    DWORD nFontSize = ::GetFontData( mhDC, 0, 0, NULL, 0 );
-    if( nFontSize == GDI_ERROR )
+    DWORD nFontSize1 = ::GetFontData( mhDC, 0, 0, NULL, 0 );
+    if( nFontSize1 == GDI_ERROR )
         return FALSE;
-    ScopedCharArray xRawFontData(new char[ nFontSize ]);
-    DWORD nFontSize2 = ::GetFontData( mhDC, 0, 0, (void*)xRawFontData.get(), nFontSize );
-    if( nFontSize != nFontSize2 )
+    ScopedCharArray xRawFontData(new char[ nFontSize1 ]);
+    DWORD nFontSize2 = ::GetFontData( mhDC, 0, 0, (void*)xRawFontData.get(), nFontSize1 );
+    if( nFontSize1 != nFontSize2 )
         return FALSE;
 
     // open font file
@@ -2211,7 +2296,7 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
         nFaceNum = ~0;  // indicate "TTC font extracts only"
 
     ScopedTrueTypeFont aSftTTF;
-    int nRC = aSftTTF.open( xRawFontData.get(), nFontSize, nFaceNum );
+    int nRC = aSftTTF.open( xRawFontData.get(), nFontSize1, nFaceNum );
     if( nRC != SF_OK )
         return FALSE;
 
@@ -2227,25 +2312,25 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
 
     // subset glyphs and get their properties
     // take care that subset fonts require the NotDef glyph in pos 0
-    int nOrigCount = nGlyphs;
+    int nOrigCount = nGlyphCount;
     USHORT    aShortIDs[ 256 ];
     sal_uInt8 aTempEncs[ 256 ];
 
     int nNotDef=-1, i;
-    for( i = 0; i < nGlyphs; ++i )
+    for( i = 0; i < nGlyphCount; ++i )
     {
         aTempEncs[i] = pEncoding[i];
         sal_uInt32 nGlyphIdx = pGlyphIDs[i] & GF_IDXMASK;
         if( pGlyphIDs[i] & GF_ISCHAR )
         {
             bool bVertical = (pGlyphIDs[i] & GF_ROTMASK) != 0;
-            nGlyphIdx = MapChar( aSftTTF.get(), nGlyphIdx, bVertical );
+            nGlyphIdx = ::MapChar( aSftTTF.get(), nGlyphIdx, bVertical );
             if( nGlyphIdx == 0 && pFont->IsSymbolFont() )
             {
                 // #i12824# emulate symbol aliasing U+FXXX <-> U+0XXX
                 nGlyphIdx = pGlyphIDs[i] & GF_IDXMASK;
                 nGlyphIdx = (nGlyphIdx & 0xF000) ? (nGlyphIdx & 0x00FF) : (nGlyphIdx | 0xF000 );
-                nGlyphIdx = MapChar( aSftTTF.get(), nGlyphIdx, bVertical );
+                nGlyphIdx = ::MapChar( aSftTTF.get(), nGlyphIdx, bVertical );
             }
         }
         aShortIDs[i] = static_cast<USHORT>( nGlyphIdx );
@@ -2258,7 +2343,7 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     {
         // add fake NotDef glyph if needed
         if( nNotDef < 0 )
-            nNotDef = nGlyphs++;
+            nNotDef = nGlyphCount++;
 
         // NotDef glyph must be in pos 0 => swap glyphids
         aShortIDs[ nNotDef ] = aShortIDs[0];
@@ -2266,18 +2351,18 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
         aShortIDs[0] = 0;
         aTempEncs[0] = 0;
     }
-    DBG_ASSERT( nGlyphs < 257, "too many glyphs for subsetting" );
+    DBG_ASSERT( nGlyphCount < 257, "too many glyphs for subsetting" );
 
     // fill pWidth array
     TTSimpleGlyphMetrics* pMetrics =
-        ::GetTTSimpleGlyphMetrics( aSftTTF.get(), aShortIDs, nGlyphs, aIFSD.mbVertical );
+        ::GetTTSimpleGlyphMetrics( aSftTTF.get(), aShortIDs, nGlyphCount, aIFSD.mbVertical );
     if( !pMetrics )
         return FALSE;
     sal_uInt16 nNotDefAdv   = pMetrics[0].adv;
     pMetrics[0].adv         = pMetrics[nNotDef].adv;
     pMetrics[nNotDef].adv   = nNotDefAdv;
     for( i = 0; i < nOrigCount; ++i )
-        pWidths[i] = pMetrics[i].adv;
+        pGlyphWidths[i] = pMetrics[i].adv;
     free( pMetrics );
 
     // write subset into destination file
@@ -2287,32 +2372,101 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     rtl_TextEncoding aThreadEncoding = osl_getThreadTextEncoding();
     ByteString aToFile( rtl::OUStringToOString( aSysPath, aThreadEncoding ) );
     nRC = ::CreateTTFromTTGlyphs( aSftTTF.get(), aToFile.GetBuffer(), aShortIDs,
-            aTempEncs, nGlyphs, 0, NULL, 0 );
+            aTempEncs, nGlyphCount, 0, NULL, 0 );
     return nRC == SF_OK;
 }
 
 //--------------------------------------------------------------------------
 
-const void* WinSalGraphics::GetEmbedFontData( ImplFontData* pFont, const sal_Unicode* pUnicodes, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen )
+const void* WinSalGraphics::GetEmbedFontData( ImplFontData* pFont,
+    const sal_Unicode* pUnicodes, sal_Int32* pCharWidths,
+    FontSubsetInfo& rInfo, long* pDataLen )
 {
-    // TODO: how to get access to Type 1 font files on this platform?
-    return NULL;
+    // create matching ImplFontSelectData
+    // we need just enough to get to the font file data
+    ImplFontSelectData aIFSD( *pFont, Size(0,1000), 0, false );
+
+    // TODO: much better solution: move SetFont and restoration of old font to caller
+    ScopedFont aOldFont(*this);
+    SetFont( &aIFSD, 0 );
+
+    // get the raw font file data
+    DWORD nFontSize1 = ::GetFontData( mhDC, 0, 0, NULL, 0 );
+    if( nFontSize1 == GDI_ERROR || nFontSize1 <= 0 )
+        return NULL;
+    *pDataLen = nFontSize1;
+    void* pData = reinterpret_cast<void*>(new char[ nFontSize1 ]);
+    DWORD nFontSize2 = ::GetFontData( mhDC, 0, 0, pData, nFontSize1 );
+    if( nFontSize1 != nFontSize2 )
+        *pDataLen = 0;
+
+    // get important font properties
+    TEXTMETRICA aTm;
+    if( !::GetTextMetricsA( mhDC, &aTm ) )
+        *pDataLen = 0;
+    rInfo.m_nFontType   = SAL_FONTSUBSETINFO_TYPE_TYPE1;
+    WCHAR aFaceName[64];
+    int nFNLen = ::GetTextFaceW( mhDC, 64, aFaceName );
+    rInfo.m_aPSName     = String( aFaceName, nFNLen );
+    rInfo.m_nAscent     = +aTm.tmAscent;
+    rInfo.m_nDescent    = -aTm.tmDescent;
+    rInfo.m_aFontBBox   = Rectangle( Point( -aTm.tmOverhang, -aTm.tmDescent ),
+              Point( aTm.tmMaxCharWidth, aTm.tmAscent+aTm.tmExternalLeading ) );
+    rInfo.m_nCapHeight  = aTm.tmAscent; // Well ...
+
+    // get individual character widths
+    for( int i = 0; i < 256; ++i )
+    {
+        int nCharWidth = 0;
+        const sal_Unicode cChar = pUnicodes[i];
+        if( !::GetCharWidth32W( mhDC, cChar, cChar, &nCharWidth ) )
+            *pDataLen = 0;
+        pCharWidths[i] = nCharWidth;
+    }
+
+    if( !*pDataLen )
+    {
+        FreeEmbedFontData( pData, nFontSize1 );
+        pData = NULL;
+    }
+
+    return pData;
 }
 
 //--------------------------------------------------------------------------
 
 void WinSalGraphics::FreeEmbedFontData( const void* pData, long nLen )
 {
-    // TODO: once GetEmbedFontData() above does something check implementation below
-    free( (void*)pData );
+    delete[] reinterpret_cast<char*>(const_cast<void*>(pData));
 }
 
-const std::map< sal_Unicode, sal_Int32 >* WinSalGraphics::GetFontEncodingVector( ImplFontData* pFont, const std::map< sal_Unicode, rtl::OString >** pNonEncoded )
+//--------------------------------------------------------------------------
+
+const std::map< sal_Unicode, sal_Int32 >* WinSalGraphics::GetFontEncodingVector(
+    ImplFontData* pFont, const std::map< sal_Unicode,rtl::OString>** pNonEncoded )
 {
-    // TODO: once GetEmbedFontData() above does something this needs implementation
+    // TODO: even for builtin fonts we get here... why?
+    if( !pFont->IsEmbeddable() )
+        return NULL;
+
+    // fill the encoding vector
+    typedef std::map< sal_Unicode,sal_Int32> Code2Int;
+    Code2Int& rMap = *new Code2Int;
+#if 0
+    // TODO: get correct encoding vector
+    ImplWinFontData* pWinFontData = reinterpret_cast<ImplWinFontData*>(pFont);
+
+    GLYPHSET aGlyphSet;
+    aGlyphSet.cbThis = sizeof(aGlyphSet);
+    DWORD aW = ::GetFontUnicodeRanges( mhDC, &aGlyphSet);
+#else
+    for( int i = 32; i < 256; ++i )
+        rMap[i] = i;
     if( pNonEncoded )
         *pNonEncoded = NULL;
-    return NULL;
+#endif
+
+    return &rMap;
 }
 
 //--------------------------------------------------------------------------
