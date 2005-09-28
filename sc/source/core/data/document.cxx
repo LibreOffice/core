@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:21:56 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:31:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,16 +185,40 @@ BOOL ScDocument::GetTable( const String& rName, SCTAB& rTab ) const
 
 BOOL ScDocument::ValidTabName( const String& rName ) const
 {
-    /*  If changed, ScfTools::ConvertToScSheetName (sc/source/filter/ftools/ftools.cxx)
-        needs to be changed too. */
+    // behaviour must be equal to ConvertToValidTabName(), see below
     using namespace ::com::sun::star::i18n;
     sal_Int32 nStartFlags = KParseTokens::ANY_LETTER_OR_NUMBER |
         KParseTokens::ASC_UNDERSCORE;
     sal_Int32 nContFlags = nStartFlags;
     String aContChars( RTL_CONSTASCII_USTRINGPARAM(" ") );
-    ParseResult rRes = ScGlobal::pCharClass->parsePredefinedToken( KParseType::IDENTNAME, rName, 0,
-        nStartFlags, EMPTY_STRING, nContFlags, aContChars );
-    return (rRes.TokenType & KParseType::IDENTNAME) && rRes.EndPos == rName.Len();
+    ParseResult aRes = ScGlobal::pCharClass->parsePredefinedToken(
+        KParseType::IDENTNAME, rName, 0, nStartFlags, EMPTY_STRING, nContFlags, aContChars );
+    return (aRes.TokenType & KParseType::IDENTNAME) && aRes.EndPos == rName.Len();
+}
+
+
+void ScDocument::ConvertToValidTabName( String& rName, sal_Unicode cReplaceChar )
+{
+    // behaviour must be equal to ValidTabName(), see above
+    using namespace ::com::sun::star::i18n;
+    sal_Int32 nStartFlags = KParseTokens::ANY_LETTER_OR_NUMBER |
+        KParseTokens::ASC_UNDERSCORE;
+    sal_Int32 nContFlags = nStartFlags;
+    String aStartChars;
+    String aContChars( RTL_CONSTASCII_USTRINGPARAM(" ") );
+    sal_Int32 nStartPos = 0;
+    while( nStartPos < rName.Len() )
+    {
+        ParseResult aRes = ScGlobal::pCharClass->parsePredefinedToken( KParseType::IDENTNAME,
+            rName, nStartPos, nStartFlags, aStartChars, nContFlags, aContChars );
+        if( aRes.EndPos < rName.Len() )
+        {
+            rName.SetChar( static_cast< xub_StrLen >( aRes.EndPos ), cReplaceChar );
+            nStartFlags = nContFlags;
+            aStartChars = aContChars;
+        }
+        nStartPos = aRes.EndPos + 1;
+    }
 }
 
 
@@ -321,6 +345,8 @@ BOOL ScDocument::InsertTab( SCTAB nPos, const String& rName,
                 //  update conditional formats after table is inserted
                 if ( pCondFormList )
                     pCondFormList->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
+                if ( pValidationList )
+                    pValidationList->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
                 // #81844# sheet names of references are not valid until sheet is inserted
                 if ( pChartListenerCollection )
                     pChartListenerCollection->UpdateScheduledSeriesRanges();
@@ -351,6 +377,20 @@ BOOL ScDocument::DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc )
                 ScRange aRange( 0, 0, nTab, MAXCOL, MAXROW, nTab );
                 DelBroadcastAreasInRange( aRange );
 
+                // #i8180# remove database ranges etc. that are on the deleted tab
+                // (restored in undo with ScRefUndoData)
+
+                xColNameRanges->DeleteOnTab( nTab );
+                xRowNameRanges->DeleteOnTab( nTab );
+                pDBCollection->DeleteOnTab( nTab );
+                if (pDPCollection)
+                    pDPCollection->DeleteOnTab( nTab );
+                if (pDetOpList)
+                    pDetOpList->DeleteOnTab( nTab );
+                DeleteAreaLinksOnTab( nTab );
+
+                // normal reference update
+
                 aRange.aEnd.SetTab( MAXTAB );
                 xColNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,-1 );
                 xRowNameRanges->UpdateReference( URM_INSDEL, this, aRange, 0,0,-1 );
@@ -368,6 +408,8 @@ BOOL ScDocument::DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc )
                 UpdateRefAreaLinks( URM_INSDEL, aRange, 0,0,-1 );
                 if ( pCondFormList )
                     pCondFormList->UpdateReference( URM_INSDEL, aRange, 0,0,-1 );
+                if ( pValidationList )
+                    pValidationList->UpdateReference( URM_INSDEL, aRange, 0,0,-1 );
                 if ( pUnoBroadcaster )
                     pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_INSDEL, aRange, 0,0,-1 ) );
 
@@ -2756,7 +2798,7 @@ SCCOL ScDocument::GetNextDifferentChangedCol( SCTAB nTab, SCCOL nStart) const
                 ((nStartFlags & CR_HIDDEN) != (pTab[nTab]->GetColFlags(nCol) & CR_HIDDEN)) )
                 return nCol;
         }
-        return MAXCOL;
+        return MAXCOL+1;
     }
     return 0;
 }
@@ -2776,7 +2818,7 @@ SCROW ScDocument::GetNextDifferentChangedRow( SCTAB nTab, SCROW nStart, bool bCa
                 (!bCareManualSize && ((nStartHeight != pTab[nTab]->GetOriginalHeight(nRow)))))
                 return nRow;
         }
-        return MAXROW;
+        return MAXROW+1;
     }
     return 0;
 }
