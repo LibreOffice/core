@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlithlp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:24:23 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:27:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,8 +161,8 @@ const struct SvXMLEnumMapEntry psXML_NamedBorderWidths[] =
 
 const sal_uInt16 aSBorderWidths[] =
 {
-        SBORDER_ENTRY( 0 ), SBORDER_ENTRY( 1 ), SBORDER_ENTRY( 2 ),
-        SBORDER_ENTRY( 3 ), SBORDER_ENTRY( 4 )
+        SBORDER_ENTRY( 0 ), SBORDER_ENTRY( 5 ), SBORDER_ENTRY( 1 ),
+        SBORDER_ENTRY( 2 ), SBORDER_ENTRY( 3 ), SBORDER_ENTRY( 4 )
 };
 
 const sal_uInt16 aDBorderWidths[5*11] =
