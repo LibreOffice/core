@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlconst.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:35:35 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:02:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,8 @@ const SCTAB SCTAB_GLOBAL                    = SCTAB_MAX;        /// A Calc sheet
 
 // Storage/stream names -------------------------------------------------------
 
+#define EXC_STORAGE_OLE_LINKED              CREATE_STRING( "LNK" )
+#define EXC_STORAGE_OLE_EMBEDDED            CREATE_STRING( "MBD" )
 #define EXC_STORAGE_VBA_PROJECT             CREATE_STRING( "_VBA_PROJECT_CUR" )
 #define EXC_STORAGE_VBA                     CREATE_STRING( "VBA" )
 
@@ -160,10 +162,11 @@ const sal_uInt16 EXC_BOF_BIFF8              = 0x0600;
 
 const sal_uInt16 EXC_BOF_GLOBALS            = 0x0005;   /// BIFF5-BIFF8 workbook globals.
 const sal_uInt16 EXC_BOF_VBMODULE           = 0x0006;   /// BIFF5-BIFF8 Visual BASIC module.
-const sal_uInt16 EXC_BOF_SHEET              = 0x0010;   /// Simple worksheet.
-const sal_uInt16 EXC_BOF_CHART              = 0x0020;   /// Chart-only sheet.
-const sal_uInt16 EXC_BOF_MACROSHEET         = 0x0040;   /// BIFF2-BIFF4 macro sheet.
-const sal_uInt16 EXC_BOF_WORKSPACE          = 0x0100;   /// BIFF3-BIFF8 workspace file.
+const sal_uInt16 EXC_BOF_SHEET              = 0x0010;   /// Regular worksheet.
+const sal_uInt16 EXC_BOF_CHART              = 0x0020;   /// Chart sheet.
+const sal_uInt16 EXC_BOF_MACROSHEET         = 0x0040;   /// Macro sheet.
+const sal_uInt16 EXC_BOF_WORKSPACE          = 0x0100;   /// Workspace.
+const sal_uInt16 EXC_BOF_UNKNOWN            = 0xFFFF;   /// Internal use only.
 
 // (0x000A) EOF ---------------------------------------------------------------
 
