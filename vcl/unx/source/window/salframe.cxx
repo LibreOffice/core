@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.192 $
+ *  $Revision: 1.193 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:51:27 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 15:05:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,7 +245,6 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
         w = 10;
         h = 10;
         Attributes.override_redirect = True;
-
     }
     else if( pParentData )
     {
@@ -540,7 +539,7 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
         WMAdaptor::WMWindowType eType = WMAdaptor::windowType_Normal;
         if( nStyle_ & SAL_FRAME_STYLE_INTRO )
             eType = WMAdaptor::windowType_Splash;
-        if( mpParent && hPresentationWindow == None )
+        if( (nStyle_ & SAL_FRAME_STYLE_DIALOG) && hPresentationWindow == None )
             eType = WMAdaptor::windowType_ModelessDialogue;
         if( nStyle_ & SAL_FRAME_STYLE_TOOLWINDOW )
             eType = WMAdaptor::windowType_Utility;
@@ -555,6 +554,8 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
 
         if( nStyle_ & SAL_FRAME_STYLE_DEFAULT )
             pDisplay_->getWMAdaptor()->maximizeFrame( this, true, true );
+
+        m_nWorkArea = GetDisplay()->getWMAdaptor()->getCurrentWorkArea();
     }
 
     // Pointer
@@ -608,6 +609,7 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, ULONG nSalFrameStyle, SystemParentD
     bMapped_                    = FALSE;
     bDefaultPosition_           = TRUE;
     nVisibility_                = VisibilityFullyObscured;
+    m_nWorkArea                 = 0;
     mbInShow                    = FALSE;
 
     nScreenSaversTimeout_       = 0;
@@ -1052,6 +1054,34 @@ void X11SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
             GetDisplay()->getWMAdaptor()->changeReferenceFrame( this, mpParent );
         }
 
+        // #i45160# switch to desktop where a dialog with parent will appear
+        if( mpParent && mpParent->m_nWorkArea != m_nWorkArea )
+            GetDisplay()->getWMAdaptor()->switchToWorkArea( mpParent->m_nWorkArea );
+
+        if( IsFloatGrabWindow() &&
+            mpParent &&
+            nVisibleFloats == 0 &&
+            ! GetDisplay()->GetCaptureFrame() )
+        {
+            /* #i39420#
+             * outsmart KWin's "focus strictly under mouse" mode
+             * which insists on taking the focus from the document
+             * to the new float. Grab focus to parent frame BEFORE
+             * showing the float (cannot grab it to the float
+             * before show).
+             */
+            XGrabPointer( GetXDisplay(),
+                          mpParent->GetWindow(),
+                          True,
+                          PointerMotionMask | ButtonPressMask | ButtonReleaseMask,
+                          GrabModeAsync,
+                          GrabModeAsync,
+                          None,
+                          mpParent ? mpParent->GetCursor() : None,
+                          CurrentTime
+                          );
+        }
+
         // actually map the window
         if( GetWindow() != GetShellWindow() )
         {
@@ -1088,6 +1118,7 @@ void X11SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
             nVisibleFloats++;
             if( nVisibleFloats == 1 && ! GetDisplay()->GetCaptureFrame() )
             {
+                /* #i39420# now move grab to the new float window */
                 XGrabPointer( GetXDisplay(),
                               GetWindow(),
                               True,
