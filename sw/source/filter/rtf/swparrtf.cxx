@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:55:15 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:24:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -372,10 +372,10 @@ void SwRTFParser::Continue( int nToken )
             pDoc->SetOldNumbering( false );
             // --> FME 2005-05-27 #i47448#
             pDoc->SetIgnoreFirstLineIndentInNumbering( false );
-            // <--
             // --> FME 2005-06-08 #i49277#
             pDoc->SetDoNotJustifyLinesWithManualBreak( false );
-            // <--
+            // --> FME 2005-08-11 #i53199#
+            pDoc->SetDoNotResetParaAttrsForNumFont( false );
             pDoc->SetUseFormerLineSpacing( false );
             pDoc->SetAddParaSpacingToTableCells( true );
             pDoc->SetUseFormerObjectPositioning( false );
