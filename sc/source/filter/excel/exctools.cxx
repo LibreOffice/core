@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:56:58 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:42:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,14 +166,14 @@ void XclImpOutlineBuffer::MakeScOutline( void )
     const UINT16    nNumLev         = 8;
     BOOL            bPreOutedLevel  = FALSE;
     BYTE            nCurrLevel      = 0;
-    UINT16          nC;
     BOOL            bMakeHidden[ nNumLev ];
     BOOL            bMakeVisible[ nNumLev + 1 ];
 
-    for( nC = 0; nC < nNumLev; nC++ )
-        bMakeHidden[ nC ] = FALSE;
-    for( nC = 0; nC <= nNumLev; nC++ )
-        bMakeVisible[ nC ] = TRUE;
+    sal_uInt16 nLevel;
+    for( nLevel = 0; nLevel < nNumLev; ++nLevel )
+        bMakeHidden[ nLevel ] = FALSE;
+    for( nLevel = 0; nLevel <= nNumLev; ++nLevel )
+        bMakeVisible[ nLevel ] = TRUE;
     if( nLast < (nSize - 1) )
         nLast++;
 
@@ -186,12 +186,12 @@ void XclImpOutlineBuffer::MakeScOutline( void )
             BYTE    nCurrLevel  = 0;
             BYTE    nPrevLevel  = 0;
 
-            for( UINT16 nC = 0 ; nC <= nLast ; nC++ )
+            for( SCSIZE nC = 0 ; nC <= nLast ; nC++ )
             {
                 nPrevLevel = nCurrLevel;
                 nCurrLevel = pLevel[ nC ];
                 if( (nPrevLevel < nWorkLevel) && (nCurrLevel >= nWorkLevel) )
-                    nStartPos = nC;
+                    nStartPos = static_cast< sal_uInt16 >( nC );
                 else if( (nPrevLevel >= nWorkLevel) && (nCurrLevel < nWorkLevel) )
                 {
                     if( pOuted[ nC ] && pHidden[ nStartPos ] )
@@ -217,11 +217,11 @@ void XclImpOutlineBuffer::MakeScOutline( void )
     BOOL    bCurrHidden = FALSE;
     BOOL    bPrevHidden = FALSE;
 
-    for( nC = 0; nC <= nLast; nC++ )
+    for( SCSIZE nC = 0; nC <= nLast; nC++ )
     {
         BYTE nWorkLevel = pLevel[ nC ];
 
-        nPrevC      = nC ? nC - 1 : 0;
+        nPrevC      = static_cast< sal_uInt16 >( nC ? nC - 1 : 0 );
         bPrevHidden = bCurrHidden;
         bCurrHidden = pHidden[ nC ];
 
@@ -232,7 +232,7 @@ void XclImpOutlineBuffer::MakeScOutline( void )
             bMakeHidden[ nCurrLevel ] = bPrevOuted;
             bMakeVisible[ nCurrLevel + 1 ] =
                 bMakeVisible[ nCurrLevel ] && !bMakeHidden[ nCurrLevel ];
-            nStart[ nCurrLevel ] = nC;
+            nStart[ nCurrLevel ] = static_cast< sal_uInt16 >( nC );
         }
         // close levels
         while( nWorkLevel < nCurrLevel )
