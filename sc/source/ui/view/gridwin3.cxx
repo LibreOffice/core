@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin3.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:58:38 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:15:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -480,6 +480,10 @@ void ScGridWindow::UpdateStatusPosSize()
     if (!pDrView)
         return;         // shouldn't be called in that case
 
+    SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
+    if (!pPV)
+        return;         // shouldn't be called in that case either
+
     SfxItemSet aSet(pViewData->GetViewShell()->GetPool(), SID_ATTR_POSITION, SID_ATTR_SIZE);
 
     //  Fill items for position and size:
@@ -494,7 +498,7 @@ void ScGridWindow::UpdateStatusPosSize()
         pDrView->TakeActionRect( aRect );
         if ( !aRect.IsEmpty() )
         {
-            pDrView->GetPageViewPvNum(0)->LogicToPagePos(aRect);
+            pPV->LogicToPagePos(aRect);
             aSet.Put( SfxPointItem( SID_ATTR_POSITION, aRect.TopLeft() ) );
             aSet.Put( SvxSizeItem( SID_ATTR_SIZE,
                     Size( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() ) ) );
@@ -506,7 +510,7 @@ void ScGridWindow::UpdateStatusPosSize()
         if ( pDrView->AreObjectsMarked() )      // selected objects
         {
             Rectangle aRect = pDrView->GetAllMarkedRect();
-            pDrView->GetPageViewPvNum(0)->LogicToPagePos(aRect);
+            pPV->LogicToPagePos(aRect);
             aSet.Put( SfxPointItem( SID_ATTR_POSITION, aRect.TopLeft() ) );
             aSet.Put( SvxSizeItem( SID_ATTR_SIZE,
                     Size( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() ) ) );
@@ -514,7 +518,7 @@ void ScGridWindow::UpdateStatusPosSize()
         else                                // mouse position
         {
             Point aPos = PixelToLogic(aCurMousePos);
-            pDrView->GetPageViewPvNum(0)->LogicToPagePos(aPos);
+            pPV->LogicToPagePos(aPos);
             aSet.Put( SfxPointItem( SID_ATTR_POSITION, aPos ) );
             aSet.Put( SvxSizeItem( SID_ATTR_SIZE, Size( 0, 0 ) ) );
         }
