@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:04:11 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:48:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,16 @@
 #endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
+#endif
+
+#ifndef _SB_SBSTAR_HXX
+#include <basic/sbstar.hxx>
+#endif
+#ifndef _SB_SBMOD_HXX
+#include <basic/sbmod.hxx>
+#endif
+#ifndef _SB_SBMETH_HXX
+#include <basic/sbmeth.hxx>
 #endif
 
 #ifndef _SVDOBJ_HXX
@@ -190,267 +200,124 @@ using ::com::sun::star::embed::XEmbedPersist;
 using ::com::sun::star::chart::XChartDocument;
 using ::com::sun::star::script::ScriptEventDescriptor;
 
-// Escher stream consumer =====================================================
+typedef ::std::auto_ptr< SdrObject > SdrObjectPtr;
 
-XclImpStreamConsumer::XclImpStreamConsumer() :
-    mpNode( 0 ),
-    mnBytesLeft( 0 )
+// Text box data ==============================================================
+
+namespace {
+
+SvxAdjust lclGetSvxHorAlignment( sal_uInt8 nXclAlign )
 {
-}
-
-XclImpStreamConsumer::~XclImpStreamConsumer()
-{
-    while( mpNode )
-        RemoveNode();
-}
-
-void XclImpStreamConsumer::UpdateNode( const DffRecordHeader& rHd )
-{
-    while( mpNode && ((mpNode->mnPos + mpNode->mnSize) <= rHd.nFilePos) )
-        RemoveNode();
-    XclImpStreamNode* pTemp = mpNode;
-    mpNode = new XclImpStreamNode;
-    mpNode->mnPos = rHd.nFilePos;
-    mpNode->mnSize = rHd.nRecLen + 8;
-    mpNode->mpPrev = pTemp;
-}
-
-void XclImpStreamConsumer::RemoveNode()
-{
-    XclImpStreamNode* pTemp = mpNode;
-    mpNode = mpNode->mpPrev;
-    delete pTemp;
-}
-
-const DffRecordHeader* XclImpStreamConsumer::ConsumeRecord( XclImpStream& rSrcStrm )
-{
-    ULONG nEntry = maStrm.Tell();
-    ULONG nSrcSize = rSrcStrm.GetRecSize();
-    if( !nSrcSize )
-        return 0;
-
-    rSrcStrm.Seek( EXC_REC_SEEK_TO_BEGIN );
-    sal_Char* pBuf = new sal_Char[ nSrcSize ];
-    rSrcStrm.Read( pBuf, nSrcSize );
-    maStrm.Write( pBuf, nSrcSize );
-    delete[] pBuf;
-
-    ULONG nPos = maStrm.Tell();
-    maStrm.Seek( nEntry );
-    if( mnBytesLeft )
+    SvxAdjust eHorAlign = SVX_ADJUST_LEFT;
+    switch( nXclAlign )
     {
-        if( nSrcSize < mnBytesLeft )
-        {
-            maStrm.SeekRel( nSrcSize );
-            mnBytesLeft -= nSrcSize;
-        }
-        else
-        {
-            maStrm.SeekRel( mnBytesLeft );
-            mnBytesLeft = 0;
-        }
+        case EXC_TXO_HOR_LEFT:      eHorAlign = SVX_ADJUST_LEFT;    break;
+        case EXC_TXO_HOR_CENTER:    eHorAlign = SVX_ADJUST_CENTER;  break;
+        case EXC_TXO_HOR_RIGHT:     eHorAlign = SVX_ADJUST_RIGHT;   break;
+        case EXC_TXO_HOR_JUSTIFY:   eHorAlign = SVX_ADJUST_BLOCK;   break;
     }
-    while( maStrm.Tell() < nPos )
+    return eHorAlign;
+}
+
+SdrTextVertAdjust lclGetSvxVerAlignment( sal_uInt8 nXclAlign )
+{
+    SdrTextVertAdjust eVerAlign = SDRTEXTVERTADJUST_TOP;
+    switch( nXclAlign )
     {
-        maStrm >> maHd;
-        if( maHd.nRecType == DFF_msofbtSolverContainer )
-        {
-            maStrm.Seek( nEntry );
-            return &maHd;
-        }
-        else if( maHd.IsContainer() )
-            UpdateNode( maHd );
-        else if( (maStrm.Tell() + maHd.nRecLen) <= nPos )
-            maStrm.SeekRel( maHd.nRecLen );
-        else
-        {
-            mnBytesLeft = maStrm.Tell() + maHd.nRecLen - nPos;
-            maStrm.Seek( nPos );
-        }
+        case EXC_TXO_VER_TOP:       eVerAlign = SDRTEXTVERTADJUST_TOP;      break;
+        case EXC_TXO_VER_CENTER:    eVerAlign = SDRTEXTVERTADJUST_CENTER;   break;
+        case EXC_TXO_VER_BOTTOM:    eVerAlign = SDRTEXTVERTADJUST_BOTTOM;   break;
+        case EXC_TXO_VER_JUSTIFY:   eVerAlign = SDRTEXTVERTADJUST_BLOCK;    break;
     }
-    maStrm.Seek( nPos );
-
-    return mnBytesLeft ? 0 : &maHd;
+    return eVerAlign;
 }
 
-bool XclImpStreamConsumer::AppendData( sal_Char* pBuf, ULONG nLen )
+::com::sun::star::text::WritingMode lclGetApiWritingMode( sal_uInt16 nXclOrient )
 {
-    if ( (maHd.nRecType != 0) && !maHd.IsContainer() && (mnBytesLeft == 0) )
+    // this is only a fake, drawing does not support real text orientation
+    namespace csst = ::com::sun::star::text;
+    csst::WritingMode eWriteMode = csst::WritingMode_LR_TB;
+    switch( nXclOrient )
     {
-        while( mpNode && ((mpNode->mnPos + mpNode->mnSize) <= maHd.nFilePos) )
-            RemoveNode();
-        XclImpStreamNode* pTemp = mpNode;
-        while( pTemp )
-        {
-            pTemp->mnSize += nLen;               // updating container sizes
-            maStrm.Seek( pTemp->mnPos + 4 );
-            maStrm << pTemp->mnSize - 8;
-            pTemp = pTemp->mpPrev;
-        }
-        maHd.nRecLen += nLen;
-        maStrm.Seek( maHd.nFilePos + 4 );        // updating atom size
-        maStrm << maHd.nRecLen;
-        maStrm.Seek( STREAM_SEEK_TO_END );
-        maStrm.Write( pBuf, nLen );
-        return true;
+        case EXC_TXO_TEXTROT_NONE:      eWriteMode = csst::WritingMode_LR_TB;   break;
+        case EXC_TXO_TEXTROT_STACKED:   eWriteMode = csst::WritingMode_TB_RL;   break;
+        case EXC_TXO_TEXTROT_90_CCW:    eWriteMode = csst::WritingMode_TB_RL;   break;
+        case EXC_TXO_TEXTROT_90_CW:     eWriteMode = csst::WritingMode_TB_RL;   break;
     }
-    return false;
+    return eWriteMode;
 }
 
-// Escher objects =============================================================
-
-TYPEINIT0( XclImpEscherObj );
-
-XclImpEscherObj::XclImpEscherObj( const XclImpRoot& rRoot ) :
-    XclImpRoot( rRoot ),
-    mnStrmBegin( 0 ),
-    mnStrmEnd( 0 ),
-    mnScTab( rRoot.GetCurrScTab() ),
-    mnObjId( EXC_OBJ_INVALID_ID ),
-    mbAreaObj( false ),
-    mbSkip( false ),
-    mbPrintable( true )
-{
-}
-
-XclImpEscherObj::XclImpEscherObj( const XclImpRoot& rRoot, ULONG nStrmBegin, ULONG nStrmEnd ) :
-    XclImpRoot( rRoot ),
-    mnStrmBegin( nStrmBegin ),
-    mnStrmEnd( nStrmEnd ),
-    mnScTab( rRoot.GetCurrScTab() ),
-    mnObjId( EXC_OBJ_INVALID_ID ),
-    mbAreaObj( false ),
-    mbSkip( false ),
-    mbPrintable( true )
-{
-}
-
-XclImpEscherObj::XclImpEscherObj( XclImpEscherObj& rSrcObj ) :
-    XclImpRoot( rSrcObj.GetRoot() ),
-    maAnchorRect( rSrcObj.maAnchorRect ),
-    mxSdrObj( rSrcObj.mxSdrObj ),          // rSrc.mxSdrObj releases the object
-    mnStrmBegin( rSrcObj.mnStrmBegin ),
-    mnStrmEnd( rSrcObj.mnStrmEnd ),
-    mnScTab( rSrcObj.mnScTab ),
-    mnObjId( rSrcObj.mnObjId ),
-    mbAreaObj( rSrcObj.mbAreaObj ),
-    mbSkip( rSrcObj.mbSkip ),
-    mbPrintable( rSrcObj.mbPrintable )
-{
-}
-
-XclImpEscherObj::~XclImpEscherObj()
-{
-}
-
-bool XclImpEscherObj::IsValidSize( const Rectangle& rRect ) const
-{
-    // XclEscherAnchor rounds up the width, width of 3 is the result of an Excel width of 0
-    return mbAreaObj ?
-        ((rRect.GetWidth() > 3) && (rRect.GetHeight() > 1)) :
-        ((rRect.GetWidth() > 3) || (rRect.GetHeight() > 1));
-}
-
-bool XclImpEscherObj::IsValidSize() const
-{
-    return IsValidSize( maAnchorRect );
-}
-
-bool XclImpEscherObj::IsValid() const
-{
-    return !mbSkip && mxSdrObj.get() && IsValidSize();
-}
-
-void XclImpEscherObj::SetSdrObj( SdrObject* pSdrObj )
-{
-    mxSdrObj.reset( pSdrObj );
-}
-
-sal_uInt32 XclImpEscherObj::GetProgressSize() const
-{
-    return 1;
-}
-
-bool XclImpEscherObj::Apply( ScfProgressBar& rProgress )
-{
-    bool bInserted = false;
-    if( IsValid() )
-    {
-        if( SdrPage* pPage = GetSdrPage( mnScTab ) )
-        {
-            pPage->InsertObject( mxSdrObj.release() );
-            bInserted = true;
-        }
-        // Trace if object is not printable.
-        if( !GetPrintable() && !ISA( XclImpEscherTbxCtrl ) )
-        {
-            bool bOcxCtrl = false;
-            if( XclImpEscherOle* pOleObj = PTR_CAST( XclImpEscherOle, this ) )
-                bOcxCtrl = pOleObj->IsControl();
-            if( !bOcxCtrl )
-                GetTracer().TraceObjectNotPrintable();
-        }
-    }
-    rProgress.Progress();
-    return bInserted;
-}
+} // namespace
 
 // ----------------------------------------------------------------------------
 
-TYPEINIT1( XclImpEscherDrawing, XclImpEscherObj );
-
-XclImpEscherDrawing::XclImpEscherDrawing( XclImpEscherObj& rSrcObj, bool bAreaObj ) :
-    XclImpEscherObj( rSrcObj )
-{
-    SetAreaObj( bAreaObj );
-}
-
-bool XclImpEscherDrawing::Apply( ScfProgressBar& rProgress )
-{
-    // #119010# - allow for the possibility that valid connectors
-    // may have no height or width set.
-    if( !GetIsSkip() && GetSdrObj() && GetSdrObj()->ISA(SdrEdgeObj) && !IsValidSize() )
-        SetAreaObj( false );
-    return XclImpEscherObj::Apply( rProgress );
-}
-
-// ----------------------------------------------------------------------------
-
-TYPEINIT1( XclImpEscherTxo, XclImpEscherDrawing );
-
-XclImpEscherTxo::XclImpEscherTxo( XclImpEscherObj& rSrcObj ) :
-    XclImpEscherDrawing( rSrcObj, true ),
-    meHorAlign( xlTxoHAlign_Default ),
-    meVerAlign( xlTxoVAlign_Default ),
-    meRotation( xlTxoRot_Default )
+XclImpTxoData::XclImpTxoData( const XclImpRoot& rRoot ) :
+    XclImpRoot( rRoot )
 {
 }
 
-void XclImpEscherTxo::SetAlignment( sal_uInt16 nAlign )
+void XclImpTxoData::ReadTxo( XclImpStream& rStrm )
 {
-    ::extract_value( meHorAlign, nAlign, 1, 3 );
-    ::extract_value( meVerAlign, nAlign, 4, 3 );
-}
+    rStrm.ResetRecord( false );     // disable internal CONTINUE handling
+    mxString.reset();
 
-void XclImpEscherTxo::SetRotation( sal_uInt16 nOrient )
-{
-    meRotation = static_cast<XclTxoRotation>(nOrient);
-}
+    // Step 1: TXO record
+    rStrm >> maData;
 
-void XclImpEscherTxo::ApplyTextOnSdrObj( SdrObject& rSdrObj ) const
-{
-    if( SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, &rSdrObj ) )
+    // Step 2: First CONTINUE with string
+    bool bValid = true;
+    if( maData.mnTextLen > 0 )
     {
-        if( mxString.get() )
+        bValid = rStrm.GetNextRecId() == EXC_ID_CONT;
+        DBG_ASSERT( bValid, "XclImpTxoData::ReadTxo - missing CONTINUE record" );
+        if( bValid )
+        {
+            rStrm.StartNextRecord();
+            rStrm.ResetRecord( false );
+            mxString.reset( new XclImpString( rStrm.ReadUniString( maData.mnTextLen ) ) );
+        }
+    }
+
+    // Step 3: Second CONTINUE with formatting runs
+    if( maData.mnFormatSize > 0 )
+    {
+        bValid = rStrm.GetNextRecId() == EXC_ID_CONT;
+        DBG_ASSERT( bValid, "XclImpTxoData::ReadTxo - missing CONTINUE record" );
+        if( bValid )
+        {
+            rStrm.StartNextRecord();
+            rStrm.ResetRecord( false );
+            if( mxString.is() )
+            {
+                // number of formatting runs, each takes 8 bytes, but ignore last run
+                sal_uInt16 nFormatRuns = maData.mnFormatSize / 8 - 1;
+                for( sal_uInt16 nRun = 0; nRun < nFormatRuns; ++nRun )
+                {
+                    sal_uInt16 nChar, nFont;
+                    rStrm >> nChar >> nFont;
+                    rStrm.Ignore( 4 );
+                    mxString->AppendFormat( nChar, nFont );
+                }
+            }
+        }
+    }
+}
+
+void XclImpTxoData::ProcessSdrObject( SdrObject& rSdrObj ) const
+{
+    if( SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( &rSdrObj ) )
+    {
+        if( mxString.is() )
         {
             if( mxString->IsRich() )
             {
                 // rich text
-                ::std::auto_ptr< EditTextObject > pEditObj(
-                XclImpStringHelper::CreateTextObject( GetRoot(), *mxString ) );
-                OutlinerParaObject* pOPO = new OutlinerParaObject( *pEditObj );
-                pOPO->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
-                pTextObj->NbcSetOutlinerParaObject( pOPO );
+                ::std::auto_ptr< EditTextObject > xEditObj(
+                    XclImpStringHelper::CreateTextObject( GetRoot(), *mxString ) );
+                OutlinerParaObject* pOutlineObj = new OutlinerParaObject( *xEditObj );
+                pOutlineObj->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
+                // text object takes ownership of the outliner object
+                pTextObj->NbcSetOutlinerParaObject( pOutlineObj );
             }
             else
             {
@@ -459,85 +326,256 @@ void XclImpEscherTxo::ApplyTextOnSdrObj( SdrObject& rSdrObj ) const
             }
         }
 
-        // horizontal text alignment (#i12188# not stored in Escher stream, but in TXO)
-        SvxAdjust eEEHorAlign = SVX_ADJUST_LEFT;
-        switch( meHorAlign )
-        {
-            case xlTxoHAlignLeft:      eEEHorAlign = SVX_ADJUST_LEFT;     break;
-            case xlTxoHAlignCenter:    eEEHorAlign = SVX_ADJUST_CENTER;   break;
-            case xlTxoHAlignRight:     eEEHorAlign = SVX_ADJUST_RIGHT;    break;
-            case xlTxoHAlignJustify:   eEEHorAlign = SVX_ADJUST_BLOCK;    break;
-        }
-        pTextObj->SetMergedItem( SvxAdjustItem( eEEHorAlign, EE_PARA_JUST ) );
-
-        // vertical text alignment (#i12188# not stored in Escher stream, but in TXO)
-        SdrTextVertAdjust eSdrVerAlign = SDRTEXTVERTADJUST_TOP;
-        switch( meVerAlign )
-        {
-            case xlTxoVAlignTop:        eSdrVerAlign = SDRTEXTVERTADJUST_TOP;       break;
-            case xlTxoHAlignCenter:     eSdrVerAlign = SDRTEXTVERTADJUST_CENTER;    break;
-            case xlTxoVAlignBottom:     eSdrVerAlign = SDRTEXTVERTADJUST_BOTTOM;    break;
-            case xlTxoVAlignJustify:    eSdrVerAlign = SDRTEXTVERTADJUST_BLOCK;     break;
-        }
-        pTextObj->SetMergedItem( SdrTextVertAdjustItem( eSdrVerAlign ) );
-
+        // #i12188# text alignment not stored in Escher stream, but in TXO record
+        SvxAdjust eHorAlign = lclGetSvxHorAlignment( maData.GetXclHorAlignment() );
+        pTextObj->SetMergedItem( SvxAdjustItem( eHorAlign, EE_PARA_JUST ) );
+        SdrTextVertAdjust eVerAlign = lclGetSvxVerAlignment( maData.GetXclVerAlignment() );
+        pTextObj->SetMergedItem( SdrTextVertAdjustItem( eVerAlign ) );
+        ::com::sun::star::text::WritingMode eWriteMode = lclGetApiWritingMode( GetOrientation() );
+        pTextObj->SetMergedItem( SvxWritingModeItem( eWriteMode ) );
     }
+}
+
+// Escher objects =============================================================
+
+XclImpDrawObjBase::XclImpDrawObjBase( const XclImpRoot& rRoot ) :
+    XclImpRoot( rRoot ),
+    maObjId( rRoot.GetCurrScTab(), EXC_OBJ_INVALID_ID ),
+    mnObjType( EXC_OBJ_CMO_UNKNOWN ),
+    mnObjFlags( 0 ),
+    mnShapeId( 0 ),
+    mnShapeFlags( 0 ),
+    mnShapeBlipId( 0 ),
+    mbAreaObj( false ),
+    mbValid( true ),
+    mbInsSdr( true ),
+    mbProcSdr( true )
+{
+}
+
+XclImpDrawObjBase::~XclImpDrawObjBase()
+{
+}
+
+XclImpDrawObjRef XclImpDrawObjBase::ReadObjCmo( XclImpStream& rStrm )
+{
+    XclImpDrawObjRef xDrawObj;
+
+    sal_uInt16 nObjType, nObjId, nFlags;
+    rStrm >> nObjType >> nObjId >> nFlags;
+
+    switch( nObjType )
+    {
+        case EXC_OBJ_CMO_GROUP:
+        case EXC_OBJ_CMO_LINE:
+        case EXC_OBJ_CMO_ARC:
+            xDrawObj.reset( new XclImpDrawingObj( rStrm.GetRoot(), false ) );
+        break;
+        case EXC_OBJ_CMO_RECTANGLE:
+        case EXC_OBJ_CMO_ELLIPSE:
+        case EXC_OBJ_CMO_POLYGON:
+        case EXC_OBJ_CMO_DRAWING:
+        case EXC_OBJ_CMO_TEXT:
+            xDrawObj.reset( new XclImpDrawingObj( rStrm.GetRoot(), true ) );
+        break;
+        case EXC_OBJ_CMO_NOTE:
+            xDrawObj.reset( new XclImpNoteObj( rStrm.GetRoot() ) );
+        break;
+        case EXC_OBJ_CMO_BUTTON:
+        case EXC_OBJ_CMO_CHECKBOX:
+        case EXC_OBJ_CMO_OPTIONBUTTON:
+        case EXC_OBJ_CMO_LABEL:
+        case EXC_OBJ_CMO_GROUPBOX:
+        case EXC_OBJ_CMO_LISTBOX:
+        case EXC_OBJ_CMO_COMBOBOX:
+        case EXC_OBJ_CMO_SPIN:
+        case EXC_OBJ_CMO_SCROLLBAR:
+            xDrawObj.reset( new XclImpTbxControlObj( rStrm.GetRoot() ) );
+        break;
+        case EXC_OBJ_CMO_PICTURE:
+            xDrawObj.reset( new XclImpOleObj( rStrm.GetRoot() ) );
+        break;
+        case EXC_OBJ_CMO_CHART:
+            xDrawObj.reset( new XclImpChartObj( rStrm.GetRoot(), false ) );
+        break;
+        case EXC_OBJ_CMO_EDIT:          // only in dialogs
+        case EXC_OBJ_CMO_DIALOG:        // not supported
+        break;
+        default:
+            DBG_ERROR1( "XclImpDrawObjBase::ReadObjCmo - unknown object type 0x%04hX", nObjType );
+            xDrawObj.reset( new XclImpDrawingObj( rStrm.GetRoot(), true ) );
+    }
+
+    if( xDrawObj.is() )
+        xDrawObj->SetObjData( nObjType, nObjId, nFlags );
+    return xDrawObj;
+}
+
+void XclImpDrawObjBase::ReadSubRecord( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize )
+{
+}
+
+Rectangle XclImpDrawObjBase::ReadClientAnchor( SvStream& rEscherStrm, const DffRecordHeader& rHeader )
+{
+    DBG_ASSERT( rHeader.nRecType == DFF_msofbtClientAnchor, "XclImpDrawObjBase::ReadClientAnchor - no client anchor record" );
+    mxAnchor.reset( new XclEscherAnchor( GetScTab() ) );
+    rHeader.SeekToContent( rEscherStrm );
+    rEscherStrm.SeekRel( 2 );
+    rEscherStrm >> *mxAnchor;
+    return mxAnchor->GetRect( GetDoc(), MAP_100TH_MM );
+}
+
+void XclImpDrawObjBase::SetObjData( sal_uInt16 nObjType, sal_uInt16 nObjId, sal_uInt16 nObjFlags )
+{
+    maObjId.mnObjId = nObjId;
+    mnObjType = nObjType;
+    mnObjFlags = nObjFlags;
+}
+
+void XclImpDrawObjBase::SetShapeData( sal_uInt32 nShapeId, sal_uInt32 nShapeFlags, sal_uInt32 nShapeBlipId )
+{
+    mnShapeId = nShapeId;
+    mnShapeFlags = nShapeFlags;
+    mnShapeBlipId = nShapeBlipId;
+}
+
+bool XclImpDrawObjBase::IsValidSize( const Rectangle& rAnchorRect ) const
+{
+    // XclEscherAnchor rounds up the width, width of 3 is the result of an Excel width of 0
+    return mbAreaObj ?
+        ((rAnchorRect.GetWidth() > 3) && (rAnchorRect.GetHeight() > 1)) :
+        ((rAnchorRect.GetWidth() > 3) || (rAnchorRect.GetHeight() > 1));
+}
+
+ScRange XclImpDrawObjBase::GetUsedArea() const
+{
+    ScRange aScUsedArea( ScAddress::INITIALIZE_INVALID );
+    if( mxAnchor.is() )
+    {
+        // #i44077# object inserted -> update used area for OLE object import
+        if( GetAddressConverter().ConvertRange( aScUsedArea, mxAnchor->maXclRange, GetScTab(), GetScTab(), false ) )
+        {
+            // reduce range, if object ends directly on borders between two columns or rows
+            if( (mxAnchor->mnRX == 0) && (aScUsedArea.aStart.Col() < aScUsedArea.aEnd.Col()) )
+                aScUsedArea.aEnd.IncCol( -1 );
+            if( (mxAnchor->mnBY == 0) && (aScUsedArea.aStart.Row() < aScUsedArea.aEnd.Row()) )
+                aScUsedArea.aEnd.IncRow( -1 );
+        }
+    }
+    return aScUsedArea;
+}
+
+sal_uInt32 XclImpDrawObjBase::GetProgressSize() const
+{
+    return DoGetProgressSize();
+}
+
+void XclImpDrawObjBase::ProcessSdrObject( SdrObject& rSdrObj ) const
+{
+    // call virtual function for object type specific processing
+    if( IsProcessSdr() )
+        DoProcessSdrObj( rSdrObj );
+}
+
+void XclImpDrawObjBase::CreateEscherAnchor( const Rectangle& rAnchorRect )
+{
+    mxAnchor.reset( new XclEscherAnchor( GetScTab() ) );
+    mxAnchor->SetRect( GetDoc(), rAnchorRect, MAP_100TH_MM );
+}
+
+sal_uInt32 XclImpDrawObjBase::DoGetProgressSize() const
+{
+    return 1;
+}
+
+void XclImpDrawObjBase::DoProcessSdrObj( SdrObject& rSdrObj ) const
+{
+    // trace if object is not printable
+    if( !IsPrintable() )
+        GetTracer().TraceObjectNotPrintable();
 }
 
 // ----------------------------------------------------------------------------
 
-TYPEINIT1( XclImpEscherNote, XclImpEscherTxo );
-
-XclImpEscherNote::XclImpEscherNote( XclImpEscherObj& rSrcObj ) :
-    XclImpEscherTxo( rSrcObj ),
-    maScPos( ScAddress::UNINITIALIZED )
+XclImpDrawingObj::XclImpDrawingObj( const XclImpRoot& rRoot, bool bAreaObj ) :
+    XclImpDrawObjBase( rRoot )
 {
+    SetAreaObj( bAreaObj );
 }
 
-bool XclImpEscherNote::Apply( ScfProgressBar& rProgress )
+void XclImpDrawingObj::DoProcessSdrObj( SdrObject& rSdrObj ) const
 {
-    if( IsValid() && maScPos.IsValid() )
+    // set text data
+    if( mxTxoData.is() )
+        mxTxoData->ProcessSdrObject( rSdrObj );
+    // base class processing
+    XclImpDrawObjBase::DoProcessSdrObj( rSdrObj );
+}
+
+// ----------------------------------------------------------------------------
+
+XclImpNoteObj::XclImpNoteObj( const XclImpRoot& rRoot ) :
+    XclImpDrawingObj( rRoot, true ),
+    maScPos( ScAddress::INITIALIZE_INVALID ),
+    mnNoteFlags( 0 )
+{
+    // note object will be processed, but not inserted into the draw page
+    SetSkipInsertSdr();
+}
+
+void XclImpNoteObj::SetNoteData( const ScAddress& rScPos, sal_uInt16 nNoteFlags )
+{
+    maScPos = rScPos;
+    mnNoteFlags = nNoteFlags;
+}
+
+void XclImpNoteObj::DoProcessSdrObj( SdrObject& rSdrObj ) const
+{
+    if( maScPos.IsValid() )
     {
-        ScPostIt aNote( GetDocPtr() );
-        if( GetDoc().GetNote( maScPos.Col(), maScPos.Row(), mnScTab, aNote ) )
+        if( const XclImpString* pString = GetString() )
         {
-            aNote.SetRectangle( maAnchorRect );
-            SdrObject* pObj = mxSdrObj.get();
+            SCCOL nScCol = maScPos.Col();
+            SCROW nScRow = maScPos.Row();
+            SCTAB nScTab = GetScTab();
+            bool bVisible = ::get_flag( mnNoteFlags, EXC_NOTE_VISIBLE );
 
-            // get the actual container from this group object.
-            if( pObj->IsGroupObject() )
-            {
-                SdrObjListIter aIter( *pObj->GetSubList() );
-                pObj = aIter.Next();
-            }
-            if( pObj )
-            {
-                namespace csst = ::com::sun::star::text;
-                csst::WritingMode eWriteMode = csst::WritingMode_LR_TB;
-                switch( GetRotation() )
-                {
-                    case xlTxoNoRot:        eWriteMode = csst::WritingMode_LR_TB;   break;
-                    case xlTxoRotStacked:   eWriteMode = csst::WritingMode_TB_RL;   break;
-                    case xlTxoRot90ccw:     eWriteMode = csst::WritingMode_TB_RL;   break;
-                    case xlTxoRot90cw:      eWriteMode = csst::WritingMode_TB_RL;   break;
-                }
-                pObj->SetMergedItem( SvxWritingModeItem( eWriteMode ) );
-                pObj->SetMergedItem( SdrTextAutoGrowWidthItem( false ) );
-                pObj->SetMergedItem( SdrTextAutoGrowHeightItem( false ) );
-                aNote.SetAndApplyItemSet( pObj->GetMergedItemSet() );
-            }
-            GetDoc().SetNote( maScPos.Col(), maScPos.Row(), mnScTab, aNote );
+            // create the note object
+            ::std::auto_ptr< EditTextObject > pEditObj(
+                XclImpStringHelper::CreateNoteObject( GetRoot(), *pString ) );
+            // ScPostIt does not take ownership of the passed note
+            ScPostIt aNote( pEditObj.get(), GetDocPtr() );
+            aNote.SetRectangle( rSdrObj.GetSnapRect() );
+            aNote.SetShown( bVisible );
 
-            if( aNote.IsShown() )
+            // get the actual container from this group object
+            SdrObject* pBoxSdrObj = &rSdrObj;
+            if( rSdrObj.IsGroupObject() && rSdrObj.GetSubList() )
             {
-                ScDetectiveFunc aDetFunc( GetDocPtr(), mnScTab );
-                aDetFunc.ShowComment( maScPos.Col(), maScPos.Row(), TRUE );
+                SdrObjListIter aIt( *rSdrObj.GetSubList() );
+                pBoxSdrObj = aIt.Next();
+            }
+
+            // set textbox properties
+            if( pBoxSdrObj )
+            {
+                XclImpDrawingObj::DoProcessSdrObj( *pBoxSdrObj );
+                pBoxSdrObj->SetMergedItem( SdrTextAutoGrowWidthItem( false ) );
+                pBoxSdrObj->SetMergedItem( SdrTextAutoGrowHeightItem( false ) );
+                aNote.SetAndApplyItemSet( pBoxSdrObj->GetMergedItemSet() );
+            }
+
+            // insert the note into the document
+            GetDoc().SetNote( nScCol, nScRow, nScTab, aNote );
+
+            // make the note visible via ScDetectiveFunc
+            if( bVisible )
+            {
+                ScDetectiveFunc aDetFunc( GetDocPtr(), nScTab );
+                aDetFunc.ShowComment( nScCol, nScRow, TRUE );
             }
         }
     }
-    rProgress.Progress();
-    // notes are not inserted into the drawing layer -> return false
-    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -556,9 +594,9 @@ void XclImpCtrlLinkHelper::ReadCellLinkFormula( XclImpStream& rStrm )
     if( rStrm.GetRoot().GetFmlaConverter().GetAbsRefs( aRangeList, nFmlaSize ) )
     {
         // Use first cell of first range
-        ::std::auto_ptr< ScRange > pRange( aRangeList.Remove( 0UL ) );
-        if( pRange.get() )
-            mxCellLink.reset( new ScAddress( pRange->aStart ) );
+        ::std::auto_ptr< ScRange > xRange( aRangeList.Remove( 0UL ) );
+        if( xRange.get() )
+            mxCellLink.reset( new ScAddress( xRange->aStart ) );
     }
 }
 
@@ -575,12 +613,9 @@ void XclImpCtrlLinkHelper::ReadSrcRangeFormula( XclImpStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
-TYPEINIT1( XclImpEscherTbxCtrl, XclImpEscherTxo );
-
-XclImpEscherTbxCtrl::XclImpEscherTbxCtrl( XclImpEscherObj& rSrcObj, sal_uInt16 nCtrlType ) :
-    XclImpEscherTxo( rSrcObj ),
+XclImpTbxControlObj::XclImpTbxControlObj( const XclImpRoot& rRoot ) :
+    XclImpDrawingObj( rRoot, true ),
     XclImpCtrlLinkHelper( xlBindPosition ),
-    mnCtrlType( nCtrlType ),
     mnState( EXC_OBJ_CBLS_STATE_UNCHECK ),
     mnSelEntry( 0 ),
     mnSelType( EXC_OBJ_LBS_SEL_SIMPLE ),
@@ -594,114 +629,47 @@ XclImpEscherTbxCtrl::XclImpEscherTbxCtrl( XclImpEscherObj& rSrcObj, sal_uInt16 n
     mbFlatBorder( false ),
     mbScrollHor( false )
 {
+    /*  Do not process the SdrObject (skips setting textbox data and tracing
+        that the object is not printable). */
+    SetSkipProcessSdr();
 }
 
-void XclImpEscherTbxCtrl::ReadCbls( XclImpStream& rStrm )
+void XclImpTbxControlObj::ReadSubRecord( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize )
 {
-    sal_uInt16 nStyle;
-    rStrm >> mnState;
-    rStrm.Ignore( 8 );
-    rStrm >> nStyle;
-    mnState &= EXC_OBJ_CBLS_STATEMASK;
-    mbFlatButton = ::get_flag( nStyle, EXC_OBJ_CBLS_FLAT );
-}
-
-void XclImpEscherTbxCtrl::ReadCblsFmla( XclImpStream& rStrm )
-{
-    ReadCellLinkFormula( rStrm );
-}
-
-void XclImpEscherTbxCtrl::ReadLbsData( XclImpStream& rStrm )
-{
-    sal_uInt16 nSubSize;
-    rStrm >> nSubSize;
-    if( nSubSize )
+    switch( nSubRecId )
     {
-        // read the address of the data source range
-        rStrm.PushPosition();
-        ReadSrcRangeFormula( rStrm );
-        rStrm.PopPosition();
-        rStrm.Ignore( nSubSize );
-    }
-
-    // other list box settings
-    sal_Int16 nEntryCount;
-    sal_uInt16 nStyle, nComboStyle;
-    rStrm >> nEntryCount >> mnSelEntry >> nStyle;
-    rStrm.Ignore( 2 );  // linked edit field
-
-    mnSelType = nStyle & EXC_OBJ_LBS_SELMASK;
-    mbFlatBorder = ::get_flag( nStyle, EXC_OBJ_LBS_FLAT );
-
-    switch( mnCtrlType )
-    {
-        case EXC_OBJ_CMO_LISTBOX:
-            if( mnSelType != EXC_OBJ_LBS_SEL_SIMPLE )
-                for( sal_Int16 nEntry = 0; nEntry < nEntryCount; ++nEntry )
-                    if( rStrm.ReaduInt8() != 0 )
-                        maMultiSel.push_back( nEntry );
+        case EXC_ID_OBJ_FTCBLS:
+            ReadCbls( rStrm );
         break;
-        case EXC_OBJ_CMO_COMBOBOX:
-            rStrm >> nComboStyle >> mnLineCount;
-            // comboboxes of auto-filters have 'simple' style, they don't have an edit area
-            if( (nComboStyle & EXC_OBJ_LBS_COMBOMASK) == EXC_OBJ_LBS_COMBO_SIMPLE )
-                SetSkip();
+        case EXC_ID_OBJ_FTLBSDATA:
+            ReadLbsData( rStrm );
         break;
-    }
-
-}
-
-void XclImpEscherTbxCtrl::ReadSbs( XclImpStream& rStrm )
-{
-    sal_uInt16 nOrient, nStyle;
-    rStrm.Ignore( 4 );
-    rStrm >> mnScrollValue >> mnScrollMin >> mnScrollMax >> mnScrollStep >> mnScrollPage >> nOrient;
-    rStrm.Ignore( 2 );
-    rStrm >> nStyle;
-
-    mbScrollHor = ::get_flag( nOrient, EXC_OBJ_SBS_HORIZONTAL );
-    mbFlatButton = ::get_flag( nStyle, EXC_OBJ_SBS_FLAT );
-}
-
-void XclImpEscherTbxCtrl::ReadGboData( XclImpStream& rStrm )
-{
-    sal_uInt16 nStyle;
-    rStrm.Ignore( 4 );
-    rStrm >> nStyle;
-    mbFlatBorder = ::get_flag( nStyle, EXC_OBJ_GBO_FLAT );
-}
-
-void XclImpEscherTbxCtrl::ReadMacro( XclImpStream& rStrm )
-{
-    maMacroName.Erase();
-    if( rStrm.GetRecLeft() > 6 )
-    {
-        // macro is stored in a tNameXR token containing a link to a defined name
-        sal_uInt16 nFmlaSize;
-        rStrm >> nFmlaSize;
-        rStrm.Ignore( 4 );
-        DBG_ASSERT( nFmlaSize == 7, "XclImpEscherTbxCtrl::ReadMacro - unexpected formula size" );
-        if( nFmlaSize == 7 )
-        {
-            sal_uInt8 nTokenId;
-            sal_uInt16 nExtSheet, nExtName;
-            rStrm >> nTokenId >> nExtSheet >> nExtName;
-            DBG_ASSERT( nTokenId == XclTokenArrayHelper::GetTokenId( EXC_TOKID_NAMEX, EXC_TOKCLASS_REF ),
-                "XclImpEscherTbxCtrl::ReadMacro - tNameXR token expected" );
-            if( nTokenId == XclTokenArrayHelper::GetTokenId( EXC_TOKID_NAMEX, EXC_TOKCLASS_REF ) )
-                maMacroName = GetLinkManager().GetMacroName( nExtSheet, nExtName );
-        }
+        case EXC_ID_OBJ_FTSBSFMLA:  // equal to ftCblsFmla
+        case EXC_ID_OBJ_FTCBLSFMLA:
+            ReadCblsFmla( rStrm );
+        break;
+        case EXC_ID_OBJ_FTSBS:
+            ReadSbs( rStrm );
+        break;
+        case EXC_ID_OBJ_FTGBODATA:
+            ReadGboData( rStrm );
+        break;
+        case EXC_ID_OBJ_FTMACRO:
+            ReadMacro( rStrm );
+        break;
+        default:
+            XclImpDrawObjBase::ReadSubRecord( rStrm, nSubRecId, nSubRecSize );
     }
 }
 
-OUString XclImpEscherTbxCtrl::GetServiceName() const
+OUString XclImpTbxControlObj::GetServiceName() const
 {
-    return XclTbxControlHelper::GetServiceName( mnCtrlType );
+    return XclTbxControlHelper::GetServiceName( GetObjType() );
 }
 
-void XclImpEscherTbxCtrl::WriteToPropertySet( ScfPropertySet& rPropSet ) const
+void XclImpTbxControlObj::WriteToPropertySet( ScfPropertySet& rPropSet ) const
 {
-    rPropSet.SetBoolProperty( CREATE_OUSTRING( "Printable" ), GetPrintable() );
+    rPropSet.SetBoolProperty( CREATE_OUSTRING( "Printable" ), IsPrintable() );
 
     namespace AwtVisualEffect = ::com::sun::star::awt::VisualEffect;
     namespace AwtScrollOrient = ::com::sun::star::awt::ScrollBarOrientation;
@@ -709,7 +677,7 @@ void XclImpEscherTbxCtrl::WriteToPropertySet( ScfPropertySet& rPropSet ) const
 
     // control name -----------------------------------------------------------
 
-    OUString aName = XclTbxControlHelper::GetControlName( mnCtrlType );
+    OUString aName = XclTbxControlHelper::GetControlName( GetObjType() );
     if( aName.getLength() )
         rPropSet.SetProperty( CREATE_OUSTRING( "Name" ), aName );
 
@@ -743,14 +711,14 @@ void XclImpEscherTbxCtrl::WriteToPropertySet( ScfPropertySet& rPropSet ) const
 
     // special control contents -----------------------------------------------
 
-    switch( mnCtrlType )
+    switch( GetObjType() )
     {
         // checkbox/option button
 
         case EXC_OBJ_CMO_CHECKBOX:
         case EXC_OBJ_CMO_OPTIONBUTTON:
         {
-            bool bCheckBox = mnCtrlType == EXC_OBJ_CMO_CHECKBOX;
+            bool bCheckBox = GetObjType() == EXC_OBJ_CMO_CHECKBOX;
 
             sal_Int16 nApiState = 0;
             switch( mnState )
@@ -781,7 +749,7 @@ void XclImpEscherTbxCtrl::WriteToPropertySet( ScfPropertySet& rPropSet ) const
 
             Sequence< sal_Int16 > aSelection;
 
-            switch( mnCtrlType )
+            switch( GetObjType() )
             {
                 case EXC_OBJ_CMO_LISTBOX:
                 {
@@ -863,13 +831,13 @@ void XclImpEscherTbxCtrl::WriteToPropertySet( ScfPropertySet& rPropSet ) const
     }
 }
 
-bool XclImpEscherTbxCtrl::FillMacroDescriptor( ScriptEventDescriptor& rEvent ) const
+bool XclImpTbxControlObj::FillMacroDescriptor( ScriptEventDescriptor& rEvent ) const
 {
     if( maMacroName.Len() )
     {
         // type of action is dependent on control type
-        rEvent.ListenerType = XclTbxControlHelper::GetListenerType( mnCtrlType );
-        rEvent.EventMethod = XclTbxControlHelper::GetEventMethod( mnCtrlType );
+        rEvent.ListenerType = XclTbxControlHelper::GetListenerType( GetObjType() );
+        rEvent.EventMethod = XclTbxControlHelper::GetEventMethod( GetObjType() );
         if( rEvent.ListenerType.getLength() && rEvent.EventMethod.getLength() )
         {
             // set the macro name
@@ -881,43 +849,119 @@ bool XclImpEscherTbxCtrl::FillMacroDescriptor( ScriptEventDescriptor& rEvent ) c
     return false;
 }
 
-bool XclImpEscherTbxCtrl::Apply( ScfProgressBar& rProgress )
+void XclImpTbxControlObj::ReadCbls( XclImpStream& rStrm )
 {
-    bool bInserted = false;
-    // do not use IsValid() - the SdrObject is still missing
-    if( !GetIsSkip() && IsValidSize() )
+    sal_uInt16 nStyle;
+    rStrm >> mnState;
+    rStrm.Ignore( 8 );
+    rStrm >> nStyle;
+    mnState &= EXC_OBJ_CBLS_STATEMASK;
+    mbFlatButton = ::get_flag( nStyle, EXC_OBJ_CBLS_FLAT );
+}
+
+void XclImpTbxControlObj::ReadCblsFmla( XclImpStream& rStrm )
+{
+    ReadCellLinkFormula( rStrm );
+}
+
+void XclImpTbxControlObj::ReadLbsData( XclImpStream& rStrm )
+{
+    sal_uInt16 nSubSize;
+    rStrm >> nSubSize;
+    if( nSubSize )
     {
-        if( GetObjectManager().CreateSdrObj( *this ) )
+        // read the address of the data source range
+        rStrm.PushPosition();
+        ReadSrcRangeFormula( rStrm );
+        rStrm.PopPosition();
+        rStrm.Ignore( nSubSize );
+    }
+
+    // other list box settings
+    sal_Int16 nEntryCount;
+    sal_uInt16 nStyle, nComboStyle;
+    rStrm >> nEntryCount >> mnSelEntry >> nStyle;
+    rStrm.Ignore( 2 );  // linked edit field
+
+    mnSelType = nStyle & EXC_OBJ_LBS_SELMASK;
+    mbFlatBorder = ::get_flag( nStyle, EXC_OBJ_LBS_FLAT );
+
+    switch( GetObjType() )
+    {
+        case EXC_OBJ_CMO_LISTBOX:
+            if( mnSelType != EXC_OBJ_LBS_SEL_SIMPLE )
+                for( sal_Int16 nEntry = 0; nEntry < nEntryCount; ++nEntry )
+                    if( rStrm.ReaduInt8() != 0 )
+                        maMultiSel.push_back( nEntry );
+        break;
+        case EXC_OBJ_CMO_COMBOBOX:
+            rStrm >> nComboStyle >> mnLineCount;
+            // comboboxes of auto-filters have 'simple' style, they don't have an edit area
+            if( (nComboStyle & EXC_OBJ_LBS_COMBOMASK) == EXC_OBJ_LBS_COMBO_SIMPLE )
+                SetInvalid();
+        break;
+    }
+
+}
+
+void XclImpTbxControlObj::ReadSbs( XclImpStream& rStrm )
+{
+    sal_uInt16 nOrient, nStyle;
+    rStrm.Ignore( 4 );
+    rStrm >> mnScrollValue >> mnScrollMin >> mnScrollMax >> mnScrollStep >> mnScrollPage >> nOrient;
+    rStrm.Ignore( 2 );
+    rStrm >> nStyle;
+
+    mbScrollHor = ::get_flag( nOrient, EXC_OBJ_SBS_HORIZONTAL );
+    mbFlatButton = ::get_flag( nStyle, EXC_OBJ_SBS_FLAT );
+}
+
+void XclImpTbxControlObj::ReadGboData( XclImpStream& rStrm )
+{
+    sal_uInt16 nStyle;
+    rStrm.Ignore( 4 );
+    rStrm >> nStyle;
+    mbFlatBorder = ::get_flag( nStyle, EXC_OBJ_GBO_FLAT );
+}
+
+void XclImpTbxControlObj::ReadMacro( XclImpStream& rStrm )
+{
+    maMacroName.Erase();
+    if( rStrm.GetRecLeft() > 6 )
+    {
+        // macro is stored in a tNameXR token containing a link to a defined name
+        sal_uInt16 nFmlaSize;
+        rStrm >> nFmlaSize;
+        rStrm.Ignore( 4 );
+        DBG_ASSERT( nFmlaSize == 7, "XclImpTbxControlObj::ReadMacro - unexpected formula size" );
+        if( nFmlaSize == 7 )
         {
-            // form controls: set bound rect explicitly
-            mxSdrObj->NbcSetSnapRect( maAnchorRect );
-            // #i30543# insert into control layer
-            mxSdrObj->NbcSetLayer( SC_LAYER_CONTROLS );
-            // insert the SdrObj into the draw page
-            bInserted = XclImpEscherObj::Apply( rProgress );
-        }
-        else
-        {
-            // no success to create a control -> create a text box
-            bInserted = XclImpEscherTxo::Apply( rProgress );
+            sal_uInt8 nTokenId;
+            sal_uInt16 nExtSheet, nExtName;
+            rStrm >> nTokenId >> nExtSheet >> nExtName;
+            DBG_ASSERT( nTokenId == XclTokenArrayHelper::GetTokenId( EXC_TOKID_NAMEX, EXC_TOKCLASS_REF ),
+                "XclImpTbxControlObj::ReadMacro - tNameXR token expected" );
+            if( nTokenId == XclTokenArrayHelper::GetTokenId( EXC_TOKID_NAMEX, EXC_TOKCLASS_REF ) )
+            {
+                maMacroName = GetLinkManager().GetMacroName( nExtSheet, nExtName );
+                // #i38718# missing module name - try to find the macro in the imported modules
+                if( maMacroName.Len() && (maMacroName.Search( '.' ) == STRING_NOTFOUND) )
+                    if( SfxObjectShell* pDocShell = GetDocShell() )
+                        if( StarBASIC* pBasic = pDocShell->GetBasic() )
+                            if( SbMethod* pMethod = dynamic_cast< SbMethod* >( pBasic->Find( maMacroName, SbxCLASS_METHOD ) ) )
+                                if( SbModule* pModule = pMethod->GetModule() )
+                                    maMacroName.Insert( '.', 0 ).Insert( pModule->GetName(), 0 );
+            }
         }
     }
-    else
-    {
-        rProgress.Progress();   // invalid objects are included in progress bar
-    }
-    return bInserted;
 }
 
 // ----------------------------------------------------------------------------
 
-TYPEINIT1( XclImpEscherOle, XclImpEscherObj );
-
-XclImpEscherOle::XclImpEscherOle( XclImpEscherObj& rSrcObj ):
-    XclImpEscherObj( rSrcObj ),
+XclImpOleObj::XclImpOleObj( const XclImpRoot& rRoot ) :
+    XclImpDrawObjBase( rRoot ),
     XclImpCtrlLinkHelper( xlBindContent ),
     mnCtrlStrmPos( 0 ),
-    mnBlipId( 0 ),
     mbAsSymbol( false ),
     mbLinked( false ),
     mbControl( false )
@@ -925,7 +969,68 @@ XclImpEscherOle::XclImpEscherOle( XclImpEscherObj& rSrcObj ):
     SetAreaObj( true );
 }
 
-void XclImpEscherOle::ReadPioGrbit( XclImpStream& rStrm )
+void XclImpOleObj::ReadSubRecord( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize )
+{
+    switch( nSubRecId )
+    {
+        case EXC_ID_OBJ_FTPIOGRBIT:
+            ReadPioGrbit( rStrm );
+        break;
+        case EXC_ID_OBJ_FTPICTFMLA:
+            ReadPictFmla( rStrm, nSubRecSize );
+        break;
+        default:
+            XclImpDrawObjBase::ReadSubRecord( rStrm, nSubRecId, nSubRecSize );
+    }
+}
+
+void XclImpOleObj::WriteToPropertySet( ScfPropertySet& rPropSet ) const
+{
+    rPropSet.SetBoolProperty( CREATE_OUSTRING( "Printable" ), IsPrintable() );
+    // #118053 set internal name of the control
+    if( maCtrlName.Len() > 0 )
+        rPropSet.SetStringProperty( CREATE_OUSTRING( "Name" ), maCtrlName );
+}
+
+void XclImpOleObj::DoProcessSdrObj( SdrObject& rSdrObj ) const
+{
+    if( !IsControl() )
+    {
+        // controls do have the "Printable" property
+        if( !IsPrintable() )
+            GetTracer().TraceObjectNotPrintable();
+
+        SfxObjectShell* pDocShell = GetDocShell();
+        SdrOle2Obj* pOleSdrObj = dynamic_cast< SdrOle2Obj* >( &rSdrObj );
+        if( pOleSdrObj && pDocShell )
+        {
+            comphelper::EmbeddedObjectContainer& rEmbObjCont = pDocShell->GetEmbeddedObjectContainer();
+            Reference< XEmbeddedObject > xEmbObj = pOleSdrObj->GetObjRef();
+            OUString aOldName( pOleSdrObj->GetPersistName() );
+
+            /*  The object persistence should be already in the storage, but
+                the object still might not be inserted into the container. */
+            if( rEmbObjCont.HasEmbeddedObject( aOldName ) )
+            {
+                if( !rEmbObjCont.HasEmbeddedObject( xEmbObj ) )
+                    // filter code is allowed to call the following method
+                    rEmbObjCont.AddEmbeddedObject( xEmbObj, aOldName );
+            }
+            else
+            {
+                /*  If the object is still not in container it must be iserted
+                    there, the name must be generated in this case. */
+                OUString aNewName;
+                rEmbObjCont.InsertEmbeddedObject( xEmbObj, aNewName );
+                if( aOldName != aNewName )
+                    // #95381# SetPersistName, not SetName
+                    pOleSdrObj->SetPersistName( aNewName );
+            }
+        }
+    }
+}
+
+void XclImpOleObj::ReadPioGrbit( XclImpStream& rStrm )
 {
     sal_uInt16 nFlags;
     rStrm >> nFlags;
@@ -933,7 +1038,7 @@ void XclImpEscherOle::ReadPioGrbit( XclImpStream& rStrm )
     mbLinked = ::get_flag( nFlags, EXC_OBJ_PIO_LINKED );
 }
 
-void XclImpEscherOle::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
+void XclImpOleObj::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
 {
     sal_uInt32 nStorageId;
     sal_uInt16 nFmlaLen;
@@ -947,14 +1052,13 @@ void XclImpEscherOle::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
 
     if( mbLinked )
     {
-        bool bSizeOk = (sizeof(nFmlaLen) + nFmlaLen == nRecSize);
-        DBG_ASSERT( bSizeOk, "XclImpEscherOle::ReadPictFmla - bad linked size" );
+        DBG_ASSERT( nFmlaLen + 2 == nRecSize, "XclImpOleObj::ReadPictFmla - bad linked size" );
         rStrm.Ignore( 7 );
         sal_uInt16 nXti, nExtName;
         rStrm >> nXti >> nExtName;
         const XclImpExtName* pExtName = GetLinkManager().GetExternName( nXti, nExtName );
         bOk = (pExtName && (pExtName->GetType() == xlExtOLE));
-        DBG_ASSERT( bOk, "XclImpEscherOle::ReadPictFmla - EXTERNNAME not found or not OLE" );
+        DBG_ASSERT( bOk, "XclImpOleObj::ReadPictFmla - EXTERNNAME not found or not OLE" );
         if( bOk )
             nStorageId = pExtName->GetStorageId();
     }
@@ -965,13 +1069,13 @@ void XclImpEscherOle::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
     {
         sal_uInt16 n16;
         rStrm >> n16;     // should be 5 but who knows ...
-        DBG_ASSERT( n16 + 4 <= nFmlaLen, "XclImpEscherOle::ReadPictFmla - embedded length mismatch" );
+        DBG_ASSERT( n16 + 4 <= nFmlaLen, "XclImpOleObj::ReadPictFmla - embedded length mismatch" );
         if( n16 + 4 <= nFmlaLen )
         {
             rStrm.Ignore( n16 + 4 );
             sal_uInt8 n8;
             rStrm >> n8;
-            DBG_ASSERT( n8 == 0x03, "XclImpEscherOle::ReadPictFmla - no name start" );
+            DBG_ASSERT( n8 == 0x03, "XclImpOleObj::ReadPictFmla - no name start" );
             if( n8 == 0x03 )
             {
                 rStrm >> n16;     // string length
@@ -981,7 +1085,7 @@ void XclImpEscherOle::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
                     // 0:= ID follows, 1:= pad byte + ID
 #ifndef PRODUCT
                     sal_Int32 nLeft = sal_Int32(nFmlaLen) - (rStrm.GetRecPos() - nPos0);
-                    DBG_ASSERT( nLeft == 0 || nLeft == 1, "XclImpEscherOle::ReadPictFmla - unknown left over" );
+                    DBG_ASSERT( nLeft == 0 || nLeft == 1, "XclImpOleObj::ReadPictFmla - unknown left over" );
 #endif
 
                     // is it a form control?
@@ -999,7 +1103,7 @@ void XclImpEscherOle::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
             if( aUserName.EqualsAscii( "Forms.HTML:Hidden.1" ) )
             {
                 // #i26521# form controls to be ignored
-                SetSkip();
+                SetInvalid();
             }
             else if( rStrm.GetRecLeft() > 8 )
             {
@@ -1027,10 +1131,9 @@ void XclImpEscherOle::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
                 }
             }
         }
-        else if( nStorageId )
+        else if( nStorageId > 0 )
         {
-            bool bSizeOk = sizeof(nFmlaLen) + nFmlaLen + sizeof(nStorageId) == nRecSize;
-            DBG_ASSERT( bSizeOk, "XclImpEscherOle::ReadPictFmla - bad embedded size" );
+            DBG_ASSERT( nFmlaLen + 6 == nRecSize, "XclImpOleObj::ReadPictFmla - bad embedded size" );
         }
         else
             bOk = false;    // no storage, internal
@@ -1038,157 +1141,46 @@ void XclImpEscherOle::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
 
     if( bOk )
     {
-        maStorageName.AssignAscii( mbLinked ? "LNK" : "MBD" );
+        if( mbLinked )
+            maStorageName = EXC_STORAGE_OLE_LINKED;
+        else
+            maStorageName = EXC_STORAGE_OLE_EMBEDDED;
         sal_Char aBuf[ 2 * sizeof( sal_uInt32 ) + 1 ];
         sprintf( aBuf, "%08X", nStorageId );    // #100211# - checked
         maStorageName.AppendAscii( aBuf );
     }
 }
 
-void XclImpEscherOle::WriteToPropertySet( ScfPropertySet& rPropSet ) const
-{
-    rPropSet.SetBoolProperty( CREATE_OUSTRING( "Printable" ), GetPrintable() );
-    // #118053 set control name
-    if( maName.getLength() > 0 )
-        rPropSet.SetProperty( CREATE_OUSTRING( "Name" ), maName );
-}
-
-bool XclImpEscherOle::Apply( ScfProgressBar& rProgress )
-{
-    // do not use IsValid() - the SdrObject is still missing
-    if( !GetIsSkip() && IsValidSize() && GetObjectManager().CreateSdrObj( *this ) )
-    {
-        SfxObjectShell* pDocShell = GetDocShell();
-        SdrOle2Obj* pOleSdrObj = PTR_CAST( SdrOle2Obj, mxSdrObj.get() );
-        if( pOleSdrObj && pDocShell )
-        {
-            Reference< XEmbeddedObject > xObj = pOleSdrObj->GetObjRef();
-            OUString aOldName( pOleSdrObj->GetPersistName() );
-
-            if ( pDocShell->GetEmbeddedObjectContainer().HasEmbeddedObject( aOldName ) )
-            {
-                // the object persistence should be already in the storage,
-                // but the object still might not be inserted into the container
-                if ( !pDocShell->GetEmbeddedObjectContainer().HasEmbeddedObject( xObj ) )
-                {
-                    // a filter code is allowed to call the following method
-                    pDocShell->GetEmbeddedObjectContainer().AddEmbeddedObject( xObj, aOldName );
-                }
-            }
-            else
-            {
-                // if the object is still not in container it must be iserted there, the name must be generated in this case
-                OUString aNewName;
-                pDocShell->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aNewName );
-                if ( aOldName != aNewName )
-                    // #95381# SetPersistName, not SetName
-                    pOleSdrObj->SetPersistName( aNewName );
-            }
-        }
-        else if( mxSdrObj->ISA( SdrUnoObj ) )
-        {
-            // form controls: set bound rect explicitly
-            mxSdrObj->NbcSetSnapRect( maAnchorRect );
-            // #i30543# insert into control layer
-            mxSdrObj->NbcSetLayer( SC_LAYER_CONTROLS );
-        }
-    }
-    return XclImpEscherObj::Apply( rProgress );
-}
-
 // ----------------------------------------------------------------------------
 
-TYPEINIT1( XclImpEscherChart, XclImpEscherObj );
-
-XclImpEscherChart::XclImpEscherChart( XclImpEscherObj& rSrcObj, bool bOwnTab ) :
-    XclImpEscherObj( rSrcObj ),
+XclImpChartObj::XclImpChartObj( const XclImpRoot& rRoot, bool bOwnTab ) :
+    XclImpDrawObjBase( rRoot ),
     mbOwnTab( bOwnTab )
 {
     SetAreaObj( true );
 }
 
-void XclImpEscherChart::ReadChartSubStream( XclImpStream& rStrm )
+void XclImpChartObj::ReadChartSubStream( XclImpStream& rStrm )
 {
-    DBG_ASSERT( rStrm.GetRecId() == EXC_ID5_BOF, "XclImpEscherChart::ReadChartSubStream - no BOF record found" );
+    DBG_ASSERT( rStrm.GetRecId() == EXC_ID5_BOF, "XclImpChartObj::ReadChartSubStream - no BOF record found" );
     if( rStrm.GetRecId() == EXC_ID5_BOF )
     {
         mxChart.reset( new XclImpChart( GetRoot(), mbOwnTab ) );
         mxChart->ReadChartSubStream( rStrm );
+
+        /*  #i44077# Calculate anchor for sheet charts. Needed to get used area
+            if this chart is inserted as OLE object. */
         if( mbOwnTab )
-            SetTabChartAnchor();
+            CalcTabChartAnchor();
     }
 }
 
-sal_uInt32 XclImpEscherChart::GetProgressSize() const
+sal_uInt32 XclImpChartObj::DoGetProgressSize() const
 {
     return mxChart.is() ? mxChart->GetProgressSize() : 0;
 }
 
-bool XclImpEscherChart::Apply( ScfProgressBar& rProgress )
-{
-    // do not use IsValid() - the SdrObject is still missing
-    if( !mxChart || GetIsSkip() || !IsValidSize() )
-        return false;
-
-    // Trace if chart object is not printable.
-    if( !GetPrintable() )
-        GetTracer().TraceObjectNotPrintable();
-
-    SfxObjectShell* pDocShell = GetDocShell();
-    if( !pDocShell ) return false;
-
-    bool bInserted = false;
-    if( SvtModuleOptions().IsChart() )
-    {
-        OUString aName;
-        Reference< XEmbeddedObject > xObj = pDocShell->GetEmbeddedObjectContainer().
-                CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aName );
-
-        sal_Int64 nAspect = ::com::sun::star::embed::Aspects::MSOLE_CONTENT;
-        ::com::sun::star::awt::Size aAwtSize = xObj->getVisualAreaSize( nAspect );
-        Size aSize( aAwtSize.Width, aAwtSize.Height );
-        if( (aSize.Height() < 1) || (aSize.Width() < 1) )
-        {
-            MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
-            aSize.Width() = aSize.Height() = 5000;
-            aSize = Window::LogicToLogic( aSize, MapMode( MAP_100TH_MM ), MapMode( aUnit ) );
-            aAwtSize.Width = aSize.Width();
-            aAwtSize.Height = aSize.Height();
-            xObj->setVisualAreaSize( nAspect, aAwtSize );
-        }
-
-        SdrOle2Obj* pSdrObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, maAnchorRect );
-        pSdrObj->NbcSetLayer( SC_LAYER_FRONT );
-        if( SdrPage* pPage = GetSdrPage( GetScTab() ) )
-        {
-            pPage->InsertObject( pSdrObj );
-            bInserted = true;
-        }
-        pSdrObj->NbcSetLogicRect( maAnchorRect );
-
-        // create the chart array (core representation of source data)
-        ScChartArray aChartObj( GetDocPtr(), mxChart->GetSourceData(), aName );
-        aChartObj.SetHeaders( mxChart->HasHeaderRow(), mxChart->HasHeaderColumn() );
-
-        SchMemChart* pMemChart = aChartObj.CreateMemChart();
-        SchDLL::Update( xObj, pMemChart );
-        pSdrObj->GetNewReplacement();
-        delete pMemChart;
-
-        if( svt::EmbeddedObjectRef::TryRunningState( xObj ) )
-        {
-            Reference< XChartDocument > xChartDoc( xObj->getComponent(), UNO_QUERY );
-            mxChart->Convert( xChartDoc, rProgress );
-
-            Reference< XEmbedPersist > xPers( xObj, UNO_QUERY );
-            if( xPers.is() )
-                xPers->storeOwn();
-        }
-    }
-    return bInserted;
-}
-
-void XclImpEscherChart::SetTabChartAnchor()
+void XclImpChartObj::CalcTabChartAnchor()
 {
     // set uninitialized page to landscape
     if ( !GetPageSettings().GetPageData().mbValid )
@@ -1212,207 +1204,73 @@ void XclImpEscherChart::SetTabChartAnchor()
         nHeight -= 1000;
     }
 
-    SetAnchor( Rectangle( 500, 500, nWidth, nHeight ) );
+    maAnchorRect = Rectangle( 500, 500, nWidth, nHeight );
+    CreateEscherAnchor( maAnchorRect );
 }
 
-// Escher object data =========================================================
+// Escher stream conversion ===================================================
 
-XclImpObjData::XclImpObjData( XclImpEscherObj* pEscherObj ) :
-    maAnchor( 0 ),
-    mbInserted( false )
+void XclImpSolverContainer::ReadSolverContainer( SvStream& rEscherStrm )
 {
-    SetObj( pEscherObj );
+    rEscherStrm >> *this;
 }
 
-void XclImpObjData::SetObj( XclImpEscherObj* pEscherObj )
+void XclImpSolverContainer::InsertSdrObjectInfo( const XclImpDrawObjBase& rDrawObj, SdrObject* pSdrObj )
 {
-    mxEscherObj.reset( pEscherObj );
-    maAnchor.mnScTab = pEscherObj ? pEscherObj->GetScTab() : 0;
+    sal_uInt32 nShapeId = rDrawObj.GetShapeId();
+    if( (nShapeId != 0) && pSdrObj )
+        maSdrInfoMap[ nShapeId ].Set( pSdrObj, rDrawObj.GetShapeFlags() );
 }
 
-bool XclImpObjData::ContainsStrmPos( ULONG nStrmPos ) const
+void XclImpSolverContainer::RemoveSdrObjectInfo( const XclImpDrawObjBase& rDrawObj )
 {
-    return mxEscherObj.get() && (mxEscherObj->GetStrmBegin() <= nStrmPos) && (nStrmPos < mxEscherObj->GetStrmEnd());
+    maSdrInfoMap.erase( rDrawObj.GetShapeId() );
 }
 
-sal_uInt32 XclImpObjData::GetProgressSize() const
+void XclImpSolverContainer::UpdateConnectorRules()
 {
-    return mxEscherObj.get() ? mxEscherObj->GetProgressSize() : 0;
-}
-
-void XclImpObjData::Apply( ScfProgressBar& rProgress )
-{
-    mbInserted = mxEscherObj.get() && mxEscherObj->Apply( rProgress );
-}
-
-void XclImpObjData::ExtendUsedArea( const XclImpRoot& rRoot, ScRange& rScUsedArea, SCTAB nScTab ) const
-{
-    if( mbInserted && mxEscherObj.get() && (mxEscherObj->GetScTab() == nScTab) )
+    for( SvxMSDffConnectorRule* pRule = GetFirstRule(); pRule; pRule = GetNextRule() )
     {
-        // #i44077# object inserted -> update used area for OLE object import
-        ScRange aScRange( ScAddress::UNINITIALIZED );
-        if( rRoot.GetAddressConverter().ConvertRange( aScRange, maAnchor.maXclRange, nScTab, nScTab, false ) )
-        {
-            // reduce range, if object ends directly on borders between two columns or rows
-            if( (maAnchor.mnRX == 0) && (aScRange.aStart.Col() < aScRange.aEnd.Col()) )
-                aScRange.aEnd.IncCol( -1 );
-            if( (maAnchor.mnBY == 0) && (aScRange.aStart.Row() < aScRange.aEnd.Row()) )
-                aScRange.aEnd.IncRow( -1 );
-            rScUsedArea.ExtendTo( aScRange );
-        }
+        UpdateConnection( pRule->nShapeA, pRule->pAObj, &pRule->nSpFlagsA );
+        UpdateConnection( pRule->nShapeB, pRule->pBObj, &pRule->nSpFlagsB );
+        UpdateConnection( pRule->nShapeC, pRule->pCObj );
+    }
+}
+
+void XclImpSolverContainer::RemoveConnectorRules()
+{
+    // base class from SVX uses plain untyped tools/List
+    for( SvxMSDffConnectorRule* pRule = GetFirstRule(); pRule; pRule = GetNextRule() )
+        delete pRule;
+    aCList.Clear();
+}
+
+SvxMSDffConnectorRule* XclImpSolverContainer::GetFirstRule()
+{
+    return static_cast< SvxMSDffConnectorRule* >( aCList.First() );
+}
+
+SvxMSDffConnectorRule* XclImpSolverContainer::GetNextRule()
+{
+    return static_cast< SvxMSDffConnectorRule* >( aCList.Next() );
+}
+
+void XclImpSolverContainer::UpdateConnection( sal_uInt32 nShapeId, SdrObject*& rpSdrObj, sal_uInt32* pnShapeFlags )
+{
+    XclImpSdrInfoMap::const_iterator aIt = maSdrInfoMap.find( nShapeId );
+    if( aIt != maSdrInfoMap.end() )
+    {
+        rpSdrObj = aIt->second.mpSdrObj;
+        if( pnShapeFlags )
+            *pnShapeFlags = aIt->second.mnShapeFlags;
     }
 }
 
 // ----------------------------------------------------------------------------
 
-XclImpEscherObjList::XclImpEscherObjList( const XclImpRoot& rRoot ) :
-    XclImpRoot( rRoot )
-{
-}
-
-void XclImpEscherObjList::AppendObj( XclImpEscherObj* pEscherObj )
-{
-    DBG_ASSERT( pEscherObj, "XclImpEscherObjList::AppendObj - missing object" );
-    maObjDataList.Append( new XclImpObjData( pEscherObj ) );
-    UpdateCache();
-}
-
-void XclImpEscherObjList::AppendDummyObj( XclImpEscherObj* pEscherObj )
-{
-    // do not modify the cache
-    maObjDataList.Append( new XclImpObjData( pEscherObj ) );
-    if( pEscherObj )
-        pEscherObj->SetSkip();
-}
-
-void XclImpEscherObjList::ReplaceLastObj( XclImpEscherObj* pEscherObj )
-{
-    if( XclImpObjData* pObjData = maObjDataList.Last() )
-    {
-        DBG_ASSERT( pEscherObj, "XclImpEscherObjList::ReplaceLastObj - missing object" );
-        pObjData->SetObj( pEscherObj );
-        UpdateCache();
-    }
-    else
-        AppendObj( pEscherObj );
-}
-
-XclImpEscherObj* XclImpEscherObjList::GetObj( SCTAB nScTab, sal_uInt16 nObjId ) const
-{
-    if( (nObjId != EXC_OBJ_INVALID_ID) && (nScTab >= 0) )
-    {
-        // objects are ordered by sheet index
-        size_t nCacheSize = maObjCache.size();
-        size_t nCacheIdx = static_cast< size_t >( nScTab );
-        if( nCacheIdx < nCacheSize )
-        {
-            ULONG nEnd = (nCacheIdx + 1 < nCacheSize) ? maObjCache[ nCacheIdx + 1 ].mnListIdx : maObjDataList.Count();
-            for( ULONG nListIdx = maObjCache[ nCacheIdx ].mnListIdx; nListIdx < nEnd; ++nListIdx )
-                if( XclImpEscherObj* pEscherObj = maObjDataList.GetObject( nListIdx )->GetObj() )
-                    if( (pEscherObj->GetScTab() == nScTab) && (pEscherObj->GetObjId() == nObjId) )
-                        return pEscherObj;
-        }
-    }
-    return 0;
-}
-
-XclImpEscherObj* XclImpEscherObjList::GetLastObj() const
-{
-    if( XclImpObjData* pObjData = maObjDataList.Last() )
-        return pObjData->GetObj();
-    return 0;
-}
-
-XclImpEscherObj* XclImpEscherObjList::GetObj( ULONG nStrmPos ) const
-{
-    XclImpObjData* pObjData = FindObjData( nStrmPos );
-    return pObjData ? pObjData->GetObj() : 0;
-}
-
-XclEscherAnchor* XclImpEscherObjList::GetAnchor( ULONG nStrmPos ) const
-{
-    XclImpObjData* pObjData = FindObjData( nStrmPos );
-    return pObjData ? &pObjData->GetAnchor() : 0;
-}
-
-void XclImpEscherObjList::Apply( ScfProgressBar& rProgress )
-{
-    DBG_ASSERT( !rProgress.IsStarted(), "XclImpEscherObjList::InitProgress - progress already started" );
-    XclImpObjData* pData = 0;
-
-    // initialize progress bar
-    sal_uInt32 nSegSize = 0;
-    for( pData = maObjDataList.First(); pData; pData = maObjDataList.Next() )
-        nSegSize += pData->GetProgressSize();
-
-    // insert the objects into the drawing layer
-    sal_Int32 nSeg = rProgress.AddSegment( std::max< sal_uInt32 >( nSegSize, 1 ) );
-    rProgress.ActivateSegment( nSeg );
-    for( pData = maObjDataList.First(); pData; pData = maObjDataList.Next() )
-        pData->Apply( rProgress );
-}
-
-void XclImpEscherObjList::ExtendUsedArea( ScRange& rScUsedArea, SCTAB nScTab ) const
-{
-    for( const XclImpObjData* pData = maObjDataList.First(); pData; pData = maObjDataList.Next() )
-        pData->ExtendUsedArea( GetRoot(), rScUsedArea, nScTab );
-}
-
-void XclImpEscherObjList::UpdateCache()
-{
-    if( const XclImpEscherObj* pEscherObj = GetLastObj() )
-    {
-        SCTAB nScTab = pEscherObj->GetScTab();
-        ULONG nStrmPos = pEscherObj->GetStrmBegin();
-
-        // #110252# ignore faked objects without corresponding Escher data (i.e. sheet-charts)
-        if( (nScTab >= 0) && (nStrmPos != 0) )
-        {
-            size_t nCacheIdx = static_cast< size_t >( nScTab );
-            if( nCacheIdx >= maObjCache.size() )
-                maObjCache.resize( nCacheIdx + 1, XclCacheEntry( GetObjCount() - 1, nStrmPos ) );
-            else if( maObjCache[ nCacheIdx ].mnStrmPos > nStrmPos )
-                maObjCache[ nCacheIdx ].mnStrmPos = nStrmPos;
-            DBG_ASSERT( (nCacheIdx == 0) || (maObjCache[ nCacheIdx - 1 ].mnStrmPos <= nStrmPos), "XclImpEscherObjList::UpdateCache - cache corrupted" );
-        }
-    }
-}
-
-XclImpObjData* XclImpEscherObjList::FindObjData( ULONG nStrmPos ) const
-{
-    size_t nCacheSize = maObjCache.size();
-    size_t nFoundIdx = 0;
-    bool bFound = false;
-
-    // find the correct cache entry
-    for( size_t nCacheIdx = 0; !bFound && (nCacheIdx < nCacheSize); ++nCacheIdx )
-    {
-        ULONG nStrmEnd = (nCacheIdx + 1 < nCacheSize) ? maObjCache[ nCacheIdx + 1 ].mnStrmPos : STREAM_SEEK_TO_END;
-        bFound = (maObjCache[ nCacheIdx ].mnStrmPos <= nStrmPos) && (nStrmPos < nStrmEnd);
-        if( bFound )
-            nFoundIdx = nCacheIdx;
-    }
-
-    // find the object in the found list range
-    if( bFound )
-    {
-        ULONG nListEnd = (nFoundIdx + 1 < nCacheSize) ? maObjCache[ nFoundIdx + 1 ].mnListIdx : maObjDataList.Count();
-        for( ULONG nListIdx = maObjCache[ nFoundIdx ].mnListIdx; nListIdx < nListEnd; ++nListIdx )
-        {
-            XclImpObjData* pObjData = maObjDataList.GetObject( nListIdx );
-            if( pObjData->ContainsStrmPos( nStrmPos ) )
-                return pObjData;
-        }
-    }
-    return 0;
-}
-
-// Escher stream conversion ===================================================
-
 XclImpDffManager::XclImpDffManager(
-        const XclImpRoot& rRoot, XclImpObjectManager& rObjManager,
-        long nOffsDgg, SvStream* pStData, SdrModel* pSdrModel, long nApplicationScale ) :
-    SvxMSDffManager( rObjManager.GetEscherStream(), rRoot.GetBasePath(), nOffsDgg, pStData, pSdrModel, nApplicationScale, COL_DEFAULT, 24, 0, &rRoot.GetTracer().GetBaseTracer() ),
+        const XclImpRoot& rRoot, XclImpObjectManager& rObjManager, SvStream& rEscherStrm ) :
+    SvxMSDffManager( rEscherStrm, rRoot.GetBasePath(), 0, 0, rRoot.GetDoc().GetDrawLayer(), 1440, COL_DEFAULT, 24, 0, &rRoot.GetTracer().GetBaseTracer() ),
     XclImpRoot( rRoot ),
     mrObjManager( rObjManager ),
     mnOleImpFlags( 0 )
@@ -1430,126 +1288,172 @@ XclImpDffManager::XclImpDffManager(
     }
 }
 
-void XclImpDffManager::SetSdrObject( XclImpEscherObj* pEscherObj, ULONG nId, SvxMSDffImportData& rData )
+XclImpDffManager::~XclImpDffManager()
 {
-    SdrObject* pSdrObj = 0;
-    bool bRet = GetShape( nId, pSdrObj, rData );
-    if( bRet )
-        pEscherObj->SetSdrObj( pSdrObj );
-    else
-        delete pSdrObj;
 }
 
-bool XclImpDffManager::CreateSdrOleObj( XclImpEscherOle& rOleObj )
+void XclImpDffManager::StartProgressBar( sal_uInt32 nProgressSize )
 {
-    SfxObjectShell* pDocShell = GetDocShell();
-    const Rectangle& rAnchor = rOleObj.GetAnchor();
-    const String& rStorageName = rOleObj.GetStorageName();
+    mxProgress.reset( new ScfProgressBar( GetDocShell(), STR_PROGRESS_CALCULATING ) );
+    mxProgress->AddSegment( nProgressSize );
+    mxProgress->Activate();
+}
 
-    if( pDocShell && !rAnchor.IsEmpty() && rStorageName.Len() )
+void XclImpDffManager::ProcessEscherStream( SvStream& rEscherStrm )
+{
+    rEscherStrm.Seek( STREAM_SEEK_TO_END );
+    ULONG nStrmSize = rEscherStrm.Tell();
+    rEscherStrm.Seek( STREAM_SEEK_TO_BEGIN );
+    while( rEscherStrm.Tell() < nStrmSize )
     {
-        Graphic aGraph;
-        if( GetBLIP( rOleObj.GetBlipId(), aGraph ) )
+        DffRecordHeader aHeader;
+        rEscherStrm >> aHeader;
+        switch( aHeader.nRecType )
         {
-            ErrCode nError = ERRCODE_NONE;
-            SotStorageRef xSrc = GetRootStorage();
-            if( SdrOle2Obj* pOleSdrObj = CreateSdrOLEFromStorage(
-                    rStorageName, xSrc, pDocShell->GetStorage(), aGraph, rAnchor, NULL, nError, mnOleImpFlags ) )
-            {
-                rOleObj.SetSdrObj( pOleSdrObj );
-                return true;
-            }
+            case DFF_msofbtDggContainer:
+                ProcessDggContainer( rEscherStrm, aHeader );
+            break;
+            case DFF_msofbtDgContainer:
+                ProcessDgContainer( rEscherStrm, aHeader );
+            break;
+            default:
+                aHeader.SeekToEndOfRecord( rEscherStrm );
         }
     }
-    return false;
 }
 
-void XclImpDffManager::ProcessClientAnchor2( SvStream& rStrm, DffRecordHeader& rHeader, void*, DffObjData& rObjData )
+void XclImpDffManager::ProcessTabChart( const XclImpChartObj& rChartObj )
 {
-    rHeader.SeekToContent( rStrm );
-    rStrm.SeekRel( 2 );
-    ULONG nFilePos = rStrm.Tell();
-
-    if( XclEscherAnchor* pAnchor = mrObjManager.GetEscherAnchorAcc( nFilePos ) )
+    // sheet charts store their anchor rectangle internally
+    const Rectangle& rAnchorRect = rChartObj.GetAnchorRect();
+    if( rChartObj.IsValidSize( rAnchorRect ) )
     {
-        rStrm >> *pAnchor;
-        rObjData.aChildAnchor = pAnchor->GetRect( GetDoc(), MAP_100TH_MM );
+        SdrObjectPtr xSdrObj( CreateSdrObject( rChartObj, rAnchorRect ) );
+        InsertSdrObject( rChartObj, xSdrObj.release() );
+        UpdateUsedArea( rChartObj );
+    }
+}
+
+ScRange XclImpDffManager::GetUsedArea( SCTAB nScTab ) const
+{
+    ScRange aScUsedArea( ScAddress::INITIALIZE_INVALID );
+    ScRangeMap::const_iterator aIt = maUsedAreaMap.find( nScTab );
+    if( aIt != maUsedAreaMap.end() )
+        aScUsedArea = aIt->second;
+    return aScUsedArea;
+}
+
+// virtual functions ----------------------------------------------------------
+
+void XclImpDffManager::ProcessClientAnchor2( SvStream& rEscherStrm,
+        DffRecordHeader& rHeader, void* pClientData, DffObjData& rObjData )
+{
+    // find the OBJ record data related to the processed shape
+    if( XclImpDrawObjBase* pDrawObj = mrObjManager.FindDrawObj( rObjData.rSpHd ).get() )
+    {
+        rObjData.aChildAnchor = pDrawObj->ReadClientAnchor( rEscherStrm, rHeader );
         rObjData.bChildAnchor = sal_True;
-
-        if( XclImpEscherObj* pEscherObj = mrObjManager.GetEscherObjAcc( nFilePos ) )
-        {
-            pEscherObj->SetAnchor( rObjData.aChildAnchor );
-            if( XclImpEscherOle* pOleObj = PTR_CAST( XclImpEscherOle, pEscherObj ) )
-                pOleObj->SetBlipId( GetPropertyValue( DFF_Prop_pib ) );
-        }
     }
 }
 
-SdrObject* XclImpDffManager::ProcessObj(
-    SvStream& rStrm, DffObjData& rObjData, void*, Rectangle& rTextRect, SdrObject* pRetSdrObj )
+SdrObject* XclImpDffManager::ProcessObj( SvStream& rEscherStrm,
+        DffObjData& rObjData, void* pClientData, Rectangle& rTextRect, SdrObject* pOldSdrObj )
 {
-    // #118052# import control name
-    XclImpEscherObj* pObj = mrObjManager.GetEscherObjAcc( rObjData.rSpHd.nFilePos );
-    if( XclImpEscherOle* pOleObj = PTR_CAST( XclImpEscherOle, pObj ) )
+    /*  pOldSdrObj passes a generated SdrObject. This function owns this object
+        and can modify it. The function has either to return it back to caller
+        or to delete it by itself. */
+    SdrObjectPtr xSdrObj( pOldSdrObj );
+
+    // find the OBJ record data related to the processed shape
+    XclImpDrawObjRef xDrawObj = mrObjManager.FindDrawObj( rObjData.rSpHd );
+    const Rectangle& rAnchorRect = rObjData.aChildAnchor;
+
+    // #102378# Do not process the global page group shape (flag SP_FPATRIARCH)
+    bool bGlobalPageGroup = ::get_flag< sal_uInt32 >( rObjData.nSpFlags, SP_FPATRIARCH );
+    if( !xDrawObj || !xDrawObj->IsValid() || bGlobalPageGroup )
+        return 0;   // simply return, xSdrObj will be destroyed
+
+    // #119010# connectors don't have to be area objects
+    if( dynamic_cast< SdrEdgeObj* >( xSdrObj.get() ) )
+        xDrawObj->SetAreaObj( false );
+
+    // check for valid size for all objects (#i30816# objects embedded in groups)
+    if( !xDrawObj->IsValidSize( rAnchorRect ) )
+        return 0;   // simply return, xSdrObj will be destroyed
+
+    // set shape information from Escher stream
+    xDrawObj->SetShapeData( rObjData.nShapeId, rObjData.nSpFlags, GetPropertyValue( DFF_Prop_pib ) );
+
+    /*  Connect textbox data (string, alignment, text orientation) to object.
+        #98132# don't ask for a text-ID, Escher export doesn't set one. */
+    if( XclImpDrawingObj* pDrawingObj = dynamic_cast< XclImpDrawingObj* >( xDrawObj.get() ) )
+        pDrawingObj->SetTxoData( mrObjManager.FindTxoData( rObjData.rSpHd ) );
+
+    // #118052# import internal name of a control
+    if( XclImpOleObj* pOleObj = dynamic_cast< XclImpOleObj* >( xDrawObj.get() ) )
     {
-        sal_uInt32 nNameLen = GetPropertyValue( DFF_Prop_wzName );
-        if( nNameLen > 0 )
-        {
-            SeekToContent( DFF_Prop_wzName, mrObjManager.GetEscherStream() );
-            sal_Int32 nStrLen = nNameLen / 2;
-            OUStringBuffer aNameBfr( nStrLen );
-            sal_uInt16 cChar = 0;
-            for( sal_Int32 nIdx = 0; nIdx < nStrLen; ++nIdx )
-            {
-                mrObjManager.GetEscherStream() >> cChar;
-                aNameBfr.append( static_cast< sal_Unicode >( cChar ) );
-            }
-            OUString aName( aNameBfr.makeStringAndClear() );
-            pOleObj->SetName( aName );
-        }
+        String aName( ReadStringProperty( rEscherStrm, DFF_Prop_wzName ) );
+        if( aName.Len() )
+            pOleObj->SetControlName( aName );
     }
 
-    /*  #102378# Do not process the omnipresent first dummy shape in the table
-        (it has the flag SP_FPATRIARCH set). */
-    if( pRetSdrObj && !::get_flag< sal_uInt32 >( rObjData.nSpFlags, SP_FPATRIARCH ) )
+    // try to create a custom SdrObject that overwrites the passed object
+    SdrObjectPtr xNewSdrObj( CreateCustomSdrObject( *xDrawObj, rAnchorRect ) );
+    if( xNewSdrObj.get() )
+        xSdrObj = xNewSdrObj;   // transfer ownership to xSdrObj
+
+    // process the SdrObject
+    if( xSdrObj.get() )
     {
-        // #i30816# objects in groups need manual check for valid size
-        if( rObjData.nCalledByGroup > 0 )
-            if( const XclImpEscherObj* pEscherObj = mrObjManager.GetEscherObj( rObjData.rSpHd.nFilePos ) )
-                if( !pEscherObj->IsValidSize( rObjData.aChildAnchor ) )
-                    DELETEZ( pRetSdrObj );
+        // maybe if there is no color, we could do this in ApplyAttributes (writer?, calc?)
+        if( GetPropertyBool( DFF_Prop_fFilled ) && !IsProperty( DFF_Prop_fillColor ) )
+            xSdrObj->SetMergedItem( XFillColorItem( EMPTY_STRING, Color( COL_WHITE ) ) );
 
-        if( pRetSdrObj )
+        // automatic margin is handled by host
+        if( GetPropertyBool( DFF_Prop_AutoTextMargin ) )
         {
-            // maybe if there is no color, we could do this in ApplyAttributes (writer?, calc?)
-            if( GetPropertyBool( DFF_Prop_fFilled ) && !IsProperty( DFF_Prop_fillColor ) )
-                pRetSdrObj->SetMergedItem( XFillColorItem( EMPTY_STRING, Color( COL_WHITE ) ) );
-
-            // automatic margin is handled by host
-            if( GetPropertyBool( DFF_Prop_AutoTextMargin ) )
-            {
-                long nMargin = EXC_ESCHER_AUTOMARGIN;
-                ScaleEmu( nMargin );
-                pRetSdrObj->SetMergedItem( SdrTextLeftDistItem( nMargin ) );
-                pRetSdrObj->SetMergedItem( SdrTextRightDistItem( nMargin ) );
-                pRetSdrObj->SetMergedItem( SdrTextUpperDistItem( nMargin ) );
-                pRetSdrObj->SetMergedItem( SdrTextLowerDistItem( nMargin ) );
-            }
-            // #i39167# always default to "full width" for text & textless
-            // objects regardless of alignment.
-            pRetSdrObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
-
-            // text data and text alignment properties
-            // #98132# don't ask for a text-ID, Escher export doesn't set one
-            if( const XclImpEscherTxo* pTxoObj = mrObjManager.GetEscherTxo( rObjData.rSpHd.nFilePos ) )
-                pTxoObj->ApplyTextOnSdrObj( *pRetSdrObj );
-
-            // connector rules
-            mrObjManager.UpdateConnectorRules( rObjData, *pRetSdrObj );
+            long nMargin = EXC_ESCHER_AUTOMARGIN;
+            ScaleEmu( nMargin );
+            xSdrObj->SetMergedItem( SdrTextLeftDistItem( nMargin ) );
+            xSdrObj->SetMergedItem( SdrTextRightDistItem( nMargin ) );
+            xSdrObj->SetMergedItem( SdrTextUpperDistItem( nMargin ) );
+            xSdrObj->SetMergedItem( SdrTextLowerDistItem( nMargin ) );
         }
+
+        // #i39167# full width for text and textless objects regardless of alignment
+        xSdrObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
+
+        // additional processing on the SdrObject
+        xDrawObj->ProcessSdrObject( *xSdrObj );
+
+        // add the area used by this object to the internal map of used areas
+        UpdateUsedArea( *xDrawObj );
+
+        /*  If the SdrObject will not be inserted into the draw page, delete it
+            here. Happens e.g. for notes: The ProcessSdrObject() call above has
+            inserted the note into the document, and the SdrObject is not
+            needed anymore. */
+        if( !xDrawObj->IsInsertSdr() )
+            xSdrObj.reset();
     }
 
-    return pRetSdrObj;
+    /*  Store the relation between shape ID and SdrObject for connectors. Must
+        be done here (and not in InsertSdrObject() function), otherwise all
+        SdrObjects embedded in groups would be lost. */
+    if( xSdrObj.get() )
+        maSolverCont.InsertSdrObjectInfo( *xDrawObj, xSdrObj.get() );
+
+    // pass the pointer to the processed draw object back to caller
+    if( pClientData )
+    {
+        XclImpDrawObjBase** ppDrawObj = reinterpret_cast< XclImpDrawObjBase** >( pClientData );
+        /*  If a group object is processed, the pointer is already set to the
+            group parent object. */
+        if( !*ppDrawObj )
+            *ppDrawObj = xDrawObj.get();
+    }
+
+    return xSdrObj.release();
 }
 
 ULONG XclImpDffManager::Calc_nBLIPPos( ULONG nOrgVal, ULONG nStreamPos ) const
@@ -1568,18 +1472,258 @@ FASTBOOL XclImpDffManager::GetColorFromPalette( USHORT nIndex, Color& rColor ) c
     return TRUE;
 }
 
-sal_Bool XclImpDffManager::ShapeHasText( ULONG nShapeId, ULONG nFilePos ) const
+// private --------------------------------------------------------------------
+
+String XclImpDffManager::ReadStringProperty( SvStream& rEscherStrm, sal_uInt32 nPropId ) const
 {
-    const XclImpEscherTxo* pTxoObj = mrObjManager.GetEscherTxo( nFilePos );
-    return pTxoObj && pTxoObj->GetString();
+    String aString;
+    sal_uInt32 nBufferSize = GetPropertyValue( nPropId );
+    if( (nBufferSize > 0) && SeekToContent( nPropId, rEscherStrm ) )
+    {
+        for( sal_Int32 nCharIdx = 0, nStrLen = nBufferSize / 2; nCharIdx < nStrLen; ++nCharIdx )
+        {
+            sal_uInt16 nChar = 0;
+            rEscherStrm >> nChar;
+            if( nChar > 0 )
+                aString.Append( static_cast< sal_Unicode >( nChar ) );
+            else
+                break;
+        }
+    }
+    return aString;
+}
+
+void XclImpDffManager::ProcessDggContainer( SvStream& rEscherStrm, const DffRecordHeader& rDggHeader )
+{
+    // seek to end of drawing group container
+    rDggHeader.SeekToEndOfRecord( rEscherStrm );
+}
+
+void XclImpDffManager::ProcessDgContainer( SvStream& rEscherStrm, const DffRecordHeader& rDgHeader )
+{
+    ULONG nEndPos = rDgHeader.GetRecEndFilePos();
+    while( rEscherStrm.Tell() < nEndPos )
+    {
+        DffRecordHeader aHeader;
+        rEscherStrm >> aHeader;
+        switch( aHeader.nRecType )
+        {
+            case DFF_msofbtSolverContainer:
+                ProcessSolverContainer( rEscherStrm, aHeader );
+            break;
+            case DFF_msofbtSpgrContainer:
+                ProcessShGrContainer( rEscherStrm, aHeader );
+            break;
+            default:
+                aHeader.SeekToEndOfRecord( rEscherStrm );
+        }
+    }
+    // seek to end of drawing page container
+    rDgHeader.SeekToEndOfRecord( rEscherStrm );
+
+    // #i12638# #i37900# connector rules
+    maSolverCont.UpdateConnectorRules();
+    SolveSolver( maSolverCont );
+    maSolverCont.RemoveConnectorRules();
+}
+
+void XclImpDffManager::ProcessShGrContainer( SvStream& rEscherStrm, const DffRecordHeader& rShGrHeader )
+{
+    ULONG nEndPos = rShGrHeader.GetRecEndFilePos();
+    while( rEscherStrm.Tell() < nEndPos )
+    {
+        DffRecordHeader aHeader;
+        rEscherStrm >> aHeader;
+        switch( aHeader.nRecType )
+        {
+            case DFF_msofbtSpgrContainer:
+            case DFF_msofbtSpContainer:
+                ProcessShContainer( rEscherStrm, aHeader );
+            break;
+            default:
+                aHeader.SeekToEndOfRecord( rEscherStrm );
+        }
+    }
+    // seek to end of shape group container
+    rShGrHeader.SeekToEndOfRecord( rEscherStrm );
+}
+
+void XclImpDffManager::ProcessSolverContainer( SvStream& rEscherStrm, const DffRecordHeader& rSolverHeader )
+{
+    // solver container wants to read the solver container header again
+    rSolverHeader.SeekToBegOfRecord( rEscherStrm );
+    // read the entire solver container
+    rEscherStrm >> maSolverCont;
+    // seek to end of solver container
+    rSolverHeader.SeekToEndOfRecord( rEscherStrm );
+}
+
+void XclImpDffManager::ProcessShContainer( SvStream& rEscherStrm, const DffRecordHeader& rShHeader )
+{
+    rShHeader.SeekToBegOfRecord( rEscherStrm );
+    Rectangle aDummy;
+    const XclImpDrawObjBase* pDrawObj = 0;
+    /*  The call to ImportObj() creates and returns a new SdrObject for the
+        processed shape. This function takes ownership of the returned object.
+        If the shape is a group object, all embedded objects are created
+        recursively, and the returned group object contains them all.
+        ImportObj() calls the virtual functions ProcessClientAnchor2() and
+        ProcessObj() of the XclImpDffManager class. it writes the pointer to
+        the related draw object data (OBJ record) into pDrawObj. */
+    SdrObjectPtr xSdrObj( ImportObj( rEscherStrm, &pDrawObj, aDummy, aDummy, 0, 0 ) );
+    if( pDrawObj && xSdrObj.get() )
+        InsertSdrObject( *pDrawObj, xSdrObj.release() );
+    rShHeader.SeekToEndOfRecord( rEscherStrm );
+}
+
+XclImpOcxConverter& XclImpDffManager::GetOcxConverter()
+{
+    if( !mxOcxConverter )
+        mxOcxConverter.reset( new XclImpOcxConverter( GetRoot() ) );
+    return *mxOcxConverter;
+}
+
+void XclImpDffManager::InsertSdrObject( const XclImpDrawObjBase& rDrawObj, SdrObject* pSdrObj )
+{
+    /*  Take ownership of the passed object. If insertion fails (e.g. rDrawObj
+        states to skip insertion, or missing draw page), the object is
+        automatically deleted. */
+    SdrObjectPtr xSdrObj( pSdrObj );
+    if( xSdrObj.get() && rDrawObj.IsInsertSdr() )
+        if( SdrPage* pSdrPage = GetSdrPage( rDrawObj.GetScTab() ) )
+            pSdrPage->InsertObject( xSdrObj.release() );
+    // SdrObject still here? Insertion failed, remove data from shape ID map.
+    if( xSdrObj.get() )
+        maSolverCont.RemoveSdrObjectInfo( rDrawObj );
+}
+
+SdrObject* XclImpDffManager::CreateCustomSdrObject( const XclImpDrawObjBase& rDrawObj, const Rectangle& rAnchorRect )
+{
+    SdrObjectPtr xSdrObj;
+    if( const XclImpOleObj* pOleObj = dynamic_cast< const XclImpOleObj* >( &rDrawObj ) )
+        xSdrObj.reset( CreateSdrObject( *pOleObj, rAnchorRect ) );
+    else if( const XclImpTbxControlObj* pTbxCtrlObj = dynamic_cast< const XclImpTbxControlObj* >( &rDrawObj ) )
+        xSdrObj.reset( CreateSdrObject( *pTbxCtrlObj, rAnchorRect ) );
+    else if( const XclImpChartObj* pChartObj = dynamic_cast< const XclImpChartObj* >( &rDrawObj ) )
+        xSdrObj.reset( CreateSdrObject( *pChartObj, rAnchorRect ) );
+    else
+        mxProgress->Progress();
+    return xSdrObj.release();
+}
+
+SdrObject* XclImpDffManager::CreateSdrObject( const XclImpOleObj& rOleObj, const Rectangle& rAnchorRect )
+{
+    SdrObjectPtr xSdrObj;
+    if( rOleObj.IsControl() )
+    {
+        // form control objects are created by the XclImpOcxConverter class
+        xSdrObj.reset( GetOcxConverter().CreateSdrObject( rOleObj, rAnchorRect ) );
+    }
+    else
+    {
+        // it is a normal OLE object
+        SfxObjectShell* pDocShell = GetDocShell();
+        const String& rStorageName = rOleObj.GetStorageName();
+        if( pDocShell && rStorageName.Len() )
+        {
+            Graphic aGraph;
+            if( GetBLIP( rOleObj.GetShapeBlipId(), aGraph ) )
+            {
+                SotStorageRef xSrcStrg = GetRootStorage();
+                ErrCode nError = ERRCODE_NONE;
+                xSdrObj.reset( CreateSdrOLEFromStorage( rStorageName, xSrcStrg,
+                    pDocShell->GetStorage(), aGraph, rAnchorRect, 0, nError, mnOleImpFlags ) );
+            }
+        }
+    }
+    mxProgress->Progress();
+    return xSdrObj.release();
+}
+
+SdrObject* XclImpDffManager::CreateSdrObject( const XclImpTbxControlObj& rTbxCtrlObj, const Rectangle& rAnchorRect )
+{
+    SdrObjectPtr xSdrObj( GetOcxConverter().CreateSdrObject( rTbxCtrlObj, rAnchorRect ) );
+    mxProgress->Progress();
+    return xSdrObj.release();
+}
+
+SdrObject* XclImpDffManager::CreateSdrObject( const XclImpChartObj& rChartObj, const Rectangle& rAnchorRect )
+{
+    SfxObjectShell* pDocShell = GetDocShell();
+    const XclImpChart* pChart = rChartObj.GetChart();
+    if( !SvtModuleOptions().IsChart() || !pDocShell || !pChart )
+        return 0;
+
+    ScRangeListRef xScRanges = pChart->GetSourceData();
+    if( !xScRanges.Is() )
+        return 0;
+
+    OUString aEmbObjName;
+    Reference< XEmbeddedObject > xEmbObj = pDocShell->GetEmbeddedObjectContainer().
+            CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aEmbObjName );
+
+    /*  Set the size to the embedded object, this prevents that font sizes of
+        text objects are changed in the chart when the object is inserted into
+        the draw page. */
+    sal_Int64 nAspect = ::com::sun::star::embed::Aspects::MSOLE_CONTENT;
+    MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xEmbObj->getMapUnit( nAspect ) );
+    Size aSize( Window::LogicToLogic( rAnchorRect.GetSize(), MapMode( MAP_100TH_MM ), MapMode( aUnit ) ) );
+    ::com::sun::star::awt::Size aAwtSize;
+    aAwtSize.Width = aSize.Width();
+    aAwtSize.Height = aSize.Height();
+    xEmbObj->setVisualAreaSize( nAspect, aAwtSize );
+
+    // create the container OLE object
+    SdrOle2Obj* pSdrOleObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xEmbObj, nAspect ), aEmbObjName, rAnchorRect );
+    SdrObjectPtr xSdrObj( pSdrOleObj );
+    xSdrObj->NbcSetLayer( SC_LAYER_FRONT );
+
+    // create the chart array (core representation of source data)
+    ScChartArray aChartArray( GetDocPtr(), xScRanges, aEmbObjName );
+    aChartArray.SetHeaders( pChart->HasHeaderRow(), pChart->HasHeaderColumn() );
+
+    ::std::auto_ptr< SchMemChart > xMemChart( aChartArray.CreateMemChart() );
+    SchDLL::Update( xEmbObj, xMemChart.get() );
+    pSdrOleObj->GetNewReplacement();
+
+    // convert Excel chart to OOo Chart
+    if( svt::EmbeddedObjectRef::TryRunningState( xEmbObj ) )
+    {
+        Reference< XChartDocument > xChartDoc( xEmbObj->getComponent(), UNO_QUERY );
+        pChart->Convert( xChartDoc, *mxProgress );
+
+        Reference< XEmbedPersist > xPers( xEmbObj, UNO_QUERY );
+        if( xPers.is() )
+            xPers->storeOwn();
+    }
+
+    return xSdrObj.release();
+}
+
+void XclImpDffManager::UpdateUsedArea( const XclImpDrawObjBase& rDrawObj )
+{
+    ScRange aScObjArea( rDrawObj.GetUsedArea() );
+    if( aScObjArea.IsValid() )
+    {
+        ScRange* pScTabArea = 0;
+        ScRangeMap::iterator aIt = maUsedAreaMap.find( rDrawObj.GetScTab() );
+        if( aIt == maUsedAreaMap.end() )
+        {
+            pScTabArea = &maUsedAreaMap[ rDrawObj.GetScTab() ];
+            pScTabArea->SetInvalid();
+        }
+        else
+            pScTabArea = &aIt->second;
+
+        if( pScTabArea )
+            pScTabArea->ExtendTo( aScObjArea );
+    }
 }
 
 // The object manager =========================================================
 
 XclImpObjectManager::XclImpObjectManager( const XclImpRoot& rRoot ) :
-    XclImpRoot( rRoot ),
-    maEscherObjList( rRoot ),
-    mbStartWithDummy( true )
+    XclImpRoot( rRoot )
 {
 }
 
@@ -1587,447 +1731,227 @@ XclImpObjectManager::~XclImpObjectManager()
 {
 }
 
-const XclImpEscherObj* XclImpObjectManager::GetEscherObj( SCTAB nScTab, sal_uInt16 nObjId ) const
-{
-    return maEscherObjList.GetObj( nScTab, nObjId );
-}
-
-XclImpEscherObj* XclImpObjectManager::GetEscherObjAcc( SCTAB nScTab, sal_uInt16 nObjId )
-{
-    return maEscherObjList.GetObj( nScTab, nObjId );
-}
-
-const XclImpEscherObj* XclImpObjectManager::GetEscherObj( ULONG nStrmPos ) const
-{
-    return maEscherObjList.GetObj( nStrmPos );
-}
-
-XclImpEscherObj* XclImpObjectManager::GetEscherObjAcc( ULONG nStrmPos )
-{
-    return maEscherObjList.GetObj( nStrmPos );
-}
-
-const XclImpEscherObj* XclImpObjectManager::GetLastEscherObj() const
-{
-    return maEscherObjList.GetLastObj();
-}
-
-XclImpEscherObj* XclImpObjectManager::GetLastEscherObjAcc()
-{
-    return maEscherObjList.GetLastObj();
-}
-
-const XclEscherAnchor* XclImpObjectManager::GetEscherAnchor( ULONG nStrmPos ) const
-{
-    return maEscherObjList.GetAnchor( nStrmPos );
-}
-
-XclEscherAnchor* XclImpObjectManager::GetEscherAnchorAcc( ULONG nStrmPos )
-{
-    return maEscherObjList.GetAnchor( nStrmPos );
-}
-
-// *** Text boxes *** ---------------------------------------------------------
-
-const XclImpEscherTxo* XclImpObjectManager::GetEscherTxo( ULONG nStrmPos ) const
-{
-    const XclImpEscherObj* pEscherObj = GetEscherObj( nStrmPos );
-    return PTR_CAST( XclImpEscherTxo, pEscherObj );
-}
-
-XclImpEscherTxo* XclImpObjectManager::GetEscherTxoAcc( ULONG nStrmPos )
-{
-    return const_cast< XclImpEscherTxo* >( GetEscherTxo( nStrmPos ) );
-}
-
-const XclImpEscherNote* XclImpObjectManager::GetEscherNote( SCTAB nScTab, sal_uInt16 nObjId ) const
-{
-    const XclImpEscherObj* pEscherObj = GetEscherObj( nScTab, nObjId );
-    return PTR_CAST( XclImpEscherNote, pEscherObj );
-}
-
-// *** Chart *** --------------------------------------------------------------
-
-void XclImpObjectManager::StartNewChartObj()
-{
-    XclImpEscherObj aTmp( GetRoot() );
-    AppendEscherObj( new XclImpEscherChart( aTmp, true ) );
-}
-
-// *** OLE / controls *** -----------------------------------------------------
-
-bool XclImpObjectManager::CreateSdrObj( XclImpEscherOle& rOleObj )
-{
-    return rOleObj.IsControl() ?
-        GetOcxConverter().CreateSdrUnoObj( rOleObj ) :
-        GetDffManager().CreateSdrOleObj( rOleObj );
-}
-
-bool XclImpObjectManager::CreateSdrObj( XclImpEscherTbxCtrl& rCtrlObj )
-{
-    return GetOcxConverter().CreateSdrUnoObj( rCtrlObj );
-}
-
 // *** Read Excel records *** -------------------------------------------------
 
-void XclImpObjectManager::ReadMsodrawinggroup( XclImpStream& rStrm )
+void XclImpObjectManager::ReadMsoDrawingGroup( XclImpStream& rStrm )
 {
-    maStreamConsumer.ConsumeRecord( rStrm );
+    // Excel continues this record with MSODRAWINGGROUP and CONTINUE records, hmm.
+    rStrm.ResetRecord( true, EXC_ID_MSODRAWINGGROUP );
+    ReadEscherRecord( rStrm );
 }
 
-void XclImpObjectManager::ReadMsodrawing( XclImpStream& rStrm )
+void XclImpObjectManager::ReadMsoDrawing( XclImpStream& rStrm )
 {
     rStrm.ResetRecord( false );     // disable internal CONTINUE handling
-
-    if( !maStreamConsumer.HasData() )
-        return;
-
-    sal_uInt32 nRecSize = rStrm.GetRecSize();
-    ULONG nStrmPos = maStreamConsumer.Tell();
-    bool bClientTextBox = false;
-
-    static sal_Char aBuf[ 0x0200 ];
-
-    if( nRecSize )
-    {
-        const DffRecordHeader* pLatestRecHd = maStreamConsumer.ConsumeRecord( rStrm );
-        if( pLatestRecHd )
-        {
-            switch( pLatestRecHd->nRecType )
-            {
-                case DFF_msofbtClientData:
-                    maStreamConsumer.AppendData( aBuf, 0x0100 );
-                break;
-                case DFF_msofbtClientTextbox:
-                    maStreamConsumer.AppendData( aBuf, 0x0200 );
-                    if( nRecSize == 8 )
-                        bClientTextBox = true;
-                break;
-                case DFF_msofbtSolverContainer:
-                    maStreamConsumer.GetStream() >> GetSolverContainer();
-                break;
-            }
-        }
-    }
-
-    // create a new escher object, if this MSODRAWING is not a client text box
-    if( !bClientTextBox )
-        AppendEscherObj( new XclImpEscherObj( GetRoot(), nStrmPos, maStreamConsumer.Tell() ) );
+    ReadEscherRecord( rStrm );
 }
 
-void XclImpObjectManager::ReadMsodrawingselection( XclImpStream& rStrm )
+void XclImpObjectManager::ReadMsoDrawingSelection( XclImpStream& rStrm )
 {
-    // not supported
+    ReadEscherRecord( rStrm );
 }
 
 void XclImpObjectManager::ReadObj( XclImpStream& rStrm )
 {
     rStrm.ResetRecord( false );     // disable internal CONTINUE handling
 
-    sal_uInt16 nSubRecId, nSubRecSize;
+    XclImpDrawObjRef xDrawObj;
     bool bLoop = true;
     while( bLoop && (rStrm.GetRecLeft() >= 4) )
     {
+        sal_uInt16 nSubRecId, nSubRecSize;
         rStrm >> nSubRecId >> nSubRecSize;
         rStrm.PushPosition();
 
         switch( nSubRecId )
         {
-            case EXC_ID_OBJ_FTEND:      bLoop = false;                              break;
-            case EXC_ID_OBJ_FTCMO:      ReadObjFtCmo( rStrm );                      break;
-            case EXC_ID_OBJ_FTPIOGRBIT: ReadObjFtPioGrbit( rStrm );                 break;
-            case EXC_ID_OBJ_FTPICTFMLA: ReadObjFtPictFmla( rStrm, nSubRecSize );    break;
-            // TBX form control subrecords
-            case EXC_ID_OBJ_FTCBLS:
-            case EXC_ID_OBJ_FTSBSFMLA:
-            case EXC_ID_OBJ_FTLBSDATA:
-            case EXC_ID_OBJ_FTCBLSFMLA:
-            case EXC_ID_OBJ_FTSBS:
-            case EXC_ID_OBJ_FTGBODATA:
-            case EXC_ID_OBJ_FTMACRO:    ReadObjTbxSubRec( rStrm, nSubRecId );       break;
+            case EXC_ID_OBJ_FTEND:
+                bLoop = false;
+            break;
+            case EXC_ID_OBJ_FTCMO:
+                DBG_ASSERT( !xDrawObj, "XclImpObjectManager::ReadObj - multiple FTCMO subrecords" );
+                xDrawObj = XclImpDrawObjBase::ReadObjCmo( rStrm );
+            break;
+            default:
+                DBG_ASSERT( xDrawObj.is(), "XclImpObjectManager::ReadObj - missing leading FTCMO subrecord" );
+                if( xDrawObj.is() )
+                    xDrawObj->ReadSubRecord( rStrm, nSubRecId, nSubRecSize );
         }
 
         rStrm.PopPosition();
         // sometimes the last subrecord has an invalid length -> min()
         rStrm.Ignore( ::std::min< sal_uInt32 >( nSubRecSize, rStrm.GetRecLeft() ) );
     }
+
+    // try to read the chart substream
+    if( XclImpChartObj* pChartObj = dynamic_cast< XclImpChartObj* >( xDrawObj.get() ) )
+    {
+        bool bChartSubStrm = (rStrm.GetNextRecId() == EXC_ID5_BOF) && rStrm.StartNextRecord();
+        DBG_ASSERT( bChartSubStrm, "XclImpObjectManager::ReadObj - missing chart substream" );
+        if( bChartSubStrm )
+        {
+            sal_uInt16 nBofType;
+            rStrm.Ignore( 2 );
+            rStrm >> nBofType;
+            DBG_ASSERT( nBofType == EXC_BOF_CHART, "XclImpObjectManager::ReadObj - no chart BOF record" );
+            // try to read the substream anyway
+            pChartObj->ReadChartSubStream( rStrm );
+        }
+    }
+
+    // store the new object in the internal containers
+    if( xDrawObj.is() )
+    {
+        maObjMap[ maEscherStrm.Tell() ] = xDrawObj;
+        maObjMapId[ xDrawObj->GetObjId() ] = xDrawObj;
+    }
 }
 
 void XclImpObjectManager::ReadTxo( XclImpStream& rStrm )
 {
-    rStrm.ResetRecord( false );     // disable internal CONTINUE handling
-
-    sal_uInt16 nAlign, nOrient, nTextLen, nFormCnt;
-    ::std::auto_ptr< XclImpString > pString;
-
-    /*  Let this function read all records in every case, even if text cannot be
-        applied to the current object - this skips all CONTINUE records. */
-
-    // step 1: read TXO record
-    rStrm >> nAlign;
-    rStrm >> nOrient;
-    rStrm.Ignore( 6 );
-    rStrm >> nTextLen >> nFormCnt;
-    nFormCnt /= 8;
-
-    // step 2: read 1st CONTINUE with string
-    bool bValid = true;
-    if( nTextLen )
-    {
-        rStrm.StartNextRecord();
-        bValid = rStrm.IsValid() && (rStrm.GetRecId() == EXC_ID_CONT);
-        DBG_ASSERT( bValid, "XclImpObjectManager::ReadTxo - missing CONTINUE record" );
-        if( bValid )
-        {
-            rStrm.ResetRecord( false );
-            String aText( rStrm.ReadUniString( nTextLen ) );
-            pString.reset( new XclImpString( aText ) );
-        }
-    }
-
-    // step 3: read 2nd CONTINUE with format runs
-    if( bValid && pString.get() && nFormCnt )
-    {
-        rStrm.StartNextRecord();
-        bValid = rStrm.IsValid() && (rStrm.GetRecId() == EXC_ID_CONT);
-        DBG_ASSERT( bValid, "XclImpObjectManager::ReadTxo - missing CONTINUE record" );
-        if( bValid )
-        {
-            rStrm.ResetRecord( false );
-
-            sal_uInt16 nChar, nFont;
-            sal_uInt16 nCount = nFormCnt - 1;
-
-            for( sal_uInt16 nIndex = 0; nIndex < nCount; ++nIndex )
-            {
-                rStrm >> nChar >> nFont;
-                rStrm.Ignore( 4 );
-                pString->AppendFormat( nChar, nFont );
-            }
-        }
-    }
-
-    if( XclImpEscherObj* pEscherObj = GetLastEscherObjAcc() )
-    {
-        // only Escher Drawing objects can have text (Charts, OLE cannot)
-        if( bValid && pString.get() && pEscherObj->ISA( XclImpEscherDrawing ) )
-        {
-            XclImpEscherTxo* pTxoObj = PTR_CAST( XclImpEscherTxo, pEscherObj );
-            if( !pTxoObj )
-                // not yet a text object - create it
-                ReplaceEscherObj( pTxoObj = new XclImpEscherTxo( *pEscherObj ) );
-
-            pTxoObj->SetString( pString.release() );
-            pTxoObj->SetAlignment( nAlign );
-            pTxoObj->SetRotation( nOrient );
-        }
-    }
+    XclImpTxoDataRef xTxo( new XclImpTxoData( GetRoot() ) );
+    xTxo->ReadTxo( rStrm );
+    maTxoMap[ maEscherStrm.Tell() ] = xTxo;
 }
 
-void XclImpObjectManager::ReadChartSubStream( XclImpStream& rStrm )
+void XclImpObjectManager::ReadNote( XclImpStream& rStrm )
 {
-    if( XclImpEscherChart* pChartObj = PTR_CAST( XclImpEscherChart, GetLastEscherObj() ) )
-        pChartObj->ReadChartSubStream( rStrm );
-    else
-        XclTools::SkipSubStream( rStrm );
+    XclAddress aXclPos;
+    sal_uInt16 nFlags, nObjId;
+    rStrm >> aXclPos >> nFlags >> nObjId;
+
+    if( nObjId != EXC_OBJ_INVALID_ID )
+    {
+        SCTAB nScTab = GetCurrScTab();
+        ScAddress aScNotePos( ScAddress::UNINITIALIZED );
+        if( GetAddressConverter().ConvertAddress( aScNotePos, aXclPos, nScTab, true ) )
+            if( XclImpNoteObj* pNoteObj = dynamic_cast< XclImpNoteObj* >( FindDrawObj( XclObjId( nScTab, nObjId ) ).get() ) )
+                pNoteObj->SetNoteData( aScNotePos, nFlags );
+    }
 }
 
-// *** Misc *** ---------------------------------------------------------------
+void XclImpObjectManager::ReadTabChart( XclImpStream& rStrm )
+{
+    XclImpChartObjRef xChartObj( new XclImpChartObj( GetRoot(), true ) );
+    xChartObj->ReadChartSubStream( rStrm );
+    maTabCharts.push_back( xChartObj );
+}
+
+// *** Drawing objects *** ----------------------------------------------------
+
+XclImpDrawObjRef XclImpObjectManager::FindDrawObj( const DffRecordHeader& rHeader ) const
+{
+    /*  maObjMap stores objects by position of the client data (OBJ record) in
+        the Escher stream, which is always behind shape start position of the
+        passed header. The function upper_bound() finds the first element in
+        the map whose key is greater then the start position of the header. Its
+        end position is used to test whether the found object is really related
+        to the shape. */
+    XclImpDrawObjRef xDrawObj;
+    XclImpObjMap::const_iterator aIt = maObjMap.upper_bound( rHeader.GetRecBegFilePos() );
+    if( (aIt != maObjMap.end()) && (aIt->first <= rHeader.GetRecEndFilePos()) )
+        xDrawObj = aIt->second;
+    return xDrawObj;
+}
+
+XclImpDrawObjRef XclImpObjectManager::FindDrawObj( const XclObjId& rObjId ) const
+{
+    XclImpDrawObjRef xDrawObj;
+    XclImpObjMapById::const_iterator aIt = maObjMapId.find( rObjId );
+    if( aIt != maObjMapId.end() )
+        xDrawObj = aIt->second;
+    return xDrawObj;
+}
+
+XclImpTxoDataRef XclImpObjectManager::FindTxoData( const DffRecordHeader& rHeader ) const
+{
+    /*  maTxoMap stores textbox data by position of the client data (TXO record)
+        in the Escher stream, which is always behind shape start position of
+        the passed header. The function upper_bound() finds the first element
+        in the map whose key is greater then the start position of the header.
+        Its end position is used to test whether the found object is really
+        related to the shape. */
+    XclImpTxoDataRef xTxoData;
+    XclImpTxoMap::const_iterator aIt = maTxoMap.upper_bound( rHeader.GetRecBegFilePos() );
+    if( (aIt != maTxoMap.end()) && (aIt->first <= rHeader.GetRecEndFilePos()) )
+        xTxoData = aIt->second;
+    return xTxoData;
+}
+
+void XclImpObjectManager::SetInvalidObj( SCTAB nScTab, sal_uInt16 nObjId )
+{
+    maInvalidObjs.push_back( XclObjId( nScTab, nObjId ) );
+}
+
+// *** Drawing object conversion *** ------------------------------------------
 
 XclImpDffManager& XclImpObjectManager::GetDffManager()
 {
-    //TODO/MBA: needs to be fixed!
-    if( !mxDffManager.get() )
-        mxDffManager.reset( new XclImpDffManager( GetRoot(), *this, 0, 0, GetDoc().GetDrawLayer(), 1440 ) );
+    if( !mxDffManager )
+        mxDffManager.reset( new XclImpDffManager( GetRoot(), *this, maEscherStrm ) );
     return *mxDffManager;
 }
 
-void XclImpObjectManager::UpdateConnectorRules( const DffObjData& rObjData, SdrObject& rSdrObj )
+void XclImpObjectManager::ConvertObjects()
 {
-    for( SvxMSDffConnectorRule* pRule = GetFirstConnectorRule(); pRule; pRule = GetNextConnectorRule() )
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "sc", "dr104026", "XclImpObjectManager::ConvertObjects" );
+
+    // process list of identifiers of invalid objects
+    for( XclObjIdVec::const_iterator aVIt = maInvalidObjs.begin(), aVEnd = maInvalidObjs.end(); aVIt != aVEnd; ++aVIt )
+        if( XclImpDrawObjBase* pDrawObj = FindDrawObj( *aVIt ).get() )
+            pDrawObj->SetInvalid();
+
+    sal_uInt32 nProgressSize = GetProgressSize();
+    if( nProgressSize > 0 )
     {
-        if( rObjData.nShapeId == pRule->nShapeC )
-        {
-            pRule->pCObj = &rSdrObj;
-        }
-        else
-        {
-            // #i37900# - remove fix for #i12638#
-            if( rObjData.nShapeId == pRule->nShapeA )
-            {
-                pRule->pAObj = &rSdrObj;
-                pRule->nSpFlagsA = rObjData.nSpFlags;
-            }
-            if( rObjData.nShapeId == pRule->nShapeB )
-            {
-                pRule->pBObj = &rSdrObj;
-                pRule->nSpFlagsB = rObjData.nSpFlags;
-            }
-        }
+        XclImpDffManager& rDffManager = GetDffManager();
+        rDffManager.StartProgressBar( nProgressSize );
+        // process the Escher stream, this inserts the objects into the drawing layer
+        rDffManager.ProcessEscherStream( maEscherStrm );
+        // chart sheets
+        for( XclImpChartObjList::const_iterator aLIt = maTabCharts.begin(), aLEnd = maTabCharts.end(); aLIt != aLEnd; ++aLIt )
+            rDffManager.ProcessTabChart( **aLIt );
     }
 }
 
-void XclImpObjectManager::SetSkipObj( SCTAB nScTab, sal_uInt16 nObjId )
+ScRange XclImpObjectManager::GetUsedArea( SCTAB nScTab ) const
 {
-    maSkipObjVec.push_back( XclSkipObj( nScTab, nObjId ) );
-}
-
-void XclImpObjectManager::Apply( ScfProgressBar& rProgress )
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "sc", "dr104026", "XclImpObjectManager::Apply" );
-
-    // mark objects to be skipped
-    for( XclSkipObjVec::const_iterator aIt = maSkipObjVec.begin(), aEnd = maSkipObjVec.end(); aIt != aEnd; ++aIt )
-        if( XclImpEscherObj* pEscherObj = maEscherObjList.GetObj( aIt->mnScTab, aIt->mnObjId ) )
-            pEscherObj->SetSkip();
-
-    // insert the objects into the drawing layer
-    maEscherObjList.Apply( rProgress );
-
-    // connector rules
-    if( mxSolverContainer.get() )
-        GetDffManager().SolveSolver( *mxSolverContainer );
-}
-
-void XclImpObjectManager::ExtendUsedArea( ScRange& rScUsedArea, SCTAB nScTab ) const
-{
-    maEscherObjList.ExtendUsedArea( rScUsedArea, nScTab );
+    ScRange aScUsedArea( ScAddress::INITIALIZE_INVALID );
+    if( mxDffManager.is() )
+        aScUsedArea = mxDffManager->GetUsedArea( nScTab );
+    return aScUsedArea;
 }
 
 // private --------------------------------------------------------------------
 
-void XclImpObjectManager::AppendEscherObj( XclImpEscherObj* pEscherObj )
+void XclImpObjectManager::ReadEscherRecord( XclImpStream& rStrm )
 {
-    if( mbStartWithDummy )    // insert dummy object for invalid first shape
+    sal_uInt32 nRecSize = rStrm.GetRecSize();
+    if( nRecSize > 0 )
     {
-        maEscherObjList.AppendDummyObj( new XclImpEscherObj( GetRoot() ) );
-        mbStartWithDummy = false;
-    }
-    maEscherObjList.AppendObj( pEscherObj );
-}
-
-void XclImpObjectManager::ReplaceEscherObj( XclImpEscherObj* pEscherObj )
-{
-    maEscherObjList.ReplaceLastObj( pEscherObj );
-}
-
-void XclImpObjectManager::ReadObjFtCmo( XclImpStream& rStrm )
-{
-    XclImpEscherObj* pEscherObj = GetLastEscherObjAcc();
-    if( !pEscherObj )
-        return;
-
-    sal_uInt16 nObjType, nObjId, nFlags;
-    rStrm >> nObjType >> nObjId >> nFlags;
-
-    pEscherObj->SetObjId( nObjId );
-    pEscherObj->SetPrintable(::get_flag( nFlags, EXC_OBJ_CMO_PRINTABLE) );
-
-    switch( nObjType )
-    {
-        case EXC_OBJ_CMO_GROUP:
-        case EXC_OBJ_CMO_LINE:
-        case EXC_OBJ_CMO_ARC:
-            ReplaceEscherObj( new XclImpEscherDrawing( *pEscherObj, false ) );
-        break;
-        case EXC_OBJ_CMO_RECTANGLE:
-        case EXC_OBJ_CMO_ELLIPSE:
-        case EXC_OBJ_CMO_POLYGON:
-        case EXC_OBJ_CMO_DRAWING:
-            ReplaceEscherObj( new XclImpEscherDrawing( *pEscherObj, true ) );
-        break;
-        case EXC_OBJ_CMO_TEXT:
-            ReplaceEscherObj( new XclImpEscherTxo( *pEscherObj ) );
-        break;
-        case EXC_OBJ_CMO_NOTE:
-            ReplaceEscherObj( new XclImpEscherNote( *pEscherObj ) );
-        break;
-        case EXC_OBJ_CMO_BUTTON:
-        case EXC_OBJ_CMO_CHECKBOX:
-        case EXC_OBJ_CMO_OPTIONBUTTON:
-        case EXC_OBJ_CMO_LABEL:
-        case EXC_OBJ_CMO_GROUPBOX:
-        case EXC_OBJ_CMO_LISTBOX:
-        case EXC_OBJ_CMO_COMBOBOX:
-        case EXC_OBJ_CMO_SPIN:
-        case EXC_OBJ_CMO_SCROLLBAR:
-            ReplaceEscherObj( new XclImpEscherTbxCtrl( *pEscherObj, nObjType ) );
-        break;
-        case EXC_OBJ_CMO_PICTURE:
-            ReplaceEscherObj( new XclImpEscherOle( *pEscherObj ) );
-        break;
-        case EXC_OBJ_CMO_CHART:
-            ReplaceEscherObj( new XclImpEscherChart( *pEscherObj, false ) );
-        break;
-        case EXC_OBJ_CMO_EDIT:          // only in dialogs
-        case EXC_OBJ_CMO_DIALOG:        // not supported
-            pEscherObj->SetSkip();
-        break;
-        default:
-            DBG_ERROR1( "XclImpObjectManager::ReadObjFtCmo - unknown object type 0x%04hX", nObjType );
-            ReplaceEscherObj( new XclImpEscherDrawing( *pEscherObj, true ) );
+        ScfUInt8Vec aBuffer( nRecSize );
+        // read from input stream
+        rStrm.Seek( EXC_REC_SEEK_TO_BEGIN );
+        rStrm.Read( &aBuffer.front(), nRecSize );
+        // write to Escher stream
+        maEscherStrm.Seek( STREAM_SEEK_TO_END );
+        maEscherStrm.Write( &aBuffer.front(), nRecSize );
     }
 }
 
-void XclImpObjectManager::ReadObjFtPioGrbit( XclImpStream& rStrm )
+void XclImpObjectManager::ReadChartSubStream( XclImpStream& rStrm, XclImpChartObj& rChartObj )
 {
-    if( XclImpEscherOle* pOleObj = PTR_CAST( XclImpEscherOle, GetLastEscherObj() ) )
-        pOleObj->ReadPioGrbit( rStrm );
-    else
-        DBG_ERRORFILE( "XclImpObjectManager::ReadObjFtPioGrbit - no OLE object" );
+    rChartObj.ReadChartSubStream( rStrm );
 }
 
-void XclImpObjectManager::ReadObjFtPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
+sal_uInt32 XclImpObjectManager::GetProgressSize() const
 {
-    if( XclImpEscherOle* pOleObj = PTR_CAST( XclImpEscherOle, GetLastEscherObj() ) )
-        pOleObj->ReadPictFmla( rStrm, nRecSize );
-    else
-        DBG_ERRORFILE( "XclImpObjectManager::ReadObjFtPictFmla - no OLE object" );
-}
-
-void XclImpObjectManager::ReadObjTbxSubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId )
-{
-    if( XclImpEscherTbxCtrl* pCtrlObj = PTR_CAST( XclImpEscherTbxCtrl, GetLastEscherObj() ) )
-    {
-        switch( nSubRecId )
-        {
-            case EXC_ID_OBJ_FTCBLS:     pCtrlObj->ReadCbls( rStrm );        break;
-            case EXC_ID_OBJ_FTLBSDATA:  pCtrlObj->ReadLbsData( rStrm );     break;
-            case EXC_ID_OBJ_FTSBSFMLA:  // equal to ftCblsFmla
-            case EXC_ID_OBJ_FTCBLSFMLA: pCtrlObj->ReadCblsFmla( rStrm );    break;
-            case EXC_ID_OBJ_FTSBS:      pCtrlObj->ReadSbs( rStrm );         break;
-            case EXC_ID_OBJ_FTGBODATA:  pCtrlObj->ReadGboData( rStrm );     break;
-            case EXC_ID_OBJ_FTMACRO:    pCtrlObj->ReadMacro( rStrm );       break;
-
-            default:    DBG_ERRORFILE( "XclImpObjectManager::ReadObjTbxSubRec - unknown subrecord" );
-        }
-    }
-}
-
-XclImpOcxConverter& XclImpObjectManager::GetOcxConverter()
-{
-    if( !mxOcxConverter.get() )
-        mxOcxConverter.reset( new XclImpOcxConverter( GetRoot() ) );
-    return *mxOcxConverter;
-}
-
-SvxMSDffSolverContainer& XclImpObjectManager::GetSolverContainer()
-{
-    if( !mxSolverContainer.get() )
-        mxSolverContainer.reset( new SvxMSDffSolverContainer );
-    return *mxSolverContainer;
-}
-
-SvxMSDffConnectorRule* XclImpObjectManager::GetFirstConnectorRule()
-{
-    void* pRule = mxSolverContainer.get() ? mxSolverContainer->aCList.First() : 0;
-    return static_cast< SvxMSDffConnectorRule* >( pRule );
-}
-
-SvxMSDffConnectorRule* XclImpObjectManager::GetNextConnectorRule()
-{
-    void* pRule = mxSolverContainer.get() ? mxSolverContainer->aCList.Next() : 0;
-    return static_cast< SvxMSDffConnectorRule* >( pRule );
+    sal_uInt32 nProgressSize = 0;
+    for( XclImpObjMap::const_iterator aMIt = maObjMap.begin(), aMEnd = maObjMap.end(); aMIt != aMEnd; ++aMIt )
+        nProgressSize += aMIt->second->GetProgressSize();
+    for( XclImpChartObjList::const_iterator aLIt = maTabCharts.begin(), aLEnd = maTabCharts.end(); aLIt != aLEnd; ++aLIt )
+        nProgressSize += (*aLIt)->GetProgressSize();
+    return nProgressSize;
 }
 
 // Escher property set helper =================================================
