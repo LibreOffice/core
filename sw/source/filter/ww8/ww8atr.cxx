@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:09:34 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:25:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1008,7 +1008,9 @@ String SwWW8Writer::GetBookmarkName( USHORT nTyp, const String* pNm,
             sRet += String::CreateFromInt32( nSeqNo );
             break;
     }
-    return sRet;
+    // --> OD 2005-06-08 #i43956# - encode bookmark accordingly
+    return BookmarkToWord( sRet );
+    // <--
 }
 
 //-----------------------------------------------------------------------
@@ -1682,8 +1684,10 @@ static Writer& OutSwFmtINetFmt( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
-
-static void InsertSpecialChar( SwWW8Writer& rWrt, BYTE c )
+// --> OD 2005-06-08 #i43956# - add optional parameter <_pLinkStr>
+// It's needed to write the hyperlink data for a certain cross-reference
+// - it contains the name of the link target, which is a bookmark.
+static void InsertSpecialChar( SwWW8Writer& rWrt, BYTE c, String* _pLinkStr = 0L )
 {
     WW8Bytes aItems;
     rWrt.GetCurrentItems(aItems);
@@ -1696,6 +1700,51 @@ static void InsertSpecialChar( SwWW8Writer& rWrt, BYTE c )
 
     rWrt.WriteChar(c);
 
+    // --> OD 2005-06-08 #i43956# - write hyperlink data and attributes
+    if ( rWrt.bWrtWW8 && c == 0x01 && _pLinkStr)
+    {
+        // write hyperlink data to data stream
+        SvStream& rStrm = *rWrt.pDataStrm;
+        // position of hyperlink data
+        const UINT32 nLinkPosInDataStrm = rStrm.Tell();
+        // write empty header
+        const UINT16 nEmptyHdrLen = 0x44;
+        BYTE aEmptyHeader[ nEmptyHdrLen ] = { 0 };
+        aEmptyHeader[ 4 ] = 0x44;
+        rStrm.Write( aEmptyHeader, nEmptyHdrLen );
+        // writer fixed header
+        const UINT16 nFixHdrLen = 0x19;
+        BYTE aFixHeader[ nFixHdrLen ] =
+        {
+            0x08, 0xD0, 0xC9, 0xEA, 0x79, 0xF9, 0xBA, 0xCE,
+            0x11, 0x8C, 0x82, 0x00, 0xAA, 0x00, 0x4B, 0xA9,
+            0x0B, 0x02, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00,
+            0x00,
+        };
+        rStrm.Write( aFixHeader, nFixHdrLen );
+        // write reference string including length+1
+        UINT32 nStrLen( _pLinkStr->Len() + 1 );
+        SwWW8Writer::WriteLong( rStrm, nStrLen );
+        SwWW8Writer::WriteString16( rStrm, *(_pLinkStr), false );
+        // write additional two NULL Bytes
+        SwWW8Writer::WriteLong( rStrm, 0 );
+        // write length of hyperlink data
+        const UINT32 nCurrPos = rStrm.Tell();
+        rStrm.Seek( nLinkPosInDataStrm );
+        SVBT32 nLen;
+        LongToSVBT32( nCurrPos - nLinkPosInDataStrm, nLen );
+        rStrm.Write( nLen, 4 );
+        rStrm.Seek( nCurrPos );
+
+        // write attributes of hyperlink character 0x01
+        SwWW8Writer::InsUInt16( aItems, 0x0802 );
+        aItems.Insert( (BYTE)0x81, aItems.Count() );
+        SwWW8Writer::InsUInt16( aItems, 0x6a03 );
+        SwWW8Writer::InsUInt32( aItems, nLinkPosInDataStrm );
+        SwWW8Writer::InsUInt16( aItems, 0x0806 );
+        aItems.Insert( (BYTE)0x01, aItems.Count() );
+    }
+    // <--
     // fSpec-Attribut true
     if( rWrt.bWrtWW8 )
         SwWW8Writer::InsUInt16( aItems, 0x855 );
@@ -1766,6 +1815,30 @@ void SwWW8Writer::OutField(const SwField* pFld, ww::eField eFldType,
             SwWW8Writer::WriteString8(Strm(), rFldCmd, false,
                 RTL_TEXTENCODING_MS_1252);
         }
+        // --> OD 2005-06-08 #i43956# - write hyperlink character including
+        // attributes and corresponding binary data for certain reference fields.
+        if ( pFld && pFld->GetTyp()->Which() == RES_GETREFFLD &&
+             ( eFldType == ww::ePAGEREF || eFldType == ww::eREF ||
+               eFldType == ww::eNOTEREF || eFldType == ww::eFOOTREF ) )
+        {
+            // retrieve reference destionation - the name of the bookmark
+            String aLinkStr;
+            const USHORT nSubType = pFld->GetSubType();
+            const SwGetRefField& rRFld = *(static_cast<const SwGetRefField*>(pFld));
+            if ( nSubType == REF_SETREFATTR ||
+                 nSubType == REF_BOOKMARK )
+            {
+                aLinkStr = GetBookmarkName( nSubType, &rRFld.GetSetRefName(), 0 );
+            }
+            else if ( nSubType == REF_FOOTNOTE ||
+                      nSubType == REF_ENDNOTE )
+            {
+                aLinkStr = GetBookmarkName( nSubType, 0, rRFld.GetSeqNo() );
+            }
+            // insert hyperlink character including attributes and data.
+            InsertSpecialChar( *this, 0x01, &aLinkStr );
+        }
+        // <--
     }
     if (WRITEFIELD_CMD_END & nMode)
     {
