@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:39:01 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:07:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2522,11 +2522,14 @@ void _FndBox::MakeFrms( SwTable &rTable )
                                                     rTable.GetTabLines()[i];
                 SwClientIter aIter( *pLine->GetFrmFmt() );
                 pSibling = (SwFrm*)aIter.First( TYPE(SwFrm) );
-                while ( pSibling &&
-                        ( ((SwRowFrm*)pSibling)->GetTabLine() != pLine ||
-                          !lcl_IsLineOfTblFrm( *pTable, *pSibling ) ||
-                           pSibling->IsInFollowFlowRow() ) )
-                      pSibling = (SwFrm*)aIter.Next();
+                while ( pSibling && (
+                            static_cast<SwRowFrm*>(pSibling)->GetTabLine() != pLine ||
+                            !lcl_IsLineOfTblFrm( *pTable, *pSibling ) ||
+                            static_cast<SwRowFrm*>(pSibling)->IsRepeatedHeadline() ||
+                            pSibling->IsInFollowFlowRow() ) )
+                {
+                    pSibling = (SwFrm*)aIter.Next();
+                }
             }
             if ( pSibling )
             {
@@ -2588,11 +2591,18 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const USHORT nNumber,
                 {
                     SwClientIter aIter( *pLineBehind->GetFrmFmt() );
                     pSibling = (SwFrm*)aIter.First( TYPE(SwFrm) );
-                    while ( pSibling &&
-                            ( ((SwRowFrm*)pSibling)->GetTabLine() != pLineBehind ||
-                              !lcl_IsLineOfTblFrm( *pTable, *pSibling ) ||
-                              pSibling->IsInFollowFlowRow() ) )
+                    while ( pSibling && (
+                                // only consider row frames associated with pLineBehind:
+                                static_cast<SwRowFrm*>(pSibling)->GetTabLine() != pLineBehind ||
+                                // only consider row frames that are in pTables Master-Follow chain:
+                                !lcl_IsLineOfTblFrm( *pTable, *pSibling ) ||
+                                // only consider row frames that are not repeated headlines:
+                                static_cast<SwRowFrm*>(pSibling)->IsRepeatedHeadline() ||
+                                // only consider row frames that are not follow flow rows
+                                pSibling->IsInFollowFlowRow() ) )
+                    {
                           pSibling = (SwFrm*)aIter.Next();
+                    }
                 }
                 if ( pSibling )
                     pUpper = pSibling->GetUpper();
