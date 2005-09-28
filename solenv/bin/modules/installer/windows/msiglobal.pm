@@ -4,9 +4,9 @@
 #
 #   $RCSfile: msiglobal.pm,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:19:50 $
+#   last change: $Author: hr $ $Date: 2005-09-28 13:16:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1413,7 +1413,7 @@ sub put_msiproductversion_into_bootstrapfile
     {
         my $onefile = ${$filesref}[$i];
 
-        if ( $onefile->{'gid'} eq "gid_Profile_Bootstrap_Ini" )
+        if ( $onefile->{'gid'} eq "gid_Profile_Version_Ini" )
         {
             my $file = installer::files::read_file($onefile->{'sourcepath'});
 
