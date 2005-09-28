@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:08:02 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:30:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -348,7 +348,9 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
     switch( nSlot )
     {
         case SID_CREATE_SW_DRAWVIEW:
-            pWrtShell->GetDoc()->MakeDrawModel();
+            // --> OD 2005-08-08 #i52858# - method name changed
+            pWrtShell->GetDoc()->GetOrCreateDrawModel();
+            // <--
             break;
 
         case FN_LINE_NUMBERING_DLG:
