@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:12:51 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:19:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,6 @@
 #include "sc.hrc"
 #include "globstr.hrc"
 
-#include "arealink.hxx"
 #include "attrib.hxx"
 #include "autoform.hxx"
 #include "cell.hxx"                 // EnterAutoSum
@@ -1865,7 +1864,11 @@ BOOL ScViewFunc::DeleteTables(const SvShorts &TheTabs, BOOL bRecord )
 
         pDocSh->PostPaintExtras();
         pDocSh->SetDocumentModified();
-        SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+
+        SfxApplication* pSfxApp = SFX_APP();                                // Navigator
+        pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+        pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
+        pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
     }
     else
     {
@@ -1899,42 +1902,12 @@ void ScViewFunc::InsertAreaLink( const String& rFile,
                                     const String& rSource, ULONG nRefresh )
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    ScDocument* pDoc = pDocSh->GetDocument();
     SCCOL nPosX = GetViewData()->GetCurX();
     SCROW nPosY = GetViewData()->GetCurY();
     SCTAB nTab = GetViewData()->GetTabNo();
     ScAddress aPos( nPosX, nPosY, nTab );
-    BOOL bUndo (pDoc->IsUndoEnabled());
 
-    String aFilterName = rFilter;
-    String aNewOptions = rOptions;
-    if (!aFilterName.Len())
-        ScDocumentLoader::GetFilterName( rFile, aFilterName, aNewOptions, TRUE );
-
-    SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
-
-    ScAreaLink* pLink = new ScAreaLink( pDocSh, rFile, aFilterName, aNewOptions, rSource, aPos, nRefresh );
-    pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, rFile, &aFilterName, &rSource );
-
-    //  Undo fuer den leeren Link
-
-    if (bUndo)
-    {
-        pDocSh->GetUndoManager()->AddUndoAction( new ScUndoInsertAreaLink( pDocSh,
-                                                    rFile, aFilterName, aNewOptions,
-                                                    rSource, ScRange(aPos), nRefresh ) );
-    }
-
-    //  Update hat sein eigenes Undo
-
-    pLink->SetDoInsert(FALSE);  // beim ersten Update nichts einfuegen
-    pLink->Update();            // kein SetInCreate -> Update ausfuehren
-    pLink->SetDoInsert(TRUE);   // Default = TRUE
-
-    SfxBindings& rBindings = GetViewData()->GetBindings();
-    rBindings.Invalidate( SID_LINKS );
-
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );     // Navigator
+    pDocSh->GetDocFunc().InsertAreaLink( rFile, rFilter, rOptions, rSource, aPos, nRefresh, FALSE, FALSE );
 }
 
 
