@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:12:54 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:12:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -622,7 +622,11 @@ void SwFlyLayFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                                 pPage = (SwPageFrm*)pPage->GetNext() )
             {
                 if ( i == nPgNum )
-                    pPage->PlaceFly( this, 0, pAnch );
+                {
+                    // --> OD 2005-06-09 #i50432# - adjust synopsis of <PlaceFly(..)>
+                    pPage->PlaceFly( this, 0 );
+                    // <--
+                }
             }
             if( !pPage )
             {
@@ -991,23 +995,31 @@ void SwPageFrm::RemoveDrawObjFromPage( SwAnchoredObject& _rToRemoveObj )
 |*
 |*************************************************************************/
 
-SwFrm *SwPageFrm::PlaceFly( SwFlyFrm *pFly, SwFrmFmt *pFmt,
-                            const SwFmtAnchor *pAnch )
+// --> OD 2005-06-09 #i50432# - adjust method description and synopsis.
+void SwPageFrm::PlaceFly( SwFlyFrm* pFly, SwFlyFrmFmt* pFmt )
 {
-    //Der Fly will immer an der Seite direkt haengen.
-    ASSERT( pAnch->GetAnchorId() == FLY_PAGE, "Unerwartete AnchorId." );
-
-    //Wenn ein Fly uebergeben wurde, so benutzen wir diesen, ansonsten wird
-    //mit dem Format einer erzeugt.
-    if ( pFly )
-        AppendFly( pFly );
-    else
-    {   ASSERT( pFmt, ":-( kein Format fuer Fly uebergeben." );
-        pFly = new SwFlyLayFrm( (SwFlyFrmFmt*)pFmt, this );
-        AppendFly( pFly );
-        ::RegistFlys( this, pFly );
+    // --> OD 2005-06-09 #i50432# - consider the case that page is an empty page:
+    // In this case append the fly frame at the next page
+    ASSERT( !IsEmptyPage() || GetNext(),
+            "<SwPageFrm::PlaceFly(..)> - empty page with no next page! -> fly frame appended at empty page" );
+    if ( IsEmptyPage() && GetNext() )
+    {
+        static_cast<SwPageFrm*>(GetNext())->PlaceFly( pFly, pFmt );
     }
-    return pFly;
+    else
+    {
+        //Wenn ein Fly uebergeben wurde, so benutzen wir diesen, ansonsten wird
+        //mit dem Format einer erzeugt.
+        if ( pFly )
+            AppendFly( pFly );
+        else
+        {   ASSERT( pFmt, ":-( kein Format fuer Fly uebergeben." );
+            pFly = new SwFlyLayFrm( (SwFlyFrmFmt*)pFmt, this );
+            AppendFly( pFly );
+            ::RegistFlys( this, pFly );
+        }
+    }
+    // <--
 }
 
 /*************************************************************************
