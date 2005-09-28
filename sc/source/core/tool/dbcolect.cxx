@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbcolect.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:41:45 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:36:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1114,6 +1114,24 @@ BOOL ScDBCollection::Store( SvStream& rStream ) const
     rStream << nEntryIndex;             // seit 24.10.95
 
     return bSuccess;
+}
+
+void ScDBCollection::DeleteOnTab( SCTAB nTab )
+{
+    USHORT nPos = 0;
+    while ( nPos < nCount )
+    {
+        // look for output positions on the deleted sheet
+
+        SCCOL nEntryCol1, nEntryCol2;
+        SCROW nEntryRow1, nEntryRow2;
+        SCTAB nEntryTab;
+        static_cast<const ScDBData*>(At(nPos))->GetArea( nEntryTab, nEntryCol1, nEntryRow1, nEntryCol2, nEntryRow2 );
+        if ( nEntryTab == nTab )
+            AtFree(nPos);
+        else
+            ++nPos;
+    }
 }
 
 void ScDBCollection::UpdateReference(UpdateRefMode eUpdateRefMode,
