@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlroot.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:09:40 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:53:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,18 @@
 #include "xlroot.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HPP_
+#include <com/sun/star/i18n/ScriptType.hpp>
+#endif
+
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
 #ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
+#endif
+#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
+#include <svtools/languageoptions.hxx>
 #endif
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
@@ -105,6 +112,8 @@
 
 namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
 
+namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
+
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::frame::XModel;
@@ -132,6 +141,7 @@ XclRootData::XclRootData( XclBiff eBiff,
     meSysLang( Application::GetSettings().GetLanguage() ),
     meDocLang( Application::GetSettings().GetLanguage() ),
     meUILang( Application::GetSettings().GetUILanguage() ),
+    mnDefApiScript( ApiScriptType::LATIN ),
     maScMaxPos( MAXCOL, MAXROW, MAXTAB ),
     maXclMaxPos( EXC_MAXCOL2, EXC_MAXROW2, EXC_MAXTAB2 ),
     maMaxPos( EXC_MAXCOL2, EXC_MAXROW2, EXC_MAXTAB2 ),
@@ -141,6 +151,15 @@ XclRootData::XclRootData( XclBiff eBiff,
     mbHasPassw( false ),
     mxRD( new RootData )//!
 {
+    // default script type, e.g. for empty cells
+    switch( ScGlobal::GetDefaultScriptType() )
+    {
+        case SCRIPTTYPE_LATIN:      mnDefApiScript = ApiScriptType::LATIN;      break;
+        case SCRIPTTYPE_ASIAN:      mnDefApiScript = ApiScriptType::ASIAN;      break;
+        case SCRIPTTYPE_COMPLEX:    mnDefApiScript = ApiScriptType::COMPLEX;    break;
+        default:    DBG_ERRORFILE( "XclRootData::XclRootData - unknown script type" );
+    }
+
     // maximum cell position
     switch( meBiff )
     {
