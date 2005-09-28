@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xename.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:00:56 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:45:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,6 +148,8 @@ public:
     sal_uInt16          InsertBuiltInName( sal_Unicode cBuiltIn, XclExpTokenArrayRef xTokArr, SCTAB nScTab );
     /** Inserts a new defined name. Sets another unused name, if rName already exists. */
     sal_uInt16          InsertUniqueName( const String& rName, XclExpTokenArrayRef xTokArr, SCTAB nScTab );
+    /** Returns index of an existing name, or creates a name without definition. */
+    sal_uInt16          InsertRawName( const String& rName );
     /** Searches or inserts a defined name describing a macro name.
         @param bFunc  true = Macro function; false = Macro procedure. */
     sal_uInt16          InsertMacroCall( const String& rMacroName, bool bFunc );
@@ -375,6 +377,25 @@ sal_uInt16 XclExpNameManagerImpl::InsertUniqueName(
     XclExpNameRef xName( new XclExpName( GetRoot(), GetUnusedName( rName ) ) );
     xName->SetTokenArray( xTokArr );
     xName->SetLocalTab( nScTab );
+    return Append( xName );
+}
+
+sal_uInt16 XclExpNameManagerImpl::InsertRawName( const String& rName )
+{
+    // empty name? may occur in broken external Calc tokens
+    if( !rName.Len() )
+        return 0;
+
+    // try to find an existing NAME record, regardless of its type
+    for( size_t nListIdx = mnFirstUserIdx, nListSize = maNameList.Size(); nListIdx < nListSize; ++nListIdx )
+    {
+        XclExpNameRef xName = maNameList.GetRecord( nListIdx );
+        if( xName->IsGlobal() && (xName->GetOrigName() == rName) )
+            return static_cast< sal_uInt16 >( nListIdx + 1 );
+    }
+
+    // create a new NAME record
+    XclExpNameRef xName( new XclExpName( GetRoot(), rName ) );
     return Append( xName );
 }
 
@@ -669,6 +690,11 @@ sal_uInt16 XclExpNameManager::InsertUniqueName(
         const String& rName, XclExpTokenArrayRef xTokArr, SCTAB nScTab )
 {
     return mxImpl->InsertUniqueName( rName, xTokArr, nScTab );
+}
+
+sal_uInt16 XclExpNameManager::InsertRawName( const String& rName )
+{
+    return mxImpl->InsertRawName( rName );
 }
 
 sal_uInt16 XclExpNameManager::InsertMacroCall( const String& rMacroName, bool bFunc )
