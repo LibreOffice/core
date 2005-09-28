@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeformula.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:00:07 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:45:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,7 +154,7 @@ struct XclExpCompConfig
     XclExpTokenClassType meClassType;   /// Token class handling type.
     XclExpLinkMgrType   meLinkMgrType;  /// Link manager to be used.
     bool                mbFromCell;     /// True = Any kind of cell formula (cell, array, shared).
-    bool                mb3DRefOnly;    /// True = Only 3D references allowed (i.e. names).
+    bool                mb3DRefOnly;    /// True = Only 3D references allowed (e.g. names).
     bool                mbStopAtSep;    /// True = Stop compilation at ocSep in root level.
 };
 
@@ -317,6 +317,7 @@ private:
     // XclExpTokenData: pass-by-value and return-by-value is intended
 
     const ScToken*      GetNextRawToken();
+    const ScToken*      PeekNextRawToken( bool bSkipSpaces ) const;
 
     bool                GetNextToken( XclExpTokenData& rTokData );
     XclExpTokenData     GetNextToken();
@@ -347,6 +348,7 @@ private:
     void                ProcessParentheses( const XclExpTokenData& rTokData, sal_uInt8 nExpClass );
     void                ProcessBoolean( const XclExpTokenData& rTokData );
     void                ProcessDdeLink( const XclExpTokenData& rTokData, sal_uInt8 nExpClass );
+    void                ProcessExternal( const XclExpTokenData& rTokData, sal_uInt8 nExpClass );
 
     void                ProcessFunction( const XclExpTokenData& rTokData, sal_uInt8 nExpClass );
     void                FinishFunction( XclExpFuncData& rFuncData, sal_uInt8 nCloseSpaces );
@@ -408,6 +410,7 @@ private:
     void                AppendErrorToken( sal_uInt8 nErrCode, sal_uInt8 nSpaces = 0 );
     void                AppendMissingToken( sal_uInt8 nSpaces = 0 );
     void                AppendNameToken( sal_uInt16 nNameIdx, sal_uInt8 nExpClass, sal_uInt8 nSpaces = 0 );
+    void                AppendMissingNameToken( const String& rName, sal_uInt8 nExpClass, sal_uInt8 nSpaces = 0 );
     void                AppendMacroCallToken( const String& rFuncName, sal_uInt8 nExpClass, sal_uInt8 nSpaces = 0 );
     void                AppendAddInFuncToken( const String& rFuncName, sal_uInt8 nExpClass, sal_uInt8 nSpaces = 0 );
     void                AppendNameXToken( sal_uInt16 nExtSheet, sal_uInt16 nExtName, sal_uInt8 nExpClass, sal_uInt8 nSpaces = 0 );
@@ -490,18 +493,38 @@ XclExpTokenArrayRef XclExpFmlaCompImpl::CreateFormula( XclExpFomulaType eType,
     // start compilation, if initialization didn't fail
     if( mbOk )
     {
-        // expected class is VAL in cell and array formulas, and REF in names
-        sal_uInt8 nExpClass = (maCfg.meClassType == EXC_CLASSTYPE_NAME) ? EXC_TOKCLASS_REF : EXC_TOKCLASS_VAL;
-        XclExpTokenData aTokData( Expression( GetNextToken(), nExpClass, maCfg.mbStopAtSep ) );
+        XclExpTokenData aTokData( GetNextToken() );
+        USHORT nScError = rScTokArr.GetError();
+        if( (nScError != 0) && (!aTokData.Is() || (aTokData.GetOpCode() == ocStop)) )
+        {
+            // #i50253# convert simple ocStop token to error code formula (e.g. =#VALUE!)
+            AppendErrorToken( XclTools::GetXclErrorCode( nScError ), aTokData.mnSpaces );
+        }
+        else if( aTokData.Is() )
+        {
+            // expected class is VAL in cell and array formulas, and REF in names
+            sal_uInt8 nExpClass = (maCfg.meClassType == EXC_CLASSTYPE_NAME) ? EXC_TOKCLASS_REF : EXC_TOKCLASS_VAL;
+            aTokData = Expression( aTokData, nExpClass, maCfg.mbStopAtSep );
+        }
+        else
+        {
+            DBG_ERRORFILE( "XclExpFmlaCompImpl::CreateFormula - empty token array" );
+            mbOk = false;
+        }
 
         /*  Do unknown tokens follow? Calc accepts "comments" following a formula,
-            i.e.: =1+1;"This is a comment". Ignore this without error. */
-        bool bUnknownTail = aTokData.Is() && (aTokData.GetOpCode() != ocSep);
-        // Tokens left? -> error
-        mbOk = mbOk && !bUnknownTail;
+            e.g.: =1+1;"This is a comment". Ignore this without error. */
+        if( mbOk )
+        {
+            // #i44907# auto-generated SUBTOTAL formula cells have trailing ocStop token
+            bool bUnknownTail = aTokData.Is() && (aTokData.GetOpCode() != ocSep) && (aTokData.GetOpCode() != ocStop);
+            DBG_ASSERT( !bUnknownTail, "XclExpFmlaCompImpl::CreateFormula - unknown garbage behind formula" );
+            // Tokens left? -> error
+            mbOk = !bUnknownTail;
+        }
     }
 
-    // finalizing, i.e. add tAttr-volatile token
+    // finalizing, e.g. add tAttr-volatile token
     FinalizeFormula();
 
     return CreateTokenArray();
@@ -685,6 +708,19 @@ const ScToken* XclExpFmlaCompImpl::GetNextRawToken()
     const ScToken* pScToken = maTokArrIt.Get();
     ++maTokArrIt;
     return pScToken;
+}
+
+const ScToken* XclExpFmlaCompImpl::PeekNextRawToken( bool bSkipSpaces ) const
+{
+    /*  Returns pointer to next raw token in the token array. The token array
+        iterator already points to the next token (A call to GetNextToken()
+        always increases the iterator), so this function just returns the token
+        the iterator points to. To skip space tokens, a copy of the iterator is
+        created and set to the passed skip-spaces mode. If spaces have to be
+        skipped, and the iterator currently points to a space token, the
+        constructor will move it to the next non-space token. */
+    XclTokenArrayIterator aTempIt( maTokArrIt, bSkipSpaces );
+    return aTempIt.Get();
 }
 
 bool XclExpFmlaCompImpl::GetNextToken( XclExpTokenData& rTokData )
@@ -1028,6 +1064,7 @@ XclExpTokenData XclExpFmlaCompImpl::Factor( XclExpTokenData aTokData, sal_uInt8 
         case svString:      ProcessString( aTokData );              break;
         case svSingleRef:   ProcessCellRef( aTokData, nExpClass );  break;
         case svDoubleRef:   ProcessRangeRef( aTokData, nExpClass ); break;
+        case svExternal:    ProcessExternal( aTokData, nExpClass ); break;
 
         default:
         {
@@ -1128,6 +1165,19 @@ void XclExpFmlaCompImpl::ProcessDdeLink( const XclExpTokenData& rTokData, sal_uI
     }
 }
 
+void XclExpFmlaCompImpl::ProcessExternal( const XclExpTokenData& rTokData, sal_uInt8 nExpClass )
+{
+    /*  #i47228# Excel import generates svExternal/ocMacro tokens for invalid
+        names and for external/invalid function calls. This function looks for
+        the next token in the token array. If it is an opening parenthesis, the
+        token is processed as external function call, otherwise as undefined name. */
+    const ScToken* pNextScToken = PeekNextRawToken( true );
+    if( !pNextScToken || (pNextScToken->GetOpCode() != ocOpen) )
+        AppendMissingNameToken( rTokData.mpScToken->GetExternal(), nExpClass, rTokData.mnSpaces );
+    else
+        ProcessFunction( rTokData, nExpClass );
+}
+
 void XclExpFmlaCompImpl::ProcessFunction( const XclExpTokenData& rTokData, sal_uInt8 nExpClass )
 {
     OpCode eOpCode = rTokData.GetOpCode();
@@ -1199,7 +1249,7 @@ void XclExpFmlaCompImpl::FinishFunction( XclExpFuncData& rFuncData, sal_uInt8 nC
         AppendSpaceToken( EXC_TOK_ATTR_SPACE_SP, rFuncData.GetSpaces() );
         // cache the start position of the function token (without spaces)
         sal_uInt16 nFuncTokPos = GetSize();
-        // put the tFunc or tFuncVar token (or another special token, i.e. tAttr-sum)
+        // put the tFunc or tFuncVar token (or another special token, e.g. tAttr-sum)
         sal_uInt8 nRetClass = rFuncData.GetReturnClass();
         sal_uInt8 nExpRetClass = rFuncData.GetExpReturnClass();
         if( (rFuncData.GetOpCode() == ocSum) && (nParamCount == 1) )
@@ -1323,7 +1373,7 @@ XclExpTokenData XclExpFmlaCompImpl::ProcessParam( XclExpTokenData aTokData, XclE
         }
         // restore old expected ARR class mode
         SetArrExpFlag( bOldIsArrExp );
-        // finalize the parameter and add special tokens, i.e. for IF or CHOOSE parameters
+        // finalize the parameter and add special tokens, e.g. for IF or CHOOSE parameters
         if( mbOk ) FinishParam( rFuncData, nParamPos );
     }
     return aTokData;
@@ -1754,7 +1804,7 @@ void XclExpFmlaCompImpl::AdjustTokenClass( sal_uInt8& rnTokenId, sal_uInt8 nExpC
         else
         {
             /*  If a REF token is part of a value operator, it behaves like a VAL token.
-                i.e.:   =SUM(A1)    -> SUM() expects REF, A1 is REF.
+                e.g.:   =SUM(A1)    -> SUM() expects REF, A1 is REF.
                         =SUM(A1+A1) -> SUM() expects REF, but both A1 are handled like VAL tokens. */
             if( (nIsClass == EXC_TOKCLASS_REF) && ::get_flag( nExpClass, EXC_TOKCLASS_INOP_FLAG ) )
             {
@@ -1799,7 +1849,7 @@ void XclExpFmlaCompImpl::AdjustLastTokenClassForEstereggOp()
         formula =OR(A1:A2,0). The Excel OR function expects REF parameters to
         be able to process all cells in a range reference. Since this compiler
         didn't know this when processing the (A1:A2) subexpression, it may
-        create a tAreaV token from the reference (i.e. if in cell context).
+        create a tAreaV token from the reference (e.g. if in cell context).
         This would cause Excel to only evaluate cell A1, and to ignore cell A2,
         if the formula is located in cell B1.
         So this function changes the last token back to its default class and
@@ -1952,6 +2002,12 @@ void XclExpFmlaCompImpl::AppendNameToken( sal_uInt16 nNameIdx, sal_uInt8 nExpCla
     }
     else
         AppendErrorToken( EXC_ERR_NAME );
+}
+
+void XclExpFmlaCompImpl::AppendMissingNameToken( const String& rName, sal_uInt8 nExpClass, sal_uInt8 nSpaces )
+{
+    sal_uInt16 nNameIdx = GetNameManager().InsertRawName( rName );
+    AppendNameToken( nNameIdx, nExpClass, nSpaces );
 }
 
 void XclExpFmlaCompImpl::AppendNameXToken( sal_uInt16 nExtSheet, sal_uInt16 nExtName, sal_uInt8 nExpClass, sal_uInt8 nSpaces )
