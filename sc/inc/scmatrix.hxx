@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scmatrix.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:54:40 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:27:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,12 +196,21 @@ public:
     /// lower left triangle
     void FillDoubleLowerLeft( double fVal, SCSIZE nC2 );
 
-    /** Use outside ScInterpreter before obtaining the double value of an
-        element and passing it's NAN around.
+private:
+    /** May be used before obtaining the double value of an element to avoid
+        passing its NAN around.
+        @ATTENTION: MUST NOT be used if the element is a string!
         @returns 0 if no error, else one of err... constants */
     USHORT GetError( SCSIZE nC, SCSIZE nR) const;
     USHORT GetError( SCSIZE nIndex) const
-        { return GetDoubleErrorValue( pMat[nIndex].fVal); }
+        { return pMat[nIndex].GetError(); }
+public:
+    /** Use in ScInterpreter to obtain the error code, if any.
+        @returns 0 if no error or string element, else one of err... constants */
+    USHORT GetErrorIfNotString( SCSIZE nC, SCSIZE nR) const
+        { return IsValue( nC, nR) ? GetError( nC, nR) : 0; }
+    USHORT GetErrorIfNotString( SCSIZE nIndex) const
+        { return IsValue( nIndex) ? GetError( nIndex) : 0; }
 
     /// @return 0.0 if empty
     double GetDouble( SCSIZE nC, SCSIZE nR) const;
