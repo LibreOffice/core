@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontmanager.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:33:51 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 14:23:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,6 +160,7 @@ struct FastPrintFontInfo
 
     // font attributes
     rtl::OUString                       m_aFamilyName;
+    rtl::OUString                       m_aStyleName;
     std::list< rtl::OUString >          m_aAliases;
     family::type                        m_eFamilyStyle;
     italic::type                        m_eItalic;
@@ -271,6 +272,7 @@ class PrintFontManager
         int                                         m_nFamilyName;  // atom
         std::list< int >                            m_aAliases;
         int                                         m_nPSName;      // atom
+        rtl::OUString                               m_aStyleName;
         italic::type                                m_eItalic;
         width::type                                 m_eWidth;
         weight::type                                m_eWeight;
