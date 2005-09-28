@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brdwin.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:21:46 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 14:50:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,10 @@ static void ImplGetPinImage( USHORT nStyle, BOOL bPinIn, Image& rImage )
     ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->maCtrlData.mpPinImgList )
     {
-        Bitmap aBmp( ResId( SV_RESID_BITMAP_PIN, ImplGetResMgr() ) );
+        Bitmap aBmp;
+        ResMgr* pResMgr = ImplGetResMgr();
+        if( pResMgr )
+            aBmp = Bitmap( ResId( SV_RESID_BITMAP_PIN, ImplGetResMgr() ) );
         pSVData->maCtrlData.mpPinImgList = new ImageList( aBmp, Color( 0x00, 0x00, 0xFF ), 4 );
     }
 
@@ -1028,7 +1031,7 @@ String ImplBorderWindowView::ImplRequestHelp( ImplBorderFrameData* pData,
         }
     }
 
-    if( nHelpId )
+    if( nHelpId && ImplGetResMgr() )
         aHelpStr = String( ResId( nHelpId, ImplGetResMgr() ) );
 
     return aHelpStr;
