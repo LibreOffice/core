@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:42:18 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:05:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -776,7 +776,7 @@ void ScXMLTableRowCellContext::SetAnnotation(const table::CellAddress& aCellAddr
             if (pMyAnnotation->pRect)
                 aNote.SetRectangle(*pMyAnnotation->pRect);
             else
-                aNote.SetRectangle(aNote.DefaultRectangle(ScAddress(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), aCellAddress.Sheet)));
+                rXMLImport.AddDefaultNote(aCellAddress);
             if (pMyAnnotation->pItemSet)
                 aNote.SetItemSet(*(pMyAnnotation->pItemSet));
             else
@@ -788,38 +788,34 @@ void ScXMLTableRowCellContext::SetAnnotation(const table::CellAddress& aCellAddr
                 // No ItemSet and Rectangle indicates notes with simple text.
                 // i.e. created with calc 1.x sxc file format
                 if (pMyAnnotation->pItemSet && pMyAnnotation->pRect)
-                 {
+                {
                     const EditTextObject& rTextObj = pMyAnnotation->pOPO->GetTextObject();
                     sal_uInt16 nCount = aEngine.GetParagraphCount();
                     for( sal_uInt16 nPara = 0; nPara < nCount; ++nPara )
                     {
-                        String aParaText( aEngine.GetText( nPara ) );
-                        if( aParaText.Len() )
-                        {
-                            SfxItemSet aSet( rTextObj.GetParaAttribs( nPara));
-                            aEngine.SetParaAttribs(nPara, aSet);
-                        }
+                        SfxItemSet aSet( rTextObj.GetParaAttribs( nPara));
+                        aEngine.SetParaAttribs(nPara, aSet);
                     }
-                 }
-                 ::std::auto_ptr< EditTextObject > pEditText( aEngine.CreateTextObject());
-                aNote.SetEditTextObject(pEditText.get());    // if pEditText is NULL, then aNote.mpEditObj will be reset().
-            }
-            if (pMyAnnotation->pRect)
-                aNote.SetRectangle(*pMyAnnotation->pRect);
-            else
-                aNote.SetRectangle(aNote.MimicOldRectangle(ScAddress(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), aCellAddress.Sheet)));
-            pDoc->SetNote(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), aCellAddress.Sheet, aNote);
-            if (pMyAnnotation->bDisplay)
-            {
-                ScDetectiveFunc aDetFunc(pDoc, aCellAddress.Sheet);
-                aDetFunc.ShowComment(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), sal_False);
-                uno::Reference<container::XIndexAccess> xShapesIndex (rXMLImport.GetTables().GetCurrentXShapes(), uno::UNO_QUERY); // make draw page
-                if (xShapesIndex.is())
-                {
-                    sal_Int32 nShapes = xShapesIndex->getCount();
-                    uno::Reference < drawing::XShape > xShape;
-                    rXMLImport.GetShapeImport()->shapeWithZIndexAdded(xShape, nShapes);
                 }
+            }
+            ::std::auto_ptr< EditTextObject > pEditText( aEngine.CreateTextObject());
+            aNote.SetEditTextObject(pEditText.get());    // if pEditText is NULL, then aNote.mpEditObj will be reset().
+        }
+        if (pMyAnnotation->pRect)
+            aNote.SetRectangle(*pMyAnnotation->pRect);
+        else
+            aNote.SetRectangle(aNote.MimicOldRectangle(ScAddress(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), aCellAddress.Sheet)));
+        pDoc->SetNote(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), aCellAddress.Sheet, aNote);
+        if (pMyAnnotation->bDisplay)
+        {
+            ScDetectiveFunc aDetFunc(pDoc, aCellAddress.Sheet);
+            aDetFunc.ShowComment(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), sal_False);
+            uno::Reference<container::XIndexAccess> xShapesIndex (rXMLImport.GetTables().GetCurrentXShapes(), uno::UNO_QUERY); // make draw page
+            if (xShapesIndex.is())
+            {
+                sal_Int32 nShapes = xShapesIndex->getCount();
+                uno::Reference < drawing::XShape > xShape;
+                rXMLImport.GetShapeImport()->shapeWithZIndexAdded(xShape, nShapes);
             }
         }
     }
