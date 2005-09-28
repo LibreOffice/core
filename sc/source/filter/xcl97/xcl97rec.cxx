@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:48:01 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:05:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -648,39 +648,39 @@ void XclObjDropDown::WriteSubRecs( XclExpStream& rStrm )
 
 // --- class XclTxo --------------------------------------------------
 
-XclTxoHorAlign lcl_GetHorAlignFromItemSet( const SfxItemSet& rItemSet )
+sal_uInt8 lcl_GetHorAlignFromItemSet( const SfxItemSet& rItemSet )
 {
-    XclTxoHorAlign eHorAlign = xlTxoHAlign_Default;
+    sal_uInt8 nHorAlign = EXC_TXO_HOR_LEFT;
 
     switch( static_cast< const SvxAdjustItem& >( rItemSet.Get( EE_PARA_JUST ) ).GetAdjust() )
     {
-        case SVX_ADJUST_LEFT:           eHorAlign = xlTxoHAlignLeft;       break;
-        case SVX_ADJUST_CENTER:         eHorAlign = xlTxoHAlignCenter;     break;
-        case SVX_ADJUST_RIGHT:          eHorAlign = xlTxoHAlignRight;      break;
-        case SVX_ADJUST_BLOCK:          eHorAlign = xlTxoHAlignJustify;    break;
+        case SVX_ADJUST_LEFT:   nHorAlign = EXC_TXO_HOR_LEFT;      break;
+        case SVX_ADJUST_CENTER: nHorAlign = EXC_TXO_HOR_CENTER;    break;
+        case SVX_ADJUST_RIGHT:  nHorAlign = EXC_TXO_HOR_RIGHT;     break;
+        case SVX_ADJUST_BLOCK:  nHorAlign = EXC_TXO_HOR_JUSTIFY;   break;
     }
-    return eHorAlign;
+    return nHorAlign;
 }
 
-XclTxoVerAlign lcl_GetVerAlignFromItemSet( const SfxItemSet& rItemSet )
+sal_uInt8 lcl_GetVerAlignFromItemSet( const SfxItemSet& rItemSet )
 {
-    XclTxoVerAlign eVerAlign = xlTxoVAlign_Default;
+    sal_uInt8 nVerAlign = EXC_TXO_VER_TOP;
 
     switch( static_cast< const SdrTextVertAdjustItem& >( rItemSet.Get( SDRATTR_TEXT_VERTADJUST ) ).GetValue() )
     {
-        case SDRTEXTVERTADJUST_TOP:     eVerAlign = xlTxoVAlignTop;     break;
-        case SDRTEXTVERTADJUST_CENTER:  eVerAlign = xlTxoVAlignCenter;  break;
-        case SDRTEXTVERTADJUST_BOTTOM:  eVerAlign = xlTxoVAlignBottom;  break;
-        case SDRTEXTVERTADJUST_BLOCK:   eVerAlign = xlTxoVAlignJustify; break;
+        case SDRTEXTVERTADJUST_TOP:     nVerAlign = EXC_TXO_VER_TOP;        break;
+        case SDRTEXTVERTADJUST_CENTER:  nVerAlign = EXC_TXO_VER_CENTER;     break;
+        case SDRTEXTVERTADJUST_BOTTOM:  nVerAlign = EXC_TXO_VER_BOTTOM;     break;
+        case SDRTEXTVERTADJUST_BLOCK:   nVerAlign = EXC_TXO_VER_JUSTIFY;    break;
     }
-    return eVerAlign;
+    return nVerAlign;
 }
 
 XclTxo::XclTxo( const String& rString, sal_uInt16 nFontIx ) :
     mpString( new XclExpString( rString ) ),
-    meHorAlign( xlTxoHAlign_Default ),
-    meVerAlign( xlTxoVAlign_Default ),
-    meRotation( xlTxoRot_Default )
+    mnRotation( EXC_TXO_TEXTROT_NONE ),
+    mnHorAlign( EXC_TXO_HOR_LEFT ),
+    mnVerAlign( EXC_TXO_VER_TOP )
 {
     if( mpString->Len() )
     {
@@ -692,34 +692,34 @@ XclTxo::XclTxo( const String& rString, sal_uInt16 nFontIx ) :
 
 XclTxo::XclTxo( const XclExpRoot& rRoot, const SdrTextObj& rTextObj ) :
     mpString( XclExpStringHelper::CreateString( rRoot, rTextObj ) ),
-    meHorAlign( xlTxoHAlign_Default ),
-    meVerAlign( xlTxoVAlign_Default ),
-    meRotation( xlTxoRot_Default )
+    mnRotation( EXC_TXO_TEXTROT_NONE ),
+    mnHorAlign( EXC_TXO_HOR_LEFT ),
+    mnVerAlign( EXC_TXO_VER_TOP )
 {
     // additional alignment and orientation items
     const SfxItemSet& rItemSet = rTextObj.GetMergedItemSet();
 
     // horizontal alignment
-    SetHorAlign(lcl_GetHorAlignFromItemSet(rItemSet));
+    SetHorAlign( lcl_GetHorAlignFromItemSet( rItemSet ) );
 
     // vertical alignment
-    SetVerAlign(lcl_GetVerAlignFromItemSet(rItemSet));
+    SetVerAlign( lcl_GetVerAlignFromItemSet( rItemSet ) );
 
     // rotation
     long nAngle = rTextObj.GetRotateAngle();
     if( (4500 < nAngle) && (nAngle < 13500) )
-        meRotation = xlTxoRot90ccw;
+        mnRotation = EXC_TXO_TEXTROT_90_CCW;
     else if( (22500 < nAngle) && (nAngle < 31500) )
-        meRotation = xlTxoRot90cw;
+        mnRotation = EXC_TXO_TEXTROT_90_CW;
     else
-        meRotation = xlTxoNoRot;
+        mnRotation = EXC_TXO_TEXTROT_NONE;
 }
 
 XclTxo::XclTxo( const XclExpRoot& rRoot, const EditTextObject& rEditObj, SdrObject* pCaption ) :
     mpString( XclExpStringHelper::CreateString( rRoot, rEditObj ) ),
-    meHorAlign( xlTxoHAlign_Default ),
-    meVerAlign( xlTxoVAlign_Default ),
-    meRotation( xlTxoRot_Default )
+    mnRotation( EXC_TXO_TEXTROT_NONE ),
+    mnHorAlign( EXC_TXO_HOR_LEFT ),
+    mnVerAlign( EXC_TXO_VER_TOP )
 {
     if(pCaption)
     {
@@ -731,25 +731,24 @@ XclTxo::XclTxo( const XclExpRoot& rRoot, const EditTextObject& rEditObj, SdrObje
         {
             SfxItemSet aSet( rEditObj.GetParaAttribs( 0));
             const SfxPoolItem* pItem = NULL;
-            if (aSet.GetItemState(EE_PARA_JUST,TRUE,&pItem) == SFX_ITEM_SET)
+            if( aSet.GetItemState( EE_PARA_JUST, TRUE, &pItem ) == SFX_ITEM_SET )
             {
-                SvxAdjust eEEAlign = static_cast< const SvxAdjustItem& >( *pItem).GetAdjust();
-                pCaption->SetMergedItem( SvxAdjustItem( eEEAlign, EE_PARA_JUST));
+                SvxAdjust eEEAlign = static_cast< const SvxAdjustItem& >( *pItem ).GetAdjust();
+                pCaption->SetMergedItem( SvxAdjustItem( eEEAlign, EE_PARA_JUST ) );
             }
         }
         const SfxItemSet& rItemSet = pCaption->GetMergedItemSet();
 
         // horizontal alignment
-        SetHorAlign(lcl_GetHorAlignFromItemSet(rItemSet));
+        SetHorAlign( lcl_GetHorAlignFromItemSet( rItemSet ) );
 
         // vertical alignment
-        SetVerAlign(lcl_GetVerAlignFromItemSet(rItemSet));
+        SetVerAlign( lcl_GetVerAlignFromItemSet( rItemSet ) );
 
         // orientation alignment
-        const SvxWritingModeItem& rItem = static_cast<const SvxWritingModeItem&>
-            (rItemSet.Get (SDRATTR_TEXTDIRECTION));
-        if (rItem.GetValue() == com::sun::star::text::WritingMode_TB_RL)
-            meRotation = xlTxoRot90cw;
+        const SvxWritingModeItem& rItem = static_cast< const SvxWritingModeItem& >( rItemSet.Get( SDRATTR_TEXTDIRECTION ) );
+        if( rItem.GetValue() == com::sun::star::text::WritingMode_TB_RL )
+            mnRotation = EXC_TXO_TEXTROT_90_CW;
     }
 }
 
@@ -760,10 +759,10 @@ void XclTxo::SaveCont( XclExpStream& rStrm )
     sal_uInt16 nRunLen = 8 * mpString->GetFormatsCount();
     // alignment
     sal_uInt16 nFlags = 0;
-    ::insert_value( nFlags, meHorAlign, 1, 3 );
-    ::insert_value( nFlags, meVerAlign, 4, 3 );
+    ::insert_value( nFlags, mnHorAlign, 1, 3 );
+    ::insert_value( nFlags, mnVerAlign, 4, 3 );
 
-    rStrm << nFlags << static_cast< sal_uInt16 >( meRotation );
+    rStrm << nFlags << mnRotation;
     rStrm.WriteZeroBytes( 6 );
     rStrm << mpString->Len() << nRunLen << sal_uInt32( 0 );
 }
