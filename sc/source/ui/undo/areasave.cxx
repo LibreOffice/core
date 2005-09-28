@@ -4,9 +4,9 @@
  *
  *  $RCSfile: areasave.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:37:24 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:13:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,8 @@ ScAreaLinkSaver::ScAreaLinkSaver( const ScAreaLink& rSource ) :
     aFilterName ( rSource.GetFilter() ),
     aOptions    ( rSource.GetOptions() ),
     aSourceArea ( rSource.GetSource() ),
-    aDestArea   ( rSource.GetDestArea() )
+    aDestArea   ( rSource.GetDestArea() ),
+    nRefresh    ( rSource.GetRefreshDelay() )       // seconds
 {
 }
 
@@ -66,7 +67,8 @@ ScAreaLinkSaver::ScAreaLinkSaver( const ScAreaLinkSaver& rCopy ) :
     aFilterName ( rCopy.aFilterName ),
     aOptions    ( rCopy.aOptions ),
     aSourceArea ( rCopy.aSourceArea ),
-    aDestArea   ( rCopy.aDestArea )
+    aDestArea   ( rCopy.aDestArea ),
+    nRefresh    ( rCopy.nRefresh )
 {
 }
 
@@ -84,7 +86,8 @@ BOOL ScAreaLinkSaver::IsEqualSource( const ScAreaLink& rCompare ) const
     return ( aFileName   == rCompare.GetFile() &&
              aFilterName == rCompare.GetFilter() &&
              aOptions    == rCompare.GetOptions() &&
-             aSourceArea == rCompare.GetSource() );
+             aSourceArea == rCompare.GetSource() &&
+             nRefresh    == rCompare.GetRefreshDelay() );
 }
 
 BOOL ScAreaLinkSaver::IsEqual( const ScAreaLink& rCompare ) const
@@ -96,6 +99,25 @@ BOOL ScAreaLinkSaver::IsEqual( const ScAreaLink& rCompare ) const
 void ScAreaLinkSaver::WriteToLink( ScAreaLink& rLink ) const
 {
     rLink.SetDestArea( aDestArea );
+}
+
+void ScAreaLinkSaver::InsertNewLink( ScDocument* pDoc ) const
+{
+    // (see ScUndoRemoveAreaLink::Undo)
+
+    SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
+    SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
+
+    if ( pLinkManager && pObjSh )
+    {
+        ScAreaLink* pLink = new ScAreaLink( pObjSh, aFileName, aFilterName, aOptions,
+                                            aSourceArea, aDestArea.aStart, nRefresh );
+        pLink->SetInCreate( TRUE );
+        pLink->SetDestArea( aDestArea );
+        pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aFileName, &aFilterName, &aSourceArea );
+        pLink->Update();
+        pLink->SetInCreate( FALSE );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -120,6 +142,9 @@ DataObject* ScAreaLinkSaveCollection::Clone() const
 
 BOOL ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
 {
+    // IsEqual can be checked in sequence.
+    // Neither ref-update nor removing links will change the order.
+
     SvxLinkManager* pLinkManager = const_cast<ScDocument*>(pDoc)->GetLinkManager();
     if (pLinkManager)
     {
@@ -137,42 +162,50 @@ BOOL ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
                 ++nPos;
             }
         }
+        if ( nPos < GetCount() )
+            return FALSE;           // fewer links in the document than in the save collection
     }
 
     return TRUE;
 }
 
+ScAreaLink* lcl_FindLink( const ::sfx2::SvBaseLinks& rLinks, const ScAreaLinkSaver& rSaver )
+{
+    USHORT nLinkCount = rLinks.Count();
+    for (USHORT i=0; i<nLinkCount; i++)
+    {
+        ::sfx2::SvBaseLink* pBase = *rLinks[i];
+        if ( pBase->ISA(ScAreaLink) &&
+             rSaver.IsEqualSource( *static_cast<ScAreaLink*>(pBase) ) )
+        {
+            return static_cast<ScAreaLink*>(pBase);     // found
+        }
+    }
+    return NULL;    // not found
+}
+
 void ScAreaLinkSaveCollection::Restore( ScDocument* pDoc ) const
 {
-    BOOL bError = FALSE;
+    // The save collection may contain additional entries that are not in the document.
+    // They must be inserted again.
+    // Entries from the save collection must be searched via source data, as the order
+    // of links changes if deleted entries are re-added to the link manager (always at the end).
+
     SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
     if (pLinkManager)
     {
-        USHORT nPos = 0;
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        USHORT nLinkCount = rLinks.Count();
-        for (USHORT i=0; i<nLinkCount; i++)
+        USHORT nCount = GetCount();
+        for (USHORT nPos=0; nPos<nCount; nPos++)
         {
-            ::sfx2::SvBaseLink* pBase = *rLinks[i];
-            if (pBase->ISA(ScAreaLink))
-            {
-                ScAreaLink* pLink = (ScAreaLink*)pBase;
-                if ( nPos < GetCount() )
-                {
-                    ScAreaLinkSaver* pSaver = (*this)[nPos];
-                    if ( pSaver->IsEqualSource( *pLink ) )
-                        pSaver->WriteToLink( *pLink );
-                    else
-                        bError = TRUE;
-                }
-                else
-                    bError = TRUE;
-
-                ++nPos;
-            }
+            ScAreaLinkSaver* pSaver = (*this)[nPos];
+            ScAreaLink* pLink = lcl_FindLink( rLinks, *pSaver );
+            if ( pLink )
+                pSaver->WriteToLink( *pLink );          // restore output position
+            else
+                pSaver->InsertNewLink( pDoc );          // re-insert deleted link
         }
     }
-    DBG_ASSERT( !bError, "ScAreaLinkSaveCollection: wrong links" );
 }
 
 // static
