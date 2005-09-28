@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndgrf.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:01:10 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:03:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,11 @@
 #ifndef _NDNOTXT_HXX
 #include <ndnotxt.hxx>
 #endif
+// --> OD, MAV 2005-08-17 #i53025#
+#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
+#include <com/sun/star/embed/XStorage.hpp>
+#endif
+// <--
 
 class SwGrfFmtColl;
 class SwDoc;
@@ -101,7 +106,10 @@ class SwGrfNode: public SwNoTxtNode
     BOOL HasStreamName() const { return aGrfObj.HasUserData(); }
     // --> OD 2005-05-04 #i48434# - adjust return type and rename method to
     // indicate that its an private one.
-    bool _GetStreamStorageNames( String& rStrmName, String& rStgName ) const;
+    // --> OD 2005-08-17 #i53025#
+    // embedded graphic stream couldn't be inside a 3.1 - 5.2 storage any more.
+    // Thus, return value isn't needed any more.
+    void _GetStreamStorageNames( String& rStrmName, String& rStgName ) const;
     // <--
     void DelStreamName();
     DECL_LINK( SwapGraphic, GraphicObject* );
@@ -110,21 +118,43 @@ class SwGrfNode: public SwNoTxtNode
 
         OD 2005-05-04 #i48434#
         Important note: caller of this method has to handle the thrown exceptions
+        OD, MAV 2005-08-17 #i53025#
+        Storage, which should contain the stream of the embedded graphic, is
+        provided via parameter. Otherwise the returned stream will be closed
+        after the the method returns, because its parent stream is closed and deleted.
+        Proposed name of embedded graphic stream is also provided by parameter.
 
         @author OD
 
-        @param _obGraphic
-        output parameter - boolean indicating, if the stream is an embedded
-        graphic file of a Writer document of version 3.1 - 5.2
-        Value of this output parameter is only valid, if the stream for the
-        the embedded graphic is created.
-        Note: name of parameter taken over from method <GetStreamStorageNames(..)>
+        @param _refPics
+        input parameter - reference to storage, which should contain the
+        embedded graphic stream.
+
+        @param _aStrmName
+        input parameter - proposed name of the embedded graphic stream.
 
         @return SvStream*
         new created stream of the embedded graphic, which has to be destroyed
         after its usage. Could be NULL, if the stream isn't found.
     */
-    SvStream* _GetStreamForEmbedGrf( bool& _obGraphic ) const;
+    SvStream* _GetStreamForEmbedGrf(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _refPics,
+            String& _aStrmName ) const;
+
+    /** helper method to get a substorage of the document storage for readonly access.
+
+        OD, MAV 2005-08-17 #i53025#
+        A substorage with the specified name will be opened readonly. If the provided
+        name is empty the root storage will be returned.
+
+        @param _aStgName
+        input parameter - name of substorage. Can be empty.
+
+        @return XStorage
+        reference to substorage or the root storage
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > _GetDocSubstorageOrRoot(
+                                                const String& aStgName ) const;
 
 public:
     virtual ~SwGrfNode();
