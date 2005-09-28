@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectformatterlayfrm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:20:36 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:13:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,12 @@
 #ifndef _PAGEFRM_HXX
 #include <pagefrm.hxx>
 #endif
+
+// --> OD 2005-07-13 #124218#
+#ifndef _LAYACT_HXX
+#include <layact.hxx>
+#endif
+// <--
 
 // =============================================================================
 // implementation of class <SwObjectFormatterLayFrm>
@@ -106,7 +112,10 @@ bool SwObjectFormatterLayFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
 {
     _FormatObj( _rAnchoredObj );
 
-    return true;
+    // --> OD 2005-07-13 #124218# - consider that the layout action has to be
+    // restarted due to a deleted page frame.
+    return GetLayAction() ? !GetLayAction()->IsAgain() : true;
+    // <--
 }
 
 bool SwObjectFormatterLayFrm::DoFormatObjs()
@@ -115,7 +124,7 @@ bool SwObjectFormatterLayFrm::DoFormatObjs()
 
     bSuccess = _FormatObjsAtFrm();
 
-    if ( GetAnchorFrm().IsPageFrm() )
+    if ( bSuccess && GetAnchorFrm().IsPageFrm() )
     {
         // anchor layout frame is a page frame.
         // Thus, format also all anchored objects, which are registered at
@@ -143,6 +152,16 @@ bool SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()
                 "<SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()> - mis-usage of method, call only for anchor frames of type page frame" );
         return true;
     }
+
+    // --> OD 2005-07-13 #124218# - consider, if the layout action
+    // has to be restarted due to a delete of a page frame.
+    if ( GetLayAction() && GetLayAction()->IsAgain() )
+    {
+        return false;
+    }
+    // <--
+
+
     SwPageFrm& rPageFrm = static_cast<SwPageFrm&>(GetAnchorFrm());
 
     if ( !rPageFrm.GetSortedObjs() )
@@ -158,6 +177,13 @@ bool SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()
     {
         SwAnchoredObject* pAnchoredObj = (*rPageFrm.GetSortedObjs())[i];
 
+        // --> OD 2005-08-18 #i51941# - do not format object, which are anchored
+        // inside or at fly frame.
+        if ( pAnchoredObj->GetAnchorFrm()->FindFlyFrm() )
+        {
+            continue;
+        }
+        // <--
         // --> OD 2004-09-23 #i33751#, #i34060# - method <GetPageFrmOfAnchor()>
         // is replaced by method <FindPageFrmOfAnchor()>. It's return value
         // have to be checked.
