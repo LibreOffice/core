@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excform.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:16:24 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:56:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,8 @@ protected:
     void                DoMulArgs( DefTokenId, BYTE );
 
     void                ExcRelToScRel( UINT16 nRow, UINT8 nCol, SingleRefData&, const BOOL bName );
+
+    void                PushRangeOperator();
 
 public:
                         ExcelToSc( XclImpStream& rStrm );
