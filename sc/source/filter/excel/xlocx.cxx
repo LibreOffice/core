@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlocx.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:08:43 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:52:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,16 +208,16 @@ XclImpOcxConverter::XclImpOcxConverter( const XclImpRoot& rRoot ) :
     mxStrm = OpenStream( EXC_STREAM_CTLS );
 }
 
-bool XclImpOcxConverter::CreateSdrUnoObj( XclImpEscherOle& rOcxCtrl )
+SdrObject* XclImpOcxConverter::CreateSdrObject( const XclImpOleObj& rOcxCtrlObj, const Rectangle& rAnchorRect )
 {
-    DBG_ASSERT( rOcxCtrl.IsControl(), "XclOcxConverter::CreateSdrUnoObj - no control object" );
-    if( mxStrm.Is() && rOcxCtrl.IsControl() )
+    DBG_ASSERT( rOcxCtrlObj.IsControl(), "XclOcxConverter::CreateSdrObject - no control object" );
+    if( mxStrm.Is() && rOcxCtrlObj.IsControl() )
     {
         // virtual call of GetDrawPage() needs current sheet index
-        SetScTab( rOcxCtrl.GetScTab() );
+        SetScTab( rOcxCtrlObj.GetScTab() );
 
         // stream position of the extra data for this control
-        sal_uInt32 nStrmPos = rOcxCtrl.GetCtrlStreamPos();
+        sal_uInt32 nStrmPos = rOcxCtrlObj.GetCtrlStreamPos();
         mxStrm->Seek( static_cast< ULONG >( nStrmPos ) );
 
         // the shape to fill
@@ -231,12 +231,12 @@ bool XclImpOcxConverter::CreateSdrUnoObj( XclImpEscherOle& rOcxCtrl )
         }
         catch( Exception& )
         {
-            DBG_ERRORFILE( "XclImpOcxConverter::CreateSdrUnoObj - unexpected exception caught" );
+            DBG_ERRORFILE( "XclImpOcxConverter::CreateSdrObject - unexpected exception caught" );
         }
 
         if( bReadSuccess )
         {
-            if( SdrObject* pSdrObj = ::GetSdrObjectFromXShape( xShape ) )
+            if( SdrObject* pSdrObj = GetSdrObject( xShape, rAnchorRect ) )
             {
                 Reference< XControlShape > xControlShape( xShape, UNO_QUERY );
                 if( xControlShape.is() )
@@ -245,62 +245,57 @@ bool XclImpOcxConverter::CreateSdrUnoObj( XclImpEscherOle& rOcxCtrl )
                     if( xModel.is() )
                     {
                         // set the spreadsheet links
-                        ConvertSheetLinks( xModel, rOcxCtrl );
+                        ConvertSheetLinks( xModel, rOcxCtrlObj );
                         // set additional control properties
                         ScfPropertySet aPropSet( xModel );
                         if( aPropSet.Is() )
-                            rOcxCtrl.WriteToPropertySet( aPropSet );
+                            rOcxCtrlObj.WriteToPropertySet( aPropSet );
                     }
                 }
-
-                rOcxCtrl.SetSdrObj( pSdrObj );
-                return true;
+                return pSdrObj;
             }
         }
     }
-    return false;
+    return 0;
 }
 
-bool XclImpOcxConverter::CreateSdrUnoObj( XclImpEscherTbxCtrl& rTbxCtrl )
+SdrObject* XclImpOcxConverter::CreateSdrObject( const XclImpTbxControlObj& rTbxCtrlObj, const Rectangle& rAnchorRect )
 {
     // virtual call of GetDrawPage() needs current sheet index
-    SetScTab( rTbxCtrl.GetScTab() );
+    SetScTab( rTbxCtrlObj.GetScTab() );
 
     const Reference< XMultiServiceFactory >& rxServiceFactory = GetServiceFactory();
     if( rxServiceFactory.is() )
     {
-        Reference< XInterface > xInt( rxServiceFactory->createInstance( rTbxCtrl.GetServiceName() ) );
+        Reference< XInterface > xInt( rxServiceFactory->createInstance( rTbxCtrlObj.GetServiceName() ) );
         Reference< XFormComponent > xFormComp( xInt, UNO_QUERY );
         Reference< XControlModel > xModel( xInt, UNO_QUERY );
         if( xFormComp.is() && xModel.is() )
         {
             // the shape to fill
             Reference< XShape > xShape;
-            // dummy size -> is done in XclImpEscherTbxCtrl::Apply
+            // dummy size
             ::com::sun::star::awt::Size aSize;
 
             // try to insert the control into the form
             if( InsertControl( xFormComp, aSize, &xShape, TRUE ) )
             {
-                if( SdrObject* pSdrObj = ::GetSdrObjectFromXShape( xShape ) )
+                if( SdrObject* pSdrObj = GetSdrObject( xShape, rAnchorRect ) )
                 {
-                    // store the created SdrObject in the object
-                    rTbxCtrl.SetSdrObj( pSdrObj );
                     // set the links to the spreadsheet
-                    ConvertSheetLinks( xModel, rTbxCtrl );
+                    ConvertSheetLinks( xModel, rTbxCtrlObj );
                     // set the control properties
                     ScfPropertySet aPropSet( xModel );
                     if( aPropSet.Is() )
-                        rTbxCtrl.WriteToPropertySet( aPropSet );
+                        rTbxCtrlObj.WriteToPropertySet( aPropSet );
                     // try to attach a macro to the control
-                    RegisterTbxMacro( rTbxCtrl );
-
-                    return true;
+                    RegisterTbxMacro( rTbxCtrlObj );
+                    return pSdrObj;
                 }
             }
         }
     }
-    return false;
+    return 0;
 }
 
 sal_Bool XclImpOcxConverter::InsertControl(
@@ -325,7 +320,6 @@ sal_Bool XclImpOcxConverter::InsertControl(
             CREATE_OUSTRING( "com.sun.star.drawing.ControlShape" ) ), UNO_QUERY );
         if( xShape.is() )
         {
-            xShape->setSize( rSize );
             // set control model at the shape
             Reference< XControlShape > xControlShape( xShape, UNO_QUERY );
             Reference< XControlModel > xControlModel( rxFormComp, UNO_QUERY );
@@ -340,6 +334,18 @@ sal_Bool XclImpOcxConverter::InsertControl(
     }
 
     return bRet;
+}
+
+SdrObject* XclImpOcxConverter::GetSdrObject( const Reference< XShape >& rxShape, const Rectangle& rAnchorRect ) const
+{
+    SdrObject* pSdrObj = ::GetSdrObjectFromXShape( rxShape );
+    if( pSdrObj )
+    {
+        pSdrObj->NbcSetSnapRect( rAnchorRect );
+        // #i30543# insert into control layer
+        pSdrObj->NbcSetLayer( SC_LAYER_CONTROLS );
+    }
+    return pSdrObj;
 }
 
 void XclImpOcxConverter::ConvertSheetLinks(
@@ -427,10 +433,10 @@ void XclImpOcxConverter::ConvertSheetLinks(
     }
 }
 
-void XclImpOcxConverter::RegisterTbxMacro( XclImpEscherTbxCtrl& rTbxCtrl )
+void XclImpOcxConverter::RegisterTbxMacro( const XclImpTbxControlObj& rTbxCtrlObj )
 {
     ScriptEventDescriptor aEvent;
-    if( (mnLastIndex >= 0) && rTbxCtrl.FillMacroDescriptor( aEvent ) )
+    if( (mnLastIndex >= 0) && rTbxCtrlObj.FillMacroDescriptor( aEvent ) )
     {
         Reference< XEventAttacherManager > xEventMgr( GetFormComps(), UNO_QUERY );
         if( xEventMgr.is() )
@@ -571,7 +577,7 @@ void XclExpOcxConverter::ConvertSheetLinks(
 #if !EXC_EXP_OCX_CTRL
 
 void XclExpOcxConverter::ConvertTbxMacro(
-    XclExpObjTbxCtrl& rTbxCtrl, const Reference< XControlModel >& rxModel )
+    XclExpObjTbxCtrl& rTbxCtrlObj, const Reference< XControlModel >& rxModel )
 {
     // *** 1) try to find the index of the processed control in the form ***
 
@@ -622,7 +628,7 @@ void XclExpOcxConverter::ConvertTbxMacro(
                     !bFound && (nEventIdx < nEventCount); ++nEventIdx )
             {
                 // try to set the event data at the Excel control object, returns true on success
-                bFound = rTbxCtrl.SetMacroLink( aEventSeq[ nEventIdx ] );
+                bFound = rTbxCtrlObj.SetMacroLink( aEventSeq[ nEventIdx ] );
             }
         }
     }
