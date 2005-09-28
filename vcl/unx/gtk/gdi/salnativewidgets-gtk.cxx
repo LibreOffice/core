@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:37:33 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 14:55:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2108,11 +2108,18 @@ BOOL GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart nPart,
 
 //  gtk_widget_set_state( gNotebookWidget, stateType );
 
-    pixmap = NWGetPixmapFromScreen( pixmapRect );
-    if ( !pixmap )
-        return( FALSE );
+    pixmap = gdk_pixmap_new( NULL, pixmapRect.GetWidth(), pixmapRect.GetHeight(),
+                             GetSalData()->GetDisplay()->GetVisual()->GetDepth() );
+    GdkRectangle paintRect;
+    paintRect.x = paintRect.y = 0;
+    paintRect.width = pixmapRect.GetWidth();
+    paintRect.height = pixmapRect.GetHeight();
+
+    gtk_paint_flat_box( m_pWindow->style, pixmap, GTK_STATE_NORMAL,
+                        GTK_SHADOW_NONE, &paintRect, m_pWindow, "base", 0, 0, -1, -1);
 
     NWSetWidgetState( gNotebookWidget, nState, stateType );
+
     switch( nType )
     {
         case CTRL_TAB_BODY:
@@ -2147,22 +2154,14 @@ BOOL GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart nPart,
         pixmapRect.Move( 1, 0 );
 
     // cache data
-    if( GetGtkFrame()->getVisibilityState() == GDK_VISIBILITY_UNOBSCURED )
-    {
-        if( nType == CTRL_TAB_ITEM )
-            aCacheItems.Fill( nType, nState, pixmapRect, pixmap );
-        else
-            aCachePage.Fill( nType, nState, pixmapRect, pixmap );
-    }
+    if( nType == CTRL_TAB_ITEM )
+        aCacheItems.Fill( nType, nState, pixmapRect, pixmap );
+    else
+        aCachePage.Fill( nType, nState, pixmapRect, pixmap );
 
-    if( !NWRenderPixmapToScreen(pixmap, pixmapRect) )
-    {
-        g_object_unref( pixmap );
-        return( FALSE );
-    }
-
+    BOOL bSuccess = NWRenderPixmapToScreen(pixmap, pixmapRect);
     g_object_unref( pixmap );
-    return( TRUE );
+    return bSuccess;
 }
 
 //-------------------------------------
