@@ -4,9 +4,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:38:03 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:07:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1807,7 +1807,9 @@ BOOL SwFEShell::ImpEndCreate()
         //Erzeugtes Object wegwerfen, so kann der Fly am elegentesten
         //ueber vorhandene SS erzeugt werden.
         GetDoc()->SetNoDrawUndoObj( TRUE );         // siehe oben
-        SdrPage *pPg = GetDoc()->MakeDrawModel()->GetPage( 0 );
+        // --> OD 2005-08-08 #i52858# - method name changed
+        SdrPage *pPg = GetDoc()->GetOrCreateDrawModel()->GetPage( 0 );
+        // <--
         if( !pPg )
         {
             pPg = GetDoc()->GetDrawModel()->AllocPage( FALSE );
