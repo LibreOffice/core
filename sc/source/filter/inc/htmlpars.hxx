@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlpars.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:20:42 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:57:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,10 @@
 #include "eeparser.hxx"
 
 const sal_uInt32 SC_HTML_FONTSIZES = 7;        // wie Export, HTML-Options
-#define SC_HTML_OFFSET_TOL 10   // Pixeltoleranz fuer SeekOffset
+
+// Pixel tolerance for SeekOffset and related.
+const USHORT SC_HTML_OFFSET_TOLERANCE_SMALL = 1;    // single table
+const USHORT SC_HTML_OFFSET_TOLERANCE_LARGE = 10;   // nested
 
 // ============================================================================
 // BASE class for HTML parser classes
@@ -101,7 +104,7 @@ struct ScHTMLTableStackEntry
                                 SCCOL nStart, SCCOL nMax, USHORT nTab,
                                 USHORT nTW, USHORT nCO, USHORT nCOS,
                                 BOOL bFR )
-                            : pCellEntry( pE ), xLockedList( rL ),
+                            : xLockedList( rL ), pCellEntry( pE ),
                             pLocalColOffset( pTO ),
                             nFirstTableCell( nFTC ),
                             nColCnt( nCol ), nRowCnt( nRow ),
@@ -155,6 +158,7 @@ private:
     USHORT              nColOffset;         // aktuell, Pixel
     USHORT              nColOffsetStart;    // Startwert je Table, in Pixel
     USHORT              nMetaCnt;           // fuer ParseMetaOptions
+    USHORT              nOffsetTolerance;   // for use with SeekOffset and related
     BOOL                bCalcWidthHeight;   // TRUE: calculate real column width
                                             // FALSE: 1 html-col = 1 sc-col
     BOOL                bTabInTabCell;
@@ -170,19 +174,15 @@ private:
     void                NextRow(  ImportInfo*  );
     void                SkipLocked( ScEEParseEntry*, BOOL bJoin = TRUE );
     static BOOL         SeekOffset( ScHTMLColOffset*, USHORT nOffset,
-                                    SCCOL* pCol,
-                                    USHORT nOffsetTol = SC_HTML_OFFSET_TOL );
+                                    SCCOL* pCol, USHORT nOffsetTol );
     static void         MakeCol( ScHTMLColOffset*, USHORT& nOffset,
-                                USHORT& nWidth,
-                                USHORT nOffsetTol = SC_HTML_OFFSET_TOL,
-                                USHORT nWidthTol = SC_HTML_OFFSET_TOL );
+                                USHORT& nWidth, USHORT nOffsetTol,
+                                USHORT nWidthTol );
     static void         MakeColNoRef( ScHTMLColOffset*, USHORT nOffset,
-                                USHORT nWidth,
-                                USHORT nOffsetTol = SC_HTML_OFFSET_TOL,
-                                USHORT nWidthTol = SC_HTML_OFFSET_TOL );
+                                USHORT nWidth, USHORT nOffsetTol,
+                                USHORT nWidthTol );
     static void         ModifyOffset( ScHTMLColOffset*, USHORT& nOldOffset,
-                                    USHORT& nNewOffset,
-                                    USHORT nOffsetTol = SC_HTML_OFFSET_TOL );
+                                    USHORT& nNewOffset, USHORT nOffsetTol );
     void                Colonize( ScEEParseEntry* );
     USHORT              GetWidth( ScEEParseEntry* );
     void                SetWidths();
