@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:23:15 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:18:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -278,13 +278,18 @@ void XMLChartExportPropertyMapper::ContextFilter(
                     property->mnIndex = -1;
                 else
                 {
-                    double fValue, fMainStep;
+                    double fValue, fMainStep = 0.0;
+                    sal_Bool bIsLogarithmic = sal_False;
                     (*property).maValue >>= fValue;
-                    sal_Int32 nDivisor = 0;
-                    if( rPropSet->getPropertyValue(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StepMain" ))) >>= fMainStep )
+                    sal_Int32 nDivisor = static_cast< sal_Int32 >( fValue );
+                    if( (rPropSet->getPropertyValue(
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Logarithmic" ))) >>= bIsLogarithmic) &&
+                        (rPropSet->getPropertyValue(
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StepMain" ))) >>= fMainStep) )
                     {
-                        if( fValue <= fMainStep &&
+                        // for logarithmic scaling the help steps are already divisors
+                        if( ! bIsLogarithmic &&
+                            (fValue <= fMainStep) &&
                             (fValue != 0.0) )
                         {
                             nDivisor = static_cast< sal_Int32 >(
@@ -605,6 +610,9 @@ sal_Bool XMLChartImportPropertyMapper::handleSpecialItem(
             {
                 double fStepHelp = 0.0;
                 double fStepMain = 0.0;
+                sal_Bool bIsLogarithmic = sal_False;
+                bool bHelpStepValid = false;
+                bool bAutoMainStep = true;
                 sal_Int32 nDivisor = 0;
                 SvXMLUnitConverter::convertNumber( nDivisor, rValue );
 
@@ -614,22 +622,47 @@ sal_Bool XMLChartImportPropertyMapper::handleSpecialItem(
                          aIt != rProperties.end();
                          aIt++ )
                     {
-                        if( (*aIt).mnIndex != -1 &&
-                            getPropertySetMapper()->GetEntryContextId( (*aIt).mnIndex ) ==
-                            XML_SCH_CONTEXT_STEP_MAIN )
+                        if( (*aIt).mnIndex != -1 )
                         {
-                            (*aIt).maValue >>= fStepMain;
+                            switch( getPropertySetMapper()->GetEntryContextId( (*aIt).mnIndex ))
+                            {
+                                case XML_SCH_CONTEXT_STEP_MAIN:
+                                    (*aIt).maValue >>= fStepMain;
+                                    bAutoMainStep = false;
+                                    break;
+                                case XML_SCH_CONTEXT_LOGARITHMIC:
+                                    (*aIt).maValue >>= bIsLogarithmic;
+                                    break;
+                            }
                         }
                     }
 
-                    if( fStepMain != 0.0 )
+                    if( bIsLogarithmic )
+                    {
+                        fStepHelp = static_cast< double >( nDivisor );
+                        bHelpStepValid = true;
+                    }
+                    else if( !bAutoMainStep && nDivisor != 0 )
+                    {
                         fStepHelp = fStepMain / static_cast< double >( nDivisor );
+                        bHelpStepValid = true;
+                    }
+                    else
+                    {
+                        // no logarithmic scaling, the divisor is 0 (which
+                        // doesn't make sense) or we have an auto main step,
+                        // where the concrete value cannot be determined unless
+                        // the data is attached to the cahrt.  This is some more
+                        // or less unspecific point of time in the
+                        // future. Therefore we fall back to auto help step here
+                        bHelpStepValid = false;
+                    }
                 }
 
-                if( fStepHelp == 0.0 )
-                    rProperty.mnIndex = -1;
-                else
+                if( bHelpStepValid )
                     rProperty.maValue <<= fStepHelp;
+                else
+                    rProperty.mnIndex = -1;
             }
             break;
 
