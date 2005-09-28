@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splitwin.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:29:48 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 14:53:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1968,7 +1968,10 @@ void SplitWindow::ImplDrawAutoHide( BOOL bInPaint )
         {
             if ( !pSVData->maCtrlData.mpSplitHPinImgList )
             {
-                Bitmap aBmp( ResId( SV_RESID_BITMAP_SPLITHPIN, ImplGetResMgr() ) );
+                Bitmap aBmp;
+                ResMgr* pResMgr = ImplGetResMgr();
+                if( pResMgr )
+                    aBmp = Bitmap( ResId( SV_RESID_BITMAP_SPLITHPIN, pResMgr ) );
                 pSVData->maCtrlData.mpSplitHPinImgList = new ImageList( aBmp, Color( 0x00, 0x00, 0xFF ), 4 );
             }
             pImageList = pSVData->maCtrlData.mpSplitHPinImgList;
@@ -1977,7 +1980,10 @@ void SplitWindow::ImplDrawAutoHide( BOOL bInPaint )
         {
             if ( !pSVData->maCtrlData.mpSplitVPinImgList )
             {
-                Bitmap aBmp( ResId( SV_RESID_BITMAP_SPLITVPIN, ImplGetResMgr() ) );
+                Bitmap aBmp;
+                ResMgr* pResMgr = ImplGetResMgr();
+                if( pResMgr )
+                    aBmp = Bitmap( ResId( SV_RESID_BITMAP_SPLITVPIN, pResMgr ) );
                 pSVData->maCtrlData.mpSplitVPinImgList = new ImageList( aBmp, Color( 0x00, 0x00, 0xFF ), 4 );
             }
             pImageList = pSVData->maCtrlData.mpSplitVPinImgList;
@@ -2807,7 +2813,10 @@ void SplitWindow::RequestHelp( const HelpEvent& rHEvt )
             aHelpRect.Bottom() = aPt.Y();
 
             // Text ermitteln und anzeigen
-            XubString aStr( ResId( nHelpResId, ImplGetResMgr() ) );
+            XubString aStr;
+            ResMgr* pResMgr = ImplGetResMgr();
+            if( pResMgr )
+                aStr = XubString( ResId( nHelpResId, pResMgr ) );
             if ( rHEvt.GetMode() & HELPMODE_BALLOON )
                 Help::ShowBalloon( this, aHelpRect.Center(), aHelpRect, aStr );
             else
