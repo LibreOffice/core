@@ -4,9 +4,9 @@
 #
 #   $RCSfile: property.pm,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:20:31 $
+#   last change: $Author: hr $ $Date: 2005-09-28 13:17:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,22 @@ sub get_arpcomments_for_property_table
     my $name = $allvariables->{'PRODUCTNAME'};
     my $version = $allvariables->{'PRODUCTVERSION'};
     my $comment = $name . " " . $version;
+
+    my $postversionextension = "";
+    if ( $allvariables->{'POSTVERSIONEXTENSION'} )
+    {
+        $postversionextension = $allvariables->{'POSTVERSIONEXTENSION'};
+        $comment = $comment . " " . $postversionextension;
+    }
+
+    if ( $installer::globals::languagepack ) { $comment = $comment . " " . "Language Pack"; }
+
+    if ( $installer::globals::patch )
+    {
+        if ( ! $allvariables->{'WINDOWSPATCHLEVEL'} ) { installer::exiter::exit_program("ERROR: No Patch level defined for Windows patch: WINDOWSPATCHLEVEL", "get_productname_for_property_table"); }
+        my $patchstring = "Product Update" . " " . $allvariables->{'WINDOWSPATCHLEVEL'};
+        $comment = $comment . " " . $patchstring;
+    }
 
     my $languagestring = $$languagestringref;
     $languagestring =~ s/\_/\,/g;
@@ -122,6 +138,13 @@ sub get_productname_for_property_table
     my $version = $allvariables->{'PRODUCTVERSION'};
     my $productname = $name . " " . $version;
 
+    my $postversionextension = "";
+    if ( $allvariables->{'POSTVERSIONEXTENSION'} )
+    {
+        $postversionextension = $allvariables->{'POSTVERSIONEXTENSION'};
+        $productname = $productname . " " . $postversionextension;
+    }
+
     if ( $installer::globals::languagepack )
     {
         my $langstring = get_language_string(); # Example (English, Deutsch)
@@ -134,6 +157,11 @@ sub get_productname_for_property_table
         my $patchstring = "Product Update" . " " . $allvariables->{'WINDOWSPATCHLEVEL'};
         $productname = $productname . " " . $patchstring;
     }
+
+    # Saving this name in hash $allvariables for further usage
+    $allvariables->{'PROPERTYTABLEPRODUCTNAME'} = $productname;
+    my $infoline = "Defined variable PROPERTYTABLEPRODUCTNAME: $productname\n";
+    push(@installer::globals::logfileinfo, $infoline);
 
     return $productname;
 }
