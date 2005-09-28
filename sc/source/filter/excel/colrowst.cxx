@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colrowst.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:54:29 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:40:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,6 +262,10 @@ void XclImpColRowSettings::SetHiddenFlags( SCTAB nScTab )
                 rDoc.SetRowFlags( nScRow, nScTab, rDoc.GetRowFlags( nScRow, nScTab ) | CR_FILTERED );
         }
     }
+
+    // #i47438# if default row format is hidden, hide remaining rows
+    if( (nDefHeight == 0) && (nMaxRow < MAXROW) )
+        rDoc.ShowRows( nMaxRow + 1, MAXROW, nScTab, FALSE );
 }
 
 
