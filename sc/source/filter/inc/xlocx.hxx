@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlocx.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:37:20 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:03:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,8 +79,10 @@ private:
 
 // ----------------------------------------------------------------------------
 
-class XclImpEscherOle;
-class XclImpEscherTbxCtrl;
+class Rectangle;
+class SdrObject;
+class XclImpOleObj;
+class XclImpTbxControlObj;
 class XclImpCtrlLinkHelper;
 
 /** Converter for import of OXC controls. */
@@ -89,16 +91,13 @@ class XclImpOcxConverter : public XclOcxConverter, protected XclImpRoot
 public:
     explicit            XclImpOcxConverter( const XclImpRoot& rRoot );
 
-    /** Reads the control formatting data for the passed object and creates the SdrUnoObj.
-        @return  true = SdrUnoObj successfully created. */
-    bool                CreateSdrUnoObj( XclImpEscherOle& rOleObj );
-
-    /** Creates the SdrUnoObj for the passed TBX form control object.
-        @return  true = SdrUnoObj successfully created. */
-    bool                CreateSdrUnoObj( XclImpEscherTbxCtrl& rTbxCtrl );
+    /** Reads the control formatting data for the passed object and creates the SdrUnoObj. */
+    SdrObject*          CreateSdrObject( const XclImpOleObj& rOcxCtrlObj, const Rectangle& rAnchorRect );
+    /** Creates the SdrUnoObj for the passed TBX form control object. */
+    SdrObject*          CreateSdrObject( const XclImpTbxControlObj& rTbxCtrlObj, const Rectangle& rAnchorRect );
 
 private:
-    /** Inserts the passed control rxFComp into the document. */
+    /** Inserts the passed control rxFComp into the form. */
     virtual sal_Bool    InsertControl(
                             const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::form::XFormComponent >& rxFComp,
@@ -107,13 +106,18 @@ private:
                                 ::com::sun::star::drawing::XShape >* pxShape,
                             BOOL bFloatingCtrl );
 
+    /** Returns the SdrObject from the passed shape. Sets the passed anchor rectangle. */
+    SdrObject*          GetSdrObject(
+                            const ::com::sun::star::uno::Reference<
+                                ::com::sun::star::drawing::XShape >& rxShape,
+                            const Rectangle& rAnchorRect ) const;
     /** Tries to set a spreadsheet cell link and source range link at the passed form control. */
     void                ConvertSheetLinks(
                             const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::awt::XControlModel >& rxModel,
                             const XclImpCtrlLinkHelper& rControl ) const;
     /** Tries to register a Basic macro for the control. */
-    void                RegisterTbxMacro( XclImpEscherTbxCtrl& rTbxCtrl );
+    void                RegisterTbxMacro( const XclImpTbxControlObj& rTbxCtrlObj );
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
@@ -159,7 +163,7 @@ private:
 #if !EXC_EXP_OCX_CTRL
     /** Tries to get the name of a Basic macro from a control. */
     void                ConvertTbxMacro(
-                            XclExpObjTbxCtrl& rTbxCtrl,
+                            XclExpObjTbxCtrl& rTbxCtrlObj,
                             const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::awt::XControlModel >& rxModel );
 #endif
