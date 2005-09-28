@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:41:39 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:05:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -366,7 +366,19 @@ void ScMyAreaLinksContainer::SetCellData( ScMyCell& rMyCell )
         {
             rMyCell.bHasAreaLink = sal_True;
             rMyCell.aAreaLink = *aItr;
-            aAreaLinkList.erase( aItr );
+            aItr = aAreaLinkList.erase( aItr );
+            sal_Bool bFound = sal_True;
+            while (aItr != aAreaLinkList.end() && bFound)
+            {
+                ScUnoConversion::FillApiStartAddress( aAddress, aItr->aDestRange );
+                if (aAddress == rMyCell.aCellAddress)
+                {
+                    DBG_ERROR("more than one linked range on one cell");
+                    aItr = aAreaLinkList.erase( aItr );
+                }
+                else
+                    bFound = sal_False;
+            }
         }
     }
 }
