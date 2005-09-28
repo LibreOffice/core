@@ -4,9 +4,9 @@
  *
  *  $RCSfile: refupdat.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:50:20 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:39:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,12 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#ifdef PCH
-#include "core_pch.hxx"
-#endif
-
-#pragma hdrstop
 
 // INCLUDE ---------------------------------------------------------------
 
@@ -157,8 +151,8 @@ void lcl_MoveItWrap( R& rRef, S nDelta, U nMask )
 }
 
 template< typename R, typename S, typename U >
-BOOL lcl_MoveRefPart( R& rRef1Val, BOOL& rRef1Del,
-                      R& rRef2Val, BOOL& rRef2Del,
+BOOL lcl_MoveRefPart( R& rRef1Val, BOOL& rRef1Del, BOOL bDo1,
+                      R& rRef2Val, BOOL& rRef2Del, BOOL bDo2,
                       U nStart, U nEnd, S nDelta, U nMask )
 {
     if ( nDelta )
@@ -166,35 +160,44 @@ BOOL lcl_MoveRefPart( R& rRef1Val, BOOL& rRef1Del,
         BOOL bDel, bCut1, bCut2;
         bDel = bCut1 = bCut2 = FALSE;
         S n;
-        if ( nDelta < 0 )
+        if (bDo1 && bDo2)
         {
-            n = nStart + nDelta;
-            if ( n <= rRef1Val && rRef1Val < nStart
-              && n <= rRef2Val && rRef2Val < nStart )
-                bDel = TRUE;
-        }
-        else
-        {
-            n = nEnd + nDelta;
-            if ( nEnd < rRef1Val && rRef1Val <= n
-              && nEnd < rRef2Val && rRef2Val <= n )
-                bDel = TRUE;
+            if ( nDelta < 0 )
+            {
+                n = nStart + nDelta;
+                if ( n <= rRef1Val && rRef1Val < nStart
+                  && n <= rRef2Val && rRef2Val < nStart )
+                    bDel = TRUE;
+            }
+            else
+            {
+                n = nEnd + nDelta;
+                if ( nEnd < rRef1Val && rRef1Val <= n
+                  && nEnd < rRef2Val && rRef2Val <= n )
+                    bDel = TRUE;
+            }
         }
         if ( bDel )
-        {   // geloeschte mitverschieben
+        {   // move deleted along
             rRef1Val += nDelta;
             rRef2Val += nDelta;
         }
         else
         {
-            if ( rRef1Del )
-                rRef1Val += nDelta;
-            else
-                bCut1 = lcl_MoveStart( rRef1Val, nStart, nDelta, nMask );
-            if ( rRef2Del )
-                rRef2Val += nDelta;
-            else
-                bCut2 = lcl_MoveEnd( rRef2Val, nStart, nDelta, nMask );
+            if (bDo1)
+            {
+                if ( rRef1Del )
+                    rRef1Val += nDelta;
+                else
+                    bCut1 = lcl_MoveStart( rRef1Val, nStart, nDelta, nMask );
+            }
+            if (bDo2)
+            {
+                if ( rRef2Del )
+                    rRef2Val += nDelta;
+                else
+                    bCut2 = lcl_MoveEnd( rRef2Val, nStart, nDelta, nMask );
+            }
         }
         if ( bDel || (bCut1 && bCut2) )
             rRef1Del = rRef2Del = TRUE;
@@ -498,11 +501,10 @@ ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
 }
 
 
-// vor dem Aufruf muessen die Abs-Refs aktualisiert werden!
 ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eMode,
                                     const ScAddress& rPos, const ScRange& r,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                    ComplRefData& rRef )
+                                    ComplRefData& rRef, WhatType eWhat )
 {
     ScRefUpdateRes eRet = UR_NOTHING;
 
@@ -545,8 +547,12 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eMode,
         {
             BOOL bExp = (bExpand && !bInDeleteUndo && IsExpand( rRef.Ref1.nCol,
                 rRef.Ref2.nCol, nCol1, nDx ));
-            if ( lcl_MoveRefPart( rRef.Ref1.nCol, bRef1ColDel,
-                                  rRef.Ref2.nCol, bRef2ColDel,
+            BOOL bDo1 = (eWhat == ScRefUpdate::ALL || (eWhat ==
+                        ScRefUpdate::ABSOLUTE && !rRef.Ref1.IsColRel()));
+            BOOL bDo2 = (eWhat == ScRefUpdate::ALL || (eWhat ==
+                        ScRefUpdate::ABSOLUTE && !rRef.Ref2.IsColRel()));
+            if ( lcl_MoveRefPart( rRef.Ref1.nCol, bRef1ColDel, bDo1,
+                                  rRef.Ref2.nCol, bRef2ColDel, bDo2,
                                   nCol1, nCol2, nDx, MAXCOL ) )
             {
                 eRet = UR_UPDATED;
@@ -583,8 +589,12 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eMode,
         {
             BOOL bExp = (bExpand && !bInDeleteUndo && IsExpand( rRef.Ref1.nRow,
                 rRef.Ref2.nRow, nRow1, nDy ));
-            if ( lcl_MoveRefPart( rRef.Ref1.nRow, bRef1RowDel,
-                                rRef.Ref2.nRow, bRef2RowDel,
+            BOOL bDo1 = (eWhat == ScRefUpdate::ALL || (eWhat ==
+                        ScRefUpdate::ABSOLUTE && !rRef.Ref1.IsRowRel()));
+            BOOL bDo2 = (eWhat == ScRefUpdate::ALL || (eWhat ==
+                        ScRefUpdate::ABSOLUTE && !rRef.Ref2.IsRowRel()));
+            if ( lcl_MoveRefPart( rRef.Ref1.nRow, bRef1RowDel, bDo1,
+                                rRef.Ref2.nRow, bRef2RowDel, bDo2,
                                 nRow1, nRow2, nDy, MAXROW ) )
             {
                 eRet = UR_UPDATED;
@@ -622,8 +632,12 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eMode,
             BOOL bExp = (bExpand && !bInDeleteUndo && IsExpand( rRef.Ref1.nTab,
                 rRef.Ref2.nTab, nTab1, nDz ));
             SCTAB nMaxTab = pDoc->GetTableCount() - 1;
-            if ( lcl_MoveRefPart( rRef.Ref1.nTab, bRef1TabDel,
-                                  rRef.Ref2.nTab, bRef2TabDel,
+            BOOL bDo1 = (eWhat == ScRefUpdate::ALL || (eWhat ==
+                        ScRefUpdate::ABSOLUTE && !rRef.Ref1.IsTabRel()));
+            BOOL bDo2 = (eWhat == ScRefUpdate::ALL || (eWhat ==
+                        ScRefUpdate::ABSOLUTE && !rRef.Ref2.IsTabRel()));
+            if ( lcl_MoveRefPart( rRef.Ref1.nTab, bRef1TabDel, bDo1,
+                                  rRef.Ref2.nTab, bRef2TabDel, bDo2,
                                   nTab1, nTab2, nDz, nMaxTab ) )
             {
                 eRet = UR_UPDATED;
@@ -661,7 +675,8 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eMode,
                 )
                 eRet = UR_UPDATED;
         }
-        rRef.CalcRelFromAbs( rPos );
+        if (eWhat != ScRefUpdate::ABSOLUTE)
+            rRef.CalcRelFromAbs( rPos );
     }
     else
     {
@@ -681,21 +696,22 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eMode,
                 rRef.Ref1.SetFlag3D( TRUE );
                 rRef.Ref2.SetFlag3D( TRUE );
                 eRet = UR_UPDATED;
-                rRef.CalcRelFromAbs( rPos );
+                if (eWhat != ScRefUpdate::ABSOLUTE)
+                    rRef.CalcRelFromAbs( rPos );
             }
-            else
+            else if (eWhat != ScRefUpdate::ABSOLUTE)
                 rRef.CalcRelFromAbs( rPos );
         }
         else if( eMode == URM_COPY && r.In( rPos ) )
             eRet = Move( pDoc, rPos, nDx, nDy, nDz, rRef, FALSE, FALSE );       // nur relative
             // sollte nicht mehr verwendet werden muessen
-        else
+        else if (eWhat != ScRefUpdate::ABSOLUTE)
             rRef.CalcRelFromAbs( rPos );
     }
     return eRet;
 }
 
-// vor dem Aufruf muessen die Abs-Refs aktualisiert werden!
+
 ScRefUpdateRes ScRefUpdate::Move( ScDocument* pDoc, const ScAddress& rPos,
                                   SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
                                   ComplRefData& rRef, BOOL bWrap, BOOL bAbsolute )
@@ -870,7 +886,7 @@ void ScRefUpdate::DoTranspose( SCsCOL& rCol, SCsROW& rRow, SCsTAB& rTab,
             static_cast<SCsCOLROW>(nRelX));
 }
 
-// vor dem Aufruf muessen die Abs-Refs aktualisiert werden!
+
 ScRefUpdateRes ScRefUpdate::UpdateTranspose( ScDocument* pDoc,
                                 const ScRange& rSource, const ScAddress& rDest,
                                 ComplRefData& rRef )
@@ -892,7 +908,7 @@ ScRefUpdateRes ScRefUpdate::UpdateTranspose( ScDocument* pDoc,
 //  UpdateGrow - erweitert Referenzen, die genau auf den Bereich zeigen
 //  kommt ohne Dokument aus
 
-// vor dem Aufruf muessen die Abs-Refs aktualisiert werden!
+
 ScRefUpdateRes ScRefUpdate::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY,
                                         ComplRefData& rRef )
 {
