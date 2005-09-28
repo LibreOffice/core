@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.196 $
+ *  $Revision: 1.197 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:43:00 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:06:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2004,8 +2004,6 @@ void ScXMLExport::_ExportAutoStyles()
                                             }
                                             sal_Int32 nOld(nColumn);
                                             nColumn = pDoc->GetNextDifferentChangedCol(nTable, static_cast<USHORT>(nColumn));
-                                            if (nColumn == MAXCOL)
-                                                ++nColumn;
                                             for (sal_Int32 i = nOld + 1; i < nColumn; ++i)
                                                 pColumnStyles->AddFieldStyleName(nTable, i, nIndex, bIsVisible);
                                         }
@@ -2056,8 +2054,6 @@ void ScXMLExport::_ExportAutoStyles()
                                             }
                                             sal_Int32 nOld(nRow);
                                             nRow = pDoc->GetNextDifferentChangedRow(nTable, static_cast<USHORT>(nRow), false);
-                                            if (nRow == MAXROW)
-                                                ++nRow;
                                             for (sal_Int32 i = nOld + 1; i < nRow; ++i)
                                                 pRowStyles->AddFieldStyleName(nTable, i, nIndex);
                                         }
