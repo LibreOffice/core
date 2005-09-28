@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:41:12 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:36:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,12 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#ifdef PCH
-#include "core_pch.hxx"
-#endif
-
-#pragma hdrstop
 
 // INCLUDE ---------------------------------------------------------------
 
@@ -726,6 +720,9 @@ xub_StrLen ScCompiler::NextSymbol()
                 if( nMask & SC_COMPILER_C_STRING_SEP )
                     eState = ssStop;
                 break;
+            case ssStop:
+                ;   // nothing, prevent warning
+                break;
         }
         cLast = c;
         c = *pSrc;
@@ -1132,6 +1129,13 @@ BOOL ScCompiler::IsColRowName( const String& rName )
                             case CELLTYPE_EDIT:
                                 ((ScEditCell*)pCell)->GetString( aStr );
                             break;
+                            case CELLTYPE_NONE:
+                            case CELLTYPE_VALUE:
+                            case CELLTYPE_NOTE:
+                            case CELLTYPE_SYMBOLS:
+                            case CELLTYPE_DESTROYED:
+                                ;   // nothing, prevent compiler warning
+                            break;
                         }
                         if ( ScGlobal::pTransliteration->isEqual( aStr, aName ) )
                         {
@@ -1185,6 +1189,13 @@ BOOL ScCompiler::IsColRowName( const String& rName )
                     break;
                     case CELLTYPE_EDIT:
                         ((ScEditCell*)pCell)->GetString( aStr );
+                    break;
+                    case CELLTYPE_NONE:
+                    case CELLTYPE_VALUE:
+                    case CELLTYPE_NOTE:
+                    case CELLTYPE_SYMBOLS:
+                    case CELLTYPE_DESTROYED:
+                        ;   // nothing, prevent compiler warning
                     break;
                 }
                 if ( ScGlobal::pTransliteration->isEqual( aStr, aName ) )
@@ -2115,6 +2126,8 @@ OpCode ScCompiler::NextToken()
                                     bCorrected = TRUE;
                                 }
                             break;
+                            default:
+                                ;   // nothing
                         }
                     }
                 }
@@ -2296,6 +2309,8 @@ void ScCompiler::Factor()
             case ocHyperLink :
                 pArr->SetHyperLink(TRUE);
             break;
+            default:
+                ;   // nothing
         }
         if( eOp > ocEndUnOp && eOp < ocEndNoPar)
         {
@@ -2956,7 +2971,7 @@ BOOL ScCompiler::UpdateNameReference(UpdateRefMode eUpdateRefMode,
                                      SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
                                      BOOL& rChanged, BOOL bSharedFormula)
 {
-    BOOL bRet = FALSE;                      // set if relative reference
+    BOOL bRelRef = FALSE;   // set if relative reference
     rChanged = FALSE;
     pArr->Reset();
     for( ScToken* t = pArr->GetNextReference(); t;
@@ -2964,23 +2979,40 @@ BOOL ScCompiler::UpdateNameReference(UpdateRefMode eUpdateRefMode,
     {
         SingleDoubleRefModifier aMod( *t );
         ComplRefData& rRef = aMod.Ref();
-        if (!rRef.Ref1.IsColRel() && !rRef.Ref1.IsRowRel() &&
-                (!rRef.Ref1.IsTabRel() || (bSharedFormula &&
-                                           !rRef.Ref1.IsFlag3D())) &&
-                (t->GetType() == svSingleRef || (!rRef.Ref2.IsColRel() &&
-                                                 !rRef.Ref2.IsRowRel() &&
-                                                 (!rRef.Ref2.IsTabRel() ||
-                                                  (bSharedFormula &&
-                                                   !rRef.Ref2.IsFlag3D())))))
+        bRelRef = rRef.Ref1.IsColRel() || rRef.Ref1.IsRowRel() ||
+            rRef.Ref1.IsTabRel();
+        if (!bRelRef && t->GetType() == svDoubleRef)
+            bRelRef = rRef.Ref2.IsColRel() || rRef.Ref2.IsRowRel() ||
+                rRef.Ref2.IsTabRel();
+        bool bUpdate;
+        if (bSharedFormula)
         {
-            if (ScRefUpdate::Update( pDoc, eUpdateRefMode, aPos,
-                                     r, nDx, nDy, nDz, rRef ) != UR_NOTHING )
-                rChanged = TRUE;
+            bUpdate = !rRef.Ref1.IsColRel() || !rRef.Ref1.IsRowRel() ||
+                !rRef.Ref1.IsTabRel();
+            if (bUpdate)
+                rRef.Ref1.CalcAbsIfRel( aPos);
+            if (t->GetType() == svDoubleRef)
+            {
+                if (!bUpdate)
+                    bUpdate = !rRef.Ref2.IsColRel() || !rRef.Ref2.IsRowRel() ||
+                        !rRef.Ref2.IsTabRel();
+                if (bUpdate)
+                    rRef.Ref2.CalcAbsIfRel( aPos);
+            }
         }
         else
-            bRet = TRUE;
+        {
+            bUpdate = !bRelRef;
+        }
+        if (bUpdate)
+        {
+            if (ScRefUpdate::Update( pDoc, eUpdateRefMode, aPos, r,
+                        nDx, nDy, nDz, rRef, ScRefUpdate::ABSOLUTE)
+                    != UR_NOTHING )
+                rChanged = TRUE;
+        }
     }
-    return bRet;
+    return bRelRef;
 }
 
 
@@ -3703,6 +3735,8 @@ ScToken* ScCompiler::CreateStringFromToken( rtl::OUStringBuffer& rBuffer, ScToke
                         aBuffer.append(pDBData->GetName());
                 }
                 break;
+                default:
+                    ;   // nothing
             }
             if ( aBuffer.getLength() )
                 rBuffer.append(aBuffer);
