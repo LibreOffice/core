@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeescher.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:59:51 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:44:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -373,8 +373,8 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
         }
 
         pTxo = new XclTxo( aString, nXclFont );
-        pTxo->SetHorAlign( (mnObjType == EXC_OBJ_CMO_BUTTON) ? xlTxoHAlignCenter : xlTxoHAlignLeft );
-        pTxo->SetVerAlign( xlTxoVAlignCenter );
+        pTxo->SetHorAlign( (mnObjType == EXC_OBJ_CMO_BUTTON) ? EXC_TXO_HOR_CENTER : EXC_TXO_HOR_LEFT );
+        pTxo->SetVerAlign( EXC_TXO_VER_CENTER );
     }
 
     rEscherEx.CloseContainer();  // ESCHER_SpContainer
