@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:57:41 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:19:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -762,6 +762,15 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
                 SwTxtPaintInfo aInf( rInf );
 static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                 aInf.X( aInf.X() + nSpaceOffs );
+
+                // --> FME 2005-08-12 #i53199# Adjust position of underline:
+                if ( rInf.GetUnderFnt() )
+                {
+                    const Point aNewPos( aInf.GetPos().X(), rInf.GetUnderFnt()->GetPos().Y() );
+                    rInf.GetUnderFnt()->SetPos( aNewPos );
+                }
+                // <--
+
                 pThis->Width( nOldWidth - nSpaceOffs + 12 );
                 {
                     SwTxtSlotLen aDiffTxt( &aInf, this, sDoubleSpace );
