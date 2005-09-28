@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:24:51 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:14:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1603,7 +1603,19 @@ void SwRootFrm::RemoveSuperfluous()
 
         // OD 19.06.2003 #108784# - optimization: check first, if essential objects
         // exists.
-        if ( bExistEssentialObjs || pPage->FindFirstBodyCntnt() || pPage->FindFtnCont() )
+        const SwLayoutFrm* pBody = 0;
+        if ( bExistEssentialObjs ||
+             pPage->FindFtnCont() ||
+             ( 0 != ( pBody = pPage->FindBodyCont() ) &&
+                ( pBody->ContainsCntnt() ||
+                    // --> FME 2005-05-18 #i47580#
+                    // Do not delete page if there's an empty tabframe
+                    // left. I think it might be correct to use ContainsAny()
+                    // instead of ContainsCntnt() to cover the empty-table-case,
+                    // but I'm not fully sure, since ContainsAny() also returns
+                    // SectionFrames. Therefore I prefer to do it the safe way:
+                  ( pBody->Lower() && pBody->Lower()->IsTabFrm() ) ) ) )
+                    // <--
         {
             if ( pPage->IsFtnPage() )
             {
