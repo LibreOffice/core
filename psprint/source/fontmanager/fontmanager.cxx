@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:37:23 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 14:26:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1090,6 +1090,10 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
     KernPair aPair;
     for( i = 0; i < pInfo->numOfPairs; i++, pKern++ )
     {
+        // #i37703# broken kern table
+        if( ! pKern->name1 || ! pKern->name2 )
+            continue;
+
         aPair.first = 0;
         aPair.second = 0;
         // currently we have to find the adobe character names
@@ -1876,6 +1880,8 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
             }
         }
 
+        if( aInfo.usubfamily )
+            pFont->m_aStyleName = OUString( aInfo.usubfamily );
 
         pFont->m_nPSName = m_pAtoms->getAtom( ATOM_PSNAME, String( ByteString( aInfo.psname ), aEncoding ), sal_True );
         switch( aInfo.weight )
@@ -2563,6 +2569,7 @@ void PrintFontManager::fillPrintFontInfo( PrintFont* pFont, FastPrintFontInfo& r
           m_aFamilyTypes.find( pFont->m_nFamilyName );
     rInfo.m_eType           = pFont->m_eType;
     rInfo.m_aFamilyName     = m_pAtoms->getString( ATOM_FAMILYNAME, pFont->m_nFamilyName );
+    rInfo.m_aStyleName      = pFont->m_aStyleName;
     rInfo.m_eFamilyStyle    = style_it != m_aFamilyTypes.end() ? style_it->second : family::Unknown;
     rInfo.m_eItalic         = pFont->m_eItalic;
     rInfo.m_eWidth          = pFont->m_eWidth;
@@ -3046,6 +3053,10 @@ bool PrintFontManager::getMetrics( fontID nFontID, const sal_Unicode* pString, i
             effectiveCode |= bVertical ? 1 << 16 : 0;
             ::std::hash_map< int, CharacterMetric >::const_iterator it =
                   pFont->m_pMetrics->m_aMetrics.find( effectiveCode );
+        // if no vertical metrics are available assume rotated horizontal metrics
+        if( bVertical && (it == pFont->m_pMetrics->m_aMetrics.end()) )
+                  it = pFont->m_pMetrics->m_aMetrics.find( pString[i] );
+        // the character metrics are in it->second
             if( it != pFont->m_pMetrics->m_aMetrics.end() )
                 pArray[ i ] = it->second;
         }
@@ -3084,7 +3095,11 @@ bool PrintFontManager::getMetrics( fontID nFontID, sal_Unicode minCharacter, sal
             effectiveCode |= bVertical ? 1 << 16 : 0;
             ::std::hash_map< int, CharacterMetric >::const_iterator it =
                   pFont->m_pMetrics->m_aMetrics.find( effectiveCode );
-            if( it != pFont->m_pMetrics->m_aMetrics.end() )
+        // if no vertical metrics are available assume rotated horizontal metrics
+        if( bVertical && (it == pFont->m_pMetrics->m_aMetrics.end()) )
+                  it = pFont->m_pMetrics->m_aMetrics.find( code );
+        // the character metrics are in it->second
+        if( it != pFont->m_pMetrics->m_aMetrics.end() )
                 pArray[ code - minCharacter ] = it->second;
         }
     }
