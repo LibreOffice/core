@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:06:26 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:21:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2212,27 +2212,31 @@ SwTwips SwTxtFrm::CalcFitToContent()
     replace by method <_CalcHeightOfLastLine()>. Height of last line will be
     stored in new member <mnHeightOfLastLine> and can be accessed via method
     <GetHeightOfLastLine()>
+    OD 2005-05-20 #i47162# - introduce new optional parameter <_bUseFont>
+    in order to force the usage of the former algorithm to determine the
+    height of the last line, which uses the font.
 
     @author OD
 */
-void SwTxtFrm::_CalcHeightOfLastLine()
+void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
 {
-    // determine output device
-    ViewShell* pVsh = (ViewShell*)GetShell();
-    ASSERT( pVsh, "<SwTxtFrm::_GetHeightOfLastLineForPropLineSpacing()> - no ViewShell -> crash" );
-    OutputDevice* pOut = pVsh->GetOut();
-    if ( !pVsh->GetDoc()->IsBrowseMode() ||
-         pVsh->GetViewOptions()->IsPrtFormat() )
-    {
-        pOut = &GetTxtNode()->GetDoc()->GetRefDev();
-    }
-    ASSERT( pOut, "<SwTxtFrm::_GetHeightOfLastLineForPropLineSpacing()> - no OutputDevice -> crash" );
-
     // determine height of last line
-    if ( GetTxtNode()->GetDoc()->IsFormerLineSpacing() )
+    if ( _bUseFont ||
+         GetTxtNode()->GetDoc()->IsFormerLineSpacing() )
     {
         // former determination of last line height for proprotional line
         // spacing - take height of font set at the paragraph
+
+        // determine output device
+        ViewShell* pVsh = (ViewShell*)GetShell();
+        ASSERT( pVsh, "<SwTxtFrm::_GetHeightOfLastLineForPropLineSpacing()> - no ViewShell -> crash" );
+        OutputDevice* pOut = pVsh->GetOut();
+        if ( !pVsh->GetDoc()->IsBrowseMode() ||
+             pVsh->GetViewOptions()->IsPrtFormat() )
+        {
+            pOut = &GetTxtNode()->GetDoc()->GetRefDev();
+        }
+        ASSERT( pOut, "<SwTxtFrm::_GetHeightOfLastLineForPropLineSpacing()> - no OutputDevice -> crash" );
 
         SwFont aFont( GetAttrSet(), GetTxtNode()->GetDoc() );
         // Wir muessen dafuer sorgen, dass am OutputDevice der Font
@@ -2290,8 +2294,21 @@ void SwTxtFrm::_CalcHeightOfLastLine()
             if ( pLineLayout )
             {
                 SwTwips nAscent, nDescent, nDummy1, nDummy2;
-                pLineLayout->MaxAscentDescent( nAscent, nDescent, nDummy1, nDummy2 );
+                // --> OD 2005-05-20 #i47162# - suppress consideration of
+                // fly content portions and the line portion.
+                pLineLayout->MaxAscentDescent( nAscent, nDescent,
+                                               nDummy1, nDummy2,
+                                               0L, true );
+                // <--
                 mnHeightOfLastLine = nAscent + nDescent;
+                // --> OD 2005-05-20 #i47162# - if last line only contains
+                // fly content portions, <mnHeightOfLastLine> is zero.
+                // In this case determine height of last line by the font
+                if ( mnHeightOfLastLine == 0 )
+                {
+                    _CalcHeightOfLastLine( true );
+                }
+                // <--
             }
         }
     }
@@ -2449,6 +2466,10 @@ void SwTxtFrm::ChgThisLines()
 void SwTxtFrm::RecalcAllLines()
 {
     ValidateLineNum();
+
+    // --> FME 2005-05-17 #i49177# Recalc ThisLines
+    ChgThisLines();
+    // <--
 
     const SwAttrSet *pAttrSet = GetAttrSet();
 
