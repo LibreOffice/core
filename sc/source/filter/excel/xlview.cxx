@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlview.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:11:01 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:53:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,22 @@
 #include "ftools.hxx"
 #endif
 
-// View settings ==============================================================
+// Structs ====================================================================
+
+XclDocViewData::XclDocViewData() :
+    mnWinX( 0 ),
+    mnWinY( 0 ),
+    mnWinWidth( 0 ),
+    mnWinHeight( 0 ),
+    mnFlags( 0 ),
+    mnDisplXclTab( 0 ),
+    mnFirstVisXclTab( 0 ),
+    mnXclSelectCnt( 0 ),
+    mnTabBarWidth( 0 )
+{
+}
+
+// ----------------------------------------------------------------------------
 
 XclTabViewData::XclTabViewData() :
     maFirstXclPos( ScAddress::UNINITIALIZED ),
