@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftools.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:11:46 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:54:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,9 @@
 
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
+#endif
+#ifndef SC_DOCUMENT_HXX
+#include "document.hxx"
 #endif
 #ifndef SC_STLPOOL_HXX
 #include "stlpool.hxx"
@@ -185,13 +188,7 @@ Color ScfTools::GetMixedColor( const Color& rFore, const Color& rBack, sal_uInt1
 
 void ScfTools::ConvertToScSheetName( String& rName )
 {
-    for( xub_StrLen nPos = 0, nLen = rName.Len(); nPos < nLen; ++nPos )
-    {
-        sal_Unicode cChar = rName.GetChar( nPos );
-        bool bSpace = (cChar == ' ');
-        if( (!ScGlobal::pCharClass->isLetterNumeric( rName, nPos ) && !bSpace) || (!nPos && bSpace) )
-            rName.SetChar( nPos, '_' );
-    }
+    ScDocument::ConvertToValidTabName( rName, '_' );
 }
 
 void ScfTools::ConvertToScDefinedName( String& rName )
