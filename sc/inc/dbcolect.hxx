@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbcolect.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:30:47 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:25:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,6 +253,7 @@ public:
 
     BOOL    SearchName( const String& rName, USHORT& rIndex ) const;
 
+    void    DeleteOnTab( SCTAB nTab );
     void    UpdateReference(UpdateRefMode eUpdateRefMode,
                                 SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                 SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
