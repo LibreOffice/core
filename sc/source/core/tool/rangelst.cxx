@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rangelst.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:48:07 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:39:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -645,6 +645,28 @@ BOOL ScRangePairList::UpdateReference( UpdateRefMode eUpdateRefMode,
         }
     }
     return bChanged;
+}
+
+
+void ScRangePairList::DeleteOnTab( SCTAB nTab )
+{
+    // Delete entries that have the labels (first range) on nTab
+
+    ULONG nCount = Count();
+    ULONG nPos = 0;
+    while ( nPos < nCount )
+    {
+        ScRangePair* pR = GetObject( nPos );
+        ScRange aRange = pR->GetRange(0);
+        if ( aRange.aStart.Tab() == nTab && aRange.aEnd.Tab() == nTab )
+        {
+            Remove( nPos );
+            delete pR;
+            nCount = Count();
+        }
+        else
+            ++nPos;
+    }
 }
 
 
