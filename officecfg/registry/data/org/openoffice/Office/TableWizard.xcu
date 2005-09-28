@@ -5,9 +5,9 @@
  *
  *  $RCSfile: TableWizard.xcu,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:51:26 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 14:11:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -9638,7 +9638,7 @@
                             </prop>
                             <prop oor:name="Name">
                                 <value xml:lang="en-US">GramsCarbohydrates</value>
-                                <value xml:lang="de">GrammKohlehydrate</value>
+                                <value xml:lang="de">GrammKohlenhydrate</value>
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">GrCarbohyd</value>
