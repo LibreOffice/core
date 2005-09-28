@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:10:47 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:18:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <com/sun/star/embed/EmbedMisc.hpp>
+#include <com/sun/star/embed/EmbedStates.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/svxdlg.hxx>
@@ -302,6 +303,18 @@ ErrCode __EXPORT ScTabViewShell::DoVerb(long nVerb)
         DBG_ERROR("kein Objekt fuer Verb gefunden");
 
     return nErr;
+}
+
+void ScTabViewShell::DeactivateOle()
+{
+    // deactivate inplace editing if currently active
+
+    ScClient* pClient = (ScClient*) GetIPClient();
+    if ( pClient && pClient->IsObjectInPlaceActive() )
+    {
+        pClient->GetObject()->changeState( embed::EmbedStates::RUNNING );
+        SFX_APP()->SetViewFrame(GetViewFrame());
+    }
 }
 
 void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
