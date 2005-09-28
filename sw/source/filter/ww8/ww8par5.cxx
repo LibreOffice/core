@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:12:49 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:26:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1010,6 +1010,11 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         String aStr;
         aF.nLCode = pSBase->WW8ReadString( *pStrm, aStr, pPlcxMan->GetCpOfs()+
             aF.nSCode, aF.nLCode, eTextCharSet );
+
+        // --> OD 2005-07-25 #i51312# - graphics inside field code not supported
+        // by Writer. Thus, delete character 0x01, which stands for such a graphic.
+        aStr.EraseAllChars( 0x01 );
+        // <--
 
         eF_ResT eRes = (this->*aWW8FieldTab[aF.nId])( &aF, aStr );
         pStrm->Seek( nOldPos );
