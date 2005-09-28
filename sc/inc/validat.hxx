@@ -4,9 +4,9 @@
  *
  *  $RCSfile: validat.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:03:12 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:27:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,6 +210,7 @@ public:
     void    CompileXML();
     void    UpdateReference( UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+    void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
 
     BOOL    operator==( const ScValidationDataList& r ) const;      // fuer Ref-Undo
 };
