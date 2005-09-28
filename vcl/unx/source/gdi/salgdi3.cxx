@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:07:44 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 15:04:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1134,6 +1134,8 @@ void X11SalGraphics::DrawStringUCS2MB( ExtendedFontStruct& rFont,
         XTextItem16 *pTextItem = (XTextItem16*)alloca( nLength * sizeof(XTextItem16) );
         XChar2b     *pMBChar   = (XChar2b*)pStr;
         int nItem = 0;
+
+        DBG_ASSERT( nLength<=1, "#i49902# DrawStringUCS2MB with nLength>1 => problems with XOrg6.8.[0123]");
 
         for( int nChar = 0; nChar < nLength; ++nChar )
         {
