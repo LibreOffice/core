@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:56:44 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:12:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -403,6 +403,8 @@ public:
 
     void            ConnectObject( SdrOle2Obj* pObj );
     BOOL            ActivateObject( SdrOle2Obj* pObj, long nVerb );
+
+    void            DeactivateOle();
 
     static ScTabViewShell* GetActiveViewShell();
     SfxModelessDialog*  CreateRefDialog( SfxBindings* pB, SfxChildWindow* pCW,
