@@ -4,9 +4,9 @@
  *
  *  $RCSfile: emfwr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:45:02 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:28:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1045,19 +1045,30 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case( META_EPS_ACTION ):
             {
                 const MetaEPSAction*    pA = (const MetaEPSAction*) pAction;
-                const GDIMetaFile       aGDIMetaFile( pA->GetSubstitute() );
-                sal_Bool                bFound = sal_False;
+                const GDIMetaFile       aSubstitute( pA->GetSubstitute() );
 
-                for( ULONG i = 0, nCount = aGDIMetaFile.GetActionCount(); ( i < nCount ) && !bFound; i++ )
+                for( ULONG i = 0, nCount = aSubstitute.GetActionCount(); i < nCount; i++ )
                 {
-                    const MetaAction* pSubstAct = aGDIMetaFile.GetAction( i );
-
+                    const MetaAction* pSubstAct = aSubstitute.GetAction( i );
                     if( pSubstAct->GetType() == META_BMPSCALE_ACTION )
                     {
-                        bFound = sal_True;
-                        const MetaBmpScaleAction* pBmpScaleAction = (const MetaBmpScaleAction*) pAction;
-                        ImplWriteBmpRecord( pBmpScaleAction->GetBitmap(), pBmpScaleAction->GetPoint(),
-                                            pBmpScaleAction->GetSize(), WIN_SRCCOPY );
+                        maVDev.Push( PUSH_ALL );
+                        ImplBeginRecord( WIN_EMR_SAVEDC );
+                        ImplEndRecord();
+
+                        MapMode aMapMode( aSubstitute.GetPrefMapMode() );
+                        Size aOutSize( maVDev.LogicToLogic( pA->GetSize(), maVDev.GetMapMode(), aMapMode ) );
+                        aMapMode.SetScaleX( Fraction( aOutSize.Width(), aSubstitute.GetPrefSize().Width() ) );
+                        aMapMode.SetScaleY( Fraction( aOutSize.Height(), aSubstitute.GetPrefSize().Height() ) );
+                        aMapMode.SetOrigin( maVDev.LogicToLogic( pA->GetPoint(), maVDev.GetMapMode(), aMapMode ) );
+                        maVDev.SetMapMode( aMapMode );
+                        ImplWrite( aSubstitute );
+
+                        maVDev.Pop();
+                        ImplBeginRecord( WIN_EMR_RESTOREDC );
+                        (*mpStm) << (INT32) -1;
+                        ImplEndRecord();
+                        break;
                     }
                 }
             }
