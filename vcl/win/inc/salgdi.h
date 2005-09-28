@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:56:15 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 15:06:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,6 +138,7 @@ public:
     HFONT                   mhFonts[ MAX_FALLBACK ];        // Font + Fallbacks
     ImplWinFontData*        mpWinFontData[ MAX_FALLBACK ];  // pointer to the most recent font face
     ImplWinFontEntry*       mpWinFontEntry[ MAX_FALLBACK ]; // pointer to the most recent font instance
+    float                   mfFontScale;        // allows metrics emulation of huge font sizes
     HPEN                    mhPen;              // Pen
     HBRUSH                  mhBrush;            // Brush
     HRGN                    mhRegion;           // Region Handle
