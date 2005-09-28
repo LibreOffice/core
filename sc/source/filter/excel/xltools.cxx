@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xltools.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:10:30 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:53:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,7 +197,7 @@ sal_uInt8 XclTools::GetXclErrorCode( USHORT nScError )
     switch( nScError )
     {
         case errIllegalArgument:        return EXC_ERR_VALUE;
-        case errIllegalFPOperation:     return EXC_ERR_DIV0;    // maybe DIV/0 or NUM...
+        case errIllegalFPOperation:     return EXC_ERR_NUM;     // maybe DIV/0 or NUM...
         case errIllegalParameter:       return EXC_ERR_VALUE;
         case errPairExpected:           return EXC_ERR_VALUE;
         case errOperatorExpected:       return EXC_ERR_VALUE;
