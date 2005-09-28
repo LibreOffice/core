@@ -4,9 +4,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:42:22 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 13:00:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1020,7 +1020,7 @@ static bool setup_version()
         }
     }
 
-    g_buildid = get_profile_string( "bootstraprc", "Bootstrap", "BuildId" );
+    g_buildid = get_profile_string( "versionrc", "Version", "BuildId" );
     g_strDefaultLanguage = get_script_string( "instdb.ins", "DefaultLanguage"  );
 
     g_strReportServer = get_profile_string( "bootstraprc", "ErrorReport", "ErrorReportServer" );
