@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:08:44 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 15:10:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1424,7 +1424,20 @@ void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
                 POINT aPt;
                 aPt.x = nX;
                 aPt.y = nY;
-                ClientToScreen( ImplGetParentHwnd( mhWnd ), &aPt );
+
+                HWND parentHwnd = ImplGetParentHwnd( mhWnd );
+                WinSalFrame* pParentFrame = GetWindowPtr( parentHwnd );
+                if ( pParentFrame && pParentFrame->mnShowState == SW_SHOWMAXIMIZED )
+                {
+                    // #i42485#: parent will be shown maximized in which case
+                    // a ClientToScreen uses the wrong coordinates (i.e. those from the restore pos)
+                    // so use the (already updated) frame geometry for the transformation
+                    aPt.x +=  pParentFrame->maGeometry.nX;
+                    aPt.y +=  pParentFrame->maGeometry.nY;
+                }
+                else
+                    ClientToScreen( parentHwnd, &aPt );
+
                 nX = aPt.x;
                 nY = aPt.y;
             }
