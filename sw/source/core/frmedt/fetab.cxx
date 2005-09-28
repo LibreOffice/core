@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:38:19 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:07:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,6 +141,9 @@
 #endif
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>
+#endif
+#ifndef _FRMTOOL_HXX
+#include <frmtool.hxx>
 #endif
 
 #include <node.hxx> // #i23726#
@@ -1886,21 +1889,7 @@ bool SwFEShell::SelTblRowCol( const Point& rPt, const Point* pEnd )
         if ( pFrm )
         {
             const SwTabFrm* pTabFrm = pFrm->FindTabFrm();
-            const SwCntntFrm* pCntnt = pFrm->ContainsCntnt();
-
-            // Leave any inner table:
-            while ( pCntnt && pFrm->IsAnLower( pCntnt ) )
-            {
-                const SwTabFrm* pTmpTab = pCntnt->FindTabFrm();
-                if ( pTmpTab != pTabFrm )
-                {
-                    pCntnt = pTmpTab->FindLastCntnt();
-                    if ( pCntnt )
-                        pCntnt = pCntnt->FindNextCnt();
-                }
-                else
-                    break;
-            }
+            const SwCntntFrm* pCntnt = ::GetCellCntnt( *pFrm );
 
             if ( pCntnt && pCntnt->IsTxtFrm() )
             {
