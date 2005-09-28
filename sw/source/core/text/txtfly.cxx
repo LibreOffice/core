@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:05:48 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:20:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1113,11 +1113,18 @@ void SwTxtFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
                 // Consider that fly frame background/shadow can be transparent
                 // and <SwAlignRect(..)> fly frame area
                 const SwFlyFrm *pFly = static_cast<const SwVirtFlyDrawObj*>(pTmp)->GetFlyFrm();
+                // --> OD 2005-06-08 #i47804# - consider transparent graphics
+                // and OLE objects.
                 bool bClipFlyArea =
-                        ( (SURROUND_THROUGHT == rSur.GetSurround()) ?
-                          (pTmp->GetLayer() != nHellId) : !rSur.IsContour() ) &&
+                        ( ( SURROUND_THROUGHT == rSur.GetSurround() )
+                          ? (pTmp->GetLayer() != nHellId)
+                          : !rSur.IsContour() ) &&
                         !pFly->IsBackgroundTransparent() &&
-                        !pFly->IsShadowTransparent();
+                        !pFly->IsShadowTransparent() &&
+                        ( !pFly->Lower() ||
+                          !pFly->Lower()->IsNoTxtFrm() ||
+                          !static_cast<const SwNoTxtFrm*>(pFly->Lower())->IsTransparent() );
+                // <--
                 if ( bClipFlyArea )
                 {
                     SwRect aFly( pTmp->GetCurrentBoundRect() );
