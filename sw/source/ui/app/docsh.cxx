@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:29:54 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:27:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,6 +148,9 @@
 #ifndef _FMTFSIZE_HXX //autogen
 #include <fmtfsize.hxx>
 #endif
+#ifndef _FMTFLD_HXX
+#include <fmtfld.hxx>
+#endif
 #ifndef _NODE_HXX //autogen
 #include <node.hxx>
 #endif
@@ -219,6 +222,12 @@
 #endif
 #ifndef _NDOLE_HXX
 #include <ndole.hxx>
+#endif
+#ifndef _TXTFTN_HXX
+#include <txtftn.hxx>
+#endif
+#ifndef _FTNIDX_HXX
+#include <ftnidx.hxx>
 #endif
 
 // --> FME 2004-08-05 #i20883# Digital Signatures and Encryption
@@ -1117,8 +1126,17 @@ sal_uInt16 SwDocShell::GetHiddenInformationState( sal_uInt16 nStates )
         {
             SwFieldType* pType = GetWrtShell()->GetFldType( RES_POSTITFLD, aEmptyStr );
             SwClientIter aIter( *pType );
-            if ( aIter.GoStart() )
-                nState |= HIDDENINFORMATION_NOTES;
+            SwClient* pFirst = aIter.GoStart();
+            while( pFirst )
+            {
+                if( static_cast<SwFmtFld*>(pFirst)->GetTxtFld() &&
+                    static_cast<SwFmtFld*>(pFirst)->IsFldInDoc() )
+                {
+                    nState |= HIDDENINFORMATION_NOTES;
+                    break;
+                }
+                pFirst = ++aIter;
+            }
         }
     }
 
@@ -1525,6 +1543,11 @@ void SwDocShell::CalcLayoutForOLEObjects()
 void SwDocShell::UpdateLinks()
 {
     GetDoc()->UpdateLinks();
+    // --> FME 2005-07-27 #i50703# Update footnote numbers
+    SwTxtFtn::SetUniqueSeqRefNo( *GetDoc() );
+    SwNodeIndex aTmp( GetDoc()->GetNodes() );
+    GetDoc()->GetFtnIdxs().UpdateFtn( aTmp );
+    // <--
 }
 
 /* -----------------------------12.02.01 12:08--------------------------------
