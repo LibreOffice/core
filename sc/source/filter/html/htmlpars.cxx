@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlpars.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:13:10 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:55:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,14 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-#ifdef PCH
-#include "filt_pch.hxx"
-#endif
-
-#pragma hdrstop
-
-//------------------------------------------------------------------------
 
 #include <boost/shared_ptr.hpp>
 
@@ -132,6 +124,7 @@ ScHTMLLayoutParser::ScHTMLLayoutParser( EditEngine* pEditP, const String& rBaseU
         nColOffset(0),
         nColOffsetStart(0),
         nMetaCnt(0),
+        nOffsetTolerance( SC_HTML_OFFSET_TOLERANCE_SMALL ),
         bTabInTabCell( FALSE ),
         bFirstRow( TRUE ),
         bInCell( FALSE ),
@@ -485,7 +478,7 @@ void ScHTMLLayoutParser::Adjust()
             }
         }
         // echte Col
-        SeekOffset( pColOffset, pE->nOffset, &pE->nCol );
+        SeekOffset( pColOffset, pE->nOffset, &pE->nCol, nOffsetTolerance );
         SCCOL nColBeforeSkip = pE->nCol;
         SkipLocked( pE, FALSE );
         if ( pE->nCol != nColBeforeSkip )
@@ -494,7 +487,7 @@ void ScHTMLLayoutParser::Adjust()
             if ( nCount <= pE->nCol )
             {
                 pE->nOffset = (USHORT) (*pColOffset)[nCount-1];
-                MakeCol( pColOffset, pE->nOffset, pE->nWidth );
+                MakeCol( pColOffset, pE->nOffset, pE->nWidth, nOffsetTolerance, nOffsetTolerance );
             }
             else
             {
@@ -502,7 +495,7 @@ void ScHTMLLayoutParser::Adjust()
             }
         }
         SCCOL nPos;
-        if ( pE->nWidth && SeekOffset( pColOffset, pE->nOffset + pE->nWidth, &nPos ) )
+        if ( pE->nWidth && SeekOffset( pColOffset, pE->nOffset + pE->nWidth, &nPos, nOffsetTolerance ) )
             pE->nColOverlap = (nPos > pE->nCol ? nPos - pE->nCol : 1);
         else
         {
@@ -688,7 +681,7 @@ void ScHTMLLayoutParser::SetWidths()
                 pE->nWidth = GetWidth( pE );
                 DBG_ASSERT( pE->nWidth, "SetWidths: pE->nWidth == 0" );
             }
-            MakeCol( pColOffset, pE->nOffset, pE->nWidth );
+            MakeCol( pColOffset, pE->nOffset, pE->nWidth, nOffsetTolerance, nOffsetTolerance );
         }
         pE = pList->Next();
     }
@@ -711,7 +704,7 @@ void ScHTMLLayoutParser::Colonize( ScEEParseEntry* pE )
     }
     pE->nOffset = nColOffset;
     USHORT nWidth = GetWidth( pE );
-    MakeCol( pLocalColOffset, pE->nOffset, nWidth );
+    MakeCol( pLocalColOffset, pE->nOffset, nWidth, nOffsetTolerance, nOffsetTolerance );
     if ( pE->nWidth )
         pE->nWidth = nWidth;
     nColOffset = pE->nOffset + nWidth;
@@ -1131,6 +1124,9 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
             nColCnt, nRowCnt, nColCntStart, nMaxCol, nTable,
             nTableWidth, nColOffset, nColOffsetStart,
             bFirstRow ) );
+        // As soon as we have multiple tables we need to be tolerant with the offsets.
+        if (nMaxTable > 0)
+            nOffsetTolerance = SC_HTML_OFFSET_TOLERANCE_LARGE;
         nTableWidth = 0;
         if ( pInfo->nToken == HTML_TABLE_ON )
         {   // es kann auch TD oder TH sein, wenn es vorher kein TABLE gab
@@ -1185,7 +1181,6 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
             SCROW nRows = nRowCnt - pS->nRowCnt;
             if ( nRows > 1 )
             {   // Groesse der Tabelle an dieser Position eintragen
-                SCCOL nCol = nColCntStart;
                 SCROW nRow = pS->nRowCnt;
                 USHORT nTab = pS->nTable;
                 if ( !pTables )
@@ -1280,7 +1275,7 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
             {
                 USHORT nOldOffset = pE->nOffset + pE->nWidth;
                 USHORT nNewOffset = pE->nOffset + nTableWidth;
-                ModifyOffset( pS->pLocalColOffset, nOldOffset, nNewOffset );
+                ModifyOffset( pS->pLocalColOffset, nOldOffset, nNewOffset, nOffsetTolerance );
                 USHORT nTmp = nNewOffset - pE->nOffset - pE->nWidth;
                 pE->nWidth = nNewOffset - pE->nOffset;
                 pS->nTableWidth += nTmp;
