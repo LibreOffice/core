@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlescher.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:36:05 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:02:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@
 #ifndef _VCL_MAPUNIT_HXX
 #include <vcl/mapunit.hxx>
 #endif
-
 #ifndef SC_XLADDRESS_HXX
 #include "xladdress.hxx"
 #endif
@@ -103,7 +102,7 @@ const sal_uInt16 EXC_OBJ_CMO_NOTE           = 0x0019;
 const sal_uInt16 EXC_OBJ_CMO_DRAWING        = 0x001E;
 const sal_uInt16 EXC_OBJ_CMO_UNKNOWN        = 0xFFFF;   /// For internal use only.
 
-// ftCmoGrbit: flags
+// ftCmo: flags
 const sal_uInt16 EXC_OBJ_CMO_PRINTABLE      = 0x0010;   /// Object printable
 
 // ftPioGrbit: flags
@@ -143,8 +142,12 @@ const sal_Int16 EXC_OBJ_SBS_MAXSCROLL       = 30000;
 enum XclCtrlBindMode
 {
     xlBindContent,      /// Binds cell to content of control.
-    xlBindPosition      /// Binds cell to position in control (i.e. listbox selection index).
+    xlBindPosition      /// Binds cell to position in control (e.g. listbox selection index).
 };
+
+// (0x00EB) MSODRAWINGGROUP ---------------------------------------------------
+
+const sal_uInt16 EXC_ID_MSODRAWINGGROUP     = 0x00EB;
 
 // (0x00EC) MSODRAWING --------------------------------------------------------
 
@@ -155,43 +158,32 @@ const sal_uInt16 EXC_ESC_ANCHOR_POSLOCKED   = 0x0001;
 const sal_uInt16 EXC_ESC_ANCHOR_SIZELOCKED  = 0x0002;
 const sal_uInt16 EXC_ESC_ANCHOR_LOCKED      = EXC_ESC_ANCHOR_POSLOCKED|EXC_ESC_ANCHOR_SIZELOCKED;
 
+// (0x00ED) MSODRAWINGSELECTION -----------------------------------------------
+
+const sal_uInt16 EXC_ID_MSODRAWINGSEL       = 0x00ED;
+
 // (0x01B6) TXO ---------------------------------------------------------------
 
 const sal_uInt16 EXC_ID_TXO                 = 0x01B6;
 
-/** Horizontal alignment flags. */
-enum XclTxoHorAlign
-{
-    xlTxoHAlignLeft                         = 0x01,
-    xlTxoHAlignCenter                       = 0x02,
-    xlTxoHAlignRight                        = 0x03,
-    xlTxoHAlignJustify                      = 0x04,
-    xlTxoHAlign_Default                     = xlTxoHAlignLeft
-};
+const sal_uInt8 EXC_TXO_HOR_LEFT            = 0x01;
+const sal_uInt8 EXC_TXO_HOR_CENTER          = 0x02;
+const sal_uInt8 EXC_TXO_HOR_RIGHT           = 0x03;
+const sal_uInt8 EXC_TXO_HOR_JUSTIFY         = 0x04;
 
-/** Vertical alignment flags. */
-enum XclTxoVerAlign
-{
-    xlTxoVAlignTop                          = 0x01,
-    xlTxoVAlignCenter                       = 0x02,
-    xlTxoVAlignBottom                       = 0x03,
-    xlTxoVAlignJustify                      = 0x04,
-    xlTxoVAlign_Default                     = xlTxoVAlignTop
-};
+const sal_uInt8 EXC_TXO_VER_TOP             = 0x01;
+const sal_uInt8 EXC_TXO_VER_CENTER          = 0x02;
+const sal_uInt8 EXC_TXO_VER_BOTTOM          = 0x03;
+const sal_uInt8 EXC_TXO_VER_JUSTIFY         = 0x04;
 
-/** Rotation. */
-enum XclTxoRotation
-{
-    xlTxoNoRot                              = 0x0000,       /// Not rotated.
-    xlTxoRotStacked                         = 0x0001,       /// characters stacked.
-    xlTxoRot90ccw                           = 0x0002,       /// 90 degr. counterclockwise.
-    xlTxoRot90cw                            = 0x0003,       /// 90 degr. clockwise.
-    xlTxoRot_Default                        = xlTxoNoRot
-};
+const sal_uInt16 EXC_TXO_TEXTROT_NONE       = 0x0000;
+const sal_uInt16 EXC_TXO_TEXTROT_STACKED    = 0x0001;      /// Stacked top to bottom.
+const sal_uInt16 EXC_TXO_TEXTROT_90_CCW     = 0x0002;      /// 90 degr. counterclockwise.
+const sal_uInt16 EXC_TXO_TEXTROT_90_CW      = 0x0003;      /// 90 degr. clockwise.
 
 // Structs and classes ========================================================
 
-// Escher client anchor =======================================================
+// Escher client anchor -------------------------------------------------------
 
 class Rectangle;
 class ScDocument;
@@ -223,7 +215,44 @@ SvStream& operator<<( SvStream& rStrm, const XclEscherAnchor& rAnchor );
 XclImpStream& operator>>( XclImpStream& rStrm, XclEscherAnchor& rAnchor );
 XclExpStream& operator<<( XclExpStream& rStrm, const XclEscherAnchor& rAnchor );
 
-// ============================================================================
+// ----------------------------------------------------------------------------
+
+/** Identifies an Escher object by sheet index and object identifier. */
+struct XclObjId
+{
+    SCTAB               mnScTab;        /// Calc sheet index.
+    sal_uInt16          mnObjId;        /// Excel object identifier.
+
+    explicit            XclObjId();
+    explicit            XclObjId( SCTAB nScTab, sal_uInt16 nObjId );
+};
+
+bool operator==( const XclObjId& rL, const XclObjId& rR );
+bool operator<( const XclObjId& rL, const XclObjId& rR );
+
+// ----------------------------------------------------------------------------
+
+/** Contains data of a TXO record for text boxes. */
+struct XclTxoData
+{
+    sal_uInt16          mnFlags;        /// Option flags and alignment.
+    sal_uInt16          mnOrient;       /// Text orientation.
+    sal_uInt16          mnTextLen;      /// Length of the string.
+    sal_uInt16          mnFormatSize;   /// Size of the format run buffer (bytes).
+
+    explicit            XclTxoData();
+
+    sal_uInt8           GetXclHorAlignment() const;
+    void                SetXclHorAlignment( sal_uInt8 nXclAlign );
+
+    sal_uInt8           GetXclVerAlignment() const;
+    void                SetXclVerAlignment( sal_uInt8 nXclAlign );
+};
+
+XclImpStream& operator>>( XclImpStream& rStrm, XclTxoData& rData );
+XclExpStream& operator<<( XclExpStream& rStrm, const XclTxoData& rData );
+
+// ----------------------------------------------------------------------------
 
 /** Provides static helper functions for textbox (TBX) form controls. */
 class XclTbxControlHelper
