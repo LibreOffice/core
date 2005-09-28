@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-09-23 13:48:01 $
+dnl * Date: $Date: 2005-09-28 15:26:19 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.136 $ )
+AC_REVISION( $Revision: 1.137 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -4197,6 +4197,8 @@ else
    AC_MSG_RESULT([$with_local_solver])
 fi
 AC_SUBST(LOCAL_SOLVER)
+
+BUILD_TYPE="$BUILD_TYPE XALAN"
 
 AC_SUBST(BUILD_TYPE)
 
