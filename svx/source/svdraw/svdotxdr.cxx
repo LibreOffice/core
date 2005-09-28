@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotxdr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:36:13 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:41:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #include "svdorect.hxx" // fuer SetXPolyDirty in MovCreate bei SolidDragging
 #include "svdglob.hxx"  // Stringcache
 #include "svdstr.hrc"   // Objektname
+#include "svdoashp.hxx"
 
 #ifndef _BIGINT_HXX //autogen
 #include <tools/bigint.hxx>
@@ -163,7 +164,8 @@ Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
             }
         }
     }
-    ImpJustifyRect(aTmpRect);
+    if (!ISA(SdrObjCustomShape))        // not justifying for CustomShapes to be able to detect if a shape has to be mirrored
+        ImpJustifyRect(aTmpRect);
     return aTmpRect;
 }
 
@@ -192,10 +194,15 @@ FASTBOOL SdrTextObj::BegDrag(SdrDragStat& rDrag) const
 
 FASTBOOL SdrTextObj::MovDrag(SdrDragStat& rDrag) const
 {
+    FASTBOOL bRet = TRUE;
     ImpTextDragUser* pUser=(ImpTextDragUser*)rDrag.GetUser();
-    Rectangle aOldRect(pUser->aR);
-    pUser->aR=ImpDragCalcRect(rDrag);
-    return pUser->aR!=aOldRect;
+    if ( pUser )
+    {
+         Rectangle aOldRect(pUser->aR);
+        pUser->aR=ImpDragCalcRect(rDrag);
+        pUser->aR != aOldRect;
+    }
+    return bRet;
 }
 
 FASTBOOL SdrTextObj::EndDrag(SdrDragStat& rDrag)
