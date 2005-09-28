@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:56:32 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:10:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,7 +178,7 @@ BOOL __EXPORT FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
     SetMouseButtonCode(rMEvt.GetButtons());
 
     DoModifiers( rMEvt );
-    if(!IsReSizingNote( rMEvt ))
+    if( !IsSizingOrMovingNote( rMEvt ) )
         CheckVisibleNote();
     return FALSE;
 }
@@ -898,24 +898,25 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
     }
 }
 
-BOOL FuDraw::IsReSizingNote( const MouseEvent& rMEvt) const
+BOOL FuDraw::IsSizingOrMovingNote( const MouseEvent& rMEvt ) const
 {
-    BOOL bReSizingNote = FALSE;
-    const SdrMarkList& rNoteMarkList = pView->GetMarkedObjectList();
-    if(rNoteMarkList.GetMarkCount() == 1)
+    BOOL bIsSizingOrMoving = FALSE;
+    if ( rMEvt.IsLeft() )
     {
-        SdrObject* pObj = rNoteMarkList.GetMark( 0 )->GetObj();
-        if ( pObj && pObj->GetLayer() == SC_LAYER_INTERN && pObj->ISA(SdrCaptionObj) )
+        const SdrMarkList& rNoteMarkList = pView->GetMarkedObjectList();
+        if(rNoteMarkList.GetMarkCount() == 1)
         {
-            if ( rMEvt.IsLeft() )
+            SdrObject* pObj = rNoteMarkList.GetMark( 0 )->GetObj();
+            if ( pObj && pObj->GetLayer() == SC_LAYER_INTERN && pObj->ISA(SdrCaptionObj) )
             {
                 Point aMPos = pWindow->PixelToLogic( rMEvt.GetPosPixel() );
-                if(SdrHdl* pHdl = pView->HitHandle(aMPos, *pWindow))
-                    bReSizingNote= TRUE;
+                bIsSizingOrMoving =
+                    pView->HitHandle( aMPos, *pWindow ) ||      // handles to resize the note
+                    pView->IsTextEditFrameHit( aMPos );         // frame for moving the note
             }
         }
     }
-    return bReSizingNote;
+    return bIsSizingOrMoving;
 }
 
 // we can arrive here if a Note set to 'not shown' has changed its
