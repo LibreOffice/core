@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:37:04 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:06:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,11 @@
 #ifndef SVX_UNOMODEL_HXX
 #include <svx/unomodel.hxx>
 #endif
+// --> OD 2005-08-03 #i50824#
+#ifndef _SVDITER_HXX
+#include <svx/svditer.hxx>
+#endif
+// <--
 #ifndef _UTL_STREAM_WRAPPER_HXX_
 #include <unotools/streamwrap.hxx>
 #endif
@@ -1044,6 +1049,14 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
                         else
                         {
                             ASSERT( RES_DRAWFRMFMT == pNew->Which(), "Neues Format.");
+                            // --> OD 2005-09-01 #i52780# - drawing object has
+                            // to be made visible on paste.
+                            {
+                                SwDrawContact* pContact =
+                                    static_cast<SwDrawContact*>(pNew->FindContactObj());
+                                pContact->MoveObjToVisibleLayer( pContact->GetMaster() );
+                            }
+                            // <--
                             SdrObject *pObj = pNew->FindSdrObject();
                             SwDrawView  *pDV = Imp()->GetDrawView();
                             pDV->MarkObj( pObj, pDV->GetPageView( pObj->GetPage() ) );
@@ -1336,6 +1349,30 @@ BOOL SwFEShell::GetDrawObjGraphic( ULONG nFmt, Graphic& rGrf ) const
     return bConvert;
 }
 
+// --> OD 2005-08-03 #i50824#
+void lcl_RemoveOleObjsFromSdrModel( SdrModel* _pModel )
+{
+    for ( sal_uInt16 nPgNum = 0; nPgNum < _pModel->GetPageCount(); ++nPgNum )
+    {
+        // setup object iterator in order to iterate through all objects
+        // including objects in group objects, but exclusive group objects.
+        SdrObjListIter aIter(*(_pModel->GetPage( nPgNum )));
+        while( aIter.IsMore() )
+        {
+            SdrObject* pObj = aIter.Next();
+            if ( pObj->ISA(SdrOle2Obj) )
+            {
+                SdrObjList* pParent = pObj->GetObjList();
+                if ( pParent )
+                {
+                    pParent->NbcRemoveObject( pObj->GetOrdNum() );
+                    delete pObj;
+                }
+            }
+        }
+    }
+}
+// <--
 void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
 {
     SET_CURR_SHELL( this );
@@ -1481,6 +1518,9 @@ void SwFEShell::Paste( SvStream& rStrm, USHORT nAction, const Point* pPt )
         if( !bDesignMode )
             pView->SetDesignMode( sal_True );
 
+        // --> OD 2005-08-03 #i50824#
+        lcl_RemoveOleObjsFromSdrModel( pModel );
+        // <--
         pView->Paste( *pModel, aPos );
 
         ULONG nCnt = pView->GetMarkedObjectList().GetMarkCount();
