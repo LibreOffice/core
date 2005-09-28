@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fudraw.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:28:12 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:12:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@ class FuDraw : public FuPoor
     // #97016# II
     virtual void SelectionHasChanged();
 
-    BOOL IsReSizingNote(const MouseEvent& rMEvt) const;
+    BOOL IsSizingOrMovingNote( const MouseEvent& rMEvt ) const;
     void CheckVisibleNote() const;
 
  private:
