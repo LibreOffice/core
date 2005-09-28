@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 16:33:12 $
+#   last change: $Author: hr $ $Date: 2005-09-28 13:08:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,8 @@ UWINAPILIB=
 
 SLOFILES = \
     $(SLO)$/swappatchfiles.obj \
-    $(SLO)$/respintest.obj
+    $(SLO)$/respintest.obj     \
+    $(SLO)$/upgrade.obj
 
 
 SHL1STDLIBS=	kernel32.lib\
