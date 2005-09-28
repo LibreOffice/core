@@ -4,9 +4,9 @@
 #
 #   $RCSfile: systemactions.pm,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:12:44 $
+#   last change: $Author: hr $ $Date: 2005-09-28 14:42:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -166,6 +166,9 @@ sub create_directories
         elsif ( $installer::globals::patch ) { $path = $path . $installer::globals::product . "_patch" . $installer::globals::separator; }
         else { $path = $path . $installer::globals::product . $installer::globals::separator; }
 
+        create_directory($path);
+
+        $path = $path . $installer::globals::installertypedir . $installer::globals::separator;
         create_directory($path);
 
         $path = $path . $newdirectory . $installer::globals::separator;
