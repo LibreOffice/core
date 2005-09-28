@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table1.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:30:19 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:32:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1077,12 +1077,12 @@ void ScTable::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW 
 
     if ( nTab >= nTab1 && nTab <= nTab2 && nDz == 0 )       // print ranges: only within the table
     {
-        SCTAB nSTab;
-        SCTAB nETab;
-        SCCOL nSCol;
-        SCROW nSRow;
-        SCCOL nECol;
-        SCROW nERow;
+        SCTAB nSTab = nTab;
+        SCTAB nETab = nTab;
+        SCCOL nSCol = 0;
+        SCROW nSRow = 0;
+        SCCOL nECol = 0;
+        SCROW nERow = 0;
         BOOL bRecalcPages = FALSE;
 
         for ( ScRangeVec::iterator aIt = aPrintRanges.begin(), aEnd = aPrintRanges.end(); aIt != aEnd; ++aIt )
@@ -1092,7 +1092,7 @@ void ScTable::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW 
             nECol = aIt->aEnd.Col();
             nERow = aIt->aEnd.Row();
 
-            // do not try to modify sheet index of repeat range
+            // do not try to modify sheet index of print range
             if ( ScRefUpdate::Update( pDocument, eUpdateRefMode,
                                       nCol1,nRow1,nTab, nCol2,nRow2,nTab,
                                       nDx,nDy,0,
