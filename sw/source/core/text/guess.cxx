@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:52:46 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:18:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,14 +173,12 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 #else
         nItalic = bAddItalic ? nPorHeight / 12 : 0;
 #endif
-        if( nItalic >= nLineWidth )
-        {
-            nBreakWidth = nItalic;
-            nCutPos = rInf.GetIdx();
-            return sal_False;
-        }
-        else
-            nLineWidth -= nItalic;
+
+        nLineWidth -= nItalic;
+
+        // --> FME 2005-05-13 #i46524# LineBreak bug with italics
+        if ( nLineWidth < 0 ) nLineWidth = 0;
+        // <--
     }
 
     // first check if everything fits to line
@@ -195,8 +193,13 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         if ( nBreakWidth <= nLineWidth )
         {
             // portion fits to line
-            nCutPos = rInf.GetIdx() + nMaxLen - 1;
-            if( nItalic && ( nCutPos + 1 ) >= rInf.GetTxt().Len() )
+            nCutPos = rInf.GetIdx() + nMaxLen;
+            if( nItalic &&
+                ( nCutPos >= rInf.GetTxt().Len() ||
+                  // --> FME 2005-05-13 #i48035# Needed for CalcFitToContent
+                  // if first line ends with a manual line break
+                  rInf.GetTxt().GetChar( nCutPos ) == CH_BREAK ) )
+                  // <--
                 nBreakWidth += nItalic;
 
             // save maximum width for later use
