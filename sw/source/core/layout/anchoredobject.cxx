@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoredobject.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:07:08 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:10:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,15 +97,27 @@
 // implementation of helper class <SwObjPositioningInProgress>
 // ============================================================================
 SwObjPositioningInProgress::SwObjPositioningInProgress( SdrObject& _rSdrObj ) :
-    mpAnchoredObj( 0L )
+    mpAnchoredObj( 0L ),
+    // --> OD 2005-08-09 #i52904#
+    mbOldObjPositioningInProgress( false )
+    // <--
 {
     mpAnchoredObj = ::GetUserCall( &_rSdrObj )->GetAnchoredObj( &_rSdrObj );
+    // --> OD 2005-08-09 #i52904#
+    mbOldObjPositioningInProgress = mpAnchoredObj->IsPositioningInProgress();
+    // <--
     mpAnchoredObj->SetPositioningInProgress( true );
 }
 
 SwObjPositioningInProgress::SwObjPositioningInProgress( SwAnchoredObject& _rAnchoredObj ) :
-    mpAnchoredObj( &_rAnchoredObj )
+    mpAnchoredObj( &_rAnchoredObj ),
+    // --> OD 2005-08-09 #i52904#
+    mbOldObjPositioningInProgress( false )
+    // <--
 {
+    // --> OD 2005-08-09 #i52904#
+    mbOldObjPositioningInProgress = mpAnchoredObj->IsPositioningInProgress();
+    // <--
     mpAnchoredObj->SetPositioningInProgress( true );
 }
 
@@ -113,7 +125,9 @@ SwObjPositioningInProgress::~SwObjPositioningInProgress()
 {
     if ( mpAnchoredObj )
     {
-        mpAnchoredObj->SetPositioningInProgress( false );
+        // --> OD 2005-08-09 #i52904#
+        mpAnchoredObj->SetPositioningInProgress( mbOldObjPositioningInProgress );
+        // <--
     }
 }
 
@@ -440,16 +454,6 @@ void SwAnchoredObject::ClearCharRectAndTopOfLine()
 {
     maLastCharRect.Clear();
     mnLastTopOfLine = 0;
-}
-
-void SwAnchoredObject::SetPositioningInProgress( const bool _bPosInProgress )
-{
-    mbPositioningInProgress = _bPosInProgress;
-}
-
-bool SwAnchoredObject::IsPositioningInProgress() const
-{
-    return mbPositioningInProgress;
 }
 
 const Point SwAnchoredObject::GetCurrRelPos() const
