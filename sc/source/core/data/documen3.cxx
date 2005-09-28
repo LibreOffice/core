@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:19:45 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:30:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -835,6 +835,8 @@ void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
             UpdateRefAreaLinks( eUpdateRefMode, aRange, nDx, nDy, nDz );
             if ( pCondFormList )
                 pCondFormList->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz );
+            if ( pValidationList )
+                pValidationList->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz );
             if ( pDetOpList )
                 pDetOpList->UpdateReference( this, eUpdateRefMode, aRange, nDx, nDy, nDz );
             if ( pUnoBroadcaster )
