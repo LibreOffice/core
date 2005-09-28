@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:06:18 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 15:03:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -651,16 +651,54 @@ void X11SalBitmap::ImplDraw( Drawable aDrawable, long nDrawableDepth,
             mpCache->ImplRemove( const_cast<X11SalBitmap*>(this) );
 
         SalTwoRect aTwoRect( rTwoRect );
+        if( aTwoRect.mnSrcX < 0 )
+        {
+            aTwoRect.mnSrcWidth += aTwoRect.mnSrcX;
+            aTwoRect.mnSrcX = 0;
+        }
+        if( aTwoRect.mnSrcY < 0 )
+        {
+            aTwoRect.mnSrcHeight += aTwoRect.mnSrcY;
+            aTwoRect.mnSrcY = 0;
+        }
 
         // create new DDB from DIB
+        const Size aSize( GetSize() );
         if( aTwoRect.mnSrcWidth == aTwoRect.mnDestWidth &&
             aTwoRect.mnSrcHeight == aTwoRect.mnDestHeight )
         {
-            const Size aSize( GetSize() );
-
             aTwoRect.mnSrcX = aTwoRect.mnSrcY = aTwoRect.mnDestX = aTwoRect.mnDestY = 0;
             aTwoRect.mnSrcWidth = aTwoRect.mnDestWidth = aSize.Width();
             aTwoRect.mnSrcHeight = aTwoRect.mnDestHeight = aSize.Height();
+        }
+        else if( aTwoRect.mnSrcWidth+aTwoRect.mnSrcX > aSize.Width() ||
+                 aTwoRect.mnSrcHeight+aTwoRect.mnSrcY > aSize.Height() )
+        {
+            // #i47823# this should not happen at all, but does nonetheless
+            // because BitmapEx allows for mask bitmaps of different size
+            // than image bitmap (broken)
+            if( aTwoRect.mnSrcX >= aSize.Width() ||
+                aTwoRect.mnSrcY >= aSize.Height() )
+                return; // this would be a really mad case
+
+            if( aTwoRect.mnSrcWidth+aTwoRect.mnSrcX > aSize.Width() )
+            {
+                aTwoRect.mnSrcWidth = aSize.Width()-aTwoRect.mnSrcX;
+                if( aTwoRect.mnSrcWidth < 1 )
+                {
+                    aTwoRect.mnSrcX = 0;
+                    aTwoRect.mnSrcWidth = aSize.Width();
+                }
+            }
+            if( aTwoRect.mnSrcHeight+aTwoRect.mnSrcY > aSize.Height() )
+            {
+                aTwoRect.mnSrcHeight = aSize.Height() - aTwoRect.mnSrcY;
+                if( aTwoRect.mnSrcHeight < 1 )
+                {
+                    aTwoRect.mnSrcY = 0;
+                    aTwoRect.mnSrcHeight = aSize.Height();
+                }
+            }
         }
 
         XImage* pImage = ImplCreateXImage( GetSalData()->GetDisplay(),
