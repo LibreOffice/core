@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlchart.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:07:35 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:51:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,9 @@
 #include <com/sun/star/chart/ChartSymbolType.hpp>
 #endif
 
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
+#endif
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
 #endif
@@ -93,6 +96,31 @@ typedef ::com::sun::star::drawing::LineStyle    ApiLineStyle;
 typedef ::com::sun::star::drawing::LineDash     ApiLineDash;
 typedef ::com::sun::star::drawing::FillStyle    ApiFillStyle;
 typedef ::com::sun::star::drawing::BitmapMode   ApiBitmapMode;
+
+// Common =====================================================================
+
+XclChPoint::XclChPoint() :
+    mnSeriesIdx( EXC_CHSERIES_INVALID ),
+    mnPointIdx( EXC_CHDATAFORMAT_ALLPOINTS )
+{
+}
+
+XclChPoint::XclChPoint( sal_uInt16 nSeriesIdx, sal_uInt16 nPointIdx ) :
+    mnSeriesIdx( nSeriesIdx ),
+    mnPointIdx( nPointIdx )
+{
+}
+
+bool operator==( const XclChPoint& rL, const XclChPoint& rR )
+{
+    return (rL.mnSeriesIdx == rR.mnSeriesIdx) && (rL.mnPointIdx == rR.mnPointIdx);
+}
+
+bool operator<( const XclChPoint& rL, const XclChPoint& rR )
+{
+    return (rL.mnSeriesIdx < rR.mnSeriesIdx) ||
+        ((rL.mnSeriesIdx == rR.mnSeriesIdx) && (rL.mnPointIdx < rR.mnPointIdx));
+}
 
 // Formatting =================================================================
 
@@ -164,9 +192,7 @@ XclChFrame::XclChFrame() :
 // Text =======================================================================
 
 XclChObjectLink::XclChObjectLink() :
-    mnTarget( EXC_CHOBJLINK_NONE ),
-    mnSeriesIdx( 0 ),
-    mnPointIdx( 0 )
+    mnTarget( EXC_CHOBJLINK_NONE )
 {
 }
 
@@ -196,8 +222,6 @@ XclChSourceLink::XclChSourceLink() :
 // ----------------------------------------------------------------------------
 
 XclChDataFormat::XclChDataFormat() :
-    mnPointIdx( 0 ),
-    mnSeriesIdx( 0 ),
     mnFormatIdx( EXC_CHDATAFORMAT_DEFAULT ),
     mnFlags( 0 )
 {
