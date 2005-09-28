@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:39:44 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:28:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -284,6 +284,14 @@ WinMtfFontStyle::WinMtfFontStyle( LOGFONTW& rFont )
         aFont.SetOrientation( (short)rFont.lfEscapement );
 
     Size  aFontSize( Size( rFont.lfWidth, rFont.lfHeight ) );
+    if ( !rFont.lfWidth )
+    {
+        VirtualDevice aVDev;
+        aFont.SetSize( aFontSize );
+        aVDev.SetFont( aFont );
+        FontMetric aMetric( aVDev.GetFontMetric() );
+        aFontSize.Width() = aMetric.GetWidth();
+    }
     if ( rFont.lfHeight > 0 )
     {
         // converting the cell height into a font height
