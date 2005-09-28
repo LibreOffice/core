@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localebackend.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:48:13 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:21:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,7 +219,8 @@ rtl::OUString ImplGetLocale(LCID lcid)
     if( cp > buffer )
     {
         if( 0 < GetLocaleInfo( lcid, LOCALE_SISO3166CTRYNAME, cp, buffer + 8 - cp) )
-          *cp = '-';
+            // #i50822# minus character must be written before cp
+            *(cp - 1) = '-';
 
         return rtl::OUString::createFromAscii(buffer);
     }
