@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:59:47 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:19:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -517,11 +517,14 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
         rLine.GetRedln()->CheckLine( rLine.GetStart(), rLine.GetEnd() ) );
 }
 
+// --> OD 2005-05-20 #i47162# - add optional parameter <_bNoFlyCntPorAndLinePor>
+// to control, if the fly content portions and line portion are considered.
 void SwLineLayout::MaxAscentDescent( SwTwips& _orAscent,
                                      SwTwips& _orDescent,
                                      SwTwips& _orObjAscent,
                                      SwTwips& _orObjDescent,
-                                     const SwLinePortion* _pDontConsiderPortion ) const
+                                     const SwLinePortion* _pDontConsiderPortion,
+                                     const bool _bNoFlyCntPorAndLinePor ) const
 {
     _orAscent = 0;
     _orDescent = 0;
@@ -536,7 +539,10 @@ void SwLineLayout::MaxAscentDescent( SwTwips& _orAscent,
 
     while ( pPortion )
     {
-        if ( !pPortion->IsBreakPortion() && !pPortion->IsFlyPortion() )
+        if ( !pPortion->IsBreakPortion() && !pPortion->IsFlyPortion() &&
+             ( !_bNoFlyCntPorAndLinePor ||
+               ( !pPortion->IsFlyCntPortion() &&
+                 !(pPortion == this && pPortion->GetPortion() ) ) ) )
         {
             SwTwips nPortionAsc = static_cast<SwTwips>(pPortion->GetAscent());
             SwTwips nPortionDesc = static_cast<SwTwips>(pPortion->Height()) -
