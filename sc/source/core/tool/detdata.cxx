@@ -4,9 +4,9 @@
  *
  *  $RCSfile: detdata.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:42:14 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:37:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,20 @@ ScDetOpList::ScDetOpList(const ScDetOpList& rList) :
 
     for (USHORT i=0; i<nCount; i++)
         Append( new ScDetOpData(*rList[i]) );
+}
+
+void ScDetOpList::DeleteOnTab( SCTAB nTab )
+{
+    USHORT nPos = 0;
+    while ( nPos < Count() )
+    {
+        // look for operations on the deleted sheet
+
+        if ( (*this)[nPos]->GetPos().Tab() == nTab )
+            Remove(nPos);
+        else
+            ++nPos;
+    }
 }
 
 void ScDetOpList::UpdateReference( ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
