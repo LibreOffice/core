@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-28 13:13:19 $
+#   last change: $Author: hr $ $Date: 2005-09-28 14:40:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,7 @@ BEGIN
     $rpmcommand = "";
     $rpmquerycommand = "";
     $debian = "";
-    $debiancompileraddon = "_DEBIAN";
+    $installertypedir = "";
 
     $is_special_epm = 0;
     $epm_in_path = 0;
