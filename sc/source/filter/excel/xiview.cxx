@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiview.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:06:43 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:50:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,53 @@
 #ifndef SC_XISTYLE_HXX
 #include "xistyle.hxx"
 #endif
+
+// Document view settings =====================================================
+
+XclImpDocViewSettings::XclImpDocViewSettings( const XclImpRoot& rRoot ) :
+    XclImpRoot( rRoot )
+{
+}
+
+void XclImpDocViewSettings::ReadWindow1( XclImpStream& rStrm )
+{
+    rStrm   >> maData.mnWinX
+            >> maData.mnWinY
+            >> maData.mnWinWidth
+            >> maData.mnWinHeight
+            >> maData.mnFlags;
+    if( GetBiff() >= EXC_BIFF5 )
+    {
+        rStrm   >> maData.mnDisplXclTab
+                >> maData.mnFirstVisXclTab
+                >> maData.mnXclSelectCnt
+                >> maData.mnTabBarWidth;
+    }
+}
+
+SCTAB XclImpDocViewSettings::GetDisplScTab() const
+{
+    /*  Simply cast Excel index to Calc index.
+        TODO: This may fail if the document contains scenarios. */
+    sal_uInt16 nMaxXclTab = static_cast< sal_uInt16 >( GetMaxPos().Tab() );
+    return static_cast< SCTAB >( (maData.mnDisplXclTab <= nMaxXclTab) ? maData.mnDisplXclTab : 0 );
+}
+
+void XclImpDocViewSettings::Finalize()
+{
+    ScViewOptions aViewOpt( GetDoc().GetViewOptions() );
+    aViewOpt.SetOption( VOPT_HSCROLL,       ::get_flag( maData.mnFlags, EXC_WIN1_HOR_SCROLLBAR ) );
+    aViewOpt.SetOption( VOPT_VSCROLL,       ::get_flag( maData.mnFlags, EXC_WIN1_VER_SCROLLBAR ) );
+    aViewOpt.SetOption( VOPT_TABCONTROLS,   ::get_flag( maData.mnFlags, EXC_WIN1_TABBAR ) );
+    GetDoc().SetViewOptions( aViewOpt );
+
+    // displayed sheet
+    GetExtDocOptions().GetDocSettings().mnDisplTab = GetDisplScTab();
+
+    // width of the tabbar with sheet names
+    if( maData.mnTabBarWidth <= 1000 )
+        GetExtDocOptions().GetDocSettings().mfTabBarWidth = static_cast< double >( maData.mnTabBarWidth ) / 1000.0;
+}
 
 // Sheet view settings ========================================================
 
@@ -109,8 +156,12 @@ void XclImpTabViewSettings::ReadWindow2( XclImpStream& rStrm )
         {
             sal_uInt16 nGridColorIdx;
             rStrm >> nGridColorIdx;
-            rStrm.Ignore( 2 );
-            rStrm >> maData.mnPageZoom >> maData.mnNormalZoom;
+            // zoom data not included in chart sheets
+            if( rStrm.GetRecLeft() >= 6 )
+            {
+                rStrm.Ignore( 2 );
+                rStrm >> maData.mnPageZoom >> maData.mnNormalZoom;
+            }
 
             if( !maData.mbDefGridColor )
                 maData.maGridColor = GetPalette().GetColor( nGridColorIdx );
@@ -154,12 +205,13 @@ void XclImpTabViewSettings::Finalize()
     ScDocument& rDoc = GetDoc();
     XclImpAddressConverter& rAddrConv = GetAddressConverter();
     ScExtTabSettings& rTabSett = GetExtDocOptions().GetOrCreateTabSettings( nScTab );
+    bool bDisplayed = GetDocViewSettings().GetDisplScTab() == nScTab;
 
     // *** sheet options: cursor, selection, splits, zoom ***
 
     // sheet flags
     rDoc.SetLayoutRTL( nScTab, maData.mbMirrored );
-    rTabSett.mbSelected = maData.mbSelected || maData.mbDisplayed;
+    rTabSett.mbSelected = maData.mbSelected || bDisplayed;
 
     // first visible cell in top-left pane and in additional pane(s)
     rTabSett.maFirstVis = rAddrConv.CreateValidAddress( maData.maFirstXclPos, nScTab, false );
@@ -214,11 +266,8 @@ void XclImpTabViewSettings::Finalize()
 
     // *** additional handling for displayed sheet ***
 
-    if( maData.mbDisplayed )
+    if( bDisplayed )
     {
-        // displayed sheet
-        GetExtDocOptions().GetDocSettings().mnDisplTab = nScTab;
-
         // set Excel sheet settings globally at Calc document, take settings from displayed sheet
         ScViewOptions aViewOpt( rDoc.GetViewOptions() );
         aViewOpt.SetOption( VOPT_FORMULAS, maData.mbShowFormulas );
