@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 23:15:26 $
+#   last change: $Author: hr $ $Date: 2005-09-28 15:31:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -224,7 +224,8 @@ SHL8TARGET= scui$(UPD)$(DLLPOSTFIX)
 SHL8IMPLIB= scuiimp
 SHL8VERSIONMAP= scui.map
 SHL8DEF=$(MISC)$/$(SHL8TARGET).def
-DEF8NAME=       $(SHL8TARGET)
+SHL8DEPN=$(SHL1TARGETN)
+DEF8NAME=$(SHL8TARGET)
 
 SHL8STDLIBS= \
             $(ISCLIB) \
