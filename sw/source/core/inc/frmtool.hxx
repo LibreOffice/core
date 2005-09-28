@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmtool.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:48:18 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:08:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,6 +173,10 @@ protected:
     FASTBOOL     bHadFollow;
     FASTBOOL     bInvaKeep;
     FASTBOOL     bValidSize;
+protected:
+    // --> OD 2005-07-29 #i49383#
+    bool mbFrmDeleted;
+    // <--
 
 public:
     SwFrmNotify( SwFrm *pFrm );
@@ -181,6 +185,12 @@ public:
     const SwRect &Frm() const { return aFrm; }
     const SwRect &Prt() const { return aPrt; }
     void SetInvaKeep() { bInvaKeep = TRUE; }
+    // --> OD 2005-07-29 #i49383#
+    void FrmDeleted()
+    {
+        mbFrmDeleted = true;
+    }
+    // <--
 };
 
 class SwLayNotify : public SwFrmNotify
@@ -528,5 +538,19 @@ inline BOOL SwBorderAttrs::IsLine() const
 void GetSpacingValuesOfFrm( const SwFrm& _rFrm,
                             SwTwips& _roLowerSpacing,
                             SwTwips& _roLineSpacing );
+
+/** method to get the content of the table cell
+
+    Content from any nested tables will be omitted.
+    Note: line spacing value is only determined for text frames
+
+    @param rCell_
+    input parameter - the cell which should be searched for content.
+
+    return
+        pointer to the found content frame or 0
+*/
+
+const SwCntntFrm* GetCellCntnt( const SwLayoutFrm& rCell_ );
 
 #endif  //_FRMTOOL_HXX
