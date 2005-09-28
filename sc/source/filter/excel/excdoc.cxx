@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:54:50 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:40:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,6 +225,7 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
     else
     {
         Add( new Exc1904( rDoc ) );
+        Add( new XclExpBoolRecord( 0x000E, !rDoc.GetDocOptions().IsCalcAsShown() ) );
         Add( new ExcDummy8_041 );
     }
 
