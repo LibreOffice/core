@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xladdress.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:07:16 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:51:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,7 @@ void XclRange::Write( XclExpStream& rStrm, bool bCol16Bit ) const
 
 XclRange XclRangeList::GetEnclosingRange() const
 {
-    XclRange aXclRange( ScAddress::UNINITIALIZED );
+    XclRange aXclRange;
     if( !empty() )
     {
         const_iterator aIt = begin(), aEnd = end();
