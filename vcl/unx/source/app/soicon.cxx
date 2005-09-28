@@ -4,9 +4,9 @@
  *
  *  $RCSfile: soicon.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:02:58 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 15:01:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,9 @@
 BOOL SelectAppIconPixmap( SalDisplay *pDisplay, USHORT nIcon, USHORT iconSize,
                           Pixmap& icon_pixmap, Pixmap& icon_mask)
 {
+    if( ! ImplGetResMgr() )
+        return FALSE;
+
     USHORT nIconSizeOffset;
 
     if( iconSize >= 48 )
