@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:11:26 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 14:49:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -504,11 +504,49 @@ ImplLayoutArgs::ImplLayoutArgs( const xub_Unicode* pStr, int nLength,
 
 bool ImplLayoutArgs::PrepareFallback()
 {
-    // TODO: sort out chars that were not requested anyway
-    maRuns = maReruns;
+    // return early if a fallback is not needed
+    if( maReruns.IsEmpty() )
+    {
+        maRuns.Clear();
+        return false;
+    }
+
+    // convert the fallback request to a layout request
+
+    // sort out chars that were not requested anyway
+    ImplLayoutRuns aOrigRuns = maRuns;
+    maRuns.Clear();
+    bool bRTL;
+    int nMin1, nEnd1;
+    maReruns.ResetPos();
+    for(; maReruns.GetRun( &nMin1, &nEnd1, &bRTL ); maReruns.NextRun() )
+    {
+        // find a matching layout run and clip the fallback run to it
+        // TODO: improve O(n^2) algorithm
+        int nMin2, nEnd2;
+        aOrigRuns.ResetPos();
+        for(; aOrigRuns.GetRun( &nMin2, &nEnd2, &bRTL ); aOrigRuns.NextRun() )
+        {
+            // ignore runs that don't overlap
+            if( nMin1 >= nEnd2 )
+                continue;
+            if( nEnd1 <= nMin2 )
+                continue;
+            // clip the fallback run to the layout run
+            if( nMin1 < nMin2 )
+                nMin1 = nMin2;
+            if( nEnd1 > nEnd2 )
+                nEnd1 = nEnd2;
+            // if there is something left request the fallback
+            if( nMin1 < nEnd1 )
+                maRuns.AddRun( nMin1, nEnd1, bRTL );
+            break;
+        }
+    }
+
     maRuns.ResetPos();
     maReruns.Clear();
-    return !maRuns.IsEmpty();
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -1443,7 +1481,10 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     {
         // now adjust the individual components
         if( n > 0 )
+        {
             aMultiArgs.maRuns = maFallbackRuns[ n-1 ];
+            aMultiArgs.mnFlags |= SAL_LAYOUT_FOR_FALLBACK;
+        }
         mpLayouts[n]->AdjustLayout( aMultiArgs );
 
         // remove unused parts of component
@@ -1742,7 +1783,7 @@ int MultiSalLayout::GetNextGlyphs( int nLen, sal_Int32* pGlyphIdxAry, Point& rPo
         nLen = 1;
 
     // NOTE: nStart is tagged with current font index
-    int nLevel = nStart >> GF_FONTSHIFT;
+    int nLevel = static_cast<unsigned>(nStart) >> GF_FONTSHIFT;
     nStart &= ~GF_FONTMASK;
     for(; nLevel < mnLevel; ++nLevel, nStart=0 )
     {
