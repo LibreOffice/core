@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undotab.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:40:35 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:14:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -443,7 +443,10 @@ void __EXPORT ScUndoDeleteTab::Undo()
     {
         pDocShell->Broadcast( ScTablesHint( SC_TAB_INSERTED, theTabs[i]) );
     }
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );    // Navigator
+    SfxApplication* pSfxApp = SFX_APP();                                // Navigator
+    pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+    pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
+    pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 
     pDocShell->PostPaint(0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_ALL );  // incl. Extras
 
