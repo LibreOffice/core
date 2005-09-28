@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 21:33:23 $
+#   last change: $Author: hr $ $Date: 2005-09-28 15:21:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -148,12 +148,12 @@ ALLTAR: \
 #cmc, hack to workaround the java build requirement
 MERGE:=python ../tools/merge/pyAltFCFGMerge
 .ELSE
-MERGE    := $(JAVA) -jar $(CLASSDIR)$/FCFGMerge.jar
+MERGE    := $(JAVAI) -jar $(CLASSDIR)$/FCFGMerge.jar
 .IF "$(JDK)" == "gcj"
-PACKLANG := $(JAVA) $(JAVACPS) $(SOLARBINDIR)/xalan.jar org.apache.xalan.xslt.Process -XSL langfilter.xsl
-.ELSE
-PACKLANG := $(JAVA) org.apache.xalan.xslt.Process -XSL langfilter.xsl
+XALANCLASS=$(SOLARBINDIR)/xalan.jar
+CLASSPATH:=$(CLASSPATH)$(PATH_SEPERATOR){$(subst,%Z*Z%,$(PATH_SEPERATOR) $(XALANCLASS:s/ /%Z*Z%/))}
 .ENDIF
+PACKLANG := $(JAVAI) org.apache.xalan.xslt.Process -XSL langfilter.xsl
 .ENDIF
 
 # -----------------------------------------------------------------------------
