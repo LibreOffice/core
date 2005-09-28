@@ -88,6 +88,9 @@ fi
 INSTALLDIR=$2
 RPM_DB_PATH=${INSTALLDIR}/.RPM_OFFICEDATABASE
 
+# Check for versionrc
+if [ -f ${INSTALLDIR}/program/versionrc ]; then VERSIONRC=versionrc; fi
+
 if [ "$UPDATE" = "ask" ]
 then
   PRODUCT=`sed --silent -e "
@@ -99,7 +102,7 @@ h
 s/ProductKey=//
 G
 p
-}" ${INSTALLDIR}/program/bootstraprc 2>/dev/null | tr -d "\012"`
+}" ${INSTALLDIR}/program/${VERSIONRC:-bootstraprc} 2>/dev/null | tr -d "\012"`
 
   if [ ! -z "$PRODUCT" ]
   then
