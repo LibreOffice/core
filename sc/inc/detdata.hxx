@@ -4,9 +4,9 @@
  *
  *  $RCSfile: detdata.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:31:55 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:25:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,6 +106,7 @@ public:
         ScDetOpList(const ScDetOpList& rList);
         ~ScDetOpList() {}
 
+    void    DeleteOnTab( SCTAB nTab );
     void    UpdateReference( ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
 
