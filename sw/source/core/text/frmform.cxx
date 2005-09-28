@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:52:01 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:18:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1445,9 +1445,20 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
     // AMA: Leider doch, Textgroessenaenderungen + FlyFrames, die Rueckwirkung
     // kann im Extremfall mehrere Zeilen (Frames!!!) betreffen!
 
+    // --> FME 2005-04-18 #i46560#
+    // FME: Yes, consider this case: (word ) has to go to the next line
+    // because ) is a forbidden character at the beginning of a line although
+    // (word would still fit on the previous line. Adding text right in front
+    // of ) would not trigger a reformatting of the previous line. Adding 1
+    // to the result of FindBrk() does not solve the problem in all cases,
+    // nevertheless it should be sufficient.
+    // <--
     sal_Bool bPrev = rLine.GetPrev() &&
-                     ( FindBrk( rString, rLine.GetStart(),
-                                rReformat.Start() + 1 ) >= rReformat.Start() ||
+                     ( FindBrk( rString, rLine.GetStart(), rReformat.Start() + 1 )
+                       // --> FME 2005-04-18 #i46560#
+                       + 1
+                       // <--
+                       >= rReformat.Start() ||
                        rLine.GetCurr()->IsRest() );
     if( bPrev )
     {
