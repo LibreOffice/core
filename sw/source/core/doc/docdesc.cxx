@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:11:08 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:04:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -264,15 +264,27 @@ void lcl_DescSetAttr( const SwFrmFmt &rSource, SwFrmFmt &rDest,
                                         RES_COL, RES_COL,
                                         RES_FRAMEDIR, RES_FRAMEDIR,
                                         RES_TEXTGRID, RES_TEXTGRID,
+                                        // --> FME 2005-04-18 #i45539#
+                                        RES_HEADER_FOOTER_EAT_SPACING,
+                                        RES_HEADER_FOOTER_EAT_SPACING,
+                                        // <--
                                         RES_UNKNOWNATR_CONTAINER,
-                                                RES_UNKNOWNATR_CONTAINER,
+                                        RES_UNKNOWNATR_CONTAINER,
                                         0 };
+
     const SfxPoolItem* pItem;
     for( USHORT n = 0; aIdArr[ n ]; n += 2 )
     {
         for( USHORT nId = aIdArr[ n ]; nId <= aIdArr[ n+1]; ++nId )
         {
-            if( bPage || ( RES_COL != nId && RES_PAPER_BIN != nId ))
+            // --> FME 2005-04-18 #i45539#
+            // bPage == true:
+            // All in aIdArr except from RES_HEADER_FOOTER_EAT_SPACING
+            // bPage == false:
+            // All in aIdArr except from RES_COL and RES_PAPER_BIN:
+            // <--
+            if( (  bPage && RES_HEADER_FOOTER_EAT_SPACING != nId ) ||
+                ( !bPage && RES_COL != nId && RES_PAPER_BIN != nId ))
             {
                 if( SFX_ITEM_SET == rSource.GetItemState( nId, FALSE, &pItem ))
                     rDest.SetAttr( *pItem );
