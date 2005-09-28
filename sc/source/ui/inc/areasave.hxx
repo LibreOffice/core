@@ -4,9 +4,9 @@
  *
  *  $RCSfile: areasave.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:11:51 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:11:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,7 @@ private:
     String      aOptions;
     String      aSourceArea;
     ScRange     aDestArea;
+    ULONG       nRefresh;
 
 public:
                 ScAreaLinkSaver( const ScAreaLink& rSource );
@@ -72,6 +73,7 @@ public:
     BOOL        IsEqualSource( const ScAreaLink& rCompare ) const;
 
     void        WriteToLink( ScAreaLink& rLink ) const;
+    void        InsertNewLink( ScDocument* pDoc ) const;
 };
 
 
