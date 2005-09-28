@@ -199,6 +199,7 @@ else
 fi
 
 rm -f $GETUID_SO
+rm -f /tmp/.ai.pkg.zone.lock*
 
 # remove local tmp directory
 if [ ! -z ${LOCAL_TMP} ]
