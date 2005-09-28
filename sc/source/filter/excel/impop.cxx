@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:58:10 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:43:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,6 +112,9 @@
 #endif
 #ifndef SC_XIPAGE_HXX
 #include "xipage.hxx"
+#endif
+#ifndef SC_XIVIEW_HXX
+#include "xiview.hxx"
 #endif
 #ifndef SC_XILINK_HXX
 #include "xilink.hxx"
@@ -224,20 +227,7 @@ void ImportExcel::Dimensions( void )
 
 void ImportExcel::Window1()
 {
-    sal_uInt16 nFlags, nTabBarSize;
-    maStrm.Ignore( 8 );
-    maStrm >> nFlags;
-    maStrm.Ignore( 6 );
-    maStrm >> nTabBarSize;
-
-    ScViewOptions aViewOpt( GetDoc().GetViewOptions() );
-    aViewOpt.SetOption( VOPT_HSCROLL,       ::get_flag( nFlags, EXC_WIN1_HOR_SCROLLBAR ) );
-    aViewOpt.SetOption( VOPT_VSCROLL,       ::get_flag( nFlags, EXC_WIN1_VER_SCROLLBAR ) );
-    aViewOpt.SetOption( VOPT_TABCONTROLS,   ::get_flag( nFlags, EXC_WIN1_TABBAR ) );
-    GetDoc().SetViewOptions( aViewOpt );
-
-    if( nTabBarSize <= 1000 )
-        GetExtDocOptions().GetDocSettings().mfTabBarWidth = static_cast< double >( nTabBarSize ) / 1000.0;
+    GetDocViewSettings().ReadWindow1( maStrm );
 }
 
 
@@ -1445,6 +1435,8 @@ void ImportExcel::PostDocLoad( void )
     for(XclImpOutlineDataBuffer* pBuffer = pOutlineListBuffer->First(); pBuffer; pBuffer = pOutlineListBuffer->Next() )
         pBuffer->Apply(pD);
 
+    // document view settings (before visible OLE area)
+    GetDocViewSettings().Finalize();
 
     // visible area if embedded OLE
     if( ScModelObj* pDocObj = GetDocModelObj() )
@@ -1468,7 +1460,11 @@ void ImportExcel::PostDocLoad( void )
                     aScOleSize = pTabSett->maUsedArea;
                 // add all valid drawing objects (object manager only available in BIFF8)
                 if( GetBiff() == EXC_BIFF8 )
-                    GetObjectManager().ExtendUsedArea( aScOleSize, nDisplScTab );
+                {
+                    ScRange aScObjArea = GetObjectManager().GetUsedArea( nDisplScTab );
+                    if( aScObjArea.IsValid() )
+                        aScOleSize.ExtendTo( aScObjArea );
+                }
             }
 
             // valid size found - set it at the document
