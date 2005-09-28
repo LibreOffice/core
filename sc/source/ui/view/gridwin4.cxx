@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:58:59 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:16:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -518,6 +518,9 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     aOutputData.SetMirrorWidth( nMirrorWidth );         // needed for RTL
 
+    std::auto_ptr< VirtualDevice > xFmtVirtDev;
+    BOOL bLogicText = bTextWysiwyg;                     // call DrawStrings in logic MapMode?
+
     if ( bTextWysiwyg )
     {
         //  use printer for text formatting
@@ -525,6 +528,17 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         OutputDevice* pFmtDev = pDoc->GetPrinter();
         pFmtDev->SetMapMode( pViewData->GetLogicMode(eWhich) );
         aOutputData.SetFmtDevice( pFmtDev );
+    }
+    else if ( aZoomX != aZoomY && pViewData->IsOle() )
+    {
+        //  #i45033# For OLE inplace editing with different zoom factors,
+        //  use a virtual device with 1/100th mm as text formatting reference
+
+        xFmtVirtDev.reset( new VirtualDevice );
+        xFmtVirtDev->SetMapMode( MAP_100TH_MM );
+        aOutputData.SetFmtDevice( xFmtVirtDev.get() );
+
+        bLogicText = TRUE;                      // use logic MapMode
     }
 
     const svtools::ColorConfig& rColorCfg = pScMod->GetColorConfig();
@@ -622,7 +636,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     }
     aOutputData.DrawShadow();
     aOutputData.DrawFrame();
-    if ( !bTextWysiwyg )
+    if ( !bLogicText )
         aOutputData.DrawStrings(FALSE);     // in pixel MapMode
 
         // Autofilter- und Pivot-Buttons
@@ -637,7 +651,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         // Edit-Zellen
 
     SetMapMode(pViewData->GetLogicMode(eWhich));
-    if ( bTextWysiwyg )
+    if ( bLogicText )
         aOutputData.DrawStrings(TRUE);      // in logic MapMode if bTextWysiwyg is set
     aOutputData.DrawEdit(TRUE);
 
