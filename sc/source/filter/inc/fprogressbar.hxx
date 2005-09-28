@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fprogressbar.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:19:35 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:56:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ const sal_Int32 SCF_INV_SEGMENT = -1;
 
         aProgress.ActivateSegment( nSeg );                  // start segment nSeg
         aProgress.Progress();                               // 0->1; display: 2%
-        aProgress.Progress( 9 );                            // 1->9; display: 18%
+        aProgress.ProgressAbs( 9 );                         // 1->9; display: 18%
 
     Example 2: Progress bar with 2 segments.
 
@@ -93,7 +93,7 @@ const sal_Int32 SCF_INV_SEGMENT = -1;
 
         aProgress.ActivateSegment( nSeg1 );                 // start first segment
         aProgress.Progress();                               // 0->1, display: 1%
-        aProgress.Progress( 3 );                            // 1->3, display: 3%
+        aProgress.Progress( 2 );                            // 1->3, display: 3%
         aProgress.ActivateSegment( nSeg2 );                 // start second segment
         aProgress.Progress( 5 );                            // 0->5, display: 8% (5+3 steps)
         aProgress.ActivateSegment( nSeg1 );                 // continue with first segment
@@ -145,10 +145,10 @@ public:
     void                ActivateSegment( sal_Int32 nSegment );
     /** Starts the progress bar (with first segment). */
     inline void         Activate() { ActivateSegment( 0 ); }
-    /** Set current segment to the specified position. */
-    void                Progress( sal_uInt32 nPos );
-    /** Increase current segment by 1. */
-    void                Progress();
+    /** Set current segment to the specified absolute position. */
+    void                ProgressAbs( sal_uInt32 nPos );
+    /** Increase current segment by the passed value. */
+    void                Progress( sal_uInt32 nDelta = 1 );
 
 private:
     struct ScfProgressSegment;
@@ -212,9 +212,9 @@ public:
     explicit            ScfSimpleProgressBar( sal_uInt32 nSize, SfxObjectShell* pDocShell, USHORT nResId );
 
     /** Set progress bar to the specified position. */
-    inline void         Progress( sal_uInt32 nPos ) { maProgress.Progress( nPos ); }
+    inline void         ProgressAbs( sal_uInt32 nPos ) { maProgress.ProgressAbs( nPos ); }
     /** Increase progress bar by 1. */
-    inline void         Progress() { maProgress.Progress(); }
+    inline void         Progress( sal_uInt32 nDelta = 1 ) { maProgress.Progress( nDelta ); }
 
 private:
     /** Initializes and starts the progress bar. */
