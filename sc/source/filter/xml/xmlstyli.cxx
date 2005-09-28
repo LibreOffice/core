@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:13:14 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:07:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -619,7 +619,8 @@ void XMLTableStyleContext::FillPropertySet(
                 if (pStyle)
                 {
                     //rPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NUMBERFORMAT)), aNumberFormat);
-                    AddProperty(CTF_SC_NUMBERFORMAT, uno::makeAny(pStyle->GetKey()));
+                    nNumberFormat = pStyle->GetKey();
+                    AddProperty(CTF_SC_NUMBERFORMAT, uno::makeAny(nNumberFormat));
                 }
             }
             if (!bConditionalFormatCreated && (aMaps.size() > 0))
