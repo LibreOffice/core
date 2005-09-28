@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stdtext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:42:30 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 14:36:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,10 @@
 
 XubString GetStandardText( USHORT nStdText )
 {
-    XubString aText( ResId( nStdText-STANDARD_TEXT_FIRST+SV_STDTEXT_FIRST, ImplGetResMgr() ) );
+    ResMgr* pResMgr = ImplGetResMgr();
+    XubString aText;
+    if( pResMgr )
+        aText = XubString( ResId( nStdText-STANDARD_TEXT_FIRST+SV_STDTEXT_FIRST, pResMgr ) );
     return aText;
 }
 
