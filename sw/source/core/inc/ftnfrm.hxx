@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftnfrm.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:48:53 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:08:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,8 +76,11 @@ class SwFtnFrm: public SwLayoutFrm
     SwCntntFrm   *pRef;         //In diesem CntntFrm steht die Fussnotenref.
     SwTxtFtn     *pAttr;        //Fussnotenattribut (zum wiedererkennen)
 
-    BOOL bBackMoveLocked;       //Absaetze in dieser Fussnote duerfen derzeit
+    BOOL bBackMoveLocked : 1;   //Absaetze in dieser Fussnote duerfen derzeit
                                 //nicht rueckwaerts fliessen.
+    // --> OD 2005-05-18 #i49383# - control unlock of position of lower anchored objects.
+    bool mbUnlockPosOfLowerObjs : 1;
+    // <--
 #ifndef PRODUCT
 protected:
     virtual SwTwips ShrinkFrm( SwTwips, SZPTR
@@ -129,6 +132,21 @@ public:
     // Verhindert, dass der letzte Inhalt den SwFtnFrm mitloescht (Cut())
     inline void ColLock()       { bColLocked = TRUE; }
     inline void ColUnlock()     { bColLocked = FALSE; }
+
+    // --> OD 2005-05-18 #i49383#
+    inline void UnlockPosOfLowerObjs()
+    {
+        mbUnlockPosOfLowerObjs = true;
+    }
+    inline void KeepLockPosOfLowerObjs()
+    {
+        mbUnlockPosOfLowerObjs = false;
+    }
+    inline bool IsUnlockPosOfLowerObjs()
+    {
+        return mbUnlockPosOfLowerObjs;
+    }
+    // <--
 };
 
 #endif  //_FTNFRM_HXX
