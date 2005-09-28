@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:22:02 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:05:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2330,8 +2330,11 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* pCrsr,
     // --> FME 2005-01-06 #i39552# Collection of the boxes of the current
     // column has to be done at the beginning of this function, because
     // the table may be formatted in ::GetTblSel.
-    const SwFrm* pCntnt = pBoxFrm->ContainsCntnt();
     SwSelBoxes aBoxes;
+
+    const SwTabFrm* pTab = pBoxFrm->FindTabFrm();
+    const SwCntntFrm* pCntnt = ::GetCellCntnt( *pBoxFrm );
+
     if ( pCntnt && pCntnt->IsTxtFrm() )
     {
         const SwPosition aPos( *((SwTxtFrm*)pCntnt)->GetTxtNode() );
@@ -2340,9 +2343,8 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* pCrsr,
     }
     // <--
 
-    SwTabFrm* pTab = ((SwFrm*)pBoxFrm)->ImplFindTabFrm();
     const SwTableBox* pBox = pBoxFrm->GetTabBox();
-    SwFrm* pFrm = pTab->GetNextLayoutLeaf();
+    const SwFrm* pFrm = pTab->GetNextLayoutLeaf();
 
     //Fix-Punkte setzen, LeftMin in Dokumentkoordinaten die anderen relativ.
     SWRECTFN( pTab )
@@ -2371,7 +2373,7 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* pCrsr,
 
     while ( pFrm && pTab->IsAnLower( pFrm ) )
     {
-        if ( pFrm->IsCellFrm() )
+        if ( pFrm->IsCellFrm() && pFrm->FindTabFrm() == pTab )
         {
             // upper and lower borders of current cell frame:
             long nUpperBorder = (pFrm->Frm().*fnRect->fnGetTop)();
@@ -2583,7 +2585,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, BOOL bCurColOnly, const SwCursor*
             const SwFrm* pFrm = pTab->GetNextLayoutLeaf();
             while ( pFrm && pTab->IsAnLower( pFrm ) )
             {
-                if ( pFrm->IsCellFrm() )
+                if ( pFrm->IsCellFrm() && pFrm->FindTabFrm() == pTab )
                 {
                     const long nLowerBorder = (pFrm->Frm().*fnRect->fnGetBottom)();
                     const ULONG nTabTop = (pTab->*fnRect->fnGetPrtTop)();
@@ -2591,7 +2593,8 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, BOOL bCurColOnly, const SwCursor*
                     {
                         if ( !bCurColOnly || pFrm == pBoxFrm )
                         {
-                            const SwFrm* pCntnt = ((SwCellFrm*)pFrm)->ContainsCntnt();
+                            const SwFrm* pCntnt = ::GetCellCntnt( static_cast<const SwCellFrm&>(*pFrm) );
+
                             if ( pCntnt && pCntnt->IsTxtFrm() )
                             {
                                 const SwTableLine* pLine = ((SwCellFrm*)pFrm)->GetTabBox()->GetUpper();
