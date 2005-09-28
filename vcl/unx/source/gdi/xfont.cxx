@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:08:51 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 15:04:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -747,6 +747,13 @@ void X11FontLayout::DrawText( SalGraphics& rSalGraphics ) const
 {
     static const int MAXGLYPHS = 160;
     int nMaxGlyphs = GetOrientation() ? 1 : MAXGLYPHS;
+
+    // workaround for #i49902# similar to #b6228733 with XDrawText items
+    // => output each item separately for non-unicode font encodings!
+    // this is done here instead of in DrawStringUCS2MB() because
+    // it needs the item positions and they are easily available here
+    if( mrFont.GetAsciiEncoding() != RTL_TEXTENCODING_UNICODE )
+    nMaxGlyphs = 1;
 
     Point aPos;
     sal_Int32 aGlyphAry[ MAXGLYPHS ];
