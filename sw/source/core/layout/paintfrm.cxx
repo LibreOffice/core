@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:26:45 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:15:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3307,25 +3307,9 @@ void SwFlyFrm::Paint( const SwRect& rRect ) const
 
     const SwNoTxtFrm *pNoTxt = Lower() && Lower()->IsNoTxtFrm()
                                                 ? (SwNoTxtFrm*)Lower() : 0;
-    /// OD 19.08.2002 #99657# - rename local variable
-    ///     <bTransparent> --> <bIsGraphicTransparent>
-    FASTBOOL bIsGraphicTransparent = pNoTxt ? pNoTxt->IsTransparent() : FALSE,
-             bContour     = GetFmt()->GetSurround().IsContour(),
-             bHell, bPaintBack;
 
-    if ( bIsGraphicTransparent &&
-         GetVirtDrawObj()->GetLayer() == GetFmt()->GetDoc()->GetHellId() &&
-         GetAnchorFrm()->FindFlyFrm() )
     {
-        SwFlyFrm *pOldRet = pRetoucheFly2; pRetoucheFly2 = (SwFlyFrm*)this;
-        const SwFrm *pFrm = GetAnchorFrm()->FindFlyFrm();
-        SwBorderAttrAccess aAccess( SwFrm::GetCache(), pFrm );
-        const SwBorderAttrs &rAttrs = *aAccess.Get();
-        pFrm->PaintBackground( aRect, pPage, rAttrs, FALSE, FALSE );
-        pRetoucheFly2 = pOldRet;
-    }
-//#33429#           else
-    {
+        bool bContour = GetFmt()->GetSurround().IsContour();
         PolyPolygon aPoly;
         if ( bContour )
         {
@@ -3335,26 +3319,55 @@ void SwFlyFrm::Paint( const SwRect& rRect ) const
             bContour = GetContour( aPoly, sal_True );
         }
 
-        //Hintergrund painten fuer:
-        bPaintBack = !pNoTxt || Prt().SSize() != Frm().SSize();
-        //sowie fuer Transparente und Contour in der Hoelle
-        bPaintBack = bPaintBack ||
-                ((bIsGraphicTransparent || bContour ) &&
-                TRUE == (bHell = GetVirtDrawObj()->GetLayer() == GetFmt()->GetDoc()->GetHellId()));
-        //sowie fuer Transparente und Contour mit eigener Brush
-        if ( !bPaintBack && (bIsGraphicTransparent||bContour) )
+        // --> OD 2005-06-08 #i47804# - distinguish complete background paint
+        // and margin paint.
+        // paint complete background for Writer text fly frames
+        bool bPaintCompleteBack( !pNoTxt );
+        // <--
+        // paint complete background for transparent graphic and contour,
+        // if own background color exists.
+        const bool bIsGraphicTransparent = pNoTxt ? pNoTxt->IsTransparent() : false;
+        if ( !bPaintCompleteBack &&
+             ( bIsGraphicTransparent|| bContour ) )
         {
             const SvxBrushItem &rBack = GetFmt()->GetBackground();
-            /// OD 07.08.2002 #99657# #GetTransChg#
-            ///     to determine, if background has to be painted, by checking, if
-            ///     background color is not COL_TRANSPARENT ("no fill"/"auto fill")
-            ///     or a background graphic exists.
-            bPaintBack = !(rBack.GetColor() == COL_TRANSPARENT) ||
-            ///bPaintBack = !rBack.GetColor().GetTransparency() ||
-                         rBack.GetGraphicPos() != GPOS_NONE;
+            // OD 07.08.2002 #99657# #GetTransChg#
+            //     to determine, if background has to be painted, by checking, if
+            //     background color is not COL_TRANSPARENT ("no fill"/"auto fill")
+            //     or a background graphic exists.
+            bPaintCompleteBack = !(rBack.GetColor() == COL_TRANSPARENT) ||
+                                 rBack.GetGraphicPos() != GPOS_NONE;
+        }
+        // paint of margin needed.
+        const bool bPaintMarginOnly( !bPaintCompleteBack &&
+                                     Prt().SSize() != Frm().SSize() );
+
+        // --> OD 2005-06-08 #i47804# - paint background of parent fly frame
+        // for transparent graphics in layer Hell, if parent fly frame isn't
+        // in layer Hell. It's only painted the intersection between the
+        // parent fly frame area and the paint area <aRect>
+        if ( bIsGraphicTransparent &&
+            GetVirtDrawObj()->GetLayer() == GetFmt()->GetDoc()->GetHellId() &&
+            GetAnchorFrm()->FindFlyFrm() )
+        {
+            const SwFlyFrm* pParentFlyFrm = GetAnchorFrm()->FindFlyFrm();
+            if ( pParentFlyFrm->GetDrawObj()->GetLayer() !=
+                                            GetFmt()->GetDoc()->GetHellId() )
+            {
+                SwFlyFrm* pOldRet = pRetoucheFly2;
+                pRetoucheFly2 = const_cast<SwFlyFrm*>(this);
+
+                SwBorderAttrAccess aAccess( SwFrm::GetCache(), pParentFlyFrm );
+                const SwBorderAttrs &rAttrs = *aAccess.Get();
+                SwRect aPaintRect( aRect );
+                aPaintRect._Intersection( pParentFlyFrm->Frm() );
+                pParentFlyFrm->PaintBackground( aPaintRect, pPage, rAttrs, FALSE, FALSE );
+
+                pRetoucheFly2 = pOldRet;
+            }
         }
 
-        if ( bPaintBack )
+        if ( bPaintCompleteBack || bPaintMarginOnly )
         {
             //#24926# JP 01.02.96, PaintBaBo in teilen hier, damit PaintBorder
             //das orig. Rect bekommt, aber PaintBackground das begrenzte.
@@ -3378,7 +3391,7 @@ void SwFlyFrm::Paint( const SwRect& rRect ) const
             // paint background
             {
                 SwRegionRects aRegion( aRect );
-                if ( pNoTxt && !bIsGraphicTransparent )
+                if ( bPaintMarginOnly )
                 {
                     //Was wir eigentlich Painten wollen ist der schmale Streifen
                     //zwischen PrtArea und aeusserer Umrandung.
@@ -3453,8 +3466,10 @@ void SwFlyFrm::Paint( const SwRect& rRect ) const
             // unlock special subsidiary lines
             pSpecSubsLines->LockLines( FALSE );
         else
+        {
             // delete created special subsidiary lines container
             DELETEZ( pSpecSubsLines );
+        }
     }
 
     SwLayoutFrm::Paint( aRect );
