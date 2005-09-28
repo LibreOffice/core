@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xicontent.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:03:54 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:46:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -679,7 +679,7 @@ void XclImpValidation::ReadDval( XclImpStream& rStrm )
     if( nObjId != EXC_DVAL_NOOBJ )
     {
         DBG_ASSERT( nObjId <= 0xFFFF, "XclImpValidation::ReadDval - invalid object ID" );
-        rRoot.GetObjectManager().SetSkipObj( rRoot.GetCurrScTab(), static_cast< sal_uInt16 >( nObjId ) );
+        rRoot.GetObjectManager().SetInvalidObj( rRoot.GetCurrScTab(), static_cast< sal_uInt16 >( nObjId ) );
     }
 }
 
