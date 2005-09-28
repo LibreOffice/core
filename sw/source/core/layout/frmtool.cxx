@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:13:58 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:12:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,7 +180,10 @@ SwFrmNotify::SwFrmNotify( SwFrm *pF ) :
     aFrm( pF->Frm() ),
     aPrt( pF->Prt() ),
     bInvaKeep( FALSE ),
-    bValidSize( pF->GetValidSizeFlag() )
+    bValidSize( pF->GetValidSizeFlag() ),
+    // --> OD 2005-07-29 #i49383#
+    mbFrmDeleted( false )
+    // <--
 {
     if ( pF->IsTxtFrm() )
     {
@@ -209,6 +212,13 @@ SwFrmNotify::SwFrmNotify( SwFrm *pF ) :
 
 SwFrmNotify::~SwFrmNotify()
 {
+    // --> OD 2005-07-29 #i49383#
+    if ( mbFrmDeleted )
+    {
+        return;
+    }
+    // <--
+
     SWRECTFN( pFrm )
     const FASTBOOL bAbsP = POS_DIFF( aFrm, pFrm->Frm() );
     const FASTBOOL bChgWidth =
@@ -473,7 +483,14 @@ SwFrmNotify::~SwFrmNotify()
         // way:
         if ( ATT_FIX_SIZE != rFrmSz.GetWidthSizeType() )
         {
-            pFly->InvalidatePos();
+            // --> OD 2005-07-29 #i50668#, #i50998# - invalidation of position
+            // of as-character anchored fly frames not needed and can cause
+            // layout loops
+            if ( !pFly->ISA(SwFlyInCntFrm) )
+            {
+                pFly->InvalidatePos();
+            }
+            // <--
             pFly->InvalidateSize();
         }
     }
@@ -537,6 +554,13 @@ void lcl_InvalidatePosOfLowers( SwLayoutFrm& _rLayoutFrm )
 
 SwLayNotify::~SwLayNotify()
 {
+    // --> OD 2005-07-29 #i49383#
+    if ( mbFrmDeleted )
+    {
+        return;
+    }
+    // <--
+
     SwLayoutFrm *pLay = GetLay();
     SWRECTFN( pLay )
     FASTBOOL bNotify = FALSE;
@@ -680,6 +704,19 @@ SwLayNotify::~SwLayNotify()
                 bUnlockPosOfObjs = false;
             }
         }
+        // --> OD 2005-05-18 #i49383# - check for footnote frame, if unlock
+        // of position of lower objects is allowed.
+        else if ( bUnlockPosOfObjs && pLay->IsFtnFrm() )
+        {
+            bUnlockPosOfObjs = static_cast<SwFtnFrm*>(pLay)->IsUnlockPosOfLowerObjs();
+        }
+        // <--
+        // --> OD 2005-07-29 #i51303# - no unlock of object positions for sections
+        else if ( bUnlockPosOfObjs && pLay->IsSctFrm() )
+        {
+            bUnlockPosOfObjs = false;
+        }
+        // <--
         pLay->NotifyLowerObjs( bUnlockPosOfObjs );
         // <--
     }
@@ -723,6 +760,13 @@ SwFlyNotify::SwFlyNotify( SwFlyFrm *pFlyFrm ) :
 
 SwFlyNotify::~SwFlyNotify()
 {
+    // --> OD 2005-07-29 #i49383#
+    if ( mbFrmDeleted )
+    {
+        return;
+    }
+    // <--
+
     SwFlyFrm *pFly = GetFly();
     if ( pFly->IsNotifyBack() )
     {
@@ -863,6 +907,13 @@ SwCntntNotify::SwCntntNotify( SwCntntFrm *pCntntFrm ) :
 
 SwCntntNotify::~SwCntntNotify()
 {
+    // --> OD 2005-07-29 #i49383#
+    if ( mbFrmDeleted )
+    {
+        return;
+    }
+    // <--
+
     SwCntntFrm *pCnt = GetCnt();
     if ( bSetCompletePaintOnInvalidate )
         pCnt->SetCompletePaint();
@@ -2923,8 +2974,18 @@ void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld,
         if( pSh && rOld.HasArea() )
             pSh->InvalidateWindows( rOld );
 
+        // --> OD 2005-08-19 #i51941# - consider case that fly frame isn't
+        // registered at the old page <pOld>
+        SwPageFrm* pPageFrm = pFly->FindPageFrm();
+        if ( pOld != pPageFrm )
+        {
+            pFly->NotifyBackground( pPageFrm, aFrm, PREP_FLY_ARRIVE );
+        }
+        // <--
+
         if ( rOld.Left() != aFrm.Left() )
-        {   SwRect aTmp( rOld );
+        {
+            SwRect aTmp( rOld );
             aTmp.Union( aFrm );
             aTmp.Left(  Min(aFrm.Left(), rOld.Left()) );
             aTmp.Right( Max(aFrm.Left(), rOld.Left()) );
@@ -2933,14 +2994,16 @@ void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld,
         SwTwips nOld = rOld.Right();
         SwTwips nNew = aFrm.Right();
         if ( nOld != nNew )
-        {   SwRect aTmp( rOld );
+        {
+            SwRect aTmp( rOld );
             aTmp.Union( aFrm );
             aTmp.Left(  Min(nNew, nOld) );
             aTmp.Right( Max(nNew, nOld) );
             pFly->NotifyBackground( pOld, aTmp, PREP_FLY_CHGD );
         }
         if ( rOld.Top() != aFrm.Top() )
-        {   SwRect aTmp( rOld );
+        {
+            SwRect aTmp( rOld );
             aTmp.Union( aFrm );
             aTmp.Top(    Min(aFrm.Top(), rOld.Top()) );
             aTmp.Bottom( Max(aFrm.Top(), rOld.Top()) );
@@ -2949,7 +3012,8 @@ void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld,
         nOld = rOld.Bottom();
         nNew = aFrm.Bottom();
         if ( nOld != nNew )
-        {   SwRect aTmp( rOld );
+        {
+            SwRect aTmp( rOld );
             aTmp.Union( aFrm );
             aTmp.Top(    Min(nNew, nOld) );
             aTmp.Bottom( Max(nNew, nOld) );
@@ -3599,3 +3663,28 @@ void GetSpacingValuesOfFrm( const SwFrm& _rFrm,
                 "<GetSpacingValuesOfFrm(..)> - spacing values aren't positive!" );
     }
 }
+
+/** method to get the content of the table cell, skipping content from nested tables
+*/
+const SwCntntFrm* GetCellCntnt( const SwLayoutFrm& rCell )
+{
+    const SwCntntFrm* pCntnt = rCell.ContainsCntnt();
+    const SwTabFrm* pTab = rCell.FindTabFrm();
+
+    while ( pCntnt && rCell.IsAnLower( pCntnt ) )
+    {
+        const SwTabFrm* pTmpTab = pCntnt->FindTabFrm();
+        if ( pTmpTab != pTab )
+        {
+            pCntnt = pTmpTab->FindLastCntnt();
+            if ( pCntnt )
+
+                pCntnt = pCntnt->FindNextCnt();
+
+        }
+        else
+            break;
+    }
+    return pCntnt;
+}
+
