@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fields.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:04:00 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:24:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,8 @@ namespace ww
     const char *GetEnglishFieldName(eField eIndex) throw()
     {
         //0 Signifies the field names I can't find.
+        // --> OD 2005-06-08 #i43956#
+        // field <eFOOTREF> = 5 should be mapped to "REF"
         static const char *aFieldNames[] =
         {
             /* 0*/  0,
@@ -57,7 +59,7 @@ namespace ww
             /* 2*/  0,
             /* 3*/  "REF",
             /* 4*/  "XE",
-            /* 5*/  0,
+            /* 5*/  "REF",
             /* 6*/  "SET",
             /* 7*/  "IF",
             /* 8*/  "INDEX",
