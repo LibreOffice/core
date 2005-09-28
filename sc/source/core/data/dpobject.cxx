@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpobject.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:22:52 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:32:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2081,6 +2081,19 @@ BOOL ScDPCollection::LoadNew( SvStream& rStream )
     return bSuccess;
 }
 
+void ScDPCollection::DeleteOnTab( SCTAB nTab )
+{
+    USHORT nPos = 0;
+    while ( nPos < nCount )
+    {
+        // look for output positions on the deleted sheet
+        if ( static_cast<const ScDPObject*>(At(nPos))->GetOutRange().aStart.Tab() == nTab )
+            AtFree(nPos);
+        else
+            ++nPos;
+    }
+}
+
 void ScDPCollection::UpdateReference( UpdateRefMode eUpdateRefMode,
                                          const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
@@ -2109,7 +2122,41 @@ void ScDPCollection::WriteRefsTo( ScDPCollection& r ) const
             ((const ScDPObject*)At(i))->WriteRefsTo( *((ScDPObject*)r.At(i)) );
     }
     else
-        DBG_ERROR("WriteRefsTo: different count");
+    {
+        // #i8180# If data pilot tables were deleted with their sheet,
+        // this collection contains extra entries that must be restored.
+        // Matching objects are found by their names.
+
+        DBG_ASSERT( nCount >= r.nCount, "WriteRefsTo: missing entries in document" );
+        for (USHORT nSourcePos=0; nSourcePos<nCount; nSourcePos++)
+        {
+            const ScDPObject* pSourceObj = static_cast<const ScDPObject*>(At(nSourcePos));
+            String aName = pSourceObj->GetName();
+            bool bFound = false;
+            for (USHORT nDestPos=0; nDestPos<r.nCount && !bFound; nDestPos++)
+            {
+                ScDPObject* pDestObj = static_cast<ScDPObject*>(r.At(nDestPos));
+                if ( pDestObj->GetName() == aName )
+                {
+                    pSourceObj->WriteRefsTo( *pDestObj );     // found object, copy refs
+                    bFound = true;
+                }
+            }
+            if ( !bFound )
+            {
+                // none found, re-insert deleted object (see ScUndoDataPilot::Undo)
+
+                ScDPObject* pDestObj = new ScDPObject( *pSourceObj );
+                pDestObj->SetAlive(TRUE);
+                if ( !r.Insert(pDestObj) )
+                {
+                    DBG_ERROR("cannot insert DPObject");
+                    DELETEZ( pDestObj );
+                }
+            }
+        }
+        DBG_ASSERT( nCount == r.nCount, "WriteRefsTo: couldn't restore all entries" );
+    }
 }
 
 String ScDPCollection::CreateNewName( USHORT nMin ) const
