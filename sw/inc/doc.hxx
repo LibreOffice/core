@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:40:43 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:02:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -528,7 +528,7 @@ class SwDoc
     // SO8pp1:
     // bIgnoreFirstLineIndentInNumbering    def = FALSE, hidden
     // bDoNotJustifyLinesWithManualBreak    def = FALSE, hidden
-    //
+    // bDoNotResetParaAttrsForNumFont       def = FALSE, hidden
 
     sal_Bool    bOldLineSpacing                 : 1;    // OD  2004-01-06 #i11859#
     sal_Bool    bAddParaSpacingToTableCells     : 1;    // OD  2004-02-16 #106629#
@@ -540,8 +540,10 @@ class SwDoc
 
     // non-ui-compatibility flags:
     sal_Bool    bOldNumbering                   : 1;    // HBRINKM #111955#
-    sal_Bool    bIgnoreFirstLineIndentInNumbering: 1;   // FME 2005-05-30# i47448#
+    sal_Bool    bIgnoreFirstLineIndentInNumbering: 1;   // FME 2005-05-30 #i47448#
     sal_Bool    bDoNotJustifyLinesWithManualBreak: 1;   // FME 2005-06-08 #i49277#
+    sal_Bool    bDoNotResetParaAttrsForNumFont   : 1;   // FME 2005-08-11 #i53199#
+    sal_Bool    bDummyNonUIFlag                  : 1;   // use this if necessary
 
     //
     // COMPATIBILITY FLAGS END
@@ -1926,8 +1928,13 @@ public:
     void InvalidateAutoCompleteFlag();
 
     SdrModel* _MakeDrawModel();
-    inline SdrModel* MakeDrawModel()
-    { return GetDrawModel() ? GetDrawModel() : _MakeDrawModel(); }
+    // --> OD 2005-08-08 #i52858#
+    // change name of method for better description of its function
+    inline SdrModel* GetOrCreateDrawModel()
+    {
+        return GetDrawModel() ? GetDrawModel() : _MakeDrawModel();
+    }
+    // <--
     void SetCalcFieldValueHdl(Outliner* pOutliner);
 
     // erfrage ob die ::com::sun::star::util::URL besucht war. Uebers Doc, falls nur ein ::com::sun::star::text::Bookmark
@@ -2240,6 +2247,17 @@ public:
     inline void SetDoNotJustifyLinesWithManualBreak( const sal_Bool _bDoNotJustifyLinesWithManualBreak )
     {
         bDoNotJustifyLinesWithManualBreak = _bDoNotJustifyLinesWithManualBreak;
+    }
+    // <--
+
+    // --> FME 2005-08-11 #i53199#
+    inline sal_Bool DoNotResetParaAttrsForNumFont() const
+    {
+        return bDoNotResetParaAttrsForNumFont;
+    }
+    inline void SetDoNotResetParaAttrsForNumFont( const sal_Bool _bDoNotResetParaAttrsForNumFont )
+    {
+        bDoNotResetParaAttrsForNumFont = _bDoNotResetParaAttrsForNumFont;
     }
     // <--
 
