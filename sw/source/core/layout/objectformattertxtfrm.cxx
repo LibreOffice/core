@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectformattertxtfrm.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:22:09 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:14:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,6 +169,14 @@ bool SwObjectFormatterTxtFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
         return true;
     }
 
+    // --> OD 2005-07-13 #124218# - consider, if the layout action has to be
+    // restarted due to a delete of a page frame.
+    if ( GetLayAction() && GetLayAction()->IsAgain() )
+    {
+        return false;
+    }
+    // <--
+
     bool bSuccess( true );
 
     if ( _rAnchoredObj.IsFormatPossible() )
@@ -176,6 +184,13 @@ bool SwObjectFormatterTxtFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
         _rAnchoredObj.SetRestartLayoutProcess( false );
 
         _FormatObj( _rAnchoredObj );
+        // --> OD 2005-07-13 #124218# - consider, if the layout action has to be
+        // restarted due to a delete of a page frame.
+        if ( GetLayAction() && GetLayAction()->IsAgain() )
+        {
+            return false;
+        }
+        // <--
 
         // check, if layout process has to be restarted.
         // if yes, perform needed invalidations.
@@ -374,7 +389,7 @@ bool SwObjectFormatterTxtFrm::DoFormatObjs()
         {
             // format of as-character anchored floating screen objects - no failure
             // excepted on the format of these objects.
-            _FormatObjsAtFrm();
+            bSuccess = _FormatObjsAtFrm();
         }
     }
     else
