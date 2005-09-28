@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:02:58 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:09:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,10 +216,17 @@ class SwTxtFrm: public SwCntntFrm
     /** method to determine height of last line, needed for proportional line spacing
 
         OD 2004-03-17 #i11860#
+        OD 2005-05-20 #i47162# - introduce new optional parameter <_bUseFont>
+        in order to force the usage of the former algorithm to determine the
+        height of the last line, which uses the font.
+
+        @param _bUseFont
+        optional input parameter - boolean indicating, if the font has to be
+        used to determine the height of the last line. default value: false
 
         @author OD
     */
-    void _CalcHeightOfLastLine();
+    void _CalcHeightOfLastLine( const bool _bUseFont = false );
 
 public:
 
