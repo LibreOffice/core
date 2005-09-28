@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:21:23 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:31:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -846,6 +846,11 @@ BOOL ScDocument::ContinueOnlineSpelling()
     if ( bIdleDisabled || !pDocOptions->IsAutoSpell() || (pShell && pShell->IsReadOnly()) )
         return FALSE;
 
+    // #i48433# set bInsertingFromOtherDoc flag so there are no broadcasts when PutCell is called
+    // (same behavior as in RemoveAutoSpellObj: just transfer the broadcaster)
+    BOOL bOldInserting = IsInsertingFromOtherDoc();
+    SetInsertingFromOtherDoc( TRUE );
+
     //! use one EditEngine for both calls
 
     //  #41504# first check visible range
@@ -866,6 +871,9 @@ BOOL ScDocument::ContinueOnlineSpelling()
         ScRange aTotalRange( 0,0,0, MAXCOL,MAXROW,MAXTAB );
         bResult = OnlineSpellInRange( aTotalRange, aOnlineSpellPos, SPELL_MAXTEST_ALL );
     }
+
+    SetInsertingFromOtherDoc( bOldInserting );
+
     return bResult;
 }
 
@@ -1313,11 +1321,31 @@ void ScDocument::UpdateAreaLinks()
     }
 }
 
+void ScDocument::DeleteAreaLinksOnTab( SCTAB nTab )
+{
+    if (pLinkManager)
+    {
+        const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+        USHORT nPos = 0;
+        while ( nPos < rLinks.Count() )
+        {
+            const ::sfx2::SvBaseLink* pBase = *rLinks[nPos];
+            if ( pBase->ISA(ScAreaLink) &&
+                 static_cast<const ScAreaLink*>(pBase)->GetDestArea().aStart.Tab() == nTab )
+                pLinkManager->Remove( nPos );
+            else
+                ++nPos;
+        }
+    }
+}
+
 void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
                              const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
     if (pLinkManager)
     {
+        bool bAnyUpdate = false;
+
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
         for (USHORT i=0; i<nCount; i++)
@@ -1341,7 +1369,42 @@ void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
                         rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aEnd.Tab(), nDx, nDy, nDz,
                         nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
                 if ( eRes != UR_NOTHING )
+                {
                     pLink->SetDestArea( ScRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 ) );
+                    bAnyUpdate = true;
+                }
+            }
+        }
+
+        if ( bAnyUpdate )
+        {
+            // #i52120# Look for duplicates (after updating all positions).
+            // If several links start at the same cell, the one with the lower index is removed
+            // (file format specifies only one link definition for a cell).
+
+            USHORT nFirstIndex = 0;
+            while ( nFirstIndex < nCount )
+            {
+                bool bFound = false;
+                ::sfx2::SvBaseLink* pFirst = *rLinks[nFirstIndex];
+                if ( pFirst->ISA(ScAreaLink) )
+                {
+                    ScAddress aFirstPos = static_cast<ScAreaLink*>(pFirst)->GetDestArea().aStart;
+                    for ( USHORT nSecondIndex = nFirstIndex + 1; nSecondIndex < nCount && !bFound; ++nSecondIndex )
+                    {
+                        ::sfx2::SvBaseLink* pSecond = *rLinks[nSecondIndex];
+                        if ( pSecond->ISA(ScAreaLink) &&
+                             static_cast<ScAreaLink*>(pSecond)->GetDestArea().aStart == aFirstPos )
+                        {
+                            // remove the first link, exit the inner loop, don't increment nFirstIndex
+                            pLinkManager->Remove( pFirst );
+                            nCount = rLinks.Count();
+                            bFound = true;
+                        }
+                    }
+                }
+                if (!bFound)
+                    ++nFirstIndex;
             }
         }
     }
