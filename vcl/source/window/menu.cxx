@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:27:26 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 14:51:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -549,7 +549,9 @@ void DecoToolBox::calcMinSize()
     ToolBox aTbx( GetParent() );
     ResMgr* pResMgr = ImplGetResMgr();
 
-    Bitmap aBitmap( ResId( SV_RESID_BITMAP_CLOSEDOC, pResMgr ) );
+    Bitmap aBitmap;
+    if( pResMgr )
+        aBitmap = Bitmap( ResId( SV_RESID_BITMAP_CLOSEDOC, pResMgr ) );
     aTbx.SetOutStyle( TOOLBOX_STYLE_FLAT );
     aTbx.InsertItem( IID_DOCUMENTCLOSE, Image( aBitmap ) );
     maMinSize = aTbx.CalcWindowSizePixel();
@@ -3172,10 +3174,14 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
     USHORT nVisibleEntries = ImplGetVisibleItemCount();
     if ( !nVisibleEntries )
     {
-        String aTmpEntryText( ResId( SV_RESID_STRING_NOSELECTIONPOSSIBLE, ImplGetResMgr() ) );
-        MenuItemData* pData = pItemList->Insert(
-            0xFFFF, MENUITEM_STRING, 0, aTmpEntryText, Image(), NULL, 0xFFFF );
-        pData->bIsTemporary = TRUE;
+        ResMgr* pResMgr = ImplGetResMgr();
+        if( pResMgr )
+        {
+            String aTmpEntryText( ResId( SV_RESID_STRING_NOSELECTIONPOSSIBLE, pResMgr ) );
+            MenuItemData* pData = pItemList->Insert(
+                0xFFFF, MENUITEM_STRING, 0, aTmpEntryText, Image(), NULL, 0xFFFF );
+                pData->bIsTemporary = TRUE;
+        }
     }
     else if ( Application::GetSettings().GetStyleSettings().GetAutoMnemonic() && !( nMenuFlags & MENU_FLAG_NOAUTOMNEMONICS ) )
     {
@@ -4544,29 +4550,32 @@ MenuBarWindow::MenuBarWindow( Window* pParent ) :
 
     ResMgr* pResMgr = ImplGetResMgr();
 
-    Bitmap aBitmap( ResId( SV_RESID_BITMAP_CLOSEDOC, pResMgr ) );
-    Bitmap aBitmapHC( ResId( SV_RESID_BITMAP_CLOSEDOCHC, pResMgr ) );
+    if( pResMgr )
+    {
+        Bitmap aBitmap( ResId( SV_RESID_BITMAP_CLOSEDOC, pResMgr ) );
+        Bitmap aBitmapHC( ResId( SV_RESID_BITMAP_CLOSEDOCHC, pResMgr ) );
 
-    aCloser.maImage = Image( aBitmap, Color( COL_LIGHTMAGENTA ) );
-    aCloser.maImageHC = Image( aBitmapHC, Color( COL_LIGHTMAGENTA ) );
+        aCloser.maImage = Image( aBitmap, Color( COL_LIGHTMAGENTA ) );
+        aCloser.maImageHC = Image( aBitmapHC, Color( COL_LIGHTMAGENTA ) );
 
-    aCloser.SetOutStyle( TOOLBOX_STYLE_FLAT );
-    aCloser.SetBackground();
-    aCloser.SetPaintTransparent( TRUE );
-    aCloser.SetParentClipMode( PARENTCLIPMODE_NOCLIP );
+        aCloser.SetOutStyle( TOOLBOX_STYLE_FLAT );
+        aCloser.SetBackground();
+        aCloser.SetPaintTransparent( TRUE );
+        aCloser.SetParentClipMode( PARENTCLIPMODE_NOCLIP );
 
-    aCloser.InsertItem( IID_DOCUMENTCLOSE,
+        aCloser.InsertItem( IID_DOCUMENTCLOSE,
         GetSettings().GetStyleSettings().GetMenuBarColor().IsDark() ? aCloser.maImageHC : aCloser.maImage, 0 );
-    aCloser.SetSelectHdl( LINK( this, MenuBarWindow, CloserHdl ) );
-    aCloser.SetQuickHelpText( IID_DOCUMENTCLOSE, XubString( ResId( SV_HELPTEXT_CLOSEDOCUMENT, pResMgr ) ) );
+        aCloser.SetSelectHdl( LINK( this, MenuBarWindow, CloserHdl ) );
+        aCloser.SetQuickHelpText( IID_DOCUMENTCLOSE, XubString( ResId( SV_HELPTEXT_CLOSEDOCUMENT, pResMgr ) ) );
 
-    aFloatBtn.SetClickHdl( LINK( this, MenuBarWindow, FloatHdl ) );
-    aFloatBtn.SetSymbol( SYMBOL_FLOAT );
-    aFloatBtn.SetQuickHelpText( XubString( ResId( SV_HELPTEXT_RESTORE, pResMgr ) ) );
+        aFloatBtn.SetClickHdl( LINK( this, MenuBarWindow, FloatHdl ) );
+        aFloatBtn.SetSymbol( SYMBOL_FLOAT );
+        aFloatBtn.SetQuickHelpText( XubString( ResId( SV_HELPTEXT_RESTORE, pResMgr ) ) );
 
-    aHideBtn.SetClickHdl( LINK( this, MenuBarWindow, HideHdl ) );
-    aHideBtn.SetSymbol( SYMBOL_HIDE );
-    aHideBtn.SetQuickHelpText( XubString( ResId( SV_HELPTEXT_MINIMIZE, pResMgr ) ) );
+        aHideBtn.SetClickHdl( LINK( this, MenuBarWindow, HideHdl ) );
+        aHideBtn.SetSymbol( SYMBOL_HIDE );
+        aHideBtn.SetQuickHelpText( XubString( ResId( SV_HELPTEXT_MINIMIZE, pResMgr ) ) );
+    }
 
     ImplInitStyleSettings();
 }
