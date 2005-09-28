@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dxfgrprd.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:55:25 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:01:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,7 +302,12 @@ void DXFGroupReader::ReadLine(char * ptgt)
     ULONG       nLen;
 
     DXFReadLine( rIS, aStr );
-    memcpy( ptgt, aStr.GetBuffer(), nLen = aStr.Len() );
+
+    nLen = aStr.Len();
+    if ( nLen > DXF_MAX_STRING_LEN )
+        nLen = DXF_MAX_STRING_LEN;
+
+    memcpy( ptgt, aStr.GetBuffer(), nLen );
     ptgt[ nLen ] = 0x00;
 
     if ( pCallback )
