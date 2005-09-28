@@ -4,9 +4,9 @@
  *
  *  $RCSfile: respintest.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:32:49 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 13:07:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,10 +94,14 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
 
     // MessageBox(NULL, sInstallPath.c_str(), "DEBUG", MB_OK);
 
+    // unsetting all properties
+
     UnsetMsiProperty( handle, TEXT("INVALIDDIRECTORY") );
     UnsetMsiProperty( handle, TEXT("ISWRONGPRODUCT") );
     UnsetMsiProperty( handle, TEXT("PATCHISOLDER") );
     UnsetMsiProperty( handle, TEXT("ALLUSERS") );
+
+    // 1. Searching for "ProductCode" in setup.ini
 
     string sSetupiniPath = sInstallPath + TEXT("program\\setup.ini");
 
@@ -114,22 +118,81 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
 
     if ( !_tcsicmp( szValue, TEXT("INVALIDDIRECTORY") ) )
     {
+        // No setup.ini or no "ProductCode" in setup.ini. This is an invalid directory.
         SetMsiProperty( handle, TEXT("INVALIDDIRECTORY"), TEXT("YES") );
         // MessageBox(NULL, "INVALIDDIRECTORY set", "DEBUG", MB_OK);
         return ERROR_SUCCESS;
     }
 
+    // 2. Searching for "version.ini" and "bootstrap.ini"
+
+    // version.ini is the new file, that shall be used. If there is no version.ini, it can be possible
+    // that this is an old src680-version, in which only bootstrap.ini exists. In this case, the data
+    // have to be read from bootstrap.ini.
+
     string sBootstrapPath = sInstallPath + TEXT("program\\bootstrap.ini");
+    string sVersionPath = sInstallPath + TEXT("program\\version.ini");
+    string sInfofilePath = "";
+    string sectionname = "";
+
+    WIN32_FIND_DATA data;
+    HANDLE hdl = FindFirstFile(sVersionPath.c_str(), &data);
+
+    // string mystr = "Searching for " + sVersionPath;
+    // MessageBox(NULL, mystr.c_str(), "DEBUG", MB_OK);
+
+    // if (hdl == INVALID_HANDLE_VALUE)
+    if ( ! IsValidHandle(hdl) )
+    {
+        // version.ini not found.
+        // Searching for bootstrap.ini
+
+        hdl = FindFirstFile(sBootstrapPath.c_str(), &data);
+
+        // mystr = "Searching for " + sBootstrapPath;
+        // MessageBox(NULL, mystr.c_str(), "DEBUG", MB_OK);
+
+        // if (hdl == INVALID_HANDLE_VALUE)
+        if ( ! IsValidHandle(hdl) )
+        {
+            // Neither bootstrap.ini nor version.ini exist -> this is a wrong product
+            // MessageBox(NULL, "Neither bootstrap.ini nor version.ini exist -> ISWRONGPRODUCT 1 set", "DEBUG", MB_OK);
+            SetMsiProperty( handle, TEXT("ISWRONGPRODUCT"), TEXT("YES") );
+            // MessageBox(NULL, "ISWRONGPRODUCT 1 set", "DEBUG", MB_OK);
+            return ERROR_SUCCESS;
+        }
+        else
+        {
+            // bootstrap.ini found, it can be used as InfoFile
+            sInfofilePath = sBootstrapPath;
+            sectionname = TEXT("Bootstrap");
+            // mystr = "bootstrap.ini found, section name: " + sectionname;
+            // MessageBox(NULL, mystr.c_str(), "DEBUG", MB_OK);
+        }
+    }
+    else
+    {
+        // version.ini found, it can be used as InfoFile
+        sInfofilePath = sVersionPath;
+        sectionname = TEXT("Version");
+        // mystr = "version.ini found, section name: " + sectionname;
+        // MessageBox(NULL, mystr.c_str(), "DEBUG", MB_OK);
+    }
+
+    // mystr = "Value of sInfofilePath: " + sInfofilePath;
+    // MessageBox(NULL, mystr.c_str(), "DEBUG", MB_OK);
+
+    // 3. Comparing first three characters of "PRODUCTMAJOR" from property table and "buildid" from InfoFile
 
     szValue[0] = '\0';
 
     GetPrivateProfileString(
-        TEXT("Bootstrap"),
+        TEXT(sectionname.c_str()),
         TEXT("buildid"),
         TEXT("ISWRONGPRODUCT"),
         szValue,
         elementsof(szValue),
-        sBootstrapPath.c_str()
+        sInfofilePath.c_str()
         );
 
     if ( !_tcsicmp( szValue, TEXT("ISWRONGPRODUCT") ) )
@@ -151,6 +214,8 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
         return ERROR_SUCCESS;
     }
 
+    // 4. Only for patch: Comparing "PRODUCTMINOR from property table and "ProductMinor" from InfoFile
+
     string isPatch = GetMsiProperty(handle, TEXT("ISPATCH"));
 
     if (isPatch=="1")
@@ -161,12 +226,12 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
         szValue[0] = '\0';
 
         GetPrivateProfileString(
-            TEXT("Bootstrap"),
+            TEXT(sectionname.c_str()),
             TEXT("ProductMinor"),
             TEXT("106"),
             szValue,
             elementsof(szValue),
-            sBootstrapPath.c_str()
+            sInfofilePath.c_str()
             );
 
         int InstalledProductMinor = atoi(szValue);
@@ -178,6 +243,8 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
             return ERROR_SUCCESS;
         }
     }
+
+    // 5. Setting property ALLUSERS with value from "setup.ini"
 
     szValue[0] = '\0';
 
