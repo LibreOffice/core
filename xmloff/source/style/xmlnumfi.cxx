@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:53:25 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:20:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -778,8 +778,24 @@ void SvXMLNumFmtEmbeddedTextContext::EndElement()
 
 //-------------------------------------------------------------------------
 
-sal_Bool lcl_ValidChar( sal_Unicode cChar, sal_uInt16 nFormatType )
+sal_Bool lcl_ValidChar( sal_Unicode cChar, const SvXMLNumFormatContext& rParent )
 {
+    sal_uInt16 nFormatType = rParent.GetType();
+
+    if ( ( nFormatType == XML_TOK_STYLES_NUMBER_STYLE ||
+           nFormatType == XML_TOK_STYLES_CURRENCY_STYLE ||
+           nFormatType == XML_TOK_STYLES_PERCENTAGE_STYLE ) &&
+         cChar == rParent.GetLocaleData().getNumThousandSep().GetChar(0) )
+    {
+        //  #i22394# Extra occurrences of thousands separator must be quoted, so they
+        //  aren't mis-interpreted as display-factor.
+        //  This must be limited to the format types that can contain a number element,
+        //  because the same character can be a date separator that should not be quoted
+        //  in date formats.
+
+        return sal_False;   // force quotes
+    }
+
     //  see ImpSvNumberformatScan::Next_Symbol
     if ( cChar == ' ' ||
          cChar == '-' ||
@@ -804,22 +820,22 @@ sal_Bool lcl_ValidChar( sal_Unicode cChar, sal_uInt16 nFormatType )
     return sal_False;
 }
 
-void lcl_EnquoteIfNecessary( rtl::OUStringBuffer& rContent, sal_uInt16 nFormatType )
+void lcl_EnquoteIfNecessary( rtl::OUStringBuffer& rContent, const SvXMLNumFormatContext& rParent )
 {
     sal_Bool bQuote = sal_True;
     sal_Int32 nLength = rContent.getLength();
 
     if ( ( nLength == 1 &&
-            lcl_ValidChar( rContent.charAt(0), nFormatType ) ) ||
+            lcl_ValidChar( rContent.charAt(0), rParent ) ) ||
          ( nLength == 2 &&
-             lcl_ValidChar( rContent.charAt(0), nFormatType ) &&
+             lcl_ValidChar( rContent.charAt(0), rParent ) &&
              rContent.charAt(1) == ' ' ) )
     {
         //  don't quote single separator characters like space or percent,
         //  or separator characters followed by space (used in date formats)
         bQuote = sal_False;
     }
-    else if ( nFormatType == XML_TOK_STYLES_PERCENTAGE_STYLE && nLength > 1 )
+    else if ( rParent.GetType() == XML_TOK_STYLES_PERCENTAGE_STYLE && nLength > 1 )
     {
         //  the percent character in percentage styles must be left out of quoting
         //  (one occurence is enough even if there are several percent characters in the string)
@@ -830,7 +846,7 @@ void lcl_EnquoteIfNecessary( rtl::OUStringBuffer& rContent, sal_uInt16 nFormatTy
         {
             if ( nPos + 1 < nLength )
             {
-                if ( nPos + 2 == nLength && lcl_ValidChar( rContent.charAt(nPos + 1), nFormatType ) )
+                if ( nPos + 2 == nLength && lcl_ValidChar( rContent.charAt(nPos + 1), rParent ) )
                 {
                     //  single character that doesn't need quoting
                 }
@@ -843,7 +859,7 @@ void lcl_EnquoteIfNecessary( rtl::OUStringBuffer& rContent, sal_uInt16 nFormatTy
             }
             if ( nPos > 0 )
             {
-                if ( nPos == 1 && lcl_ValidChar( rContent.charAt(0), nFormatType ) )
+                if ( nPos == 1 && lcl_ValidChar( rContent.charAt(0), rParent ) )
                 {
                     //  single character that doesn't need quoting
                 }
@@ -1035,7 +1051,7 @@ void SvXMLNumFmtElementContext::EndElement()
             }
             if ( aContent.getLength() )
             {
-                lcl_EnquoteIfNecessary( aContent, rParent.GetType() );
+                lcl_EnquoteIfNecessary( aContent, rParent );
                 rParent.AddToCode( aContent.makeStringAndClear() );
             }
             break;
@@ -1508,7 +1524,7 @@ sal_Int32 SvXMLNumFormatContext::PrivateGetKey()
 
 sal_Int32 SvXMLNumFormatContext::CreateAndInsert( com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >& xFormatsSupplier )
 {
-    if (!nKey > -1)
+    if (nKey <= -1)
     {
         SvNumberFormatter* pFormatter = NULL;
         SvNumberFormatsSupplierObj* pObj =
@@ -1816,6 +1832,14 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
     sal_uInt32 nStdIndex = pFormatter->GetStandardIndex( nFormatLang );
     pFormatter->GenerateFormat( aNumStr, nStdIndex, nFormatLang,
                                 bGrouping, sal_False, nGenPrec, nLeading );
+
+    if ( rInfo.nExpDigits >= 0 && nLeading == 0 && !bGrouping && nEmbeddedCount == 0 )
+    {
+        // #i43959# For scientific numbers, "#" in the integer part forces a digit,
+        // so it has to be removed if nLeading is 0 (".00E+0", not "#.00E+0").
+
+        aNumStr.EraseLeadingChars( (sal_Unicode)'#' );
+    }
 
     if ( nEmbeddedCount )
     {
