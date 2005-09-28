@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:58:09 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:15:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1244,9 +1244,16 @@ void ScGridWindow::FilterSelect( ULONG nSel )
 
 void ScGridWindow::ExecDataSelect( SCCOL nCol, SCROW nRow, const String& rStr )
 {
-    SCTAB nTab = pViewData->GetTabNo();
     if ( rStr.Len() )
-        pViewData->GetView()->EnterData( nCol, nRow, nTab, rStr );
+    {
+        SCTAB nTab = pViewData->GetTabNo();
+        ScViewFunc* pView = pViewData->GetView();
+        pView->EnterData( nCol, nRow, nTab, rStr );
+
+        // #i52307# CellContentChanged is not in EnterData so it isn't called twice
+        // if the cursor is moved afterwards.
+        pView->CellContentChanged();
+    }
 }
 
 void ScGridWindow::ExecFilter( ULONG nSel,
