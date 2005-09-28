@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:37:50 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 14:56:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,7 @@ static USHORT GetMouseModCode( guint state )
         nCode |= MOUSE_MIDDLE;
     if( (state & GDK_BUTTON3_MASK) )
         nCode |= MOUSE_RIGHT;
+
     return nCode;
 }
 
@@ -390,6 +391,7 @@ void GtkSalFrame::InitCommon()
     }
 
     SetIcon(1);
+    m_nWorkArea = pDisp->getWMAdaptor()->getCurrentWorkArea();
 }
 
 /*  Sadly gtk_window_set_accept_focus exists only since gtk 2.4
@@ -493,19 +495,23 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
     if( bDecoHandling )
     {
         bool bNoDecor = ! (nStyle & (SAL_FRAME_STYLE_MOVEABLE | SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_CLOSEABLE ) );
+        GdkWindowTypeHint eType = GDK_WINDOW_TYPE_HINT_NORMAL;
+        if( (nStyle & SAL_FRAME_STYLE_DIALOG) )
+            eType = GDK_WINDOW_TYPE_HINT_DIALOG;
         if( (nStyle & SAL_FRAME_STYLE_INTRO) )
-            gtk_window_set_type_hint( m_pWindow, GDK_WINDOW_TYPE_HINT_SPLASHSCREEN );
+            eType = GDK_WINDOW_TYPE_HINT_SPLASHSCREEN;
         else if( (nStyle & SAL_FRAME_STYLE_TOOLWINDOW ) )
         {
-            gtk_window_set_type_hint( m_pWindow, GDK_WINDOW_TYPE_HINT_UTILITY );
+            eType = GDK_WINDOW_TYPE_HINT_UTILITY;
             gtk_window_set_skip_taskbar_hint( m_pWindow, true );
         }
         else if( (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
         {
-            gtk_window_set_type_hint( m_pWindow, GDK_WINDOW_TYPE_HINT_TOOLBAR );
+            eType = GDK_WINDOW_TYPE_HINT_TOOLBAR;
             lcl_set_accept_focus( m_pWindow, FALSE, true );
             bNoDecor = true;
         }
+        gtk_window_set_type_hint( m_pWindow, eType );
         if( bNoDecor )
             gtk_window_set_decorated( m_pWindow, FALSE );
         gtk_window_set_gravity( m_pWindow, GDK_GRAVITY_STATIC );
@@ -694,6 +700,9 @@ void GtkSalFrame::SetIcon( USHORT nIcon )
         || ! m_pWindow )
         return;
 
+    if( !ImplGetResMgr() )
+        return;
+
     GdkPixbuf *pBuf;
     GList *pIcons = NULL;
 
@@ -831,8 +840,12 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
                 Center();
             if( m_bDefaultSize )
                 SetDefaultSize();
-
             setMinMaxSize();
+
+            // #i45160# switch to desktop where a dialog with parent will appear
+            if( m_pParent && m_pParent->m_nWorkArea != m_nWorkArea )
+                getDisplay()->getWMAdaptor()->switchToWorkArea( m_pParent->m_nWorkArea );
+
             gtk_widget_show( GTK_WIDGET(m_pWindow) );
             if( isFloatGrabWindow() )
             {
@@ -1509,41 +1522,48 @@ bool GtkSalFrame::Dispatch( const XEvent* pEvent )
 {
     bool bContinueDispatch = true;
 
-    if( m_pForeignParent &&
-        pEvent->type == ConfigureNotify &&
-        pEvent->xconfigure.window == m_aForeignParentWindow
-        )
+    if( pEvent->type == PropertyNotify )
     {
-        bContinueDispatch = false;
-        gtk_window_resize( m_pWindow, pEvent->xconfigure.width, pEvent->xconfigure.height );
-    //#i41820#
-        maGeometry.nWidth  = pEvent->xconfigure.width;
-        maGeometry.nHeight = pEvent->xconfigure.height;
-        setMinMaxSize();
-    }
-    else if( m_pForeignTopLevel &&
-             pEvent->type == ConfigureNotify &&
-             pEvent->xconfigure.window == m_aForeignTopLevelWindow
-             )
-    {
-        bContinueDispatch = false;
-        // update position
-        int x = 0, y = 0;
-        XLIB_Window aChild;
-          XTranslateCoordinates( getDisplay()->GetDisplay(),
-                               GDK_WINDOW_XWINDOW(GTK_WIDGET(m_pWindow)->window),
-                                getDisplay()->GetRootWindow(),
-                                0, 0,
-                                &x, &y,
-                                &aChild );
-        if( x != maGeometry.nX || y != maGeometry.nY )
+        vcl_sal::WMAdaptor* pAdaptor = getDisplay()->getWMAdaptor();
+        Atom nDesktopAtom = pAdaptor->getAtom( vcl_sal::WMAdaptor::NET_WM_DESKTOP );
+        if( pEvent->xproperty.atom == nDesktopAtom &&
+            pEvent->xproperty.state == PropertyNewValue )
         {
-            maGeometry.nX = x;
-            maGeometry.nY = y;
-            getDisplay()->SendInternalEvent( this, NULL, SALEVENT_MOVE );
+            m_nWorkArea = pAdaptor->getWindowWorkArea( GDK_WINDOW_XWINDOW( GTK_WIDGET(m_pWindow)->window) );
         }
     }
+    else if( pEvent->type == ConfigureNotify )
+    {
 
+        if( m_pForeignParent && pEvent->xconfigure.window == m_aForeignParentWindow )
+        {
+            bContinueDispatch = false;
+            gtk_window_resize( m_pWindow, pEvent->xconfigure.width, pEvent->xconfigure.height );
+            //#i41820#
+            maGeometry.nWidth  = pEvent->xconfigure.width;
+            maGeometry.nHeight = pEvent->xconfigure.height;
+            setMinMaxSize();
+        }
+        else if( m_pForeignTopLevel && pEvent->xconfigure.window == m_aForeignTopLevelWindow )
+        {
+            bContinueDispatch = false;
+            // update position
+            int x = 0, y = 0;
+            XLIB_Window aChild;
+            XTranslateCoordinates( getDisplay()->GetDisplay(),
+                                   GDK_WINDOW_XWINDOW( GTK_WIDGET(m_pWindow)->window),
+                                   getDisplay()->GetRootWindow(),
+                                   0, 0,
+                                   &x, &y,
+                                   &aChild );
+            if( x != maGeometry.nX || y != maGeometry.nY )
+            {
+                maGeometry.nX = x;
+                maGeometry.nY = y;
+                getDisplay()->SendInternalEvent( this, NULL, SALEVENT_MOVE );
+            }
+        }
+    }
     return bContinueDispatch;
 }
 
