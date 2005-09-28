@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:03:36 $
+#   last change: $Author: hr $ $Date: 2005-09-28 13:13:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@ BEGIN
 {
     $prog="make_installer.pl";
 
-    @noMSLocaleLangs = ( "dz", "km", "nr", "ns", "rw", "ss", "st", "ts", "tn", "ve", "xh", "zu" , "ne" , "bn" );
+    @noMSLocaleLangs = ( "dz", "km", "nr", "ns", "rw", "ss", "st", "ts", "tn", "ve", "xh", "zu" , "ne" , "bn", "bn-BD", "bn-IN", "lo" );
 
     $ziplistname = "";
     $pathfilename = "";
@@ -133,11 +133,10 @@ BEGIN
     @linuxpatchfiles = ();
     $linuxlibrarybaselevel = "1";
     $linuxlibrarypatchlevel = "1.1";
-    $windowsfilespatchlevel = "1";
     @linuxlinks = ();
     @linkrpms = ();
 
-    $strip = 0;
+    $strip = 1;
     $solarjava = 0;
     $jdklib = "";
     $jrepath = "";
