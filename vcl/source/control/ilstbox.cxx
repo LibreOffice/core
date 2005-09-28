@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:47:18 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 14:41:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1618,28 +1618,19 @@ void ImplListBoxWindow::ImplPaint( USHORT nPos, BOOL bErase, bool bLayout )
 
     if( ! bLayout )
     {
-        if( IsEnabled() )
+        if( mpEntryList->IsEntryPosSelected( nPos ) )
         {
-            if( mpEntryList->IsEntryPosSelected( nPos ) )
-            {
-                SetTextColor( rStyleSettings.GetHighlightTextColor() );
-                SetFillColor( rStyleSettings.GetHighlightColor() );
-                SetTextFillColor( rStyleSettings.GetHighlightColor() );
-                DrawRect( aRect );
-            }
-            else
-            {
-                ImplInitSettings( FALSE, TRUE, FALSE );
-                SetTextFillColor();
-                if( bErase )
-                    Erase( aRect );
-            }
+            SetTextColor( !IsEnabled() ? rStyleSettings.GetDisableColor() : rStyleSettings.GetHighlightTextColor() );
+            SetFillColor( rStyleSettings.GetHighlightColor() );
+            SetTextFillColor( rStyleSettings.GetHighlightColor() );
+            DrawRect( aRect );
         }
-        else // Disabled
+        else
         {
-            SetTextColor( rStyleSettings.GetDisableColor() );
-            //SetFillColor( rStyleSettings.Get???Color() );
-            //DrawRect( aRect );
+            ImplInitSettings( FALSE, TRUE, FALSE );
+            if( !IsEnabled() )
+                SetTextColor( rStyleSettings.GetDisableColor() );
+            SetTextFillColor();
             if( bErase )
                 Erase( aRect );
         }
