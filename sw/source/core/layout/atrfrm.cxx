@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:07:37 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:10:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2923,7 +2923,9 @@ void SwFlyFrmFmt::MakeFrms()
             {
                 if ( pPage->GetPhyPageNum() == nPgNum )
                 {
-                    pPage->PlaceFly( 0, this, &aAnchorAttr );
+                    // --> OD 2005-06-09 #i50432# - adjust synopsis of <PlaceFly(..)>
+                    pPage->PlaceFly( 0, this );
+                    // <--
                     break;
                 }
                 pPage = (SwPageFrm*)pPage->GetNext();
