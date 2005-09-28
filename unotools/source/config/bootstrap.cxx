@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:41:19 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 13:22:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,6 +149,7 @@ namespace utl
 
         // access helper
         OUString getBootstrapValue(OUString const& _sName, OUString const& _sDefault) const;
+        sal_Bool getVersionValue(OUString const& _sName, OUString& _rValue, OUString const& _sDefault) const;
 
         OUString getImplName() const { return m_aImplName; }
 
@@ -699,7 +700,13 @@ OUString Bootstrap::getBuildIdData(OUString const& _sDefault)
 {
     OUString const csBuildIdItem(RTL_CONSTASCII_USTRINGPARAM(BOOTSTRAP_ITEM_BUILDID));
 
-    return data().getBootstrapValue( csBuildIdItem, _sDefault );
+    OUString sBuildId;
+    // read buildid from version.ini (versionrc), if it doesn't exist or buildid is empty
+    if ( data().getVersionValue( csBuildIdItem, sBuildId, _sDefault ) != sal_True ||
+         sBuildId.getLength() == 0 )
+         // read buildid from bootstrap.ini (bootstraprc)
+        sBuildId = data().getBootstrapValue( csBuildIdItem, _sDefault );
+    return sBuildId;
 }
 // ---------------------------------------------------------------------------------------
 
@@ -929,6 +936,21 @@ OUString Bootstrap::Impl::getBootstrapValue(OUString const& _sName, OUString con
     OUString sResult;
     aData.getFrom(_sName,sResult,_sDefault);
     return sResult;
+}
+// ---------------------------------------------------------------------------------------
+
+sal_Bool Bootstrap::Impl::getVersionValue(OUString const& _sName, OUString& _rValue, OUString const& _sDefault) const
+{
+    // try to open version.ini (versionrc)
+    rtl::Bootstrap aData( getExecutableDirectory() +
+                          OUString(RTL_CONSTASCII_USTRINGPARAM("/"SAL_CONFIGFILE("version"))) );
+    if ( aData.getHandle() == NULL )
+        // version.ini (versionrc) doesn't exist
+        return sal_False;
+
+    // read value
+    aData.getFrom(_sName,_rValue,_sDefault);
+    return sal_True;
 }
 // ---------------------------------------------------------------------------------------
 
