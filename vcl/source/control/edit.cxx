@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:45:38 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 14:40:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2512,7 +2512,11 @@ FncGetSpecialChars Edit::GetGetSpecialCharsFunction()
 
 PopupMenu* Edit::CreatePopupMenu()
 {
-    PopupMenu* pPopup = new PopupMenu( ResId( SV_RESID_MENU_EDIT, ImplGetResMgr() ) );
+    ResMgr* pResMgr = ImplGetResMgr();
+    if( ! pResMgr )
+        return new PopupMenu();
+
+    PopupMenu* pPopup = new PopupMenu( ResId( SV_RESID_MENU_EDIT, pResMgr ) );
     pPopup->SetAccelKey( SV_MENU_EDIT_UNDO, KeyCode( KEYFUNC_UNDO ) );
     pPopup->SetAccelKey( SV_MENU_EDIT_CUT, KeyCode( KEYFUNC_CUT ) );
     pPopup->SetAccelKey( SV_MENU_EDIT_COPY, KeyCode( KEYFUNC_COPY ) );
