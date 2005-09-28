@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:10:24 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:11:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -833,11 +833,39 @@ SwLayoutFrm *SwFrm::GetLeaf( MakePageType eMakePage, BOOL bFwd )
     if ( IsInFtn() )
         return bFwd ? GetNextFtnLeaf( eMakePage ) : GetPrevFtnLeaf( eMakePage );
 
-    if ( IsInTab() && ( !IsTabFrm() || GetUpper()->IsCellFrm() ) ) // TABLE IN TABLE
+    // --> OD 2005-08-16 #i53323#
+    // A frame could be inside a table AND inside a section.
+    // Thus, it has to be determined, which is the first parent.
+    bool bInTab( IsInTab() );
+    bool bInSct( IsInSct() );
+    if ( bInTab && bInSct )
+    {
+        const SwFrm* pUpperFrm( GetUpper() );
+        while ( pUpperFrm )
+        {
+            if ( pUpperFrm->IsTabFrm() )
+            {
+                // the table is the first.
+                bInSct = false;
+                break;
+            }
+            else if ( pUpperFrm->IsSctFrm() )
+            {
+                // the section is the first.
+                bInTab = false;
+                break;
+            }
+
+            pUpperFrm = pUpperFrm->GetUpper();
+        }
+    }
+
+    if ( bInTab && ( !IsTabFrm() || GetUpper()->IsCellFrm() ) ) // TABLE IN TABLE
         return bFwd ? GetNextCellLeaf( eMakePage ) : GetPrevCellLeaf( eMakePage );
 
-    if ( IsInSct() )
+    if ( bInSct )
         return bFwd ? GetNextSctLeaf( eMakePage ) : GetPrevSctLeaf( eMakePage );
+    // <--
 
     return bFwd ? GetNextLeaf( eMakePage ) : GetPrevLeaf( eMakePage );
 }
@@ -987,7 +1015,12 @@ SwLayoutFrm *SwFrm::GetNextLeaf( MakePageType eMakePage )
 
             SwPageFrm *pNew = pLayLeaf->FindPageFrm();
             // #111704# The pagedesc check does not make sense for frames in fly frames
-            if ( pNew != FindPageFrm() && !bNewPg && !IsInFly() )
+            if ( pNew != FindPageFrm() && !bNewPg && !IsInFly() &&
+                 // --> FME 2005-05-10 #i46683#
+                 // Do not consider page descriptions in browse mode (since
+                 // MoveBwd ignored them)
+                 !pNew->GetFmt()->GetDoc()->IsBrowseMode() )
+                 // <--
             {
                 if( WrongPageDesc( pNew ) )
                 {
