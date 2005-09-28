@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:39:50 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 14:27:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1176,10 +1176,11 @@ static void GetNames(TrueTypeFont *t)
     }
 
     t->subfamily = NULL;
+    t->usubfamily = NULL;
     if ((r = findname(table, n, 1, 0, 0, 2)) != -1)
-        t->subfamily = nameExtract(table, nTableSize, r, 0, NULL);
+        t->subfamily = nameExtract(table, nTableSize, r, 0, &t->usubfamily);
     if ( ! t->subfamily && (r = findname(table, n, 3, 1, 0x0409, 2)) != -1)
-        t->subfamily = nameExtract(table, nTableSize, r, 1, NULL);
+        t->subfamily = nameExtract(table, nTableSize, r, 1, &t->usubfamily);
     if ( ! t->subfamily )
     {
         t->subfamily = strdup("");
@@ -1340,6 +1341,7 @@ static sal_uInt16 getGlyph4(const sal_uInt8 *cmap, sal_uInt16 c) {
 static void FindCmap(TrueTypeFont *ttf)
 {
     sal_uInt8 *table = getTable(ttf, O_cmap);
+    sal_uInt32 table_size = getTableSize(ttf, O_cmap);
     sal_uInt16 ncmaps = GetUInt16(table, 2, 1);
     int i;
     sal_uInt32 ThreeZero  = 0;              /* MS Symbol            */
@@ -1354,9 +1356,17 @@ static void FindCmap(TrueTypeFont *ttf)
         sal_uInt32 offset;
         sal_uInt16 pID, eID;
 
+        /* sanity check, cmap entry must lie within table */
+        if( i*8+4 > table_size )
+            break;
+
         pID = GetUInt16(table, 4 + i * 8, 1);
         eID = GetUInt16(table, 6 + i * 8, 1);
         offset = GetUInt32(table, 8 + i * 8, 1);
+
+         /* sanity check, cmap must lie within file */
+        if( (table - ttf->ptr) + offset > ttf->fsize )
+            continue;
 
         /* Unicode tables in Apple fonts */
         if (pID == 0) {
@@ -1834,6 +1844,8 @@ void CloseTTFont(TrueTypeFont *ttf) /*FOLD01*/
     if( ttf->ufamily )
         free( ttf->ufamily );
     free(ttf->subfamily);
+    if( ttf->usubfamily )
+        free( ttf->usubfamily );
     free(ttf->tables);
     free(ttf->tlens);
     free(ttf->kerntables);
@@ -2551,6 +2563,7 @@ void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
     info->family = ttf->family;
     info->ufamily = ttf->ufamily;
     info->subfamily = ttf->subfamily;
+    info->usubfamily = ttf->usubfamily;
     info->psname = ttf->psname;
     info->symbolEncoded = (ttf->cmapType == CMAP_MS_Symbol);
 
