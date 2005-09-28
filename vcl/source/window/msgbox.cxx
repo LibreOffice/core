@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msgbox.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:28:00 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 14:51:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,10 +82,15 @@ static void ImplInitMsgBoxImageList()
     ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->maWinData.mpMsgBoxImgList )
     {
-        BitmapEx aBmpEx( ResId( SV_RESID_BITMAP_MSGBOX, ImplGetResMgr() ) );
+        BitmapEx aBmpEx;
+        ResMgr* pResMgr = ImplGetResMgr();
+        if( pResMgr )
+        {
+            aBmpEx = BitmapEx( ResId( SV_RESID_BITMAP_MSGBOX, ImplGetResMgr() ) );
 
-        if( !aBmpEx.IsTransparent() )
-            aBmpEx = BitmapEx( aBmpEx.GetBitmap(), Color( 0xC0, 0xC0, 0xC0 ) );
+            if( !aBmpEx.IsTransparent() )
+                aBmpEx = BitmapEx( aBmpEx.GetBitmap(), Color( 0xC0, 0xC0, 0xC0 ) );
+        }
 
         pSVData->maWinData.mpMsgBoxImgList = new ImageList( aBmpEx, 4 );
     }
@@ -484,7 +489,9 @@ void MessBox::SetCheckBoxState( BOOL bCheck )
 
 void MessBox::SetDefaultCheckBoxText()
 {
-    maCheckBoxText = XubString( ResId( SV_STDTEXT_DONTHINTAGAIN, ImplGetResMgr() ) );
+    ResMgr* pResMgr = ImplGetResMgr();
+    if( pResMgr )
+        maCheckBoxText = XubString( ResId( SV_STDTEXT_DONTHINTAGAIN, pResMgr ) );
 }
 
 // -----------------------------------------------------------------------
@@ -579,7 +586,9 @@ WarningBox::WarningBox( Window* pParent, const ResId& rResId ) :
 
 void WarningBox::SetDefaultCheckBoxText()
 {
-    maCheckBoxText = XubString( ResId( SV_STDTEXT_DONTWARNAGAIN, ImplGetResMgr() ) );
+    ResMgr* pResMgr = ImplGetResMgr();
+    if( pResMgr )
+        maCheckBoxText = XubString( ResId( SV_STDTEXT_DONTWARNAGAIN, pResMgr ) );
 }
 
 // -----------------------------------------------------------------------
@@ -659,7 +668,9 @@ QueryBox::QueryBox( Window* pParent, const ResId& rResId ) :
 
 void QueryBox::SetDefaultCheckBoxText()
 {
-    maCheckBoxText = XubString( ResId( SV_STDTEXT_DONTASKAGAIN, ImplGetResMgr() ) );
+    ResMgr* pResMgr = ImplGetResMgr();
+    if( pResMgr )
+        maCheckBoxText = XubString( ResId( SV_STDTEXT_DONTASKAGAIN, pResMgr ) );
 }
 
 // -----------------------------------------------------------------------
