@@ -4,9 +4,9 @@
  *
  *  $RCSfile: validat.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:32:04 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:34:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1003,7 +1003,16 @@ void ScValidationDataList::CompileXML()
 void ScValidationDataList::UpdateReference( UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
-    DBG_ERROR("ScValidationDataList::UpdateReference");
+    USHORT nCount = Count();
+    for (USHORT i=0; i<nCount; i++)
+        (*this)[i]->UpdateReference( eUpdateRefMode, rRange, nDx, nDy, nDz);
+}
+
+void ScValidationDataList::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
+{
+    USHORT nCount = Count();
+    for (USHORT i=0; i<nCount; i++)
+        (*this)[i]->UpdateMoveTab( nOldPos, nNewPos );
 }
 
 BOOL ScValidationDataList::operator==( const ScValidationDataList& r ) const
