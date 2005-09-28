@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:07:15 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:17:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -918,9 +918,18 @@ void ScTabView::RepeatResize( BOOL bUpdateFix )
 {
     if ( bUpdateFix )
     {
-        if ( aViewData.GetHSplitMode() == SC_SPLIT_FIX )
+        ScSplitMode eHSplit = aViewData.GetHSplitMode();
+        ScSplitMode eVSplit = aViewData.GetVSplitMode();
+
+        // #i46796# UpdateFixX / UpdateFixY uses GetGridOffset, which requires the
+        // outline windows to be available. So UpdateShow has to be called before
+        // (also called from DoResize).
+        if ( eHSplit == SC_SPLIT_FIX || eVSplit == SC_SPLIT_FIX )
+            UpdateShow();
+
+        if ( eHSplit == SC_SPLIT_FIX )
             aViewData.UpdateFixX();
-        if ( aViewData.GetVSplitMode() == SC_SPLIT_FIX )
+        if ( eVSplit == SC_SPLIT_FIX )
             aViewData.UpdateFixY();
     }
 
