@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.50 $
+#   $Revision: 1.51 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 22:10:28 $
+#   last change: $Author: hr $ $Date: 2005-09-28 13:11:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -931,7 +931,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             $registryitemsinproductlanguageresolvedarrayref = installer::worker::select_patch_items_without_name($registryitemsinproductlanguageresolvedarrayref, "RegistryItem");
             if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "registryitems3a.log", $registryitemsinproductlanguageresolvedarrayref); }
 
-            installer::worker::prepare_windows_patchfiles($filesinproductlanguageresolvedarrayref, $languagestringref);
+            installer::worker::prepare_windows_patchfiles($filesinproductlanguageresolvedarrayref, $languagestringref, $allvariableshashref);
             if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles16bpatch.log", $filesinproductlanguageresolvedarrayref); }
 
             # For Windows patches, the directories can now be collected again
@@ -1178,8 +1178,11 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # 1. copy all files that need to be stripped locally
             # 2. strip all these files
 
-            installer::strip::strip_libraries($filesinpackage, $languagestringref);
-            if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . $packagename ."_files.log", $filesinpackage); }
+            if ( $installer::globals::strip )
+            {
+                installer::strip::strip_libraries($filesinpackage, $languagestringref);
+                if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . $packagename ."_files.log", $filesinpackage); }
+            }
 
             ###############################################################
             # Searching for files in $filesinpackage with flag LINUXLINK
@@ -1828,6 +1831,11 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             if ( $installer::globals::patch )
             {
+                # adding the custom action for setting the correct ALLUSERS value (CustomAc.idt and InstallE.idt and InstallU.idt )
+                $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "SetProductInstallModeAction", "321", "patchmsi.dll", "SetProductInstallMode", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
+                if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "patchmsi.dll",  "SetProductInstallModeAction", "Not REMOVE=\"ALL\"", "FindRelatedProducts", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+                if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installuitable, "patchmsi.dll", "SetProductInstallModeAction", "Not REMOVE=\"ALL\"", "FindRelatedProducts", $filesinproductlanguageresolvedarrayref, $installuitablename); }
+
                 # adding the patch custom action (CustomAc.idt and InstallE.idt (install and deinstall))
                 $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "InstallExchangeFiles", "65", "patchmsi.dll", "InstallPatchedFiles", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
                 if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "patchmsi.dll", "InstallExchangeFiles", "Not REMOVE=\"ALL\"", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
