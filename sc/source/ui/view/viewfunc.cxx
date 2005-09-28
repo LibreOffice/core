@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:14:26 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:20:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1672,6 +1672,8 @@ void ScViewFunc::DeleteMulti( BOOL bRows, BOOL bRecord )
     SetCursor( nCurX, nCurY );
 
     delete[] pRanges;
+
+    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 }
 
 //  Inhalte loeschen
