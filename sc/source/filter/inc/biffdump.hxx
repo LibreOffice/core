@@ -4,9 +4,9 @@
  *
  *  $RCSfile: biffdump.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:14:35 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:55:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,7 +179,9 @@ protected:
     UINT32                      nFieldCnt;
     UINT32                      nItemCnt;
     UINT32                      nTabIndexCnt;
+    sal_uInt32                  mnEscherPos;
     UINT16                      nFontIndex;
+    sal_uInt16                  mnSubstream;
 
     static const UINT16         nRecCnt;
     UINT16*                     pDumpModes;
@@ -208,7 +210,7 @@ protected:
     UINT16                      DumpXF( XclImpStream& rIn, const sal_Char* pPre );
     void                        DumpValidPassword( XclImpStream& rIn, const sal_Char* pPre );
     void                        RecDump( BOOL bSubStream = FALSE );
-    void                        EscherDump( const ULONG nL );
+    void                        EscherDump( const ULONG nL, bool bDumpOffset );
     void                        ObjDump( const ULONG nL );
     void                        ContDump( const ULONG nL );
     void                        ContDumpStream( SvStream& rStrm, const ULONG nL );
