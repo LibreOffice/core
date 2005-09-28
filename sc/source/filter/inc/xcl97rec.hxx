@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:27:21 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:58:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -255,8 +255,8 @@ public:
                                 XclTxo( const XclExpRoot& rRoot, const SdrTextObj& rEditObj );
                                 XclTxo( const XclExpRoot& rRoot, const EditTextObject& rEditObj, SdrObject* pCaption );
 
-    inline void                 SetHorAlign( XclTxoHorAlign eHorAlign ) { meHorAlign = eHorAlign; }
-    inline void                 SetVerAlign( XclTxoVerAlign eVerAlign ) { meVerAlign = eVerAlign; }
+    inline void                 SetHorAlign( sal_uInt8 nHorAlign ) { mnHorAlign = nHorAlign; }
+    inline void                 SetVerAlign( sal_uInt8 nVerAlign ) { mnVerAlign = nVerAlign; }
 
     virtual void                Save( XclExpStream& rStrm );
 
@@ -268,9 +268,9 @@ private:
 
 private:
     XclExpStringRef             mpString;       /// Text and formatting data.
-    XclTxoHorAlign              meHorAlign;     /// Horizontal alignment.
-    XclTxoVerAlign              meVerAlign;     /// Vertical alignment.
-    XclTxoRotation              meRotation;     /// Text rotation.
+    sal_uInt16                  mnRotation;     /// Text rotation.
+    sal_uInt8                   mnHorAlign;     /// Horizontal alignment.
+    sal_uInt8                   mnVerAlign;     /// Vertical alignment.
 };
 
 
