@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:26:25 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:22:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1129,7 +1129,9 @@ SdrObject *SwXFrame::GetOrCreateSdrObject( SwFlyFrmFmt *pFmt )
     if( !pObject )
     {
         SwDoc *pDoc = pFmt->GetDoc();
-        SdrModel *pDrawModel = pDoc->MakeDrawModel();
+        // --> OD 2005-08-08 #i52858# - method name changed
+        SdrModel *pDrawModel = pDoc->GetOrCreateDrawModel();
+        // <--
         SwFlyDrawContact* pContactObject
                     = new SwFlyDrawContact( pFmt, pDrawModel );
         pObject = pContactObject->GetMaster();
