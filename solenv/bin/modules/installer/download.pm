@@ -4,9 +4,9 @@
 #
 #   $RCSfile: download.pm,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-26 13:21:17 $
+#   last change: $Author: hr $ $Date: 2005-09-28 13:12:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -485,6 +485,19 @@ sub put_windows_productversion_into_template
     my $productversion = $variableshashref->{'PRODUCTVERSION'};
 
     replace_one_variable($templatefile, "PRODUCTVERSIONPLACEHOLDER", $productversion);
+}
+
+##################################################################
+# Windows: Including the product version into nsi template
+##################################################################
+
+sub put_windows_productpath_into_template
+{
+    my ($templatefile, $variableshashref) = @_;
+
+    my $productpath = $variableshashref->{'PROPERTYTABLEPRODUCTNAME'};
+
+    replace_one_variable($templatefile, "PRODUCTPATHPLACEHOLDER", $productpath);
 }
 
 ##################################################################
@@ -1153,6 +1166,7 @@ sub create_download_sets
         put_publisher_into_template($templatefile);
         put_website_into_template($templatefile);
         put_windows_productversion_into_template($templatefile, $allvariableshashref);
+        put_windows_productpath_into_template($templatefile, $allvariableshashref);
         put_outputfilename_into_template($templatefile, $downloadname);
         put_filelist_into_template($templatefile, $installationdir);
         put_language_list_into_template($templatefile, $languagesarrayref);
