@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xename.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:29:12 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:58:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,8 @@ public:
 
     /** Inserts a new defined name. Sets another unused name, if rName already exists. */
     sal_uInt16          InsertUniqueName( const String& rName, XclExpTokenArrayRef xTokArr, SCTAB nScTab );
+    /** Returns index of an existing name, or creates a name without definition. */
+    sal_uInt16          InsertRawName( const String& rName );
     /** Searches or inserts a defined name describing a macro name.
         @param bFunc  true = Macro function; false = Macro procedure. */
     sal_uInt16          InsertMacroCall( const String& rMacroName, bool bFunc );
