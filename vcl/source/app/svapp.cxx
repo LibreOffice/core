@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:42:50 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 14:37:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -478,11 +478,14 @@ const KeyCode*  Application::GetReservedKeyCode( ULONG i )
 
 String Application::GetReservedKeyCodeDescription( ULONG i )
 {
+    ResMgr* pResMgr = ImplGetResMgr();
+    if( ! pResMgr )
+        return String();
     ImplReservedKey *pImplReservedKeys = ImplReservedKeys::get()->first;
     if( i >= GetReservedKeyCodeCount() || ! pImplReservedKeys[i].mnResId )
         return String();
     else
-        return String( ResId( pImplReservedKeys[i].mnResId, ImplGetResMgr() ) );
+        return String( ResId( pImplReservedKeys[i].mnResId, pResMgr ) );
 }
 
 // -----------------------------------------------------------------------
