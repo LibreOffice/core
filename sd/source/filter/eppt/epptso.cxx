@@ -4,9 +4,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:44:22 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:00:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,12 @@
 //#endif
 #ifndef _SVX_SVXENUM_HXX
 #include <svx/svxenum.hxx>
+#endif
+#ifndef _SVX_UNOAPI_HXX_
+#include <svx/unoapi.hxx>
+#endif
+#ifndef _SVDOASHP_HXX
+#include <svx/svdoashp.hxx>
 #endif
 #ifndef _COM_SUN_STAR_STYLE_VERTICALALIGNMENT_HPP_
 #include <com/sun/star/style/VerticalAlignment.hpp>
@@ -4273,15 +4279,35 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             {
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 sal_uInt32 nMirrorFlags;
-                MSO_SPT eShapeType = aPropOpt.GetCustomShapeType( mXShape, nMirrorFlags );
-                ADD_SHAPE( eShapeType, nMirrorFlags | 0xa00 );
-                aPropOpt.CreateCustomShapeProperties( eShapeType, mXShape );
-                aPropOpt.CreateFillProperties( mXPropSet, sal_True );
-
-                if ( ImplGetText() )
+                rtl::OUString sCustomShapeType;
+                MSO_SPT eShapeType = aPropOpt.GetCustomShapeType( mXShape, nMirrorFlags, sCustomShapeType );
+                if ( sCustomShapeType.equalsAscii( "col-502ad400" ) || sCustomShapeType.equalsAscii( "col-60da8460" ) )
+                {   // sj: creating metafile for customshapes that can't be saved to ms format properly
+                    ADD_SHAPE( ESCHER_ShpInst_PictureFrame, 0xa00 );
+                    if ( aPropOpt.CreateGraphicProperties( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), sal_False ) )
+                    {
+                        aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
+                        SdrObject* pObj = GetSdrObjectFromXShape( mXShape );
+                        if ( pObj )
+                        {
+                            Rectangle aBound = pObj->GetCurrentBoundRect();
+                            maPosition = ImplMapPoint( ::com::sun::star::awt::Point( aBound.Left(), aBound.Top() ) );
+                            maSize = ImplMapSize( ::com::sun::star::awt::Size ( aBound.GetWidth(), aBound.GetHeight() ) );
+                            maRect = Rectangle( Point( maPosition.X, maPosition.Y ), Size( maSize.Width, maSize.Height ) );
+                            mnAngle = 0;
+                        }
+                    }
+                }
+                else
                 {
-                    if ( !aPropOpt.IsFontWork() )
-                        aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, sal_True, sal_True );
+                    ADD_SHAPE( eShapeType, nMirrorFlags | 0xa00 );
+                    aPropOpt.CreateCustomShapeProperties( eShapeType, mXShape );
+                    aPropOpt.CreateFillProperties( mXPropSet, sal_True );
+                    if ( ImplGetText() )
+                    {
+                        if ( !aPropOpt.IsFontWork() )
+                            aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, sal_True, sal_True );
+                    }
                 }
             }
             else if ( mType == "drawing.Rectangle" )
