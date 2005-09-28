@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr3.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:45:16 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:38:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1058,7 +1058,12 @@ void ScInterpreter::ScPoissonDist()
             if (lambda == 0.0)
                 PushInt(0);
             else
-                PushDouble(exp(-lambda)*pow(lambda,x)/Fakultaet(x));
+            {
+                double fPoissonVar = 1.0;
+                for ( double f = 0.0; f < x; ++f )
+                    fPoissonVar *= lambda / ( f + 1.0 );
+                PushDouble( fPoissonVar*exp( -lambda ) );
+            }
         }
         else                                            // Verteilung
         {
