@@ -4,9 +4,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:51:22 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:39:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3251,7 +3251,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
 
 // ---------------------------------------------------------------------------------------------
 
-MSO_SPT EscherPropertyContainer::GetCustomShapeType( const uno::Reference< drawing::XShape > & rXShape, sal_uInt32& nMirrorFlags )
+MSO_SPT EscherPropertyContainer::GetCustomShapeType( const uno::Reference< drawing::XShape > & rXShape, sal_uInt32& nMirrorFlags, rtl::OUString& rShapeType )
 {
     MSO_SPT eShapeType = mso_sptNil;
     nMirrorFlags = 0;
@@ -3260,7 +3260,6 @@ MSO_SPT EscherPropertyContainer::GetCustomShapeType( const uno::Reference< drawi
     {
         try
         {
-            OUString sShapeType;
             const OUString  sCustomShapeGeometry( RTL_CONSTASCII_USTRINGPARAM ( "CustomShapeGeometry" ) );
             uno::Any aGeoPropSet = aXPropSet->getPropertyValue( sCustomShapeGeometry );
             uno::Sequence< beans::PropertyValue > aGeoPropSeq;
@@ -3272,8 +3271,8 @@ MSO_SPT EscherPropertyContainer::GetCustomShapeType( const uno::Reference< drawi
                     const beans::PropertyValue& rProp = aGeoPropSeq[ i ];
                     if ( rProp.Name.equalsAscii( "Type" ) )
                     {
-                        if ( rProp.Value >>= sShapeType )
-                            eShapeType = EnhancedCustomShapeTypeNames::Get( sShapeType );
+                        if ( rProp.Value >>= rShapeType )
+                            eShapeType = EnhancedCustomShapeTypeNames::Get( rShapeType );
                     }
                     else if ( rProp.Name.equalsAscii( "MirroredX" ) )
                     {
@@ -3295,6 +3294,12 @@ MSO_SPT EscherPropertyContainer::GetCustomShapeType( const uno::Reference< drawi
         }
     }
     return eShapeType;
+}
+
+MSO_SPT EscherPropertyContainer::GetCustomShapeType( const uno::Reference< drawing::XShape > & rXShape, sal_uInt32& nMirrorFlags )
+{
+    rtl::OUString aShapeType;
+    return GetCustomShapeType( rXShape, nMirrorFlags, aShapeType );
 }
 
 // ---------------------------------------------------------------------------------------------
