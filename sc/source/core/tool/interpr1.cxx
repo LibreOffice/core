@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:44:38 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:37:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,7 +184,6 @@ void ScInterpreter::ScIfJump()
             {   // TRUE
                 if( nJumpCount >= 2 )
                 {   // THEN path
-                    nFuncFmtType = NUMBERFORMAT_UNDEFINED;
                     aCode.Jump( pJump[ 1 ], pJump[ nJumpCount ] );
                 }
                 else
@@ -198,7 +197,6 @@ void ScInterpreter::ScIfJump()
             {   // FALSE
                 if( nJumpCount == 3 )
                 {   // ELSE path
-                    nFuncFmtType = NUMBERFORMAT_UNDEFINED;
                     aCode.Jump( pJump[ 2 ], pJump[ nJumpCount ] );
                 }
                 else
@@ -3236,7 +3234,23 @@ void ScInterpreter::ScColumn()
     {
         double nVal;
         if (nParamCount == 0)
+        {
             nVal = aPos.Col() + 1;
+            if (bMatrixFormula)
+            {
+                SCCOL nCols;
+                SCROW nRows;
+                pMyFormulaCell->GetMatColsRows( nCols, nRows);
+                ScMatrixRef pResMat = GetNewMat( static_cast<SCSIZE>(nCols), 1);
+                if (pResMat)
+                {
+                    for (SCCOL i=0; i < nCols; ++i)
+                        pResMat->PutDouble( nVal + i, static_cast<SCSIZE>(i), 0);
+                    PushMatrix( pResMat);
+                    return;
+                }
+            }
+        }
         else
         {
             switch ( GetStackType() )
@@ -3295,7 +3309,23 @@ void ScInterpreter::ScRow()
     {
         double nVal;
         if (nParamCount == 0)
+        {
             nVal = aPos.Row() + 1;
+            if (bMatrixFormula)
+            {
+                SCCOL nCols;
+                SCROW nRows;
+                pMyFormulaCell->GetMatColsRows( nCols, nRows);
+                ScMatrixRef pResMat = GetNewMat( 1, static_cast<SCSIZE>(nRows));
+                if (pResMat)
+                {
+                    for (SCROW i=0; i < nRows; i++)
+                        pResMat->PutDouble( nVal + i, 0, static_cast<SCSIZE>(i));
+                    PushMatrix( pResMat);
+                    return;
+                }
+            }
+        }
         else
         {
             switch ( GetStackType() )
