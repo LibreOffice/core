@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlchart.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:35:20 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:01:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,6 +132,10 @@
 #define EXC_CHPROP_VOLUME                   CREATE_OUSTRING( "Volume" )
 
 // Constants and Enumerations =================================================
+
+const sal_uInt32 EXC_CHART_PROGRESS_SIZE        = 10;
+
+// ----------------------------------------------------------------------------
 
 /** Enumerates possible orientations for a source range. */
 enum XclChOrientation
@@ -581,6 +585,10 @@ const sal_uInt8 EXC_CH3DDATAFORMAT_STRAIGHT     = 0;        /// Straight to top.
 const sal_uInt8 EXC_CH3DDATAFORMAT_SHARP        = 1;        /// Sharp top.
 const sal_uInt8 EXC_CH3DDATAFORMAT_TRUNC        = 2;        /// Shart top, truncated.
 
+// (0x1061) CHPIEEXT ----------------------------------------------------------
+
+const sal_uInt16 EXC_ID_CHPIEEXT                = 0x1061;
+
 // (0x1066) CHESCHERFORMAT ----------------------------------------------------
 
 const sal_uInt16 EXC_ID_CHESCHERFORMAT          = 0x1066;
@@ -597,6 +605,21 @@ const sal_uInt16 EXC_ID_CHUNKNOWN               = 0xFFFF;
 // ============================================================================
 // Structs and classes
 // ============================================================================
+
+// Common =====================================================================
+
+/** Specifies the position of a data point or of an entire series. */
+struct XclChPoint
+{
+    sal_uInt16          mnSeriesIdx;        /// Series index of a data point.
+    sal_uInt16          mnPointIdx;         /// Point index of a data point.
+
+    explicit            XclChPoint();
+    explicit            XclChPoint( sal_uInt16 nSeriesIdx, sal_uInt16 nPointIdx );
+};
+
+bool operator==( const XclChPoint& rL, const XclChPoint& rR );
+bool operator<( const XclChPoint& rL, const XclChPoint& rR );
 
 // Formatting =================================================================
 
@@ -688,9 +711,8 @@ struct XclChFrame
 
 struct XclChObjectLink
 {
+    XclChPoint          maPos;              /// Position of the data point.
     sal_uInt16          mnTarget;           /// Target of the link.
-    sal_uInt16          mnSeriesIdx;        /// Series index for series/point labels.
-    sal_uInt16          mnPointIdx;         /// Point index for series/point labels.
 
     explicit            XclChObjectLink();
 };
@@ -728,8 +750,7 @@ struct XclChSourceLink
 
 struct XclChDataFormat
 {
-    sal_uInt16          mnPointIdx;         /// 0-based data point index.
-    sal_uInt16          mnSeriesIdx;        /// 0-based series index.
+    XclChPoint          maPos;              /// Position of the data point or series.
     sal_uInt16          mnFormatIdx;        /// Formatting index for automatic colors.
     sal_uInt16          mnFlags;            /// Additional flags.
 
