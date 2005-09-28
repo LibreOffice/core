@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:30:18 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:16:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2140,6 +2140,20 @@ void SwTabFrm::MakeAll()
                     continue;
                 }
 
+                // --> FME 2005-08-03 #i52781#
+                // YaSC - Yet another special case:
+                // If our upper is inside a table cell which is not allowed
+                // to split, we do not try to split:
+                if ( GetUpper()->IsInTab() )
+                {
+                    const SwFrm* pTmpRow = GetUpper();
+                    while ( pTmpRow && !pTmpRow->IsRowFrm() )
+                       pTmpRow = pTmpRow->GetUpper();
+                    if ( pTmpRow && !static_cast<const SwRowFrm*>(pTmpRow)->IsRowSplitAllowed() )
+                        continue;
+                }
+                // <--
+
                 USHORT nMinNumOfLines = nRepeat;
                 if ( !bTryToSplit )
                     ++nMinNumOfLines;
@@ -2311,9 +2325,24 @@ void SwTabFrm::MakeAll()
 
         if ( bCalcLowers && IsValid() )
         {
-            ::lcl_Recalc( this, 0, aNotify );
-            bLowersFormatted = TRUE;
-            bCalcLowers = FALSE;
+            // --> OD 2005-05-11 #i44910# - format of lower frames unnecessary
+            // and can cause layout loops, if table doesn't fit and isn't
+            // allowed to split.
+            SwTwips nDistToUpperPrtBottom =
+                (Frm().*fnRect->fnBottomDist)( (GetUpper()->*fnRect->fnGetPrtBottom)());
+            if ( nDistToUpperPrtBottom >= 0 || bTryToSplit )
+            {
+                ::lcl_Recalc( this, 0, aNotify );
+                bLowersFormatted = TRUE;
+                bCalcLowers = FALSE;
+            }
+#if OSL_DEBUG_LEVEL > 1
+            else
+            {
+                ASSERT( false, "debug assertion: <SwTabFrm::MakeAll()> - format of table lowers suppressed by fix i44910" );
+            }
+#endif
+            // <--
         }
 
     } //while ( !bValidPos || !bValidSize || !bValidPrtArea )
@@ -4403,6 +4432,23 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
                         continue;
                     }
                     // <--
+                    // --> OD 2005-08-08 #i52904# - distinguish between anchored
+                    // objects, whose vertical position depends on its anchor
+                    // frame and whose vertical position is independent
+                    // from its anchor frame.
+                    bool bVertPosDepOnAnchor( true );
+                    {
+                        SwFmtVertOrient aVert( pAnchoredObj->GetFrmFmt().GetVertOrient() );
+                        switch ( aVert.GetRelationOrient() )
+                        {
+                            case REL_PG_FRAME:
+                            case REL_PG_PRTAREA:
+                            {
+                                bVertPosDepOnAnchor = false;
+                            }
+                            break;
+                        }
+                    }
                     if ( pAnchoredObj->ISA(SwFlyFrm) )
                     {
                         SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
@@ -4411,31 +4457,31 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
                         // which are anchored to-paragraph/to-character, if
                         // the wrapping style influence has to be considered
                         // on the object positioning.
-                        // --> OD 2004-11-04 #i26945# - follow-up of #i3317#
-                        // No direct move, if Writer fly frame isn't valid.
-                        const bool bNoDirectMove =
-                                WEIT_WECH == pFly->Frm().Top() ||
-                                !pFly->IsValid() ||
-                                pFly->ConsiderObjWrapInfluenceOnObjPos();
+                        // --> OD 2005-08-08 #i52904# - no direct move of objects,
+                        // whose vertical position doesn't depend on anchor frame.
+                        const bool bDirectMove =
+                                WEIT_WECH != pFly->Frm().Top() &&
+                                bVertPosDepOnAnchor &&
+                                !pFly->ConsiderObjWrapInfluenceOnObjPos();
                         // <--
-                        if ( !bNoDirectMove )
+                        if ( bDirectMove )
                         {
                             (pFly->Frm().*fnRect->fnSubTop)( -lDiff );
                             (pFly->Frm().*fnRect->fnAddBottom)( lDiff );
+                            pFly->GetVirtDrawObj()->SetRectsDirty();
+                            // --> OD 2004-08-17 - also notify view of <SdrObject>
+                            // instance, which represents the Writer fly frame in
+                            // the drawing layer
+                            pFly->GetVirtDrawObj()->SetChanged();
+                            // <--
                         }
-                        pFly->GetVirtDrawObj()->SetRectsDirty();
-                        // --> OD 2004-08-17 - also notify view of <SdrObject>
-                        // instance, which represents the Writer fly frame in
-                        // the drawing layer
-                        pFly->GetVirtDrawObj()->SetChanged();
-                        // <--
 
                         if ( pFly->IsFlyInCntFrm() )
                         {
                             static_cast<SwFlyInCntFrm*>(pFly)->AddRefOfst( lDiff );
                             // --> OD 2004-12-02 #115759# - reset current relative
                             // position to get re-positioned, if not directly moved.
-                            if ( bNoDirectMove )
+                            if ( !bDirectMove )
                             {
                                 pAnchoredObj->SetCurrRelPos( Point( 0, 0 ) );
                             }
@@ -4482,7 +4528,7 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
                         // --> OD 2004-11-04 #i26945# - follow-up of #i3317#
                         // No arrangement of lowers, if Writer fly frame isn't
                         // moved
-                        if ( !bNoDirectMove &&
+                        if ( bDirectMove &&
                              ::lcl_ArrangeLowers( pFly,
                                                   (pFly->*fnRect->fnGetPrtTop)(),
                                                   bInva ) )
@@ -4491,7 +4537,7 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
                             pFly->SetCompletePaint();
                         }
                     }
-                    else
+                    else if ( pAnchoredObj->ISA(SwAnchoredDrawObject) )
                     {
                         // --> OD 2004-11-05 #i26945#
                         const SwTabFrm* pTabFrm = pLay->FindTabFrm();
@@ -4517,9 +4563,31 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
                         // rectangle and last top of line.
                         pAnchoredObj->AddLastCharY( lDiff );
                         pAnchoredObj->AddLastTopOfLineY( lDiff );
-                        // OD 2004-04-06 #i26791#, #i28701# - Direct object
-                        // positioning no longer needed. Instead invalidate position
+                        // --> OD 2005-08-08 #i52904# - re-introduce direct move
+                        // of drawing objects
+                        const bool bDirectMove =
+                                static_cast<const SwDrawFrmFmt&>(pAnchoredObj->GetFrmFmt()).IsPosAttrSet() &&
+                                bVertPosDepOnAnchor &&
+                                !pAnchoredObj->ConsiderObjWrapInfluenceOnObjPos();
+                        if ( bDirectMove )
+                        {
+                            SwObjPositioningInProgress aObjPosInProgress( *pAnchoredObj );
+                            if ( bVert )
+                            {
+                                pAnchoredObj->DrawObj()->Move( Size( lDiff, 0 ) );
+                            }
+                            else
+                            {
+                                pAnchoredObj->DrawObj()->Move( Size( 0, lDiff ) );
+                            }
+                        }
+                        // <--
                         pAnchoredObj->InvalidateObjPos();
+                    }
+                    else
+                    {
+                        ASSERT( false,
+                                "<lcl_ArrangeLowers(..)> - unknown type of anchored object!" );
                     }
                 }
             }
@@ -4685,7 +4753,8 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
         }
         BOOL bVertDir = TRUE;
         // --> OD 2005-03-30 #i43913# - no vertical alignment, if wrapping
-        // style influence is considered on object positioning
+        // style influence is considered on object positioning and
+        // an object is anchored inside the cell.
         const bool bConsiderWrapOnObjPos( GetFmt()->GetDoc()->ConsiderWrapOnObjPos() );
         // <--
         //Keine Ausrichtung wenn Rahmen mit Umlauf in die Zelle ragen.
@@ -4701,6 +4770,7 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
                     const SwFmtSurround &rSur = pAnchoredObj->GetFrmFmt().GetSurround();
                     if ( SURROUND_THROUGHT != rSur.GetSurround() )
                     {
+                        // frames, which the cell is a lower of, aren't relevant
                         if ( pAnchoredObj->ISA(SwFlyFrm) )
                         {
                             const SwFlyFrm *pFly =
@@ -4711,7 +4781,12 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
 
                         const SwFrm* pAnch = pAnchoredObj->GetAnchorFrm();
                         // --> OD 2005-03-30 #i43913#
-                        if ( bConsiderWrapOnObjPos || !IsAnLower( pAnch ) )
+                        // --> OD 2005-08-08 #i52904# - no vertical alignment,
+                        // if object, anchored inside cell, has temporarly
+                        // consider its wrapping style on object positioning.
+                        if ( bConsiderWrapOnObjPos ||
+                             !IsAnLower( pAnch ) ||
+                             pAnchoredObj->IsTmpConsiderWrapInfluence() )
                         // <--
                         {
                             bVertDir = FALSE;
