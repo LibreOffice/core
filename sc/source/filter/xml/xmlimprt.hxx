@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:43:51 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:07:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -668,6 +668,7 @@ struct ScMyImportValidation
 
 typedef std::vector<ScMyImportValidation>           ScMyImportValidations;
 typedef std::list<SvXMLImportContext*>              ScMyViewContextList;
+typedef std::list<com::sun::star::table::CellAddress> ScMyDefaultNotes;
 class ScMyStylesImportHelper;
 
 class ScXMLImport: public SvXMLImport
@@ -765,6 +766,7 @@ class ScXMLImport: public SvXMLImport
     ScMyLabelRanges*        pMyLabelRanges;
     ScMyImportValidations*  pValidations;
     ScMyImpDetectiveOpArray*    pDetectiveOpArray;
+    ScMyDefaultNotes*       pDefaultNotes;
     ScUnoGuard*             pScUnoGuard;
 
     std::vector<rtl::OUString>          aTableStyles;
@@ -968,6 +970,8 @@ public:
 private:
     void AddStyleRange(const com::sun::star::table::CellRangeAddress& rCellRange);
     void SetStyleToRanges();
+
+    void SetDefaultNotes();
 public:
     void SetStyleToRange(const ScRange& rRange, const rtl::OUString* pStyleName,
         const sal_Int16 nCellType, const rtl::OUString* pCurrency);
@@ -999,6 +1003,7 @@ public:
     sal_Int32   GetRangeType(const rtl::OUString sRangeType) const;
     void SetNamedRanges();
     void SetLabelRanges();
+    void AddDefaultNote( const com::sun::star::table::CellAddress& aCell );
 };
 
 #endif
