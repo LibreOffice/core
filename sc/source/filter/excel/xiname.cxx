@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiname.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:04:57 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:49:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,14 +51,10 @@
 #include "excimp8.hxx"
 
 // ============================================================================
-// *** Helper classes ***
-// ============================================================================
-
-// ============================================================================
 // *** Implementation ***
 // ============================================================================
 
-XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nScIndex ) :
+XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     XclImpRoot( rStrm.GetRoot() ),
     mpScData( 0 ),
     mcBuiltIn( EXC_BUILTIN_UNKNOWN ),
@@ -70,7 +66,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nScIndex ) :
 
     // 1) *** read data from stream *** ---------------------------------------
 
-    sal_uInt16 nFlags = 0, nFmlaSize, nExtSheet = EXC_NAME_GLOBAL;
+    sal_uInt16 nFlags = 0, nFmlaSize, nExtSheet = EXC_NAME_GLOBAL, nXclTab = EXC_NAME_GLOBAL;
     sal_uInt8 nNameLen, nShortCut;
 
     switch( GetBiff() )
@@ -96,9 +92,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nScIndex ) :
         case EXC_BIFF5:
         case EXC_BIFF8:
         {
-            rStrm >> nFlags >> nShortCut >> nNameLen >> nFmlaSize;
-            rStrm.Ignore( 2 );
-            rStrm >> nExtSheet;
+            rStrm >> nFlags >> nShortCut >> nNameLen >> nFmlaSize >> nExtSheet >> nXclTab;
             rStrm.Ignore( 4 );
         }
         break;
@@ -149,10 +143,12 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nScIndex ) :
     }
 
     // add index for local names
-    if( nExtSheet != EXC_NAME_GLOBAL )
+    if( nXclTab != EXC_NAME_GLOBAL )
     {
-        maScName.Append( '_' ).Append( String::CreateFromInt32( nExtSheet ) );
-        mnScTab = static_cast< SCTAB >( nExtSheet - 1 );
+        sal_uInt16 nUsedTab = (GetBiff() == EXC_BIFF8) ? nXclTab : nExtSheet;
+        maScName.Append( '_' ).Append( String::CreateFromInt32( nUsedTab ) );
+        // TODO: may not work for BIFF5, handle skipped sheets (all BIFF)
+        mnScTab = static_cast< SCTAB >( nUsedTab - 1 );
     }
 
     // find an unused name
@@ -168,8 +164,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nScIndex ) :
     const ScTokenArray* pTokArr = 0; // pointer to token array, owned by rFmlaConv
     RangeType nNameType = RT_NAME;
 
-    const sal_uInt16 nUnsupported = EXC_NAME_VB | EXC_NAME_PROC | EXC_NAME_BIG;
-    if( ::get_flag( nFlags, nUnsupported ) )
+    if( ::get_flag( nFlags, EXC_NAME_BIG ) )
     {
         // special, unsupported name
         rFmlaConv.GetDummy( pTokArr );
@@ -229,8 +224,8 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nScIndex ) :
     {
         // create the Calc name data
         ScRangeData* pData = new ScRangeData( GetDocPtr(), maScName, *pTokArr, ScAddress(), nNameType );
-        pData->GuessPosition();
-        pData->SetIndex( nScIndex );
+        pData->GuessPosition();             // calculate base position for relative refs
+        pData->SetIndex( nXclNameIdx );     // used as unique identifier in formulas
         rRangeNames.Insert( pData );        // takes ownership of pData
         mpScData = pData;                   // cache for later use
     }
