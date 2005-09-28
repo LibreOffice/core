@@ -4,9 +4,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-28 13:14:04 $
+#   last change: $Author: hr $ $Date: 2005-09-28 14:41:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -281,7 +281,17 @@ sub setglobalvariables
 {
     if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::parameter::setglobalvariables"); }
 
-    if ( $installer::globals::compiler =~ /wntmsci/ ) { $installer::globals::iswindowsbuild = 1; }
+    # Setting the installertype directory corresponding to the environment variable PKGFORMAT
+    # The global variable $installer::globals::packageformat can only contain one package format.
+    # If PKGFORMAT cotains more than one format (for example "rpm deb") this is splitted in the
+    # makefile calling the perl program.
+    $installer::globals::installertypedir = $installer::globals::packageformat;
+
+    if ( $installer::globals::compiler =~ /wntmsci/ )
+    {
+        $installer::globals::iswindowsbuild = 1;
+        if ( $installer::globals::installertypedir eq "" ) { $installer::globals::installertypedir = "msi"; }
+    }
 
     if ( $installer::globals::compiler =~ /unxso[lg][si]/ )
     {
@@ -357,11 +367,7 @@ sub setglobalvariables
         make_path_absolute(\$installer::globals::unpackpath);
     }
 
-    if ( $installer::globals::debian )
-    {
-        $installer::globals::unpackpath =~ s/\Q$installer::globals::separator\E\s*$//;
-        $installer::globals::unpackpath = $installer::globals::unpackpath . $installer::globals::debiancompileraddon;
-    }
+    $installer::globals::unpackpath =~ s/\Q$installer::globals::separator\E\s*$//;
 
     if (! -d $installer::globals::unpackpath )  # create unpackpath
     {
