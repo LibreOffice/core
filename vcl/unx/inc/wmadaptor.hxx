@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wmadaptor.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:50:05 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 14:58:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,9 @@
 #ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
 #endif
+#ifndef _VCL_DLLAPI_H
+#include "dllapi.h"
+#endif
 #ifndef _PREX_H
 #include <prex.h>
 #include <X11/Xlib.h>
@@ -54,7 +57,7 @@ class X11SalFrame;
 
 namespace vcl_sal {
 
-class WMAdaptor
+class VCL_DLLPUBLIC WMAdaptor
 {
 public:
     enum WMAtom {
@@ -65,6 +68,7 @@ public:
         NET_SUPPORTED,
         NET_SUPPORTING_WM_CHECK,
         NET_WM_NAME,
+        NET_WM_DESKTOP,
         NET_WM_ICON_NAME,
         NET_WM_STATE,
         NET_WM_STATE_MAXIMIZED_HORZ,
@@ -196,10 +200,23 @@ public:
     { return m_aWMWorkAreas.size(); }
 
     /*
+     * gets the current work area/desktop number: [0,m_nDesktops[ or -1 if unknown
+     */
+    int getCurrentWorkArea() const;
+    /*
+     * gets the workarea the specified window is on (or -1)
+     */
+    int getWindowWorkArea( XLIB_Window aWindow ) const;
+    /*
      *  gets the specified workarea
      */
     const Rectangle& getWorkArea( int n ) const
     { return m_aWMWorkAreas[n]; }
+
+    /*
+     * attemp to switch the desktop to a certain workarea
+     */
+    void switchToWorkArea( int nWorkArea ) const;
 
     /*
      *  sets window title
