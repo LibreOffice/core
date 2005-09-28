@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:52:13 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:03:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -318,9 +318,11 @@ public:
         maInfo.SetSdrView( pMap->GetShell()->GetDrawView() );
         maInfo.SetWindow( pMap->GetShell()->GetWin() );
         maInfo.SetViewForwarder( pMap );
+        // --> OD 2005-08-08 #i52858# - method name changed
         Reference < XEventBroadcaster > xModelBroadcaster =
             new SwDrawModellListener_Impl(
-                    pMap->GetShell()->GetDoc()->MakeDrawModel() );
+                    pMap->GetShell()->GetDoc()->GetOrCreateDrawModel() );
+        // <--
         maInfo.SetControllerBroadcaster( xModelBroadcaster );
     }
 
