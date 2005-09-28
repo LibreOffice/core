@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eeparser.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:15:38 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:55:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,8 +71,8 @@ struct ScHTMLImage
     sal_Char            nDir;           // 1==hori, 2==verti, 3==beides
 
                         ScHTMLImage() :
-                            pGraphic( NULL ),
-                            aSize( 0, 0 ), aSpace( 0, 0 ), nDir( nHorizontal )
+                            aSize( 0, 0 ), aSpace( 0, 0 ), pGraphic( NULL ),
+                            nDir( nHorizontal )
                             {}
                         ~ScHTMLImage()
                             { if ( pGraphic ) delete pGraphic; }
