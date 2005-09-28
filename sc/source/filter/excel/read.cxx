@@ -4,9 +4,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:58:57 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:44:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,10 +45,6 @@
 #include <stdio.h>
 
 #include "document.hxx"
-#include "docoptio.hxx"
-#include "globstr.hrc"
-#include "stlsheet.hxx"
-#include "stlpool.hxx"
 #ifndef _SCERRORS_HXX
 #include "scerrors.hxx"
 #endif
@@ -160,7 +156,7 @@ FltError ImportExcel::Read( void )
         }
 
         if( eAkt != Z_Biff5Pre && eAkt != Z_Biff5WPre )
-            pProgress->Progress( aIn.GetSvStreamPos() );
+            pProgress->ProgressAbs( aIn.GetSvStreamPos() );
 
         switch( eAkt )
         {
@@ -1009,7 +1005,7 @@ FltError ImportExcel8::Read( void )
         }
 
         if( eAkt != EXC_STATE_SHEET_PRE && eAkt != EXC_STATE_GLOBALS_PRE )
-            pProgress->Progress( aIn.GetSvStreamPos() );
+            pProgress->ProgressAbs( aIn.GetSvStreamPos() );
 
         if( nRecId != EXC_ID_CONT )
         {
@@ -1094,6 +1090,7 @@ FltError ImportExcel8::Read( void )
                         rXFBfr.CreateUserStyles();
                         eAkt = EXC_STATE_BEFORE_SHEET;
                         break;
+                    case 0x0E:  Precision(); break;     // PRECISION
                     case 0x22:  Rec1904(); break;       // 1904         [ 2345   ]
                     case 0x25:  Defrowheight2(); break; // DEFAULTROWHEI[ 2      ]
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345   ]
@@ -1150,10 +1147,6 @@ FltError ImportExcel8::Read( void )
                     {
                         Bof5();
                         NeueTabelle();
-
-                        // insert leading dummy object for the new sheet
-                        rObjMgr.InsertDummyObj();
-
                         switch( pExcRoot->eDateiTyp )
                         {
                             case Biff8:     // worksheet
@@ -1162,8 +1155,7 @@ FltError ImportExcel8::Read( void )
                                 aIn.StoreGlobalPosition();
                             break;
                             case Biff8C:    // chart sheet
-                                rObjMgr.StartNewChartObj();
-                                rObjMgr.ReadChartSubStream( maStrm );
+                                rObjMgr.ReadTabChart( maStrm );
                                 EndSheet();
                                 IncCurrScTab();
                                 GetTracer().TraceChartOnlySheet();
@@ -1342,10 +1334,8 @@ FltError ImportExcel8::Read( void )
                         case 0x0809:                                    // BOF          [    5   ]
                         {
                             Bof5();
-                            if( pExcRoot->eDateiTyp == Biff8C && bWithDrawLayer )
-                                rObjMgr.ReadChartSubStream( maStrm );
-                            else
-                                XclTools::SkipSubStream( maStrm );
+                            DBG_ASSERT( pExcRoot->eDateiTyp == Biff8C, "unknown BOF" );
+                            XclTools::SkipSubStream( maStrm );
                             // still in Escher objects
                             bObjSection = TRUE;
                         }
