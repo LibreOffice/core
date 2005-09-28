@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabcont.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:06:24 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:17:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -399,6 +399,10 @@ void ScTabControl::Command( const CommandEvent& rCEvt )
                     Select();
                 }
             }
+
+            // #i52073# OLE inplace editing has to be stopped before showing the sheet tab context menu
+            pViewSh->DeactivateOle();
+
             //  Popup-Menu:
             //  get Dispatcher from ViewData (ViewFrame) instead of Shell (Frame), so it can't be null
             pViewData->GetDispatcher().ExecutePopup( ScResId(RID_POPUP_TAB) );
