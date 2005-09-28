@@ -4,9 +4,9 @@
  *
  *  $RCSfile: styleuno.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:50:35 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:14:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1724,6 +1724,9 @@ void ScStyleObj::SetOnePropertyValue( const SfxItemPropertyMap* pMap, const uno:
                         case ATTR_PAGE_SCALETOPAGES:
                         case ATTR_PAGE_FIRSTPAGENO:
                             {
+                                rSet.ClearItem(ATTR_PAGE_SCALETOPAGES);
+                                rSet.ClearItem(ATTR_PAGE_SCALE);
+                                rSet.ClearItem(ATTR_PAGE_SCALETO);
                                 sal_Int16 nVal;
                                 *pValue >>= nVal;
                                 rSet.Put( SfxUInt16Item( pMap->nWID, nVal ) );
@@ -1784,6 +1787,8 @@ void ScStyleObj::SetOnePropertyValue( const SfxItemPropertyMap* pMap, const uno:
                                     else
                                         aItem.SetHeight(static_cast<sal_uInt16>(nPages));
                                     rSet.Put( aItem );
+                                    rSet.ClearItem(ATTR_PAGE_SCALETOPAGES);
+                                    rSet.ClearItem(ATTR_PAGE_SCALE);
                                 }
                             }
                             break;
