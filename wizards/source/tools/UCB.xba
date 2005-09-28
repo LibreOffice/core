@@ -34,6 +34,7 @@ Dim FileExtension as String
 	MaxIndex = StartUBound
 	CurDirMaxCount = SBMAXDIRCOUNT
 Dim sFileArray(StartUbound,1) as String
+	On Local Error Goto FILESYSTEMPROBLEM:
 	CurIndex = -1
 	&apos; Todo: Is the last separator valid?
 	DirIndex = 0
@@ -44,8 +45,11 @@ Dim sFileArray(StartUbound,1) as String
 	If oUcbObject.Exists(AnchorDir) Then
 		Do
 			AnchorDir = sDirArray(DirIndex)
+			On Local Error Resume Next
 			DirContent() = oUcbObject.GetFolderContents(AnchorDir,True)
 			DirIndex = DirIndex + 1
+			On Local Error Goto 0
+			On Local Error Goto FILESYSTEMPROBLEM:
 			If Ubound(DirContent()) &lt;&gt; -1 Then
 				FileCountinDir = Ubound(DirContent())+ 1
 				For i = 0 to FilecountinDir -1
@@ -106,6 +110,13 @@ Dim sFileArray(StartUbound,1) as String
 		Msgbox(&quot;Directory &apos;&quot; &amp; ConvertFromUrl(AnchorDir) &amp; &quot;&apos; does not exist!&quot;, 16, GetProductName())
 	End If
 	ReadDirectories() = sFileArray()
+	Exit Function
+
+	FILESYSTEMPROBLEM:
+	Msgbox(&quot;Sorry, Filesystem Problem&quot;)
+	ReadDirectories() = sFileArray()
+	Resume LEAVEPROC
+	LEAVEPROC:
 End Function
 
 
@@ -278,4 +289,5 @@ NOSPACEONDRIVE:
 		Resume GOON
 	End If
 GOON:
-End Function</script:module>
+End Function
+</script:module>
