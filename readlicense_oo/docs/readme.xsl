@@ -2,7 +2,7 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xt="http://www.jclark.com/xt"
-                extension-element-prefixes="xt">
+                extension-element-prefixes="xt" version="1.0">
                 
   <xsl:output method = "HTML" doctype-public = "-//W3C//DTD HTML 3.2//EN" /> 
   	
