@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:55:25 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:41:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -352,43 +352,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
                 aPool >> aStack;
                 break;
             case 0x11: // Range                                 [314 265]
-            {
-                aStack >> nMerk0;
-                aPool << aStack << ocRange << nMerk0;
-                aPool >> aStack;
-#if 0
-                // wenn erster und zweiter Ausdruck auf'm Stack Single Referenzen
-                // sind, dann Area Reference erzeugen, ansonsten Fehlerhaften Aus-
-                // druck generieren
-                BOOL    bErrorToken = TRUE;
-                TokenId nMerk1;
-
-                aStack >> nMerk0;
-                aStack >> nMerk1;
-
-                if( aPool.GetType( nMerk0 ) == T_RefC &&
-                    aPool.GetType( nMerk1 ) == T_RefC )
-                {
-                    register const SingleRefData *pRef1 = aPool.GetSRD( nMerk1 );
-                    register const SingleRefData *pRef2 = aPool.GetSRD( nMerk0 );
-                    if( pRef1 && pRef2 )
-                    {
-                        aCRD.Ref1 = *pRef1;
-                        aCRD.Ref2 = *pRef2;
-                        aStack << aPool.Store( aCRD );
-                        bErrorToken = FALSE;
-                    }
-                }
-
-                if( bErrorToken )
-                {
-                    aPool << ocNoName << ocOpen << nMerk1 << ocSep
-                        << nMerk0 << ocClose;
-
-                    aPool >> aStack;
-                }
-#endif
-            }
+                PushRangeOperator();
                 break;
             case 0x12: // Unary Plus                            [312 264]
                 aPool << ocAdd << aStack;
@@ -474,14 +438,14 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
                 DefTokenId          eOc;
                 switch( nByte )
                 {
-                    case 0x00:
-                    case 0x07:
-                    case 0x17:
-                    case 0x1D:
-                    case 0x24:      eOc = ocStop;       break;
-                    case 0x0F:
-                    case 0x2A:      eOc = ocNoValue;    break;
-                    default:        eOc = ocNoName;
+                    case EXC_ERR_NULL:
+                    case EXC_ERR_DIV0:
+                    case EXC_ERR_VALUE:
+                    case EXC_ERR_REF:
+                    case EXC_ERR_NAME:
+                    case EXC_ERR_NUM:   eOc = ocStop;       break;
+                    case EXC_ERR_NA:    eOc = ocNoValue;    break;
+                    default:            eOc = ocNoName;
                 }
                 aPool << eOc;
                 if( eOc != ocStop )
@@ -1509,6 +1473,37 @@ void ExcelToSc::ExcRelToScRel( UINT16 nRow, UINT8 nCol, SingleRefData &rSRD, con
 }
 
 
+void ExcelToSc::PushRangeOperator()
+{
+    // #i48496# try to convert the term singleref:singleref to a range reference
+    bool bIsConstRange = false;
+    TokenId nTokId0, nTokId1;
+    aStack >> nTokId0;
+    aStack >> nTokId1;
+
+    if( (aPool.GetType( nTokId0 ) == T_RefC) && (aPool.GetType( nTokId1 ) == T_RefC) )
+    {
+        const SingleRefData* pRef1 = aPool.GetSRD( nTokId1 );
+        const SingleRefData* pRef2 = aPool.GetSRD( nTokId0 );
+        if( pRef1 && pRef2 )
+        {
+            ComplRefData aRangeRef;
+            aRangeRef.InitFlags();
+            aRangeRef.Ref1 = *pRef1;
+            aRangeRef.Ref2 = *pRef2;
+            aStack << aPool.Store( aRangeRef );
+            bIsConstRange = true;
+        }
+    }
+
+    if( !bIsConstRange )
+    {
+        aPool << nTokId1 << ocRange << nTokId0;
+        aPool >> aStack;
+    }
+}
+
+
 const ScTokenArray* ExcelToSc::GetBoolErr( XclBoolError eType )
 {
     UINT16                  nError;
@@ -1521,7 +1516,7 @@ const ScTokenArray* ExcelToSc::GetBoolErr( XclBoolError eType )
     {
         case xlErrNull:     eOc = ocStop;       nError = errNoCode;             break;
         case xlErrDiv0:     eOc = ocStop;       nError = errIllegalFPOperation; break;
-        case xlErrValue:    eOc = ocNoValue;    nError = NOVALUE;               break;
+        case xlErrValue:    eOc = ocStop;       nError = errNoValue;            break;
         case xlErrRef:      eOc = ocStop;       nError = errNoRef;              break;
         case xlErrName:     eOc = ocStop;       nError = errNoName;             break;
         case xlErrNum:      eOc = ocStop;       nError = errIllegalFPOperation; break;
@@ -1632,20 +1627,7 @@ BOOL ExcelToSc::SetCurVal( ScFormulaCell &rCell, double &rfCurVal )
                 rCell.SetDouble( rfCurVal );
                 break;
             case 2:     // Error
-            {
-                switch( nVal )
-                {// nInd temp. missbrauchen
-                    case 0x00:  nInd = errNoCode; break;            // #NULL!
-                    case 0x07:  nInd = errIllegalFPOperation; break;// #DIV/0!
-                    case 0x0F:  nInd = NOVALUE; break;              // #VALUE!
-                    case 0x17:  nInd = errNoRef; break;             // #REF!
-                    case 0x1D:  nInd = errNoName; break;            // #NAME?
-                    case 0x24:  nInd = errIllegalFPOperation; break;// #NUM!
-                    case 0x2A:  nInd = NOVALUE; break;              // #N/A
-                    default:    nInd = errIllegalArgument;
-                }
-                rCell.SetErrCode( nInd );
-            }
+                rCell.SetErrCode( XclTools::GetScErrorCode( nVal ) );
                 break;
         }
     }
