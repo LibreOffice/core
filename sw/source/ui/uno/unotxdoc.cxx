@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:22:40 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:31:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2052,7 +2052,9 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
                 // must thus create an SdrModel, if we don't have an
                 // SdrModel and we are leaving the default at false,
                 // we don't need to make an SdrModel and can do nothing
-                pDrawDoc = reinterpret_cast < SwDrawDocument * > (pDocShell->GetDoc()->MakeDrawModel() );
+                // --> OD 2005-08-08 #i52858# - method name changed
+                pDrawDoc = reinterpret_cast < SwDrawDocument * > (pDocShell->GetDoc()->GetOrCreateDrawModel() );
+                // <--
                 pDrawDoc->SetAutoControlFocus ( bAuto );
             }
         }
@@ -2072,7 +2074,9 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
                 // SdrModel and we are leaving the default at true,
                 // we don't need to make an SdrModel and can do
                 // nothing
-                pDrawDoc = reinterpret_cast < SwDrawDocument * > (pDocShell->GetDoc()->MakeDrawModel() );
+                // --> OD 2005-08-08 #i52858# - method name changed
+                pDrawDoc = reinterpret_cast < SwDrawDocument * > (pDocShell->GetDoc()->GetOrCreateDrawModel() );
+                // <--
                 pDrawDoc->SetOpenInDesignMode ( bMode );
             }
         }
@@ -2556,6 +2560,9 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     {
         SwViewOptionAdjust_Impl aAdjust(*pWrtShell);
         pWrtShell->SetPDFExportOption( sal_True );
+        // --> FME 2005-05-23 #122919# Force field update before PDF export:
+        pWrtShell->ViewShell::UpdateFlds(TRUE);
+        // <--
         pWrtShell->CalcLayout();
         pWrtShell->SetPDFExportOption( sal_False );
         nRet = pDoc->GetPageCount();
@@ -3422,36 +3429,39 @@ Reference<XInterface> SwXDocumentPropertyHelper::GetDrawTable(short nWhich)
     {
         switch(nWhich)
         {
+            // --> OD 2005-08-08 #i52858#
+            // assure that Draw model is created, if it doesn't exist.
             case SW_CREATE_DASH_TABLE         :
                 if(!xDashTable.is())
-                    xDashTable = SvxUnoDashTable_createInstance( m_pDoc->GetDrawModel() );
+                    xDashTable = SvxUnoDashTable_createInstance( m_pDoc->GetOrCreateDrawModel() );
                 xRet = xDashTable;
             break;
             case SW_CREATE_GRADIENT_TABLE     :
                 if(!xGradientTable.is())
-                    xGradientTable = SvxUnoGradientTable_createInstance( m_pDoc->GetDrawModel() );
+                    xGradientTable = SvxUnoGradientTable_createInstance( m_pDoc->GetOrCreateDrawModel() );
                 xRet = xGradientTable;
             break;
             case SW_CREATE_HATCH_TABLE        :
                 if(!xHatchTable.is())
-                    xHatchTable = SvxUnoHatchTable_createInstance( m_pDoc->GetDrawModel() );
+                    xHatchTable = SvxUnoHatchTable_createInstance( m_pDoc->GetOrCreateDrawModel() );
                 xRet = xHatchTable;
             break;
             case SW_CREATE_BITMAP_TABLE       :
                 if(!xBitmapTable.is())
-                    xBitmapTable = SvxUnoBitmapTable_createInstance( m_pDoc->GetDrawModel() );
+                    xBitmapTable = SvxUnoBitmapTable_createInstance( m_pDoc->GetOrCreateDrawModel() );
                 xRet = xBitmapTable;
             break;
             case SW_CREATE_TRANSGRADIENT_TABLE:
                 if(!xTransGradientTable.is())
-                    xTransGradientTable = SvxUnoTransGradientTable_createInstance( m_pDoc->GetDrawModel() );
+                    xTransGradientTable = SvxUnoTransGradientTable_createInstance( m_pDoc->GetOrCreateDrawModel() );
                 xRet = xTransGradientTable;
             break;
             case SW_CREATE_MARKER_TABLE       :
                 if(!xMarkerTable.is())
-                    xMarkerTable = SvxUnoMarkerTable_createInstance( m_pDoc->GetDrawModel() );
+                    xMarkerTable = SvxUnoMarkerTable_createInstance( m_pDoc->GetOrCreateDrawModel() );
                 xRet = xMarkerTable;
             break;
+            // <--
             case  SW_CREATE_DRAW_DEFAULTS:
                 if(!xDrawDefaults.is())
                     xDrawDefaults = (cppu::OWeakObject*)new SwSvxUnoDrawPool(m_pDoc);
