@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transporttypes.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:31:14 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:19:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,7 @@
 #ifndef SCH_XML_TRANSPORTTYPES_HXX_
 #define SCH_XML_TRANSPORTTYPES_HXX_
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 
 enum SchXMLCellType
 {
