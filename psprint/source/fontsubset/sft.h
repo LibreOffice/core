@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sft.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:40:12 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 14:28:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.h,v 1.11 2005-09-08 16:40:12 rt Exp $ */
+/* $Id: sft.h,v 1.12 2005-09-28 14:28:12 hr Exp $ */
 
 /**
 
@@ -228,6 +228,7 @@ extern "C" {
         char *family;             /**< family name                                             */
         sal_uInt16 *ufamily;          /**< family name UCS2                                         */
         char *subfamily;          /**< subfamily name                                          */
+        sal_uInt16 *usubfamily;   /**< subfamily name UCS2 */
         char *psname;             /**< PostScript name                                         */
         sal_uInt16 macStyle;      /**< macstyle bits from 'HEAD' table */
         int   weight;             /**< value of WeightClass or 0 if can't be determined        */
@@ -581,6 +582,7 @@ extern "C" {
         char        *family;
         sal_uInt16  *ufamily;
         char        *subfamily;
+        sal_uInt16  *usubfamily;
 
         sal_uInt32  ntables;
         sal_uInt32  *goffsets;
