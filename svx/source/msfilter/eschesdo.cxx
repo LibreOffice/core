@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:44:27 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:40:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,12 @@
 #ifndef _SVDOBJ_HXX //autogen wg. SdrObject
 #include "svdobj.hxx"
 #endif
-
+#ifndef _SVX_UNOAPI_HXX_
+#include <unoapi.hxx>
+#endif
+#ifndef _SVDOASHP_HXX
+#include <svdoashp.hxx>
+#endif
 #ifndef _SVX_UNOSHAPE_HXX //autogen wg. SvxShape
 #include "unoshape.hxx"
 #endif
@@ -254,6 +259,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
 {
     UINT32 nShapeID = 0;
     UINT16 nShapeType = 0;
+    BOOL bDontWriteText = FALSE;        // if a metafile is written as shape replacement, then the text is already part of the metafile
     BOOL bAdditionalText = FALSE;
     UINT32 nGrpShapeID = 0;
 
@@ -315,15 +321,40 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         {
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             sal_uInt32 nMirrorFlags;
-            MSO_SPT eShapeType = aPropOpt.GetCustomShapeType( rObj.GetShapeRef(), nMirrorFlags );
-            ADD_SHAPE( eShapeType, nMirrorFlags | 0xa00 );
-            aPropOpt.CreateCustomShapeProperties( eShapeType, rObj.GetShapeRef() );
-            aPropOpt.CreateFillProperties( rObj.mXPropSet, sal_True );
-            if ( rObj.ImplGetText() )
+
+            rtl::OUString sCustomShapeType;
+            MSO_SPT eShapeType = aPropOpt.GetCustomShapeType( rObj.GetShapeRef(), nMirrorFlags, sCustomShapeType );
+            if ( sCustomShapeType.equalsAscii( "col-502ad400" ) || sCustomShapeType.equalsAscii( "col-60da8460" ) )
             {
-                if ( !aPropOpt.IsFontWork() )
-                    aPropOpt.CreateTextProperties( rObj.mXPropSet, mpEscherEx->QueryTextID(
-                        rObj.GetShapeRef(), rObj.GetShapeId() ), sal_True, sal_False );
+                ADD_SHAPE( ESCHER_ShpInst_PictureFrame, 0xa00 );
+                if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), sal_False ) )
+                {
+                    aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
+                    aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );        // no fill
+                    aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );        // no linestyle
+                        SdrObject* pObj = GetSdrObjectFromXShape( rObj.GetShapeRef() );
+                    if ( pObj )
+                    {
+                        Rectangle aBound = pObj->GetCurrentBoundRect();
+                        Point aPosition( ImplMapPoint( aBound.TopLeft() ) );
+                        Size aSize( ImplMapSize( aBound.GetSize() ) );
+                        rObj.SetRect( Rectangle( aPosition, aSize ) );
+                        rObj.SetAngle( 0 );
+                        bDontWriteText = sal_True;
+                    }
+                }
+            }
+            else
+            {
+                ADD_SHAPE( eShapeType, nMirrorFlags | 0xa00 );
+                aPropOpt.CreateCustomShapeProperties( eShapeType, rObj.GetShapeRef() );
+                aPropOpt.CreateFillProperties( rObj.mXPropSet, sal_True );
+                if ( rObj.ImplGetText() )
+                {
+                    if ( !aPropOpt.IsFontWork() )
+                        aPropOpt.CreateTextProperties( rObj.mXPropSet, mpEscherEx->QueryTextID(
+                            rObj.GetShapeRef(), rObj.GetShapeId() ), sal_True, sal_False );
+                }
             }
         }
         else if ( rObj.GetType().EqualsAscii( "drawing.Rectangle" ))
@@ -783,7 +814,8 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         {   //! with AdditionalText the App has to control whether these are written or not
             mpHostAppData->WriteClientAnchor( *mpEscherEx, rObj.GetRect() );
             mpHostAppData->WriteClientData( *mpEscherEx );
-            mpHostAppData->WriteClientTextbox( *mpEscherEx );
+            if ( !bDontWriteText )
+                mpHostAppData->WriteClientTextbox( *mpEscherEx );
         }
         mpEscherEx->CloseContainer();       // ESCHER_SpContainer
 
