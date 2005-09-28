@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiname.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:33:11 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:00:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ class ScRangeData;
 class XclImpName : protected XclImpRoot
 {
 public:
-    explicit            XclImpName( XclImpStream& rStrm, sal_uInt16 nScIndex );
+    explicit            XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx );
 
     inline const String& GetXclName() const { return maXclName; }
     inline const String& GetScName() const { return maScName; }
