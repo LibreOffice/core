@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table4.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:25:42 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:33:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -763,16 +763,21 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     case CELLTYPE_EDIT:
                         if ( nHeadNoneTail )
                         {
+                            // #i48009# with the "nStringValue+(long)nDelta" expression within the
+                            // lcl_ValueString calls, gcc 3.4.1 makes wrong optimizations (ok in 3.4.3),
+                            // so nNextValue is now calculated ahead.
+                            long nNextValue = nStringValue+(long)nDelta;
+
                             String aStr;
                             if ( nHeadNoneTail < 0 )
                             {
-                                aStr = lcl_ValueString( nStringValue+(long)nDelta, nCellDigits );
+                                aStr = lcl_ValueString( nNextValue, nCellDigits );
                                 aStr += aValue;
                             }
                             else
                             {
                                 aStr = aValue;
-                                aStr += lcl_ValueString( nStringValue+(long)nDelta, nCellDigits );
+                                aStr += lcl_ValueString( nNextValue, nCellDigits );
                             }
                             aCol[nCol].Insert(static_cast<SCROW>(nRow), new ScStringCell( aStr ) );
                         }
