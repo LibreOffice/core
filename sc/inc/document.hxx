@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:33:31 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:26:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -543,6 +543,7 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
     void            SnapVisArea( Rectangle& rRect ) const;          // 1/100 mm
 
     SC_DLLPUBLIC BOOL           ValidTabName( const String& rName ) const;
+    static void      ConvertToValidTabName( String& rName, sal_Unicode cReplaceChar );
     SC_DLLPUBLIC BOOL           ValidNewTabName( const String& rName ) const;
     SC_DLLPUBLIC void           CreateValidTabName(String& rName) const;
     BOOL            InsertTab( SCTAB nPos, const String& rName,
@@ -1653,6 +1654,7 @@ private: // CLOOK-Impl-Methoden
     void    LoadAreaLinks(SvStream& rStream);
     void    SaveAreaLinks(SvStream& rStream) const;
 
+    void    DeleteAreaLinksOnTab( SCTAB nTab );
     void    UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
                              const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
 
