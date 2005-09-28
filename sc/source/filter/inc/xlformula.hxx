@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlformula.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:36:29 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:02:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -256,6 +256,8 @@ class XclTokenArrayIterator
 public:
     explicit            XclTokenArrayIterator();
     explicit            XclTokenArrayIterator( const ScTokenArray& rScTokArr, bool bSkipSpaces );
+    /** Copy constructor that allowa to change the skip-spaces mode. */
+    explicit            XclTokenArrayIterator( const XclTokenArrayIterator& rTokArrIt, bool bSkipSpaces );
 
     void                Init();
     void                Init( const ScTokenArray& rScTokArr, bool bSkipSpaces );
