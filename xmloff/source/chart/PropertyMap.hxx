@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:23:01 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:18:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,6 +92,7 @@
 #define XML_SCH_CONTEXT_MAX                         ( XML_SCH_CTF_START + 2 )
 #define XML_SCH_CONTEXT_STEP_MAIN                   ( XML_SCH_CTF_START + 3 )
 #define XML_SCH_CONTEXT_ORIGIN                      ( XML_SCH_CTF_START + 4 )
+#define XML_SCH_CONTEXT_LOGARITHMIC                 ( XML_SCH_CTF_START + 5 )
 
 #define XML_SCH_CONTEXT_SPECIAL_TICKS_MAJ_INNER     ( XML_SCH_CTF_START + 10 )
 #define XML_SCH_CONTEXT_SPECIAL_TICKS_MAJ_OUTER     ( XML_SCH_CTF_START + 11 )
@@ -164,7 +165,7 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     MAP_SPECIAL( "Marks", CHART, XML_TICK_MARKS_MAJOR_OUTER, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, TICKS_MAJ_OUTER ),          // to two bools
     MAP_SPECIAL( "HelpMarks", CHART, XML_TICK_MARKS_MINOR_INNER, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, TICKS_MIN_INNER ),      // see above
     MAP_SPECIAL( "HelpMarks", CHART, XML_TICK_MARKS_MINOR_OUTER, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, TICKS_MIN_OUTER ),
-    MAP_ENTRY( "Logarithmic", CHART, XML_LOGARITHMIC, XML_TYPE_BOOL ),
+    MAP_CONTEXT( "Logarithmic", CHART, XML_LOGARITHMIC, XML_TYPE_BOOL, LOGARITHMIC ),
     MAP_CONTEXT( "Min", CHART, XML_MINIMUM, XML_TYPE_DOUBLE, MIN ),
     MAP_CONTEXT( "Max", CHART, XML_MAXIMUM, XML_TYPE_DOUBLE, MAX ),
     MAP_CONTEXT( "Origin", CHART, XML_ORIGIN, XML_TYPE_DOUBLE, ORIGIN ),
