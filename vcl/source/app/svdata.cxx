@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:43:10 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 14:38:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,6 @@
 #ifndef VCL_INC_CONFIGSETTINGS_HXX
 #include <configsettings.hxx>
 #endif
-#define private public
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
 #endif
@@ -80,6 +79,9 @@
 #endif
 #ifndef _SV_WRKWIN_HXX
 #include <wrkwin.hxx>
+#endif
+#ifndef _SV_MSGBOX_HXX
+#include <msgbox.hxx>
 #endif
 
 #ifndef _VCL_UNOHELP_HXX
@@ -256,6 +258,18 @@ ResMgr* ImplGetResMgr()
     {
         ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
         pSVData->mpResMgr = ResMgr::SearchCreateResMgr( VCL_CREATERESMGR_NAME( vcl ), aLocale );
+
+        static bool bMessageOnce = false;
+        if( !pSVData->mpResMgr && ! bMessageOnce )
+        {
+            bMessageOnce = true;
+            const char* pMsg =
+                "Missing vcl resource. This indicates that files vital to localization are missing. "
+                "You might have a corrupt installation.";
+            fprintf( stderr, "%s\n", pMsg );
+            ErrorBox aBox( NULL, WB_OK | WB_DEF_OK, rtl::OUString( pMsg, strlen( pMsg ), RTL_TEXTENCODING_ASCII_US ) );
+            aBox.Execute();
+        }
     }
     return pSVData->mpResMgr;
 }
@@ -370,10 +384,9 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
 
     catch(::com::sun::star::java::JavaNotConfiguredException e)
     {
-        if( bErrorMessage && bAllowCancel )
+        ResMgr *pResMgr = ImplGetResMgr();
+        if( bErrorMessage && bAllowCancel && pResMgr )
         {
-            ResMgr *pResMgr = ImplGetResMgr();
-
             String aTitle(ResId(SV_ACCESSERROR_JAVA_NOT_CONFIGURED, pResMgr));
             String aMessage(ResId(SV_ACCESSERROR_JAVA_MSG, pResMgr));
 
@@ -396,10 +409,9 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
 
     catch(::com::sun::star::java::JavaVMCreationFailureException e)
     {
-        if( bErrorMessage && bAllowCancel )
+        ResMgr *pResMgr = ImplGetResMgr();
+        if( bErrorMessage && bAllowCancel && pResMgr )
         {
-            ResMgr *pResMgr = ImplGetResMgr();
-
             String aTitle(ResId(SV_ACCESSERROR_FAULTY_JAVA, pResMgr));
             String aMessage(ResId(SV_ACCESSERROR_JAVA_MSG, pResMgr));
 
@@ -422,10 +434,9 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
 
     catch(::com::sun::star::java::MissingJavaRuntimeException e)
     {
-        if( bErrorMessage && bAllowCancel )
+        ResMgr *pResMgr = ImplGetResMgr();
+        if( bErrorMessage && bAllowCancel && pResMgr )
         {
-            ResMgr *pResMgr = ImplGetResMgr();
-
             String aTitle(ResId(SV_ACCESSERROR_MISSING_JAVA, pResMgr));
             String aMessage(ResId(SV_ACCESSERROR_JAVA_MSG, pResMgr));
 
@@ -448,10 +459,9 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
 
     catch(::com::sun::star::java::JavaDisabledException e)
     {
-        if( bErrorMessage && bAllowCancel )
+        ResMgr *pResMgr = ImplGetResMgr();
+        if( bErrorMessage && bAllowCancel && pResMgr )
         {
-            ResMgr *pResMgr = ImplGetResMgr();
-
             String aTitle(ResId(SV_ACCESSERROR_JAVA_DISABLED, pResMgr));
             String aMessage(ResId(SV_ACCESSERROR_JAVA_MSG, pResMgr));
 
@@ -475,10 +485,9 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
 
     catch(::com::sun::star::uno::RuntimeException e)
     {
-        if( bErrorMessage )
+        ResMgr *pResMgr = ImplGetResMgr();
+        if( bErrorMessage && pResMgr )
         {
-            ResMgr *pResMgr = ImplGetResMgr();
-
             String aTitle;
             String aMessage(ResId(SV_ACCESSERROR_BRIDGE_MSG, pResMgr));
 
