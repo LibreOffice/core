@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:12:35 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:19:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2491,9 +2491,14 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
 //                if( (rSel.Count() >= 2) || ((rSel.Count() == 1) && (*rSel.GetObject( 0 ) != ScRange( rCursor ))) )
 //                    rMarkData.MarkFromRangeList( rTabSett.maSelection, FALSE );
 
-                // grid color
-                if( pOptions && (rTabSett.maGridColor.GetColor() != COL_AUTO) )
-                    pOptions->SetGridColor( rTabSett.maGridColor, EMPTY_STRING );
+                // grid color -- #i47435# set automatic grid color explicitly
+                if( pOptions )
+                {
+                    Color aGridColor( rTabSett.maGridColor );
+                    if( aGridColor.GetColor() == COL_AUTO )
+                        aGridColor.SetColor( SC_STD_GRIDCOLOR );
+                    pOptions->SetGridColor( aGridColor, EMPTY_STRING );
+                }
 
                 // view mode and zoom
                 if( rTabSett.mnNormalZoom )
@@ -2740,6 +2745,9 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
     }
     if (nCount)
         SetPagebreakMode( bPageMode );
+
+    // #i47426# write view options to document, needed e.g. for Excel export
+    pDoc->SetViewOptions( *pOptions );
 }
 
 void ScViewData::SetOptions( const ScViewOptions& rOpt )
