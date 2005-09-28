@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontentry.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:23:40 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 15:11:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -313,14 +313,14 @@ void FontNameDlg::init()
 
             FastPrintFontInfo aInfo;
             m_rFontManager.getFontFastInfo( *font_it, aInfo );
-            ::std::list< fontID > aDups;
+            std::list< fontID > aDups;
             String aEntry;
             if( m_rFontManager.getFileDuplicates( *font_it, aDups ) )
             {
                 FastPrintFontInfo aDupInfo;
-                ::std::list< FastPrintFontInfo > aInfos;
+                std::list< FastPrintFontInfo > aInfos;
                 aInfos.push_back( aInfo );
-                for( ::std::list< fontID >::iterator dup = aDups.begin(); dup != aDups.end(); ++dup )
+                for( std::list< fontID >::iterator dup = aDups.begin(); dup != aDups.end(); ++dup )
                 {
                     m_rFontManager.getFontFastInfo( *dup, aDupInfo );
                     aInfos.push_back( aDupInfo );
