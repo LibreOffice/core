@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xestyle.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:02:49 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:45:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2403,7 +2403,7 @@ void XclExpXFBuffer::InsertDefaultRecords()
 
     /*  Insert the real default hard cell format -> 0 is document default pattern.
         Do it here (and not already above) to really have all built-in styles. */
-    Insert( 0, ::com::sun::star::i18n::ScriptType::WEAK );
+    Insert( 0, GetDefApiScript() );
 }
 
 void XclExpXFBuffer::AppendXFIndex( sal_uInt32 nXFId )
