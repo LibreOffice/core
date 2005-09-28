@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiroot.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:33:59 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:00:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
 #ifndef SC_XIROOT_HXX
 #define SC_XIROOT_HXX
 
@@ -66,6 +67,7 @@ class XclImpAutoFilterBuffer;
 class XclImpWebQueryBuffer;
 class XclImpPivotTableManager;
 class XclImpPageSettings;
+class XclImpDocViewSettings;
 class XclImpTabViewSettings;
 
 /** Stores global buffers and data needed for Excel import filter. */
@@ -86,6 +88,7 @@ struct XclImpRootData : public XclRootData
     typedef ScfRef< XclImpWebQueryBuffer >      XclImpWebQueryBfrRef;
     typedef ScfRef< XclImpPivotTableManager >   XclImpPTableMgrRef;
     typedef ScfRef< XclImpPageSettings >        XclImpPageSettRef;
+    typedef ScfRef< XclImpDocViewSettings >     XclImpDocViewSettRef;
     typedef ScfRef< XclImpTabViewSettings >     XclImpTabViewSettRef;
 
     XclImpAddrConvRef   mxAddrConv;         /// The address converter.
@@ -106,6 +109,7 @@ struct XclImpRootData : public XclRootData
     XclImpPTableMgrRef  mxPTableMgr;        /// All pivot tables and pivot caches.
 
     XclImpPageSettRef   mxPageSett;         /// Page settings for current sheet.
+    XclImpDocViewSettRef mxDocViewSett;     /// View settings for entire document.
     XclImpTabViewSettRef mxTabViewSett;     /// View settings for current sheet.
 
     explicit            XclImpRootData( XclBiff eBiff, SfxMedium& rMedium,
@@ -173,6 +177,8 @@ public:
 
     /** Returns the page settings of the current sheet. */
     XclImpPageSettings& GetPageSettings() const;
+    /** Returns the view settings of the entire document. */
+    XclImpDocViewSettings& GetDocViewSettings() const;
     /** Returns the view settings of the current sheet. */
     XclImpTabViewSettings& GetTabViewSettings() const;
 
