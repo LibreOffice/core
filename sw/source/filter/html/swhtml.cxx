@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:47:57 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:23:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -629,6 +629,17 @@ __EXPORT SwHTMLParser::~SwHTMLParser()
 IMPL_LINK( SwHTMLParser, AsyncCallback, void*, pVoid )
 {
     nEventId=0;
+
+    // --> FME 2005-08-18 #i47907# If the document has already been destructed,
+    // the parser should be aware of this:
+    if( ( pDoc->GetDocShell() && pDoc->GetDocShell()->IsAbortingImport() )
+        || 1 == pDoc->GetLinkCnt() )
+    {
+        // wurde der Import vom SFX abgebrochen?
+        eState = SVPAR_ERROR;
+    }
+    // <--
+
     GetAsynchCallLink().Call(0);
     return 0;
 }
