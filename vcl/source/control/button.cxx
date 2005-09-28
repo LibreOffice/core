@@ -4,9 +4,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:44:50 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 14:39:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,23 +198,37 @@ void Button::Click()
 
 XubString Button::GetStandardText( StandardButtonType eButton )
 {
-    static USHORT aResIdAry[BUTTON_COUNT] =
+    static struct
     {
-        SV_BUTTONTEXT_OK,
-        SV_BUTTONTEXT_CANCEL,
-        SV_BUTTONTEXT_YES,
-        SV_BUTTONTEXT_NO,
-        SV_BUTTONTEXT_RETRY,
-        SV_BUTTONTEXT_HELP,
-        SV_BUTTONTEXT_CLOSE,
-        SV_BUTTONTEXT_MORE,
-        SV_BUTTONTEXT_IGNORE,
-        SV_BUTTONTEXT_ABORT,
-        SV_BUTTONTEXT_LESS
+        sal_uInt32 nResId;
+        const char* pDefText;
+    } aResIdAry[BUTTON_COUNT] =
+    {
+        { SV_BUTTONTEXT_OK, "~OK" },
+        { SV_BUTTONTEXT_CANCEL, "~Cancel" },
+        { SV_BUTTONTEXT_YES, "~Yes" },
+        { SV_BUTTONTEXT_NO, "~No" },
+        { SV_BUTTONTEXT_RETRY, "~Retry" },
+        { SV_BUTTONTEXT_HELP, "~Help" },
+        { SV_BUTTONTEXT_CLOSE, "~Close" },
+        { SV_BUTTONTEXT_MORE, "~More" },
+        { SV_BUTTONTEXT_IGNORE, "~Ignore" },
+        { SV_BUTTONTEXT_ABORT, "~Abort" },
+        { SV_BUTTONTEXT_LESS, "~Less" }
     };
 
-    ResId aResId( aResIdAry[(USHORT)eButton], ImplGetResMgr() );
-    XubString aText( aResId );
+    String aText;
+    ResMgr* pResMgr = ImplGetResMgr();
+    if( pResMgr )
+    {
+        ResId aResId( aResIdAry[(USHORT)eButton].nResId, pResMgr );
+        aText = String( aResId );
+    }
+    else
+    {
+        ByteString aT( aResIdAry[(USHORT)eButton].pDefText );
+        aText = String( aT, RTL_TEXTENCODING_ASCII_US );
+    }
     return aText;
 }
 
@@ -3128,7 +3142,10 @@ Image RadioButton::GetRadioImage( const AllSettings& rSettings, USHORT nFlags )
         pColorAry2[4] = rStyleSettings.GetDarkShadowColor();
         pColorAry2[5] = rStyleSettings.GetWindowTextColor();
 
-        Bitmap aBmp( ResId( SV_RESID_BITMAP_RADIO+nStyle, ImplGetResMgr() ) );
+        ResMgr* pResMgr = ImplGetResMgr();
+        Bitmap aBmp;
+        if( pResMgr )
+            aBmp = Bitmap( ResId( SV_RESID_BITMAP_RADIO+nStyle, ImplGetResMgr() ) );
         aBmp.Replace( pColorAry1, pColorAry2, 6, NULL );
         pSVData->maCtrlData.mpRadioImgList = new ImageList( aBmp, Color( 0x00, 0x00, 0xFF ), 6 );
         pSVData->maCtrlData.mnRadioStyle = nStyle;
@@ -3942,7 +3959,10 @@ Image CheckBox::GetCheckImage( const AllSettings& rSettings, USHORT nFlags )
         pColorAry2[4] = rStyleSettings.GetDarkShadowColor();
         pColorAry2[5] = rStyleSettings.GetWindowTextColor();
 
-        Bitmap aBmp( ResId( SV_RESID_BITMAP_CHECK+nStyle, ImplGetResMgr() ) );
+        ResMgr* pResMgr = ImplGetResMgr();
+        Bitmap aBmp;
+        if( pResMgr )
+            aBmp = Bitmap( ResId( SV_RESID_BITMAP_CHECK+nStyle, ImplGetResMgr() ) );
         aBmp.Replace( pColorAry1, pColorAry2, 6, NULL );
         pSVData->maCtrlData.mpCheckImgList = new ImageList( aBmp, 9 );
         pSVData->maCtrlData.mnCheckStyle = nStyle;
