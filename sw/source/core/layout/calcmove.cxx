@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:08:06 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:10:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1798,6 +1798,12 @@ BOOL SwCntntFrm::_WouldFit( SwTwips nSpace, SwLayoutFrm *pNewUpper, BOOL bTstMov
         pPrev = pPrev->GetNext();
     do
     {
+        // --> FME 2005-03-31 #b6236853# #i46181#
+        SwTwips nSecondCheck = 0;
+        SwTwips nOldSpace = nSpace;
+        BOOL bOldSplit = bSplit;
+        // <--
+
         if ( bTstMove || IsInFly() || ( IsInSct() &&
              ( pFrm->GetUpper()->IsColBodyFrm() || ( pFtnFrm &&
                pFtnFrm->GetUpper()->GetUpper()->IsColumnFrm() ) ) ) )
@@ -1833,11 +1839,15 @@ BOOL SwCntntFrm::_WouldFit( SwTwips nSpace, SwLayoutFrm *pNewUpper, BOOL bTstMov
             }
             else
                 bRet = pFrm->WouldFit( nSpace, bSplit, sal_False );
+
             pTmpFrm->Remove();
             pTmpFrm->InsertBefore( pUp, pOldNext );
         }
         else
+        {
             bRet = pFrm->WouldFit( nSpace, bSplit, sal_False );
+            nSecondCheck = !bSplit ? 1 : 0;
+        }
 
         SwBorderAttrAccess aAccess( SwFrm::GetCache(), pFrm );
         const SwBorderAttrs &rAttrs = *aAccess.Get();
@@ -1847,6 +1857,7 @@ BOOL SwCntntFrm::_WouldFit( SwTwips nSpace, SwLayoutFrm *pNewUpper, BOOL bTstMov
         if ( bRet && !bTstMove )
         {
             SwTwips nUpper;
+
             if ( pPrev )
             {
                 nUpper = CalcUpperSpace( NULL, pPrev );
@@ -1859,20 +1870,61 @@ BOOL SwCntntFrm::_WouldFit( SwTwips nSpace, SwLayoutFrm *pNewUpper, BOOL bTstMov
                     const SwSectionFrm* pSct = pFrm->FindSctFrm();
                     bCommonBorder = pSct->GetFmt()->GetBalancedColumns().GetValue();
                 }
+
+                // --> FME 2005-03-31 #b6236853# #i46181#
+                nSecondCheck = ( 1 == nSecondCheck &&
+                                 pFrm == this &&
+                                 IsTxtFrm() &&
+                                 bCommonBorder &&
+                                 !static_cast<const SwTxtFrm*>(this)->IsEmpty() ) ?
+                                 nUpper :
+                                 0;
+                // <--
+
                 nUpper += bCommonBorder ?
                           rAttrs.GetBottomLine( *(pFrm) ) :
                           rAttrs.CalcBottomLine();
+
             }
             else
             {
+                // --> FME 2005-03-31 #b6236853# #i46181#
+                nSecondCheck = 0;
+                // <--
+
                 if( pFrm->IsVertical() )
                     nUpper = pFrm->Frm().Width() - pFrm->Prt().Width();
                 else
                     nUpper = pFrm->Frm().Height() - pFrm->Prt().Height();
             }
+
             nSpace -= nUpper;
+
             if ( nSpace < 0 )
+            {
                 bRet = FALSE;
+
+                // --> FME 2005-03-31 #b6236853# #i46181#
+                if ( nSecondCheck > 0 )
+                {
+                    // The following code is indented to solve a (rare) problem
+                    // causing some frames not to move backward:
+                    // SwTxtFrm::WouldFit() claims that the whole paragraph
+                    // fits into the given space and subtracts the height of
+                    // all lines from nSpace. nSpace - nUpper is not a valid
+                    // indicator if the frame should be allowed to move backward.
+                    // We do a second check with the original remaining space
+                    // reduced by the required upper space:
+                    nOldSpace -= nSecondCheck;
+                    const bool bSecondRet = nOldSpace >= 0 && pFrm->WouldFit( nOldSpace, bOldSplit, sal_False );
+                    if ( bSecondRet && bOldSplit && nOldSpace >= 0 )
+                    {
+                        bRet = TRUE;
+                        bSplit = TRUE;
+                    }
+                }
+                // <--
+            }
         }
 
         // OD 2004-03-01 #106629# - also consider lower spacing in table cells
