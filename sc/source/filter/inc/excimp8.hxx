@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:16:39 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:56:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,7 @@ class ImportExcel8 : public ImportExcel
 
         void                    RecString( void );              // 0x07
         void                    Calccount( void );              // 0x0C
+        void                    Precision( void );              // 0x0E
         void                    Delta( void );                  // 0x10
         void                    Iteration( void );              // 0x11
         void                    Note( void );                   // 0x1C
