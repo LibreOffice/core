@@ -4,9 +4,9 @@
  *
  *  $RCSfile: soreport.cpp,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:45:30 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 13:01:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2205,6 +2205,7 @@ static bool ReadBootstrapParams( CrashReportParams &rParams )
 {
     TCHAR   szBuffer[256] = TEXT("");
     TCHAR   szModuleName[MAX_PATH];
+    TCHAR   szModuleVersionName[MAX_PATH];
     TCHAR   szDrive[_MAX_DRIVE];
     TCHAR   szDir[_MAX_DIR];
     TCHAR   szFName[_MAX_FNAME];
@@ -2216,6 +2217,7 @@ static bool ReadBootstrapParams( CrashReportParams &rParams )
     GetModuleFileName( NULL, szModuleName, MAX_PATH );
     _tsplitpath( szModuleName, szDrive, szDir, szFName, szExt );
     _tmakepath( szModuleName, szDrive, szDir, _T("bootstrap"), _T(".ini") );
+    _tmakepath( szModuleVersionName, szDrive, szDir, _T("version"), _T(".ini") );
 
     if (
         GetPrivateProfileString(
@@ -2248,11 +2250,11 @@ static bool ReadBootstrapParams( CrashReportParams &rParams )
     }
 
     GetPrivateProfileString(
-        TEXT("Bootstrap"),
+        TEXT("Version"),
         TEXT("buildid"),
         TEXT("unknown"),
         g_szBuildId, elementsof(g_szBuildId),
-        szModuleName );
+        szModuleVersionName );
 
     g_strDefaultLanguage = get_script_string( "instdb.inf", "DefaultLanguage" );
 
