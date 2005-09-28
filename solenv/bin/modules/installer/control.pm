@@ -4,9 +4,9 @@
 #
 #   $RCSfile: control.pm,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-28 13:11:48 $
+#   last change: $Author: hr $ $Date: 2005-09-28 14:39:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -360,12 +360,10 @@ sub determine_ship_directory
     if (( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi )) { $productstring = $productstring . "_languagepack"; }
     if ( $installer::globals::patch ) { $productstring = $productstring . "_patch"; }
 
-    my $compileraddon = "";
-    if ( $installer::globals::debian ) { $compileraddon = $installer::globals::debiancompileraddon; }
-
     my $destdir = $shipdrive . $installer::globals::separator . $installer::globals::compiler .
-                $installer::globals::productextension . $compileraddon . $installer::globals::separator .
+                $installer::globals::productextension . $installer::globals::separator .
                 $productstring . $installer::globals::separator .
+                $installer::globals::installertypedir . $installer::globals::separator .
                 $installer::globals::build . "_" . $installer::globals::lastminor . "_" .
                 "native_inprogress-number_" . $languagestring . "\." . $installer::globals::buildid;
 
