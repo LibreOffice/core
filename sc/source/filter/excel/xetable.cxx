@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xetable.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:03:05 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:46:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -694,7 +694,6 @@ void XclExpLabelCell::Init( const XclExpRoot& rRoot,
 
     // create the cell format
     sal_uInt16 nXclFont = mxText->RemoveLeadingFont();
-    DBG_ASSERT( nXclFont != EXC_FONT_NOTFOUND, "XclExpLabelCell::Init - missing first font" );
     if( GetXFId() == EXC_XFID_NOTFOUND )
     {
         bool bForceLineBreak = mxText->IsWrapped();
@@ -1101,15 +1100,14 @@ XclExpBlankCell::XclExpBlankCell(
     XclExpMultiCellBase( EXC_ID_BLANK, EXC_ID_MULBLANK, 0, rXclPos )
 {
     DBG_ASSERT( rXclPos.mnCol <= nLastXclCol, "XclExpBlankCell::XclExpBlankCell - invalid column range" );
-    AppendXFId( rRoot, pPattern, ApiScriptType::WEAK, nForcedXFId, nLastXclCol - rXclPos.mnCol + 1 );
+    // #i46627# use default script type instead of ApiScriptType::WEAK
+    AppendXFId( rRoot, pPattern, rRoot.GetDefApiScript(), nForcedXFId, nLastXclCol - rXclPos.mnCol + 1 );
 }
 
 bool XclExpBlankCell::TryMerge( const XclExpCellBase& rCell )
 {
-    if( const XclExpBlankCell* pBlankCell = dynamic_cast< const XclExpBlankCell* >( &rCell ) )
-        if( TryMergeXFIds( *pBlankCell ) )
-            return true;
-    return false;
+    const XclExpBlankCell* pBlankCell = dynamic_cast< const XclExpBlankCell* >( &rCell );
+    return pBlankCell && TryMergeXFIds( *pBlankCell );
 }
 
 void XclExpBlankCell::GetBlankXFIndexes( ScfUInt16Vec& rXFIndexes ) const
@@ -1142,13 +1140,11 @@ XclExpRkCell::XclExpRkCell(
 
 bool XclExpRkCell::TryMerge( const XclExpCellBase& rCell )
 {
-    if( const XclExpRkCell* pRkCell = dynamic_cast< const XclExpRkCell* >( &rCell ) )
+    const XclExpRkCell* pRkCell = dynamic_cast< const XclExpRkCell* >( &rCell );
+    if( pRkCell && TryMergeXFIds( *pRkCell ) )
     {
-        if( TryMergeXFIds( *pRkCell ) )
-        {
-            maRkValues.insert( maRkValues.end(), pRkCell->maRkValues.begin(), pRkCell->maRkValues.end() );
-            return true;
-        }
+        maRkValues.insert( maRkValues.end(), pRkCell->maRkValues.begin(), pRkCell->maRkValues.end() );
+        return true;
     }
     return false;
 }
@@ -1348,7 +1344,7 @@ XclExpColinfo::XclExpColinfo( const XclExpRoot& rRoot,
 
     // column default format
     maXFId.mnXFId = GetXFBuffer().Insert(
-        rDoc.GetMostUsedPattern( nScCol, 0, nLastScRow, nScTab ), ApiScriptType::WEAK );
+        rDoc.GetMostUsedPattern( nScCol, 0, nLastScRow, nScTab ), GetDefApiScript() );
 
     // column width
     USHORT nScWidth = rDoc.GetColWidth( nScCol, nScTab );
