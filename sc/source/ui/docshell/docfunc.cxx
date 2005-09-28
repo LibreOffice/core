@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:45:19 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:09:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1498,7 +1498,7 @@ BOOL ScDocFunc::DeleteCells( const ScRange& rRange, DelCellCmd eCmd, BOOL bRecor
     if (pDoc->HasAttrib( nUndoStartX,nUndoStartY,nTab, nMergeTestEndX,nMergeTestEndY,nTab,
                             HASATTR_MERGED | HASATTR_OVERLAPPED ))
     {
-        if (eCmd==DEL_CELLSLEFT)
+        if ( eCmd==DEL_CELLSLEFT || eCmd==DEL_CELLSUP )
             bNeedRefresh = TRUE;
 
         SCCOL nMergeStartX = nUndoStartX;
@@ -1616,20 +1616,22 @@ BOOL ScDocFunc::DeleteCells( const ScRange& rRange, DelCellCmd eCmd, BOOL bRecor
 
     if (bNeedRefresh)
     {
-        if ( eCmd==DEL_DELCOLS || eCmd==DEL_DELROWS )
-        {
-            if (eCmd==DEL_DELCOLS) nMergeTestEndX = MAXCOL;
-            if (eCmd==DEL_DELROWS) nMergeTestEndY = MAXROW;
-            ScPatternAttr aPattern( pDoc->GetPool() );
-            aPattern.GetItemSet().Put( ScMergeFlagAttr() );
+        // #i51445# old merge flag attributes must be deleted also for single cells,
+        // not only for whole columns/rows
 
-            ScMarkData aMark;                           // nur fuer Tabellen
-            for (SCTAB i=nStartTab; i<=nEndTab; i++)
-                aMark.SelectTable( i, TRUE );
-            pDoc->ApplyPatternArea( nUndoStartX, nUndoStartY, nMergeTestEndX, nMergeTestEndY,
-                                        aMark, aPattern );
-        }
-        pDoc->ExtendMerge( nUndoStartX, nUndoStartY, nMergeTestEndX, nMergeTestEndY, nTab, TRUE );
+        if ( eCmd==DEL_DELCOLS || eCmd==DEL_CELLSLEFT ) nMergeTestEndX = MAXCOL;
+        if ( eCmd==DEL_DELROWS || eCmd==DEL_CELLSUP ) nMergeTestEndY = MAXROW;
+        ScPatternAttr aPattern( pDoc->GetPool() );
+        aPattern.GetItemSet().Put( ScMergeFlagAttr() );
+
+        ScMarkData aMark;                           // only contains the sheets
+        for (SCTAB i=nStartTab; i<=nEndTab; i++)
+            aMark.SelectTable( i, TRUE );
+        pDoc->ApplyPatternArea( nUndoStartX, nUndoStartY, nMergeTestEndX, nMergeTestEndY,
+                                    aMark, aPattern );
+
+        ScRange aMergedRange( nUndoStartX, nUndoStartY, nStartTab, nMergeTestEndX, nMergeTestEndY, nEndTab );
+        pDoc->ExtendMerge( aMergedRange, TRUE );
     }
 
     if ( eCmd == DEL_DELCOLS || eCmd == DEL_DELROWS )
@@ -1657,6 +1659,8 @@ BOOL ScDocFunc::DeleteCells( const ScRange& rRange, DelCellCmd eCmd, BOOL bRecor
 
 //! pDocSh->UpdateOle(GetViewData());   // muss an der View bleiben
 //! CellContentChanged();               // muss an der View bleiben
+
+    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 
     return TRUE;
 }
@@ -1998,6 +2002,8 @@ BOOL ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
 
     aModificator.SetDocumentModified();
 
+    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
+
     delete pClipDoc;
     return TRUE;
 }
@@ -2113,7 +2119,12 @@ BOOL ScDocFunc::DeleteTable( SCTAB nTab, BOOL bRecord, BOOL bApi )
 
         rDocShell.PostPaintExtras();
         aModificator.SetDocumentModified();
-        SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+
+        SfxApplication* pSfxApp = SFX_APP();                                // Navigator
+        pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+        pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_DBAREAS_CHANGED ) );
+        pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
+
         bSuccess = TRUE;
     }
     else
@@ -3876,6 +3887,44 @@ BOOL ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
     ScDocument* pDoc = rDocShell.GetDocument();
     BOOL bUndo (pDoc->IsUndoEnabled());
 
+    SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
+
+    //  #i52120# if other area links exist at the same start position,
+    //  remove them first (file format specifies only one link definition
+    //  for a cell)
+
+    USHORT nLinkCount = pLinkManager->GetLinks().Count();
+    USHORT nRemoved = 0;
+    USHORT nLinkPos = 0;
+    while (nLinkPos<nLinkCount)
+    {
+        ::sfx2::SvBaseLink* pBase = *pLinkManager->GetLinks()[nLinkPos];
+        if ( pBase->ISA(ScAreaLink) &&
+             static_cast<ScAreaLink*>(pBase)->GetDestArea().aStart == rDestRange.aStart )
+        {
+            if ( bUndo )
+            {
+                if ( !nRemoved )
+                {
+                    // group all remove and the insert action
+                    String aUndo = ScGlobal::GetRscString( STR_UNDO_INSERTAREALINK );
+                    rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo );
+                }
+
+                ScAreaLink* pOldArea = static_cast<ScAreaLink*>(pBase);
+                rDocShell.GetUndoManager()->AddUndoAction(
+                    new ScUndoRemoveAreaLink( &rDocShell,
+                        pOldArea->GetFile(), pOldArea->GetFilter(), pOldArea->GetOptions(),
+                        pOldArea->GetSource(), pOldArea->GetDestArea(), pOldArea->GetRefreshDelay() ) );
+            }
+            pLinkManager->Remove( pBase );
+            nLinkCount = pLinkManager->GetLinks().Count();
+            ++nRemoved;
+        }
+        else
+            ++nLinkPos;
+    }
+
     String aFilterName = rFilter;
     String aNewOptions = rOptions;
     if (!aFilterName.Len())
@@ -3885,8 +3934,6 @@ BOOL ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
     //  aren't reset when the filter name is changed in ScAreaLink::DataChanged
     ScDocumentLoader::RemoveAppPrefix( aFilterName );
 
-    SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
-
     ScAreaLink* pLink = new ScAreaLink( &rDocShell, rFile, aFilterName,
                                         aNewOptions, rSource, rDestRange, nRefresh );
     pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, rFile, &aFilterName, &rSource );
@@ -3894,9 +3941,13 @@ BOOL ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
     //  Undo fuer den leeren Link
 
     if (bUndo)
+    {
         rDocShell.GetUndoManager()->AddUndoAction( new ScUndoInsertAreaLink( &rDocShell,
                                                     rFile, aFilterName, aNewOptions,
                                                     rSource, rDestRange, nRefresh ) );
+        if ( nRemoved )
+            rDocShell.GetUndoManager()->LeaveListAction();  // undo for link update is still separate
+    }
 
     //  Update hat sein eigenes Undo
 
