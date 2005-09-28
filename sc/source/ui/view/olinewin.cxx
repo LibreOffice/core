@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olinewin.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:01:05 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:16:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,8 +273,9 @@ size_t ScOutlineWindow::GetLevelCount() const
 
 long ScOutlineWindow::GetLevelPos( size_t nLevel ) const
 {
+    // #i51970# must always return the *left* edge of the area used by a level
     long nPos = static_cast< long >( SC_OL_POSOFFSET + nLevel * SC_OL_BITMAPSIZE );
-    return mbMirrorLevels ? (GetOutputSizeLevel() - nPos - 1) : nPos;
+    return mbMirrorLevels ? (GetOutputSizeLevel() - nPos - SC_OL_BITMAPSIZE) : nPos;
 }
 
 size_t ScOutlineWindow::GetLevelFromPos( long nLevelPos ) const
