@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:17:05 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:28:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1855,7 +1855,8 @@ void ScColumn::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
 
 void ScColumn::UpdateInsertTab( SCTAB nTable)
 {
-    if (nTab >= nTable) nTab++;
+    if (nTab >= nTable)
+        pAttrArray->SetTab(++nTab);
     if( pItems )
         UpdateInsertTabOnlyCells( nTable );
 }
