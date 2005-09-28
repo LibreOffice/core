@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namebuff.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:58:40 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:43:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,75 +135,56 @@ UINT16  nShrCnt;
 #endif
 
 
-ShrfmlaBuffer::ShrfmlaBuffer( RootData* pRD ) :
-    ExcRoot( pRD )
+size_t
+ShrfmlaBuffer::ScAddressHashFunc::operator() (const ScAddress &addr) const
 {
-    nBase = 16384;  // Range~ und Shared~ Dingens mit jeweils der Haelfte Ids
+    // Use something simple, it is just a hash.
+    return (static_cast <UINT16> (addr.Row()) << 0) |
+           (static_cast <UINT8> (addr.Col()) << 16) |
+           (static_cast <UINT8> (addr.Tab()) << 24);
+}
 
+static const UINT16 nBase = 16384;  // Range~ und Shared~ Dingens mit jeweils der Haelfte Ids
+ShrfmlaBuffer::ShrfmlaBuffer( RootData* pRD ) :
+    ExcRoot( pRD ),
+    cur_index (nBase)
+{
 #ifdef DBG_UTIL
     nShrCnt = 0;
 #endif
 }
 
-
 ShrfmlaBuffer::~ShrfmlaBuffer()
 {
-    register ScAddress* pDel = ( ScAddress* ) List::First();
-
-    while( pDel )
-    {
-        delete pDel;
-        pDel = ( ScAddress* ) List::Next();
-    }
 }
-
 
 void ShrfmlaBuffer::Store( const ScRange& rRange, const ScTokenArray& rToken )
 {
     String          aName( CreateName( rRange.aStart ) );
 
-    DBG_ASSERT( List::Count() + nBase <= 0xFFFF, "*ShrfmlaBuffer::Store(): Gleich wird mir schlecht...!" );
+    DBG_ASSERT( cur_index <= 0xFFFF, "*ShrfmlaBuffer::Store(): Gleich wird mir schlecht...!" );
 
     ScRangeData* pData = new ScRangeData( pExcRoot->pIR->GetDocPtr(), aName, rToken, rRange.aStart, RT_SHARED );
-
-    pData->SetIndex( ( UINT16 ) ( List::Count() + nBase ) );
-
+    pData->SetIndex (cur_index);
     pExcRoot->pIR->GetNamedRanges().Insert( pData );
-
-    ScRange*        pNew = new ScRange( rRange );
-    Insert( pNew, LIST_APPEND );
+    index_hash[rRange.aStart] = cur_index;
+    index_list.push_front (rRange);
+    cur_index++;
 }
 
 
-UINT16 ShrfmlaBuffer::Find( const ScAddress aAddr )
+UINT16 ShrfmlaBuffer::Find( const ScAddress & aAddr ) const
 {
-    register ScRange*   pAkt = ( ScRange* ) List::First();
-    ScAddress           aSearchAddr( aAddr );
+    ShrfmlaHash::const_iterator hash = index_hash.find (aAddr);
+    if (hash != index_hash.end())
+        return hash->second;
 
-    register UINT16     nPos = nBase;
-
-    while( pAkt )
-    {
-        if( pAkt->aStart == aSearchAddr )
-            return nPos;
-
-        nPos++;
-        pAkt = ( ScRange* ) List::Next();
-    }
-
-    nPos = nBase;
-    pAkt = ( ScRange* ) List::First();
-
-    while( pAkt )
-    {
-        if( pAkt->In( aSearchAddr ) )
-            return nPos;
-
-        nPos++;
-        pAkt = ( ScRange* ) List::Next();
-    }
-
-    return nPos;
+    // It was not hashed on the top left corner ?  do a brute force search
+    unsigned int ind = nBase;
+    for (ShrfmlaList::const_iterator ptr = index_list.end(); ptr != index_list.begin() ; ind++)
+        if ((--ptr)->In (aAddr))
+            return ind;
+    return cur_index;
 }
 
 
