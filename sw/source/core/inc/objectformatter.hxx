@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectformatter.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:52:28 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:09:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,17 +111,36 @@ class SwObjectFormatter
                                                       SwLayAction* _pLayAction );
 
         virtual SwFrm& GetAnchorFrm() = 0;
-        const SwPageFrm& GetPageFrm() const;
-        const bool FormatOnlyAsCharAnchored() const;
-        const bool ConsiderWrapOnObjPos() const;
-        SwLayAction* GetLayAction();
+
+        inline const SwPageFrm& GetPageFrm() const
+        {
+            return mrPageFrm;
+        }
+
+        inline const bool ConsiderWrapOnObjPos() const
+        {
+            return mbConsiderWrapOnObjPos;
+        }
+
+        inline SwLayAction* GetLayAction()
+        {
+            return mpLayAction;
+        }
 
         /** method to restrict the format of floating screen objects to
             as-character anchored ones
 
             @author OD
         */
-        void SetFormatOnlyAsCharAnchored();
+        inline void SetFormatOnlyAsCharAnchored()
+        {
+            mbFormatOnlyAsCharAnchored = true;
+        }
+
+        inline const bool FormatOnlyAsCharAnchored() const
+        {
+            return mbFormatOnlyAsCharAnchored;
+        }
 
         /** performs the intrinsic format of a given floating screen object and its content.
 
