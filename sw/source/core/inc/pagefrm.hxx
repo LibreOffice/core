@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagefrm.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:52:50 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:09:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 #endif
 
 class SwFlyFrm;
-class SwFrmFmt;
+class SwFlyFrmFmt;
 class SwPageDesc;
 class SwCntntFrm;
 struct SwPosition;
@@ -233,9 +233,15 @@ public:
     //Schickt an alle ContentFrames ein Prepare wg. geaenderter Registervorlage
     void PrepareRegisterChg();
 
-    //Haengt einen Fly an den geeigneten LayoutFrm unterhalb der Seite,
-    //fuer SwFEShell und Modify der Flys.
-    SwFrm *PlaceFly( SwFlyFrm *, SwFrmFmt *, const SwFmtAnchor * );
+    // --> OD 2005-06-09 #i50432# - adjust method description and synopsis.
+    // Appends a fly frame - the given one or a new one - at the page frame.
+    // Needed for <Modify> and <MakeFrms>
+    // - return value not needed any more
+    // - second parameter is of type <SwFlyFrmFmt*>
+    // - third parameter only needed for assertion, but calling method assures
+    //   this assertion. Thus, delete it.
+    void PlaceFly( SwFlyFrm* pFly, SwFlyFrmFmt* pFmt );
+    // <--
 
     virtual BOOL GetCrsrOfst( SwPosition *, Point&,
                               SwCrsrMoveState* = 0 ) const;
