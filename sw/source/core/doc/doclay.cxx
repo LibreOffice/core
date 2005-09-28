@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:13:34 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:04:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,6 +223,9 @@
 #endif
 #ifndef _FTNIDX_HXX
 #include <ftnidx.hxx>
+#endif
+#ifndef _FTNINFO_HXX
+#include <ftninfo.hxx>
 #endif
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
@@ -642,18 +645,12 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
     else
     {
         ASSERT( RES_DRAWFRMFMT == rSource.Which(), "Weder Fly noch Draw." );
-        // --> OD 2005-06-10 #i50086# - move object to visible layer, only if
-        // source object is visible.
+        // OD 2005-08-02 #i52780# - Note: moving object to visible layer not needed.
         SwDrawContact* pSourceContact = (SwDrawContact *)rSource.FindContactObj();
 
         SwDrawContact* pContact = new SwDrawContact( (SwDrawFrmFmt*)pDest,
                                 CloneSdrObj( *pSourceContact->GetMaster(),
                                         bCopyIsMove && this == pSrcDoc ) );
-        if ( IsVisibleLayerId( pSourceContact->GetMaster()->GetLayer() ) )
-        {
-            pContact->MoveObjToVisibleLayer( pContact->GetMaster() );
-        }
-        // <--
         // --> OD 2005-05-23 #i49730# - notify draw frame format
         // that position attributes are already set, if the position attributes
         // are already set at the source draw frame format.
@@ -700,7 +697,9 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
 SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, sal_Bool bMoveWithinDoc,
                                 sal_Bool bInsInPage )
 {
-    SdrPage *pPg = MakeDrawModel()->GetPage( 0 );
+    // --> OD 2005-08-08 #i52858# - method name changed
+    SdrPage *pPg = GetOrCreateDrawModel()->GetPage( 0 );
+    // <--
     if( !pPg )
     {
         pPg = GetDrawModel()->AllocPage( sal_False );
@@ -2156,8 +2155,20 @@ void SwDoc::SetAllUniqueFlyNames()
     if( GetFtnIdxs().Count() )
     {
         SwTxtFtn::SetUniqueSeqRefNo( *this );
-        SwNodeIndex aTmp( GetNodes() );
-        GetFtnIdxs().UpdateFtn( aTmp );
+        // --> FME 2005-08-02 #i52775# Chapter footnotes did not
+        // get updated correctly. Calling UpdateAllFtn() instead of
+        // UpdateFtn() solves this problem, but I do not dare to
+        // call UpdateAllFtn() in all cases: Safety first.
+        if ( FTNNUM_CHAPTER == GetFtnInfo().eNum )
+        {
+            GetFtnIdxs().UpdateAllFtn();
+        }
+        // <--
+        else
+        {
+            SwNodeIndex aTmp( GetNodes() );
+            GetFtnIdxs().UpdateFtn( aTmp );
+        }
     }
 
     // neues Document und keine seitengebundenen Rahmen/DrawObjecte gefunden,
