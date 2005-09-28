@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpmerge.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:30:24 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:06:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <algorithm>
 #include <sys/types.h>
 #include <sys/stat.h>
-
+#include <bootstrp/appdef.hxx>
 /*****************************************************************************/
 void HelpParser::FillInFallbacks( LangHashMap& rElem_out, //int nLangIdx_in ){
                                                             ByteString sLangIdx_in ){
@@ -381,8 +381,29 @@ bool HelpParser::Merge(
                 ProcessHelp( aLangHM , sCur , pResData , aMergeDataFile );
             }
 
-            String test( testpath , RTL_TEXTENCODING_ASCII_US ); // check and remove '\\'
-            file->Write(test); // Always write!
+            String merged_file( testpath , RTL_TEXTENCODING_ASCII_US ); // check and remove '\\'
+
+            String aTempFile2 = Export::GetTempFile().GetFull();
+            DirEntry( aTempFile2 ).Kill();
+            aTempFile2.SearchAndReplaceAll( '\\' , '/' ) ;
+            aTempFile2 = aTempFile2.Copy( aTempFile2.SearchBackward( '/' )+1 , aTempFile2.Len() );
+            String merged_file_tmp( testpath , RTL_TEXTENCODING_ASCII_US );
+            merged_file_tmp.Append( aTempFile2 );
+            merged_file_tmp.Append( String( GetEnv( "INPATH" ) , RTL_TEXTENCODING_ASCII_US ) );
+            //String s_merged_file_tmp( merged_file_tmp , RTL_TEXTENCODING_ASCII_US ) ;
+
+            file->Write( merged_file_tmp ); // Always write!
+            DirEntry present_file( merged_file );
+            if( present_file.Exists() )
+            {
+                present_file.Kill();
+            }
+//            printf("DBG: Copy %s to %s\n", ByteString( merged_file_tmp , RTL_TEXTENCODING_ASCII_US ).GetBuffer() ,
+//                                           ByteString( merged_file , RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+
+            DirEntry aSourceFile( merged_file_tmp );
+            aSourceFile.MoveTo( merged_file );
+
         }
     if( !sUsedTempFile.EqualsIgnoreCaseAscii( "" ) ){
         DirEntry aTempFile( sUsedTempFile );
