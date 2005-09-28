@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 01:39:55 $
+#   last change: $Author: hr $ $Date: 2005-09-28 15:47:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -133,6 +133,10 @@ SCPDEFS+=-DSYSTEM_PORTAUDIO
 
 .IF "$(SYSTEM_MYSPELL)" == "YES"
 SCPDEFS+=-DSYSTEM_MYSPELL
+.ENDIF
+
+.IF "$(SYSTEM_XALAN)" == "YES"
+SCPDEFS+=-DSYSTEM_XALAN
 .ENDIF
 
 SCPDEFS+=\
