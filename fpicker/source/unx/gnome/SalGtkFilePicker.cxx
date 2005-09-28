@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalGtkFilePicker.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:34:47 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 14:09:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,6 +172,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFact
     m_pFilterList( NULL ),
     bVersionWidthUnset( false ),
     mbPreviewState( sal_False ),
+    mHID_Preview( 0 ),
     m_pPreview( NULL ),
     m_PreviewImageWidth( 256 ),
     m_PreviewImageHeight( 256 ),
@@ -315,11 +316,20 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFact
     gtk_container_add (GTK_CONTAINER (m_pFilterExpander), scrolled_window);
     gtk_widget_show (scrolled_window);
 
-    ByteString sNoGL( getenv( "SAL_NOEXPANDFPICKER" ) );
-    if( sNoGL.ToLowerAscii() != "true"  )
+    ByteString sExpand(getenv("SAL_EXPANDFPICKER"));
+    sal_Int32 nExpand  = sExpand.ToInt32();
+    switch (nExpand)
     {
-        expandexpanders(GTK_CONTAINER(m_pDialog));
-        gtk_expander_set_expanded(GTK_EXPANDER(m_pFilterExpander), TRUE);
+        default:
+        case 0:
+            break;
+        case 1:
+            gtk_expander_set_expanded(GTK_EXPANDER(m_pFilterExpander), TRUE);
+            break;
+        case 2:
+            expandexpanders(GTK_CONTAINER(m_pDialog));
+            gtk_expander_set_expanded(GTK_EXPANDER(m_pFilterExpander), TRUE);
+            break;
     }
 
     m_pFilterStore = gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_STRING,
