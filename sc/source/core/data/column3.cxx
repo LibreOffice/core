@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column3.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:17:40 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:29:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -886,14 +886,22 @@ ScBaseCell* ScColumn::CloneCell(SCSIZE nIndex, USHORT nFlags,
                         }
                     }
                     if ( pNew && pSource->GetNotePtr() && ( nFlags & IDF_NOTE ) )
-                        pNew->SetNote(*pSource->GetNotePtr());
+                    {
+                        // #i52342# the note must be constructed with the destination document pointer
+                        ScPostIt aNewNote( *pSource->GetNotePtr(), pDestDoc );
+                        pNew->SetNote( aNewNote );
+                    }
                 }
             }
             break;
     }
 
     if ( !pNew && pSource->GetNotePtr() && ( nFlags & IDF_NOTE ) )
-        pNew = new ScNoteCell(*pSource->GetNotePtr());
+    {
+        // #i52342# the note must be constructed with the destination document pointer
+        ScPostIt aNewNote( *pSource->GetNotePtr(), pDestDoc );
+        pNew = new ScNoteCell( aNewNote );
+    }
 
     return pNew;
 }
