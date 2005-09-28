@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.136 $
+ *  $Revision: 1.137 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:10:23 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:25:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2232,8 +2232,11 @@ void SwWW8ImplReader::SetAttributesAtGrfNode( SvxMSDffImportRec* pRecord,
     if( pIdx && (pGrfNd = rDoc.GetNodes()[pIdx->GetIndex() + 1]->GetGrfNode() ))
     {
         Size aSz(pGrfNd->GetTwipSize());
-        ULONG rHeight = aSz.Height();
-        ULONG rWidth  = aSz.Width();
+        // --> OD 2005-08-01 #124722# - use type <sal_uInt64> instead of <ULONG>
+        // to get correct results in the following calculations.
+        sal_uInt64 rHeight = aSz.Height();
+        sal_uInt64 rWidth  = aSz.Width();
+        // <--
         if( !rWidth && pF)
             rWidth  = pF->nXaRight  - pF->nXaLeft;
         else if( !rHeight && pF)
@@ -2373,14 +2376,25 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         Strangely in this case the FSPA value seems to be considered before
         the newer escher nXRelTo record.
         */
-        if (
-            ((pRecord->nXRelTo == 2) && (pFSPA->nbx != pRecord->nXRelTo))
-            && ((pRecord->nYRelTo == 2) && (pFSPA->nby != pRecord->nYRelTo))
-            )
+        // --> OD 2005-08-04 #i52565# - correct condition checking:
+        // first check, if <nXRelTo> and <nYRelTo> have default values.  This
+        // is a hint that these values aren't set by the escher import - see
+        // method <SwMSDffManager::ProcessObj(..)>. Then, check if for each
+        // values, if it differs from the one in the FSPA.
+        if ( pRecord->nXRelTo == 2 && pRecord->nYRelTo == 2 )
         {
-            pRecord->nXRelTo = pFSPA->nbx;
-            pRecord->nYRelTo = pFSPA->nby;
+            // if <nXRelTo> differs from <FSPA.nbx> overwrite <nXRelTo>
+            if ( pFSPA->nbx != pRecord->nXRelTo )
+            {
+                pRecord->nXRelTo = pFSPA->nbx;
+            }
+            // if <nYRelTo> differs from <FSPA.nby> overwrite <nYRelTo>
+            if ( pFSPA->nby != pRecord->nYRelTo )
+            {
+                pRecord->nYRelTo = pFSPA->nby;
+            }
         }
+        // <--
     }
 
     UINT32 nXRelTo = nCntRelTo > pRecord->nXRelTo ? pRecord->nXRelTo : 1;
@@ -2752,9 +2766,9 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
     //cmc: We're in a table, and the element has the magic Word XP bit set
     //to enable layout inside a cell
-    // --> OD, MM 2004-10-15 #i33442#
+    // --> OD 2005-08-10 #124714# - undo change made for issue #i33442#
     bool bLayoutInTableCell = ( nInTable &&
-                                pRecord->nLayoutInTableCell != 0x80000000 );
+                                pRecord->nLayoutInTableCell & 0x00008000 );
     // <--
 
     // OD 14.10.2003 #i18732#
@@ -3236,7 +3250,9 @@ void SwWW8ImplReader::GrafikCtor()  // Fuer SVDraw und VCControls und Escher
 {
     if (!pDrawModel)
     {
-        rDoc.MakeDrawModel( );
+        // --> OD 2005-08-08 #i52858# - method name changed
+        rDoc.GetOrCreateDrawModel();
+        // <--
         pDrawModel  = rDoc.GetDrawModel();
         ASSERT(pDrawModel, "Kann DrawModel nicht anlegen");
         pDrawPg = pDrawModel->GetPage(0);
