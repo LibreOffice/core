@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poly.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:41:07 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:57:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2197,18 +2197,23 @@ void Polygon::Write( SvStream& rOStream ) const
         {
             // get two control points
             Point aControlA = mpImplPolygon->mpPointAry[a++];
-            Point aControlB = mpImplPolygon->mpPointAry[a++];
 
-            // add point A
-            ::basegfx::B2DPoint aPoA(aPointA.X(), aPointA.Y());
-            aRetval.append(aPoA);
+            DBG_ASSERT( a < nCount, "Polygon::getB2DPolygon(): invalid polygon (polygon is ending with only one control point)" );
+            if ( a < nCount )
+            {
+                Point aControlB = mpImplPolygon->mpPointAry[a++];
 
-            // calculate Vectors and add them
-            const sal_uInt32 nDestIndex(aRetval.count() - 1L);
-            ::basegfx::B2DVector aVeA(aControlA.X() - aPointA.X(), aControlA.Y() - aPointA.Y());
-            aRetval.setControlVectorA(nDestIndex, aVeA);
-            ::basegfx::B2DVector aVeB(aControlB.X() - aPointA.X(), aControlB.Y() - aPointA.Y());
-            aRetval.setControlVectorB(nDestIndex, aVeB);
+                // add point A
+                ::basegfx::B2DPoint aPoA(aPointA.X(), aPointA.Y());
+                aRetval.append(aPoA);
+
+                // calculate Vectors and add them
+                const sal_uInt32 nDestIndex(aRetval.count() - 1L);
+                ::basegfx::B2DVector aVeA(aControlA.X() - aPointA.X(), aControlA.Y() - aPointA.Y());
+                aRetval.setControlVectorA(nDestIndex, aVeA);
+                ::basegfx::B2DVector aVeB(aControlB.X() - aPointA.X(), aControlB.Y() - aPointA.Y());
+                aRetval.setControlVectorB(nDestIndex, aVeB);
+            }
         }
         else
         {
