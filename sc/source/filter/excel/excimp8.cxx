@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:56:00 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:42:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,6 +174,14 @@ void ImportExcel8::Calccount( void )
 }
 
 
+void ImportExcel8::Precision( void )
+{
+    ScDocOptions aOpt = pD->GetDocOptions();
+    aOpt.SetCalcAsShown( aIn.ReaduInt16() == 0 );
+    pD->SetDocOptions( aOpt );
+}
+
+
 void ImportExcel8::Delta( void )
 {
     ScDocOptions    aOpt = pD->GetDocOptions();
@@ -189,6 +197,7 @@ void ImportExcel8::Iteration( void )
     pD->SetDocOptions( aOpt );
 }
 
+
 void ImportExcel8:: WinProtection( void )
 {
     if( aIn.ReaduInt16() != 0 )
@@ -197,37 +206,7 @@ void ImportExcel8:: WinProtection( void )
 
 void ImportExcel8::Note( void )
 {
-    XclAddress aXclPos;
-    sal_uInt16 nFlags, nObjId;
-    aIn >> aXclPos >> nFlags >> nObjId;
-
-    ScAddress aScNotePos( ScAddress::UNINITIALIZED );
-    SCTAB nScTab = GetCurrScTab();
-    if( GetAddressConverter().ConvertAddress( aScNotePos, aXclPos, nScTab, true ) )
-    {
-        if( nObjId != EXC_OBJ_INVALID_ID )
-        {
-            XclImpObjectManager& rObjManager = GetObjectManager();
-            if( XclImpEscherObj* pEscherObj = rObjManager.GetEscherObjAcc( nScTab, nObjId ) )
-            {
-                if( XclImpEscherNote* pNoteObj = PTR_CAST( XclImpEscherNote, pEscherObj ) )
-                {
-                    pNoteObj->SetScPos( aScNotePos );
-                    if( const XclImpString* pString = pNoteObj->GetString() )
-                    {
-                        ::std::auto_ptr< EditTextObject > pEditObj(
-                            XclImpStringHelper::CreateNoteObject( GetRoot(), *pString ) );
-                        bool bVisible = ::get_flag( nFlags, EXC_NOTE_VISIBLE );
-
-                        ScDocument* pDoc = GetDocPtr();
-                        ScPostIt aNote( pEditObj.get(), pDoc );
-                        aNote.SetShown( bVisible );
-                        GetDoc().SetNote( aScNotePos.Col(), aScNotePos.Row(), nScTab, aNote );
-                    }
-                }
-            }
-        }
-    }
+    GetObjectManager().ReadNote( maStrm );
     pLastFormCell = NULL;
 }
 
@@ -235,7 +214,7 @@ void ImportExcel8::Note( void )
 void ImportExcel8::Cont( void )
 {
     if( bObjSection )
-        GetObjectManager().ReadMsodrawing( aIn );
+        GetObjectManager().ReadMsoDrawing( aIn );
 }
 
 
@@ -317,19 +296,19 @@ void ImportExcel8::Cellmerging( void )
 
 void ImportExcel8::Msodrawinggroup( void )
 {
-    GetObjectManager().ReadMsodrawinggroup( maStrm );
+    GetObjectManager().ReadMsoDrawingGroup( maStrm );
 }
 
 
 void ImportExcel8::Msodrawing( void )
 {
-    GetObjectManager().ReadMsodrawing( maStrm );
+    GetObjectManager().ReadMsoDrawing( maStrm );
 }
 
 
 void ImportExcel8::Msodrawingselection( void )
 {
-    GetObjectManager().ReadMsodrawingselection( maStrm );
+    GetObjectManager().ReadMsoDrawingSelection( maStrm );
 }
 
 void ImportExcel8::Labelsst( void )
@@ -476,44 +455,7 @@ void ImportExcel8::PostDocLoad( void )
 
 void ImportExcel8::ApplyEscherObjects()
 {
-    XclImpObjectManager& rObjManager = GetObjectManager();
-
-    ScfProgressBar aProgress( GetDocShell(), STR_PROGRESS_CALCULATING );
-    sal_Int32 nSegApply = aProgress.AddSegment( 1000 );
-
-    if( rObjManager.HasEscherStream() )
-    {
-        XclImpDffManager& rDffManager = rObjManager.GetDffManager();
-        if( const SvxMSDffShapeInfos* pShapeInfos = rDffManager.GetShapeInfos() )
-        {
-            if( USHORT nInfoCount = pShapeInfos->Count() )
-            {
-                sal_Int32 nSegSetObj = aProgress.AddSegment( 200 );
-
-                ScfProgressBar& rSubProgress = aProgress.GetSegmentProgressBar( nSegSetObj );
-                sal_Int32 nSubSeg = rSubProgress.AddSegment( nInfoCount );
-                rSubProgress.ActivateSegment( nSubSeg );
-
-                for( USHORT nInfo = 0; nInfo < nInfoCount; ++nInfo )
-                {
-                    if( const SvxMSDffShapeInfo* pShapeInfo = pShapeInfos->GetObject( nInfo ) )
-                    {
-                        sal_uInt32 nShapeId = pShapeInfo->nShapeId;
-                        XclImpEscherObj* pEscherObj = rObjManager.GetEscherObjAcc( pShapeInfo->nFilePos );
-                        if( pEscherObj && !pEscherObj->GetIsSkip() && !pEscherObj->GetSdrObj() )
-                        {
-                            SvxMSDffImportData aDffImportData;
-                            rDffManager.SetSdrObject( pEscherObj, nShapeId, aDffImportData );
-                        }
-                    }
-                    rSubProgress.Progress();
-                }
-            }
-        }
-    }
-
-    ScfProgressBar& rApplyProgress = aProgress.GetSegmentProgressBar( nSegApply );
-    rObjManager.Apply( rApplyProgress );
+    GetObjectManager().ConvertObjects();
 }
 
 
