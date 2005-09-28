@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.205 $
+ *  $Revision: 1.206 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:28:11 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 14:44:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3024,6 +3024,7 @@ ImplFontEntry* ImplFontCache::GetFallback( ImplDevFontList* pFontList,
             "shayyalmt", "naskmt", "",
             "david", "nachlieli", "lucidagrande", "",
             "norasi", "angsanaupc", "",
+            "khmerossystem", "",
             0
         };
 
@@ -6127,9 +6128,9 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
     ImplFontSelectData aFontSelData = mpFontEntry->maFontSelData;
     Size aFontSize( aFontSelData.mnWidth, aFontSelData.mnHeight );
 
-    // when device specific font substitution may have been performed
-    // the originally selected font then make sure that a fallback to
-    // this font is performed first
+    // when device specific font substitution may have been performed for
+    // the originally selected font then make sure that a fallback to that
+    // font is performed first
     int nDevSpecificFallback = 0;
     if( mpOutDevData && mpOutDevData->mpFirstFontSubstEntry )
         nDevSpecificFallback = 1;
