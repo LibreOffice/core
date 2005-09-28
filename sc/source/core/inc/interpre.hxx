@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpre.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:33:58 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:35:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -555,10 +555,6 @@ void MEMat(ScMatrix* mM, SCSIZE n);
 void MFastMult(ScMatrix* pA, ScMatrix* pB, ScMatrix* pR, SCSIZE n, SCSIZE m, SCSIZE l);
 void MFastSub(ScMatrix* pA, ScMatrix* pB, ScMatrix* pR, SCSIZE n, SCSIZE m);
 void MFastTrans(ScMatrix* pA, ScMatrix* pR, SCSIZE n, SCSIZE m);
-BOOL MFastBackSubst(ScMatrix* pA, ScMatrix* pR, SCSIZE n, BOOL bIsUpper);
-BOOL ScMatLUP(ScMatrix* mA, SCSIZE m, SCSIZE p,
-              ScMatrix* mL, ScMatrix* mU, ScMatrix* mP,
-              ULONG& rPermutCounter, BOOL& bIsInvertable);
 void ScMatDet();
 void ScMatInv();
 void ScMatMult();
