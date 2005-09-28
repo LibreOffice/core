@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scuiasciiopt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:41:39 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:08:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -423,6 +423,13 @@ IMPL_LINK( ScImportAsciiDlg, SeparatorHdl, Control*, pCtrl )
     DBG_ASSERT( pCtrl, "ScImportAsciiDlg::SeparatorHdl - missing sender" );
     DBG_ASSERT( !aRbFixed.IsChecked(), "ScImportAsciiDlg::SeparatorHdl - not allowed in fixed width" );
 
+    /*  #i41550# First update state of the controls. The GetSeparators()
+        function needs final state of the check boxes. */
+    if( (pCtrl == &aCkbOther) && aCkbOther.IsChecked() )
+        aEdOther.GrabFocus();
+    else if( pCtrl == &aEdOther )
+        aCkbOther.Check( aEdOther.GetText().Len() > 0 );
+
     String aOldFldSeps( maFieldSeparators);
     maFieldSeparators = GetSeparators();
     sal_Unicode cOldSep = mcTextSep;
@@ -432,10 +439,6 @@ IMPL_LINK( ScImportAsciiDlg, SeparatorHdl, Control*, pCtrl )
     if (cOldSep != mcTextSep || aOldFldSeps != maFieldSeparators)
         UpdateVertical();
 
-    if( (pCtrl == &aCkbOther) && aCkbOther.IsChecked() )
-        aEdOther.GrabFocus();
-    else if( pCtrl == &aEdOther )
-        aCkbOther.Check( aEdOther.GetText().Len() > 0 );
     maTableBox.Execute( CSVCMD_NEWCELLTEXTS );
     return 0;
 }
