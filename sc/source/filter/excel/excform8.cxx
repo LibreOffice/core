@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:55:43 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:41:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,43 +207,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
                 aPool >> aStack;
                 break;
             case 0x11: // Range                                 [314 265]
-            {
-                aStack >> nMerk0;
-                aPool << aStack << ocRange << nMerk0;
-                aPool >> aStack;
-#if 0
-                // wenn erster und zweiter Ausdruck auf'm Stack Single Referenzen
-                // sind, dann Area Reference erzeugen, ansonsten Fehlerhaften Aus-
-                // druck generieren
-                BOOL    bErrorToken = TRUE;
-                TokenId nMerk1;
-
-                aStack >> nMerk0;
-                aStack >> nMerk1;
-
-                if( aPool.GetType( nMerk0 ) == T_RefC &&
-                    aPool.GetType( nMerk1 ) == T_RefC )
-                {
-                    register const SingleRefData *pRef1 = aPool.GetSRD( nMerk1 );
-                    register const SingleRefData *pRef2 = aPool.GetSRD( nMerk0 );
-                    if( pRef1 && pRef2 )
-                    {
-                        aCRD.Ref1 = *pRef1;
-                        aCRD.Ref2 = *pRef2;
-                        aStack << aPool.Store( aCRD );
-                        bErrorToken = FALSE;
-                    }
-                }
-
-                if( bErrorToken )
-                {
-                    aPool << ocNoName << ocOpen << nMerk1 << ocSep
-                        << nMerk0 << ocClose;
-
-                    aPool >> aStack;
-                }
-#endif
-            }
+                PushRangeOperator();
                 break;
             case 0x12: // Unary Plus                            [312 264]
                 aPool << ocAdd << aStack;
@@ -375,14 +339,14 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
                 DefTokenId          eOc;
                 switch( nByte )
                 {
-                    case 0x00:
-                    case 0x07:
-                    case 0x17:
-                    case 0x1D:
-                    case 0x24:      eOc = ocStop;       break;
-                    case 0x0F:
-                    case 0x2A:      eOc = ocNoValue;    break;
-                    default:        eOc = ocNoName;
+                    case EXC_ERR_NULL:
+                    case EXC_ERR_DIV0:
+                    case EXC_ERR_VALUE:
+                    case EXC_ERR_REF:
+                    case EXC_ERR_NAME:
+                    case EXC_ERR_NUM:   eOc = ocStop;       break;
+                    case EXC_ERR_NA:    eOc = ocNoValue;    break;
+                    default:            eOc = ocNoName;
                 }
                 aPool << eOc;
                 if( eOc != ocStop )
