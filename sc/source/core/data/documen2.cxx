@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:19:25 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:30:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1518,6 +1518,8 @@ BOOL ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )
                 UpdateRefAreaLinks( URM_REORDER, aSourceRange, 0,0,nDz );
                 if ( pCondFormList )
                     pCondFormList->UpdateMoveTab( nOldPos, nNewPos );
+                if ( pValidationList )
+                    pValidationList->UpdateMoveTab( nOldPos, nNewPos );
                 if ( pUnoBroadcaster )
                     pUnoBroadcaster->Broadcast( ScUpdateRefHint( URM_REORDER,
                                     aSourceRange, 0,0,nDz ) );
@@ -1631,6 +1633,8 @@ BOOL ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
                 //  update conditional formats after table is inserted
                 if ( pCondFormList )
                     pCondFormList->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
+                if ( pValidationList )
+                    pValidationList->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
                 // #81844# sheet names of references may not be valid until sheet is copied
                 pChartListenerCollection->UpdateScheduledSeriesRanges();
             }
