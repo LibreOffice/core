@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:21:57 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:27:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -703,7 +703,9 @@ void SwXMLImport::startDocument( void )
     }
 
     // We need a draw model to be able to set the z order
-    pDoc->MakeDrawModel();
+    // --> OD 2005-08-08 #i52858# - method name changed
+    pDoc->GetOrCreateDrawModel();
+    // <--
 
     // SJ: #i49801# locking the modell to disable repaints
     SdrModel* pDrawModel = pDoc->GetDrawModel();
@@ -1152,6 +1154,8 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bIgnoreFirstLineIndentInNumbering = false;
     // --> FME 2005-06-08 #i49277#
     bool bDoNotJustifyLinesWithManualBreak = false;
+    // --> FME 2005-08-11 #i53199#
+    bool bDoNotResetParaAttrsForNumFont    = false;
     // --> PB 2004-08-23 #i33095#
     bool bLoadReadonly = false;
 
@@ -1210,19 +1214,18 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                 // --> OD 2004-07-08 #i28701#
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ConsiderTextWrapOnObjPos")) )
                     bConsiderWrapOnObjPos = true;
-                // <--
                 // --> FME 2005-05-27 #i47448#
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IgnoreFirstLineIndentInNumbering")) )
                     bIgnoreFirstLineIndentInNumbering = true;
-                // <--
                 // --> FME 2005-06-08 #i49277#
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DoNotJustifyLinesWithManualBreak")) )
                     bDoNotJustifyLinesWithManualBreak = true;
-                // <--
+                // --> FME 2005-08-11 #i53199#
+                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DoNotResetParaAttrsForNumFont")) )
+                    bDoNotResetParaAttrsForNumFont = true;
                 // --> PB 2004-08-23 #i33095#
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LoadReadonly")) )
                     bLoadReadonly = true;
-                // <--
             }
             catch( Exception& )
             {
@@ -1321,6 +1324,15 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     {
         xProps->setPropertyValue(
             OUString( RTL_CONSTASCII_USTRINGPARAM("DoNotJustifyLinesWithManualBreak")), makeAny( true ) );
+    }
+    // <--
+
+    // --> FME 2005-08-11 #i53199#
+    // This flag has to be set for all documents < SO8
+    if ( !bDoNotResetParaAttrsForNumFont && !bConsiderWrapOnObjPos )
+    {
+        xProps->setPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("DoNotResetParaAttrsForNumFont")), makeAny( true ) );
     }
     // <--
 
