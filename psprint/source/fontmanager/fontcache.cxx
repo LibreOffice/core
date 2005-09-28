@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontcache.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:36:40 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 14:24:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,7 +168,7 @@ void FontCache::flush()
                 /*
                  *  for each font entry write:
                  *  name[;name[;name]]
-                 *  fontnr;PSName;italic;weight;width;pitch;encoding;ascend;descend;leading;vsubst;gxw;gxh;gyw;gyh;useroverrride[;{metricfile,typeflags}]
+                 *  fontnr;PSName;italic;weight;width;pitch;encoding;ascend;descend;leading;vsubst;gxw;gxh;gyw;gyh;useroverrride[;{metricfile,typeflags}][;stylename]
                  */
                 if( nEntrySize > 1 )
                     nSubEntry = static_cast<const PrintFontManager::TrueTypeFontFile*>(*it)->m_nCollectionEntry;
@@ -231,6 +231,11 @@ void FontCache::flush()
                         aLine.Append( ByteString::CreateFromInt32( static_cast<const PrintFontManager::TrueTypeFontFile*>(*it)->m_nTypeFlags ) );
                         break;
                     default: break;
+                }
+                if( (*it)->m_aStyleName.getLength() )
+                {
+                    aLine.Append( ';' );
+                    aLine.Append( ByteString( String( (*it)->m_aStyleName ), RTL_TEXTENCODING_UTF8 ) );
                 }
                 aStream.WriteLine( aLine );
             }
@@ -426,6 +431,8 @@ void FontCache::read()
                         break;
                     default: break;
                 }
+                if( nIndex != STRING_NOTFOUND )
+                    pFont->m_aStyleName = String( aLine.Copy( nIndex ), RTL_TEXTENCODING_UTF8 );
 
                 bool bObsolete = false;
                 if( bKeepOnlyUserOverridden )
@@ -451,32 +458,6 @@ void FontCache::read()
                     else
                         bObsolete = true;
                 }
-                FontCacheEntry& rEntry = (*pDir)[aFile].m_aEntry;
-                if( ! bObsolete )
-                {
-                    /*
-                    *  #i20287# duplicate lines could exist because of
-                    *  fontcache code prior to OOo 1.1.1, ignore them
-                    */
-                    for( FontCacheEntry::const_iterator entry = rEntry.begin();
-                         entry != rEntry.end() && ! bObsolete; ++entry )
-                    {
-                        const PrintFontManager::PrintFont* pOld = *entry;
-                        if( pOld->m_eType               == pFont->m_eType               &&
-                            pOld->m_nFamilyName         == pFont->m_nFamilyName         &&
-                            pOld->m_nPSName             == pFont->m_nPSName             &&
-                            pOld->m_eItalic             == pFont->m_eItalic             &&
-                            pOld->m_eWidth              == pFont->m_eWidth              &&
-                            pOld->m_ePitch              == pFont->m_ePitch              &&
-                            pOld->m_aEncoding           == pFont->m_aEncoding           &&
-                            pOld->m_bFontEncodingOnly   == pFont->m_bFontEncodingOnly   &&
-                            pOld->m_nAscend             == pFont->m_nAscend             &&
-                            pOld->m_nDescend            == pFont->m_nDescend
-                            )
-                        bObsolete = true;
-                    }
-                }
-
                 if( bObsolete )
                 {
                     m_bDoFlush = true;
@@ -487,6 +468,7 @@ void FontCache::read()
                     continue;
                 }
 
+                FontCacheEntry& rEntry = (*pDir)[aFile].m_aEntry;
                 rEntry.push_back( pFont );
             }
         }
@@ -534,6 +516,7 @@ void FontCache::copyPrintFont( const PrintFontManager::PrintFont* pFrom, PrintFo
         default: break;
     }
     pTo->m_nFamilyName      = pFrom->m_nFamilyName;
+    pTo->m_aStyleName       = pFrom->m_aStyleName;
     pTo->m_aAliases         = pFrom->m_aAliases;
     pTo->m_nPSName          = pFrom->m_nPSName;
     pTo->m_eItalic          = pFrom->m_eItalic;
@@ -596,6 +579,7 @@ bool FontCache::equalsPrintFont( const PrintFontManager::PrintFont* pLeft, Print
         default: break;
     }
     if( pRight->m_nFamilyName       != pLeft->m_nFamilyName     ||
+        pRight->m_aStyleName        != pLeft->m_aStyleName      ||
         pRight->m_nPSName           != pLeft->m_nPSName         ||
         pRight->m_eItalic           != pLeft->m_eItalic         ||
         pRight->m_eWeight           != pLeft->m_eWeight         ||
