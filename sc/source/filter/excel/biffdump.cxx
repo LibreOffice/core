@@ -4,9 +4,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:54:09 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:40:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,7 +254,7 @@ inline static void __AddDec( ByteString& r, INT16 n )
     __AddDec( r, ( INT32 ) n );
 }
 
-inline static void __AddDec( ByteString& r, INT8 n )
+inline static void __AddDec( ByteString& r, sal_Int8 n )
 {
     __AddDec( r, ( INT32 ) n );
 }
@@ -1088,24 +1088,33 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
             break;
             case 0x17:
             {
-                UINT16  n;
-                rIn >> n;
-                ADDTEXT( "# of XTI: " );
-                __AddDec( t, n );
-                PRINT();
-                UINT16  nSB, nF, nL;
-                while( n && rIn.IsValid() )
+                if( mnSubstream == EXC_BOF_WORKSPACE )
                 {
-                    LINESTART();
-                    rIn >> nSB >> nF >> nL;
-                    ADDTEXT( "Supbook = " );
-                    __AddDec( t, nSB );
-                    ADDTEXT( "    Tab = " );
-                    __AddDec( t, nF );
-                    ADDTEXT( " ... " );
-                    __AddDec( t, nL );
+                    ADDTEXT( "filename=" );
+                    AddUNICODEString( t, rIn );
                     PRINT();
-                    n--;
+                }
+                else
+                {
+                    UINT16  n;
+                    rIn >> n;
+                    ADDTEXT( "# of XTI: " );
+                    __AddDec( t, n );
+                    PRINT();
+                    UINT16  nSB, nF, nL;
+                    while( n && rIn.IsValid() )
+                    {
+                        LINESTART();
+                        rIn >> nSB >> nF >> nL;
+                        ADDTEXT( "Supbook = " );
+                        __AddDec( t, nSB );
+                        ADDTEXT( "    Tab = " );
+                        __AddDec( t, nF );
+                        ADDTEXT( " ... " );
+                        __AddDec( t, nL );
+                        PRINT();
+                        n--;
+                    }
                 }
             }
             break;
@@ -1482,6 +1491,32 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 rIn.Ignore( 1 );
                 ADDTEXT( "   " );
                 AddUNICODEString( t, rIn, FALSE );
+                PRINT();
+            }
+            break;
+            case 0x003D:        // WINDOW1
+            {
+                LINESTART();
+                ADDTEXT( "pos-x=" );            ADDDEC( 2 );
+                ADDTEXT( "   pos-y=" );         ADDDEC( 2 );
+                ADDTEXT( "   width=" );         ADDDEC( 2 );
+                ADDTEXT( "   height=" );        ADDDEC( 2 );
+                PRINT();
+                LINESTART();
+                rIn >> __nFlags;
+                STARTFLAG();
+                ADDFLAG( 0x0001, "hide-window" );
+                ADDFLAG( 0x0002, "min-window" );
+                ADDFLAG( 0x0008, "show-hscroll" );
+                ADDFLAG( 0x0010, "show-vscroll" );
+                ADDFLAG( 0x0020, "show-tabbar" );
+                ADDRESERVED( 0xFFC4 );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "active-tab=" );       ADDDEC( 2 );
+                ADDTEXT( "   first-vis-tab=" ); ADDDEC( 2 );
+                ADDTEXT( "   selected-tabs=" ); ADDDEC( 2 );
+                ADDTEXT( "   tabbar-width=" );  ADDDEC( 2 );
                 PRINT();
             }
             break;
@@ -2609,7 +2644,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
             case 0xEB:
             case 0xEC:
             case 0xED:
-                EscherDump( nL );
+                EscherDump( nL, true );
             break;
             case 0x00F6:        // SXNAME
             {
@@ -4114,11 +4149,10 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 PRINT();
                 LINESTART();
                 ADDTEXT( "substream type:      " );
-                UINT16  n;
-                rIn >> n;
-                __AddHex( t, n );
+                rIn >> mnSubstream;
+                __AddHex( t, mnSubstream );
                 ADDTEXT( " (" );
-                switch( n )
+                switch( mnSubstream )
                 {
                     case 0x0005:    p = "Workbook globals";             break;
                     case 0x0006:    p = "Visual Basic module";          break;
@@ -4132,6 +4166,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ADDTEXT( ")" );
                 PRINT();
                 LINESTART();
+                UINT16  n;
                 rIn >> n;
                 ADDTEXT( "build identifier:    ");
                 __AddHex( t, n );
@@ -4803,12 +4838,34 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
             case 0x1048:        // ChartSbaseref
                 ContDump( nL );
                 break;
-            case 0x104A:        // ChartSerparent
-                ContDump( nL );
-                break;
-            case 0x104B:        // ChartSerauxtrend
-                ContDump( nL );
-                break;
+            case 0x104A:        // CHSERPARENT
+                LINESTART();
+                ADDTEXT( "parent-index=" );     ADDDEC( 2 );
+                ADDTEXT( " (one-based)" );
+                PRINT();
+            break;
+            case 0x104B:        // CHSERTRENDLINE
+            {
+                static const sal_Char* const ppcType[] =
+                    { "poynomial", "exponential", "logarithmic", "power", "moving-avg" };
+                sal_uInt8 nType;
+                rIn >> nType;
+                LINESTART();
+                ADDTEXT( "line-type=" );        __AddDec( t, nType );
+                lcl_AddEnum( t, nType, ppcType, STATIC_TABLE_SIZE( ppcType ) );
+                ADDTEXT( "   order=" );         ADDDEC( 1 );
+                ADDTEXT( "   intercept=" );     ADDDOUBLE();
+                PRINT();
+                LINESTART();
+                ADDTEXT( "show-equation=" );    ADDDEC( 1 );
+                ADDTEXT( "   show-r-sqr=" );    ADDDEC( 1 );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "forecast-for=" );     ADDDOUBLE();
+                ADDTEXT( "   forecast-back=" ); ADDDOUBLE();
+                PRINT();
+            }
+            break;
             case 0x104E:        // ChartIfmt
                 ContDump( nL );
                 break;
@@ -4890,9 +4947,28 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 FormulaDump( n, FT_CellFormula );
             }
                 break;
-            case 0x105B:        // ChartSerauxerrbar
-                ContDump( nL );
-                break;
+            case 0x105B:        // CHSERERRORBAR
+            {
+                static const sal_Char* const ppcType[] = { 0, "x-plus", "x-minus", "y-plus", "y-minus" };
+                static const sal_Char* const ppcSource[] = { 0, "percent", "fixed", "std-dev", "custom", "std-error" };
+                static const sal_Char* const ppcLineEnd[] = { "blank", "t-shape" };
+                sal_uInt8 nType, nSource, nLineEnd;
+                rIn >> nType >> nSource >> nLineEnd;
+                LINESTART();
+                ADDTEXT( "bar-type=" );         __AddDec( t, nType );
+                lcl_AddEnum( t, nType, ppcType, STATIC_TABLE_SIZE( ppcType ) );
+                ADDTEXT( "   value-source=" );  __AddDec( t, nSource );
+                lcl_AddEnum( t, nSource, ppcSource, STATIC_TABLE_SIZE( ppcSource ) );
+                ADDTEXT( "   line-end=" );      __AddDec( t, nLineEnd );
+                lcl_AddEnum( t, nLineEnd, ppcLineEnd, STATIC_TABLE_SIZE( ppcLineEnd ) );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "reserved=" );         ADDHEX( 1 );
+                ADDTEXT( "   value=" );         ADDDOUBLE();
+                ADDTEXT( "   ref-count=" );     ADDDEC( 2 );
+                PRINT();
+            }
+            break;
             case 0x105D:        // ChartSerfmt
                 ContDump( nL );
                 break;
@@ -5009,7 +5085,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ContDump( nL );
                 break;
             case 0x1066:        // ChartGelframe
-                EscherDump( nL );
+                EscherDump( nL, false );
                 break;
             case 0x1067:        // ChartBoppcustom
                 ContDump( nL );
@@ -5122,7 +5198,7 @@ static const sal_Char* GetBlipType( UINT8 n )
     }
 }
 
-void Biff8RecDumper::EscherDump( const ULONG nMaxLen )
+void Biff8RecDumper::EscherDump( const ULONG nMaxLen, bool bDumpOffset )
 {
     ULONG           n = nMaxLen;
     UINT16          nPre, nR;
@@ -5133,8 +5209,10 @@ void Biff8RecDumper::EscherDump( const ULONG nMaxLen )
 
     aT += pLevelPre;
 
+    ULONG nStartPos = pIn->GetSvStreamPos();
     while( pIn->IsValid() && (n > 0) )
     {
+        ULONG nCurrPos = pIn->GetSvStreamPos();
         *pIn >> nPre >> nR >> nL;
         n -= sizeof( nPre ) + sizeof( nR ) + sizeof( nL );
 
@@ -5189,6 +5267,11 @@ void Biff8RecDumper::EscherDump( const ULONG nMaxLen )
         __AddHex( aT, nL );
         aT += "]  instance: ";
         __AddDec( aT, (UINT16)(nPre >> 4) );
+        if( bDumpOffset )
+        {
+            aT.Append( "   pos=" );
+            __AddHex( aT, static_cast< sal_uInt32 >( mnEscherPos + nCurrPos - nStartPos ) );
+        }
         Print( aT );
 
         if ( nR == 0xF007 && 36 <= n && 36 <= nL )
@@ -5293,6 +5376,17 @@ void Biff8RecDumper::EscherDump( const ULONG nMaxLen )
             n -= nC;
             nL -= nC;
         }
+        else if ( nR == 0xF00A )
+        {
+            sal_uInt32 nId, nFlags;
+            *pIn >> nId >> nFlags;
+            aT.Assign( "    shape-id=" );
+            __AddHex( aT, nId );
+            aT.Append( "   flags=" );
+            __AddHex( aT, nFlags );
+            Print( aT );
+            nL -= 8; n -= 8;
+        }
         else if ( nR == 0xF00B || nR == 0xF122 )
         {   // OPT
             sal_uInt32 nComplex = 0;
@@ -5374,6 +5468,8 @@ void Biff8RecDumper::EscherDump( const ULONG nMaxLen )
 
         aT.Erase();
     }
+    if( bDumpOffset )
+        mnEscherPos += nMaxLen;
 }
 
 
@@ -8578,11 +8674,13 @@ void Biff8RecDumper::AddError( const UINT32 n, const ByteString& rT, const ByteS
 Biff8RecDumper::Biff8RecDumper( const XclImpRoot& rRoot, BOOL _bBIFF8 ) :
     XclImpRoot( rRoot ),
     bBIFF8( _bBIFF8 ),
-    bEncrypted( false )
+    bEncrypted( false ),
+    mnEscherPos( 0 )
 {
     nXFCount = 0;
     nFontIndex = 0;
     nInstances++;
+    mnSubstream = EXC_BOF_UNKNOWN;
 
     if( !pCharType )
     {
@@ -8782,7 +8880,7 @@ BOOL Biff8RecDumper::Dump( XclImpStream& r )
 
         while( r.StartNextRecord() )
         {
-            pProgress->Progress( r.GetSvStreamPos() );
+            pProgress->ProgressAbs( r.GetSvStreamPos() );
 
             if( HasModeDump( r.GetRecId() ) )
                 RecDump();
