@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:43:36 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:06:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1522,6 +1522,7 @@ ScXMLImport::ScXMLImport(
     pMyNamedExpressions(NULL),
     pMyLabelRanges(NULL),
     pValidations(NULL),
+    pDefaultNotes(NULL),
     pDetectiveOpArray(NULL),
 //  pScAutoStylePool(new SvXMLAutoStylePoolP),
     bRemoveLastChar(sal_False),
@@ -1645,6 +1646,8 @@ ScXMLImport::~ScXMLImport() throw()
         delete pMyLabelRanges;
     if (pValidations)
         delete pValidations;
+    if (pDefaultNotes)
+        delete pDefaultNotes;
     if (pDetectiveOpArray)
         delete pDetectiveOpArray;
 }
@@ -2513,6 +2516,8 @@ void SAL_CALL ScXMLImport::endDocument(void)
             pDoc->CompileXML();
         aTables.UpdateRowHeights();
         aTables.ResizeShapes();
+
+        SetDefaultNotes();
     }
     if (GetModel().is())
     {
@@ -2528,6 +2533,33 @@ void SAL_CALL ScXMLImport::endDocument(void)
     }
 
     UnlockSolarMutex();
+}
+
+void ScXMLImport::AddDefaultNote(const table::CellAddress& aCell)
+{
+    if (!pDefaultNotes)
+        pDefaultNotes = new ScMyDefaultNotes();
+
+    pDefaultNotes->push_back(aCell);
+}
+
+void ScXMLImport::SetDefaultNotes()
+{
+    if (pDefaultNotes && pDoc)
+    {
+        ScMyDefaultNotes::iterator aItr(pDefaultNotes->begin());
+        ScMyDefaultNotes::iterator aEndItr(pDefaultNotes->end());
+        ScPostIt aNote(pDoc);
+        while(aItr != aEndItr)
+        {
+            if (pDoc->GetNote(static_cast<SCCOL>(aItr->Column), static_cast<SCROW>(aItr->Row), aItr->Sheet, aNote))
+            {
+                aNote.SetRectangle(aNote.MimicOldRectangle(ScAddress(static_cast<SCCOL>(aItr->Column), static_cast<SCROW>(aItr->Row), aItr->Sheet)));
+                pDoc->SetNote(static_cast<SCCOL>(aItr->Column), static_cast<SCROW>(aItr->Row), aItr->Sheet, aNote);
+            }
+            ++aItr;
+        }
+    }
 }
 
 // XEventListener
