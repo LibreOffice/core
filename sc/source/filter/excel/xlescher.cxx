@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlescher.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:08:09 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:51:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,9 @@
 
 using ::rtl::OUString;
 
-// Escher client anchor =======================================================
+// Structs and classes ========================================================
+
+// Escher client anchor -------------------------------------------------------
 
 namespace {
 
@@ -220,7 +222,79 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclEscherAnchor& rAnchor )
         << rAnchor.maXclRange.maLast.mnRow  << rAnchor.mnBY;
 }
 
-// ============================================================================
+// ----------------------------------------------------------------------------
+
+XclObjId::XclObjId() :
+    mnScTab( SCTAB_INVALID ),
+    mnObjId( EXC_OBJ_INVALID_ID )
+{
+}
+
+XclObjId::XclObjId( SCTAB nScTab, sal_uInt16 nObjId ) :
+    mnScTab( nScTab ),
+    mnObjId( nObjId )
+{
+}
+
+bool operator==( const XclObjId& rL, const XclObjId& rR )
+{
+    return (rL.mnScTab == rR.mnScTab) && (rL.mnObjId == rR.mnObjId);
+}
+
+bool operator<( const XclObjId& rL, const XclObjId& rR )
+{
+    return (rL.mnScTab < rR.mnScTab) || ((rL.mnScTab == rR.mnScTab) && (rL.mnObjId < rR.mnObjId));
+}
+
+// ----------------------------------------------------------------------------
+
+XclTxoData::XclTxoData() :
+    mnFlags( 0 ),
+    mnOrient( EXC_TXO_TEXTROT_NONE ),
+    mnTextLen( 0 ),
+    mnFormatSize( 0 )
+{
+}
+
+sal_uInt8 XclTxoData::GetXclHorAlignment() const
+{
+    sal_uInt8 nXclAlign = 0;
+    ::extract_value( nXclAlign, mnFlags, 1, 3 );
+    return nXclAlign;
+}
+
+void XclTxoData::SetXclHorAlignment( sal_uInt8 nXclAlign )
+{
+    ::insert_value( mnFlags, nXclAlign, 1, 3 );
+}
+
+sal_uInt8 XclTxoData::GetXclVerAlignment() const
+{
+    sal_uInt8 nXclAlign = 0;
+    ::extract_value( nXclAlign, mnFlags, 4, 3 );
+    return nXclAlign;
+}
+
+void XclTxoData::SetXclVerAlignment( sal_uInt8 nXclAlign )
+{
+    ::insert_value( mnFlags, nXclAlign, 4, 3 );
+}
+
+XclImpStream& operator>>( XclImpStream& rStrm, XclTxoData& rData )
+{
+    rStrm >> rData.mnFlags >> rData.mnOrient;
+    rStrm.Ignore( 6 );
+    return rStrm >> rData.mnTextLen >> rData.mnFormatSize;
+}
+
+XclExpStream& operator<<( XclExpStream& rStrm, const XclTxoData& rData )
+{
+    rStrm << rData.mnFlags << rData.mnOrient;
+    rStrm.WriteZeroBytes( 6 );
+    return rStrm << rData.mnTextLen << rData.mnFormatSize << sal_uInt32( 0 );
+}
+
+// ----------------------------------------------------------------------------
 
 OUString XclTbxControlHelper::GetServiceName( sal_uInt16 nCtrlType )
 {
@@ -328,8 +402,6 @@ OUString XclTbxControlHelper::GetScriptType()
 
 OUString XclTbxControlHelper::GetScMacroName( const String& rXclMacroName )
 {
-    // TODO #i38718#: find missing module name
-//    DBG_ASSERT( rXclMacroName.Search( '.' ) != STRING_NOTFOUND, "XclTbxControlHelper::GetScMacroName - missing module name" );
     return CREATE_OUSTRING( EXC_TBX_MACRONAME_PRE ) + rXclMacroName + CREATE_OUSTRING( EXC_TBX_MACRONAME_SUF );
 }
 
