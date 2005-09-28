@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedPDFExportHelper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:28:23 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:02:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,6 +154,8 @@ class SwTaggedPDFHelper
     SwTaggedPDFHelper( const Frm_Info* pFrmInfo, const Por_Info* pPorInfo,
                        OutputDevice& rOut );
     ~SwTaggedPDFHelper();
+
+    static bool IsExportTaggedPDF( const OutputDevice& rOut );
 };
 
 /*************************************************************************
