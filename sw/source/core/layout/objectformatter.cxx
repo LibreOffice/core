@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectformatter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:20:01 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:13:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -317,36 +317,6 @@ bool SwObjectFormatter::FormatObj( SwAnchoredObject& _rAnchoredObj,
     return bSuccess;
 }
 
-const SwPageFrm& SwObjectFormatter::GetPageFrm() const
-{
-    return mrPageFrm;
-}
-
-const bool SwObjectFormatter::FormatOnlyAsCharAnchored() const
-{
-    return mbFormatOnlyAsCharAnchored;
-}
-
-const bool SwObjectFormatter::ConsiderWrapOnObjPos() const
-{
-    return mbConsiderWrapOnObjPos;
-}
-
-SwLayAction* SwObjectFormatter::GetLayAction()
-{
-    return mpLayAction;
-}
-
-/** method to restrict the format of floating screen objects to
-    as-character anchored ones
-
-    @author OD
-*/
-void SwObjectFormatter::SetFormatOnlyAsCharAnchored()
-{
-    mbFormatOnlyAsCharAnchored = true;
-}
-
 /** helper method for method <_FormatObj(..)> - performs the intrinsic format
     of the layout of the given layout frame and all its lower layout frames.
 
@@ -450,6 +420,13 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
             if ( mpLayAction )
             {
                 mpLayAction->FormatLayoutFly( &rFlyFrm );
+                // --> OD 2005-07-13 #124218# - consider, if the layout action
+                // has to be restarted due to a delete of a page frame.
+                if ( mpLayAction->IsAgain() )
+                {
+                    break;
+                }
+                // <--
             }
             else
             {
@@ -471,6 +448,13 @@ void SwObjectFormatter::_FormatObj( SwAnchoredObject& _rAnchoredObj )
             if ( mpLayAction )
             {
                 mpLayAction->_FormatFlyCntnt( &rFlyFrm );
+                // --> OD 2005-07-13 #124218# - consider, if the layout action
+                // has to be restarted due to a delete of a page frame.
+                if ( mpLayAction->IsAgain() )
+                {
+                    break;
+                }
+                // <--
             }
             else
             {
