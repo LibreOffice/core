@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:16:42 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:30:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,6 +168,8 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_IGNORE_FIRST_LINE_INDENT_IN_NUMBERING,
     // --> FME 2005-06-08 #i49277#
     HANDLE_DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK,
+    // --> FME 2005-08-11 #i53199#
+    HANDLE_DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT,
     // --> PB 2004-08-20 #i33095#
     HANDLE_LOAD_READONLY
     // <--
@@ -218,6 +220,8 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("IgnoreFirstLineIndentInNumbering"),   HANDLE_IGNORE_FIRST_LINE_INDENT_IN_NUMBERING,         CPPUTYPE_BOOLEAN,           0,   0},
         // --> FME 2005-06-08 #i49277#
         { RTL_CONSTASCII_STRINGPARAM("DoNotJustifyLinesWithManualBreak"),   HANDLE_DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK,         CPPUTYPE_BOOLEAN,           0,   0},
+        // --> FME 2005-08-11 #i53199#
+        { RTL_CONSTASCII_STRINGPARAM("DoNotResetParaAttrsForNumFont"),   HANDLE_DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT,         CPPUTYPE_BOOLEAN,           0,   0},
         // --> PB 2004-08-20 #i33095#
         { RTL_CONSTASCII_STRINGPARAM("LoadReadonly"),               HANDLE_LOAD_READONLY,                   CPPUTYPE_BOOLEAN,           0,   0},
         // <--
@@ -645,6 +649,13 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->SetDoNotJustifyLinesWithManualBreak( bTmp );
         }
         break;
+        // --> FME 2005-08-11 #i53199#
+        case HANDLE_DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->SetDoNotResetParaAttrsForNumFont( bTmp );
+        }
+        break;
         // --> PB 2004-08-20 #i33095#
         case HANDLE_LOAD_READONLY:
         {
@@ -897,6 +908,13 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK:
         {
             sal_Bool bTmp = mpDoc->DoNotJustifyLinesWithManualBreak();
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        // --> FME 2005-08-11 #i53199#
+        case HANDLE_DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT:
+        {
+            sal_Bool bTmp = mpDoc->DoNotResetParaAttrsForNumFont();
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
