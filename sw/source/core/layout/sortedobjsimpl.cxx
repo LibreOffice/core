@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sortedobjsimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:28:44 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:16:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,6 +230,17 @@ struct ObjAnchorOrder
 
 bool SwSortedObjsImpl::Insert( SwAnchoredObject& _rAnchoredObj )
 {
+    // --> OD 2005-08-18 #i51941#
+    if ( Contains( _rAnchoredObj ) )
+    {
+        // list already contains object
+#if OSL_DEBUG_LEVEL > 1
+        ASSERT( false,
+                "<SwSortedObjsImpl::Insert()> - already contains object" );
+#endif
+        return true;
+    }
+
     // find insert position
     tIter aInsPosIter = std::lower_bound( maSortedObjLst.begin(),
                                           maSortedObjLst.end(),
@@ -253,8 +264,10 @@ bool SwSortedObjsImpl::Remove( SwAnchoredObject& _rAnchoredObj )
     {
         // object not found.
         bRet = false;
+#if OSL_DEBUG_LEVEL > 1
         ASSERT( false,
                 "<SwSortedObjsImpl::Remove()> - object not found" );
+#endif
     }
     else
     {
@@ -303,7 +316,12 @@ sal_uInt32 SwSortedObjsImpl::ListPosOf( const SwAnchoredObject& _rAnchoredObj ) 
 
     if ( aIter != maSortedObjLst.end() )
     {
-        nRetLstPos = aIter - maSortedObjLst.begin();
+        // --> OD 2005-08-18 #i51941#
+//        nRetLstPos = aIter - maSortedObjLst.begin();
+        std::vector< SwAnchoredObject* >::difference_type nPos =
+                                                aIter - maSortedObjLst.begin();
+        nRetLstPos = sal_uInt32( nPos );
+        // <--
     }
 
     return nRetLstPos;
