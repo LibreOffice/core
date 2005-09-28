@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scrbar.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:49:27 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 14:42:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -984,14 +984,45 @@ void ScrollBar::ImplDoMouseAction( const Point& rMousePos, BOOL bCallAction )
 
 // -----------------------------------------------------------------------
 
+void ScrollBar::ImplDragThumb( const Point& rMousePos )
+{
+    long nMovePix;
+    if ( GetStyle() & WB_HORZ )
+        nMovePix = rMousePos.X()-(maThumbRect.Left()+mnMouseOff);
+    else
+        nMovePix = rMousePos.Y()-(maThumbRect.Top()+mnMouseOff);
+
+    // move thumb if necessary
+    if ( nMovePix )
+    {
+        mnThumbPixPos += nMovePix;
+        if ( mnThumbPixPos < 0 )
+            mnThumbPixPos = 0;
+        if ( mnThumbPixPos > (mnThumbPixRange-mnThumbPixSize) )
+            mnThumbPixPos = mnThumbPixRange-mnThumbPixSize;
+        long nOldPos = mnThumbPos;
+        mnThumbPos = ImplCalcThumbPos( mnThumbPixPos );
+        ImplUpdateRects();
+        if ( mbFullDrag && (nOldPos != mnThumbPos) )
+        {
+            mnDelta = mnThumbPos-nOldPos;
+            Scroll();
+            mnDelta = 0;
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
 void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if ( rMEvt.IsLeft() )
+    if ( rMEvt.IsLeft() || rMEvt.IsMiddle() )
     {
         const Point&    rMousePos = rMEvt.GetPosPixel();
         USHORT          nTrackFlags = 0;
         BOOL            bHorizontal = ( GetStyle() & WB_HORZ )? TRUE: FALSE;
         BOOL            bIsInside = FALSE;
+        BOOL            bDragToMouse = FALSE;
 
         Point aPoint( 0, 0 );
         Region aControlRegion( Rectangle( aPoint, GetOutputSizePixel() ) );
@@ -1024,7 +1055,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
             else
                 Sound::Beep( SOUND_DISABLE, this );
         }
-        else if ( maThumbRect.IsInside( rMousePos ) )
+        else if ( maThumbRect.IsInside( rMousePos ) || rMEvt.IsMiddle() )
         {
             if( mpData )
             {
@@ -1039,11 +1070,22 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
                 meScrollType    = SCROLL_DRAG;
                 mnDragDraw      = SCRBAR_DRAW_THUMB;
 
-                // Zusaetzliche Daten berechnen
-                if ( GetStyle() & WB_HORZ )
-                    mnMouseOff = rMousePos.X()-maThumbRect.Left();
+                // calculate mouse offset
+                if( rMEvt.IsMiddle() )
+                {
+                    bDragToMouse = TRUE;
+                    if ( GetStyle() & WB_HORZ )
+                        mnMouseOff = maThumbRect.GetWidth()/2;
+                    else
+                        mnMouseOff = maThumbRect.GetHeight()/2;
+                }
                 else
-                    mnMouseOff = rMousePos.Y()-maThumbRect.Top();
+                {
+                    if ( GetStyle() & WB_HORZ )
+                        mnMouseOff = rMousePos.X()-maThumbRect.Left();
+                    else
+                        mnMouseOff = rMousePos.Y()-maThumbRect.Top();
+                }
 
                 mnStateFlags |= SCRBAR_STATE_THUMB_DOWN;
                 ImplDraw( mnDragDraw, this );
@@ -1070,13 +1112,16 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
         // Soll Tracking gestartet werden
         if ( meScrollType != SCROLL_DONTKNOW )
         {
-            // Startposition merken fuer Abbruch und EndScroll-Delta
+            // remember original position in case of abort or EndScroll-Delta
             mnStartPos = mnThumbPos;
             // #92906# Call StartTracking() before ImplDoMouseAction(), otherwise
             // MouseButtonUp() / EndTracking() may be called if somebody is spending
             // a lot of time in the scroll handler
             StartTracking( nTrackFlags );
             ImplDoMouseAction( rMousePos );
+
+            if( bDragToMouse )
+                ImplDragThumb( rMousePos );
         }
     }
 }
@@ -1134,32 +1179,7 @@ void ScrollBar::Tracking( const TrackingEvent& rTEvt )
 
         // Dragging wird speziell behandelt
         if ( meScrollType == SCROLL_DRAG )
-        {
-            long nMovePix;
-            if ( GetStyle() & WB_HORZ )
-                nMovePix = rMousePos.X()-(maThumbRect.Left()+mnMouseOff);
-            else
-                nMovePix = rMousePos.Y()-(maThumbRect.Top()+mnMouseOff);
-            // Nur wenn sich Maus in die Scrollrichtung bewegt, muessen
-            // wir etwas tun
-            if ( nMovePix )
-            {
-                mnThumbPixPos += nMovePix;
-                if ( mnThumbPixPos < 0 )
-                    mnThumbPixPos = 0;
-                if ( mnThumbPixPos > (mnThumbPixRange-mnThumbPixSize) )
-                    mnThumbPixPos = mnThumbPixRange-mnThumbPixSize;
-                long nOldPos = mnThumbPos;
-                mnThumbPos = ImplCalcThumbPos( mnThumbPixPos );
-                ImplUpdateRects();
-                if ( mbFullDrag && (nOldPos != mnThumbPos) )
-                {
-                    mnDelta = mnThumbPos-nOldPos;
-                    Scroll();
-                    mnDelta = 0;
-                }
-            }
-        }
+            ImplDragThumb( rMousePos );
         else
             ImplDoMouseAction( rMousePos, rTEvt.IsTrackingRepeat() );
 
