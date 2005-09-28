@@ -67,7 +67,7 @@ fa    1256  1065   # Farsi
 fo    1252  1080   # Faroese
 sl    1250  1060   # Slovenian
 sb       0  1070   # Sorbian
-sx       0  1072   # Sutu
+st       0  1072   # Sutu
 sw    1252  1089   # Swahili
 sw-TZ 1252  1089   # Swahili
 ta       0  1097   # Tamil
