@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiview.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:34:47 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:01:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
 #ifndef SC_XIVIEW_HXX
 #define SC_XIVIEW_HXX
 
@@ -41,6 +42,27 @@
 #ifndef SC_XIROOT_HXX
 #include "xiroot.hxx"
 #endif
+
+// Document view settings =====================================================
+
+/** Contains document view settings (WINDOW1 record). */
+class XclImpDocViewSettings : protected XclImpRoot
+{
+public:
+    explicit            XclImpDocViewSettings( const XclImpRoot& rRoot );
+
+    /** Reads a WINDOW1 record. */
+    void                ReadWindow1( XclImpStream& rStrm );
+
+    /** Returns the Calc index of the displayed sheet. */
+    SCTAB               GetDisplScTab() const;
+
+    /** Sets the view settings at the document. */
+    void                Finalize();
+
+private:
+    XclDocViewData      maData;         /// Document view settings data.
+};
 
 // Sheet view settings ========================================================
 

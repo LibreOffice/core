@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlview.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:40:09 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:04:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
 #ifndef SC_XLVIEW_HXX
 #define SC_XLVIEW_HXX
 
@@ -100,9 +101,25 @@ const sal_uInt8 EXC_PANE_TOPLEFT            = 3;        /// Single, top, left, o
 
 const sal_uInt16 EXC_ID_SCL                 = 0x00A0;
 
-// ============================================================================
+// Structs ====================================================================
 
-// View settings ==============================================================
+/** Contains all view settings for the entire document. */
+struct XclDocViewData
+{
+    sal_uInt16          mnWinX;             /// X position of the document window (twips).
+    sal_uInt16          mnWinY;             /// Y position of the document window (twips).
+    sal_uInt16          mnWinWidth;         /// Width of the document window (twips).
+    sal_uInt16          mnWinHeight;        /// Height of the document window (twips).
+    sal_uInt16          mnFlags;            /// Additional flags.
+    sal_uInt16          mnDisplXclTab;      /// Displayed (active) sheet.
+    sal_uInt16          mnFirstVisXclTab;   /// First visible sheet.
+    sal_uInt16          mnXclSelectCnt;     /// Number of selected sheets.
+    sal_uInt16          mnTabBarWidth;      /// Width of sheet tabbar (1/1000 of window width).
+
+    explicit            XclDocViewData();
+};
+
+// ----------------------------------------------------------------------------
 
 /** Contains all settings for a selection in a single pane of a sheet. */
 struct XclSelectionData
