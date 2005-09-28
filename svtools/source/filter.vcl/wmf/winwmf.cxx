@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winwmf.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:40:01 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:29:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1125,12 +1125,20 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pWM
             }
             switch( nFunction )
             {
+                case W_META_SETWINDOWORG:
+                {
+                    Point aWinOrg;
+                    aWinOrg = ReadYX();
+                    rPlaceableBound.SetPos( aWinOrg );
+                }
+                break;
+
                 case W_META_SETWINDOWEXT:
                 {
                     Point aPos0( 0, 0 );
                     sal_Int16 nWidth, nHeight;
                     *pWMF >> nHeight >> nWidth;
-                    rPlaceableBound = Rectangle( aPos0, Size( nWidth, nHeight ) );
+                    rPlaceableBound.SetSize( Size( nWidth, nHeight ) );
                 }
                 break;
 
