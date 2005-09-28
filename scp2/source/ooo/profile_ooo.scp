@@ -4,9 +4,9 @@
  *
  *  $RCSfile: profile_ooo.scp,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:40:48 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 13:24:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,17 @@ Profile gid_Profile_Bootstrap_Ini
     Name = "bootstraprc";
   #else
     Name = "bootstrap.ini";
+  #endif
+    Dir = gid_Dir_Program;
+    Styles = (NETWORK);
+End
+
+Profile gid_Profile_Version_Ini
+    ModuleID = gid_Module_Root;
+  #ifdef UNX
+    Name = "versionrc";
+  #else
+    Name = "version.ini";
   #endif
     Dir = gid_Dir_Program;
     Styles = (NETWORK,PATCH);
