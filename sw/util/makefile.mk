@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.51 $
+#   $Revision: 1.52 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 11:42:35 $
+#   last change: $Author: hr $ $Date: 2005-09-28 15:37:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -181,6 +181,7 @@ SHL3TARGET= swui$(UPD)$(DLLPOSTFIX)
 SHL3IMPLIB= swuiimp
 SHL3VERSIONMAP= swui.map
 SHL3DEF=$(MISC)$/$(SHL3TARGET).def
+SHL3DEPN=$(SHL1TARGETN)
 DEF3NAME=       $(SHL3TARGET)
 
 SHL3STDLIBS= \
