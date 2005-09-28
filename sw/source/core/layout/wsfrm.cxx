@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:33:24 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:16:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1126,6 +1126,19 @@ void SwCntntFrm::Cut()
                     pSct->InvalidatePage( pPage );
                 }
             }
+            // --> FME 2005-08-03 #i52253# The master table should take care
+            // of removing the follow flow line.
+            if ( IsInTab() )
+            {
+                SwTabFrm* pThisTab = FindTabFrm();
+                SwTabFrm* pMasterTab = pThisTab && pThisTab->IsFollow() ? pThisTab->FindMaster() : 0;
+                if ( pMasterTab )
+                {
+                    pMasterTab->_InvalidatePos();
+                    pMasterTab->SetRemoveFollowFlowLinePending( TRUE );
+                }
+            }
+            // <--
         }
     }
     //Erst removen, dann Upper Shrinken.
