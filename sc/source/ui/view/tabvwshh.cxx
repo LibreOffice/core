@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwshh.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:12:18 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:18:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,10 +49,6 @@
 #include <sfx2/request.hxx>
 #include <basic/sbxcore.hxx>
 #include <svtools/whiter.hxx>
-
-#ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
-#include <com/sun/star/embed/EmbedStates.hpp>
-#endif
 
 #include "tabvwsh.hxx"
 #include "client.hxx"
@@ -115,14 +111,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
             }
             break;
         case SID_OLE_DEACTIVATE:
-            {
-                ScClient* pClient = (ScClient*) pVisibleSh->GetIPClient();
-                if ( pClient && pClient->IsObjectInPlaceActive() )
-                {
-                    pClient->GetObject()->changeState( embed::EmbedStates::RUNNING );
-                    SFX_APP()->SetViewFrame(pVisibleSh->GetViewFrame());
-                }
-            }
+            pVisibleSh->DeactivateOle();
             break;
 
         case SID_OBJECT_LEFT:
