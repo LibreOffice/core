@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xcl97dum.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:47:30 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:04:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,6 @@ const ULONG ExcDummy8_040::nMyLen = sizeof(ExcDummy8_040::pMyData);
 
 
 const BYTE ExcDummy8_041::pMyData[] = {
-    0x0e, 0x00, 0x02, 0x00, 0x01, 0x00,                     // PRECISION
     0xb7, 0x01, 0x02, 0x00, 0x00, 0x00,                     // REFRESHALL (8+)
     0xda, 0x00, 0x02, 0x00, 0x00, 0x00                      // BOOKBOOL
 };
