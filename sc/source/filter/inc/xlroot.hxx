@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlroot.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:38:06 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:03:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
 #ifndef SC_XLROOT_HXX
 #define SC_XLROOT_HXX
 
@@ -99,6 +100,7 @@ struct XclRootData
     LanguageType        meSysLang;      /// System language.
     LanguageType        meDocLang;      /// Document language (import: from file, export: from system).
     LanguageType        meUILang;       /// UI language (import: from file, export: from system).
+    sal_Int16           mnDefApiScript; /// Default script type for blank cells (API constant).
     ScAddress           maScMaxPos;     /// Highest Calc cell position.
     ScAddress           maXclMaxPos;    /// Highest Excel cell position.
     ScAddress           maMaxPos;       /// Highest position valid in Calc and Excel.
@@ -157,14 +159,16 @@ public:
     inline bool         IsImport() const { return !mrData.mbExport; }
     /** Returns true, if currently a document is exported. */
     inline bool         IsExport() const { return mrData.mbExport; }
+    /** Returns the character set to import/export byte strings. */
+    inline CharSet      GetCharSet() const { return mrData.meCharSet; }
     /** Returns the system language, i.e. for number formats. */
     inline LanguageType GetSysLanguage() const { return mrData.meSysLang; }
     /** Returns the document language. */
     inline LanguageType GetDocLanguage() const { return mrData.meDocLang; }
     /** Returns the UI language. */
     inline LanguageType GetUILanguage() const { return mrData.meUILang; }
-    /** Returns the character set to import/export byte strings. */
-    inline CharSet      GetCharSet() const { return mrData.meCharSet; }
+    /** Returns the default script type, e.g. for blank cells. */
+    inline sal_Int16    GetDefApiScript() const { return mrData.mnDefApiScript; }
     /** Returns the width of the '0' character (default font) for the current printer (twips). */
     inline long         GetCharWidth() const { return mrData.mnCharWidth; }
     /** Returns the current Calc sheet index. */
