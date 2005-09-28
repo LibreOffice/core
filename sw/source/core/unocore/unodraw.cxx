@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:25:27 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:22:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -902,7 +902,9 @@ SwFmDrawPage*   SwXDrawPage::GetSvxPage()
     if(!xPageAgg.is() && pDoc)
     {
         vos::OGuard  aGuard(Application::GetSolarMutex());
-        SdrModel* pModel = pDoc->MakeDrawModel();
+        // --> OD 2005-08-08 #i52858# - method name changed
+        SdrModel* pModel = pDoc->GetOrCreateDrawModel();
+        // <--
         SdrPage* pPage = pModel->GetPage( 0 );
 
         {
