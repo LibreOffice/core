@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmldraw.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:42:04 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:23:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -439,7 +439,9 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     }
 
     // Ein DrawTxtobj anlegen
-    SdrModel* pModel = pDoc->MakeDrawModel();
+    // --> OD 2005-08-08 #i52858# - method name changed
+    SdrModel* pModel = pDoc->GetOrCreateDrawModel();
+    // <--
     SdrPage* pPg = pModel->GetPage( 0 );
     pMarquee = SdrObjFactory::MakeNewObject( SdrInventor,
                                              OBJ_TEXT, pPg, pModel );
