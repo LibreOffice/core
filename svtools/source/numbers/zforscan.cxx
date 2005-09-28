@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:36:40 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:17:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1749,21 +1749,15 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                     }
                                     else
                                     {
-                                        nTypeArray[i] = NF_SYMBOLTYPE_THSEP;
-                                        String& rStr = sStrArray[i];
-                                        nPos += rStr.Len();
-                                        i++;
-                                        nThousand++;
-                                        while ( i < nAnzStrings &&
-                                            sStrArray[i] == sOldThousandSep )
+                                        do
                                         {
                                             nThousand++;
-                                            rStr += pFormatter->GetNumThousandSep();
+                                            nTypeArray[i] = NF_SYMBOLTYPE_THSEP;
                                             nPos += sStrArray[i].Len();
-                                            nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                                            nAnzResStrings--;
+                                            sStrArray[i] = pFormatter->GetNumThousandSep();
                                             i++;
-                                        }
+                                        } while (i < nAnzStrings &&
+                                                sStrArray[i] == sOldThousandSep);
                                     }
                                 }
                                 else                    // any grsep
