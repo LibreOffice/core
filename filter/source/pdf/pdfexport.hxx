@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:50:06 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 10:54:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@ public:
                             ~PDFExport();
 
     sal_Bool                ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com::sun::star::view::XRenderable >& rRenderable, Any& rSelection,
-                                MultiSelection aMultiSelection, Sequence< PropertyValue >& rRenderOptions );
+                                MultiSelection aMultiSelection, Sequence< PropertyValue >& rRenderOptions, sal_Int32 nPageCount );
 
     sal_Bool                Export( const OUString& rFile, const Sequence< PropertyValue >& rFilterData );
 };
