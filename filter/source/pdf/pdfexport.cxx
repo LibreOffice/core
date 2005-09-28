@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:49:51 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 10:53:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,7 +150,7 @@ PDFExport::~PDFExport()
 // -----------------------------------------------------------------------------
 
 sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com::sun::star::view::XRenderable >& rRenderable, Any& rSelection,
-    MultiSelection aMultiSelection, Sequence< PropertyValue >& rRenderOptions )
+    MultiSelection aMultiSelection, Sequence< PropertyValue >& rRenderOptions, sal_Int32 nPageCount )
 {
     sal_Bool        bRet = sal_False;
     try
@@ -167,7 +167,6 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com:
         }
 
         OutputDevice* pOut = rPDFWriter.GetReferenceDevice();
-        sal_Int32 nPageCount = rRenderable->getRendererCount( rSelection, rRenderOptions );
 
         if( pOut )
         {
@@ -353,7 +352,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     aSelection <<= mxSrcDoc;
                 }
                 sal_Bool        bSecondPassForImpressNotes = sal_False;
-                sal_Int32       nPageCount = xRenderable->getRendererCount( aSelection, aRenderOptions );
+                const sal_Int32 nPageCount = xRenderable->getRendererCount( aSelection, aRenderOptions );
                 const Range     aRange( 1, nPageCount );
                 MultiSelection  aMultiSelection;
 
@@ -388,11 +387,13 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                         delete pResMgr;
                     }
                 }
-                bRet = ExportSelection( *pPDFWriter, xRenderable, aSelection, aMultiSelection, aRenderOptions );
+
+                bRet = ExportSelection( *pPDFWriter, xRenderable, aSelection, aMultiSelection, aRenderOptions, nPageCount );
+
                 if ( bRet && bSecondPassForImpressNotes )
                 {
                     rExportNotesValue <<= sal_True;
-                    bRet = ExportSelection( *pPDFWriter, xRenderable, aSelection, aMultiSelection, aRenderOptions );
+                    bRet = ExportSelection( *pPDFWriter, xRenderable, aSelection, aMultiSelection, aRenderOptions, nPageCount );
                 }
                 if ( mxStatusIndicator.is() )
                     mxStatusIndicator->end();
