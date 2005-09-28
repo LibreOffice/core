@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr5.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:45:48 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:38:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,10 +51,7 @@
 #include "scmatrix.hxx"
 #include "globstr.hrc"
 
-// STATIC DATA -----------------------------------------------------------
-
-#define SCdEpsilon                1.0E-7
-
+const double fInvEpsilon = 1.0E-7;
 
 // -----------------------------------------------------------------------
 
@@ -872,187 +869,159 @@ void ScInterpreter::MFastTrans(ScMatrix* pA, ScMatrix* pR,
             pR->PutDouble(pA->GetDouble(i, j), j, i);
 }
 
-BOOL ScInterpreter::MFastBackSubst(ScMatrix* pA, ScMatrix* pR, SCSIZE n, BOOL bIsUpper)
-        // Fuehrt Rueckwaertsersetzung der Dreickesmatrix Mat a nach Mat r durch
-        // 2 Versionen fuer obere (U)  oder untere (L- Unit) Dreiecksmatrizen
-{
-    if (!n)
-        return TRUE;
-        // Strange? that's how it was implemented with short i,j,k until
-        // 2004-03-17 (r1.8.202.4), provided that GetDouble(-1,-1) and
-        // PutDouble(...,-1,-1) silently did nothing..
 
-    if (!bIsUpper)                          // L-Matrix, immer invertierbar
+/* Matrix LUP decomposition according to the pseudocode of "Introduction to
+ * Algorithms" by Cormen, Leiserson, Rivest, Stein.
+ *
+ * Added scaling for numeric stability.
+ *
+ * Given an n x n nonsingular matrix A, find a permutation matrix P, a unit
+ * lower-triangular matrix L, and an upper-triangular matrix U such that PA=LU.
+ * Compute L and U "in place" in the matrix A, the original content is
+ * destroyed. Note that the diagonal elements of the U triangular matrix
+ * replace the diagonal elements of the L-unit matrix (that are each ==1). The
+ * permutation matrix P is an array, where P[i]=j means that the i-th row of P
+ * contains a 1 in column j. Additionally keep track of the number of
+ * permutations (row exchanges).
+ *
+ * Returns 0 if a singular matrix is encountered, else +1 if an even number of
+ * permutations occured, or -1 if odd, which is the sign of the determinant.
+ * This may be used to calculate the determinant by multiplying the sign with
+ * the product of the diagonal elements of the LU matrix.
+ */
+static int lcl_LUP_decompose( ScMatrix* mA, const SCSIZE n,
+        ::std::vector< SCSIZE> & P )
+{
+    int nSign = 1;
+    // Find scale of each row.
+    ::std::vector< double> aScale(n);
+    for (SCSIZE i=0; i < n; ++i)
     {
-        MEMat(pR, n);
-        for (SCSIZE i = 1; i < n; i++)
+        double fMax = 0.0;
+        for (SCSIZE j=0; j < n; ++j)
         {
-            for (SCSIZE j = 0; j < i; j++)
+            double fTmp = fabs( mA->GetDouble( j, i));
+            if (fMax < fTmp)
+                fMax = fTmp;
+        }
+        if (fMax == 0.0)
+            return 0;       // singular matrix
+        aScale[i] = 1.0 / fMax;
+    }
+    // Represent identity permutation, P[i]=i
+    for (SCSIZE i=0; i < n; ++i)
+        P[i] = i;
+    // "Recursion" on the diagonale.
+    SCSIZE l = n - 1;
+    for (SCSIZE k=0; k < l; ++k)
+    {
+        // Implicit pivoting. With the scale found for a row, compare values of
+        // a column and pick largest.
+        double fMax = 0.0;
+        double fScale = aScale[k];
+        SCSIZE kp = k;
+        for (SCSIZE i = k; i < n; ++i)
+        {
+            double fTmp = fScale * fabs( mA->GetDouble( k, i));
+            if (fMax < fTmp)
             {
-                double fSum = 0.0;
-                for (SCSIZE k = 0; k < i; k++)
-                    fSum += pA->GetDouble(i,k) * pR->GetDouble(k,j);
-                pR->PutDouble(-fSum, i, j);
+                fMax = fTmp;
+                kp = i;
             }
         }
-    }
-    else                                    // U-Matrix
-    {
-        SCSIZE i, j, k;
-        for (i = 0; i < n; i++)                         // Ist invertierbar?
-            if (fabs(pA->GetDouble(i,i)) < SCdEpsilon)
-                return FALSE;
-        pR->FillDoubleLowerLeft(0.0, n-1);                      // untere Haelfte
-        pR->PutDouble(1.0/pA->GetDouble(n-1, n-1), n-1, n-1);   // n-1, n-1
-        for (i = n-1; i-- > 0; )
+        if (fMax == 0.0)
+            return 0;       // singular matrix
+        // Swap rows. The pivot element will be at mA[k,kp] (row,col notation)
+        if (k != kp)
         {
-            for (j = n-1; j > i; j--)
+            // permutations
+            SCSIZE nTmp = P[k];
+            P[k]        = P[kp];
+            P[kp]       = nTmp;
+            nSign       = -nSign;
+            // scales
+            double fTmp = aScale[k];
+            aScale[k]   = aScale[kp];
+            aScale[kp]  = fTmp;
+            // elements
+            for (SCSIZE i=0; i < n; ++i)
             {
-                double fSum = 0.0;
-                for (k = n-1; k > i; k--)
-                    fSum += pA->GetDouble(i, k) * pR->GetDouble(k, j);
-                pR->PutDouble(-fSum/pA->GetDouble(i, i), i, j);
+                double fTmp = mA->GetDouble( i, k);
+                mA->PutDouble( mA->GetDouble( i, kp), i, k);
+                mA->PutDouble( fTmp, i, kp);
             }
-            double fSum = 0.0;                                          // Hauptdiagonale:
-            for (k = n-1; k > i; k--)
-                fSum += pA->GetDouble(i, k) * pR->GetDouble(k, j);
-            pR->PutDouble((1.0-fSum)/pA->GetDouble(i, i), i, i);
+        }
+        // Compute Schur complement.
+        for (SCSIZE i = k+1; i < n; ++i)
+        {
+            double fTmp = mA->GetDouble( k, i) / mA->GetDouble( k, k);
+            mA->PutDouble( fTmp, k, i);
+            for (SCSIZE j = k+1; j < n; ++j)
+                mA->PutDouble( mA->GetDouble( j, i) - fTmp * mA->GetDouble( j,
+                            k), j, i);
         }
     }
-    return TRUE;
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "\n%s\n", "lcl_LUP_decompose(): LU");
+    for (SCSIZE i=0; i < n; ++i)
+    {
+        for (SCSIZE j=0; j < n; ++j)
+            fprintf( stderr, "%8.2g  ", mA->GetDouble( j, i));
+        fprintf( stderr, "\n%s\n", "");
+    }
+    fprintf( stderr, "\n%s\n", "lcl_LUP_decompose(): P");
+    for (SCSIZE j=0; j < n; ++j)
+        fprintf( stderr, "%5u ", P[j]);
+    fprintf( stderr, "\n%s\n", "");
+#endif
+    return nSign;
 }
 
-BOOL ScInterpreter::ScMatLUP(ScMatrix* mA, SCSIZE m, SCSIZE p,
-                             ScMatrix* mL, ScMatrix* mU, ScMatrix* mP,
-                             ULONG& rPermutCounter, BOOL& bIsInvertable)
-    // Returnwert = False <=> Matrixarray voll
-    // BIsInvertable = False: <= mA hat nicht Rang m
+
+/* Solve a LUP decomposed equation Ax=b. LU is a combined matrix of L and U
+ * triangulars and P the permutation vector as obtained from
+ * lcl_LUP_decompose(). B is the right-hand side input vector, X is used to
+ * return the solution vector.
+ */
+static void lcl_LUP_solve( const ScMatrix* mLU, const SCSIZE n,
+        const ::std::vector< SCSIZE> & P, const ::std::vector< double> & B,
+        ::std::vector< double> & X )
 {
-    SCSIZE i, j;
-    if (m == 1)
+    SCSIZE nFirst = SCSIZE_MAX;
+    // Ax=b => PAx=Pb, with decomposition LUx=Pb.
+    // Define y=Ux and solve for y in Ly=Pb using forward substitution.
+    for (SCSIZE i=0; i < n; ++i)
     {
-        mL->PutDouble(1.0,0,0);
-        for (j = 0; j < p; j++)
-            if (fabs(mA->GetDouble(0, j)) >= SCdEpsilon)
-                break;
-        if (j == p)
+        double fSum = B[P[i]];
+        // Matrix inversion comes with a lot of zeros in the B vectors, we
+        // don't have to do all the computing with results multiplied by zero.
+        // Until then, simply lookout for the position of the first nonzero
+        // value.
+        if (nFirst != SCSIZE_MAX)
         {
-            bIsInvertable = FALSE;
-            return TRUE;
+            for (SCSIZE j = nFirst; j < i; ++j)
+                fSum -= mLU->GetDouble( j, i) * X[j];   // X[j] === y[j]
         }
-        MEMat(mP, p);
-        if (j > 0 && j < p)
-        {
-            mP->PutDouble(0.0, 0, 0);
-            mP->PutDouble(1.0, j, 0);
-            mP->PutDouble(0.0, j, j);
-            mP->PutDouble(1.0, 0, j);
-            rPermutCounter++;
-        }
-        MFastMult(mA, mP, mU, m, p, p);
+        else if (fSum)
+            nFirst = i;
+        X[i] = fSum;                                    // X[i] === y[i]
     }
-    else
+    // Solve for x in Ux=y using back substitution.
+    for (SCSIZE i = n; i--; )
     {
-        SCSIZE md2 = m/2;
-        ScMatrixRef mB = GetNewMat(md2, p);
-        ScMatrixRef mC = GetNewMat(md2, p);
-        ScMatrixRef mL1 = GetNewMat(md2, md2);
-        ScMatrixRef mU1 = GetNewMat(md2, p);
-        ScMatrixRef mP1 = GetNewMat(p, p);
-        if (!mB || !mC || !mL1 || !mU1 || !mP1 )
-            return FALSE;
-        for (i = 0; i < md2; i++)
-        {
-            for (j = 0; j < p; j++)
-            {
-                mB->PutDouble(mA->GetDouble(i, j), i, j);
-                mC->PutDouble(mA->GetDouble(md2+i,j), i, j);
-            }
-        }
-        if (!ScMatLUP(mB, md2, p, mL1, mU1, mP1, rPermutCounter, bIsInvertable))
-            return FALSE;
-        if (!bIsInvertable)
-            return TRUE;
-
-        ScMatrixRef mE    = GetNewMat(md2, md2);
-        ScMatrixRef mF    = GetNewMat(md2, md2);
-        ScMatrixRef mEInv = GetNewMat(md2, md2);
-        ScMatrixRef mG    = GetNewMat(md2, p);
-        ScMatrixRef mGs   = GetNewMat(md2, p - md2);
-        ScMatrixRef mU2   = GetNewMat(md2, p - md2);
-        ScMatrixRef mP2   = GetNewMat(p - md2, p - md2);
-        if (!mP2 || !mU2 || !mGs|| !mG || !mEInv || !mF || !mE)
-            return FALSE;
-        MFastTrans(mP1, mP, p, p);              // mP = mP1 hoch  -1
-        ScMatrixRef mD = mB;                        // mB wird nicht mehr gebraucht
-        MFastMult(mC, mP, mD, md2, p, p);
-        for (i = 0; i < md2; i++)
-        {
-            for (j = 0; j < md2; j++)
-            {
-                mE->PutDouble(mU1->GetDouble(i, j), i, j);
-                mF->PutDouble(mD->GetDouble(i, j), i, j);
-            }
-        }
-        BOOL bEInvok = MFastBackSubst(mE, mEInv, md2, TRUE); // MeInv = E hoch -1
-        if (!bEInvok)
-        {
-            bIsInvertable = FALSE;
-            return TRUE;
-        }
-        ScMatrixRef mFEInv = mE;                // mE wird nicht mehr gebraucht.
-        MFastMult(mF, mEInv, mFEInv, md2, md2, md2);
-        ScMatrixRef mFEInvU1 = mC;          // mC wird nicht mehr gebraucht
-        MFastMult(mFEInv, mU1, mFEInvU1, md2, md2, p);
-        MFastSub(mD, mFEInvU1, mG, md2, p);
-        for (i = 0; i < md2; i++)
-        {
-            for (j = 0; j < p-md2; j++)
-                mGs->PutDouble(mG->GetDouble(i, md2+j), i, j);
-        }
-        ScMatrixRef mL2 = mF;                   // mF wird nicht mehr gebraucht
-        if (!ScMatLUP(mGs, md2, p - md2, mL2, mU2, mP2, rPermutCounter, bIsInvertable))
-            return FALSE;
-        if (!bIsInvertable)
-            return TRUE;
-
-        ScMatrixRef mP3 =  GetNewMat(p, p);
-        if (!mP3)
-            return FALSE;
-        MEMat(mP3, p);
-        for (i = md2; i < p; i++)
-        {
-            for (j = md2; j < p; j++)
-                mP3->PutDouble(mP2->GetDouble(i-md2, j-md2), i, j);
-        }
-        MFastMult(mP3, mP1, mP, p, p, p);       // Ergebnis P !!
-        ScMatrixRef mP3Inv = mP1;                   // mP1 wird nicht mehr gebraucht;
-        MFastTrans(mP3, mP3Inv, p, p);
-        ScMatrixRef mH = mD;                        // mD wird nicht mehr gebraucht
-        MFastMult(mU1, mP3Inv, mH, md2, p, p);
-        MEMat(mL, m);                           // Ergebnis L :
-        for (i = 0; i < md2; i++)
-        {
-            for (j = 0; j < i; j++)
-                mL->PutDouble(mL1->GetDouble(i, j), i, j);
-        }
-        for (i = md2; i < m; i++)
-            for (j = md2; j < i; j++)
-                mL->PutDouble(mL2->GetDouble(i-md2, j-md2), i, j);
-        for (i = md2; i < m; i++)
-            for (j = 0; j < md2; j++)
-                mL->PutDouble(mFEInv->GetDouble(i-md2, j), i, j);
-                                                // Ergebnis U:
-        mU->FillDoubleLowerLeft(0.0, m-1);
-        for (i = 0; i < md2; i++)
-            for (j = i; j < p; j++)
-                mU->PutDouble(mH->GetDouble(i, j), i, j);
-        for (i = md2; i < m; i++)
-            for (j = i; j < p; j++)
-                mU->PutDouble(mU2->GetDouble(i - md2, j - md2), i, j);
+        double fSum = X[i];                             // X[i] === y[i]
+        for (SCSIZE j = i+1; j < n; ++j)
+            fSum -= mLU->GetDouble( j, i) * X[j];       // X[j] === x[j]
+        X[i] = fSum / mLU->GetDouble( i, i);            // X[i] === x[i]
     }
-    return TRUE;
+#if OSL_DEBUG_LEVEL >1
+    fprintf( stderr, "\n%s\n", "lcl_LUP_solve():");
+    for (SCSIZE i=0; i < n; ++i)
+        fprintf( stderr, "%8.2g  ", X[i]);
+    fprintf( stderr, "%s\n", "");
+#endif
 }
+
 
 void ScInterpreter::ScMatDet()
 {
@@ -1075,48 +1044,29 @@ void ScInterpreter::ScMatDet()
             SetIllegalParameter();
         else
         {
-            double fVal = log((double)nC) / log(2.0);
-            if (fVal - floor(fVal) != 0.0)
-                fVal = floor(fVal) + 1.0;
-            SCSIZE nDim = static_cast<SCSIZE>(pow(2.0, fVal));
-            ScMatrixRef pU = GetNewMat(nDim, nDim);
-            ScMatrixRef pL = GetNewMat(nDim, nDim);
-            ScMatrixRef pP = GetNewMat(nDim, nDim);
-            ScMatrixRef pA;
-            if (nC == nDim)
-                pA = pMat;
-            else
-            {
-                pA = GetNewMat(nDim, nDim);
-                MEMat(pA, nDim);
-                for (SCSIZE i = 0; i < nC; i++)
-                    for (SCSIZE j = 0; j < nC; j++)
-                    {
-                        pA->PutDouble(pMat->GetDouble(i, j), i, j);
-                    }
-            }
-            ULONG nPermutCounter = 0;
-            BOOL bIsInvertable = TRUE;
-            BOOL bOk = ScMatLUP(pA, nDim, nDim, pL, pU, pP,
-                                nPermutCounter, bIsInvertable);
-            if (bOk)
-            {
-                if (!bIsInvertable)
-                    PushInt(0);
-                else
-                {
-                    double fDet = 1.0;
-                    for (SCSIZE i = 0; i < nC; i++)
-                        fDet *= pU->GetDouble(i, i);
-                    if (nPermutCounter % 2 != 0)
-                        fDet *= -1.0;
-                    PushDouble(fDet);
-                }
-            }
-            else
+            // LUP decomposition is done inplace, use copy.
+            ScMatrixRef xLU = pMat->Clone();
+            if (!xLU)
             {
                 SetError(errCodeOverflow);
                 PushInt(0);
+            }
+            else
+            {
+                ::std::vector< SCSIZE> P(nR);
+                int nDetSign = lcl_LUP_decompose( xLU, nR, P);
+                if (!nDetSign)
+                    PushError();
+                else
+                {
+                    // In an LU matrix the determinant is simply the product of
+                    // all diagonal elements.
+                    double fDet = nDetSign;
+                    ScMatrix* pLU = xLU;
+                    for (SCSIZE i=0; i < nR; ++i)
+                        fDet *= pLU->GetDouble( i, i);
+                    PushDouble( fDet);
+                }
             }
         }
     }
@@ -1143,70 +1093,84 @@ void ScInterpreter::ScMatInv()
             SetIllegalParameter();
         else
         {
-            double fVal = log((double)nC) / log(2.0);
-            if (fVal - floor(fVal) != 0.0)
-                fVal = floor(fVal) + 1.0;
-            SCSIZE nDim = static_cast<SCSIZE>(pow(2.0, fVal));
-            ScMatrixRef pU = GetNewMat(nDim, nDim);
-            ScMatrixRef pL = GetNewMat(nDim, nDim);
-            ScMatrixRef pP = GetNewMat(nDim, nDim);
-            ScMatrixRef pA;
-            if (nC == nDim)
-                pA = pMat;
-            else
-            {
-                pA = GetNewMat(nDim, nDim);
-                MEMat(pA, nDim);
-                for (SCSIZE i = 0; i < nC; i++)
-                    for (SCSIZE j = 0; j < nC; j++)
-                    {
-                        pA->PutDouble(pMat->GetDouble(i, j), i, j);
-                    }
-            }
-            ULONG nPermutCounter = 0;
-            BOOL bIsInvertable = TRUE;
-            BOOL bOk = ScMatLUP(pA, nDim, nDim, pL, pU, pP,
-                                nPermutCounter, bIsInvertable);
-            if (bOk)
-            {
-                if (!bIsInvertable)
-                    SetNoValue();
-                else
-                {
-                    ScMatrixRef pUInv = GetNewMat(nDim, nDim);
-                    if (!pUInv)
-                        PushError();
-                    else
-                    {
-                        bOk = MFastBackSubst(pU, pUInv, nDim, TRUE);
-                        if (!bOk)
-                            SetNoValue();
-                        else
-                        {
-                            ScMatrixRef pPInv = pU;
-                            MFastTrans(pP, pPInv, nDim, nDim);
-                            ScMatrixRef pPInvUInv = pP;
-                            MFastMult(pPInv, pUInv, pPInvUInv, nDim, nDim, nDim);
-                            ScMatrixRef pLInv = pPInv;
-                            MFastBackSubst(pL, pLInv, nDim, FALSE);
-                            if (nDim == nC)
-                                MFastMult(pPInvUInv, pLInv, pMat, nDim, nDim, nDim);
-                            else
-                            {
-                                MFastMult(pPInvUInv, pLInv, pL, nDim, nDim, nDim);
-                                for (SCSIZE i = 0; i < nC; i++)
-                                    for (SCSIZE j = 0; j < nC; j++)
-                                        pMat->PutDouble(pL->GetDouble(i, j), i, j);
-                            }
-                            PushMatrix(pMat);
-                        }
-                    }
-                }
-            }
-            else
+            // LUP decomposition is done inplace, use copy.
+            ScMatrixRef xLU = pMat->Clone();
+            // The result matrix.
+            ScMatrixRef xY = GetNewMat( nR, nR);
+            if (!xLU || !xY)
             {
                 SetError(errCodeOverflow);
                 PushInt(0);
+            }
+            else
+            {
+                ::std::vector< SCSIZE> P(nR);
+                int nDetSign = lcl_LUP_decompose( xLU, nR, P);
+                if (!nDetSign)
+                    PushError();
+                else
+                {
+                    // Solve equation for each column.
+                    ScMatrix* pY = xY;
+                    ::std::vector< double> B(nR);
+                    ::std::vector< double> X(nR);
+                    for (SCSIZE j=0; j < nR; ++j)
+                    {
+                        for (SCSIZE i=0; i < nR; ++i)
+                            B[i] = 0.0;
+                        B[j] = 1.0;
+                        lcl_LUP_solve( xLU, nR, P, B, X);
+                        for (SCSIZE i=0; i < nR; ++i)
+                            pY->PutDouble( X[i], j, i);
+                    }
+#if 0
+                    /* Possible checks for ill-condition:
+                     * 1. Scale matrix, invert scaled matrix. If there are
+                     *    elements of the inverted matrix that are several
+                     *    orders of magnitude greater than 1 =>
+                     *    ill-conditioned.
+                     *    Just how much is "several orders"?
+                     * 2. Invert the inverted matrix and assess whether the
+                     *    result is sufficiently close to the original matrix.
+                     *    If not => ill-conditioned.
+                     *    Just what is sufficient?
+                     * 3. Multiplying the inverse by the original matrix should
+                     *    produce a result sufficiently close to the identity
+                     *    matrix.
+                     *    Just what is sufficient?
+                     *
+                     * The following is #3.
+                     */
+                    ScMatrixRef xR = GetNewMat( nR, nR);
+                    if (xR)
+                    {
+                        ScMatrix* pR = xR;
+                        MFastMult( pMat, pY, pR, nR, nR, nR);
+#if OSL_DEBUG_LEVEL > 1
+                        fprintf( stderr, "\n%s\n", "ScMatInv(): mult-identity");
+#endif
+                        for (SCSIZE i=0; i < nR; ++i)
+                        {
+                            for (SCSIZE j=0; j < nR; ++j)
+                            {
+                                double fTmp = pR->GetDouble( j, i);
+#if OSL_DEBUG_LEVEL > 1
+                                fprintf( stderr, "%8.2g  ", fTmp);
+#endif
+                                if (fabs( fTmp - (i == j)) > fInvEpsilon)
+                                    SetError( errIllegalArgument);
+                            }
+#if OSL_DEBUG_LEVEL > 1
+                        fprintf( stderr, "\n%s\n", "");
+#endif
+                        }
+                    }
+#endif
+                    if (nGlobalError)
+                        PushInt(0);
+                    else
+                        PushMatrix( pY);
+                }
             }
         }
     }
@@ -1483,9 +1447,9 @@ ScMatrixRef ScInterpreter::MatConcat(ScMatrix* pMat1, ScMatrix* pMat2)
         {
             for (j = 0; j < nMinR; j++)
             {
-                USHORT nErr = pMat1->GetError( i, j);
+                USHORT nErr = pMat1->GetErrorIfNotString( i, j);
                 if (!nErr)
-                    nErr = pMat2->GetError( i, j);
+                    nErr = pMat2->GetErrorIfNotString( i, j);
                 if (nErr)
                     pResMat->PutError( nErr, i, j);
                 else
@@ -1685,7 +1649,7 @@ void ScInterpreter::ScAmpersand()
             {
                 for ( SCSIZE i = 0; i < nCount; i++ )
                 {
-                    USHORT nErr = pMat->GetError( i);
+                    USHORT nErr = pMat->GetErrorIfNotString( i);
                     if (nErr)
                         pResMat->PutError( nErr, i);
                     else
@@ -1700,7 +1664,7 @@ void ScInterpreter::ScAmpersand()
             {
                 for ( SCSIZE i = 0; i < nCount; i++ )
                 {
-                    USHORT nErr = pMat->GetError( i);
+                    USHORT nErr = pMat->GetErrorIfNotString( i);
                     if (nErr)
                         pResMat->PutError( nErr, i);
                     else
