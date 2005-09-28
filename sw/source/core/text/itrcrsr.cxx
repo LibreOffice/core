@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:54:31 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:18:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,10 +237,19 @@ void SwTxtMargin::CtorInit( SwTxtFrm *pFrm, SwTxtSizeInfo *pNewInf )
 
     nRight = pFrm->Frm().Left() + pFrm->Prt().Left() + pFrm->Prt().Width();
 
-    if( nLeft >= nRight )
+    if( nLeft >= nRight &&
+         // --> FME 2005-08-10 #i53066# Omit adjustment of nLeft for numbered
+         // paras inside cells inside new documents:
+        ( pNewInf->GetVsh()->GetDoc()->IgnoreFirstLineIndentInNumbering() ||
+          !pFrm->IsInTab() ||
+          !nLMWithNum) )
+         // <--
+    {
         nLeft = pFrm->Prt().Left() + pFrm->Frm().Left();
-    if( nLeft >= nRight ) // z.B. bei grossen Absatzeinzuegen in schmalen Tabellenspalten
-        nRight = nLeft + 1; // einen goennen wir uns immer
+        if( nLeft >= nRight )   // z.B. bei grossen Absatzeinzuegen in schmalen Tabellenspalten
+            nRight = nLeft + 1; // einen goennen wir uns immer
+    }
+
     if( pFrm->IsFollow() && pFrm->GetOfst() )
         nFirst = nLeft;
     else
