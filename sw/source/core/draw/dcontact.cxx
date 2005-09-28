@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:23:42 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:06:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -298,7 +298,33 @@ void SwContact::SetInDTOR()
 */
 void SwContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
 {
+    // --> OD 2005-06-08 #i46297# - notify background about the arriving of
+    // the object and invalidate its position.
+    const bool bNotify( !GetFmt()->GetDoc()->IsVisibleLayerId( _pDrawObj->GetLayer() ) );
+    // <--
+
     _MoveObjToLayer( true, _pDrawObj );
+
+    // --> OD 2005-05-23 #i46297#
+    if ( bNotify )
+    {
+        SwAnchoredObject* pAnchoredObj = GetAnchoredObj( _pDrawObj );
+        ASSERT( pAnchoredObj,
+                "<SwContact::MoveObjToInvisibleLayer(..)> - missing anchored object" );
+        if ( pAnchoredObj )
+        {
+            // Note: as-character anchored objects aren't registered at a page frame and
+            //       a notification of its background isn't needed.
+            if ( pAnchoredObj->GetPageFrm() )
+            {
+                ::Notify_Background( _pDrawObj, pAnchoredObj->GetPageFrm(),
+                                     pAnchoredObj->GetObjRect(), PREP_FLY_ARRIVE, TRUE );
+            }
+
+            pAnchoredObj->InvalidateObjPos();
+        }
+    }
+    // <--
 }
 
 /** method to move drawing object to corresponding invisible layer
@@ -309,7 +335,27 @@ void SwContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
 */
 void SwContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
 {
+    // --> OD 2005-06-08 #i46297# - notify background about the leaving of the object.
+    const bool bNotify( GetFmt()->GetDoc()->IsVisibleLayerId( _pDrawObj->GetLayer() ) );
+    // <--
+
     _MoveObjToLayer( false, _pDrawObj );
+
+    // --> OD 2005-05-19 #i46297#
+    if ( bNotify )
+    {
+        SwAnchoredObject* pAnchoredObj = GetAnchoredObj( _pDrawObj );
+        ASSERT( pAnchoredObj,
+                "<SwContact::MoveObjToInvisibleLayer(..)> - missing anchored object" );
+        // Note: as-character anchored objects aren't registered at a page frame and
+        //       a notification of its background isn't needed.
+        if ( pAnchoredObj && pAnchoredObj->GetPageFrm() )
+        {
+            ::Notify_Background( _pDrawObj, pAnchoredObj->GetPageFrm(),
+                                 pAnchoredObj->GetObjRect(), PREP_FLY_LEAVE, TRUE );
+        }
+    }
+    // <--
 }
 
 /** method to move object to visible/invisible layer
@@ -707,17 +753,6 @@ void SwFlyDrawContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
 
     // make fly frame visible
     SwContact::MoveObjToVisibleLayer( _pDrawObj );
-
-    // OD 2004-02-11 #110582#-2
-    if ( pFlyFrm->IsFlyInCntFrm() )
-    {
-        static_cast<SwFlyInCntFrm*>(pFlyFrm)->SetRefPoint( Point(), Point(), Point() );
-    }
-    else
-    {
-        pFlyFrm->Frm().Pos( Point() );
-    }
-    pFlyFrm->InvalidatePos();
 }
 
 // OD 2004-01-16 #110582# - override method to control Writer fly frames,
@@ -1605,6 +1640,10 @@ void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                 "<SwDrawContact::Modify(..)> - unhandled attribute? - please inform od@openoffice.org" );
     }
 #endif
+
+    // --> OD 2005-07-18 #i51474#
+    GetAnchoredObj( 0L )->ResetLayoutProcessBools();
+    // <--
 }
 
 // OD 2004-03-31 #i26791#
