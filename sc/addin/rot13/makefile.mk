@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 17:20:04 $
+#   last change: $Author: hr $ $Date: 2005-09-28 15:30:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@ $(MISC)$/cl2c.pl: ..$/util$/cl2c.pl
 $(INCCOM)$/xlang.h : $(SOLARINCDIR)$/tools$/lang.hxx
     @+$(SED) -e "s#\([ \t]\)//\(.*\)#\1/*\2 */#" -e "s#^//\(.*\)#/*\1 */#" $(SOLARINCDIR)$/tools$/lang.hxx >$@
 
-$(SLOFILES) : $(INCCOM)$/xlang.h 
+$(SLOFILES) : $(INCCOM)$/xlang.h $(CFILES)
 
 $(MISC)$/rot.lst : \
     $(MISC)$/x$(TARGET).c \
