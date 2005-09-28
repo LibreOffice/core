@@ -4,9 +4,9 @@
 #
 #   $RCSfile: language.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:31:16 $
+#   last change: $Author: hr $ $Date: 2005-09-28 13:19:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,21 +60,21 @@ sub get_language_string_from_language_block
         }
     }
 
-    # defaulting to english?
+    # defaulting to english!
 
-    # if ( $newstring eq "" )
-    # {
-    #   $language = "01";   # defaulting to english
-    #
-    #   for ( my $i = 0; $i <= $#{$language_block}; $i++ )
-    #   {
-    #       if ( ${$language_block}[$i] =~ /^\s*$language\s*\=\s*(\".*\")\s*$/ )
-    #       {
-    #           $newstring = $1;
-    #           last;
-    #       }
-    #   }
-    # }
+    if ( $newstring eq "" )
+    {
+        $language = "en-US";    # defaulting to english
+
+        for ( my $i = 0; $i <= $#{$language_block}; $i++ )
+        {
+            if ( ${$language_block}[$i] =~ /^\s*$language\s*\=\s*(\".*\")\s*$/ )
+            {
+                $newstring = $1;
+                last;
+            }
+        }
+    }
 
     return $newstring;
 }
@@ -172,23 +172,6 @@ sub localize
 
                     ${$parfile}[$i] = $oneline;
                 }
-            }
-
-            if ( $oneline =~ /\b${$allreplacestrings}[$j]\#([\w-]+)\b/ ) # Only for basic scripts (STR_BASIC_ADABASINST1#01)
-            {
-                my $language = $1;
-                my $oldstring = ${$allreplacestrings}[$j];
-
-                my $languageblock = get_language_block_from_language_file($oldstring, $langfile);
-                my $newstring = get_language_string_from_language_block($languageblock, $language);
-
-                $oldstring = $oldstring . "\#" . $language;
-
-                if ( $newstring eq "" ) { $newstring = "\"" . $oldstring . "\""; }
-
-                $oneline =~ s/\Q$oldstring\E/$newstring/g;
-
-                ${$parfile}[$i] = $oneline;
             }
         }
     }
