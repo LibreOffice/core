@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:27:32 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:15:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1231,6 +1231,11 @@ class ExtraFormatToPositionObjs
                         if ( mpSectFrm->IsAnLower( pAnchoredObj->GetAnchorFrm() ) )
                         {
                             pAnchoredObj->UnlockPosition();
+                            // --> OD 2005-07-18 #i51474#
+                            // - reset flag for cleared environment.
+                            pAnchoredObj->SetClearedEnvironment( false );
+                            // <--
+
                         }
                     }
                 }
@@ -1350,7 +1355,8 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
         // and releases this position lock keeping on destruction.
         ExtraFormatToPositionObjs aExtraFormatToPosObjs( *this );
         if ( !bMaximize &&
-             GetFmt()->GetDoc()->ConsiderWrapOnObjPos() )
+             GetFmt()->GetDoc()->ConsiderWrapOnObjPos() &&
+             !GetFmt()->GetBalancedColumns().GetValue() )
         {
             aExtraFormatToPosObjs.FormatSectionToPositionObjs();
         }
