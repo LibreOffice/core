@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.156 $
+ *  $Revision: 1.157 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:11:15 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:26:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1599,18 +1599,14 @@ void SwWW8ImplReader::ImportDop()
 
     rDoc.SetAddFlyOffsets( true );
     rDoc.SetAddExtLeading(!pWDop->fNoLeading);
-
     // -> #111955#
     rDoc.SetOldNumbering( false );
-    // <- #111955#
-
     // --> FME 2005-05-27 #i47448#
     rDoc.SetIgnoreFirstLineIndentInNumbering( false );
-    // <--
-
     // --> FME 2005-06-08 #i49277#
     rDoc.SetDoNotJustifyLinesWithManualBreak( false );
-    // <--
+    // --> FME 2005-08-11 #i53199#
+    rDoc.SetDoNotResetParaAttrsForNumFont( false );
 
     rDoc.SetUseFormerLineSpacing( false );
 
