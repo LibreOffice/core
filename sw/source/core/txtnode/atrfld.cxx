@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrfld.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:10:17 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:21:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,9 @@
 #endif
 #ifndef _TXTFLD_HXX //autogen
 #include <txtfld.hxx>
+#endif
+#ifndef _DOCUFLD_HXX //autogen
+#include <docufld.hxx>
 #endif
 #include "reffld.hxx"
 #include "ddefld.hxx"
@@ -289,8 +292,12 @@ void SwTxtFld::Expand() const
         const USHORT nWhich = pFld->GetTyp()->Which();
         if( RES_CHAPTERFLD != nWhich && RES_PAGENUMBERFLD != nWhich &&
             RES_REFPAGEGETFLD != nWhich &&
-            ( RES_GETEXPFLD != nWhich ||
-                ((SwGetExpField*)pFld)->IsInBodyTxt() ) )
+            // --> FME 2005-05-23 #122919# Page count fields to not use aExpand
+            // during formatting, therefore an invalidation of the text frame
+            // has to be triggered even if aNewExpand == aExpand:
+            ( RES_DOCSTATFLD != nWhich || DS_PAGE != static_cast<const SwDocStatField*>(pFld)->GetSubType() ) &&
+            // <--
+            ( RES_GETEXPFLD != nWhich || ((SwGetExpField*)pFld)->IsInBodyTxt() ) )
         {
             // BP: das muesste man noch optimieren!
             //JP 12.06.97: stimmt, man sollte auf jedenfall eine Status-
