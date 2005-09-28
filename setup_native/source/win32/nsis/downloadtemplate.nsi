@@ -13,11 +13,11 @@ Function .onInit
 IfSilent onInitSilent onInitNoSilent
 
 onInitSilent:
-   StrCpy $INSTDIR "$TEMP\PRODUCTNAMEPLACEHOLDER PRODUCTVERSIONPLACEHOLDER Installation Files"
+   StrCpy $INSTDIR "$TEMP\PRODUCTPATHPLACEHOLDER Installation Files"
 GoTo onInitDone
 
 onInitNoSilent:
-   StrCpy $INSTDIR "$DESKTOP\PRODUCTNAMEPLACEHOLDER PRODUCTVERSIONPLACEHOLDER Installation Files"
+   StrCpy $INSTDIR "$DESKTOP\PRODUCTPATHPLACEHOLDER Installation Files"
 GoTo onInitDone
 
 onInitDone:
