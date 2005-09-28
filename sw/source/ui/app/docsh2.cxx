@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:30:09 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:28:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1678,7 +1678,19 @@ void SwDocShell::UpdateChildWindows()
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-
+// --> OD 2005-08-02 #i48748#
+class SwReloadFromHtmlReader : public SwReader
+{
+    public:
+        SwReloadFromHtmlReader( SfxMedium& _rTmpMedium,
+                                const String& _rFilename,
+                                SwDoc* pDoc )
+            : SwReader( _rTmpMedium, _rFilename, pDoc )
+        {
+            SetBaseURL( _rFilename );
+        }
+};
+// <--
 void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView )
 {
     BOOL bModified = IsModified();
@@ -1755,7 +1767,12 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
     SubInitNew();
 
     SfxMedium aMed( rStreamName, STREAM_READ, FALSE );
-    SwReader aReader( aMed, rMedname, pDoc );
+    // --> OD 2005-08-01 #i48748# - use class <SwReloadFromHtmlReader>, because
+    // the base URL has to be set to the filename of the document <rMedname>
+    // and not to the base URL of the temporary file <aMed> in order to get
+    // the URLs of the linked graphics correctly resolved.
+    SwReloadFromHtmlReader aReader( aMed, rMedname, pDoc );
+    // <--
     aReader.Read( *ReadHTML );
 
     const SwView* pView = GetView();
