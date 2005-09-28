@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoblk.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:38:34 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:13:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
 #include <svx/boxitem.hxx>
+#include <sfx2/app.hxx>
 
 #include "undoblk.hxx"
 #include "undoutil.hxx"
@@ -69,6 +70,7 @@
 #include "transobj.hxx"
 #include "refundo.hxx"
 #include "undoolk.hxx"
+#include "sc.hrc"
 
 
 // STATIC DATA -----------------------------------------------------------
@@ -359,6 +361,10 @@ void ScUndoDeleteCells::DoChange( const BOOL bUndo )
     else
         SetChangeTrack();
 
+    // are there merged cells?
+    ScRange aWorkRange( aEffRange );
+    BOOL bMergeBefore = pDoc->HasAttrib( aWorkRange, HASATTR_MERGED );
+
     // Ausfuehren
     switch (eCmd)
     {
@@ -384,14 +390,15 @@ void ScUndoDeleteCells::DoChange( const BOOL bUndo )
 
 //? Datenbank muss vor ExtendMerge sein ?????
 
-    // Zusammengefasste Zellen?
-    ScRange aWorkRange( aEffRange );
-    if ( pDoc->HasAttrib( aWorkRange, HASATTR_MERGED ) )
+    if ( bMergeBefore || pDoc->HasAttrib( aWorkRange, HASATTR_MERGED ) )
     {
-/*?     if ( !bUndo && ( eCmd==DEL_DELCOLS || eCmd==DEL_DELROWS ) )
+        // #i51445# old merge flag attributes must be deleted also for single cells,
+        // not only for whole columns/rows
+
+        if ( !bUndo )
         {
-            if (eCmd==DEL_DELCOLS) aWorkRange.aEnd.SetCol(MAXCOL);
-            if (eCmd==DEL_DELROWS) aWorkRange.aEnd.SetRow(MAXROW);
+            if ( eCmd==DEL_DELCOLS || eCmd==DEL_CELLSLEFT ) aWorkRange.aEnd.SetCol(MAXCOL);
+            if ( eCmd==DEL_DELROWS || eCmd==DEL_CELLSUP ) aWorkRange.aEnd.SetRow(MAXROW);
             ScMarkData aMarkData;
             aMarkData.SelectOneTable( aWorkRange.aStart.Tab() );
             ScPatternAttr aPattern( pDoc->GetPool() );
@@ -400,7 +407,7 @@ void ScUndoDeleteCells::DoChange( const BOOL bUndo )
                                     aWorkRange.aEnd.Col(),   aWorkRange.aEnd.Row(),
                                     aMarkData, aPattern );
         }
-?*/
+
         pDoc->ExtendMerge( aWorkRange, TRUE );
     }
 
@@ -451,6 +458,7 @@ void __EXPORT ScUndoDeleteCells::Undo()
     BeginUndo();
     DoChange( TRUE );
     EndUndo();
+    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 
     // Markierung erst nach EndUndo
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -464,6 +472,7 @@ void __EXPORT ScUndoDeleteCells::Redo()
     BeginRedo();
     DoChange( FALSE);
     EndRedo();
+    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
@@ -605,6 +614,7 @@ void __EXPORT ScUndoDeleteMulti::Undo()
     //! geht im Moment nicht, da keine Daten fuer Markierung vorhanden!
 
     EndUndo();
+    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 }
 
 void __EXPORT ScUndoDeleteMulti::Redo()
@@ -636,6 +646,7 @@ void __EXPORT ScUndoDeleteMulti::Redo()
 //!     DoneBlockMode();
 
     EndRedo();
+    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 }
 
 void __EXPORT ScUndoDeleteMulti::Repeat(SfxRepeatTarget& rTarget)
@@ -972,6 +983,7 @@ void __EXPORT ScUndoPaste::Undo()
     DoChange( TRUE );
     ShowTable( aBlockRange );
     EndUndo();
+    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 }
 
 void __EXPORT ScUndoPaste::Redo()
@@ -982,6 +994,7 @@ void __EXPORT ScUndoPaste::Redo()
     DoChange( FALSE );
     EnableDrawAdjust( pDoc, TRUE );                 //! include in ScBlockUndo?
     EndRedo();
+    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 }
 
 void __EXPORT ScUndoPaste::Repeat(SfxRepeatTarget& rTarget)
@@ -1154,6 +1167,7 @@ void __EXPORT ScUndoDragDrop::Undo()
     if (bCut)
         DoUndo(aSrcRange);
     EndUndo();
+    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 }
 
 void __EXPORT ScUndoDragDrop::Redo()
@@ -1214,6 +1228,7 @@ void __EXPORT ScUndoDragDrop::Redo()
     EnableDrawAdjust( pDoc, TRUE );             //! include in ScBlockUndo?
 
     EndRedo();
+    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 }
 
 void __EXPORT ScUndoDragDrop::Repeat(SfxRepeatTarget& rTarget)
