@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:58:38 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 12:11:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,7 +152,7 @@ BOOL __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
 
     if ( pView->IsTextEdit() )
     {
-        if(!IsReSizingNote(rMEvt))
+        if( !IsSizingOrMovingNote(rMEvt) )
             StopEditMode();            // Danebengeklickt, Ende mit Edit
         pView->SetCreateMode();
     }
