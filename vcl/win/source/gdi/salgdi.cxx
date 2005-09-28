@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:05:06 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 15:07:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -747,6 +747,8 @@ WinSalGraphics::WinSalGraphics()
         mpWinFontData[ i ]  = NULL;
         mpWinFontEntry[ i ] = NULL;
     }
+
+    mfFontScale = 1.0;
 
     mhDC                = 0;
     mhPen               = 0;
