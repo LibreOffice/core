@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:11:01 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:11:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -438,8 +438,12 @@ void SwFlyFrm::InitDrawObj( BOOL bNotify )
     SwFlyDrawContact *pContact = (SwFlyDrawContact*)
                                         aIter.First( TYPE(SwFlyDrawContact) );
     if ( !pContact )
+    {
+        // --> OD 2005-08-08 #i52858# - method name changed
         pContact = new SwFlyDrawContact( (SwFlyFrmFmt*)GetFmt(),
-                            GetFmt()->GetDoc()->MakeDrawModel() );
+                            GetFmt()->GetDoc()->GetOrCreateDrawModel() );
+        // <--
+    }
     ASSERT( pContact, "InitDrawObj failed" );
     // OD 2004-03-22 #i26791#
     SetDrawObj( *(pContact->CreateNewRef( this )) );
@@ -820,6 +824,10 @@ void SwFlyFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
         }
         // <--
     }
+
+    // --> OD 2005-07-18 #i51474# - reset flags for the layout process
+    ResetLayoutProcessBools();
+    // <--
 }
 
 void SwFlyFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
@@ -2206,13 +2214,21 @@ void SwFrm::InvalidateObjs( const bool _bInvaPosOnly,
                 // <--
             }
             // <--
+            // --> OD 2005-07-18 #i51474# - reset flag, that anchored object
+            // has cleared environment, and unlock its position, if the anchored
+            // object is registered at the same page as the anchor frame is on.
+            if ( pAnchoredObj->ClearedEnvironment() &&
+                 pAnchoredObj->GetPageFrm() &&
+                 pAnchoredObj->GetPageFrm() == pPageFrm )
+            {
+                pAnchoredObj->UnlockPosition();
+                pAnchoredObj->SetClearedEnvironment( false );
+            }
+            // <--
             // distinguish between writer fly frames and drawing objects
             if ( pAnchoredObj->ISA(SwFlyFrm) )
             {
                 SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
-                ASSERT( pFly->IsFlyFreeFrm(),
-                        "<SwFrm::InvalidateObjs(..) - <pFly> isn't a <SwFlyFreeFrm>." );
-
                 pFly->_Invalidate();
                 pFly->_InvalidatePos();
                 if ( !_bInvaPosOnly )
