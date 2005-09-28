@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fprogressbar.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:11:31 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:54:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,7 +142,7 @@ void ScfProgressBar::IncreaseProgressBar( sal_uInt32 nDelta )
         // calculate new position of parent progress bar
         sal_uInt32 nParentPos = static_cast< sal_uInt32 >(
             static_cast< double >( nNewPos ) * mpParentSegment->mnSize / mnTotalSize );
-        mpParentProgress->Progress( nParentPos );
+        mpParentProgress->ProgressAbs( nParentPos );
     }
     // modify system progress bar
     else if( mxSysProgress.get() )
@@ -196,7 +196,7 @@ void ScfProgressBar::ActivateSegment( sal_Int32 nSegment )
         SetCurrSegment( GetSegment( nSegment ) );
 }
 
-void ScfProgressBar::Progress( sal_uInt32 nPos )
+void ScfProgressBar::ProgressAbs( sal_uInt32 nPos )
 {
     DBG_ASSERT( mbInProgress && mpCurrSegment, "ScfProgressBar::Progress - no segment started" );
     if( mpCurrSegment )
@@ -211,9 +211,9 @@ void ScfProgressBar::Progress( sal_uInt32 nPos )
     }
 }
 
-void ScfProgressBar::Progress()
+void ScfProgressBar::Progress( sal_uInt32 nDelta )
 {
-    Progress( mpCurrSegment ? (mpCurrSegment->mnPos + 1) : 0 );
+    ProgressAbs( mpCurrSegment ? (mpCurrSegment->mnPos + nDelta) : 0 );
 }
 
 // ============================================================================
@@ -253,7 +253,7 @@ ScfStreamProgressBar::ScfStreamProgressBar( SvStream& rStrm, SfxObjectShell* pDo
 
 void ScfStreamProgressBar::Progress()
 {
-    mxProgress->Progress( mrStrm.Tell() );
+    mxProgress->ProgressAbs( mrStrm.Tell() );
 }
 
 void ScfStreamProgressBar::Init( SfxObjectShell* pDocShell, const String& rText )
