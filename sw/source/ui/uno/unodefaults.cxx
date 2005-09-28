@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodefaults.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:20:12 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:31:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,9 @@ SfxItemPool* SwSvxUnoDrawPool::getModelPool( sal_Bool bReadOnly ) throw()
         // it contains draw model item pool as secondary pool.
         //SdrModel* pModel = m_pDoc->MakeDrawModel();
         //return &pModel->GetItemPool();
-        m_pDoc->MakeDrawModel();
+        // --> OD 2005-08-08 #i52858# - method name changed
+        m_pDoc->GetOrCreateDrawModel();
+        // <--
         return &(m_pDoc->GetAttrPool());
     }
     return 0;
