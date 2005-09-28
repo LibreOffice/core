@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dptabsrc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:24:42 $
+ *  last change: $Author: hr $ $Date: 2005-09-28 11:32:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1309,7 +1309,8 @@ long ScDPDimension::getUsedHierarchy() const
 
 void ScDPDimension::setUsedHierarchy(long nNew)
 {
-    nUsedHier = nNew;
+    // #i52547# don't use the incomplete date hierarchy implementation - ignore the call
+    // nUsedHier = nNew;
 }
 
 ScDPDimension* ScDPDimension::CreateCloneObject()
@@ -1547,12 +1548,17 @@ ScDPHierarchies::ScDPHierarchies( ScDPSource* pSrc, long nD ) :
 {
     //! hold pSource
 
+#if 0
     //  date columns have 3 hierarchies (flat/quarter/week), other columns only one
     long nSrcDim = pSource->GetSourceDim( nDim );
     if ( pSource->IsDateDimension( nSrcDim ) )
         nHierCount = SC_DAPI_DATE_HIERARCHIES;
     else
         nHierCount = 1;
+#endif
+
+    // #i52547# don't offer the incomplete date hierarchy implementation
+    nHierCount = 1;
 }
 
 ScDPHierarchies::~ScDPHierarchies()
