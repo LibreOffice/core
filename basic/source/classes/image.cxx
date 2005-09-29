@@ -4,9 +4,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:33:14 $
+ *  last change: $Author: hr $ $Date: 2005-09-29 18:38:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -383,10 +383,12 @@ void SbiImage::AddString( const String& r )
             bError = TRUE;  // out of mem!
         else if( (USHORT) needed > nStringSize )
         {
-            UINT16 nNewLen = needed + 1024;
-            nNewLen &= 0xFC00;  // trim to 1K border
-            sal_Unicode* p = new sal_Unicode[ nNewLen ];
-            if( p )
+            UINT32 nNewLen = needed + 1024;
+            nNewLen &= 0xFFFFFC00;  // trim to 1K border
+            if( nNewLen > 0xFF00L )
+                nNewLen = 0xFF00L;
+            sal_Unicode* p = NULL;
+            if( (p = new sal_Unicode[ nNewLen ]) != NULL )
             {
                 memcpy( p, pStrings, nStringSize * sizeof( sal_Unicode ) );
                 delete[] pStrings;
