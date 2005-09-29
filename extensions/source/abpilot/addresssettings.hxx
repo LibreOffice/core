@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addresssettings.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:04:54 $
+ *  last change: $Author: hr $ $Date: 2005-09-29 10:39:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@ namespace abp
     enum AddressSourceType
     {
         AST_MORK,
+        AST_THUNDERBIRD,
         AST_EVOLUTION,
         AST_LDAP,
         AST_OUTLOOK,
