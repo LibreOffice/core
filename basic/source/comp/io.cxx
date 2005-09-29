@@ -4,9 +4,9 @@
  *
  *  $RCSfile: io.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:35:53 $
+ *  last change: $Author: hr $ $Date: 2005-09-29 18:40:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,8 @@ BOOL SbiParser::Channel( BOOL bAlways )
     if( IsHash() )
     {
         SbiExpression aExpr( this );
-        if( Peek() == COMMA ) Next();
+        while( Peek() == COMMA || Peek() == SEMICOLON )
+            Next();
         aExpr.Gen();
         aGen.Gen( _CHANNEL );
         bRes = TRUE;
