@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:33:14 $
+ *  last change: $Author: hr $ $Date: 2005-09-29 18:38:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -747,8 +747,12 @@ USHORT SbModule::Run( SbMethod* pMeth )
             pMOD = this;
             SbiRuntime* pRt = new SbiRuntime( this, pMeth, pMeth->nStart );
             pRt->pNext = pINST->pRun;
+            if( pRt->pNext )
+                pRt->pNext->block();
             pINST->pRun = pRt;
             while( pRt->Step() ) {}
+            if( pRt->pNext )
+                pRt->pNext->unblock();
 
             // #63710 Durch ein anderes Thread-Handling bei Events kann es passieren,
             // dass show-Aufruf an einem Dialog zurueckkehrt (durch schliessen des
