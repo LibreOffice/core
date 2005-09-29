@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasourcehandling.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:06:23 $
+ *  last change: $Author: hr $ $Date: 2005-09-29 10:40:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -321,6 +321,12 @@ namespace abp
     ODataSource ODataSourceContext::createNewMORK( const ::rtl::OUString& _rName) SAL_THROW (( ))
     {
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:mozilla" );
+    }
+
+    //---------------------------------------------------------------------
+    ODataSource ODataSourceContext::createNewThunderbird( const ::rtl::OUString& _rName ) SAL_THROW (( ))
+    {
+        return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:thunderbird" );
     }
 
     //---------------------------------------------------------------------
