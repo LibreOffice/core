@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exprnode.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:35:53 $
+ *  last change: $Author: hr $ $Date: 2005-09-29 18:39:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,18 +273,14 @@ void SbiExprNode::FoldConstants()
             {
                 String rl( pLeft->GetString() );
                 String rr( pRight->GetString() );
-                delete pLeft; pLeft = NULL;
-                delete pRight; pRight = NULL;
-                eType = SbxDOUBLE;
-                eNodeType = SbxNUMVAL;
-                bComposite = FALSE;
-                StringCompare eRes = rr.CompareTo( rl );
-                //StringCompare eRes = rl.Compare( rr );
                 String s;
-                switch( eTok )
+                bool bOk = true;
+                if( eTok == PLUS || eTok == CAT )
                 {
-                    case PLUS:
-                    case CAT:
+                    // #i45570: Block long strings
+                    UINT32 nTotalLen = rl.Len() + rr.Len();
+                    if( nTotalLen < 0x50 )
+                    {
                         eTok = CAT;
                         // Verkettung:
                         s = rl;
@@ -292,28 +288,47 @@ void SbiExprNode::FoldConstants()
                         nStringId = pGen->GetParser()->aGblStrings.Add( s, TRUE );
                         eType = SbxSTRING;
                         eNodeType = SbxSTRVAL;
-                        break;
-                    case EQ:
-                        nVal = ( eRes == COMPARE_EQUAL ) ? SbxTRUE : SbxFALSE;
-                        break;
-                    case NE:
-                        nVal = ( eRes != COMPARE_EQUAL ) ? SbxTRUE : SbxFALSE;
-                        break;
-                    case LT:
-                        nVal = ( eRes == COMPARE_LESS ) ? SbxTRUE : SbxFALSE;
-                        break;
-                    case GT:
-                        nVal = ( eRes == COMPARE_GREATER ) ? SbxTRUE : SbxFALSE;
-                        break;
-                    case LE:
-                        nVal = ( eRes != COMPARE_GREATER ) ? SbxTRUE : SbxFALSE;
-                        break;
-                    case GE:
-                        nVal = ( eRes != COMPARE_LESS ) ? SbxTRUE : SbxFALSE;
-                        break;
-                    default:
-                        pGen->GetParser()->Error( SbERR_CONVERSION );
-                        bError = TRUE;
+                    }
+                    else
+                    {
+                        bOk = false;
+                    }
+                }
+                else
+                {
+                    eType = SbxDOUBLE;
+                    eNodeType = SbxNUMVAL;
+                    StringCompare eRes = rr.CompareTo( rl );
+                    switch( eTok )
+                    {
+                        case EQ:
+                            nVal = ( eRes == COMPARE_EQUAL ) ? SbxTRUE : SbxFALSE;
+                            break;
+                        case NE:
+                            nVal = ( eRes != COMPARE_EQUAL ) ? SbxTRUE : SbxFALSE;
+                            break;
+                        case LT:
+                            nVal = ( eRes == COMPARE_LESS ) ? SbxTRUE : SbxFALSE;
+                            break;
+                        case GT:
+                            nVal = ( eRes == COMPARE_GREATER ) ? SbxTRUE : SbxFALSE;
+                            break;
+                        case LE:
+                            nVal = ( eRes != COMPARE_GREATER ) ? SbxTRUE : SbxFALSE;
+                            break;
+                        case GE:
+                            nVal = ( eRes != COMPARE_LESS ) ? SbxTRUE : SbxFALSE;
+                            break;
+                        default:
+                            pGen->GetParser()->Error( SbERR_CONVERSION );
+                            bError = TRUE;
+                    }
+                }
+                if( bOk )
+                {
+                    delete pLeft; pLeft = NULL;
+                    delete pRight; pRight = NULL;
+                    bComposite = FALSE;
                 }
             }
             else
