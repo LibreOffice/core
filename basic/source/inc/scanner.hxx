@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scanner.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:31:39 $
+ *  last change: $Author: hr $ $Date: 2005-09-29 18:41:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,7 @@ protected:
     BOOL   bError;                      // TRUE: Fehler generieren
     BOOL   bUsedForHilite;              // TRUE: Nutzung fuer Highlighting
     BOOL   bCompatible;                 // TRUE: OPTION Compatible
+    BOOL   bPrevLineExtentsComment;     // TRUE: Previous line is comment and ends on "... _"
 
     void   GenError( SbError );
 public:
