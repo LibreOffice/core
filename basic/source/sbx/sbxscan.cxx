@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxscan.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:52:36 $
+ *  last change: $Author: hr $ $Date: 2005-09-29 18:42:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -633,6 +633,27 @@ BOOL SbxValue::Scan( const XubString& rSrc, USHORT* pLen )
         return TRUE;
 }
 
+
+ResMgr* implGetResMgr( void )
+{
+    static ResMgr* pResMgr = NULL;
+    if( !pResMgr )
+    {
+        ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
+        pResMgr = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(stt), aLocale );
+    }
+    return pResMgr;
+}
+
+class SbxValueFormatResId : public ResId
+{
+public:
+    SbxValueFormatResId( USHORT nId )
+        : ResId( nId, implGetResMgr() )
+    {}
+};
+
+
 void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
 {
     short nComma;
@@ -690,19 +711,19 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
                     // Initialisierung des Basic-Formater-Hilfsobjekts:
                     // hole die Resourcen f"ur die vordefinierten Ausgaben
                     // des Format()-Befehls, z.B. f"ur "On/Off".
-                    String aOnStrg = String( BasicResId(
+                    String aOnStrg = String( SbxValueFormatResId(
                         STR_BASICKEY_FORMAT_ON ) );
-                    String aOffStrg = String( BasicResId(
+                    String aOffStrg = String( SbxValueFormatResId(
                         STR_BASICKEY_FORMAT_OFF) );
-                    String aYesStrg = String( BasicResId(
+                    String aYesStrg = String( SbxValueFormatResId(
                         STR_BASICKEY_FORMAT_YES) );
-                    String aNoStrg = String( BasicResId(
+                    String aNoStrg = String( SbxValueFormatResId(
                         STR_BASICKEY_FORMAT_NO) );
-                    String aTrueStrg = String( BasicResId(
+                    String aTrueStrg = String( SbxValueFormatResId(
                         STR_BASICKEY_FORMAT_TRUE) );
-                    String aFalseStrg = String( BasicResId(
+                    String aFalseStrg = String( SbxValueFormatResId(
                         STR_BASICKEY_FORMAT_FALSE) );
-                    String aCurrencyFormatStrg = String( BasicResId(
+                    String aCurrencyFormatStrg = String( SbxValueFormatResId(
                         STR_BASICKEY_FORMAT_CURRENCY) );
                     // erzeuge das Basic-Formater-Objekt
                     pData->pBasicFormater
