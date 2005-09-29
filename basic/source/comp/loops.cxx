@@ -4,9 +4,9 @@
  *
  *  $RCSfile: loops.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:35:53 $
+ *  last change: $Author: hr $ $Date: 2005-09-29 18:40:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -486,6 +486,7 @@ void SbiParser::On()
         {
             // ON ERROR GOTO label|0
             Next();
+            bool bError = false;
             if( MayBeLabel() )
             {
                 if( eCurTok == NUMBER && !nVal )
@@ -496,7 +497,16 @@ void SbiParser::On()
                     aGen.Gen( _ERRHDL, nOff );
                 }
             }
-            else Error( SbERR_LABEL_EXPECTED );
+            else if( eCurTok == MINUS )
+            {
+                Next();
+                if( eCurTok == NUMBER && nVal == 1 )
+                    aGen.Gen( _STDERROR );
+                else
+                    bError = true;
+            }
+            if( bError )
+                Error( SbERR_LABEL_EXPECTED );
         }
         else if( eCurTok == RESUME )
         {
