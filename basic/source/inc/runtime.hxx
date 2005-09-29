@@ -4,9 +4,9 @@
  *
  *  $RCSfile: runtime.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:31:38 $
+ *  last change: $Author: hr $ $Date: 2005-09-29 18:41:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -358,6 +358,7 @@ class SbiRuntime
     BOOL          bRun;             // TRUE: Programm ist aktiv
     BOOL          bError;           // TRUE: Fehler behandeln
     BOOL          bInError;         // TRUE: in einem Fehler-Handler
+    BOOL          bBlocked;         // TRUE: blocked by next call level, #i48868
     USHORT        nFlags;           // Debugging-Flags
     SbError       nError;           // letzter Fehler
     USHORT        nOps;             // Opcode-Zaehler
@@ -479,6 +480,8 @@ public:
     BOOL Step();                    // Einzelschritt (ein Opcode)
     void Stop()            { bRun = FALSE;   }
     BOOL IsRun()           { return bRun;    }
+    void block( void )     { bBlocked = TRUE; }
+    void unblock( void )   { bBlocked = FALSE; }
     SbMethod* GetMethod()  { return pMeth;   }
     SbModule* GetModule()  { return pMod;    }
     USHORT GetDebugFlags() { return nFlags;  }
