@@ -4,9 +4,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:02:46 $
+ *  last change: $Author: hr $ $Date: 2005-09-29 10:39:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,9 +129,17 @@ TabPage RID_PAGE_SELECTABTYPE
         Text [ de ] = "Mozilla / Netscape";
         Text [ en-US ] = "Mozilla / Netscape";
     };
+    RadioButton RB_THUNDERBIRD
+    {
+        Pos     = MAP_APPFONT ( 15, 79 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
+
+        Text [ de ] = "Thunderbird";
+        Text [ en-US ] = "Thunderbird";
+    };
     RadioButton RB_EVOLUTION
      {
-         Pos        = MAP_APPFONT ( 15, 79 ) ;
+         Pos        = MAP_APPFONT ( 15, 90 ) ;
          Size   = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
         Text [ de ] = "Evolution";
@@ -139,7 +147,7 @@ TabPage RID_PAGE_SELECTABTYPE
     };
     RadioButton RB_LDAP
     {
-        Pos     = MAP_APPFONT ( 15, 90 ) ;
+        Pos     = MAP_APPFONT ( 15, 101 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
         Text [ de ] = "LDAP Adress-Bestand";
@@ -147,7 +155,7 @@ TabPage RID_PAGE_SELECTABTYPE
     };
     RadioButton RB_OUTLOOK
     {
-        Pos     = MAP_APPFONT ( 15, 101 ) ;
+        Pos     = MAP_APPFONT ( 15, 111 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
         Text [ de ] = "Outlook Adressbuch";
@@ -155,7 +163,7 @@ TabPage RID_PAGE_SELECTABTYPE
     };
     RadioButton RB_OUTLOOKEXPRESS
     {
-        Pos     = MAP_APPFONT ( 15,112 ) ;
+        Pos     = MAP_APPFONT ( 15,123 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
         Text [ de ] = "Windows System-Adressbuch";
@@ -163,7 +171,7 @@ TabPage RID_PAGE_SELECTABTYPE
     };
     RadioButton RB_OTHER
     {
-        Pos     = MAP_APPFONT ( 15, 123 ) ;
+        Pos     = MAP_APPFONT ( 15, 134 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
         Text [ de ] = "andere externe Datenquelle";
