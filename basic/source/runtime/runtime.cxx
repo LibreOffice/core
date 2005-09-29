@@ -4,9 +4,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:41:13 $
+ *  last change: $Author: hr $ $Date: 2005-09-29 18:42:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -510,6 +510,7 @@ SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, USHORT nStart )
     bRun      =
     bError    = TRUE;
     bInError  = FALSE;
+    bBlocked  = FALSE;
     nLine     =
     nCol1     =
     nCol2     =
@@ -649,6 +650,13 @@ BOOL SbiRuntime::Step()
         // Unbedingt gelegentlich die Kontrolle abgeben!
         if( !( ++nOps & 0x1F ) && pInst->IsReschedule() && bStaticGlobalEnableReschedule )
             Application::Reschedule();
+
+        // #i48868 blocked by next call level?
+        while( bBlocked )
+        {
+            if( pInst->IsReschedule() && bStaticGlobalEnableReschedule )
+                Application::Reschedule();
+        }
 
         SbiOpcode eOp = (SbiOpcode ) ( *pCode++ );
         USHORT nOp1, nOp2;
