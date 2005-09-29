@@ -4,9 +4,9 @@
  *
  *  $RCSfile: abspilot.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:04:06 $
+ *  last change: $Author: hr $ $Date: 2005-09-29 10:39:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -359,7 +359,8 @@ namespace abp
         const sal_Char* pGuess = NULL;
         switch ( getSettings().eType )
         {
-            case AST_MORK       : pGuess = "Personal Address Book"; break;
+            case AST_MORK       :
+            case AST_THUNDERBIRD: pGuess = "Personal Address Book"; break;
             case AST_LDAP       : pGuess = "LDAP Directory"; break;
         }
         const ::rtl::OUString sGuess = ::rtl::OUString::createFromAscii( pGuess );
@@ -395,6 +396,10 @@ namespace abp
         {
             case AST_MORK:
                 m_aNewDataSource = aContext.createNewMORK( m_aSettings.sDataSourceName );
+                break;
+
+            case AST_THUNDERBIRD:
+                m_aNewDataSource = aContext.createNewThunderbird( m_aSettings.sDataSourceName );
                 break;
 
             case AST_EVOLUTION:
