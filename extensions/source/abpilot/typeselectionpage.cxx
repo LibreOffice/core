@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typeselectionpage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:10:12 $
+ *  last change: $Author: hr $ $Date: 2005-09-29 10:41:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,7 @@ namespace abp
         ,m_aHint            (this,  ResId(FT_TYPE_HINTS))
         ,m_aTypeSep         (this,  ResId(FL_TYPE))
         ,m_aMORK            (this,  ResId(RB_MORK))
+        ,m_aThunderbird     (this,  ResId(RB_THUNDERBIRD))
         ,m_aEvolution       (this,  ResId(RB_EVOLUTION))
         ,m_aLDAP            (this,  ResId(RB_LDAP))
         ,m_aOutlook         (this,  ResId(RB_OUTLOOK))
@@ -74,6 +75,7 @@ namespace abp
 
         Link aTypeSelectionHandler = LINK(this, TypeSelectionPage, OnTypeSelected );
         m_aMORK.SetClickHdl( aTypeSelectionHandler );
+        m_aThunderbird.SetClickHdl( aTypeSelectionHandler );
         m_aEvolution.SetClickHdl( aTypeSelectionHandler );
         m_aLDAP.SetClickHdl( aTypeSelectionHandler );
         m_aOutlook.SetClickHdl( aTypeSelectionHandler );
@@ -84,21 +86,15 @@ namespace abp
         sal_Int32 nMoveControlsUp = m_aLDAP.GetPosPixel().Y() - m_aEvolution.GetPosPixel().Y();
         m_aEvolution.Hide();
 
-        Point aPos = m_aLDAP.GetPosPixel();
-        aPos.Y() -= nMoveControlsUp;
-        m_aLDAP.SetPosPixel( aPos );
-
-        aPos = m_aOutlook.GetPosPixel();
-        aPos.Y() -= nMoveControlsUp;
-        m_aOutlook.SetPosPixel( aPos );
-
-        aPos = m_aOE.GetPosPixel();
-        aPos.Y() -= nMoveControlsUp;
-        m_aOE.SetPosPixel( aPos );
-
-        aPos = m_aOther.GetPosPixel();
-        aPos.Y() -= nMoveControlsUp;
-        m_aOther.SetPosPixel( aPos );
+        Control* pMoveControls[] = {
+            &m_aLDAP, &m_aOutlook, &m_aOE, &m_aOther, NULL
+        };
+        for ( Control** pMoveIt = pMoveControls; *pMoveIt; ++pMoveIt )
+        {
+            Point aPos = (*pMoveIt)->GetPosPixel();
+            aPos.Y() -= nMoveControlsUp;
+            (*pMoveIt)->SetPosPixel( aPos );
+        }
 #endif
 
 #ifdef UNX
@@ -134,18 +130,15 @@ namespace abp
     {
         AddressBookSourcePage::ActivatePage();
 
-        if (m_aMORK.IsChecked())
-            m_aMORK.GrabFocus();
-        else if (m_aEvolution.IsChecked())
-            m_aEvolution.GrabFocus();
-        else if (m_aLDAP.IsChecked())
-            m_aLDAP.GrabFocus();
-        else if (m_aOutlook.IsChecked())
-            m_aOutlook.GrabFocus();
-        else if (m_aOE.IsChecked())
-            m_aOE.GrabFocus();
-        else if (m_aOther.IsChecked())
-            m_aOther.GrabFocus();
+        RadioButton* pOptions[] = {
+            &m_aMORK, &m_aThunderbird, &m_aEvolution, &m_aLDAP, &m_aOutlook, &m_aOE, &m_aOther, NULL
+        };
+        for ( RadioButton** pCheck = pOptions; *pCheck; ++pCheck )
+            if ( (*pCheck)->IsChecked() )
+            {
+                (*pCheck)->GrabFocus();
+                break;
+            }
 
         getDialog()->enableButtons(WZB_PREVIOUS, sal_False);
     }
@@ -161,6 +154,7 @@ namespace abp
     void TypeSelectionPage::selectType( AddressSourceType _eType )
     {
         m_aMORK.Check(AST_MORK == _eType);
+        m_aThunderbird.Check(AST_THUNDERBIRD == _eType);
         m_aEvolution.Check(AST_EVOLUTION == _eType);
         m_aLDAP.Check(AST_LDAP == _eType);
         m_aOutlook.Check(AST_OUTLOOK == _eType);
@@ -173,6 +167,8 @@ namespace abp
     {
         if (m_aMORK.IsChecked())
             return AST_MORK;
+        else if (m_aThunderbird.IsChecked())
+            return AST_THUNDERBIRD;
         else if (m_aEvolution.IsChecked())
             return AST_EVOLUTION;
         else if (m_aLDAP.IsChecked())
