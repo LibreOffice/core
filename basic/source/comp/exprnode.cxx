@@ -1,35 +1,61 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
- *
  *  $RCSfile: exprnode.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:28:30 $
+ *  last change: $Author: hr $ $Date: 2005-09-29 12:46:06 $
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
  *
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
  *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
  *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
  *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
  *
  ************************************************************************/
 
@@ -273,18 +299,14 @@ void SbiExprNode::FoldConstants()
             {
                 String rl( pLeft->GetString() );
                 String rr( pRight->GetString() );
-                delete pLeft; pLeft = NULL;
-                delete pRight; pRight = NULL;
-                eType = SbxDOUBLE;
-                eNodeType = SbxNUMVAL;
-                bComposite = FALSE;
-                StringCompare eRes = rr.CompareTo( rl );
-                //StringCompare eRes = rl.Compare( rr );
                 String s;
-                switch( eTok )
+                bool bOk = true;
+                if( eTok == PLUS || eTok == CAT )
                 {
-                    case PLUS:
-                    case CAT:
+                    // #i45570: Block long strings
+                    UINT32 nTotalLen = rl.Len() + rr.Len();
+                    if( nTotalLen < 0x50 )
+                    {
                         eTok = CAT;
                         // Verkettung:
                         s = rl;
@@ -292,28 +314,47 @@ void SbiExprNode::FoldConstants()
                         nStringId = pGen->GetParser()->aGblStrings.Add( s, TRUE );
                         eType = SbxSTRING;
                         eNodeType = SbxSTRVAL;
-                        break;
-                    case EQ:
-                        nVal = ( eRes == COMPARE_EQUAL ) ? SbxTRUE : SbxFALSE;
-                        break;
-                    case NE:
-                        nVal = ( eRes != COMPARE_EQUAL ) ? SbxTRUE : SbxFALSE;
-                        break;
-                    case LT:
-                        nVal = ( eRes == COMPARE_LESS ) ? SbxTRUE : SbxFALSE;
-                        break;
-                    case GT:
-                        nVal = ( eRes == COMPARE_GREATER ) ? SbxTRUE : SbxFALSE;
-                        break;
-                    case LE:
-                        nVal = ( eRes != COMPARE_GREATER ) ? SbxTRUE : SbxFALSE;
-                        break;
-                    case GE:
-                        nVal = ( eRes != COMPARE_LESS ) ? SbxTRUE : SbxFALSE;
-                        break;
-                    default:
-                        pGen->GetParser()->Error( SbERR_CONVERSION );
-                        bError = TRUE;
+                    }
+                    else
+                    {
+                        bOk = false;
+                    }
+                }
+                else
+                {
+                    eType = SbxDOUBLE;
+                    eNodeType = SbxNUMVAL;
+                    StringCompare eRes = rr.CompareTo( rl );
+                    switch( eTok )
+                    {
+                        case EQ:
+                            nVal = ( eRes == COMPARE_EQUAL ) ? SbxTRUE : SbxFALSE;
+                            break;
+                        case NE:
+                            nVal = ( eRes != COMPARE_EQUAL ) ? SbxTRUE : SbxFALSE;
+                            break;
+                        case LT:
+                            nVal = ( eRes == COMPARE_LESS ) ? SbxTRUE : SbxFALSE;
+                            break;
+                        case GT:
+                            nVal = ( eRes == COMPARE_GREATER ) ? SbxTRUE : SbxFALSE;
+                            break;
+                        case LE:
+                            nVal = ( eRes != COMPARE_GREATER ) ? SbxTRUE : SbxFALSE;
+                            break;
+                        case GE:
+                            nVal = ( eRes != COMPARE_LESS ) ? SbxTRUE : SbxFALSE;
+                            break;
+                        default:
+                            pGen->GetParser()->Error( SbERR_CONVERSION );
+                            bError = TRUE;
+                    }
+                }
+                if( bOk )
+                {
+                    delete pLeft; pLeft = NULL;
+                    delete pRight; pRight = NULL;
+                    bComposite = FALSE;
                 }
             }
             else
