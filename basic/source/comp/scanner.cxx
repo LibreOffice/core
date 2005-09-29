@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scanner.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:35:53 $
+ *  last change: $Author: hr $ $Date: 2005-09-29 18:40:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,8 @@ SbiScanner::SbiScanner( const ::rtl::OUString& rBuf, StarBASIC* p ) : aBuf( rBuf
     bNumber  =
     bSymbol  =
     bUsedForHilite =
-    bCompatible = FALSE;
+    bCompatible =
+    bPrevLineExtentsComment = FALSE;
     bHash    =
     bErrors  = TRUE;
 }
@@ -209,9 +210,18 @@ BOOL SbiScanner::NextSym()
     nCol1 = nCol;
 
     // nur Leerzeile?
-    if( !*pLine ) goto eoln;
+    if( !*pLine )
+        goto eoln;
 
-    if( *pLine == '#' ) pLine++, nCol++, bHash = TRUE;
+    if( bPrevLineExtentsComment )
+        goto PrevLineCommentLbl;
+
+    if( *pLine == '#' )
+    {
+        pLine++;
+        nCol++;
+        bHash = TRUE;
+    }
 
     // Symbol? Dann Zeichen kopieren.
     if( BasicSimpleCharClass::isAlpha( *pLine, bCompatible ) || *pLine == '_' )
@@ -449,12 +459,17 @@ BOOL SbiScanner::NextSym()
 
     nCol2 = nCol-1;
 
+PrevLineCommentLbl:
     // Kommentar?
-    if( eScanType != SbxSTRING &&
-        ( aSym.GetBuffer()[0] == '\'' || aSym.EqualsIgnoreCaseAscii( "REM" ) ) )
+    if( bPrevLineExtentsComment || (eScanType != SbxSTRING &&
+        ( aSym.GetBuffer()[0] == '\'' || aSym.EqualsIgnoreCaseAscii( "REM" ) ) ) )
     {
+        bPrevLineExtentsComment = FALSE;
         aSym = String::CreateFromAscii( "REM" );
-        nCol2 += String( pLine ).Len();
+        USHORT nLen = String( pLine ).Len();
+        if( pLine[ nLen - 1 ] == '_' && pLine[ nLen - 2 ] == ' ' )
+            bPrevLineExtentsComment = TRUE;
+        nCol2 += nLen;
         pLine = NULL;
     }
     return TRUE;
