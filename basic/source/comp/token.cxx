@@ -4,9 +4,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:17:05 $
+ *  last change: $Author: hr $ $Date: 2005-09-29 16:35:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
