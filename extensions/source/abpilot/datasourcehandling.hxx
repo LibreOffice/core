@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasourcehandling.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:06:38 $
+ *  last change: $Author: hr $ $Date: 2005-09-29 10:40:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,9 @@ namespace abp
 
         /// creates a new MORK data source
         ODataSource createNewMORK( const ::rtl::OUString& _rName ) SAL_THROW (( ));
+
+        /// creates a new Thunderbird data source
+        ODataSource createNewThunderbird( const ::rtl::OUString& _rName ) SAL_THROW (( ));
 
         /// creates a new Evolution data source
         ODataSource createNewEvolution( const ::rtl::OUString& _rName ) SAL_THROW (( ));
