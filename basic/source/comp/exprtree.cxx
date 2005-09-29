@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exprtree.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:35:53 $
+ *  last change: $Author: hr $ $Date: 2005-09-29 18:39:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -823,31 +823,18 @@ SbiParameters::SbiParameters( SbiParser* p, BOOL bConst, BOOL bPar) :
             // Benannte Argumente: entweder .name= oder name:=
             else
             {
-                if( eTok == DOT )
+                pExpr = bConst ? new SbiConstExpression( pParser )
+                                : new SbiExpression( pParser );
+                if( pParser->Peek() == ASSIGN )
                 {
-                    // VB mode: .name=
+                    // VBA mode: name:=
+                    // SbiExpression::Term() hat einen String daraus gemacht
+                    aName = pExpr->GetString();
+                    delete pExpr;
                     pParser->Next();
-                    pParser->TestSymbol( TRUE );    // Keywords sind OK
-                    aName = pParser->GetSym();
-                    pParser->TestToken( EQ );
-                    pExpr = bConst ? new SbiConstExpression( pParser )
-                                   : new SbiExpression( pParser );
-                }
-                else
-                {
-                    pExpr = bConst ? new SbiConstExpression( pParser )
-                                   : new SbiExpression( pParser );
-                    if( pParser->Peek() == ASSIGN )
-                    {
-                        // VBA mode: name:=
-                        // SbiExpression::Term() hat einen String daraus gemacht
-                        aName = pExpr->GetString();
-                        delete pExpr;
-                        pParser->Next();
-                        pExpr = new SbiExpression( pParser );
-                        if( bConst )
-                            pParser->Error( SbERR_SYNTAX ), bError = TRUE;
-                    }
+                    pExpr = new SbiExpression( pParser );
+                    if( bConst )
+                        pParser->Error( SbERR_SYNTAX ), bError = TRUE;
                 }
                 pExpr->GetName() = aName;
             }
