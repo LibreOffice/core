@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:20:25 $
+ *  last change: $Author: hr $ $Date: 2005-09-30 10:08:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,19 @@
 #endif
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XDICTIONARYLIST_HPP_
 #include <com/sun/star/linguistic2/XDictionaryList.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
+#include <com/sun/star/frame/XDesktop.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
+#endif
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#include <comphelper/processfactory.hxx>
 #endif
 
 #include <com/sun/star/util/XCloseable.hpp>
@@ -200,9 +213,9 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::beans;
-//using namespace com::sun::star::task;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::frame;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 
@@ -1383,100 +1396,157 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
 }
 void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
 {
-            sal_Bool bSaveSpellCheck = sal_False;
-            const SfxPoolItem* pItem;
+    sal_Bool bSaveSpellCheck = sal_False;
+    const SfxPoolItem* pItem;
 
-            if ( SFX_ITEM_SET == rSet.GetItemState( SID_SPELL_MODIFIED, sal_False, &pItem ) )
+    if ( SFX_ITEM_SET == rSet.GetItemState( SID_SPELL_MODIFIED, sal_False, &pItem ) )
+    {
+        bSaveSpellCheck = ( (const SfxBoolItem*)pItem )->GetValue();
+    }
+    Reference< XMultiServiceFactory >  xMgr( ::comphelper::getProcessServiceFactory() );
+    Reference< XPropertySet >  xProp(
+            xMgr->createInstance( OUString::createFromAscii(
+                    "com.sun.star.linguistic2.LinguProperties") ),
+            UNO_QUERY );
+    if ( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_HYPHENREGION, sal_False, &pItem ) )
+    {
+        const SfxHyphenRegionItem* pHyphenItem = (const SfxHyphenRegionItem*)pItem;
+
+        if (xProp.is())
+        {
+            xProp->setPropertyValue(
+                    String::CreateFromAscii(UPN_HYPH_MIN_LEADING),
+                    makeAny((sal_Int16) pHyphenItem->GetMinLead()) );
+            xProp->setPropertyValue(
+                    String::CreateFromAscii(UPN_HYPH_MIN_TRAILING),
+                    makeAny((sal_Int16) pHyphenItem->GetMinTrail()) );
+        }
+        bSaveSpellCheck = sal_True;
+    }
+
+    SfxViewFrame *pViewFrame = SfxViewFrame::Current();
+    if ( pViewFrame )
+    {
+        SfxDispatcher* pDispatch = pViewFrame->GetDispatcher();
+        pItem = 0;
+        if(SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_LANGUAGE, sal_False, &pItem ))
+        {
+            pDispatch->Execute(pItem->Which(),    SFX_CALLMODE_ASYNCHRON, pItem, 0L);
+            bSaveSpellCheck = sal_True;
+        }
+        if(SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_CHAR_CTL_LANGUAGE, sal_False, &pItem ))
+        {
+            pDispatch->Execute(pItem->Which(),    SFX_CALLMODE_ASYNCHRON, pItem, 0L);
+            bSaveSpellCheck = sal_True;
+        }
+        if(SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_CHAR_CJK_LANGUAGE, sal_False, &pItem ))
+        {
+            pDispatch->Execute(pItem->Which(),    SFX_CALLMODE_ASYNCHRON, pItem, 0L);
+            bSaveSpellCheck = sal_True;
+        }
+
+        if( SFX_ITEM_SET == rSet.GetItemState(SID_AUTOSPELL_CHECK, sal_False, &pItem ))
+        {
+            sal_Bool bOnlineSpelling = ((const SfxBoolItem*)pItem)->GetValue();
+            pDispatch->Execute(SID_AUTOSPELL_CHECK,
+                SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD, pItem, 0L);
+
+            if (xProp.is())
             {
-                bSaveSpellCheck = ( (const SfxBoolItem*)pItem )->GetValue();
+                xProp->setPropertyValue(
+                        String::CreateFromAscii(UPN_IS_SPELL_AUTO),
+                        makeAny(bOnlineSpelling) );
             }
-            Reference< XMultiServiceFactory >  xMgr( ::comphelper::getProcessServiceFactory() );
-            Reference< XPropertySet >  xProp(
-                    xMgr->createInstance( OUString::createFromAscii(
-                            "com.sun.star.linguistic2.LinguProperties") ),
-                    UNO_QUERY );
-            if ( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_HYPHENREGION, sal_False, &pItem ) )
-            {
-                const SfxHyphenRegionItem* pHyphenItem = (const SfxHyphenRegionItem*)pItem;
+        }
 
-                if (xProp.is())
-                {
-                    xProp->setPropertyValue(
-                            String::CreateFromAscii(UPN_HYPH_MIN_LEADING),
-                            makeAny((sal_Int16) pHyphenItem->GetMinLead()) );
-                    xProp->setPropertyValue(
-                            String::CreateFromAscii(UPN_HYPH_MIN_TRAILING),
-                            makeAny((sal_Int16) pHyphenItem->GetMinTrail()) );
-                }
-                bSaveSpellCheck = sal_True;
+        if( SFX_ITEM_SET == rSet.GetItemState(SID_AUTOSPELL_MARKOFF, sal_False, &pItem ))
+        {
+            sal_Bool bHideSpell = ((const SfxBoolItem*)pItem)->GetValue();
+            pDispatch->Execute(SID_AUTOSPELL_MARKOFF, SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD, pItem, 0L);
+
+            if (xProp.is())
+            {
+                xProp->setPropertyValue(
+                        String::CreateFromAscii(UPN_IS_SPELL_HIDE),
+                        makeAny(bHideSpell) );
             }
+        }
 
-            SfxViewFrame *pViewFrame = SfxViewFrame::Current();
-            if ( pViewFrame )
+        if( bSaveSpellCheck )
+        {
+            //! the config item has changed since we modified the
+            //! property set it uses
+            pDispatch->Execute(SID_SPELLCHECKER_CHANGED, SFX_CALLMODE_ASYNCHRON);
+        }
+    }
+
+    if( SFX_ITEM_SET == rSet.GetItemState(SID_OPT_LOCALE_CHANGED, sal_False, &pItem ))
+    {
+        SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
+        while ( pViewFrame )
+        {
+            pViewFrame->GetDispatcher()->Execute(pItem->Which(),    SFX_CALLMODE_ASYNCHRON, pItem, 0L);
+            pViewFrame = SfxViewFrame::GetNext( *pViewFrame );
+        }
+    }
+}
+
+SvtModuleOptions::EFactory getCurrentFactory_Impl()
+{
+    SvtModuleOptions::EFactory eFactory = SvtModuleOptions::E_UNKNOWN_FACTORY;
+    ::rtl::OUString sIdentifier, sShortName;
+    Reference < XFrame > xCurrentFrame;
+    Reference < XModuleManager > xModuleManager( ::comphelper::getProcessServiceFactory()->createInstance(
+        DEFINE_CONST_UNICODE("com.sun.star.frame.ModuleManager") ), UNO_QUERY );
+    Reference< XDesktop > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
+        DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
+    if ( xDesktop.is() )
+        xCurrentFrame = xDesktop->getCurrentFrame();
+
+    if ( xCurrentFrame.is() && xModuleManager.is() )
+    {
+        try
+        {
+            sIdentifier = xModuleManager->identify( xCurrentFrame );
+        }
+        catch ( ::com::sun::star::frame::UnknownModuleException& )
+        {
+            DBG_WARNING( "getActiveModule_Impl(): unknown module" );
+        }
+        catch ( Exception& )
+        {
+            DBG_ERRORFILE( "getActiveModule_Impl(): exception of XModuleManager::identify()" );
+        }
+    }
+
+    if ( sIdentifier.getLength() > 0 )
+    {
+        try
+        {
+            Sequence< PropertyValue > lProps;
+            Reference< ::com::sun::star::container::XNameAccess > xCont( xModuleManager, UNO_QUERY );
+            if ( xCont.is() )
+                xCont->getByName( sIdentifier ) >>= lProps;
+            for ( sal_Int32 i = 0; i < lProps.getLength(); ++i )
             {
-                SfxDispatcher* pDispatch = pViewFrame->GetDispatcher();
-                pItem = 0;
-                if(SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_LANGUAGE, sal_False, &pItem ))
+                if ( lProps[i].Name.equalsAscii("ooSetupFactoryShortName") )
                 {
-                    pDispatch->Execute(pItem->Which(),    SFX_CALLMODE_ASYNCHRON, pItem, 0L);
-                    bSaveSpellCheck = sal_True;
-                }
-                if(SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_CHAR_CTL_LANGUAGE, sal_False, &pItem ))
-                {
-                    pDispatch->Execute(pItem->Which(),    SFX_CALLMODE_ASYNCHRON, pItem, 0L);
-                    bSaveSpellCheck = sal_True;
-                }
-                if(SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_CHAR_CJK_LANGUAGE, sal_False, &pItem ))
-                {
-                    pDispatch->Execute(pItem->Which(),    SFX_CALLMODE_ASYNCHRON, pItem, 0L);
-                    bSaveSpellCheck = sal_True;
-                }
-
-                if( SFX_ITEM_SET == rSet.GetItemState(SID_AUTOSPELL_CHECK, sal_False, &pItem ))
-                {
-                    sal_Bool bOnlineSpelling = ((const SfxBoolItem*)pItem)->GetValue();
-                    pDispatch->Execute(SID_AUTOSPELL_CHECK,
-                        SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD, pItem, 0L);
-
-                    if (xProp.is())
-                    {
-                        xProp->setPropertyValue(
-                                String::CreateFromAscii(UPN_IS_SPELL_AUTO),
-                                makeAny(bOnlineSpelling) );
-                    }
-                }
-
-                if( SFX_ITEM_SET == rSet.GetItemState(SID_AUTOSPELL_MARKOFF, sal_False, &pItem ))
-                {
-                    sal_Bool bHideSpell = ((const SfxBoolItem*)pItem)->GetValue();
-                    pDispatch->Execute(SID_AUTOSPELL_MARKOFF, SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD, pItem, 0L);
-
-                    if (xProp.is())
-                    {
-                        xProp->setPropertyValue(
-                                String::CreateFromAscii(UPN_IS_SPELL_HIDE),
-                                makeAny(bHideSpell) );
-                    }
-                }
-
-                if( bSaveSpellCheck )
-                {
-                    //! the config item has changed since we modified the
-                    //! property set it uses
-                    pDispatch->Execute(SID_SPELLCHECKER_CHANGED, SFX_CALLMODE_ASYNCHRON);
-                }
-            }
-
-            if( SFX_ITEM_SET == rSet.GetItemState(SID_OPT_LOCALE_CHANGED, sal_False, &pItem ))
-            {
-                SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
-                while ( pViewFrame )
-                {
-                    pViewFrame->GetDispatcher()->Execute(pItem->Which(),    SFX_CALLMODE_ASYNCHRON, pItem, 0L);
-                    pViewFrame = SfxViewFrame::GetNext( *pViewFrame );
+                    lProps[i].Value >>= sShortName;
+                    break;
                 }
             }
         }
+        catch ( Exception& )
+        {
+            DBG_ERRORFILE( "getActiveModule_Impl(): exception of XNameAccess::getByName()" );
+        }
+    }
+
+    if ( sShortName.getLength() > 0 )
+        eFactory = SvtModuleOptions::ClassifyFactoryByShortName( sShortName );
+
+    return eFactory;
+}
 
 void OfaTreeOptionsDialog::Initialize()
 {
@@ -1488,7 +1558,7 @@ void OfaTreeOptionsDialog::Initialize()
 
     ResStringArray& rGeneralArray = aDlgResource.GetGeneralArray();
     nGroup = AddGroup(rGeneralArray.GetString(0), 0, 0, SID_GENERAL_OPTIONS );
-    sal_uInt16 nEnd = rGeneralArray.Count();
+    sal_uInt16 nEnd = static_cast< sal_uInt16 >( rGeneralArray.Count() );
 
     sal_uInt16 i;
     for(i = 1; i < nEnd; i++)
@@ -1564,7 +1634,7 @@ void OfaTreeOptionsDialog::Initialize()
             nGroup = AddGroup( rCalcArray.GetString( 0 ), pScMod, pScMod, SID_SC_EDITOPTIONS );
             const sal_Bool  bCTL = aLanguageOptions.IsCTLFontEnabled();
             sal_uInt16      nId;
-            const USHORT    nCount = rCalcArray.Count();
+            const USHORT    nCount = static_cast< USHORT >( rCalcArray.Count() );
             for( USHORT i = 1 ; i < nCount ; ++i )
             {
                 nId = ( sal_uInt16 ) rCalcArray.GetValue( i );
@@ -1580,14 +1650,14 @@ void OfaTreeOptionsDialog::Initialize()
     {
         //Praesentation
         bHasAnyFilter = sal_True;
-        SfxModule*      pSdMod = ( *( SfxModule** ) GetAppData( SHL_DRAW ) );
-        if ( pSdMod && pSdMod->IsActive() )
+        SfxModule* pSdMod = ( *( SfxModule** ) GetAppData( SHL_DRAW ) );
+        if ( pSdMod && pSdMod->IsActive() && getCurrentFactory_Impl() == SvtModuleOptions::E_IMPRESS )
         {
             ResStringArray& rImpressArray = aDlgResource.GetImpressArray();
             nGroup = AddGroup( rImpressArray.GetString( 0 ), pSdMod, pSdMod, SID_SD_EDITOPTIONS );
             const sal_Bool  bCTL = aLanguageOptions.IsCTLFontEnabled();
             sal_uInt16      nId;
-            const USHORT    nCount = rImpressArray.Count();
+            const USHORT    nCount = static_cast< USHORT >( rImpressArray.Count() );
             for( USHORT i = 1 ; i < nCount ; ++i )
             {
                 nId = ( sal_uInt16 ) rImpressArray.GetValue( i );
@@ -1600,14 +1670,14 @@ void OfaTreeOptionsDialog::Initialize()
     if ( aModuleOpt.IsDraw() )
     {
         //Zeichnung
-        SfxModule*      pSdMod = ( *( SfxModule** ) GetAppData( SHL_DRAW ) );
-        if ( pSdMod && pSdMod->IsActive() )
+        SfxModule* pSdMod = ( *( SfxModule** ) GetAppData( SHL_DRAW ) );
+        if ( pSdMod && pSdMod->IsActive() && getCurrentFactory_Impl() == SvtModuleOptions::E_DRAW )
         {
             ResStringArray& rDrawArray = aDlgResource.GetDrawArray();
             nGroup = AddGroup( rDrawArray.GetString( 0 ), pSdMod, pSdMod, SID_SD_GRAPHIC_OPTIONS );
             const sal_Bool  bCTL = aLanguageOptions.IsCTLFontEnabled();
             sal_uInt16      nId;
-            const USHORT    nCount = rDrawArray.Count();
+            const USHORT    nCount = static_cast< USHORT >( rDrawArray.Count() );
             for( USHORT i = 1 ; i < nCount ; ++i )
             {
                 nId = ( sal_uInt16 ) rDrawArray.GetValue( i );
