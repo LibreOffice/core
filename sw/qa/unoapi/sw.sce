@@ -1,3 +1,6 @@
+# test works on windows with cws tl12 except swXMailMerge and SwXMLImporter
+# but this could be a problem of the NONPRO-Version
+
 -o sw.CharacterStyle
 -o sw.ConditionalParagraphStyle
 -o sw.PageStyle
@@ -16,7 +19,7 @@
 -o sw.SwAccessibleTextFrameView
 -o sw.SwAccessibleTextGraphicObject
 -o sw.SwXAutoTextContainer
--o sw.SwXAutoTextEntry
+# i41735#-o sw.SwXAutoTextEntry
 -o sw.SwXAutoTextGroup
 -o sw.SwXBodyText
 -o sw.SwXBookmark
@@ -58,8 +61,8 @@
 -o sw.SwXTextCursor
 -o sw.SwXTextDefaults
 -o sw.SwXTextDocument
-#binfilter-o sw.SwXTextEmbeddedObject
-#binfilter-o sw.SwXTextEmbeddedObjects
+-o sw.SwXTextEmbeddedObject
+-o sw.SwXTextEmbeddedObjects
 -o sw.SwXTextField
 -o sw.SwXTextFieldMasters
 -o sw.SwXTextFieldTypes
