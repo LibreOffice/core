@@ -4,9 +4,9 @@
  *
  *  $RCSfile: storageholder.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:05:19 $
+ *  last change: $Author: hr $ $Date: 2005-09-30 10:11:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,7 +216,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const ::rtl:
 
             try
             {
-                xChild = StorageHolder::openSubStorageWithFallback(xParent, sChild, nOpenMode, sal_False); // TODO think about delegating fallback decision to our own calli!
+                xChild = StorageHolder::openSubStorageWithFallback(xParent, sChild, nOpenMode, sal_True); // TODO think about delegating fallback decision to our own calli!
             }
             catch(const css::uno::RuntimeException& exRun)
                 { throw exRun; }
