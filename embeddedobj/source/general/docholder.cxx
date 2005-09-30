@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:44:51 $
+ *  last change: $Author: hr $ $Date: 2005-09-30 10:14:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -782,6 +782,11 @@ sal_Bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::
                     m_xFrame->getCreator(), uno::UNO_QUERY );
                 if ( xSupp.is() )
                     xSupp->setActiveFrame( m_xFrame );
+
+                // TODO/LATER: The following action should be done only if the window is not hidden
+                // otherwise the activation must fail, unfortunatelly currently it is not possible
+                // to detect whether the window is hidden using UNO API
+                m_xOwnWindow->setFocus();
             }
             catch( uno::Exception& )
             {
