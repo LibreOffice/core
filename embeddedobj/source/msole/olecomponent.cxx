@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:42:06 $
+ *  last change: $Author: hr $ $Date: 2005-09-30 10:15:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1416,16 +1416,21 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
         if ( FAILED( hr ) || !pDataObject )
             throw io::IOException(); // TODO: transport error code
 
-        // if ( m_nSupportedFormat )
-        FORMATETC* pFormatEtc = m_pNativeImpl->GetSupportedFormatForAspect( nRequestedAspect );
-        if ( pFormatEtc )
-        {
-            STGMEDIUM aMedium;
-            hr = pDataObject->GetData( pFormatEtc, &aMedium );
-            if ( SUCCEEDED( hr ) )
-                bSupportedFlavor = m_pNativeImpl->ConvertDataForFlavor( aMedium, aFlavor, aResult );
-        }
-        else
+        // The following optimization does not make much sence currently just because
+        // only one aspect is supported, and only three formats for the aspect are supported
+        // and moreover it is not guarantied that the once returned format will be supported further
+        // example - i52106
+        // TODO/LATER: bring the optimization back when other aspects are supported
+
+        // FORMATETC* pFormatEtc = m_pNativeImpl->GetSupportedFormatForAspect( nRequestedAspect );
+        // if ( pFormatEtc )
+        // {
+        //  STGMEDIUM aMedium;
+        //  hr = pDataObject->GetData( pFormatEtc, &aMedium );
+        //  if ( SUCCEEDED( hr ) )
+        //      bSupportedFlavor = m_pNativeImpl->ConvertDataForFlavor( aMedium, aFlavor, aResult );
+        // }
+        // else
         {
             // the supported format of the application is still not found, find one
             for ( sal_Int32 nInd = 0; nInd < FORMATS_NUM; nInd++ )
@@ -1435,11 +1440,11 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
                 aFormat.dwAspect = nRequestedAspect;
 
                 hr = pDataObject->GetData( &aFormat, &aMedium );
-                if ( SUCCEEDED( hr ) )
+                if ( SUCCEEDED( hr )
+                  && ( bSupportedFlavor = m_pNativeImpl->ConvertDataForFlavor( aMedium, aFlavor, aResult ) ) )
                 {
-                    m_pNativeImpl->AddSupportedFormat( aFormat );
-
-                    bSupportedFlavor = m_pNativeImpl->ConvertDataForFlavor( aMedium, aFlavor, aResult );
+                    // TODO/LATER: bring the optimization back when other aspects are supported
+                    // m_pNativeImpl->AddSupportedFormat( aFormat );
                     break;
                 }
             }
