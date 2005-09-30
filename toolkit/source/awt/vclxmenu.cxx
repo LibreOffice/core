@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxmenu.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:13:09 $
+ *  last change: $Author: hr $ $Date: 2005-09-30 09:56:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,12 +71,16 @@ VCLXMenu::~VCLXMenu()
     }
 }
 
+BOOL VCLXMenu::IsPopupMenu() const
+{
+    return (mpMenu && ! mpMenu->IsMenuBar());
+}
+
 void VCLXMenu::ImplCreateMenu( sal_Bool bPopup )
 {
     DBG_ASSERT( !mpMenu, "CreateMenu: Menu exists!" );
 
-    mbPopup = bPopup;
-    if ( mbPopup )
+    if ( bPopup )
         mpMenu = new PopupMenu;
     else
         mpMenu = new MenuBar;
