@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:40:47 $
+ *  last change: $Author: hr $ $Date: 2005-09-30 10:24:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1855,7 +1855,7 @@ SfxObjectShellRef DocTempl_EntryData_Impl::CreateObjectShell()
         {
             mbIsOwner = sal_True;
             SfxMedium *pMed=new SfxMedium(
-                aTargetURL,(STREAM_READ | STREAM_SHARE_DENYWRITE),  sal_False, 0 );
+                aTargetURL,(STREAM_STD_READWRITE | STREAM_SHARE_DENYALL),  sal_False, 0 );
             const SfxFilter* pFilter = NULL;
             if( pSfxApp->GetFilterMatcher().GuessFilter(
                 *pMed, &pFilter, SFX_FILTER_TEMPLATE, 0 ) ||
