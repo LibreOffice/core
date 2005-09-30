@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:08:18 $
+ *  last change: $Author: hr $ $Date: 2005-09-30 10:20:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -476,7 +476,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
         // TODO/LATER: do not do it for embedded links
         if( SFX_CREATE_MODE_EMBEDDED == pObjSh->GetCreateMode() )
         {
-            OUString aName = ::rtl::OUString::createFromAscii( "dummyObjectName" );
+            OUString aName;
             if ( pMedium && pMedium->GetItemSet() )
             {
                 const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
@@ -484,6 +484,8 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
                 if ( pDocHierarchItem )
                     aName = pDocHierarchItem->GetValue();
             }
+            else
+                aName = ::rtl::OUString::createFromAscii( "dummyObjectName" );
 
             if( aName.getLength() )
             {
