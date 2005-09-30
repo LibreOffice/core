@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.168 $
+ *  $Revision: 1.169 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:47:28 $
+ *  last change: $Author: hr $ $Date: 2005-09-30 10:25:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1324,6 +1324,10 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         }
     }
 
+    // TODO/LATER: error handling
+    if( rMedium.GetErrorCode() || pMedium->GetErrorCode() || GetErrorCode() )
+        return sal_False;
+
     if ( bStorageBasedTarget )
     {
         rMedium.GetOutputStorage();
@@ -1669,17 +1673,21 @@ sal_Bool SfxObjectShell::ConnectTmpStorage_Impl( const uno::Reference< embed::XS
             //CopyStoragesOfUnknownMediaType( xStorage, xTmpStorage );
             bResult = SaveCompleted( xTmpStorage );
 
-            SfxDialogLibraryContainer* pDialogCont = pImp->pDialogLibContainer;
-            if( pDialogCont )
-                pDialogCont->setStorage( xTmpStorage );
+            if ( bResult )
+            {
+                SfxDialogLibraryContainer* pDialogCont = pImp->pDialogLibContainer;
+                if( pDialogCont )
+                    pDialogCont->setStorage( xTmpStorage );
 
-            SfxScriptLibraryContainer* pBasicCont = pImp->pBasicLibContainer;
-            if( pBasicCont )
-                pBasicCont->setStorage( xTmpStorage );
-
-            bResult = sal_True;
+                SfxScriptLibraryContainer* pBasicCont = pImp->pBasicLibContainer;
+                if( pBasicCont )
+                    pBasicCont->setStorage( xTmpStorage );
+            }
         }
         catch( uno::Exception& )
+        {}
+
+        if ( !bResult )
         {
             // TODO/LATER: may need error code setting based on exception
             SetError( ERRCODE_IO_GENERAL );
@@ -2336,24 +2344,27 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
         return sal_False;
     }
 
-    // gibt es schon ein Doc mit dem Namen?
-    SfxObjectShell* pDoc = 0;
-    for ( SfxObjectShell* pTmp = SfxObjectShell::GetFirst();
-            pTmp && !pDoc;
-            pTmp = SfxObjectShell::GetNext(*pTmp) )
+    if ( aURL != INetURLObject( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:stream" ) ) ) )
     {
-        if( ( pTmp != this ) && pTmp->GetMedium() )
+        // gibt es schon ein Doc mit dem Namen?
+        SfxObjectShell* pDoc = 0;
+        for ( SfxObjectShell* pTmp = SfxObjectShell::GetFirst();
+                pTmp && !pDoc;
+                pTmp = SfxObjectShell::GetNext(*pTmp) )
         {
-            INetURLObject aCompare( pTmp->GetMedium()->GetName() );
-            if ( aCompare == aURL )
-                pDoc = pTmp;
+            if( ( pTmp != this ) && pTmp->GetMedium() )
+            {
+                INetURLObject aCompare( pTmp->GetMedium()->GetName() );
+                if ( aCompare == aURL )
+                    pDoc = pTmp;
+            }
         }
-    }
-    if ( pDoc )
-    {
-        // dann Fehlermeldeung: "schon offen"
-        SetError(ERRCODE_SFX_ALREADYOPEN);
-        return sal_False;
+        if ( pDoc )
+        {
+            // dann Fehlermeldeung: "schon offen"
+            SetError(ERRCODE_SFX_ALREADYOPEN);
+            return sal_False;
+        }
     }
 
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL!" );
@@ -3260,6 +3271,9 @@ sal_Bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >&
     {
         if ( pImp->mpObjectContainer )
             GetEmbeddedObjectContainer().SwitchPersistence( pImp->m_xDocStorage );
+
+        // let already successfully connected objects be switched back
+        SwitchChildrenPersistance( pImp->m_xDocStorage, sal_True );
     }
 
     if ( bSendNotification )
