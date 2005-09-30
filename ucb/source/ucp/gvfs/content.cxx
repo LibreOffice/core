@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:42:28 $
+ *  last change: $Author: hr $ $Date: 2005-09-30 10:10:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -740,10 +740,6 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 #endif
             xRow->appendVoid( rProp );
         } else {
-            static int warn_count = 0;
-            if (warn_count++ < 10)
-                g_message ("Unknown property: '%s'",
-                       rtl::OUStringToOString( rProp.Name, RTL_TEXTENCODING_UTF8 ).getStr () );
             xRow->appendVoid( rProp );
         }
     }
