@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:10:47 $
+ *  last change: $Author: hr $ $Date: 2005-09-30 10:23:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -912,13 +912,12 @@ IMPL_LINK(SfxAcceleratorConfigPage, Save, Button*, pButton)
 
         if (xCfgMgr.is())
         {
-            // get target accelerator manager ...
-            // and source accelerator manager.
+            // get the target configuration access and update with all shortcuts
+            // which are set currently at the UI !
+            // Dont copy the m_xAct content to it ... because m_xAct will be updated
+            // from the UI on pressing the button "OK" only. And inbetween it's not up to date !
             css::uno::Reference< css::ui::XAcceleratorConfiguration > xTargetAccMgr(xCfgMgr->getShortCutManager(), css::uno::UNO_QUERY_THROW);
-            css::uno::Reference< css::ui::XAcceleratorConfiguration > xSourceAccMgr(m_xAct                       , css::uno::UNO_QUERY_THROW);
-
-            // copy the whole configuration set from source to target!
-            CopySource2Target(xSourceAccMgr, xTargetAccMgr);
+            Apply(xTargetAccMgr);
 
             // commit (order is important!)
             css::uno::Reference< css::ui::XUIConfigurationPersistence > xCommit1(xTargetAccMgr, css::uno::UNO_QUERY_THROW);
