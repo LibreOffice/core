@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxmenu.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:44:40 $
+ *  last change: $Author: hr $ $Date: 2005-09-30 09:55:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,6 @@ class TOOLKIT_DLLPUBLIC VCLXMenu :  public ::com::sun::star::awt::XMenuBar,
 private:
     ::osl::Mutex            maMutex;
     Menu*                   mpMenu;
-    BOOL                    mbPopup;
     MenuListenerMultiplexer maMenuListeners;
     PopupMenuRefList        maPopupMenueRefs;
 
@@ -107,7 +106,7 @@ public:
 
 
     Menu*           GetMenu() const { return mpMenu; }
-    BOOL            IsPopupMenu() const { return mbPopup; }
+    BOOL            IsPopupMenu() const;
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
