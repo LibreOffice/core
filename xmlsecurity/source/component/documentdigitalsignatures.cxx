@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdigitalsignatures.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:08:57 $
+ *  last change: $Author: hr $ $Date: 2005-09-30 10:15:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,26 @@
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
 #endif
+
+#ifndef _COM_SUN_STAR_UCB_XCONTENT_HPP_
+#include <com/sun/star/ucb/XContent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDER_HPP_
+#include <com/sun/star/ucb/XContentProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XCONTENTIDENTIFIERFACTORY_HPP_
+#include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XCOMMANDPROCESSOR_HPP_
+#include <com/sun/star/ucb/XCommandProcessor.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_COMMAND_HPP_
+#include <com/sun/star/ucb/Command.hpp>
+#endif
+
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
@@ -62,6 +82,9 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_SECURITYOPTIONS_HXX
 #include <svtools/securityoptions.hxx>
+#endif
+#ifndef _UCBHELPER_CONTENTBROKER_HXX
+#include <ucbhelper/contentbroker.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -323,18 +346,95 @@ void DocumentDigitalSignatures::showCertificate( const Reference< ::com::sun::st
 {
     sal_Bool bFound = sal_False;
     INetURLObject aLocObj( Location );
+    INetURLObject aLocObjLowCase( Location.toAsciiLowerCase() ); // will be used for case insensitive comparing
+
+    // the comparing is done in the following way:
+    // - first compare in case sensitive way
+    // - if name are different try a fallback comparing inf case insensitive way
+    // - if the last comparing succeeded get casepreserving normalized names for the files and compare them
+    // ( the second step is required because retrieving of the normalized names might be very expensive in some cases )
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProvider > xContentProvider;
+    ::ucb::ContentBroker* pBroker = NULL;
+    if ( aLocObj.GetProtocol() == INET_PROT_FILE && ( pBroker = ::ucb::ContentBroker::get() ) )
+        xContentProvider = pBroker->getContentProviderInterface();
 
     Sequence< ::rtl::OUString > aSecURLs = SvtSecurityOptions().GetSecureURLs();
     sal_Int32 nCnt = aSecURLs.getLength();
     const ::rtl::OUString* pSecURLs = aSecURLs.getConstArray();
     const ::rtl::OUString* pSecURLsEnd = pSecURLs + aSecURLs.getLength();
-    for ( ; pSecURLs != pSecURLsEnd; ++pSecURLs )
+    for ( ; pSecURLs != pSecURLsEnd && !bFound; ++pSecURLs )
     {
         INetURLObject aSecURL( *pSecURLs );
-        if ( aSecURL == aLocObj )
+        INetURLObject aSecURLLowCase( pSecURLs->toAsciiLowerCase() ); // will be used for case insensitive comparing
+
+        if ( aLocObj.GetProtocol() == aSecURL.GetProtocol() )
         {
-            bFound = sal_True;
-            break;
+            INetURLObject aTmpObj( aLocObj );
+            INetURLObject aTmpObjLowCase( aLocObjLowCase ); // will be used for case insensitive comparing
+            INetURLObject aLastTmpObj;
+            do
+            {
+                if ( aSecURL == aTmpObj )
+                {
+                    // if case sensitive comparing succeeded there is no need for additional checks
+                    bFound = sal_True;
+                }
+                else if ( xContentProvider.is() && aSecURLLowCase == aTmpObjLowCase )
+                {
+                    // the comparing was done using caseinsensitive way
+                    // the case sensitive comparing have failed already
+                    // the normalized urls must be retrieved
+                    try
+                    {
+                        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > xSecCont =
+                            xContentProvider->queryContent(
+                                ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentIdentifierFactory >(
+                                    xContentProvider, ::com::sun::star::uno::UNO_QUERY_THROW )->createContentIdentifier(
+                                        aSecURL.GetMainURL( INetURLObject::NO_DECODE ) ) );
+
+                        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > xLocCont =
+                            xContentProvider->queryContent(
+                                ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentIdentifierFactory >(
+                                    xContentProvider, ::com::sun::star::uno::UNO_QUERY_THROW )->createContentIdentifier(
+                                        aTmpObj.GetMainURL( INetURLObject::NO_DECODE ) ) );
+
+                        if ( !xSecCont.is() || !xLocCont.is() )
+                            throw uno::RuntimeException();
+
+                        ::rtl::OUString aSecNormStr;
+                        ::rtl::OUString aLocNormStr;
+
+                        bFound =
+                        ( ( ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandProcessor >(
+                                xSecCont, ::com::sun::star::uno::UNO_QUERY_THROW )->execute(
+                                    ::com::sun::star::ucb::Command(
+                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getCasePreservingURL" ) ),
+                                        -1,
+                                        ::com::sun::star::uno::Any() ),
+                                    0,
+                                    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() )
+                            >>= aSecNormStr )
+                        && ( ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandProcessor >(
+                                xLocCont, ::com::sun::star::uno::UNO_QUERY_THROW )->execute(
+                                    ::com::sun::star::ucb::Command(
+                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getCasePreservingURL" ) ),
+                                        -1,
+                                        ::com::sun::star::uno::Any() ),
+                                    0,
+                                    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() )
+                            >>= aLocNormStr )
+                        && aLocNormStr.equals( aSecNormStr ) );
+                    }
+                    catch( ::com::sun::star::uno::Exception& )
+                    {}
+                }
+
+                // INetURLObject::removeSegment sometimes return true without exchanging URL,
+                // for example in case of "file:///"
+                aLastTmpObj = aTmpObj;
+
+            } while( aTmpObj.removeSegment() && aTmpObjLowCase.removeSegment() && aTmpObj != aLastTmpObj && !bFound );
         }
     }
 
