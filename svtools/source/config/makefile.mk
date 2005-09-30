@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.54 $
+#   $Revision: 1.55 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 14:42:54 $
+#   last change: $Author: hr $ $Date: 2005-09-30 10:14:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,6 @@ SLOFILES = \
     $(SLO)$/securityoptions.obj			\
     $(SLO)$/localisationoptions.obj		\
     $(SLO)$/workingsetoptions.obj		\
-    $(SLO)$/viewoptions.obj				\
     $(SLO)$/internaloptions.obj			\
     $(SLO)$/startoptions.obj			\
     $(SLO)$/historyoptions.obj			\
@@ -105,7 +104,8 @@ EXCEPTIONSFILES = \
     $(SLO)$/pathoptions.obj         \
     $(SLO)$/eventcfg.obj    \
     $(SLO)$/itemholder1.obj    \
-    $(SLO)$/itemholder2.obj
+    $(SLO)$/itemholder2.obj	\
+    $(SLO)$/viewoptions.obj
     
 
 # --- config.lib Files --------------------------------------------------------
