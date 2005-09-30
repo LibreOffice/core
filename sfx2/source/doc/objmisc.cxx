@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:46:52 $
+ *  last change: $Author: hr $ $Date: 2005-09-30 10:25:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -714,6 +714,13 @@ String SfxObjectShell::GetTitle
     SfxMedium *pMed = GetMedium();
     if ( IsLoading() )
         return String();
+
+    if ( !nMaxLength && pImp->pDocInfo )
+    {
+        String aTitle = pImp->pDocInfo->GetTitle();
+        if ( aTitle.Len() )
+            return aTitle;
+    }
 
     // Titel erzeugen?
     if ( SFX_TITLE_DETECT == nMaxLength && !pImp->aTitle.Len() )
