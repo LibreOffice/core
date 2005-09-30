@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.hrc,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:13:18 $
+ *  last change: $Author: hr $ $Date: 2005-09-30 10:23:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,8 +53,6 @@
 #define CB_READ_ONLY                    ( RC_DIALOG_BEGIN + 3)
 #define BTN_MANAGER                     ( RC_DIALOG_BEGIN + 4)
 #define BTN_STANDARD                    ( RC_DIALOG_BEGIN + 5)
-#define STR_PATH_NOT_FOUND1             ( RC_DIALOG_BEGIN + 6)
-#define STR_PATH_NOT_FOUND2             ( RC_DIALOG_BEGIN + 7)
 #define DLG_PASSWD                      ( RC_DIALOG_BEGIN + 8)
 #define STR_FILEDLG_INSERT              ( RC_DIALOG_BEGIN + 10)
 #define STR_TABPAGE_MANAGESTYLES        ( RC_DIALOG_BEGIN + 12)
