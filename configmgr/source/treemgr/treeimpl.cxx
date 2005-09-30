@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeimpl.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:35:00 $
+ *  last change: $Author: hr $ $Date: 2005-09-30 10:16:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -942,10 +942,10 @@ void ElementTreeImpl::detachFrom(data::SetNodeAccess const & aOwningSet, Name co
     {
         OSL_ENSURE(this->getSimpleRootName() == aElementName,"ElementTree: Detaching with unexpected element name");
 
-        TreeImpl* pOwningTree = this->getContextTree();
-        OSL_ENSURE(pOwningTree, "Element Tree Context must still be set when detaching data");
+        rtl::Reference< view::ViewStrategy > xOldStrategy = this->getViewBehavior();
+        OSL_ENSURE(xOldStrategy.is(), "Element Tree Context must still have the old strategy when detaching data");
 
-        if (memory::Segment * pTargetSpace = getUpdatableSegment(*pOwningTree))
+        if (memory::Segment * pTargetSpace = xOldStrategy->getDataSegmentForUpdate())
         {
             using namespace data;
 
