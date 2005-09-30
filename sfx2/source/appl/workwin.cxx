@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:51:36 $
+ *  last change: $Author: hr $ $Date: 2005-09-30 13:24:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
 #endif
 
 using namespace ::com::sun::star;
@@ -217,6 +220,9 @@ void LayoutManagerListener::setFrame( const css::uno::Reference< css::frame::XFr
                             css::uno::Reference< css::frame::XLayoutManagerListener >(
                                 static_cast< OWeakObject* >( this ), css::uno::UNO_QUERY ));
                 }
+                catch ( css::lang::DisposedException& )
+                {
+                }
                 catch ( css::uno::RuntimeException& e )
                 {
                     throw e;
@@ -257,6 +263,9 @@ throw( css::uno::RuntimeException )
     css::uno::Reference< css::frame::XFrame > xFrame( m_xFrame.get(), css::uno::UNO_QUERY );
     if ( xFrame.is() )
     {
+        m_xFrame = css::uno::Reference< css::frame::XFrame >();
+        m_bHasFrame = sal_False;
+
         css::uno::Reference< css::beans::XPropertySet > xPropSet( xFrame, css::uno::UNO_QUERY );
         css::uno::Reference< css::frame::XLayoutManagerEventBroadcaster > xLayoutManager;
         if ( xPropSet.is() )
@@ -271,6 +280,9 @@ throw( css::uno::RuntimeException )
                     xLayoutManager->removeLayoutManagerEventListener(
                         css::uno::Reference< css::frame::XLayoutManagerListener >(
                             static_cast< OWeakObject* >( this ), css::uno::UNO_QUERY ));
+            }
+            catch ( css::lang::DisposedException& )
+            {
             }
             catch ( css::uno::RuntimeException& e )
             {
@@ -290,7 +302,10 @@ void SAL_CALL LayoutManagerListener::disposing(
     const css::lang::EventObject& aEvent )
 throw( css::uno::RuntimeException )
 {
-    // do nothing
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    m_pWrkWin = 0;
+    m_bHasFrame = sal_False;
+    m_xFrame = css::uno::Reference< css::frame::XFrame >();
 }
 
 //---------------------------------------------------------------------------------------------------------
