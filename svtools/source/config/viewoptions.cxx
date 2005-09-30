@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewoptions.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:48:36 $
+ *  last change: $Author: hr $ $Date: 2005-09-30 10:14:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,12 +51,32 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
 
 #ifndef UNOTOOLS_CONFIGPATHES_HXX_INCLUDED
 #include <unotools/configpathes.hxx>
+#endif
+
+#ifndef _COMPHELPER_CONFIGURATIONHELPER_HXX_
+#include <comphelper/configurationhelper.hxx>
+#endif
+
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
+#include <unotools/processfactory.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -75,17 +95,19 @@ namespace css = ::com::sun::star;
     #define CONST_ASCII(SASCIIVALUE)            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SASCIIVALUE))
 #endif
 
-#define PATHSEPERATOR                           CONST_ASCII("/"                       )
+#define PATHSEPERATOR                           CONST_ASCII("/")
 
-#define LIST_DIALOGS                            CONST_ASCII("Office.Views/Dialogs"    )
-#define LIST_TABDIALOGS                         CONST_ASCII("Office.Views/TabDialogs" )
-#define LIST_TABPAGES                           CONST_ASCII("Office.Views/TabPages"   )
-#define LIST_WINDOWS                            CONST_ASCII("Office.Views/Windows"    )
+#define PACKAGE_VIEWS                           CONST_ASCII("org.openoffice.Office.Views")
 
-#define PROPERTY_WINDOWSTATE                    CONST_ASCII("WindowState"             )
-#define PROPERTY_PAGEID                         CONST_ASCII("PageID"                  )
-#define PROPERTY_VISIBLE                        CONST_ASCII("Visible"                 )
-#define PROPERTY_USERDATA                       CONST_ASCII("UserData"                )
+#define LIST_DIALOGS                            CONST_ASCII("Dialogs"   )
+#define LIST_TABDIALOGS                         CONST_ASCII("TabDialogs")
+#define LIST_TABPAGES                           CONST_ASCII("TabPages"  )
+#define LIST_WINDOWS                            CONST_ASCII("Windows"   )
+
+#define PROPERTY_WINDOWSTATE                    CONST_ASCII("WindowState")
+#define PROPERTY_PAGEID                         CONST_ASCII("PageID"     )
+#define PROPERTY_VISIBLE                        CONST_ASCII("Visible"    )
+#define PROPERTY_USERDATA                       CONST_ASCII("UserData"   )
 
 #define PROPCOUNT_DIALOGS                       1
 #define PROPCOUNT_TABDIALOGS                    2
@@ -290,14 +312,12 @@ typedef ::std::hash_map< ::rtl::OUString                    ,
                     between added/changed/removed elements without any complex mask or bool flag informations.
                     Caches from configuration and our own one are synchronized every time - if we do so.
 *//*-*************************************************************************************************************/
-class SvtViewOptionsBase_Impl : public ::utl::ConfigItem
+class SvtViewOptionsBase_Impl
 {
     //-------------------------------------------------------------------------------------------------------------
     public:
                                                         SvtViewOptionsBase_Impl ( const ::rtl::OUString&                                sList    );
         virtual                                        ~SvtViewOptionsBase_Impl (                                                                );
-        virtual void                                    Notify                  ( const css::uno::Sequence< ::rtl::OUString >&          lNames   );
-        virtual void                                    Commit                  (                                                                );
         sal_Bool                                        Exists                  ( const ::rtl::OUString&                                sName    );
         sal_Bool                                        Delete                  ( const ::rtl::OUString&                                sName    );
         ::rtl::OUString                                 GetWindowState          ( const ::rtl::OUString&                                sName    );
@@ -320,16 +340,14 @@ class SvtViewOptionsBase_Impl : public ::utl::ConfigItem
 
     //-------------------------------------------------------------------------------------------------------------
     private:
-        void impl_ReadWholeList     (                               );  // fill internal cache with saved information from configuration
-        void impl_createEmptySetNode( const ::rtl::OUString& sNode  );  // create an empty view item on disk
-        void impl_writeDirectProp   ( const ::rtl::OUString& sNode  ,   // change one property of specified view item on disk
-                                      const ::rtl::OUString& sProp  ,
-                                      const void*            pValue );
+        css::uno::Reference< css::uno::XInterface > impl_getSetNode( const ::rtl::OUString& sNode           ,
+                                                                           sal_Bool         bCreateIfMissing);
 
     //-------------------------------------------------------------------------------------------------------------
     private:
-        IMPL_TViewHash      m_aList         ;
-        ::rtl::OUString     m_sListName     ;
+        ::rtl::OUString                                    m_sListName;
+        css::uno::Reference< css::container::XNameAccess > m_xRoot;
+        css::uno::Reference< css::container::XNameAccess > m_xSet;
 
         #ifdef DEBUG_VIEWOPTIONS
         sal_Int32           m_nReadCount    ;
@@ -357,25 +375,28 @@ class SvtViewOptionsBase_Impl : public ::utl::ConfigItem
     @last change    19.10.2001 07:54
 *//*-*************************************************************************************************************/
 SvtViewOptionsBase_Impl::SvtViewOptionsBase_Impl( const ::rtl::OUString& sList )
-        :   ConfigItem   ( sList )    // open right configuration file
-        ,   m_sListName  ( sList )    // we must know, which view type we must support
+        :   m_sListName  ( sList )    // we must know, which view type we must support
         #ifdef DEBUG_VIEWOPTIONS
         ,   m_nReadCount ( 0     )
         ,   m_nWriteCount( 0     )
         #endif
 {
-    // Read complete list from configuration.
-    impl_ReadWholeList();
-
-/*
-    // Enable notification for our whole set tree!
-    // use "/" to do that!
-    // Attention: If you use current existing entry names to do that - you never get a notification
-    // for new created items!!!
-    css::uno::Sequence< ::rtl::OUString > lNotifyList(1);
-    lNotifyList[0] = ROOTNODE_DIALOGS;
-    ConfigItem::EnableNotification( lNotifyList );
-*/
+    try
+    {
+        m_xRoot = css::uno::Reference< css::container::XNameAccess >(
+                        ::comphelper::ConfigurationHelper::openConfig(
+                            ::utl::getProcessServiceFactory(),
+                            PACKAGE_VIEWS,
+                            ::comphelper::ConfigurationHelper::E_STANDARD),
+                        css::uno::UNO_QUERY);
+        if (m_xRoot.is())
+            m_xRoot->getByName(sList) >>= m_xSet;
+    }
+    catch(const css::uno::Exception&)
+        {
+            m_xRoot.clear();
+            m_xSet.clear();
+        }
 }
 
 /*-************************************************************************************************************//**
@@ -399,73 +420,44 @@ SvtViewOptionsBase_Impl::SvtViewOptionsBase_Impl( const ::rtl::OUString& sList )
 *//*-*************************************************************************************************************/
 SvtViewOptionsBase_Impl::~SvtViewOptionsBase_Impl()
 {
+    try
+    {
+        if (m_xRoot.is())
+            ::comphelper::ConfigurationHelper::flush(m_xRoot);
+    }
+    catch(const css::uno::Exception&)
+        {}
+    m_xRoot.clear();
+    m_xSet.clear();
+
     #ifdef DEBUG_VIEWOPTIONS
     _LOG_COUNTER_( m_sListName, m_nReadCount, m_nWriteCount )
     #endif // DEBUG_VIEWOPTIONS
-/*
-    if( ConfigItem::IsModified() == sal_True )
-    {
-        Commit();
-    }
-*/
-}
-
-/*-************************************************************************************************************//**
-    @short          configuration use it to notify external changes on our interessted values
-    @descr          If anywhere change configuration values otside these class - configuration tell it us by calling
-                    these method. To use these mechanism - we must enable it during our own ctor. See there for further
-                    informations.
-
-    @attention      Not supported in the moment!
-
-    @seealso        ctor
-    @seealso        method EnableNotification()
-
-    @param          "lNames", names of all changed configuration entries or her subnodes
-    @return         -
-
-    @last change    19.10.2001 08:02
-*//*-*************************************************************************************************************/
-void SvtViewOptionsBase_Impl::Notify( const css::uno::Sequence< ::rtl::OUString >& lNames )
-{
-    OSL_ENSURE( sal_False, "SvtViewOptionsBase_Impl::Notify()\nNot supported yet!\n" );
-}
-
-/*-************************************************************************************************************//**
-    @short          write changed internal values to configuration
-    @descr          If our internal values are changed - we should flush it to configuration file.
-                    But - we implement a write-through-cache ... so we mustn't do anything here!
-
-    @seealso        dtor
-    @seealso        method IsModified()
-
-    @param          -
-    @return         -
-
-    @last change    19.10.2001 08:02
-*//*-*************************************************************************************************************/
-void SvtViewOptionsBase_Impl::Commit()
-{
 }
 
 /*-************************************************************************************************************//**
     @short          checks for already existing entries
     @descr          If user don't know, if an entry already exist - he can get this information by calling this method.
-                    Otherwhise access (read access is enough!) will create it with default values!
-                    But these default items exist at runtime in our cache only. They are written to disk only, if
-                    user change her values realy.
 
     @seealso        member m_aList
 
     @param          "sName", name of entry to check exist state
     @return         true , if item exist
                     false, otherwise
-
-    @last change    19.10.2001 08:02
 *//*-*************************************************************************************************************/
 sal_Bool SvtViewOptionsBase_Impl::Exists( const ::rtl::OUString& sName )
 {
-    return( m_aList.find(sName) != m_aList.end() );
+    sal_Bool bExists = sal_False;
+
+    try
+    {
+        if (m_xSet.is())
+            bExists = m_xSet->hasByName(sName);
+    }
+    catch(const css::uno::Exception&)
+        { bExists = sal_False; }
+
+    return bExists;
 }
 
 /*-************************************************************************************************************//**
@@ -477,8 +469,6 @@ sal_Bool SvtViewOptionsBase_Impl::Exists( const ::rtl::OUString& sName )
     @param          "sName", name of entry to delete it
     @return         true , if item not exist(!) or could be deleted (should be the same!)
                     false, otherwise
-
-    @last change    19.10.2001 08:05
 *//*-*************************************************************************************************************/
 sal_Bool SvtViewOptionsBase_Impl::Delete( const ::rtl::OUString& sName )
 {
@@ -486,28 +476,32 @@ sal_Bool SvtViewOptionsBase_Impl::Delete( const ::rtl::OUString& sName )
     ++m_nWriteCount;
     #endif
 
-    IMPL_TViewHash::iterator pItem = m_aList.find(sName);
-    if( pItem != m_aList.end() )
+    sal_Bool bDeleted = sal_False;
+    try
     {
-        m_aList.erase( pItem );
-        ConfigItem::ClearNodeSet( ::utl::wrapConfigurationElementName(sName) );
+        css::uno::Reference< css::container::XNameContainer > xSet(m_xSet, css::uno::UNO_QUERY);
+        if (xSet.is())
+        {
+            xSet->removeByName(sName);
+            bDeleted = sal_True;
+        }
     }
-    return sal_True;
+    catch(const css::container::NoSuchElementException&)
+        { bDeleted = sal_True; }
+    catch(const css::uno::Exception&)
+        { bDeleted = sal_False; }
+
+    return bDeleted;
 }
 
 /*-************************************************************************************************************//**
     @short          read/write access to cache view items and her properties
     @descr          Follow methods support read/write access to all cache view items.
-                    If an entry doesnt exist - we create a new one with default values in memory ... not in disk!
-                    If user change values of it - we take into our internal cache AND write it to configuration
-                    instandly!
 
     @seealso        member m_sList
 
     @param          -
     @return         -
-
-    @last change    19.10.2001 08:33
 *//*-*************************************************************************************************************/
 ::rtl::OUString SvtViewOptionsBase_Impl::GetWindowState( const ::rtl::OUString& sName )
 {
@@ -515,7 +509,19 @@ sal_Bool SvtViewOptionsBase_Impl::Delete( const ::rtl::OUString& sName )
     ++m_nReadCount;
     #endif
 
-    return m_aList[sName].getWindowState();
+    ::rtl::OUString sWindowState;
+    try
+    {
+        css::uno::Reference< css::container::XNameAccess > xNode(
+            impl_getSetNode(sName, sal_False),
+            css::uno::UNO_QUERY);
+        if (xNode.is())
+            xNode->getByName(PROPERTY_WINDOWSTATE) >>= sWindowState;
+    }
+    catch(const css::uno::Exception&)
+        { sWindowState = ::rtl::OUString(); }
+
+    return sWindowState;
 }
 
 //*****************************************************************************************************************
@@ -526,11 +532,16 @@ void SvtViewOptionsBase_Impl::SetWindowState( const ::rtl::OUString& sName  ,
     ++m_nWriteCount;
     #endif
 
-    if( m_aList[sName].getWindowState() != sState )
+    try
     {
-        m_aList[sName].setWindowState( sState );
-        impl_writeDirectProp( sName, PROPERTY_WINDOWSTATE, (void*)&sState );
+        css::uno::Reference< css::container::XNameReplace > xNode(
+            impl_getSetNode(sName, sal_True),
+            css::uno::UNO_QUERY);
+        if (xNode.is())
+            xNode->replaceByName(PROPERTY_WINDOWSTATE, css::uno::makeAny(sState));
     }
+    catch(const css::uno::Exception&)
+        {}
 }
 
 //*****************************************************************************************************************
@@ -540,7 +551,35 @@ css::uno::Sequence< css::beans::NamedValue > SvtViewOptionsBase_Impl::GetUserDat
     ++m_nReadCount;
     #endif
 
-    return m_aList[sName].getUserData();
+    try
+    {
+        css::uno::Reference< css::container::XNameAccess > xNode(
+            impl_getSetNode(sName, sal_False),
+            css::uno::UNO_QUERY);
+        css::uno::Reference< css::container::XNameAccess > xUserData;
+        if (xNode.is())
+            xNode->getByName(PROPERTY_USERDATA) >>= xUserData;
+        if (xUserData.is())
+        {
+            const css::uno::Sequence< ::rtl::OUString >         lNames = xUserData->getElementNames();
+            const ::rtl::OUString*                              pNames = lNames.getConstArray();
+                  sal_Int32                                     c      = lNames.getLength();
+                  sal_Int32                                     i      = 0;
+                  css::uno::Sequence< css::beans::NamedValue >  lUserData(c);
+
+            for (i=0; i<c; ++i)
+            {
+                lUserData[i].Name  = pNames[i];
+                lUserData[i].Value = xUserData->getByName(pNames[i]);
+            }
+
+            return lUserData;
+        }
+    }
+    catch(const css::uno::Exception&)
+        {}
+
+    return css::uno::Sequence< css::beans::NamedValue >();
 }
 
 //*****************************************************************************************************************
@@ -551,25 +590,30 @@ void SvtViewOptionsBase_Impl::SetUserData( const ::rtl::OUString&               
     ++m_nWriteCount;
     #endif
 
-    if( m_aList[sName].getUserData() != lData )
+    try
     {
-        // User data are special properties of a view item.
-        // They are a subset of a set entry in configuration.
-        // Normaly a set entry is FULL created with default values,
-        // if any fixed property of them is written. But subsets
-        // couldnt be created so easy. That's why we must
-        // check for default items ( they shouldnt exist on disk ... !)
-        // but they must be created, if we whish to set new real value on
-        // UserData!!!
-        if( m_aList[sName].isDefault() == sal_True )
+        css::uno::Reference< css::container::XNameAccess > xNode(
+            impl_getSetNode(sName, sal_True),
+            css::uno::UNO_QUERY);
+        css::uno::Reference< css::container::XNameContainer > xUserData;
+        if (xNode.is())
+            xNode->getByName(PROPERTY_USERDATA) >>= xUserData;
+        if (xUserData.is())
         {
-            impl_createEmptySetNode( sName );
+            const css::beans::NamedValue* pData = lData.getConstArray();
+                  sal_Int32               c     = lData.getLength();
+                  sal_Int32               i     = 0;
+            for (i=0; i<c; ++i)
+            {
+                if (xUserData->hasByName(pData[i].Name))
+                    xUserData->replaceByName(pData[i].Name, pData[i].Value);
+                else
+                    xUserData->insertByName(pData[i].Name, pData[i].Value);
+            }
         }
-
-        m_aList[sName].setUserData( lData );
-
-        impl_writeDirectProp( sName, PROPERTY_USERDATA, &lData );
     }
+    catch(const css::uno::Exception&)
+        {}
 }
 
 //*****************************************************************************************************************
@@ -580,7 +624,22 @@ css::uno::Any SvtViewOptionsBase_Impl::GetUserItem( const ::rtl::OUString& sName
     ++m_nReadCount;
     #endif
 
-    return m_aList[sName].getUserItem(sItem);
+    css::uno::Any aItem;
+    try
+    {
+        css::uno::Reference< css::container::XNameAccess > xNode(
+            impl_getSetNode(sName, sal_False),
+            css::uno::UNO_QUERY);
+        css::uno::Reference< css::container::XNameAccess > xUserData;
+        if (xNode.is())
+            xNode->getByName(PROPERTY_USERDATA) >>= xUserData;
+        if (xUserData.is())
+            aItem = xUserData->getByName(sItem);
+    }
+    catch(const css::uno::Exception&)
+        { aItem.clear(); }
+
+    return aItem;
 }
 
 //*****************************************************************************************************************
@@ -592,25 +651,24 @@ void SvtViewOptionsBase_Impl::SetUserItem( const ::rtl::OUString& sName  ,
     ++m_nWriteCount;
     #endif
 
-    if( m_aList[sName].getUserItem(sItem) != aValue )
+    try
     {
-        // User data are special properties of a view item.
-        // They are a subset of a set entry in configuration.
-        // Normaly a set entry is FULL created with default values,
-        // if any fixed property of them is written. But subsets
-        // couldnt be created so easy. That's why we must
-        // check for default items ( they shouldnt exist on disk ... !)
-        // but they must be created, if we whish to set new real value on
-        // UserData!!!
-        if( m_aList[sName].isDefault() == sal_True )
+        css::uno::Reference< css::container::XNameAccess > xNode(
+            impl_getSetNode(sName, sal_True),
+            css::uno::UNO_QUERY);
+        css::uno::Reference< css::container::XNameContainer > xUserData;
+        if (xNode.is())
+            xNode->getByName(PROPERTY_USERDATA) >>= xUserData;
+        if (xUserData.is())
         {
-            impl_createEmptySetNode( sName );
+            if (xUserData->hasByName(sItem))
+                xUserData->replaceByName(sItem, aValue);
+            else
+                xUserData->insertByName(sItem, aValue);
         }
-
-        m_aList[sName].setUserItem(sItem, aValue);
-        const css::uno::Sequence< css::beans::NamedValue > lData = m_aList[sName].getUserData();
-        impl_writeDirectProp( sName, PROPERTY_USERDATA, &lData );
     }
+    catch(const css::uno::Exception&)
+        {}
 }
 
 //*****************************************************************************************************************
@@ -620,7 +678,19 @@ sal_Int32 SvtViewOptionsBase_Impl::GetPageID( const ::rtl::OUString& sName )
     ++m_nReadCount;
     #endif
 
-    return m_aList[sName].getPageID();
+    sal_Int32 nID = 0;
+    try
+    {
+        css::uno::Reference< css::container::XNameAccess > xNode(
+            impl_getSetNode(sName, sal_False),
+            css::uno::UNO_QUERY);
+        if (xNode.is())
+            xNode->getByName(PROPERTY_PAGEID) >>= nID;
+    }
+    catch(const css::uno::Exception&)
+        { nID = 0; }
+
+    return nID;
 }
 
 //*****************************************************************************************************************
@@ -631,11 +701,16 @@ void SvtViewOptionsBase_Impl::SetPageID( const ::rtl::OUString& sName ,
     ++m_nWriteCount;
     #endif
 
-    if( m_aList[sName].getPageID() != nID )
+    try
     {
-        m_aList[sName].setPageID( nID );
-        impl_writeDirectProp( sName, PROPERTY_PAGEID, &nID );
+        css::uno::Reference< css::container::XNameContainer > xNode(
+            impl_getSetNode(sName, sal_True),
+            css::uno::UNO_QUERY);
+        if (xNode.is())
+            xNode->replaceByName(PROPERTY_PAGEID, css::uno::makeAny(nID));
     }
+    catch(const css::uno::Exception&)
+        {}
 }
 
 //*****************************************************************************************************************
@@ -645,7 +720,19 @@ sal_Bool SvtViewOptionsBase_Impl::GetVisible( const ::rtl::OUString& sName )
     ++m_nReadCount;
     #endif
 
-    return m_aList[sName].getVisible();
+    sal_Bool bVisible = sal_False;
+    try
+    {
+        css::uno::Reference< css::container::XNameAccess > xNode(
+            impl_getSetNode(sName, sal_False),
+            css::uno::UNO_QUERY);
+        if (xNode.is())
+            xNode->getByName(PROPERTY_VISIBLE) >>= bVisible;
+    }
+    catch(const css::uno::Exception&)
+        { bVisible = sal_False; }
+
+    return bVisible;
 }
 
 //*****************************************************************************************************************
@@ -656,240 +743,16 @@ void SvtViewOptionsBase_Impl::SetVisible( const ::rtl::OUString& sName    ,
     ++m_nWriteCount;
     #endif
 
-    if( m_aList[sName].getVisible() != bVisible )
+    try
     {
-        m_aList[sName].setVisible( bVisible );
-        impl_writeDirectProp( sName, PROPERTY_VISIBLE, &bVisible );
+        css::uno::Reference< css::container::XNameContainer > xNode(
+            impl_getSetNode(sName, sal_True),
+            css::uno::UNO_QUERY);
+        if (xNode.is())
+            xNode->replaceByName(PROPERTY_VISIBLE, css::uno::makeAny(bVisible));
     }
-}
-
-/*-************************************************************************************************************//**
-    @short          read complete configuration list
-    @descr          These methods try to get all entries of right configuration list and fill it in our internal
-                    cache.
-
-    @seealso        member m_aList
-    @seealso        baseclass ConfigItem
-
-    @param          -
-    @return         -
-
-    @last change    19.10.2001 08:34
-*//*-*************************************************************************************************************/
-void SvtViewOptionsBase_Impl::impl_ReadWholeList()
-{
-    // Clear internal cache first!
-    // This is the only way to clear all memory realy!
-    IMPL_TViewHash().swap( m_aList );
-
-    sal_Bool bBreaked = sal_False; // We check some invalid operation states during execution of these method.
-                                   // If we found anyone - we set this value to TRUE. On the end we react
-                                   // to this state by freeing internal cached values and warn programmer ...
-
-    css::uno::Sequence< ::rtl::OUString >       lNames      = ConfigItem::GetNodeNames( ::rtl::OUString(), ::utl::CONFIG_NAME_LOCAL_PATH );
-    sal_Int32                                   nNameCount  = lNames.getLength();
-    sal_Int32                                   nAllCount   = 0;
-
-    // Do nothing for empty lists!
-    if( nNameCount > 0 )
-    {
-        // Calculate count of fix properties for current list entries.
-        // So we save time by suppress reallocating of name sequence!
-        if( m_sListName == LIST_DIALOGS )
-            nAllCount = nNameCount*PROPCOUNT_DIALOGS;
-        else
-        if( m_sListName == LIST_TABDIALOGS )
-            nAllCount = nNameCount*PROPCOUNT_TABDIALOGS;
-        else
-        if( m_sListName == LIST_TABPAGES )
-            nAllCount = nNameCount*PROPCOUNT_TABPAGES;
-        else
-        if( m_sListName == LIST_WINDOWS )
-            nAllCount = nNameCount*PROPCOUNT_WINDOWS;
-
-        css::uno::Sequence< ::rtl::OUString > lAllNames( nAllCount );
-        sal_Int32                             nAllStep = 0          ;
-        ::rtl::OUString                       sPath                 ;
-
-        for( sal_Int32 nNameStep=0; nNameStep<nNameCount; ++nNameStep )
-        {
-            // sPath = "*[xxx]/"
-            sPath  = lNames[nNameStep] ;
-            sPath += PATHSEPERATOR     ;
-
-            // sPath     = "*[xxx]/"
-            // lAllNames = "*[xxx]/WindowState"
-            lAllNames[nAllStep] = sPath + PROPERTY_WINDOWSTATE;
-            ++nAllStep;
-
-            if( m_sListName == LIST_TABDIALOGS )
-            {
-                // sPath     = "*[xxx]/"
-                // lAllNames = "*[xxx]/PageID"
-                lAllNames[nAllStep] = sPath + PROPERTY_PAGEID;
-                ++nAllStep;
-            }
-
-            if( m_sListName == LIST_WINDOWS )
-            {
-                // sPath     = "*[xxx]/"
-                // lAllNames = "*[xxx]/Visible"
-                lAllNames[nAllStep] = sPath + PROPERTY_VISIBLE;
-                ++nAllStep;
-            }
-
-            // Handle "UserData" in a variable way. The could exist - but the must'nt!
-                                                  // sPath = "*[xxx]/UserData"
-                                                  sPath     += PROPERTY_USERDATA;
-            css::uno::Sequence< ::rtl::OUString > lUserNames = ConfigItem::GetNodeNames( sPath, ::utl::CONFIG_NAME_LOCAL_PATH );
-            sal_Int32                             nUserCount = lUserNames.getLength();
-                                                  // sPath = "*[xxx]/UserData/"
-                                                  sPath     += PATHSEPERATOR;
-
-            // Reallocate name sequence, if any usre data was found and actualize nAllCount too!
-            // These value is neccessary to find end of name and corresponding value list after reading values from configuration.
-            if( nUserCount > 0 )
-            {
-                nAllCount += nUserCount;
-                lAllNames.realloc( nAllCount );
-            }
-
-            for( sal_Int32 nUserStep=0; nUserStep<nUserCount; ++nUserStep )
-            {
-                // sPath     = "v_xxx/UserData/"
-                // lAllNames = "v_xxx/UserData/<userprop>"
-                lAllNames[nAllStep] = sPath + lUserNames[nUserStep];
-                ++nAllStep;
-            }
-        }
-
-        // Use builded list of full qualified names to get her values in corresponding list.
-        css::uno::Sequence< css::uno::Any > lAllValues = ConfigItem::GetProperties( lAllNames );
-
-        // Safe impossible cases.
-        // We have asked for ALL our subtree keys and we would get all his values.
-        // It's important for next loop and our index using!
-        if( lAllNames.getLength()!=lAllValues.getLength() )
-        {
-            bBreaked = sal_True;
-        }
-        else
-        {
-            // step over both lists (name and value) and insert corresponding pairs into internal cache
-            ::rtl::OUString sEntryName    ;
-            ::rtl::OUString sPropertyName ;
-            ::rtl::OUString sUserName     ;
-            ::rtl::OUString sTemp         ;
-            sal_Int32       nToken        ;
-                            nAllStep      = 0;
-
-            while( nAllStep<nAllCount )
-            {
-                nToken        = 0;
-                // lAllNames = "v_<entryname>/<propertyname[/<username>]>"
-                // ... get "v_<entryname>" from lAllNames
-                // ... extract "<entryname>" from sEntryName
-                sEntryName    = lAllNames[nAllStep].getToken( 0, (sal_Unicode)'/', nToken );
-                sEntryName    = ::utl::extractFirstFromConfigurationPath(sEntryName);
-
-                if(
-                    ( nToken                 < 0 )  ||  // nToken must be different from -1 ... because we search for sPropertyName in next line!
-                    ( sEntryName.getLength() < 1 )      // An entry name is neccessary! We can't work with nothing.
-                  )
-                {
-                    bBreaked = sal_True;
-                    break;
-                }
-
-                // ... get "<propertyname>" from lAllNames
-                sPropertyName = lAllNames[nAllStep].getToken( 0, (sal_Unicode)'/', nToken );
-
-                if( sPropertyName.getLength() < 1 )
-                {
-                    // We must have a valid propertyname ... Otherwise we search value for "nothing"!
-                    // Don't check nToken here - he could be -1 for fix properties ... but he could
-                    // be >0 for UserData! Then exist some subnodes which should be readed!
-                    bBreaked = sal_True;
-                    break;
-                }
-
-                if( sPropertyName == PROPERTY_WINDOWSTATE )
-                {
-                    ::rtl::OUString sTemp;
-                    lAllValues[nAllStep] >>= sTemp;
-                    m_aList[sEntryName].setWindowState( sTemp );
-                    ++nAllStep;
-
-                }
-                else
-                if( sPropertyName == PROPERTY_PAGEID )
-                {
-                    sal_Int32 nTemp;
-                    lAllValues[nAllStep] >>= nTemp;
-                    m_aList[sEntryName].setPageID( nTemp );
-                    ++nAllStep;
-                }
-                else
-                if( sPropertyName == PROPERTY_VISIBLE )
-                {
-                    sal_Bool bTemp;
-                    lAllValues[nAllStep] >>= bTemp;
-                    m_aList[sEntryName].setVisible(bTemp);
-                    ++nAllStep;
-                }
-                else
-                if( sPropertyName == PROPERTY_USERDATA )
-                {
-                    while( sPropertyName == PROPERTY_USERDATA )
-                    {
-                        // ... extract "<username>" from sEntryName!
-                        sUserName = lAllNames[nAllStep].getToken( 0, (sal_Unicode)'/', nToken );
-                        sUserName = ::utl::extractFirstFromConfigurationPath(sUserName);
-                        m_aList[sEntryName].setUserItem( sUserName, lAllValues[nAllStep] );
-
-                        ++nAllStep;
-
-                        if( nAllStep >= nAllCount )
-                            break;
-
-                        // starte new search for entry and property names.
-                        // a)
-                        //   If next entry in lAllNames is a fix property - these search will be superflous but
-                        //   not dangerous. Because we start search on the beginning of these while-construct again.
-                        //   But don't change nAllStep AFTER these lines. You must use SAME entry there!
-                        // b)
-                        //   If next entry is an UserData node - we get sPropertyName==PROPERTY_USERDATA!
-                        //   So these "sub-while-construct" starts again to read next UserData entry ...
-                        nToken        = 0;
-                        sEntryName    = lAllNames[nAllStep].getToken( 0, (sal_Unicode)'/', nToken );
-                        sEntryName    = ::utl::extractFirstFromConfigurationPath(sEntryName);
-                        sPropertyName = lAllNames[nAllStep].getToken( 0, (sal_Unicode)'/', nToken );
-                    }
-                }
-                else
-                {
-                    // There exist any unknown subnode as fix property.
-                    // We can't handle these case ... so we should break operation!
-                    bBreaked = sal_True;
-                    break;
-                }
-            }
-        }
-    }
-
-    // If read operation was cancelled by any error - show a message for programmer and
-    // clear internal caches. We can't decide between incomplete, wrong or right values.
-    // So we should start with empty lists!
-    if( bBreaked == sal_True )
-    {
-        OSL_ENSURE( sal_False, "SvtViewOptionsBase_Impl::impl_ReadWholeList()\nBreak reading completly. Unsupported configuration format found!\n" );
-        IMPL_TViewHash().swap( m_aList );
-        // A possible solution: SELF REPAIR!
-        // Delete configuration entries in file too ...
-        // It's hard - but could solve many problems.
-        // Otherwhise these errors occure again and again and ...
-        ConfigItem::ClearNodeSet( ::rtl::OUString() );
-    }
+    catch(const css::uno::Exception&)
+        {}
 }
 
 /*-************************************************************************************************************//**
@@ -904,104 +767,25 @@ void SvtViewOptionsBase_Impl::impl_ReadWholeList()
 
     @last change    19.10.2001 08:42
 *//*-*************************************************************************************************************/
-void SvtViewOptionsBase_Impl::impl_createEmptySetNode( const ::rtl::OUString& sNode )
+css::uno::Reference< css::uno::XInterface > SvtViewOptionsBase_Impl::impl_getSetNode( const ::rtl::OUString& sNode           ,
+                                                                                            sal_Bool         bCreateIfMissing)
 {
-    css::uno::Sequence< css::beans::PropertyValue > lProps(1);
-    ::rtl::OUString                                 sPath    ;
+    css::uno::Reference< css::uno::XInterface > xNode;
 
-    sPath += ::utl::wrapConfigurationElementName(sNode);
-    sPath += PATHSEPERATOR                             ;
-
-    lProps[0].Name    = sPath + PROPERTY_WINDOWSTATE;
-    lProps[0].Value <<= DEFAULT_WINDOWSTATE         ;
-
-    if( m_sListName == LIST_TABDIALOGS )
+    try
     {
-        lProps.realloc( lProps.getLength()+1 );
-        lProps[lProps.getLength()-1].Name    = sPath + PROPERTY_PAGEID  ;
-        lProps[lProps.getLength()-1].Value <<= (sal_Int32)DEFAULT_PAGEID;
-    }
-
-    if( m_sListName == LIST_WINDOWS )
-    {
-        lProps.realloc( lProps.getLength()+1 );
-        lProps[lProps.getLength()-1].Name    = sPath + PROPERTY_VISIBLE ;
-        lProps[lProps.getLength()-1].Value <<= DEFAULT_VISIBLE          ;
-    }
-
-    ConfigItem::SetSetProperties( ::rtl::OUString(), lProps );
-}
-
-/*-************************************************************************************************************//**
-    @short          write one property of a view entry in cfg
-    @descr          These write direct to configuration and change value of a view property.
-
-    @seealso        method impl_createEmptySetNode()
-
-    @param          "sNode" , name of new entry
-    @param          "sProp" , name of property to change
-    @param          "pValue", value of these property (real type depends on given property name)
-    @return         -
-
-    @last change    19.10.2001 08:44
-*//*-*************************************************************************************************************/
-void SvtViewOptionsBase_Impl::impl_writeDirectProp( const ::rtl::OUString& sNode  ,
-                                                    const ::rtl::OUString& sProp  ,
-                                                    const void*            pValue )
-{
-    ::rtl::OUStringBuffer sPath(100);
-    sPath.append( ::utl::wrapConfigurationElementName(sNode));
-    sPath.append( PATHSEPERATOR                             );
-    sPath.append( sProp                                     );
-
-    css::uno::Sequence< css::beans::PropertyValue > lProp(1);
-    if( sProp == PROPERTY_WINDOWSTATE )
-    {
-        lProp[0].Name    = sPath.makeStringAndClear();
-        lProp[0].Value <<= *((const ::rtl::OUString*)pValue);
-        ConfigItem::SetSetProperties( ::rtl::OUString(), lProp );
-    }
-    else
-    if( sProp == PROPERTY_PAGEID )
-    {
-        lProp[0].Name    = sPath.makeStringAndClear();
-        lProp[0].Value <<= *((const sal_Int32*)pValue);
-        ConfigItem::SetSetProperties( ::rtl::OUString(), lProp );
-    }
-    else
-    if( sProp == PROPERTY_VISIBLE )
-    {
-        lProp[0].Name    = sPath.makeStringAndClear();
-        lProp[0].Value <<= *((const sal_Bool*)pValue);
-        ConfigItem::SetSetProperties( ::rtl::OUString(), lProp );
-    }
-    else
-    if( sProp == PROPERTY_USERDATA )
-    {
-        ::rtl::OUString sBasePath = sPath.makeStringAndClear();
-
-        const css::uno::Sequence< css::beans::NamedValue>* pData = (css::uno::Sequence< css::beans::NamedValue>*)pValue;
-        sal_Int32 nCount = pData->getLength();
-        sal_Int32 nStep  = 0;
-        lProp.realloc(nCount);
-        while( nStep<nCount )
+        if (bCreateIfMissing)
+            xNode = ::comphelper::ConfigurationHelper::makeSureSetNodeExists(m_xRoot, m_sListName, sNode);
+        else
         {
-            if( (*pData)[nStep].Value.hasValue() == sal_False )
-            {
-                OSL_ENSURE( sal_False, "SvtViewOptionsBase_Impl::impl_writeDirectProp()\nCan't write UserData item with void-any as value!!! Item will be ignored ...\n" );
-                --nCount;
-                lProp.realloc(nCount);
-            }
-            else
-            {
-                lProp[nStep].Name  = sBasePath + PATHSEPERATOR + ::utl::wrapConfigurationElementName( (*pData)[nStep].Name );
-                lProp[nStep].Value = (*pData)[nStep].Value;
-                ++nStep;
-            }
+            if (m_xSet.is())
+                m_xSet->getByName(sNode) >>= xNode;
         }
-
-        ConfigItem::ReplaceSetProperties( sBasePath, lProp );
     }
+    catch(const css::uno::Exception&)
+        { xNode.clear(); }
+
+    return xNode;
 }
 
 //_________________________________________________________________________________________________________________
