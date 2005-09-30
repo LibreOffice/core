@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkmgr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:45:03 $
+ *  last change: $Author: hr $ $Date: 2005-09-30 10:08:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,9 @@
 
 #pragma hdrstop
 
+#ifndef _COM_SUN_STAR_DOCUMENT_UPDATEDOCMODE_HPP_
+#include <com/sun/star/document/UpdateDocMode.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.h>
 #endif
@@ -308,6 +311,7 @@ String lcl_DDE_RelToAbs( const String& rTopic, const String& rBaseURL )
 BOOL SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
 {
     SfxObjectShell* pFndShell = 0;
+    USHORT nUpdateMode = com::sun::star::document::UpdateDocMode::NO_UPDATE;
     String sTopic, sItem, sReferer;
     if( pLink->GetLinkManager() &&
         pLink->GetLinkManager()->GetDisplayNames( pLink, 0, &sTopic, &sItem )
@@ -325,7 +329,12 @@ BOOL SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
         BOOL bFirst = TRUE;
         SfxObjectShell* pShell = pLink->GetLinkManager()->GetPersist();
         if( pShell && pShell->GetMedium() )
+        {
             sReferer = pShell->GetMedium()->GetBaseURL();
+            SFX_ITEMSET_ARG( pShell->GetMedium()->GetItemSet(), pItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False );
+            if ( pItem )
+                nUpdateMode = pItem->GetValue();
+        }
 
         String sNmURL( lcl_DDE_RelToAbs( sTopic, sReferer ) );
         aCC.toLower( sNmURL );
@@ -381,6 +390,7 @@ BOOL SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
             SfxBoolItem aMinimized(SID_MINIMIZED, TRUE);
             SfxStringItem aTarget( SID_TARGETNAME, String::CreateFromAscii("_blank") );
             SfxStringItem aReferer( SID_REFERER, sReferer );
+            SfxUInt16Item aUpdate( SID_UPDATEDOCMODE, nUpdateMode );
 
             // #i14200# (DDE-link crashes wordprocessor)
             SfxAllItemSet aArgs( SFX_APP()->GetPool() );
@@ -388,6 +398,7 @@ BOOL SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
             aArgs.Put(aTarget);
             aArgs.Put(aMinimized);
             aArgs.Put(aName);
+            aArgs.Put(aUpdate);
             pFndShell = SfxObjectShell::CreateAndLoadObject( aArgs );
         }
     }
