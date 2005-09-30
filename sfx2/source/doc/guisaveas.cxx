@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guisaveas.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:43:47 $
+ *  last change: $Author: hr $ $Date: 2005-09-30 10:24:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -264,7 +264,8 @@ public:
 
     sal_Bool OutputFileDialog( sal_Int8 nStoreMode,
                                 const ::comphelper::SequenceAsHashMap& aPreselectedFilterPropsHM,
-                                sal_Bool bSetStandardName );
+                                sal_Bool bSetStandardName,
+                                ::rtl::OUString& aUserSelectedName );
 
     sal_Bool ShowDocumentInfoDialog();
 };
@@ -694,7 +695,8 @@ sal_Bool ModelData_Impl::CheckFilterOptionsDialogExistence()
 //-------------------------------------------------------------------------
 sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
                                             const ::comphelper::SequenceAsHashMap& aPreselectedFilterPropsHM,
-                                            sal_Bool bSetStandardName )
+                                            sal_Bool bSetStandardName,
+                                            ::rtl::OUString& aUserSelectedName )
 {
     sal_Bool bUseFilterOptions = sal_False;
 
@@ -786,18 +788,16 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
         pFileDlg->CreateMatcher( aDocServiceShortName );
     }
 
-    if ( GetStorable()->hasLocation()
+    // the last used name might be provided by aUserSelectedName from the old selection
+    ::rtl::OUString aLastName = aUserSelectedName;
+
+    if ( ( aLastName.getLength() || GetStorable()->hasLocation() )
       && !GetMediaDescr().getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "RepairPackage" ),
                                                                       sal_False ) )
     {
         // --> PB 2004-11-05 #i36524# - aLastName must be an URL, not only a filename
-        /*
-        ::rtl::OUString aLastName = INetURLObject( GetStorable()->getLocation() ).getName(
-                                                        INetURLObject::LAST_SEGMENT,
-                                                        sal_True,
-                                                        INetURLObject::DECODE_WITH_CHARSET);
-        */
-        ::rtl::OUString aLastName = GetStorable()->getLocation();
+        if ( !aLastName.getLength() )
+            aLastName = GetStorable()->getLocation();
         // <--
 
         if ( !aLastName.getLength() )
@@ -913,6 +913,8 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
 
     // get the path from the dialog
     INetURLObject aURL( pFileDlg->GetPath() );
+    // the path should be provided outside since it might be used for further calls to the dialog
+    aUserSelectedName = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
     // old filter options should be cleared in case different filter is used
 
@@ -1215,9 +1217,10 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
     if ( aFileNameIter == aModelData.GetMediaDescr().end() )
     {
         sal_Bool bExit = sal_False;
+        ::rtl::OUString aUserSelectedName;
         while ( !bExit )
         {
-            bUseFilterOptions = aModelData.OutputFileDialog( nStoreMode, aFilterProps, bSetStandardName );
+            bUseFilterOptions = aModelData.OutputFileDialog( nStoreMode, aFilterProps, bSetStandardName, aUserSelectedName );
             if ( nStoreMode == SAVEAS_REQUESTED )
             {
                 // in case of saving check filter for possible alien warning
