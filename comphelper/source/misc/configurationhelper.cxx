@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configurationhelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:49:08 $
+ *  last change: $Author: hr $ $Date: 2005-09-30 10:26:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,18 @@
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
 
 //_______________________________________________
@@ -145,6 +157,40 @@ void ConfigurationHelper::writeRelativeKey(const css::uno::Reference< css::uno::
                     css::uno::Reference< css::uno::XInterface >());
     }
     xProps->setPropertyValue(sKey, aValue);
+}
+
+//-----------------------------------------------
+css::uno::Reference< css::uno::XInterface > ConfigurationHelper::makeSureSetNodeExists(const css::uno::Reference< css::uno::XInterface > xCFG         ,
+                                                                                       const ::rtl::OUString&                            sRelPathToSet,
+                                                                                       const ::rtl::OUString&                            sSetNode     )
+{
+    css::uno::Reference< css::container::XHierarchicalNameAccess > xAccess(xCFG, css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::container::XNameAccess > xSet;
+    xAccess->getByHierarchicalName(sRelPathToSet) >>= xSet;
+    if (!xSet.is())
+    {
+        ::rtl::OUStringBuffer sMsg(256);
+        sMsg.appendAscii("The requested path \"");
+        sMsg.append     (sRelPathToSet          );
+        sMsg.appendAscii("\" does not exists."  );
+
+        throw css::container::NoSuchElementException(
+                    sMsg.makeStringAndClear(),
+                    css::uno::Reference< css::uno::XInterface >());
+    }
+
+    css::uno::Reference< css::uno::XInterface > xNode;
+    if (xSet->hasByName(sSetNode))
+        xSet->getByName(sSetNode) >>= xNode;
+    else
+    {
+        css::uno::Reference< css::lang::XSingleServiceFactory > xNodeFactory(xSet, css::uno::UNO_QUERY_THROW);
+        xNode = xNodeFactory->createInstance();
+        css::uno::Reference< css::container::XNameContainer > xSetReplace(xSet, css::uno::UNO_QUERY_THROW);
+        xSetReplace->insertByName(sSetNode, css::uno::makeAny(xNode));
+    }
+
+    return xNode;
 }
 
 //-----------------------------------------------
