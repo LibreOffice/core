@@ -4,9 +4,9 @@
  *
  *  $RCSfile: presethandler.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:05:03 $
+ *  last change: $Author: hr $ $Date: 2005-09-30 10:11:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -441,14 +441,18 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
 
         case E_DOCUMENT :
         {
+            // A document does not have a share layer in real.
+            // It has one layer only, and this one should be opened READ_WRITE.
+            // So we open the user layer here only and set the share layer equals to it .-)
+
             sRelPathBuf.append(sResource);
-            sRelPathShare = sRelPathBuf.makeStringAndClear();
-            sRelPathUser  = sRelPathShare;
+            sRelPathUser  = sRelPathBuf.makeStringAndClear();
+            sRelPathShare = sRelPathUser;
 
             try
             {
-                xUser  = m_lDocumentStorages.openPath(sRelPathUser, eUserMode);
-                xShare = xUser; // !!!
+                xUser  = m_lDocumentStorages.openPath(sRelPathUser , eUserMode );
+                xShare = xUser;
             }
             catch(const css::uno::RuntimeException& exRun)
                 { throw exRun; }
