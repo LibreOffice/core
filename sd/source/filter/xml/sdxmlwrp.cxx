@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:25:38 $
+ *  last change: $Author: hr $ $Date: 2005-09-30 09:58:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -641,7 +641,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
 
     if( 0 == nRet && SFX_CREATE_MODE_EMBEDDED == mrDocShell.GetCreateMode() )
     {
-        OUString aName = ::rtl::OUString::createFromAscii( "dummyObjectName" );
+        OUString aName;
         if ( mrMedium.GetItemSet() )
         {
             const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
@@ -649,6 +649,8 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
             if ( pDocHierarchItem )
                 aName = pDocHierarchItem->GetValue();
         }
+        else
+            aName = ::rtl::OUString::createFromAscii( "dummyObjectName" );
 
         if( aName.getLength() )
         {
