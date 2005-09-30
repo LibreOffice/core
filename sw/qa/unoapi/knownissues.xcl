@@ -1,5 +1,6 @@
 ### 111714 ###
-sw.SwAccessibleTableView::com::sun::star::accessibility::XAccessibleSelection
+#sw.SwAccessibleTableView::com::sun::star::accessibility::XAccessibleSelection
+
 ### 112786 ###
 sw.SwXTextPortion::com::sun::star::style::CharacterProperties
 
@@ -13,12 +14,15 @@ sw.SwXCellRange::com::sun::star::text::CellRange
 sw.SwXCellRange::com::sun::star::text::CellRange
 
 ### i22893 ###
-sw.SwXTextDocument::com::sun::star::document::XDocumentInfoSupplier
-sw.SwXTextDocument::com::sun::star::view::XPrintJobBroadcaster
-sw.SwXTextDocument::com::sun::star::document::XViewDataSupplier
+#sw.SwXTextDocument::com::sun::star::document::XDocumentInfoSupplier
+#sw.SwXTextDocument::com::sun::star::view::XPrintJobBroadcaster
+#sw.SwXTextDocument::com::sun::star::document::XViewDataSupplier
 
 ### i22896 ###
 sw.SwXTextDocument::com::sun::star::document::XEventBroadcaster
+
+### i34456 ###
+sw.SwXTextDocument::com::sun::star::view::XPrintJobBroadcaster
 
 ### i23199 ###
 sw.SwXTextView::com::sun::star::view::XSelectionSupplier
@@ -35,19 +39,19 @@ sw.XMLStylesImporter::com::sun::star::xml::sax::XDocumentHandler
 sw.SwXTextCursor::com::sun::star::text::XSentenceCursor
 
 ### i23411 ###
-sw.SwXTextDocument::com::sun::star::text::XPagePrintable
+#sw.SwXTextDocument::com::sun::star::text::XPagePrintable
 
 ### i23422 ###
 sw.SwXTextViewCursor::com::sun::star::beans::XMultiPropertyStates
 
 ### i23426 ###
-sw.SwXMailMerge::com::sun::star::task::XJob
+#sw.SwXMailMerge::com::sun::star::task::XJob
 
 ### i23623 ###
 sw.SwXStyleFamily::com::sun::star::container::XNameReplace
 
 ### i24402 ###
-sw.SwXTextGraphicObject::com::sun::star::text::BaseFrameProperties
+#sw.SwXTextGraphicObject::com::sun::star::text::BaseFrameProperties
 
 ### i25406 ###
 sw.PageStyle::com::sun::star::style::PageProperties
@@ -63,19 +67,43 @@ sw.ConditionalParagraphStyle::com::sun::star::beans::XMultiPropertyStates
 sw.ParagraphStyle::com::sun::star::beans::XMultiPropertyStates
 
 ### i30620 ###
-sw.SwXDocumentIndex::com::sun::star::text::XDocumentIndex
+#sw.SwXDocumentIndex::com::sun::star::text::XDocumentIndex
 
 ### i31294 ###
-sw.SwXMailMerge::com::sun::star::sdb::DataAccessDescriptor
-sw.SwXMailMerge::com::sun::star::text::MailMerge
+#sw.SwXMailMerge::com::sun::star::sdb::DataAccessDescriptor
+#sw.SwXMailMerge::com::sun::star::text::MailMerge
 
 ### i31727 ###
-sw.XMLExporter::com::sun::star::document::XFilter
-sw.XMLContentExporter::com::sun::star::document::XFilter
+#sw.XMLExporter::com::sun::star::document::XFilter
+#sw.XMLContentExporter::com::sun::star::document::XFilter
 
-### 114134 ###
+### i37272 ###
 sw.SwXDrawPage::com::sun::star::drawing::XShapeGrouper
 
 ### problems with setting printer on solaris ###
 sw.DocumentSettings::com::sun::star::document::Settings
 sw.DocumentSettings::com::sun::star::beans::XPropertySet
+
+### i41735 ###
+sw.SwXAutoTextEntry::com::sun::star::text::XSimpleText
+sw.SwXAutoTextEntry::com::sun::star::text::XAutoTextEntry
+sw.SwXAutoTextEntry::com::sun::star::text::XTextRange
+sw.SwXAutoTextEntry::com::sun::star::text::XText
+
+### i38199 ###
+sw.SwXAutoTextGroup::com::sun::star::container::XNamed
+
+### i38201 ###
+sw.SwXAutoTextGroup::com::sun::star::text::XAutoTextGroup
+
+### i38586 ###
+sw.SwXParagraph::com::sun::star::style::ParagraphProperties
+
+### 112786 ###
+sw.SwXTextPortion::com::sun::star::style::CharacterProperties
+
+### i38584 ###
+sw.SwXParagraph::com::sun::star::beans::XPropertySet
+sw.SwXTextPortion::com::sun::star::beans::XPropertySet
+sw.SwXTextRange::com::sun::star::beans::XPropertySet
+sw.SwXTextViewCursor::com::sun::star::beans::XPropertySet
