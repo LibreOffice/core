@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 21:32:53 $
+#   last change: $Author: hr $ $Date: 2005-09-30 10:08:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -179,7 +179,8 @@ EXCEPTIONSFILES=\
     $(SLO)$/svxbmpnumvalueset.obj \
         $(SLO)$/macropg.obj \
     $(SLO)$/optjava.obj \
-    $(SLO)$/docrecovery.obj
+    $(SLO)$/docrecovery.obj	\
+    $(SLO)$/treeopt.obj
 
 .IF "$(GUI)"=="UNX"
 EXCEPTIONSFILES +=	$(SLO)$/sendreportunx.obj
@@ -202,7 +203,6 @@ SLOFILES=\
     $(SLO)$/optmemory.obj				\
     $(SLO)$/opthtml.obj					\
     $(SLO)$/optfltr.obj					\
-    $(SLO)$/treeopt.obj \
         $(SLO)$/autocdlg.obj     \
         $(SLO)$/cuiexp.obj     \
         $(SLO)$/dlgfact.obj     \
