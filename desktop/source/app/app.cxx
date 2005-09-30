@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.183 $
+ *  $Revision: 1.184 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:03:43 $
+ *  last change: $Author: hr $ $Date: 2005-09-30 10:27:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1329,6 +1329,8 @@ void Desktop::Main()
     if (!ShouldSuppressUI(pCmdLineArgs))
         aConfigErrHandler.activate();
 
+    ResMgr::SetReadStringHook( ReplaceStringHookProc );
+
     // Startup screen
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main { OpenSplashScreen" );
     OpenSplashScreen();
@@ -1367,7 +1369,6 @@ void Desktop::Main()
         }
 #endif
 
-        ResMgr::SetReadStringHook( ReplaceStringHookProc );
         SetAppName( DEFINE_CONST_UNICODE("soffice") );
 
         // check user installation directory for lockfile so we can be sure
