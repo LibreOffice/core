@@ -1,5 +1,3 @@
-### #i27523 ###
-svtools.AccessibleIconChoiceCtrlEntry::com::sun::star::accessibility::XAccessibleText
 ### #i30697 ###
 svtools.AccessibleTabBarPage::com::sun::star::accessibility::XAccessibleExtendedComponent
 
@@ -21,3 +19,4 @@ svtools.AccessibleTabBarPage::com::sun::star::accessibility::XAccessibleExtended
 
 ### i30702 ###
 svtools.AccessibleTreeListBox::com::sun::star::accessibility::XAccessibleEventBroadcaster
+
