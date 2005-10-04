@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:05:52 $
+ *  last change: $Author: hr $ $Date: 2005-10-04 10:38:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -797,15 +797,15 @@ void ScXMLTableRowCellContext::SetAnnotation(const table::CellAddress& aCellAddr
                         aEngine.SetParaAttribs(nPara, aSet);
                     }
                 }
+                ::std::auto_ptr< EditTextObject > pEditText( aEngine.CreateTextObject());
+                aNote.SetEditTextObject(pEditText.get());    // if pEditText is NULL, then aNote.mpEditObj will be reset().
             }
-            ::std::auto_ptr< EditTextObject > pEditText( aEngine.CreateTextObject());
-            aNote.SetEditTextObject(pEditText.get());    // if pEditText is NULL, then aNote.mpEditObj will be reset().
+            if (pMyAnnotation->pRect)
+                aNote.SetRectangle(*pMyAnnotation->pRect);
+            else
+                aNote.SetRectangle(aNote.MimicOldRectangle(ScAddress(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), aCellAddress.Sheet)));
+            pDoc->SetNote(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), aCellAddress.Sheet, aNote);
         }
-        if (pMyAnnotation->pRect)
-            aNote.SetRectangle(*pMyAnnotation->pRect);
-        else
-            aNote.SetRectangle(aNote.MimicOldRectangle(ScAddress(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), aCellAddress.Sheet)));
-        pDoc->SetNote(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), aCellAddress.Sheet, aNote);
         if (pMyAnnotation->bDisplay)
         {
             ScDetectiveFunc aDetFunc(pDoc, aCellAddress.Sheet);
