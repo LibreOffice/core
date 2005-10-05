@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grid.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:35:09 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:51:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -556,7 +556,7 @@ IMPL_LINK( GridWindow, ClickButtonHdl, Button*, pButton )
 {
     if( pButton == &m_aResetButton )
     {
-        int nType = (int)m_aResetTypeBox.GetEntryData( m_aResetTypeBox.GetSelectEntryPos() );
+        int nType = (int)(sal_IntPtr)m_aResetTypeBox.GetEntryData( m_aResetTypeBox.GetSelectEntryPos() );
         switch( nType )
         {
             case RESET_TYPE_LINEAR_ASCENDING:
