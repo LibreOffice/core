@@ -4,9 +4,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:11:25 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:57:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -329,7 +329,7 @@ IMPL_LINK( DigitalSignaturesDialog, RemoveButtonHdl, Button*, EMPTYARG )
     {
         try
         {
-            USHORT nSelected = (USHORT) (sal_Int32) maSignaturesLB.FirstSelected()->GetUserData();
+            USHORT nSelected = (USHORT) (sal_uIntPtr) maSignaturesLB.FirstSelected()->GetUserData();
             maCurrentSignatureInformations.erase( maCurrentSignatureInformations.begin()+nSelected );
 
             // Export all other signatures...
@@ -470,7 +470,7 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
 {
     if( maSignaturesLB.FirstSelected() )
     {
-        USHORT nSelected = (USHORT) (sal_Int32) maSignaturesLB.FirstSelected()->GetUserData();
+        USHORT nSelected = (USHORT) (sal_uIntPtr) maSignaturesLB.FirstSelected()->GetUserData();
         const SignatureInformation& rInfo = maCurrentSignatureInformations[ nSelected ];
 
         // Use Certificate from doc, not from key store
