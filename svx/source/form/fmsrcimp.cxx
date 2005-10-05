@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmsrcimp.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:57:00 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:39:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1164,7 +1164,7 @@ IMPL_LINK(FmSearchEngine, OnNewRecordCount, void*, pCounterAsVoid)
         return 0L;
 
     FmSearchProgress aProgress;
-    aProgress.nCurrentRecord = (sal_uInt32)pCounterAsVoid;
+    aProgress.nCurrentRecord = (sal_uIntPtr)pCounterAsVoid;
     aProgress.aSearchState = FmSearchProgress::STATE_PROGRESS_COUNTING;
     m_aProgressHandler.Call(&aProgress);
 
