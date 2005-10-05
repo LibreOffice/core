@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editdoc.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:26:47 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:23:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -377,13 +377,13 @@ struct ExtraPortionInfo
     BOOL    bFirstCharIsRightPunktuation;
     BOOL    bCompressed;
 
-    long*    pOrgDXArray;
+    sal_Int32*    pOrgDXArray;
 
 
             ExtraPortionInfo();
             ~ExtraPortionInfo();
 
-    void    SaveOrgDXArray( const long* pDXArray, USHORT nLen );
+    void    SaveOrgDXArray( const sal_Int32* pDXArray, USHORT nLen );
     void    DestroyOrgDXArray();
 };
 
