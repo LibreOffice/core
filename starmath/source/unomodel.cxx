@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:15:01 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 15:06:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -664,7 +664,8 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                 if ( *pValues >>= aSequence )
                 {
                     sal_uInt32 nSize = aSequence.getLength();
-                    SmSymSetManager &rManager = pDocSh->GetSymSetManager();
+                    SmModule *pp = SM_MOD1();
+                    SmSymSetManager &rManager = pp->GetSymSetManager();
                     SymbolDescriptor *pDescriptor = aSequence.getArray();
                     for (sal_uInt32 i = 0; i < nSize ; i++, pDescriptor++)
                     {
@@ -844,7 +845,8 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_SYMBOLS:
             {
                 // this is get
-                const SmSymSetManager &rManager = pDocSh->GetSymSetManager();
+                SmModule *pp = SM_MOD1();
+                const SmSymSetManager &rManager = pp->GetSymSetManager();
                 vector < const SmSym * > aVector;
 
                 USHORT nCount = 0;
