@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:02:35 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:18:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,6 +147,10 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
     SW_DLLPRIVATE void CalcHiddenCharFlags() const;
 
     SW_DLLPRIVATE SwNodeNum * _GetOutlineNum(BOOL bUpdate = FALSE) const;
+
+    SW_DLLPRIVATE void SetLanguageAndFont( const SwPaM &rPaM,
+            LanguageType nLang, USHORT nLangWhichId,
+            const Font *pFont,  USHORT nFontWhichId );
 
 public:
     const String& GetTxt() const { return aText; }
