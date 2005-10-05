@@ -25,20 +25,7 @@ Obsoletes: openofficeorg-mandrakelinux-menus, openofficeorg-mandriva-menus
 %description 
 OpenOffice.org desktop integration
 
-%triggerin -- openoffice.org-core01
-# create file in /etc that contains the office installation path
-cat > /tmp/install.$$ << EOF
-while [ "\$TARGET" == "" ]
-do
-  sleep 2
-  TARGET=\`rpm -q --qf '%{INSTALLPREFIX}' openoffice.org-core01 2>&1\` && ln -sf \$TARGET /etc/%unixfilename
-  # some rpm versions do not wait for the shared lock
-  echo \$TARGET | grep '/var/lib/rpm' && TARGET=""
-done
-rm -f /tmp/install.$$
-EOF
-
-/bin/sh /tmp/install.$$ &
+#include<symlink_triggers>
 
 # Update menus
 #
