@@ -4,9 +4,9 @@
  *
  *  $RCSfile: utility.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:15:14 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 15:06:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,93 +67,6 @@ SmViewShell * SmGetActiveView()
 {
     SfxViewShell *pView = SfxViewShell::Current();
     return PTR_CAST(SmViewShell, pView);
-}
-
-
-////////////////////////////////////////////////////////////
-//
-// SmRectCache
-//
-
-
-SmRectCache::Key::Key(const XubString &rText, const Font &rFont)
-{
-}
-
-
-BOOL SmRectCache::Key::operator <  (const Key &rKey) const
-{
-#ifdef never
-    BOOL  bRes = FALSE;
-
-    if (aText < rKey.aText)
-        bRes = TRUE;
-    else if ()
-
-    return      aText       <  rKey.aText
-            ||  aText       == rKey.aText        &&  aFontName   < rKey.aFontName
-            ||  aFontName   == rKey.aFontname    &&  aFontSize   < rKey.aFontSize
-            ||  aFontSize   == rKey.aFontSize    &&  eFontWeight < rKey.eFontWeight
-            ||  eFontWeight == rKey.eFontWeight  &&  eFontItalic < rKey.eFontItalic;
-#endif
-    return FALSE;
-}
-
-
-BOOL SmRectCache::Key::operator == (const Key &rKey) const
-{
-    return      aText       == rKey.aText
-            &&  aFontName   == rKey.aFontName
-            &&  aFontSize   == rKey.aFontSize
-            &&  eFontWeight == rKey.eFontWeight
-            &&  eFontItalic == rKey.eFontItalic;
-}
-
-
-SmRectCache::SmRectCache()
-{
-    pVirDev = 0;
-}
-
-
-SmRectCache::~SmRectCache()
-{
-    delete pVirDev;
-}
-
-
-const SmRect * SmRectCache::Search(const Key &rKey) const
-{
-    return 0;
-}
-
-
-const SmRect * SmRectCache::Add(const Key &rKey, const SmRect &rRect)
-{
-    return (const SmRect *)-1;
-}
-
-
-VirtualDevice * SmRectCache::GetVirDev()
-{
-    if (!pVirDev)
-    {
-        SmViewShell *pView = SmGetActiveView();
-        if (pView)
-            pVirDev = new VirtualDevice( pView->GetGraphicWindow() );
-        else
-            pVirDev = new VirtualDevice;
-        pVirDev->SetMapMode( MapMode(MAP_100TH_MM) );
-    }
-    DBG_ASSERT(pVirDev->GetMapMode().GetMapUnit() == MAP_100TH_MM,
-               "Sm : falscher MapMode");
-
-    return pVirDev;
-}
-
-
-void SmRectCache::Reset()
-{
 }
 
 
