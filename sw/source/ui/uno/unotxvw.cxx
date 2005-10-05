@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:22:59 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:25:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -598,11 +598,13 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
                         if ( pPV && pObj->GetPage() == pPV->GetPage() )
                         {
                             pDrawView->MarkObj( pObj, pPV );
+                            return sal_True;
                         }
                     }
                 }
                 else    // Shape Collection
                 {
+                    sal_Bool bSelected = sal_False;
                     SdrPageView* pPV = NULL;
                     long nCount = xShapeColl->getCount();
                     for ( long i = 0; i < nCount; i++ )
@@ -630,11 +632,13 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
                                     if ( pPV && pObj->GetPage() == pPV->GetPage() )
                                     {
                                         pDrawView->MarkObj( pObj, pPV );
+                                        bSelected = sal_True;
                                     }
                                 }
                             }
                         }
                     }
+                    return bSelected;
                 }
             }
         }
