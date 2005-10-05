@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:02:34 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:37:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3639,7 +3639,7 @@ void ImpEditEngine::ShowParagraph( sal_uInt16 nParagraph, sal_Bool bShow )
         {
             // Als deleted kenzeichnen, damit keine Selektion auf diesem
             // Absatz beginnt oder endet...
-            DeletedNodeInfo* pDelInfo = new DeletedNodeInfo( (sal_uInt32)pPPortion->GetNode(), nParagraph );
+            DeletedNodeInfo* pDelInfo = new DeletedNodeInfo( (sal_uIntPtr)pPPortion->GetNode(), nParagraph );
             aDeletedNodes.Insert( pDelInfo, aDeletedNodes.Count() );
             UpdateSelections();
             // Dann kriege ich den unteren Bereich nicht invalidiert,
