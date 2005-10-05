@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgitem.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:04:32 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:59:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,16 +193,15 @@ static Sequence< OUString > lcl_GetPropertyNames(
     return aNames;
 }
 
-/////////////////////////////////////////////////////////////////
 
-Sequence< OUString > SmMathConfigItem::GetFormatPropertyNames()
+static Sequence< OUString > GetFormatPropertyNames()
 {
     USHORT nCnt = sizeof(aFormatPropNames) / sizeof(aFormatPropNames[0]);
     return lcl_GetPropertyNames( aFormatPropNames, nCnt );
 }
 
 
-Sequence< OUString > SmMathConfigItem::GetOtherPropertyNames()
+static Sequence< OUString > GetOtherPropertyNames()
 {
     USHORT nCnt = sizeof(aMathPropNames) / sizeof(aMathPropNames[0]);
     return lcl_GetPropertyNames( aMathPropNames, nCnt );
@@ -432,18 +431,15 @@ const String SmFontFormatList::GetNewFontFormatId() const
 
 /////////////////////////////////////////////////////////////////
 
-SmMathConfig::SmMathConfig()
+SmMathConfig::SmMathConfig() :
+    ConfigItem( String::CreateFromAscii( aRootName ))
 {
     pFormat         = 0;
     pOther          = 0;
     pFontFormatList = 0;
-    pSymbols        = 0;
-    nSymbolCount    = 0;
+    pSymSetMgr      = 0;
 
     bIsOtherModified = bIsFormatModified = FALSE;
-
-    aSaveTimer.SetTimeout( 3000 );
-    aSaveTimer.SetTimeoutHdl( LINK( this, SmMathConfig, TimeOut ) );
 }
 
 
@@ -453,30 +449,28 @@ SmMathConfig::~SmMathConfig()
     delete pFormat;
     delete pOther;
     delete pFontFormatList;
-    delete [] pSymbols;
+    delete pSymSetMgr;
 }
 
 
 void SmMathConfig::SetOtherModified( BOOL bVal )
 {
-    if ((bIsOtherModified = bVal))
-        aSaveTimer.Start();
+    if (bVal)
+        SaveOther();
 }
 
 
 void SmMathConfig::SetFormatModified( BOOL bVal )
 {
-    if ((bIsFormatModified = bVal))
-        aSaveTimer.Start();
+    if (bVal)
+        SaveFormat();
 }
 
 
-SmSym SmMathConfig::ReadSymbol( SmMathConfigItem &rCfg,
+void SmMathConfig::ReadSymbol( SmSym &rSymbol,
                         const rtl::OUString &rSymbolName,
                         const rtl::OUString &rBaseNode ) const
 {
-    SmSym aRes;
-
     Sequence< OUString > aNames = lcl_GetSymbolPropertyNames();
     INT32 nProps = aNames.getLength();
 
@@ -493,7 +487,7 @@ SmSym SmMathConfig::ReadSymbol( SmMathConfigItem &rCfg,
         rName += aTmp;
     }
 
-    const Sequence< Any > aValues = rCfg.GetProperties( aNames );
+    const Sequence< Any > aValues = ((SmMathConfig*) this)->GetProperties( aNames );
 
     if (nProps  &&  aValues.getLength() == nProps)
     {
@@ -552,39 +546,33 @@ SmSym SmMathConfig::ReadSymbol( SmMathConfigItem &rCfg,
                     aUiSetName = aTmp;
             }
 
-            aRes = SmSym( aUiName, aFont, cChar, aUiSetName, bPredefined );
+            rSymbol = SmSym( aUiName, aFont, cChar, aUiSetName, bPredefined );
             if (aUiName != String(rSymbolName))
-                aRes.SetExportName( rSymbolName );
+                rSymbol.SetExportName( rSymbolName );
         }
         else
         {
             DBG_ERROR( "symbol read error" );
         }
     }
-
-    return aRes;
 }
 
 
-void SmMathConfig::LoadSymbols()
+SmSymSetManager & SmMathConfig::GetSymSetManager()
 {
-    SmMathConfigItem aCfg( String::CreateFromAscii( aRootName ));
-
-    Sequence< OUString > aNodes( aCfg.GetNodeNames( A2OU( SYMBOL_LIST ) ) );
-    const OUString *pNode = aNodes.getConstArray();
-    INT32 nNodes = aNodes.getLength();
-
-    if (pSymbols)
-        delete [] pSymbols;
-    pSymbols = nNodes ? new SmSym[ nNodes ] : 0;
-    nSymbolCount = (USHORT) nNodes;
-
-    for (INT32 i = 0;  i < nNodes;  ++i)
+    if (!pSymSetMgr)
     {
-        pSymbols[i] = ReadSymbol( aCfg, pNode[i], A2OU( SYMBOL_LIST ) );
+        pSymSetMgr = new SmSymSetManager;
+        pSymSetMgr->Load();
     }
+    return *pSymSetMgr;
 }
 
+
+void SmMathConfig::Commit()
+{
+    Save();
+}
 
 void SmMathConfig::Save()
 {
@@ -596,34 +584,35 @@ void SmMathConfig::Save()
 
 USHORT SmMathConfig::GetSymbolCount() const
 {
-    if (!pSymbols)
-        ((SmMathConfig *) this)->LoadSymbols();
-    return nSymbolCount;
+    return ((SmMathConfig *) this)->GetSymSetManager().GetSymbolCount();
 }
 
 
 const SmSym * SmMathConfig::GetSymbol( USHORT nIndex ) const
 {
-    SmSym *pRes = 0;
-    if (!pSymbols)
-        ((SmMathConfig *) this)->LoadSymbols();
-    if (nIndex < nSymbolCount)
-        pRes = &pSymbols[ nIndex ];
-    return pRes;
+    return ((SmMathConfig *) this)->GetSymSetManager().GetSymbolByPos( nIndex );
 }
 
 
-void SmMathConfig::ReplaceSymbols( const SmSym *pNewSymbols[], USHORT nCount )
+void SmMathConfig::GetSymbols( std::vector< SmSym > &rSymbols ) const
 {
-    // clear old symbols and have the new ones loaded on demand
-    if (pSymbols)
-    {
-        delete [] pSymbols;
-        pSymbols = 0;
-    }
+    Sequence< OUString > aNodes( ((SmMathConfig*) this)->GetNodeNames( A2OU( SYMBOL_LIST ) ) );
+    const OUString *pNode = aNodes.getConstArray();
+    INT32 nNodes = aNodes.getLength();
 
-    SmMathConfigItem aCfg( String::CreateFromAscii( aRootName ),
-                           CONFIG_MODE_DELAYED_UPDATE );
+    rSymbols.resize( nNodes );
+    std::vector< SmSym >::iterator aIt( rSymbols.begin() );
+    std::vector< SmSym >::iterator aEnd( rSymbols.end() );
+    while (aIt != aEnd)
+    {
+        ReadSymbol( *aIt++, *pNode++, A2OU( SYMBOL_LIST ) );
+    }
+}
+
+
+void SmMathConfig::SetSymbols( const std::vector< SmSym > &rNewSymbols )
+{
+    size_t nCount = rNewSymbols.size();
 
     Sequence< OUString > aNames = lcl_GetSymbolPropertyNames();
     const OUString *pNames = aNames.getConstArray();
@@ -634,9 +623,11 @@ void SmMathConfig::ReplaceSymbols( const SmSym *pNewSymbols[], USHORT nCount )
 
     PropertyValue *pVal = pValues;
     OUString aDelim( OUString::valueOf( (sal_Unicode) '/' ) );
-    for (USHORT i = 0;  i < nCount;  ++i)
+    std::vector< SmSym >::const_iterator aIt( rNewSymbols.begin() );
+    std::vector< SmSym >::const_iterator aEnd( rNewSymbols.end() );
+    while (aIt != aEnd)
     {
-        const SmSym &rSymbol = *pNewSymbols[i];
+        const SmSym &rSymbol = *aIt++;
         const Font  &rFont = rSymbol.GetFace();
         OUString  aNodeNameDelim( A2OU( SYMBOL_LIST ) );
         aNodeNameDelim += aDelim;
@@ -673,9 +664,9 @@ void SmMathConfig::ReplaceSymbols( const SmSym *pNewSymbols[], USHORT nCount )
         pVal++;
     }
     DBG_ASSERT( pVal - pValues == nCount * nSymbolProps, "properties missing" );
-    aCfg.ReplaceSetProperties( A2OU( SYMBOL_LIST ) , aValues );
+    ReplaceSetProperties( A2OU( SYMBOL_LIST ) , aValues );
 
-    StripFontFormatList( pNewSymbols, nCount );
+    StripFontFormatList( rNewSymbols );
     SaveFontFormatList();
 }
 
@@ -697,15 +688,14 @@ void SmMathConfig::LoadFontFormatList()
     else
         pFontFormatList->Clear();
 
-    SmMathConfigItem aCfg( String::CreateFromAscii( aRootName ) );
-
-    Sequence< OUString > aNodes( aCfg.GetNodeNames( A2OU( FONT_FORMAT_LIST ) ) );
+    Sequence< OUString > aNodes( GetNodeNames( A2OU( FONT_FORMAT_LIST ) ) );
     const OUString *pNode = aNodes.getConstArray();
     INT32 nNodes = aNodes.getLength();
 
     for (INT32 i = 0;  i < nNodes;  ++i)
     {
-        SmFontFormat aFntFmt( ReadFontFormat( aCfg, pNode[i], A2OU( FONT_FORMAT_LIST ) ) );
+        SmFontFormat aFntFmt;
+        ReadFontFormat( aFntFmt, pNode[i], A2OU( FONT_FORMAT_LIST ) );
         if (!pFontFormatList->GetFontFormat( pNode[i] ))
         {
             DBG_ASSERT( 0 == pFontFormatList->GetFontFormat( pNode[i] ),
@@ -717,11 +707,9 @@ void SmMathConfig::LoadFontFormatList()
 }
 
 
-SmFontFormat SmMathConfig::ReadFontFormat( SmMathConfigItem &rCfg,
+void SmMathConfig::ReadFontFormat( SmFontFormat &rFontFormat,
         const OUString &rSymbolName, const OUString &rBaseNode ) const
 {
-    SmFontFormat aRes;
-
     Sequence< OUString > aNames = lcl_GetFontPropertyNames();
     INT32 nProps = aNames.getLength();
 
@@ -738,7 +726,7 @@ SmFontFormat SmMathConfig::ReadFontFormat( SmMathConfigItem &rCfg,
         rName += aTmp;
     }
 
-    const Sequence< Any > aValues = rCfg.GetProperties( aNames );
+    const Sequence< Any > aValues = ((SmMathConfig*) this)->GetProperties( aNames );
 
     if (nProps  &&  aValues.getLength() == nProps)
     {
@@ -749,40 +737,38 @@ SmFontFormat SmMathConfig::ReadFontFormat( SmMathConfigItem &rCfg,
 
         BOOL bOK = TRUE;
         if (pValue->hasValue()  &&  (*pValue >>= aTmpStr))
-            aRes.aName = aTmpStr;
+            rFontFormat.aName = aTmpStr;
         else
             bOK = FALSE;
         ++pValue;
         if (pValue->hasValue()  &&  (*pValue >>= nTmp16))
-            aRes.nCharSet = nTmp16; // 6.0 file-format GetSOLoadTextEncoding not needed
+            rFontFormat.nCharSet = nTmp16; // 6.0 file-format GetSOLoadTextEncoding not needed
         else
             bOK = FALSE;
         ++pValue;
         if (pValue->hasValue()  &&  (*pValue >>= nTmp16))
-            aRes.nFamily = nTmp16;
+            rFontFormat.nFamily = nTmp16;
         else
             bOK = FALSE;
         ++pValue;
         if (pValue->hasValue()  &&  (*pValue >>= nTmp16))
-            aRes.nPitch = nTmp16;
+            rFontFormat.nPitch = nTmp16;
         else
             bOK = FALSE;
         ++pValue;
         if (pValue->hasValue()  &&  (*pValue >>= nTmp16))
-            aRes.nWeight = nTmp16;
+            rFontFormat.nWeight = nTmp16;
         else
             bOK = FALSE;
         ++pValue;
         if (pValue->hasValue()  &&  (*pValue >>= nTmp16))
-            aRes.nItalic = nTmp16;
+            rFontFormat.nItalic = nTmp16;
         else
             bOK = FALSE;
         ++pValue;
 
         DBG_ASSERT( bOK, "read FontFormat failed" );
     }
-
-    return aRes;
 }
 
 
@@ -792,8 +778,6 @@ void SmMathConfig::SaveFontFormatList()
 
     if (!rFntFmtList.IsModified())
         return;
-
-    SmMathConfigItem aCfg( String::CreateFromAscii( aRootName ) );
 
     Sequence< OUString > aNames = lcl_GetFontPropertyNames();
     INT32 nSymbolProps = aNames.getLength();
@@ -849,23 +833,24 @@ void SmMathConfig::SaveFontFormatList()
         pVal++;
     }
     DBG_ASSERT( pVal - pValues == nCount * nSymbolProps, "properties missing" );
-    aCfg.ReplaceSetProperties( A2OU( FONT_FORMAT_LIST ) , aValues );
+    ReplaceSetProperties( A2OU( FONT_FORMAT_LIST ) , aValues );
 
     rFntFmtList.SetModified( FALSE );
 }
 
 
-void SmMathConfig::StripFontFormatList( const SmSym *pUsedSymbols[], USHORT nCount )
+void SmMathConfig::StripFontFormatList( const std::vector< SmSym > &rSymbols )
 {
+    size_t nCount = rSymbols.size();
     USHORT i;
 
-    // build list of used font-formats
+    // build list of used font-formats only
     //!! font-format IDs may be different !!
     SmFontFormatList aUsedList;
     for (i = 0;  i < nCount;  ++i)
     {
-        DBG_ASSERT( pUsedSymbols[i], "null pointer for symbol" );
-        aUsedList.GetFontFormatId( SmFontFormat( pUsedSymbols[i]->GetFace() ) , TRUE );
+        DBG_ASSERT( rSymbols[i].GetName().Len() > 0, "non named symbol" );
+        aUsedList.GetFontFormatId( SmFontFormat( rSymbols[i].GetFace() ) , TRUE );
     }
     const SmFormat & rStdFmt = GetStandardFormat();
     for (i = FNT_BEGIN;  i <= FNT_END;  ++i)
@@ -901,12 +886,10 @@ void SmMathConfig::LoadOther()
     if (!pOther)
         pOther = new SmCfgOther;
 
-    SmMathConfigItem aCfg( String::CreateFromAscii( aRootName ));
-
-    Sequence< OUString > aNames( aCfg.GetOtherPropertyNames() );
+    Sequence< OUString > aNames( GetOtherPropertyNames() );
     INT32 nProps = aNames.getLength();
 
-    Sequence< Any > aValues( aCfg.GetProperties( aNames ) );
+    Sequence< Any > aValues( GetProperties( aNames ) );
     if (nProps  &&  aValues.getLength() == nProps)
     {
         const Any *pValues = aValues.getConstArray();
@@ -968,9 +951,7 @@ void SmMathConfig::SaveOther()
     if (!pOther || !IsOtherModified())
         return;
 
-    SmMathConfigItem aCfg( String::CreateFromAscii( aRootName ));
-
-    const Sequence< OUString > aNames( aCfg.GetOtherPropertyNames() );
+    const Sequence< OUString > aNames( GetOtherPropertyNames() );
     INT32 nProps = aNames.getLength();
 
     Sequence< Any > aValues( nProps );
@@ -1000,7 +981,7 @@ void SmMathConfig::SaveOther()
     *pValue++ <<= (BOOL) pOther->bFormulaCursor;
 
     DBG_ASSERT( pValue - pValues == nProps, "property mismatch" );
-    aCfg.PutProperties( aNames , aValues );
+    PutProperties( aNames , aValues );
 
     SetOtherModified( FALSE );
 }
@@ -1010,12 +991,11 @@ void SmMathConfig::LoadFormat()
     if (!pFormat)
         pFormat = new SmFormat;
 
-    SmMathConfigItem aCfg( String::CreateFromAscii( aRootName ));
 
-    Sequence< OUString > aNames( aCfg.GetFormatPropertyNames() );
+    Sequence< OUString > aNames( GetFormatPropertyNames() );
     INT32 nProps = aNames.getLength();
 
-    Sequence< Any > aValues( aCfg.GetProperties( aNames ) );
+    Sequence< Any > aValues( GetProperties( aNames ) );
     if (nProps  &&  aValues.getLength() == nProps)
     {
         const Any *pValues = aValues.getConstArray();
@@ -1095,9 +1075,7 @@ void SmMathConfig::SaveFormat()
     if (!pFormat || !IsFormatModified())
         return;
 
-    SmMathConfigItem aCfg( String::CreateFromAscii( aRootName ));
-
-    const Sequence< OUString > aNames( aCfg.GetFormatPropertyNames() );
+    const Sequence< OUString > aNames( GetFormatPropertyNames() );
     INT32 nProps = aNames.getLength();
 
     Sequence< Any > aValues( nProps );
@@ -1136,7 +1114,7 @@ void SmMathConfig::SaveFormat()
     }
 
     DBG_ASSERT( pValue - pValues == nProps, "property mismatch" );
-    aCfg.PutProperties( aNames , aValues );
+    PutProperties( aNames , aValues );
 
     SetFormatModified( FALSE );
 }
@@ -1323,12 +1301,6 @@ void SmMathConfig::SetShowFormulaCursor( BOOL bVal )
     SetOtherIfNotEqual( pOther->bFormulaCursor, bVal );
 }
 
-
-IMPL_LINK( SmMathConfig, TimeOut, Timer *, p )
-{
-    Save();
-    return 0;
-}
 
 /////////////////////////////////////////////////////////////////
 
