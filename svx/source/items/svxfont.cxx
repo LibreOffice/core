@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxfont.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:40:38 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:25:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -477,7 +477,7 @@ Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut, const XubString &rTxt )
 }
 
 Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const XubString &rTxt,
-                         const USHORT nIdx, const USHORT nLen, long* pDXArray ) const
+                         const USHORT nIdx, const USHORT nLen, sal_Int32* pDXArray ) const
 {
     if ( !IsCaseMap() && !IsKern() )
         return Size( pOut->GetTextArray( rTxt, pDXArray, nIdx, nLen ),
@@ -564,7 +564,7 @@ void SvxFont::DrawText( OutputDevice *pOut,
 
 void SvxFont::QuickDrawText( OutputDevice *pOut,
     const Point &rPos, const XubString &rTxt,
-    const xub_StrLen nIdx, const xub_StrLen nLen, const long* pDXArray ) const
+    const xub_StrLen nIdx, const xub_StrLen nLen, const sal_Int32* pDXArray ) const
 {
     // Font muss ins OutputDevice selektiert sein...
     if ( !IsCaseMap() && !IsCapital() && !IsKern() && !IsEsc() )
