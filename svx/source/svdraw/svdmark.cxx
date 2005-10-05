@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmark.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:30:37 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:41:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,8 +79,8 @@ public:
 
 int ImpSdrUShortContSorter::Compare(const void* pElem1, const void* pElem2) const
 {
-    sal_uInt16 n1((sal_uInt16)((sal_uInt32)pElem1));
-    sal_uInt16 n2((sal_uInt16)((sal_uInt32)pElem2));
+    sal_uInt16 n1((sal_uInt16)((sal_uIntPtr)pElem1));
+    sal_uInt16 n2((sal_uInt16)((sal_uIntPtr)pElem2));
 
     return ((n1 < n2) ? (-1) : (n1 > n2) ? (1) : (0));
 }
