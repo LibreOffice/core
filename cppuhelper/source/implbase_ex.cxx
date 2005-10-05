@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implbase_ex.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:26:49 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:28:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ static inline bool isXInterface( rtl_uString * pStr ) SAL_THROW( () )
     return (((OUString const *)&pStr)->equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.uno.XInterface") ) != sal_False);
 }
 //--------------------------------------------------------------------------------------------------
-static inline void * makeInterface( sal_Int32 nOffset, void * that ) SAL_THROW( () )
+static inline void * makeInterface( sal_IntPtr nOffset, void * that ) SAL_THROW( () )
 {
     return (((char *)that) + nOffset);
 }
@@ -163,7 +163,7 @@ namespace {
 
 bool recursivelyFindType(
     typelib_TypeDescriptionReference const * demandedType,
-    typelib_InterfaceTypeDescription const * type, sal_Int32 * offset)
+    typelib_InterfaceTypeDescription const * type, sal_IntPtr * offset)
 {
     // This code assumes that the vtables of a multiple-inheritance class (the
     // offset amount by which to adjust the this pointer) follow one another in
@@ -230,7 +230,7 @@ static inline void * __queryDeepNoXInterface(
                     nBaseTypes > 0,
                 "### want to implement XInterface:"
                     " template argument is XInterface?!?!?!" );
-            sal_Int32 offset = pEntries[n].m_offset;
+            sal_IntPtr offset = pEntries[n].m_offset;
             bool found = recursivelyFindType(
                 pDemandedTDR,
                 reinterpret_cast< typelib_InterfaceTypeDescription * >(pTD),
