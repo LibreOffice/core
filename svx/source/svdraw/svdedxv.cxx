@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:26:12 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:40:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -563,7 +563,16 @@ BOOL SdrObjEditView::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin
     BOOL bDontDeleteOutliner, BOOL bOnlyOneView, BOOL bGrabFocus)
 {
     EndTextEdit();
-    if (!HAS_BASE(SdrTextObj,pObj)) return FALSE; // z.Zt. nur mit meinen Textobjekten
+
+    if( dynamic_cast< SdrTextObj* >( pObj ) == 0 )
+        return FALSE; // currently only possible with text objects
+
+    if(bGrabFocus && pWin)
+    {
+        // attetion, this call may cause an EndTextEdit() call to this view
+        pWin->GrabFocus(); // to force the cursor into the edit view
+    }
+
     bTextEditDontDelete=bDontDeleteOutliner && pGivenOutliner!=NULL;
     bTextEditOnlyOneView=bOnlyOneView;
     bTextEditNewObj=bIsNewObj;
@@ -708,8 +717,7 @@ BOOL SdrObjEditView::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin
                     }
                 }
             }
-            if(bGrabFocus)
-                pWin->GrabFocus(); // Damit der Cursor hier auch blinkt
+
             pTextEditOutlinerView->ShowCursor();
             pTextEditOutliner->SetStatusEventHdl(LINK(this,SdrObjEditView,ImpOutlinerStatusEventHdl));
 #ifndef SVX_LIGHT
