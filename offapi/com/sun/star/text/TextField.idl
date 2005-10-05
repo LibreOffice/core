@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextField.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:28:04 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:29:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,26 +54,50 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::text::TextField
 /** A <type scope="com::sun::star::form::component">TextField</type> is a <type>TextContent</type> which fades its
     textual representation into the text range to which it is anchored.
  */
 published service TextField
 {
-    // DocMerge: empty anyway
     service com::sun::star::text::TextContent;
 
 
-    // DocMerge from xml: service com::sun::star::text::TextField: interface com::sun::star::text::XTextField
     /** This interface is used to access the textual representation of
-                this field.
+        this field.
      */
     interface com::sun::star::text::XTextField;
 
     /** makes it possible to access the properties of the field, if any.
     */
     [optional] interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies if the text field is actually used in the document.
+
+        <p>Not all available text fields are used, for example fields
+        that are part of unused styles.</p>
+
+        @since  OOo 2.0.1
+     */
+    [optional, property, readonly] boolean IsFieldUsed;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies if the text field is actually displayed.
+
+        <p>Not all available text fields are actually displayed
+        even when they are used. For example hidden fields or fields
+        in hidden text are used in the document but get not displayed.</p>
+
+        @since  OOo 2.0.1
+     */
+    [optional, property, readonly] boolean IsFieldDisplayed;
+
+    //-------------------------------------------------------------------------
+
 };
+
 
 //=============================================================================
 
