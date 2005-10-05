@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scriptinfo.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:55:10 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:14:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,7 +243,7 @@ public:
     USHORT HasKana( xub_StrLen nStart, const xub_StrLen nEnd ) const;
 
     // modifies the kerning array according to a given compress value
-    long Compress( long* pKernArray, xub_StrLen nIdx, xub_StrLen nLen,
+    long Compress( sal_Int32* pKernArray, xub_StrLen nIdx, xub_StrLen nLen,
                    const USHORT nCompress, const USHORT nFontHeight,
                    Point* pPoint = NULL ) const;
 
@@ -263,7 +263,7 @@ public:
                 The value which has to be added to a kashida opportunity.
     @return The number of kashida opportunities in the given range
 */
-    USHORT KashidaJustify( long* pKernArray ,long* pScrArray,
+    USHORT KashidaJustify( sal_Int32* pKernArray ,sal_Int32* pScrArray,
                            xub_StrLen nIdx, xub_StrLen nLen,
                            long nSpaceAdd = 0 ) const;
 
@@ -294,8 +294,8 @@ public:
                 The value which has to be added to the cells.
     @return The number of extra spaces in the given range
 */
-    static USHORT ThaiJustify( const XubString& rTxt, long* pKernArray,
-                               long* pScrArray, xub_StrLen nIdx,
+    static USHORT ThaiJustify( const XubString& rTxt, sal_Int32* pKernArray,
+                               sal_Int32* pScrArray, xub_StrLen nIdx,
                                xub_StrLen nLen, xub_StrLen nNumberOfBlanks = 0,
                                long nSpaceAdd = 0 );
 
