@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textconv.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:35:46 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:39:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,8 @@ TextConvWrapper::TextConvWrapper( Window* pWindow,
 
     aConvSel    = pEditView->GetSelection();
     aConvSel.Adjust();  // make Start <= End
+
+    bAllowChange = sal_False;
 }
 
 
@@ -283,9 +285,6 @@ void TextConvWrapper::ConvStart_impl( SvxSpellArea eArea )
 
 void TextConvWrapper::ConvEnd_impl()
 {
-    // modified version of EditSpellWrapper::SpellEnd
-
-    // nothing to be done
 }
 
 
@@ -297,8 +296,41 @@ sal_Bool TextConvWrapper::ConvContinue_impl()
     aConvText = rtl::OUString();
     nConvTextLang = LANGUAGE_NONE;
     pEditView->GetImpEditEngine()->ImpConvert( aConvText, nConvTextLang,
-            pEditView, GetSourceLanguage(), aConvSel );
+            pEditView, GetSourceLanguage(), aConvSel,
+            bAllowChange, GetTargetLanguage(), GetTargetFont() );
     return aConvText.getLength() != 0;
+}
+
+
+void TextConvWrapper::SetLanguageAndFont( const ESelection &rESel,
+    LanguageType nLang, USHORT nLangWhichId,
+    const Font *pFont,  USHORT nFontWhichId )
+{
+    ESelection aOldSel = pEditView->GetSelection();
+    pEditView->SetSelection( rESel );
+
+    // set new language attribute
+    SfxItemSet aNewSet( pEditView->GetEmptyItemSet() );
+    aNewSet.Put( SvxLanguageItem( nLang, nLangWhichId ) );
+
+    // new font to be set?
+    DBG_ASSERT( pFont, "target font missing?" );
+    if (pFont)
+    {
+        // set new font attribute
+        SvxFontItem aFontItem = (SvxFontItem&) aNewSet.Get( nFontWhichId );
+        aFontItem.GetFamilyName()   = pFont->GetName();
+        aFontItem.GetFamily()       = pFont->GetFamily();
+        aFontItem.GetStyleName()    = pFont->GetStyleName();
+        aFontItem.GetPitch()        = pFont->GetPitch();
+        aFontItem.GetCharSet()      = pFont->GetCharSet();
+        aNewSet.Put( aFontItem );
+    }
+
+    // apply new attributes
+    pEditView->SetAttribs( aNewSet );
+
+    pEditView->SetSelection( aOldSel );
 }
 
 
@@ -322,8 +354,11 @@ void TextConvWrapper::SelectNewUnit_impl(
 
 void TextConvWrapper::GetNextPortion(
         ::rtl::OUString& /* [out] */ rNextPortion,
-        LanguageType&    /* [out] */ rLangOfPortion )
+        LanguageType&    /* [out] */ rLangOfPortion,
+        sal_Bool /* [in] */ _bAllowImplicitChangesForNotConvertibleText )
 {
+    bAllowChange = _bAllowImplicitChangesForNotConvertibleText;
+
     FindConvText_impl();
     rNextPortion    = aConvText;
     rLangOfPortion  = nConvTextLang;
@@ -405,36 +440,13 @@ void TextConvWrapper::ReplaceUnit(
         aNewSel.nStartPos -= (xub_StrLen) aNewTxt.getLength();
         DBG_ASSERT( aOldSel.nEndPos >= 0, "error while building selection" );
 
-        pEditView->SetSelection( aNewSel );
-
-        // get new language
-        SfxItemSet aNewSet( pEditView->GetEmptyItemSet() );
         if (pNewUnitLanguage)
         {
             DBG_ASSERT(!IsSimilarChinese( *pNewUnitLanguage, nOldLang ),
                     "similar language should not be changed!");
-            aNewSet.Put( SvxLanguageItem( *pNewUnitLanguage, EE_CHAR_LANGUAGE_CJK ) );
+            SetLanguageAndFont( aNewSel, *pNewUnitLanguage, EE_CHAR_LANGUAGE_CJK,
+                                          GetTargetFont(), EE_CHAR_FONTINFO_CJK );
         }
-
-        // new font to be set?
-        const Font *pTargetFont = GetTargetFont();
-        DBG_ASSERT( pTargetFont, "target font missing?" );
-        if (pTargetFont && pNewUnitLanguage)
-        {
-            SvxFontItem aFontItem = (SvxFontItem&) aNewSet.Get( EE_CHAR_FONTINFO_CJK );
-            aFontItem.GetFamilyName()   = pTargetFont->GetName();
-            aFontItem.GetFamily()       = pTargetFont->GetFamily();
-            aFontItem.GetStyleName()    = pTargetFont->GetStyleName();
-            aFontItem.GetPitch()        = pTargetFont->GetPitch();
-            aFontItem.GetCharSet()      = pTargetFont->GetCharSet();
-            aNewSet.Put( aFontItem );
-        }
-
-        // set new language and font attributes
-        if (aNewSet.Count() > 0)
-            pEditView->SetAttribs( aNewSet );
-
-        pEditView->SetSelection( aOldSel );
     }
 
     // adjust ConvContinue / ConvTo if necessary
