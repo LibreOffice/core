@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:41:49 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:18:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1676,7 +1676,7 @@ void OResultSet::fillNeededData(SQLRETURN _nRet)
             if (nRet != SQL_SUCCESS && nRet != SQL_SUCCESS_WITH_INFO && nRet != SQL_NEED_DATA)
                 break;
 
-            sal_Int32 nColumnIndex ( reinterpret_cast<sal_Int32>(pColumnIndex));
+            sal_IntPtr nColumnIndex ( reinterpret_cast<sal_IntPtr>(pColumnIndex));
             Sequence< sal_Int8 > aSeq;
             switch(m_aRow[nColumnIndex].getTypeKind())
             {
