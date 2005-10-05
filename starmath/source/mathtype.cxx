@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mathtype.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:10:00 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 15:01:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3074,6 +3074,7 @@ int MathType::HandleChar(xub_StrLen &rTextStart,int &rSetSize,int nLevel,
         sPost.Erase();
         nPostSup = nPostlSup = 0;
         int nOriglen=rRet.Len()-rTextStart;
+        APPEND(rRet," {");  // #i24340# make what would be "vec {A}_n" become "{vec {A}}_n"
         if ((!bSilent) && ((nOriglen) > 1))
             rRet += '\"';
         nRet = HandleRecords(nLevel+1,nSelector,nVariation);
@@ -3134,6 +3135,7 @@ int MathType::HandleChar(xub_StrLen &rTextStart,int &rSetSize,int nLevel,
 
     if ((xfEMBELL(nTag)) && (!bSilent))
     {
+        rRet += '}';    // #i24340# make what would be "vec {A}_n" become "{vec {A}}_n"
         rRet += '}';
         rRet += sPost;
         rTextStart = rRet.Len();
