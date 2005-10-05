@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-26 13:27:10 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 15:00:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1003,13 +1003,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
                         " that the requested JavaVM pointer is not available")),
                 static_cast< cppu::OWeakObject * >(this));
         }
-        if (sizeof (m_pJavaVm) <= sizeof (sal_Int32)) {
-            return css::uno::makeAny(reinterpret_cast< sal_Int32 >(m_pJavaVm));
-        } else {
-            OSL_ASSERT(
-                sizeof (sal_Int64) >= sizeof (jvmaccess::VirtualMachine *));
-            return css::uno::makeAny(reinterpret_cast< sal_Int64 >(m_pJavaVm));
-        }
+        return css::uno::makeAny(reinterpret_cast< sal_IntPtr >(m_pJavaVm));
     case RETURN_VIRTUALMACHINE:
         OSL_ASSERT(sizeof (sal_Int64) >= sizeof (jvmaccess::VirtualMachine *));
         return css::uno::makeAny(
