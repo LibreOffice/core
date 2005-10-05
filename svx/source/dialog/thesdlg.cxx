@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thesdlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:16:11 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:36:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -515,7 +515,7 @@ IMPL_LINK( SvxThesaurusDialog, EntryHdl_Impl, ListBox *, EMPTYARG )
 IMPL_LINK( SvxThesaurusDialog, SpellErrorHdl_Impl, void *, pError )
 {
     // Der "ubergebene Pointer pError ist die falsche Sprachen-Nummer
-    LanguageType eLang = (LanguageType)(sal_uInt32)pError;
+    LanguageType eLang = (LanguageType)(sal_uIntPtr)pError;
     String aErr( ::GetLanguageString( eLang ) );
     // Fehlermeldung ausgeben
     ErrorHandler::HandleError(
