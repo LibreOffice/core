@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtcol.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:15:59 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:20:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -444,7 +444,12 @@ void SwTxtFmtColl::SetOutlineLevel( BYTE nLevel )
 {
     ASSERT( nLevel < MAXLEVEL || nLevel == NO_NUMBERING ,
                             "SwTxtFmtColl: Level too low" );
-    nOutlineLevel = nLevel;
+    if (!(nLevel < MAXLEVEL || nLevel == NO_NUMBERING))
+        // take care of out-of-bounds values that may occasionally crash the office
+        // such values may for example occur directly from some bad used API calls
+        nOutlineLevel = NO_NUMBERING;
+    else
+        nOutlineLevel = nLevel;
 }
 
 
