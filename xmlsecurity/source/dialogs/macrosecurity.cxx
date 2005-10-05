@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macrosecurity.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:12:29 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:57:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,7 +224,7 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, ViewCertPBHdl, void*, EMTYARG )
 {
     if( maTrustCertLB.FirstSelected() )
     {
-        USHORT nSelected = USHORT( sal_Int32( maTrustCertLB.FirstSelected()->GetUserData() ) );
+        USHORT nSelected = USHORT( sal_uIntPtr( maTrustCertLB.FirstSelected()->GetUserData() ) );
         uno::Reference< dcss::security::XCertificate > xCert = mpDlg->mxSecurityEnvironment->getCertificate( maTrustedAuthors[nSelected][0], numericStringToBigInteger( maTrustedAuthors[nSelected][1] ) );
 
         // If we don't get it, create it from signature data:
@@ -246,7 +246,7 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveCertPBHdl, void*, EMTYARG )
 {
     if( maTrustCertLB.FirstSelected() )
     {
-        USHORT nAuthor = USHORT( sal_Int32( maTrustCertLB.FirstSelected()->GetUserData() ) );
+        USHORT nAuthor = USHORT( sal_uIntPtr( maTrustCertLB.FirstSelected()->GetUserData() ) );
         ::comphelper::removeElementAt( maTrustedAuthors, nAuthor );
 
         FillCertLB();
