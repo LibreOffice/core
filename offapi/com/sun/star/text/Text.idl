@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Text.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:25:18 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:29:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,6 @@
  published interface XRelativeTextContentInsert;
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::text::Text
 /** is an independent piece of text which consists of a
     series of one or more paragraphs.
 
@@ -69,9 +68,6 @@
  */
 published service Text
 {
-
-
-    // DocMerge from xml: service com::sun::star::text::Text: interface com::sun::star::container::XEnumerationAccess
     /** This is the factory for an enumeration of the paragraphs in this text.
 
         <p>This interface is mainly useful for exporting the text to a
@@ -79,27 +75,28 @@ published service Text
      */
     interface com::sun::star::container::XEnumerationAccess;
 
+//=============================================================================
 
-    // DocMerge from xml: service com::sun::star::text::Text: interface com::sun::star::text::XText
     /** provides a cursor factory and the possibility to insert and remove contents.
      */
     interface XText;
 
+//=============================================================================
 
-    // DocMerge from xml: service com::sun::star::text::Text: interface com::sun::star::text::XTextRangeCompare
     /** optional interface to compare postions of <type>TextRange</type>
                 instances within this text.
      */
     [optional] interface XTextRangeCompare;
 
+//=============================================================================
 
-    // DocMerge from xml: service com::sun::star::text::Text: interface com::sun::star::text::XTextRangeMover
     /** makes it possible to change the position of paragraphs.
 
      */
     [optional] interface XTextRangeMover;
 
-    // DocMerge from xml: service com::sun::star::text::Text: interface com::sun::star::text::XRelativeTextContentInsert
+//=============================================================================
+
     /** makes it possible to insert a new text content, before or
                    after existing text contents.
 
@@ -107,9 +104,8 @@ published service Text
      */
     [optional] interface XRelativeTextContentInsert;
 
-    /** provides properties valid for the complete text object
-     */
-    [optional] interface ::com::sun::star::container::XEnumerationAccess;
+//=============================================================================
+
     /** contains the properties of a redline at the start of the document.<br>
     The sequence contains the following properties
     <UL>
@@ -128,6 +124,9 @@ published service Text
      @see EndRedline
      */
     [optional, property] ::com::sun::star::beans::PropertyValues StartRedline;
+
+//=============================================================================
+
     /** contains the properties of a redline at the start of the document.
     The sequence contains the following properties
     <UL>
@@ -146,6 +145,9 @@ published service Text
      @see StartRedline
      */
     [optional, maybevoid, property] ::com::sun::star::beans::PropertyValues EndRedline;
+
+//=============================================================================
+
 };
 
 //=============================================================================
