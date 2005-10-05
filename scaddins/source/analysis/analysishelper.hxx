@@ -4,9 +4,9 @@
  *
  *  $RCSfile: analysishelper.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:20:33 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:51:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -371,7 +371,7 @@ public:
 
                                 /// @return  element on position nIndex or 0 on invalid index
     inline sal_Int32            Get( sal_uInt32 nIndex ) const
-                                    { return (sal_Int32) MyList::GetObject( nIndex ); }
+                                    { return (sal_Int32)(sal_IntPtr) MyList::GetObject( nIndex ); }
 
                                 /// @return  number of elements in the range of nMinVal to nMaxVal (both included)
     sal_Int32                   CountCondition( sal_Int32 nMinVal, sal_Int32 nMaxVal ) const;
