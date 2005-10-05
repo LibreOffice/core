@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hangulhanja.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:11:27 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:38:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -560,9 +560,11 @@ namespace svx
     //-------------------------------------------------------------------------
     bool HangulHanjaConversion_Impl::implRetrieveNextPortion( )
     {
+        sal_Bool bAllowImplicitChanges = m_eConvType == HHC::eConvSimplifiedTraditional;
+
         m_sCurrentPortion = OUString();
         m_nCurrentPortionLang = LANGUAGE_NONE;
-        m_pAntiImpl->GetNextPortion( m_sCurrentPortion, m_nCurrentPortionLang );
+        m_pAntiImpl->GetNextPortion( m_sCurrentPortion, m_nCurrentPortionLang, bAllowImplicitChanges );
         m_nReplacementBaseIndex = 0;
         m_nCurrentStartIndex = m_nCurrentEndIndex = 0;
 
@@ -1135,7 +1137,7 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    void HangulHanjaConversion::GetNextPortion( OUString& /* [out] */ _rNextPortion, LanguageType& /* [out] */ _rLangOfPortion )
+    void HangulHanjaConversion::GetNextPortion( OUString& /* [out] */ _rNextPortion, LanguageType& /* [out] */ _rLangOfPortion, sal_Bool /* [in] */ _bAllowImplicitChangesForNotConvertibleText )
     {
         DBG_ERROR( "HangulHanjaConversion::GetNextPortion: to be overridden!" );
     }
