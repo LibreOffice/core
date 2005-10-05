@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngr.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:57:35 $
+#   last change: $Author: kz $ $Date: 2005-10-05 11:35:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -100,11 +100,11 @@ CFLAGSPROF=
 # Compiler flags for debugging
 CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
-# Compiler flags for enabling optimazations
+# Compiler flags for enabling optimizations
 CFLAGSOPT=-O2
-# Compiler flags for disabling optimazations
+# Compiler flags for disabling optimizations
 CFLAGSNOOPT=-O
-# Compiler flags for discibing the output path
+# Compiler flags for describing the output path
 CFLAGSOUTOBJ=-o
 
 # switches for dynamic and static linking
