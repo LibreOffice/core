@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 14:58:02 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:57:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,6 @@
 #include <vcl/jobset.hxx>
 
 class SmNode;
-class SmSymSetManager;
 class SfxPrinter;
 class Printer;
 
@@ -135,7 +134,6 @@ class SmDocShell : public SfxObjectShell, public SfxListener
     SmFormat            aFormat;
     SmParser            aInterpreter;
     String              aAccText;
-    SmSymSetManager    *pSymSetMgr;
     SmNode             *pTree;
     SfxMenuBarManager  *pMenuMgr;
     SfxItemPool        *pEditEngineItemPool;
@@ -229,12 +227,6 @@ public:
 
     EditEngine &    GetEditEngine();
     SfxItemPool &   GetEditEngineItemPool();
-
-    SmSymSetManager &       GetSymSetManager();
-    const SmSymSetManager & GetSymSetManager() const
-    {
-        return ((SmDocShell *) this)->GetSymSetManager();
-    }
 
     void        Draw(OutputDevice &rDev, Point &rPosition);
     Size        GetSize();
