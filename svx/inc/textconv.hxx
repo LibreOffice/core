@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textconv.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:19:51 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:37:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,9 @@ class TextConvWrapper : public svx::HangulHanjaConversion
     sal_Bool        bStartChk;
     sal_Bool        bStartDone;
     sal_Bool        bEndDone;
+    sal_Bool        bAllowChange;   // storage for _bAllowImplicitChangesForNotConvertibleText
+                                    // paramters value of function GetNextPortion.
+                                    // used to transport the value to where it is needed.
 
 
     // from SvxSpellWrapper copied and modified
@@ -87,7 +90,9 @@ class TextConvWrapper : public svx::HangulHanjaConversion
     TextConvWrapper & operator= (const TextConvWrapper &);
 
 protected:
-    virtual void    GetNextPortion( ::rtl::OUString& /* [out] */ rNextPortion, LanguageType& /* [out] */ rLangOfPortion );
+    virtual void    GetNextPortion( ::rtl::OUString& /* [out] */ rNextPortion,
+                        LanguageType& /* [out] */ rLangOfPortion,
+                        sal_Bool /* [in] */ _bAllowImplicitChangesForNotConvertibleText );
     virtual void    HandleNewUnit( const sal_Int32 nUnitStart,
                                    const sal_Int32 nUnitEnd );
     virtual void    ReplaceUnit(
@@ -96,7 +101,12 @@ protected:
                         ReplacementAction eAction,
                         LanguageType *pNewUnitLanguage );
 
-   virtual sal_Bool    HasRubySupport() const;
+    virtual sal_Bool    HasRubySupport() const;
+
+    void SetLanguageAndFont( const ESelection &rESel,
+                            LanguageType nLang, USHORT nLangWhichId,
+                            const Font *pFont,  USHORT nFontWhichId );
+
 
 public:
     TextConvWrapper( Window* pWindow,
