@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyphen.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:17:16 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:35:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -539,7 +539,7 @@ IMPL_LINK_INLINE_END( SvxHyphenWordDialog, GetFocusHdl_Impl, Edit *, EMPTYARG )
 IMPL_LINK( SvxHyphenWordDialog, LangError_Impl, void *, nLang )
 {
     // Status anzeigen
-    String aErr( ::GetLanguageString( (LanguageType)(sal_uInt32)nLang ) );
+    String aErr( ::GetLanguageString( (LanguageType)(sal_IntPtr)nLang ) );
     aErr += SVX_RESSTR( RID_SVXSTR_HMERR_CHECKINSTALL );
     InfoBox( this, aErr ).Execute();
     return 0;
