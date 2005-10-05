@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewling.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:14:22 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:24:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,8 +254,9 @@ void SwView::ExecLingu(SfxRequest &rReq)
 
                             // remember cursor position data for later restoration of the cursor
                             const SwPosition *pPoint = pWrtShell->GetCrsr()->GetPoint();
-                            const SwNodeIndex aPointNodeIndex  = pPoint->nNode;
-                            xub_StrLen nPointIndex = pPoint->nContent.GetIndex();
+                            sal_Bool bRestoreCursor = pPoint->nNode.GetNode().IsTxtNode();
+                            const SwNodeIndex aPointNodeIndex( pPoint->nNode );
+                            xub_StrLen nPointIndex = pPoint->nContent.GetIndex();;
 
                             // since this conversion is not interactive the whole converted
                             // document should be undone in a single undo step.
@@ -265,14 +266,17 @@ void SwView::ExecLingu(SfxRequest &rReq)
 
                             pWrtShell->EndUndo( UNDO_OVERWRITE );
 
-                            SwTxtNode *pTxtNode = aPointNodeIndex.GetNode().GetTxtNode();
-                            // check for unexpected error case
-                            DBG_ASSERT( pTxtNode && pTxtNode->GetTxt().Len() >= nPointIndex,
-                                "text missing: corrupted node?" );
-                            if (!pTxtNode || pTxtNode->GetTxt().Len() < nPointIndex)
-                                nPointIndex = 0;
-                            // restore cursor to its original position
-                            pWrtShell->GetCrsr()->GetPoint()->nContent.Assign( pTxtNode, nPointIndex );
+                            if (bRestoreCursor)
+                            {
+                                SwTxtNode *pTxtNode = aPointNodeIndex.GetNode().GetTxtNode();
+                                // check for unexpected error case
+                                DBG_ASSERT( pTxtNode && pTxtNode->GetTxt().Len() >= nPointIndex,
+                                    "text missing: corrupted node?" );
+                                if (!pTxtNode || pTxtNode->GetTxt().Len() < nPointIndex)
+                                    nPointIndex = 0;
+                                // restore cursor to its original position
+                                pWrtShell->GetCrsr()->GetPoint()->nContent.Assign( pTxtNode, nPointIndex );
+                            }
 
                             // enable all, restore view and cursor position
                             pWrtShell->EndAction();
