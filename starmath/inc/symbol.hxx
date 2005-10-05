@@ -4,9 +4,9 @@
  *
  *  $RCSfile: symbol.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:00:32 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:58:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,12 +221,14 @@ public:
 
     SmSymSetManager&   operator = (const SmSymSetManager& rSymbolSetManager);
 
+    void        GetSymbols( std::vector< SmSym > &rSymbols ) const;
+
 
     USHORT      AddSymbolSet(SmSymSet* pSymbolSet);
     void        ChangeSymbolSet(SmSymSet* pSymbolSet);
     void        DeleteSymbolSet(USHORT SymbolSetNo);
     USHORT      GetSymbolSetPos(const String& rSymbolSetName) const;
-        USHORT      GetSymbolSetCount() const { return pImpl->NoSymbolSets; }
+    USHORT      GetSymbolSetCount() const { return pImpl->NoSymbolSets; }
     SmSymSet   *GetSymbolSet(USHORT SymbolSetNo) const
     {
         return pImpl->SymbolSets.Get(SymbolSetNo);
@@ -238,15 +240,15 @@ public:
         return ((SmSymSetManager *) this)->GetSymbolByName(rSymbolName);
     }
 
-        void            AddReplaceSymbol( const SmSym & rSymbol );
-        USHORT          GetSymbolCount() const;
-        const SmSym *   GetSymbolByPos( USHORT nPos ) const;
+    void            AddReplaceSymbol( const SmSym & rSymbol );
+    USHORT          GetSymbolCount() const;
+    const SmSym *   GetSymbolByPos( USHORT nPos ) const;
 
     BOOL        IsModified() const { return pImpl->Modified; }
     void        SetModified(BOOL Modify) { pImpl->Modified = Modify; }
 
-        void            Load();
-    void            Save();
+    void        Load();
+    void        Save();
 };
 
 #endif
