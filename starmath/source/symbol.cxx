@@ -4,9 +4,9 @@
  *
  *  $RCSfile: symbol.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:13:12 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 15:05:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,8 @@
  ************************************************************************/
 
 #pragma hdrstop
+
+#include <stl/vector>
 
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
@@ -536,19 +538,40 @@ const SmSym * SmSymSetManager::GetSymbolByPos( USHORT nPos ) const
 }
 
 
+void SmSymSetManager::GetSymbols( std::vector< SmSym > &rSymbols ) const
+{
+    INT32 nCount = GetSymbolCount();
+    rSymbols.resize( nCount );
+    USHORT nPos = 0;
+    std::vector< SmSym >::iterator aIt( rSymbols.begin() );
+    std::vector< SmSym >::iterator aEnd( rSymbols.end() );
+    while (aIt != aEnd)
+    {
+        const SmSym *pSym = GetSymbolByPos( nPos++ );
+        DBG_ASSERT( pSym, "symbol missing" );
+        if (pSym)
+            *aIt++ = *pSym;
+    }
+    DBG_ASSERT( nPos == nCount, "index out of range?" );
+}
+
+
 void SmSymSetManager::Load()
 {
+    std::vector< SmSym > aSymbols;
     SmMathConfig &rCfg = *SM_MOD1()->GetConfig();
+    rCfg.GetSymbols( aSymbols );
+    INT32 nSymbolCount = aSymbols.size();
 
-    USHORT nCount = rCfg.GetSymbolCount();
     USHORT i;
-    for (i = 0;  i < nCount;  ++i)
+    for (i = 0;  i < nSymbolCount;  ++i)
     {
-        const SmSym *pSym = rCfg.GetSymbol(i);
-        if (pSym)
+        const SmSym &rSym = aSymbols[i];
+        DBG_ASSERT( rSym.Name.Len() > 0, "symbol without name!" );
+        if (rSym.Name.Len() > 0)
         {
             SmSymSet *pSymSet = 0;
-            const String &rSetName = pSym->GetSetName();
+            const String &rSetName = rSym.GetSetName();
             USHORT nSetPos = GetSymbolSetPos( rSetName );
             if (SYMBOLSET_NONE != nSetPos)
                 pSymSet = GetSymbolSet( nSetPos );
@@ -558,15 +581,15 @@ void SmSymSetManager::Load()
                 AddSymbolSet( pSymSet );
             }
 
-            pSymSet->AddSymbol( new SmSym( *pSym ) );
+            pSymSet->AddSymbol( new SmSym( rSym ) );
         }
     }
     // build HashTables
-    nCount = GetSymbolSetCount();
-    for (i = 0;  i < nCount;  ++i)
+    INT32 nSymbolSetCount = GetSymbolSetCount();
+    for (i = 0;  i < nSymbolSetCount;  ++i)
         ChangeSymbolSet( GetSymbolSet( i ) );
 
-    if (0 == nCount)
+    if (0 == nSymbolCount)
     {
         DBG_ERROR( "no symbol set found" );
         pImpl->Modified = FALSE;
@@ -604,7 +627,10 @@ void SmSymSetManager::Save()
             }
         }
         DBG_ASSERT(pSym - pSymbols == nSaveSymbolCnt, "wrong number of symbols" );
-        rCfg.ReplaceSymbols( pSymbols, nSaveSymbolCnt );
+
+        std::vector< SmSym > aSymbols;
+        GetSymbols( aSymbols );
+        rCfg.SetSymbols( aSymbols );
         delete [] pSymbols;
     }
 }
