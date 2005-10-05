@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphicsInserter.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 17:16:51 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:43:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -106,7 +106,7 @@ public class GraphicsInserter {
             try {
                 // Creating the service GraphicObject
                 oGraphic =
-                    xMSFDoc.createInstance("com.sun.star.text.GraphicObject");
+                    xMSFDoc.createInstance("com.sun.star.text.TextGraphicObject");
             }
             catch ( Exception exception ) {
                 System.out.println( "Could not create instance" );
