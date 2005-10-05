@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 11:49:31 $
+#   last change: $Author: kz $ $Date: 2005-10-05 13:00:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@ TARGET=desktopshare
 # --- Product Version Information ----------------------------------
 
 .INCLUDE :  ../productversion.mk
+.INCLUDE :  packtools.mk
 
 # --- Files --------------------------------------------------------
 
@@ -65,12 +66,20 @@ LAUNCHERDEPN = ../menus/{$(LAUNCHERLIST)}.desktop
 LAUNCHERFLAGFILE = $(COMMONMISC)/$(TARGET)/xdg.flag
 MIMEINFO = $(COMMONMISC)/$(TARGET)/openoffice.org.xml
 
+.IF "$(RPM)"!=""
+SPECFILES = \
+    $(MISC)/redhat-menus.spec \
+    $(MISC)/suse-menus.spec \
+    $(MISC)/freedesktop-menus.spec \
+    $(MISC)/mandriva-menus.spec
+.ENDIF
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
 
 .IF "$(GUI)"=="UNX"
-ALLTAR : $(LAUNCHERFLAGFILE) $(MIMEINFO)
+ALLTAR : $(LAUNCHERFLAGFILE) $(MIMEINFO) $(SPECFILES)
 .ENDIF          # "$(GUI)"=="UNIX"
 
 #
@@ -100,6 +109,11 @@ $(MIMEINFO) : $(COMMONMISC)$/$(TARGET)$/documents.ulf
     @$(PERL) create_mime_xml.pl $< > $(@).$(INPATH)
     @mv -f $(@).$(INPATH) $@
 
+.IF "$(RPM)"!=""
+$(SPECFILES) : add_specfile_triggers.sed symlink_triggers
+$(SPECFILES) : ../$$(@:b:s/-menus//)/$$(@:f)
+    @sed -f ../share/add_specfile_triggers.sed $< | tr -d "\015" >$@
+.ENDIF
 
 #
 # Install section
