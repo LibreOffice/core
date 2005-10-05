@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 11:47:08 $
+#   last change: $Author: kz $ $Date: 2005-10-05 12:57:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,9 +65,14 @@ ALLTAR : PACKAGE_RPM
 
 # --- packaging ---------------------------------------------------
     
-PACKAGE_RPM :
+.PHONY PACKAGE_RPM : $(MISC)/$(TARGET)-menus.spec
     @$(MKDIRHIER) $(MISC)$/$(TARGET)
     @$(MKDIRHIER) $(MISC)$/$(TARGET)$/BUILD
-    @$(RPM) --define "basedir $(shell pwd)" --define "unixfilename $(UNIXFILENAME)" --define "version $(PKGVERSION)" --define "release $(PKGREV)" --define "_rpmdir $(RPMDIR)" -bb freedesktop-menus.spec --define "source $(shell cd $(MISC)$/redhat; pwd)" --define "unique $(shell echo $$$$)" --define "_builddir $(shell cd $(MISC)$/$(TARGET)/BUILD; pwd)" 
+    @$(RPM) --define "basedir $(shell pwd)" --define "unixfilename $(UNIXFILENAME)" \
+        --define "version $(PKGVERSION)" --define "release $(PKGREV)" \
+        --define "_rpmdir $(RPMDIR)" -bb $< \
+        --define "source $(shell cd $(MISC)$/redhat; pwd)" \
+        --define "unique $(shell echo $$$$)" \
+        --define "_builddir $(shell cd $(MISC)$/$(TARGET)/BUILD; pwd)" 
     
 .ENDIF
