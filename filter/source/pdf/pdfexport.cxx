@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 10:53:47 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:53:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,9 +160,9 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com:
 
         for( sal_Int32 nData = 0, nDataCount = rRenderOptions.getLength(); nData < nDataCount; ++nData )
         {
-            if( rRenderOptions[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstPage" ) ) )
+            if( rRenderOptions[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFirstPage" ) ) )
                 pFirstPage = &rRenderOptions[ nData ].Value;
-            else if( rRenderOptions[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "LastPage" ) ) )
+            else if( rRenderOptions[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "IsLastPage" ) ) )
                 pLastPage = &rRenderOptions[ nData ].Value;
         }
 
@@ -200,7 +200,7 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com:
                     aMtf.Record( pOut );
 
                     // --> FME 2004-10-08 #i35176#
-                    // LastPage property.
+                    // IsLastPage property.
                     const sal_Int32 nCurrentRenderer = nSel - 1;
                     nSel = aMultiSelection.NextSelected();
                     if ( pLastPage && sal_Int32(SFX_ENDOFSELECTION) == nSel )
@@ -293,7 +293,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     rFilterData[ nData ].Value >>= mnQuality;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ReduceImageResolution" ) ) )
                     rFilterData[ nData ].Value >>= mbReduceImageResolution;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "SkipEmptyPages" ) ) )
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages" ) ) )
                     rFilterData[ nData ].Value >>= mbSkipEmptyPages;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "MaxImageResolution" ) ) )
                     rFilterData[ nData ].Value >>= mnMaxImageResolution;
@@ -337,13 +337,13 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 aRenderOptions[ 1 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages" ) );
                 aRenderOptions[ 1 ].Value <<= sal_False;
                 Any& rExportNotesValue = aRenderOptions[ 1 ].Value;
-                aRenderOptions[ 2 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstPage" ) );
+                aRenderOptions[ 2 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFirstPage" ) );
                 aRenderOptions[ 2 ].Value <<= sal_True;
-                aRenderOptions[ 3 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "LastPage" ) );
+                aRenderOptions[ 3 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsLastPage" ) );
                 aRenderOptions[ 3 ].Value <<= sal_False;
                 aRenderOptions[ 4 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) );
                 aRenderOptions[ 4 ].Value <<= aPageRange;
-                aRenderOptions[ 5 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "SkipEmptyPages" ) );
+                aRenderOptions[ 5 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages" ) );
                 aRenderOptions[ 5 ].Value <<= mbSkipEmptyPages;
 
                 if( aPageRange.getLength() || !aSelection.hasValue() )
