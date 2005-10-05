@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:09:22 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 15:01:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3846,6 +3846,22 @@ void SmXMLExport::ExportText(const SmNode *pNode, int nLevel)
     delete aText;
 }
 
+void SmXMLExport::ExportBlank(const SmNode *pNode, int nLevel)
+{
+    //!! exports an empty <mi> tag since for example "~_~" is allowed in
+    //!! Math (so it has no sense at all) but must not result in an empty
+    //!! <msub> tag in MathML !!
+
+    SvXMLElementExport *aText;
+    //const SmBlankNode *pTemp = static_cast<const SmBlankNode *>(pNode);
+
+    aText = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,XML_MI,
+                    sal_True,sal_False);
+
+    GetDocHandler()->characters( OUString() );
+    delete aText;
+}
+
 void SmXMLExport::ExportSubSupScript(const SmNode *pNode,int nLevel)
 {
     const SmNode *pSub,*pSup,*pCSub,*pCSup,*pLSub,*pLSup;
@@ -4404,6 +4420,9 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
             break;
         case NMATRIX:
             ExportMatrix(pNode,nLevel);
+            break;
+        case NBLANK:
+            ExportBlank(pNode,nLevel);
             break;
 #if 0
         default:
