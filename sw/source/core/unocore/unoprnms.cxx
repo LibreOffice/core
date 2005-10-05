@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:28:52 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:23:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -752,7 +752,9 @@ const SwPropNameTab aPropNameTab = {
 /* 0696 UNO_NAME_PAGE_COUNT*/               {MAP_CHAR_LEN("PageCount")},
 /* 0697 UNO_NAME_LINE_COUNT*/               {MAP_CHAR_LEN("LineCount")},
 /* 0698 UNO_NAME_IS_CONSTANT_SPELLCHECK*/   {MAP_CHAR_LEN("IsConstantSpellcheck")},
-/* 0699 UNO_NAME_IS_HIDE_SPELL_MARKS*/      {MAP_CHAR_LEN("IsHideSpellMarks")}
+/* 0699 UNO_NAME_IS_HIDE_SPELL_MARKS*/      {MAP_CHAR_LEN("IsHideSpellMarks")},
+/* 0700 UNO_NAME_IS_FIELD_USED */       {MAP_CHAR_LEN("IsFieldUsed")},
+/* 0701 UNO_NAME_IS_FIELD_DISPLAYED */  {MAP_CHAR_LEN("IsFieldDisplayed")}
 };
 
 const SwPropNameLen& SwGetPropName( USHORT nId )
