@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rect.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:11:19 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 15:03:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,21 +252,7 @@ void SmRect::Init(const OutputDevice &rDev, const SmFormat *pFormat,
                   const XubString &rText, USHORT nBorderWidth)
     // get rectangle fitting for drawing 'rText' on OutputDevice 'rDev'
 {
-    SmRectCache *pRectCache = SM_MOD1()->GetRectCache();
-    DBG_ASSERT(pRectCache, "Sm : NULL pointer");
-
-    // build key for rectangle (to look up in cache for)
-    const SmRectCache::Key  aKey (rText, rDev.GetFont());
-
-    const SmRect *pResult = pRectCache->Search(aKey);
-    if (pResult)
-        *this = *pResult;
-    else
-    {   // build rectangle and put it in cache
-        BuildRect(rDev, pFormat, rText, nBorderWidth);
-        pResult = pRectCache->Add(aKey, *this);
-    }
-    DBG_ASSERT(pResult, "Sm : NULL pointer");
+    BuildRect(rDev, pFormat, rText, nBorderWidth);
 }
 
 
@@ -746,7 +732,7 @@ BOOL SmGetGlyphBoundRect(const OutputDevice &rDev,
     {
         // since we format for the printer (where GetTextBoundRect will fail)
         // we need a virtual device here.
-        pGlyphDev = SM_MOD1()->GetRectCache()->GetVirDev();
+        pGlyphDev = &SM_MOD1()->GetDefaultVirtualDev();
     }
 
     const FontMetric  aDevFM (rDev.GetFontMetric());
