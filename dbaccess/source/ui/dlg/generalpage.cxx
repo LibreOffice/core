@@ -4,9 +4,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:04:29 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:46:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -514,7 +514,7 @@ namespace dbaui
         if ( bCommitTypeSelection )
         {
             USHORT nEntry = m_pDatasourceType->GetSelectEntryPos();
-            DATASOURCE_TYPE eSelectedType = static_cast<DATASOURCE_TYPE>(reinterpret_cast<sal_Int32>(m_pDatasourceType->GetEntryData(nEntry)));
+            DATASOURCE_TYPE eSelectedType = static_cast<DATASOURCE_TYPE>(reinterpret_cast<sal_IntPtr>(m_pDatasourceType->GetEntryData(nEntry)));
             if (m_DBWizardMode)
             {
                 if  (  ( m_pDatasourceType->GetSavedValue() != nEntry )
@@ -544,7 +544,7 @@ namespace dbaui
     {
         // get the type from the entry data
         sal_Int16 nSelected = _pBox->GetSelectEntryPos();
-        DATASOURCE_TYPE eSelectedType = static_cast<DATASOURCE_TYPE>(reinterpret_cast<sal_Int32>(_pBox->GetEntryData(nSelected)));
+        DATASOURCE_TYPE eSelectedType = static_cast<DATASOURCE_TYPE>(reinterpret_cast<sal_IntPtr>(_pBox->GetEntryData(nSelected)));
 
         setParentTitle(eSelectedType);
         // let the impl method do all the stuff
