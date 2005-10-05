@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txatritr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:14:46 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:21:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,9 +134,11 @@ sal_Bool SwScriptIterator::Next()
 // --------------------------------------------------------------------
 
 SwTxtAttrIterator::SwTxtAttrIterator( const SwTxtNode& rTNd, USHORT nWhchId,
-                                        xub_StrLen nStt )
+                                        xub_StrLen nStt,
+                                        sal_Bool bUseGetWhichOfScript )
     : aSIter( rTNd.GetTxt(), nStt ), rTxtNd( rTNd ),
-    nChgPos( nStt ), nAttrPos( 0 ), pParaItem( 0 ), nWhichId( nWhchId )
+    nChgPos( nStt ), nAttrPos( 0 ), pParaItem( 0 ), nWhichId( nWhchId ),
+    bIsUseGetWhichOfScript( bUseGetWhichOfScript )
 {
     SearchNextChg();
 }
@@ -173,9 +175,12 @@ sal_Bool SwTxtAttrIterator::Next()
                     nAttrPos = nSavePos;
 
                     if( RES_TXTATR_CHARFMT == pHt->Which() )
-                        pCurItem = &pHt->GetCharFmt().GetCharFmt()->GetAttr(
-                                        GetWhichOfScript( nWhichId,
-                                                aSIter.GetCurrScript() ) );
+                    {
+                        sal_uInt16 nWId = bIsUseGetWhichOfScript ?
+                                GetWhichOfScript( nWhichId,
+                                                  aSIter.GetCurrScript() ) : nWhichId;
+                        pCurItem = &pHt->GetCharFmt().GetCharFmt()->GetAttr(nWId);
+                    }
                     else
                         pCurItem = &pHt->GetAttr();
 
@@ -213,8 +218,12 @@ void SwTxtAttrIterator::SearchNextChg()
         aStack.Remove( 0, aStack.Count() );
     }
     if( !pParaItem )
-        pParaItem = &rTxtNd.GetSwAttrSet().Get( nWh =
-                    GetWhichOfScript( nWhichId, aSIter.GetCurrScript() ) );
+    {
+        nWh = bIsUseGetWhichOfScript ?
+                GetWhichOfScript( nWhichId,
+                                  aSIter.GetCurrScript() ) : nWhichId;
+        pParaItem = &rTxtNd.GetSwAttrSet().Get( nWh );
+    }
 
     xub_StrLen nStt = nChgPos;
     nChgPos = aSIter.GetScriptChgPos();
@@ -224,7 +233,11 @@ void SwTxtAttrIterator::SearchNextChg()
     if( pHts )
     {
         if( !nWh )
-            nWh = GetWhichOfScript( nWhichId, aSIter.GetCurrScript() );
+        {
+            nWh =  bIsUseGetWhichOfScript ?
+                        GetWhichOfScript( nWhichId,
+                                          aSIter.GetCurrScript() ) : nWhichId;
+        }
 
         const SfxPoolItem* pItem;
         SwFmt* pFmt;
