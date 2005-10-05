@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrhhcwrap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:26:49 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:23:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -257,6 +257,12 @@ sal_Bool SdrHHCWrapper::ConvertNextDocument()
 
                 ClearModifyFlag();
 
+                //!! update mode needs to be set to true otherwise
+                //!! the call to 'HasConvertibleTextPortion' will not always
+                //!! work correctly because the document may not be properly
+                //!! formatted when some information is accessed, and thus
+                //!! incorrect results get returned.
+                SetUpdateMode(sal_True);
                 if (HasConvertibleTextPortion( nSourceLang ))
                 {
                     SdrView *pSdrView = pView->GetWrtShell().GetDrawView();
@@ -271,6 +277,8 @@ sal_Bool SdrHHCWrapper::ConvertNextDocument()
                     pSdrView->BegTextEdit( pTextObj, pPV, &pView->GetEditWin(),
                                            sal_False, this, pOutlView, sal_True, sal_True);
                 }
+                else
+                    SetUpdateMode(sal_False);
             }
             if ( !bNextDoc )
                 pTextObj = NULL;
