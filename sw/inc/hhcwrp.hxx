@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hhcwrp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:56:59 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:18:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,12 +90,15 @@ class SwHHCWrapper : public svx::HangulHanjaConversion
 
     void        SelectNewUnit_impl( const sal_Int32 nUnitStart,
                                     const sal_Int32 nUnitEnd );
+    void        ChangeText( const String &rNewText );
 
     inline BOOL IsDrawObj()             { return bIsDrawObj; }
     inline void SetDrawObj( BOOL bNew ) { bIsDrawObj = bNew; }
 
 protected:
-    virtual void    GetNextPortion( ::rtl::OUString& rNextPortion, LanguageType& rLangOfPortion );
+    virtual void    GetNextPortion( ::rtl::OUString& rNextPortion,
+                            LanguageType& rLangOfPortion,
+                            sal_Bool bAllowImplicitChangesForNotConvertibleText );
     virtual void    HandleNewUnit( const sal_Int32 nUnitStart,
                                    const sal_Int32 nUnitEnd );
     virtual void    ReplaceUnit(
