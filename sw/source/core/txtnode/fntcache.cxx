@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:12:20 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:15:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1005,7 +1005,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() )
         {
             const USHORT nGridWidth = pGrid->GetBaseHeight();
-            long* pKernArray = new long[rInf.GetLen()];
+            sal_Int32* pKernArray = new sal_Int32[rInf.GetLen()];
 
             if ( pPrinter )
                 pPrinter->GetTextArray( rInf.GetText(), pKernArray,
@@ -1106,7 +1106,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         // Simple kerning is handled by DrawStretchText
         if( rInf.GetSpace() || rInf.GetKanaComp() )
         {
-            long *pKernArray = new long[ rInf.GetLen() ];
+            sal_Int32 *pKernArray = new sal_Int32[ rInf.GetLen() ];
             rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
                                        rInf.GetIdx(), rInf.GetLen() );
 
@@ -1320,12 +1320,12 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         BOOL bBullet = rInf.GetBullet();
         if( bSymbol )
             bBullet = FALSE;
-        long *pKernArray = new long[ rInf.GetLen() ];
+        sal_Int32 *pKernArray = new sal_Int32[ rInf.GetLen() ];
         CreateScrFont( *rInf.GetShell(), rInf.GetOut() );
         long nScrPos;
 
         // get screen array
-        long* pScrArray = new long[ rInf.GetLen() ];
+        sal_Int32* pScrArray = new sal_Int32[ rInf.GetLen() ];
         rInf.GetOut().GetTextArray( rInf.GetText(), pScrArray,
                                     rInf.GetIdx(), rInf.GetLen() );
 
@@ -1898,7 +1898,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         aTxtSize.Width() = pPrinter->GetTextWidth( rInf.GetText(),
                                                    rInf.GetIdx(), nLn );
         aTxtSize.Height() = pPrinter->GetTextHeight();
-        long *pKernArray = new long[nLn];
+        sal_Int32 *pKernArray = new sal_Int32[nLn];
         CreateScrFont( *rInf.GetShell(), rInf.GetOut() );
         if( !GetScrFont()->IsSameInstance( rInf.GetOut().GetFont() ) )
             rInf.GetOut().SetFont( *pScrFont );
@@ -1916,7 +1916,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             nScrPos = pKernArray[ nLn - 1 ];
         else
         {
-            long* pScrArray = new long[ rInf.GetLen() ];
+            sal_Int32* pScrArray = new sal_Int32[ rInf.GetLen() ];
             rInf.GetOut().GetTextArray( rInf.GetText(), pScrArray,
                                         rInf.GetIdx(), rInf.GetLen() );
             nScrPos = pScrArray[ 0 ];
@@ -1967,7 +1967,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             rInf.GetOut().SetFont( *pPrtFont );
         if( bCompress )
         {
-            long *pKernArray = new long[nLn];
+            sal_Int32 *pKernArray = new sal_Int32[nLn];
             rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
                                         rInf.GetIdx(), nLn );
             rInf.SetKanaDiff( rInf.GetScriptInfo()->Compress( pKernArray,
@@ -2006,7 +2006,7 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
     if( 0 != nSperren )
         nKern -= nSperren;
 
-    long *pKernArray = new long[ rInf.GetLen() ];
+    sal_Int32 *pKernArray = new sal_Int32[ rInf.GetLen() ];
 
     if ( pPrinter )
     {
@@ -2326,7 +2326,7 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
         {
             const USHORT nGridWidth = pGrid->GetBaseHeight();
 
-            long* pKernArray = new long[rInf.GetLen()];
+            sal_Int32* pKernArray = new sal_Int32[rInf.GetLen()];
             rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
                                         rInf.GetIdx(), rInf.GetLen() );
 
@@ -2428,7 +2428,7 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
             nLn = 1;
         else if( nLn > 2 * nTxtBreak )
             nLn = 2 * nTxtBreak;
-        long *pKernArray = new long[ nLn ];
+        sal_Int32 *pKernArray = new sal_Int32[ nLn ];
         rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
                                     rInf.GetIdx(), nLn );
         if( rInf.GetScriptInfo()->Compress( pKernArray, rInf.GetIdx(), nLn,
