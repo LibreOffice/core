@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:24:10 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:38:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -966,9 +966,13 @@ public:
 
     // text conversion functions
     void                Convert( EditView* pEditView, LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont, INT32 nOptions, sal_Bool bIsInteractive, sal_Bool bMultipleDoc );
-    void                ImpConvert( rtl::OUString &rConvTxt, LanguageType &rConvTxtLang, EditView* pEditView, LanguageType nSrcLang, const ESelection &rConvRange );
+    void                ImpConvert( rtl::OUString &rConvTxt, LanguageType &rConvTxtLang, EditView* pEditView, LanguageType nSrcLang, const ESelection &rConvRange,
+                                    sal_Bool bAllowImplicitChangesForNotConvertibleText, LanguageType nTargetLang, const Font *pTargetFont );
     ConvInfo *          GetConvInfo() const { return pConvInfo; }
     sal_Bool            HasConvertibleTextPortion( LanguageType nLang );
+    void                SetLanguageAndFont( const ESelection &rESel,
+                                LanguageType nLang, USHORT nLangWhichId,
+                                const Font *pFont,  USHORT nFontWhichId );
 
     //find the next error within the given selection - forward only!
     ::com::sun::star::uno::Reference<
