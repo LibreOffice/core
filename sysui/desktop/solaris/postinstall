@@ -41,7 +41,7 @@ do
 done | installf ${PKGINST} - || exit 2
 
 # Add the symlink to software installation database
-installf ${PKG_INSTALL_ROOT:+'-R'} ${PKG_INSTALL_ROOT} ${PKGINST} ${CLIENT_BASEDIR}/etc/%PREFIX=${OFFICE_PATH} s
+installf ${PKG_INSTALL_ROOT:+'-R'} ${PKG_INSTALL_ROOT} ${PKGINST} ${CLIENT_BASEDIR}/etc/%PREFIX=..${OFFICE_PATH} s
 
 # Patch the launch script to run gnome-set-default-application on first office launch for GNOME < 2.6 
 if [ "$LEGACY_GNOME" = "true" ]
