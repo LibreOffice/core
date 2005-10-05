@@ -89,25 +89,7 @@ export NO_BRP_STALE_LINK_ERROR=yes
 cd ..
 rm -rf $RPM_BUILD_ROOT $RPM_BUILD_DIR/%name-%version-build%unique
 
-%triggerin -- openoffice.org-core01
-# create file in /etc that contains the office installation path
-cat > /tmp/install.$$ << EOF
-sleep 2
-coreprefix=\`rpm -q --qf '%{INSTALLPREFIX}' openoffice.org-core01\`
-# non-patched epm cannot create relocatable packages
-if [ \$coreprefix == "(none)" ]; then 
-	coreprefix="/opt/openoffice.org%version"
-fi
-ln -snf \$coreprefix /etc/%unixfilename
-# needed here as as well since execution of this one is delayed, the link is
-# not intact when the other triggers are run before this one
-if (which update-desktop-database); then
-  update-desktop-database -q /usr/share/applications
-fi
-rm -f /tmp/install.$$
-EOF
-
-/bin/sh /tmp/install.$$ &
+#include<symlink_triggers>
 
 %triggerin -- openoffice.org-writer, openoffice.org-calc, openoffice.org-draw, openoffice.org-impress, openoffice.org-math
 # this is run when one of the above packages is already installed and the menu
