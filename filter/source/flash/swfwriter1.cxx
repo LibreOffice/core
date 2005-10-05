@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfwriter1.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:44:49 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 12:53:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -442,7 +442,7 @@ FlashFont& Writer::Impl_getFont( const Font& rFont )
 
 // -----------------------------------------------------------------------------
 
-void Writer::Impl_writeText( const Point& rPos, const String& rText, const long* pDXArray, long nWidth )
+void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_Int32* pDXArray, long nWidth )
 {
     const FontMetric aMetric( mpVDev->GetFontMetric() );
 
@@ -530,26 +530,26 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const long*
     }
 }
 
-void Writer::Impl_writeText( const Point& rPos, const String& rText, const long* pDXArray, long nWidth, Color aTextColor )
+void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_Int32* pDXArray, long nWidth, Color aTextColor )
 {
     sal_uInt32 nLen = rText.Len();
 
     if( nLen )
     {
         Size    aNormSize;
-        long*   pOwnArray;
-        long*   pDX;
+        sal_Int32* pOwnArray;
+        sal_Int32* pDX;
 
         // get text sizes
         if( pDXArray )
         {
             pOwnArray = NULL;
             aNormSize = Size( mpVDev->GetTextWidth( rText ), 0 );
-            pDX = (long*) pDXArray;
+            pDX = (sal_Int32*) pDXArray;
         }
         else
         {
-            pOwnArray = new long[ nLen ];
+            pOwnArray = new sal_Int32[ nLen ];
             aNormSize = Size( mpVDev->GetTextArray( rText, pOwnArray ), 0 );
             pDX = pOwnArray;
         }
