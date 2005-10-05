@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implbase3.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:15:00 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:25:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,10 +64,10 @@ namespace cppu
                 3 +1, sal_False, sal_False,
                 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                 {
-                    { { Ifc1::static_type }, ((sal_Int32)(Ifc1 *) (Impl *) 16) - 16 },
-                    { { Ifc2::static_type }, ((sal_Int32)(Ifc2 *) (Impl *) 16) - 16 },
-                    { { Ifc3::static_type }, ((sal_Int32)(Ifc3 *) (Impl *) 16) - 16 },
-                    { { ::com::sun::star::lang::XTypeProvider::static_type }, ((sal_Int32)(::com::sun::star::lang::XTypeProvider *) (Impl *) 16) - 16 }
+                    { { Ifc1::static_type }, ((sal_IntPtr)(Ifc1 *) (Impl *) 16) - 16 },
+                    { { Ifc2::static_type }, ((sal_IntPtr)(Ifc2 *) (Impl *) 16) - 16 },
+                    { { Ifc3::static_type }, ((sal_IntPtr)(Ifc3 *) (Impl *) 16) - 16 },
+                    { { ::com::sun::star::lang::XTypeProvider::static_type }, ((sal_IntPtr)(::com::sun::star::lang::XTypeProvider *) (Impl *) 16) - 16 }
                 }
             };
             return reinterpret_cast< class_data * >(&s_cd);
