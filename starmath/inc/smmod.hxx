@@ -4,9 +4,9 @@
  *
  *  $RCSfile: smmod.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:00:03 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:58:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@ class SvxErrorHandler;
 class SfxObjectFactory;
 class SmConfig;
 class SmModule;
+class SmSymSetManager;
 
 /*************************************************************************
 |*
@@ -70,7 +71,6 @@ class SmModule;
 |*
 \************************************************************************/
 
-class SmRectCache;
 class SvtSysLocale;
 class VirtualDevice;
 
@@ -138,7 +138,6 @@ class SmModule : public SfxModule, public SfxListener
     svtools::ColorConfig        *pColorConfig;
     SmConfig                *pConfig;
     SmLocalizedSymbolData   *pLocSymbolData;
-    SmRectCache             *pRectCache;
     SvtSysLocale            *pSysLocale;
     VirtualDevice           *pVirtualDev;
 
@@ -160,8 +159,8 @@ public:
 
     svtools::ColorConfig &  GetColorConfig();
 
-    SmConfig *          GetConfig();
-    SmRectCache *       GetRectCache()     { return pRectCache; }
+    SmConfig *              GetConfig();
+    SmSymSetManager &       GetSymSetManager();
 
     SmLocalizedSymbolData &   GetLocSymbolData() const;
 
