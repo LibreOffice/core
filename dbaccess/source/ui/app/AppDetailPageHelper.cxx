@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:15:34 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:45:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -516,7 +516,7 @@ sal_Bool OAppDetailPageHelper::isLeaf(SvLBoxEntry* _pEntry) const
     if ( nPos < CONTROL_COUNT && _pEntry )
     {
         DBTreeListBox& rTree = *m_pLists[nPos];
-        bLeafSelected = reinterpret_cast<sal_Int32>(_pEntry->GetUserData()) != FOLDER_TYPE;
+        bLeafSelected = reinterpret_cast<sal_IntPtr>(_pEntry->GetUserData()) != FOLDER_TYPE;
     }
     return bLeafSelected;
 }
@@ -531,7 +531,7 @@ sal_Bool OAppDetailPageHelper::isALeafSelected() const
         SvLBoxEntry* pEntry = rTree.FirstSelected( );
         while( !bLeafSelected && pEntry )
         {
-            bLeafSelected = reinterpret_cast<sal_Int32>(pEntry->GetUserData()) != FOLDER_TYPE;
+            bLeafSelected = reinterpret_cast<sal_IntPtr>(pEntry->GetUserData()) != FOLDER_TYPE;
             pEntry = rTree.NextSelected(pEntry);
         }
     }
