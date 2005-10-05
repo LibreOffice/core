@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unx.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:50:55 $
+#   last change: $Author: kz $ $Date: 2005-10-05 11:31:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -113,8 +113,8 @@ OLE2DEF=
 .INCLUDE : unxlngi6.mk
 .ENDIF
 
-.IF "$(COM)$(CVER)$(OS)$(CPU)$(GLIBC)" == "GCCC300LINUXX2REDHAT60"
-.INCLUDE : unxlngx4.mk
+.IF "$(COM)$(CVER)$(OS)$(CPU)$(GLIBC)" == "GCCC341LINUXX2REDHAT60"
+.INCLUDE : unxlngx6.mk
 .ENDIF
 
 .IF "$(COM)$(CVER)$(OS)$(CPU)$(GLIBC)" == "GCCC295LINUXP2REDHAT60"
