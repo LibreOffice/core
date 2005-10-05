@@ -51,23 +51,7 @@ for dir in *; do
   cd ../..  
 done
 
-%triggerin -- openoffice.org-core01
-# create file in /etc that contains the office installation path
-cat > /tmp/install.$$ << EOF
-while [ "\$TARGET" == "" ]
-do
-  sleep 2
-  TARGET=\`rpm -q --qf '%{INSTALLPREFIX}' openoffice.org-core01 2>&1\` && ln -snf \$TARGET /etc/%unixfilename
-  # some rpm versions do not wait for the shared lock
-  echo \$TARGET | grep '/var/lib/rpm' && TARGET=""
-done
-if [ -x /usr/bin/update-desktop-database ]; then
-  update-desktop-database -q /usr/share/applications
-fi
-rm -f /tmp/install.$$
-EOF
-
-/bin/sh /tmp/install.$$ &
+#include<symlink_triggers>
 
 %triggerin -- openoffice.org-writer, openoffice.org-calc, openoffice.org-draw, openoffice.org-impress, openoffice.org-base, openoffice.org-math
 if [ -x /usr/bin/update-desktop-database -a -h /etc/%unixfilename ]; then
