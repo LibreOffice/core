@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:15:16 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:21:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,9 @@
 #endif
 #ifndef _SVX_LANGITEM_HXX //autogen
 #include <svx/langitem.hxx>
+#endif
+#ifndef _SVX_FONTITEM_HXX
+#include <svx/fontitem.hxx>
 #endif
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
@@ -811,6 +814,42 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
 }
 
 
+void SwTxtNode::SetLanguageAndFont( const SwPaM &rPaM,
+    LanguageType nLang, USHORT nLangWhichId,
+    const Font *pFont,  USHORT nFontWhichId )
+{
+    sal_uInt16 aRanges[] = {
+            nLangWhichId, nLangWhichId,
+            nFontWhichId, nFontWhichId,
+            0, 0, 0 };
+    if (!pFont)
+        aRanges[2] = aRanges[3] = 0;    // clear entries with font WhichId
+
+    SwEditShell *pEditShell = GetDoc()->GetEditShell();
+    SfxItemSet aSet( pEditShell->GetAttrPool(), aRanges );
+    aSet.Put( SvxLanguageItem( LANGUAGE_CHINESE_TRADITIONAL, nLangWhichId ) );
+
+    DBG_ASSERT( pFont, "target font missing?" );
+    if (pFont)
+    {
+        SvxFontItem aFontItem = (SvxFontItem&) aSet.Get( nFontWhichId );
+        aFontItem.GetFamilyName()   = pFont->GetName();
+        aFontItem.GetFamily()       = pFont->GetFamily();
+        aFontItem.GetStyleName()    = pFont->GetStyleName();
+        aFontItem.GetPitch()        = pFont->GetPitch();
+        aFontItem.GetCharSet()      = pFont->GetCharSet();
+        aSet.Put( aFontItem );
+    }
+
+    GetDoc()->Insert( rPaM, aSet, 0 );
+    // SetAttr( aSet );    <- Does not set language attribute of empty paragraphs correctly,
+    //                     <- because since there is no selection the flag to garbage
+    //                     <- collect all attributes is set, and therefore attributes spanned
+    //                     <- over empty selection are removed.
+
+}
+
+
 USHORT SwTxtNode::Convert( SwConversionArgs &rArgs )
 {
     // get range of text within node to be converted
@@ -845,7 +884,20 @@ USHORT SwTxtNode::Convert( SwConversionArgs &rArgs )
     xub_StrLen  nBegin  = nTextBegin;
     xub_StrLen  nLen;
     LanguageType nLangFound = LANGUAGE_NONE;
-    if (aText.Len())
+    if (!aText.Len())
+    {
+        if (rArgs.bAllowImplicitChangesForNotConvertibleText)
+        {
+            // create SwPaM with mark & point spanning empty paragraph
+            //SwPaM aCurPaM( *this, *this, nBegin, nBegin + nLen ); <-- wrong c-tor, does sth different
+            SwPaM aCurPaM( *this, 0 );
+
+            SetLanguageAndFont( aCurPaM,
+                    rArgs.nConvTargetLang, RES_CHRATR_CJK_LANGUAGE,
+                    rArgs.pTargetFont, RES_CHRATR_CJK_FONT );
+        }
+    }
+    else
     {
         SwLanguageIterator aIter( *this, nBegin );
 
@@ -855,10 +907,39 @@ USHORT SwTxtNode::Convert( SwConversionArgs &rArgs )
             sal_Bool bLangOk =  (nLangFound == rArgs.nConvSrcLang) ||
                                 (svx::HangulHanjaConversion::IsChinese( nLangFound ) &&
                                  svx::HangulHanjaConversion::IsChinese( rArgs.nConvSrcLang ));
-            nLen = aIter.GetChgPos() - nBegin;
+
+            xub_StrLen nChPos = aIter.GetChgPos();
+            // the position at the end of the paragraph returns -1
+            // which becomes 65535 when converted to xub_StrLen,
+            // and thus must be cut to the end of the actual string.
+            if (nChPos == (xub_StrLen) -1)
+                nChPos = aText.Len();
+
+            nLen = nChPos - nBegin;
             bFound = bLangOk && nLen > 0;
             if (!bFound)
-                nBegin = aIter.GetChgPos(); // start of next language portion
+            {
+                // create SwPaM with mark & point spanning the attributed text
+                //SwPaM aCurPaM( *this, *this, nBegin, nBegin + nLen ); <-- wrong c-tor, does sth different
+                SwPaM aCurPaM( *this, nBegin );
+                aCurPaM.SetMark();
+                aCurPaM.GetPoint()->nContent = nBegin + nLen;
+
+                // check script type of selected text
+                SwEditShell *pEditShell = GetDoc()->GetEditShell();
+                pEditShell->Push();             // save current cursor on stack
+                pEditShell->SetSelection( aCurPaM );
+                sal_Bool bIsAsianScript = (SCRIPTTYPE_ASIAN == pEditShell->GetScriptType());
+                pEditShell->Pop( sal_False );   // restore cursor from stack
+
+                if (!bIsAsianScript && rArgs.bAllowImplicitChangesForNotConvertibleText)
+                {
+                    SetLanguageAndFont( aCurPaM,
+                            rArgs.nConvTargetLang, RES_CHRATR_CJK_LANGUAGE,
+                            rArgs.pTargetFont, RES_CHRATR_CJK_FONT );
+                }
+                nBegin = nChPos;    // start of next language portion
+            }
         } while (!bFound && aIter.Next());  /* loop while nothing was found and still sth is left to be searched */
     }
 
