@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:34:16 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:37:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1265,7 +1265,7 @@ EditSelection ImpEditEngine::InsertBinTextObject( BinTextObject& rTextObject, Ed
     if ( pPortionInfo && ( (long)pPortionInfo->GetPaperWidth() == aPaperSize.Width() )
             && ( pPortionInfo->GetRefMapMode() == GetRefDevice()->GetMapMode() ) )
     {
-        if ( ( pPortionInfo->GetRefDevPtr() == (sal_uInt32)GetRefDevice() ) ||
+        if ( ( pPortionInfo->GetRefDevPtr() == (sal_uIntPtr)GetRefDevice() ) ||
              ( ( pPortionInfo->GetRefDevType() == OUTDEV_VIRDEV ) &&
                ( GetRefDevice()->GetOutDevType() == OUTDEV_VIRDEV ) ) )
         bUsePortionInfo = sal_True;
