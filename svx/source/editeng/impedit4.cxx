@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:37:35 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:39:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XMEANING_HPP_
 #include <com/sun/star/linguistic2/XMeaning.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HPP_
+#include <com/sun/star/i18n/ScriptType.hpp>
 #endif
 
 #ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
@@ -1538,6 +1541,12 @@ sal_Bool ImpEditEngine::HasConvertibleTextPortion( LanguageType nSrcLang )
         {
             USHORT nEnd   = aPortions.GetObject( nPos );
             USHORT nStart = nPos > 0 ? aPortions.GetObject( nPos - 1 ) : 0;
+
+            // if the paragraph is not empty we need to increase the index
+            // by one since the attribute of the character left to the
+            // specified position is evaluated.
+            if (nEnd > nStart)  // empty para?
+                ++nStart;
             LanguageType nLangFound = pEditEngine->GetLanguage( k, nStart );
 #ifdef DEBUG
             lang::Locale aLocale( SvxCreateLocale( nLangFound ) );
@@ -1549,27 +1558,6 @@ sal_Bool ImpEditEngine::HasConvertibleTextPortion( LanguageType nSrcLang )
                 return bHasConvTxt;
        }
     }
-
-#ifdef TL_OLD_CODE
-    ContentNode* pLastNode = aEditDoc.SaveGetObject( aEditDoc.Count() - 1 );
-    EditSelection aCurSel( aEditDoc.GetStartPaM() );
-
-    String aWord;
-    while ( !bHasConvTxt )
-    {
-        if ( ( aCurSel.Max().GetNode() == pLastNode ) &&
-             ( aCurSel.Max().GetIndex() >= pLastNode->Len() ) )
-        {
-            return sal_False;
-        }
-
-        aCurSel = SelectWord( aCurSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
-        aWord = GetSelected( aCurSel );
-        if ( aWord.Len() > 0  &&  GetLanguage( aCurSel.Max() ) == nLang )
-            bHasConvTxt = sal_True;
-        aCurSel = WordRight( aCurSel.Max(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
-    }
-#endif TL_OLD_CODE
 
 #endif
     return bHasConvTxt;
@@ -1613,7 +1601,7 @@ void ImpEditEngine::Convert( EditView* pEditView,
         // of them are words on their own!) using the word boundary here does
         // not work. Thus since chinese conversion is not interactive we start
         // at the begin of the paragraph to solve the problem, i.e. have the
-        // TextConversion service get those charcters together in the same call.
+        // TextConversion service get those characters together in the same call.
         USHORT nStartIdx = ( svx::HangulHanjaConversion::IsChinese( nSrcLang ) ) ?
                                 0 : aWordStartPaM.GetIndex();
         pConvInfo->aConvStart.nIndex = nStartIdx;
@@ -1638,9 +1626,9 @@ void ImpEditEngine::Convert( EditView* pEditView,
 
     //
     //!! optimization does not work since when update mode is false
-    //!! the onject is 'lying' about it portions, paragraphs,
+    //!! the object is 'lying' about it portions, paragraphs,
     //!! EndPaM... later on.
-    //!! Should not be a grat problem since text boxes or cells in
+    //!! Should not be a great problem since text boxes or cells in
     //!! Calc usually have only a rather short text.
     //
     // disallow formatting, updating the view, ... while
@@ -1669,8 +1657,43 @@ void ImpEditEngine::Convert( EditView* pEditView,
 }
 
 
+void ImpEditEngine::SetLanguageAndFont(
+    const ESelection &rESel,
+    LanguageType nLang, USHORT nLangWhichId,
+    const Font *pFont,  USHORT nFontWhichId )
+{
+    ESelection aOldSel = pActiveView->GetSelection();
+    pActiveView->SetSelection( rESel );
+
+    // set new language attribute
+    SfxItemSet aNewSet( pActiveView->GetEmptyItemSet() );
+    aNewSet.Put( SvxLanguageItem( nLang, nLangWhichId ) );
+
+    // new font to be set?
+    DBG_ASSERT( pFont, "target font missing?" );
+    if (pFont)
+    {
+        // set new font attribute
+        SvxFontItem aFontItem = (SvxFontItem&) aNewSet.Get( nFontWhichId );
+        aFontItem.GetFamilyName()   = pFont->GetName();
+        aFontItem.GetFamily()       = pFont->GetFamily();
+        aFontItem.GetStyleName()    = pFont->GetStyleName();
+        aFontItem.GetPitch()        = pFont->GetPitch();
+        aFontItem.GetCharSet()      = pFont->GetCharSet();
+        aNewSet.Put( aFontItem );
+    }
+
+    // apply new attributes
+    pActiveView->SetAttribs( aNewSet );
+
+    pActiveView->SetSelection( aOldSel );
+}
+
+
 void ImpEditEngine::ImpConvert( rtl::OUString &rConvTxt, LanguageType &rConvTxtLang,
-        EditView* pEditView, LanguageType nSrcLang, const ESelection &rConvRange )
+        EditView* pEditView, LanguageType nSrcLang, const ESelection &rConvRange,
+        sal_Bool bAllowImplicitChangesForNotConvertibleText,
+        LanguageType nTargetLang, const Font *pTargetFont  )
 {
     // modified version of ImpEditEngine::ImpSpell
 
@@ -1693,6 +1716,19 @@ void ImpEditEngine::ImpConvert( rtl::OUString &rConvTxt, LanguageType &rConvTxtL
 
     while (!aRes.Len())
     {
+        // empty paragraph found that needs to have language and font set?
+        if (bAllowImplicitChangesForNotConvertibleText &&
+            !pEditEngine->GetText( pConvInfo->aConvContinue.nPara ).Len())
+        {
+            USHORT nPara = pConvInfo->aConvContinue.nPara;
+            ESelection aESel( nPara, 0, nPara, 0 );
+            // see comment for below same function call
+            SetLanguageAndFont( aESel,
+                    nTargetLang, EE_CHAR_LANGUAGE_CJK,
+                    pTargetFont, EE_CHAR_FONTINFO_CJK );
+        }
+
+
         if (pConvInfo->aConvContinue.nPara  == pConvInfo->aConvTo.nPara &&
             pConvInfo->aConvContinue.nIndex >= pConvInfo->aConvTo.nIndex)
             break;
@@ -1719,7 +1755,13 @@ void ImpEditEngine::ImpConvert( rtl::OUString &rConvTxt, LanguageType &rConvTxtL
         {
             USHORT nEnd   = aPortions.GetObject( nPos );
             USHORT nStart = nPos > 0 ? aPortions.GetObject( nPos - 1 ) : 0;
-            LanguageType nLangFound = pEditEngine->GetLanguage( aCurStart.nPara, nStart );
+
+            // the language attribute is obtained from the left character
+            // (like usually all other attributes)
+            // thus we usually have to add 1 in order to get the language
+            // of the text right to the cursor position
+            USHORT nLangIdx = nEnd > nStart ? nStart + 1 : nStart;
+            LanguageType nLangFound = pEditEngine->GetLanguage( aCurStart.nPara, nLangIdx );
 #ifdef DEBUG
             lang::Locale aLocale( SvxCreateLocale( nLangFound ) );
 #endif
@@ -1742,6 +1784,34 @@ void ImpEditEngine::ImpConvert( rtl::OUString &rConvTxt, LanguageType &rConvTxtL
                 nAttribStart = nStart;
                 nAttribEnd   = nEnd;
                 nResLang = nLangFound;
+            }
+            //! the list of portions may have changed compared to the previous
+            //! call to this function (because of possibly changed language
+            //! attribute!)
+            //! But since we don't want to start in the already processed part
+            //! we clip the start accordingly.
+            if (nAttribStart < aCurStart.nIndex)
+            {
+                nAttribStart = aCurStart.nIndex;
+            }
+
+            // check script type to the right of the start of the current portion
+            EditPaM aPaM( CreateEditPaM( EPaM(aCurStart.nPara, nLangIdx) ) );
+            sal_Bool bIsAsianScript = (i18n::ScriptType::ASIAN == GetScriptType( aPaM ));
+            // not yet processed text part with for conversion
+            // not suitable language found that needs to be changed?
+            if (bAllowImplicitChangesForNotConvertibleText &&
+                !bLangOk && !bIsAsianScript && nEnd > aCurStart.nIndex)
+            {
+                ESelection aESel( aCurStart.nPara, nStart, aCurStart.nPara, nEnd );
+                // set language and font to target language and font of conversion
+                //! Now this especially includes all non convertible text e.g.
+                //! spaces, empty paragraphs and western text.
+                // This is in order for every *new* text entered at *any* position to
+                // have the correct language and font attributes set.
+                SetLanguageAndFont( aESel,
+                        nTargetLang, EE_CHAR_LANGUAGE_CJK,
+                        pTargetFont, EE_CHAR_FONTINFO_CJK );
             }
 
             nCurPos = nEnd;
@@ -1786,15 +1856,10 @@ void ImpEditEngine::ImpConvert( rtl::OUString &rConvTxt, LanguageType &rConvTxtL
 
         aWord = GetSelected( aCurSel );
 
-/*
-        LanguageType nLang = GetLanguage( aCurSel.Min() );
-        sal_Bool bLangOk =  (nLang == nSrcLang) ||
-                            (svx::HangulHanjaConversion::IsChinese( nLang ) &&
-                             svx::HangulHanjaConversion::IsChinese( nSrcLang ));
-*/
         if ( aWord.Len() > 0 /* && bLangOk */)
             aRes = aWord;
 
+        // move to next word/paragraph if necessary
         if ( !aRes.Len() )
             aCurSel = WordRight( aCurSel.Min(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
 
