@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:05:55 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 15:00:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1497,7 +1497,10 @@ IMPL_LINK( SmSymbolDialog, EditClickHdl, Button *, pButton )
 
     // Dialog an evtl geaenderte Daten des SymbolSet Manager anpassen
     if (pDialog->Execute() == RET_OK  &&  rSymSetMgr.IsModified())
+    {
+        rSymSetMgr.Save();
         FillSymbolSets();
+    }
 
     // wenn das alte SymbolSet nicht mehr existiert zum ersten gehen
     // (soweit eines vorhanden ist)
@@ -1589,7 +1592,6 @@ SmSymbolDialog::SmSymbolDialog(Window *pParent, SmSymSetManager &rMgr, BOOL bFre
 
 SmSymbolDialog::~SmSymbolDialog()
 {
-    rSymSetMgr.Save();
 }
 
 
@@ -2230,6 +2232,9 @@ short SmSymDefineDialog::Execute()
                 aSymSetMgrCopy.DeleteSymbolSet(i);
 
         rSymSetMgr = aSymSetMgrCopy;
+#ifdef DEBUG
+        USHORT nS = rSymSetMgr.GetSymbolSetCount();
+#endif
     }
 
     return nResult;
@@ -2239,6 +2244,9 @@ short SmSymDefineDialog::Execute()
 void SmSymDefineDialog::SetSymbolSetManager(const SmSymSetManager &rMgr)
 {
     aSymSetMgrCopy = rMgr;
+#ifdef DEBUG
+        USHORT nS = aSymSetMgrCopy.GetSymbolSetCount();
+#endif
 
     // Das modified Flag der Kopie auf FALSE setzen, damit man spaeter damit
     // testen kann ob sich was geaendert hat.
