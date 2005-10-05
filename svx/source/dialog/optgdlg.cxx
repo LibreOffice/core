@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:42:52 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:36:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1221,7 +1221,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
             sal_Int32 d = 0;
             for (sal_Int32 i=0; i < aUserInterfaceLB.GetEntryCount(); i++)
             {
-                d = (sal_Int32)aUserInterfaceLB.GetEntryData(i);
+                d = (sal_Int32)(sal_IntPtr)aUserInterfaceLB.GetEntryData(i);
                 if ( d > 0 && seqInstalledLanguages.getLength() > d-1 && seqInstalledLanguages[d-1].equals(m_sUserLocaleValue))
                     aUserInterfaceLB.SelectEntryPos(i);
             }
@@ -1369,7 +1369,7 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         // handle settings for UI Language
         // a change of setting needs to bring up a warning message
         OUString aLangString;
-        sal_Int32 d = (sal_Int32)aUserInterfaceLB.GetEntryData(aUserInterfaceLB.GetSelectEntryPos());
+        sal_Int32 d = (sal_Int32)(sal_IntPtr)aUserInterfaceLB.GetEntryData(aUserInterfaceLB.GetSelectEntryPos());
         if( d > 0 && seqInstalledLanguages.getLength() > d-1)
             aLangString = seqInstalledLanguages[d-1];
 
