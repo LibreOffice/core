@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:45:37 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:38:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2862,7 +2862,7 @@ IMPL_LINK(FmXGridPeer, OnQueryGridSlotState, void*, pSlot)
     if (!m_pStateCache)
         return -1;  // unspecified
 
-    sal_uInt16 nSlot = (sal_uInt16)(sal_uInt32)pSlot;
+    sal_uInt16 nSlot = (sal_uInt16)(sal_uIntPtr)pSlot;
 
     // search the given slot with our supported sequence
     Sequence<sal_uInt16>& aSupported = getSupportedGridSlots();
@@ -2891,7 +2891,7 @@ IMPL_LINK(FmXGridPeer, OnExecuteGridSlot, void*, pSlot)
 
     DBG_ASSERT(aSlots.getLength() == aUrls.getLength(), "FmXGridPeer::OnExecuteGridSlot : inconstent data returned by getSupportedURLs/getSupportedGridSlots !");
 
-    sal_uInt16 nSlot = (sal_uInt16)(sal_uInt32)pSlot;
+    sal_uInt16 nSlot = (sal_uInt16)(sal_uIntPtr)pSlot;
     for (sal_uInt16 i=0; i<aSlots.getLength(); ++i, ++pUrls, ++pSlots)
     {
         if (*pSlots == nSlot)
