@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:06:24 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 15:00:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,20 +274,8 @@ void SmDocShell::LoadSymbols()
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::LoadSymbols" );
 
-    GetSymSetManager().Load();
-}
-
-
-SmSymSetManager & SmDocShell::GetSymSetManager()
-{
-    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::GetSymSetManager" );
-
-    if (!pSymSetMgr)
-    {
-        pSymSetMgr = new SmSymSetManager;
-        pSymSetMgr->Load();
-    }
-    return *pSymSetMgr;
+    SmModule *pp = SM_MOD1();
+    pp->GetSymSetManager().Load();
 }
 
 
@@ -784,7 +772,6 @@ void SmDocShell::SetPrinter( SfxPrinter *pNew )
     pPrinter = pNew;    //Eigentumsuebergang!
     pPrinter->SetMapMode( MapMode(MAP_100TH_MM) );
     SetFormulaArranged(FALSE);
-    SM_MOD1()->GetRectCache()->Reset();
     Repaint();
 }
 
@@ -794,7 +781,6 @@ void SmDocShell::OnDocumentPrinterChanged( Printer *pPrt )
 
     pTmpPrinter = pPrt;
     SetFormulaArranged(FALSE);
-    SM_MOD1()->GetRectCache()->Reset();
     Size aOldSize = GetVisArea().GetSize();
     Repaint();
     if( aOldSize != GetVisArea().GetSize() && aText.Len() )
@@ -825,7 +811,6 @@ void SmDocShell::Repaint()
 
 SmDocShell::SmDocShell(SfxObjectCreateMode eMode) :
     SfxObjectShell(eMode),
-    pSymSetMgr          ( 0 ),
     pTree               ( 0 ),
     pPrinter            ( 0 ),
     pTmpPrinter         ( 0 ),
@@ -1222,7 +1207,8 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
         case SID_SYMBOLS_CATALOGUE:
         {
-            SmSymbolDialog(NULL, GetSymSetManager()).Execute();
+            SmModule *pp = SM_MOD1();
+            SmSymbolDialog(NULL, pp->GetSymSetManager()).Execute();
             RestartFocusTimer();
         }
         break;
@@ -1590,7 +1576,8 @@ void SmDocShell::SaveSymbols()
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SaveSymbols" );
 
-    GetSymSetManager().Save();
+    SmModule *pp = SM_MOD1();
+    pp->GetSymSetManager().Save();
 }
 
 
