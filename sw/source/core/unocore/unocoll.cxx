@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:24:59 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:21:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -261,7 +261,8 @@ const char* __FAR_DATA aProvNames[] =
         "com.sun.star.text.Defaults",                //SW_SERVICE_DEFAULTS
         "com.sun.star.image.ImageMapRectangleObject",   //SW_SERVICE_IMAP_RECTANGLE
         "com.sun.star.image.ImageMapCircleObject",      //SW_SERVICE_IMAP_CIRCLE
-        "com.sun.star.image.ImageMapPolygonObject"      //SW_SERVICE_IMAP_POLYGON
+        "com.sun.star.image.ImageMapPolygonObject",      //SW_SERVICE_IMAP_POLYGON
+        "com.sun.star.text.TextGraphicObject"           //SW_SERVICE_TYPE_TEXT_GRAPHIC
     };
 /* -----------------------------23.03.01 13:38--------------------------------
 
@@ -348,6 +349,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         }
         break;
         case  SW_SERVICE_TYPE_GRAPHIC  :
+        case  SW_SERVICE_TYPE_TEXT_GRAPHIC /* #i47503# */ :
         {
             SwXTextGraphicObject* pGraphic = new SwXTextGraphicObject( pDoc );
             xRet =  (cppu::OWeakObject*)(SwXFrame*)pGraphic;
