@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeFontWork.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:49:43 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:23:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -333,7 +333,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
 
             SvxCharScaleWidthItem& rCharScaleWidthItem = (SvxCharScaleWidthItem&)pCustomShape->GetMergedItem( EE_CHAR_FONTWIDTH );
             sal_uInt16 nCharScaleWidth = rCharScaleWidthItem.GetValue();
-            long* pDXArry = NULL;
+            sal_Int32* pDXArry = NULL;
             sal_Int32 nWidth = 0;
 
             // VERTICAL
@@ -398,7 +398,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
             {
                 if ( ( nCharScaleWidth != 100 ) && nCharScaleWidth )
                 {   // applying character spacing
-                    pDXArry = new long[ rText.getLength() ];
+                    pDXArry = new sal_Int32[ rText.getLength() ];
                     aVirDev.GetTextArray( rText, pDXArry, 0, STRING_LEN );
                     FontMetric aFontMetric( aVirDev.GetFontMetric() );
                     aFont.SetWidth( (sal_Int32)( (double)aFontMetric.GetWidth() * ( (double)100 / (double)nCharScaleWidth ) ) );
