@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontentry.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 15:11:25 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 15:02:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -371,7 +371,7 @@ IMPL_LINK( FontNameDlg, ClickBtnHdl, Button*, pButton )
         for( i = 0; i < m_aFontBox.GetSelectEntryCount(); i++ )
         {
             int nSelect = m_aFontBox.GetSelectEntryPos( i );
-            aRemoveIDs.push_back( (fontID)m_aFontBox.GetEntryData( nSelect ) );
+            aRemoveIDs.push_back( (fontID)(sal_IntPtr)m_aFontBox.GetEntryData( nSelect ) );
         }
         m_rFontManager.removeFonts( aRemoveIDs );
         init();
@@ -386,7 +386,7 @@ IMPL_LINK( FontNameDlg, ClickBtnHdl, Button*, pButton )
     {
         for( i = 0; i < m_aFontBox.GetSelectEntryCount(); i++ )
         {
-            fontID aFont = (fontID)m_aFontBox.GetEntryData( m_aFontBox.GetSelectEntryPos( i ) );
+            fontID aFont = (fontID)(sal_IntPtr)m_aFontBox.GetEntryData( m_aFontBox.GetSelectEntryPos( i ) );
             if( ! m_rFontManager.checkChangeFontPropertiesPossible( aFont ) )
             {
                 String aErrorText( m_aNoRenameString );
