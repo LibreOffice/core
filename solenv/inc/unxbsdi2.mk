@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxbsdi2.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:52:14 $
+#   last change: $Author: kz $ $Date: 2005-10-05 11:32:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -103,13 +103,13 @@ CFLAGSPROF=
 # Compiler flags for debugging
 CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
-# Compiler flags for enabling optimazations
+# Compiler flags for enabling optimizations
 # CFLAGSOPT=-O2
-# reduce to -O1 to avoid optimisation problems
+# reduce to -O1 to avoid optimization problems
 CFLAGSOPT=-O1
-# Compiler flags for disabling optimazations
+# Compiler flags for disabling optimizations
 CFLAGSNOOPT=-O
-# Compiler flags for discibing the output path
+# Compiler flags for describing the output path
 CFLAGSOUTOBJ=-o
 # Enable all warnings
 CFLAGSWALL=-Wall -Wfloat-equal -Weffc++ -Wold-style-cast -Woverloaded-virtual -Wshadow -Wpointer-arith -Wcast-align -Wsign-compare -Winline
