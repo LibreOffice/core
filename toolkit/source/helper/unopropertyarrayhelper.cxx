@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopropertyarrayhelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:24:18 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:22:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ sal_Bool UnoPropertyArrayHelper::fillPropertyMembersByHandle( ::rtl::OUString * 
 
     for ( sal_uInt32 n = 0; n < nProps; n++ )
     {
-        sal_uInt16 nId = (sal_uInt16)(sal_uInt32)aSortedPropsIds.GetObject( n );
+        sal_uInt16 nId = (sal_uInt16)(sal_uIntPtr)aSortedPropsIds.GetObject( n );
         pProps[n].Name = GetPropertyName( nId );
         pProps[n].Handle = nId;
         pProps[n].Type = *GetPropertyType( nId );
