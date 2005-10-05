@@ -4,9 +4,9 @@
  *
  *  $RCSfile: emfwr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:28:25 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:20:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -744,26 +744,26 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
 
 // -----------------------------------------------------------------------------
 
-void EMFWriter::ImplWriteTextRecord( const Point& rPos, const String rText, const long* pDXArray, UINT32 nWidth )
+void EMFWriter::ImplWriteTextRecord( const Point& rPos, const String rText, const sal_Int32* pDXArray, sal_uInt32 nWidth )
 {
     UINT32 nLen = rText.Len(), i;
 
     if( nLen )
     {
-        unsigned long nNormWidth;
-        long*       pOwnArray;
-        long*       pDX;
+        sal_uInt32  nNormWidth;
+        sal_Int32*  pOwnArray;
+        sal_Int32*  pDX;
 
         // get text sizes
         if( pDXArray )
         {
             pOwnArray = NULL;
             nNormWidth = maVDev.GetTextWidth( rText );
-            pDX = (long*) pDXArray;
+            pDX = (sal_Int32*) pDXArray;
         }
         else
         {
-            pOwnArray = new long[ nLen ];
+            pOwnArray = new sal_Int32[ nLen ];
             nNormWidth = maVDev.GetTextArray( rText, pOwnArray );
             pDX = pOwnArray;
         }
