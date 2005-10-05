@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessibility.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:03:48 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:59:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -537,7 +537,10 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getCaretPosition()
 sal_Bool SAL_CALL SmGraphicAccessible::setCaretPosition( sal_Int32 nIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    // nothing to be done
+    xub_StrLen nIdx = (xub_StrLen) nIndex;
+    String aTxt( GetAccessibleText_Impl() );
+    if (!(0 <= nIdx  &&  nIdx < aTxt.Len()))
+        throw IndexOutOfBoundsException();
     return sal_False;
 }
 
@@ -761,7 +764,7 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
         sal_Int32 nEndIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    //!! nEndIndex may be the string lenght per definition of the interface !!
+    //!! nEndIndex may be the string length per definition of the interface !!
     //!! text should be copied exclusive that end index though. And arguments
     //!! may be switched.
 
