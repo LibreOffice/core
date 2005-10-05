@@ -4,9 +4,9 @@
  *
  *  $RCSfile: smmod.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:12:40 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 16:51:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -284,7 +284,6 @@ SmModule::SmModule(SfxObjectFactory* pObjFact) :
     pConfig( 0 ),
     pColorConfig( 0 ),
     pLocSymbolData( 0 ),
-    pRectCache( new SmRectCache ),
     pSysLocale( 0 ),
     pVirtualDev( 0 )
 {
@@ -297,7 +296,6 @@ SmModule::~SmModule()
     delete pConfig;
     delete pColorConfig;
     delete pLocSymbolData;
-    delete pRectCache;
     delete pSysLocale;
     delete pVirtualDev;
 }
@@ -360,6 +358,11 @@ SmConfig * SmModule::GetConfig()
     if(!pConfig)
         pConfig = new SmConfig;
     return pConfig;
+}
+
+SmSymSetManager & SmModule::GetSymSetManager()
+{
+    return GetConfig()->GetSymSetManager();
 }
 
 SmLocalizedSymbolData & SmModule::GetLocSymbolData() const
