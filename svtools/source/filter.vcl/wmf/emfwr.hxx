@@ -4,9 +4,9 @@
  *
  *  $RCSfile: emfwr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:45:20 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:21:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ private:
     void                ImplWritePolygonRecord( const Polygon& rPoly, BOOL bClose );
     void                ImplWritePolyPolygonRecord( const PolyPolygon& rPolyPoly );
     void                ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt, const Size& rSz, UINT32 nROP );
-    void                ImplWriteTextRecord( const Point& rPos, const String rText, const long* pDXArray, UINT32 nWidth );
+    void                ImplWriteTextRecord( const Point& rPos, const String rText, const sal_Int32* pDXArray, sal_uInt32 nWidth );
 
     void                ImplWrite( const GDIMetaFile& rMtf );
 
