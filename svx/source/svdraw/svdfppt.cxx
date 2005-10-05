@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:27:30 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:41:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5268,7 +5268,7 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
 
         sal_Bool bEmptyParaPossible = sal_True;
         sal_uInt32 nCurrentPara = nCharAnzRead = 0;
-        sal_uInt32 nCurrentSpecMarker = (sal_uInt32)aSpecMarkerList.First();
+        sal_uInt32 nCurrentSpecMarker = (sal_uInt32)(sal_uIntPtr)aSpecMarkerList.First();
         sal_uInt32 nExtBuInd = 0x3c00;
 
         while ( nCharAnzRead < nStringLen )
@@ -5464,7 +5464,7 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                         nCharAnzRead++;
                         bEmptyParaPossible = sal_False;
                     }
-                    nCurrentSpecMarker = (sal_uInt32)aSpecMarkerList.Next();
+                    nCurrentSpecMarker = (sal_uInt32)(sal_uIntPtr)aSpecMarkerList.Next();
                 }
                 else
                 {
