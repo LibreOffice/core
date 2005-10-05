@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svgwriter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:57:04 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 12:53:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -698,7 +698,7 @@ void SVGActionWriter::ImplWriteGradientEx( const PolyPolygon& rPolyPoly, const G
 // -----------------------------------------------------------------------------
 
 void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
-                                     const long* pDXArray, long nWidth,
+                                     const sal_Int32* pDXArray, long nWidth,
                                      const NMSP_RTL::OUString* pStyle )
 {
     long nLen = rText.Len(), i;
@@ -706,19 +706,19 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
     if( nLen )
     {
         Size    aNormSize;
-        long*   pOwnArray;
-        long*   pDX;
+        sal_Int32*  pOwnArray;
+        sal_Int32*  pDX;
 
         // get text sizes
         if( pDXArray )
         {
             pOwnArray = NULL;
             aNormSize = Size( mpVDev->GetTextWidth( rText ), 0 );
-            pDX = (long*) pDXArray;
+            pDX = (sal_Int32*) pDXArray;
         }
         else
         {
-            pOwnArray = new long[ nLen ];
+            pOwnArray = new sal_Int32[ nLen ];
             aNormSize = Size( mpVDev->GetTextArray( rText, pOwnArray ), 0 );
             pDX = pOwnArray;
         }
