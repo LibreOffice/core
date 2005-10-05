@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wmfwr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:47:28 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:21:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -629,7 +629,7 @@ sal_Bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const String&
 }
 
 void WMFWriter::WMFRecord_ExtTextOut( const Point & rPoint,
-    const String & rString, const long * pDXAry )
+    const String & rString, const sal_Int32 * pDXAry )
 {
     sal_uInt16 nOriginalTextLen = rString.Len();
 
@@ -644,7 +644,7 @@ void WMFWriter::WMFRecord_ExtTextOut( const Point & rPoint,
 }
 
 void WMFWriter::TrueExtTextOut( const Point & rPoint, const String & rString,
-    const ByteString & rByteString, const long * pDXAry )
+    const ByteString & rByteString, const sal_Int32 * pDXAry )
 {
     WriteRecordHeader( 0, W_META_EXTTEXTOUT );
     WritePointYX( rPoint );
@@ -1265,7 +1265,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                     pVirDev->SetFont( aSrcFont );
                     nLen = aTemp.Len();
-                    sal_Int32* pDXAry = nLen ? new long[ nLen ] : NULL;
+                    sal_Int32* pDXAry = nLen ? new sal_Int32[ nLen ] : NULL;
                     nNormSize = pVirDev->GetTextArray( aTemp, pDXAry );
                     for ( i = 0; i < ( nLen - 1 ); i++ )
                         pDXAry[ i ] = pDXAry[ i ] * (sal_Int32)pA->GetWidth() / nNormSize;
