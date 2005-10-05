@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexdialog.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:31:06 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:46:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -329,7 +329,7 @@ DBG_NAME(DbaIndexDialog)
         if (pSelected)
         {
             // is the current entry modified?
-            Indexes::const_iterator aSelectedPos = m_pIndexes->begin() + reinterpret_cast<sal_Int32>(pSelected->GetUserData());
+            Indexes::const_iterator aSelectedPos = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(pSelected->GetUserData());
             m_aActions.EnableItem(ID_INDEX_SAVE, aSelectedPos->isModified() || aSelectedPos->isNew());
             m_aActions.EnableItem(ID_INDEX_RESET, aSelectedPos->isModified() || aSelectedPos->isNew());
             bSelectedAnything = bSelectedAnything && !aSelectedPos->bPrimaryKey;
@@ -385,7 +385,7 @@ DBG_NAME(DbaIndexDialog)
     {
         DBG_ASSERT(_pEntry, "DbaIndexDialog::implCommit: invalid entry!");
 
-        Indexes::iterator aCommitPos = m_pIndexes->begin() + reinterpret_cast< sal_Int32 >(_pEntry->GetUserData());
+        Indexes::iterator aCommitPos = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(_pEntry->GetUserData());
 
         // if it's not a new index, remove it
         // (we can't modify indexes, only drop'n'insert)
@@ -493,7 +493,7 @@ DBG_NAME(DbaIndexDialog)
     sal_Bool DbaIndexDialog::implDropIndex(SvLBoxEntry* _pEntry, sal_Bool _bRemoveFromCollection)
     {
         // do the drop
-        Indexes::iterator aDropPos = m_pIndexes->begin() + reinterpret_cast< sal_Int32 >(_pEntry->GetUserData());
+        Indexes::iterator aDropPos = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(_pEntry->GetUserData());
         DBG_ASSERT(aDropPos != m_pIndexes->end(), "DbaIndexDialog::OnDropIndex: did not find the index in my collection!");
 
         SQLExceptionInfo aExceptionInfo;
@@ -575,7 +575,7 @@ DBG_NAME(DbaIndexDialog)
         SvLBoxEntry* pSelected = m_aIndexes.FirstSelected();
         DBG_ASSERT(pSelected, "DbaIndexDialog::OnResetIndex: invalid call!");
 
-        Indexes::iterator aResetPos = m_pIndexes->begin() + reinterpret_cast< sal_Int32 >(pSelected->GetUserData());
+        Indexes::iterator aResetPos = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(pSelected->GetUserData());
 
         if (aResetPos->isNew())
         {
@@ -648,7 +648,7 @@ DBG_NAME(DbaIndexDialog)
         if (pSelected)
         {
             // the descriptor
-            Indexes::const_iterator aSelected = m_pIndexes->begin() + reinterpret_cast<sal_Int32>(pSelected->GetUserData());
+            Indexes::const_iterator aSelected = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(pSelected->GetUserData());
 
             if (aSelected->isModified() || aSelected->isNew())
             {
@@ -685,7 +685,7 @@ DBG_NAME(DbaIndexDialog)
     //------------------------------------------------------------------
     IMPL_LINK( DbaIndexDialog, OnEntryEdited, SvLBoxEntry*, _pEntry )
     {
-        Indexes::iterator aPosition = m_pIndexes->begin() + reinterpret_cast<sal_Int32>(_pEntry->GetUserData());
+        Indexes::iterator aPosition = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(_pEntry->GetUserData());
 
         DBG_ASSERT(aPosition >= m_pIndexes->begin() && aPosition < m_pIndexes->end(),
             "DbaIndexDialog::OnEntryEdited: invalid entry!");
@@ -734,7 +734,7 @@ DBG_NAME(DbaIndexDialog)
             if (m_pFields->IsModified() && !m_pFields->SaveModified())
                 return sal_False;
 
-            Indexes::iterator aPreviouslySelected = m_pIndexes->begin() + reinterpret_cast<sal_Int32>(m_pPreviousSelection->GetUserData());
+            Indexes::iterator aPreviouslySelected = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(m_pPreviousSelection->GetUserData());
 
             // the unique flag
             aPreviouslySelected->bUnique = m_aUnique.IsChecked();
@@ -795,7 +795,7 @@ DBG_NAME(DbaIndexDialog)
     {
         if (m_pPreviousSelection)
         {
-            Indexes::iterator aPreviouslySelected = m_pIndexes->begin() + reinterpret_cast<sal_Int32>(m_pPreviousSelection->GetUserData());
+            Indexes::iterator aPreviouslySelected = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(m_pPreviousSelection->GetUserData());
 
             if (!implSaveModified())
                 return sal_False;
@@ -812,7 +812,7 @@ DBG_NAME(DbaIndexDialog)
     IMPL_LINK( DbaIndexDialog, OnModified, void*, NOTINTERESTEDIN )
     {
         DBG_ASSERT(m_pPreviousSelection, "DbaIndexDialog, OnModified: invalid call!");
-        Indexes::iterator aPosition = m_pIndexes->begin() + reinterpret_cast<sal_Int32>(m_pPreviousSelection->GetUserData());
+        Indexes::iterator aPosition = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(m_pPreviousSelection->GetUserData());
 
         aPosition->setModified(sal_True);
         updateToolbox();
@@ -826,7 +826,7 @@ DBG_NAME(DbaIndexDialog)
         if (_pEntry)
         {
             // the descriptor of the selected index
-            Indexes::const_iterator aSelectedIndex = m_pIndexes->begin() + reinterpret_cast<sal_Int32>(_pEntry->GetUserData());
+            Indexes::const_iterator aSelectedIndex = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(_pEntry->GetUserData());
 
             // fill the controls
             m_aUnique.Check(aSelectedIndex->bUnique);
