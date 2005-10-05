@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwizard.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:29:45 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:50:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -444,7 +444,7 @@ namespace dbp
         // the index of the selected entry
         WizardState nSelected = bMoveRight ? m_aExistFields.GetSelectEntryPos() : m_aSelFields.GetSelectEntryPos();
         // the (original) relative position of the entry
-        sal_Int32 nRelativeIndex = reinterpret_cast<sal_Int32>(bMoveRight ? m_aExistFields.GetEntryData(nSelected) : m_aSelFields.GetEntryData(nSelected));
+        sal_IntPtr nRelativeIndex = reinterpret_cast<sal_IntPtr>(bMoveRight ? m_aExistFields.GetEntryData(nSelected) : m_aSelFields.GetEntryData(nSelected));
 
         WizardState nInsertPos = LISTBOX_APPEND;
         if (!bMoveRight)
@@ -452,7 +452,7 @@ namespace dbp
             nInsertPos = 0;
             while (nInsertPos < rMoveTo.GetEntryCount())
             {
-                if (reinterpret_cast<sal_Int32>(rMoveTo.GetEntryData(nInsertPos)) > nRelativeIndex)
+                if (reinterpret_cast<sal_IntPtr>(rMoveTo.GetEntryData(nInsertPos)) > nRelativeIndex)
                     break;
                 ++nInsertPos;
             }
