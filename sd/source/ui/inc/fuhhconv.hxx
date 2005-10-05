@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuhhconv.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:34:14 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:12:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,10 @@ class FuHangulHanjaConversion : public FuPoor
 
     void StartConversion( INT16 nSourceLanguage,  INT16 nTargetLanguage,
                           const Font *pTargetFont, INT32 nOptions, BOOL bIsInteractive );
+
+    void StartChineseConversion();
+
+    void ConvertStyles( INT16 nTargetLanguage, const Font *pTargetFont );
 
     Outliner* GetOutliner() const { return pSdOutliner; }
 };
