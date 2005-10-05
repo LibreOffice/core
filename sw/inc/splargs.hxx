@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splargs.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:10:01 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:19:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,16 +97,25 @@ struct SwArgsBase     // used for text conversion (Hangul/Hanja, ...)
 
 struct SwConversionArgs : SwArgsBase
 {
-    rtl::OUString   aConvText;
+    rtl::OUString   aConvText;          // convertible text found
     LanguageType    nConvSrcLang;       // (source) language to look for
-    LanguageType    nConvTextLang;      // language of aConvText if that one was found
+    LanguageType    nConvTextLang;      // language of aConvText (if the latter one was found)
+
+    // used for chinese translation
+    LanguageType    nConvTargetLang;    // target language of text to be changed
+    const Font     *pTargetFont;        // target font of text to be changed
+    // explicitly enables or disables application of the above two
+    sal_Bool        bAllowImplicitChangesForNotConvertibleText;
 
     SwConversionArgs( LanguageType nLang,
             SwTxtNode* pStart, SwIndex& rStart,
             SwTxtNode* pEnd, SwIndex& rEnd )
         : SwArgsBase( pStart, rStart, pEnd, rEnd ),
           nConvSrcLang( nLang ),
-          nConvTextLang( LANGUAGE_NONE )
+          nConvTextLang( LANGUAGE_NONE ),
+          nConvTargetLang( LANGUAGE_NONE ),
+          pTargetFont( NULL ),
+          bAllowImplicitChangesForNotConvertibleText( sal_False )
         {}
 };
 
