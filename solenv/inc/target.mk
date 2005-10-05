@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.157 $
+#   $Revision: 1.158 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:41:47 $
+#   last change: $Author: kz $ $Date: 2005-10-05 11:30:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -2329,7 +2329,7 @@ $(EXCEPTIONSFILES):
 .ENDIF
 
 # ----------------------------------
-# - EXCEPTIONSNOOPT - files with exceptions, without optimisation -
+# - EXCEPTIONSNOOPT - files with exceptions, without optimization -
 # ----------------------------------
 
 .IF "$(EXCEPTIONSNOOPTTARGET)" != ""
