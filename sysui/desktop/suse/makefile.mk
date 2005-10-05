@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 11:50:33 $
+#   last change: $Author: kz $ $Date: 2005-10-05 13:02:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -141,7 +141,6 @@ RPMDEPN = \
         
 RPMDIR  = $(shell cd $(BIN); pwd)
 ULFDIR = $(COMMONMISC)$/desktopshare
-SPECFILE = $(MISC)/$(TARGET)-menus.spec
 
 .ENDIF
 
@@ -225,14 +224,9 @@ $(MISC)/$(TARGET)/etc/$(UNIXFILENAME) :
     @$(MKDIRHIER) $(@:d)
     @touch $@
 
-# --- specfile ----------------------------------------------------
-
-$(SPECFILE) : $$(@:f)
-    @cat $< | tr -d "\015" >$@
-
 # --- packaging ---------------------------------------------------
     
-.PHONY $(RPMFILE) : $(RPMDEPN) $(SPECFILE)
+.PHONY $(RPMFILE) : $(RPMDEPN) $(MISC)/$(TARGET)-menus.spec
     -$(RM) $(@:d)/$(PKGNAME)-*
     @$(RPM) -bb $(MISC)/$(TARGET)-menus.spec --buildroot $(LAUNCHERDIR) \
         --define "_builddir $(shell cd ../share; pwd)" \
