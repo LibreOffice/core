@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshel3.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:29:00 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:11:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,18 +45,6 @@
 #define ITEMID_DASH_LIST        SID_DASH_LIST
 #define ITEMID_LINEEND_LIST     SID_LINEEND_LIST
 #define ITEMID_SEARCH           SID_SEARCH_ITEM
-
-#ifndef _COM_SUN_STAR_I18N_TEXTCONVERSIONOPTION_HPP_
-#include <com/sun/star/i18n/TextConversionOption.hpp>
-#endif
-
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <cppuhelper/bootstrap.hxx>
-#include <vcl/msgbox.hxx>
-
 
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
@@ -119,8 +107,6 @@
 #endif
 #include "fuhhconv.hxx"
 
-
-#define C2U(cChar)  rtl::OUString::createFromAscii(cChar)
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -274,73 +260,8 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
         case SID_CHINESE_CONVERSION:
         {
-            //open ChineseTranslationDialog
-            Reference< XComponentContext > xContext(
-                ::cppu::defaultBootstrap_InitialComponentContext() ); //@todo get context from calc if that has one
-            if(xContext.is())
-            {
-                Reference< lang::XMultiComponentFactory > xMCF( xContext->getServiceManager() );
-                if(xMCF.is())
-                {
-                    Reference< ui::dialogs::XExecutableDialog > xDialog(
-                            xMCF->createInstanceWithContext(
-                                rtl::OUString::createFromAscii("com.sun.star.linguistic2.ChineseTranslationDialog")
-                                , xContext), UNO_QUERY);
-                    Reference< lang::XInitialization > xInit( xDialog, UNO_QUERY );
-                    if( xInit.is() )
-                    {
-                        //  initialize dialog
-                        Reference< awt::XWindow > xDialogParentWindow(0);
-                        Sequence<Any> aSeq(1);
-                        Any* pArray = aSeq.getArray();
-                        PropertyValue aParam;
-                        aParam.Name = rtl::OUString::createFromAscii("ParentWindow");
-                        aParam.Value <<= makeAny(xDialogParentWindow);
-                        pArray[0] <<= makeAny(aParam);
-                        xInit->initialize( aSeq );
-
-                        //execute dialog
-                        sal_Int16 nDialogRet = xDialog->execute();
-                        if( RET_OK == nDialogRet )
-                        {
-                            //get some parameters from the dialog
-                            sal_Bool bToSimplified = sal_True;
-                            sal_Bool bUseVariants = sal_True;
-                            sal_Bool bCommonTerms = sal_True;
-                            Reference< beans::XPropertySet >  xProp( xDialog, UNO_QUERY );
-                            if( xProp.is() )
-                            {
-                                try
-                                {
-                                    xProp->getPropertyValue( C2U("IsDirectionToSimplified") ) >>= bToSimplified;
-                                    xProp->getPropertyValue( C2U("IsUseCharacterVariants") ) >>= bUseVariants;
-                                    xProp->getPropertyValue( C2U("IsTranslateCommonTerms") ) >>= bCommonTerms;
-                                }
-                                catch( Exception& )
-                                {
-                                }
-                            }
-
-                            //execute translation
-                            sal_Int16 nSourceLang = bToSimplified ? LANGUAGE_CHINESE_TRADITIONAL : LANGUAGE_CHINESE_SIMPLIFIED;
-                            sal_Int16 nTargetLang = bToSimplified ? LANGUAGE_CHINESE_SIMPLIFIED : LANGUAGE_CHINESE_TRADITIONAL;
-                            sal_Int32 nOptions    = bUseVariants ? i18n::TextConversionOption::USE_CHARACTER_VARIANTS : 0;
-                            if( !bCommonTerms )
-                                nOptions = nOptions | i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
-
-                            Font aTargetFont = GetWindow()->GetDefaultFont(
-                                                DEFAULTFONT_CJK_PRESENTATION,
-                                                nTargetLang, DEFAULTFONT_FLAGS_ONLYONE );
-
-                            FuHangulHanjaConversion aFunc( pViewShell, pViewShell->GetActiveWindow(), pViewShell->GetView(), pDoc, rReq );
-                            aFunc.StartConversion( nSourceLang, nTargetLang, &aTargetFont, nOptions, sal_False );
-                        }
-                    }
-                    Reference< lang::XComponent > xComponent( xDialog, UNO_QUERY );
-                    if( xComponent.is() )
-                        xComponent->dispose();
-                }
-            }
+            FuHangulHanjaConversion aFunc( pViewShell, pViewShell->GetActiveWindow(), pViewShell->GetView(), pDoc, rReq );
+            aFunc.StartChineseConversion();
         }
         break;
 
