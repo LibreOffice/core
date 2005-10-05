@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:51:51 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:39:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -838,9 +838,9 @@ void DffPropSet::Merge( DffPropSet& rMaster ) const
             ( (DffPropSet*) this )->mpContents[ nRecType ] = nCurrentFlags;
 
 
-            sal_uInt32 nNewContentEx = (sal_uInt32)rMaster.GetCurObject();
+            sal_uInt32 nNewContentEx = (sal_uInt32)(sal_uIntPtr)rMaster.GetCurObject();
             if ( ((DffPropSet*)this)->Seek( nRecType ) )
-                nNewContentEx |= (sal_uInt32)GetCurObject();
+                nNewContentEx |= (sal_uInt32)(sal_uIntPtr)GetCurObject();
             ( (DffPropSet*) this )->Replace( nRecType, (void*)nNewContentEx );
         }
         else
@@ -865,7 +865,7 @@ BOOL DffPropSet::IsHardAttribute( UINT32 nId ) const
     {
         if ( ((DffPropSet*)this)->Seek( nId | 0x3f ) )
         {
-            UINT32 nContentEx = (UINT32)GetCurObject();
+            sal_uInt32 nContentEx = (sal_uInt32)(sal_uIntPtr)GetCurObject();
             bRetValue = ( nContentEx & ( 1 << ( 0xf - ( nId & 0xf ) ) ) ) != 0;
         }
     }
@@ -908,7 +908,7 @@ BOOL DffPropSet::SeekToContent( UINT32 nRecType, SvStream& rStrm ) const
         {
             if ( ((DffPropSet*)this)->Seek( nRecType ) )
             {
-                UINT32 nOffset = (UINT32)GetCurObject();
+                sal_uInt32 nOffset = (sal_uInt32)(sal_uIntPtr)GetCurObject();
                 if ( nOffset && ( ( nOffset & 0xffff0000 ) != 0xffff0000 ) )
                 {
                     rStrm.Seek( nOffset );
@@ -3583,7 +3583,7 @@ BOOL SvxMSDffManager::SeekToShape( SvStream& rSt, void* pClientData, UINT32 nId 
         UINT32 nShapeId, nSec = ( nId >> 10 ) - 1;
         if ( nSec < mnIdClusters )
         {
-            UINT32 nOfs = (UINT32)maDgOffsetTable.Get( mpFidcls[ nSec ].dgid );
+            sal_IntPtr nOfs = (sal_IntPtr)maDgOffsetTable.Get( mpFidcls[ nSec ].dgid );
             if ( nOfs )
             {
                 rSt.Seek( nOfs );
