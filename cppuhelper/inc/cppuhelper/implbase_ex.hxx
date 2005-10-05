@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implbase_ex.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:17:26 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:27:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ struct type_entry
     } m_type;
     /** offset for interface pointer
     */
-    sal_Int32 m_offset;
+    sal_IntPtr m_offset;
 };
 
 /** identical dummy struct for casting class_dataN to class_data
