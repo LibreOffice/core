@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmdirlbox.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:08:14 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:34:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ inline void* lclEnumToVoid( SvxFrameDirection eDirection )
 
 inline SvxFrameDirection lclVoidToEnum( void* pDirection )
 {
-    return static_cast< SvxFrameDirection >( reinterpret_cast< sal_uInt32 >( pDirection ) );
+    return static_cast< SvxFrameDirection >( reinterpret_cast< sal_IntPtr >( pDirection ) );
 }
 
 } // namespace
