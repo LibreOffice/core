@@ -4,9 +4,9 @@
  *
  *  $RCSfile: utility.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:01:36 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:58:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,44 +108,6 @@ inline long SmRoundFraction(const Fraction &rFrac)
 
 class SmViewShell;
 SmViewShell * SmGetActiveView();
-
-
-////////////////////////////////////////////////////////////
-//
-// SmRectCache
-//
-
-class SmRectCache
-{
-    VirtualDevice *pVirDev;
-
-    SmRectCache(const SmRectCache &);
-    SmRectCache & operator = (const SmRectCache &);
-
-public:
-    struct Key
-    {   XubString   aText,
-                    aFontName;
-        Size        aFontSize;
-        FontWeight  eFontWeight;
-        FontItalic  eFontItalic;
-
-        Key(const XubString &rText, const Font &rFont);
-
-        BOOL operator <  (const Key &rKey) const;
-        BOOL operator == (const Key &rKey) const;
-    };
-
-    SmRectCache();
-    ~SmRectCache();
-
-    const SmRect *  Search(const Key &rKey) const;
-    const SmRect *  Add(const Key &rKey, const SmRect &rRect);
-
-    VirtualDevice * GetVirDev();
-
-    void Reset();
-};
 
 
 ////////////////////////////////////////////////////////////
