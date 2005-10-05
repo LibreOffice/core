@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmvwimp.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:21:49 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:39:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,9 +179,9 @@ class FmXFormView : public ::cppu::WeakImplHelper3<
 
     FmFormObj*      m_pMarkedGrid;
     FmFormView*     m_pView;
-    sal_uInt32      m_nActivationEvent;
-    sal_uInt32      m_nErrorMessageEvent;   // event for an asynchronous error message. See also m_aAsyncError
-    sal_uInt32      m_nAutoFocusEvent;      // event for asynchronously setting the focus to a control
+    sal_uIntPtr     m_nActivationEvent;
+    sal_uIntPtr     m_nErrorMessageEvent;   // event for an asynchronous error message. See also m_aAsyncError
+    sal_uIntPtr     m_nAutoFocusEvent;      // event for asynchronously setting the focus to a control
 
     ::com::sun::star::sdb::SQLErrorEvent
                     m_aAsyncError;          // error event which is to be displayed asyn. See m_nErrorMessageEvent.
