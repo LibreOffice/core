@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eos2met.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:33:33 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:06:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1943,7 +1943,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 const MetaStretchTextAction*    pA = (const MetaStretchTextAction*) pMA;
                 VirtualDevice                   aVDev;
                 USHORT                          i;
-                long*                           pDXAry;
+                sal_Int32*                  pDXAry;
                 sal_Int32                       nNormSize;
                 String                          aStr;
                 Polygon                         aPolyDummy(1);
@@ -1968,7 +1968,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                 METSetChrAngle( nOrientation = aGDIFont.GetOrientation() );
                 METSetChrSet(FindChrSet(aGDIFont));
                 aStr=String(pA->GetText(),pA->GetIndex(),pA->GetLen());
-                pDXAry=new long[aStr.Len()];
+                pDXAry=new sal_Int32[aStr.Len()];
                 nNormSize = aVDev.GetTextArray( aStr, pDXAry );
 
                 for ( i = 0; i < aStr.Len(); i++ )
