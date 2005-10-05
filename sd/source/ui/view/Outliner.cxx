@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Outliner.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:00:26 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:13:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1578,8 +1578,10 @@ void Outliner::StartConversion( INT16 nSourceLanguage,  INT16 nTargetLanguage,
 */
 void Outliner::PrepareConversion (void)
 {
+    SetUpdateMode(sal_True);
     if( HasConvertibleTextPortion( mnConversionLanguage ) )
     {
+        SetUpdateMode(sal_False);
         mbStringFound = TRUE;
         mbMatchMayExist = TRUE;
 
@@ -1589,6 +1591,10 @@ void Outliner::PrepareConversion (void)
         // Start seach at the right end of the current object's text
         // depending on the search direction.
 //      mpOutlineView->SetSelection (GetSearchStartPosition ());
+    }
+    else
+    {
+        SetUpdateMode(sal_False);
     }
 }
 
