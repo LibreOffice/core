@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:19:35 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:14:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1495,7 +1495,7 @@ USHORT SwScriptInfo::HasKana( xub_StrLen nStart, const xub_StrLen nLen ) const
  *                      SwScriptInfo::Compress()
  *************************************************************************/
 
-long SwScriptInfo::Compress( long* pKernArray, xub_StrLen nIdx, xub_StrLen nLen,
+long SwScriptInfo::Compress( sal_Int32* pKernArray, xub_StrLen nIdx, xub_StrLen nLen,
                              const USHORT nCompress, const USHORT nFontHeight,
                              Point* pPoint ) const
 {
@@ -1611,7 +1611,7 @@ long SwScriptInfo::Compress( long* pKernArray, xub_StrLen nIdx, xub_StrLen nLen,
  *                      SwScriptInfo::KashidaJustify()
  *************************************************************************/
 
-USHORT SwScriptInfo::KashidaJustify( long* pKernArray, long* pScrArray,
+USHORT SwScriptInfo::KashidaJustify( sal_Int32* pKernArray, sal_Int32* pScrArray,
                                      xub_StrLen nStt, xub_StrLen nLen,
                                      long nSpaceAdd ) const
 {
@@ -1698,8 +1698,8 @@ sal_Bool SwScriptInfo::IsArabicLanguage( LanguageType aLang )
  *                      SwScriptInfo::ThaiJustify()
  *************************************************************************/
 
-USHORT SwScriptInfo::ThaiJustify( const XubString& rTxt, long* pKernArray,
-                                  long* pScrArray, xub_StrLen nStt,
+USHORT SwScriptInfo::ThaiJustify( const XubString& rTxt, sal_Int32* pKernArray,
+                                  sal_Int32* pScrArray, xub_StrLen nStt,
                                   xub_StrLen nLen, xub_StrLen nNumberOfBlanks,
                                   long nSpaceAdd )
 {
