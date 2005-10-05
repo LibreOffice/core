@@ -4,9 +4,9 @@
  *
  *  $RCSfile: epict.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:40:18 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:06:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,7 +188,7 @@ private:
     void SetAttrForFrame();
     void SetAttrForText();
 
-    void WriteTextArray(Point & rPoint, const String& rString, const long * pDXAry);
+    void WriteTextArray(Point & rPoint, const String& rString, const sal_Int32 * pDXAry);
 
     void WriteOpcodes(const GDIMetaFile & rMTF);
 
@@ -1377,7 +1377,7 @@ void PictWriter::SetAttrForText()
 }
 
 
-void PictWriter::WriteTextArray(Point & rPoint, const String& rString, const long * pDXAry)
+void PictWriter::WriteTextArray(Point & rPoint, const String& rString, const sal_Int32 * pDXAry)
 {
     USHORT i,nLen;
     sal_Unicode c;
@@ -1735,7 +1735,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                 Point                           aPt( pA->GetPoint() );
                 String                          aStr( pA->GetText(),pA->GetIndex(),pA->GetLen() );
                 VirtualDevice                   aVirDev;
-                long*                           pDXAry = new long[ aStr.Len() ];
+                sal_Int32*                      pDXAry = new sal_Int32[ aStr.Len() ];
                 sal_Int32                       nNormSize( aVirDev.GetTextArray( aStr,pDXAry ) );
                 USHORT                          i;
 
