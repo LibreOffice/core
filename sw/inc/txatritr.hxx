@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txatritr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:21:34 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:19:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,13 +78,14 @@ class SwTxtAttrIterator
     const SfxPoolItem *pParaItem, *pCurItem;
     xub_StrLen nChgPos;
     sal_uInt16 nAttrPos, nWhichId;
+    sal_Bool bIsUseGetWhichOfScript;
 
     void AddToStack( const SwTxtAttr& rAttr );
     void SearchNextChg();
 
 public:
     SwTxtAttrIterator( const SwTxtNode& rTxtNd, USHORT nWhichId,
-                        xub_StrLen nStart = 0 );
+                        xub_StrLen nStart = 0, sal_Bool bUseGetWhichOfScript = sal_True );
 
     sal_Bool Next();
 
@@ -98,8 +99,10 @@ public:
 class SwLanguageIterator : public SwTxtAttrIterator
 {
 public:
-    SwLanguageIterator( const SwTxtNode& rTxtNd, xub_StrLen nStart = 0 )
-        : SwTxtAttrIterator( rTxtNd, RES_CHRATR_LANGUAGE, nStart )
+    SwLanguageIterator( const SwTxtNode& rTxtNd, xub_StrLen nStart = 0,
+                        USHORT nWhichId = RES_CHRATR_LANGUAGE,
+                        sal_Bool bUseGetWhichOfScript = sal_True )
+        : SwTxtAttrIterator( rTxtNd, nWhichId, nStart, bUseGetWhichOfScript )
     {}
 
     sal_uInt16 GetLanguage() const
