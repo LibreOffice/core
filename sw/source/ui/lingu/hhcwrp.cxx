@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hhcwrp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:24:58 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:23:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,15 @@
 #ifndef _SDRHHCWRAP_HXX_
 #include <sdrhhcwrap.hxx>
 #endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
+#ifndef _SWDOCSH_HXX
+#include <docsh.hxx>
+#endif
+#ifndef _TXATRITR_HXX
+#include <txatritr.hxx>
+#endif
 #ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>       // Progress
 #endif
@@ -116,6 +125,12 @@
 #endif
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
+#ifndef _SWDOCSH_HXX
+#include <docsh.hxx>
 #endif
 
 #ifndef _OLMENU_HRC
@@ -224,6 +239,28 @@ SwHHCWrapper::~SwHHCWrapper()
 
     if( nPageCount )
         ::EndProgress( pView->GetDocShell() );
+
+    // finally for chinese translation we need to change the the documents
+    // default language and font to the new ones to be used.
+    LanguageType nTargetLang = GetTargetLanguage();
+    if (IsChinese( nTargetLang ))
+    {
+        SwDoc *pDoc = pView->GetDocShell()->GetDoc();
+
+        //!! Note: This also effects the default language of text boxes (EditEngine/EditView) !!
+        pDoc->SetDefault( SvxLanguageItem( nTargetLang, RES_CHRATR_CJK_LANGUAGE ) );
+        //
+        const Font *pFont = GetTargetFont();
+        if (pFont)
+        {
+            SvxFontItem aFontItem( pFont->GetFamily(), pFont->GetName(),
+                    pFont->GetStyleName(), pFont->GetPitch(),
+                    pFont->GetCharSet(), RES_CHRATR_CJK_FONT );
+            pDoc->SetDefault( aFontItem );
+        }
+
+    }
+
 /*
     if( bInfoBox )
         InfoBox(&pView->GetEditWin(), String(SW_RES(STR_SPELL_OK)) ).Execute();
@@ -233,8 +270,11 @@ SwHHCWrapper::~SwHHCWrapper()
 
 void SwHHCWrapper::GetNextPortion(
         ::rtl::OUString&    rNextPortion,
-        LanguageType&       rLangOfPortion )
+        LanguageType&       rLangOfPortion,
+        sal_Bool bAllowChanges )
 {
+    pConvArgs->bAllowImplicitChangesForNotConvertibleText = bAllowChanges;
+
     FindConvText_impl();
     rNextPortion    = pConvArgs->aConvText;
     rLangOfPortion  = pConvArgs->nConvTextLang;
@@ -280,6 +320,29 @@ void SwHHCWrapper::HandleNewUnit(
     SelectNewUnit_impl( nUnitStart, nUnitEnd );
 
     rWrtShell.EndAllAction();
+}
+
+
+void SwHHCWrapper::ChangeText( const String &rNewText )
+{
+    // get item set with all relevant attributes
+    //sal_uInt16 aRanges[] = {
+    //        RES_CHRATR_BEGIN, RES_FRMATR_END,
+    //        0, 0, 0  };
+    //SfxItemSet aItemSet( rWrtShell.GetAttrPool(), aRanges );
+    //SwDoc *pDoc = pView->GetDocShell()->GetDoc();
+    //SwPaM *pCrsr = rWrtShell.GetCrsr();
+    // get all attributes spanning the whole selection in order to
+    // restore those for the new text
+    //rWrtShell.GetAttr( aItemSet );
+
+    //pDoc->DeleteAndJoin( *pCrsr );
+    //pDoc->Insert( *pCrsr, aNewTxt );
+    rWrtShell.Delete();
+    //pDoc->ResetAttr( *pCrsr );      // reset all attributes
+    //pDoc->Insert( *pCrsr, aItemSet, 0 );
+    rWrtShell.Insert( rNewText );
+    //rWrtShell.SetAttr( aItemSet );  // restore previously saved attributes
 }
 
 
@@ -357,10 +420,10 @@ void SwHHCWrapper::ReplaceUnit(
         rWrtShell.StartUndo( UNDO_SETRUBYATTR );
         if (aNewOrigText.Len())
         {
-            rWrtShell.Delete();
-            rWrtShell.Insert( aNewOrigText );
+            ChangeText( aNewOrigText );
 
-            //!! since Delete, Insert do not set the WrtShells bInSelect flag
+            //!! since Delete, Insert in 'ChangeText' do not set the WrtShells
+            //!! bInSelect flag
             //!! back to false we do it now manually in order for the selection
             //!! to be done properly in the following call to Left.
             // We didn't fix it in Delete and Insert since it is currently
@@ -386,8 +449,8 @@ void SwHHCWrapper::ReplaceUnit(
     else
     {
         rWrtShell.StartUndo( UNDO_OVERWRITE );
-         rWrtShell.Delete();
-        rWrtShell.Insert( aNewTxt );
+
+        ChangeText( aNewTxt );
 
         // change language and font if necessary
         if (IsChinese( GetSourceLanguage() ))
@@ -449,9 +512,38 @@ void SwHHCWrapper::Convert()
         SwPaM *pCrsr = pView->GetWrtShell().GetCrsr();
         SwPosition* pSttPos = pCrsr->Start();
         SwPosition* pEndPos = pCrsr->End();
-        pConvArgs = new SwConversionArgs( GetSourceLanguage(),
+
+
+        if (pSttPos->nNode.GetNode().IsTxtNode() &&
+            pEndPos->nNode.GetNode().IsTxtNode())
+        {
+            pConvArgs = new SwConversionArgs( GetSourceLanguage(),
                             pSttPos->nNode.GetNode().GetTxtNode(), pSttPos->nContent,
                             pEndPos->nNode.GetNode().GetTxtNode(), pEndPos->nContent );
+        }
+        else    // we are not in the text (maybe a graphic or OLE object is selected) let's start from the top
+        {
+            // get PaM that points to the start of the document
+            SwNode& rNode = pView->GetDocShell()->GetDoc()->GetNodes().GetEndOfContent();
+            SwPaM aPam(rNode);
+            aPam.Move( fnMoveBackward, fnGoDoc ); // move to start of document
+
+            pSttPos = aPam.GetPoint();
+            SwTxtNode *pTxtNode = pSttPos->nNode.GetNode().GetTxtNode();
+            pConvArgs = new SwConversionArgs( GetSourceLanguage(),
+                            pTxtNode, pSttPos->nContent,
+                            pTxtNode, pSttPos->nContent );
+        }
+
+        // chinese conversion specific settings
+        DBG_ASSERT( IsChinese( GetSourceLanguage() ) == IsChinese( GetTargetLanguage() ),
+                "source and target language mismatch?" );
+        if (IsChinese( GetTargetLanguage() ))
+        {
+            pConvArgs->nConvTargetLang = GetTargetLanguage();
+            pConvArgs->pTargetFont = GetTargetFont();
+            pConvArgs->bAllowImplicitChangesForNotConvertibleText = sal_True;
+        }
 
         // if it is not just a selection and we are about to begin
         // with the current conversion for the very first time
