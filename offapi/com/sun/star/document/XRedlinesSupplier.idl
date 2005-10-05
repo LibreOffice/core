@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XRedlinesSupplier.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:15:55 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:28:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,11 @@ published interface XRedlinesSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** @returns
-        an enumeration access that provides access to the redline objects of the document.
+            an enumeration access that provides access to the redline objects of the document.
+
+            <p>The returned objects implent at least the interface
+            <type scope="com::sun::star::beans">XPropertySet</type>.
+            Specific objects may support other interfaces as well.</p>
      */
     com::sun::star::container::XEnumerationAccess getRedlines();
 };
