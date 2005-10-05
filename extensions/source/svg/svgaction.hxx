@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svgaction.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:40:50 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:31:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,7 +142,7 @@ private:
     void                    ImplWritePolygon( const Polygon& rPoly, sal_Bool bLineOnly, const NMSP_RTL::OUString* pStyle = NULL );
     void                    ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bool bLineOnly, const NMSP_RTL::OUString* pStyle = NULL );
     void                    ImplWriteGradientEx( const PolyPolygon& rPolyPoly, const Gradient& rGradient, const NMSP_RTL::OUString* pStyle = NULL );
-    void                    ImplWriteText( const Point& rPos, const String& rText, const long* pDXArray, long nWidth, const NMSP_RTL::OUString* pStyle = NULL );
+    void                    ImplWriteText( const Point& rPos, const String& rText, const sal_Int32* pDXArray, long nWidth, const NMSP_RTL::OUString* pStyle = NULL );
     void                    ImplWriteBmp( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& rSrcPt, const Size& rSrcSz, const NMSP_RTL::OUString* pStyle = NULL );
 
     void                    ImplCheckFontAttributes();
