@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editdoc2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:27:00 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:23:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,11 +174,11 @@ ExtraPortionInfo::~ExtraPortionInfo()
     delete[] pOrgDXArray;
 }
 
-void ExtraPortionInfo::SaveOrgDXArray( const long* pDXArray, USHORT nLen )
+void ExtraPortionInfo::SaveOrgDXArray( const sal_Int32* pDXArray, USHORT nLen )
 {
     delete[] pOrgDXArray;
-    pOrgDXArray = new long[nLen];
-    memcpy( pOrgDXArray, pDXArray, nLen*sizeof(long) );
+    pOrgDXArray = new sal_Int32[nLen];
+    memcpy( pOrgDXArray, pDXArray, nLen*sizeof(sal_Int32) );
 }
 
 void ExtraPortionInfo::DestroyOrgDXArray()
