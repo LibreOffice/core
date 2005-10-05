@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabletree.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:36:28 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:45:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,7 +131,7 @@ void OTableTreeListBox::notifyHiContrastChanged()
     SvLBoxEntry* pEntryLoop = First();
     while (pEntryLoop)
     {
-        sal_Int32 nType = reinterpret_cast<sal_Int32>(pEntryLoop->GetUserData());
+        sal_Int32 nType = reinterpret_cast<sal_IntPtr>(pEntryLoop->GetUserData());
         if ( nType )
         {
             USHORT nCount = pEntryLoop->ItemCount();
