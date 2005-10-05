@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:33:46 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:02:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,7 +186,7 @@ BYTE GetCharTypeForCompression( xub_Unicode cChar )
     }
 }
 
-void lcl_DrawRedLines( OutputDevice* pOutDev, long nFontHeight, const Point& rPnt, sal_uInt16 nIndex, sal_uInt16 nMaxEnd, const long* pDXArray, WrongList* pWrongs, short nOrientation, const Point& rOrigin, BOOL bVertical )
+void lcl_DrawRedLines( OutputDevice* pOutDev, long nFontHeight, const Point& rPnt, sal_uInt16 nIndex, sal_uInt16 nMaxEnd, const sal_Int32* pDXArray, WrongList* pWrongs, short nOrientation, const Point& rOrigin, BOOL bVertical )
 {
 #ifndef SVX_LIGHT
     // Aber nur, wenn Font nicht zu klein...
@@ -1236,7 +1236,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
             if ( bCompressedChars && ( pPortion->GetLen() > 1 ) && pPortion->GetExtraInfos() && pPortion->GetExtraInfos()->bCompressed )
             {
                 // I need the manipulated DXArray for determining the break postion...
-                ImplCalcAsianCompression( pNode, pPortion, nPortionStart, (long*)pLine->GetCharPosArray().GetData() + (nPortionStart-pLine->GetStart()), 10000, TRUE );
+                ImplCalcAsianCompression( pNode, pPortion, nPortionStart, const_cast< sal_Int32* >( pLine->GetCharPosArray().GetData() + (nPortionStart-pLine->GetStart()) ), 10000, TRUE );
             }
             ImpBreakLine( pParaPortion, pLine, pPortion, nPortionStart,
                                             nRemainingWidth, bCanHyphenate && bHyphenatePara );
@@ -3009,8 +3009,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                 XubString aText;
                                 USHORT nTextStart = 0;
                                 USHORT nTextLen = 0;
-                                const long* pDXArray = 0;
-                                long* pTmpDXArray = 0;
+                                const sal_Int32* pDXArray = 0;
+                                sal_Int32* pTmpDXArray = 0;
 
                                 if ( pTextPortion->GetKind() == PORTIONKIND_TEXT )
                                 {
@@ -3028,7 +3028,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     nTextStart = 0;
                                     nTextLen = aText.Len();
 
-                                    pTmpDXArray = new long[ aText.Len() ];
+                                    pTmpDXArray = new sal_Int32[ aText.Len() ];
                                     pDXArray = pTmpDXArray;
                                     Font aOldFont( GetRefDevice()->GetFont() );
                                     aTmpFont.SetPhysFont( GetRefDevice() );
@@ -4138,7 +4138,7 @@ Color ImpEditEngine::GetAutoColor() const
 }
 
 
-BOOL ImpEditEngine::ImplCalcAsianCompression( ContentNode* pNode, TextPortion* pTextPortion, USHORT nStartPos, long* pDXArray, USHORT n100thPercentFromMax, BOOL bManipulateDXArray )
+BOOL ImpEditEngine::ImplCalcAsianCompression( ContentNode* pNode, TextPortion* pTextPortion, USHORT nStartPos, sal_Int32* pDXArray, USHORT n100thPercentFromMax, BOOL bManipulateDXArray )
 {
     DBG_ASSERT( GetAsianCompressionMode(), "ImplCalcAsianCompression - Why?" );
     DBG_ASSERT( pTextPortion->GetLen(), "ImplCalcAsianCompression - Empty Portion?" );
@@ -4309,9 +4309,9 @@ void ImpEditEngine::ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* 
                 USHORT nTxtPortion = pParaPortion->GetTextPortions().GetPos( pTP );
                 USHORT nTxtPortionStart = pParaPortion->GetTextPortions().GetStartPos( nTxtPortion );
                 DBG_ASSERT( nTxtPortionStart >= pLine->GetStart(), "Portion doesn't belong to the line!!!" );
-                long* pDXArray = (long*)pLine->GetCharPosArray().GetData()+( nTxtPortionStart-pLine->GetStart() );
+                sal_Int32* pDXArray = const_cast< sal_Int32* >( pLine->GetCharPosArray().GetData()+( nTxtPortionStart-pLine->GetStart() ) );
                 if ( pTP->GetExtraInfos()->pOrgDXArray )
-                    memcpy( pDXArray, pTP->GetExtraInfos()->pOrgDXArray, (pTP->GetLen()-1)*sizeof(long) );
+                    memcpy( pDXArray, pTP->GetExtraInfos()->pOrgDXArray, (pTP->GetLen()-1)*sizeof(sal_Int32) );
                 ImplCalcAsianCompression( pParaPortion->GetNode(), pTP, nTxtPortionStart, pDXArray, (USHORT)nCompressPercent, TRUE );
             }
         }
@@ -4329,7 +4329,7 @@ void ImpEditEngine::ImplDrawWithComments( SvxFont&              rFont,
                                           const String&         rTxt,
                                           const USHORT          nIdx,
                                           const USHORT          nLen,
-                                          const long*           pDXArray ) const
+                                          const sal_Int32*      pDXArray ) const
 {
     // #116716# output text normally (the obvious solution, to split
     // the text up into single characters, does not work at all for
