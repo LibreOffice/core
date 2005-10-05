@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implbase_ex_pre.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:18:16 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:28:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 
 /** @internal */
 #define __IFC_EX_TYPE_INIT_NAME( class_cast, ifc_name ) \
-{ { ifc_name::static_type }, ((sal_Int32)(ifc_name *) class_cast 16) - 16 }
+{ { ifc_name::static_type }, ((sal_IntPtr)(ifc_name *) class_cast 16) - 16 }
 /** @internal */
 #define __IFC_EX_TYPE_INIT( class_cast, N ) __IFC_EX_TYPE_INIT_NAME( class_cast, Ifc##N )
 
