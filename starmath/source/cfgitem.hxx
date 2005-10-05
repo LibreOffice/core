@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgitem.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:04:54 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:59:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,8 @@
 
 #ifndef _MATH_CFGITEM_HXX_
 #define _MATH_CFGITEM_HXX_
+
+#include <stl/vector>
 
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -69,64 +71,6 @@ class SmSym;
 class SmFormat;
 class Font;
 struct SmCfgOther;
-
-/////////////////////////////////////////////////////////////////
-
-class SmMathConfigItem : public utl::ConfigItem
-{
-    // disallow copy-constructor and assignment-operator for now
-    SmMathConfigItem( const SmMathConfigItem & );
-    SmMathConfigItem & operator = ( const SmMathConfigItem & );
-
-public:
-    inline SmMathConfigItem( const rtl::OUString &rPath,
-                      sal_Int16 nMode = CONFIG_MODE_IMMEDIATE_UPDATE );
-
-    uno::Sequence< rtl::OUString > GetFormatPropertyNames();
-    uno::Sequence< rtl::OUString > GetOtherPropertyNames();
-
-    uno::Sequence< uno::Any >
-        GetProperties( const uno::Sequence< rtl::OUString > &rNames )
-        {
-            return ConfigItem::GetProperties(rNames);
-        }
-
-    sal_Bool
-        PutProperties( const uno::Sequence< rtl::OUString > &rNames,
-                       const uno::Sequence< uno::Any > &rValues)
-        {
-            return ConfigItem::PutProperties( rNames, rValues);
-        }
-
-    sal_Bool
-        SetSetProperties( const rtl::OUString &rNode,
-                          uno::Sequence< beans::PropertyValue > rValues )
-        {
-            return ConfigItem::SetSetProperties( rNode, rValues );
-        }
-
-    uno::Sequence< rtl::OUString >
-        GetNodeNames( const rtl::OUString &rNode )
-        {
-            return ConfigItem::GetNodeNames( rNode );
-        }
-
-    sal_Bool
-        ReplaceSetProperties( const rtl::OUString& rNode,
-                              uno::Sequence< beans::PropertyValue > rValues )
-        {
-            return ConfigItem::ReplaceSetProperties( rNode, rValues );
-        }
-};
-
-
-inline SmMathConfigItem::SmMathConfigItem(
-        const rtl::OUString &rPath,
-        sal_Int16 nMode ) :
-    ConfigItem( rPath, nMode )
-{
-}
-
 
 /////////////////////////////////////////////////////////////////
 
@@ -191,14 +135,12 @@ public:
 
 /////////////////////////////////////////////////////////////////
 
-class SmMathConfig
+class SmMathConfig : public utl::ConfigItem
 {
-    Timer               aSaveTimer;
     SmFormat *          pFormat;
     SmCfgOther *        pOther;
     SmFontFormatList *  pFontFormatList;
-    SmSym *             pSymbols;
-    USHORT              nSymbolCount;
+    SmSymSetManager *   pSymSetMgr;
     BOOL                bIsOtherModified;
     BOOL                bIsFormatModified;
 
@@ -206,7 +148,6 @@ class SmMathConfig
     SmMathConfig( const SmMathConfig & );
     SmMathConfig & operator = ( const SmMathConfig & );
 
-    void    LoadSymbols();
 
     void    LoadOther();
     void    SaveOther();
@@ -215,21 +156,19 @@ class SmMathConfig
     void    LoadFontFormatList();
     void    SaveFontFormatList();
 
-    void    StripFontFormatList( const SmSym *pUsedSymbols[], USHORT nCount );
+    void    StripFontFormatList( const std::vector< SmSym > &rSymbols );
 
 
     void    Save();
 
-    SmSym           ReadSymbol( SmMathConfigItem &rCfg,
+    void    ReadSymbol( SmSym &rSymbol,
                         const rtl::OUString &rSymbolName,
                         const rtl::OUString &rBaseNode ) const;
-    SmFontFormat    ReadFontFormat( SmMathConfigItem &rCfg,
+    void    ReadFontFormat( SmFontFormat &rFontFormat,
                         const rtl::OUString &rSymbolName,
                         const rtl::OUString &rBaseNode ) const;
 
     void            SetOtherIfNotEqual( BOOL &rbItem, BOOL bNewVal );
-
-    DECL_LINK( TimeOut, Timer * );
 
 protected:
     void        SetOtherModified( BOOL bVal );
@@ -245,11 +184,25 @@ protected:
 
 public:
     SmMathConfig();
-    ~SmMathConfig();
+    virtual ~SmMathConfig();
 
-    USHORT          GetSymbolCount() const;
-    const SmSym *   GetSymbol( USHORT nIndex ) const;
-    void            ReplaceSymbols( const SmSym *pNewSymbols[], USHORT nCount );
+    // utl::ConfigItem
+    //virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString > &rPropertyNames );
+    virtual void    Commit();
+
+    // make some protected functions of utl::ConfigItem public
+    //using utl::ConfigItem::GetNodeNames;
+    //using utl::ConfigItem::GetProperties;
+    //using utl::ConfigItem::PutProperties;
+    //using utl::ConfigItem::SetSetProperties;
+    //using utl::ConfigItem::ReplaceSetProperties;
+    //using utl::ConfigItem::GetReadOnlyStates;
+
+    SmSymSetManager &   GetSymSetManager();
+    void                GetSymbols( std::vector< SmSym > &rSymbols ) const;
+    void                SetSymbols( const std::vector< SmSym > &rNewSymbols );
+    USHORT              GetSymbolCount() const;
+    const SmSym *       GetSymbol( USHORT nIndex ) const;
 
     const SmFormat &    GetStandardFormat() const;
     void                SetStandardFormat( const SmFormat &rFormat );
