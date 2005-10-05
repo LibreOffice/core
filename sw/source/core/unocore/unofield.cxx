@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:26:11 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:22:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,13 @@
 #ifndef _DOCSTAT_HXX //autogen
 #include <docstat.hxx>
 #endif
+#ifndef _EDITSH_HXX
+#include <editsh.hxx>
+#endif
+#ifndef _VIEWSH_HXX
+#include <viewsh.hxx>
+#endif
+
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
@@ -213,6 +220,18 @@
 #ifndef _DDEFLD_HXX
 #include <ddefld.hxx>
 #endif
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
+#ifndef _SWUNOHELPER_HXX
+#include <swunohelper.hxx>
+#endif
+#ifndef SW_UNOFLDMID_H
+#include <unofldmid.h>
+#endif
+#ifndef _SCRIPTINFO_HXX
+#include <scriptinfo.hxx>
+#endif
 #ifndef _DATETIME_HXX
 #include <tools/datetime.hxx>
 #endif
@@ -229,15 +248,6 @@
 #endif
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SWSTYLENAMEMAPPER_HXX
-#include <SwStyleNameMapper.hxx>
-#endif
-#ifndef _SWUNOHELPER_HXX
-#include <swunohelper.hxx>
-#endif
-#ifndef SW_UNOFLDMID_H
-#include <unofldmid.h>
 #endif
 
 using namespace ::com::sun::star;
@@ -2209,8 +2219,71 @@ uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
 
     default:
         if( pField )
-            pField->QueryValue( aRet, pMap->nWID );
-        else if( m_pProps )
+        {
+            if (FIELD_PROP_IS_FIELD_USED      == pMap->nWID ||
+                FIELD_PROP_IS_FIELD_DISPLAYED == pMap->nWID)
+            {
+                sal_Bool bIsFieldUsed       = sal_False;
+                sal_Bool bIsFieldDisplayed  = sal_False;
+
+                // in order to have the information about fields
+                // correctly evaluated the document needs a layout
+                // (has to be already formatted)
+                SwDoc *pDoc = GetDoc();
+                ViewShell *pViewShell = 0;
+                SwEditShell *pEditShell = pDoc ? pDoc->GetEditShell( &pViewShell ) : 0;
+                if (pEditShell)
+                    pEditShell->CalcLayout();
+                else if (pViewShell) // a page preview has no SwEditShell it should only have a view shell
+                    pViewShell->CalcLayout();
+                else
+                    throw uno::RuntimeException();
+
+                // get text node for the text field
+                const SwFmtFld *pFldFmt = GetFldFmt();
+                const SwTxtFld* pTxtFld = pFldFmt ? pFmtFld->GetTxtFld() : 0;
+                if(!pTxtFld)
+                    throw uno::RuntimeException();
+                const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
+
+                // skip fields that are currently not in the document
+                // e.g. fields in undo or redo array
+                if (rTxtNode.GetNodes().IsDocNodes())
+                {
+                    sal_Bool bFrame = 0 != rTxtNode.FindLayoutRect().Width(); // oder so
+                    sal_Bool bHidden = rTxtNode.IsHidden();
+                    if ( !bHidden )
+                    {
+                        xub_StrLen nHiddenStart;
+                        xub_StrLen nHiddenEnd;
+
+                        SwPosition *pPos = pTxtFld->GetPosition();
+                        if (!pPos)
+                            throw RuntimeException();
+
+                        bHidden = SwScriptInfo::GetBoundsOfHiddenRange( rTxtNode,
+                                        pPos->nContent.GetIndex(),
+                                        nHiddenStart, nHiddenEnd );
+                    }
+
+                    // !bFrame && !bHidden: aller Wahrscheinlichkeit handelt es
+                    // sich um ein Feld in einem unbenutzten Seitenstyle
+                    //
+                    // bHidden: Feld ist versteckt
+                    // FME: Problem: Verstecktes Feld in unbenutzter Seitenvorlage =>
+                    // bIsFieldUsed = true
+                    // bIsFieldDisplayed = false
+                    bIsFieldUsed       = bFrame || bHidden;
+                    bIsFieldDisplayed  = bIsFieldUsed && !bHidden;
+                }
+                sal_Bool bRetVal = (FIELD_PROP_IS_FIELD_USED == pMap->nWID) ?
+                                            bIsFieldUsed : bIsFieldDisplayed;
+                aRet.setValue( &bRetVal, ::getCppuBooleanType() );
+            }
+            else
+                pField->QueryValue( aRet, pMap->nWID );
+        }
+        else if( m_pProps )     // currently just a descriptor...
         {
             switch(pMap->nWID)
             {
@@ -2271,6 +2344,10 @@ uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
                 break;
             case FIELD_PROP_STRINGS:
                 aRet <<= m_pProps->aStrings;
+                break;
+            case FIELD_PROP_IS_FIELD_USED:
+            case FIELD_PROP_IS_FIELD_DISPLAYED:
+                aRet.setValue( sal_False, ::getCppuBooleanType() );
                 break;
             }
         }
