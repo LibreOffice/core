@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlparse.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:04:44 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 15:00:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -565,6 +565,11 @@ void XMLFile::InsertL10NElement( XMLElement* pElement ){
     }else{                                  // Already there
         elem=pos->second;
         //(*elem)[langid]=pElement;
+        if ( (*elem)[ language ] )
+        {
+            fprintf(stdout,"Error: Entry for language double. ID = %s  LANG = %s in File %s\n", id.GetBuffer(), language.GetBuffer(), ByteString( sFileName,RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+            exit( -1 );
+        }
         (*elem)[ language ]=pElement;
     }
 }
