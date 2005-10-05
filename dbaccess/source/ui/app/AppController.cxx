@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:14:21 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:44:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1725,7 +1725,7 @@ Reference< XComponent > OApplicationController::openElement(const ::rtl::OUStrin
 // -----------------------------------------------------------------------------
 IMPL_LINK( OApplicationController, OnCreateWithPilot, void*, _pType )
 {
-    ElementType eType = (ElementType)reinterpret_cast< int >( _pType );
+    ElementType eType = (ElementType)reinterpret_cast< sal_IntPtr >( _pType );
     newElementWithPilot( eType );
     return 0L;
 }
