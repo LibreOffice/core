@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:27:23 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:22:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1229,7 +1229,7 @@ void SwXTextCursor::gotoStart(sal_Bool Expand) throw( uno::RuntimeException )
             {
                 pUnoCrsr->GetPoint()->nNode = *pTblNode->EndOfSectionNode();
                 pCont = GetDoc()->GetNodes().GoNext(&pUnoCrsr->GetPoint()->nNode);
-                pTblNode = pCont->FindTableNode();
+                pTblNode = pCont ? pCont->FindTableNode() : 0;
             }
             if(pCont)
                 pUnoCrsr->GetPoint()->nContent.Assign(pCont, 0);
