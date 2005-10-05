@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:33:21 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 13:24:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -654,7 +654,7 @@ private:
     BOOL                IsScriptChange( const EditPaM& rPaM ) const;
     BOOL                HasScriptType( USHORT nPara, USHORT nType ) const;
 
-    BOOL                ImplCalcAsianCompression( ContentNode* pNode, TextPortion* pTextPortion, USHORT nStartPos, long* pDXArray, USHORT n100thPercentFromMax, BOOL bManipulateDXArray );
+    BOOL                ImplCalcAsianCompression( ContentNode* pNode, TextPortion* pTextPortion, USHORT nStartPos, sal_Int32* pDXArray, USHORT n100thPercentFromMax, BOOL bManipulateDXArray );
     void                ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* pParaPortion, long nRemainingWidth );
 
     void                ImplInitLayoutMode( OutputDevice* pOutDev, USHORT nPara, USHORT nIndex );
@@ -732,7 +732,7 @@ private:
                                               const String&                         rTxt,
                                               const USHORT                          nIdx,
                                               const USHORT                          nLen,
-                                              const long*                           pDXArray ) const;
+                                              const sal_Int32*                          pDXArray ) const;
 
 protected:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
