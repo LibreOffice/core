@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 04:54:07 $
+#   last change: $Author: kz $ $Date: 2005-10-05 13:12:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@ PROJECTPCHSOURCE=$(PRJ)$/util\sd
 PRJNAME=sd
 TARGET=func
 LIBTARGET=NO
+ENABLE_EXCEPTIONS=TRUE
 
 AUTOSEG=true
 
@@ -49,12 +50,6 @@ AUTOSEG=true
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-EXCEPTIONSFILES= \
-        $(SLO)$/futempl.obj		\
-        $(SLO)$/futext2.obj		\
-        $(SLO)$/fuinsfil.obj	\
-        $(SLO)$/fuinsert.obj
 
 SLOFILES = \
         $(SLO)$/fuformatpaintbrush.obj	\
