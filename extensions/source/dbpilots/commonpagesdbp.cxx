@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commonpagesdbp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:25:58 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:50:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,7 +194,7 @@ namespace dbp
             for ( USHORT nLookup = 0; nLookup < m_aTable.GetEntryCount(); ++nLookup )
             {
                 if ( m_aTable.GetEntry( nLookup ) == sLookup )
-                    if ( reinterpret_cast< sal_Int32 >( m_aTable.GetEntryData( nLookup ) ) == nCommandType )
+                    if ( reinterpret_cast< sal_IntPtr >( m_aTable.GetEntryData( nLookup ) ) == nCommandType )
                     {
                         m_aTable.SelectEntryPos( nLookup );
                         break;
@@ -225,7 +225,7 @@ namespace dbp
                 rContext.xForm->setPropertyValue( ::rtl::OUString::createFromAscii("DataSourceName"), makeAny( sDataSource ) );
             }
             ::rtl::OUString sCommand = m_aTable.GetSelectEntry();
-            sal_Int32 nCommandType = reinterpret_cast< sal_Int32 >( m_aTable.GetEntryData( m_aTable.GetSelectEntryPos() ) );
+            sal_Int32 nCommandType = reinterpret_cast< sal_IntPtr >( m_aTable.GetEntryData( m_aTable.GetSelectEntryPos() ) );
 
             rContext.xForm->setPropertyValue( ::rtl::OUString::createFromAscii("Command"), makeAny( sCommand ) );
             rContext.xForm->setPropertyValue( ::rtl::OUString::createFromAscii("CommandType"), makeAny( nCommandType ) );
