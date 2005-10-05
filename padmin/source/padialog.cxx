@@ -4,9 +4,9 @@
  *
  *  $RCSfile: padialog.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:26:14 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 15:03:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,7 +195,7 @@ long PADialog::Notify( NotifyEvent& rEv )
 String PADialog::getSelectedDevice()
 {
     int nPos = m_aDevicesLB.GetSelectEntryPos();
-    int nLen = (int)m_aDevicesLB.GetEntryData( nPos );
+    int nLen = (int)(sal_IntPtr)m_aDevicesLB.GetEntryData( nPos );
     return m_aDevicesLB.GetEntry( nPos ).Copy( 0, nLen );
 }
 
