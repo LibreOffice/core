@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RenderOptions.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:24:13 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:29:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,60 @@ published service RenderOptions
     /** specifies the device the page should be rendered to
      */
     [property] com::sun::star::awt::XDevice RenderDevice;
+
+    //-------------------------------------------------------------------------
+
+    /** indicates that the current page is the first page to be exported.
+
+        <p>Hyperlinks, notes, and outlines cannot be exported on a per
+        page base. They have to be exported once *before* the first page
+        is exported. Therefore the IsFirstPage property has been introduced.
+        It is evaluated in the ::render function and indicates that the
+        current page is the first page to be exported.
+        </p>
+
+        @see XRenderable
+     */
+    [optional, property] boolean IsFirstPage;
+    //-------------------------------------------------------------------------
+
+    /** indicates that the current page is the last page to be exported.
+
+        <p>Hyperlinks from the EditEngine have to be exported once *after*
+        the last page has been processed. Therefore the IsLastPage property
+        has been introduced. It is evaluated in the ::render function and
+        indicates that the current page is the last page to be exported.
+        </p>
+
+        @see XRenderable
+     */
+    [optional, property] boolean IsLastPage;
+    //-------------------------------------------------------------------------
+
+    /** specifies if empty pages should be skipped.
+
+        <p>Tells the pdf export to skip empty pages. This flag also has
+        to be passed to the ::render function, in order to calculate to
+        correct page numbers during the export of hyperlinks, notes, and
+        outlines.
+        </p>
+
+        @see XRenderable
+     */
+    [optional, property] boolean IsSkipEmptyPages;
+    //-------------------------------------------------------------------------
+
+    /** specifies the page ranges to be rendered.
+
+        <p>Tells the pdf export to skip empty pages. This flag also has
+        to be passed to the ::render function, in order to calculate to
+        correct page numbers during the export of hyperlinks, notes,
+        and outlines.
+        </p>
+
+        @see XRenderable
+     */
+    [optional, property] string PageRange;
 };
 
 //=============================================================================
