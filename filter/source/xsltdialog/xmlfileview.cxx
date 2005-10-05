@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfileview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:16:09 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:55:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -633,7 +633,7 @@ IMPL_LINK(XMLSourceFileDialog, SelectHdl_Impl, ListBox *, pListBox )
     USHORT nEntry = pListBox->GetSelectEntryPos();
     if( LISTBOX_ENTRY_NOTFOUND != nEntry )
     {
-        int nLine = (int)pListBox->GetEntryData(nEntry);
+        int nLine = (int)(sal_IntPtr)pListBox->GetEntryData(nEntry);
         if( -1 != nLine )
         {
             if( nLine > 0 )
