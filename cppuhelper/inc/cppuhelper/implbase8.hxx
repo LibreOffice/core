@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implbase8.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:16:47 $
+ *  last change: $Author: kz $ $Date: 2005-10-05 14:27:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,15 +65,15 @@ namespace cppu
                 8 +1, sal_False, sal_False,
                 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                 {
-                    { { Ifc1::static_type }, ((sal_Int32)(Ifc1 *) (Impl *) 16) - 16 },
-                    { { Ifc2::static_type }, ((sal_Int32)(Ifc2 *) (Impl *) 16) - 16 },
-                    { { Ifc3::static_type }, ((sal_Int32)(Ifc3 *) (Impl *) 16) - 16 },
-                    { { Ifc4::static_type }, ((sal_Int32)(Ifc4 *) (Impl *) 16) - 16 },
-                    { { Ifc5::static_type }, ((sal_Int32)(Ifc5 *) (Impl *) 16) - 16 },
-                    { { Ifc6::static_type }, ((sal_Int32)(Ifc6 *) (Impl *) 16) - 16 },
-                    { { Ifc7::static_type }, ((sal_Int32)(Ifc7 *) (Impl *) 16) - 16 },
-                    { { Ifc8::static_type }, ((sal_Int32)(Ifc8 *) (Impl *) 16) - 16 },
-                    { { ::com::sun::star::lang::XTypeProvider::static_type }, ((sal_Int32)(::com::sun::star::lang::XTypeProvider *) (Impl *) 16) - 16 }
+                    { { Ifc1::static_type }, ((sal_IntPtr)(Ifc1 *) (Impl *) 16) - 16 },
+                    { { Ifc2::static_type }, ((sal_IntPtr)(Ifc2 *) (Impl *) 16) - 16 },
+                    { { Ifc3::static_type }, ((sal_IntPtr)(Ifc3 *) (Impl *) 16) - 16 },
+                    { { Ifc4::static_type }, ((sal_IntPtr)(Ifc4 *) (Impl *) 16) - 16 },
+                    { { Ifc5::static_type }, ((sal_IntPtr)(Ifc5 *) (Impl *) 16) - 16 },
+                    { { Ifc6::static_type }, ((sal_IntPtr)(Ifc6 *) (Impl *) 16) - 16 },
+                    { { Ifc7::static_type }, ((sal_IntPtr)(Ifc7 *) (Impl *) 16) - 16 },
+                    { { Ifc8::static_type }, ((sal_IntPtr)(Ifc8 *) (Impl *) 16) - 16 },
+                    { { ::com::sun::star::lang::XTypeProvider::static_type }, ((sal_IntPtr)(::com::sun::star::lang::XTypeProvider *) (Impl *) 16) - 16 }
                 }
             };
             return reinterpret_cast< class_data * >(&s_cd);
