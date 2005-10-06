@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbgoutsw.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:09:00 $
+ *  last change: $Author: kz $ $Date: 2005-10-06 10:50:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -355,7 +355,7 @@ static String lcl_dbg_out(const SwPosition & rPos)
     aStr += String::CreateFromInt32(rPos.nContent.GetIndex());
     aStr += String(": ", RTL_TEXTENCODING_ASCII_US);
     aStr += String::CreateFromInt32
-        (reinterpret_cast<sal_Int32>(rPos.nContent.GetIdxReg()), 16);
+        (reinterpret_cast<sal_IntPtr>(rPos.nContent.GetIdxReg()), 16);
 
     aStr += String(" )", RTL_TEXTENCODING_ASCII_US);
 
