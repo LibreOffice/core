@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewling.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:24:20 $
+ *  last change: $Author: kz $ $Date: 2005-10-06 10:55:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -467,7 +467,7 @@ IMPL_LINK( SwView, SpellError, void *, nLang )
         }
         while( pWrtShell->ActionPend() );
     }
-    LanguageType eLang = (LanguageType)(sal_uInt32)nLang;
+    LanguageType eLang = (LanguageType)(sal_uIntPtr)nLang;
     String aErr(::GetLanguageString( eLang ) );
 
     SwEditWin &rEditWin = GetEditWin();
