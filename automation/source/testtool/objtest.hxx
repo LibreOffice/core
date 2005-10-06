@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objtest.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:32:22 $
+ *  last change: $Author: kz $ $Date: 2005-10-06 12:38:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,9 +248,6 @@ public:
     SbxTransportMethodRef pMethodVar;     // zum Transport von Find nach Notify
     static CNames  *pClasses;
     static ControlDefLoad __READONLY_DATA arClasses [];
-
-private:
-    TestToolObj* pTestToolObj;
 };
 SV_DECL_IMPL_REF(Controls);
 
