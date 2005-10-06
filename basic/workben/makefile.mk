@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 21:55:29 $
+#   last change: $Author: kz $ $Date: 2005-10-06 12:42:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -91,42 +91,6 @@ APP1OBJS+=	\
             $(OBJ)$/app.obj \
             $(SLO)$/sbintern.obj
 .ENDIF
-
-# --- TESTTOOL MINIAPP ------------------------------------------------------
-
-SRS3FILES= $(SRS)$/miniapp.srs
-RES3TARGET=miniapp
-
-APP3TARGET=miniapp
-APP3STDLIBS= \
-            $(TOOLSLIB) \
-            $(SVTOOLLIB) \
-            $(PLUGCTORLIB) \
-            $(SVLIB) \
-            $(SVMEMLIB) \
-            $(SJLIB) \
-            $(SO2LIB)
-.IF "$(GUI)"=="UNX"
-APP3STDLIBS+= \
-            $(VOSLIB) $(OSLLIB)
-.ENDIF
-
-
-APP3LIBS= \
-        $(LIBPRE) $(LB)$/miniapp.lib
-
-APP3DEPN=\
-        $(L)$/svtool.lib \
-        $(L)$/itools.lib \
-        $(SVLIBDEPEND) \
-        $(LB)$/miniapp.lib
-
-.IF "$(GUI)" != "UNX"
-#               win16 braucht ein appobj
-APP3OBJS=               $(OBJ)$/testapp.obj
-.ENDIF
-
-APP3RES=        $(RES)$/miniapp.res
 
 .INCLUDE :  target.mk
 
