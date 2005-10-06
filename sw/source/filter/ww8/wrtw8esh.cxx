@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:07:39 $
+ *  last change: $Author: kz $ $Date: 2005-10-06 10:51:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2937,7 +2937,7 @@ bool SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
 
     //Create a destination storage for the microsoft control
     String sStorageName('_');
-    sStorageName += String::CreateFromInt32((UINT32)pObj);
+    sStorageName += String::CreateFromInt32((sal_uInt32)(sal_uIntPtr)pObj);
     SvStorageRef xOleStg = xObjPool->OpenSotStorage(sStorageName,
                  STREAM_READWRITE|STREAM_SHARE_DENYALL);
 
@@ -2957,7 +2957,7 @@ bool SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
     };
     //Set the obj id into the sprmCPicLocation
     BYTE *pData = aSpecOLE+2;
-    Set_UInt32(pData,(UINT32)pObj);
+    Set_UInt32(pData,(sal_uInt32)(sal_uIntPtr)pObj);
 
     String sFld(FieldString(ww::eCONTROL));
     sFld.APPEND_CONST_ASC("Forms.");
