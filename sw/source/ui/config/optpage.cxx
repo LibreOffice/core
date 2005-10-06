@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:46:01 $
+ *  last change: $Author: kz $ $Date: 2005-10-06 10:52:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -296,7 +296,7 @@ static void lcl_SelectMetricLB(ListBox& rMetric, USHORT nSID, const SfxItemSet& 
         FieldUnit eFieldUnit = (FieldUnit)((SfxUInt16Item*)pItem)->GetValue();
         for ( USHORT i = 0; i < rMetric.GetEntryCount(); ++i )
         {
-            if ( (int)rMetric.GetEntryData( i ) == (int)eFieldUnit )
+            if ( (int)(sal_IntPtr)rMetric.GetEntryData( i ) == (int)eFieldUnit )
             {
                 rMetric.SelectEntryPos( i );
                 break;
