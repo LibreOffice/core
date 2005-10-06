@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tagtest.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:56:16 $
+ *  last change: $Author: kz $ $Date: 2005-10-06 12:43:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,12 +33,18 @@
  *
  ************************************************************************/
 
+#ifndef _TAGTEST_HXX_
+#define _TAGTEST_HXX_
+
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
 #endif
+#include <hash_map> /* std::hashmap*/
+
+class GSILine;
 
 typedef USHORT TokenId;
 
@@ -46,7 +52,33 @@ typedef USHORT TokenId;
 
 class ParserMessage;
 
-DECLARE_LIST( ParserMessageList, ParserMessage* );
+DECLARE_LIST( Impl_ParserMessageList, ParserMessage* );
+class ParserMessageList;
+
+
+struct equalByteString{
+        bool operator()( const ByteString& rKey1, const ByteString& rKey2 ) const {
+            return rKey1.CompareTo( rKey2 )==COMPARE_EQUAL;
+    }
+};
+struct lessByteString{
+        bool operator()( const ByteString& rKey1, const ByteString& rKey2 ) const {
+            return rKey1.CompareTo( rKey2 )==COMPARE_LESS;
+    }
+};
+
+struct hashByteString{
+    size_t operator()( const ByteString& rName ) const{
+                std::hash< const char* > myHash;
+                return myHash( rName.GetBuffer() );
+    }
+};
+
+
+
+typedef std::hash_map<ByteString , String , hashByteString,equalByteString>
+                                StringHashMap;
+
 
 class TokenInfo
 {
@@ -54,6 +86,14 @@ private:
     void SplitTag( ParserMessageList &rErrorList );
 
     String aTagName;
+    StringHashMap aProperties;
+    BOOL bClosed;    // tag is closed  <sdnf/>
+    BOOL bCloseTag;  // tag is close Tag  </sdnf>
+
+
+    BOOL bIsBroken;
+    BOOL bHasBeenFixed;
+    BOOL bDone;
 
 public:
 
@@ -61,17 +101,47 @@ public:
     TokenId nId;
     USHORT nPos;            // Position in String
 
-    String aName;
-
-    TokenInfo():nId( 0 ){;}
-explicit    TokenInfo( TokenId pnId, USHORT nP ):nId( pnId ),nPos(nP){;}
-explicit    TokenInfo( TokenId pnId, USHORT nP, String paStr ):nId( pnId ), nPos(nP), aTokenString( paStr ){;}
+    TokenInfo():nId( 0 ),bIsBroken(FALSE),bHasBeenFixed(FALSE),bDone(FALSE),bClosed(FALSE),bCloseTag(FALSE){;}
+explicit    TokenInfo( TokenId pnId, USHORT nP ):nId( pnId ),nPos(nP),bIsBroken(FALSE),bHasBeenFixed(FALSE),bDone(FALSE),bClosed(FALSE),bCloseTag(FALSE){;}
+explicit    TokenInfo( TokenId pnId, USHORT nP, String paStr ):nId( pnId ), nPos(nP), aTokenString( paStr ),bIsBroken(FALSE),bHasBeenFixed(FALSE),bDone(FALSE),bClosed(FALSE),bCloseTag(FALSE){;}
 explicit    TokenInfo( TokenId pnId, USHORT nP, String paStr, ParserMessageList &rErrorList );
 
     String GetTagName() const;
 
-    BOOL operator == ( const TokenInfo& rInfo ) const
-    { return nId == rInfo.nId  && aTokenString.Equals( rInfo.aTokenString ); }
+    String MakeTag() const;
+
+    /**
+        Is the property to be ignored or does it have the default value anyways
+    **/
+    BOOL IsPropertyRelevant( const ByteString &aName, const String &aValue ) const;
+    BOOL IsPropertyValueValid( const ByteString &aName, const String &aValue ) const;
+    /**
+        Does the property contain the same value for all languages
+        e.g.: the href in a link tag
+    **/
+    BOOL IsPropertyInvariant( const ByteString &aName ) const;
+    /**
+        a subset of IsPropertyInvariant but containing only those that are fixable
+        we dont wat to fix e.g.: ahelp :: visibility
+    **/
+    BOOL IsPropertyFixable( const ByteString &aName ) const;
+    BOOL MatchesTranslation( TokenInfo& rInfo, BOOL bGenErrors, ParserMessageList &rErrorList, BOOL bFixTags = FALSE ) const;
+
+    BOOL IsDone() const { return bDone; }
+    void SetDone( BOOL bNew = TRUE ) { bDone = bNew; }
+
+    BOOL HasBeenFixed() const { return bHasBeenFixed; }
+    void SetHasBeenFixed( BOOL bNew = TRUE ) { bHasBeenFixed = bNew; }
+};
+
+
+class ParserMessageList : public Impl_ParserMessageList
+{
+public:
+    void AddError( USHORT nErrorNr, ByteString aErrorText, const TokenInfo &rTag );
+    void AddWarning( USHORT nErrorNr, ByteString aErrorText, const TokenInfo &rTag );
+
+    BOOL HasErrors();
 };
 
 
@@ -165,8 +235,8 @@ class TokenList : private TokenListImpl
 {
 private:
 
-    TokenList&   operator =( const TokenList& rList )
-                { TokenListImpl::operator =( rList ); return *this; }
+    TokenList&   operator =( const TokenList& rList );
+//                { TokenListImpl::operator =( rList ); return *this; }
 
 
 public:
@@ -174,6 +244,7 @@ public:
 
 
     TokenList() : TokenListImpl(){};
+    ~TokenList(){ Clear(); };
 
     void        Clear()
         {
@@ -181,39 +252,39 @@ public:
                 delete TokenListImpl::GetObject( i );
             TokenListImpl::Clear();
         }
-    void        Insert( TokenInfo p, ULONG nIndex )
+    void        Insert( TokenInfo p, ULONG nIndex = LIST_APPEND )
         { TokenListImpl::Insert( new TokenInfo(p), nIndex ); }
-    TokenInfo       Remove( ULONG nIndex )
+/*    TokenInfo     Remove( ULONG nIndex )
         {
             TokenInfo aT = GetObject( nIndex );
             delete TokenListImpl::GetObject( nIndex );
             TokenListImpl::Remove( nIndex );
             return aT;
-        }
-    TokenInfo       Remove( TokenInfo p ){ return Remove( GetPos( p ) ); }
+        }*/
+//    TokenInfo     Remove( TokenInfo p ){ return Remove( GetPos( p ) ); }
 //    TokenInfo     GetCurObject() const { return *TokenListImpl::GetCurObject(); }
-    TokenInfo       GetObject( ULONG nIndex ) const
+    TokenInfo&      GetObject( ULONG nIndex ) const
         {
-            if ( TokenListImpl::GetObject(nIndex) )
+//          if ( TokenListImpl::GetObject(nIndex) )
                 return *TokenListImpl::GetObject(nIndex);
-            else
-                return TokenInfo();
+//          else
+//              return TokenInfo();
         }
-    ULONG       GetPos( const TokenInfo p ) const
+/*    ULONG     GetPos( const TokenInfo p ) const
         {
             for ( ULONG i = 0 ; i < Count() ; i++ )
                 if ( p == GetObject( i ) )
                     return i;
             return LIST_ENTRY_NOTFOUND;
-        }
+        }*/
 
-    TokenList( const TokenList& rList )
-        {
+    TokenList( const TokenList& rList );
+/*      {
             for ( ULONG i = 0 ; i < rList.Count() ; i++ )
             {
                 Insert( rList.GetObject( i ), LIST_APPEND );
             }
-        }
+        }*/
 };
 
 class ParserMessage
@@ -221,14 +292,38 @@ class ParserMessage
     USHORT nErrorNr;
     ByteString aErrorText;
     USHORT nTagBegin,nTagLength;
-public:
+
+protected:
     ParserMessage( USHORT PnErrorNr, ByteString PaErrorText, const TokenInfo &rTag );
+
+public:
 
     USHORT GetErrorNr() { return nErrorNr; }
     ByteString GetErrorText() { return aErrorText; }
 
     USHORT GetTagBegin() { return nTagBegin; }
     USHORT GetTagLength() { return nTagLength; }
+
+    virtual BOOL IsError() =0;
+    virtual ByteString Prefix() =0;
+};
+
+class ParserError : public ParserMessage
+{
+public:
+    ParserError( USHORT PnErrorNr, ByteString PaErrorText, const TokenInfo &rTag );
+
+    virtual BOOL IsError() {return TRUE;};
+    virtual ByteString Prefix() {return "Error:"; };
+};
+
+class ParserWarning : public ParserMessage
+{
+public:
+    ParserWarning( USHORT PnErrorNr, ByteString PaErrorText, const TokenInfo &rTag );
+
+    virtual BOOL IsError() {return FALSE;};
+    virtual ByteString Prefix() {return "Warning:"; };
 };
 
 class SimpleParser
@@ -248,7 +343,7 @@ public:
     void Parse( String PaSource );
     TokenInfo GetNextToken( ParserMessageList &rErrorList );
     static String GetLexem( TokenInfo const &aToken );
-    TokenList GetTokenList(){ return aTokenList; }
+    TokenList& GetTokenList(){ return aTokenList; }
 };
 
 class TokenParser
@@ -275,14 +370,14 @@ class TokenParser
 
     TokenId nActiveRefTypes;
 
-    ParserMessageList aErrorList;
+    ParserMessageList *pErrorList;
 
 public:
     TokenParser();
-    void Parse( const String &aCode );
-    ParserMessageList& GetErrors(){ return aErrorList; }
-    BOOL HasErrors(){ return ( aErrorList.Count() > 0 ); }
-    TokenList GetTokenList(){ return aParser.GetTokenList(); }
+    void Parse( const String &aCode, ParserMessageList* pList );
+//  ParserMessageList& GetErrors(){ return aErrorList; }
+//  BOOL HasErrors(){ return ( aErrorList.Count() > 0 ); }
+    TokenList& GetTokenList(){ return aParser.GetTokenList(); }
 };
 
 class LingTest
@@ -291,19 +386,24 @@ private:
     TokenParser aReferenceParser;
     TokenParser aTesteeParser;
     ParserMessageList aCompareWarningList;
-    void CheckTags( TokenList aReference, TokenList aTestee, ParserMessageList &rErrorList );
+    void CheckTags( TokenList &aReference, TokenList &aTestee, BOOL bFixTags );
     BOOL IsTagMandatory( TokenInfo const &aToken, TokenId &aMetaTokens );
+    String aFixedTestee;
 public:
-    BOOL ReferenceOK( const String &aReference );
-    BOOL TesteeOK( const String &aTestee, BOOL bHasSourceLine );
+    void CheckReference( GSILine *aReference );
+    void CheckTestee( GSILine *aTestee, BOOL bHasSourceLine, BOOL bFixTags );
 
-    ParserMessageList& GetReferenceErrors(){ return aReferenceParser.GetErrors(); }
-    BOOL HasReferenceErrors(){ return aReferenceParser.HasErrors(); }
+//  ParserMessageList& GetReferenceErrors(){ return aReferenceParser.GetErrors(); }
+//  BOOL HasReferenceErrors(){ return aReferenceParser.HasErrors(); }
 
-    ParserMessageList& GetTesteeErrors(){ return aTesteeParser.GetErrors(); }
-    BOOL HasTesteeErrors(){ return aTesteeParser.HasErrors(); }
+//  ParserMessageList& GetTesteeErrors(){ return aTesteeParser.GetErrors(); }
+//  BOOL HasTesteeErrors(){ return aTesteeParser.HasErrors(); }
 
     ParserMessageList& GetCompareWarnings(){ return aCompareWarningList; }
     BOOL HasCompareWarnings(){ return ( aCompareWarningList.Count() > 0 ); }
+
+    String GetFixedTestee(){ return aFixedTestee; }
 };
+
+#endif
 
