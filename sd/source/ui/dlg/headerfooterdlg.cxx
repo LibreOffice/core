@@ -4,9 +4,9 @@
  *
  *  $RCSfile: headerfooterdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:02:15 $
+ *  last change: $Author: kz $ $Date: 2005-10-06 10:46:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -586,7 +586,7 @@ HeaderFooterTabPage::~HeaderFooterTabPage()
 
 IMPL_LINK( HeaderFooterTabPage, LanguageChangeHdl, void *, EMPTYARG )
 {
-    FillFormatList( (int)maCBDateTimeFormat.GetEntryData( maCBDateTimeFormat.GetSelectEntryPos() ) );
+    FillFormatList( (int)(sal_IntPtr)maCBDateTimeFormat.GetEntryData( maCBDateTimeFormat.GetSelectEntryPos() ) );
 
 
     return 0L;
@@ -642,7 +642,7 @@ void HeaderFooterTabPage::init( const HeaderFooterSettings& rSettings, bool bNot
     USHORT nPos;
     for( nPos = 0; nPos < maCBDateTimeFormat.GetEntryCount(); nPos++ )
     {
-        int nFormat = (int)maCBDateTimeFormat.GetEntryData( nPos );
+        int nFormat = (int)(sal_IntPtr)maCBDateTimeFormat.GetEntryData( nPos );
         if( nFormat == rSettings.meDateTimeFormat )
         {
             maCBDateTimeFormat.SelectEntryPos( nPos );
@@ -668,7 +668,7 @@ void HeaderFooterTabPage::getData( HeaderFooterSettings& rSettings, bool& rNotOn
     rSettings.maHeaderText = maTBHeader.GetText();
 
     if( maCBDateTimeFormat.GetSelectEntryCount() == 1 )
-        rSettings.meDateTimeFormat = (int)maCBDateTimeFormat.GetEntryData( maCBDateTimeFormat.GetSelectEntryPos() );
+        rSettings.meDateTimeFormat = (int)(sal_IntPtr)maCBDateTimeFormat.GetEntryData( maCBDateTimeFormat.GetSelectEntryPos() );
 
     LanguageType eLanguage = maCBDateTimeLanguage.GetSelectLanguage();
     if( eLanguage != meOldLanguage )
