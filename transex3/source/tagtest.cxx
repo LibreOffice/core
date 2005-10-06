@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tagtest.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:02:36 $
+ *  last change: $Author: kz $ $Date: 2005-10-06 12:44:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@
 #include <stdio.h>
 #endif
 
+#include "gsicheck.hxx"
 
 #define HAS_FLAG( nFlags, nFlag )       ( ( nFlags & nFlag ) != 0 )
 #define SET_FLAG( nFlags, nFlag )       ( nFlags |= nFlag )
@@ -53,17 +54,23 @@ TokenInfo::TokenInfo( TokenId pnId, USHORT nP, String paStr, ParserMessageList &
 : nId( pnId )
 , nPos(nP)
 , aTokenString( paStr )
+, bIsBroken(FALSE)
+, bHasBeenFixed(FALSE)
+, bDone(FALSE)
+, bClosed(FALSE)
+, bCloseTag(FALSE)
 {
     if ( nId == TAG_COMMONSTART || nId == TAG_COMMONEND )
         SplitTag( rErrorList );
 }
 
-enum tagcheck { TC_START, TC_HAS_TAG_NAME, TC_HAS_PROP_NAME_EQ, TC_HAS_PROP_NAME_EQ_SP, TC_HAS_PROP_NAME_SP, TC_INSIDE_STRING, TC_PROP_FINISHED, TC_CLOSED, TC_CLOSED_SPACE, TC_FINISHED, TC_ERROR };
+enum tagcheck { TC_START, TC_HAS_TAG_NAME, TC_HAS_PROP_NAME_EQ, TC_HAS_PROP_NAME_EQ_SP, TC_HAS_PROP_NAME_SP, TC_INSIDE_STRING, TC_PROP_FINISHED, TC_CLOSED, TC_CLOSED_SPACE, TC_CLOSETAG, TC_CLOSETAG_SP, TC_CLOSETAG_HAS_TAG_NAME, TC_FINISHED, TC_ERROR };
 
 /*
                                                       \<  link  href  =  \"text\"  name  =  \"C\"  \>
 START               ' ' ->  HAS_TAG_NAME
 START               '/' ->  CLOSED
+START               '/' ->  CLOSETAG    - no Portion (starting with /)
 START               '>' ->  FINISHED
 HAS_TAG_NAME        '=' ->  HAS_PROP_NAME_EQ
 HAS_TAG_NAME        ' ' ->  HAS_PROP_NAME_SP
@@ -84,13 +91,21 @@ CLOSED              ' ' ->  CLOSED_SPACE
 CLOSED              '>' ->  FINISHED
 CLOSED_SPACE        '>' ->  FINISHED
 
+CLOSETAG            ' ' ->  CLOSETAG_SP
+CLOSETAG            '>' ->  FINISHED
+CLOSETAG_SP         '>' ->  FINISHED
+CLOSETAG_SP         ' ' ->  CLOSETAG_HAS_TAG_NAME
+CLOSETAG_HAS_TAG_NAME  '>' ->  FINISHED
+
 */
 void TokenInfo::SplitTag( ParserMessageList &rErrorList )
 {
-    USHORT nLastPos = 2;    // skip  \<
+    USHORT nLastPos = 2;    // skip initial  \<
     USHORT nCheckPos = nLastPos;
     String aDelims( String::CreateFromAscii( " \\=>/" ) );
     String aPortion;
+    String aValue;      // store the value of a property
+    ByteString aName;   // store the name of a property/tag
     BOOL bCheckName = FALSE;
     BOOL bCheckEmpty = FALSE;
     sal_Unicode cDelim;
@@ -100,9 +115,9 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
     while ( nLastPos < aTokenString.Len() && aTokenString.GetChar( nLastPos ) == ' ')
         nLastPos++;
 
+    nCheckPos = aTokenString.SearchChar( aDelims.GetBuffer(), nLastPos );
     while ( nCheckPos != STRING_NOTFOUND && !( aState == TC_FINISHED || aState == TC_ERROR ) )
     {
-        nCheckPos = aTokenString.SearchChar( aDelims.GetBuffer(), nLastPos );
         aPortion = aTokenString.Copy( nLastPos, nCheckPos-nLastPos );
 
         if ( aTokenString.GetChar( nCheckPos ) == '\\' )
@@ -117,14 +132,25 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
 //            START           '/' ->  CLOSED
 //            START           '>' ->  FINISHED
             case TC_START:
+                aTagName = aPortion;
                 switch ( cDelim )
                 {
                     case ' ':  aState = TC_HAS_TAG_NAME;
                                bCheckName = TRUE;
                                break;
-                    case '/':  aState = TC_CLOSED;
-                               bCheckName = TRUE;
-                               break;
+                    case '/':
+                        {
+                            if ( aPortion.Len() == 0 )
+                            {
+                                aState = TC_CLOSETAG;
+                            }
+                            else
+                            {
+                                aState = TC_CLOSED;
+                                bCheckName = TRUE;
+                            }
+                        }
+                        break;
                     case '>':  aState = TC_FINISHED;
                                bCheckName = TRUE;
                                break;
@@ -176,6 +202,7 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
                                break;
                     case '\"': aState = TC_INSIDE_STRING;
                                bCheckEmpty = TRUE;
+                               aValue.Erase();
                                break;
                     default:   aState = TC_ERROR;
                 }
@@ -187,6 +214,7 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
                 {
                     case '\"': aState = TC_INSIDE_STRING;
                                bCheckEmpty = TRUE;
+                               aValue.Erase();
                                break;
                     default:   aState = TC_ERROR;
                 }
@@ -197,9 +225,32 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
             case TC_INSIDE_STRING:
                 switch ( cDelim )
                 {
-                    case '\"': aState = TC_PROP_FINISHED;
+                    case '\"':
+                        {
+                            aState = TC_PROP_FINISHED;
+                            aValue += aPortion;
+                            if ( aProperties.find( aName ) == aProperties.end() )
+                            {
+                                if ( !IsPropertyValueValid( aName, aValue ) )
+                                {
+                                    rErrorList.AddError( 25, ByteString("Property '").Append(aName).Append("' has invalid value '").Append(ByteString( aValue, RTL_TEXTENCODING_UTF8 )).Append("' "), *this );
+                                    bIsBroken = TRUE;
+                                }
+                                aProperties[ aName ] = aValue;
+                            }
+                            else
+                            {
+                                rErrorList.AddError( 25, ByteString("Property '").Append(aName).Append("' defined twice "), *this );
+                                bIsBroken = TRUE;
+                            }
+                        }
                                break;
-                    default:   aState = TC_INSIDE_STRING;
+                    default:
+                        {
+                            aState = TC_INSIDE_STRING;
+                            aValue += aPortion;
+                            aValue += cDelim;
+                        }
                 }
                 break;
 
@@ -229,6 +280,7 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
                 {
                     case ' ': aState = TC_CLOSED_SPACE;
                                bCheckEmpty = TRUE;
+                               bClosed = TRUE;
                                break;
                     case '>': aState = TC_FINISHED;
                                bCheckEmpty = TRUE;
@@ -248,29 +300,97 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
                 }
                 break;
 
-            default: rErrorList.Insert( new ParserMessage( 99, "Internal error Parsing Tag ", *this ) );
+// CLOSETAG            ' ' ->  CLOSETAG_SP
+// CLOSETAG            '>' ->  FINISHED
+            case TC_CLOSETAG:
+                bCloseTag = TRUE;
+                switch ( cDelim )
+                {
+                    case ' ':
+                        if ( aPortion.Len() == 0 )
+                        {
+                            aState = TC_CLOSETAG_SP;
+                        }
+                        else
+                        {
+                            aState = TC_CLOSETAG_HAS_TAG_NAME;
+                            aTagName = aPortion;
+                            bCheckName = TRUE;
+                        }
+                        break;
+                    case '>': aState = TC_FINISHED;
+                               aTagName = aPortion;
+                               bCheckName = TRUE;
+                               break;
+                    default:   aState = TC_ERROR;
+                }
+                break;
+
+// CLOSETAG_SP         '>' ->  FINISHED
+// CLOSETAG_SP         ' ' ->  CLOSETAG_HAS_TAG_NAME
+            case TC_CLOSETAG_SP:
+                switch ( cDelim )
+                {
+                    case '>': aState = TC_FINISHED;
+                               aTagName = aPortion;
+                               bCheckName = TRUE;
+                               break;
+                    case ' ': aState = TC_CLOSETAG_HAS_TAG_NAME;
+                               aTagName = aPortion;
+                               bCheckName = TRUE;
+                               break;
+                    default:   aState = TC_ERROR;
+                }
+                break;
+
+// CLOSETAG_HAS_TAG_NAME       '>' ->  FINISHED
+            case TC_CLOSETAG_HAS_TAG_NAME:
+                switch ( cDelim )
+                {
+                    case '>': aState = TC_FINISHED;
+                               bCheckEmpty = TRUE;
+                               break;
+                    default:   aState = TC_ERROR;
+                }
+                break;
+
+
+            default: rErrorList.AddError( 99, "Internal error Parsing Tag ", *this );
+                     bIsBroken = TRUE;
+
         }
 
         if ( bCheckName )
         {
-            ByteString aBytes( aPortion, RTL_TEXTENCODING_UTF8 );
-            // "a-zA-Z_-.0-9"
-            xub_StrLen nCount;
-            BOOL bBroken = FALSE;
-            const sal_Char* aBuf = aBytes.GetBuffer();
-            for ( nCount = 0 ; !bBroken && nCount < aBytes.Len() ; nCount++ )
+            if ( aPortion.Len() == 0 )
             {
-                bBroken = ! (   ( aBuf[nCount] >= 'a' && aBuf[nCount] <= 'z' )
-                              ||( aBuf[nCount] >= 'A' && aBuf[nCount] <= 'Z' )
-                              ||( aBuf[nCount] >= '0' && aBuf[nCount] <= '9' )
-                              ||( aBuf[nCount] == '_' )
-                              ||( aBuf[nCount] == '-' )
-                              ||( aBuf[nCount] == '.' )
-                            );
+                rErrorList.AddError( 25, "Tag/Property name missing ", *this );
+                bIsBroken = TRUE;
             }
+            else
+            {
+                aName = ByteString( aPortion, RTL_TEXTENCODING_UTF8 );
+                // "a-zA-Z_-.0-9"
+                xub_StrLen nCount;
+                BOOL bBroken = FALSE;
+                const sal_Char* aBuf = aName.GetBuffer();
+                for ( nCount = 0 ; !bBroken && nCount < aName.Len() ; nCount++ )
+                {
+                    bBroken = ! (   ( aBuf[nCount] >= 'a' && aBuf[nCount] <= 'z' )
+                                ||( aBuf[nCount] >= 'A' && aBuf[nCount] <= 'Z' )
+                                ||( aBuf[nCount] >= '0' && aBuf[nCount] <= '9' )
+                                ||( aBuf[nCount] == '_' )
+                                ||( aBuf[nCount] == '-' )
+                                ||( aBuf[nCount] == '.' )
+                                );
+                }
 
-            if ( bBroken )
-                rErrorList.Insert( new ParserMessage( 25, "Found illegal character in Tag ", *this ) );
+                if ( bBroken )
+                {
+                    rErrorList.AddError( 25, "Found illegal character in Tag/Property name ", *this );
+                    bIsBroken = TRUE;
+                }
+            }
 
             bCheckName = FALSE;
         }
@@ -278,7 +398,10 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
         if ( bCheckEmpty )
         {
             if ( aPortion.Len() )
-                rErrorList.Insert( new ParserMessage( 25, "Found displaced characters in Tag ", *this ) );
+            {
+                rErrorList.AddError( 25, ByteString("Found displaced characters '").Append(ByteString( aPortion, RTL_TEXTENCODING_UTF8 )).Append("' in Tag "), *this );
+                bIsBroken = TRUE;
+            }
             bCheckEmpty = FALSE;
         }
 
@@ -286,33 +409,188 @@ void TokenInfo::SplitTag( ParserMessageList &rErrorList )
         nLastPos = nCheckPos;
 
         // skip further blanks
-        if ( cDelim == ' ' )
+        if ( cDelim == ' ' && aState != TC_INSIDE_STRING )
             while ( nLastPos < aTokenString.Len() && aTokenString.GetChar( nLastPos ) == ' ')
                 nLastPos++;
+
+        nCheckPos = aTokenString.SearchChar( aDelims.GetBuffer(), nLastPos );
     }
     if ( aState != TC_FINISHED )
-        rErrorList.Insert( new ParserMessage( 25, "Error in Tag ", *this ) );
+    {
+        rErrorList.AddError( 25, "Parsing error in Tag ", *this );
+        bIsBroken = TRUE;
+    }
+}
+
+BOOL TokenInfo::IsPropertyRelevant( const ByteString &aName, const String &aValue ) const
+{
+    if ( aTagName.EqualsAscii( "alt" ) && aName.Equals( "xml-lang" ) )
+        return FALSE;
+    if ( aTagName.EqualsAscii( "ahelp" ) && aName.Equals( "visibility" ) && aValue.EqualsAscii("visible") )
+        return FALSE;
+    if ( aTagName.EqualsAscii( "image" ) && (aName.Equals( "width" ) || aName.Equals( "height" )) )
+        return FALSE;
+
+    return TRUE;
+}
+
+BOOL TokenInfo::IsPropertyValueValid( const ByteString &aName, const String &aValue ) const
+{
+    if ( aTagName.EqualsAscii( "switchinline" ) && aName.Equals( "select" ) )
+    {
+        return aValue.EqualsAscii("sys") ||
+               aValue.EqualsAscii("appl") ||
+               aValue.EqualsAscii("distrib");
+    }
+    if ( aTagName.EqualsAscii( "caseinline" ) && aName.Equals( "select" ) )
+    {
+        return !aValue.EqualsAscii("OS2") &&
+               !aValue.EqualsAscii("");
+    }
+
+    // we don't know any better so we assume it to be OK
+    return TRUE;
+}
+
+BOOL TokenInfo::IsPropertyInvariant( const ByteString &aName ) const
+{
+    if ( aTagName.EqualsAscii( "link" ) && aName.Equals( "name" ) )
+        return FALSE;
+    return TRUE;
+}
+
+BOOL TokenInfo::IsPropertyFixable( const ByteString &aName ) const
+{
+    // name everything that is allowed to be fixed automatically here
+    if ( aTagName.EqualsAscii( "ahelp" ) && aName.Equals( "hid" )
+      || aTagName.EqualsAscii( "link" ) && aName.Equals( "href" )
+      || aTagName.EqualsAscii( "alt" ) && aName.Equals( "id" )
+      || aTagName.EqualsAscii( "variable" ) && aName.Equals( "id" )
+      || aTagName.EqualsAscii( "image" ) && aName.Equals( "src" )
+      || aTagName.EqualsAscii( "image" ) && aName.Equals( "id" ) )
+        return TRUE;
+    return FALSE;
+}
+
+BOOL TokenInfo::MatchesTranslation( TokenInfo& rInfo, BOOL bGenErrors, ParserMessageList &rErrorList, BOOL bFixTags ) const
+{
+    // check if tags are equal
+    // check if all existing properties are in the translation as well and
+    // wether they have a matching content (the same in most cases)
+
+    if ( nId != rInfo.nId )
+        return FALSE;
+
+    if ( !aTagName.Equals( rInfo.aTagName ) )
+        return FALSE;
+
+    // If one of the tags has formating errors already it does make no sense to check here, so return right away
+    if ( bGenErrors && ( bIsBroken || rInfo.bIsBroken ) )
+        return TRUE;
+
+    StringHashMap::const_iterator iProp;
+    for( iProp = aProperties.begin() ; iProp != aProperties.end(); ++iProp )
+    {
+        if ( rInfo.aProperties.find( iProp->first ) != rInfo.aProperties.end() )
+        {
+            if ( IsPropertyRelevant( iProp->first, iProp->second ) || IsPropertyRelevant( iProp->first, rInfo.aProperties.find( iProp->first )->second ) )
+            {
+                if ( IsPropertyInvariant( iProp->first ) )
+                {
+                    if ( !rInfo.aProperties.find( iProp->first )->second.Equals( iProp->second ) )
+                    {
+                        if ( bGenErrors )
+                        {
+                            if ( bFixTags && IsPropertyFixable( iProp->first ) )
+                            {
+                                rInfo.aProperties.find( iProp->first )->second = iProp->second;
+                                rInfo.SetHasBeenFixed();
+                                rErrorList.AddWarning( 25, ByteString("Property '").Append(iProp->first).Append("': FIXED different value in Translation "), *this );
+                            }
+                            else
+                                rErrorList.AddError( 25, ByteString("Property '").Append(iProp->first).Append("': value different in Translation "), *this );
+                        }
+                        else return FALSE;
+                    }
+                }
+            }
+        }
+        else
+        {
+            if ( IsPropertyRelevant( iProp->first, iProp->second ) )
+            {
+                if ( bGenErrors )
+                    rErrorList.AddError( 25, ByteString("Property '").Append(iProp->first).Append("' missing in Translation "), *this );
+                else return FALSE;
+            }
+        }
+    }
+    for( iProp = rInfo.aProperties.begin() ; iProp != rInfo.aProperties.end(); ++iProp )
+    {
+        if ( aProperties.find( iProp->first ) == aProperties.end() )
+        {
+            if ( IsPropertyRelevant( iProp->first, iProp->second ) )
+            {
+                if ( bGenErrors )
+                    rErrorList.AddError( 25, ByteString("Extra Property '").Append(iProp->first).Append("' in Translation "), rInfo );
+                else return FALSE;
+            }
+        }
+    }
+
+    // if we reach here eather
+    //   the tags match completely or
+    //   the tags match but not the properties and we generated errors for that
+    return TRUE;
 }
 
 String TokenInfo::GetTagName() const
 {
-    String aRet( aTokenString.Copy(2) );    // cut off  \<
-    aRet.EraseLeadingChars( ' ' );
-    aRet.Erase( aRet.Len() -2 );    // cut off  \>
-    aRet.EraseTrailingChars( ' ' );
-    if ( aRet.Len() && aRet.GetChar( aRet.Len()-1 ) == '/' )
-        aRet.Erase( aRet.Len() -1 );
-    else if ( aRet.Len() && aRet.GetChar( 0 ) == '/' )
-        aRet.Erase( 0, 1 );
-    aRet.EraseLeadingChars( ' ' );
-    aRet.EraseTrailingChars( ' ' );
-    USHORT nPos;
-    if ( ( nPos = aRet.Search(' ') )  != STRING_NOTFOUND )
-        return aRet.Copy( 0, nPos );
+    return aTagName;
+}
+
+String TokenInfo::MakeTag() const
+{
+    String aRet;
+    aRet.AppendAscii("\\<");
+    if ( bCloseTag )
+        aRet.AppendAscii("/");
+    aRet.Append( GetTagName() );
+    StringHashMap::const_iterator iProp;
+
+    for( iProp = aProperties.begin() ; iProp != aProperties.end(); ++iProp )
+    {
+        aRet.AppendAscii(" ");
+        aRet.Append( String( iProp->first, RTL_TEXTENCODING_UTF8 ) );
+        aRet.AppendAscii("=\\\"");
+        aRet.Append( iProp->second );
+        aRet.AppendAscii("\\\"");
+    }
+    if ( bClosed )
+        aRet.AppendAscii("/");
+    aRet.AppendAscii("\\>");
     return aRet;
 }
 
 
+void ParserMessageList::AddError( USHORT nErrorNr, ByteString aErrorText, const TokenInfo &rTag )
+{
+    Insert( new ParserError( nErrorNr, aErrorText, rTag ), LIST_APPEND );
+}
+
+void ParserMessageList::AddWarning( USHORT nErrorNr, ByteString aErrorText, const TokenInfo &rTag )
+{
+    Insert( new ParserWarning( nErrorNr, aErrorText, rTag ), LIST_APPEND );
+}
+
+BOOL ParserMessageList::HasErrors()
+{
+    USHORT i;
+    for ( i=0 ; i < Count() ; i++ )
+        if ( GetObject( i )->IsError() )
+            return TRUE;
+    return FALSE;
+}
 
 struct Tag
 {
@@ -324,6 +602,7 @@ struct Tag
 
 static Tag aKnownTags[] =
 {
+/*  commenting oldstyle tags
 //  { "<#GROUP_FORMAT>", TAG_GROUP_FORMAT },
     { "<#BOLD>", TAG_BOLDON },
     { "<#/BOLD>", TAG_BOLDOFF },
@@ -369,7 +648,7 @@ static Tag aKnownTags[] =
     { "<#MATH>", TAG_MATH },
     { "<#CHART>", TAG_CHART },
     { "<#OFFICE>", TAG_OFFICE },
-
+  */
 //  { "<#TAG_GROUP_META>", TAG_GROUP_META },
     { "$[officefullname]", TAG_OFFICEFULLNAME },
     { "$[officename]", TAG_OFFICENAME },
@@ -380,7 +659,7 @@ static Tag aKnownTags[] =
     { "$[portalpath]", TAG_PORTALPATH },
     { "$[portalversion]", TAG_PORTALVERSION },
     { "$[portalshortname]", TAG_PORTALSHORTNAME },
-
+/*  commenting oldstyle tags
 //  { "<#TAG_GROUP_SINGLE>", TAG_GROUP_SINGLE },
     { "<#REFINSERT>", TAG_REFINSERT },
 
@@ -388,7 +667,7 @@ static Tag aKnownTags[] =
     { "<#END>", TAG_END },
     { "<#ELSE>", TAG_ELSE },
     { "<#VERSIONEND>", TAG_VERSIONEND },
-    { "<#ENDGRAPHIC>", TAG_ENDGRAPHIC },
+    { "<#ENDGRAPHIC>", TAG_ENDGRAPHIC },*/
     { "<Common Tag>", TAG_COMMONSTART },
     { "</Common Tag>", TAG_COMMONEND },
 
@@ -399,7 +678,7 @@ static Tag aKnownTags[] =
 
 SimpleParser::SimpleParser()
 : nPos( 0 )
-, aNextTag( TAG_NOMORETAGS, 0 )
+, aNextTag( TAG_NOMORETAGS, TOK_INVALIDPOS )
 {
 }
 
@@ -415,7 +694,7 @@ void SimpleParser::Parse( String PaSource )
 TokenInfo SimpleParser::GetNextToken( ParserMessageList &rErrorList )
 {
     TokenInfo aResult;
-    USHORT nTokeStartPos = 0;
+    USHORT nTokenStartPos = 0;
     if ( aNextTag.nId != TAG_NOMORETAGS )
     {
         aResult = aNextTag;
@@ -423,18 +702,12 @@ TokenInfo SimpleParser::GetNextToken( ParserMessageList &rErrorList )
     }
     else
     {
-        aLastToken = GetNextTokenString( rErrorList, nTokeStartPos );
+        aLastToken = GetNextTokenString( rErrorList, nTokenStartPos );
         if ( aLastToken.Len() == 0 )
             return TokenInfo( TAG_NOMORETAGS, TOK_INVALIDPOS );
 
-        USHORT i = 0;
-        while ( aKnownTags[i].nTag != TAG_UNKNOWN_TAG &&
-            aLastToken != aKnownTags[i].GetName() )
-            i++;
-        aResult = TokenInfo( aKnownTags[i].nTag, nTokeStartPos );
-
         // do we have a \< ... \> style tag?
-        if ( aResult.nId == TAG_UNKNOWN_TAG && aLastToken.Copy(0,2).EqualsAscii( "\\<" ) )
+        if ( aLastToken.Copy(0,2).EqualsAscii( "\\<" ) )
         {
             // check for paired \" \"
             bool bEven = true;
@@ -455,7 +728,7 @@ TokenInfo SimpleParser::GetNextToken( ParserMessageList &rErrorList )
             }
             if ( !bEven )
             {
-                rErrorList.Insert( new ParserMessage( 24, "Missing quotes ( \\\" ) in Tag", TokenInfo( TAG_UNKNOWN_TAG, nTokeStartPos, aLastToken ) ) );
+                rErrorList.AddError( 24, "Missing quotes ( \\\" ) in Tag", TokenInfo( TAG_UNKNOWN_TAG, nTokenStartPos, aLastToken ) );
             }
 
             // check if we have an end-tag or a start-tag
@@ -464,21 +737,29 @@ TokenInfo SimpleParser::GetNextToken( ParserMessageList &rErrorList )
             while ( aLastToken.GetChar(nNonBlankStartPos) == ' ' )
                 nNonBlankStartPos++;
             if ( aLastToken.GetChar(nNonBlankStartPos) == '/' )
-                aResult = TokenInfo( TAG_COMMONEND, nTokeStartPos, aLastToken );
+                aResult = TokenInfo( TAG_COMMONEND, nTokenStartPos, aLastToken, rErrorList );
             else
             {
-                aResult = TokenInfo( TAG_COMMONSTART, nTokeStartPos, aLastToken, rErrorList );
+                aResult = TokenInfo( TAG_COMMONSTART, nTokenStartPos, aLastToken, rErrorList );
                 nNonBlankEndPos = aLastToken.Len() -3;
                 while ( aLastToken.GetChar(nNonBlankEndPos) == ' ' )
                     nNonBlankEndPos--;
                 if ( aLastToken.GetChar( nNonBlankEndPos ) == '/' )
-                    aNextTag = TokenInfo( TAG_COMMONEND, nTokeStartPos, aLastToken );
+                    aNextTag = TokenInfo( TAG_COMMONEND, nTokenStartPos, String::CreateFromAscii("\\</").Append(aResult.GetTagName()).AppendAscii("\\>"), rErrorList );
             }
+        }
+        else
+        {
+            USHORT i = 0;
+            while ( aKnownTags[i].nTag != TAG_UNKNOWN_TAG &&
+                aLastToken != aKnownTags[i].GetName() )
+                i++;
+            aResult = TokenInfo( aKnownTags[i].nTag, nTokenStartPos );
         }
     }
 
     if ( aResult.nId == TAG_UNKNOWN_TAG )
-        aResult = TokenInfo( TAG_UNKNOWN_TAG, nTokeStartPos, aLastToken );
+        aResult = TokenInfo( TAG_UNKNOWN_TAG, nTokenStartPos, aLastToken );
     aTokenList.Insert( aResult, LIST_APPEND );
     return aResult;
 }
@@ -543,7 +824,7 @@ String SimpleParser::GetNextTokenString( ParserMessageList &rErrorList, USHORT &
         {   // Token is incomplete. Skip start and search for better ones
             nPos = nStyle3StartPos +2;
             ByteString sTmp( "Tag Start '\\<' without Tag End '\\>': " );
-            rErrorList.Insert( new ParserMessage( 24, "Tag Start '\\<' without Tag End '\\>'", TokenInfo( TAG_UNKNOWN_TAG, nStyle3StartPos, aSource.Copy( nStyle3StartPos-10, 20 ) ) ) );
+            rErrorList.AddError( 24, "Tag Start '\\<' without Tag End '\\>'", TokenInfo( TAG_UNKNOWN_TAG, nStyle3StartPos, aSource.Copy( nStyle3StartPos-10, 20 ) ) );
             return GetNextTokenString( rErrorList, rTagStartPos );
         }
         // check for paired quoted "    -->   \"sometext\"
@@ -570,22 +851,18 @@ String SimpleParser::GetLexem( TokenInfo const &aToken )
 }
 
 TokenParser::TokenParser()
+: pErrorList( NULL )
 {}
 
-void TokenParser::Parse( const String &aCode )
+void TokenParser::Parse( const String &aCode, ParserMessageList* pList )
 {
-    while ( aErrorList.Count() )
-    {
-        delete aErrorList.GetCurObject();
-        aErrorList.Remove();
-    }
-
+    pErrorList = pList;
 
     //Scanner initialisieren
     aParser.Parse( aCode );
 
     //erstes Symbol holen
-    aTag = aParser.GetNextToken( aErrorList );
+    aTag = aParser.GetNextToken( *pErrorList );
 
     nPfCaseOptions = 0;
     nAppCaseOptions = 0;
@@ -650,6 +927,7 @@ void TokenParser::Parse( const String &aCode )
                 }
         }
     }
+    pErrorList = NULL;
 }
 
 void TokenParser::Paragraph()
@@ -1072,7 +1350,7 @@ BOOL TokenParser::match( const TokenInfo &aCurrentToken, const TokenInfo &rExpec
                && aCurrentToken.GetTagName().Equals( aExpectedToken.GetTagName() ) )
              || aCurrentToken.nId != TAG_COMMONEND )
         {
-            aTag = aParser.GetNextToken( aErrorList );
+            aTag = aParser.GetNextToken( *pErrorList );
             return TRUE;
         }
     }
@@ -1099,10 +1377,10 @@ BOOL TokenParser::match( const TokenInfo &aCurrentToken, const TokenInfo &rExpec
 
 void TokenParser::ParseError( USHORT nErrNr, ByteString aErrMsg, const TokenInfo &rTag )
 {
-    aErrorList.Insert( new ParserMessage( nErrNr, aErrMsg, rTag), LIST_APPEND );
+    pErrorList->AddError( nErrNr, aErrMsg, rTag);
 
     // Das Fehlerhafte Tag ueberspringen
-    aTag = aParser.GetNextToken( aErrorList );
+    aTag = aParser.GetNextToken( *pErrorList );
 }
 
 
@@ -1125,6 +1403,14 @@ ParserMessage::ParserMessage( USHORT PnErrorNr, ByteString PaErrorText, const To
     nTagBegin = rTag.nPos;
     nTagLength = aLexem.Len();
 }
+
+ParserError::ParserError( USHORT nErrorNr, ByteString aErrorText, const TokenInfo &rTag )
+: ParserMessage( nErrorNr, aErrorText, rTag )
+{}
+
+ParserWarning::ParserWarning( USHORT nErrorNr, ByteString aErrorText, const TokenInfo &rTag )
+: ParserMessage( nErrorNr, aErrorText, rTag )
+{}
 
 BOOL LingTest::IsTagMandatory( TokenInfo const &aToken, TokenId &aMetaTokens )
 {
@@ -1158,7 +1444,7 @@ BOOL LingTest::IsTagMandatory( TokenInfo const &aToken, TokenId &aMetaTokens )
     return FALSE;
 }
 
-void LingTest::CheckTags( TokenList aReference, TokenList aTestee, ParserMessageList &rErrorList )
+void LingTest::CheckTags( TokenList &aReference, TokenList &aTestee, BOOL bFixTags )
 {
     ULONG i=0,j=0;
     // Clean old Warnings
@@ -1178,85 +1464,136 @@ void LingTest::CheckTags( TokenList aReference, TokenList aTestee, ParserMessage
 
     // filter uninteresting Tags
     TokenId aMetaTokens = 0;
-    i=0;
-    while ( i < aReference.Count() )
+    for ( i=0 ; i < aReference.Count() ; i++ )
     {
-        if ( IsTagMandatory( aReference.GetObject( i ), aMetaTokens ) )
-        {
-            i++;
-        }
-        else
-            aReference.Remove( i );
+        if ( !IsTagMandatory( aReference.GetObject( i ), aMetaTokens ) )
+            aReference.GetObject( i ).SetDone();
     }
 
     aMetaTokens = 0;
-    i=0;
-    while ( i < aTestee.Count() )
+    for ( i=0 ; i < aTestee.Count() ; i++ )
     {
-        if ( IsTagMandatory( aTestee.GetObject( i ), aMetaTokens ) )
-        {
-            i++;
-        }
-        else
-            aTestee.Remove( i );
+        if ( !IsTagMandatory( aTestee.GetObject( i ), aMetaTokens ) )
+            aTestee.GetObject( i ).SetDone();
     }
 
-    // remove all found tags
-    i = 0;
-    while ( i < aReference.Count() )
+    // remove all matching tags
+    for ( i=0 ; i < aReference.Count() ; i++ )
     {
+        if ( aReference.GetObject( i ).IsDone() )
+            continue;
+
         BOOL bTagFound = FALSE;
-        j = 0;
-        while ( j < aTestee.Count() && !bTagFound )
+        for ( j=0 ; j < aTestee.Count() && !bTagFound ; j++ )
         {
-            if ( aReference.GetObject( i ).nId == aTestee.GetObject( j ).nId )
+            if ( aTestee.GetObject( j ).IsDone() )
+                continue;
+
+            if ( aReference.GetObject( i ).MatchesTranslation( aTestee.GetObject( j ), FALSE, aCompareWarningList ) )
+            {
+                aReference.GetObject( i ).SetDone();
+                aTestee.GetObject( j ).SetDone();
                 bTagFound = TRUE;
-            else
-                j++;
+            }
         }
-        if ( bTagFound )
+    }
+
+    BOOL bCanFix = TRUE;
+
+    if ( bFixTags )
+    {
+        // we fix only if its a really simple case
+        USHORT nTagCount = 0;
+        for ( i=0 ; i < aReference.Count() ; i++ )
+            if ( !aReference.GetObject( i ).IsDone() )
+                nTagCount++;
+        if ( nTagCount > 1 )
+            bCanFix = FALSE;
+
+        nTagCount = 0;
+        for ( i=0 ; i < aTestee.Count() ; i++ )
+            if ( !aTestee.GetObject( i ).IsDone() )
+                nTagCount++;
+        if ( nTagCount > 1 )
+            bCanFix = FALSE;
+    }
+
+    // generate errors for tags that have differing attributes
+    for ( i=0 ; i < aReference.Count() ; i++ )
+    {
+        if ( aReference.GetObject( i ).IsDone() )
+            continue;
+
+        BOOL bTagFound = FALSE;
+        for ( j=0 ; j < aTestee.Count() && !bTagFound ; j++ )
         {
-            aReference.Remove( i );
-            aTestee.Remove( j );
+            if ( aTestee.GetObject( j ).IsDone() )
+                continue;
+
+            if ( aReference.GetObject( i ).MatchesTranslation( aTestee.GetObject( j ), TRUE, aCompareWarningList, bCanFix && bFixTags ) )
+            {
+                aReference.GetObject( i ).SetDone();
+                aTestee.GetObject( j ).SetDone();
+                bTagFound = TRUE;
+            }
         }
-        else
-            i++;
     }
 
     // list remaining tags as errors
-    ParserMessage *pNewWarning = NULL;
-    i = 0;
-    while ( i < aReference.Count() )
+    for ( i=0 ; i < aReference.Count() ; i++ )
     {
-        pNewWarning =  new ParserMessage( 20, "Missing Tag in Translation", aReference.GetObject( i ) );
-        aCompareWarningList.Insert( pNewWarning, LIST_APPEND );
-        i++;
+        if ( aReference.GetObject( i ).IsDone() )
+            continue;
+
+        aCompareWarningList.AddError( 20, "Missing Tag in Translation", aReference.GetObject( i ) );
     }
-    i = 0;
-    while ( i < aTestee.Count() )
+    for ( i=0 ; i < aTestee.Count() ; i++ )
     {
-        pNewWarning =  new ParserMessage( 21, "Extra Tag in Translation", aTestee.GetObject( i ) );
-        aCompareWarningList.Insert( pNewWarning, LIST_APPEND );
-        i++;
+        if ( aTestee.GetObject( i ).IsDone() )
+            continue;
+
+        aCompareWarningList.AddError( 21, "Extra Tag in Translation", aTestee.GetObject( i ) );
     }
 
-//  This message is obselete now
-//    pNewWarning = new ParserMessage( 22, "Tags Differ. Too many differences to be specified" );
+    for ( i=0 ; i < aReference.Count() ; i++ )
+        aReference.GetObject( i ).SetDone( FALSE );
+
+    for ( i=0 ; i < aTestee.Count() ; i++ )
+        aTestee.GetObject( i ).SetDone( FALSE );
 }
 
-BOOL LingTest::ReferenceOK( const String &aReference )
+void LingTest::CheckReference( GSILine *aReference )
 {
-    aReferenceParser.Parse( aReference );
-    return !aReferenceParser.HasErrors();
+    aReferenceParser.Parse( aReference->GetUText(), aReference->GetMessageList() );
 }
 
-BOOL LingTest::TesteeOK( const String &aTestee, BOOL bHasSourceLine )
+void LingTest::CheckTestee( GSILine *aTestee, BOOL bHasSourceLine, BOOL bFixTags )
 {
-    aTesteeParser.Parse( aTestee );
+    aFixedTestee = aTestee->GetUText();
+    aTesteeParser.Parse( aFixedTestee, aTestee->GetMessageList() );
 
     if ( bHasSourceLine )
-        CheckTags( aReferenceParser.GetTokenList(), aTesteeParser.GetTokenList(), aTesteeParser.GetErrors() );
+        CheckTags( aReferenceParser.GetTokenList(), aTesteeParser.GetTokenList(), bFixTags );
 
-    return !aTesteeParser.HasErrors() && !HasCompareWarnings();
+    if ( bFixTags )
+    {
+        TokenList& aTesteeTokens = aTesteeParser.GetTokenList();
+        BOOL bFixesDone = FALSE;
+        // count backwards to allow replacing from right to left
+        int i;
+        for ( i=aTesteeTokens.Count()-1 ; i>=0 ; i-- )
+        {
+            if ( aTesteeTokens.GetObject( i ).HasBeenFixed() )
+            {
+                bFixesDone = TRUE;
+                aFixedTestee.Replace( aTesteeTokens.GetObject( i ).nPos, aTesteeTokens.GetObject( i ).aTokenString.Len(), aTesteeTokens.GetObject( i ).MakeTag() );
+            }
+        }
+        if ( bFixesDone )
+        {
+            aTestee->SetUText( aFixedTestee );
+            aTestee->SetFixed();
+        }
+    }
 }
 
