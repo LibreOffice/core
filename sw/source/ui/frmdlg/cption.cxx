@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cption.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:49:59 $
+ *  last change: $Author: kz $ $Date: 2005-10-06 10:54:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -348,7 +348,7 @@ void SwCaptionDialog::Apply()
         aName.EraseTrailingChars( ' ' );
         aOpt.SetCategory( aName );
     }
-    aOpt.SetNumType( (sal_uInt16)(sal_uInt32)aFormatBox.GetEntryData( aFormatBox.GetSelectEntryPos() ) );
+    aOpt.SetNumType( (sal_uInt16)(sal_uIntPtr)aFormatBox.GetEntryData( aFormatBox.GetSelectEntryPos() ) );
     aOpt.SetSeparator( aSepEdit.IsEnabled() ? aSepEdit.GetText() : String() );
     aOpt.SetCaption( aTextEdit.GetText() );
     aOpt.SetPos( aPosBox.GetSelectEntryPos() );
@@ -423,7 +423,7 @@ void SwCaptionDialog::DrawSample()
     sal_Bool bNone = sFldTypeName == sNone;
     if( !bNone )
     {
-        sal_uInt16 nNumFmt = (sal_uInt16)(sal_uInt32)aFormatBox.GetEntryData(
+        sal_uInt16 nNumFmt = (sal_uInt16)(sal_uIntPtr)aFormatBox.GetEntryData(
                                         aFormatBox.GetSelectEntryPos() );
         if( SVX_NUM_NUMBER_NONE != nNumFmt )
         {
