@@ -4,9 +4,9 @@
  *
  *  $RCSfile: createaddresslistdialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:48:08 $
+ *  last change: $Author: kz $ $Date: 2005-10-06 10:53:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -344,7 +344,7 @@ void SwAddressControl_Impl::MakeVisible(const Rectangle & rRect)
 IMPL_LINK(SwAddressControl_Impl, EditModifyHdl_Impl, Edit*, pEdit)
 {
     //get the data element number of the current set
-    sal_Int32 nIndex = (sal_Int32)pEdit->GetData();
+    sal_Int32 nIndex = (sal_Int32)(sal_IntPtr)pEdit->GetData();
     //get the index of the set
     DBG_ASSERT(m_pData->aDBData.size() > m_nCurrentDataSet, "wrong data set index" );
     if(m_pData->aDBData.size() > m_nCurrentDataSet)
