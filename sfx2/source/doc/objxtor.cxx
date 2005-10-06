@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:47:58 $
+ *  last change: $Author: kz $ $Date: 2005-10-06 11:14:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1081,7 +1081,7 @@ SfxObjectShell* SfxObjectShell::CreateObject( const String& rServiceName, SfxObj
             ::com::sun::star::uno::Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
             sal_Int64 nHandle = xObj->getSomething( aSeq );
             if ( nHandle )
-                return (SfxObjectShell*) (sal_Int32*) nHandle;
+                return (SfxObjectShell*) (sal_IntPtr) nHandle;
         }
     }
 
