@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:09:17 $
+ *  last change: $Author: kz $ $Date: 2005-10-06 10:52:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -293,7 +293,7 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
         if( xObj.is() )
         {
             ::com::sun::star::embed::XEmbeddedObject *pObj = xObj.get();
-            UINT32 nPictureId = (UINT32)pObj;
+            sal_uInt32 nPictureId = (sal_uInt32)(sal_uIntPtr)pObj;
             Set_UInt32(pDataAdr, nPictureId);
 
             WW8OleMap *pMap = new WW8OleMap(nPictureId);
