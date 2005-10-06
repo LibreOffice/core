@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addresstemplate.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:54:25 $
+ *  last change: $Author: kz $ $Date: 2005-10-06 11:01:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1056,7 +1056,7 @@ public:
     IMPL_LINK(AddressBookSourceDialog, OnFieldSelect, ListBox*, _pListbox)
     {
         // the index of the affected list box in our array
-        sal_Int32 nListBoxIndex = reinterpret_cast<sal_Int32>(_pListbox->GetEntryData(0));
+        sal_IntPtr nListBoxIndex = reinterpret_cast<sal_IntPtr>(_pListbox->GetEntryData(0));
         DBG_ASSERT(nListBoxIndex >= 0 && nListBoxIndex < FIELD_CONTROLS_VISIBLE,
             "AddressBookSourceDialog::OnFieldScroll: invalid list box entry!");
 
