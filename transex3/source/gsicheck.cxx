@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gsicheck.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:59:49 $
+ *  last change: $Author: kz $ $Date: 2005-10-06 12:43:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,86 +39,15 @@
 
 // local includes
 #include "tagtest.hxx"
-
-//
-// class GSILine
-//
-enum LineFormat { FORMAT_GSI1, FORMAT_SDF, FORMAT_UNKNOWN };
-
-class GSILine : public ByteString
-{
-private:
-    LineFormat aFormat;
-    ULONG nLineNumber;
-
-    ByteString aUniqId;
-    ByteString aLineType;
-    ByteString aLangId;
-    ByteString aText;
-    ByteString aQuickHelpText;
-    ByteString aTitle;
-
-    BOOL bOK;
-
-
-public:
-    GSILine( const ByteString &rLine, ULONG nLine );
-    LineFormat  const GetLineFormat()     { return aFormat; }
-    ULONG       const GetLineNumber()     { return nLineNumber; }
-
-    ByteString  const GetUniqId()         { return aUniqId; }
-    ByteString  const GetLineType()       { return aLineType; }
-    ByteString  const GetLanguageId()     { return aLangId; }
-    ByteString  const GetText()           { return aText; }
-        String  const GetUText()          { return String( aText, RTL_TEXTENCODING_UTF8 ); }
-    ByteString  const GetQuickHelpText()  { return aQuickHelpText; }
-    ByteString  const GetTitle()          { return aTitle; }
-
-    BOOL const IsOK() { return bOK; }
-    void NotOK();
-};
-
-//
-// class GSIBlock
-//
-
-DECLARE_LIST( GSIBlock_Impl, GSILine * );
-
-class GSIBlock : public GSIBlock_Impl
-{
-private:
-    GSILine *pSourceLine;
-    GSILine *pReferenceLine;
-    void PrintList( ParserMessageList &rList, ByteString aPrefix, GSILine *pLine );
-    BOOL bPrintContext;
-    BOOL bCheckSourceLang;
-    BOOL bCheckTranslationLang;
-    BOOL bReference;
-    BOOL bHasBlockError;
-
-    BOOL IsUTF8( const ByteString &aTestee, USHORT &nErrorPos, ByteString &aErrorMsg ) const;
-    BOOL TestUTF8( GSILine* pTestee );
-
-public:
-    GSIBlock( BOOL PbPrintContext, BOOL bSource, BOOL bTrans, BOOL bRef );
-    ~GSIBlock();
-    void PrintError( ByteString aMsg, ByteString aPrefix, ByteString aContext, ULONG nLine, ByteString aUniqueId = ByteString() );
-    void InsertLine( GSILine* pLine, const ByteString aSourceLang);
-    void SetReferenceLine( GSILine* pLine );
-    BOOL CheckSyntax( ULONG nLine, BOOL bRequireSourceLine );
-
-    void WriteError( SvStream &aErrOut, BOOL bRequireSourceLine );
-    void WriteCorrect( SvStream &aOkOut, BOOL bRequireSourceLine );
-};
-
+#include "gsicheck.hxx"
 
 
 /*****************************************************************************/
-void PrintError( ByteString aMsg, ByteString aPrefix,
+void PrintMessage( ByteString aType, ByteString aMsg, ByteString aPrefix,
     ByteString aContext, BOOL bPrintContext, ULONG nLine, ByteString aUniqueId = ByteString() )
 /*****************************************************************************/
 {
-    fprintf( stdout, "Error: %s, Line %lu", aPrefix.GetBuffer(), nLine );
+    fprintf( stdout, "%s %s, Line %lu", aType.GetBuffer(), aPrefix.GetBuffer(), nLine );
     if ( aUniqueId.Len() )
         fprintf( stdout, ", UniqueID %s", aUniqueId.GetBuffer() );
     fprintf( stdout, ": %s", aMsg.GetBuffer() );
@@ -126,6 +55,14 @@ void PrintError( ByteString aMsg, ByteString aPrefix,
     if ( bPrintContext )
         fprintf( stdout, "  \"%s\"", aContext.GetBuffer() );
     fprintf( stdout, "\n" );
+}
+
+/*****************************************************************************/
+void PrintError( ByteString aMsg, ByteString aPrefix,
+    ByteString aContext, BOOL bPrintContext, ULONG nLine, ByteString aUniqueId = ByteString() )
+/*****************************************************************************/
+{
+    PrintMessage( "Error:", aMsg, aPrefix, aContext, bPrintContext, nLine, aUniqueId );
 }
 
 BOOL LanguageOK( ByteString aLang )
@@ -161,6 +98,7 @@ GSILine::GSILine( const ByteString &rLine, ULONG nLine )
                 : ByteString( rLine )
                 , nLineNumber( nLine )
                 , bOK( TRUE )
+                , bFixed ( FALSE )
 {
     if ( rLine.GetTokenCount( '\t' ) == 15 )
     {
@@ -186,7 +124,7 @@ GSILine::GSILine( const ByteString &rLine, ULONG nLine )
     }
     else    // allow tabs in gsi files
     {
-        aFormat = FORMAT_GSI1;
+        aFormat = FORMAT_GSI;
         ByteString sTmp( rLine );
         USHORT nPos = sTmp.Search( "($$)" );
         USHORT nStart = 0;
@@ -230,6 +168,63 @@ void GSILine::NotOK()
 /*****************************************************************************/
 {
     bOK = FALSE;
+}
+
+/*****************************************************************************/
+void GSILine::ReassembleLine()
+/*****************************************************************************/
+{
+    ByteString aReassemble;
+    if ( GetLineFormat() == FORMAT_SDF )
+    {
+        USHORT i;
+        for ( i = 0 ; i < 10 ; i++ )
+        {
+            aReassemble.Append( GetToken( i, '\t' ) );
+            aReassemble.Append( "\t" );
+        }
+        aReassemble.Append( aText );
+        for ( i = 11 ; i < 15 ; i++ )
+        {
+            aReassemble.Append( "\t" );
+            aReassemble.Append( GetToken( i, '\t' ) );
+        }
+        *(ByteString*)this = aReassemble;
+    }
+    else if ( GetLineFormat() == FORMAT_GSI )
+    {
+        USHORT nPos = Search( "($$)" );
+        USHORT nStart = 0;
+        if ( nPos != STRING_NOTFOUND )
+        {
+            nStart = nPos + 4;  // + length of the delemiter
+            nPos = Search( "($$)", nStart );
+        }
+        if ( nPos != STRING_NOTFOUND )
+        {
+            nStart = nPos + 4;  // + length of the delemiter
+            nPos = Search( "($$)", nStart );
+        }
+        if ( nPos != STRING_NOTFOUND )
+        {
+            nStart = nPos + 4;  // + length of the delemiter
+            nPos = Search( "($$)", nStart );
+        }
+        if ( nPos != STRING_NOTFOUND )
+        {
+            nStart = nPos + 4;  // + length of the delemiter
+        }
+        if ( nPos != STRING_NOTFOUND )
+        {
+            aReassemble = Copy( 0, nStart );
+            aReassemble += aText;
+            *(ByteString*)this = aReassemble;
+        }
+        else
+            PrintError( "Cannot reassemble GSI line (internal Error).", "File format", "", FALSE, GetLineNumber(), GetUniqId() );
+    }
+    else
+        PrintError( "Cannot reassemble line of unknown type (internal Error).", "File format", "", FALSE, GetLineNumber(), GetUniqId() );
 }
 
 //
@@ -305,22 +300,30 @@ void GSIBlock::SetReferenceLine( GSILine* pLine )
 }
 
 /*****************************************************************************/
+void GSIBlock::PrintMessage( ByteString aType, ByteString aMsg, ByteString aPrefix,
+    ByteString aContext, ULONG nLine, ByteString aUniqueId )
+/*****************************************************************************/
+{
+    ::PrintMessage( aType, aMsg, aPrefix, aContext, bPrintContext, nLine, aUniqueId );
+}
+
+/*****************************************************************************/
 void GSIBlock::PrintError( ByteString aMsg, ByteString aPrefix,
     ByteString aContext, ULONG nLine, ByteString aUniqueId )
 /*****************************************************************************/
 {
-    ::PrintError( aMsg, aPrefix, aContext, bPrintContext, nLine, aUniqueId );
+    PrintMessage( "Error:", aMsg, aPrefix, aContext, nLine, aUniqueId );
 }
 
 /*****************************************************************************/
-void GSIBlock::PrintList( ParserMessageList &rList, ByteString aPrefix,
+void GSIBlock::PrintList( ParserMessageList *pList, ByteString aPrefix,
     GSILine *pLine )
 /*****************************************************************************/
 {
     ULONG i;
-    for ( i = 0 ; i < rList.Count() ; i++ )
+    for ( i = 0 ; i < pList->Count() ; i++ )
     {
-        ParserMessage *pMsg = rList.GetObject( i );
+        ParserMessage *pMsg = pList->GetObject( i );
         ByteString aContext;
         if ( bPrintContext )
         {
@@ -332,7 +335,7 @@ void GSIBlock::PrintList( ParserMessageList &rList, ByteString aPrefix,
             aContext.EraseLeadingChars(' ');
         }
 
-        PrintError( pMsg->GetErrorText(), aPrefix, aContext, pLine->GetLineNumber(), pLine->GetUniqId() );
+        PrintMessage( pMsg->Prefix(), pMsg->GetErrorText(), aPrefix, aContext, pLine->GetLineNumber(), pLine->GetUniqId() );
     }
 }
 
@@ -391,7 +394,7 @@ BOOL GSIBlock::TestUTF8( GSILine* pTestee )
 }
 
 /*****************************************************************************/
-BOOL GSIBlock::CheckSyntax( ULONG nLine, BOOL bRequireSourceLine )
+BOOL GSIBlock::CheckSyntax( ULONG nLine, BOOL bRequireSourceLine, BOOL bFixTags )
 /*****************************************************************************/
 {
     static LingTest aTester;
@@ -404,13 +407,13 @@ BOOL GSIBlock::CheckSyntax( ULONG nLine, BOOL bRequireSourceLine )
             PrintError( "No source language entry defined!", "File format", "", nLine );
             bHasBlockError = TRUE;
         }
-//      aTester.ReferenceOK( String() );
     }
     else
     {
-        if ( !aTester.ReferenceOK( pSourceLine->GetUText() ) )
+        aTester.CheckReference( pSourceLine );
+        if ( pSourceLine->HasMessages() )
         {
-            PrintList( aTester.GetReferenceErrors(), "ReferenceString", pSourceLine );
+            PrintList( pSourceLine->GetMessageList(), "ReferenceString", pSourceLine );
             pSourceLine->NotOK();
             bHasError = TRUE;
         }
@@ -448,14 +451,14 @@ BOOL GSIBlock::CheckSyntax( ULONG nLine, BOOL bRequireSourceLine )
     ULONG i;
     for ( i = 0; i < Count(); i++ )
     {
-        if ( !aTester.TesteeOK( GetObject( i )->GetUText(), pSourceLine != NULL ) )
+        aTester.CheckTestee( GetObject( i ), pSourceLine != NULL , bFixTags );
+        if ( GetObject( i )->HasMessages() || aTester.HasCompareWarnings() )
         {
-            GetObject( i )->NotOK();
+            if ( GetObject( i )->HasMessages() || aTester.GetCompareWarnings().HasErrors() )
+                GetObject( i )->NotOK();
             bHasError = TRUE;
-            if ( aTester.HasTesteeErrors() )
-                PrintList( aTester.GetTesteeErrors(), "Translation", GetObject( i ) );
-            if ( pSourceLine && aTester.HasCompareWarnings() )
-                PrintList( aTester.GetCompareWarnings(), "Translation Tag Missmatch", GetObject( i ) );
+            PrintList( GetObject( i )->GetMessageList(), "Translation", GetObject( i ) );
+            PrintList( &(aTester.GetCompareWarnings()), "Translation Tag Missmatch", GetObject( i ) );
         }
         bHasError |= !TestUTF8( GetObject( i ) );
     }
@@ -504,6 +507,26 @@ void GSIBlock::WriteCorrect( SvStream &aOkOut, BOOL bRequireSourceLine )
         aOkOut.WriteLine( *pSourceLine );
 }
 
+void GSIBlock::WriteFixed( SvStream &aFixOut, BOOL bRequireSourceLine )
+{
+    if ( pSourceLine && !pSourceLine->IsFixed() && bCheckSourceLang )
+        return;
+
+    BOOL bHasFixes = FALSE;
+    ULONG i;
+    for ( i = 0; i < Count(); i++ )
+    {
+        if ( GetObject( i )->IsFixed() )
+        {
+            bHasFixes = TRUE;
+            aFixOut.WriteLine( *GetObject( i ) );
+        }
+    }
+
+    if ( pSourceLine && bHasFixes )
+        aFixOut.WriteLine( *pSourceLine );
+}
+
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
@@ -517,20 +540,24 @@ void Help()
 /*****************************************************************************/
 {
     fprintf( stdout, "\n" );
-    fprintf( stdout, "gsicheck Version 1.7.8 (c)1999 - 2001 by SUN Microsystems\n" );
+    fprintf( stdout, "gsicheck Version 1.8.1 (c)1999 - 2005 by SUN Microsystems\n" );
     fprintf( stdout, "=========================================================\n" );
     fprintf( stdout, "\n" );
     fprintf( stdout, "gsicheck checks the syntax of tags in GSI-Files and SDF-Files\n" );
     fprintf( stdout, "         checks for inconsistencies and malicious UTF8 encoding\n" );
+    fprintf( stdout, "         checks tags in Online Help\n" );
     fprintf( stdout, "\n" );
-    fprintf( stdout, "Syntax: gsicheck [ -c ] [ -we ] [ -wef ErrorFilename ] [ -wc ]\n" );
+    fprintf( stdout, "Syntax: gsicheck [ -c ] [-f] [ -we ] [ -wef ErrorFilename ] [ -wc ]\n" );
     fprintf( stdout, "                 [ -wcf CorrectFilename ] [ -s | -t ] [ -l LanguageID ]\n" );
     fprintf( stdout, "                 [ -r ReferenceFile ] filename\n" );
     fprintf( stdout, "\n" );
     fprintf( stdout, "-c    Add context to error message (Print the line containing the error)\n" );
-    fprintf( stdout, "-we   Write GSI-File containing all errors\n" );
+    fprintf( stdout, "-f    try to fix errors. See also -wf -wff \n" );
+    fprintf( stdout, "-wf   Write File containing all fixed parts\n" );
+    fprintf( stdout, "-wff  Same as above but give own filename\n" );
+    fprintf( stdout, "-we   Write File containing all errors\n" );
     fprintf( stdout, "-wef  Same as above but give own filename\n" );
-    fprintf( stdout, "-wc   Write GSI-File containing all correct parts\n" );
+    fprintf( stdout, "-wc   Write File containing all correct parts\n" );
     fprintf( stdout, "-wcf  Same as above but give own filename\n" );
     fprintf( stdout, "-s    Check only source language. Should be used before handing out to vendor.\n" );
     fprintf( stdout, "-t    Check only Translation language(s). Should be used before merging.\n" );
@@ -557,8 +584,11 @@ int _cdecl main( int argc, char *argv[] )
     BOOL bCheckTranslationLang = FALSE;
     BOOL bWriteError = FALSE;
     BOOL bWriteCorrect = FALSE;
+    BOOL bWriteFixed = FALSE;
+    BOOL bFixTags = FALSE;
     String aErrorFilename;
     String aCorrectFilename;
+    String aFixedFilename;
     BOOL bFileHasError = FALSE;
     ByteString aSourceLang( "en-US" );     // English is default
     ByteString aFilename;
@@ -606,6 +636,25 @@ int _cdecl main( int argc, char *argv[] )
                                 }
                             else
                                    bWriteCorrect = TRUE;
+                        else if ( (*(argv[ i ]+2)) == 'f' )
+                            if ( (*(argv[ i ]+3)) == 'f' )
+                                if ( (i+1) < argc )
+                                {
+                                    aFixedFilename = String( argv[ i+1 ], RTL_TEXTENCODING_ASCII_US );
+                                    bWriteFixed = TRUE;
+                                    bFixTags = TRUE;
+                                    i++;
+                                }
+                                else
+                                {
+                                    fprintf( stderr, "\nERROR: Switch %s requires parameter!\n\n", argv[ i ] );
+                                    bError = TRUE;
+                                }
+                            else
+                            {
+                                   bWriteFixed = TRUE;
+                                bFixTags = TRUE;
+                            }
                         else
                         {
                             fprintf( stderr, "\nERROR: Unknown Switch %s!\n\n", argv[ i ] );
@@ -646,6 +695,11 @@ int _cdecl main( int argc, char *argv[] )
                             fprintf( stderr, "\nERROR: Switch %s requires parameter!\n\n", argv[ i ] );
                             bError = TRUE;
                         }
+                    }
+                    break;
+                case 'f':
+                    {
+                        bFixTags = TRUE;
                     }
                     break;
                 default:
@@ -711,7 +765,7 @@ int _cdecl main( int argc, char *argv[] )
 
         aReferenceGSI.Open( String( aReferenceFilename, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_READ );
         if ( !aReferenceGSI.IsOpen()) {
-            fprintf( stderr, "\nERROR: Could not open GSI-File %s!\n\n", aFilename.GetBuffer() );
+            fprintf( stderr, "\nERROR: Could not open Input-File %s!\n\n", aFilename.GetBuffer() );
             exit ( 3 );
         }
     }
@@ -730,7 +784,7 @@ int _cdecl main( int argc, char *argv[] )
         aOkOut.Open( aCorrectFilename , STREAM_STD_WRITE | STREAM_TRUNC );
         if ( !aOkOut.IsOpen())
         {
-            fprintf( stderr, "\nERROR: Could not open GSI-File %s!\n\n", ByteString( aCorrectFilename, RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+            fprintf( stderr, "\nERROR: Could not open Output-File %s!\n\n", ByteString( aCorrectFilename, RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
             exit ( 4 );
         }
     }
@@ -748,7 +802,25 @@ int _cdecl main( int argc, char *argv[] )
         aErrOut.Open( aErrorFilename , STREAM_STD_WRITE | STREAM_TRUNC );
         if ( !aErrOut.IsOpen())
         {
-            fprintf( stderr, "\nERROR: Could not open GSI-File %s!\n\n", ByteString( aErrorFilename, RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+            fprintf( stderr, "\nERROR: Could not open Output-File %s!\n\n", ByteString( aErrorFilename, RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+            exit ( 4 );
+        }
+    }
+
+    SvFileStream aFixOut;
+    if ( bWriteFixed )
+    {
+        if ( !aFixedFilename.Len() )
+        {
+            String sTmpBase( aBaseName );
+            sTmpBase += String( "_fix", RTL_TEXTENCODING_ASCII_US );
+            aSource.SetBase( sTmpBase );
+            aFixedFilename = aSource.GetFull();
+        }
+        aFixOut.Open( aFixedFilename , STREAM_STD_WRITE | STREAM_TRUNC );
+        if ( !aFixOut.IsOpen())
+        {
+            fprintf( stderr, "\nERROR: Could not open Output-File %s!\n\n", ByteString( aFixedFilename, RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
             exit ( 4 );
         }
     }
@@ -797,12 +869,14 @@ int _cdecl main( int argc, char *argv[] )
                 {
                     if ( pBlock )
                     {
-                        bFileHasError |= pBlock->CheckSyntax( nLine, aSourceLang.Len() != 0 );
+                        bFileHasError |= pBlock->CheckSyntax( nLine, aSourceLang.Len() != 0, bFixTags );
 
                         if ( bWriteError )
                             pBlock->WriteError( aErrOut, aSourceLang.Len() != 0 );
                         if ( bWriteCorrect )
                             pBlock->WriteCorrect( aOkOut, aSourceLang.Len() != 0 );
+                        if ( bWriteFixed )
+                            pBlock->WriteFixed( aFixOut, aSourceLang.Len() != 0 );
 
                         delete pBlock;
                     }
@@ -865,12 +939,14 @@ int _cdecl main( int argc, char *argv[] )
     }
     if ( pBlock )
     {
-        bFileHasError |= pBlock->CheckSyntax( nLine, aSourceLang.Len() != 0 );
+        bFileHasError |= pBlock->CheckSyntax( nLine, aSourceLang.Len() != 0, bFixTags );
 
         if ( bWriteError )
             pBlock->WriteError( aErrOut, aSourceLang.Len() != 0 );
         if ( bWriteCorrect )
             pBlock->WriteCorrect( aOkOut, aSourceLang.Len() != 0 );
+        if ( bWriteFixed )
+            pBlock->WriteFixed( aFixOut, aSourceLang.Len() != 0 );
 
         delete pBlock;
     }
@@ -880,6 +956,8 @@ int _cdecl main( int argc, char *argv[] )
         aErrOut.Close();
     if ( bWriteCorrect )
         aOkOut.Close();
+    if ( bWriteFixed )
+        aFixOut.Close();
 
     if ( bFileHasError )
         return 55;
