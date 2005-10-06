@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:05:09 $
+ *  last change: $Author: kz $ $Date: 2005-10-06 11:10:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -821,7 +821,8 @@ void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
     // write only as embedded, not linked
     String          aStorageName( RTL_CONSTASCII_USTRINGPARAM( "MBD" ) );
     sal_Char        aBuf[ sizeof(UINT32) * 2 + 1 ];
-    UINT32          nPictureId = UINT32(this);
+    // FIXME Eeek! Is this just a way to get a unique id?
+    UINT32          nPictureId = UINT32(sal_uIntPtr(this) >> 2);
     sprintf( aBuf, "%08X", nPictureId );        // #100211# - checked
     aStorageName.AppendAscii( aBuf );
     SotStorageRef    xOleStg = pRootStorage->OpenSotStorage( aStorageName,
