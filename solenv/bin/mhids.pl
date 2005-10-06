@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: mhids.pl,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 22:11:36 $
+#   last change: $Author: kz $ $Date: 2005-10-06 12:41:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,7 @@ my @cleanuplist = ();
 my $appext;
 my $compiler;
 my $outbin_flag;
+my $outobj_flag;
 my $objext;
 my $preprocess_flag; # preprocess to stdout
 
@@ -79,18 +80,21 @@ sub setcompiler
         $appext = ""; # windows for now
         $compiler = "gcc -x c";
         $outbin_flag = "-o ";
+        $outobj_flag = "";
         $objext = ".o";
         $preprocess_flag = "-E"; # preprocess to stdout
     } elsif ( "$whichcom" eq "MSC" ) {
         $appext = ".exe"; # windows for now
         $compiler = "cl";
         $outbin_flag = "-Fe";
+        $outobj_flag = "-Fo";
         $objext = ".obj";
         $preprocess_flag = "-EP"; # preprocess to stdout
     } elsif ( "$whichcom" eq "C52" ) {
         $appext = ""; # windows for now
         $compiler = "cc";
         $outbin_flag = "-o ";
+        $outobj_flag = "";
         $objext = ".o";
         $preprocess_flag = "-E"; # preprocess to stdout
 
@@ -222,8 +226,13 @@ close PRE;
 close C_PROG;
 
 #cl %SOLARINCLUDES% %_srs%\%_workfile%.c /Fe%_srs%\%_workfile%$appext
-print         "$wrap_command$compiler $solarincludes $defs ${shell_workfile}.c $outbin_flag${shell_workfile}$appext \n";
-$ret = system "$wrap_command$compiler $solarincludes $defs ${shell_workfile}.c $outbin_flag${shell_workfile}$appext";
+my $outobj_param = "";
+if ( $outobj_flag ne "" )
+{
+    $outobj_param = "$outobj_flag${shell_workfile}$objext";
+}
+print         "$wrap_command$compiler $solarincludes $defs ${shell_workfile}.c $outobj_param $outbin_flag${shell_workfile}$appext \n";
+$ret = system "$wrap_command$compiler $solarincludes $defs ${shell_workfile}.c $outobj_param $outbin_flag${shell_workfile}$appext";
 if ( $ret ) {
     push @cleanuplist, "$appext";
     cleandie("ERROR - compiling $workfile.c failed");
