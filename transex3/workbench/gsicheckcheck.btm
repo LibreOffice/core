@@ -1,0 +1,17 @@
+gsicheck
+gsicheck.exe gsicheck_errors.sdf -wc -we
+#pause
+diff --brief gsicheck_errors_ok.sdf gsicheck_errors_ok-.sdf || %vdiff gsicheck_errors_ok.sdf gsicheck_errors_ok-.sdf
+diff --brief gsicheck_errors_err.sdf gsicheck_errors_err-.sdf || %vdiff gsicheck_errors_err.sdf gsicheck_errors_err-.sdf
+gsicheck.exe gsicheck_errors.sdf -wc -we -s
+#pause
+diff --brief gsicheck_errors_ok.sdf gsicheck_errors_ok-s.sdf || %vdiff gsicheck_errors_ok.sdf gsicheck_errors_ok-s.sdf
+diff --brief gsicheck_errors_err.sdf gsicheck_errors_err-s.sdf || %vdiff gsicheck_errors_err.sdf gsicheck_errors_err-s.sdf
+gsicheck.exe gsicheck_errors.sdf -wc -we -t
+#pause
+diff --brief gsicheck_errors_ok.sdf gsicheck_errors_ok-t.sdf || %vdiff gsicheck_errors_ok.sdf gsicheck_errors_ok-t.sdf
+diff --brief gsicheck_errors_err.sdf gsicheck_errors_err-t.sdf || %vdiff gsicheck_errors_err.sdf gsicheck_errors_err-t.sdf
+gsicheck.exe gsicheck_errors.sdf -wc -we -l ""
+#pause
+diff --brief gsicheck_errors_ok.sdf gsicheck_errors_ok-l.sdf || %vdiff gsicheck_errors_ok.sdf gsicheck_errors_ok-l.sdf
+diff --brief gsicheck_errors_err.sdf gsicheck_errors_err-l.sdf || %vdiff gsicheck_errors_err.sdf gsicheck_errors_err-l.sdf
