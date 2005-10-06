@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cgm.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:45:25 $
+ *  last change: $Author: kz $ $Date: 2005-10-06 11:11:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -796,7 +796,7 @@ void CGM::ImplDefaultReplacement()
     sal_uInt8*  pBuf = (sal_uInt8*)maDefRepList.First();
     if ( pBuf )
     {
-        sal_uInt32  nElementSize = (sal_uInt32)maDefRepSizeList.First();
+        sal_uInt32  nElementSize = (sal_uInt32)(sal_uIntPtr)maDefRepSizeList.First();
         sal_uInt32  nOldEscape = mnEscape;
         sal_uInt32  nOldElementClass = mnElementClass;
         sal_uInt32  nOldElementID = mnElementID;
@@ -826,7 +826,7 @@ void CGM::ImplDefaultReplacement()
                 if ( ( mnElementClass != 1 ) || ( mnElementID != 0xc ) )    // rekursion hier nicht moeglich!!
                     ImplDoClass();
             }
-            nElementSize = (sal_uInt32)maDefRepSizeList.Next();
+            nElementSize = (sal_uInt32)(sal_uIntPtr)maDefRepSizeList.Next();
             pBuf = (sal_uInt8*)maDefRepList.Next();
         }
         mnEscape = nOldEscape;
