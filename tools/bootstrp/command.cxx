@@ -4,9 +4,9 @@
  *
  *  $RCSfile: command.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:28:07 $
+ *  last change: $Author: kz $ $Date: 2005-10-06 11:04:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -418,7 +418,7 @@ void CCommand::ImplInit()
         (void) strcpy( pTmpStr, aCommandLine.GetToken(i, ' ' ).GetBuffer() );
         USHORT nStrLen = strlen( pTmpStr ) + 1;
         strcpy( pChar, pTmpStr );
-        *pPtr = (unsigned int) pChar;
+        *pPtr = (sal_uIntPtr) pChar;
         pChar += nStrLen;
         pPtr += 1;
 #ifdef UNX
@@ -431,7 +431,7 @@ void CCommand::ImplInit()
                 aCommandLine.Erase(0, 16);
             i = nArgc;
             strcpy( pChar, aCommandLine.GetBuffer() );
-            *pPtr = ( unsigned int ) pChar;
+            *pPtr = (sal_uIntPtr) pChar;
             pPtr += 1;
         }
 #endif
