@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objtest.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:32:08 $
+ *  last change: $Author: kz $ $Date: 2005-10-06 12:37:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2201,8 +2201,8 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         }
                     if ( !IsError() )
                     {
-                        SbxVariable *pMember;
-                        if ( ! (pMember = pVar->GetParent()->Find(CUniString("ID"),SbxCLASS_DONTCARE)) )
+                        SbxVariable *pMember = NULL;
+                        if ( !( pVar->GetParent() && (pMember = pVar->GetParent()->Find(CUniString("ID"),SbxCLASS_DONTCARE)) ) )
                         {
                             SetError( SbxERR_NAMED_NOT_FOUND );
                         }
@@ -2719,7 +2719,13 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
         return NULL;
 
     SbxVariableRef Old = SbxObject::Find(Str, Type );
-    if (Old && Old->GetUserData() != ID_Dispatch && Old->GetUserData() != ID_UNODispatch && Old->GetUserData() != 0 )
+    // do not return any objects from pControlsObjs[] or pMyVars[]
+    if (Old && Old->GetUserData() != ID_Dispatch
+            && Old->GetUserData() != ID_UNODispatch
+            && Old->GetUserData() != ID_Control
+            && Old->GetUserData() != ID_StringControl
+            && Old->GetUserData() != ID_ErrorDummy
+            && Old->GetUserData() != 0 )
         return Old;
     else
     {
@@ -2825,7 +2831,7 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
 
 String TestToolObj::GetRevision( String const &aSourceIn )
 {
-    // search $Revision: 1.19 $
+    // search $Revision: 1.20 $
     xub_StrLen nPos;
     if ( ( nPos = aSourceIn.SearchAscii( "$Revision:" ) ) != STRING_NOTFOUND )
         return aSourceIn.Copy( nPos+ 10, aSourceIn.SearchAscii( "$", nPos+10 ) -nPos-10);
