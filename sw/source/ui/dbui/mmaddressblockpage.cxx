@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmaddressblockpage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:56:27 $
+ *  last change: $Author: kz $ $Date: 2005-10-06 10:53:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -689,7 +689,7 @@ IMPL_LINK(SwCustomizeAddressBlockDialog, OKHdl_Impl, OKButton*, EMPTYARG)
   -----------------------------------------------------------------------*/
 IMPL_LINK(SwCustomizeAddressBlockDialog, ListBoxSelectHdl_Impl, DDListBox*, pBox)
 {
-    sal_Int32 nUserData = (sal_Int32)pBox->FirstSelected()->GetUserData();
+    sal_Int32 nUserData = (sal_Int32)(sal_IntPtr)pBox->FirstSelected()->GetUserData();
     // Check if the selected entry is already in the address and then forbid inserting
     m_aInsertFieldIB.Enable(nUserData >= 0 || !HasItem_Impl(nUserData));
     return 0;
@@ -755,7 +755,7 @@ sal_Int32 SwCustomizeAddressBlockDialog::GetSelectedItem_Impl()
             String sEntry = m_aAddressElementsLB.GetEntryText(pEntry);
             if( sSelected.Equals( sEntry, 1, sSelected.Len() - 2 ) )
             {
-                nRet = (sal_Int32)pEntry->GetUserData();
+                nRet = (sal_Int32)(sal_IntPtr)pEntry->GetUserData();
                 break;
             }
         }
@@ -771,7 +771,7 @@ bool   SwCustomizeAddressBlockDialog::HasItem_Impl(sal_Int32 nUserData)
     for(ULONG i = 0; i < m_aAddressElementsLB.GetEntryCount();  ++i)
     {
         SvLBoxEntry* pEntry = m_aAddressElementsLB.GetEntry(i);
-        if((sal_Int32)pEntry->GetUserData() == nUserData)
+        if((sal_Int32)(sal_IntPtr)pEntry->GetUserData() == nUserData)
         {
             sEntry = m_aAddressElementsLB.GetEntryText(pEntry);
             break;
@@ -879,7 +879,7 @@ void SwCustomizeAddressBlockDialog::UpdateImageButtons_Impl()
     m_aRemoveFieldIB.Enable(m_aDragED.HasCurrentItem() ? sal_True : sal_False);
     SvLBoxEntry* pEntry = m_aAddressElementsLB.GetCurEntry();
     m_aInsertFieldIB.Enable( pEntry &&
-            (0 < (sal_Int32)pEntry->GetUserData() || m_aFieldCB.GetText().Len()));
+            (0 < (sal_Int32)(sal_IntPtr)pEntry->GetUserData() || m_aFieldCB.GetText().Len()));
 }
 /*-- 28.04.2004 12:04:14---------------------------------------------------
 
@@ -905,7 +905,7 @@ void SwCustomizeAddressBlockDialog::SetAddress(const ::rtl::OUString& rAddress)
             String sEntry = m_aAddressElementsLB.GetEntryText(pEntry);
             sEntry += '>';
             sEntry.Insert('<', 0);
-            sal_Int32 nUserData = (sal_Int32)pEntry->GetUserData();
+            sal_Int32 nUserData = (sal_Int32)(sal_IntPtr)pEntry->GetUserData();
             switch(nUserData)
             {
                 case USER_DATA_SALUTATION : sAddress.SearchAndReplace(sEntry, m_sCurrentSalutation); break;
@@ -1420,7 +1420,7 @@ void  DDListBox::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
         uno::Reference<
              datatransfer::XTransferable > xRef( pContainer );
 
-        sal_Int32 nUserData = (sal_Int32)pEntry->GetUserData();
+        sal_Int32 nUserData = (sal_Int32)(sal_IntPtr)pEntry->GetUserData();
         //special entries can only be once in the address / greeting
         if(nUserData >= 0 || !m_pParentDialog->HasItem_Impl(nUserData))
         {
