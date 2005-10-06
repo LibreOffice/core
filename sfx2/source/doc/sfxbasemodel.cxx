@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:49:33 $
+ *  last change: $Author: kz $ $Date: 2005-10-06 11:15:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3582,9 +3582,9 @@ sal_Int64 SAL_CALL SfxBaseModel::getSomething( const ::com::sun::star::uno::Sequ
     {
         SvGlobalName aName( aIdentifier );
         if ( aName == SvGlobalName( SO3_GLOBAL_CLASSID ) )
-             return (sal_Int64)(sal_Int32)(SvObject*)GetObjectShell();
+             return (sal_Int64)(sal_IntPtr)(SvObject*)GetObjectShell();
         else if ( aName == SvGlobalName( SFX_GLOBAL_CLASSID ) )
-             return (sal_Int64)(sal_Int32)(SfxObjectShell*)GetObjectShell();
+             return (sal_Int64)(sal_IntPtr)(SfxObjectShell*)GetObjectShell();
     }
 
     return 0;
