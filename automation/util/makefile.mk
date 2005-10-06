@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 19:34:10 $
+#   last change: $Author: kz $ $Date: 2005-10-06 12:38:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -151,10 +151,12 @@ APP1TARGET=testtool
 
 .IF "$(GUI)" == "UNX"
 APP1STDLIBS= -lapp -lsample
+APP1DEPN+=$(SHL2TARGETN) $(SHL3TARGETN)
 .ELSE
 APP1STDLIBS= \
         app.lib \
         sample.lib
+APP1DEPN+=$(LB)$/$(SHL2IMPLIB).lib $(LB)$/$(SHL3IMPLIB).lib
 .ENDIF
     
 APP1STDLIBS+= \
@@ -210,12 +212,6 @@ APP1STDLIBS+= -lapp -lsample
 APP1LIBS=\
         $(LIBPRE) $(LB)$/testtool.lib
 
-APP1DEPN=\
-        $(LB)$/testtool.lib \
-        $(SHL2TARGETN) \
-        $(SHL3TARGETN)
-
-
 APP1OBJS=       $(OBJ)$/testbasi.obj \
                 $(OBJ)$/cmdbasestream.obj \
                 $(OBJ)$/svcommstream.obj
@@ -252,10 +248,6 @@ APP3STDLIBS+= \
 
 APP3LIBS= \
         $(LIBPRE) $(LB)$/miniapp.lib
-
-APP3DEPN=\
-        $(SHL1TARGETN) \
-        $(LB)$/miniapp.lib
 
 .IF "$(GUI)" != "UNX"
 #		win16 braucht ein appobj
