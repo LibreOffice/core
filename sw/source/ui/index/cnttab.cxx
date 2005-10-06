@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:21:03 $
+ *  last change: $Author: kz $ $Date: 2005-10-06 10:54:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2529,13 +2529,13 @@ void SwTOXEntryTabPage::UpdateDescriptor()
     {
         rDesc.SetSortByDocument(aSortDocPosRB.IsChecked());
         SwTOXSortKey aKey1, aKey2, aKey3;
-        aKey1.eField = (ToxAuthorityField)(sal_uInt32)aFirstKeyLB.GetEntryData(
+        aKey1.eField = (ToxAuthorityField)(sal_uIntPtr)aFirstKeyLB.GetEntryData(
                                     aFirstKeyLB.GetSelectEntryPos());
         aKey1.bSortAscending = aFirstSortUpRB.IsChecked();
-        aKey2.eField = (ToxAuthorityField)(sal_uInt32)aSecondKeyLB.GetEntryData(
+        aKey2.eField = (ToxAuthorityField)(sal_uIntPtr)aSecondKeyLB.GetEntryData(
                                     aSecondKeyLB.GetSelectEntryPos());
         aKey2.bSortAscending = aSecondSortUpRB.IsChecked();
-        aKey3.eField = (ToxAuthorityField)(sal_uInt32)aThirdKeyLB.GetEntryData(
+        aKey3.eField = (ToxAuthorityField)(sal_uIntPtr)aThirdKeyLB.GetEntryData(
                                 aThirdKeyLB.GetSelectEntryPos());
         aKey3.bSortAscending = aThirdSortUpRB.IsChecked();
 
@@ -2597,7 +2597,7 @@ IMPL_LINK(SwTOXEntryTabPage, RemoveInsertAuthHdl, PushButton*, pButton)
         sal_uInt16 nSelPos = aAuthFieldsLB.GetSelectEntryPos();
         String sToInsert(aAuthFieldsLB.GetSelectEntry());
         SwFormToken aInsert(TOKEN_AUTHORITY);
-        aInsert.nAuthorityField = (sal_uInt16)(sal_uInt32)aAuthFieldsLB.GetEntryData(nSelPos);
+        aInsert.nAuthorityField = (sal_uInt16)(sal_uIntPtr)aAuthFieldsLB.GetEntryData(nSelPos);
         aTokenWIN.InsertAtSelection(String::CreateFromAscii(
                                             SwForm::aFormAuth), aInsert);
         aAuthFieldsLB.RemoveEntry(sToInsert);
