@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:25:15 $
+ *  last change: $Author: kz $ $Date: 2005-10-06 10:55:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,7 +150,7 @@ void SwHyphWrapper::SpellEnd()
 
 IMPL_LINK( SwHyphWrapper, SpellError, void *, nLang )
 {
-    sal_uInt32 nNew = (sal_uInt32)nLang;
+    sal_uInt32 nNew = (sal_uInt32)(sal_uIntPtr)nLang;
     if( nNew != nLangError )
     {
         nLangError = nNew;
