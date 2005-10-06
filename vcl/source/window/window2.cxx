@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:33:01 $
+ *  last change: $Author: kz $ $Date: 2005-10-06 10:58:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -877,7 +877,7 @@ void Window::SaveBackground( const Point& rPos, const Size& rSize,
 
 // -----------------------------------------------------------------------
 
-ULONG Window::SaveFocus()
+sal_uIntPtr Window::SaveFocus()
 {
     ImplSVData* pSVData = ImplGetSVData();
     if ( pSVData->maWinData.mpFocusWin )
@@ -885,7 +885,7 @@ ULONG Window::SaveFocus()
         ImplFocusDelData* pDelData = new ImplFocusDelData;
         pSVData->maWinData.mpFocusWin->ImplAddDel( pDelData );
         pDelData->mpFocusWin = pSVData->maWinData.mpFocusWin;
-        return (ULONG)(void*)pDelData;
+        return (sal_uIntPtr)(void*)pDelData;
     }
     else
         return 0;
@@ -893,7 +893,7 @@ ULONG Window::SaveFocus()
 
 // -----------------------------------------------------------------------
 
-BOOL Window::EndSaveFocus( ULONG nSaveId, BOOL bRestore )
+BOOL Window::EndSaveFocus( sal_uIntPtr nSaveId, BOOL bRestore )
 {
     if ( !nSaveId )
         return FALSE;
