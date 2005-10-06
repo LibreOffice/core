@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regcompare.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:18:48 $
+ *  last change: $Author: kz $ $Date: 2005-10-06 11:15:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1768,7 +1768,7 @@ static sal_uInt32 checkValueDifference(RegistryKey& key1, RegValueType valueType
             case RG_VALUETYPE_LONG:
                 fprintf(stdout, "    Registry 1: Value: Type = RG_VALUETYPE_LONG\n");
                 fprintf(stdout, "                       Size = %d\n", size1);
-                fprintf(stdout, "                       Data = %d\n", (sal_Int32)value1);
+                fprintf(stdout, "                       Data = %ld\n", (sal_IntPtr)value1);
                 break;
             case RG_VALUETYPE_STRING:
                 fprintf(stdout, "    Registry 1: Value: Type = RG_VALUETYPE_STRING\n");
@@ -1851,7 +1851,7 @@ static sal_uInt32 checkValueDifference(RegistryKey& key1, RegValueType valueType
             case RG_VALUETYPE_LONG:
                 fprintf(stdout, "    Registry 2: Value: Type = RG_VALUETYPE_LONG\n");
                 fprintf(stdout, "                       Size = %d\n", size2);
-                fprintf(stdout, "                       Data = %d\n", (sal_Int32)value2);
+                fprintf(stdout, "                       Data = %ld\n", (sal_IntPtr)value2);
                 break;
             case RG_VALUETYPE_STRING:
                 fprintf(stdout, "    Registry 2: Value: Type = RG_VALUETYPE_STRING\n");
