@@ -4,9 +4,9 @@
  *
  *  $RCSfile: asyncfilepicker.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:29:54 $
+ *  last change: $Author: kz $ $Date: 2005-10-06 10:43:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,7 +176,7 @@ namespace svt
         DBG_TESTSOLARMUTEX();
             // if this asserts, we'd need to have an own mutex per instance
 
-        FileViewResult eResult = static_cast< FileViewResult >( reinterpret_cast< int >( pEmptyArg ) );
+        FileViewResult eResult = static_cast< FileViewResult >( reinterpret_cast< sal_IntPtr >( pEmptyArg ) );
         OSL_ENSURE( eStillRunning != eResult, "AsyncPickerAction::OnActionDone: invalid result!" );
 
         // release once (since we acquired in |execute|), but keep alive until the
