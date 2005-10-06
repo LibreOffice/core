@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stream.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:34:02 $
+ *  last change: $Author: kz $ $Date: 2005-10-06 11:05:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2074,7 +2074,7 @@ SvStream& SvStream::ReadNumber( sal_uInt32& rUInt32 )
     }
     char *pEndPtr;
     rUInt32 = strtoul( buf, &pEndPtr, (int)nRadix );
-    nFPtr += ( (sal_uInt32)pEndPtr - (sal_uInt32)buf );
+    nFPtr += ( (sal_uIntPtr)pEndPtr - (sal_uIntPtr)buf );
     Seek( nFPtr );
     bIsEof = FALSE;
     return *this;
