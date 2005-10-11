@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctreenode.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:09:14 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:49:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,6 +130,13 @@ namespace presentation
             void                setEndIndex( sal_Int32 nIndex ) { mnEndIndex = nIndex; }
 
             NodeType            getType() const { return meType; }
+
+            void                reset()
+            {
+                mnStartIndex = -1;
+                mnEndIndex   = -1;
+                meType = NODETYPE_INVALID;
+            }
 
         private:
             sal_Int32   mnStartIndex;
