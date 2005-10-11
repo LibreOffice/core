@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slidechangebase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:58:22 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:46:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,8 @@
 #include "soundplayer.hxx"
 #include "rtl/ref.hxx"
 #include "osl/mutex.hxx"
-#include "cppuhelper/implbase1.hxx"
+#include "cppuhelper/compbase1.hxx"
+#include "comphelper/broadcasthelper.hxx"
 #include "com/sun/star/util/XModifyListener.hpp"
 #include "com/sun/star/presentation/XSlideShowView.hpp"
 #include "boost/utility.hpp" // for boost::noncopyable
@@ -52,13 +53,18 @@
 namespace presentation {
 namespace internal {
 
+typedef ::cppu::WeakComponentImplHelper1<
+    ::com::sun::star::util::XModifyListener > UnoBaseT;
+
 /** Base class for all slide change effects.
 
     This class provides the basic sprite and view handling
     functionality.  Derived classes should normally only need to
     implement the perform() method.
 */
-class SlideChangeBase : public SlideChangeAnimation,
+class SlideChangeBase : private ::comphelper::OBaseMutex,
+                        public SlideChangeAnimation,
+                        public UnoBaseT,
                         private ::boost::noncopyable
 {
 public:
@@ -99,34 +105,27 @@ protected:
     /// Query the XDrawPage's size
     ::basegfx::B2DSize getEnteringSize() const;
 
-    void renderBitmap(
-        SlideBitmapSharedPtr const & pSlideBitmap,
-        ::cppcanvas::CanvasSharedPtr const & pCanvas );
+    void renderBitmap( SlideBitmapSharedPtr const & pSlideBitmap,
+                       ::cppcanvas::CanvasSharedPtr const & pCanvas );
 
     /** Loop over each View, and call func with that
      */
     template <typename FuncT>
-    FuncT for_each_view( FuncT func ) {
-        return ::std::for_each( maViews.begin(), maViews.end(), func );
+    void for_each_view( FuncT const& func ) const {
+        ::std::for_each( maViews.begin(), maViews.end(), func );
     }
 
     /** Loop over each View's canvas, and call func with that
      */
     template <typename FuncT>
-    FuncT for_each_canvas( FuncT func ) {
-        // at least gcc 3.4.1 cannot cope with the below:
-//         ::std::for_each(
-//             maViews.begin(), maViews.end(),
-//             ::boost::bind( ::boost::ref(func),
-//                            ::boost::bind( &ViewLayer::getCanvas, _1 ) ) );
-        const UnoViewVector::const_iterator iEnd( maViews.end() );
+    void for_each_canvas( FuncT const& func ) const {
+        UnoViewVector::const_iterator const iEnd( maViews.end() );
         for ( UnoViewVector::const_iterator iPos( maViews.begin() );
               iPos != iEnd; ++iPos )
         {
-            const ::cppcanvas::CanvasSharedPtr pCanvas( (*iPos)->getCanvas() );
+            ::cppcanvas::CanvasSharedPtr const pCanvas( (*iPos)->getCanvas() );
             func( pCanvas );
         }
-        return func;
     }
 
     /** Called on derived classes to implement actual slide change.
@@ -164,13 +163,29 @@ protected:
         double                                     t );
 
 private:
-    mutable ::osl::Mutex maMutex;
+    // XModifyListener
+    virtual void SAL_CALL modified(
+        ::com::sun::star::lang::EventObject const& evt )
+        throw (::com::sun::star::uno::RuntimeException);
+    // XEventListener
+    virtual void SAL_CALL disposing(
+        ::com::sun::star::lang::EventObject const& evt )
+        throw (::com::sun::star::uno::RuntimeException);
 
+    /// WeakComponentImplHelperBase:
+    virtual void SAL_CALL disposing();
+
+private:
+
+    // view mangement:
     UnoViewVector maViews;
     UnoViewSharedPtr findUnoView(
         ::com::sun::star::uno::Reference<
         ::com::sun::star::presentation::XSlideShowView> const & xSlideShowView )
         const;
+    bool removeView_( UnoViewSharedPtr const& pView,
+                      bool bDisposedView = false );
+    void removeTransformationChangedListenerFrom(UnoViewSharedPtr const& pView);
 
     SoundPlayerSharedPtr mpSoundPlayer;
 
@@ -190,42 +205,6 @@ private:
         UnoViewSharedPtr const & pView,
         ::basegfx::B2DSize const & rSpriteSize ) const;
     void addSprites( UnoViewSharedPtr const & pView );
-
-    void notifyViewChange( ::com::sun::star::lang::EventObject const & evt );
-
-    class ModifyListener
-        : public ::cppu::WeakImplHelper1<
-              ::com::sun::star::util::XModifyListener >,
-          private ::boost::noncopyable
-    {
-    public:
-        // XModifyListener
-        virtual void SAL_CALL modified(
-            ::com::sun::star::lang::EventObject const & evt )
-            throw (::com::sun::star::uno::RuntimeException);
-        // XEventListener
-        virtual void SAL_CALL disposing(
-            ::com::sun::star::lang::EventObject const & evt )
-            throw (::com::sun::star::uno::RuntimeException);
-
-        ModifyListener( SlideChangeBase * pSlideChangeBase )
-            : m_pSlideChangeBase(pSlideChangeBase)
-            {}
-
-    private:
-        // TODO: think about boost::shared_ptr<> when
-        // enable_shared_ptr_from_this is available
-        SlideChangeBase * m_pSlideChangeBase;
-        friend class SlideChangeBase;
-    };
-
-    ::rtl::Reference<ModifyListener> mxModifyListener;
-    ::rtl::Reference<ModifyListener> const & getModifyListener() {
-        if (! mxModifyListener.is()) // late init:
-            mxModifyListener = new ModifyListener(this);
-        return mxModifyListener;
-    }
-    friend class ModifyListener;
 };
 
 } // namespace internal
