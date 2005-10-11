@@ -4,9 +4,9 @@
  *
  *  $RCSfile: waitsymbol.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:33:17 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:37:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,8 @@
 #include <algorithm>
 
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace com::sun::star;
+using namespace com::sun::star::uno;
 
 namespace presentation {
 namespace internal {
@@ -49,12 +49,13 @@ namespace internal {
 const sal_Int32 LEFT_BORDER_SPACE  = 10;
 const sal_Int32 LOWER_BORDER_SPACE = 10;
 
-    WaitSymbol::WaitSymbol( Reference<rendering::XBitmap> const &   xBitmap,
-                            EventMultiplexer&                       rEventMultiplexer ) :
-        m_xBitmap(xBitmap),
-        m_views(),
-        mrEventMultiplexer( rEventMultiplexer ),
-        m_bVisible(false)
+WaitSymbol::WaitSymbol(
+    Reference<rendering::XBitmap> const &   xBitmap,
+    EventMultiplexer&                       rEventMultiplexer )
+    : m_xBitmap(xBitmap),
+      m_views(),
+      mrEventMultiplexer( rEventMultiplexer ),
+      m_bVisible(false)
 {
 }
 
@@ -101,8 +102,8 @@ void WaitSymbol::addView( UnoViewSharedPtr const & rView )
                 std::equal_to<UnoViewSharedPtr>(),
                 rView,
                 // select view:
-                boost::bind( std::select1st<ViewsVecT::value_type>(), _1 ) ) )!=
-        iEnd)
+                boost::bind( std::select1st<ViewsVecT::value_type>(), _1 ) ) )
+        != iEnd)
         return; // already added
 
     const geometry::IntegerSize2D spriteSize( m_xBitmap->getSize() );
