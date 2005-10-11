@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 10:49:34 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:24:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,6 +206,8 @@
 #ifndef _SVX_FLDITEM_HXX
 #include "flditem.hxx"
 #endif
+
+#include "boost/scoped_ptr.hpp"
 
 #define MAX_EXT_PIX         2048
 
@@ -548,6 +550,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     sal_Int32 nHeight = 0;
     sal_Bool bExportOnlyBackground = false;
     sal_Bool bVerboseComments = false;
+    sal_Bool bScrollText = false;
 
     if( NULL == pFilter || NULL == pPage || NULL == mpDoc )
         return sal_False;
@@ -643,6 +646,11 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                     {
                         // #110496# Read flag for verbose metafile comments
                         pDataValues->Value >>= bVerboseComments;
+                    }
+                    else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ScrollText" ) ) )
+                    {
+                        // #110496# Read flag solitary scroll text metafile
+                        pDataValues->Value >>= bScrollText;
                     }
                     else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CurrentPage" ) ) )
                     {
@@ -880,13 +888,64 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
         // special treatment for only one SdrGrafObj that has text
         sal_Bool bSingleGraphic = sal_False;
 
-        if( !bVectorType && 1 == aShapes.size() )
+        if( 1 == aShapes.size() )
         {
-            SdrObject* pObj = aShapes.front();
-            if( pObj && pObj->ISA( SdrGrafObj ) && !( (SdrGrafObj*) pObj )->HasText() )
+            if( !bVectorType )
             {
-                aGraphic = ( (SdrGrafObj*) pObj )->GetTransformedGraphic();
-                bSingleGraphic = sal_True;
+                SdrObject* pObj = aShapes.front();
+                if( pObj && pObj->ISA( SdrGrafObj ) && !( (SdrGrafObj*) pObj )->HasText() )
+                {
+                    aGraphic = ( (SdrGrafObj*) pObj )->GetTransformedGraphic();
+                    bSingleGraphic = sal_True;
+                }
+            }
+            else if( bScrollText )
+            {
+                SdrObject* pObj = aShapes.front();
+                if( pObj && pObj->ISA( SdrTextObj )
+                    && ( (SdrTextObj*) pObj )->HasText() )
+                {
+                    Rectangle aScrollRectangle;
+                    Rectangle aPaintRectangle;
+
+                    const boost::scoped_ptr< GDIMetaFile > pMtf(
+                        ( (SdrTextObj*) pObj )->GetTextScrollMetaFileAndRectangle(
+                        aScrollRectangle, aPaintRectangle ) );
+
+                    // take the larger one of the two rectangles (that
+                    // should be the bound rect of the retrieved
+                    // metafile)
+                    Rectangle aTextRect;
+
+                    if( aScrollRectangle.IsInside( aPaintRectangle ) )
+                        aTextRect = aScrollRectangle;
+                    else
+                        aTextRect = aPaintRectangle;
+
+                    // setup pref size and mapmode
+                    pMtf->SetPrefSize( aTextRect.GetSize() );
+
+                    // set actual origin (mtf is at actual shape
+                    // output position)
+                    MapMode aLocalMapMode( aMap );
+                    aLocalMapMode.SetOrigin(
+                        Point( -aTextRect.Left(),
+                               -aTextRect.Top() ) );
+                    pMtf->SetPrefMapMode( aLocalMapMode );
+
+                    pMtf->AddAction( new MetaCommentAction(
+                                         "XTEXT_SCROLLRECT", 0,
+                                         reinterpret_cast<BYTE const*>(&aScrollRectangle),
+                                         sizeof( Rectangle ) ) );
+                    pMtf->AddAction( new MetaCommentAction(
+                                         "XTEXT_PAINTRECT", 0,
+                                         reinterpret_cast<BYTE const*>(&aPaintRectangle),
+                                         sizeof( Rectangle ) ) );
+
+                    aGraphic = Graphic( *pMtf );
+
+                    bSingleGraphic = sal_True;
+                }
             }
         }
 
