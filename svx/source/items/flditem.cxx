@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flditem.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:34:27 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:24:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -567,7 +567,11 @@ void SvxURLField::Save( SvPersistStream & rStm )
 
 MetaAction* SvxURLField::createBeginComment() const
 {
-    return new MetaCommentAction( "FIELD_SEQ_BEGIN" );
+    // #i46618# Adding target URL to metafile comment
+    return new MetaCommentAction( "FIELD_SEQ_BEGIN",
+                                  0,
+                                  reinterpret_cast<const BYTE*>(aURL.GetBuffer()),
+                                  2*aURL.Len() );
 }
 
 // =================================================================
