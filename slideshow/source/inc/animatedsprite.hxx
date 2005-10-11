@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animatedsprite.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:04:32 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:47:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,12 +57,9 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #endif
 
-#ifndef _COMPHELPER_OPTIONALVALUE_HXX
-#include <comphelper/optionalvalue.hxx>
-#endif
-
 #include <viewlayer.hxx>
 
+#include "boost/optional.hpp"
 
 /* Definition of AnimatedSprite class */
 
@@ -193,10 +190,10 @@ namespace presentation
             ::basegfx::B2DSize                                          maContentPixelOffset;
 
             double                                                      mnAlpha;
-            ::comphelper::OptionalValue< ::basegfx::B2DPoint >          maPosPixel;
-            ::comphelper::OptionalValue< ::basegfx::B2DPoint >          maPos;
-            ::comphelper::OptionalValue< ::basegfx::B2DPolyPolygon >    maClip;
-            ::comphelper::OptionalValue< ::basegfx::B2DHomMatrix >      maTransform;
+            ::boost::optional< ::basegfx::B2DPoint >                    maPosPixel;
+            ::boost::optional< ::basegfx::B2DPoint >                    maPos;
+            ::boost::optional< ::basegfx::B2DPolyPolygon >              maClip;
+            ::boost::optional< ::basegfx::B2DHomMatrix >                maTransform;
 
             bool                                                        mbSpriteVisible;
         };
