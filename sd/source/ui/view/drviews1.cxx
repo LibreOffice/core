@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:07:54 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:19:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -982,27 +982,40 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
 
         if (pActualPage)
         {
-            // When in master page mode then the given index defines a
-            // master page and may be larger then the number of slides.
-            // Probably we should jump over this whole block.
             SdPage* pNewPage = NULL;
-            if (GetDoc()->GetSdPageCount(ePageKind) > nSelectedPage)
-                pNewPage = GetDoc()->GetSdPage(nSelectedPage, ePageKind);
 
-            if (pActualPage == pNewPage)
+            if (eEditMode == EM_MASTERPAGE)
             {
-                if (eEditMode == EM_MASTERPAGE)
+                if( GetDoc()->GetMasterSdPageCount(ePageKind) > nSelectedPage )
+                    pNewPage = GetDoc()->GetMasterSdPage(nSelectedPage, ePageKind);
+
+                if( pNewPage )
                 {
-                    pNewPage = (SdPage*)(&(pNewPage->TRG_GetMasterPage()));
+                    SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
+
+                    if (pPV && pNewPage == dynamic_cast< SdPage* >( pPV->GetPage() ) &&
+                        pNewPage->GetName() == aTabControl.GetPageText(nSelectedPage+1))
+                    {
+                        // this slide is already visible
+                        return TRUE;
+                    }
                 }
+            }
+            else
+            {
+                if (GetDoc()->GetSdPageCount(ePageKind) > nSelectedPage)
+                    pNewPage = GetDoc()->GetSdPage(nSelectedPage, ePageKind);
 
-                SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
-
-                if (pPV && pNewPage == (SdPage*) pPV->GetPage() &&
-                    pNewPage->GetName() == aTabControl.GetPageText(nSelectedPage+1))
+                if (pActualPage == pNewPage)
                 {
-                    // Die Seite wird schon angezeigt
-                    return(TRUE);
+                    SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
+
+                    if (pPV && pNewPage == dynamic_cast< SdPage* >( pPV->GetPage() ) &&
+                        pNewPage->GetName() == aTabControl.GetPageText(nSelectedPage+1))
+                    {
+                        // this slide is already visible
+                        return TRUE;
+                    }
                 }
             }
         }
