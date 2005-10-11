@@ -4,9 +4,9 @@
  *
  *  $RCSfile: simplecontinuousactivitybase.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:37:59 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:41:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,9 +56,7 @@ namespace presentation
             SimpleContinuousActivityBase( const ActivityParameters& rParms );
 
             virtual double calcTimeLag() const;
-
             virtual bool perform();
-            virtual void dequeued();
 
         protected:
             /** Hook for derived classes
