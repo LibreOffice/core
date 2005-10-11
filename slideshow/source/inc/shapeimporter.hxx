@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeimporter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:18:45 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:54:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,95 +32,109 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+#ifndef INCLUDED_SLIDESHOW_SHAPEIMPORTER_HXX
+#define INCLUDED_SLIDESHOW_SHAPEIMPORTER_HXX
 
-#ifndef _SLIDESHOW_SHAPEIMPORTER_HXX
-#define _SLIDESHOW_SHAPEIMPORTER_HXX
+#include "com/sun/star/drawing/XDrawPage.hpp"
+#include "com/sun/star/drawing/XShapes.hpp"
+#include "com/sun/star/beans/XPropertySet.hpp"
+#include "shape.hxx"
+#include <stack>
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
-#include <com/sun/star/uno/Reference.hxx>
-#endif
+namespace presentation {
+namespace internal {
 
-#include <shape.hxx>
-
-namespace com { namespace sun { namespace star
+/** This class imports all shapes from a given XShapes object
+ */
+class ShapeImporter
 {
-    namespace drawing
-    {
-        class XShapes;
-    }
-    namespace beans
-    {
-        class XPropertySet;
-    }
-} } }
+public:
+    /** Create shape importer.
 
-// -----------------------------------------------------------------------------
+        @param xPage
+        Page containing the shapes
 
-namespace presentation
-{
-    namespace internal
-    {
-        /** This class imports all shapes from a given XShapes object
-         */
-        class ShapeImporter
-        {
-        public:
-            /** Create shape importer.
+        @param xActualPage
+        Actual page that's imported - if xPage is a master
+        page, this argument must refer to the using, i.e the
+        page that embeds this specific masterpage. Otherwise,
+        this argument is probably equal to xPage.
 
-                @param xPage
-                Page containing the shapes
+        @param nOrdNumStart
+        Each shape receives a z order number, in order of
+        import (which relies on the fact that the API returns
+        the shapes in draw order - which it does,
+        currently). Since we might mix several pages on screen
+        (e.g. master page and foreground page), this value can
+        be used as an offset to distinguish those pages.
 
-                @param xActualPage
-                Actual page that's imported - if xPage is a master
-                page, this argument must refer to the using, i.e the
-                page that embeds this specific masterpage. Otherwise,
-                this argument is probably equal to xPage.
+        @param bConvertingMasterPage
+        When true, then the master page is imported. Otherwise, this
+        object imports the draw page.
+    */
+    ShapeImporter( const ::com::sun::star::uno::Reference<
+                   ::com::sun::star::drawing::XDrawPage >& xPage,
+                   const ::com::sun::star::uno::Reference<
+                   ::com::sun::star::drawing::XDrawPage >& xActualPage,
+                   sal_Int32 nOrdNumStart,
+                   bool bConvertingMasterPage );
 
-                @param nOrdNumStart
-                Each shape receives a z order number, in order of
-                import (which relies on the fact that the API returns
-                the shapes in draw order - which it does,
-                currently). Since we might mix several pages on screen
-                (e.g. master page and foreground page), this value can
-                be used as an offset to distinguish those pages.
+    /** This method imports presentation-visible shapes (and skips all others).
 
-                @param bConvertingMasterPage
-                When true, then the master page is imported. Otherwise, this
-                object imports the draw page.
-             */
-            ShapeImporter( const ::com::sun::star::uno::Reference<
-                                     ::com::sun::star::drawing::XDrawPage >&    xPage,
-                           const ::com::sun::star::uno::Reference<
-                                     ::com::sun::star::drawing::XDrawPage >&    xActualPage,
-                           sal_Int32                                        nOrdNumStart,
-                           bool                                             bConvertingMasterPage );
+        @return the generated Shape, or NULL for no more shapes.
+    */
+    ShapeSharedPtr importShape(); // throw (ConversionFailedException)
 
-            /** This method imports presentation-visible shapes (and
-                skips all others).
+    /** Test whether import is done.
 
-                @return the generated Shape, or NULL for no more shapes.
-             */
-            ShapeSharedPtr importShape(); // throw (ConversionFailedException)
+        @return true, if all shapes are imported via the
+        importShape() call.
+    */
+    bool isImportDone() const;
 
-            /** Test whether import is done.
+private:
+    bool isSkip( ::com::sun::star::uno::Reference<
+                 ::com::sun::star::drawing::XShape> const& xCurrShape,
+                 ::com::sun::star::uno::Reference<
+                 ::com::sun::star::beans::XPropertySet> const& xPropSet,
+                 ::rtl::OUString const& shapeType ) const;
 
-                @return true, if all shapes are imported via the
-                importShape() call.
-             */
-            bool isImportDone() const;
+    ShapeSharedPtr createShape(
+        ::com::sun::star::uno::Reference<
+        ::com::sun::star::drawing::XShape> const& xCurrShape,
+        ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet> const& xPropSet,
+        ::rtl::OUString const& shapeType ) const;
 
-        private:
-            bool isSkip( const ::com::sun::star::uno::Reference<  ::com::sun::star::drawing::XShape >&      xCurrShape,
-                         const ::com::sun::star::uno::Reference<  ::com::sun::star::beans::XPropertySet >&  xPropSet ) const;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::drawing::XDrawPage> mxPage;
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >    mxPage;
-            ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >      mxShapes;
-            sal_Int32                                                                   mnCurrShape;
-            sal_Int32                                                                   mnNumShapes;
-            sal_Int32                                                                   mnOrdNumStart;
-            bool                                                                        mbConvertingMasterPage;
-        };
-    }
-}
+    struct XShapesEntry {
+        ShapeSharedPtr const mpGroupShape;
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::drawing::XShapes> const mxShapes;
+        sal_Int32 const mnCount;
+        sal_Int32 mnPos;
+
+        XShapesEntry( ShapeSharedPtr const& pGroupShape )
+            : mpGroupShape(pGroupShape),
+              mxShapes( pGroupShape->getXShape(),
+                        ::com::sun::star::uno::UNO_QUERY_THROW ),
+              mnCount(mxShapes->getCount()), mnPos(0) {}
+        XShapesEntry( ::com::sun::star::uno::Reference<
+                      ::com::sun::star::drawing::XShapes> const& xShapes )
+            : mpGroupShape(), mxShapes(xShapes),
+              mnCount(xShapes->getCount()), mnPos(0) {}
+    };
+    typedef ::std::stack<XShapesEntry> XShapesStack;
+
+    XShapesStack maShapesStack;
+
+    double mnAscendingPrio;
+    bool mbConvertingMasterPage;
+};
+
+} // namespace internal
+} // namespace presentation
 
 #endif
