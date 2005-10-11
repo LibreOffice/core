@@ -4,9 +4,9 @@
  *
  *  $RCSfile: activity.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:03:43 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:47:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,11 @@ namespace presentation
                 shape.
              */
             virtual void dequeued() = 0;
+
+            /** Forces this activity deactivate and get to its end state
+                (if possible), but does _not_ dispose.
+            */
+            virtual void end() = 0;
         };
 
         typedef ::boost::shared_ptr< Activity > ActivitySharedPtr;
