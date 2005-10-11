@@ -4,9 +4,9 @@
  *
  *  $RCSfile: event.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:10:48 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:50:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,61 +32,61 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+#if ! defined(INCLUDED_SLIDESHOW_EVENT_HXX)
+#define INCLUDED_SLIDESHOW_EVENT_HXX
 
-#ifndef _SLIDESHOW_EVENT_HXX
-#define _SLIDESHOW_EVENT_HXX
-
-#include <boost/shared_ptr.hpp>
+#include "disposable.hxx"
+#include "boost/shared_ptr.hpp"
 #include <vector>
 
-#include <disposable.hxx>
+namespace presentation {
+namespace internal {
 
-
-/* Definition of Event interface */
-
-namespace presentation
+/** Definition of Event interface
+ */
+class Event : public Disposable
 {
-    namespace internal
-    {
+public:
+    /** Execute the event.
 
-        class Event : public Disposable
-        {
-        public:
-            /** Execute the event.
+        @return true, if event was successfully executed.
+    */
+    virtual bool fire() = 0;
 
-                @return true, if event was successfully executed.
-             */
-            virtual bool fire() = 0;
+    /** Query whether this event is still charged, i.e. able
+        to fire.
 
-            /** Query whether this event is still charged, i.e. able
-                to fire.
+        Inactive events are ignored by the normal event
+        containers (EventQueue, UserEventQueue etc.), and no
+        explicit fire() is called upon them.
 
-                Inactive events are ignored by the normal event
-                containers (EventQueue, UserEventQueue etc.), and no
-                explicit fire() is called upon them.
+        @return true, if this event has already been fired.
+    */
+    virtual bool isCharged() const = 0;
 
-                @return true, if this event has already been fired.
-             */
-            virtual bool isCharged() const = 0;
+    /** Query the activation time instant this event shall be
+        fired, if it was inserted at instant nCurrentTime into
+        the queue.
 
-            /** Query the activation time instant this event shall be
-                fired, if it was inserted at instant nCurrentTime into
-                the queue.
+        @param nCurrentTime
+        The time from which the activation time is to be
+        calculated from.
 
-                @param nCurrentTime
-                The time from which the activation time is to be
-                calculated from.
+        @return the time instant in seconds, on which this
+        event is to be fired.
+    */
+    virtual double getActivationTime( double nCurrentTime ) const = 0;
 
-                @return the time instant in seconds, on which this
-                event is to be fired.
-             */
-            virtual double getActivationTime( double nCurrentTime ) const = 0;
-        };
+#if defined(VERBOSE) && defined(DBG_UTIL)
+    char const* const ORIGIN;
+    Event( char const* const origin = "<unknown>" ) : ORIGIN(origin) {}
+#endif
+};
 
-        typedef ::boost::shared_ptr< Event > EventSharedPtr;
-        typedef ::std::vector< EventSharedPtr > VectorOfEvents;
+typedef ::boost::shared_ptr< Event > EventSharedPtr;
+typedef ::std::vector< EventSharedPtr > VectorOfEvents;
 
-    }
-}
+} // namespace internal
+} // namespace presentation
 
-#endif /* _SLIDESHOW_EVENT_HXX */
+#endif /* INCLUDED_SLIDESHOW_EVENT_HXX */
