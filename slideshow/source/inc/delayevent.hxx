@@ -4,9 +4,9 @@
  *
  *  $RCSfile: delayevent.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:08:40 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:48:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,97 +32,97 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+#if ! defined(INCLUDED_SLIDESHOW_DELAYEVENT_HXX)
+#define INCLUDED_SLIDESHOW_DELAYEVENT_HXX
 
-#ifndef _SLIDESHOW_DELAYEVENT_HXX
-#define _SLIDESHOW_DELAYEVENT_HXX
+#include "event.hxx"
+#include "boost/noncopyable.hpp"
+#include "boost/function.hpp"
+#if defined(VERBOSE) && defined(DBG_UTIL)
+#include "boost/current_function.hpp"
+#endif
 
-#include <event.hxx>
+namespace presentation {
+namespace internal {
 
-namespace presentation
+/** Event, which delays the functor call the given amount of time
+ */
+class Delay : public Event,
+              private ::boost::noncopyable
 {
-    namespace internal
-    {
-        /** Event, which delays the functor call the given amount of time
+public:
+#if defined(VERBOSE) && defined(DBG_UTIL)
+    template <typename FunctorT>
+    Delay( FunctorT const& func,
+           double nTimeout,
+           char const* const origin ) : Event(origin),
+#else
+    template <typename FunctorT>
+    Delay( FunctorT const& func,
+           double nTimeout ) :
+#endif
+        mnTimeout(nTimeout),
+        maFunc(func),
+        mbWasFired(false) {}
 
-            @tpl Functor
-            Functor to call after given timeout
+    // Event:
+    virtual bool fire();
+    virtual bool isCharged() const;
+    virtual double getActivationTime( double nCurrentTime ) const;
+    // Disposable:
+    virtual void dispose();
 
-            @attention
-            This class might generate circular dependencies, since it
-            has no means to release shared_ptrs maybe contained in the
-            Functor
-        */
-        template< typename Functor > class Delay : public Event
-        {
-        public:
-            Delay( const Functor&   rFunctor,
-                   double           nTimeout    ) :
-                maFunctor( rFunctor ),
-                mnTimeout( nTimeout ),
-                mbWasFired( false )
-            {
-            }
+private:
+    double  mnTimeout;
+    ::boost::function0<void> maFunc;
+    bool    mbWasFired;
+};
 
-            virtual bool fire()
-            {
-                if( isCharged() )
-                {
-                    mbWasFired = true;
+#if defined(VERBOSE) && defined(DBG_UTIL)
 
-                    maFunctor();
-                }
+template <typename FunctorT>
+EventSharedPtr makeDelay_( FunctorT const& func, double nTimeout,
+                           char const* const origin )
+{
+    return EventSharedPtr( new Delay( func, nTimeout, origin ) );
+}
+#define makeDelay(f, t) makeDelay_(f, t, BOOST_CURRENT_FUNCTION)
+#define makeEvent(f) makeDelay_(f, 0.0, BOOST_CURRENT_FUNCTION)
 
-                return true;
-            }
+#else
 
-            virtual bool isCharged() const
-            {
-                return !mbWasFired;
-            }
+/** Generate delay event
 
-            virtual double getActivationTime( double nCurrentTime ) const
-            {
-                return nCurrentTime + mnTimeout;
-            }
+    @param func
+    Functor to call when the event fires.
 
-            virtual void dispose()
-            {
-            }
+    @param nTimeout
+    Timeout in seconds, to wait until functor is called.
 
-        private:
-            Functor maFunctor;
-            double  mnTimeout;
-            bool    mbWasFired;
-        };
-
-        /** Generate delay event
-
-            @param rFunctor
-            Functor to call when the event fires.
-
-            @param nTimeout
-            Timeout in seconds, to wait until functor is called.
-
-            @return generated delay event
-         */
-        template< typename Functor > EventSharedPtr makeDelay( const Functor&   rFunctor,
-                                                               double           nTimeout    )
-        {
-            return EventSharedPtr( new Delay< Functor >(rFunctor, nTimeout) );
-        }
-
-        /** Generate immediate event
-
-            @param rFunctor
-            Functor to call when the event fires.
-
-            @return generated immediate event.
-         */
-        template< typename Functor > EventSharedPtr makeEvent( const Functor&   rFunctor )
-        {
-            return EventSharedPtr( new Delay< Functor >(rFunctor, 0.0) );
-        }
-    }
+    @return generated delay event
+*/
+template <typename FunctorT>
+EventSharedPtr makeDelay( FunctorT const& func, double nTimeout )
+{
+    return EventSharedPtr( new Delay( func, nTimeout ) );
 }
 
-#endif /* _SLIDESHOW_DELAYEVENT_HXX */
+/** Generate immediate event
+
+    @param func
+    Functor to call when the event fires.
+
+    @return generated immediate event.
+*/
+template <typename FunctorT>
+EventSharedPtr makeEvent( FunctorT const& func )
+{
+    return EventSharedPtr( new Delay( func, 0.0 ) );
+}
+
+#endif
+
+} // namespace internal
+} // namespace presentation
+
+#endif /* INCLUDED_SLIDESHOW_DELAYEVENT_HXX */
