@@ -4,9 +4,9 @@
  *
  *  $RCSfile: waitsymbol.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:33:31 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:38:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,23 +42,20 @@
 #include "disposable.hxx"
 #include "eventmultiplexer.hxx"
 #include "unoview.hxx"
-
-#include <boost/shared_ptr.hpp>
-#include <boost/bind.hpp>
-#include <boost/utility.hpp> // for noncopyable
-
+#include "boost/shared_ptr.hpp"
+#include "boost/bind.hpp"
+#include "boost/utility.hpp" // for noncopyable
 #include <vector>
-
 
 namespace presentation {
 namespace internal {
 
-class WaitSymbol : public Disposable, private boost::noncopyable
+class WaitSymbol : public Disposable, private ::boost::noncopyable
 {
 public:
-    WaitSymbol( const com::sun::star::uno::Reference<
-                    com::sun::star::rendering::XBitmap>&    xBitmap,
-                EventMultiplexer&                           rEventMultiplexer );
+    WaitSymbol( const ::com::sun::star::uno::Reference<
+                ::com::sun::star::rendering::XBitmap>& xBitmap,
+                EventMultiplexer&                      rEventMultiplexer );
 
     /** Shows the wait symbol.
      */
@@ -80,14 +77,14 @@ public:
     virtual void dispose();
 
 private:
-    com::sun::star::uno::Reference<
-        com::sun::star::rendering::XBitmap> m_xBitmap;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::rendering::XBitmap> m_xBitmap;
 
-    basegfx::B2DPoint calcSpritePos( UnoViewSharedPtr const & rView ) const;
+    ::basegfx::B2DPoint calcSpritePos( UnoViewSharedPtr const & rView ) const;
 
-    typedef std::vector<
-        std::pair<UnoViewSharedPtr,
-                  cppcanvas::CustomSpriteSharedPtr> > ViewsVecT;
+    typedef ::std::vector<
+        ::std::pair<UnoViewSharedPtr,
+                    cppcanvas::CustomSpriteSharedPtr> > ViewsVecT;
     ViewsVecT m_views;
 
     EventMultiplexer& mrEventMultiplexer;
