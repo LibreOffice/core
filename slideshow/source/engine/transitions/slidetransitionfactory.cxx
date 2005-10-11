@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slidetransitionfactory.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:58:38 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:46:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,9 @@
 #include <canvas/debug.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
 
+#include "comphelper/optional.hxx"
+#include "comphelper/make_shared_from_uno.hxx"
+
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>
 
@@ -51,8 +54,6 @@
 #include <animationfactory.hxx>
 #include <clippingfunctor.hxx>
 #include <combtransition.hxx>
-
-#include "comphelper/optional.hxx"
 
 
 /***************************************************
@@ -184,7 +185,7 @@ public:
     FadingSlideChange(
         boost::optional<SlideSharedPtr> const &          leavingSlide,
         const SlideSharedPtr&                            pEnteringSlide,
-        const ::comphelper::OptionalValue< RGBColor >&   rFadeColor,
+        boost::optional<RGBColor> const&                 rFadeColor,
         const SoundPlayerSharedPtr&                      pSoundPlayer )
         : SlideChangeBase( leavingSlide,
                            pEnteringSlide,
@@ -206,7 +207,7 @@ public:
         double                                     t );
 
 private:
-    const ::comphelper::OptionalValue< RGBColor >   maFadeColor;
+    const boost::optional< RGBColor >               maFadeColor;
     bool                                            mbFirstTurn;
 };
 
@@ -220,7 +221,7 @@ void FadingSlideChange::performIn(
         rSprite.get(),
         "FadingSlideChange::performIn(): Invalid sprite" );
 
-    if( maFadeColor.isValid() )
+    if( maFadeColor )
         // After half of the active time, fade in new slide
         rSprite->setAlpha( t > 0.5 ? 2.0*(t-0.5) : 0.0 );
     else
@@ -242,7 +243,7 @@ void FadingSlideChange::performOut(
         "FadingSlideChange::performOut(): Invalid dest canvas" );
 
     // only needed for color fades
-    if( maFadeColor.isValid() )
+    if( maFadeColor )
     {
         if( mbFirstTurn )
         {
@@ -252,7 +253,7 @@ void FadingSlideChange::performOut(
             // painted atop of that, but slowly fading out.
             fillPage( rDestinationCanvas,
                       getEnteringSizePixel( pView ),
-                      maFadeColor.getValue() );
+                      *maFadeColor );
         }
 
         // Until half of the active time, fade out old
@@ -478,20 +479,22 @@ SlideChangeAnimationSharedPtr createPushWipeTransition(
     if( bComb )
     {
         return SlideChangeAnimationSharedPtr(
-            new CombTransition( leavingSlide,
-                                pEnteringSlide,
-                                pSoundPlayer,
-                                aDirection,
-                                24 /* comb with 12 stripes */ ) );
+            comphelper::make_shared_from_UNO(
+                new CombTransition( leavingSlide,
+                                    pEnteringSlide,
+                                    pSoundPlayer,
+                                    aDirection,
+                                    24 /* comb with 12 stripes */ ) ) );
     }
     else
     {
         return SlideChangeAnimationSharedPtr(
-            new MovingSlideChange( leavingSlide,
-                                   pEnteringSlide,
-                                   pSoundPlayer,
-                                   aDirection,
-                                   aDirection ) );
+            comphelper::make_shared_from_UNO(
+                new MovingSlideChange( leavingSlide,
+                                       pEnteringSlide,
+                                       pSoundPlayer,
+                                       aDirection,
+                                       aDirection ) ) );
     }
 }
 
@@ -556,12 +559,13 @@ SlideChangeAnimationSharedPtr createSlideWipeTransition(
         // =======================================================
 
         return SlideChangeAnimationSharedPtr(
-            new MovingSlideChange(
-                boost::optional<SlideSharedPtr>() /* no slide */,
-                pEnteringSlide,
-                pSoundPlayer,
-                basegfx::B2DVector(),
-                aInDirection ) );
+            comphelper::make_shared_from_UNO(
+                new MovingSlideChange(
+                    boost::optional<SlideSharedPtr>() /* no slide */,
+                    pEnteringSlide,
+                    pSoundPlayer,
+                    basegfx::B2DVector(),
+                    aInDirection ) ) );
     }
     else
     {
@@ -571,12 +575,12 @@ SlideChangeAnimationSharedPtr createSlideWipeTransition(
         // =======================================================
 
         return SlideChangeAnimationSharedPtr(
-            new MovingSlideChange(
-                leavingSlide,
-                pEnteringSlide,
-                pSoundPlayer,
-                aInDirection,
-                basegfx::B2DVector() ) );
+            comphelper::make_shared_from_UNO(
+                new MovingSlideChange( leavingSlide,
+                                       pEnteringSlide,
+                                       pSoundPlayer,
+                                       aInDirection,
+                                       basegfx::B2DVector() ) ) );
     }
 }
 
@@ -592,6 +596,17 @@ SlideChangeAnimationSharedPtr TransitionFactory::createSlideTransition(
     const RGBColor&             rTransitionFadeColor,
     const SoundPlayerSharedPtr& pSoundPlayer            )
 {
+    // xxx todo: change to TransitionType::NONE, TransitionSubType::NONE:
+    if (nTransitionType == 0 || nTransitionSubType == 0) {
+        // just play sound, no slide transition:
+        if (pSoundPlayer) {
+            pSoundPlayer->startPlayback();
+            // xxx todo: for now, presentation.cxx takes care about the slide
+            // #i50492#  transition sound object, so just release it here
+        }
+        return SlideChangeAnimationSharedPtr();
+    }
+
     ENSURE_AND_THROW(
         pEnteringSlide.get(),
         "TransitionFactory::createSlideTransition(): Invalid entering slide" );
@@ -622,11 +637,12 @@ SlideChangeAnimationSharedPtr TransitionFactory::createSlideTransition(
 
                 // create a clip transition from that
                 return SlideChangeAnimationSharedPtr(
-                    new ClippedSlideChange( pEnteringSlide,
-                                            pPoly,
-                                            *pTransitionInfo,
-                                            bTransitionDirection,
-                                            pSoundPlayer ) );
+                    comphelper::make_shared_from_UNO(
+                        new ClippedSlideChange( pEnteringSlide,
+                                                pPoly,
+                                                *pTransitionInfo,
+                                                bTransitionDirection,
+                                                pSoundPlayer ) ) );
             }
             break;
 
@@ -713,8 +729,7 @@ SlideChangeAnimationSharedPtr TransitionFactory::createSlideTransition(
                             case animations::TransitionSubType::FADEFROMCOLOR:
                                 // FALLTHROUGH intended
                             case animations::TransitionSubType::FADEOVERCOLOR:
-                                if (pLeavingSlide.get() != 0)
-                                {
+                                if (pLeavingSlide) {
                                     // only generate, if fade
                                     // effect really needs it.
                                     leavingSlide.reset( pLeavingSlide );
@@ -727,10 +742,13 @@ SlideChangeAnimationSharedPtr TransitionFactory::createSlideTransition(
                         }
 
                         return SlideChangeAnimationSharedPtr(
-                            new FadingSlideChange( leavingSlide,
-                                                   pEnteringSlide,
-                                                   rTransitionFadeColor,
-                                                   pSoundPlayer ) );
+                            comphelper::make_shared_from_UNO(
+                                new FadingSlideChange(
+                                    leavingSlide,
+                                    pEnteringSlide,
+                                    comphelper::make_optional(
+                                        rTransitionFadeColor),
+                                    pSoundPlayer ) ) );
                     }
                 }
             }
