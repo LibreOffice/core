@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basecontainernode.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:43:42 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:43:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,78 +33,83 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_BASECONTAINERNODE_HXX
-#define _SLIDESHOW_BASECONTAINERNODE_HXX
+#ifndef INCLUDED_SLIDESHOW_BASECONTAINERNODE_HXX
+#define INCLUDED_SLIDESHOW_BASECONTAINERNODE_HXX
 
-#include <basenode.hxx>
+#include "basenode.hxx"
 
-namespace presentation
+namespace presentation {
+namespace internal {
+
+/** This interface extends BaseNode with child handling methods.
+    Used for XAnimationNode objects which have children
+*/
+class BaseContainerNode : public BaseNode
 {
-    namespace internal
-    {
-        /** This interface extends BaseNode with child handling methods.
+public:
+    BaseContainerNode(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::animations::XAnimationNode >& xNode,
+        const ::boost::shared_ptr< BaseContainerNode >&      rParent,
+        const NodeContext&                                   rContext );
 
-            Used for XAnimationNode objects which have children
-         */
-        class BaseContainerNode : public BaseNode
-        {
-        public:
-            BaseContainerNode( const ::com::sun::star::uno::Reference<
-                                    ::com::sun::star::animations::XAnimationNode >& xNode,
-                               const ::boost::shared_ptr< BaseContainerNode >&      rParent,
-                               const NodeContext&                                   rContext );
+    // overrides from BaseNode
+    virtual bool activate();
+    virtual void deactivate();
+    virtual bool init();
+    virtual void dispose();
+    virtual void end();
 
-            // overrides from BaseNode
-            virtual bool activate();
-            virtual bool init();
-            virtual void dispose();
-            virtual void end();
+    virtual bool hasPendingAnimation() const;
 
-            virtual bool hasPendingAnimation() const;
-
-            /** Add given child node to this container
-              */
-            virtual void appendChildNode( const BaseNodeSharedPtr& rNode );
-
-            /** Requests node to resolve all children
-
-                When parents have unresolved start times, and one
-                of the children wants to start (e.g. because of a
-                user event), it must call this method on its
-                parent.
-             */
-            virtual void requestResolveOnChildren();
+    /** Add given child node to this container
+     */
+    void appendChildNode( const BaseNodeSharedPtr& rNode );
 
 #if defined(VERBOSE) && defined(DBG_UTIL)
-            virtual void showState() const;
-            virtual const char* getDescription() const;
+    virtual void showState() const;
+    virtual const char* getDescription() const;
 #endif
 
-        protected:
-            /** Overridden, to overrule indefinite begin event.
+protected:
+    /** Overridden, to overrule indefinite begin event.
 
-                When children requested resolve, indefinite begin
-                times become resolved for us
-             */
-            virtual void scheduleActivationEvent();
+    When children requested resolve, indefinite begin
+    times become resolved for us
+    */
+    virtual void scheduleActivationEvent();
 
-            typedef ::std::vector< BaseNodeSharedPtr > VectorOfNodes;
+    typedef ::std::vector< BaseNodeSharedPtr > VectorOfNodes;
 
-            VectorOfNodes&      getChildren() { return maChildren; }
-            ::std::bit_vector&  getFinishedStates() { return maFinishedStates; }
-            ::std::size_t&      getFinishedCount() { return mnFinishedChildren; }
-            bool                isDurationInfinite() const { return mbDurationIndefinite; }
+    VectorOfNodes&      getChildren() { return maChildren; }
+    ::std::bit_vector&  getFinishedStates() { return maFinishedStates; }
+    ::std::size_t&      getFinishedCount() { return mnFinishedChildren; }
+    bool                isDurationInfinite() const
+        { return mbDurationIndefinite; }
 
-        private:
-            VectorOfNodes       maChildren;
-            ::std::bit_vector   maFinishedStates;
-            ::std::size_t       mnFinishedChildren;
-            bool                mbOverrideIndefiniteBegin;
-            const bool          mbDurationIndefinite;
-        };
+private:
 
-        typedef ::boost::shared_ptr< BaseContainerNode > BaseContainerNodeSharedPtr;
-    }
-}
+    /** Requests node to resolve all children
 
-#endif /* _SLIDESHOW_BASECONTAINERNODE_HXX */
+        When parents have unresolved start times, and one
+        of the children wants to start (e.g. because of a
+        user event), it must call this method on its
+        parent.
+    */
+    void requestResolveOnChildren();
+
+private:
+    VectorOfNodes       maChildren;
+    ::std::bit_vector   maFinishedStates;
+    ::std::size_t       mnFinishedChildren;
+    bool                mbOverrideIndefiniteBegin;
+    const bool          mbDurationIndefinite;
+};
+
+typedef ::boost::shared_ptr< BaseContainerNode > BaseContainerNodeSharedPtr;
+
+} // namespace interface
+} // namespace presentation
+
+#endif /* INCLUDED_SLIDESHOW_BASECONTAINERNODE_HXX */
+
