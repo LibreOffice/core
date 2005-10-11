@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:16:46 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:19:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -807,20 +807,25 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                         if( PickObj( aPos, pPickObj, pPV ) )
                         {
                             // insert as clip action => jump
-                            String              aBookmark( aINetBookmark.GetURL() );
+                            rtl::OUString       aBookmark( aINetBookmark.GetURL() );
                             SdAnimationInfo*    pInfo = pDoc->GetAnimationInfo( pPickObj );
                             BOOL                bCreated = FALSE;
 
-                            if( aBookmark.Len() )
+                            if( aBookmark.getLength() )
                             {
                                 presentation::ClickAction eClickAction = presentation::ClickAction_DOCUMENT;
-                                String aDocName( aBookmark.GetToken( 0, '#' ) );
 
-                                if( pDocSh->GetMedium()->GetName() == aDocName || pDocSh->GetName() == aDocName )
+                                sal_Int32 nIndex = aBookmark.indexOf( (sal_Unicode)'#' );
+                                if( nIndex != -1 )
                                 {
-                                    // Interner Sprung -> nur "#Bookmark" verwenden
-                                    aBookmark = aBookmark.GetToken( 1, '#' );
-                                    eClickAction = presentation::ClickAction_BOOKMARK;
+                                    const String aDocName( aBookmark.copy( 0, nIndex ) );
+
+                                    if( pDocSh->GetMedium()->GetName() == aDocName || pDocSh->GetName() == aDocName )
+                                    {
+                                        // internal jump, only use the part after and including '#'
+                                        eClickAction = presentation::ClickAction_BOOKMARK;
+                                        aBookmark = aBookmark.copy( nIndex+1 );
+                                    }
                                 }
 
                                 if( !pInfo )
@@ -890,15 +895,16 @@ IMPL_LINK( View, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDropEv
         Point   aPos;
         List    aBookmarkList;
         String  aBookmark;
-        String  aFile;
         SdPage* pPage = (SdPage*) GetPageViewPvNum( 0 )->GetPage();
         USHORT  nPgPos = 0xFFFF;
 
         if( pSdNavigatorDropEvent->mpTargetWindow )
             aPos = pSdNavigatorDropEvent->mpTargetWindow->PixelToLogic( pSdNavigatorDropEvent->maPosPixel );
 
-        aFile = aINetBookmark.GetURL().GetToken( 0, '#' );
-        aBookmark = aINetBookmark.GetURL().GetToken( 1, '#' );
+        const rtl::OUString aURL( aINetBookmark.GetURL() );
+        sal_Int32 nIndex = aURL.indexOf( (sal_Unicode)'#' );
+        if( nIndex != -1 )
+            aBookmark = aURL.copy( nIndex+1 );
         aBookmarkList.Insert( &aBookmark );
 
         if( !pPage->IsMasterPage() )
