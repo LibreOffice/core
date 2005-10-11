@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tools.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:31:18 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:36:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,7 @@
 
 #include <lerp.hxx>
 #include <smilfunctionparser.hxx>
+#include <layermanager.hxx>
 
 
 
@@ -466,10 +467,10 @@ namespace presentation
             return true;
         }
 
-        bool findNamedValue( uno::Sequence< beans::NamedValue >&    rSequence,
+        bool findNamedValue( uno::Sequence< beans::NamedValue > const& rSequence,
                              const beans::NamedValue&               rSearchKey )
         {
-            const beans::NamedValue*    pArray = rSequence.getArray();
+            const beans::NamedValue*    pArray = rSequence.getConstArray();
             const size_t                nLen( rSequence.getLength() );
 
             if( nLen == 0 )
