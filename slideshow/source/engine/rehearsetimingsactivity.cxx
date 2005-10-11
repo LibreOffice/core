@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rehearsetimingsactivity.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:28:14 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:34:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,17 +45,45 @@
 #include "activitiesqueue.hxx"
 #include "mouseeventhandler.hxx"
 #include "rehearsetimingsactivity.hxx"
-#include <com/sun/star/rendering/XCanvas.hpp>
-#include <com/sun/star/rendering/XBitmap.hpp>
+#include "com/sun/star/awt/MouseButton.hpp"
+#include "com/sun/star/awt/MouseEvent.hpp"
+#include "com/sun/star/rendering/XBitmap.hpp"
 #include "boost/bind.hpp"
 #include <algorithm>
 
-
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace com::sun::star;
+using namespace com::sun::star::uno;
 
 namespace presentation {
 namespace internal {
+
+class RehearseTimingsActivity::MouseHandler
+    : public MouseEventHandler, private boost::noncopyable
+{
+public:
+    MouseHandler( boost::shared_ptr<RehearseTimingsActivity> const & rta );
+
+    void reset();
+    bool hasBeenClicked() const { return m_hasBeenClicked; }
+
+    // Disposable:
+    virtual void dispose();
+    // MouseEventHandler
+    virtual bool handleMousePressed( awt::MouseEvent const & evt );
+    virtual bool handleMouseReleased( awt::MouseEvent const & evt );
+    virtual bool handleMouseEntered( awt::MouseEvent const & evt );
+    virtual bool handleMouseExited( awt::MouseEvent const & evt );
+    virtual bool handleMouseDragged( awt::MouseEvent const & evt );
+    virtual bool handleMouseMoved( awt::MouseEvent const & evt );
+
+private:
+    boost::shared_ptr<RehearseTimingsActivity> m_rta;
+    bool isInArea( com::sun::star::awt::MouseEvent const & evt ) const;
+    bool isDisposed() const { return m_rta.get() == 0 || hasBeenClicked(); }
+    void updatePressedState( const bool pressedState ) const;
+    bool m_hasBeenClicked;
+    bool m_mouseStartedInArea;
+};
 
 const sal_Int32 LEFT_BORDER_SPACE  = 10;
 const sal_Int32 LOWER_BORDER_SPACE = 30;
@@ -202,6 +230,14 @@ bool RehearseTimingsActivity::needsScreenUpdate() const
 void RehearseTimingsActivity::dequeued()
 {
     // not used here
+}
+
+void RehearseTimingsActivity::end()
+{
+    if (isActive()) {
+        stop();
+        m_bActive = false;
+    }
 }
 
 basegfx::B2DRectangle RehearseTimingsActivity::calcSpriteRectangle(
@@ -398,7 +434,9 @@ void RehearseTimingsActivity::MouseHandler::updatePressedState(
 bool RehearseTimingsActivity::MouseHandler::handleMousePressed(
     awt::MouseEvent const & evt )
 {
-    if (!isDisposed() && isInArea(evt)) {
+    if (evt.Buttons == awt::MouseButton::LEFT &&
+        !isDisposed() && isInArea(evt))
+    {
         m_mouseStartedInArea = true;
         updatePressedState(true);
         return true; // consume event
@@ -409,7 +447,9 @@ bool RehearseTimingsActivity::MouseHandler::handleMousePressed(
 bool RehearseTimingsActivity::MouseHandler::handleMouseReleased(
     awt::MouseEvent const & evt )
 {
-    if (!isDisposed() && m_mouseStartedInArea) {
+    if (evt.Buttons == awt::MouseButton::LEFT &&
+        !isDisposed() && m_mouseStartedInArea)
+    {
         m_hasBeenClicked = isInArea(evt); // fini if in
         m_mouseStartedInArea = false;
         updatePressedState(false);
