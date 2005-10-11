@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sequentialtimecontainer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:46:57 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:44:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,9 +58,14 @@ namespace presentation
             virtual bool activate();
             virtual void notifyDeactivating( const AnimationNodeSharedPtr& rNotifier );
 
+            virtual void dispose();
+
 #if defined(VERBOSE) && defined(DBG_UTIL)
             virtual const char* getDescription() const;
 #endif
+        private:
+            bool resolveChild( BaseNodeSharedPtr const & pChildNode );
+            EventSharedPtr m_pCurrentSkipEvent;
         };
     }
 }
