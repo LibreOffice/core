@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shape.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:17:37 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:52:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@
 
 #include <viewlayer.hxx>
 
+#include <vector>
 
 namespace presentation
 {
@@ -222,6 +223,18 @@ namespace presentation
              */
             virtual bool hasIntrinsicAnimation() const = 0;
 
+            typedef ::std::pair< ::basegfx::B2DRectangle, ::rtl::OUString >
+            HyperLinkRegion;
+
+            /** Checks whether this shape has hyperlinks to be clicked.
+             */
+            virtual bool hasHyperlinks() const = 0;
+
+            /** @return the position and size of all hyperlinks relative to
+                        the upper left corner of the shape.
+            */
+            virtual ::std::vector<HyperLinkRegion> getHyperlinkRegions() const
+                = 0;
 
             // Misc
             //------------------------------------------------------------------
