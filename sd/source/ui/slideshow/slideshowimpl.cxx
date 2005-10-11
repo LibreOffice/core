@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 10:46:13 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:49:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,13 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+#include <boost/scoped_ptr.hpp>
+
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP_
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #endif
@@ -140,6 +147,7 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::lang::XComponent;
 using ::com::sun::star::lang::EventObject;
+using ::com::sun::star::lang::XInitialization;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::document::XEventsSupplier;
 using ::com::sun::star::container::XNameReplace;
@@ -147,6 +155,7 @@ using ::com::sun::star::container::XIndexAccess;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::XPropertySetInfo;
+using ::com::sun::star::animations::XAnimationNode;
 
 using ::rtl::OUString;
 using ::rtl::OString;
@@ -184,58 +193,89 @@ static USHORT __READONLY_DATA pAllowed[] =
 };
 
 ///////////////////////////////////////////////////////////////////////
-// AnimationPageList
+// AnimationSlideController
 ///////////////////////////////////////////////////////////////////////
 
-class AnimationPageList
+class AnimationSlideController
 {
 public:
-    AnimationPageList( SdDrawDocument* pDoc );
+    enum Mode { ALL, FROM, CUSTOM, PREVIEW };
 
-    void setStartPageNumber( sal_Int32 nPageNumber ) { mnStartPageNumber = nPageNumber; }
-    sal_Int32 getStartPageIndex() const;
+public:
+    AnimationSlideController( Reference< XIndexAccess > xSlides, Mode eMode );
 
-    bool isPageNumberIncluded( sal_Int32 nPageNumber ) const;
+    void setStartSlideNumber( sal_Int32 nSlideNumber ) { mnStartSlideNumber = nSlideNumber; }
+    sal_Int32 getStartSlideIndex() const;
 
-    sal_Int32 getCurrentPageNumber() const { return mnCurrentPageIndex >= 0 ? maPageNumbers[mnCurrentPageIndex] : -1; }
-    sal_Int32 getCurrentPageIndex() const { return mnCurrentPageIndex; }
+    sal_Int32 getCurrentSlideNumber() const;
+    sal_Int32 getCurrentSlideIndex() const;
 
-    sal_Int32 getPageIndexCount() const { return maPageNumbers.size(); }
-    sal_Int32 getPageNumberCount() const { return mnPageCount; }
+    sal_Int32 getSlideIndexCount() const { return maSlideNumbers.size(); }
+    sal_Int32 getSlideNumberCount() const { return mnSlideCount; }
 
-    sal_Int32 findPageIndex( sal_Int32 nPageNumber ) const;
-    sal_Int32 getPageNumber( sal_Int32 nPageIndex ) const;
+    sal_Int32 getSlideNumber( sal_Int32 nSlideIndex ) const;
 
-    void insertPageNumber( sal_Int32 nPageNumber );
+    void insertSlideNumber( sal_Int32 nSlideNumber, bool bVisible = true );
+    void setPreviewNode( const Reference< XAnimationNode >& xPreviewNode );
 
-    void fillSequences( Sequence< Reference< XDrawPage > >& rSlides, Sequence< Reference< animations::XAnimationNode > >& rRootNodes );
+    bool jumpToSlideIndex( sal_Int32 nNewSlideIndex );
+    bool jumpToSlideNumber( sal_Int32 nNewSlideIndex );
 
-    void slideChange( sal_Int32 nNewSlideIndex );
+    bool nextSlide();
+    bool previousSlide();
+
+    void displayCurrentSlide( const Reference< XSlideShow >& xShow );
 
 private:
-    sal_Int32 mnStartPageNumber;
-    std::vector< sal_Int32 > maPageNumbers;
-    SdDrawDocument* mpDoc;
-    sal_Int32 mnPageCount;
-    sal_Int32 mnCurrentPageIndex;
+    sal_Int32 getNextSlideNumber() const;
+    sal_Int32 getNextSlideIndex() const;
+    bool getSlideAPI( sal_Int32 nSlideNumber, Reference< XDrawPage >& xSlide, Reference< XAnimationNode >& xAnimNode );
+    sal_Int32 findSlideIndex( sal_Int32 nSlideNumber ) const;
+
+    bool isValidIndex( sal_Int32 nIndex ) const { return (nIndex >= 0) && (nIndex < (sal_Int32)maSlideNumbers.size()); }
+    bool isValidSlideNumber( sal_Int32 nSlideNumber ) const { return (nSlideNumber >= 0) && (nSlideNumber < mnSlideCount); }
+
+private:
+    Mode meMode;
+    sal_Int32 mnStartSlideNumber;
+    std::vector< sal_Int32 > maSlideNumbers;
+    std::vector< bool > maSlideVisible;
+    std::vector< bool > maSlideVisited;
+    Reference< XAnimationNode > mxPreviewNode;
+    sal_Int32 mnSlideCount;
+    sal_Int32 mnCurrentSlideIndex;
+    sal_Int32 mnHiddenSlideNumber;
+    Reference< XIndexAccess > mxSlides;
 };
 
-AnimationPageList::AnimationPageList( SdDrawDocument* pDoc )
-    : mpDoc( pDoc ), mnCurrentPageIndex(0), mnStartPageNumber(-1)
+
+void AnimationSlideController::setPreviewNode( const Reference< XAnimationNode >& xPreviewNode )
 {
-    mnPageCount = mpDoc->GetSdPageCount( PK_STANDARD );
+    mxPreviewNode = xPreviewNode;
 }
 
-sal_Int32 AnimationPageList::getStartPageIndex() const
+AnimationSlideController::AnimationSlideController( Reference< XIndexAccess > xSlides, Mode eMode  )
+:   mnCurrentSlideIndex(0),
+    mnStartSlideNumber(-1),
+    mnSlideCount( 0 ),
+    mxSlides( xSlides ),
+    mnHiddenSlideNumber( -1 ),
+    meMode( eMode )
 {
-    if( mnStartPageNumber >= 0 )
+    if( mxSlides.is() )
+        mnSlideCount = xSlides->getCount();
+}
+
+sal_Int32 AnimationSlideController::getStartSlideIndex() const
+{
+    if( mnStartSlideNumber >= 0 )
     {
         sal_Int32 nIndex;
-        const sal_Int32 nCount = maPageNumbers.size();
+        const sal_Int32 nCount = maSlideNumbers.size();
 
         for( nIndex = 0; nIndex < nCount; nIndex++ )
         {
-            if( maPageNumbers[nIndex] == mnStartPageNumber )
+            if( maSlideNumbers[nIndex] == mnStartSlideNumber )
                 return nIndex;
         }
     }
@@ -243,80 +283,232 @@ sal_Int32 AnimationPageList::getStartPageIndex() const
     return 0;
 }
 
-sal_Int32 AnimationPageList::getPageNumber( sal_Int32 nPageIndex ) const
+sal_Int32 AnimationSlideController::getCurrentSlideNumber() const
 {
-    if( nPageIndex >= 0 && (sal_uInt32)nPageIndex < maPageNumbers.size() )
-        return maPageNumbers[nPageIndex];
+    if( mnHiddenSlideNumber != -1 )
+        return mnHiddenSlideNumber;
+    else
+        return maSlideNumbers[mnCurrentSlideIndex];
+}
+
+sal_Int32 AnimationSlideController::getCurrentSlideIndex() const
+{
+    if( mnHiddenSlideNumber != -1 )
+        return -1;
+    else
+        return mnCurrentSlideIndex;
+}
+
+bool AnimationSlideController::jumpToSlideIndex( sal_Int32 nNewSlideIndex )
+{
+    if( isValidIndex( nNewSlideIndex ) )
+    {
+        mnCurrentSlideIndex = nNewSlideIndex;
+        mnHiddenSlideNumber = -1;
+        maSlideVisited[mnCurrentSlideIndex] = true;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool AnimationSlideController::jumpToSlideNumber( sal_Int32 nNewSlideNumber )
+{
+    sal_Int32 nIndex = findSlideIndex( nNewSlideNumber );
+    if( isValidIndex( nIndex ) )
+    {
+        return jumpToSlideIndex( nIndex );
+    }
+    else if( (nNewSlideNumber >= 0) && (nNewSlideNumber < mnSlideCount) )
+    {
+        // jump to a hidden slide
+        mnHiddenSlideNumber = nNewSlideNumber;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+sal_Int32 AnimationSlideController::getSlideNumber( sal_Int32 nSlideIndex ) const
+{
+    if( isValidIndex( nSlideIndex ) )
+        return maSlideNumbers[nSlideIndex];
     else
         return -1;
 }
 
-void AnimationPageList::insertPageNumber( sal_Int32 nPageNumber )
+void AnimationSlideController::insertSlideNumber( sal_Int32 nSlideNumber, bool bVisible /* = true */ )
 {
-    DBG_ASSERT( ( nPageNumber < mnPageCount ), "sd::AnimationPageList::insertPageNumber(), illegal index" );
-    if( nPageNumber < mnPageCount )
-        maPageNumbers.push_back( nPageNumber );
+    DBG_ASSERT( isValidSlideNumber( nSlideNumber ), "sd::AnimationSlideController::insertSlideNumber(), illegal index" );
+    if( isValidSlideNumber( nSlideNumber ) )
+    {
+        maSlideNumbers.push_back( nSlideNumber );
+        maSlideVisible.push_back( bVisible );
+        maSlideVisited.push_back( false );
+    }
 }
 
-bool AnimationPageList::isPageNumberIncluded( sal_Int32 nPageNumber ) const
+bool AnimationSlideController::getSlideAPI( sal_Int32 nSlideNumber, Reference< XDrawPage >& xSlide, Reference< XAnimationNode >& xAnimNode )
 {
-    return findPageIndex( nPageNumber ) != -1;
+    if( isValidSlideNumber( nSlideNumber ) ) try
+    {
+        xSlide = Reference< XDrawPage >( mxSlides->getByIndex(nSlideNumber), UNO_QUERY_THROW );
+
+        if( meMode == PREVIEW )
+        {
+            xAnimNode = mxPreviewNode;
+        }
+        else
+        {
+               Reference< animations::XAnimationNodeSupplier > xAnimNodeSupplier( xSlide, UNO_QUERY_THROW );
+            xAnimNode = xAnimNodeSupplier->getAnimationNode();
+        }
+
+        return true;
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        DBG_ERROR(
+            (OString("sd::AnimationSlideController::getSlideAPI(), "
+                    "exception caught: ") +
+            rtl::OUStringToOString(
+                comphelper::anyToString( cppu::getCaughtException() ),
+                RTL_TEXTENCODING_UTF8 )).getStr() );
+
+    }
+
+    return false;
 }
 
-sal_Int32 AnimationPageList::findPageIndex( sal_Int32 nPageNumber ) const
+sal_Int32 AnimationSlideController::findSlideIndex( sal_Int32 nSlideNumber ) const
 {
     sal_Int32 nIndex;
-    const sal_Int32 nCount = maPageNumbers.size();
+    const sal_Int32 nCount = maSlideNumbers.size();
 
     for( nIndex = 0; nIndex < nCount; nIndex++ )
     {
-        if( maPageNumbers[nIndex] == nPageNumber )
+        if( maSlideNumbers[nIndex] == nSlideNumber )
             return nIndex;
     }
 
     return -1;
 }
 
-void AnimationPageList::fillSequences( Sequence< Reference< XDrawPage > >& rSlides, Sequence< Reference< animations::XAnimationNode > >& rRootNodes )
+sal_Int32 AnimationSlideController::getNextSlideIndex() const
 {
-    try
+    switch( meMode )
     {
-        Reference< XDrawPagesSupplier > xDrawPages( mpDoc->getUnoModel(), UNO_QUERY_THROW );
-        Reference< XIndexAccess > xPages( xDrawPages->getDrawPages(), UNO_QUERY_THROW );
-
-        Reference< XDrawPage > xDrawPage;
-        const int nPageCount( maPageNumbers.size() );
-
-        rSlides.realloc( nPageCount );
-        rRootNodes.realloc( nPageCount );
-
-        for( sal_Int32 i=0; i<nPageCount; ++i )
+    case ALL:
         {
-            xPages->getByIndex(maPageNumbers[i]) >>= xDrawPage;
+            sal_Int32 nNewSlideIndex = mnCurrentSlideIndex + 1;
+            if( isValidIndex( nNewSlideIndex ) )
+            {
+                // if the current slide is not excluded, make sure the
+                // next slide is also not excluded.
+                // if the current slide is excluded, we want to go
+                // to the next slide, even if this is also excluded.
+                if( maSlideVisible[mnCurrentSlideIndex] )
+                {
+                    while( isValidIndex( nNewSlideIndex ) )
+                    {
+                        if( maSlideVisible[nNewSlideIndex] )
+                            break;
 
-            rSlides[i] = xDrawPage;
+                        nNewSlideIndex++;
+                    }
+                }
+            }
 
-            Reference< animations::XAnimationNodeSupplier > xAnimNodeSupplier( xDrawPage, UNO_QUERY_THROW );
-            rRootNodes[i] = xAnimNodeSupplier->getAnimationNode();
+            return nNewSlideIndex;
         }
-    }
-    catch( uno::Exception& e )
-    {
-        (void)e;
-        DBG_ERROR(
-            (OString("sd::AnimationPageList::fillSequences(), "
-                     "exception caught: ") +
-             rtl::OUStringToOString(
-                 comphelper::anyToString( cppu::getCaughtException() ),
-                 RTL_TEXTENCODING_UTF8 )).getStr() );
+
+    case FROM:
+    case CUSTOM:
+        return mnHiddenSlideNumber == -1 ? mnCurrentSlideIndex + 1 : mnCurrentSlideIndex;
+
+    default:
+    case PREVIEW:
+        return -1;
+
     }
 }
 
-void AnimationPageList::slideChange( sal_Int32 nNewSlideIndex )
+sal_Int32 AnimationSlideController::getNextSlideNumber() const
 {
-    mnCurrentPageIndex = nNewSlideIndex;
+    sal_Int32 nNextSlideIndex = getNextSlideIndex();
+    if( isValidIndex( nNextSlideIndex ) )
+    {
+        return maSlideNumbers[nNextSlideIndex];
+    }
+    else
+    {
+        return -1;
+    }
 }
 
+bool AnimationSlideController::nextSlide()
+{
+    return jumpToSlideIndex( getNextSlideIndex() );
+}
+
+bool AnimationSlideController::previousSlide()
+{
+    sal_Int32 nNewSlideIndex = mnCurrentSlideIndex - 1;
+
+    switch( meMode )
+    {
+        case ALL:
+        {
+            // make sure the previous slide is visible
+            // or was already visited
+            while( isValidIndex( nNewSlideIndex ) )
+            {
+                if( maSlideVisible[nNewSlideIndex] || maSlideVisited[nNewSlideIndex] )
+                    break;
+
+                nNewSlideIndex--;
+            }
+
+            break;
+        }
+
+        case PREVIEW:
+            return false;
+    }
+
+    return jumpToSlideIndex( nNewSlideIndex );
+}
+
+void AnimationSlideController::displayCurrentSlide( const Reference< XSlideShow >& xShow )
+{
+    const sal_Int32 nCurrentSlideNumber = getCurrentSlideNumber();
+
+    if( xShow.is() && (nCurrentSlideNumber != -1 ) )
+    {
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aProperties;
+        Reference< XDrawPage > xSlide;
+        Reference< XAnimationNode > xAnimNode;
+
+        const sal_Int32 nNextSlideNumber = getNextSlideNumber();
+        if( getSlideAPI( nNextSlideNumber, xSlide, xAnimNode )  )
+        {
+            Sequence< Any > aValue(2);
+            aValue[0] <<= xSlide;
+            aValue[1] <<= xAnimNode;
+            aProperties.realloc(1);
+            aProperties[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Prefetch" ) );
+            aProperties[0].Value <<= aValue;
+        }
+
+        if( getSlideAPI( nCurrentSlideNumber, xSlide, xAnimNode ) )
+            xShow->displaySlide( xSlide, xAnimNode, aProperties );
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////
 // class SlideshowImpl
@@ -335,7 +527,7 @@ SlideshowImpl::SlideshowImpl(
     mpShowWindow(0),
     mpTimeButton(0),
     mpSaveOptions( new SvtSaveOptions ),
-    mnRestorePage(0),
+    mnRestoreSlide(0),
     mbRehearseTimings(false),
     mbAutoSaveSuppressed(false),
     meAnimationMode(ANIMATIONMODE_SHOW),
@@ -343,7 +535,7 @@ SlideshowImpl::SlideshowImpl(
     mpOldActiveWindow(0),
     mbGridVisible(false),
     mbBordVisible(false),
-    mbPageBorderVisible(false),
+    mbSlideBorderVisible(false),
     mpNewAttr(0),
     mbSetOnlineSpelling(false),
     mbDisposed(false),
@@ -354,7 +546,7 @@ SlideshowImpl::SlideshowImpl(
     msBookmark( RTL_CONSTASCII_USTRINGPARAM("Bookmark") ),
     msVerb( RTL_CONSTASCII_USTRINGPARAM("Verb") ),
     mnEntryCounter(0),
-    mnLastPageNumber(-1),
+    mnLastSlideNumber(-1),
     mbIsPaused(false),
     mbInputFreeze(false),
     mnEndShowEvent(0)
@@ -380,7 +572,7 @@ SlideshowImpl::~SlideshowImpl()
 
 bool SlideshowImpl::startPreview(
         const Reference< XDrawPage >& xDrawPage,
-        const Reference< animations::XAnimationNode >& xAnimationNode,
+        const Reference< XAnimationNode >& xAnimationNode,
         ::Window* pParent )
 {
     bool bRet = false;
@@ -420,12 +612,15 @@ bool SlideshowImpl::startPreview(
         maPresSettings.mbShowPauseLogo = sal_False;
         maPresSettings.mbStartWithNavigator = sal_False;
 
-        mpAnimationPageList.reset( new AnimationPageList( mpDoc ) );
+        Reference< XDrawPagesSupplier > xDrawPages( mpDoc->getUnoModel(), UNO_QUERY_THROW );
+        Reference< XIndexAccess > xSlides( xDrawPages->getDrawPages(), UNO_QUERY_THROW );
+        mpSlideController.reset( new AnimationSlideController( xSlides, AnimationSlideController::PREVIEW ) );
 
-        sal_Int32 nPageNumber;
+        sal_Int32 nSlideNumber;
         Reference< XPropertySet > xSet( mxPreviewDrawPage, UNO_QUERY_THROW );
-        xSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Number" ) ) ) >>= nPageNumber;
-        mpAnimationPageList->insertPageNumber( nPageNumber-1 );
+        xSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Number" ) ) ) >>= nSlideNumber;
+        mpSlideController->insertSlideNumber( nSlideNumber-1 );
+        mpSlideController->setPreviewNode( xAnimationNode );
 
         mpShowWindow = new ShowWindow( ((pParent == 0) && mpViewShell) ?  mpViewShell->GetParentWindow() : pParent );
         if( mpViewShell )
@@ -472,10 +667,7 @@ bool SlideshowImpl::startPreview(
             aProperties[1].Value = uno::makeAny( sal_True );
         }
 
-        Sequence< Reference< XDrawPage > > aSlides(&mxPreviewDrawPage, 1);
-        Sequence< Reference< animations::XAnimationNode > > aRootNodes(&mxPreviewAnimationNode, 1);
-
-        bRet = startShowImpl( aSlides, aRootNodes, aProperties );
+        bRet = startShowImpl( aProperties );
 
         if( mpShowWindow != 0 && meAnimationMode == ANIMATIONMODE_PREVIEW )
             mpShowWindow->SetPreviewMode();
@@ -513,9 +705,9 @@ bool SlideshowImpl::startShow( PresentationSettings* pPresSettings )
 
         // ---
 
-        String  aPresPage( maPresSettings.maPresPage );
+        String  aPresSlide( maPresSettings.maPresPage );
         SdPage* pStartPage = mpViewShell ? mpViewShell->GetActualPage() : 0;
-        bool    bStartWithActualPage =  pStartPage &&
+        bool    bStartWithActualSlide =  pStartPage &&
                                         ( (meAnimationMode != ANIMATIONMODE_SHOW) ||
                                            SD_MOD()->GetSdOptions( mpDoc->GetDocumentType() )->IsStartWithActualPage() );
 
@@ -542,18 +734,18 @@ bool SlideshowImpl::startShow( PresentationSettings* pPresSettings )
             }
         }
 
-        if( bStartWithActualPage )
+        if( bStartWithActualSlide )
         {
             if( meAnimationMode != ANIMATIONMODE_SHOW )
             {
                 if( pStartPage->GetPageKind() == PK_STANDARD )
                 {
-                    aPresPage = pStartPage->GetName();
+                    aPresSlide = pStartPage->GetName();
                     maPresSettings.mbAll = false;
                 }
                 else
                 {
-                    bStartWithActualPage = false;
+                    bStartWithActualSlide = false;
                 }
             }
         }
@@ -561,42 +753,39 @@ bool SlideshowImpl::startShow( PresentationSettings* pPresSettings )
         {
             if( pStartPage->GetPageKind() != PK_STANDARD )
             {
-                bStartWithActualPage = false;
+                bStartWithActualSlide = false;
             }
         }
 
-        mpAnimationPageList.reset( new AnimationPageList( mpDoc ) );
-
         // build page list
-        createPageList( maPresSettings.mbAll, false, aPresPage );
+        createSlideList( maPresSettings.mbAll, false, aPresSlide );
 
-        if( bStartWithActualPage )
+        if( bStartWithActualSlide )
         {
-            const USHORT nPageNum = ( pStartPage->GetPageNum() - 1 ) >> 1;
+            sal_Int32 nSlideNum = ( pStartPage->GetPageNum() - 1 ) >> 1;
 
             if( !maPresSettings.mbAll && !maPresSettings.mbCustomShow )
             {
-                // its start from dia, find out if it is located before our current page
-                const long nPageCount = mpDoc->GetSdPageCount( PK_STANDARD );
-                long nPage;
-                for( nPage = 0; nPage < nPageCount; nPage++ )
+                // its start from dia, find out if it is located before our current Slide
+                const sal_Int32 nSlideCount = mpDoc->GetSdPageCount( PK_STANDARD );
+                sal_Int32 nSlide;
+                for( nSlide = 0; (nSlide < nSlideCount); nSlide++ )
                 {
-                    if( mpDoc->GetSdPage( (USHORT) nPage, PK_STANDARD )->GetName() == aPresPage )
+                    if( mpDoc->GetSdPage( (USHORT) nSlide, PK_STANDARD )->GetName() == aPresSlide )
                         break;
                 }
 
-                if( nPage < nPageNum )
-                    mpAnimationPageList->setStartPageNumber( nPageNum );
+                if( nSlide > nSlideNum )
+                    nSlideNum = -1;
             }
-            else if( mpAnimationPageList->isPageNumberIncluded( nPageNum ) )
-            {
-                mpAnimationPageList->setStartPageNumber( nPageNum );
-            }
+
+            if( nSlideNum != -1 )
+                mpSlideController->setStartSlideNumber( nSlideNum );
         }
 
-        // remember page number from where the show was started
+        // remember Slide number from where the show was started
         if( pStartPage )
-            mnRestorePage = ( pStartPage->GetPageNum() - 1 ) / 2;
+            mnRestoreSlide = ( pStartPage->GetPageNum() - 1 ) / 2;
 
         // hide child windows
         hideChildWindows();
@@ -717,12 +906,7 @@ bool SlideshowImpl::startShow( PresentationSettings* pPresSettings )
                     -1, Any(true), beans::PropertyState_DIRECT_VALUE ) );
         }
 
-        Sequence< Reference< XDrawPage > > aSlides;
-        Sequence< Reference< animations::XAnimationNode > > aRootNodes;
-        mpAnimationPageList->fillSequences( aSlides, aRootNodes );
-
-        bRet = startShowImpl( aSlides, aRootNodes,
-                              Sequence<beans::PropertyValue>(
+        bRet = startShowImpl( Sequence<beans::PropertyValue>(
                                   &aProperties[0], aProperties.size() ) );
     }
     catch( Exception& e )
@@ -741,48 +925,42 @@ bool SlideshowImpl::startShow( PresentationSettings* pPresSettings )
     return bRet;
 }
 
-bool SlideshowImpl::startShowImpl(
-    const Sequence< Reference< XDrawPage > >& aSlides,
-    const Sequence< Reference< animations::XAnimationNode > >& aRootNodes,
-    const Sequence< beans::PropertyValue >& aProperties_ )
+bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProperties )
 {
     try
     {
-        Reference< XSlideShow > xShow( createSlideShow() );
-        mxShow = xShow;
+        mxShow = Reference< XSlideShow >( createSlideShow(), UNO_QUERY_THROW );
+        mxView = mxView.createFromQuery( new SlideShowView( *mpShowWindow, mpDoc, meAnimationMode, this ) );
 
-        if( mxShow.is() )
+        // try add wait symbol to properties:
+        const Reference<rendering::XSpriteCanvas> xSpriteCanvas(
+            mxView->getCanvas() );
+        if (xSpriteCanvas.is())
         {
-            mxView = mxView.createFromQuery( new SlideShowView( *mpShowWindow, mpDoc, meAnimationMode, this ) );
-
-            Sequence<beans::PropertyValue> aProperties(aProperties_);
-            // try add wait symbol to properties:
-            const Reference<rendering::XSpriteCanvas> xSpriteCanvas(
-                mxView->getCanvas() );
-            if (xSpriteCanvas.is()) {
-                BitmapEx waitSymbolBitmap( SdResId(BMP_WAIT_ICON) );
-                const Reference<rendering::XBitmap> xBitmap(
-                    vcl::unotools::xBitmapFromBitmapEx(
-                        xSpriteCanvas->getDevice(), waitSymbolBitmap ) );
-                if (xBitmap.is()) {
-                    aProperties.realloc( aProperties.getLength() + 1 );
-                    aProperties[ aProperties.getLength() - 1 ] =
-                        beans::PropertyValue(
-                            OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                          "WaitSymbolBitmap") ),
-                            -1, Any( xBitmap ),
-                            beans::PropertyState_DIRECT_VALUE );
-                }
+            BitmapEx waitSymbolBitmap( SdResId(BMP_WAIT_ICON) );
+            const Reference<rendering::XBitmap> xBitmap(
+                vcl::unotools::xBitmapFromBitmapEx(
+                    xSpriteCanvas->getDevice(), waitSymbolBitmap ) );
+            if (xBitmap.is())
+            {
+                mxShow->setProperty(
+                    beans::PropertyValue(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("WaitSymbolBitmap") ),
+                        -1,
+                        makeAny( xBitmap ),
+                        beans::PropertyState_DIRECT_VALUE ) );
             }
-
-            mxShow->addView( mxView.getRef() );
-            mxShow->addSlideShowListener( Reference< XSlideShowListener >( this ) );
-            const sal_Int32 nStartIndex = mpAnimationPageList->getStartPageIndex();
-            mxShow->show( aSlides, aRootNodes, ( nStartIndex > 0) ? nStartIndex : 0, aProperties );
-
-//          update is now started in onFirstPaint()
-//          update();
         }
+
+        const sal_Int32 nCount = aProperties.getLength();
+        sal_Int32 nIndex;
+        for( nIndex = 0; nIndex < nCount; nIndex++ )
+            mxShow->setProperty( aProperties[nIndex] );
+
+        mxShow->addView( mxView.getRef() );
+        mxShow->addSlideShowListener( Reference< XSlideShowListener >( this ) );
+
+        displaySlideIndex( mpSlideController->getStartSlideIndex() );
 
         return true;
     }
@@ -855,15 +1033,15 @@ void SlideshowImpl::stopShow()
     }
 */
 
-    if( mpAnimationPageList.get() )
+    if( mpSlideController.get() )
     {
         if( ANIMATIONMODE_SHOW == meAnimationMode )
         {
-            if( mpAnimationPageList->getCurrentPageNumber() != -1 )
-                mnRestorePage = mpAnimationPageList->getCurrentPageNumber();
+            if( mpSlideController->getCurrentSlideNumber() != -1 )
+                mnRestoreSlide = mpSlideController->getCurrentSlideNumber();
         }
 
-        mpAnimationPageList.reset();
+        mpSlideController.reset();
     }
 
     // der DrawView das Praesentationfenster wegnehmen und ihr dafuer ihre alten Fenster wiedergeben
@@ -938,8 +1116,8 @@ void SlideshowImpl::stopShow()
     {
         if( meAnimationMode == ANIMATIONMODE_SHOW )
         {
-            // switch to the previously visible page
-            static_cast<DrawViewShell*>(mpViewShell)->SwitchPage( (USHORT)mnRestorePage );
+            // switch to the previously visible Slide
+            static_cast<DrawViewShell*>(mpViewShell)->SwitchPage( (USHORT)mnRestoreSlide );
 
             // invalidate the view shell so the presentation slot will be re-enabled
             // and the rehersing will be updated
@@ -1004,100 +1182,10 @@ void SlideshowImpl::paint( const Rectangle& rRect )
     }
 }
 
-void SlideshowImpl::slideChange()
+void SlideshowImpl::slideEnded() throw (uno::RuntimeException)
 {
-    try
-    {
-        if( mxPlayer.is() )
-        {
-            mxPlayer->stop();
-            mxPlayer.clear();
-        }
-    }
-    catch( Exception& e )
-    {
-        (void)e;
-        DBG_ERROR("sd::SlideshowImpl::slideChange(), exception caught!" );
-    }
-
-    // if this is a show, ignore user inputs and
-    // start 20ms timer to reenable inputs to fiter
-    // buffered inputs during slide transition
-    if( meAnimationMode == ANIMATIONMODE_SHOW )
-    {
-        mbInputFreeze = true;
-        maInputFreezeTimer.Start();
-    }
-
-    if( mpAnimationPageList.get() )
-    {
-        sal_Int32 nCurrentPageIndex = mpAnimationPageList->getCurrentPageIndex();
-        sal_Int32 nCurrentPageNumber = mpAnimationPageList->getCurrentPageNumber();
-
-        if( nCurrentPageNumber != mnLastPageNumber )
-        {
-            removeShapeEvents();
-            registerShapeEvents(nCurrentPageNumber);
-        }
-        mnLastPageNumber = nCurrentPageNumber;
-
-        if( (nCurrentPageIndex == -1) && mpShowWindow )
-        {
-            if( meAnimationMode == ANIMATIONMODE_PREVIEW )
-            {
-                endPresentation();
-            }
-            else if( maPresSettings.mbEndless )
-            {
-                if( maPresSettings.mnPauseTimeout )
-                {
-                    Graphic* pGraphic = 0;
-
-                    if( maPresSettings.mbShowPauseLogo )
-                    {
-                        // load about image from module path
-                        String aBmpFileName( RTL_CONSTASCII_USTRINGPARAM("about.bmp") );
-                        INetURLObject aObj( SvtPathOptions().GetModulePath(), INET_PROT_FILE );
-                        aObj.insertName( aBmpFileName );
-                        SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
-                        if ( !aStrm.GetError() )
-                        {
-                            Bitmap aBmp;
-                            aStrm >> aBmp;
-                            pGraphic = new Graphic(aBmp);
-                            pGraphic->SetPrefMapMode(MAP_PIXEL);
-                        }
-                        else
-                        {
-                            //if no image is located in the module path
-                            //use default logo from iso resource:
-
-                            String aMgrName( RTL_CONSTASCII_USTRINGPARAM( "iso" ) );
-                            aMgrName += String::CreateFromInt32(SUPD);
-                            ResMgr* pResMgr = ResMgr::CreateResMgr( U2S( aMgrName ));
-                            DBG_ASSERT(pResMgr,"No ResMgr found");
-                            if(pResMgr)
-                            {
-                                pGraphic = new Graphic( Bitmap( ResId( RID_DEFAULT_ABOUT_BMP_LOGO, pResMgr ) ) );
-                                pGraphic->SetPrefMapMode(MAP_PIXEL);
-                                delete pResMgr;
-                            }
-                        }
-                    }
-                    mpShowWindow->SetPauseMode( 0, maPresSettings.mnPauseTimeout, pGraphic );
-                    delete pGraphic;
-                }
-                else
-                {
-                    jumpToPageIndex( 0 );
-                }
-            }
-            else
-            {
-                mpShowWindow->SetEndMode();
-            }
-        }
-    }
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    gotoNextSlide();
 }
 
 void SlideshowImpl::removeShapeEvents()
@@ -1129,15 +1217,15 @@ void SlideshowImpl::removeShapeEvents()
     }
 }
 
-void SlideshowImpl::registerShapeEvents(sal_Int32 nPageNumber)
+void SlideshowImpl::registerShapeEvents(sal_Int32 nSlideNumber)
 {
-    if( nPageNumber >= 0 ) try
+    if( nSlideNumber >= 0 ) try
     {
         Reference< XDrawPagesSupplier > xDrawPages( mxModel, UNO_QUERY_THROW );
         Reference< XIndexAccess > xPages( xDrawPages->getDrawPages(), UNO_QUERY_THROW );
 
         Reference< XShapes > xDrawPage;
-        xPages->getByIndex(nPageNumber) >>= xDrawPage;
+        xPages->getByIndex(nSlideNumber) >>= xDrawPage;
 
         if( xDrawPage.is() )
         {
@@ -1207,7 +1295,7 @@ void SlideshowImpl::registerShapeEvents( Reference< XShapes >& xShapes )
             case ClickAction_BOOKMARK:
                 if( xSetInfo->hasPropertyByName( msBookmark ) )
                     xSet->getPropertyValue( msBookmark ) >>= pEvent->maStrBookmark;
-                if( getPageNumberForBookmark( pEvent->maStrBookmark ) == -1 )
+                if( getSlideNumberForBookmark( pEvent->maStrBookmark ) == -1 )
                     continue;
                 break;
             case ClickAction_DOCUMENT:
@@ -1245,18 +1333,19 @@ void SlideshowImpl::registerShapeEvents( Reference< XShapes >& xShapes )
 
 void SlideshowImpl::gotoPreviousSlide()
 {
-    if( mxShow.is() ) try
+    if( mxShow.is() && mpSlideController.get() ) try
     {
-        if( mpShowWindow->GetShowWindowMode() == SHOWWINDOWMODE_END )
+        const ShowWindowMode eMode = mpShowWindow->GetShowWindowMode();
+        if( (eMode == SHOWWINDOWMODE_END) || (eMode == SHOWWINDOWMODE_PAUSE) )
         {
-            const sal_Int32 nLastPageIndex = mpAnimationPageList->getPageIndexCount() - 1;
-            if( nLastPageIndex >= 0 )
-                mpShowWindow->RestartShow( nLastPageIndex );
+            const sal_Int32 nLastSlideIndex = mpSlideController->getSlideIndexCount() - 1;
+            if( nLastSlideIndex >= 0 )
+                mpShowWindow->RestartShow( nLastSlideIndex );
         }
-        else if( mpAnimationPageList->getCurrentPageIndex() > 0 )
+        else
         {
-            mxShow->previousSlide();
-            update();
+            if( mpSlideController->previousSlide() )
+                displayCurrentSlide();
         }
     }
     catch( Exception& e )
@@ -1271,25 +1360,21 @@ void SlideshowImpl::gotoPreviousSlide()
     }
 }
 
-void SlideshowImpl::gotoNextSlide()
+void SlideshowImpl::stopSound()
 {
-    if( mxShow.is() ) try
+    try
     {
-        if( mpAnimationPageList->getCurrentPageIndex() == (mpAnimationPageList->getPageIndexCount() - 1) )
+        if( mxPlayer.is() )
         {
-            slideChange( mpAnimationPageList->getCurrentPageIndex(), -1 );
-        }
-        else
-        {
-            mxShow->nextSlide();
-            update();
+            mxPlayer->stop();
+            mxPlayer.clear();
         }
     }
     catch( Exception& e )
     {
         static_cast<void>(e);
         DBG_ERROR(
-            (OString("sd::SlideshowImpl::gotoNextSlide(), "
+            (OString("sd::SlideshowImpl::stopSound(), "
                     "exception caught: ") +
             rtl::OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
@@ -1297,31 +1382,129 @@ void SlideshowImpl::gotoNextSlide()
     }
 }
 
+void SlideshowImpl::displayCurrentSlide()
+{
+    stopSound();
+    removeShapeEvents();
+
+    if( mpSlideController.get() && mxShow.is() )
+    {
+        mpSlideController->displayCurrentSlide( mxShow );
+        registerShapeEvents(mpSlideController->getCurrentSlideNumber());
+        update();
+    }
+}
+
+void SlideshowImpl::gotoNextSlide()
+{
+
+    // if this is a show, ignore user inputs and
+    // start 20ms timer to reenable inputs to fiter
+    // buffered inputs during slide transition
+    if( meAnimationMode == ANIMATIONMODE_SHOW )
+    {
+        mbInputFreeze = true;
+        maInputFreezeTimer.Start();
+    }
+
+    if( mpSlideController.get() )
+    {
+        if( mpSlideController->nextSlide() )
+        {
+            displayCurrentSlide();
+        }
+        else
+        {
+            stopSound();
+
+            if( meAnimationMode == ANIMATIONMODE_PREVIEW )
+            {
+                endPresentation();
+            }
+            else if( maPresSettings.mbEndless )
+            {
+                if( maPresSettings.mnPauseTimeout )
+                {
+                    boost::scoped_ptr< Graphic > pGraphic;
+
+                    if( maPresSettings.mbShowPauseLogo )
+                    {
+                        // load about image from module path
+                        String aBmpFileName( RTL_CONSTASCII_USTRINGPARAM("about.bmp") );
+                        INetURLObject aObj( SvtPathOptions().GetModulePath(), INET_PROT_FILE );
+                        aObj.insertName( aBmpFileName );
+                        SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
+                        if ( !aStrm.GetError() )
+                        {
+                            Bitmap aBmp;
+                            aStrm >> aBmp;
+                            pGraphic.reset( new Graphic(aBmp) );
+                            pGraphic->SetPrefMapMode(MAP_PIXEL);
+                        }
+                        else
+                        {
+                            //if no image is located in the module path
+                            //use default logo from iso resource:
+
+                            String aMgrName( RTL_CONSTASCII_USTRINGPARAM( "iso" ) );
+                            aMgrName += String::CreateFromInt32(SUPD);
+                            boost::scoped_ptr< ResMgr > pResMgr( ResMgr::CreateResMgr( U2S( aMgrName )) );
+                            DBG_ASSERT(pResMgr,"No ResMgr found");
+                            if(pResMgr.get())
+                            {
+                                pGraphic.reset( new Graphic( Bitmap( ResId( RID_DEFAULT_ABOUT_BMP_LOGO, pResMgr.get() ) ) ) );
+                                pGraphic->SetPrefMapMode(MAP_PIXEL);
+                            }
+                        }
+                    }
+                    if( mpShowWindow )
+                        mpShowWindow->SetPauseMode( 0, maPresSettings.mnPauseTimeout, pGraphic.get() );
+                }
+                else
+                {
+                    displaySlideIndex( 0 );
+                }
+            }
+            else
+            {
+                if( mpShowWindow )
+                    mpShowWindow->SetEndMode();
+            }
+        }
+    }
+}
+
 void SlideshowImpl::gotoFirstSlide()
 {
-    if( mpShowWindow->GetShowWindowMode() == SHOWWINDOWMODE_END )
+    if( mpShowWindow && mpSlideController.get() )
     {
-        if( mpAnimationPageList->getPageIndexCount() )
-            mpShowWindow->RestartShow( 0);
-    }
-    else
-    {
-        gotoSlideIndex( 0 );
+        if( mpShowWindow->GetShowWindowMode() == SHOWWINDOWMODE_END )
+        {
+            if( mpSlideController->getSlideIndexCount() )
+                mpShowWindow->RestartShow( 0);
+        }
+        else
+        {
+            displaySlideIndex( 0 );
+        }
     }
 }
 
 void SlideshowImpl::gotoLastSlide()
 {
-    const sal_Int32 nLastPageIndex = mpAnimationPageList->getPageIndexCount() - 1;
-    if( mpAnimationPageList.get() && (nLastPageIndex > 0) )
+    if( mpSlideController.get() )
     {
-        if( mpShowWindow->GetShowWindowMode() == SHOWWINDOWMODE_END )
+        const sal_Int32 nLastSlideIndex = mpSlideController->getSlideIndexCount() - 1;
+        if( nLastSlideIndex >= 0 )
         {
-            mpShowWindow->RestartShow( nLastPageIndex );
-        }
-        else
-        {
-            gotoSlideIndex( nLastPageIndex );
+            if( mpShowWindow->GetShowWindowMode() == SHOWWINDOWMODE_END )
+            {
+                mpShowWindow->RestartShow( nLastSlideIndex );
+            }
+            else
+            {
+                displaySlideIndex( nLastSlideIndex );
+            }
         }
     }
 }
@@ -1342,25 +1525,6 @@ IMPL_LINK( SlideshowImpl, endPresentationHdl, void*, EMPTYARG )
         stopShow();
 
     return 0;
-}
-
-void SlideshowImpl::gotoSlideIndex( sal_Int32 nPageIndex )
-{
-    if( (nPageIndex >= 0) && mxShow.is() ) try
-    {
-        mxShow->displaySlide( nPageIndex );
-        update();
-    }
-    catch( Exception& e )
-    {
-        static_cast<void>(e);
-        DBG_ERROR(
-            (OString("sd::SlideshowImpl::gotoSlideIndex(), "
-                    "exception caught: ") +
-            rtl::OUStringToOString(
-                comphelper::anyToString( cppu::getCaughtException() ),
-                RTL_TEXTENCODING_UTF8 )).getStr() );
-    }
 }
 
 void SlideshowImpl::enablePen()
@@ -1423,7 +1587,7 @@ bool SlideshowImpl::pause( bool bPause )
 }
 
 // XShapeEventListener
-void SAL_CALL SlideshowImpl::click( const Reference< XShape >& xShape, sal_Int32 nSlideIndex, const ::com::sun::star::awt::MouseEvent& aOriginalEvent ) throw (RuntimeException)
+void SAL_CALL SlideshowImpl::click( const Reference< XShape >& xShape, const ::com::sun::star::awt::MouseEvent& aOriginalEvent ) throw (RuntimeException)
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
 
@@ -1440,18 +1604,9 @@ void SAL_CALL SlideshowImpl::click( const Reference< XShape >& xShape, sal_Int32
     case ClickAction_STOPPRESENTATION:  endPresentation();          break;
     case ClickAction_BOOKMARK:
     {
-        sal_Int32 nPageNumber = getPageNumberForBookmark( pEvent->maStrBookmark );
-        if( nPageNumber == -1 )
-            break;
-
-        if( mpAnimationPageList.get() )
-        {
-            sal_Int32 nPageIndex = mpAnimationPageList->findPageIndex( nPageNumber );
-            if( nPageIndex == -1 )
-                break;
-
-            gotoSlideIndex( nPageIndex );
-        }
+        sal_Int32 nSlideNumber = getSlideNumberForBookmark( pEvent->maStrBookmark );
+        if( nSlideNumber != -1 )
+            displaySlideNumber( nSlideNumber );
     }
     break;
     case ClickAction_SOUND:
@@ -1483,7 +1638,7 @@ void SAL_CALL SlideshowImpl::click( const Reference< XShape >& xShape, sal_Int32
     {
         OUString aBookmark( pEvent->maStrBookmark );
 
-        sal_Int32 nPos = aBookmark.lastIndexOf( sal_Unicode('#') );
+        sal_Int32 nPos = aBookmark.indexOf( sal_Unicode('#') );
         if( nPos >= 0 )
         {
             OUString aURL( aBookmark.copy( 0, nPos+1 ) );
@@ -1565,7 +1720,7 @@ void SAL_CALL SlideshowImpl::click( const Reference< XShape >& xShape, sal_Int32
     }
 }
 
-sal_Int32 SlideshowImpl::getPageNumberForBookmark( const OUString& rStrBookmark )
+sal_Int32 SlideshowImpl::getSlideNumberForBookmark( const OUString& rStrBookmark )
 {
     BOOL bIsMasterPage;
     OUString aBookmark = getUiNameFromPageApiNameImpl( rStrBookmark );
@@ -1590,85 +1745,79 @@ sal_Int32 SlideshowImpl::getPageNumberForBookmark( const OUString& rStrBookmark 
     return ( nPgNum - 1) >> 1;
 }
 
-void SAL_CALL SlideshowImpl::slideChange( sal_Int32 nOldSlideIndex, sal_Int32 nNewSlideIndex ) throw (RuntimeException)
+void SlideshowImpl::hyperLinkClicked( rtl::OUString const& aHyperLink )
+    throw (RuntimeException)
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    OUString aBookmark( aHyperLink );
 
-    mpAnimationPageList->slideChange( nNewSlideIndex );
-    slideChange();
-}
+    sal_Int32 nPos = aBookmark.indexOf( sal_Unicode('#') );
+    if( nPos >= 0 )
+    {
+        OUString aURL( aBookmark.copy( 0, nPos+1 ) );
+        OUString aName( aBookmark.copy( nPos+1 ) );
+        aURL += getUiNameFromPageApiNameImpl( aName );
+        aBookmark = aURL;
+    }
 
-void SAL_CALL SlideshowImpl::showEnded( ) throw (RuntimeException)
-{
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-
-    mpAnimationPageList->slideChange(-1);
-    slideChange();
+    mpDocSh->OpenBookmark( aBookmark );
 }
 
 void SAL_CALL SlideshowImpl::disposing(  const EventObject& Source ) throw (RuntimeException)
 {
 }
 
-void SlideshowImpl::jumpToPageNumber( sal_Int32 nPageNumber )
+void SlideshowImpl::displaySlideNumber( sal_Int32 nSlideNumber )
 {
-    if( mpAnimationPageList.get() )
+    if( mpSlideController.get() )
     {
-        sal_Int32 nPageIndex = mpAnimationPageList->findPageIndex( nPageNumber );
-
-        DBG_ASSERT( nPageIndex != -1, "sd::SlideshowImpl::jumpToPageNumber(), illegal page number!");
-
-        if( nPageIndex != -1 )
-            jumpToPageIndex( nPageIndex );
-    }
-}
-
-void SlideshowImpl::jumpToPageIndex( sal_Int32 nPageIndex )
-{
-    if( mpAnimationPageList.get() ) try
-    {
-        DBG_ASSERT( (nPageIndex >= 0) && (nPageIndex < mpAnimationPageList->getPageIndexCount()), "sd::SlideshowImpl::jumpToPageIndex(), illegal page index!" );
-
-        if( (nPageIndex >= 0) && (nPageIndex < mpAnimationPageList->getPageIndexCount()) )
+        if( mpSlideController->jumpToSlideNumber( nSlideNumber ) )
         {
-            mxShow->displaySlide(nPageIndex);
-            update();
+            displayCurrentSlide();
         }
     }
-    catch( Exception& e )
+}
+
+/** nSlideIndex == -1 displays current slide again */
+void SlideshowImpl::displaySlideIndex( sal_Int32 nSlideIndex )
+{
+    if( mpSlideController.get() )
     {
-        static_cast<void>(e);
-        DBG_ERROR(
-            (OString("sd::SlideshowImpl::jumpToPageIndex(), "
-                    "exception caught: ") +
-            rtl::OUStringToOString(
-                comphelper::anyToString( cppu::getCaughtException() ),
-                RTL_TEXTENCODING_UTF8 )).getStr() );
+        if( (nSlideIndex == -1) || mpSlideController->jumpToSlideIndex( nSlideIndex ) )
+        {
+            displayCurrentSlide();
+        }
     }
 }
 
-sal_Int32 SlideshowImpl::getCurrentPageNumber()
+void SlideshowImpl::jumpToBookmark( const String& sBookmark )
 {
-    return mpAnimationPageList.get() ? mpAnimationPageList->getCurrentPageNumber() : -1;
+    sal_Int32 nSlideNumber = getSlideNumberForBookmark( sBookmark );
+    if( nSlideNumber != -1 )
+        displaySlideNumber( nSlideNumber );
 }
 
-sal_Int32 SlideshowImpl::getCurrentPageIndex()
+sal_Int32 SlideshowImpl::getCurrentSlideNumber()
 {
-    return mpAnimationPageList.get() ? mpAnimationPageList->getCurrentPageIndex() : -1;
+    return mpSlideController.get() ? mpSlideController->getCurrentSlideNumber() : -1;
 }
 
-sal_Int32 SlideshowImpl::getFirstPageNumber()
+sal_Int32 SlideshowImpl::getCurrentSlideIndex()
+{
+    return mpSlideController.get() ? mpSlideController->getCurrentSlideIndex() : -1;
+}
+
+sal_Int32 SlideshowImpl::getFirstSlideNumber()
 {
     sal_Int32 nRet = 0;
-    if( mpAnimationPageList.get() )
+    if( mpSlideController.get() )
     {
-        sal_Int32 nPageIndexCount = mpAnimationPageList->getPageIndexCount() - 1;
-        if( nPageIndexCount >= 0 )
+        sal_Int32 nSlideIndexCount = mpSlideController->getSlideIndexCount() - 1;
+        if( nSlideIndexCount >= 0 )
         {
-            nRet = mpAnimationPageList->getPageNumber( nPageIndexCount );
-            while( nPageIndexCount-- )
+            nRet = mpSlideController->getSlideNumber( nSlideIndexCount );
+            while( nSlideIndexCount-- )
             {
-                sal_Int32 nTemp = mpAnimationPageList->getPageNumber( nPageIndexCount );
+                sal_Int32 nTemp = mpSlideController->getSlideNumber( nSlideIndexCount );
                 if( nRet > nTemp )
                     nRet = nTemp;
             }
@@ -1678,18 +1827,18 @@ sal_Int32 SlideshowImpl::getFirstPageNumber()
     return nRet;
 }
 
-sal_Int32 SlideshowImpl::getLastPageNumber()
+sal_Int32 SlideshowImpl::getLastSlideNumber()
 {
     sal_Int32 nRet = 0;
-    if( mpAnimationPageList.get() )
+    if( mpSlideController.get() )
     {
-        sal_Int32 nPageIndexCount = mpAnimationPageList->getPageIndexCount() - 1;
-        if( nPageIndexCount >= 0 )
+        sal_Int32 nSlideIndexCount = mpSlideController->getSlideIndexCount() - 1;
+        if( nSlideIndexCount >= 0 )
         {
-            nRet = mpAnimationPageList->getPageNumber( nPageIndexCount );
-            while( nPageIndexCount-- )
+            nRet = mpSlideController->getSlideNumber( nSlideIndexCount );
+            while( nSlideIndexCount-- )
             {
-                sal_Int32 nTemp = mpAnimationPageList->getPageNumber( nPageIndexCount );
+                sal_Int32 nTemp = mpSlideController->getSlideNumber( nSlideIndexCount );
                 if( nRet < nTemp )
                     nRet = nTemp;
             }
@@ -1825,11 +1974,10 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
             {
                 if( maCharBuffer.Len() )
                 {
-                    if( mpAnimationPageList.get() )
+                    if( mpSlideController.get() )
                     {
-                        sal_Int32 nPageIndex = mpAnimationPageList->findPageIndex( maCharBuffer.ToInt32() - 1 );
-                        if( nPageIndex != -1 )
-                            jumpToPageIndex( nPageIndex );
+                        if( mpSlideController->jumpToSlideNumber( maCharBuffer.ToInt32() - 1 ) )
+                            displayCurrentSlide();
                     }
                     maCharBuffer.Erase();
                 }
@@ -1883,7 +2031,7 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
                 if( mpShowWindow )
                 {
                     const Color aBlankColor( (nKeyCode == KEY_B ) ? COL_BLACK : COL_WHITE );
-                    if( mpShowWindow->SetBlankMode( mpAnimationPageList->getCurrentPageIndex(), aBlankColor ) )
+                    if( mpShowWindow->SetBlankMode( mpSlideController->getCurrentSlideIndex(), aBlankColor ) )
                         pause( true );
                 }
             }
@@ -1944,78 +2092,90 @@ Reference< XSlideShow > SlideshowImpl::createSlideShow() const
     return xShow;
 }
 
-void SlideshowImpl::createPageList( bool bAll, bool bStartWithActualPage, const String& rPresPage )
+void SlideshowImpl::createSlideList( bool bAll, bool bStartWithActualSlide, const String& rPresSlide )
 {
-    const long nPageCount = mpDoc->GetSdPageCount( PK_STANDARD );
+    const long nSlideCount = mpDoc->GetSdPageCount( PK_STANDARD );
 
-    if( nPageCount )
+    if( nSlideCount )
     {
         SdCustomShow*   pCustomShow;
 
-        if( !bStartWithActualPage && mpDoc->GetCustomShowList() && maPresSettings.mbCustomShow )
+        if( !bStartWithActualSlide && mpDoc->GetCustomShowList() && maPresSettings.mbCustomShow )
             pCustomShow = (SdCustomShow*) mpDoc->GetCustomShowList()->GetCurObject();
         else
             pCustomShow = NULL;
 
-        if( !pCustomShow || !pCustomShow->Count() )
+        // create animation slide controller
+        AnimationSlideController::Mode eMode =
+            ( pCustomShow && pCustomShow->Count() ) ? AnimationSlideController::CUSTOM :
+                (bAll ? AnimationSlideController::ALL : AnimationSlideController::FROM);
+
+        Reference< XDrawPagesSupplier > xDrawPages( mpDoc->getUnoModel(), UNO_QUERY_THROW );
+        Reference< XIndexAccess > xSlides( xDrawPages->getDrawPages(), UNO_QUERY_THROW );
+        mpSlideController.reset( new AnimationSlideController( xSlides, eMode ) );
+
+        if( eMode != AnimationSlideController::CUSTOM )
         {
-            sal_Int32 nFirstPage = 0;
+            sal_Int32 nFirstSlide = 0;
 
             // normale Praesentation
-            if( !bAll )
+            if( eMode == AnimationSlideController::FROM )
             {
-                if( rPresPage.Len() )
+                if( rPresSlide.Len() )
                 {
-                    sal_Int32 nPage;
+                    sal_Int32 nSlide;
                     BOOL bTakeNextAvailable = FALSE;
 
-                    for( nPage = 0, nFirstPage = -1; ( nPage < nPageCount ) && ( -1 == nFirstPage ); nPage++ )
+                    for( nSlide = 0, nFirstSlide = -1; ( nSlide < nSlideCount ) && ( -1 == nFirstSlide ); nSlide++ )
                     {
-                        SdPage* pTestPage = mpDoc->GetSdPage( (USHORT)nPage, PK_STANDARD );
+                        SdPage* pTestSlide = mpDoc->GetSdPage( (USHORT)nSlide, PK_STANDARD );
 
-                        if( pTestPage->GetName() == rPresPage )
+                        if( pTestSlide->GetName() == rPresSlide )
                         {
-                            if( pTestPage->IsExcluded() )
+                            if( pTestSlide->IsExcluded() )
                                 bTakeNextAvailable = TRUE;
                             else
-                                nFirstPage = nPage;
+                                nFirstSlide = nSlide;
                         }
-                        else if( bTakeNextAvailable && !pTestPage->IsExcluded() )
-                            nFirstPage = nPage;
+                        else if( bTakeNextAvailable && !pTestSlide->IsExcluded() )
+                            nFirstSlide = nSlide;
                     }
 
-                    if( -1 == nFirstPage )
-                        nFirstPage = 0;
+                    if( -1 == nFirstSlide )
+                        nFirstSlide = 0;
                 }
             }
 
-            for( sal_Int32 i = 0; i < nPageCount; i++ )
-                if( !( mpDoc->GetSdPage( (USHORT)i, PK_STANDARD ) )->IsExcluded() )
-                    mpAnimationPageList->insertPageNumber( i );
+            for( sal_Int32 i = 0; i < nSlideCount; i++ )
+            {
+                bool bVisible = ( mpDoc->GetSdPage( (USHORT)i, PK_STANDARD ) )->IsExcluded() ? false : true;
+                if( bVisible || (eMode == AnimationSlideController::ALL) )
+                    mpSlideController->insertSlideNumber( i, bVisible );
+            }
 
-            mpAnimationPageList->setStartPageNumber( nFirstPage );
+            mpSlideController->setStartSlideNumber( nFirstSlide );
         }
         else
         {
-            if( meAnimationMode != ANIMATIONMODE_SHOW && rPresPage.Len() )
+            if( meAnimationMode != ANIMATIONMODE_SHOW && rPresSlide.Len() )
             {
-                sal_Int32 nPage;
-                for( nPage = 0; nPage < nPageCount; nPage++ )
-                    if( rPresPage == mpDoc->GetSdPage( (USHORT) nPage, PK_STANDARD )->GetName() )
+                sal_Int32 nSlide;
+                for( nSlide = 0; nSlide < nSlideCount; nSlide++ )
+                    if( rPresSlide == mpDoc->GetSdPage( (USHORT) nSlide, PK_STANDARD )->GetName() )
                         break;
 
-                if( nPage < nPageCount )
-                    mpAnimationPageList->insertPageNumber( (USHORT) nPage );
+                if( nSlide < nSlideCount )
+                    mpSlideController->insertSlideNumber( (USHORT) nSlide );
             }
 
-            void* pCustomPage;
-            sal_Int32 nPageIndex;
-            for( pCustomPage = pCustomShow->First(),nPageIndex=0; pCustomPage; pCustomPage = pCustomShow->Next(), nPageIndex++ )
+            void* pCustomSlide;
+            sal_Int32 nSlideIndex;
+            for( pCustomSlide = pCustomShow->First(),nSlideIndex=0; pCustomSlide; pCustomSlide = pCustomShow->Next(), nSlideIndex++ )
             {
-                const USHORT nSdPage = ( ( (SdPage*) pCustomPage )->GetPageNum() - 1 ) / 2;
+                const USHORT nSdSlide = ( ( (SdPage*) pCustomSlide )->GetPageNum() - 1 ) / 2;
 
-                if( !( mpDoc->GetSdPage( nSdPage, PK_STANDARD ) )->IsExcluded())
-                    mpAnimationPageList->insertPageNumber( nSdPage );
+                if( !( mpDoc->GetSdPage( nSdSlide, PK_STANDARD ) )->IsExcluded())
+                    mpSlideController->insertSlideNumber( nSdSlide );
             }
         }
     }
@@ -2230,7 +2390,7 @@ void SlideshowImpl::receiveRequest(SfxRequest& rReq)
         {
             const String aTarget( ((SfxStringItem&) pArgs->Get(SID_NAVIGATOR_OBJECT)).GetValue() );
 
-            // is the bookmark a page?
+            // is the bookmark a Slide?
             BOOL        bIsMasterPage;
             USHORT      nPgNum = mpDoc->GetPageByName( aTarget, bIsMasterPage );
             SdrObject*  pObj   = NULL;
@@ -2247,7 +2407,7 @@ void SlideshowImpl::receiveRequest(SfxRequest& rReq)
             if( nPgNum != SDRPAGE_NOTFOUND )
             {
                 nPgNum = ( nPgNum - 1 ) >> 1;
-                jumpToPageNumber( nPgNum );
+                displaySlideNumber( nPgNum );
             }
         }
         break;
