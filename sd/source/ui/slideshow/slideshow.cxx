@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshow.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:07:28 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:17:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,26 +105,27 @@ int Slideshow::getAnimationMode()
 
 void Slideshow::jumpToPageIndex( sal_Int32 nPageIndex )
 {
-    mpImpl->jumpToPageIndex( nPageIndex );
+    mpImpl->displaySlideIndex( nPageIndex );
 }
 
 void Slideshow::jumpToPageNumber( sal_Int32 nPageNumber )
 {
-    mpImpl->jumpToPageNumber( nPageNumber );
+    mpImpl->displaySlideNumber( nPageNumber );
 }
 
 sal_Int32 Slideshow::getCurrentPageNumber()
 {
-    return mpImpl->getCurrentPageNumber();
+    return mpImpl->getCurrentSlideNumber();
 }
 
 sal_Int32 Slideshow::getCurrentPageIndex()
 {
-    return mpImpl->getCurrentPageIndex();
+    return mpImpl->getCurrentSlideIndex();
 }
 
 void Slideshow::jumpToBookmark( const String& sBookmark )
 {
+    mpImpl->jumpToBookmark( sBookmark );
 }
 
 void Slideshow::setRehearseTimings( bool bRehearseTimings )
@@ -205,12 +206,12 @@ void Slideshow::receiveRequest(SfxRequest& rReq)
 
 sal_Int32 Slideshow::getFirstPageNumber()
 {
-    return mpImpl->getFirstPageNumber();
+    return mpImpl->getFirstSlideNumber();
 }
 
 sal_Int32 Slideshow::getLastPageNumber()
 {
-    return mpImpl->getLastPageNumber();
+    return mpImpl->getLastSlideNumber();
 }
 
 bool Slideshow::isEndless()
