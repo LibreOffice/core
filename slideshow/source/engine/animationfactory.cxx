@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationfactory.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:23:32 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:28:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,6 +122,11 @@ namespace presentation
                                       "TupleAnimation::TupleAnimation(): One of the method pointers is NULL" );
                 }
 
+                ~TupleAnimation()
+                {
+                    end_();
+                }
+
                 // Animation interface
                 // -------------------
                 virtual void start( const AnimatableShapeSharedPtr&     rShape,
@@ -149,7 +154,8 @@ namespace presentation
                     }
                 }
 
-                virtual void end()
+                virtual void end() { end_(); }
+                void end_()
                 {
                     if( mbAnimationStarted )
                     {
@@ -263,6 +269,11 @@ namespace presentation
                         aPolyPoly.getB2DPolygon(0) );
                 }
 
+                ~PathAnimation()
+                {
+                    end_();
+                }
+
                 // Animation interface
                 // -------------------
                 virtual void start( const AnimatableShapeSharedPtr&     rShape,
@@ -296,7 +307,8 @@ namespace presentation
                     }
                 }
 
-                virtual void end()
+                virtual void end() { end_(); }
+                void end_()
                 {
                     if( mbAnimationStarted )
                     {
@@ -447,6 +459,11 @@ namespace presentation
                                       "GenericAnimation::GenericAnimation(): One of the method pointers is NULL" );
                 }
 
+                ~GenericAnimation()
+                {
+                    end_();
+                }
+
                 // Animation interface
                 // -------------------
                 virtual void start( const AnimatableShapeSharedPtr&     rShape,
@@ -476,7 +493,8 @@ namespace presentation
                     }
                 }
 
-                virtual void end()
+                virtual void end() { end_(); }
+                void end_()
                 {
                     // TODO(Q2): Factor out common code (most
                     // prominently start() and end()) into base class
