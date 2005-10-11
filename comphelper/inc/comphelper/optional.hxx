@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optional.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:33:31 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:58:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,13 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #if ! defined(INCLUDED_COMPHELPER_OPTIONAL_HXX)
 #define INCLUDED_COMPHELPER_OPTIONAL_HXX
 
-// #if ! defined(INCLUDED_CPPUHELPER_BOOSTUNO_HXX)
-// #include "cppuhelper/boostuno.hxx"
-// #endif
 #if ! defined(_COM_SUN_STAR_BEANS_OPTIONAL_HPP_)
 #include "com/sun/star/beans/Optional.hpp"
 #endif
@@ -49,14 +45,14 @@ namespace comphelper {
 /// Object generators for boost::optional<T>, beans::Optional<T>:
 
 template <typename T>
-inline ::boost::optional<T> make_optional( T const & v )
+inline ::boost::optional<T> make_optional( T const& v )
 {
     return ::boost::optional<T>(v);
 }
 
 template <typename T>
 inline ::boost::optional<T> make_optional(
-    ::com::sun::star::beans::Optional<T> const & o )
+    ::com::sun::star::beans::Optional<T> const& o )
 {
     if (o.IsPresent)
         return ::boost::optional<T>(o.Value);
@@ -65,7 +61,7 @@ inline ::boost::optional<T> make_optional(
 }
 
 template <typename T>
-inline ::com::sun::star::beans::Optional<T> makeOptional( T const & v )
+inline ::com::sun::star::beans::Optional<T> makeOptional( T const& v )
 {
 //     CPPU_IS_CPP_MAPPING_OF_NON_VOID_UNO_TYPE(T);
     return ::com::sun::star::beans::Optional<T>(true, v);
@@ -73,7 +69,7 @@ inline ::com::sun::star::beans::Optional<T> makeOptional( T const & v )
 
 template <typename T>
 inline ::com::sun::star::beans::Optional<T> makeOptional(
-    ::boost::optional<T> const & o )
+    ::boost::optional<T> const& o )
 {
 //     CPPU_IS_CPP_MAPPING_OF_NON_VOID_UNO_TYPE(T);
     if (o)
@@ -83,7 +79,7 @@ inline ::com::sun::star::beans::Optional<T> makeOptional(
 }
 
 inline ::com::sun::star::beans::Optional<sal_Bool> makeOptional(
-    ::boost::optional<bool> const & o )
+    ::boost::optional<bool> const& o )
 {
     if (o)
         return ::com::sun::star::beans::Optional<sal_Bool>(true, *o);
