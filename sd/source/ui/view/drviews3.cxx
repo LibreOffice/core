@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:08:41 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:19:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -531,12 +531,10 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             {
                 SFX_REQUEST_ARG(rReq, pBookmark, SfxStringItem, SID_JUMPTOMARK, FALSE);
 
-                UniString sBookmark( INetURLObject::decode( pBookmark->GetValue(), '%', INetURLObject::DECODE_WITH_CHARSET ) );
-                if( sBookmark.Search( sal_Unicode('#') ) == 0 )
-                    sBookmark = sBookmark.Copy( 1 );
-
                 if (pBookmark)
                 {
+                    UniString sBookmark( INetURLObject::decode( pBookmark->GetValue(), '%', INetURLObject::DECODE_WITH_CHARSET ) );
+
                     if(mpSlideShow)
                     {
                         mpSlideShow->jumpToBookmark(sBookmark);
