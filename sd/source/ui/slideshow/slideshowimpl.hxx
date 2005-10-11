@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:07:58 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:18:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,7 +217,7 @@ class SfxRequest;
 namespace sd
 {
 class SlideShowView;
-class AnimationPageList;
+class AnimationSlideController;
 class PaneHider;
 
 struct WrappedShapeEventImpl
@@ -257,21 +257,23 @@ public:
     bool keyInput(const KeyEvent& rKEvt);
     void mouseButtonUp(const MouseEvent& rMEvt);
 
-    void createPageList( bool bAll, bool bStartWithActualPage, const String& rPresPage );
+    void createSlideList( bool bAll, bool bStartWithActualSlide, const String& rPresSlide );
 
-    /** called from the ::com::sun::star::presentation::XSlideShowListener implementation when a slide is changed or
-        the end of the presentation is reached */
-    void slideChange();
+    void stopSound();
 
-    void jumpToPageNumber( sal_Int32 nPage );
-    void jumpToPageIndex( sal_Int32 nIndex );
-    sal_Int32 getCurrentPageNumber();
-    sal_Int32 getCurrentPageIndex();
-    sal_Int32 getFirstPageNumber();
-    sal_Int32 getLastPageNumber();
+    void displayCurrentSlide();
+
+    void displaySlideNumber( sal_Int32 nSlide );
+    void displaySlideIndex( sal_Int32 nIndex );
+    sal_Int32 getCurrentSlideNumber();
+    sal_Int32 getCurrentSlideIndex();
+    sal_Int32 getFirstSlideNumber();
+    sal_Int32 getLastSlideNumber();
     bool isEndless();
     bool isDrawingPossible();
     inline bool isInputFreezed() const;
+
+    void jumpToBookmark( const String& sBookmark );
 
     void activate();
     void deactivate();
@@ -286,11 +288,12 @@ public:
     DECL_LINK( endPresentationHdl, void* );
 
     // XShapeEventListener
-    virtual void SAL_CALL click( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape, ::sal_Int32 nSlideIndex, const ::com::sun::star::awt::MouseEvent& aOriginalEvent ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL click( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape, const ::com::sun::star::awt::MouseEvent& aOriginalEvent ) throw (::com::sun::star::uno::RuntimeException);
 
     // XSlideShowListener
-    virtual void SAL_CALL slideChange( sal_Int32 nOldSlideIndex, sal_Int32 nNewSlideIndex ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL showEnded( ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL slideEnded() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL hyperLinkClicked( ::rtl::OUString const& hyperLink )
+        throw (::com::sun::star::uno::RuntimeException);
 
     // XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
@@ -301,7 +304,6 @@ public:
     void gotoFirstSlide();
     void gotoLastSlide();
     void endPresentation();
-    void gotoSlideIndex( sal_Int32 nPageIndex );
     void enablePen();
 
     bool pause( bool bPause );
@@ -316,16 +318,14 @@ public:
 
 private:
     bool startShowImpl(
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > >& aSlides,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > >& aRootNodes,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProperties );
 
     SfxViewFrame* getViewFrame() const;
 
-    sal_Int32 getPageNumberForBookmark( const rtl::OUString& rStrBookmark );
+    sal_Int32 getSlideNumberForBookmark( const rtl::OUString& rStrBookmark );
 
     void removeShapeEvents();
-    void registerShapeEvents( sal_Int32 nPageNumber );
+    void registerShapeEvents( sal_Int32 nSlideNumber );
     void registerShapeEvents( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xShapes ) throw (::com::sun::star::uno::Exception);
 
     // default: disabled copy/assignment
@@ -351,11 +351,11 @@ private:
     SvtSaveOptions* mpSaveOptions;
     PushButton*     mpTimeButton;
 
-    boost::shared_ptr< AnimationPageList > mpAnimationPageList;
+    boost::shared_ptr< AnimationSlideController > mpSlideController;
 
-    long            mnRestorePage;
-    Point           maPageOrigin;
-    Size            maPageSize;
+    long            mnRestoreSlide;
+    Point           maSlideOrigin;
+    Size            maSlideSize;
     Size            maPresSize;
     AnimationMode   meAnimationMode;
     String          maCharBuffer;
@@ -367,7 +367,7 @@ private:
     unsigned long   mnChildMask;
     bool            mbGridVisible;
     bool            mbBordVisible;
-    bool            mbPageBorderVisible;
+    bool            mbSlideBorderVisible;
     bool            mbSetOnlineSpelling;
     bool            mbDisposed;
     bool            mbMouseIsDrawing;
@@ -382,7 +382,7 @@ private:
     /// used in updateHdl to prevent recursive calls
     sal_Int32       mnEntryCounter;
 
-    sal_Int32       mnLastPageNumber;
+    sal_Int32       mnLastSlideNumber;
     WrappedShapeEventImplMap    maShapeEventMap;
 
     ::rtl::OUString msOnClick;
