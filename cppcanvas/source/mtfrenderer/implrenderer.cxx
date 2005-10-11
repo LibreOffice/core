@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implrenderer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:30:27 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 09:03:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2801,9 +2801,8 @@ namespace cppcanvas
             clearStateStack( aStateStack );
 
             // Setup local state, such that the metafile renders
-            // itself into a one-by-one square for identity view
-            // and render transformations
-            getState( aStateStack ).transform.translate( -aMtfOriginPix.X(), -aMtfOriginPix.Y() );
+            // itself into a one-by-one square at the origin for
+            // identity view and render transformations
             getState( aStateStack ).transform.scale( 1.0 / aMtfSizePix.Width(),
                                                      1.0 / aMtfSizePix.Height() );
 
