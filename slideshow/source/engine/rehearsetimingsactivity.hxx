@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rehearsetimingsactivity.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:28:35 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:34:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,12 +42,11 @@
 #include "cppcanvas/customsprite.hxx"
 #include "basegfx/range/b2drectangle.hxx"
 #include "vcl/font.hxx"
-#include <vector>
-#include <algorithm>
 #include "boost/shared_ptr.hpp"
 #include "boost/bind.hpp"
 #include "boost/utility.hpp" // for noncopyable
-
+#include <vector>
+#include <algorithm>
 
 namespace presentation {
 namespace internal {
@@ -56,7 +55,7 @@ class EventQueue;
 class ActivitiesQueue;
 class EventMultiplexer;
 
-class RehearseTimingsActivity : public Activity, private boost::noncopyable
+class RehearseTimingsActivity : public Activity, private ::boost::noncopyable
 {
 public:
     /** Creates the activity.
@@ -95,6 +94,7 @@ public:
     virtual bool isActive() const;
     virtual bool needsScreenUpdate() const;
     virtual void dequeued();
+    virtual void end();
 
 private:
     RehearseTimingsActivity(
@@ -102,40 +102,10 @@ private:
         EventMultiplexer & rEventMultiplexer,
         ActivitiesQueue & rActivitiesQueue );
 
-    void paint( cppcanvas::CanvasSharedPtr const & canvas ) const;
+    void paint( ::cppcanvas::CanvasSharedPtr const & canvas ) const;
     void paintAllSprites() const;
 
-    class MouseHandler : public MouseEventHandler, private boost::noncopyable
-    {
-    public:
-        MouseHandler( boost::shared_ptr<RehearseTimingsActivity> const & rta );
-
-        void reset();
-        bool hasBeenClicked() const { return m_hasBeenClicked; }
-
-        // Disposable:
-        virtual void dispose();
-        // MouseEventHandler
-        virtual bool handleMousePressed(
-            com::sun::star::awt::MouseEvent const & evt );
-        virtual bool handleMouseReleased(
-            com::sun::star::awt::MouseEvent const & evt );
-        virtual bool handleMouseEntered(
-            com::sun::star::awt::MouseEvent const & evt );
-        virtual bool handleMouseExited(
-            com::sun::star::awt::MouseEvent const & evt );
-        virtual bool handleMouseDragged(
-            com::sun::star::awt::MouseEvent const & evt );
-        virtual bool handleMouseMoved(
-            com::sun::star::awt::MouseEvent const & evt );
-    private:
-        boost::shared_ptr<RehearseTimingsActivity> m_rta;
-        bool isInArea( com::sun::star::awt::MouseEvent const & evt ) const;
-        bool isDisposed() const { return m_rta.get() == 0 || hasBeenClicked(); }
-        void updatePressedState( const bool pressedState ) const;
-        bool m_hasBeenClicked;
-        bool m_mouseStartedInArea;
-    };
+    class MouseHandler;
     friend class MouseHandler;
 
     EventQueue & m_rEventQueue;
@@ -144,9 +114,9 @@ private:
     boost::shared_ptr<RehearseTimingsActivity> m_this;
     canvas::tools::ElapsedTime m_elapsedTime;
 
-    typedef std::vector<
-        std::pair<UnoViewSharedPtr,
-                  cppcanvas::CustomSpriteSharedPtr> > ViewsVecT;
+    typedef ::std::vector<
+        ::std::pair<UnoViewSharedPtr,
+                    cppcanvas::CustomSpriteSharedPtr> > ViewsVecT;
     ViewsVecT m_views;
 
     template <typename func_type>
@@ -158,8 +128,8 @@ private:
             func( iPos->second );
     }
 
-    basegfx::B2DRectangle m_spriteRectangle;
-    basegfx::B2DRectangle calcSpriteRectangle(
+    ::basegfx::B2DRectangle m_spriteRectangle;
+    ::basegfx::B2DRectangle calcSpriteRectangle(
         UnoViewSharedPtr const & rView ) const;
 
     Font m_font;
