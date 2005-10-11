@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sequentialtimecontainer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:46:40 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:44:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,20 +33,15 @@
  *
  ************************************************************************/
 
-#include <canvas/debug.hxx>
-#include <canvas/verbosetrace.hxx>
-
-#include <sequentialtimecontainer.hxx>
-#include <tools.hxx>
-#include <nodetools.hxx>
-
-#ifndef BOOST_BIND_HPP_INCLUDED
-#include <boost/bind.hpp>
-#endif
-#ifndef BOOST_MEM_FN_HPP_INCLUDED
-#include <boost/mem_fn.hpp>
-#endif
-
+#include "canvas/debug.hxx"
+#include "canvas/verbosetrace.hxx"
+#include "sequentialtimecontainer.hxx"
+#include "tools.hxx"
+#include "nodetools.hxx"
+#include "delayevent.hxx"
+#include "com/sun/star/animations/EventTrigger.hpp"
+#include "boost/bind.hpp"
+#include "boost/mem_fn.hpp"
 #include <algorithm>
 
 using namespace ::com::sun::star;
@@ -72,9 +67,31 @@ namespace presentation
 
             // resolve first child
             if( !getChildren().empty() )
-                return getChildren().front()->resolve();
+                return resolveChild( getChildren().front() );
 
             return true;
+        }
+
+        void SequentialTimeContainer::dispose()
+        {
+            BaseContainerNode::dispose();
+            m_pCurrentSkipEvent.reset();
+        }
+
+        bool SequentialTimeContainer::resolveChild(
+            BaseNodeSharedPtr const & pChildNode )
+        {
+            bool const bResolved = pChildNode->resolve();
+            if (bResolved && isMainSequenceRootNode()) {
+                if (m_pCurrentSkipEvent)
+                    m_pCurrentSkipEvent->dispose();
+                m_pCurrentSkipEvent = makeEvent(
+                    boost::bind( &BaseNode::deactivate, pChildNode ) );
+                // deactivate child node when skip event occurs:
+                getContext().mrUserEventQueue.registerSkipEffectEvent(
+                    m_pCurrentSkipEvent );
+            }
+            return bResolved;
         }
 
         void SequentialTimeContainer::notifyDeactivating( const AnimationNodeSharedPtr& rNotifier )
@@ -109,7 +126,7 @@ namespace presentation
                 // resolve next child
                 if( isDurationInfinite() &&
                     getFinishedCount() < getChildren().size() &&
-                    !getChildren()[getFinishedCount()]->resolve() )
+                    !resolveChild( getChildren()[getFinishedCount()] ))
                 {
                     // could not resolve child - since we risk to
                     // stall the chain of events here, play it safe
