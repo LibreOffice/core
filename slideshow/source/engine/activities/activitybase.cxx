@@ -4,9 +4,9 @@
  *
  *  $RCSfile: activitybase.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:34:30 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:39:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,12 +57,13 @@ namespace presentation
             mnDecelerationFraction( rParms.mnDecelerationFraction ),
             mbAutoReverse( rParms.mbAutoReverse ),
             mbFirstPerformCall( true ),
-            mbIsActive( true )
-        {
-        }
+            mbIsActive( true ) {}
 
         void ActivityBase::dispose()
         {
+            // deactivate
+            mbIsActive = false;
+
             // dispose event
             if( mpEndEvent.get() )
                 mpEndEvent->dispose();
@@ -71,9 +72,6 @@ namespace presentation
             mpEndEvent.reset();
             mpShape.reset();
             mpAttributeLayer.reset();
-
-            // deactivate
-            mbIsActive = false;
         }
 
         double ActivityBase::calcTimeLag() const
@@ -157,6 +155,35 @@ namespace presentation
 
             // release references
             mpEndEvent.reset();
+        }
+
+        void ActivityBase::dequeued()
+        {
+            // xxx todo:
+//             // ignored here, if we're still active. Discrete
+//             // activities are dequeued after every perform() call,
+//             // thus, the call is only significant when isActive() ==
+//             // false.
+            if( !isActive() )
+                endAnimation();
+        }
+
+        void ActivityBase::end()
+        {
+            if (!mbIsActive || isDisposed())
+                return;
+            // assure animation is started:
+            if (mbFirstPerformCall) {
+                mbFirstPerformCall = false;
+                // notify derived classes that we're starting now
+                this->startAnimation();
+            }
+
+            performEnd(); // calling private virtual
+
+            endAnimation();
+
+            endActivity();
         }
 
         double ActivityBase::calcAcceleratedTime( double nT ) const
