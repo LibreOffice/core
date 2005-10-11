@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optionalvalue.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:33:50 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:58:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,13 @@
 
 namespace comphelper
 {
+
+/** @deprecated
+    Use boost/optional.hpp instead.
+*/
+
+
+
     /* Definition of OptionalValue template */
 
     /** This template provides 'optionality' for the given value type.
