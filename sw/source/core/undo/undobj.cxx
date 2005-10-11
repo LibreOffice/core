@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undobj.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:19:28 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 09:21:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -663,18 +663,15 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
 
                             // nur den Anker verchieben ??
                             if( 0 != pAPos && // #i9456#
-                                ( DELCNT_CHKNOCNTNT & nDelCntntType ))
+                                !( DELCNT_CHKNOCNTNT & nDelCntntType ) &&
+                                rPoint.nNode.GetIndex() == pAPos->nNode.GetIndex())
                             {
-                                if (rPoint.nNode.GetIndex() ==
-                                    pAPos->nNode.GetIndex())
-                                {
                                     pHistory->Add( *pFmt );
 
                                     SwFmtAnchor aAnch( *pAnchor );
                                     SwPosition aPos( rMark.nNode );
                                     aAnch.SetAnchor( &aPos );
                                     pFmt->SetAttr( aAnch );
-                                }
                             }
                             else
                             {
