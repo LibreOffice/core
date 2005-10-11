@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 10:47:09 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:18:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1328,7 +1328,7 @@ void SdGenericDrawPage::setBookmarkURL( rtl::OUString& rURL )
 {
     if( pPage )
     {
-        sal_Int32 nIndex = rURL.lastIndexOf( (sal_Unicode)'#' );
+        sal_Int32 nIndex = rURL.indexOf( (sal_Unicode)'#' );
         if( nIndex != -1 )
         {
             const String aFileName( rURL.copy( 0, nIndex ) );
