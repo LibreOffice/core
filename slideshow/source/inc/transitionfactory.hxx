@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transitionfactory.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:22:49 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:55:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,6 @@
 
 #ifndef _COM_SUN_STAR_ANIMATIONS_XTRANSITIONFILTER_HPP_
 #include <com/sun/star/animations/XTransitionFilter.hpp>
-#endif
-#ifndef _COMPHELPER_OPTIONALVALUE_HXX
-#include <comphelper/optionalvalue.hxx>
 #endif
 
 #include <animatableshape.hxx>
@@ -88,7 +85,7 @@ namespace presentation
                 const AnimatableShapeSharedPtr&                         rShape,
                 const LayerManagerSharedPtr&                            rLayerManager,
                 ::com::sun::star::uno::Reference<
-                    ::com::sun::star::animations::XTransitionFilter >&  xTransition );
+                    ::com::sun::star::animations::XTransitionFilter > const&  xTransition );
 
 
             /** Create a transition effect for slides.
@@ -137,7 +134,7 @@ namespace presentation
                 const AnimatableShapeSharedPtr&                         rShape,
                 const LayerManagerSharedPtr&                            rLayerManager,
                 ::com::sun::star::uno::Reference<
-                    ::com::sun::star::animations::XTransitionFilter >&  xTransition,
+                    ::com::sun::star::animations::XTransitionFilter > const& xTransition,
                 sal_Int16                                               nTransitionType,
                 sal_Int16                                               nTransitionSubType );
 
