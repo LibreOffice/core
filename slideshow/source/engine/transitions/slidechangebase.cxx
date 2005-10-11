@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slidechangebase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:58:03 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:46:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,30 +48,6 @@ namespace css = com::sun::star; // resolving conflicts with ::presentation
 namespace presentation {
 namespace internal {
 
-// XModifyListener
-void SlideChangeBase::ModifyListener::modified( lang::EventObject const & evt )
-    throw (uno::RuntimeException)
-{
-    if (m_pSlideChangeBase != 0) {
-        m_pSlideChangeBase->notifyViewChange( evt );
-    }
-}
-
-// XEventListener
-void SlideChangeBase::ModifyListener::disposing( lang::EventObject const & evt )
-    throw (uno::RuntimeException)
-{
-    const uno::Reference<css::presentation::XSlideShowView> xSlideShowView(
-        evt.Source, uno::UNO_QUERY );
-    if (xSlideShowView.is() && m_pSlideChangeBase != 0)
-    {
-        const UnoViewSharedPtr pView(
-            m_pSlideChangeBase->findUnoView( xSlideShowView ) );
-        if (pView.get() != 0)
-            m_pSlideChangeBase->removeView( pView );
-    }
-}
-
 SlideChangeBase::~SlideChangeBase()
 {
 }
@@ -81,7 +57,7 @@ SlideChangeBase::SlideChangeBase(
     const SlideSharedPtr& pEnteringSlide,
     const SoundPlayerSharedPtr& pSoundPlayer,
     bool bCreateLeavingSprites, bool bCreateEnteringSprites )
-    : maMutex(),
+    : UnoBaseT( m_aMutex ),
       maViews(),
       mpSoundPlayer( pSoundPlayer ),
       mLeavingSlide( leavingSlide ),
@@ -92,8 +68,7 @@ SlideChangeBase::SlideChangeBase(
       maInSprites(),
       mbCreateLeavingSprites(bCreateLeavingSprites),
       mbCreateEnteringSprites(bCreateEnteringSprites),
-      mbSpritesVisible(false),
-      mxModifyListener()
+      mbSpritesVisible(false)
 {
     ENSURE_AND_THROW(
         pEnteringSlide.get(),
@@ -102,7 +77,7 @@ SlideChangeBase::SlideChangeBase(
 
 SlideBitmapSharedPtr SlideChangeBase::getLeavingBitmap() const
 {
-    osl::ResettableMutexGuard guard(maMutex);
+    osl::ResettableMutexGuard guard(m_aMutex);
     if (mpLeavingBitmap.get() == 0) {
         guard.clear();
         const SlideBitmapSharedPtr pBitmap( createBitmap(mLeavingSlide) );
@@ -115,7 +90,7 @@ SlideBitmapSharedPtr SlideChangeBase::getLeavingBitmap() const
 
 SlideBitmapSharedPtr SlideChangeBase::getEnteringBitmap() const
 {
-    osl::ResettableMutexGuard guard(maMutex);
+    osl::ResettableMutexGuard guard(m_aMutex);
     if (mpEnteringBitmap.get() == 0) {
         guard.clear();
         const SlideBitmapSharedPtr pBitmap(
@@ -234,23 +209,28 @@ void SlideChangeBase::start( const AnimatableShapeSharedPtr&,
     getLeavingBitmap();
 
     // create sprites:
-    std::for_each( maViews.begin(), maViews.end(),
-                   boost::bind( &SlideChangeBase::addSprites, this, _1 ) );
+    for_each_view( boost::bind( &SlideChangeBase::addSprites, this, _1 ) );
 
     // start accompanying sound effect, if any
-    if( mpSoundPlayer.get() )
+    if (mpSoundPlayer) {
         mpSoundPlayer->startPlayback();
-}
-
-void SlideChangeBase::end()
-{
-    // end accompanying sound effect, if any
-    if (mpSoundPlayer.get() != 0) {
-        mpSoundPlayer->stopPlayback();
-        mpSoundPlayer->dispose();
+        // xxx todo: for now, presentation.cxx takes care about the slide
+        // #i50492#  transition sound object, so just release it here
         mpSoundPlayer.reset();
     }
+}
 
+void SlideChangeBase::removeTransformationChangedListenerFrom(
+    UnoViewSharedPtr const& pView )
+{
+    uno::Reference<css::presentation::XSlideShowView> const xSlideShowView(
+        pView->getUnoView(), uno::UNO_QUERY );
+    if (xSlideShowView.is()) {
+        xSlideShowView->removeTransformationChangedListener( this );
+    }
+}
+void SlideChangeBase::end()
+{
     // draw fully entered bitmap:
     const SlideBitmapSharedPtr pSlideBitmap( getEnteringBitmap() );
     pSlideBitmap->clip( basegfx::B2DPolyPolygon() /* no clipping */ );
@@ -264,30 +244,30 @@ void SlideChangeBase::end()
     mLeavingSlide.reset();
     mpEnteringSlide.reset();
     {
-        const osl::MutexGuard guard(maMutex);
+        const osl::MutexGuard guard(m_aMutex);
         maOutSprites.clear();
         maInSprites.clear();
         mpEnteringBitmap.reset();
         mpLeavingBitmap.reset();
     }
 
-    if (mxModifyListener.is())
-    {
-        UnoViewVector::const_iterator iPos( maViews.begin() );
-        const UnoViewVector::const_iterator iEnd( maViews.end() );
-        for ( ; iPos != iEnd; ++iPos )
-        {
-            const uno::Reference<css::presentation::XSlideShowView>
-                xSlideShowView( (*iPos)->getUnoView(), uno::UNO_QUERY );
-            if (xSlideShowView.is()) {
-                xSlideShowView->removeTransformationChangedListener(
-                    getModifyListener().get() );
-            }
-        }
-        // for safety:
-        mxModifyListener->m_pSlideChangeBase = 0;
-        mxModifyListener.clear();
-    }
+    // xxx todo: discuss whether to stop listening for view changes here...
+    //           too early?
+    for_each_view(
+        boost::bind(
+            &SlideChangeBase::removeTransformationChangedListenerFrom, this,
+            _1 ) );
+    maViews.clear();
+}
+/// WeakComponentImplHelperBase:
+void SlideChangeBase::disposing()
+{
+    // we are about to die, release listeners if not already done in end(), e.g.
+    // if user has just aborted slideshow pressing ESC:
+    for_each_view(
+        boost::bind(
+            &SlideChangeBase::removeTransformationChangedListenerFrom, this,
+            _1 ) );
     maViews.clear();
 }
 
@@ -295,7 +275,7 @@ bool SlideChangeBase::operator()( double nValue )
 {
     SpriteVector aInSprites, aOutSprites;
     {
-        const osl::MutexGuard guard(maMutex);
+        const osl::MutexGuard guard(m_aMutex);
         if (maInSprites.empty() && maOutSprites.empty())
             return false;
         aInSprites = maInSprites;
@@ -346,8 +326,7 @@ bool SlideChangeBase::operator()( double nValue )
 
         if (! mbSpritesVisible)
         {
-            if (pOutSprite.get() != 0)
-            {
+            if (pOutSprite.get() != 0) {
                 // only render once: clipping is done
                 // exclusively with the sprite
                 const ::cppcanvas::CanvasSharedPtr pOutContentCanvas(
@@ -452,7 +431,7 @@ void SlideChangeBase::addSprites( UnoViewSharedPtr const & pView )
         const cppcanvas::CustomSpriteSharedPtr pLeavingSprite(
             createSprite( pView, leavingSlideSizePixel ) );
 
-        const osl::MutexGuard guard(maMutex);
+        const osl::MutexGuard guard(m_aMutex);
         maOutSprites.push_back( pLeavingSprite );
     }
 
@@ -465,35 +444,8 @@ void SlideChangeBase::addSprites( UnoViewSharedPtr const & pView )
         const cppcanvas::CustomSpriteSharedPtr pEnteringSprite(
             createSprite( pView, enteringSlideSizePixel ) );
 
-        const osl::MutexGuard guard(maMutex);
+        const osl::MutexGuard guard(m_aMutex);
         maInSprites.push_back( pEnteringSprite );
-    }
-}
-
-void SlideChangeBase::notifyViewChange( lang::EventObject const & evt )
-{
-    const uno::Reference<css::presentation::XSlideShowView> xSlideShowView(
-        evt.Source, uno::UNO_QUERY );
-    if (xSlideShowView.is())
-    {
-        const UnoViewSharedPtr pView( findUnoView( xSlideShowView ) );
-        OSL_ASSERT( pView.get() );
-        if (pView.get() != 0)
-        {
-            // invalidate bitmaps and sprites for next update():
-            {
-                const osl::MutexGuard guard(maMutex);
-                mpLeavingBitmap.reset();
-                mpEnteringBitmap.reset();
-                maOutSprites.clear();
-                maInSprites.clear();
-            }
-
-            // and create new ones (!in same order as added views!):
-            std::for_each(
-                maViews.begin(), maViews.end(),
-                boost::bind( &SlideChangeBase::addSprites, this, _1 ) );
-        }
     }
 }
 
@@ -520,19 +472,24 @@ UnoViewSharedPtr SlideChangeBase::findUnoView(
 
 void SlideChangeBase::addView( UnoViewSharedPtr const & pView )
 {
+    const osl::MutexGuard guard(m_aMutex);
     const UnoViewVector::iterator iEnd( maViews.end() );
-    if (std::find( maViews.begin(), iEnd, pView ) == iEnd)
-    {
+    if (std::find( maViews.begin(), iEnd, pView ) == iEnd) {
         // listen for view changes:
         const uno::Reference<css::presentation::XSlideShowView> xSlideShowView(
             pView->getUnoView(), uno::UNO_QUERY_THROW );
-        xSlideShowView->addTransformationChangedListener(
-            getModifyListener().get() );
+        xSlideShowView->addTransformationChangedListener( this );
         maViews.push_back( pView );
     }
 }
 
-bool SlideChangeBase::removeView( UnoViewSharedPtr const & pView )
+bool SlideChangeBase::removeView( UnoViewSharedPtr const& pView )
+{
+    osl::MutexGuard const guard(m_aMutex);
+    return removeView_(pView);
+}
+bool SlideChangeBase::removeView_( UnoViewSharedPtr const& pView,
+                                   bool bDisposedView )
 {
     UnoViewVector::iterator iBegin( maViews.begin() );
     const UnoViewVector::iterator iEnd( maViews.end() );
@@ -542,22 +499,71 @@ bool SlideChangeBase::removeView( UnoViewSharedPtr const & pView )
         return false;
     }
 
-    // don't listen for view changes anymore:
-    const uno::Reference<css::presentation::XSlideShowView> xSlideShowView(
-        pView->getUnoView(), uno::UNO_QUERY_THROW );
-    xSlideShowView->removeTransformationChangedListener(
-        getModifyListener().get() );
+    if (! bDisposedView) {
+        // don't listen for view changes anymore:
+        const uno::Reference<css::presentation::XSlideShowView> xSlideShowView(
+            pView->getUnoView(), uno::UNO_QUERY_THROW );
+        xSlideShowView->removeTransformationChangedListener( this );
+    }
 
     const std::size_t dist = std::distance( iBegin, iPos );
     maViews.erase( iPos );
-    {
-        const osl::MutexGuard guard(maMutex);
-        if (mLeavingSlide && dist < maOutSprites.size())
-            maOutSprites.erase( maOutSprites.begin() + dist );
-        if (dist < maInSprites.size())
-            maInSprites.erase( maInSprites.begin() + dist );
-    }
+    if (mLeavingSlide && dist < maOutSprites.size())
+        maOutSprites.erase( maOutSprites.begin() + dist );
+    if (dist < maInSprites.size())
+        maInSprites.erase( maInSprites.begin() + dist );
+#if OSL_DEBUG_LEVEL > 1
+    const std::size_t nEntries = std::max<std::size_t>(maInSprites.size(),
+                                                       maOutSprites.size());
+    OSL_ENSURE( maViews.size() == nEntries, "Mismatching sprite/view numbers" );
+#endif
     return true;
+}
+
+// XModifyListener
+void SlideChangeBase::modified( lang::EventObject const& evt )
+    throw (uno::RuntimeException)
+{
+    // notify view change:
+    const uno::Reference<css::presentation::XSlideShowView> xSlideShowView(
+        evt.Source, uno::UNO_QUERY );
+    if (xSlideShowView.is()) {
+        osl::MutexGuard const guard(m_aMutex);
+        const UnoViewSharedPtr pView( findUnoView( xSlideShowView ) );
+        OSL_ASSERT( pView.get() );
+        if (pView.get() != 0) {
+            // invalidate bitmaps and sprites for next update():
+            mpLeavingBitmap.reset();
+            mpEnteringBitmap.reset();
+            maOutSprites.clear();
+            maInSprites.clear();
+
+            // and create new ones (!in same order as added views!):
+            for_each_view(
+                boost::bind( &SlideChangeBase::addSprites, this, _1 ) );
+
+#if OSL_DEBUG_LEVEL > 1
+            const std::size_t nEntries = std::max<std::size_t>(
+                maInSprites.size(), maOutSprites.size() );
+            OSL_ENSURE( maViews.size() == nEntries,
+                        "Mismatching sprite/view numbers" );
+#endif
+        }
+    }
+}
+
+// XEventListener
+void SlideChangeBase::disposing( lang::EventObject const& evt )
+    throw (uno::RuntimeException)
+{
+    const uno::Reference<css::presentation::XSlideShowView> xSlideShowView(
+        evt.Source, uno::UNO_QUERY );
+    if (xSlideShowView.is()) {
+        osl::MutexGuard const guard(m_aMutex);
+        UnoViewSharedPtr const pView( findUnoView( xSlideShowView ) );
+        if (pView)
+            removeView_( pView, true /* is a disposed view */ );
+    }
 }
 
 } // namespace internal
