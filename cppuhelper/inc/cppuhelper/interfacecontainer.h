@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interfacecontainer.h,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:18:52 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:20:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,9 @@
 #include <com/sun/star/lang/EventObject.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HXX_
+#include "com/sun/star/lang/DisposedException.hpp"
+#endif
 
 /** */ //for docpp
 namespace cppu
@@ -198,6 +201,20 @@ public:
      */
     void SAL_CALL clear() SAL_THROW( () );
 
+    /** Executes a functor for each contained listener of specified type, e.g.
+        <code>forEach<awt::XPaintListener>(...</code>.
+
+        If a com::sun::star::lang::DisposedException occurs which relates to
+        the called listener, then that listener is removed from the container.
+
+        @tpl ListenerT listener type
+        @tpl FuncT unary functor type, let your compiler deduce this for you
+        @param func unary functor object expecting an argument of type
+                    ::com::sun::star::uno::Reference<ListenerT>
+    */
+    template <typename ListenerT, typename FuncT>
+    inline void forEach( FuncT const& func );
+
 private:
 friend class OInterfaceIteratorHelper;
     /**
@@ -222,7 +239,24 @@ friend class OInterfaceIteratorHelper;
 public:
 };
 
-
+template <typename ListenerT, typename FuncT>
+inline void OInterfaceContainerHelper::forEach( FuncT const& func )
+{
+    OInterfaceIteratorHelper iter( *this );
+    while (iter.hasMoreElements()) {
+        ::com::sun::star::uno::Reference<ListenerT> const xListener(
+            iter.next(), ::com::sun::star::uno::UNO_QUERY );
+        if (xListener.is()) {
+            try {
+                func( xListener );
+            }
+            catch (::com::sun::star::lang::DisposedException const& exc) {
+                if (exc.Context == xListener)
+                    iter.remove();
+            }
+        }
+    }
+}
 
 //===================================================================
 /**
