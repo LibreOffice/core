@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wakeupevent.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:26:03 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:55:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,74 +32,68 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+#if ! defined(INCLUDED_SLIDESHOW_WAKEUPEVENT_HXX)
+#define INCLUDED_SLIDESHOW_WAKEUPEVENT_HXX
 
-#ifndef _SLIDESHOW_WAKEUPEVENT_HXX
-#define _SLIDESHOW_WAKEUPEVENT_HXX
+#include "event.hxx"
+#include "activitiesqueue.hxx"
+#include "canvas/elapsedtime.hxx"
+#include "boost/bind.hpp"
+#include "boost/noncopyable.hpp"
 
-#ifndef BOOST_BIND_HPP_INCLUDED
-#include <boost/bind.hpp>
-#endif
-#ifndef _CANVAS_ELAPSEDTIME_HXX
-#include <canvas/elapsedtime.hxx>
-#endif
+namespace presentation {
+namespace internal {
 
-#include <event.hxx>
-#include <activitiesqueue.hxx>
+/** Little helper class, used to set Activities active again
+    after some sleep period.
 
-
-namespace presentation
+    Clients can use this class to schedule wakeup events at
+    the EventQueue, to avoid busy-waiting for the next
+    discrete time instant.
+*/
+class WakeupEvent : public Event,
+                    private ::boost::noncopyable
 {
-    namespace internal
-    {
-        /** Little helper class, used to set Activities active again
-            after some sleep period.
+public:
+    WakeupEvent(
+        ::boost::shared_ptr< ::canvas::tools::ElapsedTime > const& pTimeBase,
+        ActivitiesQueue & rActivityQueue );
 
-            Clients can use this class to schedule wakeup events at
-            the EventQueue, to avoid busy-waiting for the next
-            discrete time instant.
-        */
-        class WakeupEvent : public Event
-        {
-        public:
-            WakeupEvent(
-                ::boost::shared_ptr< ::canvas::tools::ElapsedTime >
-                const & pTimeBase,
-                ActivitiesQueue& rActivityQueue );
+    virtual void dispose();
+    virtual bool fire();
+    virtual bool isCharged() const;
+    virtual double getActivationTime( double nCurrentTime ) const;
 
-            virtual void dispose();
-            virtual bool fire();
-            virtual bool isCharged() const;
-            virtual double getActivationTime( double nCurrentTime ) const;
+    /// Start the internal timer
+    void start();
 
-            /// Start the internal timer
-            void start();
+    /** Set the next timeout this object should generate.
 
-            /** Set the next timeout this object should generate.
+        @param nextTime
+        Absolute time, measured from the last start() call,
+        when this event should wakeup the Activity again. If
+        your time is relative, simply call start() just before
+        every setNextTimeout() call.
+    */
+    void setNextTimeout( double nextTime );
 
-                @param rNextTime
-                Absolute time, measured from the last start() call,
-                when this event should wakeup the Activity again. If
-                your time is relative, simply call start() just before
-                every setNextTimeout() call.
-            */
-            void setNextTimeout( double rNextTime );
+    /** Set activity to wakeup.
 
-            /** Set activity to wakeup.
+        The activity given here will be reinserted into the
+        ActivitiesQueue, once the timeout is reached.
+    */
+    void setActivity( const ActivitySharedPtr& rActivity );
 
-                The activity given here will be reinserted into the
-                ActivitiesQueue, once the timeout is reached.
-             */
-            void setActivity( const ActivitySharedPtr& rActivity );
+private:
+    ::canvas::tools::ElapsedTime    maTimer;
+    double                          mnNextTime;
+    ActivitySharedPtr               mpActivity;
+    ActivitiesQueue&                mrActivityQueue;
+};
 
-        private:
-            ::canvas::tools::ElapsedTime    maTimer;
-            double                          mnNextTime;
-            ActivitySharedPtr               mpActivity;
-            ActivitiesQueue&                mrActivityQueue;
-        };
+typedef ::boost::shared_ptr< WakeupEvent > WakeupEventSharedPtr;
 
-        typedef ::boost::shared_ptr< WakeupEvent > WakeupEventSharedPtr;
-    }
-}
+} // namespace internal
+} // namespace presentation
 
-#endif /* _SLIDESHOW_WAKEUPEVENT_HXX */
+#endif /* INCLUDED_SLIDESHOW_WAKEUPEVENT_HXX */
