@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Reference.h,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:33:39 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 09:01:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -450,6 +450,15 @@ public:
     */
     inline static Reference< interface_type > SAL_CALL query( XInterface * pInterface ) SAL_THROW( (RuntimeException) );
 };
+
+/** @internal
+    Enables boost::mem_fn and boost::bind to recognize Reference.
+*/
+template <typename T>
+inline T * get_pointer( Reference<T> const& r )
+{
+    return r.get();
+}
 
 }
 }
