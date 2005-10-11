@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slide.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:19:23 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:54:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,6 @@
 #ifndef _SLIDESHOW_SLIDE_HXX
 #define _SLIDESHOW_SLIDE_HXX
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
-#include <com/sun/star/uno/Reference.hxx>
-#endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HXX_
 #include <com/sun/star/uno/XComponentContext.hpp>
 #endif
@@ -68,7 +65,7 @@
 #include <slideanimations.hxx>
 #include <slidebitmap.hxx>
 #include <shapeeventbroadcaster.hxx>
-
+#include "boost/optional.hpp"
 
 /* Definition of Slide class */
 
@@ -92,18 +89,11 @@ namespace presentation
                 property set. The top, left corner of the page will be
                 rendered at (0,0) in the given canvas' view coordinate
                 system.
-
-                @param xDrawPage
-                XDrawPage to fetch the content from
-
-                @param nSlideIndex
-                Index number of this slide
              */
             Slide( const ::com::sun::star::uno::Reference<
                        ::com::sun::star::drawing::XDrawPage >&          xDrawPage,
                    const ::com::sun::star::uno::Reference<
                        ::com::sun::star::animations::XAnimationNode >&  xRootNode,
-                   sal_Int32                                            nSlideIndex,
                    EventQueue&                                          rEventQueue,
                    ActivitiesQueue&                                     rActivitiesQueue,
                    EventMultiplexer&                                    rEventMultiplexer,
@@ -259,7 +249,7 @@ namespace presentation
                 with the given color, when pressing down the
                 mousebutton.
              */
-            void setUserPaintColor( const ::comphelper::OptionalValue< RGBColor >& rColor );
+            void setUserPaintColor( boost::optional<RGBColor> const& rColor );
 
             /// Query the XDrawPage's size
             basegfx::B2ISize getSlideSize() const;
@@ -267,6 +257,16 @@ namespace presentation
             /// Get size of the slide in device coordinates for given view
             ::basegfx::B2ISize getSlideSizePixel(
                 UnoViewSharedPtr const & pView ) const;
+
+            /// Gets the underlying API page
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::drawing::XDrawPage > const&
+            getXDrawPage() const { return mxDrawPage; }
+
+            /// Gets the animation node.
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::animations::XAnimationNode > const&
+            getXAnimationNode() const { return mxRootNode; }
 
         private:
             // default: disabled copy/assignment
@@ -327,14 +327,14 @@ namespace presentation
 
             /// The page model object
             ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XDrawPage >          mxDrawPage;
+                ::com::sun::star::drawing::XDrawPage > const mxDrawPage;
             ::com::sun::star::uno::Reference<
-                ::com::sun::star::animations::XAnimationNode >  mxRootNode;
+                ::com::sun::star::animations::XAnimationNode > const mxRootNode;
 
             /// Contains common objects needed throughout the slideshow
             SlideShowContext                                    maContext;
 
-            ShapeEventBroadcasterSharedPtr                      mpEventBroadcaster;
+            ::boost::shared_ptr<ShapeEventBroadcaster> mpEventBroadcaster;
 
             /// Handles the animation and event generation for us
             SlideAnimations                                     maAnimations;
@@ -342,7 +342,7 @@ namespace presentation
             /// All added views
             UnoViewVector                                       maViews;
 
-            ::comphelper::OptionalValue< RGBColor >             maUserPaintColor;
+            ::boost::optional<RGBColor>                         maUserPaintColor;
             UserPaintOverlaySharedPtr                           mpPaintOverlay;
 
             /// Bitmap with initial slide content
@@ -382,6 +382,8 @@ namespace presentation
                 user interaction.
              */
             bool                                                mbHasAutomaticNextSlide;
+
+            struct ShapesIterationFunc;  friend struct ShapesIterationFunc;
         };
 
         typedef ::boost::shared_ptr< ::presentation::internal::Slide > SlideSharedPtr;
