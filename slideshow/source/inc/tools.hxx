@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tools.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:22:24 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:54:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,11 +39,8 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
-#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
-#include <com/sun/star/uno/Any.hxx>
-#endif
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HXX_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
@@ -74,14 +71,15 @@
 #include <shape.hxx>
 #include <rgbcolor.hxx>
 #include <hslcolor.hxx>
-#include <layermanager.hxx>
 
 #include "boost/optional.hpp"
+#include <functional>
 #include <cstdlib>
 
+#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
-namespace com { namespace sun { namespace star { namespace beans
-{
+
+namespace com { namespace sun { namespace star { namespace beans {
     struct NamedValue;
 } } } }
 
@@ -92,8 +90,41 @@ namespace presentation
 {
     namespace internal
     {
+        // xxx todo: remove with boost::hash when 1.33 is available
+        template <typename T>
+        struct hash : ::std::unary_function<T, ::std::size_t>
+        {
+            ::std::size_t operator()( T const& val ) const {
+                return hash_value(val);
+            }
+        };
+        template <typename T>
+        inline ::std::size_t hash_value( T * const& p )
+        {
+            ::std::size_t d = static_cast< ::std::size_t >(
+                reinterpret_cast< ::std::ptrdiff_t >(p) );
+            return d + (d >> 3);
+        }
+
+        // xxx todo: shift to namespace com::sun::star::uno when
+        //           1.33 is available
+        template <typename T>
+        inline ::std::size_t hash_value(
+            ::com::sun::star::uno::Reference<T> const& x )
+        {
+            // normalize to object root, because _only_ XInterface is defined
+            // to be stable during object lifetime:
+            ::com::sun::star::uno::Reference<
+                  ::com::sun::star::uno::XInterface> const xRoot(
+                      x, ::com::sun::star::uno::UNO_QUERY );
+            return hash<void *>()(xRoot.get());
+        }
+
         // Value extraction from Any
         // =========================
+
+        class LayerManager;
+        typedef ::boost::shared_ptr< LayerManager > LayerManagerSharedPtr;
 
         /// extract unary double value from Any
         bool extractValue( double&                              o_rValue,
@@ -143,7 +174,7 @@ namespace presentation
             element.
          */
         bool findNamedValue( ::com::sun::star::uno::Sequence<
-                                 ::com::sun::star::beans::NamedValue >&     rSequence,
+                                 ::com::sun::star::beans::NamedValue > const& rSequence,
                              const ::com::sun::star::beans::NamedValue& rSearchKey );
 
         /** Search a sequence of NamedValues for an element with a given name.
@@ -383,6 +414,28 @@ namespace presentation
                 return arg1;
             else
                 return arg2;
+        }
+
+        template <typename ValueType>
+        inline bool getPropertyValue(
+            ValueType & rValue,
+            com::sun::star::uno::Reference<
+            com::sun::star::beans::XPropertySet> const & xPropSet,
+            rtl::OUString const & propName )
+        {
+            try {
+                com::sun::star::uno::Any const a(
+                    xPropSet->getPropertyValue( propName ) );
+                bool const bRet = (a >>= rValue);
+                OSL_ENSURE( bRet, "property seems to have unexpected type!" );
+                return bRet;
+            }
+            catch (com::sun::star::uno::RuntimeException &) {
+                throw;
+            }
+            catch (com::sun::star::uno::Exception &) {
+                return false;
+            }
         }
     }
 }
