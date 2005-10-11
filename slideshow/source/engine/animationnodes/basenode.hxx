@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basenode.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:44:15 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:43:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,175 +33,170 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_BASENODE_HXX
-#define _SLIDESHOW_BASENODE_HXX
+#ifndef INCLUDED_SLIDESHOW_BASENODE_HXX
+#define INCLUDED_SLIDESHOW_BASENODE_HXX
 
-#include <animationnode.hxx>
-#include <slideshowcontext.hxx>
-#include <shapesubset.hxx>
-
+#include "animationnode.hxx"
+#include "slideshowcontext.hxx"
+#include "shapesubset.hxx"
 #include <vector>
 
-namespace presentation
+namespace presentation {
+namespace internal {
+
+typedef int StateTransitionTable[17];
+
+/** Context for every node.
+
+    Besides the global AnimationNodeFactory::Context data,
+    this struct also contains the current DocTree subset
+    for this node. If start and end index of the
+    DocTreeNode are equal, the node should use the
+    complete shape.
+*/
+struct NodeContext
 {
-    namespace internal
-    {
-        typedef int StateTransitionTable[17];
+    NodeContext( const SlideShowContext& rContext )
+        : maContext( rContext ),
+          mpMasterShapeSubset(),
+          mnStartDelay(0.0),
+          mbIsIndependentSubset( true )
+        {}
 
-        /** Context for every node.
+    void dispose() { maContext.dispose(); }
 
-            Besides the global AnimationNodeFactory::Context data,
-            this struct also contains the current DocTree subset
-            for this node. If start and end index of the
-            DocTreeNode are equal, the node should use the
-            complete shape.
-        */
-        struct NodeContext
-        {
-            NodeContext( const SlideShowContext& rContext ) :
-                maContext( rContext ),
-                mpMasterShapeSubset(),
-                mnStartDelay(0.0),
-                mbIsIndependentSubset( true )
-            {
-            }
+    /// Context as passed to createAnimationNode()
+    SlideShowContext        maContext;
 
-            void dispose() { maContext.dispose(); }
+    /// Shape to be used (provided by parent, e.g. for iterations)
+    ShapeSubsetSharedPtr    mpMasterShapeSubset;
 
-            /// Context as passed to createAnimationNode()
-            SlideShowContext        maContext;
+    /// Additional delay to node begin (to offset iterate effects)
+    double                  mnStartDelay;
 
-            /// Shape to be used (provided by parent, e.g. for iterations)
-            ShapeSubsetSharedPtr    mpMasterShapeSubset;
+    /// When true, subset must be created during slide initialization
+    bool                    mbIsIndependentSubset;
+};
 
-            /// Additional delay to node begin (to offset iterate effects)
-            double                  mnStartDelay;
+class BaseContainerNode;
 
-            /// When true, subset must be created during slide initialization
-            bool                    mbIsIndependentSubset;
-        };
+/** This interface extends AnimationNode with some
+    file-private accessor methods.
+*/
+class BaseNode : public AnimationNode
+{
+public:
+    BaseNode( const ::com::sun::star::uno::Reference<
+              ::com::sun::star::animations::XAnimationNode >&     xNode,
+              const ::boost::shared_ptr< BaseContainerNode >&     rParent,
+              const NodeContext&                                  rContext );
 
-        class BaseContainerNode;
+    /** Provide the node with a shared_ptr to itself.
 
-        /** This interface extends AnimationNode with some
-            file-private accessor methods.
-        */
-        class BaseNode : public AnimationNode
-        {
-        public:
-            BaseNode( const ::com::sun::star::uno::Reference<
-                          ::com::sun::star::animations::XAnimationNode >&   xNode,
-                      const ::boost::shared_ptr< BaseContainerNode >&       rParent,
-                      const NodeContext&                                    rContext );
+        Since implementation has to create objects which need
+        a shared_ptr to this node, and a pointee cannot
+        retrieve a shared_ptr to itself internally, have to
+        set that from the outside.
+    */
+    void setSelf( const ::boost::shared_ptr< BaseNode >& rSelf );
 
-            // Disposable interface
-            // --------------------
+    // Disposable interface
+    // --------------------
 
-            virtual void dispose();
+    virtual void dispose();
 
-            // Implemented subset of AnimationNode interface
-            // ---------------------------------------------
-            virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::animations::XAnimationNode > getXAnimationNode() const;
+    // Implemented subset of AnimationNode interface
+    // ---------------------------------------------
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::animations::XAnimationNode> getXAnimationNode() const;
 
-            virtual bool init();
-            virtual bool resolve();
-            virtual bool activate();
-            virtual void deactivate();
-            virtual void end();
-            virtual NodeState getState() const;
-            virtual bool registerDeactivatingListener( const AnimationNodeSharedPtr& rNotifee );
-
-            /** Provide the node with a shared_ptr to itself.
-
-                Since implementation has to create objects which need
-                a shared_ptr to this node, and a pointee cannot
-                retrieve a shared_ptr to itself internally, have to
-                set that from the outside.
-             */
-            virtual void setSelf( const ::boost::shared_ptr< BaseNode >& rSelf );
-
-            /** Get the default fill mode.
-
-                If this node's default mode is AnimationFill::DEFAULT,
-                this method recursively calls the parent node.
-             */
-            virtual sal_Int16 getFillDefaultMode() const;
-
-            /** Get the default restart mode
-
-                If this node's default mode is
-                AnimationRestart::DEFAULT, this method recursively
-                calls the parent node.
-             */
-            virtual sal_Int16 getRestartDefaultMode() const;
-
-            /// Get the node's restart mode
-            virtual sal_Int16 getRestartMode();
-
-            /// Get the node's fill mode
-            virtual sal_Int16 getFillMode();
-
-            /** Notify a fired user event to this node
-
-                This method differs from a plain activate(), in that
-                it is able to also activate a yet unresolved node. If
-                a node cannot be simply activated, this method issues
-                a requestResolveOnChildren() on the parent node.
-             */
-            virtual void notifyUserEvent();
+    virtual bool init();
+    virtual bool resolve();
+    virtual bool activate();
+    virtual void deactivate();
+    virtual void end();
+    virtual NodeState getState() const;
+    virtual bool registerDeactivatingListener(
+        const AnimationNodeSharedPtr& rNotifee );
 
 #if defined(VERBOSE) && defined(DBG_UTIL)
-            virtual void showState() const;
-            virtual const char* getDescription() const;
-            void showTreeFromWithin() const;
+    virtual void showState() const;
+    virtual const char* getDescription() const;
+    void showTreeFromWithin() const;
 #endif
 
-            const ::boost::shared_ptr< BaseContainerNode >&     getParentNode() const { return mpParent; }
+    const ::boost::shared_ptr< BaseContainerNode >& getParentNode() const
+        { return mpParent; }
 
-        protected:
-            /** Schedule event that activates the node, once it is resolved
+protected:
+    // inline accessors
+    // ----------------
 
-                You can override this method in derived
-                classes. AnimateBaseNode does it to implement its
-                fixed delay
-            */
-            virtual void scheduleActivationEvent();
+    const SlideShowContext& getContext() const { return maContext; }
+    const ::boost::shared_ptr< BaseNode >& getSelf() const { return mpSelf; }
+    const ::com::sun::star::uno::Reference<
+        ::com::sun::star::animations::XAnimationNode >& getXNode() const
+        { return mxNode; }
 
-            /** Schedule event that deactivates the node, once it is active
+    bool isMainSequenceRootNode() const { return mbIsMainSequenceRootNode; }
 
-                You can override this method in derived
-                classes.
-            */
-            virtual void scheduleDeactivationEvent() const;
+    /** Schedule event that activates the node, once it is resolved
 
-            // inline accessors
-            // ----------------
+        You can override this method in derived
+        classes. AnimateBaseNode does it to implement its
+        fixed delay
+    */
+    virtual void scheduleActivationEvent();
 
-            const SlideShowContext&                             getContext() const { return maContext; }
-            const ::boost::shared_ptr< BaseNode >&              getSelf() const { return mpSelf; }
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::animations::XAnimationNode >& getXNode() const { return mxNode; }
+    /** Schedule event that deactivates the node, once it is active
 
-        protected:
-            SlideShowContext                                    maContext;
+        You can override this method in derived classes.
+    */
+    virtual void scheduleDeactivationEvent() const;
 
-        private:
-            typedef ::std::vector< AnimationNodeSharedPtr >     ListenerVector;
+private:
 
-            ListenerVector                                      maDeactivatingListeners;
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::animations::XAnimationNode >  mxNode;
-            ::boost::shared_ptr< BaseContainerNode >            mpParent;
-            ::boost::shared_ptr< BaseNode >                     mpSelf;
-            const int*                                          mpStateTransitionTable;
-            const double                                        mnStartDelay;
-            AnimationNode::NodeState                            meCurrState;
-            const bool                                          mbIsMainSequenceRootNode;
-        };
+    /** Get the default fill mode.
 
-        typedef ::boost::shared_ptr< BaseNode > BaseNodeSharedPtr;
-    }
-}
+        If this node's default mode is AnimationFill::DEFAULT,
+        this method recursively calls the parent node.
+    */
+    sal_Int16 getFillDefaultMode() const;
 
-#endif /* _SLIDESHOW_BASENODE_HXX */
+    /** Get the default restart mode
+
+        If this node's default mode is
+        AnimationRestart::DEFAULT, this method recursively
+        calls the parent node.
+    */
+    sal_Int16 getRestartDefaultMode() const;
+
+    /// Get the node's restart mode
+    sal_Int16 getRestartMode();
+
+    /// Get the node's fill mode
+    sal_Int16 getFillMode();
+
+private:
+    SlideShowContext                                   maContext;
+
+    typedef ::std::vector< AnimationNodeSharedPtr >    ListenerVector;
+
+    ListenerVector                                     maDeactivatingListeners;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::animations::XAnimationNode > mxNode;
+    ::boost::shared_ptr< BaseContainerNode >           mpParent;
+    ::boost::shared_ptr< BaseNode >                    mpSelf;
+    const int*                                         mpStateTransitionTable;
+    const double                                       mnStartDelay;
+    AnimationNode::NodeState                           meCurrState;
+    const bool                                         mbIsMainSequenceRootNode;
+};
+
+typedef ::boost::shared_ptr< BaseNode > BaseNodeSharedPtr;
+
+} // namespace internal
+} // namespace presentation
+
+#endif /* INCLUDED_SLIDESHOW_BASENODE_HXX */
+
