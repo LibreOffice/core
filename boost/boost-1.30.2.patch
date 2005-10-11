@@ -1,5 +1,44 @@
+*** misc/boost-1.30.2/boost/bind.hpp	2002-10-15 12:51:34.000000000 +0200
+--- misc/build/boost-1.30.2/boost/bind.hpp	2005-09-14 17:49:16.353411000 +0200
+***************
+*** 5,10 ****
+--- 5,17 ----
+  #pragma once
+  #endif
+  
++ #if defined(_MSC_VER) && !defined(BOOST_MEM_FN_ENABLE_CDECL)
++ // enable support for __cdecl (SAL_CALL) C++-UNO interface methods;
++ // makes sense to shift this to command line some day:
++ // -DBOOST_MEM_FN_ENABLE_CDECL
++ #define BOOST_MEM_FN_ENABLE_CDECL
++ #endif
++ 
+  //
+  //  bind.hpp - binds function objects to arguments
+  //
+***************
+*** 1472,1477 ****
+--- 1479,1496 ----
+  #undef BOOST_BIND_MF_NAME
+  #undef BOOST_BIND_MF_CC
+  
++ #ifdef BOOST_MEM_FN_ENABLE_CDECL
++ 
++ #define BOOST_BIND_MF_NAME(X) X##_cdecl
++ #define BOOST_BIND_MF_CC __cdecl
++ 
++ #include <boost/bind/bind_mf_cc.hpp>
++ 
++ #undef BOOST_BIND_MF_NAME
++ #undef BOOST_BIND_MF_CC
++ 
++ #endif
++ 
+  #ifdef BOOST_MEM_FN_ENABLE_STDCALL
+  
+  #define BOOST_BIND_MF_NAME(X) X##_stdcall
 *** misc/boost-1.30.2/boost/function/function_template.hpp	2003-02-07 15:03:36.000000000 +0100
---- misc/build/boost-1.30.2/boost/function/function_template.hpp	2005-04-01 15:40:45.820816441 +0200
+--- misc/build/boost-1.30.2/boost/function/function_template.hpp	2005-09-14 17:47:26.513096000 +0200
 ***************
 *** 395,401 ****
         invoker = 0;
@@ -17,3 +56,128 @@
       // Sun C++ 5.3 can't handle the safe_bool idiom, so don't use it
       operator bool () const { return !this->empty(); }
   #else
+*** misc/boost-1.30.2/boost/mem_fn.hpp	2002-12-20 19:14:59.000000000 +0100
+--- misc/build/boost-1.30.2/boost/mem_fn.hpp	2005-09-14 17:49:31.078044000 +0200
+***************
+*** 5,10 ****
+--- 5,17 ----
+  #pragma once
+  #endif
+  
++ #if defined(_MSC_VER) && !defined(BOOST_MEM_FN_ENABLE_CDECL)
++ // enable support for __cdecl (SAL_CALL) C++-UNO interface methods;
++ // makes sense to shift this to command line some day:
++ // -DBOOST_MEM_FN_ENABLE_CDECL
++ #define BOOST_MEM_FN_ENABLE_CDECL
++ #endif
++ 
+  //
+  //  mem_fn.hpp - a generalization of std::mem_fun[_ref]
+  //
+***************
+*** 46,51 ****
+--- 53,70 ----
+  #undef BOOST_MEM_FN_CC
+  #undef BOOST_MEM_FN_NAME
+  
++ #ifdef BOOST_MEM_FN_ENABLE_CDECL
++ 
++ #define BOOST_MEM_FN_NAME(X) inner_##X##_cdecl
++ #define BOOST_MEM_FN_CC __cdecl
++ 
++ #include <boost/bind/mem_fn_template.hpp>
++ 
++ #undef BOOST_MEM_FN_CC
++ #undef BOOST_MEM_FN_NAME
++ 
++ #endif
++ 
+  #ifdef BOOST_MEM_FN_ENABLE_STDCALL
+  
+  #define BOOST_MEM_FN_NAME(X) inner_##X##_stdcall
+***************
+*** 87,92 ****
+--- 106,123 ----
+  #undef BOOST_MEM_FN_CC
+  #undef BOOST_MEM_FN_NAME
+  
++ #ifdef BOOST_MEM_FN_ENABLE_CDECL
++ 
++ #define BOOST_MEM_FN_NAME(X) inner_##X##_cdecl
++ #define BOOST_MEM_FN_CC __cdecl
++ 
++ #include <boost/bind/mem_fn_template.hpp>
++ 
++ #undef BOOST_MEM_FN_CC
++ #undef BOOST_MEM_FN_NAME
++ 
++ #endif
++ 
+  #ifdef BOOST_MEM_FN_ENABLE_STDCALL
+  
+  #define BOOST_MEM_FN_NAME(X) inner_##X##_stdcall
+***************
+*** 128,133 ****
+--- 159,178 ----
+  #undef BOOST_MEM_FN_NAME2
+  #undef BOOST_MEM_FN_CC
+  
++ #ifdef BOOST_MEM_FN_ENABLE_CDECL
++ 
++ #define BOOST_MEM_FN_NAME(X) X##_cdecl
++ #define BOOST_MEM_FN_NAME2(X) inner_##X##_cdecl
++ #define BOOST_MEM_FN_CC __cdecl
++ 
++ #include <boost/bind/mem_fn_vw.hpp>
++ 
++ #undef BOOST_MEM_FN_NAME
++ #undef BOOST_MEM_FN_NAME2
++ #undef BOOST_MEM_FN_CC
++ 
++ #endif
++ 
+  #ifdef BOOST_MEM_FN_ENABLE_STDCALL
+  
+  #define BOOST_MEM_FN_NAME(X) X##_stdcall
+***************
+*** 176,181 ****
+--- 221,238 ----
+  #undef BOOST_MEM_FN_CC
+  #undef BOOST_MEM_FN_NAME
+  
++ #ifdef BOOST_MEM_FN_ENABLE_CDECL
++ 
++ #define BOOST_MEM_FN_NAME(X) X##_cdecl
++ #define BOOST_MEM_FN_CC __cdecl
++ 
++ #include <boost/bind/mem_fn_template.hpp>
++ 
++ #undef BOOST_MEM_FN_CC
++ #undef BOOST_MEM_FN_NAME
++ 
++ #endif
++ 
+  #ifdef BOOST_MEM_FN_ENABLE_STDCALL
+  
+  #define BOOST_MEM_FN_NAME(X) X##_stdcall
+***************
+*** 217,222 ****
+--- 274,291 ----
+  #undef BOOST_MEM_FN_NAME
+  #undef BOOST_MEM_FN_CC
+  
++ #ifdef BOOST_MEM_FN_ENABLE_CDECL
++ 
++ #define BOOST_MEM_FN_NAME(X) X##_cdecl
++ #define BOOST_MEM_FN_CC __cdecl
++ 
++ #include <boost/bind/mem_fn_cc.hpp>
++ 
++ #undef BOOST_MEM_FN_NAME
++ #undef BOOST_MEM_FN_CC
++ 
++ #endif
++ 
+  #ifdef BOOST_MEM_FN_ENABLE_STDCALL
+  
+  #define BOOST_MEM_FN_NAME(X) X##_stdcall
