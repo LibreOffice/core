@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapetransitionfactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:57:24 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:45:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,8 @@ public:
         bool                                    bDirectionForward,
         bool                                    bModeIn );
 
+    ~ClippingAnimation();
+
     // Animation interface
     // -------------------
     virtual void start( const AnimatableShapeSharedPtr&     rShape,
@@ -85,6 +87,8 @@ public:
     virtual double getUnderlyingValue() const;
 
 private:
+    void end_();
+
     AnimatableShapeSharedPtr           mpShape;
     ShapeAttributeLayerSharedPtr       mpAttrLayer;
     LayerManagerSharedPtr              mpLayerManager;
@@ -110,6 +114,11 @@ ClippingAnimation::ClippingAnimation(
     ENSURE_AND_THROW(
         rLayerManager.get(),
         "ClippingAnimation::ClippingAnimation(): Invalid LayerManager" );
+}
+
+ClippingAnimation::~ClippingAnimation()
+{
+    end_();
 }
 
 void ClippingAnimation::start( const AnimatableShapeSharedPtr&      rShape,
@@ -140,10 +149,18 @@ void ClippingAnimation::start( const AnimatableShapeSharedPtr&      rShape,
 
 void ClippingAnimation::end()
 {
+    end_();
+}
+
+void ClippingAnimation::end_()
+{
     if( mbSpriteActive )
     {
         mbSpriteActive = false;
         mpLayerManager->leaveAnimationMode( mpShape );
+
+        if( mpShape->isUpdateNecessary() )
+            mpLayerManager->notifyShapeUpdate( mpShape );
     }
 }
 
@@ -182,7 +199,7 @@ AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
     const ActivitiesFactory::CommonParameters&          rParms,
     const AnimatableShapeSharedPtr&                     rShape,
     const LayerManagerSharedPtr&                        rLayerManager,
-    uno::Reference< animations::XTransitionFilter >&    xTransition )
+    uno::Reference< animations::XTransitionFilter > const& xTransition )
 {
     return createShapeTransition( rParms,
                                   rShape,
@@ -197,7 +214,7 @@ AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
     const AnimatableShapeSharedPtr&                         rShape,
     const LayerManagerSharedPtr&                            rLayerManager,
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::animations::XTransitionFilter >&  xTransition,
+        ::com::sun::star::animations::XTransitionFilter > const& xTransition,
     sal_Int16                                               nType,
     sal_Int16                                               nSubType )
 {
