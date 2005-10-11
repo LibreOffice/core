@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 20:27:26 $
+#   last change: $Author: obo $ $Date: 2005-10-11 08:33:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,9 @@ SLOFILES =	$(SLO)$/activitiesqueue.obj \
             $(SLO)$/viewshape.obj \
             $(SLO)$/wakeupevent.obj \
             $(SLO)$/rehearsetimingsactivity.obj \
-            $(SLO)$/waitsymbol.obj
+            $(SLO)$/waitsymbol.obj \
+            $(SLO)$/drawinglayeranimation.obj \
+            $(SLO)$/delayevent.obj
 
 # ==========================================================================
 
