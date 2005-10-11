@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 21:26:26 $
+#   last change: $Author: obo $ $Date: 2005-10-11 08:56:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,8 +55,11 @@ LIB1FILES=\
     $(SLB)$/transitions.lib	\
     $(SLB)$/activities.lib	\
     $(SLB)$/animationnodes.lib	\
-    $(SLB)$/engine.lib		\
-    $(SLB)$/api.lib
+    $(SLB)$/engine.lib
+
+.IF "$(debug)"!="" || "$(DEBUG)"!=""
+LIB1FILES += $(SLB)$/api.lib
+.ENDIF
 
 SHL1TARGET=$(TARGET).uno
 
