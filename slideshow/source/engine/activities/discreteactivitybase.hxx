@@ -4,9 +4,9 @@
  *
  *  $RCSfile: discreteactivitybase.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:36:53 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:40:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,11 +69,8 @@ namespace presentation
                 Number of full repeats already performed
             */
             virtual void perform( sal_uInt32 nFrame, sal_uInt32 nRepeatCount ) const = 0;
-
             virtual void dispose();
-
             virtual bool perform();
-            virtual void dequeued();
 
         protected:
             virtual void startAnimation();

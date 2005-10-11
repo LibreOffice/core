@@ -4,9 +4,9 @@
  *
  *  $RCSfile: discreteactivitybase.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:36:35 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:40:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,16 +206,5 @@ namespace presentation
 
             ActivityBase::dispose();
         }
-
-        void DiscreteActivityBase::dequeued()
-        {
-            // ignored here, if we're still active. Discrete
-            // activities are dequeued after every perform() call,
-            // thus, the call is only significant when isActive() ==
-            // false.
-            if( !isActive() )
-                endAnimation();
-        }
-
     }
 }
