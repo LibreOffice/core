@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeattributelayer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:17:52 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:53:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,10 +47,6 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_FONTSLANT_HPP_
 #include <com/sun/star/awt/FontSlant.hpp>
-#endif
-
-#ifndef _COMPHELPER_OPTIONALVALUE_HXX
-#include <comphelper/optionalvalue.hxx>
 #endif
 
 #ifndef BOOST_SHARED_PTR_HPP_INCLUDED
@@ -306,8 +302,9 @@ namespace presentation
             /** Set the new clip polygon of the shape
 
                 @param rNewClip
-                New clip polygon, must have size of one and will be
-                scaled-up to the shape size
+                New clip polygon, is interpreted in shape view coordinates, but
+                relative to the shape (i.e. the origin of the shape coincides
+                with the origin of the clip polygon).
              */
             void setClip( const ::basegfx::B2DPolyPolygon& rNewClip );
 
