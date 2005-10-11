@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideTransitionPane.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:37:23 $
+ *  last change: $Author: obo $ $Date: 2005-10-11 08:16:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,8 +118,8 @@ namespace impl
 struct TransitionEffect
 {
     TransitionEffect() :
-            mnType( -1 ),
-            mnSubType( -1 ),
+            mnType( 0 ),
+            mnSubType( 0 ),
             mbDirection( sal_True ),
             mnFadeColor( 0 )
     {
@@ -1037,7 +1037,7 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
         }
         else
         {
-            aResult.mnType = -1;
+            aResult.mnType = 0;
         }
         aResult.mbEffectAmbiguous = false;
     }
