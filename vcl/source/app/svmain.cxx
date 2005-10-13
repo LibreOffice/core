@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:43:24 $
+ *  last change: $Author: obo $ $Date: 2005-10-13 09:36:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,8 +221,9 @@ public:
 }
 
 // =======================================================================
-BOOL SVMain()
+BOOL ImplSVMain()
 {
+    // The 'real' SVMain()
     RTL_LOGFILE_CONTEXT( aLog, "vcl (ss112471) ::SVMain" );
 
     ImplSVData* pSVData = ImplGetSVData();
@@ -260,6 +261,17 @@ BOOL SVMain()
     return bInit;
 }
 
+BOOL SVMain()
+{
+    // #i47888# allow for alternative initialization as required for e.g. MacOSX
+    extern BOOL ImplSVMainHook( BOOL* );
+
+    BOOL bInit;
+    if( ImplSVMainHook( &bInit ) )
+        return bInit;
+    else
+        return ImplSVMain();
+}
 // This variable is set, when no Application object is instantiated
 // before SVInit is called
 static Application *        pOwnSvApp = NULL;
