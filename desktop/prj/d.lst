@@ -69,6 +69,8 @@ mkdir: %_DEST%\bin%_EXT%\remote2
 ..\%__SRC%\misc\nswrapper.sh %_DEST%\bin%_EXT%\nswrapper
 ..\%__SRC%\misc\mozwrapper.sh %_DEST%\bin%_EXT%\mozwrapper
 
+..\%__SRC%\misc\*.tar %_DEST%\bin%_EXT%\*.tar
+
 mkdir: %COMMON_DEST%\pck%_EXT%\starsuite_bitmap
 mkdir: %COMMON_DEST%\pck%_EXT%\staroffice_bitmap
 ..\res\so_login_image.bmp %COMMON_DEST%\pck%_EXT%\staroffice_bitmap\ssologin.bmp
