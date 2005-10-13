@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 14:56:47 $
+ *  last change: $Author: obo $ $Date: 2005-10-13 09:37:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,11 @@ static USHORT GetKeyModCode( guint state )
     USHORT nCode = 0;
     if( (state & GDK_SHIFT_MASK) )
         nCode |= KEY_SHIFT;
-    if( (state & GDK_CONTROL_MASK) )
+    if( (state & GDK_CONTROL_MASK)
+#ifdef MACOSX
+     || (state & GDK_MOD2_MASK) // map Meta (aka Command key) to Ctrl
+#endif
+    )
         nCode |= KEY_MOD1;
     if( (state & GDK_MOD1_MASK) )
     {
@@ -1980,10 +1984,16 @@ gboolean GtkSalFrame::signalKey( GtkWidget* pWidget, GdkEventKey* pEvent, gpoint
         // The modifier mode therefore has to be adapted manually.
         switch( pEvent->keyval )
         {
+#ifdef MACOSX
+            case GDK_Meta_L:   // map Meta (aka Command key) to Ctrl
+#endif
             case GDK_Control_L:
                 nExtModMask = MODKEY_LMOD1;
                 nModMask = KEY_MOD1;
                 break;
+#ifdef MACOSX
+            case GDK_Meta_R:   // map Meta (aka Command key) to Ctrl
+#endif
             case GDK_Control_R:
                 nExtModMask = MODKEY_RMOD1;
                 nModMask = KEY_MOD1;
