@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-26 13:17:39 $
+#   last change: $Author: obo $ $Date: 2005-10-13 09:33:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
+
 PRJ=..
 PRJNAME=instsetoo_native
 TARGET=util
@@ -157,6 +158,9 @@ openoffice_%{$(PKGFORMAT:^".")} :
 openoffice_% :
 .ENDIF			# "$(PKGFORMAT)"!=""
     +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OpenOffice -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -addsystemintegration $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH))
+.IF "$(OS)" == "MACOSX"
+    +/bin/sh $(SOLARENV)$/unxmacxp$/bin$/create-package.sh $(subst,$(@:s/_/ /:1)_, $(@:b)) "`pwd`$/$(OUT)$/OpenOffice$/install" $(SOLARBINDIR) 
+.ENDIF
 
 .IF "$(PKGFORMAT)"!=""
 $(foreach,i,$(alllangiso) openofficewithjre_$i) : $$@{$(PKGFORMAT:^".")}
