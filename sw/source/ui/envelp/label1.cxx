@@ -4,9 +4,9 @@
  *
  *  $RCSfile: label1.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:27:57 $
+ *  last change: $Author: hr $ $Date: 2005-10-13 17:04:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -442,10 +442,6 @@ void SwLabPage::SetToBusinessCard()
 
     Size aTmpSz(3, 3);
     aTmpSz = LogicToPixel(aTmpSz, MAP_APPFONT);
-
-    //
-    aMakeBox.SetStyle((aMakeBox.GetStyle()&~WB_DROPDOWN));
-    aTypeBox.SetStyle((aTypeBox.GetStyle()&~WB_DROPDOWN));
 
     lcl_ChgYPos(aMakeBox, - nDiffPos);
     Point aLBPos(aMakeBox.GetPosPixel());
