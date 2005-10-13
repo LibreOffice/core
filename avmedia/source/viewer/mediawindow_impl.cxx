@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediawindow_impl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:43:42 $
+ *  last change: $Author: obo $ $Date: 2005-10-13 09:42:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,8 +247,15 @@ void MediaWindowImpl::onURLChanged()
         aArgs[ 0 ] = uno::makeAny( nWndHandle );
         aArgs[ 1 ] = uno::makeAny( awt::Rectangle( aPoint.X(), aPoint.Y(), aSize.Width(), aSize.Height() ) );
 
-        if( nWndHandle != 0 )
-            xPlayerWindow = getPlayer()->createPlayerWindow( aArgs );
+        try
+        {
+            if( nWndHandle != 0 )
+                xPlayerWindow = getPlayer()->createPlayerWindow( aArgs );
+        }
+        catch( uno::RuntimeException )
+        {
+            // happens eg, on MacOSX where Java frames cannot be created from X11 window handles
+        }
 
         setPlayerWindow( xPlayerWindow );
 
