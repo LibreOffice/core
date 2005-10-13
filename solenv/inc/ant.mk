@@ -4,9 +4,9 @@
 #
 #   $RCSfile: ant.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:33:09 $
+#   last change: $Author: hr $ $Date: 2005-10-13 16:48:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -140,36 +140,36 @@ $(CLASSDIR)$/solar.properties : $(SOLARENV)$/inc/minor.mk $(SOLARENV)$/inc/ant.p
     @+cat $(DMAKEROOT)$/../ant.properties >> $@
 
 ANTBUILD .PHONY:
-    $(WRAPCMD) $(ANT) $(ANT_FLAGS)
+    $(WRAPCMD_ENV) $(ANT) $(ANT_FLAGS)
 
 clean  .PHONY:
-    $(WRAPCMD) $(ANT) $(ANT_FLAGS) $@
+    $(WRAPCMD_ENV) $(ANT) $(ANT_FLAGS) $@
 
 prepare .PHONY:
-    $(WRAPCMD) $(ANT) $(ANT_FLAGS) $@
+    $(WRAPCMD_ENV) $(ANT) $(ANT_FLAGS) $@
 
 main: .PHONY:
-    $(WRAPCMD) $(ANT) $(ANT_FLAGS) $@
+    $(WRAPCMD_ENV) $(ANT) $(ANT_FLAGS) $@
 
 info: .PHONY
-    $(WRAPCMD) $(ANT) $(ANT_FLAGS) $@
+    $(WRAPCMD_ENV) $(ANT) $(ANT_FLAGS) $@
 
 jar .PHONY:
-     $(WRAPCMD) $(ANT) $(ANT_FLAGS) $@
+     $(WRAPCMD_ENV) $(ANT) $(ANT_FLAGS) $@
 
 compile .PHONY:
-    $(WRAPCMD) $(ANT) $(ANT_FLAGS) $@
+    $(WRAPCMD_ENV) $(ANT) $(ANT_FLAGS) $@
 
 depend .PHONY:
-    $(WRAPCMD) $(ANT) $(ANT_FLAGS) $@
+    $(WRAPCMD_ENV) $(ANT) $(ANT_FLAGS) $@
 
 javadoc .PHONY:
-    $(WRAPCMD) $(ANT) $(ANT_FLAGS) $@
+    $(WRAPCMD_ENV) $(ANT) $(ANT_FLAGS) $@
 
 config .PHONY:
-    $(WRAPCMD) $(ANT) $(ANT_FLAGS) $@
+    $(WRAPCMD_ENV) $(ANT) $(ANT_FLAGS) $@
 
 test .PHONY:
-    $(WRAPCMD) $(ANT) $(ANT_FLAGS) $@
+    $(WRAPCMD_ENV) $(ANT) $(ANT_FLAGS) $@
 
 
