@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sjapplet_impl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:14:11 $
+ *  last change: $Author: hr $ $Date: 2005-10-13 17:05:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@
 #include <vcl/sysdata.hxx>
 #include <com/sun/star/java/XJavaVM.hpp>
 
-#ifdef LINUX
+#ifdef UNX
 #define Time xlib_time
 #define Window xlib_window
 #define Font xlib_font
@@ -125,6 +125,10 @@ struct EmbeddedWindow {
 EmbeddedWindow::EmbeddedWindow(JNIEnv * pEnv, SystemEnvData const * pEnvData)
     throw(com::sun::star::uno::RuntimeException) : _joWindow(0)
 {
+    // ensure that all operations for the window contained in pEnvData
+    // have been processed by the Xserver since java will access that
+    // window by a separate connection to the Xserver
+    XSync( (Display*)pEnvData->pDisplay, False);
     try
     {   //java < 1.5
         jclass jcToolkit = pEnv->FindClass("java/awt/Toolkit");                         testJavaException(pEnv);
@@ -178,9 +182,6 @@ EmbeddedWindow::EmbeddedWindow(JNIEnv * pEnv, SystemEnvData const * pEnvData)
     jobject joFrame = pEnv->AllocObject(jcFrame); testJavaException(pEnv);
     jmethodID jmFrame_rinit = pEnv->GetMethodID(jcFrame, "<init>", "(J)V" ); testJavaException(pEnv);
 
-    //When using GTK, for example on JDS, then the applet is not painted. Just calling XSync
-    //seems to fix this problem.
-    XSync( (Display*)pEnvData->pDisplay, False);
     pEnv->CallVoidMethod(joFrame, jmFrame_rinit, (jlong) pEnvData->aWindow); testJavaException(pEnv);
     _joWindow = pEnv->NewGlobalRef(joFrame);
 #endif
