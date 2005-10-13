@@ -4,9 +4,9 @@
 #
 #   $RCSfile: Eis.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 08:58:27 $
+#   last change: $Author: hr $ $Date: 2005-10-13 16:44:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -145,6 +145,13 @@ sub init_eis_connector
     }
 
     my $proxy = $self->proxy_list()->[$current];
+    if ( $proxy =~ /^\s*https\:\/\// ) {
+        # SOAP::Lite does not complain if Crypt::SSLeay is not available,
+        # but crypted connections will just not work. Force the detection of
+        # Crypt::SSLeay for https connections and fail with a meaningful
+        # message if it's not available.
+        require Crypt::SSLeay;
+    }
     return create_eis_connector($self->uri(), $proxy);
 }
 
