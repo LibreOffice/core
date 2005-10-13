@@ -4,9 +4,9 @@
 #
 #   $RCSfile: upgrade.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-28 13:18:22 $
+#   last change: $Author: obo $ $Date: 2005-10-13 10:37:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,15 @@ sub create_upgrade_table
 
     my @upgradetable = ();
 
+    # fix for problematic OOo 1.9 versions
+    my $include_ooo_fix = 0;
+    my $ooomaxnew = "";
+    if ($installer::globals::product =~ /OpenOffice/i )
+    {
+        $include_ooo_fix = 1;
+        $ooomaxnew = "34.0.0";
+    }
+
     installer::windows::idtglobal::write_idt_header(\@upgradetable, "upgrade");
 
     my $newline = $installer::globals::upgradecode . "\t" . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "1" . "\t" . "\t" . "OLDPRODUCTS" . "\n";
@@ -59,11 +68,17 @@ sub create_upgrade_table
     if (( ! $installer::globals::patch ) && ( ! $installer::globals::languagepack ))
     {
         # preventing downgrading
-        $newline = $installer::globals::upgradecode . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "\t" . "2" . "\t" . "\t" . "NEWPRODUCTS" . "\n";
+        $newline = $installer::globals::upgradecode . "\t" . $installer::globals::msiproductversion . "\t" . $ooomaxnew . "\t" . "\t" . "2" . "\t" . "\t" . "NEWPRODUCTS" . "\n";
         push(@upgradetable, $newline);
 
-        $newline = $installer::globals::upgradecode . "\t" . $installer::globals::msiproductversion . "\t" . "\t" . "\t" . "258" . "\t" . "\t" . "SAMEPRODUCTS" . "\n";
+        $newline = $installer::globals::upgradecode . "\t" . $installer::globals::msiproductversion . "\t" . $ooomaxnew . "\t" . "\t" . "258" . "\t" . "\t" . "SAMEPRODUCTS" . "\n";
         push(@upgradetable, $newline);
+
+        if ( $include_ooo_fix )
+        {
+            $newline = $installer::globals::upgradecode . "\t" . "35.0.0" . "\t" . "36.0.0" . "\t" . "\t" . "1" . "\t" . "\t" . "OLDPRODUCTS" . "\n";
+            push(@upgradetable, $newline);
+        }
 
         if ( $allvariableshashref->{'PATCHUPGRADECODE'} )
         {
