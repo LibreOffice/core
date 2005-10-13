@@ -5,9 +5,9 @@
  *
  *  $RCSfile: VCL.xcu,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:46:30 $
+ *  last change: $Author: obo $ $Date: 2005-10-13 15:03:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -632,7 +632,7 @@
         <value>썬굴림;sungulim;굴림;Gulim;RoundGothic;Arial Unicode MS;Lucida Sans Unicode;AndaleSansUI;GNU-Unifont</value>
       </prop>
       <prop oor:name="FIXED" oor:type="xs:string" oor:op="replace">
-        <value>썬굴림;SunGulim;;굴림;Gulim;Cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+        <value>썬굴림;SunGulim;굴림;Gulim;Cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
     </node>
     <node oor:name="bn" oor:op="replace">
@@ -998,7 +998,7 @@
       </node>
       <node oor:name="andy" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>comicsansms;kidprint;;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting</value>
+          <value>comicsansms;kidprint;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -1046,24 +1046,12 @@
         <prop oor:name="SubstFonts">
           <value>albany;arial;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussansl;nimbussans;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
-        <prop oor:name="SubstFontsMS">
-          <value></value>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Helvetica</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>sans-serif</value>
-        </prop>
-        <prop oor:name="FontWeight">
-          <value>Normal</value>
-        </prop>
-        <prop oor:name="FontWidth">
-          <value>Normal</value>
-        </prop>
-        <prop oor:name="FontType">
-          <value>Standard,Normal,SansSerif</value>
-        </prop>
+        <prop oor:name="SubstFontsMS"><value></value></prop>
+        <prop oor:name="SubstFontsPS"><value>Helvetica</value></prop>
+        <prop oor:name="SubstFontsHTML"><value>sans-serif</value></prop>
+        <prop oor:name="FontWeight"><value>Normal</value></prop>
+        <prop oor:name="FontWidth"><value>Normal</value></prop>
+        <prop oor:name="FontType"><value>Standard,Normal,SansSerif</value></prop>
       </node>
       <node oor:name="arialnarrow" oor:op="replace">
         <prop oor:name="SubstFonts">
@@ -1321,7 +1309,7 @@
       </node>
       <node oor:name="bookman" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>bookman;itcbookman;bookmanl;bookmanoldstyle;;thorndale;timesnewroman;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;nimbusromanno9l;bookman;itcbookman;garamond;garamondmt;palatino</value>
+          <value>bookman;itcbookman;bookmanl;bookmanoldstyle;thorndale;timesnewroman;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;nimbusromanno9l;bookman;itcbookman;garamond;garamondmt;palatino</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -1344,7 +1332,7 @@
       </node>
       <node oor:name="bookmanl" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>bookman;itcbookman;bookmanl;bookmanoldstyle;;thorndale;timesnewroman;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;nimbusromanno9l;bookman;itcbookman;garamond;garamondmt;palatino</value>
+          <value>bookman;itcbookman;bookmanl;bookmanoldstyle;thorndale;timesnewroman;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;nimbusromanno9l;bookman;itcbookman;garamond;garamondmt;palatino</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -1367,7 +1355,7 @@
       </node>
       <node oor:name="bookmanoldstyle" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>bookman;itcbookman;bookmanl;bookmanoldstyle;;thorndale;timesnewroman;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;nimbusromanno9l;bookman;itcbookman;garamond;garamondmt;palatino</value>
+          <value>bookman;itcbookman;bookmanl;bookmanoldstyle;thorndale;timesnewroman;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;nimbusromanno9l;bookman;itcbookman;garamond;garamondmt;palatino</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -1390,7 +1378,7 @@
       </node>
       <node oor:name="bradleyhand" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>comicsansms;kidprint;;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley</value>
+          <value>comicsansms;kidprint;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -1735,7 +1723,7 @@
       </node>
       <node oor:name="chiller" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>comicsansms;kidprint;;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley</value>
+          <value>comicsansms;kidprint;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -1781,7 +1769,7 @@
       </node>
       <node oor:name="comicsans" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>comicsansms;kidprint;;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting</value>
+          <value>comicsansms;kidprint;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -1804,7 +1792,7 @@
       </node>
       <node oor:name="comicsansms" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>comicsansms;kidprint;;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting</value>
+          <value>comicsansms;kidprint;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -1895,50 +1883,26 @@
         </prop>
       </node>
       <node oor:name="courier" oor:op="replace">
-        <prop oor:name="SubstFonts">
+    <prop oor:name="SubstFonts">
           <value>cumberland;couriernew;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol</value>
         </prop>
-        <prop oor:name="SubstFontsMS">
-          <value></value>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value></value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>monospace</value>
-        </prop>
-        <prop oor:name="FontWeight">
-          <value>Normal</value>
-        </prop>
-        <prop oor:name="FontWidth">
-          <value>Normal</value>
-        </prop>
-        <prop oor:name="FontType">
-          <value>Standard,Normal,Fixed,Typewriter</value>
-        </prop>
+    <prop oor:name="SubstFontsMS"><value>Courier New</value></prop>
+    <prop oor:name="SubstFontsPS"><value></value></prop>
+    <prop oor:name="SubstFontsHTML"><value>monospace</value></prop>
+    <prop oor:name="FontWeight"><value>Normal</value></prop>
+    <prop oor:name="FontWidth"><value>Normal</value></prop>
+    <prop oor:name="FontType"><value>Standard,Normal,Fixed,Typewriter</value></prop>
       </node>
       <node oor:name="couriernew" oor:op="replace">
-        <prop oor:name="SubstFonts">
-          <value>cumberland;couriernew;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol</value>
+    <prop oor:name="SubstFonts">
+      <value>cumberland;couriernew;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol</value>
         </prop>
-        <prop oor:name="SubstFontsMS">
-          <value></value>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Courier</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>monospace</value>
-        </prop>
-        <prop oor:name="FontWeight">
-          <value>Normal</value>
-        </prop>
-        <prop oor:name="FontWidth">
-          <value>Normal</value>
-        </prop>
-        <prop oor:name="FontType">
-          <value>Standard,Normal,Fixed,Typewriter</value>
-        </prop>
+    <prop oor:name="SubstFontsMS"><value></value></prop>
+    <prop oor:name="SubstFontsPS"><value>Courier</value></prop>
+    <prop oor:name="SubstFontsHTML"><value>monospace</value></prop>
+    <prop oor:name="FontWeight"><value>Normal</value></prop>
+    <prop oor:name="FontWidth"><value>Normal</value></prop>
+    <prop oor:name="FontType"><value>Standard,Normal,Fixed,Typewriter</value></prop>
       </node>
       <node oor:name="cumberland" oor:op="replace">
         <prop oor:name="SubstFonts">
@@ -1965,7 +1929,7 @@
       </node>
       <node oor:name="curlz" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>comicsansms;kidprint;;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley</value>
+          <value>comicsansms;kidprint;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -1988,7 +1952,7 @@
       </node>
       <node oor:name="cursive" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>comicsansms;kidprint;;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley</value>
+          <value>comicsansms;kidprint;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -2379,7 +2343,7 @@
       </node>
       <node oor:name="forte" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>comicsansms;kidprint;;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting</value>
+          <value>comicsansms;kidprint;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -2586,7 +2550,7 @@
       </node>
       <node oor:name="gigi" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>comicsansms;kidprint;;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley</value>
+          <value>comicsansms;kidprint;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -3901,7 +3865,7 @@
       </node>
       <node oor:name="informalroman" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;comicsansms;kidprint;;palacescript;palacescriptmt;arioso;shelley</value>
+          <value>zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;comicsansms;kidprint;palacescript;palacescriptmt;arioso;shelley</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -3947,7 +3911,7 @@
       </node>
       <node oor:name="kidprint" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>comicsansms;kidprint;;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting</value>
+          <value>comicsansms;kidprint;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -3993,7 +3957,7 @@
       </node>
       <node oor:name="kristen" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>comicsansms;kidprint;;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting</value>
+          <value>comicsansms;kidprint;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -4269,7 +4233,7 @@
       </node>
       <node oor:name="lucidahandwriting" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>comicsansms;kidprint;;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley</value>
+          <value>comicsansms;kidprint;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -5123,7 +5087,42 @@
           <value>Normal,Fixed,Typewriter</value>
         </prop>
       </node>
-      <node oor:name="nsimsun" oor:op="replace">
+
+    <node oor:name="nimbussansl" oor:op="replace">
+    <prop oor:name="SubstFonts">
+      <value>albany;arial;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode</value>
+    </prop>
+    <prop oor:name="SubstFontsMS"><value>Arial</value></prop>
+    <prop oor:name="SubstFontsPS"><value>Helvetica</value></prop>
+    <prop oor:name="SubstFontsHTML"><value>sans-serif</value></prop>
+    <prop oor:name="FontWeight"><value>Normal</value></prop>
+    <prop oor:name="FontWidth"><value>Normal</value></prop>
+    <prop oor:name="FontType"><value>Standard,Normal,SansSerif</value></prop>
+    </node>
+    <node oor:name="nimbusromannol" oor:op="replace">
+    <prop oor:name="SubstFonts">
+      <value>thorndale;timesnewroman;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;bookman;itcbookman;garamond;garamondmt;palatino</value>
+        </prop>
+    <prop oor:name="SubstFontsMS"><value>Times New Roman</value></prop>
+    <prop oor:name="SubstFontsPS"><value>Times</value></prop>
+    <prop oor:name="SubstFontsHTML"><value>serif</value></prop>
+    <prop oor:name="FontWeight"><value>Normal</value></prop>
+    <prop oor:name="FontWidth"><value>Normal</value></prop>
+    <prop oor:name="FontType"><value>Default,Standard,Normal,Serif</value></prop>
+    </node>
+    <node oor:name="nimbusmonol" oor:op="replace">
+    <prop oor:name="SubstFonts">
+      <value>cumberland;couriernew;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono</value>
+        </prop>
+    <prop oor:name="SubstFontsMS"><value>Courier New</value></prop>
+    <prop oor:name="SubstFontsPS"><value>courier</value></prop>
+    <prop oor:name="SubstFontsHTML"><value>monospace</value></prop>
+    <prop oor:name="FontWeight"><value>Normal</value></prop>
+    <prop oor:name="FontWidth"><value>Normal</value></prop>
+    <prop oor:name="FontType"><value>Standard,Normal,Fixed,Typewriter</value></prop>
+    </node>
+
+    <node oor:name="nsimsun" oor:op="replace">
         <prop oor:name="SubstFonts">
           <value>fzsongti;msunglightsc;simsun;nsimsun;zycjksun;song;fzsongyi;fzsong;msong;shusong;fzshusong;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
@@ -6401,7 +6400,7 @@
       </node>
       <node oor:name="thorndale" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>thorndale;timesnewroman;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;nimbusromanno9l;bookman;itcbookman;garamond;garamondmt;palatino</value>
+          <value>timesnewroman;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;nimbusromanno9l;bookman;itcbookman;garamond;garamondmt;palatino</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>Times New Roman</value>
@@ -6424,95 +6423,47 @@
       </node>
       <node oor:name="times" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>thorndale;timesnewroman;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;nimbusromanno9l;bookman;itcbookman;garamond;garamondmt;palatino</value>
+          <value>thorndale;timesnewroman;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;nimbusromanno9l;bookman;itcbookman;garamond;garamondmt;palatino</value>
         </prop>
-        <prop oor:name="SubstFontsMS">
-          <value></value>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value></value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
-        </prop>
-        <prop oor:name="FontWeight">
-          <value>Normal</value>
-        </prop>
-        <prop oor:name="FontWidth">
-          <value>Normal</value>
-        </prop>
-        <prop oor:name="FontType">
-          <value>Standard,Normal,Serif</value>
-        </prop>
+        <prop oor:name="SubstFontsMS"><value>Times New Roman</value></prop>
+        <prop oor:name="SubstFontsPS"><value></value></prop>
+        <prop oor:name="SubstFontsHTML"><value>serif</value></prop>
+        <prop oor:name="FontWeight"><value>Normal</value></prop>
+        <prop oor:name="FontWidth"><value>Normal</value></prop>
+        <prop oor:name="FontType"><value>Standard,Normal,Serif</value></prop>
       </node>
       <node oor:name="timesnewroman" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>thorndale;timesnewroman;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;nimbusromanno9l;bookman;itcbookman;garamond;garamondmt;palatino</value>
+          <value>thorndale;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;nimbusromanno9l;bookman;itcbookman;garamond;garamondmt;palatino</value>
         </prop>
-        <prop oor:name="SubstFontsMS">
-          <value></value>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Times</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
-        </prop>
-        <prop oor:name="FontWeight">
-          <value>Normal</value>
-        </prop>
-        <prop oor:name="FontWidth">
-          <value>Normal</value>
-        </prop>
-        <prop oor:name="FontType">
-          <value>Standard,Normal,Serif</value>
-        </prop>
+        <prop oor:name="SubstFontsMS"><value></value></prop>
+        <prop oor:name="SubstFontsPS"><value>Times</value></prop>
+        <prop oor:name="SubstFontsHTML"><value>serif</value></prop>
+        <prop oor:name="FontWeight"><value>Normal</value></prop>
+        <prop oor:name="FontWidth"><value>Normal</value></prop>
+        <prop oor:name="FontType"><value>Standard,Normal,Serif</value></prop>
       </node>
       <node oor:name="timesroman" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>thorndale;timesnewroman;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;nimbusromanno9l;bookman;itcbookman;garamond;garamondmt;palatino</value>
+          <value>thorndale;timesnewroman;times;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;nimbusromanno9l;bookman;itcbookman;garamond;garamondmt;palatino</value>
         </prop>
-        <prop oor:name="SubstFontsMS">
-          <value></value>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value></value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
-        </prop>
-        <prop oor:name="FontWeight">
-          <value>Normal</value>
-        </prop>
-        <prop oor:name="FontWidth">
-          <value>Normal</value>
-        </prop>
-        <prop oor:name="FontType">
-          <value>Normal,Serif</value>
-        </prop>
+        <prop oor:name="SubstFontsMS"><value>Times New Roman</value></prop>
+        <prop oor:name="SubstFontsPS"><value></value></prop>
+        <prop oor:name="SubstFontsHTML"><value>serif</value></prop>
+        <prop oor:name="FontWeight"><value>Normal</value></prop>
+        <prop oor:name="FontWidth"><value>Normal</value></prop>
+        <prop oor:name="FontType"><value>Normal,Serif</value></prop>
       </node>
       <node oor:name="timmons" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>thorndale;timesnewroman;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;nimbusromanno9l;bookman;itcbookman;garamond;garamondmt;palatino</value>
+          <value>thorndale;timesnewroman;times;timesroman;newyork;serif;lucidaserif;lucidabright;roman;nimbusromanno9;nimbusromanno9l;bookman;itcbookman;garamond;garamondmt;palatino</value>
         </prop>
-        <prop oor:name="SubstFontsMS">
-          <value>Times New Roman</value>
-        </prop>
-        <prop oor:name="SubstFontsPS">
-          <value>Times</value>
-        </prop>
-        <prop oor:name="SubstFontsHTML">
-          <value>serif</value>
-        </prop>
-        <prop oor:name="FontWeight">
-          <value>Normal</value>
-        </prop>
-        <prop oor:name="FontWidth">
-          <value>Normal</value>
-        </prop>
-        <prop oor:name="FontType">
-          <value>Normal,Serif</value>
-        </prop>
+        <prop oor:name="SubstFontsMS"><value>Times New Roman</value></prop>
+        <prop oor:name="SubstFontsPS"><value>Times</value></prop>
+        <prop oor:name="SubstFontsHTML"><value>serif</value></prop>
+        <prop oor:name="FontWeight"><value>Normal</value></prop>
+        <prop oor:name="FontWidth"><value>Normal</value></prop>
+        <prop oor:name="FontType"><value>Normal,Serif</value></prop>
       </node>
       <node oor:name="tmsrmn" oor:op="replace">
         <prop oor:name="SubstFonts">
@@ -6700,7 +6651,7 @@
       </node>
       <node oor:name="vinerhand" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>comicsansms;kidprint;;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley</value>
+          <value>comicsansms;kidprint;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
