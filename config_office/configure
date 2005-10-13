@@ -8499,7 +8499,7 @@ echo $ECHO_N "checking which package format to use... $ECHO_C" >&6
    # defaults
    case "$_os" in
 	Darwin)
-		PKGFORMAT=osx
+		PKGFORMAT=portable
 		;;
 	SunOS)
 		PKGFORMAT=pkg
@@ -14577,6 +14577,8 @@ echo $ECHO_N "checking which nas to use... $ECHO_C" >&6
 if test -n "$with_nas"; then
     echo "$as_me:$LINENO: result: none" >&5
 echo "${ECHO_T}none" >&6
+elif test -n "$without_nas"; then
+    ENABLE_NAS=""
 elif test -n "$with_system_nas" -o -n "$with_system_libs" && \
 	test "$with_system_nas" != "no"; then
     echo "$as_me:$LINENO: result: external" >&5
