@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:06:53 $
+ *  last change: $Author: hr $ $Date: 2005-10-13 17:08:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,12 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
         hDC     = CreateCompatibleDC( pGraphics->mhDC );
         hBmp    = ImplCreateVirDevBitmap( pGraphics->mhDC,
                                         nDX, nDY, nBitCount );
-        bOk = ( (hDC != NULL) && (hBmp != NULL) );
+        // #124826# continue even if hBmp could not be created
+        // if we would return a failure in this case, the process
+        // would terminate which is not required
+        DBG_ASSERT( hBmp, "WinSalInstance::CreateVirtualDevice(), could not create Bitmap!" );
+
+        bOk = (hDC != NULL);
     }
 
     if ( bOk )
