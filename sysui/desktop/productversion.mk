@@ -4,9 +4,9 @@
 #
 #   $RCSfile: productversion.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-26 12:55:06 $
+#   last change: $Author: obo $ $Date: 2005-10-13 09:27:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,7 @@
 #*************************************************************************
 # NOTE: remove $(UPD) for final releases
 PRODUCTNAME = OpenOffice.org
+PRODUCTVERSION = 2.0
 LONGPRODUCTNAME = OpenOffice.org 2.0
 UNIXFILENAME = openoffice.org-2.0
 PKGVERSION = 2.0.0
