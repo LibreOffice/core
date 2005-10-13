@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.193 $
+ *  $Revision: 1.194 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 15:05:41 $
+ *  last change: $Author: obo $ $Date: 2005-10-13 09:37:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2362,7 +2362,11 @@ static USHORT sal_GetCode( int state )
 
     if( state & ShiftMask )
         nCode |= KEY_SHIFT;
-    if( state & ControlMask )
+    if( (state & ControlMask )
+#ifdef MACOSX
+     || (state & Mod2Mask) // map Meta (aka Command key) to Ctrl
+#endif
+      )
         nCode |= KEY_MOD1;
     if( state & Mod1Mask )
         nCode |= KEY_MOD2;
@@ -2705,6 +2709,16 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
     USHORT      nKeyCode;
     USHORT nModCode = 0;
     char        aDummy;
+
+#ifdef MACOSX
+    // map Meta (aka Command key) to Ctrl
+    if( pEvent->state & Mod2Mask )
+        nModCode |= KEY_MOD1;
+    if( nKeySym == XK_Meta_L )
+        nKeySym = XK_Control_L;
+    else if( nKeySym == XK_Meta_R )
+        nKeySym = XK_Control_R;
+#endif
 
     if( pEvent->state & ShiftMask )
         nModCode |= KEY_SHIFT;
