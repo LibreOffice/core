@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 11:46:40 $
+#   last change: $Author: obo $ $Date: 2005-10-13 09:27:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -172,8 +172,8 @@ ALLTAR : $(DEBFILE)
 
 %/menu/$(PKGNAME) : $$(@:f)
     @$(MKDIRHIER) $(@:d)
-    @cat $< | sed -e 's/%PRODUCTNAME/$(LONGPRODUCTNAME)/' -e 's/%PREFIX/%unixfilename/' \
-        -e 's/%ICONPREFIX/%unixfilename/' > $@
+    @cat $< | sed -e 's/%PRODUCTNAME/$(LONGPRODUCTNAME)/' -e 's/%PREFIX/$(UNIXFILENAME)/' \
+        -e 's/%ICONPREFIX/$(ICONPREFIX)/' > $@
 
 # --- icons --------------------------------------------------------
 
@@ -241,7 +241,7 @@ $(MISC)/$(TARGET)/$(DEBFILE:f)/usr/bin/soffice :
 
 $(MISC)/$(TARGET)/$(DEBFILE:f)/etc/$(UNIXFILENAME) :
     @$(MKDIRHIER) $(@:d)
-    @ln -sf /opt/openoffice.org$(PKGVERSION) $@
+    @ln -sf /opt/openoffice.org$(PRODUCTVERSION) $@
 
 
 
