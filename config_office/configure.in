@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-09-28 15:26:19 $
+dnl * Date: $Date: 2005-10-13 09:41:50 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.137 $ )
+AC_REVISION( $Revision: 1.138 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -2227,7 +2227,7 @@ if test "$_os" != "WINNT" -a \( "z$enable_epm" = "z" -o "$enable_epm" != "no" \)
    # defaults
    case "$_os" in
 	Darwin)
-		PKGFORMAT=osx
+		PKGFORMAT=portable
 		;;
 	SunOS)
 		PKGFORMAT=pkg
@@ -3078,6 +3078,8 @@ dnl ===================================================================
 AC_MSG_CHECKING([which nas to use])
 if test -n "$with_nas"; then
     AC_MSG_RESULT([none])
+elif test -n "$without_nas"; then
+    ENABLE_NAS=""
 elif test -n "$with_system_nas" -o -n "$with_system_libs" && \
 	test "$with_system_nas" != "no"; then
     AC_MSG_RESULT([external])
