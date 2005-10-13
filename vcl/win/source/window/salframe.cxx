@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 15:10:05 $
+ *  last change: $Author: hr $ $Date: 2005-10-13 17:08:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,6 +124,8 @@
 #define COMPILE_MULTIMON_STUBS
 #include <multimon.h>
 #include <vector>
+
+#include <time.h>
 
 #if OSL_DEBUG_LEVEL > 1
 void MyOutputDebugString( char *s) { OutputDebugString( s ); }
@@ -5909,6 +5911,62 @@ BOOL ImplHandleGlobalMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, LR
     }
     else
         return FALSE;
+}
+
+// -----------------------------------------------------------------------
+
+BOOL ImplWriteLastError( DWORD lastError, const char *szApiCall )
+{
+    // if VCL_LOGFILE_ENABLED is set, Win32 API error messages can be written
+    // to %TMP%/vcl.log or %TEMP%/vcl.log
+    static char *logEnabled = getenv("VCL_LOGFILE_ENABLED");
+    if( logEnabled )
+    {
+        BOOL bSuccess = FALSE;
+        static char *szTmp = getenv("TMP");
+        if( !szTmp || !*szTmp )
+            szTmp = getenv("TEMP");
+        if( szTmp && *szTmp )
+        {
+            char fname[5000];
+            strcpy( fname, szTmp );
+            if( fname[strlen(fname) - 1] != '\\' )
+                strcat( fname, "\\");
+            strcat( fname, "vcl.log" );
+            FILE *fp = fopen( fname, "a" ); // always append
+            if( fp )
+            {
+                time_t aclock;
+                time( &aclock );                           // Get time in seconds
+                struct tm *newtime = localtime( &aclock ); // Convert time to struct tm form
+                fprintf( fp, asctime( newtime ) );         // print time stamp
+
+                fprintf( fp, "%s returned %u (0x%x)\n", szApiCall, lastError, lastError );
+                bSuccess = TRUE;    // may be FormatMessage fails but we wrote at least the error code
+
+                LPVOID lpMsgBuf;
+                if (FormatMessageA(
+                    FORMAT_MESSAGE_ALLOCATE_BUFFER |
+                    FORMAT_MESSAGE_FROM_SYSTEM |
+                    FORMAT_MESSAGE_IGNORE_INSERTS,
+                    NULL,
+                    lastError,
+                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                    (LPSTR) &lpMsgBuf,
+                    0,
+                    NULL ))
+                {
+                    fprintf( fp, " %s\n", (LPSTR)lpMsgBuf );
+                    LocalFree( lpMsgBuf );
+                }
+
+                fclose( fp );
+            }
+        }
+        return bSuccess;
+    }
+    else
+        return TRUE;
 }
 
 // -----------------------------------------------------------------------
