@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:55:28 $
+ *  last change: $Author: hr $ $Date: 2005-10-13 17:08:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,6 +227,7 @@ void    CALLBACK SalTimerProc( HWND hWnd, UINT nMsg, UINT nId, DWORD nTime );
 
 // \WIN\SOURCE\WINDOW\SALFRAME.CXX
 void SalTestMouseLeave();
+BOOL ImplWriteLastError( DWORD lastError, const char *szApiCall );
 
 // \WIN\SOURCE\WINDOW\SALFRAME.CXX
 long ImplHandleSalObjKeyMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
