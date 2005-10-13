@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:03:10 $
+ *  last change: $Author: hr $ $Date: 2005-10-13 17:09:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -250,7 +250,11 @@ const ORowSetValue& ORowSetBase::getValue(sal_Int32 columnIndex)
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
-    OSL_ENSURE(!(m_bBeforeFirst || m_bAfterLast),"ORowSetBase::getValue: Illegal call here (we're before first or after last)!");
+    if ( m_bBeforeFirst || m_bAfterLast )
+    {
+        OSL_ENSURE(0,"ORowSetBase::getValue: Illegal call here (we're before first or after last)!");
+        throwFunctionSequenceException(*m_pMySelf);
+    }
 
     if ( !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->isValid() )
     {
