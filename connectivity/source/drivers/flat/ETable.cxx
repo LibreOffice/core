@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:01:34 $
+ *  last change: $Author: hr $ $Date: 2005-10-13 17:08:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -209,6 +209,7 @@ void OFlatTable::fillColumns()
             (pConnection->getStringDelimiter() && pConnection->getStringDelimiter() == aField.GetChar(0)))
         {
             bNumeric = FALSE;
+            nStartPosFirstLine2 = nStartPosFirstLine;
         }
         else
         {
