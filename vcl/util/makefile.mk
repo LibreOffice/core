@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.74 $
+#   $Revision: 1.75 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 13:53:03 $
+#   last change: $Author: obo $ $Date: 2005-10-13 09:37:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -237,8 +237,11 @@ SHL1STDLIBS+= -ldl
 SHL1STDLIBS += -framework Cocoa
 .ENDIF
 
-
 SHL1STDLIBS += -lX11
+
+.IF "$(OS)"=="MACOSX"
+SHL1STDLIBS += -framework Foundation -framework CoreFoundation
+.ENDIF # "$(OS)"=="MACOSX"
 
 .ENDIF          # "$(GUI)"=="UNX"
 
