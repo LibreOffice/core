@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: guw.pl,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 22:09:38 $
+#   last change: $Author: hr $ $Date: 2005-10-13 16:48:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,7 @@ use Text::ParseWords;
                          'implib:', 'delayload:', 'def', 'COMMENT:' ],
                'regcomp', [ '-env:', 'vnd.sun.star.expand:' , 'vnd.openoffice.pymodule' ],
                'regmerge', [ '/UCR' ],
+               'rc', [ '-D' ],
                'rsc', [ '-DOOO_' ] );
 
 #---------------------------------------------------------------------------
