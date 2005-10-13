@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.158 $
+#   $Revision: 1.159 $
 #
-#   last change: $Author: kz $ $Date: 2005-10-05 11:30:17 $
+#   last change: $Author: hr $ $Date: 2005-10-13 16:48:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1612,10 +1612,6 @@ PRJHID2TARGET=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/hid.lst
 .ENDIF
 .ENDIF			# "$(no_hids)$(NO_HIDS)"==""
 
-.IF "$(OS2_SOLENV_INC)"!=""
-OS2_COPY_MK=do_copy_mk
-.ENDIF
-
 .IF "$(make_srs_deps)"==""
 .IF "$(SRCFILES)" != "" || "$(SRC1FILES)" != "" || "$(SRC2FILES)" != ""
 DPRTARGET= $(MISC)$/$(TARGET).dpr
@@ -1648,7 +1644,6 @@ ALL_JAVA_TARGETS= \
 .IF "$(lintit)"==""
 .IF "$(L10N_framework)"!=""
 ALLTAR:	\
-        $(OS2_COPY_MK)		\
         $(SUBDIRS)		\
         $(DPRTARGET) \
         $(DPZTARGET) \
@@ -1708,7 +1703,6 @@ ALLTAR: $(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
         $(COMPVERMK) \
         $(JAVAVERMK) \
         $(target_empty) \
-        $(OS2_COPY_MK)		\
         $(SUBDIRS)		\
         $(ALLMOZ) \
         $(DELDEFS)		\
@@ -2393,15 +2387,6 @@ OTHERTARGET : $(OTHER)
 
 "$(TMP)$/makedt.don":
     @$(TOUCH) $(TMP)$/makedt.don
-
-do_copy_mk .IGNORE .SILENT :
-    @+-$(MKDIR) $(OS2_SOLENV_INC) >& $(NULLDEV)
-    @+-$(MKDIR) $(OS2_SOLENV_INC)$/startup >& $(NULLDEV)
-    @+-$(MKDIR) $(OS2_SOLENV_INC)$/startup$/os2 >& $(NULLDEV)
-    @+-attrib -rs $(OS2_SOLENV_INC)$/*.mk >& $(NULLDEV)
-    @+-$(COPY) /u $(SOLARENV)$/inc$/*.mk $(OS2_SOLENV_INC) >& $(NULLDEV)
-    @+-$(COPY) /u $(SOLARENV)$/inc$/startup$/*.mk $(OS2_SOLENV_INC)$/startup >& $(NULLDEV)
-    @+-$(COPY) /u $(SOLARENV)$/inc$/startup$/os2$/*.mk $(OS2_SOLENV_INC)$/startup$/os2 >& $(NULLDEV)
 
 killbin:
 .IF "$(GUI)"=="WNT"
