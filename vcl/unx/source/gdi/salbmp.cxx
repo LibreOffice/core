@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 15:03:12 $
+ *  last change: $Author: hr $ $Date: 2005-10-13 17:07:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,8 +149,10 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB( const Size& rSize, USHORT nBitCount, 
                 case( 1 ): pDIB->mnFormat |= BMP_FORMAT_1BIT_MSB_PAL; break;
                 case( 4 ): pDIB->mnFormat |= BMP_FORMAT_4BIT_MSN_PAL; break;
                 case( 8 ): pDIB->mnFormat |= BMP_FORMAT_8BIT_PAL; break;
-
                 default:
+                    nBitCount = 24;
+                    //fall through
+                case 24:
                     pDIB->mnFormat |= BMP_FORMAT_24BIT_TC_BGR;
                 break;
             }
@@ -740,7 +742,10 @@ bool X11SalBitmap::Create( const SalBitmap& rSSalBmp )
 
     if( rSalBmp.mpDIB )
     {
-        mpDIB = ImplCreateDIB( rSalBmp.GetSize(), rSalBmp.GetBitCount(), rSalBmp.mpDIB->maPalette );
+        // TODO: reference counting...
+        mpDIB = new BitmapBuffer( *rSalBmp.mpDIB );
+        // TODO: get rid of this when BitmapBuffer gets copy constructor
+        mpDIB->mpBits = new BYTE[ mpDIB->mnScanlineSize * mpDIB->mnHeight ];
 
         if( mpDIB )
             memcpy( mpDIB->mpBits, rSalBmp.mpDIB->mpBits, mpDIB->mnScanlineSize * mpDIB->mnHeight );
