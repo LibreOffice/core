@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsquery.pl,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 22:07:10 $
+#   last change: $Author: hr $ $Date: 2005-10-13 16:44:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ use Cws;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.7 $ ';
+my $id_str = ' $Revision: 1.8 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -70,12 +70,13 @@ print STDERR "$script_name -- version: $script_rev\n";
 
 #### global #####
 
-my $is_debug = 1;       # enable debug
-my $opt_master = '';    # option: master workspace
-my $opt_child  = '';    # option: child workspace
+my $is_debug = 1;           # enable debug
+my $opt_master = '';        # option: master workspace
+my $opt_child  = '';        # option: child workspace
+my $opt_milestone  = '';    # option: milestone
 
 # list of available query modes
-my @query_modes = qw(modules taskids state latest current owner);
+my @query_modes = qw(modules taskids state latest current owner integrated approved nominated ready);
 my %query_modes_hash = ();
 foreach (@query_modes) {
     $query_modes_hash{$_}++;
@@ -93,15 +94,17 @@ sub query_cws
 {
     my $query_mode = shift;
     # get master and child workspace
-    my $masterws = $opt_master ? uc($opt_master) : $ENV{WORK_STAMP};
-    my $childws  = $opt_child  ? $opt_child  : $ENV{CWS_WORK_STAMP};
+    my $masterws  = $opt_master ? uc($opt_master) : $ENV{WORK_STAMP};
+    my $childws   = $opt_child  ? $opt_child  : $ENV{CWS_WORK_STAMP};
+    my $milestone = $opt_milestone  ? $opt_milestone  : 'latest';
 
     if ( !defined($masterws) ) {
         print_error("Can't determine master workspace environment.\n"
                     . "Please initialize environment with setsolar ...", 1);
     }
 
-    if ( !defined($childws) && $query_mode ne 'latest' ) {
+    if ( ($query_mode eq 'modules' || $query_mode eq 'taskids' || $query_mode eq 'state'
+         || $query_mode eq 'current' || $query_mode eq 'owner') && !defined($childws) ) {
         print_error("Can't determine child workspace environment.\n"
                     . "Please initialize environment with setsolar ...", 1);
     }
@@ -111,7 +114,7 @@ sub query_cws
     $cws->master($masterws);
 
     no strict;
-    &{"query_".$query_mode}($cws);
+    &{"query_".$query_mode}($cws, $milestone);
     exit(0)
 }
 
@@ -211,6 +214,95 @@ sub query_latest
     return;
 }
 
+sub query_integrated
+{
+    my $cws       = shift;
+    my $milestone = shift;
+
+    my $masterws = $cws->master();
+    if ( $milestone eq 'latest' ) {
+        $milestone = $cws->get_current_milestone($masterws);
+    }
+
+    if ( !$milestone ) {
+        print_error("Can't determine latest milestone of '$masterws'.", 3);
+    }
+
+    if ( !$cws->is_milestone($masterws, $milestone) ) {
+        print_error("Milestone '$milestone' is no a valid milestone of '$masterws'.", 3);
+    }
+
+    my @integrated_cws = $cws->get_integrated_cws($masterws, $milestone);
+
+
+    if ( @integrated_cws ) {
+        print_message("Master workspace '$masterws':");
+        print_message("Integrated CWSs for milestone '$milestone':");
+        foreach (@integrated_cws) {
+            print "$_\n";
+        }
+    }
+
+    return;
+}
+
+sub query_approved
+{
+    my $cws       = shift;
+
+    my $masterws = $cws->master();
+
+    my @approved_cws = $cws->get_cws_with_state($masterws, 'approved by QA');
+
+    if ( @approved_cws ) {
+        print_message("Master workspace '$masterws':");
+        print_message("CWSs approved by QA:");
+        foreach (@approved_cws) {
+            print "$_\n";
+        }
+    }
+
+    return;
+}
+
+sub query_nominated
+{
+    my $cws       = shift;
+
+    my $masterws = $cws->master();
+
+    my @nominated_cws = $cws->get_cws_with_state($masterws, 'nominated');
+
+    if ( @nominated_cws ) {
+        print_message("Master workspace '$masterws':");
+        print_message("Nominated CWSs:");
+        foreach (@nominated_cws) {
+            print "$_\n";
+        }
+    }
+
+    return;
+}
+
+sub query_ready
+{
+    my $cws       = shift;
+
+    my $masterws = $cws->master();
+
+    my @ready_cws = $cws->get_cws_with_state($masterws, 'ready for QA');
+
+    if ( @ready_cws ) {
+        print_message("Master workspace '$masterws':");
+        print_message("CWSs ready for QA:");
+        foreach (@ready_cws) {
+            print "$_\n";
+        }
+    }
+
+    return;
+}
+
 sub is_valid_cws
 {
     my $cws = shift;
@@ -230,7 +322,8 @@ sub parse_options
 {
     # parse options and do some sanity checks
     my $help = 0;
-    my $success = GetOptions('h' => \$help, 'm=s' => \$opt_master, 'c=s'=> \$opt_child);
+    my $success = GetOptions('h' => \$help, 'm=s' => \$opt_master, 'c=s'=> \$opt_child,
+                             'ms=s' => \$opt_milestone);
     if ( $help || !$success || $#ARGV < 0 ) {
         usage();
         exit(1);
@@ -270,8 +363,10 @@ sub print_error
 
 sub usage
 {
-    print STDERR "Usage: cwsquery [-h] [-m master] [-c child] <current|modules|owner|state|taskIDs>\n";
+    print STDERR "Usage: cwsquery [-h] [-m master] [-c child] <current|modules|owner|state|taskids>\n";
     print STDERR "       cwsquery [-h] [-m master] <latest>\n";
+    print STDERR "       cwsquery [-h] [-m master] [-ms milestone/step] <integrated>\n";
+    print STDERR "       cwsquery [-h] [-m master] <approved|nominated|ready>\n";
     print STDERR "Query child workspace for miscellaneous information.\n";
     print STDERR "Modes:\n";
     print STDERR "\tmodules\t\tquery modules added to the CWS\n";
@@ -280,15 +375,21 @@ sub usage
     print STDERR "\ttaskids\t\tquery taskids to be handled on the CWS\n";
     print STDERR "\tcurrent\t\tquery current milestone of CWS\n";
     print STDERR "\tlatest\t\tquery the latest milestone available for resync\n";
+    print STDERR "\tintegrated\tquery integrated CWSs for milestone\n";
+    print STDERR "\tapproved\tquery CWSs approved by QA\n";
+    print STDERR "\tnominated\tquery nominated CWSs\n";
+    print STDERR "\tready\t\tquery CWSs ready for QA\n";
     print STDERR "Options:\n";
     print STDERR "\t-h\t\thelp\n";
     print STDERR "\t-m master\toverride MWS specified in environment\n";
     print STDERR "\t-c child\toverride CWS specified in environment\n";
+    print STDERR "\t-ms milestone\toverride latest milestone/step with specified one\n";
     print STDERR "Examples:\n";
     print STDERR "\tcwsquery modules \n";
     print STDERR "\tcwsquery -m SRX644 -c uno4 modules \n";
     print STDERR "\tcwsquery -m SRX645 -c pmselectedfixes state\n";
     print STDERR "\tcwsquery taskids\n";
     print STDERR "\tcwsquery -m SRC680 latest\n";
+    print STDERR "\tcwsquery -m SRC680 -ms m130 integrated\n";
 
 }
