@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localebackend.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:21:23 $
+ *  last change: $Author: obo $ $Date: 2005-10-13 09:43:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,10 +125,10 @@ namespace /* private */
     class CFGuard
     {
     public:
-        explicit CFGuard(T* pT) : pT_(pT) {}
-        ~CFGuard() { if (pT_) CFRelease(*pT_); }
+        explicit CFGuard(T& rT) : rT_(rT) {}
+        ~CFGuard() { if (rT_) CFRelease(rT_); }
     private:
-        T* pT_;
+        T& rT_;
     };
 
     typedef CFGuard<CFArrayRef> CFArrayGuard;
@@ -146,24 +146,26 @@ namespace /* private */
     CFStringRef ImplGetAppPreference(const char* pref)
     {
         CFStringRef csPref = CFStringCreateWithCString(NULL, pref, kCFStringEncodingASCII);
-        CFStringGuard csRefGuard(&csPref);
+        CFStringGuard csRefGuard(csPref);
 
         CFTypeRef ref = CFPreferencesCopyAppValue(csPref, kCFPreferencesCurrentApplication);
-        CFTypeRefGuard refGuard(&ref);
+        CFTypeRefGuard refGuard(ref);
 
         if (ref == NULL)
             return NULL;
 
         CFStringRef sref = (CFGetTypeID(ref) == CFArrayGetTypeID()) ? (CFStringRef)CFArrayGetValueAtIndex((CFArrayRef)ref, 0) : (CFStringRef)ref;
 
-        CFRetain(sref); // caller is responsible for releasing reference
-        return sref;
+        // NOTE: this API is only available with Mac OS X >=10.3. We need to use it because
+        // Apple used non-ISO values on systems <10.2 like "German" for instance but didn't
+        // upgrade those values during upgrade to newer Mac OS X versions. See also #i54337#
+        return CFLocaleCreateCanonicalLocaleIdentifierFromString(kCFAllocatorDefault, sref);
     }
 
     rtl::OUString ImplGetLocale(const char* pref)
     {
         CFStringRef sref = ImplGetAppPreference(pref);
-        CFStringGuard srefGuard(&sref);
+        CFStringGuard srefGuard(sref);
 
         rtl::OUStringBuffer aLocaleBuffer;
         aLocaleBuffer.appendAscii("en-US"); // initialize with fallback value
@@ -173,7 +175,7 @@ namespace /* private */
             // split the string into substrings; the first two (if there are two) substrings
             // are language and country
             CFArrayRef subs = CFStringCreateArrayBySeparatingStrings(NULL, sref, CFSTR("_"));
-            CFArrayGuard subsGuard(&subs);
+            CFArrayGuard subsGuard(subs);
 
             if (subs != NULL)
             {
