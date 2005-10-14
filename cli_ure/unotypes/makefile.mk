@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-23 11:53:19 $
+#   last change: $Author: hjs $ $Date: 2005-10-14 12:03:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,10 +74,10 @@ $(OUT)$/bin$/cli_types.dll : $(OUT)$/bin$/climaker.exe $(SOLARBINDIR)$/types.rdb
 #do not forget to deliver cli_types.config. It is NOT embedded in the policy file.
 $(OUT)$/bin$/$(POLICYASSEMBLY) : cli_types.config
     +$(COPY) cli_types.config $(OUT)$/bin  
-    +$(WRAPCMD) AL.exe /out:$@ \
-            /version:1.0.0.0 \
-            /keyfile:$(BIN)$/cliuno.snk \
-            /link:cli_types.config
+    +$(WRAPCMD) AL.exe -out:$@ \
+            -version:1.0.0.0 \
+            -keyfile:$(BIN)$/cliuno.snk \
+            -link:cli_types.config
 #Version changes
 #incompatible change from 1.0.0.0 -> 1.1.0.0
 
