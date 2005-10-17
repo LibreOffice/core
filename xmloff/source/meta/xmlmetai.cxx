@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlmetai.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:18:17 $
+ *  last change: $Author: rt $ $Date: 2005-10-17 14:00:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,10 @@
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+
 #include "xmlmetai.hxx"
 #include "xmltkmap.hxx"
 #include "xmlnmspe.hxx"
@@ -57,6 +61,7 @@
 #endif
 
 using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::beans::XPropertySet;
@@ -627,12 +632,21 @@ void SfxXMLMetaElementContext::EndElement()
                 if( nBegin == -1 )
                     break;
 
-                // cut off build id
-                sal_Int32 nEnd = sContent.indexOf( '$', nBegin );
+                sal_Int32 nEnd = sContent.indexOf( 'm', nBegin );
                 if( nEnd == -1 )
                     break;
 
-                OUString sBuild( sContent.copy( nBegin+1, nEnd-nBegin-1 ) );
+                OUStringBuffer sBuffer( sContent.copy( nBegin+1, nEnd-nBegin-1 ) );
+
+                const OUString sBuildCompare( RTL_CONSTASCII_USTRINGPARAM( "$Build-" ) );
+
+                nBegin = sContent.indexOf( sBuildCompare, nEnd );
+                if( nBegin == -1 )
+                    break;
+
+                sBuffer.append( (sal_Unicode)'$' );
+                sBuffer.append( sContent.copy( nBegin+sBuildCompare.getLength() ) );
+
                 try
                 {
                     Reference< XPropertySet > xSet( GetImport().getImportInfo() );
@@ -641,7 +655,7 @@ void SfxXMLMetaElementContext::EndElement()
                         const OUString aPropName(RTL_CONSTASCII_USTRINGPARAM("BuildId"));
                         Reference< XPropertySetInfo > xSetInfo( xSet->getPropertySetInfo() );
                         if( xSetInfo.is() && xSetInfo->hasPropertyByName( aPropName ) )
-                            xSet->setPropertyValue( aPropName, uno::makeAny( sBuild ) );
+                            xSet->setPropertyValue( aPropName, uno::makeAny( sBuffer.makeStringAndClear() ) );
                     }
                 }
                 catch( Exception& e )
