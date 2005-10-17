@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:06:15 $
+ *  last change: $Author: rt $ $Date: 2005-10-17 14:52:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,8 @@
 #include "osl/mutex.h"
 #include "rtl/byteseq.h"
 #include "osl/time.h"
+//#include <rtl/logfile.h>
+#include <stdio.h>
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -373,21 +375,24 @@ namespace /* private */
     oslFileError SAL_CALL osl_openFileDirectory(
         rtl_uString *strDirectoryPath, oslDirectory *pDirectory)
     {
-        rtl_uString     *strSysPath = NULL;
+        // MT: Done in osl_openDirectory!
+//      rtl_uString     *strSysPath = NULL;
         oslFileError    error;
 
+        //MT: Not done in osl_openNetworkServer, why here?
         if ( !pDirectory )
             return osl_File_E_INVAL;
 
         *pDirectory = NULL;
 
-        error = _osl_getSystemPathFromFileURL( strDirectoryPath, &strSysPath, sal_False );
-        if ( osl_File_E_None == error )
+        // MT: Done in osl_openDirectory!
+//      error = _osl_getSystemPathFromFileURL( strDirectoryPath, &strSysPath, sal_False );
+//      if ( osl_File_E_None == error )
         {
             Directory_Impl  *pDirImpl;
 
             pDirImpl = reinterpret_cast<Directory_Impl*>(rtl_allocateMemory(sizeof(Directory_Impl)));
-            _tcscpy( pDirImpl->szDirectoryPath, rtl_uString_getStr(strSysPath) );
+            _tcscpy( pDirImpl->szDirectoryPath, rtl_uString_getStr(strDirectoryPath) );
 
             /* Append backslash if neccessary */
 
@@ -396,7 +401,8 @@ namespace /* private */
             */
             if ( pDirImpl->szDirectoryPath[_tcslen(pDirImpl->szDirectoryPath) - 1] != L'\\' )
                 _tcscat( pDirImpl->szDirectoryPath, L"\\" );
-            GetCaseCorrectPathName( pDirImpl->szDirectoryPath, pDirImpl->szDirectoryPath, sizeof(pDirImpl->szDirectoryPath) );
+            // MT: ???
+            // GetCaseCorrectPathName( pDirImpl->szDirectoryPath, pDirImpl->szDirectoryPath, sizeof(pDirImpl->szDirectoryPath) );
 
             pDirImpl->uType = DIRECTORYTYPE_FILESYSTEM;
             pDirImpl->hDirectory = OpenDirectory( pDirImpl->szDirectoryPath );
@@ -414,7 +420,7 @@ namespace /* private */
                 error = MapError( GetLastError() );
             }
 
-            rtl_uString_release( strSysPath );
+//          rtl_uString_release( strSysPath );
         }
         return error;
     }
@@ -925,6 +931,9 @@ namespace /* private */
         DWORD   nSkipLevels
     )
     {
+//      log file doesn't work, because initialization of rtl log init() calls this method...
+//      RTL_LOGFILE_TRACE1( "SAL: GetCaseCorrectPathNameEx: %s (Skip:%n)", lpszShortPath,nSkipLevels );
+
         TCHAR   szPath[MAX_PATH];
         BOOL    fSuccess;
 
@@ -2999,10 +3008,13 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString *strDirectoryPath, oslDirect
         if ( osl_File_E_None != error )
                 return error;
 
+        // MT Perform05
+        /*
         if ( GetCaseCorrectPathName( strSysDirectoryPath->buffer, szCorrectedPathName, MAX_PATH ) )
         {
             rtl_uString_newFromStr( &strSysDirectoryPath, szCorrectedPathName );
         }
+        */
 
         dwPathType = IsValidFilePath( strSysDirectoryPath->buffer, NULL, VALIDATEPATH_NORMAL );
 
@@ -3011,7 +3023,7 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString *strDirectoryPath, oslDirect
             error = osl_openNetworkServer( strSysDirectoryPath, pDirectory );
         }
         else
-            error = osl_openFileDirectory( strDirectoryPath, pDirectory );
+            error = osl_openFileDirectory( strSysDirectoryPath, pDirectory );
 
         rtl_uString_release( strSysDirectoryPath );
     }
@@ -3100,10 +3112,13 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
     if ( osl_File_E_None != error )
             return error;
 
+    // MT: I can't imagine a case where this is good for!
+    /*
     if ( GetCaseCorrectPathName( strSysFilePath->buffer, szCorrectedPathName, MAX_PATH ) )
     {
         rtl_uString_newFromStr( &strSysFilePath, szCorrectedPathName );
     }
+    */
 
     dwPathType = IsValidFilePath( strSysFilePath->buffer, NULL, VALIDATEPATH_NORMAL );
 
@@ -3193,7 +3208,9 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
 
                 CopyMemory( &pItemImpl->FindData, &aFindData, sizeof(WIN32_FIND_DATA) );
                 _tcscpy( pItemImpl->szFullPath, rtl_uString_getStr(strSysFilePath) );
-                GetCaseCorrectPathName( pItemImpl->szFullPath, pItemImpl->szFullPath, sizeof(pItemImpl->szFullPath) );
+
+                // MT: This costs 600ms startup time on fast v60x!
+                // GetCaseCorrectPathName( pItemImpl->szFullPath, pItemImpl->szFullPath, sizeof(pItemImpl->szFullPath) );
 
                 pItemImpl->uType = DIRECTORYITEM_FILE;
                 *pItem = pItemImpl;
