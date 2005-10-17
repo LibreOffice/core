@@ -4,9 +4,9 @@
  *
  *  $RCSfile: idlccompile.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:11:33 $
+ *  last change: $Author: rt $ $Date: 2005-10-17 13:20:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -271,8 +271,9 @@ sal_Int32 compileFile(const OString * pathname)
 
         if ( filePath.getLength() )
         {
-            cppArgs.append(" -I");
+            cppArgs.append(" -I\"");
             cppArgs.append(filePath);
+            cppArgs.append("\"");
         }
     }
 
@@ -287,10 +288,11 @@ sal_Int32 compileFile(const OString * pathname)
         cppArgs.append(pOptions->getOption("-I"));
     }
 
-    cppArgs.append(" ");
+    cppArgs.append(" \"");
     cppArgs.append(tmpFile);
-    cppArgs.append(" ");
+    cppArgs.append("\" \"");
     cppArgs.append(preprocFile);
+    cppArgs.append("\"");
 
     OString cmdFileName = makeTempName(OString("idlc_"), OString());
     FILE* pCmdFile = fopen(cmdFileName, "w");
