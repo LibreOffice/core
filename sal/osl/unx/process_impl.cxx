@@ -4,9 +4,9 @@
  *
  *  $RCSfile: process_impl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:59:24 $
+ *  last change: $Author: rt $ $Date: 2005-10-17 14:25:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,11 @@ oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
     char   buffer[PATH_MAX];
     size_t buflen = sizeof(buffer);
 
+#if __GNUC__ >= 4 && defined(MACOSX)
+    if (_NSGetExecutablePath (buffer, (uint32_t*)&buflen) == 0)
+#else
     if (_NSGetExecutablePath (buffer, &buflen) == 0)
+#endif
     {
         /* Determine absolute path. */
         char abspath[PATH_MAX];
