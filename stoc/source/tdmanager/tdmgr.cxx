@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdmgr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:13:17 $
+ *  last change: $Author: rt $ $Date: 2005-10-17 13:21:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -443,10 +443,10 @@ void SAL_CALL ManagerImpl::insert( const Any & rElement )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException)
 {
     Reference< XHierarchicalNameAccess > xElem;
-    if (! (rElement >>= xElem))
+    if (! (rElement >>= xElem) || !xElem.is())
     {
         throw IllegalArgumentException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("no type description provider given!") ),
+            OUString( RTL_CONSTASCII_USTRINGPARAM("no valid type description provider given!") ),
             (XWeak *)(OWeakObject *)this, 0 );
     }
 
