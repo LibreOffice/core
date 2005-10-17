@@ -182,6 +182,7 @@
     <IndexKey phonetic="false" default="true" unoid="alphanumeric">A-V X-Z Æ Ø Å</IndexKey>
     <UnicodeScript>0</UnicodeScript>
     <UnicodeScript>1</UnicodeScript>
+    <UnicodeScript>2</UnicodeScript>
     <FollowPageWord>f.</FollowPageWord>
     <FollowPageWord>ff.</FollowPageWord>
   </LC_INDEX>
