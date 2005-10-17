@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakiterator_unicode.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:47:54 $
+ *  last change: $Author: rt $ $Date: 2005-10-17 15:42:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,28 +87,15 @@ public:
         throw( com::sun::star::uno::RuntimeException );
 
 protected:
-    const sal_Char *cBreakIterator;
+    const sal_Char *cBreakIterator, *wordRule;
     Boundary result; // for word break iterator
 
-    rtl::OUString characterText, editWordText, dictWordText, countWordText, sentenceText, lineText;
-    icu::BreakIterator *characterBreak, *editWordBreak, *dictWordBreak,
-                *countWordBreak, *sentenceBreak, *lineBreak;
-    virtual icu::BreakIterator* SAL_CALL loadICUWordBreakIterator(const rtl::OUString& Text, sal_Int32 nStartPos,
-        const com::sun::star::lang::Locale& rLocale, sal_Int16 rWordType) throw( com::sun::star::uno::RuntimeException);
-    icu::BreakIterator* SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::lang::Locale& rLocale,
-        sal_Int16 which) throw(com::sun::star::uno::RuntimeException);
-};
-
-class BreakIterator_ca : public BreakIterator_Unicode
-{
-    icu::BreakIterator* SAL_CALL loadICUWordBreakIterator(const rtl::OUString& Text, sal_Int32 nStartPos, const com::sun::star::lang::Locale& rLocale,
-    sal_Int16 rWordType) throw( com::sun::star::uno::RuntimeException);
-};
-
-class BreakIterator_hu : public BreakIterator_Unicode
-{
-    icu::BreakIterator* SAL_CALL loadICUWordBreakIterator(const rtl::OUString& Text, sal_Int32 nStartPos, const com::sun::star::lang::Locale& rLocale,
-    sal_Int16 rWordType) throw( com::sun::star::uno::RuntimeException);
+    rtl::OUString aText;
+    com::sun::star::lang::Locale aLocale;
+    icu::BreakIterator *aBreakIterator;
+    sal_Int16 aBreakType, aWordType;
+    void SAL_CALL loadICUBreakIterator(const com::sun::star::lang::Locale& rLocale,
+        sal_Int16 rBreakType, sal_Int16 rWordType, const sal_Char* name, const rtl::OUString& rText) throw(com::sun::star::uno::RuntimeException);
 };
 
 } } } }
