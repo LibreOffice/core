@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:37:57 $
+ *  last change: $Author: rt $ $Date: 2005-10-17 13:59:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1795,7 +1795,7 @@ void SvXMLImport::initXForms()
     // dummy method; to be implemented by derived classes supporting XForms
 }
 
-bool SvXMLImport::getBuildIds( sal_Int32& rMaster, sal_Int32& rMinor) const
+bool SvXMLImport::getBuildIds( sal_Int32& rUPD, sal_Int32& rBuild ) const
 {
     bool bRet = false;
     if( xImportInfo.is() ) try
@@ -1808,11 +1808,11 @@ bool SvXMLImport::getBuildIds( sal_Int32& rMaster, sal_Int32& rMinor) const
             xImportInfo->getPropertyValue( aPropName ) >>= aBuildId;
             if( aBuildId.getLength() )
             {
-                sal_Int32 nIndex = aBuildId.indexOf('m');
+                sal_Int32 nIndex = aBuildId.indexOf('$');
                 if( nIndex != -1 )
                 {
-                    rMaster = aBuildId.copy( 0, nIndex ).toInt32();
-                    rMinor = aBuildId.copy( nIndex+1 ).toInt32();
+                    rUPD = aBuildId.copy( 0, nIndex ).toInt32();
+                    rBuild = aBuildId.copy( nIndex+1 ).toInt32();
                     bRet = true;
                 }
             }
