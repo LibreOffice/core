@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nativenumbersupplier.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:20:58 $
+ *  last change: $Author: rt $ $Date: 2005-10-17 15:44:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,16 +71,12 @@ typedef struct {
 #define NUMBER_OMIT_ZERO_ONE_67 ( NUMBER_OMIT_ZERO|NUMBER_OMIT_ONE_67 )
 
 
-#define NUMBER_COMMA    0x002C
-#define isSeparator(ch)     (ch == thousandSeparator || ch == (thousandSeparator + 0xFEE0))
 #define MAX_SAL_UINT32  0xFFFFFFFF
 #define MAX_VALUE       (MAX_SAL_UINT32 - 9) / 10
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
 OUString SAL_CALL getHebrewNativeNumberString(const OUString& aNumberString, sal_Bool useGeresh);
-
-static sal_Unicode thousandSeparator = NUMBER_COMMA;    // default separator
 
 OUString SAL_CALL AsciiToNativeChar( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
         Sequence< sal_Int32 >& offset, sal_Bool useOffset, sal_Int16 number ) throw(RuntimeException)
@@ -96,11 +92,10 @@ OUString SAL_CALL AsciiToNativeChar( const OUString& inStr, sal_Int32 startPos, 
                 newStr->buffer[i] = NumberChar[number][ ch - NUMBER_ZERO ];
             else if (i+1 < nCount && isNumber(src[i+1])) {
                 if (i > 0 && isNumber(src[i-1]) && isSeparator(ch))
-                    newStr->buffer[i] = (number == NumberChar_FullWidth) ?
-                            thousandSeparator + 0xFEE0 : SeparatorChar[number];
+                    newStr->buffer[i] = SeparatorChar[number] ? SeparatorChar[number] : ch;
                 else
-                    newStr->buffer[i] = isDecimal(ch) ? DecimalChar[number] :
-                            isMinus(ch) ? MinusChar[number] : ch;
+                    newStr->buffer[i] = isDecimal(ch) ? (DecimalChar[number] ? DecimalChar[number] : ch) :
+                            isMinus(ch) ? (MinusChar[number] ? MinusChar[number] : ch) : ch;
             }
             else
                 newStr->buffer[i] = ch;
@@ -244,9 +239,11 @@ OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_
                     }
                     if (i < nCount) {
                         if (doDecimal = (!doDecimal && isDecimal(str[i]) && i < nCount-1 && isNumber(str[i+1])))
-                            newStr->buffer[count] = DecimalChar[number->number];
+                            newStr->buffer[count] = (DecimalChar[number->number] ? DecimalChar[number->number] : str[i]);
                         else if (isMinus(str[i]) && i < nCount-1 && isNumber(str[i+1]))
-                            newStr->buffer[count] = MinusChar[number->number];
+                            newStr->buffer[count] = (MinusChar[number->number] ? MinusChar[number->number] : str[i]);
+                        else if (isSeparator(str[i]) && i < nCount-1 && isNumber(str[i+1]))
+                            newStr->buffer[count] = (SeparatorChar[number->number] ? SeparatorChar[number->number] : str[i]);
                         else
                             newStr->buffer[count] = str[i];
                         if (useOffset)
@@ -327,11 +324,12 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
             sal_Int32 count = 0, index;
             sal_Int32 i;
 
-            OUString numberChar, multiplierChar, decimalChar, minusChar;
+            OUString numberChar, multiplierChar, decimalChar, minusChar, separatorChar;
             numberChar = OUString((sal_Unicode*)NumberChar, 10*NumberChar_Count);
             multiplierChar = OUString((sal_Unicode*) MultiplierChar_7_CJK, ExponentCount_7_CJK*Multiplier_Count);
             decimalChar = OUString(DecimalChar, NumberChar_Count);
             minusChar = OUString(MinusChar, NumberChar_Count);
+            separatorChar = OUString(SeparatorChar, NumberChar_Count);
 
             for ( i = 0; i < nCount; i++) {
                 if ((index = multiplierChar.indexOf(str[i])) >= 0) {
@@ -347,22 +345,22 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
                 } else {
                     if ((index = numberChar.indexOf(str[i])) >= 0)
                         newStr->buffer[count] = (index % 10) + NUMBER_ZERO;
-                    else if ((isSeparator(str[i]) || str[i] == 0x3001) &&
+                    else if ((index = separatorChar.indexOf(str[i])) >= 0 &&
                             (i < nCount-1 && (numberChar.indexOf(str[i+1]) >= 0 ||
                                             multiplierChar.indexOf(str[i+1]) >= 0)))
-                        newStr->buffer[count] = thousandSeparator;
+                        newStr->buffer[count] = SeparatorChar[NumberChar_HalfWidth];
                     else if ((index = decimalChar.indexOf(str[i])) >= 0 &&
                             (i < nCount-1 && (numberChar.indexOf(str[i+1]) >= 0 ||
                                             multiplierChar.indexOf(str[i+1]) >= 0)))
                         // Only when decimal point is followed by numbers,
                         // it will be convert to ASCII decimal point
-                        newStr->buffer[count] = NUMBER_DECIMAL;
+                        newStr->buffer[count] = DecimalChar[NumberChar_HalfWidth];
                     else if ((index = minusChar.indexOf(str[i])) >= 0 &&
                             (i < nCount-1 && (numberChar.indexOf(str[i+1]) >= 0 ||
                                             multiplierChar.indexOf(str[i+1]) >= 0)))
                         // Only when minus is followed by numbers,
                         // it will be convert to ASCII minus sign
-                        newStr->buffer[count] = NUMBER_MINUS;
+                        newStr->buffer[count] = MinusChar[NumberChar_HalfWidth];
                     else
                         newStr->buffer[count] = str[i];
                     if (useOffset)
@@ -525,11 +523,16 @@ OUString SAL_CALL NativeNumberSupplier::getNativeNumberString(const OUString& aN
                     !aLocale.Variant.equals(rLocale.Variant)) {
                 LocaleDataItem item = LocaleData().getLocaleItem( rLocale );
                 aLocale = rLocale;
-                DecimalChar[NumberChar_HalfWidth] = item.decimalSeparator.toChar();
+                DecimalChar[NumberChar_HalfWidth]=item.decimalSeparator.toChar();
                 if (DecimalChar[NumberChar_HalfWidth] > 0x7E || DecimalChar[NumberChar_HalfWidth] < 0x21)
-                    DecimalChar[NumberChar_HalfWidth] = 0x002C;
-                DecimalChar[NumberChar_FullWidth] = DecimalChar[NumberChar_HalfWidth] + 0xFEE0;
-                thousandSeparator = item.thousandSeparator.toChar();
+                    DecimalChar[NumberChar_FullWidth]=0xFF0E;
+                else
+                    DecimalChar[NumberChar_FullWidth]=DecimalChar[NumberChar_HalfWidth]+0xFEE0;
+                SeparatorChar[NumberChar_HalfWidth]=item.thousandSeparator.toChar();
+                if (SeparatorChar[NumberChar_HalfWidth] > 0x7E || SeparatorChar[NumberChar_HalfWidth] < 0x21)
+                    SeparatorChar[NumberChar_FullWidth]=0xFF0C;
+                else
+                    SeparatorChar[NumberChar_FullWidth]=SeparatorChar[NumberChar_HalfWidth]+0xFEE0;
             }
             if (number)
                 return AsciiToNative( aNumberString, 0, aNumberString.getLength(), offset, useOffset, number );
