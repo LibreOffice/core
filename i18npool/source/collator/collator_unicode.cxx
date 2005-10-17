@@ -4,9 +4,9 @@
  *
  *  $RCSfile: collator_unicode.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:07:12 $
+ *  last change: $Author: rt $ $Date: 2005-10-17 15:43:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,9 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
             throw RuntimeException();
     }
 
-    if (options & CollatorOptions::CollatorOptions_IGNORE_CASE)
+    if (options & CollatorOptions::CollatorOptions_IGNORE_CASE_ACCENT)
+        collator->setStrength(Collator::PRIMARY);
+    else if (options & CollatorOptions::CollatorOptions_IGNORE_CASE)
         collator->setStrength(Collator::SECONDARY);
     else
         collator->setStrength(Collator::TERTIARY);
