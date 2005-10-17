@@ -4,9 +4,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:03:57 $
+ *  last change: $Author: rt $ $Date: 2005-10-17 13:30:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,73 +75,6 @@
 
 using namespace ::rtl;
 using namespace ::osl;
-
-OString makeTempName(sal_Char* prefix)
-{
-    static OUString uTMP( RTL_CONSTASCII_USTRINGPARAM("TMP") );
-    static OUString uTEMP( RTL_CONSTASCII_USTRINGPARAM("TEMP") );
-    OUString        uPrefix( RTL_CONSTASCII_USTRINGPARAM("cmk_") );
-    OUString        uPattern;
-
-    sal_Char*   pPrefix = "cmk_";
-    sal_Char    tmpPattern[512];
-    sal_Char    *pTmpName = NULL;
-
-    if (prefix)
-        pPrefix = prefix;
-
-    if ( osl_getEnvironment(uTMP.pData, &uPattern.pData) != osl_Process_E_None )
-    {
-        if ( osl_getEnvironment(uTEMP.pData, &uPattern.pData) != osl_Process_E_None )
-        {
-#if defined(SAL_W32) || defined(SAL_OS2)
-            OSL_ASSERT( sizeof(tmpPattern) > RTL_CONSTASCII_LENGTH( "." ) );
-            strncpy(tmpPattern, ".", sizeof(tmpPattern)-1);
-#else
-            OSL_ASSERT( sizeof(tmpPattern) > RTL_CONSTASCII_LENGTH( "/tmp" ) );
-            strncpy(tmpPattern, "/tmp", sizeof(tmpPattern)-1);
-#endif
-        }
-    }
-
-    if (uPattern.getLength())
-    {
-        OString aOStr( OUStringToOString(uPattern, RTL_TEXTENCODING_UTF8) );
-        OSL_ASSERT( sizeof(tmpPattern) > aOStr.getLength() );
-        strncpy(tmpPattern, aOStr.getStr(), sizeof(tmpPattern)-1);
-    }
-
-#ifdef SAL_W32
-    OSL_ASSERT( sizeof(tmpPattern) > ( strlen(tmpPattern)
-                                       + RTL_CONSTASCII_LENGTH("\\")
-                                       + strlen(pPrefix)
-                                       + RTL_CONSTASCII_LENGTH("XXXXXX") ) );
-    strncat(tmpPattern, "\\", sizeof(tmpPattern)-1-strlen(tmpPattern));
-    strncat(tmpPattern, pPrefix, sizeof(tmpPattern)-1-strlen(tmpPattern));
-    strncat(tmpPattern, "XXXXXX", sizeof(tmpPattern)-1-strlen(tmpPattern));
-    pTmpName = mktemp(tmpPattern);
-#endif
-
-#ifdef SAL_OS2
-    char* tmpname = tempnam(NULL, prefix);
-    OSL_ASSERT( sizeof(tmpPattern) > strlen(tmpname) );
-    strncpy(tmpPattern, tmpname, sizeof(tmpPattern)-1);
-    pTmpName = tmpPattern;
-#endif
-
-#ifdef SAL_UNX
-    OSL_ASSERT( sizeof(tmpPattern) > ( strlen(tmpPattern)
-                                       + RTL_CONSTASCII_LENGTH("/")
-                                       + strlen(pPrefix)
-                                       + RTL_CONSTASCII_LENGTH("XXXXXX") ) );
-    strncat(tmpPattern, "/", sizeof(tmpPattern)-1-strlen(tmpPattern));
-    strncat(tmpPattern, pPrefix, sizeof(tmpPattern)-1-strlen(tmpPattern));
-    strncat(tmpPattern, "XXXXXX", sizeof(tmpPattern)-1-strlen(tmpPattern));
-    pTmpName = mktemp(tmpPattern);
-#endif
-
-    return OString(pTmpName);
-}
 
 OString createFileNameFromType( const OString& destination,
                                 const OString typeName,
