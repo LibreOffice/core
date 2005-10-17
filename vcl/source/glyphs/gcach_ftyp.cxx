@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:13:09 $
+ *  last change: $Author: rt $ $Date: 2005-10-17 14:51:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -860,8 +860,37 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
 
     const TT_OS2* pOS2 = (const TT_OS2*)FT_Get_Sfnt_Table( maFaceFT, ft_sfnt_os2 );
     const TT_HoriHeader* pHHEA = (const TT_HoriHeader*)FT_Get_Sfnt_Table( maFaceFT, ft_sfnt_hhea );
-    if( pOS2 && (~pOS2->version != 0) )
+    if( pOS2 && (pOS2->version != 0xFFFF) )
     {
+        // map the panose info from the OS2 table to their VCL counterparts
+        switch( pOS2->panose[0] )
+        {
+            case 1: rTo.meFamily = FAMILY_ROMAN; break;
+            case 2: rTo.meFamily = FAMILY_SWISS; break;
+            case 3: rTo.meFamily = FAMILY_MODERN; break;
+            case 4: rTo.meFamily = FAMILY_SCRIPT; break;
+            case 5: rTo.meFamily = FAMILY_DECORATIVE; break;
+            // TODO: is it reasonable to override the attribute with DONTKNOW?
+            case 0: // fall through
+            default: rTo.meFamilyType = FAMILY_DONTKNOW; break;
+        }
+
+        switch( pOS2->panose[3] )
+        {
+            case 2: // fall through
+            case 3: // fall through
+            case 4: // fall through
+            case 5: // fall through
+            case 6: // fall through
+            case 7: // fall through
+            case 8: rTo.mePitch = PITCH_VARIABLE; break;
+            case 9: rTo.mePitch = PITCH_FIXED; break;
+            // TODO: is it reasonable to override the attribute with DONTKNOW?
+            case 0: // fall through
+            case 1: // fall through
+            default: rTo.mePitch = PITCH_DONTKNOW; break;
+        }
+
         // #108862# sanity check, some fonts treat descent as signed !!!
         int nDescent = pOS2->usWinDescent;
         if( nDescent > 5*maFaceFT->units_per_EM )
