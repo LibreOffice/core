@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:07:21 $
+ *  last change: $Author: rt $ $Date: 2005-10-17 14:52:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <osl/file.h>
-
+#include <rtl/logfile.h>
 /*
     under WIN32, we use the void* oslModule
     as a WIN32 HANDLE (which is also a 32-bit value)
@@ -57,6 +57,8 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMod
     rtl_uString* Module = NULL;
     oslModule ret = 0;
     oslFileError    nError;
+
+    RTL_LOGFILE_TRACE1( "{ osl_loadModule start: %S", (LPTSTR)&strModuleName->buffer );
 
     OSL_ASSERT(strModuleName);
 
@@ -78,6 +80,8 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMod
     ret = (oslModule) hInstance;
     rtl_uString_release(Module);
     SetErrorMode(errorMode);
+
+    RTL_LOGFILE_TRACE1( "} osl_loadModule end: %S", (LPTSTR)&strModuleName->buffer );
 
     return ret;
 }
