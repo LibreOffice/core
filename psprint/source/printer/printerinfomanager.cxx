@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:45:16 $
+ *  last change: $Author: rt $ $Date: 2005-10-17 14:22:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -689,7 +689,7 @@ void PrinterInfoManager::initialize()
 
                     for ( psIndex = 0; psIndex < nNumValues; psIndex++ )
                     {
-                        const PPDValue*   pPSizeValue = pPSizeKey->getValue( psIndex );
+                        /*const*/ PPDValue*   pPSizeValue = (PPDValue*)pPSizeKey->getValue( psIndex );
 
                         // Only take care of PPD values that are not formatted correctly.
                         if (  pPSizeValue &&
@@ -712,7 +712,7 @@ void PrinterInfoManager::initialize()
                                 snprintf( aHeight, 32, "%d", paperHeight );
 
                                 // Construct a suitable PageSize key value from the PaperDimension values for this paper size
-                                 pPSizeValue->m_aValue.AppendAscii( "<</PageSize [" );
+                                 pPSizeValue->m_aValue.AppendAscii( (const sal_Char*)"<</PageSize [" );
                                 pPSizeValue->m_aValue.AppendAscii( aWidth );
                                  pPSizeValue->m_aValue.AppendAscii( " " );
                                 pPSizeValue->m_aValue.AppendAscii( aHeight );
