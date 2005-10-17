@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:22:20 $
+ *  last change: $Author: rt $ $Date: 2005-10-17 15:44:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,8 +168,6 @@ IMPL_CREATEINSTANCE( Calendar_jewish )
 IMPL_CREATEINSTANCE( Calendar_buddhist )
 IMPL_CREATEINSTANCE_MSF( BreakIteratorImpl )
 IMPL_CREATEINSTANCE( BreakIterator_Unicode )
-IMPL_CREATEINSTANCE( BreakIterator_ca )
-IMPL_CREATEINSTANCE( BreakIterator_hu )
 IMPL_CREATEINSTANCE( BreakIterator_ja )
 IMPL_CREATEINSTANCE( BreakIterator_zh )
 IMPL_CREATEINSTANCE( BreakIterator_ko )
@@ -412,12 +410,6 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.BreakIterator_Unicode",
         "com.sun.star.i18n.BreakIterator_Unicode",
         &BreakIterator_Unicode_CreateInstance },
-    {   "com.sun.star.i18n.BreakIterator_ca",
-        "com.sun.star.i18n.BreakIterator_ca",
-        &BreakIterator_ca_CreateInstance },
-    {   "com.sun.star.i18n.BreakIterator_hu",
-        "com.sun.star.i18n.BreakIterator_hu",
-        &BreakIterator_hu_CreateInstance },
     {   "com.sun.star.i18n.BreakIterator_ja",
         "com.sun.star.i18n.BreakIterator_ja",
         &BreakIterator_ja_CreateInstance },
