@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.56 $
+#   $Revision: 1.57 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:59:29 $
+#   last change: $Author: rt $ $Date: 2005-10-17 14:20:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,12 @@ CDEFS+= -DX_LOCALE
 # Name of library where static data members are initialized
 # STATICLIBNAME=static$(DLLPOSTFIX)
 # STATICLIB=-l$(STATICLIBNAME)
+
+# enable visibility define in "sal/types.h"
+.IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+CDEFS += -DHAVE_GCC_VISIBILITY_FEATURE
+.ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+
 
 # MacOS X specific Java compilation/link flags
 SOLAR_JAVA*=TRUE
