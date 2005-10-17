@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salplug.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:49:20 $
+ *  last change: $Author: rt $ $Date: 2005-10-17 14:23:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -327,7 +327,7 @@ static bool is_cde_desktop( Display* pDisplay )
     OUString aPathName( RTL_CONSTASCII_USTRINGPARAM( "file:///usr/dt/lib/libDtSvc.so" ) );
     if( nDtAtom && ( pLibrary = osl_loadModule( aPathName.pData, SAL_LOADMODULE_DEFAULT ) ) )
     {
-        osl_unloadModule( pLibrary );
+        osl_unloadModule( (_oslModule*)pLibrary );
         return true;
     }
 
