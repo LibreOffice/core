@@ -4,9 +4,9 @@
  *
  *  $RCSfile: font.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:57:13 $
+ *  last change: $Author: rt $ $Date: 2005-10-17 14:49:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,12 @@
 #ifndef _SV_IMPFONT_HXX
 #include <impfont.hxx>
 #endif
+#ifndef _VCL_FONTCFG_HXX
+#include <fontcfg.hxx>
+#endif
+#ifndef _VCL_OUTDEV_H
+#include <outdev.h> // just for ImplGetEnglishSearchFontName! TODO: move it
+#endif
 
 // =======================================================================
 
@@ -80,6 +86,7 @@ Impl_Font::Impl_Font() :
     mbShadow            = false;
     mbVertical          = false;
     mbTransparent       = true;
+    mbConfigLookup      = false;
 }
 
 // -----------------------------------------------------------------------
@@ -112,6 +119,7 @@ Impl_Font::Impl_Font( const Impl_Font& rImplFont )
     mbShadow            = rImplFont.mbShadow;
     mbVertical          = rImplFont.mbVertical;
     mbTransparent       = rImplFont.mbTransparent;
+    mbConfigLookup      = rImplFont.mbConfigLookup;
 }
 
 // -----------------------------------------------------------------------
@@ -156,6 +164,80 @@ bool Impl_Font::operator==( const Impl_Font& rOther ) const
         return false;
 
     return true;
+}
+
+// -----------------------------------------------------------------------
+
+void Impl_Font::AskConfig()
+{
+    if( mbConfigLookup )
+        return;
+
+    mbConfigLookup = true;
+
+    // prepare the FontSubst configuration lookup
+    const vcl::FontSubstConfigItem* pFontSubst = vcl::FontSubstConfigItem::get();
+
+    String      aShortName;
+    String      aFamilyName;
+    ULONG       nType = 0;
+    FontWeight  eWeight = WEIGHT_DONTKNOW;
+    FontWidth   eWidthType = WIDTH_DONTKNOW;
+    String      aMapName = maFamilyName;
+    ImplGetEnglishSearchFontName( aMapName );
+    vcl::FontSubstConfigItem::getMapName( aMapName,
+        aShortName, aFamilyName, eWeight, eWidthType, nType );
+
+    // lookup the font name in the configuration
+    const vcl::FontNameAttr* pFontAttr = pFontSubst->getSubstInfo( aMapName );
+
+    // if the direct lookup failed try again with an alias name
+    if ( !pFontAttr && (aShortName != aMapName) )
+        pFontAttr = pFontSubst->getSubstInfo( aShortName );
+
+    if( pFontAttr )
+    {
+        // the font was found in the configuration
+        if( meFamily == FAMILY_DONTKNOW )
+        {
+            if ( pFontAttr->Type & IMPL_FONT_ATTR_SERIF )
+                meFamily = FAMILY_ROMAN;
+            else if ( pFontAttr->Type & IMPL_FONT_ATTR_SANSSERIF )
+                meFamily = FAMILY_SWISS;
+            else if ( pFontAttr->Type & IMPL_FONT_ATTR_TYPEWRITER )
+                meFamily = FAMILY_MODERN;
+            else if ( pFontAttr->Type & IMPL_FONT_ATTR_ITALIC )
+                meFamily = FAMILY_SCRIPT;
+            else if ( pFontAttr->Type & IMPL_FONT_ATTR_DECORATIVE )
+                meFamily = FAMILY_DECORATIVE;
+        }
+
+        if( mePitch == PITCH_DONTKNOW )
+        {
+            if ( pFontAttr->Type & IMPL_FONT_ATTR_FIXED )
+                mePitch = PITCH_FIXED;
+        }
+    }
+
+    // if some attributes are still unknown then use the FontSubst magic
+    if( meFamily == FAMILY_DONTKNOW )
+    {
+        if( nType & IMPL_FONT_ATTR_SERIF )
+            meFamily = FAMILY_ROMAN;
+        else if( nType & IMPL_FONT_ATTR_SANSSERIF )
+            meFamily = FAMILY_SWISS;
+        else if( nType & IMPL_FONT_ATTR_TYPEWRITER )
+            meFamily = FAMILY_MODERN;
+        else if( nType & IMPL_FONT_ATTR_ITALIC )
+            meFamily = FAMILY_SCRIPT;
+        else if( nType & IMPL_FONT_ATTR_DECORATIVE )
+            meFamily = FAMILY_DECORATIVE;
+    }
+
+    if( meWeight == WEIGHT_DONTKNOW )
+        meWeight = eWeight;
+    if( meWidthType == WIDTH_DONTKNOW )
+        meWidthType = eWidthType;
 }
 
 // =======================================================================
@@ -755,7 +837,7 @@ SvStream& operator<<( SvStream& rOStm, const Font& rFont )
 
 // -----------------------------------------------------------------------
 
-// the inlines from the font.hxx header moved here during pImp-lification
+// the inlines from the font.hxx header are now instantiated for pImpl-ification
 // TODO: reformat
 const Color& Font::GetColor() const { return mpImplFont->maColor; }
 const Color& Font::GetFillColor() const { return mpImplFont->maFillColor; }
@@ -768,17 +850,17 @@ void Font::SetHeight( long nHeight ) { SetSize( Size( mpImplFont->maSize.Width()
 long Font::GetHeight() const { return mpImplFont->maSize.Height(); }
 void Font::SetWidth( long nWidth ) { SetSize( Size( nWidth, mpImplFont->maSize.Height() ) ); }
 long Font::GetWidth() const { return mpImplFont->maSize.Width(); }
-FontFamily Font::GetFamily() const { return mpImplFont->meFamily; }
 rtl_TextEncoding Font::GetCharSet() const { return mpImplFont->meCharSet; }
 LanguageType Font::GetLanguage() const { return mpImplFont->meLanguage; }
 LanguageType Font::GetCJKContextLanguage() const { return mpImplFont->meCJKLanguage; }
-FontPitch Font::GetPitch() const { return mpImplFont->mePitch; }
 short Font::GetOrientation() const { return mpImplFont->mnOrientation; }
 BOOL Font::IsVertical() const { return mpImplFont->mbVertical; }
 FontKerning Font::GetKerning() const { return mpImplFont->mnKerning; }
-FontWeight Font::GetWeight() const { return mpImplFont->meWeight; }
-FontWidth Font::GetWidthType() const { return mpImplFont->meWidthType; }
-FontItalic Font::GetItalic() const { return mpImplFont->meItalic; }
+FontPitch Font::GetPitch() const { return mpImplFont->GetPitch(); }
+FontWeight Font::GetWeight() const { return mpImplFont->GetWeight(); }
+FontWidth Font::GetWidthType() const { return mpImplFont->GetWidthType(); }
+FontItalic Font::GetItalic() const { return mpImplFont->GetItalic(); }
+FontFamily Font::GetFamily() const { return mpImplFont->GetFamily(); }
 BOOL Font::IsOutline() const { return mpImplFont->mbOutline; }
 BOOL Font::IsShadow() const { return mpImplFont->mbShadow; }
 FontRelief Font::GetRelief() const { return mpImplFont->meRelief; }
@@ -787,3 +869,4 @@ FontStrikeout Font::GetStrikeout() const { return mpImplFont->meStrikeout; }
 FontEmphasisMark Font::GetEmphasisMark() const { return mpImplFont->meEmphasisMark; }
 BOOL Font::IsWordLineMode() const { return mpImplFont->mbWordLine; }
 BOOL Font::IsSameInstance( const Font& rFont ) const { return (mpImplFont == rFont.mpImplFont); }
+
