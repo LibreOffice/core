@@ -4,9 +4,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:02:09 $
+ *  last change: $Author: rt $ $Date: 2005-10-17 14:26:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -424,7 +424,9 @@ void macxp_getSystemVersion( unsigned int *isDarwin, unsigned int *majorVersion,
 #   define PTHREAD_VALUE(t)             (t)
 #endif
 #ifndef PTHREAD_NONE
+# if (__GNUC__ < 4) && !defined(MACOSX)
 extern pthread_t _pthread_none_;
+# endif
 #   define PTHREAD_NONE                 _pthread_none_
 #   ifndef PTHREAD_NONE_INIT
 #       define PTHREAD_NONE_INIT        ((pthread_t)-1)
