@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numberchar.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:21:13 $
+ *  last change: $Author: rt $ $Date: 2005-10-17 15:49:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,26 +117,26 @@ static sal_Unicode DecimalChar[] = {
     0x9EDE, // Korean Upper
     0xC810, // Korean Hangul
     0x066B, // Arabic Indic
-    0x002E, // Est. Arabic Indic
-    0x002E, // Indic (Devanagari)
-    0x002E, // Thai
-    0x002E, // Oriya
-    0x002E, // Marathi
-    0x002E, // Bengali
-    0x002E, // Punjabi (Gurmukhi)
-    0x002E, // Gujarali
-    0x002E, // Tamil
-    0x002E, // Telugu
-    0x002E, // Kannada
-    0x002E, // Malayalam
-    0x002E, // Lao
-    0x002E, // Tibetan
-    0x002E, // Myammar
-    0x002E, // Cambodian (Khmer)
-    0x002E, // Mongolian
-    0x002E, // Hebrew
-    0x002E, // Nepali
-    0x002E, // Dzongkha
+    0x0000, // Est. Arabic Indic
+    0x0000, // Indic (Devanagari)
+    0x0000, // Thai
+    0x0000, // Oriya
+    0x0000, // Marathi
+    0x0000, // Bengali
+    0x0000, // Punjabi (Gurmukhi)
+    0x0000, // Gujarali
+    0x0000, // Tamil
+    0x0000, // Telugu
+    0x0000, // Kannada
+    0x0000, // Malayalam
+    0x0000, // Lao
+    0x0000, // Tibetan
+    0x0000, // Myammar
+    0x0000, // Cambodian (Khmer)
+    0x0000, // Mongolian
+    0x0000, // Hebrew
+    0x0000, // Nepali
+    0x0000, // Dzongkha
 };
 
 static sal_Unicode MinusChar[] = {
@@ -150,32 +150,32 @@ static sal_Unicode MinusChar[] = {
     0xFF0D, // Korean Lower
     0x5069, // Korean Upper
     0xFF0D, // Korean Hangul ???
-    0x002D, // Arabic Indic
-    0x002D, // Est. Arabic Indic
-    0x002D, // Indic
-    0x002D, // Thai
-    0x002D, // Oriya
-    0x002D, // Marathi
-    0x002D, // Bengali
-    0x002D, // Punjabi
-    0x002D, // Gujarali
-    0x002D, // Tamil
-    0x002D, // Telugu
-    0x002D, // Kannada
-    0x002D, // Malayalam
-    0x002D, // Lao
-    0x002D, // Tibetan
-    0x002D, // Myammar
-    0x002D, // Cambodian (Khmer)
-    0x002D, // Mongolian
-    0x002D, // Hebrew
-    0x002D, // Nepali
-    0x002D, // Dzongkha
+    0x0000, // Arabic Indic
+    0x0000, // Est. Arabic Indic
+    0x0000, // Indic
+    0x0000, // Thai
+    0x0000, // Oriya
+    0x0000, // Marathi
+    0x0000, // Bengali
+    0x0000, // Punjabi
+    0x0000, // Gujarali
+    0x0000, // Tamil
+    0x0000, // Telugu
+    0x0000, // Kannada
+    0x0000, // Malayalam
+    0x0000, // Lao
+    0x0000, // Tibetan
+    0x0000, // Myammar
+    0x0000, // Cambodian (Khmer)
+    0x0000, // Mongolian
+    0x0000, // Hebrew
+    0x0000, // Nepali
+    0x0000, // Dzongkha
 };
 
 static sal_uInt16 SeparatorChar[] = {
     0x002C, // Half Width (Ascii)
-    0x3001, // Full Width
+    0xFF0C, // Full Width
     0x3001, // Chinese Lower
     0x3001, // S. Chinese Upper
     0x3001, // T. Chinese Upper
@@ -184,37 +184,36 @@ static sal_uInt16 SeparatorChar[] = {
     0x3001, // Korean Lower
     0x3001, // Korean Upper
     0x3001, // Korean Hangul
-    0x002C, // Arabic Indic
-    0x002C, // Est. Arabic Indic
-    0x002C, // Indic
-    0x002C, // Thai
-    0x002C, // Oriya
-    0x002C, // Marathi
-    0x002C, // Bengali
-    0x002C, // Punjabi
-    0x002C, // Gujarali
-    0x002C, // Tamil
-    0x002C, // Telugu
-    0x002C, // Kannada
-    0x002C, // Malayalam
-    0x002C, // Lao
-    0x002C, // Tibetan
-    0x002C, // Myammar
-    0x002C, // Cambodian (Khmer)
-    0x002C, // Mongolian
-    0x002C, // Hebrew
-    0x002C, // Nepali
-    0x002C, // Dzongkha
+    0x0000, // Arabic Indic
+    0x0000, // Est. Arabic Indic
+    0x0000, // Indic
+    0x0000, // Thai
+    0x0000, // Oriya
+    0x0000, // Marathi
+    0x0000, // Bengali
+    0x0000, // Punjabi
+    0x0000, // Gujarali
+    0x0000, // Tamil
+    0x0000, // Telugu
+    0x0000, // Kannada
+    0x0000, // Malayalam
+    0x0000, // Lao
+    0x0000, // Tibetan
+    0x0000, // Myammar
+    0x0000, // Cambodian (Khmer)
+    0x0000, // Mongolian
+    0x0000, // Hebrew
+    0x0000, // Nepali
+    0x0000, // Dzongkha
 };
 
 #define NUMBER_ZERO     NumberChar[NumberChar_HalfWidth][0] // 0x0030
 #define NUMBER_ONE      NumberChar[NumberChar_HalfWidth][1]     // 0x0031
 #define NUMBER_NINE     NumberChar[NumberChar_HalfWidth][9]     // 0x0039
-#define NUMBER_DECIMAL  DecimalChar[0]
-#define NUMBER_MINUS    MinusChar[0]
 #define isNumber(n)     ( NUMBER_ZERO <= n && n <= NUMBER_NINE )
-#define isDecimal(n)    ( n == NUMBER_DECIMAL )
-#define isMinus(n)  ( n == NUMBER_MINUS )
+#define isDecimal(n)    ( n == DecimalChar[NumberChar_HalfWidth] )
+#define isMinus(n)      ( n == MinusChar[NumberChar_HalfWidth] )
+#define isSeparator(n)  ( n == SeparatorChar[NumberChar_HalfWidth] )
 
 const sal_Int16 Multiplier_Lower_zh     = 0;
 const sal_Int16 Multiplier_Upper_zh     = 1;
