@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propimp0.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:47:25 $
+ *  last change: $Author: rt $ $Date: 2005-10-17 14:00:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,11 +165,11 @@ sal_Bool XMLOpacityPropertyHdl::importXML(
         // #i42959#
         if( mpImport )
         {
-            sal_Int32 nMajor, nMinor;
-            if( mpImport->getBuildIds( nMajor, nMinor ) )
+            sal_Int32 nUPD, nBuild;
+            if( mpImport->getBuildIds( nUPD, nBuild ) )
             {
-                // correct import of documents written with StarOffice 8 Final
-                if( (nMajor == 680) && (nMinor < 125) )
+                // correct import of documents written prior to StarOffice 8/OOO 2.0 final
+                if( (nUPD == 680) && (nBuild < 8951) )
                     nValue = 100 - nValue;
             }
         }
