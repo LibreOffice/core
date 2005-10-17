@@ -7086,11 +7086,22 @@
   
   # Force applications to be built non-statically
   # when building the mozcomps meta component
-*** misc/mozilla/security/nss/lib/pki1/oiddata.h	Thu Aug 25 21:30:00 2005
---- misc/build/mozilla/security/nss/lib/pki1/oiddata.h	Thu Aug 25 21:31:28 2005
+*** misc/mozilla/security/nss/lib/pki1/oiddata.h	Sun Sep 11 15:57:15 2005
+--- misc/build/mozilla/security/nss/lib/pki1/oiddata.h	Sat Sep 10 00:16:58 2005
 ***************
-*** 39,44 ****
---- 39,45 ----
+*** 39,49 ****
+  static const char OIDDATA_CVS_ID[] = "@(#) $RCSfile$ $Revision$ $Date$ $Name$ ; @(#) $RCSfile$ $Revision$ $Date$ $Name$";
+  #endif /* DEBUG */
+  
+  #ifndef NSSPKI1T_H
+  #include "nsspki1t.h"
+  #endif /* NSSPKI1T_H */
+  
+! extern const NSSOID nss_builtin_oids[];
+  extern const PRUint32 nss_builtin_oid_count;
+  
+  /*extern const nssAttributeTypeAliasTable nss_attribute_type_aliases[];*/
+--- 39,50 ----
   static const char OIDDATA_CVS_ID[] = "@(#) $RCSfile$ $Revision$ $Date$ $Name$ ; @(#) $RCSfile$ $Revision$ $Date$ $Name$";
   #endif /* DEBUG */
   
@@ -7098,3 +7109,28 @@
   #ifndef NSSPKI1T_H
   #include "nsspki1t.h"
   #endif /* NSSPKI1T_H */
+  
+! extern const NSSOID *nss_builtin_oids;
+  extern const PRUint32 nss_builtin_oid_count;
+  
+  /*extern const nssAttributeTypeAliasTable nss_attribute_type_aliases[];*/
+*** misc/mozilla/xpcom/reflect/xptinfo/public/xptinfo.h	Sun Sep 11 16:02:28 2005
+--- misc/build/mozilla/xpcom/reflect/xptinfo/public/xptinfo.h	Sat Sep 10 02:27:51 2005
+***************
+*** 132,138 ****
+          }
+  
+      PRBool IsArray() const
+!         {return (PRBool) TagPart() == T_ARRAY;}
+  
+      // 'Dependent' means that params of this type are dependent upon other 
+      // params. e.g. an T_INTERFACE_IS is dependent upon some other param at 
+--- 132,138 ----
+          }
+  
+      PRBool IsArray() const
+!         {return (PRBool) TagPart() == (PRBool)T_ARRAY;}
+  
+      // 'Dependent' means that params of this type are dependent upon other 
+      // params. e.g. an T_INTERFACE_IS is dependent upon some other param at 
+
