@@ -4,9 +4,9 @@
  *
  *  $RCSfile: codemaker.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:08:59 $
+ *  last change: $Author: rt $ $Date: 2005-10-17 13:20:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,13 @@ rtl::OString convertString(rtl::OUString const & string) {
     return s;
 }
 
+rtl::OString errorMsg(rtl::OString const & desc, rtl::OString const & type) {
+    rtl::OStringBuffer msg(128);
+    msg.append(desc);
+    msg.append(type);
+    return msg.makeStringAndClear();
+}
+
 codemaker::UnoType::Sort decomposeAndResolve(
     TypeManager const & manager, rtl::OString const & type,
     bool resolveTypedefs, bool allowVoid, bool allowExtraEntities,
@@ -94,8 +101,10 @@ codemaker::UnoType::Sort decomposeAndResolve(
         *name = codemaker::UnoType::decompose(t, &n, arguments);
         if (n > SAL_MAX_INT32 - *rank) {
             throw CannotDumpException(
-                rtl::OString(
-                    RTL_CONSTASCII_STRINGPARAM("Bad type information"))); //TODO
+                errorMsg(rtl::OString(
+                    RTL_CONSTASCII_STRINGPARAM("Bad type information: ")),
+                    type));
+            //TODO
         }
         *rank += n;
         if (n > 0) {
@@ -107,9 +116,10 @@ codemaker::UnoType::Sort decomposeAndResolve(
         case codemaker::UnoType::SORT_VOID:
             if (!allowVoid) {
                 throw CannotDumpException(
-                    rtl::OString(
-                        RTL_CONSTASCII_STRINGPARAM("Bad type information")));
-                    //TODO
+                    errorMsg(rtl::OString(
+                        RTL_CONSTASCII_STRINGPARAM("Bad type information: ")),
+                        type));
+                //TODO
             }
         default:
             checkNoTypeArguments(*arguments);
@@ -132,9 +142,10 @@ codemaker::UnoType::Sort decomposeAndResolve(
                             != reader.getReferenceCount())))
                 {
                     throw CannotDumpException(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "Bad type information"))); //TODO
+                        errorMsg(rtl::OString(
+                            RTL_CONSTASCII_STRINGPARAM("Bad type information: ")),
+                            type));
+                    //TODO
                 }
                 return sort;
 
@@ -145,9 +156,10 @@ codemaker::UnoType::Sort decomposeAndResolve(
             case RT_TYPE_CONSTANTS:
                 if (!allowExtraEntities) {
                     throw CannotDumpException(
-                        rtl::OString(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "Bad type information"))); //TODO
+                        errorMsg(rtl::OString(
+                            RTL_CONSTASCII_STRINGPARAM("Bad type information: ")),
+                            type));
+                    //TODO
                 }
                 checkNoTypeArguments(*arguments);
                 //TODO: check reader for consistency
@@ -169,9 +181,10 @@ codemaker::UnoType::Sort decomposeAndResolve(
                 }
             default:
                 throw CannotDumpException(
-                    rtl::OString(
-                        RTL_CONSTASCII_STRINGPARAM("Bad type information")));
-                    //TODO
+                    errorMsg(rtl::OString(
+                        RTL_CONSTASCII_STRINGPARAM("Bad type information: ")),
+                        type));
+                //TODO
             }
         }
     }
