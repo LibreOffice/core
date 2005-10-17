@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexentrysupplier_default.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:09:57 $
+ *  last change: $Author: rt $ $Date: 2005-10-17 15:43:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ sal_Int16 SAL_CALL IndexEntrySupplier_Unicode::compareIndexEntry(
 OUString SAL_CALL IndexEntrySupplier_Unicode::getIndexCharacter( const OUString& rIndexEntry,
     const lang::Locale& rLocale, const OUString& rAlgorithm ) throw (RuntimeException) {
 
-    if (loadAlgorithm( rLocale, rAlgorithm, CollatorOptions::CollatorOptions_IGNORE_CASE))
+    if (loadAlgorithm( rLocale, rAlgorithm, CollatorOptions::CollatorOptions_IGNORE_CASE_ACCENT))
         return index->getIndexDescription(rIndexEntry);
     else
         return IndexEntrySupplier_Common::getIndexCharacter(rIndexEntry, rLocale, rAlgorithm);
@@ -222,7 +222,7 @@ void Index::init(const lang::Locale &rLocale, const OUString& algorithm) throw (
     if (table_count > MAX_TABLES)
         throw RuntimeException();
 
-    collator->loadCollatorAlgorithm(algorithm, rLocale, CollatorOptions::CollatorOptions_IGNORE_CASE);
+    collator->loadCollatorAlgorithm(algorithm, rLocale, CollatorOptions::CollatorOptions_IGNORE_CASE_ACCENT);
     sal_Int16 j=0;
     sal_Unicode start = unicode::getUnicodeScriptStart((UnicodeScript)0);
     sal_Unicode end = unicode::getUnicodeScriptEnd((UnicodeScript)0);
