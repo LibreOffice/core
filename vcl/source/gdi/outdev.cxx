@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:05:43 $
+ *  last change: $Author: rt $ $Date: 2005-10-17 14:01:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -527,7 +527,11 @@ void OutputDevice::EnableRTL( BOOL bEnable )
 
 BOOL OutputDevice::ImplHasMirroredGraphics()
 {
-    return ( ImplGetGraphics() && (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) );
+   // HOTFIX for #i55719#
+   if( meOutDevType == OUTDEV_PRINTER )
+       return FALSE;
+
+   return ( ImplGetGraphics() && (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) );
 }
 
 // note: the coordiantes to be remirrored are in frame coordiantes !
