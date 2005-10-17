@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:06:39 $
+ *  last change: $Author: rt $ $Date: 2005-10-17 14:02:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1597,6 +1597,7 @@ SalGraphics* WinSalPrinter::StartPage( ImplJobSetup* pSetupData, BOOL bNewJobDat
     SelectBrush( hDC, hTempBrush );
 
     WinSalGraphics* pGraphics = new WinSalGraphics;
+    pGraphics->SetLayout(0);
     pGraphics->mhDC     = hDC;
     pGraphics->mhWnd    = 0;
     pGraphics->mbPrinter = TRUE;
