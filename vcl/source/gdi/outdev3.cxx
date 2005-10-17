@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.206 $
+ *  $Revision: 1.207 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 14:44:42 $
+ *  last change: $Author: rt $ $Date: 2005-10-17 14:50:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1634,8 +1634,11 @@ bool ImplDevFontListData::AddFontFace( ImplFontData* pNewData )
     {
         // TODO: is it cheaper to calc matching attributes now or on demand?
         // calc matching attributes if other entries are already initialized
-        const FontSubstConfigItem& rFontSubst = *FontSubstConfigItem::get();
-        InitMatchData( rFontSubst, maSearchName );
+
+        // MT: Perform05: Do lazy, quite expensive, not needed in start-up!
+        // const FontSubstConfigItem& rFontSubst = *FontSubstConfigItem::get();
+        // InitMatchData( rFontSubst, maSearchName );
+        // mbMatchData=true; // Somewhere else???
     }
 
     // reassign name (sharing saves memory)
@@ -7258,52 +7261,6 @@ FontMetric OutputDevice::GetFontMetric() const
         aMetric.SetOrientation( pMetric->mnOrientation );
     if( !pEntry->maMetric.mbKernableFont )
          aMetric.SetKerning( maFont.GetKerning() & ~KERNING_FONTSPECIFIC );
-
-    // we want set correct family and pitch data, if we can't query the
-    // data from the system
-    if ( (aMetric.GetFamily() == FAMILY_DONTKNOW) ||
-         (aMetric.GetPitch() == PITCH_DONTKNOW) )
-    {
-        const FontSubstConfigItem* pFontSubst = FontSubstConfigItem::get();
-
-        String                  aTempName = pMetric->maName;
-        String                  aTempShortName;
-        String                  aTempFamilyName;
-        ULONG                   nTempType = 0;
-        FontWeight              eTempWeight = WEIGHT_DONTKNOW;
-        FontWidth               eTempWidth = WIDTH_DONTKNOW;
-        ImplGetEnglishSearchFontName( aTempName );
-        FontSubstConfigItem::getMapName( aTempName, aTempShortName, aTempFamilyName,
-                                         eTempWeight, eTempWidth, nTempType );
-        const FontNameAttr* pTempFontAttr = pFontSubst->getSubstInfo( aTempName );
-        if ( !pTempFontAttr && (aTempShortName != aTempName) )
-            pTempFontAttr = pFontSubst->getSubstInfo( aTempShortName );
-        if ( pTempFontAttr && pTempFontAttr->HTMLSubstitutions.size() )
-        {
-            // We use the HTML-Substitution string to overwrite these only
-            // for standard fonts - other fonts should be the default, because
-            // it's not easy to define the correct definition (for example
-            // for none latin fonts or special fonts).
-            if ( aMetric.GetFamily() == FAMILY_DONTKNOW )
-            {
-                if ( pTempFontAttr->Type & IMPL_FONT_ATTR_SERIF )
-                    aMetric.SetFamily( FAMILY_ROMAN );
-                else if ( pTempFontAttr->Type & IMPL_FONT_ATTR_SANSSERIF )
-                    aMetric.SetFamily( FAMILY_SWISS );
-                else if ( pTempFontAttr->Type & IMPL_FONT_ATTR_TYPEWRITER )
-                    aMetric.SetFamily( FAMILY_MODERN );
-                else if ( pTempFontAttr->Type & IMPL_FONT_ATTR_ITALIC )
-                    aMetric.SetFamily( FAMILY_SCRIPT );
-                else if ( pTempFontAttr->Type & IMPL_FONT_ATTR_DECORATIVE )
-                    aMetric.SetFamily( FAMILY_DECORATIVE );
-            }
-            if ( aMetric.GetPitch() == PITCH_DONTKNOW )
-            {
-                if ( pTempFontAttr->Type & IMPL_FONT_ATTR_FIXED )
-                    aMetric.SetPitch( PITCH_FIXED );
-            }
-        }
-    }
 
     // set remaining metric fields
     aMetric.mpImplMetric->mnMiscFlags   = 0;
