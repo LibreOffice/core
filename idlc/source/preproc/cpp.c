@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:13:35 $
+ *  last change: $Author: rt $ $Date: 2005-10-17 13:21:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ int ifdepth;
 int ifsatisfied[NIF];
 int skipping;
 
-char rcsid[] = "$Version 1.2 $ $Revision: 1.3 $ $Date: 2005-09-07 18:13:35 $";
+char rcsid[] = "$Version 1.2 $ $Revision: 1.4 $ $Date: 2005-10-17 13:21:14 $";
 
 int realargc;
 char* realargv[512];
@@ -67,9 +67,32 @@ void checkCommandFile(char* cmdfile)
            error(FATAL, "Can't open command file %s", cmdfile);
     } else
     {
-        while ( fscanf(commandfile, "%s", option) != EOF )
+        int i=0;
+        int found = 0;
+        char c;
+        while ( fscanf(commandfile, "%c", &c) != EOF )
         {
-            if (option[0]== '@')
+            if (c=='\"') {
+                if (found) {
+                    found=0;
+                } else {
+                    found=1;
+                    continue;
+                }
+            } else {
+                if (c!=13 && c!=10) {
+                    if (found || c!=' ') {
+                        option[i++]=c;
+                        continue;
+                    }
+                }
+                if (i==0)
+                    continue;
+            }
+            option[i]='\0';
+            found=0;
+            i=0;
+            if (option[0]== '@' || option[1]== '@')
             {
                 checkCommandFile(option);
             } else
@@ -135,10 +158,9 @@ int main(int argc, char **argv)
     process(&tr);
     flushout();
     fflush(stderr);
-    exit(nerrs);
-
     cleanCommandArgs();
-    return 0;
+    exit(nerrs);
+    //return nerrs;
 }
 
 void
