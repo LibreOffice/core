@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtdd.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:20:58 $
+ *  last change: $Author: rt $ $Date: 2005-10-18 13:50:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -506,14 +506,16 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
         }
 
         if ( EXCHG_IN_ACTION_DEFAULT != nEventAction )
-            nUserOpt = nEventAction;
+            nUserOpt = (sal_Int8)nEventAction;
 
         // show DropCursor or UserMarker ?
         if( EXCHG_DEST_SWDOC_FREE_AREA_WEB == nDropDestination ||
             EXCHG_DEST_SWDOC_FREE_AREA == nDropDestination )
         {
             CleanupDropUserMarker();
-            //rSh.SwCrsrShell::SetVisCrsr( aDocPt );
+            SwContentAtPos aCont( SwContentAtPos::SW_CONTENT_CHECK );
+            if(rSh.GetContentAtPos(aDocPt, aCont))
+                rSh.SwCrsrShell::SetVisCrsr( aDocPt );
         }
         else
         {
