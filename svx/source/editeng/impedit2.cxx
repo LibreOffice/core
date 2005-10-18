@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:24:28 $
+ *  last change: $Author: rt $ $Date: 2005-10-18 13:53:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1528,8 +1528,11 @@ EditSelection ImpEditEngine::SelectSentence( const EditSelection& rCurSel )
     uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
     const EditPaM& rPaM = rCurSel.Min();
     const ContentNode* pNode = rPaM.GetNode();
+    // #i50710# line breaks are marked with 0x01 - the break iterator prefers 0x0a for that
+    String sParagraph(*pNode);
+    sParagraph.SearchAndReplaceAll(0x01,0x0a);
     //return Null if search starts at the beginning of the string
-    long nStart = rPaM.GetIndex() ? xBI->beginOfSentence( *pNode, rPaM.GetIndex(), GetLocale( rPaM ) ) : 0;
+    long nStart = rPaM.GetIndex() ? xBI->beginOfSentence( sParagraph, rPaM.GetIndex(), GetLocale( rPaM ) ) : 0;
 
     long nEnd = xBI->endOfSentence( *pNode, rPaM.GetIndex(), GetLocale( rPaM ) );
     EditSelection aNewSel( rCurSel );
