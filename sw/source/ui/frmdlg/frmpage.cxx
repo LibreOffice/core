@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:51:12 $
+ *  last change: $Author: rt $ $Date: 2005-10-18 13:50:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3038,7 +3038,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
         aAltNameFT.Enable(FALSE);
         aNamesFL.Enable(FALSE);
     }
-    if(nDlgType == DLG_FRM_STD)
+    if(nDlgType == DLG_FRM_STD && aAltNameFT.IsVisible())
     {
         aAltNameFT.Hide();
         aAltNameED.Hide();
