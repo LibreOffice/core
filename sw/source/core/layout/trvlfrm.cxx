@@ -4,9 +4,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:31:04 $
+ *  last change: $Author: rt $ $Date: 2005-10-18 13:48:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,9 +193,16 @@ BOOL SwLayoutFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
     while ( !bRet && pFrm )
     {
         pFrm->Calc();
-        SwRect aPaintRect( pFrm->PaintArea() );
+
+        // --> FME 2005-05-13 #i43742# New function: SW_CONTENT_CHECK
+        const bool bCntntCheck = pFrm->IsTxtFrm() && pCMS && pCMS->bCntntCheck;
+        const SwRect aPaintRect( bCntntCheck ?
+                                 pFrm->UnionFrm() :
+                                 pFrm->PaintArea() );
+        // <--
+
         if ( aPaintRect.IsInside( rPoint ) &&
-            pFrm->GetCrsrOfst( pPos, rPoint, pCMS ) )
+             ( bCntntCheck || pFrm->GetCrsrOfst( pPos, rPoint, pCMS ) ) )
             bRet = TRUE;
         else
             pFrm = pFrm->GetNext();
