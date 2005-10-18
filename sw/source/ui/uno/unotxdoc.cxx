@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:25:20 $
+ *  last change: $Author: rt $ $Date: 2005-10-18 13:57:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -305,6 +305,25 @@ SwTxtFmtColl *lcl_GetParaStyle(const String& rCollName, SwDoc* pDoc)
     }
     return pColl;
 }
+void lcl_DisposeView( SfxViewFrame* pToClose, SwDocShell* pDocShell )
+{
+    // check if the view frame still exists
+    SfxViewFrame* pFound = SfxViewFrame::GetFirst( pDocShell,
+                                0,
+                                FALSE );
+    while(pFound)
+    {
+        if( pFound == pToClose)
+        {
+            pToClose->DoClose();
+            break;
+        }
+        pFound = SfxViewFrame::GetNext( *pFound,
+                                pDocShell,
+                                0,
+                                FALSE );
+    }
+}
 /* -----------------------------10.03.00 18:02--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -451,7 +470,8 @@ SwXTextDocument::SwXTextDocument(SwDocShell* pShell) :
     pxXDrawPage(0),
     pxXReferenceMarks(0),
     pxLinkTargetSupplier(0),
-    pxXRedlines(0)
+    pxXRedlines(0),
+    m_pHiddenViewFrame(0)
 {
 }
 /*-- 18.12.98 11:53:00---------------------------------------------------
@@ -659,6 +679,15 @@ void SwXTextDocument::disconnectController(const Reference< frame::XController >
 void SwXTextDocument::dispose(void) throw( RuntimeException )
 {
     SfxBaseModel::dispose();
+}
+/*-- 10.05.2005 14:14:39---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXTextDocument::close( sal_Bool bDeliverOwnership ) throw( util::CloseVetoException, RuntimeException )
+{
+    if(IsValid() && m_pHiddenViewFrame)
+        lcl_DisposeView( m_pHiddenViewFrame, pDocShell);
+    SfxBaseModel::close(bDeliverOwnership);
 }
 /*-- 18.12.98 13:12:25---------------------------------------------------
 
@@ -2547,26 +2576,33 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     if (!pDoc)
         throw RuntimeException();
 
+    SwDocShell *pDocShell = pDoc->GetDocShell();
         // #i38289
-        if(pDoc->IsBrowseMode()) {
-            SwDocShell *pDocShell = pDoc->GetDocShell();
+        if(pDoc->IsBrowseMode())
+        {
             pDocShell->ToggleBrowserMode(false,NULL);
         }
 
-    SwWrtShell *pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell *pWrtShell = pDocShell->GetWrtShell();
 
     sal_Int32 nRet = 0;
-    if( pWrtShell )
+    if( !pWrtShell )
     {
-        SwViewOptionAdjust_Impl aAdjust(*pWrtShell);
-        pWrtShell->SetPDFExportOption( sal_True );
-        // --> FME 2005-05-23 #122919# Force field update before PDF export:
-        pWrtShell->ViewShell::UpdateFlds(TRUE);
-        // <--
-        pWrtShell->CalcLayout();
-        pWrtShell->SetPDFExportOption( sal_False );
-        nRet = pDoc->GetPageCount();
+        //create a hidden view to be able to export as PDF also in print preview
+        m_pHiddenViewFrame = SFX_APP()->CreateViewFrame( *pDocShell, 2, TRUE );
+        SwView* pView = (SwView*) m_pHiddenViewFrame->GetViewShell();
+        pWrtShell = pView->GetWrtShellPtr();
     }
+
+    SwViewOptionAdjust_Impl aAdjust(*pWrtShell);
+    pWrtShell->SetPDFExportOption( sal_True );
+    // --> FME 2005-05-23 #122919# Force field update before PDF export:
+    pWrtShell->ViewShell::UpdateFlds(TRUE);
+    // <--
+    pWrtShell->CalcLayout();
+    pWrtShell->SetPDFExportOption( sal_False );
+    nRet = pDoc->GetPageCount();
+
     return nRet;
 }
 /* -----------------------------23.08.02 16:00--------------------------------
@@ -2766,6 +2802,11 @@ void SAL_CALL SwXTextDocument::render(
         // <--
 
         pVwSh->SetPDFExportOption( sal_False );
+        if( bLastPage && m_pHiddenViewFrame)
+        {
+            lcl_DisposeView( m_pHiddenViewFrame, pDocShell );
+            m_pHiddenViewFrame = 0;
+        }
         delete pViewOptionAdjust;
     }
 }
@@ -3495,4 +3536,5 @@ void SwXDocumentPropertyHelper::onChange()
     if(m_pDoc)
        m_pDoc->SetModified();
 }
+
 
