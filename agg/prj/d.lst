@@ -1,0 +1,9 @@
+
+..\%__SRC%\lib\iagg.lib %_DEST%\lib%_EXT%\iagg.lib
+..\%__SRC%\bin\agg?????.dll %_DEST%\bin%_EXT%\agg?????.dll
+
+..\%__SRC%\lib\libagg?????.* %_DEST%\lib%_EXT%\libagg?????.*
+..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+
+..\inc\*.h %_DEST%\inc%_EXT%\agg\.
