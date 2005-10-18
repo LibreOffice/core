@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonSession.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:13:12 $
+ *  last change: $Author: rt $ $Date: 2005-10-18 08:47:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ class NeonSession : public DAVSession
         // Note: Uncomment the following if locking support is required
         // NeonLockSession *      mNeonLockSession;
 
-        static bool       m_bSockInited;
+        static bool       m_bGlobalsInited;
 
     protected:
         virtual ~NeonSession();
