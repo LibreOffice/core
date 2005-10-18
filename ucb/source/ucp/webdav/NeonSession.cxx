@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:12:57 $
+ *  last change: $Author: rt $ $Date: 2005-10-18 08:47:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,10 @@
 #endif
 #ifndef NE_LOCKS_H
 #include <neon/ne_locks.h>
+#endif
+
+#ifndef __XML_PARSER_H__
+#include "libxml/parser.h"
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
@@ -133,7 +137,7 @@ RequestDataMap;
 
 // -------------------------------------------------------------------
 // static members!
-bool NeonSession::m_bSockInited = false;
+bool NeonSession::m_bGlobalsInited = false;
 
 // -------------------------------------------------------------------
 // Helper fuction
@@ -543,13 +547,17 @@ void NeonSession::Init()
     if ( m_pHttpSession == 0 )
     {
         // Ensure that Neon sockets are initialized.
-        if ( !m_bSockInited )
+        if ( !m_bGlobalsInited )
         {
             if ( ne_sock_init() != 0 )
                 throw DAVException( DAVException::DAV_SESSION_CREATE,
                                     NeonUri::makeConnectionEndPointString(
                                                     m_aHostName, m_nPort ) );
-            m_bSockInited = true;
+            // #122205# libxml2 needs to be initialized once if used by
+            // multithreaded programs like OOo
+            xmlInitParser();
+
+            m_bGlobalsInited = true;
         }
 
         const ucbhelper::InternetProxyServer & rProxyCfg = getProxySettings();
