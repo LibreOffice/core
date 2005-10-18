@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:39:15 $
+ *  last change: $Author: rt $ $Date: 2005-10-18 13:54:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2050,6 +2050,9 @@ bool ImpEditEngine::SpellSentence(EditView& rEditView, ::svx::SpellPortions& rTo
         bRet = true;
         //find the sentence boundaries
         EditSelection aSentencePaM = SelectSentence(aCurSel);
+        //make sure that the sentence is never smaller than the error range!
+        if(aSentencePaM.Max().GetIndex() < aCurSel.Max().GetIndex())
+            aSentencePaM.Max() = aCurSel.Max();
         //add the portion preceeding the error
         EditSelection aStartSelection(aSentencePaM.Min(), aCurSel.Min());
         if(aStartSelection.HasRange())
@@ -2130,8 +2133,9 @@ void ImpEditEngine::AddPortionIterated(
         {
             //iterate and search for language attribute changes
             //save the start and end positions
-            EditPaM aStart(rSel.Min());
-            EditPaM aEnd(rSel.Max());
+            bool bTest = rSel.Min().GetIndex() <= rSel.Max().GetIndex();
+            EditPaM aStart(bTest ? rSel.Min() : rSel.Max());
+            EditPaM aEnd(bTest ? rSel.Max() : rSel.Min());
             //iterate over the text to find changes in language
             //set the mark equal to the point
             EditPaM aCursor(aStart);
