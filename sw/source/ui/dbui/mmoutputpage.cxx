@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmoutputpage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:03:37 $
+ *  last change: $Author: rt $ $Date: 2005-10-18 13:49:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -726,7 +726,12 @@ IMPL_LINK(SwMailMergeOutputPage, SaveStartHdl_Impl, PushButton*, pButton)
     DBG_ASSERT( pSourceView, "source view missing")
     if(pSourceView)
     {
-        pSourceView->GetViewFrame()->GetDispatcher()->Execute(SID_SAVEDOC, SFX_CALLMODE_SYNCHRON);
+        SfxViewFrame* pSourceViewFrm = pSourceView->GetViewFrame();
+        uno::Reference< frame::XFrame > xFrame =
+                pSourceViewFrm->GetFrame()->GetFrameInterface();
+        xFrame->getContainerWindow()->setVisible(sal_True);
+        pSourceViewFrm->GetDispatcher()->Execute(SID_SAVEDOC, SFX_CALLMODE_SYNCHRON);
+        xFrame->getContainerWindow()->setVisible(sal_False);
         SwDocShell* pDocShell = pSourceView->GetDocShell();
         //if the document has been saved it's URL has to be stored for
         // later use and it can be closed now
