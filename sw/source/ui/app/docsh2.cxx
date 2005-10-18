@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:28:40 $
+ *  last change: $Author: rt $ $Date: 2005-10-18 13:48:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1403,9 +1403,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     {
                         // Fuer Global-Dokumente bieten wir jetzt auch nur
                         // noch den aktuellen an.
-                        pFlt = SwIoSystem::GetFilterOfFormat(
-                                String::CreateFromAscii(FILTER_XML),
-                                SwGlobalDocShell::Factory().GetFilterContainer() );
+                        pFlt = SwGlobalDocShell::Factory().GetFilterContainer()->
+                                    GetFilter4Extension( String::CreateFromAscii("odm")  );
                         nStrId = STR_LOAD_GLOBAL_DOC;
                     }
 
