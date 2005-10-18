@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlgrhlp.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:16:05 $
+ *  last change: $Author: rt $ $Date: 2005-10-18 13:54:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -411,7 +411,6 @@ SvXMLGraphicHelper::~SvXMLGraphicHelper()
 
 void SAL_CALL SvXMLGraphicHelper::disposing()
 {
-    Flush();
 }
 
 // -----------------------------------------------------------------------------
@@ -458,18 +457,12 @@ sal_Bool SvXMLGraphicHelper::ImplGetStreamNames( const ::rtl::OUString& rURLStr,
 
 uno::Reference < embed::XStorage > SvXMLGraphicHelper::ImplGetGraphicStorage( const ::rtl::OUString& rStorageName )
 {
-    if( mxRootStorage.is() && ( !mxGraphicStorage.is() || ( rStorageName != maCurStorageName ) ) )
+    uno::Reference < embed::XStorage > xRetStorage;
+    if( mxRootStorage.is() )
     {
-        if( mxGraphicStorage.is() && GRAPHICHELPER_MODE_WRITE == meCreateMode )
-        {
-            uno::Reference < embed::XTransactedObject > xTrans ( mxGraphicStorage, uno::UNO_QUERY );
-            if ( xTrans.is() )
-                xTrans->commit();
-        }
-
         try
         {
-            mxGraphicStorage = mxRootStorage->openStorageElement(
+            xRetStorage = mxRootStorage->openStorageElement(
                 maCurStorageName = rStorageName,
                 ( GRAPHICHELPER_MODE_WRITE == meCreateMode )
                     ? embed::ElementModes::READWRITE
@@ -478,21 +471,32 @@ uno::Reference < embed::XStorage > SvXMLGraphicHelper::ImplGetGraphicStorage( co
         catch ( uno::Exception& )
         {
         }
+        //#i43196# try again to open the storage element - this time readonly
+        if(!xRetStorage.is())
+        {
+            try
+            {
+                xRetStorage = mxRootStorage->openStorageElement( maCurStorageName = rStorageName, embed::ElementModes::READ );
+            }
+            catch ( uno::Exception& )
+            {
+            }
+        }
     }
 
-    return mxGraphicStorage;
+    return xRetStorage;
 }
 
 // -----------------------------------------------------------------------------
 
-uno::Reference < io::XStream > SvXMLGraphicHelper::ImplGetGraphicStream( const ::rtl::OUString& rPictureStorageName,
+SvxGraphicHelperStream_Impl SvXMLGraphicHelper::ImplGetGraphicStream( const ::rtl::OUString& rPictureStorageName,
                                                               const ::rtl::OUString& rPictureStreamName,
                                                               BOOL bTruncate )
 {
-    uno::Reference < io::XStream > xStm;
-    uno::Reference < embed::XStorage > xStorage( ImplGetGraphicStorage( rPictureStorageName ) );
+    SvxGraphicHelperStream_Impl aRet;
+    aRet.xStorage = ImplGetGraphicStorage( rPictureStorageName );
 
-    if( xStorage.is() )
+    if( aRet.xStorage.is() )
     {
         sal_Int32 nMode = embed::ElementModes::READ;
         if ( GRAPHICHELPER_MODE_WRITE == meCreateMode )
@@ -502,17 +506,17 @@ uno::Reference < io::XStream > SvXMLGraphicHelper::ImplGetGraphicStream( const :
                 nMode |= embed::ElementModes::TRUNCATE;
         }
 
-        xStm = xStorage->openStreamElement( rPictureStreamName, nMode );
-        if( xStm.is() && ( GRAPHICHELPER_MODE_WRITE == meCreateMode ) )
+        aRet.xStream = aRet.xStorage->openStreamElement( rPictureStreamName, nMode );
+        if( aRet.xStream.is() && ( GRAPHICHELPER_MODE_WRITE == meCreateMode ) )
         {
 //REMOVE                OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("Encrypted") );
             OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption") );
-            uno::Reference < beans::XPropertySet > xProps( xStm, uno::UNO_QUERY );
+            uno::Reference < beans::XPropertySet > xProps( aRet.xStream, uno::UNO_QUERY );
             xProps->setPropertyValue( aPropName, uno::makeAny( sal_True) );
         }
     }
 
-    return xStm;
+    return aRet;
 }
 
 // -----------------------------------------------------------------------------
@@ -553,10 +557,10 @@ Graphic SvXMLGraphicHelper::ImplReadGraphic( const ::rtl::OUString& rPictureStor
                                              const ::rtl::OUString& rPictureStreamName )
 {
     Graphic             aGraphic;
-    uno::Reference < io::XStream > xStm( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName, FALSE ) );
-    if( xStm.is() )
+    SvxGraphicHelperStream_Impl aStream( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName, FALSE ) );
+    if( aStream.xStream.is() )
     {
-        SvStream* pStream = utl::UcbStreamHelper::CreateStream( xStm );
+        SvStream* pStream = utl::UcbStreamHelper::CreateStream( aStream.xStream );
         GetGrfFilter()->ImportGraphic( aGraphic, String(), *pStream );
         delete pStream;
     }
@@ -576,14 +580,14 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
 
     if( aGrfObject.GetType() != GRAPHIC_NONE )
     {
-        uno::Reference < io::XStream > xStm( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName, FALSE ) );
-        if( xStm.is() )
+        SvxGraphicHelperStream_Impl aStream( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName, FALSE ) );
+        if( aStream.xStream.is() )
         {
             Graphic         aGraphic( (Graphic&) aGrfObject.GetGraphic() );
             const GfxLink   aGfxLink( aGraphic.GetLink() );
             const OUString  aMimeType( ImplGetGraphicMimeType( rPictureStreamName ) );
             uno::Any        aAny;
-            uno::Reference < beans::XPropertySet > xProps( xStm, uno::UNO_QUERY );
+            uno::Reference < beans::XPropertySet > xProps( aStream.xStream, uno::UNO_QUERY );
 
             // set stream properties (MediaType/Compression)
             if( aMimeType.getLength() )
@@ -596,7 +600,7 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
             aAny <<= bCompressed;
             xProps->setPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "Compressed" ) ), aAny );
 
-            SvStream* pStream = utl::UcbStreamHelper::CreateStream( xStm );
+            SvStream* pStream = utl::UcbStreamHelper::CreateStream( aStream.xStream );
             if( aGfxLink.GetDataSize() )
                 pStream->Write( aGfxLink.GetData(), aGfxLink.GetDataSize() );
             else
@@ -620,9 +624,12 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
                     bRet = ( pStream->GetError() == 0 );
                 }
             }
-
+            uno::Reference < embed::XTransactedObject > xStorage(
+                                    aStream.xStorage, uno::UNO_QUERY);
             delete pStream;
-            xStm->getOutputStream()->closeOutput();
+            aStream.xStream->getOutputStream()->closeOutput();
+            if( xStorage.is() )
+                xStorage->commit();
         }
     }
 
@@ -769,50 +776,6 @@ void SvXMLGraphicHelper::Destroy( SvXMLGraphicHelper* pSvXMLGraphicHelper )
         pSvXMLGraphicHelper->dispose();
         pSvXMLGraphicHelper->release();
     }
-}
-
-// -----------------------------------------------------------------------------
-
-void SvXMLGraphicHelper::Flush()
-{
-    if( ( GRAPHICHELPER_MODE_WRITE == meCreateMode ) && !mbDirect )
-    {
-        ::rtl::OUString     aPictureStorageName, aPictureStreamName;
-        URLSet::iterator    aSetIter( maURLSet.begin() ), aSetEnd( maURLSet.end() );
-
-        while( aSetIter != aSetEnd )
-        {
-            URLPairVector::iterator aPairIter( maGrfURLs.begin() ), aPairEnd( maGrfURLs.end() );
-
-            while( aPairIter != aPairEnd )
-            {
-                if( *aSetIter == (*aPairIter).first )
-                {
-                    if( ImplGetStreamNames( (*aPairIter).second, aPictureStorageName, aPictureStreamName ) )
-                    {
-                        DBG_ASSERT( String( aPictureStreamName ).GetTokenCount( '.' ) == 2, "invalid URL" );
-                        ImplWriteGraphic( aPictureStorageName, aPictureStreamName, String( aPictureStreamName ).GetToken( 0, '.' ) );
-                    }
-
-                    aPairIter = aPairEnd;
-                }
-                else
-                    aPairIter++;
-            }
-
-            aSetIter++;
-        }
-
-        mbDirect = sal_True;
-    }
-    if( GRAPHICHELPER_MODE_WRITE == meCreateMode )
-    {
-        uno::Reference < embed::XTransactedObject > xStorage(
-                ImplGetGraphicStorage( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(XML_GRAPHICSTORAGE_NAME) ) ), uno::UNO_QUERY);
-        if( xStorage.is() )
-            xStorage->commit();
-    }
-
 }
 
 // -----------------------------------------------------------------------------
