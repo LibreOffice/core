@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwSpellDialogChildWindow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:09:18 $
+ *  last change: $Author: rt $ $Date: 2005-10-18 13:50:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,7 +243,9 @@ SwSpellDialogChildWindow::~SwSpellDialogChildWindow ()
   -----------------------------------------------------------------------*/
 SfxChildWinInfo SwSpellDialogChildWindow::GetInfo (void) const
 {
-    return svx::SpellDialogChildWindow::GetInfo();
+    SfxChildWinInfo aInfo = svx::SpellDialogChildWindow::GetInfo();
+    aInfo.bVisible = FALSE;
+    return aInfo;
 }
 
 /*-- 09.09.2003 10:39:40---------------------------------------------------
@@ -635,7 +637,7 @@ void SwSpellDialogChildWindow::InvalidateSpellDialog()
 {
     SwWrtShell* pWrtShell = GetWrtShell_Impl();
     if(!m_pSpellState->m_bInitialCall && pWrtShell)
-        pWrtShell->SpellEnd();
+        pWrtShell->SpellEnd(0, false);
     m_pSpellState->Reset();
     svx::SpellDialogChildWindow::InvalidateSpellDialog();
 
