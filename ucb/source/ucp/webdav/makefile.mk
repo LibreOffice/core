@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 16:15:13 $
+#   last change: $Author: rt $ $Date: 2005-10-18 08:47:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,8 @@ NO_BSYMBOLIC=TRUE
 CFLAGS+= $(NEON_CFLAGS)
 .ELSE
 NEONINCDIR=external$/neon
-CFLAGS+= -I$(SOLARINCDIR)$/$(NEONINCDIR)
+LIBXMLINCDIR=external$/libxml
+CFLAGS+= -I$(SOLARINCDIR)$/$(NEONINCDIR) -I$(SOLARINCDIR)$/$(LIBXMLINCDIR)
 .ENDIF
 
 # --- General -----------------------------------------------------
