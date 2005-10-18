@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 19:37:31 $
+#   last change: $Author: rt $ $Date: 2005-10-18 08:48:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,9 @@ PATCH_FILE_NAME=$(TARFILE_NAME).patch
 CONFIGURE_DIR=win32
 CONFIGURE_ACTION=cscript configure.js
 CONFIGURE_FLAGS=iconv=no sax1=yes
+.IF "$(debug)"!=""
+CONFIGURE_FLAGS+=debug=yes
+.ENDIF
 BUILD_ACTION=nmake
 BUILD_DIR=$(CONFIGURE_DIR)
 .ELSE
