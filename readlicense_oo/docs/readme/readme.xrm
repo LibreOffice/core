@@ -7,8 +7,8 @@
 			<Text id="a" xml:lang="de">Willkommen</Text>
 		</Paragraph>
 		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US">Last updated $Date: 2005-10-13 09:28:03 $</Text>
-			<Text id="a" xml:lang="de">Letztes Update $Date: 2005-10-13 09:28:03 $</Text>
+			<Text id="a" xml:lang="en-US">Last updated $Date: 2005-10-18 11:54:22 $</Text>
+			<Text id="a" xml:lang="de">Letztes Update $Date: 2005-10-18 11:54:22 $</Text>
 		</Paragraph>
 		<Paragraph id="A3" style="H1">
 			<Text id="a" xml:lang="en-US">OpenOffice.org 2.0 ReadMe</Text>
@@ -179,9 +179,8 @@
 			<List>
 				<Text id="s2we35" xml:lang="de">Linux Kernel Version 2.2.13 oder höher</Text>
 				<Text id="s2we35" xml:lang="en-US">Linux Kernel version 2.2.13 or higher</Text>
-		<Text id="s253we" xml:lang="de">glibc2 Version 2.2.4 oder höher</Text>
+				<Text id="s253we" xml:lang="de">glibc2 Version 2.2.4 oder höher</Text>
 				<Text id="s253we" xml:lang="en-US">glibc2 version 2.2.4 or higher</Text>
-		<Text id="s2etfseg" xml:lang="de">Pentium-kompatibler PC</Text>
 		                <Text id="s2etfseg" xml:lang="de">Pentium kompatibler PC</Text>
 				<Text id="s2etfseg" xml:lang="en-US">Pentium compatible PC</Text>
 				<Text id="s2ssdfe" xml:lang="de">64 MB RAM</Text>
@@ -200,9 +199,8 @@
 			<List>
 				<Text id="ppcs2we35" xml:lang="de">Linux Kernel Version 2.2.13 oder höher</Text>
 				<Text id="ppcs2we35" xml:lang="en-US">Linux Kernel version 2.2.13 or higher</Text>
-		<Text id="ppcs253we" xml:lang="de">glibc2 Version 2.2.4 oder höher</Text>
+				<Text id="ppcs253we" xml:lang="de">glibc2 Version 2.2.4 oder höher</Text>
 				<Text id="ppcs253we" xml:lang="en-US">glibc2 version 2.2.4 or higher</Text>
-		<Text id="ppcs2etfseg" xml:lang="de">PowerPC-kompatibler G3</Text>
 		                <Text id="ppcs2etfseg" xml:lang="de">PowerPC kompatibler G3</Text>
 				<Text id="ppcs2etfseg" xml:lang="en-US">PowerPC compatible G3</Text>
 				<Text id="ppcs2ssdfe" xml:lang="de">128 MB RAM</Text>
@@ -220,16 +218,15 @@
 						<Paragraph id="Macxp" os="MACOSX" cpuname="POWERPC">
 			<List>
 				<Text id="macxp2we35" xml:lang="de">Mac OS X 10.3.4 oder höher</Text>
-				<Text id="macxpwe35" xml:lang="en-US">Mac OS X 10.3.4 or higher</Text>
-		<Text id="macxps2etfseg" xml:lang="de">PowerPC-kompatibler G3</Text>
-		                <Text id="ppcs2etfseg" xml:lang="de">PowerPC kompatibler G3</Text>
+				<Text id="macxp2we35" xml:lang="en-US">Mac OS X 10.3.4 or higher</Text>
+		                <Text id="macxps2etfseg" xml:lang="de">PowerPC kompatibler G3</Text>
 				<Text id="macxps2etfseg" xml:lang="en-US">PowerPC compatible G3</Text>
 				<Text id="macxps2ssdfe" xml:lang="de">128 MB RAM</Text>
 				<Text id="macxps2ssdfe" xml:lang="en-US">128 MB RAM</Text>
 		<Text id="macxpn42dfgf" xml:lang="de">300 MB (CJK-Version: 350 MB) verfügbarer Festplattenplatz</Text>
 				<Text id="macxpn42dfgf" xml:lang="en-US">300 MB (CJK version: 350 MB) available hard disk space</Text>
 		<Text id="macxpghjhhr" xml:lang="de">X-Server (Apple X11 oder XDarwin 1.0) mit einer Bildschirmauflösung von 800x600 Punkten oder höher, mindestens 256 Farben</Text>
-				<Text id="macxpghjhhr" xml:lang="en-US">X-Server (Apple's X11 or XDarwin1.0) with 800x600 or higher resolution, with at least 256 colors</Text>
+				<Text id="macxpghjhhr" xml:lang="en-US">X Server (Apple's X11 or XDarwin 1.0) with 800x600 or higher resolution, with at least 256 colors</Text>
 		<Text id="macxpwd2dff" xml:lang="de">Gnome 2.0 oder höher für die Unterstützung von AT-Technologien (Assistive Technology Tools) über Java Accessibility</Text>
 				<Text id="macxpwd2dff" xml:lang="en-US">Gnome 2.0 or higher required for Assistive Technology Tools</Text>
 		<Text id="macxpfhrtz5" xml:lang="de">Aquawm oder anderen X11 Window Manager</Text>
