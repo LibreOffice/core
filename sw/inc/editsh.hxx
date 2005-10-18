@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:43:41 $
+ *  last change: $Author: rt $ $Date: 2005-10-18 13:47:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -723,7 +723,7 @@ public:
     void SpellStart( SwDocPositions eStart, SwDocPositions eEnde,
                      SwDocPositions eCurr, SwConversionArgs *pConvArgs = 0 );
     // Selektionen wiederherstellen
-    void SpellEnd( SwConversionArgs *pConvArgs = 0 );
+    void SpellEnd( SwConversionArgs *pConvArgs = 0, bool bRestoreSelection = true );
     ::com::sun::star::uno::Any SpellContinue(
                     USHORT* pPageCnt, USHORT* pPageSt,
                     SwConversionArgs *pConvArgs = 0 );
