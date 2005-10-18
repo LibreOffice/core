@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CheckContentProvider.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:05:50 $
+ *  last change: $Author: rt $ $Date: 2005-10-18 08:45:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,6 +118,7 @@ public class CheckContentProvider extends ComplexTestCase {
         log.println("Open some new documents.");
         for (int i=0; i<countDocs; i++) {
             String fileName = utils.getFullTestURL(testDocuments[i]);
+            System.out.println("Doc " + i + ": " + fileName);
             xTextDoc[i] = WriterTools.loadTextDoc(xMSF, fileName);
         }
     }
@@ -268,7 +269,7 @@ public class CheckContentProvider extends ComplexTestCase {
     }
 
     /**
-     * Open a stream to the embedded picture of document 2.
+     * Open a stream to the embedded picture of document 1.
      */
     public void checkTDOCStream() {
         try {
@@ -284,7 +285,7 @@ public class CheckContentProvider extends ComplexTestCase {
                             "com.sun.star.ucb.UniversalContentBroker"));
             // create a content identifier from the ucb for tdoc
             XContentIdentifier xContentIdentifier =
-                            xContentIdentifierFactory.createContentIdentifier("vnd.sun.star.tdoc:/2/Pictures/10000000000000640000004B9C743800.gif");
+                            xContentIdentifierFactory.createContentIdentifier("vnd.sun.star.tdoc:/1/Pictures/10000000000000640000004B9C743800.gif");
             // get content
             xContent = xContentProvider.queryContent(xContentIdentifier);
 
