@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SpellDialog.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:30:19 $
+ *  last change: $Author: rt $ $Date: 2005-10-18 13:53:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1071,6 +1071,7 @@ bool SpellDialog::ApplyChangeAllList_Impl(SpellPortions& rSentence, bool &bHasRe
             if(xEntry.is())
             {
                 aStart->sText = xEntry->getReplacementText();
+                aStart->xAlternatives = 0;
                 bHasReplaced = true;
             }
             else
@@ -1498,8 +1499,6 @@ bool SentenceEditWindow_Impl::MarkNextError()
         pAction->SetErrorMove(m_nErrorStart, m_nErrorEnd, nOldErrorStart, nOldErrorEnd);
         const SpellErrorAttrib* pOldAttrib = static_cast<const SpellErrorAttrib*>(
                 pTextEngine->FindAttrib( TextPaM(0, nOldErrorStart), TEXTATTR_SPELL_ERROR ));
-        //if the window has been modified then an error should have been found
-        DBG_ASSERT(!bModified || pOldAttrib, "old error could not be found")
         pAction->SetErrorLanguageSelected(pOldAttrib && pOldAttrib->GetAlternatives().is() &&
                 SvxLocaleToLanguage( pOldAttrib->GetAlternatives()->getLocale()) ==
                                         GetSpellDialog()->aLanguageLB.GetSelectLanguage());
