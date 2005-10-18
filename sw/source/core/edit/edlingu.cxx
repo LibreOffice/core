@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edlingu.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:28:27 $
+ *  last change: $Author: rt $ $Date: 2005-10-18 13:48:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,7 +179,7 @@ public:
     // Der UI-Bauchladen:
     void _Start( SwEditShell *pSh, SwDocPositions eStart,
                 SwDocPositions eEnd );
-    void _End();
+    void _End(bool bRestoreSelection = true);
 };
 
 /*************************************************************************
@@ -354,17 +354,20 @@ void SwLinguIter::_Start( SwEditShell *pShell, SwDocPositions eStart,
 
 
 
-void SwLinguIter::_End()
+void SwLinguIter::_End(bool bRestoreSelection)
 {
     if( !pSh )
         return;
 
     ASSERT( pEnd, "SwEditShell::SpellEnd() ohne Start?");
-    while( nCrsrCnt-- )
-        pSh->Pop( sal_False );
+    if(bRestoreSelection)
+    {
+        while( nCrsrCnt-- )
+            pSh->Pop( sal_False );
 
-    pSh->KillPams();
-    pSh->ClearMark();
+        pSh->KillPams();
+        pSh->ClearMark();
+    }
     DELETEZ(pStart);
     DELETEZ(pEnd);
     DELETEZ(pCurr);
@@ -834,12 +837,12 @@ void SwEditShell::SpellStart(
  *                  SwEditShell::SpellEnd
  *************************************************************************/
 
-void SwEditShell::SpellEnd( SwConversionArgs *pConvArgs )
+void SwEditShell::SpellEnd( SwConversionArgs *pConvArgs, bool bRestoreSelection )
 {
     if (!pConvArgs && pSpellIter && pSpellIter->GetSh() == this)
     {
         ASSERT( pSpellIter, "wo ist mein Iterator?" );
-        pSpellIter->_End();
+        pSpellIter->_End(bRestoreSelection);
         delete pSpellIter, pSpellIter = 0;
     }
     if (pConvArgs && pConvIter && pConvIter->GetSh() == this)
