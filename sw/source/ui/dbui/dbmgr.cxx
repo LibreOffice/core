@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:51:23 $
+ *  last change: $Author: rt $ $Date: 2005-10-18 13:49:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -390,7 +390,19 @@ bool lcl_getCountFromResultSet( sal_Int32& rCount, const uno::Reference<XResultS
     }
     return false;
 }
-
+// #122799# copy compatibility options
+void lcl_CopyCompatibilityOptions( SwWrtShell& rSourceShell, SwWrtShell& rTargetShell)
+{
+    rTargetShell.SetParaSpaceMax( rSourceShell.IsParaSpaceMax(), rSourceShell.IsParaSpaceMaxAtPages() );
+    rTargetShell.SetTabCompat( rSourceShell.IsTabCompat() );
+    rTargetShell.SetAddExtLeading( rSourceShell.IsAddExtLeading() );
+    rTargetShell.SetUseVirtualDevice( rSourceShell.IsUseVirtualDevice() );
+    rTargetShell.SetAddParaSpacingToTableCells( rSourceShell.IsAddParaSpacingToTableCells() );
+    rTargetShell.SetUseFormerLineSpacing( rSourceShell.IsFormerLineSpacing() );
+    rTargetShell.SetUseFormerObjectPositioning( rSourceShell.IsFormerObjectPositioning() );
+    rTargetShell.SetConsiderWrapOnObjPos( rSourceShell.ConsiderWrapOnObjPos() );
+    rTargetShell.SetUseFormerTextWrapping( rSourceShell.IsFormerTextWrapping() );
+}
 }
 /* -----------------09.12.2002 12:35-----------------
  *
@@ -1445,6 +1457,8 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 nStartingPageNo = pSourceShell->GetVirtPageNum();
                 sStartingPageDesc = pSourceShell->GetPageDesc(
                                             pSourceShell->GetCurPageDesc()).GetName();
+                // #122799# copy compatibility options
+                lcl_CopyCompatibilityOptions( *pSourceShell, *pTargetShell);
             }
 
             PrintMonitor aPrtMonDlg(&pSourceShell->GetView().GetEditWin());
@@ -3152,6 +3166,8 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
         aOpt.SetMerge( sal_False );
         pTargetView->GetDocShell()->LoadStylesFromFile(
                 sSourceDocURL, aOpt, sal_True );
+        // #122799# copy compatibility options
+        lcl_CopyCompatibilityOptions( rSourceShell, *pTargetShell);
 
 
         long nStartRow, nEndRow;
