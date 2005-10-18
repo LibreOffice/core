@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 15:06:52 $
+#   last change: $Author: rt $ $Date: 2005-10-18 08:45:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,9 @@ CT_PACKAGE  = -o $(PACKAGE:s\$/\.\)
 # start the runner application
 CT_APP      = org.openoffice.Runner
 
+# test document path
+CT_TESTDOCS = -tdoc $(PWD)$/..$/test_documents
+
 # --- Targets ------------------------------------------------------
 
 run: ALLTAR
@@ -88,4 +91,4 @@ run: ALLTAR
 .INCLUDE :  target.mk
 
 Check%:
-    +java -cp $(CLASSPATH) $(CT_APP) $(CT_TESTBASE) $(CT_APPEXECCOMMAND) $(CT_PACKAGE).$@
+    +java -cp $(CLASSPATH) $(CT_APP) $(CT_TESTBASE) $(CT_TESTDOCS) $(CT_APPEXECCOMMAND) $(CT_PACKAGE).$@
