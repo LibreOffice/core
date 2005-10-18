@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crstrvl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:03:54 $
+ *  last change: $Author: rt $ $Date: 2005-10-18 13:47:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1086,11 +1086,11 @@ FASTBOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
         SwTxtAttr* pTxtAttr;
         SwCrsrMoveState aTmpState;
         aTmpState.bFieldInfo = TRUE;
-        aTmpState.bExactOnly = !( SwContentAtPos::SW_OUTLINE &
-                                    rCntntAtPos.eCntntAtPos );
+        aTmpState.bExactOnly = !( SwContentAtPos::SW_OUTLINE & rCntntAtPos.eCntntAtPos );
+        aTmpState.bCntntCheck = SwContentAtPos::SW_CONTENT_CHECK & rCntntAtPos.eCntntAtPos;
         aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
 
-        BOOL bCrsrFoundExact = GetLayout()->GetCrsrOfst( &aPos, aPt, &aTmpState );
+        const BOOL bCrsrFoundExact = GetLayout()->GetCrsrOfst( &aPos, aPt, &aTmpState );
         pTxtNd = aPos.nNode.GetNode().GetTxtNode();
 
         const SwNodes& rNds = GetDoc()->GetNodes();
@@ -1105,6 +1105,13 @@ FASTBOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                 bRet = TRUE;
             }
         }
+        // --> FME 2005-05-13 #i43742# New function: SW_CONTENT_CHECK
+        else if ( SwContentAtPos::SW_CONTENT_CHECK & rCntntAtPos.eCntntAtPos &&
+                  bCrsrFoundExact )
+        {
+            bRet = TRUE;
+        }
+        // <--
         // #i23726#
         else if( pTxtNd &&
                  SwContentAtPos::SW_NUMLABEL & rCntntAtPos.eCntntAtPos)
