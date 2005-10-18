@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdoc_docmgr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:00:05 $
+ *  last change: $Author: rt $ $Date: 2005-10-18 08:46:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,9 +242,9 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
 */
 
     if ( Event.EventName.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "OnLoad" ) ) // document loaded
+                RTL_CONSTASCII_STRINGPARAM( "OnLoadFinished" ) ) // document loaded
          || Event.EventName.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( "OnNew" ) ) ) // document created
+                RTL_CONSTASCII_STRINGPARAM( "OnCreate" ) ) ) // document created
     {
         if ( isOfficeDocument( Event.Source ) )
         {
@@ -284,7 +284,7 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
 
                 // Propagate document closure.
                 OSL_ENSURE( m_pDocEventListener,
-                    "OnLoad/OnNew event: no owner for insert event propagation!" );
+                    "OnLoadFinished/OnCreate event: no owner for insert event propagation!" );
 
                 if ( m_pDocEventListener )
                     m_pDocEventListener->notifyDocumentOpened( aDocId );
