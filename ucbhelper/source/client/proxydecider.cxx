@@ -4,9 +4,9 @@
  *
  *  $RCSfile: proxydecider.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:35:26 $
+ *  last change: $Author: rt $ $Date: 2005-10-18 08:47:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@
 
 #include <utility>
 #include <vector>
+#include <list>
 
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
@@ -111,6 +112,47 @@ public:
 typedef std::pair< WildCard, WildCard > NoProxyListEntry;
 
 //=========================================================================
+
+class HostnameCache
+{
+    typedef std::pair< rtl::OUString, rtl::OUString > HostListEntry;
+
+    std::list< HostListEntry >     m_aHostList;
+    sal_Int32                      m_nCapacity;
+
+public:
+    explicit HostnameCache( sal_Int32 nCapacity )
+        : m_nCapacity( nCapacity ) {}
+
+    bool get( const rtl::OUString & rKey, rtl::OUString & rValue ) const
+    {
+        std::list< HostListEntry >::const_iterator it
+            = m_aHostList.begin();
+        const std::list< HostListEntry >::const_iterator end
+            = m_aHostList.end();
+
+        while ( it != end )
+        {
+            if ( (*it).first == rKey )
+            {
+                rValue = (*it).second;
+                return true;
+            }
+            it++;
+        }
+        return false;
+    }
+
+    void put( const rtl::OUString & rKey, const rtl::OUString & rValue )
+    {
+        if ( m_aHostList.size() == m_nCapacity )
+            m_aHostList.resize( m_nCapacity / 2 );
+
+        m_aHostList.push_front( HostListEntry( rKey, rValue ) );
+    }
+};
+
+//=========================================================================
 class InternetProxyDecider_Impl :
     public cppu::WeakImplHelper1< util::XChangesListener >
 {
@@ -121,6 +163,7 @@ class InternetProxyDecider_Impl :
     sal_Int32                                m_nProxyType;
     uno::Reference< util::XChangesNotifier > m_xNotifier;
     std::vector< NoProxyListEntry >          m_aNoProxyList;
+    mutable HostnameCache                    m_aHostnames;
 
 private:
     bool shouldUseProxy( const rtl::OUString & rHost,
@@ -238,7 +281,8 @@ bool WildCard::Matches( const rtl::OUString& rString ) const
 
 InternetProxyDecider_Impl::InternetProxyDecider_Impl(
     const uno::Reference< lang::XMultiServiceFactory >& rxSMgr )
-: m_nProxyType( 0 )
+    : m_nProxyType( 0 ),
+      m_aHostnames( 256 ) // cache size
 {
     try
     {
@@ -531,10 +575,14 @@ const InternetProxyServer & InternetProxyDecider_Impl::getProxy(
             aHost = rHost;
         }
 
-        // This might be quite expensive (DNS lookup).
-        const osl::SocketAddr aAddr( aHost, nPort );
-        rtl::OUString aFullyQualifiedHost(
-            aAddr.getHostname().toAsciiLowerCase() );
+        rtl::OUString aFullyQualifiedHost;
+        if ( !m_aHostnames.get( aHost, aFullyQualifiedHost ) )
+        {
+            // This might be quite expensive (DNS lookup).
+            const osl::SocketAddr aAddr( aHost, nPort );
+            aFullyQualifiedHost = aAddr.getHostname().toAsciiLowerCase();
+            m_aHostnames.put( aHost, aFullyQualifiedHost );
+        }
 
         // Error resolving name? -> fallback.
         if ( !aFullyQualifiedHost.getLength() )
@@ -756,7 +804,6 @@ void InternetProxyDecider_Impl::setNoProxyList(
                     // This might be quite expensive (DNS lookup).
                     const osl::SocketAddr aAddr( aServer, 0 );
                     rtl::OUString aTmp = aAddr.getHostname().toAsciiLowerCase();
-
                     if ( aTmp != aServer.toAsciiLowerCase() )
                     {
                         if ( bIPv6Address )
