@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.147 $
+ *  $Revision: 1.148 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-17 13:31:41 $
+ *  last change: $Author: rt $ $Date: 2005-10-18 08:50:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1887,7 +1887,7 @@ End
 File gid_File_Lib_Ucbhelper
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
   #ifdef UNX
     Name = STRING(CONCAT3(libucbhelper3,COMID,UNXSUFFIX));
   #else
@@ -1907,7 +1907,7 @@ File gid_File_Lib_Ucpchelp1
     RegistryID = gid_Starregistry_Services_Rdb;
 End
 
-SPECIAL_UNO_LIB_FILE(gid_File_Lib_Ucpdav1,ucpdav1)
+SPECIAL_UNO_LIB_FILE_PATCH(gid_File_Lib_Ucpdav1,ucpdav1)
 
 SPECIAL_UNO_LIB_FILE(gid_File_Lib_Ucpfile1,ucpfile1)
 
@@ -1917,7 +1917,7 @@ SPECIAL_UNO_LIB_FILE(gid_File_Lib_Ucphier1,ucphier1)
 
 SPECIAL_UNO_LIB_FILE(gid_File_Lib_Ucppkg1,ucppkg1)
 
-SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Ucptdoc1, ucptdoc1.uno)
+SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH(gid_File_Ucptdoc1, ucptdoc1.uno)
 
 SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Ucpexpand1, ucpexpand1.uno)
 
