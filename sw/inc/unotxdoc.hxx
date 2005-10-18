@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:29:48 $
+ *  last change: $Author: rt $ $Date: 2005-10-18 13:47:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,6 +215,7 @@ class SwXBodyText;
 class SwXDrawPage;
 class SwUnoCrsr;
 class SwXDocumentPropertyHelper;
+class SfxViewFrame;
 
 typedef UnoActionContext* UnoActionContextPtr;
 SV_DECL_PTRARR(ActionContextArr, UnoActionContextPtr, 4, 4);
@@ -298,6 +299,8 @@ class SwXTextDocument : public SwXTextDocumentBaseClass,
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumerationAccess >*    pxXRedlines;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>      xXFormsContainer;
 
+    //temporary frame to enable PDF export if no valid view is available
+    SfxViewFrame*                                                                       m_pHiddenViewFrame;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>                    xPropertyHelper;
     SwXDocumentPropertyHelper*                                                              pPropertyHelper;
 
@@ -349,6 +352,9 @@ public:
     virtual void SAL_CALL dispose(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener) throw( ::com::sun::star::uno::RuntimeException );
+
+    //XCloseable
+    virtual void SAL_CALL close( sal_Bool bDeliverOwnership ) throw (::com::sun::star::util::CloseVetoException, ::com::sun::star::uno::RuntimeException);
 
     //XLineNumberingProperties
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL getLineNumberingProperties(void) throw( ::com::sun::star::uno::RuntimeException );
