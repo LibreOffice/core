@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmaddressblockpage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-06 10:53:28 $
+ *  last change: $Author: rt $ $Date: 2005-10-18 13:49:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -699,7 +699,6 @@ IMPL_LINK(SwCustomizeAddressBlockDialog, ListBoxSelectHdl_Impl, DDListBox*, pBox
   -----------------------------------------------------------------------*/
 IMPL_LINK(SwCustomizeAddressBlockDialog, EditModifyHdl_Impl, AddressMultiLineEdit*, EMPTYARG)
 {
-    m_aDragED.Modified();
     String sAddress = SwAddressPreview::FillData(
             GetAddress(),
             m_rConfigItem);
