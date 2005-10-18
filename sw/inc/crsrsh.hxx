@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:37:40 $
+ *  last change: $Author: rt $ $Date: 2005-10-18 13:46:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,17 +137,18 @@ struct SwContentAtPos
 {
     enum IsAttrAtPos
     {
-        SW_NOTHING      = 0x0000,
-        SW_FIELD        = 0x0001,
-        SW_CLICKFIELD   = 0x0002,
-        SW_FTN          = 0x0004,
-        SW_INETATTR     = 0x0008,
-        SW_TABLEBOXFML  = 0x0010,
-        SW_REDLINE      = 0x0020,
-        SW_OUTLINE      = 0x0040,
-        SW_TOXMARK      = 0x0080,
-        SW_REFMARK      = 0x0100,
-        SW_NUMLABEL     = 0x0200 // #i23726#
+        SW_NOTHING          = 0x0000,
+        SW_FIELD            = 0x0001,
+        SW_CLICKFIELD       = 0x0002,
+        SW_FTN              = 0x0004,
+        SW_INETATTR         = 0x0008,
+        SW_TABLEBOXFML      = 0x0010,
+        SW_REDLINE          = 0x0020,
+        SW_OUTLINE          = 0x0040,
+        SW_TOXMARK          = 0x0080,
+        SW_REFMARK          = 0x0100,
+        SW_NUMLABEL         = 0x0200, // #i23726#
+        SW_CONTENT_CHECK    = 0x0400  // --> FME 2005-05-13 #i43742# <--
 #ifndef PRODUCT
         ,SW_CURR_ATTRS      = 0x4000        // nur zum Debuggen
         ,SW_TABLEBOXVALUE   = 0x8000        // nur zum Debuggen
