@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.51 $
+#   $Revision: 1.52 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-28 13:11:05 $
+#   last change: $Author: rt $ $Date: 2005-10-18 08:26:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1726,6 +1726,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             my $controleventtable = installer::files::read_file($controleventtablename);
             my $controlconditiontablename = $languageidtdir . $installer::globals::separator . "ControlC.idt";
             my $controlconditiontable = installer::files::read_file($controlconditiontablename);
+            my $adminexecutetablename = $languageidtdir . $installer::globals::separator . "AdminExe.idt";
+            my $adminexecutetable = installer::files::read_file($adminexecutetablename);
 
             # The following addition of Custom Actions has to be done by scp as soon as old setup is removed
 
@@ -1839,6 +1841,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 # adding the patch custom action (CustomAc.idt and InstallE.idt (install and deinstall))
                 $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "InstallExchangeFiles", "65", "patchmsi.dll", "InstallPatchedFiles", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
                 if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "patchmsi.dll", "InstallExchangeFiles", "Not REMOVE=\"ALL\"", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+                if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($adminexecutetable, "patchmsi.dll", "InstallExchangeFiles", "", "end", $filesinproductlanguageresolvedarrayref, $adminexecutetablename); }
                 $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "DeinstallExchangeFiles", "65", "patchmsi.dll", "UninstallPatchedFiles", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
                 if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "patchmsi.dll", "DeinstallExchangeFiles", "REMOVE=\"ALL\"", "RemoveIniValues", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
                 $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "SetUserInstallMode", "65", "patchmsi.dll", "GetUserInstallMode", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
@@ -1883,6 +1886,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             installer::files::save_file($installuitablename, $installuitable);
             installer::files::save_file($controleventtablename, $controleventtable);
             installer::files::save_file($controlconditiontablename, $controlconditiontable);
+            installer::files::save_file($adminexecutetablename, $adminexecutetable);
 
             # Adding child projects to installation dynamically (also in feature table)
 
