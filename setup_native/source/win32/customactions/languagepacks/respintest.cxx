@@ -4,9 +4,9 @@
  *
  *  $RCSfile: respintest.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 13:07:34 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:13:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,15 +220,15 @@ extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
 
     if (isPatch=="1")
     {
-        string ProductMinor = GetMsiProperty(handle, TEXT("PRODUCTMINOR"));
+        string ProductMinor = GetMsiProperty(handle, TEXT("PRODUCTBUILDID"));
         int PatchProductMinor = atoi(ProductMinor.c_str());
 
         szValue[0] = '\0';
 
         GetPrivateProfileString(
             TEXT(sectionname.c_str()),
-            TEXT("ProductMinor"),
-            TEXT("106"),
+            TEXT("ProductBuildid"),
+            TEXT("8918"),
             szValue,
             elementsof(szValue),
             sInfofilePath.c_str()
