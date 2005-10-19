@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gallery1.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:07:22 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:09:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -689,14 +689,15 @@ BOOL Gallery::HasTheme( const String& rThemeName )
 
 // ------------------------------------------------------------------------
 
-BOOL Gallery::CreateTheme( const String& rThemeName )
+BOOL Gallery::CreateTheme( const String& rThemeName, UINT32 nNumFrom )
 {
     BOOL bRet = FALSE;
 
     if( !HasTheme( rThemeName ) && ( GetUserURL().GetProtocol() != INET_PROT_NOT_VALID ) )
     {
+        nLastFileNumber=nNumFrom > nLastFileNumber ? nNumFrom : ++nLastFileNumber;
         GalleryThemeEntry* pNewEntry = new GalleryThemeEntry( GetUserURL(), rThemeName,
-                                                              ++nLastFileNumber,
+                                                              nLastFileNumber,
                                                               FALSE, FALSE, TRUE, 0, FALSE );
 
         aThemeList.Insert( pNewEntry, LIST_APPEND );
