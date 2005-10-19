@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:47:33 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:35:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -372,6 +372,12 @@ protected:
     void PrepareMake();
     void OptPrepareMake();
     void MakePos();
+    // --> OD 2005-09-28 #b6329202#
+    // method formats next frame of table frame to assure keep attribute.
+    // in case of nested tables method <SwFrm::MakeAll()> is called to
+    // avoid format of superior table frame.
+    friend bool lcl_FormatNextCntntForKeep( SwTabFrm* pTabFrm );
+    // <--
     virtual void MakeAll() = 0;
         //Adjustierung der Frames einer Seite
     SwTwips AdjustNeighbourhood( SwTwips nDiff, BOOL bTst = FALSE );
