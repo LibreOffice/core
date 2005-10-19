@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:34:33 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:11:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -772,6 +772,17 @@ void SdrOle2Obj::Disconnect_Impl()
             {
                 // TODO/LATER: here we must assume that the destruction of the model is enough to make clear that we will not
                 // remove the object from the container, even if the DrawingObject itself is not destroyed (unfortunately this
+                // There is no real need to do the following removing of the object from the container
+                // in case the model has correct persistance, but in case of problems such a removing
+                // would make the behaviour of the office more stable
+
+                comphelper::EmbeddedObjectContainer* pContainer = xObjRef.GetContainer();
+                if ( pContainer )
+                {
+                    pContainer->CloseEmbeddedObject( xObjRef.GetObject() );
+                    xObjRef.AssignToContainer( NULL, mpImpl->aPersistName );
+                }
+
                 // happens later than the destruction of the model, so we can't assert that).
                 //DBG_ASSERT( bInDestruction, "Model is destroyed, but not me?!" );
                 //TODO/LATER: should be make sure that the ObjectShell also forgets the object, because we will close it soon?
@@ -849,6 +860,15 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
 
     // assignment to model has changed
     DBG_ASSERT( pSrcPers || !mpImpl->mbConnected, "Connected object without a model?!" );
+
+    DBG_ASSERT( pDestPers, "The destination model must have a persistence! Please submit an issue!" );
+    DBG_ASSERT( pDestPers != pSrcPers, "The source and the destination models should have different persistences! Problems are possible!" );
+
+    // this is a bug if the target model has no persistence
+    // no error handling is possible so just do nothing in this method
+    if ( !pDestPers )
+        return;
+
     RemoveListeners_Impl();
 
     if( pDestPers && pSrcPers && !IsEmptyPresObj() )
