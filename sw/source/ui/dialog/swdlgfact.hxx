@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdlgfact.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:15:41 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 08:30:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,7 +201,6 @@ class AbstarctSwLabDlg_Impl  : public AbstarctSwLabDlg
     virtual String      GetText() const; //add by CHINA001
      virtual const String& GetBusinessCardStr() const;
      virtual Printer *GetPrt();
-     virtual void MakeConfigItem(SwLabItem& rItem) const;
 };
 //add for SwLabDlg end
 
@@ -447,7 +446,7 @@ public:
     virtual VclAbstractDialog   * CreateSwChangeDBDlg( SwView& rVw, const ResId& rResId  ); //add for SwChangeDBDlg
     virtual SfxAbstractTabDialog *  CreateSwCharDlg( Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet, const ResId& rResId, // add for SwCharDlg
                                                 const String* pFmtStr = 0, BOOL bIsDrwTxtDlg = FALSE);
-    virtual AbstractSwConvertTableDlg* CreateSwConvertTableDlg ( SwView& rView, const ResId& rResId ); //add for SwConvertTableDlg
+    virtual AbstractSwConvertTableDlg* CreateSwConvertTableDlg ( SwView& rView, const ResId& rResId, bool bToTable ); //add for SwConvertTableDlg
     virtual VclAbstractDialog * CreateSwCaptionDialog ( Window *pParent, SwView &rV,const ResId& rResId); //add for SwCaptionDialog
 
     virtual AbstractSwInsertDBColAutoPilot* CreateSwInsertDBColAutoPilot( SwView& rView, // add for SwInsertDBColAutoPilot
