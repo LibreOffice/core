@@ -4,9 +4,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:39:49 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 08:33:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -835,6 +835,7 @@ long SwWrtShell::EndDrag(const Point *pPt, BOOL )
 // --> FME 2004-07-30 #i32329# Enhanced table selection
 FASTBOOL SwWrtShell::SelectTableRowCol( const Point& rPt, const Point* pEnd )
 {
+    MV_KONTEXT(this);
     SttSelect();
     return SelTblRowCol( rPt, pEnd );
 }
