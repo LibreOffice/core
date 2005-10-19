@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:16:54 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:49:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -259,7 +259,7 @@ class DummyInputStream : public ::cppu::WeakImplHelper1< XInputStream >
 
 //===========================================================================
 
-void copyInputToOutput_Impl( Reference< XInputStream >& aIn, Reference< XOutputStream >& aOut )
+void copyInputToOutput_Impl( const Reference< XInputStream >& aIn, const Reference< XOutputStream >& aOut )
 {
     sal_Int32 nRead;
     Sequence < sal_Int8 > aSequence ( n_ConstBufferSize );
@@ -1124,25 +1124,6 @@ sal_Bool ZipPackage::writeFileIsTemp()
         try
         {
             xTempOut->flush();
-
-            // in case the stream supports transactions it should be commited
-            uno::Reference< beans::XPropertySet > xProps( xTempOut, uno::UNO_QUERY );
-            if ( xProps.is() )
-            {
-                uno::Reference< embed::XTransactedObject > xTransactObj;
-                try
-                {
-                    // if the property provides a valid object the transaction is required
-                    xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TransactionSupport" ) ) )
-                            >>= xTransactObj;
-                }
-                catch( uno::Exception& )
-                {
-                }
-
-                if ( xTransactObj.is() )
-                    xTransactObj->commit();
-            }
 
             // in case the stream is based on a file it will implement the following interface
             // the call should be used to be sure that the contents are written to the file system
