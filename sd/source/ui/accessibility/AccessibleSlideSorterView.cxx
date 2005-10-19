@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleSlideSorterView.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:26:54 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:23:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,6 @@ public:
         ::Window* pWindow);
     ~Implementation (void);
 
-    void Dispose (void);
     void UpdateVisibility (void);
     void UpdateChildren (void);
     void Clear (void);
@@ -169,9 +168,12 @@ void AccessibleSlideSorterView::FireAccessibleEvent (
 
 void SAL_CALL AccessibleSlideSorterView::disposing (void)
 {
-    mpImpl->Dispose();
-    comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( mnClientId, *this );
-    mnClientId = 0;
+    if (mnClientId != 0)
+    {
+        comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( mnClientId, *this );
+        mnClientId = 0;
+    }
+    mpImpl.reset(NULL);
 }
 
 
@@ -405,15 +407,19 @@ void SAL_CALL AccessibleSlideSorterView::removeEventListener(
     {
         const osl::MutexGuard aGuard(maMutex);
 
-        sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, rxListener );
-        if ( !nListenerCount )
+        if (mnClientId != 0)
         {
-            // no listeners anymore
-            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-            // and at least to us not firing any events anymore, in case somebody calls
-            // NotifyAccessibleEvent, again
-            comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
-            mnClientId = 0;
+            sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener(
+                mnClientId, rxListener );
+            if ( !nListenerCount )
+            {
+                // no listeners anymore -> revoke ourself. This may lead to
+                // the notifier thread dying (if we were the last client),
+                // and at least to us not firing any events anymore, in case
+                // somebody calls NotifyAccessibleEvent, again
+                comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
+                mnClientId = 0;
+            }
         }
     }
 }
@@ -800,13 +806,6 @@ AccessibleSlideSorterView::Implementation::Implementation (
 
 
 AccessibleSlideSorterView::Implementation::~Implementation (void)
-{
-}
-
-
-
-
-void AccessibleSlideSorterView::Implementation::Dispose (void)
 {
     ReleaseListeners();
     Clear();
