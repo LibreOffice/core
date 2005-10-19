@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:09:16 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:34:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,6 +214,11 @@
 // <- #111827#
 
 #include <SwUndoFmt.hxx>
+// --> OD 2005-08-29 #TESTING#
+#ifndef _LAYOUTER_HXX
+#include <layouter.hxx>
+#endif
+// <--
 
 // Seiten-Deskriptoren
 SV_IMPL_PTRARR(SwPageDescs,SwPageDescPtr);
@@ -766,6 +771,11 @@ USHORT SwDoc::GetRefMarks( SvStringsDtor* pNames ) const
 
 void SwDoc::SetModified()
 {
+    // --> OD 2005-08-29 #125370#
+    SwLayouter::ClearMovedFwdFrms( *this );
+    SwLayouter::ClearObjsTmpConsiderWrapInfluence( *this );
+    SwLayouter::ClearFrmsNotToWrap( *this );
+    // <--
     // dem Link wird der Status returnt, wie die Flags waren und werden
     //  Bit 0:  -> alter Zustand
     //  Bit 1:  -> neuer Zustand
