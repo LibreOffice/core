@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-06 10:46:44 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:27:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1792,3 +1792,25 @@ uno::Sequence< OUString > SAL_CALL SdUnoEventsAccess::getSupportedServiceNames( 
     uno::Sequence< OUString > aStr( &maStrServiceName, 1 );
     return aStr;
 }
+
+void SdXShape::modelChanged( SdrModel* pNewModel )
+{
+    if( pNewModel )
+    {
+        uno::Reference< uno::XInterface > xModel( pNewModel->getUnoModel() );
+        mpModel = SdXImpressDocument::getImplementation( xModel );
+    }
+    else
+    {
+        mpModel = 0;
+    }
+}
+
+void SdXShape::pageChanged( SdrPage* pNewPage )
+{
+}
+
+void SdXShape::objectChanged( SdrObject* pNewObj )
+{
+}
+
