@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_resource_ooo.scp,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-18 13:55:09 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 08:47:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,7 @@ STD_RES_FILE( gid_File_Res_San, san )
 
 #endif
 
-STD_RES_FILE( gid_File_Res_Sch, sch )
+STD_RES_FILE_PATCH( gid_File_Res_Sch, sch )
 
 //
 // start binfilter #110743#
@@ -126,7 +126,7 @@ STD_RES_FILE( gid_File_Res_Bf_Sfx, bf_sfx )
 
 STD_RES_FILE( gid_File_Res_Sd, sd )
 
-STD_RES_FILE( gid_File_Res_Sfx, sfx )
+STD_RES_FILE_PATCH( gid_File_Res_Sfx, sfx )
 
 #ifdef UNX
 
@@ -138,7 +138,7 @@ STD_RES_FILE( gid_File_Res_Stt, stt )
 
 STD_RES_FILE( gid_File_Res_Svs, svs )
 
-STD_RES_FILE( gid_File_Res_Svt, svt )
+STD_RES_FILE_PATCH( gid_File_Res_Svt, svt )
 STD_RES_FILE_ONLY_PATCH( gid_File_Res_Svp, svp )
 
 STD_RES_FILE_PATCH( gid_File_Res_Svx, svx )
