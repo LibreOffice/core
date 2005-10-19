@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:54:39 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 08:31:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1168,9 +1168,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
         break;
     case FN_INSERT_PAGEHEADER:
     case FN_INSERT_PAGEFOOTER:
-    if(pItem)
+    if(pArgs && pArgs->Count())
     {
-        String sStyleName = ((const SfxStringItem*)pItem)->GetValue();
+        String sStyleName;
+        if(pItem)
+            sStyleName = ((const SfxStringItem*)pItem)->GetValue();
         BOOL bOn = TRUE;
         if( SFX_ITEM_SET == pArgs->GetItemState(FN_PARAM_1, FALSE, &pItem))
             bOn = ((const SfxBoolItem*)pItem)->GetValue();
