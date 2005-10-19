@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Effects.xcu,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:57:38 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:03:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1816,13 +1816,13 @@
             <node oor:name="wipe-left" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Wipe Left</value>
-                    <value xml:lang="de">Von links rollen</value>
+                    <value xml:lang="de">Von rechts rollen</value>
                 </prop>
             </node>
             <node oor:name="wipe-right" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Wipe Right</value>
-                    <value xml:lang="de">Von rechts rollen</value>
+                    <value xml:lang="de">Von links rollen</value>
                 </prop>
             </node>
             <node oor:name="wipe-up" oor:op="replace">
