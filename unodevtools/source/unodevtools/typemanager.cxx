@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typemanager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2005-09-09 13:50:40 $
+ *  last change: $Author: jsc $ $Date: 2005-10-19 08:55:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,7 +165,7 @@ sal_Bool UnoTypeManager::init(
             UNO_QUERY);
         if ( !xTDProvider.is() ) {
             OUString msg(RTL_CONSTASCII_USTRINGPARAM(
-                             "internal UNO problem, can't create type local"
+                             "internal UNO problem, can't create local"
                              " type description provider"));
             throw RuntimeException( msg, Reference< XInterface >());
         }
