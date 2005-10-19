@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:09:02 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 11:49:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -380,6 +380,8 @@ public:
         sal_Int32                   m_nFlags;
         sal_Int32                   m_nParent; // if not 0, parent's object number
         std::vector<sal_Int32>      m_aKids; // widget children, contains object numbers
+        std::vector<sal_Int32>      m_aKidsIndex; // widget children, contains index to m_aWidgets
+        rtl::OUString               m_aOnValue;
         sal_Int32                   m_nTabOrder; // lowest number gets first in tab order
         sal_Int32                   m_nRadioGroup;
         sal_Int32                   m_nMaxLen;
@@ -518,6 +520,8 @@ private:
     std::map< sal_Int32, sal_Int32 >    m_aRadioGroupWidgets;
     /* used to store control id during beginControlAppearance/endControlAppearance */
     sal_Int32                           m_nCurrentControl;
+    /* hash_map for field names, used to ensure unique field names */
+    std::hash_map< rtl::OString, sal_Int32, rtl::OStringHash > m_aFieldNameMap;
 
     /* contains Bitmaps for gradient functions until they are written
      *  to the file stream */
@@ -706,6 +710,8 @@ private:
     bool emitNoteAnnotations();
     // write the appearance streams of a widget
     bool emitAppearances( PDFWidget& rWidget, rtl::OStringBuffer& rAnnotDict );
+    // clean up radio button "On" values
+    void ensureUniqueRadioOnValues();
     // write all widgets
     bool emitWidgetAnnotations();
     // writes all annotation objects
@@ -735,7 +741,7 @@ private:
     void sortWidgets();
 
     // default appearences for widgets
-    sal_Int32 findRadioGroupWidget( sal_Int32 nGroup );
+    sal_Int32 findRadioGroupWidget( const PDFWriter::RadioButtonWidget& rRadio );
     Font replaceFont( const Font& rControlFont, const Font& rAppSetFont );
 
     // used for edit and listbox
@@ -747,6 +753,8 @@ private:
     void createDefaultEditAppearance( PDFWidget&, const PDFWriter::EditWidget& rWidget );
     void createDefaultListBoxAppearance( PDFWidget&, const PDFWriter::ListBoxWidget& rWidget );
 
+    /* ensure proper escapement and uniqueness of field names */
+    rtl::OString convertWidgetFieldName( const rtl::OUString& rString );
     /* adds an entry to m_aObjects and returns its index+1,
      * sets the offset to ~0
      */
