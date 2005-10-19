@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:59:40 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 08:23:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -648,7 +648,7 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, USHORT ins )
         String sSourceName(sDBName.GetToken(0, DB_DELIM));
         String sTableName(sDBName.GetToken(0).GetToken(1, DB_DELIM));
         if( pMgr && sSourceName.Len() && sTableName.Len() &&
-            pMgr->OpenDataSource(sSourceName, sTableName))
+            pMgr->OpenDataSource(sSourceName, sTableName, false))
         {
             String sColumnName( GetColumnName( sTmpName ));
             ASSERT (sColumnName.Len(), "DB-Spaltenname fehlt!");
@@ -686,6 +686,11 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, USHORT ins )
                 return &aErrExpr;
             }
         }
+        else
+        {
+            //data source was not available - set return to "NoValue"
+            aErrExpr.nValue.SetVoidValue();
+        }
         // auf keinen fall eintragen!!
         return &aErrExpr;
     }
@@ -705,9 +710,11 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, USHORT ins )
         String sSourceName(sDBName.GetToken(0, DB_DELIM));
         String sTableName(sDBName.GetToken(0).GetToken(1, DB_DELIM));
         if( pMgr && sSourceName.Len() && sTableName.Len() &&
-            pMgr->OpenDataSource(sSourceName, sTableName) &&
+            pMgr->OpenDataSource(sSourceName, sTableName, -1, false) &&
             !pMgr->IsInMerge())
             pNewExp->nValue.PutULong( pMgr->GetSelectedRecordId(sSourceName, sTableName));
+        else
+            pNewExp->nValue.SetVoidValue();
     }
 
     return pNewExp;
