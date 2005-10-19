@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:32:16 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:47:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -520,7 +520,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         if ( pMed->HasStorage_Impl() && pMed->GetStorage() == pSh->GetStorage() )
                         {
                             // TODO/LATER: faster creation of copy
-                            if ( !pSh->ConnectTmpStorage_Impl( pMed->GetStorage() ) )
+                            if ( !pSh->ConnectTmpStorage_Impl( pMed->GetStorage(), pMed ) )
                                 return;
                         }
 
@@ -781,7 +781,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     if ( pMedium->HasStorage_Impl() && pMedium->GetStorage() == xOldObj->GetStorage() )
                     {
                         // TODO/LATER: faster creation of copy
-                        if ( !xOldObj->ConnectTmpStorage_Impl( pMedium->GetStorage() ) )
+                        if ( !xOldObj->ConnectTmpStorage_Impl( pMedium->GetStorage(), pMedium ) )
                             return;
                     }
 
