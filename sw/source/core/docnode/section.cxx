@@ -4,9 +4,9 @@
  *
  *  $RCSfile: section.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:23:15 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 08:23:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1251,6 +1251,12 @@ int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
                 pSfxFlt = 0;        // dann neu detecten lassen
         }
 
+        if( nVersion )
+            pMed->GetItemSet()->Put( SfxInt16Item( SID_VERSION, nVersion ));
+
+        if( rPasswd.Len() )
+            pMed->GetItemSet()->Put( SfxStringItem( SID_PASSWORD, rPasswd ));
+
         if( !pSfxFlt )
             pSfxFlt = SwIoSystem::GetFileFilter( pMed->GetPhysicalName(), aEmptyStr, pMed );
 
@@ -1259,11 +1265,6 @@ int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
             // ohne Filter geht gar nichts
             pMed->SetFilter( pSfxFlt );
 
-            if( nVersion )
-                pMed->GetItemSet()->Put( SfxInt16Item( SID_VERSION, nVersion ));
-
-            if( rPasswd.Len() )
-                pMed->GetItemSet()->Put( SfxStringItem( SID_PASSWORD, rPasswd ));
 
             xDocSh = new SwDocShell( SFX_CREATE_MODE_INTERNAL );
             if( xDocSh->DoLoad( pMed ) )
