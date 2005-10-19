@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:26:35 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:36:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2815,7 +2815,10 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
             pDoc->GetTxtCollFromPoolSimple( RES_POOLCOLL_STANDARD, FALSE );
         pStNd = pDoc->GetNodes().MakeTextSection( aIdx, SwTableBoxStartNode,
                                                  pColl );
-        if( !pPrevSttNd )
+        // --> FLR 2005-08-30 #125369#
+        // Consider the case that a table is defined without a row.
+        if( !pPrevSttNd && pBox1 != NULL )
+        // <--
         {
             pBox1->pSttNd = pStNd;
             SwCntntNode *pCNd = pDoc->GetNodes()[ pStNd->GetIndex() + 1 ]
