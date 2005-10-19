@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layouter.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:17:32 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:35:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,9 +252,11 @@ SwLayouter::~SwLayouter()
     delete pLooping;
     // --> OD 2004-06-23 #i28701#
     delete mpMovedFwdFrms;
+    mpMovedFwdFrms = 0L;
     // <--
     // --> OD 2004-10-22 #i35911#
     delete mpObjsTmpConsiderWrapInfl;
+    mpObjsTmpConsiderWrapInfl = 0L;
     // <--
 }
 
