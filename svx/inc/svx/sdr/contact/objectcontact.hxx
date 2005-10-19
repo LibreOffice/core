@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectcontact.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:57:04 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:08:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,9 @@ namespace sdr
             // created and may be invalidated from MarkDrawHierarchyInvalid().
             // Initialisation is with sal_False of course.
             unsigned                                        mbDrawHierarchyValid : 1;
+
+            // ## test for preview renderer
+            unsigned                                        mbIsPreviewRenderer : 1;
 
             // method to create a ObjectAnimator. Needs to give a result.
             virtual sdr::animation::ObjectAnimator* CreateObjectAnimator();
@@ -219,6 +222,9 @@ namespace sdr
 
             // check if buffering of MasterPages is allowed. Default is sal_False.
             virtual sal_Bool IsMasterPageBufferingAllowed() const;
+
+            // check if this is a preview renderer. Default is sal_False.
+            bool IsPreviewRenderer() const { return mbIsPreviewRenderer; }
         };
     } // end of namespace contact
 } // end of namespace sdr
