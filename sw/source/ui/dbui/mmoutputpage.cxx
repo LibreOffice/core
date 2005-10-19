@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmoutputpage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-18 13:49:54 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 08:26:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -469,6 +469,12 @@ SwMailMergeOutputPage::SwMailMergeOutputPage( SwMailMergeWizard* _pParent) :
 
     m_aCopyToPB.SetClickHdl(LINK(this, SwMailMergeOutputPage, CopyToHdl_Impl));
 
+    m_aSaveAsOneRB.SetClickHdl(LINK(this, SwMailMergeOutputPage, DocumentSelectionHdl_Impl));
+    m_aSaveIndividualRB.SetClickHdl(LINK(this, SwMailMergeOutputPage, DocumentSelectionHdl_Impl));
+    m_aPrintAllRB.SetClickHdl(LINK(this, SwMailMergeOutputPage, DocumentSelectionHdl_Impl));
+    m_aSendAllRB.SetClickHdl(LINK(this, SwMailMergeOutputPage, DocumentSelectionHdl_Impl));
+
+    m_aFromRB.SetClickHdl(LINK(this, SwMailMergeOutputPage, DocumentSelectionHdl_Impl));
 }
 /*-- 02.04.2004 13:15:44---------------------------------------------------
 
@@ -584,7 +590,9 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
 
         } while(*(++pControl));
         if(!m_aFromRB.IsChecked() && !m_aSaveAsOneRB.IsChecked())
+        {
             m_aSaveIndividualRB.Check();
+        }
         m_aSeparatorFL.SetText(m_sSaveMergedST);
         //reposition the from/to line
         if(m_aFromRB.GetPosPixel().Y() != m_nFromToRBPos)
@@ -594,7 +602,6 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
             aPos =   m_aFromNF.GetPosPixel();    aPos.Y() = m_nFromToNFPos; m_aFromNF.SetPosPixel(aPos);
             aPos =   m_aToNF.GetPosPixel();      aPos.Y() = m_nFromToNFPos; m_aToNF.SetPosPixel(aPos);
         }
-
     }
     else if(&m_aPrintRB == pButton)
     {
@@ -695,8 +702,20 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
             aPos = m_aToNF.GetPosPixel();       aPos.Y() = nNewRBXPos + nRB_FT_Offset; m_aToNF.SetPosPixel(aPos);
         }
     }
+    m_aFromRB.GetClickHdl().Call(m_aFromRB.IsChecked() ? &m_aFromRB : 0);
 
     SetUpdateMode(FALSE);
+    return 0;
+}
+/*-- 22.08.2005 12:15:10---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+IMPL_LINK(SwMailMergeOutputPage, DocumentSelectionHdl_Impl, RadioButton*, pButton)
+{
+    sal_Bool bEnableFromTo = pButton == &m_aFromRB;
+    m_aFromNF.Enable(bEnableFromTo);
+    m_aToFT.Enable(bEnableFromTo);
+    m_aToNF.Enable(bEnableFromTo);
     return 0;
 }
 
@@ -978,18 +997,9 @@ IMPL_LINK(SwMailMergeOutputPage, PrintHdl_Impl, PushButton*, pButton)
     SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, pObjSh));
     rSh.GetNewDBMgr()->SetMergeType( DBMGR_MERGE_DOCUMENTS );
     SfxDispatcher *pDis = pTargetView->GetViewFrame()->GetDispatcher();
-    if(m_pTempPrinter)
-    {
-        SfxStringItem aPrinterName(SID_PRINTER_NAME, m_pTempPrinter->GetName());
-        pDis->Execute(SID_PRINTDOC,
-                SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aPrinterName, 0L);
-    }
-    else
-    {
-        SfxBoolItem aMergeSilent(SID_SILENT, TRUE);
-        pDis->Execute(SID_PRINTDOCDIRECT,
-                SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD/*, &aMergeSilent, 0L*/);
-    }
+    SfxBoolItem aMergeSilent(SID_SILENT, TRUE);
+    pDis->Execute(SID_PRINTDOCDIRECT,
+            SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aMergeSilent, 0L);
     SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, pObjSh));
 
     pTargetView->SetMailMergeConfigItem(0, 0, sal_False);
