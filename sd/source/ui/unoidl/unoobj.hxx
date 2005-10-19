@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:52:33 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:27:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,9 @@ public:
 
     virtual sal_Bool queryAggregation( const com::sun::star::uno::Type & rType, com::sun::star::uno::Any& aAny );
     virtual void dispose();
+    virtual void modelChanged( SdrModel* pNewModel );
+    virtual void pageChanged( SdrPage* pNewPage );
+    virtual void objectChanged( SdrObject* pNewObj );
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
