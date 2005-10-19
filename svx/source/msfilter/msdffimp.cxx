@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:39:57 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 11:58:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1452,7 +1452,8 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                                 bValidGluePoint = sal_True;
                                                 ((SdrObjCustomShape*)pO)->SetMergedItem( aGeometryItem );
                                                 SdrGluePointList* pList = pO->ForceGluePointList();
-                                                nId = (sal_Int32)((*pList)[ (sal_uInt16)nGluePoints ].GetId() + 3 );
+                                                if ( pList->GetCount() > nGluePoints )
+                                                    nId = (sal_Int32)((*pList)[ (sal_uInt16)nGluePoints ].GetId() + 3 );
                                             }
                                         }
                                     }
