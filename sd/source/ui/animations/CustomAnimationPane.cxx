@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationPane.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 10:45:34 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:24:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1573,10 +1573,12 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
         if( bHasTextReverse )
             pResultSet->getPropertyValue(nHandleTextReverse) >>= bTextReverse;
 
-        aIter = maListSelection.begin();
-        while( aIter != aEnd )
+        EffectSequence const aSelectedEffects( maListSelection );
+        EffectSequence::const_iterator iter( aSelectedEffects.begin() );
+        const EffectSequence::const_iterator iEnd( aSelectedEffects.end() );
+        while( iter != iEnd )
         {
-            CustomAnimationEffectPtr pEffect = (*aIter++);
+            CustomAnimationEffectPtr const& pEffect = (*iter++);
 
             EffectSequenceHelper* pEffectSequence = pEffect->getEffectSequence();
             if( !pEffectSequence )
