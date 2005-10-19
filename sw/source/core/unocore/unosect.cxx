@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:29:56 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 08:24:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -250,6 +250,7 @@ SwXTextSection::SwXTextSection(SwSectionFmt* pFmt, BOOL bIndexHeader) :
   -----------------------------------------------------------------------*/
 SwXTextSection::~SwXTextSection()
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
     delete pProps;
 }
 /*-- 10.12.98 14:47:08---------------------------------------------------
