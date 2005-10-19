@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:51:36 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:22:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1170,7 +1170,8 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                 // optional office:binary-data
                 rExport.AddEmbeddedGraphicObjectAsBase64( sImageURL );
             }
-            ImpExportText( xShape );
+            if( !bIsEmptyPresObj )
+                ImpExportText( xShape );
         }
 
         ImpExportEvents( xShape );
