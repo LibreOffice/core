@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.137 $
+ *  $Revision: 1.138 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:52:43 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:12:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -587,7 +587,19 @@ void SvxShape::ChangeModel( SdrModel* pNewModel )
     }
     // <--
 
+    // HACK #i53696# ChangeModel should be virtual, but it isn't. can't change that for 2.0.1
+    SvxShapeText* pShapeText = dynamic_cast< SvxShapeText* >( this );
+    if( pShapeText )
+    {
+        SvxTextEditSource* pTextEditSource = dynamic_cast< SvxTextEditSource* >( pShapeText->GetEditSource() );
+        if( pTextEditSource )
+            pTextEditSource->ChangeModel( pNewModel );
+    }
+
     pModel = pNewModel;
+
+    if( mpImpl->mpMaster )
+        mpImpl->mpMaster->modelChanged( pNewModel );
 }
 
 //----------------------------------------------------------------------
