@@ -4,9 +4,9 @@
  *
  *  $RCSfile: View.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:18:38 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:24:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,6 +157,14 @@ public:
     BOOL                    InsertData( const TransferableDataHelper& rDataHelper,
                                         const Point& rPos, sal_Int8& rDnDAction, BOOL bDrag,
                                         ULONG nFormat = 0, USHORT nPage = SDRPAGE_NOTFOUND, USHORT nLayer = SDRLAYER_NOTFOUND );
+    /** gets the metafile from the given transferable helper and insert it as a graphic shape.
+        @param bOptimize if set to true, the metafile is analyzed and if only one bitmap action is
+                         present, then is is inserted as a single graphic.
+    */
+    bool                    InsertMetaFile( TransferableDataHelper& rDataHelper,
+                                            const Point& rInsertPos,
+                                            ImageMap* pImageMap, bool bOptimize );
+
     SdrGrafObj*             InsertGraphic( const Graphic& rGraphic,
                                            sal_Int8& rAction, const Point& rPos,
                                            SdrObject* pSelectedObj, ImageMap* pImageMap );
