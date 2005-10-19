@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-17 14:52:03 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:20:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -922,6 +922,7 @@ namespace /* private */
         return lpEndPath;
     }
 
+#if 0
     //#####################################################
     // Same as GetLongPathName but also 95/NT4
     DWORD WINAPI GetCaseCorrectPathNameEx(
@@ -1005,6 +1006,22 @@ namespace /* private */
 
         return _tcslen( lpszLongPath );
     }
+#endif
+
+#if 1
+    inline size_t wcstoupper( LPWSTR lpStr )
+    {
+        size_t nLen = wcslen( lpStr );
+
+        for ( LPWSTR p = lpStr; p < lpStr + nLen; p++ )
+        {
+            *p = towupper(*p);
+        }
+
+        return nLen;
+    }
+
+#endif
 
     //#####################################################
     DWORD WINAPI GetCaseCorrectPathName(
@@ -1012,6 +1029,35 @@ namespace /* private */
         LPTSTR  lpszLongPath,   // path buffer
         DWORD   cchBuffer       // size of path buffer
     )
+#if 1
+    {
+        /* Special handling for "\\.\" as system root */
+        if ( lpszShortPath && 0 == wcscmp( lpszShortPath, WSTR_SYSTEM_ROOT_PATH ) )
+        {
+            if ( cchBuffer >= ELEMENTS_OF_ARRAY(WSTR_SYSTEM_ROOT_PATH) )
+            {
+                wcscpy( lpszLongPath, WSTR_SYSTEM_ROOT_PATH );
+                return ELEMENTS_OF_ARRAY(WSTR_SYSTEM_ROOT_PATH) - 1;
+            }
+            else
+                return ELEMENTS_OF_ARRAY(WSTR_SYSTEM_ROOT_PATH);
+        }
+        else
+        {
+            DWORD   nSrcLen = wcslen( lpszShortPath );
+
+            if ( cchBuffer > nSrcLen )
+            {
+                wcscpy( lpszLongPath, lpszShortPath );
+                wcstoupper( lpszLongPath );
+            }
+            else
+                nSrcLen++;
+
+            return nSrcLen;
+        }
+    }
+#else
     {
         /* Special handling for "\\.\" as system root */
         if ( lpszShortPath && 0 == wcscmp( lpszShortPath, WSTR_SYSTEM_ROOT_PATH ) )
@@ -1027,6 +1073,8 @@ namespace /* private */
         else
             return GetCaseCorrectPathNameEx( lpszShortPath, lpszLongPath, cchBuffer, 0 );
     }
+
+#endif
 
     //#####################################################
     #define CHARSET_SEPARATOR   TEXT("\\/")
