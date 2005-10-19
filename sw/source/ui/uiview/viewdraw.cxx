@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewdraw.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:13:49 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 08:32:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,13 +173,15 @@ void SwView::ExecDraw(SfxRequest& rReq)
     const SfxItemSet *pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem;
     const SfxAllEnumItem* pEItem = 0;
+    const SfxStringItem* pStringItem = 0;
     SdrView *pSdrView = pWrtShell->GetDrawView();
     sal_Bool bDeselect = sal_False;
 
     sal_uInt16 nSlotId = rReq.GetSlot();
     if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(GetPool().GetWhich(nSlotId), sal_False, &pItem))
     {
-        pEItem = (const SfxAllEnumItem*)pItem;
+        pEItem = dynamic_cast< const SfxAllEnumItem*>(pItem);
+        pStringItem = dynamic_cast< const SfxStringItem*>(pItem);
     }
 
     if (SID_INSERT_DRAW == nSlotId && pEItem)
@@ -323,7 +325,9 @@ void SwView::ExecDraw(SfxRequest& rReq)
     }
 
     //deselect if same shape is selected again (but different custom shapes do have same slot id)
-    if ( bDeselect || (nSlotId == nDrawSfxId && (nSlotId != SID_DRAW_CS_ID) ) )
+    if ( bDeselect || (nSlotId == nDrawSfxId &&
+            (!pStringItem || (pStringItem->GetValue() == sDrawCustom))
+                && (nSlotId != SID_DRAW_CS_ID) ) )
     {
         if (GetDrawFuncPtr())
         {
@@ -354,6 +358,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_SELECT:
             pFuncPtr = new DrawSelection(pWrtShell, pEditWin, this);
             nDrawSfxId = nFormSfxId = SID_OBJECT_SELECT;
+            sDrawCustom.Erase();
             break;
 
         case SID_DRAW_LINE:
@@ -366,6 +371,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_CAPTION_VERTICAL:
             pFuncPtr = new ConstRectangle(pWrtShell, pEditWin, this);
             nDrawSfxId = nSlotId;
+            sDrawCustom.Erase();
             break;
 
         case SID_DRAW_POLYGON_NOFILL:
@@ -373,6 +379,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_FREELINE_NOFILL:
             pFuncPtr = new ConstPolygon(pWrtShell, pEditWin, this);
             nDrawSfxId = nSlotId;
+            sDrawCustom.Erase();
             break;
 
         case SID_DRAW_ARC:
@@ -380,6 +387,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_CIRCLECUT:
             pFuncPtr = new ConstArc(pWrtShell, pEditWin, this);
             nDrawSfxId = nSlotId;
+            sDrawCustom.Erase();
             break;
 
         case SID_FM_CREATE_CONTROL:
@@ -404,10 +412,10 @@ void SwView::ExecDraw(SfxRequest& rReq)
             nDrawSfxId = nSlotId;
             if ( nSlotId != SID_DRAW_CS_ID )
             {
-                SFX_REQUEST_ARG( rReq, pEnumCommand, SfxStringItem, nSlotId, sal_False );
-                if ( pEnumCommand )
+                if ( pStringItem )
                 {
-                    aCurrShapeEnumCommand[ nSlotId - SID_DRAWTBX_CS_BASIC ] = pEnumCommand->GetValue();
+                    sDrawCustom = pStringItem->GetValue();
+                    aCurrShapeEnumCommand[ nSlotId - SID_DRAWTBX_CS_BASIC ] = sDrawCustom;
                     SfxBindings& rBind = GetViewFrame()->GetBindings();
                     rBind.Invalidate( nSlotId );
                     rBind.Update( nSlotId );
@@ -756,6 +764,7 @@ void SwView::SetDrawFuncPtr(SwDrawBase* pFuncPtr)
 void SwView::SetSelDrawSlot()
 {
     nDrawSfxId = SID_OBJECT_SELECT;
+    sDrawCustom.Erase();
 }
 
 /*--------------------------------------------------------------------
