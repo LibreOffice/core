@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 07:22:07 $
+#   last change: $Author: rt $ $Date: 2005-10-19 12:05:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -213,6 +213,12 @@ SHL4STDLIBS= \
     $(VOSLIB) \
     $(CANVASLIB) \
     $(SALLIB)
+# $(ISDLIB) is build in SHL1TARGET
+.IF "$(GUI)" == "UNX"
+SHL4DEPN=$(SHL1TARGETN)
+.ELSE
+SHL4DEPN=$(SHL1IMPLIBN)
+.ENDIF
 
 # --- Targets -------------------------------------------------------------
 
