@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:39:09 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 08:22:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -350,7 +350,8 @@ public:
     void            GetDSSelection(const SwDBData& rData, long& rSelStart, long& rSelEnd);
 
     // open the source while fields are updated - for the calculator only!
-    BOOL            OpenDataSource(const String& rDataSource, const String& rTableOrQuery, sal_Int32 nCommandType = -1);
+    BOOL            OpenDataSource(const String& rDataSource, const String& rTableOrQuery,
+                        sal_Int32 nCommandType = -1, bool bCreate = false);
     sal_uInt32      GetSelectedRecordId(const String& rDataSource, const String& rTableOrQuery, sal_Int32 nCommandType = -1);
     BOOL            GetColumnCnt(const String& rSourceName, const String& rTableName,
                             const String& rColumnName, sal_uInt32 nAbsRecordId, long nLanguage,
