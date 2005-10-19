@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 00:17:05 $
+#   last change: $Author: rt $ $Date: 2005-10-19 12:04:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,7 @@ IDLFILES=\
     XHatchWindowFactory.idl\
     XHatchWindow.idl\
     XPackageStructureCreator.idl\
+    XOptimizedStorage.idl\
     UnreachableStateException.idl\
     UseBackupException.idl\
     StateChangeInProgressException.idl\
