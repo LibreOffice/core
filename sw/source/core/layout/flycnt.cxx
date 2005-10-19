@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:11:38 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:35:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,11 @@
 #ifndef _SORTEDOBJS_HXX
 #include <sortedobjs.hxx>
 #endif
+// --> OD 2005-09-29 #125957#
+#ifndef _LAYOUTER_HXX
+#include <layouter.hxx>
+#endif
+// <--
 
 /*************************************************************************
 |*
@@ -435,18 +440,6 @@ void SwFlyAtCntFrm::MakeAll()
                     !ConsiderObjWrapInfluenceOfOtherObjs();
             // <--
 
-            // OD 2004-05-12 #i28701# - no format of anchor frame, if
-            // wrapping style influence is considered on object positioning
-            if ( bFormatAnchor )
-            {
-                // If the anchor is located inside a section, we better calculate
-                // the section first:
-                lcl_CalcUpperSection( *AnchorFrm() );
-                // --> OD 2005-06-07 #i50356#
-                GetAnchorFrmContainingAnchPos()->Calc();
-                // <--
-            }
-
             const SwFrm* pFooter = GetAnchorFrm()->FindFooterOrHeader();
             if( pFooter && !pFooter->IsFooterFrm() )
                 pFooter = NULL;
@@ -496,6 +489,28 @@ void SwFlyAtCntFrm::MakeAll()
                                                 GetPageFrm()->GetPhyPageNum() )
                     {
                         bConsiderWrapInfluenceDueToMovedFwdAnchor = true;
+                        // --> OD 2005-09-29 #125957# - mark anchor text frame
+                        // directly, that it is moved forward by object positioning.
+                        SwTxtFrm* pAnchorTxtFrm( static_cast<SwTxtFrm*>(AnchorFrm()) );
+                        const SwPageFrm* pAnchorPageFrm =
+                                GetAnchorFrmContainingAnchPos()->FindPageFrm();
+                        bool bInsert( true );
+                        sal_uInt32 nToPageNum( 0L );
+                        const SwDoc& rDoc = *(GetFrmFmt().GetDoc());
+                        if ( SwLayouter::FrmMovedFwdByObjPos(
+                                                rDoc, *pAnchorTxtFrm, nToPageNum ) )
+                        {
+                            if ( nToPageNum < pAnchorPageFrm->GetPhyPageNum() )
+                                SwLayouter::RemoveMovedFwdFrm( rDoc, *pAnchorTxtFrm );
+                            else
+                                bInsert = false;
+                        }
+                        if ( bInsert )
+                        {
+                            SwLayouter::InsertMovedFwdFrm( rDoc, *pAnchorTxtFrm,
+                                                           pAnchorPageFrm->GetPhyPageNum() );
+                        }
+                        // <--
                     }
                     // <--
                 }
