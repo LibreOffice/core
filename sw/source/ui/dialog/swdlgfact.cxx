@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdlgfact.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:15:19 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 08:30:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -306,10 +306,6 @@ const String& AbstarctSwLabDlg_Impl::GetBusinessCardStr() const
 Printer * AbstarctSwLabDlg_Impl::GetPrt()
 {
     return pDlg->GetPrt();
-}
-void AbstarctSwLabDlg_Impl::MakeConfigItem(SwLabItem& rItem) const
-{
-    pDlg->MakeConfigItem(rItem);
 }
 //add for SwLabDlg end
 
@@ -802,13 +798,14 @@ SfxAbstractTabDialog *  SwAbstractDialogFactory_Impl::CreateSwCharDlg(Window* pP
 // add for SwCharDlg end
 
 //add for SwConvertTableDlg begin
-AbstractSwConvertTableDlg* SwAbstractDialogFactory_Impl::CreateSwConvertTableDlg ( SwView& rView,const ResId& rResId )
+AbstractSwConvertTableDlg* SwAbstractDialogFactory_Impl::CreateSwConvertTableDlg (
+                                    SwView& rView,const ResId& rResId, bool bToTable )
 {
     SwConvertTableDlg* pDlg=NULL;
     switch ( rResId.GetId() )
     {
         case DLG_CONV_TEXT_TABLE :
-            pDlg = new SwConvertTableDlg( rView );
+            pDlg = new SwConvertTableDlg( rView, bToTable );
             break;
         default:
             break;
