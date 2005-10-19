@@ -25,6 +25,7 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\global\accelerator\es
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
 ..\%__SRC%\lib\isvx.lib %_DEST%\lib%_EXT%\isvx.lib
 ..\%__SRC%\slb\xdraw.lib %_DEST%\lib%_EXT%\svxsmrtd.lib
+..\%__SRC%\bin\gengal* %_DEST%\bin%_EXT%\gengal*
 ..\%__SRC%\bin\svxslots.tlb %_DEST%\bin%_EXT%\svxslots.tlb
 ..\%__SRC%\bin\cui*.dll %_DEST%\bin%_EXT%\cui*.dll
 ..\%__SRC%\bin\svx*.dll %_DEST%\bin%_EXT%\svx*.dll
