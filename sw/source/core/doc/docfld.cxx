@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfld.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:11:56 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 08:23:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1386,8 +1386,10 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, BOOL bUpdRefFlds )
             //!SECTION
 
 //          if( pGFld->IsInBodyTxt() )
-                pSect->SetCondHidden( aCalc.Calculate(
-                                        pSect->GetCondition() ).GetBool() );
+            SwSbxValue aValue = aCalc.Calculate(
+                                        pSect->GetCondition() );
+            if(!aValue.IsVoidValue())
+                pSect->SetCondHidden( aValue.GetBool() );
             continue;
         }
 
@@ -1406,15 +1408,23 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, BOOL bUpdRefFlds )
         case RES_HIDDENTXTFLD:
         {
             SwHiddenTxtField* pHFld = (SwHiddenTxtField*)pFld;
-            pHFld->SetValue( !aCalc.Calculate( pHFld->GetPar1() ).GetBool());
-            // Feld Evaluieren
-            pHFld->Evaluate(this);
+            SwSbxValue aValue = aCalc.Calculate( pHFld->GetPar1() );
+            sal_Bool bValue = !aValue.GetBool();
+            if(!aValue.IsVoidValue())
+            {
+                pHFld->SetValue( bValue );
+                // Feld Evaluieren
+                pHFld->Evaluate(this);
+            }
         }
         break;
         case RES_HIDDENPARAFLD:
         {
             SwHiddenParaField* pHPFld = (SwHiddenParaField*)pFld;
-            pHPFld->SetHidden( aCalc.Calculate( pHPFld->GetPar1() ).GetBool());
+            SwSbxValue aValue = aCalc.Calculate( pHPFld->GetPar1() );
+            sal_Bool bValue = aValue.GetBool();
+            if(!aValue.IsVoidValue())
+                pHPFld->SetHidden( bValue );
         }
         break;
         case RES_DBSETNUMBERFLD:
@@ -1518,8 +1528,10 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, BOOL bUpdRefFlds )
                     if( (!pUpdtFld || pUpdtFld == pTxtFld )
                         && pGFld->IsInBodyTxt() )
                     {
-                        pGFld->SetValue(aCalc.Calculate(
-                                        pGFld->GetFormula() ).GetDouble() );
+                        SwSbxValue aValue = aCalc.Calculate(
+                                        pGFld->GetFormula());
+                        if(!aValue.IsVoidValue())
+                            pGFld->SetValue(aValue.GetDouble() );
                     }
                 }
                 else
@@ -1551,9 +1563,10 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, BOOL bUpdRefFlds )
                     aNew += '=';
                     aNew += pSFld->GetFormula();
 
-                    double nErg = aCalc.Calculate( aNew ).GetDouble();
+                    SwSbxValue aValue = aCalc.Calculate( aNew );
+                    double nErg = aValue.GetDouble();
                     // nur ein spezielles Feld updaten ?
-                    if( !pUpdtFld || pUpdtFld == pTxtFld )
+                    if( !aValue.IsVoidValue() && (!pUpdtFld || pUpdtFld == pTxtFld) )
                     {
                         pSFld->SetValue( nErg );
 
@@ -1616,7 +1629,7 @@ void SwDoc::UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& rCalc )
 
         SwDBData aDBData( rDBFld.GetDBData(this) );
 
-        if( pMgr->OpenDataSource( aDBData.sDataSource, aDBData.sCommand ))
+        if( pMgr->OpenDataSource( aDBData.sDataSource, aDBData.sCommand, -1, false ))
             rCalc.VarChange( lcl_GetDBVarName( *this, rDBFld),
                         pMgr->GetSelectedRecordId(aDBData.sDataSource, aDBData.sCommand, aDBData.nCommandType) );
     }
