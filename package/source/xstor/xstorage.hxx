@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xstorage.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:55:37 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:49:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,10 @@
 
 #ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
 #include <com/sun/star/embed/XStorage.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_EMBED_XOPTIMIZEDSTORAGE_HPP_
+#include <com/sun/star/embed/XOptimizedStorage.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_EMBED_XSTORAGERAWACCESS_HPP_
@@ -180,6 +184,7 @@ struct StorageHolder_Impl
 
 typedef ::std::list< StorageHolder_Impl > OStorageList_Impl;
 
+class SwitchablePersistenceStream;
 struct OStorage_Impl
 {
     SotMutexHolderRef           m_rMutexRef;
@@ -216,6 +221,8 @@ struct OStorage_Impl
     sal_Bool        m_bControlMediaType;
     ::rtl::OUString m_aMediaType;
     sal_Bool        m_bMTFallbackUsed;
+
+    SwitchablePersistenceStream* m_pSwitchStream;
 
     //////////////////////////////////////////
     // Constructors
@@ -265,7 +272,8 @@ struct OStorage_Impl
     void CopyToStorage( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xDest );
     void CopyStorageElement( SotElement_Impl* pElement,
                             ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > xDest,
-                            ::rtl::OUString aName );
+                            ::rtl::OUString aName,
+                            sal_Bool bDirect );
 
     void SetModified( sal_Bool bModified );
 
@@ -310,6 +318,7 @@ class OStorage  : public ::com::sun::star::lang::XTypeProvider
                 // , public ::com::sun::star::lang::XComponent
                 , public ::com::sun::star::embed::XEncryptionProtectedSource
                 , public ::com::sun::star::beans::XPropertySet
+                , public ::com::sun::star::embed::XOptimizedStorage
                 , public ::cppu::OWeakObject
 {
     OStorage_Impl*  m_pImpl;
@@ -667,6 +676,58 @@ public:
                 ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException );
 
+    //____________________________________________________________________________________________________
+    //  XOptimizedStorage
+    //____________________________________________________________________________________________________
+    virtual void SAL_CALL insertRawNonEncrStreamElementDirect( const ::rtl::OUString& sStreamName, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream )
+        throw ( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::packages::NoRawFormatException,
+                ::com::sun::star::container::ElementExistException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException,
+                ::com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL insertStreamElementDirect( const ::rtl::OUString& sStreamName, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps )
+        throw ( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::container::ElementExistException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException,
+                ::com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL copyElementDirectlyTo( const ::rtl::OUString& sSourceName, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XOptimizedStorage >& xTargetStorage, const ::rtl::OUString& sTargetName )
+        throw ( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::container::NoSuchElementException,
+                ::com::sun::star::container::ElementExistException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException,
+                ::com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL writeAndAttachToStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xStream )
+        throw ( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException,
+                ::com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL attachToURL( const ::rtl::OUString& sURL, sal_Bool bReadOnly )
+        throw ( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException,
+                ::com::sun::star::uno::RuntimeException );
+
+    virtual ::com::sun::star::uno::Any SAL_CALL getElementPropertyValue( const ::rtl::OUString& sElementName, const ::rtl::OUString& sPropertyName )
+        throw ( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::container::NoSuchElementException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::beans::UnknownPropertyException,
+                ::com::sun::star::beans::PropertyVetoException,
+                ::com::sun::star::embed::StorageWrappedTargetException,
+                ::com::sun::star::uno::RuntimeException);
 };
 
 #endif
