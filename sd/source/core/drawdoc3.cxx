@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 10:42:24 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:23:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+
+#include "comphelper/anytostring.hxx"
+#include "cppuhelper/exc_hlp.hxx"
 
 #include <utility>
 #include <algorithm>
@@ -1388,19 +1391,33 @@ SvStream* SdDrawDocument::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) 
                 const String aPictureStorageName( aPicturePath.GetToken( 0, '/' ) );
                 if( xStor->isStorageElement( aPictureStorageName )  )
                 {
-                    uno::Reference < embed::XStorage > xPictureStorage =
-                            xStor->openStorageElement( aPictureStorageName, embed::ElementModes::READ );
                     try
                     {
-                        if( xPictureStorage.is() && xPictureStorage->isStreamElement( aPictureStreamName ) )
+                        uno::Reference < embed::XStorage > xPictureStorage =
+                                xStor->openStorageElement( aPictureStorageName, embed::ElementModes::READ );
+                        try
                         {
-                            uno::Reference < io::XStream > xStream = xPictureStorage->openStreamElement( aPictureStreamName, embed::ElementModes::READ );
-                            if( xStream.is() )
-                                pRet = ::utl::UcbStreamHelper::CreateStream( xStream );
+                            if( xPictureStorage.is() && xPictureStorage->isStreamElement( aPictureStreamName ) )
+                            {
+                                uno::Reference < io::XStream > xStream = xPictureStorage->openStreamElement( aPictureStreamName, embed::ElementModes::READ );
+                                if( xStream.is() )
+                                    pRet = ::utl::UcbStreamHelper::CreateStream( xStream );
+                            }
+                        }
+                        catch( container::NoSuchElementException& )
+                        {
                         }
                     }
-                    catch( container::NoSuchElementException& )
+                    catch( uno::Exception& e )
                     {
+                        (void)e;
+                        DBG_ERROR(
+                            (rtl::OString("sd::SdDrawDocument::GetDocumentStream(), "
+                                    "exception caught: ") +
+                            rtl::OUStringToOString(
+                                comphelper::anyToString( cppu::getCaughtException() ),
+                                RTL_TEXTENCODING_UTF8 ) +
+                                rtl::OString("\r\nATTENTION: Graphics may get lost now, please inform CL or KA!") ).getStr() );
                     }
                 }
             }
