@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gdimtf.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:58:17 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:38:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2179,6 +2179,67 @@ ULONG GDIMetaFile::GetChecksum() const
     }
 
     return nCrc;
+}
+
+// ------------------------------------------------------------------------
+
+ULONG GDIMetaFile::GetSizeBytes() const
+{
+    ULONG nSizeBytes = 0;
+
+    for( ULONG i = 0, nCount = GetActionCount(); i < nCount; ++i )
+    {
+        MetaAction* pAction = GetAction( i );
+
+        // default action size is set to 32 (=> not the exact value)
+        nSizeBytes += 32;
+
+        // add sizes for large action content
+        switch( pAction->GetType() )
+        {
+            case( META_BMP_ACTION ): nSizeBytes += ( (MetaBmpAction*) pAction )->GetBitmap().GetSizeBytes(); break;
+            case( META_BMPSCALE_ACTION ): nSizeBytes += ( (MetaBmpScaleAction*) pAction )->GetBitmap().GetSizeBytes(); break;
+            case( META_BMPSCALEPART_ACTION ): nSizeBytes += ( (MetaBmpScalePartAction*) pAction )->GetBitmap().GetSizeBytes(); break;
+
+            case( META_BMPEX_ACTION ): nSizeBytes += ( (MetaBmpExAction*) pAction )->GetBitmapEx().GetSizeBytes(); break;
+            case( META_BMPEXSCALE_ACTION ): nSizeBytes += ( (MetaBmpExScaleAction*) pAction )->GetBitmapEx().GetSizeBytes(); break;
+            case( META_BMPEXSCALEPART_ACTION ): nSizeBytes += ( (MetaBmpExScalePartAction*) pAction )->GetBitmapEx().GetSizeBytes(); break;
+
+            case( META_MASK_ACTION ): nSizeBytes += ( (MetaMaskAction*) pAction )->GetBitmap().GetSizeBytes(); break;
+            case( META_MASKSCALE_ACTION ): nSizeBytes += ( (MetaMaskScaleAction*) pAction )->GetBitmap().GetSizeBytes(); break;
+            case( META_MASKSCALEPART_ACTION ): nSizeBytes += ( (MetaMaskScalePartAction*) pAction )->GetBitmap().GetSizeBytes(); break;
+
+            case( META_POLYLINE_ACTION ): nSizeBytes += ( ( (MetaPolyLineAction*) pAction )->GetPolygon().GetSize() * sizeof( Point ) ); break;
+            case( META_POLYGON_ACTION ): nSizeBytes += ( ( (MetaPolygonAction*) pAction )->GetPolygon().GetSize() * sizeof( Point ) ); break;
+            case( META_POLYPOLYGON_ACTION ):
+            {
+                const PolyPolygon& rPolyPoly = ( (MetaPolyPolygonAction*) pAction )->GetPolyPolygon();
+
+                for( ULONG n = 0; n < rPolyPoly.Count(); ++n )
+                    nSizeBytes += ( rPolyPoly[ n ].GetSize() * sizeof( Point ) );
+            }
+            break;
+
+            case( META_TEXT_ACTION ): nSizeBytes += ( ( (MetaTextAction*) pAction )->GetText().Len() * sizeof( sal_Unicode ) ); break;
+            case( META_STRETCHTEXT_ACTION ): nSizeBytes += ( ( (MetaStretchTextAction*) pAction )->GetText().Len() * sizeof( sal_Unicode ) ); break;
+            case( META_TEXTRECT_ACTION ): nSizeBytes += ( ( (MetaTextRectAction*) pAction )->GetText().Len() * sizeof( sal_Unicode ) ); break;
+            case( META_TEXTARRAY_ACTION ):
+            {
+                MetaTextArrayAction* pTextArrayAction = (MetaTextArrayAction*) pAction;
+
+                nSizeBytes += ( pTextArrayAction->GetText().Len() * sizeof( sal_Unicode ) );
+
+                if( pTextArrayAction->GetDXArray() )
+                    nSizeBytes += ( pTextArrayAction->GetLen() << 2 );
+            }
+            break;
+
+            default:
+            break;
+        }
+    }
+
+    return( nSizeBytes );
 }
 
 // ------------------------------------------------------------------------
