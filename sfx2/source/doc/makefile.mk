@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 18:45:08 $
+#   last change: $Author: rt $ $Date: 2005-10-19 12:46:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,8 @@ SLOFILES =	\
         $(SLO)$/objembed.obj\
         $(SLO)$/graphhelp.obj \
         $(SLO)$/QuerySaveDocument.obj \
-        $(SLO)$/secmacrowarnings.obj
+        $(SLO)$/secmacrowarnings.obj \
+        $(SLO)$/opostponedtruncationstream.obj
 
 # exception should already be switched on
 # EXCEPTIONSFILES=$(SLO)$/objuno.obj \
