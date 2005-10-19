@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsListener.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:14:45 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:25:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,15 +125,11 @@ Listener::Listener (SlideSorterController& rController)
 }
 
 
-
-
 Listener::~Listener (void)
 {
-    ReleaseListeners();
+    DBG_ASSERT( !mbListeningToDocument && !mbListeningToUNODocument && !mbListeningToFrame,
+        "sd::Listener::~Listener(), disposing() was not called, ask DBO!" );
 }
-
-
-
 
 void Listener::ReleaseListeners (void)
 {
