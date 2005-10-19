@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-28 13:16:02 $
+#   last change: $Author: rt $ $Date: 2005-10-19 12:15:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1097,6 +1097,7 @@ sub sort_array
 sub prepare_linuxlinkfiles
 {
     my ( $filesref ) = @_;
+
 
     @installer::globals::linuxlinks = (); # empty this array, because it could be already used
     @installer::globals::linuxpatchfiles = (); # empty this array, because it could be already used
