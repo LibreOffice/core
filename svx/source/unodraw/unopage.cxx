@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:06:55 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:12:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -956,4 +956,17 @@ SvxShape* CreateSvxShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt32 nInvento
     return SvxDrawPage::CreateShapeByTypeAndInventor( nType, nInventor );
 }
 
+void SvxDrawPage::ChangeModel( SdrModel* pNewModel )
+{
+    if( pNewModel != pModel )
+    {
+        if( pModel )
+            EndListening( *pModel );
+
+        if( pNewModel )
+            StartListening( *pNewModel );
+
+        pModel = pNewModel;
+    }
+}
 
