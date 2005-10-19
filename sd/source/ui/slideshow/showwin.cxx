@@ -4,9 +4,9 @@
  *
  *  $RCSfile: showwin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:17:18 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:25:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,8 @@ ShowWindow::ShowWindow( ::Window* pParent )
     mbShowNavigatorAfterSpecialMode( FALSE ),
     mpSlideshow(0)
 {
+    SetOutDevViewType( OUTDEV_VIEWTYPE_SLIDESHOW );
+
     // Do never mirror the preview window.  This explicitly includes right
     // to left writing environments.
     EnableRTL (FALSE);
