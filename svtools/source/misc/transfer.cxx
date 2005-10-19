@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:23:26 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:40:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,19 +133,32 @@ using namespace ::com::sun::star::datatransfer::dnd;
 // - TransferableObjectDescriptor -
 // --------------------------------
 
+#define TOD_SIG1 0x01234567
+#define TOD_SIG2 0x89abcdef
+
 SvStream& operator>>( SvStream& rIStm, TransferableObjectDescriptor& rObjDesc )
 {
-    sal_uInt32 nSize;
+    sal_uInt32  nSize, nViewAspect, nSig1, nSig2;
 
     rIStm >> nSize;
     rIStm >> rObjDesc.maClassName;
-    rIStm >> rObjDesc.mnViewAspect;
+    rIStm >> nViewAspect;
     rIStm >> rObjDesc.maSize.Width();
     rIStm >> rObjDesc.maSize.Height();
     rIStm >> rObjDesc.maDragStartPos.X();
     rIStm >> rObjDesc.maDragStartPos.Y();
     rIStm.ReadByteString( rObjDesc.maTypeName, gsl_getSystemTextEncoding() );
     rIStm.ReadByteString( rObjDesc.maDisplayName, gsl_getSystemTextEncoding() );
+    rIStm >> nSig1 >> nSig2;
+
+    rObjDesc.mnViewAspect = static_cast< sal_uInt16 >( nViewAspect );
+
+    // don't use width/height info from external objects
+    if( ( TOD_SIG1 != nSig1 ) || ( TOD_SIG2 != nSig2 ) )
+    {
+        rObjDesc.maSize.Width() = 0;
+        rObjDesc.maSize.Height() = 0;
+    }
 
     return rIStm;
 }
@@ -154,17 +167,19 @@ SvStream& operator>>( SvStream& rIStm, TransferableObjectDescriptor& rObjDesc )
 
 SvStream& operator<<( SvStream& rOStm, const TransferableObjectDescriptor& rObjDesc )
 {
-    const sal_uInt32 nFirstPos = rOStm.Tell();
+    const sal_uInt32    nFirstPos = rOStm.Tell(), nViewAspect = rObjDesc.mnViewAspect;
+    const sal_uInt32    nSig1 = TOD_SIG1, nSig2 = TOD_SIG2;
 
     rOStm.SeekRel( 4 );
     rOStm << rObjDesc.maClassName;
-    rOStm << rObjDesc.mnViewAspect;
+    rOStm << nViewAspect;
     rOStm << rObjDesc.maSize.Width();
     rOStm << rObjDesc.maSize.Height();
     rOStm << rObjDesc.maDragStartPos.X();
     rOStm << rObjDesc.maDragStartPos.Y();
     rOStm.WriteByteString( rObjDesc.maTypeName, gsl_getSystemTextEncoding() );
     rOStm.WriteByteString( rObjDesc.maDisplayName, gsl_getSystemTextEncoding() );
+    rOStm << nSig1 << nSig2;
 
     const sal_uInt32 nLastPos = rOStm.Tell();
 
