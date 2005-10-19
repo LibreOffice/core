@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:30:45 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:26:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,15 +161,23 @@ SlideSorterViewShell::~SlideSorterViewShell (void)
 {
     ReleaseListeners();
 
-    ::sd::Window* pWindow = GetActiveWindow();
-    if (pWindow!=NULL)
+    try
     {
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XComponent> xComponent (
-                pWindow->GetAccessible(false),
-                ::com::sun::star::uno::UNO_QUERY);
-        if (xComponent.is())
-            xComponent->dispose();
+        ::sd::Window* pWindow = GetActiveWindow();
+        if (pWindow!=NULL)
+        {
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::lang::XComponent> xComponent (
+                    pWindow->GetAccessible(false),
+                    ::com::sun::star::uno::UNO_QUERY);
+            if (xComponent.is())
+                xComponent->dispose();
+        }
+    }
+    catch( ::com::sun::star::uno::Exception& e )
+    {
+        (void)e;
+        DBG_ERROR("sd::SlideSorterViewShell::~SlideSorterViewShell(), exception caught!" );
     }
 
     // Reset the auto pointers explicitly to control the order of destruction.
