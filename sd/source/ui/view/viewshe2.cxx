@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:19:50 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:28:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,14 +171,31 @@ void ViewShell::UpdateScrollBars()
     {
         long nH = (long)(mpContentWindow->GetVisibleHeight() * 32000);
         long nY = (long)(mpContentWindow->GetVisibleY() * 32000);
-        mpVerticalScrollBar->SetVisibleSize(nH);
-        mpVerticalScrollBar->SetThumbPos(nY);
-        nH = 32000 - nH;
-        long nLine = (long) (mpContentWindow->GetScrlLineHeight() * nH);
-        long nPage = (long) (mpContentWindow->GetScrlPageHeight() * nH);
-        mpVerticalScrollBar->SetLineSize(nLine);
-        mpVerticalScrollBar->SetPageSize(nPage);
+
+        if(IsPageFlipMode()) // ie in zoom mode where no panning
+        {
+            SdPage* pPage = static_cast<DrawViewShell*>(this)->GetActualPage();
+            USHORT nCurPage = (pPage->GetPageNum() - 1) / 2;
+            USHORT nTotalPages = GetDoc()->GetSdPageCount(pPage->GetPageKind());
+            mpVerticalScrollBar->SetRange(Range(0,256*nTotalPages));
+            mpVerticalScrollBar->SetVisibleSize(256);
+            mpVerticalScrollBar->SetThumbPos(256*nCurPage);
+            mpVerticalScrollBar->SetLineSize(256);
+            mpVerticalScrollBar->SetPageSize(256);
+        }
+        else
+        {
+            mpVerticalScrollBar->SetRange(Range(0,32000));
+            mpVerticalScrollBar->SetVisibleSize(nH);
+            mpVerticalScrollBar->SetThumbPos(nY);
+            nH = 32000 - nH;
+            long nLine = (long) (mpContentWindow->GetScrlLineHeight() * nH);
+            long nPage = (long) (mpContentWindow->GetScrlPageHeight() * nH);
+            mpVerticalScrollBar->SetLineSize(nLine);
+            mpVerticalScrollBar->SetPageSize(nPage);
+        }
     }
+
     if (mbHasRulers)
     {
         UpdateHRuler();
@@ -269,9 +286,15 @@ IMPL_LINK_INLINE_END(ViewShell, VScrollHdl, ScrollBar *, pVScroll )
 
 long ViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
 {
-    long nDelta = pVScroll->GetDelta();
-
-    if (nDelta != 0)
+    if(IsPageFlipMode())
+    {
+        SdPage* pPage = static_cast<DrawViewShell*>(this)->GetActualPage();
+        USHORT nCurPage = (pPage->GetPageNum() - 1) >> 1;
+        USHORT nNewPage = pVScroll->GetThumbPos()/256;
+        if( nCurPage != nNewPage )
+            static_cast<DrawViewShell*>(this)->SwitchPage(nNewPage);
+    }
+    else //panning mode
     {
         double fY = (double) pVScroll->GetThumbPos() / pVScroll->GetRange().Len();
 
