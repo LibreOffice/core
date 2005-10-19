@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:20:05 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:28:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1188,12 +1188,15 @@ SdPage* ViewShell::CreateOrDuplicatePage (
         SfxBoolItem aMakeToolPaneVisible (ID_VAL_ISVISIBLE, TRUE);
         SfxUInt32Item aPanelId (ID_VAL_PANEL_INDEX,
             toolpanel::TaskPaneViewShell::PID_LAYOUT);
-        GetDispatcher()->Execute (
-            SID_TASK_PANE,
-            SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
-            &aMakeToolPaneVisible,
-            &aPanelId,
-            NULL);
+        DBG_ASSERT(GetViewFrame()!=NULL && GetViewFrame()->GetDispatcher()!=NULL,
+            "ViewShell::CreateOrDuplicatePage(): can not get valid dispatcher");
+        if (GetViewFrame()!=NULL && GetViewFrame()->GetDispatcher()!=NULL)
+            GetViewFrame()->GetDispatcher()->Execute (
+                SID_TASK_PANE,
+                SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+                &aMakeToolPaneVisible,
+                &aPanelId,
+                NULL);
 
         // AutoLayouts muessen fertig sein
         pDocument->StopWorkStartupDelay();
