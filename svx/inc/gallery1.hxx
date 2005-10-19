@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gallery1.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:49:21 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:06:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #include <tools/list.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/brdcst.hxx>
+#include "svx/svxdllapi.h"
 #include "gallery.hrc"
 
 #include <cstdio>
@@ -159,23 +160,23 @@ private:
 
 public:
 
-    static Gallery*             AcquireGallery( const String& rMultiPath );
-    static void                 ReleaseGallery( Gallery* pGallery );
+    SVX_DLLPUBLIC static Gallery*               AcquireGallery( const String& rMultiPath );
+    SVX_DLLPUBLIC static void                   ReleaseGallery( Gallery* pGallery );
 
     const ULONG                 GetThemeCount() const { return aThemeList.Count(); }
     const GalleryThemeEntry*    GetThemeInfo( ULONG nPos ) { return aThemeList.GetObject( nPos ); }
     const GalleryThemeEntry*    GetThemeInfo( const String& rThemeName ) { return ImplGetThemeEntry( rThemeName ); }
 
-    BOOL                        HasTheme( const String& rThemeName );
+    SVX_DLLPUBLIC BOOL          HasTheme( const String& rThemeName );
     String                      GetThemeName( ULONG nThemeId ) const;
 
-    BOOL                        CreateTheme( const String& rThemeName );
+    SVX_DLLPUBLIC BOOL          CreateTheme( const String& rThemeName, UINT32 nNumFrom = 0 );
     BOOL                        CreateImportTheme( const INetURLObject& rURL, const String& rFileName );
     BOOL                        RenameTheme( const String& rOldName, const String& rNewName );
     BOOL                        RemoveTheme( const String& rThemeName );
 
-    GalleryTheme*               AcquireTheme( const String& rThemeName, SfxListener& rListener );
-    void                        ReleaseTheme( GalleryTheme* pTheme, SfxListener& rListener );
+    SVX_DLLPUBLIC GalleryTheme* AcquireTheme( const String& rThemeName, SfxListener& rListener );
+    SVX_DLLPUBLIC void          ReleaseTheme( GalleryTheme* pTheme, SfxListener& rListener );
 
 public:
 
