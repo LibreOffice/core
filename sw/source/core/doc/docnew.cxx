@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:04:59 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:34:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -512,6 +512,9 @@ SwDoc::~SwDoc()
     delete pURLStateChgd;
 
     delete pLayouter;
+    // --> OD 2005-09-05 #125370#
+    pLayouter = 0L;
+    // <--
 
     // Undo-Benachrichtigung vom Draw abschalten
     if( pDrawModel )
