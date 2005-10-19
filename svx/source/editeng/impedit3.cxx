@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:37:10 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:09:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3434,7 +3434,21 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, sal_Bool b
         VirtualDevice* pVDev = GetVirtualDevice( pOutWin->GetMapMode() );
         pVDev->SetDigitLanguage( GetRefDevice()->GetDigitLanguage() );
 
-        pVDev->SetBackground( pView->GetBackgroundColor() );
+        {
+            Color aBackgroundColor( pView->GetBackgroundColor() );
+            // #i47161# Check if text is visible on background
+            SvxFont aTmpFont;
+            ContentNode* pNode = GetEditDoc().SaveGetObject( 0 );
+            SeekCursor( pNode, 1, aTmpFont );
+            Color aFontColor( aTmpFont.GetColor() );
+            if( aFontColor == COL_AUTO )
+                aFontColor = GetAutoColor();
+
+            UINT8 nColorDiff = aFontColor.GetColorError( aBackgroundColor );
+            if( nColorDiff < 8 )
+                aBackgroundColor = aFontColor.IsDark() ? COL_WHITE : COL_BLACK;
+            pVDev->SetBackground( aBackgroundColor );
+        }
 
         sal_Bool bVDevValid = sal_True;
         Size aOutSz( pVDev->GetOutputSizePixel() );
