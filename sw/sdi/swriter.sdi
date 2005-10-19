@@ -5590,7 +5590,7 @@ SfxVoidItem MailMergeWizard FN_MAILMERGE_WIZARD
     FastCall = TRUE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = TRUE,
     RecordAbsolute = FALSE,
