@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-06 11:15:09 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:47:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -587,10 +587,7 @@ SfxSaveGuard::SfxSaveGuard(const REFERENCE< XMODEL >&             xModel        
     static ::rtl::OUString MSG_1 = ::rtl::OUString::createFromAscii("Object already disposed."                                       );
     static ::rtl::OUString MSG_2 = ::rtl::OUString::createFromAscii("Concurrent save requests on the same document are not possible.");
 
-    if (
-        m_pData->m_bClosing ||
-        m_pData->m_bClosed
-       )
+    if ( m_pData->m_bClosed )
         throw ::com::sun::star::lang::DisposedException(
                 MSG_1,
                 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >());
