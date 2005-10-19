@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IdleDetection.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:44:43 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:26:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ sal_Int32 IdleDetection::GetIdleState (void)
 
 sal_Int32 IdleDetection::CheckInputPending (void)
 {
-    if (GetpApp()->AnyInput())
+    if (GetpApp()->AnyInput(INPUT_MOUSE | INPUT_KEYBOARD | INPUT_PAINT))
         return IDET_SYSTEM_EVENT_PENDING;
     else
         return IDET_IDLE;
