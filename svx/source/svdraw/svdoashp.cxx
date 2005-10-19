@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:40:42 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:11:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2037,9 +2037,9 @@ void SdrObjCustomShape::NbcRotate( const Point& rRef, long nWink, double sn, dou
     aGeo.RecalcSinCos();
 
     long nW = (long)( fObjectRotation * 100 );                      // applying our object rotation
-    if ( bMirroredY )
-        nW = 36000 - nW;
     if ( bMirroredX )
+        nW = 36000 - nW;
+    if ( bMirroredY )
         nW = 18000 - nW;
     nW = nW % 36000;
     if ( nW < 0 )
@@ -2132,13 +2132,17 @@ void SdrObjCustomShape::NbcMirror( const Point& rRef1, const Point& rRef2 )
 
 void SdrObjCustomShape::Shear( const Point& rRef, long nWink, double tn, FASTBOOL bVShear )
 {
+/*
     SdrTextObj::Shear( rRef, nWink, tn, bVShear );
     InvalidateRenderGeometry();
+*/
 }
 void SdrObjCustomShape::NbcShear( const Point& rRef, long nWink, double tn, FASTBOOL bVShear )
 {
+/*
     SdrTextObj::NbcShear(rRef,nWink,tn,bVShear);
     InvalidateRenderGeometry();
+*/
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3728,6 +3732,7 @@ void SdrObjCustomShape::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolyg
     Rectangle aBaseRect(aPoint, aSize);
     SetSnapRect(aBaseRect);
 
+/*
     // shear?
     if(fShear != 0.0)
     {
@@ -3736,7 +3741,7 @@ void SdrObjCustomShape::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolyg
         aGeoStat.RecalcTan();
         Shear(Point(), aGeoStat.nShearWink, aGeoStat.nTan, FALSE);
     }
-
+*/
     // rotation?
     if(fRotate != 0.0)
     {
