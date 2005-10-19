@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:45:19 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:24:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,7 +154,7 @@
 static SdPage* GetCurrentPage( sd::ViewShell* pViewSh, EditFieldInfo* pInfo, bool& bMasterView )
 {
     bMasterView = false;
-    SdPage* pPage = (SdPage*)pInfo->GetSdrPage();
+    SdPage* pPage = dynamic_cast< SdPage* >( pInfo->GetSdrPage() );
 
     // special case, someone already set the current page on the EditFieldInfo
     // This is used from the svx::UnoGraphicsExporter f.e.
@@ -223,10 +223,7 @@ static SdPage* GetCurrentPage( sd::ViewShell* pViewSh, EditFieldInfo* pInfo, boo
                 // if this is not available, get the current page from the page view
                 pSdrPage = pPV->GetPage();
             }
-            // The following cast is a little hack because it ignores the
-            // const-ness of the page pointer.
-            if (pSdrPage != NULL && pSdrPage->ISA(SdPage))
-                pPage = PTR_CAST(SdPage, pSdrPage);
+            pPage = dynamic_cast< SdPage * >( const_cast< SdrPage* >( pSdrPage ) );
 
             // if all else failed, geht the current page from the object that is
             // currently formated from the document
@@ -235,7 +232,7 @@ static SdPage* GetCurrentPage( sd::ViewShell* pViewSh, EditFieldInfo* pInfo, boo
                 const SdrTextObj* pTextObj = pViewSh ? pViewSh->GetDoc()->GetFormattingTextObj() : NULL;
 
                 if( pTextObj )
-                    pPage = (SdPage*)pTextObj->GetPage();
+                    pPage = dynamic_cast< SdPage* >( pTextObj->GetPage() );
             }
 
             bMasterView = pPage && pPage->IsMasterPage();
@@ -419,8 +416,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
 
             sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : NULL;
             bool bMasterView = false;
-            SdPage* pPage = NULL;
-            pPage = GetCurrentPage( pViewSh, pInfo, bMasterView );
+            SdPage* pPage = GetCurrentPage( pViewSh, pInfo, bMasterView );
 
             if( (pPage == NULL) || bMasterView )
             {
