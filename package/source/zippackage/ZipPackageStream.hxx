@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipPackageStream.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:56:24 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:50:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,10 @@
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATASINK_HPP_
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #endif
+#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
+#include <com/sun/star/io/XSeekable.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_PACKAGES_XDATASINKENCRSUPPORT_HPP_
 #include <com/sun/star/packages/XDataSinkEncrSupport.hpp>
 #endif
@@ -88,6 +92,10 @@ protected:
 
     SotMutexHolderRef m_aSharedMutexRef;
 
+    sal_Bool m_bHasSeekable;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& GetOwnSeekStream();
+
 public:
     sal_Bool HasOwnKey ()        { return bHaveOwnKey;}
     sal_Bool IsToBeCompressed () { return bToBeCompressed;}
@@ -135,6 +143,8 @@ public:
     void setIterationCount (const sal_Int32 nNewCount)
     { xEncryptionData->nIterationCount = nNewCount;}
     void setSize (const sal_Int32 nNewSize);
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetOwnStreamNoWrap() { return xStream; }
 
     void CloseOwnStreamIfAny();
 
