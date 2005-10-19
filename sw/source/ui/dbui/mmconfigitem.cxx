@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmconfigitem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:48:38 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 08:26:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1193,7 +1193,7 @@ void SwMailMergeConfigItem::ExcludeRecord(sal_Int32 nRecord, bool bExclude)
     {
         if(nRecord > 0 && m_aSelection.getLength() > nRecord)
         {
-            m_aSelection[nRecord] <<= bExclude ? -1 : nRecord;
+            m_aSelection[nRecord - 1] <<= bExclude ? -1 : nRecord;
         }
     }
 }
