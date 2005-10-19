@@ -4,9 +4,9 @@
  *
  *  $RCSfile: framectr.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:51:14 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 08:48:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,6 +162,7 @@ static DispatchInfo SupportedCommandsArray[] =
     { ".uno:Bib/query"          ,   frame::CommandGroup::DATA       , sal_True  },
     { ".uno:Bib/autoFilter"     ,   frame::CommandGroup::DATA       , sal_True  },
     { ".uno:Bib/standardFilter" ,   frame::CommandGroup::DATA       , sal_True  },
+    { ".uno:Bib/source"         ,   frame::CommandGroup::DATA       , sal_True  },
     { ".uno:Bib/removeFilter"   ,   frame::CommandGroup::DATA       , sal_True  },
     { 0                         ,   0                               , sal_False }
 };
