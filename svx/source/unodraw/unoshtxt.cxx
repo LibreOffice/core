@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:09:00 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:12:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,6 +218,8 @@ public:
     DECL_LINK( NotifyHdl, EENotify* );
 
     virtual void ObjectInDestruction(const SdrObject& rObject);
+
+    void ChangeModel( SdrModel* pNewModel );
 };
 
 //------------------------------------------------------------------------
@@ -332,6 +334,32 @@ void SAL_CALL SvxTextEditSourceImpl::release()
         delete this;
 }
 
+void SvxTextEditSourceImpl::ChangeModel( SdrModel* pNewModel )
+{
+    if( mpModel != pNewModel )
+    {
+        if( mpModel )
+            EndListening( *mpModel );
+
+        mpModel = pNewModel;
+
+        if( mpTextForwarder )
+        {
+            delete mpTextForwarder;
+            mpTextForwarder = 0;
+        }
+
+        if( mpViewForwarder )
+        {
+            delete mpViewForwarder;
+            mpViewForwarder = 0;
+        }
+
+        if( mpModel )
+            StartListening( *mpModel );
+    }
+}
+
 //------------------------------------------------------------------------
 
 void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
@@ -421,6 +449,10 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         mpTextForwarder = NULL;
                     }
                 }
+                break;
+
+            case HINT_MODELCLEARED:
+                dispose();
                 break;
         }
     }
@@ -1155,4 +1187,9 @@ void SvxTextEditSource::removeRange( SvxUnoTextRangeBase* pOldRange )
 const SvxUnoTextRangeBaseList& SvxTextEditSource::getRanges() const
 {
     return mpImpl->getRanges();
+}
+
+void SvxTextEditSource::ChangeModel( SdrModel* pNewModel )
+{
+    mpImpl->ChangeModel( pNewModel );
 }
