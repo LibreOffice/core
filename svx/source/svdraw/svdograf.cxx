@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:52:23 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:11:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,8 @@
 // - Defines -
 // -----------
 
-#define GRAFSTREAMPOS_INVALID 0xffffffff
+#define GRAFSTREAMPOS_INVALID   0xffffffff
+#define SWAPGRAPHIC_TIMEOUT     5000
 
 // ------------------
 // - SdrGraphicLink -
@@ -212,7 +213,7 @@ SdrGrafObj::SdrGrafObj():
     pGraphicLink    ( NULL )
 {
     pGraphic = new GraphicObject;
-    pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), 20000 );
+    pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), SWAPGRAPHIC_TIMEOUT );
     nGrafStreamPos = GRAFSTREAMPOS_INVALID;
     bNoShear = TRUE;
     //BFS01bCopyToPoolOnAfterRead = FALSE;
@@ -236,7 +237,7 @@ SdrGrafObj::SdrGrafObj(const Graphic& rGrf, const Rectangle& rRect):
     pGraphicLink    ( NULL )
 {
     pGraphic = new GraphicObject( rGrf );
-    pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), 20000 );
+    pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), SWAPGRAPHIC_TIMEOUT );
     nGrafStreamPos = GRAFSTREAMPOS_INVALID;
     bNoShear = TRUE;
     //BFS01bCopyToPoolOnAfterRead = FALSE;
@@ -259,7 +260,7 @@ SdrGrafObj::SdrGrafObj( const Graphic& rGrf ):
     pGraphicLink    ( NULL )
 {
     pGraphic = new GraphicObject( rGrf );
-    pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), 20000 );
+    pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), SWAPGRAPHIC_TIMEOUT );
     nGrafStreamPos = GRAFSTREAMPOS_INVALID;
     bNoShear = TRUE;
     //BFS01bCopyToPoolOnAfterRead = FALSE;
@@ -288,7 +289,7 @@ SdrGrafObj::~SdrGrafObj()
 void SdrGrafObj::SetGraphicObject( const GraphicObject& rGrfObj )
 {
     *pGraphic = rGrfObj;
-    pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), 20000 );
+    pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), SWAPGRAPHIC_TIMEOUT );
     pGraphic->SetUserData();
     nGrafStreamPos = GRAFSTREAMPOS_INVALID;
     SetChanged();
@@ -1684,7 +1685,8 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
         if( pModel && pModel->IsSwapGraphics() && pGraphic->GetSizeBytes() > 20480 )
         {
             // test if this object is visualized from someone
-            if(!GetViewContact().HasViewObjectContacts())
+            // ## test only if there are VOCs other than the preview renderer
+            if(!GetViewContact().HasViewObjectContacts(true))
             {
 //          SdrViewIter aIter( this );
 //          SdrView*    pView = aIter.FirstView();
