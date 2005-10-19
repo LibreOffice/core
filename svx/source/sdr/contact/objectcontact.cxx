@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectcontact.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:02:45 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:10:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,8 @@ namespace sdr
         :   mpObjectAnimator(0L),
             mpEventHandler(0L),
             mpViewObjectContactRedirector(0L),
-            mbDrawHierarchyValid(sal_False)
+            mbDrawHierarchyValid(sal_False),
+            mbIsPreviewRenderer(sal_False)
         {
         }
 
