@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:04:37 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:44:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -858,6 +858,9 @@ void GraphicObject::SetGraphic( const Graphic& rGraphic )
     delete mpSimpleCache, mpSimpleCache = NULL;
 
     mpMgr->ImplRegisterObj( *this, maGraphic, NULL );
+
+    if( mpSwapOutTimer )
+        mpSwapOutTimer->Start();
 }
 
 // -----------------------------------------------------------------------------
