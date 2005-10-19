@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embeddedobjectcontainer.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:29:57 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:47:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,6 +135,9 @@ public:
     sal_Bool            RemoveEmbeddedObject( const ::rtl::OUString& rName, sal_Bool bClose=sal_True );
     sal_Bool            RemoveEmbeddedObject( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&, sal_Bool bClose=sal_True );
 
+    // close and remove an embedded object from the container without removing it from the storage
+    sal_Bool            CloseEmbeddedObject( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& );
+
     // move an embedded object to another container (keep the persistent name)
     sal_Bool            MoveEmbeddedObject( const ::rtl::OUString& rName, EmbeddedObjectContainer& );
 
@@ -146,6 +149,9 @@ public:
 
     // add a graphical representation for an object
     sal_Bool            InsertGraphicStream( const com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& rStream, const ::rtl::OUString& rObjectName, const ::rtl::OUString& rMediaType );
+
+    // try to add a graphical representation for an object in optimized way ( might fail )
+    sal_Bool            InsertGraphicStreamDirectly( const com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& rStream, const ::rtl::OUString& rObjectName, const rtl::OUString& rMediaType );
 
     // remove a graphical representation for an object
     sal_Bool            RemoveGraphicStream( const ::rtl::OUString& rObjectName );
