@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:53:20 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 11:44:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -805,6 +805,18 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                                         ByteString sComment( ((MetaCommentAction*)pAction)->GetComment() );
                                         if ( sComment.Equals( sSeqEnd ) )
                                             break;
+                                    }
+                                    // #i44496#
+                                    // the replacement action for stroke is a filled rectangle
+                                    // the set fillcolor of the replacement is part of the graphics
+                                    // state and must not be skipped
+                                    else if( pAction->GetType() == META_FILLCOLOR_ACTION )
+                                    {
+                                        const MetaFillColorAction* pA = (const MetaFillColorAction*) pAction;
+                                        if( pA->IsSetting() )
+                                            rWriter.SetFillColor( pA->GetColor() );
+                                        else
+                                            rWriter.SetFillColor();
                                     }
                                 }
                             }
