@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopage.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:53:03 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:27:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,12 +95,14 @@ class SdGenericDrawPage : public SvxFmDrawPage,
                           public ::com::sun::star::animations::XAnimationNodeSupplier,
                           public ::com::sun::star::document::XLinkTargetSupplier
 {
+private:
+    SdXImpressDocument* mpModel;
+    SdrModel* mpSdrModel;
+
 protected:
     friend class SdXImpressDocument;
 
     SvxItemPropertySet  maPropSet;
-    SdXImpressDocument* mpModel;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxModel;
 
     virtual void setBackground( const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::lang::IllegalArgumentException);
     virtual void getBackground( ::com::sun::star::uno::Any& rValue ) throw();
@@ -117,19 +119,22 @@ protected:
     void SetHeight( sal_Int32 nHeight );
 
     sal_Bool mbHasBackgroundObject;
+    bool     mbIsImpressDocument;
 
     virtual void disposing() throw();
+
+    void throwIfDisposed() const throw (::com::sun::star::uno::RuntimeException );
 
 public:
     SdGenericDrawPage( SdXImpressDocument* pModel, SdPage* pInPage, const SfxItemPropertyMap* pMap ) throw();
     virtual ~SdGenericDrawPage() throw();
 
     // intern
-    void Invalidate() { pPage = NULL; mpModel = NULL; mxModel = NULL; }
+    void Invalidate() { pPage = NULL; mpModel = NULL; }
     sal_Bool isValid() { return (pPage != NULL) && (mpModel != NULL); }
 
     SdPage* GetPage() const { return (SdPage*)pPage; }
-    SdXImpressDocument* GetModel() const { return mpModel; }
+    SdXImpressDocument* GetModel() const;
 
     UNO3_GETIMPLEMENTATION_DECL( SdGenericDrawPage )
 
