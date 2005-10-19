@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.171 $
+ *  $Revision: 1.172 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:38:57 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:45:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,7 +197,6 @@ using namespace ::com::sun::star::io;
 
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
-#include <comphelper/otransactedfilestream.hxx>
 //#include <so3/transbnd.hxx> // SvKeyValueIterator
 #include <tools/urlobj.hxx>
 #include <tools/inetmime.hxx>
@@ -215,6 +214,7 @@ using namespace ::com::sun::star::io;
 #include <sot/stg.hxx>
 #include <svtools/saveopt.hxx>
 
+#include "opostponedtruncationstream.hxx"
 #include "helper.hxx"
 #include "request.hxx"      // SFX_ITEMSET_SET
 #include "app.hxx"          // GetFilterMatcher
@@ -769,8 +769,6 @@ sal_Bool SfxMedium::Commit()
         Transfer_Impl();
     }
 
-    ClearBackup_Impl();
-
     return GetError() == SVSTREAM_OK;
 }
 
@@ -926,6 +924,15 @@ void SfxMedium::StorageBackup_Impl()
 }
 
 //------------------------------------------------------------------
+::rtl::OUString SfxMedium::GetBackup_Impl()
+{
+    if ( !pImp->m_aBackupURL.getLength() )
+        StorageBackup_Impl();
+
+    return pImp->m_aBackupURL;
+}
+
+//------------------------------------------------------------------
 ::rtl::OUString SfxMedium::GetOutputStorageURL_Impl()
 {
     String aStorageName;
@@ -1000,7 +1007,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetOutputStorage()
             if ( BasedOnOriginalFile_Impl() )
             {
                 // the storage will be based on original file, the wrapper should be used
-                xStream = new ::comphelper::OTruncatedTransactedFileStream( aOutputURL, xSimpleFileAccess, xFactory, !bExists );
+                xStream = new OPostponedTruncationFileStream( aOutputURL, xFactory, xSimpleFileAccess, sal_True );
             }
             else
             {
@@ -2068,14 +2075,25 @@ void SfxMedium::ClearBackup_Impl()
 {
     if( pImp->m_bRemoveBackup )
     {
+        // currently a document is always stored in a new medium,
+        // thus if a backup can not be removed the backup URL should not be cleaned
         if ( pImp->m_aBackupURL.getLength() )
-            if ( !::utl::UCBContentHelper::Kill( pImp->m_aBackupURL ) )
+        {
+            if ( ::utl::UCBContentHelper::Kill( pImp->m_aBackupURL ) )
+              // || !::utl::UCBContentHelper::IsDocument( pImp->m_aBackupURL ) );
+            {
+                pImp->m_bRemoveBackup = sal_False;
+                pImp->m_aBackupURL = ::rtl::OUString();
+            }
+            else
+            {
+
                 DBG_ERROR("Couldn't remove backup file!");
-
-        pImp->m_bRemoveBackup = sal_False;
+            }
+        }
     }
-
-    pImp->m_aBackupURL = ::rtl::OUString();
+    else
+        pImp->m_aBackupURL = ::rtl::OUString();
 }
 
 //----------------------------------------------------------------
@@ -2813,6 +2831,9 @@ SfxMedium::~SfxMedium()
         => further the help will be empty then ... #100490#
      */
     //CancelTransfers();
+
+    // if there is a requirement to clean the backup this is the last possibility to do it
+    ClearBackup_Impl();
 
     Close();
 
