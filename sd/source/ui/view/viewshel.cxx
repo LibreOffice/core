@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:20:19 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:29:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,6 +178,12 @@ private:
 namespace sd {
 
 static const int DELTA_ZOOM = 10;
+
+BOOL ViewShell::IsPageFlipMode(void) const
+{
+    return this->ISA(DrawViewShell) && mpContentWindow.get() != NULL &&
+        mpContentWindow->GetVisibleHeight() >= 1.0;
+}
 
 SfxViewFrame* ViewShell::GetViewFrame (void) const
 {
@@ -787,7 +793,14 @@ BOOL ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
             {
                 if( mpContentWindow.get() == pWin )
                 {
-                    bDone = pWin->HandleScrollCommand( rCEvt,
+                    ULONG nScrollLines = pData->GetScrollLines();
+                    if(IsPageFlipMode())
+                        nScrollLines = COMMAND_WHEEL_PAGESCROLL;
+                    CommandWheelData aWheelData( pData->GetDelta(),pData->GetNotchDelta(),
+                    nScrollLines,pData->GetMode(),pData->GetModifier(),pData->IsHorz() );
+                    CommandEvent aReWrite( rCEvt.GetMousePosPixel(),rCEvt.GetCommand(),
+                    rCEvt.IsMouseEvent(),(const void *) &aWheelData );
+                    bDone = pWin->HandleScrollCommand( aReWrite,
                         mpHorizontalScrollBar.get(),
                         mpVerticalScrollBar.get());
                 }
