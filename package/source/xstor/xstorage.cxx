@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xstorage.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:55:23 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:49:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,7 @@
 #include "xstorage.hxx"
 #include "owriteablestream.hxx"
 #include "disposelistener.hxx"
+#include "switchpersistencestream.hxx"
 
 #define STOR_MESS_PRECOMMIT 1
 #define STOR_MESS_COMMITED  2
@@ -235,15 +236,18 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > xInputStream,
 , m_bIsRoot( sal_True )
 , m_bListCreated( sal_False )
 , m_xFactory( xFactory )
-, m_xInputStream( xInputStream )
 , m_xProperties( xProperties )
 , m_bHasCommonPassword( sal_False )
 , m_pParent( NULL )
 , m_bControlMediaType( sal_False )
 , m_bMTFallbackUsed( sal_False )
+, m_pSwitchStream( NULL )
 {
     // all the checks done below by assertion statements must be done by factory
     OSL_ENSURE( xInputStream.is(), "No input stream is provided!\n" );
+
+    m_pSwitchStream = (SwitchablePersistenceStream*) new SwitchablePersistenceStream( xFactory, xInputStream );
+    m_xInputStream = m_pSwitchStream->getInputStream();
 
     if ( m_nStorageMode & embed::ElementModes::WRITE )
     {
@@ -266,25 +270,26 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > xStream,
 , m_bIsRoot( sal_True )
 , m_bListCreated( sal_False )
 , m_xFactory( xFactory )
-, m_xStream( xStream )
 , m_xProperties( xProperties )
 , m_bHasCommonPassword( sal_False )
 , m_pParent( NULL )
 , m_bControlMediaType( sal_False )
 , m_bMTFallbackUsed( sal_False )
+, m_pSwitchStream( NULL )
 {
     // all the checks done below by assertion statements must be done by factory
     OSL_ENSURE( xStream.is(), "No stream is provided!\n" );
 
     if ( m_nStorageMode & embed::ElementModes::WRITE )
     {
-        // check that the stream allows to write
-        OSL_ENSURE( xStream->getOutputStream().is(), "No stream for writing is provided!\n" );
+        m_pSwitchStream = (SwitchablePersistenceStream*) new SwitchablePersistenceStream( xFactory, xStream );
+        m_xStream = static_cast< io::XStream* >( m_pSwitchStream );
     }
     else
     {
-        m_xInputStream = xStream->getInputStream();
-        OSL_ENSURE( m_xInputStream.is(), "No input stream is provided!\n" );
+        m_pSwitchStream = (SwitchablePersistenceStream*) new SwitchablePersistenceStream( xFactory,
+                                                                                          xStream->getInputStream() );
+        m_xInputStream = m_pSwitchStream->getInputStream();
     }
 }
 
@@ -308,6 +313,7 @@ OStorage_Impl::OStorage_Impl(   OStorage_Impl* pParent,
 , m_pParent( pParent ) // can be empty in case of temporary readonly substorages
 , m_bControlMediaType( sal_False )
 , m_bMTFallbackUsed( sal_False )
+, m_pSwitchStream( NULL )
 {
     OSL_ENSURE( xPackageFolder.is(), "No package folder!\n" );
 }
@@ -600,7 +606,7 @@ void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDes
           pElementIter != m_aChildrenList.end(); pElementIter++ )
     {
         if ( !(*pElementIter)->m_bIsRemoved )
-            CopyStorageElement( *pElementIter, xDest, (*pElementIter)->m_aName );
+            CopyStorageElement( *pElementIter, xDest, (*pElementIter)->m_aName, sal_False );
     }
 
     // move storage properties to the destination one ( means changeable properties )
@@ -632,7 +638,8 @@ void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDes
 //-----------------------------------------------
 void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                                         uno::Reference< embed::XStorage > xDest,
-                                        ::rtl::OUString aName )
+                                        ::rtl::OUString aName,
+                                        sal_Bool bDirect )
 {
     OSL_ENSURE( xDest.is(), "No destination storage!\n" );
     OSL_ENSURE( aName.getLength(), "Empty element name!\n" );
@@ -649,6 +656,13 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
 
     if ( pElement->m_bIsStorage )
     {
+        if ( bDirect )
+        {
+            // TODO/LATER: Might need implementation if not replaced
+            // Not implemented for now
+            throw io::IOException();
+        }
+
         uno::Reference< embed::XStorage > xSubDest =
                                     xDest->openStorageElement(  aName,
                                                                 embed::ElementModes::WRITE );
@@ -673,15 +687,61 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                 throw io::IOException(); // TODO
         }
 
-        // TODO: copy encrypted element
         if ( !pElement->m_pStream->IsEncrypted() )
         {
-            uno::Reference< io::XStream > xSubStr =
-                                        xDest->openStreamElement( aName,
-                                        embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
-            OSL_ENSURE( xSubStr.is(), "No destination substream!\n" );
+            if ( bDirect )
+            {
+                // fill in the properties for the stream
+                uno::Sequence< beans::PropertyValue > aStrProps(0);
+                uno::Sequence< beans::PropertyValue > aSrcPkgProps = pElement->m_pStream->GetStreamProperties();
+                sal_Int32 nNum = 0;
+                for ( int ind = 0; ind < aSrcPkgProps.getLength(); ind++ )
+                {
+                    if ( aSrcPkgProps[ind].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) ) )
+                      || aSrcPkgProps[ind].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "Compressed" ) ) ) )
+                    {
+                        aStrProps.realloc( ++nNum );
+                        aStrProps[nNum-1].Name = aSrcPkgProps[ind].Name;
+                        aStrProps[nNum-1].Value = aSrcPkgProps[ind].Value;
+                    }
+                }
 
-            pElement->m_pStream->CopyInternallyTo_Impl( xSubStr );
+                aStrProps.realloc( ++nNum );
+                aStrProps[nNum-1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseCommonStoragePasswordEncryption" ) );
+                aStrProps[nNum-1].Value <<= (sal_Bool)( pElement->m_pStream->UsesCommonPass_Impl() );
+
+                uno::Reference< embed::XOptimizedStorage > xOptDest( xDest, uno::UNO_QUERY_THROW );
+                uno::Reference < io::XInputStream > xInputToInsert;
+
+                if ( pElement->m_pStream->HasTempFile_Impl() || !pElement->m_pStream->m_xPackageStream.is() )
+                {
+                    OSL_ENSURE( pElement->m_pStream->m_xPackageStream.is(), "No package stream!" );
+
+                    // if the stream is modified - the temporary file must be used for insertion
+                    xInputToInsert = pElement->m_pStream->GetTempFileAsInputStream();
+                }
+                else
+                {
+                    // for now get just nonseekable access to the stream
+                    // TODO/LATER: the raw stream can be used
+
+                    xInputToInsert = pElement->m_pStream->m_xPackageStream->getDataStream();
+                }
+
+                if ( !xInputToInsert.is() )
+                        throw io::IOException(); // TODO
+
+                xOptDest->insertStreamElementDirect( aName, xInputToInsert, aStrProps );
+            }
+            else
+            {
+                uno::Reference< io::XStream > xSubStr =
+                                            xDest->openStreamElement( aName,
+                                            embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
+                OSL_ENSURE( xSubStr.is(), "No destination substream!\n" );
+
+                pElement->m_pStream->CopyInternallyTo_Impl( xSubStr );
+            }
         }
         else if ( pElement->m_pStream->HasCachedPassword() && pElement->m_pStream->IsModified() )
         {
@@ -695,9 +755,31 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
         }
         else
         {
-            uno::Reference< embed::XStorageRawAccess > xRawDest( xDest, uno::UNO_QUERY_THROW );
-            uno::Reference< io::XInputStream > xRawInStream = pElement->m_pStream->GetRawInStream();
-            xRawDest->insertRawEncrStreamElement( aName, xRawInStream );
+            try
+            {
+                // If the stream can be opened with the common storage password
+                // it must be stored with the common storage password as well
+
+                uno::Reference< io::XStream > xOwnStream = pElement->m_pStream->GetStream( embed::ElementModes::READ );
+                uno::Reference< io::XStream > xDestStream =
+                                            xDest->openStreamElement( aName,
+                                                embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
+                OSL_ENSURE( xDestStream.is(), "No destination substream!\n" );
+                completeStorageStreamCopy_Impl( xOwnStream, xDestStream );
+
+                uno::Reference< beans::XPropertySet > xProps( xDestStream, uno::UNO_QUERY_THROW );
+                xProps->setPropertyValue(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseCommonStoragePasswordEncryption" ) ),
+                    uno::Any( (sal_Bool) sal_True ) );
+            }
+            catch( packages::WrongPasswordException& )
+            {
+                // If the common storage password does not allow to open the stream
+                // it must be copyed in raw way
+                uno::Reference< embed::XStorageRawAccess > xRawDest( xDest, uno::UNO_QUERY_THROW );
+                uno::Reference< io::XInputStream > xRawInStream = pElement->m_pStream->GetRawInStream();
+                xRawDest->insertRawEncrStreamElement( aName, xRawInStream );
+            }
         }
     }
 }
@@ -1647,7 +1729,8 @@ uno::Any SAL_CALL OStorage::queryInterface( const uno::Type& rType )
                     ,   static_cast<container::XElementAccess*> ( this )
                     ,   static_cast<lang::XComponent*> ( this )
                     ,   static_cast<embed::XEncryptionProtectedSource*> ( this )
-                    ,   static_cast<beans::XPropertySet*> ( this ) );
+                    ,   static_cast<beans::XPropertySet*> ( this )
+                    ,   static_cast<embed::XOptimizedStorage*> ( this ) );
     }
     else
     {
@@ -1662,7 +1745,8 @@ uno::Any SAL_CALL OStorage::queryInterface( const uno::Type& rType )
                     ,   static_cast<container::XNameAccess*> ( this )
                     ,   static_cast<container::XElementAccess*> ( this )
                     ,   static_cast<lang::XComponent*> ( this )
-                    ,   static_cast<beans::XPropertySet*> ( this ) );
+                    ,   static_cast<beans::XPropertySet*> ( this )
+                    ,   static_cast<embed::XOptimizedStorage*> ( this ) );
     }
 
     if ( aReturn.hasValue() == sal_True )
@@ -2622,7 +2706,7 @@ void SAL_CALL OStorage::copyElementTo(  const ::rtl::OUString& aElementName,
         if ( xNameAccess->hasByName( aNewName ) )
             throw container::ElementExistException();
 
-        m_pImpl->CopyStorageElement( pElement, xDest, aNewName );
+        m_pImpl->CopyStorageElement( pElement, xDest, aNewName, sal_False );
     }
     catch( embed::InvalidStorageException& )
     {
@@ -2700,7 +2784,7 @@ void SAL_CALL OStorage::moveElementTo(  const ::rtl::OUString& aElementName,
         if ( xNameAccess->hasByName( aNewName ) )
             throw container::ElementExistException();
 
-        m_pImpl->CopyStorageElement( pElement, xDest, aNewName );
+        m_pImpl->CopyStorageElement( pElement, xDest, aNewName, sal_False );
 
         m_pImpl->RemoveElement( pElement );
 
@@ -3756,4 +3840,359 @@ void SAL_CALL OStorage::removeVetoableChangeListener(
     //TODO:
 }
 
+//____________________________________________________________________________________________________
+//  XOptimizedStorage
+//____________________________________________________________________________________________________
+//-----------------------------------------------
+void SAL_CALL OStorage::insertRawNonEncrStreamElementDirect(
+            const ::rtl::OUString& sStreamName,
+            const uno::Reference< io::XInputStream >& xInStream )
+        throw ( embed::InvalidStorageException,
+                lang::IllegalArgumentException,
+                packages::NoRawFormatException,
+                container::ElementExistException,
+                io::IOException,
+                embed::StorageWrappedTargetException,
+                uno::RuntimeException )
+{
+    // not implemented currently because there is still no demand
+    // might need to be implemented if direct copying of compressed streams is used
+    throw io::IOException();
+}
+
+//-----------------------------------------------
+void SAL_CALL OStorage::insertStreamElementDirect(
+            const ::rtl::OUString& aStreamName,
+            const uno::Reference< io::XInputStream >& xInStream,
+            const uno::Sequence< beans::PropertyValue >& aProps )
+        throw ( embed::InvalidStorageException,
+                lang::IllegalArgumentException,
+                container::ElementExistException,
+                io::IOException,
+                embed::StorageWrappedTargetException,
+                uno::RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+    if ( !m_pImpl )
+        throw lang::DisposedException();
+
+    if ( m_pData->m_bReadOnlyWrap )
+        throw io::IOException(); // TODO: access denied
+
+    try
+    {
+        SotElement_Impl* pElement = m_pImpl->FindElement( aStreamName );
+
+        if ( pElement )
+            throw container::ElementExistException();
+
+        pElement = OpenStreamElement_Impl( aStreamName, embed::ElementModes::READWRITE, sal_False );
+        OSL_ENSURE( pElement && pElement->m_pStream, "In case element can not be created an exception must be thrown!" );
+
+        pElement->m_pStream->InsertStreamDirectly( xInStream, aProps );
+    }
+    catch( embed::InvalidStorageException& )
+    {
+        throw;
+    }
+    catch( lang::IllegalArgumentException& )
+    {
+        throw;
+    }
+    catch( container::ElementExistException )
+    {
+        throw;
+    }
+    catch( embed::StorageWrappedTargetException& )
+    {
+        throw;
+    }
+    catch( io::IOException& )
+    {
+        throw;
+    }
+    catch( uno::RuntimeException& )
+    {
+        throw;
+    }
+    catch( uno::Exception& )
+    {
+          uno::Any aCaught( ::cppu::getCaughtException() );
+        throw embed::StorageWrappedTargetException( ::rtl::OUString::createFromAscii( "Can't copy raw stream" ),
+                                                 uno::Reference< io::XInputStream >(),
+                                                 aCaught );
+    }
+}
+
+//-----------------------------------------------
+void SAL_CALL OStorage::copyElementDirectlyTo(
+            const ::rtl::OUString& aElementName,
+            const uno::Reference< embed::XOptimizedStorage >& xDest,
+            const ::rtl::OUString& aNewName )
+        throw ( embed::InvalidStorageException,
+                lang::IllegalArgumentException,
+                container::NoSuchElementException,
+                container::ElementExistException,
+                io::IOException,
+                embed::StorageWrappedTargetException,
+                uno::RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+    if ( !m_pImpl )
+        throw lang::DisposedException();
+
+    if ( !aElementName.getLength() || !aNewName.getLength() || !xDest.is()
+      || xDest == uno::Reference< uno::XInterface >( static_cast< OWeakObject* >( this ), uno::UNO_QUERY ) )
+        throw lang::IllegalArgumentException();
+
+    try
+    {
+        SotElement_Impl* pElement = m_pImpl->FindElement( aElementName );
+        if ( !pElement )
+            throw container::NoSuchElementException(); //TODO
+
+        uno::Reference< XNameAccess > xNameAccess( xDest, uno::UNO_QUERY );
+        if ( !xNameAccess.is() )
+            throw uno::RuntimeException(); // TODO
+
+        if ( xNameAccess->hasByName( aNewName ) )
+            throw container::ElementExistException();
+
+        // let the element be copied directly
+        uno::Reference< embed::XStorage > xStorDest( xDest, uno::UNO_QUERY_THROW );
+        m_pImpl->CopyStorageElement( pElement, xStorDest, aNewName, sal_True );
+    }
+    catch( embed::InvalidStorageException& )
+    {
+        throw;
+    }
+    catch( lang::IllegalArgumentException& )
+    {
+        throw;
+    }
+    catch( container::NoSuchElementException& )
+    {
+        throw;
+    }
+    catch( container::ElementExistException& )
+    {
+        throw;
+    }
+    catch( embed::StorageWrappedTargetException& )
+    {
+        throw;
+    }
+    catch( io::IOException& )
+    {
+        throw;
+    }
+    catch( uno::RuntimeException& )
+    {
+        throw;
+    }
+    catch( uno::Exception& )
+    {
+          uno::Any aCaught( ::cppu::getCaughtException() );
+        throw embed::StorageWrappedTargetException( ::rtl::OUString::createFromAscii( "Can't copy raw stream" ),
+                                                 uno::Reference< io::XInputStream >(),
+                                                 aCaught );
+    }
+}
+
+//-----------------------------------------------
+void SAL_CALL OStorage::writeAndAttachToStream( const uno::Reference< io::XStream >& xStream )
+        throw ( embed::InvalidStorageException,
+                lang::IllegalArgumentException,
+                io::IOException,
+                embed::StorageWrappedTargetException,
+                uno::RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+    if ( !m_pImpl )
+        throw lang::DisposedException();
+
+    if ( !m_pData->m_bIsRoot )
+        throw lang::IllegalArgumentException();
+
+    if ( !m_pImpl->m_pSwitchStream )
+        throw uno::RuntimeException();
+
+    try
+    {
+        m_pImpl->m_pSwitchStream->CopyAndSwitchPersistenceTo( xStream );
+    }
+    catch( embed::InvalidStorageException& )
+    {
+        throw;
+    }
+    catch( lang::IllegalArgumentException& )
+    {
+        throw;
+    }
+    catch( embed::StorageWrappedTargetException& )
+    {
+        throw;
+    }
+    catch( io::IOException& )
+    {
+        throw;
+    }
+    catch( uno::RuntimeException& )
+    {
+        throw;
+    }
+    catch( uno::Exception& )
+    {
+          uno::Any aCaught( ::cppu::getCaughtException() );
+        throw embed::StorageWrappedTargetException( ::rtl::OUString::createFromAscii( "Can't copy raw stream" ),
+                                                 uno::Reference< io::XInputStream >(),
+                                                 aCaught );
+    }
+
+}
+
+//-----------------------------------------------
+void SAL_CALL OStorage::attachToURL( const ::rtl::OUString& sURL,
+                                    sal_Bool bReadOnly )
+        throw ( embed::InvalidStorageException,
+                lang::IllegalArgumentException,
+                io::IOException,
+                embed::StorageWrappedTargetException,
+                uno::RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+    if ( !m_pImpl )
+        throw lang::DisposedException();
+
+    if ( !m_pData->m_bIsRoot )
+        throw lang::IllegalArgumentException();
+
+    if ( !m_pImpl->m_pSwitchStream )
+        throw uno::RuntimeException();
+
+    uno::Reference < ucb::XSimpleFileAccess > xAccess(
+            m_pImpl->m_xFactory->createInstance (
+                    ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
+            uno::UNO_QUERY_THROW );
+
+    try
+    {
+        if ( bReadOnly )
+        {
+            uno::Reference< io::XInputStream > xInputStream = xAccess->openFileRead( sURL );
+            m_pImpl->m_pSwitchStream->SwitchPersistenceTo( xInputStream );
+        }
+        else
+        {
+            uno::Reference< io::XStream > xStream = xAccess->openFileReadWrite( sURL );
+            m_pImpl->m_pSwitchStream->SwitchPersistenceTo( xStream );
+        }
+    }
+    catch( embed::InvalidStorageException& )
+    {
+        throw;
+    }
+    catch( lang::IllegalArgumentException& )
+    {
+        throw;
+    }
+    catch( embed::StorageWrappedTargetException& )
+    {
+        throw;
+    }
+    catch( io::IOException& )
+    {
+        throw;
+    }
+    catch( uno::RuntimeException& )
+    {
+        throw;
+    }
+    catch( uno::Exception& )
+    {
+          uno::Any aCaught( ::cppu::getCaughtException() );
+        throw embed::StorageWrappedTargetException( ::rtl::OUString::createFromAscii( "Can't copy raw stream" ),
+                                                 uno::Reference< io::XInputStream >(),
+                                                 aCaught );
+    }
+}
+
+//-----------------------------------------------
+uno::Any SAL_CALL OStorage::getElementPropertyValue( const ::rtl::OUString& aElementName, const ::rtl::OUString& aPropertyName )
+        throw ( embed::InvalidStorageException,
+                lang::IllegalArgumentException,
+                container::NoSuchElementException,
+                io::IOException,
+                beans::UnknownPropertyException,
+                beans::PropertyVetoException,
+                embed::StorageWrappedTargetException,
+                uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+    if ( !m_pImpl )
+        throw lang::DisposedException();
+
+    try
+    {
+        SotElement_Impl *pElement = m_pImpl->FindElement( aElementName );
+        if ( !pElement )
+            throw container::NoSuchElementException();
+
+        if ( !pElement->m_bIsStorage || !aPropertyName.equalsAscii( "MediaType" ) )
+            throw beans::PropertyVetoException();
+
+        if ( !pElement->m_pStorage )
+            m_pImpl->OpenSubStorage( pElement, embed::ElementModes::READ );
+
+        if ( !pElement->m_pStorage )
+            throw io::IOException(); // TODO: general_error
+
+        pElement->m_pStorage->ReadContents();
+        return uno::makeAny( pElement->m_pStorage->m_aMediaType );
+    }
+    catch( embed::InvalidStorageException& )
+    {
+        throw;
+    }
+    catch( lang::IllegalArgumentException& )
+    {
+        throw;
+    }
+    catch( container::NoSuchElementException& )
+    {
+        throw;
+    }
+    catch( beans::UnknownPropertyException& )
+    {
+        throw;
+    }
+    catch( beans::PropertyVetoException& )
+    {
+        throw;
+    }
+    catch( embed::StorageWrappedTargetException& )
+    {
+        throw;
+    }
+    catch( io::IOException& )
+    {
+        throw;
+    }
+    catch( uno::RuntimeException& )
+    {
+        throw;
+    }
+    catch( uno::Exception& )
+    {
+          uno::Any aCaught( ::cppu::getCaughtException() );
+        throw embed::StorageWrappedTargetException( ::rtl::OUString::createFromAscii( "Can't copy raw stream" ),
+                                                 uno::Reference< io::XInputStream >(),
+                                                 aCaught );
+    }
+}
 
