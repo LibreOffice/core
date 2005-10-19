@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationimport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:02:42 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:21:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,8 @@ class AnimationNodeContext : public SvXMLImportContext
     AnimationsImportHelperImpl* mpHelper;
     bool mbRootContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > mxNode;
+
+    void init_node( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
 public:
     TYPEINFO();
