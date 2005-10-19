@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 04:10:25 $
+#   last change: $Author: rt $ $Date: 2005-10-19 12:17:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ SLOFILES=	\
         $(SLO)$/mergechange.obj \
         $(SLO)$/oslstream.obj	\
         $(SLO)$/filehelper.obj	\
-        $(SLO)$/trivialbufferedfile.obj \
+        $(SLO)$/bufferedfile.obj \
         $(SLO)$/requestoptions.obj	\
         $(SLO)$/interactionrequest.obj	\
         $(SLO)$/configinteractionhandler.obj	\
@@ -72,7 +72,7 @@ SLOFILES=	\
 OBJFILES=	\
         $(OBJ)$/oslstream.obj	\
         $(OBJ)$/filehelper.obj	\
-        $(OBJ)$/trivialbufferedfile.obj \
+        $(OBJ)$/bufferedfile.obj \
 
 
 # --- Targets ----------------------------------
