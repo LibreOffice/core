@@ -44,3 +44,4 @@ sx	svx\source\accessibility				nmake	-	all	sx_accessibility NULL
 sx	svx\source\customshapes					nmake	-	all sx_customshapes NULL
 sx	svx\source\toolbars						nmake	-	all sx_toolbars NULL
 sx	svx\util								nmake	-	all	sx_util sx_3deng sx_dlg sx_draw sx_properties sx_contact sx_mixer sx_event sx_animation sx_eeng sx_fmcmp sx_form sx_gall sx_items sx_link sx_mnuc sx_msfilt sx_opt sx_outl sx_rtf sx_sdi sx_stbc sx_tbxc sx_undrw sx_unedt sx_ungal sx_xml sx_xout sx_accessibility sx_intro sx_init sx_customshapes sx_toolbars NULL
+sx	svx\source\gengal						nmake	-	all	sx_gengal sx_util NULL
