@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:08:45 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 11:49:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -433,30 +433,42 @@ static void appendUnicodeTextString( const rtl::OUString& rString, OStringBuffer
     rBuffer.append( ">" );
 }
 
-static OString convertWidgetFieldName( const rtl::OUString& rString )
+OString PDFWriterImpl::convertWidgetFieldName( const rtl::OUString& rString )
 {
     OStringBuffer aBuffer( rString.getLength()+64 );
+    appendName( rString, aBuffer );
 
-    const sal_Unicode* pStr = rString.getStr();
-    sal_Int32 nLen = rString.getLength();
-    for( int i = 0; i < nLen; i++ )
+    // replace all '.' by '_'
+    sal_Int32 nLen = aBuffer.getLength();
+    for( sal_Int32 i = 0; i < nLen; i++ )
     {
-        sal_Unicode aChar = pStr[i];
-        if( aChar < 256 )
-        {
-            if( aChar == '.' || aChar == ' ' )
-                aChar = '_';
-            aBuffer.append( sal_Char(aChar) );
-        }
-        else
-        {
-            aBuffer.append( "<U+" );
-            appendHex( (sal_Int8)(aChar >> 8), aBuffer );
-            appendHex( (sal_Int8)(aChar & 255 ), aBuffer );
-            aBuffer.append( ">" );
-        }
+        sal_Char aChar = aBuffer.charAt( i );
+        if( aChar == '.' )
+            aBuffer.setCharAt( i, '_' );
     }
-    return aBuffer.makeStringAndClear();
+
+    OString aRet = aBuffer.makeStringAndClear();
+    std::hash_map<OString, sal_Int32, OStringHash>::iterator it = m_aFieldNameMap.find( aRet );
+
+    if( it != m_aFieldNameMap.end() ) // not unique
+    {
+        std::hash_map< OString, sal_Int32, OStringHash >::const_iterator check_it;
+        OString aTry;
+        do
+        {
+            OStringBuffer aUnique( aRet.getLength() + 16 );
+            aUnique.append( aRet );
+            aUnique.append( '_' );
+            aUnique.append( it->second );
+            it->second++;
+            aTry = aUnique.makeStringAndClear();
+            check_it = m_aFieldNameMap.find( aTry );
+        } while( check_it != m_aFieldNameMap.end() );
+        aRet = aTry;
+    }
+    else
+        m_aFieldNameMap[ aRet ] = 2;
+    return aRet;
 }
 
 static void appendFixedInt( sal_Int32 nValue,  OStringBuffer& rBuffer, sal_Int32 nLog10Divisor = 1 )
@@ -3869,7 +3881,7 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
     endRedirect();
 
     pop();
-    rBox.m_aAppearances[ "N" ][ rBox.m_aName ] = pCheckStream;
+    rBox.m_aAppearances[ "N" ][ "Yes" ] = pCheckStream;
 
     SvMemoryStream* pUncheckStream = new SvMemoryStream( 256, 256 );
     beginRedirect( pUncheckStream, aCheckRect );
@@ -3967,6 +3979,8 @@ bool PDFWriterImpl::emitAppearances( PDFWidget& rWidget, OStringBuffer& rAnnotDi
 
 bool PDFWriterImpl::emitWidgetAnnotations()
 {
+    ensureUniqueRadioOnValues();
+
     int nAnnots = m_aWidgets.size();
     for( int i = 0; i < nAnnots; i++ )
     {
@@ -3998,10 +4012,22 @@ bool PDFWriterImpl::emitWidgetAnnotations()
         aLine.append( "/FT /" );
         switch( rWidget.m_eType )
         {
-            case PDFWriter::CheckBox:
             case PDFWriter::RadioButton:
-                aValue.append( "/" );
-                aValue.append( OUStringToOString( rWidget.m_aValue, RTL_TEXTENCODING_MS_1252 ) );
+            case PDFWriter::CheckBox:
+                // for radio buttons only the RadioButton field, not the
+                // CheckBox children should have a value, else acrobat reader
+                // does not always check the right button
+                // of course real check boxes (not belonging to a readio group)
+                // need their values, too
+                if( rWidget.m_eType == PDFWriter::RadioButton || rWidget.m_nRadioGroup < 0 )
+                {
+                    aValue.append( "/" );
+                    // check for radio group with all buttons unpressed
+                    if( rWidget.m_aValue.getLength() == 0 )
+                        aValue.append( "Off" );
+                    else
+                        appendName( rWidget.m_aValue, aValue );
+                }
             case PDFWriter::PushButton:
                 aLine.append( "Btn" );
                 break;
@@ -4044,10 +4070,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
             }
             aLine.append( "]\r\n" );
         }
-        // for unknown reasons the radio buttons of a radio group must not have a
-        // field name, else the buttons are in fact check boxes -
-        // that is multiple buttons of the radio group can be selected
-        if( rWidget.m_eType != PDFWriter::CheckBox || rWidget.m_nRadioGroup == -1 )
+        if( rWidget.m_aName.getLength() )
         {
             aLine.append( "   /T (" );
             aLine.append( rWidget.m_aName );
@@ -8661,15 +8684,88 @@ void PDFWriterImpl::setPageTransition( PDFWriter::PageTransition eType, sal_uInt
     m_aPages[ nPageNr ].m_nTransTime    = nMilliSec;
 }
 
-sal_Int32 PDFWriterImpl::findRadioGroupWidget( sal_Int32 nRadioGroup )
+void PDFWriterImpl::ensureUniqueRadioOnValues()
+{
+    // loop over radio groups
+    for( std::map<sal_Int32,sal_Int32>::const_iterator group = m_aRadioGroupWidgets.begin();
+         group != m_aRadioGroupWidgets.end(); ++group )
+    {
+        PDFWidget& rGroupWidget = m_aWidgets[ group->second ];
+        // check whether all kids have a unique OnValue
+        std::hash_map< OUString, sal_Int32, OUStringHash > aOnValues;
+        int nChildren = rGroupWidget.m_aKidsIndex.size();
+        bool bIsUnique = true;
+        for( int nKid = 0; nKid < nChildren && bIsUnique; nKid++ )
+        {
+            int nKidIndex = rGroupWidget.m_aKidsIndex[nKid];
+            const OUString& rVal = m_aWidgets[nKidIndex].m_aOnValue;
+            #if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, "OnValue: %s\n", OUStringToOString( rVal, RTL_TEXTENCODING_UTF8 ).getStr() );
+            #endif
+            if( aOnValues.find( rVal ) == aOnValues.end() )
+            {
+                aOnValues[ rVal ] = 1;
+            }
+            else
+            {
+                bIsUnique = false;
+            }
+        }
+        if( ! bIsUnique )
+        {
+            #if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, "enforcing unique OnValues\n" );
+            #endif
+            // make unique by using ascending OnValues
+            for( int nKid = 0; nKid < nChildren; nKid++ )
+            {
+                int nKidIndex = rGroupWidget.m_aKidsIndex[nKid];
+                PDFWidget& rKid = m_aWidgets[nKidIndex];
+                rKid.m_aOnValue = OUString::valueOf( sal_Int32(nKid+1) );
+                if( ! rKid.m_aValue.equalsAscii( "Off" ) )
+                    rKid.m_aValue = rKid.m_aOnValue;
+            }
+        }
+        // finally move the "Yes" appearance to the OnValue appearance
+        for( int nKid = 0; nKid < nChildren; nKid++ )
+        {
+            int nKidIndex = rGroupWidget.m_aKidsIndex[nKid];
+            PDFWidget& rKid = m_aWidgets[nKidIndex];
+            PDFAppearanceMap::iterator app_it = rKid.m_aAppearances.find( "N" );
+            if( app_it != rKid.m_aAppearances.end() )
+            {
+                PDFAppearanceStreams::iterator stream_it = app_it->second.find( "Yes" );
+                if( stream_it != app_it->second.end() )
+                {
+                    SvMemoryStream* pStream = stream_it->second;
+                    app_it->second.erase( stream_it );
+                    OStringBuffer aBuf( rKid.m_aOnValue.getLength()*2 );
+                    appendName( rKid.m_aOnValue, aBuf );
+                    (app_it->second)[ aBuf.makeStringAndClear() ] = pStream;
+                }
+                #if OSL_DEBUG_LEVEL > 1
+                else
+                    fprintf( stderr, "error: RadioButton without \"Yes\" stream\n" );
+                #endif
+            }
+            // update selected radio button
+            if( ! rKid.m_aValue.equalsAscii( "Off" ) )
+            {
+                rGroupWidget.m_aValue = rKid.m_aValue;
+            }
+        }
+    }
+}
+
+sal_Int32 PDFWriterImpl::findRadioGroupWidget( const PDFWriter::RadioButtonWidget& rBtn )
 {
     sal_Int32 nRadioGroupWidget = -1;
 
-    std::map< sal_Int32, sal_Int32 >::const_iterator it = m_aRadioGroupWidgets.find( nRadioGroup );
+    std::map< sal_Int32, sal_Int32 >::const_iterator it = m_aRadioGroupWidgets.find( rBtn.RadioGroup );
 
     if( it == m_aRadioGroupWidgets.end() )
     {
-        m_aRadioGroupWidgets[ nRadioGroup ] = nRadioGroupWidget =
+        m_aRadioGroupWidgets[ rBtn.RadioGroup ] = nRadioGroupWidget =
             sal_Int32(m_aWidgets.size());
 
         // new group, insert the radiobutton
@@ -8677,11 +8773,21 @@ sal_Int32 PDFWriterImpl::findRadioGroupWidget( sal_Int32 nRadioGroup )
         m_aWidgets.back().m_nObject     = createObject();
         m_aWidgets.back().m_nPage       = m_nCurrentPage;
         m_aWidgets.back().m_eType       = PDFWriter::RadioButton;
-        m_aWidgets.back().m_aName       = "RadioGroup";
-        m_aWidgets.back().m_aName      += OString::valueOf( nRadioGroup );
-        m_aWidgets.back().m_nRadioGroup = nRadioGroup;
+        m_aWidgets.back().m_nRadioGroup = rBtn.RadioGroup;
         m_aWidgets.back().m_nFlags |= 0x00008000;
 
+        // create radio button field name
+        const rtl::OUString& rName = (m_aContext.Version > PDFWriter::PDF_1_2) ?
+                                     rBtn.Name : rBtn.Text;
+        if( rName.getLength() )
+        {
+            m_aWidgets.back().m_aName   = convertWidgetFieldName( rName );
+        }
+        else
+        {
+            m_aWidgets.back().m_aName   = "RadioGroup";
+            m_aWidgets.back().m_aName  += OString::valueOf( rBtn.RadioGroup );
+        }
     }
     else
         nRadioGroupWidget = it->second;
@@ -8705,19 +8811,26 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
     // memory to the vector and thereby invalidates the reference
     int nRadioGroupWidget = -1;
     if( rControl.getType() == PDFWriter::RadioButton )
-        nRadioGroupWidget = findRadioGroupWidget( static_cast<const PDFWriter::RadioButtonWidget&>(rControl).RadioGroup );
+        nRadioGroupWidget = findRadioGroupWidget( static_cast<const PDFWriter::RadioButtonWidget&>(rControl) );
 
     PDFWidget& rNewWidget           = m_aWidgets[nNewWidget];
     rNewWidget.m_nObject            = createObject();
     rNewWidget.m_aRect              = rControl.Location;
     rNewWidget.m_nPage              = nPageNr;
     rNewWidget.m_eType              = rControl.getType();
-    // acrobat reader since 3.0 does not support unicode text
-    // strings for the field name; so we need to encode unicodes
-    // larger than 255
-    rNewWidget.m_aName              =
-        convertWidgetFieldName( (m_aContext.Version > PDFWriter::PDF_1_2) ?
-                                rControl.Name : rControl.Text );
+
+    // for unknown reasons the radio buttons of a radio group must not have a
+    // field name, else the buttons are in fact check boxes -
+    // that is multiple buttons of the radio group can be selected
+    if( rControl.getType() != PDFWriter::RadioButton )
+    {
+        // acrobat reader since 3.0 does not support unicode text
+        // strings for the field name; so we need to encode unicodes
+        // larger than 255
+        rNewWidget.m_aName          =
+            convertWidgetFieldName( (m_aContext.Version > PDFWriter::PDF_1_2) ?
+                                    rControl.Name : rControl.Text );
+    }
     rNewWidget.m_aDescription       = rControl.Description;
     rNewWidget.m_aText              = rControl.Text;
     rNewWidget.m_nTextStyle         = rControl.TextStyle &
@@ -8761,13 +8874,15 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
 
         PDFWidget& rRadioButton = m_aWidgets[nRadioGroupWidget];
         rRadioButton.m_aKids.push_back( rNewWidget.m_nObject );
+        rRadioButton.m_aKidsIndex.push_back( nNewWidget );
         rNewWidget.m_nParent = rRadioButton.m_nObject;
 
-        rNewWidget.m_aValue = OUString( RTL_CONSTASCII_USTRINGPARAM( "Off" ) );
+        rNewWidget.m_aValue     = OUString( RTL_CONSTASCII_USTRINGPARAM( "Off" ) );
+        rNewWidget.m_aOnValue   = rBtn.OnValue;
         if( ! rRadioButton.m_aValue.getLength() && rBtn.Selected )
         {
-            rNewWidget.m_aValue     = OStringToOUString( rNewWidget.m_aName, RTL_TEXTENCODING_MS_1252 );
-            rRadioButton.m_aValue   = rNewWidget.m_aValue;
+            rNewWidget.m_aValue     = rNewWidget.m_aOnValue;
+            rRadioButton.m_aValue   = rNewWidget.m_aOnValue;
         }
         createDefaultRadioButtonAppearance( rNewWidget, rBtn );
 
@@ -8932,7 +9047,14 @@ bool PDFWriterImpl::endControlAppearance( PDFWriter::WidgetState eState )
                 if( eState == PDFWriter::Up || eState == PDFWriter::Down )
                 {
                     aState = "N";
-                    aStyle = (eState == PDFWriter::Up) ? "Off" : rWidget.m_aName;
+                    if( eState == PDFWriter::Up )
+                        aStyle = "Off";
+                    else
+                    {
+                        OStringBuffer aBuf( rWidget.m_aOnValue.getLength()*2 );
+                        appendName( rWidget.m_aOnValue, aBuf );
+                        aStyle = aBuf.makeStringAndClear();
+                    }
                 }
                 break;
             case PDFWriter::Edit:
