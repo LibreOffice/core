@@ -4,9 +4,9 @@
  *
  *  $RCSfile: owriteablestream.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:54:19 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:48:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,6 +254,7 @@ OWriteStream_Impl::OWriteStream_Impl( OStorage_Impl* pParent,
 , m_bForceEncrypted( bForceEncrypted )
 , m_bUseCommonPass( sal_False )
 , m_xPackage( xPackage )
+, m_bHasInsertedStreamOptimization( sal_False )
 {
     OSL_ENSURE( xPackageStream.is(), "No package stream is provided!\n" );
     OSL_ENSURE( xPackage.is(), "No package component is provided!\n" );
@@ -290,6 +291,7 @@ void OWriteStream_Impl::InsertIntoPackageFolder( const ::rtl::OUString& aName,
         xParentPackageFolder->insertByName( aName, uno::makeAny( xTunnel ) );
 
         m_bFlushed = sal_False;
+        m_bHasInsertedStreamOptimization = sal_False;
     }
 }
 //-----------------------------------------------
@@ -591,6 +593,81 @@ void OWriteStream_Impl::CopyTempFileToOutput( uno::Reference< io::XOutputStream 
 // =================================================================================================
 
 //-----------------------------------------------
+void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputStream >& xInStream,
+                                              const uno::Sequence< beans::PropertyValue >& aProps )
+{
+    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
+
+    // this call can be made only during parent storage commit
+    // the  parent storage is responsible for the correct handling
+    // of deleted and renamed contents
+
+    OSL_ENSURE( m_xPackageStream.is(), "No package stream is set!\n" );
+
+    if ( m_bHasDataToFlush )
+        throw io::IOException();
+
+    OSL_ENSURE( !m_aTempURL.getLength(), "The temporary must not exist!\n" );
+
+    // use new file as current persistent representation
+    // the new file will be removed after it's stream is closed
+    m_xPackageStream->setDataStream( xInStream );
+
+    // copy properties to the package stream
+    uno::Reference< beans::XPropertySet > xPropertySet( m_xPackageStream, uno::UNO_QUERY );
+    if ( !xPropertySet.is() )
+        throw uno::RuntimeException();
+
+    // The storage-package communication has a problem
+    // the storage caches properties, thus if the package changes one of them itself
+    // the storage does not know about it
+
+    // Depending from MediaType value the package can change the compressed property itself
+    // Thus if Compressed property is provided it must be set as the latest one
+    sal_Bool bCompressedIsSet = sal_False;
+    sal_Bool bCompressed = sal_False;
+    ::rtl::OUString aComprPropName( RTL_CONSTASCII_USTRINGPARAM( "Compressed" ) );
+    ::rtl::OUString aMedTypePropName( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) );
+    for ( sal_Int32 nInd = 0; nInd < aProps.getLength(); nInd++ )
+    {
+        if ( aProps[nInd].Name.equals( aMedTypePropName ) )
+            xPropertySet->setPropertyValue( aProps[nInd].Name, aProps[nInd].Value );
+        else if ( aProps[nInd].Name.equals( aComprPropName ) )
+        {
+            bCompressedIsSet = sal_True;
+            aProps[nInd].Value >>= bCompressed;
+        }
+        else if ( aProps[nInd].Name.equalsAscii( "UseCommonStoragePasswordEncryption" ) )
+            aProps[nInd].Value >>= m_bUseCommonPass;
+
+        // if there are cached properties update them
+        if ( aProps[nInd].Name.equals( aMedTypePropName ) || aProps[nInd].Name.equals( aComprPropName ) )
+            for ( sal_Int32 nMemInd = 0; nMemInd < m_aProps.getLength(); nMemInd++ )
+            {
+                if ( aProps[nInd].Name.equals( m_aProps[nMemInd].Name ) )
+                    m_aProps[nMemInd].Value = aProps[nInd].Value;
+            }
+    }
+
+    if ( bCompressedIsSet )
+            xPropertySet->setPropertyValue( aComprPropName, uno::makeAny( (sal_Bool)bCompressed ) );
+
+    if ( m_bUseCommonPass )
+    {
+        // set to be encrypted but do not use encryption key
+        xPropertySet->setPropertyValue( ::rtl::OUString::createFromAscii( "EncryptionKey" ),
+                                        uno::makeAny( uno::Sequence< sal_Int8 >() ) );
+        xPropertySet->setPropertyValue( ::rtl::OUString::createFromAscii( "Encrypted" ),
+                                        uno::makeAny( sal_True ) );
+    }
+
+    // the stream should be free soon, after package is stored
+    m_bHasDataToFlush = sal_False;
+    m_bFlushed = sal_True; // will allow to use transaction on stream level if will need it
+    m_bHasInsertedStreamOptimization = sal_True;
+}
+
+//-----------------------------------------------
 void OWriteStream_Impl::Commit()
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
@@ -604,31 +681,41 @@ void OWriteStream_Impl::Commit()
     if ( !m_bHasDataToFlush )
         return;
 
-    OSL_ENSURE( m_aTempURL.getLength(), "The temporary must exist!\n" );
-    uno::Reference < io::XOutputStream > xTempOut(
-                        GetServiceFactory()->createInstance (
-                                ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
-                        uno::UNO_QUERY );
-    uno::Reference < io::XInputStream > xTempIn( xTempOut, uno::UNO_QUERY );
+    uno::Reference< packages::XDataSinkEncrSupport > xNewPackageStream;
 
-    if ( !xTempOut.is() || !xTempIn.is() )
-        throw io::IOException();
+    OSL_ENSURE( m_bHasInsertedStreamOptimization || m_aTempURL.getLength(), "The temporary must exist!\n" );
+    if ( m_aTempURL.getLength() )
+    {
+        uno::Reference < io::XOutputStream > xTempOut(
+                            GetServiceFactory()->createInstance (
+                                    ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
+                            uno::UNO_QUERY );
+        uno::Reference < io::XInputStream > xTempIn( xTempOut, uno::UNO_QUERY );
 
-    // Copy temporary file to a new one
-    CopyTempFileToOutput( xTempOut );
-    xTempOut->closeOutput();
+        if ( !xTempOut.is() || !xTempIn.is() )
+            throw io::IOException();
 
-    uno::Sequence< uno::Any > aSeq( 1 );
-    aSeq[0] <<= sal_False;
-    uno::Reference< packages::XDataSinkEncrSupport > xNewPackageStream(
-                                                    m_xPackage->createInstanceWithArguments( aSeq ),
-                                                    uno::UNO_QUERY );
-    if ( !xNewPackageStream.is() )
-        throw uno::RuntimeException();
+        // Copy temporary file to a new one
+        CopyTempFileToOutput( xTempOut );
+        xTempOut->closeOutput();
 
-    // use new file as current persistent representation
-    // the new file will be removed after it's stream is closed
-    xNewPackageStream->setDataStream( xTempIn );
+        uno::Sequence< uno::Any > aSeq( 1 );
+        aSeq[0] <<= sal_False;
+        xNewPackageStream = uno::Reference< packages::XDataSinkEncrSupport >(
+                                                        m_xPackage->createInstanceWithArguments( aSeq ),
+                                                        uno::UNO_QUERY );
+        if ( !xNewPackageStream.is() )
+            throw uno::RuntimeException();
+
+        // use new file as current persistent representation
+        // the new file will be removed after it's stream is closed
+        xNewPackageStream->setDataStream( xTempIn );
+    }
+    else // if ( m_bHasInsertedStreamOptimization )
+    {
+        // if the optimization is used the stream can be accessed directly
+        xNewPackageStream = m_xPackageStream;
+    }
 
     // copy properties to the package stream
     uno::Reference< beans::XPropertySet > xPropertySet( xNewPackageStream, uno::UNO_QUERY );
@@ -637,10 +724,16 @@ void OWriteStream_Impl::Commit()
 
     for ( sal_Int32 nInd = 0; nInd < m_aProps.getLength(); nInd++ )
     {
-        if ( m_aProps[nInd].Name.equalsAscii( "Size" ) && m_pAntiImpl )
-            m_aProps[nInd].Value <<= ((sal_Int32)m_pAntiImpl->m_xSeekable->getLength());
-
-        xPropertySet->setPropertyValue( m_aProps[nInd].Name, m_aProps[nInd].Value );
+        if ( m_aProps[nInd].Name.equalsAscii( "Size" ) )
+        {
+            if ( m_pAntiImpl && !m_bHasInsertedStreamOptimization && m_pAntiImpl->m_xSeekable.is() )
+            {
+                m_aProps[nInd].Value <<= ((sal_Int32)m_pAntiImpl->m_xSeekable->getLength());
+                xPropertySet->setPropertyValue( m_aProps[nInd].Name, m_aProps[nInd].Value );
+            }
+        }
+        else
+            xPropertySet->setPropertyValue( m_aProps[nInd].Name, m_aProps[nInd].Value );
     }
 
     if ( m_bUseCommonPass )
@@ -996,7 +1089,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
 
             xStream = GetTempFileAsStream();
         }
-        else
+        else if ( !m_bHasInsertedStreamOptimization )
         {
             if ( !m_aTempURL.getLength() && !( m_xPackageStream->getDataStream().is() ) )
             {
@@ -1006,12 +1099,18 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
                 // this call is triggered by the parent and it will recognize the change of the state
                 if ( m_pParent )
                     m_pParent->m_bIsModified = sal_True;
+                xStream = GetTempFileAsStream();
             }
 
-            xStream = GetTempFileAsStream();
+            // if the stream exists the temporary file is created on demand
+            // xStream = GetTempFileAsStream();
         }
 
-        m_pAntiImpl = new OWriteStream( this, xStream );
+        if ( !xStream.is() )
+            m_pAntiImpl = new OWriteStream( this );
+        else
+            m_pAntiImpl = new OWriteStream( this, xStream );
+
         uno::Reference< io::XStream > xWriteStream =
                                 uno::Reference< io::XStream >( static_cast< ::cppu::OWeakObject* >( m_pAntiImpl ),
                                                                 uno::UNO_QUERY );
@@ -1238,9 +1337,25 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetCopyOfLastCommit( const ::rt
 //===============================================
 
 //-----------------------------------------------
+OWriteStream::OWriteStream( OWriteStream_Impl* pImpl )
+: m_pImpl( pImpl )
+, m_bInStreamDisconnected( sal_False )
+, m_bInitOnDemand( sal_True )
+{
+    OSL_ENSURE( pImpl, "No base implementation!\n" );
+    OSL_ENSURE( m_pImpl->m_rMutexRef.Is(), "No mutex!\n" );
+
+    if ( !m_pImpl || !m_pImpl->m_rMutexRef.Is() )
+        throw uno::RuntimeException(); // just a disaster
+
+    m_pData = new WSInternalData_Impl( pImpl->m_rMutexRef );
+}
+
+//-----------------------------------------------
 OWriteStream::OWriteStream( OWriteStream_Impl* pImpl, uno::Reference< io::XStream > xStream )
 : m_pImpl( pImpl )
 , m_bInStreamDisconnected( sal_False )
+, m_bInitOnDemand( sal_False )
 {
     OSL_ENSURE( pImpl && xStream.is(), "No base implementation!\n" );
     OSL_ENSURE( m_pImpl->m_rMutexRef.Is(), "No mutex!\n" );
@@ -1279,9 +1394,33 @@ OWriteStream::~OWriteStream()
         delete m_pData;
 }
 
+//-----------------------------------------------
+void OWriteStream::CheckInitOnDemand()
+{
+    if ( !m_pImpl )
+        throw lang::DisposedException();
+
+    if ( m_bInitOnDemand )
+    {
+        uno::Reference< io::XStream > xStream = m_pImpl->GetTempFileAsStream();
+        if ( xStream.is() )
+        {
+            m_xInStream = xStream->getInputStream();
+            m_xOutStream = xStream->getOutputStream();
+            m_xSeekable = uno::Reference< io::XSeekable >( xStream, uno::UNO_QUERY );
+            OSL_ENSURE( m_xInStream.is() && m_xOutStream.is() && m_xSeekable.is(), "Stream implementation is incomplete!\n" );
+
+            m_bInitOnDemand = sal_False;
+        }
+    }
+}
+
+//-----------------------------------------------
 void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStream >& xDest )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+    CheckInitOnDemand();
 
     if ( !m_xInStream.is() )
         throw uno::RuntimeException();
@@ -1360,6 +1499,8 @@ sal_Int32 SAL_CALL OWriteStream::readBytes( uno::Sequence< sal_Int8 >& aData, sa
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
+    CheckInitOnDemand();
+
     if ( !m_pImpl )
         throw lang::DisposedException();
 
@@ -1377,6 +1518,8 @@ sal_Int32 SAL_CALL OWriteStream::readSomeBytes( uno::Sequence< sal_Int8 >& aData
                 uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+    CheckInitOnDemand();
 
     if ( !m_pImpl )
         throw lang::DisposedException();
@@ -1396,6 +1539,8 @@ void SAL_CALL OWriteStream::skipBytes( sal_Int32 nBytesToSkip )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
+    CheckInitOnDemand();
+
     if ( !m_pImpl )
         throw lang::DisposedException();
 
@@ -1412,6 +1557,8 @@ sal_Int32 SAL_CALL OWriteStream::available(  )
                 uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+    CheckInitOnDemand();
 
     if ( !m_pImpl )
         throw lang::DisposedException();
@@ -1434,7 +1581,7 @@ void SAL_CALL OWriteStream::closeInput(  )
     if ( !m_pImpl )
         throw lang::DisposedException();
 
-    if ( m_bInStreamDisconnected || !m_xInStream.is() )
+    if ( !m_bInitOnDemand && ( m_bInStreamDisconnected || !m_xInStream.is() ) )
         throw io::NotConnectedException();
 
     // the input part of the stream stays open for internal purposes ( to allow reading during copiing )
@@ -1456,7 +1603,7 @@ uno::Reference< io::XInputStream > SAL_CALL OWriteStream::getInputStream()
     if ( !m_pImpl )
         throw lang::DisposedException();
 
-    if ( m_bInStreamDisconnected || !m_xInStream.is() )
+    if ( !m_bInitOnDemand && ( m_bInStreamDisconnected || !m_xInStream.is() ) )
         return uno::Reference< io::XInputStream >();
 
     return uno::Reference< io::XInputStream >( static_cast< io::XInputStream* >( this ), uno::UNO_QUERY );
@@ -1467,6 +1614,8 @@ uno::Reference< io::XOutputStream > SAL_CALL OWriteStream::getOutputStream()
         throw ( uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+    CheckInitOnDemand();
 
     if ( !m_pImpl )
         throw lang::DisposedException();
@@ -1485,6 +1634,8 @@ void SAL_CALL OWriteStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
                 uno::RuntimeException )
 {
     ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+    CheckInitOnDemand();
 
     if ( !m_pImpl )
         throw lang::DisposedException();
@@ -1515,17 +1666,22 @@ void SAL_CALL OWriteStream::flush()
     if ( !m_pImpl )
         throw lang::DisposedException();
 
-    if ( !m_xOutStream.is() )
-        throw io::NotConnectedException();
+    if ( !m_bInitOnDemand )
+    {
+        if ( !m_xOutStream.is() )
+            throw io::NotConnectedException();
 
-    m_xOutStream->flush();
-    m_pImpl->Commit();
+        m_xOutStream->flush();
+        m_pImpl->Commit();
+    }
 }
 
 //-----------------------------------------------
 void OWriteStream::CloseOutput_Impl()
 {
     // all the checks must be done in calling method
+
+    CheckInitOnDemand();
 
     m_xOutStream->closeOutput();
     m_xOutStream = uno::Reference< io::XOutputStream >();
@@ -1551,6 +1707,8 @@ void SAL_CALL OWriteStream::closeOutput()
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
+    CheckInitOnDemand();
+
     if ( !m_pImpl )
         throw lang::DisposedException();
 
@@ -1571,6 +1729,8 @@ void SAL_CALL OWriteStream::seek( sal_Int64 location )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
+    CheckInitOnDemand();
+
     if ( !m_pImpl )
         throw lang::DisposedException();
 
@@ -1586,6 +1746,8 @@ sal_Int64 SAL_CALL OWriteStream::getPosition()
                 uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+    CheckInitOnDemand();
 
     if ( !m_pImpl )
         throw lang::DisposedException();
@@ -1603,6 +1765,8 @@ sal_Int64 SAL_CALL OWriteStream::getLength()
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
+    CheckInitOnDemand();
+
     if ( !m_pImpl )
         throw lang::DisposedException();
 
@@ -1618,6 +1782,8 @@ void SAL_CALL OWriteStream::truncate()
                 uno::RuntimeException )
 {
     ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+    CheckInitOnDemand();
 
     if ( !m_pImpl )
         throw lang::DisposedException();
@@ -1664,7 +1830,10 @@ void SAL_CALL OWriteStream::dispose()
     m_pData->m_aListenersContainer.disposeAndClear( aSource );
 
     m_pImpl->m_pAntiImpl = NULL;
-    m_pImpl->Commit();
+
+    if ( !m_bInitOnDemand )
+        m_pImpl->Commit();
+
     m_pImpl = NULL;
 }
 
@@ -1701,6 +1870,8 @@ void SAL_CALL OWriteStream::setEncryptionPassword( const ::rtl::OUString& aPass 
 {
     ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
+    CheckInitOnDemand();
+
     if ( !m_pImpl )
         throw lang::DisposedException();
 
@@ -1717,6 +1888,8 @@ void SAL_CALL OWriteStream::removeEncryption()
             io::IOException )
 {
     ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+    CheckInitOnDemand();
 
     if ( !m_pImpl )
         throw lang::DisposedException();
@@ -1767,7 +1940,12 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
         sal_Bool bUseCommonPass = sal_False;
         if ( aValue >>= bUseCommonPass )
         {
-            if ( bUseCommonPass )
+            if ( m_bInitOnDemand && m_pImpl->m_bHasInsertedStreamOptimization )
+            {
+                // the data stream is provided to the packagestream directly
+                m_pImpl->m_bUseCommonPass = bUseCommonPass;
+            }
+            else if ( bUseCommonPass )
             {
                 if ( !m_pImpl->m_bUseCommonPass )
                 {
@@ -1825,6 +2003,8 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const ::rtl::OUString& aProp )
         return uno::makeAny( m_pImpl->m_bUseCommonPass );
     else if ( aPropertyName.equalsAscii( "Size" ) )
     {
+        CheckInitOnDemand();
+
         if ( !m_xSeekable.is() )
             throw uno::RuntimeException();
 
