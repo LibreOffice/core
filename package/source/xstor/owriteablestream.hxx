@@ -4,9 +4,9 @@
  *
  *  $RCSfile: owriteablestream.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:54:38 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:48:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,6 +131,7 @@ class OWriteStream;
 
 struct OWriteStream_Impl : public PreCreationStruct
 {
+    friend struct OStorage_Impl;
     friend class OWriteStream;
     friend class OInputCompStream;
 
@@ -157,6 +158,8 @@ struct OWriteStream_Impl : public PreCreationStruct
     ::rtl::OUString m_aPass;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > m_xPackage;
+
+    sal_Bool m_bHasInsertedStreamOptimization;
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > GetServiceFactory();
@@ -185,6 +188,9 @@ public:
 
     ~OWriteStream_Impl();
 
+    sal_Bool UsesCommonPass_Impl() { return m_bUseCommonPass; }
+    sal_Bool HasTempFile_Impl() { return ( m_aTempURL.getLength() != 0 ); }
+
     void InsertIntoPackageFolder(
             const ::rtl::OUString& aName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xParentPackageFolder );
@@ -200,6 +206,10 @@ public:
     void SetEncryptedWithPass( const ::rtl::OUString& aPass );
 
     void DisposeWrappers();
+
+    void InsertStreamDirectly(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream,
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps );
 
     void Commit();
     void Revert();
@@ -259,8 +269,9 @@ protected:
     WSInternalData_Impl* m_pData;
 
     sal_Bool m_bInStreamDisconnected;
+    sal_Bool m_bInitOnDemand;
 
-
+    OWriteStream( OWriteStream_Impl* pImpl );
     OWriteStream( OWriteStream_Impl* pImpl, ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xStream );
 
     void CloseOutput_Impl();
@@ -272,6 +283,8 @@ protected:
 public:
 
     virtual ~OWriteStream();
+
+    void CheckInitOnDemand();
 
     // XInputStream
     virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
