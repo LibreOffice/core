@@ -4,9 +4,9 @@
  *
  *  $RCSfile: label1.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-13 17:04:41 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 08:30:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,33 +243,6 @@ SwLabDlg::~SwLabDlg()
 {
     delete pRecs;
 }
-
-/* --------------------------------------------------------------------------
-
-Diese Routine modifiziert ein uebergebenes SwLabItem so, dass es hernach in
-der Config gespeichert werden kann. Durch die Angabe des Herstellers und des
-Artikels sind die weiteren Groessenangaben redundant, daher werden in lHDist
-und den folgenden Membern die Eigenschaften der benutzerdefinierten Etiketten
-gespeichert.
-
--------------------------------------------------------------------------- */
-
-
-
-void SwLabDlg::MakeConfigItem( SwLabItem& rItem ) const
-{
-    if ( String(rItem.aType) != String(SW_RES(STR_CUSTOM)) )
-    {
-        SwLabRec* pRec = (*pRecs)[0];
-        pRec->FillItem( rItem );
-    }
-    const SwLabItem& rActItem = (const SwLabItem&)GetExampleSet()->Get(FN_LABEL);
-    rItem.bCont    = rActItem.bCont;
-    rItem.aLstMake = rActItem.aLstMake;
-    rItem.aLstType = rActItem.aLstType;
-    rItem.sDBName  = rActItem.sDBName;
-}
-
 // --------------------------------------------------------------------------
 
 void SwLabDlg::GetLabItem(SwLabItem &rItem)
