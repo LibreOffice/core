@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:19:10 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:28:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,11 @@
 #ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
 #include <com/sun/star/embed/EmbedStates.hpp>
 #endif
+
+#include "comphelper/anytostring.hxx"
+#include "cppuhelper/exc_hlp.hxx"
+#include "rtl/ref.hxx"
+
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
@@ -274,29 +279,51 @@ void DrawViewShell::SelectionHasChanged (void)
     }
 
     ViewShellBase& rBase = GetViewShellBase();
-    Client* pIPClient = static_cast<Client*>(rBase.GetIPClient());
+    rBase.SetVerbs(0);
 
-    if ( pIPClient && pIPClient->IsObjectInPlaceActive() )
+    try
     {
-        /**********************************************************************
-        * Ggf. OLE-Objekt beruecksichtigen und deaktivieren
-        **********************************************************************/
-
-        // this means we recently deselected an inplace active ole object so
-        // we need to deselect it now
-        if (!pOleObj)
+        Client* pIPClient = static_cast<Client*>(rBase.GetIPClient());
+        if ( pIPClient && pIPClient->IsObjectInPlaceActive() )
         {
-            pIPClient->GetObject()->changeState( embed::EmbedStates::RUNNING );
-            SFX_APP()->SetViewFrame( GetViewFrame() );
-            rBase.SetVerbs(0);
-            pDrView->ShowMarkHdl(NULL);
+            /**********************************************************************
+            * Ggf. OLE-Objekt beruecksichtigen und deaktivieren
+            **********************************************************************/
+
+            // this means we recently deselected an inplace active ole object so
+            // we need to deselect it now
+            if (!pOleObj)
+            {
+                pIPClient->GetObject()->changeState( embed::EmbedStates::RUNNING );
+                SFX_APP()->SetViewFrame( GetViewFrame() );
+                pDrView->ShowMarkHdl(NULL);
+            }
+            else
+            {
+                uno::Reference < embed::XEmbeddedObject > xObj = pOleObj->GetObjRef();
+                if ( xObj.is() )
+                {
+                    rBase.SetVerbs( xObj->getSupportedVerbs() );
+                }
+                else
+                {
+                    rBase.SetVerbs( uno::Sequence < embed::VerbDescriptor >() );
+                }
+            }
         }
         else
         {
-            uno::Reference < embed::XEmbeddedObject > xObj = pOleObj->GetObjRef();
-            if ( xObj.is() )
+            if ( pOleObj )
             {
-                rBase.SetVerbs( xObj->getSupportedVerbs() );
+                uno::Reference < embed::XEmbeddedObject > xObj = pOleObj->GetObjRef();
+                if ( xObj.is() )
+                {
+                    rBase.SetVerbs( xObj->getSupportedVerbs() );
+                }
+                else
+                {
+                    rBase.SetVerbs( uno::Sequence < embed::VerbDescriptor >() );
+                }
             }
             else
             {
@@ -304,24 +331,15 @@ void DrawViewShell::SelectionHasChanged (void)
             }
         }
     }
-    else
+    catch( ::com::sun::star::uno::Exception& e )
     {
-        if ( pOleObj )
-        {
-            uno::Reference < embed::XEmbeddedObject > xObj = pOleObj->GetObjRef();
-            if ( xObj.is() )
-            {
-                rBase.SetVerbs( xObj->getSupportedVerbs() );
-            }
-            else
-            {
-                rBase.SetVerbs( uno::Sequence < embed::VerbDescriptor >() );
-            }
-        }
-        else
-        {
-            rBase.SetVerbs( uno::Sequence < embed::VerbDescriptor >() );
-        }
+        (void)e;
+        DBG_ERROR(
+            (rtl::OString("sd::DrawViewShell::SelectionHasChanged(), "
+                    "exception caught: ") +
+            rtl::OUStringToOString(
+                comphelper::anyToString( cppu::getCaughtException() ),
+                RTL_TEXTENCODING_UTF8 )).getStr() );
     }
 
     if( pFuActual )
@@ -973,6 +991,14 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
     // a good thing anyway.
     if (nSelectedPage == SDRPAGE_NOTFOUND)
         nSelectedPage = 0;
+
+    // Make sure that the given page index points to an existing page.  Move
+    // the index into the valid range if necessary.
+    USHORT nPageCount = (eEditMode == EM_PAGE)
+        ? GetDoc()->GetSdPageCount(ePageKind)
+        : GetDoc()->GetMasterSdPageCount(ePageKind);
+    if (nSelectedPage >= nPageCount)
+        nSelectedPage = nPageCount-1;
 
     if (IsSwitchPageAllowed())
     {
