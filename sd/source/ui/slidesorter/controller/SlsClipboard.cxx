@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsClipboard.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:28:29 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:25:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -367,9 +367,7 @@ void Clipboard::CreateSlideTransferable (
             SD_MOD()->pTransferClip = pTransferable;
 
         pDocument->CreatingDataObj (pTransferable);
-        pTransferable->SetWorkDocument (
-            static_cast<SdDrawDocument*>(
-                mrController.GetView().GetAllMarkedModel()));
+        pTransferable->SetWorkDocument( dynamic_cast<SdDrawDocument*>(pDocument->AllocModel()) );
         pDocument->CreatingDataObj (NULL);
         TransferableObjectDescriptor aObjDesc;
         pTransferable->GetWorkDocument()->GetDocSh()
