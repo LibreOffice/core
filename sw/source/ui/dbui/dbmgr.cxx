@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-18 13:49:13 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 08:25:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,7 @@
 #ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #endif
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #ifndef _COM_SUN_STAR_UTIL_iXNUMBERFORMATTER_HPP_
 #include <com/sun/star/util/XNumberFormatter.hpp>
@@ -317,6 +318,15 @@
 #ifndef _RTL_TEXTENC_H
 #include <rtl/textenc.h>
 #endif
+#ifndef _NDINDEX_HXX
+#include <ndindex.hxx>
+#endif
+#ifndef _PAM_HXX
+#include <pam.hxx>
+#endif
+#ifndef _SWCRSR_HXX
+#include <swcrsr.hxx>
+#endif
 #ifndef _SWEVENT_HXX
 #include <swevent.hxx>
 #endif
@@ -494,8 +504,15 @@ BOOL lcl_GetColumnCnt(SwDSParam* pParam,
     const String& rColumnName, long nLanguage, String& rResult, double* pNumber)
 {
     uno::Reference< XColumnsSupplier > xColsSupp( pParam->xResultSet, UNO_QUERY );
-    uno::Reference<XNameAccess> xCols = xColsSupp->getColumns();
-    if(!xCols->hasByName(rColumnName))
+    uno::Reference<XNameAccess> xCols;
+    try
+    {
+        xCols = xColsSupp->getColumns();
+    }
+    catch( lang::DisposedException& rEx)
+    {
+    }
+    if(!xCols.is() || !xCols->hasByName(rColumnName))
         return FALSE;
     Any aCol = xCols->getByName(rColumnName);
     uno::Reference< XPropertySet > xColumnProps;
@@ -1583,6 +1600,17 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                 else
                                     pTargetShell->SetPageStyle(sStartingPageDesc);
                                 DBG_ASSERT(!pTargetShell->GetTableFmt(),"target document ends with a table - paragraph should be appended")
+                                //#i51359# add a second paragraph in case there's only one
+                                {
+                                    SwNodeIndex aIdx( pWorkDoc->GetNodes().GetEndOfExtras(), 2 );
+                  SwPosition aTestPos( aIdx );
+                  SwCursor aTestCrsr(aTestPos);
+                                    if(!aTestCrsr.MovePara(fnParaNext, fnParaStart))
+                                    {
+                                        //append a paragraph
+                                        pWorkDoc->AppendTxtNode( aTestPos );
+                                    }
+                                }
                                 pTargetShell->Paste( rWorkShell.GetDoc(), sal_True );
                             }
                             else
@@ -1785,18 +1813,23 @@ ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
         uno::Reference< XDataSource> xSource;
         uno::Reference< XConnection> xConnection;
         sal_Bool bUseMergeData = sal_False;
+        uno::Reference< XColumnsSupplier> xColsSupp;
         if(pImpl->pMergeData &&
             pImpl->pMergeData->sDataSource.equals(rDBName) && pImpl->pMergeData->sCommand.equals(rTableName))
         {
             xConnection = pImpl->pMergeData->xConnection;
             uno::Reference<XDataSource> xSource = SwNewDBMgr::getDataSourceAsParent(xConnection,rDBName);
             bUseMergeData = sal_True;
+            xColsSupp = xColsSupp.query( pImpl->pMergeData->xResultSet );
         }
-        if(!xConnection.is() || !xSource.is())
+        if(!xConnection.is())
         {
             SwDSParam* pParam = FindDSConnection(rDBName, FALSE);
             if(pParam && pParam->xConnection.is())
+            {
                 xConnection = pParam->xConnection;
+                xColsSupp = xColsSupp.query( pParam->xResultSet );
+            }
             else
             {
                 rtl::OUString sDBName(rDBName);
@@ -1805,7 +1838,11 @@ ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
             if(bUseMergeData)
                 pImpl->pMergeData->xConnection = xConnection;
         }
-        uno::Reference< XColumnsSupplier> xColsSupp = SwNewDBMgr::GetColumnSupplier(xConnection, rTableName);
+        bool bDispose = !xColsSupp.is();
+        if(bDispose)
+        {
+            xColsSupp = SwNewDBMgr::GetColumnSupplier(xConnection, rTableName);
+        }
         if(xColsSupp.is())
         {
             uno::Reference<XNameAccess> xCols;
@@ -1823,7 +1860,10 @@ ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
             uno::Reference< XPropertySet > xColumn;
             aCol >>= xColumn;
             nRet = GetColumnFmt(xSource, xConnection, xColumn, pNFmtr, nLanguage);
-            ::comphelper::disposeComponent( xColsSupp );
+            if(bDispose)
+            {
+                ::comphelper::disposeComponent( xColsSupp );
+            }
         }
         else
             nRet = pNFmtr->GetFormatIndex( NF_NUMBER_STANDARD, LANGUAGE_SYSTEM );
@@ -2346,7 +2386,8 @@ sal_Bool SwNewDBMgr::ToRecordId(sal_Int32 nSet)
 /* -----------------------------17.07.00 14:17--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTableOrQuery, sal_Int32 nCommandType)
+BOOL SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTableOrQuery,
+            sal_Int32 nCommandType, bool bCreate)
 {
     SwDBData aData;
     aData.sDataSource = rDataSource;
@@ -2361,7 +2402,7 @@ BOOL SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTableO
     uno::Reference< XConnection> xConnection;
     if(pParam && pParam->xConnection.is())
         pFound->xConnection = pParam->xConnection;
-    else
+    else if(bCreate)
     {
         rtl::OUString sDataSource(rDataSource);
         pFound->xConnection = RegisterConnection( sDataSource );
@@ -3237,6 +3278,17 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                 }
                 USHORT nPageCountBefore = pTargetShell->GetPageCnt();
                 DBG_ASSERT(!pTargetShell->GetTableFmt(),"target document ends with a table - paragraph should be appended")
+                //#i51359# add a second paragraph in case there's only one
+                {
+                    SwNodeIndex aIdx( pWorkDoc->GetNodes().GetEndOfExtras(), 2 );
+                  SwPosition aTestPos( aIdx );
+                  SwCursor aTestCrsr(aTestPos);
+                    if(!aTestCrsr.MovePara(fnParaNext, fnParaStart))
+                    {
+                        //append a paragraph
+                        pWorkDoc->AppendTxtNode( aTestPos );
+                    }
+                }
                 pTargetShell->Paste( rWorkShell.GetDoc(), sal_True );
 
                 //add the document info to the config item
