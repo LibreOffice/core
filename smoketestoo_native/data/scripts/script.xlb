@@ -3,4 +3,5 @@
 <library:library xmlns:library="http://openoffice.org/2000/library" library:name="Standard" library:readonly="false" library:passwordprotected="false">
  <library:element library:name="Global"/>
  <library:element library:name="Test_10er"/>
+ <library:element library:name="Test_DB"/>
 </library:library>
