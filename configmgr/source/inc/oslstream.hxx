@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oslstream.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:53:07 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:16:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,10 +36,6 @@
 #ifndef _CONFIGMGR_OSLSTREAM_HXX_
 #define _CONFIGMGR_OSLSTREAM_HXX_
 
-#ifndef _OSL_MUTEX_HXX_ //autogen wg. ::osl::Mutex
-#include <osl/mutex.hxx>
-#endif
-
 #ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
 #endif
@@ -50,94 +46,136 @@
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
+#include <osl/mutex.hxx>
 
-#ifndef _COMPHELPER_UNO3_HXX_
-#include <comphelper/uno3.hxx>
-#endif
+#include "bufferedfile.hxx"
 
-#ifndef _OSL_FILE_HXX_
-#include <osl/file.hxx>
-#endif
-
-#include <trivialbufferedfile.hxx>
+namespace osl
+{
+    class File;
+}
 
 namespace configmgr
 {
     namespace stario    = ::com::sun::star::io;
     namespace staruno   = ::com::sun::star::uno;
 
-//==================================================================
-// FmUnoIOStream,
-// stream zum schreiben un lesen von Daten, basieren  auf File
-//==================================================================
-    typedef ::cppu::WeakImplHelper1<stario::XInputStream> InputStreamWrapper_Base;
-    // needed for some compilers
-class OSLInputStreamWrapper : public InputStreamWrapper_Base
-{
-    ::osl::Mutex    m_aMutex;
-    ::osl::File*    m_pFile;
-    sal_Bool        m_bFileOwner : 1;
-
-public:
-    OSLInputStreamWrapper(::osl::File& _rStream);
-    OSLInputStreamWrapper(::osl::File* pStream, sal_Bool bOwner=sal_False);
-    virtual ~OSLInputStreamWrapper();
-
-// UNO Anbindung
-    DECLARE_UNO3_AGG_DEFAULTS(OSLInputStreamWrapper, InputStreamWrapper_Base);
-
-// stario::XInputStream
-    virtual sal_Int32   SAL_CALL    readBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
-    virtual sal_Int32   SAL_CALL    readSomeBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
-    virtual void        SAL_CALL    skipBytes(sal_Int32 nBytesToSkip) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
-    virtual sal_Int32   SAL_CALL    available() throw(stario::NotConnectedException, staruno::RuntimeException);
-    virtual void        SAL_CALL    closeInput() throw(stario::NotConnectedException, staruno::RuntimeException);
-};
+    using rtl::OUString;
 
 // -----------------------------------------------------------------------------
-class OSLInputBufferedStreamWrapper : public InputStreamWrapper_Base
-{
-    ::osl::Mutex    m_aMutex;
-    OTrivialBufferedFile*   m_pFile;
-    sal_Bool        m_bFileOwner : 1;
+    typedef ::cppu::WeakImplHelper1<stario::XInputStream> InputStreamWrapper_Base;
 
-public:
-    // OSLInputStreamWrapper(OTrivialBufferedFile& _rStream);
-    OSLInputBufferedStreamWrapper(OTrivialBufferedFile* pStream, sal_Bool bOwner=sal_False);
-    virtual ~OSLInputBufferedStreamWrapper();
+    /// OSLInputStreamWrapper - implementation of XInputStream on an (unbuffered) osl::File
+    class OSLInputStreamWrapper : public InputStreamWrapper_Base
+    {
+        ::osl::Mutex      m_aMutex;
+        ::osl::File*    m_pFile;
+        sal_Bool        m_bFileOwner : 1;
 
-// UNO Anbindung
-    DECLARE_UNO3_AGG_DEFAULTS(OSLInputBufferedStreamWrapper, InputStreamWrapper_Base);
+    public:
+        /// c'tor. _rStream must live at least until closeInput() is called on this stream
+        OSLInputStreamWrapper(::osl::File& _rStream);
+        /// c'tor. if bOwner is <FALSE/> *pStream must live at least until closeInput() is called on this stream
+        OSLInputStreamWrapper(::osl::File* pStream, sal_Bool bOwner=sal_False);
+        virtual ~OSLInputStreamWrapper();
 
-// stario::XInputStream
-    virtual sal_Int32   SAL_CALL    readBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
-    virtual sal_Int32   SAL_CALL    readSomeBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
-    virtual void        SAL_CALL    skipBytes(sal_Int32 nBytesToSkip) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
-    virtual sal_Int32   SAL_CALL    available() throw(stario::NotConnectedException, staruno::RuntimeException);
-    virtual void        SAL_CALL    closeInput() throw(stario::NotConnectedException, staruno::RuntimeException);
-};
+    // stario::XInputStream
+        virtual sal_Int32   SAL_CALL
+            readBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
+                throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
 
-//==================================================================
-// FmUnoOutStream,
-// Datensenke fuer Files
-//==================================================================
-typedef ::cppu::WeakImplHelper1<stario::XOutputStream> OutputStreamWrapper_Base;
-    // needed for some compilers
-class OSLOutputStreamWrapper : public OutputStreamWrapper_Base
-{
-    ::osl::File&        rFile;
+        virtual sal_Int32   SAL_CALL
+            readSomeBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
+                throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
 
-public:
-    OSLOutputStreamWrapper(::osl::File& _rFile) :rFile(_rFile) { }
+        virtual void        SAL_CALL
+            skipBytes(sal_Int32 nBytesToSkip)
+                throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
 
-// UNO Anbindung
-    DECLARE_UNO3_AGG_DEFAULTS(OSLOutputStreamWrapper, OutputStreamWrapper_Base);
+        virtual sal_Int32   SAL_CALL    available() throw(stario::NotConnectedException, staruno::RuntimeException);
+        virtual void        SAL_CALL    closeInput() throw(stario::NotConnectedException, staruno::RuntimeException);
+    };
 
-// stario::XOutputStream
-    virtual void SAL_CALL writeBytes(const staruno::Sequence< sal_Int8 >& aData) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
-    virtual void SAL_CALL flush() throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
-    virtual void SAL_CALL closeOutput() throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
-};
+// -----------------------------------------------------------------------------
+    /// BufferedFileInputStream - buffered implementation of XInputStream on an osl::File
+    class BufferedFileInputStream: public InputStreamWrapper_Base
+    {
+        BufferedInputFile   m_aFile;
+
+    public:
+        BufferedFileInputStream(rtl::OUString const & aFileURL);
+        virtual ~BufferedFileInputStream();
+
+    // stario::XInputStream
+        virtual sal_Int32   SAL_CALL
+            readBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
+                throw(stario::NotConnectedException, stario::BufferSizeExceededException,
+                        stario::IOException,  staruno::RuntimeException);
+
+        virtual sal_Int32   SAL_CALL
+            readSomeBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
+                throw(stario::NotConnectedException, stario::BufferSizeExceededException,
+                        stario::IOException,staruno::RuntimeException);
+
+        virtual void        SAL_CALL
+            skipBytes(sal_Int32 nBytesToSkip)
+                throw(stario::NotConnectedException, stario::BufferSizeExceededException,
+                        stario::IOException,staruno::RuntimeException);
+
+        virtual sal_Int32   SAL_CALL    available()
+            throw(stario::NotConnectedException, stario::IOException, staruno::RuntimeException);
+
+        virtual void        SAL_CALL    closeInput()
+            throw(stario::NotConnectedException, stario::IOException, staruno::RuntimeException);
+    };
+
+// -----------------------------------------------------------------------------
+    typedef ::cppu::WeakImplHelper1<stario::XOutputStream> OutputStreamWrapper_Base;
+
+    /// OSLOutputStreamWrapper - implementation of XOutputStream on an (unbuffered) osl::File
+    class OSLOutputStreamWrapper : public OutputStreamWrapper_Base
+    {
+        ::osl::Mutex      m_aMutex;
+        ::osl::File&        rFile;
+
+    public:
+        /// c'tor. _rStream must live at least until closeOutput() is called on this stream
+        OSLOutputStreamWrapper(::osl::File& _rFile) :rFile(_rFile) { }
+
+    // stario::XOutputStream
+        virtual void SAL_CALL writeBytes(const staruno::Sequence< sal_Int8 >& aData)
+            throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
+
+        virtual void SAL_CALL flush()
+            throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
+
+        virtual void SAL_CALL closeOutput()
+            throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
+    };
+// -----------------------------------------------------------------------------
+    /// BufferedFileOutputStream - buffered implementation of XOutputStream on an osl::File
+    class BufferedFileOutputStream: public OutputStreamWrapper_Base
+    {
+        BufferedOutputFile  m_aFile;
+
+    public:
+        BufferedFileOutputStream(rtl::OUString const & aFileURL, bool bCreate=true, sal_uInt32 nBufferSizeHint=0);
+        virtual ~BufferedFileOutputStream();
+
+    // stario::XOutputStream
+        virtual void SAL_CALL writeBytes(const staruno::Sequence< sal_Int8 >& aData)
+            throw(stario::NotConnectedException, stario::BufferSizeExceededException,
+                    stario::IOException, staruno::RuntimeException);
+
+        virtual void SAL_CALL flush()
+            throw(stario::NotConnectedException, stario::BufferSizeExceededException,
+                    stario::IOException, staruno::RuntimeException);
+
+        virtual void SAL_CALL closeOutput()
+            throw(stario::NotConnectedException, stario::BufferSizeExceededException,
+                   stario::IOException, staruno::RuntimeException);
+    };
+// -----------------------------------------------------------------------------
 
 }   // namespace configmgr
 
