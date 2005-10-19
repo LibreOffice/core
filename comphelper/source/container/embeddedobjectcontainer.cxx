@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embeddedobjectcontainer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:44:57 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:47:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,9 @@
 #endif
 #ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XOPTIMIZEDSTORAGE_HPP_
+#include <com/sun/star/embed/XOptimizedStorage.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
@@ -1063,6 +1066,41 @@ sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < e
     return sal_True;
 }
 
+sal_Bool EmbeddedObjectContainer::CloseEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj )
+{
+    // disconnect the object from the container and close it if possible
+
+    sal_Bool bFound = sal_False;
+    EmbeddedObjectContainerNameMap::iterator aIt = pImpl->maObjectContainer.begin();
+    while ( aIt != pImpl->maObjectContainer.end() )
+    {
+        if ( (*aIt).second == xObj )
+        {
+            pImpl->maObjectContainer.erase( aIt );
+            bFound = sal_True;
+            break;
+        }
+
+        aIt++;
+    }
+
+    if ( bFound )
+    {
+        uno::Reference < ::util::XCloseable > xClose( xObj, uno::UNO_QUERY );
+        try
+        {
+            xClose->close( sal_True );
+        }
+        catch ( uno::Exception& )
+        {
+            // it is no problem if the object is already closed
+            // TODO/LATER: what if the object can not be closed?
+        }
+    }
+
+    return bFound;
+}
+
 uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetGraphicStream( const ::rtl::OUString& aName, rtl::OUString* pMediaType )
 {
     uno::Reference < io::XInputStream > xStream;
@@ -1136,6 +1174,9 @@ sal_Bool EmbeddedObjectContainer::InsertGraphicStream( const com::sun::star::uno
         uno::Any aAny;
         aAny <<= rMediaType;
         xPropSet->setPropertyValue( ::rtl::OUString::createFromAscii("MediaType"), aAny );
+
+        xPropSet->setPropertyValue( ::rtl::OUString::createFromAscii( "Compressed" ),
+                                    uno::makeAny( (sal_Bool)sal_True ) );
     }
     catch( uno::Exception& )
     {
@@ -1144,6 +1185,36 @@ sal_Bool EmbeddedObjectContainer::InsertGraphicStream( const com::sun::star::uno
 
     return sal_True;
 }
+
+sal_Bool EmbeddedObjectContainer::InsertGraphicStreamDirectly( const com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& rStream, const ::rtl::OUString& rObjectName, const rtl::OUString& rMediaType )
+{
+    try
+    {
+        uno::Reference < embed::XStorage > xReplacement = pImpl->GetReplacements();
+        uno::Reference < embed::XOptimizedStorage > xOptRepl( xReplacement, uno::UNO_QUERY_THROW );
+
+        // store it into the subfolder
+        uno::Sequence< beans::PropertyValue > aProps( 3 );
+        aProps[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) );
+        aProps[0].Value <<= rMediaType;
+        aProps[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UseCommonStoragePasswordEncryption" ) );
+        aProps[1].Value <<= (sal_Bool)sal_True;
+        aProps[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Compressed" ) );
+        aProps[2].Value <<= (sal_Bool)sal_True;
+
+        if ( xReplacement->hasByName( rObjectName ) )
+            xReplacement->removeElement( rObjectName );
+
+        xOptRepl->insertStreamElementDirect( rObjectName, rStream, aProps );
+    }
+    catch( uno::Exception& )
+    {
+        return sal_False;
+    }
+
+    return sal_True;
+}
+
 
 sal_Bool EmbeddedObjectContainer::RemoveGraphicStream( const ::rtl::OUString& rObjectName )
 {
