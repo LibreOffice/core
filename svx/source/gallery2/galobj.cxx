@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galobj.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:07:54 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:09:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,7 +137,7 @@ BOOL SgaObject::CreateThumb( const Graphic& rGraphic )
 
 // ------------------------------------------------------------------------
 
-void SgaObject::WriteData( SvStream& rOut ) const
+void SgaObject::WriteData( SvStream& rOut, const String& rDestDir ) const
 {
     static const UINT32 nInventor = COMPAT_FORMAT( 'S', 'G', 'A', '3' );
 
@@ -160,7 +160,9 @@ void SgaObject::WriteData( SvStream& rOut ) const
     else
         rOut << aThumbMtf;
 
-    rOut << ByteString( String(aURL.GetMainURL( INetURLObject::NO_DECODE )), RTL_TEXTENCODING_UTF8 );
+    String aURLWithoutDestDir = String(aURL.GetMainURL( INetURLObject::NO_DECODE ));
+    aURLWithoutDestDir.SearchAndReplace(rDestDir, String());
+    rOut << ByteString( aURLWithoutDestDir, RTL_TEXTENCODING_UTF8 );
 }
 
 // ------------------------------------------------------------------------
@@ -227,7 +229,7 @@ void SgaObject::SetTitle( const String& rTitle )
 
 SvStream& operator<<( SvStream& rOut, const SgaObject& rObj )
 {
-    rObj.WriteData( rOut );
+    rObj.WriteData( rOut, String() );
     return rOut;
 }
 
@@ -280,13 +282,13 @@ void SgaObjectBmp::Init( const Graphic& rGraphic, const INetURLObject& rURL )
 
 // ------------------------------------------------------------------------
 
-void SgaObjectBmp::WriteData( SvStream& rOut ) const
+void SgaObjectBmp::WriteData( SvStream& rOut, const String& rDestDir ) const
 {
     String  aDummyStr;
     char    aDummy[ 10 ];
 
     // Version setzen
-    SgaObject::WriteData( rOut );
+    SgaObject::WriteData( rOut, rDestDir );
     rOut.Write( aDummy, 10 );
     rOut << ByteString( aDummyStr, RTL_TEXTENCODING_UTF8 ) << ByteString( aTitle, RTL_TEXTENCODING_UTF8 );
 }
@@ -367,9 +369,9 @@ Bitmap SgaObjectSound::GetThumbBmp() const
 
 // ------------------------------------------------------------------------
 
-void SgaObjectSound::WriteData( SvStream& rOut ) const
+void SgaObjectSound::WriteData( SvStream& rOut, const String& rDestDir ) const
 {
-    SgaObject::WriteData( rOut );
+    SgaObject::WriteData( rOut, rDestDir );
     rOut << (UINT16) eSoundType << ByteString( aTitle, RTL_TEXTENCODING_UTF8 );
 }
 
@@ -541,9 +543,9 @@ BOOL SgaObjectSvDraw::DrawCentered( OutputDevice* pOut, const FmFormModel& rMode
 
 // ------------------------------------------------------------------------
 
-void SgaObjectSvDraw::WriteData( SvStream& rOut ) const
+void SgaObjectSvDraw::WriteData( SvStream& rOut, const String& rDestDir ) const
 {
-    SgaObject::WriteData( rOut );
+    SgaObject::WriteData( rOut, rDestDir );
     rOut << ByteString( aTitle, RTL_TEXTENCODING_UTF8 );
 }
 
