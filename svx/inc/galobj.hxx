@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galobj.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:49:56 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:07:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@ protected:
     BOOL                    bIsValid;
     BOOL                    bIsThumbBmp;
 
-    virtual void            WriteData( SvStream& rOut ) const;
+    virtual void            WriteData( SvStream& rOut, const String& rDestDir ) const;
     virtual void            ReadData( SvStream& rIn, UINT16& rReadVersion );
 
     BOOL                    CreateThumb( const Graphic& rGraphic );
@@ -144,7 +144,7 @@ private:
 
     GalSoundType        eSoundType;
 
-    virtual void        WriteData( SvStream& rOut ) const;
+    virtual void        WriteData( SvStream& rOut, const String& rDestDir ) const;
     virtual void        ReadData( SvStream& rIn, UINT16& rReadVersion );
 
     virtual UINT16      GetVersion() const { return 6; }
@@ -172,7 +172,7 @@ private:
 
     BOOL                CreateThumb( const FmFormModel& rModel );
 
-    virtual void        WriteData( SvStream& rOut ) const;
+    virtual void        WriteData( SvStream& rOut, const String& rDestDir ) const;
     virtual void        ReadData( SvStream& rIn, UINT16& rReadVersion );
 
     virtual UINT16      GetVersion() const { return 5; }
@@ -201,7 +201,7 @@ private:
 
     void                Init( const Graphic& rGraphic, const INetURLObject& rURL );
 
-    virtual void        WriteData( SvStream& rOut ) const;
+    virtual void        WriteData( SvStream& rOut, const String& rDestDir ) const;
     virtual void        ReadData( SvStream& rIn, UINT16& rReadVersion );
 
     virtual UINT16      GetVersion() const { return 5; }
