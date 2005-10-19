@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 15:46:58 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:19:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,6 +262,35 @@ End
 
 #endif
 
+File gid_File_Bin_Gengal
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+  #ifdef UNX
+    Name = "gengal.bin";
+  #else
+    Name = "gengal.exe";
+  #endif
+End
+
+#ifdef UNX
+
+File gid_File_Script_Gengal
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+    Name = "gengal";
+End
+
+#endif
+
+File gid_File_Rdb_Gengal
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED, OVERWRITE);
+    Name = "gengal.rdb";
+End
+
 #ifdef UNX
 
 File gid_File_Bin_Pluginapp
@@ -278,7 +307,7 @@ File gid_File_Bin_Soffice
     Dir = gid_Dir_Program;
     Name = EXENAME(soffice);
   #ifdef WNT
-    Styles = (PACKED, PATCH_SO_NAME);
+    Styles = (PACKED, PATCH_SO_NAME, PATCH);
   #else
     Styles = (PACKED);
   #endif
@@ -1684,7 +1713,7 @@ End
 File gid_File_Rdb_Types
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED, OVERWRITE);
+    Styles = (PACKED, OVERWRITE, PATCH);
     Name = "types.rdb";
 End
 
