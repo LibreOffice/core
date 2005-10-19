@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModelImpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:14:25 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:13:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -709,14 +709,26 @@ sal_Bool ODatabaseModelImpl::commitEmbeddedStorage( sal_Bool _bPreventRootCommit
         m_pStorageAccess->suspendCommitPropagation();
 
     sal_Bool bStore = sal_False;
-    TStorages::iterator aFind = m_aStorages.find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("database")));
-    if ( aFind != m_aStorages.end() )
-        bStore = commitStorageIfWriteable_ignoreErrors( aFind->second );
+    try
+    {
+        TStorages::iterator aFind = m_aStorages.find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("database")));
+        if ( aFind != m_aStorages.end() )
+        {
+            Reference<XTransactedObject> xTrans(aFind->second,UNO_QUERY);
+            if ( bStore = xTrans.is() )
+                xTrans->commit();
+        }
+    }
+    catch(Exception&)
+    {
+        OSL_ENSURE(0,"Exception Caught: Could not store embedded database!");
+    }
 
     if ( _bPreventRootCommits && m_pStorageAccess )
         m_pStorageAccess->resumeCommitPropagation();
 
     return bStore;
+
 }
 // -----------------------------------------------------------------------------
 bool ODatabaseModelImpl::commitStorageIfWriteable( const Reference< XStorage >& _rxStorage ) SAL_THROW(( IOException, WrappedTargetException, RuntimeException ))
