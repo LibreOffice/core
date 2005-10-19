@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationimport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:43:08 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:21:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -841,6 +841,8 @@ AnimationNodeContext::AnimationNodeContext(
                     xInit->initialize( aArgs );
                 }
 
+                init_node( xAttrList );
+
                 Reference< XTimeContainer > xParentContainer( xParentNode, UNO_QUERY_THROW );
                 xParentContainer->appendChild( mxNode );
             }
@@ -859,6 +861,14 @@ AnimationNodeContext::~AnimationNodeContext()
 }
 
 void AnimationNodeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
+{
+    // code of StartElement is moved to init_node that is now called
+    // in c'tor before appending this node to its parent.
+    // This is needed for random nodes that need the correct target
+    // set when child nodes are appended.
+}
+
+void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
 {
     if( mxNode.is() ) try
     {
