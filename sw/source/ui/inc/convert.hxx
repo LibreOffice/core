@@ -4,9 +4,9 @@
  *
  *  $RCSfile: convert.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:08:13 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 08:30:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ class SwConvertTableDlg: public SfxModalDialog
     DECL_LINK( ReapeatHeaderCheckBoxHdl, void* p = 0 );
 
 public:
-    SwConvertTableDlg( SwView& rView );
+    SwConvertTableDlg( SwView& rView, bool bToTable );
     ~SwConvertTableDlg();
 
     void GetValues( sal_Unicode& rDelim,
