@@ -4,9 +4,9 @@
  *
  *  $RCSfile: binarywriter.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:27:49 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:16:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,6 @@
 
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
-
-#ifndef _OSL_FILE_HXX_
-#include <osl/file.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
@@ -74,9 +70,7 @@ namespace configmgr
 
         class BinaryWriter
         {
-            rtl::OUString      m_aFileURL;
-            osl::File*         m_pFileOut;
-
+            rtl::OUString       m_aFileURL;
 
             uno::Reference<lang::XMultiServiceFactory> m_xServiceProvider;
             uno::Reference< io::XDataOutputStream > m_xDataOutputStream;
