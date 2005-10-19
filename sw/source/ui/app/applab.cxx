@@ -4,9 +4,9 @@
  *
  *  $RCSfile: applab.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:29:19 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 08:25:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,7 +302,6 @@ static sal_uInt16 nBCTitleNo = 0;
         const SwLabItem& rItem = (const SwLabItem&) pDlg->
                                             GetOutputItemSet()->Get(FN_LABEL);
         aLabCfg.GetItem() = rItem;
-        pDlg->MakeConfigItem( aLabCfg.GetItem());
         aLabCfg.Commit();
 
         // Neues Dokument erzeugen.
