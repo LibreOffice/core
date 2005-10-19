@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 03:37:35 $
+#   last change: $Author: rt $ $Date: 2005-10-19 12:16:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ APP2TARGET= $(TARGET2)
 APP1OBJS=	\
     $(OBJ)$/filehelper.obj \
     $(OBJ)$/oslstream.obj \
-    $(OBJ)$/trivialbufferedfile.obj \
+    $(OBJ)$/bufferedfile.obj \
     $(OBJ)$/configimport.obj \
     $(OBJ)$/unomain.obj 
 
