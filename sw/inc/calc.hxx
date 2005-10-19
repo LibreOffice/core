@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calc.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:34:48 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 08:21:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,13 +127,17 @@ enum SwCalcError
 
 class SwSbxValue : public SbxValue
 {
+    bool bVoid;
 public:
     //JP 03.02.99: immer auf eine Zahl defaulten, damit auch gerechnet wird.
     //              Ansonsten wird daraus ein SbxEMPTY und damit ist nichts
     //              anzufangen.
-    SwSbxValue( long n = 0 )        { PutLong( n ); }
-    SwSbxValue( const double& rD )  { PutDouble( rD ); }
-    SwSbxValue( const SwSbxValue& rVal ) : SbxValue( rVal ) {}
+    SwSbxValue( long n = 0 ) : bVoid(false)  { PutLong( n ); }
+    SwSbxValue( const double& rD ) : bVoid(false) { PutDouble( rD ); }
+    SwSbxValue( const SwSbxValue& rVal ) :
+        SbxValue( rVal ),
+        bVoid(rVal.bVoid)
+        {}
     virtual ~SwSbxValue();
 
 
@@ -142,6 +146,9 @@ public:
     // Strings sonderbehandeln BOOLs sonderbehandeln
     double GetDouble() const;
     SwSbxValue& MakeDouble();
+
+    bool IsVoidValue() {return bVoid;}
+    void SetVoidValue() {bVoid = true;}
 };
 
 /******************************************************************************
