@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-27 12:30:10 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:12:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1367,6 +1367,19 @@ void SdrPage::SetModel(SdrModel* pNewModel)
         if( pBackgroundObj )
             pBackgroundObj->SetModel( pNewModel );
     }
+
+    // update listeners at possible api wrapper object
+    if( pOldModel != pNewModel )
+    {
+        uno::Reference< uno::XInterface > xPage( mxUnoPage );
+        if( xPage.is() )
+        {
+            SvxDrawPage* pPage = SvxDrawPage::getImplementation( xPage );
+            if( pPage )
+                pPage->ChangeModel( pNewModel );
+        }
+    }
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
