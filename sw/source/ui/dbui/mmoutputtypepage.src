@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmoutputtypepage.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:57:39 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 08:29:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,7 @@ TabPage DLG_MM_OUTPUTTYPE_PAGE
     FixedText FT_NOMAILHINT
     {
         Pos = MAP_APPFONT ( 12 , 113 ) ;
-        Size = MAP_APPFONT ( 242 , 26 ) ;
+        Size = MAP_APPFONT ( 242 , 42 ) ;
         WordBreak = TRUE;
         Hide = TRUE;
         Text [ de ] = "%PRODUCTNAME konnte auf Ihrem System keine Java Mail Anbindung finden. Um Nachrichten mit %PRODUCTNAME versenden zu können, muss die aktuellste Version von Java Mail installiert sein. Weitere Informationen zu Java Mail finden Sie im Internet unter 'http://java.sun.com/products/javamail/'." ;
