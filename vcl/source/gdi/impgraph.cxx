@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impgraph.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:01:14 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:38:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,9 @@
 #ifndef _SV_GRAPH_HXX
 #include <graph.hxx>
 #endif
+#ifndef _SV_METAACT_HXX
+#include <metaact.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
@@ -129,6 +132,7 @@ ImpGraphic::ImpGraphic() :
         mpGfxLink       ( NULL ),
         meType          ( GRAPHIC_NONE ),
         mnDocFilePos    ( 0UL ),
+        mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
         mbSwapOut       ( FALSE ),
         mbSwapUnderway  ( FALSE )
@@ -145,6 +149,7 @@ ImpGraphic::ImpGraphic( const ImpGraphic& rImpGraphic ) :
         meType          ( rImpGraphic.meType ),
         maDocFileURLStr ( rImpGraphic.maDocFileURLStr ),
         mnDocFilePos    ( rImpGraphic.mnDocFilePos ),
+        mnSizeBytes     ( rImpGraphic.mnSizeBytes ),
         mnRefCount      ( 1UL ),
         mbSwapOut       ( rImpGraphic.mbSwapOut ),
         mbSwapUnderway  ( FALSE )
@@ -176,6 +181,7 @@ ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
         mpGfxLink       ( NULL ),
         meType          ( !rBitmap ? GRAPHIC_NONE : GRAPHIC_BITMAP ),
         mnDocFilePos    ( 0UL ),
+        mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
         mbSwapOut       ( FALSE ),
         mbSwapUnderway  ( FALSE )
@@ -192,6 +198,7 @@ ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
         mpGfxLink       ( NULL ),
         meType          ( !rBitmapEx ? GRAPHIC_NONE : GRAPHIC_BITMAP ),
         mnDocFilePos    ( 0UL ),
+        mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
         mbSwapOut       ( FALSE ),
         mbSwapUnderway  ( FALSE )
@@ -208,6 +215,7 @@ ImpGraphic::ImpGraphic( const Animation& rAnimation ) :
         mpGfxLink       ( NULL ),
         meType          ( GRAPHIC_BITMAP ),
         mnDocFilePos    ( 0UL ),
+        mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
         mbSwapOut       ( FALSE ),
         mbSwapUnderway  ( FALSE )
@@ -224,6 +232,7 @@ ImpGraphic::ImpGraphic( const GDIMetaFile& rMtf ) :
         mpGfxLink       ( NULL ),
         meType          ( GRAPHIC_GDIMETAFILE ),
         mnDocFilePos    ( 0UL ),
+        mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
         mbSwapOut       ( FALSE ),
         mbSwapUnderway  ( FALSE )
@@ -251,6 +260,7 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
 
         maMetaFile = rImpGraphic.maMetaFile;
         meType = rImpGraphic.meType;
+        mnSizeBytes = rImpGraphic.mnSizeBytes;
 
         delete mpAnimation;
 
@@ -401,6 +411,7 @@ void ImpGraphic::ImplClear()
     // cleanup
     ImplClearGraphics( FALSE );
     meType = GRAPHIC_NONE;
+    mnSizeBytes = 0;
 }
 
 // ------------------------------------------------------------------------
@@ -701,19 +712,19 @@ void ImpGraphic::ImplSetPrefMapMode( const MapMode& rPrefMapMode )
 
 ULONG ImpGraphic::ImplGetSizeBytes() const
 {
-    ULONG nSizeBytes;
-
-    if( meType == GRAPHIC_BITMAP )
+    if( 0 == mnSizeBytes )
     {
-        if( mpAnimation )
-            nSizeBytes = mpAnimation->GetSizeBytes();
-        else
-            nSizeBytes = maEx.GetSizeBytes();
+        if( meType == GRAPHIC_BITMAP )
+        {
+            mnSizeBytes = mpAnimation ? mpAnimation->GetSizeBytes() : maEx.GetSizeBytes();
+        }
+        else if( meType == GRAPHIC_GDIMETAFILE )
+        {
+            mnSizeBytes = maMetaFile.GetSizeBytes();
+        }
     }
-    else
-        nSizeBytes = 0UL;
 
-    return nSizeBytes;
+    return( mnSizeBytes );
 }
 
 // ------------------------------------------------------------------------
@@ -1445,21 +1456,6 @@ ULONG ImpGraphic::ImplGetChecksum() const
 
 // ------------------------------------------------------------------------
 
-BOOL ImpGraphic::ImplCopy() const
-{
-    DBG_ERROR( "Missing implementation!" );
-    return FALSE;
-}
-
-// ------------------------------------------------------------------------
-
-BOOL ImpGraphic::ImplPaste()
-{
-    DBG_ERROR( "Missing implementation!" );
-    return FALSE;
-}
-
-// ------------------------------------------------------------------------
 BOOL ImpGraphic::ImplExportNative( SvStream& rOStm ) const
 {
     BOOL bResult = FALSE;
