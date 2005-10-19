@@ -4,9 +4,9 @@
  *
  *  $RCSfile: binarywriter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:27:35 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:15:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,10 +49,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #endif
 
-#ifndef _OSL_FILE_HXX_
-#include <osl/file.hxx>
-#endif
-
 #ifndef _CONFIGMGR_OSLSTREAM_HXX_
 #include "oslstream.hxx"
 #endif
@@ -88,16 +84,15 @@ namespace configmgr
     {
         using namespace ::rtl;
         using namespace ::std;
-        using namespace ::osl;
         using namespace ::com::sun::star;
         using namespace ::com::sun::star::uno;
         namespace uno = com::sun::star::uno;
         namespace io = com::sun::star::io;
 
         BinaryWriter::BinaryWriter(rtl::OUString const &_aFileURL, uno::Reference<lang::XMultiServiceFactory> const& _xServiceProvider)
-            :m_aFileURL(_aFileURL),
-             m_pFileOut(NULL),
-             m_xServiceProvider(_xServiceProvider)
+        : m_aFileURL(_aFileURL)
+        , m_xServiceProvider(_xServiceProvider)
+        , m_xDataOutputStream()
         {}
 
         bool BinaryWriter::open() SAL_THROW( (io::IOException, uno::RuntimeException) )
@@ -105,18 +100,15 @@ namespace configmgr
             if (m_aFileURL.getLength() == 0)
                 return false;
 
-            OSL_ENSURE(m_pFileOut == NULL, "Binary Writer: already open");
-            if (m_pFileOut)
-            {
-                OSL_ASSERT(m_xDataOutputStream.is());
+            OSL_ENSURE(!m_xDataOutputStream.is(), "Binary Writer: already open");
+            if ( m_xDataOutputStream.is())
                 return false;
-            }
-            OSL_ENSURE(!m_xDataOutputStream.is(), "Binary Writer: found stream without file");
 
             if (FileHelper::fileExists(m_aFileURL))
             {
                 if (osl::File::RC errorCode = osl::File::remove(m_aFileURL))
                 {
+                    // creating the file will fail later
                     OSL_TRACE("Binary Cache: Cannot remove existing file [%d]",int(errorCode));
                 }
             }
@@ -127,52 +119,33 @@ namespace configmgr
 
                 if (osl::File::RC errorCode = FileHelper::mkdirs(parentDirectory))
                 {
+                    // creating the file will fail later
                     OSL_TRACE("Binary Cache: Cannot create package cache directory [%d]",int(errorCode));
                 }
             }
 
-            try
-            {
-                m_pFileOut = new File(m_aFileURL);
+            uno::Reference<io::XOutputStream> xOutput = new BufferedFileOutputStream(m_aFileURL, true, 1024);
 
-                if (FileBase::RC eError = m_pFileOut->open(OpenFlag_Write | OpenFlag_Create))
-                {
-                    delete m_pFileOut, m_pFileOut = NULL;
-                    OSL_TRACE("Binary Cache: Cannot create cache file [%d]",int(eError));
-                    return false;
-                }
+            uno::Reference< io::XActiveDataSource > xFormattingStream(
+                    m_xServiceProvider->createInstance(ASCII("com.sun.star.io.DataOutputStream")),
+                    uno::UNO_QUERY_THROW);
 
-                uno::Reference<io::XOutputStream> xOutput = new OSLOutputStreamWrapper(*m_pFileOut);
+            xFormattingStream->setOutputStream(xOutput);
 
-                uno::Reference< io::XActiveDataSource > xFormattingStream(m_xServiceProvider->createInstance(ASCII("com.sun.star.io.DataOutputStream")), uno::UNO_QUERY_THROW);
-                xFormattingStream->setOutputStream(xOutput);
+            m_xDataOutputStream.set(xFormattingStream, uno::UNO_QUERY_THROW);
 
-                m_xDataOutputStream.set(xFormattingStream, uno::UNO_QUERY_THROW);
-            }
-            catch ( uno::Exception & )
-            {
-                m_xDataOutputStream.clear();
-                delete m_pFileOut;
-                m_pFileOut = NULL;
-
-                throw;
-            }
             OSL_ASSERT(m_xDataOutputStream.is());
-            return true;
+            return m_xDataOutputStream.is();
         }
 
         void BinaryWriter::close() SAL_THROW( (io::IOException, uno::RuntimeException) )
         {
-            if (m_pFileOut)
-            {
-                if (m_xDataOutputStream.is())
-                    m_xDataOutputStream->closeOutput();
+            if (m_xDataOutputStream.is())
+                m_xDataOutputStream->closeOutput();
 
-                m_xDataOutputStream.clear();
-                delete m_pFileOut;
-                m_pFileOut = NULL;
-            }
+            m_xDataOutputStream.clear();
         }
+
         BinaryWriter::~BinaryWriter()
         {
             try
@@ -182,7 +155,6 @@ namespace configmgr
             catch (uno::Exception& e)
             {
                 OSL_ENSURE(false, rtl::OUStringToOString(e.Message,RTL_TEXTENCODING_ASCII_US).getStr());
-                delete m_pFileOut;
             }
         }
 
