@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:38:43 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:12:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1021,33 +1021,37 @@ SdrPageViewWindow& SdrPageView::ImpMakePageViewWinRec(OutputDevice& rOut)
     SdrPageViewWindow& rWindow = *(new SdrPageViewWindow(*this, rOut));
     AppendWindow(rWindow);
 
-    ULONG nObjAnz=GetPage()!=NULL?GetPage()->GetObjCount():0;
-
-    for (ULONG nObjNum=0; nObjNum<nObjAnz; nObjNum++)
+    // do not create controls during a running slideshow
+    if( rOut.GetOutDevViewType() != OUTDEV_VIEWTYPE_SLIDESHOW )
     {
-        SdrObject* pObj = GetPage()->GetObj(nObjNum);
+        ULONG nObjAnz=GetPage()!=NULL?GetPage()->GetObjCount():0;
 
-        if (pObj->IsUnoObj())
+        for (ULONG nObjNum=0; nObjNum<nObjAnz; nObjNum++)
         {
-            SdrUnoObj* pSdrUnoObj = PTR_CAST(SdrUnoObj, pObj);
-            ImpInsertControl(pSdrUnoObj, rWindow);
-        }
-        else if (pObj->GetObjIdentifier() == OBJ_GRUP &&
-                 pObj->GetObjInventor() == SdrInventor)
-        {
-            // Gruppenobjekt: sind Uno-Objekte enthalten?
-            SdrObjListIter aIter(*((SdrObjGroup*) pObj)->GetSubList(), IM_DEEPNOGROUPS);
+            SdrObject* pObj = GetPage()->GetObj(nObjNum);
 
-            SdrObject* pObj = NULL;
-
-            while (aIter.IsMore())
+            if (pObj->IsUnoObj())
             {
-                pObj = aIter.Next();
+                SdrUnoObj* pSdrUnoObj = PTR_CAST(SdrUnoObj, pObj);
+                ImpInsertControl(pSdrUnoObj, rWindow);
+            }
+            else if (pObj->GetObjIdentifier() == OBJ_GRUP &&
+                    pObj->GetObjInventor() == SdrInventor)
+            {
+                // Gruppenobjekt: sind Uno-Objekte enthalten?
+                SdrObjListIter aIter(*((SdrObjGroup*) pObj)->GetSubList(), IM_DEEPNOGROUPS);
 
-                if (pObj && pObj->IsUnoObj())
+                SdrObject* pObj = NULL;
+
+                while (aIter.IsMore())
                 {
-                    SdrUnoObj* pSdrUnoObj = PTR_CAST(SdrUnoObj, pObj);
-                    ImpInsertControl(pSdrUnoObj, rWindow);
+                    pObj = aIter.Next();
+
+                    if (pObj && pObj->IsUnoObj())
+                    {
+                        SdrUnoObj* pSdrUnoObj = PTR_CAST(SdrUnoObj, pObj);
+                        ImpInsertControl(pSdrUnoObj, rWindow);
+                    }
                 }
             }
         }
