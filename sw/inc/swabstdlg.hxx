@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swabstdlg.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:11:06 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 08:22:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -304,7 +304,6 @@ class AbstarctSwLabDlg  : public SfxAbstractTabDialog //add for SwLabDlg
 public:
      virtual const String& GetBusinessCardStr() const = 0;
      virtual Printer *GetPrt() =0;
-     virtual void MakeConfigItem(SwLabItem& rItem) const=0;
 };
 
 class AbstarctSwSelGlossaryDlg : public VclAbstractDialog //add for SwSelGlossaryDlg
@@ -396,10 +395,10 @@ public:
     virtual VclAbstractDialog * CreateSwInsertBookmarkDlg( Window *pParent, SwWrtShell &rSh, SfxRequest& rReq, const ResId& rResId ) = 0;//CHINA001 add for SwInsertBookmarkDlg
 
     virtual AbstractSwBreakDlg * CreateSwBreakDlg( Window *pParent, SwWrtShell &rSh,const ResId& rResId ) = 0; // add for SwBreakDlg
-    virtual VclAbstractDialog   * CreateSwChangeDBDlg( SwView& rVw, const ResId& rResId  ) = 0; //add for SwChangeDBDlg
+    virtual VclAbstractDialog   * CreateSwChangeDBDlg( SwView& rVw, const ResId& rResId ) = 0; //add for SwChangeDBDlg
     virtual SfxAbstractTabDialog *  CreateSwCharDlg( Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet, const ResId& rResId, // add for SwCharDlg
                                                 const String* pFmtStr = 0, BOOL bIsDrwTxtDlg = FALSE) = 0;
-    virtual AbstractSwConvertTableDlg* CreateSwConvertTableDlg ( SwView& rView , const ResId& rResId) = 0; //add for SwConvertTableDlg
+    virtual AbstractSwConvertTableDlg* CreateSwConvertTableDlg ( SwView& rView , const ResId& rResId, bool bToTable) = 0; //add for SwConvertTableDlg
     virtual VclAbstractDialog * CreateSwCaptionDialog ( Window *pParent, SwView &rV,const ResId& rResId) = 0; //add for SwCaptionDialog
 
     virtual AbstractSwInsertDBColAutoPilot* CreateSwInsertDBColAutoPilot( SwView& rView, // add for SwInsertDBColAutoPilot
