@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jsc $ $Date: 2005-09-09 13:50:31 $
+#   last change: $Author: jsc $ $Date: 2005-10-19 08:53:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@ LIBTARGET := NO
 ENABLE_EXCEPTIONS := TRUE
 
 .INCLUDE: settings.mk
+.INCLUDE : $(PRJ)$/unodevtools.pmk
 
 APP1TARGET = $(TARGET)
 APP1OBJS = $(OBJ)$/skeletonmaker.obj \
@@ -52,13 +53,8 @@ APP1OBJS = $(OBJ)$/skeletonmaker.obj \
     $(OBJ)$/javacompskeleton.obj \
     $(OBJ)$/cppcompskeleton.obj
 
-
-
-APP1STDLIBS = $(REGLIB) $(SALLIB) $(SALHELPERLIB) $(CPPULIB) $(CPPUHELPERLIB)
-APP1LIBS = $(LB)$/unodevtools.lib \
-    $(SOLARLIBDIR)$/codemaker.lib \
-    $(SOLARLIBDIR)$/commonjava.lib \
-    $(SOLARLIBDIR)$/commoncpp.lib
+APP1STDLIBS = $(REGLIB) $(SALLIB) $(SALHELPERLIB) $(CPPULIB) $(CPPUHELPERLIB) \
+    $(UNODEVTOOLSLIB) $(CODEMAKERLIB) $(COMMONCPPLIB) $(COMMONJAVALIB)
 
 OBJFILES = $(APP1OBJS)
 
