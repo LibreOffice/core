@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: kz $ $Date: 2005-10-06 12:38:17 $
+#   last change: $Author: rt $ $Date: 2005-10-19 12:04:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -156,9 +156,9 @@ APP1DEPN+=$(SHL2TARGETN) $(SHL3TARGETN)
 APP1STDLIBS= \
         app.lib \
         sample.lib
-APP1DEPN+=$(LB)$/$(SHL2IMPLIB).lib $(LB)$/$(SHL3IMPLIB).lib
+APP1DEPN+=$(SHL2IMPLIBN) $(SHL3IMPLIBN)
 .ENDIF
-    
+
 APP1STDLIBS+= \
             $(CPPUHELPERLIB) \
             $(TOOLSLIB) \
@@ -227,7 +227,7 @@ APP3TARGET=miniapp
 APP3STDLIBS= \
             $(CPPULIB) \
             $(CPPUHELPERLIB) \
-             $(UCBHELPERLIB) \
+            $(UCBHELPERLIB) \
             $(COMPHELPERLIB) \
             $(AUTOMATIONLIB) \
             $(SALLIB) \
@@ -244,6 +244,12 @@ APP3STDLIBS+= \
 APP3STDLIBS+= \
             $(VOSLIB) $(SALLIB)
 .ENDIF
+.ENDIF
+# $(AUTOMATIONLIB) is build in SHL1TARGET
+.IF "$(GUI)"=="UNX"
+APP3DEPN=$(SHL1TARGETN)
+.ELSE
+APP3DEPN=$(SHL1IMPLIBN)
 .ENDIF
 
 APP3LIBS= \
