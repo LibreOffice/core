@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:11:07 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:23:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -753,7 +753,7 @@ void SdDrawDocument::SetSelected(SdPage* pPage, BOOL bSelect)
 |*
 \************************************************************************/
 
-void SdDrawDocument::CreateFirstPages()
+void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
 {
     /**************************************************************************
     * Wenn noch keine Seite im Model vorhanden ist (Datei-Neu), wird
@@ -769,7 +769,12 @@ void SdDrawDocument::CreateFirstPages()
         SfxPrinter* pPrinter = NULL;
         Size aDefSize(21000, 29700);   // A4-Hochformat
 
-        if (pDocSh)
+        SdPage* pRefPage = 0;
+
+        if( pRefDocument )
+            SdPage* pRefHandout = pRefDocument->GetSdPage( 0, PK_HANDOUT );
+
+        if(pDocSh)
         {
             pPrinter = pDocSh->GetPrinter(TRUE);
 
@@ -791,19 +796,27 @@ void SdDrawDocument::CreateFirstPages()
         * Handzettel-Seite einfuegen
         **********************************************************************/
         BOOL bMasterPage;
-        SdPage* pHandoutPage = (SdPage*) AllocPage(bMasterPage=FALSE);
+        SdPage* pHandoutPage = dynamic_cast< SdPage* >( AllocPage(bMasterPage=FALSE) );
 
-        // Stets Querformat
-        if (aDefSize.Height() <= aDefSize.Width())
+        if( pRefPage )
         {
-            pHandoutPage->SetSize(aDefSize);
+            pHandoutPage->SetSize( pRefPage->GetSize() );
+            pHandoutPage->SetBorder( pRefPage->GetLftBorder(), pRefPage->GetUppBorder(), pRefPage->GetRgtBorder(), pRefPage->GetLwrBorder() );
         }
         else
         {
-            pHandoutPage->SetSize( Size(aDefSize.Height(), aDefSize.Width()) );
-        }
+            // Stets Querformat
+            if (aDefSize.Height() <= aDefSize.Width())
+            {
+                pHandoutPage->SetSize(aDefSize);
+            }
+            else
+            {
+                pHandoutPage->SetSize( Size(aDefSize.Height(), aDefSize.Width()) );
+            }
 
-        pHandoutPage->SetBorder(0, 0, 0, 0);
+            pHandoutPage->SetBorder(0, 0, 0, 0);
+        }
         pHandoutPage->SetPageKind(PK_HANDOUT);
         pHandoutPage->SetName( String (SdResId(STR_HANDOUT) ) );
         InsertPage(pHandoutPage, 0);
@@ -829,11 +842,19 @@ void SdDrawDocument::CreateFirstPages()
         SdPage* pPage;
         BOOL bClipboard = FALSE;
 
+        if( pRefDocument )
+            pRefPage = pRefDocument->GetSdPage( 0, PK_STANDARD );
+
         if (nPageCount == 0)
         {
-            pPage = (SdPage*) AllocPage(bMasterPage=FALSE);
+            pPage = dynamic_cast< SdPage* >( AllocPage(bMasterPage=FALSE) );
 
-            if (eDocType == DOCUMENT_TYPE_DRAW)
+            if( pRefPage )
+            {
+                pPage->SetSize( pRefPage->GetSize() );
+                pPage->SetBorder( pRefPage->GetLftBorder(), pRefPage->GetUppBorder(), pRefPage->GetRgtBorder(), pRefPage->GetLwrBorder() );
+            }
+            else if (eDocType == DOCUMENT_TYPE_DRAW)
             {
                 // Draw: stets Default-Groesse mit Raendern
                 pPage->SetSize(aDefSize);
@@ -891,17 +912,28 @@ void SdDrawDocument::CreateFirstPages()
         **********************************************************************/
         SdPage* pNotesPage = (SdPage*) AllocPage(bMasterPage=FALSE);
 
-        // Stets Hochformat
-        if (aDefSize.Height() >= aDefSize.Width())
+        if( pRefDocument )
+            pRefPage = pRefDocument->GetSdPage( 0, PK_NOTES );
+
+        if( pRefPage )
         {
-            pNotesPage->SetSize(aDefSize);
+            pNotesPage->SetSize( pRefPage->GetSize() );
+            pNotesPage->SetBorder( pRefPage->GetLftBorder(), pRefPage->GetUppBorder(), pRefPage->GetRgtBorder(), pRefPage->GetLwrBorder() );
         }
         else
         {
-            pNotesPage->SetSize( Size(aDefSize.Height(), aDefSize.Width()) );
-        }
+            // Stets Hochformat
+            if (aDefSize.Height() >= aDefSize.Width())
+            {
+                pNotesPage->SetSize(aDefSize);
+            }
+            else
+            {
+                pNotesPage->SetSize( Size(aDefSize.Height(), aDefSize.Width()) );
+            }
 
-        pNotesPage->SetBorder(0, 0, 0, 0);
+            pNotesPage->SetBorder(0, 0, 0, 0);
+        }
         pNotesPage->SetPageKind(PK_NOTES);
         InsertPage(pNotesPage, 2);
         if( bClipboard )
