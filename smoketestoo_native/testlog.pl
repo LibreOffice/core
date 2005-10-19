@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: testlog.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 21:29:26 $
+#   last change: $Author: rt $ $Date: 2005-10-19 11:25:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,8 @@ $is_debug = 0;
                 "sdrwlog.dat",
                 "sdlog.dat",
                 "sclog.dat",
-        "javalog.dat"
+        "javalog.dat",
+        "dblog.dat"
 );
 
 $dont_kill ="dont_deinstall";
@@ -127,7 +128,7 @@ sub test_logfile {
 
 ### main ###
 
-$idStr = ' $Revision: 1.2 $ ';
+$idStr = ' $Revision: 1.3 $ ';
 $idStr =~ /Revision:\s+(\S+)\s+\$/
   ? ($cpflat2minor_rev = $1) : ($cpflat2minor_rev = "-");
 
