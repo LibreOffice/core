@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oleembobj.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:39:51 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:40:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,6 +127,7 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper3
     sal_Bool m_bStoreLoaded;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > m_xCachedVisualRepresentation;
+    sal_Bool m_bVisReplInitialized;
     sal_Bool m_bVisReplInStream;
     sal_Bool m_bStoreVisRepl;
 
@@ -201,6 +202,9 @@ protected:
 
     void RemoveVisualCache_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xTargetStream )
         throw ( ::com::sun::star::uno::Exception );
+
+    void SetVisReplInStream( sal_Bool bExists );
+    sal_Bool HasVisReplInStream();
 
     ::com::sun::star::embed::VisualRepresentation GetVisualRepresentationInNativeFormat_Impl(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xCachedVisRepr )
