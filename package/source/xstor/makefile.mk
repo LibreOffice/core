@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 16:06:15 $
+#   last change: $Author: rt $ $Date: 2005-10-19 12:48:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,7 @@ SLOFILES =  \
         $(SLO)$/xstorage.obj\
         $(SLO)$/xfactory.obj\
         $(SLO)$/disposelistener.obj\
+        $(SLO)$/switchpersistencestream.obj\
         $(SLO)$/register.obj
 
 EXCEPTIONSFILES= \
@@ -62,6 +63,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/xstorage.obj\
         $(SLO)$/xfactory.obj\
         $(SLO)$/disposelistener.obj\
+        $(SLO)$/switchpersistencestream.obj\
         $(SLO)$/register.obj
 
 SHL1TARGET=$(TARGET)
