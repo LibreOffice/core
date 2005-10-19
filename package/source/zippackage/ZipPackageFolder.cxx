@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:55:50 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:49:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -352,133 +352,152 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
             else if ( pStream->GetStreamMode() == PACKAGE_STREAM_RAW )
                 bRawStream = sal_True;
 
-            Reference < XInputStream > xStream;
-            xStream = pStream->getRawData();
-
-            if ( !xStream.is() )
-            {
-                VOS_ENSURE( 0, "ZipPackageStream didn't have a stream associated with it, skipping!" );
-                continue;
-            }
-
             sal_Bool bTransportOwnEncrStreamAsRaw = sal_False;
             // During the storing the original size of the stream can be changed
             // TODO/LATER: get rid of this hack
             sal_Int32 nOwnStreamOrigSize = bRawStream ? pStream->GetMagicalHackSize() : pStream->getSize();
-            Reference < XSeekable > xSeek ( xStream, UNO_QUERY );
-            try
+
+            sal_Bool bUseNonSeekableAccess = sal_False;
+            Reference < XInputStream > xStream;
+            if ( !pStream->IsPackageMember() && !bRawStream && !bToBeEncrypted && bToBeCompressed )
             {
-                if ( xSeek.is() )
+                // the stream is not a package member, not a raw stream,
+                // it should not be encrypted and it should be compressed,
+                // in this case nonseekable access can be used
+
+                xStream = pStream->GetOwnStreamNoWrap();
+                Reference < XSeekable > xSeek ( xStream, UNO_QUERY );
+
+                bUseNonSeekableAccess = ( xStream.is() && !xSeek.is() );
+            }
+
+            if ( !bUseNonSeekableAccess )
+            {
+                xStream = pStream->getRawData();
+
+                if ( !xStream.is() )
                 {
-                    // If the stream is a raw one, then we should be positioned
-                    // at the beginning of the actual data
-                    if ( !bToBeCompressed || bRawStream )
-                    {
-                        // The raw stream can neither be encrypted nor connected
-                        OSL_ENSURE( !bRawStream || !bToBeCompressed && !bToBeEncrypted, "The stream is already encrypted!\n" );
-                        xSeek->seek ( bRawStream ? pStream->GetMagicalHackPos() : 0 );
-                        ImplSetStoredData ( *pTempEntry, xStream );
-
-                        // TODO/LATER: Get rid of hacks related to switching of Flag Method and Size properties!
-                    }
-                    else if ( bToBeEncrypted )
-                    {
-                        // this is the correct original size
-                        pTempEntry->nSize = static_cast < sal_Int32 > ( xSeek->getLength() );
-                        nOwnStreamOrigSize = pTempEntry->nSize;
-                    }
-
-                    xSeek->seek ( 0 );
+                    VOS_ENSURE( 0, "ZipPackageStream didn't have a stream associated with it, skipping!" );
+                    bWritingFailed = sal_True;
+                    continue;
                 }
-                else
-                {
-                    // Okay, we don't have an xSeekable stream. This is possibly bad.
-                    // check if it's one of our own streams, if it is then we know that
-                    // each time we ask for it we'll get a new stream that will be
-                    // at position zero...otherwise, assert and skip this stream...
-                    if ( pStream->IsPackageMember() )
-                    {
-                        // if the password has been changed than the stream should not be package member any more
-                        if ( pStream->IsEncrypted() && pStream->IsToBeEncrypted() )
-                        {
-                            // Should be handled close to the raw stream handling
-                            bTransportOwnEncrStreamAsRaw = sal_True;
-                            pTempEntry->nMethod = STORED;
 
-                            // TODO/LATER: get rid of this situation
-                            // this size should be different from the one that will be stored in manifest.xml
-                            // it is used in storing algorithms and after storing the correct size will be set
-                            pTempEntry->nSize = pTempEntry->nCompressedSize;
+                Reference < XSeekable > xSeek ( xStream, UNO_QUERY );
+                try
+                {
+                    if ( xSeek.is() )
+                    {
+                        // If the stream is a raw one, then we should be positioned
+                        // at the beginning of the actual data
+                        if ( !bToBeCompressed || bRawStream )
+                        {
+                            // The raw stream can neither be encrypted nor connected
+                            OSL_ENSURE( !bRawStream || !bToBeCompressed && !bToBeEncrypted, "The stream is already encrypted!\n" );
+                            xSeek->seek ( bRawStream ? pStream->GetMagicalHackPos() : 0 );
+                            ImplSetStoredData ( *pTempEntry, xStream );
+
+                            // TODO/LATER: Get rid of hacks related to switching of Flag Method and Size properties!
+                        }
+                        else if ( bToBeEncrypted )
+                        {
+                            // this is the correct original size
+                            pTempEntry->nSize = static_cast < sal_Int32 > ( xSeek->getLength() );
+                            nOwnStreamOrigSize = pTempEntry->nSize;
+                        }
+
+                        xSeek->seek ( 0 );
+                    }
+                    else
+                    {
+                        // Okay, we don't have an xSeekable stream. This is possibly bad.
+                        // check if it's one of our own streams, if it is then we know that
+                        // each time we ask for it we'll get a new stream that will be
+                        // at position zero...otherwise, assert and skip this stream...
+                        if ( pStream->IsPackageMember() )
+                        {
+                            // if the password has been changed than the stream should not be package member any more
+                            if ( pStream->IsEncrypted() && pStream->IsToBeEncrypted() )
+                            {
+                                // Should be handled close to the raw stream handling
+                                bTransportOwnEncrStreamAsRaw = sal_True;
+                                pTempEntry->nMethod = STORED;
+
+                                // TODO/LATER: get rid of this situation
+                                // this size should be different from the one that will be stored in manifest.xml
+                                // it is used in storing algorithms and after storing the correct size will be set
+                                pTempEntry->nSize = pTempEntry->nCompressedSize;
+                            }
+                        }
+                        else
+                        {
+                            VOS_ENSURE( 0, "The package component requires that every stream either be FROM a package or it must support XSeekable!" );
+                            continue;
                         }
                     }
-                    else
+                }
+                catch ( Exception& )
+                {
+                    VOS_ENSURE( 0, "The stream provided to the package component has problems!" );
+                    bWritingFailed = sal_True;
+                    continue;
+                }
+
+                if ( bToBeEncrypted || bRawStream || bTransportOwnEncrStreamAsRaw )
+                {
+                    if ( bToBeEncrypted )
                     {
-                        VOS_ENSURE( 0, "The package component requires that every stream either be FROM a package or it must support XSeekable!" );
-                        continue;
+                        Sequence < sal_uInt8 > aSalt ( 16 ), aVector ( 8 );
+                        Sequence < sal_Int8 > aKey ( 16 );
+                        rtl_random_getBytes ( rRandomPool, aSalt.getArray(), 16 );
+                        rtl_random_getBytes ( rRandomPool, aVector.getArray(), 8 );
+                        sal_Int32 nIterationCount = 1024;
+
+                        if ( pStream->HasOwnKey() )
+                            rtl_digest_PBKDF2 ( reinterpret_cast < sal_uInt8 * > (aKey.getArray()), 16,
+                                                reinterpret_cast < const sal_uInt8 * > (pStream->getKey().getConstArray()), pStream->getKey().getLength(),
+                                                reinterpret_cast < const sal_uInt8 * > ( aSalt.getConstArray() ), 16,
+                                                nIterationCount );
+                        else
+                            rtl_digest_PBKDF2 ( reinterpret_cast < sal_uInt8 * > (aKey.getArray()), 16,
+                                                reinterpret_cast < const sal_uInt8 * > (rEncryptionKey.getConstArray()), rEncryptionKey.getLength(),
+                                                reinterpret_cast < const sal_uInt8 * > ( aSalt.getConstArray() ), 16,
+                                                nIterationCount );
+                        pStream->setInitialisationVector ( aVector );
+                        pStream->setSalt ( aSalt );
+                        pStream->setIterationCount ( nIterationCount );
+                        pStream->setKey ( aKey );
                     }
-                }
-            }
-            catch ( Exception& )
-            {
-                VOS_ENSURE( 0, "The stream provided to the package component has problems!" );
-                bWritingFailed = sal_True;
-                continue;
-            }
 
-            if ( bToBeEncrypted || bRawStream || bTransportOwnEncrStreamAsRaw )
-            {
-                if ( bToBeEncrypted )
-                {
-                    Sequence < sal_uInt8 > aSalt ( 16 ), aVector ( 8 );
-                    Sequence < sal_Int8 > aKey ( 16 );
-                    rtl_random_getBytes ( rRandomPool, aSalt.getArray(), 16 );
-                    rtl_random_getBytes ( rRandomPool, aVector.getArray(), 8 );
-                    sal_Int32 nIterationCount = 1024;
+                    aPropSet.realloc(7); // 7th property is digest, which is inserted later if we didn't have
+                                         // a magic header
+                    pValue = aPropSet.getArray();
+                    pValue[2].Name = sInitialisationVectorProperty;
+                    pValue[2].Value <<= pStream->getInitialisationVector();
+                    pValue[3].Name = sSaltProperty;
+                    pValue[3].Value <<= pStream->getSalt();
+                    pValue[4].Name = sIterationCountProperty;
+                    pValue[4].Value <<= pStream->getIterationCount ();
 
-                    if ( pStream->HasOwnKey() )
-                        rtl_digest_PBKDF2 ( reinterpret_cast < sal_uInt8 * > (aKey.getArray()), 16,
-                                            reinterpret_cast < const sal_uInt8 * > (pStream->getKey().getConstArray()), pStream->getKey().getLength(),
-                                            reinterpret_cast < const sal_uInt8 * > ( aSalt.getConstArray() ), 16,
-                                            nIterationCount );
-                    else
-                        rtl_digest_PBKDF2 ( reinterpret_cast < sal_uInt8 * > (aKey.getArray()), 16,
-                                            reinterpret_cast < const sal_uInt8 * > (rEncryptionKey.getConstArray()), rEncryptionKey.getLength(),
-                                            reinterpret_cast < const sal_uInt8 * > ( aSalt.getConstArray() ), 16,
-                                            nIterationCount );
-                    pStream->setInitialisationVector ( aVector );
-                    pStream->setSalt ( aSalt );
-                    pStream->setIterationCount ( nIterationCount );
-                    pStream->setKey ( aKey );
-                }
+                    // Need to store the uncompressed size in the manifest
+                    OSL_ENSURE( nOwnStreamOrigSize >= 0, "The stream size was not correctly initialized!\n" );
+                    pValue[5].Name = sSizeProperty;
+                    pValue[5].Value <<= nOwnStreamOrigSize;
 
-                aPropSet.realloc(7); // 7th property is digest, which is inserted later if we didn't have
-                                     // a magic header
-                pValue = aPropSet.getArray();
-                pValue[2].Name = sInitialisationVectorProperty;
-                pValue[2].Value <<= pStream->getInitialisationVector();
-                pValue[3].Name = sSaltProperty;
-                pValue[3].Value <<= pStream->getSalt();
-                pValue[4].Name = sIterationCountProperty;
-                pValue[4].Value <<= pStream->getIterationCount ();
-
-                // Need to store the uncompressed size in the manifest
-                OSL_ENSURE( nOwnStreamOrigSize >= 0, "The stream size was not correctly initialized!\n" );
-                pValue[5].Name = sSizeProperty;
-                pValue[5].Value <<= nOwnStreamOrigSize;
-
-                if ( bRawStream || bTransportOwnEncrStreamAsRaw )
-                {
-                    pValue[6].Name = sDigestProperty;
-                    pValue[6].Value <<= pStream->getDigest();
+                    if ( bRawStream || bTransportOwnEncrStreamAsRaw )
+                    {
+                        pValue[6].Name = sDigestProperty;
+                        pValue[6].Value <<= pStream->getDigest();
+                    }
                 }
             }
 
             // If the entry is already stored in the zip file in the format we
             // want for this write...copy it raw
-            if ( bRawStream || bTransportOwnEncrStreamAsRaw ||
-                ( pStream->IsPackageMember()          && !bToBeEncrypted &&
-                ( pStream->aEntry.nMethod == DEFLATED &&  bToBeCompressed ) ||
-                ( pStream->aEntry.nMethod == STORED   && !bToBeCompressed ) ) )
+            if ( !bUseNonSeekableAccess &&
+                ( bRawStream || bTransportOwnEncrStreamAsRaw ||
+                    ( pStream->IsPackageMember()          && !bToBeEncrypted &&
+                        ( pStream->aEntry.nMethod == DEFLATED &&  bToBeCompressed ) ||
+                        ( pStream->aEntry.nMethod == STORED   && !bToBeCompressed ) ) ) )
             {
                 // If it's a PackageMember, then it's an unbuffered stream and we need
                 // to get a new version of it as we can't seek backwards.
@@ -525,6 +544,11 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
             else
             {
                 // This stream is defenitly not a raw stream
+
+                // If nonseekable access is used the stream should be at the beginning and
+                // is useless after the storing. Thus if the storing fails the package should
+                // be thrown away ( as actually it is done currently )!
+                // To allow to reuse the package after the error, the optimization must be removed!
 
                 // If it's a PackageMember, then our previous reference held a 'raw' stream
                 // so we need to re-get it, unencrypted, uncompressed and positioned at the
