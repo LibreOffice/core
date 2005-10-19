@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.169 $
+ *  $Revision: 1.170 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-30 10:25:23 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:46:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,9 @@
 #endif
 #ifndef _COM_SUN_STAR_EMBED_ENTRYINITMODES_HPP_
 #include <com/sun/star/embed/EntryInitModes.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XOPTIMIZEDSTORAGE_HPP_
+#include <com/sun/star/embed/XOptimizedStorage.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_IO_XTRUNCATE_HPP_
@@ -1238,6 +1241,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     sal_Bool bStorageBasedTarget = IsPackageStorageFormat_Impl( rMedium );
     sal_Bool bOwnTarget = IsOwnStorageFormat_Impl( rMedium );
 
+    sal_Bool bNeedsDisconnectionOnFail = sal_False;
+
     // use UCB for case sensitive/insensitive file name comparison
     if ( pMedium
       && pMedium->GetName().CompareIgnoreCaseToAscii( "private:stream", 14 ) != COMPARE_EQUAL
@@ -1251,11 +1256,11 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         const sal_Bool bDoBackup = SvtSaveOptions().IsBackup();
         if ( bDoBackup )
         {
-            pMedium->DoBackup_Impl();
-            if ( pMedium->GetError() )
+            rMedium.DoBackup_Impl();
+            if ( rMedium.GetError() )
             {
-                SetError( pMedium->GetErrorCode() );
-                pMedium->ResetError();
+                SetError( rMedium.GetErrorCode() );
+                rMedium.ResetError();
             }
         }
 
@@ -1277,7 +1282,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                 // commit the wrapper stream ( the stream will connect the URL only on commit, after that it will hold it )
                 // if the last step is failed the stream should stay to be transacted and should be commited on any flush
                 // so we can forget the stream in any way and the next storage commit will flush it
-            if( ConnectTmpStorage_Impl( pMedium->GetStorage() ) )
+            if ( ( bNeedsDisconnectionOnFail = DisconnectStorage_Impl( *pMedium, rMedium ) )
+              || ConnectTmpStorage_Impl( pMedium->GetStorage(), pMedium ) )
             {
                 pMedium->CloseAndRelease();
 
@@ -1314,7 +1320,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             // an alien format, just connect the source to temporary
             // storage
 
-            if( ConnectTmpStorage_Impl( pMedium->GetStorage() ) )
+            if ( ( bNeedsDisconnectionOnFail = DisconnectStorage_Impl( *pMedium, rMedium ) )
+              || ConnectTmpStorage_Impl( pMedium->GetStorage(), pMedium ) )
             {
                 pMedium->CloseAndRelease();
                 rMedium.CloseAndRelease();
@@ -1582,21 +1589,28 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                 {
                     OSL_ENSURE( pMedium->GetName().Len(), "Fallback is used, the medium without name should not dispose the storage!\n" );
                     // copy storage of old medium to new temporary storage and take this over
-                    if( !ConnectTmpStorage_Impl( pMedium->GetStorage() ) )
+                    if( !ConnectTmpStorage_Impl( pMedium->GetStorage(), pMedium ) )
                         bOk = sal_False;
                 }
             }
         }
-        else if ( !bCopyTo )
+        else
         {
-            // if commit is failed the objectshell must be based on the storage that contains all the changes
-            // so just do not switch
-            // the problem is that the old medium must be preserved but the new storage must be used
-            // for it.
-            if ( IsPackageStorageFormat_Impl(rMedium) )
-                rMedium.MoveStorageTo_Impl( pMedium );
-            else
-                rMedium.MoveTempTo_Impl( pMedium );
+            // in case the document storage was connected to backup temporarely it must be disconnected now
+            if ( bNeedsDisconnectionOnFail )
+                ConnectTmpStorage_Impl( pImp->m_xDocStorage, NULL );
+
+            if ( !bCopyTo )
+            {
+                // if commit is failed the objectshell must be based on the storage that contains all the changes
+                // so just do not switch
+                // the problem is that the old medium must be preserved but the new storage must be used
+                // for it.
+                if ( IsPackageStorageFormat_Impl(rMedium) )
+                    rMedium.MoveStorageTo_Impl( pMedium );
+                else
+                    rMedium.MoveTempTo_Impl( pMedium );
+            }
         }
     }
 
@@ -1642,8 +1656,43 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 }
 
 //------------------------------------------------------------------------
+sal_Bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMedium& rTargetMedium )
+{
+    // this method disconnects the storage from source medium, and attaches it to the backup created by the target medium
 
-sal_Bool SfxObjectShell::ConnectTmpStorage_Impl( const uno::Reference< embed::XStorage >& xStorage )
+    uno::Reference< embed::XStorage > xStorage = rSrcMedium.GetStorage();
+
+    sal_Bool bResult = sal_False;
+    if ( xStorage == pImp->m_xDocStorage )
+    {
+        try
+        {
+            uno::Reference< embed::XOptimizedStorage > xOptStorage( xStorage, uno::UNO_QUERY_THROW );
+            ::rtl::OUString aBackupURL = rTargetMedium.GetBackup_Impl();
+            if ( aBackupURL.getLength() )
+            {
+                // the following call will only compare stream sizes
+                // TODO/LATER: this is a very risky part, since if the URL contents are different from the storage
+                // contents, the storag will be broken
+                xOptStorage->attachToURL( aBackupURL, sal_True );
+
+                // the storage is successfuly attached to backup, thus it it owned by the document not by the medium
+                rSrcMedium.CanDisposeStorage_Impl( sal_False );
+                bResult = sal_True;
+            }
+        }
+        catch ( uno::Exception& )
+        {}
+    }
+
+    OSL_ENSURE( bResult, "Storage disconnecting has failed - affects performance!" );
+
+    return bResult;
+}
+
+//------------------------------------------------------------------------
+
+sal_Bool SfxObjectShell::ConnectTmpStorage_Impl( const uno::Reference< embed::XStorage >& xStorage, SfxMedium* pMedium )
 
 /*   [Beschreibung]
 
@@ -1660,6 +1709,23 @@ sal_Bool SfxObjectShell::ConnectTmpStorage_Impl( const uno::Reference< embed::XS
     if ( xStorage.is() )
     {
         try
+        {
+            // the empty argument means that the storage will create temporary stream itself
+            uno::Reference< embed::XOptimizedStorage > xOptStorage( xStorage, uno::UNO_QUERY_THROW );
+            xOptStorage->writeAndAttachToStream( uno::Reference< io::XStream >() );
+
+            // the storage is successfuly disconnected from the original sources, thus the medium must not dispose it
+            if ( pMedium )
+                pMedium->CanDisposeStorage_Impl( sal_False );
+
+            bResult = sal_True;
+        }
+        catch( uno::Exception& )
+        {
+        }
+
+        // if switching of the storage does not work for any reason ( nonroot storage for example ) use the old method
+        if ( !bResult ) try
         {
             uno::Reference< embed::XStorage > xTmpStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
 
@@ -1875,6 +1941,8 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
             Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
         }
     }
+
+    pMedium->ClearBackup_Impl();
 
     return bOk;
 }
@@ -2254,7 +2322,6 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
         SetError(pMediumTmp->GetErrorCode());
 
 //REMOVE            if ( !IsHandsOff() )
-//REMOVE                DoHandsOff();
 //REMOVE            pMediumTmp->Close();
 
         sal_Bool bOpen = DoSaveCompleted( pMediumTmp );
@@ -2953,8 +3020,19 @@ sal_Bool SfxObjectShell::SaveChildren( BOOL bObjectsOnly )
                                                             xObj,
                                                             &aMediaType );
                     if ( xStream.is() )
-                        GetEmbeddedObjectContainer().InsertGraphicStream( xStream, aNames[n], aMediaType );
+                    {
+                        if ( !GetEmbeddedObjectContainer().InsertGraphicStreamDirectly( xStream, aNames[n], aMediaType ) )
+                               GetEmbeddedObjectContainer().InsertGraphicStream( xStream, aNames[n], aMediaType );
+                    }
                 }
+
+                // TODO/LATER: currently the object by default does not cache replacement image
+                // that means that if somebody loads SO7 document and store its objects using
+                // this method the images might be lost.
+                // Currently this method is only used on storing to alien formats, that means
+                // that SO7 documents storing does not use it, and all other filters are
+                // based on OASIS format. But if it changes the method must be fixed. The fix
+                // must be done only on demand since it can affect performance.
 
                 uno::Reference< embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
                 if ( xPersist.is() )
@@ -3045,36 +3123,40 @@ sal_Bool SfxObjectShell::SaveAsChildren( SfxMedium& rMedium )
                 {
                     sal_Bool bSwitchBackToLoaded = sal_False;
                     uno::Reference< embed::XLinkageSupport > xLink( xObj, uno::UNO_QUERY );
+
+                    uno::Reference < io::XInputStream > xStream;
+                    ::rtl::OUString aMediaType;
+
+                    sal_Int32 nCurState = xObj->getCurrentState();
+                    if ( nCurState == embed::EmbedStates::LOADED || nCurState == embed::EmbedStates::RUNNING )
+                    {
+                        // means that the object is not active
+                        // copy replacement image from old to new container
+                        xStream = GetEmbeddedObjectContainer().GetGraphicStream( xObj, &aMediaType );
+                    }
+
+                    if ( !xStream.is() )
+                    {
+                        // the image must be regenerated
+                        // TODO/LATER: another aspect could be used
+                        if ( xObj->getCurrentState() == embed::EmbedStates::LOADED )
+                                bSwitchBackToLoaded = sal_True;
+
+                        xStream = svt::EmbeddedObjectRef::GetGraphicReplacementStream(
+                                                                embed::Aspects::MSOLE_CONTENT,
+                                                                xObj,
+                                                                &aMediaType );
+                    }
+
                     if ( bOasis || xLink.is() && xLink->isLink() )
                     {
-                        uno::Reference < io::XInputStream > xStream;
-                        ::rtl::OUString aMediaType;
-
-                        sal_Int32 nCurState = xObj->getCurrentState();
-                        if ( nCurState == embed::EmbedStates::LOADED || nCurState == embed::EmbedStates::RUNNING )
-                        {
-                            // means that the object is not active
-                            // copy replacement image from old to new container
-                            xStream = GetEmbeddedObjectContainer().GetGraphicStream( xObj, &aMediaType );
-                        }
-
-                        if ( !xStream.is() )
-                        {
-                            // the image must be regenerated
-                            // TODO/LATER: another aspect could be used
-                            if ( xObj->getCurrentState() == embed::EmbedStates::LOADED )
-                                    bSwitchBackToLoaded = sal_True;
-
-                            xStream = svt::EmbeddedObjectRef::GetGraphicReplacementStream(
-                                                                    embed::Aspects::MSOLE_CONTENT,
-                                                                    xObj,
-                                                                    &aMediaType );
-                        }
-
                         if ( xStream.is() )
                         {
                             if ( bOasis )
-                                aCnt.InsertGraphicStream( xStream, aNames[n], aMediaType );
+                            {
+                                if ( !aCnt.InsertGraphicStreamDirectly( xStream, aNames[n], aMediaType ) )
+                                    aCnt.InsertGraphicStream( xStream, aNames[n], aMediaType );
+                            }
                             else
                             {
                                 // it is a linked object exported into SO7 format
@@ -3086,9 +3168,16 @@ sal_Bool SfxObjectShell::SaveAsChildren( SfxMedium& rMedium )
                     uno::Reference< embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
                     if ( xPersist.is() )
                     {
-                        uno::Sequence< beans::PropertyValue > aArgs(1);
+                        uno::Sequence< beans::PropertyValue > aArgs( bOasis ? 1 : 2 );
                         aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StoreVisualReplacement" ) );
                         aArgs[0].Value <<= (sal_Bool)( !bOasis );
+                        if ( !bOasis )
+                        {
+                            // if object has no cached replacement it will use this one
+                            aArgs[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VisualReplacement" ) );
+                            aArgs[1].Value <<= xStream;
+                        }
+
                         xPersist->storeAsEntry( xStorage,
                                                 xPersist->getEntryName(),
                                                 uno::Sequence< beans::PropertyValue >(),
@@ -3300,24 +3389,36 @@ sal_Bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embed::
         {
             if ( xSource->isStorageElement( aSubElements[nInd] ) )
             {
-                uno::Reference< embed::XStorage > xSubStorage;
-                try {
-                    xSubStorage = xSource->openStorageElement( aSubElements[nInd], embed::ElementModes::READ );
-                } catch( uno::Exception& )
+                ::rtl::OUString aMediaType;
+                ::rtl::OUString aMediaTypePropName( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) );
+                sal_Bool bGotMediaType = sal_False;
+
+                try
+                {
+                    uno::Reference< embed::XOptimizedStorage > xOptStorage( xSource, uno::UNO_QUERY_THROW );
+                    bGotMediaType =
+                        ( xOptStorage->getElementPropertyValue( aSubElements[nInd], aMediaTypePropName ) >>= aMediaType );
+                }
+                catch( uno::Exception& )
                 {}
 
-                if ( !xSubStorage.is() )
+                if ( !bGotMediaType )
                 {
-                    // TODO/LATER: as optimization in future a substorage of target storage could be used
-                    //             instead of the temporary storage; this substorage should be removed later
-                    //             if the MimeType is wrong
-                    xSubStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
-                    xSource->copyStorageElementLastCommitTo( aSubElements[nInd], xSubStorage );
-                }
+                    uno::Reference< embed::XStorage > xSubStorage;
+                    try {
+                        xSubStorage = xSource->openStorageElement( aSubElements[nInd], embed::ElementModes::READ );
+                    } catch( uno::Exception& )
+                    {}
 
-                uno::Reference< beans::XPropertySet > xProps( xSubStorage, uno::UNO_QUERY_THROW );
-                ::rtl::OUString aMediaType;
-                xProps->getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) ) >>= aMediaType;
+                    if ( !xSubStorage.is() )
+                    {
+                        xSubStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
+                        xSource->copyStorageElementLastCommitTo( aSubElements[nInd], xSubStorage );
+                    }
+
+                    uno::Reference< beans::XPropertySet > xProps( xSubStorage, uno::UNO_QUERY_THROW );
+                    bGotMediaType = ( xProps->getPropertyValue( aMediaTypePropName ) >>= aMediaType );
+                }
 
                 // TODO/LATER: there should be a way to detect whether an object with such a MediaType can exist
                 //             probably it should be placed in the MimeType-ClassID table or in standalone table
@@ -3424,24 +3525,39 @@ sal_Bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< e
             }
             else if ( xSource->isStorageElement( aSubElements[nInd] ) )
             {
-                uno::Reference< embed::XStorage > xSubStorage;
-                try {
-                    xSubStorage = xSource->openStorageElement( aSubElements[nInd], embed::ElementModes::READ );
-                } catch( uno::Exception& )
+                ::rtl::OUString aMediaType;
+                ::rtl::OUString aMediaTypePropName( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) );
+                sal_Bool bGotMediaType = sal_False;
+
+                try
+                {
+                    uno::Reference< embed::XOptimizedStorage > xOptStorage( xSource, uno::UNO_QUERY_THROW );
+                    bGotMediaType =
+                        ( xOptStorage->getElementPropertyValue( aSubElements[nInd], aMediaTypePropName ) >>= aMediaType );
+                }
+                catch( uno::Exception& )
                 {}
 
-                if ( !xSubStorage.is() )
+                if ( !bGotMediaType )
                 {
-                    // TODO/LATER: as optimization in future a substorage of target storage could be used
-                    //             instead of the temporary storage; this substorage should be removed later
-                    //             if the MimeType is wrong
-                    xSubStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
-                    xSource->copyStorageElementLastCommitTo( aSubElements[nInd], xSubStorage );
-                }
+                    uno::Reference< embed::XStorage > xSubStorage;
+                    try {
+                        xSubStorage = xSource->openStorageElement( aSubElements[nInd], embed::ElementModes::READ );
+                    } catch( uno::Exception& )
+                    {}
 
-                uno::Reference< beans::XPropertySet > xProps( xSubStorage, uno::UNO_QUERY_THROW );
-                ::rtl::OUString aMediaType;
-                xProps->getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) ) >>= aMediaType;
+                    if ( !xSubStorage.is() )
+                    {
+                        // TODO/LATER: as optimization in future a substorage of target storage could be used
+                        //             instead of the temporary storage; this substorage should be removed later
+                        //             if the MimeType is wrong
+                        xSubStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
+                        xSource->copyStorageElementLastCommitTo( aSubElements[nInd], xSubStorage );
+                    }
+
+                    uno::Reference< beans::XPropertySet > xProps( xSubStorage, uno::UNO_QUERY_THROW );
+                    bGotMediaType = ( xProps->getPropertyValue( aMediaTypePropName ) >>= aMediaType );
+                }
 
                 // TODO/LATER: there should be a way to detect whether an object with such a MediaType can exist
                 //             probably it should be placed in the MimeType-ClassID table or in standalone table
@@ -3480,11 +3596,7 @@ sal_Bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< e
 
                             if ( !xTarget->hasByName( aSubElements[nInd] ) )
                             {
-                                uno::Reference< embed::XStorage > xSubTarget =
-                                    xTarget->openStorageElement( aSubElements[nInd], embed::ElementModes::WRITE );
-                                if ( !xSubTarget.is() )
-                                    throw uno::RuntimeException();
-                                xSubStorage->copyToStorage( xSubTarget );
+                                xSource->copyElementTo( aSubElements[nInd], xTarget, aSubElements[nInd] );
                             }
                         }
                     }
