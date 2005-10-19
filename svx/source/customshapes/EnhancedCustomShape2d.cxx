@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:24:14 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 11:58:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -672,6 +672,8 @@ const sal_Int32* EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomSha
     com::sun::star::awt::Rectangle aViewBox;
     if ( pViewBox && (*pViewBox >>= aViewBox ) )
     {
+        nCoordLeft  = aViewBox.X;
+        nCoordTop   = aViewBox.Y;
         nCoordWidth = labs( aViewBox.Width );
         nCoordHeight= labs( aViewBox.Height);
     }
@@ -1068,6 +1070,8 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
     eSpType             ( mso_sptNil ),
     nXRef               ( 0x80000000 ),
     nYRef               ( 0x80000000 ),
+    nCoordLeft          ( 0 ),
+    nCoordTop           ( 0 ),
     nCoordWidth         ( 21600 ),
     nCoordHeight        ( 21600 ),
     nFlags              ( 0 ),
@@ -1337,6 +1341,7 @@ Point EnhancedCustomShape2d::GetPoint( const com::sun::star::drawing::EnhancedCu
         if ( nPass )    // height
         {
             GetParameter( fVal, rParameter, sal_False, bReplaceGeoSize );
+            fVal -= nCoordTop;
             if ( bScale )
             {
                 fVal *= fYScale;
@@ -1349,6 +1354,7 @@ Point EnhancedCustomShape2d::GetPoint( const com::sun::star::drawing::EnhancedCu
         else            // width
         {
             GetParameter( fVal, rParameter, bReplaceGeoSize, sal_False );
+            fVal -= nCoordLeft;
             if ( bScale )
             {
                 fVal *= fXScale;
