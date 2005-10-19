@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:02:03 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:19:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,6 +163,9 @@ class Desktop : public Application
         // Create a error message depending on bootstrap failure code and an optional file url
         ::rtl::OUString         CreateErrorMsgString( utl::Bootstrap::FailureCode nFailureCode,
                                                       const ::rtl::OUString& aFileURL );
+
+        static void             PreloadModuleData( CommandLineArgs* );
+        static void             PreloadConfigurationData();
 
         Reference<XStatusIndicator> m_rSplashScreen;
         void                    OpenSplashScreen();
