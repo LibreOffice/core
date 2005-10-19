@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:48:20 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 08:31:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -959,6 +959,10 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         case FN_CONVERT_TEXT_TABLE:
         {
             sal_Unicode cDelim = 0;
+            bool bToTable = false;
+            if( nSlot == FN_CONVERT_TEXT_TO_TABLE ||
+                ( nSlot == FN_CONVERT_TEXT_TABLE && 0 == rSh.GetTableFmt() ))
+                bToTable = true;
             SwInsertTableOptions aInsTblOpts( tabopts::ALL_TBL_INS_ATTR, 1 );
             SwTableAutoFmt* pTAFmt = 0;
             SwTableAutoFmtTbl* pAutoFmtTbl = 0;
@@ -1011,7 +1015,8 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
                 DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
-                AbstractSwConvertTableDlg* pDlg = pFact->CreateSwConvertTableDlg( GetView(),ResId( DLG_CONV_TEXT_TABLE ));
+                AbstractSwConvertTableDlg* pDlg = pFact->CreateSwConvertTableDlg(
+                            GetView(),ResId( DLG_CONV_TEXT_TABLE ), bToTable);
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 if( RET_OK == pDlg->Execute() )
                 {
@@ -1026,7 +1031,6 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 //Shellwechsel!
                 SwView& rSaveView = rView;
                 BOOL bInserted = FALSE;
-                BOOL bToText = rSh.GetTableFmt() != 0;
                 //recording:
 
                 SfxViewFrame* pViewFrame = GetView().GetViewFrame();
@@ -1034,7 +1038,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 {
                     SfxRequest aReq( pViewFrame, nSlot);
                     aReq.AppendItem( SfxStringItem( FN_PARAM_1, String(cDelim) ));
-                    if(!bToText)
+                    if(bToTable)
                     {
                         if(pTAFmt)
                             aReq.AppendItem( SfxStringItem( FN_PARAM_2, pTAFmt->GetName()));
@@ -1046,7 +1050,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     aReq.Done();
                 }
 
-                if( bToText )
+                if( !bToTable )
                     rSh.TableToText( cDelim );
                 else
                 {
