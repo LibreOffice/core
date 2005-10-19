@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typedetection.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:32:35 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:14:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,10 @@
 
 #ifndef __FRAMEWORK_DISPATCH_INTERACTION_HXX_
 #include <framework/interaction.hxx>
+#endif
+
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
 #endif
 
 //_______________________________________________
@@ -437,6 +441,13 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
 
     if (!bBreakDetection)
     {
+        // extract extension from URL .. to check it case-insensitive !
+        INetURLObject   aParser    (aParsedURL.Main);
+        ::rtl::OUString sExtension = aParser.getExtension(INetURLObject::LAST_SEGMENT       ,
+                                                          sal_True                          ,
+                                                          INetURLObject::DECODE_WITH_CHARSET);
+        sExtension = sExtension.toAsciiLowerCase();
+
         // otherwhise we must know, if it matches to the given URL realy.
         // especialy if it matches by its extension or pattern registration.
         OUStringList lExtensions(aType[PROPNAME_EXTENSIONS]);
@@ -446,11 +457,8 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
                                           pIt != lExtensions.end()  ;
                                         ++pIt                       )
         {
-            ::rtl::OUStringBuffer sExtension(10);
-            sExtension.appendAscii("*.");
-            sExtension.append     (*pIt);
-            WildCard aCheck(sExtension.makeStringAndClear());
-            if (aCheck.Matches(aParsedURL.Main))
+            ::rtl::OUString sCheckExtension(pIt->toAsciiLowerCase());
+            if (sCheckExtension.equals(sExtension))
             {
                 bBreakDetection        = sal_True;
                 bMatchByExtension      = sal_True;
