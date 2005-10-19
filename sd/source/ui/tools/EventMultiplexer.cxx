@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EventMultiplexer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:32:40 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:26:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -300,11 +300,8 @@ EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
 
 EventMultiplexer::Implementation::~Implementation (void)
 {
-    ReleaseListeners();
+    DBG_ASSERT( !mbListeningToFrame, "sd::EventMultiplexer::Implementation::~Implementation(), disposing was not called!" );
 }
-
-
-
 
 void EventMultiplexer::Implementation::ReleaseListeners (void)
 {
