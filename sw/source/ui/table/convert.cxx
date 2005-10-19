@@ -4,9 +4,9 @@
  *
  *  $RCSfile: convert.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:57:54 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 08:32:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,10 +135,11 @@ void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
 }
 
 
-SwConvertTableDlg::SwConvertTableDlg( SwView& rView )
+SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
 
     : SfxModalDialog( &rView.GetViewFrame()->GetWindow(), SW_RES(DLG_CONV_TEXT_TABLE)),
 
+#pragma warning (disable : 4355)
     aTabBtn         (this, SW_RES(CB_TAB)),
     aSemiBtn        (this, SW_RES(CB_SEMI)),
     aParaBtn        (this, SW_RES(CB_PARA)),
@@ -162,6 +163,7 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView )
     aCancelBtn(this,SW_RES(BT_CANCEL)),
     aHelpBtn(this, SW_RES(BT_HELP)),
     aAutoFmtBtn(this,SW_RES(BT_AUTOFORMAT)),
+#pragma warning (default : 4355)
 
     pTAutoFmt( 0 ),
     pShell( &rView.GetWrtShell() ),
@@ -186,7 +188,7 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView )
         }
 
     }
-    if( 0 == pShell->GetTableFmt() )
+    if( bToTable )
     {
         SetText( sConvertTextTable );
         aAutoFmtBtn.SetClickHdl(LINK(this, SwConvertTableDlg, AutoFmtHdl));
