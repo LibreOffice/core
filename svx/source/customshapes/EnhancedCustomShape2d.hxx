@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:24:31 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 11:58:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,8 @@ class EnhancedCustomShape2d : public SfxItemSet
         SdrObject*                  pCustomShapeObj;
         MSO_SPT                     eSpType;
 
+        sal_Int32                   nCoordLeft;
+        sal_Int32                   nCoordTop;
         sal_Int32                   nCoordWidth;
         sal_Int32                   nCoordHeight;
         Rectangle                   aLogicRect;
