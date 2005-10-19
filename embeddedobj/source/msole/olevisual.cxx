@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olevisual.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:43:55 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:41:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -303,8 +303,11 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
     embed::VisualRepresentation aVisualRepr;
 
     // TODO: in case of different aspects they must be applied to the mediatype and XTransferable must be used
-    if ( !m_xCachedVisualRepresentation.is() && m_bVisReplInStream )
+    if ( !m_xCachedVisualRepresentation.is() && ( !m_bVisReplInitialized || m_bVisReplInStream ) )
+    {
         m_xCachedVisualRepresentation = TryToRetrieveCachedVisualRepresentation_Impl( m_xObjectStream );
+        SetVisReplInStream( m_xCachedVisualRepresentation.is() );
+    }
 
     if ( m_xCachedVisualRepresentation.is() )
     {
