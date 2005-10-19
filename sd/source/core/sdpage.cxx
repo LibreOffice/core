@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:13:57 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:23:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3162,7 +3162,17 @@ const String& SdPage::GetName()
 
             aCreatedPageName = String(SdResId(STR_PAGE));
             aCreatedPageName += sal_Unicode( ' ' );
-            aCreatedPageName += ((SdDrawDocument*) GetModel())->CreatePageNumValue(nNum);
+            if( GetModel()->GetPageNumType() == SVX_NUMBER_NONE )
+            {
+                // if the document has number none as a formating
+                // for page numbers we still default to arabic numbering
+                // to keep the default page names unique
+                aCreatedPageName += String::CreateFromInt32( (sal_Int32)nNum );
+            }
+            else
+            {
+                aCreatedPageName += ((SdDrawDocument*) GetModel())->CreatePageNumValue(nNum);
+            }
         }
         else
         {
