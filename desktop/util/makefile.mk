@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.59 $
+#   $Revision: 1.60 $
 #
-#   last change: $Author: rt $ $Date: 2005-10-19 12:06:29 $
+#   last change: $Author: rt $ $Date: 2005-10-19 12:20:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -114,9 +114,7 @@ APP1STDLIBS=			\
     $(CPPULIB)			\
     $(TKLIB)            \
     $(SALLIB) \
-    $(SVXLIB) 
-
-
+    $(SVXLIB)
 
 
 #	$(APP1_STDPRE)		\
@@ -169,9 +167,7 @@ APP5STDLIBS=			\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
     $(SALLIB)			\
-    $(TKLIB)     
-
-
+    $(TKLIB)
 
 APP5OBJS=$(TARGETOBJS)
 APP5OBJS += $(OBJ)$/copyright_ascii_ooo.obj
@@ -201,6 +197,7 @@ APP6LINKRES=$(MISC)$/soffice6.res
 APP6ICON=$(SOLARRESDIR)$/icons/so8-main-app.ico
 APP6OBJS = \
         $(OBJ)$/officeloader.obj
+STDLIB6=advapi32.lib
 
 APP7TARGET=officeloader
 APP7RES=$(RES)$/ooloader.res
@@ -211,6 +208,7 @@ APP7LINKRES=$(MISC)$/ooffice7.res
 APP7ICON=$(SOLARRESDIR)$/icons/ooo-main-app.ico
 APP7OBJS = \
         $(OBJ)$/officeloader.obj
+STDLIB7=advapi32.lib
 .ENDIF # WNT
 
 
