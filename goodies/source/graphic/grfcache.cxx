@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfcache.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:04:09 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:43:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -492,7 +492,8 @@ public:
 ULONG GraphicDisplayCacheEntry::GetNeededSize( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                                const GraphicObject& rObj, const GraphicAttr& rAttr )
 {
-    const GraphicType   eType = rObj.GetGraphic().GetType();
+    const Graphic&      rGraphic = rObj.GetGraphic();
+    const GraphicType   eType = rGraphic.GetType();
     ULONG               nNeededSize;
 
     if( GRAPHIC_BITMAP == eType )
@@ -519,7 +520,7 @@ ULONG GraphicDisplayCacheEntry::GetNeededSize( OutputDevice* pOut, const Point& 
         }
     }
     else if( GRAPHIC_GDIMETAFILE == eType )
-        nNeededSize = 65535;
+        nNeededSize = rGraphic.GetSizeBytes();
     else
         nNeededSize = 0;
 
