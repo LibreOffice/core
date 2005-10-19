@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jsc $ $Date: 2005-09-09 13:50:38 $
+#   last change: $Author: jsc $ $Date: 2005-10-19 08:54:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,10 +47,14 @@ ENABLE_EXCEPTIONS=TRUE
 
 # ------------------------------------------------------------------
 
-OBJFILES= \
-    $(OBJ)$/typemanager.obj	\
-    $(OBJ)$/typeblob.obj \
-    $(OBJ)$/options.obj
+SLOFILES= \
+    $(SLO)$/typemanager.obj	\
+    $(SLO)$/typeblob.obj \
+    $(SLO)$/options.obj
+
+LIB1TARGET=$(LB)$/$(TARGET).lib
+LIB1ARCHIV=$(LB)$/lib$(TARGET).a
+LIB1OBJFILES=$(SLOFILES)
 
 # ------------------------------------------------------------------
 
