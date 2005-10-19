@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxruler.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:08:49 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 08:40:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2951,9 +2951,15 @@ void SvxRuler::CalcMinMax()
                 }
                 else
                 {
-                    nMaxLeft = pBorders[pColumnItem->Count() - 2].nPos + lMinFrame + lNullPix;
+                    if(pColumnItem->Count() > 1)
+                        nMaxLeft = pBorders[pColumnItem->Count() - 2].nPos + lMinFrame + lNullPix;
+                    else
+                        nMaxLeft = lMinFrame + lNullPix;
                 }
-                nMaxRight = pBorders[pColumnItem->Count() - 2].nMaxPos + lNullPix;
+                if(pColumnItem->Count() > 1)
+                    nMaxRight = pBorders[pColumnItem->Count() - 2].nMaxPos + lNullPix;
+                else
+                    nMaxRight -= GetRightIndent() - lNullPix;
             }
         }
         else
