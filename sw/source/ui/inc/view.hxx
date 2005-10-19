@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:14:08 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 08:31:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -271,6 +271,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     // Aktueller Drawmode
     USHORT          nDrawSfxId;
+    String          sDrawCustom; //some drawing types are marked with strings!
     USHORT          nFormSfxId;
     USHORT          nLastPasteDestination;
 
@@ -567,7 +568,7 @@ public:
     inline void     FlipDrawSelMode()   { bDrawSelMode = !bDrawSelMode; }
     void            NoRotate();     // Rotate-Mode abschalten
     BOOL            EnterDrawTextMode(const Point& aDocPos);
-    void            LeaveDrawCreate()   { nDrawSfxId = nFormSfxId = USHRT_MAX; }
+    void            LeaveDrawCreate()   { nDrawSfxId = nFormSfxId = USHRT_MAX; sDrawCustom.Erase();}
     BOOL            IsDrawMode()        { return (nDrawSfxId != USHRT_MAX || nFormSfxId != USHRT_MAX); }
     BOOL            IsFormMode() const;
     BOOL            IsBezierEditMode();
