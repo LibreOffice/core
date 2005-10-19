@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EffectMigration.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 10:41:59 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:23:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -464,8 +464,22 @@ EffectSequence::iterator ImplFindEffect( MainSequencePtr& pMainSequence, const R
     return aIter;
 }
 
+static bool implIsInsideGroup( SdrObject* pObj )
+{
+    return pObj && pObj->GetObjList() && pObj->GetObjList()->GetUpList();
+}
+
 void EffectMigration::SetAnimationEffect( SvxShape* pShape, AnimationEffect eEffect )
 {
+    DBG_ASSERT( pShape && pShape->GetSdrObject() && pShape->GetSdrObject()->GetPage(),
+                "sd::EffectMigration::SetAnimationEffect(), invalid argument!" );
+    if( !pShape || !pShape->GetSdrObject() || !pShape->GetSdrObject()->GetPage() )
+        return;
+
+    SdrObject* pObj = pShape->GetSdrObject();
+    if( implIsInsideGroup( pObj ) )
+        return;
+
     OUString aPresetId;
     OUString aPresetSubType;
 
@@ -478,7 +492,6 @@ void EffectMigration::SetAnimationEffect( SvxShape* pShape, AnimationEffect eEff
     const CustomAnimationPresets& rPresets = CustomAnimationPresets::getCustomAnimationPresets();
 
     CustomAnimationPresetPtr pPreset( rPresets.getEffectDescriptor( aPresetId ) );
-    SdrObject* pObj = pShape->GetSdrObject();
     sd::MainSequencePtr pMainSequence = static_cast<SdPage*>(pObj->GetPage())->getMainSequence();
 
     if( pPreset.get() && pMainSequence.get() )
@@ -617,6 +630,15 @@ AnimationEffect EffectMigration::GetAnimationEffect( SvxShape* pShape )
 
 void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect eEffect )
 {
+    DBG_ASSERT( pShape && pShape->GetSdrObject() && pShape->GetSdrObject()->GetPage(),
+                "sd::EffectMigration::SetAnimationEffect(), invalid argument!" );
+    if( !pShape || !pShape->GetSdrObject() || !pShape->GetSdrObject()->GetPage() )
+        return;
+
+    SdrObject* pObj = pShape->GetSdrObject();
+    if( implIsInsideGroup( pObj ) )
+        return;
+
     // first map the deprecated AnimationEffect to a preset and subtype
     OUString aPresetId;
     OUString aPresetSubType;
@@ -627,7 +649,6 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
         return;
     }
 
-    SdrObject* pObj = pShape->GetSdrObject();
     SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
 
     // ignore old text effects on shape without text
@@ -847,9 +868,17 @@ double EffectMigration::ConvertAnimationSpeed( AnimationSpeed eSpeed )
 
 void EffectMigration::SetAnimationSpeed( SvxShape* pShape, AnimationSpeed eSpeed )
 {
-    double fDuration = ConvertAnimationSpeed( eSpeed );
+    DBG_ASSERT( pShape && pShape->GetSdrObject() && pShape->GetSdrObject()->GetPage(),
+                "sd::EffectMigration::SetAnimationEffect(), invalid argument!" );
+    if( !pShape || !pShape->GetSdrObject() || !pShape->GetSdrObject()->GetPage() )
+        return;
 
     SdrObject* pObj = pShape->GetSdrObject();
+    if( implIsInsideGroup( pObj ) )
+        return;
+
+    double fDuration = ConvertAnimationSpeed( eSpeed );
+
     sd::MainSequencePtr pMainSequence = static_cast<SdPage*>(pObj->GetPage())->getMainSequence();
 
     const Reference< XShape > xShape( pShape );
@@ -921,7 +950,15 @@ AnimationSpeed EffectMigration::ConvertDuration( double fDuration )
 
 void EffectMigration::SetDimColor( SvxShape* pShape, sal_Int32 nColor )
 {
+    DBG_ASSERT( pShape && pShape->GetSdrObject() && pShape->GetSdrObject()->GetPage(),
+                "sd::EffectMigration::SetAnimationEffect(), invalid argument!" );
+    if( !pShape || !pShape->GetSdrObject() || !pShape->GetSdrObject()->GetPage() )
+        return;
+
     SdrObject* pObj = pShape->GetSdrObject();
+    if( implIsInsideGroup( pObj ) )
+        return;
+
     sd::MainSequencePtr pMainSequence = static_cast<SdPage*>(pObj->GetPage())->getMainSequence();
 
     const Reference< XShape > xShape( pShape );
@@ -982,10 +1019,17 @@ sal_Int32 EffectMigration::GetDimColor( SvxShape* pShape )
 
 void EffectMigration::SetDimHide( SvxShape* pShape, sal_Bool bDimHide )
 {
-    Any aEmpty;
-
+    DBG_ASSERT( pShape && pShape->GetSdrObject() && pShape->GetSdrObject()->GetPage(),
+                "sd::EffectMigration::SetAnimationEffect(), invalid argument!" );
+    if( !pShape || !pShape->GetSdrObject() || !pShape->GetSdrObject()->GetPage() )
+        return;
 
     SdrObject* pObj = pShape->GetSdrObject();
+    if( implIsInsideGroup( pObj ) )
+        return;
+
+    Any aEmpty;
+
     sd::MainSequencePtr pMainSequence = static_cast<SdPage*>(pObj->GetPage())->getMainSequence();
 
     const Reference< XShape > xShape( pShape );
@@ -1048,12 +1092,20 @@ sal_Bool EffectMigration::GetDimHide( SvxShape* pShape )
 
 void EffectMigration::SetDimPrevious( SvxShape* pShape, sal_Bool bDimPrevious )
 {
+    DBG_ASSERT( pShape && pShape->GetSdrObject() && pShape->GetSdrObject()->GetPage(),
+                "sd::EffectMigration::SetAnimationEffect(), invalid argument!" );
+    if( !pShape || !pShape->GetSdrObject() || !pShape->GetSdrObject()->GetPage() )
+        return;
+
+    SdrObject* pObj = pShape->GetSdrObject();
+    if( implIsInsideGroup( pObj ) )
+        return;
+
     Any aColor;
 
     if( bDimPrevious )
         aColor <<= (sal_Int32)COL_LIGHTGRAY;
 
-    SdrObject* pObj = pShape->GetSdrObject();
     sd::MainSequencePtr pMainSequence = static_cast<SdPage*>(pObj->GetPage())->getMainSequence();
 
     const Reference< XShape > xShape( pShape );
@@ -1116,6 +1168,9 @@ sal_Bool EffectMigration::GetDimPrevious( SvxShape* pShape )
 
 void EffectMigration::SetPresentationOrder( SvxShape* pShape, sal_Int32 nNewPos )
 {
+    if( !pShape || !pShape->GetSdrObject() || !pShape->GetSdrObject()->GetPage() )
+        return;
+
     SdrObject* pObj = pShape->GetSdrObject();
     sd::MainSequencePtr pMainSequence = static_cast<SdPage*>(pObj->GetPage())->getMainSequence();
 
