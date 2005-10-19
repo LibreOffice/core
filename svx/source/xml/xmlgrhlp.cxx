@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlgrhlp.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-18 13:54:29 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:13:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,6 +143,8 @@ SvXMLGraphicInputStream::SvXMLGraphicInputStream( const OUString& rGraphicId )
                 }
                 else if( aGraphic.GetType() == GRAPHIC_GDIMETAFILE )
                 {
+                    pStm->SetVersion( SOFFICE_FILEFORMAT_8 );
+                    pStm->SetCompressMode( COMPRESSMODE_ZBITMAP );
                     ( (GDIMetaFile&) aGraphic.GetGDIMetaFile() ).Write( *pStm );
                     bRet = ( pStm->GetError() == 0 );
                 }
@@ -620,6 +622,8 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
                 }
                 else if( aGraphic.GetType() == GRAPHIC_GDIMETAFILE )
                 {
+                    pStream->SetVersion( SOFFICE_FILEFORMAT_8 );
+                    pStream->SetCompressMode( COMPRESSMODE_ZBITMAP );
                     ( (GDIMetaFile&) aGraphic.GetGDIMetaFile() ).Write( *pStream );
                     bRet = ( pStream->GetError() == 0 );
                 }
