@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galtheme.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:50:26 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:07:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,7 @@ private:
 
     GalleryObjectList           aObjectList;
     String                      aImportName;
+    String                      m_aDestDir;
     SotStorageRef               aSvDrawStorageRef;
     Gallery*                    pParent;
     GalleryThemeEntry*          pThm;
@@ -145,6 +146,9 @@ public:
     const String&               GetRealName() const { return pThm->GetThemeName(); }
     const String&               GetImportName() const { return aImportName; }
     void                        SetImportName(const String& rImportName) { aImportName = rImportName; }
+
+    const String&               GetDestDir() const { return m_aDestDir; }
+    void                        SetDestDir(const String& rDestDir) { m_aDestDir = rDestDir; }
 
     const INetURLObject&        GetThmURL() const { return pThm->GetThmURL(); }
     const INetURLObject&        GetSdgURL() const { return pThm->GetSdgURL(); }
