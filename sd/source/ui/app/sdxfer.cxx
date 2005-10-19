@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:46:19 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:24:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -528,16 +528,23 @@ sal_Bool SdTransferable::GetData( const DataFlavor& rFlavor )
 
             aDocShellRef.Clear();
 
-            if( pSourceDoc )
-                pSourceDoc->CreatingDataObj(this);
-            SdDrawDocument* pDoc = (SdDrawDocument*) pSdViewIntern->GetAllMarkedModel();
-            if( pSourceDoc )
-                pSourceDoc->CreatingDataObj(0);
+            SdDrawDocument* pInternDoc = pSdViewIntern->GetDoc();
+            if( pInternDoc )
+                pInternDoc->CreatingDataObj(this);
+            SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( pSdViewIntern->GetAllMarkedModel() );
+            if( pInternDoc )
+                pInternDoc->CreatingDataObj(0);
 
             bOK = SetObject( pDoc, SDTRANSFER_OBJECTTYPE_DRAWMODEL, rFlavor );
 
-            if( !aDocShellRef.Is() )
+            if( aDocShellRef.Is() )
+            {
+                aDocShellRef->DoClose();
+            }
+            else
+            {
                 delete pDoc;
+            }
 
             aDocShellRef = aOldRef;
         }
@@ -751,7 +758,7 @@ void SdTransferable::SetPageBookmarks( const List& rPageBookmarks, BOOL bPersist
 
         if( bPersistent )
         {
-            pSdDrawDocument->CreateFirstPages();
+            pSdDrawDocument->CreateFirstPages(pSourceDoc);
             pSdDrawDocument->InsertBookmarkAsPage( const_cast< List* >( &rPageBookmarks ), NULL, FALSE, TRUE, 1, TRUE, pSourceDoc->GetDocSh(), TRUE, TRUE, FALSE );
         }
         else
