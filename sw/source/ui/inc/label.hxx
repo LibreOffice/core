@@ -4,9 +4,9 @@
  *
  *  $RCSfile: label.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:23:56 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 08:31:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,8 +80,6 @@ public:
      SwLabDlg( Window* pParent, const SfxItemSet& rSet,
                  SwNewDBMgr* pNewDBMgr, BOOL bLabel);
     ~SwLabDlg();
-
-    void MakeConfigItem(SwLabItem& rItem) const;
 
     SwLabRec*   GetRecord(const String &rRecName, BOOL bCont);
     void        GetLabItem(SwLabItem &rItem);
