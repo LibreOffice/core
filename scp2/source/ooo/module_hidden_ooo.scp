@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:55:37 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:19:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,9 @@ Module gid_Module_Root_Files_2
 	gid_File_Bin_Pkgchk,
 	gid_File_Bin_Pluginapp,
 	gid_File_Bin_Senddoc,
+	gid_File_Bin_Gengal,
+	gid_File_Script_Gengal,
+	gid_File_Rdb_Gengal,
 	gid_File_Bin_Soffice,
 	gid_File_Bin_Soffice_Bin,
 	gid_File_Bin_Setofficelang,
