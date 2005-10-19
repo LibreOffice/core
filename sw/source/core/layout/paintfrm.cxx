@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:15:24 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:35:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1755,7 +1755,13 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
     {
         if( rSh.GetViewOptions()->IsGraphic() )
         {
-            ((SvxBrushItem*)pBrush)->SetDoneLink( STATIC_LINK(
+            if((rSh).GetViewOptions()->IsPDFExport())
+            {
+                ((SvxBrushItem*)pBrush)->PurgeMedium();
+                ((SvxBrushItem*)pBrush)->SetDoneLink( Link() );
+            }
+            else
+                ((SvxBrushItem*)pBrush)->SetDoneLink( STATIC_LINK(
                                     rSh.GetDoc(), SwDoc, BackgroundDone ) );
             SfxObjectShell &rObjSh = *GETOBJSHELL();
             const Graphic* pGrf = pBrush->GetGraphic( &rObjSh );
