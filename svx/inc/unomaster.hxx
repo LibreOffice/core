@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomaster.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:26:43 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:07:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,10 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException) = 0;
 
     virtual void dispose() = 0;
+
+    virtual void modelChanged( SdrModel* pNewModel ) = 0;
+    virtual void pageChanged( SdrPage* pNewPage ) = 0;
+    virtual void objectChanged( SdrObject* pNewObj ) = 0;
 };
 
 #endif
