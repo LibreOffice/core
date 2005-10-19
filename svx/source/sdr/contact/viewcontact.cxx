@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontact.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:03:57 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:11:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,10 @@
 
 #ifndef _SDR_CONTACT_VIEWOBJECTCONTACT_HXX
 #include <svx/sdr/contact/viewobjectcontact.hxx>
+#endif
+
+#ifndef _SDR_CONTACT_OBJECTCONTACT_HXX
+#include <svx/sdr/contact/objectcontact.hxx>
 #endif
 
 #ifndef _SDR_ANIMATION_ANIMATIONINFO_HXX
@@ -200,9 +204,24 @@ namespace sdr
 
         // Test if this ViewContact has ViewObjectContacts at all. This can
         // be used to test if this ViewContact is visualized ATM or not
-        sal_Bool ViewContact::HasViewObjectContacts() const
+        sal_Bool ViewContact::HasViewObjectContacts(bool bExcludePreviews) const
         {
-            return (0L != maVOCList.Count());
+            if(bExcludePreviews)
+            {
+                for(sal_uInt32 a(0L); a < maVOCList.Count(); a++)
+                {
+                    if( !maVOCList.GetObject(a)->GetObjectContact().IsPreviewRenderer() )
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+            else
+            {
+                return (0L != maVOCList.Count());
+            }
         }
 
         // method to get the PaintRectangle. Tests internally for validity and calls
