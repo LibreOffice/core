@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:13:39 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:43:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -417,8 +417,11 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
 
             SvtPathOptions aPathOpt;
             String aPath = aPathOpt.GetPalettePath();
-            FmFormModel* pModel = new FmFormModel(
-                                    aPath, NULL, GetViewData()->GetDocShell() );
+
+            ScDocShellRef aDragShellRef( new ScDocShell );
+            aDragShellRef->DoInitNew(NULL);
+            FmFormModel* pModel = new FmFormModel( aPath, NULL, aDragShellRef );
+
             pModel->GetItemPool().FreezeIdRanges();
             xStm->Seek(0);
 
@@ -449,6 +452,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
 
             PasteDraw( aPos, pModel, (nObjCount > 1) );     // grouped if more than 1 object
             delete pModel;
+            aDragShellRef->DoClose();
             bRet = TRUE;
         }
     }
