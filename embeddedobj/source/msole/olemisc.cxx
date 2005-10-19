@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olemisc.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:43:00 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:41:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,9 +71,10 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_aClassID( aClassID )
 , m_aClassName( aClassName )
 , m_bWaitSaveCompleted( sal_False )
-, m_bVisReplInStream( sal_True )
+, m_bVisReplInitialized( sal_False )
+, m_bVisReplInStream( sal_False )
 , m_bStoreLoaded( sal_False )
-, m_bStoreVisRepl( sal_True )
+, m_bStoreVisRepl( sal_False )
 , m_bNewVisReplInStream( sal_True )
 , m_bIsLink( sal_False )
 , m_bHasCachedSize( sal_False )
@@ -100,9 +101,10 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_nUpdateMode ( embed::EmbedUpdateModes::ALWAYS_UPDATE )
 , m_xFactory( xFactory )
 , m_bWaitSaveCompleted( sal_False )
-, m_bVisReplInStream( sal_True )
+, m_bVisReplInitialized( sal_False )
+, m_bVisReplInStream( sal_False )
 , m_bStoreLoaded( sal_False )
-, m_bStoreVisRepl( sal_True )
+, m_bStoreVisRepl( sal_False )
 , m_bNewVisReplInStream( sal_True )
 , m_bIsLink( bLink )
 , m_bHasCachedSize( sal_False )
@@ -128,9 +130,10 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_nUpdateMode ( embed::EmbedUpdateModes::ALWAYS_UPDATE )
 , m_xFactory( xFactory )
 , m_bWaitSaveCompleted( sal_False )
-, m_bVisReplInStream( sal_True )
+, m_bVisReplInitialized( sal_False )
+, m_bVisReplInStream( sal_False )
 , m_bStoreLoaded( sal_False )
-, m_bStoreVisRepl( sal_True )
+, m_bStoreVisRepl( sal_False )
 , m_bNewVisReplInStream( sal_True )
 , m_bIsLink( sal_False )
 , m_bHasCachedSize( sal_False )
