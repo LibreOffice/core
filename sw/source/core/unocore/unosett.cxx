@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:30:11 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 08:24:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1910,7 +1910,11 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                             }
                         }
                         aFmt.SetCharFmt( pCharFmt );
-                        sNewCharStyleNames[(sal_uInt16)nIndex] = sCharFmtName;
+                        // os 2005-08-22 #i51842#
+                        // If the character format has been found it's name should not be in the
+                        // char style names array
+                        //sNewCharStyleNames[(sal_uInt16)nIndex] = sCharFmtName;
+                        sNewCharStyleNames[(sal_uInt16)nIndex].Erase();
                      }
                     else
                         sNewCharStyleNames[(sal_uInt16)nIndex] = sCharFmtName;
