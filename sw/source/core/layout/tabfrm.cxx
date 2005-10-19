@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:16:25 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:36:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1598,6 +1598,44 @@ bool lcl_NoPrev( const SwFrm& rFrm )
 
 #define KEEPTAB ( !GetFollow() && !IsFollow() )
 
+// --> OD 2005-09-28 #b6329202# - helper method to find next content frame of
+// a table frame and format it to assure keep attribute.
+// method return true, if a next content frame is formatted.
+// Precondition: The given table frame hasn't a follow and isn't a follow.
+bool lcl_FormatNextCntntForKeep( SwTabFrm* pTabFrm )
+{
+    // find next content, table or section
+    SwFrm* pNxt = pTabFrm->FindNext();
+
+    // skip empty sections
+    while ( pNxt && pNxt->IsSctFrm() &&
+            !static_cast<SwSectionFrm*>(pNxt)->GetSection() )
+    {
+        pNxt = pNxt->FindNext();
+    }
+
+    // if found next frame is a section, get its first content.
+    if ( pNxt && pNxt->IsSctFrm() )
+    {
+        pNxt = static_cast<SwSectionFrm*>(pNxt)->ContainsAny();
+    }
+
+    // format found next frame.
+    // if table frame is inside another table, method <SwFrm::MakeAll()> is
+    // called to avoid that the superior table frame is formatted.
+    bool bNxtFormatted( false );
+    if ( pNxt )
+    {
+        bNxtFormatted = true;
+        if ( pTabFrm->GetUpper()->IsInTab() )
+            pNxt->MakeAll();
+        else
+            pNxt->Calc();
+    }
+
+    return bNxtFormatted;
+}
+
 void SwTabFrm::MakeAll()
 {
     if ( IsJoinLocked() || StackHack::IsLocked() || StackHack::Count() > 50 )
@@ -1846,17 +1884,30 @@ void SwTabFrm::MakeAll()
                                 }
                                 if ( bKeep && KEEPTAB )
                                 {
-                                    SwFrm *pNxt = FindNextCnt();
-                                    // FindNextCnt geht ggf. in einen Bereich
-                                    // hinein, in eine Tabelle allerdings auch
-                                    if( pNxt && pNxt->IsInTab() )
-                                        pNxt = pNxt->FindTabFrm();
-                                    if ( pNxt )
+                                    // --> OD 2005-09-28 #b6329202#
+                                    // Consider case that table is inside another
+                                    // table, because it has to be avoided, that
+                                    // superior table is formatted.
+                                    // Thus, find next content, table or section
+                                    // and, if a section is found, get its first
+                                    // content.
+//                                    SwFrm *pNxt = FindNextCnt();
+//                                    // FindNextCnt geht ggf. in einen Bereich
+//                                    // hinein, in eine Tabelle allerdings auch
+//                                    if( pNxt && pNxt->IsInTab() )
+//                                        pNxt = pNxt->FindTabFrm();
+//                                    if ( pNxt )
+//                                    {
+//                                        pNxt->Calc();
+//                                        if ( !GetNext() )
+//                                            bValidPos = FALSE;
+//                                    }
+                                    if ( lcl_FormatNextCntntForKeep( this ) &&
+                                         !GetNext() )
                                     {
-                                        pNxt->Calc();
-                                        if ( !GetNext() )
-                                            bValidPos = FALSE;
+                                        bValidPos = FALSE;
                                     }
+                                    // <--
                                 }
                             }
                         }
@@ -1925,15 +1976,27 @@ void SwTabFrm::MakeAll()
                     bLowersFormatted = TRUE;
                     if ( bKeep && KEEPTAB )
                     {
-                        SwFrm *pNxt = FindNextCnt();
-                        if( pNxt && pNxt->IsInTab() )
-                            pNxt = pNxt->FindTabFrm();
-                        if ( pNxt )
+                        // --> OD 2005-09-28 #b6329202#
+                        // Consider case that table is inside another table,
+                        // because it has to be avoided, that superior table
+                        // is formatted.
+                        // Thus, find next content, table or section
+                        // and, if a section is found, get its first
+                        // content.
+//                        SwFrm *pNxt = FindNextCnt();
+//                        if( pNxt && pNxt->IsInTab() )
+//                            pNxt = pNxt->FindTabFrm();
+//                        if ( pNxt )
+//                        {
+//                            pNxt->Calc();
+//                            if ( !GetNext() )
+//                                bValidPos = FALSE;
+//                        }
+                        if ( lcl_FormatNextCntntForKeep( this ) && !GetNext() )
                         {
-                            pNxt->Calc();
-                            if ( !GetNext() )
-                                bValidPos = FALSE;
+                            bValidPos = FALSE;
                         }
+                        // <--
                     }
                 }
             }
@@ -2046,11 +2109,18 @@ void SwTabFrm::MakeAll()
             }
             else if ( bKeep && KEEPTAB )
             {
-                SwFrm *pNxt = FindNextCnt();
-                if( pNxt && pNxt->IsInTab() )
-                    pNxt = pNxt->FindTabFrm();
-                if ( pNxt )
-                    pNxt->Calc();
+                // --> OD 2005-09-28 #b6329202#
+                // Consider case that table is inside another table, because
+                // it has to be avoided, that superior table is formatted.
+                // Thus, find next content, table or section and, if a section
+                // is found, get its first content.
+//                SwFrm *pNxt = FindNextCnt();
+//                if( pNxt && pNxt->IsInTab() )
+//                    pNxt = pNxt->FindTabFrm();
+//                if ( pNxt )
+//                    pNxt->Calc();
+                lcl_FormatNextCntntForKeep( this );
+                // <--
             }
             if ( IsValid() )
             {
