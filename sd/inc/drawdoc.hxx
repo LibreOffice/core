@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:54:07 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:22:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -307,7 +307,12 @@ public:
 
     void                CreatingDataObj( SdTransferable* pTransferable ) { pCreatingTransferable = pTransferable; }
 
-    SD_DLLPUBLIC void   CreateFirstPages();
+    /** if the document does not contain at least one handout, one slide and one notes page with
+        at least one master each this methods creates them.
+        If a reference document is given, the sizes and border settings of that document are used
+        for newly created slides.
+    */
+    SD_DLLPUBLIC void   CreateFirstPages( SdDrawDocument* pRefDocument = 0 );
     BOOL                CreateMissingNotesAndHandoutPages();
 
     void                MovePage(USHORT nPgNum, USHORT nNewPos);
