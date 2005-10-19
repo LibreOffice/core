@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.184 $
+ *  $Revision: 1.185 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-30 10:27:37 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:20:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,6 +118,9 @@
 #ifndef _COM_SUN_STAR_UTIL_URL_HPP_
 #include <com/sun/star/util/URL.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
+#include <com/sun/star/util/XCloseable.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
 #endif
@@ -168,6 +171,12 @@
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XEVENTLISTENER_HPP_
 #include <com/sun/star/document/XEventListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_XUIELEMENTFACTORYREGISTRATION_HPP_
+#include <com/sun/star/ui/XUIElementFactoryRegistration.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XUICONTROLLERREGISTRATION_HPP_
+#include <com/sun/star/frame/XUIControllerRegistration.hpp>
 #endif
 
 #include <com/sun/star/java/XJavaVM.hpp>
@@ -1946,6 +1955,349 @@ sal_Bool Desktop::CheckOEM()
     }
 }
 
+void Desktop::PreloadModuleData( CommandLineArgs* pArgs )
+{
+    Reference< XMultiServiceFactory > rFactory = ::comphelper::getProcessServiceFactory();
+
+    Sequence < com::sun::star::beans::PropertyValue > args(1);
+    args[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Hidden"));
+    args[0].Value <<= sal_True;
+    Reference < XComponentLoader > xLoader( ::comphelper::getProcessServiceFactory()->createInstance(
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), UNO_QUERY );
+
+    if ( !xLoader.is() )
+        return;
+
+    if ( pArgs->IsWriter() )
+    {
+        try
+        {
+            Reference < ::com::sun::star::util::XCloseable > xDoc( xLoader->loadComponentFromURL( DEFINE_CONST_UNICODE("private:factory/swriter"),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")), 0, args ), UNO_QUERY_THROW );
+            xDoc->close( sal_False );
+        }
+        catch ( com::sun::star::uno::Exception& )
+        {
+        }
+    }
+    if ( pArgs->IsCalc() )
+    {
+        try
+        {
+            Reference < ::com::sun::star::util::XCloseable > xDoc( xLoader->loadComponentFromURL( DEFINE_CONST_UNICODE("private:factory/scalc"),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")), 0, args ), UNO_QUERY_THROW );
+            xDoc->close( sal_False );
+        }
+        catch ( com::sun::star::uno::Exception& )
+        {
+        }
+    }
+    if ( pArgs->IsDraw() )
+    {
+        try
+        {
+            Reference < ::com::sun::star::util::XCloseable > xDoc( xLoader->loadComponentFromURL( DEFINE_CONST_UNICODE("private:factory/sdraw"),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")), 0, args ), UNO_QUERY_THROW );
+            xDoc->close( sal_False );
+        }
+        catch ( com::sun::star::uno::Exception& )
+        {
+        }
+    }
+    if ( pArgs->IsImpress() )
+    {
+        try
+        {
+            Reference < ::com::sun::star::util::XCloseable > xDoc( xLoader->loadComponentFromURL( DEFINE_CONST_UNICODE("private:factory/simpress"),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")), 0, args ), UNO_QUERY_THROW );
+            xDoc->close( sal_False );
+        }
+        catch ( com::sun::star::uno::Exception& )
+        {
+        }
+    }
+}
+
+void Desktop::PreloadConfigurationData()
+{
+    Reference< XMultiServiceFactory > rFactory = ::comphelper::getProcessServiceFactory();
+    Reference< XNameAccess > xNameAccess( rFactory->createInstance(
+        DEFINE_CONST_UNICODE( "com.sun.star.frame.UICommandDescription" )), UNO_QUERY );
+
+    rtl::OUString aWriterDoc( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ));
+    rtl::OUString aCalcDoc( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ));
+    rtl::OUString aDrawDoc( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ));
+    rtl::OUString aImpressDoc( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ));
+
+    // preload commands configuration
+    if ( xNameAccess.is() )
+    {
+        Any a;
+        Reference< XNameAccess > xCmdAccess;
+
+        try
+        {
+            a = xNameAccess->getByName( aWriterDoc );
+            a >>= xCmdAccess;
+            if ( xCmdAccess.is() )
+            {
+                xCmdAccess->getByName( DEFINE_CONST_UNICODE( ".uno:BasicShapes" ));
+                xCmdAccess->getByName( DEFINE_CONST_UNICODE( ".uno:EditGlossary" ));
+            }
+        }
+        catch ( ::com::sun::star::uno::Exception& )
+        {
+        }
+
+        try
+        {
+            a = xNameAccess->getByName( aCalcDoc );
+            a >>= xCmdAccess;
+            if ( xCmdAccess.is() )
+                xCmdAccess->getByName( DEFINE_CONST_UNICODE( ".uno:InsertObjectStarMath" ));
+        }
+        catch ( ::com::sun::star::uno::Exception& )
+        {
+        }
+
+        try
+        {
+            // draw and impress share the same configuration file (DrawImpressCommands.xcu)
+            a = xNameAccess->getByName( aDrawDoc );
+            a >>= xCmdAccess;
+            if ( xCmdAccess.is() )
+                xCmdAccess->getByName( DEFINE_CONST_UNICODE( ".uno:Polygon" ));
+        }
+        catch ( ::com::sun::star::uno::Exception& )
+        {
+        }
+    }
+
+    // preload window state configuration
+    xNameAccess = Reference< XNameAccess >( rFactory->createInstance(
+                    DEFINE_CONST_UNICODE( "com.sun.star.ui.WindowStateConfiguration" )), UNO_QUERY );
+    if ( xNameAccess.is() )
+    {
+        Any a;
+        Reference< XNameAccess > xWindowAccess;
+        try
+        {
+            a = xNameAccess->getByName( aWriterDoc );
+            a >>= xWindowAccess;
+            if ( xWindowAccess.is() )
+                xWindowAccess->getByName( DEFINE_CONST_UNICODE( "private:resource/toolbar/standardbar" ));
+        }
+        catch ( ::com::sun::star::uno::Exception& )
+        {
+        }
+        try
+        {
+            a = xNameAccess->getByName( aCalcDoc );
+            a >>= xWindowAccess;
+            if ( xWindowAccess.is() )
+                xWindowAccess->getByName( DEFINE_CONST_UNICODE( "private:resource/toolbar/standardbar" ));
+        }
+        catch ( ::com::sun::star::uno::Exception& )
+        {
+        }
+        try
+        {
+            a = xNameAccess->getByName( aDrawDoc );
+            a >>= xWindowAccess;
+            if ( xWindowAccess.is() )
+                xWindowAccess->getByName( DEFINE_CONST_UNICODE( "private:resource/toolbar/standardbar" ));
+        }
+        catch ( ::com::sun::star::uno::Exception& )
+        {
+        }
+        try
+        {
+            a = xNameAccess->getByName( aImpressDoc );
+            a >>= xWindowAccess;
+            if ( xWindowAccess.is() )
+                xWindowAccess->getByName( DEFINE_CONST_UNICODE( "private:resource/toolbar/standardbar" ));
+        }
+        catch ( ::com::sun::star::uno::Exception& )
+        {
+        }
+    }
+
+    // preload user interface element factories
+    Sequence< Sequence< css::beans::PropertyValue > > aSeqSeqPropValue;
+    Reference< ::com::sun::star::ui::XUIElementFactoryRegistration > xUIElementFactory(
+        rFactory->createInstance(
+            DEFINE_CONST_UNICODE( "com.sun.star.ui.UIElementFactoryManager" )),
+            UNO_QUERY );
+    if ( xUIElementFactory.is() )
+    {
+        try
+        {
+            aSeqSeqPropValue = xUIElementFactory->getRegisteredFactories();
+        }
+        catch ( ::com::sun::star::uno::Exception& )
+        {
+        }
+    }
+
+    // preload popup menu controller factories. As all controllers are in the same
+    // configuration file they also get preloaded!
+    Reference< ::com::sun::star::frame::XUIControllerRegistration > xPopupMenuControllerFactory(
+        rFactory->createInstance(
+            DEFINE_CONST_UNICODE( "com.sun.star.frame.PopupMenuControllerFactory" )),
+            UNO_QUERY );
+    if ( xPopupMenuControllerFactory.is() )
+    {
+        try
+        {
+            xPopupMenuControllerFactory->hasController(
+                        DEFINE_CONST_UNICODE( ".uno:CharFontName" ),
+                        OUString() );
+        }
+        catch ( ::com::sun::star::uno::Exception& )
+        {
+        }
+    }
+
+    // preload filter configuration
+    Sequence< OUString > aSeq;
+    xNameAccess = Reference< XNameAccess >( rFactory->createInstance(
+                    DEFINE_CONST_UNICODE( "com.sun.star.document.FilterFactory" )), UNO_QUERY );
+    if ( xNameAccess.is() )
+    {
+        try
+        {
+             aSeq = xNameAccess->getElementNames();
+        }
+        catch ( ::com::sun::star::uno::Exception& )
+        {
+        }
+    }
+
+    // preload type detection configuration
+    xNameAccess = Reference< XNameAccess >( rFactory->createInstance(
+                    DEFINE_CONST_UNICODE( "com.sun.star.document.TypeDetection" )), UNO_QUERY );
+    if ( xNameAccess.is() )
+    {
+        try
+        {
+             aSeq = xNameAccess->getElementNames();
+        }
+        catch ( ::com::sun::star::uno::Exception& )
+        {
+        }
+    }
+
+    OUString sConfigSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
+    OUString sAccessSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess");
+
+    // get configuration provider
+    Reference< XMultiServiceFactory > xConfigProvider;
+    xConfigProvider = Reference< XMultiServiceFactory > (
+                rFactory->createInstance( sConfigSrvc ),UNO_QUERY );
+
+    if ( xConfigProvider.is() )
+    {
+        // preload writer configuration
+        Sequence< Any > theArgs(1);
+        theArgs[ 0 ] <<= OUString::createFromAscii( "org.openoffice.Office.Writer/MailMergeWizard" );
+        try
+        {
+            xNameAccess = Reference< XNameAccess >(
+                xConfigProvider->createInstanceWithArguments( sAccessSrvc, theArgs ), UNO_QUERY );
+        }
+        catch (::com::sun::star::uno::Exception& )
+        {
+        }
+
+        // WriterWeb
+        theArgs[ 0 ] <<= OUString::createFromAscii( "org.openoffice.Office.WriterWeb/Content" );
+        try
+        {
+            xNameAccess = Reference< XNameAccess >(
+                xConfigProvider->createInstanceWithArguments( sAccessSrvc, theArgs ), UNO_QUERY );
+        }
+        catch (::com::sun::star::uno::Exception& )
+        {
+        }
+
+        // preload compatibility
+        theArgs[ 0 ] <<= OUString::createFromAscii( "org.openoffice.Office.Compatibility/WriterCompatibilityVersion" );
+        try
+        {
+            xNameAccess = Reference< XNameAccess >(
+                xConfigProvider->createInstanceWithArguments( sAccessSrvc, theArgs ), UNO_QUERY );
+        }
+        catch (::com::sun::star::uno::Exception& )
+        {
+        }
+
+        // preload calc configuration
+        theArgs[ 0 ] <<= OUString::createFromAscii( "org.openoffice.Office.Calc/Content" );
+        try
+        {
+            xNameAccess = Reference< XNameAccess >(
+                xConfigProvider->createInstanceWithArguments( sAccessSrvc, theArgs ), UNO_QUERY );
+        }
+        catch (::com::sun::star::uno::Exception& )
+        {
+        }
+
+        // preload impress configuration
+        theArgs[ 0 ] <<= OUString::createFromAscii( "org.openoffice.Office.UI.Effects/UserInterface" );
+        try
+        {
+            xNameAccess = Reference< XNameAccess >(
+                xConfigProvider->createInstanceWithArguments( sAccessSrvc, theArgs ), UNO_QUERY );
+        }
+        catch (::com::sun::star::uno::Exception& )
+        {
+        }
+
+        theArgs[ 0 ] <<= OUString::createFromAscii( "org.openoffice.Office.Impress/Layout" );
+        try
+        {
+            xNameAccess = Reference< XNameAccess >(
+                xConfigProvider->createInstanceWithArguments( sAccessSrvc, theArgs ), UNO_QUERY );
+        }
+        catch (::com::sun::star::uno::Exception& )
+        {
+        }
+
+        // preload draw configuration
+        theArgs[ 0 ] <<= OUString::createFromAscii( "org.openoffice.Office.Draw/Layout" );
+        try
+        {
+            xNameAccess = Reference< XNameAccess >(
+                xConfigProvider->createInstanceWithArguments( sAccessSrvc, theArgs ), UNO_QUERY );
+        }
+        catch (::com::sun::star::uno::Exception& )
+        {
+        }
+
+        // preload ui configuration
+        theArgs[ 0 ] <<= OUString::createFromAscii( "org.openoffice.Office.UI/FilterClassification" );
+        try
+        {
+            xNameAccess = Reference< XNameAccess >(
+                xConfigProvider->createInstanceWithArguments( sAccessSrvc, theArgs ), UNO_QUERY );
+        }
+        catch (::com::sun::star::uno::Exception& )
+        {
+        }
+
+        // preload addons configuration
+        theArgs[ 0 ] <<= OUString::createFromAscii( "org.openoffice.Office.Addons/AddonUI" );
+        try
+        {
+            xNameAccess = Reference< XNameAccess >(
+                xConfigProvider->createInstanceWithArguments( sAccessSrvc, theArgs ), UNO_QUERY );
+        }
+        catch (::com::sun::star::uno::Exception& )
+        {
+        }
+    }
+}
+
 void Desktop::OpenClients()
 {
 
@@ -2001,6 +2353,43 @@ void Desktop::OpenClients()
 #endif
             pHelp->Start(aHelpURLBuffer.makeStringAndClear(), NULL);
             return;
+        }
+    }
+    else
+    {
+        OUString            aIniName;
+        ::vos::OStartupInfo aInfo;
+
+        aInfo.getExecutableFile( aIniName );
+        sal_uInt32     lastIndex = aIniName.lastIndexOf('/');
+        if ( lastIndex > 0 )
+        {
+            aIniName    = aIniName.copy( 0, lastIndex+1 );
+            aIniName    += OUString( RTL_CONSTASCII_USTRINGPARAM( "perftune" ));
+#ifdef WNT
+            aIniName    += OUString( RTL_CONSTASCII_USTRINGPARAM( ".ini" ));
+#else
+            aIniName    += OUString( RTL_CONSTASCII_USTRINGPARAM( "rc" ));
+#endif
+        }
+
+        rtl::Bootstrap aPerfTuneIniFile( aIniName );
+
+        OUString aDefault( RTL_CONSTASCII_USTRINGPARAM( "0" ));
+        OUString aPreloadData;
+
+        aPerfTuneIniFile.getFrom( OUString( RTL_CONSTASCII_USTRINGPARAM( "QuickstartPreloadConfiguration" )), aPreloadData, aDefault );
+        if ( aPreloadData.equalsAscii( "1" ))
+        {
+            if ( pArgs->IsWriter()  ||
+                 pArgs->IsCalc()    ||
+                 pArgs->IsDraw()    ||
+                 pArgs->IsImpress()    )
+            {
+                PreloadModuleData( pArgs );
+            }
+
+            PreloadConfigurationData();
         }
     }
 
