@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.58 $
+#   $Revision: 1.59 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 17:50:37 $
+#   last change: $Author: rt $ $Date: 2005-10-19 12:06:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ TARGETOBJS=	\
             $(OBJ)$/langselect.obj          \
             $(OBJ)$/userinstall.obj         \
             $(OBJ)$/desktopcontext.obj      
-            
+
 
 
 # --- Resourcen ----------------------------------------------------
@@ -145,7 +145,7 @@ APP1DEF=    $(MISCX)$/$(TARGET).def
 APP1RES=    $(RES)$/desktop.res
 APP1ICON=$(SOLARRESDIR)$/icons/so8-main-app.ico
 APP1VERINFO=verinfo.rc
-APP1LINKRES=$(MISC)$/$(TARGET).res
+APP1LINKRES=$(MISC)$/$(TARGET)1.res
 APP1STACK=10000000
 
 # create a manifest file with the same name as the
@@ -187,7 +187,7 @@ APP5DEF=    $(MISCX)$/$(TARGET).def
 APP5RES=    $(RES)$/oodesktop.res
 APP5ICON=$(SOLARRESDIR)$/icons/ooo-main-app.ico
 APP5VERINFO=ooverinfo.rc
-APP5LINKRES=$(MISC)$/ooffice.res
+APP5LINKRES=$(MISC)$/ooffice5.res
 APP5STACK=10000000
 .ENDIF # WNT
 
@@ -197,7 +197,7 @@ APP6RES=$(RES)$/soloader.res
 APP6NOSAL=TRUE
 APP6DEPN= $(APP1TARGETN) $(APP6RES) verinfo.rc
 APP6VERINFO=verinfo.rc
-APP6LINKRES=$(MISC)$/soffice.res
+APP6LINKRES=$(MISC)$/soffice6.res
 APP6ICON=$(SOLARRESDIR)$/icons/so8-main-app.ico
 APP6OBJS = \
         $(OBJ)$/officeloader.obj
@@ -207,7 +207,7 @@ APP7RES=$(RES)$/ooloader.res
 APP7NOSAL=TRUE
 APP7DEPN= $(APP1TARGETN) $(APP7RES) ooverinfo.rc
 APP7VERINFO=ooverinfo.rc
-APP7LINKRES=$(MISC)$/ooffice.res
+APP7LINKRES=$(MISC)$/ooffice7.res
 APP7ICON=$(SOLARRESDIR)$/icons/ooo-main-app.ico
 APP7OBJS = \
         $(OBJ)$/officeloader.obj
@@ -254,7 +254,7 @@ $(BIN)$/$(TARGET).exe.manifest: template.manifest
 
 $(BIN)$/$(TARGET).bin: $(BIN)$/$(TARGET)$(EXECPOST)
    +$(COPY) $< $@
-   
+
 $(BIN)$/so$/$(TARGET).bin: $(BIN)$/so$/$(TARGET)$(EXECPOST)
    +$(COPY) $< $@
 
