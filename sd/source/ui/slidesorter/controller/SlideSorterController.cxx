@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:28:15 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:25:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,10 +188,18 @@ void SlideSorterController::Init (void)
 
 SlideSorterController::~SlideSorterController (void)
 {
-    uno::Reference<lang::XComponent> xComponent (
-        mpListener.getRef(), uno::UNO_QUERY);
-    if (xComponent.is())
-        xComponent->dispose();
+    try
+    {
+        uno::Reference<lang::XComponent> xComponent (
+            mpListener.getRef(), uno::UNO_QUERY);
+        if (xComponent.is())
+            xComponent->dispose();
+    }
+    catch( uno::Exception& e )
+    {
+        (void)e;
+        DBG_ERROR( "sd::SlideSorterController::~SlideSorterController(), exception caught!" );
+    }
 
     // dispose should have been called by now so that nothing is to be done
     // to shut down cleanly.
