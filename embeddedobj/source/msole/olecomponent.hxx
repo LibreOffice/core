@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olecomponent.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:42:29 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:40:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,6 +192,9 @@ public:
 
     ::com::sun::star::uno::Sequence< sal_Int8 > GetCLSID();
 
+    sal_Bool IsDirty();
+
+    void StoreOwnTmpIfNecessary();
     void StoreObjectToStream( ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xOutStream );
 
     sal_Bool SaveObject_Impl();
