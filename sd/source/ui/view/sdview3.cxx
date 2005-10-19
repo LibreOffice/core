@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:17:02 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:28:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,6 +130,9 @@
 #ifndef _UTL_STREAM_WRAPPER_HXX_
 #include <unotools/streamwrap.hxx>
 #endif
+#ifndef _SV_METAACT_HXX
+#include <vcl/metaact.hxx>
+#endif
 
 #include <toolkit/helper/vclunohelper.hxx>
 
@@ -230,6 +233,139 @@ void ImpCheckInsertPos(Point& rPos, const Size& rSize, const Rectangle& rWorkAre
             }
         }
     }
+}
+
+bool View::InsertMetaFile( TransferableDataHelper& rDataHelper, const Point& rPos, ImageMap* pImageMap, bool bOptimize )
+{
+    GDIMetaFile aMtf;
+
+    if( !rDataHelper.GetGDIMetaFile( FORMAT_GDIMETAFILE, aMtf ) )
+        return false;
+
+/*
+SvFileStream    aSvOutputStream( String( RTL_CONSTASCII_USTRINGPARAM( "/tmp/test.png" ) ), STREAM_WRITE | STREAM_TRUNC );
+Graphic         aMtfGraphic( aMtf );
+Size            aPreviewSizePixel( OutputDevice::LogicToLogic( aMtf.GetPrefSize(), aMtf.GetPrefMapMode(), MAP_PIXEL ) );
+
+if( aPreviewSizePixel.Width() && aPreviewSizePixel.Height() )
+{
+    const double fWH = static_cast< double >( aPreviewSizePixel.Width() ) / static_cast< double >( aPreviewSizePixel.Height() );
+
+    if( fWH <= 1.0 )
+        aPreviewSizePixel.Width() = static_cast< long >( 128.0 * fWH ), aPreviewSizePixel.Height() = 128;
+    else
+        aPreviewSizePixel.Width() = 128, aPreviewSizePixel.Height() = static_cast< long >( 128.0 / fWH );
+
+    if( GraphicConverter::Export( aSvOutputStream, aMtfGraphic.GetBitmapEx( &aPreviewSizePixel ), CVT_PNG ) )
+    {
+        // handle errror case here
+    }
+    else
+    {
+        // Success
+    }
+}
+*/
+    bool bVector = false;
+    Graphic aGraphic;
+
+    // check if metafile only contains a pixel image, if so insert a bitmap instead
+    if( bOptimize )
+    {
+        MetaAction* pAction = aMtf.FirstAction();
+        while( pAction && !bVector )
+        {
+            switch( pAction->GetType() )
+            {
+                case META_POINT_ACTION:
+                case META_LINE_ACTION:
+                case META_RECT_ACTION:
+                case META_ROUNDRECT_ACTION:
+                case META_ELLIPSE_ACTION:
+                case META_ARC_ACTION:
+                case META_PIE_ACTION:
+                case META_CHORD_ACTION:
+                case META_POLYLINE_ACTION:
+                case META_POLYGON_ACTION:
+                case META_POLYPOLYGON_ACTION:
+                case META_TEXT_ACTION:
+                case META_TEXTARRAY_ACTION:
+                case META_STRETCHTEXT_ACTION:
+                case META_TEXTRECT_ACTION:
+                case META_GRADIENT_ACTION:
+                case META_HATCH_ACTION:
+                case META_WALLPAPER_ACTION:
+                case META_EPS_ACTION:
+                case META_TEXTLINE_ACTION:
+                case META_FLOATTRANSPARENT_ACTION:
+                case META_GRADIENTEX_ACTION:
+                case META_BMPSCALEPART_ACTION:
+                case META_BMPEXSCALEPART_ACTION:
+                    bVector = true;
+                    break;
+                case META_BMP_ACTION:
+                case META_BMPSCALE_ACTION:
+                case META_BMPEX_ACTION:
+                case META_BMPEXSCALE_ACTION:
+                    if( aGraphic.GetType() != GRAPHIC_NONE )
+                    {
+                        bVector = true;
+                    }
+                    else switch( pAction->GetType() )
+                    {
+                        case META_BMP_ACTION:
+                            {
+                                MetaBmpAction* pBmpAction = dynamic_cast< MetaBmpAction* >( pAction );
+                                if( pBmpAction )
+                                    aGraphic = Graphic( pBmpAction->GetBitmap() );
+                            }
+                            break;
+                        case META_BMPSCALE_ACTION:
+                            {
+                                MetaBmpScaleAction* pBmpScaleAction = dynamic_cast< MetaBmpScaleAction* >( pAction );
+                                if( pBmpScaleAction )
+                                    aGraphic = Graphic( pBmpScaleAction->GetBitmap() );
+                            }
+                            break;
+                        case META_BMPEX_ACTION:
+                            {
+                                MetaBmpExAction* pBmpExAction = dynamic_cast< MetaBmpExAction* >( pAction );
+                                if( pBmpExAction )
+                                    aGraphic = Graphic( pBmpExAction->GetBitmapEx() );
+                            }
+                            break;
+                        case META_BMPEXSCALE_ACTION:
+                            {
+                                MetaBmpExScaleAction* pBmpExScaleAction = dynamic_cast< MetaBmpExScaleAction* >( pAction );
+                                if( pBmpExScaleAction )
+                                    aGraphic = Graphic( pBmpExScaleAction->GetBitmapEx() );
+                            }
+                            break;
+                    }
+            }
+
+            pAction = aMtf.NextAction();
+        }
+    }
+
+    // it is not a vector metafile but it also has no graphic?
+    if( !bVector && (aGraphic.GetType() == GRAPHIC_NONE) )
+        bVector = true;
+
+    // #90129# restrict movement to WorkArea
+    Point aInsertPos( rPos );
+    Size aImageSize;
+    aImageSize = bVector ? aMtf.GetPrefSize() : aGraphic.GetSizePixel();
+    ImpCheckInsertPos(aInsertPos, aImageSize, GetWorkArea());
+
+    if( bVector )
+        aGraphic = Graphic( aMtf );
+
+    aGraphic.SetPrefMapMode( aMtf.GetPrefMapMode() );
+    aGraphic.SetPrefSize( aMtf.GetPrefSize() );
+    InsertGraphic( aGraphic, nAction, aInsertPos, NULL, pImageMap );
+
+    return true;
 }
 
 BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
@@ -894,107 +1030,116 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ) ) &&
                aDataHelper.HasFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE ) )
     {
-        uno::Reference < io::XInputStream > xStm;
-        TransferableObjectDescriptor    aObjDesc;
-
-        if ( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE, aObjDesc ) )
+        // online insert ole if format is forced or no gdi metafile is available
+        if( (nFormat != 0) || !aDataHelper.HasFormat( FORMAT_GDIMETAFILE ) )
         {
-            uno::Reference < embed::XEmbeddedObject > xObj;
-            ::rtl::OUString aName;
+            uno::Reference < io::XInputStream > xStm;
+            TransferableObjectDescriptor    aObjDesc;
 
-             if ( aDataHelper.GetInputStream( nFormat ? nFormat : SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, xStm ) ||
-                  aDataHelper.GetInputStream( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, xStm ) )
+            if ( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE, aObjDesc ) )
             {
-                xObj = pDocSh->GetEmbeddedObjectContainer().InsertEmbeddedObject( xStm, aName );
-            }
-            else
-            {
-                try
+                uno::Reference < embed::XEmbeddedObject > xObj;
+                ::rtl::OUString aName;
+
+                if ( aDataHelper.GetInputStream( nFormat ? nFormat : SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, xStm ) ||
+                    aDataHelper.GetInputStream( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, xStm ) )
                 {
-                    uno::Reference< embed::XStorage > xTmpStor = ::comphelper::OStorageHelper::GetTemporaryStorage();
-                    uno::Reference < embed::XEmbedObjectClipboardCreator > xClipboardCreator(
-                        ::comphelper::getProcessServiceFactory()->createInstance(
-                               ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.MSOLEObjectSystemCreator")) ),
-                        uno::UNO_QUERY_THROW );
-
-                    embed::InsertedObjectInfo aInfo = xClipboardCreator->createInstanceInitFromClipboard(
-                                                            xTmpStor,
-                                                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "DummyName" ) ),
-                                                            uno::Sequence< beans::PropertyValue >() );
-
-                    // TODO/LATER: in future InsertedObjectInfo will be used to get container related information
-                    // for example whether the object should be an iconified one
-                    xObj = aInfo.Object;
-                    if ( xObj.is() )
-                        pDocSh->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aName );
+                    xObj = pDocSh->GetEmbeddedObjectContainer().InsertEmbeddedObject( xStm, aName );
                 }
-                catch( uno::Exception& )
-                {}
-            }
-
-            if ( xObj.is() )
-            {
-                MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( aObjDesc.mnViewAspect ) );
-
-                awt::Size aSz;
-                try{
-                    aSz = xObj->getVisualAreaSize( aObjDesc.mnViewAspect );
-                }
-                catch( embed::NoVisualAreaSizeException& )
+                else
                 {
-                    // the default size will be set later
-                }
-
-                if( aObjDesc.maSize.Width() && aObjDesc.maSize.Height() )
-                {
-                    Size aTmp( OutputDevice::LogicToLogic( aObjDesc.maSize, MAP_100TH_MM, aMapUnit ) );
-                    if ( aSz.Width != aTmp.Width() || aSz.Height != aTmp.Height() )
+                    try
                     {
-                        aSz.Width = aTmp.Width();
-                        aSz.Height = aTmp.Height();
+                        uno::Reference< embed::XStorage > xTmpStor = ::comphelper::OStorageHelper::GetTemporaryStorage();
+                        uno::Reference < embed::XEmbedObjectClipboardCreator > xClipboardCreator(
+                            ::comphelper::getProcessServiceFactory()->createInstance(
+                                   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.MSOLEObjectSystemCreator")) ),
+                            uno::UNO_QUERY_THROW );
+
+                        embed::InsertedObjectInfo aInfo = xClipboardCreator->createInstanceInitFromClipboard(
+                                                                xTmpStor,
+                                                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "DummyName" ) ),
+                                                                uno::Sequence< beans::PropertyValue >() );
+
+                        // TODO/LATER: in future InsertedObjectInfo will be used to get container related information
+                        // for example whether the object should be an iconified one
+                        xObj = aInfo.Object;
+                        if ( xObj.is() )
+                            pDocSh->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aName );
+                    }
+                    catch( uno::Exception& )
+                    {}
+                }
+
+                if ( xObj.is() )
+                {
+                    MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( aObjDesc.mnViewAspect ) );
+
+                    awt::Size aSz;
+                    try{
+                        aSz = xObj->getVisualAreaSize( aObjDesc.mnViewAspect );
+                    }
+                    catch( embed::NoVisualAreaSizeException& )
+                    {
+                        // the default size will be set later
+                    }
+
+                    if( aObjDesc.maSize.Width() && aObjDesc.maSize.Height() )
+                    {
+                        Size aTmp( OutputDevice::LogicToLogic( aObjDesc.maSize, MAP_100TH_MM, aMapUnit ) );
+                        if ( aSz.Width != aTmp.Width() || aSz.Height != aTmp.Height() )
+                        {
+                            aSz.Width = aTmp.Width();
+                            aSz.Height = aTmp.Height();
+                            xObj->setVisualAreaSize( aObjDesc.mnViewAspect, aSz );
+                        }
+                    }
+
+                    Size aSize( aSz.Width, aSz.Height );
+
+                    if( !aSize.Width() || !aSize.Height() )
+                    {
+                        aSize = OutputDevice::LogicToLogic( Size(14100, 10000), MAP_100TH_MM, aMapUnit );
+                        aSz.Width = aSize.Width();
+                        aSz.Height = aSize.Height();
                         xObj->setVisualAreaSize( aObjDesc.mnViewAspect, aSz );
                     }
+
+                    aSize = OutputDevice::LogicToLogic( aSize, aMapUnit, MAP_100TH_MM );
+                    Size aMaxSize( pDoc->GetMaxObjSize() );
+
+                    aDropPos.X() -= Min( aSize.Width(), aMaxSize.Width() ) >> 1;
+                    aDropPos.Y() -= Min( aSize.Height(), aMaxSize.Height() ) >> 1;
+
+                    Rectangle       aRect( aDropPos, aSize );
+                    SdrOle2Obj*     pObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, aObjDesc.mnViewAspect ), aName, aRect );
+                    SdrPageView*    pPV = GetPageViewPvNum( 0 );
+                    ULONG           nOptions = SDRINSERT_SETDEFLAYER;
+
+                    if (pViewSh!=NULL)
+                    {
+                        OSL_ASSERT (pViewSh->GetViewShell()!=NULL);
+                        SfxInPlaceClient* pIpClient
+                            = pViewSh->GetViewShell()->GetIPClient();
+                        if (pIpClient!=NULL && pIpClient->IsObjectInPlaceActive())
+                            nOptions |= SDRINSERT_DONTMARK;
+                    }
+
+                    InsertObject( pObj, *pPV, nOptions );
+
+                    if( pImageMap )
+                        pObj->InsertUserData( new SdIMapInfo( *pImageMap ) );
+
+                    bReturn = TRUE;
                 }
-
-                Size aSize( aSz.Width, aSz.Height );
-
-                if( !aSize.Width() || !aSize.Height() )
-                {
-                    aSize = OutputDevice::LogicToLogic( Size(14100, 10000), MAP_100TH_MM, aMapUnit );
-                    aSz.Width = aSize.Width();
-                    aSz.Height = aSize.Height();
-                    xObj->setVisualAreaSize( aObjDesc.mnViewAspect, aSz );
-                }
-
-                aSize = OutputDevice::LogicToLogic( aSize, aMapUnit, MAP_100TH_MM );
-                Size aMaxSize( pDoc->GetMaxObjSize() );
-
-                aDropPos.X() -= Min( aSize.Width(), aMaxSize.Width() ) >> 1;
-                aDropPos.Y() -= Min( aSize.Height(), aMaxSize.Height() ) >> 1;
-
-                Rectangle       aRect( aDropPos, aSize );
-                SdrOle2Obj*     pObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, aObjDesc.mnViewAspect ), aName, aRect );
-                SdrPageView*    pPV = GetPageViewPvNum( 0 );
-                ULONG           nOptions = SDRINSERT_SETDEFLAYER;
-
-                if (pViewSh!=NULL)
-                {
-                    OSL_ASSERT (pViewSh->GetViewShell()!=NULL);
-                    SfxInPlaceClient* pIpClient
-                        = pViewSh->GetViewShell()->GetIPClient();
-                    if (pIpClient!=NULL && pIpClient->IsObjectInPlaceActive())
-                        nOptions |= SDRINSERT_DONTMARK;
-                }
-
-                InsertObject( pObj, *pPV, nOptions );
-
-                if( pImageMap )
-                    pObj->InsertUserData( new SdIMapInfo( *pImageMap ) );
-
-                bReturn = TRUE;
             }
         }
-        //TODO/LATER: if format is not available, create picture
+
+        if( !bReturn && aDataHelper.HasFormat( FORMAT_GDIMETAFILE ) )
+        {
+            // if no object was inserted, insert a picture
+            InsertMetaFile( aDataHelper, rPos, pImageMap, true );
+        }
     }
     else if( ( !bLink || pPickObj ) && CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_SVXB ) )
     {
@@ -1035,61 +1180,26 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
     }
     else if( ( !bLink || pPickObj ) && CHECK_FORMAT_TRANS( FORMAT_GDIMETAFILE ) )
     {
-        GDIMetaFile aMtf;
+        Point aInsertPos( rPos );
 
-        if( aDataHelper.GetGDIMetaFile( FORMAT_GDIMETAFILE, aMtf ) )
+        if( pOwnData && pOwnData->GetWorkDocument() )
+
         {
+            const SdDrawDocument*   pWorkModel = pOwnData->GetWorkDocument();
+            SdrPage*                pWorkPage = (SdrPage*) ( ( pWorkModel->GetPageCount() > 1 ) ?
+                                                pWorkModel->GetSdPage( 0, PK_STANDARD ) :
+                                                pWorkModel->GetPage( 0 ) );
 
-/*
-SvFileStream    aSvOutputStream( String( RTL_CONSTASCII_USTRINGPARAM( "/tmp/test.png" ) ), STREAM_WRITE | STREAM_TRUNC );
-Graphic         aMtfGraphic( aMtf );
-Size            aPreviewSizePixel( OutputDevice::LogicToLogic( aMtf.GetPrefSize(), aMtf.GetPrefMapMode(), MAP_PIXEL ) );
+            pWorkPage->SetRectsDirty();
 
-if( aPreviewSizePixel.Width() && aPreviewSizePixel.Height() )
-{
-    const double fWH = static_cast< double >( aPreviewSizePixel.Width() ) / static_cast< double >( aPreviewSizePixel.Height() );
+            // #104148# Use SnapRect, not BoundRect
+            Size aSize( pWorkPage->GetAllObjSnapRect().GetSize() );
 
-    if( fWH <= 1.0 )
-        aPreviewSizePixel.Width() = static_cast< long >( 128.0 * fWH ), aPreviewSizePixel.Height() = 128;
-    else
-        aPreviewSizePixel.Width() = 128, aPreviewSizePixel.Height() = static_cast< long >( 128.0 / fWH );
-
-    if( GraphicConverter::Export( aSvOutputStream, aMtfGraphic.GetBitmapEx( &aPreviewSizePixel ), CVT_PNG ) )
-    {
-        // handle errror case here
-    }
-    else
-    {
-        // Success
-    }
-}
-*/
-            Point aInsertPos( rPos );
-
-            if( pOwnData && pOwnData->GetWorkDocument() )
-
-            {
-                const SdDrawDocument*   pWorkModel = pOwnData->GetWorkDocument();
-                SdrPage*                pWorkPage = (SdrPage*) ( ( pWorkModel->GetPageCount() > 1 ) ?
-                                                    pWorkModel->GetSdPage( 0, PK_STANDARD ) :
-                                                    pWorkModel->GetPage( 0 ) );
-
-                pWorkPage->SetRectsDirty();
-
-                // #104148# Use SnapRect, not BoundRect
-                Size aSize( pWorkPage->GetAllObjSnapRect().GetSize() );
-
-                aInsertPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
-                aInsertPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
-            }
-
-            // #90129# restrict movement to WorkArea
-            Size aImageMapSize(aMtf.GetPrefSize());
-            ImpCheckInsertPos(aInsertPos, aImageMapSize, GetWorkArea());
-
-            InsertGraphic( aMtf, nAction, aInsertPos, NULL, pImageMap );
-            bReturn = TRUE;
+            aInsertPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
+            aInsertPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
         }
+
+        bReturn = InsertMetaFile( aDataHelper, aInsertPos, pImageMap, nFormat == 0 ? true : false ) ? TRUE : FALSE;
     }
     else if( ( !bLink || pPickObj ) && CHECK_FORMAT_TRANS( FORMAT_BITMAP ) )
     {
