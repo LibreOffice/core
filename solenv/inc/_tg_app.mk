@@ -117,7 +117,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
         $(LINKFLAGSAPP) $(APP1BASEX) \
         $(APP1STACKN) \
         -out:$@ \
-        -map:$(MISC)$/$(subst,$/,_ $(APP1TARGET)).map \
+        -map:$(MISC)$/{$(subst,$/,_ $(APP1TARGET)).map} \
         $(STDOBJ) \
         $(APP1LINKRES) \
         $(APP1RES) \
@@ -283,7 +283,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
         $(LINKFLAGSAPP) $(APP2BASEX) \
         $(APP2STACKN) \
         -out:$@ \
-        -map:$(MISC)$/$(subst,$/,_ $(APP2TARGET)).map \
+        -map:$(MISC)$/{$(subst,$/,_ $(APP2TARGET)).map} \
         $(STDOBJ) \
         $(APP2LINKRES) \
         $(APP2RES) \
@@ -449,7 +449,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
         $(LINKFLAGSAPP) $(APP3BASEX) \
         $(APP3STACKN) \
         -out:$@ \
-        -map:$(MISC)$/$(subst,$/,_ $(APP3TARGET)).map \
+        -map:$(MISC)$/{$(subst,$/,_ $(APP3TARGET)).map} \
         $(STDOBJ) \
         $(APP3LINKRES) \
         $(APP3RES) \
@@ -615,7 +615,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
         $(LINKFLAGSAPP) $(APP4BASEX) \
         $(APP4STACKN) \
         -out:$@ \
-        -map:$(MISC)$/$(subst,$/,_ $(APP4TARGET)).map \
+        -map:$(MISC)$/{$(subst,$/,_ $(APP4TARGET)).map} \
         $(STDOBJ) \
         $(APP4LINKRES) \
         $(APP4RES) \
@@ -781,7 +781,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
         $(LINKFLAGSAPP) $(APP5BASEX) \
         $(APP5STACKN) \
         -out:$@ \
-        -map:$(MISC)$/$(subst,$/,_ $(APP5TARGET)).map \
+        -map:$(MISC)$/{$(subst,$/,_ $(APP5TARGET)).map} \
         $(STDOBJ) \
         $(APP5LINKRES) \
         $(APP5RES) \
@@ -947,7 +947,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
         $(LINKFLAGSAPP) $(APP6BASEX) \
         $(APP6STACKN) \
         -out:$@ \
-        -map:$(MISC)$/$(subst,$/,_ $(APP6TARGET)).map \
+        -map:$(MISC)$/{$(subst,$/,_ $(APP6TARGET)).map} \
         $(STDOBJ) \
         $(APP6LINKRES) \
         $(APP6RES) \
@@ -1113,7 +1113,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
         $(LINKFLAGSAPP) $(APP7BASEX) \
         $(APP7STACKN) \
         -out:$@ \
-        -map:$(MISC)$/$(subst,$/,_ $(APP7TARGET)).map \
+        -map:$(MISC)$/{$(subst,$/,_ $(APP7TARGET)).map} \
         $(STDOBJ) \
         $(APP7LINKRES) \
         $(APP7RES) \
@@ -1279,7 +1279,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
         $(LINKFLAGSAPP) $(APP8BASEX) \
         $(APP8STACKN) \
         -out:$@ \
-        -map:$(MISC)$/$(subst,$/,_ $(APP8TARGET)).map \
+        -map:$(MISC)$/{$(subst,$/,_ $(APP8TARGET)).map} \
         $(STDOBJ) \
         $(APP8LINKRES) \
         $(APP8RES) \
@@ -1445,7 +1445,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
         $(LINKFLAGSAPP) $(APP9BASEX) \
         $(APP9STACKN) \
         -out:$@ \
-        -map:$(MISC)$/$(subst,$/,_ $(APP9TARGET)).map \
+        -map:$(MISC)$/{$(subst,$/,_ $(APP9TARGET)).map} \
         $(STDOBJ) \
         $(APP9LINKRES) \
         $(APP9RES) \
@@ -1611,7 +1611,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
         $(LINKFLAGSAPP) $(APP10BASEX) \
         $(APP10STACKN) \
         -out:$@ \
-        -map:$(MISC)$/$(subst,$/,_ $(APP10TARGET)).map \
+        -map:$(MISC)$/{$(subst,$/,_ $(APP10TARGET)).map} \
         $(STDOBJ) \
         $(APP10LINKRES) \
         $(APP10RES) \

@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.52 $
+#   $Revision: 1.53 $
 #
-#   last change: $Author: rt $ $Date: 2005-10-19 12:04:45 $
+#   last change: $Author: rt $ $Date: 2005-10-19 14:30:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -185,7 +185,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
         $(LINKFLAGSAPP) $(APP$(TNR)BASEX) \
         $(APP$(TNR)STACKN) \
         -out:$@ \
-        -map:$(MISC)$/$(subst,$/,_ $(APP$(TNR)TARGET)).map \
+        -map:$(MISC)$/{$(subst,$/,_ $(APP$(TNR)TARGET)).map} \
         $(STDOBJ) \
         $(APP$(TNR)LINKRES) \
         $(APP$(TNR)RES) \
