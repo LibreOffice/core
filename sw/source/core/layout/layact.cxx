@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:13:15 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:35:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -772,15 +772,6 @@ bool lcl_ScrollingAllowed( const SwPageFrm& _rPageFrm )
 
 void SwLayAction::InternalAction()
 {
-    // OD 2004-05-21 #i28701#
-    SwLayouter::ClearMovedFwdFrms( *(pRoot->GetFmt()->GetDoc()) );
-    // --> OD 2004-10-22 #i35911#
-    SwLayouter::ClearObjsTmpConsiderWrapInfluence( *(pRoot->GetFmt()->GetDoc()) );
-    // <--
-    // --> OD 2005-01-12 #i40155#
-    SwLayouter::ClearFrmsNotToWrap( *(pRoot->GetFmt()->GetDoc()) );
-    // <--
-
     ASSERT( pRoot->Lower()->IsPageFrm(), ":-( Keine Seite unterhalb der Root.");
 
     pRoot->Calc();
@@ -1124,15 +1115,6 @@ void SwLayAction::InternalAction()
     pOptTab = 0;
     if( bNoLoop )
         pDoc->GetLayouter()->EndLoopControl();
-
-    // OD 2004-05-21 #i28701#
-    SwLayouter::ClearMovedFwdFrms( *(pRoot->GetFmt()->GetDoc()) );
-    // --> OD 2004-10-22 #i35911#
-    SwLayouter::ClearObjsTmpConsiderWrapInfluence( *(pRoot->GetFmt()->GetDoc()) );
-    // <--
-    // --> OD 2005-01-12 #i40155#
-    SwLayouter::ClearFrmsNotToWrap( *(pRoot->GetFmt()->GetDoc()) );
-    // <--
 }
 /*************************************************************************
 |*
