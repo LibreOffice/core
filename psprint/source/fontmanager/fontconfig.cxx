@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontconfig.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-17 14:21:54 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 15:29:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,7 +177,7 @@ public:
 void* FontCfgWrapper::loadSymbol( const char* pSymbol )
 {
     OUString aSym( OUString::createFromAscii( pSymbol ) );
-    void* pSym = osl_getSymbol( (_oslModule*)m_pLib, aSym.pData );
+    void* pSym = osl_getSymbol( (oslModule*)m_pLib, aSym.pData );
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "%s %s\n", pSymbol, pSym ? "found" : "not found" );
 #endif
@@ -267,7 +267,7 @@ FontCfgWrapper::FontCfgWrapper()
             m_pFcPatternAddString
             ) )
     {
-        osl_unloadModule( (_oslModule*)m_pLib );
+        osl_unloadModule( (oslModule*)m_pLib );
         m_pLib = NULL;
         #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "not all needed symbols were found in libfontconfig\n" );
@@ -278,7 +278,7 @@ FontCfgWrapper::FontCfgWrapper()
     m_pDefConfig = FcConfigGetCurrent();
     if( ! m_pDefConfig )
     {
-        osl_unloadModule( (_oslModule*)m_pLib );
+        osl_unloadModule( (oslModule*)m_pLib );
         m_pLib = NULL;
     }
 }
@@ -286,7 +286,7 @@ FontCfgWrapper::FontCfgWrapper()
 FontCfgWrapper::~FontCfgWrapper()
 {
     if( m_pLib )
-        osl_unloadModule( (_oslModule*)m_pLib );
+        osl_unloadModule( (oslModule*)m_pLib );
 }
 
 static FontCfgWrapper* pOneInstance = NULL;
