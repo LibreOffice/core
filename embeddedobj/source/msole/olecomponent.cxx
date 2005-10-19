@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-30 10:15:16 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:40:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1128,7 +1128,7 @@ uno::Sequence< sal_Int8 > OleComponent::GetCLSID()
 }
 
 //----------------------------------------------
-void OleComponent::StoreObjectToStream( uno::Reference< io::XOutputStream > xOutStream )
+sal_Bool OleComponent::IsDirty()
 {
     if ( !m_pNativeImpl->m_pOleObject )
         throw embed::WrongStateException(); // TODO: the object is in wrong state
@@ -1138,13 +1138,29 @@ void OleComponent::StoreObjectToStream( uno::Reference< io::XOutputStream > xOut
     if ( FAILED( hr ) || !pPersistStorage )
         throw io::IOException(); // TODO
 
-    hr = OleSave( pPersistStorage, m_pNativeImpl->m_pIStorage, TRUE );
-    if ( FAILED( hr ) )
+    return ( pPersistStorage->IsDirty() != S_FALSE );
+}
+
+//----------------------------------------------
+void OleComponent::StoreOwnTmpIfNecessary()
+{
+    if ( !m_pNativeImpl->m_pOleObject )
+        throw embed::WrongStateException(); // TODO: the object is in wrong state
+
+    CComPtr< IPersistStorage > pPersistStorage;
+    HRESULT hr = m_pNativeImpl->m_pObj->QueryInterface( IID_IPersistStorage, (void**)&pPersistStorage );
+    if ( FAILED( hr ) || !pPersistStorage )
         throw io::IOException(); // TODO
 
-    hr = pPersistStorage->SaveCompleted( NULL );
-    if ( FAILED( hr ) )
-        throw io::IOException(); // TODO
+    if ( pPersistStorage->IsDirty() != S_FALSE )
+    {
+        hr = OleSave( pPersistStorage, m_pNativeImpl->m_pIStorage, TRUE );
+        if ( FAILED( hr ) )
+            throw io::IOException(); // TODO
+
+        hr = pPersistStorage->SaveCompleted( NULL );
+        if ( FAILED( hr ) )
+            throw io::IOException(); // TODO
 
 //REMOVE        if ( !bStoreVisReplace )
 //REMOVE        {
@@ -1159,12 +1175,19 @@ void OleComponent::StoreObjectToStream( uno::Reference< io::XOutputStream > xOut
 //REMOVE            }
 //REMOVE        }
 
-    hr = m_pNativeImpl->m_pIStorage->Commit( STGC_DEFAULT );
-    if ( FAILED( hr ) )
-        throw io::IOException(); // TODO
+        hr = m_pNativeImpl->m_pIStorage->Commit( STGC_DEFAULT );
+        if ( FAILED( hr ) )
+            throw io::IOException(); // TODO
 
-    // STATSTG aStat;
-    // m_pNativeImpl->m_pIStorage->Stat( &aStat, STATFLAG_NONAME );
+        // STATSTG aStat;
+        // m_pNativeImpl->m_pIStorage->Stat( &aStat, STATFLAG_NONAME );
+    }
+}
+
+//----------------------------------------------
+void OleComponent::StoreObjectToStream( uno::Reference< io::XOutputStream > xOutStream )
+{
+    StoreOwnTmpIfNecessary();
 
     // now all the changes should be in temporary location
 
