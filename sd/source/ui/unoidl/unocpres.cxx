@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocpres.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:48:38 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 12:27:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -290,10 +290,8 @@ void SAL_CALL SdXCustomPresentation::addEventListener( const uno::Reference< lan
 //----------------------------------------------------------------------
 void SAL_CALL SdXCustomPresentation::removeEventListener( const uno::Reference< lang::XEventListener >& aListener ) throw(uno::RuntimeException)
 {
-    if( bDisposing )
-        throw lang::DisposedException();
-
-   aDisposeListeners.removeInterface(aListener);
+    if( !bDisposing )
+        aDisposeListeners.removeInterface(aListener);
 }
 
 /*===========================================================================*
