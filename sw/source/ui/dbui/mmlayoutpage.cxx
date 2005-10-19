@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmlayoutpage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:01:04 $
+ *  last change: $Author: rt $ $Date: 2005-10-19 08:26:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -509,7 +509,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
     //set the cursor to the desired position - if no text content is here then
     //new paragraphs are inserted
     sal_Bool bRet = rShell.SetShadowCrsrPos(
-            Point(DEFAULT_LEFT_DISTANCE, GREETING_TOP_DISTANCE), FILL_SPACE );
+            Point(DEFAULT_LEFT_DISTANCE + DOCUMENTBORDER, GREETING_TOP_DISTANCE), FILL_SPACE );
     if(!bRet)
     {
         //there's already text at the desired position
