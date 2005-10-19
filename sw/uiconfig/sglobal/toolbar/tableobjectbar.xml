@@ -29,7 +29,7 @@
  <toolbar:toolbaritem xlink:href=".uno:AutoFormat" toolbar:helpid="helpid:20595" />
  <toolbar:toolbaritem xlink:href=".uno:TableDialog" toolbar:helpid="helpid:20459" />
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:OrderCrit" toolbar:helpid="helpid:20595" />
+ <toolbar:toolbaritem xlink:href=".uno:TableSort" toolbar:helpid="helpid:20533" />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:AutoSum" toolbar:helpid="helpid:20595" />
 </toolbar:toolbar>
