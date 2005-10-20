@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleSlideSorterView.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:23:54 $
+ *  last change: $Author: rt $ $Date: 2005-10-20 08:39:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,11 +135,7 @@ AccessibleSlideSorterView::AccessibleSlideSorterView(
 
 AccessibleSlideSorterView::~AccessibleSlideSorterView (void)
 {
-    if ( ! IsDisposed())
-    {
-        mpImpl->Dispose();
-        Destroyed ();
-    }
+    Destroyed ();
 }
 
 
