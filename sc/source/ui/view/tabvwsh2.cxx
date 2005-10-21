@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:08:47 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 12:09:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,6 +178,15 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
             nNewFormId = ((const SfxUInt16Item*)pItem)->GetValue();
     }
 
+    String sStringItemValue;
+    if ( pArgs )
+    {
+        const SfxPoolItem* pItem;
+        if ( pArgs->GetItemState( nNewId, TRUE, &pItem ) == SFX_ITEM_SET && pItem->ISA( SfxStringItem ) )
+            sStringItemValue = static_cast<const SfxStringItem*>(pItem)->GetValue();
+    }
+    bool bSwitchCustom = ( sStringItemValue.Len() && sDrawCustom.Len() && sStringItemValue != sDrawCustom );
+
     if (nNewId == SID_INSERT_FRAME)                     // vom Tbx-Button
         nNewId = SID_DRAW_TEXT;
 
@@ -195,8 +204,11 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         bEx = TRUE;
     }
     else if ( nNewId == nDrawSfxId && ( nNewId != SID_FM_CREATE_CONTROL ||
-                                    nNewFormId == nFormSfxId || nNewFormId == 0 ) )
+                                    nNewFormId == nFormSfxId || nNewFormId == 0 ) && !bSwitchCustom )
     {
+        //  #i52871# if a different custom shape is selected, the slot id can be the same,
+        //  so the custom shape type string has to be compared, too.
+
         //  SID_FM_CREATE_CONTROL mit nNewFormId==0 (ohne Parameter) kommt beim Deaktivieren
         //  aus FuConstruct::SimpleMouseButtonUp
         //  #59280# Execute fuer die Form-Shell, um im Controller zu deselektieren
@@ -243,6 +255,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     }
 
     nDrawSfxId = nNewId;
+    sDrawCustom.Erase();    // value is set below for custom shapes
 
     if ( nNewId != SID_DRAW_CHART )             // Chart nicht mit DrawShell
     {
@@ -341,6 +354,8 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
                     SfxBindings& rBind = GetViewFrame()->GetBindings();
                     rBind.Invalidate( nNewId );
                     rBind.Update( nNewId );
+
+                    sDrawCustom = pEnumCommand->GetValue();  // to detect when a different shape type is selected
                 }
             }
         }
