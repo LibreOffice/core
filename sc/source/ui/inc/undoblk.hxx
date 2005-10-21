@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoblk.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:02:05 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 12:05:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,7 @@ class ScUndoDeleteMulti: public ScMoveUndo
 public:
                     TYPEINFO();
                     ScUndoDeleteMulti( ScDocShell* pNewDocShell,
-                                       BOOL bNewRows, SCTAB nNewTab,
+                                       BOOL bNewRows, BOOL bNeedsRefresh, SCTAB nNewTab,
                                        const SCCOLROW* pRng, SCCOLROW nRngCnt,
                                        ScDocument* pUndoDocument, ScRefUndoData* pRefData );
     virtual         ~ScUndoDeleteMulti();
@@ -139,6 +139,7 @@ public:
 
 private:
     BOOL            bRows;
+    BOOL            bRefresh;
     SCTAB           nTab;
     SCCOLROW*       pRanges;
     SCCOLROW        nRangeCnt;
