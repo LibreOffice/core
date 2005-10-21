@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpre.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:35:15 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 11:53:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -451,6 +451,7 @@ void ScErrorType();
 void ScDBArea();
 void ScColRowNameAuto();
 void ScHyperLink();
+void ScBahtText();
 void ScCalcTeam();
 void ScAnswer();
 void ScTTT();
