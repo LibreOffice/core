@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pvlaydlg.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:46:19 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 12:04:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,7 @@ public:
     virtual BOOL            IsRefInputMode() const { return bRefInputMode; }
     virtual void            SetActive();
     virtual BOOL            Close();
+    virtual void            StateChanged( StateChangedType nStateChange );
 
     void                    NotifyDoubleClick    ( ScDPFieldType eType, size_t nFieldIndex );
     PointerStyle            NotifyMouseButtonDown( ScDPFieldType eType, size_t nFieldIndex );
