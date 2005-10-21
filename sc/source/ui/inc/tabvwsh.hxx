@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:12:53 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 12:04:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,6 +133,7 @@ private:
     USHORT                  nDrawSfxId;
     USHORT                  nCtrlSfxId;
     USHORT                  nFormSfxId;
+    String                  sDrawCustom;                // current custom shape type
     ScDrawShell*            pDrawShell;
     ScDrawTextObjectBar*    pDrawTextShell;
     ScEditShell*            pEditShell;
