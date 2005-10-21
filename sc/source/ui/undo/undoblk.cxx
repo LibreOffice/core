@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoblk.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:13:53 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 12:08:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -497,11 +497,12 @@ BOOL __EXPORT ScUndoDeleteCells::CanRepeat(SfxRepeatTarget& rTarget) const
 //
 
 ScUndoDeleteMulti::ScUndoDeleteMulti( ScDocShell* pNewDocShell,
-                                        BOOL bNewRows, SCTAB nNewTab,
+                                        BOOL bNewRows, BOOL bNeedsRefresh, SCTAB nNewTab,
                                         const SCCOLROW* pRng, SCCOLROW nRngCnt,
                                         ScDocument* pUndoDocument, ScRefUndoData* pRefData ) :
     ScMoveUndo( pNewDocShell, pUndoDocument, pRefData, SC_UNDO_REFLAST ),
     bRows( bNewRows ),
+    bRefresh( bNeedsRefresh ),
     nTab( nNewTab ),
     nRangeCnt( nRngCnt )
 {
@@ -522,11 +523,32 @@ String __EXPORT ScUndoDeleteMulti::GetComment() const
 
 void ScUndoDeleteMulti::DoChange() const
 {
+    SCCOL nStartCol;
+    SCROW nStartRow;
+    USHORT nPaint;
     if (bRows)
-        pDocShell->PostPaint( 0,pRanges[0],nTab, MAXCOL,MAXROW,nTab, PAINT_GRID | PAINT_LEFT );
+    {
+        nStartCol = 0;
+        nStartRow = static_cast<SCROW>(pRanges[0]);
+        nPaint = PAINT_GRID | PAINT_LEFT;
+    }
     else
-        pDocShell->PostPaint( static_cast<SCCOL>(pRanges[0]),0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID | PAINT_TOP );
+    {
+        nStartCol = static_cast<SCCOL>(pRanges[0]);
+        nStartRow = 0;
+        nPaint = PAINT_GRID | PAINT_TOP;
+    }
 
+    if ( bRefresh )
+    {
+        ScDocument* pDoc = pDocShell->GetDocument();
+        SCCOL nEndCol = MAXCOL;
+        SCROW nEndRow = MAXROW;
+        pDoc->RemoveFlagsTab( nStartCol, nStartRow, nEndCol, nEndRow, nTab, SC_MF_HOR | SC_MF_VER );
+        pDoc->ExtendMerge( nStartCol, nStartRow, nEndCol, nEndRow, nTab, TRUE );
+    }
+
+    pDocShell->PostPaint( nStartCol, nStartRow, nTab, MAXCOL, MAXROW, nTab, nPaint );
     pDocShell->PostDataChanged();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
