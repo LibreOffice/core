@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlformula.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:52:14 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 12:01:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,13 @@
 #endif
 
 // Function data ==============================================================
+
+String XclFunctionInfo::GetMacroFuncName() const
+{
+    if( IsMacroFunc() )
+        return String( mpcMacroName, RTL_TEXTENCODING_UTF8 );
+    return EMPTY_STRING;
+}
 
 const sal_uInt8 R = EXC_TOKCLASS_REF;
 const sal_uInt8 V = EXC_TOKCLASS_VAL;
@@ -119,7 +126,7 @@ static const XclFunctionInfo saFuncTable_2[] =
     { ocZins,               60,     3,  6,  V, { V } },
     { ocMIRR,               61,     3,  3,  V, { R, V } },
     { ocIKV,                62,     1,  2,  V, { R, V } },
-    { ocRandom,             63,     0,  0,  V, {}, true },
+    { ocRandom,             63,     0,  0,  V, {}, EXC_FUNCFLAG_VOLATILE },
     { ocMatch,              64,     2,  3,  V, { V, R } },
     { ocGetDate,            65,     3,  3,  V, { V } },
     { ocGetTime,            66,     3,  3,  V, { V } },
@@ -130,11 +137,11 @@ static const XclFunctionInfo saFuncTable_2[] =
     { ocGetHour,            71,     1,  1,  V, { V } },
     { ocGetMin,             72,     1,  1,  V, { V } },
     { ocGetSec,             73,     1,  1,  V, { V } },
-    { ocGetActTime,         74,     0,  0,  V, {}, true },
+    { ocGetActTime,         74,     0,  0,  V, {}, EXC_FUNCFLAG_VOLATILE },
     { ocAreas,              75,     1,  1,  V, { R } },
     { ocRows,               76,     1,  1,  V, { R } },
     { ocColumns,            77,     1,  1,  V, { R } },
-    { ocOffset,             78,     3,  5,  R, { R, V }, true },
+    { ocOffset,             78,     3,  5,  R, { R, V }, EXC_FUNCFLAG_VOLATILE },
     { ocSearch,             82,     2,  3,  V, { V } },
     { ocMatTrans,           83,     1,  1,  A, { A } },
     { ocType,               86,     1,  1,  V, { V } },
@@ -158,7 +165,7 @@ static const XclFunctionInfo saFuncTable_2[] =
     { ocSubstitute,         120,    3,  4,  V, { V } },
     { ocCode,               121,    1,  1,  V, { V } },
     { ocFind,               124,    2,  3,  V, { V } },
-    { ocCell,               125,    1,  2,  V, { V, R }, true },
+    { ocCell,               125,    1,  2,  V, { V, R }, EXC_FUNCFLAG_VOLATILE },
     { ocIsErr,              126,    1,  1,  V, { V } },
     { ocIsString,           127,    1,  1,  V, { V } },
     { ocIsValue,            128,    1,  1,  V, { V } },
@@ -170,7 +177,7 @@ static const XclFunctionInfo saFuncTable_2[] =
     { ocLIA,                142,    3,  3,  V, { V } },
     { ocDIA,                143,    4,  4,  V, { V } },
     { ocGDA,                144,    4,  5,  V, { V } },
-    { ocIndirect,           148,    1,  2,  R, { V }, true },
+    { ocIndirect,           148,    1,  2,  R, { V }, EXC_FUNCFLAG_VOLATILE },
     { ocClean,              162,    1,  1,  V, { V } },
     { ocMatDet,             163,    1,  1,  V, { A } },
     { ocMatInv,             164,    1,  1,  A, { A } },
@@ -190,7 +197,8 @@ static const XclFunctionInfo saFuncTable_2[] =
     { ocIsLogical,          198,    1,  1,  V, { V } },
     { ocDBCount2,           199,    3,  3,  V, { R } },
     { ocRoundUp,            212,    2,  2,  V, { V } },
-    { ocRoundDown,          213,    2,  2,  V, { V } }
+    { ocRoundDown,          213,    2,  2,  V, { V } },
+    { ocExternal,           255,    1,  30, R, { E, R }, EXC_FUNCFLAG_IMPORTONLY }
 };
 
 /** Functions new in BIFF3. Unsupported Excel function: INFO. */
@@ -203,7 +211,7 @@ static const XclFunctionInfo saFuncTable_3[] =
     { ocTrunc,              197,    1,  2,  V, { V } },             // BIFF2: 1,   BIFF3: 1-2
     { ocAdress,             219,    2,  5,  V, { V, V, V, E, V } },
     { ocGetDiffDate360,     220,    2,  2,  V, { V, V, C, I } },
-    { ocGetActDate,         221,    0,  0,  V, {}, true },
+    { ocGetActDate,         221,    0,  0,  V, {}, EXC_FUNCFLAG_VOLATILE },
     { ocVBD,                222,    5,  7,  V, { V } },
     { ocMedian,             227,    1,  30, V, { R } },
     { ocSumProduct,         228,    1,  30, V, { A } },
@@ -297,6 +305,8 @@ static const XclFunctionInfo saFuncTable_5[] =
     { ocHLookup,            101,    3,  4,  V, { V, R, R, V } },    // BIFF2-4: 3, BIFF5: 3-4
     { ocVLookup,            102,    3,  4,  V, { V, R, R, V } },    // BIFF2-4: 3, BIFF5: 3-4
     { ocGetDiffDate360,     220,    2,  3,  V, { V } },             // BIFF3-4: 2, BIFF5: 2-3
+    { ocMacro,              255,    1,  30, R, { E, R }, EXC_FUNCFLAG_EXPORTONLY },
+    { ocExternal,           255,    1,  30, R, { E, R }, EXC_FUNCFLAG_EXPORTONLY },
     { ocConcat,             336,    0,  30, V, { V } },
     { ocPower,              337,    2,  2,  V, { V } },
     { ocRad,                342,    1,  1,  V, { V } },
@@ -309,7 +319,11 @@ static const XclFunctionInfo saFuncTable_5[] =
     { ocRoman,              354,    1,  2,  V, { V } }
 };
 
-/** Functions new in BIFF8. Unsupported functions: PHONETIC, BAHTTEXT. */
+#define EXC_FUNCNAME_PREFIX "_xlfn."
+
+const sal_Char* const EXC_FUNCNAME_BAHTTEXT = EXC_FUNCNAME_PREFIX "BAHTTEXT";
+
+/** Functions new in BIFF8. Unsupported functions: PHONETIC. */
 static const XclFunctionInfo saFuncTable_8[] =
 {
     { ocHyperLink,          359,    1,  2,  V, { V } },
@@ -319,14 +333,9 @@ static const XclFunctionInfo saFuncTable_8[] =
     { ocStDevPA,            364,    1,  30, V, { R } },
     { ocVarPA,              365,    1,  30, V, { R } },
     { ocStDevA,             366,    1,  30, V, { R } },
-    { ocVarA,               367,    1,  30, V, { R } }
-};
-
-/** External functions. Separate table to be used in different BIFF versions in import/export. */
-static const XclFunctionInfo saFuncTable_E[] =
-{
-    { ocMacro,              255,    1,  30, R, { E, R } },
-    { ocExternal,           255,    1,  30, R, { E, R } }   // must follow ocMacro
+    { ocVarA,               367,    1,  30, V, { R } },
+    { ocBahtText,           368,    1,  1,  V, { V }, EXC_FUNCFLAG_IMPORTONLY, EXC_FUNCNAME_BAHTTEXT },
+    { ocBahtText,           255,    2,  2,  V, { E, V }, EXC_FUNCFLAG_EXPORTONLY, EXC_FUNCNAME_BAHTTEXT }
 };
 
 // ----------------------------------------------------------------------------
@@ -350,8 +359,6 @@ XclFunctionProvider::XclFunctionProvider( const XclRoot& rRoot )
             FillXclFuncMap( saFuncTable_5, STATIC_TABLE_END( saFuncTable_5 ) );
         if( eBiff >= EXC_BIFF8 )
             FillXclFuncMap( saFuncTable_8, STATIC_TABLE_END( saFuncTable_8 ) );
-        // external functions (i.e. add-in functions)
-        FillXclFuncMap( saFuncTable_E, STATIC_TABLE_END( saFuncTable_E ) );
     }
     else
     {
@@ -368,9 +375,6 @@ XclFunctionProvider::XclFunctionProvider( const XclRoot& rRoot )
             FillScFuncMap( saFuncTable_5, STATIC_TABLE_END( saFuncTable_5 ) );
         if( eBiff >= EXC_BIFF8 )
             FillScFuncMap( saFuncTable_8, STATIC_TABLE_END( saFuncTable_8 ) );
-        // external functions (i.e. add-in functions)
-        if( eBiff >= EXC_BIFF5 )
-            FillScFuncMap( saFuncTable_E, STATIC_TABLE_END( saFuncTable_E ) );
     }
 }
 
@@ -380,6 +384,14 @@ const XclFunctionInfo* XclFunctionProvider::GetFuncInfoFromXclFunc( sal_uInt16 n
     DBG_ASSERT( !maXclFuncMap.empty(), "XclFunctionProvider::GetFuncInfoFromXclFunc - wrong filter" );
     XclFuncMap::const_iterator aIt = maXclFuncMap.find( nXclFunc );
     return (aIt == maXclFuncMap.end()) ? 0 : aIt->second;
+}
+
+const XclFunctionInfo* XclFunctionProvider::GetFuncInfoFromXclMacroName( const String& rXclMacroName ) const
+{
+    // only in import filter allowed, but do not test maXclMacroNameMap, it may be empty for old BIFF versions
+    DBG_ASSERT( !maXclFuncMap.empty(), "XclFunctionProvider::GetFuncInfoFromXclMacroName - wrong filter" );
+    XclMacroNameMap::const_iterator aIt = maXclMacroNameMap.find( rXclMacroName );
+    return (aIt == maXclMacroNameMap.end()) ? 0 : aIt->second;
 }
 
 const XclFunctionInfo* XclFunctionProvider::GetFuncInfoFromOpCode( OpCode eOpCode ) const
@@ -393,13 +405,21 @@ const XclFunctionInfo* XclFunctionProvider::GetFuncInfoFromOpCode( OpCode eOpCod
 void XclFunctionProvider::FillXclFuncMap( const XclFunctionInfo* pBeg, const XclFunctionInfo* pEnd )
 {
     for( const XclFunctionInfo* pIt = pBeg; pIt != pEnd; ++pIt )
-        maXclFuncMap[ pIt->mnXclFunc ] = pIt;
+    {
+        if( !::get_flag( pIt->mnFlags, EXC_FUNCFLAG_EXPORTONLY ) )
+        {
+            maXclFuncMap[ pIt->mnXclFunc ] = pIt;
+            if( pIt->IsMacroFunc() )
+                maXclMacroNameMap[ pIt->GetMacroFuncName() ] = pIt;
+        }
+    }
 }
 
 void XclFunctionProvider::FillScFuncMap( const XclFunctionInfo* pBeg, const XclFunctionInfo* pEnd )
 {
     for( const XclFunctionInfo* pIt = pBeg; pIt != pEnd; ++pIt )
-        maScFuncMap[ pIt->meOpCode ] = pIt;
+        if( !::get_flag( pIt->mnFlags, EXC_FUNCFLAG_IMPORTONLY ) )
+            maScFuncMap[ pIt->meOpCode ] = pIt;
 }
 
 // Token array ================================================================
