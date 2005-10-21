@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforscan.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:36:59 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 11:46:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,6 +159,12 @@ public:
     const LanguageType GetTmpLnge() { return eTmpLnge; }
                                                 // Lesezugriff auf
                                                 // und Ausgangsland/Spr.
+
+                                                /// get Thai T speciality
+    BYTE GetNatNumModifier() const      { return nNatNumModifier; }
+                                                /// set Thai T speciality
+    void SetNatNumModifier( BYTE n )    { nNatNumModifier = n; }
+
     SvNumberFormatter* GetNumberformatter() { return pFormatter; }
                                                 // Zugriff auf Formatierer
                                                 // (fuer zformat.cxx)
@@ -219,6 +225,8 @@ private:                            // ---- privater Teil
                                                 // too).
 
     xub_StrLen nCurrPos;                        // Position des Waehrungssymbols
+
+    BYTE nNatNumModifier;                       // Thai T speciality
 
     void InitKeywords() const;
     void InitSpecialKeyword( NfKeywordIndex eIdx ) const;
