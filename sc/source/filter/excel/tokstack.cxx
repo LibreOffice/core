@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tokstack.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:59:20 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 11:56:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -642,16 +642,18 @@ BOOL TokenPool::IsSingleOp( const TokenId& rId, const DefTokenId eId ) const
 }
 
 
-BOOL TokenPool::IsExternal( const TokenId& rId ) const
+const String* TokenPool::GetExternal( const TokenId& rId ) const
 {
+    const String*   p = NULL;
     UINT16 n = (UINT16) rId;
     if( n && n <= nElementAkt )
     {
         n--;
-        return ( pType[ n ] == T_Ext );
+        if( (pType[ n ] == T_Ext) && ppP_Ext[ pElement[ n ] ] )
+            p = &ppP_Ext[ pElement[ n ] ]->aText;
     }
 
-    return FALSE;
+    return p;
 }
 
 
