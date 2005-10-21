@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:41:32 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 11:55:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -687,6 +687,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
                     {
                         aCRD.Ref1 = aCRD.Ref2 = aSRD;
                         aCRD.Ref2.nTab = nTabLast;
+                        aCRD.Ref2.SetTabDeleted( !ValidTab(nTabLast) );
                         aStack << aPool.Store( aCRD );
                     }
                     else
