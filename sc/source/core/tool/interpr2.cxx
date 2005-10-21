@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:44:55 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 11:53:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2296,3 +2296,195 @@ void ScInterpreter::ScHyperLink()
         PushMatrix(pResMat);
     }
 }
+
+// BAHTTEXT ===================================================================
+
+#define UTF8_TH_0       "\340\270\250\340\270\271\340\270\231\340\270\242\340\271\214"
+#define UTF8_TH_1       "\340\270\253\340\270\231\340\270\266\340\271\210\340\270\207"
+#define UTF8_TH_2       "\340\270\252\340\270\255\340\270\207"
+#define UTF8_TH_3       "\340\270\252\340\270\262\340\270\241"
+#define UTF8_TH_4       "\340\270\252\340\270\265\340\271\210"
+#define UTF8_TH_5       "\340\270\253\340\271\211\340\270\262"
+#define UTF8_TH_6       "\340\270\253\340\270\201"
+#define UTF8_TH_7       "\340\271\200\340\270\210\340\271\207\340\270\224"
+#define UTF8_TH_8       "\340\271\201\340\270\233\340\270\224"
+#define UTF8_TH_9       "\340\271\200\340\270\201\340\271\211\340\270\262"
+#define UTF8_TH_10      "\340\270\252\340\270\264\340\270\232"
+#define UTF8_TH_11      "\340\271\200\340\270\255\340\271\207\340\270\224"
+#define UTF8_TH_20      "\340\270\242\340\270\265\340\271\210"
+#define UTF8_TH_1E2     "\340\270\243\340\271\211\340\270\255\340\270\242"
+#define UTF8_TH_1E3     "\340\270\236\340\270\261\340\270\231"
+#define UTF8_TH_1E4     "\340\270\253\340\270\241\340\270\267\340\271\210\340\270\231"
+#define UTF8_TH_1E5     "\340\271\201\340\270\252\340\270\231"
+#define UTF8_TH_1E6     "\340\270\245\340\271\211\340\270\262\340\270\231"
+#define UTF8_TH_DOT0    "\340\270\226\340\271\211\340\270\247\340\270\231"
+#define UTF8_TH_BAHT    "\340\270\232\340\270\262\340\270\227"
+#define UTF8_TH_SATANG  "\340\270\252\340\270\225\340\270\262\340\270\207\340\270\204\340\271\214"
+#define UTF8_TH_MINUS   "\340\270\245\340\270\232"
+
+#define UTF8_STRINGPARAM( ascii )   ascii, static_cast< xub_StrLen >( sizeof( ascii ) - 1 )
+#define UTF8_CREATE( ascii )        ByteString( UTF8_STRINGPARAM( ascii ) )
+#define UTF8_ASSIGN( ascii )        Assign( UTF8_STRINGPARAM( ascii ) )
+#define UTF8_APPEND( ascii )        Append( UTF8_STRINGPARAM( ascii ) )
+
+// local functions ------------------------------------------------------------
+
+namespace {
+
+inline void lclSplitDouble( double& rfInt, double& rfFrac, double fValue )
+{
+    rfFrac = modf( fValue, &rfInt );
+}
+
+/** Appends a digit (0 to 9) to the passed string. */
+void lclAppendDigit( ByteString& rText, int nDigit )
+{
+    switch( nDigit )
+    {
+        case 0: rText.UTF8_APPEND( UTF8_TH_0 ); break;
+        case 1: rText.UTF8_APPEND( UTF8_TH_1 ); break;
+        case 2: rText.UTF8_APPEND( UTF8_TH_2 ); break;
+        case 3: rText.UTF8_APPEND( UTF8_TH_3 ); break;
+        case 4: rText.UTF8_APPEND( UTF8_TH_4 ); break;
+        case 5: rText.UTF8_APPEND( UTF8_TH_5 ); break;
+        case 6: rText.UTF8_APPEND( UTF8_TH_6 ); break;
+        case 7: rText.UTF8_APPEND( UTF8_TH_7 ); break;
+        case 8: rText.UTF8_APPEND( UTF8_TH_8 ); break;
+        case 9: rText.UTF8_APPEND( UTF8_TH_9 ); break;
+        default:    DBG_ERRORFILE( "lclAppendDigit - illegal digit" );
+    }
+}
+
+/** Appends a value raised to a power of 10: nDigit*10^nPow10.
+    @param nDigit  A digit in the range from 1 to 9.
+    @param nPow10  A value in the range from 2 to 5.
+ */
+void lclAppendPow10( ByteString& rText, int nDigit, int nPow10 )
+{
+    DBG_ASSERT( (1 <= nDigit) && (nDigit <= 9), "lclAppendPow10 - illegal digit" );
+    lclAppendDigit( rText, nDigit );
+    switch( nPow10 )
+    {
+        case 2: rText.UTF8_APPEND( UTF8_TH_1E2 );   break;
+        case 3: rText.UTF8_APPEND( UTF8_TH_1E3 );   break;
+        case 4: rText.UTF8_APPEND( UTF8_TH_1E4 );   break;
+        case 5: rText.UTF8_APPEND( UTF8_TH_1E5 );   break;
+        default:    DBG_ERRORFILE( "lclAppendPow10 - illegal power" );
+    }
+}
+
+/** Appends a block of 6 digits (value from 1 to 999,999) to the passed string. */
+void lclAppendBlock( ByteString& rText, int nValue )
+{
+    DBG_ASSERT( (1 <= nValue) && (nValue <= 999999), "lclAppendBlock - illegal value" );
+    if( nValue >= 100000 )
+    {
+        lclAppendPow10( rText, nValue / 100000, 5 );
+        nValue %= 100000;
+    }
+    if( nValue >= 10000 )
+    {
+        lclAppendPow10( rText, nValue / 10000, 4 );
+        nValue %= 10000;
+    }
+    if( nValue >= 1000 )
+    {
+        lclAppendPow10( rText, nValue / 1000, 3 );
+        nValue %= 1000;
+    }
+    if( nValue >= 100 )
+    {
+        lclAppendPow10( rText, nValue / 100, 2 );
+        nValue %= 100;
+    }
+    if( nValue > 0 )
+    {
+        int nTen = nValue / 10;
+        int nOne = nValue % 10;
+        if( nTen >= 1 )
+        {
+            if( nTen >= 3 )
+                lclAppendDigit( rText, nTen );
+            else if( nTen == 2 )
+                rText.UTF8_APPEND( UTF8_TH_20 );
+            rText.UTF8_APPEND( UTF8_TH_10 );
+        }
+        if( (nTen > 0) && (nOne == 1) )
+            rText.UTF8_APPEND( UTF8_TH_11 );
+        else if( nOne > 0 )
+            lclAppendDigit( rText, nOne );
+    }
+}
+
+} // namespace
+
+// ----------------------------------------------------------------------------
+
+void ScInterpreter::ScBahtText()
+{
+    BYTE nParamCount = GetByte();
+    if ( MustHaveParamCount( nParamCount, 1 ) )
+    {
+        double fValue = GetDouble();
+        if( nGlobalError )
+        {
+            SetIllegalParameter();
+            return;
+        }
+
+        // sign
+        bool bMinus = fValue < 0.0;
+        fValue = fabs( fValue );
+
+        // round to 2 digits after decimal point
+        (fValue *= 100.0) += 0.5;
+        fValue = ::rtl::math::approxFloor( fValue ) / 100.0 + 0.001;
+
+        // split Baht and Satang
+        double fBaht = 0.0;
+        double fSatang = 0.0;
+        lclSplitDouble( fBaht, fSatang, fValue );
+
+        ByteString aText;
+
+        // generate text for Baht value
+        if( fBaht == 0.0 )
+        {
+            aText.UTF8_APPEND( UTF8_TH_0 );
+        }
+        else while( fBaht > 0.0 )
+        {
+            double fBlock = 0.0;
+            lclSplitDouble( fBaht, fBlock, fBaht / 1.0e6 );
+            ByteString aBlock;
+            int nBlock = static_cast< int >( ::rtl::math::approxFloor( fBlock * 1.0e6 ) );
+            if( nBlock > 0 )
+                lclAppendBlock( aBlock, nBlock );
+            if( fBaht > 0.0 )
+                aBlock.UTF8_APPEND( UTF8_TH_1E6 );
+            aText.Insert( aBlock, 0 );
+        }
+        aText.UTF8_APPEND( UTF8_TH_BAHT );
+
+        // generate text for Satang value
+        int nSatang = static_cast< int >( fSatang * 100.0 );
+        if( nSatang == 0 )
+        {
+            aText.UTF8_APPEND( UTF8_TH_DOT0 );
+        }
+        else
+        {
+            lclAppendBlock( aText, nSatang );
+            aText.UTF8_APPEND( UTF8_TH_SATANG );
+        }
+
+        // add the minus sign
+        if( bMinus )
+            aText.Insert( UTF8_CREATE( UTF8_TH_MINUS ), 0 );
+
+        PushString( String( aText, RTL_TEXTENCODING_UTF8 ) );
+    }
+}
+
+// ============================================================================
+
