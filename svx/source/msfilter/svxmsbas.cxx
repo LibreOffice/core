@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxmsbas.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:48:09 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 12:17:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -283,6 +283,11 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
             for( UINT16 i=0; i<nStreamCount;i++)
             {
                 StringArray aDecompressed = aVBA.Decompress(i);
+#if 0
+/*  DR 2005-08-11 #124850# Do not filter special characters from module name.
+    Just put the original module name and let the Basic interpreter deal with
+    it. Needed for roundtrip...
+ */
                 ByteString sByteBasic(aVBA.GetStreamName(i),
                     RTL_TEXTENCODING_ASCII_US,
                         (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_UNDERLINE|
@@ -291,9 +296,11 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                         RTL_UNICODETOTEXT_FLAGS_NOCOMPOSITE)
                 );
 
-                //const String &sBasicModule = aVBA.GetStreamName( i);
                 const String sBasicModule(sByteBasic,
                     RTL_TEXTENCODING_ASCII_US);
+#else
+                const String &sBasicModule = aVBA.GetStreamName( i);
+#endif
                 /* #117718# expose information regarding type of Module
                 * Class, Form or plain 'ould VBA module with a REM statment
                 * at the top of the module. Mapping of Module Name
