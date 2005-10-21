@@ -4,9 +4,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:40:01 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 11:54:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -933,6 +933,9 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
 
     switch( nR )
     {
+        case 0x0009:
+        case 0x0209:
+        case 0x0409:
         case 0x0809:
             nLevelCnt = 0;
             break;
@@ -3588,8 +3591,21 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 ADDHEX( 2 ); ADDTEXT( " " ); ADDHEX( 2 ); ADDTEXT( " " ); ADDHEX( 2 );
                 ADDTEXT( "   text-len=" );      ADDDEC( 2 );
                 ADDTEXT( "   format-size=" );   ADDDEC( 2 );
-                ADDTEXT( "   reserved=" );      ADDHEX( 4 );
                 PRINT();
+                LINESTART();
+                ADDTEXT( "reserved=" );      ADDHEX( 2 );
+                sal_uInt16 nLinkSize = rIn.ReaduInt16();
+                ADDTEXT( "   link-size=" );     __AddDec( t, nLinkSize );
+                PRINT();
+                if( nLinkSize > 0 )
+                {
+                    LINESTART();
+                    sal_uInt16 nFmlaSize = rIn.ReaduInt16();
+                    ADDTEXT( "fmla-size=" );        __AddDec( t, nFmlaSize );
+                    ADDTEXT( "   reserved=" );      ADDHEX( 4 );
+                    PRINT();
+                    FormulaDump( nFmlaSize, FT_CellFormula );
+                }
             }
             break;
             case 0x01BE:    // DV - data validation record
