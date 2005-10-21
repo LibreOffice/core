@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:45:32 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 11:54:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3509,6 +3509,7 @@ StackVar ScInterpreter::Interpret()
                 case ocRoman            : ScRoman();                    break;
                 case ocArabic           : ScArabic();                   break;
                 case ocHyperLink        : ScHyperLink();                break;
+                case ocBahtText         : ScBahtText();                 break;
                 case ocAnswer           : ScAnswer();                   break;
                 case ocTeam             : ScCalcTeam();                 break;
                 case ocTTT              : ScTTT();                      break;
