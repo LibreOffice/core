@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fieldwnd.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:35:55 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 12:02:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -315,6 +315,11 @@ void ScDPFieldWindow::Redraw()
         InvertTracking( aSelection, SHOWTRACK_SMALL | SHOWTRACK_WINDOW );
     }
 
+    UpdateStyle();
+}
+
+void ScDPFieldWindow::UpdateStyle()
+{
     WinBits nMask = ~(WB_TABSTOP | WB_NOTABSTOP);
     SetStyle( (GetStyle() & nMask) | (IsEmpty() ? WB_NOTABSTOP : WB_TABSTOP) );
 }
@@ -453,6 +458,12 @@ void ScDPFieldWindow::MoveFieldRel( SCsCOL nDX, SCsROW nDY )
 
 void __EXPORT ScDPFieldWindow::Paint( const Rectangle& rRect )
 {
+    // #124828# hiding the caption is now done from StateChanged
+    Redraw();
+}
+
+void ScDPFieldWindow::UseMnemonic()
+{
     // Now the FixedText has its mnemonic char. Grab the text and hide the
     // FixedText to be able to handle tabstop and mnemonics separately.
     if( pFtCaption )
@@ -460,7 +471,9 @@ void __EXPORT ScDPFieldWindow::Paint( const Rectangle& rRect )
         SetText( pFtCaption->GetText() );
         pFtCaption->Hide();
     }
-    Redraw();
+
+    // after reading the mnemonics, tab stop style bits can be updated
+    UpdateStyle();
 }
 
 void __EXPORT ScDPFieldWindow::DataChanged( const DataChangedEvent& rDCEvt )
