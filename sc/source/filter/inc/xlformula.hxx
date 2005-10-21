@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlformula.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:02:48 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 12:02:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,12 +180,17 @@ const sal_uInt8 EXC_FUNC_PAR_INVALID        = 0xFF;     /// Placeholder for an i
 
 const sal_uInt8 EXC_FUNCINFO_CLASSCOUNT     = 5;        /// Number of token class entries.
 
+const sal_uInt8 EXC_FUNCFLAG_VOLATILE       = 0x01;     /// Result is volatile (e.g. NOW() function).
+const sal_uInt8 EXC_FUNCFLAG_IMPORTONLY     = 0x02;     /// Only used in import filter.
+const sal_uInt8 EXC_FUNCFLAG_EXPORTONLY     = 0x04;     /// Only used in export filter.
+
 // selected function IDs
 const sal_uInt16 EXC_FUNCID_IF              = 1;
 const sal_uInt16 EXC_FUNCID_SUM             = 4;
 const sal_uInt16 EXC_FUNCID_AND             = 36;
 const sal_uInt16 EXC_FUNCID_OR              = 37;
 const sal_uInt16 EXC_FUNCID_CHOOSE          = 100;
+const sal_uInt16 EXC_FUNCID_EXTERNCALL      = 255;
 
 /** Represents information for a spreadsheet function for import and export.
 
@@ -206,7 +211,15 @@ struct XclFunctionInfo
     sal_uInt8           mnMaxParamCount;    /// Maximum number of parameters.
     sal_uInt8           mnRetClass;         /// Token class of the return value.
     sal_uInt8           mpnParamClass[ EXC_FUNCINFO_CLASSCOUNT ]; /// Expected token classes of parameters.
-    bool                mbVolatile;         /// True = Result is volatile (i.e. NOW() function).
+    sal_uInt8           mnFlags;            /// Additional flags.
+    const sal_Char*     mpcMacroName;       /// Function name, if simulated by a macro call (UTF-8).
+
+    /** Returns true, if the function is volatile. */
+    inline bool         IsVolatile() const { return ::get_flag( mnFlags, EXC_FUNCFLAG_VOLATILE ); }
+    /** Returns true, if the function is simulated by a macro call. */
+    inline bool         IsMacroFunc() const { return mpcMacroName != 0; }
+    /** Returns the name of the external function as string. */
+    String              GetMacroFuncName() const;
 };
 
 // ----------------------------------------------------------------------------
@@ -221,6 +234,8 @@ public:
 
     /** Returns the function data for an Excel function index, or 0 on error. */
     const XclFunctionInfo* GetFuncInfoFromXclFunc( sal_uInt16 nXclFunc ) const;
+    /** Returns the function data for an Excel function simulated by a macro call, or 0 on error. */
+    const XclFunctionInfo* GetFuncInfoFromXclMacroName( const String& rXclMacroName ) const;
     /** Returns the function data for a Calc opcode, or 0 on error. */
     const XclFunctionInfo* GetFuncInfoFromOpCode( OpCode eOpCode ) const;
 
@@ -230,9 +245,11 @@ private:
 
 private:
     typedef ::std::map< sal_uInt16, const XclFunctionInfo* >    XclFuncMap;
+    typedef ::std::map< String, const XclFunctionInfo* >        XclMacroNameMap;
     typedef ::std::map< OpCode, const XclFunctionInfo* >        ScFuncMap;
 
     XclFuncMap          maXclFuncMap;       /// Maps Excel function indexes to function data.
+    XclMacroNameMap     maXclMacroNameMap;  /// Maps macro function names to function data.
     ScFuncMap           maScFuncMap;        /// Maps Calc opcodes to function data.
 };
 
