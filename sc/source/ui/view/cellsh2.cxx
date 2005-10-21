@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:53:12 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 12:09:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -505,28 +505,31 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
         case FID_FILTER_OK:
             {
-                const SfxItemSet*  pOutSet = rReq.GetArgs();
-                const ScQueryItem& rItem   = (const ScQueryItem&)
-                                             pOutSet->Get( SCITEM_QUERYDATA );
-
-                SCTAB nCurTab = GetViewData()->GetTabNo();
-                SCTAB nRefTab = GetViewData()->GetRefTabNo();
-
-                // Wenn RefInput auf andere Tabelle als Datentabelle umgeschaltet
-                // hat wieder zurueckschalten:
-
-                if ( nCurTab != nRefTab )
+                const SfxPoolItem* pItem;
+                if ( pReqArgs && SFX_ITEM_SET ==
+                        pReqArgs->GetItemState( SCITEM_QUERYDATA, TRUE, &pItem ) )
                 {
-                    pTabViewShell->SetTabNo( nRefTab );
-                    pTabViewShell->PaintExtras();
-                }
+                    const ScQueryItem& rQueryItem = static_cast<const ScQueryItem&>(*pItem);
 
-                ScRange aAdvSource;
-                if (rItem.GetAdvancedQuerySource(aAdvSource))
-                    pTabViewShell->Query( rItem.GetQueryData(), &aAdvSource, TRUE );
-                else
-                    pTabViewShell->Query( rItem.GetQueryData(), NULL, TRUE );
-                rReq.Done( *pOutSet );
+                    SCTAB nCurTab = GetViewData()->GetTabNo();
+                    SCTAB nRefTab = GetViewData()->GetRefTabNo();
+
+                    // If RefInput switched to a different sheet from the data sheet,
+                    // switch back:
+
+                    if ( nCurTab != nRefTab )
+                    {
+                        pTabViewShell->SetTabNo( nRefTab );
+                        pTabViewShell->PaintExtras();
+                    }
+
+                    ScRange aAdvSource;
+                    if (rQueryItem.GetAdvancedQuerySource(aAdvSource))
+                        pTabViewShell->Query( rQueryItem.GetQueryData(), &aAdvSource, TRUE );
+                    else
+                        pTabViewShell->Query( rQueryItem.GetQueryData(), NULL, TRUE );
+                    rReq.Done( *pReqArgs );
+                }
             }
             break;
 
