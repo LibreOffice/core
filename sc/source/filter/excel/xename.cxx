@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xename.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:45:24 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 11:57:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,11 +79,12 @@ public:
     void                SetTokenArray( XclExpTokenArrayRef xTokArr );
     /** Changes this defined name to be local on the specified Calc sheet. */
     void                SetLocalTab( SCTAB nScTab );
-    /** Changes this name to be the call to a VB macro function or procedure.
-        @param bFunc  true = Macro function; false = Macro procedure. */
-    void                SetMacroCall( bool bFunc );
     /** Hides or unhides the defined name. */
     void                SetHidden( bool bHidden = true );
+    /** Changes this name to be the call to a VB macro function or procedure.
+        @param bVBasic  true = Visual Basic macro, false = Sheet macro.
+        @param bFunc  true = Macro function; false = Macro procedure. */
+    void                SetMacroCall( bool bVBasic, bool bFunc );
 
     /** Returns the original name (title) of this defined name. */
     inline const String& GetOrigName() const { return maOrigName; }
@@ -105,7 +106,7 @@ public:
     bool                IsHidden() const;
     /** Returns true, if this defined name describes a macro call.
         @param bFunc  true = Macro function; false = Macro procedure. */
-    bool                IsMacroCall( bool bFunc ) const;
+    bool                IsMacroCall( bool bVBasic, bool bFunc ) const;
 
     /** Writes the entire NAME record to the passed stream. */
     virtual void        Save( XclExpStream& rStrm );
@@ -151,8 +152,9 @@ public:
     /** Returns index of an existing name, or creates a name without definition. */
     sal_uInt16          InsertRawName( const String& rName );
     /** Searches or inserts a defined name describing a macro name.
+        @param bVBasic  true = Visual Basic macro; false = Sheet macro.
         @param bFunc  true = Macro function; false = Macro procedure. */
-    sal_uInt16          InsertMacroCall( const String& rMacroName, bool bFunc );
+    sal_uInt16          InsertMacroCall( const String& rMacroName, bool bVBasic, bool bFunc, bool bHidden );
 
     /** Returns the NAME record at the specified position or 0 on error. */
     const XclExpName*   GetName( sal_uInt16 nNameIdx ) const;
@@ -280,10 +282,10 @@ void XclExpName::SetHidden( bool bHidden )
     ::set_flag( mnFlags, EXC_NAME_HIDDEN, bHidden );
 }
 
-void XclExpName::SetMacroCall( bool bFunc )
+void XclExpName::SetMacroCall( bool bVBasic, bool bFunc )
 {
-    ::set_flag( mnFlags, EXC_NAME_VB );
     ::set_flag( mnFlags, EXC_NAME_PROC );
+    ::set_flag( mnFlags, EXC_NAME_VB, bVBasic );
     ::set_flag( mnFlags, EXC_NAME_FUNC, bFunc );
 }
 
@@ -297,9 +299,11 @@ bool XclExpName::IsHidden() const
     return ::get_flag( mnFlags, EXC_NAME_HIDDEN );
 }
 
-bool XclExpName::IsMacroCall( bool bFunc ) const
+bool XclExpName::IsMacroCall( bool bVBasic, bool bFunc ) const
 {
-    return ::get_flag( mnFlags, EXC_NAME_VB ) && (::get_flag( mnFlags, EXC_NAME_FUNC ) == bFunc);
+    return
+        (::get_flag( mnFlags, EXC_NAME_VB ) == bVBasic) &&
+        (::get_flag( mnFlags, EXC_NAME_FUNC ) == bFunc);
 }
 
 void XclExpName::Save( XclExpStream& rStrm )
@@ -399,7 +403,7 @@ sal_uInt16 XclExpNameManagerImpl::InsertRawName( const String& rName )
     return Append( xName );
 }
 
-sal_uInt16 XclExpNameManagerImpl::InsertMacroCall( const String& rMacroName, bool bFunc )
+sal_uInt16 XclExpNameManagerImpl::InsertMacroCall( const String& rMacroName, bool bVBasic, bool bFunc, bool bHidden )
 {
     // empty name? may occur in broken external Calc tokens
     if( !rMacroName.Len() )
@@ -409,13 +413,19 @@ sal_uInt16 XclExpNameManagerImpl::InsertMacroCall( const String& rMacroName, boo
     for( size_t nListIdx = mnFirstUserIdx, nListSize = maNameList.Size(); nListIdx < nListSize; ++nListIdx )
     {
         XclExpNameRef xName = maNameList.GetRecord( nListIdx );
-        if( xName->IsMacroCall( bFunc ) && (xName->GetOrigName() == rMacroName) )
+        if( xName->IsMacroCall( bVBasic, bFunc ) && (xName->GetOrigName() == rMacroName) )
             return static_cast< sal_uInt16 >( nListIdx + 1 );
     }
 
     // create a new NAME record
     XclExpNameRef xName( new XclExpName( GetRoot(), rMacroName ) );
-    xName->SetMacroCall( bFunc );
+    xName->SetMacroCall( bVBasic, bFunc );
+    xName->SetHidden( bHidden );
+
+    // for sheet macros, add a #NAME! error
+    if( !bVBasic )
+        xName->SetTokenArray( GetFormulaCompiler().CreateErrorFormula( EXC_ERR_NAME ) );
+
     return Append( xName );
 }
 
@@ -697,9 +707,9 @@ sal_uInt16 XclExpNameManager::InsertRawName( const String& rName )
     return mxImpl->InsertRawName( rName );
 }
 
-sal_uInt16 XclExpNameManager::InsertMacroCall( const String& rMacroName, bool bFunc )
+sal_uInt16 XclExpNameManager::InsertMacroCall( const String& rMacroName, bool bVBasic, bool bFunc, bool bHidden )
 {
-    return mxImpl->InsertMacroCall( rMacroName, bFunc );
+    return mxImpl->InsertMacroCall( rMacroName, bVBasic, bFunc, bHidden );
 }
 
 const String& XclExpNameManager::GetOrigName( sal_uInt16 nNameIdx ) const
