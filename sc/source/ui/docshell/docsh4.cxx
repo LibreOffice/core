@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:46:29 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 12:03:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1644,6 +1644,8 @@ void ScDocShell::PreparePrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData 
     //! Selection etc. mit Print() zusammenfassen !!!
     //! Seiten nur einmal zaehlen
 
+    ScRange* pMarkedRange = NULL;
+
     //  get settings from print options sub-dialog
     ScPrintOptions aOptions;
     const SfxItemSet& rOptionSet = pPrinter->GetOptions();
@@ -1678,7 +1680,13 @@ void ScDocShell::PreparePrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData 
             break;
 
         case PRINTDIALOG_SELECTION:
-            //  pMarkedRange interessiert hier nicht
+            if ( pMarkData && ( pMarkData->IsMarked() || pMarkData->IsMultiMarked() ) )
+            {
+                pMarkData->MarkToMulti();
+                pMarkedRange = new ScRange;
+                pMarkData->GetMultiMarkArea( *pMarkedRange );
+                pMarkData->MarkToSimple();
+            }
             bAllTabs = FALSE;
             break;
     }
@@ -1690,8 +1698,15 @@ void ScDocShell::PreparePrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData 
     {
         nTotalPages = 0;
         for (nTab=0; nTab<nTabCount; nTab++)
+        {
+            if ( pMarkedRange )     // selected range is used instead of print ranges -> page count is different
+            {
+                ScPrintFunc aPrintFunc( this, pPrinter, nTab, 0,0, pMarkedRange, &aOptions );
+                aPageArr[nTab] = aPrintFunc.GetTotalPages();
+            }
             if ( !pMarkData || pMarkData->GetTableSelect(nTab) )
                 nTotalPages += aPageArr[nTab];
+        }
         if ( eDlgOption != PRINTDIALOG_RANGE )
             aPageRanges.Select( Range(1,nTotalPages) );
     }
@@ -1718,6 +1733,8 @@ void ScDocShell::PreparePrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData 
             nTabStart = nNext;
         }
     }
+
+    delete pMarkedRange;
 }
 
 BOOL lcl_HasTransparent( ScDocument* pDoc, SCTAB nTab, const ScRange* pRange )
@@ -1827,8 +1844,15 @@ void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
     {
         nTotalPages = 0;
         for (nTab=0; nTab<nTabCount; nTab++)
+        {
+            if ( pMarkedRange )     // selected range is used instead of print ranges -> page count is different
+            {
+                ScPrintFunc aPrintFunc( this, pPrinter, nTab, 0,0, pMarkedRange, &aOptions );
+                aPageArr[nTab] = aPrintFunc.GetTotalPages();
+            }
             if ( !pMarkData || pMarkData->GetTableSelect(nTab) )
                 nTotalPages += aPageArr[nTab];
+        }
         if ( eDlgOption != PRINTDIALOG_RANGE )
             aPageRanges.Select( Range(1,nTotalPages) );
     }
