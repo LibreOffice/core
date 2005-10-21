@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeformula.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:45:04 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 11:56:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,20 +210,43 @@ struct XclExpTokenData
 
 // ----------------------------------------------------------------------------
 
+/** Encapsulates all data needed for a call to an external function (macro, add-in). */
+struct XclExpExtFuncData
+{
+    String              maFuncName;         /// Name of the function.
+    bool                mbVBasic;           /// True = Visual Basic macro call.
+    bool                mbHidden;           /// True = Create hidden defined name.
+
+    inline explicit     XclExpExtFuncData() : mbVBasic( false ), mbHidden( false ) {}
+    void                Set( const String& rFuncName, bool bVBasic, bool bHidden );
+};
+
+void XclExpExtFuncData::Set( const String& rFuncName, bool bVBasic, bool bHidden )
+{
+    maFuncName = rFuncName;
+    mbVBasic = bVBasic;
+    mbHidden = bHidden;
+}
+
+// ----------------------------------------------------------------------------
+
 /** Encapsulates all data needed to process an entire function. */
 class XclExpFuncData
 {
 public:
-    explicit            XclExpFuncData( const XclExpTokenData& rTokData,
-                            const XclFunctionInfo& rFuncInfo, const String& rExtFuncName,
+    explicit            XclExpFuncData(
+                            const XclExpTokenData& rTokData,
+                            const XclFunctionInfo& rFuncInfo,
+                            const XclExpExtFuncData& rExtFuncData,
                             sal_uInt8 nExpRetClass );
 
     inline const ScToken& GetScToken() const { return *mrTokData.mpScToken; }
     inline OpCode       GetOpCode() const { return mrFuncInfo.meOpCode; }
     inline sal_uInt16   GetXclFuncIdx() const { return mrFuncInfo.mnXclFunc; }
-    inline bool         IsVolatile() const { return mrFuncInfo.mbVolatile; }
+    inline bool         IsVolatile() const { return mrFuncInfo.IsVolatile(); }
+    inline bool         IsMacroFunc() const { return mrFuncInfo.IsMacroFunc(); }
     inline sal_uInt8    GetSpaces() const { return mrTokData.mnSpaces; }
-    const String&       GetExtFuncName() const;
+    inline const XclExpExtFuncData& GetExtFuncData() const { return maExtFuncData; }
 
     inline sal_uInt8    GetReturnClass() const { return mrFuncInfo.mnRetClass; }
     inline sal_uInt8    GetExpReturnClass() const { return mnExpRetClass; }
@@ -246,28 +269,26 @@ private:
     ScfUInt16Vec        maAttrPosVec;       /// Token array positions of tAttr tokens.
     const XclExpTokenData& mrTokData;       /// Data about processed function name token.
     const XclFunctionInfo& mrFuncInfo;      /// Constant data about processed function.
-    String              maExtFuncName;      /// Function name for unsupported functions.
+    XclExpExtFuncData   maExtFuncData;      /// Data for external functions (macro, add-in).
     sal_uInt8           mnExpRetClass;      /// Expected token class for return value.
     sal_uInt8           mnClassIdx;         /// Index into expected parameter class array of mrFuncInfo.
     sal_uInt8           mnParamCount;       /// Current number of parameters of a function.
 };
 
-XclExpFuncData::XclExpFuncData( const XclExpTokenData& rTokData,
-        const XclFunctionInfo& rFuncInfo, const String& rExtFuncName, sal_uInt8 nExpRetClass ) :
+XclExpFuncData::XclExpFuncData(
+        const XclExpTokenData& rTokData, const XclFunctionInfo& rFuncInfo,
+        const XclExpExtFuncData& rExtFuncData, sal_uInt8 nExpRetClass ) :
     mrTokData( rTokData ),
     mrFuncInfo( rFuncInfo ),
-    maExtFuncName( rExtFuncName ),
+    maExtFuncData( rExtFuncData ),
     mnExpRetClass( nExpRetClass ),
     mnClassIdx( 0 ),
     mnParamCount( 0 )
 {
     DBG_ASSERT( mrTokData.mpScToken, "XclExpFuncData::XclExpFuncData - missing core token" );
-}
-
-const String& XclExpFuncData::GetExtFuncName() const
-{
-    // return external function name, if explicitly set; otherwise external name from Calc token
-    return maExtFuncName.Len() ? maExtFuncName : GetScToken().GetExternal();
+    // set name of an add-in function
+    if( !maExtFuncData.maFuncName.Len() && dynamic_cast< const ScExternalToken* >( mrTokData.mpScToken ) )
+        maExtFuncData.Set( GetScToken().GetExternal(), true, false );
 }
 
 void XclExpFuncData::IncExpParamClassIdx()
@@ -411,9 +432,9 @@ private:
     void                AppendMissingToken( sal_uInt8 nSpaces = 0 );
     void                AppendNameToken( sal_uInt16 nNameIdx, sal_uInt8 nExpClass, sal_uInt8 nSpaces = 0 );
     void                AppendMissingNameToken( const String& rName, sal_uInt8 nExpClass, sal_uInt8 nSpaces = 0 );
-    void                AppendMacroCallToken( const String& rFuncName, sal_uInt8 nExpClass, sal_uInt8 nSpaces = 0 );
-    void                AppendAddInFuncToken( const String& rFuncName, sal_uInt8 nExpClass, sal_uInt8 nSpaces = 0 );
     void                AppendNameXToken( sal_uInt16 nExtSheet, sal_uInt16 nExtName, sal_uInt8 nExpClass, sal_uInt8 nSpaces = 0 );
+    void                AppendMacroCallToken( const XclExpExtFuncData& rExtFuncData, sal_uInt8 nExpClass, sal_uInt8 nSpaces = 0 );
+    void                AppendAddInFuncToken( const XclExpExtFuncData& rExtFuncData, sal_uInt8 nExpClass, sal_uInt8 nSpaces = 0 );
     void                AppendParenToken( sal_uInt8 nOpenSpaces = 0, sal_uInt8 nCloseSpaces = 0 );
     void                AppendJumpToken( XclExpFuncData& rFuncData, sal_uInt8 nAttrType );
 
@@ -1183,19 +1204,27 @@ void XclExpFmlaCompImpl::ProcessFunction( const XclExpTokenData& rTokData, sal_u
     OpCode eOpCode = rTokData.GetOpCode();
     const XclFunctionInfo* pFuncInfo = maFuncProv.GetFuncInfoFromOpCode( eOpCode );
 
-    // no exportable function found - try to create an external call
-    String aExtFuncName;
+    XclExpExtFuncData aExtFuncData;
+
+    // no exportable function found - try to create an external macro call
     if( !pFuncInfo && (eOpCode > ocEndUnOp) )
     {
-        aExtFuncName = ScCompiler::GetStringFromOpCode( eOpCode, false );
-        if( aExtFuncName.Len() )
+        const String& rFuncName = ScCompiler::GetStringFromOpCode( eOpCode, false );
+        if( rFuncName.Len() )
+        {
+            aExtFuncData.Set( rFuncName, true, false );
             pFuncInfo = maFuncProv.GetFuncInfoFromOpCode( ocMacro );
+        }
     }
 
     mbOk = pFuncInfo != 0;
     if( !mbOk ) return;
 
-    XclExpFuncData aFuncData( rTokData, *pFuncInfo, aExtFuncName, nExpClass );
+    // functions simulated by a macro call in file format
+    if( pFuncInfo->IsMacroFunc() )
+        aExtFuncData.Set( pFuncInfo->GetMacroFuncName(), false, true );
+
+    XclExpFuncData aFuncData( rTokData, *pFuncInfo, aExtFuncData, nExpClass );
     XclExpTokenData aTokData;
 
     enum { STATE_START, STATE_OPEN, STATE_PARAM, STATE_SEP, STATE_CLOSE, STATE_END }
@@ -1244,6 +1273,7 @@ void XclExpFmlaCompImpl::FinishFunction( XclExpFuncData& rFuncData, sal_uInt8 nC
     sal_uInt8 nMaxCount = rFuncData.GetMaxParamCount();
     if( (nMinCount <= nParamCount) && (nParamCount <= nMaxCount) )
     {
+        sal_uInt16 nXclFuncIdx = rFuncData.GetXclFuncIdx();
         // first put the tAttr-space tokens, they must not be included in tAttr-goto handling
         AppendSpaceToken( EXC_TOK_ATTR_SPACE_SP_CLOSE, nCloseSpaces );
         AppendSpaceToken( EXC_TOK_ATTR_SPACE_SP, rFuncData.GetSpaces() );
@@ -1252,25 +1282,25 @@ void XclExpFmlaCompImpl::FinishFunction( XclExpFuncData& rFuncData, sal_uInt8 nC
         // put the tFunc or tFuncVar token (or another special token, e.g. tAttr-sum)
         sal_uInt8 nRetClass = rFuncData.GetReturnClass();
         sal_uInt8 nExpRetClass = rFuncData.GetExpReturnClass();
-        if( (rFuncData.GetOpCode() == ocSum) && (nParamCount == 1) )
+        if( (nXclFuncIdx == EXC_FUNCID_SUM) && (nParamCount == 1) )
         {
             // SUM with only one parameter
             AppendOpTokenId( EXC_TOKID_ATTR, nExpRetClass );
             Append( EXC_TOK_ATTR_SUM );
             Append( sal_uInt16( 0 ) );
         }
-        else if( nMinCount == nMaxCount )
+        else if( (nMinCount == nMaxCount) && (nXclFuncIdx != EXC_FUNCID_EXTERNCALL) )
         {
             // fixed number of parameters
             AppendOpTokenId( GetTokenId( EXC_TOKID_FUNC, nRetClass ), nExpRetClass );
-            Append( rFuncData.GetXclFuncIdx() );
+            Append( nXclFuncIdx );
         }
         else
         {
             // variable number of parameters
             AppendOpTokenId( GetTokenId( EXC_TOKID_FUNCVAR, nRetClass ), nExpRetClass );
             Append( nParamCount );
-            Append( rFuncData.GetXclFuncIdx() );
+            Append( nXclFuncIdx );
         }
 
         // update volatile flag - is set if at least one used function is volatile
@@ -1426,14 +1456,23 @@ void XclExpFmlaCompImpl::AppendDefaultParam( XclExpFuncData& rFuncData )
             AppendBoolToken( true );
         break;
         case ocExternal:
-            AppendAddInFuncToken( rFuncData.GetExtFuncName(), EXC_TOKCLASS_REF );
+            AppendAddInFuncToken( rFuncData.GetExtFuncData(), EXC_TOKCLASS_REF );
         break;
         case ocMacro:
-            AppendMacroCallToken( rFuncData.GetExtFuncName(), EXC_TOKCLASS_REF );
+            AppendMacroCallToken( rFuncData.GetExtFuncData(), EXC_TOKCLASS_REF );
         break;
         default:
-            DBG_ERRORFILE( "XclExpFmlaCompImpl::AppendDefaultParam - unknown opcode" );
-            AppendMissingToken();   // to keep parameter count valid
+        {
+            if( rFuncData.IsMacroFunc() )
+            {
+                AppendMacroCallToken( rFuncData.GetExtFuncData(), EXC_TOKCLASS_REF );
+            }
+            else
+            {
+                DBG_ERRORFILE( "XclExpFmlaCompImpl::AppendDefaultParam - unknown opcode" );
+                AppendMissingToken();   // to keep parameter count valid
+            }
+        }
     }
 
     // update parameter count, add special parameter tokens
@@ -2020,16 +2059,16 @@ void XclExpFmlaCompImpl::AppendNameXToken( sal_uInt16 nExtSheet, sal_uInt16 nExt
     Append( 0, (meBiff <= EXC_BIFF5) ? 12 : 2 );
 }
 
-void XclExpFmlaCompImpl::AppendMacroCallToken( const String& rFuncName, sal_uInt8 nExpClass, sal_uInt8 nSpaces )
+void XclExpFmlaCompImpl::AppendMacroCallToken( const XclExpExtFuncData& rExtFuncData, sal_uInt8 nExpClass, sal_uInt8 nSpaces )
 {
-    sal_uInt16 nNameIdx = GetNameManager().InsertMacroCall( rFuncName, true );
+    sal_uInt16 nNameIdx = GetNameManager().InsertMacroCall( rExtFuncData.maFuncName, rExtFuncData.mbVBasic, true, rExtFuncData.mbHidden );
     AppendNameToken( nNameIdx, nExpClass, nSpaces );
 }
 
-void XclExpFmlaCompImpl::AppendAddInFuncToken( const String& rFuncName, sal_uInt8 nExpClass, sal_uInt8 nSpaces )
+void XclExpFmlaCompImpl::AppendAddInFuncToken( const XclExpExtFuncData& rExtFuncData, sal_uInt8 nExpClass, sal_uInt8 nSpaces )
 {
     String aXclFuncName;
-    if( ScGlobal::GetAddInCollection()->GetExcelName( rFuncName, GetUILanguage(), aXclFuncName ) )
+    if( ScGlobal::GetAddInCollection()->GetExcelName( rExtFuncData.maFuncName, GetUILanguage(), aXclFuncName ) )
     {
         sal_uInt16 nExtSheet, nExtName;
         if( mpLinkMgr && mpLinkMgr->InsertAddIn( nExtSheet, nExtName, aXclFuncName ) )
@@ -2038,7 +2077,7 @@ void XclExpFmlaCompImpl::AppendAddInFuncToken( const String& rFuncName, sal_uInt
             return;
         }
     }
-    AppendMacroCallToken( rFuncName, nExpClass, nSpaces );
+    AppendMacroCallToken( rExtFuncData, nExpClass, nSpaces );
 }
 
 void XclExpFmlaCompImpl::AppendParenToken( sal_uInt8 nOpenSpaces, sal_uInt8 nCloseSpaces )
