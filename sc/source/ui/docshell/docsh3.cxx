@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh3.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:46:12 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 12:03:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,10 +129,19 @@ void ScDocShell::PostPaint( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
 
     if ( pPaintLockData )
     {
-        //! nExtFlags ???
-        pPaintLockData->AddRange( ScRange( nStartCol, nStartRow, nStartTab,
-                                            nEndCol, nEndRow, nEndTab ), nPart );
-        return;
+        // #i54081# PAINT_EXTRAS still has to be brodcast because it changes the
+        // current sheet if it's invalid. All other flags added to pPaintLockData.
+        USHORT nLockPart = nPart & ~PAINT_EXTRAS;
+        if ( nLockPart )
+        {
+            //! nExtFlags ???
+            pPaintLockData->AddRange( ScRange( nStartCol, nStartRow, nStartTab,
+                                               nEndCol, nEndRow, nEndTab ), nLockPart );
+        }
+
+        nPart &= PAINT_EXTRAS;  // for broadcasting
+        if ( !nPart )
+            return;
     }
 
 
