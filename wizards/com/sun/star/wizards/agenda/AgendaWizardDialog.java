@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AgendaWizardDialog.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:29:17 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 16:13:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -365,18 +365,6 @@ public abstract class AgendaWizardDialog  extends WizardDialog implements Agenda
     txtTemplateName = insertTextField("txtTemplateName", TXTTEMPLATENAME_TEXT_CHANGED,
       PROPS_X,
       new Object[] { INTEGER_12,TXTTEMPLATENAME_HID,new Integer(202),new Integer(60),INTEGERS[6],new Short((short)603),new Integer(100)}
-    );
-    lblTemplatePath = insertLabel("lblTemplatePath",
-      PROPS_TEXT,
-      new Object[] { INTEGERS[8],resources.reslblTemplatePath_value,new Integer(97),new Integer(80),INTEGERS[6],new Short((short)604),new Integer(70)}
-    );
-    txtTemplatePath = insertTextField("txtTemplatePath", null,
-      new String[] {"Height", "HelpURL", "PositionX", "PositionY", "ReadOnly", "Step", "TabIndex", "Width"},
-      new Object[] { INTEGER_12,TXTTEMPLATEPATH_HID,new Integer(166),new Integer(78),Boolean.TRUE, INTEGERS[6],new Short((short)605),new Integer(119)}
-    );
-    btnTemplatePath = insertButton("btnTemplatePath", BTNTEMPLATEPATH_ACTION_PERFORMED,
-      PROPS_BUTTON,
-      new Object[] { INTEGER_14,BTNTEMPLATEPATH_HID,resources.resbtnTemplatePath_value,new Integer(288),new Integer(77),INTEGERS[6],new Short((short)606),INTEGER_16}
     );
     lblProceed = insertLabel("lblProceed",
       PROPS_TEXT,
