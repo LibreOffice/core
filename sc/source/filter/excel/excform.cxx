@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:41:05 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 11:55:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -742,9 +742,8 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
 
                 if( nExtSheet <= 0 )
                 {   // in aktuellem Workbook
-                    BOOL    b3D = ( static_cast<SCTAB>(nTabFirst) != aEingPos.Tab() ) || bRangeName;
                     aSRD.nTab = static_cast<SCTAB>(nTabFirst);
-                    aSRD.SetFlag3D( b3D );
+                    aSRD.SetFlag3D( TRUE );
                     aSRD.SetTabRel( FALSE );
 
                     ExcRelToScRel( nRow, nCol, aSRD, bRangeName );
@@ -763,13 +762,8 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
 
                     if( nTabLast != nTabFirst )
                     {
-                        aCRD.Ref1 = aSRD;
-                        aCRD.Ref2.nCol = aSRD.nCol;
-                        aCRD.Ref2.nRow = aSRD.nRow;
+                        aCRD.Ref1 = aCRD.Ref2 = aSRD;
                         aCRD.Ref2.nTab = static_cast<SCTAB>(nTabLast);
-                        b3D = ( static_cast<SCTAB>(nTabLast) != aEingPos.Tab() );
-                        aCRD.Ref2.SetFlag3D( b3D );
-                        aCRD.Ref2.SetTabRel( FALSE );
                         aCRD.Ref2.SetTabDeleted( !ValidTab(static_cast<SCTAB>(nTabLast)) );
                         aStack << aPool.Store( aCRD );
                     }
@@ -819,9 +813,9 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
 
                     rR1.nTab = static_cast<SCTAB>(nTabFirst);
                     rR2.nTab = static_cast<SCTAB>(nTabLast);
-                    rR1.SetFlag3D( ( static_cast<SCTAB>(nTabFirst) != aEingPos.Tab() ) || bRangeName );
+                    rR1.SetFlag3D( TRUE );
                     rR1.SetTabRel( FALSE );
-                    rR2.SetFlag3D( ( static_cast<SCTAB>(nTabLast) != aEingPos.Tab() ) || bRangeName );
+                    rR2.SetFlag3D( nTabFirst != nTabLast );
                     rR2.SetTabRel( FALSE );
 
                     ExcRelToScRel( nRowFirst, nColFirst, aCRD.Ref1, bRangeName );
@@ -1345,9 +1339,12 @@ void ExcelToSc::DoMulArgs( DefTokenId eId, BYTE nAnz )
     {
         TokenId             n = eParam[ nAnz - 1 ];
 //##### GRUETZE FUER BASIC-FUNCS RICHTEN!
-        if( aPool.IsExternal( n ) )
+        if( const String* pExt = aPool.GetExternal( n ) )
         {
-            aPool << n;
+            if( const XclFunctionInfo* pFuncInfo = maFuncProv.GetFuncInfoFromXclMacroName( *pExt ) )
+                aPool << pFuncInfo->meOpCode;
+            else
+                aPool << n;
             nAnz--;
         }
         else
