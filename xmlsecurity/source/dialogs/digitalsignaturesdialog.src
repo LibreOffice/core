@@ -4,9 +4,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:11:34 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 13:28:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,21 @@ ModalDialog RID_XMLSECDLG_DIGSIG
     {
         Text [ de ] = "\tSigniert durch\tDigitale Signatur ausgestellt durch\tDatum";
         Text [ en-US ] = "\tSigned by\tDigital ID issued by\tDate";
+    };
+    String STR_VALID_SIGNATURE
+    {
+        Text [ de ] = "Gültige Signatur";
+        Text [ en-US ] = "Valid signature";
+    };
+    String STR_NO_INFO_TO_VERIFY
+    {
+        Text [ de ] = "Zertifikat konnte nicht verifiziert werden";
+        Text [ en-US ] = "Certificate could not be validated";
+    };
+    String STR_INVALID_SIGNATURE
+    {
+        Text [ de ] = "Die Signaturen in diesem Dokument sind ungültig";
+        Text [ en-US ] = "The signatures in this document are invalid";
     };
     FixedImage IMG_STATE_VALID
     {
