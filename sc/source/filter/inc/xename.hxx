@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xename.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:58:46 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 12:01:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,8 +78,9 @@ public:
     /** Returns index of an existing name, or creates a name without definition. */
     sal_uInt16          InsertRawName( const String& rName );
     /** Searches or inserts a defined name describing a macro name.
+        @param bVBasic  true = Visual Basic macro, false = Sheet macro.
         @param bFunc  true = Macro function; false = Macro procedure. */
-    sal_uInt16          InsertMacroCall( const String& rMacroName, bool bFunc );
+    sal_uInt16          InsertMacroCall( const String& rMacroName, bool bVBasic, bool bFunc, bool bHidden = false );
 
     /** Returns the Calc sheet of a local defined name, or SCTAB_GLOBAL for global defined names. */
     const String&       GetOrigName( sal_uInt16 nNameIdx ) const;
