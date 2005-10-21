@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:58:52 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 11:53:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1666,6 +1666,11 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ de ] = "HYPERLINK";
         Text[ en-US ] = "HYPERLINK";
     };
+    String SC_OPCODE_BAHTTEXT
+    {
+        Text [ de ] = "BAHTTEXT";
+        Text [ en-US ] = "BAHTTEXT";
+    };
 };
 Resource RID_SC_FUNCTION_NAMES_ENGLISH
 {
@@ -1961,5 +1966,6 @@ Resource RID_SC_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_ROMAN { Text = "ROMAN" ; };
     String SC_OPCODE_ARABIC { Text = "ARABIC" ; };
     String SC_OPCODE_HYPERLINK { Text = "HYPERLINK" ; };
+    String SC_OPCODE_BAHTTEXT { Text = "BAHTTEXT" ; };
 };
 
