@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tokstack.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:26:08 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 12:01:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,8 +185,7 @@ class TokenPool
         inline E_TYPE               GetType( const TokenId& nId ) const;
         inline const SingleRefData* GetSRD( const TokenId& nId ) const;
         BOOL                        IsSingleOp( const TokenId& nId, const DefTokenId eId ) const;
-        BOOL                        IsExternal( const TokenId& nId ) const;
-
+        const String*               GetExternal( const TokenId& nId ) const;
         const String*               GetString( const TokenId& nId ) const;
 };
 
