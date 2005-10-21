@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fieldwnd.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:24:46 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 12:04:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,6 +137,9 @@ private:
     /** Moves the selected field to the given direction. */
     void                    MoveFieldRel( SCsCOL nDX, SCsROW nDY );
 
+    /** Updates the tab stop style bits. */
+    void                    UpdateStyle();
+
 protected:
     virtual void            Paint( const Rectangle& rRect );
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
@@ -160,6 +163,9 @@ public:
                                 ScDPFieldType eFieldType,
                                 const String& aName );
     virtual                 ~ScDPFieldWindow();
+
+    /** Reads the FixedText's text with mnemonic and hides the FixedText. */
+    void                    UseMnemonic();
 
     /** Draws the complete control. */
     void                    Redraw();
