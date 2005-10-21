@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xicontent.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:46:52 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 11:57:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,8 +238,8 @@ void lclInsertUrl( const XclImpRoot& rRoot, const String& rUrl, SCCOL nScCol, SC
     ScAddress aScPos( nScCol, nScRow, nScTab );
     CellType eCellType = rDoc.GetCellType( aScPos );
 
-    // hyperlinks in value/formula cells not supported
-    if( (eCellType != CELLTYPE_FORMULA) && (eCellType != CELLTYPE_VALUE) )
+    // #i54261# hyperlinks only in string cells
+    if( (eCellType == CELLTYPE_STRING) || (eCellType == CELLTYPE_EDIT) )
     {
         String aDisplText;
         rDoc.GetString( nScCol, nScRow, nScTab, aDisplText );
