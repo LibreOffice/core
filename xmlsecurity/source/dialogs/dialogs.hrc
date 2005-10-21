@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogs.hrc,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:11:12 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 13:28:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,9 @@
 #define BTN_VIEWCERT                    55
 #define STR_HEADERBAR                   56
 #define BTN_RESET                       57
+#define STR_VALID_SIGNATURE             58
+#define STR_NO_INFO_TO_VERIFY           59
+#define STR_INVALID_SIGNATURE           60
 
 // --------- general metrics ---------
 #define DLGS_WIDTH                      287
@@ -174,6 +177,7 @@
 #define FI_VALIDDATE                    12
 #define IMG_KEY                         13
 #define FI_CORRPRIVKEY                  14
+#define STR_CERTIFICATE_NOT_VALIDATED   15
 
 #define IMG1_WIDTH                      33
 #define IMG1_HEIGHT                     22
@@ -233,6 +237,8 @@
 #define FT_CERTSTATUS                   2
 #define ML_CERTSTATUS                   3
 #define IMG_CERT_SMAL                   4
+#define STR_PATH_CERT_OK                5
+#define STR_PATH_CERT_NOT_VALIDATED     6
 
 #define CVP_ROW_0                       RSC_SP_TBPG_INNERBORDER_TOP
 #define CVP_ROW_1                       (CVP_ROW_0+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_DESC_Y)
