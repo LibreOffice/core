@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:12:22 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 12:17:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,9 +117,6 @@ using namespace ::com::sun::star;
 #define QUERYINT( xint ) \
     if( rType == ::getCppuType((const uno::Reference< xint >*)0) ) \
         return uno::makeAny(uno::Reference< xint >(this))
-#define QUERYINT2( xint ) \
-    if( rType == ::getCppuType((const uno::Reference< xint >*)0) ) \
-        aAny <<= uno::Reference< xint >(this)
 
 SfxItemPropertyMap aEmptyPropMap[] =
 {
@@ -2014,29 +2011,6 @@ ESelection SvxUnoTextBase::InsertField( const SvxFieldItem& rField ) throw()
     }
 
     return GetSelection();  // Selektion mit dem Feld
-}
-
-sal_Bool SvxUnoTextBase::queryAggregation( const uno::Type & rType, uno::Any& aAny )
-{
-    QUERYINT2( text::XText );
-    else QUERYINT2( text::XSimpleText );
-    else if( rType == ::getCppuType((const uno::Reference< text::XTextRange >*)0) )
-        aAny <<= uno::Reference< text::XTextRange >((text::XText*)(this));
-    else QUERYINT2(container::XEnumerationAccess );
-    else QUERYINT2( container::XElementAccess );
-//  else QUERYINT2( beans::XTolerantMultiPropertySet );
-    else QUERYINT2( beans::XPropertySet );
-    else QUERYINT2( beans::XMultiPropertySet );
-    else QUERYINT2( beans::XPropertyState );
-    else QUERYINT2( text::XTextRangeCompare );
-    else QUERYINT2( lang::XServiceInfo );
-    else QUERYINT2( text::XTextRangeMover );
-    else QUERYINT2( lang::XTypeProvider );
-    else QUERYINT2( lang::XUnoTunnel );
-    else
-        return sal_False;
-
-    return sal_True;
 }
 
 // XInterface
