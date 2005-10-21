@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr3.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:38:17 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 11:54:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <vector>
+#include <algorithm>
 
 #include "interpre.hxx"
 #include "global.hxx"
@@ -1086,46 +1088,241 @@ void ScInterpreter::ScPoissonDist()
     }
 }
 
+/** Local function used in the calculation of the hypergeometric distribution.
+ */
+void lcl_PutFactorialElements( ::std::vector< double >& cn, double fLower, double fUpper, double fBase )
+{
+    for ( double i = fLower; i <= fUpper; ++i )
+    {
+        double fVal = fBase - i;
+        if ( fVal > 1.0 )
+            cn.push_back( fVal );
+    }
+}
+
+/** Calculates a value of the hypergeometric distribution.
+
+    The algorithm is designed to avoid unnecessary multiplications and division
+    by expanding all factorial elements (9 of them).  It is done by excluding
+    those ranges that overlap in the numerator and the denominator.  This allows
+    for a fast calculation for large values which would otherwise cause an overflow
+    in the intermediate values.
+
+    @author Kohei Yoshida <kohei@openoffice.org>
+
+    @see #i47296#
+
+ */
 void ScInterpreter::ScHypGeomDist()
 {
-    if ( MustHaveParamCount( GetByte(), 4 ) )
+    const size_t nMaxArraySize = 500000; // arbitrary max array size
+
+    if ( !MustHaveParamCount( GetByte(), 4 ) )
+        return;
+
+    double N = ::rtl::math::approxFloor(GetDouble());
+    double M = ::rtl::math::approxFloor(GetDouble());
+    double n = ::rtl::math::approxFloor(GetDouble());
+    double x = ::rtl::math::approxFloor(GetDouble());
+
+    if( (x < 0.0) || (n < x) || (M < x) || (N < n) || (N < M) || (x < n - N + M) )
     {
-        double N = ::rtl::math::approxFloor(GetDouble());
-        double M = ::rtl::math::approxFloor(GetDouble());
-        double n = ::rtl::math::approxFloor(GetDouble());
-        double x = ::rtl::math::approxFloor(GetDouble());
+        SetIllegalArgument();
+        return;
+    }
 
-        if( (x < 0.0) || (n < x) || (M < x) || (N < n) || (N < M) || (x < n - N + M) )
-        {
-            SetIllegalArgument();
-            return;
-        }
-        double fFactor =
-            BinomKoeff( n, x ) / BinomKoeff( N, M ) * BinomKoeff( N - n, M - x );
+    typedef ::std::vector< double > HypContainer;
+    HypContainer cnNumer, cnDenom;
 
-/*
-        double fFactor;
-        if (x == n - N + M)
-            fFactor = BinomKoeff(M,x)/BinomKoeff(N,n);
-        else
+    size_t nEstContainerSize = static_cast<size_t>( x + ::std::min( n, M ) );
+    size_t nMaxSize = ::std::min( cnNumer.max_size(), nMaxArraySize );
+    if ( nEstContainerSize > nMaxSize )
+    {
+        SetNoValue();
+        return;
+    }
+    cnNumer.reserve( nEstContainerSize + 10 );
+    cnDenom.reserve( nEstContainerSize + 10 );
+
+    // Trim coefficient C first
+    double fCNumVarUpper = N - n - M + x - 1.0;
+    double fCDenomVarLower = 1.0;
+    if ( N - n - M + x >= M - x + 1.0 )
+    {
+        fCNumVarUpper = M - x - 1.0;
+        fCDenomVarLower = N - n - 2.0*(M - x) + 1.0;
+    }
+
+    double fCNumLower = N - n - fCNumVarUpper;
+    double fCDenomUpper = N - n - M + x + 1.0 - fCDenomVarLower;
+
+    double fDNumVarLower = n - M;
+
+    if ( n >= M + 1.0 )
+    {
+        if ( N - M < n + 1.0 )
         {
-            double fIndex = N - M - n;
-            if (fIndex >= 0.0)
+            // Case 1
+
+            if ( N - n < n + 1.0 )
             {
-                fFactor = BinomKoeff(N-M,n)/BinomKoeff(N,n);
-                for (double i = 0; i < x; i++)
-                    fFactor *= (M-i)*(n-i)/((i+1.0)*(N-M-n+i+1.0));
+                // no overlap
+                lcl_PutFactorialElements( cnNumer, 0.0, fCNumVarUpper, N - n );
+                lcl_PutFactorialElements( cnDenom, 0.0, N - n - 1.0, N );
             }
             else
             {
-                fFactor = BinomKoeff(M,-fIndex)/BinomKoeff(N,n);
-                for (double i = -fIndex + 1.0; i < x; i++)
-                    fFactor *= (M-i)*(n-i)/((i+1)*(N-M-n+i+1.0));
+                // overlap
+                DBG_ASSERT( fCNumLower < n + 1.0, "ScHypGeomDist: wrong assertion" );
+                lcl_PutFactorialElements( cnNumer, N - 2.0*n, fCNumVarUpper, N - n );
+                lcl_PutFactorialElements( cnDenom, 0.0, n - 1.0, N );
+            }
+
+            DBG_ASSERT( fCDenomUpper <= N - M, "ScHypGeomDist: wrong assertion" );
+
+            if ( fCDenomUpper < n - x + 1.0 )
+                // no overlap
+                lcl_PutFactorialElements( cnNumer, 1.0, N - M - n + x, N - M + 1.0 );
+            else
+            {
+                // overlap
+                lcl_PutFactorialElements( cnNumer, 1.0, N - M - fCDenomUpper, N - M + 1.0 );
+
+                fCDenomUpper = n - x;
+                fCDenomVarLower = N - M - 2.0*(n - x) + 1.0;
             }
         }
-*/
-        PushDouble(fFactor);
+        else
+        {
+            // Case 2
+
+            if ( n > M - 1.0 )
+            {
+                // no overlap
+                lcl_PutFactorialElements( cnNumer, 0.0, fCNumVarUpper, N - n );
+                lcl_PutFactorialElements( cnDenom, 0.0, M - 1.0, N );
+            }
+            else
+            {
+                lcl_PutFactorialElements( cnNumer, M - n, fCNumVarUpper, N - n );
+                lcl_PutFactorialElements( cnDenom, 0.0, n - 1.0, N );
+            }
+
+            DBG_ASSERT( fCDenomUpper <= n, "ScHypGeomDist: wrong assertion" );
+
+            if ( fCDenomUpper < n - x + 1.0 )
+                // no overlap
+                lcl_PutFactorialElements( cnNumer, N - M - n + 1.0, N - M - n + x, N - M + 1.0 );
+            else
+            {
+                lcl_PutFactorialElements( cnNumer, N - M - n + 1.0, N - M - fCDenomUpper, N - M + 1.0 );
+                fCDenomUpper = n - x;
+                fCDenomVarLower = N - M - 2.0*(n - x) + 1.0;
+            }
+        }
+
+        DBG_ASSERT( fCDenomUpper <= M, "ScHypGeomDist: wrong assertion" );
     }
+    else
+    {
+        if ( N - M < M + 1.0 )
+        {
+            // Case 3
+
+            if ( N - n < M + 1.0 )
+            {
+                // No overlap
+                lcl_PutFactorialElements( cnNumer, 0.0, fCNumVarUpper, N - n );
+                lcl_PutFactorialElements( cnDenom, 0.0, N - M - 1.0, N );
+            }
+            else
+            {
+                lcl_PutFactorialElements( cnNumer, N - n - M, fCNumVarUpper, N - n );
+                lcl_PutFactorialElements( cnDenom, 0.0, n - 1.0, N );
+            }
+
+            if ( n - x + 1.0 > fCDenomUpper )
+                // No overlap
+                lcl_PutFactorialElements( cnNumer, 1.0, N - M - n + x, N - M + 1.0 );
+            else
+            {
+                // Overlap
+                lcl_PutFactorialElements( cnNumer, 1.0, N - M - fCDenomUpper, N - M + 1.0 );
+
+                fCDenomVarLower = N - M - 2.0*(n - x) + 1.0;
+                fCDenomUpper = n - x;
+            }
+        }
+        else
+        {
+            // Case 4
+
+            DBG_ASSERT( M >= n - x, "ScHypGeomDist: wrong assertion" );
+            DBG_ASSERT( M - x <= N - M + 1.0, "ScHypGeomDist: wrong assertion" );
+
+            if ( N - n < N - M + 1.0 )
+            {
+                // No overlap
+                lcl_PutFactorialElements( cnNumer, 0.0, fCNumVarUpper, N - n );
+                lcl_PutFactorialElements( cnDenom, 0.0, M - 1.0, N );
+            }
+            else
+            {
+                // Overlap
+                DBG_ASSERT( fCNumLower <= N - M + 1.0, "ScHypGeomDist: wrong assertion" );
+
+                lcl_PutFactorialElements( cnNumer, M - n, fCNumVarUpper, N - n );
+                lcl_PutFactorialElements( cnDenom, 0.0, n - 1.0, N );
+            }
+
+            if ( n - x + 1.0 > fCDenomUpper )
+                // No overlap
+                lcl_PutFactorialElements( cnNumer, N - 2.0*M + 1.0, N - M - n + x, N - M + 1.0 );
+            else if ( M >= fCDenomUpper )
+            {
+                lcl_PutFactorialElements( cnNumer, N - 2.0*M + 1.0, N - M - fCDenomUpper, N - M + 1.0 );
+
+                fCDenomUpper = n - x;
+                fCDenomVarLower = N - M - 2.0*(n - x) + 1.0;
+            }
+            else
+            {
+                DBG_ASSERT( M <= fCDenomUpper, "ScHypGeomDist: wrong assertion" );
+                lcl_PutFactorialElements( cnDenom, fCDenomVarLower, N - n - 2.0*M + x,
+                        N - n - M + x + 1.0 );
+
+                fCDenomUpper = n - x;
+                fCDenomVarLower = N - M - 2.0*(n - x) + 1.0;
+            }
+        }
+
+        DBG_ASSERT( fCDenomUpper <= n, "ScHypGeomDist: wrong assertion" );
+
+        fDNumVarLower = 0.0;
+    }
+
+    double nDNumVarUpper   = fCDenomUpper < x + 1.0 ? n - x - 1.0     : n - fCDenomUpper - 1.0;
+    double nDDenomVarLower = fCDenomUpper < x + 1.0 ? fCDenomVarLower : N - n - M + 1.0;
+    lcl_PutFactorialElements( cnNumer, fDNumVarLower, nDNumVarUpper, n );
+    lcl_PutFactorialElements( cnDenom, nDDenomVarLower, N - n - M + x, N - n - M + x + 1.0 );
+
+    ::std::sort( cnNumer.begin(), cnNumer.end() );
+    ::std::sort( cnDenom.begin(), cnDenom.end() );
+    HypContainer::reverse_iterator it1 = cnNumer.rbegin(), it1End = cnNumer.rend();
+    HypContainer::reverse_iterator it2 = cnDenom.rbegin(), it2End = cnDenom.rend();
+
+    double fFactor = 1.0;
+    for ( ; it1 != it1End || it2 != it2End; )
+    {
+        double fEnum = 1.0, fDenom = 1.0;
+        if ( it1 != it1End )
+            fEnum  = *it1++;
+        if ( it2 != it2End )
+            fDenom = *it2++;
+        fFactor *= fEnum / fDenom;
+    }
+
+    PushDouble(fFactor);
 }
 
 void ScInterpreter::ScGammaDist()
