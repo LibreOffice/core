@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.197 $
+ *  $Revision: 1.198 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:06:20 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 12:02:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -728,29 +728,14 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
                                                                     Rectangle aRectangle(aPoint.X, aPoint.Y, aPoint.X + aSize.Width, aPoint.Y + aSize.Height);
                                                                     if ( sType.equals(sCaptionShape) )
                                                                     {
-                                                                        awt::Point aPoint(xShape->getPosition());
-                                                                        awt::Size aSize(xShape->getSize());
-                                                                        rtl::OUString sType(xShape->getShapeType());
-                                                                        Rectangle aRectangle(aPoint.X, aPoint.Y, aPoint.X + aSize.Width, aPoint.Y + aSize.Height);
-                                                                        if ( sType.equals(sCaptionShape) )
-                                                                        {
-                                                                            awt::Point aRelativeCaptionPoint;
-                                                                            xShapeProp->getPropertyValue( sCaptionPoint ) >>= aRelativeCaptionPoint;
-                                                                            Point aCoreRelativeCaptionPoint(aRelativeCaptionPoint.X, aRelativeCaptionPoint.Y);
-                                                                            Point aCoreAbsoluteCaptionPoint(aPoint.X, aPoint.Y);
-                                                                            aCoreAbsoluteCaptionPoint += aCoreRelativeCaptionPoint;
-                                                                            aRectangle.Union(Rectangle(aCoreAbsoluteCaptionPoint, aCoreAbsoluteCaptionPoint));
-                                                                        }
-                                                                        ScRange aRange = pDoc->GetRange(static_cast<SCTAB>(nTable), aRectangle);
-                                                                        ScMyShape aMyShape;
-                                                                        aMyShape.aAddress = aRange.aStart;
-                                                                        aMyShape.aEndAddress = aRange.aEnd;
-                                                                        aMyShape.xShape = xShape;
-                                                                        pSharedData->AddNewShape(aMyShape);
-                                                                        pSharedData->SetLastColumn(nTable, aRange.aStart.Col());
-                                                                        pSharedData->SetLastRow(nTable, aRange.aStart.Row());
+                                                                        awt::Point aRelativeCaptionPoint;
+                                                                        xShapeProp->getPropertyValue( sCaptionPoint ) >>= aRelativeCaptionPoint;
+                                                                        Point aCoreRelativeCaptionPoint(aRelativeCaptionPoint.X, aRelativeCaptionPoint.Y);
+                                                                        Point aCoreAbsoluteCaptionPoint(aPoint.X, aPoint.Y);
+                                                                        aCoreAbsoluteCaptionPoint += aCoreRelativeCaptionPoint;
+                                                                        aRectangle.Union(Rectangle(aCoreAbsoluteCaptionPoint, aCoreAbsoluteCaptionPoint));
                                                                     }
-                                                                    ScRange aRange(pDoc->GetRange(static_cast<USHORT>(nTable), aRectangle));
+                                                                    ScRange aRange(pDoc->GetRange(static_cast<SCTAB>(nTable), aRectangle));
                                                                     ScMyShape aMyShape;
                                                                     aMyShape.aAddress = aRange.aStart;
                                                                     aMyShape.aEndAddress = aRange.aEnd;
