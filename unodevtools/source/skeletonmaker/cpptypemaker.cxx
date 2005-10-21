@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpptypemaker.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2005-09-09 13:50:28 $
+ *  last change: $Author: jsc $ $Date: 2005-10-21 13:52:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -329,7 +329,7 @@ void printSetPropertyMixinBody(std::ostream & o,
     else
         o << "0);\n";
 
-    o << "    {\n        osl::MutexGuard g(m_mutex);\n        m_"
+    o << "    {\n        osl::MutexGuard g(m_aMutex);\n        m_"
       << fieldname << " = the_value;\n    }\n";
 
     if (bound) {
@@ -405,7 +405,7 @@ void printMethods(std::ostream & o,
         if (body) {
             if (defaultbody) {
                 if (usepropertymixin) {
-                    o << "\n{\n    osl::MutexGuard g(m_mutex);\n    return m_"
+                    o << "\n{\n    osl::MutexGuard g(m_aMutex);\n    return m_"
                       << codemaker::convertString(reader.getFieldName(i)).getStr()
                       << ";\n}\n\n";
                 } else {
