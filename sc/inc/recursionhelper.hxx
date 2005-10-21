@@ -4,9 +4,9 @@
  *
  *  $RCSfile: recursionhelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:51:05 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 11:52:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,11 +46,16 @@ struct ScFormulaRecursionEntry
 {
     ScFormulaCell*  pCell;
     BOOL            bOldRunning;
+    BOOL            bPreviousNumeric;
     double          fPreviousResult;
-    ScFormulaRecursionEntry( ScFormulaCell* p, BOOL b, double f ) : pCell(p),
-                                                                    bOldRunning(b),
-                                                                    fPreviousResult(f)
-    {}
+    String          aPreviousString;
+    ScFormulaRecursionEntry( ScFormulaCell* p, BOOL bR, BOOL bN, double f,
+            const String& rS ) : pCell(p), bOldRunning(bR),
+                                 bPreviousNumeric(bN), fPreviousResult(f)
+    {
+        if (!bPreviousNumeric)
+            aPreviousString = rS;
+    }
 };
 
 typedef ::std::list< ScFormulaRecursionEntry > ScFormulaRecursionList;
@@ -101,10 +106,11 @@ class ScRecursionHelper
     }
     bool    IsDoingRecursion() const        { return bDoingRecursion; }
     void    SetDoingRecursion( bool b )     { bDoingRecursion = b; }
-    void    Insert( ScFormulaCell* p, BOOL bOldRunning, double fResult )
+    void    Insert( ScFormulaCell* p, BOOL bOldRunning, BOOL bNumeric,
+                    double fResult, const String& rStrResult )
     {
         aRecursionFormulas.insert( aInsertPos, ScFormulaRecursionEntry( p,
-                    bOldRunning, fResult));
+                    bOldRunning, bNumeric, fResult, rStrResult));
     }
     ScFormulaRecursionList::iterator    GetStart()
     {
