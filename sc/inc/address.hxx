@@ -4,9 +4,9 @@
  *
  *  $RCSfile: address.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:21:26 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 11:48:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,46 +66,6 @@
 
 class ScDocument;
 
-#if 0
-// Temporary conversion environment,
-// defines SC_ROWLIMIT_TYPECONVERSION_NOCONVPASS
-// and declares class SCROW,SCCOL,SCTAB,SCSIZE
-#include "rowlimit_noconv.hxx"
-#endif
-
-#ifdef SC_ROWLIMIT_TYPECONVERSION_NOCONVPASS
-
-#define SC_ROWLIMIT_TEMP_HACK 1
-
-typedef SCROW    SCsROW;
-typedef SCCOL    SCsCOL;
-typedef SCTAB    SCsTAB;
-typedef SCCOLROW SCsCOLROW;
-
-#undef min
-#undef max
-const SCROW  SCROW_MAX    = USHRT_MAX;
-const SCCOL  SCCOL_MAX    = USHRT_MAX;
-const SCTAB  SCTAB_MAX    = USHRT_MAX;
-const SCCOL  SCCOLROW_MAX = USHRT_MAX;
-const SCSIZE SCSIZE_MAX   = ::std::numeric_limits<size_t>::max();
-
-#define SC_ROWLIMIT_MORE_THAN_32K 0
-#define MAXROWCOUNT_DEFINE 32000
-#define MAXCOLCOUNT_DEFINE 256
-
-const size_t      MAXROWCOUNT    = MAXROWCOUNT_DEFINE;
-const size_t      MAXCOLCOUNT    = MAXCOLCOUNT_DEFINE;
-const size_t      MAXTABCOUNT    = 256;
-const size_t      MAXCOLROWCOUNT = MAXROWCOUNT;
-
-const SCROW       MAXROW         = static_cast<int>(MAXROWCOUNT) - 1;
-const SCCOL       MAXCOL         = static_cast<int>(MAXCOLCOUNT) - 1;
-const SCTAB       MAXTAB         = static_cast<int>(MAXTABCOUNT) - 1;
-const SCCOLROW    MAXCOLROW      = MAXROW;
-
-#else // ! SC_ROWLIMIT_TYPECONVERSION_NOCONVPASS
-
 // The typedefs
 typedef sal_Int32 SCROW;
 typedef sal_Int16 SCCOL;
@@ -157,8 +117,6 @@ const SCCOL       MAXCOL         = MAXCOLCOUNT - 1;
 const SCTAB       MAXTAB         = MAXTABCOUNT - 1;
 const SCCOLROW    MAXCOLROW      = MAXROW;
 
-#endif // SC_ROWLIMIT_TYPECONVERSION_NOCONVPASS
-
 
 // Special values
 const SCTAB SC_TAB_APPEND     = SCTAB_MAX;
@@ -166,7 +124,6 @@ const SCTAB TABLEID_DOC       = SCTAB_MAX;  // entire document, e.g. protect
 const SCROW SCROWS32K         = 32000;
 const SCCOL SCCOL_REPEAT_NONE = SCCOL_MAX;
 const SCROW SCROW_REPEAT_NONE = SCROW_MAX;
-// REPEAT_NONE
 
 
 // We hope to get rid of the binary file format. If not, these are the places
@@ -187,18 +144,6 @@ const SCROW SCROW_REPEAT_NONE = SCROW_MAX;
 // #endif
 #define SC_ROWLIMIT_MORE_THAN_64K 0     /* set to 1 if we throw the switch */
 const SCROW SCROWS64K = 65536;
-
-// Undef code that uses ScAddress bitfield stream accessing methods.
-#ifdef SC_ROWLIMIT_TYPECONVERSION_NOCONVPASS
-#define SC_ADDRESS_BITS_USED 0
-#else
-#define SC_ADDRESS_BITS_USED 1
-#endif
-// If we throw the 64k switch this has to be the consequence.
-#if SC_ROWLIMIT_MORE_THAN_64K
-#undef SC_ADDRESS_BITS_USED
-#define SC_ADDRESS_BITS_USED 0
-#endif
 
 // === old stuff defines =====================================================
 
@@ -295,76 +240,6 @@ inline bool ValidColRowTab( SCCOL nCol, SCROW nRow, SCTAB nTab )
 #define SCA_ABS_3D          SCA_ABS | SCA_TAB_3D
 #define SCR_ABS_3D          SCR_ABS | SCA_TAB_3D
 
-// === ScAddressOldBitfieldConverter =========================================
-// TODO: to be removed if binary file format is stripped
-
-#if SC_ADDRESS_BITS_USED
-
-class ScAddressOldBitfieldConverter
-{
-private:
-    UINT32 nAddress;
-    inline UINT16* RowPos();
-    inline BYTE* ColPos();
-    inline BYTE* TabPos();
-    inline const UINT16* RowPos() const;
-    inline const BYTE* ColPos() const;
-    inline const BYTE* TabPos() const;
-
-public:
-    inline ScAddressOldBitfieldConverter() : nAddress(0) {}
-    inline explicit ScAddressOldBitfieldConverter( UINT32 n ) : nAddress(n) {}
-    inline explicit ScAddressOldBitfieldConverter( SvStream& rStream )
-    { rStream >> nAddress; }
-    inline ScAddressOldBitfieldConverter( SCCOL nCol, SCROW nRow, SCTAB nTab )
-    { Set( nCol, nRow, nTab); }
-    inline void Set( SCCOL nCol, SCROW nRow, SCTAB nTab );
-    inline void Get( SCCOL& nCol, SCROW& nRow, SCTAB& nTab ) const;
-    inline UINT32 GetBitfield() const { return nAddress; }
-};
-
-#ifdef OSL_LITENDIAN
-
-inline USHORT* ScAddressOldBitfieldConverter::RowPos() { return (USHORT*) &nAddress; }
-inline BYTE*   ScAddressOldBitfieldConverter::ColPos() { return (BYTE*) &nAddress + 2; }
-inline BYTE*   ScAddressOldBitfieldConverter::TabPos() { return (BYTE*) &nAddress + 3; }
-inline const USHORT* ScAddressOldBitfieldConverter::RowPos() const { return (USHORT*) &nAddress; }
-inline const BYTE*   ScAddressOldBitfieldConverter::ColPos() const { return (BYTE*) &nAddress + 2; }
-inline const BYTE*   ScAddressOldBitfieldConverter::TabPos() const { return (BYTE*) &nAddress + 3; }
-
-#else
-
-inline USHORT* ScAddressOldBitfieldConverter::RowPos() { return (USHORT*) ((BYTE*) &nAddress + 2 ); }
-inline BYTE*   ScAddressOldBitfieldConverter::ColPos() { return (BYTE*) &nAddress + 1; }
-inline BYTE*   ScAddressOldBitfieldConverter::TabPos() { return (BYTE*) &nAddress; }
-inline const USHORT* ScAddressOldBitfieldConverter::RowPos() const { return (USHORT*) ((BYTE*) &nAddress + 2 ); }
-inline const BYTE*   ScAddressOldBitfieldConverter::ColPos() const { return (BYTE*) &nAddress + 1; }
-inline const BYTE*   ScAddressOldBitfieldConverter::TabPos() const { return (BYTE*) &nAddress; }
-
-#endif
-
-inline void ScAddressOldBitfieldConverter::Set( SCCOL nCol, SCROW nRow, SCTAB nTab )
-{
-    DBG_ASSERT( nCol <= 0xff && nRow <= 0xffff && nTab <= 0xff,
-            "ScAddress UINT32 conversion doesn't fit");
-//  nAddress = ((UINT32) ((((BYTE) nTab) << 8 ) + (BYTE) nCol ) << 16 )
-//           | (UINT32) (UINT16) nRow;
-// Shifting: 5 mov, 2 xor, 2 shl, 1 add, 1 and, 1 or
-// Casting: 7 mov, less code and faster
-    *ColPos() = (BYTE) nCol;
-    *RowPos() = (UINT16) nRow;
-    *TabPos() = (BYTE) nTab;
-}
-
-inline void ScAddressOldBitfieldConverter::Get( SCCOL& nCol, SCROW& nRow, SCTAB& nTab ) const
-{
-    nCol = *ColPos();
-    nRow = *RowPos();
-    nTab = *TabPos();
-}
-
-#endif  // SC_ADDRESS_BITS_USED
-
 // === ScAddress =============================================================
 
 class SC_DLLPUBLIC ScAddress
@@ -393,24 +268,6 @@ public:
         {}
     inline ScAddress& operator=( const ScAddress& r );
 
-#if SC_ADDRESS_BITS_USED
-    // TODO: TO BE REMOVED
-    inline explicit ScAddress( UINT32 nOldAddress )
-    { ScAddressOldBitfieldConverter( nOldAddress).Get( nCol, nRow, nTab); }
-    // TODO: TO BE REMOVED
-    inline ScAddress& operator=( UINT32 nOldAddress )
-    {
-        ScAddressOldBitfieldConverter( nOldAddress).Get( nCol, nRow, nTab);
-        return *this;
-    }
-    // TODO: TO BE REMOVED
-    inline void Set( const ScAddressOldBitfieldConverter& rBC )
-    { rBC.Get( nCol, nRow, nTab); }
-    // TODO: TO  BE REMOVED
-    inline operator UINT32() const
-    { return ScAddressOldBitfieldConverter( nCol, nRow, nTab).GetBitfield(); }
-#endif // SC_ADDRESS_BITS_USED
-
     inline void Set( SCCOL nCol, SCROW nRow, SCTAB nTab );
     inline SCROW Row() const { return nRow; }
     inline SCCOL Col() const { return nCol; }
@@ -436,12 +293,6 @@ public:
     inline bool operator<=( const ScAddress& r ) const;
     inline bool operator>( const ScAddress& r ) const;
     inline bool operator>=( const ScAddress& r ) const;
-#if SC_ROWLIMIT_STREAM_ACCESS
-    // TODO: TO BE REMOVED
-    friend inline SvStream& operator<< ( SvStream& rStream, const ScAddress& rAdr );
-    // TODO: TO BE REMOVED
-    friend inline SvStream& operator>> ( SvStream& rStream, ScAddress& rAdr );
-#endif
 
     // moved from ScTripel
     /// "(1,2,3)"
@@ -527,23 +378,6 @@ inline bool ScAddress::operator>=( const ScAddress& r ) const
     return !operator<( r );
 }
 
-#if SC_ADDRESS_BITS_USED && SC_ROWLIMIT_STREAM_ACCESS
-
-inline SvStream& operator<< ( SvStream& rStream, const ScAddress& rAdr )
-{
-    rStream << UINT32(rAdr);
-    return rStream;
-}
-
-inline SvStream& operator>> ( SvStream& rStream, ScAddress& rAdr )
-{
-    ScAddressOldBitfieldConverter aBC( rStream);
-    rAdr.Set( aBC );
-    return rStream;
-}
-
-#endif // SC_ADDRESS_BITS_USED
-
 // === ScRange ===============================================================
 
 class SC_DLLPUBLIC ScRange
@@ -590,10 +424,6 @@ public:
     inline bool operator<=( const ScRange& r ) const;
     inline bool operator>( const ScRange& r ) const;
     inline bool operator>=( const ScRange& r ) const;
-#if SC_ROWLIMIT_STREAM_ACCESS
-    friend inline SvStream& operator<< ( SvStream& rStream, const ScRange& rRange );
-    friend inline SvStream& operator>> ( SvStream& rStream, ScRange& rRange );
-#endif
 };
 
 inline void ScRange::GetVars( SCCOL& nCol1, SCROW& nRow1, SCTAB& nTab1,
@@ -650,24 +480,6 @@ inline bool ScRange::In( const ScRange& r ) const
         aStart.Tab() <= r.aStart.Tab() && r.aEnd.Tab() <= aEnd.Tab();
 }
 
-#if SC_ROWLIMIT_STREAM_ACCESS
-
-inline SvStream& operator<< ( SvStream& rStream, const ScRange& rRange )
-{
-    rStream << rRange.aStart;
-    rStream << rRange.aEnd;
-    return rStream;
-}
-
-inline SvStream& operator>> ( SvStream& rStream, ScRange& rRange )
-{
-    rStream >> rRange.aStart;
-    rStream >> rRange.aEnd;
-    return rStream;
-}
-
-#endif // SC_ROWLIMIT_STREAM_ACCESS
-
 // === ScRangePair ===========================================================
 
 class ScRangePair
@@ -687,10 +499,6 @@ public:
     ScRange&            GetRange( USHORT n ) { return aRange[n]; }
     inline int operator==( const ScRangePair& ) const;
     inline int operator!=( const ScRangePair& ) const;
-#if SC_ROWLIMIT_STREAM_ACCESS
-    friend inline SvStream& operator<< ( SvStream&, const ScRangePair& );
-    friend inline SvStream& operator>> ( SvStream&, ScRange& );
-#endif
 };
 
 inline ScRangePair& ScRangePair::operator= ( const ScRangePair& r )
@@ -709,24 +517,6 @@ inline int ScRangePair::operator!=( const ScRangePair& r ) const
 {
     return !operator==( r );
 }
-
-#if SC_ROWLIMIT_STREAM_ACCESS
-
-inline SvStream& operator<< ( SvStream& rStream, const ScRangePair& rPair )
-{
-    rStream << rPair.GetRange(0);
-    rStream << rPair.GetRange(1);
-    return rStream;
-}
-
-inline SvStream& operator>> ( SvStream& rStream, ScRangePair& rPair )
-{
-    rStream >> rPair.GetRange(0);
-    rStream >> rPair.GetRange(1);
-    return rStream;
-}
-
-#endif // SC_ROWLIMIT_STREAM_ACCESS
 
 // === ScRefAddress ==========================================================
 
