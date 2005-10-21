@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:17:02 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 11:46:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,6 +234,13 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     sKeyword[NF_KEY_GGG].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "GGG" ) );
     sKeyword[NF_KEY_R].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "R" ) );
     sKeyword[NF_KEY_RR].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "RR" ) );
+
+    // Thai T NatNum special. Other locale's small letter 't' results in upper
+    // case comparison not matching but length does in conversion mode. Ugly.
+    if (eLang == LANGUAGE_THAI)
+        sKeyword[NF_KEY_THAI_T].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "T"));
+    else
+        sKeyword[NF_KEY_THAI_T].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "t"));
 
     switch ( eLang )
     {
@@ -539,6 +546,11 @@ short ImpSvNumberformatScan::GetKeyWord( const String& sSymbol, xub_StrLen nPos 
                 return j;
         }
     }
+    // The Thai T NatNum modifier during Xcl import.
+    if (i == 0 && bConvertMode && sString.GetChar(0) == 'T' && eTmpLnge ==
+            LANGUAGE_ENGLISH_US && SvNumberFormatter::GetProperLanguage(
+                eNewLnge) == LANGUAGE_THAI)
+        i = NF_KEY_THAI_T;
     return i;       // 0 => not found
 }
 
@@ -1049,6 +1061,7 @@ void ImpSvNumberformatScan::Reset()
     nCntExp = 0;
     bFrac = FALSE;
     bBlank = FALSE;
+    nNatNumModifier = 0;
 }
 
 
@@ -1447,11 +1460,12 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
     }
     const CharClass* pChrCls = pFormatter->GetCharClass();
 
-    xub_StrLen nPos = 0;                    // Korrekturposition
-    USHORT i = 0;                           // durchlaeuft die Symbole
-    USHORT nCounter = 0;                    // Zaehlt Ziffern
-    nAnzResStrings = nAnzStrings;           // Zaehlt uebrigbleibende Symbole
-    bDecSep = FALSE;                        // falls schon in TypeCeck benutzt
+    xub_StrLen nPos = 0;                    // error correction position
+    USHORT i = 0;                           // symbol loop counter
+    USHORT nCounter = 0;                    // counts digits
+    nAnzResStrings = nAnzStrings;           // counts remaining symbols
+    bDecSep = FALSE;                        // reset in case already used in TypeCheck
+    bool bThaiT = false;                    // Thai T NatNum modifier present
 
     switch (eScannedType)
     {
@@ -1554,6 +1568,11 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                             nCounter = 0;
                         }
                         nTypeArray[i] = NF_SYMBOLTYPE_FRACBLANK;
+                    }
+                    else if (nTypeArray[i] == NF_KEY_THAI_T)
+                    {
+                        bThaiT = true;
+                        sStrArray[i] = sKeyword[nTypeArray[i]];
                     }
                     else
                         nTypeArray[i] = NF_SYMBOLTYPE_STRING;
@@ -2131,6 +2150,9 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                         }
                     }
                     break;
+                    case NF_KEY_THAI_T :
+                        bThaiT = true;
+                        // fall thru
                     case NF_KEY_M:                          // M
                     case NF_KEY_MM:                         // MM
                     case NF_KEY_MMM:                        // MMM
@@ -2292,6 +2314,9 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                         i++;
                     }
                     break;
+                    case NF_KEY_THAI_T :
+                        bThaiT = true;
+                        // fall thru
                     case NF_KEY_MI:                         // M
                     case NF_KEY_MMI:                        // MM
                     case NF_KEY_H:                          // H
@@ -2473,6 +2498,12 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                         nPos += sStrArray[i].Len();
                         i++;
                     break;
+                    case NF_KEY_THAI_T :
+                        bThaiT = true;
+                        sStrArray[i] = sKeyword[nTypeArray[i]];
+                        nPos += sStrArray[i].Len();
+                        i++;
+                    break;
                     default:                            // andere Keywords
                         nTypeArray[i] = NF_SYMBOLTYPE_STRING;
                         nPos += sStrArray[i].Len();
@@ -2493,6 +2524,9 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
         return nPos;
     else if (eScannedType == NUMBERFORMAT_FRACTION && (nCntExp > 8 || nCntExp == 0))
         return nPos;
+
+    if (bThaiT && !GetNatNumModifier())
+        SetNatNumModifier(1);
 
     if ( bConvertMode )
     {   // strings containing keywords of the target locale must be quoted, so
@@ -2667,6 +2701,15 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                 rString += sStrArray[i];
                 RemoveQuotes( sStrArray[i] );
             }
+            break;
+            case NF_KEY_THAI_T:
+                if (bThaiT && GetNatNumModifier() == 1)
+                {   // Remove T from format code, will be replaced with a [NatNum1] prefix.
+                    nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
+                    nAnzResStrings--;
+                }
+                else
+                    rString += sStrArray[i];
             break;
             case NF_SYMBOLTYPE_EMPTY :
                 // nothing
