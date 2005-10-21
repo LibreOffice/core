@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeescher.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:44:35 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 11:56:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -526,7 +526,7 @@ bool XclExpObjTbxCtrl::SetMacroLink( const ScriptEventDescriptor& rEvent )
         if( aMacroName.Len() )
         {
             sal_uInt16 nExtSheet = GetLocalLinkManager().FindExtSheet( EXC_EXTSH_OWNDOC );
-            sal_uInt16 nNameIdx = GetNameManager().InsertMacroCall( aMacroName, false );
+            sal_uInt16 nNameIdx = GetNameManager().InsertMacroCall( aMacroName, true, false );
             mxMacroLink = GetFormulaCompiler().CreateNameXFormula( nExtSheet, nNameIdx );
             return true;
         }
