@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:35:40 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 11:45:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -858,8 +858,8 @@ inline BOOL ImpSvNumberInputScan::GetNextNumber( USHORT& i, USHORT& j )
 
 void ImpSvNumberInputScan::GetTimeRef(
         double& fOutNumber,
-        USHORT nIndex,          // j-Wert fuer den ersten Zeitstring der Eingabe (default 0)
-        USHORT nAnz )           // Anzahl der Zeitstrings
+        USHORT nIndex,          // j-value of the first numeric time part of input, default 0
+        USHORT nAnz )           // count of numeric time parts
 {
     USHORT nHour;
     USHORT nMinute = 0;
@@ -882,11 +882,13 @@ void ImpSvNumberInputScan::GetTimeRef(
         }
     }
 
-    if (nDecPos == 2 && nAnz == 3)                      // 20:45,5
+    if (nDecPos == 2 && (nAnz == 3 || nAnz == 2))   // 20:45.5 or 45.5
         nHour = 0;
     else
         nHour   = (USHORT) sStrArray[nNums[nIndex++]].ToInt32();
-    if (nIndex - nStartIndex < nAnz)
+    if (nDecPos == 2 && nAnz == 2)                  // 45.5
+        nMinute = 0;
+    else if (nIndex - nStartIndex < nAnz)
         nMinute = (USHORT) sStrArray[nNums[nIndex++]].ToInt32();
     if (nIndex - nStartIndex < nAnz)
         nSecond = (USHORT) sStrArray[nNums[nIndex++]].ToInt32();
@@ -1924,6 +1926,7 @@ BOOL ImpSvNumberInputScan::ScanEndString( const String& rString,
         SkipBlanks(rString, nPos);
     }
 
+    xub_StrLen nOldPos = nPos;
     if (GetTimeAmPm(rString, nPos))
     {
         if (eScannedType != NUMBERFORMAT_UNDEFINED &&
@@ -1932,9 +1935,16 @@ BOOL ImpSvNumberInputScan::ScanEndString( const String& rString,
             return MatchedReturn();
         else
         {
-            SkipBlanks(rString, nPos);
-            if ( eScannedType != NUMBERFORMAT_DATETIME )
-                eScannedType = NUMBERFORMAT_TIME;
+            // If not already scanned as time, 6.78am does not result in 6
+            // seconds and 78 hundredths in the morning. Keep as suffix.
+            if (eScannedType != NUMBERFORMAT_TIME && nDecPos == 2 && nAnzNums == 2)
+                nPos = nOldPos;     // rewind am/pm
+            else
+            {
+                SkipBlanks(rString, nPos);
+                if ( eScannedType != NUMBERFORMAT_DATETIME )
+                    eScannedType = NUMBERFORMAT_TIME;
+            }
         }
     }
 
