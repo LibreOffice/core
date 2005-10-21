@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scdetect.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:49:24 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 12:09:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,31 +168,36 @@ static const sal_Char __FAR_DATA pFilterRtf[]       = "Rich Text Format (StarCal
 
 static BOOL lcl_MayBeAscii( SvStream& rStream )
 {
-    //  ASCII is considered possible if there are no null bytes
+    // ASCII/CSV is considered possible if there are no null bytes, or a Byte
+    // Order Mark is present, or if, for Unicode UCS2/UTF-16, all null bytes
+    // are on either even or uneven byte positions.
 
     rStream.Seek(STREAM_SEEK_TO_BEGIN);
 
-    BOOL bNullFound = FALSE;
-    BYTE aBuffer[ 4097 ];
-    const BYTE* p = aBuffer;
-    ULONG nBytesRead = rStream.Read( aBuffer, 4096 );
+    const size_t nBufSize = 2048;
+    sal_uInt16 aBuffer[ nBufSize ];
+    sal_uInt8* pByte = reinterpret_cast<sal_uInt8*>(aBuffer);
+    ULONG nBytesRead = rStream.Read( pByte, nBufSize*2);
 
-    if ( nBytesRead >= 2 &&
-            ( ( aBuffer[0] == 0xff && aBuffer[1] == 0xfe ) ||
-              ( aBuffer[0] == 0xfe && aBuffer[1] == 0xff ) ) )
+    if ( nBytesRead >= 2 && (aBuffer[0] == 0xfffe || aBuffer[0] == 0xfeff) )
     {
-        //  unicode file may contain null bytes
+        // Unicode BOM file may contain null bytes.
         return TRUE;
     }
 
-    while( nBytesRead-- )
-        if( !*p++ )
-        {
-            bNullFound = TRUE;
-            break;
-        }
+    const sal_uInt16* p = aBuffer;
+    sal_uInt16 nMask = 0xffff;
+    nBytesRead /= 2;
+    while( nBytesRead-- && nMask )
+    {
+        sal_uInt16 nVal = *p++ & nMask;
+        if (!(nVal & 0x00ff))
+            nMask &= 0xff00;
+        if (!(nVal & 0xff00))
+            nMask &= 0x00ff;
+    }
 
-    return !bNullFound;
+    return nMask != 0;
 }
 
 static BOOL lcl_MayBeDBase( SvStream& rStream )
