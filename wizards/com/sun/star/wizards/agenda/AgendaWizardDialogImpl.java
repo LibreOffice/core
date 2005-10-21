@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AgendaWizardDialogImpl.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:15:58 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 16:13:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,8 @@ import com.sun.star.wizards.common.NoValidPathException;
 import com.sun.star.wizards.common.SystemDialog;
 import com.sun.star.wizards.document.OfficeDocument;
 import com.sun.star.wizards.text.ViewHandler;
+import com.sun.star.wizards.ui.PathSelection;
+import com.sun.star.wizards.ui.XPathSelectionListener;
 import com.sun.star.wizards.ui.event.DataAware;
 import com.sun.star.wizards.ui.event.RadioDataAware;
 import com.sun.star.wizards.ui.event.UnoDataAware;
@@ -101,6 +103,13 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
      */
     private String[][] agendaTemplates;
 
+    PathSelection myPathSelection;
+
+    String sTemplatePath;
+    String sUserTemplatePath;
+    String sBitmapPath;
+
+    String sPath;
 
     /** constructor */
     public AgendaWizardDialogImpl(XMultiServiceFactory xmsf)
@@ -144,6 +153,11 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
             buildStep6();
             drawNaviBar();
 
+            initializePaths();
+
+            //special Control for setting the save Path:
+            insertPathSelectionControl();
+
             // create the peer
             XWindow xw = agendaTemplate.xFrame.getContainerWindow();
             XWindowPeer xWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, xw);
@@ -160,6 +174,8 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
 
             // synchronize GUI and CGAgenda object.
             makeDA();
+            if(myPathSelection.xSaveTextBox.getText().equalsIgnoreCase("")) {myPathSelection.initializePath();}
+
         }
         catch (Exception ex) {
             ex.printStackTrace();
@@ -170,6 +186,35 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
         // show dialog.
         xWindow.setVisible(true);
 
+    }
+
+    private class myPathSelectionListener implements XPathSelectionListener {
+        public void validatePath() {
+            if (myPathSelection.usedPathPicker) {
+                filenameChanged = true;
+            }
+            myPathSelection.usedPathPicker = false;
+        }
+    }
+
+
+    public void insertPathSelectionControl() {
+        myPathSelection = new PathSelection(xMSF, this, PathSelection.TransferMode.SAVE, PathSelection.DialogTypes.FILE);
+        myPathSelection.insert(6, 97, 70, 205, (short) 45, resources.reslblTemplatePath_value, true, "HID:" + ( HID + 47 ), "HID:" + ( HID + 48 ));
+        myPathSelection.sDefaultDirectory = sUserTemplatePath;
+        myPathSelection.sDefaultName = "myAgendaTemplate.ott";
+        myPathSelection.sDefaultFilter = "writer8_template";
+        myPathSelection.addSelectionListener(new myPathSelectionListener());
+    }
+
+    private void initializePaths() {
+        try {
+            sTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share");
+            sUserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user");
+            sBitmapPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/wizard/bitmap");
+        } catch (NoValidPathException e) {
+            e.printStackTrace();
+        }
     }
 
     private void checkSavePath() {
@@ -199,7 +244,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
         setControlProperty("listPageDesign", "StringItemList", agendaTemplates[0]);
 
         checkSavePath();
-        setFilename(agenda.cp_TemplatePath);
+        //setFilename(agenda.cp_TemplatePath);
 
         UnoDataAware.attachListBox( agenda, "cp_AgendaType", listPageDesign , null, true ).updateUI();
         UnoDataAware.attachCheckBox( agenda, "cp_IncludeMinutes", chkMinutes, null, true).updateUI();
@@ -376,7 +421,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
     private void setFilename(String url) {
         try {
             String path = getFileAccess().getPath(url,"");
-            Helper.setUnoPropertyValue( getModel(txtTemplatePath), "Text", path);
+            Helper.setUnoPropertyValue( getModel(myPathSelection.xSaveTextBox), "Text", path);
         }
         catch (Exception ex) {
             ex.printStackTrace();
@@ -413,30 +458,34 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
     }
 
     public void finishWizard() {
-        if ( agenda.cp_TemplatePath == null || agenda.cp_TemplatePath.equals("")) {
-            return;
-        }
-        // first, if the filename was not changed, thus
-        // it is coming from a saved session, check if the
-        // file exists and warn the user.
-        if (!filenameChanged)
-            if (getFileAccess().exists(agenda.cp_TemplatePath,true)) {
-                int answer = SystemDialog.showMessageBox(xMSF, xControl.getPeer(), "MessBox", VclWindowPeerAttribute.YES_NO + VclWindowPeerAttribute.DEF_NO, resources.resFileExists);
-                if (answer == 3) // user said: no, do not overwrite....
-                    return;
-            }
-
-
-
         boolean bSaveSuccess = false; // pesimistic :(
         XTextDocument xTextDocument;
 
         try {
+            FileAccess fileAccess = new FileAccess(xMSF);
+            sPath = myPathSelection.getSelectedPath();
+            if (sPath.equals("")) {
+                myPathSelection.triggerPathPicker();
+                sPath = myPathSelection.getSelectedPath();
+            }
+            sPath = fileAccess.getURL(sPath);
+
+            //first, if the filename was not changed, thus
+            //it is coming from a saved session, check if the
+            // file exists and warn the user.
+            if (!filenameChanged)
+                if (fileAccess.exists(sPath, true)) {
+
+                    int answer = SystemDialog.showMessageBox(xMSF, xControl.getPeer(), "MessBox", VclWindowPeerAttribute.YES_NO + VclWindowPeerAttribute.DEF_NO, resources.resFileExists);
+                    if (answer == 3) // user said: no, do not overwrite....
+                        return;
+                }
+
             agendaTemplate.xTextDocument.lockControllers();
 
             xTextDocument = (XTextDocument)UnoRuntime.queryInterface(XTextDocument.class,agendaTemplate.document);
 
-            bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, agenda.cp_TemplatePath , "writer8_template", false, resources.resErrSaveTemplate );
+            bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath , "writer8_template", false, resources.resErrSaveTemplate );
         } catch (Exception e) {
             SystemDialog.showMessageBox(xMSF, xControl.getPeer(), "ErrBox", VclWindowPeerAttribute.OK, resources.resErrSaveTemplate);
             //e.printStackTrace();
@@ -476,7 +525,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
             } else {
                 loadValues[0].Value = Boolean.FALSE;
             }
-            Object oDoc = OfficeDocument.load(Desktop.getDesktop(xMSF), agenda.cp_TemplatePath, "_default", new PropertyValue[0]);
+            Object oDoc = OfficeDocument.load(Desktop.getDesktop(xMSF), sPath, "_default", new PropertyValue[0]);
             xTextDocument = (com.sun.star.text.XTextDocument) oDoc;
             XMultiServiceFactory xDocMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
             ViewHandler myViewHandler = new ViewHandler(xDocMSF, xTextDocument);
