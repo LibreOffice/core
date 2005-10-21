@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:16:33 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 11:52:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1348,13 +1348,14 @@ void ScFormulaCell::Interpret()
         InterpretTail( SCITP_NORMAL);
     }
 
-    // While leaving a recursion or iteration stack, insert it's cells to the
+    // While leaving a recursion or iteration stack, insert its cells to the
     // recursion list in reverse order.
     if (rRecursionHelper.IsInReturn())
     {
         if (rRecursionHelper.GetRecursionCount() > 0 ||
                 !rRecursionHelper.IsDoingRecursion())
-            rRecursionHelper.Insert( this, bOldRunning, nErgValue);
+            rRecursionHelper.Insert( this, bOldRunning, bIsValue, nErgValue,
+                    aErgString);
         bool bIterationFromRecursion = false;
         bool bResumeIteration = false;
         do
@@ -1395,7 +1396,14 @@ void ScFormulaCell::Interpret()
                         if (pIterCell->nSeenInIteration == nIteration)
                         {
                             if (!pIterCell->bDirty || aIter == aOldStart)
-                                pIterCell->nErgValue = (*aIter).fPreviousResult;
+                            {
+                                pIterCell->bIsValue =
+                                    (*aIter).bPreviousNumeric;
+                                pIterCell->nErgValue =
+                                    (*aIter).fPreviousResult;
+                                pIterCell->aErgString =
+                                    (*aIter).aPreviousString;
+                            }
                             --pIterCell->nSeenInIteration;
                         }
                         pIterCell->bDirty = TRUE;
@@ -1434,7 +1442,9 @@ void ScFormulaCell::Interpret()
                                 rRecursionHelper.GetIteration() !=
                                 pIterCell->GetSeenInIteration())
                         {
+                            (*aIter).bPreviousNumeric = pIterCell->bIsValue;
                             (*aIter).fPreviousResult = pIterCell->nErgValue;
+                            (*aIter).aPreviousString = pIterCell->aErgString;
                             pIterCell->InterpretTail( SCITP_FROM_ITERATION);
                         }
                         rDone = rDone && !pIterCell->IsDirtyOrInTableOpDirty();
@@ -1641,9 +1651,11 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         if (eTailParam == SCITP_FROM_ITERATION && IsDirtyOrInTableOpDirty())
         {
             // Did it converge?
-            if (p->GetResultType() == svDouble &&
-                    fabs( p->GetNumResult() - nErgValue ) <=
-                    pDocument->GetDocOptions().GetIterEps())
+            if ((bIsValue && p->GetResultType() == svDouble && fabs(
+                            p->GetNumResult() - nErgValue) <=
+                        pDocument->GetDocOptions().GetIterEps()) ||
+                    (!bIsValue && p->GetResultType() == svString &&
+                     p->GetStringResult() == aErgString))
             {
                 // A convergence in the first iteration doesn't necessarily
                 // mean that it's done, it may be because not all related cells
