@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:16:39 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 11:45:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -874,6 +874,42 @@ SvNumberformat::SvNumberformat(String& rString,
                         nStrPos = 1;
                     if (nStrPos == 0)               // ok
                     {
+                        // e.g. Thai T speciality
+                        if (pSc->GetNatNumModifier() && !NumFor[nIndex].GetNatNum().IsSet())
+                        {
+                            String aNat( RTL_CONSTASCII_USTRINGPARAM( "[NatNum"));
+                            aNat += String::CreateFromInt32( pSc->GetNatNumModifier());
+                            aNat += ']';
+                            sStr.Insert( aNat, 0);
+                            NumFor[nIndex].SetNatNumNum( pSc->GetNatNumModifier(), FALSE );
+                        }
+                        // #i53826# #i42727# For the Thai T speciality we need
+                        // to freeze the locale and immunize it against
+                        // conversions during exports, just in case we want to
+                        // save to Xcl. This disables the feature of being able
+                        // to convert a NatNum to another locale. You can't
+                        // have both.
+                        // FIXME: implement a specialized export conversion
+                        // that works on tokens (have to tokenize all first)
+                        // and doesn't use the format string and
+                        // PutandConvertEntry() to LANGUAGE_ENGLISH_US in
+                        // sc/source/filter/excel/xestyle.cxx
+                        // XclExpNumFmtBuffer::WriteFormatRecord().
+                        LanguageType eLanguage;
+                        if (NumFor[nIndex].GetNatNum().GetNatNum() == 1 &&
+                                ((eLanguage =
+                                  SvNumberFormatter::GetProperLanguage( eLan))
+                                 == LANGUAGE_THAI) &&
+                                NumFor[nIndex].GetNatNum().GetLang() ==
+                                LANGUAGE_DONTKNOW)
+                        {
+                            String aLID( RTL_CONSTASCII_USTRINGPARAM( "[$-"));
+                            aLID += String::CreateFromInt32( sal_Int32(
+                                        eLanguage), 16 ).ToUpperAscii();
+                            aLID += ']';
+                            sStr.Insert( aLID, 0);
+                            NumFor[nIndex].SetNatNumLang( eLanguage);
+                        }
                         rString.Erase(nPosOld,nPos-nPosOld);
                         rString.Insert(sStr,nPosOld);
                         nPos = nPosOld + sStr.Len();
@@ -3134,11 +3170,7 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                 OutString += ImpIntToString( nIx, nMin );
             break;
             case NF_KEY_MMI:                // MM
-            {
-                if (nMin < 10)
-                    OutString += '0';
-                OutString += ImpIntToString( nIx, nMin );
-            }
+                OutString += ImpIntToString( nIx, nMin, 2 );
             break;
             case NF_KEY_H:                  // H
                 OutString += ImpIntToString( nIx, nHour );
@@ -4077,6 +4109,16 @@ String SvNumberformat::GetMappedFormatstring(
                     break;  // for
                 }
             }
+        }
+
+        const SvNumberNatNum& rNum = NumFor[n].GetNatNum();
+        // The Thai T NatNum modifier during Xcl export.
+        if (rNum.IsSet() && rNum.GetNatNum() == 1 &&
+                rKeywords[NF_KEY_THAI_T].EqualsAscii( "T") &&
+                SvNumberFormatter::GetProperLanguage( rNum.GetLang()) ==
+                LANGUAGE_THAI)
+        {
+            aPrefix += 't';     // must be lowercase, otherwise taken as literal
         }
 
         USHORT nAnz = NumFor[n].GetnAnz();
