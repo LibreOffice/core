@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pvlaydlg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:40:37 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 12:03:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -324,6 +324,26 @@ BOOL __EXPORT ScDPLayoutDlg::Close()
     return DoClose( ScPivotLayoutWrapper::GetChildWindowId() );
 }
 
+//----------------------------------------------------------------------------
+
+void ScDPLayoutDlg::StateChanged( StateChangedType nStateChange )
+{
+    ScAnyRefDlg::StateChanged( nStateChange );
+
+    if ( nStateChange == STATE_CHANGE_INITSHOW )
+    {
+        // #124828# Hiding the FixedTexts and clearing the tab stop style bits
+        // has to be done after assigning the mnemonics, but Paint is too late,
+        // because the test tool may send key events to the dialog when it isn't visible.
+        // Mnemonics are assigned in the Dialog::StateChanged for STATE_CHANGE_INITSHOW,
+        // so this can be done immediately afterwards.
+
+        aWndPage.UseMnemonic();
+        aWndCol.UseMnemonic();
+        aWndRow.UseMnemonic();
+        aWndData.UseMnemonic();
+    }
+}
 
 //----------------------------------------------------------------------------
 
