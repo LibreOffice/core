@@ -4,9 +4,9 @@
  *
  *  $RCSfile: certificateviewer.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:11:16 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 13:28:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,6 +184,11 @@ TabPage RID_XMLSECTP_GENERAL
         Text [ de ] = "Sie haben einen privaten Schlüssel, der mit diesem Zertifikat korrespondiert.";
         Text [ en-US ] = "You have a private key that corresponds to this certificate.";
     };
+    String STR_CERTIFICATE_NOT_VALIDATED
+    {
+        Text [ de ] = "Das Zertifikat konnte nicht verifiziert werden.";
+        Text [ en-US ] = "The certificate could not be validated.";
+    };
 };
 
 TabPage RID_XMLSECTP_DETAILS
@@ -333,6 +338,16 @@ TabPage RID_XMLSECTP_CERTPATH
     {
         ImageBitmap = Bitmap { File = "certificate_16.png"; };
         MaskColor = STD_MASKCOLOR;
+    };
+    String STR_PATH_CERT_OK
+    {
+        Text [ de ] = "Das Zertifikat ist OK.";
+        Text [ en-US ] = "The certificate is OK.";
+    };
+    String STR_PATH_CERT_NOT_VALIDATED
+    {
+        Text [ de ] = "Das Zertifikat konnte nicht verifiziert werden.";
+        Text [ en-US ] = "The certificate could not be validated.";
     };
 };
 
