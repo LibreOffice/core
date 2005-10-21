@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:20:28 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 12:10:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1589,14 +1589,68 @@ void ScViewFunc::DeleteMulti( BOOL bRows, BOOL bRecord )
     //  Test ob erlaubt
 
     SCCOLROW* pOneRange = pRanges;
-    BOOL bAllowed = TRUE;
+    USHORT nErrorId = 0;
+    BOOL bNeedRefresh = FALSE;
     SCCOLROW nRangeNo;
-    for (nRangeNo=0; nRangeNo<nRangeCnt && bAllowed; nRangeNo++)
+    for (nRangeNo=0; nRangeNo<nRangeCnt && !nErrorId; nRangeNo++)
     {
         SCCOLROW nStart = *(pOneRange++);
         SCCOLROW nEnd = *(pOneRange++);
 
-        //! ...
+        SCCOL nStartCol, nEndCol;
+        SCROW nStartRow, nEndRow;
+        if ( bRows )
+        {
+            nStartCol = 0;
+            nEndCol   = MAXCOL;
+            nStartRow = static_cast<SCROW>(nStart);
+            nEndRow   = static_cast<SCROW>(nEnd);
+        }
+        else
+        {
+            nStartCol = static_cast<SCCOL>(nStart);
+            nEndCol   = static_cast<SCCOL>(nEnd);
+            nStartRow = 0;
+            nEndRow   = MAXROW;
+        }
+
+        // cell protection (only needed for first range, as all following cells are moved)
+        if ( nRangeNo == 0 )
+        {
+            // test to the end of the sheet
+            ScEditableTester aTester( pDoc, nTab, nStartCol, nStartRow, MAXCOL, MAXROW );
+            if (!aTester.IsEditable())
+                nErrorId = aTester.GetMessageId();
+        }
+
+        // merged cells
+        SCCOL nMergeStartX = nStartCol;
+        SCROW nMergeStartY = nStartRow;
+        SCCOL nMergeEndX   = nEndCol;
+        SCROW nMergeEndY   = nEndRow;
+        pDoc->ExtendMerge( nMergeStartX, nMergeStartY, nMergeEndX, nMergeEndY, nTab );
+        pDoc->ExtendOverlapped( nMergeStartX, nMergeStartY, nMergeEndX, nMergeEndY, nTab );
+
+        if ( nMergeStartX != nStartCol || nMergeStartY != nStartRow )
+        {
+            // Disallow deleting parts of a merged cell.
+            // Deleting the start is allowed (merge is removed), so the end doesn't have to be checked.
+
+            nErrorId = STR_MSSG_DELETECELLS_0;
+        }
+        if ( nMergeEndX != nEndCol || nMergeEndY != nEndRow )
+        {
+            // detect if the start of a merged cell is deleted, so the merge flags can be refreshed
+
+            bNeedRefresh = TRUE;
+        }
+    }
+
+    if ( nErrorId )
+    {
+        ErrorMessage( nErrorId );
+        delete[] pRanges;
+        return;
     }
 
     //  ausfuehren
@@ -1634,7 +1688,7 @@ void ScViewFunc::DeleteMulti( BOOL bRows, BOOL bRecord )
     }
 
     pOneRange = &pRanges[2*nRangeCnt];      // rueckwaerts
-    for (nRangeNo=0; nRangeNo<nRangeCnt && bAllowed; nRangeNo++)
+    for (nRangeNo=0; nRangeNo<nRangeCnt; nRangeNo++)
     {
         SCCOLROW nEnd = *(--pOneRange);
         SCCOLROW nStart = *(--pOneRange);
@@ -1645,10 +1699,22 @@ void ScViewFunc::DeleteMulti( BOOL bRows, BOOL bRecord )
             pDoc->DeleteCol( 0,nTab, MAXROW,nTab, static_cast<SCCOL>(nStart), static_cast<SCSIZE>(nEnd-nStart+1) );
     }
 
+    if (bNeedRefresh)
+    {
+        SCCOLROW nFirstStart = pRanges[0];
+        SCCOL nStartCol = bRows ? 0 : static_cast<SCCOL>(nFirstStart);
+        SCROW nStartRow = bRows ? static_cast<SCROW>(nFirstStart) : 0;
+        SCCOL nEndCol = MAXCOL;
+        SCROW nEndRow = MAXROW;
+
+        pDoc->RemoveFlagsTab( nStartCol, nStartRow, nEndCol, nEndRow, nTab, SC_MF_HOR | SC_MF_VER );
+        pDoc->ExtendMerge( nStartCol, nStartRow, nEndCol, nEndRow, nTab, TRUE );
+    }
+
     if (bRecord)
     {
         pDocSh->GetUndoManager()->AddUndoAction(
-            new ScUndoDeleteMulti( pDocSh, bRows, nTab, pRanges, nRangeCnt,
+            new ScUndoDeleteMulti( pDocSh, bRows, bNeedRefresh, nTab, pRanges, nRangeCnt,
                                     pUndoDoc, pUndoData ) );
     }
 
