@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xistyle.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:06:27 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 11:58:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -434,6 +434,9 @@ void XclImpFont::GuessScriptType()
             mbCtl = aCharMap.HasChar( 0x05D1 ) ||   // 0590-05FF: Hebrew
                     aCharMap.HasChar( 0x0631 ) ||   // 0600-06FF: Arabic
                     aCharMap.HasChar( 0x0721 ) ||   // 0700-074F: Syriac
+                    aCharMap.HasChar( 0x0911 ) ||   // 0900-0DFF: Indic scripts
+                    aCharMap.HasChar( 0x0E01 ) ||   // 0E00-0E7F: Thai
+                    aCharMap.HasChar( 0xFB21 ) ||   // FB1D-FB4F: Hebrew Presentation Forms
                     aCharMap.HasChar( 0xFB51 ) ||   // FB50-FDFF: Arabic Presentation Forms-A
                     aCharMap.HasChar( 0xFE71 );     // FE70-FEFF: Arabic Presentation Forms-B
             // Western fonts
