@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkarea.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:11:02 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 12:08:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,9 @@ short ScLinkedAreaDlg::Execute()
     return nRet;
 }
 
+#define FILTERNAME_HTML  "HTML (StarCalc)"
+#define FILTERNAME_QUERY "calc_HTML_WebQuery"
+
 IMPL_LINK( ScLinkedAreaDlg, BrowseHdl, PushButton*, EMPTYARG )
 {
     //  dialog parent has been set in execute
@@ -120,8 +123,8 @@ IMPL_LINK( ScLinkedAreaDlg, BrowseHdl, PushButton*, EMPTYARG )
         WaitObject aWait( this );
 
         // #92296# replace HTML filter with DataQuery filter
-        const String aHTMLFilterName( RTL_CONSTASCII_USTRINGPARAM( "HTML (StarCalc)" ) );
-        const String aWebQFilterName( RTL_CONSTASCII_USTRINGPARAM( "calc_HTML_WebQuery" ) );
+        const String aHTMLFilterName( RTL_CONSTASCII_USTRINGPARAM( FILTERNAME_HTML ) );
+        const String aWebQFilterName( RTL_CONSTASCII_USTRINGPARAM( FILTERNAME_QUERY ) );
 
         const SfxFilter* pFilter = pMed->GetFilter();
         if( pFilter && (pFilter->GetFilterName() == aHTMLFilterName) )
@@ -187,12 +190,19 @@ IMPL_LINK( ScLinkedAreaDlg, FileHdl, ComboBox*, EMPTYARG )
     if (!ScDocumentLoader::GetFilterName( aEntered, aFilter, aOptions, TRUE ))
         return 0;
 
+    // #i53241# replace HTML filter with DataQuery filter
+    if( aFilter.EqualsAscii( FILTERNAME_HTML ) )
+        aFilter.AssignAscii( FILTERNAME_QUERY );
+
     LoadDocument( aEntered, aFilter, aOptions );
 
     UpdateSourceRanges();
     UpdateEnable();
     return 0;
 }
+
+#undef FILTERNAME_HTML
+#undef FILTERNAME_QUERY
 
 void ScLinkedAreaDlg::LoadDocument( const String& rFile, const String& rFilter, const String& rOptions )
 {
