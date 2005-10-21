@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlstyle.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:10:14 $
+ *  last change: $Author: rt $ $Date: 2005-10-21 12:01:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -587,8 +587,14 @@ struct XclBuiltInFormat
 
 // ----------------------------------------------------------------------------
 
-// Special UTF-8 characters
+// Currency unit characters
+#define UTF8_BAHT       "\340\270\277"
 #define UTF8_EURO       "\342\202\254"
+#define UTF8_POUND_UK   "\302\243"
+#define UTF8_SHEQEL     "\342\202\252"
+#define UTF8_WON        "\357\277\246"
+#define UTF8_YEN_CS     "\357\277\245"
+#define UTF8_YEN_JP     "\302\245"
 
 // Japanese/Chinese date/time characters
 #define UTF8_CJ_YEAR    "\345\271\264"
@@ -667,7 +673,7 @@ static const XclBuiltInFormat spBuiltInFormats_DONTKNOW[] =
     EXC_NUMFMT_STRING(  48, "##0.0E+0" ),
     EXC_NUMFMT_OFFSET(  49, NF_TEXT ),
 
-    // 50...58 international formats
+    // 50...81 international formats
     EXC_NUMFMT_REUSE(   50, 14 ),
     EXC_NUMFMT_REUSE(   51, 14 ),
     EXC_NUMFMT_REUSE(   52, 14 ),
@@ -677,12 +683,27 @@ static const XclBuiltInFormat spBuiltInFormats_DONTKNOW[] =
     EXC_NUMFMT_REUSE(   56, 14 ),
     EXC_NUMFMT_REUSE(   57, 14 ),
     EXC_NUMFMT_REUSE(   58, 14 ),
-
-    // 59...?? repeating formats
     EXC_NUMFMT_REUSE(   59, 1 ),
     EXC_NUMFMT_REUSE(   60, 2 ),
     EXC_NUMFMT_REUSE(   61, 3 ),
     EXC_NUMFMT_REUSE(   62, 4 ),
+    EXC_NUMFMT_REUSE(   67, 9 ),
+    EXC_NUMFMT_REUSE(   68, 10 ),
+    EXC_NUMFMT_REUSE(   69, 12 ),
+    EXC_NUMFMT_REUSE(   70, 13 ),
+    EXC_NUMFMT_REUSE(   71, 14 ),
+    EXC_NUMFMT_REUSE(   72, 14 ),
+    EXC_NUMFMT_REUSE(   73, 15 ),
+    EXC_NUMFMT_REUSE(   74, 16 ),
+    EXC_NUMFMT_REUSE(   75, 17 ),
+    EXC_NUMFMT_REUSE(   76, 20 ),
+    EXC_NUMFMT_REUSE(   77, 21 ),
+    EXC_NUMFMT_REUSE(   78, 22 ),
+    EXC_NUMFMT_REUSE(   79, 45 ),
+    EXC_NUMFMT_REUSE(   80, 46 ),
+    EXC_NUMFMT_REUSE(   81, 47 ),
+
+    // 82...163 not used, must not occur in a file (Excel may crash)
 
     EXC_NUMFMT_ENDTABLE()
 };
@@ -701,6 +722,24 @@ static const XclBuiltInFormat spBuiltInFormats_ENGLISH[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
+static const XclBuiltInFormat spBuiltInFormats_ENGLISH_UK[] =
+{
+    EXC_NUMFMT_STRING(  63, UTF8_POUND_UK "#,##0;-" UTF8_POUND_UK "#,##0" ),
+    EXC_NUMFMT_STRING(  64, UTF8_POUND_UK "#,##0;[RED]-" UTF8_POUND_UK "#,##0" ),
+    EXC_NUMFMT_STRING(  65, UTF8_POUND_UK "#,##0.00;-" UTF8_POUND_UK "#,##0.00" ),
+    EXC_NUMFMT_STRING(  66, UTF8_POUND_UK "#,##0.00;[RED]-" UTF8_POUND_UK "#,##0.00" ),
+    EXC_NUMFMT_ENDTABLE()
+};
+
+static const XclBuiltInFormat spBuiltInFormats_ENGLISH_EIRE[] =
+{
+    EXC_NUMFMT_STRING(  63, UTF8_EURO "#,##0;-" UTF8_EURO "#,##0" ),
+    EXC_NUMFMT_STRING(  64, UTF8_EURO "#,##0;[RED]-" UTF8_EURO "#,##0" ),
+    EXC_NUMFMT_STRING(  65, UTF8_EURO "#,##0.00;-" UTF8_EURO "#,##0.00" ),
+    EXC_NUMFMT_STRING(  66, UTF8_EURO "#,##0.00;[RED]-" UTF8_EURO "#,##0.00" ),
+    EXC_NUMFMT_ENDTABLE()
+};
+
 static const XclBuiltInFormat spBuiltInFormats_ENGLISH_US[] =
 {
     EXC_NUMFMT_STRING(  14, "M/D/YYYY" ),
@@ -713,6 +752,10 @@ static const XclBuiltInFormat spBuiltInFormats_ENGLISH_US[] =
     EXC_NUMFMT_STRING(  38, "#,##0_);[RED](#,##0)" ),
     EXC_NUMFMT_STRING(  39, "#,##0.00_);(#,##0.00)" ),
     EXC_NUMFMT_STRING(  40, "#,##0.00_);[RED](#,##0.00)" ),
+    EXC_NUMFMT_STRING(  63, "$#,##0_);($#,##0)" ),
+    EXC_NUMFMT_STRING(  64, "$#,##0_);[RED]($#,##0)" ),
+    EXC_NUMFMT_STRING(  65, "$#,##0.00_);($#,##0.00)" ),
+    EXC_NUMFMT_STRING(  66, "$#,##0.00_);[RED]($#,##0.00)" ),
     EXC_NUMFMT_ENDTABLE()
 };
 
@@ -721,6 +764,10 @@ static const XclBuiltInFormat spBuiltInFormats_ENGLISH_CAN[] =
     EXC_NUMFMT_STRING(  20, "h:mm" ),
     EXC_NUMFMT_STRING(  21, "h:mm:ss" ),
     EXC_NUMFMT_STRING(  22, "DD/MM/YYYY h:mm" ),
+    EXC_NUMFMT_STRING(  63, "$#,##0;-$#,##0" ),
+    EXC_NUMFMT_STRING(  64, "$#,##0;[RED]-$#,##0" ),
+    EXC_NUMFMT_STRING(  65, "$#,##0.00;-$#,##0.00" ),
+    EXC_NUMFMT_STRING(  66, "$#,##0.00;[RED]-$#,##0.00" ),
     EXC_NUMFMT_ENDTABLE()
 };
 
@@ -732,6 +779,10 @@ static const XclBuiltInFormat spBuiltInFormats_ENGLISH_AUS[] =
     EXC_NUMFMT_STRING(  20, "h:mm" ),
     EXC_NUMFMT_STRING(  21, "h:mm:ss" ),
     EXC_NUMFMT_STRING(  22, "D/MM/YYYY h:mm" ),
+    EXC_NUMFMT_STRING(  63, "$#,##0;-$#,##0" ),
+    EXC_NUMFMT_STRING(  64, "$#,##0;[RED]-$#,##0" ),
+    EXC_NUMFMT_STRING(  65, "$#,##0.00;-$#,##0.00" ),
+    EXC_NUMFMT_STRING(  66, "$#,##0.00;[RED]-$#,##0.00" ),
     EXC_NUMFMT_ENDTABLE()
 };
 
@@ -741,6 +792,10 @@ static const XclBuiltInFormat spBuiltInFormats_ENGLISH_SAFRICA[] =
     EXC_NUMFMT_OFFSET(  18, NF_TIME_HHMMAMPM ),
     EXC_NUMFMT_OFFSET(  19, NF_TIME_HHMMSSAMPM ),
     EXC_NUMFMT_STRING(  22, "YYYY/MM/DD hh:mm" ),
+    EXC_NUMFMT_STRING(  63, "\\R #,##0;\\R -#,##0" ),
+    EXC_NUMFMT_STRING(  64, "\\R #,##0;[RED]\\R -#,##0" ),
+    EXC_NUMFMT_STRING(  65, "\\R #,##0.00;\\R -#,##0.00" ),
+    EXC_NUMFMT_STRING(  66, "\\R #,##0.00;[RED]\\R -#,##0.00" ),
     EXC_NUMFMT_ENDTABLE()
 };
 
@@ -764,6 +819,10 @@ static const XclBuiltInFormat spBuiltInFormats_FRENCH_FRANCE[] =
     EXC_NUMFMT_STRING(  38, "#,##0\\ _" UTF8_EURO ";[RED]-#,##0\\ _" UTF8_EURO ),
     EXC_NUMFMT_STRING(  39, "#,##0.00\\ _" UTF8_EURO ";-#,##0.00\\ _" UTF8_EURO ),
     EXC_NUMFMT_STRING(  40, "#,##0.00\\ _" UTF8_EURO ";[RED]-#,##0.00\\ _" UTF8_EURO ),
+    EXC_NUMFMT_STRING(  63, "#,##0\\ " UTF8_EURO ";-#,##0\\ " UTF8_EURO ),
+    EXC_NUMFMT_STRING(  64, "#,##0\\ " UTF8_EURO ";[RED]-#,##0\\ " UTF8_EURO ),
+    EXC_NUMFMT_STRING(  65, "#,##0.00\\ " UTF8_EURO ";-#,##0.00\\ " UTF8_EURO ),
+    EXC_NUMFMT_STRING(  66, "#,##0.00\\ " UTF8_EURO ";[RED]-#,##0.00\\ " UTF8_EURO ),
     EXC_NUMFMT_ENDTABLE()
 };
 
@@ -774,6 +833,10 @@ static const XclBuiltInFormat spBuiltInFormats_FRENCH_CANADIAN[] =
     EXC_NUMFMT_STRING(  38, "#,##0\\ _$_-;[RED]#,##0\\ _$-" ),
     EXC_NUMFMT_STRING(  39, "#,##0.00\\ _$_-;#,##0.00\\ _$-" ),
     EXC_NUMFMT_STRING(  40, "#,##0.00\\ _$_-;[RED]#,##0.00\\ _$-" ),
+    EXC_NUMFMT_STRING(  63, "#,##0\\ $_-;#,##0\\ $-" ),
+    EXC_NUMFMT_STRING(  64, "#,##0\\ $_-;[RED]#,##0\\ $-" ),
+    EXC_NUMFMT_STRING(  65, "#,##0.00\\ $_-;#,##0.00\\ $-" ),
+    EXC_NUMFMT_STRING(  66, "#,##0.00\\ $_-;[RED]#,##0.00\\ $-" ),
     EXC_NUMFMT_ENDTABLE()
 };
 
@@ -783,6 +846,10 @@ static const XclBuiltInFormat spBuiltInFormats_FRENCH_SWISS[] =
     EXC_NUMFMT_STRING(  16, "DD.MMM" ),
     EXC_NUMFMT_STRING(  17, "MMM.YY" ),
     EXC_NUMFMT_STRING(  22, "DD.MM.YYYY hh:mm" ),
+    EXC_NUMFMT_STRING(  63, "\"SFr. \"#,##0;\"SFr. \"-#,##0" ),
+    EXC_NUMFMT_STRING(  64, "\"SFr. \"#,##0;[RED]\"SFr. \"-#,##0" ),
+    EXC_NUMFMT_STRING(  65, "\"SFr. \"#,##0.00;\"SFr. \"-#,##0.00" ),
+    EXC_NUMFMT_STRING(  66, "\"SFr. \"#,##0.00;[RED]\"SFr. \"-#,##0.00" ),
     EXC_NUMFMT_ENDTABLE()
 };
 
@@ -817,6 +884,10 @@ static const XclBuiltInFormat spBuiltInFormats_GERMAN_GERMANY[] =
     EXC_NUMFMT_STRING(  38, "#,##0 _" UTF8_EURO ";[RED]-#,##0 _" UTF8_EURO ),
     EXC_NUMFMT_STRING(  39, "#,##0.00 _" UTF8_EURO ";-#,##0.00 _" UTF8_EURO ),
     EXC_NUMFMT_STRING(  40, "#,##0.00 _" UTF8_EURO ";[RED]-#,##0.00 _" UTF8_EURO ),
+    EXC_NUMFMT_STRING(  63, "#,##0 " UTF8_EURO ";-#,##0 " UTF8_EURO ),
+    EXC_NUMFMT_STRING(  64, "#,##0 " UTF8_EURO ";[RED]-#,##0 " UTF8_EURO ),
+    EXC_NUMFMT_STRING(  65, "#,##0.00 " UTF8_EURO ";-#,##0.00 " UTF8_EURO ),
+    EXC_NUMFMT_STRING(  66, "#,##0.00 " UTF8_EURO ";[RED]-#,##0.00 " UTF8_EURO ),
     EXC_NUMFMT_ENDTABLE()
 };
 
@@ -825,6 +896,19 @@ static const XclBuiltInFormat spBuiltInFormats_GERMAN_AUSTRIAN[] =
     EXC_NUMFMT_STRING(  15, "DD.MMM.YY" ),
     EXC_NUMFMT_STRING(  16, "DD.MMM" ),
     EXC_NUMFMT_STRING(  17, "MMM.YY" ),
+    EXC_NUMFMT_STRING(  63, UTF8_EURO " #,##0;-" UTF8_EURO " #,##0" ),
+    EXC_NUMFMT_STRING(  64, UTF8_EURO " #,##0;[RED]-" UTF8_EURO " #,##0" ),
+    EXC_NUMFMT_STRING(  65, UTF8_EURO " #,##0.00;-" UTF8_EURO " #,##0.00" ),
+    EXC_NUMFMT_STRING(  66, UTF8_EURO " #,##0.00;[RED]-" UTF8_EURO " #,##0.00" ),
+    EXC_NUMFMT_ENDTABLE()
+};
+
+static const XclBuiltInFormat spBuiltInFormats_GERMAN_SWISS[] =
+{
+    EXC_NUMFMT_STRING(  63, "\"SFr. \"#,##0;\"SFr. \"-#,##0" ),
+    EXC_NUMFMT_STRING(  64, "\"SFr. \"#,##0;[RED]\"SFr. \"-#,##0" ),
+    EXC_NUMFMT_STRING(  65, "\"SFr. \"#,##0.00;\"SFr. \"-#,##0.00" ),
+    EXC_NUMFMT_STRING(  66, "\"SFr. \"#,##0.00;[RED]\"SFr. \"-#,##0.00" ),
     EXC_NUMFMT_ENDTABLE()
 };
 
@@ -837,6 +921,19 @@ static const XclBuiltInFormat spBuiltInFormats_GERMAN_LUXEMBOURG[] =
     EXC_NUMFMT_STRING(  38, "#,##0 _" UTF8_EURO ";[RED]-#,##0 _" UTF8_EURO ),
     EXC_NUMFMT_STRING(  39, "#,##0.00 _" UTF8_EURO ";-#,##0.00 _" UTF8_EURO ),
     EXC_NUMFMT_STRING(  40, "#,##0.00 _" UTF8_EURO ";[RED]-#,##0.00 _" UTF8_EURO ),
+    EXC_NUMFMT_STRING(  63, "#,##0 " UTF8_EURO ";-#,##0 " UTF8_EURO ),
+    EXC_NUMFMT_STRING(  64, "#,##0 " UTF8_EURO ";[RED]-#,##0 " UTF8_EURO ),
+    EXC_NUMFMT_STRING(  65, "#,##0.00 " UTF8_EURO ";-#,##0.00 " UTF8_EURO ),
+    EXC_NUMFMT_STRING(  66, "#,##0.00 " UTF8_EURO ";[RED]-#,##0.00 " UTF8_EURO ),
+    EXC_NUMFMT_ENDTABLE()
+};
+
+static const XclBuiltInFormat spBuiltInFormats_GERMAN_LIECHTENSTEIN[] =
+{
+    EXC_NUMFMT_STRING(  63, "\"CHF \"#,##0;\"CHF \"-#,##0" ),
+    EXC_NUMFMT_STRING(  64, "\"CHF \"#,##0;[RED]\"CHF \"-#,##0" ),
+    EXC_NUMFMT_STRING(  65, "\"CHF \"#,##0.00;\"CHF \"-#,##0.00" ),
+    EXC_NUMFMT_STRING(  66, "\"CHF \"#,##0.00;[RED]\"CHF \"-#,##0.00" ),
     EXC_NUMFMT_ENDTABLE()
 };
 
@@ -852,6 +949,10 @@ static const XclBuiltInFormat spBuiltInFormats_ITALIAN_ITALY[] =
     EXC_NUMFMT_STRING(  20, "h:mm" ),
     EXC_NUMFMT_STRING(  21, "h:mm:ss" ),
     EXC_NUMFMT_STRING(  22, "DD/MM/YYYY h:mm" ),
+    EXC_NUMFMT_STRING(  63, UTF8_EURO " #,##0;-" UTF8_EURO " #,##0" ),
+    EXC_NUMFMT_STRING(  64, UTF8_EURO " #,##0;[RED]-" UTF8_EURO " #,##0" ),
+    EXC_NUMFMT_STRING(  65, UTF8_EURO " #,##0.00;-" UTF8_EURO " #,##0.00" ),
+    EXC_NUMFMT_STRING(  66, UTF8_EURO " #,##0.00;[RED]-" UTF8_EURO " #,##0.00" ),
     EXC_NUMFMT_ENDTABLE()
 };
 
@@ -863,6 +964,52 @@ static const XclBuiltInFormat spBuiltInFormats_ITALIAN_SWISS[] =
     EXC_NUMFMT_STRING(  18, "h:mm AM/PM" ),
     EXC_NUMFMT_STRING(  19, "h:mm:ss AM/PM" ),
     EXC_NUMFMT_STRING(  22, "DD.MM.YYYY hh:mm" ),
+    EXC_NUMFMT_STRING(  63, "\"SFr. \"#,##0;\"SFr. \"-#,##0" ),
+    EXC_NUMFMT_STRING(  64, "\"SFr. \"#,##0;[RED]\"SFr. \"-#,##0" ),
+    EXC_NUMFMT_STRING(  65, "\"SFr. \"#,##0.00;\"SFr. \"-#,##0.00" ),
+    EXC_NUMFMT_STRING(  66, "\"SFr. \"#,##0.00;[RED]\"SFr. \"-#,##0.00" ),
+    EXC_NUMFMT_ENDTABLE()
+};
+
+// SWEDISH --------------------------------------------------------------------
+
+static const XclBuiltInFormat spBuiltInFormats_SWEDISH_SWEDEN[] =
+{
+    EXC_NUMFMT_STRING(  15, "DD-MMM-YY" ),
+    EXC_NUMFMT_STRING(  16, "DD-MMM" ),
+    EXC_NUMFMT_STRING(  17, "MMM-YY" ),
+    EXC_NUMFMT_STRING(  18, "h:mm AM/PM" ),
+    EXC_NUMFMT_STRING(  19, "h:mm:ss AM/PM" ),
+    EXC_NUMFMT_STRING(  22, "YYYY-MM-DD hh:mm" ),
+    EXC_NUMFMT_STRING(  37, "#,##0 _k_r;-#,##0 _k_r" ),
+    EXC_NUMFMT_STRING(  38, "#,##0 _k_r;[RED]-#,##0 _k_r" ),
+    EXC_NUMFMT_STRING(  39, "#,##0.00 _k_r;-#,##0.00 _k_r" ),
+    EXC_NUMFMT_STRING(  40, "#,##0.00 _k_r;[RED]-#,##0.00 _k_r" ),
+    EXC_NUMFMT_STRING(  63, "#,##0 \"kr\";-#,##0 \"kr\"" ),
+    EXC_NUMFMT_STRING(  64, "#,##0 \"kr\";[RED]-#,##0 \"kr\"" ),
+    EXC_NUMFMT_STRING(  65, "#,##0.00 \"kr\";-#,##0.00 \"kr\"" ),
+    EXC_NUMFMT_STRING(  66, "#,##0.00 \"kr\";[RED]-#,##0.00 \"kr\"" ),
+    EXC_NUMFMT_ENDTABLE()
+};
+
+static const XclBuiltInFormat spBuiltInFormats_SWEDISH_FINLAND[] =
+{
+    EXC_NUMFMT_STRING(   9, "0 %" ),
+    EXC_NUMFMT_STRING(  10, "0.00 %" ),
+    EXC_NUMFMT_STRING(  15, "DD.MMM.YY" ),
+    EXC_NUMFMT_STRING(  16, "DD.MMM" ),
+    EXC_NUMFMT_STRING(  17, "MMM.YY" ),
+    EXC_NUMFMT_STRING(  18, "h:mm AM/PM" ),
+    EXC_NUMFMT_STRING(  19, "h:mm:ss AM/PM" ),
+    EXC_NUMFMT_STRING(  22, "D.M.YYYY hh:mm" ),
+    EXC_NUMFMT_STRING(  37, "#,##0 _" UTF8_EURO ";-#,##0 _" UTF8_EURO ),
+    EXC_NUMFMT_STRING(  38, "#,##0 _" UTF8_EURO ";[RED]-#,##0 _" UTF8_EURO ),
+    EXC_NUMFMT_STRING(  39, "#,##0.00 _" UTF8_EURO ";-#,##0.00 _" UTF8_EURO ),
+    EXC_NUMFMT_STRING(  40, "#,##0.00 _" UTF8_EURO ";[RED]-#,##0.00 _" UTF8_EURO ),
+    EXC_NUMFMT_STRING(  63, "#,##0 " UTF8_EURO ";-#,##0 " UTF8_EURO ),
+    EXC_NUMFMT_STRING(  64, "#,##0 " UTF8_EURO ";[RED]-#,##0 " UTF8_EURO ),
+    EXC_NUMFMT_STRING(  65, "#,##0.00 " UTF8_EURO ";-#,##0.00 " UTF8_EURO ),
+    EXC_NUMFMT_STRING(  66, "#,##0.00 " UTF8_EURO ";[RED]-#,##0.00 " UTF8_EURO ),
     EXC_NUMFMT_ENDTABLE()
 };
 
@@ -908,6 +1055,10 @@ static const XclBuiltInFormat spBuiltInFormats_JAPANESE[] =
     EXC_NUMFMT_STRING(  33, "[$-0411]h" UTF8_CJ_HOUR "mm" UTF8_CJ_MIN "ss" UTF8_CJ_SEC ),
     EXC_NUMFMT_STRING(  34, "[$-0411]YYYY" UTF8_CJ_YEAR "M" UTF8_CJ_MON ),
     EXC_NUMFMT_STRING(  35, "[$-0411]M" UTF8_CJ_MON "D" UTF8_CJ_DAY ),
+    EXC_NUMFMT_STRING(  63, UTF8_YEN_JP "#,##0;-" UTF8_YEN_JP "#,##0" ),
+    EXC_NUMFMT_STRING(  64, UTF8_YEN_JP "#,##0;[RED]-" UTF8_YEN_JP "#,##0" ),
+    EXC_NUMFMT_STRING(  65, UTF8_YEN_JP "#,##0.00;-" UTF8_YEN_JP "#,##0.00" ),
+    EXC_NUMFMT_STRING(  66, UTF8_YEN_JP "#,##0.00;[RED]-" UTF8_YEN_JP "#,##0.00" ),
     EXC_NUMFMT_ENDTABLE()
 };
 
@@ -926,6 +1077,10 @@ static const XclBuiltInFormat spBuiltInFormats_KOREAN[] =
     EXC_NUMFMT_STRING(  33, "[$-0412]h" UTF8_KO_HOUR " mm" UTF8_KO_MIN " ss" UTF8_KO_SEC ),
     EXC_NUMFMT_STRING(  34, "[$-0412]YYYY\"/\"MM\"/\"DD" ),
     EXC_NUMFMT_STRING(  35, "[$-0412]YYYY-MM-DD" ),
+    EXC_NUMFMT_STRING(  63, UTF8_WON "#,##0;-" UTF8_WON "#,##0" ),
+    EXC_NUMFMT_STRING(  64, UTF8_WON "#,##0;[RED]-" UTF8_WON "#,##0" ),
+    EXC_NUMFMT_STRING(  65, UTF8_WON "#,##0.00;-" UTF8_WON "#,##0.00" ),
+    EXC_NUMFMT_STRING(  66, UTF8_WON "#,##0.00;[RED]-" UTF8_WON "#,##0.00" ),
     EXC_NUMFMT_ENDTABLE()
 };
 
@@ -946,6 +1101,10 @@ static const XclBuiltInFormat spBuiltInFormats_CHINESE_SIMPLIFIED[] =
     EXC_NUMFMT_STRING(  35, "[$-0804]AM/PMh" UTF8_CS_HOUR "mm" UTF8_CJ_MIN "ss" UTF8_CJ_SEC ),
     EXC_NUMFMT_REUSE(   52, 27 ),
     EXC_NUMFMT_REUSE(   53, 28 ),
+    EXC_NUMFMT_STRING(  63, UTF8_YEN_CS "#,##0;-" UTF8_YEN_CS "#,##0" ),
+    EXC_NUMFMT_STRING(  64, UTF8_YEN_CS "#,##0;[RED]-" UTF8_YEN_CS "#,##0" ),
+    EXC_NUMFMT_STRING(  65, UTF8_YEN_CS "#,##0.00;-" UTF8_YEN_CS "#,##0.00" ),
+    EXC_NUMFMT_STRING(  66, UTF8_YEN_CS "#,##0.00;[RED]-" UTF8_YEN_CS "#,##0.00" ),
     EXC_NUMFMT_ENDTABLE()
 };
 
@@ -971,6 +1130,10 @@ static const XclBuiltInFormat spBuiltInFormats_CHINESE_TRADITIONAL[] =
     EXC_NUMFMT_STRING(  33, "[$-0404]hh" UTF8_CJ_HOUR "mm" UTF8_CJ_MIN "ss" UTF8_CJ_SEC ),
     EXC_NUMFMT_STRING(  34, "[$-0404]AM/PMhh" UTF8_CJ_HOUR "mm" UTF8_CJ_MIN ),
     EXC_NUMFMT_STRING(  35, "[$-0404]AM/PMhh" UTF8_CJ_HOUR "mm" UTF8_CJ_MIN "ss" UTF8_CJ_SEC ),
+    EXC_NUMFMT_STRING(  63, "$#,##0;-$#,##0" ),
+    EXC_NUMFMT_STRING(  64, "$#,##0;[RED]-$#,##0" ),
+    EXC_NUMFMT_STRING(  65, "$#,##0.00;-$#,##0.00" ),
+    EXC_NUMFMT_STRING(  66, "$#,##0.00;[RED]-$#,##0.00" ),
     EXC_NUMFMT_ENDTABLE()
 };
 
@@ -983,6 +1146,45 @@ static const XclBuiltInFormat spBuiltInFormats_HEBREW[] =
     EXC_NUMFMT_STRING(  17, "MMMM-YY" ),
     EXC_NUMFMT_STRING(  18, "h:mm AM/PM" ),
     EXC_NUMFMT_STRING(  19, "h:mm:ss AM/PM" ),
+    EXC_NUMFMT_STRING(  63, UTF8_SHEQEL " #,##0;" UTF8_SHEQEL " -#,##0" ),
+    EXC_NUMFMT_STRING(  64, UTF8_SHEQEL " #,##0;[RED]" UTF8_SHEQEL " -#,##0" ),
+    EXC_NUMFMT_STRING(  65, UTF8_SHEQEL " #,##0.00;" UTF8_SHEQEL " -#,##0.00" ),
+    EXC_NUMFMT_STRING(  66, UTF8_SHEQEL " #,##0.00;[RED]" UTF8_SHEQEL " -#,##0.00" ),
+    EXC_NUMFMT_ENDTABLE()
+};
+
+static const XclBuiltInFormat spBuiltInFormats_THAI[] =
+{
+    EXC_NUMFMT_STRING(  14, "D/M/YYYY" ),
+    EXC_NUMFMT_STRING(  15, "D-MMM-YY" ),
+    EXC_NUMFMT_STRING(  16, "D-MMM" ),
+    EXC_NUMFMT_STRING(  17, "MMM-YY" ),
+    EXC_NUMFMT_STRING(  18, "h:mm AM/PM" ),
+    EXC_NUMFMT_STRING(  19, "h:mm:ss AM/PM" ),
+    EXC_NUMFMT_STRING(  22, "D/M/YYYY h:mm" ),
+    EXC_NUMFMT_STRING(  59, "t0" ),
+    EXC_NUMFMT_STRING(  60, "t0.00" ),
+    EXC_NUMFMT_STRING(  61, "t#,##0" ),
+    EXC_NUMFMT_STRING(  62, "t#,##0.00" ),
+    EXC_NUMFMT_STRING(  63, "t" UTF8_BAHT "#,##0_);t(" UTF8_BAHT "#,##0)" ),
+    EXC_NUMFMT_STRING(  64, "t" UTF8_BAHT "#,##0_);[RED]t(" UTF8_BAHT "#,##0)" ),
+    EXC_NUMFMT_STRING(  65, "t" UTF8_BAHT "#,##0.00_);t(" UTF8_BAHT "#,##0.00)" ),
+    EXC_NUMFMT_STRING(  66, "t" UTF8_BAHT "#,##0.00_);[RED]t(" UTF8_BAHT "#,##0.00)" ),
+    EXC_NUMFMT_STRING(  67, "t0%" ),
+    EXC_NUMFMT_STRING(  68, "t0.00%" ),
+    EXC_NUMFMT_STRING(  69, "t# ?/?" ),
+    EXC_NUMFMT_STRING(  70, "t# ?\?/?\?" ),
+    EXC_NUMFMT_STRING(  71, "tD/M/EE" ),
+    EXC_NUMFMT_STRING(  72, "tD-MMM-E" ),
+    EXC_NUMFMT_STRING(  73, "tD-MMM" ),
+    EXC_NUMFMT_STRING(  74, "tMMM-E" ),
+    EXC_NUMFMT_STRING(  75, "th:mm" ),
+    EXC_NUMFMT_STRING(  76, "th:mm:ss" ),
+    EXC_NUMFMT_STRING(  77, "tD/M/EE h:mm" ),
+    EXC_NUMFMT_STRING(  78, "tmm:ss" ),
+    EXC_NUMFMT_STRING(  79, "t[h]:mm:ss" ),
+    EXC_NUMFMT_STRING(  80, "tmm:ss.0" ),
+    EXC_NUMFMT_STRING(  81, "D/M/E" ),
     EXC_NUMFMT_ENDTABLE()
 };
 
@@ -1008,8 +1210,8 @@ static const XclBuiltInFormatTable spBuiltInFormatTables[] =
     {   LANGUAGE_DONTKNOW,              LANGUAGE_NONE,              spBuiltInFormats_DONTKNOW               },
 
     {   LANGUAGE_ENGLISH,               LANGUAGE_DONTKNOW,          spBuiltInFormats_ENGLISH                },
-    {   LANGUAGE_ENGLISH_UK,            LANGUAGE_ENGLISH,           0                                       },
-    {   LANGUAGE_ENGLISH_EIRE,          LANGUAGE_ENGLISH,           0                                       },
+    {   LANGUAGE_ENGLISH_UK,            LANGUAGE_ENGLISH,           spBuiltInFormats_ENGLISH_UK             },
+    {   LANGUAGE_ENGLISH_EIRE,          LANGUAGE_ENGLISH,           spBuiltInFormats_ENGLISH_EIRE           },
     {   LANGUAGE_ENGLISH_US,            LANGUAGE_ENGLISH,           spBuiltInFormats_ENGLISH_US             },
     {   LANGUAGE_ENGLISH_CAN,           LANGUAGE_ENGLISH,           spBuiltInFormats_ENGLISH_CAN            },
     {   LANGUAGE_ENGLISH_AUS,           LANGUAGE_ENGLISH,           spBuiltInFormats_ENGLISH_AUS            },
@@ -1027,12 +1229,15 @@ static const XclBuiltInFormatTable spBuiltInFormatTables[] =
     {   PRV_LANGUAGE_GERMAN_PRIM,       LANGUAGE_DONTKNOW,          spBuiltInFormats_GERMAN                 },
     {   LANGUAGE_GERMAN,                PRV_LANGUAGE_GERMAN_PRIM,   spBuiltInFormats_GERMAN_GERMANY         },
     {   LANGUAGE_GERMAN_AUSTRIAN,       PRV_LANGUAGE_GERMAN_PRIM,   spBuiltInFormats_GERMAN_AUSTRIAN        },
-    {   LANGUAGE_GERMAN_SWISS,          PRV_LANGUAGE_GERMAN_PRIM,   0                                       },
+    {   LANGUAGE_GERMAN_SWISS,          PRV_LANGUAGE_GERMAN_PRIM,   spBuiltInFormats_GERMAN_SWISS           },
     {   LANGUAGE_GERMAN_LUXEMBOURG,     PRV_LANGUAGE_GERMAN_PRIM,   spBuiltInFormats_GERMAN_LUXEMBOURG      },
-    {   LANGUAGE_GERMAN_LIECHTENSTEIN,  PRV_LANGUAGE_GERMAN_PRIM,   0                                       },
+    {   LANGUAGE_GERMAN_LIECHTENSTEIN,  PRV_LANGUAGE_GERMAN_PRIM,   spBuiltInFormats_GERMAN_LIECHTENSTEIN   },
 
     {   LANGUAGE_ITALIAN,               LANGUAGE_DONTKNOW,          spBuiltInFormats_ITALIAN_ITALY          },
     {   LANGUAGE_ITALIAN_SWISS,         LANGUAGE_DONTKNOW,          spBuiltInFormats_ITALIAN_SWISS          },
+
+    {   LANGUAGE_SWEDISH,               LANGUAGE_DONTKNOW,          spBuiltInFormats_SWEDISH_SWEDEN         },
+    {   LANGUAGE_SWEDISH_FINLAND,       LANGUAGE_DONTKNOW,          spBuiltInFormats_SWEDISH_FINLAND        },
 
     {   PRV_LANGUAGE_ASIAN_PRIM,        LANGUAGE_DONTKNOW,          spBuiltInFormats_ASIAN                  },
     {   LANGUAGE_JAPANESE,              PRV_LANGUAGE_ASIAN_PRIM,    spBuiltInFormats_JAPANESE               },
@@ -1040,7 +1245,8 @@ static const XclBuiltInFormatTable spBuiltInFormatTables[] =
     {   LANGUAGE_CHINESE_SIMPLIFIED,    PRV_LANGUAGE_ASIAN_PRIM,    spBuiltInFormats_CHINESE_SIMPLIFIED     },
     {   LANGUAGE_CHINESE_TRADITIONAL,   PRV_LANGUAGE_ASIAN_PRIM,    spBuiltInFormats_CHINESE_TRADITIONAL    },
 
-    {   LANGUAGE_HEBREW,                LANGUAGE_DONTKNOW,          spBuiltInFormats_HEBREW                 }
+    {   LANGUAGE_HEBREW,                LANGUAGE_DONTKNOW,          spBuiltInFormats_HEBREW                 },
+    {   LANGUAGE_THAI,                  LANGUAGE_DONTKNOW,          spBuiltInFormats_THAI                   }
 };
 
 // ----------------------------------------------------------------------------
