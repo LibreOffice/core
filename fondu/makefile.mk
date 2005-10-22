@@ -4,7 +4,7 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
 #   last change: $Author: ericb
 #
@@ -65,14 +65,7 @@ BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_ACTION=make
 
 
-OUT2BIN=\
-    $(BUILD_DIR)$/dfont2res \
-    $(BUILD_DIR)$/fondu	\
-    $(BUILD_DIR)$/frombin	\
-    $(BUILD_DIR)$/setfondname	\
-    $(BUILD_DIR)$/showfond	\
-    $(BUILD_DIR)$/tobin	\
-    $(BUILD_DIR)$/ufond
+OUT2BIN=$(BUILD_DIR)$/fondu
 
 
 ADDITIONAL_FILES=
