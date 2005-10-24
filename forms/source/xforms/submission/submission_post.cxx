@@ -4,9 +4,9 @@
  *
  *  $RCSfile: submission_post.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:26:10 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:38:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@
 #include <osl/file.hxx>
 #include <unotools/processfactory.hxx>
 #include <ucbhelper/content.hxx>
+#include <ucbhelper/activedatasink.hxx>
 #include <com/sun/star/ucb/PostCommandArgument2.hpp>
 
 using namespace CSS::uno;
@@ -88,8 +89,10 @@ CSubmission::SubmissionResult CSubmissionPost::submit(const CSS::uno::Reference<
         OUString aCommandName = OUString::createFromAscii("post");
         PostCommandArgument2 aPostArgument;
         aPostArgument.Source = apSerialization->getInputStream();
-        Reference< XInterface > aSink( m_aFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.io.Pipe")), UNO_QUERY_THROW);
+        //Reference< XInterface > aSink( m_aFactory->createInstance(
+        //    OUString::createFromAscii("com.sun.star.io.Pipe")), UNO_QUERY_THROW);
+        Reference< XActiveDataSink > aSink(new ucb::ActiveDataSink);
+        //    OUString::createFromAscii("com.sun.star.io.Pipe")), UNO_QUERY_THROW);
         aPostArgument.Sink = aSink;
         aPostArgument.MediaType = OUString::createFromAscii("application/xml");
         aPostArgument.Referer = OUString();
@@ -99,8 +102,13 @@ CSubmission::SubmissionResult CSubmissionPost::submit(const CSS::uno::Reference<
 
         // wait for command to finish
         // pProgressHelper->m_cFinished.wait();
+
+        // Reference< XOutputStream > xOut(aSink, UNO_QUERY_THROW);
+        // xOut->closeOutput();
+
         try {
-            m_aResultStream = Reference< XInputStream >(aSink, UNO_QUERY_THROW);
+            // m_aResultStream = Reference< XInputStream >(aSink, UNO_QUERY_THROW);
+            m_aResultStream = aSink->getInputStream();
         } catch (Exception& oe) {
             OSL_ENSURE(sal_False, "Cannot open reply stream from content");
         }
