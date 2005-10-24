@@ -4,9 +4,9 @@
  *
  *  $RCSfile: element.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:00:41 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:36:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -315,6 +315,7 @@ namespace DOM
                 sal_True, sal_False, Reference< XNode >(aAttr, UNO_QUERY),
                 OUString(), aAttr->getValue(), aAttr->getName(), AttrChangeType_ADDITION);
             dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
+            dispatchSubtreeModified();
         }
         return aAttr;
     }
@@ -369,6 +370,7 @@ namespace DOM
                 sal_True, sal_False, Reference< XNode >(getAttributeNode(name), UNO_QUERY),
                 oldValue, value, name, aChangeType);
             dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
+            dispatchSubtreeModified();
         }
     }
 
@@ -438,6 +440,7 @@ namespace DOM
                     Reference< XNode >(getAttributeNodeNS(namespaceURI, OUString((char*)xLName, strlen((char*)xLName), RTL_TEXTENCODING_UTF8)), UNO_QUERY),
                     oldValue, value, qualifiedName, aChangeType);
                 dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
+                dispatchSubtreeModified();
 
             } else {
                 // ambigious ns prefix
