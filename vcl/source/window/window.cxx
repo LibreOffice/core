@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.217 $
+ *  $Revision: 1.218 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 14:54:42 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:36:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -879,6 +879,14 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
         mpWindowImpl->mpFrameData->maResizeTimer.SetTimeoutHdl( LINK( this, Window, ImplHandleResizeTimerHdl ) );
         mpWindowImpl->mpFrameData->mbInternalDragGestureRecognizer = FALSE;
         mpWindowImpl->mpFrameData->mbTriggerHangulHanja = FALSE;
+
+        if ( pRealParent && IsTopWindow() )
+        {
+            ImplWinData* pParentWinData = pRealParent->ImplGetWinData();
+            ImplWinData* pWinData = ImplGetWinData();
+
+            pParentWinData->maTopWindowChildren.push_back( this );
+        }
     }
 
     // init data
@@ -4590,6 +4598,22 @@ Window::~Window()
     // Fenster aus den Listen austragen
     ImplRemoveWindow( TRUE );
 
+    // de-register as "top window child" at our parent, if necessary
+    if ( !mpWindowImpl->mpBorderWindow && mpWindowImpl->mpFrame )
+    {
+        BOOL bIsTopWindow = mpWindowImpl->mpWinData && ( mpWindowImpl->mpWinData->mnIsTopWindow == 1 );
+        if ( mpWindowImpl->mpRealParent && bIsTopWindow )
+        {
+            ImplWinData* pParentWinData = mpWindowImpl->mpRealParent->ImplGetWinData();
+
+            ::std::list< Window* >::iterator myPos = ::std::find( pParentWinData->maTopWindowChildren.begin(),
+                pParentWinData->maTopWindowChildren.end(), this );
+            DBG_ASSERT( myPos != pParentWinData->maTopWindowChildren.end(), "Window::~Window: inconsistency in top window chain!" );
+            if ( myPos != pParentWinData->maTopWindowChildren.end() )
+                pParentWinData->maTopWindowChildren.erase( myPos );
+        }
+    }
+
     // Extra Window Daten loeschen
     if ( mpWindowImpl->mpWinData )
     {
@@ -7837,6 +7861,39 @@ Window* Window::GetWindow( USHORT nType ) const
             if ( mpWindowImpl->mpBorderWindow )
                 return mpWindowImpl->mpBorderWindow->GetWindow( WINDOW_BORDER );
             return (Window*)this;
+
+        case WINDOW_FIRSTTOPWINDOWCHILD:
+            return ImplGetWinData()->maTopWindowChildren.empty() ? NULL : *ImplGetWinData()->maTopWindowChildren.begin();
+
+        case WINDOW_LASTTOPWINDOWCHILD:
+            return ImplGetWinData()->maTopWindowChildren.empty() ? NULL : *ImplGetWinData()->maTopWindowChildren.rbegin();
+
+        case WINDOW_PREVTOPWINDOWSIBLING:
+        {
+            if ( !mpWindowImpl->mpRealParent )
+                return NULL;
+            const ::std::list< Window* >& rTopWindows( mpWindowImpl->mpRealParent->ImplGetWinData()->maTopWindowChildren );
+            ::std::list< Window* >::const_iterator myPos =
+                ::std::find( rTopWindows.begin(), rTopWindows.end(), this );
+            if ( myPos == rTopWindows.end() )
+                return NULL;
+            if ( myPos == rTopWindows.begin() )
+                return NULL;
+            return *--myPos;
+        }
+
+        case WINDOW_NEXTTOPWINDOWSIBLING:
+        {
+            if ( !mpWindowImpl->mpRealParent )
+                return NULL;
+            const ::std::list< Window* >& rTopWindows( mpWindowImpl->mpRealParent->ImplGetWinData()->maTopWindowChildren );
+            ::std::list< Window* >::const_iterator myPos =
+                ::std::find( rTopWindows.begin(), rTopWindows.end(), this );
+            if ( ( myPos == rTopWindows.end() ) || ( ++myPos == rTopWindows.end() ) )
+                return NULL;
+            return *myPos;
+        }
+
     }
 
     return NULL;
