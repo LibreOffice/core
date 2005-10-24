@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsQueueProcessor.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:12:07 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:41:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,14 +36,21 @@
 #ifndef SD_SLIDESORTER_QUEUE_PROCESSOR_HXX
 #define SD_SLIDESORTER_QUEUE_PROCESSOR_HXX
 
+#include "SlsRequestPriorityClass.hxx"
 #include "view/SlsPageObject.hxx"
 #include "view/SlideSorterView.hxx"
 #include "tools/IdleDetection.hxx"
+#include "SlsBitmapCache.hxx"
+#include "taskpane/SlideSorterCacheDisplay.hxx"
 
 #include <svx/svdpagv.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 
+// Uncomment the define below to have some more OSL_TRACE messages.
+#ifdef DEBUG
+//#define VERBOSE
+#endif
 
 namespace sd { namespace slidesorter { namespace view {
 class SlideSorterView;
@@ -52,6 +59,9 @@ class SlideSorterView;
 
 namespace sd { namespace slidesorter { namespace cache {
 
+/** This non-template base class exists primarily as a place for
+    implementing the timer callback.
+*/
 class QueueProcessorBase
 {
 public:
@@ -71,9 +81,9 @@ public:
 protected:
     virtual void ProcessRequest (void) = 0;
 
-    const ULONG mnTimeBetweenHighPriorityRequests;
-    const ULONG mnTimeBetweenLowPriorityRequests;
-    const ULONG mnTimeBetweenRequestsWhenNotIdle;
+    sal_uInt32 mnTimeBetweenHighPriorityRequests;
+    sal_uInt32 mnTimeBetweenLowPriorityRequests;
+    sal_uInt32 mnTimeBetweenRequestsWhenNotIdle;
 
 private:
     /// This time controls when to process the next element from the queue.
@@ -91,7 +101,6 @@ private:
 */
 template <class Queue,
           class RequestData,
-          class BitmapCache,
           class BitmapFactory>
     class QueueProcessor
     : public QueueProcessorBase
@@ -131,13 +140,8 @@ private:
 
 //=====  QueueProcessor  ======================================================
 
-template <class Queue,
-          class RequestData,
-          class BitmapCache,
-          class BitmapFactory>
-    QueueProcessor<
-    Queue, RequestData, BitmapCache, BitmapFactory
-    >::QueueProcessor (
+template <class Queue, class RequestData, class BitmapFactory>
+    QueueProcessor<Queue, RequestData, BitmapFactory>::QueueProcessor (
         view::SlideSorterView& rView,
         Queue& rQueue,
         BitmapCache& rCache)
@@ -152,13 +156,8 @@ template <class Queue,
 
 
 
-template <class Queue,
-          class RequestData,
-          class BitmapCache,
-          class BitmapFactory>
-    void QueueProcessor<
-    Queue, RequestData, BitmapCache, BitmapFactory
-    >::ProcessRequest (void)
+template <class Queue, class RequestData, class BitmapFactory>
+    void QueueProcessor<Queue, RequestData, BitmapFactory>::ProcessRequest (void)
 {
     bool bIsShowingFullScreenShow (false);
 
@@ -174,7 +173,7 @@ template <class Queue,
         }
 
         RequestData* pRequest = NULL;
-        int nPriorityClass = 0;
+        RequestPriorityClass ePriorityClass (NOT_VISIBLE);
         bool bRequestIsValid = false;
         {
             ::osl::MutexGuard aGuard (mrQueue.GetMutex());
@@ -183,42 +182,58 @@ template <class Queue,
             {
                 // Get the requeuest with the highest priority from the
                 // queue.
-                nPriorityClass = mrQueue.GetFrontPriorityClass();
+                ePriorityClass = mrQueue.GetFrontPriorityClass();
                 pRequest = &mrQueue.GetFront();
                 mrQueue.PopFront();
                 bRequestIsValid = true;
+                SSCD_SET_STATUS(pRequest->GetPage(),RENDERING);
             }
         }
         if (bRequestIsValid)
         {
+#ifdef VERBOSE
             OSL_TRACE ("processing request for page %d with priority class %d",
-                pRequest->GetPage()->GetPageNum(),
-                nPriorityClass);
+                (pRequest->GetPage()->GetPageNum()-1)/2,
+                ePriorityClass);
+#endif
             try
             {
                 ::osl::MutexGuard aGuard (maMutex);
                 // Create a new preview bitmap and store it in the cache.
 
-                BitmapEx aBitmap (maBitmapFactory.CreateBitmap (*pRequest));
                 mrCache.SetBitmap (
                     pRequest->GetPage(),
-                    aBitmap,
-                    nPriorityClass==0);
+                    maBitmapFactory.CreateBitmap(*pRequest),
+                    ePriorityClass!=NOT_VISIBLE);
 
                 // Initiate a repaint of the new preview.
-                SdrPageView* pPageView = mrView.GetPageViewPvNum(0);
-                Rectangle aDirtyRectangle (
-                    pRequest->GetViewContact().GetPaintRectangle()
-                    - pPageView->GetOffset());
-                mrView.InvalidateAllWin (aDirtyRectangle);
+                if (ePriorityClass != NOT_VISIBLE)
+                {
+                    SdrPageView* pPageView = mrView.GetPageViewPvNum(0);
+                    Rectangle aDirtyRectangle (
+                        pRequest->GetViewContact().GetPaintRectangle()
+                        - pPageView->GetOffset());
+                    mrView.InvalidateAllWin (aDirtyRectangle);
+                }
+
+                SSCD_SET_STATUS(pRequest->GetPage(),NONE);
             }
-            catch (...)
+            catch (::com::sun::star::uno::RuntimeException aException)
             {
+                (void) aException;
+            }
+            catch (::com::sun::star::uno::Exception aException)
+            {
+                (void) aException;
             }
 
             // Requests of lower priority are processed one at a time.
-            if (mrQueue.GetFrontPriorityClass() > 0)
-                break;
+            {
+                ::osl::MutexGuard aGuard (mrQueue.GetMutex());
+                if ( ! mrQueue.IsEmpty())
+                    if (mrQueue.GetFrontPriorityClass() > 0)
+                        break;
+            }
         }
     }
 
@@ -232,25 +247,21 @@ template <class Queue,
 
 
 
-template <class Queue, class RequestData, class BitmapCache,
-          class BitmapFactory>
-    void QueueProcessor<
-    Queue, RequestData, BitmapCache, BitmapFactory
-    >::Terminate (void)
+template <class Queue, class RequestData, class BitmapFactory>
+    void QueueProcessor<Queue, RequestData, BitmapFactory>::Terminate (void)
 {
 }
 
 
 
 
-template <class Queue, class RequestData, class BitmapCache,
-          class BitmapFactory>
-    void QueueProcessor<
-    Queue, RequestData, BitmapCache, BitmapFactory
-    >::RemoveRequest (RequestData& rRequest)
+template <class Queue, class RequestData, class BitmapFactory>
+    void QueueProcessor<Queue, RequestData, BitmapFactory>::RemoveRequest (RequestData& rRequest)
 {
+    // See the method declaration above for an explanation why this makes sense.
     ::osl::MutexGuard aGuard (maMutex);
 }
+
 
 } } } // end of namespace ::sd::slidesorter::cache
 
