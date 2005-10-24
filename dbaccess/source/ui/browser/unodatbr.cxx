@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.172 $
+ *  $Revision: 1.173 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:22:12 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:31:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
 #include <com/sun/star/frame/XLayoutManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
+#include <com/sun/star/util/XFlushable.hpp>
 #endif
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
@@ -2874,6 +2877,41 @@ void SAL_CALL SbaTableQueryBrowser::elementReplaced( const ContainerEvent& _rEve
 }
 
 // -------------------------------------------------------------------------
+void SbaTableQueryBrowser::impl_releaseConnection( SharedConnection& _rxConnection )
+{
+    // remove as event listener
+    Reference< XComponent > xComponent( _rxConnection, UNO_QUERY );
+    if ( xComponent.is() )
+    {
+        Reference< XEventListener > xListener( static_cast< ::cppu::OWeakObject* >( this ), UNO_QUERY );
+        xComponent->removeEventListener( xListener );
+    }
+
+    try
+    {
+        // temporary (hopefully!) hack for #i55274#
+        Reference< XFlushable > xFlush( _rxConnection, UNO_QUERY );
+        if ( xFlush.is() )
+            xFlush->flush();
+    }
+    catch( const Exception& e )
+    {
+    #if OSL_DEBUG_LEVEL > 0
+        ::rtl::OString sMessage( "SbaTableQueryBrowser::impl_releaseConnection: caught an exception!\n" );
+        sMessage += "message:\n";
+        sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
+        OSL_ENSURE( false, sMessage );
+    #else
+        e; // make compiler happy
+    #endif
+    }
+
+    // clear
+    _rxConnection.clear();
+        // will implicitly dispose if we have the ownership, since xConnection is a SharedConnection
+}
+
+// -------------------------------------------------------------------------
 void SbaTableQueryBrowser::disposeConnection( SvLBoxEntry* _pDSEntry )
 {
     DBG_ASSERT( _pDSEntry, "SbaTableQueryBrowser::disposeConnection: invalid entry (NULL)!" );
@@ -2884,25 +2922,12 @@ void SbaTableQueryBrowser::disposeConnection( SvLBoxEntry* _pDSEntry )
         DBTreeListModel::DBTreeListUserData* pTreeListData = static_cast< DBTreeListModel::DBTreeListUserData* >( _pDSEntry->GetUserData() );
         if ( pTreeListData )
         {
-            // remove as event listener
-            Reference< XComponent > xComponent( pTreeListData->xConnection, UNO_QUERY );
-            if ( xComponent.is() )
-            {
-                Reference< XEventListener > xListener( static_cast< ::cppu::OWeakObject* >( this ), UNO_QUERY );
-                xComponent->removeEventListener( xListener );
-            }
-
-            // dispose
-            pTreeListData->xConnection.clear();
-                // will implicitly dispose, since xConnection is a SharedConnection
+            impl_releaseConnection( pTreeListData->xConnection );
 
             // release the model-controller-connection
             DBG_ASSERT( !pTreeListData->aController.empty(),
                 "SbaTableQueryBrowser::disposeConnection: there's a connection, but we didn't register ourself as controller at the model?!" );
             pTreeListData->aController.clear();
-
-            // clear
-            pTreeListData->xConnection.clear();
         }
     }
 }
