@@ -4,9 +4,9 @@
  *
  *  $RCSfile: profileitem_ooo.scp,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 13:25:29 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 18:31:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -740,6 +740,6 @@ ProfileItem gid_Profileitem_Jvmfwk_Uno_Java_Jfw_Classpath_Urls
     Section = "Bootstrap";
     Order = 7;
     Key = "UNO_JAVA_JFW_CLASSPATH_URLS";
-    Value = "${${$ORIGIN/$UNO_SETTINGS:PKG_UserUnoFile}:UNO_JAVA_CLASSPATH} ${${$ORIGIN/$UNO_SETTINGS:PKG_SharedUnoFile}:UNO_JAVA_CLASSPATH} $ORIGIN/classes/jurt.jar $ORIGIN/classes/ridl.jar $ORIGIN/classes/java_uno.jar $ORIGIN/classes/sandbox.jar $ORIGIN/classes/bsh.jar $ORIGIN/classes/classes.jar $ORIGIN/classes/commonwizards.jar $ORIGIN/classes/docbook.jar $ORIGIN/classes/htmlsoff.jar $ORIGIN/classes/java_uno_accessbridge.jar $ORIGIN/classes/js.jar $ORIGIN/classes/juh.jar $ORIGIN/classes/jut.jar $ORIGIN/classes/letter.jar $ORIGIN/classes/officebean.jar $ORIGIN/classes/query.jar $ORIGIN/classes/report.jar $ORIGIN/classes/ScriptFramework.jar $ORIGIN/classes/ScriptProviderForBeanShell.jar $ORIGIN/classes/ScriptProviderForJava.jar $ORIGIN/classes/ScriptProviderForJavaScript.jar $ORIGIN/classes/tutorial.jar $ORIGIN/classes/unoil.jar $ORIGIN/classes/web.jar $ORIGIN/classes/XFlatXml.jar $ORIGIN/classes/xmerge.jar $ORIGIN/classes/XMergeBridge.jar $ORIGIN/classes/XSLTFilter.jar $ORIGIN/classes/XSLTValidate.jar $ORIGIN/classes/xt.jar $ORIGIN/classes/activation.jar $ORIGIN/classes/agenda.jar $ORIGIN/classes/aportisdoc.jar $ORIGIN/classes/avmedia.jar $ORIGIN/classes/email.jar $ORIGIN/classes/fax.jar $ORIGIN/classes/pexcel.jar $ORIGIN/classes/pocketword.jar $ORIGIN/classes/mail.jar $ORIGIN/classes/hsqldb.jar $ORIGIN/classes/sdbc_hsqldb.jar";
+    Value = "${${$ORIGIN/$UNO_SETTINGS:PKG_UserUnoFile}:UNO_JAVA_CLASSPATH} ${${$ORIGIN/$UNO_SETTINGS:PKG_SharedUnoFile}:UNO_JAVA_CLASSPATH} $ORIGIN/classes/jurt.jar $ORIGIN/classes/ridl.jar $ORIGIN/classes/java_uno.jar $ORIGIN/classes/sandbox.jar $ORIGIN/classes/bsh.jar $ORIGIN/classes/classes.jar $ORIGIN/classes/commonwizards.jar $ORIGIN/classes/htmlsoff.jar $ORIGIN/classes/java_uno_accessbridge.jar $ORIGIN/classes/js.jar $ORIGIN/classes/juh.jar $ORIGIN/classes/jut.jar $ORIGIN/classes/letter.jar $ORIGIN/classes/officebean.jar $ORIGIN/classes/query.jar $ORIGIN/classes/report.jar $ORIGIN/classes/ScriptFramework.jar $ORIGIN/classes/ScriptProviderForBeanShell.jar $ORIGIN/classes/ScriptProviderForJava.jar $ORIGIN/classes/ScriptProviderForJavaScript.jar $ORIGIN/classes/tutorial.jar $ORIGIN/classes/unoil.jar $ORIGIN/classes/web.jar $ORIGIN/classes/xmerge.jar $ORIGIN/classes/XMergeBridge.jar $ORIGIN/classes/XSLTFilter.jar $ORIGIN/classes/XSLTValidate.jar $ORIGIN/classes/xt.jar $ORIGIN/classes/activation.jar $ORIGIN/classes/agenda.jar $ORIGIN/classes/aportisdoc.jar $ORIGIN/classes/avmedia.jar $ORIGIN/classes/email.jar $ORIGIN/classes/fax.jar $ORIGIN/classes/pexcel.jar $ORIGIN/classes/pocketword.jar $ORIGIN/classes/mail.jar $ORIGIN/classes/hsqldb.jar $ORIGIN/classes/sdbc_hsqldb.jar";
 End
 
