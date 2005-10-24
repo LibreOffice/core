@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:06:25 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:29:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,67 +238,75 @@ namespace css = ::com::sun::star;
 //........................................................................
 namespace dbaccess
 {
-        typedef ::cppu::WeakComponentImplHelper1<   ::com::sun::star::embed::XStateChangeListener > TEmbedObjectHolder;
-        class OEmbedObjectHolder :   public ::comphelper::OBaseMutex
-                                    ,public TEmbedObjectHolder
+    //==================================================================
+    // OEmbedObjectHolder
+    //==================================================================
+    typedef ::cppu::WeakComponentImplHelper1<   ::com::sun::star::embed::XStateChangeListener > TEmbedObjectHolder;
+    class OEmbedObjectHolder :   public ::comphelper::OBaseMutex
+                                ,public TEmbedObjectHolder
+    {
+        Reference< XEmbeddedObject > m_xBroadCaster;
+        ODocumentDefinition*                 m_pDefinition;
+        sal_Bool                             m_bInStateChange;
+    protected:
+        virtual void SAL_CALL disposing();
+    public:
+        OEmbedObjectHolder(const Reference< XEmbeddedObject >& _xBroadCaster,ODocumentDefinition* _pDefinition)
+            : TEmbedObjectHolder(m_aMutex)
+            ,m_xBroadCaster(_xBroadCaster)
+            ,m_pDefinition(_pDefinition)
+            ,m_bInStateChange(sal_False)
         {
-            Reference< XEmbeddedObject > m_xBroadCaster;
-            ODocumentDefinition*                 m_pDefinition;
-            sal_Bool                             m_bInStateChange;
-        protected:
-            virtual void SAL_CALL disposing();
-        public:
-            OEmbedObjectHolder(const Reference< XEmbeddedObject >& _xBroadCaster,ODocumentDefinition* _pDefinition)
-                : TEmbedObjectHolder(m_aMutex)
-                ,m_xBroadCaster(_xBroadCaster)
-                ,m_pDefinition(_pDefinition)
-                ,m_bInStateChange(sal_False)
+            osl_incrementInterlockedCount( &m_refCount );
             {
-                osl_incrementInterlockedCount( &m_refCount );
                 if ( m_xBroadCaster.is() )
                     m_xBroadCaster->addStateChangeListener(this);
-                osl_decrementInterlockedCount( &m_refCount );
             }
+            osl_decrementInterlockedCount( &m_refCount );
+        }
 
-            virtual void SAL_CALL changingState( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL stateChanged( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
-        };
-        //------------------------------------------------------------------
-        void SAL_CALL OEmbedObjectHolder::disposing()
+        virtual void SAL_CALL changingState( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL stateChanged( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
+    };
+    //------------------------------------------------------------------
+    void SAL_CALL OEmbedObjectHolder::disposing()
+    {
+        if ( m_xBroadCaster.is() )
+            m_xBroadCaster->removeStateChangeListener(this);
+        m_xBroadCaster = NULL;
+        m_pDefinition = NULL;
+    }
+    //------------------------------------------------------------------
+    void SAL_CALL OEmbedObjectHolder::changingState( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::RuntimeException)
+    {
+    }
+    //------------------------------------------------------------------
+    void SAL_CALL OEmbedObjectHolder::stateChanged( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        if ( !m_bInStateChange && nNewState == EmbedStates::RUNNING && nOldState == EmbedStates::ACTIVE && m_pDefinition )
         {
-            if ( m_xBroadCaster.is() )
-                m_xBroadCaster->removeStateChangeListener(this);
-            m_xBroadCaster = NULL;
-            m_pDefinition = NULL;
-        }
-        //------------------------------------------------------------------
-        void SAL_CALL OEmbedObjectHolder::changingState( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::RuntimeException)
-        {
-        }
-        //------------------------------------------------------------------
-        void SAL_CALL OEmbedObjectHolder::stateChanged( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::uno::RuntimeException)
-        {
-            if ( !m_bInStateChange && nNewState == EmbedStates::RUNNING && nOldState == EmbedStates::ACTIVE && m_pDefinition )
+            m_bInStateChange = sal_True;
+            Reference<XInterface> xInt(static_cast< ::cppu::OWeakObject* >(m_pDefinition),UNO_QUERY);
             {
-                m_bInStateChange = sal_True;
-                Reference<XInterface> xInt(static_cast< ::cppu::OWeakObject* >(m_pDefinition),UNO_QUERY);
-                {
-                    Reference<XEmbeddedObject> xEmbeddedObject(aEvent.Source,UNO_QUERY);
-                    if ( xEmbeddedObject.is() )
-                        xEmbeddedObject->changeState(EmbedStates::LOADED);
-                }
-                m_bInStateChange = sal_False;
+                Reference<XEmbeddedObject> xEmbeddedObject(aEvent.Source,UNO_QUERY);
+                if ( xEmbeddedObject.is() )
+                    xEmbeddedObject->changeState(EmbedStates::LOADED);
             }
+            m_bInStateChange = sal_False;
         }
-        //------------------------------------------------------------------
-        void SAL_CALL OEmbedObjectHolder::disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException)
-        {
-            m_xBroadCaster = NULL;
-        }
-//........................................................................
-    typedef ::cppu::WeakImplHelper1<        XEmbeddedClient
-                                >   EmbeddedClientHelper_BASE;
+    }
+    //------------------------------------------------------------------
+    void SAL_CALL OEmbedObjectHolder::disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        m_xBroadCaster = NULL;
+    }
+
+    //==================================================================
+    // OEmbeddedClientHelper
+    //==================================================================
+    typedef ::cppu::WeakImplHelper1 <   XEmbeddedClient
+                                    >   EmbeddedClientHelper_BASE;
     class OEmbeddedClientHelper : public EmbeddedClientHelper_BASE
     {
         ODocumentDefinition* m_pClient;
@@ -332,6 +340,57 @@ namespace dbaccess
         }
         inline void resetClient(ODocumentDefinition* _pClient) { m_pClient = _pClient; }
     };
+
+    //==================================================================
+    // LifetimeCoupler
+    //==================================================================
+    typedef ::cppu::WeakImplHelper1 <   css::lang::XEventListener
+                                    >   LifetimeCoupler_Base;
+    /** helper class which couples the lifetime of a component to the lifetim
+        of another component
+
+        Instances of this class are constructed with two components. The first is
+        simply held by reference, and thus kept alive. The second one is observed
+        for <code>disposing</code> calls - if they occur, i.e. if the component dies,
+        the reference to the first component is cleared.
+
+        This way, you can ensure that a certain component is kept alive as long
+        as a second component is not disposed.
+    */
+    class LifetimeCoupler : public LifetimeCoupler_Base
+    {
+    private:
+        Reference< XInterface > m_xClient;
+
+    public:
+        inline static couple( const Reference< XInterface >& _rxClient, const Reference< XComponent >& _rxActor )
+        {
+            Reference< css::lang::XEventListener > xEnsureDelete( new LifetimeCoupler( _rxClient, _rxActor ) );
+        }
+
+    private:
+        inline LifetimeCoupler( const Reference< XInterface >& _rxClient, const Reference< XComponent >& _rxActor )
+            :m_xClient( _rxClient )
+        {
+            DBG_ASSERT( _rxActor.is(), "LifetimeCoupler::LifetimeCoupler: this will crash!" );
+            osl_incrementInterlockedCount( &m_refCount );
+            {
+                _rxActor->addEventListener( this );
+            }
+            osl_decrementInterlockedCount( &m_refCount );
+            DBG_ASSERT( m_refCount, "LifetimeCoupler::LifetimeCoupler: the actor is not holding us by hard ref - this won't work!" );
+        }
+
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (RuntimeException);
+    protected:
+    };
+
+    //------------------------------------------------------------------
+    void SAL_CALL LifetimeCoupler::disposing( const css::lang::EventObject& Source ) throw (RuntimeException)
+    {
+        m_xClient.clear();
+    }
+
     //==================================================================
     // ODocumentSaveContinuation
     //==================================================================
@@ -473,7 +532,7 @@ ODocumentDefinition::~ODocumentDefinition()
 
     if ( m_pInterceptor )
     {
-        m_pInterceptor->DisconnectContentHolder();
+        m_pInterceptor->dispose();
         m_pInterceptor->release();
         m_pInterceptor = NULL;
     }
@@ -576,6 +635,202 @@ namespace
 }
 
 // -----------------------------------------------------------------------------
+void ODocumentDefinition::impl_onActivateEmbeddedObject( bool _bOpenedInDesignMode )
+{
+    try
+    {
+        Reference< XModel > xModel( getComponent(), UNO_QUERY );
+        Reference< XController > xController( xModel.is() ? xModel->getCurrentController() : Reference< XController >() );
+        if ( !xController.is() )
+            return;
+        Reference< XFrame > xFrame( xController->getFrame() );
+
+        if ( m_xListener.is() )
+        {
+            // simply raise the window to top
+            if ( xFrame.is() )
+            {
+                Reference< XTopWindow > xTopWindow( xFrame->getContainerWindow(), UNO_QUERY_THROW );
+                xTopWindow->toFront();
+            }
+        }
+        else
+        {
+            // it's the first time the embedded object has been activated
+
+            //
+            if ( !m_xFrameLoader.is() )
+                m_xFrameLoader.set( m_xORB->createInstance( SERVICE_FRAME_DESKTOP ), UNO_QUERY_THROW );
+
+            // remove the frame from the desktop's frame collection because we need full control of it.
+            Reference< XFramesSupplier > xSup( m_xFrameLoader, UNO_QUERY_THROW );
+            Reference< XFrames > xFrames( xSup->getFrames(), UNO_QUERY_THROW );
+            xFrames->remove( xFrame );
+
+            // create an OEmbedObjectHolder
+            m_xListener = new OEmbedObjectHolder(m_xEmbeddedObject,this);
+
+            // ensure that we ourself are kept alive as long as the embedded object's frame is
+            // opened
+            LifetimeCoupler::couple( *this, Reference< XComponent >( xFrame, UNO_QUERY_THROW ) );
+        }
+
+        if ( _bOpenedInDesignMode )
+            impl_initObjectEditView( xController );
+    }
+    catch( const RuntimeException& e )
+    {
+    #if OSL_DEBUG_LEVEL > 0
+        ::rtl::OString sMessage( "ODocumentDefinition::impl_onActivateEmbeddedObject: caught an exception!\n" );
+        sMessage += "message:\n";
+        sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
+        OSL_ENSURE( false, sMessage );
+    #else
+        e; // make compiler happy
+    #endif
+    }
+}
+
+// -----------------------------------------------------------------------------
+namespace
+{
+    // =========================================================================
+    // = PreserveVisualAreaSize
+    // =========================================================================
+    /** stack-guard for preserving the size of the VisArea of an XModel
+    */
+    class PreserveVisualAreaSize
+    {
+    private:
+        Reference< XVisualObject >  m_xVisObject;
+        ::com::sun::star::awt::Size m_aOriginalSize;
+
+    public:
+        inline PreserveVisualAreaSize( const Reference< XModel >& _rxModel )
+            :m_xVisObject( _rxModel, UNO_QUERY )
+        {
+            if ( m_xVisObject.is() )
+            {
+                try
+                {
+                    m_aOriginalSize = m_xVisObject->getVisualAreaSize( Aspects::MSOLE_CONTENT );
+                }
+                catch ( Exception& )
+                {
+                    DBG_ERROR( "PreserveVisualAreaSize::PreserveVisualAreaSize: caught an exception!" );
+                }
+            }
+        }
+
+        inline ~PreserveVisualAreaSize()
+        {
+            if ( m_xVisObject.is() && m_aOriginalSize.Width && m_aOriginalSize.Height )
+            {
+                try
+                {
+                    m_xVisObject->setVisualAreaSize( Aspects::MSOLE_CONTENT, m_aOriginalSize );
+                }
+                catch ( Exception& )
+                {
+                    DBG_ERROR( "PreserveVisualAreaSize::~PreserveVisualAreaSize: caught an exception!" );
+                }
+            }
+        }
+    };
+
+    // =========================================================================
+    // = LayoutManagerLock
+    // =========================================================================
+    /** helper class for stack-usage which during its lifetime locks a layout manager
+    */
+    class LayoutManagerLock
+    {
+    private:
+        Reference< XLayoutManager > m_xLayoutManager;
+
+    public:
+        inline LayoutManagerLock( const Reference< XController >& _rxController )
+        {
+            DBG_ASSERT( _rxController.is(), "LayoutManagerLock::LayoutManagerLock: this will crash!" );
+            Reference< XFrame > xFrame( _rxController->getFrame() );
+            try
+            {
+                Reference< XPropertySet > xPropSet( xFrame, UNO_QUERY_THROW );
+                m_xLayoutManager.set(
+                    xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ) ) ),
+                    UNO_QUERY_THROW );
+                m_xLayoutManager->lock();
+
+            }
+            catch( Exception& )
+            {
+                DBG_ERROR( "LayoutManagerLock::LayoutManagerLock: caught an exception!" );
+            }
+        }
+
+        inline ~LayoutManagerLock()
+        {
+            try
+            {
+                // unlock the layout manager
+                if ( m_xLayoutManager.is() )
+                    m_xLayoutManager->unlock();
+            }
+            catch( Exception& )
+            {
+                DBG_ERROR( "LayoutManagerLock::~LayoutManagerLock: caught an exception!" );
+            }
+        }
+    };
+}
+
+// -----------------------------------------------------------------------------
+void ODocumentDefinition::impl_initObjectEditView( const Reference< XController >& _rxController )
+{
+    if ( !m_bForm )
+        // currently, only forms need to be initialized
+        return;
+
+    try
+    {
+        Reference< XViewSettingsSupplier > xSettingsSupplier( _rxController, UNO_QUERY_THROW );
+        Reference< XPropertySet > xViewSettings( xSettingsSupplier->getViewSettings(), UNO_QUERY_THROW );
+
+        // The visual area size can be changed by the setting of the following properties
+        // so it should be restored later
+        PreserveVisualAreaSize aPreserveVisAreaSize( _rxController->getModel() );
+
+        // Layout manager should not layout while the size is still not restored
+        // so it will stay locked for this time
+        LayoutManagerLock aLockLayout( _rxController );
+
+        // setting of the visual properties
+        xViewSettings->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowRulers")),makeAny(sal_True));
+        xViewSettings->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowVertRuler")),makeAny(sal_True));
+        xViewSettings->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowHoriRuler")),makeAny(sal_True));
+        xViewSettings->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRasterVisible")),makeAny(sal_True));
+        xViewSettings->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsSnapToRaster")),makeAny(sal_True));
+        xViewSettings->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowOnlineLayout")),makeAny(sal_True));
+        xViewSettings->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RasterSubdivisionX")),makeAny(sal_Int32(5)));
+        xViewSettings->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RasterSubdivisionY")),makeAny(sal_Int32(5)));
+
+        Reference< XModifiable > xModifiable( _rxController->getModel(), UNO_QUERY_THROW );
+        xModifiable->setModified( sal_False );
+    }
+    catch( const Exception& e )
+    {
+    #if OSL_DEBUG_LEVEL > 0
+        ::rtl::OString sMessage( "ODocumentDefinition::impl_initObjectEditView: caught an exception!\n" );
+        sMessage += "message:\n";
+        sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
+        OSL_ENSURE( false, sMessage );
+    #else
+        e; // make compiler happy
+    #endif
+    }
+}
+
+// -----------------------------------------------------------------------------
 Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 CommandId, const Reference< XCommandEnvironment >& Environment ) throw (Exception, CommandAbortedException, RuntimeException)
 {
     Any aRet;
@@ -637,138 +892,16 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
                 loadEmbeddedObject(Sequence< sal_Int8 >(),xConnection,!bOpenInDesign);
                 if ( m_xEmbeddedObject.is() )
                 {
-                    if ( bOpenForMail )
-                    {
-                        xModel.set(getComponent(),UNO_QUERY);
-                        fillReportData(!bOpenInDesign);
-                        aRet <<= xModel;
-                    }
-                    else
+                    xModel.set(getComponent(),UNO_QUERY);
+
+                    if ( !bOpenForMail )
                     {
                         m_xEmbeddedObject->changeState(EmbedStates::ACTIVE);
-
-                        // object is new, so we an interceptor for save
-                        xModel.set(getComponent(),UNO_QUERY);
-                        Reference< XFrame > xFrame;
-                        if ( xModel.is() )
-                        {
-                            xFrame = xModel->getCurrentController()->getFrame();
-
-                            if ( m_xListener.is() )
-                            {
-                                if ( xFrame.is() )
-                                {
-                                    Reference<XTopWindow> xTopWindow( xFrame->getContainerWindow(),UNO_QUERY );
-                                    if( xTopWindow.is() )
-                                        xTopWindow->toFront();
-                                }
-                            }
-                            else
-                            {
-                                if ( !m_xFrameLoader.is() )
-                                {
-                                    m_xFrameLoader.set(m_xORB->createInstance(SERVICE_FRAME_DESKTOP),UNO_QUERY);
-                                }
-                                // remove the frame from the desktop because we need full control of it.
-                                if ( m_xFrameLoader.is() )
-                                {
-                                    Reference<XFramesSupplier> xSup(m_xFrameLoader,UNO_QUERY);
-                                    if ( xSup.is() )
-                                    {
-                                        Reference<XFrames> xFrames = xSup->getFrames();
-                                        xFrames->remove(xFrame);
-                                    }
-                                }
-
-                                //  Reference<XStateChangeBroadcaster> xBrd(m_xEmbeddedObject,UNO_QUERY);
-                                m_xListener = new OEmbedObjectHolder(m_xEmbeddedObject,this);
-                            }
-                            if ( bOpenInDesign && m_bForm )
-                            {
-                                Reference<XViewSettingsSupplier> xViewSup(xModel->getCurrentController(),UNO_QUERY);
-                                if ( xViewSup.is() )
-                                {
-                                    Reference<XPropertySet> xProp = xViewSup->getViewSettings();
-                                    if ( xProp.is() )
-                                    {
-                                        // The visual area size can be changed by the setting of the following properties
-                                        // so it should be restored later
-                                        Reference< XVisualObject > xVisObj( xModel, UNO_QUERY );
-                                        ::com::sun::star::awt::Size aOrigSize;
-                                        if ( xVisObj.is() )
-                                        {
-                                            try {
-                                                aOrigSize = xVisObj->getVisualAreaSize( Aspects::MSOLE_CONTENT );
-                                            } catch ( Exception& )
-                                            {}
-                                        }
-
-                                        // Layout manager should not layout while the size is still not restored
-                                        // so it will stay locked for this time
-                                        Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
-                                        if ( xFrame.is() )
-                                        {
-                                            try
-                                            {
-                                                Reference< XPropertySet > xPropSet( xFrame, UNO_QUERY_THROW );
-                                                xLayoutManager.set( xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ) ) ), UNO_QUERY );
-                                                if ( xLayoutManager.is() )
-                                                    xLayoutManager->lock();
-
-                                            }
-                                            catch( Exception& )
-                                            {}
-                                        }
-
-                                        // setting of the visual properties
-                                        try
-                                        {
-                                            xProp->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowRulers")),makeAny(sal_True));
-                                            xProp->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowVertRuler")),makeAny(sal_True));
-                                            xProp->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowHoriRuler")),makeAny(sal_True));
-                                            xProp->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRasterVisible")),makeAny(sal_True));
-                                            xProp->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsSnapToRaster")),makeAny(sal_True));
-                                            xProp->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowOnlineLayout")),makeAny(sal_True));
-                                            xProp->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RasterSubdivisionX")),makeAny(sal_Int32(5)));
-                                            xProp->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RasterSubdivisionY")),makeAny(sal_Int32(5)));
-                                        }
-                                        catch(Exception&)
-                                        {
-                                        }
-
-                                        // setting of the ruler changes the visual area so it should be restored
-                                        if ( xVisObj.is() && aOrigSize.Width && aOrigSize.Height )
-                                        {
-                                            try
-                                            {
-                                                xVisObj->setVisualAreaSize( Aspects::MSOLE_CONTENT, aOrigSize );
-                                            } catch ( Exception& )
-                                            {}
-                                        }
-
-                                        // setting of the visual area set the form to modified state, it should be restored
-                                        try
-                                        {
-                                            // unlock the layout manager
-                                            // and let it layout before setting of the modified state
-                                            if ( xLayoutManager.is() )
-                                                xLayoutManager->unlock();
-
-                                            Reference< XModifiable > xModif( xModel, UNO_QUERY_THROW );
-                                            xModif->setModified( sal_False );
-                                        }
-                                        catch( Exception& )
-                                        {}
-                                    }
-                                    Reference<XModifiable> xModifiable(xModel,UNO_QUERY_THROW);
-                                    xModifiable->setModified(sal_False);
-                                }
-
-                            }
-                        }
-                        fillReportData(!bOpenInDesign);
-                        aRet <<= xModel;
+                        impl_onActivateEmbeddedObject( bOpenInDesign );
                     }
+
+                    fillReportData(!bOpenInDesign);
+                    aRet <<= xModel;
                 }
             }
         }
@@ -1032,7 +1165,7 @@ void ODocumentDefinition::fillLoadArgs(Sequence<PropertyValue>& _rArgs,Sequence<
 
     if ( m_pInterceptor )
     {
-        m_pInterceptor->DisconnectContentHolder();
+        m_pInterceptor->dispose();
         m_pInterceptor->release();
         m_pInterceptor = NULL;
     }
