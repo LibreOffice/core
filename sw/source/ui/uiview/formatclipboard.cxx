@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formatclipboard.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:07:58 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 15:33:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -465,7 +465,14 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
         {
             BOOL bOnlyHardAttr = TRUE;
             if( pDrawView->AreObjectsMarked() )
+            {
                 pItemSet = new SfxItemSet( pDrawView->GetAttrFromMarked(bOnlyHardAttr) );
+                //remove attributes defining the type/data of custom shapes
+                pItemSet->ClearItem(SDRATTR_CUSTOMSHAPE_ENGINE);
+                pItemSet->ClearItem(SDRATTR_CUSTOMSHAPE_DATA);
+                pItemSet->ClearItem(SDRATTR_CUSTOMSHAPE_GEOMETRY);
+                pItemSet->ClearItem(SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL);
+            }
         }
     }
     if( nSelectionType & SwWrtShell::SEL_TBL_CELLS )//only copy table attributes if really cells are selected (not only text in tables)
