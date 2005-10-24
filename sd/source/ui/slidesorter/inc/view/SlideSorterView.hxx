@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterView.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:21:27 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:43:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@
 #include <tools/gen.hxx>
 #endif
 #include <memory>
+#include <boost/shared_ptr.hpp>
 
 class Point;
 
@@ -189,7 +190,7 @@ public:
     ::sd::Window* GetWindow (void) const;
 
 
-    cache::PageCache& GetPreviewCache (void);
+    ::boost::shared_ptr<cache::PageCache> GetPreviewCache (void);
 
     view::ViewOverlay& GetOverlay (void);
 
@@ -224,6 +225,9 @@ public:
     */
     PageRange GetVisiblePageRange (void);
 
+protected:
+    virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint);
+
 private:
     model::SlideSorterModel& mrModel;
     /// This model is used for the maPage object.
@@ -232,15 +236,21 @@ private:
         pages of the document that is represented by the SlideSorterModel.
     */
     SdrPage* mpPage;
-    std::auto_ptr<Layouter> mpLayouter;
+    ::std::auto_ptr<Layouter> mpLayouter;
     bool mbPageObjectVisibilitiesValid;
-    std::auto_ptr<cache::PageCache> mpPreviewCache;
-    std::auto_ptr<ViewOverlay> mpViewOverlay;
+    ::boost::shared_ptr<cache::PageCache> mpPreviewCache;
+    ::std::auto_ptr<ViewOverlay> mpViewOverlay;
 
     int mnFirstVisiblePageIndex;
     int mnLastVisiblePageIndex;
 
     SvBorder maPagePixelBorder;
+
+    bool mbModelChangedWhileModifyEnabled;
+
+    Size maPreviewSize;
+
+    bool mbPreciousFlagUpdatePending;
 
     /** Adapt the coordinates of the given bounding box according to the
         other parameters.
@@ -271,7 +281,10 @@ private:
         resized as the borders may be device dependent.
     */
     void UpdatePageBorders (void);
+
+    void UpdatePreciousFlags (void);
 };
+
 
 } } } // end of namespace ::sd::slidesorter::view
 
