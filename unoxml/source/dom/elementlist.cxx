@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementlist.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:01:11 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:36:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,15 +42,19 @@ namespace DOM
         : m_pElement(aElement)
         , m_aName(aName)
         , xURI(0)
+        , m_bRebuild(sal_True)
     {
         OString o1 = OUStringToOString(aName, RTL_TEXTENCODING_UTF8);
         xName = new xmlChar[o1.getLength()];
         strcpy((char*)xName, o1.getStr());
+        registerListener(aElement);
     }
+
     CElementList::CElementList(const CElement* aElement, const OUString& aName, const OUString& aURI)
         : m_pElement(aElement)
         , m_aName(aName)
         , m_aURI(aURI)
+        , m_bRebuild(sal_True)
     {
         OString o1 = OUStringToOString(aName, RTL_TEXTENCODING_UTF8);
         xName = new xmlChar[o1.getLength()];
@@ -58,23 +62,52 @@ namespace DOM
         OString o2 = OUStringToOString(aURI, RTL_TEXTENCODING_UTF8);
         xURI = new xmlChar[o2.getLength()];
         strcpy((char*)xURI, o2.getStr());
+        registerListener(aElement);
     }
 
-    void CElementList::buildlist(nodevector& v, xmlNodePtr pNode, sal_Bool start)
+    void CElementList::registerListener(const CElement* pElement)
     {
-        while (pNode != NULL)
+        try {
+            // get the XNode
+            Reference< XNode > xNode(CNode::get(static_cast<const CNode*>(pElement)->m_aNodePtr));
+            Reference< XEventTarget > xTarget(xNode, UNO_QUERY_THROW);
+            OUString aType = OUString::createFromAscii("DOMSubtreeModified");
+            sal_Bool capture = sal_False;
+            xTarget->addEventListener(aType, Reference< XEventListener >(this), capture);
+        } catch (Exception &e){
+            OString aMsg("Exception caught while registering NodeList as listener:\n");
+            aMsg += OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
+            OSL_ENSURE(sal_False, aMsg.getStr());
+        }
+    }
+
+    void CElementList::buildlist(xmlNodePtr pNode, sal_Bool start)
+    {
+        // bail out if no rebuild is needed
+        if (start) {
+            if (!m_bRebuild)
+            {
+                return;
+            } else {
+                m_nodevector.erase(m_nodevector.begin(), m_nodevector.end());
+                m_bRebuild = sal_False; // don't rebuild until tree is mutated
+            }
+        }
+
+        while (pNode != NULL )
         {
-            if (strcmp((char*)pNode->name, (char*)xName)==0)
+            if (pNode->type == XML_ELEMENT_NODE && strcmp((char*)pNode->name, (char*)xName)==0)
             {
                 if (xURI == NULL)
-                    v.push_back(pNode);
+                    m_nodevector.push_back(pNode);
                 else
                     if (pNode->ns != NULL && strcmp((char*)pNode->ns->href, (char*)xURI) == 0)
-                        v.push_back(pNode);
+                        m_nodevector.push_back(pNode);
             }
-            if (pNode->children != NULL) buildlist(v,pNode->children, sal_False);
+            if (pNode->children != NULL) buildlist(pNode->children, sal_False);
+
             if (!start) pNode = pNode->next;
-            else break;
+            else break; // fold back
         }
     }
 
@@ -84,10 +117,8 @@ namespace DOM
     sal_Int32 SAL_CALL CElementList::getLength() throw (RuntimeException)
     {
         // this has to be 'live'
-        // XXX work with listeners at some point
-        nodevector v;
-        buildlist(v, static_cast<const CNode*>(m_pElement)->m_aNodePtr);
-        return v.size();
+        buildlist(static_cast<const CNode*>(m_pElement)->m_aNodePtr);
+        return m_nodevector.size();
     }
     /**
     Returns the indexth item in the collection.
@@ -95,8 +126,13 @@ namespace DOM
     Reference< XNode > SAL_CALL CElementList::item(sal_Int32 index) throw (RuntimeException)
     {
         if (index < 0) throw RuntimeException();
-        nodevector v;
-        buildlist(v, static_cast<const CNode*>(m_pElement)->m_aNodePtr);
-        return Reference< XNode >(CNode::get(v[index]));
+        buildlist(static_cast<const CNode*>(m_pElement)->m_aNodePtr);
+        return Reference< XNode >(CNode::get(m_nodevector[index]));
+    }
+
+    // tree mutations can change the list
+    void SAL_CALL CElementList::handleEvent(const Reference< XEvent >& evt) throw (RuntimeException)
+    {
+        m_bRebuild = sal_True;
     }
 }
