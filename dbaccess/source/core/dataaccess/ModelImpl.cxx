@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModelImpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:13:31 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:28:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -343,6 +343,16 @@ void SAL_CALL DocumentStorageAccess::disposing( const css::lang::EventObject& So
     ODatabaseModelImpl* pImpl = m_pModelImplementation;
     if ( pImpl )
         pImpl->disposing( Source );
+
+    for (   NamedStorages::iterator find = m_aExposedStorages.begin();
+            find != m_aExposedStorages.end();
+            ++find
+        )
+        if ( find->second == Source.Source )
+        {
+            m_aExposedStorages.erase( find );
+            break;
+        }
 }
 
 //============================================================
@@ -531,6 +541,13 @@ void ODatabaseModelImpl::dispose()
     {
     }
     m_xStorage = NULL;
+
+    if ( m_pStorageAccess )
+    {
+        m_pStorageAccess->dispose();
+        m_pStorageAccess->release();
+        m_pStorageAccess = NULL;
+    }
 }
 // -----------------------------------------------------------------------------
 const Reference< XNumberFormatsSupplier > & ODatabaseModelImpl::getNumberFormatsSupplier()
