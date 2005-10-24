@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PaneDockingWindow.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:50:04 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 16:16:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 #include "PaneDockingWindow.hrc"
 
-DockingWindow FLT_LEFT_PANE_DOCKING_WINDOW
+DockingWindow FLT_LEFT_PANE_IMPRESS_DOCKING_WINDOW
 {
     //  HelpID = SID_EFFECT_WIN ;
     Border = TRUE ;
@@ -48,8 +48,25 @@ DockingWindow FLT_LEFT_PANE_DOCKING_WINDOW
     Dockable = TRUE ;
     EnableResizing = TRUE ;
     Size = MAP_APPFONT (100,200) ;
-    Text [ de ] = "Slides" ;
-    Text [ en-US ] = "Slides" ;
+    Text [ de ] = "Folienbereich" ;
+    Text [ en-US ] = "Slide Pane" ;
+};
+
+DockingWindow FLT_LEFT_PANE_DRAW_DOCKING_WINDOW
+{
+    //  HelpID = SID_EFFECT_WIN ;
+    Border = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Sizeable = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Dockable = TRUE ;
+    EnableResizing = TRUE ;
+    Size = MAP_APPFONT (100,200) ;
+    Text [ de ] = "Seitenbereich" ;
+    Text [ en-US ] = "Page Pane" ;
 };
 
 DockingWindow FLT_RIGHT_PANE_DOCKING_WINDOW
@@ -65,6 +82,6 @@ DockingWindow FLT_RIGHT_PANE_DOCKING_WINDOW
     Dockable = TRUE ;
     EnableResizing = TRUE ;
     Size = MAP_APPFONT (100,200) ;
-    Text [ de ] = "Task Panel" ;
-    Text [ en-US ] = "Task Panel" ;
+    Text [ de ] = "Aufgabenbereich" ;
+    Text [ en-US ] = "Task Pane" ;
 };
