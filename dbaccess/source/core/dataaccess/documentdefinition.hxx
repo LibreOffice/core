@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:06:40 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:29:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
+#include <com/sun/star/frame/XController.hpp>
 #endif
 #ifndef _COM_SUN_STAR_EMBED_XSTATECHANGELISTENER_HPP_
 #include <com/sun/star/embed/XStateChangeListener.hpp>
@@ -196,6 +199,22 @@ public:
             <TRUE/> if and only if the document component can be closed
     */
     bool prepareClose();
+
+    /** does necessary initializations after our embedded object has been switched to ACTIVE
+        @param _bOpenedInDesignMode
+            determines whether the embedded object has been opened for designing it or for data display
+    */
+    void impl_onActivateEmbeddedObject( bool _bOpenedInDesignMode );
+
+    /** initializes a newly created view/controller which is displaying our embedded object
+
+        Has only to be called if the respective embedded object has been loaded for design (and
+        not for data entry)
+
+        @param  _rxController
+            the controller which belongs to the XModel of our (active) embedded object
+    */
+    void impl_initObjectEditView( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& _rxController );
 
 protected:
     // OPropertyArrayUsageHelper
