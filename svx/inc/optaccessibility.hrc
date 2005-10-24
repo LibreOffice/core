@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optaccessibility.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:10:39 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 15:38:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 #define COL3                    (COL1+(CB_WIDTH * 2/3))
 #define COL4                    (COL3+EDIT_WIDTH+RSC_SP_CTRL_DESC_X)
 
-#define UNIT_WIDTH              (CB_WIDTH-COL4)
+#define UNIT_WIDTH              (COL1+CB_WIDTH-COL4)
 
 #define ROWSPACE                RSC_SP_CTRL_DESC_Y
 #define LINESPACE               1
