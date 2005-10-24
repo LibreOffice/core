@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 06:37:19 $
+#   last change: $Author: rt $ $Date: 2005-10-24 07:45:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,8 @@ SLOFILES =      								\
     $(SLO)$/EmptyWindow.obj						\
     $(SLO)$/LayoutMenu.obj                      \
     $(SLO)$/TestMenu.obj                        \
-    $(SLO)$/TestPanel.obj
+    $(SLO)$/TestPanel.obj						\
+    $(SLO)$/SlideSorterCacheDisplay.obj
 
 EXCEPTIONSFILES=
 
