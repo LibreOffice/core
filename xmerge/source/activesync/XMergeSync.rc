@@ -7,7 +7,11 @@
 //
 // Generated from the TEXTINCLUDE 2 resource.
 //
-#include "afxres.h"
+<<<<<<< XMergeSync.rc
+// #include "afxres.h"
+=======
+//#include "afxres.h"
+>>>>>>> 1.1.12.1
 
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
@@ -17,7 +21,8 @@
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENI)
 #ifdef _WIN32
-LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_EIRE
+//LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_EIRE
+LANGUAGE 0x9, 0x1
 #pragma code_page(1252)
 #endif //_WIN32
 
