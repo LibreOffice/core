@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtextcontrolshell.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:58:10 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:26:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1124,11 +1124,7 @@ namespace svx
         if ( _bCountRichTextOnly && !m_bActiveControlIsRichText )
             return false;
 
-#ifdef DONT_REMEMBER_LAST_CONTROL
-        return m_xActiveControl.is();
-#else
         return m_bActiveControl;
-#endif
     }
 
     //------------------------------------------------------------------------
@@ -1273,10 +1269,7 @@ namespace svx
         m_xActiveTextComponent.clear();
         m_bActiveControlIsReadOnly = true;
         m_bActiveControlIsRichText = false;
-
-#ifndef DONT_REMEMBER_LAST_CONTROL
         m_bActiveControl = false;
-#endif
     }
 
     //------------------------------------------------------------------------
@@ -1285,11 +1278,7 @@ namespace svx
         DBG_ASSERT( IsActiveControl(), "FmTextControlShell::controlDeactivated: no active control!" );
         OSL_TRACE( "deactivated: %X", m_xActiveControl.get() );
 
-#ifdef DONT_REMEMBER_LAST_CONTROL
-        implClearActiveControlRef();
-#else
         m_bActiveControl = false;
-#endif
 
         m_rBindings.Invalidate( pTextControlSlots );
     }
@@ -1344,16 +1333,29 @@ namespace svx
             m_aClipboardInvalidation.Start();
         }
 
-#ifndef DONT_REMEMBER_LAST_CONTROL
         m_bActiveControl = true;
-#endif
 
         m_rBindings.Invalidate( pTextControlSlots );
 
         if ( m_pViewFrame )
             m_pViewFrame->UIFeatureChanged();
 
-        if ( m_aControlActivationHandler.IsSet() )
+        // don't call the activation handler if we don't have any slots we can serve
+        // The activation handler is used to put the shell on the top of the dispatcher stack,
+        // so it's preferred when slots are distributed.
+        // Note that this is a slight hack, to prevent that we grab slots from the SfxDispatcher
+        // which should be served by other shells (e.g. Cut/Copy/Paste).
+        // A real solution would be a forwarding-mechanism for slots: We should be on the top
+        // if we're active, but if we cannot handle the slot, then we need to tell the dispatcher
+        // to skip our shell, and pass the slot to the next one. However, this mechanism is not
+        // not in place in SFX.
+        // Another possibility would be to have dedicated shells for the slots which we might
+        // or might not be able to serve. However, this could probably increase the number of
+        // shells too much (In theory, nearly every slot could have an own shell then).
+        //
+        // #i51621# / 2005-08-19 / frank.schoenheit@sun.com
+        bool bHaveAnyServeableSlots = m_xActiveTextComponent.is() || !m_aControlFeatures.empty();
+        if ( m_aControlActivationHandler.IsSet() && bHaveAnyServeableSlots )
             m_aControlActivationHandler.Call( NULL );
 
         m_bNeedClipboardInvalidation = true;
@@ -1428,12 +1430,7 @@ namespace svx
         DBG_TRACE( sTrace );
 #endif
 
-#ifdef DONT_REMEMBER_LAST_CONTROL
-        if ( xControl == m_xActiveControl )
-            controlDeactivated();
-#else
         m_bActiveControl = false;
-#endif
     }
 
     //------------------------------------------------------------------------
