@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:25:29 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:42:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,9 +145,6 @@ SlideSorterController::SlideSorterController (
     // The whole background is painted by the view and controls.
     pParentWindow->SetBackground (Wallpaper());
 
-    mrModel.SetPageObjectFactory (::std::auto_ptr<PageObjectFactory> (
-        new PageObjectFactory (&mrView.GetPreviewCache())));
-
     // Connect the view with the window that has been created by our base
     // class.
     ::sd::Window* pWindow = GetViewShell().GetActiveWindow();
@@ -157,6 +154,11 @@ SlideSorterController::SlideSorterController (
     pWindow->SetCenterAllowed (false);
     pWindow->SetViewSize (mrView.GetModelArea().GetSize());
     mrView.HandleModelChange();
+
+    // Now that the window is present we can create the preview cache and
+    // with it the page object factory.
+    mrModel.SetPageObjectFactory (::std::auto_ptr<PageObjectFactory> (
+        new PageObjectFactory (mrView.GetPreviewCache())));
 }
 
 
@@ -1175,7 +1177,7 @@ void SlideSorterController::SetZoom (long int nZoom)
     mrView.GetLayouter().SetZoom(nZoom/100.0, pWindow);
     mrView.Layout();
     GetScrollBarManager().UpdateScrollBars (false);
-    mrView.GetPreviewCache().InvalidateCache();
+    mrView.GetPreviewCache()->InvalidateCache();
     mrView.RequestRepaint();
     mrView.LockRedraw (FALSE);
 
@@ -1253,12 +1255,15 @@ bool SlideSorterController::ChangeEditMode (EditMode eEditMode)
 {
     ModelChangeLock aLock (*this);
 
-    // Do the actual edit mode switching.
-    PreModelChange();
-    bool bResult (mrModel.SetEditMode (eEditMode));
-    if (bResult)
-        HandleModelChange();
-
+    bool bResult (false);
+    if (mrModel.GetEditMode() != eEditMode)
+    {
+        // Do the actual edit mode switching.
+        PreModelChange();
+        bResult = mrModel.SetEditMode(eEditMode);
+        if (bResult)
+            HandleModelChange();
+    }
     return bResult;
 }
 
