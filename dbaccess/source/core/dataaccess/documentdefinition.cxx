@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:29:02 $
+ *  last change: $Author: fs $ $Date: 2005-10-24 09:03:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -363,7 +363,7 @@ namespace dbaccess
         Reference< XInterface > m_xClient;
 
     public:
-        inline static couple( const Reference< XInterface >& _rxClient, const Reference< XComponent >& _rxActor )
+        inline static void couple( const Reference< XInterface >& _rxClient, const Reference< XComponent >& _rxActor )
         {
             Reference< css::lang::XEventListener > xEnsureDelete( new LifetimeCoupler( _rxClient, _rxActor ) );
         }
