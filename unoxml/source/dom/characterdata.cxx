@@ -4,9 +4,9 @@
  *
  *  $RCSfile: characterdata.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:55:45 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:36:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,7 @@ namespace DOM
                 sal_True, sal_False, Reference< XNode >(),
                 prevValue, newValue, OUString(), (AttrChangeType)0 );
         dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
+        dispatchSubtreeModified();
     }
 
     void CCharacterData::init_characterdata(const xmlNodePtr aNodePtr)
