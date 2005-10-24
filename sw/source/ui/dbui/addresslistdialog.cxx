@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addresslistdialog.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:47:39 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 15:30:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,8 +114,8 @@
 #ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSERFACTORY_HPP_
-#include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
+#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSERFACTORY_HPP_
+#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
@@ -384,9 +384,9 @@ IMPL_LINK(SwAddressListDialog, FilterHdl_Impl, PushButton*, pButton)
         {
             try
             {
-                uno::Reference<XSQLQueryComposerFactory> xQFact(pUserData->xConnection, UNO_QUERY_THROW);
-                uno::Reference<XSQLQueryComposer> xComposer = xQFact->createQueryComposer();
-
+                uno::Reference<lang::XMultiServiceFactory> xConnectFactory(pUserData->xConnection, UNO_QUERY_THROW);
+                uno::Reference<XSingleSelectQueryComposer> xComposer(
+                        xConnectFactory->createInstance(C2U("com.sun.star.sdb.SingleSelectQueryComposer")), UNO_QUERY_THROW);
 
                 PropertyValue aSecond;
                 aSecond.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RowSet" ) );
@@ -396,7 +396,7 @@ IMPL_LINK(SwAddressListDialog, FilterHdl_Impl, PushButton*, pButton)
                 xRowProperties->setPropertyValue(C2U("DataSourceName"),
                         makeAny(OUString(m_aListLB.GetEntryText(pSelect, ITEMID_NAME - 1))));
                 xRowProperties->setPropertyValue(C2U("Command"), makeAny(
-                        OUString()));
+                        OUString(sCommand)));
                 xRowProperties->setPropertyValue(C2U("CommandType"), makeAny(pUserData->nCommandType));
                 xRowProperties->setPropertyValue(C2U("ActiveConnection"), makeAny(pUserData->xConnection.getTyped()));
                 xRowSet->execute();
