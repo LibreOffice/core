@@ -5,9 +5,9 @@
  *
  *  $RCSfile: ImpressWindowState.xcu,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:19:43 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:22:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,6 +241,9 @@
                     <value>true</value>
                 </prop>
                 <prop oor:name="ContextSensitive" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="NoClose" oor:type="xs:boolean">
                     <value>true</value>
                 </prop>
             </node>
