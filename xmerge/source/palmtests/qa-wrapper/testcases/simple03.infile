@@ -1,0 +1,3 @@
+# simple03
+TEST|Simple 3|QUICKWORD|simple03
+ENTER_STRING_AT_LOCATION|LEFT|42|This is also in standard style\n
