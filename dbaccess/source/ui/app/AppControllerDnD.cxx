@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppControllerDnD.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:14:58 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:30:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -228,8 +228,7 @@ using namespace ::com::sun::star::util;
 // -----------------------------------------------------------------------------
 void OApplicationController::deleteTables(const ::std::vector< ::rtl::OUString>& _rList)
 {
-    Reference<XConnection> xConnection;
-    ensureConnection(xConnection);
+    SharedConnection xConnection( ensureConnection() );
 
     Reference<XTablesSupplier> xSup(xConnection,UNO_QUERY);
     OSL_ENSURE(xSup.is(),"OApplicationController::deleteTable: no XTablesSuppier!");
@@ -451,43 +450,26 @@ void OApplicationController::deleteEntries()
     }
 }
 // -----------------------------------------------------------------------------
-Reference<XConnection> OApplicationController::getActiveConnection() const
-{
-    Reference<XConnection> xConnection;
-    if ( getContainer() )
-    {
-        ::rtl::OUString sDataSourceName = getDatabaseName();
-        TDataSourceConnections::const_iterator aFind = m_aDataSourceConnections.find(sDataSourceName);
-        if ( aFind != m_aDataSourceConnections.end() )
-            xConnection = aFind->second;
-    }
-
-    return xConnection;
-}
-// -----------------------------------------------------------------------------
-bool OApplicationController::ensureConnection(Reference<XConnection>& _xConnection,sal_Bool _bCreate)
+const SharedConnection& OApplicationController::ensureConnection()
 {
     ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    ::rtl::OUString sDataSourceName = getDatabaseName();
-    TDataSourceConnections::iterator aFind = m_aDataSourceConnections.find(sDataSourceName);
-    if ( aFind == m_aDataSourceConnections.end() )
-        aFind = m_aDataSourceConnections.insert(TDataSourceConnections::value_type(sDataSourceName,Reference<XConnection>())).first;
-
-    if ( !aFind->second.is() && _bCreate )
+    if ( !m_xDataSourceConnection.is() )
     {
         WaitObject aWO(getView());
         String sConnectingContext( ModuleRes( STR_COULDNOTCONNECT_DATASOURCE ) );
         sConnectingContext.SearchAndReplaceAscii("$name$", getStrippedDatabaseName());
 
-        aFind->second = connect(sDataSourceName, sConnectingContext, rtl::OUString(), sal_True);
+        m_xDataSourceConnection.reset( connect( getDatabaseName(), sConnectingContext, rtl::OUString(), sal_True ) );
+        if ( m_xDataSourceConnection.is() )
+            m_xMetaData = m_xDataSourceConnection->getMetaData();
+
         // otherwise we got a loop when connecting to db throws an error
-//      if ( !aFind->second.is() )
+//      if ( !m_xDataSourceConnection.is() )
 //          getContainer()->clearSelection();
     }
-    _xConnection = aFind->second;
-    return _xConnection.is();
+    return m_xDataSourceConnection;
 }
 // -----------------------------------------------------------------------------
 sal_Bool OApplicationController::isDataSourceReadOnly() const
@@ -499,13 +481,11 @@ sal_Bool OApplicationController::isDataSourceReadOnly() const
 sal_Bool OApplicationController::isConnectionReadOnly() const
 {
     sal_Bool bIsConnectionReadOnly = sal_True;
-    Reference<XConnection> xConnection = getActiveConnection();
-
-    if ( xConnection.is() )
+    if ( m_xMetaData.is() )
     {
         try
         {
-            bIsConnectionReadOnly = xConnection->getMetaData()->isReadOnly();
+            bIsConnectionReadOnly = m_xMetaData->isReadOnly();
         }
         catch(SQLException&)
         {
@@ -554,11 +534,9 @@ Reference< XNameAccess > OApplicationController::getElements(ElementType _eType)
                 break;
             case E_TABLE:
                 {
-                    Reference<XConnection> xConnection;
-                    ensureConnection(xConnection,sal_False);
-                    if ( xConnection.is() )
+                    if ( m_xDataSourceConnection.is() )
                     {
-                        Reference<XTablesSupplier> xSup(xConnection,UNO_QUERY);
+                        Reference< XTablesSupplier > xSup( getConnection(), UNO_QUERY );
                         OSL_ENSURE(xSup.is(),"OApplicationController::getElements: no XTablesSuppier!");
                         if ( xSup.is() )
                             xElements = xSup->getTables();
@@ -620,10 +598,8 @@ void OApplicationController::getSelectionElementNames(::std::vector< ::rtl::OUSt
     Reference< XDatabaseMetaData> xMetaData;
     if ( getContainer()->getElementType() == E_TABLE )
     {
-        Reference<XConnection> xConnection;
-        ensureConnection(xConnection,sal_False);
-        if ( xConnection.is() )
-            xMetaData = xConnection->getMetaData();
+        if ( m_xDataSourceConnection.is() )
+            xMetaData = m_xDataSourceConnection->getMetaData();
     }
 
     getContainer()->getSelectionElementNames(_rNames,xMetaData);
@@ -666,16 +642,17 @@ void OApplicationController::getSelectionElementNames(::std::vector< ::rtl::OUSt
 
     }
 
-    Reference<XConnection> xConnection;
+    SharedConnection xConnection;
     try
     {
-        ensureConnection(xConnection);
+        xConnection = ensureConnection();
     }
     catch(SQLContext& e) { showError(SQLExceptionInfo(e)); }
     catch(SQLWarning& e) { showError(SQLExceptionInfo(e)); }
     catch(SQLException& e) { showError(SQLExceptionInfo(e)); }
     OSL_ENSURE(xNameAccess.is(),"Data source doesn't return a name access -> GPF");
-    return ::std::auto_ptr<OLinkedDocumentsAccess>( new OLinkedDocumentsAccess(getView(), getORB(), xNameAccess,xConnection,getDatabaseName()));
+    return ::std::auto_ptr<OLinkedDocumentsAccess>(
+        new OLinkedDocumentsAccess( getView(), getORB(), xNameAccess, xConnection, getDatabaseName() ) );
 }
 // -----------------------------------------------------------------------------
 TransferableHelper* OApplicationController::copyObject()
@@ -692,11 +669,9 @@ TransferableHelper* OApplicationController::copyObject()
             case E_TABLE:
             case E_QUERY:
             {
-                Reference<XConnection> xConnection;
-                ensureConnection(xConnection,sal_False);
                 Reference< XDatabaseMetaData> xMetaData;
-                if ( xConnection.is() )
-                    xMetaData = xConnection->getMetaData();
+                if ( m_xDataSourceConnection.is() )
+                    xMetaData = m_xDataSourceConnection->getMetaData();
 
                 ::rtl::OUString sName = getContainer()->getQualifiedName(NULL,xMetaData);
                 if ( sName.getLength() )
@@ -705,11 +680,11 @@ TransferableHelper* OApplicationController::copyObject()
 
                     if ( eType == E_TABLE )
                     {
-                        pData = new ODataClipboard(sDataSource, CommandType::TABLE, sName, xConnection, getNumberFormatter(xConnection,getORB()), getORB());
+                        pData = new ODataClipboard(sDataSource, CommandType::TABLE, sName, m_xDataSourceConnection, getNumberFormatter(m_xDataSourceConnection,getORB()), getORB());
                     }
                     else
                     {
-                        pData = new ODataClipboard(sDataSource, CommandType::QUERY, sName, getNumberFormatter(xConnection,getORB()), getORB());
+                        pData = new ODataClipboard(sDataSource, CommandType::QUERY, sName, getNumberFormatter(m_xDataSourceConnection,getORB()), getORB());
                     }
                 }
             }
@@ -931,13 +906,9 @@ sal_Bool OApplicationController::copyTagTable(OTableCopyHelper::DropDescriptor& 
     // first get the dest connection
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    Reference<XConnection> xDestConnection;  // supports the service sdb::connection
-    ensureConnection( xDestConnection);
-    if ( !xDestConnection.is() )
+    SharedConnection xConnection( ensureConnection() );
+    if ( !xConnection.is() )
         return sal_False;
-
-    SharedConnection xConnection( xDestConnection, SharedConnection::NoTakeOwnership );
-    // TODO: migrate ensureConnection to the SharedConnection-API
 
     return m_aTableCopyHelper.copyTagTable( _rDesc, _bCheck, xConnection );
 }
@@ -951,13 +922,8 @@ IMPL_LINK( OApplicationController, OnAsyncDrop, void*, NOTINTERESTEDIN )
 
     if ( m_aAsyncDrop.nType == E_TABLE )
     {
-        Reference<XConnection> xDestConnection;  // supports the service sdb::connection
-        ensureConnection( xDestConnection);
-
-        SharedConnection xConnection( xDestConnection, SharedConnection::NoTakeOwnership );
-        // TODO: migrate ensureConnection to the SharedConnection-API
-
-        if ( xDestConnection.is() )
+        SharedConnection xConnection( ensureConnection() );
+        if ( xConnection.is() )
             m_aTableCopyHelper.asyncCopyTagTable( m_aAsyncDrop, getDatabaseName(), xConnection );
     }
     else
