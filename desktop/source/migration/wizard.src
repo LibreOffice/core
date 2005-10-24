@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizard.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:35:29 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 18:34:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,8 +98,18 @@ String STR_WELCOME_OEM
 };
 String STR_WELCOME_OEM_EXT
 {
-    Text [ de ]    = "Dieser Assistent wird Sie durch die Lizenzbedingungen und  die Registrierung von %PRODUCTNAME führen.\n\nIn der Readme-Datei im %PRODUCTNAME-Produktverzeichnis finden Sie wichtige Hinweise zum Programm. Bitte lesen Sie diese Hinweise aufmerksam durch. Des weiteren finden Sie ausführliche Informationen auf der Internetseite von Sun unter\n\nhttp://www.sun.com/%PRODUCTNAME.\n\nSupport und Schulung:\n\nNutzen Sie die Möglichkeit des kostenlosen Software-Supports für 60 Tage ab Kaufdatum. Auch eine kostenlose, Web-basierte %PRODUCTNAME-Schulung des Sun(tm) Web Learning Centers wartet auf Sie. Dieses Schulungsangebot ist 90 Tage ab Registrierung gültig. Besuchen Sie folgende Webseite für weitere Details.\n\nhttp://www.sun.com/star/service\n\nKlicken Sie auf 'Weiter', um fortzufahren.";
-    Text [ en-US ] = "This wizard will guide you through the license agreement and the registration of %PRODUCTNAME.\n\nImportant information is contained in the readme files which are located in the %PRODUCTNAME product directory. Please read these files carefully. You can also find detailed information on the Sun website \n\nhttp://www.sun.com/&PRODUCTNAME.\n\nSupport and Training:\n\nGet FREE software support valid for 60 days from date of purchase and FREE access to a web-based %PRODUCTNAME course available through the Sun(tm) Web Learning Center (valid for 90 days from the date of registration). To take advantage of this offer, visit the website below.\n\nhttp://www.sun.com/star/service\n\nClick 'Next' to continue.";
+    Text [ de ]    = "Dieser Assistent wird Sie durch die Lizenzbedingungen und  die Registrierung von %PRODUCTNAME führen.\n\n"
+    "In der Readme-Datei im %PRODUCTNAME-Produktverzeichnis finden Sie wichtige Hinweise zum Programm. Bitte lesen Sie diese "
+    "Hinweise aufmerksam durch. Des weiteren finden Sie ausführliche Informationen auf der Internetseite von Sun unter\n\n"
+    "http://www.sun.com/%PRODUCTNAME.\n\nSupport:\n\nNutzen Sie die Möglichkeit des kostenlosen "
+    "Software-Supports für 60 Tage ab Kaufdatum. Besuchen Sie folgende "
+    "Webseite für weitere Details.\n\nhttp://www.sun.com/star/service\n\nKlicken Sie auf 'Weiter', um fortzufahren.";
+    Text [ en-US ] = "This wizard will guide you through the license agreement and the registration of %PRODUCTNAME.\n\n"
+    "Important information is contained in the readme files which are located in the %PRODUCTNAME product directory. "
+    "Please read these files carefully. You can also find detailed information on the Sun website \n\n"
+    "http://www.sun.com/&PRODUCTNAME.\n\nSupport:\n\nGet FREE software support valid for 60 days from "
+    "date of purchase. To take advantage of this offer, visit the website below.\n\n"
+    "http://www.sun.com/star/service\n\nClick 'Next' to continue.";
 };
 
 String STR_WELCOME_EVAL
