@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:43:59 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:32:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,6 +247,21 @@ void OSelectionBrowseBox::initialize()
     Reference< XConnection> xConnection = static_cast<OQueryController*>(getDesignView()->getController())->getConnection();
     if(xConnection.is())
     {
+        const IParseContext& rContext = static_cast<OQueryController*>(getDesignView()->getController())->getParser()->getContext();
+        IParseContext::InternationalKeyCode eFunctions[] = { IParseContext::KEY_AVG,IParseContext::KEY_COUNT,IParseContext::KEY_MAX,IParseContext::KEY_MIN,IParseContext::KEY_SUM };
+
+        String sGroup = m_aFunctionStrings.GetToken(m_aFunctionStrings.GetTokenCount() - 1);
+        m_aFunctionStrings = m_aFunctionStrings.GetToken(0);
+
+        for (sal_Int32 i = 0; i < sizeof(eFunctions)/sizeof(eFunctions[0]) ; ++i)
+        {
+            m_aFunctionStrings += String(RTL_CONSTASCII_USTRINGPARAM(";"));
+            m_aFunctionStrings += String(ByteString(rContext.getIntlKeywordAscii(eFunctions[i])),RTL_TEXTENCODING_UTF8);
+
+        } // for (sal_Int32 i = 0; i < sizeof(eFunctions)/sizeof(eFunctions[0]) ; ++i)
+        m_aFunctionStrings += String(RTL_CONSTASCII_USTRINGPARAM(";"));
+        m_aFunctionStrings += sGroup;
+
         // Diese Funktionen stehen nur unter CORE zur Verfügung
         if ( lcl_SupportsCoreSQLGrammar(xConnection) )
         {
