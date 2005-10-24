@@ -4,9 +4,9 @@
  *
  *  $RCSfile: replace.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:23:30 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:38:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,9 @@ using namespace com::sun::star::xml::dom;
 
 CSubmission::SubmissionResult CSubmission::replace(const OUString& aReplace, const Reference<XDocument>& aDocument, const Reference<XFrame>& aFrame)
 {
+    if (!m_aResultStream.is())
+        return CSubmission::UNKNOWN_ERROR;
+
     try {
         Reference< XMultiServiceFactory > xFactory = utl::getProcessServiceFactory();
         if (aReplace.equalsIgnoreAsciiCaseAscii("all") || aReplace.equalsIgnoreAsciiCaseAscii("document")) {
@@ -89,14 +92,18 @@ CSubmission::SubmissionResult CSubmission::replace(const OUString& aReplace, con
                     OUString::createFromAscii("com.sun.star.xml.dom.DocumentBuilder")), UNO_QUERY_THROW);
                 Reference< XDocument > aNewDocument = xBuilder->parse(m_aResultStream);
 
-                // and replace the content of the current instance
-                Reference< XElement > oldRoot = aDocument->getDocumentElement();
-                Reference< XElement > newRoot = aNewDocument->getDocumentElement();
+                if (aNewDocument.is()) {
+                    // and replace the content of the current instance
+                    Reference< XElement > oldRoot = aDocument->getDocumentElement();
+                    Reference< XElement > newRoot = aNewDocument->getDocumentElement();
 
-                // aDocument->removeChild(Reference< XNode >(oldRoot, UNO_QUERY_THROW));
-                Reference< XNode > aImportedNode = aDocument->importNode(Reference< XNode >(newRoot, UNO_QUERY_THROW), sal_True);
-                Reference< XNode >(aDocument, UNO_QUERY_THROW)->replaceChild(aImportedNode, Reference< XNode >(oldRoot, UNO_QUERY_THROW));
-                return CSubmission::SUCCESS;
+                    // aDocument->removeChild(Reference< XNode >(oldRoot, UNO_QUERY_THROW));
+                    Reference< XNode > aImportedNode = aDocument->importNode(Reference< XNode >(newRoot, UNO_QUERY_THROW), sal_True);
+                    Reference< XNode >(aDocument, UNO_QUERY_THROW)->replaceChild(aImportedNode, Reference< XNode >(oldRoot, UNO_QUERY_THROW));
+                    return CSubmission::SUCCESS;
+                } else {
+                    return CSubmission::UNKNOWN_ERROR;
+                }
             } else {
                 // nothing to replace
                 return CSubmission::UNKNOWN_ERROR;
