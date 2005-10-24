@@ -4,9 +4,9 @@
  *
  *  $RCSfile: preload.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:05:04 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 18:33:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,8 +99,23 @@ TabPage RID_TP_WELCOME
         Size = MAP_APPFONT ( 248 , 174 ) ;
         WordBreak = TRUE ;
         Text [ x-comment ] = "; LHO:; EM 30 AUG 2002: DO NOT DELETE YOUR TRANSLATION!!! THE GERMAN TEXT IS MISSING BUT WILL RETURN!! ENGLISH IS CORRECT!LHO: Please eliminate any notion about the training in all languages except German, English, French and Japanese";
-        Text [ de ] = "Herzlich willkommen zu %PRODUCTNAME %PRODUCTVERSION OEM\n\nUm %PRODUCTNAME %PRODUCTVERSION OEM starten zu können, geben Sie bitte auf der dem Lizenztext folgenden Dialogseite Ihre Benutzerdaten ein. In der Readme-Datei im %PRODUCTNAME-Produktverzeichnis finden Sie wichtige Hinweise zum Programm. Bitte lesen Sie diese Hinweise aufmerksam durch. Des weiteren finden Sie ausführliche Informationen auf der Internetseite von Sun unter\n\nhttp://www.sun.com/staroffice.\n\nSupport und Schulung:\n\nNutzen Sie die Möglichkeit des kostenlosen Software-Supports für 60 Tage ab Kaufdatum. Auch eine kostenlose, Web-basierte %PRODUCTNAME-Schulung des Sun(tm) Web Learning Centers wartet auf Sie. Dieses Schulungsangebot ist 90 Tage ab Registrierung gültig. Besuchen Sie folgende Webseite für weitere Details.\n\nhttp://www.sun.com/star/service\n\nWir wünschen Ihnen viel Spaß und Erfolg mit Ihrem neuen %PRODUCTNAME.\nIhr %PRODUCTNAME Team.";
-        Text [ en-US ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start the %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text. Important information is contained in the readme files which are located in the %PRODUCTNAME product directory. Please read these files carefully. You can also find detailed information at the Sun website \n\nhttp://www.sun.com/staroffice.\n\nSupport and Training:\n\nGet FREE software support valid for 60 days from date of purchase and FREE access to a web-based %PRODUCTNAME course available through the Sun(tm) Web Learning Center (valid for 90 days from the date of registration). To take advantage of this offer, visit the website below.\n\nhttp://www.sun.com/star/service\n\nWe hope you enjoy working with %PRODUCTNAME.";
+        Text [ de ] = "Herzlich willkommen zu %PRODUCTNAME %PRODUCTVERSION OEM\n\n"
+        "Um %PRODUCTNAME %PRODUCTVERSION OEM starten zu können, geben Sie bitte auf der dem Lizenztext folgenden "
+        "Dialogseite Ihre Benutzerdaten ein. In der Readme-Datei im %PRODUCTNAME-Produktverzeichnis finden Sie "
+        "wichtige Hinweise zum Programm. Bitte lesen Sie diese Hinweise aufmerksam durch. "
+        "Des weiteren finden Sie ausführliche Informationen auf der Internetseite von Sun unter\n\n"
+        "http://www.sun.com/staroffice.\n\nSupport und Schulung:\n\n"
+        "Nutzen Sie die Möglichkeit des kostenlosen Software-Supports für 60 Tage ab Kaufdatum. "
+        "Besuchen Sie folgende Webseite für weitere Details.\n\nhttp://www.sun.com/star/service\n\n"
+        "Wir wünschen Ihnen viel Spaß und Erfolg mit Ihrem neuen %PRODUCTNAME.\nIhr %PRODUCTNAME Team.";
+
+        Text [ en-US ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start the %PRODUCTNAME %PRODUCTVERSION OEM, "
+        "please enter your personal data in the dialog following the license text. Important information is contained "
+        "in the readme files which are located in the %PRODUCTNAME product directory. Please read these files carefully. "
+        "You can also find detailed information at the Sun website \n\n"
+        "http://www.sun.com/staroffice.\n\nSupport and Training:\n\nGet FREE software support valid for 60 days from date "
+        "of purchase. To take advantage of this offer, visit the website below.\n\n"
+        "http://www.sun.com/star/service\n\nWe hope you enjoy working with %PRODUCTNAME.";
     };
 };
 
