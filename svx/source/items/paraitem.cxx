@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:38:49 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 15:39:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,7 +202,7 @@ sal_Bool SvxLineSpacingItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             if(eInterLineSpace == SVX_INTER_LINE_SPACE_FIX)
             {
                 aLSp.Mode = style::LineSpacingMode::LEADING;
-                aLSp.Height = nInterLineSpace;
+                aLSp.Height = ( bConvert ? (short)TWIP_TO_MM100(nInterLineSpace) : nInterLineSpace);
             }
             else if(eInterLineSpace == SVX_INTER_LINE_SPACE_OFF)
             {
@@ -264,6 +264,9 @@ sal_Bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 eInterLineSpace = SVX_INTER_LINE_SPACE_FIX;
                 eLineSpace = SVX_LINE_SPACE_AUTO;
                 nInterLineSpace = aLSp.Height;
+                if(bConvert)
+                    nInterLineSpace = (short)MM100_TO_TWIP(nInterLineSpace);
+
             }
             break;
             case style::LineSpacingMode::PROP:
