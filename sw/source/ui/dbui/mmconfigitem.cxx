@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmconfigitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 08:26:00 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 15:31:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1009,16 +1009,14 @@ Reference< XResultSet>   SwMailMergeConfigItem::GetResultSet()
                 xRowProperties->setPropertyValue(C2U("CommandType"), makeAny(m_pImpl->aDBData.nCommandType));
                 xRowProperties->setPropertyValue(C2U("FetchSize"), makeAny((sal_Int32)10));
                 xRowProperties->setPropertyValue(C2U("ActiveConnection"), makeAny(m_pImpl->xConnection.getTyped()));
-                if(m_pImpl->sFilter.getLength())
+                try
                 {
-                    try
-                    {
-                        xRowProperties->setPropertyValue(C2U("Filter"), makeAny(m_pImpl->sFilter));
-                    }
-                    catch(Exception&)
-                    {
-                        DBG_ERROR("exception caught in xResultSet->SetFilter()")
-                    }
+                    xRowProperties->setPropertyValue(C2U("ApplyFilter"), makeAny(m_pImpl->sFilter.getLength()>0));
+                    xRowProperties->setPropertyValue(C2U("Filter"), makeAny(m_pImpl->sFilter));
+                }
+                catch(Exception&)
+                {
+                    DBG_ERROR("exception caught in xResultSet->SetFilter()")
                 }
                 xRowSet->execute();
                 m_pImpl->xResultSet = xRowSet.get();
@@ -1065,7 +1063,10 @@ void  SwMailMergeConfigItem::SetFilter(::rtl::OUString& rFilter)
         {
             try
             {
+                xRowProperties->setPropertyValue(C2U("ApplyFilter"), makeAny(m_pImpl->sFilter.getLength()>0));
                 xRowProperties->setPropertyValue(C2U("Filter"), makeAny(m_pImpl->sFilter));
+                uno::Reference<XRowSet> xRowSet( m_pImpl->xResultSet, UNO_QUERY_THROW );
+                xRowSet->execute();
             }
             catch(Exception&)
             {
