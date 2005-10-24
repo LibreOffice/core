@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotools.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:32:24 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 15:33:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,6 +219,12 @@ void    SwOneExampleFrame::CreateControl()
         if(xToolkit.is())
         {
             _xControl->createPeer( xToolkit, xParent );
+
+            uno::Reference< awt::XWindow >  xWin( _xControl, uno::UNO_QUERY );
+            xWin->setVisible( sal_False );
+            Size aWinSize(rWindow.GetOutputSizePixel());
+            xWin->setPosSize( 0, 0, aWinSize.Width(), aWinSize.Height(), awt::PosSize::SIZE );
+
             uno::Reference< beans::XPropertySet >  xPrSet(xInst, uno::UNO_QUERY);
             uno::Any aURL;
             //
@@ -244,11 +250,6 @@ void    SwOneExampleFrame::CreateControl()
             //save and set readonly???
 
             xPrSet->setPropertyValue(C2U("ComponentURL"), aURL);
-
-            uno::Reference< awt::XWindow >  xWin( _xControl, uno::UNO_QUERY );
-            xWin->setVisible( sal_False );
-            Size aWinSize(rWindow.GetOutputSizePixel());
-            xWin->setPosSize( 0, 0, aWinSize.Width(), aWinSize.Height(), awt::PosSize::SIZE );
 
             aLoadedTimer.Start();
             bServiceAvailable = sal_True;
