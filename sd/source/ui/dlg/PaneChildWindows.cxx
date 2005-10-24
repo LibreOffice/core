@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PaneChildWindows.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:49:33 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 16:15:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@
 #include "sdresid.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/dockwin.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
 
 namespace sd
 {
@@ -51,6 +53,7 @@ namespace sd
 
 
 #include "PaneDockingWindow.hxx"
+#include "ViewShellBase.hxx"
 
 namespace sd {
 
@@ -63,22 +66,41 @@ LeftPaneChildWindow::LeftPaneChildWindow (
     SfxChildWinInfo* pInfo)
     : SfxChildWindow (pParentWindow, nId)
 {
-    pWindow = new PaneDockingWindow (
-        pBindings,
-        this,
-        pParentWindow,
-        SdResId(FLT_LEFT_PANE_DOCKING_WINDOW),
-        PaneManager::PT_LEFT);
-    eChildAlignment = SFX_ALIGN_LEFT;
-    static_cast<SfxDockingWindow*>(pWindow)->Initialize (pInfo);
-    SetHideNotDelete (TRUE);
-};
+    ViewShellBase* pBase = ViewShellBase::GetViewShellBase(pBindings->GetDispatcher()->GetFrame());
+    if (pBase != NULL)
+    {
+        PaneManager& rPaneManager (pBase->GetPaneManager());
+        pWindow = new PaneDockingWindow (
+            pBindings,
+            this,
+            pParentWindow,
+            rPaneManager.GetDockingWindowTitle(PaneManager::PT_LEFT),
+            PaneManager::PT_LEFT,
+            rPaneManager.GetWindowTitle(PaneManager::PT_LEFT));
+        eChildAlignment = SFX_ALIGN_LEFT;
+        static_cast<SfxDockingWindow*>(pWindow)->Initialize (pInfo);
+        SetHideNotDelete (TRUE);
+        rPaneManager.SetWindow(PaneManager::PT_LEFT, pWindow);
+    }
+}
 
 
 
 
 LeftPaneChildWindow::~LeftPaneChildWindow (void)
-{}
+{
+    ViewShellBase* pBase = NULL;
+    PaneDockingWindow* pDockingWindow = dynamic_cast<PaneDockingWindow*>(pWindow);
+    if (pDockingWindow != NULL)
+        pBase = ViewShellBase::GetViewShellBase(
+            pDockingWindow->GetBindings().GetDispatcher()->GetFrame());
+    if (pBase != NULL)
+    {
+        // Tell the ViewShellBase that the window of this slide sorter is
+        // not available anymore.
+        pBase->GetPaneManager().SetWindow(PaneManager::PT_LEFT, NULL);
+    }
+}
 
 
 
@@ -94,22 +116,41 @@ RightPaneChildWindow::RightPaneChildWindow (
     SfxChildWinInfo* pInfo)
     : SfxChildWindow (pParentWindow, nId)
 {
-    pWindow = new PaneDockingWindow (
-        pBindings,
-        this,
-        pParentWindow,
-        SdResId(FLT_RIGHT_PANE_DOCKING_WINDOW),
-        PaneManager::PT_RIGHT);
-    eChildAlignment = SFX_ALIGN_RIGHT;
-    static_cast<SfxDockingWindow*>(pWindow)->Initialize (pInfo);
-    SetHideNotDelete (TRUE);
+    ViewShellBase* pBase = ViewShellBase::GetViewShellBase(pBindings->GetDispatcher()->GetFrame());
+    if (pBase != NULL)
+    {
+        PaneManager& rPaneManager (pBase->GetPaneManager());
+        pWindow = new PaneDockingWindow (
+            pBindings,
+            this,
+            pParentWindow,
+            rPaneManager.GetDockingWindowTitle(PaneManager::PT_RIGHT),
+            PaneManager::PT_RIGHT,
+            rPaneManager.GetWindowTitle(PaneManager::PT_RIGHT));
+        eChildAlignment = SFX_ALIGN_RIGHT;
+        static_cast<SfxDockingWindow*>(pWindow)->Initialize (pInfo);
+        SetHideNotDelete (TRUE);
+        rPaneManager.SetWindow(PaneManager::PT_RIGHT, pWindow);
+    }
 };
 
 
 
 
 RightPaneChildWindow::~RightPaneChildWindow (void)
-{}
+{
+    ViewShellBase* pBase = NULL;
+    PaneDockingWindow* pDockingWindow = dynamic_cast<PaneDockingWindow*>(pWindow);
+    if (pDockingWindow != NULL)
+        pBase = ViewShellBase::GetViewShellBase(
+            pDockingWindow->GetBindings().GetDispatcher()->GetFrame());
+    if (pBase != NULL)
+    {
+        // Tell the ViewShellBase that the window of this slide sorter is
+        // not available anymore.
+        pBase->GetPaneManager().SetWindow(PaneManager::PT_RIGHT, NULL);
+    }
+}
 
 
 
