@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-18 13:50:34 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 15:32:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4825,7 +4825,7 @@ BOOL SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
 
     UpdatePointer( aDocPos, 0 );
 
-    if ( aActHitType != SDRHIT_NONE && !rSh.IsSelFrmMode() &&
+    if( !rSh.IsSelFrmMode() &&
         !GetView().GetViewFrame()->GetDispatcher()->IsLocked() )
     {
         // #107513#
