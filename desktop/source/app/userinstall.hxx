@@ -4,9 +4,9 @@
  *
  *  $RCSfile: userinstall.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:14:15 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 18:34:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,10 +55,5 @@ public:
     };
 
     static UserInstallError finalize();
-
-    // configureLanguage ensures that a ooLocale is set to a valid
-    // Language every time since the Language of the base
-    // install might change
-    static UserInstallError configureLanguage();
 };
 }
