@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageObjectFactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:15:17 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:43:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,8 +45,8 @@
 namespace sd { namespace slidesorter { namespace controller {
 
 
-PageObjectFactory::PageObjectFactory (cache::PageCache* pCache)
-    : mpPageCache(pCache)
+PageObjectFactory::PageObjectFactory (const ::boost::shared_ptr<cache::PageCache>& rpCache)
+    : mpPageCache(rpCache)
 {
 }
 
