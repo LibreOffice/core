@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmoutputpage.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 08:26:30 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 15:31:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -846,8 +846,9 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             String sExtension = aURL.getExtension();
             if(!sExtension.Len())
             {
-                sPath.AppendAscii(".sxw");
-                sExtension.AppendAscii("sxw");
+                sExtension = pSfxFlt->GetWildcard()().GetToken(1, '.');
+                sPath += '.';
+                sPath += sExtension;
             }
             //now extract a document from the target document
             SfxObjectShellRef xTempDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
@@ -872,7 +873,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             String sOutPath = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
             String sCounter('_');
             sCounter += String::CreateFromInt32(nDoc);
-            sOutPath.Insert(sCounter, sPath.Len() - sExtension.Len() - 1);
+            sOutPath.Insert(sCounter, sOutPath.Len() - sExtension.Len() - 1);
             //SfxStringItem aName(SID_FILE_NAME, sOutPath);
             //SfxStringItem aFilter(SID_FILTER_NAME, sFilter);
 
