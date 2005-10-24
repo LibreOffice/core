@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:15:13 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:23:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1493,6 +1493,8 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             case BASEPROPERTY_BACKGROUNDCOLOR:
                 if ( bVoid )
                 {
+                    if ( pWindow->IsCompoundControl() )
+                        pWindow->SetBackground();
                     pWindow->SetControlBackground();
                 }
                 else
