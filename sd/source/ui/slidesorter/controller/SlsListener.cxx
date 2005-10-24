@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsListener.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:25:53 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:19:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,7 +221,13 @@ void Listener::ConnectToController (void)
 
 
         // Listen for hints at the view shell in the center pane as well.
-        StartListening (*rShell.GetViewShellBase().GetMainViewShell());
+        ViewShell* pMainViewShell = rShell.GetViewShellBase().GetMainViewShell();
+        if (pMainViewShell != NULL)
+            StartListening (*pMainViewShell);
+        else
+        {
+            DBG_ASSERT(false,"sls::Listener::ConnectToController: main view shell is not present");
+        }
     }
 }
 
