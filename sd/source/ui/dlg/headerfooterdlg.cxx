@@ -4,9 +4,9 @@
  *
  *  $RCSfile: headerfooterdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-06 10:46:24 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 16:16:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -542,7 +542,7 @@ HeaderFooterTabPage::HeaderFooterTabPage( HeaderFooterDialog* pDialog, ::Window*
         maCBSlideNumber.SetText( aPageNumberStr );
 
         String aIncludeOnPageStr( SdResId( STR_INCLUDE_ON_PAGE ) );
-        maCBNotOnTitle.SetText( aIncludeOnPageStr );
+        maFLIncludeOnPage.SetText( aIncludeOnPageStr );
     }
 
     FreeResource();
