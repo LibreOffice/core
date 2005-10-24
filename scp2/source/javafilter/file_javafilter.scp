@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_javafilter.scp,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:31:07 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 18:30:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,13 +101,10 @@ End
 
 #ifdef SOLAR_JAVA
 
-STD_JAR_FILE( gid_File_Jar_Aportisdoc, aportisdoc )
-STD_JAR_FILE( gid_File_Jar_Docbook, docbook )
-STD_JAR_FILE( gid_File_Jar_Htmlsoff, htmlsoff )
+STD_JAR_FILE_PATCH( gid_File_Jar_Aportisdoc, aportisdoc )
 STD_JAR_FILE( gid_File_Jar_Pexcel, pexcel )
 STD_JAR_FILE( gid_File_Jar_Pocketword, pocketword )
-UNO_JAR_FILE( gid_File_Jar_Xflatxml, XFlatXml )
-STD_JAR_FILE( gid_File_Jar_Xmerge, xmerge )
-UNO_JAR_FILE( gid_File_Jar_Xmergebridge, XMergeBridge )
+STD_JAR_FILE_PATCH( gid_File_Jar_Xmerge, xmerge )
+UNO_JAR_FILE_PATCH( gid_File_Jar_Xmergebridge, XMergeBridge )
 
 #endif
