@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_resource_ooo.scp,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 08:47:11 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 18:30:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@ STD_RES_FILE_PATCH( gid_File_Res_Dbu, dbu)
 
 STD_RES_FILE( gid_File_Res_Dbw, dbw )
 
-STD_RES_FILE( gid_File_Res_Dkt, dkt)
+STD_RES_FILE_PATCH( gid_File_Res_Dkt, dkt)
 
 STD_RES_FILE( gid_File_Res_Epb, epb )
 
@@ -94,7 +94,7 @@ STD_RES_FILE( gid_File_Res_Pcr, pcr)
 
 STD_RES_FILE( gid_File_Res_Pdffilter, pdffilter)
 
-STD_RES_FILE( gid_File_Res_Preload, preload)
+STD_RES_FILE_PATCH( gid_File_Res_Preload, preload)
 
 STD_RES_FILE( gid_File_Res_Productregistration, productregistration)
 
