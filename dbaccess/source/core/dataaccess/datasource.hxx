@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:05:38 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:28:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,8 +81,8 @@
 #ifndef _CPPUHELPER_WEAKREF_HXX_
 #include <cppuhelper/weakref.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE10_HXX_
-#include <cppuhelper/implbase10.hxx>
+#ifndef _CPPUHELPER_IMPLBASE11_HXX_
+#include <cppuhelper/implbase11.hxx>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE12_HXX_
 #include <cppuhelper/implbase12.hxx>
@@ -163,17 +163,18 @@ class OChildCommitListen_Impl;
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
     ODatabaseSource_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
-typedef ::cppu::ImplHelper10    <   ::com::sun::star::lang::XServiceInfo
-                            ,   ::com::sun::star::sdbc::XDataSource
-                            ,   ::com::sun::star::sdb::XBookmarksSupplier
-                            ,   ::com::sun::star::sdb::XQueryDefinitionsSupplier
-                            ,   ::com::sun::star::sdb::XCompletedConnection
-                            ,   ::com::sun::star::container::XContainerListener
-                            ,   ::com::sun::star::sdbc::XIsolatedConnection
-                            ,   ::com::sun::star::sdbcx::XTablesSupplier
-                            ,   ::com::sun::star::util::XFlushable
-                            ,   ::com::sun::star::sdb::XDocumentDataSource
-                            >   ODatabaseSource_Base;
+typedef ::cppu::ImplHelper11    <   ::com::sun::star::lang::XServiceInfo
+                                ,   ::com::sun::star::sdbc::XDataSource
+                                ,   ::com::sun::star::sdb::XBookmarksSupplier
+                                ,   ::com::sun::star::sdb::XQueryDefinitionsSupplier
+                                ,   ::com::sun::star::sdb::XCompletedConnection
+                                ,   ::com::sun::star::container::XContainerListener
+                                ,   ::com::sun::star::sdbc::XIsolatedConnection
+                                ,   ::com::sun::star::sdbcx::XTablesSupplier
+                                ,   ::com::sun::star::util::XFlushable
+                                ,   ::com::sun::star::util::XFlushListener
+                                ,   ::com::sun::star::sdb::XDocumentDataSource
+                                >   ODatabaseSource_Base;
 
 
 class ODatabaseSource   :public ::comphelper::OBaseMutex
@@ -280,6 +281,9 @@ public:
     virtual void SAL_CALL flush(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addFlushListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XFlushListener >& l ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeFlushListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XFlushListener >& l ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XFlushListener
+    virtual void SAL_CALL flushed( const ::com::sun::star::lang::EventObject& rEvent ) throw (::com::sun::star::uno::RuntimeException);
 
     // XDocumentDataSource
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XOfficeDatabaseDocument > SAL_CALL getDatabaseDocument() throw (::com::sun::star::uno::RuntimeException);
