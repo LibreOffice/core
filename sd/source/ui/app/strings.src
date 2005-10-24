@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:29:32 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 16:15:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2977,7 +2977,7 @@ String STR_TASKPANEL_MASTER_PAGE_MENU_LOCK
 };
 String STR_TASKPANEL_MASTER_PAGE_MENU_UNLOCK
 {
-    Text [ de ] = "Aufgabenbereich entdocken";
+    Text [ de ] = "Aufgabenbereich abdocken";
     Text [ en-US ] = "~Undock Task Pane";
 };
 String STR_TASKPANEL_MASTER_PAGE_MENU_CLOSE
