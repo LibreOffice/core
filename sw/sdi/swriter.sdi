@@ -7072,7 +7072,7 @@ SfxBoolItem ScrollNavigation FN_SCROLL_NAVIGATION
 
 //--------------------------------------------------------------------------
 SfxVoidItem ScrollNextPrev FN_SCROLL_NEXT_PREV
-()
+( SfxBoolItem ScrollNextPrev FN_SCROLL_NEXT_PREV )
 [
     /* flags: */
     AutoUpdate = FALSE,
