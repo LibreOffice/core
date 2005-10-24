@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DateConversion.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:09:08 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:20:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,15 +146,14 @@ using namespace ::com::sun::star::beans;
                     DateTime aDateTime;
 
                     // check if this is really a timestamp or only a date
-                    if ((_rVal >>= aDateTime) &&
-                        (aDateTime.Hours || aDateTime.Minutes || aDateTime.Seconds || aDateTime.HundredthSeconds))
+                    if ( _rVal >>= aDateTime )
                     {
                         if (bQuote) aRet += ::rtl::OUString::createFromAscii("{TS '");
                         aRet += DBTypeConversion::toDateTimeString(aDateTime);
                         if (bQuote) aRet += ::rtl::OUString::createFromAscii("'}");
                         break;
                     }
-                    // else continue
+                    break;
                 }
                 case DataType::DATE:
                 {
