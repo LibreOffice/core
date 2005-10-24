@@ -1,0 +1,4 @@
+#testing textspan conversion 
+# 
+TEST||QUICKWORD|a_textspan
+SLEEP|10
