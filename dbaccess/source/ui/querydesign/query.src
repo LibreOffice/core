@@ -4,9 +4,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:18:09 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:32:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,9 +237,8 @@ String STR_QUERY_SORTTEXT
 
 String STR_QUERY_FUNCTIONS
 {
-    /* Gleiche Textreihenfolge fuer die Funtkionen wie in common.src */
-    Text [ de ] = "(keine Funktion);Durchschnitt;Anzahl;Maximum;Minimum;Summe;Gruppierung";
-    Text [ en-US ] = "(no function);Average;Count;Maximum;Minimum;Sum;Group";
+    Text [ de ] = "(keine Funktion);Gruppierung";
+    Text [ en-US ] = "(no function);Group";
     Text [ x-comment ] = " ";
 };
 String STR_QUERY_NOTABLE
