@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:15:44 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:24:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1869,7 +1869,10 @@ void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com:
                     for ( sal_uInt16 n = pListBox->GetEntryCount(); n; )
                         pListBox->SelectEntryPos( --n, sal_False );
 
-                    selectItemsPos( aItems, sal_True );
+                    if ( aItems.getLength() )
+                        selectItemsPos( aItems, sal_True );
+                    else
+                        pListBox->SetNoSelection();
 
                     if ( !pListBox->GetSelectEntryCount() )
                         pListBox->SetTopEntry( 0 );
