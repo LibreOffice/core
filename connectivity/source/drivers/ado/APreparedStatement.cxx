@@ -4,9 +4,9 @@
  *
  *  $RCSfile: APreparedStatement.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:30:25 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:20:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,7 +247,18 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const DataTypeEn
         sDefaultName += ::rtl::OUString::valueOf(parameterIndex);
         ADOParameter* pParam = m_Command.CreateParameter(sDefaultName,_eType,adParamInput,_nSize,_Val);
         if(pParam)
+        {
             m_pParameters->Append(pParam);
+#if OSL_DEBUG_LEVEL > 0
+            ADOParameter* pParam = NULL;
+            m_pParameters->get_Item(OLEVariant(sal_Int32(parameterIndex-1)),&pParam);
+            WpADOParameter aParam(pParam);
+            if(pParam)
+            {
+                DataTypeEnum eType = aParam.GetADOType();
+            }
+#endif
+        }
     }
     else
     {
@@ -262,7 +273,7 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const DataTypeEn
 #endif // OSL_DEBUG_LEVEL
 
             DataTypeEnum eType = aParam.GetADOType();
-            if ( _eType != eType )
+            if ( _eType != eType && _eType != adDBTimeStamp )
             {
                 aParam.put_Type(_eType);
                 eType = _eType;
