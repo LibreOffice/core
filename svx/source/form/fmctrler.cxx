@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:51:18 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:26:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1032,8 +1032,9 @@ void FmXFormController::toggleAutoFields(sal_Bool bAutoFields)
     if ( !pWindow )
         return;
 
-    const Reference< XControl >* pControls = m_aControls.getConstArray();
-    sal_Int32 nControls = m_aControls.getLength();
+    Sequence< Reference< XControl > > aControlsCopy( m_aControls );
+    const Reference< XControl >* pControls = aControlsCopy.getConstArray();
+    sal_Int32 nControls = aControlsCopy.getLength();
 
     // the control we have to activate after replacement
     Reference< XControl > xNewActiveControl;
@@ -2125,7 +2126,7 @@ void FmXFormController::removeControl(const Reference< XControl > & xControl)
     {
         if ( xControl.get() == (*pControls++).get() )
         {
-            ::comphelper::removeElementAt( m_aControls, pControls - m_aControls.getArray() - 1 );
+            ::comphelper::removeElementAt( m_aControls, pControls - m_aControls.getConstArray() - 1 );
             break;
         }
     }
@@ -2772,8 +2773,9 @@ void FmXFormController::startFiltering()
     m_bAttachEvents = sal_False;
 
     // Austauschen der Kontrols fuer das aktuelle Formular
-    const Reference< XControl >* pControls = m_aControls.getConstArray();
-    sal_Int32 nControlCount = m_aControls.getLength();
+    Sequence< Reference< XControl > > aControlsCopy( m_aControls );
+    const Reference< XControl >* pControls = aControlsCopy.getConstArray();
+    sal_Int32 nControlCount = aControlsCopy.getLength();
 
     // the control we have to activate after replacement
     Reference< XControl >  xNewActiveControl;
@@ -2959,8 +2961,9 @@ void FmXFormController::stopFiltering()
     ::comphelper::disposeComponent(m_xComposer);
 
     // Austauschen der Kontrols fuer das aktuelle Formular
-    const Reference< XControl > * pControls = m_aControls.getConstArray();
-    sal_Int32 nControlCount = m_aControls.getLength();
+    Sequence< Reference< XControl > > aControlsCopy( m_aControls );
+    const Reference< XControl > * pControls = aControlsCopy.getConstArray();
+    sal_Int32 nControlCount = aControlsCopy.getLength();
     SdrPageView* pCurPageView = m_pView->GetPageViewPvNum(0);
 
     // sal_uInt16 nPos = pCurPageView ? pCurPageView->GetWinList().Find((OutputDevice*)m_pView->GetActualOutDev()) : SDRPAGEVIEWWIN_NOTFOUND;
