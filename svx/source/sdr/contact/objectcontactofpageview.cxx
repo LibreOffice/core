@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectcontactofpageview.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:03:14 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:47:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -298,6 +298,10 @@ namespace sdr
                             pWin->ExpandPaintClipRegion(aExpandRegion);
                             aOriginalDrawArea.Union(aExpandRegion);
                         }
+
+                        // Clip the draw area to the visible are of the
+                        // output device.
+                        aOriginalDrawArea.Intersect(aVisibleLogic);
                     }
 
                     // restore original DrawArea
