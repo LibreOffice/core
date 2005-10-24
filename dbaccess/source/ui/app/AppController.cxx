@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:44:23 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:30:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,12 +36,10 @@
 #ifndef DBAUI_APPCONTROLLER_HXX
 #include "AppController.hxx"
 #endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
-#include <comphelper/sequence.hxx>
-#endif
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
 #endif
+/** === begin UNO includes === **/
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
@@ -97,15 +95,17 @@
 #ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
 #include <com/sun/star/util/XModifiable.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
-#include <com/sun/star/util/XCloseable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XDROP_HPP_
-#include <com/sun/star/sdbcx/XDrop.hpp>
-#endif
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
+#include <com/sun/star/util/XFlushable.hpp>
+#endif
+/** === end UNO includes === **/
+
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -232,11 +232,11 @@
 #ifndef INCLUDED_SVTOOLS_HISTORYOPTIONS_HXX
 #include <svtools/historyoptions.hxx>
 #endif
-#ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
-#endif
 #ifndef SVTOOLS_FILENOTATION_HXX_
 #include <svtools/filenotation.hxx>
+#endif
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 #ifndef _DBACCESS_SLOTID_HRC_
 #include "dbaccess_slotid.hrc"
@@ -353,31 +353,37 @@ OApplicationController::~OApplicationController()
 //--------------------------------------------------------------------
 IMPLEMENT_FORWARD_XTYPEPROVIDER2(OApplicationController,OApplicationController_CBASE,OApplicationController_Base)
 IMPLEMENT_FORWARD_XINTERFACE2(OApplicationController,OApplicationController_CBASE,OApplicationController_Base)
-//-------------------------------------------------------------------------
-void OApplicationController::disconnect(Reference< XConnection >& _xConnection)
+// -----------------------------------------------------------------------------
+void OApplicationController::disconnect()
 {
-    ::comphelper::disposeComponent( _xConnection );
-    stopConnectionListening(_xConnection);
+    if ( m_xDataSourceConnection.is() )
+        stopConnectionListening( m_xDataSourceConnection );
+
+    try
+    {
+        // temporary (hopefully!) hack for #i55274#
+        Reference< XFlushable > xFlush( m_xDataSourceConnection, UNO_QUERY );
+        if ( xFlush.is() )
+            xFlush->flush();
+    }
+    catch( const Exception& e )
+    {
+    #if OSL_DEBUG_LEVEL > 0
+        ::rtl::OString sMessage( "OApplicationController::disconnect: caught an exception!\n" );
+        sMessage += "message:\n";
+        sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
+        OSL_ENSURE( false, sMessage );
+    #else
+        e; // make compiler happy
+    #endif
+    }
+
+    m_xDataSourceConnection.clear();
+    m_xMetaData.clear();
 
     InvalidateAll();
 }
-// -----------------------------------------------------------------------------
-void OApplicationController::clearConnections()
-{
-    try
-    {
-        TDataSourceConnections::iterator aIter = m_aDataSourceConnections.begin();
-        TDataSourceConnections::iterator aEnd = m_aDataSourceConnections.end();
-        for (; aIter != aEnd; ++aIter)
-        {
-            stopConnectionListening(aIter->second);
-            ::comphelper::disposeComponent(aIter->second);
-        }
-    }
-    catch(Exception)
-    {}
-    m_aDataSourceConnections.clear();
-}
+
 //--------------------------------------------------------------------
 void SAL_CALL OApplicationController::disposing()
 {
@@ -395,7 +401,7 @@ void SAL_CALL OApplicationController::disposing()
         m_pClipbordNotifier = NULL;
     }
 
-    clearConnections();
+    disconnect();
     try
     {
         Reference < XFrame > xFrame;
@@ -497,18 +503,16 @@ void SAL_CALL OApplicationController::disposing(const EventObject& _rSource) thr
     Reference<XConnection> xCon(_rSource.Source, UNO_QUERY);
     if ( xCon.is() )
     {
+        DBG_ASSERT( ( m_xDataSourceConnection == xCon ) && getContainer() && ( getContainer()->getElementType() == E_TABLE ),
+            "OApplicationController::disposing: the below code will ignore this call - why?" );
+
         if ( getContainer() && getContainer()->getElementType() == E_TABLE )
         {
-            TDataSourceConnections::iterator aIter = m_aDataSourceConnections.begin();
-            TDataSourceConnections::iterator aEnd = m_aDataSourceConnections.end();
-            for (;aIter != aEnd ; ++aIter)
+            if ( m_xDataSourceConnection == xCon )
             {
-                if ( aIter->second.is() && aIter->second == xCon )
-                {
-                    getContainer()->clearPages();
-                    m_aDataSourceConnections.erase(aIter);
-                    break;
-                }
+                getContainer()->clearPages();
+                m_xDataSourceConnection.clear();
+                m_xMetaData.clear();
             }
         }
     }
@@ -684,7 +688,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = !isDataSourceReadOnly() && !isConnectionReadOnly();
                 if ( aReturn.bEnabled )
                 {
-                    Reference<XViewsSupplier> xViewsSup(getActiveConnection(),UNO_QUERY);
+                    Reference<XViewsSupplier> xViewsSup( getConnection(), UNO_QUERY );
                     aReturn.bEnabled = xViewsSup.is();
                 }
                 break;
@@ -767,7 +771,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = !isDataSourceReadOnly();
                 break;
             case SID_DB_APP_REFRESH_TABLES:
-                aReturn.bEnabled = getContainer()->getElementType() == E_TABLE && getActiveConnection().is();
+                aReturn.bEnabled = getContainer()->getElementType() == E_TABLE && isConnected();
                 break;
             case SID_DB_APP_DSPROPS:
                 if ( aReturn.bEnabled = m_xDataSource.is() )
@@ -798,8 +802,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                     aReturn.bEnabled = eType == E_QUERY && getContainer()->getSelectionCount() > 0;
                     if ( aReturn.bEnabled )
                     {
-                        Reference<XConnection> xConnection = getActiveConnection();
-                        Reference<XViewsSupplier> xViewSup(xConnection,UNO_QUERY);
+                        Reference<XViewsSupplier> xViewSup( getConnection(), UNO_QUERY );
                         aReturn.bEnabled = xViewSup.is() && Reference<XAppend>(xViewSup->getViews(),UNO_QUERY).is();
                     }
                 }
@@ -951,15 +954,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     switch( eType )
                     {
                         case E_TABLE:
-                            {
-                                Reference<XConnection> xDestConnection;
-                                ensureConnection(xDestConnection);
-
-                                SharedConnection xConnection( xDestConnection, SharedConnection::NoTakeOwnership );
-                                // TODO: migrate ensureConnection to the SharedConnection-API
-
-                                m_aTableCopyHelper.pasteTable( aTransferData , getDatabaseName(), xConnection );
-                            }
+                            m_aTableCopyHelper.pasteTable( aTransferData , getDatabaseName(), ensureConnection() );
                             break;
                         case E_QUERY:
                             if ( getViewClipboard().HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY) )
@@ -1169,8 +1164,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
             case ID_NEW_VIEW_DESIGN:
             case SID_DB_NEW_VIEW_SQL:
                 {
-                    Reference<XConnection> xConnection;
-                    ensureConnection(xConnection);
+                    SharedConnection xConnection( ensureConnection() );
                     if ( xConnection.is() )
                     {
                         OQueryDesignAccess aHelper(getORB(),sal_True,SID_DB_NEW_VIEW_SQL == _nId );
@@ -1216,20 +1210,18 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 break;
             case SID_DB_APP_DSRELDESIGN:
                 {
-                    Reference<XConnection> xConnection;
-                    ensureConnection(xConnection);
+                    SharedConnection xConnection( ensureConnection() );
                     if ( xConnection.is() )
                     {
                         ORelationDesignAccess aHelper(getORB());
-                        Reference< XComponent > xComponent(aHelper.create(Reference<XDataSource>(m_xDataSource,UNO_QUERY), getActiveConnection()),UNO_QUERY);
+                        Reference< XComponent > xComponent(aHelper.create(Reference<XDataSource>(m_xDataSource,UNO_QUERY), xConnection),UNO_QUERY);
                         addDocumentListener(xComponent,NULL);
                     }
                 }
                 break;
             case SID_DB_APP_DSUSERADMIN:
                 {
-                    Reference<XConnection> xConnection;
-                    ensureConnection(xConnection);
+                    SharedConnection xConnection( ensureConnection() );
                     if ( xConnection.is() )
                         openDialog(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.UserAdministrationDialog")));
                 }
@@ -1255,8 +1247,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 break;
             case ID_DIRECT_SQL:
                 {
-                    Reference<XConnection> xConnection;
-                    ensureConnection(xConnection);
+                    SharedConnection xConnection( ensureConnection() );
                     if ( xConnection.is() )
                         openDirectSQLDialog();
                 }
@@ -1438,13 +1429,12 @@ void SAL_CALL OApplicationController::elementInserted( const ContainerEvent& _rE
         {
             ::rtl::OUString sName;
             _rEvent.Accessor >>= sName;
-            Reference<XConnection> xConnection;
             ElementType eType = getElementType(xContainer);
 
             switch( eType )
             {
                 case E_TABLE:
-                    ensureConnection(xConnection);
+                    ensureConnection();
                     break;
                 case E_FORM:
                 case E_REPORT:
@@ -1455,7 +1445,7 @@ void SAL_CALL OApplicationController::elementInserted( const ContainerEvent& _rE
                     }
                     break;
             }
-            getContainer()->elementAdded(eType,sName,_rEvent.Element,xConnection);
+            getContainer()->elementAdded(eType,sName,_rEvent.Element,getConnection());
         }
     }
 }
@@ -1471,12 +1461,11 @@ void SAL_CALL OApplicationController::elementRemoved( const ContainerEvent& _rEv
         OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
         ::rtl::OUString sName;
         _rEvent.Accessor >>= sName;
-        Reference<XConnection> xConnection;
         ElementType eType = getElementType(xContainer);
         switch( eType )
         {
             case E_TABLE:
-                ensureConnection(xConnection);
+                ensureConnection();
                 break;
             case E_FORM:
             case E_REPORT:
@@ -1489,7 +1478,7 @@ void SAL_CALL OApplicationController::elementRemoved( const ContainerEvent& _rEv
                 }
                 break;
         }
-        getContainer()->elementRemoved(eType,sName,xConnection);
+        getContainer()->elementRemoved(eType,sName,getConnection());
     }
 }
 // -----------------------------------------------------------------------------
@@ -1514,12 +1503,14 @@ void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rE
             switch( eType )
             {
                 case E_TABLE:
-                    ensureConnection(xConnection);
-                    if ( xProp.is() && xConnection.is() )
+                {
+                    ensureConnection();
+                    if ( xProp.is() && m_xMetaData.is() )
                     {
-                        sNewName = ::dbaui::composeTableName(xConnection->getMetaData(),xProp,sal_False,::dbtools::eInDataManipulation);
+                        sNewName = ::dbaui::composeTableName(m_xMetaData,xProp,sal_False,::dbtools::eInDataManipulation);
                     }
-                    break;
+                }
+                break;
                 case E_FORM:
                 case E_REPORT:
                     {
@@ -1580,9 +1571,7 @@ sal_Bool OApplicationController::onContainerSelect(ElementType _eType)
         {
             try
             {
-                Reference<XConnection> xConnection;
-                ensureConnection(xConnection);
-
+                SharedConnection xConnection( ensureConnection() );
                 if ( xConnection.is() && getContainer()->getDetailView() )
                 {
                     getContainer()->getDetailView()->createTablesPage(xConnection);
@@ -1631,28 +1620,9 @@ void OApplicationController::onEntryDoubleClick(SvTreeListBox* _pTree)
     OSL_ENSURE(_pTree != NULL,"Who called me without a svtreelsiboc! ->GPF ");
     if ( getContainer() && getContainer()->isLeaf(_pTree->GetHdlEntry()) )
     {
-        ElementType eType = getContainer()->getElementType();
-
-        Reference<XConnection> xConnection;
-        Reference<XDatabaseMetaData> xMetaData;
-        if ( eType == E_TABLE )
-        {
-            ensureConnection(xConnection);
-            if ( xConnection.is() )
-            {
-                try
-                {
-                    xMetaData = xConnection->getMetaData();
-                }
-                catch(const Exception&)
-                {
-                    OSL_ENSURE(0,"Exception catched!");
-                }
-            }
-        }
         try
         {
-            openElement(getContainer()->getQualifiedName(_pTree->GetHdlEntry(),xMetaData),eType);
+            openElement( getContainer()->getQualifiedName( _pTree->GetHdlEntry(), m_xMetaData ), getContainer()->getElementType() );
         }
         catch(const Exception&)
         {
@@ -1685,8 +1655,7 @@ Reference< XComponent > OApplicationController::openElement(const ::rtl::OUStrin
         case E_TABLE:
             {
                 ::std::auto_ptr< ODesignAccess> pDispatcher;
-                Reference<XConnection> xConnection;
-                ensureConnection(xConnection);
+                SharedConnection xConnection( ensureConnection() );
                 if ( xConnection.is() )
                 {
                     Sequence < PropertyValue > aArgs;
@@ -1752,16 +1721,7 @@ void OApplicationController::newElementWithPilot( ElementType _eType )
                 {
                     try
                     {
-                        Reference< XDatabaseMetaData> xMetaData;
-                        if ( CommandType::TABLE == nCommandType )
-                        {
-                            ensureConnection(xConnection,sal_False);
-
-                            if ( xConnection.is() )
-                                xMetaData = xConnection->getMetaData();
-                        }
-
-                        sName = getContainer()->getQualifiedName(NULL,xMetaData);
+                        sName = getContainer()->getQualifiedName( NULL, m_xMetaData );
                         OSL_ENSURE( sName.getLength(), "OApplicationController::newElementWithPilot: no name given!" );
                     }
                     catch(Exception)
@@ -1819,8 +1779,8 @@ void OApplicationController::newElement( ElementType _eType, sal_Bool _bSQLView 
         case E_TABLE:
             {
                 ::std::auto_ptr< ODesignAccess> pDispatcher;
-                Reference<XConnection> xConnection;
-                if ( ensureConnection( xConnection ) )
+                SharedConnection xConnection( ensureConnection() );
+                if ( xConnection.is() )
                 {
                     if ( _eType == E_TABLE )
                     {
@@ -1878,7 +1838,6 @@ void OApplicationController::renameEntry()
     {
         if ( xContainer.is() )
         {
-            Reference<XConnection> xConnection = getActiveConnection();
             ::std::auto_ptr<OSaveAsDlg> aDlg;
             Reference<XRename> xRename;
             ElementType eType = getContainer()->getElementType();
@@ -1920,7 +1879,8 @@ void OApplicationController::renameEntry()
                     }
                     break;
                 case E_TABLE:
-                    if ( !ensureConnection( xConnection, sal_True ) )
+                    ensureConnection();
+                    if ( !getConnection().is() )
                         break;
                     // NO break
                 case E_QUERY:
@@ -1928,10 +1888,10 @@ void OApplicationController::renameEntry()
                     {
                         xRename.set(xContainer->getByName(*aList.begin()),UNO_QUERY);
                         sal_Int32 nCommandType = eType == E_QUERY ? CommandType::QUERY : CommandType::TABLE;
+
                         aDlg.reset( new OSaveAsDlg(
                             getView(), nCommandType, xContainer,
-                            xConnection.is() ? xConnection->getMetaData() : Reference< XDatabaseMetaData >(),
-                            xConnection, *aList.begin(), SAD_TITLE_RENAME) );
+                            m_xMetaData, getConnection(), *aList.begin(), SAD_TITLE_RENAME) );
                     }
                     break;
             }
@@ -1953,7 +1913,7 @@ void OApplicationController::renameEntry()
                                 ::rtl::OUString sCatalog = aDlg->getCatalog();
                                 ::rtl::OUString sSchema  = aDlg->getSchema();
 
-                                ::dbtools::composeTableName(xConnection->getMetaData(),sCatalog,sSchema,sName,sNewName,sal_False,::dbtools::eInTableDefinitions);
+                                ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sName, sNewName, sal_False, ::dbtools::eInTableDefinitions );
                             }
                             else
                                 sNewName = aDlg->getName();
@@ -1970,8 +1930,8 @@ void OApplicationController::renameEntry()
 
                             xRename->rename(sNewName);
 
-                            if ( ! Reference< XNameAccess >(xRename,UNO_QUERY).is() )
-                                getContainer()->elementReplaced(getContainer()->getElementType(),sOldName,sNewName,xConnection);
+                            if ( !Reference< XNameAccess >( xRename, UNO_QUERY ).is() )
+                                getContainer()->elementReplaced( getContainer()->getElementType(), sOldName, sNewName, getConnection() );
 
                             bTryAgain = sal_False;
                         }
@@ -2041,8 +2001,7 @@ void OApplicationController::onEntrySelect(SvLBoxEntry* _pEntry)
                             ::rtl::OUString sName = pView->getQualifiedName( _pEntry,NULL);
                             if ( pView->isPreviewEnabled() )
                             {
-                                Reference<XConnection> xConnection;
-                                ensureConnection(xConnection);
+                                SharedConnection xConnection( ensureConnection() );
                                 if ( xConnection.is() )
                                     pView->showPreview(getDatabaseName(),xConnection,sName,sal_False);
                             }
@@ -2051,8 +2010,7 @@ void OApplicationController::onEntrySelect(SvLBoxEntry* _pEntry)
                         break;
                     case E_TABLE:
                         {
-                            Reference<XConnection> xConnection;
-                            ensureConnection(xConnection);
+                            SharedConnection xConnection( ensureConnection() );
                             if ( xConnection.is() )
                             {
                                 ::rtl::OUString sName = pView->getQualifiedName( _pEntry,xConnection->getMetaData());
@@ -2322,13 +2280,8 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
     }
     else
     {
-        Reference<XConnection> xDestConnection;  // supports the service sdb::connection
-        ensureConnection( xDestConnection);
-
-        SharedConnection xConnection( xDestConnection, SharedConnection::NoTakeOwnership );
-        // TODO: migrate ensureConnection to the SharedConnection-API
-
-        if ( xDestConnection.is() && m_aTableCopyHelper.copyTagTable( aDroppedData, m_aAsyncDrop, xConnection ) )
+        SharedConnection xConnection( ensureConnection() );
+        if ( xConnection.is() && m_aTableCopyHelper.copyTagTable( aDroppedData, m_aAsyncDrop, xConnection ) )
         {
             // asyncron because we some dialogs and we aren't allowed to show them while in D&D
             m_nAsyncDrop = Application::PostUserEvent(LINK(this, OApplicationController, OnAsyncDrop));
