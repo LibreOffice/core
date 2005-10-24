@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsLayouter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:27:15 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:44:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -258,6 +258,7 @@ void Layouter::SetZoom (double nZoomFactor, OutputDevice* pDevice)
 
 
 
+
 void Layouter::SetZoom (Fraction nZoomFactor, OutputDevice* pDevice)
 {
     MapMode aMapMode (pDevice->GetMapMode());
@@ -322,6 +323,14 @@ sal_Int32 Layouter::GetColumnCount (void) const
 bool Layouter::IsColumnCountFixed (void) const
 {
     return mnMinimalColumnCount == mnMaximalColumnCount;
+}
+
+
+
+
+Size Layouter::GetPageObjectSize (void) const
+{
+    return maPageObjectModelSize;
 }
 
 
