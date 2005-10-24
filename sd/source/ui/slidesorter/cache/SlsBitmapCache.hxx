@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsBitmapCache.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:09:24 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:39:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,55 +40,39 @@ class SdrPage;
 
 #include <vcl/bitmapex.hxx>
 #include <osl/mutex.hxx>
+#include <memory>
+#include <boost/shared_ptr.hpp>
 #include <hash_map>
 
 namespace sd { namespace slidesorter { namespace cache {
 
-
-/** The key for looking up preview bitmaps is a pointer to an SdrPage
-    object.  The prior use of PageObjectViewObjectContact objects (which
-    ultimatly use them) turned out to be less suitable because their
-    life time is shorter then that of the page objects.  Frequent
-    destruction and re-creation of the preview bitmaps was the result.
-    */
-typedef const SdrPage* CacheKey;
-
-
-class CacheHash {
-public:
-    size_t operator()(const CacheKey& p) const
-    { return (size_t)p; }
-};
-
-
-class CacheEntry {
-public:
-    CacheEntry(
-        const BitmapEx& rBitmap,
-        sal_Int32 nLastAccessTime,
-        bool bIsPrecious)
-        : maBitmap(rBitmap),
-          mbIsUpToDate(true),
-          mnLastAccessTime(nLastAccessTime),
-          mbIsPrecious(bIsPrecious)
-    {}
-    BitmapEx maBitmap;
-    bool mbIsUpToDate;
-    sal_Int32 mnLastAccessTime;
-    // When this flag is set then the bitmap is not modified by a cache
-    // compactor.
-    bool mbIsPrecious;
-};
-
-
-typedef ::std::hash_map<CacheKey, CacheEntry, CacheHash> CacheBitmapContainer;
+class BitmapReplacement;
+class CacheCompactor;
+class BitmapCompressor;
 
 
 
-
+/** This low level cache is the actual bitmap container.  It supports a
+    precious flag for every preview bitmap and keeps track of total sizes
+    for all previews with as well as those without the flag.  The precious
+    flag is used by compaction algorithms to determine which previews may be
+    compressed or even discarded and which have to remain in their original
+    form.  The precious flag is usually set for the visible previews.
+*/
 class BitmapCache
 {
 public:
+    /** The key for looking up preview bitmaps is a pointer to an SdrPage
+        object.  The prior use of PageObjectViewObjectContact objects (which
+        ultimatly use them) turned out to be less suitable because their
+        life time is shorter then that of the page objects.  Frequent
+        destruction and re-creation of the preview bitmaps was the result.
+    */
+    typedef const SdrPage* CacheKey;
+    class CacheEntry;
+    class CacheBitmapContainer;
+    typedef ::std::vector<CacheKey> CacheIndex;
+
     /** Create a new cache for bitmap objects.
     */
     BitmapCache (void);
@@ -102,48 +86,141 @@ public:
     */
     void Clear (void);
 
-    /** Return the memory size that is occupied by all bitmaps in the cache.
+    /** Returns <TRUE/> when there is no preview bitmap in the cache.
+    */
+    bool IsEmpty (void) const;
+
+    /** Return <TRUE/> when the cache is full, i.e. the cache compactor had
+        to be run.
+    */
+    bool IsFull (void) const;
+
+    /** Return the memory size that is occupied by all non-precious bitmaps
+        in the cache.
     */
     sal_Int32 GetSize (void);
 
+    /** Return <TRUE/> when a preview bitmap exists for the given key.
+    */
     bool HasBitmap (const CacheKey& rKey);
 
+    /** Return <TRUE/> when a preview bitmap exists for the given key and
+        when it is up-to-date.
+    */
     bool BitmapIsUpToDate (const CacheKey& rKey);
 
     /** Return the preview bitmap for the given contact object.
     */
-    const BitmapEx& GetBitmap (const CacheKey& rKey);
+    ::boost::shared_ptr<BitmapEx> GetBitmap (const CacheKey& rKey);
 
+    /** Release the reference to the preview bitmap that is associated with
+        the given key.
+    */
     void ReleaseBitmap (const CacheKey& rKey);
 
+    /** Mark the specified preview bitmap as not being up-to-date anymore.
+    */
     void InvalidateBitmap (const CacheKey& rKey);
+
+    /** Mark all preview bitmaps as not being up-to-date anymore.
+    */
+    void InvalidateCache (void);
 
     /** Add or replace a bitmap for the given key.
     */
     void SetBitmap (
         const CacheKey& rKey,
-        const BitmapEx& rBitmap,
+        const ::boost::shared_ptr<BitmapEx>& rpPreview,
         bool bIsPrecious);
 
+    /** Return whether the specified preview bitmap has been marked as
+        precious.
+    */
     bool IsPrecious (const CacheKey& rKey);
+
+    /** Mark the specified preview bitmap as precious, i.e. that it must not
+        be compressed or otherwise removed from the cache.
+    */
     void SetPrecious (const CacheKey& rKey, bool bIsPrecious);
 
-    const CacheBitmapContainer& GetContainer (void) const;
+    /** Calculate the cache size.  This should rarely be necessary because
+        the cache size is tracked with each modification of preview
+        bitmaps.
+    */
+    void ReCalculateTotalCacheSize (void);
+
+    /** Use the previews in the given cache to initialize missing previews.
+    */
+    void Recycle (const BitmapCache& rCache);
+
+    /** Return a list of sorted cache keys that represent an index into (a
+        part of) the cache.  The entries of the index are sorted according
+        to last access times with the least recently access time first.
+        @param bIncludePrecious
+            When this flag is <TRUE/> entries with the precious flag set are
+            included in the index.  When the flag is <FALSE/> these entries
+            are ommited.
+        @param bIncludeNoPreview
+            When this flag is <TRUE/> entries with that have no preview
+            bitmaps are included in the index.  When the flag is <FALSE/> these entries
+            are ommited.
+    */
+    ::std::auto_ptr<CacheIndex> GetCacheIndex (
+        bool bIncludePrecious,
+        bool bIncludeNoPreview) const;
+
+    /** Compress the specified preview bitmap with the given bitmap
+        compressor.  A reference to the compressor is stored for later
+        decompression.
+    */
+    void Compress (
+        const CacheKey& rKey,
+        const ::boost::shared_ptr<BitmapCompressor>& rpCompressor);
 
 private:
-    ::osl::Mutex maMutex;
+    mutable ::osl::Mutex maMutex;
 
-    CacheBitmapContainer maBitmapContainer;
+    ::std::auto_ptr<CacheBitmapContainer> mpBitmapContainer;
 
-    /** Total size of bytes that are occupied by the bitmaps in the cache.
-        */
-    sal_Int32 mnSize;
+    /** Total size of bytes that are occupied by bitmaps in the cache for
+        whom the slides are currently not inside the visible area.
+    */
+    sal_Int32 mnNormalCacheSize;
+
+    /** Total size of bytes that are occupied by bitmaps in the cache for
+        whom the slides are currently visible.
+    */
+    sal_Int32 mnPreciousCacheSize;
 
     /** At the moment the access time is not an actual time or date value
         but a counter that is increased with every access.  It thus defines
         the same ordering as a true time.
     */
     sal_Int32 mnCurrentAccessTime;
+
+    /** The maximal cache size for the off-screen preview bitmaps.  When
+        mnNormalCacheSize grows larger than this value then the
+        mpCacheCompactor member is used to reduce the cache size.
+    */
+    sal_Int32 mnMaximalNormalCacheSize;
+
+    /** The cache compactor is used to reduce the number of bytes used by
+        off-screen preview bitmaps.
+    */
+    ::std::auto_ptr<CacheCompactor> mpCacheCompactor;
+
+    /** This flag stores if the cache is or recently was full, i.e. the
+        cache compactor has or had to be run in order to reduce the cache
+        size to the allowed value.
+    */
+    bool mbIsFull;
+
+    /** Update mnNormalCacheSize or mnPreciousCacheSize according to the
+        precious flag of the specified preview bitmap and the specified
+        operation.
+    */
+    enum CacheOperation { ADD, REMOVE };
+    void UpdateCacheSize (const CacheEntry& rKey, CacheOperation eOperation);
 };
 
 
