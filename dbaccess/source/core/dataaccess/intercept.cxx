@@ -4,9 +4,9 @@
  *
  *  $RCSfile: intercept.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:06:53 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:29:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,55 +80,23 @@ using namespace ::cppu;
 #define DISPATCH_RELOAD     5
 // the OSL_ENSURE in CTOR has to be changed too, when adding new defines
 
-void OInterceptor::DisconnectContentHolder()
-{
-    osl::MutexGuard aGuard( m_aMutex );
-    m_pContentHolder = NULL;
-}
-
-void SAL_CALL
-OInterceptor::addEventListener(
-    const Reference< com::sun::star::lang::XEventListener >& Listener )
-    throw( RuntimeException )
-{
-    osl::MutexGuard aGuard( m_aMutex );
-
-    if ( ! m_pDisposeEventListeners )
-        m_pDisposeEventListeners =
-            new cppu::OInterfaceContainerHelper( m_aMutex );
-
-    m_pDisposeEventListeners->addInterface( Listener );
-}
-
-
-void SAL_CALL
-OInterceptor::removeEventListener(
-    const Reference< com::sun::star::lang::XEventListener >& Listener )
-    throw( RuntimeException )
-{
-    osl::MutexGuard aGuard( m_aMutex );
-
-    if ( m_pDisposeEventListeners )
-        m_pDisposeEventListeners->removeInterface( Listener );
-}
-
-
 void SAL_CALL OInterceptor::dispose()
     throw( RuntimeException )
 {
-    EventObject aEvt;
-    aEvt.Source = static_cast< XDispatch* >( this );
+    EventObject aEvt( *this );
 
     osl::MutexGuard aGuard(m_aMutex);
 
     if ( m_pDisposeEventListeners && m_pDisposeEventListeners->getLength() )
         m_pDisposeEventListeners->disposeAndClear( aEvt );
 
-    if(m_pStatCL)
+    if ( m_pStatCL )
         m_pStatCL->disposeAndClear( aEvt );
 
-    m_xSlaveDispatchProvider = 0;
-    m_xMasterDispatchProvider = 0;
+    m_xSlaveDispatchProvider.clear();
+    m_xMasterDispatchProvider.clear();
+
+    m_pContentHolder = NULL;
 }
 
 
@@ -227,6 +195,7 @@ OInterceptor::dispatch(
                     if ( xEvtB.is() )
                         xEvtB->removeEventListener(this);
 
+                    Reference< XInterface > xKeepContentHolderAlive( *m_pContentHolder );
                     xDispatch->dispatch( _URL, Arguments );
                 }
             }
