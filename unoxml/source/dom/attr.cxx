@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:53:48 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:35:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,14 +142,13 @@ namespace DOM
         // dispatch DomAttrModified + DOMSubtreeModified
         OUString sEventName( RTL_CONSTASCII_USTRINGPARAM("DOMAttrModified") );
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
-        Reference< XMutationEvent > event(docevent->createEvent(sEventName),
-                                          UNO_QUERY);
+        Reference< XMutationEvent > event(docevent->createEvent(sEventName),UNO_QUERY);
         event->initMutationEvent(
                 sEventName, sal_True, sal_False,
                 Reference<XNode>( static_cast<XAttr*>( this ) ),
                 sOldValue, value, getName(), AttrChangeType_MODIFICATION );
         dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
-
+        dispatchSubtreeModified();
         xmlFree(buffer);
     }
 
