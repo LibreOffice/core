@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:40:14 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:20:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -971,142 +971,149 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
 
     ::rtl::OUString aName;
     Reference<XPropertySet> xCol;
-    for(sal_Int32 i=0;i<xColumns->getCount();++i)
+    try
     {
-        ::cppu::extractInterface(xCol,xColumns->getByIndex(i));
-        OSL_ENSURE(xCol.is(),"This should be a column!");
-
-        char  cTyp;
-
-        xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aName;
-
-        if (aName.getLength() > nMaxFieldLength)
+        for(sal_Int32 i=0;i<xColumns->getCount();++i)
         {
-            try
+            ::cppu::extractInterface(xCol,xColumns->getByIndex(i));
+            OSL_ENSURE(xCol.is(),"This should be a column!");
+
+            char  cTyp;
+
+            xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aName;
+
+            ::rtl::OString aCol;
+            if ( DBTypeConversion::convertUnicodeString( aName, aCol, getConnection()->getTextEncoding() ) > nMaxFieldLength)
             {
-                // we have to drop the file because it is corrupted now
-                DropImpl();
+                ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Invalid column name length for column: ");
+                sMsg += aName;
+                sMsg += ::rtl::OUString::createFromAscii("!");
+                throw SQLException(sMsg,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
             }
-            catch(const Exception&)
+
+            (*m_pFileStream) << aCol.getStr();
+            m_pFileStream->Write(aBuffer, 11 - aCol.getLength());
+
+            switch (getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
             {
+                case DataType::CHAR:
+                case DataType::VARCHAR:
+                    cTyp = 'C';
+                    break;
+                case DataType::TINYINT:
+                case DataType::SMALLINT:
+                case DataType::INTEGER:
+                case DataType::BIGINT:
+                case DataType::DECIMAL:
+                case DataType::NUMERIC:
+                case DataType::REAL:
+                case DataType::DOUBLE:
+                    cTyp = 'N';                             // nur dBase 3 format
+                    break;
+                case DataType::DATE:
+                    cTyp = 'D';
+                    break;
+                case DataType::BIT:
+                    cTyp = 'L';
+                    break;
+                case DataType::LONGVARBINARY:
+                case DataType::LONGVARCHAR:
+                    cTyp = 'M';
+                    break;
+                default:
+                    {
+                        throwInvalidColumnType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid column type for column: ")), aName);
+                    }
             }
-            ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Invalid column name length for column: ");
-            sMsg += aName;
-            sMsg += ::rtl::OUString::createFromAscii("!");
-            throw SQLException(sMsg,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
-        }
 
-        ByteString aCol(aName.getStr(), getConnection()->getTextEncoding());
-        (*m_pFileStream) << aCol.GetBuffer();
-        m_pFileStream->Write(aBuffer, 11 - aCol.Len());
+            (*m_pFileStream) << cTyp;
+            m_pFileStream->Write(aBuffer, 4);
 
-        switch (getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
-        {
-            case DataType::CHAR:
-            case DataType::VARCHAR:
-                cTyp = 'C';
-                break;
-            case DataType::TINYINT:
-            case DataType::SMALLINT:
-            case DataType::INTEGER:
-            case DataType::BIGINT:
-            case DataType::DECIMAL:
-            case DataType::NUMERIC:
-            case DataType::REAL:
-            case DataType::DOUBLE:
-                cTyp = 'N';                             // nur dBase 3 format
-                break;
-            case DataType::DATE:
-                cTyp = 'D';
-                break;
-            case DataType::BIT:
-                cTyp = 'L';
-                break;
-            case DataType::LONGVARBINARY:
-            case DataType::LONGVARCHAR:
-                cTyp = 'M';
-                break;
-            default:
-                {
-                    throwInvalidColumnType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid column type for column: ")), aName);
-                }
-        }
+            sal_Int32 nPrecision = 0;
+            xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)) >>= nPrecision;
+            sal_Int32 nScale = 0;
+            xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)) >>= nScale;
 
-        (*m_pFileStream) << cTyp;
-        m_pFileStream->Write(aBuffer, 4);
+            switch(cTyp)
+            {
+                case 'C':
+                    OSL_ENSURE(nPrecision < 255, "ODbaseTable::Create: Column zu lang!");
+                    if (nPrecision > 254)
+                    {
+                        throwInvalidColumnType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid precision for column: ")), aName);
+                    }
+                    (*m_pFileStream) << (BYTE) Min((ULONG)nPrecision, 255UL);      //Feldlaenge
+                    nRecLength += (USHORT)Min((ULONG)nPrecision, 255UL);
+                    (*m_pFileStream) << (BYTE)0;                                                                //Nachkommastellen
+                    break;
+                case 'F':
+                case 'N':
+                    OSL_ENSURE(nPrecision >=  nScale,
+                            "ODbaseTable::Create: Feldlaenge muss groesser Nachkommastellen sein!");
+                    if (nPrecision <  nScale)
+                    {
+                        throwInvalidColumnType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Precision is less than scale for column: ")), aName);
+                    }
+                    if (getBOOL(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)))) // Currency wird gesondert behandelt
+                    {
+                        (*m_pFileStream) << (BYTE)10;          // Standard Laenge
+                        (*m_pFileStream) << (BYTE)4;
+                        nRecLength += 10;
+                    }
+                    else
+                    {
+                        sal_Int32 nPrec = SvDbaseConverter::ConvertPrecisionToDbase(nPrecision,nScale);
 
-        sal_Int32 nPrecision = 0;
-        xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)) >>= nPrecision;
-        sal_Int32 nScale = 0;
-        xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)) >>= nScale;
-
-        switch(cTyp)
-        {
-            case 'C':
-                OSL_ENSURE(nPrecision < 255, "ODbaseTable::Create: Column zu lang!");
-                if (nPrecision > 254)
-                {
-                    throwInvalidColumnType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid precision for column: ")), aName);
-                }
-                (*m_pFileStream) << (BYTE) Min((ULONG)nPrecision, 255UL);      //Feldlaenge
-                nRecLength += (USHORT)Min((ULONG)nPrecision, 255UL);
-                (*m_pFileStream) << (BYTE)0;                                                                //Nachkommastellen
-                break;
-            case 'F':
-            case 'N':
-                OSL_ENSURE(nPrecision >=  nScale,
-                           "ODbaseTable::Create: Feldlaenge muss groesser Nachkommastellen sein!");
-                if (nPrecision <  nScale)
-                {
-                    throwInvalidColumnType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Precision is less than scale for column: ")), aName);
-                }
-                if (getBOOL(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)))) // Currency wird gesondert behandelt
-                {
-                    (*m_pFileStream) << (BYTE)10;          // Standard Laenge
-                    (*m_pFileStream) << (BYTE)4;
+                        (*m_pFileStream) << (BYTE)( nPrec);
+                        (*m_pFileStream) << (BYTE)nScale;
+                        nRecLength += (USHORT)nPrec;
+                    }
+                    break;
+                case 'L':
+                    (*m_pFileStream) << (BYTE)1;
+                    (*m_pFileStream) << (BYTE)0;
+                    nRecLength++;
+                    break;
+                case 'D':
+                    (*m_pFileStream) << (BYTE)8;
+                    (*m_pFileStream) << (BYTE)0;
+                    nRecLength += 8;
+                    break;
+                case 'M':
+                    bCreateMemo = TRUE;
+                    (*m_pFileStream) << (BYTE)10;
+                    (*m_pFileStream) << (BYTE)0;
                     nRecLength += 10;
-                }
-                else
-                {
-                    sal_Int32 nPrec = SvDbaseConverter::ConvertPrecisionToDbase(nPrecision,nScale);
-
-                    (*m_pFileStream) << (BYTE)( nPrec);
-                    (*m_pFileStream) << (BYTE)nScale;
-                    nRecLength += (USHORT)nPrec;
-                }
-                break;
-            case 'L':
-                (*m_pFileStream) << (BYTE)1;
-                (*m_pFileStream) << (BYTE)0;
-                nRecLength++;
-                break;
-            case 'D':
-                (*m_pFileStream) << (BYTE)8;
-                (*m_pFileStream) << (BYTE)0;
-                nRecLength += 8;
-                break;
-            case 'M':
-                bCreateMemo = TRUE;
-                (*m_pFileStream) << (BYTE)10;
-                (*m_pFileStream) << (BYTE)0;
-                nRecLength += 10;
-                break;
-            default:
-                {
-                    throwInvalidColumnType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid column type for column: ")), aName);
-                }
+                    break;
+                default:
+                    {
+                        throwInvalidColumnType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid column type for column: ")), aName);
+                    }
+            }
+            m_pFileStream->Write(aBuffer, 14);
         }
-        m_pFileStream->Write(aBuffer, 14);
+
+        (*m_pFileStream) << (BYTE)0x0d;                                     // kopf ende
+        m_pFileStream->Seek(10L);
+        (*m_pFileStream) << nRecLength;                                     // Satzlaenge nachtraeglich eintragen
+
+        if (bCreateMemo)
+        {
+            m_pFileStream->Seek(0L);
+            (*m_pFileStream) << (BYTE) dBaseIIIMemo;
+        } // if (bCreateMemo)
     }
-
-    (*m_pFileStream) << (BYTE)0x0d;                                     // kopf ende
-    m_pFileStream->Seek(10L);
-    (*m_pFileStream) << nRecLength;                                     // Satzlaenge nachtraeglich eintragen
-
-    if (bCreateMemo)
+    catch(const Exception& e)
     {
-        m_pFileStream->Seek(0L);
-        (*m_pFileStream) << (BYTE) dBaseIIIMemo;
+        try
+        {
+            // we have to drop the file because it is corrupted now
+            DropImpl();
+        }
+        catch(const Exception&)
+        {
+        }
+        throw e;
     }
     return TRUE;
 }
@@ -2227,7 +2234,7 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
         {
             OSL_ASSERT(0);
         }
-    }
+    } // for(sal_uInt32 nRowPos = 0; nRowPos < m_aHeader.db_anz;++nRowPos)
 }
 // -----------------------------------------------------------------------------
 void ODbaseTable::throwInvalidDbaseFormat()
