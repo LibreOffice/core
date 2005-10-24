@@ -4,9 +4,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:46:11 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:31:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,6 +162,27 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
+    namespace
+    {
+        struct DisplayedType
+        {
+            DATASOURCE_TYPE eType;
+            String          sDisplayName;
+
+            DisplayedType( DATASOURCE_TYPE _eType, const String& _rDisplayName ) : eType( _eType ), sDisplayName( _rDisplayName ) { }
+        };
+        typedef ::std::vector< DisplayedType > DisplayedTypes;
+
+        struct DisplayedTypeLess : ::std::binary_function< DisplayedType, DisplayedType, bool >
+        {
+            bool operator() ( const DisplayedType& _rLHS, const DisplayedType& _rRHS )
+            {
+                return _rLHS.eType < _rRHS.eType;
+            }
+        };
+    }
+
+    //-------------------------------------------------------------------------
     void OGeneralPage::initializeTypeList()
     {
         m_pDatasourceType->Clear();
@@ -186,6 +207,8 @@ namespace dbaui
 
         if ( m_pCollection )
         {
+            DisplayedTypes aDisplayedTypes;
+
             for (   ODsnTypeCollection::TypeIterator aTypeLoop =  m_pCollection->begin();
                     aTypeLoop != m_pCollection->end();
                     ++aTypeLoop
@@ -205,10 +228,16 @@ namespace dbaui
                 if ( m_pDatasourceType->GetEntryPos( sDisplayName ) == LISTBOX_ENTRY_NOTFOUND )
                 {
                     sDisplayName = VerifyDisplayName(eType, sDisplayName);
-                    if (sDisplayName.Len() > 0)
-                        insertDatasourceTypeEntryData(eType, sDisplayName);
+                    if ( sDisplayName.Len() > 0 )
+                        aDisplayedTypes.push_back( DisplayedTypes::value_type( eType, sDisplayName ) );
                 }
             }
+            ::std::sort( aDisplayedTypes.begin(), aDisplayedTypes.end(), DisplayedTypeLess() );
+            for (   DisplayedTypes::const_iterator loop = aDisplayedTypes.begin();
+                    loop != aDisplayedTypes.end();
+                    ++loop
+                )
+                insertDatasourceTypeEntryData( loop->eType, loop->sDisplayName );
         }
     }
 
