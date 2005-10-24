@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HConnection.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:14:26 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:21:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,8 @@
 #ifndef _CONNECTIVITY_ZCONNECTIONWRAPPER_HXX_
 #include "connectivity/ConnectionWrapper.hxx"
 #endif
-#ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
-#include <com/sun/star/embed/XTransactedObject.hpp>
+#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
+#include <com/sun/star/util/XFlushable.hpp>
 #endif
 #ifndef _CPPUHELPER_COMPBASE1_HXX_
 #include <cppuhelper/compbase1.hxx>
@@ -47,27 +47,32 @@
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
-
+#include <memory>
 
 namespace connectivity
 {
     namespace hsqldb
     {
+        class FlushListeners;
 
         //==========================================================================
         //= OConnectionWeakWrapper - wraps all methods to the real connection from the driver
         //= but when disposed it doesn't dispose the real connection
         //==========================================================================
-        typedef ::cppu::WeakComponentImplHelper1<       ::com::sun::star::embed::XTransactedObject
-                                                > OConnectionWeakWrapper_BASE;
+        typedef ::cppu::WeakComponentImplHelper1<   ::com::sun::star::util::XFlushable
+                                                >   OConnectionWeakWrapper_BASE;
 
-        class OConnectionWeakWrapper :   public ::comphelper::OBaseMutex
-                                    ,public OConnectionWeakWrapper_BASE
-                                    , public OConnectionWrapper
+        class OConnectionWeakWrapper    :public ::comphelper::OBaseMutex
+                                        ,public OConnectionWeakWrapper_BASE
+                                        ,public OConnectionWrapper
         {
+        private:
+            ::std::auto_ptr< FlushListeners >   m_pFlushListeners;
+
         protected:
             virtual void SAL_CALL disposing(void);
             virtual ~OConnectionWeakWrapper();
+
         public:
             OConnectionWeakWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection
                                   ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _xORB);
@@ -76,9 +81,11 @@ namespace connectivity
             DECLARE_SERVICE_INFO();
             DECLARE_XTYPEPROVIDER()
             DECLARE_XINTERFACE( )
+
             // XTransactedObject
-            virtual void SAL_CALL commit(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL revert(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL flush(  ) throw (::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL addFlushListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XFlushListener >& l ) throw (::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL removeFlushListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XFlushListener >& l ) throw (::com::sun::star::uno::RuntimeException);
         };
     }
 }
