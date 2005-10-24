@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:03:22 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:36:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -337,6 +337,9 @@ namespace DOM
                 , sal_True, sal_False, Reference< XNode >(CNode::get(m_aNodePtr)),
                 OUString(), OUString(), OUString(), (AttrChangeType)0 );
             dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
+
+            // dispatch subtree modified for this node
+            dispatchSubtreeModified();
         }
         return aNode;
     }
@@ -731,6 +734,9 @@ namespace DOM
                 sal_False, Reference< XNode >(CNode::get(m_aNodePtr)),
                 OUString(), OUString(), OUString(), (AttrChangeType)0 );
             dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
+
+            // subtree modofied for this node
+            dispatchSubtreeModified();
         }
         return xReturn;
     }
@@ -803,6 +809,13 @@ namespace DOM
         }
         }
 
+        dispatchSubtreeModified();
+
+        return oldChild;
+    }
+
+    void CNode::dispatchSubtreeModified()
+    {
         // dispatch DOMSubtreeModified
         // target is _this_ node
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
@@ -812,8 +825,6 @@ namespace DOM
             sal_False, Reference< XNode >(),
             OUString(), OUString(), OUString(), (AttrChangeType)0 );
         dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
-
-        return oldChild;
     }
 
     /**
