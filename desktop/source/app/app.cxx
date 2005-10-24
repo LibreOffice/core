@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.185 $
+ *  $Revision: 1.186 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:20:09 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 18:33:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -615,6 +615,7 @@ Desktop::~Desktop()
 void Desktop::Init()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::Init" );
+    SetBootstrapStatus(BS_OK);
 
     // create service factory...
     Reference < XMultiServiceFactory > rSMgr = CreateApplicationServiceManager();
@@ -641,7 +642,7 @@ void Desktop::Init()
     //  check whether we need to print cmdline help
     if ( pCmdLineArgs->IsHelp() ) {
         displayCmdlineHelp();
-        _exit( ExitHelper::E_NO_ERROR );
+        SetBootstrapStatus(BS_TERMINATE);
     }
 #endif
         // start ipc thread only for non-remote offices
@@ -654,7 +655,7 @@ void Desktop::Init()
         else if ( aStatus == OfficeIPCThread::IPC_STATUS_2ND_OFFICE )
         {
             // 2nd office startup should terminate after sending cmdlineargs through pipe
-            _exit( ExitHelper::E_SECOND_OFFICE );
+            SetBootstrapStatus(BS_TERMINATE);
         }
         else if ( pCmdLineArgs->IsHelp() )
         {
@@ -1327,6 +1328,11 @@ void Desktop::Main()
         return;
     }
 
+    BootstrapStatus eStatus = GetBootstrapStatus();
+    if (eStatus == BS_TERMINATE) {
+        return;
+    }
+
     // Detect desktop environment - need to do this as early as possible
     com::sun::star::uno::setCurrentContext(
         new DesktopContext( com::sun::star::uno::getCurrentContext() ) );
@@ -1346,9 +1352,8 @@ void Desktop::Main()
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main } OpenSplashScreen" );
 
     {
-        UserInstall::UserInstallError instErr_lang = UserInstall::configureLanguage();
         UserInstall::UserInstallError instErr_fin = UserInstall::finalize();
-        if ( instErr_lang != UserInstall::E_None || instErr_fin != UserInstall::E_None)
+        if ( instErr_fin != UserInstall::E_None)
         {
             OSL_ENSURE(sal_False, "userinstall failed");
             HandleBootstrapErrors( BE_USERINSTALL_FAILED );
