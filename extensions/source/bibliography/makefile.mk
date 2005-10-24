@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 19:19:59 $
+#   last change: $Author: hr $ $Date: 2005-10-24 15:41:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@ RESLIB1DEPN= bib.src bib.hrc
 
 
 SHL1STDLIBS= \
+        $(SOTLIB)           \
         $(SVTOOLLIB) \
         $(TKLIB) \
         $(VCLLIB) \
