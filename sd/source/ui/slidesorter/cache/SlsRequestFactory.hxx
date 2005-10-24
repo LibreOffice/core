@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsRequestFactory.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:12:37 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:42:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,12 +90,10 @@ template <class Queue,bool UseAheadOfTimeRequests>
             rModel.GetVisiblePagesEnumeration());
         while (aPageEnumeration.HasMoreElements())
         {
-            model::PageDescriptor& rDescriptor (
-                aPageEnumeration.GetNextElement());
-            view::PageObjectViewObjectContact* pRequest (
-                rDescriptor.GetViewObjectContact());
+            model::PageDescriptor& rDescriptor (aPageEnumeration.GetNextElement());
+            view::PageObjectViewObjectContact* pRequest (rDescriptor.GetViewObjectContact());
             if (pRequest != NULL)
-                rQueue.InsertFrontRequest (*pRequest, 0);
+                rQueue.AddRequest(*pRequest, VISIBLE_NO_PREVIEW);
         }
 
         if (UseAheadOfTimeRequests)
@@ -104,14 +102,13 @@ template <class Queue,bool UseAheadOfTimeRequests>
             aPageEnumeration = rModel.GetAllPagesEnumeration();
             while (aPageEnumeration.HasMoreElements())
             {
-                model::PageDescriptor& rDescriptor (
-                    aPageEnumeration.GetNextElement());
+                model::PageDescriptor& rDescriptor (aPageEnumeration.GetNextElement());
                 view::PageObjectViewObjectContact* pRequest =
                     static_cast<view::PageObjectViewObjectContact*>(
                         &rDescriptor.GetPageObject()->GetViewContact()
                         .GetViewObjectContact(rObjectContact));
                 if ( ! rDescriptor.IsVisible())
-                    rQueue.InsertFrontRequest (*pRequest, 1);
+                    rQueue.AddRequest(*pRequest, NOT_VISIBLE);
             }
         }
     }
