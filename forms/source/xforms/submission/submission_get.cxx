@@ -4,9 +4,9 @@
  *
  *  $RCSfile: submission_get.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:25:43 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:38:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,50 +84,38 @@ CSubmission::SubmissionResult CSubmissionGet::submit(const CSS::uno::Reference< 
     // UCB has ownership of environment...
     Reference< XCommandEnvironment > aEnvironment(pHelper);
 
-    if (m_aURLObj.GetProtocol() == INET_PROT_FILE)
-    {
-        // write the serialized content to a file
-        try {
-            ucb::Content aContent(m_aURLObj.GetMainURL(INetURLObject::NO_DECODE), aEnvironment);
-            // insert serialized data to content -> PUT
+    // append query string to the URL
+    try {
+        OStringBuffer aUTF8QueryURL(OUStringToOString(m_aURLObj.GetMainURL(INetURLObject::NO_DECODE),
+            RTL_TEXTENCODING_UTF8));
+        OStringBuffer aQueryString;
 
-            aContent.writeStream(aInStream, sal_True);
-        } catch (Exception& e)
+        const sal_Int32 size = 1024;
+        sal_Int32 n = 0;
+        Sequence< sal_Int8 > aByteBuffer(size);
+        while ((n = aInStream->readSomeBytes(aByteBuffer, size-1)) != 0)
+            aQueryString.append((sal_Char*)aByteBuffer.getArray(), n);
+        if (aQueryString.getLength() > 0 && m_aURLObj.GetProtocol() != INET_PROT_FILE)
         {
-            // XXX
-            OSL_ENSURE(sal_False, "Exception during UCB operatration.");
-            return UNKNOWN_ERROR;
-        }
-    }
-    else
-    {
-        // append query string to the URL
-        try {
-            OStringBuffer aUTF8QueryURL(OUStringToOString(m_aURLObj.GetMainURL(INetURLObject::NO_DECODE),
-                RTL_TEXTENCODING_UTF8));
             aUTF8QueryURL.append('?');
-            const sal_Int32 size = 1024;
-            sal_Int32 n = 0;
-            Sequence< sal_Int8 > aByteBuffer(size);
-            while ((n = aInStream->readSomeBytes(aByteBuffer, size-1)) != 0)
-                aUTF8QueryURL.append((sal_Char*)aByteBuffer.getArray(), n);
-            OUString aQueryURL = OStringToOUString(aUTF8QueryURL.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
-            ucb::Content aContent(aQueryURL, aEnvironment);
-            Reference< XOutputStream > aPipe(m_aFactory->createInstance(
-                OUString::createFromAscii("com.sun.star.io.Pipe")), UNO_QUERY_THROW);
-            aContent.openStream(aPipe);
-            // get reply
-            try {
-                m_aResultStream = aContent.openStream();
-            } catch (Exception& oe) {
-                OSL_ENSURE(sal_False, "Cannot open reply stream from content");
-            }
-        } catch (Exception& e)
-        {
-            // XXX
-            OSL_ENSURE(sal_False, "Exception during UCB operatration.");
-            return UNKNOWN_ERROR;
+            aUTF8QueryURL.append(aQueryString.makeStringAndClear());
         }
+        OUString aQueryURL = OStringToOUString(aUTF8QueryURL.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
+        ucb::Content aContent(aQueryURL, aEnvironment);
+        Reference< XOutputStream > aPipe(m_aFactory->createInstance(
+            OUString::createFromAscii("com.sun.star.io.Pipe")), UNO_QUERY_THROW);
+        aContent.openStream(aPipe);
+        // get reply
+        try {
+            m_aResultStream = aContent.openStream();
+        } catch (Exception& oe) {
+            OSL_ENSURE(sal_False, "Cannot open reply stream from content");
+        }
+    } catch (Exception& e)
+    {
+        // XXX
+        OSL_ENSURE(sal_False, "Exception during UCB operatration.");
+        return UNKNOWN_ERROR;
     }
 
     return SUCCESS;
