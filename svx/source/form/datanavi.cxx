@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datanavi.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:48:59 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:40:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -542,17 +542,12 @@ namespace svxform
                 bool bIsElement = true;
                 if ( DGTInstance == m_eGroup )
                 {
-// #i36453# warning changing instance.  Removed for
-// upcoming 2.0 release because string change could not go through
-// translation anymore. Please re-enable in the next version.
-/*
                     if ( m_sInstanceURL.Len() > 0 )
                     {
                         LinkedInstanceWarningBox aMsgBox( this );
                         if ( aMsgBox.Execute() != RET_OK )
                             return bHandled;
                     }
-*/
 
                     DBG_ASSERT( pEntry, "XFormsPage::DoToolBoxAction(): no entry" );
                     ItemNode* pParentNode = static_cast< ItemNode* >( pEntry->GetUserData() );
@@ -710,17 +705,12 @@ namespace svxform
                 ItemNode* pNode = static_cast< ItemNode* >( pEntry->GetUserData() );
                 if ( DGTInstance == m_eGroup || DGTBinding == m_eGroup )
                 {
-// #i36453# warning changing instance.  Removed for
-// upcoming 2.0 release because string change could not go through
-// translation anymore. Please re-enable in the next version.
-/*
                     if ( DGTInstance == m_eGroup && m_sInstanceURL.Len() > 0 )
                     {
                         LinkedInstanceWarningBox aMsgBox( this );
                         if ( aMsgBox.Execute() != RET_OK )
                             return bHandled;
                     }
-*/
 
                     AddDataItemDialog aDlg( this, pNode, m_xUIHelper );
                     DataItemType eType = DITElement;
@@ -801,17 +791,12 @@ namespace svxform
         else if ( TBI_ITEM_REMOVE == _nToolBoxID )
         {
             bHandled = true;
-// #i36453# warning changing instance.  Removed for
-// upcoming 2.0 release because string change could not go through
-// translation anymore. Please re-enable in the next version.
-/*
             if ( DGTInstance == m_eGroup && m_sInstanceURL.Len() > 0 )
             {
                 LinkedInstanceWarningBox aMsgBox( this );
                 if ( aMsgBox.Execute() != RET_OK )
                     return bHandled;
             }
-*/
             bIsDocModified = RemoveEntry();
         }
 
@@ -1229,16 +1214,11 @@ namespace svxform
                 {
                     DBG_ERRORFILE( "XFormsPage::RemoveEntry(): exception caught" );
                 }
-// #i36202 warning when deleting element/attribute.  Removed for
-// upcoming 2.0 release because string change could not go through
-// translation anymore. Please re-enable in the next version.
-/*
                 QueryBox aQBox( this, SVX_RES( nResId ) );
                 String sMessText = aQBox.GetMessText();
                 sMessText.SearchAndReplace( sSearch, String( sName ) );
                 aQBox.SetMessText( sMessText );
                 if ( aQBox.Execute() == RET_YES )
-*/
                 {
                     try
                     {
