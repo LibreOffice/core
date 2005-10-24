@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageCache.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:18:08 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:43:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,8 +73,7 @@ namespace sd { namespace slidesorter { namespace cache {
     <li>Give the UI the chance to handle user events between the rendering
     of differe slides.</li>
     <li>Limit the amount of space that may be used for storing preview
-    bitmaps and throw.  For this we need a policy for which bitmaps are to
-    be disposed to make room for new ones.</li>
+    bitmaps and throw.</li>
     </p>
 
     <p>There are three somewhat similar methods for requesting new previews:
@@ -90,7 +89,7 @@ namespace sd { namespace slidesorter { namespace cache {
     remembers that one is necessary when one of the other two methods is
     called.
     </p>
-    */
+*/
 class PageCache
 {
 public:
@@ -99,13 +98,18 @@ public:
     /** The page chache is created with references both to the view and the
         model so that it can fill itself with requests for all or just the
         visible pages.
+
+        It is the task of the PageCacheManager to create new objects of this
+        class.
     */
     PageCache (
         view::SlideSorterView& rView,
         model::SlideSorterModel& rModel,
-        sal_Int32 nMaximalCacheSize);
+        const Size& rPreviewSize);
 
     ~PageCache (void);
+
+    void ChangeSize(const Size& rPreviewSize);
 
     /** Request a preview bitmap for the specified page object in the
         specified size.  The returned bitmap may be a preview of the
@@ -145,20 +149,6 @@ public:
     */
     void InvalidatePreviewBitmap (const RequestData& rRequestData);
 
-    /** Lower the priority with which the request associated with the given
-        data will be processed.  Call this method when the visibility of a
-        page object changes (from visible to not visible) and the request
-        becomes a ahead-of-time request. When the request is already in the
-        lowest class it will be removed.
-    */
-    void DecreaseRequestPriority (RequestData& rRequestData);
-
-    /** Move the request associated with the given data into a higher
-        priority class and increase its priority in that class above all
-        other elements in the class.
-    */
-    void IncreaseRequestPriority (RequestData& rRequestData);
-
     /** Call this method when a view-object-contact object is being deleted
         and does not need (a) its current bitmap in the cache and (b) a
         requested new bitmap.
@@ -168,8 +158,12 @@ public:
     /** Call this method when all preview bitmaps have to be generated anew.
         This is the case when the size of the page objects on the screen has
         changed or when the model has changed.
+        @param bUpdateCache
+            When this flags is <TRUE/> then requests for updated previews
+            are created.  When it is <FALSE/> the existing previews are only
+            marked as not being up-to-date anymore.
     */
-    void InvalidateCache (void);
+    void InvalidateCache (bool bUpdateCache = true);
 
     /** With the precious flag you can control whether a bitmap can be
         removed or reduced in size to make room for other bitmaps or is so
