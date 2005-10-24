@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-
     OpenOffice.org - a multi-platform office productivity suite
 
     $RCSfile: build.xml,v $
 
-    $Revision: 1.8 $
+    $Revision: 1.9 $
 
-    last change: $Author: rt $ $Date: 2005-09-09 11:49:39 $
+    last change: $Author: hr $ $Date: 2005-10-24 18:23:52 $
 
     The Contents of this file are made available subject to
     the terms of GNU Lesser General Public License Version 2.1.
@@ -35,149 +34,51 @@
 -->
 <project name="xmrg_util" default="main" basedir=".">
 
-    <!-- ================================================================= -->
-    <!-- settings                                                          -->
-    <!-- ================================================================= -->
+    <property file="../source/inc/antbuild.properties"/>
 
-    <!-- project prefix, used for targets and build.lst  -->
-    <property name="prj.prefix" value="xmrg"/>
+    <property name="javadoc.dir" location="${build.dir}/javadoc"/>
 
-    <!-- name of this sub target used in recursive builds -->
-    <property name="target" value="xmrg_util"/>
+    <path id="classpath">
+        <pathelement location="${solar.jar}/parser.jar"/>
+        <pathelement location="${solar.jar}/jaxp.jar"/>
+        <pathelement location="${solar.jar}/xerces.jar"/>
+        <pathelement location="${solar.jar}/unoil.jar"/>
+        <pathelement location="${solar.jar}/ridl.jar"/>
+        <pathelement location="${solar.jar}/jurt.jar"/>
+        <pathelement location="${solar.jar}/juh.jar"/>
+        <pathelement location="${build.dir}/xmerge.jar"/>
+    </path>
 
-    <!-- relative path to project directory -->
-    <property name="prj" value=".."/>
-
-    <!-- start of java source code package structure -->
-    <property name="java.dir" value="../java"/>
-
-    <!-- path component for java package -->
-    <property name="package" value="org/openoffice/xmerge"/>
-
-     <property name="aportis" value="org/openoffice/xmerge/converter/xml/sxw/aportisdoc"/>
-
-    <!-- path component for java package -->
-    <property name="htmlsoff" value="org/openoffice/xmerge/converter/xml/xslt"/>
-
-    <!-- path component for java package -->
-    <property name="pocketword" value="org/openoffice/xmerge/converter/xml/sxw/pocketword"/>
-
-    <!-- path component for java package -->
-    <property name="pexcel" value="org/openoffice/xmerge/converter/xml/sxc/pexcel"/>
-
-    <!-- name of jar file created, without .jar extension -->
-    <property name="jarname1" value="xmerge"/>
-
-    <!-- name of jar file created, without .jar extension -->
-    <property name="jarname2" value="htmlsoff"/>
-
-    <!-- name of jar file created, without .jar extension -->
-    <property name="jarname3" value="aportisdoc"/>
-
-    <!-- name of jar file created, without .jar extension -->
-    <property name="jarname4" value="pocketword"/>
-
-    <!-- name of jar file created, without .jar extension -->
-    <property name="jarname5" value="pexcel"/>
-
-    <!-- ================================================================= -->
-    <!--  solar build environment targets                                  -->
-    <!-- ================================================================= -->
-
-    <target name="build_dir" unless="build.dir">
-        <property name="build.dir" value="${out}"/>
+    <target name="init">
+        <mkdir dir="${javadoc.dir}"/>
     </target>
 
-    <target name="solar" depends="build_dir" if="solar.update">
-        <property name="solar.properties"
-                  value="${solar.bin}/solar.properties"/>
+    <!-- build javadoc -->
+    <target name="javadoc" depends="init">
+        <javadoc destdir="${javadoc.dir}"
+                 author="true"
+                 version="true"
+                 use="true"
+                 windowtitle="XMerge API"
+                 classpathref="classpath">
+
+            <fileset dir="../source/bridge" defaultexcludes="yes"/>
+            <fileset dir="../source/xmerge" defaultexcludes="yes"/>
+            <fileset dir="../source/aportisdoc" defaultexcludes="yes"/>
+            <fileset dir="../source/pexcel" defaultexcludes="yes"/>
+            <fileset dir="../source/pocketword" defaultexcludes="yes"/>
+
+        </javadoc>
     </target>
 
-    <target name="init" depends="solar">
-        <property name="build.compiler" value="classic"/>
-        <property file="${solar.properties}"/>
-        <property file="${build.dir}/class/solar.properties"/>
+    <target name="main" depends="javadoc">
     </target>
 
-
-    <target name="info">
-        <echo message="--------------------"/>
-        <echo message="${target}"/>
-        <echo message="--------------------"/>
+     <target name="all" depends="javadoc">
     </target>
 
-
-    <!-- ================================================================= -->
-    <!-- custom targets                                                    -->
-    <!-- ================================================================= -->
-
-    <!-- the main target, called in recursive builds -->
-    <target name="main" depends="info,prepare,xmerge,htmlsoff,aportis,pocketword,pexcel"/>
-
-    <!-- prepare output directories -->
-    <target name="prepare" depends="init" if="build.class">
-        <mkdir dir="${build.dir}"/>
-        <mkdir dir="${build.class}"/>
-    </target>
-
-    <!-- create xmerge jar file -->
-    <target name="xmerge" depends="prepare" if="build.class">
-        <jar jarfile="${build.class}/${jarname1}.jar"
-             basedir="${build.class}"
-             manifest="${jarname1}.mf">
-            <include name="${package}/**"/>
-            <exclude name="${aportis}/**"/>
-            <exclude name="${pocketword}/**"/>
-            <exclude name="${pexcel}/**"/>
-        </jar>
-    </target>
-
-     <!-- create htmlsoff jar file -->
-    <target name="htmlsoff" depends="prepare,xmerge" if="build.class">
-        <jar jarfile="${build.class}/${jarname2}.jar"
-             basedir="${java.dir}/${htmlsoff}">
-            <include name="htmltosoff.xsl"/>
-        <include name="sofftohtml.xsl"/>
-            <metainf dir="${java.dir}/${htmlsoff}" includes="converter.xml"/>
-        </jar>
-    </target>
-
-     <!-- create aportis jar file -->
-    <target name="aportis" depends="prepare,xmerge" if="build.class">
-        <jar jarfile="${build.class}/${jarname3}.jar"
-             basedir="${build.class}">
-            <include name="${aportis}/**"/>
-            <metainf dir="${java.dir}/${aportis}" includes="converter.xml"/>
-        </jar>
-    </target>
-
-    <!-- create pocketword jar file -->
-    <target name="pocketword" depends="prepare,xmerge" if="build.class">
-        <jar jarfile="${build.class}/${jarname4}.jar"
-             basedir="${build.class}">
-            <include name="${pocketword}/**"/>
-            <metainf dir="${java.dir}/${pocketword}" includes="converter.xml"/>
-        </jar>
-    </target>
-
-     <!-- create pexcel.jar file -->
-    <target name="pexcel" depends="prepare,xmerge" if="build.class">
-        <jar jarfile="${build.class}/${jarname5}.jar"
-             basedir="${build.class}">
-            <include name="${pexcel}/**"/>
-            <include name="${pexcel}/records/**"/>
-            <include name="${pexcel}/records/formula/**"/>
-            <metainf dir="${java.dir}/${pexcel}" includes="converter.xml"/>
-        </jar>
-    </target>
-
-    <!-- clean up -->
-    <target name="clean" depends="prepare">
-        <delete file="${build.class}/${jarname1}.jar"/>
-        <delete file="${build.class}/${jarname2}.jar"/>
-        <delete file="${build.class}/${jarname3}.jar"/>
-        <delete file="${build.class}/${jarname4}.jar"/>
-        <delete file="${build.class}/${jarname5}.jar"/>
+    <target name="clean">
+        <delete file="${javadoc.dir}"/>
     </target>
 
 </project>
