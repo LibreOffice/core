@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:23:29 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 18:29:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1045,7 +1045,7 @@ Window* Window::GetLabelFor() const
                                                  nIndex,
                                                  nIndex,
                                                  FALSE );
-                if( pSWindow && pSWindow->IsVisible() )
+                if( pSWindow && pSWindow->IsVisible() && ! (pSWindow->GetStyle() & WB_NOLABEL) )
                 {
                     if( pSWindow->GetType() != WINDOW_FIXEDTEXT     &&
                         pSWindow->GetType() != WINDOW_FIXEDLINE     &&
@@ -1116,6 +1116,7 @@ Window* Window::GetLabeledBy() const
                                                  nFoundIndex,
                                                  FALSE );
                 if( pSWindow && pSWindow->IsVisible() &&
+                    ! (pSWindow->GetStyle() & WB_NOLABEL) &&
                     ( pSWindow->GetType() == WINDOW_FIXEDTEXT   ||
                       pSWindow->GetType() == WINDOW_FIXEDLINE   ||
                       pSWindow->GetType() == WINDOW_GROUPBOX ) )
