@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgass.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:31:39 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 16:16:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,7 +234,7 @@ ModalDialog DLG_ASS
         Pos = MAP_APPFONT ( 75 , 135  ) ;
         Size = MAP_APPFONT ( 59 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Folie" ;
+        Text [ de ] = "~Dia" ;
         Text [ en-US ] = "Sli~de" ;
         Text [ x-comment ] = " ";
     };
@@ -245,7 +245,7 @@ ModalDialog DLG_ASS
         Pos = MAP_APPFONT ( 12 , 135  ) ;
         Size = MAP_APPFONT ( 59 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "F~olie" ;
+        Text [ de ] = "Overhead~folie" ;
         Text [ en-US ] = "O~verhead sheet" ;
         Text [ x-comment ] = " ";
     };
