@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unowrapper.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:24:33 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:24:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,13 +58,20 @@
 #endif
 #include "toolkit/dllapi.h"
 
+#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_SYSWIN_HXX
+#include <vcl/syswin.hxx>
+#endif
 
 #ifndef _SV_MENU_HXX
 #include <vcl/menu.hxx>
 #endif
 
 #include <tools/debug.hxx>
+
+using namespace ::com::sun::star;
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > CreateXWindow( Window* pWindow )
 {
@@ -310,21 +317,22 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
     // #102132# Iterate over frames after setting Window peer to NULL,
     // because while destroying other frames, we get get into the method again and try
     // to destroy this window again...
-    USHORT nFrames = Application::GetTopWindowCount();
-    for ( USHORT nFrame = nFrames; nFrame;  )
+    // #i42462#/#116855# no, don't loop: Instead, just ensure that all our top-window-children
+    // are disposed, too (which should also be a valid fix for #102132#, but doesn't have the extreme
+    // performance penalties)
+    if ( pWindow )
     {
-        Window* pFrameWindow = Application::GetTopWindow( --nFrame );
-        DBG_ASSERT( pFrameWindow, "TopWindow?" );
-        if ( pFrameWindow && pFrameWindow->GetWindowPeer() && ( pFrameWindow->GetParent() == pWindow ) )    // Only direct parents here!
+        Window* pTopWindowChild = pWindow->GetWindow( WINDOW_FIRSTTOPWINDOWCHILD );
+        OSL_ENSURE( pTopWindowChild || !pWindow->GetWindow( WINDOW_FIRSTTOPWINDOWCHILD ),
+            "UnoWrapper::WindowDestroyed: system child which is no system window?" );
+        while ( pTopWindowChild )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp( pFrameWindow->GetComponentInterface( FALSE ), ::com::sun::star::uno::UNO_QUERY );
-            xComp->dispose();
-            // Loop again, we don't know what else happened while disposing:
-            if ( nFrame )
-            {
-                nFrames = Application::GetTopWindowCount();
-                nFrame = nFrames;
-            }
+            OSL_ENSURE( pTopWindowChild->GetParent() == pWindow, "UnoWrapper::WindowDestroyed: inconsistency in the SystemWindow relationship!" );
+
+            uno::Reference< lang::XComponent > xComp( pTopWindowChild->GetComponentInterface( FALSE ), uno::UNO_QUERY );
+            pTopWindowChild = pTopWindowChild->GetWindow( WINDOW_NEXTTOPWINDOWSIBLING );
+            if  ( xComp.is() )
+                xComp->dispose();
         }
     }
 }
