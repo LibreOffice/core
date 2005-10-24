@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XSLTFilter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:24:18 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 15:57:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -430,11 +430,12 @@ sal_Bool XSLTFilter::importer(
 
             // transform
             m_tcontrol->start();
-            osl_waitCondition(m_cTransformed, 0);
+            // osl_waitCondition(m_cTransformed, 0);
             if (!m_bError && !m_bTerminated)
             {
                 // parse the transformed XML buffered in the pipe
                 xSaxParser->parseStream(aInput);
+                osl_waitCondition(m_cTransformed, 0);
                 return sal_True;
             } else {
                 return sal_False;
@@ -541,9 +542,9 @@ sal_Bool XSLTFilter::exporter(
         Reference< XActiveDataSource > tsource(m_tcontrol, UNO_QUERY);
         tsource->setOutputStream(m_rOutputStream);
 
-        // don't start transformer yet but wait for buffer to be filled
-        // m_tcontrol->start();
-
+        // we will start receiving events after returning 'true'.
+        // we will start the transformation as soon as we receive the startDocument
+        // event.
         return sal_True;
     }
     else
@@ -558,12 +559,13 @@ sal_Bool XSLTFilter::exporter(
 void XSLTFilter::startDocument() throw (SAXException,RuntimeException){
     OSL_ASSERT(m_rDocumentHandler.is());
     m_rDocumentHandler->startDocument();
+    m_tcontrol->start();
 }
 
-void XSLTFilter::endDocument() throw (SAXException,RuntimeException){
+void XSLTFilter::endDocument() throw (SAXException, RuntimeException){
     OSL_ASSERT(m_rDocumentHandler.is());
     m_rDocumentHandler->endDocument();
-    m_tcontrol->start();
+    // wait for the transformer to finish
     osl_waitCondition(m_cTransformed, 0);
     if (!m_bError && !m_bTerminated)
     {
