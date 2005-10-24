@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageObjectViewObjectContact.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:02:52 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:45:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@
 #include "view/SlsPageNotificationObjectContact.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "cache/SlsPageCache.hxx"
+#include "cache/SlsPageCacheManager.hxx"
 #include "res_bmp.hrc"
 #include "tools/IconCache.hxx"
 #include "PreviewRenderer.hxx"
@@ -86,11 +87,12 @@ const sal_Int32 PageObjectViewObjectContact::mnMouseOverEffectThickness = 1;
 PageObjectViewObjectContact::PageObjectViewObjectContact (
     ObjectContact& rObjectContact,
     ViewContact& rViewContact,
-    cache::PageCache* pCache)
+    const ::boost::shared_ptr<cache::PageCache>& rpCache)
     : ViewObjectContact (rObjectContact, rViewContact),
       mbIsValid(true),
-      mpCache(pCache),
-      mpNotifier(NULL)
+      mpCache(rpCache),
+      mpNotifier(NULL),
+      mbInPrepareDelete(false)
 {
     GetPageDescriptor().SetViewObjectContact (this);
 }
@@ -102,6 +104,7 @@ PageObjectViewObjectContact::~PageObjectViewObjectContact (void)
 {
     if (mpNotifier.get() != NULL)
     {
+        mbInPrepareDelete = true;
         mpNotifier->PrepareDelete();
         mpNotifier.reset();
     }
@@ -110,21 +113,41 @@ PageObjectViewObjectContact::~PageObjectViewObjectContact (void)
 
 
 
-Rectangle PageObjectViewObjectContact::GetPixelBox (
-    const OutputDevice& rDevice)
+void PageObjectViewObjectContact::SetCache (const ::boost::shared_ptr<cache::PageCache>& rpCache)
 {
-    return rDevice.LogicToPixel(GetViewContact().GetPaintRectangle());
+    mpCache = rpCache;
 }
 
 
 
 
-Rectangle PageObjectViewObjectContact::GetPreviewPixelBox (
-    const OutputDevice& rDevice)
+Rectangle PageObjectViewObjectContact::GetModelBoundingBox (void) const
 {
-    return  rDevice.LogicToPixel(
-        static_cast<PageObjectViewContact&>(GetViewContact()
+    return static_cast<PageObjectViewContact&>(GetViewContact())
+        .GetPageObjectBoundingBox();
+}
+
+
+
+
+Rectangle PageObjectViewObjectContact::GetPixelBox (const OutputDevice& rDevice) const
+{
+    Rectangle aBox (GetViewContact().GetPaintRectangle());
+    return Rectangle(
+        rDevice.LogicToPixel(aBox.TopLeft()),
+        rDevice.LogicToPixel(aBox.GetSize()));
+}
+
+
+
+
+Rectangle PageObjectViewObjectContact::GetPreviewPixelBox (const OutputDevice& rDevice) const
+{
+    Rectangle aBBox (static_cast<PageObjectViewContact&>(GetViewContact()
             ).GetPageObject().GetCurrentBoundRect());
+    return Rectangle(
+        rDevice.LogicToPixel(aBBox.TopLeft()),
+        rDevice.LogicToPixel(aBBox.GetSize()));
 }
 
 
@@ -163,6 +186,7 @@ BitmapEx PageObjectViewObjectContact::GetPreview (
                 aBitmap = mpCache->GetPreviewBitmap(
                     *this,
                     rNewSizePixel.GetSize());
+                mpCache->SetPreciousFlag(*this, true);
             }
             else
                 aBitmap = CreatePreview (rDisplayInfo);
@@ -255,6 +279,7 @@ void PageObjectViewObjectContact::PaintObject (DisplayInfo& rDisplayInfo)
 void PageObjectViewObjectContact::PrepareDelete (void)
 {
     mbIsValid = false;
+    mbInPrepareDelete = true;
 
     GetPageDescriptor().SetViewObjectContact (NULL);
 
@@ -262,6 +287,8 @@ void PageObjectViewObjectContact::PrepareDelete (void)
         mpCache->ReleasePreviewBitmap(*this);
 
     ViewObjectContact::PrepareDelete();
+
+    mbInPrepareDelete = false;
 }
 
 
@@ -277,15 +304,17 @@ const SdrPage* PageObjectViewObjectContact::GetPage (void) const
 
 void PageObjectViewObjectContact::ActionChanged (void)
 {
-    // Tell the cache to create a new preview bitmap.
-    if (mpCache != NULL)
+    // Even when we are called from PrepareDelete we still have to invalide
+    // the preview bitmap in the cache.
+    const SdrPage* pPage = GetPage();
+    SdDrawDocument* pDocument = dynamic_cast<SdDrawDocument*>(pPage->GetModel());
+    if (mpCache!=NULL && pPage!=NULL && pDocument!=NULL)
     {
-        // We are brave and hope that the cache does the right thing with us
-        // even when we are not valid anymore.
-        mpCache->InvalidatePreviewBitmap(*this);
+        cache::PageCacheManager::Instance()->InvalidatePreviewBitmap(
+            pDocument,
+            GetPage());
     }
 
-    // We have to call the base class, even when we are not in a valid state.
     ViewObjectContact::ActionChanged();
 }
 
@@ -347,7 +376,8 @@ void PageObjectViewObjectContact::PaintFrame (
 void PageObjectViewObjectContact::PaintBorder (
     OutputDevice& rDevice) const
 {
-    Rectangle aFrameBox (rDevice.LogicToPixel(GetModelBoundingBox()));
+    Rectangle aFrameBox (//rDevice.LogicToPixel(GetModelBoundingBox()));
+        GetPreviewPixelBox(rDevice));
     rDevice.EnableMapMode(FALSE);
     rDevice.SetFillColor ();
     svtools::ColorConfig aColorConfig;
@@ -365,7 +395,7 @@ void PageObjectViewObjectContact::PaintSelectionIndicator (
 {
     if (GetPageDescriptor().IsSelected())
     {
-        Rectangle aSelectionFrame (GetModelBoundingBox());
+        //        Rectangle aSelectionFrame (GetModelBoundingBox());
 
         const Color aOldFillColor (rDevice.GetFillColor());
         const Color aOldLineColor (rDevice.GetLineColor());
@@ -383,7 +413,8 @@ void PageObjectViewObjectContact::PaintSelectionIndicator (
         ULONG nPreviousDrawMode = rDevice.GetDrawMode();
         rDevice.SetDrawMode (DRAWMODE_DEFAULT);
 
-        Rectangle aInner (rDevice.LogicToPixel(aSelectionFrame));
+        Rectangle aInner (//rDevice.LogicToPixel(aSelectionFrame));
+            GetPreviewPixelBox(rDevice));
         rDevice.EnableMapMode (FALSE);
 
         rDevice.SetFillColor ();
@@ -454,7 +485,8 @@ void PageObjectViewObjectContact::PaintMouseOverEffect (
     bool bVisible) const
 {
     rDevice.SetDrawMode (DRAWMODE_DEFAULT);
-    Rectangle aInner (rDevice.LogicToPixel(GetModelBoundingBox()));
+    Rectangle aInner (//rDevice.LogicToPixel(GetModelBoundingBox()));
+        GetPreviewPixelBox(rDevice));
     rDevice.EnableMapMode (FALSE);
 
     svtools::ColorConfig aColorConfig;
@@ -694,15 +726,6 @@ Rectangle PageObjectViewObjectContact::GetPageNumberArea (
         aNumberSize);
 
     return aPageNumberArea;
-}
-
-
-
-
-Rectangle PageObjectViewObjectContact::GetModelBoundingBox (void) const
-{
-    return static_cast<PageObjectViewContact&>(GetViewContact())
-        .GetPageObjectBoundingBox();
 }
 
 
