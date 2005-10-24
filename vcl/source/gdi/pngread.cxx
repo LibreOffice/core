@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pngread.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:55:35 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:48:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1220,8 +1220,13 @@ void PNGReaderImpl::ImplGetFilter ( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                         {
                             if ( mnBitDepth == 8 )  // maybe the source is a 16 bit grayscale
                             {
-                                for ( nX = nXStart; nX < mnWidth; nX += nXAdd )
-                                    ImplSetPixel( nY, nX, *pTmp++, FALSE );
+                                if ( mnPass == 7 )  // mnPass == 7 -> no interlace or whole scanline is available
+                                    mpAcc->CopyScanline( nY, pTmp, BMP_FORMAT_8BIT_PAL, mnScansize -1 );
+                                else
+                                {
+                                    for ( nX = nXStart; nX < mnWidth; nX += nXAdd )
+                                        ImplSetPixel( nY, nX, *pTmp++, FALSE );
+                                }
                             }
                             else
                             {
@@ -1246,10 +1251,23 @@ void PNGReaderImpl::ImplGetFilter ( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 {
                     if ( mnBitDepth == 8 )  // maybe the source is a 16 bit each sample
                     {
-                        for ( nX = nXStart; nX < mnWidth; nX += nXAdd, pTmp += 4 )
-                            ImplSetAlphaPixel( nY, nX, BitmapColor( mpColorTable[ pTmp[ 0 ] ],
-                                                                        mpColorTable[ pTmp[ 1 ] ],
-                                                                            mpColorTable[ pTmp[ 2 ] ] ), pTmp[ 3 ] );
+                        if ( mpColorTable != mpDefaultColorTable )
+                        {
+                            for ( nX = nXStart; nX < mnWidth; nX += nXAdd, pTmp += 4 )
+                                ImplSetAlphaPixel( nY, nX, BitmapColor( mpColorTable[ pTmp[ 0 ] ],
+                                                                            mpColorTable[ pTmp[ 1 ] ],
+                                                                                mpColorTable[ pTmp[ 2 ] ] ), pTmp[ 3 ] );
+                        }
+                        else
+                        {
+//                          if ( mnPass == 7 )  // mnPass == 7 -> no interlace or whole scanline is available
+//                              mpAcc->CopyScanline( nY, pTmp, BMP_FORMAT_32BIT_TC_RGBA, mnScansize -1 );
+//                          else
+                            {
+                                for ( nX = nXStart; nX < mnWidth; nX += nXAdd, pTmp += 4 )
+                                    ImplSetAlphaPixel( nY, nX, BitmapColor( pTmp[ 0 ], pTmp[ 1 ], pTmp[ 2 ] ), pTmp[ 3 ] );
+                            }
+                        }
                     }
                     else
                     {
@@ -1302,10 +1320,24 @@ void PNGReaderImpl::ImplGetFilter ( sal_uInt32 nXStart, sal_uInt32 nXAdd )
             {
                 if ( mnBitDepth == 8 )  // maybe the source is a 16 bit each sample
                 {
-                    for ( nX = nXStart; nX < mnWidth; nX += nXAdd, pTmp += 3 )
-                        ImplSetPixel( nY, nX, BitmapColor( mpColorTable[ pTmp[ 0 ] ],
-                                                            mpColorTable[ pTmp[ 1 ] ],
-                                                                mpColorTable[ pTmp[ 2 ] ] ), FALSE );
+                    if ( mpColorTable != mpDefaultColorTable )
+                    {
+                        for ( nX = nXStart; nX < mnWidth; nX += nXAdd, pTmp += 3 )
+                            ImplSetPixel( nY, nX, BitmapColor( mpColorTable[ pTmp[ 0 ] ],
+                                                                mpColorTable[ pTmp[ 1 ] ],
+                                                                    mpColorTable[ pTmp[ 2 ] ] ), FALSE );
+                    }
+                    else
+                    {
+                        if ( mnPass == 7 )  // mnPass == 7 -> no interlace or whole scanline is available
+                            mpAcc->CopyScanline( nY, pTmp, BMP_FORMAT_24BIT_TC_RGB, mnScansize -1 );
+                        else
+                        {
+                            for ( nX = nXStart; nX < mnWidth; nX += nXAdd, pTmp += 3 )
+                                ImplSetPixel( nY, nX, BitmapColor( pTmp[ 0 ], pTmp[ 1 ], pTmp[ 2 ] ), FALSE );
+                        }
+
+                    }
                 }
                 else
                 {
