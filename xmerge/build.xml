@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-
     OpenOffice.org - a multi-platform office productivity suite
 
     $RCSfile: build.xml,v $
 
-    $Revision: 1.6 $
+    $Revision: 1.7 $
 
-    last change: $Author: rt $ $Date: 2005-09-09 10:17:33 $
+    last change: $Author: hr $ $Date: 2005-10-24 15:59:21 $
 
     The Contents of this file are made available subject to
     the terms of GNU Lesser General Public License Version 2.1.
@@ -35,262 +34,63 @@
 -->
 <project name="xmerge" default="main" basedir=".">
 
-    <!-- ================================================================= -->
-    <!-- settings                                                          -->
-    <!-- ================================================================= -->
+    <property environment="env"/>
+    <property name="solar.platform" value="${env.COMP_ENV}${env.PROEXT}"/>
+    <property name="out" location="${basedir}/${solar.platform}"/>
+    <property name="solar.jar" location="${env.SOLARVER}/${solar.platform}/bin${env.UPDMINOREXT}"/>
+    <property name="debug" value="yes"/>
+    <property name="optimize" value="no"/>
 
-    <!-- project prefix, used to generate build.lst -->
-    <property name="prj.prefix" value="xmrg"/>
-
-    <!-- name of this sub target used in recursive builds -->
-    <property name="target" value="xmerge"/>
-
-
-    <!-- ================================================================= -->
-    <!--  solar build environment targets                                  -->
-    <!-- ================================================================= -->
-
-    <!-- used by init to set build directory -->
-    <target name="build_dir" unless="build.dir">
-        <property name="build.dir" value="${basedir}/${inpath}"/>
+    <target name="init">
+        <echoproperties prefix="solar"/>
+        <mkdir dir="${out}"/>
+        <mkdir dir="${out}/class"/>
     </target>
 
-    <target name="build_class" depends="build_dir">
-    <property name="build.class" value="${build.dir}/class"/>
-    <mkdir dir="${build.dir}"/>
-    <mkdir dir="${build.class}"/>
-    <copy file="util/solar.properties" todir="${build.class}"/>
+    <target name="xmerge" depends="init">
+        <ant dir="source/xmerge" target="all"/>
     </target>
 
-    <!-- used by init to set up  'solar' build environment -->
-    <target name="solar" depends="build_dir,build_class" if="solar.update">
-        <property name="solar.properties"
-                  value="${solar.bin}/solar.properties"/>
-        <property name="build.dir" value="${basedir}/${out}"/>
+    <target name="bridge" depends="xmerge, init">
+        <ant dir="source/bridge" target="all"/>
     </target>
 
-
-    <!-- initialize build environment -->
-    <target name="init" depends="solar">
-        <property name="build.compiler" value="classic"/>
-        <property file="${build.dir}/class/solar.properties"/>
-        <property file="${solar.properties}"/>
+    <target name="aportisdoc" depends="xmerge, init">
+        <ant dir="source/aportisdoc" target="all"/>
     </target>
 
-    <!-- show information about current sub target in recursive builds -->
-    <target name="info">
-       <echo message="----------------------------------------"/>
-       <echo message="${target}"/>
-       <echo message="----------------------------------------"/>
+    <target name="pexcel" depends="xmerge, init">
+        <ant dir="source/pexcel" target="all"/>
     </target>
 
-
-    <!-- ================================================================= -->
-    <!--- custom targets                                                   -->
-    <!-- ================================================================= -->
-
-    <!-- names for targets build by release engineering   -->
-    <!-- must start with project prefix and an underscore -->
-
-    <!-- the main target, called in recursive builds -->
-    <target name="main" depends="info,prepare,xmrg_util,xmrg_javadoc"/>
-
-    <!-- prepare output directories -->
-    <target name="prepare" depends="init"/>
-
-
-
-    <!-- java package -->
-    <target name="xmrg_joo_xmerge" depends="prepare">
-        <ant dir="java/org/openoffice/xmerge" target="main">
-            <property name="target" value="xmrg_joo_xmerge"/>
-            <property name="prj" value="../../../.."/>
-        </ant>
+    <target name="pocketword" depends="xmerge, init">
+        <ant dir="source/pocketword" target="all"/>
     </target>
 
-
-    <!-- java package -->
-    <target name="xmrg_jooxc_xml" depends="prepare">
-        <ant dir="java/org/openoffice/xmerge/converter/xml" target="main">
-            <property name="target" value="xmrg_jooxc_xml"/>
-            <property name="prj" value="../../../../../.."/>
-        </ant>
+    <target name="htmlsoff" depends="init">
+        <ant dir="source/htmlsoff" target="all"/>
     </target>
 
-
-    <!-- java package -->
-    <target name="xmrg_jooxcx_sxc" depends="prepare">
-        <ant dir="java/org/openoffice/xmerge/converter/xml/sxc" target="main">
-            <property name="target" value="xmrg_jooxcx_sxc"/>
-            <property name="prj" value="../../../../../../.."/>
-        </ant>
+    <target name="wordsmith" depends="xmerge">
+        <echo>wordsmith filter is not supported</echo>
+        <ant dir="source/wordsmith" target="all"/>
     </target>
 
-
-    <!-- java package -->
-    <target name="xmrg_jooxcxsp_records" depends="prepare">
-        <ant dir="java/org/openoffice/xmerge/converter/xml/sxc/pexcel/records" target="main">
-            <property name="target" value="xmrg_jooxcxsp_records"/>
-            <property name="prj" value="../../../../../../../../.."/>
-        </ant>
+    <target name="minicalc" depends="xmerge">
+        <echo>minicalc filter is not supported</echo>
+        <ant dir="source/minicalc" target="all"/>
     </target>
 
-    <!-- java package -->
-    <target name="xmrg_jooxcxspr_formula" depends="prepare">
-        <ant
-        dir="java/org/openoffice/xmerge/converter/xml/sxc/pexcel/records/formula" target="main">
-            <property name="target" value="xmrg_jooxcxspr_formula"/>
-            <property name="prj" value="../../../../../../../../../.."/>
-        </ant>
+    <target name="util" depends="xmerge, bridge, aportisdoc, pexcel, pocketword, htmlsoff">
+        <ant dir="util" target="all"/>
     </target>
 
-    <!-- java package -->
-    <target name="xmrg_jooxcxs_pexcel" depends="prepare">
-        <ant dir="java/org/openoffice/xmerge/converter/xml/sxc/pexcel" target="main">
-            <property name="target" value="xmrg_jooxcxs_pexcel"/>
-            <property name="prj" value="../../../../../../../.."/>
-        </ant>
+    <target name="all" depends="xmerge, bridge, aportisdoc, pexcel, pocketword, htmlsoff, util">
     </target>
 
-
-    <!-- java package -->
-    <target name="xmrg_jooxcx_sxw" depends="prepare">
-        <ant dir="java/org/openoffice/xmerge/converter/xml/sxw" target="main">
-            <property name="target" value="xmrg_jooxcx_sxw"/>
-            <property name="prj" value="../../../../../../.."/>
-        </ant>
+    <target name="clean">
+        <delete dir="${out}" />
     </target>
-
-    <!-- java package -->
-    <target name="xmrg_jooxcxs_aportisdoc" depends="prepare">
-        <ant dir="java/org/openoffice/xmerge/converter/xml/sxw/aportisdoc" target="main">
-            <property name="target" value="xmrg_jooxcxs_aportisdoc"/>
-            <property name="prj" value="../../../../../../../.."/>
-        </ant>
-    </target>
-
-
-    <!-- java package -->
-    <target name="xmrg_jooxcxs_pocketword" depends="prepare">
-        <ant dir="java/org/openoffice/xmerge/converter/xml/sxw/pocketword" target="main">
-            <property name="target" value="xmrg_jooxcxs_pocketword"/>
-            <property name="prj" value="../../../../../../../.."/>
-        </ant>
-    </target>
-
-
-    <!-- java package -->
-    <target name="xmrg_jooxcx_xslt" depends="prepare">
-        <ant dir="java/org/openoffice/xmerge/converter/xml/xslt" target="main">
-            <property name="target" value="xmrg_jooxcx_xslt"/>
-            <property name="prj" value="../../../../../../.."/>
-        </ant>
-    </target>
-
-
-    <!-- java package -->
-    <target name="xmrg_joox_merger" depends="prepare">
-        <ant dir="java/org/openoffice/xmerge/merger" target="main">
-            <property name="target" value="xmrg_joox_merger"/>
-            <property name="prj" value="../../../../.."/>
-        </ant>
-    </target>
-
-
-    <!-- java package -->
-    <target name="xmrg_jooxm_diff" depends="prepare">
-        <ant dir="java/org/openoffice/xmerge/merger/diff" target="main">
-            <property name="target" value="xmrg_jooxm_diff"/>
-            <property name="prj" value="../../../../../.."/>
-        </ant>
-    </target>
-
-
-    <!-- java package -->
-    <target name="xmrg_jooxm_merge" depends="prepare">
-        <ant dir="java/org/openoffice/xmerge/merger/merge" target="main">
-            <property name="target" value="xmrg_jooxm_merge"/>
-            <property name="prj" value="../../../../../.."/>
-        </ant>
-    </target>
-
-
-    <!-- java package -->
-    <target name="xmrg_joox_test" depends="prepare,xmrg_joox_util,xmrg_joo_xmerge">
-        <ant dir="java/org/openoffice/xmerge/test" target="main">
-            <property name="target" value="xmrg_joox_test"/>
-            <property name="prj" value="../../../../.."/>
-        </ant>
-    </target>
-
-
-    <!-- java package -->
-    <target name="xmrg_joox_util" depends="prepare">
-        <ant dir="java/org/openoffice/xmerge/util" target="main">
-            <property name="target" value="xmrg_joox_util"/>
-            <property name="prj" value="../../../../.."/>
-        </ant>
-    </target>
-
-
-    <!-- java package -->
-    <target name="xmrg_jooxu_registry" depends="prepare">
-        <ant dir="java/org/openoffice/xmerge/util/registry" target="main">
-            <property name="target" value="xmrg_jooxu_registry"/>
-            <property name="prj" value="../../../../../.."/>
-        </ant>
-    </target>
-
-
-    <!-- java package -->
-    <target name="xmrg_jooxc_palm" depends="prepare">
-        <ant dir="java/org/openoffice/xmerge/converter/palm" target="main">
-            <property name="target" value="xmrg_jooxc_palm"/>
-            <property name="prj" value="../../../../../.."/>
-        </ant>
-    </target>
-
-    <!-- java package -->
-    <target name="xmrg_jooxc_dom" depends="prepare">
-        <ant dir="java/org/openoffice/xmerge/converter/dom" target="main">
-            <property name="target" value="xmrg_jooxc_dom"/>
-            <property name="prj" value="../../../../../.."/>
-        </ant>
-    </target>
-
-
-    <!-- java package -->
-    <target name="xmrg_javadoc" depends="prepare">
-        <ant dir="java" target="main">
-            <property name="target" value="javadoc"/>
-            <property name="prj" value=".."/>
-        </ant>
-    </target>
-
-
-    <!-- util -->
-    <target name="xmrg_util"
-    depends="prepare,xmrg_joo_xmerge,xmrg_jooxc_xml,xmrg_jooxcx_sxc,xmrg_jooxcxsp_records,xmrg_jooxcxspr_formula, xmrg_jooxcxs_pexcel,xmrg_jooxcx_sxw,xmrg_jooxcxs_aportisdoc,xmrg_jooxcxs_pocketword,xmrg_jooxcx_xslt,xmrg_joox_merger,xmrg_jooxm_diff,xmrg_jooxm_merge,xmrg_joox_test,xmrg_joox_util,xmrg_jooxu_registry,xmrg_jooxc_palm,xmrg_jooxc_dom,xmrg_javadoc">
-        <ant dir="util" target="main">
-            <property name="target" value="xmrg_util"/>
-                <property name="prj" value="."/>
-        </ant>
-     </target>
-
-
-    <!-- clean up -->
-    <target name="clean" depends="prepare">
-        <delete includeEmptyDirs="true">
-            <fileset dir="${build.dir}">
-                <patternset>
-                    <include name="**"/>
-                </patternset>
-            </fileset>
-        </delete>
-    </target>
-
-    <!-- handle dependencies -->
-    <target name="depend"/>
 
 </project>
 
