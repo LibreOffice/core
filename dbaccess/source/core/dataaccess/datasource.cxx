@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:05:24 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:28:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,9 +150,111 @@ namespace dbaccess
 {
 //........................................................................
 
-//============================================================
-//= OAuthenticationContinuation
-//============================================================
+    //============================================================
+    //= FlushNotificationAdapter
+    //============================================================
+    typedef ::cppu::WeakImplHelper1< XFlushListener > FlushNotificationAdapter_Base;
+    /** helper class which implements a XFlushListener, and forwards all
+        notification events to another XFlushListener
+
+        The speciality is that the foreign XFlushListener instance, to which
+        the notifications are forwarded, is held weak.
+
+        Thus, the class can be used with XFlushable instance which hold
+        their listeners with a hard reference, if you simply do not *want*
+        to be held hard-ref-wise.
+    */
+    class FlushNotificationAdapter : public FlushNotificationAdapter_Base
+    {
+    private:
+        WeakReference< XFlushable >     m_aBroadcaster;
+        WeakReference< XFlushListener > m_aListener;
+
+    public:
+        static void installAdapter( const Reference< XFlushable >& _rxBroadcaster, const Reference< XFlushListener >& _rxListener )
+        {
+            Reference< XFlushListener > xAdapter( new FlushNotificationAdapter( _rxBroadcaster, _rxListener ) );
+        }
+
+    protected:
+        FlushNotificationAdapter( const Reference< XFlushable >& _rxBroadcaster, const Reference< XFlushListener >& _rxListener );
+        ~FlushNotificationAdapter();
+
+        void SAL_CALL impl_dispose( bool _bRevokeListener );
+
+    protected:
+        // XFlushListener
+        virtual void SAL_CALL flushed( const ::com::sun::star::lang::EventObject& rEvent ) throw (::com::sun::star::uno::RuntimeException);
+        // XEventListener
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
+    };
+
+    //------------------------------------------------------------
+    DBG_NAME( FlushNotificationAdapter )
+    //------------------------------------------------------------
+    FlushNotificationAdapter::FlushNotificationAdapter( const Reference< XFlushable >& _rxBroadcaster, const Reference< XFlushListener >& _rxListener )
+        :m_aBroadcaster( _rxBroadcaster )
+        ,m_aListener( _rxListener )
+    {
+        DBG_CTOR( FlushNotificationAdapter, NULL );
+        DBG_ASSERT( _rxBroadcaster.is(), "FlushNotificationAdapter::FlushNotificationAdapter: invalid flushable!" );
+
+        osl_incrementInterlockedCount( &m_refCount );
+        {
+            if ( _rxBroadcaster.is() )
+                _rxBroadcaster->addFlushListener( this );
+        }
+        osl_decrementInterlockedCount( &m_refCount );
+        DBG_ASSERT( m_refCount == 1, "FlushNotificationAdapter::FlushNotificationAdapter: broadcaster isn't holding by hard ref!?" );
+    }
+
+    //------------------------------------------------------------
+    FlushNotificationAdapter::~FlushNotificationAdapter()
+    {
+        DBG_DTOR( FlushNotificationAdapter, NULL );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL FlushNotificationAdapter::impl_dispose( bool _bRevokeListener )
+    {
+        Reference< XFlushListener > xKeepAlive( this );
+
+        if ( _bRevokeListener )
+        {
+            Reference< XFlushable > xFlushable( m_aBroadcaster );
+            if ( xFlushable.is() )
+                xFlushable->removeFlushListener( this );
+        }
+
+        m_aListener = Reference< XFlushListener >();
+        m_aBroadcaster = Reference< XFlushable >();
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL FlushNotificationAdapter::flushed( const EventObject& rEvent ) throw (RuntimeException)
+    {
+        Reference< XFlushListener > xListener( m_aListener );
+        if ( xListener.is() )
+            xListener->flushed( rEvent );
+        else
+            impl_dispose( true );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL FlushNotificationAdapter::disposing( const EventObject& Source ) throw (RuntimeException)
+    {
+        DBG_ASSERT( Source.Source == m_aBroadcaster.get(), "FlushNotificationAdapter::disposing: where did this come from?" );
+
+        Reference< XFlushListener > xListener( m_aListener );
+        if ( xListener.is() )
+            xListener->disposing( Source );
+
+        impl_dispose( false );
+    }
+
+    //============================================================
+    //= OAuthenticationContinuation
+    //============================================================
     class OAuthenticationContinuation : public OInteraction< XInteractionSupplyAuthentication >
     {
         sal_Bool    m_bDatasourceReadonly : 1;  // if sal_True, the data source using this continuation
@@ -718,6 +820,15 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
                 xReturn = xManager->getConnectionWithInfo(m_pImpl->m_sConnectURL, ::comphelper::concatSequences(aUserPwd,aDriverInfo));
             else
                 xReturn = xManager->getConnectionWithInfo(m_pImpl->m_sConnectURL,aDriverInfo);
+
+            if ( m_pImpl->isEmbeddedDatabase() )
+            {
+                // see ODatabaseSource::flushed for comment on why we register as FlushListener
+                // at the connection
+                Reference< XFlushable > xFlushable( xReturn, UNO_QUERY );
+                if ( xFlushable.is() )
+                    FlushNotificationAdapter::installAdapter( xFlushable, this );
+            }
         }
     }
     else
@@ -1094,7 +1205,7 @@ Reference< XConnection > ODatabaseSource::getConnection(const rtl::OUString& use
     {
         Reference< XComponent> xComp(xConn,UNO_QUERY);
         if ( xComp.is() )
-            xComp->addEventListener(static_cast< css::lang::XEventListener* >(this));
+            xComp->addEventListener( static_cast< XContainerListener* >( this ) );
         m_pImpl->m_aConnections.push_back(OWeakConnection(xConn));
     }
 
@@ -1182,6 +1293,41 @@ void SAL_CALL ODatabaseSource::flush(  ) throw (RuntimeException)
     {
     }
 }
+
+// -----------------------------------------------------------------------------
+void SAL_CALL ODatabaseSource::flushed( const EventObject& rEvent ) throw (RuntimeException)
+{
+    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    MutexGuard aGuard(m_aMutex);
+
+    // Okay, this is some hack.
+    //
+    // In general, we have the problem that embedded databases write into their underlying storage, which
+    // logically is one of our sub storage, and practically is a temporary file maintained by the
+    // package implementation. As long as we did not commit this storage and our main storage,
+    // the changes made by the embedded database engine is not really reflected in the database document
+    // file. This is Bad (TM) for a "real" database application - imagine somebody entering some
+    // data, and then crashing: For a database application, you would expect that the data still is present
+    // when you connect to the database next time.
+    //
+    // Since this is a conceptual problem as long as we do use those ZIP packages (in fact, we *cannot*
+    // provide the desired functionality as long as we do not have a package format which allows O(1) writes),
+    // we cannot completely fix this. However, we can relax the problem by commiting more often - often
+    // enough so that data loss is more seldom, and seldom enough so that there's no noticable performance
+    // decrease.
+    //
+    // For this, we introduced a few places which XFlushable::flush their connections, and register as
+    // XFlushListener at the embedded connection (which needs to provide the XFlushable functionality).
+    // Then, when the connection is flushed, we commit both the database storage and our main storage.
+    //
+    // #i55274# / 2005-09-30 / frank.schoenheit@sun.com
+
+    OSL_ENSURE( m_pImpl->isEmbeddedDatabase(), "ODatabaseSource::flushed: no embedded database?!" );
+    sal_Bool bWasModified = m_pImpl->m_bModified;
+    m_pImpl->commitEmbeddedStorage();
+    m_pImpl->setModified( bWasModified );
+}
+
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseSource::addFlushListener( const Reference< ::com::sun::star::util::XFlushListener >& _xListener ) throw (RuntimeException)
 {
