@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:14:43 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:30:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,9 @@
 #ifndef DBACCESS_SOURCE_UI_INC_DOCUMENTCONTROLLER_HXX
 #include "documentcontroller.hxx"
 #endif
+#ifndef _DBAUI_COMMON_TYPES_HXX_
+#include "commontypes.hxx"
+#endif
 
 #include <memory>
 
@@ -135,10 +138,12 @@ namespace dbaui
 
     private:
 
-        DECLARE_STL_USTRINGACCESS_MAP(::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,TDataSourceConnections);
-
         OTableCopyHelper::DropDescriptor            m_aAsyncDrop;
-        TDataSourceConnections  m_aDataSourceConnections;
+
+        SharedConnection        m_xDataSourceConnection;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >
+                                m_xMetaData;
+
         TransferableDataHelper  m_aSystemClipboard;     // content of the clipboard
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xDataSource;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
@@ -385,10 +390,6 @@ namespace dbaui
         */
         sal_Bool suspendDocuments(sal_Bool bSuspend);
 
-        /** disposes all created connections
-        */
-        void clearConnections();
-
         /** add event listener and remember the document
             @param  _xDocument
                 the new document, may be <NULL/>
@@ -489,30 +490,23 @@ namespace dbaui
         // XPropertyChangeListener
         virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException);
 
-        /** ensures that a connection for the selected data source exists
-            @param  _xConnection
-                The new connection
-            @param  _bCreate
-                If set to <TRUE/> than the connection will be created if it doesn't exist.
-            @return
-                <TRUE/> if and only if the conneciton could be established
+        /** retrieves the current connection, creates it if necessary
         */
-        bool ensureConnection(::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,sal_Bool _bCreate = sal_True);
+        const SharedConnection& ensureConnection();
 
-        /** returns the connection for the currently active data source
-            @return
-                The connection for the currently active data source
+        /** retrieves the current connection
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getActiveConnection() const;
+        const SharedConnection& getConnection() const { return m_xDataSourceConnection; }
 
+        /// determines whether we're currently connected to the database
+        bool isConnected() const { return m_xDataSourceConnection.is(); }
+
+        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >&
+            getConnectionMetaData() const { return m_xMetaData; }
 
         /** refreshes the tables
         */
         void refreshTables();
-
-        /** closes the connection of the select data source
-        */
-        void closeConnection();
 
         /// @see <method>IApplicationElementNotification::onEntryDoubleClick</method>
         virtual void onEntryDoubleClick(SvTreeListBox* _pTree);
@@ -545,11 +539,9 @@ namespace dbaui
         virtual void previewChanged( sal_Int32 _nMode);
     protected:
 
-        /** the connection will be disposed and set to NULL
-            @param  _xConnection
-                the connection to be disposed
+        /** disconnects from our XConnection, and cleans up this connection
         */
-        virtual void        disconnect(::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection);
+        virtual void        disconnect();
 
         // late construction
         virtual sal_Bool    Construct(Window* pParent);
