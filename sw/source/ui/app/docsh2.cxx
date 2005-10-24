@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-18 13:48:57 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 15:30:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -948,12 +948,12 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                 const String sWild = ((WildCard&)pFlt->GetWildcard()).GetWildCard();
                                 xFltMgr->appendFilter( pFlt->GetUIName(), sWild );
                             }
-
-                            if( pFlt->GetUserData().EqualsAscii( FILTER_XML ))
-                                xFltMgr->setCurrentFilter( pFlt->GetUIName() ) ;
-
                             pFlt = aIter.Next();
                         }
+                        const SfxFilter *pOwnFlt = SwIoSystem::GetFilterOfFormat(
+                                String::CreateFromAscii( GetFILTER_XML() ),
+                                SwDocShell::Factory().GetFilterContainer() );
+                        xFltMgr->setCurrentFilter( pOwnFlt->GetUIName() );
 
                         if( ERRCODE_NONE == aDlgHelper.Execute() )
                         {
