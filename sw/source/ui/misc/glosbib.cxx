@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glosbib.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:29:55 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 15:33:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,6 +146,8 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
     for( i = 0; i < pPathArr->Count(); i++)
     {
         String sPath(*(*pPathArr)[i]);
+        INetURLObject aTempURL(sPath);
+        sPath = aTempURL.GetMainURL(INetURLObject::DECODE_WITH_CHARSET );
         aPathLB.InsertEntry(sPath);
         ULONG nCaseReadonly = 0;
         utl::TempFile aTempFile(&sPath);
@@ -172,7 +174,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
         String sTemp(sTitle);
         //sGroup.GetToken(0, GLOS_DELIM)
         sTemp += '\t';
-        pData->sPath = aPathLB.GetEntry(sGroup.GetToken(1, GLOS_DELIM).ToInt32());
+        pData->sPath = aPathLB.GetEntry((USHORT)sGroup.GetToken(1, GLOS_DELIM).ToInt32());
         sTemp += pData->sPath;
         SvLBoxEntry* pEntry = aGroupTLB.InsertEntry(sTemp);
         pEntry->SetUserData(pData);
