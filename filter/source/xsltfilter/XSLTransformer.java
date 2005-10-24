@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XSLTransformer.java,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:25:19 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 15:57:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 import java.util.*;
 import java.io.*;
 import java.lang.ref.*;
+import java.net.URI;
 
 // Imported TraX classes
 import javax.xml.transform.*;
@@ -63,7 +64,8 @@ import com.sun.star.lib.uno.adapter.*;
  */
 public class XSLTransformer
     implements XTypeProvider, XServiceName, XServiceInfo, XActiveDataSink,
-        XActiveDataSource, XActiveDataControl, XInitialization
+        XActiveDataSource, XActiveDataControl, XInitialization, URIResolver
+
 
 {
 
@@ -104,6 +106,17 @@ public class XSLTransformer
 
     // cache for transformations by stylesheet
     private static Hashtable transformers = new Hashtable();
+
+    // struct for cached stylesheets
+    private static class Transformation {
+        public Transformer transformer;
+        public long lastmod;
+    }
+
+    // Resolve URIs to an empty source
+    public Source resolve(String href, String base) {
+        return new StreamSource(new StringReader(""));
+    }
 
     // --- Initialization ---
 
@@ -206,61 +219,30 @@ public class XSLTransformer
                         XStreamListener l = (XStreamListener)e.nextElement();
                         l.started();
                     }
-                    StreamSource stylesource = new StreamSource(stylesheeturl);
 
                     // buffer input and modify doctype declaration
                     // remove any dtd references but keep localy defined
                     // entities
 
-                    ByteArrayOutputStream bufstream = new ByteArrayOutputStream();
-                    final int bsize = 4000;
-                    int rbytes = 0;
-                    byte[][] byteBuffer = new byte[1][bsize];
+                    // ByteArrayOutputStream bufstream = new ByteArrayOutputStream();
+                    // File buffile = File.createTempFile("xsltfilter",".tmp");
+                    // buffile.deleteOnExit();
+                    // OutputStream bufstream = new FileOutputStream(buffile);
+
+                    // final int bsize = 4000;
+                    // int rbytes = 0;
+                    // byte[][] byteBuffer = new byte[1][bsize];
 
                     XSeekable xseek = (XSeekable)UnoRuntime.queryInterface(XSeekable.class, xistream);
                     if (xseek != null) {
                         xseek.seek(0);
                     }
 
-                    while ((rbytes = xistream.readSomeBytes(byteBuffer, bsize)) != 0) {
-                        bufstream.write(byteBuffer[0], 0, rbytes);
-                    }
-                    StringBuffer strbuf = new StringBuffer(bufstream.toString("UTF-8"));
-                    bufstream = null;
 
-                    // close the input stream after we have transferred all data
-                    // into the buffer so it won't keep the content open until it
-                    // gets finalized by the java GC
-                    xistream.closeInput();
 
-                    // set stream to null, so the uno reference gets cleaned ASAP
-                    xistream = null;
-
-                    if (strbuf.indexOf("<!DOCTYPE")!=-1){
-                        // document element tag name
-                        String tag = strbuf.substring(strbuf.lastIndexOf("/")+1,
-                                                      strbuf.lastIndexOf(">"));
-                        String entities = new String();
-                        // look for inline doctype/entities to preserve
-                        if (strbuf.indexOf("[",strbuf.indexOf("<!DOCTYPE"))!=-1){
-                            if (strbuf.indexOf("[",strbuf.indexOf("<!DOCTYPE")) <
-                                strbuf.indexOf(">",strbuf.indexOf("<!DOCTYPE")))
-                            {
-                                // copy inline doctype/entities
-                                entities = strbuf.substring(
-                                    strbuf.indexOf("[",strbuf.indexOf("<!DOCTYPE")),
-                                    strbuf.indexOf("]",strbuf.indexOf("<!DOCTYPE"))+1);
-                            }
-                        }
-                        // construct a new doctype/header including only the saved inline information
-                        String newDocType =
-                            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE "
-                            +tag+" "+entities+">";
-                        // replace the header of the original buffer (end index is exclusive)
-                        strbuf.replace(0, strbuf.indexOf("<"+tag, 0), newDocType);
-                    }
-
-                    StreamSource xmlsource = new StreamSource(new StringReader(strbuf.toString()));
+                    InputStream xmlinput = new BufferedInputStream(
+                            new XInputStreamToInputStreamAdapter(xistream));
+                    StreamSource xmlsource = new StreamSource(xmlinput);
 
                     BufferedOutputStream output = new BufferedOutputStream(
                         new XOutputStreamToOutputStreamAdapter(xostream));
@@ -271,23 +253,38 @@ public class XSLTransformer
                     // be reclaimed though they are no longer referenced here, we use
                     // a cache of weak references to transformers created for specific
                     // style sheet URLs see also #i48384#
+
                     Transformer transformer = null;
+                    Transformation transformation = null;
+                    File stylefile = new File(new URI(stylesheeturl));
                     synchronized(transformers) {
                         java.lang.ref.WeakReference ref = null;
                         // try to get the transformer reference from the cache
                         if ((ref = (java.lang.ref.WeakReference)transformers.get(stylesheeturl)) == null ||
-                            (transformer = (Transformer)ref.get()) == null) {
+                            (transformation = ((Transformation)ref.get())) == null ||
+                            ((Transformation)ref.get()).lastmod < stylefile.lastModified()
+                        ) {
                             // we cannot find a valid reference for this stylesheet
+                            // or the stylsheet was updated
                             if (ref != null) {
                                 transformers.remove(stylesheeturl);
                             }
+                            // create new transformer for this stylesheet
                             TransformerFactory tfactory = TransformerFactory.newInstance();
-                            transformer = tfactory.newTransformer(stylesource);
+                            transformer = tfactory.newTransformer(new StreamSource(stylefile));
                             transformer.setOutputProperty("encoding", "UTF-8");
-                            ref = new java.lang.ref.WeakReference(transformer);
+                            transformer.setURIResolver(XSLTransformer.this);
+
+                            // store the transformation into the cache
+                            transformation = new Transformation();
+                            transformation.lastmod = stylefile.lastModified();
+                            transformation.transformer = transformer;
+                            ref = new java.lang.ref.WeakReference(transformation);
                             transformers.put(stylesheeturl, ref);
+
                         }
                     }
+                    transformer = transformation.transformer;
 
                     // invalid to set 'null' as parameter as 'null' is not a valid Java object
                     if(sourceurl != null)
@@ -307,14 +304,15 @@ public class XSLTransformer
 
                     long tstart = System.currentTimeMillis();
 
-                    StringWriter sw = new StringWriter();
-                    StreamResult sr = new StreamResult(sw);
+                    // StringWriter sw = new StringWriter();
+                    // StreamResult sr = new StreamResult(sw);
+                    StreamResult sr = new StreamResult(output);
                     transformer.transform(xmlsource, sr);
 
-                    String s = sw.toString();
-                    OutputStreamWriter ow = new OutputStreamWriter(output, "UTF-8");
-                    ow.write(s);
-                    ow.close();
+                    // String s = sw.toString();
+                    // OutputStreamWriter ow = new OutputStreamWriter(output, "UTF-8");
+                    // ow.write(s);
+                    // ow.close();
 
                     long time = System.currentTimeMillis() - tstart;
                     if (statsp != null) {
