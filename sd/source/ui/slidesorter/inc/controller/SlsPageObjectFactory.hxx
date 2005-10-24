@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageObjectFactory.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:19:04 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:43:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 #ifndef SD_SLIDESORTER_PAGE_OBJECT_FACTORY_HEADER
 #define SD_SLIDESORTER_PAGE_OBJECT_FACTORY_HEADER
+
+#include <boost/shared_ptr.hpp>
 
 class SdPage;
 
@@ -69,7 +71,7 @@ namespace sd { namespace slidesorter { namespace controller {
 class PageObjectFactory
 {
 public:
-    PageObjectFactory (cache::PageCache* pCache);
+    PageObjectFactory (const ::boost::shared_ptr<cache::PageCache>& rpCache);
     virtual ~PageObjectFactory (void);
 
     virtual view::PageObject* CreatePageObject (
@@ -85,7 +87,7 @@ public:
         ::sdr::contact::ViewContact& rViewContact) const;
 
 private:
-    cache::PageCache* mpPageCache;
+    ::boost::shared_ptr<cache::PageCache> mpPageCache;
 };
 
 } } } // end of namespace ::sd::slidesorter::controller
