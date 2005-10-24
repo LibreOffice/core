@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PaneDockingWindow.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:49:47 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 16:16:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,8 +34,8 @@
  ************************************************************************/
 
 #include "PaneDockingWindow.hxx"
-#include "ViewShellBase.hxx"
 #include "Window.hxx"
+#include "ViewShellBase.hxx"
 #include "sdresid.hxx"
 #include "res_bmp.hrc"
 #ifndef _SFXDISPATCH_HXX
@@ -53,7 +53,8 @@ PaneDockingWindow::PaneDockingWindow (
     SfxChildWindow *pChildWindow,
     ::Window* pParent,
     const ResId& rResId,
-    PaneManager::PaneType ePane)
+    PaneManager::PaneType ePane,
+    const String& rsTitle)
     : SfxDockingWindow (
         pBindings,
         pChildWindow,
@@ -61,7 +62,7 @@ PaneDockingWindow::PaneDockingWindow (
         rResId
         ),
       mePane(ePane),
-      msTitle(),
+      msTitle(rsTitle),
       mpTitleToolBox(NULL),
       maBorder (3,1,3,3),
       mnChildWindowId(pChildWindow->GetType())
@@ -69,14 +70,6 @@ PaneDockingWindow::PaneDockingWindow (
     SetBackground (Wallpaper());
 
     InitializeTitleToolBox();
-
-    ViewShellBase* pBase = ViewShellBase::GetViewShellBase(
-        pBindings->GetDispatcher()->GetFrame());
-    if (pBase != NULL)
-    {
-        msTitle = pBase->GetPaneManager().GetWindowTitle (mePane);
-        pBase->GetPaneManager().SetWindow (mePane, this);
-    }
 
     // Tell the system window about the new docking window so that it can be
     // reached via the keyboard.
@@ -94,19 +87,11 @@ PaneDockingWindow::~PaneDockingWindow (void)
 {
     RemoveEventListener(LINK(this,PaneDockingWindow,WindowEventListener));
 
-    ViewShellBase* pBase = ViewShellBase::GetViewShellBase(
-        GetBindings().GetDispatcher()->GetFrame());
-
     // Tell the next system window that the docking window is no longer
     // available.
     SystemWindow* pSystemWindow = GetSystemWindow();
     if (pSystemWindow != NULL)
         pSystemWindow->GetTaskPaneList()->RemoveWindow(this);
-
-    // Tell the ViewShellBase that the window of this slide sorter is not
-    // available anymore.
-    if (pBase != NULL)
-        pBase->GetPaneManager().SetWindow (mePane, NULL);
 }
 
 
