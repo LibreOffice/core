@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementlist.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:01:25 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:36:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,10 +39,13 @@
 #include <vector>
 #include <sal/types.h>
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
+#include <com/sun/star/xml/dom/events/XEvent.hpp>
+#include <com/sun/star/xml/dom/events/XEventListener.hpp>
 #include "element.hxx"
 #include "document.hxx"
 #include "libxml/tree.h"
@@ -51,12 +54,13 @@ using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::dom;
+using namespace com::sun::star::xml::dom::events;
 
 namespace DOM
 {
     typedef std::vector< xmlNodePtr > nodevector;
 
-    class CElementList : public cppu::WeakImplHelper1< XNodeList >
+    class CElementList : public cppu::WeakImplHelper2< XNodeList, XEventListener >
     {
     private:
         const CElement* m_pElement;
@@ -64,9 +68,12 @@ namespace DOM
         const OUString m_aName;
         xmlChar *xName;
         xmlChar *xURI;
+        sal_Bool m_bRebuild;
+        nodevector m_nodevector;
 
 
-        void buildlist(nodevector& v, xmlNodePtr pNode, sal_Bool start=sal_True);
+        void buildlist(xmlNodePtr pNode, sal_Bool start=sal_True);
+        void registerListener(const CElement* pElement);
 
     public:
         CElementList(const CElement* aDoc, const OUString& aName);
@@ -79,6 +86,9 @@ namespace DOM
         Returns the indexth item in the collection.
         */
         virtual Reference< XNode > SAL_CALL item(sal_Int32 index) throw (RuntimeException);
+
+        // XEventListener
+        virtual void SAL_CALL handleEvent(const Reference< XEvent >& evt) throw (RuntimeException);
     };
 }
 
