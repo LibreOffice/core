@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:19:51 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 18:33:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,11 @@ class Desktop : public Application
             BE_USERINSTALL_FAILED,
             BE_LANGUAGE_MISSING
         };
+        enum BootstrapStatus
+        {
+            BS_OK,
+            BS_TERMINATE
+        };
 
                                 Desktop();
                                 ~Desktop();
@@ -133,6 +138,15 @@ class Desktop : public Application
         BootstrapError          GetBootstrapError() const
         {
             return m_aBootstrapError;
+        }
+
+        void                    SetBootstrapStatus( BootstrapStatus nStatus )
+        {
+            m_aBootstrapStatus = nStatus;
+        }
+        BootstrapStatus          GetBootstrapStatus() const
+        {
+            return m_aBootstrapStatus;
         }
 
         DECL_STATIC_LINK( Desktop, AsyncTerminate, void*);
@@ -198,6 +212,7 @@ class Desktop : public Application
         USHORT                          m_nAppEvents;
         IntroWindow_Impl*               m_pIntro;
         BootstrapError                  m_aBootstrapError;
+        BootstrapStatus                 m_aBootstrapStatus;
 
         Lockfile *m_pLockfile;
         Timer    m_firstRunTimer;
