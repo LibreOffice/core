@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HStorageMap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:04:08 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:21:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,22 +170,29 @@ namespace connectivity
 
         ::rtl::OUString StorageContainer::jstring2ustring(JNIEnv * env, jstring jstr)
         {
-            const char *    cstr;
-            rtl_uString *   ustr    = NULL;
-            cstr    = env->GetStringUTFChars(jstr, NULL);
             if (JNI_FALSE != env->ExceptionCheck())
             {
                 env->ExceptionClear();
                 OSL_ENSURE(0,"ExceptionClear");
             }
-            rtl_uString_newFromAscii(&ustr, cstr);
-            env->ReleaseStringUTFChars(jstr, cstr);
+            ::rtl::OUString aStr;
+            if ( jstr )
+            {
+                jboolean bCopy(sal_True);
+                const jchar* pChar = env->GetStringChars(jstr,&bCopy);
+                jsize len = env->GetStringLength(jstr);
+                aStr = ::rtl::OUString(pChar,len);
+
+                if(bCopy)
+                    env->ReleaseStringChars(jstr,pChar);
+            }
+
             if (JNI_FALSE != env->ExceptionCheck())
             {
                 env->ExceptionClear();
                 OSL_ENSURE(0,"ExceptionClear");
             }
-            return ustr ? ::rtl::OUString(ustr,SAL_NO_ACQUIRE) : ::rtl::OUString();
+            return aStr;
         }
 
         // -----------------------------------------------------------------------------
