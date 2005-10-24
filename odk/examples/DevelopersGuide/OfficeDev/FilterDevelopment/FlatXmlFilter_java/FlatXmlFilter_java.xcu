@@ -7,7 +7,7 @@
                 <prop oor:name="Type"><value>devguide_FlatXMLType_Cpp_calc</value></prop>
                 <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
                 <prop oor:name="UIComponent"/>
-                <prop oor:name="UserData"><value oor:separator=",">devguide.officedev.samples.filter.FlatXmlCpp, ,com.sun.star.comp.Calc.XMLImporter,com.sun.star.comp.Calc.XMLExporter</value></prop>
+                <prop oor:name="UserData"><value oor:separator=",">devguide.officedev.samples.filter.FlatXmlJava, ,com.sun.star.comp.Calc.XMLOasisImporter,com.sun.star.comp.Calc.XMLOasisExporter</value></prop>
                 <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
                 <prop oor:name="TemplateName"/>
                 <prop oor:name="UIName">
@@ -21,7 +21,7 @@
                 <prop oor:name="Type"><value>devguide_FlatXMLType_Cpp_draw</value></prop>
                 <prop oor:name="DocumentService"><value>com.sun.star.drawing.DrawingDocument</value></prop>
                 <prop oor:name="UIComponent"/>
-                <prop oor:name="UserData"><value oor:separator=",">devguide.officedev.samples.filter.FlatXmlCpp, ,com.sun.star.comp.DrawingLayer.XMLImporter,com.sun.star.comp.DrawingLayer.XMLExporter</value></prop>
+                <prop oor:name="UserData"><value oor:separator=",">devguide.officedev.samples.filter.FlatXmlJava, ,com.sun.star.comp.DrawingLayer.XMLOasisImporter,com.sun.star.comp.DrawingLayer.XMLOasisExporter</value></prop>
                 <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
                 <prop oor:name="TemplateName"/>
                 <prop oor:name="UIName">
@@ -35,7 +35,7 @@
                 <prop oor:name="Type"><value>devguide_FlatXMLType_Cpp_impress</value></prop>
                 <prop oor:name="DocumentService"><value>com.sun.star.presentation.PresentationDocument</value></prop>
                 <prop oor:name="UIComponent"/>
-                <prop oor:name="UserData"><value oor:separator=",">devguide.officedev.samples.filter.FlatXmlCpp, ,com.sun.star.comp.Impress.XMLImporter,com.sun.star.comp.Impress.XMLExporter</value></prop>
+                <prop oor:name="UserData"><value oor:separator=",">devguide.officedev.samples.filter.FlatXmlJava, ,com.sun.star.comp.Impress.XMLOasisImporter,com.sun.star.comp.Impress.XMLOasisExporter</value></prop>
                 <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
                 <prop oor:name="TemplateName"/>
                 <prop oor:name="UIName">
@@ -49,7 +49,7 @@
                 <prop oor:name="Type"><value>devguide_FlatXMLType_Cpp_writer</value></prop>
                 <prop oor:name="DocumentService"><value>com.sun.star.text.TextDocument</value></prop>
                 <prop oor:name="UIComponent"/>
-                <prop oor:name="UserData"><value oor:separator=",">devguide.officedev.samples.filter.FlatXmlCpp, ,com.sun.star.comp.Writer.XMLImporter,com.sun.star.comp.Writer.XMLExporter</value></prop>
+                <prop oor:name="UserData"><value oor:separator=",">devguide.officedev.samples.filter.FlatXmlJava, ,com.sun.star.comp.Writer.XMLOasisImporter,com.sun.star.comp.Writer.XMLOasisExporter</value></prop>
                 <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
                 <prop oor:name="TemplateName"/>
                 <prop oor:name="UIName">
@@ -58,5 +58,19 @@
                 </prop>
                 <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN 3RDPARTYFILTER</value></prop>
             </node>
-    </node>
+            <node oor:name="devguide_FlatXMLFilter_Java_master" oor:op="replace">
+                <prop oor:name="FileFormatVersion"><value>0</value></prop>
+                <prop oor:name="Type"><value>devguide_FlatXMLType_Cpp_master</value></prop>
+                <prop oor:name="DocumentService"><value>com.sun.star.text.GlobalDocument</value></prop>
+                <prop oor:name="UIComponent"/>
+                <prop oor:name="UserData"><value oor:separator=",">devguide.officedev.samples.filter.FlatXmlJava, ,com.sun.star.comp.Writer.XMLOasisImporter,com.sun.star.comp.Writer.XMLOasisExporter</value></prop>
+                <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
+                <prop oor:name="TemplateName"/>
+                <prop oor:name="UIName">
+                    <value xml:lang="de">DevGuide FlatXML Master</value>
+                    <value xml:lang="en-US">DevGuide FlatXML Master</value>
+                </prop>
+                <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN 3RDPARTYFILTER</value></prop>
+            </node>
+        </node>
 </oor:component-data>
