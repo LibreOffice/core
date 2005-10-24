@@ -152,7 +152,7 @@ STDMETHODIMP CXMergeFilter::FormatMessage(DWORD dwFlags, DWORD dwMessageId,
         lRet = ::RegQueryValueEx(hKey, _T("Java"), 0, NULL, (LPBYTE)errMsg, &dwSize);
         if (lRet != ERROR_SUCCESS)
         {
-            lstrcpy(errMsg, "Unable to locate Java 1.4 installation.");
+            lstrcpy(errMsg, "Unable to locate Java 1.4/1.5 installation.");
         }
         break;
 
@@ -339,8 +339,13 @@ TCHAR* CXMergeFilter::GetJavaBaseDir()
 
     TCHAR szClassName[_MAX_PATH] = "\0";
     TCHAR szKeyName[_MAX_PATH]   = "\0";
+    TCHAR szCurrentJava[_MAX_PATH] = "\0";
     DWORD dwClassName            = _MAX_PATH;
     DWORD dwKeyName              = _MAX_PATH;
+
+    // Locations shouldn't be greater than _MAX_PATH
+    TCHAR*  szJavaHome = new TCHAR[_MAX_PATH + 1];
+    DWORD dwSize = _MAX_PATH + 1;
 
 
     /*
@@ -352,10 +357,10 @@ TCHAR* CXMergeFilter::GetJavaBaseDir()
     if (lRet != ERROR_SUCCESS)
         return NULL;
 
+    /* use current version */
+    lRet = ::RegQueryValueEx(hKey, _T("CurrentVersion"), 0, NULL, (LPBYTE)szCurrentJava, &dwSize);
+
     /*
-     * Need to enumerate the subkeys.  The current version may not be 1.4 if
-     * multiple versions are installed on the system.
-     */
     for (DWORD i = 0; lRet != ERROR_NO_MORE_ITEMS; i++)
     {
         lRet = ::RegEnumKeyEx(hKey, i, szKeyName, &dwKeyName, 0, szClassName, &dwClassName, NULL);
@@ -363,20 +368,20 @@ TCHAR* CXMergeFilter::GetJavaBaseDir()
             break;
         dwKeyName = _MAX_PATH;
     }
-
     // Found a Java 1.4 installation.  Can now read its home directory.
-    lRet = ::RegOpenKeyEx(hKey, _T(szKeyName), 0, KEY_READ, &hDataKey);
+    */
+
+
+    lRet = ::RegOpenKeyEx(hKey, _T(szCurrentJava), 0, KEY_READ, &hDataKey);
     if (lRet != ERROR_SUCCESS)
     {
         RegCloseKey(hKey);
         return NULL;
     }
 
-    // Location shouldn't be greater than _MAX_PATH
-    TCHAR*  szJavaHome = new TCHAR[_MAX_PATH + 1];
-    DWORD dwSize = _MAX_PATH + 1;
 
     // Now read the JavaHome value
+    dwSize = _MAX_PATH + 1;
     lRet = ::RegQueryValueEx(hDataKey, _T("JavaHome"), 0, NULL, (LPBYTE)szJavaHome, &dwSize);
     if (lRet != ERROR_SUCCESS)
     {
