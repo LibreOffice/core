@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmergehelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:48:23 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 15:30:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -342,6 +342,11 @@ void SwAddressPreview::SelectAddress(sal_uInt16 nSelect)
 {
     DBG_ASSERT(pImpl->nSelectedAddress < pImpl->aAdresses.size(), "selection invalid")
     pImpl->nSelectedAddress = nSelect;
+    // now make it visible..
+    sal_uInt16 nSelectRow = nSelect / pImpl->nColumns;
+    sal_uInt16 nStartRow = (sal_uInt16)aVScrollBar.GetThumbPos();
+    if( (nSelectRow < nStartRow) || (nSelectRow >= (nStartRow + pImpl->nRows) ))
+        aVScrollBar.SetThumbPos( nSelectRow );
 }
 /*-- 25.06.2004 11:00:40---------------------------------------------------
 
