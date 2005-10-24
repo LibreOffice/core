@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppControllerGen.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:15:14 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:30:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,7 @@ void OApplicationController::convertToView(const ::rtl::OUString& _sName)
 {
     try
     {
-        Reference<XConnection> xConnection = getActiveConnection();
+        SharedConnection xConnection( getConnection() );
         Reference<XQueriesSupplier> xSup(xConnection,UNO_QUERY);
         if ( xSup.is() )
         {
@@ -214,13 +214,7 @@ void OApplicationController::pasteFormat(sal_uInt32 _nFormatId)
             ElementType eType = getContainer()->getElementType();
             if ( eType == E_TABLE )
             {
-                Reference<XConnection> xDestConnection;
-                ensureConnection(xDestConnection);
-
-                SharedConnection xConnection( xDestConnection, SharedConnection::NoTakeOwnership );
-                // TODO: migrate ensureConnection to the SharedConnection-API
-
-                m_aTableCopyHelper.pasteTable( _nFormatId, rClipboard, getDatabaseName(), xConnection);
+                m_aTableCopyHelper.pasteTable( _nFormatId, rClipboard, getDatabaseName(), ensureConnection() );
             }
             else
                 paste( eType,ODataAccessObjectTransferable::extractObjectDescriptor(rClipboard) );
@@ -246,7 +240,7 @@ void OApplicationController::openDialog(const ::rtl::OUString& _sServiceName)
         ::osl::MutexGuard aGuard(m_aMutex);
         WaitObject aWO(getView());
 
-        Reference<XConnection> xConnection = getActiveConnection();
+        SharedConnection xConnection( getConnection() );
         Sequence< Any > aArgs(xConnection.is() ? 3 : 2);
 
         Reference< ::com::sun::star::awt::XWindow> xWindow = getTopMostContainerWindow();
@@ -272,7 +266,7 @@ void OApplicationController::openDialog(const ::rtl::OUString& _sServiceName)
         if ( xConnection.is() )
             aArgs[2] <<= PropertyValue(
                 PROPERTY_ACTIVECONNECTION, 0,
-                makeAny(xConnection), PropertyState_DIRECT_VALUE);
+                makeAny( xConnection ), PropertyState_DIRECT_VALUE);
 
         // create the dialog
         Reference< XExecutableDialog > xAdminDialog;
@@ -294,16 +288,6 @@ void OApplicationController::openTableFilterDialog()
     openDialog(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.TableFilterDialog")));
 }
 // -----------------------------------------------------------------------------
-void OApplicationController::closeConnection()
-{
-    if ( getContainer() )
-    {
-        TDataSourceConnections::iterator aFind = m_aDataSourceConnections.find(getDatabaseName());
-        if ( aFind != m_aDataSourceConnections.end() )
-            disconnect(aFind->second);
-    }
-}
-// -----------------------------------------------------------------------------
 void OApplicationController::refreshTables()
 {
     if ( getContainer() && getContainer()->getDetailView() )
@@ -322,9 +306,7 @@ void OApplicationController::refreshTables()
         }
 
         getContainer()->getDetailView()->clearPages(sal_False);
-        Reference<XConnection> xConnection;
-        ensureConnection(xConnection);
-        getContainer()->getDetailView()->createTablesPage(xConnection);
+        getContainer()->getDetailView()->createTablesPage( ensureConnection() );
     }
 }
 // -----------------------------------------------------------------------------
@@ -432,7 +414,7 @@ void OApplicationController::askToReconnect()
         if ( bClear )
         {
             ElementType eType = getContainer()->getElementType();
-            clearConnections();
+            disconnect();
             getContainer()->getDetailView()->clearPages(sal_False);
             getContainer()->changeContainer(E_NONE); // invalidate the old selection
             getContainer()->changeContainer(eType); // reselect the current one again
