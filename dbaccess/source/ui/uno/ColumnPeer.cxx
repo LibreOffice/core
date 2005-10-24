@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ColumnPeer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:47:23 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:33:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,8 +65,8 @@ OColumnPeer::OColumnPeer(Window* _pParent,const Reference<XMultiServiceFactory>&
     osl_incrementInterlockedCount( &m_refCount );
     {
         OColumnControlWindow* pFieldControl = new OColumnControlWindow(_pParent,m_xORB);
-        pFieldControl->Show();
         pFieldControl->SetComponentInterface(this);
+        pFieldControl->Show();
     }
     osl_decrementInterlockedCount( &m_refCount );
 }
