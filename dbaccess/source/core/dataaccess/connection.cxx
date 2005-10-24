@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:04:20 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:28:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -342,6 +342,9 @@ OConnection::OConnection(ODatabaseSource& _rDB
 
     try
     {
+        Reference< XTypeProvider > xTest( _rxMaster, UNO_QUERY );
+        xTest->getTypes();
+
         Reference< XProxyFactory > xProxyFactory(
                 _rxORB->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.ProxyFactory"))),UNO_QUERY);
         Reference<XAggregation> xAgg = xProxyFactory->createProxy(_rxMaster.get());
@@ -504,44 +507,44 @@ void SAL_CALL OConnection::clearWarnings(  ) throw(SQLException, RuntimeExceptio
     m_aAdditionalWarnings.clear();
 }
 
+//--------------------------------------------------------------------------
+namespace
+{
+    struct CompareTypeByName : public ::std::binary_function< Type, Type, bool >
+    {
+        bool operator() ( const Type& _rLHS, const Type& _rRHS ) const
+        {
+            return _rLHS.getTypeName() < _rRHS.getTypeName();
+        }
+    };
+    typedef ::std::set< Type, CompareTypeByName > TypeBag;
+
+    void lcl_copyTypes( TypeBag& _out_rTypes, const Sequence< Type >& _rTypes )
+    {
+        ::std::copy( _rTypes.getConstArray(), _rTypes.getConstArray() + _rTypes.getLength(),
+            ::std::insert_iterator< TypeBag >( _out_rTypes, _out_rTypes.begin() ) );
+    }
+}
 // com::sun::star::lang::XTypeProvider
 //--------------------------------------------------------------------------
 Sequence< Type > OConnection::getTypes() throw (RuntimeException)
 {
-    if ( m_bSupportsViews && m_bSupportsUsers && m_bSupportsGroups )
-        return concatSequences(OSubComponent::getTypes(), OConnection_Base::getTypes());
+    TypeBag aNormalizedTypes;
 
-    // here views are supported
-    Sequence<Type> aTypes = OSubComponent::getTypes();
-    Sequence<Type> aConTypes = OConnection_Base::getTypes();
-    sal_Int32 nSize = aTypes.getLength();
-    aTypes.realloc(aTypes.getLength() + aConTypes.getLength() - 1);
-    Type* pIter = aConTypes.getArray();
-    Type* pEnd  = pIter + aConTypes.getLength();
-    Type aViewToHide    = getCppuType( (Reference<XViewsSupplier>*)0);
-    Type aGroupToHide   = getCppuType( (Reference<XGroupsSupplier>*)0);
-    Type aUserToHide    = getCppuType( (Reference<XUsersSupplier>*)0);
-    for (; pIter != pEnd; ++pIter )
-    {
-        if ( *pIter == aViewToHide )
-        {
-            if ( m_bSupportsViews )
-                aTypes.getArray()[nSize++] = *pIter;
-        }
-        else if ( *pIter == aGroupToHide )
-        {
-            if ( m_bSupportsGroups )
-                aTypes.getArray()[nSize++] = *pIter;
-        }
-        else if ( *pIter == aUserToHide )
-        {
-            if ( m_bSupportsUsers )
-                aTypes.getArray()[nSize++] = *pIter;
-        }
-        else
-            aTypes.getArray()[nSize++] = *pIter;
-    }
-    return aTypes;
+    lcl_copyTypes( aNormalizedTypes, OSubComponent::getTypes() );
+    lcl_copyTypes( aNormalizedTypes, OConnection_Base::getTypes() );
+    lcl_copyTypes( aNormalizedTypes, ::connectivity::OConnectionWrapper::getTypes() );
+
+    if ( !m_bSupportsViews )
+        aNormalizedTypes.erase( XViewsSupplier::static_type() );
+    if ( !m_bSupportsUsers )
+        aNormalizedTypes.erase( XUsersSupplier::static_type() );
+    if ( !m_bSupportsGroups )
+        aNormalizedTypes.erase( XGroupsSupplier::static_type() );
+
+    Sequence< Type > aSupportedTypes( aNormalizedTypes.size() );
+    ::std::copy( aNormalizedTypes.begin(), aNormalizedTypes.end(), aSupportedTypes.getArray() );
+    return aSupportedTypes;
 }
 
 //--------------------------------------------------------------------------
@@ -554,11 +557,11 @@ Sequence< sal_Int8 > OConnection::getImplementationId() throw (RuntimeException)
 //--------------------------------------------------------------------------
 Any OConnection::queryInterface( const Type & rType ) throw (RuntimeException)
 {
-    if(!m_bSupportsViews && rType == getCppuType( (Reference<XViewsSupplier>*)0))
+    if ( !m_bSupportsViews && rType.equals( XViewsSupplier::static_type() ) )
         return Any();
-    else if(!m_bSupportsUsers && rType == getCppuType( (Reference<XUsersSupplier>*)0))
+    else if ( !m_bSupportsUsers && rType.equals( XUsersSupplier::static_type() ) )
         return Any();
-    else if(!m_bSupportsGroups && rType == getCppuType( (Reference<XGroupsSupplier>*)0))
+    else if ( !m_bSupportsGroups && rType.equals( XGroupsSupplier::static_type() ) )
         return Any();
     Any aReturn = OSubComponent::queryInterface( rType );
     if (!aReturn.hasValue())
