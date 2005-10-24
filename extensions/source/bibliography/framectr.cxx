@@ -4,9 +4,9 @@
  *
  *  $RCSfile: framectr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 08:48:58 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 15:41:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,14 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_COMMANDGROUP_HPP_
 #include <com/sun/star/frame/CommandGroup.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARD_HPP_
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#endif
+#include <sot/exchange.hxx>
+#include <sot/formats.hxx>
+#ifndef _SV_EDIT_HXX
+#include <vcl/edit.hxx>
 #endif
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
@@ -497,6 +505,21 @@ sal_Bool BibFrameController_Impl::SaveModified(const Reference< form::XFormContr
     return bResult;
 }
 
+Window* lcl_GetFocusChild( Window* pParent )
+{
+    USHORT nChildren = pParent->GetChildCount();
+    for( USHORT nChild = 0; nChild < nChildren; ++nChild)
+    {
+        Window* pChild = pParent->GetChild( nChild );
+        if(pChild->HasFocus())
+            return pChild;
+        Window* pSubChild = lcl_GetFocusChild( pChild );
+        if(pSubChild)
+            return pSubChild;
+    }
+    return 0;
+}
+
 //class XDispatch
 void BibFrameController_Impl::dispatch(const util::URL& aURL, const uno::Sequence< beans::PropertyValue >& aArgs) throw (::com::sun::star::uno::RuntimeException)
 {
@@ -730,6 +753,33 @@ void BibFrameController_Impl::dispatch(const util::URL& aURL, const uno::Sequenc
                 }
             }
         }
+        else if(aCommand.EqualsAscii("Cut"))
+        {
+            Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
+            if(pChild)
+            {
+                KeyEvent aEvent( 0, KEYFUNC_CUT );
+                pChild->KeyInput( aEvent );
+            }
+        }
+        else if(aCommand.EqualsAscii("Copy"))
+        {
+            Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
+            if(pChild)
+            {
+                KeyEvent aEvent( 0, KEYFUNC_COPY );
+                pChild->KeyInput( aEvent );
+            }
+        }
+        else if(aCommand.EqualsAscii("Paste"))
+        {
+            Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
+            if(pChild)
+            {
+                KeyEvent aEvent( 0, KEYFUNC_PASTE );
+                pChild->KeyInput( aEvent );
+            }
+        }
     }
 }
 IMPL_STATIC_LINK( BibFrameController_Impl, DisposeHdl, void*, EMPTYARG )
@@ -749,75 +799,102 @@ void BibFrameController_Impl::addStatusListener(
     aStatusListeners.Insert( new BibStatusDispatch( aURL, aListener ), aStatusListeners.Count() );
 
     // den ersten Status synchron zusenden
+    FeatureStateEvent aEvent;
+    aEvent.FeatureURL = aURL;
+    aEvent.Requery    = sal_False;
+    aEvent.Source     = (XDispatch *) this;
     if ( aURL.Path == C2U("StatusBarVisible") )
     {
-        FeatureStateEvent aEvent;
-        aEvent.FeatureURL = aURL;
         aEvent.IsEnabled  = sal_False;
-        aEvent.Requery    = sal_False;
-        aEvent.Source     = (XDispatch *) this;
         aEvent.State <<= sal_Bool( sal_False );
-        aListener->statusChanged( aEvent );
     }
     else if ( aURL.Path == C2U("Bib/hierarchical") )
     {
-        FeatureStateEvent aEvent;
-        aEvent.FeatureURL = aURL;
         aEvent.IsEnabled  = sal_True;
-        aEvent.Requery    = sal_False;
-        aEvent.Source     = (XDispatch *) this;
         const char*  pHier = bHierarchical? "" : "*" ;
         aEvent.State <<= rtl::OUString::createFromAscii(pHier);
-        aListener->statusChanged( aEvent );
     }
     else if(aURL.Path == C2U("Bib/MenuFilter"))
     {
-        FeatureStateEvent aEvent;
-        aEvent.FeatureURL = aURL;
         aEvent.IsEnabled  = sal_True;
-        aEvent.Requery    = sal_False;
-        aEvent.Source     = (XDispatch *) this;
         aEvent.FeatureDescriptor=pDatMan->getQueryField();
 
         uno::Sequence<rtl::OUString> aStringSeq=pDatMan->getQueryFields();
         aEvent.State.setValue(&aStringSeq,::getCppuType((uno::Sequence<rtl::OUString>*)0));
 
-        aListener->statusChanged( aEvent );
     }
     else if ( aURL.Path == C2U("Bib/source"))
     {
-        FeatureStateEvent aEvent;
-        aEvent.FeatureURL = aURL;
         aEvent.IsEnabled  = sal_True;
-        aEvent.Requery    = sal_False;
-        aEvent.Source     = (XDispatch *) this;
         aEvent.FeatureDescriptor=pDatMan->getActiveDataTable();
 
         uno::Sequence<rtl::OUString> aStringSeq=pDatMan->getDataSources();
         aEvent.State.setValue(&aStringSeq,::getCppuType((uno::Sequence<rtl::OUString>*)0));
-        aListener->statusChanged( aEvent );
     }
     else if(aURL.Path == C2U("Bib/query"))
     {
-        FeatureStateEvent aEvent;
-        aEvent.FeatureURL = aURL;
         aEvent.IsEnabled  = sal_True;
-        aEvent.Requery    = sal_False;
-        aEvent.Source     = (XDispatch *) this;
         aEvent.State <<= pConfig->getQueryText();
-        aListener->statusChanged( aEvent );
     }
     else if (aURL.Path == C2U("Bib/removeFilter") )
     {
         rtl::OUString aFilterStr=pDatMan->getFilter();
-        FeatureStateEvent  aEvent;
-        aEvent.FeatureURL = aURL;
         aEvent.IsEnabled  = (aFilterStr.getLength() > 0);
-        aEvent.Requery    = sal_False;
-        aEvent.Source     = (XDispatch *) this;
-        aListener->statusChanged( aEvent );
-        //break; because there are more than one
     }
+    else if(aURL.Path == C2U("Cut"))
+    {
+        Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
+        Edit* pEdit = dynamic_cast<Edit*>( pChild );
+        if( pEdit )
+            aEvent.IsEnabled  = !pEdit->IsReadOnly() && pEdit->GetSelection().Len();
+    }
+    if(aURL.Path == C2U("Copy"))
+    {
+        Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
+        Edit* pEdit = dynamic_cast<Edit*>( pChild );
+        if( pEdit )
+            aEvent.IsEnabled  = pEdit->GetSelection().Len() > 0;
+    }
+    else if(aURL.Path == C2U("Paste") )
+    {
+        aEvent.IsEnabled  = sal_False;
+        Window* pChild = lcl_GetFocusChild( VCLUnoHelper::GetWindow( xWindow ) );
+        if(pChild)
+        {
+            uno::Reference< datatransfer::clipboard::XClipboard > xClip = pChild->GetClipboard();
+            if(xClip.is())
+            {
+                uno::Reference< datatransfer::XTransferable > xDataObj;
+                const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+                try
+                {
+                    xDataObj = xClip->getContents();
+                }
+                catch( const uno::Exception& )
+                {
+                }
+                Application::AcquireSolarMutex( nRef );
+
+                if ( xDataObj.is() )
+                {
+                    datatransfer::DataFlavor aFlavor;
+                    SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
+                    try
+                    {
+                        uno::Any aData = xDataObj->getTransferData( aFlavor );
+                        ::rtl::OUString aText;
+                        aData >>= aText;
+                        aEvent.IsEnabled  = aText.getLength() > 0;
+                    }
+                    catch( const uno::Exception& )
+                    {
+                    }
+                }
+            }
+            uno::Reference< datatransfer::XTransferable > xContents = xClip->getContents(  );
+        }
+    }
+    aListener->statusChanged( aEvent );
 }
 //-----------------------------------------------------------------------------
 void BibFrameController_Impl::removeStatusListener(
