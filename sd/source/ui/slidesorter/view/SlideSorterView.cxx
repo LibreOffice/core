@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterView.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:26:39 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:44:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
 #include "view/SlideSorterView.hxx"
 
 #include "ViewShellBase.hxx"
@@ -45,9 +46,11 @@
 #include "model/SlsPageEnumeration.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "cache/SlsPageCache.hxx"
+#include "cache/SlsPageCacheManager.hxx"
 #include "view/SlsPageObject.hxx"
 #include "view/SlsPageObjectViewObjectContact.hxx"
-#include "TextLogger.hxx"
+#include "taskpane/SlideSorterCacheDisplay.hxx"
+#include "DrawDocShell.hxx"
 
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
@@ -74,12 +77,9 @@
 using namespace std;
 using namespace ::sd::slidesorter::model;
 
-namespace {
-// The cache can grow up to 4 Megabytes.
-const sal_Int32 nMaxCacheSize (4*1024*1024);
-}
-
 namespace sd { namespace slidesorter { namespace view {
+
+
 
 SlideSorterView::SlideSorterView (
     SlideSorterViewShell& rViewShell,
@@ -93,11 +93,13 @@ SlideSorterView::SlideSorterView (
     mpPage(new SdrPage(maPageModel)),
     mpLayouter (new Layouter ()),
     mbPageObjectVisibilitiesValid (false),
-    mpPreviewCache (auto_ptr<cache::PageCache>(
-        new cache::PageCache(*this, mrModel, nMaxCacheSize))),
+    mpPreviewCache(),
     mpViewOverlay (new ViewOverlay(rViewShell)),
     mnFirstVisiblePageIndex(0),
-    mnLastVisiblePageIndex(-1)
+    mnLastVisiblePageIndex(-1),
+    mbModelChangedWhileModifyEnabled(true),
+    maPreviewSize(0,0),
+    mbPreciousFlagUpdatePending(true)
 {
     // Hide the page that contains the page objects.
     SetPageVisible (FALSE);
@@ -110,10 +112,20 @@ SlideSorterView::SlideSorterView (
 
 SlideSorterView::~SlideSorterView (void)
 {
-    // We have to delete the contact objects before the cache is destroyed.
-    // Otherwise the contact objects call back to the cache that does not
-    // exist anymore.
-    GetObjectContact().PrepareDelete();
+    // Inform the contact objects to disconnect from the preview cache.
+    // Otherwise each dying contact object invalidates its preview.  When
+    // the previews are kept for a later re-use than this invalidation is
+    // not wanted.
+    ::boost::shared_ptr<cache::PageCache> pEmptyCache;
+    model::SlideSorterModel::Enumeration aPageEnumeration (
+        mrModel.GetAllPagesEnumeration());
+    while (aPageEnumeration.HasMoreElements())
+    {
+        view::PageObjectViewObjectContact* pContact
+            = aPageEnumeration.GetNextElement().GetViewObjectContact();
+        if (pContact != NULL)
+            pContact->SetCache(pEmptyCache);
+    }
     mpPreviewCache.reset();
 }
 
@@ -191,18 +203,23 @@ Layouter& SlideSorterView::GetLayouter (void)
 
 void SlideSorterView::ModelHasChanged (void)
 {
-    // First call our base class.
-    View::ModelHasChanged ();
+    if (mbModelChangedWhileModifyEnabled)
+    {
+        mbModelChangedWhileModifyEnabled = false;
 
-    // Then re-set the page as current page that contains the page objects.
-    ShowPage (mpPage, Point(0,0));
+        // First call our base class.
+        View::ModelHasChanged ();
 
-    // Initialize everything that depends on a page view, now that we have
-    // one.
-    GetPageViewPvNum(0)->SetApplicationBackgroundColor(
-        Application::GetSettings().GetStyleSettings().GetWindowColor());
+        // Then re-set the page as current page that contains the page objects.
+        ShowPage (mpPage, Point(0,0));
 
-    UpdatePageBorders();
+        // Initialize everything that depends on a page view, now that we have
+        // one.
+        GetPageViewPvNum(0)->SetApplicationBackgroundColor(
+            Application::GetSettings().GetStyleSettings().GetWindowColor());
+
+        UpdatePageBorders();
+    }
 }
 
 
@@ -294,6 +311,13 @@ void SlideSorterView::Layout ()
     pWindow->SetViewOrigin (aViewBox.TopLeft());
     pWindow->SetViewSize (aViewBox.GetSize());
 
+    Size aPageObjectPixelSize (pWindow->LogicToPixel(mpLayouter->GetPageObjectSize()));
+    if (maPreviewSize != aPageObjectPixelSize && mpPreviewCache.get()!=NULL)
+    {
+        mpPreviewCache->ChangeSize(aPageObjectPixelSize);
+        maPreviewSize = aPageObjectPixelSize;
+    }
+
     // Iterate over all page objects and place them relative to the
     // containing page.
     model::SlideSorterModel::Enumeration aPageEnumeration (
@@ -349,6 +373,8 @@ void SlideSorterView::DeterminePageObjectVisibilities (void)
 
         int nMinIndex = ::std::min (mnFirstVisiblePageIndex, nFirstIndex);
         int nMaxIndex = ::std::max (mnLastVisiblePageIndex, nLastIndex);
+        if (mnFirstVisiblePageIndex!=nFirstIndex || mnLastVisiblePageIndex!=nLastIndex)
+            mbPreciousFlagUpdatePending |= true;
         model::PageDescriptor* pDescriptor;
         view::PageObjectViewObjectContact* pContact;
         for (int nIndex=nMinIndex; nIndex<=nMaxIndex; nIndex++)
@@ -372,30 +398,49 @@ void SlideSorterView::DeterminePageObjectVisibilities (void)
                     pDescriptor->SetVisible (bIsVisible);
             }
 
-            if (bWasVisible && ! bIsVisible)
-            {
-                // The page object dropped of the visible area.
-
-                // 1. Decrease the priority with with the preview rendering
-                // is scheduled.
-                if (pContact != NULL)
-                    GetPreviewCache().DecreaseRequestPriority (*pContact);
-
-                // 2. Reset the precious flag.
-                if (pContact != NULL)
-                    GetPreviewCache().SetPreciousFlag(*pContact, false);
-            }
-            else if (bIsVisible && ! bWasVisible)
-            {
-                // The page object became visible.
-
-                // Set the precious flag.
-                if (pContact != NULL)
-                    GetPreviewCache().SetPreciousFlag(*pContact, true);
-            }
         }
         mnFirstVisiblePageIndex = nFirstIndex;
         mnLastVisiblePageIndex = nLastIndex;
+    }
+}
+
+
+
+
+void SlideSorterView::UpdatePreciousFlags (void)
+{
+    if (mbPreciousFlagUpdatePending)
+    {
+        mbPreciousFlagUpdatePending = false;
+
+        view::PageObjectViewObjectContact* pContact = NULL;
+        model::PageDescriptor* pDescriptor = NULL;
+        ::boost::shared_ptr<cache::PageCache> pCache = GetPreviewCache();
+        sal_Int32 nPageCount (mrModel.GetPageCount());
+
+        for (int nIndex=0; nIndex<=nPageCount; ++nIndex)
+        {
+            pContact = NULL;
+            pDescriptor = mrModel.GetPageDescriptor (nIndex);
+            if (pDescriptor != NULL)
+                pContact = pDescriptor->GetViewObjectContact();
+
+            if (pContact != NULL)
+            {
+                pCache->SetPreciousFlag(
+                    *pContact,
+                    (nIndex>=mnFirstVisiblePageIndex && nIndex<=mnLastVisiblePageIndex));
+                SSCD_SET_VISIBILITY(mrModel.GetDocument(), nIndex,
+                    (nIndex>=mnFirstVisiblePageIndex && nIndex<=mnLastVisiblePageIndex));
+            }
+            else
+            {
+                // At least one cache entry can not be updated.  Remember to
+                // repeat the whole updating later and leave the loop now.
+                mbPreciousFlagUpdatePending = true;
+                break;
+            }
+        }
     }
 }
 
@@ -478,7 +523,10 @@ void SlideSorterView::CompleteRedraw (
     {
         // Update the page visibilities when they have been invalidated.
         if ( ! mbPageObjectVisibilitiesValid)
-            DeterminePageObjectVisibilities ();
+            DeterminePageObjectVisibilities();
+
+        if (mbPreciousFlagUpdatePending)
+            UpdatePreciousFlags();
 
         // Call the base class InitRedraw even when re-drawing is locked to
         // let it remember the request for a redraw.  The overlay is hidden
@@ -568,9 +616,16 @@ void SlideSorterView::AdaptBoundingBox (
 
 
 
-cache::PageCache& SlideSorterView::GetPreviewCache (void)
+::boost::shared_ptr<cache::PageCache> SlideSorterView::GetPreviewCache (void)
 {
-    return *mpPreviewCache.get();
+    if (mpPreviewCache.get() == NULL)
+    {
+        Resize();
+        maPreviewSize = GetWindow()->LogicToPixel(mpLayouter->GetPageObjectSize());
+        mpPreviewCache.reset(new cache::PageCache(*this, mrModel, maPreviewSize));
+    }
+
+    return mpPreviewCache;
 }
 
 
@@ -600,6 +655,18 @@ SlideSorterView::PageRange SlideSorterView::GetVisiblePageRange (void)
     return PageRange(
         ::std::min(mnFirstVisiblePageIndex,nMaxPageIndex),
         ::std::min(mnLastVisiblePageIndex, nMaxPageIndex));
+}
+
+
+
+
+void SlideSorterView::Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint)
+{
+    ::sd::DrawDocShell* pDocShell = mrModel.GetDocument()->GetDocSh();
+    if (pDocShell!=NULL && pDocShell->IsEnableSetModified())
+        mbModelChangedWhileModifyEnabled = true;
+
+    ::sd::View::SFX_NOTIFY(rBroadcaster, rBroadcastType, rHint, rHintType);
 }
 
 
