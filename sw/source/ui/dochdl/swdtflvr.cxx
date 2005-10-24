@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:19:54 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 15:32:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3695,7 +3695,7 @@ SwTrnsfrDdeLink::SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
         rSh.MakeUniqueBookmarkName( sName );
 
         //Ok, den eindeutigen Namen haben wir
-        if( !rSh.SetBookmark( KeyCode(), sName, aEmptyStr ) )
+        if( !rSh.SetBookmark( KeyCode(), sName, aEmptyStr, BOOKMARK_HIDDEN ) )
             sName.Erase();
         else
         {
