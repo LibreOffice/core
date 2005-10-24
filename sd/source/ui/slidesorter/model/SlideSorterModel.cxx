@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterModel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:30:30 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:44:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 #include "model/SlsPageDescriptor.hxx"
 #include "model/SlsPageEnumeration.hxx"
 #include "controller/SlsPageObjectFactory.hxx"
+#include "taskpane/SlideSorterCacheDisplay.hxx"
 
 #ifndef _DRAWDOC_HXX
 #include "drawdoc.hxx"
@@ -273,6 +274,12 @@ void SlideSorterModel::AdaptSize ()
         maPageDescriptors.resize (
             mrDocument.GetMasterSdPageCount(mePageKind),
             NULL);
+
+#ifdef USE_SLIDE_SORTER_PAGE_CACHE
+    toolpanel::SlideSorterCacheDisplay* pDisplay = toolpanel::SlideSorterCacheDisplay::Instance(&mrDocument);
+    if (pDisplay != NULL)
+        pDisplay->SetPageCount(mrDocument.GetSdPageCount(mePageKind));
+#endif
 }
 
 
@@ -362,7 +369,7 @@ const controller::PageObjectFactory&
         // controller does not provide a factory where the cache is properly
         // set.
         mpPageObjectFactory = ::std::auto_ptr<controller::PageObjectFactory> (
-            new controller::PageObjectFactory(NULL));
+            new controller::PageObjectFactory(::boost::shared_ptr<cache::PageCache>()));
     }
     return *mpPageObjectFactory.get();
 }
