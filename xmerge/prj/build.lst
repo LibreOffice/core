@@ -1,2 +1,10 @@
 xmrg xmerge :  solenv NULL
-xmrg xmerge                                                  usr1  - all xmrg_mkout NULL
+xmrg xmerge                        usr1  - all xmrg_mkout NULL
+xmrg xmerge\source\xmerge          nmake - all xmrg_xmerge NULL
+xmrg xmerge\source\bridge          nmake - all xmrg_bridge xmrg_xmerge NULL
+xmrg xmerge\source\aportisdoc      nmake - all xmrg_aportis xmrg_xmerge NULL
+xmrg xmerge\source\pexcel          nmake - all xmrg_pexcel xmrg_xmerge NULL
+xmrg xmerge\source\pocketword      nmake - all xmrg_pword xmrg_xmerge NULL
+xmrg xmerge\source\htmlsoff        nmake - all xmrg_htmlsoff NULL
+xmrg xmerge\source\activesync      nmake - all xmrg_activesync NULL
+xmrg xmerge\util                   nmake - all xmrg_util xmrg_xmerge xmrg_bridge xmrg_aportis xmrg_pexcel xmrg_pword NULL
