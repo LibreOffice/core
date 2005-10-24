@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageObjectViewObjectContact.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:23:03 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:44:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@
 #include <sfx2/viewfrm.hxx>
 
 #include <memory>
+#include <boost/shared_ptr.hpp>
 
 class SdrPage;
 
@@ -85,8 +86,13 @@ public:
     PageObjectViewObjectContact (
         ::sdr::contact::ObjectContact& rObjectContact,
         ::sdr::contact::ViewContact& rViewContact,
-        cache::PageCache* pCache);
+        const ::boost::shared_ptr<cache::PageCache>& rpCache);
     virtual ~PageObjectViewObjectContact (void);
+
+    /** This method is primarily for releasing the current preview cache (by
+        providing a NULL pointer.)
+    */
+    void SetCache (const ::boost::shared_ptr<cache::PageCache>& rpCache);
 
     virtual void PaintObject (::sdr::contact::DisplayInfo& rDisplayInfo);
 
@@ -172,11 +178,11 @@ public:
     /** Return the rectangle of the whole page object, the preview toghether
         with frames, indicators, and title, in pixel coordinates.
     */
-    Rectangle GetPixelBox (const OutputDevice& rDevice);
+    Rectangle GetPixelBox (const OutputDevice& rDevice) const;
 
     /** Return the rectangle of the preview in pixel coordinates.
     */
-    Rectangle GetPreviewPixelBox (const OutputDevice& rDevice);
+    Rectangle GetPreviewPixelBox (const OutputDevice& rDevice) const;
 
 private:
     /// Gap between border of page object and inside of selection rectangle.
@@ -199,9 +205,11 @@ private:
     */
     bool mbIsValid;
 
-    cache::PageCache* mpCache;
+    ::boost::shared_ptr<cache::PageCache> mpCache;
 
     ::std::auto_ptr<PageNotificationObjectContact> mpNotifier;
+
+    bool mbInPrepareDelete;
 
     BitmapEx GetPreview (
         ::sdr::contact::DisplayInfo& rDisplayInfo,
