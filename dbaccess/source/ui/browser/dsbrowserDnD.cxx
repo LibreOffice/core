@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:20:37 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:31:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -335,16 +335,9 @@ namespace dbaui
                     {
                         DBG_ASSERT( impl_isDataSourceEntry( pEntryLoop ), "SbaTableQueryBrowser::clearTreeModel: no data source entry, but a connection?" );
                         // without this, pData->aController might not really be a valid ModelControllerConnector
-
-                        Reference< XComponent >  xComponent( pData->xConnection, UNO_QUERY );
-                        if (xComponent.is())
-                        {
-                            Reference< ::com::sun::star::lang::XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
-                            xComponent->removeEventListener(xEvtL);
-                        }
+                        impl_releaseConnection( pData->xConnection );
                     }
 
-                    pData->xConnection.clear();
                     pData->aController.clear();
                     delete pData;
                 }
