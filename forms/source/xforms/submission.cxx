@@ -4,9 +4,9 @@
  *
  *  $RCSfile: submission.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:21:33 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:38:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -532,10 +532,7 @@ void SAL_CALL Submission::submitWithInteraction(
     Model* pModel = Model::getModel( xModel );
     OSL_ENSURE( pModel != NULL, "illegal model?" );
 
-// #i36765# #i47248# warning on submission of illegal data.  Removed for
-// upcoming 2.0 release because string change could not go through
-// translation anymore. Please re-enable in the next version.
-/*
+    // #i36765# #i47248# warning on submission of illegal data
     // check for validity (and query user if invalid)
     bool bValid = pModel->isValid();
     if( ! bValid )
@@ -575,7 +572,6 @@ void SAL_CALL Submission::submitWithInteraction(
         if( ! bValid )
             throw aInvalidDataException;
     }
-*/
 
     // attempt submission
     bool bResult = false;
