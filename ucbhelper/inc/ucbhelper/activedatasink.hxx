@@ -4,9 +4,9 @@
  *
  *  $RCSfile: activedatasink.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:23:59 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:37:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,9 @@
 #ifndef _UCBHELPER_MACROS_HXX
 #include <ucbhelper/macros.hxx>
 #endif
-
+#ifndef INCLUDED_UCBHELPERDLLAPI_H
+#include "ucbhelper/ucbhelperdllapi.h"
+#endif
 namespace ucb
 {
 
@@ -61,7 +63,7 @@ namespace ucb
   * "open" command.
   */
 
-class ActiveDataSink : public cppu::OWeakObject,
+class UCBHELPER_DLLPUBLIC ActiveDataSink : public cppu::OWeakObject,
                        public com::sun::star::lang::XTypeProvider,
                        public com::sun::star::io::XActiveDataSink
 {
