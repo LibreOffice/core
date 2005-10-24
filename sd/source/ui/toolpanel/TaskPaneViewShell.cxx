@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TaskPaneViewShell.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:34:18 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:45:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 #include "TaskPaneShellManager.hxx"
 #include "ToolPanelChildWindow.hrc"
 #include "ToolPanelChildWindow.hxx"
+#include "taskpane/SlideSorterCacheDisplay.hxx"
 #include "taskpane/ToolPanel.hxx"
 #include "taskpane/TitledControl.hxx"
 #include "LayoutMenu.hxx"
@@ -262,6 +263,13 @@ void TaskPaneViewShell::Implementation::Setup (
     pToolPanel->AddControl (
         TestPanel::CreateControlFactory(),
         String::CreateFromAscii ("Test Panel"),
+        0);
+#endif
+
+#ifdef USE_SLIDE_SORTER_CACHE_DISPLAY
+    pToolPanel->AddControl (
+        SlideSorterCacheDisplay::CreateControlFactory(pDocument),
+        String::CreateFromAscii("Slide Sorter Cache Status"),
         0);
 #endif
 
