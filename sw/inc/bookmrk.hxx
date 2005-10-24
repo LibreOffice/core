@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bookmrk.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:33:45 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 15:29:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,7 @@ public:
     BOOL IsMark() const         { return MARK == eMarkType; }
     BOOL IsDDEMark() const      { return DDE_BOOKMARK == eMarkType; }
     BOOL IsUNOMark() const      { return UNO_BOOKMARK == eMarkType; }
+    BOOL IsHiddenBookMark() const   { return BOOKMARK_HIDDEN == eMarkType; }
     void SetType( BOOKMARK_TYPE eNewType )  { eMarkType = eNewType; }
     BOOKMARK_TYPE GetType() const   { return eMarkType; }
 
