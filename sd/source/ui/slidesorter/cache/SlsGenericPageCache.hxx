@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsGenericPageCache.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:10:13 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:40:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,9 @@
 #define SD_SLIDESORTER_GENERIC_PAGE_CACHE_HXX
 
 #include "SlsQueueProcessor.hxx"
+#include "SlsRequestPriorityClass.hxx"
+#include "model/SlideSorterModel.hxx"
 #include "view/SlsPageObjectViewObjectContact.hxx"
-
 
 namespace sd { namespace slidesorter { namespace model {
 class SlideSorterModel;
@@ -50,11 +51,12 @@ class SlideSorterView;
 namespace sd { namespace slidesorter { namespace cache {
 
 
+/** This basically is the implementation class for the PageCache class.  It
+    allows the PageCache class to hide the template parameters.
+*/
 template<class RequestData,
          class CreationManager,
-         class BitmapCache,
          class RequestQueue,
-         class CacheCompactionPolicy,
          class QueueProcessor>
 class GenericPageCache
 {
@@ -66,9 +68,15 @@ public:
     GenericPageCache (
         view::SlideSorterView& rView,
         model::SlideSorterModel& rModel,
-        sal_Int32 nMaximalCacheSize);
+        const Size& rPreviewSize);
 
     ~GenericPageCache (void);
+
+    /** Change the size of the preview bitmaps.  This may be caused by a
+        resize of the slide sorter window or a change of the number of
+        columns.
+    */
+    void ChangePreviewSize (const Size& rPreviewSize);
 
     /** Request a preview bitmap for the specified page object in the
         specified size.  The returned bitmap may be preview of the preview,
@@ -115,23 +123,9 @@ public:
     */
     void InvalidatePreviewBitmap (const RequestData& rRequestData);
 
-    /** Lower the priority with which the request associated with the given
-        data will be processed.  Call this method when the visibility of a
-        page object changes (from visible to not visible) and the request
-        becomes a ahead-of-time request. When the request is already in the
-        lowest class it will be removed.
-    */
-    void DecreaseRequestPriority (RequestData& rRequestData);
-
-    /** Move the request associated with the given data into a higher
-        priority class and increase its priority in that class above all
-        other elements in the class.
-    */
-    void IncreaseRequestPriority (RequestData& rRequestData);
-
     /** Call this method when a view-object-contact object is being deleted
         and does not need (a) its current bitmap in the cache and (b) a
-        requested new bitmap.
+        requested a new bitmap.
     */
     void ReleasePreviewBitmap (RequestData& rRequestData);
 
@@ -139,36 +133,46 @@ public:
         This is the case when the size of the page objects on the screen has
         changed or when the model has changed.
     */
-    void InvalidateCache (void);
+    void InvalidateCache (bool bUpdateCache);
 
     /** With the precious flag you can control whether a bitmap can be
-        removed or reduced in size to make room for other bitmaps or is so
-        precious that it will not be touched.  A typical use is to set the
-        precious flag for exactly the visible pages.
+        removed from the cache or reduced in size to make room for other
+        bitmaps or is so precious that it will not be touched.  A typical
+        use is to set the precious flag for the visible pages.
     */
     void SetPreciousFlag (RequestData& rRequestData, bool bIsPrecious);
+
+    /** Return <TRUE/> when there is no preview bitmap in the cache.
+    */
+    bool IsEmpty (void) const;
+
+    /** Return the view in which the preview bitmaps are displayed.
+    */
+    view::SlideSorterView& GetView (void) const;
+
+    /** Return the model for whose slides the previews are created.
+    */
+    model::SlideSorterModel& GetModel (void) const;
 
 private:
     view::SlideSorterView& mrView;
 
     model::SlideSorterModel& mrModel;
 
-    BitmapCache maBitmapCache;
+    ::boost::shared_ptr<BitmapCache> mpBitmapCache;
 
     RequestQueue maRequestQueue;
 
-    QueueProcessor* mpQueueProcessor;
+    ::std::auto_ptr<QueueProcessor> mpQueueProcessor;
 
-    const sal_Int32 mnMaximalCacheSize;
-
-    /** Remember whether the cache limit has been reached at least once
-        after a Clear() call.  This is important because afterwards the
-        cache will be constantly at its limit of capacity.  Therefore
-        requests with another than the highest priority class will not be
-        processed since the resulting preview bitmaps would be removed
-        shortly afterwards.
+    /** The current size of preview bitmaps.
     */
-    bool mbLimitHasBeenReached;
+    Size maPreviewSize;
+
+    /** Both bitmap cache and queue processor are created on demand by this
+        method.
+    */
+    void ProvideCacheAndProcessor (void);
 };
 
 
@@ -178,28 +182,20 @@ private:
 
 template<class RequestData,
          class CreationManager,
-         class BitmapCache,
          class RequestQueue,
-         class CompactionPolicy,
          class QueueProcessor>
 GenericPageCache<
-    RequestData,
-    CreationManager,
-    BitmapCache,
-    RequestQueue,
-    CompactionPolicy, QueueProcessor
+    RequestData, CreationManager, RequestQueue, QueueProcessor
     >::GenericPageCache (
         view::SlideSorterView& rView,
         model::SlideSorterModel& rModel,
-        sal_Int32 nMaximalCacheSize)
+        const Size& rPreviewSize)
         : mrView(rView),
           mrModel(rModel),
-          maBitmapCache (),
+          mpBitmapCache(),
           maRequestQueue(),
-          mpQueueProcessor(
-              new QueueProcessor(mrView,maRequestQueue,maBitmapCache)),
-          mnMaximalCacheSize(nMaximalCacheSize),
-          mbLimitHasBeenReached (false)
+          mpQueueProcessor(),
+          maPreviewSize(rPreviewSize)
 {
 }
 
@@ -208,21 +204,24 @@ GenericPageCache<
 
 template<class RequestData,
          class CreationManager,
-         class BitmapCache,
          class RequestQueue,
-         class CompactionPolicy,
          class QueueProcessor>
 GenericPageCache<
-    RequestData, CreationManager, BitmapCache, RequestQueue,
-    CompactionPolicy, QueueProcessor
+    RequestData, CreationManager, RequestQueue, QueueProcessor
     >::~GenericPageCache (void)
 {
-    OSL_TRACE("terminating thread %p", mpQueueProcessor);
-    mpQueueProcessor->Stop();
+    OSL_TRACE("terminating queue processor %p", mpQueueProcessor.get());
+    if (mpQueueProcessor.get() != NULL)
+        mpQueueProcessor->Stop();
     maRequestQueue.Clear();
-    mpQueueProcessor->Terminate();
-    //    delete mpQueueProcessor;
-    OSL_TRACE("thread %p stopped and terminated", mpQueueProcessor);
+    if (mpQueueProcessor.get() != NULL)
+        mpQueueProcessor->Terminate();
+    mpQueueProcessor.reset();
+    OSL_TRACE("queue processor stopped and terminated");
+
+    if (mpBitmapCache.get() != NULL)
+        PageCacheManager::Instance()->ReleaseCache(mpBitmapCache);
+    mpBitmapCache.reset();
 }
 
 
@@ -230,28 +229,66 @@ GenericPageCache<
 
 template<class RequestData,
          class CreationManager,
-         class BitmapCache,
          class RequestQueue,
-         class CompactionPolicy,
+         class QueueProcessor>
+void GenericPageCache<
+    RequestData, CreationManager, RequestQueue, QueueProcessor
+    >::ProvideCacheAndProcessor (void)
+{
+    if (mpBitmapCache.get() == NULL)
+        mpBitmapCache = PageCacheManager::Instance()->GetCache(
+            mrModel.GetDocument(),
+            maPreviewSize);
+
+    if (mpQueueProcessor.get() == NULL)
+        mpQueueProcessor.reset(new QueueProcessor(mrView,maRequestQueue,*mpBitmapCache));
+}
+
+
+
+
+template<class RequestData,
+         class CreationManager,
+         class RequestQueue,
+         class QueueProcessor>
+void GenericPageCache<
+    RequestData, CreationManager, RequestQueue, QueueProcessor
+    >::ChangePreviewSize (const Size& rPreviewSize)
+{
+    if (mpBitmapCache.get() != NULL)
+        mpBitmapCache = PageCacheManager::Instance()->ChangeSize(
+            mpBitmapCache, maPreviewSize, rPreviewSize);
+    maPreviewSize = rPreviewSize;
+}
+
+
+
+
+template<class RequestData,
+         class CreationManager,
+         class RequestQueue,
          class QueueProcessor>
 BitmapEx GenericPageCache<
-    RequestData, CreationManager, BitmapCache, RequestQueue,
-    CompactionPolicy, QueueProcessor
+    RequestData, CreationManager, RequestQueue, QueueProcessor
     >::GetPreviewBitmap (
         RequestData& rRequestData,
         const Size& rSize)
 {
     BitmapEx aPreview;
     bool bMayBeUpToDate = true;
-    if (maBitmapCache.HasBitmap (rRequestData.GetPage()))
+    ProvideCacheAndProcessor();
+    if (mpBitmapCache->HasBitmap(rRequestData.GetPage()))
     {
-        aPreview = maBitmapCache.GetBitmap (rRequestData.GetPage());
+        ::boost::shared_ptr<BitmapEx> pPreview(mpBitmapCache->GetBitmap(rRequestData.GetPage()));
+        OSL_ASSERT(pPreview.get() != NULL);
+        aPreview = *pPreview;
         Size aBitmapSize (aPreview.GetSizePixel());
         if (aBitmapSize != rSize)
         {
             // The bitmap has the wrong size.
             DBG_ASSERT (rSize.Width() < 1000,
-                "GenericPageCache<>::GetPreviewBitmap(): bitmap requested with large width.  This may indicate an error.");
+                "GenericPageCache<>::GetPreviewBitmap(): bitmap requested with large width. "
+                "This may indicate an error.");
 
             // Scale the bitmap to the desired size when that is possible,
             // i.e. the bitmap is not empty.
@@ -276,13 +313,10 @@ BitmapEx GenericPageCache<
 
 template<class RequestData,
          class CreationManager,
-         class BitmapCache,
          class RequestQueue,
-         class CompactionPolicy,
          class QueueProcessor>
 void GenericPageCache<
-    RequestData, CreationManager, BitmapCache, RequestQueue,
-    CompactionPolicy, QueueProcessor
+    RequestData, CreationManager, RequestQueue, QueueProcessor
     >::RequestPreviewBitmap (
         RequestData& rRequestData,
         const Size& rSize,
@@ -290,13 +324,15 @@ void GenericPageCache<
 {
     const SdrPage* pPage = rRequestData.GetPage();
 
+    ProvideCacheAndProcessor();
+
     // Determine if the available bitmap is up to date.
     bool bIsUpToDate = false;
     if (bMayBeUpToDate)
-        bIsUpToDate = maBitmapCache.BitmapIsUpToDate (pPage);
+        bIsUpToDate = mpBitmapCache->BitmapIsUpToDate (pPage);
     if (bIsUpToDate)
     {
-        BitmapEx aPreview (maBitmapCache.GetBitmap (pPage));
+        BitmapEx aPreview (*mpBitmapCache->GetBitmap (pPage));
         if (aPreview.GetSizePixel() != rSize)
             bIsUpToDate = false;
     }
@@ -304,16 +340,14 @@ void GenericPageCache<
     if ( ! bIsUpToDate)
     {
         // No, the bitmap is not up-to-date.  Request a new one.
-        int nPriorityClass = rRequestData.GetPageDescriptor().IsVisible() ? 0 : 1;
-        maRequestQueue.AddRequest (rRequestData, nPriorityClass);
-        mpQueueProcessor->Start (nPriorityClass);
-    }
-
-    // Reduce the cache size if it grew too large.
-    if (maBitmapCache.GetSize() > mnMaximalCacheSize)
-    {
-        mbLimitHasBeenReached = true;
-        CompactionPolicy()(maBitmapCache, mnMaximalCacheSize);
+        RequestPriorityClass ePriorityClass (NOT_VISIBLE);
+        if (rRequestData.GetPageDescriptor().IsVisible())
+            if (mpBitmapCache->HasBitmap(pPage))
+                ePriorityClass = VISIBLE_OUTDATED_PREVIEW;
+            else
+                ePriorityClass = VISIBLE_NO_PREVIEW;
+        maRequestQueue.AddRequest(rRequestData, ePriorityClass);
+        mpQueueProcessor->Start(ePriorityClass);
     }
 }
 
@@ -322,16 +356,14 @@ void GenericPageCache<
 
 template<class RequestData,
          class CreationManager,
-         class BitmapCache,
          class RequestQueue,
-         class CompactionPolicy,
         class QueueProcessor>
 void GenericPageCache<
-    RequestData, CreationManager, BitmapCache, RequestQueue,
-    CompactionPolicy, QueueProcessor
+    RequestData, CreationManager, RequestQueue, QueueProcessor
     >::InvalidatePreviewBitmap (const RequestData& rRequestData)
 {
-    maBitmapCache.InvalidateBitmap (rRequestData.GetPage());
+    if (mpBitmapCache.get() != NULL)
+        mpBitmapCache->InvalidateBitmap(rRequestData.GetPage());
 }
 
 
@@ -339,61 +371,23 @@ void GenericPageCache<
 
 template<class RequestData,
          class CreationManager,
-         class BitmapCache,
          class RequestQueue,
-         class CompactionPolicy,
         class QueueProcessor>
 void GenericPageCache<
-    RequestData, CreationManager, BitmapCache, RequestQueue,
-    CompactionPolicy, QueueProcessor
-    >::DecreaseRequestPriority (RequestData& rRequestData)
-{
-    if (mbLimitHasBeenReached)
-        maRequestQueue.RemoveRequest (rRequestData);
-    else
-        maRequestQueue.ChangePriorityClass (rRequestData,+1);
-}
-
-
-
-
-template<class RequestData,
-         class CreationManager,
-         class BitmapCache,
-         class RequestQueue,
-         class CompactionPolicy,
-        class QueueProcessor>
-void GenericPageCache<
-    RequestData, CreationManager, BitmapCache, RequestQueue,
-    CompactionPolicy, QueueProcessor
-    >::IncreaseRequestPriority (RequestData& rRequestData)
-{
-    maRequestQueue.ChangePriorityClass (rRequestData,-1);
-}
-
-
-
-
-template<class RequestData,
-         class CreationManager,
-         class BitmapCache,
-         class RequestQueue,
-         class CompactionPolicy,
-        class QueueProcessor>
-void GenericPageCache<
-    RequestData, CreationManager, BitmapCache, RequestQueue,
-    CompactionPolicy, QueueProcessor
+    RequestData, CreationManager, RequestQueue, QueueProcessor
     >::ReleasePreviewBitmap (RequestData& rRequestData)
 {
-    mpQueueProcessor->RemoveRequest (rRequestData);
-    maRequestQueue.RemoveRequest (rRequestData);
+    if (mpBitmapCache.get() != NULL)
+    {
+        mpQueueProcessor->RemoveRequest (rRequestData);
+        maRequestQueue.RemoveRequest (rRequestData);
+    }
 
     // We do not relase the preview bitmap that is associated with the page
     // of the given request data because this method is called when the
     // request data, typically a view-object-contact object, is destroyed.
     // The page object usually lives longer than that and thus the preview
     // bitmap may be used later on.
-    //    maBitmapCache.ReleaseBitmap (rRequestData);
 }
 
 
@@ -401,28 +395,27 @@ void GenericPageCache<
 
 template<class RequestData,
          class RequestFactory,
-         class BitmapCache,
          class RequestQueue,
-         class CompactionPolicy,
         class QueueProcessor>
 void GenericPageCache<
-    RequestData, RequestFactory, BitmapCache, RequestQueue,
-    CompactionPolicy, QueueProcessor
-    >::InvalidateCache (void)
+    RequestData, RequestFactory, RequestQueue, QueueProcessor
+    >::InvalidateCache (bool bUpdateCache)
 {
-    // 1.) Stop the timer while the queues are being updated.
-    mpQueueProcessor->Stop();
+    if (mpBitmapCache.get() != NULL)
+    {
+        // When the cache is being invalidated then it makes no sense to
+        // continue creating preview bitmaps.  However, this may be
+        // re-started below.
+        mpQueueProcessor->Stop();
+        maRequestQueue.Clear();
 
-    // 2.) Clear the request queue of their current content.
-    maRequestQueue.Clear();
-    mbLimitHasBeenReached = false;
-
-    // 3.) Create the new requests for filling the cache with at least the
-    // visible previews.
-    RequestFactory()(mrModel, mrView,maRequestQueue);
-
-    // 4.) Start the timer again.
-    mpQueueProcessor->Start();
+        // Mark the previews in the cache as not being up-to-date anymore.
+        // Depending on the given bUpdateCache flag we start to create new
+        // preview bitmaps.
+        mpBitmapCache->InvalidateCache();
+        if (bUpdateCache)
+            RequestFactory()(mrModel, mrView,maRequestQueue);
+    }
 }
 
 
@@ -430,17 +423,81 @@ void GenericPageCache<
 
 template<class RequestData,
          class RequestFactory,
-         class BitmapCache,
          class RequestQueue,
-         class CompactionPolicy,
         class QueueProcessor>
 void GenericPageCache<
-    RequestData, RequestFactory, BitmapCache, RequestQueue,
-    CompactionPolicy, QueueProcessor
+    RequestData, RequestFactory, RequestQueue, QueueProcessor
     >::SetPreciousFlag (RequestData& rRequestData, bool bIsPrecious)
 {
-    maBitmapCache.SetPrecious (rRequestData.GetPage(), bIsPrecious);
+    ProvideCacheAndProcessor();
+
+    // Change the request priority class according to the new precious flag.
+    if (bIsPrecious)
+    {
+        if (mpBitmapCache->HasBitmap(rRequestData.GetPage()))
+            maRequestQueue.ChangeClass(rRequestData,VISIBLE_OUTDATED_PREVIEW);
+        else
+            maRequestQueue.ChangeClass(rRequestData,VISIBLE_NO_PREVIEW);
+    }
+    else
+    {
+        if (mpBitmapCache->IsFull())
+        {
+            // When the bitmap cache is full then requests for slides that
+            // are not visible are removed.
+            maRequestQueue.RemoveRequest(rRequestData);
+        }
+        else
+            maRequestQueue.ChangeClass(rRequestData,NOT_VISIBLE);
+    }
+
+    mpBitmapCache->SetPrecious(rRequestData.GetPage(), bIsPrecious);
 }
+
+
+
+
+template<class RequestData,
+         class RequestFactory,
+         class RequestQueue,
+        class QueueProcessor>
+bool GenericPageCache<
+    RequestData, RequestFactory, RequestQueue, QueueProcessor
+    >::IsEmpty (void) const
+{
+    if (mpBitmapCache.get() != NULL)
+        return mpBitmapCache->IsEmpty();
+    else
+        return true;
+}
+
+
+
+template<class RequestData,
+         class CreationManager,
+         class RequestQueue,
+         class QueueProcessor>
+model::SlideSorterModel& GenericPageCache<
+    RequestData, CreationManager, RequestQueue, QueueProcessor
+    >::GetModel (void) const
+{
+    return mrModel;
+}
+
+
+
+
+template<class RequestData,
+         class CreationManager,
+         class RequestQueue,
+         class QueueProcessor>
+view::SlideSorterView& GenericPageCache<
+    RequestData, CreationManager, RequestQueue, QueueProcessor
+    >::GetView (void) const
+{
+    return mrView;
+}
+
 
 
 
