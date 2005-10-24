@@ -4,9 +4,9 @@
  *
  *  $RCSfile: userinstall.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:14:01 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 18:34:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -269,83 +269,6 @@ namespace desktop {
         NULL
     };
 
-
-    UserInstall::UserInstallError UserInstall::configureLanguage()
-    {
-        try
-        {
-            OUString sConfigSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
-            OUString sAccessSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess");
-
-            // get configuration provider
-            Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
-
-            OUString aUserLanguage = LanguageSelection::getLanguageString();
-
-            Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory >(
-                theMSF->createInstance(sConfigSrvc), UNO_QUERY_THROW);
-
-            // localize the provider to user selection
-            Reference< XLocalizable > localizable(theConfigProvider, UNO_QUERY_THROW);
-            Locale aLocale = LanguageSelection::IsoStringToLocale(aUserLanguage);
-            localizable->setLocale(aLocale);
-
-            // org.openoffice.Setup/L10N/ooLocale
-            // org.openoffice.Office.Linguistic/General/DefaultLocale
-            // org.openoffice.Office.Linguistic/General/DefaultLocale_CJK
-
-            Sequence< Any > theArgs(1);
-            NamedValue v;
-            v.Name = OUString::createFromAscii("NodePath");
-            v.Value <<= OUString::createFromAscii("org.openoffice.Office.Linguistic/General");
-            theArgs[0] <<= v;
-            Reference< XPropertySet > pset = Reference< XPropertySet >(
-                theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
-            OUString aDefaultLocale( OUString::createFromAscii("DefaultLocale") );
-            OUString aDefaultLocale_CJK( OUString::createFromAscii("DefaultLocale_CJK") );
-            OUString aTmp;
-            if (aUserLanguage.equalsAscii("ja") || aUserLanguage.equalsAscii("ko")
-                || aUserLanguage.equalsAscii("zh-CN") || aUserLanguage.equalsAscii("zh-TW"))
-            {
-                // only set the locales if there is not already a value set
-                // (inititially there is no value set in the configuration)
-                pset->getPropertyValue(aDefaultLocale) >>= aTmp;
-                if (!aTmp.getLength())
-                    pset->setPropertyValue(aDefaultLocale, makeAny(OUString::createFromAscii("en-US")));
-                pset->getPropertyValue(aDefaultLocale_CJK) >>= aTmp;
-                if (!aTmp.getLength())
-                    pset->setPropertyValue(aDefaultLocale_CJK, makeAny(aUserLanguage));
-            } else
-            {
-                // only set the locales if there is not already a value set
-                // (inititially there is no value set in the configuration)
-                pset->getPropertyValue(aDefaultLocale) >>= aTmp;
-                if (!aTmp.getLength())
-                    pset->setPropertyValue(aDefaultLocale, makeAny(aUserLanguage));
-            }
-            Reference< XChangesBatch >(pset, UNO_QUERY_THROW)->commitChanges();
-
-            v.Value = makeAny(OUString::createFromAscii("org.openoffice.Setup"));
-            theArgs[0] <<= v;
-            Reference< XHierarchicalPropertySet> hpset(
-                theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
-            hpset->setHierarchicalPropertyValue(OUString::createFromAscii("L10N/ooLocale"), makeAny(aUserLanguage));
-            Reference< XChangesBatch >(hpset, UNO_QUERY_THROW)->commitChanges();
-        }
-        catch ( PropertyVetoException& )
-        {
-            // we are not allowed to change this
-        }
-        catch (Exception const & e)
-        {
-            OString msg(OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US));
-            OSL_ENSURE(sal_False, msg.getStr());
-            return UserInstall::E_Configuration;
-        }
-
-        // everything went well
-        return UserInstall::E_None;
-    }
 
     static UserInstall::UserInstallError create_user_install(OUString& aUserPath)
     {
