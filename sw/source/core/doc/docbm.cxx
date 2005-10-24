@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docbm.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:09:49 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 15:29:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,7 +151,7 @@ SwBookmark* SwDoc::MakeBookmark( const SwPaM& rPaM, const KeyCode& rCode,
     SwBookmark *pBM;
     if( MARK == eMark )
         pBM = new SwMark( *rPaM.GetPoint(), rCode, rName, rShortName );
-    else if( BOOKMARK == eMark )
+    else if( BOOKMARK == eMark || BOOKMARK_HIDDEN == eMark)
     {
         pBM = new SwBookmark(*rPaM.GetPoint(), rCode, rName, rShortName);
         if( rPaM.HasMark() )
@@ -178,8 +178,14 @@ SwBookmark* SwDoc::MakeBookmark( const SwPaM& rPaM, const KeyCode& rCode,
             ClearRedo();
             AppendUndo( new SwUndoInsBookmark( *pBM ));
         }
-        if(UNO_BOOKMARK != eMark)
-            SetModified();
+        switch( eMark )
+        {
+            case UNO_BOOKMARK:
+            case BOOKMARK_HIDDEN:
+            break;
+            default:
+                SetModified();
+        }
     }
     return pBM;
 }
