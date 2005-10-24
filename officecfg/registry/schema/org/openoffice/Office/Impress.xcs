@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Impress.xcs,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:14:34 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:37:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1233,42 +1233,106 @@
                     </info>
                 </set>
 			</group>
+			<group oor:name="SlideSorter">
+                <info>
+		    		<desc>Values related to the slide sorter.</desc>
+                    <label>Slide Sorter Options</label>
+                </info>
+				<group oor:name="PreviewCache">
+                	<info>
+		    			<desc>Values for tuning the preview cache of the slide sorter.</desc>
+                    	<label>Preview Cache Options</label>
+                	</info>
+    				<prop oor:name="CacheSize" oor:type="xs:int">
+                    	<info>
+	        				<desc>Maximal size of the cache that stores slide
+                            preview bitmaps.  This size does only cover
+                            previews of slides that are not currently
+                            visible.  Depending on the compression policy
+                            this upper bound may be violated.</desc>
+                        	<label>Preview Cache Size</label>
+                    	</info>
+                    	<value>4194304</value>
+                	</prop>
+    				<prop oor:name="CompactionPolicy" oor:type="xs:string">
+                    	<info>
+	        				<desc>Technique of how to reduce the memory used by the cache.</desc> 
+                        	<label>Compaction Policy</label>
+                    	</info>
+						<constraints>
+							<enumeration oor:value="None">
+								<info>
+									<desc>Ignore the maximal cache size.</desc>
+								</info>
+							</enumeration>
+							<enumeration oor:value="Compress">
+								<info>
+									<desc>Use the compression policy to compress preview bitmaps
+                                    that are not visible.</desc>
+								</info>
+							</enumeration>
+						</constraints>
+                    	<value>Compress</value>
+                    </prop>
+    				<prop oor:name="CompressionPolicy" oor:type="xs:string">
+                    	<info>
+	        				<desc>Technique of how to compress preview bitmaps for
+	        				slides that are moved out of the visible area in
+	        				order to save cache space.</desc> 
+                        	<label>Compression Policy</label>
+                    	</info>
+						<constraints>
+							<enumeration oor:value="None">
+								<info>
+									<desc>Keep bitmaps unmodified in cache.  This effectively 
+                                    ignores the maximal cache size.</desc>
+								</info>
+							</enumeration>
+							<enumeration oor:value="Erase">
+								<info>
+									<desc>Remove preview from cache</desc>
+								</info>
+							</enumeration>
+							<enumeration oor:value="ResolutionReduction">
+								<info>
+									<desc>Reduce the resolution to a width
+									of 100 Pixels</desc>
+								</info>
+							</enumeration>
+							<enumeration oor:value="PNGCompression">
+								<info>
+									<desc>Store preview as compressed PNG bitmap</desc>
+								</info>
+							</enumeration>
+						</constraints>
+                    	<value>ResolutionReduction</value>
+                	</prop>
+       				<prop oor:name="TimeBetweenHighPriorityRequests" oor:type="xs:int">
+                    	<info>
+	        				<desc>Time in milli seconds to wait between processing
+                            preview creation requests with high priority.</desc>
+                        	<label>Time Between High Priority Requests</label>
+                    	</info>
+                    	<value>10</value>
+                	</prop>
+       				<prop oor:name="TimeBetweenLowPriorityRequests" oor:type="xs:int">
+                    	<info>
+	        				<desc>Time in milli seconds to wait between processing 
+                            preview creation requests with low priority.</desc>
+                        	<label>Time Between Low Priority Requests</label>
+                    	</info>
+                    	<value>100</value>
+                	</prop>
+       				<prop oor:name="TimeBetweenRequestsDuringShow" oor:type="xs:int">
+                    	<info>
+	        				<desc>Time in milli seconds to wait between processing 
+                            preview creation requestsest when show is running.</desc>
+                        	<label>Time Between Requests During Show</label>
+                    	</info>
+                    	<value>1000</value>
+                	</prop>
+	     		</group>
+	     	</group>
 		</group>
 	</component>
 </oor:component-schema>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
