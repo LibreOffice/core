@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmoutputpage.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 08:26:55 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 15:31:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,28 +59,28 @@ TabPage DLG_MM_OUTPUT_PAGE
     RadioButton RB_SAVESTARTDOC
     {
         Pos = MAP_APPFONT ( 45 , 40 ) ;
-        Size = MAP_APPFONT ( 248 , 10 ) ;
+        Size = MAP_APPFONT ( 209 , 10 ) ;
         Text [ de ] = "Ausgangsdokument speichern" ;
         Text[ en-US ] = "~Save starting document";
     };
     RadioButton RB_SAVEMERGEDDOC
     {
         Pos = MAP_APPFONT ( 45 , 53 ) ;
-        Size = MAP_APPFONT ( 240 , 10 ) ;
+        Size = MAP_APPFONT ( 209 , 10 ) ;
         Text [ de ] = "S~erienbriefdokument speichern" ;
         Text[ en-US ] = "Save ~merged document" ;
     };
     RadioButton RB_PRINT
     {
         Pos = MAP_APPFONT ( 45 , 66 ) ;
-        Size = MAP_APPFONT ( 240 , 10 ) ;
+        Size = MAP_APPFONT ( 209 , 10 ) ;
         Text [ de ] = "Serienbriefdokument ~drucken" ;
         Text[ en-US ] = "~Print merged document";
     };
     RadioButton RB_SENDMAIL
     {
         Pos = MAP_APPFONT ( 45 , 79 ) ;
-        Size = MAP_APPFONT ( 240 , 10 ) ;
+        Size = MAP_APPFONT ( 209 , 10 ) ;
         Text [ de ] = "Serienbriefdokument als E-Mail ~versenden" ;
         Text[ en-US ] = "Send merged document as ~E-Mail";
     };
