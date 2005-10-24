@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:14:14 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:36:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -303,7 +303,7 @@ namespace pcr
         DEF_INFO_1( LISTINDEX,         LISTINDEX,          LISTINDEX,         FORM_VISIBLE ),
         DEF_INFO_4( STRINGITEMLIST,    STRINGITEMLIST,     STRINGITEMLIST,    FORM_VISIBLE, DIALOG_VISIBLE, ACTUATING, COMPOSEABLE ),
         DEF_INFO_2( DEFAULT_TEXT,      DEFAULTTEXT,        DEFAULTVALUE,      FORM_VISIBLE, COMPOSEABLE ),
-        DEF_INFO_2( FONT_NAME,         FONT,               FONT,              FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_3( FONT_NAME,         FONT,               FONT,              FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_4( VISUALEFFECT,      VISUALEFFECT,       VISUALEFFECT,      FORM_VISIBLE, DIALOG_VISIBLE, ENUM_ONE, COMPOSEABLE ),
         DEF_INFO_4( ALIGN,             ALIGN,              ALIGN,             FORM_VISIBLE, DIALOG_VISIBLE, ENUM, COMPOSEABLE ),
         DEF_INFO_5( VERTICAL_ALIGN,    VERTICAL_ALIGN,     VERTICAL_ALIGN,    FORM_VISIBLE, DIALOG_VISIBLE, ENUM, COMPOSEABLE, EXPERIMENTAL ),
