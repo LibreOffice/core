@@ -54,5 +54,18 @@
                 </prop>
                 <prop oor:name="ClipboardFormat"><value>doctype:office:document</value></prop>
             </node>
-    </node>
+            <node oor:name="devguide_FlatXMLType_Cpp_master" oor:op="replace">
+                <prop oor:name="UIOrder"><value>0</value></prop>
+                <prop oor:name="DetectService"><value>devguide.officedev.samples.filter.FlatXmlDetect</value></prop>
+                <prop oor:name="URLPattern"/>
+                <prop oor:name="Extensions"><value>fodm</value></prop>
+                <prop oor:name="MediaType"/>
+                <prop oor:name="Preferred"><value>false</value></prop>
+                <prop oor:name="PreferredFilter"><value>devguide_FlatXMLFilter_Cpp_master</value></prop>
+                <prop oor:name="UIName">
+                    <value xml:lang="en-US">DevGuide FlatXML Master</value>
+                </prop>
+                <prop oor:name="ClipboardFormat"><value>doctype:office:document</value></prop>
+            </node>
+        </node>
 </oor:component-data>
