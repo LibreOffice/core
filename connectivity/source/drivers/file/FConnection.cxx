@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:54:59 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:21:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,9 @@
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
 #endif
+#ifndef _OSL_NLSUPPORT_H_
+#include <osl/nlsupport.h>
+#endif
 #ifndef _CONNECTIVITY_MODULECONTEXT_HXX_
 #include "ModuleContext.hxx"
 #endif
@@ -121,6 +124,7 @@ OConnection::OConnection(OFileDriver*   _pDriver)
                          ,m_bCheckSQL92(sal_False)
 {
     ModuleContext::AddRef();
+    m_nTextEncoding = RTL_TEXTENCODING_DONTKNOW;
 }
 //-----------------------------------------------------------------------------
 OConnection::~OConnection()
@@ -189,9 +193,6 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
                 m_nTextEncoding = (*aLookup).getEncoding();
             else
                 m_nTextEncoding = RTL_TEXTENCODING_DONTKNOW;
-            if(m_nTextEncoding == RTL_TEXTENCODING_DONTKNOW)
-                m_nTextEncoding = osl_getThreadTextEncoding();
-
         }
         else if (0 == pBegin->Name.compareToAscii("ShowDeleted"))
         {
@@ -201,6 +202,12 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         {
             pBegin->Value >>= m_bCheckSQL92;
         }
+    } // for(;pBegin != pEnd;++pBegin)
+
+    if ( m_nTextEncoding == RTL_TEXTENCODING_DONTKNOW )
+    {
+        //m_nTextEncoding = osl_getTextEncodingFromLocale(NULL);
+        m_nTextEncoding = osl_getThreadTextEncoding();
     }
 
     if ( aExt.getLength() )
