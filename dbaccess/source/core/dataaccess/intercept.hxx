@@ -4,9 +4,9 @@
  *
  *  $RCSfile: intercept.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:30:54 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 08:29:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,23 +77,7 @@ public:
 
     OInterceptor( ODocumentDefinition* _pContentHolder,sal_Bool _bAllowEditDoc );
 
-
-    void DisconnectContentHolder();
-    // overwritten to release the statuslistner.
-
-    // XComponent
-    virtual void SAL_CALL
-    addEventListener(
-        const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& xListener )
-        throw( com::sun::star::uno::RuntimeException );
-
-    virtual void SAL_CALL
-    removeEventListener( const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& aListener )
-        throw( com::sun::star::uno::RuntimeException );
-
-    void SAL_CALL
-    dispose() throw(::com::sun::star::uno::RuntimeException);
-
+    void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
 
     //XDispatch
     virtual void SAL_CALL
