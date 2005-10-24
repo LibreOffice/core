@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmaddressblockpage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-18 13:49:28 $
+ *  last change: $Author: hr $ $Date: 2005-10-24 15:30:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -511,7 +511,9 @@ IMPL_LINK(SwSelectAddressBlockDialog, NewCustomizeHdl_Impl, PushButton*, pButton
             ::rtl::OUString sNew = pDlg->GetAddress();
             m_aPreview.AddAddress(sNew);
             m_aAddressBlocks.realloc(m_aAddressBlocks.getLength() + 1);
-            m_aAddressBlocks[m_aAddressBlocks.getLength() -1] = sNew;
+            sal_uInt16 nSelect = (sal_uInt16)m_aAddressBlocks.getLength() - 1;
+            m_aAddressBlocks[nSelect] = sNew;
+            m_aPreview.SelectAddress(nSelect);
         }
     }
     delete pDlg;
