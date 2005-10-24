@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:19:02 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:48:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1296,14 +1296,14 @@ End
 
 File gid_File_Oo_Office_Ui_Genericcommands_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/GenericCommands.xcu";
 End
 
 File gid_File_Oo_Office_Impress_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/Impress.xcs";
 End
