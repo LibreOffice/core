@@ -58,5 +58,19 @@
                 </prop>
                 <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN 3RDPARTYFILTER</value></prop>
             </node>
+            <node oor:name="devguide_FlatXMLFilter_Cpp_master" oor:op="replace">
+                <prop oor:name="FileFormatVersion"><value>0</value></prop>
+                <prop oor:name="Type"><value>devguide_FlatXMLType_Cpp_master</value></prop>
+                <prop oor:name="DocumentService"><value>com.sun.star.text.GlobalDocument</value></prop>
+                <prop oor:name="UIComponent"/>
+                <prop oor:name="UserData"><value oor:separator=",">devguide.officedev.samples.filter.FlatXmlCpp, ,com.sun.star.comp.Writer.XMLOasisImporter,com.sun.star.comp.Writer.XMLOasisExporter</value></prop>
+                <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
+                <prop oor:name="TemplateName"/>
+                <prop oor:name="UIName">
+                    <value xml:lang="de">DevGuide FlatXML Matser</value>
+                    <value xml:lang="en-US">DevGuide FlatXML Master</value>
+                </prop>
+                <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN 3RDPARTYFILTER</value></prop>
+            </node>
     </node>
 </oor:component-data>
