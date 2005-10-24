@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:03:38 $
+ *  last change: $Author: rt $ $Date: 2005-10-24 07:37:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,8 @@ namespace DOM
         // for initialization by classes derived through ImplInheritanceHelper
         CNode();
         void init_node(const xmlNodePtr aNode);
+
+        void dispatchSubtreeModified();
 
     public:
 
