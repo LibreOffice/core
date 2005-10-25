@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:28:52 $
+ *  last change: $Author: hr $ $Date: 2005-10-25 11:50:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -484,17 +484,8 @@ Size WinMtfOutput::ImplMap( const Size& rSz )
 {
     if ( mnWinExtX && mnWinExtY )
     {
-        double fX = rSz.Width() * maXForm.eM11;
-        double fY = rSz.Width() * maXForm.eM12;
-        double fWidth = sqrt( fX * fX + fY * fY );
-        if ( rSz.Width() < 0 )
-            fWidth *= -1;
-
-        fX = rSz.Height() * maXForm.eM21;
-        fY = rSz.Height() * maXForm.eM22;
-        double fHeight = sqrt( fX * fX + fY * fY );
-        if ( rSz.Height() < 0 )
-            fHeight *= -1;
+        double fWidth = rSz.Width() * maXForm.eM11;
+        double fHeight = rSz.Height() * maXForm.eM22;
 
         if ( mnGfxMode == GM_COMPATIBLE )
         {
