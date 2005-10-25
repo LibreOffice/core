@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.159 $
+#   $Revision: 1.160 $
 #
-#   last change: $Author: hr $ $Date: 2005-10-13 16:48:54 $
+#   last change: $Author: hr $ $Date: 2005-10-25 11:09:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1082,7 +1082,8 @@ UNOTYPES!:=$(strip $(UNOTYPES))
 #moved here to get UNOTYPES from COMPxTYPELIST
 .IF "$(UNOTYPES)" != ""
 UNOUCRHEADER=$(foreach,j,$(subst,.,$/ $(UNOTYPES)) $(UNOUCROUT)$/$(j:+".hpp"))
-UNOUCRTARGET:=$(UNOUCRHEADER)
+UNOUCRTYPEFLAGS=$(foreach,j,$(UNOTYPES) $(UNOUCROUT)$/$(j:+".flag"))
+UNOUCRTARGET:=$(INCCOM)$/$(TARGET)_headergen.done
 .ENDIF			# "$(UNOTYPES)" != ""
 
 .IF "$(HELPIDFILES)"!=""
@@ -1853,7 +1854,6 @@ TARGETDEPS+=$(EXCEPTIONSTARGET)
 CPPUMAKERFLAGS*=-L
 
 .IF "$(UNOTYPES)" != ""
-.IF "$(SINGLE_SHOT)"==""
 # makeing all in one
 .DIRCACHE=no
 .IF "$(ENVINCPRE))"!=""
@@ -1868,12 +1868,36 @@ $(SLOFILES) : $(UNOUCRHEADER)
 .IF "$(DEPOBJFILES)"!=""
 $(DEPOBJFILES) : $(UNOUCRHEADER)
 .ENDIF			# "$(SLOFILES)"!=""
-$(UNOUCRTARGET) : $(UNOUCRDEP)
+.IF "$(NOOPTTARGET)"!=""
+$(NOOPTTARGET) : $(UNOUCRHEADER)
+.ENDIF			# "$(SLOFILES)"!=""
+.IF "$(NOOPTFILES)"!=""
+$(NOOPTFILES) : $(UNOUCRHEADER)
+.ENDIF			# "$(SLOFILES)"!=""
+.IF "$(EXCEPTIONSTARGET)"!=""
+$(EXCEPTIONSTARGET) : $(UNOUCRHEADER)
+.ENDIF			# "$(SLOFILES)"!=""
+.IF "$(EXCEPTIONSFILES)"!=""
+$(EXCEPTIONSFILES) : $(UNOUCRHEADER)
+.ENDIF			# "$(SLOFILES)"!=""
+.IF "$(EXCEPTIONSNOOPTTARGET)"!=""
+$(EXCEPTIONSNOOPTTARGET) : $(UNOUCRHEADER)
+.ENDIF			# "$(SLOFILES)"!=""
+.IF "$(EXCEPTIONSNOOPTFILES)"!=""
+$(EXCEPTIONSNOOPTFILES) : $(UNOUCRHEADER)
+.ENDIF			# "$(SLOFILES)"!=""
+
+$(UNOUCRHEADER) : $(UNOUCRTARGET)
+
+$(UNOUCROUT)$/%.flag :
+    @+-$(MKDIRHIER) $(@:d)
+    @+$(TOUCH) $@
+
+$(UNOUCRTARGET) : $(UNOUCRDEP) $(UNOUCRTYPEFLAGS)
 .IF "$(XML2MK_FILES)"!=""
     @+-$(RM) $(foreach,i,$(XML2MK_FILES) $(MISC)$/$(i).mk) >& $(NULLDEV)
 .ENDIF			# "$(XML2MK_FILES)"!=""
-    +$(CPPUMAKER) @$(mktmp $(CPPUMAKERFLAGS) -B$(UNOUCRBASE) -O$(UNOUCROUT) $(UNOTYPES:^"-T")  $(UNOUCRRDB))
-.ENDIF			# "$(SINGLE_SHOT)" == ""
+    +$(CPPUMAKER) @$(mktmp $(CPPUMAKERFLAGS) -B$(UNOUCRBASE) -O$(UNOUCROUT) $(UNOTYPES:^"-T")  $(UNOUCRRDB)) && touch $@
 .ENDIF			# "$(UNOTYPES)" != ""
 
 .ENDIF			# "$(L10N_framework)"!=""
@@ -2200,7 +2224,9 @@ $(COMMONPRJHIDOTHERTARGET) : $(PRJHIDOTHERTARGET)
 .IF "$(DEPFILES)" != ""
 .INCLUDE : $(DEPFILES)
 DPCTARGET=$(MISC)$/$(TARGET).dpc
+.IF "$(nodep)"==""
 .INCLUDE : $(MISC)$/$(TARGET).dpc
+.ENDIF			# "$(nodep)"==""
 .ENDIF			# "$(DEPFILES)" != ""
 .ENDIF			# "$(CXXFILES)$(CFILES)$(RCFILES)$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)$(PARFILES)" != ""
 .ELSE		# MAKEFILERC
