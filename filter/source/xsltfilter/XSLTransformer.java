@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XSLTransformer.java,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-24 15:57:48 $
+ *  last change: $Author: lo $ $Date: 2005-10-25 15:41:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,8 @@
 import java.util.*;
 import java.io.*;
 import java.lang.ref.*;
-import java.net.URI;
+import java.net.URL;
+import java.net.URLConnection;
 
 // Imported TraX classes
 import javax.xml.transform.*;
@@ -256,13 +257,22 @@ public class XSLTransformer
 
                     Transformer transformer = null;
                     Transformation transformation = null;
-                    File stylefile = new File(new URI(stylesheeturl));
+                    // File stylefile = new File(new URI(stylesheeturl));
+                    long lastmod = 0;
+                    try {
+                        URL uStyle = new URL(stylesheeturl);
+                        URLConnection c = uStyle.openConnection();
+                        lastmod = c.getLastModified();
+                    } catch (java.lang.Exception e) {
+                        // lastmod will remain at 0;
+                    }
+
                     synchronized(transformers) {
                         java.lang.ref.WeakReference ref = null;
                         // try to get the transformer reference from the cache
                         if ((ref = (java.lang.ref.WeakReference)transformers.get(stylesheeturl)) == null ||
                             (transformation = ((Transformation)ref.get())) == null ||
-                            ((Transformation)ref.get()).lastmod < stylefile.lastModified()
+                            ((Transformation)ref.get()).lastmod < lastmod
                         ) {
                             // we cannot find a valid reference for this stylesheet
                             // or the stylsheet was updated
@@ -271,13 +281,13 @@ public class XSLTransformer
                             }
                             // create new transformer for this stylesheet
                             TransformerFactory tfactory = TransformerFactory.newInstance();
-                            transformer = tfactory.newTransformer(new StreamSource(stylefile));
+                            transformer = tfactory.newTransformer(new StreamSource(stylesheeturl));
                             transformer.setOutputProperty("encoding", "UTF-8");
                             transformer.setURIResolver(XSLTransformer.this);
 
                             // store the transformation into the cache
                             transformation = new Transformation();
-                            transformation.lastmod = stylefile.lastModified();
+                            transformation.lastmod = lastmod;
                             transformation.transformer = transformer;
                             ref = new java.lang.ref.WeakReference(transformation);
                             transformers.put(stylesheeturl, ref);
