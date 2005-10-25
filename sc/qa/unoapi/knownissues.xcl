@@ -125,3 +125,21 @@ sc.ScDataPilotFieldObj::com::sun::star::sheet::DataPilotField
 ### i43931 ###
 sc.XMLImporter::com::sun::star::xml::sax::XDocumentHandler
 sc.XMLContentImporter::com::sun::star::xml::sax::XDocumentHandler
+
+### i46730 ###
+sc.ScDataPilotFieldGroupObj::com::sun::star::container::XNameAccess
+
+### i55490 ###
+sc.XMLContentExporter::com::sun::star::document::XFilter
+sc.XMLExporter::com::sun::star::document::XFilter
+sc.XMLStylesExporter::com::sun::star::document::XFilter
+sc.XMLExporter::com::sun::star::document::XFilter
+sc.XMLMetaExporter::com::sun::star::document::XFilter
+sc.XMLSettingsExporter::com::sun::star::document::XFilter
+
+### 112460 ###
+sc.ScAreaLinksObj::com::sun::star::sheet::XAreaLinks
+
+### sometimes fails ###
+sc.ScAccessiblePreviewCell::com::sun::star::accessibility::XAccessibleComponent
+
