@@ -4,9 +4,9 @@
  *
  *  $RCSfile: otherjre.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:30:24 $
+ *  last change: $Author: hr $ $Date: 2005-10-25 11:35:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,14 +71,16 @@ char const* const* OtherInfo::getRuntimePaths(int * size)
         "/bin/client/jvm.dll",
         "/bin/hotspot/jvm.dll",
         "/bin/classic/jvm.dll"
+    "/bin/jrockit/jvm.dll"
 #elif UNX
 #ifdef MACOSX
         "/../../../JavaVM"
 #else
-        "/bin/classic/libjvm.so", // for IBM Java
+    "/bin/classic/libjvm.so", // for IBM Java
         "/jre/bin/classic/libjvm.so", // for IBM Java
         "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so", // for Blackdown PPC
         "/lib/" JFW_PLUGIN_ARCH "/classic/libjvm.so" // for Blackdown PPC
+    "/lib/" JFW_PLUGIN_ARCH "/jrockit/libjvm.so" // for Java of BEA Systems
 #endif
 #endif
 
@@ -102,6 +104,7 @@ char const* const* OtherInfo::getLibraryPaths(int* size)
         "/jre/bin/classic",
         "/lib/" JFW_PLUGIN_ARCH "/client",
         "/lib/" JFW_PLUGIN_ARCH "/classic",
+        "/lib/" JFW_PLUGIN_ARCH "/jrockit",
         "/lib/" JFW_PLUGIN_ARCH "/native_threads",
         "/lib/" JFW_PLUGIN_ARCH
 #endif
