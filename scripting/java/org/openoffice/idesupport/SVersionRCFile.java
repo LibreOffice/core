@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SVersionRCFile.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:06:28 $
+ *  last change: $Author: hr $ $Date: 2005-10-25 11:19:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -226,18 +226,18 @@ public class SVersionRCFile {
         else
             ov = new SVersionRCFile(args[0]);
 
-        Enumeration enum;
+        Enumeration enumer;
 
         try {
-            enum = ov.getVersions();
+            enumer = ov.getVersions();
         }
         catch (IOException ioe) {
             System.err.println("Error getting versions: " + ioe.getMessage());
             return;
         }
 
-        while (enum.hasMoreElements()) {
-            OfficeInstallation oi = (OfficeInstallation)enum.nextElement();
+        while (enumer.hasMoreElements()) {
+            OfficeInstallation oi = (OfficeInstallation)enumer.nextElement();
             System.out.println("Name: " + oi.getName() + ", Path: " + oi.getPath() +
                 ", URL: " + oi.getURL());
         }
