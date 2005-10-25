@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typeblob.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2005-09-09 13:50:40 $
+ *  last change: $Author: jsc $ $Date: 2005-10-25 12:59:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -532,6 +532,11 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
                                    superCount, memberCount, 0,
                                (sal_uInt16)typeParams.getLength());
 
+        // set super type
+        if (superCount > 0) {
+            writer.setSuperTypeName(0, uSuperType);
+        }
+
         sal_uInt16 i=0;
         for (i=0; i < memberCount; i++)
         {
@@ -582,6 +587,11 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
                                RT_TYPE_EXCEPTION, xPublished->isPublished(),
                                uTypeName.replace('.', '/'),
                                superCount, memberCount, 0, 0);
+
+        // set super type
+        if (superCount > 0) {
+            writer.setSuperTypeName(0, uSuperType);
+        }
 
         for (sal_Int16 i=0; i < memberCount; i++)
         {
