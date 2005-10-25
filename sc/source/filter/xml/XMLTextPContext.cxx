@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextPContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:01:20 $
+ *  last change: $Author: hr $ $Date: 2005-10-25 11:00:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,9 +163,34 @@ SvXMLImportContext *ScXMLTextPContext::CreateChildContext( USHORT nTempPrefix,
     {
         if (!pTextPContext)
         {
-            pCellContext->SetCursorOnTextImport(sOUText.makeStringAndClear());
+            rtl::OUString sSetString( sOUText.makeStringAndClear() );
+            sal_Unicode cNonSpace(0);
+
+            sal_Int32 nLength = sSetString.getLength();
+            if ( nLength > 0 )
+            {
+                sal_Unicode cLast = sSetString.getStr()[ nLength - 1 ];
+                if ( cLast != (sal_Unicode)' ' )
+                {
+                    // #i53253# To keep XMLParaContext's whitespace handling in sync,
+                    // if there's a non-space character at the end of the existing string,
+                    // it has to be processed by XMLParaContext.
+
+                    cNonSpace = cLast;
+                    sSetString = sSetString.copy( 0, nLength - 1 );  // remove from the string for SetCursorOnTextImport
+                }
+            }
+
+            pCellContext->SetCursorOnTextImport( sSetString );
+
             pTextPContext = GetScImport().GetTextImport()->CreateTextChildContext(
                                     GetScImport(), nPrefix, sLName, xAttrList);
+
+            if ( cNonSpace != 0 )
+            {
+                // pass non-space character through XMLParaContext, so a following space isn't ignored
+                pTextPContext->Characters( rtl::OUString( cNonSpace ) );
+            }
         }
         if (pTextPContext)
             pContext = pTextPContext->CreateChildContext(nTempPrefix, rLName, xTempAttrList);
