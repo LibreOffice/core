@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 14:43:58 $
+#   last change: $Author: hr $ $Date: 2005-10-25 10:45:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@ PACKAGE=org$/openoffice$/configuration
 
 .INCLUDE :  settings.mk
 
-EXTRAJARFILES = jaxp.jar parser.jar xt.jar
+JARFILES = jaxp.jar parser.jar xt.jar
 
 JAVACLASSFILES= \
     $(CLASSDIR)$/$(PACKAGE)$/XMLDefaultGenerator.class \
