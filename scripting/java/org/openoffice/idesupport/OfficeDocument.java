@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeDocument.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:05:59 $
+ *  last change: $Author: hr $ $Date: 2005-10-25 11:19:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,9 +81,9 @@ public class OfficeDocument
         {
             zp = new ZipFile(this.file);
 
-            for (Enumeration enum = zp.entries(); enum.hasMoreElements(); )
+            for (Enumeration enumer = zp.entries(); enumer.hasMoreElements(); )
             {
-                ZipEntry ze = (ZipEntry)enum.nextElement();
+                ZipEntry ze = (ZipEntry)enumer.nextElement();
                 if (ze.getName().endsWith(ParcelZipper.PARCEL_DESCRIPTOR_XML))
                 {
                     String tmp = ze.getName();
