@@ -4,9 +4,9 @@
  *
  *  $RCSfile: skeletonmaker.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2005-09-09 13:50:36 $
+ *  last change: $Author: jsc $ $Date: 2005-10-25 12:25:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ static const char usageText[] =
 "                           existing UNO environment (URE, office installation).\n"
 "    -env:UNO_TYPES=<url>   url specifies a binary type library file. It can be\n"
 "                           a space separated list of urls.\n"
-"    --a                    list all interface methods, not only the direct\n"
+"    -a, --all              list all interface methods, not only the direct\n"
 "                           ones\n"
 "    --(java4|java5|cpp)    select the target language\n"
 "                           --java4 generate output for Java 1.4 or earlier\n"
@@ -87,8 +87,8 @@ static const char usageText[] =
 "                           forwarding, or '<name>->|.' for composition.\n"
 "    -t <name>              specifies an UNOIDL type name, e.g.\n"
 "                           com.sun.star.text.XText (can be used more than once)\n"
-"    --v                    print version number and exit\n"
-"    --h                    print this help and exit\n\n"
+"    -V, --version          print version number and exit\n"
+"    -h, --help             print this help and exit\n\n"
 " Sun Microsystems (R) ";
 
 void printUsageAndExit(char* programname, char* version) {
@@ -100,11 +100,10 @@ void printUsageAndExit(char* programname, char* version) {
         << " (-env:INIFILENAME=<url> | -env:UNO_TYPES=<url>)\n"
         << "                          component [<options>] -n <name> -t "
         << "<type> ...\n"
-        << "        " << programname << " --v\n"
-        << "        " << programname << " --h\n"
+        << "        " << programname << " -V, --version\n"
+        << "        " << programname << " -h, --help\n"
         << usageText
         << programname << " Version " << version << "\n\n";
-    exit(EXIT_FAILURE);
 }
 
 }
@@ -114,8 +113,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     char* version = "0.1";
     char* programname = "uno-skeletonmaker";
 
-    if (argc <= 1)
+    if (argc <= 1) {
         printUsageAndExit(programname, version);
+        exit(EXIT_FAILURE);
+    }
 
     ProgramOptions options;
     std::vector< OUString > registries;
@@ -135,18 +136,22 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         options.dump = true;
     } else if (arg.equals(OUString(RTL_CONSTASCII_USTRINGPARAM("component")))) {
         options.dump = false;
-    } else if (readOption( &bOption, "h", &nPos, arg)) {
+    } else if (readOption( &bOption, "h", &nPos, arg) ||
+               readOption( &bOption, "help", &nPos, arg)) {
         printUsageAndExit(programname, version);
-    } else if (readOption( &bOption, "v", &nPos, arg)) {
+        exit(EXIT_SUCCESS);
+    } else if (readOption( &bOption, "V", &nPos, arg) ||
+               readOption( &bOption, "version", &nPos, arg)) {
         std::cerr << "\n Sun Microsystems (R) " << programname
                   << " Version " << version << "\n\n";
-        exit(EXIT_FAILURE);
+        exit(EXIT_SUCCESS);
     } else {
         std::cerr
             << "ERROR: unexpected command \""
             << OUStringToOString(arg, RTL_TEXTENCODING_UTF8).getStr()
             << "\"!\n";
         printUsageAndExit(programname, version);
+        exit(EXIT_FAILURE);
     }
 
     // read up to arguments
@@ -154,7 +159,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     {
         rtl_getAppCommandArg(nPos, &arg.pData);
 
-        if (readOption( &bOption, "a", &nPos, arg)) {
+        if (readOption( &bOption, "a", &nPos, arg) ||
+            readOption( &bOption, "all", &nPos, arg)) {
             options.all = true;
             continue;
         }
@@ -207,6 +213,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         std::cerr
             << ("\nError: no type is specified, use the -T option at least once\n");
         printUsageAndExit(programname, version);
+        exit(EXIT_FAILURE);
     }
 
     UnoTypeManager manager;
