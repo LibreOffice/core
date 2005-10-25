@@ -4,6 +4,7 @@ sd.SdUnoOutlineView::com::sun::star::frame::XController
 sd.SdUnoPresView::com::sun::star::ui::XContextMenuInterception
 sd.SdUnoDrawView::com::sun::star::ui::XContextMenuInterception
 sd.SdUnoOutlineView::com::sun::star::ui::XContextMenuInterception
+sd.SdUnoSlideView::com::sun::star::ui::XContextMenuInterception
 
 ### i22888 ###
 sd.SdUnoDrawView::com::sun::star::drawing::DrawingDocumentDrawView
@@ -12,6 +13,7 @@ sd.SdUnoDrawView::com::sun::star::drawing::DrawingDocumentDrawView
 sd.SdUnoOutlineView::com::sun::star::view::XSelectionSupplier
 sd.SdUnoPresView::com::sun::star::view::XSelectionSupplier
 sd.SdUnoDrawView::com::sun::star::view::XSelectionSupplier
+sd.SdUnoSlideView::com::sun::star::view::XSelectionSupplier
 
 ### i22891 ###
 sd.SdUnoPresView::com::sun::star::presentation::PreviewView
@@ -29,3 +31,20 @@ sd.SdUnoDrawView::com::sun::star::lang::XServiceInfo
 sd.SdXImpressDocument::com::sun::star::view::XPrintable
 sd.SdXImpressDocument::com::sun::star::view::XPrintJobBroadcaster
 sd.SdXImpressDocument::com::sun::star::frame::XStorable
+
+### i53605 ###
+sd.SdUnoPresView::com::sun::star::awt::XUserInputInterception
+sd.SdUnoDrawView::com::sun::star::awt::XUserInputInterception
+sd.SdUnoOutlineView::com::sun::star::awt::XUserInputInterception
+sd.SdUnoSlideView::com::sun::star::awt::XUserInputInterception
+
+### i54994 ###
+sd.SdUnoSlideView::com::sun::star::frame::XController
+
+### i54352 ###
+sd.SdUnoSlideView::com::sun::star::lang::XComponent
+sd.SdUnoPresView::com::sun::star::lang::XComponent
+sd.SdUnoDrawView::com::sun::star::lang::XComponent
+
+### sometimes fails ###
+sd.SdXCustomPresentationAccess::com::sun::star::container::XNameReplace
