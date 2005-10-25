@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpmerge.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:06:58 $
+ *  last change: $Author: hr $ $Date: 2005-10-25 11:42:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 #include <tools/fsys.hxx>
-
+#include <osl/file.hxx>
 // local includes
 #include "helpmerge.hxx"
 #include "utf8conv.hxx"
@@ -277,8 +277,7 @@ bool HelpParser::CreateSDF(
 }
 bool HelpParser::Merge( const ByteString &rSDFFile, const ByteString &rDestinationFile )
 {
-    Merge( rSDFFile , rDestinationFile , ByteString("") , false );
-    return true;
+    return Merge( rSDFFile , rDestinationFile , ByteString("") , false );
 }
 
 bool ByteStringEqual( const ByteString& rKey1, const ByteString& rKey2 )  {
@@ -293,6 +292,8 @@ bool HelpParser::Merge(
     const ByteString &rSDFFile, const ByteString &rPathX , const ByteString &rPathY , bool bISO )
 /*****************************************************************************/
 {
+
+    bool hasNoError = true;
 
     SimpleXMLParser aParser;
 
@@ -394,15 +395,39 @@ bool HelpParser::Merge(
 
             file->Write( merged_file_tmp ); // Always write!
             DirEntry present_file( merged_file );
-            if( present_file.Exists() )
-            {
-                present_file.Kill();
-            }
-//            printf("DBG: Copy %s to %s\n", ByteString( merged_file_tmp , RTL_TEXTENCODING_ASCII_US ).GetBuffer() ,
-//                                           ByteString( merged_file , RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
-
             DirEntry aSourceFile( merged_file_tmp );
-            aSourceFile.MoveTo( merged_file );
+
+            OUString OUmerged_file_tmp( merged_file_tmp );
+            OUString OUmerged_file( merged_file );
+//#ifdef WIN
+//            merged_file_tmp.replace( '/','\\' );
+//          merged_file.replace('/','\\');
+//#endif
+            OUString OUmerged_file_tmp_url;
+            OUString OUmerged_file_url;
+
+            osl::File::getFileURLFromSystemPath(OUmerged_file_tmp, OUmerged_file_tmp_url);
+            osl::File::getFileURLFromSystemPath(OUmerged_file, OUmerged_file_url);
+
+
+            // Tools fsys kill / move does not work, using osl::File::move
+            DirEntry aDir(".");
+            aDir.ToAbs();
+            OUString base( aDir.GetFull() );
+
+            OUString base_url;
+            osl::File::getFileURLFromSystemPath( base , base_url );
+            osl::File::getAbsoluteFileURL( base_url ,  OUmerged_file_tmp_url , OUmerged_file_tmp );
+            osl::File::getAbsoluteFileURL( base_url ,  OUmerged_file_url , OUmerged_file );
+
+            int rc = osl::File::move( OUmerged_file_tmp , OUmerged_file );
+            if ( rc != osl::File::E_None ) {
+                fprintf(stderr,"ERROR: helpex failed to move merged file %s over file %s! rc = %d\n",
+                        OUStringToOString( OUmerged_file_tmp , RTL_TEXTENCODING_UTF8 ).getStr(),
+                        OUStringToOString( OUmerged_file , RTL_TEXTENCODING_UTF8 ).getStr(),
+                        rc);
+                hasNoError = false;
+            }
 
         }
     if( !sUsedTempFile.EqualsIgnoreCaseAscii( "" ) ){
@@ -410,7 +435,7 @@ bool HelpParser::Merge(
         aTempFile.Kill();
     }
 
-    return true;
+    return hasNoError;
 }
 
 ByteString HelpParser::GetOutpath( const ByteString& rPathX , const ByteString& sCur , const ByteString& rPathY ){
