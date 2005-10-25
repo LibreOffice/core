@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2005-10-25 11:23:15 $
+#   last change: $Author: hr $ $Date: 2005-10-25 12:53:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ SHL1STDLIBS= \
 
 #USE_UDK_EXTENDED_MANIFESTFILE=TRUE
 #USE_EXTENDED_MANIFESTFILE=TRUE
-JARFILES 		= ridl.jar unoil.jar jurt.jar juh.jar xalan.jar xercesImpl.jar xml-apis.jar crimson.jar
+JARFILES 		= ridl.jar unoil.jar jurt.jar juh.jar xalan.jar xercesImpl.jar xml-apis.jar
 JAVAFILES		= $(subst,$(CLASSDIR)$/, $(subst,.class,.java $(JAVACLASSFILES))) 
 CUSTOMMANIFESTFILE = Manifest  
 #JARMANIFEST = Manifest
