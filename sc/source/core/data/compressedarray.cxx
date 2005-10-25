@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compressedarray.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:17:57 $
+ *  last change: $Author: hr $ $Date: 2005-10-25 13:13:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -317,9 +317,21 @@ void ScCompressedArray<A,D>::Remove( A nStart, size_t nAccessCount )
     if ((nStart == 0 || (nIndex > 0 && nStart == pData[nIndex-1].nEnd+1)) &&
             pData[nIndex].nEnd == nEnd && nIndex < nCount-1)
     {
-        memmove( pData + nIndex, pData + nIndex+1, (nCount - (nIndex+1)) *
-                sizeof(DataEntry));
-        --nCount;
+        // In case removing an entry results in two adjacent entries with
+        // identical data, combine them into one. This is also necessary to
+        // make the algorithm used in SetValue() work correctly, it relies on
+        // the fact that consecutive values actually differ.
+        size_t nRemove;
+        if (pData[nIndex-1].aValue == pData[nIndex+1].aValue)
+        {
+            nRemove = 2;
+            --nIndex;
+        }
+        else
+            nRemove = 1;
+        memmove( pData + nIndex, pData + nIndex + nRemove, (nCount - (nIndex +
+                        nRemove)) * sizeof(DataEntry));
+        nCount -= nRemove;
     }
     // adjust end rows, nIndex still being valid
     do
