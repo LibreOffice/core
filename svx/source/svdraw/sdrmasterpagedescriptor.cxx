@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrmasterpagedescriptor.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:23:12 $
+ *  last change: $Author: hr $ $Date: 2005-10-25 11:57:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,7 +152,7 @@ namespace sdr
 
         // Test if it's really what we need. There are known problems where
         // the 0th object is not the MasterPageBackgroundObject at all.
-        if(!pRetval->IsMasterPageBackgroundObject())
+        if(pRetval && !pRetval->IsMasterPageBackgroundObject())
         {
             pRetval = 0L;
         }
