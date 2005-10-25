@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldpimp.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:06:25 $
+ *  last change: $Author: hr $ $Date: 2005-10-25 11:00:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -553,6 +553,7 @@ class ScXMLDataPilotMemberContext : public SvXMLImportContext
     rtl::OUString sName;
     sal_Bool    bDisplay;
     sal_Bool    bDisplayDetails;
+    sal_Bool    bHasName;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
