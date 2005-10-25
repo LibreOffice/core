@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-10-19 12:06:42 $
+#   last change: $Author: hr $ $Date: 2005-10-25 11:17:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,17 @@ TARGETTYPE=GUI
 
 # --- Files --------------------------------------------------------
 
+OBJFILES= \
+    $(OBJ)$/launcher.obj \
+    $(OBJ)$/swriter.obj \
+    $(OBJ)$/scalc.obj \
+    $(OBJ)$/sdraw.obj \
+    $(OBJ)$/simpress.obj \
+    $(OBJ)$/sbase.obj \
+    $(OBJ)$/smath.obj
+
+# SO launcher
+.IF "$(BUILD_SPECIAL)"!=""
 APP1TARGET=so$/swriter
 APP1NOSAL=TRUE
 APP1LINKRES=$(MISC)$/$(TARGET)1.res
@@ -94,6 +105,8 @@ APP6ICON=$(SOLARRESDIR)$/icons/so8-math-app.ico
 APP6OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/smath.obj
+
+.ENDIF			# "$(BUILD_SPECIAL)"!=""
 
 # --- Targets ------------------------------------------------------
 
