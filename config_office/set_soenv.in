@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.76 $
-# Date:        $Date: 2005-10-05 11:37:08 $
+# Version:     $Revision: 1.77 $
+# Date:        $Date: 2005-10-25 11:24:20 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -60,7 +60,7 @@ my ( $CALL_CDECL, $COMMON_OUTDIR, $NO_SRS_PATCH, $BIG_GOODIES, $BMP_WRITES_FLAG,
 my ( $BIG_SVX, $COM, $CPU, $CPUNAME, $CVER, $DLLSUFFIX, $GLIBC, $GUI, $GUIBASE, $GUIENV,
       $GVER, $GVERDIR, $OS, $OSVERSION, $OUTPATH, $INPATH, $PATH_SEPERATOR, $XPVERSION, $BOTH,
       $DEMO_ENV, $DYNAMIC_CRT, $SET_EXCEPTIONS, $emergency, $use_shl_versions, $CDPATHx, $JRELIBDIR,
-      $JRETOOLKITDIR, $JRETHREADDIR, $EXCEPTIONS, $WRAPCMD );
+      $JREEXTRALIBDIR, $JRETOOLKITDIR, $JRETHREADDIR, $EXCEPTIONS, $WRAPCMD );
 #
 #-------------------------------------------
 # IIc. Declaring the environment variables.
@@ -207,6 +207,9 @@ $NEW_JAR_PACK         = "TRUE";
 $NO_BSYMBOLIC         = "TRUE";
 $comment              = "#";           # UNIX script comment character
 $comment4nt           = "rem";         # Windows 4nt script comment character
+
+# Some JREs do not need the following variable.
+$JREEXTRALIBDIR = "";
 
 # Setting platform dependent constant values.
 if ( $platform =~ m/solaris/ ) 
@@ -377,8 +380,15 @@ elsif ( $platform =~ m/linux-gnu/ )
         $JRETOOLKITDIR = '$JAVA_HOME'.$ds."jre".$ds."bin".$ds."classic";
         $JRETHREADDIR  = '$JAVA_HOME'.$ds."jre".$ds."bin"; }
 
+      elsif ($JDK =~ m/^[Bb][Ee][Aa]/)
+      { $JRELIBDIR     = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
+        $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."xawt";
+        $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."jrockit";
+        $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads"; }
+
       else {      
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
+        $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."xawt";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
       }
@@ -907,6 +917,7 @@ if ($platform =~ m/solaris/)
                         $ps.$par_dir.$LIB.
                         $ps_STLPORT_LIB.
                         $ps.$JRELIBDIR.
+			$ps.$JREEXTRALIBDIR.
                         $ps.$JRETOOLKITDIR.
                         $ps.$JRETHREADDIR.
                         $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB;
@@ -915,6 +926,7 @@ elsif ($platform =~ m/linux-gnu|netbsd|osf1|freebsd|aix/)
 {  $LD_LIBRARY_PATH   = $cur_dir.
                         $ps.'$SOLARENV'.$ds.'$INPATH'.$LIB.
                         $ps.$JRELIBDIR.
+			$ps.$JREEXTRALIBDIR.
                         $ps.$JRETOOLKITDIR.
                         $ps.$JRETHREADDIR.
                         $ps.$par_dir.$LIB64.
@@ -926,6 +938,7 @@ elsif ($platform =~ m/irix/)
 {  $LD_LIBRARY_PATH   = $cur_dir.
                         $ps.'$SOLARENV'.$ds.'$INPATH'.$LIB.
                         $ps.$JRELIBDIR.
+			$ps.$JREEXTRALIBDIR.
                         $ps.$JRETOOLKITDIR.
                         $ps.$JRETHREADDIR.
                         $ps.$USR_LOCAL.$LIB.
@@ -1496,7 +1509,7 @@ ToFile( "BUILD_VER_STRING",  "@BUILD_VER_STRING@", "e" );
 if ($platform =~ m/linux-gnu/ && $platform =~ m/powerpc/) {
 ToFile( "JITC_PROCESSOR_TYPE","6",                 "e" );
 }
-if ($JDK =~ m/^[Ii][Bb][Mm]/ && $platform =~ m/linux-gnu/ && $platform =~ m/^i[3456]86/) {
+if (($JDK =~ m/^[Ii][Bb][Mm]/ || $JDK =~ m/^[Ii][Bb][Mm]/) && $platform =~ m/linux-gnu/ && $platform =~ m/^i[3456]86/) {
 ToFile( "LANG", "@LANG@", "e");
 }
 ToFile( "DEFAULT_TO_ENGLISH_FOR_PACKING",  "yes", "e" );
