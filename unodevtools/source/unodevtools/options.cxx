@@ -4,9 +4,9 @@
  *
  *  $RCSfile: options.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2005-09-09 13:50:38 $
+ *  last change: $Author: jsc $ $Date: 2005-10-25 12:25:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,9 +122,11 @@ sal_Bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
                      sal_Int32 * pnIndex, const OUString & aArg)
 {
     const OUString dashdash(RTL_CONSTASCII_USTRINGPARAM("--"));
+    const OUString dash(RTL_CONSTASCII_USTRINGPARAM("-"));
     OUString aOpt = OUString::createFromAscii(pOpt);
 
-    if(aArg.indexOf(dashdash) == 0 && aOpt.equalsIgnoreAsciiCase(aArg.copy(2)))
+    if((aArg.indexOf(dash) == 0 && aOpt.equalsIgnoreAsciiCase(aArg.copy(1))) ||
+       (aArg.indexOf(dashdash) == 0 && aOpt.equalsIgnoreAsciiCase(aArg.copy(2))) )
     {
         ++(*pnIndex);
         *pbOpt = sal_True;
