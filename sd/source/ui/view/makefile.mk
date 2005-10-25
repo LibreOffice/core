@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-23 15:00:27 $
+#   last change: $Author: hr $ $Date: 2005-10-25 17:10:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@ EXCEPTIONSFILES=				\
         $(SLO)$/slidvish.obj \
         $(SLO)$/viewshe2.obj \
         $(SLO)$/ObjectBarManager.obj	\
+        $(SLO)$/PaneManager.obj			\
         $(SLO)$/UpdateLockManager.obj	\
         $(SLO)$/ViewShellBase.obj
 
