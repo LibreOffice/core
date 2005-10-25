@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PluginFactoryImpl.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:25:38 $
+ *  last change: $Author: hr $ $Date: 2005-10-25 11:30:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,9 +163,9 @@ public final class PluginFactoryImpl extends PluginFactory
     String ext= ".txt";
     String mimeType = null;
     ConverterInfo ci = this.getConverterInfo();
-    Enumeration enum = ci.getDeviceMime();
-    while (enum.hasMoreElements()) {
-        mimeType= (String) enum.nextElement();
+    Enumeration enumer = ci.getDeviceMime();
+    while (enumer.hasMoreElements()) {
+        mimeType= (String) enumer.nextElement();
     }
     try {
         props.load(is);
