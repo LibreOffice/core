@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_zip.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:50:16 $
+#   last change: $Author: hr $ $Date: 2005-10-25 11:09:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,7 @@ ZIP$(TNR)FLAGS*=$(ZIPFLAGS)
 zip$(TNR)langdirs*=$(alllangiso)
 .ELSE           # "$(zip$(TNR)generatedlangs)"!=""
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-zip$(TNR)langdirs:=$(shell +find {$(subst,$/$(LANGDIR), $(null,$(ZIP$(TNR)DIR) . $(ZIP$(TNR)DIR)))}/ -type d ! -name CVS ! -name "." | sed "s/\.\/\///" | sed "s/\.\///" )
+zip$(TNR)langdirs:=$(shell +-test -d {$(subst,$/$(LANGDIR), $(null,$(ZIP$(TNR)DIR) . $(ZIP$(TNR)DIR)))}/ && find {$(subst,$/$(LANGDIR), $(null,$(ZIP$(TNR)DIR) . $(ZIP$(TNR)DIR)))}/ -type d ! -name CVS ! -name "." | sed "s/\.\/\///" | sed "s/\.\///" )
 .ELSE			# "$(GUI)"=="UNX"
 zip$(TNR)langdirs:=$(subst,CVS, $(shell +-dir {$(subst,$/$(LANGDIR), $(ZIP$(TNR)DIR))} /ba:d ))
 .ENDIF			# "$(GUI)"=="UNX"
