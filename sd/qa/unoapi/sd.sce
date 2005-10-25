@@ -1,10 +1,11 @@
+###i46734###-o sd.SdUnoSlideView
 -o sd.SdXImpressDocument
 -o sd.SdXCustomPresentationAccess
 -o sd.SdUnoOutlineView
 -o sd.SdUnoPresView
-#i35935#-o sd.AccessibleDrawDocumentView
+###i35935### -o sd.AccessibleDrawDocumentView
 -o sd.AccessibleOutlineView
-#i35935#-o sd.AccessibleSlideView
+###i35935### -o sd.AccessibleSlideView
 -o sd.SdDocLinkTargets
 -o sd.SdDrawPage
 -o sd.SdGenericDrawPage
