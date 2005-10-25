@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldpimp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:06:08 $
+ *  last change: $Author: hr $ $Date: 2005-10-25 11:00:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1354,7 +1354,10 @@ ScXMLDataPilotMemberContext::ScXMLDataPilotMemberContext( ScXMLImport& rImport,
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDataPilotFieldContext* pTempDataPilotField) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    pDataPilotField(pTempDataPilotField)
+    pDataPilotField(pTempDataPilotField),
+    bDisplay( sal_True ),
+    bDisplayDetails( sal_True ),
+    bHasName( sal_False )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDataPilotMemberAttrTokenMap();
@@ -1371,6 +1374,7 @@ ScXMLDataPilotMemberContext::ScXMLDataPilotMemberContext( ScXMLImport& rImport,
             case XML_TOK_DATA_PILOT_MEMBER_ATTR_NAME :
             {
                 sName = sValue;
+                bHasName = sal_True;
             }
             break;
             case XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY :
@@ -1406,7 +1410,7 @@ SvXMLImportContext *ScXMLDataPilotMemberContext::CreateChildContext( USHORT nPre
 
 void ScXMLDataPilotMemberContext::EndElement()
 {
-    if (sName.getLength())
+    if (bHasName)   // #i53407# don't check sName, empty name is allowed
     {
         ScDPSaveMember* pMember = new ScDPSaveMember(String(sName));
         pMember->SetIsVisible(bDisplay);
