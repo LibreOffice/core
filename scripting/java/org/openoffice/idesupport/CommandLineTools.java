@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CommandLineTools.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:05:31 $
+ *  last change: $Author: hr $ $Date: 2005-10-25 11:19:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -312,10 +312,10 @@ public class CommandLineTools {
                 ParcelDescriptor desc = new ParcelDescriptor(parcelxml, language);
                 desc.setScriptEntries((ScriptEntry[])scripts.toArray(new ScriptEntry[0]));
                 if (properties.size() != 0) {
-                    Enumeration enum = properties.keys();
+                    Enumeration enumer = properties.keys();
 
-                    while (enum.hasMoreElements()) {
-                        String name = (String)enum.nextElement();
+                    while (enumer.hasMoreElements()) {
+                        String name = (String)enumer.nextElement();
                         String value = (String)properties.get(name);
                         log("Setting property: " +  name + " to " + value);
 
