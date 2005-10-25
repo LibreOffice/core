@@ -4,9 +4,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:20:16 $
+ *  last change: $Author: hr $ $Date: 2005-10-25 10:58:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -838,14 +838,18 @@ STRING ConvertFromDec( double fNum, double fMin, double fMax, sal_uInt16 nBase,
 
     return aRet;
 }
-
-
-double Erf( double x )
+/** Calculates erf(x) by using Maclaurin expansion.  Accurate up to
+    x = 4.
+ */
+void ErfMaclaurin( double x, double& fErf )
 {
     if( x == 0.0 )
-        return 0.0;
+    {
+        fErf = 0.0;
+        return;
+    }
 
-    double      f, fZm, fN2, fn1, fOld, fT;
+    double      fZm, fN2, fn1, fOld, fT;
     sal_Bool    bAdd = sal_True;
     sal_Int32   nMaxIter = 1000;
 
@@ -857,13 +861,13 @@ double Erf( double x )
 
     fT = x * fZm;
 
-    f = x - fT / fN2;
+    fErf = x - fT / fN2;
 
-    fOld = f * 0.9;
+    fOld = fErf * 0.9;
 
-    while( f != fOld && nMaxIter )
+    while( fErf != fOld && nMaxIter-- )
     {
-        fOld = f;
+        fOld = fErf;
 
         fN2 += 2.0;
 
@@ -873,18 +877,96 @@ double Erf( double x )
         fn1++;
 
         if( bAdd )
-            f += fT / fN2;
+            fErf += fT / fN2;
         else
-            f -= fT / fN2;
+            fErf -= fT / fN2;
+
+        bAdd = !bAdd;
+    }
+
+    fErf *= 1.1283791670955125738961589031215452;
+}
+
+/** Calculates erf(x) by using Asymptotic expansion.  Accurate for x > 4
+    but converges more quickly than octave/gnumeric.  Calculated values
+    are almost identical to Excel's.
+
+    @author Kohei Yoshida <kohei@openoffice.org>
+
+    @see #i19991#
+ */
+void ErfAsymptotic( double x, double& fErf )
+{
+    if( x == 0.0 )
+    {
+        fErf = 0.0;
+        return;
+    }
+
+    long nMaxIter = 1000;
+
+    double fFct2 = 1.0, fDenom = 1.0, fX = x, fn = 0.0;
+    double fXCnt = 1.0;
+    double f = 1.0 / fX;
+    double fOld = f * 0.9;
+
+    bool bAdd = false;
+    double fDiff = 0.0, fDiffOld = 1000.0;
+    while( f != fOld && nMaxIter-- )
+    {
+        fOld = f;
+
+        fFct2 *= 2.0*++fn - 1.0;
+        fDenom *= 2.0;
+        fX *= x*x;
+        fXCnt += 2.0;
+
+        if ( bAdd )
+            f += fFct2 / ( fDenom * fX );
+        else
+            f -= fFct2 / ( fDenom * fX );
 
         bAdd = !bAdd;
 
-        nMaxIter--;
+        fDiff = fabs( f - fOld );
+        if ( fDiffOld < fDiff )
+        {
+            f = fOld;
+            break;
+        }
+        fDiffOld = fDiff;
     }
 
-    return f * 1.128379167095512573896; // * 2/sqrt(PI)
+    fErf = 1.0 - f*exp( -1.0*x*x )*0.5641895835477562869480794515607726;
 }
 
+/** Parent erf function that calls two different algorithms based on value
+    of x.  It takes care of cases where x is negative ( erf is an odd function
+    i.e. f(-x) = -f(x) ).
+
+    @author Kohei Yoshida <kohei@openoffice.org>
+
+    @see #i19991#
+ */
+double Erf( double x )
+{
+    bool bNegative = false;
+    if ( x < 0.0 )
+    {
+        x = fabs( x );
+        bNegative = true;
+    }
+
+    double fErf;
+    if ( x > 4.0 )
+        ErfAsymptotic( x, fErf );
+    else
+        ErfMaclaurin( x, fErf );
+
+    if ( bNegative )
+        fErf *= -1.0;
+    return fErf;
+}
 
 inline sal_Bool IsNum( sal_Unicode c )
 {
