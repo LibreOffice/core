@@ -4,9 +4,9 @@
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:39:18 $
+ *  last change: $Author: hr $ $Date: 2005-10-25 11:31:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -788,47 +788,7 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
             }
             break;
 
-            case EMR_BITBLT :
-            {
-                UINT32      nRasterOp;
-                Size        aDestExt;
-                Point       aDestOrg;
-                Bitmap      aBmp;
-
-                pWMF->SeekRel( 0x10 );
-                *pWMF >> nX32 >> nY32 >> nx32 >> ny32 >> nRasterOp;
-                aDestOrg = Point( nX32, nY32 );
-                aDestExt = Size( nx32, ny32 );
-                *pWMF >> nX32 >> nY32 >> nColor;
-
-                sal_uInt32 nNewRop = R2_BLACK;
-                switch( nRasterOp )
-                {
-                    case DSTINVERT :
-                        nNewRop = R2_NOT;
-                    break;
-                    case 0x00990066 :
-                    case SRCINVERT:
-                        nNewRop = R2_XORPEN;
-                    break;
-                    case BLACKNESS :
-                        nColor = 0;
-                    break;
-                    case WHITENESS :
-                        nColor = 0xffffff;
-                    break;
-                    case 0xaa0029 :         // #93902# I added this rasterop, because it is heavily
-                        nNewRop = R2_NOP;   // used by XP, making all our metafiles black (SJ)
-                    break;                  // todo: supporting all 256 ternary rasterops
-                }
-                pOut->Push();
-                sal_uInt32 nOldRop = pOut->SetRasterOp( nNewRop );
-                pOut->DrawRect( Rectangle( aDestOrg, aDestExt ), sal_False );   // SJ: 118798, not using edge for bitblit
-                pOut->SetRasterOp( nOldRop );
-                pOut->Pop();
-            }
-            break;
-
+            case EMR_BITBLT :   // PASSTHROUGH INTENDED
             case EMR_STRETCHBLT :
             {
                 INT32   xDest, yDest, cxDest, cyDest, xSrc, ySrc, cxSrc, cySrc;
@@ -840,7 +800,12 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                 pWMF->SeekRel( 0x10 );
                 *pWMF >> xDest >> yDest >> cxDest >> cyDest >> dwRop >> xSrc >> ySrc
                         >> xformSrc >> nColor >> iUsageSrc >> offBmiSrc >> cbBmiSrc
-                            >> offBitsSrc >> cbBitsSrc >> cxSrc >> cySrc;
+                            >> offBitsSrc >> cbBitsSrc;
+
+                if ( nRecType == EMR_STRETCHBLT )
+                    *pWMF >> cxSrc >> cySrc;
+                else
+                    cxSrc = cySrc = 0;
 
                 Bitmap      aBitmap;
                 Rectangle   aRect( Point( xDest, yDest ), Size( cxDest+1, cyDest+1 ) );
