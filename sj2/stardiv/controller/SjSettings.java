@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SjSettings.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:18:44 $
+ *  last change: $Author: hr $ $Date: 2005-10-25 11:20:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@ import java.util.Enumeration;
 import com.sun.star.lib.sandbox.SandboxSecurity;
 
 /**
- * Über diese Klasse werden alle globalen Einstellungen, die für das Sj Projekt
+ * Ueber diese Klasse werden alle globalen Einstellungen, die fuer das Sj Projekt
  * wichtig sind, dokumentiert und modifiziert.
  *
  * @version    $Version: 1.0 $
