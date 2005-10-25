@@ -46,16 +46,16 @@
 ***************
 *** 1 ****
 ! dummy
---- 1,43 ----
+--- 1,46 ----
 ! #*************************************************************************
 ! #
 ! #   OpenOffice.org - a multi-platform office productivity suite
 ! #
 ! #   $RCSfile: bsh-2.0b1-src.patch,v $
 ! #
-! #   $Revision: 1.4 $
+! #   $Revision: 1.5 $
 ! #
-! #   last change: $Author: rt $ $Date: 2005-09-07 22:05:15 $
+! #   last change: $Author: hr $ $Date: 2005-10-25 11:42:49 $
 ! #
 ! #   The Contents of this file are made available subject to
 ! #   the terms of GNU Lesser General Public License Version 2.1.
@@ -88,5 +88,29 @@
 ! 
 ! .INCLUDE : ant.mk
 ! 
+! CLASSPATH+=$PATH_SEPERATOR$SOLARVER/$UPD/$INPATH/bin/crimson.jar
+! .EXPORT : CLASSPATH
+!
 ! ALLTAR : ANTBUILD
 ! 
+*** misc/BeanShell/src/bsh/ClassGeneratorUtil.java	2003-12-19 17:14:28.000000000 +0100
+--- misc/build/BeanShell/src/bsh/ClassGeneratorUtil.java	2005-08-24 15:20:06.996244243 +0200
+***************
+*** 34,40 ****
+  package bsh;
+  
+  import bsh.org.objectweb.asm.*;
+! import java.lang.reflect.*;
+  import java.util.ArrayList;
+  import java.util.List;
+  
+--- 34,42 ----
+  package bsh;
+  
+  import bsh.org.objectweb.asm.*;
+! import java.lang.reflect.Constructor;
+! import java.lang.reflect.InvocationTargetException;
+! import java.lang.reflect.Method;
+  import java.util.ArrayList;
+  import java.util.List;
+  
