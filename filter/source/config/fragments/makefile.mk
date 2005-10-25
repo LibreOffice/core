@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-28 15:21:07 $
+#   last change: $Author: hr $ $Date: 2005-10-25 11:56:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -149,11 +149,7 @@ ALLTAR: \
 MERGE:=python ../tools/merge/pyAltFCFGMerge
 .ELSE
 MERGE    := $(JAVAI) -jar $(CLASSDIR)$/FCFGMerge.jar
-.IF "$(JDK)" == "gcj"
-XALANCLASS=$(SOLARBINDIR)/xalan.jar
-CLASSPATH:=$(CLASSPATH)$(PATH_SEPERATOR){$(subst,%Z*Z%,$(PATH_SEPERATOR) $(XALANCLASS:s/ /%Z*Z%/))}
-.ENDIF
-PACKLANG := $(JAVAI) org.apache.xalan.xslt.Process -XSL langfilter.xsl
+PACKLANG := $(JAVAI) $(JAVACPS) $(SOLARBINDIR)/xalan.jar org.apache.xalan.xslt.Process -XSL langfilter.xsl
 .ENDIF
 
 # -----------------------------------------------------------------------------
