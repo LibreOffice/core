@@ -7,8 +7,8 @@
 			<Text id="a" xml:lang="de">Willkommen</Text>
 		</Paragraph>
 		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US">Last updated $Date: 2005-10-18 11:54:22 $</Text>
-			<Text id="a" xml:lang="de">Letztes Update $Date: 2005-10-18 11:54:22 $</Text>
+			<Text id="a" xml:lang="en-US">Last updated $Date: 2005-10-25 11:48:52 $</Text>
+			<Text id="a" xml:lang="de">Letztes Update $Date: 2005-10-25 11:48:52 $</Text>
 		</Paragraph>
 		<Paragraph id="A3" style="H1">
 			<Text id="a" xml:lang="en-US">OpenOffice.org 2.0 ReadMe</Text>
@@ -135,82 +135,82 @@
 			<Text id="a" xml:lang="de">Microsoft Windows 98, ME, NT (Service Pack 6 oder höher), 2000 or XP</Text>
 		<Text id="utzu6" xml:lang="de">Pentium-kompatibler PC</Text>
 				<Text id="utzu6" xml:lang="en-US">Pentium compatible PC</Text>
-		<Text id="ghuj67" xml:lang="de">64 MB RAM</Text>
-				<Text id="ghuj67" xml:lang="en-US">64 MB RAM</Text>
-		<Text id="jzjtzu6" xml:lang="de">250 MB (CJK-Version: 300 MB) verfügbarer Festplattenplatz</Text>
-				<Text id="jzjtzu6" xml:lang="en-US">250 MB (CJK version: 300 MB) available hard disk space</Text>
+		<Text id="ghuj67" xml:lang="de">128 MB RAM (256 MB RAM empfohlen)</Text>
+				<Text id="ghuj67" xml:lang="en-US">128 MB RAM (256 MB RAM recommended)</Text>
+		<Text id="jzjtzu6" xml:lang="de">320 MB (Chinesische, Japanische, und Koreanische Versionen: 350 MB, mehrsprachige Version: 500 MB) verfügbarer Festplattenplatz</Text>
+				<Text id="jzjtzu6" xml:lang="en-US">320 MB (Chinese, Japanese, and Korean versions: 350 MB, multi-language version: 500 MB) available hard disk space</Text>
 		<Text id="jtzu56" xml:lang="de">800x600 Punkte Bildschirmauflösung oder höher, mindestens 256 Farben</Text>
 				<Text id="jtzu56" xml:lang="en-US">800x600 resolution or higher, at least 256 colors</Text>
 		</List>
 		</Paragraph>
 		<Paragraph id="Sols2" os="SOLARIS" cpuname="SPARC">
 			<List>
-				<Text id="s2335" xml:lang="de">Solaris 7 Betriebssystem (SPARC Plattform Edition) oder höher (Solaris 9 empfohlen)</Text>
-				<Text id="s2335" xml:lang="en-US">Solaris 7 operating system (SPARC platform) or higher (Solaris 9 recommended)</Text>
-		<Text id="s253" xml:lang="de">128 MB RAM</Text>
-				<Text id="s253" xml:lang="en-US">128 MB RAM</Text>
-		<Text id="s23seg" xml:lang="de">300 MB (CJK-Version: 450 MB) verfügbarer Festplattenplatz</Text>
-				<Text id="s23seg" xml:lang="en-US">300 MB (CJK version: 450 MB) available hard disk space</Text>
+				<Text id="s2335" xml:lang="de">Solaris 8 Betriebssystem (SPARC Plattform Edition) oder höher (Solaris 10 empfohlen)</Text>
+				<Text id="s2335" xml:lang="en-US">Solaris 8 operating system (SPARC platform) or higher (Solaris 10 recommended)</Text>
+		<Text id="s253" xml:lang="de">128 MB RAM (256 MB RAM empfohlen)</Text>
+				<Text id="s253" xml:lang="en-US">128 MB RAM (256 MB RAM recommended)</Text>
+		<Text id="s23seg" xml:lang="de">450 MB (Chinesische, Japanische und Koreanische Versionen: 550 MB, mehrsprachige Version: 950 MB) verfügbarer Festplattenplatz</Text>
+				<Text id="s23seg" xml:lang="en-US">450 MB (Chinese, Japanese and Korean versions: 550 MB, multi-language version: 950 MB) available hard disk space</Text>
 		<Text id="s2s43gfe" xml:lang="de">X-Server mit einer Bildschirmauflösung von 800x600 Punkten oder höher, mindestens 256 Farben</Text>
 				<Text id="s2s43gfe" xml:lang="en-US">X Server with 800x600 or higher resolution, with at least 256 colors</Text>
-		<Text id="wd2dff" xml:lang="de">Gnome 2.0 oder höher für die Unterstützung von AT-Technologien (Assistive Technology Tools) über die Java-Accessibility-Unterstützung</Text>
-				<Text id="wd2dff" xml:lang="en-US">Gnome 2.0 or higher required for support of assistive technology tools (AT tools) via Java accessibility support</Text>
+		<Text id="wd2dff" xml:lang="de">Gnome 2.6 oder höher für die Unterstützung von AT-Technologien (Assistive Technology Tools) über die Java-Accessibility-Unterstützung</Text>
+				<Text id="wd2dff" xml:lang="en-US">Gnome 2.6 or higher required for support of assistive technology tools (AT tools) via Java accessibility support</Text>
 		<Text id="n4234rw" xml:lang="de">Window Manager</Text>
 				<Text id="n4234rw" xml:lang="en-US">Window Manager</Text>
 		</List>
 		</Paragraph>
 		<Paragraph id="Solia2" os="SOLARIS" cpuname="INTEL">
 			<List>
-				<Text id="s23h" xml:lang="de">Solaris 7 Betriebssystem (Intel Plattform Edition) oder höher (Solaris 9 empfohlen)</Text>
-				<Text id="s23h" xml:lang="en-US">Solaris 7 operating system (Intel platform) or higher (Solaris 9 recommended)</Text>
-		<Text id="s24f" xml:lang="de">64 MB RAM</Text>
-				<Text id="s24f" xml:lang="en-US">64 MB RAM</Text>
-		<Text id="fgheg" xml:lang="de">300 MB (CJK-Version: 450 MB) verfügbarer Festplattenplatz</Text>
-				<Text id="fgheg" xml:lang="en-US">300 MB (CJK version: 450 MB) available hard disk space</Text>
+				<Text id="s23h" xml:lang="de">Solaris 8 Betriebssystem (Intel Plattform Edition) oder höher (Solaris 10 empfohlen)</Text>
+				<Text id="s23h" xml:lang="en-US">Solaris 8 operating system (Intel platform) or higher (Solaris 10 recommended)</Text>
+		<Text id="s24f" xml:lang="de">128 MB RAM (256 MB RAM empfohlen)</Text>
+				<Text id="s24f" xml:lang="en-US">128 MB RAM (256 MB RAM recommended)</Text>
+		<Text id="fgheg" xml:lang="de">400 MB (Chinesische, Japanische und Koreanische Versionen: 600 MB, mehrsprachige Version: 950 MB) verfügbarer Festplattenplatz</Text>
+				<Text id="fgheg" xml:lang="en-US">400 MB (Chinese, Japanese and Korean versions: 600 MB, multi-language version: 950 MB) available hard disk space</Text>
 		<Text id="fghfgh" xml:lang="de">X-Server mit einer Bildschirmauflösung von 800x600 Punkten oder höher, mindestens 256 Farben</Text>
 				<Text id="fghfgh" xml:lang="en-US">X Server with 800x600 or higher resolution, with at least 256 colors</Text>
-		<Text id="wd2dff" xml:lang="de">Gnome 2.0 oder höher für die Unterstützung von AT-Technologien (Assistive Technology Tools) über Java Accessibility</Text>
-				<Text id="wd2dff" xml:lang="en-US">Gnome 2.0 or higher required for Assistive Technology Tools</Text>
+		<Text id="wd2dff" xml:lang="de">Gnome 2.6 oder höher für die Unterstützung von AT-Technologien (Assistive Technology Tools) über Java Accessibility</Text>
+				<Text id="wd2dff" xml:lang="en-US">Gnome 2.6 or higher required for Assistive Technology Tools</Text>
 		<Text id="mgjfg" xml:lang="de">Window Manager</Text>
 				<Text id="mgjfg" xml:lang="en-US">Window Manager</Text>
 		</List>
 		</Paragraph>
 		<Paragraph id="Linuxi2" os="LINUX" cpuname="INTEL">
 			<List>
-				<Text id="s2we35" xml:lang="de">Linux Kernel Version 2.2.13 oder höher</Text>
-				<Text id="s2we35" xml:lang="en-US">Linux Kernel version 2.2.13 or higher</Text>
-				<Text id="s253we" xml:lang="de">glibc2 Version 2.2.4 oder höher</Text>
+				<Text id="s2we35" xml:lang="de">Linux Kernel Version 2.4 oder höher</Text>
+				<Text id="s2we35" xml:lang="en-US">Linux Kernel version 2.4 or higher</Text>
+		        <Text id="s253we" xml:lang="de">glibc2 Version 2.2.4 oder höher</Text>
 				<Text id="s253we" xml:lang="en-US">glibc2 version 2.2.4 or higher</Text>
 		                <Text id="s2etfseg" xml:lang="de">Pentium kompatibler PC</Text>
 				<Text id="s2etfseg" xml:lang="en-US">Pentium compatible PC</Text>
-				<Text id="s2ssdfe" xml:lang="de">64 MB RAM</Text>
-				<Text id="s2ssdfe" xml:lang="en-US">64 MB RAM</Text>
-		<Text id="n42dfgf" xml:lang="de">300 MB (CJK-Version: 350 MB) verfügbarer Festplattenplatz</Text>
-				<Text id="n42dfgf" xml:lang="en-US">300 MB (CJK version: 350 MB) available hard disk space</Text>
+				<Text id="s2ssdfe" xml:lang="de">128 MB RAM (256 MB RAM empfohlen)</Text>
+				<Text id="s2ssdfe" xml:lang="en-US">128 MB RAM (256 MB RAM recommended)</Text>
+		<Text id="n42dfgf" xml:lang="de">400 MB (Chinesische, Japanische und Koreanische Versionen: 550 MB, mehrsprachige Version: 900 MB) verfügbarer Festplattenplatz</Text>
+				<Text id="n42dfgf" xml:lang="en-US">400 MB (Chinese, Japanese and Korean versions: 550 MB, multi-language version: 900 MB) available hard disk space</Text>
 		<Text id="ghjhhr" xml:lang="de">X-Server mit einer Bildschirmauflösung von 800x600 Punkten oder höher, mindestens 256 Farben</Text>
 				<Text id="ghjhhr" xml:lang="en-US">X Server with 800x600 or higher resolution, with at least 256 colors</Text>
-		<Text id="wd2dff" xml:lang="de">Gnome 2.0 oder höher für die Unterstützung von AT-Technologien (Assistive Technology Tools) über Java Accessibility</Text>
-				<Text id="wd2dff" xml:lang="en-US">Gnome 2.0 or higher required for Assistive Technology Tools</Text>
+		<Text id="wd2dff" xml:lang="de">Gnome 2.6 oder höher für die Unterstützung von AT-Technologien (Assistive Technology Tools) über Java Accessibility</Text>
+				<Text id="wd2dff" xml:lang="en-US">Gnome 2.6 or higher required for Assistive Technology Tools</Text>
 		<Text id="fhrtz5" xml:lang="de">Window Manager</Text>
 				<Text id="fhrtz5" xml:lang="en-US">Window Manager</Text>
 		</List>
 		</Paragraph>
 				<Paragraph id="Linuxp2" os="LINUX" cpuname="POWERPC">
 			<List>
-				<Text id="ppcs2we35" xml:lang="de">Linux Kernel Version 2.2.13 oder höher</Text>
-				<Text id="ppcs2we35" xml:lang="en-US">Linux Kernel version 2.2.13 or higher</Text>
-				<Text id="ppcs253we" xml:lang="de">glibc2 Version 2.2.4 oder höher</Text>
+				<Text id="ppcs2we35" xml:lang="de">Linux Kernel Version 2.4 oder höher</Text>
+				<Text id="ppcs2we35" xml:lang="en-US">Linux Kernel version 2.4 or higher</Text>
+		        <Text id="ppcs253we" xml:lang="de">glibc2 Version 2.2.4 oder höher</Text>
 				<Text id="ppcs253we" xml:lang="en-US">glibc2 version 2.2.4 or higher</Text>
 		                <Text id="ppcs2etfseg" xml:lang="de">PowerPC kompatibler G3</Text>
 				<Text id="ppcs2etfseg" xml:lang="en-US">PowerPC compatible G3</Text>
 				<Text id="ppcs2ssdfe" xml:lang="de">128 MB RAM</Text>
 				<Text id="ppcs2ssdfe" xml:lang="en-US">128 MB RAM</Text>
-		<Text id="ppcn42dfgf" xml:lang="de">300 MB (CJK-Version: 350 MB) verfügbarer Festplattenplatz</Text>
-				<Text id="ppcn42dfgf" xml:lang="en-US">300 MB (CJK version: 350 MB) available hard disk space</Text>
+		<Text id="ppcn42dfgf" xml:lang="de">400 MB (Chinesische, Japanische und Koreanische Versionen: 550 MB, mehrsprachige Version: 900 MB) verfügbarer Festplattenplatz</Text>
+				<Text id="ppcn42dfgf" xml:lang="en-US">400 MB (Chinese, Japanese and Korean versions: 550 MB, multi-language version: 900 MB) available hard disk space</Text>
 		<Text id="ppcghjhhr" xml:lang="de">X-Server mit einer Bildschirmauflösung von 800x600 Punkten oder höher, mindestens 256 Farben</Text>
 				<Text id="ppcghjhhr" xml:lang="en-US">X Server with 800x600 or higher resolution, with at least 256 colors</Text>
-		<Text id="ppcwd2dff" xml:lang="de">Gnome 2.0 oder höher für die Unterstützung von AT-Technologien (Assistive Technology Tools) über Java Accessibility</Text>
-				<Text id="ppcwd2dff" xml:lang="en-US">Gnome 2.0 or higher required for Assistive Technology Tools</Text>
+		<Text id="ppcwd2dff" xml:lang="de">Gnome 2.6 oder höher für die Unterstützung von AT-Technologien (Assistive Technology Tools) über Java Accessibility</Text>
+				<Text id="ppcwd2dff" xml:lang="en-US">Gnome 2.6 or higher required for Assistive Technology Tools</Text>
 		<Text id="ppcfhrtz5" xml:lang="de">Window Manager</Text>
 				<Text id="ppcfhrtz5" xml:lang="en-US">Window Manager</Text>
 		</List>
@@ -223,13 +223,13 @@
 				<Text id="macxps2etfseg" xml:lang="en-US">PowerPC compatible G3</Text>
 				<Text id="macxps2ssdfe" xml:lang="de">128 MB RAM</Text>
 				<Text id="macxps2ssdfe" xml:lang="en-US">128 MB RAM</Text>
-		<Text id="macxpn42dfgf" xml:lang="de">300 MB (CJK-Version: 350 MB) verfügbarer Festplattenplatz</Text>
-				<Text id="macxpn42dfgf" xml:lang="en-US">300 MB (CJK version: 350 MB) available hard disk space</Text>
-		<Text id="macxpghjhhr" xml:lang="de">X-Server (Apple X11 oder XDarwin 1.0) mit einer Bildschirmauflösung von 800x600 Punkten oder höher, mindestens 256 Farben</Text>
-				<Text id="macxpghjhhr" xml:lang="en-US">X Server (Apple's X11 or XDarwin 1.0) with 800x600 or higher resolution, with at least 256 colors</Text>
-		<Text id="macxpwd2dff" xml:lang="de">Gnome 2.0 oder höher für die Unterstützung von AT-Technologien (Assistive Technology Tools) über Java Accessibility</Text>
-				<Text id="macxpwd2dff" xml:lang="en-US">Gnome 2.0 or higher required for Assistive Technology Tools</Text>
-		<Text id="macxpfhrtz5" xml:lang="de">Aquawm oder anderen X11 Window Manager</Text>
+		        <Text id="macxpn42dfgf" xml:lang="de">400 MB (Chinesische, Japanische und Koreanische Versionen: 550 MB, mehrsprachige Version: 900 MB) verfügbarer Festplattenplatz</Text>
+				<Text id="macxpn42dfgf" xml:lang="en-US">400 MB (Chinese, Japanese and Korean versions: 550 MB, multi-language version: 900 MB) available hard disk space</Text>
+		        <Text id="macxpghjhhr" xml:lang="de">X-Server (Apple X11 oder XDarwin 1.0) mit einer Bildschirmauflösung von 800x600 Punkten oder höher, mindestens 256 Farben</Text>
+				<Text id="macxpghjhhr" xml:lang="en-US">X-Server (Apple's X11 or XDarwin1.0) with 800x600 or higher resolution, with at least 256 colors</Text>
+		        <Text id="macxpwd2dff" xml:lang="de">Gnome 2.6 oder höher für die Unterstützung von AT-Technologien (Assistive Technology Tools) über Java Accessibility</Text>
+				<Text id="macxpwd2dff" xml:lang="en-US">Gnome 2.6 or higher required for Assistive Technology Tools</Text>
+		        <Text id="macxpfhrtz5" xml:lang="de">Aquawm oder anderen X11 Window Manager</Text>
 				<Text id="macxpfhrtz5" xml:lang="en-US">Aquawm or third part Window Manager</Text>
 		</List>
 		</Paragraph>
@@ -251,22 +251,25 @@
 			<Text id="dfg4tr" xml:lang="de">Benötigte Betriebssystem-Patches:</Text>
 			<Text id="dfg4tr" xml:lang="en-US">Operating system patches required:</Text>
 		</Paragraph>
-		<Paragraph id="Sols_Patch" os="SOLARIS" cpuname="SPARC">
-			<List>
-				<Text id="dd3s" xml:lang="de">Für Solaris 7: 106327-11, 106950-16 (nur 64 bit)</Text>
-				<Text id="dd3s" xml:lang="en-US">for Solaris 7: 106327-11, 106300-16 (only 64 bit)</Text>
-		<Text id="xch3" xml:lang="de">Für Solaris 8: 108434-04, 108773-13, 108435-04 (nur 64 bit), 109147-14</Text>
-				<Text id="xch3" xml:lang="en-US">for Solaris 8: 108434-04, 108773-13, 108435-04 (only 64 bit), 109147-14</Text>
-		</List>
-		</Paragraph>
-		<Paragraph id="Soli_Patch" os="SOLARIS" cpuname="INTEL">
-			<List>
-				<Text id="bg4" xml:lang="de">Für Solaris 7: 106328-08</Text>
-				<Text id="bg4" xml:lang="en-US">for Solaris 7: 106328-08</Text>
-		<Text id="fg4" xml:lang="de">Für Solaris 8: 108436-01, 108774-12</Text>
-				<Text id="fg4" xml:lang="en-US">for Solaris 8: 108436-01, 108774-12</Text>
-		</List>
-		</Paragraph>
+        
+        <Paragraph id="Sols_Patch" os="SOLARIS" cpuname="SPARC">
+           <List>
+              <Text id="xch3" xml:lang="de">für Solaris 8:  108434-11, 109147-28, 108993-33, 108435-16 (64 bit), 109148-28 (64 bit), 110934-12, 110380-04</Text>
+              <Text id="xch3" xml:lang="en-US">for Solaris 8: 108434-11, 109147-28, 108993-33, 108435-16 (64 bit), 109148-28 (64 bit), 110934-12, 110380-04</Text>
+              <Text id="xch4" xml:lang="de">für Solaris 9: 111711-04, 111712-10 (64 bit), 113713-03</Text>
+              <Text id="xch4" xml:lang="en-US">for Solaris 9: 111711-04, 111712-10 (64 bit), and 113713-03</Text>
+           </List>
+        </Paragraph>
+                                                                                        
+        <Paragraph id="Soli_Patch" os="SOLARIS" cpuname="INTEL">
+          <List>
+            <Text id="fg4" xml:lang="de">für Solaris 8: 108436-10, 108994-32, 109148-28, 110935-12, 110403-04</Text>
+            <Text id="fg4" xml:lang="en-US">for Solaris 8: 108436-10, 108994-32, 109148-28, 110935-12, 110403-04</Text>
+            <Text id="fg5" xml:lang="de">für Solaris 9: 111713-02, 114568-02</Text>
+            <Text id="fg5" xml:lang="en-US">for Solaris 9: 111713-02, 114568-02</Text>
+          </List>
+        </Paragraph>
+                                                                                                            
 		<Paragraph id="P_Note" os="SOLARIS">
 			<Text id="dfgferd34" xml:lang="de">Die oben genannten Revisionsangaben sind Mindestangaben, neuere (höhere) Revisionsnummern sind ebenfalls zulässig.</Text>
 			<Text id="dfgferd34" xml:lang="en-US">The versions mentioned above are the minimum requirements, newer (higher) version numbers are also allowed.</Text>
