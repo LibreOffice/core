@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ServiceManager.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:52:24 $
+ *  last change: $Author: hr $ $Date: 2005-10-25 11:31:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@ import java.lang.reflect.InvocationTargetException;
  * calls to the implementing objects and are used instead of casts
  * and identity comparisons.
  * <p>
- * @version     $Revision: 1.8 $ $ $Date: 2005-09-07 18:52:24 $
+ * @version     $Revision: 1.9 $ $ $Date: 2005-10-25 11:31:26 $
  * @author      Markus Herzog
  * @see         com.sun.star.lang.XMultiServiceFactory
  * @see         com.sun.star.container.XSet
@@ -470,10 +470,10 @@ public class ServiceManager implements XMultiServiceFactory,
         throws com.sun.star.uno.RuntimeException
     {
         if (eventListener != null) {
-            java.util.Enumeration enum = eventListener.elements();
+            java.util.Enumeration enumer = eventListener.elements();
 
-            while (enum.hasMoreElements()) {
-                XEventListener listener = (XEventListener) enum.nextElement();
+            while (enumer.hasMoreElements()) {
+                XEventListener listener = (XEventListener) enumer.nextElement();
                 listener.disposing(new com.sun.star.lang.EventObject(this));
             }
         }
@@ -702,16 +702,16 @@ public class ServiceManager implements XMultiServiceFactory,
     public XEnumeration createContentEnumeration( String serviceName )
                 throws com.sun.star.uno.RuntimeException
     {
-        XEnumeration enum = null;
+        XEnumeration enumer = null;
 
         java.util.Vector serviceList = (java.util.Vector) factoriesByServiceNames.get(serviceName);
 
         if (serviceList != null)
-            enum = new ServiceEnumerationImpl( serviceList.elements() );
+            enumer = new ServiceEnumerationImpl( serviceList.elements() );
         else
-            enum = new ServiceEnumerationImpl();
+            enumer = new ServiceEnumerationImpl();
 
-        return enum;
+        return enumer;
     }
 
     /**
@@ -761,7 +761,7 @@ public class ServiceManager implements XMultiServiceFactory,
      * implementation of the @see com.sun.star.container.XEnumeration interface.
      * It is a inner wrapper for a java.util.Enumeration object.
      * <p>
-     * @version     $Revision: 1.8 $ $ $Date: 2005-09-07 18:52:24 $
+     * @version     $Revision: 1.9 $ $ $Date: 2005-10-25 11:31:26 $
      * @author      Markus Herzog
      * @see         com.sun.star.lang.XSingleServiceFactory
      * @see         com.sun.star.lang.XServiceInfo
@@ -779,11 +779,11 @@ public class ServiceManager implements XMultiServiceFactory,
         /**
          * Constructs a new instance with a given enumeration.
          * <p>
-         * @param   enum    is the enumeration which should been wrapped.
+         * @param   enumer  is the enumeration which should been wrapped.
          * @see     com.sun.star.container.XEnumeration
          */
-        public ServiceEnumerationImpl(java.util.Enumeration enum) {
-            enumeration = enum;
+        public ServiceEnumerationImpl(java.util.Enumeration enumer) {
+            enumeration = enumer;
         }
 
         /**
@@ -834,7 +834,7 @@ public class ServiceManager implements XMultiServiceFactory,
  * com.sun.star.lang.XSingleServiceFactory and the com.sun.star.lang.XServiceInfo
  * interfaces.
  * <p>
- * @version     $Revision: 1.8 $ $ $Date: 2005-09-07 18:52:24 $
+ * @version     $Revision: 1.9 $ $ $Date: 2005-10-25 11:31:26 $
  * @author      Markus Herzog
  * @see         com.sun.star.lang.XSingleServiceFactory
  * @see         com.sun.star.lang.XServiceInfo
