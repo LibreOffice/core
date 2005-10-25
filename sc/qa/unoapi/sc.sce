@@ -1,12 +1,12 @@
-### 114242 ### -o sc.ScPageObj
-### 111147 ### -o sc.AccessibleEditableTextPara_PreviewNote
+### 114242 -o sc.ScPageObj
+## 111147 -o sc.AccessibleEditableTextPara_PreviewNote
 -o sc.AccessibleEditableTextPara_HeaderFooter
 -o sc.AccessibleEditableTextPara_PreviewCell
 -o sc.ScAccessibleCell
--o sc.ScAccessibleCsvCell
--o sc.ScAccessibleCsvGrid
--o sc.ScAccessibleCsvRuler
--o sc.ScAccessibleDocument
+### i54260 -o sc.ScAccessibleCsvCell
+### i54260 -o sc.ScAccessibleCsvGrid
+### i54260 -o sc.ScAccessibleCsvRuler
+### i54271 -o sc.ScAccessibleDocument
 -o sc.ScAccessiblePageHeader
 -o sc.ScAccessiblePageHeaderArea
 -o sc.ScAccessiblePreviewCell
@@ -38,6 +38,9 @@
 -o sc.ScConsolidationDescriptor
 -o sc.ScDDELinkObj
 -o sc.ScDDELinksObj
+-o sc.ScDataPilotFieldGroupItemObj
+-o sc.ScDataPilotFieldGroupObj
+-o sc.ScDataPilotFieldGroupsObj
 -o sc.ScDataPilotFieldObj
 -o sc.ScDataPilotFieldsObj
 -o sc.ScDataPilotItemObj
@@ -95,7 +98,7 @@
 -o sc.ScStyleObj
 -o sc.ScSubTotalDescriptorBase
 -o sc.ScSubTotalFieldObj
--o sc.ScTabViewObj
+### 114209 -o sc.ScTabViewObj
 -o sc.ScTableColumnObj
 -o sc.ScTableColumnsObj
 -o sc.ScTableConditionalEntry
@@ -103,6 +106,8 @@
 -o sc.ScTableRowObj
 -o sc.ScTableRowsObj
 -o sc.ScTableSheetObj
+-o sc.ScUniqueCellFormatsEnumeration
+-o sc.ScUniqueCellFormatsObj
 -o sc.ScTableSheetsObj
 -o sc.ScTableValidationObj
 -o sc.ScViewPaneObj
@@ -117,3 +122,4 @@
 -o sc.XMLStylesExporter
 -o sc.XMLStylesImporter
 -o sc.ScAccessibleDocumentPagePreview
+-o sc.XMLExporter
