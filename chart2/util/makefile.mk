@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 01:52:55 $
+#   last change: $Author: hr $ $Date: 2005-10-25 11:06:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,8 +51,10 @@ UNOIDLDBFILES= \
 
 # --- Targets ------------------------------------------------------
 
-ALL : \
-    ALLTAR \
+.INCLUDE :  target.mk
+
+.IF "$(L10N_framewor)"==""
+ALLTAR : \
     $(BIN)$/$(PRJNAME).rdb \
     $(MISC)$/$(TARGET).don
 
@@ -61,6 +63,7 @@ $(BIN)$/$(PRJNAME).rdb : $(UCR)$/$(PRJNAME).db
 
 $(MISC)$/$(TARGET).don : $(UCR)$/$(PRJNAME).db
     +$(CPPUMAKER) -O$(OUT)$/inc -BUCR $(UCR)$/$(PRJNAME).db -X$(SOLARBINDIR)$/types.rdb && echo > $@
-    echo $@
+    +echo $@
 
-.INCLUDE :  target.mk
+.ENDIF			# "$(L10N_framewor)"==""
+
