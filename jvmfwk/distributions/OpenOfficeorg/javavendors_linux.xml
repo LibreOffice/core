@@ -19,6 +19,9 @@
   <vendor name="Free Software Foundation, Inc.">
     <minVersion>1.4.2</minVersion>
   </vendor>
+  <vendor name="BEA Systems, Inc.">
+    <minVersion>1.4.1</minVersion>
+  </vendor>
  </vendorInfos>
 
  <plugins>
@@ -26,5 +29,6 @@
   <library vendor="IBM Corporation">sunjavaplugin.so</library>
   <library vendor="Blackdown Java-Linux Team">sunjavaplugin.so</library>
   <library vendor="Free Software Foundation, Inc.">sunjavaplugin.so</library>
+  <library vendor="BEA Systems, Inc.">sunjavaplugin.so</library>
  </plugins>
 </javaSelection>
