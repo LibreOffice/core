@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:54:02 $
+ *  last change: $Author: hr $ $Date: 2005-10-25 11:53:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,6 +150,10 @@
 
 #ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
 #include <com/sun/star/frame/XModuleManager.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UCB_XSIMPLEFILEACCESS_HPP_
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
@@ -881,6 +885,11 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
     uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
     uno::Reference< container::XNameAccess > xFilterFactory( xFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" ) ) ), uno::UNO_QUERY );
 
+    Reference< ::com::sun::star::ucb::XSimpleFileAccess > xFileAccess(
+        xFactory->createInstance(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess"))),
+        UNO_QUERY_THROW);
+
     sal_uInt32 nCount = aHistory.getLength();
     for (sal_uInt32 nItem=0; nItem<nCount; ++nItem)
     {
@@ -917,6 +926,11 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
             {
                 // yes, it's an impress document
                 INetURLObject aURL;
+
+                // Do not include the file if it does not exist.
+                if (xFileAccess.is() && ! xFileAccess->exists(sURL))
+                    continue;
+
                 aURL.SetSmartURL (sURL);
                 // The password is set only when it is not empty.
                 if (sPassword.getLength() > 0)
