@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HelpIndexer.java,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:15:34 $
+ *  last change: $Author: hr $ $Date: 2005-10-25 11:24:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,11 +212,11 @@ public class HelpIndexer {
             table.close(0);
 
             System.out.println("Indexing...");
-            Enumeration enum = _hashDocInfo.elements();
+            Enumeration enumer = _hashDocInfo.elements();
             int cut = 0;
-            while (enum.hasMoreElements() && cut < 100000000) {
+            while (enumer.hasMoreElements() && cut < 100000000) {
                 try {
-                    DocInfo info = (DocInfo) enum.nextElement();
+                    DocInfo info = (DocInfo) enumer.nextElement();
                     String url = info.getURL();
                     if (url == null) {
                         System.out.println(
@@ -396,11 +396,11 @@ public class HelpIndexer {
         }
 
         void dump() {
-            Enumeration enum = _hash.keys();
+            Enumeration enumer = _hash.keys();
             int j = 0;
             String[] list = new String[_hash.size()];
-            while (enum.hasMoreElements()) {
-                list[j++] = (String) enum.nextElement();
+            while (enumer.hasMoreElements()) {
+                list[j++] = (String) enumer.nextElement();
             }
 
             Db table;
@@ -431,11 +431,11 @@ public class HelpIndexer {
     }
 
     void dumpHelptext() {
-        Enumeration enum = _hashHelptext.keys();
+        Enumeration enumer = _hashHelptext.keys();
         int j = 0;
         String[] list = new String[_hashHelptext.size()];
-        while (enum.hasMoreElements()) {
-            list[j++] = (String) enum.nextElement();
+        while (enumer.hasMoreElements()) {
+            list[j++] = (String) enumer.nextElement();
         }
 
         Db table;
