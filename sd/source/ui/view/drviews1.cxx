@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:28:19 $
+ *  last change: $Author: hr $ $Date: 2005-10-25 11:53:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1019,8 +1019,11 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
                 {
                     SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
 
-                    if (pPV && pNewPage == dynamic_cast< SdPage* >( pPV->GetPage() ) &&
-                        pNewPage->GetName() == aTabControl.GetPageText(nSelectedPage+1))
+                    String sPageText (pNewPage->GetLayoutName());
+                    sPageText.Erase(sPageText.SearchAscii(SD_LT_SEPARATOR));
+                    if (pPV
+                        && pNewPage == dynamic_cast< SdPage* >( pPV->GetPage() )
+                        && sPageText == aTabControl.GetPageText(nSelectedPage+1))
                     {
                         // this slide is already visible
                         return TRUE;
