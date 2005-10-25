@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpex.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:00:23 $
+ *  last change: $Author: hr $ $Date: 2005-10-25 11:42:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,20 +230,25 @@ int _cdecl main( int argc, char *argv[] )
     if( !bQuiet ) fprintf( stdout, "\nProcessing File %s ...\n", sInputFile.GetBuffer());
     else printf(".");
 
+    bool hasNoError = true;
+
     if ( sOutputFile.Len() ){
         HelpParser aParser( sInputFile, bUTF8 );
         if ( bMergeMode )
-            aParser.Merge( sMergeSrc, sOutputFile );
+            hasNoError = aParser.Merge( sMergeSrc, sOutputFile );
         else
-            aParser.CreateSDF( sOutputFile, sPrj, sPrjRoot );
+            hasNoError = aParser.CreateSDF( sOutputFile, sPrj, sPrjRoot );
     }else if ( sOutputFileX.Len() && sOutputFileY.Len() ) {
         HelpParser aParser( sInputFile, bUTF8 );
         if ( bMergeMode )
-            aParser.Merge( sMergeSrc, sOutputFileX , sOutputFileY , true );
+            hasNoError = aParser.Merge( sMergeSrc, sOutputFileX , sOutputFileY , true );
     }
 
     if( !bQuiet ) fprintf( stdout, "\n=================================================\n\n" );
 
-    return 0;
+    if( hasNoError )
+        return 0;
+    else
+        return 1;
 }
 #endif
