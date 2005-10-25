@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tokstack.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 11:56:10 $
+ *  last change: $Author: hr $ $Date: 2005-10-25 11:00:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,6 +262,7 @@ void TokenPool::GrowExt( void )
 
     EXTCONT**   ppNew = new EXTCONT*[ nNewSize ];
 
+    memset( ppNew, 0, sizeof( EXTCONT* ) * nNewSize );
     memcpy( ppNew, ppP_Ext, sizeof( EXTCONT* ) * nP_Ext );
 
     delete[] ppP_Ext;
@@ -276,10 +277,11 @@ void TokenPool::GrowNlf( void )
 
     NLFCONT**   ppNew = new NLFCONT*[ nNewSize ];
 
+    memset( ppNew, 0, sizeof( NLFCONT* ) * nNewSize );
     memcpy( ppNew, ppP_Nlf, sizeof( NLFCONT* ) * nP_Nlf );
 
     delete[] ppP_Nlf;
-    ppNew = ppP_Nlf;
+    ppP_Nlf = ppNew;
     nP_Nlf = nNewSize;
 }
 
