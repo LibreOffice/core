@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 02:01:34 $
+#   last change: $Author: hr $ $Date: 2005-10-25 11:14:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -68,8 +68,8 @@ ALLTAR : \
 
 ASSEMBLY_KEY_X=$(subst,\,\\ $(ASSEMBLY_KEY)) 
 
-$(ASSEMBLY_ATTRIBUTES) .PHONY:
-    +echo $(ASSEMBLY_KEY_X)
+$(ASSEMBLY_ATTRIBUTES) : assembly.cxx makefile.mk $(BIN)$/cliuno.snk
+    @+echo $(ASSEMBLY_KEY_X)
     $(GNUCOPY) -p assembly.cxx $@
     +echo $(ECHOQUOTE) \
     [assembly:System::Reflection::AssemblyVersion( $(ASSEMBLY_VERSION) )]; $(ECHOQUOTE) \
@@ -127,3 +127,8 @@ DEF1NAME = $(SHL1TARGET)
 
 .INCLUDE : $(PRJ)$/util$/target.pmk
 .INCLUDE : target.mk
+
+.IF "$(depend)"!=""
+ALLDPC : $(ASSEMBLY_ATTRIBUTES) 
+.ENDIF			# "$(depend)"!=""
+
