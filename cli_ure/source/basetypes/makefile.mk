@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 01:58:29 $
+#   last change: $Author: hr $ $Date: 2005-10-25 11:14:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,11 +57,10 @@ ECHOQUOTE=
 #policy assembly!!!
 ASSEMBLY_VERSION="1.0.0.0"
 
-ASSEMBLY_ATTRIBUTES = $(MISC)$/assembly_ure.cs
+ASSEMBLY_ATTRIBUTES = $(MISC)$/assembly_ure_$(TARGET).cs
 
 ALLTAR : \
-    $(ASSEMBLY_ATTRIBUTES) \
-    $(OUT)$/bin$/cli_basetypes.dll
+    $(BIN)$/cli_basetypes.dll
 
 CSFILES = \
     uno$/Any.cs			\
@@ -74,16 +73,14 @@ CSFILES = \
     uno$/PolymorphicType.cs \
     $(ASSEMBLY_ATTRIBUTES)
 
-#	uno$/MethodAtrribute.cs				\
-
-$(ASSEMBLY_ATTRIBUTES) .PHONY :
+$(ASSEMBLY_ATTRIBUTES) : assembly.cs makefile.mk $(BIN)$/cliuno.snk
     $(GNUCOPY) -p assembly.cs $@
     +echo $(ECHOQUOTE) \
     [assembly:System.Reflection.AssemblyVersion( $(ASSEMBLY_VERSION))] \
     [assembly:System.Reflection.AssemblyKeyFile(@"$(BIN)$/cliuno.snk")]$(ECHOQUOTE) \
     >> $@
 
-$(OUT)$/bin$/cli_basetypes.dll : $(CSFILES)
+$(BIN)$/cli_basetypes.dll : $(CSFILES)
     +$(CSC) $(CSCFLAGS) \
         -target:library \
         -out:$@ \
