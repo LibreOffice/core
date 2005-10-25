@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 02:02:16 $
+#   last change: $Author: hr $ $Date: 2005-10-25 11:15:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,11 +57,10 @@ ECHOQUOTE=
 #policy assembly!!!
 ASSEMBLY_VERSION="1.0.0.0"
 
-ASSEMBLY_ATTRIBUTES = $(MISC)$/assembly_ure.cs
+ASSEMBLY_ATTRIBUTES = $(MISC)$/assembly_ure_$(TARGET).cs
 
 ALLTAR : \
-    $(ASSEMBLY_ATTRIBUTES) \
-    $(OUT)$/bin$/cli_ure.dll
+    $(BIN)$/cli_ure.dll
 
 CSFILES = \
     uno$/util$/DisposeGuard.cs					\
@@ -70,14 +69,14 @@ CSFILES = \
     uno$/util$/WeakComponentBase.cs	\
     $(ASSEMBLY_ATTRIBUTES)
 
-$(ASSEMBLY_ATTRIBUTES) .PHONY :
+$(ASSEMBLY_ATTRIBUTES) : assembly.cs makefile.mk $(BIN)$/cliuno.snk
     $(GNUCOPY) -p assembly.cs $@
     +echo $(ECHOQUOTE) \
     [assembly:System.Reflection.AssemblyVersion( $(ASSEMBLY_VERSION))] \
     [assembly:System.Reflection.AssemblyKeyFile(@"$(BIN)$/cliuno.snk")]$(ECHOQUOTE) \
     >> $@
 
-$(OUT)$/bin$/cli_ure.dll : $(CSFILES) $(OUT)$/bin$/cli_types.dll
+$(BIN)$/cli_ure.dll : $(CSFILES) $(BIN)$/cli_types.dll
     +$(CSC) $(CSCFLAGS) \
         -target:library \
         -out:$@ \
