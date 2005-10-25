@@ -36,10 +36,10 @@ public class SelectPathVisualPanel extends javax.swing.JPanel {
         OfficeInstallation orig = panel.getSelectedPath();
 
         try {
-            Enumeration enum = SVersionRCFile.createInstance().getVersions();
+            Enumeration enumer = SVersionRCFile.createInstance().getVersions();
 
-            while (enum.hasMoreElements()) {
-                OfficeInstallation oi = (OfficeInstallation)enum.nextElement();
+            while (enumer.hasMoreElements()) {
+                OfficeInstallation oi = (OfficeInstallation)enumer.nextElement();
                 installationsComboBox.addItem(oi);
             }
         }
