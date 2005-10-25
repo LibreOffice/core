@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:19:42 $
+ *  last change: $Author: hr $ $Date: 2005-10-25 11:54:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -411,7 +411,7 @@ void View::DoPaste (::Window* pWindow)
 
             DrawViewShell* pDrViewSh = (DrawViewShell*) pDocSh->GetViewShell();
 
-            if( pDrViewSh && pDrViewSh->GetEditMode() != EM_MASTERPAGE)
+            if (pDrViewSh != NULL)
             {
                 if( !InsertData( aDataHelper, aPos, nDnDAction, FALSE ) )
                 {
