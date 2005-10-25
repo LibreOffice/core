@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocumentDeserializerImpl.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:24:35 $
+ *  last change: $Author: hr $ $Date: 2005-10-25 11:29:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,14 +135,14 @@ public final class DocumentDeserializerImpl
      */
     public Document deserialize() throws ConvertException, IOException {
     log("\nFound the XSLT deserializer");
-    Enumeration enum = cd.getDocumentEnumeration();
+    Enumeration enumer = cd.getDocumentEnumeration();
     org.w3c.dom.Document domDoc=null;
     DOMDocument docOut=null;
     GenericOfficeDocument doc = null;
     ByteArrayOutputStream baos =null;
     GenericOfficeDocument sxwDoc = new GenericOfficeDocument("output");
-    while (enum.hasMoreElements()) {
-         docOut = (DOMDocument) enum.nextElement();
+    while (enumer.hasMoreElements()) {
+         docOut = (DOMDocument) enumer.nextElement();
     }
     domDoc = docOut.getContentDOM();
     try{
