@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mbu $ $Date: 2005-10-18 10:40:41 $
+#   last change: $Author: thb $ $Date: 2005-10-26 19:26:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 PRJ=..
 PRJNAME=agg
 TARGET=agg
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings ----------------------------------
 
@@ -78,6 +79,15 @@ SHL1LIBS = $(SLB)$/$(TARGET).lib
 SHL1DEF = $(MISC)$/$(SHL1TARGET).def
 DEF1NAME = $(SHL1TARGET)
 
+DEF1DEPN	=$(MISC)$/$(SHL1TARGET).flt \
+        $(LIB1TARGET)
+
+DEF1DES		=agg
+DEFLIB1NAME	=$(TARGET)
+
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
+
+$(MISC)$/$(SHL1TARGET).flt : makefile.mk $(TARGET).flt
+    @+$(TYPE) $(TARGET).flt > $@
