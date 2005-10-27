@@ -89,3 +89,5 @@ nr       0  1580   # Ndebele South
 ss       0  1579   # Swazi
 st       0  1072   # Southern Sotho
 ve       0  1075   # Venda
+ga       0  2108   # Irish
+mk    1251  1071   # Macedonian
