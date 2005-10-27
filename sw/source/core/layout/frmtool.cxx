@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:12:23 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 16:02:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -833,7 +833,11 @@ SwFlyNotify::~SwFlyNotify()
            !static_cast<SwFlyFreeFrm*>(pFly)->IsNoMoveOnCheckClip() ) )
     // <--
     {
-        if ( bPosChgd || bFrmChgd )
+        // --> OD 2005-09-05 #i54138# - suppress restart of the layout process
+        // on changed frame height.
+        // Note: It doesn't seem to be necessary and can cause layout loops.
+        if ( bPosChgd )
+        // <--
         {
             // indicate a restart of the layout process
             pFly->SetRestartLayoutProcess( true );
@@ -3687,4 +3691,26 @@ const SwCntntFrm* GetCellCntnt( const SwLayoutFrm& rCell )
     }
     return pCntnt;
 }
+
+/** Can be used to check if a frame has been deleted
+ */
+bool SwDeletionChecker::HasBeenDeleted()
+{
+    if ( !mpFrm || !mpRegIn )
+        return false;
+
+    SwClientIter aIter( const_cast<SwModify&>(*mpRegIn) );
+    const SwClient* pLast = aIter.GoStart();
+
+    while ( pLast )
+    {
+        if ( pLast->ISA( SwFrm ) && pLast == mpFrm )
+            return false;
+
+        pLast = aIter++;
+    }
+
+    return true;
+}
+
 
