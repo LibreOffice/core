@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 02:18:46 $
+#   last change: $Author: hr $ $Date: 2005-10-27 17:12:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  settings.mk
+.INCLUDE : settings.mk
+.INCLUDE : $(PRJ)$/codemaker.pmk
 
 # --- Files --------------------------------------------------------
 
@@ -58,13 +59,7 @@ APP1TARGET= $(TARGET)
 
 APP1OBJS = $(OBJFILES)
 
-APP1STDLIBS= \
-             $(SALLIB) \
-             $(SALHELPERLIB)	\
-             $(REGLIB)
-
-APP1LIBS= \
-          $(LB)$/codemaker.lib $(LB)$/commonjava.lib
+APP1STDLIBS= $(SALLIB) $(SALHELPERLIB) $(REGLIB) $(CODEMAKERLIB) $(COMMONJAVALIB)
 
 .INCLUDE :  target.mk
 
