@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoredobject.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:10:14 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 16:01:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -542,9 +542,15 @@ bool SwAnchoredObject::ConsiderObjWrapInfluenceOnObjPos() const
     bool bRet( false );
 
     const SwFrmFmt& rObjFmt = GetFrmFmt();
-    // --> OD 2004-08-25 #i3317# - add condition <IsTmpConsiderWrapInfluence()>
-    if ( rObjFmt.GetDoc()->ConsiderWrapOnObjPos() ||
-         IsTmpConsiderWrapInfluence() )
+    // --> OD 2005-09-29 #i55204#
+    // - correction: wrapping style influence has been considered, if condition
+    //   <IsTmpConsiderWrapInfluence()> is hold, regardless of its anchor type
+    //   or its wrapping style.
+    if ( IsTmpConsiderWrapInfluence() )
+    {
+        bRet = true;
+    }
+    else if ( rObjFmt.GetDoc()->ConsiderWrapOnObjPos() )
     // <--
     {
         const SwFmtAnchor& rAnchor = rObjFmt.GetAnchor();
