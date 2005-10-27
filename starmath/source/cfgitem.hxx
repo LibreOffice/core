@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgitem.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:59:46 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 15:55:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,13 +149,6 @@ class SmMathConfig : public utl::ConfigItem
     SmMathConfig & operator = ( const SmMathConfig & );
 
 
-    void    LoadOther();
-    void    SaveOther();
-    void    LoadFormat();
-    void    SaveFormat();
-    void    LoadFontFormatList();
-    void    SaveFontFormatList();
-
     void    StripFontFormatList( const std::vector< SmSym > &rSymbols );
 
 
@@ -171,6 +164,13 @@ class SmMathConfig : public utl::ConfigItem
     void            SetOtherIfNotEqual( BOOL &rbItem, BOOL bNewVal );
 
 protected:
+    void    LoadOther();
+    void    SaveOther();
+    void    LoadFormat();
+    void    SaveFormat();
+    void    LoadFontFormatList();
+    void    SaveFontFormatList();
+
     void        SetOtherModified( BOOL bVal );
     inline BOOL IsOtherModified() const     { return bIsOtherModified; }
     void        SetFormatModified( BOOL bVal );
