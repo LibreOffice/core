@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:36:08 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 16:02:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3290,7 +3290,7 @@ BOOL SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL bHead, BOOL &rReform
                     SwRect aRect( pNewUpper->Prt() );
                     aRect.Pos() += pNewUpper->Frm().Pos();
                     const SwFrm *pPrevFrm = pNewUpper->Lower();
-                    while ( pPrevFrm )
+                    while ( pPrevFrm && pPrevFrm != this )
                     {
                         (aRect.*fnRectX->fnSetTop)( (pPrevFrm->Frm().*fnRectX->
                                                     fnGetBottom)() );
