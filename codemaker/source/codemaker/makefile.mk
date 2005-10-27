@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 02:10:03 $
+#   last change: $Author: hr $ $Date: 2005-10-27 17:10:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,13 +41,17 @@ ENABLE_EXCEPTIONS := TRUE
 
 .INCLUDE: settings.mk
 
-OBJFILES = \
-    $(OBJ)$/dependencies.obj \
-    $(OBJ)$/exceptiontree.obj \
-    $(OBJ)$/global.obj \
-    $(OBJ)$/options.obj \
-    $(OBJ)$/typemanager.obj \
-    $(OBJ)$/unotype.obj \
-    $(OBJ)$/codemaker.obj
+SLOFILES = \
+    $(SLO)$/dependencies.obj \
+    $(SLO)$/exceptiontree.obj \
+    $(SLO)$/global.obj \
+    $(SLO)$/options.obj \
+    $(SLO)$/typemanager.obj \
+    $(SLO)$/unotype.obj \
+    $(SLO)$/codemaker.obj
+
+LIB1TARGET=$(LB)$/$(TARGET).lib
+LIB1ARCHIV=$(LB)$/lib$(TARGET).a
+LIB1OBJFILES=$(SLOFILES)
 
 .INCLUDE: target.mk
