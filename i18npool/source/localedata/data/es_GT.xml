@@ -21,7 +21,7 @@
 <DecimalSeparator>.</DecimalSeparator>
 <TimeSeparator>:</TimeSeparator>
 <Time100SecSeparator>.</Time100SecSeparator>
-<ListSeparator>,</ListSeparator>
+<ListSeparator>;</ListSeparator>
 <LongDateDayOfWeekSeparator> </LongDateDayOfWeekSeparator>
 <LongDateDaySeparator> de </LongDateDaySeparator>
 <LongDateMonthSeparator> de </LongDateMonthSeparator>
