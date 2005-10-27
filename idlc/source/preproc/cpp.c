@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-17 13:21:14 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 14:20:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ int ifdepth;
 int ifsatisfied[NIF];
 int skipping;
 
-char rcsid[] = "$Version 1.2 $ $Revision: 1.4 $ $Date: 2005-10-17 13:21:14 $";
+char rcsid[] = "$Version 1.2 $ $Revision: 1.5 $ $Date: 2005-10-27 14:20:44 $";
 
 int realargc;
 char* realargv[512];
@@ -99,7 +99,13 @@ void checkCommandFile(char* cmdfile)
             {
                 realargv[realargc]= strdup(option);
                 realargc++;
+                option[0]='\0';
             }
+        }
+        if (option[0] != '\0') {
+            option[i]='\0';
+            realargv[realargc]= strdup(option);
+            realargc++;
         }
         fclose(commandfile);
     }
