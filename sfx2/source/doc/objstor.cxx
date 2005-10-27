@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.170 $
+ *  $Revision: 1.171 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:46:26 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 14:06:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1933,6 +1933,11 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
                 catch( uno::Exception& )
                 {}
             }
+
+            // before the title regenerated the document must loose the signatures
+            pImp->nDocumentSignatureState = SIGNATURESTATE_NOSIGNATURES;
+            pImp->nScriptingSignatureState = SIGNATURESTATE_NOSIGNATURES;
+            pImp->bSignatureErrorIsShown = sal_False;
 
             // Titel neu setzen
             if ( pNewMed->GetName().Len() && SFX_CREATE_MODE_EMBEDDED != eCreateMode )
