@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 18:41:32 $
+#   last change: $Author: hr $ $Date: 2005-10-27 17:20:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,22 +39,19 @@ PRJNAME = juhelper
 PACKAGE = com$/sun$/star$/lib$/uno$/helper
 TARGET  = com_sun_star_lib_uno_helper
 
-
-# --- Settings -----------------------------------------------------
 .INCLUDE : settings.mk
 .INCLUDE: $(PRJ)$/util$/settings.pmk
 
-# Files --------------------------------------------------------
-JAVACLASSFILES= \
-    $(CLASSDIR)$/$(PACKAGE)$/WeakBase.class 	\
-        $(CLASSDIR)$/$(PACKAGE)$/WeakAdapter.class  	\
-    $(CLASSDIR)$/$(PACKAGE)$/ComponentBase.class		\
-    $(CLASSDIR)$/$(PACKAGE)$/InterfaceContainer.class	\
-    $(CLASSDIR)$/$(PACKAGE)$/MultiTypeInterfaceContainer.class \
-        $(CLASSDIR)$/$(PACKAGE)$/PropertySet.class	\
-    $(CLASSDIR)$/$(PACKAGE)$/UnoUrl.class		\
-    $(CLASSDIR)$/$(PACKAGE)$/Factory.class
-# --- Targets ------------------------------------------------------
+JAVAFILES = \
+    ComponentBase.java \
+    Factory.java \
+    InterfaceContainer.java \
+    MultiTypeInterfaceContainer.java \
+    PropertySet.java \
+    PropertySetMixin.java \
+    UnoUrl.java \
+    WeakAdapter.java \
+    WeakBase.java
 
 .INCLUDE :  target.mk
 
