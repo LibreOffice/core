@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MetaTContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:48:04 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 15:54:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,6 +124,7 @@ XMLTransformerContext *XMLMetaTransformerContext::CreateChildContext(
 void XMLMetaTransformerContext::EndElement()
 {
     // export everything in the correct order
+    OUString aKeywordsQName;
     XMLTokenEnum *pToken = aMetaTokens;
     while( *pToken != XML_TOKEN_END )
     {
@@ -134,28 +135,27 @@ void XMLMetaTransformerContext::EndElement()
         {
             if( XML_KEYWORD == *pToken )
             {
-                OUString aKeywordsQName(
+                aKeywordsQName =
                     GetTransformer().GetNamespaceMap().GetQNameByKey(
-                            XML_NAMESPACE_META, GetXMLToken(XML_KEYWORDS ) ) );
+                            XML_NAMESPACE_META, GetXMLToken(XML_KEYWORDS ) );
+
                 Reference< XAttributeList > xAttrList =
                     new XMLMutableAttributeList;
                 GetTransformer().GetDocHandler()->startElement( aKeywordsQName,
                                                             xAttrList );
-
-                XMLMetaContexts_Impl::const_iterator aEndIter =
-                    m_aContexts.upper_bound( rToken );
-                while( aIter != aEndIter )
-                {
-                    (*aIter).second->Export();
-                    ++aIter;
-                }
-
-                GetTransformer().GetDocHandler()->endElement( aKeywordsQName );
             }
-            else
+
+            // All elements may occur multiple times
+            XMLMetaContexts_Impl::const_iterator aEndIter =
+                m_aContexts.upper_bound( rToken );
+            while( aIter != aEndIter )
             {
                 (*aIter).second->Export();
+                ++aIter;
             }
+
+            if( XML_KEYWORD == *pToken )
+                GetTransformer().GetDocHandler()->endElement( aKeywordsQName );
         }
         pToken++;
     }
