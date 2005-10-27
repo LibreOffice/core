@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.163 $
+ *  $Revision: 1.164 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:13:11 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 16:03:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2071,8 +2071,10 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
 
     // Bindung
     nYBind = (( rWW.nSp29 & 0x30 ) >> 4);
-// OD 14.10.2003 #i18732#
-    eAnchor = FLY_AUTO_CNTNT;
+    // --> OD 2005-08-24 #i53725# - absolute positioned objects have to be
+    // anchored at-paragraph to assure its correct anchor position.
+    eAnchor = FLY_AT_CNTNT;
+    // <--
     switch (nYBind)
     {
         case 0:     //relative to margin
