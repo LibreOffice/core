@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.152 $
+ *  $Revision: 1.153 $
  *
- *  last change: $Author: fs $ $Date: 2005-10-25 08:59:17 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 14:10:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1811,7 +1811,11 @@ STD_LIB_FILE_PATCH( gid_File_Lib_Swui, swui)
 
 File gid_File_Lib_Sysdtrans
     TXT_FILE_BODY;
+  #ifdef UNX
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
+  #else
     Styles = (PACKED,UNO_COMPONENT);
+  #endif
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
   #ifdef UNX
