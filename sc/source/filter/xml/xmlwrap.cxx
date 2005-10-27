@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-30 10:20:39 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 14:04:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,7 +158,10 @@ ScXMLImportWrapper::ScXMLImportWrapper(ScDocument& rD, SfxMedium* pM, const uno:
 uno::Reference <task::XStatusIndicator> ScXMLImportWrapper::GetStatusIndicator(
     uno::Reference < frame::XModel> & rModel)
 {
+    DBG_ERROR( "The status indicator from medium must be used!" );
+
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
+
     if (rModel.is())
     {
         uno::Reference<frame::XController> xController( rModel->getCurrentController());
@@ -768,7 +771,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
         pObjSh->UpdateDocInfoForSave();     // update information
 
         uno::Reference<frame::XModel> xModel(pObjSh->GetModel());
-        uno::Reference<task::XStatusIndicator> xStatusIndicator(GetStatusIndicator(xModel));
+        uno::Reference<task::XStatusIndicator> xStatusIndicator(GetStatusIndicator());
         sal_Int32 nProgressRange(1000000);
         if(xStatusIndicator.is())
             xStatusIndicator->start(rtl::OUString(ScGlobal::GetRscString(STR_SAVE_DOC)), nProgressRange);
@@ -778,7 +781,6 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
         sal_Bool bUsePrettyPrinting(aSaveOpt.IsPrettyPrinting());
         xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UsePrettyPrinting")), uno::makeAny(bUsePrettyPrinting));
 
-        OSL_ENSURE( pMedium, "There is no medium to get MediaDescriptor from!\n" );
         OSL_ENSURE( pMedium, "There is no medium to get MediaDescriptor from!\n" );
         ::rtl::OUString aBaseURL = pMedium ? pMedium->GetBaseURL( true ) : ::rtl::OUString();
         rtl::OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
