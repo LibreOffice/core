@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 15:08:14 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 14:17:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1084,7 +1084,7 @@ USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
         {
             mfFontScale = -aLogFont.lfHeight / (float)MAXFONTHEIGHT;
             aLogFont.lfHeight = -MAXFONTHEIGHT;
-            aLogFont.lfWidth /= mfFontScale;
+            aLogFont.lfWidth = static_cast<int>( aLogFont.lfWidth / mfFontScale );
         }
 
         hNewFont = CreateFontIndirectW( &aLogFont );
@@ -1139,7 +1139,7 @@ USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
         {
             mfFontScale = -aLogFont.lfHeight / (float)MAXFONTHEIGHT;
             aLogFont.lfHeight = -MAXFONTHEIGHT;
-            aLogFont.lfWidth /= mfFontScale;
+            aLogFont.lfWidth = static_cast<int>( aLogFont.lfWidth / mfFontScale );
         }
 
         hNewFont = CreateFontIndirectA( &aLogFont );
@@ -1265,11 +1265,11 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
     }
 
     // transformation dependend font metrics
-    pMetric->mnWidth        = mfFontScale * aWinMetric.tmAveCharWidth;
-    pMetric->mnIntLeading   = mfFontScale * aWinMetric.tmInternalLeading;
-    pMetric->mnExtLeading   = mfFontScale * aWinMetric.tmExternalLeading;
-    pMetric->mnAscent       = mfFontScale * aWinMetric.tmAscent;
-    pMetric->mnDescent      = mfFontScale * aWinMetric.tmDescent;
+    pMetric->mnWidth        = static_cast<int>( mfFontScale * aWinMetric.tmAveCharWidth );
+    pMetric->mnIntLeading   = static_cast<int>( mfFontScale * aWinMetric.tmInternalLeading );
+    pMetric->mnExtLeading   = static_cast<int>( mfFontScale * aWinMetric.tmExternalLeading );
+    pMetric->mnAscent       = static_cast<int>( mfFontScale * aWinMetric.tmAscent );
+    pMetric->mnDescent      = static_cast<int>( mfFontScale * aWinMetric.tmDescent );
 
     // #107888# improved metric compatibility for Asian fonts...
     // TODO: assess workaround below for CWS >= extleading
@@ -1994,6 +1994,10 @@ BOOL WinSalGraphics::GetGlyphBoundRect( long nIndex, Rectangle& rRect )
 
     rRect = Rectangle( Point( +aGM.gmptGlyphOrigin.x, -aGM.gmptGlyphOrigin.y ),
         Size( aGM.gmBlackBoxX, aGM.gmBlackBoxY ) );
+    rRect.Left()    = static_cast<int>( mfFontScale * rRect.Left() );
+    rRect.Right()   = static_cast<int>( mfFontScale * rRect.Right() );
+    rRect.Top()     = static_cast<int>( mfFontScale * rRect.Top() );
+    rRect.Bottom()  = static_cast<int>( mfFontScale * rRect.Bottom() );
     return true;
 }
 
@@ -2179,6 +2183,8 @@ BOOL WinSalGraphics::GetGlyphOutline( long nIndex, PolyPolygon& rPolyPoly )
         }
 
         delete[] pData;
+
+        rPolyPoly.Scale( mfFontScale, mfFontScale );
     }
 
     return bRet;
