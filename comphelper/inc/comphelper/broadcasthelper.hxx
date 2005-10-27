@@ -4,9 +4,9 @@
  *
  *  $RCSfile: broadcasthelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:28:02 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 17:22:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,8 @@ namespace comphelper
     };
 
     // base class for all classes who are derived from OPropertySet and from OComponent
+    // @deprecated, you should use cppu::BaseMutex instead (cppuhelper/basemutex.hxx)
+
     class OBaseMutex
     {
     protected:
