@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:35:13 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 16:51:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@
 #ifndef _SORTEDOBJS_HXX
 #include <sortedobjs.hxx>
 #endif
-// --> OD 2005-09-29 #125957#
+// --> OD 2005-09-29 #125370#,#125957#
 #ifndef _LAYOUTER_HXX
 #include <layouter.hxx>
 #endif
@@ -489,7 +489,7 @@ void SwFlyAtCntFrm::MakeAll()
                                                 GetPageFrm()->GetPhyPageNum() )
                     {
                         bConsiderWrapInfluenceDueToMovedFwdAnchor = true;
-                        // --> OD 2005-09-29 #125957# - mark anchor text frame
+                        // --> OD 2005-09-29 #125370#,#125957# - mark anchor text frame
                         // directly, that it is moved forward by object positioning.
                         SwTxtFrm* pAnchorTxtFrm( static_cast<SwTxtFrm*>(AnchorFrm()) );
                         const SwPageFrm* pAnchorPageFrm =
