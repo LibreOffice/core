@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writer.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:00:54 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 14:08:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -387,7 +387,7 @@ ULONG Writer::Write( SwPaM& rPam, SvStorage&, const String* )
     return ERR_SWG_WRITE_ERROR;
 }
 
-ULONG Writer::Write( SwPaM&, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String* )
+ULONG Writer::Write( SwPaM&, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String*, SfxMedium* )
 {
     ASSERT( !this, "Schreiben in Storages auf einem Stream?" );
     return ERR_SWG_WRITE_ERROR;
@@ -646,7 +646,7 @@ ULONG StgWriter::Write( SwPaM& rPaM, SvStorage& rStg, const String* pFName )
     return nRet;
 }
 
-ULONG StgWriter::Write( SwPaM& rPaM, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const String* pFName )
+ULONG StgWriter::Write( SwPaM& rPaM, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const String* pFName, SfxMedium* pMedium )
 {
     pStrm = 0;
     pStg = 0;
@@ -660,7 +660,7 @@ ULONG StgWriter::Write( SwPaM& rPaM, const com::sun::star::uno::Reference < com:
     // zum Vergleich auf den akt. Pam sichern
     pOrigPam = &rPaM;
 
-    ULONG nRet = WriteStorage();
+    ULONG nRet = pMedium ? WriteMedium( *pMedium ) : WriteStorage();
 
     pStg = NULL;
     ResetWriter();
