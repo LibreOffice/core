@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgitem.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:59:30 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 15:54:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -455,15 +455,13 @@ SmMathConfig::~SmMathConfig()
 
 void SmMathConfig::SetOtherModified( BOOL bVal )
 {
-    if (bVal)
-        SaveOther();
+    bIsOtherModified = bVal;
 }
 
 
 void SmMathConfig::SetFormatModified( BOOL bVal )
 {
-    if (bVal)
-        SaveFormat();
+    bIsFormatModified = bVal;
 }
 
 
@@ -1136,6 +1134,7 @@ void SmMathConfig::SetStandardFormat( const SmFormat &rFormat )
     {
         *pFormat = rFormat;
         SetFormatModified( TRUE );
+        SaveFormat();
     }
 }
 
