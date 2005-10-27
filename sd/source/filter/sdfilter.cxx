@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdfilter.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:16:46 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 14:00:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,10 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/progress.hxx>
+
+#ifndef _SFXITEMSET_HXX
+#include <svtools/itemset.hxx>
+#endif
 
 #ifndef MAC
 #ifndef SVX_LIGHT
@@ -132,28 +136,35 @@ SdFilter::~SdFilter()
 
 void SdFilter::CreateStatusIndicator()
 {
-    try
-    {
-        if (mxModel.is())
-        {
-            Reference< XController > xController( mxModel->getCurrentController());
-            if( xController.is())
-            {
-                Reference< XFrame > xFrame( xController->getFrame());
-                if( xFrame.is())
-                {
-                    Reference< XStatusIndicatorFactory > xFactory( xFrame, UNO_QUERY );
-                    if( xFactory.is())
-                    {
-                        mxStatusIndicator = xFactory->createStatusIndicator();
-                    }
-                }
-            }
-        }
-    }
-    catch( Exception& )
-    {
-    }
+    // The status indicator must be retrieved from the provided medium arguments
+    const SfxUnoAnyItem* pStatusBarItem = static_cast<const SfxUnoAnyItem*>(
+            mrMedium.GetItemSet()->GetItem(SID_PROGRESS_STATUSBAR_CONTROL) );
+
+    if ( pStatusBarItem )
+        pStatusBarItem->GetValue() >>= mxStatusIndicator;
+
+//  try
+//  {
+//      if (mxModel.is())
+//      {
+//          Reference< XController > xController( mxModel->getCurrentController());
+//          if( xController.is())
+//          {
+//              Reference< XFrame > xFrame( xController->getFrame());
+//              if( xFrame.is())
+//              {
+//                  Reference< XStatusIndicatorFactory > xFactory( xFrame, UNO_QUERY );
+//                  if( xFactory.is())
+//                  {
+//                      mxStatusIndicator = xFactory->createStatusIndicator();
+//                  }
+//              }
+//          }
+//      }
+//  }
+//  catch( Exception& )
+//  {
+//  }
 }
 
 // -----------------------------------------------------------------------------
