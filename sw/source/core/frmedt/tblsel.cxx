@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:07:45 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 16:00:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,6 +125,9 @@
 // OD 26.08.2003 #i18103#
 #ifndef _SECTFRM_HXX
 #include <sectfrm.hxx>
+#endif
+#ifndef _FRMTOOL_HXX //autogen
+#include <frmtool.hxx>
 #endif
 
 //siehe auch swtable.cxx
@@ -503,6 +506,8 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
         if( bTblIsValid )
             break;
 
+        SwDeletionChecker aDelCheck( pStart );
+
         // ansonsten das Layout der Tabelle kurz "kalkulieren" lassen
         // und nochmals neu aufsetzen
         SwTabFrm *pTable = aUnions[0]->GetTable();
@@ -516,6 +521,16 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
             if( 0 == (pTable = pTable->GetFollow()) )
                 break;
         }
+
+        // --> FME 2005-10-13 #125337# Make code robust, check if pStart has
+        // been deleted due to the formatting of the table:
+        if ( aDelCheck.HasBeenDeleted() )
+        {
+            ASSERT( false, "Current box has been deleted during GetTblSel()" )
+            break;
+        }
+        // <--
+
         i = 0;
         rBoxes.Remove( i, rBoxes.Count() );
         --nLoopMax;
@@ -2526,7 +2541,11 @@ void _FndBox::MakeFrms( SwTable &rTable )
                             static_cast<SwRowFrm*>(pSibling)->GetTabLine() != pLine ||
                             !lcl_IsLineOfTblFrm( *pTable, *pSibling ) ||
                             static_cast<SwRowFrm*>(pSibling)->IsRepeatedHeadline() ||
-                            pSibling->IsInFollowFlowRow() ) )
+                            // --> FME 2005-08-24 #i53647# If !pLineBehind,
+                            // IsInSplitTableRow() should be checked.
+                            ( pLineBehind && pSibling->IsInFollowFlowRow() ) ||
+                            (!pLineBehind && pSibling->IsInSplitTableRow() ) ) )
+                            // <--
                 {
                     pSibling = (SwFrm*)aIter.Next();
                 }
