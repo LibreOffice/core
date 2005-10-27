@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-25 12:54:07 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 14:08:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,7 +166,7 @@ End
 #if !defined(UNX) || defined(ENABLE_GTK)
 File gid_File_Lib_Npsoplugin
         BIN_FILE_BODY;
-        Styles          = (PACKED);
+        Styles          = (PACKED,PATCH);
         Dir             = gid_Dir_Program;
         Name            = SPECIAL_NAME(npsoplugin);
 End
@@ -175,7 +175,7 @@ End
 #if !defined(UNX) || defined(ENABLE_GTK)
 File gid_File_Exe_Nsplugin
         BIN_FILE_BODY;
-        Styles          = (PACKED);
+        Styles          = (PACKED,PATCH);
         Dir             = gid_Dir_Program;
  #ifdef UNX
         Name            = "nsplugin";
