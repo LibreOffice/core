@@ -34,6 +34,7 @@ mkdir: %_DEST%\inc%_EXT%\cppuhelper
 ..\inc\cppuhelper\compbase12.hxx %_DEST%\inc%_EXT%\cppuhelper\compbase12.hxx
 
 ..\inc\cppuhelper\shlib.hxx %_DEST%\inc%_EXT%\cppuhelper\shlib.hxx
+..\inc\cppuhelper\basemutex.hxx %_DEST%\inc%_EXT%\cppuhelper\basemutex.hxx
 ..\inc\cppuhelper\bootstrap.hxx %_DEST%\inc%_EXT%\cppuhelper\bootstrap.hxx
 ..\inc\cppuhelper\extract.hxx %_DEST%\inc%_EXT%\cppuhelper\extract.hxx
 ..\inc\cppuhelper\exc_hlp.hxx %_DEST%\inc%_EXT%\cppuhelper\exc_hlp.hxx
@@ -45,6 +46,7 @@ mkdir: %_DEST%\inc%_EXT%\cppuhelper
 ..\inc\cppuhelper\component.hxx %_DEST%\inc%_EXT%\cppuhelper\component.hxx
 ..\inc\cppuhelper\propshlp.hxx %_DEST%\inc%_EXT%\cppuhelper\propshlp.hxx
 ..\inc\cppuhelper\proptypehlp.hxx %_DEST%\inc%_EXT%\cppuhelper\proptypehlp.hxx
+..\inc\cppuhelper\propertysetmixin.hxx %_DEST%\inc%_EXT%\cppuhelper\propertysetmixin.hxx
 ..\inc\cppuhelper\proptypehlp.h %_DEST%\inc%_EXT%\cppuhelper\proptypehlp.h
 ..\inc\cppuhelper\stdidlclass.hxx %_DEST%\inc%_EXT%\cppuhelper\stdidlclass.hxx
 ..\inc\cppuhelper\weak.hxx %_DEST%\inc%_EXT%\cppuhelper\weak.hxx
