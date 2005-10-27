@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compbase8.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:09:57 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 17:16:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,8 +49,10 @@ __DEF_COMPIMPLHELPER_EX( 8 )
 namespace cppu
 {
     /** Implementation helper supporting ::com::sun::star::lang::XTypeProvider and
-        ::com::sun::star::lang::XComponent.  Upon disposing objects of this class, sub-classes
-        receive a disposing() call.  Objects of this class can be held weakly, i.e. by a
+        ::com::sun::star::lang::XComponent.
+
+        Upon disposing objects of this class, sub-classes receive a disposing()
+        call.  Objects of this class can be held weakly, i.e. by a
         ::com::sun::star::uno::WeakReference.
 
         @attention
@@ -78,16 +80,24 @@ namespace cppu
             { WeakComponentImplHelperBase::acquire(); }
         virtual void SAL_CALL release() throw ()
             { WeakComponentImplHelperBase::release(); }
+        virtual void SAL_CALL dispose()throw (::com::sun::star::uno::RuntimeException)
+            { WeakComponentImplHelperBase::dispose(); }
+        virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException)
+            { WeakComponentImplHelperBase::addEventListener(xListener); }
+        virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException)
+            { WeakComponentImplHelperBase::removeEventListener(xListener); }
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException)
             { return WeakComponentImplHelper_getTypes( cd::get() ); }
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
             { return ImplHelper_getImplementationId( cd::get() ); }
     };
     /** Implementation helper supporting ::com::sun::star::lang::XTypeProvider and
-        ::com::sun::star::lang::XComponent.  Upon disposing objects of this class, sub-classes
-        receive a disposing() call.  Objects of this class can be held weakly, i.e. by a
-        ::com::sun::star::uno::WeakReference.  Object of this class can be aggregated, i.e.
-        incoming queryInterface() calls are delegated.
+        ::com::sun::star::lang::XComponent.
+
+        Upon disposing objects of this class, sub-classes receive a disposing()
+        call.  Objects of this class can be held weakly, i.e. by a
+        ::com::sun::star::uno::WeakReference.  Object of this class can be
+        aggregated, i.e. incoming queryInterface() calls are delegated.
 
         @attention
         The life-cycle of the passed mutex reference has to be longer than objects of this class.
@@ -95,6 +105,8 @@ namespace cppu
         @derive
         Inherit from this class giving your interface(s) to be implemented as template argument(s).
         Your sub class defines method implementations for these interface(s).
+
+        @deprecated
     */
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8 >
     class SAL_NO_VTABLE WeakAggComponentImplHelper8
