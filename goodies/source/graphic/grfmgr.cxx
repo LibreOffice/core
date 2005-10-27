@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:44:00 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 15:56:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -306,7 +306,6 @@ void GraphicObject::ImplAutoSwapIn()
 }
 
 // -----------------------------------------------------------------------------
-
 BOOL GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz, const GraphicAttr* pAttr,
                                        PolyPolygon& rClipPolyPoly, BOOL& bRectClipRegion ) const
 {
@@ -317,7 +316,9 @@ BOOL GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz
         Polygon         aClipPoly( Rectangle( rPt, rSz ) );
         const USHORT    nRot10 = pAttr->GetRotation() % 3600;
         const Point     aOldOrigin( rPt );
-        const Graphic&  rGraphic = GetGraphic();
+        // --> OD 2005-09-30 #i54875# - It's not needed to get the graphic again.
+//        const Graphic&  rGraphic = GetGraphic();
+        // <--
         const MapMode   aMap100( MAP_100TH_MM );
         Size            aSize100;
         long            nTotalWidth, nTotalHeight;
@@ -334,10 +335,17 @@ BOOL GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz
 
         rClipPolyPoly = aClipPoly;
 
-        if( rGraphic.GetPrefMapMode() == MAP_PIXEL )
-            aSize100 = Application::GetDefaultDevice()->PixelToLogic( rGraphic.GetPrefSize(), aMap100 );
+        // --> OD 2005-09-30 #i54875# - directly access member <maGraphic> to
+        // get <PrefSize> and <PrefMapMode>.
+//        if( rGraphic.GetPrefMapMode() == MAP_PIXEL )
+//            aSize100 = Application::GetDefaultDevice()->PixelToLogic( rGraphic.GetPrefSize(), aMap100 );
+//        else
+//            aSize100 = pOut->LogicToLogic( rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode(), aMap100 );
+        if( maGraphic.GetPrefMapMode() == MAP_PIXEL )
+            aSize100 = Application::GetDefaultDevice()->PixelToLogic( maGraphic.GetPrefSize(), aMap100 );
         else
-            aSize100 = pOut->LogicToLogic( rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode(), aMap100 );
+            aSize100 = pOut->LogicToLogic( maGraphic.GetPrefSize(), maGraphic.GetPrefMapMode(), aMap100 );
+        // <--
 
         nTotalWidth = aSize100.Width() - pAttr->GetLeftCrop() - pAttr->GetRightCrop();
         nTotalHeight = aSize100.Height() - pAttr->GetTopCrop() - pAttr->GetBottomCrop();
@@ -607,7 +615,21 @@ BOOL GraphicObject::IsCached( OutputDevice* pOut, const Point& rPt, const Size& 
     BOOL bRet;
 
     if( nFlags & GRFMGR_DRAW_CACHED )
-        bRet = mpMgr->IsInCache( pOut, rPt, rSz, *this, ( pAttr ? *pAttr : GetAttr() ) );
+    {
+        // --> OD 2005-10-11 #i54875# - Consider cropped graphics.
+        // Note: The graphic manager caches a cropped graphic with its
+        //       uncropped position and size.
+//        bRet = mpMgr->IsInCache( pOut, rPt, rSz, *this, ( pAttr ? *pAttr : GetAttr() ) );
+        Point aPt( rPt );
+        Size aSz( rSz );
+        if ( pAttr->IsCropped() )
+        {
+            PolyPolygon aClipPolyPoly;
+            BOOL        bRectClip;
+            ImplGetCropParams( pOut, aPt, aSz, pAttr, aClipPolyPoly, bRectClip );
+        }
+        bRet = mpMgr->IsInCache( pOut, aPt, aSz, *this, ( pAttr ? *pAttr : GetAttr() ) );
+    }
     else
         bRet = FALSE;
 
