@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:18:43 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 14:08:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,10 @@
 #include <svtools/stritem.hxx>
 #endif
 
+#ifndef _SFXFRAME_HXX
+#include <sfx2/frame.hxx>
+#endif
+
 #ifndef _SFXDOCFILE_HXX //autogen wg. SfxMedium
 #include <sfx2/docfile.hxx>
 #endif
@@ -141,8 +145,9 @@ __EXPORT SwXMLWriter::~SwXMLWriter()
 }
 
 
-sal_uInt32 SwXMLWriter::_Write()
+sal_uInt32 SwXMLWriter::_Write( SfxMedium* pTargetMedium )
 {
+    DBG_ASSERT( pTargetMedium, "No medium is provided!" );
     // Get service factory
     Reference< lang::XMultiServiceFactory > xServiceFactory =
             comphelper::getProcessServiceFactory();
@@ -160,7 +165,7 @@ sal_uInt32 SwXMLWriter::_Write()
     SvXMLEmbeddedObjectHelper *pObjectHelper = 0;
 
     ASSERT( xStg.is(), "Where is my storage?" );
-    pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
+pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
                                                  GRAPHICHELPER_MODE_WRITE,
                                                  sal_False );
     xGraphicResolver = pGraphicHelper;
@@ -237,33 +242,44 @@ sal_uInt32 SwXMLWriter::_Write()
     uno::Any aAny;
     if (bShowProgress)
     {
-        try
+        // retrieve status indicator from the medium MediaDescriptor
+        if ( pTargetMedium )
         {
-            uno::Reference<frame::XModel> xModel( pDoc->GetDocShell()->GetModel());
-            if (xModel.is())
-            {
-                uno::Reference<frame::XController> xController(
-                    xModel->getCurrentController());
-                if( xController.is())
-                {
-                    uno::Reference<frame::XFrame> xFrame( xController->getFrame());
-                    if( xFrame.is())
-                    {
-                        uno::Reference<task::XStatusIndicatorFactory> xFactory(
-                            xFrame, uno::UNO_QUERY );
-                        if( xFactory.is())
-                        {
-                            xStatusIndicator =
-                                xFactory->createStatusIndicator();
-                        }
-                    }
-                }
-            }
+            const SfxUnoAnyItem* pStatusBarItem = static_cast<const SfxUnoAnyItem*>(
+               pTargetMedium->GetItemSet()->GetItem(SID_PROGRESS_STATUSBAR_CONTROL) );
+
+            if ( pStatusBarItem )
+                pStatusBarItem->GetValue() >>= xStatusIndicator;
         }
-        catch( const RuntimeException& )
-        {
-            xStatusIndicator = 0;
-        }
+
+//      try
+//      {
+//          uno::Reference<frame::XModel> xModel( pDoc->GetDocShell()->GetModel());
+//          if (xModel.is())
+//          {
+//              uno::Sequence< beans::PropertyValue > xMediaDescr
+//              uno::Reference<frame::XController> xController(
+//                  xModel->getCurrentController());
+//              if( xController.is())
+//              {
+//                  uno::Reference<frame::XFrame> xFrame( xController->getFrame());
+//                  if( xFrame.is())
+//                  {
+//                      uno::Reference<task::XStatusIndicatorFactory> xFactory(
+//                          xFrame, uno::UNO_QUERY );
+//                      if( xFactory.is())
+//                      {
+//                          xStatusIndicator =
+//                              xFactory->createStatusIndicator();
+//                      }
+//                  }
+//              }
+//          }
+//      }
+//      catch( const RuntimeException& )
+//      {
+//          xStatusIndicator = 0;
+//      }
 
         // set progress range and start status indicator
         sal_Int32 nProgressRange(1000000);
@@ -297,24 +313,22 @@ sal_uInt32 SwXMLWriter::_Write()
     nRedlineMode |= REDLINE_SHOW_INSERT;
     pDoc->SetRedlineMode( nRedlineMode );
 
-    // TODO/LATER : either target medium or mediadescriptor for the current storing must be accessible here
-    SfxMedium* pMedDescrMedium = NULL;
-
     // Set base URI
     OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
     xInfoSet->setPropertyValue( sPropName, makeAny( ::rtl::OUString( GetBaseURL() ) ) );
 
-    // TODO/LATER: separate links from normal embedded objects
     if( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocShell()->GetCreateMode() )
     {
         OUString aName;
-        if ( pMedDescrMedium && pMedDescrMedium->GetItemSet() )
+        if ( pTargetMedium && pTargetMedium->GetItemSet() )
         {
             const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
-                pMedDescrMedium->GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME) );
+                pTargetMedium->GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME) );
             if ( pDocHierarchItem )
                 aName = pDocHierarchItem->GetValue();
         }
+        else
+            aName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "dummyObjectName" ) );
 
         if( aName.getLength() )
         {
@@ -524,11 +538,16 @@ sal_uInt32 SwXMLWriter::WriteStorage()
     return _Write();
 }
 
+sal_uInt32 SwXMLWriter::WriteMedium( SfxMedium& aTargetMedium )
+{
+    return _Write( &aTargetMedium );
+}
+
 sal_uInt32 SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
                                const String* pFileName )
 {
     return IsStgWriter()
-            ? ((StgWriter *)this)->Write( rPaM, rMed.GetOutputStorage(), pFileName )
+            ? ((StgWriter *)this)->Write( rPaM, rMed.GetOutputStorage(), pFileName, &rMed )
             : ((Writer *)this)->Write( rPaM, *rMed.GetOutStream(), pFileName );
 }
 
