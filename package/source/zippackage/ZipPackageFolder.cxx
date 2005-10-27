@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:49:39 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 14:14:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -444,7 +444,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
                 if ( bToBeEncrypted || bRawStream || bTransportOwnEncrStreamAsRaw )
                 {
-                    if ( bToBeEncrypted )
+                    if ( bToBeEncrypted && !bTransportOwnEncrStreamAsRaw )
                     {
                         Sequence < sal_uInt8 > aSalt ( 16 ), aVector ( 8 );
                         Sequence < sal_Int8 > aKey ( 16 );
