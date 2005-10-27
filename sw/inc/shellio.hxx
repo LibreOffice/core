@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:09:09 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 14:07:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -510,7 +510,7 @@ public:
 
     virtual ULONG Write( SwPaM&, SfxMedium&, const String* = 0 );
             ULONG Write( SwPaM&, SvStream&,  const String* = 0 );
-    virtual ULONG Write( SwPaM&, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String* = 0 );
+    virtual ULONG Write( SwPaM&, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String* = 0, SfxMedium* = 0 );
     virtual ULONG Write( SwPaM&, SotStorage&, const String* = 0 );
 
     virtual void SetPasswd( const String& );
@@ -584,7 +584,6 @@ SV_DECL_REF(Writer)
 SV_IMPL_REF(Writer)
 
 // Basisklasse fuer alle Storage-Writer
-
 class StgWriter : public Writer
 {
 protected:
@@ -595,12 +594,13 @@ protected:
     // Fehler beim Aufruf erzeugen
     virtual ULONG WriteStream();
     virtual ULONG WriteStorage() = 0;
+    virtual ULONG WriteMedium( SfxMedium& ) = 0;
 
 public:
     StgWriter() : Writer() {}
 
     virtual BOOL IsStgWriter() const;
-    virtual ULONG Write( SwPaM&, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String* = 0 );
+    virtual ULONG Write( SwPaM&, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String* = 0, SfxMedium* = 0 );
     virtual ULONG Write( SwPaM&, SotStorage&, const String* = 0 );
 
     SotStorage& GetStorage() const       { return *pStg; }
@@ -614,6 +614,7 @@ class Sw3Writer : public StgWriter
     BOOL bSaveAs : 1;
 
     virtual ULONG WriteStorage();
+    virtual ULONG WriteMedium( SfxMedium& );
 
 public:
     Sw3Writer() : pIO( 0 ), bSaveAs( FALSE ) {}
