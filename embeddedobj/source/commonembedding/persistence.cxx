@@ -4,9 +4,9 @@
  *
  *  $RCSfile: persistence.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:35:11 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 13:58:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -529,7 +529,13 @@ uno::Reference< io::XInputStream > OCommonEmbeddedObject::StoreDocumentToTempStr
     if ( !xTempOut.is() || !aResult.is() )
         throw uno::RuntimeException(); // TODO:
 
-    uno::Reference< frame::XStorable > xStorable( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
+    uno::Reference< frame::XStorable > xStorable;
+    {
+        osl::MutexGuard aGuard( m_aMutex );
+        if ( m_pDocHolder )
+            xStorable = uno::Reference< frame::XStorable > ( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
+    }
+
     if( !xStorable.is() )
         throw uno::RuntimeException(); // TODO:
 
@@ -669,7 +675,13 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl( const uno::Reference< embed:
         throw uno::RuntimeException(); // TODO:
 
 #ifdef USE_STORAGEBASED_DOCUMENT
-    uno::Reference< document::XStorageBasedDocument > xDoc( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
+    uno::Reference< document::XStorageBasedDocument > xDoc;
+    {
+        osl::MutexGuard aGuard( m_aMutex );
+        if ( m_pDocHolder )
+            xDoc = uno::Reference< document::XStorageBasedDocument >( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
+    }
+
     if ( xDoc.is() )
     {
         ::rtl::OUString aFilterName;
@@ -701,6 +713,7 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl( const uno::Reference< embed:
     {
         // store document to temporary stream based on temporary file
         uno::Reference < io::XInputStream > xTempIn = StoreDocumentToTempStream_Impl( nStorageFormat, aBaseURL, aHierarchName );
+
         OSL_ENSURE( xTempIn.is(), "The stream reference can not be empty!\n" );
 
         // open storage based on document temporary file for reading
@@ -993,7 +1006,7 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
 {
     // TODO: use lObjArgs
 
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
@@ -1067,8 +1080,11 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
         if ( !xSubStorage.is() )
             throw uno::RuntimeException(); //TODO
 
+        aGuard.clear();
         // TODO/LATER: support hierarchical name for embedded objects in embedded objects
         StoreDocToStorage_Impl( xSubStorage, nTargetStorageFormat, GetBaseURLFrom_Impl( lArguments, lObjArgs ), sEntName );
+        aGuard.reset();
+
         if ( bSwitchBackToLoaded )
             changeState( embed::EmbedStates::LOADED );
     }
@@ -1089,7 +1105,7 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
 {
     // TODO: use lObjArgs
 
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
@@ -1168,8 +1184,11 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
 
     if ( m_nObjectState != embed::EmbedStates::LOADED )
     {
+        aGuard.clear();
         // TODO/LATER: support hierarchical name for embedded objects in embedded objects
         StoreDocToStorage_Impl( xSubStorage, nTargetStorageFormat, GetBaseURLFrom_Impl( lArguments, lObjArgs ), sEntName );
+        aGuard.reset();
+
         if ( bSwitchBackToLoaded )
             changeState( embed::EmbedStates::LOADED );
     }
@@ -1322,7 +1341,7 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
     // ask container to store the object, the container has to make decision
     // to do so or not
 
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
@@ -1358,7 +1377,12 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
         if ( !xStorable.is() )
             throw uno::RuntimeException(); // TODO
 
+        // free the main mutex for the storing time
+        aGuard.clear();
+
         xStorable->store();
+
+        aGuard.reset();
     }
     else
     {
@@ -1380,7 +1404,9 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
             OSL_ENSURE( sal_False, "Can not retrieve storage media type!\n" );
         }
 
+        aGuard.clear();
         StoreDocToStorage_Impl( m_xObjectStorage, nStorageFormat, GetBaseURL_Impl(), m_aEntryName );
+        aGuard.reset();
     }
 
     uno::Reference< util::XModifiable > xModif( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
