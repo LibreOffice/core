@@ -4,9 +4,9 @@
  *
  *  $RCSfile: so_instance.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:41:32 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 14:09:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -357,6 +357,18 @@ int SoPluginInstance::LoadDocument(NSP_HWND hParent)
 
         // initialize frame
         m_xFrame->initialize( m_xUnoWin );
+
+        try
+        {
+            // currently ignore errors in this code
+            uno::Reference< beans::XPropertySet > xFrameProps( m_xFrame, uno::UNO_QUERY_THROW );
+            uno::Reference< beans::XPropertySet > xLMProps;
+            xFrameProps->getPropertyValue( ::rtl::OUString::createFromAscii("LayoutManager") ) >>= xLMProps;
+            if ( xLMProps.is() )
+                xLMProps->setPropertyValue( ::rtl::OUString::createFromAscii("AutomaticToolbars"), uno::makeAny( (sal_Bool)sal_False ) );
+        }
+        catch( uno::Exception& )
+        {}
 
         // get frames supplier
         Reference< frame::XFramesSupplier > m_xFramesSupplier(
