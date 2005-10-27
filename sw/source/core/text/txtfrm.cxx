@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:21:05 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 16:02:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2189,7 +2189,10 @@ SwTwips SwTxtFrm::CalcFitToContent()
     SwTxtFormatter  aLine( this, &aInf );
     SwHookOut aHook( aInf );
 
-    const SwTwips nMax = aLine._CalcFitToContent() + 1;
+    // --> OD 2005-09-06 #i54031# - assure mininum of MINLAY twips.
+    const SwTwips nMax = Max( (SwTwips)MINLAY,
+                              aLine._CalcFitToContent() + 1 );
+    // <--
 
     Frm().Width( nOldFrmWidth );
     Prt().Width( nOldPrtWidth );
