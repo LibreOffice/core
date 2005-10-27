@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlout.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:47:08 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 15:51:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -744,8 +744,9 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
     return rStream;
 }
 
-SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm, const String& rSource,
+SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
                                    const String& rBaseURL,
+                                   const String& rSource,
                                    const String& rLanguage,
                                    ScriptType eScriptType,
                                    const String& rSrc,
