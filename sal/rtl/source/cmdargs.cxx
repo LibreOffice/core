@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdargs.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:00:59 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 17:27:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,6 @@
 #include <osl/mutex.hxx>
 #include <rtl/process.h>
 #include <rtl/ustring.hxx>
-
-#include "macro.hxx"
 
 rtl_uString ** g_ppCommandArgs = 0;
 sal_uInt32     g_nCommandArgCount = 0;
@@ -98,9 +96,7 @@ oslProcessError SAL_CALL rtl_getAppCommandArg (
     oslProcessError result = osl_Process_E_NotFound;
     if( nArg < g_nCommandArgCount )
     {
-        rtl::OUString expandedArg (expandMacros(NULL, g_ppCommandArgs[nArg]));
-
-        rtl_uString_assign( ppCommandArg, expandedArg.pData );
+         rtl_uString_assign( ppCommandArg, g_ppCommandArgs[nArg] );
         result = osl_Process_E_None;
     }
     return (result);
