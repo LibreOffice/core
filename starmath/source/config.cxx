@@ -4,9 +4,9 @@
  *
  *  $RCSfile: config.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 15:05:21 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 15:55:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,6 +133,8 @@ void SmConfig::ItemSetToConfig(const SfxItemSet &rSet)
             Broadcast(SfxSimpleHint(HINT_FORMATCHANGED));
         }
     }
+
+    SaveOther();
 }
 
 
