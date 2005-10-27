@@ -4,9 +4,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:30:26 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 14:06:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -686,6 +686,18 @@ void SfxTopFrame::SetPresentationMode( BOOL bSet )
 {
     if ( GetCurrentViewFrame() )
         GetCurrentViewFrame()->GetWindow().SetBorderStyle( bSet ? WINDOW_BORDER_NOBORDER : WINDOW_BORDER_NORMAL );
+
+    Reference< com::sun::star::beans::XPropertySet > xPropSet( GetFrameInterface(), UNO_QUERY );
+    Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+
+    if ( xPropSet.is() )
+    {
+        Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+        aValue >>= xLayoutManager;
+    }
+
+    if ( xLayoutManager.is() )
+        xLayoutManager->setVisible( !bSet ); // we don't want to have ui in presentation mode
 
     SetMenuBarOn_Impl( !bSet );
     if ( GetWorkWindow_Impl() )
