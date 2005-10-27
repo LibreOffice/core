@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:11:41 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 16:01:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1857,9 +1857,26 @@ SwTwips SwFlyFrm::_Grow( SwTwips nDist, BOOL bTst )
                 // anchor, which grows/shrinks the outer Writer fly frame.
                 // Note: position will be invalidated below.
                 bValidPos = TRUE;
+                // --> OD 2005-10-10 #i55416#
+                // Suppress format of width for autowidth frame, because the
+                // format of the width would call <SwTxtFrm::CalcFitToContent()>
+                // for the lower frame, which initiated this grow.
+                const BOOL bOldFormatHeightOnly = bFormatHeightOnly;
+                const SwFmtFrmSize& rFrmSz = GetFmt()->GetFrmSize();
+                if ( rFrmSz.GetWidthSizeType() != ATT_FIX_SIZE )
+                {
+                    bFormatHeightOnly = TRUE;
+                }
+                // <--
                 static_cast<SwFlyFreeFrm*>(this)->SetNoMoveOnCheckClip( true );
                 ((SwFlyFreeFrm*)this)->SwFlyFreeFrm::MakeAll();
                 static_cast<SwFlyFreeFrm*>(this)->SetNoMoveOnCheckClip( false );
+                // --> OD 2005-10-10 #i55416#
+                if ( rFrmSz.GetWidthSizeType() != ATT_FIX_SIZE )
+                {
+                    bFormatHeightOnly = bOldFormatHeightOnly;
+                }
+                // <--
                 // <--
             }
             else
@@ -1933,9 +1950,26 @@ SwTwips SwFlyFrm::_Shrink( SwTwips nDist, BOOL bTst )
                 // anchor, which grows/shrinks the outer Writer fly frame.
                 // Note: position will be invalidated below.
                 bValidPos = TRUE;
+                // --> OD 2005-10-10 #i55416#
+                // Suppress format of width for autowidth frame, because the
+                // format of the width would call <SwTxtFrm::CalcFitToContent()>
+                // for the lower frame, which initiated this shrink.
+                const BOOL bOldFormatHeightOnly = bFormatHeightOnly;
+                const SwFmtFrmSize& rFrmSz = GetFmt()->GetFrmSize();
+                if ( rFrmSz.GetWidthSizeType() != ATT_FIX_SIZE )
+                {
+                    bFormatHeightOnly = TRUE;
+                }
+                // <--
                 static_cast<SwFlyFreeFrm*>(this)->SetNoMoveOnCheckClip( true );
                 ((SwFlyFreeFrm*)this)->SwFlyFreeFrm::MakeAll();
                 static_cast<SwFlyFreeFrm*>(this)->SetNoMoveOnCheckClip( false );
+                // --> OD 2005-10-10 #i55416#
+                if ( rFrmSz.GetWidthSizeType() != ATT_FIX_SIZE )
+                {
+                    bFormatHeightOnly = bOldFormatHeightOnly;
+                }
+                // <--
                 // <--
             }
             else
