@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:08:46 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 14:08:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2546,6 +2546,11 @@ ULONG SwWW8Writer::WriteStorage()
     ::EndProgress( pDoc->GetDocShell() );
     bWrtWW8 = false;        // sicherheitshalber: Default fuer's naechste Mal
     return nRet;
+}
+
+ULONG SwWW8Writer::WriteMedium( SfxMedium& )
+{
+    return WriteStorage();
 }
 
 SwWW8Writer::SwWW8Writer(const String& rFltName, const String& rBaseURL)
