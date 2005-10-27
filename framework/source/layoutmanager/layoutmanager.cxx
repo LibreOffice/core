@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:41:41 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 14:03:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -403,6 +403,7 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
         ,   m_bVisible( sal_True )
         ,   m_bParentWindowVisible( sal_False )
         ,   m_bMustDoLayout( sal_True )
+        ,   m_bAutomaticToolbars( sal_True )
         ,   m_xModuleManager( Reference< XModuleManager >(
                 xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY ))
         ,   m_xUIElementFactoryManager( Reference< ::com::sun::star::ui::XUIElementFactory >(
@@ -567,6 +568,7 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
     Reference< XMultiServiceFactory > xServiceManager( m_xSMGR );
     Reference< XNameAccess > xPersistentWindowStateSupplier( m_xPersistentWindowStateSupplier );
     OUString aModuleIdentifier( m_aModuleIdentifier );
+    sal_Bool bAutomaticToolbars( m_bAutomaticToolbars );
     aReadLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
@@ -725,9 +727,12 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
             {
             }
 
-            implts_createCustomToolBars();
-            implts_createAddonsToolBars();
-            implts_createNonContextSensitiveToolBars();
+            if ( bAutomaticToolbars )
+            {
+                implts_createCustomToolBars();
+                implts_createAddonsToolBars();
+                implts_createNonContextSensitiveToolBars();
+            }
             implts_sortUIElements();
         }
         else
@@ -3487,6 +3492,7 @@ throw ( RuntimeException )
           !m_xFrame.is() )
         return;
 
+    sal_Bool bAutomaticToolbars( m_bAutomaticToolbars );
     std::vector< Reference< css::awt::XWindow > > oldDockingAreaWindows;
 
     // Remove listener from old docking area acceptor
@@ -3585,9 +3591,12 @@ throw ( RuntimeException )
         }
     }
 
-    implts_createAddonsToolBars(); // create addon toolbars
-    implts_createCustomToolBars(); // create custom toolbars
-//    implts_createNonContextSensitiveToolBars();
+    if ( bAutomaticToolbars )
+    {
+        implts_createAddonsToolBars(); // create addon toolbars
+        implts_createCustomToolBars(); // create custom toolbars
+        implts_createNonContextSensitiveToolBars();
+    }
     implts_sortUIElements();
     implts_doLayout( sal_True );
 }
@@ -6901,6 +6910,13 @@ sal_Bool SAL_CALL LayoutManager::convertFastPropertyValue( Any&       aConverted
                         aOldValue,
                         aConvertedValue);
                 break;
+        case LAYOUTMANAGER_PROPHANDLE_AUTOMATICTOOLBARS:
+            bReturn = PropHelper::willPropertyBeChanged(
+                        com::sun::star::uno::makeAny(m_bAutomaticToolbars),
+                        aValue,
+                        aOldValue,
+                        aConvertedValue);
+                break;
     }
 
     // Return state of operation.
@@ -6920,6 +6936,13 @@ void SAL_CALL LayoutManager::setFastPropertyValue_NoBroadcast( sal_Int32        
                 implts_setMenuBarCloser( xListener );
             else
                 implts_clearMenuBarCloser();
+            break;
+        }
+        case LAYOUTMANAGER_PROPHANDLE_AUTOMATICTOOLBARS:
+        {
+            sal_Bool bValue;
+            if ( aValue >>= bValue )
+                m_bAutomaticToolbars = bValue;
             break;
         }
     }
@@ -6997,6 +7020,7 @@ const com::sun::star::uno::Sequence< com::sun::star::beans::Property > LayoutMan
 
     static const com::sun::star::beans::Property pProperties[] =
     {
+        com::sun::star::beans::Property( LAYOUTMANAGER_PROPNAME_AUTOMATICTOOLBARS, LAYOUTMANAGER_PROPHANDLE_AUTOMATICTOOLBARS, ::getCppuType((const sal_Bool*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
         com::sun::star::beans::Property( LAYOUTMANAGER_PROPNAME_MENUBARCLOSER, LAYOUTMANAGER_PROPHANDLE_MENUBARCLOSER, ::getCppuType((const Reference< XStatusListener >*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  )
     };
     // Use it to initialize sequence!
