@@ -4,9 +4,9 @@
  *
  *  $RCSfile: properties.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:59:35 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 14:01:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,12 +200,15 @@ namespace framework{
 /** properties for "LayoutManager" class */
 
 #define LAYOUTMANAGER_PROPNAME_ASCII_MENUBARCLOSER      "MenuBarCloser"
+#define LAYOUTMANAGER_PROPNAME_ASCII_AUTOMATICTOOLBARS  "AutomaticToolbars"
 
 #define LAYOUTMANAGER_PROPNAME_MENUBARCLOSER            ::rtl::OUString::createFromAscii( LAYOUTMANAGER_PROPNAME_ASCII_MENUBARCLOSER )
+#define LAYOUTMANAGER_PROPNAME_AUTOMATICTOOLBARS        ::rtl::OUString::createFromAscii( LAYOUTMANAGER_PROPNAME_ASCII_AUTOMATICTOOLBARS )
 
 #define LAYOUTMANAGER_PROPHANDLE_MENUBARCLOSER          0
+#define LAYOUTMANAGER_PROPHANDLE_AUTOMATICTOOLBARS      1
 
-#define LAYOUTMANAGER_PROPCOUNT                         1
+#define LAYOUTMANAGER_PROPCOUNT                         2
 
 //_______________________________________________
 /** properties for "UICommandDescription" class */
