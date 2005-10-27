@@ -4,9 +4,9 @@
  *
  *  $RCSfile: options.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-17 13:20:57 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 14:20:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,7 +242,7 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                 {
                     int rargc=0;
                     char* rargv[512];
-                    char  buffer[512];
+                    char  buffer[512]="";
 
                     int i=0;
                     int found = 0;
@@ -269,6 +269,12 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                         buffer[i]='\0';
                         found=0;
                         i=0;
+                        rargv[rargc]= strdup(buffer);
+                        rargc++;
+                        buffer[0]='\0';
+                    }
+                    if (buffer[0] != '\0') {
+                        buffer[i]='\0';
                         rargv[rargc]= strdup(buffer);
                         rargc++;
                     }
