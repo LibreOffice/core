@@ -4,9 +4,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:09:49 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 17:10:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,7 +169,10 @@ OString createFileNameFromType( const OString& destination,
         nameBuffer.append(token);
     } while( nIndex != -1 );
 
-    return fileName;
+    OUString uSysFileName;
+    OSL_VERIFY( FileBase::getSystemPathFromFileURL(
+        convertToFileUrl(fileName), uSysFileName) == FileBase::E_None );
+    return OUStringToOString(uSysFileName, osl_getThreadTextEncoding());;
 }
 
 sal_Bool fileExists(const OString& fileName)
