@@ -304,3 +304,33 @@ UDK_3.1 {
         __1cEcppubL__RTTI__1CpnEcppuSBootstrapException__;
         __1cEcppubM__RTTI__1CpknEcppuSBootstrapException__;
 } UDK_3_0_0;
+
+UDK_3.2 {
+    global:
+    __1cEcppubL__RTTI__1nEcppuUPropertySetMixinImpl__;
+    __1cEcppubN__RTTI__1CpnEcppuUPropertySetMixinImpl__;
+    __1cEcppubO__RTTI__1CpknEcppuUPropertySetMixinImpl__;
+        __1cEcppuUPropertySetMixinImpl2t5B6MrknDcomDsunEstarDunoJReference4n0FRXComponentContext___n0BKImplements_rkn0FISequence4nDrtlIOUString___rkn0FEType__v_;
+        __1cEcppuUPropertySetMixinImpl2T5B6M_v_;
+        __1cEcppuUPropertySetMixinImpl2t6MrknDcomDsunEstarDunoJReference4n0FRXComponentContext___n0BKImplements_rkn0FISequence4nDrtlIOUString___rkn0FEType__v_;
+        __1cEcppuUPropertySetMixinImpl2T6M_v_;
+        __1cEcppuUPropertySetMixinImplbCremovePropertyChangeListener6MrknDrtlIOUString_rknDcomDsunEstarDunoJReference4n0GFbeansXXPropertyChangeListener____v_;
+        __1cEcppuUPropertySetMixinImplbCremoveVetoableChangeListener6MrknDrtlIOUString_rknDcomDsunEstarDunoJReference4n0GFbeansXXVetoableChangeListener____v_;
+        __1cEcppuUPropertySetMixinImplHdispose6M_v_;
+        __1cEcppuUPropertySetMixinImplKprepareSet6MrknDrtlIOUString_rknDcomDsunEstarDunoDAny_9Dpn0BOBoundListeners__v_;
+        __1cEcppuUPropertySetMixinImplOBoundListeners2T5B6M_v_;
+        __1cEcppuUPropertySetMixinImplOBoundListeners2t5B6M_v_;
+        __1cEcppuUPropertySetMixinImplOBoundListeners2T6M_v_;
+        __1cEcppuUPropertySetMixinImplOBoundListeners2t6M_v_;
+        __1cEcppuUPropertySetMixinImplOBoundListenersGnotify6kM_v_;
+        __1cEcppuUPropertySetMixinImplOqueryInterface6MrknDcomDsunEstarDunoEType__n0FDAny__;
+        __1cEcppuUPropertySetMixinImplQgetPropertyValue6MrknDrtlIOUString__nDcomDsunEstarDunoDAny__;
+        __1cEcppuUPropertySetMixinImplQsetPropertyValue6MrknDrtlIOUString_rknDcomDsunEstarDunoDAny__v_;
+        __1cEcppuUPropertySetMixinImplRgetPropertyValues6M_nDcomDsunEstarDunoISequence4n0EFbeansNPropertyValue____;
+        __1cEcppuUPropertySetMixinImplRsetPropertyValues6MrknDcomDsunEstarDunoISequence4n0EFbeansNPropertyValue____v_;
+        __1cEcppuUPropertySetMixinImplSgetPropertySetInfo6M_nDcomDsunEstarDunoJReference4n0EFbeansQXPropertySetInfo____;
+        __1cEcppuUPropertySetMixinImplUgetFastPropertyValue6Ml_nDcomDsunEstarDunoDAny__;
+        __1cEcppuUPropertySetMixinImplUsetFastPropertyValue6MlrknDcomDsunEstarDunoDAny__v_;
+        __1cEcppuUPropertySetMixinImplZaddPropertyChangeListener6MrknDrtlIOUString_rknDcomDsunEstarDunoJReference4n0GFbeansXXPropertyChangeListener____v_;
+        __1cEcppuUPropertySetMixinImplZaddVetoableChangeListener6MrknDrtlIOUString_rknDcomDsunEstarDunoJReference4n0GFbeansXXVetoableChangeListener____v_;
+} UDK_3.1;
