@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.153 $
+ *  $Revision: 1.154 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 14:10:34 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 17:27:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -371,7 +371,7 @@ End
 
 File gid_File_Lib_Cppuhelper
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Dir = gid_Dir_Program;
   #ifdef UNX
     Name = STRING(CONCAT5(libuno_cppuhelper,COMID,UNXSUFFIX,.,UDK_MAJOR));
