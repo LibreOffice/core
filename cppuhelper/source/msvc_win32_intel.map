@@ -234,3 +234,26 @@ UDK_3.1 {
         ??4BootstrapException@cppu@@QAEAAV01@ABV01@@Z;
         ?getMessage@BootstrapException@cppu@@QBEABVOUString@rtl@@XZ;
 } UDK_3_0_0;
+
+UDK_3.2 {
+    global:
+        ??1PropertySetMixinImpl@cppu@@AAE@XZ;
+        ?queryInterface@PropertySetMixinImpl@cppu@@MAA?AVAny@uno@star@sun@com@@ABVType@4567@@Z;
+        ?getPropertySetInfo@PropertySetMixinImpl@cppu@@MAA?AV?$Reference@VXPropertySetInfo@beans@star@sun@com@@@uno@star@sun@com@@XZ;
+        ?notify@BoundListeners@PropertySetMixinImpl@cppu@@QBEXXZ;
+        ?setPropertyValue@PropertySetMixinImpl@cppu@@MAAXABVOUString@rtl@@ABVAny@uno@star@sun@com@@@Z;
+        ?getPropertyValue@PropertySetMixinImpl@cppu@@MAA?AVAny@uno@star@sun@com@@ABVOUString@rtl@@@Z;
+        ?removePropertyChangeListener@PropertySetMixinImpl@cppu@@MAAXABVOUString@rtl@@ABV?$Reference@VXPropertyChangeListener@beans@star@sun@com@@@uno@star@sun@com@@@Z;
+        ?removeVetoableChangeListener@PropertySetMixinImpl@cppu@@MAAXABVOUString@rtl@@ABV?$Reference@VXVetoableChangeListener@beans@star@sun@com@@@uno@star@sun@com@@@Z;
+        ?setFastPropertyValue@PropertySetMixinImpl@cppu@@MAAXJABVAny@uno@star@sun@com@@@Z;
+        ?getFastPropertyValue@PropertySetMixinImpl@cppu@@MAA?AVAny@uno@star@sun@com@@J@Z;
+        ?getPropertyValues@PropertySetMixinImpl@cppu@@MAA?AV?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@XZ;
+        ?setPropertyValues@PropertySetMixinImpl@cppu@@MAAXABV?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@@Z;
+        ?prepareSet@PropertySetMixinImpl@cppu@@IAEXABVOUString@rtl@@ABVAny@uno@star@sun@com@@1PAVBoundListeners@12@@Z;
+        ??0BoundListeners@PropertySetMixinImpl@cppu@@QAE@XZ;
+        ??1BoundListeners@PropertySetMixinImpl@cppu@@QAE@XZ;
+        ??0PropertySetMixinImpl@cppu@@AAE@ABV?$Reference@VXComponentContext@uno@star@sun@com@@@uno@star@sun@com@@W4Implements@01@ABV?$Sequence@VOUString@rtl@@@3456@ABVType@3456@@Z;
+        ?dispose@PropertySetMixinImpl@cppu@@IAEXXZ;
+        ?addPropertyChangeListener@PropertySetMixinImpl@cppu@@MAAXABVOUString@rtl@@ABV?$Reference@VXPropertyChangeListener@beans@star@sun@com@@@uno@star@sun@com@@@Z;
+        ?addVetoableChangeListener@PropertySetMixinImpl@cppu@@MAAXABVOUString@rtl@@ABV?$Reference@VXVetoableChangeListener@beans@star@sun@com@@@uno@star@sun@com@@@Z;
+} UDK_3.1;
