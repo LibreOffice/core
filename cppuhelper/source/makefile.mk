@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:28:11 $
+#   last change: $Author: hr $ $Date: 2005-10-27 17:19:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,8 @@ SLOFILES= \
         $(SLO)$/implementationentry.obj	\
         $(SLO)$/access_control.obj	\
         $(SLO)$/macro_expander.obj \
-        $(SLO)$/unourl.obj
+            $(SLO)$/unourl.obj \
+        $(SLO)$/propertysetmixin.obj
 
 .IF "$(GUI)" == "WNT"
 SHL1TARGET=$(TARGET)$(UDK_MAJOR)$(COMID)
@@ -149,6 +150,7 @@ SHL1TARGET=uno_$(TARGET)$(COMID)
 
 SHL1STDLIBS= \
         $(SALLIB)		\
+        $(SALHELPERLIB)	\
         $(CPPULIB)
 
 SHL1DEPN=
