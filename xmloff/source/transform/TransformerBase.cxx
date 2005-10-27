@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TransformerBase.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:57:58 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 15:54:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1073,7 +1073,7 @@ sal_Bool XMLTransformerBase::EncodeStyleName( OUString& rName ) const
     sal_Int32 nLen = rName.getLength();
     OUStringBuffer aBuffer( nLen );
 
-    for( xub_StrLen i = 0; i < nLen; i++ )
+    for( sal_Int32 i = 0; i < nLen; i++ )
     {
         sal_Unicode c = rName[i];
         sal_Bool bValidChar = sal_False;
@@ -1177,6 +1177,9 @@ sal_Bool XMLTransformerBase::EncodeStyleName( OUString& rName ) const
         }
     }
 
+    if( aBuffer.getLength() > (1<<15)-1 )
+        bEncoded = sal_False;
+
     if( bEncoded )
         rName = aBuffer.makeStringAndClear();
     return bEncoded;
@@ -1191,7 +1194,7 @@ sal_Bool XMLTransformerBase::DecodeStyleName( OUString& rName )
 
     sal_Bool bWithinHex = sal_False;
     sal_Unicode cEnc = 0;
-    for( xub_StrLen i = 0; i < nLen; i++ )
+    for( sal_Int32 i = 0; i < nLen; i++ )
     {
         sal_Unicode c = rName[i];
         if( '_' == c )
