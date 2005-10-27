@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commonjava.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:11:05 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 17:11:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,8 +98,7 @@ rtl::OString translateUnoToJavaType(
             { rtl::OString(RTL_CONSTASCII_STRINGPARAM("java/lang/String")),
               rtl::OString(RTL_CONSTASCII_STRINGPARAM("java/lang/String")) },
             { rtl::OString(RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Type")),
-              rtl::OString(RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Type"))
-            },
+              rtl::OString(RTL_CONSTASCII_STRINGPARAM("com/sun/star/uno/Type")) },
             { rtl::OString(RTL_CONSTASCII_STRINGPARAM("java/lang/Object")),
               rtl::OString(RTL_CONSTASCII_STRINGPARAM("java/lang/Object")) } };
         buf.append(javaTypes[sort][referenceType]);
