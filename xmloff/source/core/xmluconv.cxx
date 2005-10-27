@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:39:19 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 15:53:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2002,7 +2002,7 @@ OUString SvXMLUnitConverter::encodeStyleName(
     sal_Int32 nLen = rName.getLength();
     OUStringBuffer aBuffer( nLen );
 
-    for( xub_StrLen i = 0; i < nLen; i++ )
+    for( sal_Int32 i = 0; i < nLen; i++ )
     {
         sal_Unicode c = rName[i];
         sal_Bool bValidChar = sal_False;
@@ -2104,6 +2104,15 @@ OUString SvXMLUnitConverter::encodeStyleName(
                 *pEncoded = sal_True;
         }
     }
+
+    // check for length
+    if( aBuffer.getLength() > ((1<<15)-1) )
+    {
+        aBuffer = rName;
+        if( pEncoded )
+            *pEncoded = sal_False;
+    }
+
 
     return aBuffer.makeStringAndClear();
 }
