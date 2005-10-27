@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LocaleNode.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:18:23 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 14:28:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -880,19 +880,19 @@ void LCIndexNode::generateCode (const OFileWriter &of) const
         of.writeInt( i );
         of.writeAsciiString( ", " );
     }
-    of.writeAsciiString("NULL };\n");
+    of.writeAsciiString("NULL };\n\n");
 
     of.writeAsciiString("static const sal_Int16 nbOfPageWords = ");
     of.writeInt(nbOfPageWords);
     of.writeAsciiString(";\n\n");
 
-    of.writeAsciiString("\nstatic const sal_Unicode* FollowPageWordArray[] = {\n");
+    of.writeAsciiString("static const sal_Unicode* FollowPageWordArray[] = {\n");
     for(i = 0; i < nbOfPageWords; i++) {
         of.writeAsciiString("\tfollowPageWord");
         of.writeInt(i);
         of.writeAsciiString(",\n");
     }
-    of.writeAsciiString("};\n\n");
+    of.writeAsciiString("\tNULL\n};\n\n");
 
     of.writeFunction("getIndexAlgorithm_", "nbOfIndexs", "IndexArray");
     of.writeFunction("getUnicodeScripts_", "nbOfUnicodeScripts", "UnicodeScriptArray");
