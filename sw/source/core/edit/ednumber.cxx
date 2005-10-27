@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ednumber.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:28:44 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 16:00:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -662,6 +662,13 @@ BYTE SwEditShell::GetNumLevel( BOOL* pHasChilds ) const
 
     SwPaM* pCrsr = GetCrsr();
     const SwTxtNode* pTxtNd = pCrsr->GetNode()->GetTxtNode();
+
+    // --> FME 2005-09-12 #124972# Made code robust:
+    ASSERT( pTxtNd, "GetNumLevel() without text node" )
+    if ( !pTxtNd )
+        return nLevel;
+    // <--
+
     const SwNumRule* pRule = pTxtNd->GetNumRule();
     if( pRule && pTxtNd->GetNum() )
     {
