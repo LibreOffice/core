@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:52:07 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 15:53:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1043,17 +1043,19 @@ void SvXMLExportPropertyMapper::_exportXML(
 
             const sal_Int32 nCount = aAttribNames.getLength();
 
-            OUStringBuffer sName;
+            OUStringBuffer sNameBuffer;
             xml::AttributeData aData;
             for( sal_Int32 i=0; i < nCount; i++, pAttribName++ )
             {
                 xAttrContainer->getByName( *pAttribName ) >>= aData;
+                OUString sAttribName( *pAttribName );
 
                 // extract namespace prefix from attribute name if it exists
                 OUString sPrefix;
-                const sal_Int32 nPos = pAttribName->indexOf( sal_Unicode(':') );
-                if( nPos != -1 )
-                    sPrefix = pAttribName->copy( 0, nPos );
+                const sal_Int32 nColonPos =
+                    pAttribName->indexOf( sal_Unicode(':') );
+                if( nColonPos != -1 )
+                    sPrefix = pAttribName->copy( 0, nColonPos );
 
                 if( sPrefix.getLength() )
                 {
@@ -1064,25 +1066,69 @@ void SvXMLExportPropertyMapper::_exportXML(
                     sal_uInt16 nKey = pNamespaceMap->GetKeyByPrefix( sPrefix );
                     if( USHRT_MAX == nKey || pNamespaceMap->GetNameByKey( nKey ) != sNamespace )
                     {
-                        if( !pNewNamespaceMap )
+                        sal_Bool bAddNamespace = sal_False;
+                        if( USHRT_MAX == nKey )
                         {
-                            pNewNamespaceMap = new SvXMLNamespaceMap( rNamespaceMap );
-                            pNamespaceMap = pNewNamespaceMap;
+                            // The prefix is unused, so it is sufficient
+                            // to add it to the namespace map.
+                            bAddNamespace = sal_True;
                         }
-                        pNewNamespaceMap->Add( sPrefix, sNamespace );
+                        else
+                        {
+                            // check if there is a prefix registered for the
+                            // namepsace URI
+                            nKey = pNamespaceMap->GetKeyByName( sNamespace );
+                            if( XML_NAMESPACE_UNKNOWN == nKey )
+                            {
+                                // There is no prefix for the namespace, so
+                                // we have to generate one and have to add it.
+                                sal_Int32 n=0;
+                                OUString sOrigPrefix( sPrefix );
+                                do
+                                {
+                                    sNameBuffer.append( sOrigPrefix );
+                                    sNameBuffer.append( ++n );
+                                    sPrefix = sNameBuffer.makeStringAndClear();
+                                    nKey = pNamespaceMap->GetKeyByPrefix( sPrefix );
+                                }
+                                while( nKey != USHRT_MAX );
 
-                        sName.append( GetXMLToken(XML_XMLNS) );
-                        sName.append( sal_Unicode(':') );
-                        sName.append( sPrefix );
-                        rAttrList.AddAttribute( sName.makeStringAndClear(),
-                                                sNamespace );
+                                bAddNamespace = sal_True;
+                            }
+                            else
+                            {
+                                // If there is a prefix for the namespace,
+                                // we reuse that.
+                                sPrefix = pNamespaceMap->GetPrefixByKey( nKey );
+                            }
+                            // In any case, the attribute name has to be adapted.
+                            sNameBuffer.append( sPrefix );
+                            sNameBuffer.append( sal_Unicode(':') );
+                            sNameBuffer.append( pAttribName->copy( nColonPos+1 ) );
+                            sAttribName = sNameBuffer.makeStringAndClear();
+                        }
+
+                        if( bAddNamespace )
+                        {
+                            if( !pNewNamespaceMap )
+                            {
+                                pNewNamespaceMap = new SvXMLNamespaceMap( rNamespaceMap );
+                                pNamespaceMap = pNewNamespaceMap;
+                            }
+                            pNewNamespaceMap->Add( sPrefix, sNamespace );
+                            sNameBuffer.append( GetXMLToken(XML_XMLNS) );
+                            sNameBuffer.append( sal_Unicode(':') );
+                            sNameBuffer.append( sPrefix );
+                            rAttrList.AddAttribute( sNameBuffer.makeStringAndClear(),
+                                                    sNamespace );
+                        }
                     }
                 }
-                OUString sOldValue( rAttrList.getValueByName( *pAttribName ) );
+                OUString sOldValue( rAttrList.getValueByName( sAttribName ) );
                 OSL_ENSURE( sOldValue.getLength() == 0, "alien attribute exists already" );
                 OSL_ENSURE(aData.Type == GetXMLToken(XML_CDATA), "different type to our default type which should be written out");
                 if( !sOldValue.getLength() )
-                    rAttrList.AddAttribute( *pAttribName, aData.Value );
+                    rAttrList.AddAttribute( sAttribName, aData.Value );
             }
 
             delete pNewNamespaceMap;
