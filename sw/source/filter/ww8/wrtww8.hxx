@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:09:02 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 14:08:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -435,6 +435,7 @@ friend Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode );
     unsigned int mnHdFtIndex;
 
     virtual ULONG WriteStorage();
+    virtual ULONG WriteMedium( SfxMedium& );
 
     void PrepareStorage();
     void WriteFkpPlcUsw();
