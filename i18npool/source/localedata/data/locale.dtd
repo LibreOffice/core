@@ -14,7 +14,7 @@
     http://unicode.org/cldr/data/tools/java/org/unicode/cldr/util/XMLValidator.java
     Compile it into a class-jar and call it in the
     i18npool/source/localedata/data/ directory:
-    java -cp <your_path>/XMLValidator.jar com.ibm.icu.dev.tool.cldr.XMLValidator your_data.xml
+    java -cp <your_path>/XMLValidator.jar org.unicode.cldr.util.XMLValidator your_data.xml
 
 
     A second possiblity is:
