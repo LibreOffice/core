@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtxml.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:18:57 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 14:09:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,10 +55,11 @@ namespace com { namespace sun { namespace start {
 
 class SwXMLWriter : public StgWriter
 {
-    sal_uInt32 _Write();
+    sal_uInt32 _Write( SfxMedium* pTargetMedium = NULL );
 
 protected:
     virtual sal_uInt32 WriteStorage();
+    virtual sal_uInt32 WriteMedium( SfxMedium& aTargetMedium );
 
 public:
 
