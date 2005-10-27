@@ -18,7 +18,7 @@
 <DecimalSeparator>.</DecimalSeparator>
 <TimeSeparator>:</TimeSeparator>
 <Time100SecSeparator>.</Time100SecSeparator>
-<ListSeparator>、</ListSeparator>
+<ListSeparator>;</ListSeparator>
 <LongDateDayOfWeekSeparator/>
 <LongDateDaySeparator>日</LongDateDaySeparator>
 <LongDateMonthSeparator>月</LongDateMonthSeparator>
