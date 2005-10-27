@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:05:44 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 15:59:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2327,20 +2327,39 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* pCrsr,
 {
     ASSERT( pBoxFrm, "GetTabRows called without pBoxFrm" )
 
+    // --> FME 2005-09-12 #121591# Make code robust:
+    if ( !pBoxFrm )
+        return;
+    // <--
+
     // --> FME 2005-01-06 #i39552# Collection of the boxes of the current
     // column has to be done at the beginning of this function, because
     // the table may be formatted in ::GetTblSel.
+    SwDeletionChecker aDelCheck( pBoxFrm );
+
     SwSelBoxes aBoxes;
-
-    const SwTabFrm* pTab = pBoxFrm->FindTabFrm();
     const SwCntntFrm* pCntnt = ::GetCellCntnt( *pBoxFrm );
-
     if ( pCntnt && pCntnt->IsTxtFrm() )
     {
         const SwPosition aPos( *((SwTxtFrm*)pCntnt)->GetTxtNode() );
         const SwCursor aTmpCrsr( aPos );
         ::GetTblSel( aTmpCrsr, aBoxes, TBLSEARCH_COL );
     }
+    // <--
+
+    // --> FME 2005-09-12 #121591# Make code robust:
+    if ( aDelCheck.HasBeenDeleted() )
+    {
+        ASSERT( false, "Current box has been deleted during GetTabRows()" )
+        return;
+    }
+    // <--
+
+    // --> FME 2005-09-12 #121591# Make code robust:
+    const SwTabFrm* pTab = pBoxFrm->FindTabFrm();
+    ASSERT( pTab, "GetTabRows called without a table" )
+    if ( !pTab )
+        return;
     // <--
 
     const SwTableBox* pBox = pBoxFrm->GetTabBox();
