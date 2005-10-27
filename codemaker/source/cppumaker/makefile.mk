@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 02:13:52 $
+#   last change: $Author: hr $ $Date: 2005-10-27 17:12:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,8 @@ LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
-.INCLUDE :  settings.mk
+.INCLUDE : settings.mk
+.INCLUDE : $(PRJ)$/codemaker.pmk
 
 # --- Files --------------------------------------------------------
 
@@ -64,12 +65,7 @@ APP1TARGET= $(TARGET)
 
 APP1OBJS=   $(OBJFILES)
 
-APP1STDLIBS= \
-             $(SALLIB) \
-             $(SALHELPERLIB) \
-             $(REGLIB) 
 
-APP1LIBS= \
-          $(LB)$/codemaker.lib
+APP1STDLIBS= $(SALLIB) $(SALHELPERLIB) $(REGLIB) $(CODEMAKERLIB)
 
 .INCLUDE :  target.mk
