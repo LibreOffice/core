@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLIndexTemplateContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:12:06 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 15:54:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -276,11 +276,20 @@ void XMLIndexTemplateContext::EndElement()
             DBG_ASSERT(NULL != pStyleProperty, "need property name");
             if (NULL != pStyleProperty)
             {
-                aAny <<= GetImport().GetStyleDisplayName(
+                OUString sDisplayStyleName =
+                        GetImport().GetStyleDisplayName(
                         XML_STYLE_FAMILY_TEXT_PARAGRAPH,
                         sStyleName );
-                rPropertySet->setPropertyValue(
-                    OUString::createFromAscii(pStyleProperty), aAny);
+                // #i50288#: Check if style exists
+                const Reference < ::com::sun::star::container::XNameContainer > & rStyles =
+                    GetImport().GetTextImport()->GetParaStyles();
+                if( rStyles.is() &&
+                    rStyles->hasByName( sDisplayStyleName ) )
+                {
+                    aAny <<= sDisplayStyleName;
+                    rPropertySet->setPropertyValue(
+                        OUString::createFromAscii(pStyleProperty), aAny);
+                }
             }
         }
     }
