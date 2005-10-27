@@ -4,9 +4,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:02:37 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 14:09:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1444,6 +1444,9 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
                 aGuard.reset();
                 if( bConverted )
                 {
+                    // get pixmap again since clearing the guard could have invalidated
+                    // the pixmap in another thread
+                    pPixmap = getPixmapHolder( selection );
                     // conversion succeeded, so aData contains image/bmp now
                     if( pPixmap->needsConversion( (const sal_uInt8*)aData.getConstArray() )
                         && m_xBitmapConverter.is() )
@@ -1456,13 +1459,12 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
                         Sequence<sal_Int16> aOutIndex;
                         aArgs.getArray()[0] = makeAny( xBM );
                         aArgs.getArray()[1] = makeAny( (sal_uInt16)pPixmap->getDepth() );
+                        aGuard.clear();
                         try
                         {
-                            aGuard.clear();
                             Any aResult =
                                 m_xBitmapConverter->invoke( OUString::createFromAscii( "convert-bitmap-depth" ),
                                                             aArgs, aOutIndex, aOutArgs );
-                            aGuard.reset();
                             if( aResult >>= xBM )
                                 aData = xBM->getDIB();
                         }
@@ -1472,7 +1474,11 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
                             fprintf( stderr, "exception in bitmap converter\n" );
 #endif
                         }
+                        aGuard.reset();
                     }
+                    // get pixmap again since clearing the guard could have invalidated
+                    // the pixmap in another thread
+                    pPixmap = getPixmapHolder( selection );
                     nValue = (XID)pPixmap->setBitmapData( (const sal_uInt8*)aData.getConstArray() );
                 }
                 if( nValue == None )
