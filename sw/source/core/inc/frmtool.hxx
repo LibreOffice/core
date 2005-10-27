@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmtool.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:08:31 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 16:00:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -552,5 +552,34 @@ void GetSpacingValuesOfFrm( const SwFrm& _rFrm,
 */
 
 const SwCntntFrm* GetCellCntnt( const SwLayoutFrm& rCell_ );
+
+
+/** helper class to check if a frame has been deleted during an operation
+ *  !!!WARNING!!! This should only be used as a last and desperate means
+ *  to make the code robust.
+ */
+
+class SwDeletionChecker
+{
+    private:
+
+    const SwFrm* mpFrm;
+    const SwModify* mpRegIn;
+
+    public:
+
+    SwDeletionChecker( const SwFrm* pFrm )
+            : mpFrm( pFrm ),
+              mpRegIn( pFrm ? pFrm->GetRegisteredIn() : 0 )
+    {
+    }
+
+    /**
+     *  return
+     *    true if mpFrm != 0 and mpFrm is not client of pRegIn
+     *    false otherwise
+     */
+    bool HasBeenDeleted();
+};
 
 #endif  //_FRMTOOL_HXX
