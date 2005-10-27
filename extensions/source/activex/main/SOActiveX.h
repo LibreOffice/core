@@ -141,6 +141,7 @@ public:
     HRESULT OnDrawAdvanced(ATL_DRAWINFO& di);
     HRESULT OnDraw(ATL_DRAWINFO& di);
 
+    HRESULT SetLayoutManagerProps();
     HRESULT CreateFrameOldWay( HWND hwnd, int width, int height );
     HRESULT GetUnoStruct( OLECHAR* sStructName, CComPtr<IDispatch>& pdispResult );
     HRESULT LoadURLToFrame();
