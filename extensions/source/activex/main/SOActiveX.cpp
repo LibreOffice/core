@@ -338,6 +338,30 @@ HRESULT CSOActiveX::GetUrlStruct( OLECHAR* sUrl, CComPtr<IDispatch>& pdispUrl )
     return S_OK;
 }
 
+HRESULT CSOActiveX::SetLayoutManagerProps()
+{
+    if ( !mpDispFrame )
+        return E_FAIL;
+
+    CComVariant pVarLayoutMgr;
+    OLECHAR* sLMPropName = L"LayoutManager";
+    HRESULT hr = GetPropertiesFromIDisp( mpDispFrame, &sLMPropName, &pVarLayoutMgr, 1 );
+    if( pVarLayoutMgr.vt != VT_DISPATCH || pVarLayoutMgr.pdispVal == NULL )
+        return E_FAIL;
+
+      CComPtr<IDispatch> pdispLM( pVarLayoutMgr.pdispVal );
+
+
+    if( !SUCCEEDED( hr ) || !pdispLM )
+        return E_FAIL;
+
+    OLECHAR* sATName = L"AutomaticToolbars";
+    CComVariant pATProp;
+    pATProp.vt = VT_BOOL; pATProp.boolVal = VARIANT_FALSE ;
+    hr = PutPropertiesToIDisp( pdispLM, &sATName, &pATProp, 1 );
+
+    return hr;
+}
 
 HRESULT CSOActiveX::CreateFrameOldWay( HWND hwnd, int width, int height )
 {
@@ -409,6 +433,9 @@ HRESULT CSOActiveX::CreateFrameOldWay( HWND hwnd, int width, int height )
     CComVariant dummyResult;
     hr = ExecuteFunc( mpDispFrame, L"initialize", &CComVariant( mpDispWin ), 1, &dummyResult );
     if( !SUCCEEDED( hr ) ) return hr;
+
+    // set some properties to the layout manager, ignore errors for now
+    SetLayoutManagerProps();
 
     // create desktop
     CComPtr<IDispatch> pdispDesktop;
