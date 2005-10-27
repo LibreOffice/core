@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:35:12 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 14:07:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -399,6 +399,12 @@ ULONG Sw3Writer::WriteStorage()
         nRet = ERR_SWG_WRITE_ERROR;
     }*/
     return nRet;
+}
+
+ULONG Sw3Writer::WriteMedium( SfxMedium& )
+{
+    DBG_ERROR( "Shouldn't be used currently!");
+    return WriteStorage();
 }
 
 BOOL Sw3Writer::IsSw3Writer() const { return TRUE; }
