@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_activex.scp,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:16:46 $
+ *  last change: $Author: hr $ $Date: 2005-10-27 14:08:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 
 File gid_File_Lib_Soactivex
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Program;
     Name = "so_activex.dll";
 End
