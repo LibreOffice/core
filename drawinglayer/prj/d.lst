@@ -1,0 +1,37 @@
+..\%__SRC%\lib\idrawinglayer.lib %_DEST%\lib%_EXT%\idrawinglayer.lib
+..\%__SRC%\bin\drawinglayer?????.dll %_DEST%\bin%_EXT%\drawinglayer?????.dll
+..\%__SRC%\lib\libdrawinglayer?????.* %_DEST%\lib%_EXT%\libdrawinglayer?????.*
+..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+
+mkdir: %_DEST%\inc%_EXT%\drawinglayer
+
+mkdir: %_DEST%\inc%_EXT%\drawinglayer\primitive
+..\inc\drawinglayer\primitive\sdrfillbitmapattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\sdrfillbitmapattribute.hxx
+..\inc\drawinglayer\primitive\fillbitmapprimitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\fillbitmapprimitive.hxx
+..\inc\drawinglayer\primitive\fillhatchprimitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\fillhatchprimitive.hxx
+..\inc\drawinglayer\primitive\fillgradientprimitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\fillgradientprimitive.hxx
+..\inc\drawinglayer\primitive\bitmapprimitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\bitmapprimitive.hxx
+..\inc\drawinglayer\primitive\fillattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\fillattribute.hxx
+..\inc\drawinglayer\primitive\fillbitmapattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\fillbitmapattribute.hxx
+..\inc\drawinglayer\primitive\maskprimitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\maskprimitive.hxx
+..\inc\drawinglayer\primitive\metafileprimitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\metafileprimitive.hxx
+..\inc\drawinglayer\primitive\polygonprimitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\polygonprimitive.hxx
+..\inc\drawinglayer\primitive\polypolygonprimitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\polypolygonprimitive.hxx
+..\inc\drawinglayer\primitive\primitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\primitive.hxx
+..\inc\drawinglayer\primitive\primitivedefines.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\primitivedefines.hxx
+..\inc\drawinglayer\primitive\primitivelist.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\primitivelist.hxx
+..\inc\drawinglayer\primitive\primitiveprocessor.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\primitiveprocessor.hxx
+..\inc\drawinglayer\primitive\referencedprimitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\referencedprimitive.hxx
+..\inc\drawinglayer\primitive\rgbcolorattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\rgbcolorattribute.hxx
+..\inc\drawinglayer\primitive\sdrattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\sdrattribute.hxx
+..\inc\drawinglayer\primitive\shadowprimitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\shadowprimitive.hxx
+..\inc\drawinglayer\primitive\simpletransparenceprimitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\simpletransparenceprimitive.hxx
+..\inc\drawinglayer\primitive\strokearrowattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\strokearrowattribute.hxx
+..\inc\drawinglayer\primitive\strokeattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\strokeattribute.hxx
+..\inc\drawinglayer\primitive\textlayoutdevice.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\textlayoutdevice.hxx
+..\inc\drawinglayer\primitive\textprimitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\textprimitive.hxx
+..\inc\drawinglayer\primitive\texture.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\texture.hxx
+..\inc\drawinglayer\primitive\transparenceprimitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\transparenceprimitive.hxx
+..\inc\drawinglayer\primitive\unifiedcolorprimitive.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\unifiedcolorprimitive.hxx
+..\inc\drawinglayer\primitive\vclprimitiveprocessor.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive\vclprimitiveprocessor.hxx
