@@ -1,4 +1,4 @@
-udt	unodevtools	:	codemaker NULL
+udt	unodevtools	:	codemaker cppuhelper NULL
 udt	unodevtools							usr1	-	all	udt_mkout NULL
 udt	unodevtools\inc						get		-	all	udt_inc NULL
 udt	unodevtools\prj						get		-	all	udt_prj NULL
