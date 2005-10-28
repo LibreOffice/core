@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interfacecontainer.h,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:20:32 $
+ *  last change: $Author: dbo $ $Date: 2005-10-28 09:13:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,6 +247,9 @@ inline void OInterfaceContainerHelper::forEach( FuncT const& func )
         ::com::sun::star::uno::Reference<ListenerT> const xListener(
             iter.next(), ::com::sun::star::uno::UNO_QUERY );
         if (xListener.is()) {
+#if defined(EXCEPTIONS_OFF)
+            func( xListener );
+#else
             try {
                 func( xListener );
             }
@@ -254,6 +257,7 @@ inline void OInterfaceContainerHelper::forEach( FuncT const& func )
                 if (exc.Context == xListener)
                     iter.remove();
             }
+#endif
         }
     }
 }
