@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.77 $
-# Date:        $Date: 2005-10-25 11:24:20 $
+# Version:     $Revision: 1.78 $
+# Date:        $Date: 2005-10-28 11:59:53 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1856,7 +1856,7 @@ if ( $platform !~ m/cygwin/ )
 if ( $platform =~ m/cygwin/ and '@USE_SHELL@' eq "4nt" )
 {
   ToFile( "build the dmake executable.", $empty, "c");
-  ToFile( "if not exist \%SOLARENV\\\%OUTPATH\\bin\\dmake.exe (cd \%SRC_ROOT\\dmake \^ set INCLUDE=\%COMPATH\\include \^ set LIB=\%COMPATH\\lib \^ call make.bat win95-vpp40 \^ cd \%SRC_ROOT)", $empty, "x");
+  ToFile( "if not exist \%SOLARENV\\\%OUTPATH\\bin\\dmake.exe (cd \%SRC_ROOT\\dmake \^ set INCLUDE=\%COMPATH\\include;\%PSDK_HOME\\include \^ set LIB=\%COMPATH\\lib;\%PSDK_HOME\\lib \^ call make.bat win95-vpp40 \^ cd \%SRC_ROOT)", $empty, "x");
   ToFile( "if not exist \%SOLARENV\\\%OUTPATH\\bin\\dmake.exe ( mkdir /S \%SOLARENV\\\%OUTPATH\\bin \^ copy dmake\\dmake.exe \%SOLARENV\\\%OUTPATH\\bin\\dmake.exe )", $empty, "x");
   ToFile( "echo Warning! LIB and INCLUDE will be cleared!", $empty, "x");
   ToFile( "unset INCLUDE LIB", $empty, "x");
