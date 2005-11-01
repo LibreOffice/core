@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:34:36 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 12:59:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -474,29 +474,16 @@ void ToolBox::ImplUpdateItem( USHORT nIndex )
     {
         if ( nIndex == 0xFFFF )
         {
-            // Nur direkt neu ausgeben, wenn nicht neu formatiert
-            // werden muss
-            if ( !mbFormat )
-            {
-                USHORT nItemCount = mpData->m_aItems.size();
-                for ( USHORT i = 0; i < nItemCount; i++ )
-                    ImplDrawItem( i, (i == mnCurPos) ? TRUE : FALSE );
-            }
-            else
-            {
-                Invalidate( Rectangle( mnLeftBorder, mnTopBorder,
-                                       mnDX-mnRightBorder-1, mnDY-mnBottomBorder-1 ) );
-            }
+            // #i52217# no immediate draw as this might lead to paint problems
+            Invalidate( Rectangle( mnLeftBorder, mnTopBorder,
+                                    mnDX-mnRightBorder-1, mnDY-mnBottomBorder-1 ) );
         }
         else
         {
-            // Nur direkt neu ausgeben, wenn nicht neu formatiert
-            // werden muss
             if ( !mbFormat )
             {
-                ImplToolItem* pItem = &mpData->m_aItems[nIndex];
-                //ImplDrawItem( nIndex, (nIndex == mnCurPos) ? TRUE : FALSE );
-                ImplDrawItem( nIndex, (pItem->mnId == mnHighItemId) ? 2 : FALSE );
+                // #i52217# no immediate draw as this might lead to paint problems
+                Invalidate( mpData->m_aItems[nIndex].maRect );
             }
             else
                 maPaintRect.Union( mpData->m_aItems[nIndex].maRect );
