@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:32:15 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:34:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,11 +55,9 @@
 #ifndef _SV_BITMAP_HXX
 #include <bitmap.hxx>
 #endif
-#define private public
 #ifndef _SV_TOOLBOX_HXX
 #include <toolbox.hxx>
 #endif
-#undef private
 #ifndef _SV_TOOLBOX_H
 #include <toolbox.h>
 #endif
