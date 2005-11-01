@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xdictionary.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:02:35 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 14:52:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@
 #endif
 
 #include <com/sun/star/i18n/WordType.hpp>
-#include <tools/string.hxx>
 #include <xdictionary.hxx>
 #include <i18nutil/unicode.hxx>
 #include <string.h>
