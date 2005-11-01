@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:35:45 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 13:00:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,32 @@ static USHORT GetKeyCode( guint keyval )
     else if( keyval >= GDK_a && keyval <= GDK_z )
         nCode = KEY_A + (keyval-GDK_a );
     else if( keyval >= GDK_F1 && keyval <= GDK_F26 )
-        nCode = KEY_F1 + (keyval-GDK_F1);
+    {
+        if( GetSalData()->GetDisplay()->IsNumLockFromXS() )
+        {
+            nCode = KEY_F1 + (keyval-GDK_F1);
+        }
+        else
+        {
+            switch( keyval )
+            {
+                // - - - - - Sun keyboard, see vcl/unx/source/app/saldisp.cxx
+                case GDK_L2:
+                    if( GetSalData()->GetDisplay()->GetServerVendor() == vendor_sun )
+                        nCode = KEY_REPEAT;
+                    else
+                        nCode = KEY_F12;
+                    break;
+                case GDK_L3:            nCode = KEY_PROPERTIES; break;
+                case GDK_L4:            nCode = KEY_UNDO;       break;
+                case GDK_L6:            nCode = KEY_COPY;       break; // KEY_F16
+                case GDK_L8:            nCode = KEY_PASTE;      break; // KEY_F18
+                case GDK_L10:           nCode = KEY_CUT;        break; // KEY_F20
+                default:
+                    nCode = KEY_F1 + (keyval-GDK_F1);           break;
+            }
+        }
+    }
     else
     {
         switch( keyval )
