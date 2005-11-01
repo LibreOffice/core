@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-13 09:37:03 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:35:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,8 @@ static USHORT GetKeyCode( guint keyval )
     USHORT nCode = 0;
     if( keyval >= GDK_0 && keyval <= GDK_9 )
         nCode = KEY_0 + (keyval-GDK_0);
+    else if( keyval >= GDK_KP_0 && keyval <= GDK_KP_9 )
+        nCode = KEY_0 + (keyval-GDK_KP_0);
     else if( keyval >= GDK_A && keyval <= GDK_Z )
         nCode = KEY_A + (keyval-GDK_A );
     else if( keyval >= GDK_a && keyval <= GDK_z )
@@ -205,40 +207,42 @@ void GtkSalFrame::doKeyCallback( guint state,
     SalKeyEvent aEvent;
 
     aEvent.mnTime           = time;
-    aEvent.mnCode           = GetKeyCode( keyval ) | GetKeyModCode( state );
     aEvent.mnCharCode       = aOrigCode;
     aEvent.mnRepeat         = 0;
 
     vcl::DeletionListener aDel( this );
+    /* #i42122# translate all keys with Ctrl and/or Alt to group 0
+    *  else shortcuts (e.g. Ctrl-o) will not work but be inserted by
+    *  the application
+    */
+    /* #i52338# do this for all keys that the independent part has no key code for
+    */
+    aEvent.mnCode = GetKeyCode( keyval );
+    if( aEvent.mnCode == 0 )
+    {
+        // check other mapping
+        gint eff_group, level;
+        GdkModifierType consumed;
+        guint updated_keyval = 0;
+        // use gdk_keymap_get_default instead of NULL;
+        // workaround a crahs fixed in gtk 2.4
+        if( gdk_keymap_translate_keyboard_state( gdk_keymap_get_default(),
+                                                 hardware_keycode,
+                                                 (GdkModifierType)0,
+                                                 0,
+                                                 &updated_keyval,
+                                                 &eff_group,
+                                                 &level,
+                                                 &consumed ) )
+        {
+            aEvent.mnCode   = GetKeyCode( updated_keyval );
+        }
+    }
+    aEvent.mnCode   |= GetKeyModCode( state );
+
     if( bDown )
     {
-        /* #i42122# translate all keys with Ctrl and/or Alt to group 0
-        *  else shortcuts (e.g. Ctrl-o) will not work but be inserted by
-        *  the application
-        */
-        bool bHandled = false;
-        if( (aEvent.mnCode & (KEY_MOD1|KEY_MOD2)) == 0 || group == 0 )
-            bHandled = CallCallback( SALEVENT_KEYINPUT, &aEvent );
-        else
-        {
-            // check other mapping
-            gint eff_group, level;
-            GdkModifierType consumed;
-            guint updated_keyval = 0;
-            if( gdk_keymap_translate_keyboard_state( NULL,
-                                                     hardware_keycode,
-                                                     (GdkModifierType)0,
-                                                     0,
-                                                     &updated_keyval,
-                                                     &eff_group,
-                                                     &level,
-                                                     &consumed ) )
-            {
-                aEvent.mnCode   = GetKeyCode( updated_keyval ) | GetKeyModCode( state );
-                aEvent.mnCharCode = (USHORT)gdk_keyval_to_unicode( updated_keyval );
-                bHandled = CallCallback( SALEVENT_KEYINPUT, &aEvent );
-            }
-        }
+        bool bHandled = CallCallback( SALEVENT_KEYINPUT, &aEvent );
         // #i46889# copy AlternatKeyCode handling from generic plugin
         if( ! bHandled )
         {
@@ -503,7 +507,10 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
         if( (nStyle & SAL_FRAME_STYLE_DIALOG) )
             eType = GDK_WINDOW_TYPE_HINT_DIALOG;
         if( (nStyle & SAL_FRAME_STYLE_INTRO) )
+        {
+            gtk_window_set_role(m_pWindow, "splashscreen");
             eType = GDK_WINDOW_TYPE_HINT_SPLASHSCREEN;
+        }
         else if( (nStyle & SAL_FRAME_STYLE_TOOLWINDOW ) )
         {
             eType = GDK_WINDOW_TYPE_HINT_UTILITY;
@@ -832,6 +839,18 @@ void GtkSalFrame::SetDefaultSize()
         gtk_window_maximize( m_pWindow );
 }
 
+static void initClientId()
+{
+    static bool bOnce = false;
+    if( ! bOnce )
+    {
+        bOnce = true;
+        const ByteString& rID = SessionManagerClient::getSessionID();
+        if( rID.Len() > 0 )
+            gdk_set_sm_client_id(rID.GetBuffer());
+    }
+}
+
 void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
 {
     if( m_pWindow )
@@ -839,6 +858,7 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
         if( bVisible )
         {
             SessionManagerClient::open(); // will simply return after the first time
+            initClientId();
 
             if( m_bDefaultPos )
                 Center();
@@ -1290,7 +1310,7 @@ void GtkSalFrame::ToTop( USHORT nFlags )
     {
         if( GTK_WIDGET_MAPPED( GTK_WIDGET(m_pWindow ) ) )
         {
-            if( ! SAL_FRAME_TOTOP_GRABFOCUS_ONLY )
+            if( ! (nFlags & SAL_FRAME_TOTOP_GRABFOCUS_ONLY) )
                 gtk_window_present( m_pWindow );
             else
                 gdk_window_focus( GTK_WIDGET(m_pWindow)->window, GDK_CURRENT_TIME );
@@ -2312,6 +2332,13 @@ bool GtkSalFrame::IMHandler::handleKeyEvent( GdkEventKey* pEvent )
         }
 
         GObject* pRef = G_OBJECT( g_object_ref( G_OBJECT( m_pIMContext ) ) );
+
+        // #i51353# update spot location on every key input since we cannot
+        // know which key may activate a preedit choice window
+        updateIMSpotLocation();
+        if( aDel.isDeleted() )
+            return true;
+
         gboolean bResult = gtk_im_context_filter_keypress( m_pIMContext, pEvent );
         g_object_unref( pRef );
         if( bResult )
