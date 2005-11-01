@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 11:49:22 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:33:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -350,9 +350,11 @@ public:
     {
         sal_Int32                   m_nDest; // set to -1 for URL, to a dest else
         rtl::OUString               m_aURL;
+        sal_Int32                   m_nStructParent; // struct parent entry
 
         PDFLink()
-                : m_nDest( -1 )
+                : m_nDest( -1 ),
+                  m_nStructParent( -1 )
         {}
     };
 
@@ -474,6 +476,7 @@ private:
     OutputDevice*                       m_pReferenceDevice;
 
     MapMode                             m_aMapMode; // PDFWriterImpl scaled units
+    MapMode                             m_aFineMapMode;
     std::vector< PDFPage >              m_aPages;
     PDFDocInfo                          m_aDocInfo;
     /* maps object numbers to file offsets (needed for xref) */
@@ -508,6 +511,8 @@ private:
     /* current object in the structure hierarchy
      */
     sal_Int32                           m_nCurrentStructElement;
+    /* structure parent tree */
+    std::vector< rtl::OString >         m_aStructParentTree;
     /* emit strucure marks currently (aka. NonStructElement or not)
      */
     bool                                m_bEmitStructure;
@@ -726,7 +731,7 @@ private:
     // writes document structure
     sal_Int32 emitStructure( PDFStructureElement& rEle );
     // writes structure parent tree
-    sal_Int32 emitStructParentTree();
+    sal_Int32 emitStructParentTree( sal_Int32 nTreeObject );
     // writes page tree and catalog
     bool emitCatalog();
     // writes xref and trailer
