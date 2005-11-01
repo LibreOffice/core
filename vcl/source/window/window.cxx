@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.218 $
+ *  $Revision: 1.219 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:36:16 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:34:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -9102,6 +9102,10 @@ LanguageType Window::GetInputLanguage() const
 
 void Window::EnableNativeWidget( BOOL bEnable )
 {
+    static const char* pNoNWF = getenv( "SAL_NO_NWF" );
+    if( pNoNWF && *pNoNWF )
+        bEnable = FALSE;
+
     if( bEnable != ImplGetWinData()->mbEnableNativeWidget )
     {
         ImplGetWinData()->mbEnableNativeWidget = bEnable;
