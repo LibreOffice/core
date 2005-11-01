@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NumberingType.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:29:55 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 14:48:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,6 +227,27 @@ published constants NumberingType
         @since OOo 2.0.0
      */
     const short CHARS_HEBREW = 33;
+
+    //-------------------------------------------------------------------------
+    /** Numbering in Nepali alphabet letters
+
+        @since OOo 2.0.1
+     */
+    const short CHARS_NEPALI = 34;
+
+    //-------------------------------------------------------------------------
+    /** Numbering in Khmer alphabet letters
+
+        @since OOo 2.0.1
+     */
+    const short CHARS_KHMER = 35;
+
+    //-------------------------------------------------------------------------
+    /** Numbering in Lao alphabet letters
+
+        @since OOo 2.0.1
+      */
+    const short CHARS_LAO = 36;
 };
 
 //=============================================================================
