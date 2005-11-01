@@ -81,6 +81,7 @@ ns       0  1132   # Northern Sotho (Sepedi)
 yi       0  1085   # Yiddish
 zu       0  1077   # Zulu
 gu-IN    0  1095   # Gujarati
+br    1252  1577   # Breton
 or       0  1096   # Oriya
 ne       0  1121   # Nepali
 sh-YU    0  2074   # Serbian Latin
