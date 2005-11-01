@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 14:08:26 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 12:47:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1169,7 +1169,7 @@ End
 
 File gid_File_Oo_Office_Ui_Dbucommands_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/DbuCommands.xcu";
 End
@@ -1883,7 +1883,7 @@ End
 // new user interface configuration files
 File gid_File_Share_Config_Sofficecfg_uiconfig_Zip
     TXT_FILE_BODY;
-    Styles = (ARCHIVE);
+    Styles = (ARCHIVE,PATCH);
     Dir = gid_Dir_Share_Config_Sofficecfg;
     Name = "uiconfig.zip";
 End
@@ -1913,7 +1913,7 @@ End
 
 File gid_File_Share_Config_Sofficecfg_Dbubrowser_Menubar_Xml
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Config_Sofficecfg_Dbbrowser_Menubar;
     Name = "/uiconfig/dbbrowser/menubar/menubar.xml";
 End
