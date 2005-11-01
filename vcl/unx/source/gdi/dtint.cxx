@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dtint.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:04:22 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:39:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,14 +122,12 @@ DtIntegrator* DtIntegrator::CreateDtIntegrator()
             return new DtIntegrator();
     }
 
-    Atom nDtAtom = None;
-
 #ifdef USE_CDE
     void* pLibrary = NULL;
 
     // check dt type
     // CDE
-    nDtAtom = XInternAtom( pDisplay, "_DT_WM_READY", True );
+    Atom nDtAtom = XInternAtom( pDisplay, "_DT_WM_READY", True );
     if( nDtAtom && ( pLibrary = dlopen( "/usr/dt/lib/libDtSvc.so", DLOPEN_MODE ) ) )
     {
         dlclose( pLibrary );
@@ -146,4 +144,8 @@ DtIntegrator* DtIntegrator::CreateDtIntegrator()
 
 void DtIntegrator::GetSystemLook( AllSettings& rSettings )
 {
+    // #i48001# set a default blink rate
+    StyleSettings aStyleSettings = rSettings.GetStyleSettings();
+    aStyleSettings.SetCursorBlinkTime( 500 );
+    rSettings.SetStyleSettings( aStyleSettings );
 }
