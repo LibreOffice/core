@@ -4,9 +4,9 @@
  *
  *  $RCSfile: split.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:29:26 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:33:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,11 +39,9 @@
 #ifndef _SV_EVENT_HXX
 #include <event.hxx>
 #endif
-#define private public
 #ifndef _SV_SPLIT_HXX
 #include <split.hxx>
 #endif
-#undef private
 #ifndef _SV_SVAPP_HXX
 #include <svapp.hxx>
 #endif
@@ -89,7 +87,7 @@ namespace
 
 void Splitter::ImplInitData()
 {
-    mpWindowImpl->mbSplitter        = TRUE;
+    ImplGetWindowImpl()->mbSplitter        = TRUE;
     mpRefWin          = NULL;
     mnSplitPos        = 0;
     mnLastSplitPos    = 0;
