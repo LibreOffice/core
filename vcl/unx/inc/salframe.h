@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 14:57:38 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:36:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,6 @@ class VCL_DLLPUBLIC X11SalFrame : public SalFrame
     SystemChildData maSystemChildData;
 
     SalI18N_InputContext *mpInputContext;
-    bool            mbDeleteInputContext;
     Bool            mbInputFocus;
 
     void            GetPosSize( Rectangle &rPosSize );
@@ -213,6 +212,7 @@ public:
     void                    getPosSize( Rectangle& rRect ) { GetPosSize( rRect ); }
     void                    setPosSize( const Rectangle& rRect ) { SetPosSize( rRect ); }
     bool                    isMapped() const { return bMapped_; }
+    bool                    hasFocus() const { return mbInputFocus; }
 
     virtual SalGraphics*        GetGraphics();
     virtual void                ReleaseGraphics( SalGraphics* pGraphics );
