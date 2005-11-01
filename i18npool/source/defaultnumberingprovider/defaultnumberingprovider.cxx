@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultnumberingprovider.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:08:10 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 14:53:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -425,6 +425,15 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
           case CHARS_HEBREW:
               lcl_formatChars(table_Alphabet_he, sizeof(table_Alphabet_he) / sizeof(sal_Unicode), number - 1, result);
               break;
+          case CHARS_NEPALI:
+              lcl_formatChars(table_Alphabet_ne, sizeof(table_Alphabet_ne) / sizeof(sal_Unicode), number - 1, result);
+              break;
+          case CHARS_KHMER:
+              lcl_formatChars(table_Alphabet_km, sizeof(table_Alphabet_km) / sizeof(sal_Unicode), number - 1, result);
+              break;
+          case CHARS_LAO:
+              lcl_formatChars(table_Alphabet_lo, sizeof(table_Alphabet_lo) / sizeof(sal_Unicode), number - 1, result);
+              break;
 
           default:
                assert(0);
@@ -496,6 +505,9 @@ static const Supported_NumberingType aSupportedTypes[] =
         {style::NumberingType::CHARS_ARABIC,    NULL, LANG_CTL},
         {style::NumberingType::CHARS_THAI,      NULL, LANG_CTL},
         {style::NumberingType::CHARS_HEBREW,    NULL, LANG_CTL},
+        {style::NumberingType::CHARS_NEPALI,    NULL, LANG_CTL},
+        {style::NumberingType::CHARS_KHMER,     NULL, LANG_CTL},
+        {style::NumberingType::CHARS_LAO,       NULL, LANG_CTL},
 };
 static const sal_Int32 nSupported_NumberingTypes = sizeof(aSupportedTypes) / sizeof(Supported_NumberingType);
 /* -----------------------------21.02.01 15:57--------------------------------
