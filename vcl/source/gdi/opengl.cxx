@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opengl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:05:25 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:32:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,8 @@
  *
  ************************************************************************/
 
-#define private public
 #include <svsys.h>
 #include <window.hxx>
-#undef private
-#define private public
 
 #ifndef _SV_OUTDEV_HXX
 #include <outdev.hxx>
@@ -544,7 +541,7 @@ void OpenGL::Viewport( GLint nX, GLint nY, GLsizei nWidth, GLsizei nHeight )
         long nOutHeight;
 
         if( mpOutDev->GetOutDevType() == OUTDEV_WINDOW )
-            nOutHeight = ( (Window*) mpOutDev )->mpWindowImpl->mpFrameWindow->mnOutHeight;
+            nOutHeight = ( (Window*) mpOutDev )->ImplGetFrameWindow()->mnOutHeight;
         else
             nOutHeight = mpOutDev->mnOutHeight;
 
@@ -1264,7 +1261,7 @@ void OpenGL::Scissor( GLint nX, GLint nY, GLsizei nWidth, GLsizei nHeight )
         long nOutHeight;
 
         if( mpOutDev->GetOutDevType() == OUTDEV_WINDOW )
-            nOutHeight = ( (Window*) mpOutDev )->mpWindowImpl->mpFrameWindow->mnOutHeight;
+            nOutHeight = ( (Window*) mpOutDev )->ImplGetFrameWindow()->mnOutHeight;
         else
             nOutHeight = mpOutDev->mnOutHeight;
 
