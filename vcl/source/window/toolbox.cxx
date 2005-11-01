@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:31:57 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:34:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,11 +80,9 @@
 #ifndef _SV_SPIN_H
 #include <spin.h>
 #endif
-#define private public
 #ifndef _SV_TOOLBOX_HXX
 #include <toolbox.hxx>
 #endif
-#undef private
 #ifndef _SV_TOOLBOX_H
 #include <toolbox.h>
 #endif
@@ -262,7 +260,7 @@ static void ImplDrawConfigFrame( ToolBox* pThis, const Rectangle& rRect )
 
 // -----------------------------------------------------------------------
 
-static int ImplGetDragWidth( ToolBox* pThis )
+int ToolBox::ImplGetDragWidth( ToolBox* pThis )
 {
     #define TB_DRAGWIDTH 8  // the default width of the grip
 
@@ -285,7 +283,7 @@ static int ImplGetDragWidth( ToolBox* pThis )
 }
 // -----------------------------------------------------------------------
 
-static void ImplUpdateDragArea( ToolBox *pThis )
+void ToolBox::ImplUpdateDragArea( ToolBox *pThis )
 {
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( pThis );
     if( pWrapper )
@@ -304,8 +302,8 @@ static void ImplUpdateDragArea( ToolBox *pThis )
 
 // -----------------------------------------------------------------------
 
-static void ImplCalcBorder( WindowAlign eAlign, long& rLeft, long& rTop,
-                            long& rRight, long& rBottom, const ToolBox *pThis )
+void ToolBox::ImplCalcBorder( WindowAlign eAlign, long& rLeft, long& rTop,
+                              long& rRight, long& rBottom, const ToolBox *pThis )
 {
     if( pThis->ImplIsFloatingMode() || !(pThis->mnWinStyle & WB_BORDER) )
     {
@@ -368,7 +366,7 @@ static void ImplCheckUpdate( ToolBox *pThis )
 
 // -----------------------------------------------------------------------
 
-static void ImplDrawGrip( ToolBox* pThis )
+void ToolBox::ImplDrawGrip( ToolBox* pThis )
 {
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( pThis );
     if( pWrapper && !pWrapper->GetDragArea().IsEmpty() )
@@ -444,7 +442,7 @@ static void ImplDrawGrip( ToolBox* pThis )
     }
 }
 
-static void ImplDrawGradientBackground( ToolBox* pThis, ImplDockingWindowWrapper *pWrapper )
+void ToolBox::ImplDrawGradientBackground( ToolBox* pThis, ImplDockingWindowWrapper *pWrapper )
 {
     // draw a nice gradient
 
@@ -594,7 +592,7 @@ static void ImplDrawGradientBackground( ToolBox* pThis, ImplDockingWindowWrapper
 
 }
 
-static BOOL ImplDrawNativeBackground( ToolBox* pThis, const Region &rRegion )
+BOOL ToolBox::ImplDrawNativeBackground( ToolBox* pThis, const Region &rRegion )
 {
     // use NWF
     Point aPt;
@@ -605,7 +603,7 @@ static BOOL ImplDrawNativeBackground( ToolBox* pThis, const Region &rRegion )
                                     aCtrlRegion, nState, ImplControlValue(), rtl::OUString() );
 }
 
-static void ImplDrawTransparentBackground( ToolBox* pThis, const Region &rRegion )
+void ToolBox::ImplDrawTransparentBackground( ToolBox* pThis, const Region &rRegion )
 {
     // just invalidate to trigger paint of the parent
 
@@ -618,7 +616,7 @@ static void ImplDrawTransparentBackground( ToolBox* pThis, const Region &rRegion
     pThis->mpData->mbIsPaintLocked = bOldPaintLock;
 }
 
-static void ImplDrawConstantBackground( ToolBox* pThis, const Region &rRegion, BOOL bIsInPopupMode )
+void ToolBox::ImplDrawConstantBackground( ToolBox* pThis, const Region &rRegion, BOOL bIsInPopupMode )
 {
     // draw a constant color
     if( !bIsInPopupMode )
@@ -633,7 +631,7 @@ static void ImplDrawConstantBackground( ToolBox* pThis, const Region &rRegion, B
 }
 
 
-static void ImplDrawBackground( ToolBox* pThis, const Rectangle &rRect )
+void ToolBox::ImplDrawBackground( ToolBox* pThis, const Rectangle &rRect )
 {
     // execute pending paint requests
     ImplCheckUpdate( pThis );
@@ -684,7 +682,7 @@ static void ImplDrawBackground( ToolBox* pThis, const Rectangle &rRect )
     pThis->Pop();
 }
 
-static void ImplErase( ToolBox* pThis, const Rectangle &rRect, BOOL bHighlight = FALSE, BOOL bHasOpenPopup = FALSE )
+void ToolBox::ImplErase( ToolBox* pThis, const Rectangle &rRect, BOOL bHighlight, BOOL bHasOpenPopup )
 {
     // the background of non NWF buttons is painted in a constant color
     // to have the same highlight color (transparency in DrawSelectionBackground())
@@ -712,7 +710,7 @@ static void ImplErase( ToolBox* pThis, const Rectangle &rRect, BOOL bHighlight =
         ImplDrawBackground( pThis, rRect );
 }
 
-static void ImplDrawBorder( ToolBox* pWin )
+void ToolBox::ImplDrawBorder( ToolBox* pWin )
 {
     const StyleSettings&    rStyleSettings = pWin->GetSettings().GetStyleSettings();
     long                    nDX = pWin->mnDX;
@@ -788,7 +786,7 @@ static bool ImplIsFixedControl( const ImplToolItem *pItem )
 
 // -----------------------------------------------------------------------
 
-static const ImplToolItem *ImplGetFirstClippedItem( const ToolBox* pThis )
+const ImplToolItem *ToolBox::ImplGetFirstClippedItem( const ToolBox* pThis )
 {
     std::vector< ImplToolItem >::const_iterator it;
     it = pThis->mpData->m_aItems.begin();
@@ -803,8 +801,7 @@ static const ImplToolItem *ImplGetFirstClippedItem( const ToolBox* pThis )
 
 // -----------------------------------------------------------------------
 
-static Size ImplCalcSize( const ToolBox* pThis,
-                          USHORT nCalcLines, USHORT nCalcMode = 0 )
+Size ToolBox::ImplCalcSize( const ToolBox* pThis, USHORT nCalcLines, USHORT nCalcMode )
 {
     long            nMax;
     long            nLeft;
@@ -927,7 +924,7 @@ static Size ImplCalcSize( const ToolBox* pThis,
 
 // -----------------------------------------------------------------------
 
-static void ImplCalcFloatSizes( ToolBox* pThis )
+void ToolBox::ImplCalcFloatSizes( ToolBox* pThis )
 {
     if ( pThis->mpFloatSizeAry )
         return;
@@ -999,7 +996,7 @@ static void ImplCalcFloatSizes( ToolBox* pThis )
 
 // -----------------------------------------------------------------------
 
-static Size ImplCalcFloatSize( ToolBox* pThis, USHORT& rLines )
+Size ToolBox::ImplCalcFloatSize( ToolBox* pThis, USHORT& rLines )
 {
     ImplCalcFloatSizes( pThis );
 
@@ -1025,7 +1022,7 @@ static Size ImplCalcFloatSize( ToolBox* pThis, USHORT& rLines )
 
 // -----------------------------------------------------------------------
 
-static void ImplCalcMinMaxFloatSize( ToolBox* pThis, Size& rMinSize, Size& rMaxSize )
+void ToolBox::ImplCalcMinMaxFloatSize( ToolBox* pThis, Size& rMinSize, Size& rMaxSize )
 {
     ImplCalcFloatSizes( pThis );
 
@@ -1046,7 +1043,7 @@ static void ImplCalcMinMaxFloatSize( ToolBox* pThis, Size& rMinSize, Size& rMaxS
     }
 }
 
-static void ImplSetMinMaxFloatSize( ToolBox *pThis )
+void ToolBox::ImplSetMinMaxFloatSize( ToolBox *pThis )
 {
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( pThis );
     Size aMinSize, aMaxSize;
@@ -1068,7 +1065,7 @@ static void ImplSetMinMaxFloatSize( ToolBox *pThis )
 // -----------------------------------------------------------------------
 
 
-static USHORT ImplCalcLines( ToolBox* pThis, long nToolSize )
+USHORT ToolBox::ImplCalcLines( ToolBox* pThis, long nToolSize )
 {
     long nLineHeight;
 
@@ -1096,7 +1093,7 @@ static USHORT ImplCalcLines( ToolBox* pThis, long nToolSize )
 
 // -----------------------------------------------------------------------
 
-static USHORT ImplTestLineSize( ToolBox* pThis, const Point& rPos )
+USHORT ToolBox::ImplTestLineSize( ToolBox* pThis, const Point& rPos )
 {
     if ( !pThis->ImplIsFloatingMode() &&
          (!pThis->mbScroll || (pThis->mnLines > 1) || (pThis->mnCurLines > pThis->mnVisLines)) )
@@ -1130,8 +1127,8 @@ static USHORT ImplTestLineSize( ToolBox* pThis, const Point& rPos )
 
 // -----------------------------------------------------------------------
 
-static void ImplLineSizing( ToolBox* pThis, const Point& rPos, Rectangle& rRect,
-                            USHORT nLineMode )
+void ToolBox::ImplLineSizing( ToolBox* pThis, const Point& rPos, Rectangle& rRect,
+                     USHORT nLineMode )
 {
     BOOL    mbHorz;
     long    nOneLineSize;
@@ -1226,7 +1223,7 @@ static void ImplLineSizing( ToolBox* pThis, const Point& rPos, Rectangle& rRect,
 
 // -----------------------------------------------------------------------
 
-static USHORT ImplFindItemPos( ToolBox* pBox, const Point& rPos )
+USHORT ToolBox::ImplFindItemPos( ToolBox* pBox, const Point& rPos )
 {
     USHORT  nPos = 0;
     long    nLast = 0;
@@ -1326,7 +1323,7 @@ ToolBox* ImplTBDragMgr::FindToolBox( const Rectangle& rRect )
          *  this works in one frame only anyway. If the dialogue
          *  changes to a system window, we need a new implementation here
          */
-        if ( pBox->IsReallyVisible() && pBox->mpWindowImpl->mpFrame == mpDragBox->mpWindowImpl->mpFrame )
+        if ( pBox->IsReallyVisible() && pBox->ImplGetWindowImpl()->mpFrame == mpDragBox->ImplGetWindowImpl()->mpFrame )
         {
             if ( !pBox->ImplIsFloatingMode() )
             {
@@ -1397,7 +1394,7 @@ void ImplTBDragMgr::Dragging( const Point& rPos )
 {
     if ( mnLineMode )
     {
-        ImplLineSizing( mpDragBox, rPos, maRect, mnLineMode );
+        ToolBox::ImplLineSizing( mpDragBox, rPos, maRect, mnLineMode );
         Point aOff = mpDragBox->OutputToScreenPixel( Point() );
         maRect.Move( aOff.X(), aOff.Y() );
         mpDragBox->Docking( rPos, maRect );
@@ -1494,7 +1491,7 @@ void ImplTBDragMgr::EndDragging( BOOL bOK )
                     }
 
                     aPos = pDropBox->ScreenToOutputPixel( aPos );
-                    USHORT nPos = ImplFindItemPos( pDropBox, aPos );
+                    USHORT nPos = ToolBox::ImplFindItemPos( pDropBox, aPos );
                     mpDragBox->Customize( ToolBoxCustomizeEvent( pDropBox, nTempItem,
                                                                  nPos, mpCustomizeData ) );
                 }
@@ -1619,7 +1616,7 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
 {
 
     // Variablen initialisieren
-    mpWindowImpl->mbToolBox         = TRUE;
+    ImplGetWindowImpl()->mbToolBox         = TRUE;
     mpBtnDev          = NULL;
     mpFloatSizeAry    = NULL;
     mpData              = new ImplToolBoxPrivateData;
@@ -1692,8 +1689,8 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
     {
         // dockingwindow's ImplInit removes some bits, so restore them here
         // to allow keyboard handling for toolbars
-        mpWindowImpl->mnStyle |= WB_TABSTOP|WB_NODIALOGCONTROL;
-        mpWindowImpl->mnStyle &= ~WB_DIALOGCONTROL;
+        ImplGetWindowImpl()->mnStyle |= WB_TABSTOP|WB_NODIALOGCONTROL;
+        ImplGetWindowImpl()->mnStyle &= ~WB_DIALOGCONTROL;
     }
 
     ImplInitSettings( TRUE, TRUE, TRUE );
@@ -3063,9 +3060,8 @@ static void ImplDrawDropdownArrow( ToolBox *pBox, const Rectangle& rDropDownRect
         pBox->SetLineColor( );
 }
 
-static void ImplDrawToolArrow( ToolBox* pBox, long nX, long nY, BOOL bBlack, BOOL bColTransform,
-                               BOOL bLeft = FALSE, BOOL bTop = FALSE,
-                               long nSize = 6 )
+void ToolBox::ImplDrawToolArrow( ToolBox* pBox, long nX, long nY, BOOL bBlack, BOOL bColTransform,
+                                 BOOL bLeft, BOOL bTop, long nSize )
 {
     Color           aOldFillColor = pBox->GetFillColor();
     WindowAlign     eAlign = pBox->meAlign;
@@ -3159,9 +3155,8 @@ static void ImplDrawToolArrow( ToolBox* pBox, long nX, long nY, BOOL bBlack, BOO
     }
 }
 
-static void SetToolArrowClipregion( ToolBox* pBox, long nX, long nY,
-                               BOOL bLeft = FALSE, BOOL bTop = FALSE,
-                               long nSize = 6 )
+void ToolBox::SetToolArrowClipregion( ToolBox* pBox, long nX, long nY,
+                                      BOOL bLeft, BOOL bTop, long nSize )
 {
     WindowAlign     eAlign = pBox->meAlign;
     long            nHalfSize;
@@ -3216,7 +3211,7 @@ static void SetToolArrowClipregion( ToolBox* pBox, long nX, long nY,
 
 // -----------------------------------------------------------------------
 
-static void ImplDrawMenubutton( ToolBox *pThis, BOOL bHighlight )
+void ToolBox::ImplDrawMenubutton( ToolBox *pThis, BOOL bHighlight )
 {
     if( !pThis->mpData->maMenubuttonItem.maRect.IsEmpty() )
     {
@@ -4195,17 +4190,17 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
     // and do not hilight when focus is in a different toolbox
     BOOL bDrawHotSpot = TRUE;
     Window *pWin = Application::GetFocusWindow();
-    if( pWin && pWin->mpWindowImpl->mbToolBox && pWin != this )
+    if( pWin && pWin->ImplGetWindowImpl()->mbToolBox && pWin != this )
         bDrawHotSpot = FALSE;
     else if( !HasFocus() && HasChildPathFocus() )   // focus is in our childwindow: no highlight
         bDrawHotSpot = FALSE;
     /*
     else
-        if( pWin && !pWin->mpWindowImpl->mbToolBox )
+        if( pWin && !pWin->ImplGetWindowImpl()->mbToolBox )
             while( pWin )
             {
                 pWin = pWin->GetParent();
-                if( pWin && pWin->mpWindowImpl->mbToolBox )
+                if( pWin && pWin->ImplGetWindowImpl()->mbToolBox )
                 {
                     bDrawHotSpot = FALSE;
                     break;
@@ -5387,7 +5382,7 @@ Size ToolBox::CalcWindowSizePixel( USHORT nCalcLines, WindowAlign eAlign ) const
         (eAlign == WINDOWALIGN_TOP || eAlign == WINDOWALIGN_BOTTOM) ? TB_CALCMODE_HORZ : TB_CALCMODE_VERT );
 }
 
-static USHORT ImplCountLineBreaks( const ToolBox *pThis )
+USHORT ToolBox::ImplCountLineBreaks( const ToolBox *pThis )
 {
     USHORT nLines = 0;
 
@@ -5985,7 +5980,7 @@ ImplToolItem* ToolBox::ImplGetLastValidItem( USHORT nLine )
 
 // -----------------------------------------------------------------------
 
-static USHORT ImplFindItemPos( const ImplToolItem* pItem, const std::vector< ImplToolItem >& rList )
+USHORT ToolBox::ImplFindItemPos( const ImplToolItem* pItem, const std::vector< ImplToolItem >& rList )
 {
     if( pItem )
     {
@@ -6015,7 +6010,7 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, BOOL bNoGrabFocus )
         ImplDrawItem( nPos, FALSE );
         ImplCallEventListeners( VCLEVENT_TOOLBOX_HIGHLIGHTOFF, reinterpret_cast< void* >( nPos ) );
         pOldItem = ImplGetItem( mnHighItemId );
-        oldPos = ImplFindItemPos( pOldItem, mpData->m_aItems );
+        oldPos = ToolBox::ImplFindItemPos( pOldItem, mpData->m_aItems );
     }
 
     if( !bNoGrabFocus && pItem != pOldItem && pOldItem && pOldItem->mpWindow )
@@ -6026,7 +6021,7 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, BOOL bNoGrabFocus )
 
     if( pItem )
     {
-        USHORT aPos = ImplFindItemPos( pItem, mpData->m_aItems );
+        USHORT aPos = ToolBox::ImplFindItemPos( pItem, mpData->m_aItems );
         if( aPos != TOOLBOX_ITEM_NOTFOUND)
         {
             // check for line breaks
@@ -6178,7 +6173,7 @@ BOOL ToolBox::ImplChangeHighlightUpDn( BOOL bUp, BOOL bNoCycle )
 
     if( pItem )
     {
-        ULONG pos = ImplFindItemPos( pItem, mpData->m_aItems );
+        ULONG pos = ToolBox::ImplFindItemPos( pItem, mpData->m_aItems );
         ULONG nCount = mpData->m_aItems.size();
 
         ULONG i=0;
@@ -6251,8 +6246,8 @@ void ToolBox::ImplShowFocus()
         ImplToolItem* pItem = ImplGetItem( mnHighItemId );
         if( pItem->mpWindow )
         {
-            Window *pWin = pItem->mpWindow->mpWindowImpl->mpBorderWindow ? pItem->mpWindow->mpWindowImpl->mpBorderWindow : pItem->mpWindow;
-            pWin->mpWindowImpl->mbDrawSelectionBackground = TRUE;
+            Window *pWin = pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow ? pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow : pItem->mpWindow;
+            pWin->ImplGetWindowImpl()->mbDrawSelectionBackground = TRUE;
             pWin->Invalidate( 0 );
         }
     }
@@ -6267,8 +6262,8 @@ void ToolBox::ImplHideFocus()
         ImplToolItem* pItem = ImplGetItem( mnHighItemId );
         if( pItem->mpWindow )
         {
-            Window *pWin = pItem->mpWindow->mpWindowImpl->mpBorderWindow ? pItem->mpWindow->mpWindowImpl->mpBorderWindow : pItem->mpWindow;
-            pWin->mpWindowImpl->mbDrawSelectionBackground = FALSE;
+            Window *pWin = pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow ? pItem->mpWindow->ImplGetWindowImpl()->mpBorderWindow : pItem->mpWindow;
+            pWin->ImplGetWindowImpl()->mbDrawSelectionBackground = FALSE;
             pWin->Invalidate( 0 );
         }
     }
