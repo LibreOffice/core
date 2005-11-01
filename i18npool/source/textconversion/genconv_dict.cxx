@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genconv_dict.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:24:08 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 14:57:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,8 @@
 #include <stdlib.h>
 #include <sal/main.h>
 #include <sal/types.h>
-#include <tools/string.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/ustring.hxx>
 
 using namespace ::rtl;
 
@@ -353,7 +353,6 @@ void make_stc_word(FILE *sfp, FILE *cfp)
         // input file is in UTF-8 encoding (SChinese:TChinese)
         // don't convert last new line character to Ostr.
         OUString Ostr((const sal_Char *)Cstr, strlen(Cstr) - 1, RTL_TEXTENCODING_UTF8);
-        const sal_Unicode *Ustr = Ostr.getStr();
         sal_Int32  len = Ostr.getLength();
         if (char_total + len + 1 > 0xFFFF) {
             fprintf(stderr, "Word Dictionary stc_word.dic is too big (line %d)", line);
