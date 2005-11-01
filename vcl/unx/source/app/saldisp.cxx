@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:00:41 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:38:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1403,10 +1403,18 @@ XubString SalDisplay::GetKeyName( USHORT nKeyCode ) const
 
     if( nKeySym )
     {
-        if( aStrMap.Len() )
-            aStrMap += '+';
-        aStrMap += GetKeyNameFromKeySym( nKeySym );
+        String aKeyName = GetKeyNameFromKeySym( nKeySym );
+        if( aKeyName.Len() )
+        {
+            if( aStrMap.Len() )
+                aStrMap += '+';
+            aStrMap += aKeyName;
+        }
+        else
+            aStrMap.Erase();
     }
+    else
+        aStrMap.Erase();
 
     return aStrMap;
 }
@@ -1795,6 +1803,7 @@ USHORT SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
 KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
                                     unsigned char    *pPrintable,
                                     int              *pLen,
+                                    KeySym           *pUnmodifiedKeySym,
                                     Status           *pStatusReturn,
                                     XIC              aInputContext ) const
 {
@@ -1802,6 +1811,7 @@ KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
     memset( pPrintable, 0, *pLen );
     *pStatusReturn = 0;
 
+    // first get the printable of the possibly modified KeySym
     if (   (aInputContext == 0)
         || (pEvent->type == KeyRelease)
         || (mpInputMethod != NULL && mpInputMethod->PosixLocale()) )
@@ -1856,22 +1866,19 @@ KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
             || IsKeypadKey(nKeySym)
             || XK_Delete == nKeySym ) )
     {
-    // Bei einigen X-Servern muss man bei den Keypadtasten
-    // schon sehr genau hinschauen. ZB. Solaris XServer:
-    // 2, 4, 6, 8 werden als Cursorkeys klassifiziert (Up, Down, Left, Right
-    // 1, 3, 5, 9 werden als Functionkeys klassifiziert (F27,F29,F33,F35)
-    // 0 als Keypadkey und der Dezimalpunkt gar nicht (KP_Insert)
+        // Bei einigen X-Servern muss man bei den Keypadtasten
+        // schon sehr genau hinschauen. ZB. Solaris XServer:
+        // 2, 4, 6, 8 werden als Cursorkeys klassifiziert (Up, Down, Left, Right
+        // 1, 3, 5, 9 werden als Functionkeys klassifiziert (F27,F29,F33,F35)
+        // 0 als Keypadkey und der Dezimalpunkt gar nicht (KP_Insert)
         KeySym nNewKeySym = XLookupKeysym( pEvent, nNumLockIndex_ );
-//      fprintf( stderr, "Key%s: sym=%x state=%x code=%d new=%x\n",
-//               KeyRelease == pEvent->type ? "Release" : "Press",
-//               nKeySym, pEvent->state, pEvent->keycode, nNewKeySym );
         if( nNewKeySym != NoSymbol )
             nKeySym = nNewKeySym;
     }
-//  else
-//      fprintf( stderr, "Key%s: sym=%x state=%x code=%d\n",
-//               KeyRelease == pEvent->type ? "Release" : "Press",
-//               nKeySym, pEvent->state, pEvent->keycode );
+
+    // Now get the unmodified KeySym for KeyCode retrieval
+    // try to strip off modifiers, e.g. Ctrl-$ becomes Ctrl-Shift-4
+    *pUnmodifiedKeySym  = XKeycodeToKeysym( GetDisplay(), pEvent->keycode, 0);
 
     return nKeySym;
 }
@@ -2843,24 +2850,46 @@ void SalDisplay::InitXinerama()
     }
 #else
 #if defined( X86 ) || defined( MACOSX )
-    if( XineramaIsActive( pDisp_ ) )
+if( XineramaIsActive( pDisp_ ) )
+{
+    int nFramebuffers = 1;
+    XineramaScreenInfo* pScreens = XineramaQueryScreens( pDisp_, &nFramebuffers );
+    if( pScreens )
     {
-        int nFramebuffers = 1;
-        XineramaScreenInfo* pScreens = XineramaQueryScreens( pDisp_, &nFramebuffers );
-        if( pScreens )
+        if( nFramebuffers > 1 )
         {
-            if( nFramebuffers > 1 )
+            for( int i = 0; i < nFramebuffers; i++ )
             {
-                m_bXinerama = true;
-                for( int i = 0; i < nFramebuffers; i++ )
+                // see if any frame buffers are at the same coordinates
+                // this can happen with weird configuration e.g. on
+                // XFree86 and Clone displays
+                bool bDuplicate = false;
+                for( int n = 0; n < i; n++ )
+                {
+                    if( m_aXineramaScreens[n].Left() == pScreens[i].x_org &&
+                        m_aXineramaScreens[n].Top() == pScreens[i].y_org )
+                    {
+                        bDuplicate = true;
+                        if( m_aXineramaScreens[n].GetWidth() < pScreens[i].width ||
+                            m_aXineramaScreens[n].GetHeight() < pScreens[i].height )
+                        {
+                            m_aXineramaScreens[n].SetSize( Size( pScreens[i].width,
+                            pScreens[i].height ) );
+                        }
+                        break;
+                    }
+                }
+                if( ! bDuplicate )
                     m_aXineramaScreens.push_back( Rectangle( Point( pScreens[i].x_org,
                                                                     pScreens[i].y_org ),
                                                              Size( pScreens[i].width,
                                                                    pScreens[i].height ) ) );
             }
-            XFree( pScreens );
+            m_bXinerama = m_aXineramaScreens.size() > 1;
         }
+        XFree( pScreens );
     }
+}
 #endif
 #endif
 #if OSL_DEBUG_LEVEL > 1
