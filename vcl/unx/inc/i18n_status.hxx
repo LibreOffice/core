@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_status.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:40:55 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:36:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,15 +89,10 @@ public:
         void*   pData;
     };
 private:
-    SalFrame*               m_pParent;
-    StatusWindow*           m_pStatusWindow;
-    SalI18N_InputContext*   m_pInputContext;
-    String                  m_aCurrentIM;
-
-
-
-    ::std::vector< ChoiceData >
-                            m_aChoices;
+    SalFrame*                       m_pParent;
+    StatusWindow*                   m_pStatusWindow;
+    String                          m_aCurrentIM;
+    ::std::vector< ChoiceData >     m_aChoices;
 
     I18NStatus();
     ~I18NStatus();
@@ -123,7 +118,6 @@ public:
     const ::std::vector< ChoiceData >& getChoices() const { return m_aChoices; }
     void clearChoices();
     void addChoice( const String&, void* pData );
-    SalI18N_InputContext* getInputContext( bool& bDeleteAfterUse );
 
     void toTop() const;
 
