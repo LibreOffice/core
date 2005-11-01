@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:34:24 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 12:59:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1743,6 +1743,7 @@ void ToolBox::ImplInitSettings( BOOL bFont,
                 SetBackground();
                 SetPaintTransparent( TRUE );
                 SetParentClipMode( PARENTCLIPMODE_NOCLIP );
+                mpData->maDisplayBackground = Wallpaper( rStyleSettings.GetFaceColor() );
             }
             else
             {
