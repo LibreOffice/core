@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gencoll_rule.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:07:35 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 14:52:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@
 #include <stdlib.h>
 #include <sal/main.h>
 #include <sal/types.h>
-#include <tools/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <unicode/tblcoll.h>
 
