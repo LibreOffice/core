@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:56:04 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:38:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -502,7 +502,7 @@ IMPL_LINK( IIIMPStatusWindow, SelectHdl, MenuButton*, pBtn )
         if( nIndex < rChoices.size() )
         {
             bool bDummy; // should always be false in this case
-            XSetICValues( I18NStatus::get().getInputContext( bDummy )->GetContext(),
+            XSetICValues( static_cast<X11SalFrame*>(I18NStatus::get().getParent())->getInputContext()->GetContext(),
                           XNUnicodeCharacterSubset,
                           rChoices[nIndex].pData,
                           NULL);
@@ -552,8 +552,7 @@ void I18NStatus::free()
 
 I18NStatus::I18NStatus() :
         m_pParent( NULL ),
-        m_pStatusWindow( NULL ),
-        m_pInputContext( NULL )
+        m_pStatusWindow( NULL )
 {
 }
 
@@ -561,32 +560,10 @@ I18NStatus::I18NStatus() :
 
 I18NStatus::~I18NStatus()
 {
-    if( m_pInputContext )
-        delete m_pInputContext, m_pInputContext = NULL;
     if( m_pStatusWindow )
         delete m_pStatusWindow, m_pStatusWindow = NULL;
     if( pInstance == this )
         pInstance = NULL;
-}
-
-// --------------------------------------------------------------------------
-
-SalI18N_InputContext* I18NStatus::getInputContext( bool& bDeleteAfterUse )
-{
-    SalI18N_InputContext* pRet = NULL;
-    if( m_aChoices.end() != m_aChoices.begin() )
-    {
-        if( ! m_pInputContext )
-            m_pInputContext = new SalI18N_InputContext( m_pParent );
-        bDeleteAfterUse = false;
-        pRet = m_pInputContext;
-    }
-    else
-    {
-        pRet = new SalI18N_InputContext( m_pParent );
-        bDeleteAfterUse = true;
-    }
-    return pRet;
 }
 
 // --------------------------------------------------------------------------
