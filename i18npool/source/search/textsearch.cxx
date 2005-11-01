@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsearch.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:23:27 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 14:57:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -895,7 +895,11 @@ SearchResult TextSearch::ApproxSrchFrwrd( const OUString& searchStr,
         nStt = nEnd - 1;
         aWBnd = xBreak->nextWord( aWTemp, nStt, aSrchPara.Locale,
                 WordType::ANYWORD_IGNOREWHITESPACES);
-    } while( aWBnd.startPos != aWBnd.endPos || aWBnd.endPos != aWTemp.getLength() );
+    } while( aWBnd.startPos != aWBnd.endPos ||
+            (aWBnd.endPos != aWTemp.getLength() && aWBnd.endPos != nEnd) );
+    // #i50244# aWBnd.endPos != nEnd : in case there is _no_ word (only
+    // whitespace) in searchStr, getWordBoundary() returned startPos,startPos
+    // and nextWord() does also => don't loop forever.
     return aRet;
 }
 
