@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cdeint.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:04:08 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:38:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,10 +191,12 @@ void CDEIntegrator::GetSystemLook( AllSettings& rSettings )
             XFree( aTextProperty.value );
     }
 
+
+    StyleSettings aStyleSettings = rSettings.GetStyleSettings();
+    // #i48001# set a default blink rate
+    aStyleSettings.SetCursorBlinkTime( 500 );
     if (bValid)
     {
-        StyleSettings aStyleSettings = rSettings.GetStyleSettings();
-
         aStyleSettings.SetActiveColor( aColors[0] );
         aStyleSettings.SetActiveColor2( aColors[0] );
         aStyleSettings.SetActiveBorderColor( aColors[0] );
@@ -240,7 +242,6 @@ void CDEIntegrator::GetSystemLook( AllSettings& rSettings )
             BYTE    nBlue   = (BYTE)(((USHORT)aColors[1].GetBlue()  + (USHORT)aColor2.GetBlue())/2);
             aStyleSettings.SetCheckedColor( Color( nRed, nGreen, nBlue ) );
         }
-
-        rSettings.SetStyleSettings( aStyleSettings );
     }
+    rSettings.SetStyleSettings( aStyleSettings );
 }
