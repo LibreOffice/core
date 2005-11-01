@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_cb.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:39:30 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:35:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,11 @@
  ************************************************************************/
 #ifndef _SAL_I18N_CALLBACK_HXX
 #define _SAL_I18N_CALLBACK_HXX
+
+#ifndef _SV_SALWTYPE_HXX
+#include <salwtype.hxx>
+#endif
+#include <vector>
 
 #ifdef __cplusplus
 extern "C" {
@@ -89,10 +94,12 @@ typedef enum {
 } preedit_status_t;
 
 typedef struct {
-    SalFrame*           pFrame;
-    Bool                bIsMultilingual;
-    preedit_status_t    eState;
-    preedit_text_t      aText;
+    SalFrame*               pFrame;
+    Bool                    bIsMultilingual;
+    preedit_status_t        eState;
+    preedit_text_t          aText;
+    SalExtTextInputEvent    aInputEv;
+    std::vector< USHORT >   aInputFlags;
 } preedit_data_t;
 
 #endif /* _SAL_I18N_CALLBACK_HXX */
