@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sm.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:48:23 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:36:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ public:
     static void interactionDone();
 
     static String getExecName();
-    static const ByteString&  getSessionID() { return aClientID; }
+    static VCL_DLLPUBLIC const ByteString&  getSessionID();
 };
 
 class SalFrame;
