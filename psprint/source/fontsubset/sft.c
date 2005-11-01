@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 14:27:13 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:25:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -348,9 +348,13 @@ _inline void PutInt16(sal_Int16 val, sal_uInt8 *ptr, size_t offset, int bigendia
 
 #if defined(_BIG_ENDIAN)
 #define Int16FromMOTA(a) (a)
+#define Int32FromMOTA(a) (a)
 #else
 static sal_uInt16 Int16FromMOTA(sal_uInt16 a) {
   return (sal_uInt16) (((sal_uInt8)((a) >> 8)) | ((sal_uInt8)(a) << 8));
+}
+static sal_uInt32 Int32FromMOTA(sal_uInt32 a) {
+  return ((a>>24)&0xFF) | ((a>>8)&0xFF00 | ((a&0xFF00)<<8) | ((a&0xFF)<<24));
 }
 #endif
 
@@ -1202,10 +1206,12 @@ enum cmapType {
 #define MISSING_GLYPH_INDEX 0
 
 /*
- * All getGlyph?() functions and freinds are implemented by:
+ * getGlyph[0246]() functions and freinds are implemented by:
  * @author Manpreet Singh
+ * getGlyph12() function and friends by:
+ * @author HDU
  */
-static sal_uInt16 getGlyph0(const sal_uInt8* cmap, sal_uInt16 c) {
+static sal_uInt32 getGlyph0(const sal_uInt8* cmap, sal_uInt32 c) {
     if (c <= 255) {
         return *(cmap + 6 + c);
     } else {
@@ -1220,7 +1226,7 @@ typedef struct _subHeader2 {
     sal_uInt16 idRangeOffset;
 } subHeader2;
 
-static sal_uInt16 getGlyph2(const sal_uInt8 *cmap, sal_uInt16 c) {
+static sal_uInt32 getGlyph2(const sal_uInt8 *cmap, sal_uInt32 c) {
     sal_uInt16 *CMAP2 = (sal_uInt16 *) cmap;
     sal_uInt8 theHighByte;
 
@@ -1229,7 +1235,7 @@ static sal_uInt16 getGlyph2(const sal_uInt8 *cmap, sal_uInt16 c) {
     sal_uInt16* subHeader2Keys;
     sal_uInt16 firstCode;
     int k;
-    int ToReturn;
+    sal_uInt32 ToReturn;
 
     theHighByte = (sal_uInt8)((c >> 8) & 0x00ff);
     theLowByte = (sal_uInt8)(c & 0x00ff);
@@ -1257,7 +1263,8 @@ static sal_uInt16 getGlyph2(const sal_uInt8 *cmap, sal_uInt16 c) {
             if(ToReturn == 0) {
                 return MISSING_GLYPH_INDEX;
             } else {
-                return (sal_uInt16)((ToReturn + Int16FromMOTA(subHeader2s[k].idDelta)) % 0xFFFF);
+                ToReturn += Int16FromMOTA(subHeader2s[k].idDelta);
+                return (ToReturn & 0xFFFF);
             }
         } else {
             return MISSING_GLYPH_INDEX;
@@ -1267,7 +1274,7 @@ static sal_uInt16 getGlyph2(const sal_uInt8 *cmap, sal_uInt16 c) {
     }
 }
 
-static sal_uInt16 getGlyph6(const sal_uInt8 *cmap, sal_uInt16 c) {
+static sal_uInt32 getGlyph6(const sal_uInt8 *cmap, sal_uInt32 c) {
     sal_uInt16 firstCode;
     sal_uInt16 *CMAP6 = (sal_uInt16 *) cmap;
 
@@ -1301,7 +1308,7 @@ static sal_uInt16 GEbinsearch(sal_uInt16 *ar, sal_uInt16 length, sal_uInt16 toSe
 }
 
 
-static sal_uInt16 getGlyph4(const sal_uInt8 *cmap, sal_uInt16 c) {
+static sal_uInt32 getGlyph4(const sal_uInt8 *cmap, sal_uInt32 c) {
     sal_uInt16  i;
     int ToReturn;
     sal_uInt16  segCount;
@@ -1338,6 +1345,37 @@ static sal_uInt16 getGlyph4(const sal_uInt8 *cmap, sal_uInt16 c) {
     return ToReturn;
 }
 
+static sal_uInt32 getGlyph12(const sal_uInt8 *pCmap, sal_uInt32 cChar) {
+    sal_uInt32* pCMAP12 = (sal_uInt16*)pCmap;
+    int nLength = Int32FromMOTA( pCMAP12[1] );
+    int nGroups = Int32FromMOTA( pCMAP12[3] );
+    int nLower = 0;
+    int nUpper = nGroups;
+
+    if( nUpper > (nLength-16)/12 )
+        nUpper = (nLength-16)/12;
+
+    /* binary search in "segmented coverage" subtable */
+    while( nLower < nUpper ) {
+        int nIndex = (nLower + nUpper) / 2;
+        sal_uInt32* pEntry = &pCMAP12[ 4 + 3*nIndex ];
+        sal_uInt32 cStart = Int32FromMOTA( pEntry[0] );
+        sal_uInt32 cLast  = Int32FromMOTA( pEntry[1] );
+        if( cChar < cStart )
+            nUpper = nIndex;
+        else if( cChar > cLast )
+            nLower = nIndex + 1;
+        else { /* found matching entry! */
+            sal_uInt32 nGlyph  = Int32FromMOTA( pEntry[2] );
+            nGlyph += cChar - cStart;
+            return nGlyph;
+        }
+    }
+
+    return MISSING_GLYPH_INDEX;
+}
+
+
 static void FindCmap(TrueTypeFont *ttf)
 {
     sal_uInt8 *table = getTable(ttf, O_cmap);
@@ -1345,7 +1383,7 @@ static void FindCmap(TrueTypeFont *ttf)
     sal_uInt16 ncmaps = GetUInt16(table, 2, 1);
     int i;
     sal_uInt32 ThreeZero  = 0;              /* MS Symbol            */
-    sal_uInt32 ThreeOne   = 0;              /* MS Unicode           */
+    sal_uInt32 ThreeOne   = 0;              /* MS UCS-2             */
     sal_uInt32 ThreeTwo   = 0;              /* MS ShiftJIS          */
     sal_uInt32 ThreeThree = 0;              /* MS Big5              */
     sal_uInt32 ThreeFour  = 0;              /* MS PRC               */
@@ -1376,6 +1414,7 @@ static void FindCmap(TrueTypeFont *ttf)
         if (pID == 3) {
             switch (eID) {
                 case 0: ThreeZero  = offset; break;
+                case 10: // UCS-4
                 case 1: ThreeOne   = offset; break;
                 case 2: ThreeTwo   = offset; break;
                 case 3: ThreeThree = offset; break;
@@ -1418,6 +1457,7 @@ static void FindCmap(TrueTypeFont *ttf)
             case 2: ttf->mapper = getGlyph2; break;
             case 4: ttf->mapper = getGlyph4; break;
             case 6: ttf->mapper = getGlyph6; break;
+            case 12: ttf->mapper= getGlyph12; break;
             default:
 #if OSL_DEBUG_LEVEL > 1
                 /*- if the cmap table is really broken */
