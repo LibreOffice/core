@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 15:04:06 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:39:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -797,6 +797,11 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
         if( !nGlyphs )
             break;
 
+        // #i51924# avoid 32->16bit coordinate truncation problem in X11
+        // TODO: reevaluate once displays with >30000 pixels are available
+        if( aPos.X() >= 30000 || aPos.Y() >= 30000 )
+            continue;
+
         unsigned int aRenderAry[ MAXGLYPHS ];
         for( int i = 0; i < nGlyphs; ++i )
              aRenderAry[ i ] = aX11GlyphPeer.GetGlyphId( rFont, aGlyphAry[i] );
@@ -1063,6 +1068,11 @@ void X11SalGraphics::DrawServerSimpleFontString( const ServerFontLayout& rSalLay
     sal_Int32 nGlyph;
     for( int nStart = 0; rSalLayout.GetNextGlyphs( 1, &nGlyph, aPos, nStart ); )
     {
+        // #i51924# avoid 32->16bit coordinate truncation problem in X11
+        // TODO: reevaluate once displays with >30000 pixels are available
+        if( aPos.X() >= 30000 || aPos.Y() >= 30000 )
+            continue;
+
         Pixmap aStipple = aX11GlyphPeer.GetPixmap( rFont, nGlyph );
         const GlyphMetric& rGM = rFont.GetGlyphMetric( nGlyph );
 
