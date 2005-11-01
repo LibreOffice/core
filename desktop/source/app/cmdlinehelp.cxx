@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdlinehelp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:06:18 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 12:45:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,7 +113,7 @@ namespace desktop
         "      print the specified documents on the specified printer.\n"\
         "-view <documents...>\n"\
         "      open the specified documents in viewer-(readonly-)mode.\n"\
-        "-show <sxi-document>\n"\
+        "-show <presentation>\n"\
         "      open the specified presentation and start it immediately\n"\
         "-accept=<accept-string>\n"\
         "      Specify an UNO connect-string to create an UNO acceptor through which\n"\
