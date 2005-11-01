@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 14:38:24 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:31:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -558,7 +558,7 @@ Window* ImplFindWindow( const SalFrame* pFrame, Point& rSalFramePos )
             rSalFramePos = pWindow->ImplFrameToOutput( rSalFramePos );
             return pWindow;
         }
-        pFrameWindow = pFrameWindow->mpWindowImpl->mpFrameData->mpNextFrame;
+        pFrameWindow = pFrameWindow->ImplGetFrameData()->mpNextFrame;
     }
 
     return NULL;
