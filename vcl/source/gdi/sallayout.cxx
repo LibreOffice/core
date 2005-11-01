@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 14:49:02 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 12:59:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,10 +40,8 @@
 
 #if defined(SOLARIS) || defined(IRIX)
   #include <alloca.h>
-#else
-#if !(defined(MACOSX) || defined(FREEBSD))
+#elif !(defined(MACOSX) || defined(FREEBSD))
   #include <malloc.h>
-#endif
 #endif
 
 #ifndef _SV_SVSYS_HXX
@@ -56,13 +54,19 @@
 
 #ifndef _SV_SALLAYOUT_HXX
 #include <sallayout.hxx>
-#endif // _SV_SALLAYOUT_HXX
+#endif
 
 #ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
 #endif
 
+#ifndef _TL_LANG_HXX
 #include <tools/lang.hxx>
+#endif
+
+#ifndef _TL_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 #include <limits.h>
 #include <unicode/ubidi.h>
@@ -237,6 +241,7 @@ sal_Unicode GetLocalizedChar( sal_Unicode nChar, LanguageType eLang )
         case LANGUAGE_TIBETAN:
             nOffset = 0x0F20 - '0';   // tibetan
             break;
+#if 0 // TODO: use language type for these digit substitutions?
         // TODO case:
             nOffset = 0x2776 - '0';   // dingbat circled
             break;
@@ -246,6 +251,7 @@ sal_Unicode GetLocalizedChar( sal_Unicode nChar, LanguageType eLang )
         // TODO case:
             nOffset = 0x2080 - '0';   // subscript
             break;
+#endif
     }
 
     nChar += nOffset;
@@ -256,11 +262,19 @@ sal_Unicode GetLocalizedChar( sal_Unicode nChar, LanguageType eLang )
 
 inline bool IsControlChar( sal_Unicode cChar )
 {
+    // C0 control characters
+    if( (0x0001 <= cChar) && (cChar <= 0x001F) )
+        return true;
+    // formatting characters
     if( (0x200C <= cChar) && (cChar <= 0x200F) )
         return true;
     if( (0x2028 <= cChar) && (cChar <= 0x202E) )
         return true;
-    if( (0xFEFF == cChar) || (0xFFFE <= cChar) )
+    // deprecated formatting characters
+    if( (0x206A <= cChar) && (cChar <= 0x206F) )
+        return true;
+    // byte order markers and invalid unicode
+    if( (cChar == 0xFEFF) || (cChar == 0xFFFE) || (cChar == 0xFFFF) )
         return true;
     return false;
 }
@@ -424,80 +438,97 @@ ImplLayoutArgs::ImplLayoutArgs( const xub_Unicode* pStr, int nLength,
 {
     if( mnFlags & SAL_LAYOUT_BIDI_STRONG )
     {
+        // handle strong BiDi mode
+
         // do not bother to BiDi analyze strong LTR/RTL
         // TODO: can we assume these strings do not have unicode control chars?
         //       if not remove the control characters from the runs
         bool bRTL = ((mnFlags & SAL_LAYOUT_BIDI_RTL) != 0);
-        maRuns.AddRun( mnMinCharPos, mnEndCharPos, bRTL );
-        maRuns.ResetPos();
-        return;
+        AddRun( mnMinCharPos, mnEndCharPos, bRTL );
     }
-
-    UBiDiLevel nLevel = UBIDI_DEFAULT_LTR;
-    if( mnFlags & SAL_LAYOUT_BIDI_RTL )
-        nLevel = UBIDI_RTL;
-
-    // prepare substring for BiDi analysis
-    UErrorCode rcI18n = U_ZERO_ERROR;
-    UBiDi* pParaBidi = ubidi_openSized( mnLength, 0, &rcI18n );
-    if( !pParaBidi )
-        return;
-    ubidi_setPara( pParaBidi, mpStr, mnLength, nLevel, NULL, &rcI18n );
-
-    UBiDi* pLineBidi = pParaBidi;
-    int nSubLength = mnEndCharPos - mnMinCharPos;
-    if( nSubLength != mnLength )
+    else
     {
-        pLineBidi = ubidi_openSized( nSubLength, 0, &rcI18n );
-        ubidi_setLine( pParaBidi, mnMinCharPos, mnEndCharPos, pLineBidi, &rcI18n );
-    }
+        // handle weak BiDi mode
 
-    // run BiDi algorithm
-    int nRunCount = ubidi_countRuns( pLineBidi, &rcI18n);
-    //maRuns.resize( 2 * nRunCount );
-    // TODO: see comment about #110273# below, remove when external issue fixed
-    const UBiDiLevel* pParaLevels = ubidi_getLevels( pParaBidi, &rcI18n);
-    for( int i = 0; i < nRunCount; ++i )
-    {
-        int32_t nMinPos, nLength;
-        ubidi_getVisualRun( pLineBidi, i, &nMinPos, &nLength );
-        int nPos0 = nMinPos + mnMinCharPos;
-        int nPos1 = nPos0 + nLength;
+        UBiDiLevel nLevel = UBIDI_DEFAULT_LTR;
+        if( mnFlags & SAL_LAYOUT_BIDI_RTL )
+            nLevel = UBIDI_RTL;
 
-        // bool bRTL = (nDir == UBIDI_RTL);
-        // workaround for #110273# (probably ICU problem TODO: analyze there)
-        bool bRTL = ((pParaLevels[ nPos0 ] & 1) != 0);
+        // prepare substring for BiDi analysis
+        // TODO: reuse allocated pParaBidi
+        UErrorCode rcI18n = U_ZERO_ERROR;
+        UBiDi* pParaBidi = ubidi_openSized( mnLength, 0, &rcI18n );
+        if( !pParaBidi )
+            return;
+        ubidi_setPara( pParaBidi, mpStr, mnLength, nLevel, NULL, &rcI18n );
 
-        // remove control characters from runs by splitting them up
-        if( !bRTL )
+        UBiDi* pLineBidi = pParaBidi;
+        int nSubLength = mnEndCharPos - mnMinCharPos;
+        if( nSubLength != mnLength )
         {
-            for( int j = nPos0; j < nPos1; ++j )
-                if( IsControlChar( mpStr[j] ) )
-                {
-                    maRuns.AddRun( nPos0, j, bRTL );
-                    nPos0 = j + 1;
-                }
-        }
-        else
-        {
-            for( int j = nPos1; --j >= nPos0; )
-                if( IsControlChar( mpStr[j] ) )
-                {
-                    maRuns.AddRun( j+1, nPos1, bRTL );
-                    nPos1 = j;
-                }
+            pLineBidi = ubidi_openSized( nSubLength, 0, &rcI18n );
+            ubidi_setLine( pParaBidi, mnMinCharPos, mnEndCharPos, pLineBidi, &rcI18n );
         }
 
-        maRuns.AddRun( nPos0, nPos1, bRTL );
-    }
+        // run BiDi algorithm
+        int nRunCount = ubidi_countRuns( pLineBidi, &rcI18n);
+        //maRuns.resize( 2 * nRunCount );
+        // TODO: see comment about #110273# below, remove when external issue fixed
+        const UBiDiLevel* pParaLevels = ubidi_getLevels( pParaBidi, &rcI18n);
+        for( int i = 0; i < nRunCount; ++i )
+        {
+            int32_t nMinPos, nLength;
+            ubidi_getVisualRun( pLineBidi, i, &nMinPos, &nLength );
+            int nPos0 = nMinPos + mnMinCharPos;
+            int nPos1 = nPos0 + nLength;
 
-    // cleanup BiDi engine
-    if( pLineBidi != pParaBidi )
-        ubidi_close( pLineBidi );
-    ubidi_close( pParaBidi );
+            // bool bRTL = (nDir == UBIDI_RTL);
+            // workaround for #110273# (probably ICU problem TODO: analyze there)
+            bool bRTL = ((pParaLevels[ nPos0 ] & 1) != 0);
+            AddRun( nPos0, nPos1, bRTL );
+        }
+
+        // cleanup BiDi engine
+        if( pLineBidi != pParaBidi )
+            ubidi_close( pLineBidi );
+        ubidi_close( pParaBidi );
+    }
 
     // prepare calls to GetNextPos/GetNextRun
     maRuns.ResetPos();
+}
+
+// -----------------------------------------------------------------------
+
+// add a run after splitting it up to get rid of control chars
+void ImplLayoutArgs::AddRun( int nCharPos0, int nCharPos1, bool bRTL )
+{
+    DBG_ASSERT( nCharPos0 <= nCharPos1, "ImplLayoutArgs::AddRun() nCharPos0>=nCharPos1" );
+
+    // remove control characters from runs by splitting them up
+    if( !bRTL )
+    {
+        for( int i = nCharPos0; i < nCharPos1; ++i )
+            if( IsControlChar( mpStr[i] ) )
+            {
+                // add run until control char
+                maRuns.AddRun( nCharPos0, i, bRTL );
+                nCharPos0 = i + 1;
+            }
+    }
+    else
+    {
+        for( int i = nCharPos1; --i >= nCharPos0; )
+            if( IsControlChar( mpStr[i] ) )
+            {
+                // add run until control char
+                maRuns.AddRun( i+1, nCharPos1, bRTL );
+                nCharPos1 = i;
+            }
+    }
+
+    // add remainder of run
+    maRuns.AddRun( nCharPos0, nCharPos1, bRTL );
 }
 
 // -----------------------------------------------------------------------
@@ -677,7 +708,8 @@ int SalLayout::CalcAsianKerning( sal_Unicode c, bool bLeft, bool bVertical )
 
 bool SalLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolyVector& rVector ) const
 {
-    bool bRet = true;
+    bool bAllOk = true;
+    bool bOneOk = false;
 
     Point aPos;
     PolyPolygon aGlyphOutline;
@@ -689,7 +721,8 @@ bool SalLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolyVector& rVector )
 
         // get outline of individual glyph, ignoring "empty" glyphs
         bool bSuccess = rSalGraphics.GetGlyphOutline( nLGlyph, aGlyphOutline );
-        bRet &= bSuccess;
+        bAllOk &= bSuccess;
+        bOneOk |= bSuccess;
         // only add non-empty outlines
         if( bSuccess && (aGlyphOutline.Count() > 0) )
         {
@@ -699,7 +732,7 @@ bool SalLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolyVector& rVector )
         }
     }
 
-    return bRet;
+    return (bAllOk & bOneOk);
 }
 
 // -----------------------------------------------------------------------
