@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 14:55:55 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:35:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2804,6 +2804,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     NWEnsureGTKMenu();
     NWEnsureGTKMenubar();
     NWEnsureGTKScrollbars();
+    NWEnsureGTKEditBox();
 
     gtk_widget_ensure_style( m_pWindow );
     GtkStyle* pStyle = gtk_widget_get_style( m_pWindow );
@@ -2967,6 +2968,23 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetFieldFont( aFont );
     aStyleSet.SetIconFont( aFont );
     aStyleSet.SetGroupFont( aFont );
+
+    // get cursor blink time
+    GtkSettings *pSettings = gtk_widget_get_settings( gEditBoxWidget );
+    gboolean blink = false;
+
+    g_object_get( pSettings, "gtk-cursor-blink", &blink, NULL );
+    if( blink )
+    {
+        gint blink_time = STYLE_CURSOR_NOBLINKTIME;
+        g_object_get( pSettings, "gtk-cursor-blink-time", &blink_time, NULL );
+        // set the blink_time if there is a setting and it is reasonable
+        // else leave the default value
+        if( blink_time > 100 && blink_time != gint(STYLE_CURSOR_NOBLINKTIME) )
+            aStyleSet.SetCursorBlinkTime( blink_time/2 );
+    }
+    else
+        aStyleSet.SetCursorBlinkTime( STYLE_CURSOR_NOBLINKTIME );
 
     // set scrollbar settings
     gint slider_width = 14;
