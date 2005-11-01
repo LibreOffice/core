@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:47:21 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:20:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -209,6 +209,10 @@ Sequence< PropertyValue > ImpPDFDialog::GetFilterData()
     else
         maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotes" ) ), maCbExportNotes.IsChecked() );
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "UseTransitionEffects" ) ), maCbTransitionEffects.IsChecked() );
+    /*
+    * FIXME: the entries are only implicitly defined by the resource file. Should there
+    * ever be an additional form submit format this could get invalid.
+    */
     maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "FormsType" ) ), maLbFormsFormat.GetSelectEntryPos() );
 
     Sequence< PropertyValue > aRet( maConfigItem.GetFilterData() );
