@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-13 17:08:42 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:40:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,6 @@
 #include <tools/debug.hxx>
 #endif
 
-#define private public
 #ifndef _SV_WINCOMP_HXX
 #include <wincomp.hxx>
 #endif
@@ -232,13 +231,13 @@ void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect )
         while( pWin )
         {
             WorkWindow *pWorkWin = (pWin->GetType() == WINDOW_WORKWINDOW) ? (WorkWindow *) pWin : NULL;
-            if( pWorkWin && pWorkWin->mpWindowImpl->mbReallyVisible && pWorkWin->mbFullScreenMode )
+            if( pWorkWin && pWorkWin->ImplGetWindowImpl()->mbReallyVisible && pWorkWin->IsFullScreenMode() )
             {
                 bIgnoreTaskbar = true;
                 break;
             }
             else
-                pWin = pWin->mpWindowImpl->mpParent;
+                pWin = pWin->ImplGetWindowImpl()->mpParent;
         }
     }
 
@@ -1202,9 +1201,9 @@ HWND ImplGetParentHwnd( HWND hWnd )
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
     if( !pFrame || !pFrame->GetInstance())
         return ::GetParent( hWnd );
-    Window *pRealParent = ((Window*)pFrame->GetInstance())->mpWindowImpl->mpRealParent;
+    Window *pRealParent = ((Window*)pFrame->GetInstance())->ImplGetWindowImpl()->mpRealParent;
     if( pRealParent )
-        return static_cast<WinSalFrame*>(pRealParent->mpWindowImpl->mpFrame)->mhWnd;
+        return static_cast<WinSalFrame*>(pRealParent->ImplGetWindowImpl()->mpFrame)->mhWnd;
     else
         return ::GetParent( hWnd );
 
@@ -3115,7 +3114,7 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
         // hopefully we will not receive the corresponding button up before this
         // button down arrives again
         Window *pWin = (Window*) pFrame->GetInstance();
-        if( pWin && pWin->mpWindowImpl->mpFrameData->mnFocusId )
+        if( pWin && pWin->ImplGetWindowImpl()->mpFrameData->mnFocusId )
         {
             ImplPostMessage( hWnd, nMsg, wParam, lParam );
             return 1;
