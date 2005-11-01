@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.219 $
+ *  $Revision: 1.220 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:34:49 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 12:59:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,6 +121,9 @@
 #endif
 #ifndef _SV_WALL_HXX
 #include <wall.hxx>
+#endif
+#ifndef _SV_TOOLBOX_H
+#include <toolbox.h>
 #endif
 #ifndef _VCL_FONTCFG_HXX
 #include <fontcfg.hxx>
@@ -4402,7 +4405,7 @@ Window::~Window()
         pSVData->maWinData.mpDefDialogParent = NULL;
 
 #ifdef DBG_UTIL
-    if ( DbgIsAssert() )
+    if ( TRUE ) // always perform these tests in non-pro versions
     {
         ByteString  aErrorStr;
         BOOL        bError = FALSE;
@@ -4425,6 +4428,7 @@ Window::~Window()
             aTempStr += ") with living SystemWindow(s) destroyed: ";
             aTempStr += aErrorStr;
             DBG_ERROR( aTempStr.GetBuffer() );
+            GetpApp()->Abort(String());   // abort in non-pro version, this must be fixed!
         }
 
         bError = FALSE;
@@ -4447,6 +4451,7 @@ Window::~Window()
             aTempStr += ") with living SystemWindow(s) destroyed: ";
             aTempStr += aErrorStr;
             DBG_ERROR( aTempStr.GetBuffer() );
+            GetpApp()->Abort(String());   // abort in non-pro version, this must be fixed!
         }
 
         if ( mpWindowImpl->mpFirstChild )
@@ -4463,6 +4468,7 @@ Window::~Window()
                     aTempStr += "; ";
             }
             DBG_ERROR( aTempStr.GetBuffer() );
+            GetpApp()->Abort(String());   // abort in non-pro version, this must be fixed!
         }
 
         if ( mpWindowImpl->mpFirstOverlap )
@@ -4479,6 +4485,7 @@ Window::~Window()
                     aTempStr += "; ";
             }
             DBG_ERROR( aTempStr.GetBuffer() );
+            GetpApp()->Abort(String());   // abort in non-pro version, this must be fixed!
         }
 
         Window* pMyParent = this;
@@ -4496,6 +4503,7 @@ Window::~Window()
             aTempStr += ByteString( GetText(), RTL_TEXTENCODING_UTF8 );
             aTempStr += ") still in TaskPanelList!";
             DBG_ERROR( aTempStr.GetBuffer() );
+            GetpApp()->Abort(String());   // abort in non-pro version, this must be fixed!
         }
     }
 #endif
@@ -4517,9 +4525,25 @@ Window::~Window()
             pSVData->maWinData.mpExtTextInputWin = NULL;
     }
 
+    // check if the focus window is our child
+    BOOL bHasFocussedChild = FALSE;
+    if( pSVData->maWinData.mpFocusWin && ImplIsRealParentPath( pSVData->maWinData.mpFocusWin ) )
+    {
+        // #122232#, this must not happen and is an application bug ! but we try some cleanup to hopefully avoid crashes, see below
+        bHasFocussedChild = TRUE;
+#ifdef DBG_UTIL
+        ByteString aTempStr( "Window (" );
+        aTempStr += ByteString( GetText(), RTL_TEXTENCODING_UTF8 );
+        aTempStr += ") with focussed child window destroyed ! THIS WILL LEAD TO CRASHES AND MUST BE FIXED !";
+        DBG_ERROR( aTempStr.GetBuffer() );
+        GetpApp()->Abort( String() );   // abort in non-pro version, this must be fixed!
+#endif
+    }
+
     // Wenn wir den Focus haben, dann den Focus auf ein anderes Fenster setzen
     Window* pOverlapWindow = ImplGetFirstOverlapWindow();
-    if ( pSVData->maWinData.mpFocusWin == this )
+    if ( pSVData->maWinData.mpFocusWin == this
+        || bHasFocussedChild )  // #122232#, see above, try some cleanup
     {
         if ( mpWindowImpl->mbFrame )
         {
@@ -4555,6 +4579,8 @@ Window::~Window()
             }
         }
     }
+
+
     if ( pOverlapWindow->mpWindowImpl->mpLastFocusWindow == this )
         pOverlapWindow->mpWindowImpl->mpLastFocusWindow = NULL;
 
@@ -7727,6 +7753,15 @@ String Window::GetDisplayText() const
 
 const Wallpaper& Window::GetDisplayBackground() const
 {
+    // FIXME: fix issue 52349, need to fix this really in
+    // all NWF enabled controls
+    const ToolBox* pTB = dynamic_cast<const ToolBox*>(this);
+    if( pTB )
+    {
+        if( IsNativeWidgetEnabled() )
+            return pTB->ImplGetToolBoxPrivateData()->maDisplayBackground;
+    }
+
     if( !IsBackground() )
     {
         if( mpWindowImpl->mpParent )
