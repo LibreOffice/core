@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.149 $
+ *  $Revision: 1.150 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:31:29 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 12:47:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -557,7 +557,8 @@ TabPage PAGE_GENERAL
     {
         Pos = MAP_APPFONT ( 6 , UNRELATED_CONTROLS ) ;
         Size = MAP_APPFONT ( WIZARD_PAGE_X - 12 , 3*FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Bitte wählen Sie den Type der Datenbank aus, zu der eine Verbindung aufgebaut werden soll.";
+        WordBreak = TRUE;
+        Text [ de ] = "Bitte wählen Sie den Typ der Datenbank aus, zu der eine Verbindung aufgebaut werden soll.";
         Text [ en-US ] = "Select the type of database to which you want to establish a connection.";
     };
 
@@ -592,14 +593,15 @@ TabPage PAGE_GENERAL
     FixedText FT_DATASOURCETYPE_POST
     {
         Pos = MAP_APPFONT ( 6 , 4*UNRELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + RELATED_CONTROLS ) ;
-        Size = MAP_APPFONT ( WIZARD_PAGE_X - 12 , 4*FIXEDTEXT_HEIGHT ) ;
+        Size = MAP_APPFONT ( WIZARD_PAGE_X - 12 , 5*FIXEDTEXT_HEIGHT ) ;
+        WordBreak = TRUE;
         Text [ de ]= "Auf den nächsten Seiten können Sie dann detaillierte Verbindungs-Einstellungen vornehmen.\n\nBitte beachten Sie dabei,dass diese neuen Einstellungen Ihre existierenden überschreiben.";
         Text [ en-US ] = "On the following pages, you can make detailed settings for the connection.\n\nThe new settings you make will overwrite your existing settings.";
     };
 
     FixedText FT_SPECIAL_MESSAGE
     {
-        Pos = MAP_APPFONT ( 6, 4*UNRELATED_CONTROLS + 8*FIXEDTEXT_HEIGHT + RELATED_CONTROLS  );
+        Pos = MAP_APPFONT ( 6, 4*UNRELATED_CONTROLS + 9*FIXEDTEXT_HEIGHT + 2*RELATED_CONTROLS  );
         Size = MAP_APPFONT ( WIZARD_PAGE_X - 12, 3*FIXEDTEXT_HEIGHT );
         WordBreak = TRUE;
         HelpId = HID_DSADMIN_SPECIAL_MESSAGE;
