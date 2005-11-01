@@ -64,6 +64,7 @@ class ListStyle : public Style
 public:
     ListStyle(const char *psName, const int iListID);
     virtual ~ListStyle();
+    virtual void updateListLevel(const int iLevel, const WPXPropertyList &xPropList) = 0;
     virtual void write(DocumentHandler &xHandler) const;
     const int getListID() { return miListID; }
     const bool isListLevelDefined(int iLevel) const;

@@ -122,6 +122,8 @@ void TableStyle::write(DocumentHandler &xHandler) const
         stylePropertiesOpen.addAttribute("fo:margin-right", mPropList["fo:margin-right"]->getStr());
     if (mPropList["style:width"])
         stylePropertiesOpen.addAttribute("style:width", mPropList["style:width"]->getStr());
+    if (mPropList["fo:break-before"])
+        stylePropertiesOpen.addAttribute("fo:break-before", mPropList["fo:break-before"]->getStr());
     stylePropertiesOpen.write(xHandler);
 
     xHandler.endElement("style:properties");
