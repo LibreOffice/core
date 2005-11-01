@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlfd_extd.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:09:40 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:40:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,11 @@
 #include <rtl/alloc.h>
 #endif
 
-#include <algorithm>
+#ifndef _RTL_TENCINFO_H_
+#include <rtl/tencinfo.h>
+#endif
+
+#include <set>
 
 // --------------------------------------------------------------------------
 
@@ -355,108 +359,53 @@ FontWidth ExtendedXlfd::GetWidthType() const
     return (FontWidth)pWidthAttr->GetValue();
 }
 
-struct CodeRange
+class CodeRange
 {
+public:
+    CodeRange( int nMin, int nEnd ) : mnMin( nMin ), mnEnd( nEnd ) {}
+
+    sal_uInt32 GetMin() const { return mnMin; }
+    sal_uInt32 GetEnd() const { return mnEnd; }
+
+    bool operator<( const CodeRange& r ) const
+        { return (mnMin<r.mnMin) || ((mnMin==r.mnMin) && (mnEnd<r.mnEnd)); }
+
+private:
     sal_uInt32 mnMin, mnEnd;
-    bool operator<( const CodeRange& b ) const { return mnMin < b.mnMin; }
 };
+
 
 int ExtendedXlfd::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
 {
-    int nRangeCount = 0;
     bool bHasUnicode = false;
     bool bHasUnknownEncoding = false;
 
     // approximate unicode ranges from encodings
-    sal_uInt32* pRange = pCodePairs;
+    typedef std::set<CodeRange> RangeSet;
+    RangeSet aRangeSet;
+
     for( unsigned short i = 0; i < mnEncodings; ++i )
     {
-        sal_uInt32 pBuffer[32];
-        if( !pCodePairs )
-            pRange = pBuffer;
-        sal_uInt32* pOldRange = pRange;
-
         // TODO: move encoding -> unicode range mapping to RTL
         // NOTE: for now only some are VERY roughly approximated
+        const rtl_TextEncoding eEncoding = mpEncodingInfo[i].mnEncoding;
         switch( mpEncodingInfo[i].mnEncoding )
         {
             case RTL_TEXTENCODING_SYMBOL: // postscript symbol encoding
-                *(pRange++) = 0x0020; *(pRange++) = 0x0100;  // symbol aliasing
-                *(pRange++) = 0xF020; *(pRange++) = 0xF100;
+                aRangeSet.insert( CodeRange( 0x0020, 0x0100 ) );  // symbol aliasing
+                aRangeSet.insert( CodeRange( 0xF020, 0xF100 ) );
                 break;
+
             case RTL_TEXTENCODING_ISO_8859_15:
-                *(pRange++) = 0x20AC; *(pRange++) = 0x20AD; // Euro currency symbol
+                aRangeSet.insert( CodeRange( 0x20AC, 0x20AD ) ); // Euro currency symbol
                 // fall through
             case RTL_TEXTENCODING_APPLE_ROMAN:
             case RTL_TEXTENCODING_ISO_8859_1:
             case RTL_TEXTENCODING_MS_1252:
             case RTL_TEXTENCODING_IBM_437:
             case RTL_TEXTENCODING_IBM_852:
-                *(pRange++) = 0x0020; *(pRange++) = 0x0080;
-                *(pRange++) = 0x00A0; *(pRange++) = 0x0100;
-                break;
-
-            // Cyrillic
-            case RTL_TEXTENCODING_APPLE_CYRILLIC:
-            case RTL_TEXTENCODING_APPLE_UKRAINIAN:
-            case RTL_TEXTENCODING_ISO_8859_5:
-            case RTL_TEXTENCODING_KOI8_R:
-            case RTL_TEXTENCODING_IBM_855:
-            case RTL_TEXTENCODING_IBM_866:
-                *(pRange++) = 0x0020; *(pRange++) = 0x0080;
-                *(pRange++) = 0x0400; *(pRange++) = 0x04AF;
-                *(pRange++) = 0x2116; *(pRange++) = 0x2117;
-                break;
-
-            // Greek
-            case RTL_TEXTENCODING_APPLE_GREEK:
-            case RTL_TEXTENCODING_ISO_8859_7:
-            case RTL_TEXTENCODING_IBM_737:
-            case RTL_TEXTENCODING_IBM_869:
-            case RTL_TEXTENCODING_MS_1253:
-                *(pRange++) = 0x0020; *(pRange++) = 0x0080;
-                *(pRange++) = 0x00A0; *(pRange++) = 0x0100;
-                *(pRange++) = 0x0370; *(pRange++) = 0x0400;
-                *(pRange++) = 0x2015; *(pRange++) = 0x2020;
-                break;
-
-            // Turkish
-            case RTL_TEXTENCODING_APPLE_TURKISH:
-            case RTL_TEXTENCODING_IBM_857:
-            case RTL_TEXTENCODING_ISO_8859_9:
-            case RTL_TEXTENCODING_MS_1254:
-                *(pRange++) = 0x0020; *(pRange++) = 0x0080;
-                *(pRange++) = 0x00A0; *(pRange++) = 0x0160;
-                break;
-
-            // misc 8bit encodings
-            case RTL_TEXTENCODING_APPLE_CENTEURO:
-            case RTL_TEXTENCODING_APPLE_CROATIAN:
-            case RTL_TEXTENCODING_APPLE_ICELAND:
-            case RTL_TEXTENCODING_APPLE_ROMANIAN:
-            case RTL_TEXTENCODING_ISO_8859_2:
-            case RTL_TEXTENCODING_ISO_8859_3:
-            case RTL_TEXTENCODING_ISO_8859_4:
-            case RTL_TEXTENCODING_ISO_8859_10:
-            case RTL_TEXTENCODING_ISO_8859_13:
-            case RTL_TEXTENCODING_IBM_775:
-            case RTL_TEXTENCODING_IBM_850:
-            case RTL_TEXTENCODING_IBM_860:
-            case RTL_TEXTENCODING_IBM_861:
-            case RTL_TEXTENCODING_IBM_863:
-            case RTL_TEXTENCODING_IBM_865:
-            case RTL_TEXTENCODING_MS_1250:
-            case RTL_TEXTENCODING_MS_1251:
-            case RTL_TEXTENCODING_MS_1257:
-            case RTL_TEXTENCODING_MS_1258:
-                *(pRange++) = 0x0020; *(pRange++) = 0x0080;
-                *(pRange++) = 0x00A0; *(pRange++) = 0x02EA;
-                break;
-
-            case RTL_TEXTENCODING_ISO_8859_14:
-                *(pRange++) = 0x0020; *(pRange++) = 0x0080;
-                *(pRange++) = 0x00A0; *(pRange++) = 0x0100;
-                *(pRange++) = 0x1E00; *(pRange++) = 0x1F00;
+                aRangeSet.insert( CodeRange( 0x0020, 0x0080 ) );
+                aRangeSet.insert( CodeRange( 0x00A0, 0x0100 ) );
                 break;
 
             // Traditional, Simplified, Japanese
@@ -481,8 +430,8 @@ int ExtendedXlfd::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
             case RTL_TEXTENCODING_MS_932:
             case RTL_TEXTENCODING_MS_936:
             case RTL_TEXTENCODING_MS_950:
-                *(pRange++) = 0x3000; *(pRange++) = 0xA000;
-                *(pRange++) = 0xF900; *(pRange++) = 0xFB00;
+                aRangeSet.insert( CodeRange( 0x3000, 0xA000 ) );
+                aRangeSet.insert( CodeRange( 0xF900, 0xFB00 ) );
                 break;
 
             // Korean
@@ -491,44 +440,16 @@ int ExtendedXlfd::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
             case RTL_TEXTENCODING_MS_1361:
             case RTL_TEXTENCODING_EUC_KR:
             case RTL_TEXTENCODING_ISO_2022_KR:
-                *(pRange++) = 0x1100; *(pRange++) = 0x1200;
-                *(pRange++) = 0x3130; *(pRange++) = 0x3190;
-                *(pRange++) = 0xAC00; *(pRange++) = 0xD7A4;
+                aRangeSet.insert( CodeRange( 0x1100, 0x1200 ) );
+                aRangeSet.insert( CodeRange( 0x3130, 0x3190 ) );
+                aRangeSet.insert( CodeRange( 0xAC00, 0xD7A4 ) );
                 break;
 
-            // Arabic
-            case RTL_TEXTENCODING_APPLE_ARABIC:
-            case RTL_TEXTENCODING_APPLE_FARSI:
-            case RTL_TEXTENCODING_ISO_8859_6:
-            case RTL_TEXTENCODING_IBM_864:
-            case RTL_TEXTENCODING_MS_1256:
-                *(pRange++) = 0x0600; *(pRange++) = 0x0700;
-                *(pRange++) = 0xFB50; *(pRange++) = 0xFE00;
-                *(pRange++) = 0xFE70; *(pRange++) = 0xFF00;
+            // unknown encoding
+            case RTL_TEXTENCODING_DONTKNOW:
+                bHasUnknownEncoding = true;
                 break;
 
-            // Hebrew
-            case RTL_TEXTENCODING_APPLE_HEBREW:
-            case RTL_TEXTENCODING_ISO_8859_8:
-            case RTL_TEXTENCODING_IBM_862:
-            case RTL_TEXTENCODING_MS_1255:
-                *(pRange++) = 0x0590; *(pRange++) = 0x0600;
-                *(pRange++) = 0xFB1D; *(pRange++) = 0xFB50;
-                break;
-
-            // Indic
-            case RTL_TEXTENCODING_APPLE_GURMUKHI:
-            case RTL_TEXTENCODING_APPLE_DEVANAGARI:
-            case RTL_TEXTENCODING_APPLE_GUJARATI:
-                *(pRange++) = 0x0900; *(pRange++) = 0x0B00;
-                break;
-
-            // Thai
-            case RTL_TEXTENCODING_APPLE_THAI:
-            case RTL_TEXTENCODING_TIS_620:
-            case RTL_TEXTENCODING_MS_874:
-                *(pRange++) = 0x0E00; *(pRange++) = 0x0E80;
-                break;
             // Unicode
             case RTL_TEXTENCODING_UNICODE:
             case RTL_TEXTENCODING_UTF7:
@@ -536,18 +457,50 @@ int ExtendedXlfd::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
                 bHasUnicode = true;
                 break;
 
-            case RTL_TEXTENCODING_DONTKNOW:
+            // misc 8bit encodings
             default:
-                bHasUnknownEncoding = true;
+                if( !rtl_isOctetTextEncoding( eEncoding ) )
+                    bHasUnknownEncoding = true;
+                else
+                {
+                    // use the unicode converter to get the coverage of an 8bit encoding
+                    rtl_TextToUnicodeConverter aConverter = rtl_createTextToUnicodeConverter( eEncoding );
+                    rtl_UnicodeToTextContext aCvtContext = rtl_createTextToUnicodeContext( aConverter );
+                    if( !aConverter || !aCvtContext )
+                        bHasUnknownEncoding = true;
+                    else
+                    {
+                        sal_Char cCharsInp[ 0x100 ];
+                        for( int i = 0x20; i < 0x080; ++i )
+                            cCharsInp[ i-0x20 ] = i;
+                        for( int i = 0xA0; i < 0x100; ++i )
+                            cCharsInp[ i-0x40 ] = i;
+
+                        sal_Unicode cCharsOut[ 0x100 ];
+                        sal_uInt32 nCvtInfo;
+                        sal_Size nSrcCvtBytes;
+                        int nOutLen = rtl_convertTextToUnicode(
+                            aConverter, aCvtContext,
+                            cCharsInp, 0xC0,
+                            cCharsOut, sizeof(cCharsOut)/sizeof(*cCharsOut),
+                            RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE
+                            | RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE,
+                            &nCvtInfo, &nSrcCvtBytes );
+
+                        for( int i = 0; i < nOutLen; ++i )
+                            aRangeSet.insert( CodeRange( cCharsOut[i], cCharsOut[i]+1 ) );
+
+                        rtl_destroyTextToUnicodeConverter( aCvtContext );
+                        rtl_destroyTextToUnicodeConverter( aConverter );
+                    }
+                }
                 break;
         }
-
-        nRangeCount += (pRange - pOldRange) / 2;
     }
 
     // unicode encoded fonts usually do not cover the entire unicode range
     // => only use them to determine coverage when no other encodings are available
-    if( !nRangeCount && (bHasUnicode || bHasUnknownEncoding) )
+    if( aRangeSet.empty() && (bHasUnicode || bHasUnknownEncoding) )
     {
         if( pCodePairs )
         {
@@ -559,26 +512,39 @@ int ExtendedXlfd::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
         return 2;
     }
 
+    if( aRangeSet.empty() )
+        return 0;
+
     // sort and merge the code pairs
-    if( pCodePairs && nRangeCount )
+    sal_uInt32* pDst = pCodePairs;
+    RangeSet::const_iterator it = aRangeSet.begin();
+    for( sal_uInt32 nEnd = 0; it != aRangeSet.end(); ++it )
     {
-        CodeRange* pSrc = (CodeRange*)pCodePairs;
-        CodeRange* pEnd = pSrc + nRangeCount;
-        ::std::sort( pSrc, pEnd );
-        for( CodeRange* pDst = pSrc; ++pSrc < pEnd; )
+        // check overlap with to previous range
+        const CodeRange& rSrc = *it;
+        if( nEnd < rSrc.GetMin() )
         {
-            if( pDst->mnEnd < pSrc->mnMin )
-                ++pDst;
-            else
+            nEnd = rSrc.GetEnd();
+            if( pCodePairs )
             {
-                // merge overlapping ranges
-                if( pDst->mnEnd < pSrc->mnEnd )
-                    pDst->mnEnd = pSrc->mnEnd;
-                --nRangeCount;
+               pDst[0] = rSrc.GetMin();
+               pDst[1] = rSrc.GetEnd();
+            }
+            pDst += 2;
+        }
+        else
+        {
+            // merge overlapping ranges
+            if( nEnd < rSrc.GetEnd() )
+            {
+                nEnd = rSrc.GetEnd();
+                if( pCodePairs )
+                    pDst[-1] = nEnd;
             }
         }
     }
 
+    int nRangeCount = (pDst - pCodePairs) / 2;
     return nRangeCount;
 }
 
