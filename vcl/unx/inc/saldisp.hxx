@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:36:34 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 13:00:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -477,6 +477,7 @@ public:
     const std::list< SalFrame* >& getFrames()
     { return m_aFrames; }
 
+    BOOL            IsNumLockFromXS() const { return bNumLockFromXS_; }
 };
 
 // -=-= inlines =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
