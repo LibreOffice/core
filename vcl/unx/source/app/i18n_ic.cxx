@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:54:58 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:37:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,23 @@
 #endif
 
 using namespace vcl;
+
+static void sendEmptyCommit( SalFrame* pFrame )
+{
+    vcl::DeletionListener aDel( pFrame );
+
+    SalExtTextInputEvent aEmptyEv;
+    aEmptyEv.mnTime             = 0;
+    aEmptyEv.mpTextAttr         = 0;
+    aEmptyEv.maText             = String();
+    aEmptyEv.mnCursorPos        = 0;
+    aEmptyEv.mnCursorFlags      = 0;
+    aEmptyEv.mnDeltaStart       = 0;
+    aEmptyEv.mbOnlyCursor       = False;
+    pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&aEmptyEv );
+    if( ! aDel.isDeleted() )
+        pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, NULL );
+}
 
 // ---------------------------------------------------------------------------
 //
@@ -183,8 +200,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         mnPreeditStyle( 0 ),
         mpAttributes( NULL ),
         mpStatusAttributes( NULL ),
-        mpPreeditAttributes( NULL ),
-        mpFocusFrame( NULL )
+        mpPreeditAttributes( NULL )
 {
 #ifdef SOLARIS
     static const char* pIIIMPEnable = getenv( "SAL_DISABLE_OWN_IM_STATUS" );
@@ -192,8 +208,14 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         mnSupportedStatusStyle &= ~XIMStatusCallbacks;
 #endif
 
-    maClientData.aText.pUnicodeBuffer = NULL;
-    maClientData.aText.pCharStyle     = NULL;
+    maClientData.aText.pUnicodeBuffer       = NULL;
+    maClientData.aText.pCharStyle           = NULL;
+    maClientData.aInputEv.mnTime            = 0;
+    maClientData.aInputEv.mpTextAttr        = NULL;
+    maClientData.aInputEv.mnCursorPos       = 0;
+    maClientData.aInputEv.mnDeltaStart      = 0;
+    maClientData.aInputEv.mnCursorFlags     = 0;
+    maClientData.aInputEv.mbOnlyCursor      = FALSE;
 
     SalI18N_InputMethod *pInputMethod;
     pInputMethod = GetSalData()->GetDisplay()->GetInputMethod();
@@ -435,19 +457,15 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
 void
 SalI18N_InputContext::Unmap( SalFrame* pFrame )
 {
-    if( pFrame == mpFocusFrame )
+    if ( maContext != NULL )
     {
-        if ( maContext != NULL )
-        {
-            I18NStatus& rStatus( I18NStatus::get() );
+        I18NStatus& rStatus( I18NStatus::get() );
+        if( rStatus.getParent() == pFrame )
             rStatus.show( false, I18NStatus::contextmap );
 
-        }
-        if( mpFocusFrame )
-            mpFocusFrame->EndExtTextInput( SAL_FRAME_ENDEXTTEXTINPUT_COMPLETE );
-        UnsetICFocus( pFrame );
-        mpFocusFrame = maClientData.pFrame = NULL;
     }
+    UnsetICFocus( pFrame );
+    maClientData.pFrame = NULL;
 }
 
 void
@@ -474,7 +492,7 @@ SalI18N_InputContext::Map( SalFrame *pFrame )
                                   XNSwitchIMNotifyCallback, &maSwitchIMCallback,
                                   NULL );
             }
-            if( ! mpFocusFrame )
+            if( maClientData.pFrame != pFrame )
                 SetICFocus( pFrame );
         }
     }
@@ -692,16 +710,8 @@ void
 SalI18N_InputContext::SetICFocus( SalFrame* pFocusFrame )
 {
     I18NStatus::get().setParent( pFocusFrame );
-    if ( mbUseable && (maContext != NULL) && pFocusFrame != mpFocusFrame )
+    if ( mbUseable && (maContext != NULL)  )
     {
-        if( mpFocusFrame )
-        {
-            mpFocusFrame->EndExtTextInput( SAL_FRAME_ENDEXTTEXTINPUT_COMPLETE );
-            // FIXME: remove cast to X11SalFrame
-            static_cast<X11SalFrame*>(mpFocusFrame)->getInputContext()->UnsetICFocus( mpFocusFrame );
-        }
-
-        mpFocusFrame = pFocusFrame;
         maClientData.pFrame = pFocusFrame;
 
         const SystemEnvData* pEnv   = pFocusFrame->GetSystemData();
@@ -713,9 +723,15 @@ SalI18N_InputContext::SetICFocus( SalFrame* pFocusFrame )
                       XNClientWindow,      aClientWindow,
                       NULL );
 
-    }
-    if ( mbUseable && (maContext != NULL) )
+        if( maClientData.aInputEv.mpTextAttr )
+        {
+            sendEmptyCommit(pFocusFrame);
+            // begin preedit again
+            GetSalData()->GetDisplay()->SendInternalEvent( pFocusFrame, &maClientData.aInputEv, SALEVENT_EXTTEXTINPUT );
+        }
+
         XSetICFocus( maContext );
+    }
 }
 
 void
@@ -727,11 +743,10 @@ SalI18N_InputContext::UnsetICFocus( SalFrame* pFrame )
 
     if ( mbUseable && (maContext != NULL) )
     {
-        if( pFrame == mpFocusFrame )
-        {
-            mpFocusFrame = maClientData.pFrame = NULL;
-            XUnsetICFocus( maContext );
-        }
+        // cancel an eventual event posted to begin preedit again
+        GetSalData()->GetDisplay()->CancelInternalEvent( maClientData.pFrame, &maClientData.aInputEv, SALEVENT_EXTTEXTINPUT );
+        maClientData.pFrame = NULL;
+        XUnsetICFocus( maContext );
     }
 }
 
@@ -778,99 +793,21 @@ SalI18N_InputContext::SetLanguage(LanguageType aInputLanguage)
 void
 SalI18N_InputContext::EndExtTextInput( USHORT nFlags )
 {
-    if ( mbUseable && (maContext != NULL) )
+    if ( mbUseable && (maContext != NULL) && maClientData.pFrame )
     {
-        SalFrame* pOldFocusFrame = mpFocusFrame;
-
-        // restore conversion state after resetting XIC
-        XIMPreeditState preedit_state = XIMPreeditUnKnown;
-        XVaNestedList preedit_attr;
-
-        Bool is_preedit_state = False;
-        preedit_attr = XVaCreateNestedList(0,
-                                           XNPreeditState, &preedit_state,
-                                           NULL);
-        if (!XGetICValues(maContext,
-                          XNPreeditAttributes, preedit_attr,
-                          NULL)) {
-            is_preedit_state = True;
-        }
-        XFree(preedit_attr);
-
-        char *pPendingChars = XmbResetIC( maContext );
-
-        if (pPendingChars == NULL && maClientData.eState != ePreeditStatusStartPending )
-            PreeditDoneCallback (maContext, (char*)&maClientData, NULL);
-
-        preedit_attr = XVaCreateNestedList(0,
-                                           XNPreeditState, preedit_state,
-                                           NULL);
-        if (is_preedit_state) {
-             XSetICValues(maContext,
-                         XNPreeditAttributes, preedit_attr,
-                         XNPreeditState, XIMPreeditDisable,
-                         NULL);
-        }
-        XFree(preedit_attr);
-        // text is unicode
-        if ( (pPendingChars != NULL)
-             && (nFlags & SAL_FRAME_ENDEXTTEXTINPUT_COMPLETE) )
+        vcl::DeletionListener aDel( maClientData.pFrame );
+        // delete preedit in sal (commit an empty string)
+        sendEmptyCommit( maClientData.pFrame );
+        if( ! aDel.isDeleted() )
         {
-            XIMUnicodeText aPendingText;
-            int nLen;
-            sal_Unicode* pPtr;
-            rtl_TextEncoding nEncoding = osl_getThreadTextEncoding();
-
-            // buffer is already unicode
-            if ( mbMultiLingual || nEncoding == RTL_TEXTENCODING_UNICODE )
+            // mark previous preedit state again (will e.g. be sent at focus gain)
+            maClientData.aInputEv.mpTextAttr = &maClientData.aInputFlags[0];
+            if( static_cast<X11SalFrame*>(maClientData.pFrame)->hasFocus() )
             {
-                pPtr = (sal_Unicode*)pPendingChars;
-                for ( nLen = 0; pPtr[ nLen ] != (sal_Unicode)0; nLen++ )
-                    ;
+                // begin preedit again
+                GetSalData()->GetDisplay()->SendInternalEvent( maClientData.pFrame, &maClientData.aInputEv, SALEVENT_EXTTEXTINPUT );
             }
-            // else convert buffer to unicode
-            else
-            {
-                for ( nLen = 0; pPendingChars[ nLen ] != (char)0; nLen++ )
-                    ;
-
-                // create text converter
-                rtl_TextToUnicodeConverter aConverter =
-                    rtl_createTextToUnicodeConverter( nEncoding );
-                rtl_TextToUnicodeContext aContext =
-                    rtl_createTextToUnicodeContext( aConverter );
-
-                sal_Size    nBufferSize = nLen * 2;
-                sal_uInt32  nConversionInfo;
-                sal_Size    nConvertedChars;
-
-                pPtr = (sal_Unicode*) alloca( nBufferSize );
-
-                // convert to single byte text stream
-                nLen = rtl_convertTextToUnicode(
-                                                aConverter, aContext, (char*)pPendingChars,
-                                                nLen, pPtr, nBufferSize,
-                                                RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE
-                                                | RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE,
-                                                &nConversionInfo, &nConvertedChars );
-
-                // destroy converter
-                rtl_destroyTextToUnicodeContext( aConverter, aContext );
-                rtl_destroyTextToUnicodeConverter( aConverter );
-            }
-            aPendingText.length = nLen;
-            aPendingText.string.utf16_char = pPtr;
-
-            ::CommitStringCallback( maContext,
-                                    (XPointer)&maClientData, (XPointer)&aPendingText );
         }
-        if ( pPendingChars != NULL )
-            XFree ( (void*)pPendingChars  );
-
-        /* #i41330# workaround XmbResetIC disabling the whole context
-        */
-        if( mpFocusFrame && mpFocusFrame == pOldFocusFrame )
-            SetICFocus( mpFocusFrame );
     }
 }
 
