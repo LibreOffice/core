@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_ic.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:39:51 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:36:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,6 @@ private:
     XVaNestedList mpAttributes;
     XVaNestedList mpStatusAttributes;
     XVaNestedList mpPreeditAttributes;
-    SalFrame*  mpFocusFrame;
 
     Bool         SupportInputMethodStyle( XIMStyles *pIMStyles );
     unsigned int GetWeightingOfIMStyle(   XIMStyle n_style ) const ;
