@@ -401,7 +401,7 @@
 </Era>
 </Eras>
 <StartDayOfWeek><DayID>mon</DayID></StartDayOfWeek>
-<MinimalDaysInFirstWeek>7</MinimalDaysInFirstWeek>
+<MinimalDaysInFirstWeek>4</MinimalDaysInFirstWeek>
 </Calendar>
 </LC_CALENDAR>
 <LC_CURRENCY>
@@ -409,7 +409,7 @@
 <CurrencyID>yuan</CurrencyID>
 <CurrencySymbol>￥</CurrencySymbol>
 <BankSymbol>CNY</BankSymbol>
-<CurrencyName>Ren Min Bi</CurrencyName>
+<CurrencyName>人民币</CurrencyName>
 <DecimalPlaces>2</DecimalPlaces>
 </Currency>
 <!--more currency should be put here -->
