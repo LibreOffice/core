@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gendict.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:01:51 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 14:52:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,8 @@
 #include <stdlib.h>
 #include <sal/main.h>
 #include <sal/types.h>
-#include <tools/string.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/ustring.hxx>
 
 using namespace ::rtl;
 
