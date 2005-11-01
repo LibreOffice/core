@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkdata.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:36:01 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:35:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,10 +76,14 @@
 #ifndef _SAL_I18N_XKBDEXTENSION_HXX
 #include "i18n_xkb.hxx"
 #endif
+#ifndef _VCL_WMADAPTOR_HXX_
+#include <wmadaptor.hxx>
+#endif
 
 #include "../../unx/source/inc/salcursors.h"
 
 using namespace rtl;
+using namespace vcl_sal;
 
 /***************************************************************************
  * class GtkDisplay                                                        *
@@ -133,6 +137,18 @@ GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
 
     if (pDisplay->GetDisplay() == pEvent->xany.display )
     {
+        // #i53471# gtk has no callback mechanism that lets us be notified
+        // when settings (as in XSETTING and opposed to styles) are changed.
+        // so we need to listen for corresponding property notifications here
+        // these should be rare enough so that we can assume that the settings
+        // actually change when a corresponding PropertyNotify occurs
+        if( pEvent->type == PropertyNotify &&
+            pEvent->xproperty.atom == pDisplay->getWMAdaptor()->getAtom( WMAdaptor::XSETTINGS ) &&
+            ! pDisplay->m_aFrames.empty()
+           )
+        {
+            pDisplay->SendInternalEvent( pDisplay->m_aFrames.front(), NULL, SALEVENT_SETTINGSCHANGED );
+        }
         // let's see if one of our frames wants to swallow these events
         // get the frame
         for( std::list< SalFrame* >::const_iterator it = pDisplay->m_aFrames.begin();
