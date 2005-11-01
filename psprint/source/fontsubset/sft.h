@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sft.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 14:28:12 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:25:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.h,v 1.12 2005-09-28 14:28:12 hr Exp $ */
+/* $Id: sft.h,v 1.13 2005-11-01 10:25:36 kz Exp $ */
 
 /**
 
@@ -592,7 +592,7 @@ extern "C" {
         sal_uInt32  numOfLongVerMetrics;                   /* if this number is not 0, font has vertical metrics information */
         sal_uInt8   *cmap;
         int         cmapType;
-        sal_uInt16 (*mapper)(const sal_uInt8 *, sal_uInt16);       /* character to glyphID translation function                          */
+        sal_uInt32 (*mapper)(const sal_uInt8 *, sal_uInt32); /* character to glyphID translation function                          */
         void        **tables;                              /* array of pointers to tables                                        */
         sal_uInt32  *tlens;                                /* array of table lengths                                             */
         int         kerntype;                              /* Defined in the KernType enum                                       */
