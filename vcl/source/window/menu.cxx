@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 14:51:05 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:33:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,11 +66,9 @@
 #ifndef _SV_SVIDS_HRC
 #include <svids.hrc>
 #endif
-#define private public
 #ifndef _SV_FLOATWIN_HXX
 #include <floatwin.hxx>
 #endif
-#undef private
 #ifndef _SV_WRKWIN_HXX
 #include <wrkwin.hxx>
 #endif
@@ -782,12 +780,12 @@ static int ImplGetTopDockingAreaHeight( Window *pWindow )
     BOOL bDone = FALSE;
     if( pWindow->ImplGetFrameWindow() )
     {
-        Window *pWin = pWindow->ImplGetFrameWindow()->mpWindowImpl->mpFirstChild;
+        Window *pWin = pWindow->ImplGetFrameWindow()->GetWindow( WINDOW_FIRSTCHILD); //mpWindowImpl->mpFirstChild;
         while( pWin && !bDone )
         {
             if( pWin->IsSystemWindow() )
             {
-                pWin = pWin->mpWindowImpl->mpFirstChild;
+                pWin = pWin->GetWindow( WINDOW_FIRSTCHILD); //mpWindowImpl->mpFirstChild;
                 while( pWin && !bDone )
                 {
                     DockingAreaWindow *pDockingArea = dynamic_cast< DockingAreaWindow* >( pWin );
@@ -798,12 +796,12 @@ static int ImplGetTopDockingAreaHeight( Window *pWindow )
                             height = pDockingArea->GetOutputSizePixel().Height();
                     }
                     else
-                        pWin = pWin->mpWindowImpl->mpNext;
+                        pWin = pWin->GetWindow( WINDOW_NEXT ); //mpWindowImpl->mpNext;
                 }
 
             }
             else
-                pWin = pWin->mpWindowImpl->mpNext;
+                pWin = pWin->GetWindow( WINDOW_NEXT ); //mpWindowImpl->mpNext;
         }
     }
     return height;
@@ -4538,7 +4536,7 @@ MenuBarWindow::MenuBarWindow( Window* pParent ) :
     aFloatBtn( this, WB_NOPOINTERFOCUS | WB_SMALLSTYLE | WB_RECTSTYLE ),
     aHideBtn( this, WB_NOPOINTERFOCUS | WB_SMALLSTYLE | WB_RECTSTYLE )
 {
-    mpWindowImpl->mnType = WINDOW_MENUBARWINDOW;
+    SetType( WINDOW_MENUBARWINDOW );
     pMenu = NULL;
     pActivePopup = NULL;
     nSaveFocusId = 0;
@@ -5233,9 +5231,11 @@ void MenuBarWindow::ImplInitStyleSettings()
         Color aHighlightTextColor = ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor;
         if( aHighlightTextColor != Color( COL_TRANSPARENT ) )
         {
-            StyleSettings aStyle = maSettings.GetStyleSettings();
+            AllSettings aSettings( GetSettings() );
+            StyleSettings aStyle( aSettings.GetStyleSettings() );
             aStyle.SetMenuHighlightTextColor( aHighlightTextColor );
-            maSettings.SetStyleSettings( aStyle );
+            aSettings.SetStyleSettings( aStyle );
+            OutputDevice::SetSettings( aSettings );
         }
     }
 }
