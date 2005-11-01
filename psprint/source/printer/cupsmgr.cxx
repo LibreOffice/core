@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cupsmgr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:44:29 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:25:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -456,6 +456,10 @@ void CUPSManager::initialize()
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     int nPrinter = m_nDests;
 
+    // reset global default PPD options; these are queried on demand from CUPS
+    m_aGlobalDefaults.m_pParser = NULL;
+    m_aGlobalDefaults.m_aContext = PPDContext();
+
     // add CUPS printers, should there be a printer
     // with the same name as a CUPS printer, overwrite it
     while( nPrinter-- )
@@ -472,7 +476,10 @@ void CUPSManager::initialize()
         }
 
         // initialize printer with possible configuration from psprint.conf
+        bool bSetToGlobalDefaults = m_aPrinters.find( aPrinterName ) == m_aPrinters.end();
         Printer aPrinter = m_aPrinters[ aPrinterName ];
+        if( bSetToGlobalDefaults )
+            aPrinter.m_aInfo = m_aGlobalDefaults;
         aPrinter.m_aInfo.m_aPrinterName = aPrinterName;
         if( pDest->is_default )
             m_aDefaultPrinter = aPrinterName;
