@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:26:52 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:24:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1022,6 +1022,8 @@ void MultiLineEdit::ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackgr
     Color aTextColor = rStyleSettings.GetFieldTextColor();
     if ( IsControlForeground() )
         aTextColor = GetControlForeground();
+    if ( !IsEnabled() )
+        aTextColor = rStyleSettings.GetDisableColor();
 
     Font aFont = rStyleSettings.GetFieldFont();
     if ( IsControlFont() )
@@ -1261,6 +1263,7 @@ void MultiLineEdit::StateChanged( StateChangedType nType )
     if( nType == STATE_CHANGE_ENABLE )
     {
         pImpSvMEdit->Enable( IsEnabled() );
+        ImplInitSettings( TRUE, FALSE, FALSE );
     }
     else if( nType == STATE_CHANGE_READONLY )
     {
