@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wmadaptor.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 14:58:45 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:37:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,6 +126,7 @@ public:
         SAL_EXTTEXTEVENT,
         DTWM_IS_RUNNING,
         VCL_SYSTEM_SETTINGS,
+        XSETTINGS,
         NetAtomMax
     };
 
