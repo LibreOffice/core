@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsadd.pl,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 22:05:52 $
+#   last change: $Author: obo $ $Date: 2005-11-01 13:12:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,15 +67,12 @@ $log = Logging->new() if (!$@);
 eval { require CopyPrj; import CopyPrj; };
 use CvsModule;
 
-######### Interrupt handler #########
- $SIG{'INT'} = 'INT_handler' if defined($log);
-
 #### script id #####
 
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.7 $ ';
+my $id_str = ' $Revision: 1.8 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
