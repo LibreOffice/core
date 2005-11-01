@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mapmod.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:04:11 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:32:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,11 +42,9 @@
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#define private public
 #ifndef _SV_MAPMOD_HXX
 #include <mapmod.hxx>
 #endif
-#undef private
 
 // =======================================================================
 
@@ -107,7 +105,7 @@ SvStream& operator<<( SvStream& rOStm, const ImplMapMode& rImplMapMode )
 
 // -----------------------------------------------------------------------
 
-static ImplMapMode* ImplGetStaticMapMode( MapUnit eUnit )
+ImplMapMode* ImplMapMode::ImplGetStaticMapMode( MapUnit eUnit )
 {
     static long aStaticImplMapModeAry[(MAP_LASTENUMDUMMY)*sizeof(ImplMapMode)/sizeof(long)];
 
@@ -147,7 +145,7 @@ MapMode::MapMode()
 {
     DBG_CTOR( MapMode, NULL );
 
-    mpImplMapMode = ImplGetStaticMapMode( MAP_PIXEL );
+    mpImplMapMode = ImplMapMode::ImplGetStaticMapMode( MAP_PIXEL );
 }
 
 // -----------------------------------------------------------------------
@@ -171,7 +169,7 @@ MapMode::MapMode( MapUnit eUnit )
 {
     DBG_CTOR( MapMode, NULL );
 
-    mpImplMapMode = ImplGetStaticMapMode( eUnit );
+    mpImplMapMode = ImplMapMode::ImplGetStaticMapMode( eUnit );
 }
 
 // -----------------------------------------------------------------------
@@ -298,7 +296,7 @@ BOOL MapMode::IsDefault() const
 {
     DBG_CHKTHIS( MapMode, NULL );
 
-    ImplMapMode* pDefMapMode = ImplGetStaticMapMode( MAP_PIXEL );
+    ImplMapMode* pDefMapMode = ImplMapMode::ImplGetStaticMapMode( MAP_PIXEL );
     if ( mpImplMapMode == pDefMapMode )
         return TRUE;
 
