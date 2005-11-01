@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.207 $
+ *  $Revision: 1.208 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-17 14:50:47 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 12:58:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3031,6 +3031,7 @@ ImplFontEntry* ImplFontCache::GetFallback( ImplDevFontList* pFontList,
             0
         };
 
+        bool bHasEudc = false;
         int nMaxLevel = 0;
         int nBestQuality = 0;
         ImplDevFontListData** pFallbackList = NULL;
@@ -3064,16 +3065,20 @@ ImplFontEntry* ImplFontCache::GetFallback( ImplDevFontList* pFontList,
                 if( !pFallbackList )
                     pFallbackList = new ImplDevFontListData*[ MAX_FALLBACK ];
                 pFallbackList[ nMaxLevel ] = pFallbackFont;
+                if( !bHasEudc && !nMaxLevel )
+                    bHasEudc = (0 == strncmp( *ppNames, "eudc", 5 ));
             }
         }
 
-        // sort the fonts for glyph fallback by quality (highest first)
+        // sort the list of fonts for glyph fallback by quality (highest first)
+        // #i33947# keep the EUDC font at the front of the list
         // an insertion sort is good enough for this short list
-        for( int i = 1, j; i < nMaxLevel; ++i )
+        const int nSortStart = bHasEudc ? 1 : 0;
+        for( int i = nSortStart+1, j; i < nMaxLevel; ++i )
         {
             ImplDevFontListData* pTestFont = pFallbackList[ i ];
             int nTestQuality = pTestFont->GetMinQuality();
-            for( j = i; --j >= 0; )
+            for( j = i; --j >= nSortStart; )
                 if( nTestQuality > pFallbackList[j]->GetMinQuality() )
                     pFallbackList[ j+1 ] = pFallbackList[ j ];
                 else
@@ -7563,6 +7568,14 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
     const String& rStr, xub_StrLen nBase, xub_StrLen nIndex,
     xub_StrLen nLen, BOOL bOptimize, const ULONG nTWidth, const sal_Int32* pDXArray ) const
 {
+    // the fonts need to be initialized
+    if( mbNewFont )
+        ImplNewFont();
+    if( mbInitFont )
+        ImplInitFont();
+    if( !mpFontEntry )
+        return FALSE;
+
     BOOL bRet = FALSE;
     rVector.clear();
     if( nLen == STRING_LEN )
@@ -7722,7 +7735,8 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
             Bitmap aBmp( aVDev.GetBitmap(Point(0, 0), aSize));
 
             PolyPolygon aPolyPoly;
-            if( !aBmp.Vectorize(aPolyPoly, BMP_VECTORIZE_OUTER | BMP_VECTORIZE_REDUCE_EDGES) )
+            bool bVectorized = aBmp.Vectorize(aPolyPoly, BMP_VECTORIZE_OUTER | BMP_VECTORIZE_REDUCE_EDGES);
+            if( !bVectorized )
                 bSuccess = false;
             else
             {
