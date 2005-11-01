@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LocaleNode.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 14:28:36 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 14:53:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -625,7 +625,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
 
     }
 
-    // 0..49 MUST be present
+    // 0..47 MUST be present, 48,49 MUST NOT be present
     ValueSet::const_iterator aIter( aFormatIndex.begin());
     for (sal_Int16 nNext = cssi::NumberFormatIndex::NUMBER_START;
             nNext < cssi::NumberFormatIndex::INDEX_TABLE_ENTRIES; ++nNext)
@@ -647,6 +647,17 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                 default:
                     incErrorInt( "FormatElement formatindex=\"%d\" not present.", nNext);
             }
+        }
+        switch (nHere)
+        {
+            case cssi::NumberFormatIndex::BOOLEAN :
+                incErrorInt( "FormatElement formatindex=\"%d\" reserved for internal ``BOOLEAN''.", nNext);
+                break;
+            case cssi::NumberFormatIndex::TEXT :
+                incErrorInt( "FormatElement formatindex=\"%d\" reserved for internal ``@'' (TEXT).", nNext);
+                break;
+            default:
+                ;   // nothing
         }
     }
 
