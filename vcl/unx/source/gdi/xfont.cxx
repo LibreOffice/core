@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 15:04:52 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:39:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -258,7 +258,7 @@ ExtendedFontStruct::ToImplFontMetricData(ImplFontMetricData *pFontMetric)
     pFontMetric->mbDevice       = true;
     pFontMetric->mbScalableFont = mpXlfd->IsScalable();
     pFontMetric->mbKernableFont = false;
-    pFontMetric->mbSymbolFlag= (mpXlfd->GetEncoding() != RTL_TEXTENCODING_UNICODE);
+    pFontMetric->mbSymbolFlag= mpXlfd->IsSymbolFont();
     pFontMetric->meFamily   = mpXlfd->GetFamilyType();
     pFontMetric->meWeight   = mpXlfd->GetWeight();
     pFontMetric->mePitch    = mpXlfd->GetPitch();
