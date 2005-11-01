@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 11:49:08 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:32:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 
 #include <pdfwriter_impl.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include <tools/zcodec.hxx>
 #include <tools/stream.hxx>
@@ -135,6 +136,7 @@ void doTestCode()
     // set transitional mode
     aWriter.SetPageTransition( PDFWriter::WipeRightToLeft, 1500 );
     aWriter.SetMapMode( MapMode( MAP_100TH_MM ) );
+    aWriter.SetTextColor( Color( COL_BLACK ) );
     aWriter.SetFont( Font( String( RTL_CONSTASCII_USTRINGPARAM( "Times" ) ), Size( 0, 500 ) ) );
     aWriter.DrawText( Rectangle( Point( 4500, 1500 ), Size( 12000, 3000 ) ),
                       String( RTL_CONSTASCII_USTRINGPARAM( "Here's where all things come to an end ... well at least the paragaph from the last page." ) ),
@@ -233,6 +235,7 @@ void doTestCode()
     aWriter.NewPage();
     aWriter.SetMapMode( MapMode( MAP_100TH_MM ) );
     aWriter.SetFont( Font( String( RTL_CONSTASCII_USTRINGPARAM( "Times" ) ), Size( 0, 500 ) ) );
+    aWriter.SetTextColor( Color( COL_BLACK ) );
     aRect = Rectangle( Point( 4500, 6000 ), Size( 6000, 1500 ) );
     aWriter.DrawRect( aRect );
     aWriter.DrawText( aRect, String( RTL_CONSTASCII_USTRINGPARAM( "www.heise.de" ) ) );
@@ -360,7 +363,14 @@ void doTestCode()
     aWriter.Emit();
 }
 #endif
+static const sal_Int32 nLog10Divisor = 1;
+static const double fDivisor = 10.0;
+static const sal_Int32 nFineFactor = 100;
+static const sal_Int32 nFineLog10Divisor = nLog10Divisor+2;
 
+static inline double pixelToPoint( sal_Int32 px ) { return double(px)/fDivisor; }
+static inline double pixelToPoint( double px ) { return px/fDivisor; }
+static inline sal_Int32 pointToPixel( double pt ) { return sal_Int32(pt*fDivisor); }
 
 static void appendHex( sal_Int8 nInt, OStringBuffer& rBuffer )
 {
@@ -471,15 +481,15 @@ OString PDFWriterImpl::convertWidgetFieldName( const rtl::OUString& rString )
     return aRet;
 }
 
-static void appendFixedInt( sal_Int32 nValue,  OStringBuffer& rBuffer, sal_Int32 nLog10Divisor = 1 )
+static void appendFixedInt( sal_Int32 nValue,  OStringBuffer& rBuffer, sal_Int32 nPrecision = nLog10Divisor )
 {
     if( nValue < 0 )
     {
         rBuffer.append( '-' );
         nValue = -nValue;
     }
-    sal_Int32 nFactor = 1;
-    while( nLog10Divisor-- )
+    sal_Int32 nFactor = 1, nDiv = nPrecision;
+    while( nDiv-- )
         nFactor *= 10;
 
     sal_Int32 nInt      = nValue / nFactor;
@@ -490,6 +500,9 @@ static void appendFixedInt( sal_Int32 nValue,  OStringBuffer& rBuffer, sal_Int32
         if( nDecimal )
         {
             rBuffer.append( '.' );
+            // omit trailing zeros
+            while( (nDecimal % 10) == 0 )
+                nDecimal /= 10;
             rBuffer.append( nDecimal );
         }
     }
@@ -810,8 +823,20 @@ bool PDFWriterImpl::PDFPage::emit(sal_Int32 nParentObject )
     #endif
     if( m_aMCIDParents.size() > 0 )
     {
+        OStringBuffer aStructParents( 1024 );
+        aStructParents.append( "[ " );
+        int nParents = m_aMCIDParents.size();
+        for( int i = 0; i < nParents; i++ )
+        {
+            aStructParents.append( m_aMCIDParents[i] );
+            aStructParents.append( " 0 R" );
+            aStructParents.append( ((i%10) == 9) ? "\r\n" : " " );
+        }
+        aStructParents.append( "]" );
+        m_pWriter->m_aStructParentTree.push_back( aStructParents.makeStringAndClear() );
+
         aLine.append( "   /StructParents " );
-        aLine.append( m_nPageIndex );
+        aLine.append( sal_Int32(m_pWriter->m_aStructParentTree.size()-1) );
         aLine.append( "\r\n" );
     }
     if( m_nDuration > 0 )
@@ -922,27 +947,33 @@ GEOMETRY lcl_convert( const MapMode& _rSource, const MapMode& _rDest, OutputDevi
 
 void PDFWriterImpl::PDFPage::appendPoint( const Point& rPoint, OStringBuffer& rBuffer, bool bNeg, Point* pOutPoint ) const
 {
+    if( pOutPoint )
+    {
+        Point aPoint( lcl_convert( m_pWriter->m_aGraphicsStack.front().m_aMapMode,
+                                   m_pWriter->m_aMapMode,
+                                   m_pWriter->getReferenceDevice(),
+                                   rPoint ) );
+        *pOutPoint = aPoint;
+    }
+
     Point aPoint( lcl_convert( m_pWriter->m_aGraphicsStack.front().m_aMapMode,
-                               m_pWriter->m_aMapMode,
+                               m_pWriter->m_aFineMapMode,
                                m_pWriter->getReferenceDevice(),
                                rPoint ) );
-
-    if( pOutPoint )
-        *pOutPoint = aPoint;
 
     sal_Int32 nValue    = aPoint.X();
     if( bNeg )
         nValue = -nValue;
 
-    appendFixedInt( nValue, rBuffer );
+    appendFixedInt( nValue, rBuffer, nFineLog10Divisor );
 
     rBuffer.append( ' ' );
 
-    nValue      = 10*getHeight() - aPoint.Y();
+    nValue      = pointToPixel(getHeight())*nFineFactor - aPoint.Y();
     if( bNeg )
         nValue = -nValue;
 
-    appendFixedInt( nValue, rBuffer );
+    appendFixedInt( nValue, rBuffer, nFineLog10Divisor );
 }
 
 void PDFWriterImpl::PDFPage::appendRect( const Rectangle& rRect, OStringBuffer& rBuffer ) const
@@ -968,7 +999,7 @@ void PDFWriterImpl::PDFPage::convertRect( Rectangle& rRect ) const
                               rRect.GetSize() );
     rRect.Left()    = aLL.X();
     rRect.Right()   = aLL.X() + aSize.Width();
-    rRect.Top()     = 10*getHeight() - aLL.Y();
+    rRect.Top()     = pointToPixel(getHeight()) - aLL.Y();
     rRect.Bottom()  = rRect.Top() + aSize.Height();
 }
 
@@ -1035,14 +1066,14 @@ void PDFWriterImpl::PDFPage::appendMappedLength( sal_Int32 nLength, OStringBuffe
     }
 
     Size aSize( lcl_convert( m_pWriter->m_aGraphicsStack.front().m_aMapMode,
-                             m_pWriter->m_aMapMode,
+                             m_pWriter->m_aFineMapMode,
                              m_pWriter->getReferenceDevice(),
                              Size( nValue, nValue ) ) );
     nValue = bVertical ? aSize.Height() : aSize.Width();
     if( pOutLength )
-        *pOutLength = (nLength < 0 ) ? -nValue : nValue;
+        *pOutLength = ((nLength < 0 ) ? -nValue : nValue)/nFineFactor;
 
-    appendFixedInt( nValue, rBuffer );
+    appendFixedInt( nValue, rBuffer, nFineLog10Divisor );
 }
 
 void PDFWriterImpl::PDFPage::appendMappedLength( double fLength, OStringBuffer& rBuffer, bool bVertical, sal_Int32* pOutLength ) const
@@ -1053,7 +1084,7 @@ void PDFWriterImpl::PDFPage::appendMappedLength( double fLength, OStringBuffer& 
                              Size( 1000, 1000 ) ) );
     if( pOutLength )
         *pOutLength = (sal_Int32)(fLength*(double)(bVertical ? aSize.Height() : aSize.Width())/1000.0);
-    fLength *= (double)(bVertical ? aSize.Height() : aSize.Width()) / 10000.0;
+    fLength *= pixelToPoint((double)(bVertical ? aSize.Height() : aSize.Width()) / 1000.0);
     appendDouble( fLength, rBuffer );
 }
 
@@ -1133,7 +1164,8 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
 PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext )
         :
         m_pReferenceDevice( NULL ),
-        m_aMapMode( MAP_POINT, Point(), Fraction( 1L, 10L ), Fraction( 1L, 10L ) ),
+        m_aMapMode( MAP_POINT, Point(), Fraction( 1L, pointToPixel(1) ), Fraction( 1L, pointToPixel(1) ) ),
+        m_aFineMapMode( MAP_POINT, Point(), Fraction( 1L, pointToPixel(1)*nFineFactor ), Fraction( 1L, pointToPixel(1)*nFineFactor ) ),
         m_nCurrentStructElement( 0 ),
         m_bEmitStructure( true ),
         m_bNewMCID( false ),
@@ -1672,36 +1704,28 @@ bool PDFWriterImpl::updateObject( sal_Int32 n )
 
 #define CHECK_RETURN( x ) if( !(x) ) return 0
 
-sal_Int32 PDFWriterImpl::emitStructParentTree()
+sal_Int32 PDFWriterImpl::emitStructParentTree( sal_Int32 nObject )
 {
-    OStringBuffer aLine( 1024 );
-    sal_Int32 nParentTree = createObject();
-
-    aLine.append( nParentTree );
-    aLine.append( " 0 obj\r\n"
-                  "<< /Nums [\r\n" );
-    int nPages = m_aPages.size();
-    for( sal_Int32 n = 0; n < nPages; n++ )
+    if( nObject > 0 )
     {
-        int nParents = m_aPages[n].m_aMCIDParents.size();
-        if( nParents )
+        OStringBuffer aLine( 1024 );
+
+        aLine.append( nObject );
+        aLine.append( " 0 obj\r\n"
+                      "<< /Nums [\r\n" );
+        sal_Int32 nTreeItems = m_aStructParentTree.size();
+        for( sal_Int32 n = 0; n < nTreeItems; n++ )
         {
-            DBG_ASSERT( m_aPages[n].m_nPageIndex == n, "wrong page index" );
-            aLine.append( m_aPages[n].m_nPageIndex ); // actually page index must equal n
-            aLine.append( " [ " );
-            for( int i = 0; i < nParents; i++ )
-            {
-                aLine.append( m_aPages[n].m_aMCIDParents[i] );
-                aLine.append( " 0 R" );
-                aLine.append( ((i%10) == 9) ? "\r\n" : " " );
-            }
-            aLine.append( "]\r\n" );
+            aLine.append( n );
+            aLine.append( ' ' );
+            aLine.append( m_aStructParentTree[n] );
+            aLine.append( "\r\n" );
         }
+        aLine.append( "]\r\n>>\r\nendobj\r\n\r\n" );
+        CHECK_RETURN( updateObject( nObject ) );
+        CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
     }
-    aLine.append( "]\r\n>>\r\nendobj\r\n\r\n" );
-    CHECK_RETURN( updateObject( nParentTree ) );
-    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
-    return nParentTree;
+    return nObject;
 }
 
 const sal_Char* PDFWriterImpl::getAttributeTag( PDFWriter::StructAttribute eAttr )
@@ -1827,6 +1851,13 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& rEle )
                 nLink = link_it->second;
             if( nLink >= 0 && nLink < (sal_Int32)m_aLinks.size() )
             {
+                // update struct parent of link
+                OStringBuffer aStructParentEntry( 32 );
+                aStructParentEntry.append( rEle.m_nObject );
+                aStructParentEntry.append( " 0 R" );
+                m_aStructParentTree.push_back( aStructParentEntry.makeStringAndClear() );
+                m_aLinks[ nLink ].m_nStructParent = m_aStructParentTree.size()-1;
+
                 sal_Int32 nRefObject = createObject();
                 OStringBuffer aRef( 256 );
                 aRef.append( nRefObject );
@@ -1960,9 +1991,10 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
     aLine.append( rEle.m_nObject );
     aLine.append( " 0 obj\r\n"
                   "<< /Type " );
+    sal_Int32 nParentTree = -1;
     if( rEle.m_nOwnElement == rEle.m_nParentElement )
     {
-        sal_Int32 nParentTree = emitStructParentTree();
+        nParentTree = createObject();
         CHECK_RETURN( nParentTree );
         aLine.append( "/StructTreeRoot\r\n" );
         aLine.append( "   /ParentTree " );
@@ -2039,6 +2071,8 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
     CHECK_RETURN( updateObject( rEle.m_nObject ) );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
+    CHECK_RETURN( emitStructParentTree( nParentTree ) );
+
     return rEle.m_nObject;
 }
 
@@ -2095,10 +2129,10 @@ bool PDFWriterImpl::emitTilings()
         appendFixedInt( nY+nH, aTilingObj );
         aTilingObj.append( " ]\r\n"
                            "   /XStep " );
-        appendDouble( (double)nW/10.0, aTilingObj, 1 );
+        appendDouble( pixelToPoint(nW), aTilingObj, 1 );
         aTilingObj.append( "\r\n"
                            "   /YStep " );
-        appendDouble( (double)nH/10.0, aTilingObj, 1 );
+        appendDouble( pixelToPoint(nH), aTilingObj, 1 );
         aTilingObj.append( "\r\n"
                            "   /Resources <<\r\n"
                            "   /XObject << /Im" );
@@ -3400,6 +3434,12 @@ bool PDFWriterImpl::emitLinkAnnotations()
             aLine.append( rtl::OUStringToOString( rLink.m_aURL, RTL_TEXTENCODING_ASCII_US ) );
             aLine.append( ")\r\n"
                           "      >>\r\n" );
+        }
+        if( rLink.m_nStructParent > 0 )
+        {
+            aLine.append( "   /StructParent " );
+            aLine.append( rLink.m_nStructParent );
+            aLine.append( "\r\n" );
         }
         aLine.append( ">>\r\nendobj\r\n\r\n" );
         CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
@@ -6188,7 +6228,7 @@ void PDFWriterImpl::beginRedirect( SvStream* pStream, const Rectangle& rTargetRe
                                              rTargetRect );
         Point aDelta = aTargetRect.BottomLeft();
         sal_Int32 nPageHeight = m_aPages[m_nCurrentPage].getHeight();
-        aDelta.Y() = aTargetRect.Bottom() - 10*nPageHeight;
+        aDelta.Y() = aTargetRect.Bottom() - pointToPixel(nPageHeight);
         m_aMapMode.SetOrigin( m_aMapMode.GetOrigin() + aDelta );
     }
 
@@ -7132,7 +7172,17 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         if( bTrueColor )
             aLine.append( "/DeviceRGB\r\n" );
         else if( aBitmap.HasGreyPalette() )
+        {
             aLine.append( "/DeviceGray\r\n" );
+            if( aBitmap.GetBitCount() == 1 )
+            {
+                // #i47395# 1 bit bitmaps occasionally have an inverted grey palette
+                sal_Int32 nBlackIndex = pAccess->GetBestPaletteIndex( BitmapColor( Color( COL_BLACK ) ) );
+                DBG_ASSERT( nBlackIndex == 0 || nBlackIndex == 1, "wrong black index" );
+                if( nBlackIndex == 1 )
+                    aLine.append( "   /Decode [ 1 0 ]\r\n" );
+            }
+        }
         else
         {
             aLine.append( "[  /Indexed /DeviceRGB " );
@@ -7995,13 +8045,34 @@ sal_Int32 PDFWriterImpl::setLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId )
     return 0;
 }
 
+static OUString escapeStringLiteral( const OUString& rStr )
+{
+    OUStringBuffer aBuf( rStr.getLength()*2 );
+    const sal_Unicode* pUni = rStr.getStr();
+    int nLen = rStr.getLength();
+    for( ; nLen; nLen--, pUni++ )
+    {
+        switch( *pUni )
+        {
+            case sal_Unicode(')'):
+            case sal_Unicode('('):
+            case sal_Unicode('\\'):
+                aBuf.append( sal_Unicode( '\\' ) );
+            default:
+                aBuf.append( *pUni );
+                break;
+        }
+    }
+    return aBuf.makeStringAndClear();
+}
+
 sal_Int32 PDFWriterImpl::setLinkURL( sal_Int32 nLinkId, const OUString& rURL )
 {
     if( nLinkId < 0 || nLinkId >= (sal_Int32)m_aLinks.size() )
         return -1;
 
     m_aLinks[ nLinkId ].m_nDest = -1;
-    m_aLinks[ nLinkId ].m_aURL  = rURL;
+    m_aLinks[ nLinkId ].m_aURL  = escapeStringLiteral( rURL );
 
     return 0;
 }
@@ -8202,6 +8273,35 @@ sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType )
 
     // close eventual current MC sequence
     endStructureElementMCSeq();
+
+    if( m_nCurrentStructElement == 0 &&
+        eType != PDFWriter::Document && eType != PDFWriter::NonStructElement )
+    {
+        // struct tree root hit, but not beginning document
+        // this might happen with setCurrentStructureElement
+        // silently insert structure into document again if one properly exists
+        if( ! m_aStructure[ 0 ].m_aChildren.empty() )
+        {
+            PDFWriter::StructElement childType = PDFWriter::NonStructElement;
+            sal_Int32 nNewCurElement = 0;
+            const std::list< sal_Int32 >& rRootChildren = m_aStructure[0].m_aChildren;
+            for( std::list< sal_Int32 >::const_iterator it = rRootChildren.begin();
+                 childType != PDFWriter::Document && it != rRootChildren.end(); ++it )
+            {
+                nNewCurElement = *it;
+                childType = m_aStructure[ nNewCurElement ].m_eType;
+            }
+            if( childType == PDFWriter::Document )
+            {
+                m_nCurrentStructElement = nNewCurElement;
+                DBG_ASSERT( 0, "Structure element inserted to StructTreeRoot that is not a document" );
+            }
+            else
+                DBG_ERROR( "document structure in disorder !" );
+        }
+        else
+            DBG_ERROR( "PDF document structure MUST be contained in a Document element" );
+    }
 
 #if OSL_DEBUG_LEVEL > 1
     if( m_bEmitStructure )
@@ -9003,7 +9103,7 @@ void PDFWriterImpl::beginControlAppearance( sal_Int32 nControl )
     // MapMode between createControl and beginControlAppearance
     // could have changed; therefore the widget rectangle is
     // already converted
-    Rectangle aBack( Point( rWidget.m_aRect.Left(), 10*m_aPages[m_nCurrentPage].getHeight() - rWidget.m_aRect.Top() - rWidget.m_aRect.GetHeight() ),
+    Rectangle aBack( Point( rWidget.m_aRect.Left(), pointToPixel(m_aPages[m_nCurrentPage].getHeight()) - rWidget.m_aRect.Top() - rWidget.m_aRect.GetHeight() ),
                      rWidget.m_aRect.GetSize() );
     aBack = lcl_convert( m_aMapMode,
                          m_aGraphicsStack.front().m_aMapMode,
