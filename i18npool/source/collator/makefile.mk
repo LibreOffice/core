@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 17:07:53 $
+#   last change: $Author: kz $ $Date: 2005-11-01 14:53:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,6 @@ APP1TARGET = gencoll_rule
 APP1OBJS   = $(OBJ)$/gencoll_rule.obj
 
 APP1STDLIBS = $(SALLIB) \
-        $(TOOLSLIB) \
         $(ICUINLIB) \
         $(ICUUCLIB)
 
