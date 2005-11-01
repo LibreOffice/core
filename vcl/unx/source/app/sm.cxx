@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sm.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:02:43 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:38:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -469,6 +469,11 @@ void SessionManagerClient::open()
     else if( ! aSmcConnection )
         SMprintf( "no SESSION_MANAGER\n" );
 #endif
+}
+
+const ByteString& SessionManagerClient::getSessionID()
+{
+    return aClientID;
 }
 
 void SessionManagerClient::close()
