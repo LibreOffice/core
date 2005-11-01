@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE Locale SYSTEM 'locale.dtd'>
-<Locale versionDTD="2.0" allowUpdateFromCLDR="no" version="1.2">
+<Locale versionDTD="2.0" allowUpdateFromCLDR="no" version="1.3">
   <LC_INFO>
     <Language>
       <LangID>pl</LangID>
@@ -13,7 +13,7 @@
   </LC_INFO>
   <LC_CTYPE>
     <Separators>
-      <DateSeparator>.</DateSeparator>
+      <DateSeparator>-</DateSeparator>
       <ThousandSeparator> </ThousandSeparator>
       <DecimalSeparator>,</DecimalSeparator>
       <TimeSeparator>:</TimeSeparator>
@@ -84,16 +84,16 @@
       <FormatCode># ##0,-- [$zł-415];[RED]-# ##0,-- [$zł-415]</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
-      <FormatCode>D.M.YY</FormatCode>
+      <FormatCode>YY-M-D</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey9" default="true" type="long" usage="DATE" formatindex="19">
       <FormatCode>NNNNDD MMMM, YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey8" default="true" type="medium" usage="DATE" formatindex="20">
-      <FormatCode>DD.MM.YY</FormatCode>
+    <FormatElement msgid="DateFormatskey8" default="false" type="medium" usage="DATE" formatindex="20">
+      <FormatCode>YY-MM-DD</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="21">
-      <FormatCode>DD.MM.YYYY</FormatCode>
+      <FormatCode>YYYY-MM-DD</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey10" default="false" type="long" usage="DATE" formatindex="22">
       <FormatCode>D MMM, YY</FormatCode>
@@ -123,18 +123,18 @@
       <FormatCode>NNNND MMMM, YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey18" default="false" type="short" usage="DATE" formatindex="31">
-      <FormatCode>DD.MM</FormatCode>
+      <FormatCode>MM-DD</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey19" default="false" type="medium" usage="DATE" formatindex="32">
       <FormatCode>YY-MM-DD</FormatCode>
       <DefaultName>ISO 8601</DefaultName>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey20" default="false" type="medium" usage="DATE" formatindex="33">
+    <FormatElement msgid="DateFormatskey20" default="true" type="medium" usage="DATE" formatindex="33">
       <FormatCode>YYYY-MM-DD</FormatCode>
       <DefaultName>ISO 8601</DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey3" default="false" type="medium" usage="DATE" formatindex="34">
-      <FormatCode>MM.YY</FormatCode>
+      <FormatCode>YY-MM</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey4" default="false" type="medium" usage="DATE" formatindex="35">
       <FormatCode>DD MMM</FormatCode>
@@ -169,11 +169,14 @@
     <FormatElement msgid="TimeFormatskey7" default="false" type="medium" usage="TIME" formatindex="45">
       <FormatCode>[HH]:MM:SS,00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateTimeFormatskey1" default="true" type="medium" usage="DATE_TIME" formatindex="46">
-      <FormatCode>DD.MM.YY HH:MM</FormatCode>
+    <FormatElement msgid="DateTimeFormatskey1" default="false" type="medium" usage="DATE_TIME" formatindex="46">
+      <FormatCode>YY-MM-DD HH:MM</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey2" default="false" type="medium" usage="DATE_TIME" formatindex="47">
-      <FormatCode>DD.MM.YYYY HH:MM:SS</FormatCode>
+      <FormatCode>YYYY-MM-DD HH:MM:SS</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateTimeFormatskey3" default="true" type="medium" usage="DATE_TIME" formatindex="50">
+      <FormatCode>YYYY-MM-DD HH:MM</FormatCode>
     </FormatElement>
   </LC_FORMAT>
   <LC_COLLATION ref="en_US" />
