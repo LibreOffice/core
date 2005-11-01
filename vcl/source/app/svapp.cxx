@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 14:37:14 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 12:58:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1457,8 +1457,17 @@ Window* Application::GetDefDialogParent()
         Window *pWin = NULL;
         if( pWin = pSVData->maWinData.mpFocusWin )
         {
-            while( pWin->mpWindowImpl->mpParent )
+            while( pWin->mpWindowImpl && pWin->mpWindowImpl->mpParent )
                 pWin = pWin->mpWindowImpl->mpParent;
+
+            // check for corrupted window hierarchy, #122232#, may be we now crash somewhere else
+            if( !pWin->mpWindowImpl )
+            {
+                DBG_ERROR( "Window hierarchy corrupted!" );
+                pSVData->maWinData.mpFocusWin = NULL;   // avoid further access
+                return NULL;
+            }
+
             // use only decorated windows
             if( pWin->mpWindowImpl->mpFrameWindow->GetStyle() & (WB_MOVEABLE | WB_SIZEABLE) )
                 return pWin->mpWindowImpl->mpFrameWindow->ImplGetWindow();
