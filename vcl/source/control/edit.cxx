@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 14:40:22 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:31:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -560,12 +560,12 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
         return;
     }
 
-    ImplClearBackground( 0, GetOutputSizePixel().Width() );
-
     Cursor* pCursor = GetCursor();
     BOOL bVisCursor = pCursor ? pCursor->IsVisible() : FALSE;
     if ( pCursor )
         pCursor->Hide();
+
+    ImplClearBackground( 0, GetOutputSizePixel().Width() );
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if ( IsEnabled() )
@@ -914,15 +914,13 @@ int Edit::ImplGetNativeControlType()
 
 void Edit::ImplClearBackground( long nXStart, long nXEnd )
 {
+    /*
+    * note: at this point the cursor must be switched off already
+    */
     Point aTmpPoint;
     Rectangle aRect( aTmpPoint, GetOutputSizePixel() );
     aRect.Left() = nXStart;
     aRect.Right() = nXEnd;
-
-    Cursor* pCursor = HasFocus() ? GetCursor() : NULL;
-
-    if ( pCursor )
-        pCursor->Hide();
 
     if( ImplUseNativeBorder( GetStyle() ) )
     {
@@ -961,9 +959,6 @@ void Edit::ImplClearBackground( long nXStart, long nXEnd )
     }
     else
         Erase( aRect );
-
-    if ( pCursor )
-        pCursor->Show();
 }
 
 // -----------------------------------------------------------------------
@@ -1380,7 +1375,31 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
         }
     }
 
-    if ( eFunc == KEYFUNC_DONTKNOW )
+    if ( !bDone && rKEvt.GetKeyCode().IsMod1() )
+    {
+        if ( nCode == KEY_A )
+        {
+            ImplSetSelection( Selection( 0, maText.Len() ) );
+            bDone = TRUE;
+        }
+        else if ( rKEvt.GetKeyCode().IsShift() && (nCode == KEY_S) )
+        {
+            if ( pImplFncGetSpecialChars )
+            {
+                Selection aSaveSel = GetSelection();    // Falls jemand in Get/LoseFocus die Selektion verbiegt, z.B. URL-Zeile...
+                XubString aChars = pImplFncGetSpecialChars( this, GetFont() );
+                SetSelection( aSaveSel );
+                if ( aChars.Len() )
+                {
+                    ImplInsertText( aChars );
+                    ImplModified();
+                }
+                bDone = TRUE;
+            }
+        }
+    }
+
+    if ( eFunc == KEYFUNC_DONTKNOW && ! bDone )
     {
         switch ( nCode )
         {
@@ -1521,30 +1540,6 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                         }
                     }
                 }
-            }
-        }
-    }
-
-    if ( !bDone && rKEvt.GetKeyCode().IsMod1() )
-    {
-        if ( nCode == KEY_A )
-        {
-            ImplSetSelection( Selection( 0, maText.Len() ) );
-            bDone = TRUE;
-        }
-        else if ( rKEvt.GetKeyCode().IsShift() && (nCode == KEY_S) )
-        {
-            if ( pImplFncGetSpecialChars )
-            {
-                Selection aSaveSel = GetSelection();    // Falls jemand in Get/LoseFocus die Selektion verbiegt, z.B. URL-Zeile...
-                XubString aChars = pImplFncGetSpecialChars( this, GetFont() );
-                SetSelection( aSaveSel );
-                if ( aChars.Len() )
-                {
-                    ImplInsertText( aChars );
-                    ImplModified();
-                }
-                bDone = TRUE;
             }
         }
     }
