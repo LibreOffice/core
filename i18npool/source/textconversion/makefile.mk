@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 17:24:25 $
+#   last change: $Author: kz $ $Date: 2005-11-01 14:57:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,8 +66,7 @@ APP1TARGET = genconv_dict
 
 APP1OBJS   = $(OBJ)$/genconv_dict.obj
 
-APP1STDLIBS = $(SALLIB) \
-        $(TOOLSLIB)
+APP1STDLIBS = $(SALLIB)
 
 # --- Targets ------------------------------------------------------
 
