@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 11:44:59 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:20:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -305,13 +305,33 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     rFilterData[ nData ].Value >>= mbExportNotesPages;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "UseTransitionEffects" ) ) )
                     rFilterData[ nData ].Value >>= mbUseTransitionEffects;
-                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "FormsFormat" ) ) )
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "FormsType" ) ) )
                     rFilterData[ nData ].Value >>= mnFormsFormat;
             }
             PDFWriter::PDFWriterContext aContext;
             aContext.URL        = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
             aContext.Version    = PDFWriter::PDF_1_4;
             aContext.Tagged     = mbUseTaggedPDF;
+            /*
+            * FIXME: the entries are only implicitly defined by the resource file. Should there
+            * ever be an additional form submit format this could get invalid.
+            */
+            switch( mnFormsFormat )
+            {
+                case 1:
+                    aContext.SubmitFormat = PDFWriter::PDF;
+                    break;
+                case 2:
+                    aContext.SubmitFormat = PDFWriter::HTML;
+                    break;
+                case 3:
+                    aContext.SubmitFormat = PDFWriter::XML;
+                    break;
+                default:
+                case 0:
+                    aContext.SubmitFormat = PDFWriter::FDF;
+                    break;
+            }
             PDFWriter*          pPDFWriter = new PDFWriter( aContext );
             OutputDevice*       pOut = pPDFWriter->GetReferenceDevice();
             vcl::PDFExtOutDevData* pPDFExtOutDevData = NULL;
