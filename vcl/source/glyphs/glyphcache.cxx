@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:14:52 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:33:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,8 +161,14 @@ void GlyphCache::RemoveFont( int nFontId )
         it_next = maFontList.begin();
         if( pSF && (pSF->GetRefCount() <= 0) )
         {
+            // remove font from list of garbage collected fonts
+            if( pSF->mpPrevGCFont )
+                pSF->mpPrevGCFont->mpNextGCFont = pSF->mpNextGCFont;
+            if( pSF->mpNextGCFont )
+                pSF->mpNextGCFont->mpPrevGCFont = pSF->mpPrevGCFont;
             if( pSF == mpCurrentGCFont )
                 mpCurrentGCFont = NULL;
+
             delete pSF;
         }
     }
@@ -322,11 +328,21 @@ void GlyphCache::GarbageCollect()
         DBG_ASSERT( (pServerFont->GetRefCount() == 0),
             "GlyphCache::GC detected RefCount underflow" );
 
+        // free all pServerFont related data
         pServerFont->GarbageCollect( mnLruIndex+0x10000000 );
         const ImplFontSelectData& rIFSD = pServerFont->GetFontSelData();
         maFontList.erase( rIFSD );
         mpPeer->RemovingFont( *pServerFont );
         mnBytesUsed -= pServerFont->GetByteCount();
+
+        // remove font from list of garbage collected fonts
+        if( pServerFont->mpPrevGCFont )
+            pServerFont->mpPrevGCFont->mpNextGCFont = pServerFont->mpNextGCFont;
+        if( pServerFont->mpNextGCFont )
+            pServerFont->mpNextGCFont->mpPrevGCFont = pServerFont->mpPrevGCFont;
+        if( pServerFont == mpCurrentGCFont )
+            mpCurrentGCFont = NULL;
+
         delete pServerFont;
     }
 }
