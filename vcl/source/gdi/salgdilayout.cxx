@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdilayout.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:11:09 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:33:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,7 +114,6 @@
 #ifndef _SV_SALLAYOUT_HXX
 #include <sallayout.hxx>
 #endif
-#undef private
 
 //#define USE_NEW_RTL_IMPLEMENTATION
 
