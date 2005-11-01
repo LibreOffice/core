@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.194 $
+ *  $Revision: 1.195 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-13 09:37:20 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:40:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -615,7 +615,6 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, ULONG nSalFrameStyle, SystemParentD
     nScreenSaversTimeout_       = 0;
 
     mpInputContext              = NULL;
-    mbDeleteInputContext        = false;
     mbInputFocus                = False;
 
     maAlwaysOnTopRaiseTimer.SetTimeoutHdl( LINK( this, X11SalFrame, HandleAlwaysOnTopRaise ) );
@@ -699,8 +698,7 @@ X11SalFrame::~X11SalFrame()
     {
         mpInputContext->UnsetICFocus( this );
         mpInputContext->Unmap( this );
-        if( mbDeleteInputContext )
-            delete mpInputContext;
+        delete mpInputContext;
     }
 
     if( GetWindow() == hPresentationWindow )
@@ -960,7 +958,7 @@ void X11SalFrame::SetIcon( USHORT nIcon )
 
 void X11SalFrame::SetMaxClientSize( long nWidth, long nHeight )
 {
-    if( GetShellWindow() && ! (nStyle_ & SAL_FRAME_STYLE_FLOAT) )
+    if( GetShellWindow() && (nStyle_ & (SAL_FRAME_STYLE_FLOAT|SAL_FRAME_STYLE_OWNERDRAWDECORATION) ) != SAL_FRAME_STYLE_FLOAT )
     {
         XSizeHints* pHints = XAllocSizeHints();
         long nSupplied = 0;
@@ -981,7 +979,7 @@ void X11SalFrame::SetMaxClientSize( long nWidth, long nHeight )
 
 void X11SalFrame::SetMinClientSize( long nWidth, long nHeight )
 {
-    if( GetShellWindow() && ! (nStyle_ & SAL_FRAME_STYLE_FLOAT) )
+    if( GetShellWindow() && (nStyle_ & (SAL_FRAME_STYLE_FLOAT|SAL_FRAME_STYLE_OWNERDRAWDECORATION) ) != SAL_FRAME_STYLE_FLOAT )
     {
         XSizeHints* pHints = XAllocSizeHints();
         long nSupplied = 0;
@@ -1740,7 +1738,7 @@ void X11SalFrame::SetSize( const Size &rSize )
     {
          if( ! ( nStyle_ & SAL_FRAME_STYLE_SIZEABLE )
             && ! ( nStyle_ & SAL_FRAME_STYLE_CHILD )
-            && ! ( nStyle_ & SAL_FRAME_STYLE_FLOAT ) )
+            && ( nStyle_ & (SAL_FRAME_STYLE_FLOAT|SAL_FRAME_STYLE_OWNERDRAWDECORATION) ) != SAL_FRAME_STYLE_FLOAT )
          {
             XSizeHints* pHints = XAllocSizeHints();
             long nSupplied = 0;
@@ -1817,8 +1815,13 @@ void X11SalFrame::SetPosSize( const Rectangle &rPosSize )
         values.y    -= maGeometry.nTopDecoration;
     }
 
-    if( ( ! ( nStyle_ & SAL_FRAME_STYLE_CHILD )
-          && ! ( nStyle_ & SAL_FRAME_STYLE_FLOAT ) )
+    // do net set WMNormalHints for ..
+    if(
+        // plugged windows
+        ! ( nStyle_ & SAL_FRAME_STYLE_CHILD )
+        // popups (menu, help window, etc.)
+        &&  (nStyle_ & (SAL_FRAME_STYLE_FLOAT|SAL_FRAME_STYLE_OWNERDRAWDECORATION) ) != SAL_FRAME_STYLE_FLOAT
+        // shown, sizeable windows
         && ( nShowState_ == SHOWSTATE_UNKNOWN ||
              nShowState_ == SHOWSTATE_HIDDEN ||
              ! ( nStyle_ & SAL_FRAME_STYLE_SIZEABLE )
@@ -2131,15 +2134,6 @@ X11SalFrame::HandleExtTextEvent (XClientMessageEvent *pEvent)
             break;
 
         case SALEVENT_EXTTEXTINPUT:
-
-            if (pExtTextEvent != NULL)
-            {
-                  SalExtTextInputEvent *pEvent = (SalExtTextInputEvent*)pExtTextEvent;
-
-                if (pEvent->mpTextAttr != NULL)
-                    free ((void*)pEvent->mpTextAttr);
-                delete (pEvent);
-            }
             break;
 
         default:
@@ -2207,7 +2201,7 @@ void X11SalFrame::SetInputContext( SalInputContext* pContext )
     {
         I18NStatus& rStatus( I18NStatus::get() );
         rStatus.setParent( this );
-        mpInputContext = rStatus.getInputContext( mbDeleteInputContext );
+        mpInputContext = new SalI18N_InputContext( this );
         if (mpInputContext->UseContext())
         {
               mpInputContext->ExtendEventMask( GetShellWindow() );
@@ -2679,6 +2673,7 @@ GetAlternateKeyCode( const USHORT nKeyCode )
 long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
 {
     KeySym          nKeySym;
+    KeySym          nUnmodifiedKeySym;
     int             nLen = 2048;
     unsigned char   *pPrintable = (unsigned char*)alloca( nLen );
 
@@ -2689,20 +2684,22 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
         // printable may be empty.
         Status nStatus;
         nKeySym = pDisplay_->GetKeySym( pEvent, pPrintable, &nLen,
-                &nStatus, mpInputContext->GetContext() );
+                                        &nUnmodifiedKeySym,
+                                        &nStatus, mpInputContext->GetContext() );
         if ( nStatus == XBufferOverflow )
         {
             nLen *= 2;
             pPrintable = (unsigned char*)alloca( nLen );
             nKeySym = pDisplay_->GetKeySym( pEvent, pPrintable, &nLen,
-                    &nStatus, mpInputContext->GetContext() );
+                                            &nUnmodifiedKeySym,
+                                            &nStatus, mpInputContext->GetContext() );
         }
     }
     else
     {
         // fallback, this should never ever be called
         Status nStatus = 0;
-           nKeySym = pDisplay_->GetKeySym( pEvent, pPrintable, &nLen, &nStatus );
+           nKeySym = pDisplay_->GetKeySym( pEvent, pPrintable, &nLen, &nUnmodifiedKeySym, &nStatus );
      }
 
     SalKeyEvent aKeyEvt;
@@ -2820,7 +2817,11 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
     mbSendExtKeyModChange = mbKeyMenu = false;
 
     // try to figure out the vcl code for the keysym
+    // #i52338# use the unmodified KeySym if there is none for the real KeySym
+    // because the independent part has only keycodes for unshifted keys
     nKeyCode = pDisplay_->GetKeyCode( nKeySym, &aDummy );
+    if( nKeyCode == 0 )
+        nKeyCode = pDisplay_->GetKeyCode( nUnmodifiedKeySym, &aDummy );
 
     // try to figure out a printable if XmbLookupString returns only a keysym
     // and NOT a printable. Do not store it in pPrintable[0] since it is expected to
@@ -2829,7 +2830,6 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
     // the printable is bound to the encoding so the KeySym might contain more
     // information (in et_EE locale: "Compose + Z + <" delivers "," in printable and
     // (the desired) Zcaron in KeySym
-
     sal_Unicode nKeyString = 0x0;
     if (   (nLen == 0)
         || ((nLen == 1) && (nKeySym > 0)) )
@@ -2871,12 +2871,12 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
 
         // convert to single byte text stream
         nSize = rtl_convertTextToUnicode(
-                aConverter, aContext,
-                (char*)pPrintable, nLen,
-                pBuffer, nBufferSize,
-                  RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE
-                | RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE,
-                &nConversionInfo, &nConvertedChars );
+                                aConverter, aContext,
+                                (char*)pPrintable, nLen,
+                                pBuffer, nBufferSize,
+                                RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE |
+                                RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE,
+                                &nConversionInfo, &nConvertedChars );
 
         // destroy converter
         rtl_destroyTextToUnicodeContext( aConverter, aContext );
@@ -2931,24 +2931,6 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
                     if( aAlternate.nCharCode )
                         aKeyEvt.mnCharCode = aAlternate.nCharCode;
                     CallCallback(SALEVENT_KEYINPUT, &aKeyEvt);
-                }
-                else
-                if (pEvent->keycode != 0)
-                {
-                    // try to strip off modifiers, e.g. Ctrl-$ becomes Ctrl-Shift-4
-                    nKeySym  = XKeycodeToKeysym (pDisplay_->GetDisplay(),
-                                                 pEvent->keycode, 0);
-                    nKeyCode = pDisplay_->GetKeyCode(nKeySym, &aDummy);
-                    if ((nKeyCode != 0) && ((nKeyCode | nModCode) != aKeyEvt.mnCode))
-                    {
-                        aKeyEvt.mnCode = nKeyCode | nModCode;
-                        if( nKeySym )
-                        {
-                            String aKeyName = pDisplay_->GetKeyNameFromKeySym( nKeySym );
-                            aKeyEvt.mnCharCode = aKeyName.GetChar(0);
-                        }
-                        CallCallback(SALEVENT_KEYINPUT, &aKeyEvt);
-                    }
                 }
             }
         }
