@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-kde.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:53:35 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:37:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1914,6 +1914,8 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetFieldFont( aFont );
     aStyleSettings.SetIconFont( aFont );
     aStyleSettings.SetGroupFont( aFont );
+    int flash_time = QApplication::cursorFlashTime();
+    aStyleSettings.SetCursorBlinkTime( flash_time != 0 ? flash_time/2 : STYLE_CURSOR_NOBLINKTIME );
 
     KMainWindow qMainWindow;
     qMainWindow.createGUI( "/dev/null" ); // hack
