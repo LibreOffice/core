@@ -4,9 +4,9 @@
  *
  *  $RCSfile: help.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:40:11 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:31:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,11 +36,9 @@
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
 #endif
-#define private public
 #ifndef _SV_WINDOW_HXX
 #include <window.hxx>
 #endif
-#undef private
 #ifndef _SV_EVENT_HXX
 #include <event.hxx>
 #endif
