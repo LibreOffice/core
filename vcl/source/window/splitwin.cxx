@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splitwin.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 14:53:30 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:34:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,11 +72,9 @@
 #ifndef _SV_HELP_HXX
 #include <help.hxx>
 #endif
-#define private public
 #ifndef _SV_SPLITWIN_HXX
 #include <splitwin.hxx>
 #endif
-#undef private
 
 
 
@@ -181,7 +179,7 @@ static void ImplCalcBorder( WindowAlign eAlign, BOOL bNoAlign,
 
 // -----------------------------------------------------------------------
 
-static void ImplDrawBorder( SplitWindow* pWin )
+void SplitWindow::ImplDrawBorder( SplitWindow* pWin )
 {
     const StyleSettings&    rStyleSettings = pWin->GetSettings().GetStyleSettings();
     long                    nDX = pWin->mnDX;
@@ -284,7 +282,7 @@ static void ImplDrawBorder( SplitWindow* pWin )
 
 // -----------------------------------------------------------------------
 
-static void ImplDrawBorderLine( SplitWindow* pWin )
+void SplitWindow::ImplDrawBorderLine( SplitWindow* pWin )
 {
     if ( pWin->mbFadeOut || pWin->mbAutoHide )
     {
@@ -874,8 +872,8 @@ static void ImplCalcSet( ImplSplitSet* pSet,
 
 // -----------------------------------------------------------------------
 
-static void ImplCalcSet2( SplitWindow* pWindow, ImplSplitSet* pSet, BOOL bHide,
-                          BOOL bRows, BOOL bDown = TRUE )
+void SplitWindow::ImplCalcSet2( SplitWindow* pWindow, ImplSplitSet* pSet, BOOL bHide,
+                                BOOL bRows, BOOL bDown )
 {
     USHORT          i;
     USHORT          nItems = pSet->mnItems;
@@ -1014,8 +1012,8 @@ static void ImplCalcLogSize( ImplSplitItem* pItems, USHORT nItems )
 
 // -----------------------------------------------------------------------
 
-static void ImplDrawBack( SplitWindow* pWindow, const Rectangle& rRect,
-                          const Wallpaper* pWall, const Bitmap* pBitmap )
+void SplitWindow::ImplDrawBack( SplitWindow* pWindow, const Rectangle& rRect,
+                                const Wallpaper* pWall, const Bitmap* pBitmap )
 {
     if ( pBitmap )
     {
@@ -1043,7 +1041,7 @@ static void ImplDrawBack( SplitWindow* pWindow, const Rectangle& rRect,
 
 // -----------------------------------------------------------------------
 
-static void ImplDrawBack( SplitWindow* pWindow, ImplSplitSet* pSet )
+void SplitWindow::ImplDrawBack( SplitWindow* pWindow, ImplSplitSet* pSet )
 {
     USHORT          i;
     USHORT          nItems = pSet->mnItems;
@@ -1182,9 +1180,9 @@ static void ImplDrawSplit( SplitWindow* pWindow, ImplSplitSet* pSet,
 
 // -----------------------------------------------------------------------
 
-static USHORT ImplTestSplit( ImplSplitSet* pSet, const Point& rPos,
-                             long& rMouseOff, ImplSplitSet** ppFoundSet, USHORT& rFoundPos,
-                             BOOL bRows, BOOL bDown = TRUE )
+USHORT SplitWindow::ImplTestSplit( ImplSplitSet* pSet, const Point& rPos,
+                                   long& rMouseOff, ImplSplitSet** ppFoundSet, USHORT& rFoundPos,
+                                   BOOL bRows, BOOL bDown )
 {
     if ( !pSet->mpItems )
         return 0;
@@ -1262,8 +1260,8 @@ static USHORT ImplTestSplit( ImplSplitSet* pSet, const Point& rPos,
 
 // -----------------------------------------------------------------------
 
-static USHORT ImplTestSplit( SplitWindow* pWindow, const Point& rPos,
-                             long& rMouseOff, ImplSplitSet** ppFoundSet, USHORT& rFoundPos )
+USHORT SplitWindow::ImplTestSplit( SplitWindow* pWindow, const Point& rPos,
+                                   long& rMouseOff, ImplSplitSet** ppFoundSet, USHORT& rFoundPos )
 {
     // Resizeable SplitWindow muss anders behandelt werden
     if ( pWindow->mnWinStyle & WB_SIZEABLE )
@@ -1326,7 +1324,7 @@ static USHORT ImplTestSplit( SplitWindow* pWindow, const Point& rPos,
 
 // -----------------------------------------------------------------------
 
-static void ImplDrawSplitTracking( SplitWindow* pThis, const Point& rPos )
+void SplitWindow::ImplDrawSplitTracking( SplitWindow* pThis, const Point& rPos )
 {
     Rectangle aRect;
 
