@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pspgraphics.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 15:02:25 $
+ *  last change: $Author: kz $ $Date: 2005-11-01 10:39:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -779,8 +779,7 @@ USHORT PspGraphics::SetFont( ImplFontSelectData *pEntry, int nFallbackLevel )
     }
     int nWeight = (int)pEntry->meWeight;
     int nRealWeight = (int)m_pPrinterGfx->GetFontMgr().getFontWeight( nID );
-    if( nRealWeight < nWeight-2 ||
-        ( nRealWeight < (int)psp::weight::SemiBold && nWeight > (int)WEIGHT_NORMAL) )
+    if( nRealWeight <= (int)psp::weight::Medium && nWeight > (int)WEIGHT_MEDIUM )
     {
         bArtBold = true;
     }
