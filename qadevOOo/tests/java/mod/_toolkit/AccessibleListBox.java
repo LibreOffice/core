@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleListBox.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:19:41 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:16:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,8 +91,8 @@ import util.utils;
  * @see ifc.accessibility._XAccessibleContext
  */
 public class AccessibleListBox extends TestCase {
-    XTextDocument xTextDoc = null;
-    XAccessibleAction action = null;
+    private static XTextDocument xTextDoc = null;
+    private static XAccessibleAction action = null;
 
     /**
      * Opens 'Insert Hyperlink' dialog using document dispatch provider.
