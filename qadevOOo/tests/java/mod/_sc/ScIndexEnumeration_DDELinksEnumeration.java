@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScIndexEnumeration_DDELinksEnumeration.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:53:08 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:02:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,8 +58,8 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 
 public class ScIndexEnumeration_DDELinksEnumeration extends TestCase {
-    XSpreadsheetDocument xSheetDoc = null;
-    XComponent oDoc = null;
+    static XSpreadsheetDocument xSheetDoc = null;
+    static XComponent oDoc = null;
 
     /**
     * Creates Spreadsheet document.
