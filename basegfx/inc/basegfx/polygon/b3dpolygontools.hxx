@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dpolygontools.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:30:33 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:54:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,15 @@ namespace basegfx
 
         // get size of polygon. Control vectors are included in that ranges.
         ::basegfx::B3DRange getRange(const ::basegfx::B3DPolygon& rCandidate);
+
+        // get normal vector of polygon
+        ::basegfx::B3DVector getNormal(const ::basegfx::B3DPolygon& rCandidate);
+
+        // get signed area of polygon
+        double getSignedArea(const B3DPolygon& rCandidate);
+
+        // get area of polygon
+        double getArea(const ::basegfx::B3DPolygon& rCandidate);
 
         // get length of polygon edge from point nIndex to nIndex + 1
         double getEdgeLength(const ::basegfx::B3DPolygon& rCandidate, sal_uInt32 nIndex);
