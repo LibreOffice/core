@@ -4,6 +4,7 @@
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/curve/b2dbeziertools.hxx>
 
@@ -66,43 +67,43 @@ public:
         // Choosing R=1, A=0, B=pi/2
         const double h( 4.0/3.0 * tan(F_PI/8.0) );
         aQuarterCircle  = B2DCubicBezier(a10 + B2DPoint(1.0,0.0),
-                                         B2DPoint( 1.0, h ) + B2DPoint(1.0,0.0),
-                                         B2DPoint( h, 1.0) + B2DPoint(1.0,0.0),
+                                         B2DPoint(B2DPoint( 1.0, h ) + B2DPoint(1.0,0.0)),
+                                         B2DPoint(B2DPoint( h, 1.0) + B2DPoint(1.0,0.0)),
                                          a01 + B2DPoint(1.0,0.0));
 
         aCusp           = B2DCubicBezier(a00 + B2DPoint(2.0,0.0),
-                                         a11 + B2DPoint(2.0,0.0),
-                                         a01 + B2DPoint(2.0,0.0),
+                                         B2DPoint(a11 + B2DPoint(2.0,0.0)),
+                                         B2DPoint(a01 + B2DPoint(2.0,0.0)),
                                          a10 + B2DPoint(2.0,0.0));
 
         aLoop           = B2DCubicBezier(a00 + B2DPoint(3.0,0.0),
-                                         a01 + B2DPoint(3.0,0.0),
-                                         a10 + B2DPoint(3.0,0.0),
+                                         B2DPoint(a01 + B2DPoint(3.0,0.0)),
+                                         B2DPoint(a10 + B2DPoint(3.0,0.0)),
                                          a00 + B2DPoint(3.0,0.0));
 
         aStraightLineDistinctEndPoints  = B2DCubicBezier(a00 + B2DPoint(4.0,0.0),
-                                                         middle + B2DPoint(4.0,0.0),
-                                                         middle + B2DPoint(4.0,0.0),
+                                                         B2DPoint(middle + B2DPoint(4.0,0.0)),
+                                                         B2DPoint(middle + B2DPoint(4.0,0.0)),
                                                          a11 + B2DPoint(4.0,0.0));
 
         aStraightLineDistinctEndPoints2  = B2DCubicBezier(a00 + B2DPoint(5.0,0.0),
-                                                          quarterDown + B2DPoint(5.0,0.0),
-                                                          quarterUp + B2DPoint(5.0,0.0),
+                                                          B2DPoint(quarterDown + B2DPoint(5.0,0.0)),
+                                                          B2DPoint(quarterUp + B2DPoint(5.0,0.0)),
                                                           a11 + B2DPoint(5.0,0.0));
 
         aStraightLineIdenticalEndPoints = B2DCubicBezier(a00 + B2DPoint(6.0,0.0),
-                                                         a11 + B2DPoint(6.0,0.0),
-                                                         a11 + B2DPoint(6.0,0.0),
+                                                         B2DPoint(a11 + B2DPoint(6.0,0.0)),
+                                                         B2DPoint(a11 + B2DPoint(6.0,0.0)),
                                                          a00 + B2DPoint(6.0,0.0));
 
         aStraightLineIdenticalEndPoints2 = B2DCubicBezier(a00 + B2DPoint(7.0,0.0),
-                                                          quarterDown + B2DPoint(7.0,0.0),
-                                                          quarterUp + B2DPoint(7.0,0.0),
+                                                          B2DPoint(quarterDown + B2DPoint(7.0,0.0)),
+                                                          B2DPoint(quarterUp + B2DPoint(7.0,0.0)),
                                                           a00 + B2DPoint(7.0,0.0));
 
         aCrossing       = B2DCubicBezier(a00 + B2DPoint(8.0,0.0),
-                                         B2DPoint(2.0,2.0) + B2DPoint(8.0,0.0),
-                                         B2DPoint(-1.0,2.0) + B2DPoint(8.0,0.0),
+                                         B2DPoint(B2DPoint(2.0,2.0) + B2DPoint(8.0,0.0)),
+                                         B2DPoint(B2DPoint(-1.0,2.0) + B2DPoint(8.0,0.0)),
                                          a10 + B2DPoint(8.0,0.0));
 
         ::std::ofstream output("bez_testcases.gnuplot");
@@ -566,10 +567,59 @@ public:
 
     // insert your test code here.
     // this is only demonstration code
-    void EmptyMethod()
+    void testIsRectangle()
     {
-          // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
-       CPPUNIT_ASSERT_STUB();
+        B2DPolygon aRect1(
+            tools::createPolygonFromRect(
+                B2DRange(0,0,1,1) ) );
+
+        B2DPolygon aRect2;
+        aRect2.append( B2DPoint(0,0) );
+        aRect2.append( B2DPoint(1,0) );
+        aRect2.append( B2DPoint(1,.5));
+        aRect2.append( B2DPoint(1,1) );
+        aRect2.append( B2DPoint(0,1) );
+        aRect2.setClosed(true);
+
+        B2DPolygon aNonRect1;
+        aNonRect1.append( B2DPoint(0,0) );
+        aNonRect1.append( B2DPoint(1,0) );
+        aNonRect1.append( B2DPoint(1,1) );
+        aNonRect1.append( B2DPoint(0.5,1) );
+        aNonRect1.append( B2DPoint(0.5,0) );
+        aNonRect1.setClosed(true);
+
+        B2DPolygon aNonRect2;
+        aNonRect2.append( B2DPoint(0,0) );
+        aNonRect2.append( B2DPoint(1,1) );
+        aNonRect2.append( B2DPoint(1,0) );
+        aNonRect2.append( B2DPoint(0,1) );
+        aNonRect2.setClosed(true);
+
+        B2DPolygon aNonRect3;
+        aNonRect3.append( B2DPoint(0,0) );
+        aNonRect3.append( B2DPoint(1,0) );
+        aNonRect3.append( B2DPoint(1,1) );
+        aNonRect3.setClosed(true);
+
+        B2DPolygon aNonRect4;
+        aNonRect4.append( B2DPoint(0,0) );
+        aNonRect4.append( B2DPoint(1,0) );
+        aNonRect4.append( B2DPoint(1,1) );
+        aNonRect4.append( B2DPoint(0,1) );
+
+        CPPUNIT_ASSERT_MESSAGE("checking rectangle-ness of rectangle 1",
+                               tools::isRectangle( aRect1 ));
+        CPPUNIT_ASSERT_MESSAGE("checking rectangle-ness of rectangle 2",
+                               tools::isRectangle( aRect2 ));
+        CPPUNIT_ASSERT_MESSAGE("checking non-rectangle-ness of polygon 1",
+                               !tools::isRectangle( aNonRect1 ));
+        CPPUNIT_ASSERT_MESSAGE("checking non-rectangle-ness of polygon 2",
+                               !tools::isRectangle( aNonRect2 ));
+        CPPUNIT_ASSERT_MESSAGE("checking non-rectangle-ness of polygon 3",
+                               !tools::isRectangle( aNonRect3 ));
+        CPPUNIT_ASSERT_MESSAGE("checking non-rectangle-ness of polygon 4",
+                               !tools::isRectangle( aNonRect4 ));
     }
 
     // Change the following lines only, if you add, remove or rename
@@ -577,7 +627,7 @@ public:
     // because these macros are need by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(b2dpolygontools);
-    CPPUNIT_TEST(EmptyMethod);
+    CPPUNIT_TEST(testIsRectangle);
     CPPUNIT_TEST_SUITE_END();
 }; // class b2dpolygontools
 
