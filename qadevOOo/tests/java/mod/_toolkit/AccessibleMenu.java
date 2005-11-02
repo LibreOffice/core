@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleMenu.java,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:20:51 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:17:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,8 +92,8 @@ import util.utils;
  * @see ifc.accessibility._XAccessibleContext
  */
 public class AccessibleMenu extends TestCase {
-    XTextDocument xTextDoc = null;
-    XAccessibleAction action = null;
+    private static XTextDocument xTextDoc = null;
+    private static XAccessibleAction action = null;
 
     /**
      * Finds accessible component with role <code>MENU</code>
