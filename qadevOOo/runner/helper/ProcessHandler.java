@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ProcessHandler.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:20:09 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:43:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,9 +138,29 @@ public class ProcessHandler {
         this(cmdLine, null, null, null, 0);
     }
 
+    /**
+     * Creates instance with specified external command
+     * including parameters as an array.
+     * Debug info and output
+     * of external command is printed to stdout.
+     */
     public ProcessHandler(String[] cmdLines)
         {
             this(null, null, null, null, 0);
+            cmdLineArray = cmdLines;
+        }
+
+    /**
+     * Creates instance with specified external command
+     * including parameters as an array, with environment
+     * variables.
+     * Debug info and output
+     * of external command is printed to stdout.
+     * @see java.lang.Runtime exec(String[], String[])
+     */
+    public ProcessHandler(String[] cmdLines, String[] envVars)
+        {
+            this(null, null, null, envVars, 0);
             cmdLineArray = cmdLines;
         }
 
