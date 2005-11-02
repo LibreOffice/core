@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implcanvas.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:26:37 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:43:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,8 +85,8 @@ namespace cppcanvas
             virtual void                        setTransformation( const ::basegfx::B2DHomMatrix& rMatrix );
             virtual ::basegfx::B2DHomMatrix     getTransformation() const;
 
-            virtual void                        setClip( const PolyPolygonSharedPtr& rClipPoly );
-            virtual PolyPolygonSharedPtr        getClip() const;
+            virtual void                        setClip( const ::basegfx::B2DPolyPolygon& rClipPoly );
+            virtual ::basegfx::B2DPolyPolygon   getClip() const;
 
             virtual FontSharedPtr               createFont( const ::rtl::OUString& rFontName, const double& rCellSize ) const;
 
@@ -106,8 +106,8 @@ namespace cppcanvas
             // default: disabled assignment
             ImplCanvas& operator=( const ImplCanvas& );
 
-            ::com::sun::star::rendering::ViewState                                          maViewState;
-            PolyPolygonSharedPtr                                                                    mpClipPolyPolygon;
+            mutable ::com::sun::star::rendering::ViewState                                  maViewState;
+            ::basegfx::B2DPolyPolygon                                                       maClipPolyPolygon;
             const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas >  mxCanvas;
         };
 
