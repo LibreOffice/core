@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLSettingsExporter.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:07:29 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:13:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ import com.sun.star.xml.sax.XDocumentHandler;
  */
 public class XMLSettingsExporter extends TestCase {
 
-    XComponent xSheetDoc;
+    static XComponent xSheetDoc;
 
     /**
      * New spreadsheet document created.
@@ -149,9 +149,15 @@ public class XMLSettingsExporter extends TestCase {
             XPropertySet xPropSet = (XPropertySet)
                 UnoRuntime.queryInterface(XPropertySet.class, xController);
             xPropSet.setPropertyValue("ShowGrid", "false");
+
+            util.CalcTools.fillCalcSheetWithContent(xSheetDoc,1, 3, 3, 50, 50);
+
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log) ;
             throw new StatusException("Can't create component.", e) ;
+        } catch (java.lang.Exception e) {
+            e.printStackTrace(log);
+            throw new StatusException("Can't create environment.", e);
         }
 
         //Create and prepare filter
