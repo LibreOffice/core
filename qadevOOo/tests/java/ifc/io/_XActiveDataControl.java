@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XActiveDataControl.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:10:17 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:46:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -250,7 +250,7 @@ public class _XActiveDataControl extends MultiMethodTest {
      * Disposes the test environment, since it is used.
      */
     public void after() {
-        tEnv.dispose();
+        this.disposeEnvironment();
     }
 }
 
