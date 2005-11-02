@@ -1,20 +1,17 @@
 ..\%__SRC%\bin\canvastools*.dll %_DEST%\bin%_EXT%\canvastools*.dll
 ..\%__SRC%\bin\vclcanvas*.dll %_DEST%\bin%_EXT%\vclcanvas*.dll
-..\%__SRC%\bin\directxcanvas*.dll %_DEST%\bin%_EXT%\directxcanvas*.dll
+..\%__SRC%\bin\nullcanvas*.dll %_DEST%\bin%_EXT%\nullcanvas*.dll
 ..\%__SRC%\bin\canvasfactory.uno.dll %_DEST%\bin%_EXT%\canvasfactory.uno.dll
 ..\%__SRC%\lib\icanvastools.lib %_DEST%\lib%_EXT%\icanvastools.lib
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\%__SRC%\class\javacanvas*.jar %_DEST%\bin%_EXT%\javacanvas*.jar
 
+mkdir: %_DEST%\inc%_EXT%\canvas\base
+..\inc\canvas\base\*.hxx %_DEST%\inc%_EXT%\canvas\base\*.hxx
+
+mkdir: %_DEST%\inc%_EXT%\canvas\rendering
+..\inc\canvas\rendering\*.hxx %_DEST%\inc%_EXT%\canvas\rendering\*.hxx
+
 mkdir: %_DEST%\inc%_EXT%\canvas
-..\inc\canvas\bitmapcanvasbase.hxx %_DEST%\inc%_EXT%\canvas\bitmapcanvasbase.hxx
-..\inc\canvas\canvasbase.hxx %_DEST%\inc%_EXT%\canvas\canvasbase.hxx
-..\inc\canvas\linepolypolygonbase.hxx %_DEST%\inc%_EXT%\canvas\linepolypolygonbase.hxx
-..\inc\canvas\redrawmanagement.hxx %_DEST%\inc%_EXT%\canvas\redrawmanagement.hxx
-..\inc\canvas\canvastools.hxx %_DEST%\inc%_EXT%\canvas\canvastools.hxx
-..\inc\canvas\prioritybooster.hxx %_DEST%\inc%_EXT%\canvas\prioritybooster.hxx
-..\inc\canvas\debug.hxx %_DEST%\inc%_EXT%\canvas\debug.hxx
-..\inc\canvas\elapsedtime.hxx %_DEST%\inc%_EXT%\canvas\elapsedtime.hxx
-..\inc\canvas\vclwrapper.hxx %_DEST%\inc%_EXT%\canvas\vclwrapper.hxx
-..\inc\canvas\verbosetrace.hxx %_DEST%\inc%_EXT%\canvas\verbosetrace.hxx
+..\inc\canvas\*.hxx %_DEST%\inc%_EXT%\canvas\*.hxx
