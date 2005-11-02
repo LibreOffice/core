@@ -23,17 +23,21 @@ mkdir: %_DEST%\inc%_EXT%\basegfx\point
 mkdir: %_DEST%\inc%_EXT%\basegfx\range
 ..\inc\basegfx\range\rangeexpander.hxx %_DEST%\inc%_EXT%\basegfx\range\rangeexpander.hxx
 ..\inc\basegfx\range\basicrange.hxx %_DEST%\inc%_EXT%\basegfx\range\basicrange.hxx
+..\inc\basegfx\range\basicbox.hxx %_DEST%\inc%_EXT%\basegfx\range\basicbox.hxx
 ..\inc\basegfx\range\b1drange.hxx %_DEST%\inc%_EXT%\basegfx\range\b1drange.hxx
 ..\inc\basegfx\range\b2dmultirange.hxx %_DEST%\inc%_EXT%\basegfx\range\b2dmultirange.hxx
 ..\inc\basegfx\range\b2drange.hxx %_DEST%\inc%_EXT%\basegfx\range\b2drange.hxx
 ..\inc\basegfx\range\b2drectangle.hxx %_DEST%\inc%_EXT%\basegfx\range\b2drectangle.hxx
 ..\inc\basegfx\range\b2dconnectedranges.hxx %_DEST%\inc%_EXT%\basegfx\range\b2dconnectedranges.hxx
 ..\inc\basegfx\range\b3drange.hxx %_DEST%\inc%_EXT%\basegfx\range\b3drange.hxx
-..\inc\basegfx\range\b3dbox.hxx %_DEST%\inc%_EXT%\basegfx\range\b3dbox.hxx
+..\inc\basegfx\range\b3dvolume.hxx %_DEST%\inc%_EXT%\basegfx\range\b3dvolume.hxx
 ..\inc\basegfx\range\b1irange.hxx %_DEST%\inc%_EXT%\basegfx\range\b1irange.hxx
 ..\inc\basegfx\range\b2irange.hxx %_DEST%\inc%_EXT%\basegfx\range\b2irange.hxx
 ..\inc\basegfx\range\b2irectangle.hxx %_DEST%\inc%_EXT%\basegfx\range\b2irectangle.hxx
 ..\inc\basegfx\range\b3irange.hxx %_DEST%\inc%_EXT%\basegfx\range\b3irange.hxx
+..\inc\basegfx\range\b3ivolume.hxx %_DEST%\inc%_EXT%\basegfx\range\b3ivolume.hxx
+..\inc\basegfx\range\b1ibox.hxx %_DEST%\inc%_EXT%\basegfx\range\b1ibox.hxx
+..\inc\basegfx\range\b2ibox.hxx %_DEST%\inc%_EXT%\basegfx\range\b2ibox.hxx
 ..\inc\basegfx\range\b3ibox.hxx %_DEST%\inc%_EXT%\basegfx\range\b3ibox.hxx
 
 mkdir: %_DEST%\inc%_EXT%\basegfx\vector
@@ -62,8 +66,10 @@ mkdir: %_DEST%\inc%_EXT%\basegfx\polygon
 ..\inc\basegfx\polygon\b2dpolypolygontools.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dpolypolygontools.hxx
 ..\inc\basegfx\polygon\b2dpolypolygonrasterconverter.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dpolypolygonrasterconverter.hxx
 ..\inc\basegfx\polygon\b2dlinegeometry.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dlinegeometry.hxx
+..\inc\basegfx\polygon\b2dpolygonclipper.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dpolygonclipper.hxx
 ..\inc\basegfx\polygon\b2dpolygontriangulator.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dpolygontriangulator.hxx
 ..\inc\basegfx\polygon\b2dpolygoncutandtouch.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dpolygoncutandtouch.hxx
+..\inc\basegfx\polygon\b2dpolypolygoncutter.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dpolypolygoncutter.hxx
 ..\inc\basegfx\polygon\b3dpolygon.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b3dpolygon.hxx
 ..\inc\basegfx\polygon\b3dpolypolygon.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b3dpolypolygon.hxx
 ..\inc\basegfx\polygon\b3dpolygontools.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b3dpolygontools.hxx
