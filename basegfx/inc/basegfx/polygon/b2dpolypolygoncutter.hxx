@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolypolygoncutter.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:29:09 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:53:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,71 +36,62 @@
 #ifndef _BGFX_POLYGON_B2DPOLYPOLYGONCUTTER_HXX
 #define _BGFX_POLYGON_B2DPOLYPOLYGONCUTTER_HXX
 
-#ifndef _SAL_TYPES_H_
-#include <sal/types.h>
-#endif
-
-#ifndef _BGFX_POINT_B2DPOINT_HXX
-#include <basegfx/point/b2dpoint.hxx>
-#endif
-
-#ifndef _BGFX_RANGE_B2DRANGE_HXX
-#include <basegfx/range/b2drange.hxx>
-#endif
+//#ifndef _SAL_TYPES_H_
+//#include <sal/types.h>
+//#endif
+//
+//#ifndef _BGFX_POINT_B2DPOINT_HXX
+//#include <basegfx/point/b2dpoint.hxx>
+//#endif
+//
+//#ifndef _BGFX_RANGE_B2DRANGE_HXX
+//#include <basegfx/range/b2drange.hxx>
+//#endif
 
 #ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #endif
 
-#include <vector>
+//#include <vector>
 
 //////////////////////////////////////////////////////////////////////////////
-// class B2DPolyPolygonCutter
 
 namespace basegfx
 {
-    // predeclarations
-    class B2DPolygonNode;
-    class B2DSimpleCut;
-
-    // a type definition to have a vector of pointers to B2DPolygonNodes
-    typedef ::std::vector< B2DPolygonNode* > B2DPolygonNodeVector;
-
-    // a type definition to have a vector of pointers to B2DSimpleCuts
-    typedef ::std::vector< B2DSimpleCut* > B2DSimpleCutVector;
-
-    class B2DPolyPolygonCutter
+    namespace tools
     {
-        // list of polys
-        B2DPolygonNodeVector                    maPolygonList;
+        // solve all crossovers in a polyPolygon. This re-layouts all contained polygons so that the
+        // result will contain only non-cutting polygons. For that reason, points will be added at
+        // crossover and touch points and the single Polygons may be re-combined. The orientations
+        // of the contained polygons in not changed but used as hints.
+        // If bSelfCrossovers is set, first all self-intersections of the contained polygons will be
+        // solved.
+        B2DPolyPolygon SolveCrossovers(const B2DPolyPolygon& rCandidate, bool bSelfCrossovers = true);
 
-        // help routines
-        B2DSimpleCut* getExistingCut(B2DSimpleCutVector& rTmpCuts, B2DPolygonNode* pA, B2DPolygonNode* pB);
-        B2DPolygonNode* extractNextPolygon(B2DPolygonNode*& rpList);
-        bool isCrossover(B2DPolygonNode* pA, B2DPolygonNode* pB);
-        bool isCrossover(B2DSimpleCut* pEnter, B2DSimpleCut* pLeave);
-        bool isNextSamePos(B2DPolygonNode* pA, B2DPolygonNode* pB);
-        bool isPrevSamePos(B2DPolygonNode* pA, B2DPolygonNode* pB);
-        void addAllNodes(B2DPolygonNode* pPolygon, B2DPolygonNode*& rpList);
-        B2DPolygonNode* createNewPolygon(const ::basegfx::B2DPolygon& rPolygon);
-        void deletePolygon(B2DPolygonNode* pCand);
-        void polysToList(B2DPolygonNode*& rpList);
-        void listToPolys(B2DPolygonNode*& rpList);
-        void solveAllCuts(B2DSimpleCutVector& rCuts);
+        // version for single polygons. This is for solving self-intersections. Result will be free of
+        // crossovers. When result contains multiple polygons, it may be necessary to rearrange their
+        // orientations since holes may have been created (use correctOrientations eventually).
+        B2DPolyPolygon SolveCrossovers(const B2DPolygon& rCandidate);
 
-    public:
-        B2DPolyPolygonCutter() {}
-        ~B2DPolyPolygonCutter();
+        // Neutral polygons will be stripped. Neutral polygons are ones who's orientation is
+        // neutral, so normally they have no volume -> just closed paths. A polygon with the same
+        // positive and negative oriented volume is also neutral, so this may not be wanted. It is
+        // safe to call with crossover-free polygons, though (that's where it's mostly used).
+        B2DPolyPolygon StripNeutralPolygons(const B2DPolyPolygon& rCandidate);
 
-        // put/get poly
-        void addPolygon(const ::basegfx::B2DPolygon& rPolygon);
-        void addPolyPolygon(const ::basegfx::B2DPolyPolygon& rPolyPolygon);
-        ::basegfx::B2DPolyPolygon getPolyPolygon();
-
-        // transformations
-        void removeSelfIntersections();
-        void removeDoubleIntersections();
-    };
+        // Remove not necessary polygons. Works only correct with crossover-free polygons. For each
+        // polygon, the depth for the PolyPolygon is calculated. The orientation is used to identify holes.
+        // Start value for holes is -1, for polygons it's zero. Ech time a polygon is contained in another one,
+        // it's depth is increased when inside a polygon, decreased when inside a hole. The result is a depth
+        // which e.g. is -1 for holes outside everything, 1 for a polygon covered by another polygon and zero
+        // for e.g. holes in a polygon or polygons outside everythig else.
+        // In the 2nd step, all polygons with depth other than zero are removed. If bKeepAboveZero is used,
+        // all polygons < 1 are removed. The bKeepAboveZero mode is useful for clipping, e.g. just append
+        // one polygon to another and use this mode -> only parts where two polygons overlapped will be kept.
+        // In combination with correct orientation of the input orientations and the SolveCrossover calls this
+        // can be combined for logical polygon operations or polygon clipping.
+        B2DPolyPolygon StripDispensablePolygons(const B2DPolyPolygon& rCandidate, bool bKeepAboveZero = false);
+    } // end of namespace tools
 } // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////
