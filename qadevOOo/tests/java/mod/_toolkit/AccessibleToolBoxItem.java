@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleToolBoxItem.java,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:28:15 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:19:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,8 +95,8 @@ import util.SOfficeFactory;
  * @see ifc.accessibility.XAccessibleValue
  */
 public class AccessibleToolBoxItem extends TestCase {
-    XDesktop the_Desk;
-    XTextDocument xTextDoc;
+    private static XDesktop the_Desk;
+    private static XTextDocument xTextDoc;
 
     /**
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
