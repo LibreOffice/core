@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dhommatrix.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:42:20 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:56:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,10 @@
 
 #ifndef _BGFX_TUPLE_B2DTUPLE_HXX
 #include <basegfx/tuple/b2dtuple.hxx>
+#endif
+
+#ifndef _BGFX_VECTOR_B2DVECTOR_HXX
+#include <basegfx/vector/b2dvector.hxx>
 #endif
 
 namespace basegfx
@@ -120,6 +124,11 @@ namespace basegfx
     {
         implPrepareChange();
         mpM->set(nRow, nColumn, fValue);
+    }
+
+    bool B2DHomMatrix::isLastLineDefault() const
+    {
+        return mpM->isLastLineDefault();
     }
 
     bool B2DHomMatrix::isIdentity() const
@@ -313,6 +322,8 @@ namespace basegfx
             }
             else
             {
+                // TODO(P1): Maybe use glibc's sincos here (though
+                // that's kinda non-portable...)
                 fSin = sin(fRadiant);
                 fCos = cos(fRadiant);
             }
@@ -396,39 +407,81 @@ namespace basegfx
         if(!mpM->isLastLineDefault())
             return false;
 
-        // If determinant is zero, decomposition is not possible
-        if(0.0 == mpM->doDeterminant())
-            return false;
-
-        // copy 2x2 matrix and translate vector to 3x3 matrix
-        ::basegfx::B3DHomMatrix a3DHomMat;
-
-        a3DHomMat.set(0, 0, get(0, 0));
-        a3DHomMat.set(0, 1, get(0, 1));
-        a3DHomMat.set(1, 0, get(1, 0));
-        a3DHomMat.set(1, 1, get(1, 1));
-        a3DHomMat.set(0, 3, get(0, 2));
-        a3DHomMat.set(1, 3, get(1, 2));
-
-        ::basegfx::B3DTuple r3DScale, r3DTranslate, r3DRotate, r3DShear;
-
-        if(a3DHomMat.decompose(r3DScale, r3DTranslate, r3DRotate, r3DShear))
+        // test for rotation and shear
+        if(::basegfx::fTools::equalZero(get(0, 1)) && ::basegfx::fTools::equalZero(get(1, 0)))
         {
+            // no rotation and shear, direct value extraction
+            rRotate = rShearX = 0.0;
+
             // copy scale values
-            rScale.setX(r3DScale.getX());
-            rScale.setY(r3DScale.getY());
+            rScale.setX(get(0, 0));
+            rScale.setY(get(1, 1));
 
-            // copy shear
-            rShearX = r3DShear.getX();
-
-            // copy rotate
-            rRotate = r3DRotate.getZ();
-
-            // copy translate
-            rTranslate.setX(r3DTranslate.getX());
-            rTranslate.setY(r3DTranslate.getY());
+            // copy translation values
+            rTranslate.setX(get(0, 2));
+            rTranslate.setY(get(1, 2));
 
             return true;
+        }
+        else
+        {
+            // test if shear is zero. That's the case, if the unit vectors in the matrix
+            // are perpendicular -> scalar is zero
+            const ::basegfx::B2DVector aUnitVecX(get(0, 0), get(1, 0));
+            const ::basegfx::B2DVector aUnitVecY(get(0, 1), get(1, 1));
+
+            if(::basegfx::fTools::equalZero(aUnitVecX.scalar(aUnitVecY)))
+            {
+                // calculate rotation
+                rRotate = atan2(aUnitVecX.getY(), aUnitVecX.getX());
+
+                // calculate scale values
+                rScale.setX(aUnitVecX.getLength());
+                rScale.setY(aUnitVecY.getLength());
+
+                // copy translation values
+                rTranslate.setX(get(0, 2));
+                rTranslate.setY(get(1, 2));
+
+                return true;
+            }
+            else
+            {
+                // If determinant is zero, decomposition is not possible
+                if(0.0 == mpM->doDeterminant())
+                    return false;
+
+                // copy 2x2 matrix and translate vector to 3x3 matrix
+                ::basegfx::B3DHomMatrix a3DHomMat;
+
+                a3DHomMat.set(0, 0, get(0, 0));
+                a3DHomMat.set(0, 1, get(0, 1));
+                a3DHomMat.set(1, 0, get(1, 0));
+                a3DHomMat.set(1, 1, get(1, 1));
+                a3DHomMat.set(0, 3, get(0, 2));
+                a3DHomMat.set(1, 3, get(1, 2));
+
+                ::basegfx::B3DTuple r3DScale, r3DTranslate, r3DRotate, r3DShear;
+
+                if(a3DHomMat.decompose(r3DScale, r3DTranslate, r3DRotate, r3DShear))
+                {
+                    // copy scale values
+                    rScale.setX(r3DScale.getX());
+                    rScale.setY(r3DScale.getY());
+
+                    // copy shear
+                    rShearX = r3DShear.getX();
+
+                    // copy rotate
+                    rRotate = r3DRotate.getZ();
+
+                    // copy translate
+                    rTranslate.setX(r3DTranslate.getX());
+                    rTranslate.setY(r3DTranslate.getY());
+
+                    return true;
+                }
+            }
         }
 
         return false;
