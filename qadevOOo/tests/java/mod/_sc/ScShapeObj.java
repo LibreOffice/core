@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScShapeObj.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:59:51 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:07:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ import com.sun.star.uno.XInterface;
 
 public class ScShapeObj extends TestCase {
 
-    XComponent xSheetDoc;
+    static XComponent xSheetDoc;
 
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
