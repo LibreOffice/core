@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XPrintable.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:46:20 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:49:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,12 +180,13 @@ public class _XPrintable extends MultiMethodTest {
             result = false ;
         }
 
-        java.io.File the_file = new java.io.File(fileName);
-        log.println("File "+fileName+" exists = "+the_file.exists());
-
         try {
+            boolean fileExists = fAcc.exists(fileURL);
+
+            log.println("File "+fileName+" exists = "+fileExists);
+
             if (result) {
-                result &= fAcc.exists(fileURL) ;
+                result &= fileExists ;
             }
         } catch (com.sun.star.uno.Exception e) {
             log.println("Error while while checking file '" +
