@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XImplementationRegistration.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:22:35 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:48:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,7 +199,7 @@ public class _XImplementationRegistration extends MultiMethodTest {
     }
 
     public void after() {
-        tEnv.dispose() ;
+        this.disposeEnvironment() ;
     }
 }
 
