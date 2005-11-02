@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvastools.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:14:37 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 12:52:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,56 +33,35 @@
  *
  ************************************************************************/
 
-#ifndef _COM_SUN_STAR_GEOMETRY_AFFINEMATRIX2D_HPP_
-#include <com/sun/star/geometry/AffineMatrix2D.hpp>
-#endif
-#ifndef _COM_SUN_STAR_GEOMETRY_MATRIX2D_HPP_
-#include <com/sun/star/geometry/Matrix2D.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_RENDERSTATE_HPP__
-#include <com/sun/star/rendering/RenderState.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_VIEWSTATE_HPP__
-#include <com/sun/star/rendering/ViewState.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_XCANVAS_HPP__
-#include <com/sun/star/rendering/XCanvas.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_COMPOSITEOPERATION_HPP__
-#include <com/sun/star/rendering/CompositeOperation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP__
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
+#include <canvas/debug.hxx>
 
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <com/sun/star/geometry/AffineMatrix2D.hpp>
+#include <com/sun/star/geometry/Matrix2D.hpp>
+#include <com/sun/star/rendering/RenderState.hpp>
+#include <com/sun/star/rendering/ViewState.hpp>
+#include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/rendering/CompositeOperation.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-#ifndef _BGFX_RANGE_B2DRANGE_HXX
 #include <basegfx/range/b2drange.hxx>
-#endif
-#ifndef _BGFX_RANGE_B2DRECTANGLE_HXX
+#include <basegfx/range/b2irange.hxx>
 #include <basegfx/range/b2drectangle.hxx>
-#endif
-#ifndef _BGFX_POINT_B2DPOINT_HXX
 #include <basegfx/point/b2dpoint.hxx>
-#endif
-#ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
-#include <basegfx/tools/canvastools.hxx>
-#endif
-#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/point/b2ipoint.hxx>
+#include <basegfx/vector/b2ivector.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#endif
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/numeric/ftools.hxx>
 
 #include <canvas/canvastools.hxx>
 
+#include <canvas/base/linepolypolygonbase.hxx>
+
 #include <limits>
-#include <memory>
-#include <algorithm>
-#include <cstdio>
 
 
 using namespace ::com::sun::star;
@@ -91,20 +70,12 @@ namespace canvas
 {
     namespace tools
     {
-        // prototypes
-        uno::Sequence< uno::Any >& getVCLDeviceInfo( uno::Reference< rendering::XGraphicDevice > xDevice, uno::Sequence< uno::Any >& o_rxParams );
-        uno::Sequence< uno::Any >& getDXDeviceInfo( uno::Reference< rendering::XGraphicDevice > xDevice, uno::Sequence< uno::Any >& o_rxParams );
-
-        // ---------------------------------------------------------------------
-
         geometry::RealSize2D createInfiniteSize2D()
         {
             return geometry::RealSize2D(
                 ::std::numeric_limits<double>::infinity(),
                 ::std::numeric_limits<double>::infinity() );
         }
-
-        // ---------------------------------------------------------------------
 
         rendering::RenderState& initRenderState( rendering::RenderState& renderState )
         {
@@ -404,6 +375,179 @@ namespace canvas
             return o_transform;
         }
 
+        bool isInside( const ::basegfx::B2DRange&       rContainedRect,
+                       const ::basegfx::B2DRange&       rTransformRect,
+                       const ::basegfx::B2DHomMatrix&   rTransformation )
+        {
+            ::basegfx::B2DPolygon aPoly(
+                ::basegfx::tools::createPolygonFromRect( rTransformRect ) );
+            aPoly.transform( rTransformation );
+
+            return ::basegfx::tools::isInside( aPoly,
+                                               ::basegfx::tools::createPolygonFromRect(
+                                                   rContainedRect ),
+                                               true );
+        }
+
+        namespace
+        {
+            bool clipAreaImpl( ::basegfx::B2IRange*       o_pDestArea,
+                               ::basegfx::B2IRange&       io_rSourceArea,
+                               ::basegfx::B2IPoint&       io_rDestPoint,
+                               const ::basegfx::B2IRange& rSourceBounds,
+                               const ::basegfx::B2IRange& rDestBounds )
+            {
+                const ::basegfx::B2IPoint aSourceTopLeft(
+                    io_rSourceArea.getMinimum() );
+
+                ::basegfx::B2IRange aLocalSourceArea( io_rSourceArea );
+
+                // clip source area (which must be inside rSourceBounds)
+                aLocalSourceArea.intersect( rSourceBounds );
+
+                if( aLocalSourceArea.isEmpty() )
+                    return false;
+
+                // calc relative new source area points (relative to orig
+                // source area)
+                const ::basegfx::B2IVector aUpperLeftOffset(
+                    aLocalSourceArea.getMinimum()-aSourceTopLeft );
+                const ::basegfx::B2IVector aLowerRightOffset(
+                    aLocalSourceArea.getMaximum()-aSourceTopLeft );
+
+                ::basegfx::B2IRange aLocalDestArea( io_rDestPoint + aUpperLeftOffset,
+                                                    io_rDestPoint + aLowerRightOffset );
+
+                // clip dest area (which must be inside rDestBounds)
+                aLocalDestArea.intersect( rDestBounds );
+
+                if( aLocalDestArea.isEmpty() )
+                    return false;
+
+                // calc relative new dest area points (relative to orig
+                // source area)
+                const ::basegfx::B2IVector aDestUpperLeftOffset(
+                    aLocalDestArea.getMinimum()-io_rDestPoint );
+                const ::basegfx::B2IVector aDestLowerRightOffset(
+                    aLocalDestArea.getMaximum()-io_rDestPoint );
+
+                io_rSourceArea = ::basegfx::B2IRange( aSourceTopLeft + aDestUpperLeftOffset,
+                                                      aSourceTopLeft + aDestLowerRightOffset );
+                io_rDestPoint  = aLocalDestArea.getMinimum();
+
+                if( o_pDestArea )
+                    *o_pDestArea = aLocalDestArea;
+
+                return true;
+            }
+        }
+
+        bool clipScrollArea( ::basegfx::B2IRange&                  io_rSourceArea,
+                             ::basegfx::B2IPoint&                  io_rDestPoint,
+                             ::std::vector< ::basegfx::B2IRange >& o_ClippedAreas,
+                             const ::basegfx::B2IRange&            rBounds )
+        {
+            ::basegfx::B2IRange aResultingDestArea;
+
+            // compute full destination area (to determine uninitialized
+            // areas below)
+            const ::basegfx::B2I64Tuple& rRange( io_rSourceArea.getRange() );
+            ::basegfx::B2IRange aInputDestArea( io_rDestPoint.getX(),
+                                                io_rDestPoint.getY(),
+                                                (io_rDestPoint.getX()
+                                                 + static_cast<sal_Int32>(rRange.getX())),
+                                                (io_rDestPoint.getY()
+                                                 + static_cast<sal_Int32>(rRange.getY())) );
+            // limit to output area (no point updating outside of it)
+            aInputDestArea.intersect( rBounds );
+
+            // clip to rBounds
+            if( !clipAreaImpl( &aResultingDestArea,
+                               io_rSourceArea,
+                               io_rDestPoint,
+                               rBounds,
+                               rBounds ) )
+                return false;
+
+            // finally, compute all areas clipped off the total
+            // destination area.
+            ::basegfx::computeSetDifference( o_ClippedAreas,
+                                             aInputDestArea,
+                                             aResultingDestArea );
+
+            return true;
+        }
+
+        bool clipBlit( ::basegfx::B2IRange&       io_rSourceArea,
+                       ::basegfx::B2IPoint&       io_rDestPoint,
+                       const ::basegfx::B2IRange& rSourceBounds,
+                       const ::basegfx::B2IRange& rDestBounds )
+        {
+            return clipAreaImpl( NULL,
+                                 io_rSourceArea,
+                                 io_rDestPoint,
+                                 rSourceBounds,
+                                 rDestBounds );
+        }
+
+        ::basegfx::B2IRange spritePixelAreaFromB2DRange( const ::basegfx::B2DRange& rRange )
+        {
+            const ::basegfx::B2IPoint aTopLeft( ::basegfx::fround( rRange.getMinX() ),
+                                                ::basegfx::fround( rRange.getMinY() ) );
+            return ::basegfx::B2IRange( aTopLeft,
+                                        aTopLeft + ::basegfx::B2IPoint(
+                                            ::basegfx::fround( rRange.getWidth() ),
+                                            ::basegfx::fround( rRange.getHeight() ) ) );
+        }
+
+        ::basegfx::B2DPolyPolygon polyPolygonFromXPolyPolygon2D( const uno::Reference< rendering::XPolyPolygon2D >& xPoly )
+        {
+            ::canvas::LinePolyPolygonBase* pPolyImpl =
+                dynamic_cast< ::canvas::LinePolyPolygonBase* >( xPoly.get() );
+
+            if( pPolyImpl )
+            {
+                return pPolyImpl->getPolyPolygon();
+            }
+            else
+            {
+                const sal_Int32 nPolys( xPoly->getNumberOfPolygons() );
+
+                // not a known implementation object - try data source
+                // interfaces
+                uno::Reference< rendering::XBezierPolyPolygon2D > xBezierPoly(
+                    xPoly,
+                    uno::UNO_QUERY );
+
+                if( xBezierPoly.is() )
+                {
+                    return ::basegfx::unotools::polyPolygonFromBezier2DSequenceSequence(
+                        xBezierPoly->getBezierSegments( 0,
+                                                        nPolys,
+                                                        0,
+                                                        -1 ) );
+                }
+                else
+                {
+                    uno::Reference< rendering::XLinePolyPolygon2D > xLinePoly(
+                        xPoly,
+                        uno::UNO_QUERY );
+
+                    // no implementation class and no data provider
+                    // found - contract violation.
+                    CHECK_AND_THROW( xLinePoly.is(),
+                                     "canvas::tools::polyPolygonFromXPolyPolygon2D(): Invalid input "
+                                     "poly-polygon, cannot retrieve vertex data" );
+
+                    return ::basegfx::unotools::polyPolygonFromPoint2DSequenceSequence(
+                        xLinePoly->getPoints( 0,
+                                              nPolys,
+                                              0,
+                                              -1 ) );
+                }
+            }
+        }
+
         uno::Sequence< uno::Any >& getDeviceInfo( const uno::Reference< rendering::XCanvas >& i_rxCanvas,
                                                   uno::Sequence< uno::Any >&                  o_rxParams )
         {
@@ -435,6 +579,52 @@ namespace canvas
 
             return o_rxParams;
         }
+
+        ::basegfx::B2DPolyPolygon getBoundMarkPolyPolygon( const ::basegfx::B2DRange& rRange )
+        {
+            ::basegfx::B2DPolyPolygon aPolyPoly;
+            ::basegfx::B2DPolygon     aPoly;
+
+            const double nX0( rRange.getMinX() );
+            const double nY0( rRange.getMinY() );
+            const double nX1( rRange.getMaxX() );
+            const double nY1( rRange.getMaxY() );
+
+            aPoly.append( ::basegfx::B2DPoint( nX0+4,
+                                               nY0 ) );
+            aPoly.append( ::basegfx::B2DPoint( nX0,
+                                               nY0 ) );
+            aPoly.append( ::basegfx::B2DPoint( nX0,
+                                               nY0+4 ) );
+            aPolyPoly.append( aPoly ); aPoly.clear();
+
+            aPoly.append( ::basegfx::B2DPoint( nX1-4,
+                                               nY0 ) );
+            aPoly.append( ::basegfx::B2DPoint( nX1,
+                                               nY0 ) );
+            aPoly.append( ::basegfx::B2DPoint( nX1,
+                                               nY0+4 ) );
+            aPolyPoly.append( aPoly ); aPoly.clear();
+
+            aPoly.append( ::basegfx::B2DPoint( nX0+4,
+                                               nY1 ) );
+            aPoly.append( ::basegfx::B2DPoint( nX0,
+                                               nY1 ) );
+            aPoly.append( ::basegfx::B2DPoint( nX0,
+                                               nY1-4 ) );
+            aPolyPoly.append( aPoly ); aPoly.clear();
+
+            aPoly.append( ::basegfx::B2DPoint( nX1-4,
+                                               nY1 ) );
+            aPoly.append( ::basegfx::B2DPoint( nX1,
+                                               nY1 ) );
+            aPoly.append( ::basegfx::B2DPoint( nX1,
+                                               nY1-4 ) );
+            aPolyPoly.append( aPoly );
+
+            return aPolyPoly;
+        }
+
     } // namespace tools
 
 } // namespace canvas
