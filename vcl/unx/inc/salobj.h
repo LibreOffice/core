@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salobj.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:45:50 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:33:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,16 +42,13 @@
 #ifndef _SV_SYSDATA_HXX
 #include <sysdata.hxx>
 #endif
-#ifndef _LIST_HXX
-#include <tools/list.hxx>
-#endif
 #ifndef _SV_SALOBJ_HXX
 #include <salobj.hxx>
 #endif
 
-class X11SalObject;
-
-DECLARE_LIST( SalObjectList, X11SalObject* );
+#ifndef _VCL_DLLAPI_H
+#include "dllapi.h"
+#endif
 
 class SalClipRegion
 {
@@ -87,18 +84,15 @@ private:
 class X11SalObject : public SalObject
 {
 public:
-    static SalObjectList aAllObjects;
-
     SystemChildData maSystemChildData;
+    SalFrame*       mpParent;
     XLIB_Window     maPrimary;
     XLIB_Window     maSecondary;
     SalClipRegion   maClipRegion;
-    void*           mpInst;
-    SALOBJECTPROC   mpProc;
-    SalObject*      mpSalObject;
     BOOL            mbVisible;
 
-    static long Dispatch( XEvent* pEvent );
+    static VCL_DLLPUBLIC long Dispatch( XEvent* pEvent );
+    static VCL_DLLPUBLIC X11SalObject* CreateObject( SalFrame* pParent, SystemWindowData* pWindowData );
 
     X11SalObject();
     virtual ~X11SalObject();
