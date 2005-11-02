@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sprite.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:15:11 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:38:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,16 @@ namespace cppcanvas
 
         virtual void show() = 0;
         virtual void hide() = 0;
+
+        /** Change the sprite priority
+
+            @param fPriority
+            New sprite priority. The higher the priority, the further
+            towards the viewer the sprite appears. That is, sprites
+            with higher priority appear before ones with lower
+            priority.
+         */
+        virtual void setPriority( double fPriority ) = 0;
 
         virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::rendering::XSprite > getUNOSprite() const = 0;
