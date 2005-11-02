@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleList.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:18:58 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:16:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,9 +67,9 @@ import util.utils;
 
 
 public class AccessibleList extends TestCase {
-    XTextDocument xTextDoc = null;
-    XAccessibleAction action = null;
-    XMultiServiceFactory msf = null;
+    private static XTextDocument xTextDoc = null;
+    private static XAccessibleAction action = null;
+    private static XMultiServiceFactory msf = null;
 
     /**
      * Opens 'Insert Hyperlink' dialog using document dispatch provider.
