@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScDocumentConfiguration.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:49:39 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:59:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ import util.SOfficeFactory;
 
 
 public class ScDocumentConfiguration extends TestCase {
-    XSpreadsheetDocument xSheetDoc = null;
+    static XSpreadsheetDocument xSheetDoc = null;
 
     protected void initialize(TestParameters tParam, PrintWriter log) {
         // get a soffice factory object
