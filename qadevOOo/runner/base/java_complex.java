@@ -4,9 +4,9 @@
  *
  *  $RCSfile: java_complex.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:03:33 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:40:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@ public class java_complex implements TestBase{
 //        and the office was killed.
 //        In complex tests just use "ThreadTimeOut" as timout.
 
-        param.put("TimeOut", new Integer(0));
+        // param.put("TimeOut", new Integer(0));
 
         for (int i=0; i<entries.length; i++) {
 
