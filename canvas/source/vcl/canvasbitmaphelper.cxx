@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvasbitmaphelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:17:47 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 12:58:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,45 +35,27 @@
 
 #include <canvas/debug.hxx>
 
-#ifndef _RTL_LOGFILE_HXX_
+#include <com/sun/star/rendering/IntegerBitmapFormat.hpp>
+#include <com/sun/star/rendering/Endianness.hpp>
+
 #include <rtl/logfile.hxx>
-#endif
-#ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
-#endif
 
-#ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
-#endif
-#ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
-#endif
-#ifndef _SV_BITMAPEX_HXX
 #include <vcl/bitmapex.hxx>
-#endif
-#ifndef _SV_BMPACC_HXX
 #include <vcl/bmpacc.hxx>
-#endif
-#ifndef _VCL_CANVASTOOLS_HXX
 #include <vcl/canvastools.hxx>
-#endif
 
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-#ifndef _BGFX_POINT_B2DPOINT_HXX
 #include <basegfx/point/b2dpoint.hxx>
-#endif
-#ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
 #include <basegfx/tools/canvastools.hxx>
-#endif
-#ifndef _BGFX_NUMERIC_FTOOLS_HXX
 #include <basegfx/numeric/ftools.hxx>
-#endif
 
 #include <canvas/canvastools.hxx>
 
 #include "canvasbitmap.hxx"
+#include "canvasbitmaphelper.hxx"
 
 
 using namespace ::com::sun::star;
@@ -85,18 +67,35 @@ namespace vclcanvas
     {
     }
 
-    void CanvasBitmapHelper::setBitmap( const BitmapEx&                     rBitmap,
-                                        const WindowGraphicDevice::ImplRef& rDevice )
+    void CanvasBitmapHelper::setBitmap( const BitmapEx& rBitmap )
     {
-        ENSURE_AND_THROW( rDevice.is() && rDevice->getOutDev(),
+        ENSURE_AND_THROW( mpDevice && mpDevice->getOutDev(),
                           "CanvasBitmapHelper::setBitmap(): Invalid reference device" );
 
         mpBackBuffer.reset( new BitmapBackBuffer( rBitmap,
-                                                  *rDevice->getOutDev() ) );
+                                                  *mpDevice->getOutDev() ) );
 
-        // forward new settings to base class
-        setGraphicDevice( rDevice );
+        // tell canvas helper about the new target OutDev (don't
+        // protect state, it's our own VirDev, anyways)
         setOutDev( mpBackBuffer, false );
+    }
+
+    void CanvasBitmapHelper::init( const BitmapEx&  rBitmap,
+                                   SpriteCanvas&    rSpriteCanvas )
+    {
+        ENSURE_AND_THROW( rSpriteCanvas.getOutDev(),
+                          "CanvasBitmapHelper::setBitmap(): Invalid reference device" );
+
+        mpBackBuffer.reset( new BitmapBackBuffer( rBitmap,
+                                                  *rSpriteCanvas.getOutDev() ) );
+
+        // forward new settings to base class (ref device, output
+        // surface, no protection (own backbuffer), alpha depends on
+        // whether BmpEx is transparent or not)
+        CanvasHelper::init( rSpriteCanvas,
+                            mpBackBuffer,
+                            false,
+                            rBitmap.IsTransparent() );
     }
 
     void CanvasBitmapHelper::disposing()
@@ -107,20 +106,23 @@ namespace vclcanvas
         CanvasHelper::disposing();
     }
 
-    geometry::IntegerSize2D SAL_CALL CanvasBitmapHelper::getSize()
+    geometry::IntegerSize2D CanvasBitmapHelper::getSize()
     {
-        if( !mpBackBuffer.get() )
+        if( !mpBackBuffer )
             return geometry::IntegerSize2D();
 
         return ::vcl::unotools::integerSize2DFromSize( mpBackBuffer->getBitmapReference().GetSizePixel() );
     }
 
-    uno::Reference< rendering::XBitmap > SAL_CALL CanvasBitmapHelper::getScaledBitmap( const geometry::RealSize2D&  newSize,
-                                                                                       sal_Bool                     beFast )
+    uno::Reference< rendering::XBitmap > CanvasBitmapHelper::getScaledBitmap( const geometry::RealSize2D&   newSize,
+                                                                              sal_Bool                      beFast )
     {
+        ENSURE_AND_THROW( mpDevice,
+                          "CanvasBitmapHelper::getScaledBitmap(): disposed CanvasHelper" );
+
         RTL_LOGFILE_CONTEXT( aLog, "::vclcanvas::CanvasBitmapHelper::getScaledBitmap()" );
 
-        if( !mpBackBuffer.get() )
+        if( !mpBackBuffer )
             return uno::Reference< rendering::XBitmap >(); // we're disposed
 
         BitmapEx aRes( mpBackBuffer->getBitmapReference() );
@@ -128,15 +130,16 @@ namespace vclcanvas
         aRes.Scale( ::vcl::unotools::sizeFromRealSize2D(newSize),
                      beFast ? BMP_SCALE_FAST : BMP_SCALE_INTERPOLATE );
 
-        return uno::Reference< rendering::XBitmap >( new CanvasBitmap( aRes,
-                                                                       mxDevice ) );
+        return uno::Reference< rendering::XBitmap >(
+            new CanvasBitmap( aRes, mpDevice ) );
     }
 
-    uno::Sequence< sal_Int8 > SAL_CALL CanvasBitmapHelper::getData( const geometry::IntegerRectangle2D& rect )
+    uno::Sequence< sal_Int8 > CanvasBitmapHelper::getData( rendering::IntegerBitmapLayout&      bitmapLayout,
+                                                           const geometry::IntegerRectangle2D&  rect )
     {
         RTL_LOGFILE_CONTEXT( aLog, "::vclcanvas::CanvasBitmapHelper::getData()" );
 
-        if( !mpBackBuffer.get() )
+        if( !mpBackBuffer )
             return uno::Sequence< sal_Int8 >(); // we're disposed
 
         Bitmap aBitmap( mpBackBuffer->getBitmapReference().GetBitmap() );
@@ -194,12 +197,13 @@ namespace vclcanvas
         return uno::Sequence< sal_Int8 >();
     }
 
-    void SAL_CALL CanvasBitmapHelper::setData( const uno::Sequence< sal_Int8 >&     data,
-                                               const geometry::IntegerRectangle2D&  rect )
+    void CanvasBitmapHelper::setData( const uno::Sequence< sal_Int8 >&      data,
+                                      const rendering::IntegerBitmapLayout& bitmapLayout,
+                                      const geometry::IntegerRectangle2D&   rect )
     {
         RTL_LOGFILE_CONTEXT( aLog, "::vclcanvas::CanvasBitmapHelper::setData()" );
 
-        if( !mpBackBuffer.get() )
+        if( !mpBackBuffer )
             return; // we're disposed
 
         // retrieve local copies from the BitmapEx, which are later
@@ -272,8 +276,6 @@ namespace vclcanvas
                                      x<aBmpSize.Width() && x<rect.X2;
                                      ++x )
                                 {
-                                    Scanline pTmp = pScan + x * 3;
-
                                     *pScan++ = data[ nCurrPos   ];
                                     *pScan++ = data[ nCurrPos+1 ];
                                     *pScan++ = data[ nCurrPos+2 ];
@@ -296,8 +298,6 @@ namespace vclcanvas
                                      x<aBmpSize.Width() && x<rect.X2;
                                      ++x )
                                 {
-                                    Scanline pTmp = pScan + x * 3;
-
                                     *pScan++ = data[ nCurrPos+2 ];
                                     *pScan++ = data[ nCurrPos+1 ];
                                     *pScan++ = data[ nCurrPos   ];
@@ -364,8 +364,6 @@ namespace vclcanvas
                                      x<aBmpSize.Width() && x<rect.X2;
                                      ++x )
                                 {
-                                    Scanline pTmp = pScan + x * 3;
-
                                     *pScan++ = data[ nCurrPos   ];
                                     *pScan++ = data[ nCurrPos+1 ];
                                     *pScan++ = data[ nCurrPos+2 ];
@@ -383,8 +381,6 @@ namespace vclcanvas
                                      x<aBmpSize.Width() && x<rect.X2;
                                      ++x )
                                 {
-                                    Scanline pTmp = pScan + x * 3;
-
                                     *pScan++ = data[ nCurrPos+2 ];
                                     *pScan++ = data[ nCurrPos+1 ];
                                     *pScan++ = data[ nCurrPos   ];
@@ -420,21 +416,20 @@ namespace vclcanvas
         if( bCopyBack )
         {
             if( aAlpha.IsEmpty() )
-                setBitmap( BitmapEx( aBitmap ),
-                           mxDevice );
+                setBitmap( BitmapEx( aBitmap ) );
             else
                 setBitmap( BitmapEx( aBitmap,
-                                     AlphaMask( aAlpha ) ),
-                           mxDevice );
+                                     AlphaMask( aAlpha ) ) );
         }
     }
 
-    void SAL_CALL CanvasBitmapHelper::setPixel( const uno::Sequence< sal_Int8 >&    color,
-                                                const geometry::IntegerPoint2D&     pos )
+    void CanvasBitmapHelper::setPixel( const uno::Sequence< sal_Int8 >&         color,
+                                       const rendering::IntegerBitmapLayout&    bitmapLayout,
+                                       const geometry::IntegerPoint2D&          pos )
     {
         RTL_LOGFILE_CONTEXT( aLog, "::vclcanvas::CanvasBitmapHelper::setPixel()" );
 
-        if( !mpBackBuffer.get() )
+        if( !mpBackBuffer )
             return; // we're disposed
 
         const Size aBmpSize( mpBackBuffer->getBitmapReference().GetSizePixel() );
@@ -480,20 +475,19 @@ namespace vclcanvas
         if( bCopyBack )
         {
             if( aAlpha.IsEmpty() )
-                setBitmap( BitmapEx( aBitmap ),
-                           mxDevice );
+                setBitmap( BitmapEx( aBitmap ) );
             else
                 setBitmap( BitmapEx( aBitmap,
-                                     AlphaMask( aAlpha ) ),
-                           mxDevice );
+                                     AlphaMask( aAlpha ) ) );
         }
     }
 
-    uno::Sequence< sal_Int8 > SAL_CALL CanvasBitmapHelper::getPixel( const geometry::IntegerPoint2D& pos )
+    uno::Sequence< sal_Int8 > CanvasBitmapHelper::getPixel( rendering::IntegerBitmapLayout& bitmapLayout,
+                                                            const geometry::IntegerPoint2D& pos )
     {
         RTL_LOGFILE_CONTEXT( aLog, "::vclcanvas::CanvasBitmapHelper::getPixel()" );
 
-        if( !mpBackBuffer.get() )
+        if( !mpBackBuffer )
             return uno::Sequence< sal_Int8 >(); // we're disposed
 
         const Size aBmpSize( mpBackBuffer->getBitmapReference().GetSizePixel() );
@@ -534,37 +528,47 @@ namespace vclcanvas
         return uno::Sequence< sal_Int8 >();
     }
 
-    uno::Reference< rendering::XBitmapPalette > SAL_CALL CanvasBitmapHelper::getPalette()
+    uno::Reference< rendering::XBitmapPalette > CanvasBitmapHelper::getPalette()
     {
         // TODO(F1): Provide palette support
         return uno::Reference< rendering::XBitmapPalette >();
     }
 
-    rendering::IntegerBitmapLayout SAL_CALL CanvasBitmapHelper::getMemoryLayout()
+    rendering::IntegerBitmapLayout CanvasBitmapHelper::getMemoryLayout()
     {
         // TODO(F1): finish that one
         rendering::IntegerBitmapLayout aLayout;
 
-        if( !mpBackBuffer.get() )
+        if( !mpBackBuffer )
             return aLayout; // we're disposed
 
-        const Size aBmpSize( mpBackBuffer->getBitmapReference().GetSizePixel() );
+        const BitmapEx& rBmpEx( mpBackBuffer->getBitmapReference() );
+        const Size aBmpSize( rBmpEx.GetSizePixel() );
 
         aLayout.ScanLines = aBmpSize.Height();
         aLayout.ScanLineBytes = aBmpSize.Width()*4;
         aLayout.ScanLineStride = aLayout.ScanLineBytes;
-        aLayout.Format = 0;
+        aLayout.PlaneStride = 0;
+        // cast away const, need to change refcount (as this is
+        // ~invisible to client code, still logically const)
+        aLayout.ColorSpace.set( mpDevice );
         aLayout.NumComponents = 4;
-        aLayout.ComponentMasks = uno::Sequence<sal_Int64>();
-        aLayout.Endianness = 0;
-        aLayout.IsPseudoColor = false;
+        aLayout.ComponentMasks.realloc(4);
+        aLayout.ComponentMasks[0] = 0x00FF0000;
+        aLayout.ComponentMasks[1] = 0x0000FF00;
+        aLayout.ComponentMasks[2] = 0x000000FF;
+        aLayout.ComponentMasks[3] = 0xFF000000;
+        aLayout.Palette.clear();
+        aLayout.Endianness = rendering::Endianness::LITTLE;
+        aLayout.Format = rendering::IntegerBitmapFormat::CHUNKY_32BIT;
+        aLayout.IsMsbFirst = sal_False;
 
         return aLayout;
     }
 
     BitmapEx CanvasBitmapHelper::getBitmap() const
     {
-        if( !mpBackBuffer.get() )
+        if( !mpBackBuffer )
             return BitmapEx(); // we're disposed
         else
             return mpBackBuffer->getBitmapReference();
