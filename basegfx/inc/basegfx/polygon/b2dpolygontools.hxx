@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolygontools.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:28:16 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:53:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,10 @@
 
 #ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B3DPOLYGON_HXX
+#include <basegfx/polygon/b3dpolygon.hxx>
 #endif
 
 #include <vector>
@@ -130,7 +134,7 @@ namespace basegfx
         // Continuity check for point with given index
         B2VectorContinuity getContinuityInPoint(const B2DPolygon& rCandidate, sal_uInt32 nIndex);
 
-        //BFS08
+        // remove intersections
         B2DPolyPolygon removeIntersections(const B2DPolygon& rCandidate, bool bKeepOrientations = true);
 
         // Subdivide all contained curves. Use distanceBound value if given.
@@ -205,10 +209,28 @@ namespace basegfx
         // with distance fDistance and rounded edges (start and end point).
         bool isInEpsilonRange(const B2DPolygon& rCandidate, const B2DPoint& rTestPosition, double fDistance);
 
-        /* Still missing:
-        void transform(const Matrix4D& rTfMatrix);
-        Polygon3D getExpandedPolygon(sal_uInt32 nNum);
-        */
+        /** Create a polygon from a rectangle.
+
+            @param rRect
+            The rectangle which describes the polygon size
+
+            @param fRadius
+            Radius of the edge rounding, relative to the rectangle size. 0.0 means no
+            rounding, 1.0 will lead to an ellipse
+         */
+        B2DPolygon createPolygonFromRect( const B2DRectangle& rRect, double fRadius );
+
+        /** Create a polygon from a rectangle.
+
+            @param rRect
+            The rectangle which describes the polygon size
+
+            @param fRadiusX
+            @param fRadiusY
+            Radius of the edge rounding, relative to the rectangle size. 0.0 means no
+            rounding, 1.0 will lead to an ellipse
+         */
+        B2DPolygon createPolygonFromRect( const B2DRectangle& rRect, double fRadiusX, double fRadiusY );
 
         /** Create a polygon from a rectangle.
          */
@@ -223,10 +245,22 @@ namespace basegfx
             @param rCenter
             Center point of the circle
 
-            @param nRadius
+            @param fRadius
             Radius of the circle
          */
-        B2DPolygon createPolygonFromCircle( const B2DPoint& rCenter, double nRadius );
+        B2DPolygon createPolygonFromCircle( const B2DPoint& rCenter, double fRadius );
+
+        /** append a unit circle with one point and the control vectors to the given polygon
+         */
+        void appendUnitCircleQuadrant(B2DPolygon& rPolygon, sal_uInt32 nQuadrant, bool bEndPoint);
+
+        /** append a segment of unit circle with one point and the control vectors to the given polygon
+         */
+        void appendUnitCircleQuadrantSegment(B2DPolygon& rPolygon, sal_uInt32 nQuadrant, double fStart, double fEnd, bool bEndPoint);
+
+        /** create a polygon which describes the unit circle and close it
+         */
+        B2DPolygon createPolygonFromUnitCircle();
 
         /** Create an ellipse polygon with given radii.
 
@@ -237,13 +271,41 @@ namespace basegfx
             @param rCenter
             Center point of the circle
 
-            @param nRadiusX
+            @param fRadiusX
             Radius of the ellipse in X direction
 
-            @param nRadiusY
+            @param fRadiusY
             Radius of the ellipse in Y direction
          */
-        B2DPolygon createPolygonFromEllipse( const B2DPoint& rCenter, double nRadiusX, double nRadiusY );
+        B2DPolygon createPolygonFromEllipse( const B2DPoint& rCenter, double fRadiusX, double fRadiusY );
+
+        /** Create an ellipse polygon with given radii and the given angles, from start to end
+
+            This method creates an ellipse approximation consisting of
+            four cubic bezier segments, which approximate the given
+            ellipse with an error of less than 0.5 percent.
+
+            @param rCenter
+            Center point of the circle
+
+            @param fRadiusX
+            Radius of the ellipse in X direction
+
+            @param fRadiusY
+            Radius of the ellipse in Y direction
+
+            @param fStart
+            Start angle where the ellipe segment starts in the range [0.0 .. 2PI[
+
+            @param fEnd
+            End angle where the ellipe segment ends in the range [0.0 .. 2PI[
+         */
+
+        /** Create an unit ellipse polygon with the given angles, from start to end
+         */
+        B2DPolygon createPolygonFromEllipseSegment( const B2DPoint& rCenter, double fRadiusX, double fRadiusY, double fStart, double fEnd );
+
+        B2DPolygon createPolygonFromUnitEllipseSegment( double fStart, double fEnd );
 
         /** Predicate whether a given polygon is a rectangle.
 
@@ -251,11 +313,51 @@ namespace basegfx
             Polygon to check
 
             @return true, if the polygon describes a rectangle
-            (contains exactly four points, is closed, and the points
-            are either cw or ccw enumerations of a rectangle's
-            vertices).
+            (polygon is closed, and the points are either cw or ccw
+            enumerations of a rectangle's vertices). Note that
+            intermediate points and duplicate points are ignored.
          */
         bool isRectangle( const B2DPolygon& rPoly );
+
+        // create 3d polygon from given 2d polygon. The given fZCoordinate is used to expand the
+        // third coordinate.
+        B3DPolygon createB3DPolygonFromB2DPolygon(const B2DPolygon& rCandidate, double fZCoordinate = 0.0);
+
+        // create 2d PolyPolygon from given 3d PolyPolygon. All coordinates are transformed using the given
+        // matrix and the resulting x,y is used to form the new polygon.
+        B2DPolygon createB2DPolygonFromB3DPolygon(const B3DPolygon& rCandidate, const B3DHomMatrix& rMat);
+
+        // calculate the smallest distance to given edge and return. The relative position on the edge is returned in Cut.
+        double getSmallestDistancePointToEdge(const B2DPoint& rPointA, const B2DPoint& rPointB, const B2DPoint& rTestPoint, double* pCut = 0L);
+
+        // for each contained edge calculate the smallest distance. Return the index to the smallest
+        // edge in rEdgeIndex. The relative position on the edge is returned in rCut.
+        // If nothing was found (e.g. empty input plygon), DBL_MAX is returned.
+        double getSmallestDistancePointToPolygon(const B2DPolygon& rCandidate, const B2DPoint& rTestPoint, sal_uInt32& rEdgeIndex, double& rCut);
+
+        // distort single point. rOriginal describes the original range, where the given points describe the distorted corresponding points.
+        B2DPoint distort(const B2DPoint& rCandidate, const B2DRange& rOriginal, const B2DPoint& rTopLeft, const B2DPoint& rTopRight, const B2DPoint& rBottomLeft, const B2DPoint& rBottomRight);
+
+        // distort polygon. rOriginal describes the original range, where the given points describe the distorted corresponding points.
+        B2DPolygon distort(const B2DPolygon& rCandidate, const B2DRange& rOriginal, const B2DPoint& rTopLeft, const B2DPoint& rTopRight, const B2DPoint& rBottomLeft, const B2DPoint& rBottomRight);
+
+        // rotate polygon around given point with given angle.
+        B2DPolygon rotateAroundPoint(const B2DPolygon& rCandidate, const B2DPoint& rCenter, double fAngle);
+
+        // expand all segments (which are not yet) to curve segments. This is done with setting the control
+        // vectors on the 1/3 resp. 2/3 distances on each segment.
+        B2DPolygon expandToCurve(const B2DPolygon& rCandidate);
+
+        // expand given segment to curve segment. This is done with setting the control
+        // vectors on the 1/3 resp. 2/3 distances. The return value describes if a change took place.
+        bool expandToCurveInPoint(B2DPolygon& rCandidate, sal_uInt32 nIndex);
+
+        // set continuity for the whole curve. If not a curve, nothing will change. Non-curve points are not changed, too.
+        B2DPolygon setContinuity(const B2DPolygon& rCandidate, B2VectorContinuity eContinuity);
+
+        // set continuity for given index. If not a curve, nothing will change. Non-curve points are not changed, too.
+        // The return value describes if a change took place.
+        bool setContinuityInPoint(B2DPolygon& rCandidate, sal_uInt32 nIndex, B2VectorContinuity eContinuity);
 
         // test if polygon contains neutral points. A neutral point is one whos orientation is neutral
         // e.g. positioned on the edge of it's predecessor and successor
@@ -284,6 +386,8 @@ namespace basegfx
         // All triangles will go from the start point of rCandidate to two consecutive points, building (rCandidate.count() - 2)
         // triangles.
         void addTriangleFan(const B2DPolygon& rCandidate, B2DPolygon& rTarget);
+
+        bool isPolyPolygonEqualRectangle( const ::basegfx::B2DPolyPolygon& rPolyPoly, const ::basegfx::B2DRange& rRect );
 
     } // end of namespace tools
 } // end of namespace basegfx
