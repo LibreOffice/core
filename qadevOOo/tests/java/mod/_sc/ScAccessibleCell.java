@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScAccessibleCell.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:37:59 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:50:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ import com.sun.star.uno.XInterface;
  */
 public class ScAccessibleCell extends TestCase {
 
-    XSpreadsheetDocument xSpreadsheetDoc = null;
+    static XSpreadsheetDocument xSpreadsheetDoc = null;
 
     /**
     * Called to create an instance of <code>TestEnvironment</code>
