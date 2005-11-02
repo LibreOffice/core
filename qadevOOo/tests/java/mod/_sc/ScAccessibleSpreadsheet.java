@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScAccessibleSpreadsheet.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:40:42 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:53:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ import com.sun.star.uno.XInterface;
  * @see ifc.accessibility._XAccessibleTable
  */
 public class ScAccessibleSpreadsheet extends TestCase {
-    XSpreadsheetDocument xSheetDoc = null;
+    static XSpreadsheetDocument xSheetDoc = null;
 
     /**
      * Creates a spreadsheet document.
