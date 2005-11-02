@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScAccessibleCsvRuler.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:38:45 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:51:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ import com.sun.star.uno.XInterface;
 public class ScAccessibleCsvRuler extends TestCase {
 
     Thread lThread = null;
-    XAccessibleAction accAction = null;
+    static XAccessibleAction accAction = null;
 
     /**
      * Called to create an instance of <code>TestEnvironment</code> with an
@@ -108,7 +108,7 @@ public class ScAccessibleCsvRuler extends TestCase {
         XAccessibleContext acc = AccessibilityTools.getAccessibleObjectForRole(xRoot,
                                                                AccessibleRole.RADIO_BUTTON);
 
-        System.out.println("Click on: " + acc.getAccessibleName());
+        log.println("Click on: " + acc.getAccessibleName());
 
         XAccessibleAction accAction2 = (XAccessibleAction) UnoRuntime.queryInterface(
                                                XAccessibleAction.class, acc);
