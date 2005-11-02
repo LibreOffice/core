@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvasfont.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:18:57 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 12:59:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,18 +35,11 @@
 
 #include <canvas/debug.hxx>
 
-#ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
-#endif
-#ifndef _BGFX_NUMERIC_FTOOLS_HXX
 #include <basegfx/numeric/ftools.hxx>
-#endif
 
-#ifndef _SV_METRIC_HXX
 #include <vcl/metric.hxx>
-#endif
 
-#include "outdevprovider.hxx"
 #include "canvasfont.hxx"
 #include "textlayout.hxx"
 
@@ -58,7 +51,7 @@ namespace vclcanvas
     CanvasFont::CanvasFont( const rendering::FontRequest&                   rFontRequest,
                             const uno::Sequence< beans::PropertyValue >&    rExtraFontProperties,
                             const geometry::Matrix2D&                       rFontMatrix,
-                            const OutDevProviderSharedPtr&                  rDevice ) :
+                            const DeviceRef&                                rDevice ) :
         CanvasFont_Base( m_aMutex ),
         maFont( Font( rFontRequest.FontDescription.FamilyName,
                       rFontRequest.FontDescription.StyleName,
@@ -66,9 +59,6 @@ namespace vclcanvas
         maFontRequest( rFontRequest ),
         mpRefDevice( rDevice )
     {
-        CHECK_AND_THROW( mpRefDevice.get(),
-                         "CanvasFont::CanvasFont(): Invalid ref device" );
-
         maFont->SetAlign( ALIGN_BASELINE );
         maFont->SetCharSet( (rFontRequest.FontDescription.IsSymbolFont==com::sun::star::util::TriState_YES) ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
         maFont->SetVertical( (rFontRequest.FontDescription.IsVertical==com::sun::star::util::TriState_YES) ? TRUE : FALSE );
@@ -77,43 +67,52 @@ namespace vclcanvas
         maFont->SetWeight( static_cast<FontWeight>(rFontRequest.FontDescription.FontDescription.Weight) );
         maFont->SetItalic( (rFontRequest.FontDescription.FontDescription.Letterform<=8) ? ITALIC_NONE : ITALIC_NORMAL );
 
-        // adjust to stretched font
+        // adjust to stretched/shrinked font
         if( !::rtl::math::approxEqual( rFontMatrix.m00, rFontMatrix.m11) )
         {
-            const OutputDevice& rOutDev( mpRefDevice->getOutDev() );
-            const Size aSize = rOutDev.GetFontMetric( *maFont ).GetSize();
+            OutputDevice* pOutDev( mpRefDevice->getOutDev() );
 
-            const double fDividend( rFontMatrix.m10 + rFontMatrix.m11 );
-            double fStretch = (rFontMatrix.m00 + rFontMatrix.m01);
+            if( pOutDev )
+            {
+                const bool bOldMapState( pOutDev->IsMapModeEnabled() );
+                pOutDev->EnableMapMode(FALSE);
 
-            if( !::basegfx::fTools::equalZero( fDividend) )
-                fStretch /= fDividend;
+                const Size aSize = pOutDev->GetFontMetric( *maFont ).GetSize();
 
-            const long nNewWidth = ::basegfx::fround( aSize.Width() * fStretch );
+                const double fDividend( rFontMatrix.m10 + rFontMatrix.m11 );
+                double fStretch = (rFontMatrix.m00 + rFontMatrix.m01);
 
-            maFont->SetWidth( nNewWidth );
+                if( !::basegfx::fTools::equalZero( fDividend) )
+                    fStretch /= fDividend;
+
+                const long nNewWidth = ::basegfx::fround( aSize.Width() * fStretch );
+
+                maFont->SetWidth( nNewWidth );
+
+                pOutDev->EnableMapMode(bOldMapState);
+            }
         }
-    }
-
-    CanvasFont::~CanvasFont()
-    {
     }
 
     void SAL_CALL CanvasFont::disposing()
     {
         tools::LocalGuard aGuard;
 
-        mpRefDevice.reset();
+        mpRefDevice.clear();
     }
 
     uno::Reference< rendering::XTextLayout > SAL_CALL  CanvasFont::createTextLayout( const rendering::StringContext& aText, sal_Int8 nDirection, sal_Int64 nRandomSeed ) throw (uno::RuntimeException)
     {
         tools::LocalGuard aGuard;
 
-        if( !mpRefDevice.get() )
+        if( !mpRefDevice.is() )
             return uno::Reference< rendering::XTextLayout >(); // we're disposed
 
-        return new TextLayout( aText, nDirection, nRandomSeed, ImplRef( this ), mpRefDevice );
+        return new TextLayout( aText,
+                               nDirection,
+                               nRandomSeed,
+                               Reference( this ),
+                               mpRefDevice );
     }
 
     rendering::FontRequest SAL_CALL  CanvasFont::getFontRequest(  ) throw (uno::RuntimeException)
@@ -147,11 +146,12 @@ namespace vclcanvas
         return uno::Sequence< beans::PropertyValue >();
     }
 
+#define IMPLEMENTATION_NAME "VCLCanvas::CanvasFont"
 #define SERVICE_NAME "com.sun.star.rendering.CanvasFont"
 
     ::rtl::OUString SAL_CALL CanvasFont::getImplementationName() throw( uno::RuntimeException )
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CANVASFONT_IMPLEMENTATION_NAME ) );
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ) );
     }
 
     sal_Bool SAL_CALL CanvasFont::supportsService( const ::rtl::OUString& ServiceName ) throw( uno::RuntimeException )
