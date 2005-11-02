@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implrenderer.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:17:06 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:39:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,7 +168,7 @@ namespace cppcanvas
                                               const sal_Int32*              pCharWidths,
                                               ::VirtualDevice&              rVDev,
                                               const CanvasSharedPtr&        rCanvas,
-                                              const VectorOfOutDevStates&   rStates,
+                                              VectorOfOutDevStates&         rStates,
                                               const Parameters&             rParms,
                                               bool                          bSubsettable,
                                               sal_Int32&                    io_rCurrActionIndex );
