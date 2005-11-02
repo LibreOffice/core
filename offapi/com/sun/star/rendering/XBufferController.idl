@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XBufferController.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:57:34 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:23:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,36 +85,56 @@ interface XBufferController : ::com::sun::star::uno::XInterface
 
         The method returns, when the switch is performed and the
         selected buffer is shown on screen, or immediately when an
-        error occurs.<p>
+        error occurs. If the switch was successful, subsequent render
+        operations will be directed to the new backbuffer.<p>
 
-        @param nBuffer
-        Buffer to switch the display to. Valid range is from 0 to the
-        number returned by createBuffers()-1.
+        Use this method if you need your screen display to be in sync
+        with other things, e.g. sound playback.<p>
+
+        @param bUpdateAll
+        When <TRUE>, update the whole screen. When <FALSE>,
+        implementation is permitted to restrict update to areas the
+        canvas itself changed (e.g. because of render operations, or
+        changes on the sprites). The former is useful for updates
+        after window expose events, the latter for animation display.
 
         @return whether the switch was performed successfully.
 
         @throws com::sun::star::lang::IllegalArgumentException
         if nBuffer is outside the permissible range.
      */
-    boolean showBuffer( [in] long nBuffer )
-        raises (com::sun::star::lang::IllegalArgumentException);
+    boolean showBuffer( [in] boolean bUpdateAll );
 
     //-------------------------------------------------------------------------
 
-    /** Switch the canvas to render into the buffer with the specified
-        index number.
+    /** Schedule the display of the specified buffer.<p>
 
-        @param nBuffer
-        Buffer to change the rendering to. Valid range is from 0 to
-        the number returned by createBuffers()-1.
+        The method returns, when the switching of the buffer is
+        successfully scheduled, or immediately when an error
+        occurs. If the switch was successful, subsequent render
+        operations will be directed to the new backbuffer. Note that,
+        if the buffer switching is exceedingly slow, or the frequency
+        of switchBuffer() is exceedingly high, the buffer scheduled
+        for display here might become the current render target
+        <em>before</em> it is fully displayed on screen. In this case,
+        any rendering operation to this buffer will block, until it is
+        safe to perform the operation without visible cluttering.<p>
 
-        @return true, if this switch was successful.
+        Use this method if you favor maximal render speed, but don't
+        necessarily require your screen display to be in sync with
+        other things, e.g. sound playback.<p>
 
-        @throws com::sun::star::lang::IllegalArgumentException
-        if nBuffer is outside the permissible range.
+        @param bUpdateAll
+        When <TRUE>, update the whole screen. When <FALSE>,
+        implementation is permitted to restrict update to areas the
+        canvas itself changed (e.g. because of render operations, or
+        changes on the sprites). The former is useful for updates
+        after window expose events, the latter for animation display.
+
+        @return whether the switch was performed successfully.
      */
-    boolean renderToBuffer( [in] long nBuffer )
-        raises (com::sun::star::lang::IllegalArgumentException);
+    boolean switchBuffer( [in] boolean bUpdateAll );
+
 };
 
 }; }; }; };
