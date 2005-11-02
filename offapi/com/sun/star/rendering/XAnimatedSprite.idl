@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XAnimatedSprite.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:56:08 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:22:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,7 +185,7 @@ interface XAnimatedSprite : XSprite
 
         @param bUpdateAnimation
         Whether this method should implicitely call
-        <member>XSpriteCanvas::updateAnimation</member or not.
+        <member>XSpriteCanvas::updateAnimation</member> or not.
 
         @throws com::sun::star::lang::IllegalArgumentException
         if one of the passed parameters does not lie in the specified,
