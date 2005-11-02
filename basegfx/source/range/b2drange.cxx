@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2drange.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:50:21 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:59:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,16 +48,25 @@
 namespace basegfx
 {
     B2DRange::B2DRange( const B2IRange& rRange ) :
-        maRangeX(rRange.getMinX()),
-        maRangeY(rRange.getMinY())
+        maRangeX(),
+        maRangeY()
     {
-        maRangeX.expand(rRange.getMaxX());
-        maRangeY.expand(rRange.getMaxY());
+        if( !rRange.isEmpty() )
+        {
+            maRangeX = rRange.getMinX();
+            maRangeY = rRange.getMinY();
+
+            maRangeX.expand(rRange.getMaxX());
+            maRangeY.expand(rRange.getMaxY());
+        }
     }
 
     B2IRange fround(const B2DRange& rRange)
     {
-        return B2IRange(fround(rRange.getMinimum()), fround(rRange.getMaximum()));
+        return rRange.isEmpty() ?
+            B2IRange() :
+            B2IRange(fround(rRange.getMinimum()),
+                     fround(rRange.getMaximum()));
     }
 
 } // end of namespace basegfx

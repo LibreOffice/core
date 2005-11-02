@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3drange.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:50:36 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 14:00:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,23 +48,32 @@
 namespace basegfx
 {
     B3DRange::B3DRange(const B3IRange& rRange) :
-        maRangeX( rRange.getMinX() ),
-        maRangeY( rRange.getMinY() ),
-        maRangeZ( rRange.getMinZ() )
+        maRangeX(),
+        maRangeY(),
+        maRangeZ()
     {
-        maRangeX.expand( rRange.getMaxX() );
-        maRangeY.expand( rRange.getMaxY() );
-        maRangeZ.expand( rRange.getMaxZ() );
+        if( !rRange.isEmpty() )
+        {
+            maRangeX = rRange.getMinX();
+            maRangeY = rRange.getMinY();
+            maRangeZ = rRange.getMinZ();
+
+            maRangeX.expand( rRange.getMaxX() );
+            maRangeY.expand( rRange.getMaxY() );
+            maRangeZ.expand( rRange.getMaxZ() );
+        }
     }
 
     B3IRange fround(const B3DRange& rRange )
     {
-        return B3IRange(fround(rRange.getMinX()),
-                        fround(rRange.getMinY()),
-                        fround(rRange.getMinZ()),
-                        fround(rRange.getMaxX()),
-                        fround(rRange.getMaxY()),
-                        fround(rRange.getMaxZ()));
+        return rRange.isEmpty() ?
+            B3IRange() :
+            B3IRange(fround(rRange.getMinX()),
+                     fround(rRange.getMinY()),
+                     fround(rRange.getMinZ()),
+                     fround(rRange.getMaxX()),
+                     fround(rRange.getMaxY()),
+                     fround(rRange.getMaxZ()));
     }
 
 } // end of namespace basegfx
