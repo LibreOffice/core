@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BuildID.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:09:26 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:40:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@ package convwatch;
 import java.io.File;
 import convwatch.OSHelper;
 import convwatch.IniFile;
+import java.util.Date;
 
 public class BuildID
 {
@@ -105,11 +106,14 @@ public class BuildID
     public static void main(String[] args)
         {
             String sApp;
-            sApp = "/opt/staroffice8_net/program/soffice -headless -accept=socket,host=localhost,port=8100;urp;";
+            sApp = "/opt/staroffice8_m116/program/soffice -headless -accept=socket,host=localhost,port=8100;urp;";
             String sBuildID;
             sBuildID = getBuildID(sApp);
             System.out.println("BuildID is: " + sBuildID);
 
+            Date aDate = new Date();
+            long nStart = aDate.getTime();
+            System.out.println("Time:" + nStart);
             // LLA: Just some more tests for getBuildID
             // sApp = "/opt/staroffice8_net/program/soffice";
             // sBuildID = getBuildID(sApp);
