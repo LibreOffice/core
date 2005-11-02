@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScCellFormatsObj.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:43:52 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:55:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ import com.sun.star.uno.XInterface;
 * @see ifc.container._XElementAccess
 */
 public class ScCellFormatsObj extends TestCase {
-    XSpreadsheetDocument xSheetDoc = null;
+    static XSpreadsheetDocument xSheetDoc = null;
 
     /**
     * Creates Spreadsheet document.
