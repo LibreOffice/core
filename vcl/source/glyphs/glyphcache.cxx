@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:33:30 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:30:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include <salbtype.hxx>
-#include <gcach_vdev.hxx>
 #include <gcach_ftyp.hxx>
 
 #include <svapp.hxx>
