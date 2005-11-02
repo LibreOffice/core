@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdUnoDrawView.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:17:49 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:13:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,9 +95,9 @@ import com.sun.star.util.XModifiable;
 * @see ifc.drawing._XDrawView
 */
 public class SdUnoDrawView extends TestCase {
-    XDesktop the_Desk;
-    XComponent xDrawDoc;
-    XComponent xSecondDrawDoc;
+    static XDesktop the_Desk;
+    static XComponent xDrawDoc;
+    static XComponent xSecondDrawDoc;
 
     /**
     * Creates the instance of the service
@@ -120,8 +120,8 @@ public class SdUnoDrawView extends TestCase {
     */
     protected void cleanup( TestParameters Param, PrintWriter log) {
         log.println("disposing impress documents");
-        util.DesktopTools.closeDoc(xDrawDoc);;
-        util.DesktopTools.closeDoc(xSecondDrawDoc);;
+        util.DesktopTools.closeDoc(xDrawDoc);
+        util.DesktopTools.closeDoc(xSecondDrawDoc);
     }
 
     /**
@@ -169,7 +169,7 @@ public class SdUnoDrawView extends TestCase {
                                     (XMultiServiceFactory)Param.getMSF());
 
         try {
-            log.println( "creating a impress documents" );
+            log.println( "creating two impress documents" );
             xDrawDoc = SOF.createDrawDoc(null);
             shortWait();
             xSecondDrawDoc = SOF.createDrawDoc(null);
@@ -282,6 +282,8 @@ public class SdUnoDrawView extends TestCase {
         //Adding ObjRelations for XController
         tEnv.addObjRelation("FirstModel", aModel);
 
+        tEnv.addObjRelation("XUserInputInterception.XModel", aModel);
+
         XFrame the_frame = the_Desk.getCurrentFrame();
         tEnv.addObjRelation("Frame", the_frame);
 
@@ -305,6 +307,8 @@ public class SdUnoDrawView extends TestCase {
             UnoRuntime.queryInterface(XModifiable.class,xDrawDoc);
 
         tEnv.addObjRelation("Modifiable",modify);
+
+        tEnv.addObjRelation("XComponent.DisposeThis", xDrawDoc);
 
         return tEnv;
 
