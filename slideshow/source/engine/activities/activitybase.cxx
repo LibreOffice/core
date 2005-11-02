@@ -4,9 +4,9 @@
  *
  *  $RCSfile: activitybase.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:39:10 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 14:04:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 // must be first
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
+#include <canvas/canvastools.hxx>
 
 #include <activitybase.hxx>
 
@@ -192,7 +193,7 @@ namespace presentation
             // ================================
 
             // clamp nT to permissible [0,1] range
-            nT = ::std::max( 0.0, ::std::min( 1.0, nT ) );
+            nT = ::canvas::tools::clamp( nT, 0.0, 1.0 );
 
             // take acceleration/deceleration into account. if the sum
             // of mnAccelerationFraction and mnDecelerationFraction
