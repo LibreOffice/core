@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleScrollBar.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:24:21 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:18:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,8 +91,8 @@ import util.SOfficeFactory;
  * @see ifc.accessibility.XAccessibleAction
  */
 public class AccessibleScrollBar extends TestCase {
-    XDesktop the_Desk;
-    XComponent xDoc;
+    private static XDesktop the_Desk;
+    private static XComponent xDoc;
 
     /**
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
