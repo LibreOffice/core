@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLContentExporter.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:05:48 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:11:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,8 +83,8 @@ import com.sun.star.xml.sax.XDocumentHandler;
  */
 public class XMLContentExporter extends TestCase {
 
-    XComponent xSheetDoc;
-    ContentFilterChecker Filter;
+    static XComponent xSheetDoc;
+    static ContentFilterChecker Filter;
 
     /**
      * New spreadsheet document created.
@@ -156,9 +156,15 @@ public class XMLContentExporter extends TestCase {
             XCell xCell = xSheet.getCellByPosition(0, 0);
             xCell.setFormula(CELL_TEXT);
 
+            log.println("fill sheet 1 with contnet...");
+            util.CalcTools.fillCalcSheetWithContent(xSheetDoc, 1, 1, 1, 5, 5);
+
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log) ;
             throw new StatusException("Can't create component.", e) ;
+        } catch (java.lang.Exception e) {
+            e.printStackTrace(log);
+            throw new StatusException("Can't create environment.", e);
         }
 
         // adding tags which must be contained in XML output
