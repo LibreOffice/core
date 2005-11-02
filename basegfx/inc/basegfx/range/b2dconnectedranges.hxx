@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dconnectedranges.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:32:01 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:54:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,12 +86,13 @@ namespace basegfx
     public:
         /// Type of the basic entity (rect + user data)
         typedef ::std::pair< B2DRange, UserData > ComponentType;
+        typedef ::std::list< ComponentType >      ComponentListType;
 
         /// List of (intersecting) components, plus overall bounds
         struct ConnectedComponents
         {
-            ::std::list< ComponentType >    maComponentList;
-            B2DRange                        maTotalBounds;
+            ComponentListType   maComponentList;
+            B2DRange            maTotalBounds;
         };
 
         typedef ::std::list< ConnectedComponents > ConnectedComponentsType;
@@ -117,12 +118,19 @@ namespace basegfx
 
             This method integrates a new range into the connected
             ranges lists. The method has a worst-case time complexity
-            of O(n^3), with n denoting the number of already added
-            ranges.
+            of O(n^2), with n denoting the number of already added
+            ranges (typically, for well-behaved input, it is O(n)
+            though).
          */
         void addRange( const B2DRange&  rRange,
                        const UserData&  rUserData )
         {
+            // check whether fast path is possible: if new range is
+            // outside accumulated total range, can add it as a
+            // separate component right away.
+            const bool bNotOutsideEverything(
+                maTotalBounds.overlaps( rRange ) );
+
             // update own global bounds range
             maTotalBounds.expand( rRange );
 
@@ -144,8 +152,10 @@ namespace basegfx
             // if rRange is empty, it will intersect with no
             // maDisjunctAggregatesList member. Thus, we can safe us
             // the check.
-
-            if( !rRange.isEmpty() )
+            // if rRange is outside all other rectangle, skip here,
+            // too
+            if( bNotOutsideEverything &&
+                !rRange.isEmpty() )
             {
                 typename ConnectedComponentsType::iterator aCurrAggregate;
                 typename ConnectedComponentsType::iterator aLastAggregate;
@@ -155,7 +165,7 @@ namespace basegfx
                 // we have to repeat the intersection process, because
                 // these changes might have generated new
                 // intersections.
-                bool                                    bSomeAggregatesChanged;
+                bool bSomeAggregatesChanged;
 
                 // loop, until bSomeAggregatesChanged stays false
                 do
@@ -175,7 +185,8 @@ namespace basegfx
                         // no position and size.
 
                         if( !aCurrAggregate->maTotalBounds.isEmpty() &&
-                            aCurrAggregate->maTotalBounds.overlaps( rRange ) )
+                            aCurrAggregate->maTotalBounds.overlaps(
+                                aNewConnectedComponent.maTotalBounds ) )
                         {
                             // union the intersecting
                             // maDisjunctAggregatesList element into
@@ -190,10 +201,10 @@ namespace basegfx
                                 aNewConnectedComponent.maComponentList.end(),
                                 aCurrAggregate->maComponentList );
 
-                            // remove and delete aCurrCC element from
-                            // list (we've gutted it's content above).
-                            // list::erase() will update our iterator
-                            // with the predecessor here.
+                            // remove and delete aCurrAggregate entry
+                            // from list (we've gutted it's content
+                            // above). list::erase() will update our
+                            // iterator with the predecessor here.
                             aCurrAggregate = maDisjunctAggregatesList.erase( aCurrAggregate );
 
                             // at least one aggregate changed, need to rescan everything
@@ -209,8 +220,8 @@ namespace basegfx
             }
 
             //
-            //  STAGE 2: Add newly generated CC list element
-            //  ============================================
+            //  STAGE 2: Add newly generated connected component list element
+            //  =============================================================
             //
 
             // add new component to the end of the component list
