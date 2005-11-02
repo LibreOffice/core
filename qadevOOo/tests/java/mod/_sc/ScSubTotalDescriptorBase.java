@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScSubTotalDescriptorBase.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:02:01 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:09:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ import com.sun.star.uno.XInterface;
 * @see ifc.beans._XPropertySet
 */
 public class ScSubTotalDescriptorBase extends TestCase {
-    public XSpreadsheetDocument xSpreadsheetDoc;
+    public static XSpreadsheetDocument xSpreadsheetDoc;
 
     /**
     * Creates Spreadsheet document.
