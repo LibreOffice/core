@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cachedbitmap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:16:39 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 12:57:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,26 +38,14 @@
 #include "cachedbitmap.hxx"
 #include "repainttarget.hxx"
 
-#ifndef _COM_SUN_STAR_RENDERING_REPAINTRESULT_HPP_
 #include <com/sun/star/rendering/RepaintResult.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_XPOLYPOLYGON2D_HPP_
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
-#endif
 
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-#ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
 #include <basegfx/tools/canvastools.hxx>
-#endif
 
 
 using namespace ::com::sun::star;
-
-
-#define IMPLEMENTATION_NAME "VCLCanvas::CachedBitmap"
-#define SERVICE_NAME "com.sun.star.rendering.CachedBitmap"
 
 namespace vclcanvas
 {
@@ -67,17 +55,11 @@ namespace vclcanvas
                                 const GraphicAttr&                          rAttr,
                                 const rendering::ViewState&                 rUsedViewState,
                                 const uno::Reference< rendering::XCanvas >& rTarget ) :
-        CachedBitmap_Base( m_aMutex ),
+        CachedPrimitiveBase( rUsedViewState, rTarget, true ),
         mpGraphicObject( rGraphicObject ),
         maPoint( rPoint ),
         maSize( rSize ),
-        maAttributes( rAttr ),
-        maUsedViewState( rUsedViewState ),
-        mxTarget( rTarget )
-    {
-    }
-
-    CachedBitmap::~CachedBitmap()
+        maAttributes( rAttr )
     {
     }
 
@@ -85,33 +67,24 @@ namespace vclcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        maUsedViewState.Clip.clear();
         mpGraphicObject.reset();
-        mxTarget.clear();
+
+        CachedPrimitiveBase::disposing();
     }
 
-    sal_Int8 SAL_CALL CachedBitmap::redraw( const rendering::ViewState& aState ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+    ::sal_Int8 CachedBitmap::doRedraw( const rendering::ViewState&                  rNewState,
+                                       const rendering::ViewState&                  rOldState,
+                                       const uno::Reference< rendering::XCanvas >&  rTargetCanvas,
+                                       bool                                         bSameViewTransform )
     {
-        ::basegfx::B2DHomMatrix aUsedTransformation;
-        ::basegfx::B2DHomMatrix aNewTransformation;
+        ENSURE_AND_THROW( bSameViewTransform,
+                          "CachedBitmap::doRedraw(): base called with changed view transform "
+                          "(told otherwise during construction)" );
 
-        ::basegfx::unotools::homMatrixFromAffineMatrix( aUsedTransformation,
-                                                        maUsedViewState.AffineTransform );
-        ::basegfx::unotools::homMatrixFromAffineMatrix( aNewTransformation,
-                                                        aState.AffineTransform );
-
-        if( aUsedTransformation != aNewTransformation )
-        {
-            // differing transformations, don't try to draft the
-            // output, just plain fail here.
-            return rendering::RepaintResult::FAILED;
-        }
-
-        RepaintTarget* pTarget = dynamic_cast< RepaintTarget* >(mxTarget.get());
+        RepaintTarget* pTarget = dynamic_cast< RepaintTarget* >(rTargetCanvas.get());
 
         ENSURE_AND_THROW( pTarget,
                           "CachedBitmap::redraw(): cannot cast target to RepaintTarget" );
-
 
         if( !pTarget->repaint( mpGraphicObject,
                                maPoint,
@@ -123,23 +96,5 @@ namespace vclcanvas
         }
 
         return rendering::RepaintResult::REDRAWN;
-    }
-
-    ::rtl::OUString SAL_CALL CachedBitmap::getImplementationName(  ) throw (uno::RuntimeException)
-    {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ) );
-    }
-
-    sal_Bool SAL_CALL CachedBitmap::supportsService( const ::rtl::OUString& ServiceName ) throw (uno::RuntimeException)
-    {
-        return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME ) );
-    }
-
-    uno::Sequence< ::rtl::OUString > SAL_CALL CachedBitmap::getSupportedServiceNames(  ) throw (uno::RuntimeException)
-    {
-        uno::Sequence< ::rtl::OUString > aRet(1);
-        aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
-
-        return aRet;
     }
 }
