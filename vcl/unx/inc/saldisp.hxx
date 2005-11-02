@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 13:00:19 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 14:35:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -367,6 +367,7 @@ protected:
     bool            m_bXinerama;
     std::vector< Rectangle > m_aXineramaScreens;
     std::list<SalFrame*> m_aFrames;
+    std::list<SalObject*> m_aSalObjects;
 
     struct SnDisplay           *m_pSnDisplay;
     struct SnLauncheeContext   *m_pSnLauncheeContext;
@@ -474,10 +475,12 @@ public:
     bool            IsXinerama() const { return m_bXinerama; }
     const std::vector< Rectangle >& GetXineramaScreens() const { return m_aXineramaScreens; }
 
-    const std::list< SalFrame* >& getFrames()
+    const std::list< SalFrame* >& getFrames() const
     { return m_aFrames; }
 
     BOOL            IsNumLockFromXS() const { return bNumLockFromXS_; }
+
+    std::list< SalObject* >& getSalObjects() { return m_aSalObjects; }
 };
 
 // -=-= inlines =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
