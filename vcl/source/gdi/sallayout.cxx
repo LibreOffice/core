@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 12:59:12 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 14:41:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,8 +56,11 @@
 #include <sallayout.hxx>
 #endif
 
-#ifndef _TL_POLY_HXX
-#include <tools/poly.hxx>
+#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#endif
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #endif
 
 #ifndef _TL_LANG_HXX
@@ -706,13 +709,14 @@ int SalLayout::CalcAsianKerning( sal_Unicode c, bool bLeft, bool bVertical )
 
 // -----------------------------------------------------------------------
 
-bool SalLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolyVector& rVector ) const
+bool SalLayout::GetOutline( SalGraphics& rSalGraphics,
+    ::basegfx::B2DPolyPolygonVector& rVector ) const
 {
     bool bAllOk = true;
     bool bOneOk = false;
 
     Point aPos;
-    PolyPolygon aGlyphOutline;
+    ::basegfx::B2DPolyPolygon aGlyphOutline;
     for( int nStart = 0;;)
     {
         sal_Int32 nLGlyph;
@@ -726,9 +730,15 @@ bool SalLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolyVector& rVector )
         // only add non-empty outlines
         if( bSuccess && (aGlyphOutline.Count() > 0) )
         {
+            if( aPos.X() || aPos.Y() )
+            {
+                ::basegfx::B2DHomMatrix aMatrix;
+        aMatrix.translate( aPos.X(), aPos.Y() );
+        aGlyphOutline.transform( aMatrix );
+        }
+
             // insert outline at correct position
             rVector.push_back( aGlyphOutline );
-            rVector.back().Move( aPos.X(), aPos.Y() );
         }
     }
 
@@ -1853,7 +1863,8 @@ int MultiSalLayout::GetNextGlyphs( int nLen, sal_Int32* pGlyphIdxAry, Point& rPo
 
 // -----------------------------------------------------------------------
 
-bool MultiSalLayout::GetOutline( SalGraphics& rGraphics, PolyPolyVector& rPPV ) const
+bool MultiSalLayout::GetOutline( SalGraphics& rGraphics,
+    ::basegfx::B2DPolyPolygonVector& rPPV ) const
 {
     bool bRet = false;
 
