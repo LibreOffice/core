@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLExporter.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:06:22 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:12:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ import com.sun.star.xml.sax.XDocumentHandler;
  * @see ifc.beans._XPropertySet
  */
 public class XMLExporter extends TestCase {
-    XComponent xSheetDoc;
+    static XComponent xSheetDoc;
 
     /**
      * New spreadsheet document created.
@@ -153,9 +153,16 @@ public class XMLExporter extends TestCase {
             XNamed xSheetNamed = (XNamed)
                 UnoRuntime.queryInterface(XNamed.class, xSheet);
             xSheetNamed.setName(SHEET_NAME);
+
+            log.println("fill sheet with contnet...");
+            util.CalcTools.fillCalcSheetWithContent(xSheet, 3, 3, 50, 50);
+
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log) ;
             throw new StatusException("Can't create component.", e) ;
+        } catch (java.lang.Exception e) {
+            e.printStackTrace(log);
+            throw new StatusException("Can't create environment.", e);
         }
 
         // adding tags which must be contained in XML output
