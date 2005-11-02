@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _DrawingDocumentDrawView.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:32:19 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:45:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@ import lib.MultiPropertyTest;
 import com.sun.star.container.XNamed;
 import com.sun.star.drawing.XDrawPage;
 import com.sun.star.uno.UnoRuntime;
+import util.ValueChanger;
 
 /**
 * Testing <code>com.sun.star.drawing.DrawingDocumentDrawView</code>
@@ -156,5 +157,29 @@ public class _DrawingDocumentDrawView extends MultiPropertyTest {
             e.printStackTrace(log);
         }
     }
+
+    public void _ZoomType() {
+        Object oldValue=null;
+        Object newValue=null;
+        try {
+            oldValue = oObj.getPropertyValue("ZoomValue");
+            Object oldZoom = oObj.getPropertyValue("ZoomType");
+            Object newZoom = ValueChanger.changePValue(oldZoom);
+            oObj.setPropertyValue("ZoomType", newZoom);
+            newValue = oObj.getPropertyValue("ZoomValue");
+        } catch(com.sun.star.lang.WrappedTargetException e) {
+            e.printStackTrace(log);
+        } catch(com.sun.star.beans.UnknownPropertyException e) {
+            e.printStackTrace(log);
+        } catch(com.sun.star.lang.IllegalArgumentException e) {
+            e.printStackTrace(log);
+        } catch(com.sun.star.beans.PropertyVetoException e) {
+            e.printStackTrace(log);
+        }
+        log.println("oldZoomValue: "+oldValue);
+        log.println("newZoomValue: "+newValue);
+        tRes.tested("ZoomType",(!oldValue.equals(newValue)));
+    }
+
 }
 
