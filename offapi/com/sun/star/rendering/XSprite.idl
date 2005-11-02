@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XSprite.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:01:18 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:25:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,9 @@ interface XSprite : ::com::sun::star::uno::XInterface
         coordinate space. As the sprite has its own local coordinate
         system, with its origin on screen being equal to its current
         position, the clip poly-polygon's origin will always coincide
-        with the sprite's origin. The implementation is free, if it
+        with the sprite's origin. Furthermore, if any sprite
+        transformation is set via transform(), the clip is subject to
+        this transformation, too. The implementation is free, if it
         has a cached representation of the sprite at hand, to
         clip-output only this cached representation (e.g. a bitmap),
         instead of re-rendering the sprite from first principles. This
@@ -165,6 +167,14 @@ interface XSprite : ::com::sun::star::uno::XInterface
         associated <type>XSpriteCanvas</type> does not update changed
         sprites automatically, but has to be told to do so via
         <member>XSpriteCanvas::updateScreen()</member>.<p>
+
+        Specifying an empty interface denotes no clipping,
+        i.e. everything contained in the sprite will be visible
+        (subject to device-dependent constraints, of
+        course). Specifying an empty XPolyPolygon2D, i.e. a
+        poly-polygon containing zero polygons, or an XPolyPolygon2D
+        with any number of empty sub-polygons, denotes the NULL
+        clip. That means, nothing from the sprite will be visible.<p>
 
         @param aClip
         The clip poly-polygon to apply.
