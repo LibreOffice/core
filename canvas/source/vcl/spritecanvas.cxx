@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spritecanvas.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:23:21 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:04:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,64 +34,29 @@
  ************************************************************************/
 
 #include <canvas/debug.hxx>
-
-#ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
-#include <com/sun/star/lang/XInitialization.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICENAME_HPP_
-#include <com/sun/star/lang/XServiceName.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XCOMPONENTCONTEXT_HPP_
-#include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-
-#ifndef _CPPUHELPER_FACTORY_HXX_
-#include <cppuhelper/factory.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
-#include <cppuhelper/implementationentry.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
-#include <cppuhelper/implementationentry.hxx>
-#endif
-
-#ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
-#include <basegfx/tools/canvastools.hxx>
-#endif
-
-#ifndef _VCL_CANVASTOOLS_HXX
-#include <vcl/canvastools.hxx>
-#endif
-#ifndef _SV_OUTDEV_HXX
-#include <vcl/outdev.hxx>
-#endif
-#ifndef _SV_WINDOW_HXX
-#include <vcl/window.hxx>
-#endif
-#ifndef _SV_BITMAPEX_HXX
-#include <vcl/bitmapex.hxx>
-#endif
-
-#include <algorithm>
-
 #include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
 
+#include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+
+#include <cppuhelper/factory.hxx>
+#include <cppuhelper/implementationentry.hxx>
+
+#include <vcl/canvastools.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/window.hxx>
+#include <vcl/bitmapex.hxx>
+
+#include <basegfx/tools/canvastools.hxx>
+
+#include <algorithm>
+
 #include "spritecanvas.hxx"
-#include "canvascustomsprite.hxx"
-#include "windowgraphicdevice.hxx"
+
 
 using namespace ::com::sun::star;
-
 
 #define IMPLEMENTATION_NAME "VCLCanvas::SpriteCanvas"
 #define SERVICE_NAME "com.sun.star.rendering.VCLCanvas"
@@ -116,103 +81,81 @@ namespace
 namespace vclcanvas
 {
     SpriteCanvas::SpriteCanvas( const uno::Reference< uno::XComponentContext >& rxContext ) :
-        maBounds(),
-        mxComponentContext( rxContext ),
-        mxDevice(),
-        mpBackBuffer(),
-        mpRedrawManager(),
-    mbIsVisible( false )
+        mxComponentContext( rxContext )
     {
+        OSL_TRACE( "SpriteCanvas created" );
+
+        // add our own property to GraphicDevice
+        maPropHelper.addProperties(
+            ::canvas::PropertySetHelper::MakeMap
+            ("UnsafeScrolling",
+             boost::bind(&SpriteCanvasHelper::isUnsafeScrolling,
+                         boost::ref(maCanvasHelper)),
+             boost::bind(&SpriteCanvasHelper::enableUnsafeScrolling,
+                         boost::ref(maCanvasHelper),
+                         _1))
+            ("SpriteBounds",
+             boost::bind(&SpriteCanvasHelper::isSpriteBounds,
+                         boost::ref(maCanvasHelper)),
+             boost::bind(&SpriteCanvasHelper::enableSpriteBounds,
+                         boost::ref(maCanvasHelper),
+                         _1)));
     }
 
     SpriteCanvas::~SpriteCanvas()
     {
+        OSL_TRACE( "SpriteCanvas destroyed" );
     }
+
 
     void SAL_CALL SpriteCanvas::disposing()
     {
         tools::LocalGuard aGuard;
 
-    dispose();
+        mxComponentContext.clear();
 
         // forward to parent
-        SpriteCanvas_Base::disposing();
+        SpriteCanvasBaseT::disposing();
     }
 
-    uno::Reference< rendering::XAnimatedSprite > SAL_CALL SpriteCanvas::createSpriteFromAnimation( const uno::Reference< rendering::XAnimation >& animation ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+    ::sal_Bool SAL_CALL SpriteCanvas::showBuffer( ::sal_Bool bUpdateAll ) throw (uno::RuntimeException)
     {
         tools::LocalGuard aGuard;
 
-        return uno::Reference< rendering::XAnimatedSprite >(NULL);
+        // avoid repaints on hidden window (hidden: not mapped to
+        // screen). Return failure, since the screen really has _not_
+        // been updated (caller should try again later)
+        return !mbIsVisible ? false : SpriteCanvasBaseT::showBuffer( bUpdateAll );
     }
 
-    uno::Reference< rendering::XAnimatedSprite > SAL_CALL SpriteCanvas::createSpriteFromBitmaps( const uno::Sequence< uno::Reference< rendering::XBitmap > >& animationBitmaps,
-                                                                                                 sal_Int8                                                     interpolationMode ) throw (lang::IllegalArgumentException, rendering::VolatileContentDestroyedException, uno::RuntimeException)
+    ::sal_Bool SAL_CALL SpriteCanvas::switchBuffer( ::sal_Bool bUpdateAll ) throw (uno::RuntimeException)
     {
         tools::LocalGuard aGuard;
 
-        return uno::Reference< rendering::XAnimatedSprite >(NULL);
-    }
-
-    uno::Reference< rendering::XCustomSprite > SAL_CALL SpriteCanvas::createCustomSprite( const geometry::RealSize2D& spriteSize ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        tools::LocalGuard aGuard;
-
-        if( !mxDevice.is() )
-            return uno::Reference< rendering::XCustomSprite >(); // we're disposed
-
-        return uno::Reference< rendering::XCustomSprite >(
-            new CanvasCustomSprite( spriteSize,
-                                    mxDevice,
-                                    ImplRef(this)) );
-    }
-
-    uno::Reference< rendering::XSprite > SAL_CALL SpriteCanvas::createClonedSprite( const uno::Reference< rendering::XSprite >& original ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        tools::LocalGuard aGuard;
-
-        return uno::Reference< rendering::XSprite >(NULL);
+        // avoid repaints on hidden window (hidden: not mapped to
+        // screen). Return failure, since the screen really has _not_
+        // been updated (caller should try again later)
+        return !mbIsVisible ? false : SpriteCanvasBaseT::switchBuffer( bUpdateAll );
     }
 
     sal_Bool SAL_CALL SpriteCanvas::updateScreen( sal_Bool bUpdateAll ) throw (uno::RuntimeException)
     {
         tools::LocalGuard aGuard;
 
-        if( !mpRedrawManager.get() )
-            return sal_False; // disposed
-
-        // hidden windows need not paint anything, thus prevent
-        // screen updates, then
-        if( !mbIsVisible )
-            return sal_False;
-
-        // pass background dirty state to redrawmanager
-        if( mbSurfaceDirty )
-        {
-            mpRedrawManager->backgroundDirty();
-            mbSurfaceDirty = false;
-        }
-
-        mpRedrawManager->updateScreen( bUpdateAll );
-
-        // commit to screen
-        maCanvasHelper.flush();
-
-#if defined(VERBOSE) && defined(DBG_UTIL)
-        static ::canvas::tools::ElapsedTime aElapsedTime;
-
-        // log time immediately after surface flip
-        OSL_TRACE( "SpriteCanvas::updateScreen(): flip done at %f",
-                   aElapsedTime.getElapsedTime() );
-#endif
-
-        return sal_True;
+        // avoid repaints on hidden window (hidden: not mapped to
+        // screen). Return failure, since the screen really has _not_
+        // been updated (caller should try again later)
+        return !mbIsVisible ? false : maCanvasHelper.updateScreen(bUpdateAll,
+                                                                  mbSurfaceDirty);
     }
+
 
     void SAL_CALL SpriteCanvas::initialize( const uno::Sequence< uno::Any >& aArguments ) throw( uno::Exception,
                                                                                                  uno::RuntimeException)
     {
-        VERBOSE_TRACE( "SpriteCanvas::initialize called" );
+        tools::LocalGuard aGuard;
+
+        VERBOSE_TRACE( "VCLSpriteCanvas::initialize called" );
 
         CHECK_AND_THROW( aArguments.getLength() >= 1,
                          "SpriteCanvas::initialize: wrong number of arguments" );
@@ -228,154 +171,15 @@ namespace vclcanvas
             CHECK_AND_THROW( pOutputWindow != NULL,
                              "SpriteCanvas::initialize: invalid Window pointer" );
 
-            // setup graphic device
-            mxDevice = WindowGraphicDevice::ImplRef( new WindowGraphicDevice( *pOutputWindow ) );
-
             // setup helper
-            maCanvasHelper.setGraphicDevice( mxDevice );
-
-            // setup back buffer
-            mpBackBuffer.reset( new BackBuffer( *pOutputWindow ) );
-            mpBackBuffer->setSize( pOutputWindow->GetOutputSizePixel() );
-
-            // always render into back buffer, don't preserve state
-            // (it's our private VDev, after all)
-            maCanvasHelper.setOutDev( mpBackBuffer, false );
-
-            // setup RedrawManager
-            mpRedrawManager.reset( new RedrawManager( *pOutputWindow,
-                                                      mpBackBuffer ) );
+            maDeviceHelper.init( *pOutputWindow,
+                                 *this );
+            maCanvasHelper.init( *this,
+                                 maDeviceHelper.getBackBuffer(),
+                                 false,   // no OutDev state preservation
+                                 false ); // no alpha on surface
+            maCanvasHelper.setRedrawManager( maRedrawManager );
         }
-    }
-
-    void SAL_CALL SpriteCanvas::dispose(  ) throw (uno::RuntimeException)
-    {
-        tools::LocalGuard aGuard;
-
-        maCanvasHelper.disposing();
-
-        mxComponentContext.clear();
-        mxDevice.reset();
-        mpBackBuffer.reset(),
-        mpRedrawManager.reset();
-    }
-
-    void SAL_CALL SpriteCanvas::addEventListener( const uno::Reference< lang::XEventListener >& xListener ) throw (uno::RuntimeException)
-    {
-        // Ignored
-    }
-
-    void SAL_CALL SpriteCanvas::removeEventListener( const uno::Reference< lang::XEventListener >& aListener ) throw (uno::RuntimeException)
-    {
-        // Ignored
-    }
-
-    void SAL_CALL SpriteCanvas::setPosSize( sal_Int32 nX,
-                                            sal_Int32 nY,
-                                            sal_Int32 nWidth,
-                                            sal_Int32 nHeight,
-                                            sal_Int16 nFlags ) throw (uno::RuntimeException)
-    {
-        tools::LocalGuard aGuard;
-
-    if( maBounds.X != nX ||
-        maBounds.Y != nY ||
-        maBounds.Width != nWidth ||
-        maBounds.Height != nHeight )
-    {
-            maBounds.X = nX;
-        maBounds.Y = nY;
-        maBounds.Width = nWidth;
-        maBounds.Height = nHeight;
-
-        if( mpBackBuffer.get() )
-            mpBackBuffer->setSize( Size( nWidth,
-                         nHeight ) );
-    }
-    }
-
-    awt::Rectangle SAL_CALL SpriteCanvas::getPosSize(  ) throw (uno::RuntimeException)
-    {
-        tools::LocalGuard aGuard;
-
-        return maBounds;
-    }
-
-    void SAL_CALL SpriteCanvas::setVisible( ::sal_Bool bVisible ) throw (uno::RuntimeException)
-    {
-        tools::LocalGuard aGuard;
-
-        mbIsVisible = bVisible;
-    }
-
-    void SAL_CALL SpriteCanvas::setEnable( ::sal_Bool Enable ) throw (uno::RuntimeException)
-    {
-        // Ignored
-    }
-
-    void SAL_CALL SpriteCanvas::setFocus(  ) throw (uno::RuntimeException)
-    {
-        // Ignored
-    }
-
-    void SAL_CALL SpriteCanvas::addWindowListener( const uno::Reference< awt::XWindowListener >& xListener ) throw (uno::RuntimeException)
-    {
-        // Ignored
-    }
-
-    void SAL_CALL SpriteCanvas::removeWindowListener( const uno::Reference< awt::XWindowListener >& xListener ) throw (uno::RuntimeException)
-    {
-        // Ignored
-    }
-
-    void SAL_CALL SpriteCanvas::addFocusListener( const uno::Reference< awt::XFocusListener >& xListener ) throw (uno::RuntimeException)
-    {
-        // Ignored
-    }
-
-    void SAL_CALL SpriteCanvas::removeFocusListener( const uno::Reference< awt::XFocusListener >& xListener ) throw (uno::RuntimeException)
-    {
-        // Ignored
-    }
-
-    void SAL_CALL SpriteCanvas::addKeyListener( const uno::Reference< awt::XKeyListener >& xListener ) throw (uno::RuntimeException)
-    {
-        // Ignored
-    }
-
-    void SAL_CALL SpriteCanvas::removeKeyListener( const uno::Reference< awt::XKeyListener >& xListener ) throw (uno::RuntimeException)
-    {
-        // Ignored
-    }
-
-    void SAL_CALL SpriteCanvas::addMouseListener( const uno::Reference< awt::XMouseListener >& xListener ) throw (uno::RuntimeException)
-    {
-        // Ignored
-    }
-
-    void SAL_CALL SpriteCanvas::removeMouseListener( const uno::Reference< awt::XMouseListener >& xListener ) throw (uno::RuntimeException)
-    {
-        // Ignored
-    }
-
-    void SAL_CALL SpriteCanvas::addMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& xListener ) throw (uno::RuntimeException)
-    {
-        // Ignored
-    }
-
-    void SAL_CALL SpriteCanvas::removeMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& xListener ) throw (uno::RuntimeException)
-    {
-        // Ignored
-    }
-
-    void SAL_CALL SpriteCanvas::addPaintListener( const uno::Reference< awt::XPaintListener >& xListener ) throw (uno::RuntimeException)
-    {
-        // Ignored
-    }
-
-    void SAL_CALL SpriteCanvas::removePaintListener( const uno::Reference< awt::XPaintListener >& xListener ) throw (uno::RuntimeException)
-    {
-        // Ignored
     }
 
     ::rtl::OUString SAL_CALL SpriteCanvas::getImplementationName() throw( uno::RuntimeException )
@@ -403,52 +207,6 @@ namespace vclcanvas
         return uno::Reference< uno::XInterface >( static_cast<cppu::OWeakObject*>(new SpriteCanvas( xContext )) );
     }
 
-    // SpriteSurface
-    void SpriteCanvas::showSprite( const Sprite::ImplRef& sprite )
-    {
-        tools::LocalGuard aGuard;
-
-        if( !mpRedrawManager.get() )
-            return; // we're disposed
-
-        mpRedrawManager->showSprite( sprite );
-    }
-
-    void SpriteCanvas::hideSprite( const Sprite::ImplRef& sprite )
-    {
-        tools::LocalGuard aGuard;
-
-        if( !mpRedrawManager.get() )
-            return; // we're disposed
-
-        mpRedrawManager->hideSprite( sprite );
-    }
-
-    void SpriteCanvas::moveSprite( const Sprite::ImplRef&   sprite,
-                                   const Point&             rOldPos,
-                                   const Point&             rNewPos,
-                                   const Size&              rSpriteSize )
-    {
-        tools::LocalGuard aGuard;
-
-        if( !mpRedrawManager.get() )
-            return; // we're disposed
-
-        mpRedrawManager->moveSprite( sprite, rOldPos, rNewPos, rSpriteSize );
-    }
-
-    void SpriteCanvas::updateSprite( const Sprite::ImplRef& sprite,
-                                     const Point&           rPos,
-                                     const Rectangle&       rUpdateArea )
-    {
-        tools::LocalGuard aGuard;
-
-        if( !mpRedrawManager.get() )
-            return; // we're disposed
-
-        mpRedrawManager->updateSprite( sprite, rPos, rUpdateArea );
-    }
-
     bool SpriteCanvas::repaint( const GraphicObjectSharedPtr&   rGrf,
                                 const ::Point&                  rPt,
                                 const ::Size&                   rSz,
@@ -456,11 +214,87 @@ namespace vclcanvas
     {
         tools::LocalGuard aGuard;
 
-        mbSurfaceDirty = true;
-
         return maCanvasHelper.repaint( rGrf, rPt, rSz, rAttr );
     }
 
+    OutputDevice* SpriteCanvas::getOutDev() const
+    {
+        tools::LocalGuard aGuard;
+
+        return maDeviceHelper.getOutDev();
+    }
+
+    BackBufferSharedPtr SpriteCanvas::getBackBuffer() const
+    {
+        tools::LocalGuard aGuard;
+
+        return maDeviceHelper.getBackBuffer();
+    }
+
+    uno::Reference< beans::XPropertySetInfo > SAL_CALL SpriteCanvas::getPropertySetInfo() throw (uno::RuntimeException)
+    {
+        tools::LocalGuard aGuard;
+        return maPropHelper.getPropertySetInfo();
+    }
+
+    void SAL_CALL SpriteCanvas::setPropertyValue( const ::rtl::OUString& aPropertyName,
+                                                  const uno::Any&        aValue ) throw (beans::UnknownPropertyException,
+                                                                                         beans::PropertyVetoException,
+                                                                                         lang::IllegalArgumentException,
+                                                                                         lang::WrappedTargetException,
+                                                                                         uno::RuntimeException)
+    {
+        tools::LocalGuard aGuard;
+        maPropHelper.setPropertyValue( aPropertyName, aValue );
+    }
+
+    uno::Any SAL_CALL SpriteCanvas::getPropertyValue( const ::rtl::OUString& aPropertyName ) throw (beans::UnknownPropertyException,
+                                                                                                    lang::WrappedTargetException,
+                                                                                                    uno::RuntimeException)
+    {
+        tools::LocalGuard aGuard;
+        return maPropHelper.getPropertyValue( aPropertyName );
+    }
+
+    void SAL_CALL SpriteCanvas::addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
+                                                           const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException,
+                                                                                                                                      lang::WrappedTargetException,
+                                                                                                                                      uno::RuntimeException)
+    {
+        tools::LocalGuard aGuard;
+        maPropHelper.addPropertyChangeListener( aPropertyName,
+                                                xListener );
+    }
+
+    void SAL_CALL SpriteCanvas::removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
+                                                              const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException,
+                                                                                                                                         lang::WrappedTargetException,
+                                                                                                                                         uno::RuntimeException)
+    {
+        tools::LocalGuard aGuard;
+        maPropHelper.removePropertyChangeListener( aPropertyName,
+                                                   xListener );
+    }
+
+    void SAL_CALL SpriteCanvas::addVetoableChangeListener( const ::rtl::OUString& aPropertyName,
+                                                           const uno::Reference< beans::XVetoableChangeListener >& xListener ) throw (beans::UnknownPropertyException,
+                                                                                                                                      lang::WrappedTargetException,
+                                                                                                                                      uno::RuntimeException)
+    {
+        tools::LocalGuard aGuard;
+        maPropHelper.addVetoableChangeListener( aPropertyName,
+                                                xListener );
+    }
+
+    void SAL_CALL SpriteCanvas::removeVetoableChangeListener( const ::rtl::OUString& aPropertyName,
+                                                              const uno::Reference< beans::XVetoableChangeListener >& xListener ) throw (beans::UnknownPropertyException,
+                                                                                                                                         lang::WrappedTargetException,
+                                                                                                                                         uno::RuntimeException)
+    {
+        tools::LocalGuard aGuard;
+        maPropHelper.removeVetoableChangeListener( aPropertyName,
+                                                   xListener );
+    }
 }
 
 namespace
