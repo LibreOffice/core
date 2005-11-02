@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implsprite.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:29:43 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:43:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,8 +180,11 @@ namespace cppcanvas
 
             if( mxSprite.is() && mxGraphicDevice.is() )
             {
-                mxSprite->clip( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( mxGraphicDevice,
-                                                                                     rClipPoly ) );
+                if( rClipPoly.count() == 0 )
+                    mxSprite->clip( uno::Reference< rendering::XPolyPolygon2D >() );
+                else
+                    mxSprite->clip( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( mxGraphicDevice,
+                                                                                         rClipPoly ) );
             }
         }
 
@@ -192,19 +195,26 @@ namespace cppcanvas
 
             if( mxSprite.is() && mxGraphicDevice.is() )
             {
-                ::basegfx::B2DPolyPolygon   aTransformedClipPoly( rClipPoly );
+                if( rClipPoly.count() == 0 )
+                {
+                    mxSprite->clip( uno::Reference< rendering::XPolyPolygon2D >() );
+                }
+                else
+                {
+                    ::basegfx::B2DPolyPolygon   aTransformedClipPoly( rClipPoly );
 
-                // extract linear part of canvas view transformation (linear means:
-                // without translational components)
-                ::basegfx::B2DHomMatrix     aViewTransform( mpTransformArbiter->getTransformation() );
-                aViewTransform.set( 0, 2, 0.0 );
-                aViewTransform.set( 1, 2, 0.0 );
+                    // extract linear part of canvas view transformation (linear means:
+                    // without translational components)
+                    ::basegfx::B2DHomMatrix     aViewTransform( mpTransformArbiter->getTransformation() );
+                    aViewTransform.set( 0, 2, 0.0 );
+                    aViewTransform.set( 1, 2, 0.0 );
 
-                // transform polygon from view to device coordinate space
-                aTransformedClipPoly.transform( aViewTransform );
+                    // transform polygon from view to device coordinate space
+                    aTransformedClipPoly.transform( aViewTransform );
 
-                mxSprite->clip( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( mxGraphicDevice,
-                                                                                     aTransformedClipPoly ) );
+                    mxSprite->clip( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( mxGraphicDevice,
+                                                                                         aTransformedClipPoly ) );
+                }
             }
         }
 
@@ -222,6 +232,14 @@ namespace cppcanvas
 
             if( mxSprite.is() )
                 mxSprite->hide();
+        }
+
+        void ImplSprite::setPriority( double fPriority )
+        {
+            OSL_ENSURE( mxSprite.is(), "ImplSprite::setPriority(): Invalid sprite");
+
+            if( mxSprite.is() )
+                mxSprite->setPriority(fPriority);
         }
 
         uno::Reference< rendering::XSprite > ImplSprite::getUNOSprite() const
