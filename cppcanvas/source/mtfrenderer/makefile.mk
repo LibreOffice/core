@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 08:19:21 $
+#   last change: $Author: kz $ $Date: 2005-11-02 13:40:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,8 @@ ENABLE_EXCEPTIONS=TRUE
 CDEFS+= -DVERBOSE
 .ENDIF
 
-SLOFILES =	$(SLO)$/bitmapaction.obj \
+SLOFILES =	$(SLO)$/cachedprimitivebase.obj \
+            $(SLO)$/bitmapaction.obj \
             $(SLO)$/implrenderer.obj \
             $(SLO)$/lineaction.obj \
             $(SLO)$/pointaction.obj \
