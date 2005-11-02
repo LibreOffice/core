@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScUniqueCellFormatsObj.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:05:14 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:11:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,8 +58,8 @@ import util.SOfficeFactory;
 
 
 public class ScUniqueCellFormatsObj extends TestCase {
-    XSpreadsheetDocument xSheetDoc = null;
-    XSpreadsheet oSheet = null;
+    static XSpreadsheetDocument xSheetDoc = null;
+    static XSpreadsheet oSheet = null;
 
     /**
     * Creates Spreadsheet document.
