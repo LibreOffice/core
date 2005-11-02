@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScModelObj.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:58:39 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:06:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,8 +96,8 @@ import util.utils;
 * @see ifc.beans._XPropertySet
 */
 public class ScModelObj extends TestCase {
-    public XSpreadsheetDocument xSpreadsheetDoc;
-    public XSpreadsheetDocument xSecondsheetDoc;
+    public static XSpreadsheetDocument xSpreadsheetDoc;
+    public static XSpreadsheetDocument xSecondsheetDoc;
 
     /**
     * Disposes Spreadsheet documents.
