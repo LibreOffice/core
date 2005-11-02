@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvastools.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:51:06 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 14:00:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -500,6 +500,22 @@ namespace basegfx
                                         rRect.Y,
                                         rRect.X + rRect.Width,
                                         rRect.Y + rRect.Height );
+        }
+
+        ::basegfx::B2IRange b2ISurroundingRangeFromB2DRange( const ::basegfx::B2DRange& rRange )
+        {
+            return ::basegfx::B2IRange( static_cast<sal_Int32>( floor(rRange.getMinX()) ),
+                                        static_cast<sal_Int32>( floor(rRange.getMinY()) ),
+                                        static_cast<sal_Int32>( ceil(rRange.getMaxX()) ),
+                                        static_cast<sal_Int32>( ceil(rRange.getMaxY()) ) );
+        }
+
+        ::basegfx::B2DRange b2DSurroundingIntegerRangeFromB2DRange( const ::basegfx::B2DRange& rRange )
+        {
+            return ::basegfx::B2DRange( floor(rRange.getMinX()),
+                                        floor(rRange.getMinY()),
+                                        ceil(rRange.getMaxX()),
+                                        ceil(rRange.getMaxY()) );
         }
 
     } // namespace bgfxtools
