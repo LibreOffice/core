@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CanvasBitmap.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:08:42 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 12:46:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,6 +123,14 @@ public class CanvasBitmap
 
     //----------------------------------------------------------------------------------
 
+    public synchronized boolean hasAlpha()
+    {
+        // TODO
+        return false;
+    }
+
+    //----------------------------------------------------------------------------------
+
     //
     // XBitmapCanvas impl
     // ==================
@@ -174,7 +182,8 @@ public class CanvasBitmap
     // =============================
     //
 
-    public synchronized byte[] getData( IntegerRectangle2D rect )
+    public synchronized byte[] getData( IntegerBitmapLayout[] bitmapLayout,
+                                        IntegerRectangle2D    rect )
     {
         int [] pixelData = bitmap.getRGB( rect.X1, rect.Y1, rect.X2 - rect.X1, rect.Y1 - rect.Y2, null, 0, 0 );
 
@@ -202,7 +211,8 @@ public class CanvasBitmap
 
     //----------------------------------------------------------------------------------
 
-    public synchronized byte[] getPixel( IntegerPoint2D pos )
+    public synchronized byte[] getPixel( IntegerBitmapLayout[]  bitmapLayout,
+                                         IntegerPoint2D         pos )
     {
         int pixel = bitmap.getRGB( pos.X, pos.Y );
 
@@ -236,7 +246,7 @@ public class CanvasBitmap
         layout.NumComponents = 4;
         layout.ComponentMasks = null;
         layout.Endianness = 0;
-        layout.IsPseudoColor = false;
+        layout.IsMsbFirst = false;
 
         return layout;
     }
