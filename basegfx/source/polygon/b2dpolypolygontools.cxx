@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolypolygontools.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:47:39 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:58:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,281 +67,63 @@
 
 namespace basegfx
 {
-    namespace
-    {
-        class B2DExtraPolygonInfo
-        {
-            B2DRange                                maRange;
-            sal_Int32                               mnDepth;
-            B2VectorOrientation                     meOrinetation;
-
-        public:
-            B2DExtraPolygonInfo()
-            {
-            }
-
-            void init(const B2DPolygon& rCandidate)
-            {
-                maRange = tools::getRange(rCandidate);
-                meOrinetation = tools::getOrientation(rCandidate);
-                mnDepth = (ORIENTATION_NEGATIVE == meOrinetation) ? -1L : 0L;
-            }
-
-            const B2DRange& getRange() const { return maRange; }
-            B2VectorOrientation getOrientation() const { return meOrinetation; }
-
-            sal_Int32 getDepth() const { return mnDepth; }
-
-            void changeDepth(B2VectorOrientation eOrientation)
-            {
-                if(ORIENTATION_POSITIVE == eOrientation)
-                {
-                    mnDepth++;
-                }
-                else if(ORIENTATION_NEGATIVE == eOrientation)
-                {
-                    mnDepth--;
-                }
-            }
-        };
-    } // end of anonymous namespace
-} // end of namespace basegfx
-
-//////////////////////////////////////////////////////////////////////////////
-
-namespace basegfx
-{
     namespace tools
     {
         // B2DPolyPolygon tools
-
-//BFS08     void correctOrientations(B2DPolyPolygon& rCandidate)
         B2DPolyPolygon correctOrientations(const B2DPolyPolygon& rCandidate)
         {
-            B2DPolyPolygon aRetval;
-            const sal_uInt32 nPolygonCount(rCandidate.count());
-            sal_uInt32 nIndexOfOutmostPolygon(0L);
-            bool bIndexOfOutmostPolygonSet(false);
+            B2DPolyPolygon aRetval(rCandidate);
+            const sal_uInt32 nCount(aRetval.count());
 
-            for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+            for(sal_uInt32 a(0L); a < nCount; a++)
             {
-                B2DPolygon aCandidate = rCandidate.getB2DPolygon(a);
+                const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
+                const B2VectorOrientation aOrientation(tools::getOrientation(aCandidate));
+                sal_uInt32 nDepth(0L);
 
-                if(aCandidate.count() > 2L)
+                for(sal_uInt32 b(0L); b < nCount; b++)
                 {
-                    B2VectorOrientation aOrientation = tools::getOrientation(aCandidate);
-                    bool bDoFlip(ORIENTATION_NEGATIVE == aOrientation);
-
-                    // init values for depth and compare point for
-                    // inside test. Since the ordering makes only sense when assuming
-                    // that there are no intersections, the inside test is done with
-                    // any point of the candidate, so teke the first one.
-                    sal_uInt32 nDepth(0L);
-                    const B2DPoint aTestPoint(aCandidate.getB2DPoint(0L));
-
-                    // loop over other polygons and calculate depth
-                    for(sal_uInt32 b(0L); b < nPolygonCount; b++)
+                    if(b != a)
                     {
-                        if(b != a)
+                        const B2DPolygon aCompare(rCandidate.getB2DPolygon(b));
+
+                        if(tools::isInside(aCompare, aCandidate, true))
                         {
-                            B2DPolygon aComparePolygon = rCandidate.getB2DPolygon(b);
-
-                            if(tools::isInside(aComparePolygon, aTestPoint))
-                            {
-                                nDepth++;
-                            }
+                            nDepth++;
                         }
-                    }
-
-                    // if nDepth is odd it is a hole
-                    bool bIsHole(1L == (nDepth & 0x00000001));
-
-                    // does polygon need to be flipped?
-                    if((bDoFlip && !bIsHole) || (!bDoFlip && bIsHole))
-                    {
-                        aCandidate.flip();
-                    }
-
-                    // remember the index if it's the outmost polygon
-                    if(!bIndexOfOutmostPolygonSet && 0L == nDepth)
-                    {
-                        bIndexOfOutmostPolygonSet = true;
-                        nIndexOfOutmostPolygon = a;
                     }
                 }
 
-                // add to result
-                aRetval.append(aCandidate);
-            }
+                const bool bShallBeHole(1L == (nDepth & 0x00000001));
+                const bool bIsHole(ORIENTATION_NEGATIVE == aOrientation);
 
-            // if the outmost polygon is not the first, move it in front
-            if(bIndexOfOutmostPolygonSet && nIndexOfOutmostPolygon > 0L)
-            {
-                B2DPolygon aOutmostPolygon = rCandidate.getB2DPolygon(nIndexOfOutmostPolygon);
-                aRetval.remove(nIndexOfOutmostPolygon);
-                aRetval.insert(0L, aOutmostPolygon);
+                if(bShallBeHole != bIsHole && ORIENTATION_NEUTRAL != aOrientation)
+                {
+                    B2DPolygon aFlipped(aCandidate);
+                    aFlipped.flip();
+                    aRetval.setB2DPolygon(a, aFlipped);
+                }
             }
 
             return aRetval;
         }
 
-//BFS08     void removeIntersections(B2DPolyPolygon& rCandidate,
-//BFS08         bool bForceOrientation, bool bInvertRemove)
-//BFS08     {
-//BFS08         B2DPolyPolygonCutter aCutter;
-//BFS08
-//BFS08         aCutter.addPolyPolygon(rCandidate, bForceOrientation);
-//BFS08         aCutter.removeSelfIntersections();
-//BFS08         aCutter.removeDoubleIntersections();
-//BFS08         aCutter.removeIncludedPolygons(!bInvertRemove);
-//BFS08         rCandidate.clear();
-//BFS08         aCutter.getPolyPolygon(rCandidate);
-//BFS08     }
         B2DPolyPolygon removeIntersections(const B2DPolyPolygon& rCandidate)
         {
-            OSL_ENSURE(!rCandidate.areControlPointsUsed(), "removeIntersections: ATM works not for curves (!)");
-            B2DPolyPolygon aRetval;
-
-            if(rCandidate.count() > 1L)
-            {
-                B2DPolyPolygonCutter aCutter;
-
-                for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
-                {
-                    B2DPolygon aCandidate = rCandidate.getB2DPolygon(a);
-                    aCandidate.removeDoublePoints();
-                    aRetval.append(aCandidate);
-                }
-
-                aCutter.addPolyPolygon(aRetval);
-                aCutter.removeDoubleIntersections();
-
-                aRetval = aCutter.getPolyPolygon();
-            }
-            else
-            {
-                aRetval = rCandidate;
-            }
-
-            return aRetval;
+            return SolveCrossovers(rCandidate, false);
         }
 
         B2DPolyPolygon removeAllIntersections(const B2DPolyPolygon& rCandidate)
         {
-            OSL_ENSURE(!rCandidate.areControlPointsUsed(), "removeAllIntersections: ATM works not for curves (!)");
-            B2DPolyPolygon aRetval;
-
-            if(rCandidate.count() > 1L)
-            {
-                B2DPolyPolygonCutter aCutter;
-
-                for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
-                {
-                    B2DPolyPolygon aCandidate = removeIntersections(rCandidate.getB2DPolygon(a), true);
-                    aRetval.append(aCandidate);
-                }
-
-                aCutter.addPolyPolygon(aRetval);
-                aCutter.removeDoubleIntersections();
-
-                aRetval = aCutter.getPolyPolygon();
-            }
-            else
-            {
-                aRetval = rCandidate;
-            }
-
-            return aRetval;
+            return SolveCrossovers(rCandidate);
         }
 
         B2DPolyPolygon removeNeutralPolygons(const B2DPolyPolygon& rCandidate, bool bUseOr)
         {
-            OSL_ENSURE(!rCandidate.areControlPointsUsed(), "removeNeutralOrientedPolygons: ATM works not for curves (!)");
-            B2DPolyPolygon aRetval;
-            B2DPolyPolygon aLocalCandidate;
-            sal_uInt32 nCount(rCandidate.count());
-            sal_uInt32 a;
+            B2DPolyPolygon aRetval(rCandidate);
 
-            // sort out neutral polygons
-            for(a = 0L; a < nCount; a++)
-            {
-                const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
-                const B2VectorOrientation aOrientation(getOrientation(aCandidate));
-
-                if(ORIENTATION_NEUTRAL != aOrientation)
-                {
-                    aLocalCandidate.append(aCandidate);
-                }
-            }
-
-            // get new count
-            nCount = aLocalCandidate.count();
-
-            if(nCount > 1L)
-            {
-                B2DExtraPolygonInfo* pPolygonInfos = new B2DExtraPolygonInfo[nCount];
-
-                // initialize polygon infos
-                for(a = 0L; a < nCount; a++)
-                {
-                    const B2DPolygon aCandidate(aLocalCandidate.getB2DPolygon(a));
-                    pPolygonInfos[a].init(aCandidate);
-                }
-
-                // get all includes
-                for(a = 0L; a < nCount; a++)
-                {
-                    B2DExtraPolygonInfo& rInfoA = pPolygonInfos[a];
-
-                    for(sal_uInt32 b(0L); b < nCount; b++)
-                    {
-                        B2DExtraPolygonInfo& rInfoB = pPolygonInfos[b];
-
-                        if(a != b && rInfoA.getRange().isInside(rInfoB.getRange()))
-                        {
-                            // volume B in A, test pA, pB for inclusion, with border
-                            const B2DPolygon aCandidateA(aLocalCandidate.getB2DPolygon(a));
-                            const B2DPolygon aCandidateB(aLocalCandidate.getB2DPolygon(b));
-
-                            if(isInside(aCandidateA, aCandidateB, true))
-                            {
-                                // pB is inside pA
-                                rInfoB.changeDepth(rInfoA.getOrientation());
-                            }
-                        }
-                    }
-                }
-
-                // copy non-removables
-                for(a = 0L; a < nCount; a++)
-                {
-                    B2DExtraPolygonInfo& rInfo = pPolygonInfos[a];
-
-                    if(bUseOr)
-                    {
-                        if(rInfo.getDepth() == 0L)
-                        {
-                            const B2DPolygon aCandidate(aLocalCandidate.getB2DPolygon(a));
-                            aRetval.append(aCandidate);
-                        }
-                    }
-                    else
-                    {
-                        if(rInfo.getDepth() >= 1L)
-                        {
-                            const B2DPolygon aCandidate(aLocalCandidate.getB2DPolygon(a));
-                            aRetval.append(aCandidate);
-                        }
-                    }
-                }
-
-                // delete infos
-                delete[] pPolygonInfos;
-            }
-            else
-            {
-                aRetval = aLocalCandidate;
-            }
+            aRetval = StripNeutralPolygons(aRetval);
+            aRetval = StripDispensablePolygons(aRetval, !bUseOr);
 
             return aRetval;
         }
@@ -414,6 +196,33 @@ namespace basegfx
             }
 
             return aRetval;
+        }
+
+        bool isInside(const B2DPolyPolygon& rCandidate, const B2DPoint& rPoint, bool bWithBorder)
+        {
+            const sal_uInt32 nPolygonCount(rCandidate.count());
+
+            if(1L == nPolygonCount)
+            {
+                return isInside(rCandidate.getB2DPolygon(0L), rPoint, bWithBorder);
+            }
+            else
+            {
+                sal_Int32 nInsideCount(0L);
+
+                for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+                {
+                    const B2DPolygon aPolygon(rCandidate.getB2DPolygon(a));
+                    const sal_Bool bInside(isInside(aPolygon, rPoint, bWithBorder));
+
+                    if(bInside)
+                    {
+                        nInsideCount++;
+                    }
+                }
+
+                return (nInsideCount % 2L);
+            }
         }
 
         B2DRange getRange(const B2DPolyPolygon& rCandidate)
@@ -538,12 +347,11 @@ namespace basegfx
 
         bool isInEpsilonRange(const B2DPolyPolygon& rCandidate, const B2DPoint& rTestPosition, double fDistance)
         {
-            OSL_ENSURE(!rCandidate.areControlPointsUsed(), "isInEpsilonRange: ATM works not for curves (!)");
             const sal_uInt32 nPolygonCount(rCandidate.count());
 
             for(sal_uInt32 a(0L); a < nPolygonCount; a++)
             {
-                B2DPolygon aCandidate = rCandidate.getB2DPolygon(a);
+                B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
 
                 if(isInEpsilonRange(aCandidate, rTestPosition, fDistance))
                 {
@@ -552,6 +360,144 @@ namespace basegfx
             }
 
             return false;
+        }
+
+        B3DPolyPolygon createB3DPolyPolygonFromB2DPolyPolygon(const B2DPolyPolygon& rCandidate, double fZCoordinate)
+        {
+            const sal_uInt32 nPolygonCount(rCandidate.count());
+            B3DPolyPolygon aRetval;
+
+            for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+            {
+                B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
+
+                aRetval.append(createB3DPolygonFromB2DPolygon(aCandidate, fZCoordinate));
+            }
+
+            return aRetval;
+        }
+
+        B2DPolyPolygon createB2DPolyPolygonFromB3DPolyPolygon(const B3DPolyPolygon& rCandidate, const B3DHomMatrix& rMat)
+        {
+            const sal_uInt32 nPolygonCount(rCandidate.count());
+            B2DPolyPolygon aRetval;
+
+            for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+            {
+                B3DPolygon aCandidate(rCandidate.getB3DPolygon(a));
+
+                aRetval.append(createB2DPolygonFromB3DPolygon(aCandidate, rMat));
+            }
+
+            return aRetval;
+        }
+
+        double getSmallestDistancePointToPolyPolygon(const B2DPolyPolygon& rCandidate, const B2DPoint& rTestPoint, sal_uInt32& rPolygonIndex, sal_uInt32& rEdgeIndex, double& rCut)
+        {
+            double fRetval(DBL_MAX);
+            const double fZero(0.0);
+            const sal_uInt32 nPolygonCount(rCandidate.count());
+
+            for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+            {
+                const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
+                sal_uInt32 nNewEdgeIndex;
+                double fNewCut;
+                const double fNewDistance(getSmallestDistancePointToPolygon(aCandidate, rTestPoint, nNewEdgeIndex, fNewCut));
+
+                if(DBL_MAX == fRetval || fNewDistance < fRetval)
+                {
+                    fRetval = fNewDistance;
+                    rPolygonIndex = a;
+                    rEdgeIndex = nNewEdgeIndex;
+                    rCut = fNewCut;
+
+                    if(fTools::equal(fRetval, fZero))
+                    {
+                        // already found zero distance, cannot get better. Ensure numerical zero value and end loop.
+                        fRetval = 0.0;
+                        break;
+                    }
+                }
+            }
+
+            return fRetval;
+        }
+
+        B2DPolyPolygon distort(const B2DPolyPolygon& rCandidate, const B2DRange& rOriginal, const B2DPoint& rTopLeft, const B2DPoint& rTopRight, const B2DPoint& rBottomLeft, const B2DPoint& rBottomRight)
+        {
+            const sal_uInt32 nPolygonCount(rCandidate.count());
+            B2DPolyPolygon aRetval;
+
+            for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+            {
+                const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
+
+                aRetval.append(distort(aCandidate, rOriginal, rTopLeft, rTopRight, rBottomLeft, rBottomRight));
+            }
+
+            return aRetval;
+        }
+
+        B2DPolyPolygon rotateAroundPoint(const B2DPolyPolygon& rCandidate, const B2DPoint& rCenter, double fAngle)
+        {
+            const sal_uInt32 nPolygonCount(rCandidate.count());
+            B2DPolyPolygon aRetval;
+
+            for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+            {
+                const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
+
+                aRetval.append(rotateAroundPoint(aCandidate, rCenter, fAngle));
+            }
+
+            return aRetval;
+        }
+
+        B2DPolyPolygon expandToCurve(const B2DPolyPolygon& rCandidate)
+        {
+            const sal_uInt32 nPolygonCount(rCandidate.count());
+            B2DPolyPolygon aRetval;
+
+            for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+            {
+                const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
+
+                aRetval.append(expandToCurve(aCandidate));
+            }
+
+            return aRetval;
+        }
+
+        B2DPolyPolygon setContinuity(const B2DPolyPolygon& rCandidate, B2VectorContinuity eContinuity)
+        {
+            if(rCandidate.areControlVectorsUsed())
+            {
+                const sal_uInt32 nPolygonCount(rCandidate.count());
+                B2DPolyPolygon aRetval;
+
+                for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+                {
+                    const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
+
+                    aRetval.append(setContinuity(aCandidate, eContinuity));
+                }
+
+                return aRetval;
+            }
+            else
+            {
+                return rCandidate;
+            }
+        }
+
+        bool isRectangle( const B2DPolyPolygon& rPoly )
+        {
+            // exclude some cheap cases first
+            if( rPoly.count() != 1 )
+                return false;
+
+            return isRectangle( rPoly.getB2DPolygon(0) );
         }
 
     } // end of namespace tools
