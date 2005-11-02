@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScAccessiblePreviewHeaderCell.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:40:11 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:52:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ import com.sun.star.util.XURLTransformer;
  * @see ifc.accessibility._XAccessibleTable
  */
 public class ScAccessiblePreviewHeaderCell extends TestCase {
-    XSpreadsheetDocument xSheetDoc = null;
+    static XSpreadsheetDocument xSheetDoc = null;
 
     /**
      * Creates a spreadsheet document.
