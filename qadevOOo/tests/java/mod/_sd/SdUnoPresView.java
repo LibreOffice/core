@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdUnoPresView.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:18:18 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:14:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,9 +93,9 @@ import com.sun.star.util.XModifiable;
 * @see ifc.drawing._XDrawView
 */
 public class SdUnoPresView extends TestCase {
-    XDesktop the_Desk;
-    XComponent xImpressDoc;
-    XComponent xSecondDrawDoc;
+    static XDesktop the_Desk;
+    static XComponent xImpressDoc;
+    static XComponent xSecondDrawDoc;
 
     /**
     * Creates the instance of the service <code>com.sun.star.frame.Desktop</code>.
@@ -165,7 +165,7 @@ public class SdUnoPresView extends TestCase {
                                         (XMultiServiceFactory)Param.getMSF());
 
         try {
-            log.println( "creating a impress documents" );
+            log.println( "creating two impress documents" );
             xImpressDoc = SOF.createImpressDoc(null);
             xSecondDrawDoc = SOF.createImpressDoc(null);
             shortWait();
@@ -241,6 +241,8 @@ public class SdUnoPresView extends TestCase {
         //Adding ObjRelations for XController
         tEnv.addObjRelation("FirstModel", aModel);
 
+        tEnv.addObjRelation("XUserInputInterception.XModel", aModel);
+
         XFrame the_frame = the_Desk.getCurrentFrame();
         tEnv.addObjRelation("Frame", the_frame);
 
@@ -260,6 +262,9 @@ public class SdUnoPresView extends TestCase {
                               UnoRuntime.queryInterface(XModifiable.class,xImpressDoc);
 
         tEnv.addObjRelation("Modifiable",modify);
+
+
+        tEnv.addObjRelation("XComponent.DisposeThis", xImpressDoc);
 
         return tEnv;
 
