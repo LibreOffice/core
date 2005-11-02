@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficePrint.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:15:16 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:42:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,8 +69,47 @@ import convwatch.ConvWatchCancelException;
 public class OfficePrint {
 
 
-    static void waitInSeconds(int _nSeconds)
+//     static long m_nStartTime;
+//     // static Date m_aDateCache = null;
+//
+//     /*
+//       simple helper functions to start/stop a timer, to know how long a process need in milliseconds
+//      */
+//     public static void startTimer()
+//         {
+//             // if (m_aDateCache == null)
+//             // {
+//             //     m_aDateCache = new Date();
+//             // }
+//             // m_nStartTime = m_aDateCache.getTime();
+//             m_nStartTime = System.currentTimeMillis();
+//         }
+//     public static long stopTimer()
+//         {
+//             // if (m_aDateCache == null)
+//             // {
+//             //     System.out.println("Forgotten to initialise start timer.");
+//             //     return 0;
+//             // }
+//             // long m_nStopTime = m_aDateCache.getTime();
+//             if (m_nStartTime == 0)
+//             {
+//                 System.out.println("Forgotten to initialise start timer.");
+//                 return 0;
+//             }
+//             long m_nStopTime = System.currentTimeMillis();
+//             return m_nStopTime - m_nStartTime;
+//         }
+
+
+    /*
+      wait a second the caller don't need to handle the interruptexception
+      @param _nSeconds how long should we wait
+      @param _sReason  give a good reason, why we have to wait
+     */
+    static void waitInSeconds(int _nSeconds, String _sReason)
         {
+            System.out.println("Wait " + String.valueOf(_nSeconds) + " sec. Reason: " + _sReason);
             try {
                 java.lang.Thread.sleep(_nSeconds * 1000);
             } catch (java.lang.InterruptedException e2) {}
@@ -166,7 +205,9 @@ public class OfficePrint {
 
                     // XComponent aDoc = null;
 
+                    _aGTA.getPerformance().startTime(PerformanceContainer.Load);
                     aDoc = aCompLoader.loadComponentFromURL(_sInputURL, "_blank", 0, aProps );
+                    _aGTA.getPerformance().stopTime(PerformanceContainer.Load);
                     if (aDoc != null)
                     {
                         System.out.println(" done.");
@@ -284,6 +325,7 @@ public class OfficePrint {
                 return bBack;
             }
             bBack = storeAsPDF(_aGTA, aDoc, _sOutputURL);
+            createInfoFile(_sOutputURL, _aGTA, "as pdf");
 
             System.out.println("close document.");
             aDoc.dispose();
@@ -296,7 +338,11 @@ public class OfficePrint {
         {
             // try {
             boolean bBack = true;
-            if (!exportToPDF(_aDoc, _sOutputURL))
+            _aGTA.getPerformance().startTime(PerformanceContainer.StoreAsPDF);
+            bBack = exportToPDF(_aDoc, _sOutputURL);
+            _aGTA.getPerformance().stopTime(PerformanceContainer.StoreAsPDF);
+
+            if (!bBack)
             {
                 System.out.println("Can't store document as PDF.");
                 bBack = false;
@@ -349,6 +395,11 @@ public class OfficePrint {
     // -----------------------------------------------------------------------------
     public static void createInfoFile(String _sFile, GraphicalTestArguments _aGTA)
         {
+            createInfoFile(_sFile, _aGTA, "");
+        }
+
+    public static void createInfoFile(String _sFile, GraphicalTestArguments _aGTA, String _sSpecial)
+        {
             String sFilename = _sFile;
             if (_sFile.startsWith("file:///"))
             {
@@ -371,7 +422,50 @@ public class OfficePrint {
             {
                 FileWriter out = new FileWriter(aInfoFile.toString());
                 out.write("# automatically created file by graphical compare" + ls);
-                out.write("buildid=" + _aGTA.getBuildID() + ls);
+                if (_aGTA != null)
+                {
+                    if (_sSpecial != null && _sSpecial.equals("msoffice"))
+                    {
+                        out.write("# buildid from wordloadfile" + ls);
+                        out.write("buildid=" + _aGTA.getPerformance().getMSOfficeVersion() + ls);
+                    }
+                    else
+                    {
+                        out.write("# buildid is read out of the bootstrap file" + ls);
+                        out.write("buildid=" + _aGTA.getBuildID() + ls);
+                    }
+                    // if (_sSpecial != null && _sSpecial.length() > 0)
+                    // {
+                    //    out.write("special=" + _sSpecial + ls);
+                    // }
+                    out.write(ls);
+                    out.write("# resolution given in DPI" + ls);
+                    out.write("resolution=" + _aGTA.getResolutionInDPI() + ls);
+                }
+                else
+                {
+                    out.write("buildid=" + _sSpecial + ls);
+                }
+                // long nTime = stopTimer();
+                // if (nTime != 0)
+                // {
+                //     out.write("# time is given in milli seconds" + ls);
+                //     out.write("time=" + nTime + ls);
+                // }
+
+                out.write(ls);
+                out.write("# Values out of System.getProperty(...)" + ls);
+                out.write("os.name=" + System.getProperty("os.name") + ls);
+                out.write("os.arch=" + System.getProperty("os.arch") + ls);
+                out.write("os.version=" + System.getProperty("os.version") + ls);
+
+                if (_aGTA != null)
+                {
+                    out.write(ls);
+                    out.write("# Performance output, values are given in milli sec." + ls);
+                    _aGTA.getPerformance().print(out);
+                }
+
                 out.flush();
                 out.close();
             }
@@ -475,25 +569,30 @@ public class OfficePrint {
                         aPrintProps[nPropsCount ++] = Arg;
                     }
 
-                    System.out.println("start printing.");
-                    aPrintable.print(aPrintProps);
-                    waitInSeconds(1);
-
                     if (_sOutputURL != null)
                     {
                         if (_aGTA.isStoreAllowed())
                         {
-                        // store the document in an other directory
-                        XStorable aStorable = (XStorable) UnoRuntime.queryInterface( XStorable.class, _aDoc);
-                        if (aStorable != null)
-                        {
-                            PropertyValue [] szEmptyArgs = new PropertyValue [0];
+                            // store the document in an other directory
+                            XStorable aStorable = (XStorable) UnoRuntime.queryInterface( XStorable.class, _aDoc);
+                            if (aStorable != null)
+                            {
+                                PropertyValue [] szEmptyArgs = new PropertyValue [0];
 
-                            System.out.println("Document stored.");
-                            aStorable.storeAsURL(_sOutputURL, szEmptyArgs);
+                                System.out.println("Document stored.");
+                                _aGTA.getPerformance().startTime(PerformanceContainer.Store);
+                                aStorable.storeAsURL(_sOutputURL, szEmptyArgs);
+                                _aGTA.getPerformance().stopTime(PerformanceContainer.Store);
+                            }
                         }
                     }
-                    }
+
+
+                    System.out.println("start printing.");
+
+                    _aGTA.getPerformance().startTime(PerformanceContainer.Print);
+                    aPrintable.print(aPrintProps);
+                    waitInSeconds(1, "unknown.");
 
                     System.out.println("Wait until document is printed.");
                     boolean isBusy = true;
@@ -507,8 +606,9 @@ public class OfficePrint {
                             nPropIndex++;
                         }
                         isBusy = (aPrinterProps[nPropIndex].Value == Boolean.TRUE) ? true : false;
-                        waitInSeconds(1);
+                        waitInSeconds(1, "is print ready?");
                     }
+                    _aGTA.getPerformance().stopTime(PerformanceContainer.Print);
 
                     // Create a .info file near the printed '.ps' or '.prn' file.
                     createInfoFile(_sPrintFileURL, _aGTA);
@@ -662,6 +762,21 @@ public class OfficePrint {
         {
             boolean bBack = false;
             String sPrintFileURL = null;
+
+            // check if given file is a picture, then do nothing
+            String sDocumentSuffix = FileHelper.getSuffix(_sInputFileURL);
+            if (sDocumentSuffix.toLowerCase().endsWith(".png") ||
+                sDocumentSuffix.toLowerCase().endsWith(".gif") ||
+                sDocumentSuffix.toLowerCase().endsWith(".jpg") ||
+                sDocumentSuffix.toLowerCase().endsWith(".bmp"))
+            {
+                return false;
+            }
+
+
+            // remember the current timer, to know how long a print process need.
+            // startTimer();
+
             if (_aGTA.getReferenceType().toLowerCase().equals("ooo"))
             {
                 bBack = printToFileWithOOo(_aGTA, _sInputFileURL, _sOutputFileURL, _sPrintFileURL);
@@ -1035,7 +1150,7 @@ public class OfficePrint {
                 return;
             }
 //  TODO: Do we need to wait?
-            waitInSeconds(1);
+            waitInSeconds(1, "wait after loadFromURL.");
 
             XServiceInfo xServiceInfo = (XServiceInfo) UnoRuntime.queryInterface( XServiceInfo.class, aDoc );
             // String sFilter = getFilterName_forExcel(xServiceInfo);
@@ -1146,7 +1261,7 @@ public class OfficePrint {
                 System.out.println("Can't store document '" + sOutputURL + "'. Message is :'" + e.getMessage() + "'");
             }
 //  TODO: Do we need to wait?
-            waitInSeconds(1);
+            waitInSeconds(1, "unknown.");
 
         }
 
