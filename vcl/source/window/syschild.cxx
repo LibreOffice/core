@@ -4,9 +4,9 @@
  *
  *  $RCSfile: syschild.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:30:24 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:31:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,9 +116,9 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
 
 // =======================================================================
 
-void SystemChildWindow::ImplInit( Window* pParent, WinBits nStyle )
+void SystemChildWindow::ImplInit( Window* pParent, WinBits nStyle, SystemWindowData *pData )
 {
-    mpWindowImpl->mpSysObj = ImplGetSVData()->mpDefInst->CreateObject( pParent->ImplGetFrame() );
+    mpWindowImpl->mpSysObj = ImplGetSVData()->mpDefInst->CreateObject( pParent->ImplGetFrame(), pData );
 
     Window::ImplInit( pParent, nStyle, NULL );
 
@@ -136,7 +136,15 @@ void SystemChildWindow::ImplInit( Window* pParent, WinBits nStyle )
 SystemChildWindow::SystemChildWindow( Window* pParent, WinBits nStyle ) :
     Window( WINDOW_SYSTEMCHILDWINDOW )
 {
-    ImplInit( pParent, nStyle );
+    ImplInit( pParent, nStyle, NULL );
+}
+
+// -----------------------------------------------------------------------
+
+SystemChildWindow::SystemChildWindow( Window* pParent, WinBits nStyle, SystemWindowData *pData ) :
+    Window( WINDOW_SYSTEMCHILDWINDOW )
+{
+    ImplInit( pParent, nStyle, pData );
 }
 
 // -----------------------------------------------------------------------
@@ -146,7 +154,7 @@ SystemChildWindow::SystemChildWindow( Window* pParent, const ResId& rResId ) :
 {
     rResId.SetRT( RSC_WINDOW );
     WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
+    ImplInit( pParent, nStyle, NULL );
     ImplLoadRes( rResId );
 
     if ( !(nStyle & WB_HIDE) )
@@ -175,3 +183,18 @@ const SystemEnvData* SystemChildWindow::GetSystemData() const
         return NULL;
 }
 
+// -----------------------------------------------------------------------
+
+void SystemChildWindow::EnableEraseBackground( BOOL bEnable )
+{
+    if ( mpWindowImpl->mpSysObj )
+        mpWindowImpl->mpSysObj->EnableEraseBackground( bEnable );
+}
+
+BOOL SystemChildWindow::IsEraseBackgroundEnabled()
+{
+    if ( mpWindowImpl->mpSysObj )
+        return mpWindowImpl->mpSysObj->IsEraseBackgroundEnabled();
+    else
+        return FALSE;
+}
