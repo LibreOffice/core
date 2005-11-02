@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocumentConverter.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:11:10 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:41:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,12 +191,18 @@ public class DocumentConverter extends EnhancedComplexTestCase
                     log.println("- next file is: ------------------------------");
                     log.println(sEntry);
 
-                    runGDC(sEntry, sNewReferencePath);
+                    if (aGTA.checkIfUsable(sEntry))
+                    {
+                        runGDC(sEntry, sNewReferencePath);
+                    }
                 }
             }
             else
             {
-                runGDC(m_sInputPath, m_sReferencePath);
+                if (aGTA.checkIfUsable(m_sInputPath))
+                {
+                    runGDC(m_sInputPath, m_sReferencePath);
+                }
             }
         }
 
