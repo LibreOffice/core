@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvastools.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:35:18 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:55:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,12 +89,12 @@ namespace basegfx
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >
             xPolyPolygonFromB2DPolygon( const ::com::sun::star::uno::Reference<
                                             ::com::sun::star::rendering::XGraphicDevice >&  xGraphicDevice,
-                                        const ::basegfx::B2DPolygon&                                rPoly    );
+                                        const ::basegfx::B2DPolygon&                        rPoly    );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >
             xPolyPolygonFromB2DPolyPolygon( const ::com::sun::star::uno::Reference<
                                                  ::com::sun::star::rendering::XGraphicDevice >&     xGraphicDevice,
-                                            const ::basegfx::B2DPolyPolygon&                            rPolyPoly    );
+                                            const ::basegfx::B2DPolyPolygon&                    rPolyPoly    );
 
 
         ::com::sun::star::uno::Sequence<
@@ -128,11 +128,11 @@ namespace basegfx
         // ===================================================================
 
         ::com::sun::star::geometry::AffineMatrix2D&
-            affineMatrixFromHomMatrix( ::com::sun::star::geometry::AffineMatrix2D&          matrix,
-                                       const ::basegfx::B2DHomMatrix&                               transform);
+            affineMatrixFromHomMatrix( ::com::sun::star::geometry::AffineMatrix2D&  matrix,
+                                       const ::basegfx::B2DHomMatrix&               transform);
 
         ::basegfx::B2DHomMatrix&
-            homMatrixFromAffineMatrix( ::basegfx::B2DHomMatrix&                                     transform,
+            homMatrixFromAffineMatrix( ::basegfx::B2DHomMatrix&                             transform,
                                        const ::com::sun::star::geometry::AffineMatrix2D&    matrix );
 
 
@@ -162,6 +162,30 @@ namespace basegfx
         ::basegfx::B2IVector    b2ISizeFromAwtSize( const ::com::sun::star::awt::Size& );
         ::basegfx::B2IPoint     b2IPointFromAwtPoint( const ::com::sun::star::awt::Point& );
         ::basegfx::B2IRange     b2IRectangleFromAwtRectangle( const ::com::sun::star::awt::Rectangle& );
+
+        /** Return smalltest integer range, which completely contains
+            given floating point range.
+
+            @param rRange
+            Input range. Values must be within the representable
+            bounds of sal_Int32
+
+            @return the closest integer range, which completely
+            contains rRange.
+         */
+        ::basegfx::B2IRange     b2ISurroundingRangeFromB2DRange( const ::basegfx::B2DRange& rRange );
+
+        /** Return smalltest B2DRange with integer values, which
+            completely contains given floating point range.
+
+            @param rRange
+            Input range.
+
+            @return the closest B2DRange with integer coordinates,
+            which completely contains rRange.
+         */
+        ::basegfx::B2DRange     b2DSurroundingIntegerRangeFromB2DRange( const ::basegfx::B2DRange& rRange );
+
     }
 }
 
