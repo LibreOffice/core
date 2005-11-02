@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.93 $
+#   $Revision: 1.94 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:34:31 $
+#   last change: $Author: kz $ $Date: 2005-11-02 13:52:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.93 $$"
+LIBSMKREV!:="$$Revision: 1.94 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -114,6 +114,7 @@ VCLLIB=$(SVLIB)
 BASEGFXLIB=-lbasegfx$(OFFICEUPD)$(DLLPOSTFIX)
 CANVASTOOLSLIB=-lcanvastools$(OFFICEUPD)$(DLLPOSTFIX)
 CPPCANVASLIB=-lcppcanvas$(OFFICEUPD)$(DLLPOSTFIX)
+AGGLIB=-lagg$(OFFICEUPD)$(DLLPOSTFIX)
 .IF "$(SYSTEM_FREETYPE)"=="YES"
 FREETYPELIB=$(FREETYPE_LIBS)
 FREETYPELIBST=$(FREETYPE_LIBS)
@@ -424,6 +425,7 @@ VCLLIB=$(SVLIB)
 BASEGFXLIB=$(LIBPRE) ibasegfx.lib
 CANVASTOOLSLIB=$(LIBPRE) icanvastools.lib
 CPPCANVASLIB=$(LIBPRE) icppcanvas.lib
+AGGLIB=$(LIBPRE) iagg.lib
 TKLIB=$(LIBPRE) itk.lib
 SVLIBDEPEND=$(L)$/ivcl.lib
 SVXLLIB=$(LIBPRE) svxl.lib
