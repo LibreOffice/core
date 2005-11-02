@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impltools.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:20:16 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:01:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,85 +40,38 @@
 #endif
 #include <math.h>           // M_PI definition
 
-#ifndef _RTL_LOGFILE_HXX_
-#include <rtl/logfile.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_GEOMETRY_REALSIZE2D_HPP__
-#include <com/sun/star/geometry/RealSize2D.hpp>
-#endif
-#ifndef _COM_SUN_STAR_GEOMETRY_REALPOINT2D_HPP__
-#include <com/sun/star/geometry/RealPoint2D.hpp>
-#endif
-#ifndef _COM_SUN_STAR_GEOMETRY_REALRECTANGLE2D_HPP__
-#include <com/sun/star/geometry/RealRectangle2D.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_RENDERING_RENDERSTATE_HPP__
-#include <com/sun/star/rendering/RenderState.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_XCANVAS_HPP__
-#include <com/sun/star/rendering/XCanvas.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_XBITMAP_HPP__
-#include <com/sun/star/rendering/XBitmap.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_XPOLYPOLYGON2D_HPP__
-#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
-#endif
-#ifndef _COM_SUN_STAR_GEOMETRY_REALBEZIERSEGMENT2D_HPP__
-#include <com/sun/star/geometry/RealBezierSegment2D.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_XINTEGERBITMAP_HPP__
-#include <com/sun/star/rendering/XIntegerBitmap.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
-
-#ifndef _SV_SALBTYPE_HXX
-#include <vcl/salbtype.hxx>
-#endif
-#ifndef _SV_BMPACC_HXX
-#include <vcl/bmpacc.hxx>
-#endif
-#ifndef _SV_BITMAPEX_HXX
-#include <vcl/bitmapex.hxx>
-#endif
-#ifndef _SV_METRIC_HXX
-#include <vcl/metric.hxx>
-#endif
-#ifndef _VCL_CANVASTOOLS_HXX
-#include <vcl/canvastools.hxx>
-#endif
-
-#ifndef _BGFX_POINT_B2DPOINT_HXX
-#include <basegfx/point/b2dpoint.hxx>
-#endif
-#ifndef _BGFX_TUPLE_B2DTUPLE_HXX
-#include <basegfx/tuple/b2dtuple.hxx>
-#endif
-#ifndef _BGFX_RANGE_B2DRECTANGLE_HXX
-#include <basegfx/range/b2drectangle.hxx>
-#endif
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-#ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
-#include <basegfx/tools/canvastools.hxx>
-#endif
-#ifndef _BGFX_NUMERIC_FTOOLS_HXX
-#include <basegfx/numeric/ftools.hxx>
-#endif
-
-#ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
-#endif
+#include <rtl/logfile.hxx>
 
+#include <com/sun/star/geometry/RealSize2D.hpp>
+#include <com/sun/star/geometry/RealPoint2D.hpp>
+#include <com/sun/star/geometry/RealRectangle2D.hpp>
+#include <com/sun/star/rendering/RenderState.hpp>
+#include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/rendering/XBitmap.hpp>
+#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
+#include <com/sun/star/geometry/RealBezierSegment2D.hpp>
+#include <com/sun/star/rendering/XIntegerBitmap.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+
+#include <vcl/salbtype.hxx>
+#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapex.hxx>
+#include <vcl/metric.hxx>
+#include <vcl/canvastools.hxx>
+
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/tuple/b2dtuple.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/tools/canvastools.hxx>
+#include <basegfx/numeric/ftools.hxx>
+
+#include <canvas/base/linepolypolygonbase.hxx>
 #include <canvas/canvastools.hxx>
 
 #include "impltools.hxx"
-#include "linepolypolygon.hxx"
 #include "canvasbitmap.hxx"
 
 #include <numeric>
@@ -130,63 +83,15 @@ namespace vclcanvas
 {
     namespace tools
     {
-        ::basegfx::B2DPolyPolygon polyPolygonFromXPolyPolygon2D( const uno::Reference< rendering::XPolyPolygon2D >& xPoly )
-        {
-            LinePolyPolygon* pPolyImpl = dynamic_cast< LinePolyPolygon* >( xPoly.get() );
-
-            if( pPolyImpl )
-            {
-                return pPolyImpl->getPolyPolygon();
-            }
-            else
-            {
-                const sal_Int32 nPolys( xPoly->getNumberOfPolygons() );
-
-                // not a known implementation object - try data source
-                // interfaces
-                uno::Reference< rendering::XBezierPolyPolygon2D > xBezierPoly(
-                    xPoly,
-                    uno::UNO_QUERY );
-
-                if( xBezierPoly.is() )
-                {
-                    return ::basegfx::unotools::polyPolygonFromBezier2DSequenceSequence(
-                        xBezierPoly->getBezierSegments( 0,
-                                                        nPolys,
-                                                        0,
-                                                        -1 ) );
-                }
-                else
-                {
-                    uno::Reference< rendering::XLinePolyPolygon2D > xLinePoly(
-                        xPoly,
-                        uno::UNO_QUERY );
-
-                    // no implementation class and no data provider
-                    // found - contract violation.
-                    CHECK_AND_THROW( xLinePoly.is(),
-                                     "VCLCanvas::polyPolygonFromXPolyPolygon2D(): Invalid input "
-                                     "poly-polygon, cannot retrieve vertex data" );
-
-                    return ::basegfx::unotools::polyPolygonFromPoint2DSequenceSequence(
-                        xLinePoly->getPoints( 0,
-                                              nPolys,
-                                              0,
-                                              -1 ) );
-                }
-            }
-        }
-
         ::BitmapEx bitmapExFromXBitmap( const uno::Reference< rendering::XBitmap >& xBitmap )
         {
-            uno::Reference< lang::XServiceInfo > xRef( xBitmap,
-                                                       uno::UNO_QUERY );
+            // TODO(F3): CanvasCustomSprite should also be tunnelled
+            // through (also implements XIntegerBitmap interface)
+            CanvasBitmap* pBitmapImpl = dynamic_cast< CanvasBitmap* >( xBitmap.get() );
 
-            if( xRef.is() &&
-                xRef->getImplementationName().equals( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(CANVASBITMAP_IMPLEMENTATION_NAME))) )
+            if( pBitmapImpl )
             {
-                // TODO(Q1): Maybe use dynamic_cast here
-                return static_cast<CanvasBitmap*>(xBitmap.get())->getBitmap();
+                return pBitmapImpl->getBitmap();
             }
             else
             {
@@ -227,9 +132,9 @@ namespace vclcanvas
             if( !::rtl::math::approxEqual(aScale.getX(), aScale.getY()) )
             {
                 // retrieve true font width
-                const int nFontWidth( rOutDev.GetFontMetric( io_rVCLFont ).GetWidth() );
+                const sal_Int32 nFontWidth( rOutDev.GetFontMetric( io_rVCLFont ).GetWidth() );
 
-                const int nScaledFontWidth( ::basegfx::fround(nFontWidth * aScale.getX()) );
+                const sal_Int32 nScaledFontWidth( ::basegfx::fround(nFontWidth * aScale.getX()) );
 
                 if( !nScaledFontWidth )
                 {
@@ -243,7 +148,7 @@ namespace vclcanvas
 
             if( !::rtl::math::approxEqual(aScale.getY(), 1.0) )
             {
-                const int nFontHeight( io_rVCLFont.GetHeight() );
+                const sal_Int32 nFontHeight( io_rVCLFont.GetHeight() );
                 io_rVCLFont.SetHeight( ::basegfx::fround(nFontHeight * aScale.getY()) );
             }
 
@@ -256,8 +161,7 @@ namespace vclcanvas
             return true;
         }
 
-        bool isPolyPolygonEqualRectangle( const PolyPolygon& rPolyPoly,
-                                          const Rectangle&   rRect )
+        bool isRectangle( const PolyPolygon& rPolyPoly )
         {
             // exclude some cheap cases first
             if( rPolyPoly.Count() != 1 )
@@ -266,56 +170,11 @@ namespace vclcanvas
             const ::Polygon& rPoly( rPolyPoly[0] );
 
             USHORT nCount( rPoly.GetSize() );
-            if( nCount != 4 && nCount != 5 )
+            if( nCount < 4 )
                 return false;
 
-            // fill array with rectangle vertices
-            const ::Point aPoints[4] =
-              {
-                  rRect.TopLeft(),
-                  rRect.TopRight(),
-                  rRect.BottomRight(),
-                  rRect.BottomLeft()
-              };
-
-            // now match polygon and rectangle start points, to
-            // facilitate point-by-point comparison
-            const ::Point*       aIter;
-            const ::Point* const aEnd( &aPoints[5] );
-            if( (aIter=::std::find( aPoints, aEnd,
-                                    rPoly[0] )) == aEnd )
-                return false; // point not found
-
-            // determine index from iterator
-            const ::std::size_t nIndexOfFirstPoint( aIter - aPoints );
-
-            bool bNotMatching( false ); // when true, at least on
-                                        // point does not match
-
-            // start point found, now try forward sweep to match
-            // points
-            for( USHORT i=0; i<4; ++i )
-            {
-                if( rPoly[i] != aPoints[ (i+nIndexOfFirstPoint)%4 ] )
-                {
-                    bNotMatching = true;
-                    break;
-                }
-            }
-
-            if( !bNotMatching )
-                return true; // all points match, done
-
-            // at least one point doesn't match, try reverse sweep to
-            // match points
-            for( USHORT i=0; i<4; ++i )
-            {
-                if( rPoly[i] != aPoints[ (4-i+nIndexOfFirstPoint)%4 ] )
-                    return false; // nothing more to try, exit directly
-            }
-
-            // all points for reverse sweep match
-            return true;
+            // delegate to basegfx
+            return ::basegfx::tools::isRectangle( rPoly.getB2DPolygon() );
         }
 
 
