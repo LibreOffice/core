@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dcubicbezier.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:40:27 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:56:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -314,12 +314,19 @@ namespace basegfx
     {
     }
 
-    B2DCubicBezier::B2DCubicBezier(const B2DPoint& rStart, const B2DPoint& rControlPointA,
-        const B2DPoint& rControlPointB, const B2DPoint& rEnd)
+    B2DCubicBezier::B2DCubicBezier(const B2DPoint& rStart, const B2DPoint& rControlPointA, const B2DPoint& rControlPointB, const B2DPoint& rEnd)
     :   maStartPoint(rStart),
         maEndPoint(rEnd),
         maControlPointA(rControlPointA),
         maControlPointB(rControlPointB)
+    {
+    }
+
+    B2DCubicBezier::B2DCubicBezier(const B2DPoint& rStart, const B2DVector& rControlVectorA, const B2DVector& rControlVectorB, const B2DPoint& rEnd)
+    :   maStartPoint(rStart),
+        maEndPoint(rEnd),
+        maControlPointA(rStart + rControlVectorA),
+        maControlPointB(rStart + rControlVectorB)
     {
     }
 
@@ -402,25 +409,161 @@ namespace basegfx
     {
         rTarget.append(maStartPoint);
 
-        if(nCount)
+        for(sal_uInt32 a(0L); a < nCount; a++)
         {
-            for(sal_uInt32 a(0L); a < nCount; a++)
-            {
-                const double fPos(double(a + 1L) / double(nCount + 1L));
-                const B2DPoint aS1L(interpolate(maStartPoint, maControlPointA, fPos));
-                const B2DPoint aS1C(interpolate(maControlPointA, maControlPointB, fPos));
-                const B2DPoint aS1R(interpolate(maControlPointB, maEndPoint, fPos));
-                const B2DPoint aS2L(interpolate(aS1L, aS1C, fPos));
-                const B2DPoint aS2R(interpolate(aS1C, aS1R, fPos));
-                const B2DPoint aS3C(interpolate(aS2L, aS2R, fPos));
-                rTarget.append(aS3C);
-            }
+            const double fPos(double(a + 1L) / double(nCount + 1L));
+            rTarget.append(interpolatePoint(fPos));
         }
 
         if(bAddLastPoint)
         {
             rTarget.append(maEndPoint);
         }
+    }
+
+    B2DPoint B2DCubicBezier::interpolatePoint(double t) const
+    {
+        OSL_ENSURE(t >= 0.0 && t <= 1.0, "B2DCubicBezier::interpolatePoint: Access out of range (!)");
+        const B2DPoint aS1L(interpolate(maStartPoint, maControlPointA, t));
+        const B2DPoint aS1C(interpolate(maControlPointA, maControlPointB, t));
+        const B2DPoint aS1R(interpolate(maControlPointB, maEndPoint, t));
+        const B2DPoint aS2L(interpolate(aS1L, aS1C, t));
+        const B2DPoint aS2R(interpolate(aS1C, aS1R, t));
+        return interpolate(aS2L, aS2R, t);
+    }
+
+    double B2DCubicBezier::getSmallestDistancePointToBezierSegment(const B2DPoint& rTestPoint, double& rCut) const
+    {
+        const sal_uInt32 nInitialDivisions(3L);
+        B2DPolygon aInitialPolygon;
+
+        // as start make a fix division, creates nInitialDivisions + 2L points
+        adaptiveSubdivideByCount(aInitialPolygon, nInitialDivisions, true);
+
+        // now look for the closest point
+        const sal_uInt32 nPointCount(aInitialPolygon.count());
+        B2DVector aVector(rTestPoint - aInitialPolygon.getB2DPoint(0L));
+        double fQuadDist(aVector.getX() * aVector.getX() + aVector.getY() * aVector.getY());
+        double fNewQuadDist;
+        sal_uInt32 nSmallestIndex(0L);
+
+        for(sal_uInt32 a(1L); a < nPointCount; a++)
+        {
+            aVector = B2DVector(rTestPoint - aInitialPolygon.getB2DPoint(a));
+            fNewQuadDist = aVector.getX() * aVector.getX() + aVector.getY() * aVector.getY();
+
+            if(fNewQuadDist < fQuadDist)
+            {
+                fQuadDist = fNewQuadDist;
+                nSmallestIndex = a;
+            }
+        }
+
+        // look right and left for even smaller distances
+        double fStepValue(1.0 / (double)((nPointCount - 1L) * 2L)); // half the edge step width
+        double fPosition((double)nSmallestIndex / (double)(nPointCount - 1L));
+        bool bDone(false);
+
+        while(!bDone)
+        {
+            if(!bDone)
+            {
+                // test left
+                double fPosLeft(fPosition - fStepValue);
+
+                if(fPosLeft < 0.0)
+                {
+                    fPosLeft = 0.0;
+                    aVector = B2DVector(rTestPoint - maStartPoint);
+                }
+                else
+                {
+                    aVector = B2DVector(rTestPoint - interpolatePoint(fPosLeft));
+                }
+
+                fNewQuadDist = aVector.getX() * aVector.getX() + aVector.getY() * aVector.getY();
+
+                if(fTools::less(fNewQuadDist, fQuadDist))
+                {
+                    fQuadDist = fNewQuadDist;
+                    fPosition = fPosLeft;
+                }
+                else
+                {
+                    // test right
+                    double fPosRight(fPosition + fStepValue);
+
+                    if(fPosRight > 1.0)
+                    {
+                        fPosRight = 1.0;
+                        aVector = B2DVector(rTestPoint - maEndPoint);
+                    }
+                    else
+                    {
+                        aVector = B2DVector(rTestPoint - interpolatePoint(fPosRight));
+                    }
+
+                    fNewQuadDist = aVector.getX() * aVector.getX() + aVector.getY() * aVector.getY();
+
+                    if(fTools::less(fNewQuadDist, fQuadDist))
+                    {
+                        fQuadDist = fNewQuadDist;
+                        fPosition = fPosRight;
+                    }
+                    else
+                    {
+                        // not less left or right, done
+                        bDone = true;
+                    }
+                }
+            }
+
+            if(0.0 == fPosition || 1.0 == fPosition)
+            {
+                // if we are completely left or right, we are done
+                bDone = true;
+            }
+
+            if(!bDone)
+            {
+                // prepare next step value
+                fStepValue /= 2.0;
+            }
+        }
+
+        rCut = fPosition;
+        return sqrt(fQuadDist);
+    }
+
+    void B2DCubicBezier::split(double t, B2DCubicBezier& rBezierA, B2DCubicBezier& rBezierB) const
+    {
+        OSL_ENSURE(t >= 0.0 && t <= 1.0, "B2DCubicBezier::split: Access out of range (!)");
+        const B2DPoint aS1L(interpolate(maStartPoint, maControlPointA, t));
+        const B2DPoint aS1C(interpolate(maControlPointA, maControlPointB, t));
+        const B2DPoint aS1R(interpolate(maControlPointB, maEndPoint, t));
+        const B2DPoint aS2L(interpolate(aS1L, aS1C, t));
+        const B2DPoint aS2R(interpolate(aS1C, aS1R, t));
+        const B2DPoint aS3C(interpolate(aS2L, aS2R, t));
+
+        rBezierA.setStartPoint(maStartPoint);
+        rBezierA.setEndPoint(aS3C);
+        rBezierA.setControlPointA(aS1L);
+        rBezierA.setControlPointB(aS2L);
+
+        rBezierB.setStartPoint(aS3C);
+        rBezierB.setEndPoint(maEndPoint);
+        rBezierB.setControlPointA(aS2R);
+        rBezierB.setControlPointB(aS1R);
+    }
+
+    B2DRange B2DCubicBezier::getRange() const
+    {
+        B2DRange aRetval(maStartPoint, maEndPoint);
+
+        aRetval.expand(maControlPointA);
+        aRetval.expand(maControlPointB);
+
+        return aRetval;
     }
 } // end of namespace basegfx
 
