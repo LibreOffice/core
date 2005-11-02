@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.220 $
+ *  $Revision: 1.221 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 12:59:52 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:31:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5633,6 +5633,9 @@ void Window::SetMouseTransparent( BOOL bTransparent )
 
     if ( mpWindowImpl->mpBorderWindow )
         mpWindowImpl->mpBorderWindow->SetMouseTransparent( bTransparent );
+
+    if( mpWindowImpl->mpSysObj )
+        mpWindowImpl->mpSysObj->SetMouseTransparent( bTransparent );
 
     mpWindowImpl->mbMouseTransparent = bTransparent;
 }
