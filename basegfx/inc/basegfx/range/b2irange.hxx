@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2irange.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:33:07 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:55:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,16 +53,17 @@
 #include <basegfx/range/basicrange.hxx>
 #endif
 
+#include <vector>
+
+
 namespace basegfx
 {
     class B2IRange
     {
-        typedef ::basegfx::BasicRange< sal_Int32, Int32Traits > MyBasicRange;
-
-        MyBasicRange        maRangeX;
-        MyBasicRange        maRangeY;
-
     public:
+        typedef sal_Int32       ValueType;
+        typedef Int32Traits     TraitsType;
+
         B2IRange()
         {
         }
@@ -236,7 +237,37 @@ namespace basegfx
             maRangeX.grow(nValue);
             maRangeY.grow(nValue);
         }
+
+    private:
+        typedef ::basegfx::BasicRange< ValueType, TraitsType >  MyBasicRange;
+
+        MyBasicRange        maRangeX;
+        MyBasicRange        maRangeY;
     };
+
+    /** Compute the set difference of the two given ranges
+
+        This method calculates the symmetric difference (aka XOR)
+        between the two given ranges, and returning the resulting
+        ranges. Thus, the result will contain all areas where one, but
+        not both ranges lie.
+
+        @param o_rResult
+        Result vector. The up to four difference ranges are returned
+        within this vector
+
+        @param rFirst
+        The first range
+
+        @param rSecond
+        The second range
+
+        @return the input vector
+     */
+    ::std::vector< B2IRange >& computeSetDifference( ::std::vector< B2IRange >& o_rResult,
+                                                     const B2IRange&            rFirst,
+                                                     const B2IRange&            rSecond );
+
 } // end of namespace basegfx
 
 #endif /* _BGFX_RANGE_B2IRANGE_HXX */
