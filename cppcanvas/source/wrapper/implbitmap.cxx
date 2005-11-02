@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implbitmap.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:24:56 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:42:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,7 @@ namespace cppcanvas
             // TODO(P1): implement caching
             pCanvas->getUNOCanvas()->drawBitmap( mxBitmap,
                                                  pCanvas->getViewState(),
-                                                 maRenderState );
+                                                 getRenderState() );
 
             return true;
         }
@@ -107,7 +107,7 @@ namespace cppcanvas
                 return false;
             }
 
-            rendering::RenderState aLocalState( maRenderState );
+            rendering::RenderState aLocalState( getRenderState() );
             ::canvas::tools::setDeviceColor( aLocalState,
                                              1.0, 1.0, 1.0, nAlphaModulation );
 
