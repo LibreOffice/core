@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.156 $
+ *  $Revision: 1.157 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-28 13:55:50 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 14:08:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,7 +212,7 @@ End
 
 File gid_File_Lib_Cli_Types
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Name = "cli_types.dll";
     Dir = gid_Dir_Program_Assembly;
 End
@@ -223,7 +223,7 @@ End
 
 File gid_File_Lib_Cli_Types_Assembly
     TXT_FILE_BODY;
-    Styles = (PACKED, ASSEMBLY);
+    Styles = (PACKED, ASSEMBLY, PATCH);
     Name = "cli_types.dll";
     Dir = gid_Dir_Program;
     Assemblyname = "cli_types";
@@ -2004,7 +2004,7 @@ End
 
 #endif
 
-STD_LIB_FILE( gid_File_Lib_BaseGfx, basegfx )
+STD_LIB_FILE_PATCH( gid_File_Lib_BaseGfx, basegfx )
 
 File gid_File_Lib_Vcl
     Name = LIBNAME(vcl);
