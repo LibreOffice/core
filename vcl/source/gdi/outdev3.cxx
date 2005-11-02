@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.208 $
+ *  $Revision: 1.209 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 12:58:58 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 14:41:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,15 @@
 #endif
 #ifndef _SV_OUTFONT_HXX
 #include <outfont.hxx>
+#endif
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#endif
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #endif
 #ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
@@ -7547,26 +7556,9 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
 
 // -----------------------------------------------------------------------
 
-BOOL OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly,
+BOOL OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
     const String& rStr, xub_StrLen nBase, xub_StrLen nIndex, xub_StrLen nLen,
     BOOL bOptimize, const ULONG nTWidth, const sal_Int32* pDXArray ) const
-{
-    rPolyPoly.Clear();
-    PolyPolyVector aVector;
-    if (!GetTextOutlines(aVector, rStr, nBase, nIndex, nLen, bOptimize, nTWidth, pDXArray ))
-        return false;
-    for (PolyPolyVector::iterator aIt(aVector.begin()); aIt != aVector.end();
-         ++aIt)
-        for (USHORT i = 0; i < aIt->Count(); ++i)
-            rPolyPoly.Insert((*aIt)[i]);
-    return true;
-}
-
-// -----------------------------------------------------------------------
-
-BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
-    const String& rStr, xub_StrLen nBase, xub_StrLen nIndex,
-    xub_StrLen nLen, BOOL bOptimize, const ULONG nTWidth, const sal_Int32* pDXArray ) const
 {
     // the fonts need to be initialized
     if( mbNewFont )
@@ -7599,7 +7591,7 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
     {
         xub_StrLen nStart = Min( nBase, nIndex );
         xub_StrLen nOfsLen = Max( nBase, nIndex ) - nStart;
-        pSalLayout = ImplLayout( rStr, nStart, nOfsLen, Point( 0,0 ), nTWidth, pDXArray );
+        pSalLayout = ImplLayout( rStr, nStart, nOfsLen, Point(0,0), nTWidth, pDXArray );
         if( pSalLayout )
         {
             nXOffset = pSalLayout->GetTextWidth();
@@ -7610,29 +7602,37 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
         }
     }
 
-    pSalLayout = ImplLayout( rStr, nIndex, nLen, Point( 0,0 ), nTWidth, pDXArray );
+    pSalLayout = ImplLayout( rStr, nIndex, nLen, Point(0,0), nTWidth, pDXArray );
     if( pSalLayout )
     {
-        int nWidthFactor = pSalLayout->GetUnitsPerPixel();
         bRet = pSalLayout->GetOutline( *mpGraphics, rVector );
         if( bRet )
         {
-            PolyPolyVector::iterator aIt;
+            // transform polygon to pixel units
+            ::basegfx::B2DHomMatrix aMatrix;
 
+        int nWidthFactor = pSalLayout->GetUnitsPerPixel();
             if( nXOffset | mnTextOffX | mnTextOffY )
             {
                 Point aRotatedOfs( mnTextOffX*nWidthFactor, mnTextOffY*nWidthFactor );
                 aRotatedOfs -= pSalLayout->GetDrawPosition( Point( nXOffset, 0 ) );
-                for( aIt = rVector.begin(); aIt != rVector.end(); ++aIt )
-                    aIt->Move( aRotatedOfs.X(), aRotatedOfs.Y() );
+        aMatrix.translate( aRotatedOfs.X(), aRotatedOfs.Y() );
             }
+
             if( nWidthFactor > 1 )
             {
                 double fFactor = 1.0 / nWidthFactor;
-                for( aIt = rVector.begin(); aIt != rVector.end(); ++aIt )
-                    aIt->Scale( fFactor, fFactor );
+                aMatrix.scale( fFactor, fFactor );
+            }
+
+        if( !aMatrix.isIdentity() )
+            {
+                ::basegfx::B2DPolyPolygonVector::iterator aIt = rVector.begin();
+                for(; aIt != rVector.end(); ++aIt )
+                    (*aIt).transform( aMatrix );
             }
         }
+
         pSalLayout->Release();
     }
 
@@ -7649,11 +7649,11 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
     // fall back to bitmap conversion ------------------------------------------
 
     // Here, we can savely assume that the mapping between characters and glyphs
-    // is one-to-one.
+    // is one-to-one. This is most probably valid for the old bitmap fonts.
 
     // fall back to bitmap method to get the bounding rectangle,
     // so we need a monochrome virtual device with matching font
-    pSalLayout = ImplLayout(rStr, nIndex, nLen, Point( 0,0 ), nTWidth, pDXArray );
+    pSalLayout = ImplLayout( rStr, nIndex, nLen, Point(0,0), nTWidth, pDXArray );
     if (pSalLayout == 0)
         return false;
     long nOrgWidth = pSalLayout->GetTextWidth();
@@ -7678,7 +7678,7 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
     aVDev.SetTextColor( Color(COL_BLACK) );
     aVDev.SetTextFillColor();
 
-    pSalLayout = aVDev.ImplLayout( rStr, nIndex, nLen, Point( 0,0 ), nTWidth, pDXArray );
+    pSalLayout = aVDev.ImplLayout( rStr, nIndex, nLen, Point(0,0), nTWidth, pDXArray );
     if (pSalLayout == 0)
         return false;
     long nWidth = pSalLayout->GetTextWidth();
@@ -7698,7 +7698,7 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
     {
         xub_StrLen nStart  = ((nBase < nIndex) ? nBase : nIndex);
         xub_StrLen nLength = ((nBase > nIndex) ? nBase : nIndex) - nStart;
-        pSalLayout = aVDev.ImplLayout( rStr, nStart, nLength, Point( 0,0 ), nTWidth, pDXArray );
+        pSalLayout = aVDev.ImplLayout( rStr, nStart, nLength, Point(0,0), nTWidth, pDXArray );
         if( pSalLayout )
         {
             nXOffset = pSalLayout->GetTextWidth();
@@ -7714,7 +7714,7 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
         bool bSuccess = false;
 
         // draw character into virtual device
-        pSalLayout = aVDev.ImplLayout(rStr, i, 1, Point( 0,0 ), nTWidth, pDXArray );
+        pSalLayout = aVDev.ImplLayout(rStr, i, 1, Point(0,0), nTWidth, pDXArray );
         if (pSalLayout == 0)
             return false;
         long nCharWidth = pSalLayout->GetTextWidth();
@@ -7740,31 +7740,36 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
                 bSuccess = false;
             else
             {
-                // convert units to logical width
+        // convert units to logical width
                 for (USHORT j = 0; j < aPolyPoly.Count(); ++j)
                 {
                     Polygon& rPoly = aPolyPoly[j];
                     for (USHORT k = 0; k < rPoly.GetSize(); ++k)
                     {
                         Point& rPt = rPoly[k];
-                        rPt.X() = FRound(ImplDevicePixelToLogicWidth(
-                                             nXOffset + rPt.X() - aOffset.X()
-                                             - ((OutputDevice*)&aVDev)->mnTextOffX)
-                                         * fScaleX);
-                        rPt.Y() = FRound(ImplDevicePixelToLogicHeight(
-                                             rPt.Y() - aOffset.Y()
-                                             - ((OutputDevice*)&aVDev)->mnTextOffY)
-                                         * fScaleY);
+            rPt -= aOffset;
+            int nPixelX = rPt.X() - ((OutputDevice&)aVDev).mnTextOffX + nXOffset;
+            int nPixelY = rPt.Y() - ((OutputDevice&)aVDev).mnTextOffY;
+                        rPt.X() = ImplDevicePixelToLogicWidth( nPixelX );
+                        rPt.Y() = ImplDevicePixelToLogicHeight( nPixelY );
                     }
                 }
 
-                if (GetFont().GetOrientation() != 0)
-                    aPolyPoly.Rotate(Point(0, 0),
-                                     GetFont().GetOrientation());
 
-                // Ignore "empty" glyphs:
-                if (aPolyPoly.Count() > 0)
-                    rVector.push_back(aPolyPoly);
+                // ignore "empty" glyphs:
+                if( aPolyPoly.Count() > 0 )
+                {
+                    // convert  to B2DPolyPolygon
+            // TODO: get rid of intermediate tool's PolyPolygon
+                    ::basegfx::B2DPolyPolygon aB2DPolyPoly = aPolyPoly.getB2DPolyPolygon();
+                    ::basegfx::B2DHomMatrix aMatrix;
+                    aMatrix.scale( fScaleX, fScaleY );
+                    int nAngle = GetFont().GetOrientation();
+                    if( nAngle )
+                        aMatrix.rotate( nAngle * F_PI1800 );
+            aB2DPolyPoly.transform( aMatrix );
+                    rVector.push_back( aB2DPolyPoly );
+        }
             }
         }
 
@@ -7773,6 +7778,52 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rVector,
     }
 
     return bRet;
+}
+
+// -----------------------------------------------------------------------
+
+BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
+    const String& rStr, xub_StrLen nBase, xub_StrLen nIndex,
+    xub_StrLen nLen, BOOL bOptimize, const ULONG nTWidth, const sal_Int32* pDXArray ) const
+{
+    rResultVector.clear();
+
+    // get the basegfx polypolygon vector
+    ::basegfx::B2DPolyPolygonVector aB2DPolyPolyVector;
+    if( !GetTextOutlines( aB2DPolyPolyVector, rStr, nBase, nIndex, nLen,
+                         bOptimize, nTWidth, pDXArray ) )
+    return FALSE;
+
+    // convert to a tool polypolygon vector
+    rResultVector.reserve( aB2DPolyPolyVector.size() );
+    ::basegfx::B2DPolyPolygonVector::const_iterator aIt = aB2DPolyPolyVector.begin();
+    for(; aIt != aB2DPolyPolyVector.end(); ++aIt )
+        rResultVector.push_back( *aIt );
+
+    return TRUE;
+}
+
+// -----------------------------------------------------------------------
+
+BOOL OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly,
+    const String& rStr, xub_StrLen nBase, xub_StrLen nIndex, xub_StrLen nLen,
+    BOOL bOptimize, const ULONG nTWidth, const sal_Int32* pDXArray ) const
+{
+    rPolyPoly.Clear();
+
+    // get the basegfx polypolygon vector
+    ::basegfx::B2DPolyPolygonVector aB2DPolyPolyVector;
+    if( !GetTextOutlines( aB2DPolyPolyVector, rStr, nBase, nIndex, nLen,
+                         bOptimize, nTWidth, pDXArray ) )
+    return FALSE;
+
+    // convert and merge into a tool polypolygon
+    ::basegfx::B2DPolyPolygonVector::const_iterator aIt = aB2DPolyPolyVector.begin();
+    for(; aIt != aB2DPolyPolyVector.end(); ++aIt )
+        for( int i = 0; i < aIt->count(); ++i )
+            rPolyPoly.Insert( (*aIt).getB2DPolygon( i ) );
+
+    return TRUE;
 }
 
 // -----------------------------------------------------------------------
