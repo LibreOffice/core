@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScIndexEnumeration_TextFieldEnumeration.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:57:56 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:05:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ import com.sun.star.uno.XInterface;
  * @see ifc.container._XEnumeration
  */
 public class ScIndexEnumeration_TextFieldEnumeration extends TestCase {
-    XSpreadsheetDocument xSheetDoc = null;
+    static XSpreadsheetDocument xSheetDoc = null;
 
     /**
     * Creates Spreadsheet document.
