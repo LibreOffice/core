@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XDispatchRecorder.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:01:24 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:45:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ public class _XDispatchRecorder extends MultiMethodTest {
 
         oObj.startRecording(xFrame);
 
-        log.println("NEGATIVE TEST: dispatch calles via API must not recorded");
+        log.println("dispatch calles via API must be recorded");
         dispURL = utils.parseURL((XMultiServiceFactory)tParam.getMSF(), ".uno:InsertText");
 
         PropertyValue prop = new PropertyValue();
@@ -114,11 +114,9 @@ public class _XDispatchRecorder extends MultiMethodTest {
         oObj.endRecording();
 
         boolean res = macro != null
-                   && macro.indexOf(dispURL.Complete) == -1
-                   && macro.indexOf((String)dispArgs[0].Value) == -1;
+                   && macro.indexOf(dispURL.Complete) > -1;
         if (!res) log.println("Dispatch URL '" + dispURL.Complete
-            + "' or its argument '" + dispArgs[0].Value
-            + "' was found in macro - FAILED");
+            + "' was NOT found in macro - FAILED");
 
         tRes.tested("getRecordedMacro()", res);
     }
