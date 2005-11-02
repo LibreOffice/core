@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cachedbitmap.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:16:58 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 12:58:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,36 +36,11 @@
 #ifndef _VCLCANVAS_CACHEDBITMAP_HXX
 #define _VCLCANVAS_CACHEDBITMAP_HXX
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
-#include <com/sun/star/uno/Reference.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_XCANVAS_HPP_
-#include <com/sun/star/rendering/XCanvas.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_XCACHEDPRIMITIVE_HPP_
-#include <com/sun/star/rendering/XCachedPrimitive.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_VIEWSTATE_HPP__
-#include <com/sun/star/rendering/ViewState.hpp>
-#endif
+#include <canvas/base/cachedprimitivebase.hxx>
 
-#ifndef _CPPUHELPER_COMPBASE2_HXX_
-#include <cppuhelper/compbase2.hxx>
-#endif
-#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
-#include <comphelper/broadcasthelper.hxx>
-#endif
-
-#ifndef _GRFMGR_HXX
 #include <goodies/grfmgr.hxx>
-#endif
 
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
 
 
 /* Definition of CachedBitmap class */
@@ -74,10 +49,7 @@ namespace vclcanvas
 {
     typedef ::boost::shared_ptr< GraphicObject > GraphicObjectSharedPtr;
 
-    typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::rendering::XCachedPrimitive,
-                                                   ::com::sun::star::lang::XServiceInfo > CachedBitmap_Base;
-
-    class CachedBitmap : public ::comphelper::OBaseMutex, public CachedBitmap_Base
+    class CachedBitmap : public ::canvas::CachedPrimitiveBase
     {
     public:
 
@@ -94,28 +66,18 @@ namespace vclcanvas
         /// Dispose all internal references
         virtual void SAL_CALL disposing();
 
-        // XCachedPrimitive
-        virtual ::sal_Int8 SAL_CALL redraw( const ::com::sun::star::rendering::ViewState& aState ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-
-        // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
-
-    protected:
-        ~CachedBitmap(); // we're a ref-counted UNO class. _We_ destroy ourselves.
-
     private:
-        // default: disabled copy/assignment
-        CachedBitmap(const CachedBitmap&);
-        CachedBitmap& operator=( const CachedBitmap& );
+        virtual ::sal_Int8 doRedraw( const ::com::sun::star::rendering::ViewState&  rNewState,
+                                     const ::com::sun::star::rendering::ViewState&  rOldState,
+                                     const ::com::sun::star::uno::Reference<
+                                         ::com::sun::star::rendering::XCanvas >&    rTargetCanvas,
+                                     bool                                           bSameViewTransform );
+
 
         GraphicObjectSharedPtr                                                      mpGraphicObject;
         const ::Point                                                               maPoint;
         const ::Size                                                                maSize;
         const GraphicAttr                                                           maAttributes;
-        ::com::sun::star::rendering::ViewState                                      maUsedViewState;
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas >    mxTarget;
     };
 }
 
