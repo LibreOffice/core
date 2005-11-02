@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dhommatrix.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:25:05 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:52:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,10 @@ namespace basegfx
 
         double get(sal_uInt16 nRow, sal_uInt16 nColumn) const;
         void set(sal_uInt16 nRow, sal_uInt16 nColumn, double fValue);
+
+        // test if last line is default to see if last line needs to be
+        // involved in calculations
+        bool isLastLineDefault() const;
 
         // Auf Einheitsmatrix zuruecksetzen
         bool isIdentity() const;
