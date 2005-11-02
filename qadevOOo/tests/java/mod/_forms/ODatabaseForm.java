@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ODatabaseForm.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:08:46 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:50:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -295,7 +295,10 @@ public class ODatabaseForm extends TestCase {
         } else {
             //DataSource for sdbc db
             try {
-                srcInf.URL = "sdbc:dbase:" + DBTools.dirToUrl(tmpDir);
+                String myDbUrl = "sdbc:dbase:" + DBTools.dirToUrl(tmpDir);
+                srcInf.URL = myDbUrl;
+
+                log.println("try to register '"+myDbUrl+"' as '"+dbSourceName+"'");
 
                 dbSrc = srcInf.getDataSourceService();
                 dbTools.reRegisterDB(dbSourceName, dbSrc);
