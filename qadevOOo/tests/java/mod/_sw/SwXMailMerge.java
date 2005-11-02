@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXMailMerge.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:48:42 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:14:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,9 +69,10 @@ import lib.TestParameters;
 */
 public class SwXMailMerge extends TestCase {
 
-    private int uniqueSuffix = 0 ;
-
-    public void initialize( TestParameters tParam, PrintWriter log ) {
+    public void initialize( TestParameters Param, PrintWriter log ) {
+        if (! Param.containsKey("uniqueSuffix")){
+            Param.put("uniqueSuffix", new Integer(0));
+        }
     }
 
     /**
@@ -330,6 +331,7 @@ public class SwXMailMerge extends TestCase {
         XDataSource oXDataSource = null;
         Object oInterface = null;
         XMultiServiceFactory xMSF = null ;
+        int uniqueSuffix = Param.getInt("uniqueSuffix");
 
         try {
             xMSF = (XMultiServiceFactory)Param.getMSF();
@@ -337,6 +339,13 @@ public class SwXMailMerge extends TestCase {
 
             // retrieving temp directory for database
             String tmpDatabaseUrl = utils.getOfficeTempDir((XMultiServiceFactory)Param.getMSF());
+
+            databaseName = "NewDatabaseSource" + uniqueSuffix ;
+
+            String tmpDatabaseFile = tmpDatabaseUrl + databaseName + ".odb";
+            System.out.println("try to delete '"+tmpDatabaseFile+"'");
+            utils.deleteFile(((XMultiServiceFactory) Param.getMSF()), tmpDatabaseFile);
+
 
             tmpDatabaseUrl = "sdbc:dbase:file:///" + tmpDatabaseUrl ;
 
@@ -349,17 +358,19 @@ public class SwXMailMerge extends TestCase {
 
             xSrcProp.setPropertyValue("URL", tmpDatabaseUrl) ;
 
-            databaseName = "NewDatabaseSource" + uniqueSuffix ;
-
             DBTools dbt = new DBTools(((XMultiServiceFactory) Param.getMSF()));
             // registering source in DatabaseContext
+            log.println("register database '"+tmpDatabaseUrl+"' as '"+databaseName+"'" );
             dbt.reRegisterDB(databaseName, newSource) ;
 
             uniqueSuffix++;
+            Param.put("uniqueSuffix", new Integer(uniqueSuffix));
+
             return dbt.connectToSource(newSource);
         }
         catch( Exception e ) {
             uniqueSuffix++;
+            Param.put("uniqueSuffix", new Integer(uniqueSuffix));
             log.println("could not register new database" );
             e.printStackTrace();
             throw new StatusException("could not register new database", e) ;
@@ -401,6 +412,32 @@ public class SwXMailMerge extends TestCase {
             throw new StatusException("Couldn't get registered data base", e);
         } catch (   SQLException e){
             throw new StatusException("Couldn't get XConnection from registered data base", e);
+        }
+
+    }
+
+    protected void cleanup(TestParameters Param, PrintWriter log) {
+        log.println("closing connections...");
+        XMultiServiceFactory xMsf = (XMultiServiceFactory) Param.getMSF();
+        DBTools dbt = new DBTools(xMsf);
+
+        if (Param.containsKey("uniqueSuffix")){
+            int uniqueSuffix = Param.getInt("uniqueSuffix");
+            uniqueSuffix--;
+            String databaseName =  "";
+            while (uniqueSuffix >= 0){
+
+                databaseName = "NewDatabaseSource" + uniqueSuffix ;
+
+                log.println("revoke '"+databaseName+"'");
+
+                try{
+                    dbt.revokeDB(databaseName);
+                } catch (com.sun.star.uno.Exception e){
+                }
+
+                uniqueSuffix--;
+            }
         }
 
     }
