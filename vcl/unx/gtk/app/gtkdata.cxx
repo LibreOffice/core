@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkdata.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:35:17 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:32:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,7 @@
 #ifndef _VCL_GTKFRAME_HXX
 #include <plugins/gtk/gtkframe.hxx>
 #endif
+#include <salobj.h>
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
 #endif
@@ -165,6 +166,7 @@ GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
                 break;
             }
         }
+        X11SalObject::Dispatch( pEvent );
     }
 
     return aFilterReturn;
