@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLMetaExporter.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:06:52 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:12:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ import com.sun.star.xml.sax.XDocumentHandler;
  */
 public class XMLMetaExporter extends TestCase {
 
-    XComponent xSheetDoc;
+    static XComponent xSheetDoc;
 
     /**
      * New spreadsheet document created.
@@ -156,9 +156,16 @@ public class XMLMetaExporter extends TestCase {
             XPropertySet docInfo = (XPropertySet) UnoRuntime.queryInterface
                 (XPropertySet.class, infoSup.getDocumentInfo()) ;
             docInfo.setPropertyValue("Title", "TestDocument");
+
+            log.println("fill sheet 1 with contnet...");
+            util.CalcTools.fillCalcSheetWithContent(xSheetDoc,1, 3, 3, 50, 50);
+
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace(log) ;
             throw new StatusException("Can't create environment.", e) ;
+        } catch (java.lang.Exception e) {
+            e.printStackTrace(log);
+            throw new StatusException("Can't create environment.", e);
         }
 
         // create testobject here
