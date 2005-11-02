@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeProvider.java,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:19:35 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:43:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -408,7 +408,12 @@ public class OfficeProvider implements AppProvider {
                     }
 
                     try {
-                        Thread.sleep(5000);
+                        int closeTime = param.getInt(util.PropertyName.OFFICE_CLOSE_TIME_OUT);
+                        if (debug){
+                            System.out.println("the Office has " + closeTime/1000 +
+                                               " seconds for closing...");
+                        }
+                        Thread.sleep(closeTime);
                     } catch (java.lang.InterruptedException e) {
                     }
                 }
