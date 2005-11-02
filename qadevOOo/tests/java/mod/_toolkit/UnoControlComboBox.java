@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoControlComboBox.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:33:50 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:21:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ import com.sun.star.view.XControlAccess;
 
 
 public class UnoControlComboBox extends TestCase {
-    XTextDocument xTextDoc;
+    private static XTextDocument xTextDoc;
 
     protected void initialize(TestParameters Param, PrintWriter log) {
         SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory) Param.getMSF());
