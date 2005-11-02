@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XInitialization.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:15:06 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:48:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@ public class _XInitialization extends MultiMethodTest {
             log.println("calling method with valid arguments...");
             Object[] args = (Object[]) tEnv.getObjRelation("XInitialization.args");
             if (args==null) {
+                System.out.println("Using new Object[0] as Argument");
                 xInit.initialize(new Object[0]);
             } else {
                 xInit.initialize(args);
