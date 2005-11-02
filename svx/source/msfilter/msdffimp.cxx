@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 11:58:36 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 09:57:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4550,63 +4550,33 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
             pRet = new SdrGrafObj;
             if( bGrfRead )
                 ((SdrGrafObj*)pRet)->SetGraphic( aGraf );
-            if( bLinkGrf )
-            {
+
+            if( bLinkGrf && !bGrfRead )     // sj: #i55484# if the graphic was embedded ( bGrfRead == true ) then
+            {                               // we do not need to set a link. TODO: not to lose the information where the graphic is linked from
                 UniString aName( ::URIHelper::SmartRel2Abs( INetURLObject(maBaseURL), aFilename, URIHelper::GetMaybeFileHdl(), true, false,
-                                                                    INetURLObject::WAS_ENCODED,
-                                                                        INetURLObject::DECODE_UNAMBIGUOUS ) );
-                sal_Bool bSetFileName = TRUE;
+                                                                INetURLObject::WAS_ENCODED,
+                                                                    INetURLObject::DECODE_UNAMBIGUOUS ) );
 
-                if ( bGrfRead )
+                String          aFilterName;
+                INetURLObject   aURLObj( aName );
+
+                if( aURLObj.GetProtocol() == INET_PROT_NOT_VALID )
                 {
+                    String aValidURL;
 
-                    // There is still an embedded graphic that could be used. Sometimes
-                    // a graphiclink is also set. The problem is that the graphic cache will
-                    // not swapout graphics when a graphiclink exists, so a validity check has to be done
-
-                    if ( ( eFlags & mso_blipflagLinkToFile ) == mso_blipflagComment )
-                        bSetFileName = FALSE;
-                    else
-                    {
-                        try
-                        {
-                            ::ucb::Content  aCnt( aName, uno::Reference<
-                                ::com::sun::star::ucb::XCommandEnvironment >() );
-                            ::rtl::OUString     aTitle;
-
-                            aCnt.getPropertyValue( ::rtl::OUString::createFromAscii( "Title" ) ) >>= aTitle;
-                            bSetFileName = ( aTitle.getLength() > 0 );
-                        }
-                        catch( ... )
-                        {
-                            // this file did not exist, so we will not set this as graphiclink
-                            bSetFileName = FALSE;
-                        }
-                    }
+                    if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aValidURL ) )
+                        aURLObj = INetURLObject( aValidURL );
                 }
-                if ( bSetFileName )
+
+                if( aURLObj.GetProtocol() != INET_PROT_NOT_VALID )
                 {
-                    String          aFilterName;
-                    INetURLObject   aURLObj( aName );
-
-                    if( aURLObj.GetProtocol() == INET_PROT_NOT_VALID )
-                    {
-                        String aValidURL;
-
-                        if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aValidURL ) )
-                            aURLObj = INetURLObject( aValidURL );
-                    }
-
-                    if( aURLObj.GetProtocol() != INET_PROT_NOT_VALID )
-                    {
-                        GraphicFilter* pGrfFilter = GetGrfFilter();
-                        aFilterName = pGrfFilter->GetImportFormatName(
-                                        pGrfFilter->GetImportFormatNumberForShortName( aURLObj.getExtension() ) );
-                    }
-
-                    aLinkFileName = aName;
-                    aLinkFilterName = aFilterName;
+                    GraphicFilter* pGrfFilter = GetGrfFilter();
+                    aFilterName = pGrfFilter->GetImportFormatName(
+                                    pGrfFilter->GetImportFormatNumberForShortName( aURLObj.getExtension() ) );
                 }
+
+                aLinkFileName = aName;
+                aLinkFilterName = aFilterName;
             }
         }
         if ( !pRet->GetName().Len() )                   // SJ 22.02.00 : PPT OLE IMPORT:
