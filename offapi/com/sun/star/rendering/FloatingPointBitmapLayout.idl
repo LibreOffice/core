@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FloatingPointBitmapLayout.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:48:17 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:21:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,9 @@
 #ifndef __com_sun_star_rendering_FloatingPointBitmapFormat_idl__
 #include <com/sun/star/rendering/FloatingPointBitmapFormat.idl>
 #endif
+#ifndef __com_sun_star_rendering_XColorSpace_idl__
+#include <com/sun/star/rendering/XColorSpace.idl>
+#endif
 
 module com { module sun { module star { module rendering {
 
@@ -54,19 +57,38 @@ module com { module sun { module star { module rendering {
  */
 struct FloatingPointBitmapLayout
 {
-    /// Number of scanlines for this bitmap.
+    /** Number of scanlines for this bitmap.
+
+        This value must not be negative
+     */
     long                ScanLines;
 
-    /// Number of data bytes per scanline.
+    /** Number of data bytes per scanline.
+
+        This value must not be negative
+     */
     long                ScanLineBytes;
 
-    /// Byte offset between the start of two consecutive scanlines.
+    /** Byte offset between the start of two consecutive scanlines.
+
+        This value is permitted to be negative, denoting a bitmap
+        whose content is flipped at the x axis.
+     */
     long                ScanLineStride;
 
-    /// Byte offset between the start of two consecutive planes.
+    /** Byte offset between the start of two consecutive planes.
+
+        This value is permitted to be negative.
+     */
     long                PlaneStride;
 
-    /// Number of color components per pixel.
+    /// Color space the bitmap colors shall be interpreted within.
+    XColorSpace         ColorSpace;
+
+    /** Number of color components per pixel.
+
+        This value must not be negative
+     */
     long                NumComponents;
 
     /** Endianness of the pixel values.
