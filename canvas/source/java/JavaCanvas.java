@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JavaCanvas.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:11:14 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 12:47:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -455,12 +455,21 @@ public class JavaCanvas
 
     //----------------------------------------------------------------------------------
 
+    public synchronized boolean hasAlpha()
+    {
+        // TODO
+        return false;
+    }
+
+    //----------------------------------------------------------------------------------
+
     //
     // XIntegerBitmap implementation
     // =============================
     //
 
-    public synchronized byte[] getData( IntegerRectangle2D rect )
+    public synchronized byte[] getData( IntegerBitmapLayout[] bitmapLayout,
+                                        IntegerRectangle2D    rect )
     {
         // TODO
         return null;
@@ -482,7 +491,8 @@ public class JavaCanvas
 
     //----------------------------------------------------------------------------------
 
-    public synchronized byte[] getPixel( IntegerPoint2D pos )
+    public synchronized byte[] getPixel( IntegerBitmapLayout[] bitmapLayout,
+                                         IntegerPoint2D        pos )
     {
         // TODO
         return null;
@@ -510,7 +520,7 @@ public class JavaCanvas
         layout.NumComponents = 4;
         layout.ComponentMasks = null;
         layout.Endianness = 0;
-        layout.IsPseudoColor = false;
+        layout.IsMsbFirst = false;
 
         return layout;
     }
