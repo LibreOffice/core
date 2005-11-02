@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvasgraphichelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:16:50 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:39:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,8 +67,8 @@ namespace cppcanvas
             // CanvasGraphic implementation
             virtual void                        setTransformation( const ::basegfx::B2DHomMatrix& rMatrix );
             virtual ::basegfx::B2DHomMatrix     getTransformation() const;
-            virtual void                        setClip( const PolyPolygonSharedPtr& rClipPoly );
-            virtual PolyPolygonSharedPtr        getClip() const;
+            virtual void                        setClip( const ::basegfx::B2DPolyPolygon& rClipPoly );
+            virtual ::basegfx::B2DPolyPolygon   getClip() const;
             virtual void                        setRGBAColor( Color::IntSRGBA );
             virtual Color::IntSRGBA             getRGBAColor() const;
             virtual void                        setCompositeOp( CompositeOp aOp );
@@ -77,14 +77,15 @@ namespace cppcanvas
         protected:
             // for our clients
             // ===============
-            CanvasSharedPtr                                                                         getCanvas() const;
+            CanvasSharedPtr                                                                 getCanvas() const;
             ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice > getGraphicDevice() const;
-
-            mutable ::com::sun::star::rendering::RenderState                                maRenderState; // for reasons of speed...
+            const ::com::sun::star::rendering::RenderState&                                 getRenderState() const;
 
         private:
-            PolyPolygonSharedPtr                                                                    mpClipPolyPolygon;
-            CanvasSharedPtr                                                                         mpCanvas;
+            mutable ::com::sun::star::rendering::RenderState                                maRenderState;
+
+            ::basegfx::B2DPolyPolygon                                                       maClipPolyPolygon;
+            CanvasSharedPtr                                                                 mpCanvas;
             ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice > mxGraphicDevice;
         };
 
