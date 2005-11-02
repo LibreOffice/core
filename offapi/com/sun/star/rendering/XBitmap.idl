@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XBitmap.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:56:51 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:23:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,18 @@ interface XBitmap : ::com::sun::star::uno::XInterface
         @return the bitmap size in pixel.
       */
     ::com::sun::star::geometry::IntegerSize2D   getSize();
+
+    //-------------------------------------------------------------------------
+
+    /** Query transparency status of the bitmap.<p>
+
+        This method checks, whether the bitmap contains any alpha
+        information.<p>
+
+        @return </TRUE>, if the bitmap has alpha data, or </FALSE> if
+        not.
+      */
+    boolean                                     hasAlpha();
 
     //-------------------------------------------------------------------------
 
