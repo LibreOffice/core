@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dhommatrix.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:42:35 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:56:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,11 @@ namespace basegfx
     {
         implPrepareChange();
         mpM->set(nRow, nColumn, fValue);
+    }
+
+    bool B3DHomMatrix::isLastLineDefault() const
+    {
+        return mpM->isLastLineDefault();
     }
 
     bool B3DHomMatrix::isIdentity() const
@@ -308,9 +313,9 @@ namespace basegfx
         {
             Impl3DHomMatrix aTransMat(get3DIdentityMatrix());
 
-            aTransMat.set(0, 2, fX);
-            aTransMat.set(1, 2, fY);
-            aTransMat.set(2, 2, fZ);
+            aTransMat.set(0, 3, fX);
+            aTransMat.set(1, 3, fY);
+            aTransMat.set(2, 3, fZ);
 
             implPrepareChange();
             mpM->doMulMatrix(aTransMat);
@@ -382,92 +387,92 @@ namespace basegfx
         }
     }
 
-    void B3DHomMatrix::frustum(double fLeft, double fRight, double fBottom, double fTop, double fNear, double fFar)
-    {
-        const double fZero(0.0);
-        const double fOne(1.0);
+//  void B3DHomMatrix::frustum(double fLeft, double fRight, double fBottom, double fTop, double fNear, double fFar)
+//  {
+//      const double fZero(0.0);
+//      const double fOne(1.0);
+//
+//      if(!::basegfx::fTools::more(fNear, fZero))
+//      {
+//          fNear = 0.001;
+//      }
+//
+//      if(!::basegfx::fTools::more(fFar, fZero))
+//      {
+//          fFar = fOne;
+//      }
+//
+//      if(::basegfx::fTools::equal(fNear, fFar))
+//      {
+//          fFar = fNear + fOne;
+//      }
+//
+//      if(::basegfx::fTools::equal(fLeft, fRight))
+//      {
+//          fLeft -= fOne;
+//          fRight += fOne;
+//      }
+//
+//      if(::basegfx::fTools::equal(fTop, fBottom))
+//      {
+//          fBottom -= fOne;
+//          fTop += fOne;
+//      }
+//
+//      Impl3DHomMatrix aFrustumMat(get3DIdentityMatrix());
+//
+//      aFrustumMat.set(0, 0, 2.0 * fNear / (fRight - fLeft));
+//      aFrustumMat.set(1, 1, 2.0 * fNear / (fTop - fBottom));
+//      aFrustumMat.set(0, 2, (fRight + fLeft) / (fRight - fLeft));
+//      aFrustumMat.set(1, 2, (fTop + fBottom) / (fTop - fBottom));
+//      aFrustumMat.set(2, 2, -fOne * ((fFar + fNear) / (fFar - fNear)));
+//      aFrustumMat.set(3, 2, -fOne);
+//      aFrustumMat.set(2, 3, -fOne * ((2.0 * fFar * fNear) / (fFar - fNear)));
+//      aFrustumMat.set(3, 3, fZero);
+//
+//      if(mpM->getRefCount())
+//          mpM->decRefCount();
+//      else
+//          delete mpM;
+//
+//      mpM = new Impl3DHomMatrix(aFrustumMat);
+//  }
 
-        if(!::basegfx::fTools::more(fNear, fZero))
-        {
-            fNear = 0.001;
-        }
-
-        if(!::basegfx::fTools::more(fFar, fZero))
-        {
-            fFar = fOne;
-        }
-
-        if(::basegfx::fTools::equal(fNear, fFar))
-        {
-            fFar = fNear + fOne;
-        }
-
-        if(::basegfx::fTools::equal(fLeft, fRight))
-        {
-            fLeft -= fOne;
-            fRight += fOne;
-        }
-
-        if(::basegfx::fTools::equal(fTop, fBottom))
-        {
-            fBottom -= fOne;
-            fTop += fOne;
-        }
-
-        Impl3DHomMatrix aFrustumMat(get3DIdentityMatrix());
-
-        aFrustumMat.set(0, 0, 2.0 * fNear / (fRight - fLeft));
-        aFrustumMat.set(1, 1, 2.0 * fNear / (fTop - fBottom));
-        aFrustumMat.set(0, 2, (fRight + fLeft) / (fRight - fLeft));
-        aFrustumMat.set(1, 2, (fTop + fBottom) / (fTop - fBottom));
-        aFrustumMat.set(2, 2, -fOne * ((fFar + fNear) / (fFar - fNear)));
-        aFrustumMat.set(3, 2, -fOne);
-        aFrustumMat.set(2, 3, -fOne * ((2.0 * fFar * fNear) / (fFar - fNear)));
-        aFrustumMat.set(3, 3, fZero);
-
-        if(mpM->getRefCount())
-            mpM->decRefCount();
-        else
-            delete mpM;
-
-        mpM = new Impl3DHomMatrix(aFrustumMat);
-    }
-
-    void B3DHomMatrix::ortho(double fLeft, double fRight, double fBottom, double fTop, double fNear, double fFar)
-    {
-        if(::basegfx::fTools::equal(fNear, fFar))
-        {
-            fFar = fNear + 1.0;
-        }
-
-        if(::basegfx::fTools::equal(fLeft, fRight))
-        {
-            fLeft -= 1.0;
-            fRight += 1.0;
-        }
-
-        if(::basegfx::fTools::equal(fTop, fBottom))
-        {
-            fBottom -= 1.0;
-            fTop += 1.0;
-        }
-
-        Impl3DHomMatrix aOrthoMat(get3DIdentityMatrix());
-
-        aOrthoMat.set(0, 0, 2.0 / (fRight - fLeft));
-        aOrthoMat.set(1, 1, 2.0 / (fTop - fBottom));
-        aOrthoMat.set(2, 2, -1.0 * (2.0 / (fFar - fNear)));
-        aOrthoMat.set(0, 3, -1.0 * ((fRight + fLeft) / (fRight - fLeft)));
-        aOrthoMat.set(1, 3, -1.0 * ((fTop + fBottom) / (fTop - fBottom)));
-        aOrthoMat.set(2, 3, -1.0 * ((fFar + fNear) / (fFar - fNear)));
-
-        if(mpM->getRefCount())
-            mpM->decRefCount();
-        else
-            delete mpM;
-
-        mpM = new Impl3DHomMatrix(aOrthoMat);
-    }
+//  void B3DHomMatrix::ortho(double fLeft, double fRight, double fBottom, double fTop, double fNear, double fFar)
+//  {
+//      if(::basegfx::fTools::equal(fNear, fFar))
+//      {
+//          fFar = fNear + 1.0;
+//      }
+//
+//      if(::basegfx::fTools::equal(fLeft, fRight))
+//      {
+//          fLeft -= 1.0;
+//          fRight += 1.0;
+//      }
+//
+//      if(::basegfx::fTools::equal(fTop, fBottom))
+//      {
+//          fBottom -= 1.0;
+//          fTop += 1.0;
+//      }
+//
+//      Impl3DHomMatrix aOrthoMat(get3DIdentityMatrix());
+//
+//      aOrthoMat.set(0, 0, 2.0 / (fRight - fLeft));
+//      aOrthoMat.set(1, 1, 2.0 / (fTop - fBottom));
+//      aOrthoMat.set(2, 2, -1.0 * (2.0 / (fFar - fNear)));
+//      aOrthoMat.set(0, 3, -1.0 * ((fRight + fLeft) / (fRight - fLeft)));
+//      aOrthoMat.set(1, 3, -1.0 * ((fTop + fBottom) / (fTop - fBottom)));
+//      aOrthoMat.set(2, 3, -1.0 * ((fFar + fNear) / (fFar - fNear)));
+//
+//      if(mpM->getRefCount())
+//          mpM->decRefCount();
+//      else
+//          delete mpM;
+//
+//      mpM = new Impl3DHomMatrix(aOrthoMat);
+//  }
 
     bool B3DHomMatrix::decompose(B3DTuple& rScale, B3DTuple& rTranslate, B3DTuple& rRotate, B3DTuple& rShear) const
     {
