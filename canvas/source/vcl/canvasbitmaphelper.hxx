@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvasbitmaphelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:18:10 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 12:59:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,14 +37,12 @@
 #define _VCLCANVAS_CANVASBITMAPHELPER_HXX_
 
 #include <canvashelper.hxx>
-
-#ifndef _SV_BITMAPEX_HXX
-#include <vcl/bitmapex.hxx>
-#endif
-
 #include <canvas/vclwrapper.hxx>
 
+#include <vcl/bitmapex.hxx>
+
 #include "bitmapbackbuffer.hxx"
+#include "spritecanvas.hxx"
 
 
 namespace vclcanvas
@@ -65,12 +63,26 @@ namespace vclcanvas
 
         /** Set a new bitmap on this helper.
 
-            This method force-sets a new bitmap. The internally stored
-            bitmap representation is updated from the given bitmap,
-            including any size changes.
+            This method late-initializes the bitmap canvas helper,
+            providing it with the necessary device and output
+            objects. The internally stored bitmap representation is
+            updated from the given bitmap, including any size
+            changes. Note that the CanvasHelper does <em>not</em> take
+            ownership of the SpriteCanvas object, nor does it perform
+            any reference counting. Thus, to prevent reference counted
+            objects from deletion, the user of this class is
+            responsible for holding ref-counted references to those
+            objects!
+
+            @param rBitmap
+            Content of this bitmap is used as our new content (our
+            internal size is adapted to the size of the bitmap given)
+
+            @param rDevice
+            Reference device for this canvas bitmap
          */
-        void setBitmap( const BitmapEx&                     rBitmap,
-                        const WindowGraphicDevice::ImplRef& rDevice );
+        void init( const BitmapEx&  rBitmap,
+                   SpriteCanvas&    rDevice );
 
 
         // Overridden CanvasHelper functionality
@@ -78,37 +90,40 @@ namespace vclcanvas
 
         void disposing();
 
-        ::com::sun::star::geometry::IntegerSize2D SAL_CALL getSize();
+        ::com::sun::star::geometry::IntegerSize2D getSize();
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > SAL_CALL queryBitmapCanvas();
+        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > queryBitmapCanvas();
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > SAL_CALL
+        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap >
             getScaledBitmap( const ::com::sun::star::geometry::RealSize2D&  newSize,
-                             sal_Bool                                               beFast );
+                             sal_Bool                                       beFast );
 
-        ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
-            getData( const ::com::sun::star::geometry::IntegerRectangle2D& rect );
+        ::com::sun::star::uno::Sequence< sal_Int8 >
+            getData( ::com::sun::star::rendering::IntegerBitmapLayout&      bitmapLayout,
+                     const ::com::sun::star::geometry::IntegerRectangle2D&  rect );
 
-        void SAL_CALL setData( const ::com::sun::star::uno::Sequence< sal_Int8 >&               data,
-                               const ::com::sun::star::geometry::IntegerRectangle2D&    rect );
+        void setData( const ::com::sun::star::uno::Sequence< sal_Int8 >&        data,
+                      const ::com::sun::star::rendering::IntegerBitmapLayout&   bitmapLayout,
+                      const ::com::sun::star::geometry::IntegerRectangle2D&     rect );
 
-        void SAL_CALL setPixel( const ::com::sun::star::uno::Sequence< sal_Int8 >&          color,
-                                const ::com::sun::star::geometry::IntegerPoint2D&   pos );
+        void setPixel( const ::com::sun::star::uno::Sequence< sal_Int8 >&       color,
+                       const ::com::sun::star::rendering::IntegerBitmapLayout&  bitmapLayout,
+                       const ::com::sun::star::geometry::IntegerPoint2D&        pos );
 
-        ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
-            getPixel( const ::com::sun::star::geometry::IntegerPoint2D& pos );
+        ::com::sun::star::uno::Sequence< sal_Int8 >
+            getPixel( ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
+                      const ::com::sun::star::geometry::IntegerPoint2D& pos );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapPalette > SAL_CALL getPalette();
+        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapPalette > getPalette();
 
-        ::com::sun::star::rendering::IntegerBitmapLayout SAL_CALL getMemoryLayout();
+        ::com::sun::star::rendering::IntegerBitmapLayout getMemoryLayout();
 
         /// @internal
         BitmapEx getBitmap() const;
 
     private:
-        // default: disabled copy/assignment
-        CanvasBitmapHelper(const CanvasBitmapHelper&);
-        CanvasBitmapHelper& operator=( const CanvasBitmapHelper& );
+
+        void setBitmap( const BitmapEx& rBitmap );
 
         BitmapBackBufferSharedPtr   mpBackBuffer;
     };
