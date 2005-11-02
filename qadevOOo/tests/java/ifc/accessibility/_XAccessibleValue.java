@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XAccessibleValue.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:48:56 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:45:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,6 +139,9 @@ public class _XAccessibleValue extends MultiMethodTest {
         executeMethod("getCurrentValue()");
 
         boolean result = true ;
+        boolean partResult=true;
+        String noMax = "com.sun.star.comp.toolkit.AccessibleScrollBar";
+        String implName = util.utils.getImplName(oObj);
 
         if (tEnv.getObjRelation("ValueNotPersitent")!=null) {
             log.println("Excluded since it works like AccessibleAction");
@@ -173,12 +176,24 @@ public class _XAccessibleValue extends MultiMethodTest {
             resVal = getDoubleValue(oObj.getCurrentValue());
             log.println("Result min value is " + resVal);
             result &= Math.abs(minVal - resVal) < 0.00001;
+            log.println("\t works: "+(Math.abs(minVal - resVal) < 0.00001));
 
             result &= oObj.setCurrentValue(getObjectValue(maxVal, val.getClass()));
             log.println("Setting to "+ getObjectValue(maxVal, val.getClass()));
             resVal = getDoubleValue(oObj.getCurrentValue());
             log.println("Result max value is " + resVal);
-            result &= Math.abs(maxVal - resVal) < 0.00001;
+            partResult = Math.abs(maxVal - resVal) < 0.00001;
+
+            if (implName.equals(noMax)) {
+                log.println("If one sets the maximum value of a scroll bar with XScrollBar::setMaximum(),"+
+                "then XScrollBar::getValue() returns the maximum value minus the visible size of"+
+                "the thumb");
+                //using abitrary Value, since we can't determine the resulting value
+                partResult = resVal > 10;
+            }
+
+            result &=partResult;
+            log.println("\t works: "+partResult);
 
             log.println("Checking truncating of min/max values");
             oObj.setCurrentValue(getObjectValue(minVal - 1, val.getClass()));
@@ -186,12 +201,23 @@ public class _XAccessibleValue extends MultiMethodTest {
             resVal = getDoubleValue(oObj.getCurrentValue());
             log.println("Result min value is " + resVal);
             result &= Math.abs(minVal - resVal) < 0.00001;
+            log.println("\t works: "+(Math.abs(minVal - resVal) < 0.00001));
 
             oObj.setCurrentValue(getObjectValue(maxVal + 1, val.getClass()));
             log.println("Setting to "+ getObjectValue(maxVal +1 , val.getClass()));
             resVal = getDoubleValue(oObj.getCurrentValue());
             log.println("Result max value is " + resVal);
-            result &= Math.abs(maxVal - resVal) < 0.00001;
+            partResult = Math.abs(maxVal - resVal) < 0.00001;
+            if (implName.equals(noMax)) {
+                log.println("If one sets the maximum value of a scroll bar with XScrollBar::setMaximum(),"+
+                "then XScrollBar::getValue() returns the maximum value minus the visible size of"+
+                "the thumb");
+                //using abitrary Value, since we can't determine the resulting value
+                partResult = resVal > 10;
+            }
+
+            result &=partResult;
+            log.println("\t works: "+partResult);
         } else {
             int curValBase = getIntegerValue(val);
             Object valAnotherFromGroup = anotherFromGroup.getCurrentValue();
