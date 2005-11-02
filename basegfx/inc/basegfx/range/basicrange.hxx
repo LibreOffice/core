@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basicrange.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:34:40 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:55:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,9 @@ namespace basegfx
         T       mnMaximum;
 
     public:
+        typedef T       ValueType;
+        typedef Traits  TraitsType;
+
         BasicRange() :
             mnMinimum(Traits::initMin()),
             mnMaximum(Traits::initMax())
