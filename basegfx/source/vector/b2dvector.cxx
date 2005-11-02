@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dvector.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:54:06 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 14:01:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ namespace basegfx
     {
         double fLen(scalar(*this));
 
-        if(::basegfx::fTools::equalZero(fLen))
+        if(fTools::equalZero(fLen))
         {
             mfX = 0.0;
             mfY = 0.0;
@@ -60,11 +60,11 @@ namespace basegfx
         {
             const double fOne(1.0);
 
-            if(!::basegfx::fTools::equal(fOne, fLen))
+            if(!fTools::equal(fOne, fLen))
             {
                 fLen = sqrt(fLen);
 
-                if(!::basegfx::fTools::equalZero(fLen))
+                if(!fTools::equalZero(fLen))
                 {
                     mfX /= fLen;
                     mfY /= fLen;
@@ -75,7 +75,7 @@ namespace basegfx
         return *this;
     }
 
-    B2DVector& B2DVector::operator=( const ::basegfx::B2DTuple& rVec )
+    B2DVector& B2DVector::operator=( const B2DTuple& rVec )
     {
         mfX = rVec.getX();
         mfY = rVec.getY();
@@ -106,7 +106,7 @@ namespace basegfx
 
     const B2DVector& B2DVector::getEmptyVector()
     {
-        return (const B2DVector&) ::basegfx::B2DTuple::getEmptyTuple();
+        return (const B2DVector&) B2DTuple::getEmptyTuple();
     }
 
     B2DVector& B2DVector::operator*=( const B2DHomMatrix& rMat )
@@ -125,11 +125,11 @@ namespace basegfx
     {
         double fLenNow(scalar(*this));
 
-        if(!::basegfx::fTools::equalZero(fLenNow))
+        if(!fTools::equalZero(fLenNow))
         {
             const double fOne(10.0);
 
-            if(!::basegfx::fTools::equal(fOne, fLenNow))
+            if(!fTools::equal(fOne, fLenNow))
             {
                 fLen /= sqrt(fLenNow);
             }
@@ -146,20 +146,20 @@ namespace basegfx
         const double fOne(1.0);
         const double fScalar(scalar(*this));
 
-        return (::basegfx::fTools::equal(fOne, fScalar));
+        return fTools::equal(fOne, fScalar);
     }
 
     bool areParallel( const B2DVector& rVecA, const B2DVector& rVecB )
     {
         double fVal(rVecA.getX() * rVecB.getY() - rVecA.getY() * rVecB.getX());
-        return ::basegfx::fTools::equalZero(fVal);
+        return fTools::equalZero(fVal);
     }
 
     B2VectorOrientation getOrientation( const B2DVector& rVecA, const B2DVector& rVecB )
     {
         double fVal(rVecA.getX() * rVecB.getY() - rVecA.getY() * rVecB.getX());
 
-        if(::basegfx::fTools::equalZero(fVal))
+        if(fTools::equalZero(fVal))
         {
             return ORIENTATION_NEUTRAL;
         }
@@ -190,7 +190,7 @@ namespace basegfx
         return aPerpendicular;
     }
 
-    B2DVector operator*( const ::basegfx::B2DHomMatrix& rMat, const B2DVector& rVec )
+    B2DVector operator*( const B2DHomMatrix& rMat, const B2DVector& rVec )
     {
         B2DVector aRes( rVec );
         return aRes*=rMat;
@@ -198,21 +198,20 @@ namespace basegfx
 
     B2VectorContinuity getContinuity(const B2DVector& rBackVector, const B2DVector& rForwardVector )
     {
-        B2VectorContinuity eRetval(::basegfx::CONTINUITY_NONE);
+        B2VectorContinuity eRetval(CONTINUITY_NONE);
 
         if(!rBackVector.equalZero() && !rForwardVector.equalZero())
         {
-            const B2DVector aInverseForwardVector(-rForwardVector.getX(), -rForwardVector.getY());
-
-            if(rBackVector.equal(aInverseForwardVector))
+            if( fTools::equal(rBackVector.getX(), -rForwardVector.getX()) &&
+                fTools::equal(rBackVector.getY(), -rForwardVector.getY()))
             {
                 // same direction and same length -> C2
-                eRetval = ::basegfx::CONTINUITY_C2;
+                eRetval = CONTINUITY_C2;
             }
-            else if(areParallel(rBackVector, aInverseForwardVector))
+            else if(areParallel(rBackVector, rForwardVector))
             {
                 // same direction -> C1
-                eRetval = ::basegfx::CONTINUITY_C1;
+                eRetval = CONTINUITY_C1;
             }
         }
 
