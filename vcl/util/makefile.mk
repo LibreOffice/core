@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.75 $
+#   $Revision: 1.76 $
 #
-#   last change: $Author: obo $ $Date: 2005-10-13 09:37:37 $
+#   last change: $Author: kz $ $Date: 2005-11-02 13:35:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -171,6 +171,7 @@ SHL1STDLIBS+=\
             $(CPPULIB)          \
             $(VOSLIB)           \
             $(SALLIB)			\
+            $(BASEGFXLIB)		\
             $(ICUUCLIB)			\
             $(ICULELIB)			\
             $(JVMACCESSLIB)
