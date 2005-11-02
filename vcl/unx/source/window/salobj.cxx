@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:52:36 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:35:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,20 +56,27 @@
 #ifndef _SV_SALOBJ_H
 #include <salobj.h>
 #endif
+#ifndef _SV_SALWTYPE_HXX
+#include <salwtype.hxx>
+#endif
+#ifndef _SV_KEYCODES_HXX
+#include <keycodes.hxx>
+#endif
 
-SalObjectList X11SalObject::aAllObjects;
+#include <tools/debug.hxx>
+#if OSL_DEBUG_LEVEL > 1
+#include <stdio.h>
+#endif
 
 // =======================================================================
+// SalInstance member to create and destroy a SalObject
 
-long ImplSalObjCallbackDummy( void*, SalObject*, USHORT, const void* )
+SalObject* X11SalInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData )
 {
-    return 0;
+    return X11SalObject::CreateObject( pParent, pWindowData );
 }
 
-// =======================================================================
-// SalInstance memberfkts to create and destroy a SalObject
-
-SalObject* X11SalInstance::CreateObject( SalFrame* pParent )
+X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData )
 {
     int error_base, event_base;
     X11SalObject*       pObject  = new X11SalObject();
@@ -82,10 +89,36 @@ SalObject* X11SalInstance::CreateObject( SalFrame* pParent )
         return NULL;
     }
 
+    pObject->mpParent = pParent;
+
     SalDisplay* pSalDisp        = GetSalData()->GetDisplay();
     const SystemEnvData* pEnv   = pParent->GetSystemData();
     Display* pDisp              = pSalDisp->GetDisplay();
     XLIB_Window aObjectParent   = (XLIB_Window)pEnv->aWindow;
+
+    Visual* pVisual = (pWindowData && pWindowData->pVisual) ?
+                      (Visual*)pWindowData->pVisual :
+                      pSalDisp->GetVisual()->GetVisual();
+    // get visual info
+    VisualID aVisID = XVisualIDFromVisual( pVisual );
+    XVisualInfo aTemplate;
+    aTemplate.visualid = aVisID;
+    int nVisuals = 0;
+    XVisualInfo* pInfos = XGetVisualInfo( pDisp, VisualIDMask, &aTemplate, &nVisuals );
+    // only one VisualInfo structure can match the visual id
+    DBG_ASSERT( nVisuals == 1, "match count for visual id is not 1" );
+    unsigned int nDepth     = pInfos->depth;
+    XFree( pInfos );
+    XSetWindowAttributes aAttribs;
+    aAttribs.event_mask =   StructureNotifyMask
+                          | ButtonPressMask
+                          | ButtonReleaseMask
+                          | PointerMotionMask
+                          | EnterWindowMask
+                          | LeaveWindowMask
+                          | FocusChangeMask
+                          | ExposureMask
+                          ;
 
     pObject->maPrimary =
         XCreateSimpleWindow( pDisp,
@@ -95,25 +128,69 @@ SalObject* X11SalInstance::CreateObject( SalFrame* pParent )
                              pSalDisp->GetColormap().GetBlackPixel(),
                              pSalDisp->GetColormap().GetWhitePixel()
                              );
-    pObject->maSecondary =
-        XCreateSimpleWindow( pDisp,
-                             pObject->maPrimary,
-                             0, 0,
-                             1, 1, 0,
-                             pSalDisp->GetColormap().GetBlackPixel(),
-                             pSalDisp->GetColormap().GetWhitePixel()
-                             );
+    if( aVisID == pSalDisp->GetVisual()->GetVisualId() )
+    {
+        pObject->maSecondary =
+            XCreateSimpleWindow( pDisp,
+                                 pObject->maPrimary,
+                                 0, 0,
+                                 1, 1, 0,
+                                 pSalDisp->GetColormap().GetBlackPixel(),
+                                 pSalDisp->GetColormap().GetWhitePixel()
+                                 );
+    }
+    else
+    {
+        #if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "visual id of vcl %x, of visual %x\n",
+                    pSalDisp->GetVisual()->GetVisualId(),
+                    aVisID );
+        #endif
+        BOOL bOldIgnore = pSalDisp->GetXLib()->GetIgnoreXErrors();
+        pSalDisp->GetXLib()->SetIgnoreXErrors(TRUE);
+        pObject->maSecondary =
+            XCreateWindow( pDisp,
+                           pSalDisp->GetRootWindow(),
+                           0, 0,
+                           1, 1, 0,
+                           nDepth, InputOutput,
+                           pVisual,
+                           CWEventMask, &aAttribs );
+        XSync( pDisp, False );
+        BOOL bWasXError = pSalDisp->GetXLib()->WasXError();
+        pSalDisp->GetXLib()->SetIgnoreXErrors( bOldIgnore );
+        if( bWasXError )
+        {
+            pObject->maSecondary = None;
+            delete pObject;
+            return NULL;
+        }
+        XReparentWindow( pDisp, pObject->maSecondary, pObject->maPrimary, 0, 0 );
+    }
+
     XMapWindow( pDisp, pObject->maPrimary );
     XMapWindow( pDisp, pObject->maSecondary );
 
     pObjData->pDisplay      = pDisp;
     pObjData->aWindow       = pObject->maSecondary;
     pObjData->pWidget       = NULL;
-    pObjData->pVisual       = pSalDisp->GetVisual()->GetVisual();
-    pObjData->nDepth        = pSalDisp->GetVisual()->GetDepth();
-    pObjData->aColormap     = pSalDisp->GetColormap().GetXColormap();
+    pObjData->pVisual       = pVisual;
+    pObjData->nDepth        = nDepth;
+    pObjData->aColormap     = aVisID == pSalDisp->GetVisual()->GetVisualId() ?
+                              pSalDisp->GetColormap().GetXColormap() : None;
     pObjData->pAppContext   = NULL;
+
+    BOOL bOldIgnore = pSalDisp->GetXLib()->GetIgnoreXErrors();
+    pSalDisp->GetXLib()->SetIgnoreXErrors(TRUE);
     XSync(pDisp, False);
+    BOOL bWasXError = pSalDisp->GetXLib()->WasXError();
+    pSalDisp->GetXLib()->SetIgnoreXErrors( bOldIgnore );
+    if( bWasXError )
+    {
+        delete pObject;
+        return NULL;
+    }
+
     return pObject;
 }
 
@@ -191,22 +268,27 @@ X11SalObject::X11SalObject()
     maSystemChildData.pAppContext   = NULL;
     maSystemChildData.aShellWindow  = 0;
     maSystemChildData.pShellWidget  = NULL;
-    mpInst                          = NULL;
-    mpProc                          = ImplSalObjCallbackDummy;
     maPrimary                       = 0;
     maSecondary                     = 0;
 
-    X11SalObject::aAllObjects.Insert( this, LIST_APPEND );
+    std::list< SalObject* >& rObjects = GetSalData()->GetDisplay()->getSalObjects();
+    rObjects.push_back( this );
 }
 
 
 X11SalObject::~X11SalObject()
 {
-    X11SalObject::aAllObjects.Remove( this );
+    std::list< SalObject* >& rObjects = GetSalData()->GetDisplay()->getSalObjects();
+    rObjects.remove( this );
+    SalDisplay* pSalDisp = GetSalData()->GetDisplay();
+    BOOL bOldIgnore = pSalDisp->GetXLib()->GetIgnoreXErrors();
+    pSalDisp->GetXLib()->SetIgnoreXErrors(TRUE);
     if ( maSecondary )
         XDestroyWindow( (Display*)maSystemChildData.pDisplay, maSecondary );
     if ( maPrimary )
         XDestroyWindow( (Display*)maSystemChildData.pDisplay, maPrimary );
+    XSync( (Display*)maSystemChildData.pDisplay, False );
+    pSalDisp->GetXLib()->SetIgnoreXErrors(bOldIgnore);
 }
 
 
@@ -370,32 +452,103 @@ const SystemChildData* X11SalObject::GetSystemData() const
     return &maSystemChildData;
 }
 
+static USHORT sal_GetCode( int state )
+{
+    USHORT nCode = 0;
+
+    if( state & Button1Mask )
+        nCode |= MOUSE_LEFT;
+    if( state & Button2Mask )
+        nCode |= MOUSE_MIDDLE;
+    if( state & Button3Mask )
+        nCode |= MOUSE_RIGHT;
+
+    if( state & ShiftMask )
+        nCode |= KEY_SHIFT;
+    if( state & ControlMask )
+        nCode |= KEY_MOD1;
+    if( state & Mod1Mask )
+        nCode |= KEY_MOD2;
+
+    return nCode;
+}
+
 long X11SalObject::Dispatch( XEvent* pEvent )
 {
-    for( int n= 0; n < aAllObjects.Count(); n++ )
+    std::list< SalObject* >& rObjects = GetSalData()->GetDisplay()->getSalObjects();
+
+    for( std::list< SalObject* >::iterator it = rObjects.begin(); it != rObjects.end(); ++it )
     {
-        X11SalObject* pObject = aAllObjects.GetObject( n );
+        X11SalObject* pObject = static_cast<X11SalObject*>(*it);
         if( pEvent->xany.window == pObject->maPrimary ||
             pEvent->xany.window == pObject->maSecondary )
         {
-            switch( pEvent->type )
+            if( pObject->IsMouseTransparent() && (
+                    pEvent->type == ButtonPress     ||
+                    pEvent->type == ButtonRelease   ||
+                    pEvent->type == EnterNotify     ||
+                    pEvent->type == LeaveNotify     ||
+                    pEvent->type == MotionNotify
+                    )
+               )
             {
-                case UnmapNotify:
+                SalMouseEvent aEvt;
+                const SystemEnvData* pParentData = pObject->mpParent->GetSystemData();
+                int dest_x, dest_y;
+                XLIB_Window aChild = None;
+                XTranslateCoordinates( pEvent->xbutton.display,
+                                       pEvent->xbutton.root,
+                                       pParentData->aWindow,
+                                       pEvent->xbutton.x_root,
+                                       pEvent->xbutton.y_root,
+                                       &dest_x, &dest_y,
+                                       &aChild );
+                aEvt.mnX        = dest_x;
+                aEvt.mnY        = dest_y;
+                aEvt.mnTime     = pEvent->xbutton.time;
+                aEvt.mnCode     = sal_GetCode( pEvent->xbutton.state );
+                aEvt.mnButton   = 0;
+                USHORT nEvent = 0;
+                if( pEvent->type == ButtonPress ||
+                    pEvent->type == ButtonRelease )
+                {
+                    switch( pEvent->xbutton.button )
+                    {
+                        case Button1: aEvt.mnButton = MOUSE_LEFT;break;
+                        case Button2: aEvt.mnButton = MOUSE_MIDDLE;break;
+                        case Button3: aEvt.mnButton = MOUSE_RIGHT;break;
+                    }
+                    nEvent = (pEvent->type == ButtonPress) ?
+                             SALEVENT_MOUSEBUTTONDOWN :
+                             SALEVENT_MOUSEBUTTONUP;
+                }
+                else if( pEvent->type == EnterNotify )
+                    nEvent = SALEVENT_MOUSELEAVE;
+                else
+                    nEvent = SALEVENT_MOUSEMOVE;
+                pObject->mpParent->CallCallback( nEvent, &aEvt );
+            }
+            else
+            {
+                switch( pEvent->type )
+                {
+                    case UnmapNotify:
                     pObject->mbVisible = FALSE;
                     return 1;
-                case MapNotify:
+                    case MapNotify:
                     pObject->mbVisible = TRUE;
                     return 1;
-                case ButtonPress:
+                    case ButtonPress:
                     pObject->CallCallback( SALOBJ_EVENT_TOTOP, NULL );
                     return 1;
-                case FocusIn:
+                    case FocusIn:
                     pObject->CallCallback( SALOBJ_EVENT_GETFOCUS, NULL );
                     return 1;
-                case FocusOut:
+                    case FocusOut:
                     pObject->CallCallback( SALOBJ_EVENT_LOSEFOCUS, NULL );
                     return 1;
-                default: break;
+                    default: break;
+                }
             }
             return 0;
         }
