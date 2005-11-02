@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FileTools.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:19:03 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:43:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,10 +131,11 @@ public class FileTools {
      */
     public static boolean deleteDir(File dir) {
 
-        if (! cleanDir(dir)) return false;
+        // if (! cleanDir(dir)) return false;
 
         // The directory is now empty so delete it
-        return dir.delete();
+        // return dir.delete();
+        return cleanDir(dir);
     }
 
     /**
@@ -144,17 +145,36 @@ public class FileTools {
      * @return Returns true if all deletions were successful, else false.
      * @param dir the directory to clean from content
      */
-    public static boolean cleanDir(File dir){
+    // public static boolean cleanDir(File dir){
+    //
+    //     boolean success = true;
+    //     if (dir.isDirectory()){
+    //         File [] theFiles = dir.listFiles();
+    //
+    //         if (theFiles.length != 0 )
+    //             for (int i = 0; i < theFiles.length; i++){
+    //                 success &= theFiles[i].delete();
+    //             }
+    //     }
+    //     return success;
+    // }
 
-        boolean success = true;
-        if (dir.isDirectory()){
-            File [] theFiles = dir.listFiles();
-
-            if (theFiles.length != 0 )
-                for (int i = 0; i < theFiles.length; i++){
-                    success &= theFiles[i].delete();
+   public static boolean cleanDir(File dir)
+        {
+            if (dir.isDirectory())
+            {
+                String[] children = dir.list();
+                for (int i=0; i<children.length; i++)
+                {
+                    boolean success = cleanDir(new File(dir, children[i]));
+                    if (!success)
+                    {
+                        return false;
+                    }
                 }
+            }
+
+            // The directory is now empty so delete it
+            return dir.delete();
         }
-        return success;
-    }
 }
