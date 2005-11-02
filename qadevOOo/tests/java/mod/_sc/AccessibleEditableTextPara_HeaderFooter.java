@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara_HeaderFooter.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:37:28 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:50:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,9 +64,9 @@ import com.sun.star.util.XURLTransformer;
 
 
 public class AccessibleEditableTextPara_HeaderFooter extends TestCase {
-    protected XComponent xCalcDoc = null;
-    protected XMultiServiceFactory msf = null;
-    protected XAccessibleAction action = null;
+    protected static XComponent xCalcDoc = null;
+    protected static XMultiServiceFactory msf = null;
+    protected static XAccessibleAction action = null;
 
     protected TestEnvironment createTestEnvironment(TestParameters Param,
                                                     PrintWriter log) {
