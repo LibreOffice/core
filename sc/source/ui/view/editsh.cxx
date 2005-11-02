@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:56:56 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:39:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -535,8 +535,28 @@ void ScEditShell::Execute( SfxRequest& rReq )
         pHdl->SetSelIsRef(TRUE);
 }
 
+void lcl_DisableAll( SfxItemSet& rSet )    // disable all slots
+{
+    SfxWhichIter aIter( rSet );
+    USHORT nWhich = aIter.FirstWhich();
+    while (nWhich)
+    {
+        rSet.DisableItem( nWhich );
+        nWhich = aIter.NextWhich();
+    }
+}
+
 void __EXPORT ScEditShell::GetState( SfxItemSet& rSet )
 {
+    // #125326# When deactivating the view, edit mode is stopped, but the EditShell is left active
+    // (a shell can't be removed from within Deactivate). In that state, the EditView isn't inserted
+    // into the EditEngine, so it can have an invalid selection and must not be used.
+    if ( !pViewData->HasEditView( pViewData->GetActivePart() ) )
+    {
+        lcl_DisableAll( rSet );
+        return;
+    }
+
     ScInputHandler* pHdl = GetMyInputHdl();
     EditView* pActiveView = pHdl ? pHdl->GetActiveView() : pEditView;
 
@@ -880,6 +900,12 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
 void ScEditShell::GetAttrState(SfxItemSet &rSet)
 {
+    if ( !pViewData->HasEditView( pViewData->GetActivePart() ) )    // #125326#
+    {
+        lcl_DisableAll( rSet );
+        return;
+    }
+
     SfxItemSet aAttribs = pEditView->GetAttribs();
     rSet.Put( aAttribs );
 
@@ -933,19 +959,22 @@ String ScEditShell::GetSelectionText( BOOL bWholeWord )
 {
     String aStrSelection;
 
-    if ( bWholeWord )
+    if ( pViewData->HasEditView( pViewData->GetActivePart() ) )    // #125326#
     {
-        EditEngine* pEngine = pEditView->GetEditEngine();
-        ESelection  aSel = pEditView->GetSelection();
-        String      aStrCurrentDelimiters = pEngine->GetWordDelimiters();
+        if ( bWholeWord )
+        {
+            EditEngine* pEngine = pEditView->GetEditEngine();
+            ESelection  aSel = pEditView->GetSelection();
+            String      aStrCurrentDelimiters = pEngine->GetWordDelimiters();
 
-        pEngine->SetWordDelimiters( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(" .,;\"'")) );
-        aStrSelection = pEngine->GetWord( aSel.nEndPara, aSel.nEndPos );
-        pEngine->SetWordDelimiters( aStrCurrentDelimiters );
-    }
-    else
-    {
-        aStrSelection = pEditView->GetSelected();
+            pEngine->SetWordDelimiters( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(" .,;\"'")) );
+            aStrSelection = pEngine->GetWord( aSel.nEndPara, aSel.nEndPos );
+            pEngine->SetWordDelimiters( aStrCurrentDelimiters );
+        }
+        else
+        {
+            aStrSelection = pEditView->GetSelected();
+        }
     }
 
     return aStrSelection;
