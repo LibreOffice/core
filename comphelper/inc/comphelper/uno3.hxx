@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uno3.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:41:05 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 14:06:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,92 @@ namespace comphelper
         virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException) \
             { return baseclass::queryInterface(_rType); } \
         void                    SAL_CALL PUT_SEMICOLON_AT_THE_END()
+
+    /** Use this macro to forward XComponent methods to base class
+
+        When using the ::cppu::WeakComponentImplHelper base classes to
+        implement a UNO interface, a problem occurs when the interface
+        itself already derives from XComponent (like e.g. awt::XWindow
+        or awt::XControl): ::cppu::WeakComponentImplHelper is then
+        still abstract. Using this macro in the most derived class
+        definition provides overrides for the XComponent methods,
+        forwarding them to the given baseclass.
+
+        @param classname
+        Name of the class this macro is issued within
+
+        @param baseclass
+        Name of the baseclass that should have the XInterface methods
+        forwarded to - that's usually the WeakComponentImplHelperN base
+
+        @param implhelper
+        Name of the baseclass that should have the XComponent methods
+        forwarded to - in the case of the WeakComponentImplHelper,
+        that would be ::cppu::WeakComponentImplHelperBase
+    */
+    #define DECLARE_UNO3_XCOMPONENT_DEFAULTS(classname, baseclass, implhelper) \
+        virtual void SAL_CALL acquire() throw() { baseclass::acquire(); }   \
+        virtual void SAL_CALL release() throw() { baseclass::release(); }   \
+        virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException) \
+        {                                                                               \
+            implhelper::dispose();                                                      \
+        }                                                                               \
+        virtual void SAL_CALL addEventListener(                                         \
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > const & xListener ) throw (::com::sun::star::uno::RuntimeException) \
+        {                                                                               \
+            implhelper::addEventListener(xListener);                                        \
+        }                                                                               \
+        virtual void SAL_CALL removeEventListener(                                      \
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > const & xListener ) throw (::com::sun::star::uno::RuntimeException) \
+        {                                                                               \
+            implhelper::removeEventListener(xListener);                                 \
+        }                                                                               \
+        void         SAL_CALL PUT_SEMICOLON_AT_THE_END()
+
+
+    /** Use this macro to forward XComponent methods to base class
+
+        When using the ::cppu::WeakComponentImplHelper base classes to
+        implement a UNO interface, a problem occurs when the interface
+        itself already derives from XComponent (like e.g. awt::XWindow
+        or awt::XControl): ::cppu::WeakComponentImplHelper is then
+        still abstract. Using this macro in the most derived class
+        definition provides overrides for the XComponent methods,
+        forwarding them to the given baseclass.
+
+        @param classname
+        Name of the class this macro is issued within
+
+        @param baseclass
+        Name of the baseclass that should have the XInterface methods
+        forwarded to - that's usually the WeakComponentImplHelperN base
+
+        @param implhelper
+        Name of the baseclass that should have the XComponent methods
+        forwarded to - in the case of the WeakComponentImplHelper,
+        that would be ::cppu::WeakComponentImplHelperBase
+    */
+    #define DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS(classname, baseclass, implhelper) \
+        virtual void SAL_CALL acquire() throw() { baseclass::acquire(); }   \
+        virtual void SAL_CALL release() throw() { baseclass::release(); }   \
+        virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException) \
+            { return baseclass::queryInterface(_rType); }                               \
+        virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException) \
+        {                                                                               \
+            implhelper::dispose();                                                      \
+        }                                                                               \
+        virtual void SAL_CALL addEventListener(                                         \
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > const & xListener ) throw (::com::sun::star::uno::RuntimeException) \
+        {                                                                               \
+            implhelper::addEventListener(xListener);                                        \
+        }                                                                               \
+        virtual void SAL_CALL removeEventListener(                                      \
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > const & xListener ) throw (::com::sun::star::uno::RuntimeException) \
+        {                                                                               \
+            implhelper::removeEventListener(xListener);                                 \
+        }                                                                               \
+        void         SAL_CALL PUT_SEMICOLON_AT_THE_END()
+
 
     //=====================================================================
     //= deriving from multiple XInterface-derived classes
