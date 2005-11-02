@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapbackbuffer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:16:25 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 12:57:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,20 +36,21 @@
 #ifndef _VCLCANVAS_BITMAPBACKBUFFER_HXX_
 #define _VCLCANVAS_BITMAPBACKBUFFER_HXX_
 
-#ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
+#include <vcl/bitmapex.hxx>
 
 #include <canvas/vclwrapper.hxx>
 #include "outdevprovider.hxx"
 
+#include <boost/shared_ptr.hpp>
+
 
 namespace vclcanvas
 {
-    /** OutDevProvider implementation for canvas bitmap.
+    /** Backbuffer implementation for canvas bitmap.
 
-        This class implements the OutDevProvider interface for the
-        bitmap canvas. The actual VirtualDevice is only created when
+        This class abstracts away the renderable bitmap for the bitmap
+        canvas. The actual VirtualDevice is only created when
         necessary, which makes read-only bitmaps a lot smaller.
     */
     class BitmapBackBuffer : public OutDevProvider
@@ -62,18 +63,18 @@ namespace vclcanvas
 
         ~BitmapBackBuffer();
 
-        virtual OutputDevice&           getOutDev();
-        virtual const OutputDevice&     getOutDev() const;
+        virtual OutputDevice&       getOutDev();
+        virtual const OutputDevice& getOutDev() const;
 
-        VirtualDevice&                  getVirDev();
-        const VirtualDevice&            getVirDev() const;
+        VirtualDevice&              getVirDev();
+        const VirtualDevice&        getVirDev() const;
 
         /** Exposing our internal bitmap. Only to be used from
             CanvasBitmapHelper
 
             @internal
         */
-        BitmapEx&                       getBitmapReference();
+        BitmapEx&                   getBitmapReference();
 
     private:
         void createVDev() const;
