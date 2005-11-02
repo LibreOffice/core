@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implpolypolygon.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:29:09 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:43:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,25 +179,27 @@ namespace cppcanvas
 
             if( mbFillColorSet )
             {
-                maRenderState.DeviceColor = maFillColor;
+                rendering::RenderState aLocalState( getRenderState() );
+                aLocalState.DeviceColor = maFillColor;
 
                 pCanvas->getUNOCanvas()->fillPolyPolygon( mxPolyPoly,
                                                           pCanvas->getViewState(),
-                                                          maRenderState );
+                                                          aLocalState );
             }
 
             if( mbStrokeColorSet )
             {
-                maRenderState.DeviceColor = maStrokeColor;
+                rendering::RenderState aLocalState( getRenderState() );
+                aLocalState.DeviceColor = maStrokeColor;
 
                 if( ::rtl::math::approxEqual(maStrokeAttributes.StrokeWidth, 1.0) )
                     pCanvas->getUNOCanvas()->drawPolyPolygon( mxPolyPoly,
                                                               pCanvas->getViewState(),
-                                                              maRenderState );
+                                                              aLocalState );
                 else
                     pCanvas->getUNOCanvas()->strokePolyPolygon( mxPolyPoly,
                                                                 pCanvas->getViewState(),
-                                                                maRenderState,
+                                                                aLocalState,
                                                                 maStrokeAttributes );
             }
 
