@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dpolypolygon.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:48:49 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:59:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,13 @@ public:
     {
         // complete initialization using copy
         maPolygons = rToBeCopied.maPolygons;
+    }
+
+    ImplB3DPolyPolygon(const ::basegfx::B3DPolygon& rToBeCopied)
+    :   mnRefCount(0)
+    {
+        // initialization using given Polygon
+        maPolygons.push_back( rToBeCopied );
     }
 
     ~ImplB3DPolyPolygon()
@@ -217,6 +224,11 @@ namespace basegfx
     :   mpPolyPolygon(rPolyPolygon.mpPolyPolygon)
     {
         mpPolyPolygon->incRefCount();
+    }
+
+    B3DPolyPolygon::B3DPolyPolygon(const B3DPolygon& rPolygon)
+    :   mpPolyPolygon( new ImplB3DPolyPolygon(rPolygon) )
+    {
     }
 
     B3DPolyPolygon::~B3DPolyPolygon()
