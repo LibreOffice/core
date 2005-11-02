@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transparencygroupaction.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:22:52 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:42:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,81 +33,42 @@
  *
  ************************************************************************/
 
-#ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
-#endif
 
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
 
-#include <transparencygroupaction.hxx>
-#include <outdevstate.hxx>
-
-#ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
-#endif
 
-#ifndef _COM_SUN_STAR_RENDERING_XBITMAP_HPP__
 #include <com/sun/star/rendering/XBitmap.hpp>
-#endif
 
-#ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
-#endif
 
-#ifndef _SV_METAACT_HXX
 #include <vcl/metaact.hxx>
-#endif
-#ifndef _SV_BITMAPEX_HXX
 #include <vcl/bitmapex.hxx>
-#endif
-#ifndef _VCL_CANVASTOOLS_HXX
 #include <vcl/canvastools.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_OUTDEV_HXX
 #include <vcl/outdev.hxx>
-#endif
-#ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
-#ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
-#ifndef _SV_GDIMTF_HXX
 #include <vcl/gdimtf.hxx>
-#endif
-#ifndef _SV_GRADIENT_HXX
 #include <vcl/gradient.hxx>
-#endif
 
-#ifndef _CANVAS_CANVASTOOLS_HXX
 #include <canvas/canvastools.hxx>
-#endif
 
-#ifndef _BGFX_RANGE_B2DRANGE_HXX
 #include <basegfx/range/b2drange.hxx>
-#endif
-#ifndef _BGFX_NUMERIC_FTOOLS_HXX
 #include <basegfx/numeric/ftools.hxx>
-#endif
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-#ifndef _BGFX_TUPLE_B2DTUPLE_HXX
 #include <basegfx/tuple/b2dtuple.hxx>
-#endif
-#ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
 #include <basegfx/tools/canvastools.hxx>
-#endif
 
 #include <boost/utility.hpp>
 
-#include <mtftools.hxx>
-#include <cppcanvas/vclfactory.hxx>
+#include "transparencygroupaction.hxx"
+#include "outdevstate.hxx"
+#include "mtftools.hxx"
+#include "cppcanvas/vclfactory.hxx"
 
 
 using namespace ::com::sun::star;
@@ -246,7 +207,12 @@ namespace cppcanvas
                 implSetupTransform( maState, rDstPoint );
 
                 // correct clip (which is relative to original transform)
-                tools::modifyClip( maState, rState, rCanvas, rDstPoint, NULL );
+                tools::modifyClip( maState,
+                                   rState,
+                                   rCanvas,
+                                   rDstPoint,
+                                   NULL,
+                                   NULL );
 
                 maLastSubset.mnSubsetBegin = 0;
                 maLastSubset.mnSubsetEnd = -1;
@@ -273,7 +239,12 @@ namespace cppcanvas
                 implSetupTransform( maState, rDstPoint );
 
                 // correct clip (which is relative to original transform)
-                tools::modifyClip( maState, rState, rCanvas, rDstPoint, NULL );
+                tools::modifyClip( maState,
+                                   rState,
+                                   rCanvas,
+                                   rDstPoint,
+                                   NULL,
+                                   NULL );
 
                 maLastSubset.mnSubsetBegin = 0;
                 maLastSubset.mnSubsetEnd = -1;
