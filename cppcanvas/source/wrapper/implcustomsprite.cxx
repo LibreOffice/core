@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implcustomsprite.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:27:39 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:43:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,10 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#endif
 
 #include <implcustomsprite.hxx>
 #include <implcanvas.hxx>
