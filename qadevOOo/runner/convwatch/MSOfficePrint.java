@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MSOfficePrint.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:14:28 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:41:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,9 @@ public class MSOfficePrint
         // -----------------------------------------------------------------------------
     static boolean isWordDocument(String _sSuffix)
         {
-            if (_sSuffix.toLowerCase().endsWith(".doc"))
+            if (_sSuffix.toLowerCase().endsWith(".doc") ||
+                _sSuffix.toLowerCase().endsWith(".rtf") ||
+                _sSuffix.toLowerCase().endsWith(".dot"))
             {
                 return true;
             }
@@ -231,6 +233,9 @@ public class MSOfficePrint
 
                 realStartCommand(aStartCommand);
             }
+            _aGTA.getPerformance().readWordValuesFromFile("c:\\temp\\wordloadtimes.txt");
+            OfficePrint.createInfoFile(_sPrintFilename, _aGTA, "msoffice");
+            OfficePrint.waitInSeconds(2, "Give word/excel some time to print.");
         }
 
     public void realStartCommand(ArrayList _aStartCommand) throws ConvWatchCancelException
@@ -302,7 +307,7 @@ public class MSOfficePrint
             out.write( "eval 'exec perl -wS $0 ${1+\"$@\"}'                                                          " + ls );
             out.write( "   if 0;                                                                                     " + ls );
             out.write( "use strict;                                                                                  " + ls );
-            out.write( "                                                                                             " + ls );
+            out.write( "use Time::HiRes;                                                                             " + ls );
             out.write( "if ( $^O ne \"MSWin32\")                                                                     " + ls );
             out.write( "{                                                                                            " + ls );
             out.write( "   print 'Windows only.\\n';                                                                  " + ls );
@@ -333,15 +338,22 @@ public class MSOfficePrint
             out.write( "   exit(1);                                                                                  " + ls );
             out.write( "}                                                                                            " + ls );
             out.write( "                                                                                             " + ls );
-            out.write( "                                                                                             " + ls );
+            out.write( "my $startWordTime = Time::HiRes::time(); " + ls );
             out.write( "my $Word = Win32::OLE->new('Word.Application');                                              " + ls );
+            out.write( "my $stopWordTime = Time::HiRes::time() - $startWordTime; " + ls );
             out.write( "# $Word->{'Visible'} = 1;         # if you want to see what's going on                       " + ls );
-            out.write( "$Word->Documents->Open($ARGV[0])                                                             " + ls );
+            out.write( "# , ReadOnly => 1})" + ls );
+            out.write(ls);
+            out.write( "my $startLoadWordTime = Time::HiRes::time(); " + ls );
+            out.write( "$Word->Documents->Open({Filename => $ARGV[0]})                                               " + ls );
             out.write( "    || die('Unable to open document ', Win32::OLE->LastError());                             " + ls );
+            out.write( "my $stopLoadWordTime = Time::HiRes::time() - $startLoadWordTime; " + ls );
+            out.write(ls);
+            out.write( "my $startPrintWordTime = Time::HiRes::time(); " + ls);
             out.write( "my $oldActivePrinte = $Word->{ActivePrinter} ;                                               " + ls );
             out.write( "$Word->{ActivePrinter} = $ARGV[1];                                                           " + ls );
             out.write( "$Word->ActiveDocument->PrintOut({                                                            " + ls );
-            out.write( "                                 Background => 1,                                            " + ls );
+            out.write( "                                 Background => 0,                                            " + ls );
             out.write( "                                 Append     => 0,                                            " + ls );
             out.write( "                                 Range      => wdPrintAllDocument,                           " + ls );
             out.write( "                                 Item       => wdPrintDocumentContent,                       " + ls );
@@ -351,7 +363,23 @@ public class MSOfficePrint
             out.write( "                                 OutputFileName => $ARGV[2]                                  " + ls );
             out.write( "  });                                                                                        " + ls );
             out.write( "$Word->{ActivePrinter} = $oldActivePrinte;                                                   " + ls );
+            out.write( "my $stopPrintWordTime = Time::HiRes::time() - $startPrintWordTime;" + ls);
+
+            out.write( "# ActiveDocument.Close(SaveChanges:=WdSaveOptions.wdDoNotSaveChanges)" + ls );
+            out.write( "my $sVersion = $Word->Application->Version();"+ls);
+            out.write( "$Word->ActiveDocument->Close({SaveChanges => 0});                                                           " + ls );
             out.write( "$Word->Quit();                                                                               " + ls );
+
+            out.write( "local *FILE;" + ls);
+            out.write( "if (open(FILE, \">c:/temp/wordloadtimes.txt\"))" + ls);
+            out.write( "{" + ls);
+            out.write( "   print FILE \"name=$ARGV[0]\\n\";" + ls);
+            out.write( "   print FILE \"WordVersion=$sVersion\\n\";" + ls);
+            out.write( "   print FILE \"WordStartTime=$stopWordTime\\n\";" + ls);
+            out.write( "   print FILE \"WordLoadTime=$stopLoadWordTime\\n\";" + ls);
+            out.write( "   print FILE \"WordPrintTime=$stopPrintWordTime\\n\";" + ls);
+            out.write( "   close(FILE);" + ls);
+            out.write( "}" + ls);
             out.close();
 
             aList.add("perl");
@@ -451,7 +479,7 @@ public class MSOfficePrint
             out.write( "# my $oldActivePrinte = $Word->{ActivePrinter} ;                                               " + ls );
             out.write( "# $Word->{ActivePrinter} = $ARGV[1];                                                           " + ls );
             out.write( "# $Word->ActiveDocument->PrintOut({                                                            " + ls );
-            out.write( "#                                  Background => 1,                                            " + ls );
+            out.write( "#                                  Background => 0,                                            " + ls );
             out.write( "#                                  Append     => 0,                                            " + ls );
             out.write( "#                                  Range      => wdPrintAllDocument,                           " + ls );
             out.write( "#                                  Item       => wdPrintDocumentContent,                       " + ls );
@@ -462,6 +490,8 @@ public class MSOfficePrint
             out.write( "#   });                                                                                        " + ls );
             out.write( "# $Word->{ActivePrinter} = $oldActivePrinte;                                                   " + ls );
             out.write( "$Book->savaAs($ARGV[2], $ARGV[1]);                                                             " + ls );
+            out.write( "# ActiveDocument.Close(SaveChanges:=WdSaveOptions.wdDoNotSaveChanges)" + ls );
+            out.write( "$Book->Close({SaveChanges => 0});                                                           " + ls );
             out.write( "$Word->Quit();                                                                               " + ls );
             out.close();
 
@@ -548,6 +578,8 @@ public class MSOfficePrint
             out.write( "                    PrToFileName => $ARGV[2],                                                                    " + ls );
             out.write( "                    Collate => 1                                                                                 " + ls );
             out.write( "                    });                                                                                          " + ls );
+            out.write( "# Close worksheets without store changes" + ls );
+            out.write( "# $Book->Close({SaveChanges => 0});                                                           " + ls );
             out.write( "$Excel->Quit                                                                                                     " + ls );
             out.close();
 
@@ -636,6 +668,8 @@ public class MSOfficePrint
             out.write( "              xlNoChange,                                                                                        " + ls );
             out.write( "              xlLocalSessionChanges,                                                                             " + ls );
             out.write( "              1);                                                                                                " + ls );
+            out.write( "# Close worksheets without store changes" + ls );
+            out.write( "# $Book->Close({SaveChanges => 0}); " + ls );
             out.write( "$Excel->Quit                                                                                                     " + ls );
             out.close();
 
@@ -717,7 +751,7 @@ public class MSOfficePrint
             out.write( "   my $Presentation = $PowerPoint->Presentations->Add;                                                                 " + ls );
             out.write( "   my $Presentation = $PowerPoint->Presentations->Open( $ARGV[0] );                                                    " + ls );
             out.write( "   $Presentation->PrintOptions->{ActivePrinter} = $ARGV[1];                                                            " + ls );
-            out.write( "   $Presentation->PrintOptions->{PrintInBackground} = 1;                                                               " + ls );
+            out.write( "   $Presentation->PrintOptions->{PrintInBackground} = 0;                                                               " + ls );
             out.write( "   # PrintColorType = 1 means print in color and PrintColorType = 2 means print in gray                                " + ls );
             out.write( "   $Presentation->PrintOptions->{PrintColorType} = 1;                                                                  " + ls );
             out.write( "                                                                                                                       " + ls );
