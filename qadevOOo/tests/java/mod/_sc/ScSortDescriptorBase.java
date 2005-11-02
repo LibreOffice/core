@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScSortDescriptorBase.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:00:36 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:08:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ import com.sun.star.util.XSortable;
  */
 public class ScSortDescriptorBase extends TestCase {
 
-    XSpreadsheetDocument xSpreadsheetDoc;
+    static XSpreadsheetDocument xSpreadsheetDoc;
 
     /**
      * in general this method creates a testdocument
