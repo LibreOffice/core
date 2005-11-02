@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXCellRange.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:44:52 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:14:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,6 +165,11 @@ public class SwXCellRange extends TestCase {
         NewData[4] = new Double[]
             {new Double(4),new Double(9),new Double(2.5),new Double(5)};
         tEnv.addObjRelation("NewData",NewData);
+
+        // com::sun::star::chart::XChartDataArray
+        tEnv.addObjRelation("CRDESC",
+                 "Column and RowDescriptions can't be changed for this Object");
+
 
         return tEnv;
     }
