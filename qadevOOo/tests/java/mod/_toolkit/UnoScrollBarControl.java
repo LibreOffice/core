@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoScrollBarControl.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:50:04 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:26:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ import util.utils;
 
 
 public class UnoScrollBarControl extends TestCase {
-    XTextDocument xTextDoc;
+    private static XTextDocument xTextDoc;
 
     protected void initialize(TestParameters Param, PrintWriter log) {
         SOfficeFactory SOF = SOfficeFactory.getFactory(
