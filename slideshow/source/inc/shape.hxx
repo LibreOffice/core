@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shape.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:52:44 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 14:05:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,6 +168,19 @@ namespace presentation
              */
             virtual ::basegfx::B2DRectangle getPosSize() const = 0;
 
+            /** Get the DOM position and size of the shape.
+
+                This method yields the underlying DOM shape bounds,
+                i.e. the original shape bounds from the document
+                model. This value is <em>always</em> unaffected by any
+                animation activity. Note that shape rotations, which
+                are already contained in the shape as displayed in the
+                original document are already included herein (we
+                currently take the shape as-is from the document,
+                assuming a rotation angle of 0).
+             */
+            virtual ::basegfx::B2DRectangle getDOMBounds() const = 0;
+
             /** Get the current shape update area.
 
                 This method yields the currently effective update area
@@ -190,7 +203,7 @@ namespace presentation
                 The shape priority defines the relative order of the
                 shapes on the slide.
 
-                @return the priority. Will be in the [0,1] range.
+                @return the priority. Will be in the [0,+infty) range.
              */
             virtual double getPriority() const = 0;
 
