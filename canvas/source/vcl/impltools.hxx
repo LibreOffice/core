@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impltools.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:20:33 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:01:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,37 +36,18 @@
 #ifndef _VCLCANVAS_TOOLS_HXX
 #define _VCLCANVAS_TOOLS_HXX
 
-#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
+
 #include <vcl/svapp.hxx>
-#endif
-
-#ifndef _SV_OUTDEV_HXX
 #include <vcl/outdev.hxx>
-#endif
 
-#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#endif
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
-
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
-#include <boost/shared_ptr.hpp>
-#endif
 
 #include <canvas/vclwrapper.hxx>
-
 #include "outdevprovider.hxx"
 
 
@@ -123,10 +104,6 @@ namespace vclcanvas
 {
     namespace tools
     {
-        ::basegfx::B2DPolyPolygon
-        polyPolygonFromXPolyPolygon2D( const ::com::sun::star::uno::Reference<
-                                       ::com::sun::star::rendering::XPolyPolygon2D >& );
-
         ::BitmapEx
         bitmapExFromXBitmap( const ::com::sun::star::uno::Reference<
                              ::com::sun::star::rendering::XBitmap >& );
@@ -141,12 +118,11 @@ namespace vclcanvas
                                  const ::com::sun::star::rendering::RenderState&    renderState,
                                  ::OutputDevice&                                            rOutDev );
 
-        /** Predicate, to determine whether polygon is equal to given rectangle
+        /** Predicate, to determine whether polygon is actually an axis-aligned rectangle
 
-            @return true, if the polygon exactly describes the given rectangle
+            @return true, if the polygon is a rectangle.
          */
-        bool isPolyPolygonEqualRectangle( const PolyPolygon& rPolyPoly,
-                                          const Rectangle&   rRect );
+        bool isRectangle( const PolyPolygon& rPolyPoly );
 
 
         // Little helper to encapsulate locking into policy class
@@ -171,8 +147,6 @@ namespace vclcanvas
         class OutDevStateKeeper
         {
         public:
-            typedef ::boost::shared_ptr< canvas::vcltools::VCLObject< OutputDevice > >  OutputDeviceSharedPtr;
-
             explicit OutDevStateKeeper( OutputDevice& rOutDev ) :
                 mpOutDev( &rOutDev ),
                 mbMappingWasEnabled( mpOutDev->IsMapModeEnabled() )
