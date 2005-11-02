@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dtuple.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:53:01 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 14:00:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,11 @@ namespace { struct EmptyTuple : public rtl::Static<basegfx::B3DTuple, EmptyTuple
 
 namespace basegfx
 {
+    const B3DTuple& B3DTuple::getEmptyTuple()
+    {
+        return EmptyTuple::get();
+    }
+
     B3DTuple::B3DTuple(const B3ITuple& rTup)
     :   mfX( rTup.getX() ),
         mfY( rTup.getY() ),
@@ -57,11 +62,6 @@ namespace basegfx
     B3ITuple fround(const B3DTuple& rTup)
     {
         return B3ITuple(fround(rTup.getX()), fround(rTup.getY()), fround(rTup.getZ()));
-    }
-
-    static const B3DTuple& getEmptyTuple()
-    {
-        return EmptyTuple::get();
     }
 } // end of namespace basegfx
 
