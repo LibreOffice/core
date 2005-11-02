@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XFrame.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:02:11 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:45:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -538,20 +538,37 @@ public class _XFrame extends MultiMethodTest {
     }
 
     /**
-    * Test calls the method. <p>
-    * Has <b> OK </b> status if the method successfully returns
-    * and no exceptions were thrown. <p>
-    * The following method tests are to be completed successfully before :
-    * <ul>
-    *  <li> <code> setComponent() </code> : sets window and controller to the
-    *  object</li>
-    * </ul>
-    */
+     * Test calls the method. <p>
+     * Has <b> OK </b> status if the method successfully returns.
+     * In case a frame should initialised twice, a
+     * <CODE>com.sun.star.uno.RuntimeException</CODE> was thron. This is ok. But since
+     * a com.sun.star.uno.RuntimeException could thrown in any state the message of
+     * the exception must contain a defined string. In this case the test get an
+     * <CODE>OK</CODE> status.
+     * The following method tests are to be completed successfully before :
+     * <ul>
+     *  <li> <code> setComponent() </code> : sets window and controller to the
+     *  object</li>
+     * </ul>
+     */
     public void _initialize() {
         requiredMethod("setComponent()") ;
         XWindow win = oObj.getContainerWindow() ;
-        oObj.initialize(win) ;
-        tRes.tested("initialize()", true) ;
+        boolean bOK = true;
+        try {
+            oObj.initialize(win) ;
+        } catch (com.sun.star.uno.RuntimeException e){
+            String message="Frame::initialized() is called more then once, which isnt usefull nor allowed.";
+            if (e.toString().indexOf(message) != -1){
+                log.println(e.toString());
+                log.println("methods throws exception, but it's OK");
+            }else{
+                log.println(e.toString());
+                bOK=false;
+            }
+
+        }
+        tRes.tested("initialize()", bOK) ;
     }
 
     /**
