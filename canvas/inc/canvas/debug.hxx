@@ -4,9 +4,9 @@
  *
  *  $RCSfile: debug.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:04:39 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 12:40:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,7 @@
 ::std::size_t find_unreachable_objects( bool );
 
 #ifdef VERBOSE
-#define SHARED_PTR_LEFTOVERS(a) OSL_TRACE( "%s\n%s: Unreachable objects still use %d bytes", \
+#define SHARED_PTR_LEFTOVERS(a) OSL_TRACE( "%s\n%s: Unreachable objects still use %d bytes\n", \
                                            BOOST_CURRENT_FUNCTION, a, \
                                            find_unreachable_objects(true) )
 #else
@@ -137,7 +137,7 @@
     still contained in those objects, which quite possibly are prevented
     from deletion by circular references.
  */
-#define SHARED_PTR_LEFTOVERS(a) OSL_TRACE( "%s\n%s: Unreachable objects still use %d bytes", \
+#define SHARED_PTR_LEFTOVERS(a) OSL_TRACE( "%s\n%s: Unreachable objects still use %d bytes\n", \
                                            BOOST_CURRENT_FUNCTION, a, \
                                            find_unreachable_objects(false) )
 #endif
