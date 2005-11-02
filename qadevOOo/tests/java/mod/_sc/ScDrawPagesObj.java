@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScDrawPagesObj.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:50:05 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:00:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ import com.sun.star.uno.XInterface;
 * @see ifc.drawing._XDrawPages
 */
 public class ScDrawPagesObj extends TestCase {
-    XSpreadsheetDocument xSheetDoc = null;
+    static XSpreadsheetDocument xSheetDoc = null;
 
     /**
     * Creates Spreadsheet document.
