@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:39:41 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:34:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,8 +78,8 @@
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
-#ifndef _TL_POLY_HXX
-#include <tools/poly.hxx>
+#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #endif
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
@@ -1375,7 +1375,8 @@ BOOL X11SalGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
 
 // ---------------------------------------------------------------------------
 
-BOOL X11SalGraphics::GetGlyphOutline( long nGlyphIndex, PolyPolygon& rPolyPoly )
+BOOL X11SalGraphics::GetGlyphOutline( long nGlyphIndex,
+    ::basegfx::B2DPolyPolygon& rPolyPoly )
 {
     int nLevel = nGlyphIndex >> GF_FONTSHIFT;
     if( nLevel >= MAX_FALLBACK )
