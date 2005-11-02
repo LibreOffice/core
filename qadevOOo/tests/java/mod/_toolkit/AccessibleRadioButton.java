@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleRadioButton.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:23:50 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:18:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,9 +102,10 @@ import util.SOfficeFactory;
  * @see ifc.accessibility.XAccessibleText
  */
 public class AccessibleRadioButton extends TestCase {
-    XDesktop the_Desk;
-    XTextDocument xTextDoc;
-    XAccessibleAction accCloseButton = null;
+    private static XDesktop the_Desk;
+    private static XTextDocument xTextDoc;
+    private static XAccessibleAction accCloseButton;
+
 
     /**
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
@@ -171,23 +172,6 @@ public class AccessibleRadioButton extends TestCase {
                                                     PrintWriter log) {
         log.println("creating a test environment");
 
-        try {
-            if (accCloseButton != null) {
-                log.println("closing HyperlinkDialog");
-                accCloseButton.doAccessibleAction(0);
-            }
-        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            e.printStackTrace(log);
-        } catch (com.sun.star.lang.DisposedException de) {
-            log.println("already disposed");
-        }
-
-        if (xTextDoc != null) {
-            log.println("dispose a text document");
-            closeDoc();
-            xTextDoc = null;
-        }
-
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(
                                      (XMultiServiceFactory) tParam.getMSF());
@@ -201,7 +185,7 @@ public class AccessibleRadioButton extends TestCase {
             throw new StatusException("Couldn't create document", e);
         }
 
-        shortWait();
+        util.utils.shortWait(2000);
 
         XModel aModel1 = (XModel) UnoRuntime.queryInterface(XModel.class,
                                                             xTextDoc);
@@ -236,7 +220,7 @@ public class AccessibleRadioButton extends TestCase {
         PropertyValue[] noArgs = new PropertyValue[0];
         getting.dispatch(url[0], noArgs);
 
-        shortWait();
+        util.utils.shortWait(2000);
 
         XInterface oObj = null;
 
@@ -254,7 +238,7 @@ public class AccessibleRadioButton extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        shortWait();
+        util.utils.shortWait(2000);
 
         XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
                                                               tk.getActiveTopWindow());
@@ -276,6 +260,8 @@ public class AccessibleRadioButton extends TestCase {
             e.printStackTrace(log);
         }
 
+        at.printAccessibleTree(log,xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+
         oObj = at.getAccessibleObjectForRole(xRoot,
                                              AccessibleRole.RADIO_BUTTON,
                                              "Web");
@@ -287,6 +273,7 @@ public class AccessibleRadioButton extends TestCase {
         XAccessibleContext closeButton = at.getAccessibleObjectForRole(xRoot,
                                                                        AccessibleRole.PUSH_BUTTON,
                                                                        "Close");
+
 
         accCloseButton = (XAccessibleAction) UnoRuntime.queryInterface(
                                  XAccessibleAction.class, closeButton);
@@ -324,18 +311,6 @@ public class AccessibleRadioButton extends TestCase {
                             anotherButtonValue);
 
         return tEnv;
-    }
-
-    /**
-    * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
-    * reset</code> call.
-    */
-    private void shortWait() {
-        try {
-            Thread.currentThread().sleep(2000);
-        } catch (InterruptedException e) {
-            System.out.println("While waiting :" + e);
-        }
     }
 
     protected void closeDoc() {
