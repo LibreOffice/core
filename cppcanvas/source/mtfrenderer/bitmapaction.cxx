@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapaction.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:17:43 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:39:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,52 +33,28 @@
  *
  ************************************************************************/
 
-#include <bitmapaction.hxx>
-#include <outdevstate.hxx>
-
-#ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_XBITMAP_HPP__
 #include <com/sun/star/rendering/XBitmap.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_REPAINTRESULT_HPP_
 #include <com/sun/star/rendering/RepaintResult.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_XCACHEDPRIMITIVE_HPP_
 #include <com/sun/star/rendering/XCachedPrimitive.hpp>
-#endif
 
-#ifndef _SV_BITMAPEX_HXX
 #include <vcl/bitmapex.hxx>
-#endif
-#ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
-#endif
-#ifndef _VCL_CANVASTOOLS_HXX
 #include <vcl/canvastools.hxx>
-#endif
 
-#ifndef _CANVAS_CANVASTOOLS_HXX
 #include <canvas/canvastools.hxx>
-#endif
 
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-#ifndef _BGFX_VECTOR_B2DSIZE_HXX
 #include <basegfx/vector/b2dsize.hxx>
-#endif
-#ifndef _BGFX_RANGE_B2DRANGE_HXX
 #include <basegfx/range/b2drange.hxx>
-#endif
-#ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
 #include <basegfx/tools/canvastools.hxx>
-#endif
 
 #include <boost/utility.hpp>
 
-#include <mtftools.hxx>
+#include "cachedprimitivebase.hxx"
+#include "bitmapaction.hxx"
+#include "outdevstate.hxx"
+#include "mtftools.hxx"
 
 
 using namespace ::com::sun::star;
@@ -90,7 +66,7 @@ namespace cppcanvas
         namespace
         {
 
-            class BitmapAction : public Action, private ::boost::noncopyable
+            class BitmapAction : public CachedPrimitiveBase
             {
             public:
                 BitmapAction( const ::BitmapEx&,
@@ -103,7 +79,6 @@ namespace cppcanvas
                               const CanvasSharedPtr&,
                               const OutDevState& );
 
-                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
                                      const Subset&                  rSubset ) const;
 
@@ -114,9 +89,10 @@ namespace cppcanvas
                 virtual sal_Int32 getActionCount() const;
 
             private:
+                virtual bool render( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
+                                     const ::basegfx::B2DHomMatrix&                 rTransformation ) const;
+
                 uno::Reference< rendering::XBitmap >                    mxBitmap;
-                mutable uno::Reference< rendering::XCachedPrimitive >   mxCachedBitmap;
-                mutable ::basegfx::B2DHomMatrix                         maLastTransformation;
                 CanvasSharedPtr                                         mpCanvas;
                 rendering::RenderState                                  maState;
             };
@@ -126,10 +102,9 @@ namespace cppcanvas
                                         const ::Point&          rDstPoint,
                                         const CanvasSharedPtr&  rCanvas,
                                         const OutDevState&      rState ) :
+                CachedPrimitiveBase( rCanvas, true ),
                 mxBitmap( ::vcl::unotools::xBitmapFromBitmapEx( rCanvas->getUNOCanvas()->getDevice(),
                                                                 rBmpEx ) ),
-                mxCachedBitmap(),
-                maLastTransformation(),
                 mpCanvas( rCanvas ),
                 maState()
             {
@@ -144,7 +119,12 @@ namespace cppcanvas
                                                       aLocalTransformation );
 
                 // correct clip (which is relative to original transform)
-                tools::modifyClip( maState, rState, rCanvas, rDstPoint, NULL );
+                tools::modifyClip( maState,
+                                   rState,
+                                   rCanvas,
+                                   rDstPoint,
+                                   NULL,
+                                   NULL );
             }
 
             BitmapAction::BitmapAction( const ::BitmapEx&       rBmpEx,
@@ -152,10 +132,9 @@ namespace cppcanvas
                                         const ::Size&           rDstSize,
                                         const CanvasSharedPtr&  rCanvas,
                                         const OutDevState&      rState      ) :
+                CachedPrimitiveBase( rCanvas, true ),
                 mxBitmap( ::vcl::unotools::xBitmapFromBitmapEx( rCanvas->getUNOCanvas()->getDevice(),
                                                                 rBmpEx ) ),
-                mxCachedBitmap(),
-                maLastTransformation(),
                 mpCanvas( rCanvas ),
                 maState()
             {
@@ -176,10 +155,16 @@ namespace cppcanvas
                                                       aLocalTransformation );
 
                 // correct clip (which is relative to original transform)
-                tools::modifyClip( maState, rState, rCanvas, rDstPoint, &aScale );
+                tools::modifyClip( maState,
+                                   rState,
+                                   rCanvas,
+                                   rDstPoint,
+                                   &aScale,
+                                   NULL );
             }
 
-            bool BitmapAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
+            bool BitmapAction::render( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
+                                       const ::basegfx::B2DHomMatrix&                 rTransformation ) const
             {
                 RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::BitmapAction::render()" );
                 RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::BitmapAction: 0x%X", this );
@@ -187,25 +172,9 @@ namespace cppcanvas
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
 
-                const rendering::ViewState& rViewState( mpCanvas->getViewState() );
-
-                // can we use the cached bitmap?
-                if( mxCachedBitmap.is() &&
-                    maLastTransformation == rTransformation )
-                {
-                    if( mxCachedBitmap->redraw( rViewState ) ==
-                        rendering::RepaintResult::REDRAWN )
-                    {
-                        // cached repaint succeeded, done.
-                        return true;
-                    }
-                }
-
-                maLastTransformation = rTransformation;
-
-                mxCachedBitmap = mpCanvas->getUNOCanvas()->drawBitmap( mxBitmap,
-                                                                       rViewState,
-                                                                       aLocalState );
+                rCachedPrimitive = mpCanvas->getUNOCanvas()->drawBitmap( mxBitmap,
+                                                                         mpCanvas->getViewState(),
+                                                                         aLocalState );
 
                 return true;
             }
@@ -219,7 +188,7 @@ namespace cppcanvas
                     rSubset.mnSubsetEnd != 1 )
                     return false;
 
-                return render( rTransformation );
+                return CachedPrimitiveBase::render( rTransformation );
             }
 
             ::basegfx::B2DRange BitmapAction::getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const
