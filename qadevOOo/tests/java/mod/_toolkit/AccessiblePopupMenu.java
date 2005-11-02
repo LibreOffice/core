@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessiblePopupMenu.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:23:12 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:17:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,8 +66,9 @@ import util.SOfficeFactory;
 
 
 public class AccessiblePopupMenu extends TestCase {
-    XDesktop the_Desk;
-    XTextDocument xTextDoc;
+    private static XDesktop the_Desk;
+    private static XTextDocument xTextDoc;
+    private static Point point;
 
     /**
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
@@ -83,6 +84,19 @@ public class AccessiblePopupMenu extends TestCase {
      * <code>createTestEnvironment</code> method.
      */
     protected void cleanup(TestParameters Param, PrintWriter log) {
+
+        log.println("release the popup menu");
+        try {
+            Robot rob = new Robot();
+            int x = point.X;
+            int y = point.Y;
+            rob.mouseMove(x, y);
+            rob.mousePress(InputEvent.BUTTON1_MASK);
+            rob.mouseRelease(InputEvent.BUTTON1_MASK);
+        } catch (java.awt.AWTException e) {
+            log.println("couldn't press mouse button");
+        }
+
         log.println("disposing xTextDoc");
 
         if (xTextDoc != null) {
@@ -158,7 +172,7 @@ public class AccessiblePopupMenu extends TestCase {
         XAccessibleComponent window = (XAccessibleComponent) UnoRuntime.queryInterface(
                                               XAccessibleComponent.class, oObj);
 
-        Point point = window.getLocationOnScreen();
+        point = window.getLocationOnScreen();
         Rectangle rect = window.getBounds();
 
         try {
