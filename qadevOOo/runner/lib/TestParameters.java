@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TestParameters.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:24:15 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:43:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,6 +173,12 @@ public class TestParameters extends Hashtable {
      */
     public Integer ThreadTimeOut = new Integer(30000);
 
+    /*
+     * This parameter contains the time which the office could use to close for
+     * itself before its destroyed. Default is 5000 ms
+     */
+    public Integer OfficeCloseTimeOut = new Integer(5000);
+
     /**
      * Wraper around "get()" with some debug output
      * @param key A key of this table.
@@ -268,6 +274,7 @@ public class TestParameters extends Hashtable {
         put(PropertyName.TIME_OUT,TimeOut);
         put(PropertyName.THREAD_TIME_OUT,ThreadTimeOut);
         put(PropertyName.AUTO_RESTART,AutoRestart?Boolean.TRUE:Boolean.FALSE);
+        put(PropertyName.OFFICE_CLOSE_TIME_OUT, OfficeCloseTimeOut);
 
         // get the operating system
         put(PropertyName.OPERATING_SYSTEM, getSOCompatibleOSName());
