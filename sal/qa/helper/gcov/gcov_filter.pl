@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 #
-# $Id: gcov_filter.pl,v 1.3 2003-06-11 16:36:22 vg Exp $
+# $Id: gcov_filter.pl,v 1.4 2005-11-02 17:23:57 kz Exp $
 #
 
 # GCOV_FILTER
@@ -18,7 +18,7 @@ use File::Basename;
 use Getopt::Long;
 
 # Global constants
-our $version_info = 'gcov helper $Revision: 1.3 $ ';
+our $version_info = 'gcov helper $Revision: 1.4 $ ';
 our $help;                    # Help option flag
 our $version;                 # Version option flag
 our $cwd = `pwd`;             # current working directory
@@ -34,7 +34,7 @@ our $allfuncinfo;             # allfuncinfo option flag
 our $showallfunc;             # showallfunc option flag
 our $no_percentage;           # no_percentage option flag
 our $donotfilter;             # donotfilter option flag
-
+our $objectdir;
 
 # Prototypes
 sub print_usage(*);
@@ -54,6 +54,7 @@ if (!GetOptions( "input-allfunc=s" => \$input_allfunc,
                  "showallfunc" => \$showallfunc,
                  "no-percentage" => \$no_percentage,
                  "do-not-filter" => \$donotfilter,
+                 "objectdir=s" => \$objectdir,
                  "help"   => \$help,
                  "version" => \$version
                  ))
@@ -164,10 +165,16 @@ for ($nIdx = 0; $nIdx < $nCount ; ++$nIdx)
 
     # change directory, to the current file, due to the fact, that we may be need to call gcov
     # and gcov will create some extra files, like *.gcov near the current file.
-    if ( $startdir ne "" )
+    # if ( $startdir ne "" )
+    # {
+    #     chdir $startdir;
+    #     $file = basename($file);
+    # }
+
+    my $OBJECTS="";
+    if ($objectdir)
     {
-        chdir $startdir;
-        $file = basename($file);
+        $OBJECTS = "-o " . $objectdir;
     }
 
     if (! ($file =~ /\.f$/ ))
@@ -175,7 +182,8 @@ for ($nIdx = 0; $nIdx < $nCount ; ++$nIdx)
         my $filef = "$file.f";
         # if (! -e $filef )
         # {
-            my $blah = `gcov -f $file >$filef`;
+        # print "gcov $OBJECTS -l -f $file >$filef\n";
+        my $blah = `gcov $OBJECTS -n -f $file >$filef`;
         # }
         $file = $filef;
     }
@@ -271,8 +279,61 @@ sub contain_in_List($$)
 # Read the gcov function (gcov -f) file
 # and compare line by line with the export function list
 # so we get a list of functions, which are only exported, and not all stuff.
-
+# sample of output
+# new gcov gcc 3.4 format
 sub read_gcov_function_file($)
+{
+    local *INPUT_HANDLE;
+    my $file = $_[0];
+    my $line = "";
+    open(INPUT_HANDLE, $file)
+        or die("ERROR: cannot open $file!\n");
+
+    while ($line = <INPUT_HANDLE>)
+    {
+        chomp($line);
+        # sample line (for reg exp:)
+        # 100.00% of 3 source lines executed in function osl_thread_init_Impl
+        if ($line =~ /^Function \`(.*)\'$/ )
+        {
+            my $sFunctionName = $1;
+            my $sPercentage;
+            $line = <INPUT_HANDLE>;
+            if ($line =~ /^Lines executed:(.*)% of/ )
+            {
+                $sPercentage = $1;
+            }
+            my $value = contain_in_List( $sFunctionName, \@aExportedFunctionList );
+            if ($value)
+            {
+                my $isDeprecated = contain_in_List( $sFunctionName, \@aDeprecatedList );
+                if ($isDeprecated)
+                {
+                    # Function is deprecated, do not export it.
+                }
+                else
+                {
+                    if ($no_percentage)
+                    {
+                        print("$value\n");
+                    }
+                    else
+                    {
+                        print("$sPercentage $value\n");
+                    }
+                }
+            }
+            # push(@aExportedFunctionList, $1);
+        }
+    }
+    close(INPUT_HANDLE);
+}
+
+# gcov format since gcc 3.3.6
+# 100.00% von 3 Zeilen in function helloworld ausgeführt
+# 100.00% von 5 Zeilen in function main ausgeführt
+# 100.00% von 8 Zeilen in file tmp.c ausgeführt
+sub read_gcov_function_file_old_gcc_3($)
 {
     local *INPUT_HANDLE;
     my $file = $_[0];
