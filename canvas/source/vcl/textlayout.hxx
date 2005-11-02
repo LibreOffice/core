@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textlayout.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:24:24 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:05:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,30 +33,23 @@
  *
  ************************************************************************/
 
-#ifndef _TEXTLAYOUT_HXX
-#define _TEXTLAYOUT_HXX
+#ifndef _VCLCANVAS_TEXTLAYOUT_HXX
+#define _VCLCANVAS_TEXTLAYOUT_HXX
 
-#ifndef _CPPUHELPER_COMPBASE2_HXX_
 #include <cppuhelper/compbase2.hxx>
-#endif
-#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
-#endif
 
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_XTEXTLAYOUT_HPP_
+#include <com/sun/star/rendering/StringContext.hpp>
 #include <com/sun/star/rendering/XTextLayout.hpp>
-#endif
 
 #include <canvas/vclwrapper.hxx>
 
 #include "canvasfont.hxx"
 #include "impltools.hxx"
 
+#include <boost/utility.hpp>
 
-#define TEXTLAYOUT_IMPLEMENTATION_NAME "VCLCanvas::TextLayout"
 
 /* Definition of TextLayout class */
 
@@ -65,14 +58,16 @@ namespace vclcanvas
     typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::rendering::XTextLayout,
                                                ::com::sun::star::lang::XServiceInfo > TextLayout_Base;
 
-    class TextLayout : public ::comphelper::OBaseMutex, public TextLayout_Base
+    class TextLayout : public ::comphelper::OBaseMutex,
+                       public TextLayout_Base,
+                       private ::boost::noncopyable
     {
     public:
         TextLayout( const ::com::sun::star::rendering::StringContext&   aText,
-                    sal_Int8                                                    nDirection,
-                    sal_Int64                                                   nRandomSeed,
-                    const CanvasFont::ImplRef&                                  rFont,
-                    const OutDevProviderSharedPtr&                              rRefDevice );
+                    sal_Int8                                            nDirection,
+                    sal_Int64                                           nRandomSeed,
+                    const CanvasFont::Reference&                        rFont,
+                    const DeviceRef&                                    rRefDevice );
 
         /// Dispose all internal references
         virtual void SAL_CALL disposing();
@@ -101,31 +96,24 @@ namespace vclcanvas
         virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw( ::com::sun::star::uno::RuntimeException );
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()  throw( ::com::sun::star::uno::RuntimeException );
 
-        bool draw( OutputDevice&                                           rOutDev,
-                   const Point&                                            rOutpos,
+        bool draw( OutputDevice&                                   rOutDev,
+                   const Point&                                    rOutpos,
                    const ::com::sun::star::rendering::ViewState&   viewState,
                    const ::com::sun::star::rendering::RenderState& renderState ) const;
 
-    protected:
-        ~TextLayout(); // we're a ref-counted UNO class. _We_ destroy ourselves.
-
     private:
-        // default: disabled copy/assignment
-        TextLayout(const TextLayout&);
-        TextLayout& operator=( const TextLayout& );
-
-        void setupTextOffsets( long*                                                    outputOffsets,
-                               const ::com::sun::star::uno::Sequence< double >&         inputOffsets,
+        void setupTextOffsets( sal_Int32*                                       outputOffsets,
+                               const ::com::sun::star::uno::Sequence< double >& inputOffsets,
                                const ::com::sun::star::rendering::ViewState&    viewState,
                                const ::com::sun::star::rendering::RenderState&  renderState     ) const;
 
-        ::com::sun::star::rendering::StringContext maText;
-        ::com::sun::star::uno::Sequence< double >          maLogicalAdvancements;
-        CanvasFont::ImplRef                                mpFont;
-        OutDevProviderSharedPtr                            mpRefDevice;
-        sal_Int8                                           mnTextDirection;
+        ::com::sun::star::rendering::StringContext  maText;
+        ::com::sun::star::uno::Sequence< double >   maLogicalAdvancements;
+        CanvasFont::Reference                       mpFont;
+        DeviceRef                                   mpRefDevice;
+        sal_Int8                                    mnTextDirection;
     };
 
 }
 
-#endif /* _TEXTLAYOUT_HXX */
+#endif /* _VCLCANVAS_TEXTLAYOUT_HXX */
