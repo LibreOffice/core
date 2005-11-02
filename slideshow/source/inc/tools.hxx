@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tools.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:54:47 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 14:06:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,108 +190,6 @@ namespace presentation
                              const ::com::sun::star::uno::Sequence<
                                  ::com::sun::star::beans::NamedValue >&     rSequence,
                              const ::rtl::OUString&                     rSearchString );
-
-        template< typename ValueType > class ValueMap
-        {
-        public:
-            struct MapEntry
-            {
-                const char*     maKey;
-                ValueType       maValue;
-            };
-
-            ValueMap( const MapEntry*   pMap,
-                      ::std::size_t     nEntries,
-                      bool              bCaseSensitive ) :
-                mpMap( pMap ),
-                mnEntries( nEntries ),
-                mbCaseSensitive( bCaseSensitive )
-            {
-#ifdef DBG_UTIL
-                // Ensure that map entries are sorted (and all lowercase, if this
-                // map is case insensitive)
-                const ::rtl::OString aStr( pMap->maKey );
-                if( !mbCaseSensitive &&
-                    aStr != aStr.toAsciiLowerCase() )
-                {
-                    OSL_TRACE("ValueMap::ValueMap(): Key %s is not lowercase",
-                              pMap->maKey);
-                    OSL_ENSURE( false, "ValueMap::ValueMap(): Key is not lowercase" );
-                }
-
-                if( mnEntries > 1 )
-                {
-                    for( ::std::size_t i=0; i<mnEntries-1; ++i, ++pMap )
-                    {
-                        if( !mapComparator(pMap[0], pMap[1]) &&
-                            mapComparator(pMap[1], pMap[0]) )
-                        {
-                            OSL_TRACE("ValueMap::ValueMap(): Map is not sorted, keys %s and %s are wrong",
-                                       pMap[0].maKey,
-                                       pMap[1].maKey);
-                            OSL_ENSURE( false,
-                                        "ValueMap::ValueMap(): Map is not sorted" );
-                        }
-
-                        const ::rtl::OString aStr( pMap[1].maKey );
-                        if( !mbCaseSensitive &&
-                            aStr != aStr.toAsciiLowerCase() )
-                        {
-                            OSL_TRACE("ValueMap::ValueMap(): Key %s is not lowercase",
-                                      pMap[1].maKey);
-                            OSL_ENSURE( false, "ValueMap::ValueMap(): Key is not lowercase" );
-                        }
-                    }
-                }
-#endif
-            }
-
-            bool lookup( const ::rtl::OUString& rName,
-                         ValueType&             o_rResult ) const
-            {
-                // rName is required to contain only ASCII characters.
-                // TODO(Q1): Enforce this at upper layers
-                ::rtl::OString aKey( ::rtl::OUStringToOString( mbCaseSensitive ? rName : rName.toAsciiLowerCase(),
-                                                               RTL_TEXTENCODING_ASCII_US ) );
-                MapEntry aSearchKey =
-                    {
-                        aKey.getStr(),
-                        ValueType()
-                    };
-
-                const MapEntry* pRes;
-                const MapEntry* pEnd = mpMap+mnEntries;
-                if( (pRes=::std::lower_bound( mpMap,
-                                              pEnd,
-                                              aSearchKey,
-                                              &mapComparator )) != pEnd )
-                {
-                    // place to _insert before_ found - is it equal to
-                    // the search key?
-                    if( strcmp( pRes->maKey, aSearchKey.maKey ) == 0 )
-                    {
-                        // yep, correct entry found
-                        o_rResult = pRes->maValue;
-                        return true;
-                    }
-                }
-
-                // not found
-                return false;
-            }
-
-        private:
-            static bool mapComparator( const MapEntry& rLHS,
-                                       const MapEntry& rRHS )
-            {
-                return strcmp( rLHS.maKey,
-                               rRHS.maKey ) < 0;
-            }
-
-            const MapEntry*     mpMap;
-            ::std::size_t       mnEntries;
-            bool                mbCaseSensitive;
-        };
 
         inline ::basegfx::B2DRectangle calcRelativeShapeBounds( const ::basegfx::B2DRectangle& rPageBounds,
                                                                 const ::basegfx::B2DRectangle& rShapeBounds )
