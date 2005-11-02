@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 23:21:19 $
+#   last change: $Author: kz $ $Date: 2005-11-02 13:02:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,22 +55,21 @@ CDEFS+= -DVERBOSE
 NOOPTFILES = $(SLO)$/canvashelper_texturefill.obj 
 .ENDIF
 
-SLOFILES =	$(SLO)$/spritecanvas.obj \
-            $(SLO)$/linepolypolygon.obj \
-            $(SLO)$/backbuffer.obj \
+SLOFILES =	$(SLO)$/backbuffer.obj \
             $(SLO)$/bitmapbackbuffer.obj \
-            $(SLO)$/canvasfont.obj \
-            $(SLO)$/windowgraphicdevice.obj \
+            $(SLO)$/cachedbitmap.obj \
             $(SLO)$/canvasbitmap.obj \
             $(SLO)$/canvasbitmaphelper.obj \
+            $(SLO)$/canvascustomsprite.obj \
+            $(SLO)$/canvasfont.obj \
             $(SLO)$/canvashelper.obj \
             $(SLO)$/canvashelper_texturefill.obj \
-            $(SLO)$/textlayout.obj \
-            $(SLO)$/canvascustomsprite.obj \
-            $(SLO)$/cachedbitmap.obj \
-            $(SLO)$/redrawmanager.obj \
+            $(SLO)$/devicehelper.obj \
             $(SLO)$/impltools.obj \
-            $(SLO)$/parametricpolypolygon.obj
+            $(SLO)$/spritecanvas.obj \
+            $(SLO)$/spritecanvashelper.obj \
+            $(SLO)$/spritehelper.obj \
+            $(SLO)$/textlayout.obj
 
 SHL1TARGET=$(TARGET).uno
 
