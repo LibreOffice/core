@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScIndexEnumeration_TableConditionalEntryEnumeration.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:57:25 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:05:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 
 public class ScIndexEnumeration_TableConditionalEntryEnumeration extends TestCase {
-    XSpreadsheetDocument xSpreadsheetDoc = null;
+    static XSpreadsheetDocument xSpreadsheetDoc = null;
 
     /**
     * Creates Spreadsheet document.
@@ -134,7 +134,7 @@ public class ScIndexEnumeration_TableConditionalEntryEnumeration extends TestCas
                 UnoRuntime.queryInterface(XPropertySet.class, oSheet);
             CFormat = Props.getPropertyValue("ConditionalFormat");
             if (utils.isVoid(CFormat)) {
-                System.out.println("Property 'ConditionalFormat' is void");
+                log.println("Property 'ConditionalFormat' is void");
             }
         } catch (com.sun.star.lang.WrappedTargetException e){
             e.printStackTrace(log);
