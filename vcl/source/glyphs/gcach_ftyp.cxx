@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-17 14:51:06 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:30:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,9 +46,9 @@
 #include <bitmap.hxx>
 #include <bmpacc.hxx>
 
-#ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
-#endif
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
@@ -1961,12 +1961,13 @@ static int FT_cubic_to( FT_Vector* /*const*/ p1, FT_Vector* /*const*/ p2, FT_Vec
 
 // -----------------------------------------------------------------------
 
-bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex, PolyPolygon& rPolyPoly ) const
+bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex,
+    ::basegfx::B2DPolyPolygon& rB2DPolyPoly ) const
 {
     if( maSizeFT )
         pFTActivateSize( maSizeFT );
 
-    rPolyPoly.Clear();
+    rB2DPolyPoly.clear();
 
     int nGlyphFlags;
     SplitGlyphFlags( *this, nGlyphIndex, nGlyphFlags );
@@ -1989,7 +1990,8 @@ bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex, PolyPolygon& rPolyPol
         return true;
 
     long nMaxPoints = 1 + rOutline.n_points * 3;
-    PolyArgs aPolyArg( rPolyPoly, nMaxPoints );
+    PolyPolygon aToolPolyPolygon;
+    PolyArgs aPolyArg( aToolPolyPolygon, nMaxPoints );
 
     int nAngle = ApplyGlyphTransform( nGlyphFlags, pGlyphFT, false );
 
@@ -2004,7 +2006,12 @@ bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex, PolyPolygon& rPolyPol
     aPolyArg.ClosePolygon();    // close last polygon
     FT_Done_Glyph( pGlyphFT );
 
-    rPolyPoly.Scale( +1.0/(1<<6), -1.0/(1<<6) );
+    // convert to basegfx polypolygon
+    // TODO: get rid of the intermediate tools polypolygon
+    rB2DPolyPoly = aToolPolyPolygon.getB2DPolyPolygon();
+    ::basegfx::B2DHomMatrix aMatrix;
+    aMatrix.scale( +1.0/(1<<6), -1.0/(1<<6) );
+    rB2DPolyPoly.transform( aMatrix );
 
     return true;
 }
