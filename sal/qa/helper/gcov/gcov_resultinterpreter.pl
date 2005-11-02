@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 #
-# $Id: gcov_resultinterpreter.pl,v 1.2 2003-06-11 16:37:12 vg Exp $
+# $Id: gcov_resultinterpreter.pl,v 1.3 2005-11-02 17:24:12 kz Exp $
 #
 
 # GCOV_RESULTINTERPRETER
@@ -15,7 +15,7 @@ use strict;
 use File::Basename;
 use Getopt::Long;
 
-our $version_info = 'gcov helper $Revision: 1.2 $ ';
+our $version_info = 'gcov helper $Revision: 1.3 $ ';
 
 our $help;                    # Help option flag
 our $version;                 # Version option flag
@@ -33,14 +33,14 @@ sub read_gcov_function_file($);
 
 # Parse command line options
 if (!GetOptions(
-                 "usedfunctions" => \$usedFunctions,
-                 "nonusedfunctions" => \$nonusedFunctions,
-                 "percent=s" => \$nPercent,
-                 "complete" => \$complete,
-                 "incomplete" => \$incomplete,
-                 "help"   => \$help,
-                 "version" => \$version
-                 ))
+                "usedfunctions" => \$usedFunctions,
+                "nonusedfunctions" => \$nonusedFunctions,
+                "percent=s" => \$nPercent,
+                "complete" => \$complete,
+                "incomplete" => \$incomplete,
+                "help"   => \$help,
+                "version" => \$version
+                ))
 {
     print_usage(*STDERR);
     exit(1);
@@ -136,7 +136,7 @@ sub read_gcov_function_file($)
         chomp($line);
         # sample line (for reg exp:)
         # 100.00 rtl_ustr_toDouble
-        if ($line =~ /^(.{6}) (\w+)$/ )
+        if ($line =~ /^(.*) (\w+)$/ )
         {
             my $percent = $1;
             my $value = $2;
