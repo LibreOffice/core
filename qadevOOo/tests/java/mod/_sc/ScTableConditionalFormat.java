@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScTableConditionalFormat.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:03:28 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:10:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ import com.sun.star.uno.XInterface;
 */
 public class ScTableConditionalFormat extends TestCase {
 
-    XSpreadsheetDocument xSpreadsheetDoc = null;
+    static XSpreadsheetDocument xSpreadsheetDoc = null;
 
     /**
     * Creates Spreadsheet document.
