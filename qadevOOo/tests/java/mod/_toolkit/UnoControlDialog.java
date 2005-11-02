@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoControlDialog.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:38:48 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:22:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,8 +91,8 @@ import util.SOfficeFactory;
 * @see ifc.awt._XView
 */
 public class UnoControlDialog extends TestCase {
-    private XWindow xWinDlg = null;
-    public XTextDocument xTextDoc;
+    private static XWindow xWinDlg = null;
+    private static XTextDocument xTextDoc;
 
     /**
     * Creating a Testenvironment for the interfaces to be tested.
