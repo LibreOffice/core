@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolygon.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:45:51 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:57:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,7 @@
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #endif
+
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
 #endif
@@ -130,12 +131,7 @@ public:
         {
             // add nCount copies of rValue
             CoordinateData2DVector::iterator aIndex(maVector.begin());
-
-            if( maVector.size() == nIndex )
-                aIndex = maVector.end();
-            else
-                aIndex += nIndex+1; // vector::insert inserts _before_ the given iterator
-
+            aIndex += nIndex;
             maVector.insert(aIndex, nCount, rValue);
         }
     }
@@ -148,12 +144,7 @@ public:
         {
             // insert data
             CoordinateData2DVector::iterator aIndex(maVector.begin());
-
-            if( maVector.size() == nIndex )
-                aIndex = maVector.end();
-            else
-                aIndex += nIndex+1; // vector::insert inserts _before_ the given iterator
-
+            aIndex += nIndex;
             CoordinateData2DVector::const_iterator aStart(rSource.maVector.begin());
             CoordinateData2DVector::const_iterator aEnd(rSource.maVector.end());
             maVector.insert(aIndex, aStart, aEnd);
@@ -172,12 +163,14 @@ public:
         }
     }
 
-    void flip()
+    void flip(bool mbIsClosed)
     {
         if(maVector.size() > 1)
         {
-            const sal_uInt32 nHalfSize(maVector.size() >> 1L);
-            CoordinateData2DVector::iterator aStart(maVector.begin());
+            // to keep the same point at index 0, just flip all points except the
+            // first one when closed
+            const sal_uInt32 nHalfSize(mbIsClosed ? (maVector.size() - 1L) >> 1L : maVector.size() >> 1L);
+            CoordinateData2DVector::iterator aStart(mbIsClosed ? maVector.begin() + 1L : maVector.begin());
             CoordinateData2DVector::iterator aEnd(maVector.end() - 1L);
 
             for(sal_uInt32 a(0); a < nHalfSize; a++)
@@ -755,8 +748,9 @@ public:
                 // newly fill the local point and vector data
                 for(sal_uInt32 a(0L); a < nCount; a++)
                 {
-                    // get index for source point
-                    const sal_uInt32 nCoorSource(nCount - (a + 1));
+                    // get index for source point. If closed, use other pattern for calculation of source
+                    // point to enable keeping the same point on index 0.
+                    const sal_uInt32 nCoorSource(mbIsClosed ? ((nCount - a) % nCount) : nCount - (a + 1));
 
                     // get index for predecessor point
                     const sal_uInt32 nVectorSource(nCoorSource ? nCoorSource - 1L : nCount - 1L);
@@ -803,7 +797,7 @@ public:
             }
             else
             {
-                maPoints.flip();
+                maPoints.flip(mbIsClosed);
             }
         }
     }
@@ -999,7 +993,7 @@ namespace basegfx
     B2DPolygon::B2DPolygon(const B2DPolygon& rPolygon, sal_uInt32 nIndex, sal_uInt32 nCount)
     :   mpPolygon(new ImplB2DPolygon(*rPolygon.mpPolygon, nIndex, nCount))
     {
-        OSL_ENSURE(nIndex + nCount > rPolygon.mpPolygon->count(), "B2DPolygon constructor outside range (!)");
+        OSL_ENSURE(nIndex + nCount <= rPolygon.mpPolygon->count(), "B2DPolygon constructor outside range (!)");
     }
 
     B2DPolygon::~B2DPolygon()
