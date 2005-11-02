@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backbuffer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:15:59 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 12:57:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,18 +36,17 @@
 #ifndef _VCLCANVAS_BACKBUFFER_HXX_
 #define _VCLCANVAS_BACKBUFFER_HXX_
 
-#ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
 
 #include <canvas/vclwrapper.hxx>
-
 #include "outdevprovider.hxx"
+
+#include <boost/shared_ptr.hpp>
 
 
 namespace vclcanvas
 {
-    /// OutDevProvider implementation for backbuffer VDev
+    /// Background buffer abstraction
     class BackBuffer : public OutDevProvider
     {
     public:
@@ -57,19 +56,15 @@ namespace vclcanvas
             When false, default depth of reference device is
             chosen. When true, the buffer will be monochrome, i.e. one
             bit deep.
-
-            @param bAlphaVDev
-            If true, the generated backbuffer will have an alpha channel
          */
         BackBuffer( const OutputDevice& rRefDevice,
-                    bool                bMonochromeBuffer=false,
-                    bool                bAlphaVDev=false );
+                    bool                bMonochromeBuffer=false );
 
-        virtual OutputDevice&           getOutDev();
-        virtual const OutputDevice&     getOutDev() const;
+        virtual OutputDevice&       getOutDev();
+        virtual const OutputDevice& getOutDev() const;
 
-        VirtualDevice&                  getVirDev();
-        const VirtualDevice&            getVirDev() const;
+        VirtualDevice&              getVirDev();
+        const VirtualDevice&        getVirDev() const;
 
         void setSize( const ::Size& rNewSize );
 
@@ -78,7 +73,6 @@ namespace vclcanvas
     };
 
     typedef ::boost::shared_ptr< BackBuffer > BackBufferSharedPtr;
-
 }
 
 #endif /* #ifndef _VCLCANVAS_BACKBUFFER_HXX_ */
