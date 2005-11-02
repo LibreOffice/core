@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mtftools.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:19:37 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:40:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,54 +36,27 @@
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
 
-#include <mtftools.hxx>
-#include <outdevstate.hxx>
-#include <polypolyaction.hxx>
-
-#ifndef _COM_SUN_STAR_RENDERING_RENDERSTATE_HPP__
 #include <com/sun/star/rendering/RenderState.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_XCANVAS_HPP__
 #include <com/sun/star/rendering/XCanvas.hpp>
-#endif
 
-#ifndef _BGFX_NUMERIC_FTOOLS_HXX
 #include <basegfx/numeric/ftools.hxx>
-#endif
-#ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
 #include <basegfx/tools/canvastools.hxx>
-#endif
-#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#endif
-#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
 #include <basegfx/polygon/b2dpolygon.hxx>
-#endif
-#ifndef _BGFX_RANGE_B2DRECTANGLE_HXX
 #include <basegfx/range/b2drectangle.hxx>
-#endif
-#ifndef _BGFX_VECTOR_B2DVECTOR_HXX
 #include <basegfx/vector/b2dvector.hxx>
-#endif
-#ifndef _CANVAS_CANVASTOOLS_HXX
 #include <canvas/canvastools.hxx>
-#endif
 
-#ifndef _SV_GDIMTF_HXX
 #include <vcl/gdimtf.hxx>
-#endif
-#ifndef _SV_METAACT_HXX
 #include <vcl/metaact.hxx>
-#endif
-#ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
-#ifndef _SV_METRIC_HXX
 #include <vcl/metric.hxx>
-#endif
-#ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
-#endif
+
+#include "mtftools.hxx"
+#include "outdevstate.hxx"
+#include "polypolyaction.hxx"
+
 
 
 using namespace ::com::sun::star;
@@ -149,7 +122,8 @@ namespace cppcanvas
                          const struct ::cppcanvas::internal::OutDevState&   rOutdevState,
                          const CanvasSharedPtr&                             rCanvas,
                          const ::basegfx::B2DPoint&                         rOffset,
-                         const ::basegfx::B2DVector*                        pScaling )
+                         const ::basegfx::B2DVector*                        pScaling,
+                         const double*                                      pRotation )
         {
             const ::Point aEmptyPoint;
 
@@ -157,8 +131,10 @@ namespace cppcanvas
             const bool bScaling( pScaling &&
                                  pScaling->getX() != 1.0 &&
                                  pScaling->getY() != 1.0 );
+            const bool bRotation( pRotation &&
+                                  *pRotation != 0.0 );
 
-            if( !bOffsetting && !bScaling )
+            if( !bOffsetting && !bScaling && !bRotation )
                 return false; // nothing to do
 
             if( rOutdevState.clip.count() )
@@ -174,6 +150,9 @@ namespace cppcanvas
                 if( bScaling )
                     aTransform.scale( 1.0/pScaling->getX(), 1.0/pScaling->getY() );
 
+                if( bRotation )
+                    aTransform.rotate( - *pRotation );
+
                 aLocalClip.transform( aTransform );
 
                 o_rRenderState.Clip = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
@@ -188,7 +167,34 @@ namespace cppcanvas
 
                 const ::Rectangle aLocalClipRect( rOutdevState.clipRect );
 
-                if( bScaling )
+                if( bRotation )
+                {
+                    // rotation involved - convert to polygon first,
+                    // then transform that
+                    ::basegfx::B2DPolygon aLocalClip(
+                        ::basegfx::tools::createPolygonFromRect(
+                                ::basegfx::B2DRectangle(
+                                    (double)(aLocalClipRect.Left()),
+                                    (double)(aLocalClipRect.Top()),
+                                    (double)(aLocalClipRect.Right()),
+                                    (double)(aLocalClipRect.Bottom()) ) ) );
+                    ::basegfx::B2DHomMatrix aTransform;
+
+                    if( bOffsetting )
+                        aTransform.translate( -rOffset.getX(),
+                                              -rOffset.getY() );
+                    if( bScaling )
+                        aTransform.scale( 1.0/pScaling->getX(), 1.0/pScaling->getY() );
+
+                    aTransform.rotate( - *pRotation );
+
+                    aLocalClip.transform( aTransform );
+
+                    o_rRenderState.Clip = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
+                        rCanvas->getUNOCanvas()->getDevice(),
+                        ::basegfx::B2DPolyPolygon( aLocalClip ) );
+                }
+                else if( bScaling )
                 {
                     // scale and offset - do it on the fly, have to
                     // convert to float anyway.
@@ -227,14 +233,16 @@ namespace cppcanvas
                          const struct ::cppcanvas::internal::OutDevState&   rOutdevState,
                          const CanvasSharedPtr&                             rCanvas,
                          const ::Point&                                     rOffset,
-                         const ::basegfx::B2DVector*                        pScaling )
+                         const ::basegfx::B2DVector*                        pScaling,
+                         const double*                                      pRotation )
         {
             return modifyClip( o_rRenderState,
                                rOutdevState,
                                rCanvas,
                                ::basegfx::B2DPoint( rOffset.X(),
                                                     rOffset.Y() ),
-                               pScaling );
+                               pScaling,
+                               pRotation );
         }
 
         bool modifyClip( rendering::RenderState&                            o_rRenderState,
