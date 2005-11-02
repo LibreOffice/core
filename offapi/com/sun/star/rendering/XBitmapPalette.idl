@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XBitmapPalette.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:57:19 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:23:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,14 @@ interface XBitmapPalette : ::com::sun::star::uno::XInterface
     boolean                     setPaletteIndex( [in] sequence<ColorComponent> color, [in] long nIndex )
         raises (com::sun::star::lang::IndexOutOfBoundsException,
                 com::sun::star::lang::IllegalArgumentException);
+
+    //-------------------------------------------------------------------------
+
+    /** Query associated color space.<p>
+
+        @return the color space that is associated with this palette.
+     */
+    XColorSpace                 getColorSpace( );
 };
 
 }; }; }; };
