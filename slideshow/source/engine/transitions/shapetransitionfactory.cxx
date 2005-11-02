@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapetransitionfactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:45:36 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 14:04:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,7 +172,7 @@ bool ClippingAnimation::operator()( double nValue )
 
     // set new clip
     mpAttrLayer->setClip( maClippingFunctor( nValue,
-                                             mpShape->getUpdateArea().getRange() ) );
+                                             mpShape->getDOMBounds().getRange() ) );
 
     if( mpShape->isUpdateNecessary() )
         mpLayerManager->notifyShapeUpdate( mpShape );
