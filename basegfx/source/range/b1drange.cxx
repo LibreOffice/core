@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b1drange.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:49:49 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:59:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,15 +46,21 @@
 namespace basegfx
 {
     B1DRange::B1DRange( const B1IRange& rRange ) :
-        maRange(rRange.getMinimum())
+        maRange()
     {
-        expand(rRange.getMaximum());
+        if( !rRange.isEmpty() )
+        {
+            maRange = rRange.getMinimum();
+            expand(rRange.getMaximum());
+        }
     }
 
     B1IRange fround(const B1DRange& rRange)
     {
-        return B1IRange( fround( rRange.getMinimum()),
-                         fround( rRange.getMaximum()) );
+        return rRange.isEmpty() ?
+            B1IRange() :
+            B1IRange( fround( rRange.getMinimum()),
+                      fround( rRange.getMaximum()) );
     }
 
 } // end of namespace basegfx
