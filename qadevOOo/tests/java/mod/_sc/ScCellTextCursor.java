@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScCellTextCursor.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:45:09 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:56:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@ import com.sun.star.uno.XInterface;
 * @see ifc.style._CharacterPropertiesAsian
 */
 public class ScCellTextCursor extends TestCase {
-    XSpreadsheetDocument xSheetDoc = null;
+    static XSpreadsheetDocument xSheetDoc = null;
 
     /**
     * Creates Spreadsheet document.
