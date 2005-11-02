@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:56:56 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:35:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ public:
     virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, ULONG nStyle );
     virtual SalFrame*       CreateFrame( SalFrame* pParent, ULONG nStyle );
     virtual void            DestroyFrame( SalFrame* pFrame );
-    virtual SalObject*      CreateObject( SalFrame* pParent );
+    virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData );
     virtual void            DestroyObject( SalObject* pObject );
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
                                                      long nDX, long nDY,
