@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScAccessibleCsvCell.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:38:15 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:50:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ import com.sun.star.uno.XInterface;
 public class ScAccessibleCsvCell extends TestCase {
 
     Thread lThread = null;
-    XAccessibleAction accAction = null;
+    static XAccessibleAction accAction = null;
 
     /**
      * Called to create an instance of <code>TestEnvironment</code> with an
@@ -115,7 +115,7 @@ public class ScAccessibleCsvCell extends TestCase {
         try {
             XAccessible acc = cont.getAccessibleChild(3);
             name = acc.getAccessibleContext().getAccessibleName();
-            System.out.println("Child: "+ name);
+            log.println("Child: "+ name);
             log.println("ImplementationName " + utils.getImplName(acc));
             oObj = acc;
         }
