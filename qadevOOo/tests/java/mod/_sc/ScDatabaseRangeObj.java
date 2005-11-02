@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScDatabaseRangeObj.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:49:11 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:59:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ import util.SOfficeFactory;
 * @see ifc.sheet._XCellRangeReferrer
 */
 public class ScDatabaseRangeObj extends TestCase {
-    XSpreadsheetDocument xSheetDoc = null;
+    static XSpreadsheetDocument xSheetDoc = null;
 
     /**
     * Creates Spreadsheet document.
