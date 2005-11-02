@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polypolyaction.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:21:32 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:41:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,40 +33,25 @@
  *
  ************************************************************************/
 
-#include <polypolyaction.hxx>
-#include <outdevstate.hxx>
-
-#ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
-#endif
 
-#ifndef _COM_SUN_STAR_RENDERING_XCANVAS_HPP_
 #include <com/sun/star/rendering/XCanvas.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_TEXTURINGMODE_HPP_
 #include <com/sun/star/rendering/TexturingMode.hpp>
-#endif
 
-#ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
-#endif
-#ifndef _VCL_CANVASTOOLS_HXX
 #include <vcl/canvastools.hxx>
-#endif
 
-#ifndef _BGFX_RANGE_B2DRANGE_HXX
 #include <basegfx/range/b2drange.hxx>
-#endif
-#ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
 #include <basegfx/tools/canvastools.hxx>
-#endif
-#ifndef _CANVAS_CANVASTOOLS_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <canvas/canvastools.hxx>
-#endif
 
 #include <boost/utility.hpp>
 
-#include <mtftools.hxx>
+#include "cachedprimitivebase.hxx"
+#include "polypolyaction.hxx"
+#include "outdevstate.hxx"
+#include "mtftools.hxx"
 
 
 using namespace ::com::sun::star;
@@ -77,7 +62,7 @@ namespace cppcanvas
     {
         namespace
         {
-            class PolyPolyAction : public Action, private ::boost::noncopyable
+            class PolyPolyAction : public CachedPrimitiveBase
             {
             public:
                 PolyPolyAction( const ::PolyPolygon&,
@@ -92,7 +77,6 @@ namespace cppcanvas
                                 bool bStroke,
                                 int nTransparency );
 
-                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
                                      const Subset&                  rSubset ) const;
 
@@ -103,6 +87,9 @@ namespace cppcanvas
                 virtual sal_Int32 getActionCount() const;
 
             private:
+                virtual bool render( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
+                                     const ::basegfx::B2DHomMatrix&                 rTransformation ) const;
+
                 const uno::Reference< rendering::XPolyPolygon2D >   mxPolyPoly;
                 const ::Rectangle                                   maBounds;
                 const CanvasSharedPtr                               mpCanvas;
@@ -118,6 +105,7 @@ namespace cppcanvas
                                             const OutDevState&      rState,
                                             bool                    bFill,
                                             bool                    bStroke ) :
+                CachedPrimitiveBase( rCanvas, false ),
                 mxPolyPoly( ::vcl::unotools::xPolyPolygonFromPolyPolygon( rCanvas->getUNOCanvas()->getDevice(),
                                                                           rPolyPoly ) ),
                 maBounds( rPolyPoly.GetBoundRect() ),
@@ -140,6 +128,7 @@ namespace cppcanvas
                                             bool                    bFill,
                                             bool                    bStroke,
                                             int                     nTransparency ) :
+                CachedPrimitiveBase( rCanvas, false ),
                 mxPolyPoly( ::vcl::unotools::xPolyPolygonFromPolyPolygon( rCanvas->getUNOCanvas()->getDevice(),
                                                                           rPolyPoly ) ),
                 maBounds( rPolyPoly.GetBoundRect() ),
@@ -174,7 +163,8 @@ namespace cppcanvas
                 }
             }
 
-            bool PolyPolyAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
+            bool PolyPolyAction::render( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
+                                         const ::basegfx::B2DHomMatrix&                 rTransformation ) const
             {
                 RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::PolyPolyAction::render()" );
                 RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::PolyPolyAction: 0x%X", this );
@@ -203,20 +193,18 @@ namespace cppcanvas
                     const uno::Sequence< double > aTmpColor( aLocalState.DeviceColor );
                     aLocalState.DeviceColor = maFillColor;
 
-                    // TODO(P1): implement caching
-                    mpCanvas->getUNOCanvas()->fillPolyPolygon( mxPolyPoly,
-                                                               mpCanvas->getViewState(),
-                                                               aLocalState );
+                    rCachedPrimitive = mpCanvas->getUNOCanvas()->fillPolyPolygon( mxPolyPoly,
+                                                                                  mpCanvas->getViewState(),
+                                                                                  aLocalState );
 
                     aLocalState.DeviceColor = aTmpColor;
                 }
 
                 if( aLocalState.DeviceColor.getLength() )
                 {
-                    // TODO(P1): implement caching
-                    mpCanvas->getUNOCanvas()->drawPolyPolygon( mxPolyPoly,
-                                                               mpCanvas->getViewState(),
-                                                               aLocalState );
+                    rCachedPrimitive = mpCanvas->getUNOCanvas()->drawPolyPolygon( mxPolyPoly,
+                                                                                  mpCanvas->getViewState(),
+                                                                                  aLocalState );
                 }
 
                 return true;
@@ -234,7 +222,7 @@ namespace cppcanvas
                     rSubset.mnSubsetEnd != 1 )
                     return false;
 
-                return render( rTransformation );
+                return CachedPrimitiveBase::render( rTransformation );
             }
 
             ::basegfx::B2DRange PolyPolyAction::getBounds( const ::basegfx::B2DHomMatrix&   rTransformation ) const
@@ -273,7 +261,7 @@ namespace cppcanvas
 
             // -------------------------------------------------------------------------------
 
-            class TexturedPolyPolyAction : public Action, private ::boost::noncopyable
+            class TexturedPolyPolyAction : public CachedPrimitiveBase
             {
             public:
                 TexturedPolyPolyAction( const ::PolyPolygon&        rPoly,
@@ -281,7 +269,6 @@ namespace cppcanvas
                                         const OutDevState&          rState,
                                         const rendering::Texture&   rTexture );
 
-                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
                                      const Subset&                  rSubset ) const;
 
@@ -292,6 +279,9 @@ namespace cppcanvas
                 virtual sal_Int32 getActionCount() const;
 
             private:
+                virtual bool render( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
+                                     const ::basegfx::B2DHomMatrix&                 rTransformation ) const;
+
                 const uno::Reference< rendering::XPolyPolygon2D >   mxPolyPoly;
                 const ::Rectangle                                   maBounds;
                 const CanvasSharedPtr                               mpCanvas;
@@ -305,6 +295,7 @@ namespace cppcanvas
                                                             const CanvasSharedPtr&      rCanvas,
                                                             const OutDevState&          rState,
                                                             const rendering::Texture&   rTexture ) :
+                CachedPrimitiveBase( rCanvas, true ),
                 mxPolyPoly( ::vcl::unotools::xPolyPolygonFromPolyPolygon( rCanvas->getUNOCanvas()->getDevice(),
                                                                           rPolyPoly ) ),
                 maBounds( rPolyPoly.GetBoundRect() ),
@@ -315,7 +306,8 @@ namespace cppcanvas
                 tools::initRenderState(maState,rState);
             }
 
-            bool TexturedPolyPolyAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
+            bool TexturedPolyPolyAction::render( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
+                                                 const ::basegfx::B2DHomMatrix&                 rTransformation ) const
             {
                 RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::PolyPolyAction::render()" );
                 RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::PolyPolyAction: 0x%X", this );
@@ -326,10 +318,10 @@ namespace cppcanvas
                 uno::Sequence< rendering::Texture > aSeq(1);
                 aSeq[0] = maTexture;
 
-                mpCanvas->getUNOCanvas()->fillTexturedPolyPolygon( mxPolyPoly,
-                                                                   mpCanvas->getViewState(),
-                                                                   aLocalState,
-                                                                   aSeq );
+                rCachedPrimitive = mpCanvas->getUNOCanvas()->fillTexturedPolyPolygon( mxPolyPoly,
+                                                                                      mpCanvas->getViewState(),
+                                                                                      aLocalState,
+                                                                                      aSeq );
                 return true;
             }
 
@@ -345,7 +337,7 @@ namespace cppcanvas
                     rSubset.mnSubsetEnd != 1 )
                     return false;
 
-                return render( rTransformation );
+                return CachedPrimitiveBase::render( rTransformation );
             }
 
             ::basegfx::B2DRange TexturedPolyPolyAction::getBounds( const ::basegfx::B2DHomMatrix&   rTransformation ) const
@@ -383,7 +375,7 @@ namespace cppcanvas
 
             // -------------------------------------------------------------------------------
 
-            class StrokedPolyPolyAction : public Action, private ::boost::noncopyable
+            class StrokedPolyPolyAction : public CachedPrimitiveBase
             {
             public:
                 StrokedPolyPolyAction( const ::PolyPolygon&                 rPoly,
@@ -391,7 +383,6 @@ namespace cppcanvas
                                        const OutDevState&                   rState,
                                        const rendering::StrokeAttributes&   rStrokeAttributes );
 
-                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
                 virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
                                      const Subset&                  rSubset ) const;
 
@@ -402,6 +393,9 @@ namespace cppcanvas
                 virtual sal_Int32 getActionCount() const;
 
             private:
+                virtual bool render( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
+                                     const ::basegfx::B2DHomMatrix&                 rTransformation ) const;
+
                 const uno::Reference< rendering::XPolyPolygon2D >   mxPolyPoly;
                 const ::Rectangle                                   maBounds;
                 const CanvasSharedPtr                               mpCanvas;
@@ -413,6 +407,7 @@ namespace cppcanvas
                                                           const CanvasSharedPtr&                rCanvas,
                                                           const OutDevState&                    rState,
                                                           const rendering::StrokeAttributes&    rStrokeAttributes ) :
+                CachedPrimitiveBase( rCanvas, false ),
                 mxPolyPoly( ::vcl::unotools::xPolyPolygonFromPolyPolygon( rCanvas->getUNOCanvas()->getDevice(),
                                                                           rPolyPoly ) ),
                 maBounds( rPolyPoly.GetBoundRect() ),
@@ -424,7 +419,8 @@ namespace cppcanvas
                 maState.DeviceColor = rState.lineColor;
             }
 
-            bool StrokedPolyPolyAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
+            bool StrokedPolyPolyAction::render( uno::Reference< rendering::XCachedPrimitive >& rCachedPrimitive,
+                                                const ::basegfx::B2DHomMatrix&                 rTransformation ) const
             {
                 RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::PolyPolyAction::render()" );
                 RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::PolyPolyAction: 0x%X", this );
@@ -432,10 +428,10 @@ namespace cppcanvas
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
 
-                mpCanvas->getUNOCanvas()->strokePolyPolygon( mxPolyPoly,
-                                                             mpCanvas->getViewState(),
-                                                             aLocalState,
-                                                             maStrokeAttributes );
+                rCachedPrimitive = mpCanvas->getUNOCanvas()->strokePolyPolygon( mxPolyPoly,
+                                                                                mpCanvas->getViewState(),
+                                                                                aLocalState,
+                                                                                maStrokeAttributes );
                 return true;
             }
 
@@ -451,7 +447,7 @@ namespace cppcanvas
                     rSubset.mnSubsetEnd != 1 )
                     return false;
 
-                return render( rTransformation );
+                return CachedPrimitiveBase::render( rTransformation );
             }
 
             ::basegfx::B2DRange StrokedPolyPolyAction::getBounds( const ::basegfx::B2DHomMatrix&    rTransformation ) const
