@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pspgraphics.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:39:30 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:34:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -924,7 +924,8 @@ BOOL PspGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
     return TRUE;
 }
 
-BOOL PspGraphics::GetGlyphOutline( long nGlyphIndex, PolyPolygon& rPolyPoly )
+BOOL PspGraphics::GetGlyphOutline( long nGlyphIndex,
+    ::basegfx::B2DPolyPolygon& rB2DPolyPoly )
 {
     int nLevel = nGlyphIndex >> GF_FONTSHIFT;
     if( nLevel >= MAX_FALLBACK )
@@ -935,7 +936,7 @@ BOOL PspGraphics::GetGlyphOutline( long nGlyphIndex, PolyPolygon& rPolyPoly )
         return FALSE;
 
     nGlyphIndex &= ~GF_FONTMASK;
-    if( pSF->GetGlyphOutline( nGlyphIndex, rPolyPoly ) )
+    if( pSF->GetGlyphOutline( nGlyphIndex, rB2DPolyPoly ) )
         return TRUE;
 
     return FALSE;
