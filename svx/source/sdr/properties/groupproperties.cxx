@@ -4,9 +4,9 @@
  *
  *  $RCSfile: groupproperties.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:14:36 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 09:57:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -338,7 +338,14 @@ namespace sdr
                 // also clear local ItemSet, it's only temporary for group objects anyways.
                 if(mpItemSet)
                 {
-                    mpItemSet->ClearItem();
+                    // #121905#
+                    // copy/paste is still using clone operators and MoveToItemPool functionality.
+                    // Since SfxItemSet contains a pool pointer, ClearItem is not enough here.
+                    // The ItemSet for merge is constructed on demand, so it's enough here to
+                    // just delete it and set to 0L.
+                    // mpItemSet->ClearItem();
+                    delete mpItemSet;
+                    mpItemSet = 0L;
                 }
             }
         }
