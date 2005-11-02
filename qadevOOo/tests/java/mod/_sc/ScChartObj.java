@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScChartObj.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:45:54 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:56:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ import com.sun.star.uno.UnoRuntime;
 * @see ifc.document._XEmbeddedObjectSupplier
 */
 public class ScChartObj extends TestCase {
-    XSpreadsheetDocument xSheetDoc = null;
+    static XSpreadsheetDocument xSheetDoc = null;
 
     /**
     * Creates Spreadsheet document.
@@ -129,7 +129,7 @@ public class ScChartObj extends TestCase {
         XSpreadsheet oSheet=null;
 
         try {
-            System.out.println("Getting spreadsheet") ;
+            log.println("Getting spreadsheet") ;
             XSpreadsheets oSheets = xSheetDoc.getSheets() ;
             XIndexAccess oIndexSheets = (XIndexAccess)
                         UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
