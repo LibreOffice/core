@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textlayout.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:24:06 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:05:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,32 +34,20 @@
  ************************************************************************/
 
 #include <canvas/debug.hxx>
-#include "textlayout.hxx"
-
-#ifndef BOOST_SCOPED_ARRAY_HPP_INCLUDED
-#include <boost/scoped_array.hpp>
-#endif
-
-#ifndef _SV_METRIC_HXX
-#include <vcl/metric.hxx>
-#endif
-#ifndef _SV_VIRDEV_HXX
-#include <vcl/virdev.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_RENDERING_TEXTDIRECTION_HPP_
-#include <com/sun/star/rendering/TextDirection.hpp>
-#endif
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-#ifndef _BGFX_NUMERIC_FTOOLS_HXX
-#include <basegfx/numeric/ftools.hxx>
-#endif
-
 #include <canvas/canvastools.hxx>
 
+#include <com/sun/star/rendering/TextDirection.hpp>
+
+#include <vcl/metric.hxx>
+#include <vcl/virdev.hxx>
+
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/numeric/ftools.hxx>
+
 #include "impltools.hxx"
+#include "textlayout.hxx"
+
+#include <boost/scoped_array.hpp>
 
 
 using namespace ::com::sun::star;
@@ -101,8 +89,8 @@ namespace vclcanvas
     TextLayout::TextLayout( const rendering::StringContext& aText,
                             sal_Int8                        nDirection,
                             sal_Int64                       nRandomSeed,
-                            const CanvasFont::ImplRef&      rFont,
-                            const OutDevProviderSharedPtr&  rRefDevice ) :
+                            const CanvasFont::Reference&    rFont,
+                            const DeviceRef&                rRefDevice ) :
         TextLayout_Base( m_aMutex ),
         maText( aText ),
         maLogicalAdvancements(),
@@ -112,16 +100,12 @@ namespace vclcanvas
     {
     }
 
-    TextLayout::~TextLayout()
-    {
-    }
-
     void SAL_CALL TextLayout::disposing()
     {
         tools::LocalGuard aGuard;
 
         mpFont.reset();
-        mpRefDevice.reset();
+        mpRefDevice.clear();
     }
 
     // XTextLayout
@@ -170,7 +154,11 @@ namespace vclcanvas
     {
         tools::LocalGuard aGuard;
 
-        VirtualDevice aVDev( mpRefDevice->getOutDev() );
+        OutputDevice* pOutDev = mpRefDevice->getOutDev();
+        if( !pOutDev )
+            return geometry::RealRectangle2D();
+
+        VirtualDevice aVDev( *pOutDev );
         aVDev.SetFont( mpFont->getVCLFont() );
 
         // need metrics for Y offset, the XCanvas always renders
@@ -296,7 +284,7 @@ namespace vclcanvas
         if( maLogicalAdvancements.getLength() )
         {
             // TODO(P2): cache that
-            ::boost::scoped_array< long > aOffsets(new long[maLogicalAdvancements.getLength()]);
+            ::boost::scoped_array< sal_Int32 > aOffsets(new sal_Int32[maLogicalAdvancements.getLength()]);
             setupTextOffsets( aOffsets.get(), maLogicalAdvancements, viewState, renderState );
 
             // TODO(F3): ensure correct length and termination for DX
@@ -329,7 +317,7 @@ namespace vclcanvas
             {
             }
 
-            long operator()( const double& rOffset )
+            sal_Int32 operator()( const double& rOffset )
             {
                 // This is an optimization of the normal rMat*[x,0]
                 // transformation of the advancement vector (in x
@@ -351,7 +339,7 @@ namespace vclcanvas
         };
     }
 
-    void TextLayout::setupTextOffsets( long*                            outputOffsets,
+    void TextLayout::setupTextOffsets( sal_Int32*                       outputOffsets,
                                        const uno::Sequence< double >&   inputOffsets,
                                        const rendering::ViewState&      viewState,
                                        const rendering::RenderState&    renderState     ) const
@@ -373,11 +361,12 @@ namespace vclcanvas
     }
 
 
+#define IMPLEMENTATION_NAME "VCLCanvas::TextLayout"
 #define SERVICE_NAME "com.sun.star.rendering.TextLayout"
 
     ::rtl::OUString SAL_CALL TextLayout::getImplementationName() throw( uno::RuntimeException )
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( TEXTLAYOUT_IMPLEMENTATION_NAME ) );
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ) );
     }
 
     sal_Bool SAL_CALL TextLayout::supportsService( const ::rtl::OUString& ServiceName ) throw( uno::RuntimeException )
