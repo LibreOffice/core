@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mtftools.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:20:00 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:41:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,13 +127,17 @@ namespace cppcanvas
             @param pScaling
             The clip is inversely scaled by this value (if given)
 
+            @param pRotation
+            The clip is inversely rotated by this value (if given)
+
             @return true, if the clip has changed, false if not
          */
         bool modifyClip( ::com::sun::star::rendering::RenderState&          o_rRenderState,
                          const struct ::cppcanvas::internal::OutDevState&   rOutdevState,
                          const CanvasSharedPtr&                             rCanvas,
                          const ::Point&                                     rOffset,
-                         const ::basegfx::B2DVector*                        pScaling );
+                         const ::basegfx::B2DVector*                        pScaling,
+                         const double*                                      pRotation );
 
         /** This method modifies the clip, to cancel the given
             transformation.
@@ -155,13 +159,17 @@ namespace cppcanvas
             @param pScaling
             The clip is inversely scaled by this value (if given)
 
+            @param pRotation
+            The clip is inversely rotated by this value (if given)
+
             @return true, if the clip has changed, false if not
          */
         bool modifyClip( ::com::sun::star::rendering::RenderState&          o_rRenderState,
                          const struct ::cppcanvas::internal::OutDevState&   rOutdevState,
                          const CanvasSharedPtr&                             rCanvas,
                          const ::basegfx::B2DPoint&                         rOffset,
-                         const ::basegfx::B2DVector*                        pScaling );
+                         const ::basegfx::B2DVector*                        pScaling,
+                         const double*                                      pRotation );
 
         /** This method modifies the clip, to cancel the given
             transformation.
