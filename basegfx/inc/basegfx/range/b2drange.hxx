@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2drange.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:32:34 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:54:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,9 @@
 #include <basegfx/range/basicrange.hxx>
 #endif
 
+#include <vector>
+
+
 namespace basegfx
 {
     // predeclarations
@@ -57,12 +60,10 @@ namespace basegfx
 
     class B2DRange
     {
-        typedef ::basegfx::BasicRange< double, DoubleTraits >   MyBasicRange;
-
-        MyBasicRange        maRangeX;
-        MyBasicRange        maRangeY;
-
     public:
+        typedef double          ValueType;
+        typedef DoubleTraits    TraitsType;
+
         B2DRange()
         {
         }
@@ -263,6 +264,12 @@ namespace basegfx
             maRangeX.grow(fValue);
             maRangeY.grow(fValue);
         }
+
+    private:
+        typedef ::basegfx::BasicRange< ValueType, TraitsType >  MyBasicRange;
+
+        MyBasicRange        maRangeX;
+        MyBasicRange        maRangeY;
     };
 
     /** Round double to nearest integer for 2D range
@@ -270,6 +277,30 @@ namespace basegfx
         @return the nearest integer for this range
     */
     B2IRange fround(const B2DRange& rRange);
+
+    /** Compute the set difference of the two given ranges
+
+        This method calculates the symmetric difference (aka XOR)
+        between the two given ranges, and returning the resulting
+        ranges. Thus, the result will contain all areas where one, but
+        not both ranges lie.
+
+        @param o_rResult
+        Result vector. The up to four difference ranges are returned
+        within this vector
+
+        @param rFirst
+        The first range
+
+        @param rSecond
+        The second range
+
+        @return the input vector
+     */
+    ::std::vector< B2DRange >& computeSetDifference( ::std::vector< B2DRange >& o_rResult,
+                                                     const B2DRange&            rFirst,
+                                                     const B2DRange&            rSecond );
+
 } // end of namespace basegfx
 
 
