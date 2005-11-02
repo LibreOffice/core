@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animatedsprite.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:27:44 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 14:01:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,7 +213,7 @@ namespace presentation
         void AnimatedSprite::clip( const ::basegfx::B2DPolyPolygon& rClip )
         {
             maClip.reset( rClip );
-            mpSprite->setClip( rClip );
+            mpSprite->setClipPixel( rClip );
         }
 
         void AnimatedSprite::transform( const ::basegfx::B2DHomMatrix& rTransform )
