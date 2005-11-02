@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:49:26 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:18:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -930,7 +930,12 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
     try
     {
         mxShow = Reference< XSlideShow >( createSlideShow(), UNO_QUERY_THROW );
-        mxView = mxView.createFromQuery( new SlideShowView( *mpShowWindow, mpDoc, meAnimationMode, this ) );
+        mxView = mxView.createFromQuery( new SlideShowView(
+                                             *mpShowWindow,
+                                             mpDoc,
+                                             meAnimationMode,
+                                             this,
+                                             maPresSettings.mbFullScreen) );
 
         // try add wait symbol to properties:
         const Reference<rendering::XSpriteCanvas> xSpriteCanvas(
