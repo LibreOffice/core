@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textaction.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:22:10 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:42:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,67 +36,34 @@
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
 
-#include <textaction.hxx>
-#include <outdevstate.hxx>
-
-#ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
-#endif
 
-#ifndef _COM_SUN_STAR_RENDERING_PATHCAPTYPE_HPP__
 #include <com/sun/star/rendering/PathCapType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_PATHJOINTYPE_HPP__
 #include <com/sun/star/rendering/PathJoinType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_XCANVAS_HPP_
 #include <com/sun/star/rendering/XCanvas.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_XCANVASFONT_HPP_
 #include <com/sun/star/rendering/XCanvasFont.hpp>
-#endif
 
-#ifndef _BGFX_NUMERIC_FTOOLS_HXX
 #include <basegfx/numeric/ftools.hxx>
-#endif
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
-#ifndef _BGFX_RANGE_B2DRECTANGLE_HXX
 #include <basegfx/range/b2drectangle.hxx>
-#endif
-#ifndef _BGFX_VECTOR_B2DSIZE_HXX
 #include <basegfx/vector/b2dsize.hxx>
-#endif
-#ifndef _BGFX_POLYGON_B2DPOLYPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#endif
-#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#endif
 
-#ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
-#endif
-#ifndef _VCL_CANVASTOOLS_HXX
 #include <vcl/canvastools.hxx>
-#endif
-#ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
 
-#ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
 #include <basegfx/tools/canvastools.hxx>
-#endif
-#ifndef _CANVAS_CANVASTOOLS_HXX
 #include <canvas/canvastools.hxx>
-#endif
 
 #include <boost/scoped_array.hpp>
 #include <boost/bind.hpp>
 #include <boost/utility.hpp>
 
-#include <mtftools.hxx>
+#include "textaction.hxx"
+#include "outdevstate.hxx"
+#include "mtftools.hxx"
 
 
 using namespace ::com::sun::star;
@@ -115,8 +82,17 @@ namespace cppcanvas
                 tools::initRenderState(o_rRenderState,rState);
 
                 // #i36950# Offset clip back to origin (as it's also moved
-                // by rStartPoint!)
-                tools::modifyClip( o_rRenderState, rState, rCanvas, rStartPoint, NULL );
+                // by rStartPoint)
+                // #i53964# Also take VCL font rotation into account,
+                // since this, opposed to the FontMatrix rotation
+                // elsewhere, _does_ get incorporated into the render
+                // state transform.
+                tools::modifyClip( o_rRenderState,
+                                   rState,
+                                   rCanvas,
+                                   rStartPoint,
+                                   NULL,
+                                   &rState.fontRotation );
 
                 ::basegfx::B2DHomMatrix aLocalTransformation;
 
@@ -554,9 +530,6 @@ namespace cppcanvas
                     rRenderer( aShadowState );
                 }
 
-                // draw normal text
-                rRenderer( rRenderState );
-
                 // draw relief text, if enabled
                 if( rReliefColor != aEmptyColor )
                 {
@@ -574,6 +547,9 @@ namespace cppcanvas
 
                     rRenderer( aReliefState );
                 }
+
+                // draw normal text
+                rRenderer( rRenderState );
 
                 return true;
             }
@@ -1157,7 +1133,7 @@ namespace cppcanvas
                                                             ::Color( 0x80FF0000 ) );
 
                 if( maState.Clip.is() )
-                    mpCanvas->getUNOCanvas()->fillPolyPolygon( maState.Clip,
+                    mpCanvas->getUNOCanvas()->drawPolyPolygon( maState.Clip,
                                                                mpCanvas->getViewState(),
                                                                aLocalState );
 
@@ -2086,7 +2062,12 @@ namespace cppcanvas
                     rVDev.SetMapMode( aOldMapMode );
 
                     const uno::Sequence< double > aCharWidthSeq(
-                        setupDXArray( pDXArray, nLen, rVDev ) );
+                        pDXArray ?
+                        setupDXArray( pDXArray, nLen, rVDev ) :
+                        setupDXArray( rText,
+                                      nStartPos,
+                                      nLen,
+                                      rVDev ) );
                     const uno::Reference< rendering::XPolyPolygon2D > xTextPoly(
                         ::vcl::unotools::xPolyPolygonFromPolyPolygon(
                             rCanvas->getUNOCanvas()->getDevice(),
