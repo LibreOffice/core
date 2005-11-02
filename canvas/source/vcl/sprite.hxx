@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sprite.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:23:01 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:03:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,71 +33,47 @@
  *
  ************************************************************************/
 
-#ifndef _VCLCANVAS_SPRITE_HXX
-#define _VCLCANVAS_SPRITE_HXX
+#ifndef INCLUDED_VCLCANVAS_SPRITE_HXX
+#define INCLUDED_VCLCANVAS_SPRITE_HXX
 
-#ifndef _RTL_REF_HXX_
-#include <rtl/ref.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_RENDERING_XCANVAS_HPP_
-#include <com/sun/star/rendering/XCanvas.hpp>
-#endif
-
-#ifndef _BGFX_POINT_B2DPOINT_HXX
-#include <basegfx/vector/b2dpoint.hxx>
-#endif
-#ifndef _BGFX_VECTOR_B2DSIZE_HXX
-#include <basegfx/vector/b2dsize.hxx>
-#endif
+#include <canvas/base/sprite.hxx>
 
 class OutputDevice;
 
 namespace vclcanvas
 {
-    /* Definition of Sprite class */
-
-    /** Helper interface to connect SpriteCanvas with various
-        sprite implementations.
-    */
-
-    class Sprite : public ::com::sun::star::uno::XInterface
+    /** Specialization of ::canvas::Sprite interface, to also provide
+        redraw methods.
+     */
+    class Sprite : public ::canvas::Sprite
     {
     public:
-        typedef ::rtl::Reference< Sprite > ImplRef;
 
-        virtual ~Sprite() {}
+        /** Redraw sprite at the stored position.
 
-        /** Repaint whole sprite on given target surface
+            @param bBufferedUpdate
+            When true, the redraw does <em>not</em> happen directly on
+            the front buffer, but within a VDev. Used to speed up
+            drawing.
          */
-        virtual void redraw( OutputDevice& rTargetSurface ) const = 0;
+        virtual void redraw( OutputDevice& rOutDev,
+                             bool          bBufferedUpdate ) const = 0;
 
-        /** Repaint sprite.
+        /** Redraw sprite at the given position.
 
-            @param rTargetSurface
-            Target surface to output sprite content
+            @param rPos
+            Output position of the sprite. Overrides the sprite's own
+            output position.
 
-            @param rOutputPos
-            Position where to render the sprite (overrides the
-            sprite's output position)
+            @param bBufferedUpdate
+            When true, the redraw does <em>not</em> happen directly on
+            the front buffer, but within a VDev. Used to speed up
+            drawing.
          */
-        virtual void redraw( OutputDevice&  rTargetSurface,
-                             const Point&   rOutputPos ) const = 0;
-
-        /** Query whether sprite update will fully cover the given area.
-
-            Use this method to determine whether any background
-            content (regardless of static or sprite) needs an update
-            before rendering this sprite.
-
-            @return true, if sprite redraw will fully overwrite given
-            area.
-         */
-        virtual bool isAreaUpdateOpaque( const Rectangle& rUpdateArea ) const = 0;
-
-        virtual ::basegfx::B2DPoint getSpritePos() const = 0;
-        virtual ::basegfx::B2DSize  getSpriteSize() const = 0;
+        virtual void redraw( OutputDevice&              rOutDev,
+                             const ::basegfx::B2DPoint& rPos,
+                             bool                       bBufferedUpdate ) const = 0;
     };
 }
 
-#endif /* _VCLCANVAS_SPRITE_HXX */
+#endif /* INCLUDED_VCLCANVAS_SPRITE_HXX */
