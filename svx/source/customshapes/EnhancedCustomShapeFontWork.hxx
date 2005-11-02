@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeFontWork.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:26:13 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 09:57:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,12 +36,18 @@
 #ifndef _ENHANCEDCUSTOMSHAPEFONTWORK_HXX
 #define _ENHANCEDCUSTOMSHAPEFONTWORK_HXX
 
+#ifndef _COM_SUN_STAR_I18N_XBREAKITERATOR_HPP_
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+#endif
+
 class SdrObject;
 class EnhancedCustomShapeFontWork
 {
+        static ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > mxBreakIterator;
 
     public :
 
+        static com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > GetBreakIterator();
         static SdrObject* CreateFontWork( const SdrObject* pShape2d, const SdrObject* pCustomShape );
 };
 
