@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:09:18 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:36:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,7 +192,7 @@ BOOL ImplSalPreDispatchMsg( MSG* pMsg )
     {
         ImplSalYieldMutexAcquireWithWait();
         pObject = ImplFindSalObject( pMsg->hwnd );
-        if ( pObject )
+        if ( pObject && !pObject->IsMouseTransparent() )
             ImplPostMessage( pObject->mhWnd, SALOBJ_MSG_TOTOP, 0, 0 );
         ImplSalYieldMutexRelease();
     }
@@ -323,7 +323,7 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
             {
                 ImplSalYieldMutexAcquireWithWait();
                 pSysObj = GetSalObjWindowPtr( hWnd );
-                if ( pSysObj )
+                if ( pSysObj && !pSysObj->IsMouseTransparent() )
                     pSysObj->CallCallback( SALOBJ_EVENT_TOTOP, 0 );
                 ImplSalYieldMutexRelease();
             }
@@ -331,7 +331,13 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
             break;
 
         case WM_MOUSEACTIVATE:
-            ImplPostMessage( hWnd, SALOBJ_MSG_TOTOP, 0, 0 );
+            {
+            ImplSalYieldMutexAcquireWithWait();
+            pSysObj = GetSalObjWindowPtr( hWnd );
+            if ( pSysObj && !pSysObj->IsMouseTransparent() )
+                ImplPostMessage( hWnd, SALOBJ_MSG_TOTOP, 0, 0 );
+            ImplSalYieldMutexRelease();
+            }
             break;
 
         case SALOBJ_MSG_TOTOP:
@@ -424,18 +430,54 @@ LRESULT CALLBACK SalSysObjChildWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPA
     switch( nMsg )
     {
         // Wegen PlugIn's loeschen wir erstmal den Hintergrund
-/*
         case WM_ERASEBKGND:
-            nRet = 1;
-            rDef = FALSE;
+            {
+                WinSalObject* pSysObj = GetSalObjWindowPtr( ::GetParent( hWnd ) );
+
+                if( pSysObj && !pSysObj->IsEraseBackgroundEnabled() )
+                {
+                    // do not erase background
+                    nRet = 1;
+                    rDef = FALSE;
+                }
+            }
             break;
-*/
+
         case WM_PAINT:
             {
             PAINTSTRUCT aPs;
             BeginPaint( hWnd, &aPs );
             EndPaint( hWnd, &aPs );
             rDef = FALSE;
+            }
+            break;
+
+        case WM_MOUSEMOVE:
+        case WM_LBUTTONDOWN:
+        case WM_MBUTTONDOWN:
+        case WM_RBUTTONDOWN:
+        case WM_LBUTTONUP:
+        case WM_MBUTTONUP:
+        case WM_RBUTTONUP:
+            {
+                WinSalObject* pSysObj;
+                pSysObj = GetSalObjWindowPtr( ::GetParent( hWnd ) );
+
+                if( pSysObj && pSysObj->IsMouseTransparent() )
+                {
+                    // forward mouse events to parent frame
+                    HWND hWndParent = ::GetParent( pSysObj->mhWnd );
+
+                    // transform coordinates
+                    POINT pt;
+                    pt.x = (long) LOWORD( lParam );
+                    pt.y = (long) HIWORD( lParam );
+                    MapWindowPoints( hWnd, hWndParent, &pt, 1 );
+                    lParam = MAKELPARAM( (WORD) pt.x, (WORD) pt.y );
+
+                    nRet = ImplSendMessage( hWndParent, nMsg, wParam, lParam );
+                    rDef = FALSE;
+                }
             }
             break;
     }
