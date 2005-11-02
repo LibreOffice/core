@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleDropDownListBox.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:17:11 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:15:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 
 import util.AccessibilityTools;
+import util.DesktopTools;
 import util.SOfficeFactory;
 import util.utils;
 
@@ -80,8 +81,8 @@ import util.utils;
  * @see ifc.accessibility._XAccessibleContext
  */
 public class AccessibleDropDownListBox extends TestCase {
-    XTextDocument xTextDoc = null;
-    XAccessibleAction action = null;
+    private static XTextDocument xTextDoc = null;
+    private static XAccessibleAction action = null;
 
     /**
      * Finds AccessibleDropDownListBox walking through the
@@ -100,6 +101,8 @@ public class AccessibleDropDownListBox extends TestCase {
                                   xTextDoc);
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
+
+        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
 
         oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.COMBO_BOX,
                                              "", "AccessibleDropDownListBox");
@@ -131,6 +134,7 @@ public class AccessibleDropDownListBox extends TestCase {
         try {
             SOfficeFactory SOF = SOfficeFactory.getFactory(
                                          (XMultiServiceFactory) Param.getMSF());
+            DesktopTools.dockStylist((XMultiServiceFactory) Param.getMSF());
             xTextDoc = SOF.createTextDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create document", e);
@@ -142,7 +146,6 @@ public class AccessibleDropDownListBox extends TestCase {
      */
     protected void cleanup(TestParameters Param, PrintWriter log) {
         util.DesktopTools.closeDoc(xTextDoc);
-        ;
     }
 
     /**
