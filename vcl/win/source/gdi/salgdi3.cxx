@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 14:17:05 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:36:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,9 +74,21 @@
 #ifndef _SV_SALLAYOUT_HXX
 #include <sallayout.hxx>
 #endif
+
 #ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
 #endif
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
+#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#endif
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
+
+
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -109,9 +121,10 @@ inline FIXED FixedFromDouble( double d )
 
 // -----------------------------------------------------------------------
 
-inline int IntFromFixed(FIXED f)
+inline int IntTimes256FromFixed(FIXED f)
 {
-    return( ( f.fract >= 0x8000 ) ? ( f.value + 1 ) : f.value );
+    int nFixedTimes256 = (f.value << 8) + ((f.fract+0x80) >> 8);
+    return nFixedTimes256;
 }
 
 // =======================================================================
@@ -2003,9 +2016,10 @@ BOOL WinSalGraphics::GetGlyphBoundRect( long nIndex, Rectangle& rRect )
 
 // -----------------------------------------------------------------------
 
-BOOL WinSalGraphics::GetGlyphOutline( long nIndex, PolyPolygon& rPolyPoly )
+BOOL WinSalGraphics::GetGlyphOutline( long nIndex,
+    ::basegfx::B2DPolyPolygon& rB2DPolyPoly )
 {
-    rPolyPoly.Clear();
+    rB2DPolyPoly.clear();
 
     BOOL bRet = FALSE;
     HDC  hDC = mhDC;
@@ -2060,8 +2074,8 @@ BOOL WinSalGraphics::GetGlyphOutline( long nIndex, PolyPolygon& rPolyPoly )
                 // of previous segment
                 int nPnt = 0;
 
-                long nX = IntFromFixed( pHeader->pfxStart.x );
-                long nY = IntFromFixed( pHeader->pfxStart.y );
+                long nX = IntTimes256FromFixed( pHeader->pfxStart.x );
+                long nY = IntTimes256FromFixed( pHeader->pfxStart.y );
                 pPoints[ nPnt ] = Point( nX, nY );
                 pFlags[ nPnt++ ] = POLY_NORMAL;
 
@@ -2092,8 +2106,8 @@ BOOL WinSalGraphics::GetGlyphOutline( long nIndex, PolyPolygon& rPolyPoly )
                     {
                         while( i < pCurve->cpfx )
                         {
-                            nX = IntFromFixed( pCurve->apfx[ i ].x );
-                            nY = IntFromFixed( pCurve->apfx[ i ].y );
+                            nX = IntTimes256FromFixed( pCurve->apfx[ i ].x );
+                            nY = IntTimes256FromFixed( pCurve->apfx[ i ].y );
                             ++i;
                             pPoints[ nPnt ] = Point( nX, nY );
                             pFlags[ nPnt ] = POLY_NORMAL;
@@ -2106,8 +2120,8 @@ BOOL WinSalGraphics::GetGlyphOutline( long nIndex, PolyPolygon& rPolyPoly )
                         while( i < pCurve->cpfx )
                         {
                             // get control point of quadratic bezier spline
-                            nX = IntFromFixed( pCurve->apfx[ i ].x );
-                            nY = IntFromFixed( pCurve->apfx[ i ].y );
+                            nX = IntTimes256FromFixed( pCurve->apfx[ i ].x );
+                            nY = IntTimes256FromFixed( pCurve->apfx[ i ].y );
                             ++i;
                             Point aControlP( nX, nY );
 
@@ -2119,8 +2133,8 @@ BOOL WinSalGraphics::GetGlyphOutline( long nIndex, PolyPolygon& rPolyPoly )
                             pFlags[ nPnt+0 ] = POLY_CONTROL;
 
                             // calculate endpoint of segment
-                            nX = IntFromFixed( pCurve->apfx[ i ].x );
-                            nY = IntFromFixed( pCurve->apfx[ i ].y );
+                            nX = IntTimes256FromFixed( pCurve->apfx[ i ].x );
+                            nY = IntTimes256FromFixed( pCurve->apfx[ i ].y );
 
                             if ( i+1 >= pCurve->cpfx )
                             {
@@ -2130,8 +2144,8 @@ BOOL WinSalGraphics::GetGlyphOutline( long nIndex, PolyPolygon& rPolyPoly )
                             else
                             {
                                 // or endpoint is the middle of two control points
-                                nX += IntFromFixed( pCurve->apfx[ i-1 ].x );
-                                nY += IntFromFixed( pCurve->apfx[ i-1 ].y );
+                                nX += IntTimes256FromFixed( pCurve->apfx[ i-1 ].x );
+                                nY += IntTimes256FromFixed( pCurve->apfx[ i-1 ].y );
                                 nX = (nX + 1) / 2;
                                 nY = (nY + 1) / 2;
                                 // no need to advance, because the current point
@@ -2175,7 +2189,9 @@ BOOL WinSalGraphics::GetGlyphOutline( long nIndex, PolyPolygon& rPolyPoly )
 
                 // insert into polypolygon
                 Polygon aPoly( nPnt, pPoints, (bHasOfflinePoints ? pFlags : NULL) );
-                rPolyPoly.Insert( aPoly );
+                // convert to B2DPolyPolygon
+        // TODO: get rid of the intermediate PolyPolygon
+        rB2DPolyPoly.append( aPoly.getB2DPolygon() );
             }
 
             delete[] pPoints;
@@ -2185,6 +2201,14 @@ BOOL WinSalGraphics::GetGlyphOutline( long nIndex, PolyPolygon& rPolyPoly )
         delete[] pData;
 
         rPolyPoly.Scale( mfFontScale, mfFontScale );
+    }
+
+    // rescaling needed for the PolyPolygon conversion
+    if( rB2DPolyPoly.count() )
+    {
+        ::basegfx::B2DHomMatrix aMatrix;
+    aMatrix.scale( 1.0/256, 1.0/256 );
+    rB2DPolyPoly.transform( aMatrix );
     }
 
     return bRet;
