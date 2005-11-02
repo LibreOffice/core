@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScSubTotalFieldObj.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:02:15 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:09:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ import com.sun.star.uno.XInterface;
 * @see ifc.sheet._XSubTotalField
 */
 public class ScSubTotalFieldObj extends TestCase {
-    public XSpreadsheetDocument xSpreadsheetDoc;
+    public static XSpreadsheetDocument xSpreadsheetDoc;
 
     /**
     * Creates Spreadsheet document.
