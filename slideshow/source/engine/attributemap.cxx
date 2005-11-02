@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attributemap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:23:50 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 14:02:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,16 +35,17 @@
 
 // must be first
 #include <canvas/debug.hxx>
-#include <attributemap.hxx>
+#include <canvas/canvastools.hxx>
 
-#include <tools.hxx>
+#include "attributemap.hxx"
+#include "tools.hxx"
 
 
 namespace presentation
 {
     namespace internal
     {
-        typedef ValueMap< AttributeType > AnimateAttributeMap;
+        typedef ::canvas::tools::ValueMap< AttributeType > AnimateAttributeMap;
 
         AttributeType mapAttributeName( const ::rtl::OUString& rAttrName )
         {
