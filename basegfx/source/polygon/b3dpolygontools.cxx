@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dpolygontools.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:48:31 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:59:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,20 +120,133 @@ namespace basegfx
             return aRetval;
         }
 
+        B3DVector getNormal(const B3DPolygon& rCandidate)
+        {
+            B3DVector aRetval;
+            const sal_uInt32 nPointCount(rCandidate.count());
+
+            if(nPointCount > 2)
+            {
+                const B3DPoint aPrevPnt(rCandidate.getB3DPoint(nPointCount - 1L));
+                B3DPoint aCurrPnt(rCandidate.getB3DPoint(0L));
+                B3DVector aLastVector(aPrevPnt - aCurrPnt);
+
+                for(sal_uInt32 a(0L); a < nPointCount; a++)
+                {
+                    const bool bLast(a + 1L == nPointCount);
+                    const B3DPoint aNextPnt(rCandidate.getB3DPoint(bLast ? 0L : a + 1L));
+                    const B3DVector aNextVector(aNextPnt - aCurrPnt);
+                    aRetval += aLastVector.getPerpendicular(aNextVector);
+
+                    // prepare next run
+                    if(!bLast)
+                    {
+                        aLastVector = -aNextVector;
+                        aCurrPnt = aNextPnt;
+                    }
+                }
+
+                // normalize result
+                aRetval.normalize();
+            }
+
+            return aRetval;
+        }
+
+        double getSignedArea(const B3DPolygon& rCandidate)
+        {
+            double fRetval(0.0);
+            const sal_uInt32 nPointCount(rCandidate.count());
+
+            if(nPointCount > 2)
+            {
+                const B3DVector aNormal(getNormal(rCandidate));
+                sal_uInt16 nCase(3); // default: ignore z
+
+                if(fabs(aNormal.getX()) > fabs(aNormal.getY()))
+                {
+                    if(fabs(aNormal.getX()) > fabs(aNormal.getZ()))
+                    {
+                        nCase = 1; // ignore x
+                    }
+                }
+                else if(fabs(aNormal.getY()) > fabs(aNormal.getZ()))
+                {
+                    nCase = 2; // ignore y
+                }
+
+                for(sal_uInt32 a(0L); a < nPointCount; a++)
+                {
+                    const B3DPoint aPreviousPoint(rCandidate.getB3DPoint((!a) ? nPointCount - 1L : a - 1L));
+                    const B3DPoint aCurrentPoint(rCandidate.getB3DPoint(a));
+
+                    switch(nCase)
+                    {
+                        case 1: // ignore x
+                            fRetval += aPreviousPoint.getZ() * aCurrentPoint.getY();
+                            fRetval -= aPreviousPoint.getY() * aCurrentPoint.getZ();
+                            break;
+                        case 2: // ignore y
+                            fRetval += aPreviousPoint.getX() * aCurrentPoint.getZ();
+                            fRetval -= aPreviousPoint.getZ() * aCurrentPoint.getX();
+                            break;
+                        case 3: // ignore z
+                            fRetval += aPreviousPoint.getX() * aCurrentPoint.getY();
+                            fRetval -= aPreviousPoint.getY() * aCurrentPoint.getX();
+                            break;
+                    }
+                }
+
+
+                switch(nCase)
+                {
+                    case 1: // ignore x
+                        fRetval /= 2.0 * aNormal.getX();
+                        break;
+                    case 2: // ignore y
+                        fRetval /= 2.0 * aNormal.getY();
+                        break;
+                    case 3: // ignore z
+                        fRetval /= 2.0 * aNormal.getZ();
+                        break;
+                }
+            }
+
+            return fRetval;
+        }
+
+        double getArea(const B3DPolygon& rCandidate)
+        {
+            double fRetval(0.0);
+
+            if(rCandidate.count() > 2)
+            {
+                fRetval = getSignedArea(rCandidate);
+                const double fZero(0.0);
+
+                if(fTools::less(fRetval, fZero))
+                {
+                    fRetval = -fRetval;
+                }
+            }
+
+            return fRetval;
+        }
+
         double getEdgeLength(const ::basegfx::B3DPolygon& rCandidate, sal_uInt32 nIndex)
         {
-            OSL_ENSURE(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
+            OSL_ENSURE(nIndex < rCandidate.count(), "getEdgeLength: Access to polygon out of range (!)");
             double fRetval(0.0);
             const sal_uInt32 nPointCount(rCandidate.count());
 
             if(nIndex < nPointCount)
             {
-                if(rCandidate.isClosed() || nIndex + 1 != nPointCount)
+                if(rCandidate.isClosed() || ((nIndex + 1L) != nPointCount))
                 {
-                    const sal_uInt32 nNextIndex(nIndex + 1 == nPointCount ? 0L : nIndex + 1L);
-                    const ::basegfx::B3DPoint aCurrentPoint(rCandidate.getB3DPoint(nIndex));
-                    const ::basegfx::B3DPoint aNextPoint(rCandidate.getB3DPoint(nNextIndex));
-                    const ::basegfx::B3DVector aVector(aNextPoint - aCurrentPoint);
+                    const sal_uInt32 nNextIndex(getIndexOfSuccessor(nIndex, rCandidate));
+                    const B3DPoint aCurrentPoint(rCandidate.getB3DPoint(nIndex));
+                    const B3DPoint aNextPoint(rCandidate.getB3DPoint(nNextIndex));
+                    const B3DVector aVector(aNextPoint - aCurrentPoint);
                     fRetval = aVector.getLength();
                 }
             }
@@ -143,29 +256,20 @@ namespace basegfx
 
         double getLength(const ::basegfx::B3DPolygon& rCandidate)
         {
-            // This method may also be implemented using a loop over getEdgeLength, but
-            // since this would cause a lot of sqare roots to be solved it is much better
-            // to sum up the quadrats first and then use a singe suare root (if necessary)
             double fRetval(0.0);
             const sal_uInt32 nPointCount(rCandidate.count());
-            const sal_uInt32 nLoopCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1L);
 
-            for(sal_uInt32 a(0L); a < nLoopCount; a++)
+            if(nPointCount > 1L)
             {
-                const sal_uInt32 nNextIndex(a + 1 == nPointCount ? 0L : a + 1L);
-                const ::basegfx::B3DPoint aCurrentPoint(rCandidate.getB3DPoint(a));
-                const ::basegfx::B3DPoint aNextPoint(rCandidate.getB3DPoint(nNextIndex));
-                const ::basegfx::B3DVector aVector(aNextPoint - aCurrentPoint);
-                fRetval += aVector.scalar(aVector);
-            }
+                const sal_uInt32 nLoopCount(rCandidate.isClosed() ? nPointCount : nPointCount - 1L);
 
-            if(!::basegfx::fTools::equalZero(fRetval))
-            {
-                const double fOne(1.0);
-
-                if(!::basegfx::fTools::equal(fOne, fRetval))
+                for(sal_uInt32 a(0L); a < nLoopCount; a++)
                 {
-                    fRetval = sqrt(fRetval);
+                    const sal_uInt32 nNextIndex(getIndexOfSuccessor(a, rCandidate));
+                    const B3DPoint aCurrentPoint(rCandidate.getB3DPoint(a));
+                    const B3DPoint aNextPoint(rCandidate.getB3DPoint(nNextIndex));
+                    const B3DVector aVector(aNextPoint - aCurrentPoint);
+                    fRetval += aVector.getLength();
                 }
             }
 
