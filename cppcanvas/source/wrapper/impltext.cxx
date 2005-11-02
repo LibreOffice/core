@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impltext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:31:04 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:44:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ namespace cppcanvas
             pCanvas->getUNOCanvas()->drawText( aText,
                                                mpFont->getUNOFont(),
                                                pCanvas->getViewState(),
-                                               maRenderState,
+                                               getRenderState(),
                                                nBidiOption );
 
             return true;
