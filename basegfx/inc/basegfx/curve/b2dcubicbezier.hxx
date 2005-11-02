@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dcubicbezier.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:24:30 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:52:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,12 +40,17 @@
 #include <basegfx/point/b2dpoint.hxx>
 #endif
 
+#ifndef _BGFX_RANGE_B2DRANGE_HXX
+#include <basegfx/range/b2drange.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
 
 namespace basegfx
 {
     class B2DPolygon;
+    class B2DVector;
 } // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////
@@ -54,17 +59,17 @@ namespace basegfx
 {
     class B2DCubicBezier
     {
-        ::basegfx::B2DPoint                         maStartPoint;
-        ::basegfx::B2DPoint                         maEndPoint;
-        ::basegfx::B2DPoint                         maControlPointA;
-        ::basegfx::B2DPoint                         maControlPointB;
+        B2DPoint                                        maStartPoint;
+        B2DPoint                                        maEndPoint;
+        B2DPoint                                        maControlPointA;
+        B2DPoint                                        maControlPointB;
 
     public:
         B2DCubicBezier();
         B2DCubicBezier(const B2DCubicBezier& rBezier);
-        B2DCubicBezier(const ::basegfx::B2DPoint& rStart, const ::basegfx::B2DPoint& rEnd);
-        B2DCubicBezier(const ::basegfx::B2DPoint& rStart, const ::basegfx::B2DPoint& rControlPointA,
-            const ::basegfx::B2DPoint& rControlPointB, const ::basegfx::B2DPoint& rEnd);
+        B2DCubicBezier(const B2DPoint& rStart, const B2DPoint& rEnd);
+        B2DCubicBezier(const B2DPoint& rStart, const B2DPoint& rControlPointA, const B2DPoint& rControlPointB, const B2DPoint& rEnd);
+        B2DCubicBezier(const B2DPoint& rStart, const B2DVector& rControlVectorA, const B2DVector& rControlVectorB, const B2DPoint& rEnd);
         ~B2DCubicBezier();
 
         // assignment operator
@@ -87,17 +92,17 @@ namespace basegfx
         double getControlPolygonLength() const;
 
         // data interface
-        ::basegfx::B2DPoint getStartPoint() const { return maStartPoint; }
-        void setStartPoint(const ::basegfx::B2DPoint& rValue) { maStartPoint = rValue; }
+        B2DPoint getStartPoint() const { return maStartPoint; }
+        void setStartPoint(const B2DPoint& rValue) { maStartPoint = rValue; }
 
-        ::basegfx::B2DPoint getEndPoint() const { return maEndPoint; }
-        void setEndPoint(const ::basegfx::B2DPoint& rValue) { maEndPoint = rValue; }
+        B2DPoint getEndPoint() const { return maEndPoint; }
+        void setEndPoint(const B2DPoint& rValue) { maEndPoint = rValue; }
 
-        ::basegfx::B2DPoint getControlPointA() const { return maControlPointA; }
-        void setControlPointA(const ::basegfx::B2DPoint& rValue) { maControlPointA = rValue; }
+        B2DPoint getControlPointA() const { return maControlPointA; }
+        void setControlPointA(const B2DPoint& rValue) { maControlPointA = rValue; }
 
-        ::basegfx::B2DPoint getControlPointB() const { return maControlPointB; }
-        void setControlPointB(const ::basegfx::B2DPoint& rValue) { maControlPointB = rValue; }
+        B2DPoint getControlPointB() const { return maControlPointB; }
+        void setControlPointB(const B2DPoint& rValue) { maControlPointB = rValue; }
 
         // adaptive subdivide by angle criteria
         // #i37443# allow the criteria to get unsharp in recursions
@@ -105,6 +110,19 @@ namespace basegfx
 
         // #i37443# adaptive subdivide by nCount subdivisions
         void adaptiveSubdivideByCount(B2DPolygon& rTarget, sal_uInt32 nCount, bool bAddLastPoint) const;
+
+        // get point at given relative position
+        B2DPoint interpolatePoint(double t) const;
+
+        // calculate the smallest distance from given point to this cubic bezier segment
+        // and return the value. The relative position on the segment is returned in rCut.
+        double getSmallestDistancePointToBezierSegment(const B2DPoint& rTestPoint, double& rCut) const;
+
+        // do a split at position t and fill both resulting segments
+        void split(double t, B2DCubicBezier& rBezierA, B2DCubicBezier& rBezierB) const;
+
+        // get range including conrol points
+        B2DRange getRange() const;
     };
 } // end of namespace basegfx
 
