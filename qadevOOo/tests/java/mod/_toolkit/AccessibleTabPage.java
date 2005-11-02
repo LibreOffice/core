@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleTabPage.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:26:45 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:19:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,9 +96,9 @@ import util.SOfficeFactory;
  * @see ifc.accessibility.XAccessibleExtendedComponent
  */
 public class AccessibleTabPage extends TestCase {
-    XDesktop the_Desk;
-    XTextDocument xTextDoc;
-    XAccessibleAction accCloseButton = null;
+    private static XDesktop the_Desk;
+    private static XTextDocument xTextDoc;
+    private static XAccessibleAction accCloseButton = null;
 
     /**
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
