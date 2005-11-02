@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicalTestArguments.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:13:00 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:41:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,8 @@ public class GraphicalTestArguments
     boolean m_bResuseOffice = false;
 
     boolean m_bDebugMode = false;
+
+    String m_sLeaveOutNames = null;
 
     // CONSTRUCTOR
     private GraphicalTestArguments(){}
@@ -250,6 +252,29 @@ public class GraphicalTestArguments
             {
                 m_bWithBorderMove = false;
             }
+
+            String sLeaveOutNames = (String)param.get(PropertyName.DOC_COMPARATOR_LEAVE_OUT_FILES);
+            if (sLeaveOutNames != null)
+            {
+                m_sLeaveOutNames = sLeaveOutNames;
+            }
+        }
+
+    public boolean checkIfUsable(String _sName)
+        {
+            // @todo
+            // check if the name is in the leave out list and then return 'false'
+            if (_sName.toLowerCase().endsWith(".jpg") ||
+                _sName.toLowerCase().endsWith(".png") ||
+                _sName.toLowerCase().endsWith(".gif") ||
+                _sName.toLowerCase().endsWith(".bmp") ||
+                _sName.toLowerCase().endsWith(".prn") ||
+                _sName.toLowerCase().endsWith(".ps"))
+            {
+                return false;
+            }
+
+            return true;
         }
 
     static void showInternalFilterName(String _sFilterName, XMultiServiceFactory _xMSF)
@@ -363,6 +388,11 @@ public class GraphicalTestArguments
                             }
                             // This type of document no one would like to load.
                             if (pathname.getName().endsWith(".zip"))
+                            {
+                                return false;
+                            }
+                            // just a hack
+                            if (pathname.getName().endsWith("_"))
                             {
                                 return false;
                             }
@@ -494,6 +524,19 @@ public class GraphicalTestArguments
             return sBuildID;
         }
 
+    public boolean shouldOfficeStart()
+        {
+            String sNoOffice = (String)m_aCurrentParams.get( "NoOffice" );
+            if (sNoOffice != null)
+            {
+                if (sNoOffice.toLowerCase().startsWith("t") || sNoOffice.toLowerCase().startsWith("y"))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         // Handle for Reference Build ID, is set in ConvWatch.createPostscriptStartCheck()
     private String m_sRefBuildID;
 
@@ -573,6 +616,21 @@ public class GraphicalTestArguments
         {
             return m_bWithBorderMove;
         }
+
+
+    /*
+      helper class for performance analyser features
+     */
+    PerformanceContainer m_aPerformanceContainer = null;
+    public PerformanceContainer getPerformance()
+        {
+            if (m_aPerformanceContainer == null)
+            {
+                m_aPerformanceContainer = new PerformanceContainer();
+            }
+            return m_aPerformanceContainer;
+        }
+
 }
 
 
