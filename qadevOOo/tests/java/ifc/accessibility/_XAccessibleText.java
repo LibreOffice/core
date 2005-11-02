@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XAccessibleText.java,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:48:42 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:44:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,7 +192,7 @@ public class _XAccessibleText extends MultiMethodTest {
             log.print("setCaretPosition(-1):");
             oObj.setCaretPosition(-1);
             res &= false;
-            log.println("exception was expected");
+            log.println("exception was expected ... FAILED");
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             log.println("expected exception");
             res &= true;
@@ -202,7 +202,7 @@ public class _XAccessibleText extends MultiMethodTest {
             log.print("setCaretPosition(chCount+1):");
             oObj.setCaretPosition(chCount + 1);
             res &= false;
-            log.println("exception was expected");
+            log.println("exception was expected  ... FAILED");
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             log.println("expected exception");
             res &= true;
@@ -213,7 +213,7 @@ public class _XAccessibleText extends MultiMethodTest {
             oObj.setCaretPosition(chCount - 1);
             res &= true;
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("unexpected exception");
+            log.println("unexpected exception  ... FAILED");
             e.printStackTrace(log);
             res &= false;
         }
@@ -882,12 +882,13 @@ public class _XAccessibleText extends MultiMethodTest {
             txt = oObj.getTextAtIndex(chCount, AccessibleTextType.WORD);
             log.println("'" + txt.SegmentText + "'");
             res &= compareLength(0,txt.SegmentText);
-
-            log.print("getTextAtIndex(1," +
-                      " AccessibleTextType.PARAGRAPH):");
-            txt = oObj.getTextAtIndex(1, AccessibleTextType.PARAGRAPH);
-            log.println("'" + txt.SegmentText + "'");
-            res &= compareStrings(text,txt.SegmentText);
+            if (!tEnv.getTestCase().getObjectName().equals("SmGraphicAccessible")) {
+                log.print("getTextAtIndex(1," +
+                          " AccessibleTextType.PARAGRAPH):");
+                txt = oObj.getTextAtIndex(1, AccessibleTextType.PARAGRAPH);
+                log.println("'" + txt.SegmentText + "'");
+                res &= compareStrings(text,txt.SegmentText);
+            }
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             log.println("Unexpected exception");
             e.printStackTrace(log);
@@ -949,13 +950,15 @@ public class _XAccessibleText extends MultiMethodTest {
         }
 
         try {
-            log.print("getTextBeforeIndex(chCount," +
-                      " AccessibleTextType.WORD):");
+            if (!tEnv.getTestCase().getObjectName().equals("SmGraphicAccessible")) {
+                log.print("getTextBeforeIndex(chCount," +
+                          " AccessibleTextType.WORD):");
 
-            txt = oObj.getTextBeforeIndex(chCount,
-                                                 AccessibleTextType.WORD);
-            log.println("'" + txt.SegmentText + "'");
-            res &= compareLength(chCount, txt.SegmentText);
+                txt = oObj.getTextBeforeIndex(chCount,
+                                                     AccessibleTextType.WORD);
+                log.println("'" + txt.SegmentText + "'");
+                res &= compareLength(chCount, txt.SegmentText);
+            }
 
             log.print("getTextBeforeIndex(1," +
                       " AccessibleTextType.PARAGRAPH):");
