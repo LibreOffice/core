@@ -1,12 +1,12 @@
 /*************************************************************************
-*
+ *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: canvascommons.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:29:49 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 14:07:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,5 +36,6 @@
 #include "macros.inc"
 
 STD_LIB_FILE_PATCH(gid_File_Lib_CppCanvas, cppcanvas)
-STD_LIB_FILE(gid_File_Lib_CanvasTools, canvastools)
-SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_CanvasFactory, canvasfactory.uno)
+STD_LIB_FILE_PATCH(gid_File_Lib_CanvasTools, canvastools)
+STD_LIB_FILE_PATCH(gid_File_Lib_Agg, agg)
+SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH(gid_File_CanvasFactory, canvasfactory.uno)
