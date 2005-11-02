@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdevprovider.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:21:34 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:02:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,8 @@
 #define _VCLCANVAS_OUTDEVPROVIDER_HXX
 
 #include <sal/types.h>
-
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
-#endif
+
 
 class OutputDevice;
 
@@ -49,7 +47,12 @@ namespace vclcanvas
     /* Definition of OutDevProvider interface */
 
     /** Implementers of this interface provide the CanvasHelper
-        with its OutputDevice
+        with its OutputDevice.
+
+        This additional level of indirection was necessary, as the
+        OutputDevice is not an interface. There had to be a mechanism
+        to detect the moment when an OutputDevice is rendered to
+        (e.g. for the BitmapBackBuffer).
      */
     class OutDevProvider
     {
