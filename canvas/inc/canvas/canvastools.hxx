@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvastools.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:04:25 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 12:40:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,10 @@
 #ifndef _CANVAS_CANVASTOOLS_HXX
 #define _CANVAS_CANVASTOOLS_HXX
 
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
 #endif
@@ -52,6 +56,15 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #endif
 
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
+
+#include <string.h> // for strcmp
+#include <vector>
 #include <limits>
 #include <algorithm>
 
@@ -60,6 +73,9 @@ namespace basegfx
 {
     class B2DHomMatrix;
     class B2DRange;
+    class B2IRange;
+    class B2IPoint;
+    class B2DPolyPolygon;
 }
 
 namespace com { namespace sun { namespace star { namespace geometry
@@ -74,6 +90,7 @@ namespace com { namespace sun { namespace star { namespace rendering
     struct RenderState;
     struct ViewState;
     class  XCanvas;
+    class  XPolyPolygon2D;
 } } } }
 
 
@@ -120,13 +137,27 @@ namespace canvas
             } while(nNumBytes);
             return c;
         }
-        inline unsigned int bitcount32( unsigned int c ) {
+        inline sal_uInt32 bitcount32( sal_uInt32 c ) {
             c=count(c,0);
             c=count(c,1);
             c=count(c,2);
             c=count(c,3);
             c=count(c,4);
             return c;
+        }
+
+        /** Round given floating point value down to next integer
+         */
+        inline sal_Int32 roundDown( const double& rVal )
+        {
+            return static_cast< sal_Int32 >( floor( rVal ) );
+        }
+
+        /** Round given floating point value up to next integer
+         */
+        inline sal_Int32 roundUp( const double& rVal )
+        {
+            return static_cast< sal_Int32 >( ceil( rVal ) );
         }
 
         /** Create a RealSize2D with both coordinate values set to +infinity
@@ -215,6 +246,13 @@ namespace canvas
         ::com::sun::star::geometry::Matrix2D&
             setIdentityMatrix2D( ::com::sun::star::geometry::Matrix2D&              matrix );
 
+
+        // PolyPolygon utilities
+        // ===================================================================
+
+        ::basegfx::B2DPolyPolygon
+               polyPolygonFromXPolyPolygon2D( const ::com::sun::star::uno::Reference<
+                                                    ::com::sun::star::rendering::XPolyPolygon2D >& );
 
         // Special utilities
         // ===================================================================
@@ -314,55 +352,123 @@ namespace canvas
                                                             const ::basegfx::B2DRange&      i_srcRect,
                                                             const ::basegfx::B2DHomMatrix&  i_transformation );
 
-        /** Range checker, which throws ::com::sun::star::lang::IllegalArgument exception, when
-            range is violated
-        */
-        template< typename NumType > inline void checkRange( NumType arg, NumType lowerBound, NumType upperBound )
+        /** Check whether a given rectangle is within another
+            transformed rectangle.
+
+            This method checks for polygonal containedness, i.e. the
+            transformed rectangle is not represented as an axis-alignd
+            rectangle anymore (like calcTransformedRectBounds()), but
+            polygonal. Thus, the insideness test is based on tight
+            bounds.
+
+            @param rContainedRect
+            This rectangle is checked, whether it is fully within the
+            transformed rTransformRect.
+
+            @param rTransformRect
+            This rectangle is transformed, and then checked whether it
+            fully contains rContainedRect.
+
+            @param rTransformation
+            This transformation is applied to rTransformRect
+         */
+        bool isInside( const ::basegfx::B2DRange&       rContainedRect,
+                       const ::basegfx::B2DRange&       rTransformRect,
+                       const ::basegfx::B2DHomMatrix&   rTransformation );
+
+        /** Clip a scroll to the given bound rect
+
+            @param io_rSourceArea
+            Source area to scroll. The resulting clipped source area
+            is returned therein.
+
+            @param io_rDestPoint
+            Destination point of the scroll (upper, left corner of
+            rSourceArea after the scroll). The new, resulting
+            destination point is returned therein.q
+
+            @param o_ClippedAreas
+            Vector of rectangles in the <em>destination</em> area
+            coordinate system, which are clipped away from the source
+            area, and thus need extra updates (i.e. they are not
+            correctly copy from the scroll operation, since there was
+            no information about them in the source).
+
+            @param rBounds
+            Bounds to clip against.
+
+            @return false, if the resulting scroll area is empty
+         */
+        bool clipScrollArea( ::basegfx::B2IRange&                  io_rSourceArea,
+                             ::basegfx::B2IPoint&                  io_rDestPoint,
+                             ::std::vector< ::basegfx::B2IRange >& o_ClippedAreas,
+                             const ::basegfx::B2IRange&            rBounds );
+
+        /** Clip a blit between two differently surfaces.
+
+            This method clips source and dest rect for a clip between
+            two differently clipped surfaces, such that the resulting
+            blit rects are fully within both clip areas.
+
+            @param io_rSourceArea
+            Source area of the blit. Returned therein is the computed
+            clipped source area.
+
+            @param io_rDestPoint
+            Dest area of the blit. Returned therein is the computed
+            clipped dest area.
+
+            @param rSourceBounds
+            Clip bounds of the source surface
+
+            @param rDestBounds
+            Clip bounds of the dest surface
+
+            @return false, if the resulting blit is empty, i.e. fully
+            clipped away.
+         */
+        bool clipBlit( ::basegfx::B2IRange&       io_rSourceArea,
+                       ::basegfx::B2IPoint&       io_rDestPoint,
+                       const ::basegfx::B2IRange& rSourceBounds,
+                       const ::basegfx::B2IRange& rDestBounds );
+
+        /** Return range of integer pixel, which will cover the sprite
+            given by the floating point range.
+
+            This method assumes that sprite sizes are always integer,
+            and that the sprite position (top, left edge of the
+            sprite) is rounded to the nearest integer before
+            rendering.
+
+            @param rRange
+            Input range. Values must be within the representable
+            bounds of sal_Int32
+
+            @return the integer range, which is covered by the sprite
+            given by rRange.
+         */
+        ::basegfx::B2IRange spritePixelAreaFromB2DRange( const ::basegfx::B2DRange& rRange );
+
+        /** This method clamps the given value to the specified range
+
+            @param val
+            The value to clamp
+
+            @param minVal
+            The minimal value val is allowed to attain
+
+            @param maxVal
+            The maximal value val is allowed to attain
+
+            @return the clamped value
+         */
+        template< typename T > T clamp( T  val,
+                                        T  minVal,
+                                        T  maxVal )
         {
-            if( arg < lowerBound ||
-                arg > upperBound )
-            {
-                throw ::com::sun::star::lang::IllegalArgumentException();
-            }
-        }
-
-        /** Range checker, which throws ::com::sun::star::lang::IndexOutOfBounds exception, when
-            index range is violated
-        */
-        template< typename NumType > inline void checkIndexRange( NumType arg, NumType lowerBound, NumType upperBound )
-        {
-            if( arg < lowerBound ||
-                arg > upperBound )
-            {
-                throw ::com::sun::star::lang::IndexOutOfBoundsException();
-            }
-        }
-
-        // BEWARE(E2): don't currently use with float or double, Solaris
-        // STLport's numeric_limits bark on that (unresolved
-        // externals)
-
-        // Modeled closely after boost::numeric_cast, only that we
-        // issue some trace output here and throw a RuntimeException
-        template< typename Target, typename Source > inline Target numeric_cast( Source arg )
-        {
-            // typedefs abbreviating respective trait classes
-            typedef ::std::numeric_limits< Source > SourceLimits;
-            typedef ::std::numeric_limits< Target > TargetLimits;
-
-            if( ( arg<0 && !TargetLimits::is_signed) ||                     // loosing the sign here
-                ( SourceLimits::is_signed && arg<TargetLimits::min()) ||    // underflow will happen
-                ( arg>TargetLimits::max() ) )                               // overflow will happen
-            {
-#if defined(VERBOSE) && defined(DBG_UTIL)
-                OSL_TRACE("numeric_cast detected data loss");
-#endif
-                throw ::com::sun::star::uno::RuntimeException(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "numeric_cast detected data loss" )),
-                    NULL );
-            }
-
-            return static_cast<Target>(arg);
+            return ::std::max( minVal,
+                               ::std::min( maxVal,
+                                           val ) );
         }
 
         /** Retrieve various internal properties of the actual canvas implementation.
@@ -386,6 +492,188 @@ namespace canvas
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& getDeviceInfo(
             const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas >& i_rxCanvas,
             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& o_rxParams );
+
+
+        // Modeled closely after boost::numeric_cast, only that we
+        // issue some trace output here and throw a RuntimeException
+
+        /** Cast numeric value into another (numeric) data type
+
+            Apart from converting the numeric value, this template
+            also checks if any overflow, underflow, or sign
+            information is lost (if yes, it throws an
+            uno::RuntimeException.
+         */
+        template< typename Target, typename Source > inline Target numeric_cast( Source arg )
+        {
+            // typedefs abbreviating respective trait classes
+            typedef ::std::numeric_limits< Source > SourceLimits;
+            typedef ::std::numeric_limits< Target > TargetLimits;
+
+            if( ( arg<0 && !TargetLimits::is_signed) ||                     // loosing the sign here
+                ( SourceLimits::is_signed && arg<TargetLimits::min()) ||    // underflow will happen
+                ( arg>TargetLimits::max() ) )                               // overflow will happen
+            {
+#if defined(VERBOSE) && defined(DBG_UTIL)
+                OSL_TRACE("numeric_cast detected data loss");
+#endif
+                throw ::com::sun::star::uno::RuntimeException(
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "numeric_cast detected data loss" )),
+                    NULL );
+            }
+
+            return static_cast<Target>(arg);
+        }
+
+        /** Retrieve for small bound marks around each corner of the given rectangle
+         */
+        ::basegfx::B2DPolyPolygon getBoundMarkPolyPolygon( const ::basegfx::B2DRange& rRange );
+
+
+        /** A very simplistic map for ASCII strings and arbitrary value
+            types.
+
+            This class internally references a constant, static array of
+            sorted MapEntries, and performs a binary search to look up
+            values for a given query string. Note that this map is static,
+            i.e. not meant to be extented at runtime.
+
+            @tpl ValueType
+            The value type this map should store, associated with an ASCII
+            string.
+        */
+        template< typename ValueType > class ValueMap
+        {
+        public:
+            struct MapEntry
+            {
+                const char*     maKey;
+                ValueType       maValue;
+            };
+
+            /** Create a ValueMap for the given array of MapEntries.
+
+                @param pMap
+                Pointer to a <em>static</em> array of MapEntries. Must
+                live longer than this object! Make absolutely sure that
+                the string entries passed via pMap are ASCII-only -
+                everything else might not yield correct string
+                comparisons, and thus will result in undefined behaviour.
+
+                @param nEntries
+                Number of entries for pMap
+
+                @param bCaseSensitive
+                Whether the map query should be performed case sensitive
+                or not. When bCaseSensitive is false, all MapEntry strings
+                must be lowercase!
+            */
+            ValueMap( const MapEntry*   pMap,
+                      ::std::size_t     nEntries,
+                      bool              bCaseSensitive ) :
+                mpMap( pMap ),
+                mnEntries( nEntries ),
+                mbCaseSensitive( bCaseSensitive )
+            {
+#ifdef DBG_UTIL
+                // Ensure that map entries are sorted (and all lowercase, if this
+                // map is case insensitive)
+                const ::rtl::OString aStr( pMap->maKey );
+                if( !mbCaseSensitive &&
+                    aStr != aStr.toAsciiLowerCase() )
+                {
+                    OSL_TRACE("ValueMap::ValueMap(): Key %s is not lowercase",
+                              pMap->maKey);
+                    OSL_ENSURE( false, "ValueMap::ValueMap(): Key is not lowercase" );
+                }
+
+                if( mnEntries > 1 )
+                {
+                    for( ::std::size_t i=0; i<mnEntries-1; ++i, ++pMap )
+                    {
+                        if( !mapComparator(pMap[0], pMap[1]) &&
+                            mapComparator(pMap[1], pMap[0]) )
+                        {
+                            OSL_TRACE("ValueMap::ValueMap(): Map is not sorted, keys %s and %s are wrong",
+                                      pMap[0].maKey,
+                                      pMap[1].maKey);
+                            OSL_ENSURE( false,
+                                        "ValueMap::ValueMap(): Map is not sorted" );
+                        }
+
+                        const ::rtl::OString aStr( pMap[1].maKey );
+                        if( !mbCaseSensitive &&
+                            aStr != aStr.toAsciiLowerCase() )
+                        {
+                            OSL_TRACE("ValueMap::ValueMap(): Key %s is not lowercase",
+                                      pMap[1].maKey);
+                            OSL_ENSURE( false, "ValueMap::ValueMap(): Key is not lowercase" );
+                        }
+                    }
+                }
+#endif
+            }
+
+            /** Lookup a value for the given query string
+
+                @param rName
+                The string to lookup. If the map was created with the case
+                insensitive flag, the lookup is performed
+                case-insensitive, otherwise, case-sensitive.
+
+                @param o_rResult
+                Output parameter, which receives the value associated with
+                the query string. If no value was found, the referenced
+                object is kept unmodified.
+
+                @return true, if a matching entry was found.
+            */
+            bool lookup( const ::rtl::OUString& rName,
+                         ValueType&             o_rResult ) const
+            {
+                // rName is required to contain only ASCII characters.
+                // TODO(Q1): Enforce this at upper layers
+                ::rtl::OString aKey( ::rtl::OUStringToOString( mbCaseSensitive ? rName : rName.toAsciiLowerCase(),
+                                                               RTL_TEXTENCODING_ASCII_US ) );
+                MapEntry aSearchKey =
+                    {
+                        aKey.getStr(),
+                        ValueType()
+                    };
+
+                const MapEntry* pRes;
+                const MapEntry* pEnd = mpMap+mnEntries;
+                if( (pRes=::std::lower_bound( mpMap,
+                                              pEnd,
+                                              aSearchKey,
+                                              &mapComparator )) != pEnd )
+                {
+                    // place to _insert before_ found - is it equal to
+                    // the search key?
+                    if( strcmp( pRes->maKey, aSearchKey.maKey ) == 0 )
+                    {
+                        // yep, correct entry found
+                        o_rResult = pRes->maValue;
+                        return true;
+                    }
+                }
+
+                // not found
+                return false;
+            }
+
+        private:
+            static bool mapComparator( const MapEntry& rLHS,
+                                       const MapEntry& rRHS )
+            {
+                return strcmp( rLHS.maKey,
+                               rRHS.maKey ) < 0;
+            }
+
+            const MapEntry*     mpMap;
+            ::std::size_t       mnEntries;
+            bool                mbCaseSensitive;
+        };
     }
 }
 
