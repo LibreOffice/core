@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolypolygonrasterconverter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:47:23 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:58:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,9 +40,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 
-#ifndef BOOST_MEM_FN_HPP_INCLUDED
 #include <boost/mem_fn.hpp>
-#endif
 
 #include <algorithm>
 
@@ -121,7 +119,7 @@ namespace basegfx
             m_indices2 = new sal_uInt32[nNumElements];
 
             // check for out of memory situation
-            if(!((sal_uInt32)m_indices1|(sal_uInt32)m_indices2)) {
+            if(!m_indices1 || !m_indices2) {
                 delete [] m_indices1;
                 delete [] m_indices2;
                 m_indices1 = NULL;
@@ -151,23 +149,24 @@ namespace basegfx
 
         // clear counters
         sal_uInt32 *ptr = m_counter;
-        for(int i=0; i<64; ++i) {
-            *ptr++ = NULL;
-            *ptr++ = NULL;
-            *ptr++ = NULL;
-            *ptr++ = NULL;
-            *ptr++ = NULL;
-            *ptr++ = NULL;
-            *ptr++ = NULL;
-            *ptr++ = NULL;
-            *ptr++ = NULL;
-            *ptr++ = NULL;
-            *ptr++ = NULL;
-            *ptr++ = NULL;
-            *ptr++ = NULL;
-            *ptr++ = NULL;
-            *ptr++ = NULL;
-            *ptr++ = NULL;
+        for(int i=0; i<64; ++i)
+        {
+            *ptr++ = 0;
+            *ptr++ = 0;
+            *ptr++ = 0;
+            *ptr++ = 0;
+            *ptr++ = 0;
+            *ptr++ = 0;
+            *ptr++ = 0;
+            *ptr++ = 0;
+            *ptr++ = 0;
+            *ptr++ = 0;
+            *ptr++ = 0;
+            *ptr++ = 0;
+            *ptr++ = 0;
+            *ptr++ = 0;
+            *ptr++ = 0;
+            *ptr++ = 0;
         }
 
         // prepare pointers to relevant memory addresses
