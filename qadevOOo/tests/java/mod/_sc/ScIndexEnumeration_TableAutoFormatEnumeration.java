@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScIndexEnumeration_TableAutoFormatEnumeration.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:56:42 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:04:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,8 +51,8 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 
 public class ScIndexEnumeration_TableAutoFormatEnumeration extends TestCase{
-    XSpreadsheetDocument xSheetDoc = null;
-    SOfficeFactory SOF = null;
+    static XSpreadsheetDocument xSheetDoc = null;
+    static SOfficeFactory SOF = null;
 
     /**
     * Creates Spreadsheet document.
