@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConvWatchStarter.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:10:39 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:40:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@ import convwatch.GraphicalTestArguments;
 import convwatch.NameHelper;
 import convwatch.HTMLOutputter;
 import helper.OfficeProvider;
+import convwatch.PerformanceContainer;
 
 /**
  * The following Complex Test will test
@@ -221,6 +222,7 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
             HTMLOutputter HTMLoutput = HTMLOutputter.create(m_sOutputPath, "index.html", "", "");
             HTMLoutput.header( m_sOutputPath );
             HTMLoutput.indexSection( m_sOutputPath );
+            LISTOutputter LISToutput = LISTOutputter.create(m_sOutputPath, "allfiles.txt");
 
             File aInputPath = new File(m_sInputPath);
             if (aInputPath.isDirectory())
@@ -262,27 +264,46 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
                         // NameHelper aNameContainer = new NameHelper(m_sOutputPath, sNewSubDir, FileHelper.getBasename(sEntry));
                         // aNameContainer.print();
 
-                        runGDCWithStatus(HTMLoutput, sEntry, sNewOutputPath, sNewReferencePath, sNewDiffPath, sNewSubDir);
+                        if (aGTA.checkIfUsable(sEntry))
+                        {
+                            runGDCWithStatus(HTMLoutput, LISToutput, sEntry, sNewOutputPath, sNewReferencePath, sNewDiffPath, sNewSubDir);
+                        }
                     }
                 }
             }
             else
             {
-                runGDCWithStatus(HTMLoutput, m_sInputPath, m_sOutputPath, m_sReferencePath, m_sDiffPath, "");
+                if (aGTA.checkIfUsable(m_sInputPath))
+                {
+                    runGDCWithStatus(HTMLoutput, LISToutput, m_sInputPath, m_sOutputPath, m_sReferencePath, m_sDiffPath, "");
+                }
             }
+
+            LISToutput.close();
             HTMLoutput.close();
             log.println("The file '" + HTMLoutput.getFilename() + "' shows a html based status.");
         }
 
 
     // -----------------------------------------------------------------------------
-    void runGDCWithStatus(HTMLOutputter _aHTMLoutput, String _sInputFile, String _sOutputPath, String _sReferencePath, String _sDiffPath, String _sNewSubDir )
+    void runGDCWithStatus(HTMLOutputter _aHTMLoutput, LISTOutputter _aLISToutput, String _sInputFile, String _sOutputPath, String _sReferencePath, String _sDiffPath, String _sNewSubDir )
         {
             // start a fresh Office
-            OfficeProvider aProvider = new OfficeProvider();
-            XMultiServiceFactory xMSF = (XMultiServiceFactory) aProvider.getManager(param);
-            param.put("ServiceFactory", xMSF);
             GraphicalTestArguments aGTA = getGraphicalTestArguments();
+
+            OfficeProvider aProvider = null;
+            if (aGTA.shouldOfficeStart())
+            {
+                aGTA.getPerformance().startTime(PerformanceContainer.OfficeStart);
+                aProvider = new OfficeProvider();
+                XMultiServiceFactory xMSF = (XMultiServiceFactory) aProvider.getManager(param);
+                param.put("ServiceFactory", xMSF);
+                aGTA.getPerformance().stopTime(PerformanceContainer.OfficeStart);
+
+                long nStartTime = aGTA.getPerformance().getTime(PerformanceContainer.OfficeStart);
+                aGTA = getGraphicalTestArguments(); // get new TestArguments
+                aGTA.getPerformance().setTime(PerformanceContainer.OfficeStart, nStartTime);
+            }
 
             String sStatusRunThrough = "";
             String sStatusMessage = "";
@@ -314,21 +335,42 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
             String fs = System.getProperty("file.separator");
             String sBasename = FileHelper.getBasename(_sInputFile);
             String sFilenameNoSuffix = FileHelper.getNameNoSuffix(sBasename);
+
+            // -------------------- List of all files -----------------
+            String sListFile;
+            if (_sNewSubDir.length() > 0)
+            {
+                sListFile = _sNewSubDir + fs + sFilenameNoSuffix + ".ini";
+            }
+            else
+            {
+                sListFile = sFilenameNoSuffix + ".ini";
+            }
+            _aLISToutput.writeValue(sListFile);
+
+            // -------------------- HTML --------------------
             String sLink;
             String sLinkDD;
             String sLinkName;
             String sLinkDDName;
             String sHTMLPrefix = aGTA.getHTMLOutputPrefix();
-            if (_sNewSubDir.length() > 0)
-            {
-                sLink   = sHTMLPrefix /* + "/cw.php?inifile=" */ + _sOutputPath + fs + _sNewSubDir + fs + sFilenameNoSuffix + ".ini";
-                sLinkDD = sHTMLPrefix /* + "/cw.php?inifile=" */ + _sOutputPath + fs + _sNewSubDir + fs + "DiffDiff_" + sFilenameNoSuffix + ".ini";
-            }
-            else
-            {
-                sLink = sHTMLPrefix   /* + "/cw.php?inifile=" */ + _sOutputPath + fs + sFilenameNoSuffix + ".ini";
-                sLinkDD = sHTMLPrefix /* + "/cw.php?inifile=" */ + _sOutputPath + fs + _sNewSubDir + fs + "DiffDiff_" + sFilenameNoSuffix + ".ini";
-            }
+
+            System.out.println("----------------------------------------------------------------------");
+            System.out.println(" OutputPath: " + _sOutputPath);
+            System.out.println("    NewPath: " + _sNewSubDir);
+            System.out.println("----------------------------------------------------------------------");
+
+//             if (_sNewSubDir.length() > 0)
+//             {
+//                 sLink   = sHTMLPrefix /* + "/cw.php?inifile=" */ + _sOutputPath + fs + _sNewSubDir + fs + sFilenameNoSuffix + ".ini";
+//                 sLinkDD = sHTMLPrefix /* + "/cw.php?inifile=" */ + _sOutputPath + fs + _sNewSubDir + fs + "DiffDiff_" + sFilenameNoSuffix + ".ini";
+//             }
+//             else
+//             {
+            sLink = sHTMLPrefix   /* + "/cw.php?inifile=" */ + _sOutputPath + fs + sFilenameNoSuffix + ".ini";
+                // sLinkDD = sHTMLPrefix /* + "/cw.php?inifile=" */ + _sOutputPath + fs + _sNewSubDir + fs + "DiffDiff_" + sFilenameNoSuffix + ".ini";
+            sLinkDD = sHTMLPrefix /* + "/cw.php?inifile=" */ + _sOutputPath + fs + "DiffDiff_" + sFilenameNoSuffix + ".ini";
+//             }
             sLinkName = sFilenameNoSuffix;
             sLinkDDName = sFilenameNoSuffix + " (DiffDiff)";
 
@@ -342,8 +384,10 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
             }
 
             // Office shutdown
-            aProvider.closeExistingOffice(param, true);
-
+            if (aProvider != null)
+            {
+                aProvider.closeExistingOffice(param, true);
+            }
         }
 
 
