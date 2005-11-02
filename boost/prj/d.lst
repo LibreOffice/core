@@ -3,6 +3,8 @@ mkdir: %_DEST%\inc%_EXT%\boost
 ..\%__SRC%\misc\build\boost-1.30.2\boost\rational.hpp %_DEST%\inc%_EXT%\boost\rational.hpp
 ..\%__SRC%\misc\build\boost-1.30.2\boost\operators.hpp %_DEST%\inc%_EXT%\boost\operators.hpp
 
+..\%__SRC%\misc\build\boost-1.30.2\boost\cast.hpp %_DEST%\inc%_EXT%\boost\cast.hpp
+
 ..\%__SRC%\misc\build\boost-1.30.2\boost\function.hpp %_DEST%\inc%_EXT%\boost\function.hpp
 mkdir: %_DEST%\inc%_EXT%\boost\function
 ..\%__SRC%\misc\build\boost-1.30.2\boost\function\*.*pp %_DEST%\inc%_EXT%\boost\function\*.*pp
@@ -232,3 +234,13 @@ mkdir: %_DEST%\inc%_EXT%\boost\spirit\utility\impl
 mkdir: %_DEST%\inc%_EXT%\boost\spirit\utility\impl\chset
 ..\%__SRC%\misc\build\spirit-1.6.1\boost\spirit\utility\impl\chset\*.*pp %_DEST%\inc%_EXT%\boost\spirit\utility\impl\chset\*.*pp
 
+mkdir: %_DEST%\inc%_EXT%\boost\pool
+..\%__SRC%\misc\build\boost-1.30.2\boost\pool\*.hpp %_DEST%\inc%_EXT%\boost\pool
+mkdir: %_DEST%\inc%_EXT%\boost\pool\detail
+..\%__SRC%\misc\build\boost-1.30.2\boost\pool\detail\*.hpp %_DEST%\inc%_EXT%\boost\pool\detail
+..\%__SRC%\misc\build\boost-1.30.2\boost\pool\detail\*.inc %_DEST%\inc%_EXT%\boost\pool\detail
+
+mkdir: %_DEST%\inc%_EXT%\boost\tuple
+..\%__SRC%\misc\build\boost-1.30.2\boost\tuple\*.hpp %_DEST%\inc%_EXT%\boost\tuple
+mkdir: %_DEST%\inc%_EXT%\boost\tuple\detail
+..\%__SRC%\misc\build\boost-1.30.2\boost\tuple\detail\*.hpp %_DEST%\inc%_EXT%\boost\tuple\detail
