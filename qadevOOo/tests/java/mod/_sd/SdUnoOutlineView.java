@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdUnoOutlineView.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:18:03 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:14:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -209,6 +209,8 @@ public class SdUnoOutlineView extends TestCase {
 
          //Adding ObjRelations for XController
         tEnv.addObjRelation("FirstModel", aModel);
+
+        tEnv.addObjRelation("XUserInputInterception.XModel", aModel);
 
         XFrame the_frame = the_Desk.getCurrentFrame();
         tEnv.addObjRelation("Frame", the_frame);
