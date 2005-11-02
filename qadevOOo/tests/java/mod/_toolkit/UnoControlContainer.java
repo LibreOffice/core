@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoControlContainer.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:35:03 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:21:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,11 +68,11 @@ import util.utils;
 
 
 public class UnoControlContainer extends TestCase {
-    XTextDocument xTextDoc;
-    XTextDocument xTD2;
-    XControl xCtrl;
-    XControl xCtrl1;
-    XControl xCtrl2;
+    private static XTextDocument xTextDoc;
+    private static XTextDocument xTD2;
+    private static XControl xCtrl;
+    private static XControl xCtrl1;
+    private static XControl xCtrl2;
 
     protected void initialize(TestParameters param, PrintWriter log) {
         try {
