@@ -76,3 +76,8 @@
 "ScTabViewObj";"com::sun::star::frame::XController";"restoreViewData()"
 "ScTabViewObj";"com::sun::star::frame::XController";"getModel()"
 "ScTabViewObj";"com::sun::star::frame::XController";"getFrame()"
+"ScTabViewObj";"com::sun::star::awt::XUserInputInterception#optional";"addKeyHandler()"
+"ScTabViewObj";"com::sun::star::awt::XUserInputInterception#optional";"removeKeyHandler()"
+"ScTabViewObj";"com::sun::star::awt::XUserInputInterception#optional";"addMouseClickHandler()"
+"ScTabViewObj";"com::sun::star::awt::XUserInputInterception#optional";"removeMouseClickHandler()"
+
