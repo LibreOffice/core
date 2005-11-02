@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScDataPilotItemObj.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:48:16 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:58:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@ import util.SOfficeFactory;
 * @see ifc.beans._XPropertySet
 */
 public class ScDataPilotItemObj extends TestCase {
-    XSpreadsheetDocument xSheetDoc = null;
+    static XSpreadsheetDocument xSheetDoc = null;
 
     /**
      * A field is filled some values. This integer determines the size of the
