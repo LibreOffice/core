@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeFontWork.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:23:01 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 09:57:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,9 +117,6 @@
 #endif
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
-#ifndef _COM_SUN_STAR_I18N_XBREAKITERATOR_HPP_
-#include <com/sun/star/i18n/XBreakIterator.hpp>
 #endif
 #ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -306,7 +303,27 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
         if ( rText.getLength() )
         {
             // generating vcl/font
-            SvxFontItem& rFontItem = (SvxFontItem&)pCustomShape->GetMergedItem( EE_CHAR_FONTINFO );
+            USHORT nScriptType = i18n::ScriptType::LATIN;
+            Reference< i18n::XBreakIterator > xBI( EnhancedCustomShapeFontWork::GetBreakIterator() );
+            if ( xBI.is() )
+            {
+                nScriptType = xBI->getScriptType( rText, 0 );
+                sal_uInt16 nChg = 0;
+                if( i18n::ScriptType::WEAK == nScriptType )
+                {
+                    nChg = (xub_StrLen)xBI->endOfScript( rText, nChg, nScriptType );
+                    if( nChg < rText.getLength() )
+                        nScriptType = xBI->getScriptType( rText, nChg );
+                    else
+                        nScriptType = i18n::ScriptType::LATIN;
+                }
+            }
+            UINT16 nFntItm = EE_CHAR_FONTINFO;
+            if ( nScriptType == i18n::ScriptType::COMPLEX )
+                nFntItm = EE_CHAR_FONTINFO_CTL;
+            else if ( nScriptType == i18n::ScriptType::ASIAN )
+                nFntItm = EE_CHAR_FONTINFO_CJK;
+            SvxFontItem& rFontItem = (SvxFontItem&)pCustomShape->GetMergedItem( nFntItm );
             Font aFont;
             aFont.SetHeight( rFWData.nSingleLineHeight );
             aFont.SetAlign( ALIGN_TOP );
@@ -926,6 +943,23 @@ SdrObject* CreateSdrObjectFromParagraphOutlines( const FWData& rFWData, const Sd
         pRet->SetMergedItemSet( aSet );             // * otherwise we would crash, because the outliner tries to create a Paraobject, but there is no model
     }
     return pRet;
+}
+
+::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > EnhancedCustomShapeFontWork::mxBreakIterator = 0;
+
+Reference < i18n::XBreakIterator > EnhancedCustomShapeFontWork::GetBreakIterator()
+{
+    if ( !mxBreakIterator.is() )
+    {
+        Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+        Reference < XInterface > xI = xMSF->createInstance( rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) );
+        if ( xI.is() )
+        {
+            Any x = xI->queryInterface( ::getCppuType((const Reference< i18n::XBreakIterator >*)0) );
+            x >>= mxBreakIterator;
+        }
+    }
+    return mxBreakIterator;
 }
 
 SdrObject* EnhancedCustomShapeFontWork::CreateFontWork( const SdrObject* pShape2d, const SdrObject* pCustomShape )
