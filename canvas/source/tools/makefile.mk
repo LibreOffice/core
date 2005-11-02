@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 23:15:20 $
+#   last change: $Author: kz $ $Date: 2005-11-02 12:53:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,16 +48,36 @@ ENABLE_EXCEPTIONS=TRUE
 .IF "$(verbose)"!="" || "$(VERBOSE)"!=""
 CDEFS+= -DVERBOSE
 .ENDIF
+.IF "$(profiler)"!="" || "$(PROFILER)"!=""
+CDEFS+= -DPROFILER
+.ENDIF
+
+#CFLAGS +:= /Ox /Ot					# THIS IS IMPORTANT
+
+
 
 SLOFILES =	\
+    $(SLO)$/bitmap.obj \
+    $(SLO)$/cachedprimitivebase.obj \
+    $(SLO)$/canvascustomspritehelper.obj \
     $(SLO)$/canvastools.obj \
-    $(SLO)$/linepolypolygonbase.obj \
     $(SLO)$/elapsedtime.obj \
-    $(SLO)$/prioritybooster.obj 
+    $(SLO)$/image.obj \
+    $(SLO)$/linepolypolygonbase.obj \
+    $(SLO)$/parametricpolypolygon.obj \
+    $(SLO)$/prioritybooster.obj \
+    $(SLO)$/propertysethelper.obj \
+    $(SLO)$/spriteredrawmanager.obj \
+    $(SLO)$/surface.obj \
+    $(SLO)$/surfaceproxy.obj \
+    $(SLO)$/surfaceproxymanager.obj \
+    $(SLO)$/pagemanager.obj \
+    $(SLO)$/page.obj \
+    $(SLO)$/verifyinput.obj
 
 SHL1TARGET= 	$(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= 	i$(TARGET)
-SHL1STDLIBS=	$(SALLIB) $(CPPULIB) $(BASEGFXLIB) $(CPPUHELPERLIB)
+SHL1STDLIBS=	$(SALLIB) $(CPPULIB) $(BASEGFXLIB) $(CPPUHELPERLIB) $(COMPHELPERLIB) $(VCLLIB) $(AGGLIB)
 
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
 
@@ -73,9 +93,10 @@ DEFLIB1NAME	=$(TARGET)
 SHL1STDLIBS += winmm.lib kernel32.lib
 .ENDIF
 
+
 # ==========================================================================
 
 .INCLUDE :	target.mk
 
-$(MISC)$/$(SHL1TARGET).flt : makefile.mk
+$(MISC)$/$(SHL1TARGET).flt : makefile.mk $(TARGET).flt
     @+$(TYPE) $(TARGET).flt > $@
