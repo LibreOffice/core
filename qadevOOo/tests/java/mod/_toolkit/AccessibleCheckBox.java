@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleCheckBox.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:15:29 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:15:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,9 +95,9 @@ import util.utils;
  * @see ifc.accessibility._XAccessibleText
  */
 public class AccessibleCheckBox extends TestCase {
-    XTextDocument xTextDoc = null;
-    XAccessibleAction action = null;
-    DiagThread psDiag = null;
+    private static XTextDocument xTextDoc = null;
+    private static XAccessibleAction action = null;
+    private static DiagThread psDiag = null;
 
     /**
      * Opens 'Insert Table' dialog using document dispatch provider
