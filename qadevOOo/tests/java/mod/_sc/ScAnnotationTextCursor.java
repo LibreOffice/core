@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScAnnotationTextCursor.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:41:23 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:53:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ import com.sun.star.uno.XInterface;
  */
 public class ScAnnotationTextCursor extends TestCase {
 
-        XSpreadsheetDocument xSheetDoc = null;
+    static XSpreadsheetDocument xSheetDoc = null;
 
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         SOfficeFactory SOF = SOfficeFactory.getFactory(  (XMultiServiceFactory) tParam.getMSF() );
