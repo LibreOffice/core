@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:02:51 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:35:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1023,7 +1023,8 @@ void WinSalInstance::DestroyFrame( SalFrame* pFrame )
 
 // -----------------------------------------------------------------------
 
-SalObject* WinSalInstance::CreateObject( SalFrame* pParent )
+SalObject* WinSalInstance::CreateObject( SalFrame* pParent,
+                                        SystemWindowData* /*pWindowData*/ ) // SystemWindowData meaningless on Windows
 {
     // Um auf Main-Thread umzuschalten
     return (SalObject*)ImplSendMessage( mhComWnd, SAL_MSG_CREATEOBJECT, 0, (LPARAM)static_cast<WinSalFrame*>(pParent) );
