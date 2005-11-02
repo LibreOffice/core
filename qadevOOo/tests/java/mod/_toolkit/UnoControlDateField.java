@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoControlDateField.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:37:35 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:22:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,8 +66,8 @@ import util.utils;
 
 
 public class UnoControlDateField extends TestCase {
-    XTextDocument xTextDoc;
-    XTextDocument xTD2;
+    private static XTextDocument xTextDoc;
+    private static XTextDocument xTD2;
 
     protected void initialize(TestParameters Param, PrintWriter log) {
         SOfficeFactory SOF = SOfficeFactory.getFactory(
