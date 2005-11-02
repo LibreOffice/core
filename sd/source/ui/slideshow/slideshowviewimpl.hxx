@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowviewimpl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:08:34 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:18:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -333,7 +333,11 @@ class SlideShowView : public ::comphelper::OBaseMutex,
                     public SlideShowView_Base
 {
 public:
-    SlideShowView( ShowWindow& rOutputWindow, SdDrawDocument* pDoc, AnimationMode eAnimationMode, SlideshowImpl* pSlideShow );
+    SlideShowView( ShowWindow&     rOutputWindow,
+                   SdDrawDocument* pDoc,
+                   AnimationMode   eAnimationMode,
+                   SlideshowImpl*  pSlideShow,
+                   bool            bFullScreen );
 
     /// Dispose all internal references
     virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
@@ -394,6 +398,7 @@ private:
     Rectangle                               maPresentationArea;
     AnimationMode                           meAnimationMode;
     bool                                    mbFirstPaint;
+    bool                                    mbFullScreen;
 };
 
 
