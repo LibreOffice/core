@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:44:52 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:33:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -256,7 +256,7 @@ public:
                                           long* pDataLen );
     virtual void            FreeEmbedFontData( const void* pData, long nDataLen );
     virtual BOOL            GetGlyphBoundRect( long nIndex, Rectangle& );
-    virtual BOOL            GetGlyphOutline( long nIndex, PolyPolygon& );
+    virtual BOOL            GetGlyphOutline( long nIndex, ::basegfx::B2DPolyPolygon& );
     virtual SalLayout*      GetTextLayout( ImplLayoutArgs&, int nFallbackLevel );
     virtual void            DrawServerFontLayout( const ServerFontLayout& );
     virtual void            drawPixel( long nX, long nY );
