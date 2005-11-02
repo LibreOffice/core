@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dpolypolygon.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:30:51 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:54:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,7 @@ namespace basegfx
     public:
         B3DPolyPolygon();
         B3DPolyPolygon(const B3DPolyPolygon& rPolyPolygon);
+        explicit B3DPolyPolygon(const B3DPolygon& rPolygon);
         ~B3DPolyPolygon();
 
         // assignment operator
