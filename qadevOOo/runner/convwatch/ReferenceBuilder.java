@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReferenceBuilder.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:16:18 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:42:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@ import convwatch.ConvWatchException;
 import convwatch.EnhancedComplexTestCase;
 import convwatch.PropertyName;
 import helper.OfficeProvider;
+import convwatch.PerformanceContainer;
 
 /**
  * The following Complex Test will test
@@ -190,12 +191,18 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
                     log.println("- next file is: ------------------------------");
                     log.println(sEntry);
 
-                    runGDC(sEntry, sNewReferencePath);
+                    if (aGTA.checkIfUsable(sEntry))
+                    {
+                        runGDC(sEntry, sNewReferencePath);
+                    }
                 }
             }
             else
             {
-                runGDC(m_sInputPath, m_sReferencePath);
+                if (aGTA.checkIfUsable(m_sInputPath))
+                {
+                    runGDC(m_sInputPath, m_sReferencePath);
+                }
             }
         }
 
@@ -203,31 +210,44 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
         {
             // first do a check if the reference not already exist, this is a big speedup, due to the fact,
             // we don't need to start a new office.
-            GraphicalTestArguments aGTA_local = getGraphicalTestArguments();
-            if (GraphicalDifferenceCheck.isReferenceExists(_sInputPath, _sReferencePath, aGTA_local) == false)
+            GraphicalTestArguments aGTA = getGraphicalTestArguments();
+            if (GraphicalDifferenceCheck.isReferenceExists(_sInputPath, _sReferencePath, aGTA) == false)
             {
             // start a fresh Office
-            OfficeProvider aProvider = new OfficeProvider();
-            XMultiServiceFactory xMSF = (XMultiServiceFactory) aProvider.getManager(param);
-            param.put("ServiceFactory", xMSF);
-            GraphicalTestArguments aGTA = getGraphicalTestArguments();
+                OfficeProvider aProvider = null;
+                if (aGTA.shouldOfficeStart())
+                {
+                    aGTA.getPerformance().startTime(PerformanceContainer.OfficeStart);
+                    aProvider = new OfficeProvider();
+                    XMultiServiceFactory xMSF = (XMultiServiceFactory) aProvider.getManager(param);
+                    param.put("ServiceFactory", xMSF);
+                    aGTA.getPerformance().stopTime(PerformanceContainer.OfficeStart);
 
-            try
-            {
-                GraphicalDifferenceCheck.createOneReferenceFile(_sInputPath, _sReferencePath, aGTA);
-            }
-            catch(ConvWatchCancelException e)
-            {
+                    long nStartTime = aGTA.getPerformance().getTime(PerformanceContainer.OfficeStart);
+                    aGTA = getGraphicalTestArguments();
+                    aGTA.getPerformance().setTime(PerformanceContainer.OfficeStart, nStartTime);
+                }
+
+                try
+                {
+                    System.out.println("Reference type is " + aGTA.getReferenceType());
+                    GraphicalDifferenceCheck.createOneReferenceFile(_sInputPath, _sReferencePath, aGTA);
+                }
+                catch(ConvWatchCancelException e)
+                {
                     assure(e.getMessage(), false);
-            }
-            catch(ConvWatchException e)
-            {
-                assure(e.getMessage(), false);
-            }
+                }
+                catch(ConvWatchException e)
+                {
+                    assure(e.getMessage(), false);
+                }
 
-            // Office shutdown
-            aProvider.closeExistingOffice(param, true);
+                // Office shutdown
+                if (aProvider != null)
+                {
+                    aProvider.closeExistingOffice(param, true);
+                }
+            }
         }
-}
 }
 
