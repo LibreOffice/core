@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclfactory.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:32:07 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:44:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,10 @@
 #endif
 #ifndef _VCL_CANVASTOOLS_HXX
 #include <vcl/canvastools.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #endif
 
 #include <cppcanvas/vclfactory.hxx>
