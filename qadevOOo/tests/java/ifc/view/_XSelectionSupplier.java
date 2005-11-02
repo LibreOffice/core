@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XSelectionSupplier.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:46:46 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:49:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,8 +34,6 @@
  ************************************************************************/
 
 package ifc.view;
-
-import java.util.Comparator;
 
 import lib.MultiMethodTest;
 import lib.Status;
@@ -69,7 +67,6 @@ public class _XSelectionSupplier extends MultiMethodTest {
     public XSelectionSupplier oObj = null;
     public boolean selectionChanged = false;
     Object[] selections = null;
-    Comparator comparer = null;
 
     protected void before() {
         selections = (Object[])tEnv.getObjRelation("Selections");
@@ -78,11 +75,6 @@ public class _XSelectionSupplier extends MultiMethodTest {
             "Couldn't get relation 'Selections'"));
         }
 
-        comparer = (Comparator)tEnv.getObjRelation("Comparer");
-        if (comparer == null) {
-            throw new StatusException(Status.failed(
-            "Couldn't get relation 'Comparer'"));
-        }
     }
 
     /**
@@ -191,7 +183,7 @@ public class _XSelectionSupplier extends MultiMethodTest {
     }
 
     /**
-    * Firts test change selection of the object : if nothing is
+    * First test changes selection of the object : if nothing is
     * currently selected or first instance ('First' relation) is
     * selected then selects second instance; if second instance
     * is currently selected then the first instance is selected. <p>
