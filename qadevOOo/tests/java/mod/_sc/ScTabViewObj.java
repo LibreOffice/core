@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScTabViewObj.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:02:28 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:09:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,8 +92,8 @@ import com.sun.star.uno.XInterface;
 * @see ifc.view._XSelectionSupplier
 */
 public class ScTabViewObj extends TestCase {
-    public XSpreadsheetDocument xSpreadsheetDoc;
-    public XSpreadsheetDocument xSpreadsheetDoc2;
+    public static XSpreadsheetDocument xSpreadsheetDoc;
+    public static XSpreadsheetDocument xSpreadsheetDoc2;
 
     /**
     * Creates Spreadsheet document.
@@ -220,6 +220,8 @@ public class ScTabViewObj extends TestCase {
             public boolean equals(Object obj) {
                 return compare(this, obj) == 0;
             } });
+
+        tEnv.addObjRelation("XUserInputInterception.XModel", aModel);
 
         return tEnv;
     }
