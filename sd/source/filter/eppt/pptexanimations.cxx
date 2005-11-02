@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptexanimations.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 10:43:40 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 09:55:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1618,7 +1618,7 @@ sal_uInt32 GetValueTypeForAttributeName( const rtl::OUString& rAttributeName )
         NULL
     };
     const Entry* pPtr = &lcl_attributeMap[ 0 ];
-    while( pPtr )
+    while( pPtr->pName )
     {
         if ( rAttributeName.equalsIgnoreAsciiCaseAscii( pPtr->pName ) )
         {
@@ -1627,6 +1627,7 @@ sal_uInt32 GetValueTypeForAttributeName( const rtl::OUString& rAttributeName )
         }
         pPtr++;
     }
+    DBG_ASSERT( pPtr->pName, "GetValueTypeForAttributeName, unknown property value!" );
     return nValueType;
 }
 
