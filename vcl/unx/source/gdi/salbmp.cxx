@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-13 17:07:54 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:34:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,9 @@
 #endif
 #ifndef _SV_SALINST_H
 #include <salinst.h>
+#endif
+#ifndef _SV_BITMAP_HXX
+#include <bitmap.hxx>
 #endif
 
 // -----------
@@ -867,6 +870,15 @@ void X11SalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
 
 bool X11SalBitmap::GetSystemData( BitmapSystemData& rData )
 {
+    if( mpDDB )
+    {
+        // Rename/retype pDummy to your likings (though X11 Pixmap is
+        // prolly not a good idea, since it's accessed from
+        // non-platform aware code in vcl/bitmap.hxx)
+        rData.aPixmap = (void*)mpDDB->ImplGetPixmap();
+        return true;
+    }
+
     return false;
 }
 
