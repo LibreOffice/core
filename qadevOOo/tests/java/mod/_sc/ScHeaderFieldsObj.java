@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScHeaderFieldsObj.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:51:17 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:01:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ import com.sun.star.uno.XInterface;
  * @see ifc.container._XElementAccess
  */
 public class ScHeaderFieldsObj extends TestCase {
-    XSpreadsheetDocument xSpreadsheetDoc;
+    static XSpreadsheetDocument xSpreadsheetDoc;
 
     /**
      * Creates Spreadsheet document.
