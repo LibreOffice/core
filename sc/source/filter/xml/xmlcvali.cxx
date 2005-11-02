@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlcvali.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:05:32 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:38:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -282,7 +282,7 @@ ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImpo
                 {
                     sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
                             _GetKeyByAttrName( sValue, &sCondition, sal_False );
-                    if (XML_NAMESPACE_OOOC != nPrefix)
+                    if ( nPrefix == XML_NAMESPACE_UNKNOWN || nPrefix == XML_NAMESPACE_NONE )    // #i56720#
                         sCondition = sValue;
                 }
             break;
