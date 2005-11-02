@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvasfont.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:19:11 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 12:59:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,39 +33,28 @@
  *
  ************************************************************************/
 
-#ifndef _CANVASFONT_HXX
-#define _CANVASFONT_HXX
+#ifndef _VCLCANVAS_CANVASFONT_HXX
+#define _VCLCANVAS_CANVASFONT_HXX
 
-#ifndef _COMPHELPER_IMPLEMENTATIONREFERENCE_HXX
 #include <comphelper/implementationreference.hxx>
-#endif
 
-#ifndef _CPPUHELPER_COMPBASE2_HXX_
 #include <cppuhelper/compbase2.hxx>
-#endif
-#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
-#endif
 
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_RENDERING_XCANVASFONT_HPP_
+#include <com/sun/star/geometry/Matrix2D.hpp>
+#include <com/sun/star/rendering/FontRequest.hpp>
 #include <com/sun/star/rendering/XCanvasFont.hpp>
-#endif
 
-#ifndef _SV_FONT_HXX
 #include <vcl/font.hxx>
-#endif
 
 #include <canvas/vclwrapper.hxx>
 
-#include "canvashelper.hxx"
+#include "spritecanvas.hxx"
 #include "impltools.hxx"
 
+#include <boost/utility.hpp>
 
-#define CANVASFONT_IMPLEMENTATION_NAME "VCLCanvas::CanvasFont"
 
 /* Definition of CanvasFont class */
 
@@ -74,17 +63,19 @@ namespace vclcanvas
     typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::rendering::XCanvasFont,
                                                ::com::sun::star::lang::XServiceInfo > CanvasFont_Base;
 
-    class CanvasFont : public ::comphelper::OBaseMutex, public CanvasFont_Base
+    class CanvasFont : public ::comphelper::OBaseMutex,
+                       public CanvasFont_Base,
+                       private ::boost::noncopyable
     {
     public:
         typedef ::comphelper::ImplementationReference<
             CanvasFont,
-            ::com::sun::star::rendering::XCanvasFont > ImplRef;
+            ::com::sun::star::rendering::XCanvasFont > Reference;
 
-        CanvasFont( const ::com::sun::star::rendering::FontRequest&                                 fontRequest,
-                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&        extraFontProperties,
-                    const ::com::sun::star::geometry::Matrix2D&                                     rFontMatrix,
-                    const OutDevProviderSharedPtr&                                                          rDevice );
+        CanvasFont( const ::com::sun::star::rendering::FontRequest&                                     fontRequest,
+                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&    extraFontProperties,
+                    const ::com::sun::star::geometry::Matrix2D&                                         rFontMatrix,
+                    const DeviceRef&                                                                    rDevice );
 
         /// Dispose all internal references
         virtual void SAL_CALL disposing();
@@ -103,19 +94,12 @@ namespace vclcanvas
 
         ::Font getVCLFont() const;
 
-    protected:
-        ~CanvasFont(); // we're a ref-counted UNO class. _We_ destroy ourselves.
-
     private:
-        // default: disabled copy/assignment
-        CanvasFont(const CanvasFont&);
-        CanvasFont& operator=( const CanvasFont& );
-
-        ::canvas::vcltools::VCLObject<Font>                 maFont;
+        ::canvas::vcltools::VCLObject<Font>         maFont;
         ::com::sun::star::rendering::FontRequest    maFontRequest;
-        OutDevProviderSharedPtr                             mpRefDevice;
+        DeviceRef                                   mpRefDevice;
     };
 
 }
 
-#endif /* _CANVASFONT_HXX */
+#endif /* _VCLCANVAS_CANVASFONT_HXX */
