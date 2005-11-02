@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XAccessibleEditableText.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:47:16 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:44:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,10 +119,10 @@ public class _XAccessibleEditableText extends MultiMethodTest {
             log.print("cutText(-1," + (length-1) + "): ");
             locRes = oObj.cutText(-1, length - 1);
             log.println(locRes);
-            log.println("exception was expected");
+            log.println("exception was expected => FAILED");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("expected exception");
+            log.println("expected exception => OK");
             curText = oObj.getText();
             log.println("Current text: '" + curText + "'");
             res &= curText.equals(oldText);
@@ -132,10 +132,10 @@ public class _XAccessibleEditableText extends MultiMethodTest {
             log.print("cutText(0," + (length+1) + "): ");
             locRes = oObj.cutText(0, length + 1);
             log.println(locRes);
-            log.println("exception was expected");
+            log.println("exception was expected => FAILED");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("expected exception");
+            log.println("expected exception => OK");
             curText = oObj.getText();
             log.println("Current text: '" + curText + "'");
             res &= curText.equals(oldText);
@@ -183,10 +183,10 @@ public class _XAccessibleEditableText extends MultiMethodTest {
             log.print("pasteText(-1): ");
             locRes = oObj.pasteText(-1);
             log.println(locRes);
-            log.println("exception was expected");
+            log.println("exception was expected => FAILED");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("expected exception");
+            log.println("expected exception => OK");
             curText = oObj.getText();
             log.println("Current text: '" + curText + "'");
             res &= curText.equals(text);
@@ -196,10 +196,10 @@ public class _XAccessibleEditableText extends MultiMethodTest {
             log.print("pasteText(" + (length+1) + "): ");
             locRes = oObj.pasteText(length + 1);
             log.println(locRes);
-            log.println("exception was expected");
+            log.println("exception was expected => FAILED");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("expected exception");
+            log.println("expected exception => OK");
             curText = oObj.getText();
             log.println("Current text: '" + curText + "'");
             res &= curText.equals(text);
@@ -248,10 +248,10 @@ public class _XAccessibleEditableText extends MultiMethodTest {
             log.print("deleteText(-1," + length + "): ");
             locRes = oObj.deleteText(-1, length);
             log.println(locRes);
-            log.println("exception was expected");
+            log.println("exception was expected => FAILED");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("expected exception");
+            log.println("expected exception => OK");
             curText = oObj.getText();
             log.println("Current text: '" + curText + "'");
             res &= curText.equals(text);
@@ -261,10 +261,10 @@ public class _XAccessibleEditableText extends MultiMethodTest {
             log.print("deleteText(0," + (length+1) + "): ");
             locRes = oObj.deleteText(0, length + 1);
             log.println(locRes);
-            log.println("exception was expected");
+            log.println("exception was expected => FAILED");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("expected exception");
+            log.println("expected exception => OK");
             curText = oObj.getText();
             log.println("Current text: '" + curText + "'");
             res &= curText.equals(text);
@@ -318,10 +318,10 @@ public class _XAccessibleEditableText extends MultiMethodTest {
             log.print("insertText(insStr, -1): ");
             locRes = oObj.insertText(insStr, -1);
             log.println(locRes);
-            log.println("exception was expected");
+            log.println("exception was expected=> FAILED");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("expected exception");
+            log.println("expected exception => OK");
             curText = oObj.getText();
             log.println("Current text: '" + curText + "'");
             res &= curText.equals(text);
@@ -331,10 +331,10 @@ public class _XAccessibleEditableText extends MultiMethodTest {
             log.print("insertText(insStr," + (length+1) + "): ");
             locRes = oObj.insertText(insStr, length+1);
             log.println(locRes);
-            log.println("exception was expected");
+            log.println("exception was expected => FAILED");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("expected exception");
+            log.println("expected exception => OK");
             curText = oObj.getText();
             log.println("Current text: '" + curText + "'");
             res &= curText.equals(text);
@@ -349,7 +349,7 @@ public class _XAccessibleEditableText extends MultiMethodTest {
             log.println("Current text: '" + curText + "'");
             log.println("Expected text: '" + text + insStr + "'");
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("unexpected exception");
+            log.println("unexpected exception => FAILED");
             e.printStackTrace(log);
             res &= false;
         }
@@ -388,10 +388,10 @@ public class _XAccessibleEditableText extends MultiMethodTest {
             log.print("replaceText(-1," + length + "): ");
             locRes = oObj.replaceText(-1, length, sReplacement);
             log.println(locRes);
-            log.println("exception was expected");
+            log.println("exception was expected => FAILED");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("expected exception");
+            log.println("expected exception => OK");
             curText = oObj.getText();
             log.println("Current text: '" + curText + "'");
             res &= curText.equals(text);
@@ -401,10 +401,10 @@ public class _XAccessibleEditableText extends MultiMethodTest {
             log.print("replaceText(0," + (length+1) + "): ");
             locRes = oObj.replaceText(0, length + 1, sReplacement);
             log.println(locRes);
-            log.println("exception was expected");
+            log.println("exception was expected => FAILED");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("expected exception");
+            log.println("expected exception => OK");
             curText = oObj.getText();
             log.println("Current text: '" + curText + "'");
             res &= curText.equals(text);
@@ -455,10 +455,10 @@ public class _XAccessibleEditableText extends MultiMethodTest {
             log.print("setAttributes(-1," + (length - 1) + "):");
             locRes = oObj.setAttributes(-1, length - 1, attrs);
             log.println(locRes);
-            log.println("exception was expected");
+            log.println("exception was expected => FAILED");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("expected exception");
+            log.println("expected exception => OK");
             res &= true;
         }
 
@@ -466,10 +466,10 @@ public class _XAccessibleEditableText extends MultiMethodTest {
             log.print("setAttributes(0," + (length+1) + "):");
             locRes = oObj.setAttributes(0, length + 1, attrs);
             log.println(locRes);
-            log.println("exception was expected");
+            log.println("exception was expected => FAILED");
             res &= false;
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("expected exception");
+            log.println("expected exception => OK");
             res &= true;
         }
 
@@ -496,7 +496,7 @@ public class _XAccessibleEditableText extends MultiMethodTest {
                 log.println("Text attributes can't be changed.");
             }
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("unexpected exception");
+            log.println("unexpected exception => FAILED");
             e.printStackTrace(log);
             res &= false;
         }
