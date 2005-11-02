@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvastools.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:15:44 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:31:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,9 @@
 #endif
 #ifndef _COM_SUN_STAR_RENDERING_INTEGERBITMAPFORMAT_HPP__
 #include <com/sun/star/rendering/IntegerBitmapFormat.hpp>
+#endif
+#ifndef _COM_SUN_STAR_RENDERING_INTEGERBITMAPLAYOUT_HPP__
+#include <com/sun/star/rendering/IntegerBitmapLayout.hpp>
 #endif
 #ifndef _COM_SUN_STAR_RENDERING_ENDIANNESS_HPP__
 #include <com/sun/star/rendering/Endianness.hpp>
@@ -531,8 +534,10 @@ namespace vcl
                 }
             }
 
+            rendering::IntegerBitmapLayout aFormat;
             const Size aPixelSize( sizeFromIntegerSize2D( xInputBitmap->getSize() ) );
             const uno::Sequence< sal_Int8 > data( xInputBitmap->getData(
+                                                      aFormat,
                                                       geometry::IntegerRectangle2D(0,0,aPixelSize.Width(),aPixelSize.Height()) ) );
 
             ::Bitmap aBitmap( aPixelSize, 24 ); // create 24bpp Bitmap
@@ -706,6 +711,26 @@ namespace vcl
                                 FRound( rRect.getMaxY() ) );
         }
 
+        Size sizeFromB2ISize( const ::basegfx::B2IVector& rVec )
+        {
+            return ::Size( rVec.getX(),
+                           rVec.getY() );
+        }
+
+        Point pointFromB2IPoint( const ::basegfx::B2IPoint& rPoint )
+        {
+            return ::Point( rPoint.getX(),
+                            rPoint.getY() );
+        }
+
+        Rectangle rectangleFromB2IRectangle( const ::basegfx::B2IRange& rRect )
+        {
+            return ::Rectangle( rRect.getMinX(),
+                                rRect.getMinY(),
+                                rRect.getMaxX(),
+                                rRect.getMaxY() );
+        }
+
         ::basegfx::B2DVector b2DSizeFromSize( const ::Size& rSize )
         {
             return ::basegfx::B2DVector( rSize.Width(),
@@ -721,6 +746,26 @@ namespace vcl
         ::basegfx::B2DRange b2DRectangleFromRectangle( const ::Rectangle& rRect )
         {
             return ::basegfx::B2DRange( rRect.Left(),
+                                        rRect.Top(),
+                                        rRect.Right(),
+                                        rRect.Bottom() );
+        }
+
+        basegfx::B2IVector b2ISizeFromSize( const Size& rSize )
+        {
+            return ::basegfx::B2IVector( rSize.Width(),
+                                         rSize.Height() );
+        }
+
+        basegfx::B2IPoint b2IPointFromPoint( const Point& rPoint )
+        {
+            return ::basegfx::B2IPoint( rPoint.X(),
+                                        rPoint.Y() );
+        }
+
+        basegfx::B2IRange b2IRectangleFromRectangle( const Rectangle& rRect )
+        {
+            return ::basegfx::B2IRange( rRect.Left(),
                                         rRect.Top(),
                                         rRect.Right(),
                                         rRect.Bottom() );
