@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IntegerBitmapLayout.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:49:33 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:21:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,12 @@
 #ifndef __com_sun_star_rendering_IntegerBitmapFormat_idl__
 #include <com/sun/star/rendering/IntegerBitmapFormat.idl>
 #endif
+#ifndef __com_sun_star_rendering_XColorSpace_idl__
+#include <com/sun/star/rendering/XColorSpace.idl>
+#endif
+#ifndef __com_sun_star_rendering_XBitmapPalette_idl__
+#include <com/sun/star/rendering/XBitmapPalette.idl>
+#endif
 
 module com { module sun { module star { module rendering {
 
@@ -54,19 +60,38 @@ module com { module sun { module star { module rendering {
  */
 struct IntegerBitmapLayout
 {
-    /// Number of scanlines for this bitmap.
+    /** Number of scanlines for this bitmap.
+
+        This value must not be negative
+     */
     long                ScanLines;
 
-    /// Number of data bytes per scanline.
+    /** Number of data bytes per scanline.
+
+        This value must not be negative
+     */
     long                ScanLineBytes;
 
-    /// Byte offset between the start of two consecutive scanlines.
+    /** Byte offset between the start of two consecutive scanlines.
+
+        This value is permitted to be negative, denoting a bitmap
+        whose content is flipped at the x axis.
+     */
     long                ScanLineStride;
 
-    /// Byte offset between the start of two consecutive planes.
+    /** Byte offset between the start of two consecutive planes.
+
+        This value is permitted to be negative.
+     */
     long                PlaneStride;
 
-    /// Number of color components per pixel.
+    /// Color space the bitmap colors shall be interpreted within.
+    XColorSpace         ColorSpace;
+
+    /** Number of color components per pixel.
+
+        This value must not be negative
+     */
     long                NumComponents;
 
     /** Mask values for packed bitmaps
@@ -78,6 +103,15 @@ struct IntegerBitmapLayout
         0x0000FF00, and 0x000000FF.
      */
     sequence<hyper>     ComponentMasks;
+
+    /** This member determines whether the bitmap data are actually
+        indices into a color map.<p>
+
+        When set to the nil reference, the bitmap data is assumed to
+        contain direct color values (to be interpreted according to
+        the associated color space).<p>
+     */
+    XBitmapPalette      Palette;
 
     /** Endianness of the pixel values.
 
@@ -93,13 +127,21 @@ struct IntegerBitmapLayout
     */
     byte                Format;
 
-    /** This member determines whether the bitmap data are actually
-        indices into a color map.<p>
+    /** This member determines the bit order (only relevant if a pixel
+        uses less than 8 bits, of course).<p>
 
-        The member must not be true for bitmap formats of more than
-        eight bits per pixel.<p>
+        When </TRUE>, this member denotes that the leftmost pixel from
+        an 8 bit amount of pixel data consists of the bits starting
+        with the most significant bit. When </FALSE>, it's starting
+        with the least significant bit.<p>
+
+        Example: for a 1bpp bitmap, each pixel is represented by
+        exactly one bit. If this member is </TRUE>, the first pixel is
+        the MSB of the first byte, and the eighth pixel is the LSB of
+        the first byte. If this member is </FALSE>, it's just the
+        opposite.
      */
-    boolean             IsPseudoColor;
+    boolean             IsMsbFirst;
 };
 
 }; }; }; };
