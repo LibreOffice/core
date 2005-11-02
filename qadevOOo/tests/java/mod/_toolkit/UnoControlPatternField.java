@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoControlPatternField.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:48:09 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:25:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ import util.utils;
 
 
 public class UnoControlPatternField extends TestCase {
-    XTextDocument xTextDoc;
+    private static XTextDocument xTextDoc;
 
     protected void initialize(TestParameters Param, PrintWriter log) {
         SOfficeFactory SOF = SOfficeFactory.getFactory(
