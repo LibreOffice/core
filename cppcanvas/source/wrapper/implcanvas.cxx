@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implcanvas.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:26:17 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:43:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,6 @@
  *
  ************************************************************************/
 
-#include <implcanvas.hxx>
-
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
@@ -43,6 +41,9 @@
 #endif
 #ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#endif
+#ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
+#include <basegfx/tools/canvastools.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_RENDERING_XCANVAS_HPP_
@@ -55,6 +56,8 @@
 #include <implfont.hxx>
 #include <implcolor.hxx>
 
+#include <implcanvas.hxx>
+
 
 using namespace ::com::sun::star;
 
@@ -65,7 +68,7 @@ namespace cppcanvas
 
         ImplCanvas::ImplCanvas( const uno::Reference< rendering::XCanvas >& xCanvas ) :
             maViewState(),
-            mpClipPolyPolygon(),
+            maClipPolyPolygon(),
             mxCanvas( xCanvas )
         {
             OSL_ENSURE( mxCanvas.is(), "Canvas::Canvas() invalid XCanvas" );
@@ -89,19 +92,16 @@ namespace cppcanvas
                                                            maViewState );
         }
 
-        void ImplCanvas::setClip( const PolyPolygonSharedPtr& rClipPoly )
+        void ImplCanvas::setClip( const ::basegfx::B2DPolyPolygon& rClipPoly )
         {
-            mpClipPolyPolygon = rClipPoly;
-
-            if( rClipPoly.get() )
-                maViewState.Clip = rClipPoly->getUNOPolyPolygon();
-            else
-                maViewState.Clip.clear();
+            // TODO(T3): not thread-safe. B2DPolyPolygon employs copy-on-write
+            maClipPolyPolygon = rClipPoly;
+            maViewState.Clip.clear();
         }
 
-        PolyPolygonSharedPtr ImplCanvas::getClip() const
+        ::basegfx::B2DPolyPolygon ImplCanvas::getClip() const
         {
-            return mpClipPolyPolygon;
+            return maClipPolyPolygon;
         }
 
         FontSharedPtr ImplCanvas::createFont( const ::rtl::OUString& rFontName, const double& rCellSize ) const
@@ -128,6 +128,16 @@ namespace cppcanvas
 
         rendering::ViewState ImplCanvas::getViewState() const
         {
+            if( maClipPolyPolygon.count() && !maViewState.Clip.is() )
+            {
+                if( !mxCanvas.is() )
+                    return maViewState;
+
+                maViewState.Clip = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
+                    mxCanvas->getDevice(),
+                    maClipPolyPolygon );
+            }
+
             return maViewState;
         }
 
