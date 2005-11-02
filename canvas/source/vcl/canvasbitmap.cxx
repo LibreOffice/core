@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvasbitmap.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:17:14 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 12:58:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,12 +36,7 @@
 #include <canvas/debug.hxx>
 #include "canvasbitmap.hxx"
 
-#ifndef _SV_BITMAPEX_HXX
-#include <vcl/bitmapex.hxx>
-#endif
-#ifndef _SV_BMPACC_HXX
 #include <vcl/bmpacc.hxx>
-#endif
 
 using namespace ::com::sun::star;
 
@@ -51,9 +46,10 @@ namespace vclcanvas
     // Currently, the only way to generate an XBitmap is from
     // XGraphicDevice.getCompatibleBitmap(). Therefore, we don't even
     // take a bitmap here, but a VDev directly.
-    CanvasBitmap::CanvasBitmap( const ::Size&                       rSize,
-                                bool                                bAlphaBitmap,
-                                const WindowGraphicDevice::ImplRef& rDevice )
+    CanvasBitmap::CanvasBitmap( const ::Size&       rSize,
+                                bool                bAlphaBitmap,
+                                const DeviceRef&    rDevice ) :
+        mpDevice( rDevice )
     {
         ENSURE_AND_THROW( rDevice->getOutDev(),
                           "CanvasBitmap::CanvasBitmap(): Invalid reference outdev" );
@@ -66,30 +62,6 @@ namespace vclcanvas
         const USHORT nBitCount( (USHORT)24U );
         const BitmapPalette*    pPalette = NULL;
 
-#if 0
-        // TODO(P2): Seems like VCL doesn't handle palette bitmap with
-        // alpha channel. Devise other ways to handle this, or fix VCL
-        const USHORT nBitCount( ::std::min( (USHORT)24U,
-                                            (USHORT)rOutDev.GetBitCount() ) );
-
-        if( nBitCount <= 8 )
-        {
-            rOutDev.EnableMapMode( FALSE );
-
-            // try to determine palette from output device (by
-            // extracting a 1,1 bitmap, and querying it)
-            const Point aEmptyPoint;
-            const Size  aSize(1,1);
-            Bitmap aTmpBitmap( rOutDev.GetBitmap( aEmptyPoint,
-                                                  aSize ) );
-
-            ScopedBitmapReadAccess pReadAccess( aTmpBitmap.AcquireReadAccess(),
-                                                aTmpBitmap );
-
-            pPalette = &pReadAccess->GetPalette();
-        }
-#endif
-
         Bitmap aBitmap( rSize, nBitCount, pPalette );
 
         // only create alpha channel bitmap, if factory requested
@@ -100,43 +72,41 @@ namespace vclcanvas
         {
             AlphaMask   aAlpha ( rSize );
 
-            maCanvasHelper.setBitmap( BitmapEx( aBitmap, aAlpha ),
-                                      rDevice );
+            maCanvasHelper.init( BitmapEx( aBitmap, aAlpha ),
+                                 *rDevice.get() );
         }
         else
         {
-            maCanvasHelper.setBitmap( BitmapEx( aBitmap ),
-                                      rDevice );
+            maCanvasHelper.init( BitmapEx( aBitmap ),
+                                 *rDevice.get() );
         }
     }
 
-    CanvasBitmap::CanvasBitmap( const BitmapEx&                     rBitmap,
-                                const WindowGraphicDevice::ImplRef& rDevice )
+    CanvasBitmap::CanvasBitmap( const BitmapEx&     rBitmap,
+                                const DeviceRef&    rDevice ) :
+        mpDevice( rDevice )
     {
         ENSURE_AND_THROW( rDevice->getOutDev(),
                           "CanvasBitmap::CanvasBitmap(): Invalid reference outdev" );
 
-        maCanvasHelper.setBitmap( rBitmap,
-                                  rDevice );
-    }
-
-    CanvasBitmap::~CanvasBitmap()
-    {
+        maCanvasHelper.init( rBitmap,
+                             *rDevice.get() );
     }
 
     void SAL_CALL CanvasBitmap::disposing()
     {
-        tools::LocalGuard aGuard;
+        mpDevice.clear();
 
-        // forward to parent
+        // forward to base
         CanvasBitmap_Base::disposing();
     }
 
+#define IMPLEMENTATION_NAME "VCLCanvas.CanvasBitmap"
 #define SERVICE_NAME "com.sun.star.rendering.CanvasBitmap"
 
     ::rtl::OUString SAL_CALL CanvasBitmap::getImplementationName(  ) throw (uno::RuntimeException)
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CANVASBITMAP_IMPLEMENTATION_NAME ) );
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ) );
     }
 
     sal_Bool SAL_CALL CanvasBitmap::supportsService( const ::rtl::OUString& ServiceName ) throw (uno::RuntimeException)
@@ -154,6 +124,10 @@ namespace vclcanvas
 
     BitmapEx CanvasBitmap::getBitmap() const
     {
+        tools::LocalGuard aGuard;
+
+        // TODO(T3): Rework to use shared_ptr all over the place for
+        // BmpEx. This is highly un-threadsafe
         return maCanvasHelper.getBitmap();
     }
 
