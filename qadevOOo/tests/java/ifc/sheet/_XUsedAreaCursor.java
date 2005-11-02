@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XUsedAreaCursor.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:59:41 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:49:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,7 +140,7 @@ public class _XUsedAreaCursor extends MultiMethodTest {
     * Forces object environment recreation.
     */
     protected void after() {
-        tEnv.dispose();
+        this.disposeEnvironment();
     }
 } // finished class _XUsedAreaCursor
 
