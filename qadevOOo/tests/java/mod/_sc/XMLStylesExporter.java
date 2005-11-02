@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLStylesExporter.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:07:59 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:13:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ import com.sun.star.xml.sax.XDocumentHandler;
  * @see ifc.beans._XPropertySet
  */
 public class XMLStylesExporter extends TestCase {
-    XComponent xSheetDoc;
+    static XComponent xSheetDoc;
     protected int counter = 0;
 
     /**
@@ -163,7 +163,14 @@ public class XMLStylesExporter extends TestCase {
             XStyle StyleCell = (XStyle)
                 UnoRuntime.queryInterface(XStyle.class,SC);
             StyleFamilyName.insertByName(newName, StyleCell);
+
+            log.println("fill sheet 1 with contnet...");
+            util.CalcTools.fillCalcSheetWithContent(xSheetDoc, 1, 3, 3, 50, 100);
+
         } catch (com.sun.star.uno.Exception e) {
+            e.printStackTrace(log);
+            throw new StatusException("Can't create environment.", e);
+        } catch (java.lang.Exception e) {
             e.printStackTrace(log);
             throw new StatusException("Can't create environment.", e);
         }
