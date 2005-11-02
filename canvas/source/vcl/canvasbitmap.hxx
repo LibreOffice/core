@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvasbitmap.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:17:31 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 12:58:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,37 +36,24 @@
 #ifndef _VCLCANVAS_CANVASBITMAP_HXX
 #define _VCLCANVAS_CANVASBITMAP_HXX
 
-#ifndef _CPPUHELPER_COMPBASE3_HXX_
 #include <cppuhelper/compbase3.hxx>
-#endif
 
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_XBITMAPCANVAS_HPP_
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_XINTEGERBITMAP_HPP_
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
-#endif
 
-#ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
-#endif
-#ifndef _SV_BITMAPEX_HXX
 #include <vcl/bitmapex.hxx>
-#endif
 
 #include <canvas/vclwrapper.hxx>
 
-#include <canvas/bitmapcanvasbase.hxx>
+#include <canvas/base/integerbitmapbase.hxx>
 #include <canvasbitmaphelper.hxx>
 
 #include "impltools.hxx"
 #include "repainttarget.hxx"
+#include "spritecanvas.hxx"
 
-
-#define CANVASBITMAP_IMPLEMENTATION_NAME "VCLCanvas::CanvasBitmap"
 
 /* Definition of CanvasBitmap class */
 
@@ -74,8 +61,11 @@ namespace vclcanvas
 {
     typedef ::cppu::WeakComponentImplHelper3< ::com::sun::star::rendering::XBitmapCanvas,
                                                ::com::sun::star::rendering::XIntegerBitmap,
-                                                ::com::sun::star::lang::XServiceInfo >                                  CanvasBitmapBase_Base;
-    typedef ::canvas::internal::BitmapCanvasBase< CanvasBitmapBase_Base, CanvasBitmapHelper, tools::LocalGuard >    CanvasBitmap_Base;
+                                                ::com::sun::star::lang::XServiceInfo >      CanvasBitmapBase_Base;
+    typedef ::canvas::IntegerBitmapBase< ::canvas::BaseMutexHelper< CanvasBitmapBase_Base >,
+                                         CanvasBitmapHelper,
+                                         tools::LocalGuard,
+                                         ::cppu::OWeakObject >                          CanvasBitmap_Base;
 
     class CanvasBitmap : public CanvasBitmap_Base,
                          public RepaintTarget
@@ -92,15 +82,15 @@ namespace vclcanvas
             @param rDevice
             Reference device, with which bitmap should be compatible
          */
-        CanvasBitmap( const ::Size&                         rSize,
-                      bool                                  bAlphaBitmap,
-                      const WindowGraphicDevice::ImplRef&   rDevice );
+        CanvasBitmap( const ::Size&     rSize,
+                      bool              bAlphaBitmap,
+                      const DeviceRef&  rDevice );
 
         /// Must be called with locked Solar mutex
-        CanvasBitmap( const BitmapEx&                       rBitmap,
-                      const WindowGraphicDevice::ImplRef&   rDevice );
+        CanvasBitmap( const BitmapEx&   rBitmap,
+                      const DeviceRef&  rDevice );
 
-        /// Dispose all internal references
+        // overridden because of mpDevice
         virtual void SAL_CALL disposing();
 
         // XServiceInfo
@@ -114,15 +104,14 @@ namespace vclcanvas
                               const ::Size&                 rSz,
                               const GraphicAttr&            rAttr ) const;
 
+        /// Not threadsafe! Returned object is shared!
         BitmapEx getBitmap() const;
 
-    protected:
-        ~CanvasBitmap(); // we're a ref-counted UNO class. _We_ destroy ourselves.
-
     private:
-        // default: disabled copy/assignment
-        CanvasBitmap(const CanvasBitmap&);
-        CanvasBitmap& operator=( const CanvasBitmap& );
+        /** MUST hold here, too, since CanvasHelper only contains a
+            raw pointer (without refcounting)
+        */
+        DeviceRef   mpDevice;
     };
 }
 
