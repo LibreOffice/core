@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implrenderer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 09:03:07 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:40:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,7 @@
 #ifndef _VCL_CANVASTOOLS_HXX
 #include <vcl/canvastools.hxx>
 #endif
+#include <vcl/salbtype.hxx>
 
 #include <implrenderer.hxx>
 #include <tools.hxx>
@@ -100,8 +101,6 @@
 #include <vector>
 #include <algorithm>
 #include <iterator>
-
-#include <boost/scoped_array.hpp>
 
 #include <boost/scoped_array.hpp>
 
@@ -388,6 +387,26 @@ namespace
         {
             rStates.pop_back();
         }
+    }
+
+    /** Create masked BitmapEx, where the white areas of rBitmap are
+        transparent, and the other appear in rMaskColor.
+     */
+    BitmapEx createMaskBmpEx( const Bitmap&  rBitmap,
+                              const ::Color& rMaskColor )
+    {
+        const ::Color aWhite( COL_WHITE );
+        BitmapPalette aBiLevelPalette(2);
+        aBiLevelPalette[0] = aWhite;
+        aBiLevelPalette[1] = rMaskColor;
+
+        Bitmap aMask( rBitmap.CreateMask( aWhite ));
+        Bitmap aSolid( rBitmap.GetSizePixel(),
+                       1,
+                       &aBiLevelPalette );
+        aSolid.Erase( rMaskColor );
+
+        return BitmapEx( aSolid, aMask );
     }
 }
 
@@ -939,17 +958,17 @@ namespace cppcanvas
         }
 
         // create text effects such as shadow/relief/embossed
-        void ImplRenderer::createTextAction( const ::Point&                 rStartPoint,
-                                             const String                   rString,
-                                             int                            nIndex,
-                                             int                            nLength,
-                                             const sal_Int32*               pCharWidths,
-                                             ::VirtualDevice&               rVDev,
-                                             const CanvasSharedPtr&         rCanvas,
-                                             const VectorOfOutDevStates&    rStates,
-                                             const Parameters&              rParms,
-                                             bool                           bSubsettableActions,
-                                             sal_Int32&                     io_rCurrActionIndex )
+        void ImplRenderer::createTextAction( const ::Point&         rStartPoint,
+                                             const String           rString,
+                                             int                    nIndex,
+                                             int                    nLength,
+                                             const sal_Int32*       pCharWidths,
+                                             ::VirtualDevice&       rVDev,
+                                             const CanvasSharedPtr& rCanvas,
+                                             VectorOfOutDevStates&  rStates,
+                                             const Parameters&      rParms,
+                                             bool                   bSubsettableActions,
+                                             sal_Int32&             io_rCurrActionIndex )
         {
             ENSURE_AND_THROW( nIndex >= 0 && nLength <= rString.Len() + nIndex,
                               "ImplRenderer::createTextWithEffectsAction(): Invalid text index" );
@@ -996,7 +1015,7 @@ namespace cppcanvas
                 if( nReliefOffset < 1 )
                     nReliefOffset = 1;
 
-                if( rState.textReliefStyle == RELIEF_EMBOSSED )
+                if( rState.textReliefStyle == RELIEF_ENGRAVED )
                     nReliefOffset = -nReliefOffset;
 
                 aReliefOffset.setWidth( nReliefOffset );
@@ -1004,12 +1023,23 @@ namespace cppcanvas
 
                 // determine relief color (from outdev3.cxx)
                 ::Color aTextColor = ::vcl::unotools::sequenceToColor(
-                    rCanvas->getUNOCanvas()->getDevice(), rState.textColor );
+                    rCanvas->getUNOCanvas()->getDevice(),
+                    rState.textColor );
 
                 aReliefColor = ::Color( COL_LIGHTGRAY );
+
+                // we don't have a automatic color, so black is always
+                // drawn on white (literally copied from
+                // vcl/source/gdi/outdev3.cxx)
                 if( aTextColor.GetColor() == COL_BLACK )
-                    aReliefColor = ::Color( COL_WHITE );
-                else if( aTextColor.GetColor() == COL_WHITE )
+                {
+                    aTextColor = ::Color( COL_WHITE );
+                    getState( rStates ).textColor =
+                        ::vcl::unotools::colorToDoubleSequence( rCanvas->getUNOCanvas()->getDevice(),
+                                                                aTextColor );
+                }
+
+                if( aTextColor.GetColor() == COL_WHITE )
                     aReliefColor = ::Color( COL_BLACK );
                 aReliefColor.SetTransparency( aTextColor.GetTransparency() );
             }
@@ -2187,11 +2217,8 @@ namespace cppcanvas
                         // create masked BitmapEx right here, as the
                         // canvas does not provide equivalent
                         // functionality
-                        Bitmap aMask( pAct->GetBitmap().CreateMask( pAct->GetColor() ) );
-                        aMask.Invert();
-
-                        BitmapEx aBmp( pAct->GetBitmap(),
-                                       aMask );
+                        BitmapEx aBmp( createMaskBmpEx( pAct->GetBitmap(),
+                                                        pAct->GetColor() ));
 
                         ActionSharedPtr pBmpAction(
                             internal::BitmapActionFactory::createBitmapAction(
@@ -2219,11 +2246,8 @@ namespace cppcanvas
                         // create masked BitmapEx right here, as the
                         // canvas does not provide equivalent
                         // functionality
-                        Bitmap aMask( pAct->GetBitmap().CreateMask( pAct->GetColor() ) );
-                        aMask.Invert();
-
-                        BitmapEx aBmp( pAct->GetBitmap(),
-                                       aMask );
+                        BitmapEx aBmp( createMaskBmpEx( pAct->GetBitmap(),
+                                                        pAct->GetColor() ));
 
                         ActionSharedPtr pBmpAction(
                             internal::BitmapActionFactory::createBitmapAction(
@@ -2252,11 +2276,8 @@ namespace cppcanvas
                         // create masked BitmapEx right here, as the
                         // canvas does not provide equivalent
                         // functionality
-                        Bitmap aMask( pAct->GetBitmap().CreateMask( pAct->GetColor() ) );
-                        aMask.Invert();
-
-                        BitmapEx aBmp( pAct->GetBitmap(),
-                                       aMask );
+                        BitmapEx aBmp( createMaskBmpEx( pAct->GetBitmap(),
+                                                        pAct->GetColor() ));
 
                         // crop bitmap to given source rectangle (no
                         // need to copy and convert the whole bitmap)
@@ -2643,8 +2664,6 @@ namespace cppcanvas
                                        "ImplRenderer::forSubsetRange(): Invalid indices" );
 
                     rFunctor( *aRangeBegin, aSubset );
-
-                    return rFunctor.result();
                 }
                 else
                 {
@@ -2662,18 +2681,12 @@ namespace cppcanvas
 
                     rFunctor( *aRangeBegin, aSubset );
 
-                    if( !rFunctor.result() )
-                        return false;
-
                     // first action rendered, skip to next
                     ++aRangeBegin;
 
                     // render full middle actions
-                    rFunctor = ::std::for_each( aRangeBegin,
-                                                aRangeEnd,
-                                                rFunctor );
-                    if( !rFunctor.result() )
-                        return false;
+                    while( aRangeBegin != aRangeEnd )
+                        rFunctor( *aRangeBegin++ );
 
                     if( aRangeEnd == rEnd ||
                         aRangeEnd->mnOrigIndex > nEndIndex )
@@ -2686,7 +2699,7 @@ namespace cppcanvas
                         // aRangeBegin, but _before_ aRangeEnd
                         //
                         // either way: no partial action left
-                        return true;
+                        return rFunctor.result();
                     }
 
                     aSubset.mnSubsetBegin = 0;
@@ -2696,9 +2709,9 @@ namespace cppcanvas
                                        "ImplRenderer::forSubsetRange(): Invalid indices" );
 
                     rFunctor( *aRangeEnd, aSubset );
-
-                    return rFunctor.result();
                 }
+
+                return rFunctor.result();
             }
         }
 
@@ -2935,7 +2948,8 @@ namespace cppcanvas
             // ========================
 
             ::basegfx::B2DHomMatrix aMatrix;
-            ::canvas::tools::getRenderStateTransform( aMatrix, maRenderState );
+            ::canvas::tools::getRenderStateTransform( aMatrix,
+                                                      getRenderState() );
 
             ActionRenderer aRenderer( aMatrix );
 
@@ -2971,7 +2985,8 @@ namespace cppcanvas
             // ==================================
 
             ::basegfx::B2DHomMatrix aMatrix;
-            ::canvas::tools::getRenderStateTransform( aMatrix, maRenderState );
+            ::canvas::tools::getRenderStateTransform( aMatrix,
+                                                      getRenderState() );
 
             AreaQuery aQuery( aMatrix );
             forSubsetRange( aQuery,
@@ -2981,7 +2996,23 @@ namespace cppcanvas
                             nEndIndex,
                             maActions.end() );
 
-            return aQuery.getBounds();
+            ::basegfx::B2DRange aBounds(
+                aQuery.getBounds() );
+
+            OSL_ENSURE( aBounds.getMinX() >= 0.0 &&
+                        aBounds.getMinY() >= 0.0 &&
+                        aBounds.getMaxX() <= 1.0 &&
+                        aBounds.getMaxY() <= 1.0,
+                        "ImplRenderer::getSubsetArea(): bounds larger than original shape - clipping!" );
+
+            // really make sure no shape appears larger than its
+            // original bounds (there _are_ some pathologic cases,
+            // especially when imported from PPT, that have
+            // e.g. obscenely large polygon bounds)
+            aBounds.intersect(
+                ::basegfx::B2DRange( 0.0, 0.0,
+                                     1.0, 1.0 ));
+            return aBounds;
         }
 
         bool ImplRenderer::draw() const
@@ -2989,7 +3020,8 @@ namespace cppcanvas
             RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::ImplRenderer::draw()" );
 
             ::basegfx::B2DHomMatrix aMatrix;
-            ::canvas::tools::getRenderStateTransform( aMatrix, maRenderState );
+            ::canvas::tools::getRenderStateTransform( aMatrix,
+                                                      getRenderState() );
 
             return ::std::for_each( maActions.begin(), maActions.end(), ActionRenderer( aMatrix ) ).result();
         }
