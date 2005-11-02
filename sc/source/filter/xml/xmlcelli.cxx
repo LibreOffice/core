@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-04 10:38:25 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:38:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,7 +227,13 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                             pOUFormula = new rtl::OUString();
                             sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
                                     _GetKeyByAttrName( sValue, pOUFormula, sal_False );
-                            if (XML_NAMESPACE_OOOC != nPrefix)
+                            // #i56720# For any valid namespace, the formula text is the part without
+                            // the namespace tag.
+                            // Only for an invalid namespace (not defined in the file, XML_NAMESPACE_UNKNOWN)
+                            // or no namespace tag (XML_NAMESPACE_NONE) the full text is used.
+                            // An invalid namespace can occur from a colon in the formula text if no
+                            // namespace tag was added.
+                            if ( nPrefix == XML_NAMESPACE_UNKNOWN || nPrefix == XML_NAMESPACE_NONE )
                             {
                                 delete pOUFormula;
                                 pOUFormula = new rtl::OUString(sValue);
