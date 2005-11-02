@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvas.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:12:56 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:38:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,8 +105,8 @@ namespace cppcanvas
         virtual void                        setTransformation( const ::basegfx::B2DHomMatrix& rMatrix ) = 0;
         virtual ::basegfx::B2DHomMatrix     getTransformation() const = 0;
 
-        virtual void                        setClip( const PolyPolygonSharedPtr& rClipPoly ) = 0;
-        virtual PolyPolygonSharedPtr        getClip() const = 0;
+        virtual void                        setClip( const ::basegfx::B2DPolyPolygon& rClipPoly ) = 0;
+        virtual ::basegfx::B2DPolyPolygon   getClip() const = 0;
 
         virtual FontSharedPtr               createFont( const ::rtl::OUString& rFontName, const double& rCellSize ) const = 0;
 
