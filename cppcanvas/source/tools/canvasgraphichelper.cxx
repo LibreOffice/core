@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvasgraphichelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:23:30 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:42:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ namespace cppcanvas
     namespace internal
     {
         CanvasGraphicHelper::CanvasGraphicHelper( const CanvasSharedPtr& rParentCanvas ) :
-            mpClipPolyPolygon(),
+            maClipPolyPolygon(),
             mpCanvas( rParentCanvas ),
             mxGraphicDevice()
         {
@@ -95,19 +95,32 @@ namespace cppcanvas
                                                              maRenderState );
         }
 
-        void CanvasGraphicHelper::setClip( const PolyPolygonSharedPtr& rClipPoly )
+        void CanvasGraphicHelper::setClip( const ::basegfx::B2DPolyPolygon& rClipPoly )
         {
-            mpClipPolyPolygon = rClipPoly;
-
-            if( rClipPoly.get() )
-                maRenderState.Clip = rClipPoly->getUNOPolyPolygon();
-            else
-                maRenderState.Clip.clear();
+            // TODO(T3): not thread-safe. B2DPolyPolygon employs copy-on-write
+            maClipPolyPolygon = rClipPoly;
+            maRenderState.Clip.clear();
         }
 
-        PolyPolygonSharedPtr CanvasGraphicHelper::getClip() const
+        ::basegfx::B2DPolyPolygon CanvasGraphicHelper::getClip() const
         {
-            return mpClipPolyPolygon;
+            return maClipPolyPolygon;
+        }
+
+        const rendering::RenderState& CanvasGraphicHelper::getRenderState() const
+        {
+            if( maClipPolyPolygon.count() && !maRenderState.Clip.is() )
+            {
+                uno::Reference< rendering::XCanvas > xCanvas( mpCanvas->getUNOCanvas() );
+                if( !xCanvas.is() )
+                    return maRenderState;
+
+                maRenderState.Clip = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
+                    xCanvas->getDevice(),
+                    maClipPolyPolygon );
+            }
+
+            return maRenderState;
         }
 
         void CanvasGraphicHelper::setRGBAColor( Color::IntSRGBA aColor )
