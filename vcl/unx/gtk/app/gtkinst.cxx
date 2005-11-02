@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkinst.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:36:25 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:32:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include <plugins/gtk/gtkdata.hxx>
 #include <plugins/gtk/gtkinst.hxx>
 #include <salframe.h>
+#include <salobj.h>
 #include <plugins/gtk/gtkframe.hxx>
 #include <plugins/gtk/gtkobject.hxx>
 
@@ -208,8 +209,13 @@ SalFrame* GtkInstance::CreateChildFrame( SystemParentData* pParentData, ULONG nS
     return pFrame;
 }
 
-SalObject* GtkInstance::CreateObject( SalFrame* pParent )
+SalObject* GtkInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData )
 {
+    // there is no method to set a visual for a GtkWidget
+    // so we need the X11SalObject in that case
+    if( pWindowData )
+        return X11SalObject::CreateObject( pParent, pWindowData );
+
     return new GtkSalObject( static_cast<GtkSalFrame*>(pParent) );
 }
 
