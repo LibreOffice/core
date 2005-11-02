@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slidetransitionfactory.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:46:34 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 14:05:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -597,7 +597,7 @@ SlideChangeAnimationSharedPtr TransitionFactory::createSlideTransition(
     const SoundPlayerSharedPtr& pSoundPlayer            )
 {
     // xxx todo: change to TransitionType::NONE, TransitionSubType::NONE:
-    if (nTransitionType == 0 || nTransitionSubType == 0) {
+    if (nTransitionType == 0 && nTransitionSubType == 0) {
         // just play sound, no slide transition:
         if (pSoundPlayer) {
             pSoundPlayer->startPlayback();
