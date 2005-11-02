@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XExecutableDialog.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:37:02 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 17:49:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@ public class _XExecutableDialog extends MultiMethodTest {
                 log.println("result: "+res);
                 result = (res == 0);
             } else {
-                tEnv.dispose();
+                this.disposeEnvironment();
                 result=true;
                 log.println("XCancellable isn't supported and the "+
                     "environment is killed hard");
