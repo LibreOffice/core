@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implsprite.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:30:06 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:44:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,8 @@ namespace cppcanvas
 
             virtual void show();
             virtual void hide();
+
+            virtual void setPriority( double fPriority );
 
             virtual ::com::sun::star::uno::Reference<
                 ::com::sun::star::rendering::XSprite >  getUNOSprite() const;
