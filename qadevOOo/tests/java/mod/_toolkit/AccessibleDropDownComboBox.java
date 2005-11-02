@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleDropDownComboBox.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:16:30 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:15:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ import util.utils;
  * @see ifc.accessibility._XAccessibleContext
  */
 public class AccessibleDropDownComboBox extends TestCase {
-    XTextDocument xTextDoc = null;
+    private static XTextDocument xTextDoc = null;
 
     /**
      * Finds AccessibleDropDownComboBox walking through the
