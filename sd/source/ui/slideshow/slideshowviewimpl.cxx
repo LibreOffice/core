@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowviewimpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:18:31 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 13:18:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,8 @@
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
+
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -164,7 +166,11 @@ bool SlideShowViewMouseMotionListeners::implNotify( const Reference< awt::XMouse
 // SlideShowView
 ///////////////////////////////////////////////////////////////////////
 
-SlideShowView::SlideShowView( ShowWindow& rOutputWindow, SdDrawDocument* pDoc, AnimationMode eAnimationMode, SlideshowImpl* pSlideShow  )
+SlideShowView::SlideShowView( ShowWindow&     rOutputWindow,
+                              SdDrawDocument* pDoc,
+                              AnimationMode   eAnimationMode,
+                              SlideshowImpl*  pSlideShow,
+                              bool            bFullScreen )
 :   SlideShowView_Base( m_aMutex ),
     mpCanvas( ::cppcanvas::VCLFactory::getInstance().createSpriteCanvas( rOutputWindow ) ),
     mxWindow( VCLUnoHelper::GetInterface( &rOutputWindow ), uno::UNO_QUERY_THROW ),
@@ -179,7 +185,8 @@ SlideShowView::SlideShowView( ShowWindow& rOutputWindow, SdDrawDocument* pDoc, A
     mpMouseMotionListeners( new SlideShowViewMouseMotionListeners( m_aMutex ) ),
     mbIsMouseMotionListener( false ),
     meAnimationMode( eAnimationMode ),
-    mbFirstPaint( true )
+    mbFirstPaint( true ),
+    mbFullScreen( bFullScreen )
 {
     init();
 }
@@ -592,6 +599,24 @@ void SlideShowView::init()
                         uno::UNO_QUERY );
 
     getTransformation();
+
+    // #i48939# only switch on kind of hacky scroll optimisation, when
+    // running fullscreen. this minimizes the probability that other
+    // windows partially cover the show.
+    if( mbFullScreen )
+    {
+        try
+        {
+            Reference< beans::XPropertySet > xCanvasProps( getCanvas(),
+                                                           uno::UNO_QUERY_THROW );
+            xCanvasProps->setPropertyValue(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UnsafeScrolling")),
+                uno::makeAny( true ) );
+        }
+        catch( uno::Exception& )
+        {
+        }
+    }
 }
 
 } // namespace ::sd
