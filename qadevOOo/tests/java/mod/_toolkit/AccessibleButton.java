@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleButton.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:14:58 $
+ *  last change: $Author: kz $ $Date: 2005-11-02 18:15:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,8 +91,8 @@ import util.utils;
  * @see ifc.accessibility._XAccessibleText
  */
 public class AccessibleButton extends lib.TestCase {
-    XTextDocument xTextDoc = null;
-    XAccessibleAction action = null;
+    private static XTextDocument xTextDoc = null;
+    private static XAccessibleAction action = null;
 
     /**
      * Opens 'Printer Settings' dialog using document dispatch provider
