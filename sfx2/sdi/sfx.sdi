@@ -6379,7 +6379,7 @@ SfxBoolItem SendMail SID_MAIL_SENDDOC
     HasDialog = TRUE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = FALSE,
+    Container = TRUE,
     RecordAbsolute = FALSE,
     RecordPerSet;
     Asynchron;
@@ -6406,7 +6406,7 @@ SfxBoolItem SendMailDocAsPDF SID_MAIL_SENDDOCASPDF
     HasDialog = TRUE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = FALSE,
+    Container = TRUE,
     RecordAbsolute = FALSE,
     RecordPerSet;
     Asynchron;
