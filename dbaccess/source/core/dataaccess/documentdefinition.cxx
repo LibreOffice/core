@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fs $ $Date: 2005-10-24 09:03:01 $
+ *  last change: $Author: kz $ $Date: 2005-11-03 12:35:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -661,12 +661,12 @@ void ODocumentDefinition::impl_onActivateEmbeddedObject( bool _bOpenedInDesignMo
             //
             if ( !m_xFrameLoader.is() )
                 m_xFrameLoader.set( m_xORB->createInstance( SERVICE_FRAME_DESKTOP ), UNO_QUERY_THROW );
-
+/*
             // remove the frame from the desktop's frame collection because we need full control of it.
             Reference< XFramesSupplier > xSup( m_xFrameLoader, UNO_QUERY_THROW );
             Reference< XFrames > xFrames( xSup->getFrames(), UNO_QUERY_THROW );
             xFrames->remove( xFrame );
-
+*/
             // create an OEmbedObjectHolder
             m_xListener = new OEmbedObjectHolder(m_xEmbeddedObject,this);
 
