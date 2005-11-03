@@ -4,9 +4,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:41:08 $
+ *  last change: $Author: kz $ $Date: 2005-11-03 12:01:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -518,38 +518,67 @@ sal_Bool SAL_CALL Desktop::terminate() throw( css::uno::RuntimeException )
     {
         // Step over all child tasks and ask they "WOULD YOU DIE?"
         css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > lTasks = m_aChildTaskContainer.getAllElements();
-        sal_Int32                                                       nCount = lTasks.getLength()                    ;
-        for( sal_Int32 nPosition=0; !bTaskVeto && nPosition<nCount; ++nPosition )
+        sal_Int32                                                       c      = lTasks.getLength();
+        sal_Int32                                                       i      = 0;
+        for(i=0; !bTaskVeto && i<c; ++i)
         {
-            // Get an element from container and cast it to task.
-            css::uno::Reference< css::frame::XFrame > xTask( lTasks[nPosition], css::uno::UNO_QUERY );
-            css::uno::Reference< css::util::XCloseable > xCloseable( xTask, css::uno::UNO_QUERY );
-            // Ask task for terminating. If anyone say "NO" ...
-            // ... we must reset our default return value to "NO" too!
             try
             {
-                // Don't deliver ownershipt of this task to any other one! => means call close(sal_False).
-                if ( !xTask->getController().is() || xTask->getController()->suspend(TRUE) )
-                    xCloseable->close(sal_False);
-                else
-                    // Controller didn't give permission to close
+                // Get an element from container and cast it to task.
+                // Ignore already gone references.
+                // So it can happen that a frame was still closed by another client.
+                css::uno::Reference< css::frame::XFrame > xTask = lTasks[i];
+                if (! xTask.is())
+                    continue;
+
+                // Terminate allow showing of UI ... so it can ask a controller
+                // if it agree with a close. If it disagree .. stop terminate!
+                css::uno::Reference< css::frame::XController > xController( xTask->getController(), css::uno::UNO_QUERY );
+                sal_Bool bSuspended = (
+                                    (! xController.is()              ) ||
+                                    (  xController->suspend(sal_True))
+                                    );
+                if (!bSuspended)
+                {
                     bTaskVeto = sal_True;
-                // Don't remove the task from our child container!
-                // A task do it by itself inside close
+                    continue;
+                }
+
+                css::uno::Reference< css::util::XCloseable > xClose(xTask, css::uno::UNO_QUERY);
+                if (xClose.is())
+                {
+                    try
+                    {
+                        // Don't deliver ownership of this task to any other one! => means call close(sal_False).
+                        // Desktop::terminate() can be called by the user ... using "File->Exit()" again!
+                        xClose->close(sal_False);
+                        // Don't remove the task from our child container!
+                        // A task do it by itself inside close
+                    }
+                    catch( css::util::CloseVetoException& )
+                    {
+                        // Any internal process of this task disagree with our request.
+                        // Safe this state and break this loop. Following task willn't be asked!
+                        bTaskVeto = sal_True;
+                    }
+
+                    // It doesnt matter if this task was closed sucesfully or not.
+                    // It's not allowed to try other possible interfaces to kill this task.
+                    // Try the next one !
+                    continue;
+                }
+
+                css::uno::Reference< css::lang::XComponent > xDispose(xTask, css::uno::UNO_QUERY);
+                if (xDispose.is())
+                    xDispose->dispose();
             }
-            catch( css::util::CloseVetoException& )
+            catch(const css::lang::DisposedException&)
             {
-                // Any internal process of this task disagree with our request.
-                // Safe this state and break this loop. Following task willn't be asked!
-                bTaskVeto = sal_True;
-            }
-            catch( css::lang::DisposedException& )
-            {
-                // Task already closed by another thread or user ...
+                // Task already closed / disposed by another thread or user ...
                 // It doesn't matter! Because dead is dead is dead ...!
                 // Do nothing and try to close next one.
                 // But may it's agood idea to release this task from our container
-                m_aChildTaskContainer.remove( lTasks[nPosition] );
+                m_aChildTaskContainer.remove( lTasks[i] );
             }
         }
     }
