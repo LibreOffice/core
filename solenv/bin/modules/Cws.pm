@@ -4,9 +4,9 @@
 #
 #   $RCSfile: Cws.pm,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 08:55:47 $
+#   last change: $Author: kz $ $Date: 2005-11-03 10:32:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -69,16 +69,17 @@ sub new
     my $self = {};
     # instance data
     # initialize CWS name from environment
-    $self->{CHILD}       = undef;    # name of child workspace
-    $self->{MASTER}      = undef;    # name of master workspace
-    $self->{EIS_ID}      = undef;    # id of child workspace in EIS
-    $self->{FILES}       = undef;    # list of files registered with child
-                                     # any file can be registered multiple times
-    $self->{PATCH_FILES} = undef     # list of product patch files registered with
-                                     # child, each file can be added only once
-    $self->{MILESTONE}   = undef;    # master milestone to which child is related
-    $self->{MODULES}     = undef;    # list of modules belonging to child
-    $self->{TASKIDS}     = undef;    # list of tasks registered with child
+    $self->{CHILD}        = undef;    # name of child workspace
+    $self->{MASTER}       = undef;    # name of master workspace
+    $self->{EIS_ID}       = undef;    # id of child workspace in EIS
+    $self->{FILES}        = undef;    # list of files registered with child
+                                      # any file can be registered multiple times
+    $self->{PATCH_FILES}  = undef     # list of product patch files registered with
+                                      # child, each file can be added only once
+    $self->{MILESTONE}    = undef;    # master milestone to which child is related
+    $self->{MODULES}      = undef;    # list of modules belonging to child
+    $self->{TASKIDS}      = undef;    # list of tasks registered with child
+    $self->{_CACHED_TAGS} = undef;    # list of cached tags (tags are looked up frequently)
     bless($self, $class);
     return $self;
 }
@@ -302,6 +303,11 @@ sub get_tags
 {
     my $self = shift;
 
+    # look up if tags have already been retrieved
+    if ( defined($self->{_CACHED_TAGS}) ) {
+        return @{$self->{_CACHED_TAGS}};
+    }
+
     # check if child workspace is valid
     my $id = $self->eis_id();
     if ( !$id ) {
@@ -325,7 +331,8 @@ sub get_tags
     my $cws_root_tag   = uc($cws_branch_tag) . "_ANCHOR";
     my $master_milestone_tag = uc($current_master) . "_" . $milestone;
 
-    return ($master_branch_tag, $cws_branch_tag, $cws_root_tag, $master_milestone_tag );
+    $self->{_CACHED_TAGS} = [$master_branch_tag, $cws_branch_tag, $cws_root_tag, $master_milestone_tag];
+    return @{$self->{_CACHED_TAGS}};
 }
 
 # Get child workspace owner
@@ -669,9 +676,13 @@ sub set_item_in_eis
 
     my $result;
     if ( $type eq 'milestone' ) {
+        # this operation invalidates the cached tags list
+        $self->{_CACHED_TAGS} = undef;
         eval { $result = $eis->setMilestone($id, $item) };
     }
     elsif ( $type eq 'master' ) {
+        # this operation invalidates the cached tags list
+        $self->{_CACHED_TAGS} = undef;
         eval { $result = $eis->setMasterWorkspace($id, $item) };
     }
     else {
