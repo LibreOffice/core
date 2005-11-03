@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsanalyze.pl,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 22:06:22 $
+#   last change: $Author: kz $ $Date: 2005-11-03 10:31:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ $log = Logging->new() if (!$@);
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.10 $ ';
+my $id_str = ' $Revision: 1.11 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -246,7 +246,7 @@ sub analyze
     if ( !$approval ) {
         print_error("Internal error: can't get approval status for '$child'.", 3);
     }
-    print_message("Child workspace approval status: $approval");
+    print_message("Child workspace approval status: '$approval'");
 
     my ($ntotal_merged, $ntotal_new, $ntotal_removed, $ntotal_conflicts, $ntotal_alerts)
             = (0, 0, 0, 0);
@@ -752,7 +752,19 @@ sub get_changed_files
     $cvs_module->verbose(1);
     STDOUT->autoflush(1);
     print_message("Retrieving changes ...");
-    my $changed_files_ref = $cvs_module->changed_files($cws_root_tag,$cws_branch_tag);
+    my $changed_files_ref;
+    eval { $changed_files_ref = $cvs_module->changed_files($cws_root_tag,$cws_branch_tag) };
+    if ( $@ ) {
+        if ( $@ =~ /server died silently/ ) {
+            my $time_str = localtime();
+            print_error("The CVS server has died silently on 'cvs rdiff' operation.", 0);
+            print_error("Please inform Release Engineering!", 0);
+            print_error("Time of failure: '$time_str'", 99);
+        }
+        else {
+            croak($@); # rethrow
+        }
+    }
     STDOUT->autoflush(0);
     return $changed_files_ref;
 }
