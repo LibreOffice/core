@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tdoc_docmgr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-18 08:46:48 $
+ *  last change: $Author: kz $ $Date: 2005-11-03 12:39:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,22 +223,7 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
     throw ( uno::RuntimeException )
 {
 /*
-    OOo Developer's Guide / Writing UNO Components / Jobs
-
-    OnStartApp          Application has been started
-    OnCloseApp          Application is going to be closed
-    OnNew               New Document was created
-    OnLoad              Document has been loaded
-    OnSaveAs            Document is going to be saved under a new name
-    OnSaveAsDone        Document was saved under a new name
-    OnSave              Document is going to be saved
-    OnSaveDone          Document was saved
-    OnPrepareUnload     Document is going to be removed
-    OnUnload            Document has been removed
-    OnFocus             Document was activated
-    OnUnfocus           Document was deactivated
-    OnPrint             Document will be printed
-    OnModifyChange      Modified state of the document has changed
+    Events documentation: OOo Developer's Guide / Writing UNO Components / Jobs
 */
 
     if ( Event.EventName.equalsAsciiL(
@@ -402,6 +387,33 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
 
             OSL_ENSURE( it != m_aDocs.end(),
                         "OnSaveAsDone event notified for unknown document!" );
+        }
+    }
+    else if ( Event.EventName.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( "TitleChanged" ) ) )
+    {
+        if ( isOfficeDocument( Event.Source ) )
+        {
+            osl::MutexGuard aGuard( m_aMtx );
+
+            uno::Reference< frame::XModel >
+                 xModel( Event.Source, uno::UNO_QUERY );
+            OSL_ENSURE( xModel.is(), "Got no frame::XModel!" );
+
+            DocumentList::iterator it = m_aDocs.begin();
+            while ( it != m_aDocs.end() )
+            {
+                if ( (*it).second.xModel == xModel )
+                {
+                    // Adjust title.
+                    (*it).second.aTitle = getDocumentTitle( Event.Source );
+                    break;
+                }
+                ++it;
+            }
+
+            OSL_ENSURE( it != m_aDocs.end(),
+                        "TitleChanged event notified for unknown document!" );
         }
     }
 }
