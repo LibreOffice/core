@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-02 12:53:36 $
+#   last change: $Author: kz $ $Date: 2005-11-03 17:26:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ SLOFILES =	\
 
 SHL1TARGET= 	$(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= 	i$(TARGET)
-SHL1STDLIBS=	$(SALLIB) $(CPPULIB) $(BASEGFXLIB) $(CPPUHELPERLIB) $(COMPHELPERLIB) $(VCLLIB) $(AGGLIB)
+SHL1STDLIBS=	$(SALLIB) $(CPPULIB) $(BASEGFXLIB) $(CPPUHELPERLIB) $(COMPHELPERLIB) $(VCLLIB) $(AGGLIB) $(TOOLSLIB)
 
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
 
