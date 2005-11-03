@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embedhlp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:15:53 $
+ *  last change: $Author: kz $ $Date: 2005-11-03 12:02:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,13 +163,13 @@ void SAL_CALL EmbedEventListener_Impl::stateChanged( const lang::EventObject& aE
             // get new replacement after deactivation
             pObject->UpdateReplacement();
 
-        if ( xMod.is() )
-            // listen for changes in running state (update replacements in case of changes)
+        if ( xMod.is() && nOldState == embed::EmbedStates::LOADED )
+            // listen for changes (update replacements in case of changes)
             xMod->addModifyListener( this );
     }
-    else
+    else if ( nNewState == embed::EmbedStates::LOADED )
     {
-        // in active state we don't need a listener (in loaded state we can't listen)
+        // in loaded state we can't listen
         if ( xMod.is() )
             xMod->removeModifyListener( this );
     }
@@ -178,9 +178,20 @@ void SAL_CALL EmbedEventListener_Impl::stateChanged( const lang::EventObject& aE
 void SAL_CALL EmbedEventListener_Impl::modified( const lang::EventObject& aEvent ) throw (uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    if ( pObject && nState == embed::EmbedStates::RUNNING )
-        // updates only necessary in non-active states
-        pObject->UpdateReplacement();
+    if ( pObject )
+    {
+        if ( nState == embed::EmbedStates::RUNNING )
+        {
+            // updates only necessary in non-active states
+            pObject->UpdateReplacement();
+        }
+        else if ( nState == embed::EmbedStates::UI_ACTIVE || nState == embed::EmbedStates::INPLACE_ACTIVE )
+        {
+            // in case the object is inplace or UI active the replacement image should be updated on demand
+            pObject->UpdateReplacementOnDemand();
+        }
+    }
+
 }
 
 void SAL_CALL EmbedEventListener_Impl::notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException )
@@ -239,6 +250,7 @@ struct EmbeddedObjectRef_Impl
     Graphic*                                    pGraphic;
     sal_Int64                                   nViewAspect;
     BOOL                                        bIsLocked;
+    sal_Bool                                    bNeedUpdate;
 };
 
 void EmbeddedObjectRef::Construct_Impl()
@@ -248,6 +260,7 @@ void EmbeddedObjectRef::Construct_Impl()
     mpImp->pGraphic = 0;
     mpImp->nViewAspect = embed::Aspects::MSOLE_CONTENT;
     mpImp->bIsLocked = FALSE;
+    mpImp->bNeedUpdate = sal_False;
 }
 
 EmbeddedObjectRef::EmbeddedObjectRef()
@@ -273,8 +286,9 @@ EmbeddedObjectRef::EmbeddedObjectRef( const EmbeddedObjectRef& rObj )
     mpImp->xListener = EmbedEventListener_Impl::Create( this );
     mpImp->aPersistName = rObj.mpImp->aPersistName;
     mpImp->aMediaType = rObj.mpImp->aMediaType;
+    mpImp->bNeedUpdate = rObj.mpImp->bNeedUpdate;
 
-    if ( rObj.mpImp->pGraphic )
+    if ( rObj.mpImp->pGraphic && !rObj.mpImp->bNeedUpdate )
         mpImp->pGraphic = new Graphic( *rObj.mpImp->pGraphic );
     else
         mpImp->pGraphic = 0;
@@ -300,8 +314,9 @@ EmbeddedObjectRef& EmbeddedObjectRef::operator = ( const EmbeddedObjectRef& rObj
     mpImp->pContainer = rObj.mpImp->pContainer;
     mpImp->aPersistName = rObj.mpImp->aPersistName;
     mpImp->aMediaType = rObj.mpImp->aMediaType;
+    mpImp->bNeedUpdate = rObj.mpImp->bNeedUpdate;
 
-    if ( rObj.mpImp->pGraphic )
+    if ( rObj.mpImp->pGraphic && !rObj.mpImp->bNeedUpdate )
         mpImp->pGraphic = new Graphic( *rObj.mpImp->pGraphic );
     else
         mpImp->pGraphic = 0;
@@ -356,6 +371,7 @@ void EmbeddedObjectRef::Clear()
         }
 
         mxObj = 0;
+        mpImp->bNeedUpdate = sal_False;
     }
 }
 
@@ -364,7 +380,7 @@ void EmbeddedObjectRef::AssignToContainer( comphelper::EmbeddedObjectContainer* 
     mpImp->pContainer = pContainer;
     mpImp->aPersistName = rPersistName;
 
-    if ( mpImp->pGraphic && pContainer )
+    if ( mpImp->pGraphic && !mpImp->bNeedUpdate && pContainer )
         SetGraphicToContainer( *mpImp->pGraphic, *pContainer, mpImp->aPersistName, ::rtl::OUString() );
 }
 
@@ -425,8 +441,12 @@ void EmbeddedObjectRef::GetReplacement( BOOL bUpdate )
 
 Graphic* EmbeddedObjectRef::GetGraphic( ::rtl::OUString* pMediaType ) const
 {
-    if ( !mpImp->pGraphic )
+    if ( mpImp->bNeedUpdate )
+        // bNeedUpdate will be set to false while retrieving new replacement
+        const_cast < EmbeddedObjectRef* >(this)->GetReplacement( sal_True );
+    else if ( !mpImp->pGraphic )
         const_cast < EmbeddedObjectRef* >(this)->GetReplacement( FALSE );
+
     if ( mpImp->pGraphic && pMediaType )
         *pMediaType = mpImp->aMediaType;
     return mpImp->pGraphic;
@@ -441,6 +461,8 @@ void EmbeddedObjectRef::SetGraphic( const Graphic& rGraphic, const ::rtl::OUStri
 
     if ( mpImp->pContainer )
         SetGraphicToContainer( rGraphic, *mpImp->pContainer, mpImp->aPersistName, rMediaType );
+
+    mpImp->bNeedUpdate = sal_False;
 }
 
 SvStream* EmbeddedObjectRef::GetGraphicStream( BOOL bUpdate ) const
@@ -478,7 +500,11 @@ SvStream* EmbeddedObjectRef::GetGraphicStream( BOOL bUpdate ) const
             if ( mpImp->pContainer )
                 mpImp->pContainer->InsertGraphicStream( xStream, mpImp->aPersistName, mpImp->aMediaType );
 
-            return ::utl::UcbStreamHelper::CreateStream( xStream );
+            SvStream* pResult = ::utl::UcbStreamHelper::CreateStream( xStream );
+            if ( pResult && bUpdate )
+                mpImp->bNeedUpdate = sal_False;
+
+            return pResult;
         }
     }
 
@@ -673,6 +699,12 @@ uno::Reference< io::XInputStream > EmbeddedObjectRef::GetGraphicReplacementStrea
     }
 
     return xInStream;
+}
+
+void EmbeddedObjectRef::UpdateReplacementOnDemand()
+{
+    DELETEZ( mpImp->pGraphic );
+    mpImp->bNeedUpdate = sal_True;
 }
 
 };
