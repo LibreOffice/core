@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docrecovery.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:01:59 $
+ *  last change: $Author: kz $ $Date: 2005-11-03 11:54:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1042,6 +1042,7 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
     , m_aNextBtn    ( this           , ResId  ( BTN_RECOV_NEXT                 ) )
     , m_aCancelBtn  ( this           , ResId  ( BTN_RECOV_CANCEL               ) )
     , m_aNextStr    (                  ResId  ( STR_RECOVERY_NEXT              ) )
+    , m_aTitleRecoveryInProgress(      ResId  ( STR_RECOVERY_INPROGRESS        ) )
     , m_pCore       ( pCore                                                      )
     , m_pDefButton  ( NULL                                                       )
     , m_eRecoveryState      (RecoveryDialog::E_RECOVERY_PREPARED)
@@ -1131,6 +1132,7 @@ short RecoveryDialog::execute()
                 m_bWasRecoveryStarted = sal_True;
                 // do it asynchronous (to allow repaints)
                 // and wait for this asynchronous operation.
+                m_aDescrFT.SetText( m_aTitleRecoveryInProgress );
                 m_aNextBtn.Enable(FALSE);
                 m_aCancelBtn.Enable(FALSE);
                 m_pCore->setProgressHandler(m_xProgress);
