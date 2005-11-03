@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:28:36 $
+ *  last change: $Author: kz $ $Date: 2005-11-03 11:50:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -724,7 +724,7 @@ void SwNavigationPI::MakeMark()
     if (nMarkCount >= MAX_MARKS)
         rSh.DelBookmark( aMark );
     rSh.SetBookmark(KeyCode(), aMark, aEmptyStr, MARK);
-    SwView::SetActMark( nAutoMarkIdx );
+    SwView::SetActMark( static_cast< BYTE >( nAutoMarkIdx ) );
 }
 
 /*------------------------------------------------------------------------
@@ -1282,24 +1282,29 @@ void SwNavigationPI::UpdateListBox()
                                         0;
     while (pView)
     {
-        String sEntry = pView->GetDocShell()->GetTitle();
-        sEntry += C2S(" (");
-        if (pView == pActView)
+        SfxObjectShell* pDoc = pView->GetDocShell();
+        // pb: #i53333# don't show help pages here
+        if ( !pDoc->IsHelpDocument() )
         {
-            nAct = nCount;
-            sEntry += aStatusArr[ST_ACTIVE - ST_STATUS_FIRST];
+            String sEntry = pDoc->GetTitle();
+            sEntry += C2S(" (");
+            if (pView == pActView)
+            {
+                nAct = nCount;
+                sEntry += aStatusArr[ST_ACTIVE - ST_STATUS_FIRST];
+            }
+            else
+                sEntry += aStatusArr[ST_INACTIVE - ST_STATUS_FIRST];
+            sEntry += ')';
+            aDocListBox.InsertEntry(sEntry);
+
+
+            if (pConstView && pView == pConstView)
+                nConstPos = nCount;
+
+            nCount++;
         }
-        else
-            sEntry += aStatusArr[ST_INACTIVE - ST_STATUS_FIRST];
-        sEntry += ')';
-        aDocListBox.InsertEntry(sEntry);
-
-
-        if (pConstView && pView == pConstView)
-            nConstPos = nCount;
-
         pView = SwModule::GetNextView(pView);
-        nCount++;
     }
     aDocListBox.InsertEntry(aStatusArr[3]); //"Aktives Fenster"
     nCount++;
@@ -1584,14 +1589,14 @@ SwNavigationChild::SwNavigationChild( Window* pParent,
 
     SwNavigationConfig* pNaviConfig = SW_MOD()->GetNavigationConfig();
 
-    USHORT nRootType = pNaviConfig->GetRootType();
+    USHORT nRootType = static_cast< USHORT >( pNaviConfig->GetRootType() );
     if( nRootType < CONTENT_TYPE_MAX )
     {
         pNavi->aContentTree.SetRootType(nRootType);
         pNavi->aContentToolBox.CheckItem(FN_SHOW_ROOT, TRUE);
     }
-    pNavi->aContentTree.SetOutlineLevel(pNaviConfig->GetOutlineLevel());
-    pNavi->SetRegionDropMode(pNaviConfig->GetRegionMode());
+    pNavi->aContentTree.SetOutlineLevel( static_cast< BYTE >( pNaviConfig->GetOutlineLevel() ) );
+    pNavi->SetRegionDropMode( static_cast< USHORT >( pNaviConfig->GetRegionMode() ) );
 
     if(GetFloatingWindow() && pNaviConfig->IsSmall())
     {
