@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newmenucontroller.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:56:27 $
+ *  last change: $Author: kz $ $Date: 2005-11-03 12:01:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,25 +147,49 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   NewMenuController                   
 
 DEFINE_INIT_SERVICE                     (   NewMenuController, {} )
 
-void SetMenuImages( PopupMenu* pPopupMenu, Reference< XFrame >& xFrame, sal_Bool bSetImages, sal_Bool bHiContrast )
+void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, sal_Bool bSetImages, sal_Bool bHiContrast )
 {
-    int   nItemCount = pPopupMenu->GetItemCount();
-    Image aImage;
+    int                 nItemCount = pPopupMenu->GetItemCount();
+    Image               aImage;
+    Reference< XFrame > xFrame( m_xFrame );
 
     for ( int i = 0; i < nItemCount; i++ )
     {
         USHORT nItemId = pPopupMenu->GetItemId( i );
-        if ( bSetImages )
+        if ( nItemId != 0 )
         {
-            aImage = GetImageFromURL( xFrame,
-                                      pPopupMenu->GetItemCommand( nItemId ),
-                                      FALSE,
-                                      bHiContrast );
-            if ( !!aImage )
+            if ( bSetImages )
+            {
+                sal_Bool        bImageSet( sal_False );
+                ::rtl::OUString aImageId;
+
+                AddInfoForId::const_iterator pInfo = m_aAddInfoForItem.find( nItemId );
+                if ( pInfo != m_aAddInfoForItem.end() )
+                    aImageId = pInfo->second.aImageId; // Retrieve image id for menu item
+
+                if ( aImageId.getLength() > 0 )
+                {
+                    aImage = GetImageFromURL( xFrame, aImageId, FALSE, bHiContrast );
+                    if ( !!aImage )
+                    {
+                        bImageSet = sal_True;
+                        pPopupMenu->SetItemImage( nItemId, aImage );
+                    }
+                }
+
+                if ( !bImageSet )
+                {
+                    String aCmd( pPopupMenu->GetItemCommand( nItemId ) );
+                    if ( aCmd.Len() )
+                        aImage = GetImageFromURL( xFrame, aCmd, FALSE, bHiContrast );
+
+                    if ( !!aImage )
+                        pPopupMenu->SetItemImage( nItemId, aImage );
+                }
+            }
+            else
                 pPopupMenu->SetItemImage( nItemId, aImage );
         }
-        else
-            pPopupMenu->SetItemImage( nItemId, aImage );
     }
 }
 
@@ -398,7 +422,7 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
 
         int             nItemCount = pVCLPopupMenu->GetItemCount();
         Image           aImage;
-        rtl::OUString   aTargetFrame;
+        AddInfo         aAddInfo;
 
         // retrieve additional parameters from bookmark menu and
         // store it in a hash_map.
@@ -409,13 +433,18 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
                 ( pSubMenu->GetItemType( nItemId ) != MENUITEM_SEPARATOR ))
             {
                 MenuConfiguration::Attributes* pBmkAttributes = (MenuConfiguration::Attributes *)(pSubMenu->GetUserValue( nItemId ));
-                aTargetFrame = pBmkAttributes->aTargetFrame;
-                m_aTargetFrameForItem.insert( TargetFrameForId::value_type( nItemId, aTargetFrame ));
+                if ( pBmkAttributes != 0 )
+                {
+                    aAddInfo.aTargetFrame = pBmkAttributes->aTargetFrame;
+                    aAddInfo.aImageId     = pBmkAttributes->aImageId;
+
+                    m_aAddInfoForItem.insert( AddInfoForId::value_type( nItemId, aAddInfo ));
+                }
             }
         }
 
         if ( m_bShowImages )
-            SetMenuImages( pVCLPopupMenu, m_xFrame, m_bShowImages, m_bHiContrast );
+            setMenuImages( pVCLPopupMenu, m_bShowImages, m_bHiContrast );
 
         delete pSubMenu;
     }
@@ -480,9 +509,9 @@ void SAL_CALL NewMenuController::select( const css::awt::MenuEvent& rEvent ) thr
             aArgsList[0].Value = makeAny( ::rtl::OUString::createFromAscii( SFX_REFERER_USER ));
 
             rtl::OUString aTargetFrame( m_aTargetFrame );
-            TargetFrameForId::const_iterator pItem = m_aTargetFrameForItem.find( rEvent.MenuId );
-            if ( pItem != m_aTargetFrameForItem.end() )
-                aTargetFrame = pItem->second;
+            AddInfoForId::const_iterator pItem = m_aAddInfoForItem.find( rEvent.MenuId );
+            if ( pItem != m_aAddInfoForItem.end() )
+                aTargetFrame = pItem->second.aTargetFrame;
 
             xDispatch = xDispatchProvider->queryDispatch( aTargetURL, aTargetFrame, 0 );
         }
@@ -521,7 +550,7 @@ void SAL_CALL NewMenuController::activate( const css::awt::MenuEvent& rEvent ) t
                 m_bShowImages = bShowImages;
                 m_bHiContrast = bHiContrast;
 
-                SetMenuImages( pVCLPopupMenu, m_xFrame, m_bShowImages, m_bHiContrast );
+                setMenuImages( pVCLPopupMenu, m_bShowImages, m_bHiContrast );
             }
 
             setAccelerators( pVCLPopupMenu );
