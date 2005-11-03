@@ -4,9 +4,9 @@
 #
 #   $RCSfile: CvsModule.pm,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 08:55:15 $
+#   last change: $Author: kz $ $Date: 2005-11-03 10:32:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -124,25 +124,21 @@ for my $ucdatum (keys %CvsModuleClassData) {
 sub handle_update_information {
     my ($self, $updated_files_ref) = @_;
     my ($updated, $merged, $conflicts);
-    if ( $updated_files_ref eq 'invalidpath' || $updated_files_ref eq 'cantchdir') {
-        die('ERROR: Can\'t chdir() into module'. $self->module());
-    }
-    else {
-        foreach ( @$updated_files_ref ) {
-            print "\t$_->[1]\t$_->[0]\n";
-            if ( $_->[1] eq 'P' || $_->[1] eq 'U' ) {
-                $updated++;
-            }
-            elsif ( $_->[1] eq 'M' ) {
-                $merged++;
-            }
-            elsif ( $_->[1] eq 'C' ) {
-                $conflicts++;
-            }
-            else {
-                # can't happen
-                die("ERROR: internal error in update_module()");
-            }
+
+    foreach ( @$updated_files_ref ) {
+        print "\t$_->[1]\t$_->[0]\n";
+        if ( $_->[1] eq 'P' || $_->[1] eq 'U' ) {
+            $updated++;
+        }
+        elsif ( $_->[1] eq 'M' ) {
+            $merged++;
+        }
+        elsif ( $_->[1] eq 'C' ) {
+            $conflicts++;
+        }
+        else {
+            # can't happen
+            croak("ERROR: handle_update_information(): internal error");
         }
     }
     print("\t\tUpdated: $updated\n") if $updated;
@@ -164,7 +160,7 @@ sub patch_cvs_root_file {
         my $root_file = "$cvs_dir/Root";
         next if (!-f $root_file);
         if (!open(ROOT, "<$cvs_dir/Root")) {
-            die("ERROR: can't open $root_file");
+            croak("ERROR: patch_cvs_root_file(): can't open file '$root_file'");
         }
         my $line = <ROOT>;
         close(ROOT);
@@ -173,15 +169,15 @@ sub patch_cvs_root_file {
         $action = '' if (!defined $action);
         if ($action ne 'server') {
             # in this case patching user won't be the wrong thing
-            die ("Wrong format $root_file") if ($line !~ /:(\w+)@/o);
+            croak ("ERROR: patch_cvs_root_file(): file '$root_file' has wrong format") if ($line !~ /:(\w+)@/o);
             $line = "$`:" . $self->vcsid(). "\@$'";
         }
         if ($action ne 'user') {
             # in this case patching server won't be the wrong thing either
-            die ("Wrong format $root_file") if ($line !~ /@/o);
+            croak ("ERROR: patch_cvs_root_file(): file '$root_file' has wrong format") if ($line !~ /@/o);
             $line = "$`\@" . $self->cvs_server() . ":" . $self->cvs_repository() . "\n";
         }
-        open(ROOT, ">$root_file") or die ("ERROR: can't write $root_file");
+        open(ROOT, ">$root_file") or croak ("ERROR: patch_cvs_root_file(): can't write file '$root_file'");
         print ROOT $line;
         close(ROOT);
     };
@@ -210,19 +206,16 @@ sub checkout
     my $module  = $self->module();
 
     if ( !$module ) {
-        carp("ERROR: no module for checkout specified");
-        return "modulenotset";
+        croak("ERROR: CvsModule::checkout(): no module for checkout specified");
     }
     if ( ! -d $path ) {
-        carp("ERROR: invalid local path for checkout specified");
-        return "invalidpath";
+        croak("ERROR: CvsModule::checkout(): invalid local path for checkout specified");
     }
 
     # chdir to checkout area
     my $saved_cwd = cwd();
     if ( !chdir($path) ) {
-        carp("ERROR: can't chdir() to $path");
-        return "cantchdir";
+        croak("ERROR: CvsModule:: can't chdir() to '$path'");
     }
 
     my $from_mirror = 0;
@@ -310,19 +303,16 @@ sub update
     my $module  = $self->module();
 
     if ( !$module ) {
-        carp("ERROR: no module for checkout specified");
-        return "modulenotset";
+        croak("ERROR: CvsModule::update(): no module for checkout specified");
     }
     if ( !-d "$path/$module" ) {
-        carp("ERROR: can't find '$path/$module'");
-        return "invalidpath";
+        croak("ERROR: CvsModule::update(): can't find '$path/$module'");
     }
 
     # chdir to update area
     my $saved_cwd = cwd();
     if ( !chdir("$path/$module") ) {
-        carp("ERROR: can't chdir() to '$path/$module'");
-        return "cantchdir";
+        croak("ERROR: CvsModule::update(): can't chdir() to '$path/$module'");
     }
 
     my ($dirs_ref, $files_ref, $unknown_ref) = $self->do_update($tag, $options);
@@ -360,16 +350,16 @@ sub changed_files
         print "checking for changed files in module '$module'; $tag_old $tag_new\n";
     }
 
+    my $server_died_silently = 1;
     my @changed_files = ();
     open(RDIFF, "$cvs_binary -d $root rdiff -s $tag_old $tag_new $module 2>&1 |");
     while(<RDIFF>) {
-        # TODO more error checking
         if ( /^cvs server: Diffing (.*)$/ ) {
             print "." if $verbose;
+            $server_died_silently = 0;
         }
         if ( /\[rdiff aborted\]: connect to/ ) {
-            carp("ERROR: connection to server failed");
-            return 'connectionfailure';
+            croak("ERROR: CvsModule::changed_files(): connection to server failed");
         }
         if ( /^File (.+?) / ) {
             my $file_name = $1;
@@ -387,7 +377,7 @@ sub changed_files
                 $rev_old = undef;
             }
             else {
-                carp("ERROR: unexpected output from rdiff");
+                croak("ERROR: CvsModule::changed_files(): unexpected output from rdiff");
             }
 
             $file_name = $self->strip_module_from_path($file_name);
@@ -396,10 +386,14 @@ sub changed_files
     }
     close(RDIFF);
     print "\n" if $verbose;
+    die_on_error_code('CvsModule::changed_files()');
     if ( $verbose > 1) {
         $t1 = Benchmark->new();
         print "rdiff time: " . timestr(timediff($t1, $t0),'nop') . "\n";
         autoflush STDOUT 0
+    }
+    if ( $server_died_silently ) {
+        croak("ERROR: CvsModule::changed_files(): server died silently");
     }
     return wantarray ? @changed_files : \@changed_files;
 }
@@ -433,15 +427,13 @@ sub tag
     my $tag_errors   = 0;
     my $saved_cwd = cwd();
     if ( !chdir("$path/$module") ) {
-        carp("ERROR: can't chdir to directory $path/$module");
-        return (undef, undef);
+        croak("ERROR: CvsModule::tag(): can't chdir() to directory '$path/$module'");
     }
     open(TAG, "$cvs_binary tag $force $branch $tag 2>&1 |");
     while(<TAG>) {
         # TODO error checking
         if ( /\[.* aborted\]: connect to/ ) {
-            carp("ERROR: connection to server failed");
-            return 'connectionfailure';
+            croak("ERROR: CvsModule::tag(): connection to server failed");
         }
         if ( /^cvs server: Tagging (.*)$/ ) {
             print "." if $verbose;
@@ -455,12 +447,13 @@ sub tag
             my $line = $_;
             $line =~ s/^W //;
             chomp($line);
-            carp("ERROR: " . "$line");
+            carp("ERROR: CvsModule::tag():" . "$line");
             $tag_errors++;
         }
     }
     close(TAG);
     print "\n" if $verbose;
+    die_on_error_code('CvsModule::tag()');
     if ( $verbose > 1) {
         $t1 = Benchmark->new();
         print "tagging time: " . timestr(timediff($t1, $t0),'nop') . "\n";
@@ -480,15 +473,14 @@ sub get_aliases_hash {
     my $root = ":$method:$vcsid\@$server:$repository";
     my $commando = "$cvs_binary -d $root checkout -c";
     if(!open(CHECKOUT, "$commando 2>&1 |")) {
-        die("Cannot run $commando");
+        croak("ERROR: get_aliases_hash(): Cannot run commando '$commando'");
     };
     my %aliases_hash = ();
     my $last_alias = '';
     my $string = '';
     while(<CHECKOUT>) {
         if ( /\[.* aborted\]: connect to/ ) {
-            carp("ERROR: connection to server failed");
-            return 'connectionfailure';
+            croak("ERROR: CvsModule::get_aliases_hash(): connection to server failed");
         }
         if (/^(\S+)\s+(.+)$/o) {
             $last_alias = $1;
@@ -502,6 +494,7 @@ sub get_aliases_hash {
         $aliases_hash{$last_alias} = $string;
     };
     close CHECKOUT;
+    die_on_error_code('CvsModule::get_aliases_hash()');
     return %aliases_hash;
 };
 
@@ -517,8 +510,7 @@ sub do_checkout
     my $vcsid = $self->vcsid();
 
     if ( !$vcsid ) {
-        carp("ERROR: VCSID not set");
-        return "invalidvcsid";
+        croak("ERROR: CvsModule::do_checkout: VCSID not set");
     }
 
     my $module     = $self->module();
@@ -541,10 +533,8 @@ sub do_checkout
     }
     open(CHECKOUT, "$cvs_binary -d $root checkout $tag $options $module 2>&1 |");
     while(<CHECKOUT>) {
-        # TODO error checking
         if ( /\[.* aborted\]: connect to/ ) {
-            carp("ERROR: connection to server failed");
-            return 'connectionfailure';
+            croak("ERROR: CvsModule::do_checkout(): connection to server failed");
         }
         if ( /^cvs server: Updating (.*)$/ ) {
             print "." if $verbose;
@@ -556,6 +546,7 @@ sub do_checkout
     }
     close(CHECKOUT);
     print "\n" if $verbose;
+    die_on_error_code('CvsModule::do_checkout()');
     if ( $verbose > 1 ) {
         $t1 = Benchmark->new();
         print "checkout time: " . timestr(timediff($t1, $t0),'nop') . "\n";
@@ -592,10 +583,8 @@ sub do_update
     }
     open(UPDATE, "$cvs_binary -z6 update $tag $options 2>&1 |");
     while(<UPDATE>) {
-        # TODO error checking
         if ( /\[.* aborted\]: connect to/ ) {
-            carp("ERROR: connection to server failed");
-            return 'connectionfailure';
+            croak("ERROR: CvsModule::do_update(): connection to server failed");
         }
         if ( /^cvs server: Updating (.*)$/ ) {
             print "." if $verbose;
@@ -610,6 +599,7 @@ sub do_update
     }
     close(UPDATE);
     print "\n" if $verbose;
+    die_on_error_code('CvsModule::do_update()');
     if ( $verbose > 1) {
         $t1 = Benchmark->new();
         print "update time: " . timestr(timediff($t1, $t0),'nop') . "\n";
@@ -643,13 +633,11 @@ sub get_root
         $repository =~ s/^\d*//;
         my ($vcsid, $server)  = split('@', $vcsid_server);
         if ( !($method && $vcsid && $server && $repository) ) {
-            carp("ERROR: can't determine CVS Server");
-            return;
+            croak("ERROR: CvsModule::get_root(): can't determine CVS Server");
         }
         # sanity check
         if ( $vcsid ne $self->vcsid() ) {
-            carp("ERROR: environment VCSID and CVS server root differ");
-            return;
+            croak("ERROR: CvsModule::get_root(): environment VCSID and CVS server root differ");
         }
         $self->cvs_method($method);
         $self->cvs_server($server);
@@ -673,25 +661,25 @@ sub patch_root
         # pruned directories may not exist
         if ( -d $_ ) {
             my $root = "$_/CVS/Root";
-            open(ROOT, "<$root") or carp("ERROR: can't open $root");
+            open(ROOT, "<$root") or croak("ERROR: CvsModule::patch_root(): can't open file '$root'");
             my $line = <ROOT>;
             close(ROOT);
 
             # patch root
             $line =~ s/$old_server/$new_server/o;  # note: evaluate reg exp. only once
-            open(ROOT, ">$root") or carp("ERROR: can't write $root");
+            open(ROOT, ">$root") or croak("ERROR: CvsModule::patch_root(): can't write '$root'");
             print ROOT $line;
             close(ROOT);
             # repository will usually not change
             if ( $old_rep ne $new_rep ) {
                 my $rep = "$_/CVS/Repository";
-                open(REPOSITORY, "<$rep") or carp("ERROR: can't open $rep");
+                open(REPOSITORY, "<$rep") or croak("ERROR: CvsModule::patch_root(): can't open '$rep'");
                 my $line = <REPOSITORY>;
                 close(REPOSITORY);
 
                 # patch rep
                 $line =~ s/$old_rep/$new_rep/o;  # note: evaluate reg exp. only once
-                open(REPOSITORY, ">$rep") or carp("ERROR: can't write $rep");
+                open(REPOSITORY, ">$rep") or croak("ERROR: CvsModule::patch_root(): can't write '$rep'");
                 print REPOSITORY $line;
                 close(REPOSITORY);
             }
@@ -707,8 +695,7 @@ sub get_rcmd_root
     my $vcsid = $self->vcsid();
 
     if ( !$vcsid ) {
-        carp("ERROR: VCSID not set");
-        return "invalidvcsid";
+        croak("ERROR: CvsModule::get_rcmd_root(): VCSID not set");
     }
 
     my $method     = $self->cvs_method();
@@ -776,8 +763,7 @@ sub get_module_definitions
         chomp();
         # TODO more error checking
         if ( /\[checkout aborted\]: connect to/ ) {
-            carp("ERROR: connection to server failed");
-            return 'connectionfailure';
+            croak("ERROR: CvsModule::get_module_definitions(): connection to server failed");
         }
         # Module list format:
         # A entry starts on the first column, otherwise
@@ -853,8 +839,7 @@ sub strip_module_from_path
                 return $1;
             }
             else {
-                carp("ERROR: internal error in strip_module_from_path()");
-                return $file;
+                croak("ERROR: CvsModule::strip_module_from_path(): internal error");
             }
         }
     }
@@ -870,8 +855,7 @@ sub view {
     my $path    = shift;
     my $saved_cwd = cwd();
     if ( !chdir($path) ) {
-        carp("ERROR: can't chdir() to $path");
-        return "cantchdir";
+        croak("ERROR: CvsModule::view(): can't chdir() to '$path'");
     }
     cwd();
     my $module     = $self->module();
@@ -880,15 +864,14 @@ sub view {
     my $verbose = $self->verbose();
     my ($info, $seen,  @field);
     my $line = "$cvs_binary status -R";
-    open (CVSVIEW , "$line 2>&1 |") or carp("ERROR: can't run $line");
+    open (CVSVIEW , "$line 2>&1 |") or croak("ERROR: CvsModule::view(): can't run command '$line'");
 
     $seen = 0;
 
     # check error
     if ( $? >> 8  ) {
-        # don't know if cvs status ever returns with status != 0
         close(CVSVIEW);
-        carp("ERROR: cvs view failed!\n");
+        croak("ERROR: CvsModule::view(): view failed!\n");
     }
 
     while(<CVSVIEW>) {
@@ -958,6 +941,17 @@ sub view {
     }
 
 }
+
+sub die_on_error_code
+{
+    my $method = shift;
+    my $errcode = $? >> 8;
+
+    if ( $errcode ) {
+        croak("ERROR: $method: CVS client returned error code '$errcode'!");
+    }
+}
+
 
 ####
 
