@@ -4,9 +4,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 14:06:22 $
+ *  last change: $Author: kz $ $Date: 2005-11-03 12:06:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -941,6 +941,9 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
     }
     else
     {
+        // 1: internal embedded object
+        // 2: external embedded object
+        // 3: OLE server
         if ( pPluginItem && pPluginItem->GetValue() != 2 )
             SetInPlace_Impl( TRUE );
 
@@ -1033,7 +1036,13 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
         // by SfxTopFrame::Create() or SfxViewFrame::ExecView_Impl() ...
 
         if ( IsInPlace() )
+        {
             pFrame->UnlockAdjustPosSizePixel();
+            // force resize for OLE server to fix layout problems of writer and math
+            // see i53651
+            if ( pPluginItem && pPluginItem->GetValue() == 3 )
+                pFrame->Resize(TRUE);
+        }
     }
 
     if ( bSetFocus )
