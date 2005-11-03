@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsclone.pl,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 22:06:37 $
+#   last change: $Author: kz $ $Date: 2005-11-03 10:32:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ use CwsConfig;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.4 $ ';
+my $id_str = ' $Revision: 1.5 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -212,31 +212,26 @@ sub output_update_information {
     my $updated_files_ref = shift;
     my $nonrepolist = shift;
     my ($updated, $merged, $conflicts, $non_repo);
-    if ( $updated_files_ref eq 'invalidpath' || $updated_files_ref eq 'cantchdir') {
-        die('ERROR: Can\'t chdir() into module');
+    foreach ( @$updated_files_ref ) {
+        if ( $_->[1] eq 'P' || $_->[1] eq 'U' ) {
+#           print "\t$_->[1]\t$_->[0]\n";
+            $updated++;
+        }
+        elsif ( $_->[1] eq 'M' ) {
+            print "\t$_->[1]\t$_->[0]\n";
+            $merged++;
+        }
+        elsif ( $_->[1] eq 'C' ) {
+            print "\t$_->[1]\t$_->[0]\n";
+            $conflicts++;
+        }
+        else {
+            # can't happen
+            die("ERROR: internal error in update_module()");
+        }
     }
-    else {
-        foreach ( @$updated_files_ref ) {
-            if ( $_->[1] eq 'P' || $_->[1] eq 'U' ) {
-#            print "\t$_->[1]\t$_->[0]\n";
-                $updated++;
-            }
-            elsif ( $_->[1] eq 'M' ) {
-                print "\t$_->[1]\t$_->[0]\n";
-                $merged++;
-            }
-            elsif ( $_->[1] eq 'C' ) {
-                print "\t$_->[1]\t$_->[0]\n";
-                $conflicts++;
-            }
-            else {
-                # can't happen
-                die("ERROR: internal error in update_module()");
-            }
-        }
-        foreach ( @$nonrepolist ) {
-            $non_repo++;
-        }
+    foreach ( @$nonrepolist ) {
+        $non_repo++;
     }
     if( !($updated or $merged or $conflicts or $non_repo) ) {
         print(" nothing to do.");
