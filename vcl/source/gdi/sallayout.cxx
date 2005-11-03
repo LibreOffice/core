@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 14:41:36 $
+ *  last change: $Author: kz $ $Date: 2005-11-03 15:26:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -728,7 +728,7 @@ bool SalLayout::GetOutline( SalGraphics& rSalGraphics,
         bAllOk &= bSuccess;
         bOneOk |= bSuccess;
         // only add non-empty outlines
-        if( bSuccess && (aGlyphOutline.Count() > 0) )
+        if( bSuccess && (aGlyphOutline.count() > 0) )
         {
             if( aPos.X() || aPos.Y() )
             {
