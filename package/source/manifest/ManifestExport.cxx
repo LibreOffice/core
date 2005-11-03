@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ManifestExport.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:02:42 $
+ *  last change: $Author: kz $ $Date: 2005-11-03 12:06:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,23 +146,25 @@ ManifestExport::ManifestExport(Reference < XDocumentHandler > xHandler,  const S
           || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII ) ) )
           || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_CHART_ASCII ) ) )
           || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII ) ) )
-          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII ) ) ) )
+          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII ) ) )
+
+          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_TEXT_TEMPLATE_ASCII ) ) )
+          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_TEMPLATE_ASCII ) ) )
+          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE_ASCII ) ) )
+          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_TEMPLATE_ASCII ) ) )
+          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_CHART_TEMPLATE_ASCII ) ) )
+          || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_TEMPLATE_ASCII ) ) ) )
+
         {
             // oasis format
             pRootAttrList->AddAttribute ( OUString( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_XMLNS ) ),
                                         sCdataAttribute,
                                         OUString( RTL_CONSTASCII_USTRINGPARAM ( MANIFEST_OASIS_NAMESPACE ) ) );
         }
-        else if ( aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VND_SUN_XML_WRITER_ASCII ) ) )
-               || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VND_SUN_XML_WRITER_WEB_ASCII ) ) )
-               || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VND_SUN_XML_WRITER_GLOBAL_ASCII ) ) )
-               || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VND_SUN_XML_DRAW_ASCII ) ) )
-               || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VND_SUN_XML_IMPRESS_ASCII ) ) )
-               || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VND_SUN_XML_CALC_ASCII ) ) )
-               || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VND_SUN_XML_CHART_ASCII ) ) )
-               || aDocMediaType.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VND_SUN_XML_MATH_ASCII ) ) ) )
+        else
         {
-            // SO6 format
+            // even if it is no SO6 format the namespace must be specified
+            // thus SO6 format is used as default one
             pRootAttrList->AddAttribute ( OUString( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_XMLNS ) ),
                                         sCdataAttribute,
                                         OUString( RTL_CONSTASCII_USTRINGPARAM ( MANIFEST_NAMESPACE ) ) );
