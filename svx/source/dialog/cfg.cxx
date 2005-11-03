@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:38:51 $
+ *  last change: $Author: kz $ $Date: 2005-11-03 11:53:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1658,6 +1658,44 @@ void SvxMenuEntriesListBox::KeyInput( const KeyEvent& rKeyEvent )
     }
 }
 
+// class SvxDescriptionEdit ----------------------------------------------
+
+SvxDescriptionEdit::SvxDescriptionEdit( Window* pParent, const ResId& _rId ) :
+
+    ExtMultiLineEdit( pParent, _rId )
+
+{
+    // calculate the available space for help text
+    m_aRealRect = Rectangle( Point(), GetSizePixel() );
+    if ( GetVScrollBar() )
+        m_aRealRect.Right() -= ( GetVScrollBar()->GetSizePixel().Width() + 4 );
+
+    SetLeftMargin(2);
+    SetBorderStyle( WINDOW_BORDER_MONO );
+}
+
+// -----------------------------------------------------------------------
+
+void SvxDescriptionEdit::SetNewText( const String& _rText )
+{
+    String sTemp( _rText );
+    sal_Bool bShow = sal_False;
+    if ( sTemp.Len() > 0 )
+    {
+        // detect if a scrollbar is necessary
+        Rectangle aRect = GetTextRect( m_aRealRect, sTemp, TEXT_DRAW_WORDBREAK | TEXT_DRAW_MULTILINE );
+        bShow = ( aRect.Bottom() > m_aRealRect.Bottom() );
+    }
+
+    if ( GetVScrollBar() )
+        GetVScrollBar()->Show( bShow );
+
+    if ( bShow )
+        sTemp += '\n';
+
+    SetText( sTemp );
+}
+
 /******************************************************************************
  *
  * SvxConfigPage is the abstract base class on which the Menu and Toolbar
@@ -1683,12 +1721,15 @@ SvxConfigPage::SvxConfigPage(
     aMoveDownButton( this, ResId( BTN_DOWN ) ),
     aSaveInText( this, ResId( TXT_SAVEIN ) ),
     aSaveInListBox( this, ResId( LB_SAVEIN ) ),
-    aDescriptionLine( this, ResId( GRP_DESCRIPTION ) ),
-    aDescriptionText( this, ResId( TXT_DESCRIPTION ) ),
+    aDescriptionLabel( this, ResId( FT_DESCRIPTION ) ),
+    aDescriptionField( this, ResId( ED_DESCRIPTION ) ),
     pCurrentSaveInData( 0 ),
     pSelectorDlg( 0 ),
     bInitialised( FALSE )
 {
+    aDescriptionField.SetControlBackground( GetSettings().GetStyleSettings().GetDialogColor() );
+    aDescriptionField.SetAutoScroll( TRUE );
+    aDescriptionField.EnableCursor( FALSE );
 }
 
 SvxConfigPage::~SvxConfigPage()
@@ -1723,7 +1764,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
         {
             uno::Reference< frame::XDesktop > xDesktop( xFramesSupplier, uno::UNO_QUERY );
             m_xFrame = xDesktop->getCurrentFrame();
-            if ( !m_xFrame.is() )
+            if ( !m_xFrame.is() && SfxViewFrame::Current() )
                 m_xFrame = SfxViewFrame::Current()->GetFrame()->GetFrameInterface();
         }
 
@@ -2434,7 +2475,7 @@ void SvxMenuConfigPage::UpdateButtonStates()
         pPopup->EnableItem( ID_RENAME, FALSE );
         pPopup->EnableItem( ID_DELETE, FALSE );
 
-        aDescriptionText.SetText( String() );
+        aDescriptionField.Clear();
 
         return;
     }
@@ -2454,7 +2495,7 @@ void SvxMenuConfigPage::UpdateButtonStates()
         pPopup->EnableItem( ID_BEGIN_GROUP, FALSE );
         pPopup->EnableItem( ID_RENAME, FALSE );
 
-        aDescriptionText.SetText( String() );
+        aDescriptionField.Clear();
     }
     else
     {
@@ -2462,7 +2503,7 @@ void SvxMenuConfigPage::UpdateButtonStates()
         pPopup->EnableItem( ID_DELETE, TRUE );
         pPopup->EnableItem( ID_RENAME, TRUE );
 
-        aDescriptionText.SetText( pEntryData->GetHelpText() );
+        aDescriptionField.SetNewText( pEntryData->GetHelpText() );
     }
 }
 
@@ -4808,7 +4849,7 @@ void SvxToolbarConfigPage::UpdateButtonStates()
     pPopup->EnableItem( ID_CHANGE_SYMBOL, FALSE );
     pPopup->EnableItem( ID_RESET_SYMBOL, FALSE );
 
-    aDescriptionText.SetText( String() );
+    aDescriptionField.Clear();
 
     SvLBoxEntry* selection = aContentsListBox->GetCurEntry();
     if ( aContentsListBox->GetEntryCount() == 0 || selection == NULL )
@@ -4851,7 +4892,7 @@ void SvxToolbarConfigPage::UpdateButtonStates()
             pPopup->EnableItem( ID_RESET_SYMBOL, TRUE );
         }
 
-        aDescriptionText.SetText( pEntryData->GetHelpText() );
+        aDescriptionField.SetNewText( pEntryData->GetHelpText() );
     }
 }
 
