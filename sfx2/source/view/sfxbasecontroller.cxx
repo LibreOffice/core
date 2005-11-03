@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:29:56 $
+ *  last change: $Author: kz $ $Date: 2005-11-03 12:06:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1217,12 +1217,12 @@ void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::Runtime
             EVENTOBJECT aObject;
             aObject.Source = (OWEAKOBJECT*)this ;
 
-            // Bei Reload hat die alte ViewShell keinen Frame!
             SfxObjectShell* pDoc = pFrame->GetObjectShell() ;
             SfxViewFrame *pView = SfxViewFrame::GetFirst(pDoc);
             while( pView )
             {
-                if ( pView != pFrame )
+                // if there is another ViewFrame or currently the ViewShell in my ViewFrame is switched (PagePreview)
+                if ( pView != pFrame || pView->GetViewShell() != m_pData->m_pViewShell )
                     break;
                 pView = SfxViewFrame::GetNext( *pView, pDoc );
             }
