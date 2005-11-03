@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.221 $
+ *  $Revision: 1.222 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:31:55 $
+ *  last change: $Author: kz $ $Date: 2005-11-03 11:58:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,9 @@
 #ifndef _SV_BUTTON_HXX
 #include <button.hxx> // Button::GetStandardText
 #endif
-
+#ifndef _SV_TASKPANELIST_HXX
+#include <taskpanelist.hxx>
+#endif
 #include <com/sun/star/awt/XWindowPeer.hpp>
 
 #ifndef _COM_SUN_STAR_RENDERING_XCANVAS_HPP_
@@ -6074,10 +6076,40 @@ void Window::ExpandPaintClipRegion( const Region& rRegion )
 
 // -----------------------------------------------------------------------
 
+static SystemWindow *ImplGetLastSystemWindow( Window *pWin )
+{
+    // get the most top-level system window, the one that contains the taskpanelist
+    SystemWindow *pSysWin = NULL;
+    if( !pWin )
+        return pSysWin;
+    Window *pMyParent = pWin;
+    while ( pMyParent )
+    {
+        if ( pMyParent->IsSystemWindow() )
+            pSysWin = (SystemWindow*)pMyParent;
+        pMyParent = pMyParent->GetParent();
+    }
+    return pSysWin;
+}
+
 void Window::SetParent( Window* pNewParent )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
     DBG_ASSERT( pNewParent, "Window::SetParent(): pParent == NULL" );
+
+    // check if the taskpanelist would change and move the window pointer accordingly
+    SystemWindow *pSysWin = ImplGetLastSystemWindow(this);
+    SystemWindow *pNewSysWin = NULL;
+    BOOL bChangeTaskPaneList = FALSE;
+    if( pSysWin->ImplIsInTaskPaneList( this ) )
+    {
+        pNewSysWin = ImplGetLastSystemWindow( pNewParent );
+        if( pNewSysWin && pNewSysWin != pSysWin )
+        {
+            bChangeTaskPaneList = TRUE;
+            pSysWin->GetTaskPaneList()->RemoveWindow( this );
+        }
+    }
 
     ImplSetFrameParent( pNewParent );
 
@@ -6203,6 +6235,9 @@ void Window::SetParent( Window* pNewParent )
     {
             GetDropTarget();
     }
+
+    if( bChangeTaskPaneList )
+        pNewSysWin->GetTaskPaneList()->AddWindow( this );
 
     if ( bVisible )
         Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
