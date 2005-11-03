@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:36:12 $
+ *  last change: $Author: kz $ $Date: 2005-11-03 16:34:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2190,8 +2190,8 @@ BOOL WinSalGraphics::GetGlyphOutline( long nIndex,
                 // insert into polypolygon
                 Polygon aPoly( nPnt, pPoints, (bHasOfflinePoints ? pFlags : NULL) );
                 // convert to B2DPolyPolygon
-        // TODO: get rid of the intermediate PolyPolygon
-        rB2DPolyPoly.append( aPoly.getB2DPolygon() );
+                // TODO: get rid of the intermediate PolyPolygon
+                rB2DPolyPoly.append( aPoly.getB2DPolygon() );
             }
 
             delete[] pPoints;
@@ -2199,16 +2199,15 @@ BOOL WinSalGraphics::GetGlyphOutline( long nIndex,
         }
 
         delete[] pData;
-
-        rPolyPoly.Scale( mfFontScale, mfFontScale );
     }
 
     // rescaling needed for the PolyPolygon conversion
     if( rB2DPolyPoly.count() )
     {
         ::basegfx::B2DHomMatrix aMatrix;
-    aMatrix.scale( 1.0/256, 1.0/256 );
-    rB2DPolyPoly.transform( aMatrix );
+        aMatrix.scale( 1.0/256, 1.0/256 );
+        aMatrix.scale( mfFontScale, mfFontScale );
+        rB2DPolyPoly.transform( aMatrix );
     }
 
     return bRet;
