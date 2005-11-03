@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-06 11:14:47 $
+ *  last change: $Author: kz $ $Date: 2005-11-03 12:05:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -833,7 +833,7 @@ SEQUENCE< OUSTRING > SfxObjectShell::GetEventNames_Impl()
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
         if ( !pEventNameContainer )
         {
-            static uno::Sequence< ::rtl::OUString > aEventNameContainer( 25 );
+            static uno::Sequence< ::rtl::OUString > aEventNameContainer( 26 );
             // SFX_EVENT_STARTAPP
             aEventNameContainer[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnStartApp" ) );
 
@@ -908,6 +908,9 @@ SEQUENCE< OUSTRING > SfxObjectShell::GetEventNames_Impl()
 
             // SFX_EVENT_SAVETODOCFAILED
             aEventNameContainer[24] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnCopyToFailed" ) );
+
+            // SFX_HINT_TITLECHANGED
+            aEventNameContainer[25] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TitleChanged" ) );
 
             pEventNameContainer = &aEventNameContainer;
         }
