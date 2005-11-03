@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:39:21 $
+ *  last change: $Author: kz $ $Date: 2005-11-03 11:53:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,9 @@
 
 #ifndef _SVTREEBOX_HXX //autogen
 #include <svtools/svtreebx.hxx>
+#endif
+#ifndef _SVTOOLS_SVMEDIT2_HXX
+#include <svtools/svmedit2.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
@@ -419,6 +422,19 @@ public:
     void                KeyInput( const KeyEvent& rKeyEvent );
 };
 
+class SvxDescriptionEdit : public ExtMultiLineEdit
+{
+private:
+    Rectangle           m_aRealRect;
+
+public:
+    SvxDescriptionEdit( Window* pParent, const ResId& _rId );
+    inline ~SvxDescriptionEdit() {}
+
+    void                SetNewText( const String& _rText );
+    inline void         Clear() { SetNewText( String() ); }
+};
+
 class SvxConfigPage : public SfxTabPage
 {
 private:
@@ -426,11 +442,11 @@ private:
     bool                                bInitialised;
     SaveInData*                         pCurrentSaveInData;
 
-    DECL_LINK( SelectSaveInLocation, ListBox * );
-    DECL_LINK( AsyncInfoMsg, String* );
+    DECL_LINK(  SelectSaveInLocation, ListBox * );
+    DECL_LINK(  AsyncInfoMsg, String* );
 
-    bool        SwapEntryData(
-        SvLBoxEntry* pSourceEntry, SvLBoxEntry* pTargetEntry );
+    bool        SwapEntryData( SvLBoxEntry* pSourceEntry, SvLBoxEntry* pTargetEntry );
+    void        AlignControls();
 
 protected:
 
@@ -457,8 +473,8 @@ protected:
     FixedText                           aSaveInText;
     ListBox                             aSaveInListBox;
 
-    FixedLine                           aDescriptionLine;
-    FixedText                           aDescriptionText;
+    FixedText                           aDescriptionLabel;
+    SvxDescriptionEdit                  aDescriptionField;
 
     SvxScriptSelectorDialog*            pSelectorDlg;
 
