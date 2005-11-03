@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsresync.pl,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 22:07:25 $
+#   last change: $Author: kz $ $Date: 2005-11-03 10:32:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ use CwsConfig;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.18 $ ';
+my $id_str = ' $Revision: 1.19 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -1655,7 +1655,19 @@ sub get_changed_files
     $cvs_module->verbose(1);
     STDOUT->autoflush(1);
     print_message("Retrieving changes ...");
-    my $changed_files_ref = $cvs_module->changed_files($old_tag, $new_tag);
+    my $changed_files_ref;
+    eval { $changed_files_ref = $cvs_module->changed_files($old_tag, $new_tag) };
+    if ( $@ ) {
+        if ( $@ =~ /server died silently/ ) {
+            my $time_str = localtime();
+            print_error("The CVS server has died silently on 'cvs rdiff' operation.", 0);
+            print_error("Please inform Release Engineering!", 0);
+            print_error("Time of failure: '$time_str'", 99);
+        }
+        else {
+            croak($@); # rethrow
+        }
+    }
     STDOUT->autoflush(0);
     return $changed_files_ref;
 }
