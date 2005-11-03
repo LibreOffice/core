@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:39:07 $
+ *  last change: $Author: kz $ $Date: 2005-11-03 11:53:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,10 +46,10 @@
 #define BTN_CHANGE_ENTRY (18 + CFG_OFFSET)
 #define BTN_UP (19 + CFG_OFFSET)
 #define BTN_DOWN (20 + CFG_OFFSET)
-#define GRP_DESCRIPTION (22 + CFG_OFFSET)
+#define FT_DESCRIPTION (22 + CFG_OFFSET)
 #define TXT_SAVEIN (23 + CFG_OFFSET)
 #define LB_SAVEIN (24 + CFG_OFFSET)
-#define TXT_DESCRIPTION (25 + CFG_OFFSET)
+#define ED_DESCRIPTION (25 + CFG_OFFSET)
 #define BTN_ADD_COMMANDS (26 + CFG_OFFSET)
 
 #define MODIFY_MENU (40 + CFG_OFFSET)
@@ -101,4 +101,4 @@
 #define BTN_OK (103 + CFG_OFFSET)
 #define BTN_CANCEL (104 + CFG_OFFSET)
 #define BTN_HELP (105 + CFG_OFFSET)
-#define FT_DESCRIPTION (106 + CFG_OFFSET)
+#define FT_NAME (106 + CFG_OFFSET)
