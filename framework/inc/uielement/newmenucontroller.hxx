@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newmenucontroller.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:45:26 $
+ *  last change: $Author: kz $ $Date: 2005-11-03 12:00:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,7 +149,13 @@ namespace framework
             DECL_STATIC_LINK( NewMenuController, ExecuteHdl_Impl, NewDocument* );
 
         private:
-            typedef ::std::hash_map< int, ::rtl::OUString > TargetFrameForId;
+            struct AddInfo
+            {
+                rtl::OUString aTargetFrame;
+                rtl::OUString aImageId;
+            };
+
+            typedef ::std::hash_map< int, AddInfo > AddInfoForId;
 
             void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
             void retrieveShortcutsFromConfiguration( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >& rAccelCfg,
@@ -157,6 +163,7 @@ namespace framework
                                                      std::vector< KeyCode >& aMenuShortCuts );
             void setAccelerators( PopupMenu* pPopupMenu );
             void determineAndSetNewDocAccel( PopupMenu* pPopupMenu, const KeyCode& rKeyCode );
+            void setMenuImages( PopupMenu* pPopupMenu, sal_Bool bSetImages, sal_Bool bHiContrast );
 
         private:
             // members
@@ -165,7 +172,7 @@ namespace framework
                                 m_bNewMenu    : 1,
                                 m_bModuleIdentified : 1,
                                 m_bAcceleratorCfg : 1;
-            TargetFrameForId    m_aTargetFrameForItem;
+            AddInfoForId        m_aAddInfoForItem;
             rtl::OUString       m_aTargetFrame;
             rtl::OUString       m_aModuleIdentifier;
             rtl::OUString       m_aEmptyDocURL;
