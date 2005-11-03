@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 14:03:18 $
+ *  last change: $Author: kz $ $Date: 2005-11-03 12:00:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3247,7 +3247,9 @@ void LayoutManager::implts_setStatusBarPosSize( const ::Point& rPos, const ::Siz
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pParentWindow && ( pWindow && pWindow->GetType() == WINDOW_STATUSBAR ))
         {
-            pWindow->SetParent( pParentWindow );
+            Window* pOldParentWindow = pWindow->GetParent();
+            if ( pParentWindow != pOldParentWindow )
+                pWindow->SetParent( pParentWindow );
             ((StatusBar *)pWindow)->SetPosSizePixel( rPos, rSize );
         }
     }
@@ -5299,7 +5301,10 @@ void LayoutManager::implts_calcWindowPosSizeOnSingleRowColumn( sal_Int32 nDockin
     {
         Reference< css::awt::XWindow > xWindow = rRowColumnWindowData.aRowColumnWindows[i];
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-        pWindow->SetParent( pDockAreaWindow );
+        Window* pOldParentWindow = pWindow->GetParent();
+
+        if ( pDockAreaWindow != pOldParentWindow )
+            pWindow->SetParent( pDockAreaWindow );
 
         css::awt::Rectangle aWinRect = rRowColumnWindowData.aRowColumnWindowSizes[i];
         if ( nDockingArea == DockingArea_DOCKINGAREA_TOP )
