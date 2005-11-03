@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 22:05:58 $
+#   last change: $Author: kz $ $Date: 2005-11-03 11:56:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@ CONFIGURE_ACTION= \
     setenv CFLAGS "$(ARCH_FLAGS)" && \
     setenv CXXFLAGS "$(ARCH_FLAGS)" && \
     ..$/dist$/configure
-CONFIGURE_FLAGS=--enable-cxx --enable-dynamic --enable-shared
+CONFIGURE_FLAGS=--enable-cxx --enable-dynamic --enable-shared --enable-compat185
 .IF "$(SOLAR_JAVA)"!=""
 CONFIGURE_FLAGS+=--enable-java
 .ENDIF
