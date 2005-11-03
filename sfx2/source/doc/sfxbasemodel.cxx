@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:47:00 $
+ *  last change: $Author: kz $ $Date: 2005-11-03 12:06:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2474,6 +2474,14 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
                     // the medium should not dispose the storage in this case
                     uno::Reference < embed::XStorage > xTmpStor = ::comphelper::OStorageHelper::GetTemporaryStorage();
                     m_pData->m_pObjectShell->GetStorage()->copyToStorage( xTmpStor );
+
+                    // the medium should disconnect from the original location
+                    // the storage should not be disposed since the document is still
+                    // based on it, but in DoSaveCompleted it will be disposed
+                    pMedium->CanDisposeStorage_Impl( sal_False );
+                    pMedium->Close();
+
+                    // setting the new storage the medium will be based on
                     pMedium->SetStorage_Impl( xTmpStor );
 
                     m_pData->m_pObjectShell->ForgetMedium();
@@ -2487,7 +2495,7 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
                             SetTemplate_Impl( aName, aTemplateName, m_pData->m_pObjectShell );
                         }
 
-                        // the medium should not dispose the storage
+                        // the medium should not dispose the storage, DoSaveCompleted() has let it to do so
                         pMedium->CanDisposeStorage_Impl( sal_False );
                     }
                 }
@@ -3130,7 +3138,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                 ListenForStorage_Impl( m_pData->m_pObjectShell->GetStorage() );
             }
 
-            postEvent_Impl( *pNamedHint );
+            postEvent_Impl( pNamedHint->GetEventId() );
         }
 
         if ( pSimpleHint )
@@ -3139,6 +3147,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             {
                 ::rtl::OUString aTitle = m_pData->m_pObjectShell->GetTitle();
                 addTitle_Impl( m_pData->m_seqArguments, aTitle );
+                postEvent_Impl( pSimpleHint->GetId() );
             }
 /*
             else if ( pSimpleHint->GetId() == SFX_HINT_DYING
@@ -3427,7 +3436,7 @@ void SfxBaseModel::impl_store(  const   OUSTRING&                   sURL        
 
 //********************************************************************************************************
 
-void SfxBaseModel::postEvent_Impl( const SfxEventHint& rHint )
+void SfxBaseModel::postEvent_Impl( sal_uInt16 nEventID )
 {
     // object already disposed?
     if ( impl_isDisposed() )
@@ -3438,7 +3447,7 @@ void SfxBaseModel::postEvent_Impl( const SfxEventHint& rHint )
     if( pIC )
 
     {
-        OUSTRING aName = SfxEventConfiguration::GetEventName_Impl( rHint.GetEventId() );
+        OUSTRING aName = SfxEventConfiguration::GetEventName_Impl( nEventID );
         DOCEVENTOBJECT aEvent( (XMODEL *)this, aName );
         OINTERFACECONTAINERHELPER aIC( m_aMutex );
         SEQUENCE < REFERENCE < XINTERFACE > > aElements = pIC->getElements();
