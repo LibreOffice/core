@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_resource_ooo.scp,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-24 18:30:51 $
+ *  last change: $Author: kz $ $Date: 2005-11-03 12:07:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,6 +163,6 @@ STD_RES_FILE( gid_File_Res_Xsltdlg, xsltdlg )
 STD_RES_FILE( gid_File_Res_AVMedia, avmedia )
 
 #ifndef WITHOUT_MOZILLA
-STD_RES_FILE( gid_File_Res_XMLSecurity, xmlsec )
+STD_RES_FILE_PATCH( gid_File_Res_XMLSecurity, xmlsec )
 #endif
 
