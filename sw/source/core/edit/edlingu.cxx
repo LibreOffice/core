@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edlingu.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-18 13:48:17 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 16:00:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1661,7 +1661,10 @@ void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > xAlt,
             }
             while(*pCrsr->GetPoint() < aEnd)
             {
-                GetSh()->Right(1, CRSR_SKIP_CELLS);
+                //#125786 in table cell with fixed row height the cursor might not move forward
+                if(!GetSh()->Right(1, CRSR_SKIP_CELLS))
+                    break;
+
                 bool bField = false;
                 //read the character at the current position to check if it's a field
                 xub_Unicode cChar = pTxtNode->GetTxt().GetChar( pCrsr->GetMark()->nContent.GetIndex() );
