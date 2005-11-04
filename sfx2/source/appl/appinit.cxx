@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-03 12:05:19 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 15:49:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,6 +148,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;
+namespace css = ::com::sun::star;
 
 void doFirstTimeInit();
 
@@ -172,6 +173,9 @@ void SAL_CALL SfxTerminateListener_Impl::queryTermination( const EventObject& aE
 
 void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& aEvent ) throw(RuntimeException )
 {
+    static ::rtl::OUString SERVICE_GLOBALEVENTBROADCASTER = ::rtl::OUString::createFromAscii("com.sun.star.frame.GlobalEventBroadcaster");
+    static ::rtl::OUString EVENT_QUIT_APP                 = ::rtl::OUString::createFromAscii("OnCloseApp");
+
     Reference< XDesktop > xDesktop( aEvent.Source, UNO_QUERY );
     if( xDesktop.is() == sal_True )
         xDesktop->removeTerminateListener( this );
@@ -184,6 +188,16 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
     pApp->Get_Impl()->pAppDispatch->ReleaseAll();
     pApp->Get_Impl()->pAppDispatch->release();
     pApp->NotifyEvent(SfxEventHint( SFX_EVENT_CLOSEAPP) );
+
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+    css::uno::Reference< css::document::XEventListener > xGlobalBroadcaster(xSMGR->createInstance(SERVICE_GLOBALEVENTBROADCASTER), css::uno::UNO_QUERY);
+    if (xGlobalBroadcaster.is())
+    {
+        css::document::EventObject aEvent;
+        aEvent.EventName = EVENT_QUIT_APP;
+        xGlobalBroadcaster->notifyEvent(aEvent);
+    }
+
     //pApp->Deinitialize();
     delete pApp;
     Application::Quit();
