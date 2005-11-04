@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view1.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:12:14 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 16:02:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,6 +118,12 @@ void SwView::Activate(BOOL bMDIActivate)
     if(!bDocSzUpdated)
         DocSzChgd(aDocSz);
 
+    // #b6330459# make selection visible
+    if(bMakeSelectionVisible)
+    {
+        pWrtShell->MakeSelVisible();
+        bMakeSelectionVisible = sal_False;
+    }
     pHRuler->SetActive( TRUE );
     pVRuler->SetActive( TRUE );
 
