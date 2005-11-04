@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:50:35 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 16:01:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,9 @@
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
+#include <com/sun/star/util/Date.hpp>
 #endif
 
 #ifndef _SVX_LANGITEM_HXX
@@ -1498,7 +1501,23 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                                                 aDBFormatData,
                                                 &nValue ) );
                             if( DBL_MAX != nValue )
-                                pFld->ChgValue( nValue, TRUE );
+                            {
+                                Any aType = xColumnProps->getPropertyValue(C2U("Type"));
+                                sal_Int32 eDataType;
+                                aType >>= eDataType;
+                                if( DataType::DATE == eDataType  || DataType::TIME == eDataType  ||
+                                    DataType::TIMESTAMP  == eDataType)
+
+                                {
+                                    ::Date aStandard(1,1,1900);
+                                    ::Date aCompare(aDBFormatData.aNullDate.Day ,
+                                                    aDBFormatData.aNullDate.Month,
+                                                    aDBFormatData.aNullDate.Year);
+                                    if(aStandard != aCompare)
+                                        nValue += (aStandard - aCompare);
+                                }
+                            }
+                            pFld->ChgValue( nValue, TRUE );
                             pFld->SetInitialized();
 
                             rSh.Insert( *pFld );
