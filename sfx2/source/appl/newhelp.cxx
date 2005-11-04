@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:44:49 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 15:49:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3006,7 +3006,16 @@ void SfxHelpWindow_Impl::MakeLayout()
     if ( nHeight > 0 && xWindow.is() )
     {
            Window* pScreenWin = VCLUnoHelper::GetWindow( xWindow );
-           pScreenWin->Hide();
+
+        /* #i55528#
+            Hide() / Show() will produce starnge effects.
+            The returned size (used later to be written back into the configuration)
+            isnt the right after a resize during the window is hidden.
+            If this resize is done if the window is visible evyrthing works as aspected.
+            Some VCL-patches could not solve this problem so I've established the
+            workaround: resize the help window if it's visible .-)
+        */
+//      pScreenWin->Hide();
 
         ::com::sun::star::awt::Rectangle aRect = xWindow->getPosSize();
         sal_Int32 nOldWidth = bIndex ? nCollapseWidth : nExpandWidth;
@@ -3024,7 +3033,7 @@ void SfxHelpWindow_Impl::MakeLayout()
         else if ( aWinPos.X() > 0 && aWinPos.Y() > 0 )
             pScreenWin->SetPosPixel( aWinPos );
 
-           pScreenWin->Show();
+//      pScreenWin->Show();
     }
 
     Clear();
