@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:43:13 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 15:44:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -408,7 +408,9 @@ DEFINE_INIT_SERVICE                 (   Frame,
     @onerror    ASSERT in debug version or nothing in relaese version.
 *//*-*****************************************************************************************************/
 Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
-        :   PropertySetHelper           ( xFactory, &Application::GetSolarMutex(), sal_False) // FALSE => dont release shared mutex on calling us!
+        :   PropertySetHelper           ( xFactory,
+                                          &Application::GetSolarMutex(),
+                                          sal_False) // FALSE => dont release shared mutex on calling us!
         ,   ::cppu::OWeakObject         (                                                   )
         //  init member
         ,   m_xFactory                  ( xFactory                                          )
@@ -2554,6 +2556,8 @@ sal_Int16 SAL_CALL Frame::resetActionLocks() throw( css::uno::RuntimeException )
 //*****************************************************************************************************************
 void Frame::impl_initializePropInfo()
 {
+    impl_setPropertyChangeBroadcaster(static_cast< css::frame::XFrame* >(this));
+
     impl_addPropertyInfo(
         css::beans::Property(
             FRAME_PROPNAME_DISPATCHRECORDERSUPPLIER,
