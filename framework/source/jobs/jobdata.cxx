@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jobdata.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:35:33 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 15:42:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -652,6 +652,24 @@ sal_Bool isEnabled( const ::rtl::OUString& sAdminTime ,
             (!bValidAdmin && !bValidUser                         ) ||
             ( bValidAdmin &&  bValidUser && sAdminTime>=sUserTime)
            );
+}
+
+//________________________________
+/**
+ */
+void JobData::appendEnabledJobsForEvent( const css::uno::Reference< css::lang::XMultiServiceFactory >&          xSMGR  ,
+                                         const ::rtl::OUString&                                                 sEvent ,
+                                               ::comphelper::SequenceAsVector< JobData::TJob2DocEventBinding >& lJobs  )
+{
+    css::uno::Sequence< ::rtl::OUString > lAdditionalJobs = JobData::getEnabledJobsForEvent(xSMGR, sEvent);
+    sal_Int32                             c               = lAdditionalJobs.getLength();
+    sal_Int32                             i               = 0;
+
+    for (i=0; i<c; ++i)
+    {
+        JobData::TJob2DocEventBinding aBinding(lAdditionalJobs[i], sEvent);
+        lJobs.push_back(aBinding);
+    }
 }
 
 //________________________________
