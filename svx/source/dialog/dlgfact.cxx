@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:58:56 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 16:06:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -966,8 +966,16 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateVclDialog( Window* pParent,
     switch ( rResId.GetId() )
     {
         case SID_OPTIONS_TREEDIALOG :
-            pDlg = new  OfaTreeOptionsDialog( pParent );
-            break;
+        case SID_OPTIONS_DATABASES:
+        {
+            OfaTreeOptionsDialog* pOptDlg = new OfaTreeOptionsDialog( pParent );
+            if(rResId.GetId() == SID_OPTIONS_DATABASES)
+            {
+                pOptDlg->ActivatePage(SID_SB_DBREGISTEROPTIONS);
+            }
+            pDlg = pOptDlg;
+        }
+        break;
         default:
             break;
     }
