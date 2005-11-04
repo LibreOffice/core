@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:10:38 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 16:06:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4200,15 +4200,6 @@ const GraphicObject* SvxBrushItem::GetGraphicObject( SfxObjectShell* pSh ) const
     if ( bLoadAgain && pStrLink && !pImpl->pGraphicObject && !pImpl->xMedium.Is() )
     // wenn Grafik schon geladen, als Cache benutzen
     {
-/*    os: #125481# invalid code - loading cannot be aborted anymore but the related
-            flag is for some reasons set in SfxViewFrame::~SfxViewFrame()
-        if( pSh && pSh->IsAbortingImport() )
-        {
-            SvxBrushItem* pThis = (SvxBrushItem*)this;
-            pThis->bLoadAgain = sal_False;
-            return 0;
-        }
- */
         //JP 29.6.2001: only with "valid" names - empty names now allowed
         if( pStrLink->Len() )
         {
