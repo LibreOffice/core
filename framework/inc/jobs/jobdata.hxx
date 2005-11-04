@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jobdata.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:22:33 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 15:40:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,6 +183,27 @@ class JobData : private ThreadHelpBase
             E_DOCUMENTEVENT
         };
 
+        /** Some jobs can be registered to "logical events", which are generated on demand if another document event
+            occures. E.g. "onDocumentOpened" in case "OnNew" or "OnLoad" was notified to the JobExecutor instance.
+            And normaly the original event is transported as parameter set to the executed job. But then such job
+            cant differ between e.g. "OnNew" and "onDocumentOpened".
+            That's why we must know, for which type of event the job was realy triggered .-)
+
+            The information "sDocEvent" from this struct must be set on the member JobData::m_sEvent from outside
+            user of such Jobdata structure.
+        */
+        struct TJob2DocEventBinding
+        {
+            ::rtl::OUString m_sJobName;
+            ::rtl::OUString m_sDocEvent;
+
+            TJob2DocEventBinding(const ::rtl::OUString& sJobName ,
+                                 const ::rtl::OUString& sDocEvent)
+                : m_sJobName (sJobName )
+                , m_sDocEvent(sDocEvent)
+            {}
+        };
+
     //___________________________________
     // member
 
@@ -288,6 +309,10 @@ class JobData : private ThreadHelpBase
 
         static css::uno::Sequence< ::rtl::OUString > getEnabledJobsForEvent( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR  ,
                                                                              const ::rtl::OUString&                                        sEvent );
+
+        static void appendEnabledJobsForEvent( const css::uno::Reference< css::lang::XMultiServiceFactory >&          xSMGR  ,
+                                               const ::rtl::OUString&                                                 sEvent ,
+                                                     ::comphelper::SequenceAsVector< JobData::TJob2DocEventBinding >& lJobs  );
 
     //___________________________________
     // private helper
