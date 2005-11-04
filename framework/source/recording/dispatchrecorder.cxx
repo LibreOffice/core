@@ -357,14 +357,12 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const ::rtl::OUString& aURL,
             continue;
 
         {
-            ++nValidArgs;
-
             // add arg().Name
             if(bAsComment)
                 aArgumentBuffer.appendAscii(REM_AS_COMMENT);
             aArgumentBuffer.append     (sArrayName);
             aArgumentBuffer.appendAscii("(");
-            aArgumentBuffer.append     (i);
+            aArgumentBuffer.append     (nValidArgs);
             aArgumentBuffer.appendAscii(").Name = \"");
             aArgumentBuffer.append     (lArguments[i].Name);
             aArgumentBuffer.appendAscii("\"\n");
@@ -374,10 +372,12 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const ::rtl::OUString& aURL,
                 aArgumentBuffer.appendAscii(REM_AS_COMMENT);
             aArgumentBuffer.append     (sArrayName);
             aArgumentBuffer.appendAscii("(");
-            aArgumentBuffer.append     (i);
+            aArgumentBuffer.append     (nValidArgs);
             aArgumentBuffer.appendAscii(").Value = ");
             aArgumentBuffer.append     (sValBuffer.makeStringAndClear());
             aArgumentBuffer.appendAscii("\n");
+
+            ++nValidArgs;
         }
     }
 
