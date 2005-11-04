@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jobexecutor.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:36:02 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 15:43:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,8 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
+
+#include <rtl/logfile.hxx>
 
 //________________________________
 //  namespace
@@ -211,6 +213,8 @@ JobExecutor::~JobExecutor()
  */
 void SAL_CALL JobExecutor::trigger( const ::rtl::OUString& sEvent ) throw(css::uno::RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT(aLog, "fwk (as96863) JobExecutor::trigger()");
+
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
 
@@ -259,54 +263,63 @@ void SAL_CALL JobExecutor::trigger( const ::rtl::OUString& sEvent ) throw(css::u
 
 void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent ) throw(css::uno::RuntimeException)
 {
+    static ::rtl::OUString EVENT_ON_NEW             = DECLARE_ASCII("OnNew"             ); // Doc UI  event
+    static ::rtl::OUString EVENT_ON_LOAD            = DECLARE_ASCII("OnLoad"            ); // Doc UI  event
+    static ::rtl::OUString EVENT_ON_CREATE          = DECLARE_ASCII("OnCreate"          ); // Doc API event
+    static ::rtl::OUString EVENT_ON_LOAD_FINISHED   = DECLARE_ASCII("OnLoadFinished"    ); // Doc API event
+    static ::rtl::OUString EVENT_ON_DOCUMENT_OPENED = DECLARE_ASCII("onDocumentOpened"  ); // Job UI  event : OnNew    or OnLoad
+    static ::rtl::OUString EVENT_ON_DOCUMENT_ADDED  = DECLARE_ASCII("onDocumentAdded"   ); // Job API event : OnCreate or OnLoadFinished
+
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
 
+    ::comphelper::SequenceAsVector< JobData::TJob2DocEventBinding > lJobs;
+
     // Optimization!
     // Check if the given event name exist inside configuration and reject wrong requests.
-    // This optimization supress using of the cfg api for getting event and job descriptions ...
-    if (m_lEvents.find(aEvent.EventName) == m_lEvents.end())
-        return;
-
-    // get list of all enabled jobs
-    // The called static helper methods read it from the configuration and
-    // filter disabled jobs using it's time stamp values.
-    css::uno::Sequence< ::rtl::OUString > lJobs = JobData::getEnabledJobsForEvent(m_xSMGR, aEvent.EventName);
+    // This optimization supress using of the cfg api for getting event and job descriptions.
+    // see using of m_lEvents.find() below ...
 
     // Special feature: If the events "OnNew" or "OnLoad" occures - we generate our own event "onDocumentOpened".
     if (
-        (aEvent.EventName.equalsAscii("OnNew") ) ||
-        (aEvent.EventName.equalsAscii("OnLoad"))
+        (aEvent.EventName.equals(EVENT_ON_NEW )) ||
+        (aEvent.EventName.equals(EVENT_ON_LOAD))
        )
     {
-        css::uno::Sequence< ::rtl::OUString > lAdditionalJobs = JobData::getEnabledJobsForEvent(m_xSMGR, DECLARE_ASCII("onDocumentOpened"));
-        sal_Int32 count = lAdditionalJobs.getLength();
-        if (count > 0)
-        {
-            sal_Int32 dest   = lJobs.getLength();
-            sal_Int32 source = 0;
-            lJobs.realloc(dest+count);
-            while(source < count)
-            {
-                lJobs[dest] = lAdditionalJobs[source];
-                ++source;
-                ++dest;
-            }
-        }
+        if (m_lEvents.find(EVENT_ON_DOCUMENT_OPENED) != m_lEvents.end())
+            JobData::appendEnabledJobsForEvent(m_xSMGR, EVENT_ON_DOCUMENT_OPENED, lJobs);
     }
+
+    // Special feature: If the events "OnCreate" or "OnLoadFinished" occures - we generate our own event "onDocumentAdded".
+    if (
+        (aEvent.EventName.equals(EVENT_ON_CREATE       )) ||
+        (aEvent.EventName.equals(EVENT_ON_LOAD_FINISHED))
+       )
+    {
+        if (m_lEvents.find(EVENT_ON_DOCUMENT_ADDED) != m_lEvents.end())
+            JobData::appendEnabledJobsForEvent(m_xSMGR, EVENT_ON_DOCUMENT_ADDED, lJobs);
+    }
+
+    // Add all jobs for "real" notified event too .-)
+    if (m_lEvents.find(aEvent.EventName) != m_lEvents.end())
+        JobData::appendEnabledJobsForEvent(m_xSMGR, aEvent.EventName, lJobs);
 
     aReadLock.unlock();
     /* } SAFE */
 
     // step over all enabled jobs and execute it
-    sal_Int32 c = lJobs.getLength();
-    for (sal_Int32 j=0; j<c; ++j)
+    ::comphelper::SequenceAsVector< JobData::TJob2DocEventBinding >::const_iterator pIt;
+    for (  pIt  = lJobs.begin();
+           pIt != lJobs.end()  ;
+         ++pIt                 )
     {
         /* SAFE { */
         aReadLock.lock();
 
+        const JobData::TJob2DocEventBinding& rBinding = *pIt;
+
         JobData aCfg(m_xSMGR);
-        aCfg.setEvent(aEvent.EventName, lJobs[j]);
+        aCfg.setEvent(rBinding.m_sDocEvent, rBinding.m_sJobName);
         aCfg.setEnvironment(JobData::E_DOCUMENTEVENT);
 
         /*Attention!
