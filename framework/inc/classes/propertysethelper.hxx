@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertysethelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:07:20 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 15:40:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,8 @@
 //_________________________________________________________________________________________________________________
 //  other includes
 
+#include <cppuhelper/weakref.hxx>
+
 //_________________________________________________________________________________________________________________
 //  namespace
 
@@ -114,6 +116,9 @@ class PropertySetHelper : public css::beans::XPropertySet
 
         sal_Bool m_bReleaseLockOnCall;
 
+        // hold it weak ... otherwhise this helper has to be "killed" explicitly .-)
+        css::uno::WeakReference< css::uno::XInterface > m_xBroadcaster;
+
     //-------------------------------------------------------------------------
     /* native interface */
     public:
@@ -133,6 +138,14 @@ class PropertySetHelper : public css::beans::XPropertySet
         /** free all needed memory.
          */
         virtual ~PropertySetHelper();
+
+        //---------------------------------------------------------------------
+        /** set a new owner for this helper.
+         *
+         *  This owner is used as source for all broadcasted events.
+         *  Further we hold it weak, because we dont wish to be disposed() .-)
+         */
+        void impl_setPropertyChangeBroadcaster(const css::uno::Reference< css::uno::XInterface >& xBroadcaster);
 
         //---------------------------------------------------------------------
         /** add a new property info to the set of supported ones.
