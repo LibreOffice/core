@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:53:09 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 16:02:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1346,6 +1346,9 @@ void SwTableShell::GetState(SfxItemSet &rSet)
     SfxWhichIter aIter( rSet );
     SwWrtShell &rSh = GetShell();
     SwFrmFmt *pFmt = rSh.GetTableFmt();
+    // os #124829# crash report: in case of an invalid shell selection return immediately
+    if(!pFmt)
+        return;
     USHORT nSlot = aIter.FirstWhich();
     while ( nSlot )
     {
