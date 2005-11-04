@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:04:11 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 16:00:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,6 +187,7 @@ static void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId,
         case LANGUAGE_ENGLISH_US:
         case LANGUAGE_ENGLISH_CAN:
         case LANGUAGE_FRENCH_CANADIAN:
+        case LANGUAGE_SPANISH_MEXICAN:
             ePaper = SvxPaper( SVX_PAPER_LETTER );
             break;
         default:
