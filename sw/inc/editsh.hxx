@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-18 13:47:30 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 15:59:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -251,6 +251,8 @@ public:
 
     // replace fields by text - mailmerge support
     BOOL ConvertFieldsToText();
+    // set all numbering start points to a fixed value - mailmerge support
+    void SetNumberingRestart();
 
     // embedded alle lokalen Links (Bereiche/Grafiken)
     BOOL EmbedAllLinks();
