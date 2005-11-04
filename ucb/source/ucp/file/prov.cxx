@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:29:26 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 15:39:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -711,7 +711,12 @@ rtl::OUString SAL_CALL FileProvider::getFileURLFromSystemPath( const rtl::OUStri
     if ( osl::FileBase::getFileURLFromSystemPath( SystemPath,aNormalizedPath ) != osl::FileBase::E_None )
         return rtl::OUString();
 
-    return aNormalizedPath;
+    rtl::OUString aAbsoluteURL;
+    if( osl::FileBase::getAbsoluteFileURL(BaseURL,aNormalizedPath,aAbsoluteURL)
+        != osl::FileBase::E_None )
+        return rtl::OUString();
+
+    return aAbsoluteURL;
 }
 
 rtl::OUString SAL_CALL FileProvider::getSystemPathFromFileURL( const rtl::OUString& URL )
