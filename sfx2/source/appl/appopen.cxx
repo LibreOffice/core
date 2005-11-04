@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:51:06 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 15:49:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,6 +181,7 @@
 #include "objface.hxx"
 #include "filedlghelper.hxx"
 #include "docfac.hxx"
+#include "event.hxx"
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
@@ -466,10 +467,21 @@ ULONG SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFil
         SfxBoolItem aHidden( SID_HIDDEN, TRUE );
         const SfxPoolItem *pRet = GetDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, &aName, &aHidden, &aReferer, &aFlags, 0L );
         const SfxObjectItem *pObj = PTR_CAST( SfxObjectItem, pRet );
-        xDoc = PTR_CAST( SfxObjectShell, pObj->GetShell() );
+        if ( pObj )
+            xDoc = PTR_CAST( SfxObjectShell, pObj->GetShell() );
+        else
+        {
+            const SfxViewFrameItem *pView = PTR_CAST( SfxViewFrameItem, pRet );
+            if ( pView )
+            {
+                SfxViewFrame *pFrame = pView->GetFrame();
+                if ( pFrame )
+                    xDoc = pFrame->GetObjectShell();
+            }
+        }
+
         if ( !xDoc.Is() )
             return ERRCODE_SFX_DOLOADFAILED;
-        xDoc->OwnerLock( FALSE );   // lock was set by hidden load
     }
     else
     {
@@ -502,6 +514,7 @@ ULONG SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFil
 //REMOVE                xDoc->DoHandsOff();
             if ( !xDoc->DoSaveCompleted( new SfxMedium( xTempStorage, String() ) ) )
                 throw uno::RuntimeException();
+            NotifyEvent( SfxEventHint( SFX_EVENT_STORAGECHANGED, xDoc ) );
         }
         catch( uno::Exception& )
         {
