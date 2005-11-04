@@ -4,9 +4,9 @@
  *
  *  $RCSfile: runtime.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 18:41:20 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 15:33:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,6 +164,7 @@ struct SbiGosubStack {              // GOSUB-Stack:
 
 
 class Dir;
+class WildCard;
 
 class SbiRTLData
 {
@@ -177,12 +178,8 @@ public:
     INT16   nDirFlags;
     short   nCurDirPos;
 
-    // #80200 HACK to provide minimum wildcard functionality
-    sal_Bool bDoCheck;
-    sal_Bool bNeedsDot;
-    String sExtension;
-    String sPreWildcard;
     String sFullNameToBeChecked;
+    WildCard* pWildCard;
 
 #ifdef _USE_UNO
     Sequence< OUString > aDirSeq;
