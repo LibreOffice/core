@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertysethelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:13:33 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 15:42:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,18 @@ PropertySetHelper::PropertySetHelper(const css::uno::Reference< css::lang::XMult
 //-----------------------------------------------------------------------------
 PropertySetHelper::~PropertySetHelper()
 {
+}
+
+//-----------------------------------------------------------------------------
+void PropertySetHelper::impl_setPropertyChangeBroadcaster(const css::uno::Reference< css::uno::XInterface >& xBroadcaster)
+{
+    TransactionGuard aTransaction(m_aTransactionManager, E_SOFTEXCEPTIONS);
+
+    // SAFE ->
+    WriteGuard aWriteLock(m_aLock);
+    m_xBroadcaster = xBroadcaster;
+    aWriteLock.unlock();
+    // <- SAFE
 }
 
 //-----------------------------------------------------------------------------
@@ -248,6 +260,7 @@ void SAL_CALL PropertySetHelper::setPropertyValue(const ::rtl::OUString& sProper
     aEvent.PropertyHandle = aPropInfo.Handle;
     aEvent.OldValue       = aCurrentValue;
     aEvent.NewValue       = aValue;
+    aEvent.Source         = css::uno::Reference< css::uno::XInterface >(m_xBroadcaster.get(), css::uno::UNO_QUERY);
 
     if (m_bReleaseLockOnCall)
     {
