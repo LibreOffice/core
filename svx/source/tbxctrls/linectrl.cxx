@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linectrl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:50:34 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 15:48:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -681,7 +681,7 @@ void SvxLineEndWindow::StateChanged(
     if ( nSID == SID_LINEEND_LIST )
     {
         // Die Liste der LinienEnden (LineEndList) hat sich geaendert:
-        if ( pState->ISA( SvxLineEndListItem ))
+        if ( pState && pState->ISA( SvxLineEndListItem ))
         {
             pLineEndList = ((SvxLineEndListItem*)pState)->GetLineEndList();
             DBG_ASSERT( pLineEndList, "LineEndList nicht gefunden" );
