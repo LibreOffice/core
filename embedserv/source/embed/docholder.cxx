@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:45:24 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 15:46:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
+#include <com/sun/star/frame/XStatusListener.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XMODIFYBROADCASTER_HPP_
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
@@ -901,6 +904,27 @@ void DocumentHolder::show()
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_self")),
                 0,
                 aSeq);
+
+            try
+            {
+                // get rid of second closer if it is there
+                uno::Reference< beans::XPropertySet > xProps( m_xFrame, uno::UNO_QUERY );
+                if ( xProps.is() )
+                {
+                    uno::Reference< frame::XLayoutManager > xLayoutManager;
+                    xProps->getPropertyValue( rtl::OUString::createFromAscii( "LayoutManager" ) ) >>= xLayoutManager;
+                    uno::Reference< beans::XPropertySet > xLMProps( xLayoutManager, uno::UNO_QUERY );
+                    if ( xLMProps.is() )
+                    {
+                        xLMProps->setPropertyValue( ::rtl::OUString::createFromAscii( "MenuBarCloser" ),
+                                                    uno::makeAny( uno::Reference< frame::XStatusListener >() ) );
+                    }
+                }
+            }
+            catch( uno::Exception& )
+            {
+                OSL_ENSURE( sal_False, "Can not adjust the frame!\n" );
+            }
         }
         setTitle(m_aDocumentNamePart);
     }
