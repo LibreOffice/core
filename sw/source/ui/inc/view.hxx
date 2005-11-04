@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 08:31:21 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 16:02:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -300,7 +300,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
                     bPasteSpecialState : 1,
                     bInMailMerge : 1,
                     bInDtor : 1, //detect destructor to prevent creating of sub shells while closing
-                    bOldShellWasPagePreView
+                    bOldShellWasPagePreView : 1,
+                    bMakeSelectionVisible : 1 // #b6330459# transport the bookmark selection
                     ;
 
     // Methoden fuers Suchen
