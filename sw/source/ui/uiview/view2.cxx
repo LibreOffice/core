@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:30:17 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 16:03:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,9 @@
 #endif
 #ifndef _SFX_PASSWD_HXX
 #include <sfx2/passwd.hxx>
+#endif
+#ifndef _SFX2_DIALOG_HXX
+#include <sfx2/sfxdlg.hxx>
 #endif
 #ifndef _SFX_HELP_HXX
 #include <sfx2/sfxhelp.hxx>
@@ -1540,6 +1543,10 @@ BOOL SwView::JumpToSwMark( const String& rMark )
         else if( 0 != ( pINet = pWrtShell->FindINetAttr( sMark ) ))
             bRet = pWrtShell->GotoINetAttr( *pINet->GetTxtINetFmt() );
 
+        // #b6330459# make selection visible later
+        if ( aVisArea.IsEmpty() )
+            bMakeSelectionVisible = sal_True;
+
         // ViewStatus wieder zurueck setzen
         SetCrsrAtTop( bSaveCT, bSaveCC );
 
@@ -1736,6 +1743,56 @@ namespace
 /* -----------------27.11.2002 12:12-----------------
  *
  * --------------------------------------------------*/
+
+class SwMergeSourceWarningBox_Impl : public ModalDialog
+{
+        FixedInfo       aMessageFI;
+        OKButton        aOK;
+        CancelButton    aCancel;
+
+        FixedImage      aWarnImage;
+    public:
+        SwMergeSourceWarningBox_Impl( Window* pParent ) :
+            ModalDialog( pParent, SW_RES( DLG_MERGE_SOURCE_UNAVAILABLE   ) ),
+                    aMessageFI( this, ResId( ST_MERGE_SOURCE_UNAVAILABLE ) ),
+                    aOK(        this, ResId( PB_MERGE_OK                 ) ),
+                    aCancel(    this, ResId( PB_MERGE_CANCEL             ) ),
+                    aWarnImage( this, ResId( IMG_MERGE                   ) )
+                    {
+                        FreeResource();
+                        SetText( Application::GetDisplayName() );
+                        const Image& rImg = WarningBox::GetStandardImage();
+                        aWarnImage.SetImage( rImg );
+                        Size aImageSize( rImg.GetSizePixel() );
+                        aImageSize.Width()  += 4;
+                        aImageSize.Height() += 4;
+                        aWarnImage.SetSizePixel( aImageSize );
+
+                        aImageSize.Width() += aWarnImage.GetPosPixel().X();
+                        Size aSz(GetSizePixel());
+                        aSz.Width() += aImageSize.Width();
+                        SetSizePixel(aSz);
+
+                        Point aPos(aMessageFI.GetPosPixel());
+                        aPos.X() += aImageSize.Width();
+                        aMessageFI.SetPosPixel( aPos );
+
+                        aPos = aOK.GetPosPixel();
+                        aPos.X() += aImageSize.Width();
+                        aOK.SetPosPixel( aPos );
+                        aPos = aCancel.GetPosPixel();
+                        aPos.X() += aImageSize.Width();
+                        aCancel.SetPosPixel( aPos );
+
+                    }
+
+        String          GetMessText() const { return aMessageFI.GetText(); }
+        void            SetMessText( const String& rText ) { aMessageFI.SetText( rText ); }
+};
+
+
+
+
 void SwView::GenerateFormLetter(BOOL bUseCurrentDocument)
 {
     if(bUseCurrentDocument)
@@ -1811,12 +1868,20 @@ void SwView::GenerateFormLetter(BOOL bUseCurrentDocument)
             String sSource;
             if(!GetWrtShell().IsFieldDataSourceAvailable(sSource))
             {
-                WarningBox aWarning( &GetViewFrame()->GetWindow(),
-                            SW_RES(MSG_MERGE_SOURCE_UNAVAILABLE));
+                SwMergeSourceWarningBox_Impl aWarning( &GetViewFrame()->GetWindow());
                 String sTmp(aWarning.GetMessText());
                 sTmp.SearchAndReplaceAscii("%1", sSource);
                 aWarning.SetMessText(sTmp);
-                aWarning.Execute();
+                if(RET_OK == aWarning.Execute())
+                {
+                    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+                    if ( pFact )
+                    {
+                        VclAbstractDialog* pDlg = pFact->CreateVclDialog( NULL, ResId( SID_OPTIONS_DATABASES ) );
+                        pDlg->Execute();
+                        delete pDlg;
+                    }
+                }
                 return ;
             }
         }
