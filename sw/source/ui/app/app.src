@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:49:42 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 16:00:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -704,13 +704,39 @@ QueryBox MSG_PRINT_AS_MERGE
     Message [ de ] = "Ihr Dokument enthält Adressdatenbank-Felder. Möchten Sie einen Serienbrief drucken?";
     Message [ en-US ] = "Your document contains address database fields. Do you want to print a form letter?";
 };
-WarningBox MSG_MERGE_SOURCE_UNAVAILABLE
+ModalDialog DLG_MERGE_SOURCE_UNAVAILABLE
 {
     HelpId = HID_MERGE_SOURCE_UNAVAILABLE;
-    Buttons = WB_OK ;
-    DefButton = WB_DEF_YES ;
-    Message [ de ] = "Die Datenquelle \'%1\' konnte nicht gefunden werden.\nÜberprüfen Sie die Einstellungen in \'Extras - Datenquellen...\'";
-    Message [ en-US ] = "The data source \'%1\' was not found.\nCheck the settings in \'Tools - Data Sources...\'";
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 202 , 72 ) ;
+    Moveable = TRUE ;
+
+    FixedImage IMG_MERGE
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 103 , 32 ) ;
+    };
+    FixedText ST_MERGE_SOURCE_UNAVAILABLE
+    {
+        Pos = MAP_APPFONT ( 12 , 6 ) ;
+        Size = MAP_APPFONT ( 178 , 40 ) ;
+        WordBreak = TRUE;
+        Text [ de ] = "Die Datenquelle \'%1\' wurde nicht gefunden.\nAus diesem Grund konnte keine Verbindung zur Datenquelle erstellt werden.\n\nBitte Überprüfen Sie die Verbindungseinstellungen.";
+        Text [ en-US ] = "The data source \'%1\' was not found. Thus the connection to the data source could not be established.\n\nPlease check the connections settings.";
+    };
+    OKButton PB_MERGE_OK
+    {
+        Pos = MAP_APPFONT ( 12 , 52 ) ;
+        Size = MAP_APPFONT ( 125 , 14 ) ;
+        Text [ de ] = "~Verbindungseinstellungen Überprüfen...";
+        Text [ en-US ] = "Check Connection Settings...";
+    };
+    CancelButton PB_MERGE_CANCEL
+    {
+        Pos = MAP_APPFONT ( 140 , 52 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
 };
 WarningBox MSG_DATA_SOURCES_UNAVAILABLE
 {
