@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 14:53:46 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 15:33:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -625,7 +625,7 @@ LocaleData::getIndexKeysByAlgorithm( const Locale& rLocale, const OUString& algo
         if ( indexArray ) {
             for(sal_Int16 i = 0; i < indexCount; i++) {
               if (algorithm.equals(indexArray[i*3]))
-                  return OUString(indexArray[i*4 + 1]);
+                  return OUString::createFromAscii("0-9")+OUString(indexArray[i*4 + 1]);
             }
         }
         return OUString();
