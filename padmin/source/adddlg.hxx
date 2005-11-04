@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adddlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:22:20 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 15:40:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,6 +252,9 @@ class AddPrinterDialog : public ModalDialog
     void advance();
     void back();
     void addPrinter();
+
+    void updateSettings();
+    virtual void DataChanged( const DataChangedEvent& rEv );
 
 public:
     AddPrinterDialog( Window* pParent );
