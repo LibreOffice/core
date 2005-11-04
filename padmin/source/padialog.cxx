@@ -4,9 +4,9 @@
  *
  *  $RCSfile: padialog.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 15:03:02 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 15:41:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,13 +138,27 @@ PADialog::PADialog( Window* pParent, BOOL bAdmin ) :
         m_aDefPrt( PaResId( RID_PA_STR_DEFPRT ) ),
         m_aRenameStr( PaResId( RID_PA_STR_RENAME ) ),
         m_pPrinter( 0 ),
-        m_rPIManager( PrinterInfoManager::get() ),
-        m_aPrinterImg( Bitmap( PaResId( RID_BMP_SMALL_PRINTER ) ), Color( 0xff, 0x00, 0xff ) ),
-        m_aFaxImg( Bitmap( PaResId( RID_BMP_SMALL_FAX ) ), Color( 0xff, 0x00, 0xff ) ),
-        m_aPdfImg( Bitmap( PaResId( RID_BMP_SMALL_PDF ) ), Color( 0xff, 0x00, 0xff ) )
+        m_rPIManager( PrinterInfoManager::get() )
 {
     FreeResource();
+    updateSettings();
     Init();
+}
+
+void PADialog::updateSettings()
+{
+    if( ! GetDisplayBackground().GetColor().IsDark() )
+    {
+        m_aPrinterImg = Image( BitmapEx( PaResId( RID_BMP_SMALL_PRINTER ) ) );
+        m_aFaxImg = Image( BitmapEx( PaResId( RID_BMP_SMALL_FAX ) ) );
+        m_aPdfImg = Image( BitmapEx( PaResId( RID_BMP_SMALL_PDF ) ) );
+    }
+    else
+    {
+        m_aPrinterImg = Image( BitmapEx( PaResId( RID_BMP_SMALL_PRINTER_HC ) ) );
+        m_aFaxImg = Image( BitmapEx( PaResId( RID_BMP_SMALL_FAX_HC ) ) );
+        m_aPdfImg = Image( BitmapEx( PaResId( RID_BMP_SMALL_PDF_HC ) ) );
+    }
 }
 
 void PADialog::Init()
@@ -191,6 +205,17 @@ long PADialog::Notify( NotifyEvent& rEv )
     return ModalDialog::Notify( rEv );
 }
 
+void PADialog::DataChanged( const DataChangedEvent& rEv )
+{
+    ModalDialog::DataChanged( rEv );
+    if( (rEv.GetType() == DATACHANGED_SETTINGS) &&
+        (rEv.GetFlags() & SETTINGS_STYLE) )
+    {
+        updateSettings();
+        // push the new images into the listbox
+        UpdateDevice();
+    }
+}
 
 String PADialog::getSelectedDevice()
 {
