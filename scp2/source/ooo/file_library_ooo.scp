@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.157 $
+ *  $Revision: 1.158 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 14:08:17 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 15:50:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -551,7 +551,7 @@ SPECIAL_UNO_LIB_FILE_PATCH(gid_File_Lib_Emboleobj,emboleobj)
 
 #ifdef WNT
 
-STD_UNO_LIB_FILE( gid_File_Lib_Emser , emser)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Emser , emser)
 
 #endif
 
@@ -1912,7 +1912,7 @@ End
 
 SPECIAL_UNO_LIB_FILE_PATCH(gid_File_Lib_Ucpdav1,ucpdav1)
 
-SPECIAL_UNO_LIB_FILE(gid_File_Lib_Ucpfile1,ucpfile1)
+SPECIAL_UNO_LIB_FILE_PATCH(gid_File_Lib_Ucpfile1,ucpfile1)
 
 SPECIAL_UNO_LIB_FILE(gid_File_Lib_Ucpftp1,ucpftp1)
 
