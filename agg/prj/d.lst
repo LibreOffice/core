@@ -6,4 +6,4 @@
 ..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 
-..\inc\*.h %_DEST%\inc%_EXT%\agg\.
+..\inc\*.h %_DEST%\inc%_EXT%\agg
