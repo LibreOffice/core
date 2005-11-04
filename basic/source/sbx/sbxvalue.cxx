@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxvalue.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:54:27 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 15:56:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1443,10 +1443,10 @@ BOOL SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
     // und der andere ein String, ist num < str
     else if( !IsFixed() && !rOp.IsFixed()
      && ( rOp.GetType() == SbxSTRING && GetType() != SbxSTRING && IsNumeric() ) )
-        bRes = BOOL( eOp == SbxLT || eOp == SbxLE );
+        bRes = BOOL( eOp == SbxLT || eOp == SbxLE || eOp == SbxNE );
     else if( !IsFixed() && !rOp.IsFixed()
      && ( GetType() == SbxSTRING && rOp.GetType() != SbxSTRING && rOp.IsNumeric() ) )
-        bRes = BOOL( eOp == SbxGT || eOp == SbxGE );
+        bRes = BOOL( eOp == SbxGT || eOp == SbxGE || eOp == SbxNE );
     else
     {
         SbxValues aL, aR;
