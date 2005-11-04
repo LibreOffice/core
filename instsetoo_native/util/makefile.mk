@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: obo $ $Date: 2005-10-13 09:33:47 $
+#   last change: $Author: rt $ $Date: 2005-11-04 09:48:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -291,9 +291,9 @@ $(MISC)$/ure$/services.rdb .ERRREMOVE:
 
 .IF "$(LOCALPYFILES)"!=""
 .IF "$(PKGFORMAT)"==""
-$(foreach,i,$(alllangiso) openoffice_$i openofficewithjre_$i ooolanguagepack_$i) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py
+$(foreach,i,$(alllangiso) openoffice_$i openofficewithjre_$i ooolanguagepack_$i) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py $(BIN)$/iso8859_1.py
 .ELSE			# "$(PKGFORMAT)"==""
-$(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".")} openofficewithjre_$i{$(PKGFORMAT:^".")} ooolanguagepack_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py
+$(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".")} openofficewithjre_$i{$(PKGFORMAT:^".")} ooolanguagepack_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py $(BIN)$/iso8859_1.py
 .ENDIF			# "$(PKGFORMAT)"==""
 .ENDIF			# "$(LOCALPYFILES)"!=""
 
@@ -303,8 +303,12 @@ $(BIN)$/%.py : $(SOLARSHAREDBIN)$/pyuno$/%.py
 .IF "$(SYSTEM_PYTHON)" != "YES"
 $(BIN)$/cp1251.py : $(SOLARLIBDIR)$/python$/encodings$/cp1251.py
     @+$(COPY) $< $@
+$(BIN)$/iso8859_1.py : $(SOLARLIBDIR)$/python$/encodings$/iso8859_1.py
+    @+$(COPY) $< $@
 .ELSE
 $(BIN)$/cp1251.py : 
+    @+echo "Using system python - nothing more to do here"
+$(BIN)$/iso8859_1.py : 
     @+echo "Using system python - nothing more to do here"
 .ENDIF
 
