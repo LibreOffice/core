@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodetect.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:59:29 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 15:59:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ struct SwIoDetect
 
     inline int IsFilter( const String& rNm )
     {
-        return rNm.EqualsAscii( pName, 0, nLen );
+        return pName && rNm.EqualsAscii( pName, 0, nLen );
     }
 
 #ifdef _DLL_
