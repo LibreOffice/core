@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-24 15:30:00 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 16:01:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -960,7 +960,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             aFileName = xFP->getFiles().getConstArray()[0];
                         }
                     }
-                    else
+                    else if( RET_OK == nRet)
                     {
                         aFileName = pNewFileDlg->GetTemplateFileName();
                     }
@@ -971,17 +971,17 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     delete pNewFileDlg;
                 }
 
-                SwgReaderOption aOpt;
-                aOpt.SetTxtFmts(    bText = (0 != (nFlags&SFX_LOAD_TEXT_STYLES) ));
-                aOpt.SetFrmFmts(    bFrame = (0 != (nFlags&SFX_LOAD_FRAME_STYLES)));
-                aOpt.SetPageDescs(  bPage = (0 != (nFlags&SFX_LOAD_PAGE_STYLES )));
-                aOpt.SetNumRules(   bNum = (0 != (nFlags&SFX_LOAD_NUM_STYLES  )));
-                //different meaning between SFX_MERGE_STYLES and aOpt.SetMerge!
-                bMerge = 0 != (nFlags&SFX_MERGE_STYLES);
-                aOpt.SetMerge( !bMerge );
-
                 if( aFileName.Len() )
                 {
+                    SwgReaderOption aOpt;
+                    aOpt.SetTxtFmts(    bText = (0 != (nFlags&SFX_LOAD_TEXT_STYLES) ));
+                    aOpt.SetFrmFmts(    bFrame = (0 != (nFlags&SFX_LOAD_FRAME_STYLES)));
+                    aOpt.SetPageDescs(  bPage = (0 != (nFlags&SFX_LOAD_PAGE_STYLES )));
+                    aOpt.SetNumRules(   bNum = (0 != (nFlags&SFX_LOAD_NUM_STYLES  )));
+                    //different meaning between SFX_MERGE_STYLES and aOpt.SetMerge!
+                    bMerge = 0 != (nFlags&SFX_MERGE_STYLES);
+                    aOpt.SetMerge( !bMerge );
+
                     SetError( LoadStylesFromFile( aFileName, aOpt, FALSE ));
                     if ( !GetError() )
                         rReq.Done();
