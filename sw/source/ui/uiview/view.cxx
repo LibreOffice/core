@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:07:47 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 16:02:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -917,7 +917,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     bCenterCrsr = bTopCrsr = bAllwaysShowSel = bTabColFromDoc = bTabRowFromDoc =
     bSetTabColFromDoc = bSetTabRowFromDoc = bAttrChgNotified = bAttrChgNotifiedWithRegistrations =
     bVerbsActive = bIsApi = bDrawRotate = bInOuterResizePixel = bInInnerResizePixel =
-    bPasteState = bPasteSpecialState = sal_False;
+    bPasteState = bPasteSpecialState = bMakeSelectionVisible = sal_False;
 
     bShowAtResize = bDrawSelMode = bDocSzUpdated = sal_True;
 
