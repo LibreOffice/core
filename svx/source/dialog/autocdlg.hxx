@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autocdlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:33:24 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 16:06:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,7 +263,6 @@ private:
         String          sModify;
         String          sNew;
 
-        SvxAutoCorrect*         pAutoCorrect;
         SvStringsISortDtor*     pFormatText;
         DoubleStringTable       aDoubleStringTable;
         CollatorWrapper*        pCompareClass;
@@ -322,8 +321,6 @@ private:
         PushButton      aNewDoublePB;
         PushButton      aDelDoublePB;
         CheckBox        aAutoCapsCB;
-
-        SvxAutoCorrect* pAutoCorrect;
 
         StringsTable    aStringsTable;
         CollatorWrapper* pCompareClass;
