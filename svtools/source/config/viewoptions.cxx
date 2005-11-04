@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewoptions.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-30 10:14:22 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 15:45:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,6 +129,15 @@ namespace css = ::com::sun::star;
                     fclose( pFile );                                                                                                        \
                 }
 #endif // DEBUG_VIEWOPTIONS
+
+#define SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION_PARAM_EXCEPTION)            \
+    {                                                                                                               \
+        ::rtl::OUStringBuffer sMsg(256);                                                                            \
+        sMsg.appendAscii("Unexpected exception catched. Original message was:\n\""      );                          \
+        sMsg.append     (SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION_PARAM_EXCEPTION.Message);                          \
+        sMsg.appendAscii("\""                                                           );                          \
+        OSL_ENSURE(sal_False, ::rtl::OUStringToOString(sMsg.makeStringAndClear(), RTL_TEXTENCODING_UTF8).getStr()); \
+    }
 
 //_________________________________________________________________________________________________________________
 //  initialization!
@@ -392,10 +401,12 @@ SvtViewOptionsBase_Impl::SvtViewOptionsBase_Impl( const ::rtl::OUString& sList )
         if (m_xRoot.is())
             m_xRoot->getByName(sList) >>= m_xSet;
     }
-    catch(const css::uno::Exception&)
+    catch(const css::uno::Exception& ex)
         {
             m_xRoot.clear();
             m_xSet.clear();
+
+            SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
         }
 }
 
@@ -425,8 +436,10 @@ SvtViewOptionsBase_Impl::~SvtViewOptionsBase_Impl()
         if (m_xRoot.is())
             ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
-    catch(const css::uno::Exception&)
-        {}
+    catch(const css::uno::Exception& ex)
+        {
+            SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
+        }
     m_xRoot.clear();
     m_xSet.clear();
 
@@ -454,8 +467,11 @@ sal_Bool SvtViewOptionsBase_Impl::Exists( const ::rtl::OUString& sName )
         if (m_xSet.is())
             bExists = m_xSet->hasByName(sName);
     }
-    catch(const css::uno::Exception&)
-        { bExists = sal_False; }
+    catch(const css::uno::Exception& ex)
+        {
+            bExists = sal_False;
+            SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
+        }
 
     return bExists;
 }
@@ -479,17 +495,17 @@ sal_Bool SvtViewOptionsBase_Impl::Delete( const ::rtl::OUString& sName )
     sal_Bool bDeleted = sal_False;
     try
     {
-        css::uno::Reference< css::container::XNameContainer > xSet(m_xSet, css::uno::UNO_QUERY);
-        if (xSet.is())
-        {
-            xSet->removeByName(sName);
-            bDeleted = sal_True;
-        }
+        css::uno::Reference< css::container::XNameContainer > xSet(m_xSet, css::uno::UNO_QUERY_THROW);
+        xSet->removeByName(sName);
+        bDeleted = sal_True;
     }
     catch(const css::container::NoSuchElementException&)
         { bDeleted = sal_True; }
-    catch(const css::uno::Exception&)
-        { bDeleted = sal_False; }
+    catch(const css::uno::Exception& ex)
+        {
+            bDeleted = sal_False;
+            SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
+        }
 
     return bDeleted;
 }
@@ -512,14 +528,17 @@ sal_Bool SvtViewOptionsBase_Impl::Delete( const ::rtl::OUString& sName )
     ::rtl::OUString sWindowState;
     try
     {
-        css::uno::Reference< css::container::XNameAccess > xNode(
+        css::uno::Reference< css::beans::XPropertySet > xNode(
             impl_getSetNode(sName, sal_False),
             css::uno::UNO_QUERY);
         if (xNode.is())
-            xNode->getByName(PROPERTY_WINDOWSTATE) >>= sWindowState;
+            xNode->getPropertyValue(PROPERTY_WINDOWSTATE) >>= sWindowState;
     }
-    catch(const css::uno::Exception&)
-        { sWindowState = ::rtl::OUString(); }
+    catch(const css::uno::Exception& ex)
+        {
+            sWindowState = ::rtl::OUString();
+            SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
+        }
 
     return sWindowState;
 }
@@ -534,14 +553,15 @@ void SvtViewOptionsBase_Impl::SetWindowState( const ::rtl::OUString& sName  ,
 
     try
     {
-        css::uno::Reference< css::container::XNameReplace > xNode(
+        css::uno::Reference< css::beans::XPropertySet > xNode(
             impl_getSetNode(sName, sal_True),
-            css::uno::UNO_QUERY);
-        if (xNode.is())
-            xNode->replaceByName(PROPERTY_WINDOWSTATE, css::uno::makeAny(sState));
+            css::uno::UNO_QUERY_THROW);
+        xNode->setPropertyValue(PROPERTY_WINDOWSTATE, css::uno::makeAny(sState));
     }
-    catch(const css::uno::Exception&)
-        {}
+    catch(const css::uno::Exception& ex)
+        {
+            SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
+        }
 }
 
 //*****************************************************************************************************************
@@ -555,7 +575,7 @@ css::uno::Sequence< css::beans::NamedValue > SvtViewOptionsBase_Impl::GetUserDat
     {
         css::uno::Reference< css::container::XNameAccess > xNode(
             impl_getSetNode(sName, sal_False),
-            css::uno::UNO_QUERY);
+            css::uno::UNO_QUERY); // no _THROW ! because we dont create missing items here. So we have to live with zero references .-)
         css::uno::Reference< css::container::XNameAccess > xUserData;
         if (xNode.is())
             xNode->getByName(PROPERTY_USERDATA) >>= xUserData;
@@ -576,8 +596,10 @@ css::uno::Sequence< css::beans::NamedValue > SvtViewOptionsBase_Impl::GetUserDat
             return lUserData;
         }
     }
-    catch(const css::uno::Exception&)
-        {}
+    catch(const css::uno::Exception& ex)
+        {
+            SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
+        }
 
     return css::uno::Sequence< css::beans::NamedValue >();
 }
@@ -594,10 +616,9 @@ void SvtViewOptionsBase_Impl::SetUserData( const ::rtl::OUString&               
     {
         css::uno::Reference< css::container::XNameAccess > xNode(
             impl_getSetNode(sName, sal_True),
-            css::uno::UNO_QUERY);
+            css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::container::XNameContainer > xUserData;
-        if (xNode.is())
-            xNode->getByName(PROPERTY_USERDATA) >>= xUserData;
+        xNode->getByName(PROPERTY_USERDATA) >>= xUserData;
         if (xUserData.is())
         {
             const css::beans::NamedValue* pData = lData.getConstArray();
@@ -612,8 +633,10 @@ void SvtViewOptionsBase_Impl::SetUserData( const ::rtl::OUString&               
             }
         }
     }
-    catch(const css::uno::Exception&)
-        {}
+    catch(const css::uno::Exception& ex)
+        {
+            SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
+        }
 }
 
 //*****************************************************************************************************************
@@ -636,8 +659,13 @@ css::uno::Any SvtViewOptionsBase_Impl::GetUserItem( const ::rtl::OUString& sName
         if (xUserData.is())
             aItem = xUserData->getByName(sItem);
     }
-    catch(const css::uno::Exception&)
+    catch(const css::container::NoSuchElementException&)
         { aItem.clear(); }
+    catch(const css::uno::Exception& ex)
+        {
+            aItem.clear();
+            SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
+        }
 
     return aItem;
 }
@@ -655,10 +683,9 @@ void SvtViewOptionsBase_Impl::SetUserItem( const ::rtl::OUString& sName  ,
     {
         css::uno::Reference< css::container::XNameAccess > xNode(
             impl_getSetNode(sName, sal_True),
-            css::uno::UNO_QUERY);
+            css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::container::XNameContainer > xUserData;
-        if (xNode.is())
-            xNode->getByName(PROPERTY_USERDATA) >>= xUserData;
+        xNode->getByName(PROPERTY_USERDATA) >>= xUserData;
         if (xUserData.is())
         {
             if (xUserData->hasByName(sItem))
@@ -667,8 +694,10 @@ void SvtViewOptionsBase_Impl::SetUserItem( const ::rtl::OUString& sName  ,
                 xUserData->insertByName(sItem, aValue);
         }
     }
-    catch(const css::uno::Exception&)
-        {}
+    catch(const css::uno::Exception& ex)
+        {
+            SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
+        }
 }
 
 //*****************************************************************************************************************
@@ -681,14 +710,17 @@ sal_Int32 SvtViewOptionsBase_Impl::GetPageID( const ::rtl::OUString& sName )
     sal_Int32 nID = 0;
     try
     {
-        css::uno::Reference< css::container::XNameAccess > xNode(
+        css::uno::Reference< css::beans::XPropertySet > xNode(
             impl_getSetNode(sName, sal_False),
             css::uno::UNO_QUERY);
         if (xNode.is())
-            xNode->getByName(PROPERTY_PAGEID) >>= nID;
+            xNode->getPropertyValue(PROPERTY_PAGEID) >>= nID;
     }
-    catch(const css::uno::Exception&)
-        { nID = 0; }
+    catch(const css::uno::Exception& ex)
+        {
+            nID = 0;
+            SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
+        }
 
     return nID;
 }
@@ -703,14 +735,15 @@ void SvtViewOptionsBase_Impl::SetPageID( const ::rtl::OUString& sName ,
 
     try
     {
-        css::uno::Reference< css::container::XNameContainer > xNode(
+        css::uno::Reference< css::beans::XPropertySet > xNode(
             impl_getSetNode(sName, sal_True),
-            css::uno::UNO_QUERY);
-        if (xNode.is())
-            xNode->replaceByName(PROPERTY_PAGEID, css::uno::makeAny(nID));
+            css::uno::UNO_QUERY_THROW);
+        xNode->setPropertyValue(PROPERTY_PAGEID, css::uno::makeAny(nID));
     }
-    catch(const css::uno::Exception&)
-        {}
+    catch(const css::uno::Exception& ex)
+        {
+            SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
+        }
 }
 
 //*****************************************************************************************************************
@@ -723,14 +756,17 @@ sal_Bool SvtViewOptionsBase_Impl::GetVisible( const ::rtl::OUString& sName )
     sal_Bool bVisible = sal_False;
     try
     {
-        css::uno::Reference< css::container::XNameAccess > xNode(
+        css::uno::Reference< css::beans::XPropertySet > xNode(
             impl_getSetNode(sName, sal_False),
             css::uno::UNO_QUERY);
         if (xNode.is())
-            xNode->getByName(PROPERTY_VISIBLE) >>= bVisible;
+            xNode->getPropertyValue(PROPERTY_VISIBLE) >>= bVisible;
     }
-    catch(const css::uno::Exception&)
-        { bVisible = sal_False; }
+    catch(const css::uno::Exception& ex)
+        {
+            bVisible = sal_False;
+            SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
+        }
 
     return bVisible;
 }
@@ -745,14 +781,15 @@ void SvtViewOptionsBase_Impl::SetVisible( const ::rtl::OUString& sName    ,
 
     try
     {
-        css::uno::Reference< css::container::XNameContainer > xNode(
+        css::uno::Reference< css::beans::XPropertySet > xNode(
             impl_getSetNode(sName, sal_True),
-            css::uno::UNO_QUERY);
-        if (xNode.is())
-            xNode->replaceByName(PROPERTY_VISIBLE, css::uno::makeAny(bVisible));
+            css::uno::UNO_QUERY_THROW);
+        xNode->setPropertyValue(PROPERTY_VISIBLE, css::uno::makeAny(bVisible));
     }
-    catch(const css::uno::Exception&)
-        {}
+    catch(const css::uno::Exception& ex)
+        {
+            SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
+        }
 }
 
 /*-************************************************************************************************************//**
@@ -782,8 +819,13 @@ css::uno::Reference< css::uno::XInterface > SvtViewOptionsBase_Impl::impl_getSet
                 m_xSet->getByName(sNode) >>= xNode;
         }
     }
-    catch(const css::uno::Exception&)
+    catch(const css::container::NoSuchElementException&)
         { xNode.clear(); }
+    catch(const css::uno::Exception& ex)
+        {
+            xNode.clear();
+            SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
+        }
 
     return xNode;
 }
