@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 08:59:02 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 16:02:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,8 +94,12 @@
 #define STR_CJK_FONT                (RC_APP_BEGIN + 78)
 //#define MSG_INS_MERGE_FIELDS        (RC_APP_BEGIN + 79)
 #define MSG_PRINT_AS_MERGE          (RC_APP_BEGIN + 80)
-#define MSG_MERGE_SOURCE_UNAVAILABLE (RC_APP_BEGIN + 81)
 #define MSG_DATA_SOURCES_UNAVAILABLE (RC_APP_BEGIN + 82)
+#define DLG_MERGE_SOURCE_UNAVAILABLE (RC_APP_BEGIN + 83)
+#define ST_MERGE_SOURCE_UNAVAILABLE 1
+#define PB_MERGE_OK                 2
+#define PB_MERGE_CANCEL             3
+#define IMG_MERGE                   4
 #define SID_TOGGLETOOLBOX           (RC_APP_BEGIN + 89)
 
 #define STR_ENV_TITLE               (RC_APP_BEGIN + 91)
