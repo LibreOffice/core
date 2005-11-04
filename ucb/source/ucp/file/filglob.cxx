@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filglob.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:23:21 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 15:39:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -781,7 +781,21 @@ namespace fileaccess {
         else if( errorCode == TASKHANDLING_ENSUREDIR_FOR_WRITE  ||
                  errorCode == TASKHANDLING_CREATEDIRECTORY_MKDIR )
         {
-            ioErrorCode = IOErrorCode_NOT_EXISTING_PATH;
+            switch( minorCode )
+            {
+            case FileBase::E_ACCES:
+                ioErrorCode = IOErrorCode_ACCESS_DENIED;
+                break;
+            case FileBase::E_ROFS:
+                ioErrorCode = IOErrorCode_WRITE_PROTECTED;
+                break;
+            case FileBase::E_NAMETOOLONG:
+                ioErrorCode = IOErrorCode_NAME_TOO_LONG;
+                break;
+            default:
+                ioErrorCode = IOErrorCode_NOT_EXISTING_PATH;
+                break;
+            }
             cancelCommandExecution(
                 ioErrorCode,
                 generateErrorArguments(pShell,getParentName(aUncPath)),
