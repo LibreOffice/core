@@ -4,9 +4,9 @@
  *
  *  $RCSfile: padialog.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:26:29 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 15:41:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,9 +196,13 @@
 #define RID_TXT_FONT_REGULAR                     1095
 
 #define RID_BMP_SMALL_PRINTER                    1096
-#define RID_BMP_SMALL_FAX                        1097
-#define RID_BMP_SMALL_PDF                        1098
-#define RID_BMP_PRINTER                      1099
+#define RID_BMP_SMALL_PRINTER_HC                 1097
+#define RID_BMP_SMALL_FAX                        1098
+#define RID_BMP_SMALL_FAX_HC                     1099
+#define RID_BMP_SMALL_PDF                        1100
+#define RID_BMP_SMALL_PDF_HC                     1101
+#define RID_BMP_PRINTER                          1102
+#define RID_BMP_PRINTER_HC                       1103
 
 #define RID_AFMERROR_OK                         1300
 #define RID_AFMERROR_NO_FONT_NAME               1301
