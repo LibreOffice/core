@@ -4,9 +4,9 @@
  *
  *  $RCSfile: actiontriggerhelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:22:39 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 15:42:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -229,10 +229,8 @@ void InsertSubMenuItems( Menu* pSubMenu, USHORT& nItemId, Reference< XIndexConta
 
                                 if ( !bImageSet )
                                 {
-                                    // This is a unknown implementation of XBitmap interface. We have to
+                                    // This is an unknown implementation of a XBitmap interface. We have to
                                     // use a more time consuming way to build an Image!
-                                    // TODO: use memory streams to build a bitmap and this can be used
-                                    // to create an image!!
                                     Image   aImage;
                                     Bitmap  aBitmap;
 
@@ -253,6 +251,9 @@ void InsertSubMenuItems( Menu* pSubMenu, USHORT& nItemId, Reference< XIndexConta
                                     }
                                     else
                                         aImage = Image( aBitmap );
+
+                                    if ( !!aImage )
+                                        pSubMenu->SetItemImage( nNewItemId, aImage );
                                 }
                             }
 
