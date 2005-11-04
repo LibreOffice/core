@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:28:12 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 16:00:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,6 +144,9 @@
 #endif
 #ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
+#endif
+#ifndef _SECTION_HXX
+#include <section.hxx>
 #endif
 
 using namespace com::sun::star;
@@ -943,6 +946,76 @@ BOOL SwEditShell::ConvertFieldsToText()
     BOOL bRet = GetDoc()->ConvertFieldsToText();
     EndAllAction();
     return bRet;
+}
+void SwEditShell::SetNumberingRestart()
+{
+    StartAllAction();
+    Push();
+    //iterate over all text contents - body, frames, header, footer, footnote text
+    SwPaM* pCrsr = GetCrsr();
+    for(sal_uInt16 i = 0; i < 2; i++)
+    {
+        if(!i)
+            MakeFindRange(DOCPOS_START, DOCPOS_END, pCrsr); //body content
+        else
+            MakeFindRange(DOCPOS_OTHERSTART, DOCPOS_OTHEREND, pCrsr); //extra content
+        SwPosition* pSttPos = pCrsr->Start(), *pEndPos = pCrsr->End();
+        sal_uInt32 nCurrNd = pSttPos->nNode.GetIndex();
+        sal_uInt32 nEndNd = pEndPos->nNode.GetIndex();
+        if( nCurrNd <= nEndNd )
+        {
+            SwCntntFrm* pCntFrm;
+            sal_Bool bGoOn = sal_True;
+            //iterate over all paragraphs
+            while( bGoOn )
+            {
+                SwNode* pNd = GetDoc()->GetNodes()[ nCurrNd ];
+                switch( pNd->GetNodeType() )
+                {
+                case ND_TEXTNODE:
+                    if( 0 != ( pCntFrm = ((SwTxtNode*)pNd)->GetFrm()) )
+                    {
+                        //jump over hidden frames - ignore protection!
+                        if( !((SwTxtFrm*)pCntFrm)->IsHiddenNow() )
+                        {
+                            //if the node is numbered and the starting value of the numbering equals the
+                            //start value of the numbering rule then set this value as hard starting value
+
+                            //get the node num
+                            const SwNodeNum* pNodeNum = ((SwTxtNode*)pNd)->_GetNodeNum();
+                            SwNumRule *pNumRule = ((SwTxtNode*)pNd)->GetNumRule();
+
+                            if(pNodeNum && pNumRule &&
+                                    pNodeNum->IsNum() && pNodeNum->IsShowNum() && !pNodeNum->IsStart() &&
+                                    *pNodeNum->GetLevelVal() == pNumRule->Get(pNodeNum->GetLevel()).GetStart())
+                            {
+                                //now set a the start value as attribute
+                                SwPosition aCurrentNode(*pNd);
+                                GetDoc()->SetNumRuleStart( aCurrentNode, sal_True );
+                            }
+                        }
+                    }
+                    break;
+                case ND_SECTIONNODE:
+                    // jump over hidden sections  - ignore protection!
+                    if(((SwSectionNode*)pNd)->GetSection().IsHidden() )
+                        nCurrNd = pNd->EndOfSectionIndex();
+                    break;
+                case ND_ENDNODE:
+                    {
+                        break;
+                    }
+                }
+
+                bGoOn = nCurrNd < nEndNd;
+                ++nCurrNd;
+            }
+        }
+    }
+
+
+    Pop(FALSE);
+    EndAllAction();
 }
 
 BOOL SwEditShell::EmbedAllLinks()
