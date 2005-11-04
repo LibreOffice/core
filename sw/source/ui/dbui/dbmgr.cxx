@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 08:25:32 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 16:01:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1589,6 +1589,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                 DBG_ASSERT( pTargetShell, "no target shell available!" )
                                 // copy created file into the target document
                                 rWorkShell.ConvertFieldsToText();
+                                rWorkShell.SetNumberingRestart();
 
                                 // insert the document into the target document
                                 rWorkShell.SwCrsrShell::EndDoc();
@@ -3261,6 +3262,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                 // strip invisible content and convert fields to text
                 rWorkShell.RemoveInvisibleContent();
                 rWorkShell.ConvertFieldsToText();
+                rWorkShell.SetNumberingRestart();
 
 
                 // insert the document into the target document
