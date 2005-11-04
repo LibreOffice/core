@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adddlg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:21:59 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 15:40:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -800,7 +800,7 @@ AddPrinterDialog::AddPrinterDialog( Window* pParent )
 
     m_aTitleImage.SetBackgroundColor( Color( 0xff, 0xff, 0xff ) );
     m_aTitleImage.SetText( m_pCurrentPage->getTitle() );
-    m_aTitleImage.SetImage( Image( Bitmap( PaResId( RID_BMP_PRINTER ) ) ) );
+    updateSettings();
 }
 
 AddPrinterDialog::~AddPrinterDialog()
@@ -829,6 +829,24 @@ AddPrinterDialog::~AddPrinterDialog()
         delete m_pPdfNamePage;
     if( m_pPdfCommandPage )
         delete m_pPdfCommandPage;
+}
+
+void AddPrinterDialog::updateSettings()
+{
+    if( ! GetDisplayBackground().GetColor().IsDark() )
+        m_aTitleImage.SetImage( Image( BitmapEx( PaResId( RID_BMP_PRINTER ) ) ) );
+    else
+        m_aTitleImage.SetImage( Image( BitmapEx( PaResId( RID_BMP_PRINTER_HC ) ) ) );
+}
+
+void AddPrinterDialog::DataChanged( const DataChangedEvent& rEv )
+{
+    ModalDialog::DataChanged( rEv );
+    if( (rEv.GetType() == DATACHANGED_SETTINGS) &&
+        (rEv.GetFlags() & SETTINGS_STYLE) )
+    {
+        updateSettings();
+    }
 }
 
 void AddPrinterDialog::advance()
