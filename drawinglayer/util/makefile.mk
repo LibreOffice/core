@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: aw $ $Date: 2005-10-28 11:52:44 $
+#   last change: $Author: aw $ $Date: 2005-11-04 12:43:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,7 @@ SHL1TARGET= drawinglayer$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= idrawinglayer
 
 SHL1STDLIBS=\
+        $(GOODIESLIB)		\
         $(VCLLIB)			\
         $(BASEGFXLIB)		\
         $(TOOLSLIB)			\
