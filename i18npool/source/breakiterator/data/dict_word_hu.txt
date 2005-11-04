@@ -101,7 +101,7 @@ $NumberSequence {100};
 #     - may include  MideLetter, MidNumber punctuation.
 #
 $LetterSequence = $ALetterEx ($FormatEx* $MidLetterEx? $FormatEx* $ALetterEx)*;     # rules #6, #7
-$LetterSequence $SufixLetterEx? {200};
+($NumberSequence $FormatEx*)? $LetterSequence ($FormatEx* ($NumberSequence | $LetterSequence))* $SufixLetterEx? {200};
 
 [[:P:][:S:]]*;
 
