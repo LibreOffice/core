@@ -4,9 +4,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:17:10 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 15:41:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -503,28 +503,49 @@ String RID_YOU_SURE
 
 Bitmap RID_BUTTERFLY
 {
-    File = "butter.bmp" ;
+    File = "butter.png" ;
 };
 
 Bitmap RID_BMP_SMALL_PRINTER
 {
-    File = "print.bmp";
+    File = "print.png";
 };
 
 Bitmap RID_BMP_SMALL_FAX
 {
-    File = "fax.bmp";
+    File = "fax.png";
 };
 
 Bitmap RID_BMP_SMALL_PDF
 {
-    File = "pdf.bmp";
+    File = "pdf.png";
 };
 
 Bitmap RID_BMP_PRINTER
 {
-    File = "printer_large.bmp";
+    File = "printer_large.png";
 };
+
+Bitmap RID_BMP_SMALL_PRINTER_HC
+{
+    File = "printer_16_h.png";
+};
+
+Bitmap RID_BMP_SMALL_FAX_HC
+{
+    File = "fax_16_h.png";
+};
+
+Bitmap RID_BMP_SMALL_PDF_HC
+{
+    File = "printpdf_16_h.png";
+};
+
+Bitmap RID_BMP_PRINTER_HC
+{
+    File = "printer_40x48_h.png";
+};
+
 
 String RID_AFMERROR_OK
 {
