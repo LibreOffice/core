@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autocdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:32:49 $
+ *  last change: $Author: kz $ $Date: 2005-11-04 16:05:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1050,8 +1050,7 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage( Window* pParent,
     pFormatText(0),
     bFirstSelect(TRUE),
     bReplaceEditChanged(FALSE),
-    bSWriter(TRUE),
-    pAutoCorrect(SvxAutoCorrCfg::Get()->GetAutoCorrect())
+    bSWriter(TRUE)
 {
     FreeResource();
     SfxModule *pMod = *(SfxModule**)GetAppData(SHL_WRITER);
@@ -1126,6 +1125,7 @@ int OfaAutocorrReplacePage::DeactivatePage( SfxItemSet* pSet )
 
 BOOL OfaAutocorrReplacePage::FillItemSet( SfxItemSet& rSet )
 {
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
     DoubleStringArrayPtr pArray = aDoubleStringTable.Last();
     while(pArray)
     {
@@ -1327,6 +1327,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(BOOL bFromReset,
     }
     else
     {
+        SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
         SvxAutocorrWordList* pWordList = pAutoCorrect->LoadAutocorrWordList(eLang);
 
         for(USHORT i = 0; i < pWordList->Count(); i++)
@@ -1648,8 +1649,7 @@ OfaAutocorrExceptPage::OfaAutocorrExceptPage( Window* pParent,
     aNewDoublePB    (this, ResId(PB_NEWDOUBLECAPS)),
     aDelDoublePB    (this, ResId(PB_DELDOUBLECAPS)),
     aAutoCapsCB     (this, ResId(CB_AUTOCAPS     )),
-    eLang(eLastDialogLanguage),
-    pAutoCorrect    (SvxAutoCorrCfg::Get()->GetAutoCorrect())
+    eLang(eLastDialogLanguage)
 {
     FreeResource();
 
@@ -1714,6 +1714,7 @@ int     OfaAutocorrExceptPage::DeactivatePage( SfxItemSet* pSet )
 
 BOOL OfaAutocorrExceptPage::FillItemSet( SfxItemSet& rSet )
 {
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
     StringsArraysPtr pArrays = aStringsTable.Last();
     while(pArrays)
     {
@@ -1899,6 +1900,7 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(BOOL bFromReset,
     }
     else
     {
+        SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
         const SvStringsISortDtor* pCplList = pAutoCorrect->GetCplSttExceptList(eLang);
         const SvStringsISortDtor* pWrdList = pAutoCorrect->GetWrdSttExceptList(eLang);
         USHORT i;
@@ -1919,6 +1921,7 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(BOOL bFromReset,
 
 void OfaAutocorrExceptPage::Reset( const SfxItemSet& rSet )
 {
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
     RefillReplaceBoxes(TRUE, eLang, eLang);
     aAutoAbbrevCB.  Check(  pAutoCorrect->IsAutoCorrFlag( SaveWordCplSttLst ));
     aAutoCapsCB.    Check(  pAutoCorrect->IsAutoCorrFlag( SaveWordWrdSttLst ));
