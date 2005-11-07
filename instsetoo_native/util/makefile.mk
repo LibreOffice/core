@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-04 09:48:24 $
+#   last change: $Author: rt $ $Date: 2005-11-07 10:32:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,7 @@ openoffice_% :
 .ENDIF			# "$(PKGFORMAT)"!=""
     +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OpenOffice -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -addsystemintegration $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH))
 .IF "$(OS)" == "MACOSX"
-    +/bin/sh $(SOLARENV)$/unxmacxp$/bin$/create-package.sh $(subst,$(@:s/_/ /:1)_, $(@:b)) "`pwd`$/$(OUT)$/OpenOffice$/install" $(SOLARBINDIR) 
+    +/bin/sh $(SOLARENV)$/unxmacxp$/bin$/create-package.sh $(subst,$(@:s/_/ /:1)_, $(@:b)) "`pwd`$/$(OUT)$/OpenOffice$/$(PKGFORMAT)$/install" $(SOLARBINDIR) 
 .ENDIF
 
 .IF "$(PKGFORMAT)"!=""
