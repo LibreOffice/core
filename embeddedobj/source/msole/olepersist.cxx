@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olepersist.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:41:17 $
+ *  last change: $Author: rt $ $Date: 2005-11-07 15:14:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -883,14 +883,17 @@ void OleEmbeddedObject::StoreToLocation_Impl(
 
     sal_Bool bVisReplIsStored = sal_False;
 
+    sal_Bool bTryOptimization = sal_False;
     sal_Bool bStoreVis = m_bStoreVisRepl;
     uno::Reference< io::XStream > xCachedVisualRepresentation;
     for ( sal_Int32 nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
     {
         if ( lObjArgs[nInd].Name.equalsAscii( "StoreVisualReplacement" ) )
             lObjArgs[nInd].Value >>= bStoreVis;
-        if ( lObjArgs[nInd].Name.equalsAscii( "VisualReplacement" ) )
+        else if ( lObjArgs[nInd].Name.equalsAscii( "VisualReplacement" ) )
             lObjArgs[nInd].Value >>= xCachedVisualRepresentation;
+        else if ( lObjArgs[nInd].Name.equalsAscii( "CanTryOptimization" ) )
+            lObjArgs[nInd].Value >>= bTryOptimization;
     }
 
     // ignore visual representation provided from outside if it should not be stored
@@ -916,7 +919,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
     {
         sal_Bool bOptimizedCopyingDone = sal_False;
 
-        if ( bStoreVis == HasVisReplInStream() )
+        if ( bTryOptimization && bStoreVis == HasVisReplInStream() )
         {
             try
             {
