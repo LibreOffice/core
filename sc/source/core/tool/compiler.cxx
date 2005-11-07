@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:36:34 $
+ *  last change: $Author: rt $ $Date: 2005-11-07 14:41:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,9 @@
 #include <tools/rc.hxx>
 #include <tools/solar.h>
 #include <unotools/charclass.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 #ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
 #include <unotools/transliterationwrapper.hxx>
 #endif
@@ -82,6 +85,7 @@ USHORT  ScCompiler::nAnzStrings = 0;
 ULONG* ScCompiler::pCharTable = 0;
 ScOpCodeHashMap* ScCompiler::pSymbolHashMapNative = NULL;
 ScOpCodeHashMap* ScCompiler::pSymbolHashMapEnglish = NULL;
+CharClass* ScCompiler::pCharClassEnglish = NULL;
 
 enum ScanState
 {
@@ -290,6 +294,11 @@ void ScCompiler::DeInit()
         delete pSymbolHashMapEnglish;
         pSymbolHashMapEnglish = NULL;
     }
+    if (pCharClassEnglish)
+    {
+        delete pCharClassEnglish;
+        pCharClassEnglish = NULL;
+    }
     delete [] pCharTable;
     pCharTable = NULL;
 }
@@ -305,13 +314,24 @@ void ScCompiler::SetCompileEnglish( BOOL bCompileEnglish )
             ScOpCodeList aOpCodeListEnglish( RID_SC_FUNCTION_NAMES_ENGLISH,
                 pSymbolTableEnglish, *pSymbolHashMapEnglish );
         }
+        if (!pCharClassEnglish)
+        {
+            ::com::sun::star::lang::Locale aLocale(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "en")),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "US")),
+                    ::rtl::OUString());
+            pCharClassEnglish = new CharClass(
+                    ::comphelper::getProcessServiceFactory(), aLocale);
+        }
         pSymbolTable = pSymbolTableEnglish;
         pSymbolHashMap = pSymbolHashMapEnglish;
+        pCharClass = pCharClassEnglish;
     }
     else
     {
         pSymbolTable = pSymbolTableNative;
         pSymbolHashMap = pSymbolHashMapNative;
+        pCharClass = ScGlobal::pCharClass;
     }
 }
 
@@ -323,6 +343,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,
         aPos( rPos ),
         pSymbolTable( pSymbolTableNative ),
         pSymbolHashMap( pSymbolHashMapNative ),
+        pCharClass( ScGlobal::pCharClass ),
         nRecursion(0),
         bAutoCorrect( FALSE ),
         bCorrected( FALSE ),
@@ -345,6 +366,7 @@ ScCompiler::ScCompiler(ScDocument* pDocument, const ScAddress& rPos )
         aPos( rPos ),
         pSymbolTable( pSymbolTableNative ),
         pSymbolHashMap( pSymbolHashMapNative ),
+        pCharClass( ScGlobal::pCharClass ),
         nRecursion(0),
         bAutoCorrect( FALSE ),
         bCorrected( FALSE ),
@@ -746,7 +768,7 @@ xub_StrLen ScCompiler::NextSymbol()
             if ( pStart[nSrcPos] == '$' && pStart[nSrcPos+1] == '\'' )
                 aSymbol += pStart[nSrcPos++];
 
-            ParseResult aRes = ScGlobal::pCharClass->parseAnyToken( aFormula,
+            ParseResult aRes = pCharClass->parseAnyToken( aFormula,
                 nSrcPos, nStartFlags, aAddAllowed, nContFlags, aAddAllowed );
 
             if ( !aRes.TokenType )
