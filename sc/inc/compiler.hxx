@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:28:16 $
+ *  last change: $Author: rt $ $Date: 2005-11-07 14:40:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,6 +231,7 @@ public:
     static USHORT   nAnzStrings;                    // count of symbols
     static ScOpCodeHashMap* pSymbolHashMapNative;   // hash map of native symbols
     static ScOpCodeHashMap* pSymbolHashMapEnglish;  // hash map of English symbols
+    static CharClass* pCharClassEnglish;            // character classification for en_US locale
 private:
     static ULONG*   pCharTable;                     // array of ASCII character flags
     ScDocument* pDoc;
@@ -250,6 +251,7 @@ private:
     ScArrayStack* pStack;
     String*     pSymbolTable;               // which symbol table is used
     ScOpCodeHashMap*    pSymbolHashMap;     // which symbol hash map is used
+    const CharClass*    pCharClass;         // which character classification is used for parseAnyToken
     USHORT      pc;
     short       nNumFmt;                    // set during CompileTokenArray()
     SCsTAB      nMaxTab;                    // last sheet in document
