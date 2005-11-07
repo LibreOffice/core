@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngx6.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2005-10-05 11:36:34 $
+#   last change: $Author: rt $ $Date: 2005-11-07 10:27:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ JAVA_RUNTIME=-ljava_g
 
 # architecture dependent flags for the C and C++ compiler that can be changed by
 # exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
-ARCH_FLAGS*=-fno-use-cxa-atexit
+ARCH_FLAGS*=
 
 # name of C++ Compiler
 CXX*=g++
@@ -95,6 +95,7 @@ CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 # -fpermissive should be removed as soon as possible
 CFLAGSCXX= -pipe $(ARCH_FLAGS)
 CFLAGSCXX+= -Wno-ctor-dtor-privacy
+CFLAGSCXX+= -fno-use-cxa-atexit
 PICSWITCH:=-fpic
 .IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
 CFLAGSCXX += -fvisibility-inlines-hidden
