@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.171 $
+ *  $Revision: 1.172 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 14:06:09 $
+ *  last change: $Author: rt $ $Date: 2005-11-07 15:15:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3159,7 +3159,9 @@ sal_Bool SfxObjectShell::SaveAsChildren( SfxMedium& rMedium )
                         {
                             if ( bOasis )
                             {
-                                if ( !aCnt.InsertGraphicStreamDirectly( xStream, aNames[n], aMediaType ) )
+                                // if it is an embedded object or the optimized inserting fails the normal inserting should be done
+                                if ( SFX_CREATE_MODE_EMBEDDED == eCreateMode
+                                  || !aCnt.InsertGraphicStreamDirectly( xStream, aNames[n], aMediaType ) )
                                     aCnt.InsertGraphicStream( xStream, aNames[n], aMediaType );
                             }
                             else
@@ -3173,14 +3175,18 @@ sal_Bool SfxObjectShell::SaveAsChildren( SfxMedium& rMedium )
                     uno::Reference< embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
                     if ( xPersist.is() )
                     {
-                        uno::Sequence< beans::PropertyValue > aArgs( bOasis ? 1 : 2 );
+                        uno::Sequence< beans::PropertyValue > aArgs( bOasis ? 2 : 3 );
                         aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StoreVisualReplacement" ) );
                         aArgs[0].Value <<= (sal_Bool)( !bOasis );
+
+                        // if it is an embedded object or the optimized inserting fails the normal inserting should be done
+                        aArgs[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CanTryOptimization" ) );
+                        aArgs[1].Value <<= (sal_Bool)( !( SFX_CREATE_MODE_EMBEDDED == eCreateMode ) );
                         if ( !bOasis )
                         {
                             // if object has no cached replacement it will use this one
-                            aArgs[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VisualReplacement" ) );
-                            aArgs[1].Value <<= xStream;
+                            aArgs[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VisualReplacement" ) );
+                            aArgs[2].Value <<= xStream;
                         }
 
                         xPersist->storeAsEntry( xStorage,
