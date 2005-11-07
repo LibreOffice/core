@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsanalyze.pl,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-03 10:31:52 $
+#   last change: $Author: rt $ $Date: 2005-11-07 17:03:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@ use File::Basename;
 use Getopt::Long;
 use Cwd;
 use IO::Handle;
+use Carp;
 
 #### module lookup
 my @lib_dirs;
@@ -73,7 +74,7 @@ $log = Logging->new() if (!$@);
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.11 $ ';
+my $id_str = ' $Revision: 1.12 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
