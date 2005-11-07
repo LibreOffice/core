@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.176 $
+#   $Revision: 1.177 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:40:34 $
+#   last change: $Author: kz $ $Date: 2005-11-07 12:43:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1119,10 +1119,6 @@ SVXLIBS=svxitems dialogs editeng svrtf svdraw outliner xout si basicide \
 .INCLUDE : wnt.mk
 .ENDIF
 
-.IF "$(GUI)" == "AS4"
-.INCLUDE : as4.mk
-.ENDIF
-
 .IF "$(GUI)" == "UNX"
 .INCLUDE : unx.mk
 .ENDIF
@@ -1131,29 +1127,21 @@ SVXLIBS=svxitems dialogs editeng svrtf svdraw outliner xout si basicide \
 # allow seperate handling
 EXTMAXPROCESS*=$(MAXPROCESS)
 
-IDLC*=idlc
-REGMERGE*=regmerge
-REGCOMPARE*=regcompare
-REGCOMP*=regcomp
-CPPUMAKER*=cppumaker
-JAVAMAKER*=javamaker
-.IF "$(GUI)" == "WNT"
-CLIMAKER*=climaker
-CSC*=csc
-VBC*=vbc
-.ENDIF
-
-RDBMAKER*=rdbmaker
+IDLC*=$(WRAPCMD) idlc
+REGMERGE*=$(WRAPCMD) regmerge
+REGCOMPARE*=$(WRAPCMD) regcompare
+REGCOMP*=$(WRAPCMD) regcomp
+CPPUMAKER*=$(WRAPCMD) cppumaker
+JAVAMAKER*=$(WRAPCMD) javamaker
+RDBMAKER*=$(WRAPCMD) rdbmaker
 .IF "$(JAVAINTERPRETER)" == ""
 JAVA*=java
 .ELSE
 JAVA*=$(JAVAINTERPRETER)
 .ENDIF
-SCPCOMP*=scpcomp
-#SCPLINK*=scplink
-SCPLINK*=$(PERL) $(SOLARENV)$/bin/par2script.pl
+SCPLINK=$(WRAPCMD) $(PERL) $(SOLARENV)$/bin/par2script.pl
 LZIP*=lzip
-CPPLCC*=cpplcc
+CPPLCC*=$(WRAPCMD) cpplcc
 
 .IF "$(DISABLE_ENHANCED_COMID)"==""
 .INCLUDE : tg_compv.mk
