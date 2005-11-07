@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unx.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: kz $ $Date: 2005-10-05 11:31:00 $
+#   last change: $Author: kz $ $Date: 2005-11-07 12:43:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,13 +34,7 @@
 #*************************************************************************
 
 # --- Unix-Environment ---------------------------------------
-
-.IF "$(GUI)" == "UNX"
-
-# --- Ole2 Behandlung -------------
-
-OLE2=
-OLE2DEF=
+# Used if "$(GUI)" == "UNX"
 
 
 # Dieses Define gilt fuer alle  WNT- Plattformen
@@ -182,7 +176,7 @@ OLE2DEF=
 .INCLUDE : unxmacxp.mk
 .ENDIF
 
-# --- *ix  Allgemein ---
+# --- general *ix settings ---
 HC=hc
 HCFLAGS=
 PATH_SEPERATOR*=:
@@ -203,5 +197,4 @@ SONAME_SWITCH*=-h
 .IF "$(UNIXVERSIONNAMES)"!=""
 DLLPOST!:=$(DLLPOST).$($(UNIXVERSIONNAMES)_MAJOR)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
-.ENDIF			# "$(GUI)" == "UNX"
 
