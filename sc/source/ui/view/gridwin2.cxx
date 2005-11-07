@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:58:23 $
+ *  last change: $Author: rt $ $Date: 2005-11-07 14:41:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -685,7 +685,8 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, BOOL bMove )
 
         BOOL bIsDataLayout;
         String aDimName = pDragDPObj->GetDimName( nDPField, bIsDataLayout );
-        if ( bIsDataLayout && nOrient == sheet::DataPilotFieldOrientation_HIDDEN )
+        if ( bIsDataLayout && ( nOrient != sheet::DataPilotFieldOrientation_COLUMN &&
+                                nOrient != sheet::DataPilotFieldOrientation_ROW ) )
         {
             //  removing data layout is not allowed
             pViewData->GetView()->ErrorMessage(STR_PIVOT_MOVENOTALLOWED);
