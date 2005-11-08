@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 14:07:51 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:24:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -703,7 +703,7 @@ void SwRelNumRuleSpaces::SetOultineRelSpaces( const SwNodeIndex& rStt,
                 rOutlNds[ nPos ]->GetIndex() < rEnd.GetIndex(); ++nPos )
         {
             SwTxtNode* pNd = rOutlNds[ nPos ]->GetTxtNode();
-            if( pNd->GetOutlineNum() && !pNd->GetNumRule() )
+            if( pNd->IsOutline() && !pNd->GetNumRule() )
                 SetNumLSpace( *pNd, *pDoc->GetOutlineNumRule() );
         }
     }
@@ -712,14 +712,7 @@ void SwRelNumRuleSpaces::SetOultineRelSpaces( const SwNodeIndex& rStt,
 void SwRelNumRuleSpaces::SetNumLSpace( SwTxtNode& rNd, const SwNumRule& rRule )
 {
     BOOL bOutlineRule = OUTLINE_RULE == rRule.GetRuleType();
-    BYTE nLvl;
-    {
-        SwNodeNum aNdNum( 0 );
-        const SwNodeNum* pNum;
-        if( 0 == ( pNum = rNd.GetNum() ))
-            pNum = rNd.UpdateNum( aNdNum );
-        nLvl = GetRealLevel( pNum->GetLevel() );
-    }
+    BYTE nLvl = rNd.GetLevel();
     const SwNumFmt& rFmt = rRule.Get( nLvl );
     const SvxLRSpaceItem& rLR = rNd.GetSwAttrSet().GetLRSpace();
 
