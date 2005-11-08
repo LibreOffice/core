@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:24:00 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:27:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1962,8 +1962,7 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
             SwTxtNode* pTxtNd = pDoc->GetNodes()[ n ]->GetTxtNode();
             if( pTxtNd )
             {
-                pTxtNd->UpdateNum( SwNodeNum( (BYTE)
-                            ((SfxUInt16Item*)pItem)->GetValue() ));
+                pTxtNd->SetLevel((BYTE) ((SfxUInt16Item*)pItem)->GetValue());
                 // Update vom LR-Space abschalten?
             }
         }
@@ -1979,14 +1978,11 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
             // diese Rule hat keinen Level, also muss die Einrueckung
             // erhalten bleiben!
             // dann ueber den Bereich an den Nodes das Flag zuruecksetzen
-            SwNodeNum aNdNum( 0 );
             for( ULONG n = nSNd; n <= nENd; ++n )
             {
                 SwTxtNode* pTxtNd = pDoc->GetNodes()[ n ]->GetTxtNode();
                 if( pTxtNd )
                 {
-                    if( !pTxtNd->GetNum() )
-                        pTxtNd->UpdateNum( aNdNum );
                     // Update vom LR-Space abschalten
                     pTxtNd->SetNumLSpace( FALSE );
                 }
@@ -2012,7 +2008,6 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
             {
                 pTxtNd->SwCntntNode::SetAttr(
                     *GetDfltAttr(RES_PARATR_NUMRULE));
-                pTxtNd->UpdateNum(SwNodeNum(NO_NUMBERING));
             }
         }
     }
