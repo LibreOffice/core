@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textconv.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:39:57 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 09:14:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@
 
 
 using namespace rtl;
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
@@ -383,7 +384,9 @@ void TextConvWrapper::HandleNewUnit(
 
 void TextConvWrapper::ReplaceUnit(
         const sal_Int32 nUnitStart, const sal_Int32 nUnitEnd,
+        const ::rtl::OUString& rOrigText,
         const ::rtl::OUString& rReplaceWith,
+        const ::com::sun::star::uno::Sequence< sal_Int32 > &rOffsets,
         ReplacementAction eAction,
         LanguageType *pNewUnitLanguage )
 {
@@ -425,12 +428,22 @@ void TextConvWrapper::ReplaceUnit(
     // remember current original language for kater use
     ImpEditEngine *pImpEditEng = pEditView->GetImpEditEngine();
     ESelection aOldSel      = pEditView->GetSelection();
+    //EditSelection aOldEditSel = pEditView->GetImpEditView()->GetEditSelection();
     LanguageType nOldLang   = pImpEditEng->GetLanguage( pImpEditEng->CreateSel( aOldSel ).Min() );
 
-    pEditView->InsertText( aNewTxt );
+    pImpEditEng->UndoActionStart( EDITUNDO_INSERT );
+
+    // according to FT we should currently not bother about keeping
+    // attributes in Hangul/Hanja conversion and leave that untouched.
+    // Thus we do this only for Chinese translation...
+    sal_Bool bIsChineseConversion = IsChinese( GetSourceLanguage() );
+    if (bIsChineseConversion)
+        ChangeText( aNewTxt, rOrigText, &rOffsets, &aOldSel );
+    else
+        ChangeText( aNewTxt, rOrigText, NULL, NULL );
 
     // change language and font if necessary
-    if (IsChinese( GetSourceLanguage() ))
+    if (bIsChineseConversion)
     {
         DBG_ASSERT( GetTargetLanguage() == LANGUAGE_CHINESE_SIMPLIFIED || GetTargetLanguage() == LANGUAGE_CHINESE_TRADITIONAL,
                 "TextConvWrapper::ReplaceUnit : unexpected target language" );
@@ -449,6 +462,8 @@ void TextConvWrapper::ReplaceUnit(
         }
     }
 
+    pImpEditEng->UndoActionEnd( EDITUNDO_INSERT );
+
     // adjust ConvContinue / ConvTo if necessary
     ImpEditEngine* pImpEE = pEditView->GetImpEditEngine();
     ConvInfo* pConvInfo = pImpEE->GetConvInfo();
@@ -463,6 +478,146 @@ void TextConvWrapper::ReplaceUnit(
         // the end needs to be updated also
         if (pConvInfo->aConvTo.nPara == pConvInfo->aConvContinue.nPara)
             pConvInfo->aConvTo.nIndex += (USHORT) nDelta;
+    }
+}
+
+
+void TextConvWrapper::ChangeText( const String &rNewText,
+        const OUString& rOrigText,
+        const uno::Sequence< sal_Int32 > *pOffsets,
+        ESelection *pESelection )
+{
+    //!! code is a modifed copy of SwHHCWrapper::ChangeText from sw !!
+
+    DBG_ASSERT( rNewText.Len() != 0, "unexpected empty string" );
+    if (rNewText.Len() == 0)
+        return;
+
+    if (pOffsets && pESelection)  // try to keep as much attributation as possible ?
+    {
+        pESelection->Adjust();
+
+        // remember cursor start position for later setting of the cursor
+        const xub_StrLen nStartIndex = pESelection->nStartPos;
+
+        const sal_Int32  nIndices = pOffsets->getLength();
+        const sal_Int32 *pIndices = pOffsets->getConstArray();
+        xub_StrLen nConvTextLen = rNewText.Len();
+        xub_StrLen nPos = 0;
+        xub_StrLen nChgPos = STRING_NOTFOUND;
+        xub_StrLen nChgLen = 0;
+        xub_StrLen nConvChgPos = STRING_NOTFOUND;
+        xub_StrLen nConvChgLen = 0;
+
+        // offset to calculate the position in the text taking into
+        // account that text may have been replaced with new text of
+        // different length. Negative values allowed!
+        long nCorrectionOffset = 0;
+
+        DBG_ASSERT(nIndices == 0 || nIndices == nConvTextLen,
+                "mismatch between string length and sequence length!" );
+
+        // find all substrings that need to be replaced (and only those)
+        while (sal_True)
+        {
+            // get index in original text that matches nPos in new text
+            xub_StrLen nIndex;
+            if (nPos < nConvTextLen)
+                nIndex = (sal_Int32) nPos < nIndices ? (xub_StrLen) pIndices[nPos] : nPos;
+            else
+            {
+                nPos   = nConvTextLen;
+                nIndex = static_cast< xub_StrLen >( rOrigText.getLength() );
+            }
+
+            if (rOrigText.getStr()[nIndex] == rNewText.GetChar(nPos) ||
+                nPos == nConvTextLen /* end of string also terminates non-matching char sequence */)
+            {
+                // substring that needs to be replaced found?
+                if (nChgPos != STRING_NOTFOUND && nConvChgPos != STRING_NOTFOUND)
+                {
+                    nChgLen = nIndex - nChgPos;
+                    nConvChgLen = nPos - nConvChgPos;
+#ifdef DEBUG
+                    String aInOrig( rOrigText.copy( nChgPos, nChgLen ) );
+#endif
+                    String aInNew( rNewText.Copy( nConvChgPos, nConvChgLen ) );
+
+                    // set selection to sub string to be replaced in original text
+                    ESelection aSel( *pESelection );
+                    xub_StrLen nChgInNodeStartIndex = static_cast< xub_StrLen >( nStartIndex + nCorrectionOffset + nChgPos );
+                    aSel.nStartPos = nChgInNodeStartIndex;
+                    aSel.nEndPos   = nChgInNodeStartIndex + nChgLen;
+                    pEditView->SetSelection( aSel );
+#ifdef DEBUG
+                    String aSelTxt1( pEditView->GetSelected() );
+#endif
+
+                    // replace selected sub string with the corresponding
+                    // sub string from the new text while keeping as
+                    // much from the attributes as possible
+                    ChangeText_impl( aInNew, sal_True );
+
+                    nCorrectionOffset += nConvChgLen - nChgLen;
+
+                    nChgPos = STRING_NOTFOUND;
+                    nConvChgPos = STRING_NOTFOUND;
+                }
+            }
+            else
+            {
+                // begin of non-matching char sequence found ?
+                if (nChgPos == STRING_NOTFOUND && nConvChgPos == STRING_NOTFOUND)
+                {
+                    nChgPos = nIndex;
+                    nConvChgPos = nPos;
+                }
+            }
+            if (nPos >= nConvTextLen)
+                break;
+            ++nPos;
+        }
+
+        // set cursor to the end of the inserted text
+        // (as it would happen after ChangeText_impl (Delete and Insert)
+        // of the whole text in the 'else' branch below)
+        pESelection->nStartPos = pESelection->nEndPos = nStartIndex + nConvTextLen;
+    }
+    else
+    {
+        ChangeText_impl( rNewText, sal_False );
+    }
+}
+
+
+void TextConvWrapper::ChangeText_impl( const String &rNewText, sal_Bool bKeepAttributes )
+{
+    if (bKeepAttributes)
+    {
+        // save attributes to be restored
+        SfxItemSet aSet( pEditView->GetAttribs() );
+
+#ifdef DEBUG
+        String aSelTxt1( pEditView->GetSelected() );
+#endif
+        // replace old text and select new text
+        pEditView->InsertText( rNewText, sal_True );
+#ifdef DEBUG
+        String aSelTxt2( pEditView->GetSelected() );
+#endif
+
+        // since 'SetAttribs' below function like merging with the attributes
+        // from the itemset with any existing ones we have to get rid of all
+        // all attributes now. (Those attributes that may take effect left
+        // to the position where the new text gets inserted after the old text
+        // was deleted)
+        pEditView->RemoveAttribs();
+        // apply saved attributes to new inserted text
+        pEditView->SetAttribs( aSet );
+    }
+    else
+    {
+        pEditView->InsertText( rNewText );
     }
 }
 
