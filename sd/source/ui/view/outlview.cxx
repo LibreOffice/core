@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:15:38 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 09:06:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1918,11 +1918,14 @@ void OutlineView::SetSelectedPages()
         if ( pOutliner->GetDepth( (USHORT) nParaPos ) == 0 )                     // eine Seite?
         {
             SdPage* pPage = pDoc->GetSdPage(nPos, PK_STANDARD);
-            pPage->SetSelected(FALSE);
-
-            if (pSelParas->Seek(pPara))            // selektiert?
+            DBG_ASSERT(pPage!=NULL,
+                "Trying to select non-existing page OutlineView::SetSelectedPages()");
+            if (pPage != NULL)
             {
-                pPage->SetSelected(TRUE);
+                pPage->SetSelected(FALSE);
+
+                if (pSelParas->Seek(pPara))            // selektiert?
+                    pPage->SetSelected(TRUE);
             }
 
             nPos++;
