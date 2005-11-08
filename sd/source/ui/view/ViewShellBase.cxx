@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:59:46 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 09:05:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -836,6 +836,7 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
                 }
             }
         }
+        break;
 
         case SID_RESTORE_EDITING_VIEW:
             mpImpl->ProcessRestoreEditingViewSlot();
