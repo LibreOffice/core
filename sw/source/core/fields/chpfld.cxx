@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chpfld.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:32:19 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:19:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,18 +173,16 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
             } while( sal_True );
         }
 
-        const SwNodeNum * pNum = pTxtNd->GetOutlineNum();
         // nur die Nummer besorgen, ohne Pre-/Post-fixstrings
 
-        if (pNum)
+        SwNumRule * pRule = pTxtNd->GetNumRule();
+        if (pTxtNd->IsOutline() && pRule)
         {
-            sNumber =
-                pDoc->GetOutlineNumRule()->MakeNumString( *pNum, sal_False );
+            sNumber = pTxtNd->GetNumString();
 
-            if( pNum->IsShowNum() )
+            if( pTxtNd->IsCounted() )
             {
-                const SwNumFmt& rNFmt =
-                    pDoc->GetOutlineNumRule()->Get( pNum->GetLevel() );
+                const SwNumFmt& rNFmt = pRule->Get( pTxtNd->GetLevel() );
                 sPost = rNFmt.GetSuffix();
                 sPre = rNFmt.GetPrefix();
             }
