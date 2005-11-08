@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:15:15 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:17:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1762,15 +1762,10 @@ String lcl_GetNumString( const SwTOXSortTabBase& rBase )
         const SwTxtNode* pNd = rBase.aTOXSources[0].pNd->GetTxtNode();
         if( pNd )
         {
-            const SwNodeNum* pNum;
-            const SwNumRule* pRule;
+            const SwNumRule* pRule = pNd->GetNumRule();
 
-            if( (( 0 != ( pNum = pNd->GetNum() ) &&
-                    0 != ( pRule = pNd->GetNumRule() )) ||
-                    ( 0 != ( pNum = pNd->GetOutlineNum() ) &&
-                    0 != ( pRule = pNd->GetDoc()->GetOutlineNumRule() ) ) ) &&
-                pNum->GetLevel() < MAXLEVEL )
-                sRet = pRule->MakeNumString( *pNum );
+            if( pRule && pNd->GetLevel() < MAXLEVEL )
+                sRet = pNd->GetNumString();
         }
     }
     return sRet;
