@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:03:18 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:12:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,6 +125,10 @@ protected:
 public:
     virtual ~SwNode();
 
+#ifndef PRODUCT
+    long int GetSerial() const { return nMySerial; }
+#endif
+
     USHORT GetSectionLevel() const;
     inline ULONG StartOfSectionIndex() const;
     inline const SwStartNode* StartOfSectionNode() const;
@@ -189,6 +193,14 @@ public:
     inline BOOL IsNoTxtNode() const;
     inline BOOL IsGrfNode() const;
 #endif
+
+    /**
+       Checks if this node is in redlines.
+
+       @retval TRUE       this node is in redlines
+       @retval FALSE      else
+     */
+    BOOL IsInRedlines() const;
 
     // suche den TabellenNode, in dem dieser steht. Wenn in keiner
     // Tabelle wird 0 returnt.
