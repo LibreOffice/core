@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocrsrhelper.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:25:13 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:24:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -279,20 +279,20 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
             const SwTxtNode* pTxtNd = rPam.GetNode()->GetTxtNode();
             const SwNumRule* pRule = pTxtNd->GetNumRule();
             // hier wird Multiselektion nicht beruecksichtigt
-            if( pRule && pTxtNd->GetNum() )
+            if( pRule )
             {
                 if( pAny )
                 {
                     if(pMap->nWID == FN_UNO_NUM_LEVEL)
-                        *pAny <<= (sal_Int16)(pTxtNd->GetNum()->GetRealLevel());
+                        *pAny <<= (sal_Int16)(pTxtNd->GetLevel());
                     else if(pMap->nWID == FN_UNO_IS_NUMBER)
                     {
-                        BOOL bIsNumber = pTxtNd->GetNum()->IsNum();
+                        BOOL bIsNumber = pTxtNd->IsCounted();
                         pAny->setValue(&bIsNumber, ::getBooleanCppuType());
                     }
                     else /*if(pMap->nWID == UNO_NAME_PARA_IS_NUMBERING_RESTART)*/
                     {
-                        BOOL bIsRestart = pTxtNd->GetNum()->IsStart();
+                        BOOL bIsRestart = pTxtNd->IsRestart();
                         pAny->setValue(&bIsRestart, ::getBooleanCppuType());
                     }
                 }
@@ -579,11 +579,11 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertyMap* pMap
 sal_Int16 IsNodeNumStart(SwPaM& rPam, PropertyState& eState)
 {
     const SwTxtNode* pTxtNd = rPam.GetNode()->GetTxtNode();
-    if( pTxtNd && pTxtNd->GetNum() && pTxtNd->GetNumRule() )
+    if( pTxtNd && pTxtNd->GetNumRule() && pTxtNd->IsRestart())
     {
         eState = PropertyState_DIRECT_VALUE;
-        sal_uInt16 nTmp = pTxtNd->GetNum()->GetSetValue();
-        return USHRT_MAX == nTmp ? -1 : (sal_Int16)nTmp;
+        sal_uInt16 nTmp = pTxtNd->GetStart();
+        return (sal_Int16)nTmp;
     }
     eState = PropertyState_DEFAULT_VALUE;
     return -1;
