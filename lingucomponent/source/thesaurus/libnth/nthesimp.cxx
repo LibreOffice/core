@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nthesimp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:44:28 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 09:02:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -357,13 +357,20 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL
                       OString aTmpdat(OU2ENC(ndat,osl_getThreadTextEncoding()));
                       aThes[i] = new MyThes(aTmpidx.getStr(),aTmpdat.getStr());
                       if (aThes[i]) {
-                         const char * enc_string = aThes[i]->get_th_encoding();
-                         if (enc_string) {
-                 aTEncs[i] = rtl_getTextEncodingFromUnixCharset(enc_string);
-                         } else {
-                 aTEncs[i] = rtl_getTextEncodingFromUnixCharset("ISO8859-1");
-                         }
-              }
+                        const char * enc_string = aThes[i]->get_th_encoding();
+                        if (!enc_string) {
+                          aTEncs[i] = rtl_getTextEncodingFromUnixCharset("ISO8859-1");
+                        } else {
+                          aTEncs[i] = rtl_getTextEncodingFromUnixCharset(enc_string);
+                          if (aTEncs[i] == RTL_TEXTENCODING_DONTKNOW) {
+                            if (strcmp("ISCII-DEVANAGARI", enc_string) == 0) {
+                              aTEncs[i] = RTL_TEXTENCODING_ISCII_DEVANAGARI;
+                            } else if (strcmp("UTF-8", enc_string) == 0) {
+                              aTEncs[i] = RTL_TEXTENCODING_UTF8;
+                            }
+                          }
+                      }
+                   }
                }
                pTH = aThes[i];
                    aEnc = aTEncs[i];
