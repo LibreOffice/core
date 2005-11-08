@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.136 $
+ *  $Revision: 1.137 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:11:36 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:29:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,7 +213,6 @@ struct WW8OleMap
 
 class SwWW8ImplReader;
 struct WW8LSTInfo;
-class SwNodeNum;
 class WW8ListManager
 {
 public:
@@ -222,8 +221,8 @@ public:
     enum ListLevel {nMinLevel=1, nMaxLevel=9};
     //the rParaSprms returns back the original word paragraph indent
     //sprms which were attached to the original numbering format
-    SwNumRule* GetNumRuleForActivation(USHORT nLFOPosition, BYTE nLevel,
-        std::vector<sal_uInt8> &rParaSprms, SwNodeNum *pNodeNum=0) const;
+    SwNumRule* GetNumRuleForActivation(USHORT nLFOPosition, const BYTE nLevel,
+        std::vector<sal_uInt8> &rParaSprms, SwTxtNode *pNode=0) const;
     SwNumRule* CreateNextRule(bool bSimple);
     ~WW8ListManager();
 private:
