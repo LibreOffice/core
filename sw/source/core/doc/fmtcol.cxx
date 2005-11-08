@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtcol.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:20:23 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:17:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,6 +117,7 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
                         FALSE, (const SfxPoolItem**)&(aFontSizeArr[1]) );
         pNewChgSet->GetChgSet()->GetItemState( RES_CHRATR_CTL_FONTSIZE,
                         FALSE, (const SfxPoolItem**)&(aFontSizeArr[2]) );
+
         break;
 
     case RES_FMT_CHG:
