@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:26:01 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 16:35:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -398,6 +398,9 @@ OutlinerParaObject* Outliner::CreateParaObject( USHORT nStartPara, USHORT nCount
 
     if ( ( nStartPara + nCount ) > pParaList->GetParagraphCount() )
         nCount = pParaList->GetParagraphCount() - nStartPara;
+
+    if ( ( nStartPara + nCount ) > pEditEngine->GetParagraphCount() )
+        nCount = pEditEngine->GetParagraphCount() - nStartPara;
 
     if( !nCount )
         return NULL;
