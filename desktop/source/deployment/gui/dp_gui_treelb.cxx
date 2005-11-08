@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_treelb.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:17:16 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 16:38:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -364,7 +364,8 @@ DialogImpl::TreeListBoxImpl::~TreeListBoxImpl()
 long DialogImpl::SelectionBoxControl::Notify( NotifyEvent & rEvt )
 {
     const long nRet = Control::Notify( rEvt );
-    if (rEvt.GetType() == EVENT_GETFOCUS &&
+    if (IsReallyVisible() &&
+        rEvt.GetType() == EVENT_GETFOCUS &&
         rEvt.GetWindow() != static_cast<Window *>(m_dialog->m_treelb.get()))
     {
         m_dialog->m_treelb->GrabFocus();
