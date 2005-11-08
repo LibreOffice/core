@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 08:31:36 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:32:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -426,8 +426,10 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
                 if( bLeft )
                 {
                     // JP 28.03.96: ein Backspace im Absatz ohne Nummer wird zum Delete
-                    rSh.SwapPam();
-                    rSh.DelRight( FALSE );
+                    //rSh.SwapPam();
+                    //rSh.DelRight( FALSE );
+
+                    rSh.DelLeft();
                 }
                 else
                     // JP 15.07.96: wenns nicht mehr nach vorne geht, die
