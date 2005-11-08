@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpage2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 10:42:48 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 09:03:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -502,7 +502,7 @@ SdrPage* SdPage::Clone() const
         SdrObject* pTarget = aTargetIter.Next();
 
         if( pSource->GetUserCall() )
-            pTarget->SetUserCall( const_cast<SdPage*>(this) );
+            pTarget->SetUserCall( pPage );
     }
 
     return pPage;
