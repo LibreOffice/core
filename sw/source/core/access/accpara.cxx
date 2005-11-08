@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:53:34 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:15:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -419,7 +419,7 @@ SwPaM* SwAccessibleParagraph::GetCrsr()
 sal_Bool SwAccessibleParagraph::IsHeading() const
 {
     const SwTxtNode *pTxtNd = GetTxtNode();
-    return (pTxtNd->GetOutlineNum() && !pTxtNd->GetNum());
+    return pTxtNd->IsOutline();
 }
 
 void SwAccessibleParagraph::GetStates(
