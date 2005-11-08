@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:39:01 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:05:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2858,6 +2858,9 @@ namespace xmloff { namespace token {
         // are replaced by XML_HORIZONTAL_ON_EVEN and XML_HORIZONTAL_ON_ODD.
         TOKEN( "horizontal-on-even",        XML_HORIZONTAL_ON_EVEN ),
         TOKEN( "horizontal-on-odd",         XML_HORIZONTAL_ON_ODD ),
+        // <--
+        // --> OD 2005-10-10 #i45874#
+        TOKEN( "restart-numbering",               XML_RESTART_NUMBERING),
         // <--
 
 #if OSL_DEBUG_LEVEL > 0
