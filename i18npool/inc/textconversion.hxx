@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textconversion.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:56:29 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 09:15:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/i18n/XTextConversion.hpp>
+#include <com/sun/star/i18n/XExtendedTextConversion.hpp>
 #include <com/sun/star/linguistic2/XConversionDictionary.hpp>
 #include <com/sun/star/linguistic2/XConversionDictionaryList.hpp>
 #include <cppuhelper/implbase2.hxx> // helper for implementations
@@ -49,7 +49,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 //  ----------------------------------------------------
 class TextConversion: public cppu::WeakImplHelper2
 <
-    com::sun::star::i18n::XTextConversion,
+    com::sun::star::i18n::XExtendedTextConversion,
     com::sun::star::lang::XServiceInfo
 >
 {
@@ -66,6 +66,13 @@ public:
         getConversion( const ::rtl::OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nTextConversionType,
             sal_Int32 nTextConversionOptions )
+            throw(  com::sun::star::uno::RuntimeException,
+                    com::sun::star::lang::IllegalArgumentException,
+                    com::sun::star::lang::NoSupportException ) = 0;
+        virtual rtl::OUString SAL_CALL
+        getConversionWithOffset( const ::rtl::OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
+            const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nTextConversionType,
+            sal_Int32 nTextConversionOptions, com::sun::star::uno::Sequence< sal_Int32 >& offset )
             throw(  com::sun::star::uno::RuntimeException,
                     com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::lang::NoSupportException ) = 0;
@@ -120,6 +127,13 @@ public:
             throw(  com::sun::star::uno::RuntimeException,
                     com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::lang::NoSupportException );
+        rtl::OUString SAL_CALL
+        getConversionWithOffset( const ::rtl::OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
+            const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nTextConversionType,
+            sal_Int32 nTextConversionOptions, com::sun::star::uno::Sequence< sal_Int32 >& offset )
+            throw(  com::sun::star::uno::RuntimeException,
+                    com::sun::star::lang::IllegalArgumentException,
+                    com::sun::star::lang::NoSupportException );
         sal_Bool SAL_CALL
         interactiveConversion(const ::com::sun::star::lang::Locale& aLocale,
             sal_Int16 nTextConversionType,
@@ -167,6 +181,13 @@ public:
             throw(  com::sun::star::uno::RuntimeException,
                     com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::lang::NoSupportException );
+        rtl::OUString SAL_CALL
+        getConversionWithOffset( const ::rtl::OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
+            const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nTextConversionType,
+            sal_Int32 nTextConversionOptions, com::sun::star::uno::Sequence< sal_Int32 >& offset )
+            throw(  com::sun::star::uno::RuntimeException,
+                    com::sun::star::lang::IllegalArgumentException,
+                    com::sun::star::lang::NoSupportException );
         sal_Bool SAL_CALL
         interactiveConversion(const ::com::sun::star::lang::Locale& aLocale,
             sal_Int16 nTextConversionType,
@@ -178,7 +199,7 @@ private :
         // user defined dictionary list
         com::sun::star::uno::Reference < com::sun::star::linguistic2::XConversionDictionaryList > xCDL;
         rtl::OUString SAL_CALL getWordConversion(const ::rtl::OUString& aText,
-            sal_Int32 nStartPos, sal_Int32 nLength, sal_Bool toSChinese, sal_Int32 nConversionOptions);
+            sal_Int32 nStartPos, sal_Int32 nLength, sal_Bool toSChinese, sal_Int32 nConversionOptions, com::sun::star::uno::Sequence <sal_Int32>& offset);
         com::sun::star::lang::Locale aLocale;
 };
 
