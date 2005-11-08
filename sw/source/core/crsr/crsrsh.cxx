@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:28:47 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:15:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -497,9 +497,8 @@ void SwCrsrShell::UpdateMarkedNumLevel()
 
             if (pNumRule)
             {
-                const SwNodeNum * pNdNum = pTxtNd->GetNum();
                 SetMarkedNumLevel(pNumRule->GetName(),
-                                  pNdNum->GetRealLevel());
+                                  pTxtNd->GetLevel());
             }
         }
         else
