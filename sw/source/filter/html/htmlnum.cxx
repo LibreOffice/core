@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlnum.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:44:51 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:26:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,13 +108,12 @@ static HTMLOptionEnum __FAR_DATA aHTMLULTypeTable[] =
 
 void SwHTMLNumRuleInfo::Set( const SwTxtNode& rTxtNd )
 {
-    if( rTxtNd.GetNumNoOutline() )
+    if( rTxtNd.GetNumRule() && ! rTxtNd.IsOutline())
     {
         pNumRule = (SwNumRule *)rTxtNd.GetNumRule();
-        const SwNodeNum& rNum = *rTxtNd.GetNumNoOutline();
-        nDeep = pNumRule ? GetRealLevel( rNum.GetLevel() )+1 : 0;
-        bNumbered = rNum.IsNum();
-        bRestart = rTxtNd.GetNumNoOutline()->IsStart();
+        nDeep = pNumRule ? rTxtNd.GetLevel() + 1 : 0;
+        bNumbered = rTxtNd.IsCounted();
+        bRestart = rTxtNd.IsRestart();
     }
     else
     {
@@ -415,8 +414,7 @@ void SwHTMLParser::EndNumBulList( int nToken )
     if( !bAppend )
     {
         SwTxtNode* pTxtNode = pPam->GetNode()->GetTxtNode();
-        bAppend = (pTxtNode && pTxtNode->GetNumNoOutline() &&
-                   pTxtNode->GetNumNoOutline()->IsNum()) ||
+        bAppend = (pTxtNode && ! pTxtNode->IsOutline() && pTxtNode->IsCounted()) ||
             HasCurrentParaFlys();
     }
 
@@ -593,7 +591,9 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
 
     SwTxtNode* pTxtNode = pPam->GetNode()->GetTxtNode();
     ((SwCntntNode *)pTxtNode)->SetAttr( SwNumRuleItem(aNumRuleName) );
-    pTxtNode->UpdateNum( SwNodeNum( nLevel, nStart ) );
+    pTxtNode->SetLevel(nLevel);
+    pTxtNode->SetStart(nStart);
+
 #ifndef NUM_RELSPACE
     pTxtNode->SetNumLSpace( GetNumInfo().GetNumRule()!=0 );
 #endif
@@ -680,7 +680,7 @@ void SwHTMLParser::SetNodeNum( sal_uInt8 nLevel )
     const String& rName = GetNumInfo().GetNumRule()->GetName();
     ((SwCntntNode *)pTxtNode)->SetAttr( SwNumRuleItem(rName) );
 
-    pTxtNode->UpdateNum( SwNodeNum( nLevel ) );
+    pTxtNode->SetLevel( nLevel );
 #ifndef NUM_RELSPACE
     pTxtNode->SetNumLSpace( sal_True );
 #endif
@@ -814,9 +814,8 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
                             ASSERT(! pTxtNd->IsOutline(),
                                    "outline not expected");
 
-                            const SwNodeNum& rNum = *pTxtNd->GetNum();
-                            if( GetRealLevel( rNum.GetLevel() )+1 <
-                                                            rInfo.GetDepth() )
+                            if( pTxtNd->GetLevel() + 1 <
+                                rInfo.GetDepth() )
                             {
                                 // node is numbered, but level is lower
                                 // => check completed
@@ -917,8 +916,19 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
 
             sal_uInt16 nStartVal = rNumFmt.GetStart();
             if( bStartValue && 1 == nStartVal && i == rInfo.GetDepth()-1 )
-                nStartVal = rWrt.pCurPam->GetNode()->GetTxtNode()->GetNum()
-                                              ->GetLevelVal()[i];
+            {
+                // --> OD 2005-11-02 #i51089 - TUNING#
+                if ( rWrt.pCurPam->GetNode()->GetTxtNode()->GetNum() )
+                {
+                    nStartVal = rWrt.pCurPam->GetNode()->GetTxtNode()->GetNum()->
+                        GetNumberVector()[i];
+                }
+                else
+                {
+                    ASSERT( false,
+                            "<OutHTML_NumBulListStart(..) - text node has no number." );
+                }
+            }
             if( nStartVal != 1 )
             {
                 (((sOut += ' ') += sHTML_O_start) += '=')
