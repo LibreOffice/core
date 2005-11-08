@@ -4,8 +4,8 @@
  *
  *  $RCSfile: lngmerge.cxx,v $
  *
- *  $Revision: 1.22 $
- *  last change: $Author: hr $ $Date: 2005-09-23 14:30:54 $
+ *  $Revision: 1.23 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:22:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -265,7 +265,6 @@ BOOL LngParser::Merge(
         ResData  *pResData = new ResData( "", sID );
         pResData->sResTyp = "LngText";
         PFormEntrys *pEntrys = aMergeDataFile.GetPFormEntrys( pResData );
-
         // read languages
         bGroup = FALSE;
 
@@ -311,14 +310,14 @@ BOOL LngParser::Merge(
                         if ( sNewText.Len()) {
                             ByteString *pLine = pLines->GetObject( nPos );
 
-                            if( Export::isAllowed( sLang ) ) {
+                            //if( Export::isAllowed( sLang ) ) {
                                     //!sLang.EqualsIgnoreCaseAscii("de") && !sLang.EqualsIgnoreCaseAscii("en-US") ){
                                 ByteString sText( sLang );
                                 sText += " = \"";
                                 sText += sNewText;
                                 sText += "\"";
                                 *pLine = sText;
-                            }
+                            //}
                             Text[ sLang ] = sNewText;
                         }
                     }
@@ -339,17 +338,24 @@ BOOL LngParser::Merge(
         if ( nLastLangPos ) {
             for( long int n = 0; n < aLanguages.size(); n++ ){
                 sCur = aLanguages[ n ];
-
+//                if( sCur.EqualsIgnoreCaseAscii("de") ){
+//                    printf("%s: Export::isMergingGermanAllowed( rPrj )=%d\n",sCur.GetBuffer(),Export::isMergingGermanAllowed( rPrj ) );
+//                    printf("Text[ sCur ].Len()=%d pEntrys=%d\n",Text[ sCur ].Len(), pEntrys);
+//                }
 //<<<<<<< lngmerge.cxx
-                if( Export::isAllowed( sCur ) && ( !sCur.EqualsIgnoreCaseAscii("de") || ( sCur.EqualsIgnoreCaseAscii("de") && Export::isMergingGermanAllowed( rPrj ) ) )
+//                if( Export::isAllowed( sCur ) && ( !sCur.EqualsIgnoreCaseAscii("de") || ( sCur.EqualsIgnoreCaseAscii("de") && Export::isMergingGermanAllowed( rPrj ) ) )
+
+//                if( ( !sCur.EqualsIgnoreCaseAscii("de") || ( sCur.EqualsIgnoreCaseAscii("de") && Export::isMergingGermanAllowed( rPrj ) ) )
+//                   &&!sCur.EqualsIgnoreCaseAscii("en-US") && !Text[ sCur ].Len() && pEntrys ){
+//                if( 1 ){
+
+//                    ByteString sNewText;
+//=======
+                if(   ( !sCur.EqualsIgnoreCaseAscii("de") ||
+                      ( sCur.EqualsIgnoreCaseAscii("de") && Export::isMergingGermanAllowed( rPrj ) ) )
                     &&!sCur.EqualsIgnoreCaseAscii("en-US") && !Text[ sCur ].Len() && pEntrys ){
 
                     ByteString sNewText;
-//=======
-//                if( ( !sCur.EqualsIgnoreCaseAscii("de") || ( sCur.EqualsIgnoreCaseAscii("de") && Export::isMergingGermanAllowed( rPrj ) ) )
-//                    &&!sCur.EqualsIgnoreCaseAscii("en-US") && !Text[ sCur ].Len() && pEntrys ){
-//
-//                    ByteString sNewText;
 //>>>>>>> 1.20
                     pEntrys->GetText( sNewText, STRING_TYP_TEXT, sCur, TRUE );
                     if (( sNewText.Len()) &&
