@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textconversionImpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:24:58 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 09:15:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,19 @@ TextConversionImpl::getConversion( const OUString& aText, sal_Int32 nStartPos, s
     if (nLength > len)
         nLength = len > 0 ? len : 0;
     return xTC->getConversion(aText, nStartPos, nLength, rLocale, nConversionType, nConversionOptions);
+}
+
+OUString SAL_CALL
+TextConversionImpl::getConversionWithOffset( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
+    const Locale& rLocale, sal_Int16 nConversionType, sal_Int32 nConversionOptions, Sequence< sal_Int32>& offset)
+    throw(  RuntimeException, IllegalArgumentException, NoSupportException )
+{
+    getLocaleSpecificTextConversion(rLocale);
+
+    sal_Int32 len = aText.getLength() - nStartPos;
+    if (nLength > len)
+        nLength = len > 0 ? len : 0;
+    return xTC->getConversionWithOffset(aText, nStartPos, nLength, rLocale, nConversionType, nConversionOptions, offset);
 }
 
 sal_Bool SAL_CALL
