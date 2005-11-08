@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:24:42 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 09:04:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,6 +187,9 @@ SdTransferable::SdTransferable( SdDrawDocument* pSrcDoc, ::sd::View* pWorkView, 
     bPageTransferablePersistent( FALSE ),
     mbIsUnoObj( false )
 {
+    if( pSourceDoc )
+        StartListening( *pSourceDoc );
+
     if( !bLateInit )
         CreateData();
 }
@@ -195,6 +198,9 @@ SdTransferable::SdTransferable( SdDrawDocument* pSrcDoc, ::sd::View* pWorkView, 
 
 SdTransferable::~SdTransferable()
 {
+    if( pSourceDoc )
+        EndListening( *pSourceDoc );
+
     Application::GetSolarMutex().acquire();
 
     ObjectReleased();
@@ -249,7 +255,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
             if( xObj.is() )
                 pOLEDataHelper = new TransferableDataHelper( new SvEmbedTransferHelper( xObj ) );
         }
-        else if( pObj->ISA( SdrGrafObj ) && !pSourceDoc->GetAnimationInfo( pObj ) )
+        else if( pObj->ISA( SdrGrafObj ) && (pSourceDoc && !pSourceDoc->GetAnimationInfo( pObj )) )
         {
             pGraphic = new Graphic( static_cast< SdrGrafObj* >( pObj )->GetTransformedGraphic() );
         }
@@ -836,5 +842,21 @@ SdTransferable* SdTransferable::getImplementation( const Reference< XInterface >
     catch( const ::com::sun::star::uno::Exception& )
     {
         return NULL;
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+// SfxListener
+void SdTransferable::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
+
+    if( pSdrHint )
+    {
+        if( HINT_MODELCLEARED == pSdrHint->GetKind() )
+        {
+            pSourceDoc = 0;
+        }
     }
 }
