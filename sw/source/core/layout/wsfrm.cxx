@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:16:50 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:20:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2352,6 +2352,7 @@ void SwCntntFrm::_UpdateAttr( SfxPoolItem* pOld, SfxPoolItem* pNew,
         case RES_CHRATR_FONTSIZE:
         case RES_CHRATR_ESCAPEMENT:
         case RES_CHRATR_CONTOUR:
+        case RES_PARATR_NUMRULE:
             rInvFlags |= 0x01;
             break;
 
