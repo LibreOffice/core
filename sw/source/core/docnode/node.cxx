@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:22:30 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:18:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1066,26 +1066,27 @@ void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
         break;
     }
 
+    // Warning: this does not have to be a SwTxtNode.
+    SwTxtNode* pTxtNd = dynamic_cast<SwTxtNode*>(this);
+
+
+    if ( pTxtNd )
+        pTxtNd->SyncNumberAndNumRule();
+
     if( bNumRuleSet )
     {
+        // bNumRuleSet = true => pTxtNd != 0
         if( sNumRule.Len() )
         {
-            // --> FME 2005-02-21 #i42912#
-            // UpdateNum should be called if pNodeNum is 0:
+            int nLevel = pTxtNd->GetLevel();
 
-            // HB 2005-04-05 #i46588#
-            // Call UpdateNum with a node number of the appropriate level.
-            SwTxtNode * pTxtNd = static_cast<SwTxtNode*>(this);
-            if( !pTxtNd->_GetNodeNum() )
-            {
-                BYTE nLevel = pTxtNd->GetOutlineLevel();
+            if (nLevel == NO_NUMBERING)
+                nLevel = pTxtNd->GetOutlineLevel();
 
-                if (nLevel == NO_NUMBERING)
-                    nLevel = 0;
+            if (nLevel == NO_NUMBERING)
+                nLevel = 0;
 
-                 pTxtNd->UpdateNum( SwNodeNum(nLevel) );
-            }
-            // <--
+            pTxtNd->SetLevel(nLevel);
 
 #ifndef NUM_RELSPACE
             SetNumLSpace( TRUE );
@@ -1100,16 +1101,16 @@ void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
             if( pRule )
                 pRule->SetInvalidRule( TRUE );
         }
-        else if( ((SwTxtNode*)this)->GetNum() )
+        else
         {
             bCallModify = FALSE;
             SwModify::Modify( pOldValue, pNewValue );
-            ((SwTxtNode*)this)->UpdateNum( SwNodeNum(NO_NUMBERING) );
 #ifndef NUM_RELSPACE
             SetNumLSpace( TRUE );
 #endif
         }
     }
+
     if( sOldNumRule.Len() && sNumRule != sOldNumRule )
     {
         SwNumRule* pRule = GetDoc()->FindNumRulePtr( sOldNumRule );
@@ -1175,6 +1176,7 @@ SwFmtColl *SwCntntNode::ChgFmtColl( SwFmtColl *pNewColl )
 {
     ASSERT( pNewColl, "Collectionpointer ist 0." );
     SwFmtColl *pOldColl = GetFmtColl();
+
     if( pNewColl != pOldColl )
     {
         pNewColl->Add( this );
@@ -1427,12 +1429,11 @@ BOOL SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
         {
             SwTxtNode * pTxtNode = (SwTxtNode*)this;
             pItem = (SwNumRuleItem*)GetNoCondAttr(RES_PARATR_NUMRULE, TRUE );
-            const SwNodeNum * pNum = pTxtNode->GetNum(); // #115901#
 
             if (0 != pItem  &&
                 pItem->GetValue().Len() &&
                 pItem->GetValue() == ((SwNumRuleInfo&)rInfo).GetName() &&
-                GetNodes().IsDocNodes() && 0 != pNum)
+                GetNodes().IsDocNodes())
             {
                 ((SwNumRuleInfo&)rInfo).AddNode( *pTxtNode );
             }
@@ -1441,11 +1442,11 @@ BOOL SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
         return TRUE;
 
     case RES_GETLOWERNUMLEVEL:
-        if( IsTxtNode() && ((SwTxtNode*)this)->GetNum() &&
+        if( IsTxtNode() &&
             0 != ( pItem = (SwNumRuleItem*)GetNoCondAttr(
             RES_PARATR_NUMRULE, TRUE )) && pItem->GetValue().Len() &&
             pItem->GetValue() == ((SwNRuleLowerLevel&)rInfo).GetName() &&
-            ((SwTxtNode*)this)->GetNum()->GetRealLevel()
+            ((SwTxtNode*)this)->GetLevel()
                 > ((SwNRuleLowerLevel&)rInfo).GetLevel() )
         {
             return FALSE;
@@ -1491,6 +1492,14 @@ BOOL SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
         if( 0 != ( bRet = (0 != pAttrSet->Put( rAttr )) ))
             // einige Sonderbehandlungen fuer Attribute
             pAttrSet->SetModifyAtAttr( this );
+        // --> OD 2005-10-25 #126367#
+        if ( IsModifyLocked() )
+        {
+            SwTxtNode* pTxtNd = dynamic_cast<SwTxtNode*>(this);
+            if ( pTxtNd )
+                pTxtNd->SyncNumberAndNumRule();
+        }
+        // <--
     }
     else
     {
@@ -1524,12 +1533,21 @@ BOOL SwCntntNode::SetAttr( const SfxItemSet& rSet )
     BOOL bRet = FALSE;
 
     // wenn Modify gelockt ist, werden keine Modifies verschickt
-    if( IsModifyLocked() || ( !GetDepends() &&
-        SFX_ITEM_SET != rSet.GetItemState( RES_PARATR_NUMRULE, FALSE )) )
+    if ( IsModifyLocked() ||
+         ( !GetDepends() &&
+           SFX_ITEM_SET != rSet.GetItemState( RES_PARATR_NUMRULE, FALSE ) ) )
     {
         // einige Sonderbehandlungen fuer Attribute
         if( 0 != (bRet = (0 != pAttrSet->Put( rSet ))) )
             pAttrSet->SetModifyAtAttr( this );
+        // --> OD 2005-10-25 #126367#
+        if ( IsModifyLocked() )
+        {
+            SwTxtNode* pTxtNd = dynamic_cast<SwTxtNode*>(this);
+            if ( pTxtNd )
+                pTxtNd->SyncNumberAndNumRule();
+        }
+        // <--
     }
     else
     {
@@ -1693,7 +1711,12 @@ const SfxPoolItem* SwCntntNode::GetNoCondAttr( USHORT nWhich,
                     nWhich, FALSE, &pFnd ) && bInParents ))
             ((SwFmt*)GetRegisteredIn())->GetItemState( nWhich, bInParents, &pFnd );
     }
-    else if (pAttrSet)
+    // --> OD 2005-10-25 #126347# - undo change of issue #i51029#
+    // Note: <GetSwAttrSet()> returns <pAttrSet>, if set, otherwise it returns
+    //       the attribute set of the paragraph style, which is valid for the
+    //       content node - see file <node.hxx>
+    else
+    // <--
         GetSwAttrSet().GetItemState( nWhich, bInParents, &pFnd );
     return pFnd;
 }
@@ -1861,10 +1884,9 @@ BOOL SwCntntNode::IsAnyCondition( SwCollCondition& rTmp ) const
             {
                 SwTxtNode* pOutlNd = rOutlNds[ nPos ]->GetTxtNode();
 
-                if( pOutlNd->GetOutlineNum() && !pOutlNd->GetNumRule() )
+                if( pOutlNd->IsOutline())
                 {
-                    rTmp.SetCondition( PARA_IN_OUTLINE,
-                                    pOutlNd->GetOutlineNum()->GetLevel() );
+                    rTmp.SetCondition( PARA_IN_OUTLINE, pOutlNd->GetOutlineLevel() );
                     return TRUE;
                 }
             }
@@ -1883,18 +1905,28 @@ void SwCntntNode::ChkCondColl()
         SwCollCondition aTmp( 0, 0, 0 );
         const SwCollCondition* pCColl;
 
-        if( IsAnyCondition( aTmp ) && 0 != ( pCColl =
-                ((SwConditionTxtFmtColl*)GetFmtColl())->HasCondition( aTmp )))
-            SetCondFmtColl( pCColl->GetTxtFmtColl() );
-        else
+        bool bDone = false;
+
+        if( IsAnyCondition( aTmp ))
         {
-            if( IsTxtNode() && ((SwTxtNode*)this)->GetNumRule() &&
-                    ((SwTxtNode*)this)->GetNum() )
+            pCColl = static_cast<SwConditionTxtFmtColl*>(GetFmtColl())
+                ->HasCondition( aTmp );
+
+            if (pCColl)
+            {
+                SetCondFmtColl( pCColl->GetTxtFmtColl() );
+                bDone = true;
+            }
+        }
+
+        if (!bDone)
+        {
+            if( IsTxtNode() && ((SwTxtNode*)this)->GetNumRuleSync())
             {
                 // steht in einer Numerierung
                 // welcher Level?
                 aTmp.SetCondition( PARA_IN_LIST,
-                                ((SwTxtNode*)this)->GetNum()->GetLevel() );
+                                ((SwTxtNode*)this)->GetLevel() );
                 pCColl = ((SwConditionTxtFmtColl*)GetFmtColl())->
                                 HasCondition( aTmp );
             }
@@ -1958,6 +1990,13 @@ const SwTxtNode   *SwNode::GetTxtNode() const
 }
 #endif
 
+BOOL SwNode::IsInRedlines() const
+{
+    const SwDoc * pDoc = GetDoc();
+    BOOL bResult = FALSE;
 
+    if (pDoc != NULL)
+        bResult = pDoc->IsInRedlines(*this);
 
-
+    return bResult;
+}
