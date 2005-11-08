@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageCacheManager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 07:43:24 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 16:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,8 +143,12 @@ public:
     ~PageCacheManager (void);
 
 private:
-    /// Singleton instance of the cache manager.
-    static ::boost::shared_ptr<PageCacheManager> mpInstance;
+    /** Singleton instance of the cache manager.  Note that this is a weak
+        pointer.  The (implementation class of) ViewShellBase holds a
+        shared_ptr so that the cache manager has the same life time as the
+        ViewShellBase.
+    */
+    static ::boost::weak_ptr<PageCacheManager> mpInstance;
 
     /// List of active caches.
     class PageCacheContainer;
