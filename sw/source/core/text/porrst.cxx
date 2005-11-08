@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:01:52 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:22:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -359,7 +359,6 @@ sal_Bool SwTxtFrm::FormatEmpty()
 
     if ( HasFollow() || GetTxtNode()->GetpSwpHints() ||
         0 != GetTxtNode()->GetNumRule() ||
-        0 != GetTxtNode()->GetOutlineNum() ||
         GetTxtNode()->HasHiddenCharAttribute( true ) ||
          IsInFtn() || ( HasPara() && GetPara()->IsPrepMustFit() ) )
         return sal_False;
