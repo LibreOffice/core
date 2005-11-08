@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:21:26 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 09:06:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -827,7 +827,7 @@ void SwTxtNode::SetLanguageAndFont( const SwPaM &rPaM,
 
     SwEditShell *pEditShell = GetDoc()->GetEditShell();
     SfxItemSet aSet( pEditShell->GetAttrPool(), aRanges );
-    aSet.Put( SvxLanguageItem( LANGUAGE_CHINESE_TRADITIONAL, nLangWhichId ) );
+    aSet.Put( SvxLanguageItem( nLang, nLangWhichId ) );
 
     DBG_ASSERT( pFont, "target font missing?" );
     if (pFont)
