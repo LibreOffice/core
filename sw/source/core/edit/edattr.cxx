@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:26:13 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:19:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,13 +154,12 @@ BOOL SwEditShell::GetAttr( SfxItemSet& rSet ) const
 
             if (pTxtNd)
             {
-                const SwNodeNum * pNdNum = pTxtNd->GetNum();
+                SwNumRule * pNumRule = pTxtNd->GetNumRule();
 
-                if (pNdNum)
+                if (pNumRule)
                 {
-                    SwNumRule * pNumRule = pTxtNd->GetNumRule();
                     const String & aCharFmtName =
-                        pNumRule->Get(pNdNum->GetRealLevel()).
+                        pNumRule->Get(pTxtNd->GetLevel()).
                         GetCharFmtName();
                     SwCharFmt * pCharFmt =
                         GetDoc()->FindCharFmtByName(aCharFmtName);
@@ -490,25 +489,17 @@ BOOL lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
         bRet = FALSE;
 
         const SwNumRule* pNumRule = rTNd.GetNumRule();
-        const SwNodeNum* pNum = rTNd.GetNum();
 
-        if( !pNumRule )     // oder sollte OutlineNum an sein?
+        if( pNumRule && MAXLEVEL > rTNd.GetLevel() )
         {
-            pNum = rTNd.GetOutlineNum();
-            if( pNum )
-                pNumRule = rTNd.GetDoc()->GetOutlineNumRule();
-        }
-
-        if( pNumRule && pNum && MAXLEVEL > pNum->GetLevel() )
-        {
-            const SwNumFmt &rNumFmt = pNumRule->Get( pNum->GetLevel() );
+            const SwNumFmt &rNumFmt = pNumRule->Get( rTNd.GetLevel() );
 
             if( SVX_NUM_BITMAP != rNumFmt.GetNumberingType() )
             {
                 if ( SVX_NUM_CHAR_SPECIAL == rNumFmt.GetNumberingType() )
                     sExp = rNumFmt.GetBulletChar();
                 else
-                    sExp = pNumRule->MakeNumString( *pNum );
+                    sExp = rTNd.GetNumString();
             }
         }
     }
