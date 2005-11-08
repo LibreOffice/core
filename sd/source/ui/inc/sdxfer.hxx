@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxfer.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:53:19 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 09:04:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,9 @@
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
 #endif
+#ifndef _SFXLSTNER_HXX
+#include <svtools/lstner.hxx>
+#endif
 
 // ------------------
 // - SdTransferable -
@@ -62,7 +65,7 @@ class View;
 }
 
 class SfxObjectShellRef;
-class SdTransferable : public TransferableHelper
+class SdTransferable : public TransferableHelper, public SfxListener
 {
 public:
 
@@ -97,6 +100,9 @@ public:
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
     static SdTransferable*          getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData ) throw();
+
+    // SfxListener
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
 protected:
 
