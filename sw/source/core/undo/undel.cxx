@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undel.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:18:40 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:23:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -704,7 +704,7 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
             if( pTxtNd && pTxtNd->GetpSwAttrSet() )
                 pTxtNd->ResetAllAttr();
 
-            if( pTxtNd->GetpSwpHints() )
+            if( pTxtNd && pTxtNd->GetpSwpHints() )
                 pTxtNd->ClearSwpHintsArr( FALSE );
 
             if( pSttStr )
