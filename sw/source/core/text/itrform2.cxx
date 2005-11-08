@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:54:46 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:21:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1102,8 +1102,7 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
                      "Rotated number portion trouble" )
 
             // Wenn wir im Follow stehen, dann natuerlich nicht.
-            if( GetTxtFrm()->GetTxtNode()->GetNum() ||
-                GetTxtFrm()->GetTxtNode()->GetOutlineNum() )
+            if( GetTxtFrm()->GetTxtNode()->GetNumRule() )
                 pPor = (SwLinePortion*)NewNumberPortion( rInf );
             rInf.SetNumDone( sal_True );
         }
