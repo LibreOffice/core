@@ -6748,7 +6748,7 @@ SfxVoidItem CloseMasterView SID_CLOSE_MASTER_VIEW()
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
+    ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
