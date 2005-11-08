@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-18 13:46:59 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:11:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -308,12 +308,6 @@ private:
     // -> #i27615#
 
     /**
-       Updates the marked numbering level stored in this shell
-       according to the cursor.
-     */
-    SW_DLLPRIVATE void UpdateMarkedNumLevel();
-
-    /**
        Set the marked numbering level stored in this shell.
 
        @param sNumRule   the name of the marked numbering rule
@@ -376,6 +370,12 @@ protected:
     // --> FME 2005-01-31 #i41424# Only update the marked number levels if necessary
     bool SetInFrontOfLabel( FASTBOOL bNew );
     // <--
+
+    /**
+       Updates the marked numbering level stored in this shell
+       according to the cursor.
+     */
+    SW_DLLPRIVATE void UpdateMarkedNumLevel();
 
 public:
     TYPEINFO();
