@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:18:42 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:12:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,8 +97,11 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
     //Also niemals direkt zugreifen!
     SwpHints    *pSwpHints;
     SwWrongList *pWrong;    // Rechtschreibfehler nach Online-Spelling
-    mutable SwNodeNum   *pNdNum;    // Numerierung fuer diesen Absatz
+    // --> OD 2005-11-02 #i51089 - TUNING#
+    mutable SwNodeNum* mpNodeNum;  // Numerierung fuer diesen Absatz
+    // <--
     XubString   aText;
+    SwNodeNum::tSwNumTreeNumber nStart;
 
     // Some of the chars this para are hidden. Paragraph has to be reformatted
     // on changing the view to print preview.
@@ -108,7 +111,11 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
     // The last two flags have to be recalculated if this flag is set:
     mutable BOOL bRecalcHiddenCharFlags : 1;
 
+    bool bCounted;
+    bool bNotifiable;
     mutable BOOL bLastOutlineState : 1;
+
+    BYTE nOutlineLevel;
 
     SW_DLLPRIVATE SwTxtNode( const SwNodeIndex &rWhere, SwTxtFmtColl *pTxtColl,
                 SwAttrSet* pAutoAttr = 0 );
@@ -146,7 +153,7 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
 
     SW_DLLPRIVATE void CalcHiddenCharFlags() const;
 
-    SW_DLLPRIVATE SwNodeNum * _GetOutlineNum(BOOL bUpdate = FALSE) const;
+    SW_DLLPRIVATE SwNumRule * _GetNumRule(BOOL bInParent = TRUE) const;
 
     SW_DLLPRIVATE void SetLanguageAndFont( const SwPaM &rPaM,
             LanguageType nLang, USHORT nLangWhichId,
@@ -281,65 +288,44 @@ public:
     // (Methode steht im ndcopy.cxx!!)
     void CopyCollFmt( SwTxtNode& rDestNd );
 
-    const SwNodeNum* _GetNodeNum() const { return pNdNum; }
+    //const SwNodeNum* _GetNodeNum() const { return pNdNum; }
 
     //
     // BEGIN OF BULLET/NUMBERING/OUTLINE STUFF:
     //
 
     /**
-       Updates SwNodeNum of this node.
-
-       @param rNum     SwNodeNum to be set
-
-       Copies rNum to this node's SwNodeNum.
-
-       EXCEPTION: If the level of rNum is NO_NUMBERING the SwNodeNum
-       is deleted.
-
-       @return pointer to this node's SwNodeNum after update
-     */
-    const SwNodeNum* UpdateNum( const SwNodeNum& rNum);
-
-    /**
        Returns numbering rule of this text node.
+
+       @param bInParent     serach in parent attributes, too
 
        @return numbering rule of this text node or NULL if none is set
      */
-    SwNumRule *GetNumRule() const;
+    SwNumRule *GetNumRule(BOOL bInParent = TRUE) const;
+    SwNumRule *GetNumRuleSync(BOOL bInParent = TRUE);
 
-    /**
-       Returns number of this node.
+    /** create number for this text node, if not already existing
 
-       @param bUpdate   - TRUE: ensure numrule is valid
-                        - FALSE: do not care about numrule's validity
+        OD 2005-11-02 #i51089 - TUNING#
 
-       @return     number of this node
+        @return number of this node
     */
-    const SwNodeNum* GetNum(BOOL bUpdate = FALSE) const; // #i29363#
+    inline SwNodeNum* CreateNum() const
+    {
+        if ( !mpNodeNum )
+        {
+            mpNodeNum = new SwNodeNum;
+            mpNodeNum->SetTxtNode( const_cast<SwTxtNode*>(this) );
+        }
+        return mpNodeNum;
+    }
 
-    /**
-       Returns outline number of this node.
+    inline const SwNodeNum* GetNum() const
+    {
+        return mpNodeNum;
+    }
 
-       If this node has an outline numbering rule the outline number
-       is its numbrt, otherwise the node has no outline number.
-
-       @param bUpdate   - TRUE: ensure numrule is valid
-                        - FALSE: do not care about numrule's validity
-
-       @return     outline number of this node
-    */
-    const SwNodeNum* GetOutlineNum(BOOL bUpdate = FALSE) const;
-
-    /**
-       Return non-outline number of this text node.
-
-       If this text node is an outline the result is NULL
-
-       @return the non-outline number of this text node or NULL if
-       outline of not present
-     */
-    const SwNodeNum* GetNumNoOutline() const;
+    SwNodeNum::tNumberVector GetNumberVector() const;
 
     /**
        Returns if this text node is an outline.
@@ -365,7 +351,7 @@ public:
        @retval TRUE      this text node may be numbered
        @retval FALSE     else
      */
-    BOOL MayBeNumbered() const;
+    //BOOL MayBeNumbered() const;
 
     /**
        Notify this textnode that its numbering rule has changed.
@@ -463,14 +449,14 @@ public:
        @return the level of this node or NO_NUMBERING if it has no
                numbering label.
      */
-    BYTE GetLevel() const;
+    int GetLevel() const;
 
     /**
        Sets the numbering level of this text node.
 
        @param nLevel     level to set (no flags)
      */
-    void SetLevel(BYTE nLevel);
+    void SetLevel(int nLevel);
 
     /**
        Returns outline level of this textn node.
@@ -492,7 +478,7 @@ public:
 
        @return outline level or NO_NUMBERING if there is no outline level
      */
-    BYTE GetOutlineLevel() const;
+    int GetOutlineLevel() const;
 
     /**
        Sets the out line level *at* a text node.
@@ -507,7 +493,7 @@ public:
 
        NOTE: This is subject to change, see GetOutlineLevel.
      */
-    void SetOutlineLevel(BYTE nLevel);
+    //void SetOutlineLevel(int nLevel);
 
     /**
        Returns the width of leading tabs/blanks in this paragraph.
@@ -633,6 +619,31 @@ public:
        @return position of given attribute or NULL in case of failure
      */
     SwPosition * GetPosition(const SwTxtAttr * pAttr);
+
+    void SetStart(SwNodeNum::tSwNumTreeNumber nNum);
+    SwNodeNum::tSwNumTreeNumber GetStart() const;
+
+    bool IsNotifiable() const;
+
+    bool IsContinuous() const;
+
+    void SetCounted(bool _bCounted);
+    bool IsCounted() const;
+
+    // --> OD 2005-11-02 #i51089 - TUNING#
+    inline bool IsRestart() const
+    {
+        return GetNum() ? GetNum()->IsRestart() : false;
+    }
+    // <--
+    void SetRestart(bool bRestart) const;
+
+    void CopyNumber(SwTxtNode & rNode) const;
+
+    void SyncNumberAndNumRule();
+    void UnregisterNumber();
+
+    bool IsFirstOfNumRule() const;
 
     USHORT GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd ) const;
 
