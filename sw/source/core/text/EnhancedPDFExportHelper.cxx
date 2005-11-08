@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedPDFExportHelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:17:41 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:21:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -845,14 +845,13 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                     static_cast<const SwTxtFrm*>(pFrm)->GetTxtNode();
 
                 const SwNumRule* pNumRule = pTxtNd->GetNumRule();
-                const SwNodeNum* pNodeNum = pTxtNd->GetNum();
 
                 //
                 // Heading: H1 - H6
                 //
-                if ( pNumRule && pNodeNum && pNumRule->IsOutlineRule() )
+                if ( pNumRule && pNumRule->IsOutlineRule() )
                 {
-                    BYTE nRealLevel = pNodeNum->GetRealLevel();
+                    BYTE nRealLevel = pTxtNd->GetLevel();
                     nRealLevel = nRealLevel > 5 ? 5 : nRealLevel;
 
                     nPDFType =  vcl::PDFWriter::H1 + nRealLevel;
@@ -862,23 +861,18 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 //
                 // Numbering: L, LI, LBody
                 //
-                else if ( pNumRule && pNodeNum )
+                else if ( pNumRule )
                 {
                     // Check numbering of previous text node:
                     SwNodeIndex aIdx( *pTxtNd );
                     SwCntntNode* pPrevTxtNd = pTxtNd->GetNodes().GoPrevious( &aIdx );
-                    const SwNodeNum* pPrevNodeNum = pPrevTxtNd &&
-                                                    pPrevTxtNd->IsTxtNode() &&
-                                                    (static_cast<SwTxtNode*>(pPrevTxtNd))->GetNumRule() == pNumRule ?
-                                                    (static_cast<SwTxtNode*>(pPrevTxtNd))->GetNum() :
-                                                    0;
 
                     // If pPrevNodeNum is set, we know that pTxtNd and pPrevTxtNd
                     // belong to the same NumRule:
-                    const USHORT nMyLevel = pNodeNum->GetRealLevel() + 1;
-                    USHORT nPreviousLevel = pPrevNodeNum ?
-                                            pPrevNodeNum->GetRealLevel() + 1 :
-                                            0;
+                    const USHORT nMyLevel = pTxtNd->GetLevel() + 1;
+                    USHORT nPreviousLevel = pPrevTxtNd->IsTxtNode() ?
+                        static_cast<SwTxtNode *>(pPrevTxtNd)->GetLevel() + 1 :
+                        0;
 
                     if ( nMyLevel <= nPreviousLevel )
                     {
