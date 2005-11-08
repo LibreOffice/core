@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:02:48 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:11:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -400,7 +400,7 @@ class SwDoc
     SwURLStateChanged *pURLStateChgd;   // SfxClient fuer Aenderungen in der
                                         // INetHistory
     SvNumberFormatter *pNumberFormatter;    // NumFormatter fuer die Tabellen/Felder
-    SwNumRuleTbl    *pNumRuleTbl;           // Liste aller benannten NumRules
+    mutable SwNumRuleTbl    *pNumRuleTbl;           // Liste aller benannten NumRules
     // Hash map to find numrules by name
     mutable std::hash_map<String, SwNumRule *, StringHash> aNumRuleMap;
 
@@ -513,7 +513,7 @@ class SwDoc
     // DUMMY_USE_VIRTUAL_DEVICE             def = TRUE
     // DUMMY_ADD_FLY_OFFSETS                def = FALSE, hidden
     //
-    // SO7pp4:
+    // SO7pp1:
     // bOldNumbering                        def = FALSE, hidden
     //
     // SO8:
@@ -544,6 +544,8 @@ class SwDoc
     sal_Bool    bDoNotJustifyLinesWithManualBreak: 1;   // FME 2005-06-08 #i49277#
     sal_Bool    bDoNotResetParaAttrsForNumFont   : 1;   // FME 2005-08-11 #i53199#
     sal_Bool    bDummyNonUIFlag                  : 1;   // use this if necessary
+
+    sal_Bool    bOutlineLevelYieldsOutlineRule  : 1;
 
     //
     // COMPATIBILITY FLAGS END
@@ -659,6 +661,8 @@ class SwDoc
 
     BOOL _SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rRubyEntry,
                                 USHORT nMode );
+
+    void AddNumRuleRanges(SwNumRule * pRule, SwNodes & rNodes);
 
     // unser eigener 'IdlTimer' ruft folgende Methode
     DECL_LINK( DoIdleJobs, Timer * );
@@ -1332,6 +1336,8 @@ public:
     SwTxtFmtColl* FindTxtFmtCollByName( const String& rName ) const
         {   return (SwTxtFmtColl*)FindFmtByName( (SvPtrarr&)*pTxtFmtCollTbl, rName ); }
 
+    void ChkCondColls();
+
         // GRF
     const SwGrfFmtColl* GetDfltGrfFmtColl() const   { return pDfltGrfFmtColl; }
     const SwGrfFmtColls *GetGrfFmtColls() const     { return pGrfFmtCollTbl; }
@@ -1609,7 +1615,12 @@ public:
                     const xub_StrLen nOffset = 0, sal_Bool bMoveCrsr = sal_False );
 
         // GliederungsRegeln erfragen / setzen
-    SwNumRule* GetOutlineNumRule() const;
+    // --> OD 2005-11-02 #i51089 - TUNING#
+    inline SwNumRule* GetOutlineNumRule() const
+    {
+        return pOutlineRule;
+    }
+    // <--
     void SetOutlineNumRule( const SwNumRule& rRule );
     void PropagateOutlineRule();
 
@@ -1628,7 +1639,7 @@ public:
     void SetNumRule( const SwPaM&, const SwNumRule&,
                      sal_Bool bSetItem = sal_True );
     // <--
-        // ab hier neu starten lassen oder den Start wieder aufheben
+    void SetCounted( const SwPaM&, bool bCounted);
 
     /**
        Replace numbering rules in a PaM by another numbering rule.
@@ -1644,6 +1655,8 @@ public:
     void SetNodeNumStart( const SwPosition& rPos, sal_uInt16 nStt = USHRT_MAX );
 
     SwNumRule* GetCurrNumRule( const SwPosition& rPos ) const;
+    BYTE GetCurOutlineLevel( const SwPosition& rPos) const;
+
     const SwNumRuleTbl& GetNumRuleTbl() const { return *pNumRuleTbl; }
 
     // #i36749#
@@ -1658,18 +1671,16 @@ public:
                             BOOL bBroadcast = FALSE);
     sal_uInt16 FindNumRule( const String& rName ) const;
     SwNumRule* FindNumRulePtr( const String& rName ) const;
+    SwNumRule* FindNumRulePtrWithPool( const String& rName );
+
     // loeschen geht nur, wenn die ::com::sun::star::chaos::Rule niemand benutzt!
     // #106897#
     sal_Bool RenameNumRule(const String & aOldName, const String & aNewName,
                            BOOL bBroadcast = FALSE);
     sal_Bool DelNumRule( const String& rName, BOOL bBroadCast = FALSE );
     String GetUniqueNumRuleName( const String* pChkStr = 0, sal_Bool bAutoNum = sal_True ) const;
-    void UpdateNumRule( const String& rName, sal_uInt32 nUpdPos );
+
     void UpdateNumRule();   // alle invaliden Updaten
-    /* -> #111955# */
-    void UpdateNumRule( SwNumRule & rRule, ULONG nUpdatePos); // #115901#
-    void UpdateNumRuleOld( SwNumRule & rRule, ULONG nUpdatePos);
-    /* <- #111955# */
     // #106897#
     void ChgNumRuleFmts( const SwNumRule& rRule, const String * pOldName = 0 );
     sal_Bool ReplaceNumRule( const SwPosition& rPos, const String& rOldRule,
@@ -1682,8 +1693,9 @@ public:
                         sal_uInt8* pUpper = 0, sal_uInt8* pLower = 0 );
 
     // #i23731#
-    /**
-       Searches for a text node with a numbering rule.
+    /** Searches for a text node with a numbering rule.
+
+       OD 2005-10-24 #i55391# - add optional parameter <_bInvestigateStartNode>
 
        \param rPos         position to start search
        \param bForward     - TRUE:  search forward
@@ -1694,12 +1706,16 @@ public:
                            - FALSE: search for outline numbering rule
        \param nNonEmptyAllowed   number of non-empty paragraphs allowed between
                                  rPos and found paragraph
+        @param _bInvestigateStartNode
+        input parameter - boolean, indicating, if start node, determined by given
+        start position has to be investigated or not.
      */
     const SwNumRule * SearchNumRule(SwPosition & rPos,
                                     BOOL bForward,
                                     BOOL bNum,
                                     BOOL bOutline,
-                                    int nNonEmptyAllowed);
+                                    int nNonEmptyAllowed,
+                                    bool _bInvestigateStartNode = false );
 
         // Absaetze ohne Numerierung, aber mit Einzuegen
     sal_Bool NoNum( const SwPaM& );
@@ -1708,6 +1724,8 @@ public:
 
     // Invalidates all numrules
     void InvalidateNumRules();
+
+    void SyncNumRulesAndNodes();
 
         // Hoch-/Runterstufen
     sal_Bool NumUpDown( const SwPaM&, sal_Bool bDown = sal_True );
@@ -1989,6 +2007,8 @@ public:
     void SetRedlineMode_intern( sal_uInt16 eMode ) { eRedlineMode = (SwRedlineMode)eMode; }
     void SetRedlineMode( sal_uInt16 eMode );
 
+    sal_Bool IsInRedlines(const SwNode & rNode) const;
+
     const SwRedlineTbl& GetRedlineTbl() const { return *pRedlineTbl; }
     sal_Bool AppendRedline( SwRedline* pPtr, sal_Bool bCallDelete = sal_True );
     sal_Bool SplitRedline( const SwPaM& rPam );
@@ -2206,6 +2226,15 @@ public:
     }
     void SetOldNumbering( sal_Bool _bOldNumbering );
     // <- #111955#
+
+    sal_Bool IsOutlineLevelYieldsOutlineRule() const
+    {
+        return bOutlineLevelYieldsOutlineRule;
+    }
+    void SetOutlineYieldsOutlineRule(sal_Bool _bOutlineLevelYieldsOutlineRule)
+    {
+        bOutlineLevelYieldsOutlineRule = _bOutlineLevelYieldsOutlineRule;
+    }
 
     // --> FME #108724#
     sal_Bool IsFormerTextWrapping() const
