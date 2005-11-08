@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:35:40 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:25:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -428,8 +428,10 @@ ULONG SwReader::Read( const Reader& rOptions )
 
     pDoc->bInReading = FALSE;
 
+    pDoc->SyncNumRulesAndNodes();
     pDoc->InvalidateNumRules();
     pDoc->UpdateNumRule();
+    pDoc->ChkCondColls();
     pDoc->SetAllUniqueFlyNames();
 
     if( bReadPageDescs )
