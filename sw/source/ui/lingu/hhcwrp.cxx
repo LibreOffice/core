@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hhcwrp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:23:41 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 09:06:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -323,32 +323,166 @@ void SwHHCWrapper::HandleNewUnit(
 }
 
 
-void SwHHCWrapper::ChangeText( const String &rNewText )
+void SwHHCWrapper::ChangeText( const String &rNewText,
+        const OUString& rOrigText,
+        const ::com::sun::star::uno::Sequence< sal_Int32 > *pOffsets,
+        SwPaM *pCrsr )
 {
-    // get item set with all relevant attributes
-    //sal_uInt16 aRanges[] = {
-    //        RES_CHRATR_BEGIN, RES_FRMATR_END,
-    //        0, 0, 0  };
-    //SfxItemSet aItemSet( rWrtShell.GetAttrPool(), aRanges );
-    //SwDoc *pDoc = pView->GetDocShell()->GetDoc();
-    //SwPaM *pCrsr = rWrtShell.GetCrsr();
-    // get all attributes spanning the whole selection in order to
-    // restore those for the new text
-    //rWrtShell.GetAttr( aItemSet );
+    //!! please see also TextConvWrapper::ChangeText with is a modified
+    //!! copy of this code
 
-    //pDoc->DeleteAndJoin( *pCrsr );
-    //pDoc->Insert( *pCrsr, aNewTxt );
-    rWrtShell.Delete();
-    //pDoc->ResetAttr( *pCrsr );      // reset all attributes
-    //pDoc->Insert( *pCrsr, aItemSet, 0 );
-    rWrtShell.Insert( rNewText );
-    //rWrtShell.SetAttr( aItemSet );  // restore previously saved attributes
+    DBG_ASSERT( rNewText.Len() != 0, "unexpected empty string" );
+    if (rNewText.Len() == 0)
+        return;
+
+    if (pOffsets && pCrsr)  // try to keep as much attributation as possible ?
+    {
+        // remember cursor start position for later setting of the cursor
+        const SwPosition *pStart = pCrsr->Start();
+        const xub_StrLen nStartIndex = pStart->nContent.GetIndex();
+        const SwNodeIndex aStartNodeIndex  = pStart->nNode;
+        SwTxtNode *pStartTxtNode = aStartNodeIndex.GetNode().GetTxtNode();
+
+        const sal_Int32  nIndices = pOffsets->getLength();
+        const sal_Int32 *pIndices = pOffsets->getConstArray();
+        xub_StrLen nConvTextLen = rNewText.Len();
+        xub_StrLen nPos = 0;
+        xub_StrLen nChgPos = STRING_NOTFOUND;
+        xub_StrLen nChgLen = 0;
+        xub_StrLen nConvChgPos = STRING_NOTFOUND;
+        xub_StrLen nConvChgLen = 0;
+
+        // offset to calculate the position in the text taking into
+        // account that text may have been replaced with new text of
+        // different length. Negative values allowed!
+        long nCorrectionOffset = 0;
+
+        DBG_ASSERT(nIndices == 0 || nIndices == nConvTextLen,
+                "mismatch between string length and sequence length!" );
+
+        // find all substrings that need to be replaced (and only those)
+        while (sal_True)
+        {
+            // get index in original text that matches nPos in new text
+            xub_StrLen nIndex;
+            if (nPos < nConvTextLen)
+                nIndex = (sal_Int32) nPos < nIndices ? (xub_StrLen) pIndices[nPos] : nPos;
+            else
+            {
+                nPos   = nConvTextLen;
+                nIndex = static_cast< xub_StrLen >( rOrigText.getLength() );
+            }
+
+            if (rOrigText.getStr()[nIndex] == rNewText.GetChar(nPos) ||
+                nPos == nConvTextLen /* end of string also terminates non-matching char sequence */)
+            {
+                // substring that needs to be replaced found?
+                if (nChgPos != STRING_NOTFOUND && nConvChgPos != STRING_NOTFOUND)
+                {
+                    nChgLen = nIndex - nChgPos;
+                    nConvChgLen = nPos - nConvChgPos;
+#ifdef DEBUG
+                    String aInOrig( rOrigText.copy( nChgPos, nChgLen ) );
+#endif
+                    String aInNew( rNewText.Copy( nConvChgPos, nConvChgLen ) );
+
+                    // set selection to sub string to be replaced in original text
+                    xub_StrLen nChgInNodeStartIndex = static_cast< xub_StrLen >( nStartIndex + nCorrectionOffset + nChgPos );
+                    DBG_ASSERT( rWrtShell.GetCrsr()->HasMark(), "cursor misplaced (nothing selected)" )
+                    rWrtShell.GetCrsr()->GetMark()->nContent.Assign( pStartTxtNode, nChgInNodeStartIndex );
+                    rWrtShell.GetCrsr()->GetPoint()->nContent.Assign( pStartTxtNode, nChgInNodeStartIndex + nChgLen );
+#ifdef DEBUG
+                    String aSelTxt1( rWrtShell.GetSelTxt() );
+#endif
+
+                    // replace selected sub string with the corresponding
+                    // sub string from the new text while keeping as
+                    // much from the attributes as possible
+                    ChangeText_impl( aInNew, sal_True );
+
+                    nCorrectionOffset += nConvChgLen - nChgLen;
+
+                    nChgPos = STRING_NOTFOUND;
+                    nConvChgPos = STRING_NOTFOUND;
+                }
+            }
+            else
+            {
+                // begin of non-matching char sequence found ?
+                if (nChgPos == STRING_NOTFOUND && nConvChgPos == STRING_NOTFOUND)
+                {
+                    nChgPos = nIndex;
+                    nConvChgPos = nPos;
+                }
+            }
+            if (nPos >= nConvTextLen)
+                break;
+            ++nPos;
+        }
+
+        // set cursor to the end of all the new text
+        // (as it would happen after ChangeText_impl (Delete and Insert)
+        // of the whole text in the 'else' branch below)
+        rWrtShell.ClearMark();
+        rWrtShell.GetCrsr()->Start()->nContent.Assign( pStartTxtNode, nStartIndex + nConvTextLen );
+    }
+    else
+    {
+        ChangeText_impl( rNewText, sal_False );
+    }
+}
+
+
+void SwHHCWrapper::ChangeText_impl( const String &rNewText, sal_Bool bKeepAttributes )
+{
+    if (bKeepAttributes)
+    {
+        // get item set with all relevant attributes
+        sal_uInt16 aRanges[] = {
+                RES_CHRATR_BEGIN, RES_FRMATR_END,
+                0, 0, 0  };
+        SfxItemSet aItemSet( rWrtShell.GetAttrPool(), aRanges );
+        // get all attributes spanning the whole selection in order to
+        // restore those for the new text
+        rWrtShell.GetAttr( aItemSet );
+
+#ifdef DEBUG
+        String aSelTxt1( rWrtShell.GetSelTxt() );
+#endif
+        rWrtShell.Delete();
+        rWrtShell.Insert( rNewText );
+
+        // select new inserted text (currently the Point is right after the new text)
+        if (!rWrtShell.GetCrsr()->HasMark())
+            rWrtShell.GetCrsr()->SetMark();
+        SwPosition *pMark = rWrtShell.GetCrsr()->GetMark();
+        pMark->nContent = pMark->nContent.GetIndex() - rNewText.Len();
+#ifdef DEBUG
+        String aSelTxt2( rWrtShell.GetSelTxt() );
+#endif
+
+        // since 'SetAttr' below functions like merging with the attributes
+        // from the itemset with any existing ones we have to get rid of all
+        // all attributes now. (Those attributes that may take effect left
+        // to the position where the new text gets inserted after the old text
+        // was deleted)
+        rWrtShell.ResetAttr();
+        // apply previously saved attributes to new text
+        rWrtShell.SetAttr( aItemSet );
+    }
+    else
+    {
+        rWrtShell.Delete();
+        rWrtShell.Insert( rNewText );
+    }
 }
 
 
 void SwHHCWrapper::ReplaceUnit(
          const sal_Int32 nUnitStart, const sal_Int32 nUnitEnd,
+         const ::rtl::OUString& rOrigText,
          const OUString& rReplaceWith,
+         const ::com::sun::star::uno::Sequence< sal_Int32 > &rOffsets,
          ReplacementAction eAction,
          LanguageType *pNewUnitLanguage )
 {
@@ -369,6 +503,7 @@ void SwHHCWrapper::ReplaceUnit(
 
     OUString aOrigTxt( rWrtShell.GetSelTxt() );
     OUString aNewTxt( rReplaceWith );
+    DBG_ASSERT( aOrigTxt == rOrigText, "!! text mismatch !!" );
     SwFmtRuby *pRuby = 0;
     sal_Bool bRubyBelow = sal_False;
     String  aNewOrigText;
@@ -420,7 +555,9 @@ void SwHHCWrapper::ReplaceUnit(
         rWrtShell.StartUndo( UNDO_SETRUBYATTR );
         if (aNewOrigText.Len())
         {
-            ChangeText( aNewOrigText );
+            // according to FT we currently should not bother about keeping
+            // attributes in Hangul/Hanja conversion
+            ChangeText( aNewOrigText, rOrigText, NULL, NULL );
 
             //!! since Delete, Insert in 'ChangeText' do not set the WrtShells
             //!! bInSelect flag
@@ -450,10 +587,17 @@ void SwHHCWrapper::ReplaceUnit(
     {
         rWrtShell.StartUndo( UNDO_OVERWRITE );
 
-        ChangeText( aNewTxt );
+        // according to FT we should currently not bother about keeping
+        // attributes in Hangul/Hanja conversion and leave that untouched.
+        // Thus we do this only for Chinese translation...
+        sal_Bool bIsChineseConversion = IsChinese( GetSourceLanguage() );
+        if (bIsChineseConversion)
+            ChangeText( aNewTxt, rOrigText, &rOffsets, rWrtShell.GetCrsr() );
+        else
+            ChangeText( aNewTxt, rOrigText, NULL, NULL );
 
         // change language and font if necessary
-        if (IsChinese( GetSourceLanguage() ))
+        if (bIsChineseConversion)
         {
             rWrtShell.SetMark();
             rWrtShell.GetCrsr()->GetMark()->nContent -= (xub_StrLen) aNewTxt.getLength();
