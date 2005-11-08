@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:23:41 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:26:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1063,13 +1063,6 @@ void SwHTMLParser::DocumentDetected()
             FinishHeader( TRUE );
 
         CallEndAction( TRUE, TRUE );
-
-#if 0
-        ViewShell *pTmpVSh = 0;
-        pDoc->GetEditShell( &pTmpVSh );
-        ASSERT( pTmpVSh==0,
-                "Dok-ViewShell existiert schon vor DocDetected" );
-#endif
 
         pDoc->DoUndo( FALSE );
         // Durch das DocumentDetected wurde im allgemeinen eine
@@ -3983,9 +3976,6 @@ void SwHTMLParser::EndPara( BOOL bReal )
     {
         const SwNumRule *pNumRule = pPam->GetNode()->GetTxtNode()->GetNumRule();
         ASSERT( pNumRule, "Wo ist die Numrule geblieben" );
-        if( pNumRule )
-            pDoc->UpdateNumRule( pNumRule->GetName(),
-                                    pPam->GetPoint()->nNode.GetIndex() );
     }
 
     // leere Absaetze werden von Netscape uebersprungen, von uns jetzt auch
@@ -4780,56 +4770,9 @@ void SwHTMLParser::SetTxtCollAttrs( _HTMLAttrContext *pContext )
     const SvxLRSpaceItem& rLRItem = pCollToSet->GetLRSpace();
     BOOL bSetLRSpace;
 
-#ifndef NUM_RELSPACE
-    SwTxtNode* pTxtNode = pPam->GetNode()->GetTxtNode();
-    ASSERT( pTxtNode, "TxtFmtColl an Nicht-Text-Node setzen???" );
-    const SwNodeNum *pNodeNum = pTxtNode->GetNum();
-    if( GetNumInfo().GetDepth() > 0 || pNodeNum )
-    {
-        // Die Werte fuer den linken Rand und den Einzug koennte man auch
-        // aus der NumRule holen. Berechnen ist aber einfacher.
-
-        ASSERT( (GetNumInfo().GetDepth() > 0) ==
-                    (GetNumInfo().GetNumRule() != 0),
-                "Keine NumRule in Aufzaehlung oder umgekehrt" );
-
-        ASSERT( pNodeNum, "Kein SwNodeNum am Absatz in Aufzaehlung" );
-
-        BOOL bNumbered = FALSE;
-        if( pNodeNum && pNodeNum.IsNum())
-        {
-            // der Erstzeilen-Einzug des List-Items muss noch zu dem
-            // sowieso schon bestehenden addiert werden, weil er im
-            // LI-Kontext nicht gesetzt wurde. Das ist leider nicht moeglich,
-            // weil auch nicht-numerierte Absaetze in diesem Kontext
-            // vorkommen koennen.
-            nFirstLineIndent += HTML_NUMBUL_INDENT;
-            bNumbered = TRUE;
-        }
-
-        // In LI-Absaetzen ausserhalb von OL/UL ist nNumBulListDeep 0, aber
-        // es muss trotzdem um die Breite des Bullet-Zeichens eingerueckt
-        // werden.
-        USHORT nLeftMarginNumBul = (GetNumInfo().GetDepth() * HTML_NUMBUL_MARGINLEFT);
-        if( !nLeftMarginNumBul )
-            nLeftMarginNumBul = (USHORT)(-HTML_NUMBUL_INDENT);
-
-        bSetLRSpace = nLeftMargin != nLeftMarginNumBul ||
-                      (bNumbered && nFirstLineIndent != HTML_NUMBUL_INDENT) ||
-                      (!bNumbered && nFirstLineIndent) ||
-                      nRightMargin != rLRItem.GetRight();
-
-        pTxtNode->SetNumLSpace( !bSetLRSpace );
-    }
-    else
-    {
-#endif
         bSetLRSpace = nLeftMargin != rLRItem.GetTxtLeft() ||
                       nFirstLineIndent != rLRItem.GetTxtFirstLineOfst() ||
                       nRightMargin != rLRItem.GetRight();
-#ifndef NUM_RELSPACE
-    }
-#endif
 
     if( bSetLRSpace )
     {
