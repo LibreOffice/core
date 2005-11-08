@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-18 13:53:57 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 09:10:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3792,49 +3792,60 @@ long ImpEditEngine::GetXPos( ParaPortion* pParaPortion, EditLine* pLine, USHORT 
         else if ( pPortion->GetKind() == PORTIONKIND_TEXT )
         {
             DBG_ASSERT( nIndex != pLine->GetStart(), "Strange behavior in new GetXPos()" );
+            DBG_ASSERT( pLine && pLine->GetCharPosArray().Count(), "svx::ImpEditEngine::GetXPos(), portion in an empty line?" );
 
-            long nPosInPortion = pLine->GetCharPosArray().GetObject( nIndex - 1 - pLine->GetStart() );
-
-            if ( !pPortion->IsRightToLeft() )
+            if( pLine->GetCharPosArray().Count() )
             {
-                nX += nPosInPortion;
-            }
-            else
-            {
-                nX += nPortionTextWidth - nPosInPortion;
-            }
-
-            if ( pPortion->GetExtraInfos() && pPortion->GetExtraInfos()->bCompressed )
-            {
-                nX += pPortion->GetExtraInfos()->nPortionOffsetX;
-                if ( pPortion->GetExtraInfos()->nAsianCompressionTypes & CHAR_PUNCTUATIONRIGHT )
+                USHORT nPos = nIndex - 1 - pLine->GetStart();
+                if( nPos >= pLine->GetCharPosArray().Count() )
                 {
-                    BYTE nType = GetCharTypeForCompression( pParaPortion->GetNode()->GetChar( nIndex ) );
-                    if ( nType == CHAR_PUNCTUATIONRIGHT )
+                    nPos = pLine->GetCharPosArray().Count()-1;
+                    DBG_ERROR("svx::ImpEditEngine::GetXPos(), index out of range!");
+                }
+
+                long nPosInPortion = pLine->GetCharPosArray().GetObject( nPos );
+
+                if ( !pPortion->IsRightToLeft() )
+                {
+                    nX += nPosInPortion;
+                }
+                else
+                {
+                    nX += nPortionTextWidth - nPosInPortion;
+                }
+
+                if ( pPortion->GetExtraInfos() && pPortion->GetExtraInfos()->bCompressed )
+                {
+                    nX += pPortion->GetExtraInfos()->nPortionOffsetX;
+                    if ( pPortion->GetExtraInfos()->nAsianCompressionTypes & CHAR_PUNCTUATIONRIGHT )
                     {
-                        USHORT n = nIndex - nTextPortionStart;
-                        const sal_Int32* pDXArray = pLine->GetCharPosArray().GetData()+( nTextPortionStart-pLine->GetStart() );
-                        long nCharWidth = ( ( (n+1) < pPortion->GetLen() ) ? pDXArray[n] : pPortion->GetSize().Width() )
-                                                        - ( n ? pDXArray[n-1] : 0 );
-                        if ( (n+1) < pPortion->GetLen() )
+                        BYTE nType = GetCharTypeForCompression( pParaPortion->GetNode()->GetChar( nIndex ) );
+                        if ( nType == CHAR_PUNCTUATIONRIGHT )
                         {
-                            // smaller, when char behind is CHAR_PUNCTUATIONRIGHT also
-                            nType = GetCharTypeForCompression( pParaPortion->GetNode()->GetChar( nIndex+1 ) );
-                            if ( nType == CHAR_PUNCTUATIONRIGHT )
+                            USHORT n = nIndex - nTextPortionStart;
+                            const sal_Int32* pDXArray = pLine->GetCharPosArray().GetData()+( nTextPortionStart-pLine->GetStart() );
+                            long nCharWidth = ( ( (n+1) < pPortion->GetLen() ) ? pDXArray[n] : pPortion->GetSize().Width() )
+                                                            - ( n ? pDXArray[n-1] : 0 );
+                            if ( (n+1) < pPortion->GetLen() )
                             {
-                                long nNextCharWidth = ( ( (n+2) < pPortion->GetLen() ) ? pDXArray[n+1] : pPortion->GetSize().Width() )
-                                                                - pDXArray[n];
-                                long nCompressed = nNextCharWidth/2;
-                                nCompressed *= pPortion->GetExtraInfos()->nMaxCompression100thPercent;
-                                nCompressed /= 10000;
-                                nCharWidth += nCompressed;
+                                // smaller, when char behind is CHAR_PUNCTUATIONRIGHT also
+                                nType = GetCharTypeForCompression( pParaPortion->GetNode()->GetChar( nIndex+1 ) );
+                                if ( nType == CHAR_PUNCTUATIONRIGHT )
+                                {
+                                    long nNextCharWidth = ( ( (n+2) < pPortion->GetLen() ) ? pDXArray[n+1] : pPortion->GetSize().Width() )
+                                                                    - pDXArray[n];
+                                    long nCompressed = nNextCharWidth/2;
+                                    nCompressed *= pPortion->GetExtraInfos()->nMaxCompression100thPercent;
+                                    nCompressed /= 10000;
+                                    nCharWidth += nCompressed;
+                                }
                             }
+                            else
+                            {
+                                nCharWidth *= 2;    // last char pos to portion end is only compressed size
+                            }
+                            nX += nCharWidth/2; // 50% compression
                         }
-                        else
-                        {
-                            nCharWidth *= 2;    // last char pos to portion end is only compressed size
-                        }
-                        nX += nCharWidth/2; // 50% compression
                     }
                 }
             }
