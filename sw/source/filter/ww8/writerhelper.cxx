@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writerhelper.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:06:35 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:28:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -648,14 +648,12 @@ namespace sw
         const SwNumFmt* GetNumFmtFromTxtNode(const SwTxtNode &rTxtNode)
         {
             const SwNumRule *pRule = 0;
-            const SwNodeNum* pNum = 0;
             if (
-                (pNum = rTxtNode.GetNum()) &&
-                (MAXLEVEL > pNum->GetLevel()) &&
+                rTxtNode.IsNumbered() && rTxtNode.IsCounted() &&
                 (pRule = rTxtNode.GetNumRule())
-               )
+                )
             {
-                return &(pRule->Get(pNum->GetLevel()));
+                return &(pRule->Get(rTxtNode.GetLevel()));
             }
 
             ASSERT(rTxtNode.GetDoc(), "No document for node?, suspicious");
@@ -663,12 +661,11 @@ namespace sw
                 return 0;
 
             if (
-                  (pNum = rTxtNode.GetOutlineNum()) &&
-                  (MAXLEVEL > pNum->GetLevel()) &&
-                  (pRule = rTxtNode.GetDoc()->GetOutlineNumRule())
+                rTxtNode.IsNumbered() && rTxtNode.IsCounted() &&
+                (pRule = rTxtNode.GetDoc()->GetOutlineNumRule())
                 )
             {
-                return &(pRule->Get(pNum->GetLevel()));
+                return &(pRule->Get(rTxtNode.GetLevel()));
             }
 
             return 0;
@@ -676,26 +673,22 @@ namespace sw
 
         const SwNumRule* GetNumRuleFromTxtNode(const SwTxtNode &rTxtNode)
         {
-            if (const SwNumRule *pRule = GetNormalNumRuleFromTxtNode(rTxtNode))
-                return pRule;
-            return GetOutlineNumRuleFromTxtNode(rTxtNode);
+            return GetNormalNumRuleFromTxtNode(rTxtNode);
         }
 
         const SwNumRule* GetOutlineNumRuleFromTxtNode(const SwTxtNode &rTxtNode)
         {
             const SwNumRule *pRet = 0;
             const SwNumRule *pRule = 0;
-            const SwNodeNum* pNum;
 
             ASSERT(rTxtNode.GetDoc(), "No document for node?, suspicious");
             if (!rTxtNode.GetDoc())
                 return 0;
 
             if (
-                (pNum = rTxtNode.GetOutlineNum()) &&
-                (MAXLEVEL > pNum->GetLevel()) &&
+                rTxtNode.IsNumbered() && rTxtNode.IsCounted() &&
                 (pRule = rTxtNode.GetDoc()->GetOutlineNumRule())
-               )
+                )
             {
                 return pRule;
             }
@@ -707,11 +700,9 @@ namespace sw
         {
             const SwNumRule *pRet = 0;
             const SwNumRule *pRule = 0;
-            const SwNodeNum* pNum;
 
             if (
-                (pNum = rTxtNode.GetNum()) &&
-                (MAXLEVEL > pNum->GetLevel()) &&
+                rTxtNode.IsNumbered() && rTxtNode.IsCounted() &&
                 (pRule = rTxtNode.GetNumRule())
                )
             {
