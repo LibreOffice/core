@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:23:34 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:13:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,10 @@
 #include <SwRewriter.hxx>
 #endif
 #include <svx/svdundo.hxx> // #111827#
+
+#ifndef _SW_NODE_NUM_HXX
+#include <SwNodeNum.hxx>
+#endif
 
 class SwUndoIter;
 class SwHistory;
@@ -1469,11 +1473,11 @@ public:
 class SwUndoNumOrNoNum : public SwUndo
 {
     ULONG nIdx;
-    SwNodeNum mNewNum, mOldNum; // #115901#
+    BOOL mbNewNum, mbOldNum;
 
 public:
-    SwUndoNumOrNoNum( const SwNodeIndex& rIdx, const SwNodeNum & mOldNum,
-                      const SwNodeNum & mNewNum ); // #115901#
+    SwUndoNumOrNoNum( const SwNodeIndex& rIdx, BOOL mbOldNum,
+                      BOOL mbNewNum );
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
