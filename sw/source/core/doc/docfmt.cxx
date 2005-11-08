@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:12:32 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:16:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -596,23 +596,27 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
         if (rRg.IsInFrontOfLabel())
         {
             SwTxtNode * pTxtNd = pNode->GetTxtNode();
-            const SwNodeNum * pNdNum = pTxtNd->GetNum();
+            SwNumRule * pNumRule = pTxtNd->GetNumRule();
 
-            if (pNdNum )
+            // --> OD 2005-10-24 #126346# - make code robust:
+            if ( !pNumRule )
             {
-                SwNumRule * pNumRule = pTxtNd->GetNumRule();
+                ASSERT( false,
+                        "<InsAttr(..)> - PaM in front of label, but text node has no numbering rule set. This is a serious defect, please inform OD." );
+                return FALSE;
+            }
+            // <--
 
-                SwNumFmt aNumFmt = pNumRule->Get(pNdNum->GetRealLevel());
-                SwCharFmt * pCharFmt =
-                    pDoc->FindCharFmtByName(aNumFmt.GetCharFmtName());
+            SwNumFmt aNumFmt = pNumRule->Get(pTxtNd->GetLevel());
+            SwCharFmt * pCharFmt =
+                pDoc->FindCharFmtByName(aNumFmt.GetCharFmtName());
 
-                if (pCharFmt)
-                {
-                    if (pHistory)
-                        pHistory->Add(pCharFmt->GetAttrSet(), *pCharFmt);
+            if (pCharFmt)
+            {
+                if (pHistory)
+                    pHistory->Add(pCharFmt->GetAttrSet(), *pCharFmt);
 
-                    pCharFmt->SetAttr(aCharSet);
-                }
+                pCharFmt->SetAttr(aCharSet);
             }
 
             return TRUE;
@@ -1562,8 +1566,16 @@ BOOL lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
     {
         ParaRstFmt* pPara = (ParaRstFmt*)pArgs;
 
+        SwTxtFmtColl* pFmt = static_cast<SwTxtFmtColl*>(pPara->pFmtColl);
         if ( pPara->bReset )
+        {
             lcl_RstAttr( pCNd, pPara );
+
+            /*
+            if (pFmt && pFmt->GetNumRule().GetValue().Len() > 0)
+                pCNd->ResetAttr(RES_PARATR_NUMRULE);
+            */
+        }
 
         // erst in die History aufnehmen, damit ggfs. alte Daten
         // gesichert werden koennen
@@ -1571,7 +1583,6 @@ BOOL lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
             pPara->pHistory->Add( pCNd->GetFmtColl(), pCNd->GetIndex(),
                                     ND_TEXTNODE );
 
-        SwTxtFmtColl* pFmt = static_cast<SwTxtFmtColl*>(pPara->pFmtColl);
         pCNd->ChgFmtColl( pFmt );
 
         pPara->nWhich++;
