@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-01 14:55:31 $
+#   last change: $Author: rt $ $Date: 2005-11-08 17:00:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -146,6 +146,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_lo_LA.cxx  \
     $(MISC)$/localedata_lt_LT.cxx  \
     $(MISC)$/localedata_lv_LV.cxx  \
+    $(MISC)$/localedata_mk_MK.cxx  \
     $(MISC)$/localedata_mn_MN.cxx  \
     $(MISC)$/localedata_mr_IN.cxx  \
     $(MISC)$/localedata_ms_MY.cxx  \
@@ -292,6 +293,7 @@ SHL3OBJS=	\
     $(SLO)$/localedata_kl_GL.obj	\
     $(SLO)$/localedata_lt_LT.obj	\
     $(SLO)$/localedata_lv_LV.obj	\
+    $(SLO)$/localedata_mk_MK.obj	\
     $(SLO)$/localedata_nb_NO.obj	\
     $(SLO)$/localedata_nl_BE.obj	\
     $(SLO)$/localedata_nl_NL.obj	\
