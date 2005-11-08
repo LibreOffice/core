@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LayoutMenu.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:31:32 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 09:05:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -309,7 +309,16 @@ String LayoutMenu::GetSelectedLayoutName (void)
 
 AutoLayout LayoutMenu::GetSelectedAutoLayout (void)
 {
-    return *static_cast<AutoLayout*>(GetItemData(GetSelectItemId()));
+    AutoLayout aResult = AUTOLAYOUT_NONE;
+
+    if ( ! IsNoSelection() && GetSelectItemId()!=0)
+    {
+        AutoLayout* pLayout = static_cast<AutoLayout*>(GetItemData(GetSelectItemId()));
+        if (pLayout != NULL)
+            aResult = *pLayout;
+    }
+
+    return aResult;
 }
 
 
