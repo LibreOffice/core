@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlform.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:43:41 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:25:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1762,15 +1762,6 @@ void SwHTMLParser::InsertInput()
         if( !sImgSrc.Len() )
             return;
     }
-#if 0
-    else if( HTML_IT_HIDDEN!=eType )
-    {
-        // Obwohl Netscape und MS-IE nur Iamge-Buttons ausrichten koennen,
-        // werten wir ALIGN fuer alle Controls aus.
-        if( VERT_NONE == eVertOri )
-            eVertOri = VERT_TOP;
-    }
-#else
     else
     {
         // ALIGN fuer alle Controls auszuwerten ist keine so gute Idee,
@@ -1780,7 +1771,6 @@ void SwHTMLParser::InsertInput()
         eVertOri = VERT_TOP;
         eHoriOri = HORI_NONE;
     }
-#endif
 
     // Defaults entsprechen HTML_IT_TEXT
     const sal_Char *pType = "TextField";
