@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 15:33:43 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:02:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,6 +156,7 @@ static const struct {
         { "ka_GE",  lcl_DATA_EURO, "ka" },
         { "be_BY",  lcl_DATA_EURO, "be" },
         { "kl_GL",  lcl_DATA_EURO, "kl" },
+        { "mk_MK",  lcl_DATA_EURO, "mk" },
 
         { "ja_JP",  lcl_DATA_OTHERS, "ja" },
         { "ko_KR",  lcl_DATA_OTHERS, "ko" },
