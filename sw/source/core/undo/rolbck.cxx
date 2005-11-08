@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rolbck.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:17:54 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:23:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,13 +197,13 @@ SwSetFmtHint::SwSetFmtHint( const SfxPoolItem* pFmtHt, ULONG nNd )
     case RES_PARATR_NUMRULE:
         {
             const SwModify* pMod = ((SwNumRuleItem*)pFmtHt)->GetDefinedIn();
-            const SwNodeNum* pNdNum;
-            if( pMod && pMod->ISA( SwTxtNode ) &&
-                0 != (pNdNum = ((SwTxtNode*)pMod)->GetNum() ) )
+            if( pMod && pMod->ISA( SwTxtNode ))
             {
-                nNumLvl = pNdNum->GetLevel();
-                bNumStt = pNdNum->IsStart();
-                nSetStt = pNdNum->GetSetValue();
+                const SwTxtNode* pTxtNd = static_cast<const SwTxtNode *>(pMod);
+
+                nNumLvl = pTxtNd->GetLevel();
+                bNumStt = pTxtNd->IsRestart();
+                nSetStt = pTxtNd->GetStart();
             }
             ((SwNumRuleItem*)pAttr)->ChgDefinedIn( 0 );
         }
@@ -251,14 +251,12 @@ void SwSetFmtHint::SetInDoc( SwDoc* pDoc, BOOL bTmpSet )
     {
         ((SwCntntNode*)pNode)->SetAttr( *pAttr );
 
-        if( RES_PARATR_NUMRULE == pAttr->Which() && NO_NUMBERING != nNumLvl &&
-            ((SwTxtNode*)pNode)->GetNum() )
+        if( RES_PARATR_NUMRULE == pAttr->Which() && NO_NUMBERING != nNumLvl)
         {
-            SwNodeNum aNum( *((SwTxtNode*)pNode)->GetNum() );
-            aNum.SetLevel( nNumLvl );
-            aNum.SetStart( bNumStt );
-            aNum.SetSetValue( nSetStt );
-            ((SwTxtNode*)pNode)->UpdateNum( aNum );
+            SwTxtNode * pTxtNd = static_cast<SwTxtNode *>(pNode);
+            pTxtNd->SetLevel( nNumLvl );
+            pTxtNd->SetRestart( bNumStt );
+            pTxtNd->SetStart( nSetStt );
         }
     }
     else if( pNode->IsTableNode() )
@@ -588,11 +586,11 @@ SwChgFmtColl::SwChgFmtColl( const SwFmtColl* pFmtColl, ULONG nNd,
 {
     const SwDoc* pDoc = pFmtColl->GetDoc();
     const SwTxtNode* pTxtNd = pDoc->GetNodes()[ nNode ]->GetTxtNode();
-    if( pTxtNd && pTxtNd->GetNum() )
+    if( pTxtNd )
     {
-        nNumLvl = pTxtNd->GetNum()->GetLevel();
-        bNumStt = pTxtNd->GetNum()->IsStart();
-        nSetStt = pTxtNd->GetNum()->GetSetValue();
+        nNumLvl = pTxtNd->GetLevel();
+        bNumStt = pTxtNd->IsRestart();
+        nSetStt = pTxtNd->GetStart();
     }
 }
 
@@ -611,13 +609,13 @@ void SwChgFmtColl::SetInDoc( SwDoc* pDoc, BOOL bTmpSet )
             if( USHRT_MAX != pDoc->GetTxtFmtColls()->GetPos( (SwTxtFmtColl*)pColl ))
             {
                 pCntntNd->ChgFmtColl( (SwFmtColl*)pColl );
-                if( NO_NUMBERING != nNumLvl && ((SwTxtNode*)pCntntNd)->GetNum() )
+                if( NO_NUMBERING != nNumLvl)
                 {
-                    SwNodeNum aNum( *((SwTxtNode*)pCntntNd)->GetNum() );
-                    aNum.SetLevel( nNumLvl );
-                    aNum.SetStart( bNumStt );
-                    aNum.SetSetValue( nSetStt );
-                    ((SwTxtNode*)pCntntNd)->UpdateNum( aNum );
+                    SwTxtNode * pTxtNd = static_cast<SwTxtNode *>(pCntntNd);
+
+                    pTxtNd->SetLevel( nNumLvl );
+                    pTxtNd->SetRestart( bNumStt );
+                    pTxtNd->SetStart( nSetStt );
                 }
             }
         }
@@ -849,12 +847,9 @@ SwHstrySetAttrSet::SwHstrySetAttrSet( const SfxItemSet& rSet, ULONG nNodePos,
                     ((SwNumRuleItem*)pItem)->GetDefinedIn()->ISA( SwTxtNode ))
                 {
                     SwTxtNode* pTNd = (SwTxtNode*)((SwNumRuleItem*)pItem)->GetDefinedIn();
-                    if( pTNd->GetNum() )
-                    {
-                        nNumLvl = pTNd->GetNum()->GetLevel();
-                        bNumStt = pTNd->GetNum()->IsStart();
-                        nSetStt = pTNd->GetNum()->GetSetValue();
-                    }
+                    nNumLvl = pTNd->GetLevel();
+                    bNumStt = pTNd->IsRestart();
+                    nSetStt = pTNd->GetStart();
                 }
                 ((SwNumRuleItem*)pItem)->ChgDefinedIn( 0 );
                 break;
@@ -881,14 +876,13 @@ void SwHstrySetAttrSet::SetInDoc( SwDoc* pDoc, BOOL )
         if( ((SwCntntNode*)pNode)->GetpSwAttrSet() && SFX_ITEM_SET ==
             ((SwCntntNode*)pNode)->GetpSwAttrSet()->GetItemState(
             RES_PARATR_NUMRULE, FALSE, &pItem ) &&
-            NO_NUMBERING != nNumLvl &&
-            ((SwTxtNode*)pNode)->GetNum() )
+            NO_NUMBERING != nNumLvl)
         {
-            SwNodeNum aNum( *((SwTxtNode*)pNode)->GetNum() );
-            aNum.SetLevel( nNumLvl );
-            aNum.SetStart( bNumStt );
-            aNum.SetSetValue( nSetStt );
-            ((SwTxtNode*)pNode)->UpdateNum( aNum );
+            SwTxtNode * pTxtNd = static_cast<SwTxtNode *>(pNode);
+
+            pTxtNd->SetLevel( nNumLvl );
+            pTxtNd->SetRestart( bNumStt );
+            pTxtNd->SetStart( nSetStt );
         }
         if( aResetArr.Count() )
             ((SwCntntNode*)pNode)->ResetAttr( aResetArr );
