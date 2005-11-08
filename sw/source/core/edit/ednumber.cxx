@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ednumber.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 16:00:00 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:19:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,6 +211,16 @@ BOOL SwEditShell::HasNumber() const
     if (pTxtNd)
     {
         bResult = pTxtNd->HasNumber();
+
+        // --> OD 2005-10-26 #b6340308#
+        // special case: outline numbered, not counted paragraph
+        if ( bResult &&
+             pTxtNd->GetNumRule() == GetDoc()->GetOutlineNumRule() &&
+             !pTxtNd->IsCounted() )
+        {
+            bResult = FALSE;
+        }
+        // <--
     }
 
     return bResult;
@@ -254,6 +264,11 @@ BOOL SwEditShell::DelNumRules()
     // ueberfluessig sein, aber VB hatte darueber eine Bugrep.
     CallChgLnk();
 
+    // --> OD 2005-10-24 #126346# - cursor can not be anymore in
+    // front of a label, because numbering/bullet is deleted.
+    SetInFrontOfLabel( FALSE );
+    // <--
+
     GetDoc()->SetModified();
     EndAllAction();
     return bRet;
@@ -280,6 +295,14 @@ BOOL SwEditShell::NumUpDown( BOOL bDown )
         GetDoc()->EndUndo( UNDO_END );
     }
     GetDoc()->SetModified();
+
+    // --> FME 2005-09-19 #i54693# Update marked numbering levels
+    if ( IsInFrontOfLabel() )
+        UpdateMarkedNumLevel();
+    // <--
+
+    CallChgLnk();
+
     EndAllAction();
     return bRet;
 }
@@ -341,9 +364,9 @@ void SwEditShell::NumIndent(short nIndent, const SwPosition & rPos)
         SwTxtNode * pTxtNode = aPaM.GetNode()->GetTxtNode();
 
         int nLevel = -1;
-        int nReferenceLevel = pTxtNode->GetNum()->GetLevel();
+        int nReferenceLevel = pTxtNode->GetLevel();
 
-        if (! IsFirstOfNumRule(aPaM) && pTxtNode->GetNum())
+        if (! IsFirstOfNumRule(aPaM))
             nLevel = nReferenceLevel;
 
         SwNumRule aRule(*pCurNumRule);
@@ -436,13 +459,20 @@ BOOL SwEditShell::MoveNumParas( BOOL bUpperLower, BOOL bUpperLeft )
                     pOrig == aCrsr.GetNode()->GetTxtNode()->GetNumRule() )
                 {
                     ULONG nStt = aCrsr.GetPoint()->nNode.GetIndex(), nIdx = nStt+1;
-                    while( nIdx < GetDoc()->GetNodes().Count()-1 && (
-                        ( pNd = GetDoc()->GetNodes()[ nIdx ])->IsSectionNode() ||
-                        ( pNd->IsEndNode() && pNd->FindStartNode()->IsSectionNode()) ||
-                        ( pNd->IsTxtNode() && pOrig == ((SwTxtNode*)pNd)->GetNumRule() &&
-                            ((SwTxtNode*)pNd)->GetNum() &&
-                            ((SwTxtNode*)pNd)->GetNum()->GetRealLevel() > nUpperLevel )) )
-                        ++nIdx;
+
+                    while (nIdx < GetDoc()->GetNodes().Count()-1)
+                    {
+                        pNd = GetDoc()->GetNodes()[ nIdx ];
+
+                        if (pNd->IsSectionNode() ||
+                            ( pNd->IsEndNode() && pNd->FindStartNode()->IsSectionNode()) ||
+                            ( pNd->IsTxtNode() && pOrig == ((SwTxtNode*)pNd)->GetNumRule() &&
+                              ((SwTxtNode*)pNd)->GetLevel() > nUpperLevel ))
+                        {
+                            ++nIdx;
+                        }
+                    }
+
                     if( nStt == nIdx || !GetDoc()->GetNodes()[ nIdx ]->IsTxtNode() )
                         nOffset = 1;
                     else
@@ -482,8 +512,8 @@ USHORT SwEditShell::GetOutlineCnt() const
 BYTE SwEditShell::GetOutlineLevel( USHORT nIdx ) const
 {
     const SwNodes& rNds = GetDoc()->GetNodes();
-    const SwTxtFmtColl* pColl = rNds.GetOutLineNds()[ nIdx ]->GetTxtNode()->GetTxtColl();
-    return pColl->GetOutlineLevel();
+
+    return rNds.GetOutLineNds()[ nIdx ]->GetTxtNode()->GetOutlineLevel();
 }
 
 
@@ -612,7 +642,6 @@ BOOL SwEditShell::NumOrNoNum( BOOL bNumOn, BOOL bChkStart ) // #115901#
     return bRet;
 }
 
-
 BOOL SwEditShell::IsNoNum( BOOL bChkStart, BOOL bOutline ) const
 {
     // ein Backspace im Absatz ohne Nummer wird zum Delete
@@ -626,34 +655,18 @@ BOOL SwEditShell::IsNoNum( BOOL bChkStart, BOOL bOutline ) const
 
         if (pTxtNd)
         {
-            const SwNodeNum* pNum = NULL;
-
-            if (bOutline)
-            {
-                if (NO_NUMBERING != pTxtNd->GetTxtColl()->GetOutlineLevel())
-                {
-                    pNum = pTxtNd->GetOutlineNum();
-                }
-            }
-            else if (pTxtNd->GetNumRule())
-            {
-                pNum = pTxtNd->GetNum();
-            }
-            if (pNum)
-                bResult =  pNum->GetLevel() & NO_NUMLEVEL;
+            bResult =  ! pTxtNd->IsCounted();
         }
     }
 
     return bResult;
 }
 
-
-const SwNodeNum* SwEditShell::GetOutlineNum( USHORT nIdx ) const
+SwTxtNode * SwEditShell::GetOutlineNode( USHORT nIdx ) const
 {
     const SwNodes& rNds = GetDoc()->GetNodes();
-    return rNds.GetOutLineNds()[ nIdx ]->GetTxtNode()->GetOutlineNum();
+    return rNds.GetOutLineNds()[ nIdx ]->GetTxtNode();
 }
-
 
 BYTE SwEditShell::GetNumLevel( BOOL* pHasChilds ) const
 {
@@ -670,9 +683,9 @@ BYTE SwEditShell::GetNumLevel( BOOL* pHasChilds ) const
     // <--
 
     const SwNumRule* pRule = pTxtNd->GetNumRule();
-    if( pRule && pTxtNd->GetNum() )
+    if(pRule)
     {
-        nLevel = pTxtNd->GetNum()->GetLevel();
+        nLevel = pTxtNd->GetLevel();
         if( pHasChilds )
         {
             *pHasChilds = FALSE;
@@ -694,8 +707,7 @@ BYTE SwEditShell::GetNumLevel( BOOL* pHasChilds ) const
                         ((SwNumRuleItem*)pItem)->GetValue() == rRule &&
                         pMod->IsA( TYPE( SwTxtNode )) &&
                         ((SwTxtNode*)pMod)->GetNodes().IsDocNodes() &&
-                        ((SwTxtNode*)pMod)->GetNum() &&
-                        nLvl < ((SwTxtNode*)pMod)->GetNum()->GetRealLevel() )
+                        nLvl < ((SwTxtNode*)pMod)->GetLevel() )
                     {
                         *pHasChilds = TRUE;
                         break;
@@ -740,13 +752,25 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule )
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
         for( USHORT n = 0; n < aRangeArr.Count(); ++n )
-            GetDoc()->SetNumRule( aRangeArr.SetPam( n, aPam ), rRule );
+        {
+            aRangeArr.SetPam( n, aPam );
+            GetDoc()->SetNumRule( aPam, rRule );
+            GetDoc()->SetCounted( aPam, true );
+        }
         GetDoc()->EndUndo( UNDO_END );
     }
     else
-        GetDoc()->SetNumRule( *pCrsr, rRule );
+    {
+        GetDoc()->SetNumRule( *pCrsr, rRule);
+        GetDoc()->SetCounted( *pCrsr, true );
+    }
 
     EndAllAction();
+}
+
+BYTE SwEditShell::GetCurOutlineLevel() const
+{
+    return GetDoc()->GetCurOutlineLevel(*GetCrsr()->GetPoint());
 }
 
 String SwEditShell::GetUniqueNumRuleName( const String* pChkStr, BOOL bAutoNum ) const
@@ -791,10 +815,11 @@ void SwEditShell::SetNumRuleStart( BOOL bFlag )
 
 BOOL SwEditShell::IsNumRuleStart() const
 {
+    BOOL bResult = FALSE;
     const SwTxtNode* pTxtNd = GetCrsr()->GetNode()->GetTxtNode();
-    if( pTxtNd && pTxtNd->GetNum() && pTxtNd->GetNumRule() )
-        return pTxtNd->GetNum()->IsStart();
-    return FALSE;
+    if( pTxtNd )
+        bResult = pTxtNd->IsRestart() ? TRUE : FALSE;
+    return bResult;
 }
 
 void SwEditShell::SetNodeNumStart( USHORT nStt )
@@ -820,9 +845,9 @@ void SwEditShell::SetNodeNumStart( USHORT nStt )
 USHORT SwEditShell::IsNodeNumStart() const
 {
     const SwTxtNode* pTxtNd = GetCrsr()->GetNode()->GetTxtNode();
-    if( pTxtNd && pTxtNd->GetNum() && pTxtNd->GetNumRule() )
-        return pTxtNd->GetNum()->GetSetValue();
-    return USHRT_MAX;
+    if( pTxtNd )
+        return pTxtNd->GetStart();
+    return FALSE;
 }
 
 
