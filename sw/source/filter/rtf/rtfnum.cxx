@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfnum.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:54:40 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:27:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1168,9 +1168,9 @@ void SwRTFWriter::OutRTFListTab()
     USHORT nId = 1, nTmplId = 1, n;
 
     // prepare the NodeNum to generate the NumString
-    SwNodeNum aNdNum( 0 );
+    SwNodeNum::tNumberVector aNumVector;
     for( n = 0; n < MAXLEVEL; ++n )
-        aNdNum.GetLevelVal()[ n ] = n;
+        aNumVector.push_back(n);
     BYTE aNumLvlPos[ MAXLEVEL ];
 
     if( !pNumRuleTbl )
@@ -1253,8 +1253,7 @@ void SwRTFWriter::OutRTFListTab()
             {
                 memset( aNumLvlPos, 0, MAXLEVEL );
                 BYTE* pLvlPos = aNumLvlPos;
-                aNdNum.SetLevel( nLvl );
-                String sNumStr( pRule->MakeNumString( aNdNum, FALSE, TRUE ));
+                String sNumStr( pRule->MakeNumString(aNumVector, FALSE, TRUE));
 
                 // now search the nums in the string
                 for( BYTE i = 0; i <= nLvl; ++i )
@@ -1401,23 +1400,16 @@ BOOL SwRTFWriter::OutListNum( const SwTxtNode& rNd )
 {
     BOOL bRet = FALSE;
     const SwNumRule* pRule = rNd.GetNumRule();
-    const SwNodeNum* pNdNum = 0;
-    // or is an outlinerule valid?
-    if( pRule )
-        pNdNum = rNd.GetNum();
-    else if( MAXLEVEL > rNd.GetTxtColl()->GetOutlineLevel() &&
-            0 != ( pNdNum = rNd.GetOutlineNum() ) )
-        pRule = pDoc->GetOutlineNumRule();
 
-    if( pRule && pNdNum && MAXLEVEL > pNdNum->GetLevel() )
+    if( pRule && MAXLEVEL > rNd.GetLevel() )
     {
         bOutFmtAttr = FALSE;
         bOutListNumTxt = TRUE;
         bRet = TRUE;
 
-        BOOL bValidNum = MAXLEVEL > pNdNum->GetLevel(),
+        BOOL bValidNum = MAXLEVEL > rNd.GetLevel(),
              bExportNumRule = USHRT_MAX != GetNumRuleId( *pRule );
-        BYTE nLvl = GetRealLevel( pNdNum->GetLevel() );
+        BYTE nLvl = rNd.GetLevel();
         const SwNumFmt* pFmt = pRule->GetNumFmt( nLvl );
         if( !pFmt )
             pFmt = &pRule->Get( nLvl );
@@ -1448,7 +1440,7 @@ BOOL SwRTFWriter::OutListNum( const SwTxtNode& rNd )
             if( SVX_NUM_CHAR_SPECIAL == pFmt->GetNumberingType() || SVX_NUM_BITMAP == pFmt->GetNumberingType() )
                 sTxt = pFmt->GetBulletChar();
             else
-                sTxt = pRule->MakeNumString( *pNdNum );
+                sTxt = rNd.GetNumString();
 
             if( bOutFmtAttr )
             {
