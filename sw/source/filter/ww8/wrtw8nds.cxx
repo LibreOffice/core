@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:07:53 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:28:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1799,15 +1799,10 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         if( !pTmpSet )
             pTmpSet = pNd->GetpSwAttrSet();
 
-        const SwNumRule* pRule;
-        const SwNodeNum* pNum;
-        if( (( 0 != ( pNum = pNd->GetNum() ) &&
-                0 != ( pRule = pNd->GetNumRule() )) ||
-                ( 0 != ( pNum = pNd->GetOutlineNum() ) &&
-                0 != ( pRule = rWrt.pDoc->GetOutlineNumRule() ) ) ) &&
-                pNum->IsShowNum() )
+        if( pNd->IsNumbered())
         {
-            BYTE nLvl = GetRealLevel( pNum->GetLevel() );
+            const SwNumRule* pRule = pNd->GetNumRule();
+            BYTE nLvl = pNd->GetLevel();
             const SwNumFmt* pFmt = pRule->GetNumFmt( nLvl );
             if( !pFmt )
                 pFmt = &pRule->Get( nLvl );
@@ -1818,25 +1813,17 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*pTmpSet, RES_LR_SPACE));
             aLR.SetTxtLeft( aLR.GetTxtLeft() + pFmt->GetAbsLSpace() );
 
-            if( MAXLEVEL > pNum->GetLevel() )
+            if( pNd->IsNumbered() && pNd->IsCounted() )
             {
                 aLR.SetTxtFirstLineOfst(GetWordFirstLineOffset(*pFmt));
-                if (pNum == pNd->GetNum() && SFX_ITEM_SET !=
-                   pTmpSet->GetItemState(RES_PARATR_NUMRULE, false) )
+                if (SFX_ITEM_SET !=
+                    pTmpSet->GetItemState(RES_PARATR_NUMRULE, false) )
                 {
                     //If the numbering is not outline, and theres no numrule
                     //name in the itemset, put one in there
 
                     // NumRule from a template - then put it into the itemset
                     pTmpSet->Put( SwNumRuleItem( pRule->GetName() ));
-                }
-                else if (pNum != pNd->GetNum())
-                {
-                    //#111936#
-                    //If the numbering in use is outline numbering, then
-                    //any numbering in the itemset is not being used, so
-                    //remove it
-                    pTmpSet->ClearItem(RES_PARATR_NUMRULE);
                 }
             }
             else
@@ -1872,46 +1859,57 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             pTmpSet->Put(SvxFrameDirectionItem(FRMDIR_HORI_RIGHT_TOP));
         }
 
+        // --> OD 2005-10-18 #126238# - move code for handling of numbered,
+        // but not counted paragraphs to this place. Otherwise, the paragraph
+        // isn't exported as numbered, but not counted, if no other attribute
+        // is found in <pTmpSet>
+        // #i44815# adjust numbering/indents for numbered paragraphs
+        //          without number (NO_NUMLEVEL)
+        // #i47013# need to check pNd->GetNumRule()!=NULL as well.
+        if ( ! pNd->IsCounted() && pNd->GetNumRule()!=NULL )
+        {
+            // WW8 does not know numbered paragraphs without number
+            // (NO_NUMLEVEL). In OutWW8_SwNumRuleItem, we will export
+            // the RES_PARATR_NUMRULE as list-id 0, which in WW8 means
+            // no numbering. Here, we will adjust the indents to match
+            // visually.
+
+            if (pTmpSet == pNd->GetpSwAttrSet())
+                pTmpSet = new SfxItemSet(pNd->GetSwAttrSet());
+
+            // create new LRSpace item, based on the current (if present)
+            const SfxPoolItem* pItem = NULL;
+            pTmpSet->GetItemState(RES_LR_SPACE, TRUE, &pItem);
+            SvxLRSpaceItem aLRSpace(
+                ( pItem == NULL )
+                    ? SvxLRSpaceItem(0, 0)
+                    : *static_cast<const SvxLRSpaceItem*>( pItem ) );
+
+            // new left margin = old left + label space
+            const SwNumRule* pRule = pNd->GetNumRule();
+            const SwNumFmt& rNumFmt = pRule->Get( pNd->GetLevel() );
+            aLRSpace.SetTxtLeft( aLRSpace.GetLeft() + rNumFmt.GetAbsLSpace() );
+
+            // new first line indent = 0
+            // (first line indent is ignored for NO_NUMLEVEL)
+            aLRSpace.SetTxtFirstLineOfst( 0 );
+
+            // put back the new item
+            pTmpSet->Put( aLRSpace );
+
+            // assure that numbering rule is in <pTmpSet>
+            if (SFX_ITEM_SET != pTmpSet->GetItemState(RES_PARATR_NUMRULE, false) )
+            {
+                pTmpSet->Put( SwNumRuleItem( pRule->GetName() ));
+            }
+        }
+
         if( pTmpSet )
         {                                               // Para-Attrs
             rWW8Wrt.pStyAttr = &pNd->GetAnyFmtColl().GetAttrSet();
 
             const SwModify* pOldMod = rWW8Wrt.pOutFmtNode;
             rWW8Wrt.pOutFmtNode = pNd;
-
-            // #i44815# adjust numbering/indents for numbered paragraphs
-            //          without number (NO_NUMLEVEL)
-            // #i47013# need to check pNd->GetNumRule()!=NULL as well.
-            if( pNd->GetNum() != NULL  &&  ! pNd->IsNumbered() && pNd->GetNumRule()!=NULL )
-            {
-                // WW8 does not know numbered paragraphs without number
-                // (NO_NUMLEVEL). In OutWW8_SwNumRuleItem, we will export
-                // the RES_PARATR_NUMRULE as list-id 0, which in WW8 means
-                // no numbering. Here, we will adjust the indents to match
-                // visually.
-
-                if (pTmpSet == pNd->GetpSwAttrSet())
-                    pTmpSet = new SfxItemSet(pNd->GetSwAttrSet());
-
-                // create new LRSpace item, based on the current (if present)
-                const SfxPoolItem* pItem = NULL;
-                pTmpSet->GetItemState(RES_LR_SPACE, TRUE, &pItem);
-                SvxLRSpaceItem aLRSpace(
-                    ( pItem == NULL )
-                        ? SvxLRSpaceItem(0, 0)
-                        : *static_cast<const SvxLRSpaceItem*>( pItem ) );
-
-                // new left margin = old left + label space
-                const SwNumFmt& rNumFmt = pNd->GetNumRule()->Get( pNd->GetNum()->GetRealLevel() );
-                aLRSpace.SetTxtLeft( aLRSpace.GetLeft() + rNumFmt.GetAbsLSpace() );
-
-                // new first line indent = 0
-                // (first line indent is ignored for NO_NUMLEVEL)
-                aLRSpace.SetTxtFirstLineOfst( 0 );
-
-                // put back the new item
-                pTmpSet->Put( aLRSpace );
-            }
 
             // Pap-Attrs, so script is not necessary
             rWW8Wrt.Out_SfxItemSet( *pTmpSet, true, false,
