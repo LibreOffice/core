@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdUnoOutlineView.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:46:19 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 09:05:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@ SdUnoOutlineView::SdUnoOutlineView(
     OutlineViewShell& rViewShell,
     View& rView) throw()
     :   DrawController (rBase, rViewShell, rView),
-        mpCurrentPage(NULL)
+        mxCurrentPage(NULL)
 {
 }
 
@@ -107,6 +107,15 @@ SdUnoOutlineView::SdUnoOutlineView(
 
 SdUnoOutlineView::~SdUnoOutlineView() throw()
 {
+    try
+    {
+        Reference<XComponent> xComponent (mxCurrentPage, UNO_QUERY);
+        if (xComponent.is())
+            xComponent->removeEventListener(this);
+    }
+    catch (Exception aException)
+    {
+    }
 }
 
 
@@ -115,6 +124,21 @@ SdUnoOutlineView::~SdUnoOutlineView() throw()
 OutlineViewShell* SdUnoOutlineView::GetDrawViewShell (void) const
 {
     return static_cast<OutlineViewShell*>(mpViewShell);
+}
+
+
+
+
+// XComponent
+void SAL_CALL SdUnoOutlineView::dispose (void)
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    Reference<XComponent> xComponent (mxCurrentPage, UNO_QUERY);
+    if (xComponent.is())
+        xComponent->removeEventListener(this);
+    mxCurrentPage = NULL;
+
+    DrawController::dispose();
 }
 
 
@@ -314,6 +338,16 @@ void SdUnoOutlineView::setFastPropertyValue_NoBroadcast (
 
 
 
+void SAL_CALL SdUnoOutlineView::disposing (const ::com::sun::star::lang::EventObject& rEventObject)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    if (rEventObject.Source == mxCurrentPage)
+        FireSwitchCurrentPage(NULL);
+}
+
+
+
+
 void SdUnoOutlineView::getFastPropertyValue(
     Any & rRet,
     sal_Int32 nHandle ) const
@@ -346,21 +380,26 @@ void SdUnoOutlineView::getFastPropertyValue(
 
 void SdUnoOutlineView::FireSwitchCurrentPage (SdPage* pCurrentPage) throw()
 {
-    if (pCurrentPage != mpCurrentPage )
+
+    Reference<drawing::XDrawPage> xNewPage;
+    if (pCurrentPage != NULL)
+        xNewPage = Reference<drawing::XDrawPage>(pCurrentPage->getUnoPage(), UNO_QUERY);
+
+    if (xNewPage != mxCurrentPage)
     {
-        Reference< drawing::XDrawPage > xNewPage( pCurrentPage->getUnoPage(), UNO_QUERY );
-        Any aNewValue( makeAny( xNewPage ) );
-
-        Any aOldValue;
-        if( mpCurrentPage )
-        {
-            Reference< drawing::XDrawPage > xOldPage( mpCurrentPage->getUnoPage(), UNO_QUERY );
-            aOldValue <<= xOldPage;
-        }
-
+        Any aNewValue (makeAny(xNewPage));
+        Any aOldValue (makeAny(mxCurrentPage));
         FirePropertyChange (PROPERTY_CURRENTPAGE, aNewValue, aOldValue);
 
-        mpCurrentPage = pCurrentPage;
+        Reference<XComponent> xComponent (mxCurrentPage, UNO_QUERY);
+        if (xComponent.is())
+            xComponent->removeEventListener(this);
+
+        mxCurrentPage = xNewPage;
+
+        xComponent = Reference<XComponent>(mxCurrentPage, UNO_QUERY);
+        if (xComponent.is())
+            xComponent->addEventListener(this);
     }
 }
 
