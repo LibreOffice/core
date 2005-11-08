@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlforw.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:44:08 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:25:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1062,37 +1062,6 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         nFrmOpts = HTML_FRMOPTS_IMG_CONTROL;
         break;
 
-#if 0
-    case FORMCOMPONENT_URLBUTTON:
-        {
-            // in einen Hyperlink wandeln
-            ((((sOut = '<') += sHTML_anchor) += ' ' ) += sHTML_O_href )
-                += "=\"";
-            rWrt.Strm() << sOut.GetStr();
-            HTMLOutFuncs::Out_String( rWrt.Strm(),
-                URIHelper::simpleNormalizedMakeRelative( GetBaseURL(), ((VCURLButton*)pVCSbxCtrl)->GetURL()),
-                rHTMLWrt.eDestEnc, rHTMLWrt.eDestEnc );
-            sOut = '\"';
-            const String& rTarget =
-                ((VCURLButton*)pVCSbxCtrl)->GetTargetFrame();
-            if( rTarget.Len() )
-            {
-                ((sOut += ' ') += sHTML_O_target) += "=\"";
-                rWrt.Strm() << sOut.GetStr();
-                HTMLOutFuncs::Out_String( rWrt.Strm(), rTarget,
-                rHTMLWrt.eDestEnc, rHTMLWrt.eDestEnc );
-                sOut = '\"';
-            }
-            sOut += ">";
-            rWrt.Strm() << sOut.GetStr();
-
-            HTMLOutFuncs::Out_String( rWrt.Strm(),
-                                      ((VCURLButton*)pVCSbxCtrl)->GetText(),
-                rHTMLWrt.eDestEnc, rHTMLWrt.eDestEnc );
-            HTMLOutFuncs::Out_Tag( rWrt.Strm(), sHTML_anchor, sal_False ) << ' ';
-        }
-        break;
-#endif
     default:                // kennt HTML nicht
         pTag = 0;        // also ueberspringen
         break;
