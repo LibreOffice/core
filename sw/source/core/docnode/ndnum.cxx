@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndnum.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:21:32 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:18:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,8 +155,6 @@ void SwNodes::UpdateOutlineNode( const SwNode& rNd, BYTE nOldLevel,
         if (! bSeekIdx)
             pOutlineNds->Insert( pSrch );
 
-        if( ! IsShowNum( nNewLevel ))
-            return;     // keine Nummerierung dann kein Update
     }
     else if( NO_NUMBERING == nNewLevel )    // Level entfernen
     {
@@ -165,8 +163,6 @@ void SwNodes::UpdateOutlineNode( const SwNode& rNd, BYTE nOldLevel,
 
         // jetzt noch alle nachfolgende Outline-Nodes updaten
         pOutlineNds->Remove( nSttPos );
-        if( ! IsShowNum(nOldLevel) )
-            return;     // keine Nummerierung dann kein Update
     }
     else if( !bSeekIdx )        // Update und Index nicht gefunden ??
         return ;
@@ -177,15 +173,7 @@ void SwNodes::UpdateOutlineNode( const SwNode& rNd, BYTE nOldLevel,
 
         if (nNewLevel != NO_NUMBERING) // #115901#
         {
-            const SwNodeNum * pNum = rTxtNd.GetOutlineNum();
-
-            if (0 == pNum)
-            {
-                SwNodeNum aNum(nNewLevel);
-
-                aNum.SetLevel(rTxtNd.GetTxtColl()->GetOutlineLevel());
-                rTxtNd.UpdateNum(aNum);
-            }
+            rTxtNd.SetLevel(rTxtNd.GetTxtColl()->GetOutlineLevel());
 
             rTxtNd.NumRuleChgd();
             //GetDoc()->SetNumRule(aPam, *GetDoc()->GetOutlineNumRule());
@@ -198,9 +186,8 @@ void SwNodes::UpdateOutlineNode( const SwNode& rNd, BYTE nOldLevel,
 
     // die Gliederungs-Felder Updaten
     GetDoc()->GetSysFldType( RES_CHAPTERFLD )->UpdateFlds();
+    GetDoc()->ChkCondColls();
 }
-
-
 
 void SwNodes::UpdtOutlineIdx( const SwNode& rNd )
 {
@@ -217,13 +204,7 @@ void SwNodes::UpdtOutlineIdx( const SwNode& rNd )
         --nPos;
 
     if( !GetDoc()->IsInDtor() && IsDocNodes() )
-        UpdateOutlineNode( *(*pOutlineNds)[ nPos ], 0, 0 );
-}
-
-void SwNodes::UpdateOutlineNodes()
-{
-    if( pOutlineNds->Count() )      // OutlineNodes vorhanden ?
-        UpdateOutlineNode( *(*pOutlineNds)[ 0 ], 0, 0 );
+        UpdateOutlineNode( *(*pOutlineNds)[ nPos ]);
 }
 
 const SwOutlineNodes & SwNodes::GetOutLineNds() const
