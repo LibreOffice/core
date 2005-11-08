@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:08:08 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:28:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,13 +135,29 @@ USHORT SwWW8Writer::GetId( const SwNumRule& rNumRule ) const
         SwWW8Writer* pThis = (SwWW8Writer*)this;
         pThis->pUsedNumTbl = new SwNumRuleTbl;
         pThis->pUsedNumTbl->Insert( &pDoc->GetNumRuleTbl(), 0 );
+        // --> OD 2005-10-17 #126238# - Check, if the outline rule is
+        // already inserted into <pUsedNumTbl>. If yes, do not insert it again.
+        bool bOutlineRuleAdded( false );
         for( USHORT n = pUsedNumTbl->Count(); n; )
-            if( !pDoc->IsUsed( *pUsedNumTbl->GetObject( --n )) )
+        {
+            const SwNumRule& rRule = *pUsedNumTbl->GetObject( --n );
+            if ( !pDoc->IsUsed( rRule ) )
+            {
                 pThis->pUsedNumTbl->Remove( n );
+            }
+            else if ( &rRule == pDoc->GetOutlineNumRule() )
+            {
+                bOutlineRuleAdded = true;
+            }
+        }
 
-        // jetzt noch die OutlineRule einfuegen
-        SwNumRule* pR = (SwNumRule*)pDoc->GetOutlineNumRule();
-        pThis->pUsedNumTbl->Insert( pR, pUsedNumTbl->Count() );
+        if ( !bOutlineRuleAdded )
+        {
+            // jetzt noch die OutlineRule einfuegen
+            SwNumRule* pR = (SwNumRule*)pDoc->GetOutlineNumRule();
+            pThis->pUsedNumTbl->Insert( pR, pUsedNumTbl->Count() );
+        }
+        // <--
     }
     SwNumRule* p = (SwNumRule*)&rNumRule;
     USHORT nRet = pUsedNumTbl->GetPos(p);
@@ -202,9 +218,9 @@ void SwWW8Writer::OutListTab()
     // second Loop - write all Levels for all SwNumRules - LVLF
 
     // prepare the NodeNum to generate the NumString
-    SwNodeNum aNdNum( 0 );
+    SwNodeNum::tNumberVector aNumVector;
     for (n = 0; n < WW8ListManager::nMaxLevel; ++n)
-        aNdNum.GetLevelVal()[ n ] = n;
+        aNumVector.push_back(n);
 
     BYTE aPapSprms [] = {
         0x0f, 0x84, 0, 0,               // sprmPDxaLeft
@@ -275,8 +291,10 @@ void SwWW8Writer::OutListTab()
                 if (SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType())
                 {
                     BYTE* pLvlPos = aNumLvlPos;
-                    aNdNum.SetLevel( nLvl );
-                    sNumStr = rRule.MakeNumString(aNdNum, false, true);
+                    // --> OD 2005-10-17 #126238# - the numbering string
+                    // has to be restrict to the level currently working on.
+                    sNumStr = rRule.MakeNumString(aNumVector, false, true, nLvl);
+                    // <--
 
                     // now search the nums in the string
                     for( BYTE i = 0; i <= nLvl; ++i )
@@ -723,7 +741,7 @@ void SwWW8Writer::Out_NumRuleAnld( const SwNumRule& rRul, const SwNumFmt& rFmt,
 // Return: ist es eine Gliederung ?
 bool SwWW8Writer::Out_SwNum(const SwTxtNode* pNd)
 {
-    BYTE nSwLevel = pNd->GetNum()->GetLevel();
+    BYTE nSwLevel = pNd->GetLevel();
     const SwNumRule* pRul = pNd->GetNumRule();
     if( !pRul || nSwLevel == WW8ListManager::nMaxLevel )
         return false;
