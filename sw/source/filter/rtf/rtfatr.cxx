@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:53:44 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:26:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1424,21 +1424,16 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
     }
 
     // gibt es harte Attributierung ?
-    if( bNewFmts && ( pNd->GetpSwAttrSet() || pNd->GetNum() ))
+    if( bNewFmts && pNd->GetpSwAttrSet())
     {
         rRTFWrt.pFlyFmt = 0;
 
         const SfxItemSet& rNdSet = pNd->GetSwAttrSet();
 
-        const SwNumRule* pRule;
-        const SwNodeNum* pNum;
-        if( (( 0 != ( pNum = pNd->GetNum() ) &&
-                0 != ( pRule = pNd->GetNumRule() )) ||
-                ( 0 != ( pNum = pNd->GetOutlineNum() ) &&
-                0 != ( pRule = rWrt.pDoc->GetOutlineNumRule() ) ) ) &&
-                pNum->IsShowNum() )
+        const SwNumRule* pRule = pNd->GetNumRule();
+        if( pRule && pNd->IsCounted())
         {
-            BYTE nLvl = GetRealLevel( pNum->GetLevel() );
+            BYTE nLvl = pNd->GetLevel() ;
             const SwNumFmt* pFmt = pRule->GetNumFmt( nLvl );
             if( !pFmt )
                 pFmt = &pRule->Get( nLvl );
@@ -1447,7 +1442,7 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             SvxLRSpaceItem aLR( (SvxLRSpaceItem&)rNdSet.Get( RES_LR_SPACE ) );
 
             aLR.SetTxtLeft( aLR.GetTxtLeft() + pFmt->GetAbsLSpace() );
-            if( MAXLEVEL > pNum->GetLevel() )
+            if( MAXLEVEL > pNd->GetLevel() )
                 aLR.SetTxtFirstLineOfst( pFmt->GetFirstLineOffset() );
             else
                 aSet.ClearItem( RES_PARATR_NUMRULE );
