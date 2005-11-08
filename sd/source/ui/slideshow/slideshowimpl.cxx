@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:18:01 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 16:29:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1038,16 +1038,7 @@ void SlideshowImpl::stopShow()
     }
 */
 
-    if( mpSlideController.get() )
-    {
-        if( ANIMATIONMODE_SHOW == meAnimationMode )
-        {
-            if( mpSlideController->getCurrentSlideNumber() != -1 )
-                mnRestoreSlide = mpSlideController->getCurrentSlideNumber();
-        }
-
-        mpSlideController.reset();
-    }
+    mpSlideController.reset();
 
     // der DrawView das Praesentationfenster wegnehmen und ihr dafuer ihre alten Fenster wiedergeben
     if( mpShowWindow && mpView )
@@ -1966,6 +1957,13 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
             case KEY_ESCAPE:
             case KEY_BACKSPACE:
             case KEY_SUBTRACT:
+                // in case the user cancels the presentation, switch to current slide
+                // in edit mode
+                if( mpSlideController.get() && (ANIMATIONMODE_SHOW == meAnimationMode) )
+                {
+                    if( mpSlideController->getCurrentSlideNumber() != -1 )
+                        mnRestoreSlide = mpSlideController->getCurrentSlideNumber();
+                }
                 endPresentation();
                 break;
 
