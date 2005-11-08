@@ -4,9 +4,9 @@
  *
  *  $RCSfile: forbiddencharacterstable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:32:46 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 09:09:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,8 +62,11 @@ const com::sun::star::i18n::ForbiddenCharacters* SvxForbiddenCharactersTable::Ge
     ForbiddenCharactersInfo* pInf = Get( nLanguage );
     if ( !pInf && bGetDefault && mxMSF.is() )
     {
-        pInf = new ForbiddenCharactersInfo;
-        ((SvxForbiddenCharactersTableImpl*)this)->Insert( nLanguage, pInf );
+        const SvxForbiddenCharactersTableImpl *pConstImpl = dynamic_cast<const SvxForbiddenCharactersTableImpl*>(this);
+        SvxForbiddenCharactersTableImpl* pImpl = const_cast<SvxForbiddenCharactersTableImpl*>(pConstImpl);
+         pInf = new ForbiddenCharactersInfo;
+        pImpl->Insert( nLanguage, pInf );
+
         pInf->bTemporary = TRUE;
         LocaleDataWrapper aWrapper( mxMSF, SvxCreateLocale( nLanguage ) );
         pInf->aForbiddenChars = aWrapper.getForbiddenCharacters();
