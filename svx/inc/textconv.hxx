@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textconv.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:37:19 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 09:13:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,9 @@
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
+#endif
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
 #endif
 
 #ifndef SVX_HANGUL_HANJA_CONVERSION_HXX
@@ -85,6 +88,12 @@ class TextConvWrapper : public svx::HangulHanjaConversion
     void        SelectNewUnit_impl( const sal_Int32 nUnitStart,
                                     const sal_Int32 nUnitEnd );
 
+    void        ChangeText( const String &rNewText,
+                            const ::rtl::OUString& rOrigText,
+                            const ::com::sun::star::uno::Sequence< sal_Int32 > *pOffsets,
+                            ESelection *pESelection );
+    void        ChangeText_impl( const String &rNewText, sal_Bool bKeepAttributes );
+
     // Forbidden and not implemented.
     TextConvWrapper (const TextConvWrapper &);
     TextConvWrapper & operator= (const TextConvWrapper &);
@@ -97,7 +106,9 @@ protected:
                                    const sal_Int32 nUnitEnd );
     virtual void    ReplaceUnit(
                         const sal_Int32 nUnitStart, const sal_Int32 nUnitEnd,
+                        const ::rtl::OUString& rOrigText,
                         const ::rtl::OUString& rReplaceWith,
+                        const ::com::sun::star::uno::Sequence< sal_Int32 > &rOffsets,
                         ReplacementAction eAction,
                         LanguageType *pNewUnitLanguage );
 
