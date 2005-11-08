@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:14:15 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 09:05:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1506,7 +1506,14 @@ BOOL SwpHints::Merge( SwTxtNode &rNode, SwTxtAttr* pAttr )
                     pAttr->SetDontExpand( FALSE );
                     if( pHistory ) pHistory->Add( pAttr, TRUE );
                     rNode.DestroyAttr( Cut( j - 1 ) );
+
+                    // --> FME 2005-09-15 #i# Array operation can make it
+                    // necessary to re-calculate i
+                    if ( pPrev )
+                        i = GetPos( pAttr );
+                    // <--
                 }
+
                 if( pPrev )
                 {
                     if( pHistory )
