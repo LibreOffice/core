@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:18:02 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:21:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1140,8 +1140,7 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
             // the numbering and must stay.
             if ( GetFollow()->GetOfst() != nEnd ||
                  GetFollow()->IsFieldFollow() ||
-                 ( nStrLen == 0 &&
-                   ( GetTxtNode()->GetNum() || GetTxtNode()->GetOutlineNum() ) )
+                 ( nStrLen == 0 && GetTxtNode()->GetNumRule())
                )
             {
                 nNew |= 3;
@@ -1154,8 +1153,7 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
             // OD 21.03.2003 #108121# - Only split frame, if the frame contains
             // content or contains no content, but has a numbering.
             if ( nStrLen > 0 ||
-                 ( nStrLen == 0 &&
-                   ( GetTxtNode()->GetNum() || GetTxtNode()->GetOutlineNum() ) )
+                 ( nStrLen == 0 && GetTxtNode()->GetNumRule())
                )
             {
                 SplitFrm( nEnd );
