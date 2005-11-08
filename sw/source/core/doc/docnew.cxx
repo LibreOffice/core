@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:34:47 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:16:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -377,6 +377,7 @@ SwDoc::SwDoc() :
     bUseFormerTextWrapping              =
     mbConsiderWrapOnObjPos              =
     bOldNumbering                       =
+    bOutlineLevelYieldsOutlineRule  =
     bIgnoreFirstLineIndentInNumbering   =
     bDoNotJustifyLinesWithManualBreak   =
     bDoNotResetParaAttrsForNumFont      =
@@ -430,6 +431,9 @@ SwDoc::SwDoc() :
                                     OUTLINE_RULE );
     // #115901#
     AddNumRule(pOutlineRule);
+    // --> OD 2005-10-21 - counting of phantoms depends on <IsOldNumbering()>
+    pOutlineRule->SetCountPhantoms( !IsOldNumbering() );
+    // <--
 
     new SwTxtNode( SwNodeIndex( aUndoNodes.GetEndOfContent() ), pDfltTxtFmtColl );
     new SwTxtNode( SwNodeIndex( aNodes.GetEndOfContent() ),
@@ -920,6 +924,9 @@ void SwDoc::ClearDoc()
                                       SwNumRule::GetOutlineRuleName() ),
                                   OUTLINE_RULE );
     AddNumRule(pOutlineRule);
+    // --> OD 2005-10-21 - counting of phantoms depends on <IsOldNumbering()>
+    pOutlineRule->SetCountPhantoms( !IsOldNumbering() );
+    // <--
 
     // create a dummy pagedesc for the layout
     sal_uInt16 nDummyPgDsc = MakePageDesc( String::CreateFromAscii( "?DUMMY?" ));
