@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:30:16 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:05:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -423,6 +423,8 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPAttrTokenMap[] =
     { XML_NAMESPACE_TEXT, XML_OUTLINE_LEVEL,XML_TOK_TEXT_P_LEVEL },
     { XML_NAMESPACE_TEXT, XML_ID,           XML_TOK_TEXT_P_ID },
     { XML_NAMESPACE_TEXT, XML_IS_LIST_HEADER,XML_TOK_TEXT_P_IS_LIST_HEADER },
+    { XML_NAMESPACE_TEXT, XML_RESTART_NUMBERING,XML_TOK_TEXT_P_RESTART_NUMBERING },
+    { XML_NAMESPACE_TEXT, XML_START_VALUE,XML_TOK_TEXT_P_START_VALUE },
     XML_TOKEN_MAP_END
 };
 
@@ -1087,14 +1089,16 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 if( xPropSetInfo->hasPropertyByName( sParaIsNumberingRestart ) )
                 {
                     sal_Bool bTmp = sal_True;
-                    xPropSet->setPropertyValue( sParaIsNumberingRestart, makeAny(bTmp) );
+                    xPropSet->setPropertyValue(sParaIsNumberingRestart,
+                                               makeAny(bTmp) );
                 }
                 pListBlock->ResetRestartNumbering();
             }
             if( pListItem && pListItem->HasStartValue() &&
                 xPropSetInfo->hasPropertyByName( sNumberingStartValue ) )
             {
-                xPropSet->setPropertyValue( sNumberingStartValue, makeAny(pListItem->GetStartValue()) );
+                xPropSet->setPropertyValue(sNumberingStartValue,
+                                           makeAny(pListItem->GetStartValue()));
             }
             SetListItem( (XMLTextListItemContext *)0 );
         }
@@ -1102,10 +1106,27 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         {
             // If the paragraph is not in a list but its style, remove it from
             // the list.
+            // --> OD 2005-10-25 #126347# - do not remove it, if the list
+            // of the style is the chapter numbering rule.
             if( xNumRules.is() )
             {
-                xPropSet->setPropertyValue( sNumberingRules, Any() );
+                bool bRemove( true );
+                if ( xChapterNumbering.is() )
+                {
+                    Reference< XNamed > xNumNamed( xNumRules, UNO_QUERY );
+                    Reference< XNamed > xChapterNumNamed( xChapterNumbering, UNO_QUERY );
+                    if ( xNumNamed.is() && xChapterNumNamed.is() &&
+                         xNumNamed->getName() == xChapterNumNamed->getName() )
+                    {
+                        bRemove = false;
+                    }
+                }
+                if ( bRemove )
+                {
+                    xPropSet->setPropertyValue( sNumberingRules, Any() );
+                }
             }
+            // <--
         }
     }
 
@@ -1176,86 +1197,57 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
     }
 
     // outline level; set after list style has been set
-    if( bPara && nOutlineLevel != -1 && ! IsInList() )
+    // --> OD 2005-08-25 #i53198#
+    // Complete re-worked and corrected:
+    // - set outline level at paragraph
+    // - set numbering level at paragraph, if none is already set
+    // - assure that style is marked as an outline style for the corresponding
+    //   outline level.
+    // - DO NOT set type of numbering rule to outline.
+    // - DO NOT set numbering rule directly at the paragraph.
+    if ( bPara && nOutlineLevel != -1 )
     {
-        // find list style name
-        OUString sListStyle;
-        sal_Int8 nDefaultOutlineLevel = -1;
-        if( pStyle != NULL )
-            sListStyle = pStyle->GetListStyle();
-        if( sListStyle.getLength() == 0  &&  xParaStyles->hasByName( sStyleName ) )
+        // --> OD 2005-08-25 #i53198# - set the outline level at the paragraph.
+        {
+            const OUString sParaChapterNumberingLevel(
+                        RTL_CONSTASCII_USTRINGPARAM("ParaChapterNumberingLevel") );
+            xPropSet->setPropertyValue( sParaChapterNumberingLevel,
+                        makeAny( static_cast<sal_Int8>(nOutlineLevel - 1) ) );
+        }
+        // <--
+        // --> OD 2005-09-01 #i53198# - set numbering level of the paragraph to
+        // its outline level, if no numbering level is set.
+        {
+            sal_Int16 nNumLevel = -1;
+            xPropSet->getPropertyValue( sNumberingLevel ) >>= nNumLevel;
+            if ( nNumLevel == -1 )
+            {
+                xPropSet->setPropertyValue( sNumberingLevel,
+                        makeAny( static_cast<sal_Int8>(nOutlineLevel - 1) ) );
+            }
+        }
+        // <--
+        // --> OD 2005-08-25 #i53198# - always assure that outline style is
+        // set, if no default outline level is found at the style.
+        if( xParaStyles->hasByName( sStyleName ) )
         {
             Reference<XPropertySet> xStyle(
                 xParaStyles->getByName( sStyleName ), UNO_QUERY );
             if( xStyle.is() )
             {
-                xStyle->getPropertyValue( sNumberingStyleName ) >>= sListStyle;
-                OUString sDefaultOutlineLevel( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultOutlineLevel")) );
+                const OUString sDefaultOutlineLevel(
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultOutlineLevel")) );
+                sal_Int8 nDefaultOutlineLevel = -1;
                 xStyle->getPropertyValue( sDefaultOutlineLevel ) >>= nDefaultOutlineLevel;
-            }
-        }
-
-        // if we have a list style name: find the num-rules
-        Reference<XIndexReplace> xNumRules;
-        if( sListStyle.getLength() > 0 )
-        {
-            // find the numbering rule
-            const Reference<XNameContainer> xNumStyles = GetNumberingStyles();
-            if( xNumStyles.is() && xNumStyles->hasByName( sListStyle ) )
-            {
-                // we have a list style of that name -> use it
-                Reference<XPropertySet> xStyle;
-                xNumStyles->getByName( sListStyle ) >>= xStyle;
-                xStyle->getPropertyValue( sNumberingRules ) >>= xNumRules;
-            }
-            else
-            {
-                // automatic style
-                const SvxXMLListStyleContext* pListStyle =
-                    FindAutoListStyle( sListStyle );
-                if( pListStyle )
+                if ( nDefaultOutlineLevel == -1 )
                 {
-                    xNumRules = pListStyle->GetNumRules();
-                    if( !xNumRules.is() )
-                    {
-                        pListStyle->CreateAndInsertAuto();
-                        xNumRules = pListStyle->GetNumRules();
-                    }
+                    SetOutlineStyle( nOutlineLevel, sStyleName );
                 }
             }
         }
-
-        // now we (hopefully) have the num rules. So we need to
-        // 1) set them at the paragraph
-        // 2) also set the numbering level
-        // 3) tell our num rule to be an outline rule
-        // else, we record the current style
-        if( xNumRules.is() )
-        {
-            Any aAny;
-
-            OUString sNumberingIsOutline(
-                RTL_CONSTASCII_USTRINGPARAM("NumberingIsOutline") );
-            Reference<XPropertySet> xNumRuleProps( xNumRules, UNO_QUERY );
-            if( xNumRuleProps.is() &&
-                xNumRuleProps->getPropertySetInfo()->
-                    hasPropertyByName( sNumberingIsOutline ) )
-            {
-                aAny <<= true;
-                xNumRuleProps->setPropertyValue( sNumberingIsOutline, aAny );
-            }
-
-            aAny <<= xNumRules;
-            xPropSet->setPropertyValue( sNumberingRules, aAny );
-            aAny <<= static_cast<sal_Int8>( nOutlineLevel - 1 );
-            xPropSet->setPropertyValue( sNumberingLevel, aAny );
-        }
-        else if( nDefaultOutlineLevel == -1 )
-        {
-            SetOutlineStyle( nOutlineLevel, sStyleName );
-        }
-        // else: nothing to do!
+        // <--
     }
+    // <--
 
     return sStyleName;
 }
