@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlgrin.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:44:37 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:26:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -544,14 +544,12 @@ IMAGE_SETEVENT:
         aBulletGrfs[GetNumInfo().GetDepth()-1]==sGrfNm )
     {
         SwTxtNode* pTxtNode = pPam->GetNode()->GetTxtNode();
-        if( pTxtNode && pTxtNode->GetNumNoOutline() &&
-            ! pTxtNode->GetNumNoOutline()->IsNum())
+        if( pTxtNode && ! pTxtNode->IsCounted())
         {
-            SwNodeNum aNum( *pTxtNode->GetNumNoOutline() );
-            aNum.SetLevel( aNum.GetLevel() & ~NO_NUMLEVEL );
-            ASSERT( aNum.GetLevel() == GetNumInfo().GetLevel(),
+            ASSERT( pTxtNode->GetLevel() == GetNumInfo().GetLevel(),
                     "Numerierungs-Ebene stimmt nicht" );
-            pTxtNode->UpdateNum( aNum );
+
+            pTxtNode->SetCounted(TRUE);
 
             // Rule invalisieren ist noetig, weil zwischem dem einlesen
             // des LI und der Grafik ein EndAction gerufen worden sein kann.
