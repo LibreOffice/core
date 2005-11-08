@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:40:38 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:33:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1163,43 +1163,182 @@ void SwWrtShell::SplitNode( BOOL bAutoFmt, BOOL bCheckTableStart )
 // extern void SetNumChrFmt( SwWrtShell*, SwNumRules& );
 
 // -> #i40041#
+// --> OD 2005-10-25 #b6340308#
+// Preconditions (as far as OD has figured out):
+// - <SwEditShell::HasNumber()> is FALSE, if <bNum> is TRUE
+// - <SwEditShell::HasBullet()> is FALSE, if <bNum> is FALSE
+// Behavior of method is determined by the current situation at the current
+// cursor position in the document.
 void SwWrtShell::NumOrBulletOn(BOOL bNum)
 {
+    // determine numbering rule found at current cursor position in the docment.
     const SwNumRule* pCurRule = GetCurNumRule();
 
     StartUndo(UNDO_NUMORNONUM);
 
     const SwNumRule * pNumRule = pCurRule;
 
+    // --> OD 2005-10-25 #b6340308#
+    // - activate outline rule respectively turning on outline rule for
+    //   current text node. But, only for turning on a numbering (<bNum> == TRUE).
+    // - overwrite found numbering rule at current cursor position, if
+    //   no numbering rule can be retrieved from the paragraph style.
+    bool bContinueFoundNumRule( false );
+    bool bActivateOutlineRule( false );
+    int nActivateOutlineLvl( MAXLEVEL );    // only relevant, if <bActivateOutlineRule> == TRUE
     SwTxtFmtColl * pColl = GetCurTxtFmtColl();
-    SwNumRule * pCollRule = NULL;
-
-    if (pColl)
+    if ( pColl )
     {
-        pCollRule = pDoc->FindNumRulePtr(pColl->GetNumRule().GetValue());
-        pNumRule = pCollRule;
-
-        if (pNumRule == NULL && NO_NUMBERING != pColl->GetOutlineLevel())
-            pNumRule = GetDoc()->GetOutlineNumRule();
+        // --> OD 2005-10-25 #b6340308# - retrieve numbering rule at paragraph
+        // style, which is found at current cursor position in the document.
+        SwNumRule* pCollRule = pDoc->FindNumRulePtr(pColl->GetNumRule().GetValue());
+        // --> OD 2005-10-25 #125993# - The outline numbering rule isn't allowed
+        // to be derived from a parent paragraph style to a derived one.
+        // Thus check, if the found outline numbering rule is directly
+        // set at the paragraph style <pColl>. If not, set <pCollRule> to NULL
+        if ( pCollRule && pCollRule == GetDoc()->GetOutlineNumRule() )
+        {
+            const SwNumRule* pDirectCollRule =
+                    pDoc->FindNumRulePtr(pColl->GetNumRule( FALSE ).GetValue());
+            if ( !pDirectCollRule )
+            {
+                pCollRule = 0L;
+            }
+        }
+        if ( pCollRule == NULL &&
+             NO_NUMBERING != pColl->GetOutlineLevel() &&
+             GetDoc()->IsOutlineLevelYieldsOutlineRule() )
+        {
+            pCollRule = GetDoc()->GetOutlineNumRule();
+        }
+        // <--
+        // --> OD 2005-10-25 #b6340308#
+        if ( !pCollRule )
+        {
+            pNumRule = pCollRule;
+        }
+        else if ( bNum && pCollRule == GetDoc()->GetOutlineNumRule() )
+        {
+            if ( pNumRule == pCollRule )
+            {
+                // check, if text node at current cursor positioned is counted.
+                // If not, let it been counted. Then it has to be checked,
+                // of the outline numbering has to be activated or continued.
+                SwTxtNode* pTxtNode =
+                            GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
+                if ( pTxtNode && !pTxtNode->IsCounted() )
+                {
+                    // check, if numbering of the outline level of the pararaph
+                    // style is active. If not, activate this outline level.
+                    nActivateOutlineLvl = pColl->GetOutlineLevel();
+                    ASSERT( nActivateOutlineLvl >= 0 && nActivateOutlineLvl < MAXLEVEL,
+                            "<SwWrtShell::NumOrBulletOn(..)> - paragraph style with outline rule, but no outline level" );
+                    if ( nActivateOutlineLvl >= 0 && nActivateOutlineLvl < MAXLEVEL &&
+                         pCollRule->Get( nActivateOutlineLvl ).GetNumberingType()
+                            == SVX_NUM_NUMBER_NONE )
+                    {
+                        // activate outline numbering
+                        bActivateOutlineRule = true;
+                    }
+                    else
+                    {
+                        // turning on outline numbering at current cursor position
+                        bContinueFoundNumRule = true;
+                    }
+                }
+                else
+                {
+                    // activate outline numbering, because from the precondition
+                    // it's known, that <SwEdit::HasNumber()> == FALSE
+                    bActivateOutlineRule = true;
+                    nActivateOutlineLvl = pColl->GetOutlineLevel();
+                }
+            }
+            else if ( !pNumRule )
+            {
+                // activate outline numbering, because from the precondition
+                // it's known, that <SwEdit::HasNumber()> == FALSE
+                bActivateOutlineRule = true;
+                nActivateOutlineLvl = pColl->GetOutlineLevel();
+            }
+            else
+            {
+                // check, if numbering of the outline level of the pararaph
+                // style is active. If not, activate this outline level.
+                nActivateOutlineLvl = pColl->GetOutlineLevel();
+                ASSERT( nActivateOutlineLvl >= 0 && nActivateOutlineLvl < MAXLEVEL,
+                        "<SwWrtShell::NumOrBulletOn(..)> - paragraph style with outline rule, but no outline level" );
+                if ( nActivateOutlineLvl >= 0 && nActivateOutlineLvl < MAXLEVEL &&
+                     pCollRule->Get( nActivateOutlineLvl ).GetNumberingType()
+                        == SVX_NUM_NUMBER_NONE )
+                {
+                    // activate outline numbering
+                    bActivateOutlineRule = true;
+                }
+                else
+                {
+                    // turning on outline numbering at current cursor position
+                    bContinueFoundNumRule = true;
+                }
+            }
+            pNumRule = pCollRule;
+        }
     }
 
+    // --> OD 2005-10-25 #b6340308#
+    // Only automatic numbering/bullet rules should be changed.
+    // Note: The outline numbering rule is also an automatic one. It's only
+    //       changed, if it has to be activated.
+    if ( pNumRule )
+    {
+        if ( !pNumRule->IsAutoRule() )
+        {
+            pNumRule = 0L;
+        }
+        else if ( pNumRule == GetDoc()->GetOutlineNumRule() &&
+                  !bActivateOutlineRule && !bContinueFoundNumRule )
+        {
+            pNumRule = 0L;
+        }
+    }
+    // <--
+
+    // --> OD 2005-10-25 #b6340308#
+    // Search for a previous numbering/bullet rule to continue it.
     if (!pNumRule )
+    {
         pNumRule = GetDoc()->SearchNumRule(*GetCrsr()->GetPoint(),
                                            FALSE, bNum, FALSE, 0);
+        bContinueFoundNumRule = pNumRule != 0;
+    }
+    // <--
 
     if (pNumRule)
     {
         SwNumRule aNumRule(*pNumRule);
-        SwTxtNode * pTxtNode =
-            GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
 
-        if (pTxtNode)
+        // --> OD 2005-10-25 #b6340308#
+        // do not change found numbering/bullet rule, if it should only be continued.
+        if ( !bContinueFoundNumRule )
         {
-            const SwNodeNum * pNum = pTxtNode->GetNum();
+            SwTxtNode * pTxtNode = GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
 
-            if (pNum)
+            if (pTxtNode)
             {
-                SwNumFmt aFmt(aNumRule.Get(pNum->GetRealLevel()));
+                // --> OD 2005-10-26 #b6340308# - use above retrieve outline
+                // level, if outline numbering has to be activated.
+                int nLevel = bActivateOutlineRule
+                             ? nActivateOutlineLvl
+                             : pTxtNode->GetLevel();
+                // <--
+
+                if (nLevel < 0)
+                    nLevel = 0;
+
+                if (nLevel >= MAXLEVEL)
+                    nLevel = MAXLEVEL - 1;
+
+                SwNumFmt aFmt(aNumRule.Get(nLevel));
 
                 if (bNum)
                     aFmt.SetNumberingType(SVX_NUM_ARABIC);
@@ -1207,12 +1346,13 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
                 {
                     const Font* pFnt = &SwNumRule::GetDefBulletFont();
                     aFmt.SetBulletFont( pFnt );
-                    aFmt.SetBulletChar( GetBulletChar(pNum->GetRealLevel() ));
+                    aFmt.SetBulletChar( GetBulletChar(nLevel));
                     aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
                 }
-                aNumRule.Set(pNum->GetRealLevel(), aFmt);
+                aNumRule.Set(nLevel, aFmt);
             }
         }
+        // <--
 
         SetCurNumRule(aNumRule);
     }
@@ -1248,7 +1388,7 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
             if (! bNum)
             {
                 aFmt.SetBulletFont( pFnt );
-                aFmt.SetBulletChar( cBulletChar );
+                aFmt.SetBulletChar( GetBulletChar(nLvl) );
                 aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
             }
 
@@ -1301,23 +1441,24 @@ void SwWrtShell::NumOrBulletOff()
 
             if (pTxtNode)
             {
-                const SwNodeNum * pNum = pTxtNode->GetNum();
+                unsigned int nLevel = pTxtNode->GetLevel();
+                SwNumFmt aFmt(aNumRule.Get(nLevel));
 
-                if (pNum)
-                {
-                    SwNumFmt aFmt(aNumRule.Get(pNum->GetRealLevel()));
+                aFmt.SetNumberingType(SVX_NUM_NUMBER_NONE);
+                aNumRule.Set(nLevel, aFmt);
 
-                    aFmt.SetNumberingType(SVX_NUM_NUMBER_NONE);
-                    aNumRule.Set(pNum->GetRealLevel(), aFmt);
-
-                    SetCurNumRule(aNumRule);
-                }
+                SetCurNumRule(aNumRule);
             }
         }
         else
         {
             DelNumRules();
         }
+
+        // --> OD 2005-10-24 #126346# - Cursor can not be anymore in front of
+        // a label, because numbering/bullet is switched off.
+        SetInFrontOfLabel( FALSE );
+        // <--
     }
 }
 // <- #i29560#
@@ -1413,13 +1554,9 @@ int SwWrtShell::GetSelectionType() const
 
         if ( pTxtNd )
         {
-            const SwNodeNum* pNodeNum = pTxtNd->GetNum();
-            if ( pNodeNum )
-            {
-                 const SwNumFmt& rFmt = pNumRule->Get( pNodeNum->GetRealLevel() );
-                 if ( SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType() )
-                     nCnt |= SEL_NUM;
-            }
+            const SwNumFmt& rFmt = pNumRule->Get(pTxtNd->GetLevel());
+            if ( SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType() )
+                nCnt |= SEL_NUM;
         }
     }
     // <--
