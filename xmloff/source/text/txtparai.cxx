@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:31:32 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:06:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1606,7 +1606,9 @@ XMLParaContext::XMLParaContext(
     pHints( 0 ),
     bIgnoreLeadingSpace( sal_True ),
     bHeading( bHead ),
-    bIsListHeader( false )
+    bIsListHeader( false ),
+    bIsRestart (false),
+    nStartValue(0)
 #ifdef CONV_STAR_FONTS
     ,nStarFontsConvFlags( 0 )
 #endif
@@ -1660,6 +1662,20 @@ XMLParaContext::XMLParaContext(
         case XML_TOK_TEXT_P_ID:
             sId = rValue;
             break;
+        case XML_TOK_TEXT_P_RESTART_NUMBERING:
+            {
+                sal_Bool bBool;
+                if (SvXMLUnitConverter::convertBool(bBool, rValue))
+                {
+                    bIsRestart = bBool;
+                }
+            }
+            break;
+        case XML_TOK_TEXT_P_START_VALUE:
+            {
+                nStartValue = rValue.toInt32();
+            }
+            break;
         }
     }
 
@@ -1707,15 +1723,44 @@ XMLParaContext::~XMLParaContext()
     sStyleName = xTxtImport->SetStyleAndAttrs( GetImport(), xAttrCursor, sStyleName, sal_True, bHeading ? nOutlineLevel : -1 );
 
     // handle list style header
-    if( bHeading && bIsListHeader )
+    if (bHeading && (bIsListHeader || bIsRestart))
     {
         Reference<XPropertySet> xPropSet( xAttrCursor, UNO_QUERY );
-        OUString sNumberingIsNumber(
-            RTL_CONSTASCII_USTRINGPARAM("NumberingIsNumber") );
-        if( xPropSet.is() &&
-            xPropSet->getPropertySetInfo()->hasPropertyByName( sNumberingIsNumber ) )
+
+        if (xPropSet.is())
         {
-            xPropSet->setPropertyValue( sNumberingIsNumber, makeAny( false ) );
+            if (bIsListHeader)
+            {
+                OUString sNumberingIsNumber
+                    (RTL_CONSTASCII_USTRINGPARAM("NumberingIsNumber"));
+                if(xPropSet->getPropertySetInfo()->
+                   hasPropertyByName(sNumberingIsNumber))
+                {
+                    xPropSet->setPropertyValue
+                        (sNumberingIsNumber, makeAny( false ) );
+                }
+            }
+            if (bIsRestart)
+            {
+                OUString sParaIsNumberingRestart
+                    (RTL_CONSTASCII_USTRINGPARAM("ParaIsNumberingRestart"));
+                OUString sNumberingStartValue
+                    (RTL_CONSTASCII_USTRINGPARAM("NumberingStartValue"));
+                if (xPropSet->getPropertySetInfo()->
+                    hasPropertyByName(sParaIsNumberingRestart))
+                {
+                    xPropSet->setPropertyValue
+                        (sParaIsNumberingRestart, makeAny(true));
+                }
+
+                if (xPropSet->getPropertySetInfo()->
+                    hasPropertyByName(sNumberingStartValue))
+                {
+                    xPropSet->setPropertyValue
+                        (sNumberingStartValue, makeAny(nStartValue));
+                }
+            }
+
         }
     }
 
