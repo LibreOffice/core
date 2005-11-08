@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.52 $
+#   $Revision: 1.53 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-28 15:37:49 $
+#   last change: $Author: rt $ $Date: 2005-11-08 17:34:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -302,7 +302,6 @@ LIB3OBJFILES = \
         $(SLO)$/mmmergepage.obj \
         $(SLO)$/mmpreparemergepage.obj \
         $(SLO)$/selectdbtabledialog.obj
-
 
 
 .INCLUDE :  target.mk
