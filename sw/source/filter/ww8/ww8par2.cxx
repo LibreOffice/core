@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:11:52 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:29:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1138,10 +1138,14 @@ void SwWW8ImplReader::NextAnlLine(const BYTE* pSprm13)
     else
         nSwNumLevel = 0xff;                 // keine Nummer
 
-    BYTE nLevel = (nSwNumLevel < MAXLEVEL) ? nSwNumLevel : NO_NUMLEVEL;
-    SwNodeNum aNum(nLevel);
     SwTxtNode* pNd = pPaM->GetNode()->GetTxtNode();
-    pNd->UpdateNum(aNum);
+    if (nSwNumLevel < MAXLEVEL)
+        pNd->SetLevel(nSwNumLevel);
+    else
+    {
+        pNd->SetLevel(0);
+        pNd->SetCounted(FALSE);
+    }
 }
 
 void SwWW8ImplReader::StopAllAnl(bool bGoBack)
