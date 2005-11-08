@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:06:41 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:20:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1097,15 +1097,17 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
 
             {
                 SwNodeIndex aIndexBefore(rInsPos.nNode);
+
                 aIndexBefore--;
 
                 pClpDoc->Copy( aCpyPam, rInsPos );
 
                 {
                     aIndexBefore++;
-                    SwPaM aPaM(SwPosition(aIndexBefore, 0), rInsPos);
+                    SwPaM aPaM(SwPosition(aIndexBefore, 0),
+                               SwPosition(rInsPos.nNode, 0));
 
-                    GetDoc()->MakeUniqueNumRules(aPaM);
+                    aPaM.GetDoc()->MakeUniqueNumRules(aPaM);
                 }
             }
 
