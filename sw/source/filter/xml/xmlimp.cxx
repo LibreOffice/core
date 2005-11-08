@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:27:04 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:30:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1139,6 +1139,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     // below, and set them if not found
     bool bPrinterIndependentLayout = false;
     bool bUseOldNumbering = false; // #111955#
+    bool bOutlineLevelYieldsOutlineRule = false;
     bool bAddExternalLeading = false;
     // OD 2004-02-16 #106629#
     bool bAddParaSpacingToTableCells = false;
@@ -1211,6 +1212,10 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                 // #111955#
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UseOldNumbering")) )
                     bUseOldNumbering = true;
+                // --> HB 2005-07-28
+                else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OutlineLevelYieldsNumbering")) )
+                    bOutlineLevelYieldsOutlineRule = true;
+                // <--
                 // --> OD 2004-07-08 #i28701#
                 else if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ConsiderTextWrapOnObjPos")) )
                     bConsiderWrapOnObjPos = true;
@@ -1276,6 +1281,16 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                        aAny );
     }
 
+    if( !bOutlineLevelYieldsOutlineRule )
+    {
+        Any aAny;
+        sal_Bool bTmp = true;
+        aAny.setValue(&bTmp, ::getBooleanCppuType());
+        xProps->setPropertyValue
+            (OUString( RTL_CONSTASCII_USTRINGPARAM
+                       ("OutlineLevelYieldsNumbering")),
+                       aAny );
+    }
 
     // OD 2004-02-16 #106629#
     if( !bAddParaSpacingToTableCells )
