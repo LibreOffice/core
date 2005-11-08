@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 01:58:48 $
+#   last change: $Author: rt $ $Date: 2005-11-08 09:11:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -120,6 +120,7 @@ IDLFILES=\
     XNativeNumberSupplier.idl \
     XNumberFormatCode.idl \
     XTextConversion.idl \
+    XExtendedTextConversion.idl \
     XScriptTypeDetector.idl \
     XTransliteration.idl \
     reservedWords.idl
