@@ -4,9 +4,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:18:04 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:17:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,37 +205,11 @@ USHORT SwNumRule::GetBullIndent( BYTE nLvl )
     return aDefNumIndents[ nLvl ];
 }
 
-#ifndef PRODUCT
-long SwNodeNum::nSerial = 0;
-#endif
 
-SwNodeNum::SwNodeNum( BYTE nLevel, USHORT nSetVal )
-    : nSetValue( nSetVal ), nMyLevel( nLevel ), bStartNum( FALSE ),
-      bContNum(FALSE)
-{
-    memset( nLevelVal, 0, sizeof( nLevelVal ) );
-
-#ifndef PRODUCT
-    nMySerial = nSerial;
-    nSerial++;
-#endif
-}
-
-SwNodeNum& SwNodeNum::operator=( const SwNodeNum& rCpy )
-{
-    nSetValue = rCpy.nSetValue;
-    nMyLevel = rCpy.nMyLevel;
-    bStartNum = rCpy.bStartNum;
-    bContNum = rCpy.bContNum;
-
-    memcpy( nLevelVal, rCpy.nLevelVal, sizeof( nLevelVal ) );
-    return *this;
-}
 
 static void lcl_SetRuleChgd( SwTxtNode& rNd, BYTE nLevel )
 {
-    if( rNd.GetNum() &&
-        rNd.GetNum()->GetRealLevel() == nLevel )
+    if( rNd.GetLevel() == nLevel )
         rNd.NumRuleChgd();
 }
 /* -----------------------------22.02.01 13:41--------------------------------
@@ -508,36 +482,6 @@ void SwNumFmt::UpdateNumNodes( SwDoc* pDoc )
             }
     }
 
-    if( !bFnd )
-    {
-        pRule = pDoc->GetOutlineNumRule();
-        for( BYTE i = 0; i < MAXLEVEL; ++i )
-            if( pRule->GetNumFmt( i ) == this )
-            {
-                ULONG nStt = pDoc->GetNodes().GetEndOfContent().StartOfSectionIndex();
-                const SwTxtFmtColls& rColls = *pDoc->GetTxtFmtColls();
-                for( USHORT n = 1; n < rColls.Count(); ++n )
-                {
-                    const SwTxtFmtColl* pColl = rColls[ n ];
-                    if( i == pColl->GetOutlineLevel() )
-                    {
-                        SwClientIter aIter( *(SwTxtFmtColl*)pColl );
-                        for( SwTxtNode* pNd = (SwTxtNode*)aIter.First( TYPE( SwTxtNode ));
-                                pNd; pNd = (SwTxtNode*)aIter.Next() )
-                            if( pNd->GetNodes().IsDocNodes() &&
-                                nStt < pNd->GetIndex() &&
-                                pNd->GetOutlineNum() && i ==
-                                pNd->GetOutlineNum()->GetRealLevel() )
-                                    pNd->NumRuleChgd();
-                        break;
-                    }
-                }
-
-                bFnd = TRUE;
-                break;
-            }
-    }
-
     if( bFnd && !bDocIsModified )
         pDoc->ResetModified();
 }
@@ -556,18 +500,6 @@ const SwFmtVertOrient*      SwNumFmt::GetGraphicOrientation() const
     }
 }
 
-BOOL SwNodeNum::operator==( const SwNodeNum& rNum ) const
-{
-    return
-        nMyLevel == rNum.nMyLevel &&
-        nSetValue == rNum.nSetValue &&
-        bStartNum == rNum.bStartNum &&
-        bContNum == rNum.bContNum && // #111955#
-        ( nMyLevel >= MAXLEVEL ||
-          0 == memcmp( nLevelVal, rNum.nLevelVal,
-                       sizeof( USHORT ) * (nMyLevel+1) ));
-}
-
 #ifndef PRODUCT
 long int SwNumRule::nInstances = 0;
 #endif
@@ -584,7 +516,10 @@ SwNumRule::SwNumRule( const String& rNm, SwNumRuleType eType, BOOL bAutoFlg )
     bAbsSpaces( FALSE ),
     nPoolFmtId( USHRT_MAX ),
     nPoolHelpId( USHRT_MAX ),
-    nPoolHlpFileId( UCHAR_MAX )
+    nPoolHlpFileId( UCHAR_MAX ),
+    // --> OD 2005-10-21 - initialize member <mbCountPhantoms>
+    mbCountPhantoms( true )
+    // <--
 {
 #ifndef PRODUCT
     nSerial = nInstances++;
@@ -637,7 +572,10 @@ SwNumRule::SwNumRule( const SwNumRule& rNumRule )
     bAbsSpaces( rNumRule.bAbsSpaces ),
     nPoolFmtId( rNumRule.GetPoolFmtId() ),
     nPoolHelpId( rNumRule.GetPoolHelpId() ),
-    nPoolHlpFileId( rNumRule.GetPoolHlpFileId() )
+    nPoolHlpFileId( rNumRule.GetPoolHlpFileId() ),
+    // --> OD 2005-10-21 - initialize member <mbCountPhantoms>
+    mbCountPhantoms( true )
+    // <--
 {
 #ifndef PRODUCT
     nSerial = nInstances++;
@@ -673,6 +611,15 @@ SwNumRule::~SwNumRule()
             for( n = 0; n < MAXLEVEL; ++n, ++ppFmts )
                 delete *ppFmts, *ppFmts = 0;
     }
+
+    tPamAndNums::iterator aIt;
+
+    for(aIt = aNumberRanges.begin(); aIt != aNumberRanges.end(); aIt++)
+    {
+        delete (*aIt).first;
+        delete (*aIt).second;
+    }
+
 }
 
 
@@ -702,29 +649,6 @@ void SwNumRule::CheckCharFmts( SwDoc* pDoc )
             aFmts[ n ] = pNew;
         }
 }
-
-    // setzt Num oder NoNum fuer den Level am TextNode UND setzt die
-    // richtige Attributierung
-#ifndef NUM_RELSPACE
-BOOL SwNumRule::IsRuleLSpace( SwTxtNode& rNd ) const
-{
-    const SfxPoolItem* pItem;
-    BYTE nLvl;
-    const SwAttrSet* pASet = rNd.GetpSwAttrSet();
-
-    BOOL bRet = FALSE;
-    if (rNd.GetNum() && pASet &&
-        SFX_ITEM_SET == pASet->GetItemState(RES_LR_SPACE, FALSE, &pItem ))
-    {
-        nLvl = rNd.GetNum()->GetRealLevel();
-
-        if (nLvl < MAXLEVEL)
-            bRet = Get( nLvl ).GetAbsLSpace() == ((SvxLRSpaceItem*)pItem)->GetTxtLeft();
-    }
-
-    return bRet;
-}
-#endif
 
 SwNumRule& SwNumRule::operator=( const SwNumRule& rNumRule )
 {
@@ -803,12 +727,35 @@ String SwNumRule::MakeNumString( const SwNodeNum& rNum, BOOL bInclStrings,
                                 BOOL bOnlyArabic ) const
 {
     String aStr;
-    if (rNum.IsShowNum())
+
+    if (rNum.IsCounted())
+        aStr = MakeNumString(rNum.GetNumberVector(),
+                             bInclStrings, bOnlyArabic);
+
+    return aStr;
+}
+
+String SwNumRule::MakeNumString( const SwNodeNum::tNumberVector & rNumVector,
+                                 const BOOL bInclStrings,
+                                 const BOOL bOnlyArabic,
+                                 const unsigned int _nRestrictToThisLevel ) const
+{
+    String aStr;
+
+    unsigned int nLevel = rNumVector.size() - 1;
+    // --> OD 2005-10-17 #126238#
+    if ( nLevel > _nRestrictToThisLevel )
     {
-        const SwNumFmt& rMyNFmt = Get( rNum.GetLevel() );
+        nLevel = _nRestrictToThisLevel;
+    }
+    // <--
+
+    if (nLevel >= 0 && nLevel < MAXLEVEL)
+    {
+        const SwNumFmt& rMyNFmt = Get( nLevel );
         if( SVX_NUM_NUMBER_NONE != rMyNFmt.GetNumberingType() )
         {
-            BYTE i = rNum.GetLevel();
+            BYTE i = nLevel;
 
             if( !IsContinusNum() &&
                 rMyNFmt.GetIncludeUpperLevels() )  // nur der eigene Level ?
@@ -823,41 +770,42 @@ String SwNumRule::MakeNumString( const SwNodeNum& rNum, BOOL bInclStrings,
                 }
             }
 
-            for( ; i <= rNum.GetLevel(); ++i )
+            for( ; i <= nLevel; ++i )
             {
                 const SwNumFmt& rNFmt = Get( i );
                 if( SVX_NUM_NUMBER_NONE == rNFmt.GetNumberingType() )
                 {
-    // Soll aus 1.1.1 --> 2. NoNum --> 1..1 oder 1.1 ??
-    //                 if( i != rNum.nMyLevel )
-    //                    aStr += aDotStr;
+                    // Soll aus 1.1.1 --> 2. NoNum --> 1..1 oder 1.1 ??
+                    //                 if( i != rNum.nMyLevel )
+                    //                    aStr += aDotStr;
                     continue;
                 }
 
-                if( rNum.GetLevelVal()[ i ] )
+                if( rNumVector[ i ] )
                 {
                     if( bOnlyArabic )
-                        aStr += String::CreateFromInt32( rNum.GetLevelVal()[ i ] );
+                        aStr += String::CreateFromInt32( rNumVector[ i ] );
                     else
-                        aStr += rNFmt.GetNumStr( rNum.GetLevelVal()[ i ] );
+                        aStr += rNFmt.GetNumStr( rNumVector[ i ] );
                 }
                 else
                     aStr += '0';        // alle 0-Level sind eine 0
-                if( i != rNum.GetLevel() && aStr.Len() )
+                if( i != nLevel && aStr.Len() )
                     aStr += aDotStr;
             }
-        }
 
-        //JP 14.12.99: the type dont have any number, so dont append
-        //              the Post-/Prefix String
-        if( bInclStrings && !bOnlyArabic &&
-            SVX_NUM_CHAR_SPECIAL != rMyNFmt.GetNumberingType() &&
-            SVX_NUM_BITMAP != rMyNFmt.GetNumberingType() )
-        {
-            aStr.Insert( rMyNFmt.GetPrefix(), 0 );
-            aStr += rMyNFmt.GetSuffix();
+            //JP 14.12.99: the type dont have any number, so dont append
+            //              the Post-/Prefix String
+            if( bInclStrings && !bOnlyArabic &&
+                SVX_NUM_CHAR_SPECIAL != rMyNFmt.GetNumberingType() &&
+                SVX_NUM_BITMAP != rMyNFmt.GetNumberingType() )
+            {
+                aStr.Insert( rMyNFmt.GetPrefix(), 0 );
+                aStr += rMyNFmt.GetSuffix();
+            }
         }
     }
+
     return aStr;
 }
 
@@ -934,10 +882,18 @@ SvxNumRule SwNumRule::MakeSvxNumRule() const
 
 void SwNumRule::SetInvalidRule(BOOL bFlag)
 {
-    if (bFlag && pList)
+    if (bFlag)
     {
-        delete pList;
-        pList = 0;
+        if (pList != NULL)
+        {
+            delete pList;
+            pList = 0;
+        }
+
+        tPamAndNums::iterator aIt;
+
+        for (aIt = aNumberRanges.begin(); aIt != aNumberRanges.end(); aIt++)
+            (*aIt).second->InvalidateTree();
     }
 
     bInvalidRuleFlag = bFlag;
@@ -1037,4 +993,75 @@ sal_Unicode GetBulletChar(BYTE nLevel)
         nLevel = MAXLEVEL;
 
     return nLevelChars[nLevel];
+}
+
+void SwNumRule::NewNumberRange(const SwPaM & rPam)
+{
+    SwNodeNum * pNum = new SwNodeNum();
+    // --> OD 2005-10-21 - apply numbering rule to number tree root node for
+    // correct creation of phantoms.
+    pNum->SetNumRule( this );
+    // <--
+
+    SwPaM * pPam = new SwPaM(*rPam.Start(), *rPam.End());
+    tPamAndNum aPamAndNum(pPam, pNum);
+
+    aNumberRanges.push_back(aPamAndNum);
+}
+
+void SwNumRule::AddNumber(SwNodeNum * pNum, unsigned int nLevel)
+{
+    tPamAndNums::iterator aIt;
+
+    SwPosition aPos(pNum->GetPosition());
+
+    for (aIt = aNumberRanges.begin(); aIt != aNumberRanges.end(); aIt++)
+    {
+        SwPosition * pStart = (*aIt).first->Start();
+        SwPosition * pEnd = (*aIt).first->End();
+        SwNodes * pRangeNodes = &(pStart->nNode.GetNode().GetNodes());
+        SwNodes * pNodes = &(aPos.nNode.GetNode().GetNodes());
+
+        if (pRangeNodes == pNodes && *pStart <= aPos && aPos <= *pEnd)
+        {
+            pNum->SetNumRule(this);
+            (*aIt).second->AddChild(pNum, nLevel);
+        }
+    }
+}
+
+void SwNumRule::Validate()
+{
+    tPamAndNums::iterator aIt;
+
+    for (aIt = aNumberRanges.begin(); aIt != aNumberRanges.end(); aIt++)
+        (*aIt).second->NotifyInvalidChildren();
+
+    SetInvalidRule(FALSE);
+}
+
+bool SwNumRule::IsCountPhantoms() const
+{
+    return mbCountPhantoms;
+}
+
+void SwNumRule::SetCountPhantoms(bool bCountPhantoms)
+{
+    mbCountPhantoms = bCountPhantoms;
+}
+
+String SwNumRule::ToString() const
+{
+    String aResult("[ ", RTL_TEXTENCODING_ASCII_US);
+
+    aResult += GetName();
+    aResult += String("\n", RTL_TEXTENCODING_ASCII_US);
+
+    tPamAndNums::const_iterator aIt;
+    for (aIt = aNumberRanges.begin(); aIt != aNumberRanges.end(); aIt++)
+        aResult += aIt->second->print();
+
+    aResult += String("]\n", RTL_TEXTENCODING_ASCII_US);
+
+    return aResult;
 }
