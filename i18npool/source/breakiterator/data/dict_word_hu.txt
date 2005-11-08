@@ -25,6 +25,19 @@ $Ideographic = [:Ideographic:];
 $Hangul = [:Script = HANGUL:];
 
 $ALetter   = [\u0002 [:Alphabetic:] [:name= COMMERCIAL AT:] [:name= HEBREW PUNCTUATION GERESH:]
+                [:name = PERCENT SIGN:] [:name = PER MILLE SIGN:] [:name = PER TEN THOUSAND SIGN:]
+                [:name = SECTION SIGN:] [:name = DEGREE SIGN:] [:name = EURO SIGN:]
+                [:name = HYPHEN-MINUS:] [:name = EN DASH:] [:name = EM DASH:]
+                [:name = DIGIT ZERO:]
+                [:name = DIGIT ONE:]
+                [:name = DIGIT TWO:]
+                [:name = DIGIT THREE:]
+                [:name = DIGIT FOUR:]
+                [:name = DIGIT FIVE:]
+                [:name = DIGIT SIX:]
+                [:name = DIGIT SEVEN:]
+                [:name = DIGIT EIGHT:]
+                [:name = DIGIT NINE:]
                            - $Ideographic
                            - $Katakana
                            - $Hangul
@@ -32,9 +45,11 @@ $ALetter   = [\u0002 [:Alphabetic:] [:name= COMMERCIAL AT:] [:name= HEBREW PUNCT
                            - [:Script = Lao:]
                            - [:Script = Hiragana:]];
                            
-$MidLetter = [[:name = APOSTROPHE:] [:name = GRAVE ACCENT:] \u0084 [:name = SOFT HYPHEN:] [:name = MIDDLE DOT:] [:name = GREEK TONOS:] [:name= FULL STOP:] 
+$MidLetter = [[:name = APOSTROPHE:] [:name = GRAVE ACCENT:] \u0084 [:name = SOFT HYPHEN:] [:name = MIDDLE DOT:] [:name = GREEK TONOS:]
               [:name = HEBREW PUNCTUATION GERSHAYIM:] [:name = DOUBLE VERTICAL LINE:] [:name = LEFT SINGLE QUOTATION MARK:]
               [:name = RIGHT SINGLE QUOTATION MARK:] [:name = HYPHENATION POINT:] [:name = PRIME:] [:name = HYPHEN-MINUS:]
+              [:name = EURO SIGN:] [:name = PERCENT SIGN:] [:name = PER MILLE SIGN:] [:name = PER TEN THOUSAND SIGN:]
+              [:name = EN DASH:] [:name = EM DASH:]
               [:name = FULL STOP:] [:name = PERCENT SIGN:] [:name = SECTION SIGN:] [:name = DEGREE SIGN:]];  
               
 $SufixLetter = [:name= FULL STOP:];
