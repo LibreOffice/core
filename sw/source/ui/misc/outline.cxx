@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:37:53 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:32:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -463,14 +463,25 @@ short SwOutlineTabDialog::Ok()
         {
             rTxtColl.SetOutlineLevel( (BYTE)GetLevel(rTxtColl.GetName()));
 
+            const SfxPoolItem & rItem =
+                rTxtColl.GetAttr(RES_PARATR_NUMRULE, FALSE);
+
             if ((BYTE)GetLevel(rTxtColl.GetName()) == NO_NUMBERING)
             {
-                rTxtColl.ResetAttr(RES_PARATR_NUMRULE);
+                if (static_cast<const SwNumRuleItem &>(rItem).GetValue() ==
+                    pOutlineRule->GetName())
+                {
+                    rTxtColl.ResetAttr(RES_PARATR_NUMRULE);
+                }
             }
             else
             {
-                SwNumRuleItem aItem(pOutlineRule->GetName());
-                rTxtColl.SetAttr(aItem);
+                if (static_cast<const SwNumRuleItem &>(rItem).GetValue() !=
+                    pOutlineRule->GetName())
+                {
+                    SwNumRuleItem aItem(pOutlineRule->GetName());
+                    rTxtColl.SetAttr(aItem);
+                }
             }
         }
     }
@@ -1101,7 +1112,6 @@ void    NumberingPreview::Paint( const Rectangle& rRect )
             nFontHeight = nYStep * 15 / 10;
         aStdFont.SetSize(Size( 0, nFontHeight ));
 
-        SwNodeNum aNum( (BYTE)0 );
         USHORT nPreNum = pActNum->Get(0).GetStart();
 
         if(bPosition)
@@ -1114,11 +1124,13 @@ void    NumberingPreview::Paint( const Rectangle& rRect )
             }
             if(nStart) // damit moeglichs Vorgaenger und Nachfolger gezeigt werden
                 nStart--;
+
+            SwNodeNum::tNumberVector aNumVector;
             BYTE nEnd = Min( (BYTE)(nStart + 3), MAXLEVEL );
             for( BYTE nLevel = nStart; nLevel < nEnd; ++nLevel )
             {
                 const SwNumFmt &rFmt = pActNum->Get(nLevel);
-                aNum.GetLevelVal()[ nLevel ] = rFmt.GetStart();
+                aNumVector.push_back(rFmt.GetStart());
                 USHORT nXStart = rFmt.GetAbsLSpace() / nWidthRelation;
                 USHORT nTextOffset = rFmt.GetCharTextDistance() / nWidthRelation;
                 USHORT nNumberXPos = nXStart;
@@ -1143,10 +1155,9 @@ void    NumberingPreview::Paint( const Rectangle& rRect )
                 else
                 {
                     pVDev->SetFont(aStdFont);
-                    aNum.SetLevel( nLevel );
                     if(pActNum->IsContinusNum())
-                        aNum.GetLevelVal()[nLevel] = nPreNum;
-                    String aText(pActNum->MakeNumString( aNum ));
+                        aNumVector[nLevel] = nPreNum;
+                    String aText(pActNum->MakeNumString( aNumVector, nLevel ));
                     pVDev->DrawText( Point(nNumberXPos, nYStart), aText );
                     nBulletWidth = (USHORT)pVDev->GetTextWidth(aText);
                     nPreNum++;
@@ -1165,12 +1176,13 @@ void    NumberingPreview::Paint( const Rectangle& rRect )
         }
         else
         {
+            SwNodeNum::tNumberVector aNumVector;
             USHORT nLineHeight = nFontHeight * 3 / 2;
             for( BYTE nLevel = 0; nLevel < MAXLEVEL;
                             ++nLevel, nYStart += nYStep )
             {
                 const SwNumFmt &rFmt = pActNum->Get(nLevel);
-                aNum.GetLevelVal()[ nLevel ] = rFmt.GetStart();
+                aNumVector.push_back(rFmt.GetStart());
                 USHORT nXStart = (rFmt.GetAbsLSpace() / nWidthRelation) / 2 + 2;
                 USHORT nTextOffset = 2 * nXStep;
                 if( SVX_NUM_BITMAP == rFmt.GetNumberingType() )
@@ -1186,10 +1198,9 @@ void    NumberingPreview::Paint( const Rectangle& rRect )
                 else
                 {
                     pVDev->SetFont(aStdFont);
-                    aNum.SetLevel( nLevel );
                     if(pActNum->IsContinusNum())
-                        aNum.GetLevelVal()[nLevel] = nPreNum;
-                    String aText(pActNum->MakeNumString( aNum ));
+                        aNumVector[nLevel] = nPreNum;
+                    String aText(pActNum->MakeNumString( aNumVector, nLevel ));
                     pVDev->DrawText( Point(nXStart, nYStart), aText );
                     nTextOffset = (USHORT)pVDev->GetTextWidth(aText);
                     nTextOffset += nXStep;
