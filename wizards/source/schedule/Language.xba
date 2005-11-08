@@ -79,7 +79,8 @@ Const dlgShortMonth = 1225
 			&apos; Load long month names
 			For i = 0 To 11
 				cCalLongMonthNames(i) = GetResText(dlgMonth+i)
-				cCalShortMonthNames(i)= Left$(cCalLongMonthNames(i), 3)
+				cCalShortMonthNames(i)= cCalLongMonthNames(i)
+				&apos;cCalShortMonthNames(i)= Left$(cCalLongMonthNames(i), 3)
 				cCalShortMonthNames(i)= RTrim(cCalShortMonthNames(i))
 			Next
 			&apos; Load sheet names
