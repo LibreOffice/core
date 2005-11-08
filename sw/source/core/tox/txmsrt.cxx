@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txmsrt.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:10:02 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:22:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -764,24 +764,39 @@ String SwTOXPara::GetURL() const
     case TOX_TEMPLATE:
     case TOX_OUTLINELEVEL:
         {
-            if( MAXLEVEL >= ((SwTxtNode*)pNd)->GetTxtColl()->GetOutlineLevel())
+            const SwTxtNode * pTxtNd = static_cast<const SwTxtNode *>(pNd);
+
+            if( MAXLEVEL >= pTxtNd->GetTxtColl()->GetOutlineLevel())
             {
                 aTxt = '#';
-                const SwNodeNum* pNum = ((SwTxtNode*)pNd)->GetOutlineNum();
-                if( pNum && pNd->GetDoc()->GetOutlineNumRule() )
+                const SwNumRule * pRule = pTxtNd->GetNumRule();
+                if( pRule )
                 {
                     // dann noch die rel. Nummer davor setzen
-                    const SwNumRule& rRule = *pNd->GetDoc()->GetOutlineNumRule();
-                    const USHORT nCurrLevel = pNum->GetLevel();
+                    const USHORT nCurrLevel = pTxtNd->GetLevel();
                     if(nCurrLevel <= MAXLEVEL)
-                        for( int n = 0; n <= nCurrLevel; ++n )
+                    {
+                        // --> OD 2005-11-02 #i51089 - TUNING#
+                        if ( pTxtNd->GetNum() )
                         {
-                            int nNum = pNum->GetLevelVal()[ n ];
-                            nNum -= ( rRule.Get( n ).GetStart() - 1 );
-                            ( aTxt += String::CreateFromInt32( nNum )) += '.';
+                            SwNodeNum::tNumberVector aNumVector =
+                                pTxtNd->GetNum()->GetNumberVector();
+
+                            for( int n = 0; n <= nCurrLevel; ++n )
+                            {
+                                int nNum = aNumVector[ n ];
+                                nNum -= ( pRule->Get( n ).GetStart() - 1 );
+                                ( aTxt += String::CreateFromInt32( nNum )) += '.';
+                            }
                         }
+                        else
+                        {
+                            ASSERT( false,
+                                    "<SwTOXPara::GetURL()> - text node with numbering rule, but without number. This is a serious defect -> inform OD" );
+                        }
+                    }
                 }
-                aTxt += ((SwTxtNode*)pNd)->GetExpandTxt();
+                aTxt += pTxtNd->GetExpandTxt();
                 ( aTxt += cMarkSeperator ).AppendAscii( pMarkToOutline );
             }
         }
