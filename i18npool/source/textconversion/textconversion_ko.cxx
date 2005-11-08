@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textconversion_ko.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:25:15 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 09:15:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -316,6 +316,15 @@ TextConversion_ko::getConversion( const OUString& aText, sal_Int32 nStartPos, sa
     }
 
     return aBuf.makeStringAndClear();
+}
+
+OUString SAL_CALL
+TextConversion_ko::getConversionWithOffset( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
+    const Locale& rLocale, sal_Int16 nConversionType, sal_Int32 nConversionOptions, Sequence<sal_Int32>& offset)
+    throw(  RuntimeException, IllegalArgumentException, NoSupportException )
+{
+    offset.realloc(0);
+    return getConversion(aText, nStartPos, nLength, rLocale, nConversionType, nConversionOptions);
 }
 
 sal_Bool SAL_CALL
