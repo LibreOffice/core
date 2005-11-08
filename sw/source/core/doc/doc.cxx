@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:34:26 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:15:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1413,12 +1413,35 @@ void SwDoc::SetOldNumbering(sal_Bool _bOldNumbering)
 
         UpdateNumRule();
 
-        if (bOldNumbering)
-            GetNodes().UpdateOutlineNodes();
-        else
+        if (pOutlineRule)
         {
-            if (pOutlineRule)
-                UpdateNumRule(*pOutlineRule, 0); // #115901#
+            pOutlineRule->Validate();
+            // --> OD 2005-10-21 - counting of phantoms depends on <IsOldNumbering()>
+            pOutlineRule->SetCountPhantoms( !bOldNumbering );
+            // <--
         }
     }
+}
+
+void SwDoc::ChkCondColls()
+{
+     for (USHORT n = 0; n < pTxtFmtCollTbl->Count(); n++)
+     {
+        SwTxtFmtColl *pColl = (*pTxtFmtCollTbl)[n];
+
+        if (RES_CONDTXTFMTCOLL == pColl->Which())
+        {
+            SwClientIter aIter(*pColl);
+
+            SwClient * pClient = aIter.First(TYPE(SwTxtNode));
+            while (pClient)
+            {
+                SwTxtNode * pTxtNode = static_cast<SwTxtNode *>(pClient);
+
+                pTxtNode->ChkCondColl();
+
+                pClient = aIter.Next();
+            }
+        }
+     }
 }
