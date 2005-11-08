@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfld.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:20:17 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:22:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -355,18 +355,11 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
     SwNumberPortion *pRet = 0;
     const SwTxtNode* pTxtNd = GetTxtFrm()->GetTxtNode();
     const SwNumRule* pNumRule = pTxtNd->GetNumRule();
-    const SwNodeNum* pNum = pTxtNd->GetNum();
 
-    if( !pNumRule )     // oder sollte OutlineNum an sein?
-    {
-        pNum = pTxtNd->GetOutlineNum();
-        if( pNum )
-            pNumRule = pTxtNd->GetDoc()->GetOutlineNumRule();
-    }
     // hat ein "gueltige" Nummer ?
-    if( pNumRule && pNum && MAXLEVEL > pNum->GetLevel() )
+    if( pTxtNd->IsNumbered() && pTxtNd->IsCounted())
     {
-        CONST SwNumFmt &rNumFmt = pNumRule->Get( pNum->GetLevel() );
+        CONST SwNumFmt &rNumFmt = pNumRule->Get( pTxtNd->GetLevel() );
         const sal_Bool bLeft = SVX_ADJUST_LEFT == rNumFmt.GetNumAdjust();
         const sal_Bool bCenter = SVX_ADJUST_CENTER == rNumFmt.GetNumAdjust();
         const KSHORT nMinDist = rNumFmt.GetCharTextDistance();
@@ -440,7 +433,7 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
             }
             else
             {
-                XubString aTxt( pNumRule->MakeNumString( *pNum ) );
+                XubString aTxt( pTxtNd->GetNumString() );
 
                 // 7974: Nicht nur eine Optimierung...
                 // Eine Numberportion ohne Text wird die Breite von 0
