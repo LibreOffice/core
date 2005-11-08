@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optload.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-06 10:52:23 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:31:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -918,12 +918,12 @@ void SwCaptionOptPage::DrawSample()
                 if( pFldType && pFldType->GetOutlineLvl() < MAXLEVEL )
                 {
                     BYTE nLvl = pFldType->GetOutlineLvl();
-                    SwNodeNum aNum( nLvl );
+                    SwNodeNum::tNumberVector aNumVector;
                     for( BYTE i = 0; i <= nLvl; ++i )
-                        *(aNum.GetLevelVal() + i) = 1;
+                        aNumVector.push_back(1);
 
                     String sNumber( pSh->GetOutlineNumRule()->MakeNumString(
-                                                            aNum, FALSE ));
+                                                            aNumVector, FALSE ));
                     if( sNumber.Len() )
                         (aStr += sNumber) += pFldType->GetDelimiter();
                 }
