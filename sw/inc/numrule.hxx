@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numrule.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:03:31 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:13:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,7 @@
 #endif
 #include <hash_map>
 #include <stringhash.hxx>
+#include <SwNodeNum.hxx>
 
 class Font;
 class SvxBrushItem;
@@ -81,7 +82,6 @@ class SvxNumRule;
 class SwCharFmt;
 class SwDoc;
 class SwFmtVertOrient;
-class SwNodeNum;
 class SwTxtNode;
 
 extern char __FAR_DATA sOutlineStr[];   // SWG-Filter
@@ -135,9 +135,12 @@ public:
     BOOL IsItemize() const; // #i29560#
 };
 
+class SwPaM;
 enum SwNumRuleType { OUTLINE_RULE = 0, NUM_RULE = 1, RULE_END = 2 };
 class SW_DLLPUBLIC SwNumRule
 {
+    typedef std::pair<SwPaM *, SwNodeNum *> tPamAndNum;
+    typedef std::vector<tPamAndNum> tPamAndNums;
     friend void _FinitCore();
 
 #ifndef PRODUCT
@@ -151,6 +154,7 @@ class SW_DLLPUBLIC SwNumRule
     static Font* pDefBulletFont;
     static char* pDefOutlineName;
 
+    tPamAndNums aNumberRanges;
     SwNumFmt* aFmts[ MAXLEVEL ];
 
     /**
@@ -178,6 +182,7 @@ class SW_DLLPUBLIC SwNumRule
     BOOL bInvalidRuleFlag : 1;
     BOOL bContinusNum : 1;  // Fortlaufende Numerierung - ohne Ebenen
     BOOL bAbsSpaces : 1;    // die Ebenen repraesentieren absol. Einzuege
+    bool mbCountPhantoms;
 
     SW_DLLPRIVATE static void _MakeDefBulletFont();
 
@@ -203,6 +208,14 @@ public:
     void Set( USHORT i, const SwNumFmt& );
     String MakeNumString( const SwNodeNum&, BOOL bInclStrings = TRUE,
                             BOOL bOnlyArabic = FALSE ) const;
+    // --> OD 2005-10-17 #126238#
+    // - add optional parameter <_nRestrictToThisLevel> in order to
+    //   restrict returned string to this level.
+    String MakeNumString( const SwNodeNum::tNumberVector & rNumVector,
+                          const BOOL bInclStrings = TRUE,
+                          const BOOL bOnlyArabic = FALSE,
+                          const unsigned int _nRestrictToThisLevel = MAXLEVEL ) const;
+    // <--
 
     /**
        Returns list of associated text nodes.
@@ -270,6 +283,9 @@ public:
     // #115901#
     BOOL IsOutlineRule() const { return eRuleType == OUTLINE_RULE; }
 
+    bool IsCountPhantoms() const;
+    void SetCountPhantoms(bool bCountPhantoms);
+
     // erfragen und setzen der Poolvorlagen-Id's
     USHORT GetPoolFmtId() const         { return nPoolFmtId; }
     void SetPoolFmtId( USHORT nId )     { nPoolFmtId = nId; }
@@ -321,55 +337,12 @@ public:
     void        Indent(short aAmount, int nLevel = -1,
                        int nReferenceLevel = -1, BOOL bRelative = TRUE,
                        BOOL bFirstLine = TRUE, BOOL bCheckGtZero = TRUE);
-};
 
+    void Validate();
+    void NewNumberRange(const SwPaM & rPam);
+    void AddNumber(SwNodeNum * pNdNum, unsigned int nLevel);
 
-class SW_DLLPUBLIC SwNodeNum
-{
-#ifndef PRODUCT
-    static long nSerial;
-    long nMySerial;
-#endif
-
-    USHORT nLevelVal[ MAXLEVEL ];       // Nummern aller Levels
-    USHORT nSetValue;                   // vorgegeben Nummer
-    BYTE nMyLevel;                      // akt. Level
-    BOOL bStartNum;                     // Numerierung neu starten
-    BOOL bContNum;                      // #111955#
-                                        // TRUE -> in continuous numbering
-public:
-    SwNodeNum( BYTE nLevel = NO_NUMBERING, USHORT nSetVal = USHRT_MAX );
-    SwNodeNum& operator=( const SwNodeNum& rCpy );
-
-    BOOL operator==( const SwNodeNum& ) const;
-
-    BYTE GetLevel() const                   { return nMyLevel; }
-    void SetLevel( BYTE nVal )              { ::SetLevel(&nMyLevel, nVal); }
-
-    BOOL IsStart() const                    { return bStartNum; }
-    void SetStart( BOOL bFlag = TRUE )      { bStartNum = bFlag; }
-
-    // -> #111955#
-    BOOL IsContinuousNum() const { return bContNum; }
-    void SetContinuousNum( BOOL bFlag = TRUE ) { bContNum = bFlag; }
-    // <- #111955#
-
-    BOOL HasSetValue() const { return USHRT_MAX != nSetValue; }
-    USHORT GetSetValue() const              { return nSetValue; }
-    void SetSetValue( USHORT nVal )         { nSetValue = nVal; }
-
-    const USHORT* GetLevelVal() const       { return nLevelVal; }
-          USHORT* GetLevelVal()             { return nLevelVal; }
-
-    BYTE GetRealLevel() const { return ::GetRealLevel(nMyLevel); }
-    BOOL IsNum() const { return ::IsNum(nMyLevel); }
-    BOOL IsShowNum() const { return ::IsShowNum(nMyLevel); }
-
-    void SetNoNum(BOOL nVal = TRUE)
-    {
-        nMyLevel = nVal ? nMyLevel | NO_NUMLEVEL : nMyLevel & ~NO_NUMLEVEL;
-    }
-
+    String ToString() const;
 };
 
 sal_Unicode GetBulletChar(BYTE nLevel);
