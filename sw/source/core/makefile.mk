@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 02:45:09 $
+#   last change: $Author: rt $ $Date: 2005-11-08 17:14:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,8 @@ SUBLIBS2= \
         $(SLB)$/doc.lib \
         $(SLB)$/docnode.lib \
                 $(SLB)$/unocore.lib \
-                $(SLB)$/objectpositioning.lib
+                $(SLB)$/objectpositioning.lib \
+                $(SLB)$/SwNumberTree.lib
 
 .IF "$(PRODUCT)" == ""
 SUBLIBS2+= \
