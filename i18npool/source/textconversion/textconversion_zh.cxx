@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textconversion_zh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:25:31 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 09:15:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@ OUString SAL_CALL getCharConversion(const OUString& aText, sal_Int32 nStartPos, 
     return OUString( newStr->buffer, nLength);
 }
 
-OUString SAL_CALL TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, sal_Bool toSChinese, sal_Int32 nConversionOptions)
+OUString SAL_CALL TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, sal_Bool toSChinese, sal_Int32 nConversionOptions, Sequence<sal_Int32>& offset)
 {
     sal_Int32 dictLen = 0;
     const sal_Unicode *wordData = getSTC_WordData(dictLen);
@@ -115,6 +115,7 @@ OUString SAL_CALL TextConversion_zh::getWordConversion(const OUString& aText, sa
     const sal_uInt16 *entry;
     const sal_Unicode *charData;
     const sal_uInt16 *charIndex;
+    sal_Bool one2one=sal_True;
 
     if (toSChinese) {
         index = getSTC_WordIndex_T2S(maxLen);
@@ -136,7 +137,7 @@ OUString SAL_CALL TextConversion_zh::getWordConversion(const OUString& aText, sa
     if ((!wordData || !index || !entry) && !xCDL.is()) // no word mapping defined, do char2char conversion.
         return getCharConversion(aText, nStartPos, nLength, toSChinese, nConversionOptions);
 
-    rtl_uString * newStr = x_rtl_uString_new_WithLength( nLength*2 ); // defined in x_rtl_ustring.h
+    rtl_uString * newStr = x_rtl_uString_new_WithLength( nLength * 2 ); // defined in x_rtl_ustring.h
     sal_Int32 currPos = 0, count = 0;
     while (currPos < nLength) {
         sal_Int32 len = nLength - currPos;
@@ -166,8 +167,19 @@ OUString SAL_CALL TextConversion_zh::getWordConversion(const OUString& aText, sa
                     // querying the system dictionary in the next line
                 }
                 if (conversions.getLength() > 0) {
-                    while (current < conversions[0].getLength())
-                        newStr->buffer[count++] = conversions[0][current++];
+                    if (offset.getLength() > 0) {
+                        if (word.getLength() != conversions[0].getLength())
+                            one2one=sal_False;
+                        while (current < conversions[0].getLength()) {
+                            offset[count] = nStartPos + currPos + (current *
+                                    word.getLength() / conversions[0].getLength());
+                            newStr->buffer[count++] = conversions[0][current++];
+                        }
+                        offset[count-1] = nStartPos + currPos + word.getLength() - 1;
+                    } else {
+                        while (current < conversions[0].getLength())
+                            newStr->buffer[count++] = conversions[0][current++];
+                    }
                     currPos += word.getLength();
                     found = sal_True;
                 }
@@ -189,8 +201,21 @@ OUString SAL_CALL TextConversion_zh::getWordConversion(const OUString& aText, sa
                             for (current = entry[current]-1; current > 0 && wordData[current-1]; current--);
                         else  // Simplified/Traditionary conversion, forwards search for next word
                             current = entry[current] + word.getLength() + 1;
-                        while (wordData[current])
-                            newStr->buffer[count++] = wordData[current++];
+                        sal_Int32 start=current;
+                        if (offset.getLength() > 0) {
+                            if (word.getLength() != OUString(&wordData[current]).getLength())
+                                one2one=sal_False;
+                            sal_Int32 convertedLength=OUString(&wordData[current]).getLength();
+                            while (wordData[current]) {
+                                offset[count]=nStartPos + currPos + ((current-start) *
+                                    word.getLength() / convertedLength);
+                                newStr->buffer[count++] = wordData[current++];
+                            }
+                            offset[count-1]=nStartPos + currPos + word.getLength() - 1;
+                        } else {
+                            while (wordData[current])
+                                newStr->buffer[count++] = wordData[current++];
+                        }
                         currPos += word.getLength();
                         found = sal_True;
                     }
@@ -198,23 +223,27 @@ OUString SAL_CALL TextConversion_zh::getWordConversion(const OUString& aText, sa
             }
         }
         if (!found) {
+            if (offset.getLength() > 0)
+                offset[count]=nStartPos+currPos;
             newStr->buffer[count++] =
                 getOneCharConversion(aText[nStartPos+currPos], charData, charIndex);
             currPos++;
         }
     }
+    if (offset.getLength() > 0)
+        offset.realloc(one2one ? 0 : count);
     return OUString( newStr->buffer, count);
 }
 
 TextConversionResult SAL_CALL
 TextConversion_zh::getConversions( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
-    const Locale& aLocale, sal_Int16 nConversionType, sal_Int32 nConversionOptions)
+    const Locale& rLocale, sal_Int16 nConversionType, sal_Int32 nConversionOptions)
     throw(  RuntimeException, IllegalArgumentException, NoSupportException )
 {
     TextConversionResult result;
 
     result.Candidates.realloc(1);
-    result.Candidates[0] = getConversion( aText, nStartPos, nLength, aLocale, nConversionType, nConversionOptions);
+    result.Candidates[0] = getConversion( aText, nStartPos, nLength, rLocale, nConversionType, nConversionOptions);
     result.Boundary.startPos = nStartPos;
     result.Boundary.endPos = nStartPos + nLength;
 
@@ -236,15 +265,43 @@ TextConversion_zh::getConversion( const OUString& aText, sal_Int32 nStartPos, sa
         if (nConversionOptions & TextConversionOption::CHARACTER_BY_CHARACTER)
             // char to char dictionary
             return getCharConversion(aText, nStartPos, nLength, toSChinese, nConversionOptions);
-        else
+        else {
+            Sequence <sal_Int32> offset;
             // word to word dictionary
-            return  getWordConversion(aText, nStartPos, nLength, toSChinese, nConversionOptions);
+            return  getWordConversion(aText, nStartPos, nLength, toSChinese, nConversionOptions, offset);
+        }
+    } else
+        throw NoSupportException(); // Conversion type is not supported in this service.
+}
+
+OUString SAL_CALL
+TextConversion_zh::getConversionWithOffset( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
+    const Locale& rLocale, sal_Int16 nConversionType, sal_Int32 nConversionOptions, Sequence<sal_Int32>& offset)
+    throw(  RuntimeException, IllegalArgumentException, NoSupportException )
+{
+    if (rLocale.Language.equalsAscii("zh") &&
+            ( nConversionType == TextConversionType::TO_SCHINESE ||
+            nConversionType == TextConversionType::TO_TCHINESE) ) {
+
+        aLocale=rLocale;
+        sal_Bool toSChinese = nConversionType == TextConversionType::TO_SCHINESE;
+
+        if (nConversionOptions & TextConversionOption::CHARACTER_BY_CHARACTER) {
+            offset.realloc(0);
+            // char to char dictionary
+            return getCharConversion(aText, nStartPos, nLength, toSChinese, nConversionOptions);
+        } else {
+            if (offset.getLength() < 2*nLength)
+                offset.realloc(2*nLength);
+            // word to word dictionary
+            return  getWordConversion(aText, nStartPos, nLength, toSChinese, nConversionOptions, offset);
+        }
     } else
         throw NoSupportException(); // Conversion type is not supported in this service.
 }
 
 sal_Bool SAL_CALL
-TextConversion_zh::interactiveConversion( const Locale& aLocale, sal_Int16 nTextConversionType, sal_Int32 nTextConversionOptions )
+TextConversion_zh::interactiveConversion( const Locale& rLocale, sal_Int16 nTextConversionType, sal_Int32 nTextConversionOptions )
     throw(  RuntimeException, IllegalArgumentException, NoSupportException )
 {
     return sal_False;
