@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:14:18 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:16:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3633,3 +3633,14 @@ String SwRedline::GetDescr(USHORT nPos)
     return aResult;
 }
 // <- #111827#
+
+
+sal_Bool SwDoc::IsInRedlines(const SwNode & rNode) const
+{
+    SwPosition aPos(rNode);
+    SwNode & rEndOfRedlines = aNodes.GetEndOfRedlines();
+    SwPaM aPam(SwPosition(*rEndOfRedlines.StartOfSectionNode()),
+               SwPosition(rEndOfRedlines));
+
+    return aPam.ContainsPosition(aPos) ? sal_True : sal_False;
+}
