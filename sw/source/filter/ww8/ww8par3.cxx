@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:12:21 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:30:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1421,7 +1421,7 @@ bool IsEqualFormatting(const SwNumRule &rOne, const SwNumRule &rTwo)
 }
 
 SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
-    sal_uInt8 nLevel, std::vector<sal_uInt8> &rParaSprms, SwNodeNum *pNodeNum)
+    const BYTE nLevel, std::vector<sal_uInt8> &rParaSprms, SwTxtNode *pNode)
     const
 {
     sal_uInt16 nLFOInfos = pLFOInfos ? pLFOInfos->Count() : 0;
@@ -1519,13 +1519,14 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
         }
     }
 
-    if (pNodeNum)
+    if (pNode)
     {
-        pNodeNum->SetLevel(nLevel);
+        pNode->SetLevel(nLevel);
+
         if (bRestart || bNewstart)   //#112466# (I think)
-            pNodeNum->SetStart(true);
+            pNode->SetRestart(true);
         if (bNewstart)
-            pNodeNum->SetSetValue(nStart);
+            pNode->SetStart(nStart);
     }
     return pRet;
 }
@@ -1563,8 +1564,16 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
         }
         else
         {
-            pTxtNode->
-                SetLevel(((SwTxtFmtColl*) rStyleInfo.pFmt)->GetOutlineLevel());
+            // --> OD 2005-11-07 #127520#
+            // Use outline level set at the style info <rStyleInfo> instead of
+            // the outline level at the text format, because the WW8 document
+            // could contain more than one outline numbering rule and the one
+            // of the text format isn't the one, which a chosen as the Writer
+            // outline rule.
+//            pTxtNode->
+//                SetLevel(((SwTxtFmtColl*) rStyleInfo.pFmt)->GetOutlineLevel());
+            pTxtNode->SetLevel( rStyleInfo.nOutlineLevel );
+            // <--
         }
     }
     return bRes;
@@ -1682,16 +1691,15 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
     if (pLstManager) // sind die Listendeklarationen gelesen?
     {
         std::vector<sal_uInt8> aParaSprms;
-        SwNodeNum aNum(nActLevel);
+        SwTxtNode* pTxtNd = pPaM->GetNode()->GetTxtNode();
+        ASSERT(pTxtNd, "Kein Text-Node an PaM-Position");
+
         const SwNumRule* pRule = bSetAttr ?
             pLstManager->GetNumRuleForActivation( nActLFO, nActLevel,
-                aParaSprms, &aNum) : 0;
+                aParaSprms, pTxtNd) : 0;
 
         if (pRule || !bSetAttr)
         {
-            SwTxtNode* pTxtNd = pPaM->GetNode()->GetTxtNode();
-            ASSERT(pTxtNd, "Kein Text-Node an PaM-Position");
-
             //#i24136# old is the same as new, and its the outline numbering,
             //then we don't set the numrule again, and we just take the num node
             //(the actual outline numbering gets set in SetOutlineNum)
@@ -1702,10 +1710,11 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
              is the one that was chosen to be the outline numbering then all
              is unchanged
             */
-            if (
-                (GetOutlineNumRuleFromTxtNode(*pTxtNd)) &&
-                 (pRule == mpChosenOutlineNumRule)
-               )
+            // --> OD 2005-11-04 #???# - correct condition according to the
+            // above given comment.
+            if ( pTxtNd->GetNumRule() == rDoc.GetOutlineNumRule() &&
+                 pRule == mpChosenOutlineNumRule )
+            // <--
             {
                 bUnchangedOutlineNumbering = true;
             }
@@ -1716,18 +1725,32 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
                 //it to the new one
                 if (bSetAttr)
                 {
-                    const SwNumRule *pNormal =
-                        GetNormalNumRuleFromTxtNode(*pTxtNd);
+                    const SwNumRule *pNormal = pTxtNd->GetNumRule();
                     if (pNormal != pRule)
                     {
-                        pTxtNd->SwCntntNode::SetAttr(
-                            SwNumRuleItem(pRule->GetName()));
+                        pTxtNd->SwCntntNode::SetAttr
+                            (SwNumRuleItem(pRule->GetName()));
+
                     }
                 }
 
             }
 
-            pTxtNd->UpdateNum(aNum);
+            // --> OD 2005-10-17 #126238#
+            // - re-introduce fix for issue #i49037#, which got lost by
+            // accident on a re-synchronisation on the master.
+//            if (pTxtNd->IsOutline() && pTxtNd->Len() == 0)
+//                pTxtNd->SetCounted(false);
+            // <--
+
+            pTxtNd->SetLevel(nActLevel);
+            // --> OD 2005-11-01 #126924#
+            // - <IsCounted()> state of text node has to be adjusted accordingly.
+            if ( nActLevel >= 0 && nActLevel < MAXLEVEL )
+            {
+                pTxtNd->SetCounted( true );
+            }
+            // <--
 
             SfxItemSet aListIndent(rDoc.GetAttrPool(), RES_LR_SPACE,
                     RES_LR_SPACE);
@@ -1864,12 +1887,14 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
             }
             else if (SwTxtNode* pTxtNode = pPaM->GetNode()->GetTxtNode())
             {
-                if (pTxtNode->GetNum())
-                {
-                    pTxtNode->SwCntntNode::SetAttr(
-                        *GetDfltAttr(RES_PARATR_NUMRULE));
-                    pTxtNode->UpdateNum(SwNodeNum(NO_NUMLEVEL));
-                }
+                // --> OD 2005-10-21 #i54393#
+                // - Reset hard set numbering rule at paragraph instead of
+                //   setting hard no numbering.
+//                pTxtNode->SwCntntNode::SetAttr
+//                    (*GetDfltAttr(RES_PARATR_NUMRULE));
+                pTxtNode->SwCntntNode::ResetAttr( RES_PARATR_NUMRULE );
+                // <--
+                pTxtNode->SetCounted(false);
 
                 /*
                 #i24553#
@@ -1881,17 +1906,22 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                 #115901#
                 No special outline number in textnode any more
                 */
-                if (pTxtNode->GetOutlineNum())
+                if (pTxtNode->IsOutline())
                 {
-                    ASSERT(mpChosenOutlineNumRule, "that doesn't make sense!");
-                    if (mpChosenOutlineNumRule)
+                    // OD 2005-10-21 #i54393#
+                    // It's not needed to call <SetCounted( false )> again - see above.
+                    // --> OD 2005-10-21 #i54393#
+                    // Assure that the numbering rule, which is retrieved at
+                    // the paragraph is the outline numbering rule, instead of
+                    // incorrectly setting the chosen outline rule.
+                    // Note: The chosen outline rule doesn't have to correspond
+                    //       to the outline rule
+                    if ( pTxtNode->GetNumRule() != rDoc.GetOutlineNumRule() )
                     {
                         pTxtNode->SwCntntNode::SetAttr(
-                            SwNumRuleItem(mpChosenOutlineNumRule->GetName()));
-                        pTxtNode->UpdateNum(SwNodeNum(NO_NUMLEVEL));
+                            SwNumRuleItem( rDoc.GetOutlineNumRule()->GetName() ) );
                     }
-                    else
-                        pTxtNode->UpdateNum(SwNodeNum(NO_NUMLEVEL));
+                    // <--
                 }
 
                 //#94672#
@@ -2376,16 +2406,8 @@ sal_Bool WW8FormulaCheckBox::Import(const uno::Reference <
         aTmp <<= rtl::OUString(sName);
     xPropSet->setPropertyValue(C2U("Name"), aTmp );
 
-#if 0
-    aTmp <<= (sal_Int16)nDefaultChecked;
-    xPropSet->setPropertyValue(C2U("DefaultState"), aTmp);
-
-    aTmp <<= (sal_Int16)nChecked;
-    xPropSet->setPropertyValue(C2U("State"), aTmp);
-#else
     aTmp <<= (sal_Int16)nChecked;
     xPropSet->setPropertyValue(C2U("DefaultState"), aTmp);
-#endif
 
     if( sToolTip.Len() )
     {
