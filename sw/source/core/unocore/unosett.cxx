@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 08:24:50 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:24:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1478,8 +1478,8 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
     {
         SwXNumberingRules::SetNumberingRuleByIndex( *pRule,
                             rProperties, nIndex);
-        sal_uInt16 nPos = pDoc->FindNumRule( sCreatedNumRuleName );
-        pDoc->UpdateNumRule( sCreatedNumRuleName, nPos );
+
+        pRule->Validate();
     }
     else
         throw uno::RuntimeException();
@@ -2219,8 +2219,7 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
     }
     else if(pCreatedRule)
     {
-        sal_uInt16 nPos = pDoc->FindNumRule( sCreatedNumRuleName );
-        pDoc->UpdateNumRule( sCreatedNumRuleName, nPos );
+        pCreatedRule->Validate();
     }
 }
 /*-- 19.07.00 07:49:18---------------------------------------------------
@@ -2308,6 +2307,14 @@ OUString SwXNumberingRules::getName() throw( RuntimeException )
         SwStyleNameMapper::FillProgName(pNumRule->GetName(), aString, GET_POOLID_NUMRULE, sal_True );
         return OUString ( aString );
     }
+    // --> OD 2005-10-25 #126347# - consider chapter numbering <SwXNumberingRules>
+    else if ( pDocShell )
+    {
+        SwStyleNameMapper::FillProgName( pDocShell->GetDoc()->GetOutlineNumRule()->GetName(),
+                                         aString, GET_POOLID_NUMRULE, sal_True );
+        return OUString ( aString );
+    }
+    // <--
     else
         return sCreatedNumRuleName;
 }
