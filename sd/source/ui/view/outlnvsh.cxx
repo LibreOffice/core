@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:15:17 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 09:06:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -571,8 +571,13 @@ void OutlineViewShell::GetCtrlState(SfxItemSet &rSet)
     if (rSet.GetItemState(SID_RELOAD) != SFX_ITEM_UNKNOWN)
     {
         // "Letzte Version" vom SFx en/disablen lassen
+        // The second call to GetViewFrame() (without the SFX_APP) should be
+        // the default.  The first call may return NULL or even the wrong
+        // view shell.  This should be changed sometime.
         SfxViewFrame* pViewFrame = SFX_APP()->GetViewFrame();
-        if (pViewFrame->ISA(SfxTopViewFrame))
+        if (pViewFrame == NULL)
+            pViewFrame = GetViewFrame();
+        if (pViewFrame!=NULL && pViewFrame->ISA(SfxTopViewFrame))
         {
             pViewFrame->GetSlotState (SID_RELOAD, NULL, &rSet);
         }
