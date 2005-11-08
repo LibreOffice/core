@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.158 $
+ *  $Revision: 1.159 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 15:50:00 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 16:36:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -365,7 +365,7 @@ File gid_File_Lib_Cppu
     Name = STRING(CONCAT3(cppu,UDK_MAJOR,.dll));
   #endif
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
 End
 
 File gid_File_Lib_Cppuhelper
