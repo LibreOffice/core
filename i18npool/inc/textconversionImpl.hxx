@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textconversionImpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:56:45 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 09:15:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/i18n/XTextConversion.hpp>
+#include <com/sun/star/i18n/XExtendedTextConversion.hpp>
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 
 namespace com { namespace sun { namespace star { namespace i18n {
@@ -47,7 +47,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 //  ----------------------------------------------------
 class TextConversionImpl : public cppu::WeakImplHelper2
 <
-    com::sun::star::i18n::XTextConversion,
+    com::sun::star::i18n::XExtendedTextConversion,
     com::sun::star::lang::XServiceInfo
 >
 {
@@ -66,6 +66,13 @@ public:
         getConversion( const ::rtl::OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nTextConversionType,
             sal_Int32 nTextConversionOptions )
+            throw(  com::sun::star::uno::RuntimeException,
+                    com::sun::star::lang::IllegalArgumentException,
+                    com::sun::star::lang::NoSupportException );
+        rtl::OUString SAL_CALL
+        getConversionWithOffset( const ::rtl::OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
+            const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nTextConversionType,
+            sal_Int32 nTextConversionOptions, com::sun::star::uno::Sequence< sal_Int32 >& offset )
             throw(  com::sun::star::uno::RuntimeException,
                     com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::lang::NoSupportException );
@@ -88,7 +95,7 @@ public:
             throw( com::sun::star::uno::RuntimeException );
 private :
     com::sun::star::lang::Locale aLocale;
-    com::sun::star::uno::Reference < com::sun::star::i18n::XTextConversion > xTC;
+    com::sun::star::uno::Reference < com::sun::star::i18n::XExtendedTextConversion > xTC;
     com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xMSF;
 
     void SAL_CALL getLocaleSpecificTextConversion( const com::sun::star::lang::Locale& rLocale )
