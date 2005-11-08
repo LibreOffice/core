@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pam.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:04:30 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:13:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -265,6 +265,9 @@ public:
     // steht in etwas geschuetztem oder in die Selektion umspannt
     // etwas geschuetztes.
     FASTBOOL HasReadonlySel( bool bFormView ) const;
+
+    FASTBOOL ContainsPosition(const SwPosition & rPos)
+    { return *Start() <= rPos && rPos <= *End(); }
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwPaM);
 
