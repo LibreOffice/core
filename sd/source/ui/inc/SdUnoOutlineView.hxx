@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdUnoOutlineView.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:13:43 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 09:04:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,9 @@ public:
 
     virtual void FireSwitchCurrentPage (SdPage* pCurrentPage) throw();
 
+    // XComponent
+    virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException );
+
     // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
 
@@ -103,8 +106,13 @@ protected:
         ::com::sun::star::uno::Any& rValue,
         sal_Int32 nHandle ) const;
 
+    // lang::XEventListener
+    virtual void SAL_CALL
+        disposing (const ::com::sun::star::lang::EventObject& rEventObject)
+        throw (::com::sun::star::uno::RuntimeException);
+
 private:
-    SdPage* mpCurrentPage;
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage> mxCurrentPage;
 
     /** This is a shortcut for accessing the view shell data member of
         the base class casted to the correct class.
