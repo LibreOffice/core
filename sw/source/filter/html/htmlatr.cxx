@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlatr.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:41:07 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:25:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -750,16 +750,15 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         bNumbered = aNumInfo.IsNumbered();
         BYTE nLvl = aNumInfo.GetLevel();
 
-        const SwNodeNum& rAktNum = *pTxtNd->GetNum();
-        ASSERT( GetRealLevel( rAktNum.GetLevel() ) == nLvl,
+        ASSERT( pTxtNd->GetLevel() == nLvl,
                 "Gemerkter Num-Level ist falsch" );
-        ASSERT( bNumbered == rAktNum.IsNum(),
+        ASSERT( bNumbered == pTxtNd->IsCounted(),
                 "Gemerkter Numerierungs-Zustand ist falsch" );
 
         if( bNumbered )
         {
             nBulletGrfLvl = nLvl; // nur veruebergehend!!!
-            nNumStart = rAktNum.GetSetValue();
+            nNumStart = pTxtNd->GetStart();
             DBG_ASSERT( rHWrt.nLastParaToken == 0,
                 "<PRE> wurde nicht vor <LI> beendet." );
         }
@@ -1000,15 +999,6 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
                 nBulletGrfLvl = 255;
         }
 
-#ifndef NUM_RELSPACE
-        // Wenn der Ziel-Browser mit horizontalen Absatz-Abstaenden in
-        // Listen nicht zurechtkommt, loeschen wir das Item.
-        if( !rHWrt.IsHTMLMode( HTMLMODE_LRSPACE_IN_NUMBUL ) &&
-            rInfo.pItemSet )
-        {
-            rInfo.pItemSet->ClearItem( RES_LR_SPACE );
-        }
-#endif
     }
 
     // Die Defaults aus der Vorlage merken, denn sie muessen nicht
@@ -1017,7 +1007,6 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     rHWrt.nDfltRightMargin = pFmtInfo->nRightMargin;
     rHWrt.nDfltFirstLineIndent = pFmtInfo->nFirstLineIndent;
 
-#ifdef NUM_RELSPACE
     if( rInfo.bInNumBulList )
     {
         if( !rHWrt.IsHTMLMode( HTMLMODE_LSPACE_IN_NUMBUL ) )
@@ -1026,7 +1015,6 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         // In Numerierungs-Listen keinen Ertzeilen-Einzug ausgeben.
         rHWrt.nFirstLineIndent = rLRSpace.GetTxtFirstLineOfst();
     }
-#endif
 
     if( rInfo.bInNumBulList && bNumbered && bPara && !rHWrt.bCfgOutStyles )
     {
@@ -2529,7 +2517,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     xub_StrLen nOffset = 0;
     String aOutlineTxt;
     String aFullText;
-    if( pNd->GetOutlineNum() && !pNd->GetNumNoOutline() )
+    if( pNd->IsOutline() )
     {
         aOutlineTxt = pNd->GetNumString();
         nOffset += aOutlineTxt.Len();
@@ -2634,8 +2622,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     }
 
     BOOL bWriteBreak = (HTML_PREFORMTXT_ON != rHTMLWrt.nLastParaToken);
-    if( bWriteBreak && pNd->GetNum() &&
-        NO_NUMBERING != pNd->GetNum()->GetLevel() )
+    if( bWriteBreak && pNd->GetNumRule()  )
         bWriteBreak = FALSE;
 
     {
@@ -2685,16 +2672,6 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                             aEndPosLst.Insert( pHt->GetAttr(), nStrPos + nOffset,
                                                *pHt->GetEnd() + nOffset,
                                                rHTMLWrt.aChrFmtInfos );
-                        }
-                        else
-                        {
-#if 0
-                            // leere Hinst gleich ausgeben
-                            rHTMLWrt.bTagOn = TRUE;
-                            Out( aHTMLAttrFnTab, pHt->GetAttr(), rHTMLWrt );
-                            rHTMLWrt.bTagOn = FALSE;
-                            Out( aHTMLAttrFnTab, pHt->GetAttr(), rHTMLWrt );
-#endif
                         }
                     }
                     else
