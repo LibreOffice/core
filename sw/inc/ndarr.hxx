@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndarr.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:00:56 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:12:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,10 +263,9 @@ public:
         // Array aller GliederiungsNodes;
     const SwOutlineNodes& GetOutLineNds() const;
 
-    void UpdateOutlineNode( SwNode &);
     void UpdateOutlineNode( const SwNode&, BYTE nOldLevel, BYTE nNewLevel );
         // alle Nodes Updaten - Rule/Format-Aenderung
-    void UpdateOutlineNodes();
+    void UpdateOutlineNode(SwNode & rNd);
 
         // fuege die Nodes fuer die Tabelle ein
         // wenn Lines angegeben, erzeuge die Matrix aus Lines & Boxen
