@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:13:29 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:22:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,12 +227,8 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
     ASSERT( pColl, "Collectionpointer ist 0." );
 
     SwTxtNode *pNode = new SwTxtNode( rWhere, pColl, pAutoAttr );
-    UpdateOutlineNode(*pNode);
 
     SwNodeIndex aIdx( *pNode );
-
-    if( pColl && NO_NUMBERING != pColl->GetOutlineLevel() && IsDocNodes() )
-        UpdateOutlineNode( *pNode, NO_NUMBERING, pColl->GetOutlineLevel() );
 
     //Wenn es noch kein Layout gibt oder in einer versteckten Section
     // stehen, brauchen wir uns um das MakeFrms nicht bemuehen.
@@ -316,20 +312,38 @@ SwTxtNode::SwTxtNode( const SwNodeIndex &rWhere,
                       SwTxtFmtColl *pTxtColl,
                       SwAttrSet* pAutoAttr )
     : SwCntntNode( rWhere, ND_TEXTNODE, pTxtColl ),
-      pSwpHints( 0 ), pWrong( 0 ), pNdNum( 0 ), bLastOutlineState(FALSE)
+      pSwpHints( 0 ),
+      pWrong( 0 ),
+      // --> OD 2005-11-02 #i51089 - TUNING#
+      mpNodeNum( 0L ),
+      // <--
+      bCounted( true ),
+      bNotifiable( false ),
+      bLastOutlineState( FALSE ),
+      nOutlineLevel( pTxtColl->GetOutlineLevel() )
 {
+    // --> OD 2005-11-02 #i51089 - TUNING#
+//    aNdNum.SetTxtNode(this);
+    // <--
+
     // soll eine Harte-Attributierung gesetzt werden?
     if( pAutoAttr )
         SwCntntNode::SetAttr( *pAutoAttr );
 
+    SyncNumberAndNumRule();
+    GetNodes().UpdateOutlineNode(*this);
+
     if( GetNodes().IsDocNodes())
     {
-        //pNdNum = new SwNodeNum( 0 );
-        SwNumRule* pRule = GetNumRule();
-
+        SwNumRule* pRule = _GetNumRule();
         if( pRule )
+        {
             pRule->SetInvalidRule( TRUE );
+            bCounted = true;
+        }
     }
+
+    bNotifiable = true;
 
     bContainsHiddenChars = bHiddenCharsHidePara = FALSE;
     bRecalcHiddenCharFlags = TRUE;
@@ -357,14 +371,27 @@ SwTxtNode::~SwTxtNode()
     // ggf. pWrong nochmal deletet wird, deshalb diese Zuweisung
     pWrong = NULL; // hier nicht wegoptimieren!
 
+    // --> OD 2005-11-02 #i51089 - TUNING#
+//    aNdNum.RemoveMe();
+//    aNdNum.SetTxtNode(NULL);
+    // <--
+
     // --> FME 2004-11-02 #114798# Force the deletion of the pList member
     // of the num rule, otherwise this may still be contained in pList.
-    SwNumRule* pRule = GetNumRule();
+    // --> OD 2005-11-02 #i51089 - TUNING#
+    SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
     if ( pRule )
         pRule->SetInvalidRule( TRUE );
     // <--
 
-    delete pNdNum, pNdNum = 0;      // ggfs. wird in der BasisKlasse noch
+    // --> OD 2005-11-02 #i51089 - TUNING#
+    if ( mpNodeNum )
+    {
+        mpNodeNum->RemoveMe();
+        delete mpNodeNum;
+        mpNodeNum = 0L;
+    }
+    // <--
 }
 
 SwCntntFrm *SwTxtNode::MakeFrm()
@@ -467,7 +494,30 @@ SwCntntNode *SwTxtNode::SplitNode( const SwPosition &rPos )
     // lege den Node "vor" mir an
     register xub_StrLen nSplitPos = rPos.nContent.GetIndex(),
                     nTxtLen = aText.Len();
+    // --> OD 2005-10-17 #i55459#
+    // Method <_MakeNewTxtNode(..)> may modify <IsCounted> attribute of <this>.
+    // Thus, remember its state before calling this method and set this state
+    // at the newly created text node.
+    const bool bIsCounted( IsCounted() );
+    // <--
+
     SwTxtNode* pNode = _MakeNewTxtNode( rPos.nNode, FALSE, nSplitPos==nTxtLen );
+
+    // --> OD 2005-10-19 #126009#
+    // improvement: first set level of new node
+    if (GetNumRule() != NULL && GetNumRule() == pNode->GetNumRule())
+        pNode->SetLevel(GetLevel());
+    // <--
+    pNode->SetRestart(IsRestart());
+    pNode->SetStart(GetStart());
+    // --> OD 2005-10-17 #i55459#
+    pNode->SetCounted(bIsCounted);
+    // <--
+    //pNode->SetOutlineLevel(GetOutlineLevel());
+
+    SetRestart(false);
+    SetStart(1);
+    SetCounted(true);
 
     if( GetDepends() && aText.Len() && (nTxtLen / 2) < nSplitPos )
     {
@@ -997,39 +1047,29 @@ SwFmtColl* SwTxtNode::ChgFmtColl( SwFmtColl *pNewColl )
     ASSERT( HAS_BASE( SwTxtFmtColl, pNewColl ),
                 "ChgFmtColl: ist kein Text-Collectionpointer." );
 
-    SwNumRule * pOldRule = GetNumRule();
-
     SwTxtFmtColl *pOldColl = GetTxtColl();
     if( pNewColl != pOldColl )
     {
         SetCalcHiddenCharFlags();
         SwCntntNode::ChgFmtColl( pNewColl );
+        NumRuleChgd();
     }
+
+    SwTxtFmtColl * pNewTxtColl = static_cast<SwTxtFmtColl *>(pNewColl);
+
     // nur wenn im normalen Nodes-Array
     if( GetNodes().IsDocNodes() )
-        _ChgTxtCollUpdateNum( pOldColl, static_cast<SwTxtFmtColl*>(pNewColl));
+        _ChgTxtCollUpdateNum( pOldColl, pNewTxtColl);
 
-    SwNumRule * pNewRule = GetNumRule();
+    BYTE nNewLevel = pNewTxtColl->GetOutlineLevel();
 
-    if (pNewRule != pOldRule)
-    {
-        if (pNewRule)
-            pNewRule->SetInvalidRule(TRUE);
+    if ( nNewLevel != NO_NUMBERING)
+        SetLevel(nNewLevel);
 
-        if (pOldRule)
-            pOldRule->SetInvalidRule(TRUE);
-    }
-    else
-    {
-        SwTxtFmtColl * pOldTxtColl = static_cast<SwTxtFmtColl *>(pOldColl);
-        SwTxtFmtColl * pNewTxtColl = static_cast<SwTxtFmtColl *>(pNewColl);
+    //SetOutlineLevel(nNewLevel);
+    GetNodes().UpdateOutlineNode(*this);
 
-        if (pNewRule &&
-            pOldTxtColl->GetOutlineLevel() != pNewTxtColl->GetOutlineLevel())
-            pNewRule->SetInvalidRule(TRUE);
-    }
-
-    return  pOldColl;
+    return pOldColl;
 }
 
 void SwTxtNode::_ChgTxtCollUpdateNum( const SwTxtFmtColl *pOldColl,
@@ -1042,43 +1082,21 @@ void SwTxtNode::_ChgTxtCollUpdateNum( const SwTxtFmtColl *pOldColl,
     const BYTE nOldLevel = pOldColl ? pOldColl->GetOutlineLevel():NO_NUMBERING;
     const BYTE nNewLevel = pNewColl ? pNewColl->GetOutlineLevel():NO_NUMBERING;
 
-    // -> HB 2005-04-05 #i46625#
+    SyncNumberAndNumRule();
 
-    // Only change numbering level if paragraph has the same numbering
-    // rule as the assigned paragraph style
-    SwNumRule * pRule = GetNumRule();
-
-    const SfxPoolItem * pItem = NULL;
-    String sNewCollNumRuleName;
-    if (SFX_ITEM_SET ==
-        pNewColl->GetItemState(RES_PARATR_NUMRULE, TRUE, &pItem))
+    if (NO_NUMBERING != nNewLevel)
     {
-        sNewCollNumRuleName =
-            static_cast<const SwNumRuleItem *>(pItem)->GetValue();
+        SetLevel(nNewLevel);
+        //SetOutlineLevel(nNewLevel);
+    }
+
+    {
+        SwDoc * pDoc = GetDoc();
+        if (pDoc)
+            pDoc->GetNodes().UpdateOutlineNode(*this);
     }
 
     SwNodes& rNds = GetNodes();
-    if( nOldLevel != nNewLevel &&
-        (pRule == NULL || sNewCollNumRuleName.Len() == 0 ||
-         sNewCollNumRuleName == pRule->GetName()))
-    // <- HB 2005-04-05 #i46625#
-    {
-        // Numerierung aufheben, falls sie aus der Vorlage kommt
-        // und nicht nicht aus der neuen
-        if( NO_NUMBERING != nNewLevel && pNdNum &&
-            ( !GetpSwAttrSet() ||
-              SFX_ITEM_SET !=
-              GetpSwAttrSet()->GetItemState(RES_PARATR_NUMRULE, FALSE )))
-        {
-            if ((!pNewColl ||
-                 SFX_ITEM_SET != pNewColl->GetItemState(RES_PARATR_NUMRULE )) )
-                delete pNdNum, pNdNum = 0;
-        }
-
-        if( rNds.IsDocNodes() )
-            rNds.UpdateOutlineNode( *this);
-    }
-
     // Update beim Level 0 noch die Fussnoten !!
     if( (!nNewLevel || !nOldLevel) && pDoc->GetFtnIdxs().Count() &&
         FTNNUM_CHAPTER == pDoc->GetFtnInfo().eNum &&
@@ -1406,7 +1424,6 @@ void SwTxtNode::Copy( SwTxtNode *pDest, const SwIndex &rDestStart,
             else
                 GetpSwAttrSet()->CopyToModify( *pDest );
         }
-
         return;
     }
 
@@ -2249,52 +2266,138 @@ void SwTxtNode::GCAttr()
         SwModify::Modify( 0, &aNew );
     }
 }
-
-
-const SwNodeNum* SwTxtNode::UpdateNum( const SwNodeNum& rNum )
-{
-    // #111955#
-    const SwNodeNum * pOldNum = pNdNum;
-
-    if( NO_NUMBERING == rNum.GetLevel() )       // kein Nummerierung mehr ?
-    {
-        if( !pNdNum )
-            return 0;
-        delete pNdNum, pNdNum = 0;
-    }
-    else
-    {
-        if( !pNdNum )
-            pNdNum = new SwNodeNum( rNum );
-        else if( !( *pNdNum == rNum ))
-            *pNdNum = rNum;
-    }
-
-#if 1 // #115901#
-    // #111955#
-    if ((0 == pOldNum || 0 == pNdNum) && pOldNum != pNdNum)
-        GetDoc()->UpdateNumRule(*GetDoc()->GetOutlineNumRule(), 0);
-#endif
-
-    NumRuleChgd();
-    return pNdNum;
-}
-
 // #i23726#
-SwNumRule* SwTxtNode::GetNumRule() const
+SwNumRule* SwTxtNode::_GetNumRule(BOOL bInParent) const
 {
     SwNumRule* pRet = 0;
-    const SfxPoolItem* pItem = GetNoCondAttr( RES_PARATR_NUMRULE, TRUE );
-    if( pItem && ((SwNumRuleItem*)pItem)->GetValue().Len() )
-        pRet = GetDoc()->FindNumRulePtr( ((SwNumRuleItem*)pItem)->GetValue() );
 
-    if (! pRet)
+    // --> OD 2005-11-01 #TUNING#
+    const SfxPoolItem* pItem = GetNoCondAttr( RES_PARATR_NUMRULE, bInParent );
+    bool bNoNumRule = false;
+    if ( pItem )
     {
-        SwTxtFmtColl * pColl = GetTxtColl();
-
-        if (pColl && pColl->GetOutlineLevel() != NO_NUMBERING)
-            pRet = GetDoc()->GetOutlineNumRule();
+        String sNumRuleName = static_cast<const SwNumRuleItem *>(pItem)->GetValue();
+        if (sNumRuleName.Len() > 0)
+        {
+            pRet = GetDoc()->FindNumRulePtr( sNumRuleName );
+        }
+        else // numbering is turned off
+            bNoNumRule = true;
     }
+
+    if ( !bNoNumRule )
+    {
+        if ( pRet && pRet == GetDoc()->GetOutlineNumRule() &&
+             ( !HasSwAttrSet() ||
+               SFX_ITEM_SET !=
+                GetpSwAttrSet()->GetItemState( RES_PARATR_NUMRULE, FALSE ) ) )
+        {
+            SwTxtFmtColl* pColl = GetTxtColl();
+            if ( pColl )
+            {
+                const SwNumRuleItem& rDirectItem = pColl->GetNumRule( FALSE );
+                if ( rDirectItem.GetValue().Len() == 0 )
+                {
+                    pRet = 0L;
+                }
+            }
+        }
+
+        if ( !pRet &&
+             GetDoc()->IsOutlineLevelYieldsOutlineRule() &&
+             GetOutlineLevel() != NO_NUMBERING )
+        {
+            pRet = GetDoc()->GetOutlineNumRule();
+        }
+    }
+    // old code before tuning
+//    // --> OD 2005-10-25 #126347#
+//    // determine of numbering/bullet rule, which is set as a hard attribute
+//    // at the text node
+//    const SfxPoolItem* pItem( 0L );
+//    if ( HasSwAttrSet() ) // does text node has hard attributes ?
+//    {
+//        if ( SFX_ITEM_SET !=
+//                GetpSwAttrSet()->GetItemState( RES_PARATR_NUMRULE, FALSE, &pItem ) )
+//        {
+//            pItem = 0L;
+//        }
+//        // else: <pItem> contains the numbering/bullet attribute, which is
+//        //       hard set at the paragraph.
+
+//    }
+//    // <--
+//    bool bNoNumRule = false;
+//    if (pItem)
+//    {
+//        String sNumRuleName = static_cast<const SwNumRuleItem *>(pItem)->GetValue();
+//        if (sNumRuleName.Len() > 0)
+//        {
+//            pRet = GetDoc()->FindNumRulePtr(sNumRuleName);
+//        }
+//        else // numbering is turned off by hard attribute
+//            bNoNumRule = true;
+//    }
+
+//    if (! bNoNumRule)
+//    {
+//        if (! pRet && bInParent)
+//        {
+//            SwTxtFmtColl * pColl = GetTxtColl();
+
+//            if (pColl)
+//            {
+//                const SwNumRuleItem & rItem = pColl->GetNumRule(TRUE);
+
+//                pRet = const_cast<SwDoc *>(GetDoc())->
+//                    FindNumRulePtrWithPool(rItem.GetValue());
+//                // --> OD 2005-10-13 #125993# - The outline numbering rule
+//                // isn't allowed to be derived from a parent paragraph style
+//                // to a derived one.
+//                // Thus check, if the found outline numbering rule is directly
+//                // set at the paragraph style <pColl>. If not, don't return
+//                // the outline numbering rule.
+//                if ( pRet && pRet == GetDoc()->GetOutlineNumRule() )
+//                {
+//                    const SwNumRuleItem& rDirectItem = pColl->GetNumRule(FALSE);
+//                    SwNumRule* pNumRuleAtParaStyle = const_cast<SwDoc*>(GetDoc())->
+//                        FindNumRulePtrWithPool(rDirectItem.GetValue());
+//                    if ( !pNumRuleAtParaStyle )
+//                    {
+//                        pRet = 0L;
+//                    }
+//                }
+//                // <--
+//            }
+//        }
+
+//        if (!pRet && GetDoc()->IsOutlineLevelYieldsOutlineRule() &&
+//            GetOutlineLevel() != NO_NUMBERING)
+//            pRet = GetDoc()->GetOutlineNumRule();
+//    }
+    // <--
+
+    return pRet;
+}
+
+SwNumRule* SwTxtNode::GetNumRule(BOOL bInParent) const
+{
+    SwNumRule * pRet = _GetNumRule(bInParent);
+
+    if (pRet && GetLevel() == -1)
+    {
+        ASSERT(FALSE, "Node with numrule but without number?");
+    }
+
+    return pRet;
+}
+
+SwNumRule * SwTxtNode::GetNumRuleSync(BOOL bInParent)
+{
+    SwNumRule * pRet = _GetNumRule();
+
+    if (pRet && GetLevel() == -1)
+        SyncNumberAndNumRule();
 
     return pRet;
 }
@@ -2323,34 +2426,15 @@ void SwTxtNode::NumRuleChgd()
 #endif
 }
 
-// #i22362#
-BOOL SwTxtNode::MayBeNumbered() const
-{
-    BOOL bResult = TRUE;
-
-    if (pNdNum)
-    {
-        SwNumRule * pRule = GetNumRule();
-
-        if (pRule)
-        {
-            const SwNumFmt &aFmt = pRule->Get(pNdNum->GetRealLevel());
-
-            bResult = aFmt.IsEnumeration() &&
-                aFmt.GetNumberingType() != SVX_NUM_NUMBER_NONE;
-        }
-    }
-
-    return bResult;
-}
-
 // -> #i27615#
 BOOL SwTxtNode::IsNumbered() const
 {
     BOOL bResult = FALSE;
-    SwNumRule * pRule = GetNumRule();
 
-    if (pRule && pNdNum && pNdNum->IsNum())
+    // --> OD 2005-11-02 #i51089 - TUNING#
+    SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
+    // <--
+    if ( pRule && IsCounted() )
         bResult = TRUE;
 
     return bResult;
@@ -2360,13 +2444,11 @@ BOOL SwTxtNode::HasMarkedLabel() const
 {
     BOOL bResult = FALSE;
 
-    if (pNdNum)
-    {
-        SwNumRule * pNumRule = GetNumRule();
-
-        if (pNumRule)
-            bResult = pNumRule->IsLevelMarked(pNdNum->GetRealLevel());
-    }
+    // --> OD 2005-11-02 #i51089 - TUNING#
+    SwNumRule* pNumRule = GetNum() ? GetNum()->GetNumRule() : 0L;
+    if ( pNumRule )
+        bResult = pNumRule->IsLevelMarked( GetNum()->GetLevel() );
+    // <--
 
     return bResult;
 }
@@ -2402,6 +2484,17 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, BOOL bNext,
             pTmpSet->ClearItem( RES_PARATR_SPLIT );
             bRemoveFromCache = TRUE;
         }
+        if(SFX_ITEM_SET == pTmpSet->GetItemState(RES_PARATR_NUMRULE, FALSE))
+        {
+            SwNumRule * pRule = GetNumRule();
+
+            if (pRule && IsOutline())
+            {
+                pTmpSet->ClearItem(RES_PARATR_NUMRULE);
+                bRemoveFromCache = TRUE;
+            }
+        }
+
         if( !bNext && bRemoveFromCache && IsInCache() )
         {
             SwFrm::GetCache().Delete( this );
@@ -2420,33 +2513,14 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, BOOL bNext,
     const SwNumRule* pRule = GetNumRule();
     if( pRule && pRule == pNode->GetNumRule() && rNds.IsDocNodes() ) // #115901#
     {
-        // ist am Node eine Nummerierung gesetzt und wird dieser vor dem
-        // alten eingefuegt, so kopiere die Nummer
-        if( !bNext && pNdNum && NO_NUMBERING != pNdNum->GetLevel() )
-        {
-            if( pNode->pNdNum )
-                *pNode->pNdNum = *pNdNum;
-            else
-                pNode->pNdNum = new SwNodeNum( *pNdNum );
-
-            // SetValue immer auf default zurueck setzem
-            pNdNum->SetSetValue( USHRT_MAX );
-            if( pNdNum->IsStart() )
-            {
-                pNdNum->SetStart( FALSE );
-                pNode->pNdNum->SetStart( TRUE );
-            }
-
-            // Ein SplitNode erzeugt !!immer!! einen neuen Level, NO_NUM
-            // kann nur ueber eine entsprechende Methode erzeugt werden !!
-            if( ! pNdNum->IsNum())
-            {
-                pNdNum->SetNoNum(FALSE);
-#ifndef NUM_RELSPACE
-                SetNumLSpace( TRUE );
-#endif
-            }
-        }
+        // Ein SplitNode erzeugt !!immer!! einen neuen Level, NO_NUM
+        // kann nur ueber eine entsprechende Methode erzeugt werden !!
+        // --> OD 2005-10-18 #i55459#
+        // - correction: parameter <bNext> has to be checked, as it was in the
+        //   previous implementation.
+        if ( !bNext && !IsCounted() )
+            SetCounted(true);
+        // <--
     }
 
     // jetzt kann es sein, das durch die Nummerierung dem neuen Node eine
@@ -2468,16 +2542,14 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, BOOL bNext,
         /* -> HB #i47372# */
         BYTE nLevel = pNextColl->GetOutlineLevel();
 
-        if (nLevel == NO_NUMBERING)
-            nLevel = 0;
-
-        SetLevel(nLevel);
+        if (nLevel != NO_NUMBERING)
+        {
+            SetLevel(nLevel);
+            //SetOutlineLevel(nLevel);
+        }
 
         /* <- HB #i47372# */
     }
-
-    if (pRule)
-        rNds.GetDoc()->UpdateNumRule( pRule->GetName(), pNode->GetIndex());
 
     return pNode;
 }
@@ -2487,6 +2559,9 @@ SwCntntNode* SwTxtNode::AppendNode( const SwPosition & rPos )
     // Position hinter dem eingefuegt wird
     SwNodeIndex aIdx( rPos.nNode, 1 );
     SwTxtNode* pNew = _MakeNewTxtNode( aIdx, TRUE );
+
+    SyncNumberAndNumRule();
+
     if( GetDepends() )
         MakeFrms( *pNew );
     return pNew;
@@ -2528,20 +2603,19 @@ SwTxtAttr *SwTxtNode::GetTxtAttr( const xub_StrLen nIdx,
 BOOL SwTxtNode::HasNumber() const
 {
     BOOL bResult = FALSE;
-    const SwNodeNum * pNum = GetNum();
 
-    if (pNum)
+    // --> OD 2005-11-02 #i51089 - TUNING#
+    const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
+    // <--
+    if ( pRule )
     {
-        const SwNumRule * pRule = GetNumRule();
+        // --> OD 2005-11-02 #i51089 - TUNING#
+        SwNumFmt aFmt(pRule->Get(GetNum()->GetLevel()));
+        // <--
 
-        if (pRule)
-        {
-            SwNumFmt aFmt(pRule->Get(pNum->GetRealLevel()));
-
-            // #i40041#
-            bResult = aFmt.IsEnumeration() &&
-                SVX_NUM_NUMBER_NONE != aFmt.GetNumberingType();
-        }
+        // #i40041#
+        bResult = aFmt.IsEnumeration() &&
+            SVX_NUM_NUMBER_NONE != aFmt.GetNumberingType();
     }
 
     return bResult;
@@ -2550,18 +2624,17 @@ BOOL SwTxtNode::HasNumber() const
 BOOL SwTxtNode::HasBullet() const
 {
     BOOL bResult = FALSE;
-    const SwNodeNum * pNum = GetNum();
 
-    if (pNum)
+    // --> OD 2005-11-02 #i51089 - TUNING#
+    const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
+    // <--
+    if ( pRule )
     {
-        const SwNumRule * pRule = GetNumRule();
+        // --> OD 2005-11-02 #i51089 - TUNING#
+        SwNumFmt aFmt(pRule->Get(GetNum()->GetLevel()));
+        // <--
 
-        if (pRule)
-        {
-            SwNumFmt aFmt(pRule->Get(pNum->GetRealLevel()));
-
-            bResult = aFmt.IsItemize();
-        }
+        bResult = aFmt.IsItemize();
     }
 
     return bResult;
@@ -2570,44 +2643,30 @@ BOOL SwTxtNode::HasBullet() const
 
 XubString SwTxtNode::GetNumString() const
 {
-    const SwNodeNum* pNum = GetNum(TRUE);
-
-    if (pNum)
+    // --> OD 2005-11-02 #i51089 - TUNING#
+    const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
+    if ( pRule &&
+         GetNum()->IsCounted() &&
+         pRule->Get( GetNum()->GetLevel() ).IsTxtFmt() )
     {
-        const SwNumRule* pRule = GetNumRule();
-
-        if (pRule &&
-            pNum->GetLevel() < MAXLEVEL &&
-            pRule->Get(pNum->GetLevel()).IsTxtFmt())
-            return pRule->MakeNumString(*pNum);
+        return pRule->MakeNumString( *(GetNum()) );
     }
+    // <--
 
     return aEmptyStr;
-
-#if 0
-    if( (( 0 != ( pNum = GetNum() ) &&
-            0 != ( pRule = GetNumRule() )) ||
-            ( 0 != ( pNum = GetOutlineNum() ) &&
-            0 != ( pRule = GetDoc()->GetOutlineNumRule() ) ) ) &&
-        pNum->GetLevel() < MAXLEVEL &&
-        pRule->Get( pNum->GetLevel() ).IsTxtFmt() )
-        return pRule->MakeNumString( *pNum );
-    return aEmptyStr;
-#endif
 }
 
 long SwTxtNode::GetLeftMarginWithNum( BOOL bTxtLeft ) const
 {
-    long nOffset;
-    const SwNodeNum* pNum;
-    const SwNumRule* pRule;
-    if( (( 0 != ( pNum = GetNum() ) &&
-            0 != ( pRule = GetNumRule() )) ||
-            ( 0 != ( pNum = GetOutlineNum() ) &&
-            0 != ( pRule = GetDoc()->GetOutlineNumRule() ) ) ) &&
-            pNum->GetLevel() < NO_NUMBERING )
+    long nOffset = 0;
+    // --> OD 2005-11-02 #i51089 - TUNING#
+    const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
+    // <--
+    if( pRule )
     {
-        const SwNumFmt& rFmt = pRule->Get( GetRealLevel( pNum->GetLevel() ) );
+        // --> OD 2005-11-02 #i51089 - TUNING#
+        const SwNumFmt& rFmt = pRule->Get(GetNum()->GetLevel());
+        // <--
         nOffset = rFmt.GetAbsLSpace();
 
         if( !bTxtLeft )
@@ -2622,26 +2681,22 @@ long SwTxtNode::GetLeftMarginWithNum( BOOL bTxtLeft ) const
         if( pRule->IsAbsSpaces() )
             nOffset -= GetSwAttrSet().GetLRSpace().GetLeft();
     }
-    else
-        nOffset = 0;
+
     return nOffset;
 }
 
 BOOL SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
 {
-    const SwNodeNum* pNum;
-    const SwNumRule* pRule;
-    if( (( 0 != ( pNum = GetNum() ) &&
-            0 != ( pRule = GetNumRule() )) ||
-            ( 0 != ( pNum = GetOutlineNum() ) &&
-            0 != ( pRule = GetDoc()->GetOutlineNumRule() ) ) ) &&
-            pNum->GetLevel() < NO_NUMBERING )
+    // --> OD 2005-11-02 #i51089 - TUNING#
+    const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
+    // <--
+    if ( pRule )
     {
-        if( ! pNum->IsNum() )
-            rFLOffset = 0;
-        else
+        if ( IsCounted() )
         {
-            rFLOffset = pRule->Get( pNum->GetRealLevel() ).GetFirstLineOffset();
+            // --> OD 2005-11-02 #i51089 - TUNING#
+            rFLOffset = pRule->Get( GetNum()->GetLevel() ).GetFirstLineOffset();
+            // <--
 
             if (! GetDoc()->IgnoreFirstLineIndentInNumbering())
             {
@@ -2650,6 +2705,8 @@ BOOL SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
                 rFLOffset += aItem.GetTxtFirstLineOfst();
             }
         }
+        else
+            rFLOffset = 0;
 
         return TRUE;
     }
@@ -3041,6 +3098,9 @@ void SwTxtNode::Replace( const SwIndex& rStart, xub_StrLen nLen,
 
 void SwTxtNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
 {
+    bool bWasNotifiable = bNotifiable;
+    bNotifiable = false;
+
     // Bug 24616/24617:
     //      Modify ueberladen, damit beim Loeschen von Vorlagen diese
     //      wieder richtig verwaltet werden (Outline-Numerierung!!)
@@ -3053,11 +3113,15 @@ void SwTxtNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
                         (SwTxtFmtColl*)((SwFmtChg*)pOldValue)->pChangedFmt,
                         (SwTxtFmtColl*)((SwFmtChg*)pNewValue)->pChangedFmt );
 
+
+
     SwCntntNode::Modify( pOldValue, pNewValue );
 
     SwDoc * pDoc = GetDoc();
-    if (pDoc)
+    if (pDoc && ! pDoc->IsInDtor())
         pDoc->GetNodes().UpdateOutlineNode(*this);
+
+    bNotifiable = bWasNotifiable;
 }
 
 // #111840#
@@ -3078,43 +3142,44 @@ SwPosition * SwTxtNode::GetPosition(const SwTxtAttr * pAttr)
     return pResult;
 }
 
-// #i29363#
-const SwNodeNum * SwTxtNode::GetNum(BOOL bUpdate) const
+SwNumberTreeNode::tNumberVector SwTxtNode::GetNumberVector() const
 {
-    SwNumRule * pRule = GetNumRule();
-
-    if (pRule)
+    // --> OD 2005-11-02 #i51089 - TUNING#
+    if ( GetNum() )
     {
-        if (! pNdNum)
-        {
-            BYTE nOutlineLevel = NO_NUMBERING;
-
-            SwTxtFmtColl * pColl = GetTxtColl();
-
-            if (pColl)
-                nOutlineLevel = pColl->GetOutlineLevel();
-
-            if (nOutlineLevel != NO_NUMBERING)
-                pNdNum = new SwNodeNum(nOutlineLevel);
-            else
-                pNdNum = new SwNodeNum(0);
-        }
-
-        if (bUpdate && pRule->IsInvalidRule())
-            const_cast<SwDoc *>(GetDoc())->UpdateNumRule(*pRule, 0);
+        return GetNum()->GetNumberVector();
     }
-
-    return pNdNum;
+    else
+    {
+        SwNumberTreeNode::tNumberVector aResult;
+        return aResult;
+    }
+    // <--
 }
 
 BOOL SwTxtNode::IsOutline() const
 {
     BOOL bResult = FALSE;
-    const SwNumRule * pRule = GetNumRule();
+    // --> OD 2005-11-02 #i51089 - TUNING#
+//    const SwNumRule * pRule = _GetNumRule();
 
-    if ((pRule && pRule->IsOutlineRule()) ||
-        GetOutlineLevel() != NO_NUMBERING)
-        bResult = TRUE;
+//    if ( ( ( pRule && pRule->IsOutlineRule() ) ||
+//           GetOutlineLevel() != NO_NUMBERING ) &&
+//         !IsInRedlines() )
+//        bResult = TRUE;
+    if ( GetOutlineLevel() != NO_NUMBERING )
+    {
+        bResult = !IsInRedlines();
+    }
+    else
+    {
+        const SwNumRule* pRule( GetNum() ? GetNum()->GetNumRule() : 0L );
+        if ( pRule && pRule->IsOutlineRule() )
+        {
+            bResult = !IsInRedlines();
+        }
+    }
+    // <--
 
     return bResult;
 }
@@ -3126,43 +3191,13 @@ BOOL SwTxtNode::IsOutlineStateChanged() const
 
 void SwTxtNode::UpdateOutlineState()
 {
-    BOOL bIsOutline = IsOutline();
-
-    if (bIsOutline != bLastOutlineState)
-        NumRuleChgd();
-
-    bLastOutlineState = bIsOutline;
+    bLastOutlineState = IsOutline();
 }
 
-SwNodeNum * SwTxtNode::_GetOutlineNum(BOOL bUpdate) const
+int SwTxtNode::GetOutlineLevel() const
 {
-    const SwNodeNum * pResult = NULL;
-
-    if (IsOutline())
-        pResult = GetNum(bUpdate);
-
-    return const_cast<SwNodeNum *>(pResult);
-}
-
-
-const SwNodeNum * SwTxtNode::GetOutlineNum(BOOL bUpdate) const
-{
-    return _GetOutlineNum(bUpdate);
-}
-
-const SwNodeNum * SwTxtNode::GetNumNoOutline() const
-{
-    const SwNodeNum * pResult = NULL;
-
-    if (! IsOutline())
-        pResult = GetNum();
-
-    return pResult;
-}
-
-BYTE SwTxtNode::GetOutlineLevel() const
-{
-    BYTE aResult = NO_NUMBERING;
+#if 1
+    int aResult = NO_NUMBERING;
 
     SwFmtColl * pFmtColl = GetFmtColl();
 
@@ -3170,34 +3205,68 @@ BYTE SwTxtNode::GetOutlineLevel() const
         aResult = ((SwTxtFmtColl *) pFmtColl)->GetOutlineLevel();
 
     return aResult;
+#else // for OOo3
+    return nOutlineLevel
+#endif
 }
 
-BYTE SwTxtNode::GetLevel() const
+int SwTxtNode::GetLevel() const
 {
-    return pNdNum ? pNdNum->GetRealLevel() : NO_NUMBERING;
+    // --> OD 2005-11-02 #i51089 - TUNING#
+    return GetNum() ? GetNum()->GetLevel() : -1;
+    // <--
 }
 
-void SwTxtNode::SetLevel(BYTE nLevel)
+void SwTxtNode::SetLevel(int nLevel)
 {
-    if (pNdNum)
+    if (0 <= nLevel && nLevel < MAXLEVEL)
     {
-        pNdNum->SetLevel(nLevel);
+        // --> OD 2005-11-02 #i51089 - TUNING#
+        CreateNum()->SetLevel( nLevel );
+        // <--
     }
-}
-
-void SwTxtNode::SetOutlineLevel(BYTE nLevel)
-{
-    SwNodeNum * pNum = _GetOutlineNum();
-
-    if (pNum)
-        pNum->SetLevel(nLevel);
     else
     {
-        SwFmtColl * pFmtColl = GetFmtColl();
+        if (0 <= nLevel && (nLevel & NO_NUMLEVEL))
+        {
+            nLevel &= ~NO_NUMLEVEL;
 
-        if (pFmtColl)
-            ((SwTxtFmtColl *) pFmtColl)->SetOutlineLevel(nLevel);
+            if (0 <= nLevel && nLevel < NO_NUMLEVEL)
+            {
+                ASSERT(false, "SetLevel(NO_NUMLEVEL) is deprecated");
+
+                SetCounted(false);
+                // --> OD 2005-11-02 #i51089 - TUNING#
+                CreateNum()->SetLevel(nLevel & ~NO_NUMLEVEL);
+                // <--
+            }
+
+        }
+        else if (nLevel == NO_NUMBERING)
+        {
+            ASSERT(false, "SetLevel(NO_NUMBERING) is deprecated");
+
+            SetCounted(false);
+        }
+        else
+        {
+            // --> OD 2005-11-02 #i51089 - TUNING#
+            if ( GetNum() )
+            {
+                mpNodeNum->RemoveMe();
+                delete mpNodeNum;
+                mpNodeNum = 0L;
+            }
+            // <--
+        }
     }
+}
+
+void SwTxtNode::SetRestart(bool bRestart) const
+{
+    // --> OD 2005-11-02 #i51089 - TUNING#
+    CreateNum()->SetRestart(bRestart);
+    // <--
 }
 
 /**
@@ -3211,18 +3280,177 @@ bool SwTxtNode::HasVisibleNumberingOrBullet() const
 {
     bool bRet = false;
 
-    if ( pNdNum && pNdNum->IsShowNum() )
+    // --> OD 2005-11-02 #i51089 - TUNING#
+    const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
+    // <--
+    if ( pRule && IsCounted())
     {
-        const SwNumRule * pRule = GetNumRule();
-        if ( pRule )
+        // --> OD 2005-11-02 #i51089 - TUNING#
+        const SwNumFmt& rFmt = pRule->Get( GetNum()->GetLevel() );
+        // <--
+        if ( SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType() )
         {
-            const SwNumFmt& rFmt = pRule->Get( pNdNum->GetRealLevel() );
-            if ( SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType() )
-            {
-                bRet = true;
-            }
+            bRet = true;
         }
     }
 
     return bRet;
+}
+
+void SwTxtNode::SetStart(SwNodeNum::tSwNumTreeNumber nNumber)
+{
+    // --> OD 2005-11-02 #i51089 - TUNING#
+    CreateNum()->SetStart(nNumber);
+    // <--
+}
+
+
+SwNodeNum::tSwNumTreeNumber SwTxtNode::GetStart() const
+{
+    // --> OD 2005-11-02 #i51089 - TUNING#
+    return GetNum() ? GetNum()->GetStart() : 1;
+    // <--
+}
+
+bool SwTxtNode::IsNotifiable() const
+{
+    bool aResult = false;
+
+    const SwDoc * pDoc = GetDoc();
+
+    if (bNotifiable && pDoc)
+    {
+        aResult = pDoc->IsInReading() || pDoc->IsInDtor() ? false : true;
+    }
+
+    return aResult;
+}
+
+bool SwTxtNode::IsContinuous() const
+{
+    bool aResult = false;
+
+    // --> OD 2005-11-02 #i51089 - TUNING#
+    SwNumRule * pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
+    // <--
+    if (pRule)
+        aResult = pRule->IsContinusNum() ? true : false;
+
+    return aResult;
+}
+
+void SwTxtNode::SetCounted(bool _bCounted)
+{
+    // --> OD 2005-10-19 #126009#
+    // - improvement: invalidations only, if <IsCounted()> state changes.
+    const bool bInvalidate( bCounted != _bCounted );
+    // <--
+    bCounted = _bCounted;
+    // --> OD 2005-10-19 #126009#
+    // --> OD 2005-11-02 #i51089 - TUNING#
+    if ( bInvalidate && GetNum() )
+    {
+        mpNodeNum->InvalidateMe();
+        // --> OD 2005-10-19 #126009# - invalidation of children and not counted
+        // parent needed.
+        mpNodeNum->InvalidateChildren();
+        mpNodeNum->InvalidateNotCountedParent();
+        // <--
+        // --> OD 2005-10-20 #126009# - notification of not counted parent needed.
+        mpNodeNum->NotifyNotCountedParentSiblings();
+        // <--
+        mpNodeNum->NotifyInvalidSiblings();
+    }
+    // <--
+}
+
+bool SwTxtNode::IsCounted() const
+{
+    return bCounted;
+}
+
+void SwTxtNode::CopyNumber(SwTxtNode & rNode) const
+{
+    // --> OD 2005-11-02 #i51089 - TUNING#
+    if ( GetNum() )
+    {
+        rNode.SetLevel(GetLevel());
+        rNode.SetCounted(IsCounted());
+        if ( rNode.GetNum() )
+        {
+            rNode.mpNodeNum->SetRestart( GetNum()->IsRestart() );
+            rNode.mpNodeNum->SetStart( GetNum()->GetStart() );
+        }
+    }
+    // <--
+}
+
+void SwTxtNode::SyncNumberAndNumRule()
+{
+    SwNumRule* pRule = _GetNumRule();
+
+    // --> OD 2005-11-02 #i51089 - TUNING#
+    if ( pRule && !GetNum() )
+    {
+        CreateNum();
+    }
+    if ( GetNum() &&
+         GetNum()->GetNumRule() != pRule )
+    // <--
+    {
+        // --> OD 2005-10-26 #b6340308# - use outline level in the case that the
+        // new numbering rule is the outline rule.
+        int nLevel = pRule == GetDoc()->GetOutlineNumRule()
+                     ? GetOutlineLevel()
+                     : GetLevel();
+        // <--
+
+        if (nLevel < 0)
+            nLevel = 0;
+
+        if (nLevel > MAXLEVEL)
+            nLevel = MAXLEVEL;
+
+        // --> OD 2005-11-02 #i51089 - TUNING#
+        mpNodeNum->RemoveMe();
+        // <--
+
+        if (pRule)
+        {
+            // --> OD 2005-11-02 #i51089 - TUNING#
+            pRule->AddNumber( mpNodeNum, nLevel );
+            // <--
+        }
+        // --> OD 2005-11-03 #i51089 - TUNING#
+        else
+        {
+            delete mpNodeNum;
+            mpNodeNum = 0L;
+        }
+        // <--
+    }
+}
+
+void SwTxtNode::UnregisterNumber()
+{
+    // --> OD 2005-11-02 #i51089 - TUNING#
+    if ( GetNum() )
+    {
+        mpNodeNum->RemoveMe();
+        delete mpNodeNum;
+        mpNodeNum = 0L;
+    }
+    // <--
+}
+
+bool SwTxtNode::IsFirstOfNumRule() const
+{
+    bool bResult = false;
+
+    // --> OD 2005-11-02 #i51089 - TUNING#
+    if ( GetNum() && GetNum()->GetNumRule())
+        bResult = GetNum()->IsFirst();
+    // <--
+
+    return bResult;
 }
