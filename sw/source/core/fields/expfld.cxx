@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expfld.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:33:33 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:20:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -685,17 +685,29 @@ USHORT SwSetExpFieldType::GetSeqFldList( SwSeqFldList& rList )
 void SwSetExpFieldType::SetChapter( SwSetExpField& rFld, const SwNode& rNd )
 {
     const SwTxtNode* pTxtNd = rNd.FindOutlineNodeOfLevel( nLevel );
-    if( pTxtNd && pTxtNd->GetOutlineNum() )
+    if( pTxtNd )
     {
-        SwNodeNum aNum( *pTxtNd->GetOutlineNum() );
-        if( nLevel < aNum.GetLevel() )
-            aNum.SetLevel( nLevel );
+        SwNumRule * pRule = pTxtNd->GetNumRule();
 
-        // nur die Nummer besorgen, ohne Pre-/Post-fixstrings
-        String sNumber( GetDoc()->GetOutlineNumRule()->MakeNumString(
-                                                aNum, FALSE ));
-        if( sNumber.Len() )
-            rFld.ChgExpStr(  ( sNumber += sDelim ) += rFld.GetExpStr() );
+        if (pRule)
+        {
+            // --> OD 2005-11-02 #i51089 - TUNING#
+            if ( pTxtNd->GetNum() )
+            {
+                const SwNodeNum & aNum = *(pTxtNd->GetNum());
+
+                // nur die Nummer besorgen, ohne Pre-/Post-fixstrings
+                String sNumber( pRule->MakeNumString(aNum, FALSE ));
+
+                if( sNumber.Len() )
+                    rFld.ChgExpStr(  ( sNumber += sDelim ) += rFld.GetExpStr() );
+            }
+            else
+            {
+                ASSERT( false,
+                        "<SwSetExpFieldType::SetChapter(..)> - text node with numbering rule, but without number. This is a serious defect -> inform OD" );
+            }
+        }
     }
 }
 
