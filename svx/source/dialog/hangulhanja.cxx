@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hangulhanja.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:38:13 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 09:13:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,9 @@
 #endif
 #ifndef _COM_SUN_STAR_I18N_XTEXTCONVERSION_HPP_
 #include <com/sun/star/i18n/XTextConversion.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_XEXTENDEDTEXTCONVERSION_HPP_
+#include <com/sun/star/i18n/XExtendedTextConversion.hpp>
 #endif
 #ifndef _COM_SUN_STAR_I18N_TEXTCONVERSIONTYPE_HPP_
 #include <com/sun/star/i18n/TextConversionType.hpp>
@@ -186,10 +189,12 @@ namespace svx
         sal_Int32               m_nCurrentStartIndex;   // the start index within m_sCurrentPortion of the current convertible portion
         sal_Int32               m_nCurrentEndIndex;     // the end index (excluding) within m_sCurrentPortion of the current convertible portion
         sal_Int32               m_nReplacementBaseIndex;// index which ReplaceUnit-calls need to be relative to
+        sal_Int32               m_nCurrentConversionOption;
+        sal_Int16               m_nCurrentConversionType;
         Sequence< OUString >
                                 m_aCurrentSuggestions;  // the suggestions for the current unit
                                                         // (means for the text [m_nCurrentStartIndex, m_nCurrentEndIndex) in m_sCurrentPortion)
-        sal_Bool                m_bTryBothDirections;   // specifies if noth conversion directions should be tried when looking for convertible characters
+        sal_Bool                m_bTryBothDirections;   // specifies if other conversion directions should be tried when looking for convertible characters
 
 
     public:
@@ -327,6 +332,8 @@ namespace svx
         ,m_nCurrentStartIndex( 0 )
         ,m_nCurrentEndIndex( 0 )
         ,m_nReplacementBaseIndex( 0 )
+        ,m_nCurrentConversionOption( TextConversionOption::NONE )
+        ,m_nCurrentConversionType( -1 ) // not yet known
         ,m_bTryBothDirections( sal_True )
         ,m_xORB( _rxORB )
         ,m_aSourceLocale( _rSourceLocale )
@@ -418,10 +425,14 @@ namespace svx
             nStartSearch = _nStartAt;
 
         sal_Int32 nLength = m_sCurrentPortion.getLength() - nStartSearch;
-        sal_Int16 nConversionType = implGetConversionType();
-        sal_Int32 nConversionOption = IsByCharacter() ? CHARACTER_BY_CHARACTER : NONE;
+        m_nCurrentConversionType = implGetConversionType();
+        m_nCurrentConversionOption = IsByCharacter() ? CHARACTER_BY_CHARACTER : NONE;
         if( m_bIgnorePostPositionalWord )
-            nConversionOption = nConversionOption | IGNORE_POST_POSITIONAL_WORD;
+            m_nCurrentConversionOption = m_nCurrentConversionOption | IGNORE_POST_POSITIONAL_WORD;
+
+        // no need to check both directions for chinese conversion (saves time)
+        if (m_eConvType == HHC::eConvSimplifiedTraditional)
+            m_bTryBothDirections = sal_False;
 
         sal_Bool bFoundAny = sal_True;
         try
@@ -431,8 +442,8 @@ namespace svx
                 nStartSearch,
                 nLength,
                 m_aSourceLocale,
-                nConversionType,
-                nConversionOption
+                m_nCurrentConversionType,
+                m_nCurrentConversionOption
             );
             sal_Bool bFoundPrimary = aResult.Boundary.startPos < aResult.Boundary.endPos;
             bFoundAny = bFoundPrimary;
@@ -445,7 +456,7 @@ namespace svx
                     nLength,
                     m_aSourceLocale,
                     implGetConversionType( true ), // switched!
-                    nConversionOption
+                    m_nCurrentConversionOption
                 );
                 if ( aSecondResult.Boundary.startPos < aSecondResult.Boundary.endPos )
                 {   // we indeed found such a convertible
@@ -872,8 +883,37 @@ namespace svx
                 pNewUnitLang = &nNewUnitLang;
         }
 
+        // according to FT we should not (yet) bother about Hangul/Hanja conversion here
+        //
+        // aOffsets is needed in ReplaceUnit below in order to to find out
+        // exactly which characters are really changed in order to keep as much
+        // from attributation for the text as possible.
+        Sequence< sal_Int32 > aOffsets;
+        Reference< XExtendedTextConversion > xExtConverter( m_xConverter, UNO_QUERY );
+        if (m_eConvType == HHC::eConvSimplifiedTraditional && xExtConverter.is())
+        {
+            try
+            {
+                OUString aConvText = xExtConverter->getConversionWithOffset(
+                    m_sCurrentPortion,
+                    m_nCurrentStartIndex,
+                    m_nCurrentEndIndex - m_nCurrentStartIndex,
+                    m_aSourceLocale,
+                    m_nCurrentConversionType,
+                    m_nCurrentConversionOption,
+                    aOffsets
+                );
+            }
+            catch( const Exception& e )
+            {
+                DBG_ERROR( "HangulHanjaConversion_Impl::implChange: caught unexpected exception!" );
+                aOffsets.realloc(0);
+            }
+        }
+
         // do the replacement
-        m_pAntiImpl->ReplaceUnit( nStartIndex, nEndIndex, _rChangeInto, eAction, pNewUnitLang );
+        m_pAntiImpl->ReplaceUnit( nStartIndex, nEndIndex, m_sCurrentPortion,
+                _rChangeInto, aOffsets, eAction, pNewUnitLang );
 
 
         // adjust the replacement base
@@ -1143,8 +1183,12 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    void HangulHanjaConversion::ReplaceUnit( const sal_Int32 _nUnitStart, const sal_Int32 _nUnitEnd,
-            const OUString& _rReplaceWith, ReplacementAction _eAction,
+    void HangulHanjaConversion::ReplaceUnit(
+            const sal_Int32 _nUnitStart, const sal_Int32 _nUnitEnd,
+            const ::rtl::OUString& _rOrigText,
+            const OUString& _rReplaceWith,
+            const ::com::sun::star::uno::Sequence< sal_Int32 > &_rOffsets,
+            ReplacementAction _eAction,
             LanguageType *pNewUnitLanguage )
     {
         DBG_ERROR( "HangulHanjaConversion::ReplaceUnit: to be overridden!" );
