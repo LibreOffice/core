@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:25:04 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:29:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3174,15 +3174,14 @@ static Writer& OutWW8_SwNumRuleItem( Writer& rWrt, const SfxPoolItem& rHt )
                 if( rWW8Wrt.pOutFmtNode->ISA( SwCntntNode ))
                 {
                     pTxtNd = (SwTxtNode*)rWW8Wrt.pOutFmtNode;
-                    const SwNodeNum* pNum = pTxtNd->GetNum();
 
-                    if( pNum && pNum->IsShowNum() )
+                    if( pTxtNd->IsCounted())
                     {
-                        nLvl = GetRealLevel( pNum->GetLevel() );
+                        nLvl = pTxtNd->GetLevel();
 
-                        if (USHRT_MAX != pNum->GetSetValue() || pNum->IsStart())
+                        if (pTxtNd->IsRestart())
                         {
-                            USHORT nStartWith = (USHRT_MAX != pNum->GetSetValue()) ? pNum->GetSetValue() : 1;
+                            USHORT nStartWith = pTxtNd->GetStart();
                             nNumId = rWW8Wrt.DupNumRuleWithLvlStart(pRule,nLvl,nStartWith);
                             if (USHRT_MAX != nNumId)
                                 ++nNumId;
