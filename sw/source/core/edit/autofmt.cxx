@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:25:40 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:19:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1746,10 +1746,10 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
             {
                 aDelPam.SetMark();
                 aDelPam.GetMark()->nNode++;
-                aDelPam.GetNode(FALSE)->GetTxtNode()->UpdateNum( SwNodeNum( (BYTE)nLvl ) );
+                aDelPam.GetNode(FALSE)->GetTxtNode()->SetLevel( nLvl );
             }
 
-            pAktTxtNd->UpdateNum( SwNodeNum( (BYTE)nLvl ) );
+            pAktTxtNd->SetLevel(nLvl);
             pAktTxtNd->SetNumLSpace( TRUE );
 
             pDoc->SetNumRule( aDelPam, aRule );
