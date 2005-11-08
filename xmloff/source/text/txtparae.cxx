@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:31:14 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:06:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,8 +326,6 @@ enum eParagraphPropertyNamesEnum
     PARA_STYLE_NAME = 3,
     TEXT_SECTION = 4
 };
-
-
 
 void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                                   const Reference < XPropertySet > & rPropSet,
@@ -1693,6 +1691,56 @@ void XMLTextParagraphExport::exportParagraph(
                             GetExport().AddAttribute( XML_NAMESPACE_TEXT,
                                                       XML_IS_LIST_HEADER,
                                                       XML_TRUE );
+                    }
+
+                    {
+                        String sParaIsNumberingRestart
+                            (RTL_CONSTASCII_USTRINGPARAM
+                             ("ParaIsNumberingRestart"));
+                        bool bIsRestartNumbering = false;
+
+                        Reference< XPropertySetInfo >
+                        xPropSetInfo(xMultiPropSet.is() ?
+                                     xMultiPropSet->getPropertySetInfo():
+                                     xPropSet->getPropertySetInfo());
+
+                        if (xPropSetInfo->
+                            hasPropertyByName(sParaIsNumberingRestart))
+                        {
+                            xPropSet->getPropertyValue(sParaIsNumberingRestart)
+                                >>= bIsRestartNumbering;
+                        }
+
+                        if (bIsRestartNumbering)
+                        {
+                            GetExport().AddAttribute(XML_NAMESPACE_TEXT,
+                                                     XML_RESTART_NUMBERING,
+                                                     XML_TRUE);
+
+                            String sNumberingStartValue
+                                (RTL_CONSTASCII_USTRINGPARAM
+                                 ("NumberingStartValue"));
+
+
+                            sal_Int32 nStartValue;
+
+                            if (xPropSetInfo->
+                                hasPropertyByName(sNumberingStartValue))
+                            {
+                                xPropSet->getPropertyValue(sNumberingStartValue)
+                                    >>= nStartValue;
+
+                                OUStringBuffer sTmpStartValue;
+
+                                sTmpStartValue.append(nStartValue);
+
+                                GetExport().
+                                    AddAttribute(XML_NAMESPACE_TEXT,
+                                                 XML_START_VALUE,
+                                                 sTmpStartValue.
+                                                 makeStringAndClear());
+                            }
+                        }
                     }
                 }
             }
