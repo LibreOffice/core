@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:25:04 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:33:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,6 +210,9 @@
 #endif
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>
+#endif
+#ifndef _NDTXT_HXX
+#include <ndtxt.hxx>
 #endif
 
 #include "swabstdlg.hxx" //CHINA001
@@ -1583,18 +1586,22 @@ sal_Bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
             if( pWrtShell->IsOutlineCopyable( nPos ) )
             {
                 const SwNumRule* pOutlRule = pWrtShell->GetOutlineNumRule();
-                const SwNodeNum* pNum = pWrtShell->GetOutlineNum(nPos);
-                if( pNum && pOutlRule && MAXLEVEL >= pNum->GetLevel())
+                const SwTxtNode* pTxtNd = pWrtShell->GetOutlineNode(nPos);
+                if( pTxtNd && pOutlRule && pTxtNd->IsNumbered())
+                {
+                    SwNodeNum::tNumberVector aNumVector =
+                        pTxtNd->GetNumberVector();
                     for( sal_Int8 nLevel = 0;
-                         nLevel <= pNum->GetLevel();
+                         nLevel <= pTxtNd->GetLevel();
                          nLevel++ )
                     {
-                        sal_uInt16 nVal = pNum->GetLevelVal()[nLevel];
+                        sal_uInt16 nVal = aNumVector[nLevel];
                         nVal ++;
                         nVal -= pOutlRule->Get(nLevel).GetStart();
                         sEntry += String::CreateFromInt32( nVal );
                         sEntry += '.';
                     }
+                }
                 sEntry += pWrtShell->GetOutlineText(nPos, sal_False);
                 sOutlineText = pWrtShell->GetOutlineText(nPos, sal_True);
                 bIsOutlineMoveable = ((SwOutlineContent*)pCnt)->IsMoveable();
