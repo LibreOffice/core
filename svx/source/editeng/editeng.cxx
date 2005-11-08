@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:27:16 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 09:09:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,9 +104,7 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #endif
 
-#ifndef SVX_LIGHT
 #include <srchdlg.hxx>
-#endif
 
 #if OSL_DEBUG_LEVEL > 1
 #include <frmdiritem.hxx>
@@ -169,13 +167,11 @@ sal_Bool EditEngine::IsInUndo()
     return pImpEditEngine->IsInUndo();
 }
 
-#ifndef SVX_LIGHT
 SfxUndoManager& EditEngine::GetUndoManager()
 {
     DBG_CHKTHIS( EditEngine, 0 );
     return pImpEditEngine->GetUndoManager();
 }
-#endif
 
 void EditEngine::UndoActionStart( sal_uInt16 nId )
 {
@@ -822,8 +818,6 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
 
     sal_Bool bDone = sal_True;
 
-#ifndef SVX_LIGHT
-
     sal_Bool bModified  = sal_False;
     sal_Bool bMoved     = sal_False;
     sal_Bool bAllowIdle = sal_True;
@@ -1180,8 +1174,6 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
         pImpEditEngine->CallStatusHdl();
     }
 
-#endif
-
     if ( GetNotifyHdl().IsSet() )
     {
         EENotify aNotify( EE_NOTIFY_INPUT_END );
@@ -1256,7 +1248,6 @@ sal_uInt32 EditEngine::Read( SvStream& rInput, const String& rBaseURL, EETextFor
     return rInput.GetError();
 }
 
-#ifndef SVX_LIGHT
 sal_uInt32 EditEngine::Write( SvStream& rOutput, EETextFormat eFormat )
 {
     DBG_CHKTHIS( EditEngine, 0 );
@@ -1265,7 +1256,6 @@ sal_uInt32 EditEngine::Write( SvStream& rOutput, EETextFormat eFormat )
     pImpEditEngine->Write( rOutput, eFormat, EditSelection( aStartPaM, aEndPaM ) );
     return rOutput.GetError();
 }
-#endif
 
 EditTextObject* EditEngine::CreateTextObject()
 {
@@ -1682,7 +1672,6 @@ void EditEngine::SetControlWord( sal_uInt32 nWord )
             }
         }
 
-#ifndef SVX_LIGHT
         sal_Bool bSpellingChanged = nChanges & EE_CNTRL_ONLINESPELLING ? sal_True : sal_False;
         sal_Bool bRedLinesChanged = nChanges & EE_CNTRL_NOREDLINES ? sal_True : sal_False;
 
@@ -1723,7 +1712,6 @@ void EditEngine::SetControlWord( sal_uInt32 nWord )
                 }
             }
         }
-#endif // !SVX_LIGHT
     }
 }
 
@@ -2070,37 +2058,27 @@ sal_Bool __EXPORT EditEngine::SpellNextDocument()
 
 EESpellState EditEngine::HasSpellErrors()
 {
-#ifdef SVX_LIGHT
-    return EE_SPELL_NOSPELLER;
-#else
     DBG_CHKTHIS( EditEngine, 0 );
     if ( !pImpEditEngine->GetSpeller().is()  )
         return EE_SPELL_NOSPELLER;
 
     return pImpEditEngine->HasSpellErrors();
-#endif
 }
 /*-- 13.10.2003 16:56:23---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void EditEngine::StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc)
 {
-#ifdef SVX_LIGHT
-#else
     DBG_CHKTHIS( EditEngine, 0 );
     pImpEditEngine->StartSpelling(rEditView, bMultipleDoc);
-#endif
 }
 /*-- 13.10.2003 16:56:23---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void EditEngine::EndSpelling()
 {
-#ifdef SVX_LIGHT
-#else
     DBG_CHKTHIS( EditEngine, 0 );
     pImpEditEngine->EndSpelling();
-#endif
 }
 
 /*-- 13.10.2003 16:43:27---------------------------------------------------
@@ -2108,34 +2086,22 @@ void EditEngine::EndSpelling()
   -----------------------------------------------------------------------*/
 bool EditEngine::SpellSentence(EditView& rView, ::svx::SpellPortions& rToFill)
 {
-#ifdef SVX_LIGHT
-    return false;
-#else
     DBG_CHKTHIS( EditEngine, 0 );
     return pImpEditEngine->SpellSentence( rView, rToFill );
-#endif
 }
 /*-- 13.10.2003 16:43:27---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void EditEngine::ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions)
 {
-#ifdef SVX_LIGHT
-    return;
-#else
     DBG_CHKTHIS( EditEngine, 0 );
     pImpEditEngine->ApplyChangedSentence( rEditView, rNewPortions );
-#endif
 }
 
 sal_Bool EditEngine::HasConvertibleTextPortion( LanguageType nLang )
 {
-#ifdef SVX_LIGHT
-    return sal_False;
-#else
     DBG_CHKTHIS( EditEngine, 0 );
     return pImpEditEngine->HasConvertibleTextPortion( nLang );
-#endif
 }
 
 sal_Bool __EXPORT EditEngine::ConvertNextDocument()
@@ -2279,7 +2245,6 @@ void EditEngine::RemoveFields( sal_Bool bKeepFieldText, TypeId aType )
 
 sal_Bool EditEngine::HasOnlineSpellErrors() const
 {
-#ifndef SVX_LIGHT
     DBG_CHKTHIS( EditEngine, 0 );
     sal_uInt16 nNodes = pImpEditEngine->GetEditDoc().Count();
     for ( sal_uInt16 n = 0; n < nNodes; n++ )
@@ -2288,20 +2253,20 @@ sal_Bool EditEngine::HasOnlineSpellErrors() const
         if ( pNode->GetWrongList() && pNode->GetWrongList()->Count() )
             return sal_True;
     }
-#endif // !SVX_LIGHT
     return sal_False;
 }
 
 void EditEngine::CompleteOnlineSpelling()
 {
-#ifndef SVX_LIGHT
     DBG_CHKTHIS( EditEngine, 0 );
     if ( pImpEditEngine->GetStatus().DoOnlineSpelling() )
     {
+        if( !pImpEditEngine->IsFormatted() )
+            pImpEditEngine->FormatAndUpdate();
+
         pImpEditEngine->StopOnlineSpellTimer();
         pImpEditEngine->DoOnlineSpelling( 0, sal_True, sal_False );
     }
-#endif // SVX_LIGHT
 }
 
 USHORT EditEngine::FindParagraph( long nDocPosY )
@@ -2549,14 +2514,10 @@ sal_uInt32 EditEngine::RegisterClipboardFormatName()
 
 sal_uInt16 EditEngine::GetAvailableSearchOptions()
 {
-#ifdef SVX_LIGHT
-    return 0;
-#else
     return SEARCH_OPTIONS_SEARCH | SEARCH_OPTIONS_REPLACE |
             SEARCH_OPTIONS_REPLACE_ALL | SEARCH_OPTIONS_WHOLE_WORDS |
             SEARCH_OPTIONS_BACKWARDS | SEARCH_OPTIONS_REG_EXP |
             SEARCH_OPTIONS_EXACT | SEARCH_OPTIONS_SELECTION;
-#endif
 }
 
 void EditEngine::SetFontInfoInItemSet( SfxItemSet& rSet, const Font& rFont )
