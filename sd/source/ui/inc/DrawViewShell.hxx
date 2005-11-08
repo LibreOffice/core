@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawViewShell.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:04:15 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 09:04:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,7 @@ class TransferableDataHelper;
 class TransferableClipboardListener;
 class AbstractSvxNameDialog; //CHINA001 class SvxNameDialog;
 class SdrLayer;
+class SvxClipboardFmtItem;
 
 namespace sd {
 
@@ -453,6 +454,12 @@ private:
         dialog is visible.
     */
     bool mbIsLayerModeActive;
+
+    /** This item contains the clipboard formats of the current clipboard
+        content that are supported both by that content and by the
+        DrawViewShell.
+    */
+    ::std::auto_ptr<SvxClipboardFmtItem> mpCurrentClipboardFormats;
 
     void Construct (DrawDocShell* pDocSh, PageKind ePageKind);
 
