@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:26:33 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 09:13:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1683,7 +1683,8 @@ BOOL EditDoc::RemoveAttribs( ContentNode* pNode, USHORT nStart, USHORT nEnd, Edi
                 {
                     pAttr->GetStart() = nEnd;   // dann faengt es dahinter an
                     rpStarting = pAttr;
-                    break;  // es kann kein weiteres Attrib hier liegen
+                    if ( nWhich )
+                        break;  // es kann kein weiteres Attrib hier liegen
                 }
                 else if ( !pAttr->IsFeature() || ( pAttr->GetStart() == nStart ) )
                 {
@@ -1715,13 +1716,15 @@ BOOL EditDoc::RemoveAttribs( ContentNode* pNode, USHORT nStart, USHORT nEnd, Edi
                 {
                     pAttr->GetStart() = nEnd;
                     rpStarting = pAttr;
-                    break;  // es kann weitere Attribute geben!
+                    if ( nWhich )
+                        break;  // es kann weitere Attribute geben!
                 }
                 else if ( pAttr->GetEnd() == nEnd )
                 {
                     pAttr->GetEnd() = nStart;
                     rpEnding = pAttr;
-                    break;  // es kann weitere Attribute geben!
+                    if ( nWhich )
+                        break;  // es kann weitere Attribute geben!
                 }
                 else // Attribut muss gesplittet werden...
                 {
@@ -1729,7 +1732,8 @@ BOOL EditDoc::RemoveAttribs( ContentNode* pNode, USHORT nStart, USHORT nEnd, Edi
                     pAttr->GetEnd() = nStart;
                     rpEnding = pAttr;
                     InsertAttrib( *pAttr->GetItem(), pNode, nEnd, nOldEnd );
-                    break;  // es kann weitere Attribute geben!
+                    if ( nWhich )
+                        break;  // es kann weitere Attribute geben!
                 }
             }
         }
