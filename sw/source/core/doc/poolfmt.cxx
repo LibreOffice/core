@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:18:32 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:17:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,13 +326,21 @@ void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
             pColl->SetOutlineLevel( nLevel );
             if( !pDoc->IsHTMLMode() )
             {
-                const SwNumFmt& rNFmt = pDoc->GetOutlineNumRule()->Get( nLevel );
+                SwNumRule * pOutlineRule = pDoc->GetOutlineNumRule();
+                const SwNumFmt& rNFmt = pOutlineRule->Get( nLevel );
                 if( rNFmt.GetAbsLSpace() || rNFmt.GetFirstLineOffset() )
                 {
                     SvxLRSpaceItem aLR( (SvxLRSpaceItem&)pColl->GetAttr( RES_LR_SPACE ) );
                     aLR.SetTxtFirstLineOfstValue( rNFmt.GetFirstLineOffset() );
                     aLR.SetTxtLeft( rNFmt.GetAbsLSpace() );
                     pColl->SetAttr( aLR );
+                }
+
+                if (! pDoc->IsOutlineLevelYieldsOutlineRule())
+                {
+                    SwNumRuleItem aItem(pOutlineRule->GetName());
+
+                    pColl->SetAttr(aItem);
                 }
             }
         }
