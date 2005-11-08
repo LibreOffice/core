@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cption.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-06 10:54:27 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:32:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -439,12 +439,12 @@ void SwCaptionDialog::DrawSample()
             if( pFldType && pFldType->GetOutlineLvl() < MAXLEVEL )
             {
                 sal_Int8 nLvl = pFldType->GetOutlineLvl();
-                SwNodeNum aNum( nLvl );
+                SwNodeNum::tNumberVector aNumVector;
                 for( sal_Int8 i = 0; i <= nLvl; ++i )
-                    *(aNum.GetLevelVal() + i) = 1;
+                    aNumVector.push_back(1);
 
-                String sNumber( rSh.GetOutlineNumRule()->MakeNumString(
-                                                        aNum, sal_False ));
+                String sNumber( rSh.GetOutlineNumRule()->
+                                MakeNumString(aNumVector, sal_False ));
                 if( sNumber.Len() )
                     (aStr += sNumber) += pFldType->GetDelimiter();
             }
