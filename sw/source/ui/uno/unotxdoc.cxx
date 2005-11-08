@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-18 13:57:46 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:33:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1187,13 +1187,14 @@ String lcl_CreateOutlineString( USHORT nIndex,
             const SwOutlineNodes& rOutlineNodes, const SwNumRule* pOutlRule)
 {
     String sEntry;
-    const SwNodeNum* pNum = rOutlineNodes[ nIndex ]->GetTxtNode()->GetOutlineNum();
-    if( pNum && pOutlRule && MAXLEVEL >= pNum->GetLevel())
+    const SwTxtNode * pTxtNd = rOutlineNodes[ nIndex ]->GetTxtNode();
+    SwNodeNum::tNumberVector aNumVector = pTxtNd->GetNumberVector();
+    if( pOutlRule && pTxtNd->GetNumRule())
         for( sal_Int8 nLevel = 0;
-             nLevel <= pNum->GetLevel();
+             nLevel <= pTxtNd->GetLevel();
              nLevel++ )
         {
-            sal_uInt16 nVal = pNum->GetLevelVal()[nLevel];
+            sal_uInt16 nVal = aNumVector[nLevel];
             nVal ++;
             nVal -= pOutlRule->Get(nLevel).GetStart();
             sEntry += String::CreateFromInt32( nVal );
