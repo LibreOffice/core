@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageCacheManager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 07:41:21 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 16:29:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 
 #include <deque>
 #include <map>
+#include <boost/weak_ptr.hpp>
 
 namespace {
 
@@ -196,25 +197,22 @@ public:
 
 //===== PageCacheManager ====================================================
 
-::boost::shared_ptr<PageCacheManager> PageCacheManager::mpInstance;
+::boost::weak_ptr<PageCacheManager> PageCacheManager::mpInstance;
 
 ::boost::shared_ptr<PageCacheManager> PageCacheManager::Instance (void)
 {
-    if (mpInstance.get() == NULL)
-    {
-        ::osl::GetGlobalMutex aMutexFunctor;
-        ::osl::MutexGuard aGuard (aMutexFunctor());
-        if (mpInstance.get() == NULL)
-        {
-            PageCacheManager* pSingleton = new PageCacheManager();
-            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-            mpInstance.reset(pSingleton);
-        }
-    }
-    else
-        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+    ::boost::shared_ptr<PageCacheManager> pInstance;
 
-    return mpInstance;
+    ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
+
+    pInstance = mpInstance.lock();
+    if (pInstance.get() == NULL)
+    {
+        pInstance.reset(new PageCacheManager());
+        mpInstance = pInstance;
+    }
+
+    return pInstance;
 }
 
 
