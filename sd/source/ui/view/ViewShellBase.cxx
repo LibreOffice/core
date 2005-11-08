@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 09:05:52 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 16:30:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 
 #include "EventMultiplexer.hxx"
 #include "../toolpanel/controls/MasterPageContainer.hxx"
+#include "cache/SlsPageCacheManager.hxx"
 #include "ShellFactory.hxx"
 #ifndef SD_RESID_HXX
 #include "sdresid.hxx"
@@ -175,6 +176,12 @@ public:
 
 private:
     ViewShellBase& mrBase;
+
+    /** Hold a reference to the page cache manager of the slide sorter in
+        order to ensure that it stays alive while the ViewShellBase is
+        alive.
+    */
+    ::boost::shared_ptr<slidesorter::cache::PageCacheManager> mpPageCacheManager;
 };
 
 
@@ -1185,7 +1192,8 @@ UpdateLockManager& ViewShellBase::GetUpdateLockManager (void) const
 //===== ViewShellBase::Implementation =========================================
 
 ViewShellBase::Implementation::Implementation (ViewShellBase& rBase)
-    : mrBase(rBase)
+    : mrBase(rBase),
+      mpPageCacheManager(slidesorter::cache::PageCacheManager::Instance())
 {
 }
 
