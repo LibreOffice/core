@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndcopy.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:20:47 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:18:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,8 +180,13 @@ SwCntntNode* SwTxtNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
         // ??? reicht das ??? was ist mit PostIts/Feldern/FeldTypen ???
     pCpyTxtNd->Copy( pTxtNd, SwIndex( pCpyTxtNd ), pCpyTxtNd->GetTxt().Len() );
 
-    if( pCpyAttrNd->GetNum() )
-        pTxtNd->UpdateNum( *pCpyAttrNd->GetNum() );
+    // --> OD 2005-11-01 #i53235#
+    // --> OD 2005-11-02 #i51089 - TUNING#
+    if ( pCpyAttrNd->GetNum() && pCpyAttrNd->GetNum()->GetNumRule() )
+    {
+        pCpyAttrNd->CopyNumber(*pTxtNd);
+    }
+    // <--
 
 //FEATURE::CONDCOLL
     if( RES_CONDTXTFMTCOLL == pColl->Which() )
@@ -853,8 +858,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
                 }
                 else if( !bOneNode )
                 {
-                    BYTE nNumLevel = !pDestNd->GetNum() ? 0
-                                            : pDestNd->GetNum()->GetLevel();
+                    BYTE nNumLevel = pDestNd->GetLevel();
 
                     xub_StrLen nCntntEnd = pEnd->nContent.GetIndex();
                     BOOL bDoesUndo = pDoc->DoesUndo();
@@ -864,8 +868,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
 
                     // Nummerierung korrigieren, SplitNode erzeugt immer einen
                     // neuen Level
-                    if( ! IsNum(nNumLevel) )
-                        pDestNd->UpdateNum( SwNodeNum( nNumLevel ));
+                    pDestNd->SetLevel(nNumLevel);
 
                     if( bCanMoveBack && rPos == *aCpyPam.GetPoint() )
                     {
@@ -932,9 +935,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
                     if( bCopyCollFmt )
                     {
                         pSttNd->CopyCollFmt( *pDestNd );
-
-                        if (pSttNd->GetNum())
-                              pDestNd->UpdateNum(*pSttNd->GetNum());
+                        pSttNd->CopyNumber(*pDestNd);
 
                         /* #107213# If only a part of one paragraph is copied
                            restore the numrule at the destination. */
@@ -962,8 +963,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
             else if( rPos.nContent.GetIndex() )
             {
                 // splitte den TextNode, bei dem Eingefuegt wird.
-                BYTE nNumLevel = !pDestNd->GetNum() ? 0
-                                        : pDestNd->GetNum()->GetLevel();
+                BYTE nNumLevel = pDestNd->GetLevel();
 
                 xub_StrLen nCntntEnd = pEnd->nContent.GetIndex();
                 BOOL bDoesUndo = pDoc->DoesUndo();
@@ -973,8 +973,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
 
                 // Nummerierung korrigieren, SplitNode erzeugt immer einen
                 // neuen Level
-                if( ! IsNum(nNumLevel ) )
-                    pDestNd->UpdateNum( SwNodeNum( nNumLevel ));
+                pDestNd->SetLevel(nNumLevel);
 
                 if( bCanMoveBack && rPos == *aCpyPam.GetPoint() )
                 {
@@ -1043,8 +1042,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
             {
                 pEndNd->CopyCollFmt( *pDestNd );
 
-                if (pEndNd->GetNum())
-                    pDestNd->UpdateNum( *pEndNd->GetNum() );
+                pEndNd->CopyNumber(*pDestNd);
 
                 if (bOneNode)
                 {
