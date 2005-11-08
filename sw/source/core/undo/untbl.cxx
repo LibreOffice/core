@@ -4,9 +4,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:22:45 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:23:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1415,10 +1415,13 @@ void SwUndoAttrTbl::Undo( SwUndoIter& rUndoIter )
     SwTableNode* pTblNd = rDoc.GetNodes()[ nSttNode ]->GetTableNode();
     ASSERT( pTblNd, "kein TabellenNode" );
 
-    _SaveTable* pOrig = new _SaveTable( pTblNd->GetTable() );
-    pSaveTbl->RestoreAttr( pTblNd->GetTable() );
-    delete pSaveTbl;
-    pSaveTbl = pOrig;
+    if (pTblNd)
+    {
+        _SaveTable* pOrig = new _SaveTable( pTblNd->GetTable() );
+        pSaveTbl->RestoreAttr( pTblNd->GetTable() );
+        delete pSaveTbl;
+        pSaveTbl = pOrig;
+    }
 
     if( bClearTabCol )
         ClearFEShellTabCols();
