@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LocaleNode.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 14:53:33 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 16:59:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1036,7 +1036,20 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 of.writeParameter(elementTag, "DefaultFullName",currNode->getChildAt(2)->getValue() , i, j);
             }
         }
-        of.writeParameter("startDayOfWeek", calNode ->getChildAt(3)-> getChildAt(0)->getValue(), i);
+        str = calNode->getChildAt(3)->getChildAt(0)->getValue();
+        if (nbOfDays[i])
+        {
+            for (j = 0; j < nbOfDays[i]; j++)
+            {
+                LocaleNode *currNode = daysNode->getChildAt(j);
+                OUString dayID( currNode->getChildAt(0)->getValue());
+                if (str == dayID)
+                    break;  // for
+            }
+            if (j >= nbOfDays[i])
+                incErrorStr( "<StartDayOfWeek> <DayID> must be one of the <DaysOfWeek>, but is", str);
+        }
+        of.writeParameter("startDayOfWeek", str, i);
         str = calNode ->getChildAt(4)-> getValue();
         sal_Int16 nDays = str.toInt32();
         if (nDays < 1 || (0 < nbOfDays[i] && nbOfDays[i] < nDays))
