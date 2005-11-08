@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodes.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:23:00 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:18:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,11 +207,25 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSize,
         {
             SwNodeIndex aDelIdx( *this, n );
             SwNode& rNd = aDelIdx.GetNode();
+
+            unsigned nTxtNodeLevel = 0;
+
             if( rNd.IsTxtNode() && NO_NUMBERING !=
                 ((SwTxtNode&)rNd).GetTxtColl()->GetOutlineLevel() )
             {
                 const SwNodePtr pSrch = (SwNodePtr)&rNd;
                 pOutlineNds->Remove( pSrch );
+
+                SwTxtNode * pTxtNode = rNd.GetTxtNode();
+
+                pTxtNode->SetLevel(NO_NUMBERING);
+            }
+
+            if (rNd.IsTxtNode())
+            {
+                SwTxtNode& rTxtNd = (SwTxtNode&)rNd;
+                nTxtNodeLevel = rTxtNd.GetLevel();
+                rTxtNd.UnregisterNumber();
             }
 
             BigPtrArray::Move( aDelIdx.GetIndex(), rInsPos.GetIndex() );
@@ -219,6 +233,11 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSize,
             if( rNd.IsTxtNode() )
             {
                 SwTxtNode& rTxtNd = (SwTxtNode&)rNd;
+                rTxtNd.SyncNumberAndNumRule();
+
+                if (rTxtNd.GetNumRule())
+                    rTxtNd.SetLevel(nTxtNodeLevel);
+
                 if( bInsOutlineIdx && NO_NUMBERING !=
                     rTxtNd.GetTxtColl()->GetOutlineLevel() )
                 {
@@ -246,6 +265,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSize,
 
         String sNumRule;
         SwNodeIndex aInsPos( rInsPos );
+        unsigned int nTxtNdLevel;
         for( ULONG n = 0; n < nSize; n++ )
         {
             SwNode* pNd = &rDelPos.GetNode();
@@ -259,6 +279,9 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSize,
             else if( pNd->IsTxtNode() )
             {
                 SwTxtNode* pTxtNd = (SwTxtNode*)pNd;
+
+                nTxtNdLevel = pTxtNd->GetLevel();
+
                 // loesche die Gliederungs-Indizies aus dem alten Nodes-Array
                 if( NO_NUMBERING != pTxtNd->GetTxtColl()->GetOutlineLevel() )
                     pOutlineNds->Remove( pNd );
@@ -281,6 +304,8 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSize,
                     // wenns ins UndoNodes-Array gemoved wird, sollten die
                     // Numerierungen auch aktualisiert werden.
                     pTxtNd->InvalidateNumRule();
+
+                pTxtNd->UnregisterNumber();
             }
 
             RemoveNode( rDelPos.GetIndex(), 1, FALSE );     // Indizies verschieben !!
@@ -300,7 +325,9 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSize,
 
                     // OD 21.01.2003 #106403# - invalidate numbering rule of
                     // text node in the destination environment.
-                    pTxtNd->InvalidateNumRule();
+                    //pTxtNd->InvalidateNumRule();
+                    pTxtNd->SyncNumberAndNumRule();
+                    pTxtNd->SetLevel(nTxtNdLevel);
 
                     // Sonderbehandlung fuer die Felder!
                     if( pHts && pHts->Count() )
@@ -2503,12 +2530,23 @@ void SwNodes::RemoveNode( ULONG nDelPos, ULONG nSize, FASTBOOL bDel )
         }
     }
 
+    {
+        for (int nCnt = 0; nCnt < nSize; nCnt++)
+        {
+            SwTxtNode * pTxtNd = ((*this)[ nDelPos + nCnt ])->GetTxtNode();
+
+            if (pTxtNd)
+            {
+                pTxtNd->UnregisterNumber();
+            }
+        }
+    }
+
     if( bDel )
     {
         ULONG nCnt = nSize;
         SwNode *pDel = (*this)[ nDelPos+nCnt-1 ], *pPrev = (*this)[ nDelPos+nCnt-2 ];
 
-#if 1
 // temp. Object setzen
         //JP 24.08.98: muessten eigentlich einzeln removed werden, weil
         //      das Remove auch rekursiv gerufen werden kann, z.B. bei
@@ -2530,23 +2568,6 @@ void SwNodes::RemoveNode( ULONG nDelPos, ULONG nSize, FASTBOOL bDel )
         }
         nDelPos = pDel->GetIndex() + 1;
     }
-#else
-// nach jedem Del ein Remove rufen - teuer!
-        //JP 24.08.98: muessen leider einzeln removed werden, weil das
-        //              auch rekursiv gerufen wird - zeichengeb. Flys!
-        // siehe Bug 55406
-        while( nCnt-- )
-        {
-            delete pDel;
-            pDel = pPrev;
-            ULONG nPrevNdIdx = pPrev->GetIndex();
-            BigPtrArray::Remove( nPrevNdIdx+1, 1 );
-            if( nCnt )
-                pPrev = (*this)[ nPrevNdIdx  - 1 ];
-        }
-    }
-    else
-#endif
 
     BigPtrArray::Remove( nDelPos, nSize );
 }
