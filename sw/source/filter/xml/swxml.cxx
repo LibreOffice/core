@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-30 10:03:43 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:30:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,6 +144,21 @@
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>
 #endif
+
+// --> OD 2005-09-06 #i44177#
+#ifndef _SWSTYLENAMEMAPPER_HXX
+#include <SwStyleNameMapper.hxx>
+#endif
+#ifndef _POOLFMT_HXX
+#include <poolfmt.hxx>
+#endif
+#ifndef _NUMRULE_HXX
+#include <numrule.hxx>
+#endif
+#ifndef _PARATR_HXX
+#include <paratr.hxx>
+#endif
+// <--
 
 #define LOGFILE_AUTHOR "mb93740"
 
@@ -429,6 +444,82 @@ sal_Int32 ReadThroughComponent(
 
     return ERR_SWG_READ_ERROR;
 }
+
+// --> OD 2005-09-06 #i44177#
+void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
+{
+    // array containing the names of the default outline styles ('Heading 1',
+    // 'Heading 2', ..., 'Heading 10')
+    String aDefOutlStyleNames[ MAXLEVEL ];
+    {
+        String sStyleName;
+        for ( BYTE i = 0; i < MAXLEVEL; ++i )
+        {
+            sStyleName =
+                SwStyleNameMapper::GetProgName( RES_POOLCOLL_HEADLINE1 + i,
+                                                sStyleName );
+            aDefOutlStyleNames[i] = sStyleName;
+        }
+    }
+
+    // array indicating, which outline level already has a style assigned.
+    bool aOutlineLevelAssigned[ MAXLEVEL ];
+    // array of the default outline styles, which are created for the document.
+    SwTxtFmtColl* aCreatedDefaultOutlineStyles[ MAXLEVEL ];
+
+    {
+        for ( BYTE i = 0; i < MAXLEVEL; ++i )
+        {
+            aOutlineLevelAssigned[ i ] = false;
+            aCreatedDefaultOutlineStyles[ i ] = 0L;
+        }
+    }
+
+    // determine, which outline level has already a style assigned and
+    // which of the default outline styles is created.
+    const SwTxtFmtColls& rColls = *(_rDoc.GetTxtFmtColls());
+    for ( USHORT n = 1; n < rColls.Count(); ++n )
+    {
+        SwTxtFmtColl* pColl = rColls[ n ];
+        if ( pColl->GetOutlineLevel() != NO_NUMBERING )
+        {
+            aOutlineLevelAssigned[ pColl->GetOutlineLevel() ] = true;
+        }
+
+        for ( BYTE i = 0; i < MAXLEVEL; ++i )
+        {
+            if ( aCreatedDefaultOutlineStyles[ i ] == 0L &&
+                 pColl->GetName() == aDefOutlStyleNames[i] )
+            {
+                aCreatedDefaultOutlineStyles[ i ] = pColl;
+                break;
+            }
+        }
+    }
+
+    // assign already created default outline style to outline level, which
+    // doesn't have a style assigned to it.
+    const SwNumRule* pOutlineRule = _rDoc.GetOutlineNumRule();
+    for ( BYTE i = 0; i < MAXLEVEL; ++i )
+    {
+        if ( aCreatedDefaultOutlineStyles[ i ] != 0 && !aOutlineLevelAssigned[ i ] )
+        {
+            // apply outline level at created default outline style
+            aCreatedDefaultOutlineStyles[ i ]->SetOutlineLevel( i );
+
+            // apply outline numbering rule, if none is set.
+            const SfxPoolItem& rItem =
+                aCreatedDefaultOutlineStyles[ i ]->GetAttr( RES_PARATR_NUMRULE, FALSE );
+            if ( static_cast<const SwNumRuleItem&>(rItem).GetValue().Len() == 0 )
+            {
+                SwNumRuleItem aItem( pOutlineRule->GetName() );
+                aCreatedDefaultOutlineStyles[ i ]->SetAttr( aItem );
+            }
+        }
+    }
+
+}
+// <--
 
 sal_uInt32 XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const String & rName )
 {
@@ -835,6 +926,21 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, co
         SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
     xObjectResolver = 0;
     rDoc.RemoveLink();
+
+    // --> OD 2005-09-06 #i44177# - assure that for documents in OpenOffice.org
+    // file format the relation between outline numbering rule and styles is
+    // filled-up accordingly.
+    // Note: The OpenOffice.org file format, which has no content that applys
+    //       a certain style, which is related to the outline numbering rule,
+    //       has lost the information, that this certain style is related to
+    //       the outline numbering rule.
+    if ( !bOASIS )
+    {
+        lcl_AdjustOutlineStylesForOOo( rDoc );
+    }
+    // <--
+
+    rDoc.PropagateOutlineRule();
 
     if (xStatusIndicator.is())
     {
