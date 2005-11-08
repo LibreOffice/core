@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:09:55 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 09:06:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,7 +181,96 @@ SfxUndoManager* ImpGetUndoManagerFromViewShell (::sd::DrawViewShell& rDViewShell
     DBG_ASSERT(pViewShell, "ViewShell not found");
     return 0L;
 }
+
+
+
+
+/** Create a list of clipboard formats that are supported both from the
+    current clipboard content and the DrawViewShell.
+    The list is stored in a new instance of SvxClipboardFmtItem.
+*/
+::std::auto_ptr<SvxClipboardFmtItem> GetSupportedClipboardFormats (
+    TransferableDataHelper& rDataHelper)
+{
+    ::std::auto_ptr<SvxClipboardFmtItem> pResult (
+        new SvxClipboardFmtItem(SID_CLIPBOARD_FORMAT_ITEMS));
+
+    sal_uInt32 nFormatCount (rDataHelper.GetFormatCount());
+    for (sal_uInt32 i=0; i<nFormatCount; i++)
+    {
+        const SotFormatStringId nTestFormat = rDataHelper.GetFormat(i);
+
+        // Check if the current format is the same as one that has already
+        // been handled.
+        bool bDuplicate (false);
+        for (sal_uInt32 j=0; j<i; j++)
+        {
+            if (nTestFormat == rDataHelper.GetFormat(j))
+            {
+                bDuplicate = true;
+                break;
+            }
+        }
+
+        // Look up the format among those that are supported by the
+        // DrawViewShell.
+        if ( ! bDuplicate)
+        {
+            switch (nTestFormat)
+            {
+                case SOT_FORMATSTR_ID_EMBED_SOURCE:
+                {
+                    String sName;
+
+                    TransferableObjectDescriptor aDescriptor;
+                    if (rDataHelper.GetTransferableObjectDescriptor(
+                        SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aDescriptor))
+                        {
+                            sName = aDescriptor.maTypeName;
+                        }
+                    if (sName.Len() > 0)
+                        pResult->AddClipbrdFormat(nTestFormat, sName);
+                    else
+                        pResult->AddClipbrdFormat(nTestFormat);
+
+                    break;
+                }
+
+                case SOT_FORMATSTR_ID_LINK_SOURCE:
+                case SOT_FORMATSTR_ID_DRAWING:
+                case SOT_FORMATSTR_ID_SVXB:
+                case FORMAT_GDIMETAFILE:
+                case FORMAT_BITMAP:
+                case SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK:
+                case FORMAT_STRING:
+                case SOT_FORMATSTR_ID_HTML:
+                case FORMAT_RTF:
+                case SOT_FORMATSTR_ID_EDITENGINE:
+                    pResult->AddClipbrdFormat(nTestFormat);
+                    break;
+            }
+        }
+    }
+
+    // Check some OLE formats whose names are handled differently.
+    SotFormatStringId nFormat (SOT_FORMATSTR_ID_EMBED_SOURCE_OLE);
+    bool bHasFormat (rDataHelper.HasFormat(nFormat));
+    if ( ! bHasFormat)
+    {
+        bHasFormat = rDataHelper.HasFormat(nFormat);
+    }
+    if (bHasFormat)
+    {
+        String sName;
+        String sSource;
+        if (SvPasteObjectHelper::GetEmbeddedName (rDataHelper, sName, sSource, nFormat))
+            pResult->AddClipbrdFormat (nFormat, sName);
+    }
+
+    return pResult;
 }
+
+} // end of anonymous namespace
 
 namespace sd {
 
@@ -190,6 +279,19 @@ IMPL_LINK( DrawViewShell, ClipboardChanged, TransferableDataHelper*, pDataHelper
     if ( pDataHelper )
     {
         bPastePossible = ( pDataHelper->GetFormatCount() != 0 );
+
+        // Update the list of supported clipboard formats according to the
+        // new clipboard content.
+        // There are some stack traces that indicate the possibility of the
+        // DrawViewShell destructor called during the call to
+        // GetSupportedClipboardFormats().  If that really has happened then
+        // exit immediately.
+        TransferableDataHelper aDataHelper (
+            TransferableDataHelper::CreateFromSystemClipboard(GetActiveWindow()));
+        ::std::auto_ptr<SvxClipboardFmtItem> pFormats (GetSupportedClipboardFormats(aDataHelper));
+        if (pDrView == NULL)
+            return 0;
+        mpCurrentClipboardFormats = pFormats;
 
         SfxBindings& rBindings = GetViewFrame()->GetBindings();
         rBindings.Invalidate( SID_PASTE );
@@ -207,6 +309,14 @@ IMPL_LINK( DrawViewShell, ClipboardChanged, TransferableDataHelper*, pDataHelper
 
 void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 {
+    if (pDrView == NULL)
+    {
+        // This assertion and return are here to prevent crashes like that
+        // of issue #126202#.
+        DBG_ASSERT(pDrView!=NULL, "Please report this assertion to the Impress team.");
+        return;
+    }
+
     ViewShell::GetMenuState(rSet);
     BOOL bDisableVerticalText = !SvtLanguageOptions().IsVerticalTextEnabled();
 
@@ -597,88 +707,26 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
         else if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CLIPBOARD_FORMAT_ITEMS ) )
         {
-            SvxClipboardFmtItem aItem( SID_CLIPBOARD_FORMAT_ITEMS );
-            TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( GetActiveWindow() ) );
-
-            for( sal_uInt32 i = 0; i < aDataHelper.GetFormatCount(); i++ )
-            {
-                static SotFormatStringId aSupportedFormats[] =
-                {
-                    SOT_FORMATSTR_ID_EMBED_SOURCE,
-                    SOT_FORMATSTR_ID_LINK_SOURCE,
-                    SOT_FORMATSTR_ID_DRAWING,
-                    SOT_FORMATSTR_ID_SVXB,
-                    FORMAT_GDIMETAFILE,
-                    FORMAT_BITMAP,
-                    SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK,
-                    FORMAT_STRING,
-                    SOT_FORMATSTR_ID_HTML,
-                    FORMAT_RTF,
-                    SOT_FORMATSTR_ID_EDITENGINE
-                };
-
-                ::com::sun::star::datatransfer::DataFlavor  aFlavor;
-                const SotFormatStringId                     nTestFormat = aDataHelper.GetFormat( i );
-
-                sal_uInt32  j;
-                sal_Bool    bDouble = sal_False;
-                for ( j = 0; j < i; j++ )
-                {
-                    const SotFormatStringId nF = aDataHelper.GetFormat( j );
-                    if (  nTestFormat == nF )
-                    {
-                        bDouble = sal_True;
-                        break;
-                    }
-                }
-                if ( bDouble == sal_False )
-                {
-                    for( sal_uInt32 n = 0, nCount = sizeof( aSupportedFormats ) / sizeof( SotFormatStringId ); n < nCount; n++ )
-                    {
-                        if( nTestFormat == aSupportedFormats[ n ] )
-                        {
-                            String aName;
-
-                            if( SOT_FORMATSTR_ID_EMBED_SOURCE == nTestFormat )
-                            {
-                                TransferableObjectDescriptor aDesc;
-
-                                if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aDesc ) )
-                                    aName = aDesc.maTypeName;
-                            }
-
-                            if( aName.Len() )
-                                aItem.AddClipbrdFormat( nTestFormat, aName );
-                            else
-                                aItem.AddClipbrdFormat( nTestFormat );
-                        }
-                    }
-                }
-            }
-
-            SotFormatStringId nFormat;
-            bool bHasFormat = false;
-            nFormat = SOT_FORMATSTR_ID_EMBED_SOURCE_OLE;
-            bHasFormat = aDataHelper.HasFormat (nFormat);
-            if ( ! bHasFormat)
-            {
-                nFormat = SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE;
-                bHasFormat = aDataHelper.HasFormat (nFormat);
-            }
-            if (bHasFormat)
-            {
-                String sName,sSource;
-                if (SvPasteObjectHelper::GetEmbeddedName (aDataHelper, sName, sSource, nFormat))
-                    aItem.AddClipbrdFormat (nFormat, sName);
-            }
-
-            rSet.Put( aItem );
+            if (mpCurrentClipboardFormats.get() != NULL)
+                rSet.Put(*mpCurrentClipboardFormats);
         }
     }
 
     if ( !bConvertToPathPossible )
     {
         rSet.DisableItem(SID_CHANGEBEZIER);
+    }
+
+    if (pDrView == NULL)
+    {
+        // When we come to this line then we probably have another
+        // incarnation of issue #126202#.  The pDrView was not NULL but is
+        // now.  The reason for this may be that the DrawViewShell has been
+        // destroyed in the mean time.
+        // We can only return immediately and hope that the deleted
+        // DrawViewShell is not called again.
+        DBG_ASSERT(pDrView!=NULL, "Please report this assertion to the Impress team.");
+        return;
     }
 
     if( !( pDrView->IsConvertToPolyObjPossible(FALSE) || pDrView->IsVectorizeAllowed() ) )
