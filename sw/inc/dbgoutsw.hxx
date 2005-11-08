@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbgoutsw.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:38:54 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:11:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,9 @@ class SwFrmFmts;
 class SwNodes;
 class SwRewriter;
 class SwNumRuleTbl;
+class SwNumRule;
+class SwOutlineNodes;
+class SwTxtFmtColl;
 
 #define DBG_OUT_HERE printf("%s(%d):", __FILE__, __LINE__)
 #define DBG_OUT_HERE_FN printf("%s(%d) %s:", __FILE__, __LINE__, __FUNCTION__)
