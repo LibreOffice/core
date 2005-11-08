@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.157 $
+ *  $Revision: 1.158 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:26:01 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:29:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1019,14 +1019,13 @@ const SwNumFmt* SwWW8FltControlStack::GetNumFmtFromStack(const SwPosition &rPos,
 {
     const SwNumFmt *pRet = 0;
     const SfxPoolItem *pItem = GetStackAttr(rPos, RES_FLTR_NUMRULE);
-    if (pItem && rTxtNode.GetNum())
+    if (pItem && rTxtNode.GetNumRule())
     {
         String sName(((SfxStringItem*)pItem)->GetValue());
-        const SwNodeNum *pNum = rTxtNode.GetNum();
-        if (pNum && pNum->IsNum())
+        if (rTxtNode.IsCounted())
         {
             const SwNumRule *pRule = pDoc->FindNumRulePtr(sName);
-            BYTE nLvl = GetRealLevel(pNum->GetLevel());
+            BYTE nLvl = rTxtNode.GetLevel();
             pRet = &(pRule->Get(nLvl));
         }
     }
@@ -2662,7 +2661,6 @@ bool SwWW8ImplReader::HandlePageBreakChar()
                 {
                     pTxtNode->SwCntntNode::SetAttr(
                         *GetDfltAttr(RES_PARATR_NUMRULE));
-                    pTxtNode->UpdateNum(SwNodeNum(NO_NUMBERING));
                 }
             }
         }
@@ -4383,7 +4381,14 @@ void SwWW8ImplReader::SetOutLineStyles()
     #i3674# & #101291# Load new document and insert document cases.
     */
     SwNumRule aOutlineRule(*rDoc.GetOutlineNumRule());
-    mpChosenOutlineNumRule = rDoc.GetOutlineNumRule();
+    // --> OD 2005-10-14 #i53044,i53213#
+    // <mpChosenOutlineNumRule> has to be set to point to local variable
+    // <aOutlineRule>, because its used below to be compared this <&aOutlineRule>.
+    // But at the end of the method <mpChosenOutlineNumRule> has to be set to
+    // <rDoc.GetOutlineNumRule()>, because <aOutlineRule> will be destroyed.
+//    mpChosenOutlineNumRule = rDoc.GetOutlineNumRule();
+    mpChosenOutlineNumRule = &aOutlineRule;
+    // <--
 
     sw::ParaStyles aOutLined(sw::util::GetParaStyles(rDoc));
     sw::util::SortByOutline(aOutLined);
@@ -4413,8 +4418,13 @@ void SwWW8ImplReader::SetOutLineStyles()
         pick the one that affects most styles. If we're not importing a new
         document, we got to stick with what is already there.
         */
-        std::map<SwNumRule *, int>aRuleMap;
-        typedef std::map<SwNumRule *, int>::iterator myIter;
+        // --> OD 2005-11-07 #127520# - use index in text format collection
+        // array <pCollA> as key of the outline numbering map <aRuleMap>
+        // instead of the memory pointer of the outline numbering rule
+        // to assure that, if two outline numbering rule affect the same
+        // count of text formats, always the same outline numbering rule is chosen.
+        std::map<USHORT, int>aRuleMap;
+        typedef std::map<USHORT, int>::iterator myIter;
         for (USHORT nI = 0; nI < nColls; ++nI)
         {
             SwWW8StyInf& rSI = pCollA[ nI ];
@@ -4423,9 +4433,15 @@ void SwWW8ImplReader::SetOutLineStyles()
                 rSI.pFmt
                )
             {
-                myIter aIter = aRuleMap.find(rSI.pOutlineNumrule);
+                // --> OD 2005-11-07 #127520#
+                myIter aIter = aRuleMap.find(nI);
+                // <--
                 if (aIter == aRuleMap.end())
-                    aRuleMap[rSI.pOutlineNumrule] = 1;
+                {
+                    // --> OD 2005-11-07 #127520#
+                    aRuleMap[nI] = 1;
+                    // <--
+                }
                 else
                     ++(aIter->second);
             }
@@ -4438,9 +4454,12 @@ void SwWW8ImplReader::SetOutLineStyles()
             if (aIter->second > nMax)
             {
                 nMax = aIter->second;
-                mpChosenOutlineNumRule = aIter->first;
+                // --> OD 2005-11-07 #127520#
+                mpChosenOutlineNumRule = pCollA[ aIter->first ].pOutlineNumrule;
+                // <--
             }
         }
+        // <--
 
         ASSERT(mpChosenOutlineNumRule, "Impossible");
         if (mpChosenOutlineNumRule)
@@ -4528,6 +4547,12 @@ void SwWW8ImplReader::SetOutLineStyles()
     }
     if (nOldFlags != nFlagsStyleOutlLevel)
         rDoc.SetOutlineNumRule(aOutlineRule);
+    // --> OD 2005-10-14 #i53044,i53213#
+    if ( mpChosenOutlineNumRule == &aOutlineRule )
+    {
+        mpChosenOutlineNumRule = rDoc.GetOutlineNumRule();
+    }
+    // <--
 }
 
 const String* SwWW8ImplReader::GetAnnotationAuthor(sal_uInt16 nIdx)
