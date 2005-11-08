@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:10:52 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 09:06:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,9 @@
 #endif
 #ifndef _SVX_FONTWORK_BAR_HXX
 #include <svx/fontworkbar.hxx>
+#endif
+#ifndef _SVX_CLIPFMTITEM_HXX
+#include <svx/clipfmtitem.hxx>
 #endif
 
 #pragma hdrstop
@@ -219,7 +222,8 @@ DrawViewShell::DrawViewShell (
       pSlotArray( NULL ),
       pClipEvtLstnr(NULL),
       mbIsLayerModeActive(false),
-      bPastePossible(FALSE)
+      bPastePossible(FALSE),
+      mpCurrentClipboardFormats(NULL)
 {
     if (pFrameViewArgument != NULL)
         pFrameView = pFrameViewArgument;
@@ -254,7 +258,8 @@ DrawViewShell::DrawViewShell (
       pSlotArray( NULL ),
       pClipEvtLstnr(NULL),
       mbIsLayerModeActive(false),
-      bPastePossible(FALSE)
+      bPastePossible(FALSE),
+      mpCurrentClipboardFormats(NULL)
 {
     pFrameView = new FrameView(GetDoc());
     Construct (GetDocSh(), PK_STANDARD);
