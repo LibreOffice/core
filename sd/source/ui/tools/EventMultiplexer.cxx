@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EventMultiplexer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:26:32 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 09:05:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
+class SdDrawDocument;
 
 namespace sd { namespace tools {
 
@@ -161,6 +162,8 @@ private:
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::view::XSelectionSupplier> mxSlideSorterSelectionWeak;
 
+    SdDrawDocument* mpDocument;
+
     void ReleaseListeners (void);
 
     void ConnectToController (void);
@@ -196,13 +199,22 @@ EventMultiplexer::EventMultiplexer (ViewShellBase& rBase)
 
 EventMultiplexer::~EventMultiplexer (void)
 {
-    mpImpl->dispose();
-    // Now we call release twice.  One decreases the use count of the
-    // implementation object (if all goes well to zero and thus deletes it.)
-    // The other releases the auto_ptr and prevents the implementation
-    // object from being deleted a second time.
-    mpImpl->release();
-    mpImpl.release();
+    try
+    {
+        mpImpl->dispose();
+        // Now we call release twice.  One decreases the use count of the
+        // implementation object (if all goes well to zero and thus deletes
+        // it.)  The other releases the auto_ptr and prevents the
+        // implementation object from being deleted a second time.
+        mpImpl->release();
+        mpImpl.release();
+    }
+    catch (RuntimeException aException)
+    {
+    }
+    catch (Exception aException)
+    {
+    }
 }
 
 
@@ -267,7 +279,8 @@ EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
       mbPaneManagerAvailable(true),
       mxControllerWeak(NULL),
       mxFrameWeak(NULL),
-      mxSlideSorterSelectionWeak(NULL)
+      mxSlideSorterSelectionWeak(NULL),
+      mpDocument(NULL)
 {
     // Connect to the frame to listen for controllers being exchanged.
     // Listen to changes of certain properties.
@@ -287,7 +300,9 @@ EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
     ConnectToController ();
 
     // Listen for document changes.
-    StartListening (*mrBase.GetDocument());
+    mpDocument = mrBase.GetDocument();
+    if (mpDocument != NULL)
+        StartListening (*mpDocument);
 
     // Listen for view switches.
     if (mbPaneManagerAvailable)
@@ -321,7 +336,11 @@ void EventMultiplexer::Implementation::ReleaseListeners (void)
 
     DisconnectFromController ();
 
-    EndListening (*mrBase.GetDocument());
+    if (mpDocument != NULL)
+    {
+        EndListening (*mpDocument);
+        mpDocument = NULL;
+    }
 
     // Stop listening for view switches.
     if (mbPaneManagerAvailable)
@@ -633,6 +652,12 @@ void EventMultiplexer::Implementation::Notify (
                     EventMultiplexerEvent::EID_CURRENT_PAGE);
                 break;
         }
+    }
+    else if (rHint.ISA(SfxSimpleHint))
+    {
+        SfxSimpleHint& rSimpleHint (*PTR_CAST(SfxSimpleHint, &rHint));
+        if (rSimpleHint.GetId() == SFX_HINT_DYING)
+            mpDocument = NULL;
     }
 }
 
