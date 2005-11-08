@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lbenv.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:53:00 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 16:35:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1134,8 +1134,10 @@ void SAL_CALL uno_getEnvironment(
     SAL_THROW_EXTERN_C()
 {
     OSL_ENSURE( ppEnv, "### null ptr!" );
-    if (*ppEnv)
+    if (*ppEnv) {
         (*(*ppEnv)->release)( *ppEnv );
+        *ppEnv = 0;
+    }
 
     OUString const & rEnvTypeName = OUString::unacquired( &pEnvTypeName );
 
