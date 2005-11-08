@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unnum.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:20:58 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:23:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,9 +123,8 @@ void SwUndoInsNum::Undo( SwUndoIter& rUndoIter )
     {
         SwTxtNode* pNd;
         if( ULONG_MAX != nSttSet &&
-            0 != ( pNd = rDoc.GetNodes()[ nSttSet ]->GetTxtNode() ) &&
-            pNd->GetNum() )
-                ((SwNodeNum*)pNd->GetNum())->SetStart( TRUE );
+            0 != ( pNd = rDoc.GetNodes()[ nSttSet ]->GetTxtNode() ))
+                pNd->SetRestart( TRUE );
         else
             pNd = 0;
 
@@ -145,8 +144,7 @@ void SwUndoInsNum::Undo( SwUndoIter& rUndoIter )
                 pNdRule = rDoc.FindNumRulePtr( aNumRule.GetName() );
 
             pHistory->TmpRollback( &rDoc, nLRSavePos );
-            if( pNdRule )
-                rDoc.UpdateNumRule( pNdRule->GetName(), ULONG_MAX );
+
         }
         pHistory->TmpRollback( &rDoc, 0 );
         pHistory->SetTmpEnd( pHistory->Count() );
@@ -245,7 +243,7 @@ void SwUndoDelNum::Undo( SwUndoIter& rUndoIter )
     {
         SwTxtNode* pNd = rDoc.GetNodes()[ aNodeIdx[ n ] ]->GetTxtNode();
         ASSERT( pNd, "wo ist der TextNode geblieben?" );
-        pNd->UpdateNum( SwNodeNum( aLevels[ n ] ));
+        pNd->SetLevel(aLevels[ n ] );
 
 #ifndef NUM_RELSPACE
         pNd->SetNumLSpace( aRstLRSpaces[ n ] );
@@ -275,11 +273,11 @@ void SwUndoDelNum::Repeat( SwUndoIter& rUndoIter )
 
 void SwUndoDelNum::AddNode( const SwTxtNode& rNd, BOOL bFlag )
 {
-    if( rNd.GetNum() && NO_NUMBERING != rNd.GetNum()->GetLevel() )
+    if( rNd.GetNumRule() )
     {
         register USHORT nIns = aNodeIdx.Count();
         aNodeIdx.Insert( rNd.GetIndex(), nIns );
-        aLevels.Insert( rNd.GetNum()->GetLevel(), nIns );
+        aLevels.Insert( rNd.GetLevel(), nIns );
 #ifndef NUM_RELSPACE
         aRstLRSpaces.Insert( bFlag, nIns );
 #endif
@@ -380,11 +378,10 @@ void SwUndoNumUpDown::Repeat( SwUndoIter& rUndoIter )
 /*  */
 
 // #115901#
-SwUndoNumOrNoNum::SwUndoNumOrNoNum( const SwNodeIndex& rIdx,
-                                    const SwNodeNum & rOldNum,
-                                    const SwNodeNum & rNewNum)
-    : SwUndo( UNDO_NUMORNONUM ), nIdx( rIdx.GetIndex() ), mNewNum(rNewNum),
-      mOldNum(rOldNum)
+SwUndoNumOrNoNum::SwUndoNumOrNoNum( const SwNodeIndex& rIdx, BOOL bOldNum,
+                                    BOOL bNewNum)
+    : SwUndo( UNDO_NUMORNONUM ), nIdx( rIdx.GetIndex() ), mbNewNum(bNewNum),
+      mbOldNum(bOldNum)
 {
 }
 
@@ -396,12 +393,7 @@ void SwUndoNumOrNoNum::Undo( SwUndoIter& rUndoIter )
 
     if (NULL != pTxtNd)
     {
-        pTxtNd->UpdateNum(mOldNum);
-
-        SwNumRule * pRule = pTxtNd->GetNumRule();
-
-        if (pRule != NULL)
-            pRule->SetInvalidRule(TRUE);
+        pTxtNd->SetCounted(mbOldNum);
     }
 }
 
@@ -413,12 +405,7 @@ void SwUndoNumOrNoNum::Redo( SwUndoIter& rUndoIter )
 
     if (NULL != pTxtNd)
     {
-        pTxtNd->UpdateNum(mNewNum);
-
-        SwNumRule * pRule = pTxtNd->GetNumRule();
-
-        if (pRule != NULL)
-            pRule->SetInvalidRule(TRUE);
+        pTxtNd->SetCounted(mbNewNum);
     }
 }
 
@@ -426,12 +413,12 @@ void SwUndoNumOrNoNum::Redo( SwUndoIter& rUndoIter )
 void SwUndoNumOrNoNum::Repeat( SwUndoIter& rUndoIter )
 {
 
-    if (mOldNum.IsNum() && ! mNewNum.IsNum())
-        rUndoIter.GetDoc().NumOrNoNum( rUndoIter.pAktPam->GetPoint()->nNode,
-                                       TRUE);
-    else if ( ! mOldNum.IsNum() && mNewNum.IsNum())
+    if (mbOldNum && ! mbNewNum)
         rUndoIter.GetDoc().NumOrNoNum( rUndoIter.pAktPam->GetPoint()->nNode,
                                        FALSE);
+    else if ( ! mbOldNum && mbNewNum )
+        rUndoIter.GetDoc().NumOrNoNum( rUndoIter.pAktPam->GetPoint()->nNode,
+                                       TRUE);
 }
 
 /*  */
@@ -449,8 +436,8 @@ SwUndoNumRuleStart::SwUndoNumRuleStart( const SwPosition& rPos, USHORT nStt )
     nNewStt( nStt ), nOldStt( USHRT_MAX )
 {
     SwTxtNode* pTxtNd = rPos.nNode.GetNode().GetTxtNode();
-    if( pTxtNd && pTxtNd->GetNum() )
-        nOldStt = pTxtNd->GetNum()->GetSetValue();
+    if( pTxtNd )
+        nOldStt = pTxtNd->GetStart();
 }
 
 
