@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 08:31:49 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 17:32:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -997,12 +997,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     //if it's set to something different than USHRT_MAX
 
                     BOOL bStart = ((SfxBoolItem&)pSet->Get(FN_NUMBER_NEWSTART)).GetValue();
-                    USHORT nNumStart = USHRT_MAX;
+                    USHORT nNumStart = 1;
                     if( SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
                     {
                         nNumStart = ((SfxUInt16Item&)pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
-                        if(USHRT_MAX != nNumStart)
-                            bStart = FALSE;
                     }
                     rWrtSh.SetNumRuleStart(bStart);
                     rWrtSh.SetNodeNumStart(nNumStart);
@@ -1282,7 +1280,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         {
         case FN_NUMBER_NEWSTART :
             rSet.Put(SfxBoolItem(FN_NUMBER_NEWSTART,
-                rSh.IsNumRuleStart()||USHRT_MAX != rSh.IsNodeNumStart()));
+                rSh.IsNumRuleStart()));
         break;
         case FN_EDIT_FORMULA:
         case FN_INSERT_SYMBOL:
