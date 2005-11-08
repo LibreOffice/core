@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:26:04 $
+ *  last change: $Author: rt $ $Date: 2005-11-08 16:30:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -694,8 +694,9 @@ void SlideSorterViewShell::ReadFrameViewData (FrameView* pFrameView)
         }
         else
             rView.GetLayouter().SetColumnCount(nSlidesPerRow,nSlidesPerRow);
+        mpSlideSorterController->Rearrange(true);
 
-    // DrawMode for 'main' window
+        // DrawMode for 'main' window
         if (GetActiveWindow()->GetDrawMode() != pFrameView->GetDrawMode() )
             GetActiveWindow()->SetDrawMode( pFrameView->GetDrawMode() );
     }
