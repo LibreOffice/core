@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndnum.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:18:27 $
+ *  last change: $Author: rt $ $Date: 2005-11-09 10:07:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,20 @@ void SwNodes::UpdateOutlineNode(SwNode & rNd)
         if (pTxtNd->IsOutline())
         {
             if (! bFound)
-                pOutlineNds->Insert(pTxtNd);
+            {
+                // --> OD 2005-11-02 #125329#
+                // assure that text is in the correct nodes array
+                if ( &(pTxtNd->GetNodes()) == this )
+                {
+                    pOutlineNds->Insert(pTxtNd);
+                }
+                else
+                {
+                    ASSERT( false,
+                            "<SwNodes::UpdateOutlineNode(..)> - given text node isn't in the correct nodes array. This is a serious defect -> inform OD" );
+                }
+                // <--
+            }
         }
         else
         {
@@ -153,7 +166,20 @@ void SwNodes::UpdateOutlineNode( const SwNode& rNd, BYTE nOldLevel,
 
         // jetzt noch alle nachfolgende Outline-Nodes updaten
         if (! bSeekIdx)
-            pOutlineNds->Insert( pSrch );
+        {
+            // --> OD 2005-11-03 #125329#
+            // assure that node <pSrch> is in the correct nodes array
+            if ( &(pSrch->GetNodes()) == this )
+            {
+                pOutlineNds->Insert( pSrch );
+            }
+            else
+            {
+                ASSERT( false,
+                        "<SwNodes::UpdateOutlineNode(..)> - node <pSrch> isn't in correct nodes array. This is a serious defect -> inform OD" );
+            }
+            // <--
+        }
 
     }
     else if( NO_NUMBERING == nNewLevel )    // Level entfernen
