@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:22:48 $
+ *  last change: $Author: rt $ $Date: 2005-11-09 10:09:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -229,6 +229,21 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
     SwTxtNode *pNode = new SwTxtNode( rWhere, pColl, pAutoAttr );
 
     SwNodeIndex aIdx( *pNode );
+
+    // --> OD 2005-11-03 #125329#
+    // call method <UpdateOutlineNode(..)> only for the document nodes array
+    if ( IsDocNodes() )
+    {
+        if ( pColl && NO_NUMBERING != pColl->GetOutlineLevel() )
+        {
+            UpdateOutlineNode( *pNode, NO_NUMBERING, pColl->GetOutlineLevel() );
+        }
+        else
+        {
+            UpdateOutlineNode(*pNode);
+        }
+    }
+    // <--
 
     //Wenn es noch kein Layout gibt oder in einer versteckten Section
     // stehen, brauchen wir uns um das MakeFrms nicht bemuehen.
@@ -3118,8 +3133,12 @@ void SwTxtNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
     SwCntntNode::Modify( pOldValue, pNewValue );
 
     SwDoc * pDoc = GetDoc();
-    if (pDoc && ! pDoc->IsInDtor())
+    // --> OD 2005-11-02 #125329# - assure that text node is in document nodes array
+    if ( pDoc && !pDoc->IsInDtor() && &pDoc->GetNodes() == &GetNodes() )
+    // <--
+    {
         pDoc->GetNodes().UpdateOutlineNode(*this);
+    }
 
     bNotifiable = bWasNotifiable;
 }
