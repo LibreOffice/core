@@ -244,13 +244,8 @@ SHAREDLIB_OUT=$(OUT_LIB)
 
 GCC_VERSION=$(shell $(CC) -dumpversion)
 
-ifeq "$(shell echo $(GCC_VERSION) | cut -c 1)" "3"
 COMID=gcc3
 CPPU_ENV=gcc3
-else
-COMID=GCC
-CPPU_ENV=gcc2
-endif
 
 OSEP=\<
 CSEP=\>
@@ -323,7 +318,7 @@ endif
 # MacOSX/Darwin specific settings
 #
 ###########################################################################
-ifeq "$(PLATFORM)" "darwin"
+ifneq (,$(findstring darwin,$(PLATFORM)))
 # Settings for MacOSX using gcc 3.3 compiler
 
 # Default is MacOSX on a ppc machine    
