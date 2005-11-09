@@ -4,9 +4,9 @@
 #
 #   $RCSfile: file.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-23 11:49:48 $
+#   last change: $Author: rt $ $Date: 2005-11-09 09:11:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@ use installer::existence;
 use installer::exiter;
 use installer::files;
 use installer::globals;
+use installer::logger;
 use installer::pathanalyzer;
 use installer::windows::idtglobal;
 use installer::windows::language;
@@ -147,7 +148,7 @@ sub get_component_from_assigned_file
 
 sub generate_unique_filename_for_filetable
 {
-    my ($fileref, $filetablehashref, $filesref) = @_;
+    my ($fileref) = @_;
 
     # This new filename has to be saved into $fileref, because this is needed to find the source.
     # The filename sbasic.idx/OFFSETS is changed to OFFSETS, but OFFSETS is not unique.
@@ -170,21 +171,18 @@ sub generate_unique_filename_for_filetable
     $uniquefilename =~ s/^\s*\d/\_d/g;      # no number at the beginning allowed allowed (even file "0.gif", replacing to "_d.gif")
     $uniquefilename =~ s/org_openoffice_/ooo_/g;    # shorten the unique file name
 
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    my $lcuniquefilename = lc($uniquefilename); # only lowercase names
+
+    my $newname = 0;
+
+    if ( ! exists($installer::globals::alllcuniquefilenames{$lcuniquefilename}) )   # case insensitive
     {
-        $onefile = ${$filesref}[$i];
-        $uniquename = "";
-
-        if ( $onefile->{'uniquename'} ) { $uniquename = $onefile->{'uniquename'}; }
-
-        if (lc($uniquename) eq lc($uniquefilename)) # case insensitve comparison !
-        {
-            $alreadyexists = 1;
-            last;
-        }
+        $installer::globals::alluniquefilenames{$uniquefilename} = 1;
+        $installer::globals::alllcuniquefilenames{$lcuniquefilename} = 1;
+        $newname = 1;
     }
 
-    if ($alreadyexists)
+    if ( ! $newname )
     {
         # adding a number until the name is really unique: OFFSETS, OFFSETS1, OFFSETS2, ...
         # But attention: Making "abc.xcu" to "abc1.xcu"
@@ -205,24 +203,17 @@ sub generate_unique_filename_for_filetable
                 $uniquefilename = $uniquefilenamebase . $counter;
             }
 
-            $alreadyexists = 0;
+            $newname = 0;
+            $lcuniquefilename = lc($uniquefilename);    # only lowercase names
 
-            for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+            if ( ! exists($installer::globals::alllcuniquefilenames{$lcuniquefilename}) )
             {
-                $onefile = ${$filesref}[$i];
-
-                $uniquename = "";
-
-                if ( $onefile->{'uniquename'} ) { $uniquename = $onefile->{'uniquename'}; }
-
-                if (lc($uniquename) eq lc($uniquefilename)) # case insensitive comparison !
-                {
-                    $alreadyexists = 1;
-                    last;
-                }
+                $installer::globals::alluniquefilenames{$uniquefilename} = 1;
+                $installer::globals::alllcuniquefilenames{$lcuniquefilename} = 1;
+                $newname = 1;
             }
         }
-        until (!($alreadyexists))
+        until ( $newname )
     }
 
     return $uniquefilename;
@@ -244,7 +235,7 @@ sub generate_filename_for_filetable
 
     installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$filename);   # making /registry/schema/org/openoffice/VCL.xcs to VCL.xcs
 
-    my $shortstring = installer::windows::idtglobal::make_eight_three_conform($filename, "file", $shortnamesref);
+    my $shortstring = installer::windows::idtglobal::make_eight_three_conform_with_hash($filename, "file", $shortnamesref);
 
     if ( $shortstring eq $filename ) { $returnstring = $filename; } # nothing changed
     else {$returnstring = $shortstring . "\|" . $filename; }
@@ -266,7 +257,6 @@ sub get_filesize
 
     if ( -f $file ) # test of existence. For instance services.rdb does not always exist
     {
-        # $filesize = (stat($file))[7] || installer::exiter::exit_program("ERROR: $file: stat error in function get_filesize", "get_filesize");
         $filesize = (stat($file))[7];   # file size can be "0"
     }
     else
@@ -328,27 +318,33 @@ sub create_files_table
 {
     my ($filesref, $allfilecomponentsref, $basedir) = @_;
 
+    installer::logger::include_timestamp_into_logfile("Performance Info: File Table start");
+
     # Structure of the files table:
     # File Component_ FileName FileSize Version Language Attributes Sequence
     # In this function, all components are created.
+    #
+    # $allfilecomponentsref is empty at the beginning
 
     my $infoline;
 
     my @filetable = ();
-
-    my %file = ();
+    my %allfilecomponents = ();
 
     # The filenames must be collected because of uniqueness
     # 01-44-~1.DAT, 01-44-~2.DAT, ...
-    my @shortnames = ();
+    # my @shortnames = ();
+    my %shortnames = ();
 
     installer::windows::idtglobal::write_idt_header(\@filetable, "file");
 
     for ( my $i = 0; $i <= $#{$filesref}; $i++ )
     {
+        my %file = ();
+
         my $onefile = ${$filesref}[$i];
 
-        $file{'File'} = generate_unique_filename_for_filetable($onefile, \%filetable, $filesref);
+        $file{'File'} = generate_unique_filename_for_filetable($onefile);
 
         $onefile->{'uniquename'} = $file{'File'};
 
@@ -357,9 +353,11 @@ sub create_files_table
         $onefile->{'componentname'} = $file{'Component_'};
 
         # Collecting all components
-        if (!(installer::existence::exists_in_array($file{'Component_'}, $allfilecomponentsref))) { push(@{$allfilecomponentsref}, $file{'Component_'}); }
+        # if (!(installer::existence::exists_in_array($file{'Component_'}, $allfilecomponentsref))) { push(@{$allfilecomponentsref}, $file{'Component_'}); }
 
-        $file{'FileName'} = generate_filename_for_filetable($onefile, \@shortnames);
+        if ( ! exists($allfilecomponents{$file{'Component_'}}) ) { $allfilecomponents{$file{'Component_'}} = 1; }
+
+        $file{'FileName'} = generate_filename_for_filetable($onefile, \%shortnames);
 
         $file{'FileSize'} = get_filesize($onefile);
 
@@ -385,12 +383,21 @@ sub create_files_table
                 . $file{'Attributes'} . "\t" . $file{'Sequence'} . "\n";
 
         push(@filetable, $oneline);
+
+        # Saving the sequence number in a hash with uniquefilename as key.
+        # This is used for better performance in "save_packorder"
+        $installer::globals::uniquefilenamesequence{$onefile->{'uniquename'}} = $onefile->{'sequencenumber'};
     }
+
+    # putting content from %allfilecomponents to $allfilecomponentsref for later usage
+    foreach $localkey (keys %allfilecomponents ) { push( @{$allfilecomponentsref}, $localkey); }
 
     my $filetablename = $basedir . $installer::globals::separator . "File.idt";
     installer::files::save_file($filetablename ,\@filetable);
     $infoline = "\nCreated idt file: $filetablename\n";
     push(@installer::globals::logfileinfo, $infoline);
+
+    installer::logger::include_timestamp_into_logfile("Performance Info: File Table end");
 
 }
 
