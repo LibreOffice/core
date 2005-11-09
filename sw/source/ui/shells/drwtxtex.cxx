@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwtxtex.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:49:53 $
+ *  last change: $Author: rt $ $Date: 2005-11-09 09:56:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -557,7 +557,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             ASSERT(!this, falscher Dispatcher);
             return;
     }
-    if(nEEWhich)
+    if(nEEWhich && pNewAttrs)
         aNewAttr.Put(pNewAttrs->Get(nWhich), nEEWhich);
 
     SetAttrToMarked(aNewAttr);
