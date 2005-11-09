@@ -4,9 +4,9 @@
 #
 #   $RCSfile: control.pm,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-28 14:39:26 $
+#   last change: $Author: rt $ $Date: 2005-11-09 09:09:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -291,6 +291,8 @@ sub check_logfile
         $compareline =~ s/Error\.idt//g;    # removing all occurences of "Error.idt"
         $compareline =~ s/Error\.mlf//g;    # removing all occurences of "Error.mlf"
         $compareline =~ s/Error\.ulf//g;    # removing all occurences of "Error.ulf"
+        $compareline =~ s/Error\.idl//g;    # removing all occurences of "Error.idl"
+        $compareline =~ s/Error\.html//g;   # removing all occurences of "Error.html"
 
         if ( $compareline =~ /\bError\b/i )
         {
