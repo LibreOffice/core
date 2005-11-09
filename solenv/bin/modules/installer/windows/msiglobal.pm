@@ -4,9 +4,9 @@
 #
 #   $RCSfile: msiglobal.pm,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-28 13:16:48 $
+#   last change: $Author: rt $ $Date: 2005-11-09 09:11:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,42 @@ sub write_ddf_file_header
 }
 
 ##########################################################################
+# Lines in ddf files must not contain more than 256 characters
+##########################################################################
+
+sub check_ddf_file
+{
+    my ( $ddffile, $ddffilename ) = @_;
+
+    my $maxlength = 0;
+    my $maxline = 0;
+    my $linelength = 0;
+    my $linenumber = 0;
+
+    for ( my $i = 0; $i <= $#{$ddffile}; $i++ )
+    {
+        my $oneline = ${$ddffile}[$i];
+
+        $linelength = length($oneline);
+        $linenumber = $i + 1;
+
+        if ( $linelength > 256 )
+        {
+            installer::exiter::exit_program("ERROR \"$ddffilename\" line $linenumber: Lines in ddf files must not contain more than 256 characters!", "check_ddf_file");
+        }
+
+        if ( $linelength > $maxlength )
+        {
+            $maxlength = $linelength;
+            $maxline = $linenumber;
+        }
+    }
+
+    my $infoline = "Check of ddf file \"$ddffilename\": Maximum length \"$maxlength\" in line \"$maxline\" (allowed line length: 256 characters)\n";
+    push(@installer::globals::logfileinfo, $infoline);
+}
+
+##########################################################################
 # Generation the list, in which the source of the files is connected
 # with the cabinet destination file. Because more than one file needs
 # to be included into a cab file, this has to be done via ddf files.
@@ -91,6 +127,8 @@ sub generate_cab_file_list
     my @cabfilelist = ();
 
     installer::logger::include_header_into_logfile("Generating ddf files");
+
+    installer::logger::include_timestamp_into_logfile("Performance Info: ddf file generation start");
 
     if (( $installer::globals::cab_file_per_component ) || ( $installer::globals::fix_number_of_cab_files ))
     {
@@ -150,6 +188,9 @@ sub generate_cab_file_list
             my $infoline = "Created ddf file: $ddffilename\n";
             push(@installer::globals::logfileinfo, $infoline);
 
+            # lines in ddf files must not be longer than 256 characters
+            check_ddf_file(\@ddffile, $ddffilename);
+
             # Writing the makecab system call
 
             my $oneline = "makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n";
@@ -196,6 +237,9 @@ sub generate_cab_file_list
         my $infoline = "Created ddf file: $ddffilename\n";
         push(@installer::globals::logfileinfo, $infoline);
 
+        # lines in ddf files must not be longer than 256 characters
+        check_ddf_file(\@ddffile, $ddffilename);
+
         # Writing the makecab system call
 
         my $oneline = "makecab.exe /F " . $ddffilename . "\n";
@@ -210,6 +254,7 @@ sub generate_cab_file_list
         installer::exiter::exit_program("ERROR: No cab file specification in globals.pm !", "create_media_table");
     }
 
+    installer::logger::include_timestamp_into_logfile("Performance Info: ddf file generation end");
 
     return \@cabfilelist;   # contains all system calls for packaging process
 }
@@ -234,6 +279,7 @@ sub get_file_sequence
         {
             $sequence = $onefile->{'sequencenumber'};
             $found_sequence = 1;
+            last;
         }
     }
 
@@ -253,6 +299,10 @@ sub get_file_sequence
 sub save_packorder
 {
     my ( $filesref ) = @_;
+
+    installer::logger::include_header_into_logfile("Saving pack order");
+
+    installer::logger::include_timestamp_into_logfile("Performance Info: saving pack order start");
 
     my $packorderfilename = "packorder.txt";
     $packorderfilename = $installer::globals::infodirectory . $installer::globals::separator . $packorderfilename;
@@ -285,7 +335,10 @@ sub save_packorder
 
                 installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$sourcefile);
 
-                my $filesequence = get_file_sequence($filesref, $uniquefilename);
+                # Using the hash created in create_files_table for performance reasons to get the sequence number
+                my $filesequence = "";
+                if ( exists($installer::globals::uniquefilenamesequence{$uniquefilename}) ) { $filesequence = $installer::globals::uniquefilenamesequence{$uniquefilename}; }
+                else { installer::exiter::exit_program("ERROR: No sequence number value for $uniquefilename !", "save_packorder"); }
 
                 my $line = $filesequence . "\t" . $cabinetfile . "\t" . $sourcefile . "\t" . $uniquefilename . "\n";
                 push(@packorder, $line);
@@ -294,6 +347,8 @@ sub save_packorder
     }
 
     installer::files::save_file($packorderfilename ,\@packorder);
+
+    installer::logger::include_timestamp_into_logfile("Performance Info: saving pack order end");
 }
 
 #################################################################
@@ -449,7 +504,7 @@ sub get_packagecode_for_sis
 {
     # always generating a new package code for each package
 
-    my $guidref = get_guid_list(1); # only one GUID shall be generated
+    my $guidref = get_guid_list(1, 1);  # only one GUID shall be generated
 
     ${$guidref}[0] =~ s/\s*$//;     # removing ending spaces
 
@@ -987,9 +1042,9 @@ sub copy_child_projects_into_installset
 
 sub get_guid_list
 {
-    my ($number) = @_;
+    my ($number, $log) = @_;
 
-    installer::logger::include_header_into_logfile("Generating $number GUID");
+    if ( $log ) { installer::logger::include_header_into_logfile("Generating $number GUID"); }
 
     my $uuidgen = "uuidgen.exe";        # Has to be in the path
 
@@ -1002,19 +1057,19 @@ sub get_guid_list
     close (UUIDGEN);
 
     my $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    if ( $log ) { push( @installer::globals::logfileinfo, $infoline); }
 
     my $comparenumber = $#uuidlist + 1;
 
     if ( $comparenumber == $number )
     {
         $infoline = "Success: Executed $uuidgen successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        if ( $log ) { push( @installer::globals::logfileinfo, $infoline); }
     }
     else
     {
         $infoline = "ERROR: Could not execute $uuidgen successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        if ( $log ) { push( @installer::globals::logfileinfo, $infoline); }
     }
 
     # uppercase, no longer "-c", because this is only supported in uuidgen.exe v.1.01
@@ -1124,11 +1179,11 @@ sub set_uuid_into_component_table
 
             # Creating new guid
 
-            my $guidref = get_guid_list(1); # only one GUID shall be generated
+            my $guidref = get_guid_list(1, 0);  # only one GUID shall be generated
             my $newuuid = ${$guidref}[0];
             $newuuid =~ s/\s*$//;           # removing ending spaces
-            $infoline = "WARNING: Creating new GUID for component: $componentname, value: $newuuid \n";
-            push( @installer::globals::logfileinfo, $infoline);
+            # $infoline = "WARNING: Creating new GUID for component: $componentname, value: $newuuid \n";
+            # push( @installer::globals::logfileinfo, $infoline);
             $counter++;
 
             # Setting new uuid
@@ -1250,6 +1305,8 @@ sub execute_packaging
 
     installer::logger::include_header_into_logfile("Packaging process");
 
+    installer::logger::include_timestamp_into_logfile("Performance Info: Execute packaging start");
+
     my $from = cwd();
     my $to = $loggingdir;
 
@@ -1294,6 +1351,8 @@ sub execute_packaging
         }
     }
 
+    installer::logger::include_timestamp_into_logfile("Performance Info: Execute packaging end");
+
     # setting back to the original tmp directory
     $ENV{'TMP'} = $origtemppath;
 
@@ -1307,6 +1366,20 @@ sub execute_packaging
 sub set_global_code_variables
 {
     my ( $languagesref, $languagestringref, $allvariableshashref ) = @_;
+
+    # In the msi template directory a files "codes.txt" has to exist, in which the ProductCode
+    # and the UpgradeCode for the product are defined.
+    # The name "codes.txt" can be overwritten in Product definition with CODEFILENAME .
+    # Default $installer::globals::codefilename is defined in parameter.pm.
+
+    if ( $allvariableshashref->{'CODEFILENAME'} )
+    {
+        $installer::globals::codefilename = $installer::globals::idttemplatepath  . $installer::globals::separator . $allvariableshashref->{'CODEFILENAME'};
+        installer::files::check_file($installer::globals::codefilename);
+    }
+
+    my $infoline = "Using Codes file: $installer::globals::codefilename \n";
+    push( @installer::globals::logfileinfo, $infoline);
 
     my $codefile = installer::files::read_file($installer::globals::codefilename);
 
@@ -1353,7 +1426,7 @@ sub set_global_code_variables
     $infoline = "Setting UpgradeCode to: $installer::globals::upgradecode \n";
     push( @installer::globals::logfileinfo, $infoline);
 
-    my $guidref = get_guid_list(1); # only one GUID shall be generated
+    my $guidref = get_guid_list(1, 1);  # only one GUID shall be generated
 
     ${$guidref}[0] =~ s/\s*$//;     # removing ending spaces
 
