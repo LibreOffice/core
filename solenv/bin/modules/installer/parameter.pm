@@ -4,9 +4,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-28 14:41:10 $
+#   last change: $Author: rt $ $Date: 2005-11-09 09:10:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,7 @@ The following parameter are needed:
 -languagepack : do create a languagepack, no product pack (optional)
 -patch : do create a patch (optional)
 -patchinc: Source for the patch include files (Solaris only)
+-dontstrip: No file stripping (Unix only)
 -log : Logging all available information (optional)
 -debug : Collecting debug information
 
@@ -171,6 +172,7 @@ sub getparameter
         elsif ($param eq "-debian") { $installer::globals::debian = 1; }
         elsif ($param eq "-addchildprojects") { $installer::globals::addchildprojects = 1; }
         elsif ($param eq "-addsystemintegration") { $installer::globals::addsystemintegration = 1; }
+        elsif ($param eq "-dontstrip") { $installer::globals::strip = 0; }
         elsif ($param eq "-destdir")    # new parameter for simple installer
         {
             $installer::globals::rootpath ne "" && die "must set destdir before -i or -simple";
@@ -381,7 +383,7 @@ sub setglobalvariables
         if ( $ENV{'TMP'} ) { $installer::globals::temppath = $ENV{'TMP'}; }
         elsif ( $ENV{'TEMP'} )  { $installer::globals::temppath = $ENV{'TEMP'}; }
         $installer::globals::temppath =~ s/\Q$installer::globals::separator\E\s*$//;    # removing ending slashes and backslashes
-        $installer::globals::temppath = $installer::globals::temppath . $installer::globals::separator . "instsetunpack";
+        $installer::globals::temppath = $installer::globals::temppath . $installer::globals::separator . "i";
         $installer::globals::temppath = installer::systemactions::create_pid_directory($installer::globals::temppath);
         push(@installer::globals::removedirs, $installer::globals::temppath);
         $installer::globals::temppath = $installer::globals::temppath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::productextension;
@@ -514,6 +516,7 @@ sub control_required_parameter
 
         # In the msi template directory a files "codes.txt" has to exist, in which the ProductCode
         # and the UpgradeCode for the product are defined.
+        # The name "codes.txt" can be overwritten in Product definition with CODEFILENAME (msiglobal.pm)
 
         if ($installer::globals::iswindowsbuild)
         {
@@ -624,6 +627,8 @@ sub outputparameter
     if ( $installer::globals::addsystemintegration ) { push(@output, "Adding system integration packages\n"); }
     if ( $installer::globals::debug ) { push(@output, "Debug is activated\n"); }
     if ( $installer::globals::tab ) { push(@output, "TAB version\n"); }
+    if ( $installer::globals::strip ) { push(@output, "Stripping files\n"); }
+    else { push(@output, "No file stripping\n"); }
     if ( $installer::globals::debian ) { push(@output, "Linux: Creating Debian packages\n"); }
     if ( $installer::globals::dounzip ) { push(@output, "Unzip ARCHIVE files\n"); }
     else  { push(@output, "Not unzipping ARCHIVE files\n"); }
