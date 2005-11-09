@@ -51,7 +51,7 @@ FileTypeDialog	Back	NewDialog	CustomSetup	Installed OR _IsSetupTypeMin = "Custom
 FileTypeDialog	Back	NewDialog	SetupType	NOT Installed AND _IsSetupTypeMin <> "Custom"	1
 FileTypeDialog	Cancel	SpawnDialog	CancelSetup	1	0
 FileTypeDialog	Next	NewDialog	ReadyToInstall	1	0
-InstallChangeFolder	Cancel	EndDialog	Return	1	2
+InstallChangeFolder	Cancel	NewDialog	DestinationFolder	1	2
 InstallChangeFolder	Cancel	Reset	0	1	1
 InstallChangeFolder	NewFolder	DirectoryListNew	0	1	0
 InstallChangeFolder	OK	NewDialog	DestinationFolder	1	3
