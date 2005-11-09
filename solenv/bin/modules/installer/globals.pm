@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.46 $
+#   $Revision: 1.47 $
 #
-#   last change: $Author: hr $ $Date: 2005-10-27 15:10:10 $
+#   last change: $Author: rt $ $Date: 2005-11-09 09:10:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -156,6 +156,9 @@ BEGIN
 
     $ismultilingual = 0;
     @multilanguagemodules = ();
+    %alluniquefilenames = ();
+    %alllcuniquefilenames = ();
+    %uniquefilenamesequence = ();
     $isopensourceproduct = 1;
     $manufacturer = "";
     $longmanufacturer = "";
@@ -193,7 +196,6 @@ BEGIN
 
     $unomaxservices = 25;
     $javamaxservices = 15;
-    $javaversion = "1.5.0_03";
 
     $one_cab_file = 0;
     $fix_number_of_cab_files = 1;
