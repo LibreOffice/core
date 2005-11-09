@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphicdevicebase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:43:16 $
+ *  last change: $Author: rt $ $Date: 2005-11-09 13:27:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -513,7 +513,9 @@ namespace canvas
 
         void setDumpScreenContent( const ::com::sun::star::uno::Any& rAny )
         {
-            mbDumpScreenContent = rAny.get< bool >();
+            // TODO(Q1): this was mbDumpScreenContent =
+            // rAny.get<bool>(), only that gcc3.3 wouldn't eat it
+            rAny >>= mbDumpScreenContent;
         }
 
         HelperType         maDeviceHelper;
