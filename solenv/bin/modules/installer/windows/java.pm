@@ -4,9 +4,9 @@
 #
 #   $RCSfile: java.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:18:46 $
+#   last change: $Author: rt $ $Date: 2005-11-09 09:11:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -89,9 +89,12 @@ sub update_java_tables
     }
 
     # Writing content into this tables
+    # Java version is saved in scp project
+    # $installer::globals::javafile was defined in installer::windows::idtglobal::add_childprojects
 
-    my $javastring = $installer::globals::javaversion;
-    if ( $allvariables->{'JAVAVERSION'} ) { $javastring = $allvariables->{'JAVAVERSION'}; }
+    if ( ! $installer::globals::javafile->{'Javaversion'} ) { installer::exiter::exit_program("ERROR: \"Javaversion\" has to be defined in $installer::globals::javafile->{'gid'} in scp project!", "update_java_tables"); }
+
+    my $javastring = $installer::globals::javafile->{'Javaversion'};
 
     my $signature = "JavaReg";
     my $rootvalue = "2";
