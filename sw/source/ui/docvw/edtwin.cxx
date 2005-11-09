@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:31:54 $
+ *  last change: $Author: rt $ $Date: 2005-11-09 09:55:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2510,6 +2510,11 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         }
         else
         {
+            // --> FME 2005-11-03 #125036# Make sure the pointer is set to 0,
+            // otherwise it may point to nowhere after deleting the corresponding
+            // text node.
+            rView.SetNumRuleNodeFromDoc( NULL );
+            // <--
             return;
         }
     }
