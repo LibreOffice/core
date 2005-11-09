@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-07 10:32:10 $
+#   last change: $Author: rt $ $Date: 2005-11-09 09:46:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ ALLTAR : $(LOCALPYFILES)
     @echo "No EPM: do no packaging at this stage"
 .ELSE			# "$(GUI)"!="WNT" && "$(EPM)"=="NO" && "$(USE_PACKAGER)"==""
 .IF "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
-ALLTAR : openoffice ure_en-US
+ALLTAR : openoffice sdkoo ure_en-US
 .ELSE			# "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
 ALLTAR : updatepack
 .ENDIF			# "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
@@ -116,26 +116,37 @@ updatepack:
 
 openoffice: $(foreach,i,$(alllangiso) openoffice_$i)
 
+openofficedev: $(foreach,i,$(alllangiso) openofficedev_$i)
+
 openofficewithjre: $(foreach,i,$(alllangiso) openofficewithjre_$i)
 
 ooolanguagepack : $(foreach,i,$(alllangiso) ooolanguagepack_$i)
 
+sdkoo: $(foreach,i,$(alllangiso) sdkoo_$i)
+
 MSIOFFICETEMPLATESOURCE=$(PRJ)$/inc_openoffice$/windows$/msi_templates
 MSILANGPACKTEMPLATESOURCE=$(PRJ)$/inc_ooolangpack$/windows$/msi_templates
+MSISDKOOTEMPLATESOURCE=$(PRJ)$/inc_sdkoo$/windows$/msi_templates
 .IF "$(BUILD_SPECIAL)"!=""
 MSIOFFICETEMPLATEDIR=$(MSIOFFICETEMPLATESOURCE)
 MSILANGPACKTEMPLATEDIR=$(MSILANGPACKTEMPLATESOURCE)
+MSISDKOOTEMPLATEDIR=$(MSISDKOOTEMPLATESOURCE)
 .ELSE			# "$(BUILD_SPECIAL)"!=""
 NOLOGOSPLASH:=$(BIN)$/intro.bmp
 MSIOFFICETEMPLATEDIR=$(MISC)$/openoffice$/msi_templates
 MSILANGPACKTEMPLATEDIR=$(MISC)$/ooolangpack$/msi_templates
+MSISDKOOTEMPLATEDIR=$(MISC)$/sdkoo$/msi_templates
 ADDDEPS=$(NOLOGOSPLASH) hack_msitemplates
 
 $(foreach,i,$(alllangiso) openoffice_$i) : $(ADDDEPS)
 
+$(foreach,i,$(alllangiso) openofficedev_$i) : $(ADDDEPS)
+
 $(foreach,i,$(alllangiso) openofficewithjre_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) ooolanguagepack_$i) : $(ADDDEPS)
+
+$(foreach,i,$(alllangiso) sdkoo_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) ure_$i) : $(ADDDEPS)
 
@@ -171,12 +182,28 @@ openofficewithjre_% :
     +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OpenOffice_wJRE -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -addchildprojects -addsystemintegration $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH))
 
 .IF "$(PKGFORMAT)"!=""
+$(foreach,i,$(alllangiso) openofficedev_$i) : $$@{$(PKGFORMAT:^".")}
+openofficedev_%{$(PKGFORMAT:^".")} :
+.ELSE			# "$(PKGFORMAT)"!=""
+openofficedev_% :
+.ENDIF			# "$(PKGFORMAT)"!=""
+    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OpenOffice_Dev -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH))
+
+.IF "$(PKGFORMAT)"!=""
 $(foreach,i,$(alllangiso) ooolanguagepack_$i) : $$@{$(PKGFORMAT:^".")}
 ooolanguagepack_%{$(PKGFORMAT:^".")} :
 .ELSE			# "$(PKGFORMAT)"!=""
 ooolanguagepack_% :
 .ENDIF			# "$(PKGFORMAT)"!=""
     +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OpenOffice -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist_language.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(MSILANGPACKTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -languagepack $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH))
+
+.IF "$(PKGFORMAT)"!=""
+$(foreach,i,$(alllangiso) sdkoo_$i) : $$@{$(PKGFORMAT:^".")}
+sdkoo_%{$(PKGFORMAT:^".")} :
+.ELSE			# "$(PKGFORMAT)"!=""
+sdkoo_% :
+.ENDIF			# "$(PKGFORMAT)"!=""
+    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OpenOffice_SDK -packagelist $(PRJ)$/inc_sdkoo$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(MSISDKOOTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles $(subst,xxx,$(@:e:s/.//) -dontstrip $(PKGFORMATSWITCH))
 
 .ELSE			# "$(alllangiso)"!=""
 openoffice:
@@ -291,9 +318,9 @@ $(MISC)$/ure$/services.rdb .ERRREMOVE:
 
 .IF "$(LOCALPYFILES)"!=""
 .IF "$(PKGFORMAT)"==""
-$(foreach,i,$(alllangiso) openoffice_$i openofficewithjre_$i ooolanguagepack_$i) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py $(BIN)$/iso8859_1.py
+$(foreach,i,$(alllangiso) openoffice_$i openofficewithjre_$i openofficedev_$i ooolanguagepack_$i sdkoo_$i) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py $(BIN)$/iso8859_1.py
 .ELSE			# "$(PKGFORMAT)"==""
-$(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".")} openofficewithjre_$i{$(PKGFORMAT:^".")} ooolanguagepack_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py $(BIN)$/iso8859_1.py
+$(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".")} openofficewithjre_$i{$(PKGFORMAT:^".")} openofficedev_$i{$(PKGFORMAT:^".")} ooolanguagepack_$i{$(PKGFORMAT:^".")} sdkoo_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py $(BIN)$/iso8859_1.py
 .ENDIF			# "$(PKGFORMAT)"==""
 .ENDIF			# "$(LOCALPYFILES)"!=""
 
@@ -318,10 +345,14 @@ $(BIN)$/intro.bmp : $(SOLARCOMMONPCKDIR)$/openoffice$/nologointro.bmp
 hack_msitemplates .PHONY:
     +-$(MKDIRHIER) $(MSIOFFICETEMPLATEDIR)
     +-$(MKDIRHIER) $(MSILANGPACKTEMPLATEDIR)
+    +-$(MKDIRHIER) $(MSISDKOOTEMPLATEDIR)
     $(GNUCOPY) -ua $(MSIOFFICETEMPLATESOURCE) $(MSIOFFICETEMPLATEDIR:d:d)
     $(GNUCOPY) -ua $(MSILANGPACKTEMPLATESOURCE) $(MSILANGPACKTEMPLATEDIR:d:d)
+    $(GNUCOPY) -ua $(MSISDKOOTEMPLATESOURCE) $(MSISDKOOTEMPLATEDIR:d:d)
     +$(RM) $(MSIOFFICETEMPLATEDIR)$/Binary$/Image.bmp
     +$(RM) $(MSILANGPACKTEMPLATEDIR)$/Binary$/Image.bmp
+    +$(RM) $(MSISDKOOTEMPLATEDIR)$/Binary$/Image.bmp
     +$(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSIOFFICETEMPLATEDIR)$/Binary$/Image.bmp
     +$(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSILANGPACKTEMPLATEDIR)$/Binary$/Image.bmp
+    +$(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSISDKOOTEMPLATEDIR)$/Binary$/Image.bmp
 
