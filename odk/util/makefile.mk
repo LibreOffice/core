@@ -7,23 +7,48 @@ TARGET=odk
 .INCLUDE: makefile.pmk
 # ------------------------------------------------------------------
 
-.IF "$(OS)"=="WNT"
-all:\
-    $(BIN)$/$(PRODUCTZIPFILE)
-.ELSE
-all:\
-    $(BIN)$/$(PRODUCTTARGZFILE)
-.ENDIF
+ZIP1TARGET=odkexamples
+ZIP1FLAGS=-u -r
+ZIP1DIR=$(PRJ)
+ZIP1LIST=examples -x "*CVS*" -x "*makefile.mk" -x "*Storage*" -x "*EmbedDocument*" -x "*register_component*" -x "*examples.html"
 
-$(BIN)$/$(PRODUCTZIPFILE) : $(SDK_CONTENT_CHECK_FILES) $(SDKCHECKFLAG)
-    +cd $(BIN) && $(WRAPCMD) zip -urq $(PRODUCTZIPFILE) $(PRODUCT_NAME)
+.INCLUDE :  target.mk
 
-$(BIN)$/$(PRODUCTTARGZFILE) : $(SDK_CONTENT_CHECK_FILES) $(SDKCHECKFLAG)
-    +-rm -f $@ >& $(NULLDEV)
-#	tar does not properly support update
-.IF "$(OS)"=="SOLARIS"
-#	always use the system tar on Solaris
-    +cd $(BIN) && /usr/bin/tar cf - $(PRODUCT_NAME) | gzip - > $(PRODUCTTARGZFILE)
-.ELSE
-    +cd $(BIN) && tar cf - $(PRODUCT_NAME) | gzip - > $(PRODUCTTARGZFILE)
-.ENDIF
+ALLTAR:\
+    $(BIN)$/$(PRODUCTZIPFILE)\
+    $(BIN)$/odk_oo.zip
+
+
+$(BIN)$/$(PRODUCTZIPFILE) : $(SDK_CONTENT_CHECK_FILES) $(SDK_CHECK_FLAGS)
+    +cd $(BIN)$/$(PRODUCT_NAME) && $(WRAPCMD) zip -urq ..$/$(PRODUCTZIPFILE) . -x "idl/*"
+    +cd $(BIN)$/$(PRODUCT_NAME) && $(WRAPCMD) zip -urq ..$/odkidl.zip idl/*
+
+ODK_OO_FILES=\
+    $(PRJ)$/index.html \
+    $(PRJ)$/docs$/tools.html \
+    $(PRJ)$/docs$/notsupported.html \
+    $(PRJ)$/docs$/DevelopersGuide_intro.html \
+    $(PRJ)$/docs$/install.html \
+    $(PRJ)$/docs$/sdk_styles.css \
+    $(PRJ)$/docs$/images$/arrow-1.gif \
+    $(PRJ)$/docs$/images$/arrow-3.gif \
+    $(PRJ)$/docs$/images$/bg_table.gif \
+    $(PRJ)$/docs$/images$/bg_table2.gif \
+    $(PRJ)$/docs$/images$/bg_table3.gif \
+    $(PRJ)$/docs$/images$/nav_down.png \
+    $(PRJ)$/docs$/images$/nav_home.png \
+    $(PRJ)$/docs$/images$/nav_left.png \
+    $(PRJ)$/docs$/images$/nav_right.png \
+    $(PRJ)$/docs$/images$/nav_up.png \
+    $(PRJ)$/docs$/images$/sdk_head-1.gif \
+    $(PRJ)$/docs$/images$/sdk_head-2.gif \
+    $(PRJ)$/docs$/images$/sdk_head-3.gif \
+    $(PRJ)$/docs$/images$/sdk_line-1.gif \
+    $(PRJ)$/docs$/images$/sdk_line-2.gif \
+    $(PRJ)$/examples$/examples.html \
+    $(PRJ)$/examples$/DevelopersGuide$/examples.html
+
+
+$(BIN)$/odk_oo.zip : $(ODK_OO_FILES)
+    +cd $(PRJ) && $(WRAPCMD) zip -urq $(subst,$(PRJ)$/, $(BIN)$/odk_oo.zip) $(subst,$(PRJ)$/, $<)
+
