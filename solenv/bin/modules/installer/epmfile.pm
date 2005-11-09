@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-26 13:21:46 $
+#   last change: $Author: rt $ $Date: 2005-11-09 09:09:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1074,6 +1074,18 @@ sub make_prototypefile_relocatable
             my $infoline = "Info: Removed line \"$line\" from prototype file!\n";
             push( @installer::globals::logfileinfo, $infoline);
             last;
+        }
+    }
+
+    # Making "\$" to "$" in prototype file. "\$" was created by epm.
+
+    for ( my $i = 0; $i <= $#{$prototypefile}; $i++ )
+    {
+        if ( ${$prototypefile}[$i] =~ /\\\$/ )
+        {
+            ${$prototypefile}[$i] =~ s/\\\$/\$/g;
+            my $infoline2 = "Info: Changed line in prototype file: ${$prototypefile}[$i] !\n";
+            push( @installer::globals::logfileinfo, $infoline2);
         }
     }
 }
