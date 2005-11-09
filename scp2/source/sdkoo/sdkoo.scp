@@ -1,0 +1,142 @@
+/*************************************************************************
+*
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: sdkoo.scp,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2005-11-09 09:40:01 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+************************************************************************/
+
+#include "macros.inc"
+
+Installation gid_Installation
+    ProductName = "${PRODUCTNAME}";
+    ProductVersion = "${PRODUCTVERSION}";
+#if defined WNT
+    DefaultDestPath = "<winprogpath>\%PRODUCTNAME";
+#else
+    DefaultDestPath = "/opt/%PRODUCTNAME";
+#endif
+End
+
+DataCarrier gid_Datacarrier
+    Name = "%PRODUCTNAME %PRODUCTVERSION";
+    DiskNo = 1;
+End
+
+Directory gid_Dir_Share
+    ParentID = PD_PROGDIR;
+    DosName = "share";
+End
+
+Directory gid_Dir_Share_Readme
+    ParentID = gid_Dir_Share;
+    DosName = "readme";
+End
+
+Module gid_Module_Root
+    Name = "sdkoo";
+    Description = "sdkoo";
+End
+
+File gid_File_Txt_License
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Readme;
+  #ifdef UNX
+    README_ALL_LANG(Name, LICENSE);
+  #endif
+  #ifdef WNT
+    README_TXT_ALL_LANG(Name, license, txt);
+  #endif
+    Styles = (PACKED, SCPZIP_REPLACE);
+End
+
+File gid_File_Txt_License_Html
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Readme;
+  #ifdef UNX
+    README_TXT_ALL_LANG(Name, LICENSE, html);
+  #endif
+  #ifdef WNT
+    README_TXT_ALL_LANG(Name, license, html);
+  #endif
+    Styles = (PACKED, SCPZIP_REPLACE);
+End
+
+File gid_File_Txt_Readme
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Readme;
+  #ifdef UNX
+    README_ALL_LANG(Name, README);
+  #endif
+  #ifdef WNT
+    README_TXT_ALL_LANG(Name, readme, txt);
+  #endif
+    Styles = (PACKED, SCPZIP_REPLACE);
+End
+
+File gid_File_Txt_Readme_Html
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Readme;
+  #ifdef UNX
+    README_TXT_ALL_LANG(Name, README, html);
+  #endif
+  #ifdef WNT
+    README_TXT_ALL_LANG(Name, readme, html);
+  #endif
+    Styles = (PACKED, SCPZIP_REPLACE);
+End
+
+File gid_File_Zip_Sdk_Oo
+    TXT_FILE_BODY;
+    Dir = PREDEFINED_PROGDIR;
+    Name = "sdk_oo.zip";
+    Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
+End
+
+File gid_File_Zip_Odkexamples
+    TXT_FILE_BODY;
+    Dir = PREDEFINED_PROGDIR;
+    Name = "odkexamples.zip";
+    Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
+End
+
+File gid_File_Zip_Odkidl
+    TXT_FILE_BODY;
+    Dir = PREDEFINED_PROGDIR;
+    Name = "odkidl.zip";
+    Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
+End
+
+File gid_File_Zip_Odkcommon
+    TXT_FILE_BODY;
+    Dir = PREDEFINED_PROGDIR;
+    Name = "odkcommon.zip";
+    Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
+End
