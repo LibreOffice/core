@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 16:02:03 $
+ *  last change: $Author: rt $ $Date: 2005-11-09 09:55:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1346,8 +1346,10 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
 {
     const BOOL bOldIdle = pDoc->IsIdleTimerActive();
     pDoc->StopIdleTimer();
-    const BOOL bOldCallbackActionEnabled = pDoc->GetRootFrm()->IsCallbackActionEnabled();
-    pDoc->GetRootFrm()->SetCallbackActionEnabled( FALSE );
+    SwRootFrm* pLayout = pDoc->GetRootFrm();
+    const BOOL bOldCallbackActionEnabled = pLayout ? pLayout->IsCallbackActionEnabled() : sal_False;
+    if(pLayout)
+        pLayout->SetCallbackActionEnabled( FALSE );
 
     //Bei der Erzeugung des Layouts wird bPages mit TRUE uebergeben. Dann
     //werden schon mal alle x Absaetze neue Seiten angelegt. Bei umbruechen
@@ -1688,7 +1690,8 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
 
     if ( bOldIdle )
         pDoc->StartIdleTimer();
-    pDoc->GetRootFrm()->SetCallbackActionEnabled( bOldCallbackActionEnabled );
+    if(pLayout)
+        pLayout->SetCallbackActionEnabled( bOldCallbackActionEnabled );
 }
 
 
