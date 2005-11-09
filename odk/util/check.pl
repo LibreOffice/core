@@ -1,35 +1,62 @@
 #*************************************************************************
 #
-#   OpenOffice.org - a multi-platform office productivity suite
-#
 #   $RCSfile: check.pl,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 20:21:23 $
+#   last change: $Author: rt $ $Date: 2005-11-09 09:37:41 $
 #
-#   The Contents of this file are made available subject to
-#   the terms of GNU Lesser General Public License Version 2.1.
+#   The Contents of this file are made available subject to the terms of
+#   either of the following licenses
+#
+#          - GNU Lesser General Public License Version 2.1
+#          - Sun Industry Standards Source License Version 1.1
+#
+#   Sun Microsystems Inc., October, 2000
+#
+#   GNU Lesser General Public License Version 2.1
+#   =============================================
+#   Copyright 2000 by Sun Microsystems, Inc.
+#   901 San Antonio Road, Palo Alto, CA 94303, USA
+#
+#   This library is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU Lesser General Public
+#   License version 2.1, as published by the Free Software Foundation.
+#
+#   This library is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#   Lesser General Public License for more details.
+#
+#   You should have received a copy of the GNU Lesser General Public
+#   License along with this library; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#   MA  02111-1307  USA
 #
 #
-#     GNU Lesser General Public License Version 2.1
-#     =============================================
-#     Copyright 2005 by Sun Microsystems, Inc.
-#     901 San Antonio Road, Palo Alto, CA 94303, USA
+#   Sun Industry Standards Source License Version 1.1
+#   =================================================
+#   The contents of this file are subject to the Sun Industry Standards
+#   Source License Version 1.1 (the "License"); You may not use this file
+#   except in compliance with the License. You may obtain a copy of the
+#   License at http://www.openoffice.org/license.html.
 #
-#     This library is free software; you can redistribute it and/or
-#     modify it under the terms of the GNU Lesser General Public
-#     License version 2.1, as published by the Free Software Foundation.
+#   Software provided under this License is provided on an "AS IS" basis,
+#   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+#   WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+#   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+#   See the License for the specific provisions governing your rights and
+#   obligations concerning the Software.
 #
-#     This library is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-#     Lesser General Public License for more details.
+#   The Initial Developer of the Original Code is: Sun Microsystems, Inc.
 #
-#     You should have received a copy of the GNU Lesser General Public
-#     License along with this library; if not, write to the Free Software
-#     Foundation, Inc., 59 Temple Place, Suite 330, Boston,
-#     MA  02111-1307  USA
+#   Copyright: 2000 by Sun Microsystems, Inc.
+#
+#   All Rights Reserved.
+#
+#   Contributor(s): _______________________________________
+#
+#
 #
 #*************************************************************************
 
@@ -93,23 +120,9 @@ if (-d "$StartDir") {
 
     # packaging files
     print "check packaging files: ";
-    if (! -e "$StartDir/index.html") {
-    print ":";
-    $return++;
-    }
     if (-d "$StartDir/docs") {
-    my @filelist = ( "install.html","DevelopersGuide_intro.html",
-             "notsupported.html","sdk_styles.css","tools.html",
-             "images/nada.gif","images/arrow-1.gif",
-             "images/arrow-2.gif","images/arrow-3.gif",
-             "images/bg_table.gif","images/bg_table2.gif",
-             "images/bg_table3.gif","images/bluball.gif",
-             "images/nada.gif","images/nav_down.png",
-             "images/nav_home.png","images/nav_left.png",
-             "images/nav_right.png","images/nav_up.png",
-             "images/sdk_head-1.gif", "images/sdk_head-2.gif",
-             "images/sdk_head-3.gif", "images/sdk_line-1.gif",
-             "images/sdk_line-2.gif", "images/so-main-app_32.png",
+    my @filelist = ( "images/nada.gif","images/arrow-2.gif",
+             "images/bluball.gif","images/so-main-app_32.png",
              "images/ooo-main-app_32.png");
 
     foreach $i (@filelist)
@@ -137,12 +150,12 @@ if (-d "$StartDir") {
     #check configure files
     print "check config files: ";
     if ($OperatingSystem eq "windows") {
-    if (! -e "$StartDir/configureWindows.bat") {
-        print "\nERROR: \"$StartDir/configureWindows.bat\" is missing\n";
-        $return++;
-    }
     if (! -e "$StartDir/setsdkenv_windows.bat") {
         print "\nERROR: \"$StartDir/setsdkenv_windows.bat\" is missing\n";
+        $return++;
+    }
+    if (! -e "$StartDir/setsdkenv_windows.template") {
+        print "\nERROR: \"$StartDir/setsdkenv_windows.template\" is missing\n";
         $return++;
     }
     if (! -e "$StartDir/cfgWin.js") {
@@ -150,10 +163,6 @@ if (-d "$StartDir") {
         $return++;
     }
     } else {
-    if (! -e "$StartDir/configure") {
-        print "\nERROR: \"$StartDir/configure\" is missing\n";
-        $return++;
-    }
     if (! -e "$StartDir/configure.pl") {
         print "\nERROR: \"$StartDir/configure.pl\" is missing\n";
         $return++;
@@ -356,123 +365,6 @@ if (-d "$StartDir") {
     print "\n";
     }
 
-    #check examples, it is only a first and simple check
-    # improvement required
-    print "check examples: ";
-    if (-d "$StartDir/examples") {
-    if (! -e "$StartDir/examples/examples.html") {
-        print "\nERROR: \"$StartDir/examples/examples.html\" is missing\n";
-        $return++;
-    }
-    if (! -e "$StartDir/examples/DevelopersGuide/examples.html") {
-        print "\nERROR: \"$StartDir/examples/DevelopersGuide/examples.html\" is missing\n";
-        $return++;
-    }
-
-    my @ex_dirlist = ( "OLE",
-               "OLE/vbscript",
-               "OLE/delphi",
-               "OLE/delphi/InsertTables",
-               "OLE/activex",
-               "CLI/CSharp/Spreadsheet",
-               "CLI/VB.NET/WriterDemo",
-               "cpp",
-               "cpp/counter",
-               "cpp/remoteclient",
-               "cpp/DocumentLoader",
-               "java",
-               "java/Text",
-               "java/ToDo",
-               "java/NotesAccess",
-               "java/ConverterServlet",
-               "java/Inspector",
-               "java/Drawing",
-               "java/MinimalComponent",
-               "java/PropertySet",
-               "java/Spreadsheet",
-               "java/DocumentHandling",
-               "java/DocumentHandling/test",
-               "basic",
-               "basic/text",
-               "basic/text/modifying_text_automatically",
-               "basic/text/creating_an_index",
-               "basic/sheet",
-               "basic/drawing",
-               "basic/forms_and_controls",
-               "basic/stock_quotes_updater",
-               "DevelopersGuide",
-               "DevelopersGuide/UCB",
-               "DevelopersGuide/UCB/data",
-               "DevelopersGuide/Text",
-               "DevelopersGuide/Charts",
-               "DevelopersGuide/Config",
-               "DevelopersGuide/Forms",
-               "DevelopersGuide/FirstSteps",
-               "DevelopersGuide/OfficeDev",
-               "DevelopersGuide/OfficeDev/FilterDevelopment",
-               "DevelopersGuide/OfficeDev/FilterDevelopment/AsciiFilter",
-               "DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilter_cpp",
-               "DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilter_java",
-               "DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilterDetection",
-               "DevelopersGuide/OfficeDev/Linguistic",
-               "DevelopersGuide/OfficeDev/Clipboard",
-               "DevelopersGuide/OfficeDev/PathSettings",
-               "DevelopersGuide/OfficeDev/TerminationTest",
-               "DevelopersGuide/OfficeDev/DesktopEnvironment",
-               "DevelopersGuide/OfficeDev/DesktopEnvironment/nativelib",
-               "DevelopersGuide/OfficeDev/DesktopEnvironment/nativelib/unix",
-               "DevelopersGuide/OfficeDev/DesktopEnvironment/nativelib/windows",
-               "DevelopersGuide/OfficeDev/DisableCommands",
-               "DevelopersGuide/OfficeDev/PathSubstitution",
-               "DevelopersGuide/Components",
-               "DevelopersGuide/Components/JavaComponent",
-               "DevelopersGuide/Components/Thumbs",
-               "DevelopersGuide/Components/Thumbs/org",
-               "DevelopersGuide/Components/Thumbs/org/openoffice",
-               "DevelopersGuide/Components/Thumbs/org/openoffice/comp",
-               "DevelopersGuide/Components/Thumbs/org/openoffice/comp/test",
-               "DevelopersGuide/Components/Thumbs/org/openoffice/test",
-               "DevelopersGuide/Components/CppComponent",
-               "DevelopersGuide/Components/Addons",
-               "DevelopersGuide/Components/Addons/JobsAddon",
-               "DevelopersGuide/Components/Addons/ProtocolHandlerAddon_java",
-               "DevelopersGuide/Components/Addons/ProtocolHandlerAddon_cpp",
-               "DevelopersGuide/BasicAndDialogs",
-               "DevelopersGuide/BasicAndDialogs/ToolkitControls",
-               "DevelopersGuide/BasicAndDialogs/CreatingDialogs",
-               "DevelopersGuide/ProfUNO",
-               "DevelopersGuide/ProfUNO/CppBinding",
-               "DevelopersGuide/ProfUNO/InterprocessConn",
-               "DevelopersGuide/ProfUNO/Lifetime",
-               "DevelopersGuide/ProfUNO/SimpleBootstrap_java",
-               "DevelopersGuide/ProfUNO/SimpleBootstrap_cpp",
-               "DevelopersGuide/Drawing",
-               "DevelopersGuide/Accessibility",
-               "DevelopersGuide/OfficeBean",
-               "DevelopersGuide/Database",
-               "DevelopersGuide/Database/DriverSkeleton",
-               "DevelopersGuide/Spreadsheet",
-               "DevelopersGuide/ScriptingFramework",
-               "DevelopersGuide/ScriptingFramework/SayHello",
-               "DevelopersGuide/ScriptingFramework/SayHello/SayHello",
-               "DevelopersGuide/ScriptingFramework/SayHello/META-INF",
-               "DevelopersGuide/ScriptingFramework/ScriptSelector",
-               "DevelopersGuide/ScriptingFramework/ScriptSelector/ScriptSelector",
-               "DevelopersGuide/ScriptingFramework/ScriptSelector/META-INF" );
-
-    foreach $i (@ex_dirlist)
-    {
-        if (! -d "$StartDir/examples/$i") {
-        $return++;
-        print "\nERROR: \"$StartDir/examples/$i\" is missing\n";
-        } else {
-        print "+";
-        }
-    }
-    } else {
-    $return++;
-    }
-    print "\n";
 } else {
     $return++;
 }
