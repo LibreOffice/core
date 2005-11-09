@@ -1,5 +1,5 @@
 ifneq "$(OO_SDK_OUTPUT_DIR)" ""
-OUT=$(subst \,/,$(OO_SDK_OUTPUT_DIR))/$(SDKNAME)/$(OS)example.out
+OUT=$(subst \,/,$(OO_SDK_OUTPUT_DIR))/$(OO_SDK_NAME)/$(OS)example.out
 else
 OUT=$(PRJ)/$(OS)example.out
 endif
