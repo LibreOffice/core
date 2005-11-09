@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 01:52:09 $
+#   last change: $Author: rt $ $Date: 2005-11-09 09:40:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -150,9 +150,7 @@ SCP1FILES += \
              vclcanvas.par
  
 # ------------------------------------------------------------------------
-# OpenOffice.org with JRE (Windows Only)
-
-.IF "$(GUI)"=="WNT"
+# OpenOffice.org with JRE
 
 SCP2LINK_PRODUCT_TYPE=osl
 SCP2TARGET = setup_osljre
@@ -257,11 +255,19 @@ SCP2FILES += \
 SCP2FILES += \
              vclcanvas.par
 
-.ENDIF
+# ------------------------------------------------------------------------
+# URE
 
 SCP3LINK_PRODUCT_TYPE = ure
 SCP3TARGET = ure
 SCP3FILES = ure.par
+
+# ------------------------------------------------------------------------
+# SDK
+
+SCP4LINK_PRODUCT_TYPE = sdk
+SCP4TARGET = sdkoo
+SCP4FILES = sdkoo.par
 
 # --- target -------------------------------------------------------------
 .INCLUDE :  target.mk
