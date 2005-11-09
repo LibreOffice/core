@@ -4,9 +4,9 @@
 #
 #   $RCSfile: directory.pm,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2005-10-18 08:26:58 $
+#   last change: $Author: rt $ $Date: 2005-11-09 09:11:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,21 @@ sub create_unique_directorynames
 }
 
 #####################################################
+# Getting the name of the top level directory. This
+# can have only one letter
+#####################################################
+
+sub get_last_directory_name
+{
+    my ($completepathref) = @_;
+
+    if ( $$completepathref =~ /^.*[\/\\](\S+?)\s*$/ )
+    {
+        $$completepathref = $1;
+    }
+}
+
+#####################################################
 # Creating the defaultdir for the file Director.idt
 #####################################################
 
@@ -93,7 +108,9 @@ sub create_defaultdir_directorynames
     {
         my $onedir = ${$directoryref}[$i];
         my $hostname = $onedir->{'HostName'};
-        installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$hostname);   # making program/classes to classes
+        $hostname =~ s/\Q$installer::globals::separator\E\s*$//;
+        get_last_directory_name(\$hostname);
+        # installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$hostname); # making program/classes to classes
         my $shortstring = installer::windows::idtglobal::make_eight_three_conform($hostname, "dir", \@shortnames);
 
         my $defaultdir;
@@ -174,7 +191,9 @@ sub add_root_directories
         my $productversion = $allvariableshashref->{'PRODUCTVERSION'};
         my $productkey = $productname . " " . $productversion;
 
+        if ( $allvariableshashref->{'POSTVERSIONEXTENSION'} ) { $productkey = $productkey . " " . $allvariableshashref->{'POSTVERSIONEXTENSION'}; }
         if ( $allvariableshashref->{'NOVERSIONINDIRNAME'} ) { $productkey = $productname; }
+        if ( $allvariableshashref->{'NOSPACEINDIRECTORYNAME'} ) { $productkey =~ s/\ /\_/g; }
 
         my $shortproductkey = installer::windows::idtglobal::make_eight_three_conform($productkey, "dir");      # third parameter not used
         $shortproductkey =~ s/\s/\_/g;                                  # changing empty space to underline
