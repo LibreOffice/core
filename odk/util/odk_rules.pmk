@@ -1,46 +1,65 @@
 #*************************************************************************
 #
-#   OpenOffice.org - a multi-platform office productivity suite
-#
 #   $RCSfile: odk_rules.pmk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 20:22:21 $
+#   last change: $Author: rt $ $Date: 2005-11-09 09:38:14 $
 #
-#   The Contents of this file are made available subject to
-#   the terms of GNU Lesser General Public License Version 2.1.
+#   The Contents of this file are made available subject to the terms of
+#   either of the following licenses
+#
+#          - GNU Lesser General Public License Version 2.1
+#          - Sun Industry Standards Source License Version 1.1
+#
+#   Sun Microsystems Inc., October, 2000
+#
+#   GNU Lesser General Public License Version 2.1
+#   =============================================
+#   Copyright 2000 by Sun Microsystems, Inc.
+#   901 San Antonio Road, Palo Alto, CA 94303, USA
+#
+#   This library is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU Lesser General Public
+#   License version 2.1, as published by the Free Software Foundation.
+#
+#   This library is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#   Lesser General Public License for more details.
+#
+#   You should have received a copy of the GNU Lesser General Public
+#   License along with this library; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#   MA  02111-1307  USA
 #
 #
-#     GNU Lesser General Public License Version 2.1
-#     =============================================
-#     Copyright 2005 by Sun Microsystems, Inc.
-#     901 San Antonio Road, Palo Alto, CA 94303, USA
+#   Sun Industry Standards Source License Version 1.1
+#   =================================================
+#   The contents of this file are subject to the Sun Industry Standards
+#   Source License Version 1.1 (the "License"); You may not use this file
+#   except in compliance with the License. You may obtain a copy of the
+#   License at http://www.openoffice.org/license.html.
 #
-#     This library is free software; you can redistribute it and/or
-#     modify it under the terms of the GNU Lesser General Public
-#     License version 2.1, as published by the Free Software Foundation.
+#   Software provided under this License is provided on an "AS IS" basis,
+#   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+#   WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+#   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+#   See the License for the specific provisions governing your rights and
+#   obligations concerning the Software.
 #
-#     This library is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-#     Lesser General Public License for more details.
+#   The Initial Developer of the Original Code is: Sun Microsystems, Inc.
 #
-#     You should have received a copy of the GNU Lesser General Public
-#     License along with this library; if not, write to the Free Software
-#     Foundation, Inc., 59 Temple Place, Suite 330, Boston,
-#     MA  02111-1307  USA
+#   Copyright: 2000 by Sun Microsystems, Inc.
+#
+#   All Rights Reserved.
+#
+#   Contributor(s): _______________________________________
+#
+#
 #
 #*************************************************************************
 
-
-$(DESTDIR)$/index.html : $(PRJ)$/index.html
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/index.html $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIREXAMPLES)$/examples.html : $(PRJ)$/docs$/examples.html
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/docs$/examples.html $(MY_TEXTCOPY_TARGETPRE) $@
 
 $(DESTDIRDOCU)$/%.html : $(PRJ)$/docs$/%.html
     +-rm -f $@ >& $(NULLDEV)
@@ -51,10 +70,6 @@ $(DESTDIRDOCU)$/%.css : $(PRJ)$/docs$/%.css
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
 $(DESTDIRDOCUIMAGES)$/% : $(PRJ)$/docs$/images$/%
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_COPY) $< $@
-
-$(DESTDIRDOCU)$/DevStudioWizards$/images$/% : $(PRJ)$/docs$/DevStudioWizards$/images$/%
     +-rm -f $@ >& $(NULLDEV)
     $(MY_COPY) $< $@
 
@@ -100,194 +115,17 @@ $(DESTDIR)$/setsdkenv_unix.%.in : $(PRJ)$/setsdkenv_unix.%.in
     +-chmod 644 $@
 .ENDIF
 
-$(DESTDIR)$/configureWindows.bat : $(PRJ)$/configureWindows.bat
+$(DESTDIR)$/%.bat : $(PRJ)$/%.bat
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/configureWindows.bat $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
-$(DESTDIR)$/setsdkenv_windows.bat : $(PRJ)$/setsdkenv_windows.bat
+$(DESTDIR)$/setsdkenv_windows.template : $(PRJ)$/setsdkenv_windows.template
     +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/setsdkenv_windows.bat $(MY_TEXTCOPY_TARGETPRE) $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
 $(DESTDIR)$/cfgWin.js : $(PRJ)$/cfgWin.js
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/cfgWin.js $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIREXAMPLES)$/%.sxw : $(PRJ)$/examples$/%.sxw
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_COPY) $< $@
-
-$(DESTDIREXAMPLES)$/%.sxd : $(PRJ)$/examples$/%.sxd
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_COPY) $< $@
-
-$(DESTDIREXAMPLES)$/%.odt : $(PRJ)$/examples$/%.odt
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_COPY) $< $@
-
-$(DESTDIREXAMPLES)$/%.ods : $(PRJ)$/examples$/%.ods
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_COPY) $< $@
-
-$(DESTDIREXAMPLES)$/%.odg : $(PRJ)$/examples$/%.odg
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_COPY) $< $@
-
-$(DESTDIREXAMPLES)$/%.odp : $(PRJ)$/examples$/%.odp
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_COPY) $< $@
-
-$(DESTDIREXAMPLES)$/%.xlb : $(PRJ)$/examples$/%.xlb
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_COPY) $< $@
-
-$(DESTDIREXAMPLES)$/%.xdl : $(PRJ)$/examples$/%.xdl
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_COPY) $< $@
-
-$(DESTDIREXAMPLES)$/%.gif : $(PRJ)$/examples$/%.gif
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_COPY) $< $@
-
-$(DESTDIREXAMPLES)$/%.jpg : $(PRJ)$/examples$/%.jpg
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_COPY) $< $@
-
-$(DESTDIREXAMPLES)$/%.wmf : $(PRJ)$/examples$/%.wmf
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_COPY) $< $@
-
-$(DESTDIREXAMPLES)$/%.nsf : $(PRJ)$/examples$/%.nsf
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_COPY) $< $@
-
-$(DESTDIREXAMPLES)$/%.pdf : $(PRJ)$/examples$/%.pdf
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_COPY) $< $@
-
-$(DESTDIREXAMPLES)$/%.xba : $(PRJ)$/examples$/%.xba
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIREXAMPLES)$/%.cxx : $(PRJ)$/examples$/%.cxx
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIREXAMPLES)$/%.c : $(PRJ)$/examples$/%.c
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIREXAMPLES)$/%.hxx : $(PRJ)$/examples$/%.hxx
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIREXAMPLES)$/%.java : $(PRJ)$/examples$/%.java
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIREXAMPLES)$/%.idl : $(PRJ)$/examples$/%.idl
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIREXAMPLES)$/%.dxp : $(PRJ)$/examples$/%.dxp
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIREXAMPLES)$/%.xml : $(PRJ)$/examples$/%.xml
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIREXAMPLES)$/%.xcu : $(PRJ)$/examples$/%.xcu
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIREXAMPLES)$/%.html : $(PRJ)$/examples$/%.html
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIREXAMPLES)$/%.txt : $(PRJ)$/examples$/%.txt
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIREXAMPLES)$/%Makefile : $(PRJ)$/examples$/%Makefile
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIREXAMPLES)$/%README : $(PRJ)$/examples$/%README
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIREXAMPLES)$/%.cpp : $(PRJ)$/examples$/%.cpp
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIREXAMPLES)$/%.h : $(PRJ)$/examples$/%.h
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIREXAMPLES)$/%.def : $(PRJ)$/examples$/%.def
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIREXAMPLES)$/%.rc : $(PRJ)$/examples$/%.rc
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIREXAMPLES)$/%.rgs : $(PRJ)$/examples$/%.rgs
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIREXAMPLES)$/%.dpr : $(PRJ)$/examples$/%.dpr
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIREXAMPLES)$/%.res : $(PRJ)$/examples$/%.res
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIREXAMPLES)$/%.pas : $(PRJ)$/examples$/%.pas
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIREXAMPLES)$/%.dfm : $(PRJ)$/examples$/%.dfm
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIREXAMPLES)$/%.vbs : $(PRJ)$/examples$/%.vbs
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIREXAMPLES)$/%.vb : $(PRJ)$/examples$/%.vb
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIREXAMPLES)$/%.cs : $(PRJ)$/examples$/%.cs
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIREXAMPLES)$/%.mk : $(PRJ)$/examples$/%.mk
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIREXAMPLES)$/%.ini : $(PRJ)$/examples$/%.ini
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIREXAMPLES)$/%.bas : $(PRJ)$/examples$/%.bas
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-
-$(DESTDIREXAMPLES)$/%.mf : $(PRJ)$/examples$/%.mf
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
-
-# catch all otheres and fail
-$(DESTDIREXAMPLES)$/% : $(PRJ)$/examples$/%
-    @+echo now way to build $@
-    force_dmake_to_error
-
-$(DESTDIRCLASSES)$/oosupport.nbm : $(OUT)$/class$/oosupport.nbm
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_COPY) $< $@
 
 $(DESTDIRSETTINGS)$/%.mk : $(PRJ)$/settings$/%.mk
     +-rm -f $@ >& $(NULLDEV)
@@ -396,5 +234,6 @@ $(DIR_FILE_LIST) : $(DIR_CREATE_FLAG)
 
 $(DIR_FILE_FLAG) : $(DIR_FILE_LIST)
     @echo "must be zipped" > $@
+
 
 
