@@ -12,6 +12,7 @@ sdkdir=`dirname $sdkscript`
 
 # The SDK name
 OO_SDK_NAME=@OO_SDK_NAME@
+export OO_SDK_NAME
 
 # Installation directory of the Software Development Kit.
 # Example: OO_SDK_HOME=/work/StarOffice_SDK
@@ -132,7 +133,7 @@ case $sd_platform in
     export LD_LIBRARY_PATH
     ;;
 
-  darwin)
+  darwin*)
     if [ -n "$OO_SDK_CPP_HOME" ]
     then
 	SDK_GXX_INCLUDE_PATH=`echo "#include <cstring>" | $OO_SDK_CPP_HOME/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
