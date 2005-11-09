@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.52 $
+#   $Revision: 1.53 $
 #
-#   last change: $Author: rt $ $Date: 2005-10-18 08:26:44 $
+#   last change: $Author: rt $ $Date: 2005-11-09 09:08:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -336,6 +336,12 @@ if (! $installer::globals::patch)
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles2c.log", $filesinproductarrayref); }
 }
 
+if (! $installer::globals::tab)
+{
+    $filesinproductarrayref = installer::scriptitems::remove_tabonlyfiles_from_Installset($filesinproductarrayref);
+    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles2c.log", $filesinproductarrayref); }
+}
+
 installer::logger::print_message( "... analyzing scpactions ... \n" );
 
 my $scpactionsinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "ScpAction");
@@ -653,12 +659,11 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles11.log", $filesinproductlanguageresolvedarrayref); }
     if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "additional_paths.log" ,\@additional_paths_from_zipfiles); }
 
-    # packed files sometimes contain a $ in their name: HighlightText$1.class. epm conflicts with such files.
-    # Therefore these files are renamed for non-Windows builds at the moment:
+    # packed files sometimes contain a "$" in their name: HighlightText$1.class. For epm the "$" has to be quoted by "$$"
 
     if (!( $installer::globals::iswindowsbuild ))
     {
-        installer::scriptitems::rename_illegal_filenames($filesinproductlanguageresolvedarrayref);
+        installer::scriptitems::quoting_illegal_filenames($filesinproductlanguageresolvedarrayref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles12.log", $filesinproductlanguageresolvedarrayref); }
     }
 
@@ -924,7 +929,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions6patch.log", $scpactionsinproductlanguageresolvedarrayref); }
         $linksinproductlanguageresolvedarrayref = installer::worker::select_patch_items($linksinproductlanguageresolvedarrayref, "Shortcut");
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productlinks8patch.log", $linksinproductlanguageresolvedarrayref); }
-        @{$folderitemsinproductlanguageresolvedarrayref} = (); # no folderitems in languagepacks
+        $folderitemsinproductlanguageresolvedarrayref = installer::worker::select_patch_items($folderitemsinproductlanguageresolvedarrayref, "FolderItem");
+        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfolderitems1patch.log", $folderitemsinproductlanguageresolvedarrayref); }
+        # @{$folderitemsinproductlanguageresolvedarrayref} = (); # no folderitems in languagepacks
 
         if ( $installer::globals::iswindowsbuild )
         {
@@ -1500,32 +1507,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         my $installlogdir = installer::systemactions::create_directory_next_to_directory($installdir, "log");
         # my $installchecksumdir = installer::systemactions::create_directory_next_to_directory($installdir, "checksum");
 
-        ############################################################################
-        # Begin of functions that are used for the creation of idt files
-        # This is only for Windows ($installer::globals::compiler, $installer::globals::iswindowsbuild)
-        # The following tables of the msi-database have to be created dynamically:
-        #  1. ActionTe.idt (localization)
-        #  2. Componen.idt  (All components)
-        #  3. Control.idt (localization and license text)
-        #  4. Director.idt  (All directories)
-        #  5. Error.idt (localization)
-        #  6. Feature.idt  (All features)
-        #  7. FeatureC.idt ! (Features <-> Components)
-        #  8. File.idt  (All files)
-        #  9. Font.idt
-        # 10. Icon.idt
-        # 11. Media.idt
-        # 12. Property.idt (defining some properties)
-        # 13. RadioBut.idt (localization)
-        # 14. Registry.idt  Windows registry
-        # 15. Shortcut.idt  (non advertised)
-        # 16. Shortcut.idt  (advertised)
-        # 17. CreateFo.idt  (empty directories)
-        # 18. UIText.idt (localization)
-        # 19. RemoveFi.idt   (removal of OfficeMenuFolder)
-        # 10. Upgrade.idt
-        # All other tables are static!
-        ############################################################################
+        #################################################################################
+        # Begin of functions that are used for the creation of idt files (Windows only)
+        #################################################################################
 
         installer::logger::print_message( "... creating idt files ...\n" );
 
@@ -1703,10 +1687,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             # adding the files from the binary directory into the binary table
             installer::windows::binary::update_binary_table($languageidtdir, $filesinproductlanguageresolvedarrayref, $binarytablefiles);
-
-            # setting Java variables for Java products
-
-            if ( $allvariableshashref->{'JAVAPRODUCT'} ) { installer::windows::java::update_java_tables($languageidtdir, $allvariableshashref); }
 
             # setting patch codes to detect installed products
 
@@ -1888,28 +1868,14 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             installer::files::save_file($controlconditiontablename, $controlconditiontable);
             installer::files::save_file($adminexecutetablename, $adminexecutetable);
 
-            # Adding child projects to installation dynamically (also in feature table)
+            # Adding child projects if specified
 
             if ($installer::globals::addchildprojects)
             {
-                my $customactiontablename = $languageidtdir . $installer::globals::separator . "CustomAc.idt";
-                my $customactiontable = installer::files::read_file($customactiontablename);
-                my $installuitablename = $languageidtdir . $installer::globals::separator . "InstallU.idt";
-                my $installuitable = installer::files::read_file($installuitablename);
-                my $featuretablename = $languageidtdir . $installer::globals::separator . "Feature.idt";
-                my $featuretable = installer::files::read_file($featuretablename);
-                my $directorytablename = $languageidtdir . $installer::globals::separator . "Director.idt";
-                my $directorytable = installer::files::read_file($directorytablename);
-                my $componenttablename = $languageidtdir . $installer::globals::separator . "Componen.idt";
-                my $componenttable = installer::files::read_file($componenttablename);
-
-                installer::windows::idtglobal::add_childprojects($customactiontable, $installuitable, $featuretable, $directorytable, $componenttable, $customactiontablename, $installuitablename, $featuretablename, $directorytablename, $componenttablename, $filesinproductlanguageresolvedarrayref, $allvariableshashref);
-
-                installer::files::save_file($customactiontablename, $customactiontable);
-                installer::files::save_file($installuitablename, $installuitable);
-                installer::files::save_file($featuretablename, $featuretable);
-                installer::files::save_file($directorytablename, $directorytable);
-                installer::files::save_file($componenttablename, $componenttable);
+                # Adding child projects to installation dynamically (also in feature table)
+                installer::windows::idtglobal::add_childprojects($languageidtdir, $filesinproductlanguageresolvedarrayref, $allvariableshashref);
+                # setting Java variables for Java products
+                if ( $allvariableshashref->{'JAVAPRODUCT'} ) { installer::windows::java::update_java_tables($languageidtdir, $allvariableshashref); }
             }
 
             # Then the language specific msi database can be created
