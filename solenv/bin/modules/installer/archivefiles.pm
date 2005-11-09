@@ -4,9 +4,9 @@
 #
 #   $RCSfile: archivefiles.pm,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 08:59:15 $
+#   last change: $Author: rt $ $Date: 2005-11-09 09:09:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 package installer::archivefiles;
 
 use installer::converter;
+use installer::existence;
 use installer::exiter;
 use installer::files;
 use installer::globals;
@@ -73,6 +74,24 @@ sub put_language_into_name
 }
 
 #################################################################
+# Converting patchfiles string into array
+#################################################################
+
+sub get_patch_file_list
+{
+    my ( $patchfilestring ) = @_;
+
+    $patchfilestring =~ s/^\s*\(?//;
+    $patchfilestring =~ s/\)?\s*$//;
+    $patchfilestring =~ s/^\s*\///;
+    $patchfilestring =~ s/^\s*\\//;
+
+    my $patchfilesarray = installer::converter::convert_stringlist_into_array_without_linebreak_and_quotes(\$patchfilestring, ",");
+
+    return $patchfilesarray;
+}
+
+#################################################################
 # Analyzing files with flag ARCHIVE
 #################################################################
 
@@ -88,7 +107,7 @@ sub resolving_archive_flag
 
     my $unziplistfile = $loggingdir . "unziplist_" . $installer::globals::build . "_" . $installer::globals::compiler . "_" . $$languagestringref . ".txt";
 
-    my $platformunzipdirbase = installer::systemactions::create_directories("zipfiles", $languagestringref);
+    my $platformunzipdirbase = installer::systemactions::create_directories("zip", $languagestringref);
     push(@installer::globals::removedirs, $platformunzipdirbase);
 
     installer::logger::include_header_into_logfile("Files with flag ARCHIVE:");
@@ -115,8 +134,28 @@ sub resolving_archive_flag
                 $iscommonfile = 1;
             }
 
+            my $use_internal_rights = 0;
+            if ( $styles =~ /\bUSE_INTERNAL_RIGHTS\b/ ) { $use_internal_rights = 1; }   # using the rights used inside the zip file
+
             my $rename_to_language = 0;
             if ( $styles =~ /\bRENAME_TO_LANGUAGE\b/ ) { $rename_to_language = 1; } # special handling for renamed files (scriptitems.pm)
+
+            my $select_patch_files = 0;
+            my $patchlistfiles = "";
+            my @keptpatchflags = ();
+            if (( $styles =~ /\bPATCH\b/ ) && ( $onefile->{'Patchfiles'} ) && ( $installer::globals::patch ))
+            {
+                $select_patch_files = 1; # special handling if a Patchlist is defined
+                $patchlistfiles = get_patch_file_list( $onefile->{'Patchfiles'} );
+                $infoline = "Patch file list defined at file: $onefile->{'Name'} :\n";
+                push( @installer::globals::logfileinfo, $infoline);
+                for ( my $k = 0; $k <= $#{$patchlistfiles}; $k++ )
+                {
+                    $infoline = "\"${$patchlistfiles}[$k]\"\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                }
+            }
+            if ( $onefile->{'Patchfiles'} ) { $onefile->{'Patchfiles'} = ""; } # Patch file list no longer required
 
             # creating directories
 
@@ -258,6 +297,36 @@ sub resolving_archive_flag
                             $newfile{'destination'} = $destination . $zipname;
                             $newfile{'sourcepath'} = $unzipdir . $zipname;
 
+                            if (( $use_internal_rights ) && ( ! $installer::globals::iswin ))
+                            {
+                                my $value = sprintf("%o", (stat($newfile{'sourcepath'}))[2]);
+                                $newfile{'UnixRights'} = substr($value, 3);
+                                $infoline = "Setting unix rights for \"$newfile{'sourcepath'}\" to \"$newfile{'UnixRights'}\"\n";
+                                push( @installer::globals::logfileinfo, $infoline);
+                            }
+
+                            if ( $select_patch_files )
+                            {
+                                # Is this file listed in the Patchfile list?
+                                # $zipname (filename including path in zip file has to be listed in patchfile list
+
+                                if ( ! installer::existence::exists_in_array($zipname,$patchlistfiles) )
+                                {
+                                    $newfile{'Styles'} =~ s/\bPATCH\b//;    # removing the flag PATCH
+                                    $newfile{'Styles'} =~ s/\,\s*\,/\,/;
+                                    $newfile{'Styles'} =~ s/\(\s*\,/\(/;
+                                    $newfile{'Styles'} =~ s/\,\s*\)/\)/;
+                                    # $infoline = "Removing PATCH flag from: $zipname\n";
+                                    # push( @installer::globals::logfileinfo, $infoline);
+                                }
+                                else
+                                {
+                                    # $infoline = "Keeping PATCH flag at: $zipname\n";
+                                    # push( @installer::globals::logfileinfo, $infoline);
+                                    push( @keptpatchflags, $zipname); # collecting all PATCH flags
+                                }
+                            }
+
                             if ( $rename_to_language )
                             {
                                 my $newzipname = put_language_into_name($zipname, $onelanguage);
@@ -286,6 +355,43 @@ sub resolving_archive_flag
 
                             if ( ! $repeat_unzip ) { push(@newallfilesarray, \%newfile); }
                         }
+                    }
+                }
+
+                # Comparing the content of @keptpatchflags and $patchlistfiles
+                # Do all files from the patch list have a PATCH flag ?
+                # @keptpatchflags contains only files included in $patchlistfiles. But are all
+                # files from $patchlistfiles included in @keptpatchflags?
+
+                if ( $select_patch_files )
+                {
+                    my $number = $#{$patchlistfiles} + 1;
+                    $infoline = "PATCHLIST: Number of files in patch list: $number\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                    $number = $#keptpatchflags + 1;
+                    $infoline = "PATCHLIST: Number of kept PATCH flags: $number\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+
+                    for ( my $k = 0; $k <= $#keptpatchflags; $k++ )
+                    {
+                        $infoline = "KEPT PATCH FLAGS: $keptpatchflags[$k]\n";
+                        push( @installer::globals::logfileinfo, $infoline);
+                    }
+
+                    my @warningfiles = ();
+
+                    for ( my $k = 0; $k <= $#{$patchlistfiles}; $k++ )
+                    {
+                        if ( ! installer::existence::exists_in_array(${$patchlistfiles}[$k],\@keptpatchflags) )
+                        {
+                            push(@warningfiles, ${$patchlistfiles}[$k]);
+                        }
+                    }
+
+                    for ( my $k = 0; $k <= $#warningfiles; $k++ )
+                    {
+                        $infoline = "WARNING: $warningfiles[$k] did not keep PATCH flag (does not exist in zip file)!\n";
+                        push( @installer::globals::logfileinfo, $infoline);
                     }
                 }
 
