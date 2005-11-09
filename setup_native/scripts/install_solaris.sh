@@ -153,11 +153,14 @@ then
     INSTALL_ROOT=`cd ${INSTALL_ROOT}; pwd`
   fi
 
-  INSTALL_DIR=${INSTALL_ROOT}`pkgparam -f ${INSTALL_ROOT}/var/sadm/pkg/*core01/pkginfo BASEDIR`
+  OFFICE_DIR=${INSTALL_ROOT}`pkgparam -f ${INSTALL_ROOT}/var/sadm/pkg/*core01/pkginfo BASEDIR 2>/dev/null`
 
   # restore original "bootstraprc" and "soffice" prior to patching
-  mv -f ${INSTALL_DIR}/program/bootstraprc.orig ${INSTALL_DIR}/program/bootstraprc
-  mv -f ${INSTALL_DIR}/program/soffice.orig ${INSTALL_DIR}/program/soffice
+  if [ "${OFFICE_DIR}" != "" ]
+  then
+    mv -f ${OFFICE_DIR}/program/bootstraprc.orig ${OFFICE_DIR}/program/bootstraprc
+    mv -f ${OFFICE_DIR}/program/soffice.orig ${OFFICE_DIR}/program/soffice
+  fi
 
   # copy INST_RELEASE file
   if [ ! -f ${INSTALL_ROOT}/var/sadm/system/admin/INST_RELEASE ]
@@ -167,20 +170,22 @@ then
   fi
 
   LD_PRELOAD_32=$GETUID_SO /usr/sbin/patchadd -R ${INSTALL_ROOT} -M ${PATCH_PATH} ${PATCH_LIST} 2>&1 | grep -v '/var/sadm/patch'
+
 else
 
-  # Create /usr directory required by co-packages like SUNWfreetype2
-  mkdir -m 0755 -p ${INSTALL_ROOT}/usr
+  # Create BASEDIR directories to avoid manual user interaction
+  for i in ${PKG_LIST}; do
+    mkdir -m 0755 -p ${INSTALL_ROOT}`pkgparam -d ${PACKAGE_PATH} $i BASEDIR` 2>/dev/null
+  done
 
   #
-  # Check/Create installation directory
+  # Determine office installation directory
   #
 
   for i in ${PKG_LIST}; do
     echo $i | grep core01 > /dev/null
     if [ $? = 0 ]; then
-      INSTALL_DIR=${INSTALL_ROOT}`pkgparam -d ${PACKAGE_PATH} $i BASEDIR`
-      mkdir -p ${INSTALL_DIR}
+      OFFICE_DIR=${INSTALL_ROOT}`pkgparam -d ${PACKAGE_PATH} $i BASEDIR`
     fi
   done
 
@@ -217,21 +222,25 @@ fi
 if [ "$LINK" = "yes" ]
 then
   echo
-  echo "Creating link from $INSTALL_DIR/program/soffice to $HOME/soffice"
+  echo "Creating link from $OFFICE_DIR/program/soffice to $HOME/soffice"
   rm -f $HOME/soffice 2>/dev/null
-  ln -s $INSTALL_DIR/program/soffice $HOME/soffice
+  ln -s $OFFICE_DIR/program/soffice $HOME/soffice
 fi
 
 # patch the "bootstraprc" to create a self-containing installation
-mv ${INSTALL_DIR}/program/bootstraprc ${INSTALL_DIR}/program/bootstraprc.orig
-sed 's/UserInstallation=$SYSUSERCONFIG.*/UserInstallation=$ORIGIN\/..\/UserInstallation/g' \
-${INSTALL_DIR}/program/bootstraprc.orig > ${INSTALL_DIR}/program/bootstraprc
+if [ "${OFFICE_DIR}" != "" ]; then
+  mv ${OFFICE_DIR}/program/bootstraprc ${OFFICE_DIR}/program/bootstraprc.orig
+  sed 's/UserInstallation=$SYSUSERCONFIG.*/UserInstallation=$ORIGIN\/..\/UserInstallation/g' \
+    ${OFFICE_DIR}/program/bootstraprc.orig > ${OFFICE_DIR}/program/bootstraprc
+fi
 
 # patch the LD_LIBRARY_PATH in the "soffice" script so that it finds a suitable libfreetype
-mv ${INSTALL_DIR}/program/soffice ${INSTALL_DIR}/program/soffice.orig
-sed 's| LD_LIBRARY_PATH=\"\$sd_prog\"| LD_LIBRARY_PATH=/usr/sfw/lib:"$sd_prog":"$sd_prog/../../../usr/sfw/lib"|' \
-${INSTALL_DIR}/program/soffice.orig > ${INSTALL_DIR}/program/soffice
-chmod a+x ${INSTALL_DIR}/program/soffice
+if [ "${OFFICE_DIR}" != "" ]; then
+  mv ${OFFICE_DIR}/program/soffice ${OFFICE_DIR}/program/soffice.orig
+  sed 's| LD_LIBRARY_PATH=\"\$sd_prog\"| LD_LIBRARY_PATH=/usr/sfw/lib:"$sd_prog":"$sd_prog/../../../usr/sfw/lib"|' \
+    ${OFFICE_DIR}/program/soffice.orig > ${OFFICE_DIR}/program/soffice
+  chmod a+x ${OFFICE_DIR}/program/soffice
+fi
 
 echo
 echo "Installation done ..."

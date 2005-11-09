@@ -86,7 +86,13 @@ fi
 #
 
 INSTALLDIR=$2
-RPM_DB_PATH=${INSTALLDIR}/.RPM_OFFICEDATABASE
+
+# Check for old style .RPM_OFFICEDATABASE first
+if [ -d ${INSTALLDIR}/.RPM_OFFICEDATABASE ]; then
+  RPM_DB_PATH=${INSTALLDIR}/.RPM_OFFICEDATABASE
+else
+  RPM_DB_PATH=${INSTALLDIR}/.RPM_DATABASE
+fi
 
 # Check for versionrc
 if [ -f ${INSTALLDIR}/program/versionrc ]; then VERSIONRC=versionrc; fi
@@ -117,6 +123,21 @@ p
         exit 2
       fi
     done
+  elif [ -d $RPM_DB_PATH ]
+  then
+    echo
+    echo "The following packages are already installed in $INSTALLDIR"
+    echo
+    rpm --dbpath `cd $RPM_DB_PATH; pwd` --query --all
+    echo
+    while [ "$UPDATE" != "yes" ]
+    do
+      read -a UPDATE -p "Do you want to continue with this installation (yes/no)? "
+      if [ "$UPDATE" = "no" ]
+      then
+        exit 2
+      fi
+    done
   else
     UPDATE="no"
   fi
@@ -129,7 +150,7 @@ fi
 if [ "$UPDATE" = "yes" ]
 then
   # restore original bootstraprc
-  mv -f ${INSTALLDIR}/program/bootstraprc.orig ${INSTALLDIR}/program/bootstraprc
+  mv -f ${INSTALLDIR}/program/bootstraprc.orig ${INSTALLDIR}/program/bootstraprc 2>/dev/null
 
   # the RPM_DB_PATH must be absolute
   if [ ! "${RPM_DB_PATH:0:1}" = "/" ]; then
@@ -193,9 +214,23 @@ then
   ln -sf $INSTALLDIR/program/soffice $HOME/soffice
 fi
 
+if [ "$UPDATE" = "yes" -a ! -f $INSTALLDIR/program/bootstraprc ]
+then
+  echo
+  echo "Update failed due to a bug in RPM, uninstalling .."
+  rpm --erase -v --nodeps --dbpath $RPM_DB_PATH `rpm --query --queryformat "%{NAME} " --package $RPMLIST $GNOMERPM --dbpath $RPM_DB_PATH`
+  echo
+  echo "Now re-installing new packages .."
+  echo
+  rpm --upgrade --nodeps --ignoresize -vh $RELOCATIONS --dbpath $RPM_DB_PATH $RPMLIST $GNOMERPM
+  echo
+fi
+
 # patch the "bootstraprc" to create a self-containing installation
-mv $INSTALLDIR/program/bootstraprc $INSTALLDIR/program/bootstraprc.orig
-sed 's/UserInstallation=$SYSUSERCONFIG.*/UserInstallation=$ORIGIN\/..\/UserInstallation/g' $INSTALLDIR/program/bootstraprc.orig > $INSTALLDIR/program/bootstraprc
+if [ -f $INSTALLDIR/program/bootstraprc ]; then
+  mv $INSTALLDIR/program/bootstraprc $INSTALLDIR/program/bootstraprc.orig
+  sed 's/UserInstallation=$SYSUSERCONFIG.*/UserInstallation=$ORIGIN\/..\/UserInstallation/g' $INSTALLDIR/program/bootstraprc.orig > $INSTALLDIR/program/bootstraprc
+fi
 
 echo
 echo "Installation done ..."
