@@ -4,9 +4,9 @@
 #
 #   $RCSfile: setupscript.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:11:36 $
+#   last change: $Author: rt $ $Date: 2005-11-09 09:10:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -164,6 +164,11 @@ sub add_lowercase_productname_setupscriptvariable
                 $value = $original;
                 $value =~ s/\s/\_/g;
                 $newline = "\%UNIXPRODUCTNAME " . lc($value) . "\n";
+                push(@{$variablesref} ,$newline);
+                $value = $original;
+                $value =~ s/\s/\_/g;
+                $value =~ s/\.//g;
+                $newline = "\%UNIXPRODUCTNAMEWITHOUTDOT " . lc($value) . "\n";
                 push(@{$variablesref} ,$newline);
             }
         }
