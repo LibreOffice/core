@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 16:00:20 $
+ *  last change: $Author: rt $ $Date: 2005-11-09 09:55:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -888,7 +888,7 @@ BOOL GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
                     if( pCell->GetNext() )
                     {
                         pCell = (const SwLayoutFrm*)pCell->GetNext();
-                        if ( pCell->Lower()->IsRowFrm() )
+                        if ( pCell->Lower() && pCell->Lower()->IsRowFrm() )
                             pCell = pCell->FirstCell();
                     }
                     else
@@ -959,7 +959,7 @@ BOOL GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
                         if( pCell->GetNext() )
                         {
                             pCell = (const SwLayoutFrm*)pCell->GetNext();
-                            if ( pCell->Lower()->IsRowFrm() )
+                            if ( pCell->Lower() && pCell->Lower()->IsRowFrm() )
                                 pCell = pCell->FirstCell();
                         }
                         else
@@ -1257,7 +1257,8 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                     if ( pCell->GetNext() )
                     {
                         pCell = (const SwLayoutFrm*)pCell->GetNext();
-                        if ( pCell->Lower()->IsRowFrm() )
+                        // --> FME 2005-11-03 #125288# Check if table cell is not empty
+                        if ( pCell->Lower() && pCell->Lower()->IsRowFrm() )
                             pCell = pCell->FirstCell();
                     }
                     else
