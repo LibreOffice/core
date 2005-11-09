@@ -4,9 +4,9 @@
  *
  *  $RCSfile: image.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:52:56 $
+ *  last change: $Author: rt $ $Date: 2005-11-09 13:28:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -232,13 +232,13 @@ namespace canvas
         bool fromVCLBitmap( ::BitmapEx& rBmpEx );
 
         template<class pixel_format>
-        void drawLinePolyPolygon( const ::basegfx::B2DPolyPolygon&   rPoly,
-                                  double                             fStrokeWidth,
-                                  const ::com::sun::star::rendering::ViewState&        viewState,
-                                  const ::com::sun::star::rendering::RenderState&      renderState );
+        void drawLinePolyPolygonImpl( const ::basegfx::B2DPolyPolygon&                  rPoly,
+                                      double                                            fStrokeWidth,
+                                      const ::com::sun::star::rendering::ViewState&     viewState,
+                                      const ::com::sun::star::rendering::RenderState&   renderState );
 
         template<class pixel_format,class span_gen_type>
-        ImageCachedPrimitiveSharedPtr fillTexturedPolyPolygon(
+        ImageCachedPrimitiveSharedPtr fillTexturedPolyPolygonImpl(
                                       const Image&                                   rTexture,
                                       const ::basegfx::B2DPolyPolygon&               rPolyPolygon,
                                       const ::basegfx::B2DHomMatrix&                 rOverallTransform,
@@ -246,20 +246,20 @@ namespace canvas
                                       const ::com::sun::star::rendering::Texture&    texture );
 
         template<class pixel_format>
-        void fillGradient( const ParametricPolyPolygon::Values& rValues,
-                                const ::com::sun::star::uno::Sequence< double >&       rUnoColor1,
-                                const ::com::sun::star::uno::Sequence< double >&       rUnoColor2,
-                                const ::basegfx::B2DPolyPolygon&     rPolyPolygon,
-                                const ::basegfx::B2DHomMatrix&       rOverallTransform,
-                                const ::com::sun::star::rendering::Texture&            texture );
+        void fillGradientImpl( const ParametricPolyPolygon::Values&             rValues,
+                               const ::com::sun::star::uno::Sequence< double >& rUnoColor1,
+                               const ::com::sun::star::uno::Sequence< double >& rUnoColor2,
+                               const ::basegfx::B2DPolyPolygon&                 rPolyPolygon,
+                               const ::basegfx::B2DHomMatrix&                   rOverallTransform,
+                               const ::com::sun::star::rendering::Texture&      texture );
 
         template<class pixel_format>
-        ImageCachedPrimitiveSharedPtr fillPolyPolygon(
+        ImageCachedPrimitiveSharedPtr fillPolyPolygonImpl(
             const ::basegfx::B2DPolyPolygon&                    rPolyPolygon,
             const ::com::sun::star::rendering::ViewState&       viewState,
             const ::com::sun::star::rendering::RenderState&     renderState );
 
-        template<class pixel_format> void implClear( sal_uInt8 a,
+        template<class pixel_format> void clearImpl( sal_uInt8 a,
                                                      sal_uInt8 r,
                                                      sal_uInt8 g,
                                                      sal_uInt8 b );

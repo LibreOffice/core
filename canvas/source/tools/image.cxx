@@ -4,9 +4,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:52:42 $
+ *  last change: $Author: rt $ $Date: 2005-11-09 13:27:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,8 +102,6 @@
 //////////////////////////////////////////////////////////////////////////////////
 // platform-dependend includes [wrapped into their own namepsaces]
 //////////////////////////////////////////////////////////////////////////////////
-
-#include <malloc.h>     // _alloca
 
 #if defined(WNT)
     namespace  win32
@@ -969,10 +967,10 @@ namespace canvas { namespace
 //////////////////////////////////////////////////////////////////////////////////
 
 template<class pixel_format>
-void Image::drawLinePolyPolygon( const ::basegfx::B2DPolyPolygon&   rPoly,
-                            double                             fStrokeWidth,
-                            const rendering::ViewState&        viewState,
-                            const rendering::RenderState&      renderState )
+void Image::drawLinePolyPolygonImpl( const ::basegfx::B2DPolyPolygon&   rPoly,
+                                     double                             fStrokeWidth,
+                                     const rendering::ViewState&        viewState,
+                                     const rendering::RenderState&      renderState )
 {
     ::basegfx::B2DPolyPolygon aPolyPolygon( rPoly );
     ARGB                      aRenderColor;
@@ -1087,10 +1085,10 @@ void Image::drawLinePolyPolygon( const ::basegfx::B2DPolyPolygon&   rPoly,
     switch(maDesc.eFormat)
     {
         case FMT_R8G8B8:
-            drawLinePolyPolygon<agg::pixfmt_rgb24>(rPoly,fStrokeWidth,viewState,renderState);
+            drawLinePolyPolygonImpl<agg::pixfmt_rgb24>(rPoly,fStrokeWidth,viewState,renderState);
             break;
         case FMT_A8R8G8B8:
-            drawLinePolyPolygon<agg::pixfmt_rgba32>(rPoly,fStrokeWidth,viewState,renderState);
+            drawLinePolyPolygonImpl<agg::pixfmt_rgba32>(rPoly,fStrokeWidth,viewState,renderState);
             break;
         default:
             OSL_ENSURE(false, "Unexpected pixel format");
@@ -1216,7 +1214,7 @@ class cachedPrimitiveFTPP : public ImageCachedPrimitive
 //////////////////////////////////////////////////////////////////////////////////
 
 template<class pixel_format,class span_gen_type>
-ImageCachedPrimitiveSharedPtr Image::fillTexturedPolyPolygon(
+ImageCachedPrimitiveSharedPtr Image::fillTexturedPolyPolygonImpl(
                                      const Image&                     rTexture,
                                      const ::basegfx::B2DPolyPolygon& rPolyPolygon,
                                      const ::basegfx::B2DHomMatrix&   rOverallTransform,
@@ -1430,39 +1428,43 @@ ImageCachedPrimitiveSharedPtr Image::fillTexturedPolyPolygon(
 
     if(nDest == FMT_R8G8B8 && nSource == FMT_R8G8B8)
     {
-        return fillTexturedPolyPolygon< agg::pixfmt_rgb24,
-                                 span_gen_type_rgb >( rTexture,
-                                                      rPolyPolygon,
-                                                      rOverallTransform,
-                                                      rViewTransform,
-                                                      texture );
+        return fillTexturedPolyPolygonImpl< agg::pixfmt_rgb24,
+                                            span_gen_type_rgb >(
+                                                rTexture,
+                                                rPolyPolygon,
+                                                rOverallTransform,
+                                                rViewTransform,
+                                                texture );
     }
     else if(nDest == FMT_R8G8B8 && nSource == FMT_A8R8G8B8)
     {
-        return fillTexturedPolyPolygon< agg::pixfmt_rgb24,
-                                 span_gen_type_rgba >( rTexture,
-                                                       rPolyPolygon,
-                                                       rOverallTransform,
-                                                       rViewTransform,
-                                                       texture );
+        return fillTexturedPolyPolygonImpl< agg::pixfmt_rgb24,
+                                            span_gen_type_rgba >(
+                                                rTexture,
+                                                rPolyPolygon,
+                                                rOverallTransform,
+                                                rViewTransform,
+                                                texture );
     }
     else if(nDest == FMT_A8R8G8B8 && nSource == FMT_R8G8B8)
     {
-        return fillTexturedPolyPolygon< agg::pixfmt_rgba32,
-                                 span_gen_type_rgb >( rTexture,
-                                                      rPolyPolygon,
-                                                      rOverallTransform,
-                                                      rViewTransform,
-                                                      texture );
+        return fillTexturedPolyPolygonImpl< agg::pixfmt_rgba32,
+                                            span_gen_type_rgb >(
+                                                rTexture,
+                                                rPolyPolygon,
+                                                rOverallTransform,
+                                                rViewTransform,
+                                                texture );
     }
     else if(nDest == FMT_A8R8G8B8 && nSource == FMT_A8R8G8B8)
     {
-        return fillTexturedPolyPolygon< agg::pixfmt_rgba32,
-                                 span_gen_type_rgba >( rTexture,
-                                                      rPolyPolygon,
-                                                      rOverallTransform,
-                                                      rViewTransform,
-                                                      texture );
+        return fillTexturedPolyPolygonImpl< agg::pixfmt_rgba32,
+                                            span_gen_type_rgba >(
+                                                rTexture,
+                                                rPolyPolygon,
+                                                rOverallTransform,
+                                                rViewTransform,
+                                                texture );
     }
     else
     {
@@ -1477,12 +1479,12 @@ ImageCachedPrimitiveSharedPtr Image::fillTexturedPolyPolygon(
 //////////////////////////////////////////////////////////////////////////////////
 
 template<class pixel_format>
-void Image::fillGradient( const ParametricPolyPolygon::Values& rValues,
-                          const uno::Sequence< double >&       rUnoColor1,
-                          const uno::Sequence< double >&       rUnoColor2,
-                          const ::basegfx::B2DPolyPolygon&     rPolyPolygon,
-                          const ::basegfx::B2DHomMatrix&       rOverallTransform,
-                          const rendering::Texture&            texture )
+void Image::fillGradientImpl( const ParametricPolyPolygon::Values& rValues,
+                              const uno::Sequence< double >&       rUnoColor1,
+                              const uno::Sequence< double >&       rUnoColor2,
+                              const ::basegfx::B2DPolyPolygon&     rPolyPolygon,
+                              const ::basegfx::B2DHomMatrix&       rOverallTransform,
+                              const rendering::Texture&            texture )
 {
     const ARGB aColor1(0xFFFFFFFF,
                        rUnoColor1);
@@ -1665,10 +1667,10 @@ void Image::fillGradient( const ParametricPolyPolygon::Values& rValues,
     switch(maDesc.eFormat)
     {
         case FMT_R8G8B8:
-            fillGradient<agg::pixfmt_rgb24>(rValues,rUnoColor1,rUnoColor2,rPolyPolygon,rOverallTransform,texture);
+            fillGradientImpl<agg::pixfmt_rgb24>(rValues,rUnoColor1,rUnoColor2,rPolyPolygon,rOverallTransform,texture);
             break;
         case FMT_A8R8G8B8:
-            fillGradient<agg::pixfmt_rgba32>(rValues,rUnoColor1,rUnoColor2,rPolyPolygon,rOverallTransform,texture);
+            fillGradientImpl<agg::pixfmt_rgba32>(rValues,rUnoColor1,rUnoColor2,rPolyPolygon,rOverallTransform,texture);
             break;
         default:
             OSL_ENSURE(false, "Unexpected pixel format");
@@ -1804,7 +1806,7 @@ Image::~Image()
 //////////////////////////////////////////////////////////////////////////////////
 
 template<class pixel_format>
-void Image::implClear( sal_uInt8 a,
+void Image::clearImpl( sal_uInt8 a,
                        sal_uInt8 r,
                        sal_uInt8 g,
                        sal_uInt8 b )
@@ -1827,9 +1829,9 @@ void Image::clear( sal_uInt8 a,
     switch(maDesc.eFormat)
     {
         case FMT_R8G8B8:
-            return implClear<agg::pixfmt_rgb24>(a,r,g,b);
+            return clearImpl<agg::pixfmt_rgb24>(a,r,g,b);
         case FMT_A8R8G8B8:
-            return implClear<agg::pixfmt_rgba32>(a,r,g,b);
+            return clearImpl<agg::pixfmt_rgba32>(a,r,g,b);
         default:
             OSL_ENSURE(false, "Unexpected pixel format");
             break;
@@ -1852,10 +1854,10 @@ void Image::fillB2DPolyPolygon(
     switch(maDesc.eFormat)
     {
         case FMT_R8G8B8:
-            fillPolyPolygon<agg::pixfmt_rgb24>(rPolyPolygon,viewState,renderState);
+            fillPolyPolygonImpl<agg::pixfmt_rgb24>(rPolyPolygon,viewState,renderState);
             break;
         case FMT_A8R8G8B8:
-            fillPolyPolygon<agg::pixfmt_rgba32>(rPolyPolygon,viewState,renderState);
+            fillPolyPolygonImpl<agg::pixfmt_rgba32>(rPolyPolygon,viewState,renderState);
             break;
         default:
             OSL_ENSURE(false, "Unexpected pixel format");
@@ -2067,7 +2069,7 @@ ImageCachedPrimitiveSharedPtr Image::strokeTextureMappedPolyPolygon(
 //////////////////////////////////////////////////////////////////////////////////
 
 template<class pixel_format>
-ImageCachedPrimitiveSharedPtr Image::fillPolyPolygon(
+ImageCachedPrimitiveSharedPtr Image::fillPolyPolygonImpl(
             const ::basegfx::B2DPolyPolygon&                    rPolyPolygon,
             const rendering::ViewState&                         viewState,
             const rendering::RenderState&                       renderState )
@@ -2172,9 +2174,9 @@ ImageCachedPrimitiveSharedPtr Image::fillPolyPolygon(
     switch(maDesc.eFormat)
     {
         case FMT_R8G8B8:
-            return fillPolyPolygon<agg::pixfmt_rgb24>(aPoly,viewState,renderState);
+            return fillPolyPolygonImpl<agg::pixfmt_rgb24>(aPoly,viewState,renderState);
         case FMT_A8R8G8B8:
-            return fillPolyPolygon<agg::pixfmt_rgba32>(aPoly,viewState,renderState);
+            return fillPolyPolygonImpl<agg::pixfmt_rgba32>(aPoly,viewState,renderState);
         default:
             OSL_ENSURE(false, "Unexpected pixel format");
             break;
