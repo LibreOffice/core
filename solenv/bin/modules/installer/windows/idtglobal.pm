@@ -4,9 +4,9 @@
 #
 #   $RCSfile: idtglobal.pm,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:17:26 $
+#   last change: $Author: rt $ $Date: 2005-11-09 09:11:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,47 @@ sub get_next_free_number
     return $counter
 }
 
+############################################
+# Getting the next free number, that
+# can be added.
+# Sample: 01-44-~1.DAT, 01-44-~2.DAT, ...
+############################################
+
+sub get_next_free_number_with_hash
+{
+    my ($name, $shortnamesref) = @_;
+
+    my $counter = 0;
+    my $dontsave = 0;
+    my $saved = 0;
+    my $alreadyexists;
+    my ($newname, $shortname);
+
+    do
+    {
+        $alreadyexists = 0;
+        $counter++;
+        $newname = $name . $counter;
+        $newname = uc($newname);    # case insensitive, always upper case
+        if ( exists($shortnamesref->{$newname}) ) { $alreadyexists = 1; }
+    }
+    until (!($alreadyexists));
+
+    if (( $counter > 9 ) && ( length($name) > 6 ))
+    {
+        $dontsave = 1;
+    }
+
+    if (!($dontsave))
+    {
+        # push(@{$shortnamesref}, $newname);    # adding the new shortname to the array of shortnames
+        $shortnamesref->{$newname} = 1; # adding the new shortname to the array of shortnames, always uppercase
+        $saved = 1;
+    }
+
+    return ( $counter, $saved )
+}
+
 #########################################
 # 8.3 for filenames and directories
 #########################################
@@ -184,6 +225,105 @@ sub make_eight_three_conform
                 $name = substr($name, 0, 5);    # name, offset, length
                 $name = $name . "\~";
                 $number = get_next_free_number($name, $shortnamesref);
+            }
+
+            $name = $name . "$number";
+            $changed = 1;
+            if ( $pattern eq "dir" ) { $name =~ s/\./\_/g; }    # in directories replacing "." with "_"
+        }
+
+        $conformstring = $name;
+
+        if ( $changed ) { $conformstring = uc($name); }
+    }
+
+    return $conformstring;
+}
+
+#########################################
+# 8.3 for filenames and directories
+# $shortnamesref is a hash in this case
+# -> performance reasons
+#########################################
+
+sub make_eight_three_conform_with_hash
+{
+    my ($inputstring, $pattern, $shortnamesref) = @_;
+
+    # all shortnames are collected in $shortnamesref, because of uniqueness (a hash!)
+
+    my ($name, $namelength, $number);
+    my $conformstring = "";
+    my $changed = 0;
+    my $saved;
+
+    if (( $inputstring =~ /^\s*(.*?)\.(.*?)\s*$/ ) && ( $pattern eq "file" ))   # files with a dot
+    {
+        $name = $1;
+        my $extension = $2;
+
+        $namelength = length($name);
+        my $extensionlength = length($extension);
+
+        if ( $extensionlength > 3 )
+        {
+            # simply taking the first three letters
+            $extension = substr($extension, 0, 3);  # name, offset, length
+        }
+
+        # Attention: readme.html -> README~1.HTM
+
+        if (( $namelength > 8 ) || ( $extensionlength > 3 ))
+        {
+            # taking the first six letters, if filename is longer than 6 characters
+            if ( $namelength > 6 )
+            {
+                $name = substr($name, 0, 6);    # name, offset, length
+            }
+
+            $name = $name . "\~";
+
+            ($number, $saved) = get_next_free_number_with_hash($name, $shortnamesref);
+
+            # if $number>9 the new name would be "abcdef~10.xyz", which is 9+3, and therefore not allowed
+
+            if ( ! $saved )
+            {
+                $name = substr($name, 0, 5);    # name, offset, length
+                $name = $name . "\~";
+                ($number, $saved) = get_next_free_number_with_hash($name, $shortnamesref);
+                if ( ! $saved ) { installer::exiter::exit_program("ERROR: Could not set 8+3 conform name for $inputstring !", "make_eight_three_conform_with_hash"); }
+            }
+
+            $name = $name . "$number";
+
+            $changed = 1;
+        }
+
+        $conformstring = $name . "\." . $extension;
+
+        if ( $changed ) { $conformstring= uc($conformstring); }
+    }
+    else        # no dot in filename or directory (also used for shortcuts)
+    {
+        $name = $inputstring;
+        $namelength = length($name);
+
+        if ( $namelength > 8 )
+        {
+            # taking the first six letters
+            $name = substr($name, 0, 6);    # name, offset, length
+            $name = $name . "\~";
+            ( $number, $saved ) = get_next_free_number_with_hash($name, $shortnamesref);
+
+            # if $number>9 the new name would be "abcdef~10.xyz", which is 9+3, and therefore not allowed
+
+            if ( ! $saved )
+            {
+                $name = substr($name, 0, 5);    # name, offset, length
+                $name = $name . "\~";
+                ( $number, $saved ) = get_next_free_number_with_hash($name, $shortnamesref);
+                if ( ! $saved ) { installer::exiter::exit_program("ERROR: Could not set 8+3 conform name for $inputstring !", "make_eight_three_conform_with_hash"); }
             }
 
             $name = $name . "$number";
@@ -1361,7 +1501,18 @@ sub include_subdir_into_componenttable
 
 sub add_childprojects
 {
-    my ($customactiontable, $installuitable, $featuretable, $directorytable, $componenttable, $customactiontablename, $installuitablename, $featuretablename, $directorytablename, $componenttablename, $filesref, $allvariables) = @_;
+    my ($languageidtdir, $filesref, $allvariables) = @_;
+
+    my $customactiontablename = $languageidtdir . $installer::globals::separator . "CustomAc.idt";
+    my $customactiontable = installer::files::read_file($customactiontablename);
+    my $installuitablename = $languageidtdir . $installer::globals::separator . "InstallU.idt";
+    my $installuitable = installer::files::read_file($installuitablename);
+    my $featuretablename = $languageidtdir . $installer::globals::separator . "Feature.idt";
+    my $featuretable = installer::files::read_file($featuretablename);
+    my $directorytablename = $languageidtdir . $installer::globals::separator . "Director.idt";
+    my $directorytable = installer::files::read_file($directorytablename);
+    my $componenttablename = $languageidtdir . $installer::globals::separator . "Componen.idt";
+    my $componenttable = installer::files::read_file($componenttablename);
 
     my $infoline = "";
     my $line = "";
@@ -1430,7 +1581,7 @@ sub add_childprojects
 
     if ( $allvariables->{'ADAPRODUCT'} )
     {
-        $line = "InstallAdabas\t98\tSystemFolder\t$installer::globals::adafile->{'Subdir'}\\$installer::globals::adafile->{'Name'} /S\n";
+        $line = "InstallAdabas\t98\tSystemFolder\t[SourceDir]$installer::globals::adafile->{'Subdir'}\\$installer::globals::adafile->{'Name'} /S\n";
         push(@{$customactiontable} ,$line);
         installer::remover::remove_leading_and_ending_whitespaces(\$line);
         $infoline = "Added $line into table $customactiontablename\n";
@@ -1439,7 +1590,7 @@ sub add_childprojects
 
     if ( $allvariables->{'JAVAPRODUCT'} )
     {
-        $line = "InstallJava\t98\tSystemFolder\t$installer::globals::javafile->{'Subdir'}\\$installer::globals::javafile->{'Name'} \/s \/v\"\/qr REBOOT=Suppress\"\n";
+        $line = "InstallJava\t98\tSystemFolder\t[SourceDir]$installer::globals::javafile->{'Subdir'}\\$installer::globals::javafile->{'Name'} \/s \/v\"\/qr REBOOT=Suppress\"\n";
         push(@{$customactiontable} ,$line);
         installer::remover::remove_leading_and_ending_whitespaces(\$line);
         $infoline = "Added $line into table $customactiontablename\n";
@@ -1521,6 +1672,11 @@ sub add_childprojects
     # gm_o_adabas gm_optional Adabas Description 2 200
     # gm_o_java gm_optional Java 1.4.2 Description 2 200
 
+    installer::files::save_file($customactiontablename, $customactiontable);
+    installer::files::save_file($installuitablename, $installuitable);
+    installer::files::save_file($featuretablename, $featuretable);
+    installer::files::save_file($directorytablename, $directorytable);
+    installer::files::save_file($componenttablename, $componenttable);
 }
 
 ##################################################################
