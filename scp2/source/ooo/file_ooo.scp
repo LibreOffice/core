@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:01:06 $
+ *  last change: $Author: rt $ $Date: 2005-11-09 09:46:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1830,7 +1830,6 @@ File gid_File_Registry_Spool_Oo_Common_Ctl_Xcu
     Name (km) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
     Name (gu-IN) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
     Name (or) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
-    Name (lo) = "/registry/spool/org/openoffice/Office/Common-ctl.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_Writer_Cjk_Xcu
@@ -1887,73 +1886,36 @@ File gid_File_Share_Config_Sofficecfg_uiconfig_Zip
     Styles = (ARCHIVE,PATCH);
     Dir = gid_Dir_Share_Config_Sofficecfg;
     Name = "uiconfig.zip";
+    Patchfiles = ("modules/dbbrowser/menubar/menubar.xml",
+                  "modules/scalc/menubar/menubar.xml",
+                  "modules/sglobal/accelerator/de/default.xml",
+                  "modules/sglobal/accelerator/en-GB/default.xml",
+                  "modules/sglobal/accelerator/en-US/default.xml",
+                  "modules/sglobal/accelerator/es/default.xml",
+                  "modules/sglobal/accelerator/fr/default.xml",
+                  "modules/sweb/accelerator/de/default.xml",
+                  "modules/sweb/accelerator/en-GB/default.xml",
+                  "modules/sweb/accelerator/en-US/default.xml",
+                  "modules/sweb/accelerator/es/default.xml",
+                  "modules/sweb/accelerator/fr/default.xml",
+                  "modules/swriter/accelerator/de/default.xml",
+                  "modules/swriter/accelerator/en-GB/default.xml",
+                  "modules/swriter/accelerator/en-US/default.xml",
+                  "modules/swriter/accelerator/es/default.xml",
+                  "modules/swriter/accelerator/fr/default.xml",
+                  "modules/simpress/accelerator/de/default.xml",
+                  "modules/simpress/accelerator/en-GB/default.xml",
+                  "modules/simpress/accelerator/en-US/default.xml",
+                  "modules/simpress/accelerator/es/default.xml",
+                  "modules/simpress/accelerator/fr/default.xml",
+                  "modules/simpress/menubar/menubar.xml",                  
+                  "modules/sdraw/accelerator/de/default.xml",
+                  "modules/sdraw/accelerator/en-GB/default.xml",
+                  "modules/sdraw/accelerator/en-US/default.xml",
+                  "modules/sdraw/accelerator/es/default.xml",
+                  "modules/sdraw/accelerator/fr/default.xml",
+                  "modules/sdraw/menubar/menubar.xml");
 End
-
-/*
-File gid_File_Share_Config_Sofficecfg_Basicide_Menubar_Xml
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Config_Sofficecfg_Basicide_Menubar;
-    Name = "/uiconfig/basicide/menubar/menubar.xml";
-End
-
-
-File gid_File_Share_Config_Sofficecfg_Bibliography_Menubar_Xml
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Config_Sofficecfg_Sbibliography_Menubar;
-    Name = "/uiconfig/sbibliography/menubar/menubar.xml";
-End
-
-File gid_File_Share_Config_Sofficecfg_Dbuquery_Menubar_Xml
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Config_Sofficecfg_Dbquery_Menubar;
-    Name = "/uiconfig/dbquery/menubar/menubar.xml";
-End
-
-File gid_File_Share_Config_Sofficecfg_Dbubrowser_Menubar_Xml
-    TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
-    Dir = gid_Dir_Share_Config_Sofficecfg_Dbbrowser_Menubar;
-    Name = "/uiconfig/dbbrowser/menubar/menubar.xml";
-End
-
-File gid_File_Share_Config_Sofficecfg_Dbuapp_Menubar_Xml
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Config_Sofficecfg_Dbapp_Menubar;
-    Name = "/uiconfig/dbapp/menubar/menubar.xml";
-End
-
-File gid_File_Share_Config_Sofficecfg_Dburelation_Menubar_Xml
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Config_Sofficecfg_Dbrelation_Menubar;
-    Name = "/uiconfig/dbrelation/menubar/menubar.xml";
-End
-
-File gid_File_Share_Config_Sofficecfg_Dbutable_Menubar_Xml
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Config_Sofficecfg_Dbtable_Menubar;
-    Name = "/uiconfig/dbtable/menubar/menubar.xml";
-End
-
-File gid_File_Share_Config_Sofficecfg_Startmodule_Menubar_Xml
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Config_Sofficecfg_Startmodule_Menubar;
-    Name = "/uiconfig/startmodule/menubar/menubar.xml";
-End
-
-File gid_File_Share_Config_Sofficecfg_Chart_Menubar_Xml
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Config_Sofficecfg_Schart_Menubar;
-    Name = "/uiconfig/schart/menubar/menubar.xml";
-End
-*/
 
 #ifdef WNT
 
