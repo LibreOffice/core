@@ -4,9 +4,9 @@
 #
 #   $RCSfile: systemactions.pm,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-28 14:42:12 $
+#   last change: $Author: rt $ $Date: 2005-11-09 09:10:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -137,7 +137,7 @@ sub create_directories
 
     my $path = "";
 
-    if (( $newdirectory eq "zipfiles" ) || ( $newdirectory =~ /rdb\s*$/ ))  # special handling for zip files and services file because of performance reasons
+    if (( $newdirectory eq "zip" ) || ( $newdirectory =~ /rdb\s*$/ ))   # special handling for zip files and services file because of performance reasons
     {
         if ( $installer::globals::temppathdefined ) { $path = $installer::globals::temppath; }
         else { $path = $installer::globals::unpackpath; }
