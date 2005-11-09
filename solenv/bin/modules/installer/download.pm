@@ -4,9 +4,9 @@
 #
 #   $RCSfile: download.pm,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-28 13:12:28 $
+#   last change: $Author: rt $ $Date: 2005-11-09 09:09:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1007,6 +1007,10 @@ sub replace_variables
     foreach $key (keys %{$variableshashref})
     {
         my $value = $variableshashref->{$key};
+
+        # special handling for PRODUCTVERSION, if $allvariables->{'POSTVERSIONEXTENSION'}
+        if (( $key eq "PRODUCTVERSION" ) && ( $variableshashref->{'POSTVERSIONEXTENSION'} )) { $value = $value . " " . $variableshashref->{'POSTVERSIONEXTENSION'}; }
+
         replace_one_variable_in_translationfile($translationfile, $value, $key);
     }
 }
