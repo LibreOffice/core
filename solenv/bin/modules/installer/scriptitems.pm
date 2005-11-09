@@ -4,9 +4,9 @@
 #
 #   $RCSfile: scriptitems.pm,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-28 13:15:09 $
+#   last change: $Author: rt $ $Date: 2005-11-09 09:10:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1354,12 +1354,49 @@ sub remove_patchonlyfiles_from_Installset
 }
 
 ############################################################################
-# FAKE: Some files cotain a $ in their name. epm conflicts with such files.
-# Quick solution: Renaming this files, converting "$" to "_"
-# Still a ToDo ! :-)
+# Removing all files with flag TAB_ONLY from installation set.
+# This function is not called during tab creation.
 ############################################################################
 
-sub rename_illegal_filenames
+sub remove_tabonlyfiles_from_Installset
+{
+    my ($itemsarrayref) = @_;
+
+    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::remove_tabonlyfiles_from_Installset : $#{$itemsarrayref}"); }
+
+    my $infoline;
+
+    my @newitemsarray = ();
+
+    for ( my $i = 0; $i <= $#{$itemsarrayref}; $i++ )
+    {
+        my $oneitem = ${$itemsarrayref}[$i];
+        my $styles = "";
+        if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
+
+        if ( $styles =~ /\bTAB_ONLY\b/ )
+        {
+            $infoline = "Removing tab only file $oneitem->{'gid'} from the installation set.\n";
+            push( @installer::globals::globallogfileinfo, $infoline);
+
+            next;
+        }
+
+        push(@newitemsarray, $oneitem);
+    }
+
+    $infoline = "\n";
+    push( @installer::globals::globallogfileinfo, $infoline);
+
+    return \@newitemsarray;
+}
+
+############################################################################
+# Some files cotain a $ in their name. epm conflicts with such files.
+# Solution: Renaming this files, converting "$" to "$$"
+############################################################################
+
+sub quoting_illegal_filenames
 {
     my ($filesarrayref) = @_;
 
@@ -1379,26 +1416,22 @@ sub rename_illegal_filenames
             my $sourcepath = $onefile->{'sourcepath'};
             my $destpath = $onefile->{'destination'};
 
-            $filename =~ s/\$/\_/g;
-            $destpath =~ s/\$/\_/g;
-            my $oldsourcepath = $sourcepath;
-            $sourcepath =~ s/\$/\_/g;
+            # sourcepath and destination have to be quoted for epm list file
 
-            my $infoline = "ATTENTION: Files: Renaming $onefile->{'Name'} to $filename\n";
+            # $filename =~ s/\$/\$\$/g;
+            $destpath =~ s/\$/\$\$/g;
+            $sourcepath =~ s/\$/\$\$/g;
+
+            # my $infoline = "ATTENTION: Files: Renaming $onefile->{'Name'} to $filename\n";
+            # push( @installer::globals::logfileinfo, $infoline);
+            my $infoline = "ATTENTION: Files: Quoting sourcepath $onefile->{'sourcepath'} to $sourcepath\n";
             push( @installer::globals::logfileinfo, $infoline);
-            $infoline = "ATTENTION: Files: Renaming $onefile->{'sourcepath'} to $sourcepath\n";
-            push( @installer::globals::logfileinfo, $infoline);
-            $infoline = "ATTENTION: Files: Renaming $onefile->{'destination'} to $destpath\n";
+            $infoline = "ATTENTION: Files: Quoting destination path $onefile->{'destination'} to $destpath\n";
             push( @installer::globals::logfileinfo, $infoline);
 
-            $onefile->{'Name'} = $filename;
+            # $onefile->{'Name'} = $filename;
             $onefile->{'sourcepath'} = $sourcepath;
             $onefile->{'destination'} = $destpath;
-
-            if (! -f $sourcepath)
-            {
-                installer::systemactions::copy_one_file($oldsourcepath, $sourcepath);
-            }
         }
     }
 }
