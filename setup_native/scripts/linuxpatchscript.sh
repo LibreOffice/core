@@ -15,7 +15,7 @@ RPMNAME=`rpm -qa | grep PRODUCTNAMEPLACEHOLDER-core01`
 
 if [ "x$RPMNAME" != "x" ]
 then
-  PRODUCTINSTALLLOCATION="`rpm -ql $RPMNAME | head -n 1`"
+  PRODUCTINSTALLLOCATION="`rpm --query --queryformat "%{INSTALLPREFIX}" $RPMNAME`"
 else
   echo "PRODUCTNAMEPLACEHOLDER is not installed"
   exit 1
