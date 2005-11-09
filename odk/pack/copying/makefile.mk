@@ -1,35 +1,62 @@
 #*************************************************************************
 #
-#   OpenOffice.org - a multi-platform office productivity suite
-#
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.74 $
+#   $Revision: 1.75 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 20:17:08 $
+#   last change: $Author: rt $ $Date: 2005-11-09 09:36:32 $
 #
-#   The Contents of this file are made available subject to
-#   the terms of GNU Lesser General Public License Version 2.1.
+#   The Contents of this file are made available subject to the terms of
+#   either of the following licenses
+#
+#          - GNU Lesser General Public License Version 2.1
+#          - Sun Industry Standards Source License Version 1.1
+#
+#   Sun Microsystems Inc., October, 2000
+#
+#   GNU Lesser General Public License Version 2.1
+#   =============================================
+#   Copyright 2000 by Sun Microsystems, Inc.
+#   901 San Antonio Road, Palo Alto, CA 94303, USA
+#
+#   This library is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU Lesser General Public
+#   License version 2.1, as published by the Free Software Foundation.
+#
+#   This library is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#   Lesser General Public License for more details.
+#
+#   You should have received a copy of the GNU Lesser General Public
+#   License along with this library; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#   MA  02111-1307  USA
 #
 #
-#     GNU Lesser General Public License Version 2.1
-#     =============================================
-#     Copyright 2005 by Sun Microsystems, Inc.
-#     901 San Antonio Road, Palo Alto, CA 94303, USA
+#   Sun Industry Standards Source License Version 1.1
+#   =================================================
+#   The contents of this file are subject to the Sun Industry Standards
+#   Source License Version 1.1 (the "License"); You may not use this file
+#   except in compliance with the License. You may obtain a copy of the
+#   License at http://www.openoffice.org/license.html.
 #
-#     This library is free software; you can redistribute it and/or
-#     modify it under the terms of the GNU Lesser General Public
-#     License version 2.1, as published by the Free Software Foundation.
+#   Software provided under this License is provided on an "AS IS" basis,
+#   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+#   WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+#   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+#   See the License for the specific provisions governing your rights and
+#   obligations concerning the Software.
 #
-#     This library is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-#     Lesser General Public License for more details.
+#   The Initial Developer of the Original Code is: Sun Microsystems, Inc.
 #
-#     You should have received a copy of the GNU Lesser General Public
-#     License along with this library; if not, write to the Free Software
-#     Foundation, Inc., 59 Temple Place, Suite 330, Boston,
-#     MA  02111-1307  USA
+#   Copyright: 2000 by Sun Microsystems, Inc.
+#
+#   All Rights Reserved.
+#
+#   Contributor(s): _______________________________________
+#
+#
 #
 #*************************************************************************
 
@@ -142,117 +169,54 @@ SETTINGSLIST+=$(DESTDIRSETTINGS)$/component.uno.def
 SETTINGSLIST+=$(DESTDIRSETTINGS)$/component.uno.map
 .ENDIF
 
-DOCUSTUDIO4INTEGRATIONHTMLFILES= \
-    $(DESTDIRDOCU)$/DevStudioWizards$/CalcAddinWizard.html \
-    $(DESTDIRDOCU)$/DevStudioWizards$/DeployingComponents.html \
-    $(DESTDIRDOCU)$/DevStudioWizards$/IDLWizard.html \
-    $(DESTDIRDOCU)$/DevStudioWizards$/UNOComponentWizard.html \
-    $(DESTDIRDOCU)$/DevStudioWizards$/wizards.html
-
-DOCUSTUDIO4INTEGRATIONGRAPHICSFILES= \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/AddInsDescription.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/ChooseIDL.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/DesignIDL.jpg \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/ExecuteAntScript.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/GeneratedJavaCalcAddins.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/InterfacesToImplementCalcAddins.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/InterfacesToImplementCalcAddinsExtended.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/MountWorkingDirectory.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/NewObjectName.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/NewOfficeIDL.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/NewOfficeObject.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/OutputWindowBuild.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/ReturnCommand.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/SelectModule.jpg \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/ServiceSetupPanelCalcAddins.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/ServiceSetupPanelCalcAddinsExtended.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/mount_directory.jpg \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/office01.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/office02.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/office03.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/office04.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/office05.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/office06.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/office07.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/office08.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/office09.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot10.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot11.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot12.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot13.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot14.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot15.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot16b.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot17b.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot18b.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot20b.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot21.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot22.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot23.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot24.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot25.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot26.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot27b.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot3.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot32b.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot33b.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot34b.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot35b.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot42b.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot43b.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot8.png \
-    $(DESTDIRDOCU)$/DevStudioWizards$/images$/snapshot9.png
 
 DOCUHTMLFILES+= \
-    $(DESTDIR)$/index.html \
-    $(DESTDIRDOCU)$/tools.html \
-    $(DESTDIRDOCU)$/notsupported.html \
-    $(DESTDIRDOCU)$/DevelopersGuide_intro.html \
-    $(DESTDIRDOCU)$/install.html \
-    $(DESTDIRDOCU)$/sdk_styles.css \
-    $(DESTDIREXAMPLES)$/examples.html \
-    $(DESTDIREXAMPLES)$/DevelopersGuide$/examples.html
-#	$(DOCUSTUDIO4INTEGRATIONHTMLFILES) \
+    $(DESTDIR2)$/index.html \
+    $(DESTDIRDOCU2)$/tools.html \
+    $(DESTDIRDOCU2)$/notsupported.html \
+    $(DESTDIRDOCU2)$/DevelopersGuide_intro.html \
+    $(DESTDIRDOCU2)$/install.html \
+    $(DESTDIREXAMPLES2)$/examples.html \
+    $(DESTDIREXAMPLES2)$/DevelopersGuide$/examples.html
 
-DOCUFILES+= \
-    $(DOCUHTMLFILES) \
+DOCUFILES= \
     $(DESTDIRDOCUIMAGES)$/nada.gif \
-    $(DESTDIRDOCUIMAGES)$/arrow-1.gif \
     $(DESTDIRDOCUIMAGES)$/arrow-2.gif \
-    $(DESTDIRDOCUIMAGES)$/arrow-3.gif \
-    $(DESTDIRDOCUIMAGES)$/bg_table.gif \
-    $(DESTDIRDOCUIMAGES)$/bg_table2.gif \
-    $(DESTDIRDOCUIMAGES)$/bg_table3.gif \
     $(DESTDIRDOCUIMAGES)$/bluball.gif \
-    $(DESTDIRDOCUIMAGES)$/nada.gif \
-    $(DESTDIRDOCUIMAGES)$/nav_down.png \
-    $(DESTDIRDOCUIMAGES)$/nav_home.png \
-    $(DESTDIRDOCUIMAGES)$/nav_left.png \
-    $(DESTDIRDOCUIMAGES)$/nav_right.png \
-    $(DESTDIRDOCUIMAGES)$/nav_up.png \
-    $(DESTDIRDOCUIMAGES)$/sdk_head-1.gif \
-    $(DESTDIRDOCUIMAGES)$/sdk_head-2.gif \
-    $(DESTDIRDOCUIMAGES)$/sdk_head-3.gif \
-    $(DESTDIRDOCUIMAGES)$/sdk_line-1.gif \
-    $(DESTDIRDOCUIMAGES)$/sdk_line-2.gif \
     $(DESTDIRDOCUIMAGES)$/so-main-app_32.png \
     $(DESTDIRDOCUIMAGES)$/ooo-main-app_32.png
 
-#	$(DOCUSTUDIO4INTEGRATIONGRAPHICSFILES) \
+DOCUFILES_OO= \
+    $(DOCUHTMLFILES) \
+    $(DESTDIRDOCUIMAGES2)$/arrow-1.gif \
+    $(DESTDIRDOCUIMAGES2)$/arrow-3.gif \
+    $(DESTDIRDOCUIMAGES2)$/bg_table.gif \
+    $(DESTDIRDOCUIMAGES2)$/bg_table2.gif \
+    $(DESTDIRDOCUIMAGES2)$/bg_table3.gif \
+    $(DESTDIRDOCUIMAGES2)$/nav_down.png \
+    $(DESTDIRDOCUIMAGES2)$/nav_home.png \
+    $(DESTDIRDOCUIMAGES2)$/nav_left.png \
+    $(DESTDIRDOCUIMAGES2)$/nav_right.png \
+    $(DESTDIRDOCUIMAGES2)$/nav_up.png \
+    $(DESTDIRDOCUIMAGES2)$/sdk_head-1.gif \
+    $(DESTDIRDOCUIMAGES2)$/sdk_head-2.gif \
+    $(DESTDIRDOCUIMAGES2)$/sdk_head-3.gif \
+    $(DESTDIRDOCUIMAGES2)$/sdk_line-1.gif \
+    $(DESTDIRDOCUIMAGES2)$/sdk_line-2.gif
 
 .IF "$(GUI)"=="UNX"
 INSTALLSCRIPT= \
     $(DESTDIR)$/config.guess \
     $(DESTDIR)$/config.sub \
-    $(DESTDIR)$/configure \
     $(DESTDIR)$/configure.pl \
     $(DESTDIR)$/setsdkenv_unix \
     $(DESTDIR)$/setsdkenv_unix.sh.in \
     $(DESTDIR)$/setsdkenv_unix.csh.in
 .ELSE
 INSTALLSCRIPT= \
-    $(DESTDIR)$/configureWindows.bat \
     $(DESTDIR)$/setsdkenv_windows.bat \
+    $(DESTDIR)$/setsdkenv_windows.template \
+    $(DESTDIR)$/setsdkname.bat \
     $(DESTDIR)$/cfgWin.js
 .ENDIF
 
@@ -268,7 +232,6 @@ DIR_FILE_LIST=\
     $(DESTCLASSESLIST) \
     $(DESTDIRJAR)$/win$/unowinreg.dll \
     $(DESTDIRDOCU)$/common$/spec$/xml_format$/xml_specification.pdf
-#	$(DESTDIRCLASSES)$/oosupport.nbm \
 
 DIR_DIRECTORY_LIST=$(uniq $(DIR_FILE_LIST:d))
 DIR_CREATE_FLAG=$(MISC)$/copying_dirs_created.txt
