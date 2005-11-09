@@ -1,5 +1,7 @@
 ..\%__SRC%\bin\odk*.zip %_DEST%\bin%_EXT%\odk*.zip
-..\%__SRC%\bin\odk*.tar.gz %_DEST%\bin%_EXT%\odk*.tar.gz
+..\%__SRC%\bin\odk_oo.zip %_DEST%\bin%_EXT%\odk_oo.zip
+..\%__SRC%\bin\odkidl.zip %_DEST%\bin%_EXT%\odkidl.zip
 
 ..\%__SRC%\bin\uno_loader_classes.zip %_DEST%\bin%_EXT%\uno_loader_classes.zip
 
+..\%__SRC%\bin\odkexamples.zip %COMMON_DEST%\bin%_EXT%\odkexamples.zip
