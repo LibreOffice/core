@@ -4,9 +4,9 @@
 #
 #   $RCSfile: files.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-14 08:03:11 $
+#   last change: $Author: rt $ $Date: 2005-11-09 09:12:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
