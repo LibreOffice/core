@@ -1,21 +1,51 @@
 #! /bin/sh
 
-SDKDIRECTORY=`dirname $0`
+CURRENTDIR=`/bin/pwd`
+TMPDIR=`dirname $0`
+SDKDIRECTORY=`(cd $TMPDIR && pwd && cd $CURRENTDIR) | head -n 1`
+OO_SDK_NAME=`basename $SDKDIRECTORY`
+
+if [ "$1" = "--force-configure" ]
+then
+    if [ -r $HOME/$OO_SDK_NAME/setsdkenv_unix.sh ]
+    then
+	rm $HOME/$OO_SDK_NAME/setsdkenv_unix.sh
+    fi	
+    if [ -r $HOME/$OO_SDK_NAME/setsdkenv_unix.csh ]
+    then
+	rm $HOME/$OO_SDK_NAME/setsdkenv_unix.csh
+    fi	
+elif [ "$1" = "-h" ] || [ "$1" = "--help" ] || [ -n "$1" ]
+then
+    echo 
+    echo " using: setsdkenv_unix [options]"
+    echo ""
+    echo " options:"
+    echo "   --force-configure : force a new configuration of your SDK environment."
+    echo "                       Alternatively can you edit your SDK environment scripts directly:"
+    echo "                        $HOME/$OO_SDK_NAME/setsdkenv_unix.sh"
+    echo "                        $HOME/$OO_SDK_NAME/setsdkenv_unix.csh"
+    echo "   -h, --help        : print this help and exit"
+    echo
+    exit 1
+fi
 
 # source the prepared environment and start a new shell
-if [ -r $SDKDIRECTORY/setsdkenv_unix.sh ]
+if [ -r $HOME/$OO_SDK_NAME/setsdkenv_unix.sh ]
 then
-    . $SDKDIRECTORY/setsdkenv_unix.sh
+    . $HOME/$OO_SDK_NAME/setsdkenv_unix.sh
 else
     echo 
-    echo " *********************************************************************"
+    echo " ************************************************************************"
     echo " *"
-    echo " * Error: You have to configure your SDK environment first"
-    echo " *        before you can use it!"
+    echo " *  You have to configure your SDK environment first before you can"
+    echo " *  can use it! The configuration has to be done only once."
     echo " *"
-    echo " *********************************************************************"
+    echo " ************************************************************************"
     echo 
-    exit 1
+    perl $SDKDIRECTORY/configure.pl $SDKDIRECTORY
+
+    . $HOME/$OO_SDK_NAME/setsdkenv_unix.sh
 fi
 
 "$SHELL" "$@"
