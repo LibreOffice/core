@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 16:00:13 $
+ *  last change: $Author: rt $ $Date: 2005-11-09 16:51:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -982,12 +982,21 @@ void SwEditShell::SetNumberingRestart()
                             //start value of the numbering rule then set this value as hard starting value
 
                             //get the node num
-                            const SwNodeNum* pNodeNum = ((SwTxtNode*)pNd)->_GetNodeNum();
-                            SwNumRule *pNumRule = ((SwTxtNode*)pNd)->GetNumRule();
+                            // OD 2005-11-09
+                            SwTxtNode* pTxtNd( static_cast<SwTxtNode*>(pNd) );
+                            SwNumRule* pNumRule( pTxtNd->GetNumRule() );
 
-                            if(pNodeNum && pNumRule &&
-                                    pNodeNum->IsNum() && pNodeNum->IsShowNum() && !pNodeNum->IsStart() &&
-                                    *pNodeNum->GetLevelVal() == pNumRule->Get(pNodeNum->GetLevel()).GetStart())
+                            if ( pNumRule && pTxtNd->GetNum() &&
+                                 ( pTxtNd->HasNumber() || pTxtNd->HasBullet() ) &&
+                                 pTxtNd->IsCounted() &&
+                                 !pTxtNd->IsRestart() &&
+                                 pTxtNd->GetNum()->GetNumber() == pNumRule->Get( pTxtNd->GetLevel() ).GetStart() )
+//                            const SwNodeNum* pNodeNum = ((SwTxtNode*)pNd)->_GetNodeNum();
+//                            SwNumRule *pNumRule = ((SwTxtNode*)pNd)->GetNumRule();
+
+//                            if(pNodeNum && pNumRule &&
+//                                    pNodeNum->IsNum() && pNodeNum->IsShowNum() && !pNodeNum->IsStart() &&
+//                                    *pNodeNum->GetLevelVal() == pNumRule->Get(pNodeNum->GetLevel()).GetStart())
                             {
                                 //now set a the start value as attribute
                                 SwPosition aCurrentNode(*pNd);
