@@ -6,10 +6,10 @@
 
 use IO::File;
 
-$currentdir=`/bin/pwd`;
-$main::sdkpath = `(cd $ARGV[0] && pwd && cd $currentdir ) | head -n 1`;
-chop ($main::sdkpath);
+$main::sdkpath= $ARGV[0];
 $main::OO_SDK_NAME=readSDKName($main::sdkpath);
+$main::OO_SDK_CONFIG_HOME= "$ENV{HOME}/$main::OO_SDK_NAME";
+
 $main::operatingSystem = `$main::sdkpath/config.guess | cut -d"-" -f3,4`;
 chop ($main::operatingSystem);
 $main::OO_SDK_HOME = "";
@@ -57,8 +57,8 @@ $main::SDK_AUTO_DEPLOYMENT_SUGGESTION = "YES";
 $main::SDK_AUTO_DEPLOYMENT = "";
 $main::SDK_AUTO_DEPLOYMENT_SUGGESTION = "YES";
 
-$main::OO_SDK_OUTPUT_DIR = "";
 #$main::OO_SDK_OUTPUT_DIR = '$HOME';
+$main::OO_SDK_OUTPUT_DIR_SUGGESTION = "$ENV{HOME}";
 $main::OO_SDK_OUTPUT_DIR = "";
 $main::skipOutputDir = 0;
 
@@ -420,8 +420,8 @@ while ( (!$main::correctVersion) &&
 while ( (!$main::skipOutputDir) &&
         (! -d "$main::OO_SDK_OUTPUT_DIR") )
 {
-    print " Default output directory is the SDK directory itself.\n";
-    print " Enter an existent directory if you prefer a different output directory (optional) [$main::OO_SDK_OUTPUT_DIR]: ";
+    print " Default output directory is in your HOME directory.\n";
+    print " Enter an existent directory if you prefer a different output directory (optional) [$main::OO_SDK_OUTPUT_DIR_SUGGESTION]: ";
 
     $main::OO_SDK_OUTPUT_DIR = readStdIn();
 
@@ -470,20 +470,21 @@ else
 }
 
 prepareScriptFile("setsdkenv_unix.sh.in", "setsdkenv_unix.sh", 1);
-chmod 0644, "$main::sdkpath/setsdkenv_unix.sh";
+chmod 0644, "$main::OO_SDK_CONFIG_HOME/setsdkenv_unix.sh";
 
 prepareScriptFile("setsdkenv_unix.csh.in", "setsdkenv_unix.csh", 2);
-chmod 0644, "$main::sdkpath/setsdkenv_unix.csh";
+chmod 0644, "$main::OO_SDK_CONFIG_HOME/setsdkenv_unix.csh";
 
 print "\n";
-print " *********************************************************************\n";
+print " ************************************************************************\n";
 print " * ... your SDK environment has been prepared.\n";
 print " * For each time you want to use this configured SDK environment, you\n";
 print " * have to run the \"setsdkenv_unix\" script file!\n";
-print " * Alternatively can you source one of the scripts \"setsdkenv_unix.sh\"\n";
-print " * or \"setsdkenv_unix.csh\" to get an environment without starting\n";
-print " * a new shell.\n";
-print " *********************************************************************\n\n";
+print " * Alternatively can you source one of the scripts\n";
+print " *   \"$main::OO_SDK_CONFIG_HOME/setsdkenv_unix.sh\"\n";
+print " *   \"$main::OO_SDK_CONFIG_HOME/setsdkenv_unix.csh\"\n";
+print " * to get an environment without starting a new shell.\n";
+print " ************************************************************************\n\n";
 
 exit $return;
 
@@ -568,19 +569,10 @@ sub testVersion
 sub readSDKName
 {
     my $sdkpath = shift;
-    my $mkfilename = "$sdkpath/settings/dk.mk";
-
-    open ( FILEIN, $mkfilename ) || die "ERROR: could not open '$mkfilename' for reading";
-
-    @lines = <FILEIN>;
-    close( FILEIN );
-    foreach $_ (@lines)
+    my $offset = rindex($sdkpath, "/");
+    if ( $offset != -1 )
     {
-        if( s#(SDKNAME=([\w\._]+)\n)#$1#go )
-        {
-            return $2;
-            break;
-        }
+        return substr($sdkpath, $offset+1);
     }
 
     return "";
@@ -605,8 +597,13 @@ sub prepareScriptFile()
     #            2 = csh
     my $shellMode = shift;
 
+    if ( ! -d "$main::OO_SDK_CONFIG_HOME" )
+    {
+        mkdir $main::OO_SDK_CONFIG_HOME;
+    }
+
     open ( FILEIN, "$main::sdkpath/$inputFile" ) || die "\nERROR: could not open '$main::sdkpath/$inputFile' for reading";
-    open ( FILEOUT, ">$main::sdkpath/$outputFile" ) || die "\nERROR: could not open '$main::sdkpath/$outputFile' for writing";
+    open ( FILEOUT, ">$main::OO_SDK_CONFIG_HOME/$outputFile" ) || die "\nERROR: could not open '$main::OO_SDK_CONFIG_HOME/$outputFile' for writing";
 
     while ( <FILEIN> )
     {
