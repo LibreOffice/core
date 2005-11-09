@@ -23,6 +23,9 @@ stdout.WriteLine("\n" +
 
 var oo_sdk_name = WshSysEnv("OO_SDK_NAME");
 var oo_sdk_home = getSdkHome();
+var oo_user_sdk_dir = WshSysEnv("APPDATA") + "\\" + oo_sdk_name;
+var oo_user_sdk_env_script = oo_user_sdk_dir + "\\setsdkenv_windows.bat";
+
 var office_or_ure = getOfficeOrUre();
 var office_home = "";
 var oo_sdk_ure_home = "";
@@ -42,14 +45,18 @@ if (office_or_ure == "office") {
     sdk_auto_deployment = getAutoDeployment();
 }
 
-writeBatFile(oo_sdk_home + "\\setsdkenv_windows.bat");
+//writeBatFile(oo_sdk_home + "\\setsdkenv_windows.bat");
+writeBatFile(oo_user_sdk_dir, oo_user_sdk_env_script);
 
 stdout.Write(
-	"\n ********************************************************************\n" +
-    " * ... \"setsdkenv_windows.bat\" batch file has been prepared.        *\n" +
-    " * For each time you want to use this configured SDK environment,   *\n" +
-    " * you have to run the \"setsdkenv_windows.bat\" file in a new shell! *\n" +
-    " ********************************************************************\n");
+	"\n ******************************************************************\n" +
+    " * ... \"" + oo_user_sdk_env_script + "\"\n" +
+    " * batch file has been prepared.\n" +
+    " * This batch file will be used in the future to prepare your\n" +
+	" * personal configured SDK environment.\n" +
+	" ******************************************************************\n\n");
+//    " * For each time you want to use this configured SDK environment,\n" +
+//    " * you have to run the \"setsdkenv_windows.bat\" file in a new shell!\n" +
 
 // done -------------------------------------------------------------------------
 
@@ -66,8 +73,10 @@ function skipChoice(msg)
 function getSdkHome()
 {
 	var sSuggestedHome = WshSysEnv("OO_SDK_HOME");
-    if (sSuggestedHome.length == 0)
-        sSuggestedHome = WshShell.CurrentDirectory;
+    if (sSuggestedHome.length == 0) {
+        var scriptname = WScript.ScriptFullName;
+        sSuggestedHome = scriptname.substr(0,scriptname.length-10);
+    }
     
     while(true)
     {
@@ -550,21 +559,30 @@ function getJavaHome()
 
 function getOutputDir()
 {
-//    var sSuggestedDir = WshSysEnv("OO_SDK_OUTPUT_DIR");
-    var sSuggestedDir = "";
+    var sSuggestedDir = WshSysEnv("OO_SDK_OUTPUT_DIR");
+	if (sSuggestedDir.length == 0)
+//	   sSuggestedDir = oo_user_sdk_dir;
+	   sSuggestedDir = ""; //"c:\\" + oo_sdk_name;
     var bSkip = false;       
     while(true)
     {
-        stdout.Write("\n Default output directory is the SDK directory itself.\n" +
-                     " Enter an existent directory if you prefer a different " +
-					 "output directory (optional) [" + sSuggestedDir + "]:");    
+        stdout.Write(
+			"\n Default output directory is the SDK directory itself.\n" +
+            " Enter an existent directory if you prefer a different one. But note" +
+			" that only\n a path without spaces is allowed because of a" +
+			" limitation of gnu make. (optional) [" + sSuggestedDir + "]:");    
         var sDir = stdin.ReadLine();
         if (sDir.length == 0)
         {
-            //No user input, check OO_SDK_JAVA_HOME or suggested value
+            //No user input, check OO_SDK_OUTPUT_DIR or suggested value
 			if ( sSuggestedDir.length == 0 ) {
 			    bSkip = true;
 			} else {
+				if (sSuggestedDir == oo_user_sdk_dir) {
+				    var fso = new ActiveXObject("Scripting.FileSystemObject");
+					if ( !fso.FolderExists(sSuggestedDir) )
+						fso.CreateFolder(sSuggestedDir);
+				}				
 			    if ( !aFileSystemObject.FolderExists(sSuggestedDir) )
 				{
 					stdout.WriteLine("\n Error: Could not find directory \"" +
@@ -578,6 +596,14 @@ function getOutputDir()
         }
         else
         {
+			if (sDir.indexOf(' ') != -1) {
+				stdout.WriteLine("\n Error: your specified output directory " +
+								 "\"" + sDir + "\" " +	 
+								 "contains one or more spaces.\n        That " +
+								 "causes problems with gnu make. Please specifiy" +
+								 " a directory without spaces.");
+				bSkip = true;
+			}
             //validate the user input
             if ( ! aFileSystemObject.FolderExists(sDir))
             {
@@ -652,9 +678,11 @@ function makeBootstrapFileUrl(systemPath)
     return output;
 }
 
-function writeBatFile(file)
+function writeBatFile(fdir, file)
 {
     var fso = new ActiveXObject("Scripting.FileSystemObject");
+    if ( !fso.FolderExists(fdir) )
+       fso.CreateFolder(fdir);
     var newFile = fso.CreateTextFile(file, true);
     newFile.Write(
         "@echo off\n" +
@@ -662,6 +690,7 @@ function writeBatFile(file)
         "REM are necessary for building the examples of the Office Development Kit.\n" +
         "REM The Script was developed for the operating systems Windows.\n" +
         "REM The SDK name\n" +
+        "REM Example: set OO_SDK_NAME=StarOffice_SDK\n" +
         "set OO_SDK_NAME=" + oo_sdk_name  +
         "\n\n" +
         "REM Installation directory of the Software Development Kit.\n" +
@@ -794,7 +823,7 @@ function writeBatFile(file)
         "title Shell prepared for SDK\n" + 
         "\nREM Prepare shell with all necessary environment variables.\n" +
         "echo.\n" +
-        "echo  ************************************************************************\n" +
+        "echo  ******************************************************************\n" +
         "echo  *\n" + 
         "echo  * SDK environment is prepared for Windows\n" +
         "echo  *\n" +       
@@ -809,8 +838,8 @@ function writeBatFile(file)
         "echo  * Special Output directory = %OO_SDK_OUTPUT_DIR%\n" +
         "echo  * Auto deployment = %SDK_AUTO_DEPLOYMENT%\n" +
         "echo  *\n" +
-        "echo  ************************************************************************\n" +
-
+        "echo  ******************************************************************\n" +
+        "echo.\n" +
         "goto end\n" + 
         "\n" +
         " :error\n" +
