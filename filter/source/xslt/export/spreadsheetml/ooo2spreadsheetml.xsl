@@ -1,37 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    OpenOffice.org - a multi-platform office productivity suite
- 
-    $RCSfile: ooo2spreadsheetml.xsl,v $
- 
-    $Revision: 1.4 $
- 
-    last change: $Author: rt $ $Date: 2005-09-08 22:03:54 $
- 
-    The Contents of this file are made available subject to
-    the terms of GNU Lesser General Public License Version 2.1.
- 
- 
-      GNU Lesser General Public License Version 2.1
-      =============================================
-      Copyright 2005 by Sun Microsystems, Inc.
-      901 San Antonio Road, Palo Alto, CA 94303, USA
- 
-      This library is free software; you can redistribute it and/or
-      modify it under the terms of the GNU Lesser General Public
-      License version 2.1, as published by the Free Software Foundation.
- 
-      This library is distributed in the hope that it will be useful,
-      but WITHOUT ANY WARRANTY; without even the implied warranty of
-      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-      Lesser General Public License for more details.
- 
-      You should have received a copy of the GNU Lesser General Public
-      License along with this library; if not, write to the Free Software
-      Foundation, Inc., 59 Temple Place, Suite 330, Boston,
-      MA  02111-1307  USA
- 
+   $RCSfile: ooo2spreadsheetml.xsl,v $
+
+   $Revision: 1.5 $
+
+   last change: $Author: rt $ $Date: 2005-11-10 16:52:46 $
+
+	The Contents of this file are made available subject to
+	the terms of GNU Lesser General Public License Version 2.1.
+
+
+	  GNU Lesser General Public License Version 2.1
+	  =============================================
+	  Copyright 2005 by Sun Microsystems, Inc.
+	  901 San Antonio Road, Palo Alto, CA 94303, USA
+
+	  This library is free software; you can redistribute it and/or
+	  modify it under the terms of the GNU Lesser General Public
+	  License version 2.1, as published by the Free Software Foundation.
+
+	  This library is distributed in the hope that it will be useful,
+	  but WITHOUT ANY WARRANTY; without even the implied warranty of
+	  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+	  Lesser General Public License for more details.
+
+	  You should have received a copy of the GNU Lesser General Public
+	  License along with this library; if not, write to the Free Software
+	  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+	  MA  02111-1307  USA
+
 -->
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -121,7 +119,14 @@
 	<xsl:param name="debug"                    select="false()" />
 	<xsl:param name="debugEnabled"             select="boolean($debug)" />
 
+	<!-- matching configuration entries -->
+	<xsl:key name="config" use="@config:name"
+			 match="/*/office:settings/config:config-item-set/config:config-item-map-indexed/config:config-item-map-entry/config:config-item |
+					/*/office:settings/config:config-item-set/config:config-item-map-indexed/config:config-item-map-entry/config:config-item-map-named/config:config-item-map-entry/config:config-item" />
 
+	<xsl:key name="colors" match="/*/office:styles//@*[name() = 'fo:background-color' or name() = 'fo:color'] |
+								  /*/office:automatic-styles//@*[name() = 'fo:background-color' or name() = 'fo:color']" use="/" />
+	<xsl:key name="colorRGB" match="@fo:background-color | @fo:color" use="." />
 	<!-- *************************** -->
 	<!-- *** Built up Excel file *** -->
 	<!-- *************************** -->
@@ -132,9 +137,22 @@
 		<Workbook>
 			<!-- adding some default settings -->
 			<OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office">
-				<DownloadComponents/>
+				<Colors>
+					<xsl:for-each select="key('colors', /)
+						[generate-id(.) =
+						 generate-id(key('colorRGB', .)[1]) and starts-with(., '#')] ">
+					<xsl:sort select="." />
+					<Color>
+						<Index><xsl:value-of select="position() + 2" /></Index>
+						<RGB><xsl:value-of select="." /></RGB>
+					</Color>
+					</xsl:for-each>
+				</Colors>
 			</OfficeDocumentSettings>
 			<ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+				<xsl:if test="key('config', 'HasSheetTabs') = 'false'">
+						<xsl:element name="HideWorkbookTabs" />
+				</xsl:if>
 				<WindowHeight>9000</WindowHeight>
 				<WindowWidth>13860</WindowWidth>
 				<WindowTopX>240</WindowTopX>
@@ -168,17 +186,27 @@
 		<xsl:apply-templates />
 	</xsl:template>
 
-	<!-- Disable default element matching
-	<xsl:template match="*" />
-	-->
-
 	<!-- office:body table:table children are spreadsheets -->
 	<xsl:template match="office:spreadsheet/table:table">
-		<xsl:element name="Worksheet">
+		<xsl:element name="ss:Worksheet">
 			<xsl:attribute name="ss:Name">
 				<xsl:value-of select="@table:name" />
 			</xsl:attribute>
 			<xsl:call-template name="table:table" />
+			<xsl:element name="x:WorksheetOptions">
+				<xsl:if test="key('config', 'ShowGrid') = 'false'">
+						<xsl:element name="x:DoNotDisplayGridlines" />
+				</xsl:if>
+				<xsl:if test="key('config', 'HasColumnRowHeaders') = 'false'">
+						<xsl:element name="x:DoNotDisplayHeadings" />
+				</xsl:if>
+				<xsl:if test="key('config', 'IsOutlineSymbolsSet') = 'false'">
+						<xsl:element name="x:DoNotDisplayOutline" />
+				</xsl:if>
+				<xsl:if test="key('config', 'ShowZeroValues') = 'false'">
+						<xsl:element name="x:DoNotDisplayZeros" />
+				</xsl:if>
+			</xsl:element>
 		</xsl:element>
 	</xsl:template>
 
