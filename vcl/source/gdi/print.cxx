@@ -4,9 +4,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:10:05 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 15:48:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1450,6 +1450,17 @@ BOOL Printer::StartJob( const XubString& rJobName )
         else
             pPrintFile = NULL;
 
+        // #125075# StartJob can Reschedule on Windows, sfx
+        // depends on IsPrinting() in case of closing a document
+        BOOL bSaveNewJobSetup   = mbNewJobSetup;
+        mbNewJobSetup           = FALSE;
+        String aSaveJobName     = maJobName;
+        maJobName               = rJobName;
+        mnCurPage               = 1;
+        mnCurPrintPage          = 1;
+        mbJobActive             = TRUE;
+        mbPrinting              = TRUE;
+
         if ( !mpPrinter->StartJob( pPrintFile, rJobName, Application::GetDisplayName(),
                                    nCopies, bCollateCopy,
                                    maJobSetup.ImplGetConstData() ) )
@@ -1459,16 +1470,16 @@ BOOL Printer::StartJob( const XubString& rJobName )
                 mnError = PRINTER_GENERALERROR;
             ImplSVData* pSVData = ImplGetSVData();
             pSVData->mpDefInst->DestroyPrinter( mpPrinter );
+            mbNewJobSetup       = bSaveNewJobSetup;
+            maJobName           = aSaveJobName;
+            mnCurPage           = 0;
+            mnCurPrintPage      = 0;
+            mbJobActive         = FALSE;
+            mbPrinting          = FALSE;
             mpPrinter = NULL;
             return FALSE;
         }
 
-        mbNewJobSetup   = FALSE;
-        maJobName       = rJobName;
-        mnCurPage       = 1;
-        mnCurPrintPage  = 1;
-        mbJobActive     = TRUE;
-        mbPrinting      = TRUE;
         StartPrint();
     }
     else
@@ -1477,18 +1488,29 @@ BOOL Printer::StartJob( const XubString& rJobName )
         mpQPrinter->SetDigitLanguage( GetDigitLanguage() );
         mpQPrinter->SetUserCopy( bUserCopy );
         mpQPrinter->SetPrinterOptions( *mpPrinterOptions );
+
+        // #125075# StartJob can Reschedule on Windows, sfx
+        // depends on IsPrinting() in case of closing a document
+        BOOL bSaveNewJobSetup   = mbNewJobSetup;
+        mbNewJobSetup           = FALSE;
+        String aSaveJobName     = maJobName;
+        maJobName               = rJobName;
+        mnCurPage               = 1;
+        mbJobActive             = TRUE;
+        mbPrinting              = TRUE;
+
         if ( mpQPrinter->StartJob( rJobName ) )
         {
-            mbNewJobSetup   = FALSE;
-            maJobName       = rJobName;
-            mnCurPage       = 1;
-            mbJobActive     = TRUE;
-            mbPrinting      = TRUE;
             StartPrint();
             mpQPrinter->StartQueuePrint();
         }
         else
         {
+            mbNewJobSetup   = bSaveNewJobSetup;
+            maJobName       = aSaveJobName;
+            mnCurPage       = 0;
+            mbJobActive     = FALSE;
+            mbPrinting      = FALSE;
             mnError = mpQPrinter->GetErrorCode();
             mpQPrinter->Destroy();
             mpQPrinter = NULL;
