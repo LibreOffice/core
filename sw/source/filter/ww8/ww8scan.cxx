@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:13:32 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:32:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -849,7 +849,7 @@ const BYTE* WW8SprmIter::operator ++( int )
 
 void WW8SprmIter::UpdateMyMembers()
 {
-    if (pSprms && nRemLen > 0)
+    if (pSprms && nRemLen > (mrSprmParser.getVersion()?1:0)) //see #125180#
     {
         nAktId = mrSprmParser.GetSprmId(pSprms);
         pAktParams = pSprms + mrSprmParser.DistanceToData(nAktId);
