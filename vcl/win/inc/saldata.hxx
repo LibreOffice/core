@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-13 17:08:08 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 15:49:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,8 @@
 #ifndef _SV_WINCOMP_HXX
 #include <wincomp.hxx>
 #endif
+
+#include <set>  // for hMenu validation
 
 class AutoTimer;
 class WinSalInstance;
@@ -93,6 +95,9 @@ public:
     void    initNWF();
     void    deInitNWF();
 
+    // checks if the menuhandle was created by VCL
+    BOOL    IsKnownMenuHandle( HMENU hMenu );
+
 public:
     HINSTANCE               mhInst;                 // default instance handle
     HINSTANCE               mhPrevInst;             // previous instance handle
@@ -137,6 +142,7 @@ public:
     TempFontItem*           mpTempFontItem;
     BOOL                    mbThemeChanged;         // true if visual theme was changed: throw away theme handles
 
+    std::set< HMENU >       mhMenuSet;              // keeps track of menu handles created by VCL, used by IsKnownMenuHandle()
 };
 
 inline void SetSalData( SalData* pData ) { ImplGetSVData()->mpSalData = (void*)pData; }
