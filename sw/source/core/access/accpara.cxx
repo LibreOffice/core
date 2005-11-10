@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:15:03 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 15:56:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1204,7 +1204,7 @@ Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
 
     // create a (dummy) text portion for the sole purpose of calling
     // getPropertyValues on it
-    Reference<XMultiPropertySet> xPortion = CreateUnoPortion( nIndex, nIndex );
+    Reference<XMultiPropertySet> xPortion = CreateUnoPortion( nIndex, nIndex + 1 );
 
     // get values
     Sequence<OUString> aNames = getAttributeNames();
