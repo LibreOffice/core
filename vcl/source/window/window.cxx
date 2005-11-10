@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.222 $
+ *  $Revision: 1.223 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-03 11:58:34 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 15:49:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -724,6 +724,7 @@ void Window::ImplInitData( WindowType nType )
                                                         // checked for every pos or size change. Since mxCanvasWindow is
                                                         // a weak reference, checking for validity is somewhat expensive,
                                                         // and is now guarded by this cheap bool check.
+    mpWindowImpl->mbIsInTaskPaneList = FALSE;           // TRUE: window was added to the taskpanelist in the topmost system window
 
     mbEnableRTL         = TRUE;         // TRUE: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
 }
@@ -4509,6 +4510,30 @@ Window::~Window()
         }
     }
 #endif
+
+    if( mpWindowImpl->mbIsInTaskPaneList )
+    {
+        Window* pMyParent = this;
+        SystemWindow* pMySysWin = NULL;
+
+        while ( pMyParent )
+        {
+            if ( pMyParent->IsSystemWindow() )
+                pMySysWin = (SystemWindow*)pMyParent;
+            pMyParent = pMyParent->GetParent();
+        }
+        if ( pMySysWin && pMySysWin->ImplIsInTaskPaneList( this ) )
+        {
+            pMySysWin->GetTaskPaneList()->RemoveWindow( this );
+        }
+        else
+        {
+            ByteString aTempStr( "Window (" );
+            aTempStr += ByteString( GetText(), RTL_TEXTENCODING_UTF8 );
+            aTempStr += ") not found in TaskPanelList!";
+            DBG_ERROR( aTempStr.GetBuffer() );
+        }
+    }
 
     // Fenster hiden, um das entsprechende Paint-Handling auszuloesen
     Hide();
@@ -9128,6 +9153,15 @@ void Window::ImplDecModalCount()
 {
     mpWindowImpl->mpFrameWindow->mpWindowImpl->mpFrameData->mnModalMode--;
 }
+BOOL Window::ImplIsInTaskPaneList()
+{
+    return mpWindowImpl->mbIsInTaskPaneList;
+}
+void Window::ImplIsInTaskPaneList( BOOL mbIsInTaskList )
+{
+    mpWindowImpl->mbIsInTaskPaneList = mbIsInTaskList;
+}
+
 void Window::ImplNotifyIconifiedState( BOOL bIconified )
 {
     mpWindowImpl->mpFrameWindow->ImplCallEventListeners( bIconified ? VCLEVENT_WINDOW_MINIMIZE : VCLEVENT_WINDOW_NORMALIZE );
