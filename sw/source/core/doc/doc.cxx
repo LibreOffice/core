@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:15:45 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 15:56:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1161,25 +1161,38 @@ BOOL SwDoc::ConvertFieldsToText()
             const SwTxtFld *pTxtFld = (*aBegin)->GetTxtFld();
             // skip fields that are currently not in the document
             // e.g. fields in undo or redo array
+
             BOOL bSkip = !pTxtFld ||
-                         !pTxtFld->GetpTxtNode()->GetNodes().IsDocNodes() ||
-                         IsInHeaderFooter(SwNodeIndex(*pTxtFld->GetpTxtNode(), 0));
+                         !pTxtFld->GetpTxtNode()->GetNodes().IsDocNodes();
 
             if (!bSkip)
             {
+                BOOL bInHeaderFooter = IsInHeaderFooter(SwNodeIndex(*pTxtFld->GetpTxtNode()));
                 const SwFmtFld& rFmtFld = pTxtFld->GetFld();
                 const SwField*  pField = rFmtFld.GetFld();
-                String sText = pField->GetCntnt();
-                //database fields should not convert their command into text
-                if( RES_DBFLD == pCurType->Which() && !static_cast<const SwDBField*>(pField)->IsInitialized())
-                    sText.Erase();
+                //#i55595# some fields have to be excluded in headers/footers
+                USHORT nWhich = pField->GetTyp()->Which();
+                if(!bInHeaderFooter ||
+                        (nWhich != RES_PAGENUMBERFLD &&
+                        nWhich != RES_CHAPTERFLD &&
+                        nWhich != RES_GETEXPFLD&&
+                        nWhich != RES_SETEXPFLD&&
+                        nWhich != RES_INPUTFLD&&
+                        nWhich != RES_REFPAGEGETFLD&&
+                        nWhich != RES_REFPAGESETFLD))
+                {
+                    String sText = pField->GetCntnt();
+                    //database fields should not convert their command into text
+                    if( RES_DBFLD == pCurType->Which() && !static_cast<const SwDBField*>(pField)->IsInitialized())
+                        sText.Erase();
 
-                //now remove the field and insert the string
-                SwPaM aPam(*pTxtFld->GetpTxtNode(), *pTxtFld->GetStart());
-                aPam.SetMark();
-                aPam.Move();
-                DeleteAndJoin(aPam);
-                Insert( aPam, sText );
+                    //now remove the field and insert the string
+                    SwPaM aPam(*pTxtFld->GetpTxtNode(), *pTxtFld->GetStart());
+                    aPam.SetMark();
+                    aPam.Move();
+                    DeleteAndJoin(aPam);
+                    Insert( aPam, sText );
+                }
             }
             ++aBegin;
         }
