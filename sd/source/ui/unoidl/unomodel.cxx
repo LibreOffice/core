@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:44:45 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:32:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -279,12 +279,14 @@ const sal_Int32 WID_MODEL_CONTFOCUS = 6;
 const sal_Int32 WID_MODEL_DSGNMODE  = 7;
 const sal_Int32 WID_MODEL_BASICLIBS = 8;
 const sal_Int32 WID_MODEL_RUNTIMEUID = 9;
+const sal_Int32 WID_MODEL_BUILDID = 10;
 
 const SfxItemPropertyMap* ImplGetDrawModelPropertyMap()
 {
     // Achtung: Der erste Parameter MUSS sortiert vorliegen !!!
     const static SfxItemPropertyMap aDrawModelPropertyMap_Impl[] =
     {
+        { MAP_CHAR_LEN("BuildId"),                      WID_MODEL_BUILDID,  &::getCppuType(static_cast< const rtl::OUString * >(0)), 0, 0},
         { MAP_CHAR_LEN(sUNO_Prop_CharLocale),           WID_MODEL_LANGUAGE, &::getCppuType((const lang::Locale*)0),     0,  0},
         { MAP_CHAR_LEN(sUNO_Prop_TabStop),              WID_MODEL_TABSTOP,  &::getCppuType((const sal_Int32*)0),        0,  0},
         { MAP_CHAR_LEN(sUNO_Prop_VisibleArea),          WID_MODEL_VISAREA,  &::getCppuType((const awt::Rectangle*)0),   0,  0},
@@ -1367,6 +1369,9 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
                 pDoc->SetOpenInDesignMode( bMode );
             }
             break;
+        case WID_MODEL_BUILDID:
+            aValue >>= maBuildId;
+            return;
         case WID_MODEL_MAPUNIT:
         case WID_MODEL_BASICLIBS:
         case WID_MODEL_RUNTIMEUID: // is read-only
@@ -1444,6 +1449,8 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
         case WID_MODEL_RUNTIMEUID:
             aAny <<= getRuntimeUID();
             break;
+        case WID_MODEL_BUILDID:
+            return uno::Any( maBuildId );
         default:
             throw beans::UnknownPropertyException();
             break;
