@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swappatchfiles.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:33:28 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 14:56:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,85 @@
 
 #include <systools/win32/uwinapi.h>
 
+
+
+#define WININIT_FILENAME    "wininit.ini"
+#define RENAME_SECTION      "rename"
+
+static BOOL MoveFileEx9x( LPCSTR lpExistingFileNameA, LPCSTR lpNewFileNameA, DWORD dwFlags )
+{
+    BOOL    fSuccess = FALSE;   // assume failure
+
+    // Windows 9x has a special mechanism to move files after reboot
+
+    if ( dwFlags & MOVEFILE_DELAY_UNTIL_REBOOT )
+    {
+        CHAR    szExistingFileNameA[MAX_PATH];
+        CHAR    szNewFileNameA[MAX_PATH] = "NUL";
+
+        // Path names in WININIT.INI must be in short path name form
+
+        if (
+            GetShortPathNameA( lpExistingFileNameA, szExistingFileNameA, MAX_PATH ) &&
+            (!lpNewFileNameA || GetShortPathNameA( lpNewFileNameA, szNewFileNameA, MAX_PATH ))
+            )
+        {
+            CHAR    szBuffer[32767];    // The buffer size must not exceed 32K
+            DWORD   dwBufLen = GetPrivateProfileSectionA( RENAME_SECTION, szBuffer, elementsof(szBuffer), WININIT_FILENAME );
+
+            CHAR    szRename[MAX_PATH]; // This is enough for at most to times 67 chracters
+            strcpy( szRename, szNewFileNameA );
+            strcat( szRename, "=" );
+            strcat( szRename, szExistingFileNameA );
+            size_t  lnRename = strlen(szRename);
+
+            if ( dwBufLen + lnRename + 2 <= elementsof(szBuffer) )
+            {
+                CopyMemory( &szBuffer[dwBufLen], szRename, lnRename );
+                szBuffer[dwBufLen + lnRename ] = 0;
+                szBuffer[dwBufLen + lnRename + 1 ] = 0;
+
+                fSuccess = WritePrivateProfileSectionA( RENAME_SECTION, szBuffer, WININIT_FILENAME );
+            }
+            else
+                SetLastError( ERROR_BUFFER_OVERFLOW );
+        }
+    }
+    else
+    {
+
+        fSuccess = MoveFileA( lpExistingFileNameA, lpNewFileNameA );
+
+        if ( !fSuccess && 0 != (dwFlags & (MOVEFILE_COPY_ALLOWED | MOVEFILE_REPLACE_EXISTING)) )
+        {
+            BOOL    bFailIfExist = 0 == (dwFlags & MOVEFILE_REPLACE_EXISTING);
+
+            fSuccess = CopyFileA( lpExistingFileNameA, lpNewFileNameA, bFailIfExist );
+
+            // In case of successfull copy do not return FALSE if delete fails.
+            // Error detection is done by GetLastError()
+
+            if ( fSuccess )
+            {
+                SetLastError( NO_ERROR );
+                DeleteFileA( lpExistingFileNameA );
+            }
+        }
+
+    }
+
+    return fSuccess;
+}
+
+static BOOL MoveFileExImpl( LPCSTR lpExistingFileNameA, LPCSTR lpNewFileNameA, DWORD dwFlags )
+{
+    if ( 0 > ((LONG)GetVersion())) // High order bit indicates Win 9x
+        return MoveFileEx9x( lpExistingFileNameA, lpNewFileNameA, dwFlags );
+    else
+        return MoveFileExA( lpExistingFileNameA, lpNewFileNameA, dwFlags );
+}
+
+
 static std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
 {
     std::_tstring   result;
@@ -79,38 +158,57 @@ static bool SwapFiles( const std::_tstring& sFileName1, const std::_tstring& sFi
     bool fSuccess = true;
 
     //Try to move the original file to a temp file
-    fSuccess = MoveFileEx( sFileName1.c_str(), sTempFileName.c_str(),
+    fSuccess = MoveFileExImpl( sFileName1.c_str(), sTempFileName.c_str(),
                            MOVEFILE_REPLACE_EXISTING  );
+
+    std::_tstring   mystr;
 
     if ( fSuccess )
     {
-        fSuccess = MoveFileEx( sFileName2.c_str(), sFileName1.c_str(), MOVEFILE_REPLACE_EXISTING );
+        fSuccess = MoveFileExImpl( sFileName2.c_str(), sFileName1.c_str(), MOVEFILE_REPLACE_EXISTING );
 
         if ( fSuccess )
         {
-            fSuccess = MoveFileEx( sTempFileName.c_str(), sFileName2.c_str(),
+            fSuccess = MoveFileExImpl( sTempFileName.c_str(), sFileName2.c_str(),
                                        MOVEFILE_REPLACE_EXISTING );
             if ( !fSuccess )
-                MoveFileEx( sFileName1.c_str(), sFileName2.c_str(), MOVEFILE_REPLACE_EXISTING );
+            {
+                MoveFileExImpl( sFileName1.c_str(), sFileName2.c_str(), MOVEFILE_REPLACE_EXISTING );
+            }
         }
         else
         {
-            MoveFileEx( sTempFileName.c_str(), sFileName1.c_str(), MOVEFILE_REPLACE_EXISTING  );
+            MoveFileExImpl( sTempFileName.c_str(), sFileName1.c_str(), MOVEFILE_REPLACE_EXISTING  );
         }
     }
     else
     {
         //It could be that there is no original file and therefore copying the original to a temp
         // file failed. Examine if there is no original and if so then move file2 to file1
+
         WIN32_FIND_DATA data;
         HANDLE hdl = FindFirstFile(sFileName1.c_str(), &data);
         if (hdl == INVALID_HANDLE_VALUE)
-            fSuccess = MoveFileEx( sFileName2.c_str(), sFileName1.c_str(),
-                                   MOVEFILE_REPLACE_EXISTING );
-        else
-            FindClose(hdl);
-    }
+        {
+            fSuccess = MoveFileExImpl( sFileName2.c_str(), sFileName1.c_str(), MOVEFILE_REPLACE_EXISTING );
 
+            // if ( fSuccess )
+            // {
+            //  mystr = "Success";
+            //  MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
+            // }
+            // else
+            // {
+            //  char buff[256];
+            //  wsprintf(buff, "Failure %d", GetLastError());
+            //  MessageBox( NULL, buff, "Titel", MB_OK );
+            // }
+        }
+        else
+        {
+            FindClose(hdl);
+        }
+    }
 
     return fSuccess;
 }
@@ -137,38 +235,57 @@ extern "C" UINT __stdcall InstallPatchedFiles( MSIHANDLE handle )
     std::_tstring   sProgramDir = sInstDir + TEXT("program\\");
     std::_tstring   sPatchFile = sProgramDir + TEXT("patchlist.txt");
 
+    TCHAR   szSectionNames[32767];
     TCHAR   szKeyNames[32767];
 
     // std::_tstring    mystr;
     // mystr = "Patchfile: " + sPatchFile;
     // MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
 
-    if ( GetPrivateProfileString( TEXT("SwapFiles"), NULL, TEXT(""), szKeyNames, elementsof(szKeyNames), sPatchFile.c_str() ) )
+    if ( GetPrivateProfileString( NULL, NULL, TEXT(""), szSectionNames, elementsof(szSectionNames), sPatchFile.c_str() ) )
     {
-        TCHAR   *pKeyName = szKeyNames;
+        TCHAR   *pSectionName = szSectionNames;
 
-        while ( *pKeyName )
+        while ( *pSectionName )
         {
-            TCHAR   szValue[4096];
+            std::_tstring   sSectionName = pSectionName;
+            // mystr = "Section: " + sSectionName;
+            // MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
 
-            if ( GetPrivateProfileString( TEXT("SwapFiles"), pKeyName, TEXT(""), szValue, elementsof(szValue), sPatchFile.c_str() ) )
+            if ( GetPrivateProfileString( pSectionName, NULL, TEXT(""), szKeyNames, elementsof(szKeyNames), sPatchFile.c_str() ) )
             {
-                std::_tstring   sFileName1 = pKeyName;
-                std::_tstring   sFileName2 = szValue;
+                TCHAR   *pKeyName = szKeyNames;
 
-                sFileName1 = strip( sFileName1, '\"' );
-                sFileName2 = strip( sFileName2, '\"' );
+                while ( *pKeyName )
+                {
+                    TCHAR   szValue[4096];
 
-                sFileName1 = sInstDir + sFileName1;
-                sFileName2 = sInstDir + sFileName2;
+                    if ( GetPrivateProfileString( pSectionName, pKeyName, TEXT(""), szValue, elementsof(szValue), sPatchFile.c_str() ) )
+                    {
+                        std::_tstring   sFileName1 = pKeyName;
+                        std::_tstring   sFileName2 = szValue;
 
-                // mystr = "Convert: " + sFileName1 + " to " + sFileName2;
-                // MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
+                        sFileName1 = strip( sFileName1, '\"' );
+                        sFileName2 = strip( sFileName2, '\"' );
 
-                SwapFiles( sFileName1, sFileName2 );
+                        // TCHAR *lpLastDot = _tcsrchr( sFileName1.c_str(), '.' );
+                        // if ( lpLastDot )
+                        //  *lpLastDot = 0;
+
+                        sFileName1 = sInstDir + sFileName1;
+                        sFileName2 = sInstDir + sFileName2;
+
+                        // mystr = "Convert: " + sFileName1 + " to " + sFileName2;
+                        // MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
+
+                        SwapFiles( sFileName1, sFileName2 );
+                    }
+
+                    pKeyName += _tcslen(pKeyName) + 1;
+                }
             }
 
-            pKeyName += _tcslen(pKeyName) + 1;
+            pSectionName += _tcslen(pSectionName) + 1;
         }
     }
 
@@ -207,38 +324,53 @@ extern "C" UINT __stdcall UninstallPatchedFiles( MSIHANDLE handle )
     std::_tstring   sProgramDir = sInstDir + TEXT("program\\");
     std::_tstring   sPatchFile = sProgramDir + TEXT("patchlist.txt");
 
+    TCHAR   szSectionNames[32767];
     TCHAR   szKeyNames[32767];
 
     // std::_tstring    mystr;
     // mystr = "Patchfile: " + sPatchFile;
     // MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
 
-    if ( GetPrivateProfileString( TEXT("SwapFiles"), NULL, TEXT(""), szKeyNames, elementsof(szKeyNames), sPatchFile.c_str() ) )
+    if ( GetPrivateProfileString( NULL, NULL, TEXT(""), szSectionNames, elementsof(szSectionNames), sPatchFile.c_str() ) )
     {
-        TCHAR   *pKeyName = szKeyNames;
+        TCHAR   *pSectionName = szSectionNames;
 
-        while ( *pKeyName )
+        while ( *pSectionName )
         {
-            TCHAR   szValue[4096];
+            std::_tstring   sSectionName = pSectionName;
+            // mystr = "Section: " + sSectionName;
+            // MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
 
-            if ( GetPrivateProfileString( TEXT("SwapFiles"), pKeyName, TEXT(""), szValue, elementsof(szValue), sPatchFile.c_str() ) )
+            if ( GetPrivateProfileString( pSectionName, NULL, TEXT(""), szKeyNames, elementsof(szKeyNames), sPatchFile.c_str() ) )
             {
-                std::_tstring   sFileName1 = pKeyName;
-                std::_tstring   sFileName2 = szValue;
+                TCHAR   *pKeyName = szKeyNames;
 
-                sFileName1 = strip( sFileName1, '\"' );
-                sFileName2 = strip( sFileName2, '\"' );
+                while ( *pKeyName )
+                {
+                    TCHAR   szValue[4096];
 
-                sFileName1 = sInstDir + sFileName1;
-                sFileName2 = sInstDir + sFileName2;
+                    if ( GetPrivateProfileString( pSectionName, pKeyName, TEXT(""), szValue, elementsof(szValue), sPatchFile.c_str() ) )
+                    {
+                        std::_tstring   sFileName1 = pKeyName;
+                        std::_tstring   sFileName2 = szValue;
 
-                // mystr = "Convert: " + sFileName1 + " to " + sFileName2;
-                // MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
+                        sFileName1 = strip( sFileName1, '\"' );
+                        sFileName2 = strip( sFileName2, '\"' );
 
-                SwapFiles( sFileName2, sFileName1 );
+                        sFileName1 = sInstDir + sFileName1;
+                        sFileName2 = sInstDir + sFileName2;
+
+                        // mystr = "Convert: " + sFileName1 + " to " + sFileName2;
+                        // MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
+
+                        SwapFiles( sFileName2, sFileName1 );
+                    }
+
+                    pKeyName += _tcslen(pKeyName) + 1;
+                }
             }
 
-            pKeyName += _tcslen(pKeyName) + 1;
+            pSectionName += _tcslen(pSectionName) + 1;
         }
     }
 
