@@ -4,9 +4,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:30:42 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 15:49:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -934,7 +934,17 @@ void SystemWindow::SetMenuBar( MenuBar* pMenuBar )
                 ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetMenuBarWindow( NULL );
             ImplToBottomChild();
             if ( pOldMenuBar )
-                MenuBar::ImplDestroy( pOldMenuBar, pMenuBar == 0 );
+            {
+                BOOL bDelete = (pMenuBar == 0) ? TRUE : FALSE;
+                if( bDelete && pOldWindow )
+                {
+                    if( mpImplData->mpTaskPaneList )
+                        mpImplData->mpTaskPaneList->RemoveWindow( pOldWindow );
+                }
+                MenuBar::ImplDestroy( pOldMenuBar, bDelete );
+                if( bDelete )
+                    pOldWindow = NULL;  // will be deleted in MenuBar::ImplDestroy,
+            }
 
         }
         else
