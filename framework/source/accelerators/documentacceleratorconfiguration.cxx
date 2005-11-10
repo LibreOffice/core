@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentacceleratorconfiguration.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:03:37 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:11:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,8 +199,15 @@ void DocumentAcceleratorConfiguration::impl_ts_fillCache()
         AcceleratorConfiguration::reload();
         m_aPresetHandler.addStorageListener(this);
     }
+    /*
+
+        Sometimes the configuration seams to be corrupted ..
+        So it would be nice if we dont crash the office then .-)
+        #121559#
+
     catch(const css::uno::RuntimeException& exRun)
         { throw exRun; }
+    */
     catch(const css::uno::Exception&)
         {}
 }
