@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryitem_draw.scp,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:26:15 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:18:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -885,7 +885,7 @@ End
 // .ODG
 RegistryItem gid_Regitem_OpenOffice_ODG_OpenWith_Draw
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".ODG\OpenWithProgIDs";
+    Subkey = ".odg\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Draw_Bin;
     Name = "opendocument.DrawDocument.1";
     Value = " ";
@@ -894,7 +894,7 @@ End
 // .OTG
 RegistryItem gid_Regitem_OpenOffice_OTG_OpenWith_Draw
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".OTG\OpenWithProgIDs";
+    Subkey = ".otg\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Draw_Bin;
     Name = "opendocument.DrawDocument.1";
     Value = " ";
@@ -903,7 +903,7 @@ End
 // .SXD
 RegistryItem gid_Regitem_OpenOffice_SXD_OpenWith_Draw
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".SXD\OpenWithProgIDs";
+    Subkey = ".sxd\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Draw_Bin;
     Name = "opendocument.DrawDocument.1";
     Value = " ";
@@ -912,7 +912,7 @@ End
 // .STD
 RegistryItem gid_Regitem_OpenOffice_STD_OpenWith_Draw
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".STD\OpenWithProgIDs";
+    Subkey = ".std\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Draw_Bin;
     Name = "opendocument.DrawDocument.1";
     Value = " ";
@@ -921,7 +921,7 @@ End
 // .SDA
 RegistryItem gid_Regitem_OpenOffice_SDA_OpenWith_Draw
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".SDA\OpenWithProgIDs";
+    Subkey = ".sda\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Draw_Bin;
     Name = "opendocument.DrawDocument.1";
     Value = " ";
@@ -930,7 +930,7 @@ End
 // .SDD
 RegistryItem gid_Regitem_OpenOffice_SDD_OpenWith_Draw
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".SDD\OpenWithProgIDs";
+    Subkey = ".sdd\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Draw_Bin;
     Name = "opendocument.DrawDocument.1";
     Value = " ";
@@ -939,7 +939,7 @@ End
 // .VOR
 RegistryItem gid_Regitem_OpenOffice_VOR_OpenWith_Draw
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".VOR\OpenWithProgIDs";
+    Subkey = ".vor\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Draw_Bin;
     Name = "opendocument.DrawDocument.1";
     Value = " ";
