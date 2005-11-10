@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:32:50 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 15:57:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -749,6 +749,12 @@ void ViewShell::LayoutIdle()
         //Cache vorbereiten und restaurieren, damit er nicht versaut wird.
         SwSaveSetLRUOfst aSave( *SwTxtFrm::GetTxtCache(),
                              SwTxtFrm::GetTxtCache()->GetCurMax() - 50 );
+        // #125243# there are lots of stacktraces indicating that Imp() returns NULL
+        // this ViewShell seems to be invalid - but it's not clear why
+        // this return is only a workaround!
+        DBG_ASSERT(Imp(), "ViewShell already deleted?")
+        if(!Imp())
+            return;
         SwLayIdle aIdle( GetLayout(), Imp() );
         DBG_PROFSTOP( LayoutIdle );
     }
