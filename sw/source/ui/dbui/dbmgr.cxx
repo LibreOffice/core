@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 16:01:40 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 15:57:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1613,6 +1613,12 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                     }
                                 }
                                 pTargetShell->Paste( rWorkShell.GetDoc(), sal_True );
+                                //convert fields in page styles (header/footer - has to be done after the first document has been pasted
+                                if(1 == nDocNo)
+                                {
+                                    pTargetShell->CalcLayout();
+                                    pTargetShell->ConvertFieldsToText();
+                                }
                             }
                             else
                             {
@@ -3292,7 +3298,12 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                     }
                 }
                 pTargetShell->Paste( rWorkShell.GetDoc(), sal_True );
-
+                //convert fields in page styles (header/footer - has to be done after the first document has been pasted
+                if(1 == nDocNo)
+                {
+                    pTargetShell->CalcLayout();
+                    pTargetShell->ConvertFieldsToText();
+                }
                 //add the document info to the config item
                 SwDocMergeInfo aMergeInfo;
                 aMergeInfo.nStartPageInTarget = nPageCountBefore;
