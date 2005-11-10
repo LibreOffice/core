@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:11:48 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:42:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XEVENTLISTENER_HPP_
 #include <com/sun/star/document/XEventListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
 #endif
 
 #include <comphelper/processfactory.hxx>
@@ -659,6 +662,10 @@ void SdrOle2Obj::Connect_Impl()
                     GetSdrGlobalData().GetOLEObjCache().InsertObj(this);
 
                 CheckFileLink_Impl();
+
+                uno::Reference< container::XChild > xChild( xObjRef.GetObject(), uno::UNO_QUERY );
+                if( xChild.is() )
+                    xChild->setParent( pModel->getUnoModel() );
             }
         }
         catch( ::com::sun::star::uno::Exception& e )
