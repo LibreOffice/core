@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 14:14:09 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 15:51:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,7 +326,8 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
         {
             // if pTempEntry is necessary, it will be released and passed to the ZipOutputStream
             // and be deleted in the ZipOutputStream destructor
-            auto_ptr < ZipEntry > pTempEntry ( new ZipEntry );
+            auto_ptr < ZipEntry > pAutoTempEntry ( new ZipEntry );
+            ZipEntry* pTempEntry = pAutoTempEntry.get();
 
             // In case the entry we are reading is also the entry we are writing, we will
             // store the ZipEntry data in pTempEntry
@@ -517,7 +518,10 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                     if ( bRawStream )
                         xStream->skipBytes( pStream->GetMagicalHackPos() );
 
-                    rZipOut.putNextEntry ( *(pTempEntry.get()), pStream->getEncryptionData(), sal_False );
+                    rZipOut.putNextEntry ( *pTempEntry, pStream->getEncryptionData(), sal_False );
+                    // the entry is provided to the ZipOutputStream that will delete it
+                    pAutoTempEntry.release();
+
                     Sequence < sal_Int8 > aSeq ( n_ConstBufferSize );
                     sal_Int32 nLength;
 
@@ -572,7 +576,10 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
                 try
                 {
-                    rZipOut.putNextEntry ( *(pTempEntry.get()), pStream->getEncryptionData(), bToBeEncrypted);
+                    rZipOut.putNextEntry ( *pTempEntry, pStream->getEncryptionData(), bToBeEncrypted);
+                    // the entry is provided to the ZipOutputStream that will delete it
+                    pAutoTempEntry.release();
+
                     sal_Int32 nLength;
                     Sequence < sal_Int8 > aSeq (n_ConstBufferSize);
                     do
@@ -627,8 +634,6 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
                 // Then copy it back afterwards...
                 ZipPackageFolder::copyZipEntry ( pStream->aEntry, *pTempEntry );
-                // all the dangerous stuff has passed, so we can release pTempEntry
-                pTempEntry.release();
 
                 // TODO/LATER: get rid of this hack ( the encrypted stream size property is changed during saving )
                 if ( pStream->IsEncrypted() )
