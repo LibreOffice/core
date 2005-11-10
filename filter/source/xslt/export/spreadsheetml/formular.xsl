@@ -1,37 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    OpenOffice.org - a multi-platform office productivity suite
- 
-    $RCSfile: formular.xsl,v $
- 
-    $Revision: 1.3 $
- 
-    last change: $Author: rt $ $Date: 2005-09-08 22:03:38 $
- 
-    The Contents of this file are made available subject to
-    the terms of GNU Lesser General Public License Version 2.1.
- 
- 
-      GNU Lesser General Public License Version 2.1
-      =============================================
-      Copyright 2005 by Sun Microsystems, Inc.
-      901 San Antonio Road, Palo Alto, CA 94303, USA
- 
-      This library is free software; you can redistribute it and/or
-      modify it under the terms of the GNU Lesser General Public
-      License version 2.1, as published by the Free Software Foundation.
- 
-      This library is distributed in the hope that it will be useful,
-      but WITHOUT ANY WARRANTY; without even the implied warranty of
-      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-      Lesser General Public License for more details.
- 
-      You should have received a copy of the GNU Lesser General Public
-      License along with this library; if not, write to the Free Software
-      Foundation, Inc., 59 Temple Place, Suite 330, Boston,
-      MA  02111-1307  USA
- 
+   $RCSfile: formular.xsl,v $
+
+   $Revision: 1.4 $
+
+   last change: $Author: rt $ $Date: 2005-11-10 16:52:30 $
+
+	The Contents of this file are made available subject to
+	the terms of GNU Lesser General Public License Version 2.1.
+
+
+	  GNU Lesser General Public License Version 2.1
+	  =============================================
+	  Copyright 2005 by Sun Microsystems, Inc.
+	  901 San Antonio Road, Palo Alto, CA 94303, USA
+
+	  This library is free software; you can redistribute it and/or
+	  modify it under the terms of the GNU Lesser General Public
+	  License version 2.1, as published by the Free Software Foundation.
+
+	  This library is distributed in the hope that it will be useful,
+	  but WITHOUT ANY WARRANTY; without even the implied warranty of
+	  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+	  Lesser General Public License for more details.
+
+	  You should have received a copy of the GNU Lesser General Public
+	  License along with this library; if not, write to the Free Software
+	  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+	  MA  02111-1307  USA
+
 -->
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -65,64 +63,15 @@
 
 	<!-- Mapping @table:formula to @ss:Formula translating the expression syntax -->
 	<xsl:template match="@table:formula">
+		<xsl:param name="calculatedCellPosition" />
+		<xsl:param name="calculatedRowPosition" />
+
 		<xsl:attribute name="ss:Formula">
-			<xsl:choose>
-				<!-- In case of a table cell reference, the reference of the current address is necessary -->
-				<xsl:when test="contains(., '[.')">
-					<!-- The column position of the current cell is archieved by adding up all preceding table cells
-						 or if available @table:number-columns-repeated of the preceding cells.
-						Two steps:
-						Step1: creating '$precedingColumns/quantity/@table:number-columns-repeated').
-						Step2: sum(xxx:nodeset($precedingColumns)/quantity) + 1        -->
-					<xsl:variable name="precedingColumns">
-						<xsl:for-each select="parent::table:table-cell/preceding-sibling::*">
-							<xsl:choose>
-								<!-- maybe a parser is used, which reads the DTD files (e.g. Xerces),
-									then '1' is the default for 'table:number-columns-repeated' -->
-								<xsl:when test="not(@table:number-columns-repeated and @table:number-columns-repeated > 1)">
-									<xsl:element name="quantity" namespace="">
-										<xsl:text>1</xsl:text>
-									</xsl:element>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:element name="quantity" namespace="">
-										<xsl:value-of select="@table:number-columns-repeated" />
-									</xsl:element>
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:for-each>
-					</xsl:variable>
-					<xsl:variable name="ancestorRow" select="ancestor::table:table-row" />
-					<xsl:variable name="precedingRows" select="$ancestorRow/preceding-sibling::table:table-row |
-															   $ancestorRow/preceding-sibling::*[table:table-row-group or table:table-header-rows]/descendant::table:table-row"/>
-					<xsl:call-template name="translate-formular-expression">
-						<xsl:with-param name="rowPos" select="count($precedingRows) + 1" />
-						<xsl:with-param name="columnPos">
-							<xsl:choose>
-								<xsl:when test="function-available('xalan:nodeset')">
-									<xsl:value-of select="sum(xalan:nodeset($precedingColumns)/*) + 1" />
-								</xsl:when>
-								<xsl:when test="function-available('xt:node-set')">
-									<xsl:value-of select="sum(xt:node-set($precedingColumns)/*) + 1" />
-								</xsl:when>
-								<xsl:when test="function-available('common:nodeset')">
-									<xsl:value-of select="sum(common:nodeset($precedingColumns)/*) + 1" />
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:message terminate="yes">ERROR: Function not found: nodeset</xsl:message>
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:with-param>
-						<xsl:with-param name="expression" select="." />
-					</xsl:call-template>
-				</xsl:when>
-				<xsl:otherwise>
-					<!-- No cell position for tranformation required -->
-					<xsl:call-template name="translate-formular-expression">
-						<xsl:with-param name="expression" select="." />
-					</xsl:call-template>
-				</xsl:otherwise>
-			</xsl:choose>
+			<xsl:call-template name="translate-formular-expression">
+				<xsl:with-param name="rowPos"    select="$calculatedRowPosition" />
+				<xsl:with-param name="columnPos" select="$calculatedCellPosition" />
+				<xsl:with-param name="expression" select="." />
+			</xsl:call-template>
 		</xsl:attribute>
 	</xsl:template>
 
@@ -179,13 +128,11 @@
 		<!-- Choose if the expression contains one of the function, which might need changes -->
 		<xsl:choose>
 			<!-- if not contain one of the functions, which need parameter mapping -->
-			<xsl:when test="not(contains($expression, 'ADDRESS') or
-								contains($expression, 'CEILING') or
-								contains($expression, 'FLOOR') or
-								(contains($expression, 'IF') and
-									not(contains($expression, 'COUNTIF') or
-									contains($expression, 'SUMIF'))) or
-								contains($expression, 'ROUND'))">
+			<xsl:when test="not(contains($expression, 'ADDRESS(') or
+								contains($expression, 'CEILING(') or
+								contains($expression, 'FLOOR(') or
+								contains($expression, 'IF(') or
+								contains($expression, 'ROUND('))">
 				<!-- simply translate possily exisiting column & row references -->
 				<xsl:call-template name="translate-oooc-expression">
 					<xsl:with-param name="rowPos" select="$rowPos" />
@@ -208,8 +155,8 @@
 				<xsl:text>(</xsl:text>
 				<xsl:choose>
 					<xsl:when test="not(contains($functionPrefix, 'ADDRESS') or
-                                        contains($functionPrefix, 'CEILING') or
-                                        contains($functionPrefix, 'FLOOR') or
+										contains($functionPrefix, 'CEILING') or
+										contains($functionPrefix, 'FLOOR') or
 										(contains($functionPrefix, 'IF') and not(
 											contains($functionPrefix, 'COUNTIF') or
 											contains($functionPrefix, 'SUMIF'))) or
@@ -222,7 +169,7 @@
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:choose>
-                            <xsl:when test="contains($functionPrefix, 'ADDRESS')">
+							<xsl:when test="contains($functionPrefix, 'ADDRESS')">
 								<xsl:call-template name="find-parameters">
 									<xsl:with-param name="rowPos" select="$rowPos" />
 									<xsl:with-param name="columnPos" select="$columnPos" />
@@ -230,8 +177,8 @@
 									<xsl:with-param name="parameterRemoval" select="4" />
 								</xsl:call-template>
 							</xsl:when>
-                            <xsl:when test="contains($functionPrefix, 'CEILING') or
-                                            contains($functionPrefix, 'FLOOR')">
+							<xsl:when test="contains($functionPrefix, 'CEILING') or
+											contains($functionPrefix, 'FLOOR')">
 								<xsl:call-template name="find-parameters">
 									<xsl:with-param name="rowPos" select="$rowPos" />
 									<xsl:with-param name="columnPos" select="$columnPos" />
@@ -524,7 +471,7 @@
 	</xsl:template>
 
 
-	<!-- A cell expression have always the format of a '.' followed by  -->
+	<!-- A cell expression has usually starts with a '.' otherwise it references to a sheet  -->
 	<xsl:template name="translate-cell-expression">
 		<xsl:param name="rowPos" /> <!-- the vertical position of the current cell -->
 		<xsl:param name="columnPos" /> <!-- the horizontal position of the current cell -->
@@ -533,68 +480,107 @@
 		<xsl:param name="charPos" select="0"/> <!-- current column position (needed for multiplying) -->
 		<xsl:param name="digitPos" select="0"/>  <!-- current row position (needed for multiplying) -->
 		<xsl:param name="expression" /> <!-- expression to be parsed by character -->
+		<xsl:param name="isRow" select="true()"/> <!-- the string (e.g. $D39 is parsed character per character from the back,
+													   first the row, later the column is parsed -->
 
-		<xsl:variable name="expLength" select="string-length($expression)" />
 		<xsl:choose>
-			<!-- parsing from the end, till only the '.' remains -->
-			<xsl:when test="$expLength != 1">
-				<xsl:variable name="token" select="substring($expression, $expLength)" />
+			<xsl:when test="starts-with($expression, '.')">
+				<xsl:variable name="expLength" select="string-length($expression)" />
 				<xsl:choose>
-					<xsl:when test="$token='0' or $token='1' or $token='2' or $token='3' or $token='4' or $token='5' or $token='6' or $token='7' or $token='8' or $token='9'">
-						<xsl:variable name="multiplier">
-							<xsl:call-template name="calculate-square-numbers">
-								<xsl:with-param name="base" select="10" />
-								<xsl:with-param name="exponent" select="$digitPos"/>
-							</xsl:call-template>
-						</xsl:variable>
-						<xsl:call-template name="translate-cell-expression">
-							<xsl:with-param name="columnPos" select="$columnPos" />
-							<xsl:with-param name="rowPos" select="$rowPos" />
-							<xsl:with-param name="targetColumnPos" select="$targetColumnPos" />
-							<xsl:with-param name="targetRowPos" select="$targetRowPos + $multiplier * $token" />
-							<xsl:with-param name="digitPos" select="$digitPos + 1" />
-							<xsl:with-param name="charPos" select="$charPos" />
-							<!-- removing the last character-->
-							<xsl:with-param name="expression" select="substring($expression, 1, $expLength - 1)" />
-						</xsl:call-template>
+					<!-- parsing from the end, till only the '.' remains -->
+					<xsl:when test="$expLength != 1">
+						<xsl:variable name="token" select="substring($expression, $expLength)" />
+						<xsl:choose>
+							<xsl:when test="$token='0' or $token='1' or $token='2' or $token='3' or $token='4' or $token='5' or $token='6' or $token='7' or $token='8' or $token='9'">
+								<xsl:variable name="multiplier">
+									<xsl:call-template name="calculate-square-numbers">
+										<xsl:with-param name="base" select="10" />
+										<xsl:with-param name="exponent" select="$digitPos"/>
+									</xsl:call-template>
+								</xsl:variable>
+								<xsl:call-template name="translate-cell-expression">
+									<xsl:with-param name="columnPos" select="$columnPos" />
+									<xsl:with-param name="rowPos" select="$rowPos" />
+									<xsl:with-param name="targetColumnPos" select="$targetColumnPos" />
+									<xsl:with-param name="targetRowPos" select="$targetRowPos + $multiplier * $token" />
+									<xsl:with-param name="digitPos" select="$digitPos + 1" />
+									<xsl:with-param name="charPos" select="$charPos" />
+									<!-- removing the last character-->
+									<xsl:with-param name="expression" select="substring($expression, 1, $expLength - 1)" />
+									<xsl:with-param name="isRow" select="true()" />
+								</xsl:call-template>
+							</xsl:when>
+							<xsl:when test="$token = '$'">
+								<xsl:choose>
+									<!-- if this is the first '$' after '.' (column-->
+									<xsl:when test="$expLength = 2">
+										<xsl:text>C</xsl:text><xsl:value-of select="$targetColumnPos"/>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:text>R</xsl:text><xsl:value-of select="$targetRowPos"/>
+										<xsl:call-template name="translate-cell-expression">
+											<xsl:with-param name="columnPos" select="$columnPos" />
+											<xsl:with-param name="rowPos" select="$rowPos" />
+											<xsl:with-param name="targetColumnPos" select="$targetColumnPos" />
+											<xsl:with-param name="targetRowPos" select="$targetRowPos" />
+											<xsl:with-param name="charPos" select="$charPos" />
+											<!-- removing the last character-->
+											<xsl:with-param name="expression" select="substring($expression, 1, $expLength - 1)" />
+											<xsl:with-param name="isRow" select="false()" />
+										</xsl:call-template>
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:when>
+							<!-- in case of a letter -->
+							<xsl:otherwise>
+								<xsl:if test="$isRow">
+									<xsl:text>R</xsl:text>
+									<xsl:if test="$targetRowPos != $rowPos">
+										<xsl:text>[</xsl:text><xsl:value-of select="$targetRowPos - $rowPos"/><xsl:text>]</xsl:text>
+									</xsl:if>
+								</xsl:if>
+								<xsl:variable name="multiplier">
+									<xsl:call-template name="calculate-square-numbers">
+										<xsl:with-param name="base" select="26" />
+										<xsl:with-param name="exponent" select="$charPos"/>
+									</xsl:call-template>
+								</xsl:variable>
+								<xsl:variable name="tokenNumber">
+									<xsl:call-template name="character-to-number">
+										<xsl:with-param name="character" select="$token" />
+									</xsl:call-template>
+								</xsl:variable>
+
+								<xsl:call-template name="translate-cell-expression">
+									<xsl:with-param name="columnPos" select="$columnPos" />
+									<xsl:with-param name="rowPos" select="$rowPos" />
+									<xsl:with-param name="targetColumnPos" select="$targetColumnPos + $multiplier * $tokenNumber" />
+									<xsl:with-param name="targetRowPos" select="$targetRowPos" />
+									<xsl:with-param name="digitPos" select="$digitPos" />
+									<xsl:with-param name="charPos" select="$charPos + 1" />
+									<!-- removing the last character-->
+									<xsl:with-param name="expression" select="substring($expression, 1, $expLength - 1)" />
+									<xsl:with-param name="isRow" select="false()" />
+								</xsl:call-template>
+							</xsl:otherwise>
+						</xsl:choose>
 					</xsl:when>
-					<!-- in case of a letter -->
 					<xsl:otherwise>
-						<xsl:variable name="multiplier">
-							<xsl:call-template name="calculate-square-numbers">
-								<xsl:with-param name="base" select="26" />
-								<xsl:with-param name="exponent" select="$charPos"/>
-							</xsl:call-template>
-						</xsl:variable>
-
-						<xsl:variable name="tokenNumber">
-							<xsl:call-template name="character-to-number">
-								<xsl:with-param name="character" select="$token" />
-							</xsl:call-template>
-						</xsl:variable>
-
-						<xsl:call-template name="translate-cell-expression">
-							<xsl:with-param name="columnPos" select="$columnPos" />
-							<xsl:with-param name="rowPos" select="$rowPos" />
-							<xsl:with-param name="targetColumnPos" select="$targetColumnPos + $multiplier * $tokenNumber" />
-							<xsl:with-param name="targetRowPos" select="$targetRowPos" />
-							<xsl:with-param name="digitPos" select="$digitPos" />
-							<xsl:with-param name="charPos" select="$charPos + 1" />
-							<!-- removing the last character-->
-							<xsl:with-param name="expression" select="substring($expression, 1, $expLength - 1)" />
-						</xsl:call-template>
+						<xsl:text>C</xsl:text>
+						<xsl:if test="$targetColumnPos != $columnPos">
+							<xsl:text>[</xsl:text><xsl:value-of select="$targetColumnPos - $columnPos"/><xsl:text>]</xsl:text>
+						</xsl:if>
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:text>R</xsl:text>
-				<xsl:if test="$targetRowPos != $rowPos">
-					<xsl:text>[</xsl:text><xsl:value-of select="$targetRowPos - $rowPos"/><xsl:text>]</xsl:text>
-				</xsl:if>
-				<xsl:text>C</xsl:text>
-				<xsl:if test="$targetColumnPos != $columnPos">
-					<xsl:text>[</xsl:text><xsl:value-of select="$targetColumnPos - $columnPos"/><xsl:text>]</xsl:text>
-				</xsl:if>
+				<xsl:variable name="sheetName" select="substring-before($expression, '.')" />
+				<xsl:value-of select="$sheetName"/><xsl:text>!</xsl:text>
+				<xsl:call-template name="translate-cell-expression">
+					<xsl:with-param name="rowPos" select="$rowPos" />
+					<xsl:with-param name="columnPos" select="$columnPos" />
+					<xsl:with-param name="expression" select="substring-after($expression, $sheetName)" />
+				</xsl:call-template>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
