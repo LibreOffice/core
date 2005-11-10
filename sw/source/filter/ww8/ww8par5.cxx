@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:26:29 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:31:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -964,6 +964,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     bool bOk = pF->GetPara(pRes->nCp2OrIdx, aF);
 
     ASSERT(bOk, "WW8: Bad Field!\n");
+    if (aF.nId == 33) aF.bCodeNest=false; //#124716#: do not recurse into nested page fields
 
     maFieldStack.push_back(FieldEntry(*pPaM->GetPoint(), aF.nId));
 
@@ -1001,8 +1002,17 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         if (aF.bResNest && !AcceptableNestedField(aF.nId))
             return aF.nLen;                 // Result nested -> nicht brauchbar
 
-        return aF.nLen - aF.nLRes - 1;  // so viele ueberlesen, das Resultfeld
-                                        // wird wie Haupttext eingelesen
+        long nOldPos = pStrm->Tell();
+        String aStr;
+        aF.nLCode = pSBase->WW8ReadString( *pStrm, aStr, pPlcxMan->GetCpOfs()+
+            aF.nSCode, aF.nLCode, eTextCharSet );
+        pStrm->Seek( nOldPos );
+
+        if (aStr.Search('.')>=0 || aStr.Search('/')>=0) //#124725# field codes which contain '/' or '.' are not displayed in WinWord
+            return aF.nLen;
+        else
+            return aF.nLen - aF.nLRes - 1;  // so viele ueberlesen, das Resultfeld
+                                            // wird wie Haupttext eingelesen
     }
     else
     {                                   // Lies Feld
@@ -1013,7 +1023,10 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
 
         // --> OD 2005-07-25 #i51312# - graphics inside field code not supported
         // by Writer. Thus, delete character 0x01, which stands for such a graphic.
-        aStr.EraseAllChars( 0x01 );
+        if (aF.nId==51) //#i56768# only do it for the MACROBUTTON field, since DropListFields need the 0x01.
+        {
+            aStr.EraseAllChars( 0x01 );
+        }
         // <--
 
         eF_ResT eRes = (this->*aWW8FieldTab[aF.nId])( &aF, aStr );
@@ -3196,8 +3209,10 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                         {
                             SwFormTokens aPattern = aOldForm.GetPattern(nLevel);
 
-                            remove_if(aPattern.begin(), aPattern.end(),
+                            SwFormTokens::iterator new_end=remove_if(aPattern.begin(), aPattern.end(),
                                       SwFormTokenEqualToFormTokenType(TOKEN_ENTRY_NO));
+
+                            aPattern.erase (new_end, aPattern.end() ); // #124710#: table index imported with wrong page number format
 
                             aForm.SetPattern(nLevel, aPattern);
 
