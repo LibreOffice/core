@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.137 $
+ *  $Revision: 1.138 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:25:29 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:30:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2868,7 +2868,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                 {
                     pRecord = aData.GetRecord(nTxbx);
                     if (pRecord && pRecord->pObj && pRecord->aTextId.nTxBxS)
-                    {
+                    { // #i52825# pRetFrmFmt can be NULL
                         pRetFrmFmt = MungeTextIntoDrawBox(pRecord->pObj,
                             pRecord, nGrafAnchorCp, pRetFrmFmt);
                     }
@@ -2878,7 +2878,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     }
 
     // --> OD 2005-03-11 #i44344#, #i44681# - positioning attributes already set
-    if ( pRetFrmFmt->ISA(SwDrawFrmFmt) )
+    if ( pRetFrmFmt /*#i52825# */ && pRetFrmFmt->ISA(SwDrawFrmFmt) )
     {
         static_cast<SwDrawFrmFmt*>(pRetFrmFmt)->PosAttrSet();
     }
