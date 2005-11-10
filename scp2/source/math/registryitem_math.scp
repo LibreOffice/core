@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryitem_math.scp,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:35:47 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:18:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -676,7 +676,7 @@ End
 // .ODF
 RegistryItem gid_Regitem_OpenOffice_ODF_OpenWith_Math
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".ODF\OpenWithProgIDs";
+    Subkey = ".odf\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Math_Bin;
     Name = "opendocument.MathDocument.1";
     Value = " ";
@@ -685,7 +685,7 @@ End
 // .SXM
 RegistryItem gid_Regitem_OpenOffice_SXM_OpenWith_Math
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".SXM\OpenWithProgIDs";
+    Subkey = ".sxm\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Math_Bin;
     Name = "opendocument.MathDocument.1";
     Value = " ";
@@ -694,7 +694,7 @@ End
 // .SMF
 RegistryItem gid_Regitem_OpenOffice_SMF_OpenWith_Math
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".SMF\OpenWithProgIDs";
+    Subkey = ".smf\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Math_Bin;
     Name = "opendocument.MathDocument.1";
     Value = " ";
@@ -703,7 +703,7 @@ End
 // .MML
 RegistryItem gid_Regitem_OpenOffice_MML_OpenWith_Math
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".MML\OpenWithProgIDs";
+    Subkey = ".mml\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Math_Bin;
     Name = "opendocument.MathDocument.1";
     Value = " ";

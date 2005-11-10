@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryitem_impress.scp,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:30:40 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:18:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -936,7 +936,7 @@ End
 // .ODP
 RegistryItem gid_Regitem_OpenOffice_ODP_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".ODP\OpenWithProgIDs";
+    Subkey = ".odp\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Name = "opendocument.ImpressDocument.1";
     Value = " ";
@@ -945,7 +945,7 @@ End
 // .OTP
 RegistryItem gid_Regitem_OpenOffice_OTP_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".OTP\OpenWithProgIDs";
+    Subkey = ".otp\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Name = "opendocument.ImpressDocument.1";
     Value = " ";
@@ -954,7 +954,7 @@ End
 // .SXI
 RegistryItem gid_Regitem_OpenOffice_SXI_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".SXI\OpenWithProgIDs";
+    Subkey = ".sxi\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Name = "opendocument.ImpressDocument.1";
     Value = " ";
@@ -963,7 +963,7 @@ End
 // .STI
 RegistryItem gid_Regitem_OpenOffice_STI_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".STI\OpenWithProgIDs";
+    Subkey = ".sti\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Name = "opendocument.ImpressDocument.1";
     Value = " ";
@@ -972,7 +972,7 @@ End
 // .PPT
 RegistryItem gid_Regitem_OpenOffice_PPT_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".PPT\OpenWithProgIDs";
+    Subkey = ".ppt\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Name = "opendocument.ImpressDocument.1";
     Value = " ";
@@ -981,7 +981,7 @@ End
 // .PPS
 RegistryItem gid_Regitem_OpenOffice_PPS_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".PPS\OpenWithProgIDs";
+    Subkey = ".pps\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Name = "opendocument.ImpressDocument.1";
     Value = " ";
@@ -990,7 +990,7 @@ End
 // .POT
 RegistryItem gid_Regitem_OpenOffice_POT_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".POT\OpenWithProgIDs";
+    Subkey = ".pot\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Name = "opendocument.ImpressDocument.1";
     Value = " ";
@@ -999,7 +999,7 @@ End
 // .SXD
 RegistryItem gid_Regitem_OpenOffice_SXD_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".SXD\OpenWithProgIDs";
+    Subkey = ".sxd\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Name = "opendocument.ImpressDocument.1";
     Value = " ";
@@ -1008,7 +1008,7 @@ End
 // .SDA
 RegistryItem gid_Regitem_OpenOffice_SDA_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".SDA\OpenWithProgIDs";
+    Subkey = ".sda\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Name = "opendocument.ImpressDocument.1";
     Value = " ";
@@ -1017,7 +1017,7 @@ End
 // .SDD
 RegistryItem gid_Regitem_OpenOffice_SDD_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".SDD\OpenWithProgIDs";
+    Subkey = ".sdd\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Name = "opendocument.ImpressDocument.1";
     Value = " ";
@@ -1026,7 +1026,7 @@ End
 // .SDP
 RegistryItem gid_Regitem_OpenOffice_SDP_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".SDP\OpenWithProgIDs";
+    Subkey = ".sdp\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Name = "opendocument.ImpressDocument.1";
     Value = " ";
@@ -1035,7 +1035,7 @@ End
 // .VOR
 RegistryItem gid_Regitem_OpenOffice_VOR_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".VOR\OpenWithProgIDs";
+    Subkey = ".vor\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Name = "opendocument.ImpressDocument.1";
     Value = " ";
@@ -1044,7 +1044,7 @@ End
 // .ODG
 RegistryItem gid_Regitem_OpenOffice_ODG_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".ODG\OpenWithProgIDs";
+    Subkey = ".odg\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Name = "opendocument.ImpressDocument.1";
     Value = " ";
