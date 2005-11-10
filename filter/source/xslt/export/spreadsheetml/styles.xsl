@@ -1,39 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    OpenOffice.org - a multi-platform office productivity suite
- 
-    $RCSfile: styles.xsl,v $
- 
-    $Revision: 1.4 $
- 
-    last change: $Author: rt $ $Date: 2005-09-08 22:04:31 $
- 
-    The Contents of this file are made available subject to
-    the terms of GNU Lesser General Public License Version 2.1.
- 
- 
-      GNU Lesser General Public License Version 2.1
-      =============================================
-      Copyright 2005 by Sun Microsystems, Inc.
-      901 San Antonio Road, Palo Alto, CA 94303, USA
- 
-      This library is free software; you can redistribute it and/or
-      modify it under the terms of the GNU Lesser General Public
-      License version 2.1, as published by the Free Software Foundation.
- 
-      This library is distributed in the hope that it will be useful,
-      but WITHOUT ANY WARRANTY; without even the implied warranty of
-      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-      Lesser General Public License for more details.
- 
-      You should have received a copy of the GNU Lesser General Public
-      License along with this library; if not, write to the Free Software
-      Foundation, Inc., 59 Temple Place, Suite 330, Boston,
-      MA  02111-1307  USA
- 
--->
+   $RCSfile: styles.xsl,v $
 
+   $Revision: 1.5 $
+
+   last change: $Author: rt $ $Date: 2005-11-10 16:53:12 $
+
+	The Contents of this file are made available subject to
+	the terms of GNU Lesser General Public License Version 2.1.
+
+
+	  GNU Lesser General Public License Version 2.1
+	  =============================================
+	  Copyright 2005 by Sun Microsystems, Inc.
+	  901 San Antonio Road, Palo Alto, CA 94303, USA
+
+	  This library is free software; you can redistribute it and/or
+	  modify it under the terms of the GNU Lesser General Public
+	  License version 2.1, as published by the Free Software Foundation.
+
+	  This library is distributed in the hope that it will be useful,
+	  but WITHOUT ANY WARRANTY; without even the implied warranty of
+	  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+	  Lesser General Public License for more details.
+
+	  You should have received a copy of the GNU Lesser General Public
+	  License along with this library; if not, write to the Free Software
+	  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+	  MA  02111-1307  USA
+
+-->
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0"
@@ -57,8 +54,11 @@
 	xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
 	xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
 	xmlns:xlink="http://www.w3.org/1999/xlink"
+	xmlns:xt="http://www.jclark.com/xt"
+	xmlns:common="http://exslt.org/common"
+	xmlns:xalan="http://xml.apache.org/xalan"
 	xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:c="urn:schemas-microsoft-com:office:component:spreadsheet" xmlns:html="http://www.w3.org/TR/REC-html40" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:x2="http://schemas.microsoft.com/office/excel/2003/xml" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	exclude-result-prefixes="chart config dc dom dr3d draw fo form math meta number office ooo oooc ooow script style svg table text xlink">
+	exclude-result-prefixes="chart config dc dom dr3d draw fo form math meta number office ooo oooc ooow script style svg table text xlink xt common xalan">
 
 	<!-- Used in case of 'style:map', conditional formatting, where a style references to another -->
 	<xsl:key name="styles" match="/*/office:styles/style:style | /*/office:automatic-styles/style:style" use="@style:name" />
@@ -75,44 +75,152 @@
 	</xsl:template>
 	 -->
 
-	<xsl:template match="style:style" name="style:style" mode="styles">
+	<xsl:template match="style:style" mode="styles">
 		<xsl:param name="isAutomatic" />
 		<xsl:param name="styleName" select="@style:name" />
+		<xsl:param name="styleParentName" select="@style:parent-style-name" />
 
-		<xsl:element name="Style">
-			<xsl:attribute name="ss:ID">
-				<xsl:value-of select="$styleName" />
-			</xsl:attribute>
-			<xsl:if test="not($isAutomatic)">
+		<!-- only row styles used by cells are exported,
+			as usual row style properties are already exported as row attributes -->
+		<xsl:if test="not(@style:family='table-row') or @style:family='table-row' and key('getCellByStyle', '.')">
+			<xsl:element name="Style">
+				<xsl:attribute name="ss:ID">
+					<!-- neglecting that a style is only unique in conjunction with it's family name -->
+					<xsl:value-of select="@style:name" />
+				</xsl:attribute>
 				<xsl:choose>
-					<xsl:when test="$styleName='Default'">
-						<xsl:attribute name="ss:Name"><xsl:value-of select="'Normal'" /></xsl:attribute>
+					<xsl:when test="not($isAutomatic)">
+						<xsl:choose>
+							<xsl:when test="@style:display-name">
+								<xsl:attribute name="ss:Name"><xsl:value-of select="@style:display-name"/></xsl:attribute>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:attribute name="ss:Name"><xsl:value-of select="@style:name" /></xsl:attribute>
+							</xsl:otherwise>
+						</xsl:choose>
+						<xsl:choose>
+							<!-- when a non-allowed parent style is found
+								(in spreadsheetml no style with ss:Name is able to have a ss:Parent)  -->
+							<xsl:when test="@style:parent-style-name">
+								<!-- styles have to be merged (flatting heritance tree) -->
+								<xsl:variable name="stylePropertiesContainer">
+									<xsl:call-template name="merge-all-parent-styles">
+										<xsl:with-param name="currentStyle" select="." />
+									</xsl:call-template>
+								</xsl:variable>
+								<xsl:choose>
+									<xsl:when test="function-available('xalan:nodeset')">
+										<xsl:call-template name="write-style-properties">
+											<xsl:with-param name="styleProperties" select="xalan:nodeset($stylePropertiesContainer)/*" />
+										</xsl:call-template>
+									</xsl:when>
+									<xsl:when test="function-available('common:node-set')">
+										<xsl:call-template name="write-style-properties">
+											<xsl:with-param name="styleProperties" select="common:node-set($stylePropertiesContainer)/*" />
+										</xsl:call-template>
+									</xsl:when>
+									<xsl:when test="function-available('xt:node-set')">
+										<xsl:call-template name="write-style-properties">
+											<xsl:with-param name="styleProperties" select="xt:node-set($stylePropertiesContainer)/*" />
+										</xsl:call-template>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:message terminate="yes">WARNING: The required node set function was not found!</xsl:message>
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:call-template name="write-style-properties" />
+							</xsl:otherwise>
+						</xsl:choose>
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:attribute name="ss:Name"><xsl:value-of select="$styleName" /></xsl:attribute>
+						<!-- automatic styles are implicit inherting from a style called 'Default',
+						furthermore nor in spreadsheetml nor in OpenDocument automatic styles are able to inherit from each other -->
+						<xsl:choose>
+							<xsl:when test="@style:parent-style-name and not(@style:parent-style-name = 'Default')">
+								<xsl:attribute name="ss:Parent"><xsl:value-of select="@style:parent-style-name" /></xsl:attribute>
+							</xsl:when>
+						</xsl:choose>
+						<xsl:call-template name="write-style-properties" />
 					</xsl:otherwise>
 				</xsl:choose>
-			</xsl:if>
-			<xsl:if test="@style:parent-style-name">
-				<xsl:attribute name="ss:Parent"><xsl:value-of select="@style:parent-style-name" /></xsl:attribute>
-			</xsl:if>
+			</xsl:element>
+		</xsl:if>
+	</xsl:template>
 
-			<xsl:variable name="styleProperties" select="key('styles', $styleName)/*" />
-			<xsl:call-template name="Alignment">
-				<xsl:with-param name="styleProperties" select="$styleProperties" />
-			</xsl:call-template>
-			<xsl:call-template name="Border">
-				<xsl:with-param name="styleProperties" select="$styleProperties" />
-			</xsl:call-template>
-			<xsl:call-template name="Font">
-				<xsl:with-param name="styleProperties" select="$styleProperties" />
-			</xsl:call-template>
-			<xsl:call-template name="Interior">
-				<xsl:with-param name="styleProperties" select="$styleProperties" />
-			</xsl:call-template>
-			<xsl:call-template name="NumberFormat">
-				<xsl:with-param name="styleProperties" select="$styleProperties" />
-			</xsl:call-template>
+	<!-- resolving the style inheritance by starting from uppermost parent and
+		 overriding exisiting style properties by new found child properties -->
+	<xsl:template name="merge-all-parent-styles">
+		<xsl:param name="currentStyle" />
+
+		<xsl:choose>
+			<!-- in case of a parent, styles have to be merged (flatting heritance tree) -->
+			<xsl:when test="$currentStyle/@style:parent-style-name">
+				<!-- collect parent style properties -->
+				<xsl:variable name="parentStyleContainer">
+					<!-- take a look if the parent style has a parent himself -->
+					<xsl:call-template name="merge-all-parent-styles" >
+						<xsl:with-param name="currentStyle" select="key('styles', $currentStyle/@style:parent-style-name)" />
+					</xsl:call-template>
+				</xsl:variable>
+				<xsl:choose>
+					<xsl:when test="function-available('xalan:nodeset')">
+						<xsl:call-template name="merge-style-properties">
+							<xsl:with-param name="childStyleContainer"  select="$currentStyle" />
+							<xsl:with-param name="parentStyleContainer" select="xalan:nodeset($parentStyleContainer)" />
+						</xsl:call-template>
+					</xsl:when>
+					<xsl:when test="function-available('common:node-set')">
+						<xsl:call-template name="merge-style-properties">
+							<xsl:with-param name="childStyleContainer"  select="$currentStyle" />
+							<xsl:with-param name="parentStyleContainer" select="common:node-set($parentStyleContainer)" />
+						</xsl:call-template>
+					</xsl:when>
+					<xsl:when test="function-available('xt:node-set')">
+						<xsl:call-template name="merge-style-properties">
+							<xsl:with-param name="childStyleContainer"  select="$currentStyle" />
+							<xsl:with-param name="parentStyleContainer" select="xt:node-set($parentStyleContainer)" />
+						</xsl:call-template>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:message terminate="yes">WARNING: The required node-set function was not found!</xsl:message>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+			<!-- called for top parents (or styles without parents) -->
+			<xsl:otherwise>
+				<xsl:copy-of select="$currentStyle/*"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="merge-style-properties">
+		<xsl:param name="childStyleContainer" />
+		<xsl:param name="parentStyleContainer" />
+
+		<xsl:choose>
+			<xsl:when test="$parentStyleContainer/*">
+				<xsl:apply-templates select="$parentStyleContainer/*" mode="inheritance">
+					<xsl:with-param name="childStyleContainer" select="$childStyleContainer" />
+				</xsl:apply-templates>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:copy-of select="$childStyleContainer/*"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template match="*" mode="inheritance">
+		<xsl:param name="childStyleContainer" />
+
+		<!-- create an element named equal to the current properties parent element (e.g. style:table-cell-properties) -->
+		<xsl:element name="{name()}" namespace="urn:oasis:names:tc:opendocument:xmlns:style:1.0">
+			<!-- attributes will be automatically replaced	-->
+			<xsl:copy-of select="@*" />
+			<xsl:copy-of select="$childStyleContainer/*[name() = name(current()	)]/@*"/>
+
+			<!-- elements are not needed yet, will be neglected for simplicity reasons -->
 		</xsl:element>
 	</xsl:template>
 
@@ -126,6 +234,30 @@
 					/*/office:automatic-styles/number:number-style  |
 					/*/office:automatic-styles/number:percentage-style |
 					/*/office:automatic-styles/number:currency-style" name="number-style" use="@style:name" />
+
+
+	<xsl:template name="write-style-properties">
+		<xsl:param name="styleProperties" select="key('styles', @style:name)/*" />
+
+		<xsl:call-template name="Alignment">
+			<xsl:with-param name="styleProperties" select="$styleProperties" />
+		</xsl:call-template>
+		<xsl:call-template name="Border">
+			<xsl:with-param name="styleProperties" select="$styleProperties" />
+		</xsl:call-template>
+		<xsl:call-template name="Font">
+			<xsl:with-param name="styleProperties" select="$styleProperties" />
+			<xsl:with-param name="styleParentName" select="@style:parent-style-name" />
+		</xsl:call-template>
+		<xsl:call-template name="Interior">
+			<xsl:with-param name="styleProperties" select="$styleProperties" />
+		</xsl:call-template>
+		<xsl:call-template name="NumberFormat">
+			<xsl:with-param name="styleProperties" select="$styleProperties" />
+		</xsl:call-template>
+	</xsl:template>
+
+	<!-- context is element 'style:style' -->
 	<xsl:template name="NumberFormat">
 		<xsl:if test="@style:data-style-name">
 			<xsl:variable name="numberStyleName" select="@style:data-style-name" />
@@ -462,6 +594,7 @@
 
 	<xsl:template name="Font">
 		<xsl:param name="styleProperties" />
+		<xsl:param name="styleParentName" />
 
 		<!-- An empty font element, might overwrite parents setting by
 			 the default attributes -->
@@ -479,9 +612,10 @@
 
 
 			<xsl:element name="Font">
-				<xsl:if test="$styleProperties/@fo:font-weight = 'bold'">
-					<xsl:attribute name="ss:Bold">1</xsl:attribute>
-				</xsl:if>
+				<xsl:call-template name="getParentBold">
+					<xsl:with-param name="styleProperties" select="$styleProperties" />
+					<xsl:with-param name="styleParentName" select="$styleParentName" />
+				</xsl:call-template>
 				<xsl:if test="$styleProperties/@fo:color">
 					<xsl:attribute name="ss:Color"><xsl:value-of select="$styleProperties/@fo:color" /></xsl:attribute>
 				</xsl:if>
@@ -539,6 +673,28 @@
 				Therefore a default is set -->
 				<xsl:attribute name="ss:Pattern">Solid</xsl:attribute>
 			</xsl:element>
+		</xsl:if>
+	</xsl:template>
+
+	<!-- Excel issue workaround: <Font ss:Bold="1"> is not inherited -->
+	<xsl:template name="getParentBold">
+		<xsl:param name="styleProperties" />
+		<xsl:param name="styleParentName" />
+		<xsl:param name="styleName" />
+
+		<xsl:if test="$styleParentName and $styleParentName != $styleName">
+			<xsl:choose>
+				<xsl:when test="$styleProperties/@fo:font-weight = 'bold'">
+					<xsl:attribute name="ss:Bold">1</xsl:attribute>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:call-template name="getParentBold">
+						<xsl:with-param name="styleProperties" select="key('styles', $styleParentName)/*" />
+						<xsl:with-param name="styleParentName" select="key('styles', $styleParentName)/@style:parent-style-name" />
+						<xsl:with-param name="styleName" select="$styleParentName" />
+					</xsl:call-template>
+				</xsl:otherwise>
+			</xsl:choose>
 		</xsl:if>
 	</xsl:template>
 
