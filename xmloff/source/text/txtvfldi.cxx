@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtvfldi.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:34:35 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:26:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -389,9 +389,14 @@ void XMLSetVarFieldImportContext::EndElement()
                     Reference<XTextContent> xTextContent(xPropSet, UNO_QUERY);
                     if (xTextContent.is())
                     {
+                        try {
                         // insert, set field properties and exit!
                         GetImportHelper().InsertTextContent(xTextContent);
                         PrepareField(xPropSet);
+                        } catch (lang::IllegalArgumentException & /*e*/)
+                        {
+                            // ignore e: #i54023#
+                        };
                         return;
                     }
                 }
