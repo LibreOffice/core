@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.46 $
+#   $Revision: 1.47 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-09 09:38:04 $
+#   last change: $Author: jsc $ $Date: 2005-11-10 14:36:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -229,8 +229,18 @@ INCLUDEFILELIST=\
     $(INCOUT)$/com$/sun$/star$/uno$/Type.h \
     $(INCOUT)$/com$/sun$/star$/uno$/Type.hxx
 
+.IF "$(USE_SHELL)"=="4nt"
+# Quoted Open Bracket -QOB
+# Quoted Close Bracket -QCB
+QOB=(
+QCB=)
+.ELSE
+QOB=\(
+QCB=\)
+.ENDIF
+
 INCLUDELIST:=\
-    {$(subst,/,$/ $(shell $(FIND) $(INCLUDETOPDIRLIST) -type f -print))} \
+    {$(subst,/,$/ $(shell $(FIND) $(INCLUDETOPDIRLIST) -type f ! $(QOB) -name "*~" -o -name "*build.lst" -o -name "*deliver.log" $(QCB) -print))} \
     $(INCLUDEFILELIST)
 
 SDK_CONTENT_CHECK_FILES= \
