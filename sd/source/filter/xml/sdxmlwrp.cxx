@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-30 09:58:25 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:31:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,12 @@
 #include <rtl/logfile.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#endif
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
 #endif
@@ -565,6 +571,23 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
     uno::Reference< beans::XPropertySet > xInfoSet( GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
     xInfoSet->setPropertyValue( OUString::createFromAscii( "Preview" ), uno::makeAny( mrDocShell.GetDoc()->IsStarDrawPreviewMode() ) );
 
+    // ---- get BuildId from parent container if available
+
+    uno::Reference< container::XChild > xChild( mxModel, uno::UNO_QUERY );
+    if( xChild.is() )
+    {
+        uno::Reference< beans::XPropertySet > xParentSet( xChild->getParent(), uno::UNO_QUERY );
+        if( xParentSet.is() )
+        {
+            uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xParentSet->getPropertySetInfo() );
+            OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BuildId" ) );
+            if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(sPropName) )
+            {
+                xInfoSet->setPropertyValue( sPropName, xParentSet->getPropertyValue(sPropName) );
+            }
+        }
+    }
+
     // -------------------------------------
 
     Reference< io::XActiveDataSource > xSource;
@@ -791,6 +814,21 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
         catch( Exception& )
         {
             DBG_ERROR("sd::SdXMLFilter::Import(), exception during clearing of unused named items");
+        }
+    }
+
+    // set BuildId on XModel for later OLE object loading
+    if( xInfoSet.is() )
+    {
+        uno::Reference< beans::XPropertySet > xModelSet( mxModel, uno::UNO_QUERY );
+        if( xModelSet.is() )
+        {
+            uno::Reference< beans::XPropertySetInfo > xModelSetInfo( xModelSet->getPropertySetInfo() );
+            OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BuildId" ) );
+            if( xModelSetInfo.is() && xModelSetInfo->hasPropertyByName(sPropName) )
+            {
+                xModelSet->setPropertyValue( sPropName, xInfoSet->getPropertyValue(sPropName) );
+            }
         }
     }
 
