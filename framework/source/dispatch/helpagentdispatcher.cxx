@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpagentdispatcher.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:19:38 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:11:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,16 +37,36 @@
 #include <dispatch/helpagentdispatcher.hxx>
 #endif
 
-#ifndef __FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
-#include <threadhelp/resetableguard.hxx>
+#ifndef __FRAMEWORK_THREADHELP_READGUARD_HXX_
+#include <threadhelp/readguard.hxx>
 #endif
 
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
+#ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
+#include <threadhelp/writeguard.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_XWINDOW2_HPP_
+#include <com/sun/star/awt/XWindow2.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
+#include <com/sun/star/awt/PosSize.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
+#include <com/sun/star/awt/Size.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
+#include <com/sun/star/awt/Rectangle.hpp>
 #endif
 
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
+#endif
+
+#ifndef INCLUDED_SVTOOLS_HELPOPT_HXX
+#include <svtools/helpopt.hxx>
 #endif
 
 #ifndef _SV_SVAPP_HXX
@@ -57,346 +77,406 @@
 #include <vcl/help.hxx>
 #endif
 
-#ifndef _COMPHELPER_GUARDING_HXX_
-#include <comphelper/guarding.hxx>
-#endif
+namespace css = ::com::sun::star;
 
-#ifndef INCLUDED_SVTOOLS_HELPOPT_HXX
-#include <svtools/helpopt.hxx>
-#endif
-
-#ifndef _SV_SVAPP_HXX
-#include <vcl/svapp.hxx>
-#endif
 //........................................................................
 namespace framework
 {
-//........................................................................
 
-    using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::frame;
-    using namespace ::com::sun::star::util;
-    using namespace ::com::sun::star::beans;
-    using namespace ::com::sun::star::awt;
-    using namespace ::com::sun::star::lang;
+//-----------------------------------------------
+DEFINE_XINTERFACE_4(HelpAgentDispatcher                         ,
+                    OWeakObject                                 ,
+                    DIRECT_INTERFACE (css::lang::XTypeProvider ),
+                    DIRECT_INTERFACE (css::frame::XDispatch    ),
+                    DIRECT_INTERFACE (css::awt::XWindowListener),
+                    DIRECT_INTERFACE (css::lang::XEventListener))
 
-    //====================================================================
-    //= HelpAgentDispatcher
-    //====================================================================
-    //--------------------------------------------------------------------
-    HelpAgentDispatcher::HelpAgentDispatcher( const Reference< XFrame >& _rxParentFrame )
-        :ThreadHelpBase(&Application::GetSolarMutex())
-        ,m_pContainerWindow(NULL)
-        ,m_pAgentWindow(NULL)
-        ,m_xParentFrame(_rxParentFrame)
+//-----------------------------------------------
+DEFINE_XTYPEPROVIDER_2(HelpAgentDispatcher     ,
+                       css::lang::XTypeProvider,
+                       css::frame::XDispatch   )
+
+//--------------------------------------------------------------------
+HelpAgentDispatcher::HelpAgentDispatcher( const css::uno::Reference< css::frame::XFrame >& xParentFrame)
+    : ThreadHelpBase    (&Application::GetSolarMutex())
+    , m_sCurrentURL     (                             )
+    , m_xContainerWindow(                             )
+    , m_xAgentWindow    (                             )
+    , m_aTimer          (                             )
+    , m_xSelfHold       (                             )
+{
+    // It's required that this class has to be contructed with a valid frame.
+    // And "valid" means: the frame must already bound to a valid container window.
+    m_xContainerWindow = xParentFrame->getContainerWindow();
+}
+
+//--------------------------------------------------------------------
+HelpAgentDispatcher::~HelpAgentDispatcher()
+{
+    implts_stopTimer();
+    implts_ignoreCurrentURL();
+
+    // Needed ... because it was create as "new VCLWindow()" ! Such windows must be disposed explicitly.
+    css::uno::Reference< css::lang::XComponent > xAgentWindow(m_xAgentWindow, css::uno::UNO_QUERY);
+    if (xAgentWindow.is())
+        xAgentWindow->dispose();
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL HelpAgentDispatcher::dispatch(const css::util::URL&                                  aURL ,
+                                            const css::uno::Sequence< css::beans::PropertyValue >& lArgs)
+    throw(css::uno::RuntimeException)
+{
+    // silently drop the request if the new URL was marked to be ignored next time.
+    sal_Int32 nAllowedToIgnore = SvtHelpOptions().getAgentIgnoreURLCounter(aURL.Complete);
+    if (nAllowedToIgnore < 1)
+        return;
+
+    // stop the expiration timer for the old URL
+    // The timer will add the old URL to the list of ignorable URLs.
+    // So m_sCurrentURL must be set AFTER the timer was stopped !!!
+    implts_stopTimer();
+
+    // SAFE ->
+    WriteGuard aWriteLock(m_aLock);
+    m_sCurrentURL = aURL.Complete;
+    aWriteLock.unlock();
+    // <- SAFE
+
+    // start the expiration timer for the new URL
+    implts_startTimer();
+
+    // make sure the agent window is shown
+    implts_showAgentWindow();
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL HelpAgentDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
+                                                     const css::util::URL&                                     aURL     )
+    throw(css::uno::RuntimeException)
+{
+    // no status available
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL HelpAgentDispatcher::removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
+                                                        const css::util::URL&                                     aURL     )
+    throw(css::uno::RuntimeException)
+{
+    // no status available
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL HelpAgentDispatcher::windowResized(const css::awt::WindowEvent& aEvent)
+    throw(css::uno::RuntimeException)
+{
+    implts_positionAgentWindow();
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL HelpAgentDispatcher::windowMoved(const css::awt::WindowEvent& aEvent)
+    throw(css::uno::RuntimeException)
+{
+    implts_positionAgentWindow();
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL HelpAgentDispatcher::windowShown(const css::lang::EventObject& aEvent)
+    throw(css::uno::RuntimeException)
+{
+    implts_showAgentWindow();
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL HelpAgentDispatcher::windowHidden(const css::lang::EventObject& aEvent)
+    throw(css::uno::RuntimeException)
+{
+    implts_hideAgentWindow();
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL HelpAgentDispatcher::disposing(const css::lang::EventObject& aEvent)
+    throw(css::uno::RuntimeException)
+{
+    // SAFE ->
+    WriteGuard aWriteLock(m_aLock);
+
+    // Already disposed ?!
+    if (! m_xContainerWindow.is())
+        return;
+    // Wrong broadcaster ?!
+    if (aEvent.Source != m_xContainerWindow)
+        return;
+
+    css::uno::Reference< css::uno::XInterface > xSelfHoldUntilMethodEnds(static_cast< css::frame::XDispatch* >(this), css::uno::UNO_QUERY_THROW);
+    m_xSelfHold.clear();
+
+    aWriteLock.unlock();
+    // <- SAFE
+
+    implts_stopTimer();
+    implts_hideAgentWindow();
+    implts_ignoreCurrentURL();
+
+    // SAFE ->
+    aWriteLock.lock();
+    m_xContainerWindow.clear();
+    css::uno::Reference< css::lang::XComponent > xAgentWindow(m_xAgentWindow, css::uno::UNO_QUERY);
+    m_xAgentWindow.clear();
+    aWriteLock.unlock();
+    // <- SAFE
+
+    // Needed ... because it was create as "new VCLWindow()" ! Such windows must be disposed explicitly.
+    if (xAgentWindow.is())
+        xAgentWindow->dispose();
+}
+
+//--------------------------------------------------------------------
+void HelpAgentDispatcher::helpRequested()
+{
+    implts_stopTimer();
+    implts_hideAgentWindow();
+    implts_acceptCurrentURL();
+}
+
+//-----------------------------------------------
+void HelpAgentDispatcher::closeAgent()
+{
+    implts_stopTimer();
+    implts_hideAgentWindow();
+    implts_ignoreCurrentURL();
+}
+
+//--------------------------------------------------------------------
+void HelpAgentDispatcher::implts_acceptCurrentURL()
+{
+    // SAFE ->
+    WriteGuard aWriteLock(m_aLock);
+
+    ::rtl::OUString sAcceptedURL  = m_sCurrentURL;
+                    m_sCurrentURL = ::rtl::OUString();
+
+    aWriteLock.unlock();
+    // <- SAFE
+
+    // We must make sure that this URL isnt marked as ignored by the user.
+    // Otherwhise the user wont see the corresponding help content in the future.
+    SvtHelpOptions().resetAgentIgnoreURLCounter(sAcceptedURL);
+
+    // show the right help content
+    // SOLAR SAFE ->
     {
-        OSL_ENSURE(m_xParentFrame.is(), "HelpAgentDispatcher::HelpAgentDispatcher: invalid parent frame!");
+        ::vos::OGuard aSolarLock(Application::GetSolarMutex());
+        Help* pHelp = Application::GetHelp();
+        if (pHelp)
+            pHelp->Start(sAcceptedURL, NULL);
     }
+    // <- SOLAR SAFE
+}
 
-    //--------------------------------------------------------------------
-    HelpAgentDispatcher::~HelpAgentDispatcher()
+//--------------------------------------------------------------------
+void HelpAgentDispatcher::implts_ignoreCurrentURL()
+{
+    // SAFE ->
+    WriteGuard aWriteLock(m_aLock);
+
+    ::rtl::OUString sIgnoredURL   = m_sCurrentURL;
+                    m_sCurrentURL = ::rtl::OUString();
+
+    aWriteLock.unlock();
+    // <- SAFE
+
+    if (sIgnoredURL.getLength())
+        SvtHelpOptions().decAgentIgnoreURLCounter(sIgnoredURL);
+}
+
+//--------------------------------------------------------------------
+void HelpAgentDispatcher::implts_stopTimer()
+{
+    // SAFE ->
+    WriteGuard aWriteLock(m_aLock);
+    m_xSelfHold.clear();
+    aWriteLock.unlock();
+    // <- SAFE
+
+    // SOLAR SAFE ->
+    // Timer access needs no "own lock" ! It lives if we live ...
+    // But it requires locking of the solar mutex ... because it's a vcl based timer.
     {
-        osl_incrementInterlockedCount( &m_refCount );
-            // we may create new references to ourself below, so ensure the dtor is not called twice ....
-        closeAgentWindow();
-        if(m_xAutoCloseTimer.isValid())
-            m_xAutoCloseTimer->setListener(NULL);
-    }
-
-    //--------------------------------------------------------------------
-    sal_Bool HelpAgentDispatcher::ensureContainerWindow()
-    {
-        if (m_pContainerWindow)
-            return sal_True;
-
-        if (!m_xParentFrame.is())
-        {
-            OSL_ENSURE(sal_False, "HelpAgentDispatcher::ensureContainerWindow: have no explicit container window and no frame to obtain an implicit one!");
-            // error condition, already asserted in the ctor
-            return sal_False;
-        }
-
-        Reference< XWindow > xContainer = m_xParentFrame->getContainerWindow();
-        implConstruct(xContainer);
-
-        return (NULL != m_pContainerWindow);
-    }
-
-    //--------------------------------------------------------------------
-    void HelpAgentDispatcher::implConstruct( const Reference< XWindow >& _rxContainer )
-    {
-        OSL_ENSURE(!m_pContainerWindow, "HelpAgentDispatcher::implConstruct: not to be called twice!");
-        OSL_ENSURE(_rxContainer.is(), "HelpAgentDispatcher::implConstruct: invalid container window given!");
-
-        m_pContainerWindow = VCLUnoHelper::GetWindow(_rxContainer);
-        OSL_ENSURE(!_rxContainer.is() || (NULL != m_pContainerWindow), "HelpAgentDispatcher::implConstruct: could not get the implementation of the container!");
-    }
-
-    //--------------------------------------------------------------------
-    void SAL_CALL HelpAgentDispatcher::dispatch( const URL& _rURL, const Sequence< PropertyValue >& _rArgs ) throw (RuntimeException)
-    {
-        ResetableGuard aGuard(m_aLock);
-        switchURL(_rURL);
-    }
-
-    //--------------------------------------------------------------------
-    void SAL_CALL HelpAgentDispatcher::addStatusListener( const Reference< XStatusListener >& _rxListener, const URL& _rURL ) throw (RuntimeException)
-    {
-        // this is pretty simple: we accept _all_ URLs, and we accept them _always_. So simply notify the listener
-        // of the initial "available" state and then do nothing.
-        if (_rxListener.is())
-        {
-            FeatureStateEvent aEvent;
-            aEvent.FeatureURL = _rURL;
-            aEvent.IsEnabled = sal_True;
-            aEvent.Requery = sal_False;
-            _rxListener->statusChanged(aEvent);
-        }
-    }
-
-    //--------------------------------------------------------------------
-    void SAL_CALL HelpAgentDispatcher::removeStatusListener( const Reference< XStatusListener >& _rxListener, const URL& _rURL ) throw (RuntimeException)
-    {
-        // nothing to do. see addStatusListener
-    }
-
-    //--------------------------------------------------------------------
-    void SAL_CALL HelpAgentDispatcher::windowResized( const WindowEvent& _rSource ) throw (RuntimeException)
-    {
-        positionAgentWindow();
-    }
-
-    //--------------------------------------------------------------------
-    void SAL_CALL HelpAgentDispatcher::windowMoved( const WindowEvent& _rSource ) throw (RuntimeException)
-    {
-        // not interested in
-    }
-
-    //--------------------------------------------------------------------
-    void SAL_CALL HelpAgentDispatcher::windowShown( const EventObject& _rSource ) throw (RuntimeException)
-    {
-        // not interested in
-    }
-
-    //--------------------------------------------------------------------
-    void SAL_CALL HelpAgentDispatcher::windowHidden( const EventObject& _rSource ) throw (RuntimeException)
-    {
-        // not interested in
-    }
-
-    //--------------------------------------------------------------------
-    void SAL_CALL HelpAgentDispatcher::disposing( const EventObject& _rSource ) throw (RuntimeException)
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xSelfHold( static_cast< ::com::sun::star::frame::XDispatch* >(this), ::com::sun::star::uno::UNO_QUERY );
-
-        // not interested in case the container window is closed (this should be handled by our owner)
-
-        // interested in case our agent window is closed (we're the only instance allowed to close it)
-        if (m_pAgentWindow)
-        {
-            Reference< XWindow > xSource(_rSource.Source, UNO_QUERY);
-            Reference< XWindow > xAgentWindow = VCLUnoHelper::GetInterface(m_pAgentWindow);
-            if (xSource.get() == xAgentWindow.get())
-            {   // somebody closed my agent window, but it was not me
-                agentClosedExternally();
-            }
-        }
-    }
-
-    //--------------------------------------------------------------------
-    void HelpAgentDispatcher::agentClosedExternally()
-    {
-        ResetableGuard aGuard(m_aLock);
-        stopAutoCloseTimer();
-        m_pAgentWindow = NULL;
-    }
-
-    //--------------------------------------------------------------------
-    sal_Bool HelpAgentDispatcher::approveURLRequest(const URL& _rURL)
-    {
-        SvtHelpOptions aHelpOptions;
-        sal_Int32 nAllowedToIgnore = aHelpOptions.getAgentIgnoreURLCounter(_rURL.Complete);
-        return nAllowedToIgnore > 0;
-    }
-
-    //--------------------------------------------------------------------
-    void HelpAgentDispatcher::switchURL(const URL& _rURL)
-    {
-        if (!approveURLRequest(_rURL))
-            // silently drop the request
+        ::vos::OGuard aSolarLock(Application::GetSolarMutex());
+        if (! m_aTimer.IsActive())
             return;
-
-        // show our agent window
-        ensureAgentWindow();
-
-        // stop the expiration timer for the old URL
-        stopAutoCloseTimer();
-
-        // save the URL
-        m_sCurrentURL = _rURL.Complete;
-
-        // start the expiration timer for the new URL
-        startAutoCloseTimer();
+        m_aTimer.Stop();
     }
+    // <- SOLAR SAFE
+}
 
-    //--------------------------------------------------------------------
-    void HelpAgentDispatcher::stopAutoCloseTimer()
+//--------------------------------------------------------------------
+void HelpAgentDispatcher::implts_startTimer()
+{
+    // SOLAR SAFE ->
+    // Timer access needs no "own lock" ! It lives if we live ...
+    // But it requires locking of the solar mutex ... because it's a vcl based timer.
     {
-        if (!m_xAutoCloseTimer.isValid())
+        ::vos::OGuard aSolarLock(Application::GetSolarMutex());
+        if (m_aTimer.IsActive())
             return;
-
-        m_xAutoCloseTimer->stop();
     }
+    // <- SOLAR SAFE
 
-    //--------------------------------------------------------------------
-    void HelpAgentDispatcher::startAutoCloseTimer()
+    // SAFE ->
+    // Timer uses pointer to this help agent dispatcher ...
+    // But normaly we are ref counted. So we must make sure that this
+    // dispatcher isnt killed during the timer runs .-)
+    WriteGuard aWriteLock(m_aLock);
+    m_xSelfHold = css::uno::Reference< css::uno::XInterface >(static_cast< css::frame::XDispatch* >(this), css::uno::UNO_QUERY_THROW);
+    aWriteLock.unlock();
+    // <- SAFE
+
+    sal_Int32 nTime = SvtHelpOptions().GetHelpAgentTimeoutPeriod();
+
+    // SOLAR SAFE ->
+    // Timer access needs no "own lock" ! It lives if we live ...
+    // But it requires locking of the solar mutex ... because it's a vcl based timer.
     {
-        ::vos::TTimeValue aAutoCloseTimeout( SvtHelpOptions().GetHelpAgentTimeoutPeriod(), 0 );
-        if (!m_xAutoCloseTimer.isValid())
-        {
-
-            m_xAutoCloseTimer = new OTimerHelper(aAutoCloseTimeout);
-            m_xAutoCloseTimer->setListener(this);
-        }
-
-        m_xAutoCloseTimer->setRemainingTime(aAutoCloseTimeout);
-        m_xAutoCloseTimer->start();
+        ::vos::OGuard aSolarLock(Application::GetSolarMutex());
+        m_aTimer.SetTimeout(nTime*1000); // sec => ms !
+        m_aTimer.Start();
     }
+}
 
-    //--------------------------------------------------------------------
-    void HelpAgentDispatcher::helpRequested()
+//-----------------------------------------------
+IMPL_LINK(HelpAgentDispatcher, implts_timerExpired, void*, pVoid)
+{
+    // This method is called by using a pointer to us.
+    // But we must be aware that we can be destroyed hardly
+    // if our uno reference will be gone!
+    // => Hold this object alive till this method finish its work.
+    // SAFE ->
+    WriteGuard aWriteLock(m_aLock);
+    css::uno::Reference< css::uno::XInterface > xSelfHoldUntilMethodEnds(static_cast< css::frame::XDispatch* >(this), css::uno::UNO_QUERY_THROW);
+    m_xSelfHold.clear();
+    aWriteLock.unlock();
+    // <- SAFE
+
+    implts_hideAgentWindow();
+    implts_ignoreCurrentURL();
+
+    return 0;
+}
+
+//--------------------------------------------------------------------
+void HelpAgentDispatcher::implts_showAgentWindow()
+{
+    // SAFE ->
+    ReadGuard aReadLock(m_aLock);
+    css::uno::Reference< css::awt::XWindow2 > xContainerWindow(m_xContainerWindow, css::uno::UNO_QUERY_THROW);
+    aReadLock.unlock();
+    // <- SAFE
+
+    css::uno::Reference< css::awt::XWindow > xAgentWindow = implts_ensureAgentWindow();
+
+    if (
+        (xContainerWindow.is()        ) &&
+        (xAgentWindow.is()            ) &&
+        (xContainerWindow->isVisible())
+       )
     {
-        ResetableGuard aGuard(m_aLock);
-
-        // FIRST stop the timer
-        stopAutoCloseTimer();
-
-        // reset the ignore counter for this URL
-        SvtHelpOptions().resetAgentIgnoreURLCounter(m_sCurrentURL);
-
-        Help* pApplicationHelp = Application::GetHelp();
-        OSL_ENSURE(pApplicationHelp, "HelpAgentDispatcher::helpRequested: no help system available!");
-        if (pApplicationHelp)
-            pApplicationHelp->Start( m_sCurrentURL, NULL );
-
-        aGuard.unlock();
-        closeAgentWindow();
+        // make sure that agent window resists at the right place .-)
+        implts_positionAgentWindow();
+        xAgentWindow->setVisible(sal_True);
     }
+}
 
-    //--------------------------------------------------------------------
-    void HelpAgentDispatcher::closeAgent()
+//--------------------------------------------------------------------
+void HelpAgentDispatcher::implts_hideAgentWindow()
+{
+    css::uno::Reference< css::awt::XWindow > xAgentWindow = implts_ensureAgentWindow();
+    if (xAgentWindow.is())
+        xAgentWindow->setVisible(sal_False);
+}
+
+//--------------------------------------------------------------------
+void HelpAgentDispatcher::implts_positionAgentWindow()
+{
+    // SAFE ->
+    ReadGuard aReadLock(m_aLock);
+    css::uno::Reference< css::awt::XWindow > xContainerWindow = m_xContainerWindow;
+    aReadLock.unlock();
+    // <- SAFE
+
+    css::uno::Reference< css::awt::XWindow > xAgentWindow = implts_ensureAgentWindow();
+    if (
+        (! xContainerWindow.is())  ||
+        (! xAgentWindow.is()    )
+       )
+        return;
+
+          ::svt::HelpAgentWindow* pAgentWindow   = (::svt::HelpAgentWindow*)VCLUnoHelper::GetWindow(xAgentWindow);
+    const css::awt::Rectangle     aContainerSize = xContainerWindow->getPosSize();
+    const Size                    aAgentSize     = pAgentWindow->getPreferredSizePixel();
+
+    sal_Int32 nW = aAgentSize.Width() ;
+    sal_Int32 nH = aAgentSize.Height();
+
+    if (nW < 1)
+        nW = 100;
+    if (nH < 1)
+        nH = 100;
+
+    sal_Int32 nX = aContainerSize.Width  - nW;
+    sal_Int32 nY = aContainerSize.Height - nH;
+
+    // TODO: use a surrogate if the container window is too small to contain the full-sized agent window
+    xAgentWindow->setPosSize(nX, nY, nW, nH, css::awt::PosSize::POSSIZE);
+}
+
+//--------------------------------------------------------------------
+css::uno::Reference< css::awt::XWindow > HelpAgentDispatcher::implts_ensureAgentWindow()
+{
+    // SAFE ->
+    ReadGuard aReadLock(m_aLock);
+    if (m_xAgentWindow.is())
+        return m_xAgentWindow;
+    css::uno::Reference< css::awt::XWindow > xContainerWindow = m_xContainerWindow;
+    aReadLock.unlock();
+    // <- SAFE
+
+    if (!xContainerWindow.is())
+        return css::uno::Reference< css::awt::XWindow >();
+
+    ::svt::HelpAgentWindow* pAgentWindow = 0;
+    // SOLAR SAFE ->
     {
-        // the hint has been ignored by the user (click the closer)
-        markURLIgnored(m_sCurrentURL);
-        // close the window
-        closeAgentWindow();
+        ::vos::OGuard aSolarLock(Application::GetSolarMutex());
+        // create the agent window
+        Window* pContainerWindow = VCLUnoHelper::GetWindow(xContainerWindow);
+                pAgentWindow     = new ::svt::HelpAgentWindow(pContainerWindow);
+        pAgentWindow->setCallback(this);
     }
+    // <- SOLAR SAFE
 
-    //--------------------------------------------------------------------
-    void HelpAgentDispatcher::timerExpired()
+    // SAFE ->
+    WriteGuard aWriteLock(m_aLock);
+    m_xAgentWindow = VCLUnoHelper::GetInterface(pAgentWindow);
+    css::uno::Reference< css::awt::XWindow > xAgentWindow = m_xAgentWindow;
+    aWriteLock.unlock();
+    // <- SAFE
+
+    // add as window listener to the container window so we can maintain the property position of the agent window
+    xContainerWindow->addWindowListener(this);
+
+    // SOLAR SAFE ->
     {
-        // the hint has been ignored by the user
-        markURLIgnored(m_sCurrentURL);
-        // close the window
-        closeAgentWindow();
+        ::vos::OGuard aSolarLock(Application::GetSolarMutex());
+        // establish callback for our internal used timer.
+        // Note: Its only active, if the timer will be started ...
+        m_aTimer.SetTimeoutHdl(LINK(this, HelpAgentDispatcher, implts_timerExpired));
     }
+    // <- SOLAR SAFE
 
-    //--------------------------------------------------------------------
-    void HelpAgentDispatcher::markURLIgnored( const ::rtl::OUString& _rURL )
-    {
-        SvtHelpOptions().decAgentIgnoreURLCounter(_rURL);
-    }
+    return xAgentWindow;
+}
 
-    //--------------------------------------------------------------------
-    void HelpAgentDispatcher::closeAgentWindow()
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xSelfHold( static_cast< ::com::sun::star::frame::XDispatch* >(this), ::com::sun::star::uno::UNO_QUERY );
-
-        // now acquire the SolarMutex ...
-        ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
-        // ... and our own mutex
-        ResetableGuard aGuard(m_aLock);
-
-        stopAutoCloseTimer();
-
-        if (!m_pAgentWindow)
-            return;
-
-        if (m_pContainerWindow)
-        {
-            Reference< XWindow > xContainer = VCLUnoHelper::GetInterface(m_pContainerWindow);
-            OSL_ENSURE(xContainer.is(), "HelpAgentDispatcher::closeAgentWindow: no UNO interface for the container window!");
-            if (xContainer.is())
-                xContainer->removeWindowListener(this);
-        }
-
-        if (m_pAgentWindow)
-        {
-            Reference< XWindow > xAgentWindow = VCLUnoHelper::GetInterface(m_pAgentWindow);
-            OSL_ENSURE(xAgentWindow.is(), "HelpAgentDispatcher::closeAgentWindow: no UNO interface for the agent window!");
-            if (xAgentWindow.is())
-                xAgentWindow->removeWindowListener(this);
-        }
-
-        delete m_pAgentWindow;
-        m_pAgentWindow = NULL;
-    }
-
-    //--------------------------------------------------------------------
-    void HelpAgentDispatcher::positionAgentWindow()
-    {
-        OSL_ENSURE(m_pContainerWindow, "HelpAgentDispatcher::positionAgentWindow: please use ensureContainerWindow!");
-        OSL_ENSURE(m_pAgentWindow, "HelpAgentDispatcher::positionAgentWindow: to be called with an existing agent window only!");
-        OSL_ENSURE(m_pAgentWindow->GetParent() == m_pContainerWindow, "HelpAgentDispatcher::positionAgentWindow: invalid window hierarchy!");
-
-        const Size aContainerSize = m_pContainerWindow->GetSizePixel();
-        const Size aAgentSize = m_pAgentWindow->getPreferredSizePixel();
-
-        const Point aAgentPos   ( aContainerSize.Width() - aAgentSize.Width()
-                                , aContainerSize.Height() - aAgentSize.Height() );
-
-        // TODO: use a surrogate if the container window is too small to contain the full-sized agent window
-
-        m_pAgentWindow->SetPosSizePixel(aAgentPos, aAgentSize);
-    }
-
-    //--------------------------------------------------------------------
-    sal_Bool HelpAgentDispatcher::ensureAgentWindow()
-    {
-        if (m_pAgentWindow)
-            return sal_True;
-
-        ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
-        if (!ensureContainerWindow())
-            return sal_False;
-
-        // create it
-        m_pAgentWindow = new ::svt::HelpAgentWindow(m_pContainerWindow);
-        m_pAgentWindow->setCallback(this);
-
-        // add as listener at the agent window in case it is closed by the user (and not by us ourself)
-        Reference< XWindow > xAgentWindow = VCLUnoHelper::GetInterface(m_pAgentWindow);
-        OSL_ENSURE(xAgentWindow.is(), "HelpAgentDispatcher::ensureAgentWindow: no UNO interface for the agent window!");
-        if (xAgentWindow.is())
-            xAgentWindow->addWindowListener(this);
-
-        // add as window listener to the container window so we can maintain the property position of the agent window
-        Reference< XWindow > xContainer = VCLUnoHelper::GetInterface(m_pContainerWindow);
-        OSL_ENSURE(xContainer.is(), "HelpAgentDispatcher::ensureAgentWindow: no container window interface!");
-        if (xContainer.is())
-            xContainer->addWindowListener(this);
-
-        // position it
-        positionAgentWindow();
-
-        // show it
-        if (m_pContainerWindow->IsVisible())
-            m_pAgentWindow->Show();
-
-        return sal_True;
-    }
-
-//........................................................................
-}   // namespace framework
-//........................................................................
+} // namespace framework
 
