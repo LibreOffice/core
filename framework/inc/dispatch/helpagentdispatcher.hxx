@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpagentdispatcher.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:12:34 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:11:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,14 @@
 #include <threadhelp/threadhelpbase.hxx>
 #endif
 
+#ifndef __FRAMEWORK_MACROS_XINTERFACE_HXX_
+#include <macros/xinterface.hxx>
+#endif
+
+#ifndef __FRAMEWORK_MACROS_XTYPEPROVIDER_HXX_
+#include <macros/xtypeprovider.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
 #endif
@@ -52,98 +60,195 @@
 #include <com/sun/star/awt/XWindowListener.hpp>
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
-#endif
-
-#ifndef _OSL_MUTEX_HXX_
-#include <osl/mutex.hxx>
-#endif
-
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
-#endif
-
-#ifndef _FRAMEWORK_HELPER_TIMERHELPER_HXX_
-#include <helper/timerhelper.hxx>
+#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
+#include <com/sun/star/awt/XWindow.hpp>
 #endif
 
 #ifndef _SVTOOLS_HELPAGENTWIDNOW_HXX_
 #include <svtools/helpagentwindow.hxx>
 #endif
 
-class Window;
+#ifndef _SV_TIMER_HXX
+#include <vcl/timer.hxx>
+#endif
+
+#ifndef _VCL_EVNTPOST_HXX
+#include <vcl/evntpost.hxx>
+#endif
+
+#ifndef _CPPUHELPER_WEAK_HXX_
+#include <cppuhelper/weak.hxx>
+#endif
 
 //........................................................................
 namespace framework
 {
+
+// define css alias ... and undefine it at the end of this file !!!
+#ifdef css
+    #error "I tried to use css as namespace define inside non exported header ... but it was already defined by somwhere else. .-)"
+#else
+    #define css ::com::sun::star
+#endif
+
 //........................................................................
 
-    //====================================================================
-    //= OHelpAgentDispatcher
-    //====================================================================
-    typedef ::cppu::WeakImplHelper2 <   ::com::sun::star::frame::XDispatch
-                                    ,   ::com::sun::star::awt::XWindowListener
-                                    >   OHelpAgent_Base;
+class HelpAgentDispatcher : public  css::lang::XTypeProvider
+                          , public  css::frame::XDispatch
+                          , public  css::awt::XWindowListener // => css::lang::XEventListener
+                          , public  ::svt::IHelpAgentCallback
+                          , private ThreadHelpBase
+                          , public  ::cppu::OWeakObject
+{
+    private:
 
-    class HelpAgentDispatcher
-            :private ThreadHelpBase
-            ,public OHelpAgent_Base
-            ,public ITimerListener
-            ,public ::svt::IHelpAgentCallback
-    {
-    protected:
-        ::rtl::OUString     m_sCurrentURL;
+        //---------------------------------------
+        /// @short  represent the current active help URL, which must be used to show the right help page
+        ::rtl::OUString m_sCurrentURL;
 
-        Window*             m_pContainerWindow;     // parent of the agent window.
-        ::svt::HelpAgentWindow*
-                            m_pAgentWindow;         // the agent window itself
+        //---------------------------------------
+        /// @short  parent of the agent window.
+        css::uno::Reference< css::awt::XWindow > m_xContainerWindow;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
-                            m_xParentFrame;         // weak reference to the frame we're responsible for
+        //---------------------------------------
+        /// @short  the agent window itself (implemented in svtools)
+        css::uno::Reference< css::awt::XWindow > m_xAgentWindow;
 
-        ::vos::ORef< OTimerHelper >
-                            m_xAutoCloseTimer;
+        //---------------------------------------
+        /// @short  the timer for showing the agent window
+        Timer m_aTimer;
+
+        //---------------------------------------
+        /** @short  hold this dispatcher alive till the timer was killed or expired!
+            @descr  Because the vcl timer knows us by using a pointer ... and our instance is used
+                    ref counted normaly it can happen that our reference goes down to 0 ... and the timer
+                    runs into some trouble. So we hold us self alive till the timer could be stopped or expired.
+        */
+        css::uno::Reference< css::uno::XInterface > m_xSelfHold;
 
     public:
-        HelpAgentDispatcher( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxParentFrame );
+
+        HelpAgentDispatcher(const css::uno::Reference< css::frame::XFrame >& xParentFrame);
+
+        DECLARE_XINTERFACE
+        DECLARE_XTYPEPROVIDER
+
+        // css::frame::XDispatch
+        virtual void SAL_CALL dispatch(const css::util::URL&                                  sURL ,
+                                       const css::uno::Sequence< css::beans::PropertyValue >& lArgs)
+            throw(css::uno::RuntimeException);
+        virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
+                                                const css::util::URL&                                     aURL     )
+            throw(css::uno::RuntimeException);
+        virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
+                                                   const css::util::URL&                                     aURL     )
+            throw(css::uno::RuntimeException);
+
+        // css::awt::XWindowListener
+        virtual void SAL_CALL windowResized(const css::awt::WindowEvent& aSource)
+            throw(css::uno::RuntimeException);
+        virtual void SAL_CALL windowMoved(const css::awt::WindowEvent& aSource)
+            throw(css::uno::RuntimeException);
+        virtual void SAL_CALL windowShown(const css::lang::EventObject& aSource)
+            throw(css::uno::RuntimeException);
+        virtual void SAL_CALL windowHidden(const css::lang::EventObject& aSource)
+            throw(css::uno::RuntimeException);
+
+        // css::lang::XEventListener
+        virtual void SAL_CALL disposing(const css::lang::EventObject& aSource)
+            throw(css::uno::RuntimeException);
 
     protected:
+
         ~HelpAgentDispatcher();
 
-        // ::com::sun::star::frame::XDispatch
-        virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& _rURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArgs ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL addStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& _rxListener, const ::com::sun::star::util::URL& _rURL ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL removeStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& _rxListener, const ::com::sun::star::util::URL& _rURL ) throw (::com::sun::star::uno::RuntimeException);
-
-        // ::com::sun::star::awt::XWindowListener
-        virtual void SAL_CALL windowResized( const ::com::sun::star::awt::WindowEvent& _rSource ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL windowMoved( const ::com::sun::star::awt::WindowEvent& _rSource ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL windowShown( const ::com::sun::star::lang::EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL windowHidden( const ::com::sun::star::lang::EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException);
-
-        // ::com::sun::star::lang::XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException);
-
     protected:
-        void    implConstruct( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _rxContainer );
 
+        /// IHelpAgentCallback overridables
+        virtual void helpRequested();
+        virtual void closeAgent();
+
+    private:
+
+        //---------------------------------------
+        /** @short  mark the current set URL as "accepted by user" and show the right help window
+         */
+        void implts_acceptCurrentURL();
+
+        //---------------------------------------
+        /** @short  mark the current set URL as "ignored by user"
+         */
+        void implts_ignoreCurrentURL();
+
+        //---------------------------------------
+        /** @short  ensures that the agent's window exists
+            @descr  We create the agent window on demand. But afterwards we hold it alive till
+                    this helpagent dispatcher dies. The agent window will be made visible/hidden
+                    in case a new dispatch occures or in case the timer expired.
+
+            @return [sal_Bool]
+                    TRUE in case the member m_xAgentWindow is a valid reference;
+                    FALSE otherwise.
+        */
+        css::uno::Reference< css::awt::XWindow > implts_ensureAgentWindow();
+
+        //---------------------------------------
+        /** @short  show the agent window.
+            @descr  If the agent window does not exists, it will be created on demand.
+                    (see implts_ensureAgentWindow). Further it's checked if the parent container
+                    window is currently visible or not. Only if its visible the agent window will
+                    be shown too.
+         */
+        void implts_showAgentWindow();
+
+        //---------------------------------------
+        /** @short  hide the agent window.
+         */
+        void implts_hideAgentWindow();
+
+        //---------------------------------------
+        /** @short  set the new position and size of the agent window.
+            @descr  If the agent window does not exists, it will be created on demand.
+                    (see implts_ensureAgentWindow).
+                    If the agent window exists, its position and size will be calculated
+                    and set.
+         */
+        void implts_positionAgentWindow();
+
+        //---------------------------------------
+        /** @short  starts the timer for showing the agent window.
+            @descr  The timer wont be started twice ... this method checks the current running state .-)
+         */
+        void implts_startTimer();
+
+        //---------------------------------------
+        /** @short  stop the timer.
+            @descr  The timer wont be stopped twice ... this method checks the current running state .-)
+                    Further this method marks the current help URL (m_xCurrentURL) as "ignorable".
+                    Cause the user ignored it !
+         */
+        void implts_stopTimer();
+
+        //---------------------------------------
+        /** @short  callback of our internal timer.
+         */
+        DECL_LINK(implts_timerExpired, void*);
+
+/*
         /// switches the agent to a new URL
-        void        switchURL(const ::com::sun::star::util::URL& _rURL);
+        void        switchURL(const css::util::URL& _rURL);
 
-        /// ensures that the agent's window exists and is visible
-        sal_Bool    ensureAgentWindow();
         /// check if the agent window exists
-        sal_Bool    haveAgentWindow() const { return (NULL != m_pAgentWindow); }
+//TODO      sal_Bool    haveAgentWindow() const { return (NULL != m_pAgentWindow); }
         /** destroyes the agent window
             <p>This method has to be called with m_aMutex aqcuired _exactly_ once!</p>
-        */
+
         void        closeAgentWindow();
 
         /** positions the help agent's window in an optimal position
             <p>At the moment, this is a lie. The agent's window will always be placed in the
             lower right corner of the parent window.</p>
-        */
+
         void        positionAgentWindow();
 
         /// stops the timer which triggers the auto close event
@@ -151,29 +256,20 @@ namespace framework
         /// starts the timer which triggers the auto close event
         void        startAutoCloseTimer();
 
-        /** ensures that m_pContainerWindow is set
-        */
-        sal_Bool    ensureContainerWindow();
-
         /** checks whether or not the given is on the ignore list
-        */
-        sal_Bool    approveURLRequest(const ::com::sun::star::util::URL& _rURL);
+
+        sal_Bool    approveURLRequest(const css::util::URL& _rURL);
 
         /** mark the given URL as "ignored once more"
-        */
+
         void        markURLIgnored( const ::rtl::OUString& _rURL );
 
         /// to be called when the agent window has been closed by an external instance
         void        agentClosedExternally();
+*/
+};
 
-    protected:
-        // ITimerListener overridables
-        virtual void    timerExpired();
-
-        // IHelpAgentCallback overridables
-        virtual void    helpRequested();
-        virtual void    closeAgent();
-    };
+#undef css
 
 //........................................................................
 }   // namespace framework
