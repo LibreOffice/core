@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:30:12 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 15:47:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,6 +119,9 @@
 #endif
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <svtools/cjkoptions.hxx>
+#endif
+#ifndef _SFXVISIBILITYITEM_HXX
+#include <svtools/visitem.hxx>
 #endif
 
 #include <sfx2/fcontnr.hxx>
@@ -414,14 +417,7 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
             case SID_CHINESE_CONVERSION:
             case SID_HANGUL_HANJA_CONVERSION:
             {
-                SfxViewFrame* pFrame = pViewShell ? pViewShell->GetFrame() : GetFrame();
-                if (!SvtCJKOptions().IsAnyEnabled())
-                {
-                    pFrame->GetBindings().SetVisibleState( nWhich, sal_False );
-                    rSet.DisableItem(nWhich);
-                }
-                else
-                    pFrame->GetBindings().SetVisibleState( nWhich, sal_True );
+                rSet.Put(SfxVisibilityItem(nWhich, SvtCJKOptions().IsAnyEnabled()));
             }
             break;
 
