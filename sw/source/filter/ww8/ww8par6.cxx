@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.164 $
+ *  $Revision: 1.165 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 16:03:12 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:32:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3501,7 +3501,15 @@ bool SwWW8ImplReader::GetFontParams( USHORT nFCode, FontFamily& reFamily,
     if( 77 == pF->chs )             // Mac-Font im Mac-Charset oder
         reCharSet = eTextCharSet;   // auf ANSI-Charset uebersetzt
     else
-        reCharSet = rtl_getTextEncodingFromWindowsCharset( pF->chs );
+    { // patch from cmc for #i52786#
+        // #i52786#, for word 67 we'll assume that ANSI is basically invalid,
+        // might be true for (above) mac as well, but would need a mac example
+        // that exercises this to be sure
+        if (bVer67 && pF->chs == 0)
+            reCharSet = RTL_TEXTENCODING_DONTKNOW;
+        else
+            reCharSet = rtl_getTextEncodingFromWindowsCharset( pF->chs );
+    }
 
     // pF->ff : Family
     BYTE b = pF->ff;
