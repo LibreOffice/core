@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:29:47 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:31:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3849,6 +3849,7 @@ WW8RStyle::WW8RStyle(WW8Fib& rFib, SwWW8ImplReader* pI)
     pIo->nColls = cstd;
 }
 
+#if 0 // removed by a patch from cmc for #i52786#
 void SetStyleCharSet(SwWW8StyInf &rStyle)
 {
     /*
@@ -3876,6 +3877,7 @@ void SetStyleCharSet(SwWW8StyInf &rStyle)
         }
     }
 }
+#endif
 
 void WW8RStyle::Set1StyleDefaults()
 {
@@ -3889,8 +3891,10 @@ void WW8RStyle::Set1StyleDefaults()
     if (!bFontChanged)      // Style has no Font? set the default,
     {
         pIo->SetNewFontAttr(ftcStandardChpStsh, true, RES_CHRATR_FONT);
+        /* removed by a patch from cmc for #i52786#
         if (pIo->bVer67)
             SetStyleCharSet(pIo->pCollA[pIo->nAktColl]);
+        */
     }
 
     if( !pIo->bNoAttrImport )
