@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oleembed.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:42:45 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:12:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -457,11 +457,15 @@ void SAL_CALL OleEmbeddedObject::setClientSite(
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
-                                        uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+    if ( m_xClientSite != xClient)
+    {
+        if ( m_nObjectState != embed::EmbedStates::LOADED && m_nObjectState != embed::EmbedStates::RUNNING )
+            throw embed::WrongStateException(
+                                    ::rtl::OUString::createFromAscii( "The client site can not be set currently!\n" ),
+                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
-    m_xClientSite = xClient;
+        m_xClientSite = xClient;
+    }
 }
 
 //----------------------------------------------
