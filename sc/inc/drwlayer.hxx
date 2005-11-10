@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwlayer.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:37:52 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:36:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,6 +200,8 @@ private:
     static SfxObjectShell* pGlobalDrawPersist;          // fuer AllocModel
 public:
     static void     SetGlobalDrawPersist(SfxObjectShell* pPersist);
+protected:
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel();
 };
 
 
