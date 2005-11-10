@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:54:24 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 15:57:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1116,6 +1116,7 @@ void  SwTextShell::ExecDelete(SfxRequest &rReq)
             ASSERT(!this, "falscher Dispatcher");
             return;
     }
+    rReq.Done();
 }
 
 void SwTextShell::ExecTransliteration( SfxRequest & rReq )
