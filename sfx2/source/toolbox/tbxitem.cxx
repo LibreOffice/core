@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:23:34 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:13:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,6 +196,29 @@ SFX_IMPL_TOOLBOX_CONTROL_ARG(SfxToolBoxControl, SfxStringItem, TRUE);
 SFX_IMPL_TOOLBOX_CONTROL(SfxAppToolBoxControl_Impl, SfxStringItem);
 //SFX_IMPL_TOOLBOX_CONTROL(SfxReloadToolBoxControl_Impl, SfxBoolItem);
 //SFX_IMPL_TOOLBOX_CONTROL(SfxAddonsToolBoxControl_Impl, SfxVoidItem);
+
+static Window* GetTopMostParentSystemWindow( Window* pWindow )
+{
+    OSL_ASSERT( pWindow );
+    if ( pWindow )
+    {
+        // ->manually search topmost system window
+        // required because their might be another system window between this and the top window
+        pWindow = pWindow->GetParent();
+        SystemWindow* pTopMostSysWin = NULL;
+        while ( pWindow )
+        {
+            if ( pWindow->IsSystemWindow() )
+                pTopMostSysWin = (SystemWindow*)pWindow;
+            pWindow = pWindow->GetParent();
+        }
+        pWindow = pTopMostSysWin;
+        OSL_ASSERT( pWindow );
+        return pWindow;
+    }
+
+    return NULL;
+}
 
 svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const Reference< XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const ::rtl::OUString& aCommandURL )
 {
@@ -1277,10 +1300,7 @@ SfxPopupWindow::SfxPopupWindow(
 {
     m_xServiceManager = ::comphelper::getProcessServiceFactory();
 
-    Window* pWindow = SFX_APP()->GetTopWindow();
-    while ( pWindow && !pWindow->IsSystemWindow() )
-        pWindow = pWindow->GetParent();
-
+    Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
         ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( this );
 }
@@ -1300,10 +1320,7 @@ SfxPopupWindow::SfxPopupWindow(
 {
     m_xServiceManager = ::comphelper::getProcessServiceFactory();
 
-    Window* pWindow = SFX_APP()->GetTopWindow();
-    while ( pWindow && !pWindow->IsSystemWindow() )
-        pWindow = pWindow->GetParent();
-
+    Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
         ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( this );
 }
@@ -1324,10 +1341,7 @@ SfxPopupWindow::SfxPopupWindow(
 {
     m_xServiceManager = ::comphelper::getProcessServiceFactory();
 
-    Window* pWindow = SFX_APP()->GetTopWindow();
-    while ( pWindow && !pWindow->IsSystemWindow() )
-        pWindow = pWindow->GetParent();
-
+    Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
         ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( this );
 }
@@ -1348,10 +1362,7 @@ SfxPopupWindow::SfxPopupWindow(
 {
     m_xServiceManager = ::comphelper::getProcessServiceFactory();
 
-    Window* pWindow = SFX_APP()->GetTopWindow();
-    while ( pWindow && !pWindow->IsSystemWindow() )
-        pWindow = pWindow->GetParent();
-
+    Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
         ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( this );
 }
@@ -1366,25 +1377,7 @@ SfxPopupWindow::~SfxPopupWindow()
         m_xStatusListener.clear();
     }
 
-    Window* pWindow = SFX_APP()->GetTopWindow();
-    if( !pWindow )
-    {
-        // #i48549# no top window found (may happen during document close)
-        // ->manually search topmost system window
-        // required because their might be another system window between this and the top window
-        pWindow = GetParent();
-        SystemWindow* pTopMostSysWin = NULL;
-        while ( pWindow )
-        {
-            if ( pWindow->IsSystemWindow() )
-                pTopMostSysWin = (SystemWindow*)pWindow;
-            pWindow = pWindow->GetParent();
-        }
-        pWindow = pTopMostSysWin;
-    }
-    while ( pWindow && !pWindow->IsSystemWindow() )
-        pWindow = pWindow->GetParent();
-
+    Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
         ((SystemWindow *)pWindow)->GetTaskPaneList()->RemoveWindow( this );
 }
