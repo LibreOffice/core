@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipclient.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:27:45 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:14:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -800,7 +800,14 @@ void SfxInPlaceClient::SetObject( const uno::Reference < embed::XEmbeddedObject 
                 SetObjectState( embed::EmbedStates::RUNNING );
             m_pImp->m_xObject->removeEventListener( uno::Reference < document::XEventListener >( m_pImp->m_xClient, uno::UNO_QUERY ) );
             m_pImp->m_xObject->removeStateChangeListener( uno::Reference < embed::XStateChangeListener >( m_pImp->m_xClient, uno::UNO_QUERY ) );
-            m_pImp->m_xObject->setClientSite( 0 );
+            try
+            {
+                m_pImp->m_xObject->setClientSite( 0 );
+            }
+            catch( uno::Exception& )
+            {
+                OSL_ENSURE( sal_False, "Can not clean the client site!\n" );
+            }
         }
     }
 
@@ -816,7 +823,16 @@ void SfxInPlaceClient::SetObject( const uno::Reference < embed::XEmbeddedObject 
         // to be activated
         rObject->addStateChangeListener( uno::Reference < embed::XStateChangeListener >( m_pImp->m_xClient, uno::UNO_QUERY ) );
         rObject->addEventListener( uno::Reference < document::XEventListener >( m_pImp->m_xClient, uno::UNO_QUERY ) );
-        rObject->setClientSite( m_pImp->m_xClient );
+
+        try
+        {
+            rObject->setClientSite( m_pImp->m_xClient );
+        }
+        catch( uno::Exception& )
+        {
+            OSL_ENSURE( sal_False, "Can not set the client site!\n" );
+        }
+
         m_pImp->m_aTimer.Start();
     }
     else
@@ -1003,6 +1019,8 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
         {
             try
             {
+                m_pImp->m_xObject->setClientSite( m_pImp->m_xClient );
+
                 m_pImp->m_xObject->doVerb( nVerb );
             }
             catch ( embed::UnreachableStateException& )
