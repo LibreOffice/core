@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: rt $ $Date: 2005-10-19 12:15:09 $
+#   last change: $Author: rt $ $Date: 2005-11-10 14:55:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1164,11 +1164,18 @@ sub prepare_windows_patchfiles
     # the environment variable CWS_WORK_STAMP is set only in CWS
     if ( $ENV{'CWS_WORK_STAMP'} ) { $windowspatchlevel = $ENV{'CWS_WORK_STAMP'} . $windowspatchlevel; }
 
-    my $header = "\[SwapFiles\]\n";
-    push(@patchfiles, $header);
+    my $counter = 1;
+    my $header = "";
 
     for ( my $i = 0; $i <= $#{$filesref}; $i++ )
     {
+        if ( $i%50 == 0 )
+        {
+            $header = "\[SwapFiles$counter\]\n";
+            push(@patchfiles, $header);
+            $counter++;
+        }
+
         my $onefile = ${$filesref}[$i];
 
         my $filename = $onefile->{'Name'};
