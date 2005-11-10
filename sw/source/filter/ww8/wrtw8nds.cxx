@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:28:32 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:30:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1142,7 +1142,7 @@ void WW8_SwAttrIter::OutSwTOXMark(const SwTOXMark& rAttr, bool bStart)
         // kein break;
     case TOX_CONTENT:
         {
-            sTxt.InsertAscii( " INHALT \"", 0 );
+            sTxt.InsertAscii( " TC \"", 0 );
             USHORT nLvl = rAttr.GetLevel();
             if (nLvl > WW8ListManager::nMaxLevel)
                 nLvl = WW8ListManager::nMaxLevel;
