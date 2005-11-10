@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autorecovery.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:40:24 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:12:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1190,55 +1190,62 @@ void AutoRecovery::implts_specifyAppModuleAndFactoryURL(AutoRecovery::TDocumentI
 //-----------------------------------------------
 void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rInfo, sal_Bool bRemoveIt)
 {
-    css::uno::Reference< css::container::XHierarchicalNameAccess > xCFG  (implts_openConfig(), css::uno::UNO_QUERY);
-    css::uno::Reference< css::container::XNameAccess >             xCheck;
-    xCFG->getByHierarchicalName(CFG_ENTRY_RECOVERYLIST) >>= xCheck;
-
-    css::uno::Reference< css::container::XNameContainer >   xModify(xCheck, css::uno::UNO_QUERY);
-    css::uno::Reference< css::lang::XSingleServiceFactory > xCreate(xCheck, css::uno::UNO_QUERY);
-    css::uno::Reference< css::util::XChangesBatch >         xFlush (xCFG  , css::uno::UNO_QUERY);
-
-    ::rtl::OUStringBuffer sIDBuf;
-    sIDBuf.append(RECOVERY_ITEM_BASE_IDENTIFIER);
-    sIDBuf.append((sal_Int32)rInfo.ID);
-    ::rtl::OUString sID = sIDBuf.makeStringAndClear();
-
-    // remove
-    if (bRemoveIt)
+    try
     {
-        // Catch NoSuchElementException.
-        // Its not a good idea inside multithreaded environments to call hasElement - removeElement.
-        // DO IT!
-        try
+        css::uno::Reference< css::container::XHierarchicalNameAccess > xCFG  (implts_openConfig(), css::uno::UNO_QUERY);
+        css::uno::Reference< css::container::XNameAccess >             xCheck;
+        xCFG->getByHierarchicalName(CFG_ENTRY_RECOVERYLIST) >>= xCheck;
+
+        css::uno::Reference< css::container::XNameContainer >   xModify(xCheck, css::uno::UNO_QUERY);
+        css::uno::Reference< css::lang::XSingleServiceFactory > xCreate(xCheck, css::uno::UNO_QUERY);
+        css::uno::Reference< css::util::XChangesBatch >         xFlush (xCFG  , css::uno::UNO_QUERY);
+
+        ::rtl::OUStringBuffer sIDBuf;
+        sIDBuf.append(RECOVERY_ITEM_BASE_IDENTIFIER);
+        sIDBuf.append((sal_Int32)rInfo.ID);
+        ::rtl::OUString sID = sIDBuf.makeStringAndClear();
+
+        // remove
+        if (bRemoveIt)
         {
-            xModify->removeByName(sID);
+            // Catch NoSuchElementException.
+            // Its not a good idea inside multithreaded environments to call hasElement - removeElement.
+            // DO IT!
+            try
+            {
+                xModify->removeByName(sID);
+            }
+            catch(const css::container::NoSuchElementException&)
+                { return; }
         }
-        catch(const css::container::NoSuchElementException&)
-            { return; }
-    }
-    else
-    {
-        // new/modify
-        css::uno::Reference< css::beans::XPropertySet > xSet;
-        sal_Bool                                        bNew = (!xCheck->hasByName(sID));
-        if (bNew)
-            xSet = css::uno::Reference< css::beans::XPropertySet >(xCreate->createInstance(), css::uno::UNO_QUERY);
         else
-            xCheck->getByName(sID) >>= xSet;
+        {
+            // new/modify
+            css::uno::Reference< css::beans::XPropertySet > xSet;
+            sal_Bool                                        bNew = (!xCheck->hasByName(sID));
+            if (bNew)
+                xSet = css::uno::Reference< css::beans::XPropertySet >(xCreate->createInstance(), css::uno::UNO_QUERY);
+            else
+                xCheck->getByName(sID) >>= xSet;
 
-        xSet->setPropertyValue(CFG_ENTRY_PROP_ORIGINALURL  , css::uno::makeAny(rInfo.OrgURL       ));
-        xSet->setPropertyValue(CFG_ENTRY_PROP_TEMPURL      , css::uno::makeAny(rInfo.OldTempURL   ));
-        xSet->setPropertyValue(CFG_ENTRY_PROP_TEMPLATEURL  , css::uno::makeAny(rInfo.TemplateURL  ));
-        xSet->setPropertyValue(CFG_ENTRY_PROP_FILTER       , css::uno::makeAny(rInfo.RealFilter   ));
-        xSet->setPropertyValue(CFG_ENTRY_PROP_DOCUMENTSTATE, css::uno::makeAny(rInfo.DocumentState));
-        xSet->setPropertyValue(CFG_ENTRY_PROP_MODULE       , css::uno::makeAny(rInfo.AppModule    ));
-        xSet->setPropertyValue(CFG_ENTRY_PROP_TITLE        , css::uno::makeAny(rInfo.Title        ));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_ORIGINALURL  , css::uno::makeAny(rInfo.OrgURL       ));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_TEMPURL      , css::uno::makeAny(rInfo.OldTempURL   ));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_TEMPLATEURL  , css::uno::makeAny(rInfo.TemplateURL  ));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_FILTER       , css::uno::makeAny(rInfo.RealFilter   ));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_DOCUMENTSTATE, css::uno::makeAny(rInfo.DocumentState));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_MODULE       , css::uno::makeAny(rInfo.AppModule    ));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_TITLE        , css::uno::makeAny(rInfo.Title        ));
 
-        if (bNew)
-            xModify->insertByName(sID, css::uno::makeAny(xSet));
+            if (bNew)
+                xModify->insertByName(sID, css::uno::makeAny(xSet));
+        }
+
+        xFlush->commitChanges();
     }
-
-    xFlush->commitChanges();
+    catch(const css::uno::Exception&)
+    {
+        LOG_ASSERT(sal_False, "May be you found the reason for bug #125528#. Please report a test scenario to the right developer. THX.");
+    }
 }
 
 //-----------------------------------------------
@@ -1346,6 +1353,8 @@ void AutoRecovery::implts_stopTimer()
 //-----------------------------------------------
 IMPL_LINK(AutoRecovery, implts_timerExpired, void*, pVoid)
 {
+    try
+    {
     // This method is called by using a pointer to us.
     // But we must be aware that we can be destroyed hardly
     // if our uno reference will be gone!
@@ -1434,6 +1443,12 @@ IMPL_LINK(AutoRecovery, implts_timerExpired, void*, pVoid)
     // <- SAFE ----------------------------------
 
     implts_actualizeTimer();
+
+    }
+    catch(const css::uno::Exception& ex)
+    {
+        LOG_ASSERT(sal_False, "May be you found the reason for bug #125528#. Please report a test scenario to the right developer. THX.");
+    }
 
     return 0;
 }
