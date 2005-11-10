@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:13:48 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:32:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,6 +163,8 @@ public:
 
     //The minimum acceptable sprm len possible for this type of parser
     int MinSprmLen() const { return (mnVersion < 8) ? 2 : 3; }
+
+    inline int getVersion() const { return mnVersion; }
 };
 
 //--Line abovewhich the code has meaningful comments
