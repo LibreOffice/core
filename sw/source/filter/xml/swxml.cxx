@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:30:17 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:45:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,12 @@
 #endif
 #ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
 #include <com/sun/star/text/XTextRange.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -651,6 +657,23 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, co
                 comphelper::GenericPropertySet_CreateInstance(
                             new comphelper::PropertySetInfo( aInfoMap ) ) );
 
+    // ---- get BuildId from parent container if available
+
+    uno::Reference< container::XChild > xChild( xModelComp, uno::UNO_QUERY );
+    if( xChild.is() )
+    {
+        uno::Reference< beans::XPropertySet > xParentSet( xChild->getParent(), uno::UNO_QUERY );
+        if( xParentSet.is() )
+        {
+            uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xParentSet->getPropertySetInfo() );
+            OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BuildId" ) );
+            if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(sPropName) )
+            {
+                xInfoSet->setPropertyValue( sPropName, xParentSet->getPropertyValue(sPropName) );
+            }
+        }
+    }
+
     // try to get an XStatusIndicator from the Medium
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
 
@@ -941,6 +964,21 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, co
     // <--
 
     rDoc.PropagateOutlineRule();
+
+    // set BuildId on XModel for later OLE object loading
+    if( xInfoSet.is() )
+    {
+        uno::Reference< beans::XPropertySet > xModelSet( xModelComp, uno::UNO_QUERY );
+        if( xModelSet.is() )
+        {
+            uno::Reference< beans::XPropertySetInfo > xModelSetInfo( xModelSet->getPropertySetInfo() );
+            OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BuildId" ) );
+            if( xModelSetInfo.is() && xModelSetInfo->hasPropertyByName(sPropName) )
+            {
+                xModelSet->setPropertyValue( sPropName, xInfoSet->getPropertyValue(sPropName) );
+            }
+        }
+    }
 
     if (xStatusIndicator.is())
     {
