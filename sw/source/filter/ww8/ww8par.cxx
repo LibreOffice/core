@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.158 $
+ *  $Revision: 1.159 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:29:15 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:31:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2425,6 +2425,33 @@ CharSet SwWW8ImplReader::GetCurrentCharSet()
             eSrcCharSet = pCollA[nCharFmt].GetCharSet();
         if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
             eSrcCharSet = pCollA[nAktColl].GetCharSet();
+        if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
+        { // patch from cmc for #i52786#
+            /*
+             #i22206#/#i52786#
+             The (default) character set used for a run of text is the default
+             character set for the version of Word that last saved the document.
+
+             This is a bit tentative, more might be required if the concept is correct.
+             When later version of word write older 6/95 documents the charset is
+             correctly set in the character runs involved, so its hard to reproduce
+             documents that require this to be sure of the process involved.
+            */
+            const SvxLanguageItem *pLang =
+                (const SvxLanguageItem*)GetFmtAttr(RES_CHRATR_LANGUAGE);
+            if (pLang)
+            {
+                switch (pLang->GetLanguage())
+                {
+                    case LANGUAGE_CZECH:
+                        eSrcCharSet = RTL_TEXTENCODING_MS_1250;
+                        break;
+                    default:
+                        eSrcCharSet = RTL_TEXTENCODING_MS_1252;
+                        break;
+                }
+            }
+        }
     }
     return eSrcCharSet;
 }
