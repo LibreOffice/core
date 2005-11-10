@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:38:44 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 15:56:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -594,7 +594,7 @@ BOOL SwOLENode::IsOLEObjectDeleted() const
         SfxObjectShell* p = GetDoc()->GetPersist();
         if( p )     // muss da sein
         {
-            return p->GetEmbeddedObjectContainer().HasEmbeddedObject( aOLEObj.aName );
+            return !p->GetEmbeddedObjectContainer().HasEmbeddedObject( aOLEObj.aName );
             //SvInfoObjectRef aRef( p->Find( aOLEObj.aName ) );
             //if( aRef.Is() )
             //    bRet = aRef->IsDeleted();
