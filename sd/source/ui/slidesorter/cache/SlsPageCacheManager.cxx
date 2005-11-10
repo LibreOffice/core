@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageCacheManager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 16:29:59 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 15:47:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,12 +313,11 @@ void PageCacheManager::Recycle (
 
 void PageCacheManager::ReleaseCache (const ::boost::shared_ptr<Cache>& rpCache)
 {
-    OSL_TRACE("releasing cache %x", rpCache.get());
     PageCacheContainer::iterator iCache (::std::find_if(
         mpPageCaches->begin(),
         mpPageCaches->end(),
         PageCacheContainer::CompareWithCache(rpCache)));
-    OSL_ASSERT((iCache != mpPageCaches->end()));
+
     if (iCache != mpPageCaches->end())
     {
         OSL_ASSERT(iCache->second == rpCache);
