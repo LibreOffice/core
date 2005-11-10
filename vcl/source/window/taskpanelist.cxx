@@ -4,9 +4,9 @@
  *
  *  $RCSfile: taskpanelist.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:31:37 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 15:49:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,6 +170,7 @@ void TaskPaneList::AddWindow( Window *pWindow )
         }
 
         mTaskPanes.insert( insertionPos, pWindow );
+        pWindow->ImplIsInTaskPaneList( TRUE );
     }
 }
 
@@ -180,7 +181,10 @@ void TaskPaneList::RemoveWindow( Window *pWindow )
     ::std::vector< Window* >::iterator p;
     p = ::std::find( mTaskPanes.begin(), mTaskPanes.end(), pWindow );
     if( p != mTaskPanes.end() )
+    {
         mTaskPanes.erase( p );
+        pWindow->ImplIsInTaskPaneList( FALSE );
+    }
 }
 
 // --------------------------------------------------
