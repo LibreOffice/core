@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-30 10:14:53 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:29:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -943,9 +943,9 @@ void DocumentHolder::SetComponent( const uno::Reference< util::XCloseable >& xDo
     }
 
     m_xComponent = xDoc;
-    uno::Reference < container::XChild > xChild( m_xComponent, uno::UNO_QUERY );
-    if ( xChild.is() && m_pEmbedObj )
-        xChild->setParent( m_pEmbedObj->getParent() );
+    // done outside currently uno::Reference < container::XChild > xChild( m_xComponent, uno::UNO_QUERY );
+    // done outside currently if ( xChild.is() && m_pEmbedObj )
+    // done outside currently   xChild->setParent( m_pEmbedObj->getParent() );
 
     m_bReadOnly = bReadOnly;
     m_bAllowClosing = sal_False;
