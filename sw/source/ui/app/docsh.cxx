@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:27:56 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:33:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -419,6 +419,7 @@ BOOL SwDocShell::ConvertFrom( SfxMedium& rMedium )
 
     SwReader* pRdr;
     SwRead pRead = StartConvertFrom(rMedium, &pRdr);
+    SotStorageRef pStg=pRead->getSotStorageRef(); // #i45333# save sot storage ref in case of recursive calls
     if (!pRead)
         return FALSE;
 
@@ -474,6 +475,8 @@ BOOL SwDocShell::ConvertFrom( SfxMedium& rMedium )
     // Diese muessen das selbst rufen!
     if( bOk && !pDoc->IsInLoadAsynchron() )
         StartLoadFinishedTimer();
+
+    pRead->setSotStorageRef(pStg); // #i45333# save sot storage ref in case of recursive calls
 
     return bOk;
 }
