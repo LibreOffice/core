@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-13 17:08:24 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 15:50:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,11 +93,17 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
     else
     {
         hDC     = CreateCompatibleDC( pGraphics->mhDC );
+        if( !hDC )
+            ImplWriteLastError( GetLastError(), "CreateCompatibleDC in CreateVirtualDevice" );
+
         hBmp    = ImplCreateVirDevBitmap( pGraphics->mhDC,
                                         nDX, nDY, nBitCount );
+        if( !hBmp )
+            ImplWriteLastError( GetLastError(), "ImplCreateVirDevBitmap in CreateVirtualDevice" );
         // #124826# continue even if hBmp could not be created
         // if we would return a failure in this case, the process
         // would terminate which is not required
+
         DBG_ASSERT( hBmp, "WinSalInstance::CreateVirtualDevice(), could not create Bitmap!" );
 
         bOk = (hDC != NULL);
@@ -160,6 +166,14 @@ void WinSalInstance::DestroyVirtualDevice( SalVirtualDevice* pDevice )
 
 WinSalVirtualDevice::WinSalVirtualDevice()
 {
+    mhDC = (HDC) NULL;          // HDC or 0 for Cache Device
+    mhBmp = (HBITMAP) NULL;     // Memory Bitmap
+    mhDefBmp = (HBITMAP) NULL;  // Default Bitmap
+    mpGraphics = NULL;          // current VirDev graphics
+    mpNext = NULL;              // next VirDev
+    mnBitCount = 0;             // BitCount (0 or 1)
+    mbGraphics = FALSE;         // is Graphics used
+    mbForeignDC = FALSE;        // uses a foreign DC instead of a bitmap
 }
 
 // -----------------------------------------------------------------------
@@ -231,6 +245,9 @@ BOOL WinSalVirtualDevice::SetSize( long nDX, long nDY )
             return TRUE;
         }
         else
+        {
+            ImplWriteLastError( GetLastError(), "ImplCreateVirDevBitmap in SetSize" );
             return FALSE;
+        }
     }
 }
