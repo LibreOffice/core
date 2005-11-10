@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:33:27 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:41:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2122,6 +2122,10 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
         }
         break;
         // <--
+        case WID_DOC_BUILDID:
+            aValue >>= maBuildId;
+        break;
+
         default:
         {
             const SfxPoolItem& rItem = pDocShell->GetDoc()->GetDefault(pMap->nWID);
@@ -2259,6 +2263,9 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         break;
         case WID_DOC_LOCK_UPDATES :
             aAny <<= static_cast<bool>( pDocShell->GetDoc()->IsInReading() );
+        break;
+        case WID_DOC_BUILDID:
+            aAny <<= maBuildId;
         break;
 
         default:
