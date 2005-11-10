@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:45:34 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:37:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,6 +138,7 @@ const SfxItemPropertyMap* lcl_GetDocOptPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_STANDARDDEC),  0,  &getCppuType((sal_Int16*)0),                              0},
         {MAP_CHAR_LEN(SC_UNO_REGEXENABLED), 0,  &getBooleanCppuType(),                                    0},
         {MAP_CHAR_LEN(SC_UNO_RUNTIMEUID),   0,  &getCppuType(static_cast< const rtl::OUString * >(0)),    beans::PropertyAttribute::READONLY},
+        {MAP_CHAR_LEN("BuildId"),           0,  &::getCppuType(static_cast< const rtl::OUString * >(0)), 0, 0},
 
         {0,0,0,0}
     };
@@ -1338,6 +1339,10 @@ void SAL_CALL ScModelObj::setPropertyValue(
             if (pBindings)
                 pBindings->Invalidate( SID_FM_AUTOCONTROLFOCUS );
         }
+        else if ( aString.EqualsAscii( "BuildId" ) )
+        {
+            aValue >>= maBuildId;
+        }
 
         if ( aNewOpt != rOldOpt )
         {
@@ -1449,6 +1454,10 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
         else if ( aString.EqualsAscii( SC_UNO_RUNTIMEUID ) )
         {
             aRet <<= getRuntimeUID();
+        }
+        else if ( aString.EqualsAscii( "BuildId" ) )
+        {
+            aRet <<= maBuildId;
         }
     }
 
