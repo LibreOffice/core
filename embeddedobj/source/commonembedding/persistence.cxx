@@ -4,9 +4,9 @@
  *
  *  $RCSfile: persistence.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 13:58:41 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:28:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,6 +302,10 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::InitNewDocument_Impl()
     uno::Reference< util::XCloseable > xDocument( m_xFactory->createInstance( GetDocumentServiceName() ),
                                                 uno::UNO_QUERY );
 
+    uno::Reference < container::XChild > xChild( xDocument, uno::UNO_QUERY );
+       if ( xChild.is() )
+           xChild->setParent( m_xParent );
+
     uno::Reference< frame::XModel > xModel( xDocument, uno::UNO_QUERY );
     uno::Reference< frame::XLoadable > xLoadable( xModel, uno::UNO_QUERY );
     if ( !xLoadable.is() )
@@ -341,6 +345,10 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
 {
     uno::Reference< util::XCloseable > xDocument( m_xFactory->createInstance( GetDocumentServiceName() ),
                                                 uno::UNO_QUERY );
+
+    uno::Reference < container::XChild > xChild( xDocument, uno::UNO_QUERY );
+    if ( xChild.is() )
+        xChild->setParent( m_xParent );
 
     uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY );
     if ( !xLoadable.is() )
@@ -416,6 +424,11 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
     OSL_ENSURE( xStorage.is(), "The storage can not be empty!" );
 
     uno::Reference< util::XCloseable >  xDocument( m_xFactory->createInstance( GetDocumentServiceName() ), uno::UNO_QUERY );
+
+    uno::Reference < container::XChild > xChild( xDocument, uno::UNO_QUERY );
+    if ( xChild.is() )
+        xChild->setParent( m_xParent );
+
     uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY );
     uno::Reference< document::XStorageBasedDocument > xDoc
 #ifdef USE_STORAGEBASED_DOCUMENT
@@ -739,6 +752,10 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateDocFromMediaDesc
 {
     uno::Reference< util::XCloseable > xDocument( m_xFactory->createInstance( GetDocumentServiceName() ),
                                                 uno::UNO_QUERY );
+
+    uno::Reference < container::XChild > xChild( xDocument, uno::UNO_QUERY );
+       if ( xChild.is() )
+           xChild->setParent( m_xParent );
 
     uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY );
     if ( !xLoadable.is() )
