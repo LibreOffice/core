@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-09 09:55:58 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 15:57:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4425,8 +4425,8 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                         aDocPos = rSh.GetCharRect().Center();
                     else
                     {
-                        if(SelectMenuPosition(rSh, rCEvt.GetMousePosPixel()))
-                            rView.StopShellTimer();
+                        SelectMenuPosition(rSh, rCEvt.GetMousePosPixel());
+                        rView.StopShellTimer();
 
                     }
                     const Point aPixPos = LogicToPixel( aDocPos );
