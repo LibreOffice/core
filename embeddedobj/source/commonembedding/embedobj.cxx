@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embedobj.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:12:36 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:28:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -232,6 +232,11 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
                     aArgs[0] <<= uno::Reference < embed::XEmbeddedObject >( this );
                     uno::Reference< util::XCloseable > xDocument(
                             m_xFactory->createInstanceWithArguments( GetDocumentServiceName(), aArgs ), uno::UNO_QUERY );
+
+                    uno::Reference < container::XChild > xChild( xDocument, uno::UNO_QUERY );
+                    if ( xChild.is() )
+                        xChild->setParent( m_xParent );
+
                     m_pDocHolder->SetComponent( xDocument, m_bReadOnly );
                 }
             }
