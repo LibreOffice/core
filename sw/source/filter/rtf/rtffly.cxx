@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtffly.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:54:19 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:30:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -343,7 +343,8 @@ void SwRTFParser::SetFlysInDoc()
             SwTxtNode* pSttNd = pFlySave->nSttNd.GetNode().GetTxtNode();
             SwTxtNode* pEndNd = pFlySave->nEndNd.GetNode().GetTxtNode();
             if( pSttNd && pEndNd &&
-                pSttNd->GetIndex() + 1 == pEndNd->GetIndex() )
+                pSttNd->GetIndex() + 1 == pEndNd->GetIndex()
+                && pSttNd->GetTxt().Len()>0 /* #i38227# leave drop caps with no content as fly frames */ )
             {
                 BOOL bJoined;
                 {
@@ -352,7 +353,6 @@ void SwRTFParser::SetFlysInDoc()
                 }
                 if( bJoined )
                 {
-                    pEndNd=pSttNd; //#i38227# since pEndNd was deleted and joined
                     SwFmtDrop aDropCap;
                     aDropCap.GetLines() = (BYTE)pFlySave->nDropLines;
                     aDropCap.GetChars() = 1;
@@ -361,9 +361,9 @@ void SwRTFParser::SetFlysInDoc()
                     pEndNd->RstAttr( aIdx, 1, RES_CHRATR_FONTSIZE );
                     pEndNd->SwCntntNode::SetAttr( aDropCap );
                 }
+                delete pFlySave;
+                continue;
             }
-            delete pFlySave;
-            continue;
         }
 
         // liegt Ende und Start vom Naechsten im gleichen Node, dann muss
@@ -446,6 +446,14 @@ void SwRTFParser::SetFlysInDoc()
                 ? rNds.MakeEmptySection( aTmpIdx, SwFlyStartNode )
                 : rNds.MakeTextSection( aTmpIdx, SwFlyStartNode,
                         (SwTxtFmtColl*)pDoc->GetDfltTxtFmtColl() );
+
+        // patch from cmc for #i52542#
+        if (pSttNd->GetIndex() + 1 == pSttNd->EndOfSectionIndex())
+        {
+            ASSERT(!this, "nothing in this frame, not legal");
+            delete pFlySave;
+            continue;
+        }
 
         // das ist die Verankerungs-Position (fuers Layout!)
         pFlySave->nSttNd = aRg.aStart.GetIndex()-1;
