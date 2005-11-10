@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryitem_writer.scp,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:50:28 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:19:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1309,7 +1309,7 @@ End
 // .ODT
 RegistryItem gid_Regitem_OpenOffice_ODT_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".ODT\OpenWithProgIDs";
+    Subkey = ".odt\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = "opendocument.WriterDocument.1";
     Value = " ";
@@ -1318,7 +1318,7 @@ End
 // .OTT
 RegistryItem gid_Regitem_OpenOffice_OTT_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".OTT\OpenWithProgIDs";
+    Subkey = ".ott\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = "opendocument.WriterDocument.1";
     Value = " ";
@@ -1327,7 +1327,7 @@ End
 // .SXW
 RegistryItem gid_Regitem_OpenOffice_SXW_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".SXW\OpenWithProgIDs";
+    Subkey = ".sxw\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = "opendocument.WriterDocument.1";
     Value = " ";
@@ -1336,7 +1336,7 @@ End
 // .STW
 RegistryItem gid_Regitem_OpenOffice_STW_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".STW\OpenWithProgIDs";
+    Subkey = ".stw\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = "opendocument.WriterDocument.1";
     Value = " ";
@@ -1345,7 +1345,7 @@ End
 // .DOC
 RegistryItem gid_Regitem_OpenOffice_DOC_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".DOC\OpenWithProgIDs";
+    Subkey = ".doc\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = "opendocument.WriterDocument.1";
     Value = " ";
@@ -1354,7 +1354,7 @@ End
 // .DOT
 RegistryItem gid_Regitem_OpenOffice_DOT_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".DOT\OpenWithProgIDs";
+    Subkey = ".dot\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = "opendocument.WriterDocument.1";
     Value = " ";
@@ -1363,7 +1363,7 @@ End
 // .RTF
 RegistryItem gid_Regitem_OpenOffice_RTF_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".RTF\OpenWithProgIDs";
+    Subkey = ".rtf\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = "opendocument.WriterDocument.1";
     Value = " ";
@@ -1372,7 +1372,7 @@ End
 // .SDW
 RegistryItem gid_Regitem_OpenOffice_SDW_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".SDW\OpenWithProgIDs";
+    Subkey = ".sdw\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = "opendocument.WriterDocument.1";
     Value = " ";
@@ -1381,7 +1381,7 @@ End
 // .VOR
 RegistryItem gid_Regitem_OpenOffice_VOR_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".VOR\OpenWithProgIDs";
+    Subkey = ".vor\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = "opendocument.WriterDocument.1";
     Value = " ";
@@ -1390,7 +1390,7 @@ End
 // .TXT
 RegistryItem gid_Regitem_OpenOffice_TXT_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".TXT\OpenWithProgIDs";
+    Subkey = ".txt\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = "opendocument.WriterDocument.1";
     Value = " ";
@@ -1399,7 +1399,7 @@ End
 // .HTM
 RegistryItem gid_Regitem_OpenOffice_HTM_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".HTM\OpenWithProgIDs";
+    Subkey = ".htm\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = "opendocument.WriterDocument.1";
     Value = " ";
@@ -1408,7 +1408,7 @@ End
 // .HTML
 RegistryItem gid_Regitem_OpenOffice_HTML_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".HTML\OpenWithProgIDs";
+    Subkey = ".html\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = "opendocument.WriterDocument.1";
     Value = " ";
@@ -1417,7 +1417,7 @@ End
 // .XML
 RegistryItem gid_Regitem_OpenOffice_XML_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".XML\OpenWithProgIDs";
+    Subkey = ".xml\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = "opendocument.WriterDocument.1";
     Value = " ";
@@ -1426,7 +1426,7 @@ End
 // .WPD
 RegistryItem gid_Regitem_OpenOffice_WPD_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".WPD\OpenWithProgIDs";
+    Subkey = ".wpd\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = "opendocument.WriterDocument.1";
     Value = " ";
@@ -1435,7 +1435,7 @@ End
 // .WPS
 RegistryItem gid_Regitem_OpenOffice_WPS_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".WPS\OpenWithProgIDs";
+    Subkey = ".wps\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = "opendocument.WriterDocument.1";
     Value = " ";
@@ -1444,7 +1444,7 @@ End
 // .JTD
 RegistryItem gid_Regitem_OpenOffice_JTD_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".JTD\OpenWithProgIDs";
+    Subkey = ".jtd\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = "opendocument.WriterDocument.1";
     Value = " ";
@@ -1453,7 +1453,7 @@ End
 // .JTT
 RegistryItem gid_Regitem_OpenOffice_JTT_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".JTT\OpenWithProgIDs";
+    Subkey = ".jtt\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = "opendocument.WriterDocument.1";
     Value = " ";
@@ -1462,7 +1462,7 @@ End
 // .HWP
 RegistryItem gid_Regitem_OpenOffice_HWP_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".HWP\OpenWithProgIDs";
+    Subkey = ".hwp\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = "opendocument.WriterDocument.1";
     Value = " ";
@@ -1471,7 +1471,7 @@ End
 // .OTH
 RegistryItem gid_Regitem_OpenOffice_OTH_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".OTH\OpenWithProgIDs";
+    Subkey = ".oth\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = "opendocument.WriterDocument.1";
     Value = " ";
@@ -1480,7 +1480,7 @@ End
 // .ODM
 RegistryItem gid_Regitem_OpenOffice_ODM_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".ODM\OpenWithProgIDs";
+    Subkey = ".odm\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = "opendocument.WriterDocument.1";
     Value = " ";
@@ -1489,7 +1489,7 @@ End
 // .SXG
 RegistryItem gid_Regitem_OpenOffice_SXG_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".SXG\OpenWithProgIDs";
+    Subkey = ".sxg\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = "opendocument.WriterDocument.1";
     Value = " ";
@@ -1498,7 +1498,7 @@ End
 // .SGL
 RegistryItem gid_Regitem_OpenOffice_SGL_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".SGL\OpenWithProgIDs";
+    Subkey = ".sgl\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = "opendocument.WriterDocument.1";
     Value = " ";
