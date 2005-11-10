@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessibility.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:59:11 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 15:52:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1056,6 +1056,9 @@ SmTextForwarder::SmTextForwarder( SmEditAccessible& rAcc, SmEditSource & rSource
 
 SmTextForwarder::~SmTextForwarder()
 {
+    EditEngine *pEditEngine = rEditAcc.GetEditEngine();
+    if (pEditEngine)
+        pEditEngine->SetNotifyHdl( Link() );
 }
 
 IMPL_LINK(SmTextForwarder, NotifyHdl, EENotify*, aNotify)
