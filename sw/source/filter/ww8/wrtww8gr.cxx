@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-06 10:52:03 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:30:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,8 +206,8 @@ bool SwWW8Writer::TestOleNeedsGraphic(const SwAttrSet& rSet,
     long nX=0,nY=0;
     if (!bGraphicNeeded && SwWW8ImplReader::ImportOleWMF(xOleStg,aWMF,nX,nY))
     {
-        //TODO/LATER: this line looks strange - shouldn't it be true?!
-        bGraphicNeeded = false;
+        // bGraphicNeeded set to true is right / fixes #i51670#.
+        bGraphicNeeded = true;
         Point aTmpPoint;
         Rectangle aRect( aTmpPoint, Size( nX, nY ) );
         Graphic aGraph(aWMF);
