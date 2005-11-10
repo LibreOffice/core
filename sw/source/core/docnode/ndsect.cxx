@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndsect.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:21:47 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 15:56:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -581,6 +581,8 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, BOOL bDelNodes )
                 if( pFtnEndAtTxtEnd )
                     GetFtnIdxs().UpdateFtn( aUpdIdx );
                 SetModified();
+                //#126178# start/end undo have to be pairs!
+                EndUndo(UNDO_DELSECTION);
                 return ;
             }
             AppendUndo( new SwUndoDelSection( *pFmt ) );
@@ -593,6 +595,8 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, BOOL bDelNodes )
             if( pFtnEndAtTxtEnd )
                 GetFtnIdxs().UpdateFtn( aUpdIdx );
             SetModified();
+            //#126178# start/end undo have to be pairs!
+            EndUndo(UNDO_DELSECTION);
             return ;
         }
 
