@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 14:04:02 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:37:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,12 @@
 #include <tools/urlobj.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#endif
 #include <com/sun/star/xml/sax/XErrorHandler.hpp>
 #include <com/sun/star/xml/sax/XEntityResolver.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
@@ -462,6 +468,25 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
         };
         uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aImportInfoMap ) ) );
 
+        // ---- get BuildId from parent container if available
+
+        uno::Reference< container::XChild > xChild( xModel, uno::UNO_QUERY );
+        if( xChild.is() )
+        {
+            uno::Reference< beans::XPropertySet > xParentSet( xChild->getParent(), uno::UNO_QUERY );
+            if( xParentSet.is() )
+            {
+                uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xParentSet->getPropertySetInfo() );
+                OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BuildId" ) );
+                if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(sPropName) )
+                {
+                    xInfoSet->setPropertyValue( sPropName, xParentSet->getPropertyValue(sPropName) );
+                }
+            }
+        }
+
+        // -------------------------------------
+
         uno::Reference<task::XStatusIndicator> xStatusIndicator(GetStatusIndicator());
         if (xStatusIndicator.is())
         {
@@ -633,6 +658,21 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
                 nError = nSettingsRetval;
             else
                 bRet = sal_True;
+        }
+
+        // set BuildId on XModel for later OLE object loading
+        if( xInfoSet.is() )
+        {
+            uno::Reference< beans::XPropertySet > xModelSet( xModel, uno::UNO_QUERY );
+            if( xModelSet.is() )
+            {
+                uno::Reference< beans::XPropertySetInfo > xModelSetInfo( xModelSet->getPropertySetInfo() );
+                OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BuildId" ) );
+                if( xModelSetInfo.is() && xModelSetInfo->hasPropertyByName(sPropName) )
+                {
+                    xModelSet->setPropertyValue( sPropName, xInfoSet->getPropertyValue(sPropName) );
+                }
+            }
         }
 
         // Don't test bStylesRetval and bMetaRetval, because it could be an older file which not contain such streams
