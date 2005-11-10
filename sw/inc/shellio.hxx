@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 14:07:38 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:29:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -311,6 +311,9 @@ public:
     // returns the count of it
     virtual USHORT GetSectionList( SfxMedium& rMedium,
                                     SvStrings& rStrings ) const;
+
+    SotStorageRef getSotStorageRef() { return pStg; };
+    void setSotStorageRef(SotStorageRef pStg) { this->pStg=pStg; };
 
 private:
     virtual ULONG Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &)=0;
