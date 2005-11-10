@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:40:35 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 15:50:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -517,6 +517,8 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
         hWnd = CreateWindowExW( nExSysStyle, pClassName, L"", nSysStyle,
                                 CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
                                 hWndParent, 0, pInst->mhInst, (void*)pFrame );
+        if( !hWnd )
+            ImplWriteLastError( GetLastError(), "CreateWindowEx" );
 #if OSL_DEBUG_LEVEL > 1
         // set transparency value
         if( bLayeredAPI == 1 && GetWindowExStyle( hWnd ) & WS_EX_LAYERED )
@@ -4882,6 +4884,11 @@ static int ImplHandleMenuSelect( HWND hWnd, WPARAM wParam, LPARAM lParam )
     WORD nId = LOWORD(wParam);      // menu item or submenu index
     WORD nFlags = HIWORD(wParam);
     HMENU hMenu = (HMENU) lParam;
+
+    // check if we have to process the message
+    if( !GetSalData()->IsKnownMenuHandle( hMenu ) )
+        return 0;
+
     BOOL bByPosition = FALSE;
     if( nFlags & MF_POPUP )
         bByPosition = TRUE;
@@ -5916,6 +5923,7 @@ BOOL ImplHandleGlobalMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, LR
 
 BOOL ImplWriteLastError( DWORD lastError, const char *szApiCall )
 {
+    static int first=1;
     // if VCL_LOGFILE_ENABLED is set, Win32 API error messages can be written
     // to %TMP%/vcl.log or %TEMP%/vcl.log
     static char *logEnabled = getenv("VCL_LOGFILE_ENABLED");
@@ -5935,6 +5943,11 @@ BOOL ImplWriteLastError( DWORD lastError, const char *szApiCall )
             FILE *fp = fopen( fname, "a" ); // always append
             if( fp )
             {
+                if( first )
+                {
+                    first = 0;
+                    fprintf( fp, "Process ID: %d (0x%x)\n", GetCurrentProcessId(), GetCurrentProcessId() );
+                }
                 time_t aclock;
                 time( &aclock );                           // Get time in seconds
                 struct tm *newtime = localtime( &aclock ); // Convert time to struct tm form
