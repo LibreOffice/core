@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:49:28 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 15:51:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -966,13 +966,15 @@ sal_Bool ZipPackage::writeFileIsTemp()
     aZipOut.setMethod(DEFLATED);
     aZipOut.setLevel(DEFAULT_COMPRESSION);
 
-    if ( m_bPackageFormat )
+    try
     {
-        // Remove the old manifest.xml file as the
-        // manifest will be re-generated and the
-        // META-INF directory implicitly created if does not exist
-        const OUString sMeta ( RTL_CONSTASCII_USTRINGPARAM ( "META-INF" ) );
-        try {
+        if ( m_bPackageFormat )
+        {
+            // Remove the old manifest.xml file as the
+            // manifest will be re-generated and the
+            // META-INF directory implicitly created if does not exist
+            const OUString sMeta ( RTL_CONSTASCII_USTRINGPARAM ( "META-INF" ) );
+
             if ( xRootFolder->hasByName( sMeta ) )
             {
                 const OUString sManifest (RTL_CONSTASCII_USTRINGPARAM( "manifest.xml") );
@@ -984,145 +986,100 @@ sal_Bool ZipPackage::writeFileIsTemp()
                 if ( xMetaInfFolder.is() && xMetaInfFolder->hasByName( sManifest ) )
                     xMetaInfFolder->removeByName( sManifest );
             }
-        }
-        catch (::com::sun::star::uno::RuntimeException & r )
-        {
-            VOS_ENSURE( 0, "Error preparing ZIP file for writing to disk" );
-            throw WrappedTargetException(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM ( "Error preparing ZIP file for writing to disk!" ) ),
-                    static_cast < OWeakObject * > ( this ),
-                    makeAny( r ) );
+
+            // Write a magic file with mimetype
+            WriteMimetypeMagicFile( aZipOut );
         }
 
+        // Create a vector to store data for the manifest.xml file
+        vector < Sequence < PropertyValue > > aManList;
 
-        // Write a magic file with mimetype
-        WriteMimetypeMagicFile( aZipOut );
-    }
+        // Make a reference to the manifest output stream so it persists
+        // until the call to ZipOutputStream->finish()
+        Reference < XOutputStream > xManOutStream;
+        const OUString sMediaType ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
+        const OUString sFullPath ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
 
-    // Create a vector to store data for the manifest.xml file
-    vector < Sequence < PropertyValue > > aManList;
+        Sequence < PropertyValue > aPropSeq ( 2 );
+        aPropSeq [0].Name = sMediaType;
+        aPropSeq [0].Value <<= pRootFolder->GetMediaType( );
+        aPropSeq [1].Name = sFullPath;
+        aPropSeq [1].Value <<= OUString ( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
 
-    // Make a reference to the manifest output stream so it persists
-    // until the call to ZipOutputStream->finish()
-    Reference < XOutputStream > xManOutStream;
-    const OUString sMediaType ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
-    const OUString sFullPath ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
+        aManList.push_back( aPropSeq );
 
-    Sequence < PropertyValue > aPropSeq ( 2 );
-    aPropSeq [0].Name = sMediaType;
-    aPropSeq [0].Value <<= pRootFolder->GetMediaType( );
-    aPropSeq [1].Name = sFullPath;
-    aPropSeq [1].Value <<= OUString ( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
-
-    aManList.push_back( aPropSeq );
-
-    // Get a random number generator and seed it with current timestamp
-    // This will be used to generate random salt and initialisation vectors
-    // for encrypted streams
-    TimeValue aTime;
-    osl_getSystemTime( &aTime );
-    rtlRandomPool aRandomPool = rtl_random_createPool ();
-    rtl_random_addBytes ( aRandomPool, &aTime, 8 );
+        // Get a random number generator and seed it with current timestamp
+        // This will be used to generate random salt and initialisation vectors
+        // for encrypted streams
+        TimeValue aTime;
+        osl_getSystemTime( &aTime );
+        rtlRandomPool aRandomPool = rtl_random_createPool ();
+        rtl_random_addBytes ( aRandomPool, &aTime, 8 );
 
 
-    // call saveContents (it will recursively save sub-directories
-    OUString aEmptyString;
-    try {
+        // call saveContents (it will recursively save sub-directories
+        OUString aEmptyString;
         pRootFolder->saveContents( aEmptyString, aManList, aZipOut, aEncryptionKey, aRandomPool );
-    }
-    catch (::com::sun::star::uno::RuntimeException & r )
-    {
-        VOS_ENSURE( 0, "Error writing ZIP file to disk" );
-        throw WrappedTargetException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM ( "Error writing ZIP file to disk!" ) ),
-                static_cast < OWeakObject * > ( this ),
-                makeAny( r ) );
-    }
 
-    // Clean up random pool memory
-    rtl_random_destroyPool ( aRandomPool );
+        // Clean up random pool memory
+        rtl_random_destroyPool ( aRandomPool );
 
-    if( bUseManifest && m_bPackageFormat )
-    {
-        // Write the manifest
-        OUString sManifestWriter( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.manifest.ManifestWriter" ) );
-        Reference < XManifestWriter > xWriter ( xFactory->createInstance( sManifestWriter ), UNO_QUERY );
-        if ( xWriter.is() )
+        if( bUseManifest && m_bPackageFormat )
         {
-            ZipEntry * pEntry = new ZipEntry;
-            ZipPackageBuffer *pBuffer = new ZipPackageBuffer( n_ConstBufferSize );
-            xManOutStream = Reference < XOutputStream > (*pBuffer, UNO_QUERY);
-
-            pEntry->sName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "META-INF/manifest.xml") );
-            pEntry->nMethod = DEFLATED;
-            pEntry->nCrc = pEntry->nSize = pEntry->nCompressedSize = -1;
-            pEntry->nTime = ZipOutputStream::getCurrentDosTime();
-
-            // Convert vector into a Sequence
-            Sequence < Sequence < PropertyValue > > aManifestSequence ( aManList.size() );
-            Sequence < PropertyValue > * pSequence = aManifestSequence.getArray();
-            for (vector < Sequence < PropertyValue > >::const_iterator aIter = aManList.begin(), aEnd = aManList.end();
-                 aIter != aEnd;
-                 aIter++, pSequence++)
-                *pSequence= (*aIter);
-            xWriter->writeManifestSequence ( xManOutStream,  aManifestSequence );
-
-            sal_Int32 nBufferLength = static_cast < sal_Int32 > ( pBuffer->getPosition() );
-            pBuffer->realloc( nBufferLength );
-
-            try
+            // Write the manifest
+            OUString sManifestWriter( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.manifest.ManifestWriter" ) );
+            Reference < XManifestWriter > xWriter ( xFactory->createInstance( sManifestWriter ), UNO_QUERY );
+            if ( xWriter.is() )
             {
+                ZipEntry * pEntry = new ZipEntry;
+                ZipPackageBuffer *pBuffer = new ZipPackageBuffer( n_ConstBufferSize );
+                xManOutStream = Reference < XOutputStream > (*pBuffer, UNO_QUERY);
+
+                pEntry->sName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "META-INF/manifest.xml") );
+                pEntry->nMethod = DEFLATED;
+                pEntry->nCrc = pEntry->nSize = pEntry->nCompressedSize = -1;
+                pEntry->nTime = ZipOutputStream::getCurrentDosTime();
+
+                // Convert vector into a Sequence
+                Sequence < Sequence < PropertyValue > > aManifestSequence ( aManList.size() );
+                Sequence < PropertyValue > * pSequence = aManifestSequence.getArray();
+                for (vector < Sequence < PropertyValue > >::const_iterator aIter = aManList.begin(), aEnd = aManList.end();
+                     aIter != aEnd;
+                     aIter++, pSequence++)
+                    *pSequence= (*aIter);
+                xWriter->writeManifestSequence ( xManOutStream,  aManifestSequence );
+
+                sal_Int32 nBufferLength = static_cast < sal_Int32 > ( pBuffer->getPosition() );
+                pBuffer->realloc( nBufferLength );
+
                 // the manifest.xml is never encrypted - so pass an empty reference
                 vos::ORef < EncryptionData > xEmpty;
                 aZipOut.putNextEntry( *pEntry, xEmpty );
                 aZipOut.write( pBuffer->getSequence(), 0, nBufferLength );
                 aZipOut.closeEntry();
             }
-            catch (::com::sun::star::io::IOException & r )
+            else
             {
-                VOS_ENSURE( 0, "Error adding META-INF/manifest.xml to the ZipOutputStream" );
+                VOS_ENSURE ( 0, "Couldn't get a ManifestWriter!" );
+                IOException aException;
                 throw WrappedTargetException(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM ( "Error adding META-INF/manifest.xml to the ZipOutputStream!" ) ),
+                        OUString( RTL_CONSTASCII_USTRINGPARAM ( "Couldn't get a ManifestWriter!" ) ),
                         static_cast < OWeakObject * > ( this ),
-                        makeAny( r ) );
-
+                        makeAny( aException ) );
             }
+        }
+
+        aZipOut.finish();
+
+        // Update our References to point to the new temp file
+        if( bUseTemp )
+        {
+            xContentStream = Reference < XInputStream > ( xTempOut, UNO_QUERY_THROW );
+            xContentSeek = Reference < XSeekable > ( xTempOut, UNO_QUERY_THROW );
         }
         else
         {
-            VOS_ENSURE ( 0, "Couldn't get a ManifestWriter!" );
-            IOException aException;
-            throw WrappedTargetException(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM ( "Couldn't get a ManifestWriter!" ) ),
-                    static_cast < OWeakObject * > ( this ),
-                    makeAny( aException ) );
-        }
-    }
-
-    try
-    {
-        aZipOut.finish();
-    }
-    catch (::com::sun::star::io::IOException & r )
-    {
-        VOS_ENSURE( 0, "Error writing ZIP file to disk" );
-        throw WrappedTargetException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM ( "Error writing ZIP file to disk!" ) ),
-                static_cast < OWeakObject * > ( this ),
-                makeAny( r ) );
-    }
-
-    // Update our References to point to the new temp file
-    if( bUseTemp )
-    {
-        xContentStream = Reference < XInputStream > ( xTempOut, UNO_QUERY_THROW );
-        xContentSeek = Reference < XSeekable > ( xTempOut, UNO_QUERY_THROW );
-    }
-    else
-    {
-        // the case when the original contents were written directly
-        try
-        {
+            // the case when the original contents were written directly
             xTempOut->flush();
 
             // in case the stream is based on a file it will implement the following interface
@@ -1135,25 +1092,39 @@ sal_Bool ZipPackage::writeFileIsTemp()
                 xContentStream = xSink->getStream()->getInputStream();
             else if ( eMode == e_IMode_XStream )
                 xContentStream = xStream->getInputStream();
+
+            xContentSeek = Reference < XSeekable > ( xContentStream, UNO_QUERY_THROW );
+
+            OSL_ENSURE( xContentStream.is() && xContentSeek.is(), "XSeekable interface is required!" );
         }
-        catch ( lang::WrappedTargetException& )
+    }
+    catch ( uno::Exception& )
+    {
+        if( bUseTemp )
         {
-            throw;
-        }
-        catch ( uno::Exception& )
-        {
-            // the original content is written directly here only in case either it did not exist before
-            // or was empty, in both cases no information loss appeares, thus no special handling is required
-              uno::Any aCaught( ::cppu::getCaughtException() );
+            // no information loss appeares, thus no special handling is required
+               uno::Any aCaught( ::cppu::getCaughtException() );
+
+            // it is allowed to throw WrappedTargetException
+            WrappedTargetException aException;
+            if ( aCaught >>= aException )
+                throw;
+
             throw WrappedTargetException(
                     OUString( RTL_CONSTASCII_USTRINGPARAM ( "Problem writing the original content!" ) ),
                     static_cast < OWeakObject * > ( this ),
                     aCaught );
         }
-
-        xContentSeek = Reference < XSeekable > ( xContentStream, UNO_QUERY_THROW );
-
-        OSL_ENSURE( xContentStream.is() && xContentSeek.is(), "XSeekable interface is required!" );
+        else
+        {
+            // the document is written directly, although it was empty it is important to notify that the writing has failed
+            // TODO/LATER: let the package be able to recover in this situation
+            ::rtl::OUString aErrTxt( RTL_CONSTASCII_USTRINGPARAM ( "This package is unusable!" ) );
+            embed::UseBackupException aException( aErrTxt, uno::Reference< uno::XInterface >(), ::rtl::OUString() );
+            throw WrappedTargetException( aErrTxt,
+                                            static_cast < OWeakObject * > ( this ),
+                                            makeAny ( aException ) );
+        }
     }
 
     // seek back to the beginning of the temp file so we can read segments from it
