@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:25:14 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:36:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2167,5 +2167,11 @@ SdrLayerID __EXPORT ScDrawLayer::GetControlExportLayerId( const SdrObject & ) co
     return SC_LAYER_FRONT;
 }
 
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ScDrawLayer::createUnoModel()
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xRet;
+    if( pDoc && pDoc->GetDocumentShell() )
+        xRet = pDoc->GetDocumentShell()->GetModel();
 
-
+    return xRet;
+}
