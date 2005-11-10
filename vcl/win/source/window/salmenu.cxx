@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salmenu.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:09:01 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 15:50:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,16 @@ static DWORD myerr=0;
 
 // =======================================================================
 
+BOOL SalData::IsKnownMenuHandle( HMENU hMenu )
+{
+    if( mhMenuSet.find( hMenu ) == mhMenuSet.end() )
+        return FALSE;
+    else
+        return TRUE;
+}
+
+// =======================================================================
+
 // WinSalInst factory methods
 
 SalMenu* WinSalInstance::CreateMenu( BOOL bMenuBar )
@@ -86,6 +96,9 @@ SalMenu* WinSalInstance::CreateMenu( BOOL bMenuBar )
         pSalMenu->mhMenu = ::CreateMenu();
     else
         pSalMenu->mhMenu = ::CreatePopupMenu();
+
+    if( pSalMenu->mhMenu )
+        GetSalData()->mhMenuSet.insert( pSalMenu->mhMenu );
 
     return pSalMenu;
 }
@@ -189,6 +202,7 @@ WinSalMenu::WinSalMenu()
 WinSalMenu::~WinSalMenu()
 {
     // only required if not associated to a window...
+    GetSalData()->mhMenuSet.erase( mhMenu );
     ::DestroyMenu( mhMenu );
 }
 
@@ -294,10 +308,13 @@ void WinSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsig
 {
     if( pSalMenuItem )
     {
-    WinSalMenuItem* pWMenuItem = static_cast<WinSalMenuItem*>(pSalMenuItem);
-    WinSalMenu* pWSubMenu = static_cast<WinSalMenu*>(pSubMenu);
+        WinSalMenuItem* pWMenuItem = static_cast<WinSalMenuItem*>(pSalMenuItem);
+        WinSalMenu* pWSubMenu = static_cast<WinSalMenu*>(pSubMenu);
         if( pWMenuItem->mInfo.hSubMenu )
+        {
+            GetSalData()->mhMenuSet.erase( pWMenuItem->mInfo.hSubMenu );
             ::DestroyMenu( pWMenuItem->mInfo.hSubMenu );
+        }
 
         pWMenuItem->mInfo.fMask |= MIIM_SUBMENU;
         if( !pSubMenu )
