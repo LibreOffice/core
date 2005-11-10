@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxmsbas.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 12:17:42 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:40:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -283,11 +283,7 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
             for( UINT16 i=0; i<nStreamCount;i++)
             {
                 StringArray aDecompressed = aVBA.Decompress(i);
-#if 0
-/*  DR 2005-08-11 #124850# Do not filter special characters from module name.
-    Just put the original module name and let the Basic interpreter deal with
-    it. Needed for roundtrip...
- */
+
                 ByteString sByteBasic(aVBA.GetStreamName(i),
                     RTL_TEXTENCODING_ASCII_US,
                         (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_UNDERLINE|
@@ -346,15 +342,23 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                         break;
                 }
 
+                String sModule(sBasicModule); //#i52606# no need to split Macros in 64KB blocks any more!
+                String sTemp;
+                if (bAsComment)
+                {
+                    sTemp+=String(RTL_CONSTASCII_USTRINGPARAM( "Sub " ));
+                    String sMunge(sModule);
+                    //Streams can have spaces in them, but modulenames
+                    //cannot !
+                    sMunge.SearchAndReplaceAll(' ','_');
+
+                    sTemp += sMunge;
+                    sTemp.AppendAscii("\n");
+                };
+                ::rtl::OUString aSource(sTemp);
+
                 for(ULONG j=0;j<aDecompressed.GetSize();j++)
                 {
-                    String sModule(sBasicModule);
-                    if (j>0)
-                    {
-                        sModule.AppendAscii("_Part");
-                        sModule += String::CreateFromInt32(j+1);
-                    }
-
                     if (bStripped)
                     {
                         String *pStr = aDecompressed.Get(j);
@@ -378,38 +382,28 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                                 pStr->Erase(nBegin, (nEnd-nBegin)+1);
                         }
                     }
-
                     if( aDecompressed.Get(j)->Len() )
                     {
-                        if (bAsComment)
-                        {
-                            String sTemp( RTL_CONSTASCII_USTRINGPARAM( "Sub " ) );
-                            String sMunge(sModule);
-                            //Streams can have spaces in them, but modulenames
-                            //cannot !
-                            sMunge.SearchAndReplaceAll(' ','_');
-
-                            sTemp += sMunge;
-                            sTemp.AppendAscii("\n");
-                            aDecompressed.Get(j)->Insert(sTemp,0);
-                            aDecompressed.Get(j)->InsertAscii("\nEnd Sub");
-                        }
-
-                        ::rtl::OUString aModName( sModule );
-                        ::rtl::OUString aSource( *aDecompressed.Get(j) );
-
-                        aSource = modeTypeComment + aSource;
-
-                        Any aSourceAny;
-                        aSourceAny <<= aSource;
-                        if( xLib->hasByName( aModName ) )
-                            xLib->replaceByName( aModName, aSourceAny );
-                        else
-                            xLib->insertByName( aModName, aSourceAny );
-
-                        bRet = true;
+                        aSource+=::rtl::OUString( *aDecompressed.Get(j) );
                     }
+
                 }
+                if (bAsComment)
+                {
+                        aSource += rtl::OUString::createFromAscii("\nEnd Sub");
+                }
+                ::rtl::OUString aModName( sModule );
+
+                aSource = modeTypeComment + aSource;
+
+                Any aSourceAny;
+                aSourceAny <<= aSource;
+                if( xLib->hasByName( aModName ) )
+                    xLib->replaceByName( aModName, aSourceAny );
+                else
+                    xLib->insertByName( aModName, aSourceAny );
+
+                bRet = true;
             }
         }
         SFX_APP()->LeaveBasicCall();
