@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.138 $
+ *  $Revision: 1.139 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:12:38 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:58:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2727,49 +2727,49 @@ void SAL_CALL SvxShape::setPropertyValues( const ::com::sun::star::uno::Sequence
     const uno::Any* pValues = aValues.getConstArray();
 
 
-    try
+    mbIsMultiPropertyCall = sal_True;
+
+    if( mpImpl->mpMaster )
     {
-        mbIsMultiPropertyCall = sal_True;
-
-        if( mpImpl->mpMaster )
+        for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
         {
-            for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
+            try
+            {
                 setPropertyValue( *pNames++, *pValues++ );
-        }
-        else
-        {
-            uno::Reference< beans::XPropertySet > xSet;
-            queryInterface( ::getCppuType( (const uno::Reference< beans::XPropertySet >*) 0) ) >>= xSet;
-
-            for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
-                xSet->setPropertyValue( *pNames++, *pValues++ );
-        }
-
-        mbIsMultiPropertyCall = sal_False;
-
-        if( mpImpl->mpItemSet )
-        {
-            //pObj->SetItemSetAndBroadcast( *mpImpl->mpItemSet );
-            pObj->SetMergedItemSetAndBroadcast( *mpImpl->mpItemSet );
-
-            delete mpImpl->mpItemSet;
-            mpImpl->mpItemSet = NULL;
+            }
+            catch( beans::UnknownPropertyException& e )
+            {
+                DBG_ERROR("svx::SvxShape::setPropertyValues(), unknown property!" );
+            }
         }
     }
-    catch( beans::UnknownPropertyException& e )
+    else
     {
-        mbIsMultiPropertyCall = sal_False;
+        uno::Reference< beans::XPropertySet > xSet;
+        queryInterface( ::getCppuType( (const uno::Reference< beans::XPropertySet >*) 0) ) >>= xSet;
 
-        if( mpImpl->mpItemSet )
+        for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
         {
-            delete mpImpl->mpItemSet;
-            mpImpl->mpItemSet = NULL;
+            try
+            {
+                xSet->setPropertyValue( *pNames++, *pValues++ );
+            }
+            catch( beans::UnknownPropertyException& e )
+            {
+                DBG_ERROR("svx::SvxShape::setPropertyValues(), unknown property!" );
+            }
         }
+    }
 
-        const OUString aMsg( RTL_CONSTASCII_USTRINGPARAM("UnknownPropertyException"));
-        const uno::Reference< uno::XInterface > xContext;
+    mbIsMultiPropertyCall = sal_False;
 
-        throw lang::WrappedTargetException( aMsg, xContext, uno::makeAny(e) );
+    if( mpImpl->mpItemSet )
+    {
+        //pObj->SetItemSetAndBroadcast( *mpImpl->mpItemSet );
+        pObj->SetMergedItemSetAndBroadcast( *mpImpl->mpItemSet );
+
+        delete mpImpl->mpItemSet;
+        mpImpl->mpItemSet = NULL;
     }
 }
 
