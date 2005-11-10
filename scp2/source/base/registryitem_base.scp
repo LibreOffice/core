@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryitem_base.scp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:19:52 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:17:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,7 @@ End
 
 RegistryItem gid_Regitem_OpenOffice_ODB_OpenWith_Database
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = ".ODB\OpenWithProgIDs";
+    Subkey = ".odb\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Base_Bin;
     Name = "opendocument.DatabaseDocument.1";
     Value = " ";
