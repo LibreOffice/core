@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:43:46 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:37:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1316,7 +1316,8 @@ ATTR_SETEMPHASIS:
 
 void SvxRTFParser::ReadTabAttr( int nToken, SfxItemSet& rSet )
 {
-    // dann lese doch mal alle TabStops ein
+    bool bMethodOwnsToken = false; // #i52542# patch from cmc.
+// dann lese doch mal alle TabStops ein
     SvxTabStop aTabStop;
     SvxTabStopItem aAttr( 0, 0, SVX_TAB_ADJUST_DEFAULT, PARDID->nTabStop );
     int bWeiter = TRUE;
@@ -1366,7 +1367,8 @@ void SvxRTFParser::ReadTabAttr( int nToken, SfxItemSet& rSet )
                     aTabStop.GetDecimal() = BYTE(nTokenValue & 0xff);
                     aTabStop.GetFill() = BYTE((nTokenValue >> 8) & 0xff);
                     // ueberlese noch die schliessende Klammer
-                    GetNextToken();
+                    if (bMethodOwnsToken)
+                        GetNextToken();
                 }
                 if( nSkip )
                 {
@@ -1380,7 +1382,10 @@ void SvxRTFParser::ReadTabAttr( int nToken, SfxItemSet& rSet )
             bWeiter = FALSE;
         }
         if( bWeiter )
+        {
             nToken = GetNextToken();
+            bMethodOwnsToken = true;
+        }
     } while( bWeiter );
 
     // mit Defaults aufuellen fehlt noch !!!
