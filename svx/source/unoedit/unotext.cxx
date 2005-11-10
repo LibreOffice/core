@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 12:17:59 $
+ *  last change: $Author: rt $ $Date: 2005-11-10 16:59:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -820,106 +820,115 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< ::rt
 
         const SfxItemPropertyMap* pMap = aPropSet.getPropertyMap();
 
+        const OUString* pLastPropertyName = 0;
+
         for( ; nCount; nCount--, pPropertyNames++, pValues++ )
         {
+            if( pLastPropertyName )
+            {
+                sal_Int32 nComp = pLastPropertyName->compareTo( *pPropertyNames );
+                if( nComp < 0 )
+                {
+                    if(pMap)
+                        pMap++;
+                    else
+                        pMap = aPropSet.getPropertyMap();
+                }
+                else if( nComp > 0 )
+                {
+                    pMap = aPropSet.getPropertyMap();
+                }
+                else
+                {
+                    DBG_ERROR( "svx::SvxUnoTextRangeBase::_setPropertyValues(), duplicate property in parameter sequence!" );
+                }
+            }
+
+            pLastPropertyName = pPropertyNames;
             pMap = SfxItemPropertyMap::GetByName(pMap, *pPropertyNames );
-            if( NULL == pMap )
+
+            if( pMap )
             {
-                bUnknownProperty = sal_True;
-                break;
-            }
+                sal_Bool bParaAttrib = (pMap->nWID >= EE_PARA_START) && ( pMap->nWID <= EE_PARA_END );
 
-            sal_Bool bParaAttrib = (pMap->nWID >= EE_PARA_START) && ( pMap->nWID <= EE_PARA_END );
-
-            if( (nPara == -1) && !bParaAttrib )
-            {
-                if( NULL == pNewAttrSet )
+                if( (nPara == -1) && !bParaAttrib )
                 {
-                    const SfxItemSet aSet( pForwarder->GetAttribs( aSel ) );
-                    pOldAttrSet = new SfxItemSet( aSet );
-                    pNewAttrSet = new SfxItemSet( *pOldAttrSet->GetPool(), pOldAttrSet->GetRanges() );
-                }
-
-                setPropertyValue( pMap, *pValues, GetSelection(), *pOldAttrSet, *pNewAttrSet );
-
-                if( pMap->nWID >= EE_ITEMS_START && pMap->nWID <= EE_ITEMS_END )
-                {
-                    const SfxPoolItem* pItem;
-                    if( pNewAttrSet->GetItemState( pMap->nWID, sal_True, &pItem ) == SFX_ITEM_SET )
+                    if( NULL == pNewAttrSet )
                     {
-                        pOldAttrSet->Put( *pItem );
+                        const SfxItemSet aSet( pForwarder->GetAttribs( aSel ) );
+                        pOldAttrSet = new SfxItemSet( aSet );
+                        pNewAttrSet = new SfxItemSet( *pOldAttrSet->GetPool(), pOldAttrSet->GetRanges() );
+                    }
+
+                    setPropertyValue( pMap, *pValues, GetSelection(), *pOldAttrSet, *pNewAttrSet );
+
+                    if( pMap->nWID >= EE_ITEMS_START && pMap->nWID <= EE_ITEMS_END )
+                    {
+                        const SfxPoolItem* pItem;
+                        if( pNewAttrSet->GetItemState( pMap->nWID, sal_True, &pItem ) == SFX_ITEM_SET )
+                        {
+                            pOldAttrSet->Put( *pItem );
+                        }
                     }
                 }
-            }
-            else
-            {
-                if( NULL == pNewParaSet )
+                else
                 {
-                    const SfxItemSet aSet( pForwarder->GetParaAttribs( (USHORT)nTempPara ) );
-                    pOldParaSet = new SfxItemSet( aSet );
-                    pNewParaSet = new SfxItemSet( *pOldParaSet->GetPool(), pOldParaSet->GetRanges() );
-                }
-
-                setPropertyValue( pMap, *pValues, GetSelection(), *pOldParaSet, *pNewParaSet );
-
-                if( pMap->nWID >= EE_ITEMS_START && pMap->nWID <= EE_ITEMS_END )
-                {
-                    const SfxPoolItem* pItem;
-                    if( pNewParaSet->GetItemState( pMap->nWID, sal_True, &pItem ) == SFX_ITEM_SET )
+                    if( NULL == pNewParaSet )
                     {
-                        pOldParaSet->Put( *pItem );
+                        const SfxItemSet aSet( pForwarder->GetParaAttribs( (USHORT)nTempPara ) );
+                        pOldParaSet = new SfxItemSet( aSet );
+                        pNewParaSet = new SfxItemSet( *pOldParaSet->GetPool(), pOldParaSet->GetRanges() );
                     }
+
+                    setPropertyValue( pMap, *pValues, GetSelection(), *pOldParaSet, *pNewParaSet );
+
+                    if( pMap->nWID >= EE_ITEMS_START && pMap->nWID <= EE_ITEMS_END )
+                    {
+                        const SfxPoolItem* pItem;
+                        if( pNewParaSet->GetItemState( pMap->nWID, sal_True, &pItem ) == SFX_ITEM_SET )
+                        {
+                            pOldParaSet->Put( *pItem );
+                        }
+                    }
+
                 }
-
             }
-
-            if (pMap)
-                pMap++;
-            else
-                pMap = aPropSet.getPropertyMap();
         }
 
-        if( !bUnknownProperty )
+        sal_Bool bNeedsUpdate = sal_False;
+
+        if( pNewParaSet )
         {
-            sal_Bool bNeedsUpdate = sal_False;
-
-            if( pNewParaSet )
+            if( pNewParaSet->Count() )
             {
-
-                if( pNewParaSet->Count() )
+                while( nTempPara <= nEndPara )
                 {
-                    while( nTempPara <= nEndPara )
-                    {
-                        SfxItemSet aSet( pForwarder->GetParaAttribs( (USHORT)nTempPara ) );
-                        aSet.Put( *pNewParaSet );
-                        pForwarder->SetParaAttribs( (USHORT)nTempPara, aSet );
-                        nTempPara++;
-                    }
-                    bNeedsUpdate = sal_True;
+                    SfxItemSet aSet( pForwarder->GetParaAttribs( (USHORT)nTempPara ) );
+                    aSet.Put( *pNewParaSet );
+                    pForwarder->SetParaAttribs( (USHORT)nTempPara, aSet );
+                    nTempPara++;
                 }
-
-                delete pNewParaSet;
-                delete pOldParaSet;
+                bNeedsUpdate = sal_True;
             }
 
-            if( pNewAttrSet )
-            {
-                if( pNewAttrSet->Count() )
-                {
-                    pForwarder->QuickSetAttribs( *pNewAttrSet, GetSelection() );
-                    bNeedsUpdate = sal_True;
-                }
-                delete pNewAttrSet;
-                delete pOldAttrSet;
-
-            }
-
-            if( bNeedsUpdate )
-                GetEditSource()->UpdateData();
+            delete pNewParaSet;
+            delete pOldParaSet;
         }
 
-        if( bUnknownProperty )
-            throw beans::UnknownPropertyException();
+        if( pNewAttrSet )
+        {
+            if( pNewAttrSet->Count() )
+            {
+                pForwarder->QuickSetAttribs( *pNewAttrSet, GetSelection() );
+                bNeedsUpdate = sal_True;
+            }
+            delete pNewAttrSet;
+            delete pOldAttrSet;
+
+        }
+
+        if( bNeedsUpdate )
+            GetEditSource()->UpdateData();
     }
 }
 
@@ -953,18 +962,36 @@ uno::Sequence< uno::Any > SAL_CALL SvxUnoTextRangeBase::_getPropertyValues( cons
 
         const SfxItemPropertyMap* pMap = aPropSet.getPropertyMap();
 
+        const OUString* pLastPropertyName = 0;
+
         for( ; nCount; nCount--, pPropertyNames++, pValues++ )
         {
+            if( pLastPropertyName )
+            {
+                sal_Int32 nComp = pLastPropertyName->compareTo( *pPropertyNames );
+                if( nComp < 0 )
+                {
+                    if(pMap)
+                        pMap++;
+                    else
+                        pMap = aPropSet.getPropertyMap();
+                }
+                else if( nComp > 0 )
+                {
+                    pMap = aPropSet.getPropertyMap();
+                }
+                else
+                {
+                    DBG_ERROR( "svx::SvxUnoTextRangeBase::_getPropertyValues(), duplicate property in parameter sequence!" );
+                }
+            }
+
+            pLastPropertyName = pPropertyNames;
             pMap = SfxItemPropertyMap::GetByName(pMap, *pPropertyNames );
-            if( NULL == pMap )
-                throw beans::UnknownPropertyException();
-
-            getPropertyValue( pMap, *pValues, *pAttribs );
-
-            if (pMap)
-                pMap++;
-            else
-                pMap = aPropSet.getPropertyMap();
+            if( pMap )
+            {
+                getPropertyValue( pMap, *pValues, *pAttribs );
+            }
         }
 
         delete pAttribs;
