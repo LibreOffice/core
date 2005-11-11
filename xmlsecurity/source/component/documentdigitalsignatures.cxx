@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdigitalsignatures.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-30 10:15:55 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 09:17:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,12 +83,17 @@
 #ifndef INCLUDED_SVTOOLS_SECURITYOPTIONS_HXX
 #include <svtools/securityoptions.hxx>
 #endif
+#ifndef _COM_SUN_STAR_SECURITY_CERTIFICATEVALIDITY_HDL_
+#include <com/sun/star/security/CertificateValidity.hdl>
+#endif
 #ifndef _UCBHELPER_CONTENTBROKER_HXX
 #include <ucbhelper/contentbroker.hxx>
 #endif
 
+#include <stdio.h>
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+namespace css = ::com::sun::star;
 
 DocumentDigitalSignatures::DocumentDigitalSignatures( const Reference< com::sun::star::lang::XMultiServiceFactory> rxMSF )
 {
@@ -100,7 +105,7 @@ sal_Bool DocumentDigitalSignatures::signDocumentContent( const Reference< ::com:
     return ImplViewSignatures( rxStorage, xSignStream, SignatureModeDocumentContent, false );
 }
 
-Sequence< ::com::sun::star::security::DocumentSignaturesInformation > DocumentDigitalSignatures::verifyDocumentContentSignatures( const Reference< ::com::sun::star::embed::XStorage >& rxStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xSignInStream ) throw (RuntimeException)
+Sequence< ::com::sun::star::security::DocumentSignatureInformation > DocumentDigitalSignatures::verifyDocumentContentSignatures( const Reference< ::com::sun::star::embed::XStorage >& rxStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xSignInStream ) throw (RuntimeException)
 {
     return ImplVerifySignatures( rxStorage, xSignInStream, SignatureModeDocumentContent );
 }
@@ -120,7 +125,7 @@ sal_Bool DocumentDigitalSignatures::signScriptingContent( const Reference< ::com
     return ImplViewSignatures( rxStorage, xSignStream, SignatureModeMacros, false );
 }
 
-Sequence< ::com::sun::star::security::DocumentSignaturesInformation > DocumentDigitalSignatures::verifyScriptingContentSignatures( const Reference< ::com::sun::star::embed::XStorage >& rxStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xSignInStream ) throw (RuntimeException)
+Sequence< ::com::sun::star::security::DocumentSignatureInformation > DocumentDigitalSignatures::verifyScriptingContentSignatures( const Reference< ::com::sun::star::embed::XStorage >& rxStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xSignInStream ) throw (RuntimeException)
 {
     return ImplVerifySignatures( rxStorage, xSignInStream, SignatureModeMacros );
 }
@@ -141,7 +146,7 @@ sal_Bool DocumentDigitalSignatures::signPackage( const Reference< ::com::sun::st
     return ImplViewSignatures( rxStorage, xSignStream, SignatureModePackage, false );
 }
 
-Sequence< ::com::sun::star::security::DocumentSignaturesInformation > DocumentDigitalSignatures::verifyPackageSignatures( const Reference< ::com::sun::star::embed::XStorage >& rxStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xSignInStream ) throw (RuntimeException)
+Sequence< ::com::sun::star::security::DocumentSignatureInformation > DocumentDigitalSignatures::verifyPackageSignatures( const Reference< ::com::sun::star::embed::XStorage >& rxStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xSignInStream ) throw (RuntimeException)
 {
     return ImplVerifySignatures( rxStorage, xSignInStream, SignatureModePackage );
 }
@@ -198,7 +203,7 @@ sal_Bool DocumentDigitalSignatures::ImplViewSignatures( const Reference< ::com::
     return bChanges;
 }
 
-Sequence< ::com::sun::star::security::DocumentSignaturesInformation > DocumentDigitalSignatures::ImplVerifySignatures( const Reference< ::com::sun::star::embed::XStorage >& rxStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xSignStream, DocumentSignatureMode eMode ) throw (RuntimeException)
+Sequence< ::com::sun::star::security::DocumentSignatureInformation > DocumentDigitalSignatures::ImplVerifySignatures( const Reference< ::com::sun::star::embed::XStorage >& rxStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xSignStream, DocumentSignatureMode eMode ) throw (RuntimeException)
 {
     // First check for the InputStream, to avoid unnecessary initialization of the security environemnt...
     SignatureStreamHelper aStreamHelper;
@@ -212,7 +217,7 @@ Sequence< ::com::sun::star::security::DocumentSignaturesInformation > DocumentDi
     }
 
     if ( !xInputStream.is() )
-        return Sequence< ::com::sun::star::security::DocumentSignaturesInformation >(0);
+        return Sequence< ::com::sun::star::security::DocumentSignatureInformation >(0);
 
 
     XMLSignatureHelper aSignatureHelper( mxMSF );
@@ -222,7 +227,7 @@ Sequence< ::com::sun::star::security::DocumentSignaturesInformation > DocumentDi
     DBG_ASSERT( bInit, "Error initializing security context!" );
 
     if ( !bInit )
-        return Sequence< ::com::sun::star::security::DocumentSignaturesInformation >(0);
+        return Sequence< ::com::sun::star::security::DocumentSignatureInformation >(0);
 
     aSignatureHelper.SetStorage( rxStorage );
 
@@ -236,7 +241,8 @@ Sequence< ::com::sun::star::security::DocumentSignaturesInformation > DocumentDi
 
     SignatureInformations aSignInfos = aSignatureHelper.GetSignatureInformations();
     int nInfos = aSignInfos.size();
-    Sequence< ::com::sun::star::security::DocumentSignaturesInformation > aInfos(nInfos);
+    Sequence< css::security::DocumentSignatureInformation > aInfos(nInfos);
+    css::security::DocumentSignatureInformation* arInfos = aInfos.getArray();
 
     if ( nInfos )
     {
@@ -244,30 +250,47 @@ Sequence< ::com::sun::star::security::DocumentSignaturesInformation > DocumentDi
         for( int n = 0; n < nInfos; ++n )
         {
             const SignatureInformation& rInfo = aSignInfos[n];
-            aInfos[n].Signer = xSecEnv->getCertificate( rInfo.ouX509IssuerName, numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
-            if ( !aInfos[n].Signer.is() && rInfo.ouX509Certificate.getLength() )
-                aInfos[n].Signer = xSecEnv->createCertificateFromAscii( rInfo.ouX509Certificate ) ;
+            css::security::DocumentSignatureInformation& rSigInfo = arInfos[n];
+
+            if (rInfo.ouX509Certificate.getLength())
+               rSigInfo.Signer = xSecEnv->createCertificateFromAscii( rInfo.ouX509Certificate ) ;
+            if (!rSigInfo.Signer.is())
+                rSigInfo.Signer = xSecEnv->getCertificate( rInfo.ouX509IssuerName, numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
 
             // --> PB 2004-12-14 #i38744# time support again
             Date aDate( rInfo.stDateTime.Day, rInfo.stDateTime.Month, rInfo.stDateTime.Year );
             Time aTime( rInfo.stDateTime.Hours, rInfo.stDateTime.Minutes,
                         rInfo.stDateTime.Seconds, rInfo.stDateTime.HundredthSeconds );
-            aInfos[n].SignatureDate = aDate.GetDate();
-            aInfos[n].SignatureTime = aTime.GetTime();
-            // <--
+            rSigInfo.SignatureDate = aDate.GetDate();
+            rSigInfo.SignatureTime = aTime.GetTime();
 
-            DBG_ASSERT( rInfo.nStatus != ::com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN, "Signature not processed!" );
+            // Verify certificate
+            //We have patched our version of libxmlsec, so that it does not verify the certificates. This has two
+            //reasons. First we want two separate status for signature and certificate. Second libxmlsec calls
+            //CERT_VerifyCertificate (solaris, linux) falsly, so that it always regards the certificate as valid.
+            //On Window the checking of the certificate path is buggy. It does name matching (issuer, subject name)
+            //to find the parent certificate. It does not take into account that there can be several certificates
+            //with the same subject name.
+            if (rSigInfo.Signer.is())
+            {
+                try {
+                    rSigInfo.CertificateStatus = xSecEnv->verifyCertificate(rSigInfo.Signer);
+                } catch (SecurityException& ) {
+                    OSL_ENSURE(0, "Verification of certificate failed");
+                    rSigInfo.CertificateStatus = css::security::CertificateValidity::INVALID;
+                }
+            }
+            else
+            {
+                //We should always be aible to get the certificates because it is contained in the document.
+                OSL_ENSURE(0, "Could not create certificate");
+                rSigInfo.CertificateStatus = css::security::CertificateValidity::INVALID;
+            }
 
-            aInfos[n].SignatureIsValid = ( rInfo.nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED );
+            rSigInfo.SignatureIsValid = ( rInfo.nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED );
 
-            // HACK for #i46696#
-            // Should only happen because of author or issuer certificates are missing in keystore.
-            // We always have the key from authors certificate, because it's attached.
-            // This is a question of trust, not of a *broken* signature.
-            if ( ( rInfo.nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_KEY_NOT_FOUND ) && rInfo.ouX509Certificate.getLength() )
-                aInfos[n].SignatureIsValid = sal_True;
 
-            if ( aInfos[n].SignatureIsValid )
+            if ( rSigInfo.SignatureIsValid )
             {
                 // Can only be valid if ALL streams are signed, which means real stream count == signed stream count
                 int nRealCount = 0;
@@ -278,7 +301,7 @@ Sequence< ::com::sun::star::security::DocumentSignaturesInformation > DocumentDi
                     if ( ( rInf.nType == TYPE_BINARYSTREAM_REFERENCE ) || ( rInf.nType == TYPE_XMLSTREAM_REFERENCE ) )
                         nRealCount++;
                 }
-                aInfos[n].SignatureIsValid = ( aElementsToBeVerified.size() == nRealCount );
+                rSigInfo.SignatureIsValid = ( aElementsToBeVerified.size() == nRealCount );
             }
 
         }
