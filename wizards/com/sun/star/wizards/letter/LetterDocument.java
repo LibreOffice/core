@@ -26,7 +26,7 @@ public class LetterDocument extends TextDocument {
 
 
     public LetterDocument(XMultiServiceFactory xMSF, XTerminateListener listener) {
-        super(xMSF, listener);
+        super(xMSF, listener, "WIZARD_LIVE_PREVIEW");
     }
 
 
