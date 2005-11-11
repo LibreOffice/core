@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Setup.xcu,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:46:10 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:56:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,9 @@
                 <prop oor:name="ooSetupFactoryCommandConfigRef">
                     <value >CalcCommands</value>
                 </prop>
+                <prop oor:name="ooSetupFactoryActualFilter">
+                    <value >calc8</value>
+                </prop>
                 <prop oor:name="ooSetupFactoryDefaultFilter">
                     <value >calc8</value>
                 </prop>
@@ -95,6 +98,9 @@
             <node oor:name="com.sun.star.drawing.DrawingDocument" oor:op="replace" install:module="draw" >
                 <prop oor:name="ooSetupFactoryCommandConfigRef">
                     <value >DrawImpressCommands</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryActualFilter">
+                    <value>draw8</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryDefaultFilter">
                     <value >draw8</value>
@@ -128,11 +134,14 @@
                 <prop oor:name="ooSetupFactoryCommandConfigRef">
                     <value >DrawImpressCommands</value>
                 </prop>
+                <prop oor:name="ooSetupFactoryActualFilter">
+                    <value >impress8</value>
+                </prop>
                 <prop oor:name="ooSetupFactoryDefaultFilter">
                     <value >impress8</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryEmptyDocumentURL">
-                    <value >private:factory/simpress?slot=6686</value>
+                    <value >private:factory/simpress</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryWindowAttributes">
                     <value>,,,;4;</value>
@@ -159,6 +168,9 @@
             <node oor:name="com.sun.star.formula.FormulaProperties" oor:op="replace" install:module="math">
                 <prop oor:name="ooSetupFactoryCommandConfigRef">
                     <value >MathCommands</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryActualFilter">
+                    <value >math8</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryDefaultFilter">
                     <value >math8</value>
@@ -192,6 +204,9 @@
                 <prop oor:name="ooSetupFactoryCommandConfigRef">
                     <value >WriterCommands</value>
                 </prop>
+                <prop oor:name="ooSetupFactoryActualFilter">
+                    <value >writerglobal8</value>
+                </prop>
                 <prop oor:name="ooSetupFactoryDefaultFilter">
                     <value >writerglobal8</value>
                 </prop>
@@ -224,6 +239,9 @@
                 <prop oor:name="ooSetupFactoryCommandConfigRef">
                     <value >WriterCommands</value>
                 </prop>
+                <prop oor:name="ooSetupFactoryActualFilter">
+                    <value >writer8</value>
+                </prop>
                 <prop oor:name="ooSetupFactoryDefaultFilter">
                     <value >writer8</value>
                 </prop>
@@ -255,6 +273,9 @@
             <node oor:name="com.sun.star.text.WebDocument" oor:op="replace" install:module="writer">
                 <prop oor:name="ooSetupFactoryCommandConfigRef">
                     <value >WriterCommands</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryActualFilter">
+                    <value >HTML</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryDefaultFilter">
                     <value >HTML</value>
@@ -416,6 +437,9 @@
                 <prop oor:name="ooSetupFactoryCommandConfigRef">
                     <value >ChartCommands</value>
                 </prop>
+                <prop oor:name="ooSetupFactoryActualFilter">
+                    <value >chart8</value>
+                </prop>
                 <prop oor:name="ooSetupFactoryDefaultFilter">
                     <value >chart8</value>
                 </prop>
@@ -447,6 +471,9 @@
             <node oor:name="com.sun.star.sdb.OfficeDatabaseDocument" oor:op="replace" install:module="base">
                 <prop oor:name="ooSetupFactoryCommandConfigRef">
                     <value >DbuCommands</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryActualFilter">
+                    <value >StarOffice XML (Base)</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryDefaultFilter">
                     <value >StarOffice XML (Base)</value>
