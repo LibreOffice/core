@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-24 18:33:37 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:28:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,7 +150,8 @@ class Desktop : public Application
         }
 
         DECL_STATIC_LINK( Desktop, AsyncTerminate, void*);
-        static sal_Bool CheckOEM();
+        static sal_Bool         CheckOEM();
+        static sal_Bool         isCrashReporterEnabled();
 
     private:
         // Bootstrap methods
@@ -198,8 +199,10 @@ class Desktop : public Application
         /// does initializations which are necessary for the first run of the office
         void                    DoFirstRunInitializations();
 
-        static sal_Bool             SaveTasks(sal_Int32 options);
-        static sal_Bool _bTasksSaved;
+        static sal_Bool         SaveTasks(sal_Int32 options);
+        static sal_Bool         _bTasksSaved;
+
+        static void             retrieveCrashReporterState();
 
         // on-demand acceptors
         static void                         createAcceptor(const OUString& aDescription);
