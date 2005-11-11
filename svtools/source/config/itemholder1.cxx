@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemholder1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:50:10 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 13:50:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,7 @@
 #include <pathoptions.hxx>
 #include <printwarningoptions.hxx>
 #include <regoptions.hxx>
+#include <optionsdlg.hxx>
 #include <saveopt.hxx>
 #include <searchopt.hxx>
 #include <securityoptions.hxx>
@@ -260,6 +261,10 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
             rItem.pItem = new SvtModuleOptions();
             break;
 
+        case E_OPTIONSDLGOPTIONS :
+            rItem.pItem = new SvtOptionsDialogOptions();
+            break;
+
         case E_OPTIONS3D :
             rItem.pItem = new SvtOptions3D();
             break;
@@ -331,3 +336,4 @@ void ItemHolder1::impl_deleteItem(TItemInfo& rItem)
         rItem.pItem = 0;
     }
 }
+
