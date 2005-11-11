@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemholderbase.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:50:57 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 13:51:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,7 @@ enum EItem
     E_MISCOPTIONS                   ,   //
     E_MODULEOPTIONS                 ,   //
 
+    E_OPTIONSDLGOPTIONS             ,   //
     E_OPTIONS3D                     ,   //
 
     E_PATHOPTIONS                   ,   //
