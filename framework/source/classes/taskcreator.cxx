@@ -4,9 +4,9 @@
  *
  *  $RCSfile: taskcreator.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:15:35 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:04:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,10 @@
 
 #ifndef __FRAMEWORK_CLASSES_TASKCREATOR_HXX_
 #include <classes/taskcreator.hxx>
+#endif
+
+#ifndef __FRAMEWORK_CLASSES_FRAMELISTANALYZER_HXX_
+#include <classes/framelistanalyzer.hxx>
 #endif
 
 #ifndef __FRAMEWORK_HELPER_PERSISTENTWINDOWSTATE_HXX_
@@ -113,6 +117,18 @@
 #include <svtools/colorcfg.hxx>
 #endif
 
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/unohlp.hxx>
+#endif
+
+#ifndef _SV_WINDOW_HXX
+#include <vcl/window.hxx>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  includes of my own project
 //_________________________________________________________________________________________________________________
@@ -183,20 +199,17 @@ TaskCreator::~TaskCreator()
 css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const ::rtl::OUString& sName    ,
                                                                          sal_Bool         bVisible )
 {
-    // Check incoming parameter. We don't allow special target names like e.g. "_blank"
-    ::rtl::OUString sRightName = impl_filterNames(sName);
-
     /* SAFE { */
     ReadGuard aReadLock( m_aLock );
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
     aReadLock.unlock();
     /* } SAFE */
 
-    css::uno::Reference< css::frame::XFramesSupplier > xDesktop( xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY );
-    if ( ! xDesktop.is())
-        return NULL;
+    css::uno::Reference< css::frame::XFramesSupplier > xDesktop(
+        xSMGR->createInstance(SERVICENAME_DESKTOP),
+        css::uno::UNO_QUERY_THROW);
 
-    css::uno::Reference< css::frame::XFrame > xTask = implts_createSystemTask(xDesktop, sRightName, bVisible);
+    css::uno::Reference< css::frame::XFrame > xTask = implts_createSystemTask(xDesktop, sName, bVisible);
     return xTask;
 }
 
@@ -221,17 +234,27 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::implts_createSystemTask( 
                                                                                 const ::rtl::OUString&                                      sName    ,
                                                                                       sal_Bool                                              bVisible )
 {
-    css::uno::Reference< css::frame::XFrame > xTask;
-
-    // get toolkit to create task container window
     /* SAFE { */
     ReadGuard aReadLock( m_aLock );
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
     aReadLock.unlock();
     /* } SAFE */
-    css::uno::Reference< css::awt::XToolkit > xToolkit( xSMGR->createInstance( SERVICENAME_VCLTOOLKIT ), css::uno::UNO_QUERY );
-    if ( ! xToolkit.is() )
-        return NULL;
+
+    // check if it's a special target name.
+    // Such values indicates creation of document windows
+    // and such target names are not allowed to be set as
+    // frame name!
+
+    // On the other side all real named frames indicates using of these frames
+    // as non document-windows (e.g. help window, life-previews of wizards etcpp).
+
+    ::rtl::OUString sFilteredName = impl_filterNames(sName);
+    sal_Bool        bIsDocument   = (! sFilteredName.getLength());
+
+    // get toolkit to create task container window
+    css::uno::Reference< css::awt::XToolkit > xToolkit(
+        xSMGR->createInstance(SERVICENAME_VCLTOOLKIT),
+        css::uno::UNO_QUERY_THROW);
 
     // describe window properties.
     css::awt::WindowDescriptor aDescriptor;
@@ -250,6 +273,8 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::implts_createSystemTask( 
     css::uno::Reference< css::awt::XWindow >     xWindow    ( xPeer, css::uno::UNO_QUERY );
     xPeer->setBackground(::svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor);
     css::uno::Reference< css::frame::XFrames >   xContainer = xDesktop->getFrames();
+    css::uno::Reference< css::frame::XFrame >    xTask;
+
     if (
         ( xWindow.is()    ) &&
         ( xContainer.is() )
@@ -269,11 +294,29 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::implts_createSystemTask( 
             // (task member xParent will automaticly set by "append()" call!)
 
             xTask->initialize  ( xWindow );
-            xTask->setName     ( sName   );
             xContainer->append ( xTask   );
 
             if (bVisible)
                 xWindow->setVisible(bVisible);
+
+            if (sFilteredName.getLength())
+                xTask->setName(sFilteredName);
+
+            if (bIsDocument)
+            {
+                // SOLAR SAFE ->
+                // #125187# + #i53630#
+                // Mark all document windows as "special ones", so VCL can bind
+                // special features to it. Because VCL doesnt know anything about documents ...
+                // Note: Doing so it's no longer supported, that e.g. our wizards can use findFrame(_blank)
+                // to create it's previes frames. They must do it manually by using WindowDescriptor+Toolkit!
+                ::vos::OClearableGuard aSolarGuard(Application::GetSolarMutex());
+                Window* pVCLWindow = VCLUnoHelper::GetWindow(xWindow);
+                if (pVCLWindow)
+                    pVCLWindow->SetExtendedStyle(WB_EXT_DOCUMENT);
+                aSolarGuard.clear();
+                // <- SOLAR SAFE
+            }
 
             // Special feature: It's allowed for system tasks only - not for browser plugged ones!
             // We must create a special listener service and couple it with the new created task frame.
