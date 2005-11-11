@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guisaveas.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:56:36 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:21:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include "docinf.hxx"
 
+class Window;
 class ModelData_Impl;
 class SfxStoringHelper
 {
@@ -131,6 +132,9 @@ public:
                                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel
                                     ,/*OUT*/::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgsSequence
                                 );
+
+    static Window* GetModelWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
+
 };
 
 #endif
