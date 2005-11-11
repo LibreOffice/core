@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtercache.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:28:41 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:43:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -264,11 +264,13 @@ void FilterCache::load(EFillState eRequired,
     if ((m_eFillState & eRequired) == eRequired)
         return;
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 0
     if (
-        (!bByThread                                              ) &&
-        ((eRequired & E_CONTAINS_STANDARD) != E_CONTAINS_STANDARD) &&
-        ((eRequired & E_CONTAINS_TYPES   ) != E_CONTAINS_TYPES   )    // TYPES are STANDARD + "some small updates" => OK .. but dont accept e.g. the complete list of FILTERs here!
+        (!bByThread) &&
+        (
+            ((eRequired & E_CONTAINS_FILTERS) == E_CONTAINS_FILTERS) ||
+            ((eRequired & E_CONTAINS_ALL    ) == E_CONTAINS_ALL    )
+        )
        )
     {
         OSL_ENSURE(sal_False, "Who disturb our \"fill cache on demand\" feature and force loading of ALL data during office startup? Please optimize your code, so a full filled filter cache is not realy needed here!");
