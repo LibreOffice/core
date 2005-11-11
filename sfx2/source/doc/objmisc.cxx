@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-30 10:25:01 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 10:20:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1943,7 +1943,7 @@ void SfxObjectShell::AdjustMacroMode( const String& rScriptType )
         // check whether the document is signed with trusted certificate
         if ( xSignatures.is() && pImp->nMacroMode != MacroExecMode::FROM_LIST )
         {
-            ::com::sun::star::uno::Sequence< security::DocumentSignaturesInformation > aScriptingSignatureInformations;
+            ::com::sun::star::uno::Sequence< security::DocumentSignatureInformation > aScriptingSignatureInformations;
             uno::Reference < embed::XStorage > xStore = GetMedium()->GetLastCommitReadStorage_Impl();
             sal_uInt16 nSignatureState = GetScriptingSignatureState();
             if ( nSignatureState == SIGNATURESTATE_SIGNATURES_BROKEN )
@@ -1955,8 +1955,11 @@ void SfxObjectShell::AdjustMacroMode( const String& rScriptType )
                     return;
                 }
             }
-            else if ( nSignatureState == SIGNATURESTATE_SIGNATURES_OK && xStore.is() )
-                aScriptingSignatureInformations = xSignatures->verifyScriptingContentSignatures( xStore, uno::Reference< io::XInputStream >() );
+            else if ( (    nSignatureState == SIGNATURESTATE_SIGNATURES_OK
+                        || nSignatureState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED )
+                      && xStore.is() )
+                aScriptingSignatureInformations =
+                    xSignatures->verifyScriptingContentSignatures( xStore, uno::Reference< io::XInputStream >() );
 
             sal_Int32 nNumOfInfos = aScriptingSignatureInformations.getLength();
 
