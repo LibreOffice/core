@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:47:08 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 10:20:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,8 +99,12 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_SECURITY_CERTIFICATEVALIDITY_HPP_
+#include <com/sun/star/security/CertificateValidity.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_SECURITY_DOCUMENTSIGNATURESINFORMATION_HPP_
-#include <com/sun/star/security/DocumentSignaturesInformation.hpp>
+#include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_SECURITY_XDOCUMENTDIGITALSIGNATURES_HPP_
@@ -485,9 +489,12 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 SfxErrorContext aEc( ERRCTX_SFX_SAVEASDOC, GetTitle() ); // ???
 
                 // xmlsec05, check with SFX team
-                if ( ( GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_OK ) || ( GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_INVALID ) )
+                sal_uInt16 nState = GetDocumentSignatureState();
+                if (    SIGNATURESTATE_SIGNATURES_OK == nState
+                     || SIGNATURESTATE_SIGNATURES_INVALID == nState
+                     || SIGNATURESTATE_SIGNATURES_NOTVALIDATED == nState )
                 {
-                    if( QueryBox( NULL, SfxResId( RID_XMLSEC_QUERY_LOSINGSIGNATURE ) ).Execute() != RET_YES )
+                    if ( QueryBox( NULL, SfxResId( RID_XMLSEC_QUERY_LOSINGSIGNATURE ) ).Execute() != RET_YES )
                         return;
                 }
 
@@ -1362,6 +1369,7 @@ void SfxObjectShell::StateView_Impl(SfxItemSet &rSet)
 
 sal_uInt16 SfxObjectShell::ImplGetSignatureState( sal_Bool bScriptingContent )
 {
+    bool bCertValid = true;
     sal_Int16* pState = bScriptingContent ? &pImp->nScriptingSignatureState : &pImp->nDocumentSignatureState;
 
     if ( *pState == SIGNATURESTATE_UNKNOWN )
@@ -1377,7 +1385,7 @@ sal_uInt16 SfxObjectShell::ImplGetSignatureState( sal_Bool bScriptingContent )
 
                 if ( xD.is() )
                 {
-                    ::com::sun::star::uno::Sequence< security::DocumentSignaturesInformation > aInfos;
+                    ::com::sun::star::uno::Sequence< security::DocumentSignatureInformation > aInfos;
                     if ( bScriptingContent )
                         aInfos = xD->verifyScriptingContentSignatures( GetMedium()->GetLastCommitReadStorage_Impl(),
                                                                         uno::Reference< io::XInputStream >() );
@@ -1388,9 +1396,23 @@ sal_uInt16 SfxObjectShell::ImplGetSignatureState( sal_Bool bScriptingContent )
                     int nInfos = aInfos.getLength();
                     if( nInfos )
                     {
+                        //These errors of certificates are allowed
+                        sal_Int32 nNonErrors = security::CertificateValidity::VALID |
+                                               security::CertificateValidity::UNKNOWN_REVOKATION;
+                        //Build a  mask to filter out the allowed errors
+                        sal_Int32 nMask = ~nNonErrors;
+
                         *pState = SIGNATURESTATE_SIGNATURES_OK;
                         for ( int n = 0; n < nInfos; n++ )
                         {
+                            if ( bCertValid )
+                            {
+                                sal_Int32 nCertStat = aInfos[n].CertificateStatus;
+                                // "subtract" the allowed error flags from the result
+                                sal_Int32 nErrors = ( nCertStat & nMask );
+                                bCertValid = nErrors > 0 ? false : true;
+                            }
+
                             if ( !aInfos[n].SignatureIsValid )
                             {
                                 *pState = SIGNATURESTATE_SIGNATURES_BROKEN;
@@ -1410,6 +1432,8 @@ sal_uInt16 SfxObjectShell::ImplGetSignatureState( sal_Bool bScriptingContent )
     {
         if ( IsModified() )
             *pState = SIGNATURESTATE_SIGNATURES_INVALID;
+        if ( !bCertValid )
+            *pState = SIGNATURESTATE_SIGNATURES_NOTVALIDATED;
     }
 
     return (sal_uInt16)*pState;
