@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optfltr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:42:22 $
+ *  last change: $Author: kz $ $Date: 2005-11-11 13:55:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,8 @@ class OfaMSFilterTabPage2 : public SfxTabPage
     OfaMSFilterTabPage2( Window* pParent, const SfxItemSet& rSet );
     virtual ~OfaMSFilterTabPage2();
 
-    void InsertEntry( const String& rTxt );
+    void            InsertEntry( const String& _rTxt, sal_Int32 _nType );
+    SvLBoxEntry*    GetEntry4Type( sal_Int32 _nType ) const;
 
 public:
 
