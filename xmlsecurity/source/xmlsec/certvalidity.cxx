@@ -4,9 +4,9 @@
  *
  *  $RCSfile: certvalidity.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:25:39 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 09:19:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,8 @@ using namespace ::com::sun::star::security ;
 #define VALID_STR "valid certificate"
 #define INVALID_STR "invalid certificate"
 #define UNTRUSTED_STR "untrusted certificate"
-#define TIMEOUT_STR "expired certificate"
+#define TIME_INVALID_STR "expired certificate"
+#define NOT_NESTED_TIME_STR "invalid time nesting"
 #define REVOKED_STR "revoked certificate"
 #define UNKNOWN_REVOKATION_STR "unknown certificate revocation status"
 #define SIGNATURE_INVALID_STR "invalid certificate signature"
@@ -62,14 +63,16 @@ using namespace ::com::sun::star::security ;
 rtl::OUString certificateValidityToOUString( ::sal_Int32 certValidity ) {
     OUString aValidity ;
 
-    if( !certValidity ) {
+    if( (certValidity & CertificateValidity::VALID) == CertificateValidity::VALID ) {
         aValidity = OUString::createFromAscii( ( const char* )VALID_STR ) ;
     } else if( ( certValidity & CertificateValidity::INVALID ) == CertificateValidity::INVALID ) {
          aValidity = OUString::createFromAscii( ( const char* )INVALID_STR ) ;
     } else if( ( certValidity &  CertificateValidity::UNTRUSTED ) ==  CertificateValidity::UNTRUSTED ) {
          aValidity = OUString::createFromAscii( ( const char* )UNTRUSTED_STR ) ;
-    } else if( ( certValidity & CertificateValidity::TIMEOUT ) == CertificateValidity::TIMEOUT ) {
-         aValidity = OUString::createFromAscii( ( const char* )TIMEOUT_STR ) ;
+    } else if( ( certValidity & CertificateValidity::TIME_INVALID ) == CertificateValidity::TIME_INVALID ) {
+         aValidity = OUString::createFromAscii( ( const char* )TIME_INVALID_STR ) ;
+    } else if( ( certValidity & CertificateValidity::NOT_TIME_NESTED ) == CertificateValidity::NOT_TIME_NESTED ) {
+         aValidity = OUString::createFromAscii( ( const char* )NOT_NESTED_TIME_STR ) ;
     } else if( ( certValidity & CertificateValidity::REVOKED ) == CertificateValidity::REVOKED ) {
          aValidity = OUString::createFromAscii( ( const char* )REVOKED_STR ) ;
     } else if( ( certValidity &  CertificateValidity::UNKNOWN_REVOKATION ) == CertificateValidity::UNKNOWN_REVOKATION ) {
