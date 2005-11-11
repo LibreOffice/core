@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:32:28 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:40:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,9 @@
 #ifndef SVTOOLS_URL_FILTER_HXX
 #include "svtools/urlfilter.hxx"
 #endif
+#ifndef SVTOOLS_RESTRICTEDPATHS_HXX
+#include <svtools/restrictedpaths.hxx>
+#endif
 
 #ifndef SVTOOLS_SOURCE_FILEPICKER_ASYNCFILEPICKER_HXX
 #include "asyncfilepicker.hxx"
@@ -131,7 +134,7 @@ class SvtFileDialogFilter_Impl;
 //*****************************************************************************
 
 class SvtExpFileDlg_Impl;
-class SvtFileDialog : public ModalDialog, public ::svt::IFilePickerController, public IUrlFilter
+class SvtFileDialog : public ModalDialog, public ::svt::IFilePickerController
 {
 private:
     // originally from VclFileDialog
@@ -153,13 +156,14 @@ private:
     ImageList                   m_aImages;
     ::svt::SmartContent         m_aContent;
 
-    ::std::vector< String >     m_aApprovedURLs;
+    ::svt::RestrictedPaths      m_aURLFilter;
     ::std::set< Control* >      m_aDisabledControls;
 
     ::utl::OConfigurationNode   m_aConfiguration;
     ::rtl::Reference< ::svt::AsyncPickerAction >
                                 m_pCurrentAsyncAction;
     bool                        m_bInExecuteAsync;
+    bool                        m_bHasFilename;
 
     DECL_STATIC_LINK( SvtFileDialog, FilterSelectHdl_Impl, ListBox* );
     DECL_STATIC_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton* );
@@ -302,6 +306,7 @@ public:
 
     // inline
     inline void                 SetPath( const String& rNewURL );
+    inline void                 SetHasFilename( bool bHasFilename );
     inline const String&        GetPath() const;
     inline void                 SetDefaultExt( const String& rExt );
     inline void                 EraseDefaultExt( xub_StrLen _nIndex = 0 );
@@ -335,7 +340,7 @@ public:
 
         <p>If no "access restriction" is effective, this method always returns <TRUE/>.</p>
     */
-    virtual bool                isUrlAllowed( const String& _rURL ) const;
+    inline bool isUrlAllowed( const String& _rURL ) const { return m_aURLFilter.isUrlAllowed( _rURL ); }
 
 private:
     SvtFileDialogFilter_Impl*   implAddFilter( const String& _rFilter, const String& _rType );
@@ -363,7 +368,7 @@ private:
     virtual void                enableControl( sal_Int16 _nControlId, sal_Bool _bEnable );
     virtual String              getCurFilter( ) const;
 
-    String                      implConvertToURL( const String& _rPath, sal_Bool _bAssumeFile, const String& _rFallback );
+    String                      implGetInitialURL( const String& _rPath, const String& _rFallback );
 
     /// initializes the special URL lists, such as our favourites and our restricted paths
     void                        implInitializeSpecialURLLists( );
@@ -381,6 +386,13 @@ private:
 inline void SvtFileDialog::SetPath( const String& rNewURL )
 {
     _aPath = rNewURL;
+}
+
+//***************************************************************************
+
+inline void SvtFileDialog::SetHasFilename( bool bHasFilename )
+{
+    m_bHasFilename = bHasFilename;
 }
 
 //***************************************************************************
