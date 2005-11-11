@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:08:33 $
+ *  last change: $Author: kz $ $Date: 2005-11-11 14:14:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1332,9 +1332,11 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
     CreateControllers( aCtrlParamsVector );
 
     // Notify controllers that they are now correctly initialized and can start listening
-    if ( m_pToolBar->IsReallyVisible() )
+    // toolbars that will open in popup mode will be updated immediately to avoid flickering
+    if( m_pToolBar->WillUsePopupMode() )
+        UpdateControllers();
+    else if ( m_pToolBar->IsReallyVisible() )
         m_aAsyncUpdateControllersTimer.Start();
-//    UpdateControllers();
 
     // Try to retrieve UIName from the container property set and set it as the title
     // if it is not empty.
