@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.99 $
+#   $Revision: 1.100 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-11 12:09:03 $
+#   last change: $Author: kz $ $Date: 2005-11-11 14:14:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -348,6 +348,7 @@ SHL5IMPLIB=		ifwm
 
 SHL5OBJS=       \
                 $(SLO)$/helponstartup.obj \
+                $(SLO)$/systemexec.obj    \
                 $(SLO)$/register3rdcomponents.obj
 
 SHL5STDLIBS=	\
