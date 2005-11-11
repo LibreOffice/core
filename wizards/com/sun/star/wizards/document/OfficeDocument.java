@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeDocument.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:27:32 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:18:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,7 @@
  ************************************************************************/
 package com.sun.star.wizards.document;
 
+import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.container.XNameAccess;
@@ -42,7 +43,12 @@ import com.sun.star.document.XEventsSupplier;
 import com.sun.star.document.XTypeDetection;
 import com.sun.star.drawing.XDrawPagesSupplier;
 import com.sun.star.wizards.common.*;
+import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.VclWindowPeerAttribute;
+import com.sun.star.awt.WindowAttribute;
+import com.sun.star.awt.WindowDescriptor;
+import com.sun.star.awt.XToolkit;
+import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.PropertyVetoException;
@@ -147,16 +153,83 @@ public class OfficeDocument {
     }
 
     public static XFrame createNewFrame(XMultiServiceFactory xMSF, XTerminateListener listener) {
-        XFrame xF = (XFrame) UnoRuntime.queryInterface(XFrame.class, Desktop.getDesktop(xMSF));
-        XFrame xFrame = xF.findFrame("_blank", 0);
-        if (listener != null) {
-            XFramesSupplier xFS = (XFramesSupplier) UnoRuntime.queryInterface(XFramesSupplier.class, xF);
-            XFrames xFF = xFS.getFrames();
-            xFF.remove(xFrame);
-            XDesktop xDesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, xF);
-            xDesktop.addTerminateListener(listener);
+        return createNewFrame(xMSF, listener, "_blank");
+    }
+
+    public static XFrame createNewFrame(XMultiServiceFactory xMSF, XTerminateListener listener, String FrameName) {
+        XFrame xFrame = null;
+        if (FrameName.equalsIgnoreCase("WIZARD_LIVE_PREVIEW")) {
+            xFrame = createNewPreviewFrame(xMSF, listener);
+        } else {
+            XFrame xF = (XFrame) UnoRuntime.queryInterface(XFrame.class, Desktop.getDesktop(xMSF));
+            xFrame = xF.findFrame(FrameName, 0);
+            if (listener != null) {
+                XFramesSupplier xFS = (XFramesSupplier) UnoRuntime.queryInterface(XFramesSupplier.class, xF);
+                XFrames xFF = xFS.getFrames();
+                xFF.remove(xFrame);
+                XDesktop xDesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, xF);
+                xDesktop.addTerminateListener(listener);
+            }
         }
         return xFrame;
+    }
+
+    public static XFrame createNewPreviewFrame(XMultiServiceFactory xMSF, XTerminateListener listener) {
+        XToolkit xToolkit = null;
+        try {
+            xToolkit = (XToolkit)UnoRuntime.queryInterface(XToolkit.class,xMSF.createInstance("com.sun.star.awt.Toolkit"));
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        //describe the window and its properties
+        WindowDescriptor aDescriptor = new WindowDescriptor();
+        aDescriptor.Type                =   com.sun.star.awt.WindowClass.TOP;
+        aDescriptor.WindowServiceName   =   "window";
+        aDescriptor.ParentIndex         =   -1;
+        aDescriptor.Parent              =   null;
+        aDescriptor.Bounds              =   new Rectangle(10,10,640,480);
+        aDescriptor.WindowAttributes    =   WindowAttribute.BORDER               |
+                                            WindowAttribute.MOVEABLE             |
+                                            WindowAttribute.SIZEABLE             |
+                                            //WindowAttribute.CLOSEABLE            |
+                                            VclWindowPeerAttribute.CLIPCHILDREN  ;
+
+        //create a new blank container window
+        XWindowPeer xPeer = null;
+        try {
+            xPeer = (XWindowPeer)UnoRuntime.queryInterface(XWindowPeer.class,xToolkit.createWindow(aDescriptor));
+        } catch (IllegalArgumentException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        XWindow xWindow = (XWindow)UnoRuntime.queryInterface(XWindow.class,xPeer);
+
+        //define some further properties of the frame window
+        //if it's needed .-)
+        //xPeer->setBackground(...);
+
+        //create new empty frame and set window on it
+        XFrame xFrame = null;
+        try {
+            xFrame = (XFrame)UnoRuntime.queryInterface(XFrame.class,xMSF.createInstance("com.sun.star.frame.Frame"));
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        xFrame.initialize(xWindow);
+
+        //from now this frame is useable ...
+        //and not part of the desktop tree.
+        //You are alone with him .-)
+
+        if (listener != null) {
+            Desktop.getDesktop(xMSF).addTerminateListener(listener);
+        }
+
+        return xFrame;
+
     }
 
 
