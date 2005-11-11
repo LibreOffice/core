@@ -4,9 +4,9 @@
  *
  *  $RCSfile: asyncfilepicker.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-06 10:43:15 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:39:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,7 +156,7 @@ namespace svt
         }
 
         acquire();
-        if ( eResult == eSuccess )
+        if ( ( eResult == eSuccess ) || ( eResult == eFailure ) )
         {
             // the handler is only called if the action could not be finished within
             // the given minimum time period. In case of success, we need to call it
