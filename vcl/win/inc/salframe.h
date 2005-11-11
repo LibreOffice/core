@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:55:48 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:57:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,6 +113,7 @@ public:
     virtual void                SetIcon( USHORT nIcon );
     virtual void                                SetMenu( SalMenu* pSalMenu );
     virtual void                                DrawMenuBar();
+    virtual void                SetExtendedFrameStyle( SalExtStyle nExtStyle );
     virtual void                Show( BOOL bVisible, BOOL bNoActivate = FALSE );
     virtual void                Enable( BOOL bEnable );
     virtual void                SetMinClientSize( long nWidth, long nHeight );
