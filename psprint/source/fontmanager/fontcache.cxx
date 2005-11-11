@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontcache.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 14:24:20 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:44:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -449,7 +449,7 @@ void FontCache::read()
                         {
                             bObsolete = true;
                         }
-                        #if OSL_DEBUG_LEVEL > 1
+                        #if OSL_DEBUG_LEVEL > 2
                         else
                             fprintf( stderr, "keeping file %s in outdated cache entry due to user override\n",
                                      aFilePath.GetBuffer() );
@@ -461,7 +461,7 @@ void FontCache::read()
                 if( bObsolete )
                 {
                     m_bDoFlush = true;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
                     fprintf( stderr, "removing obsolete font %s\n", aFile.getStr() );
 #endif
                     delete pFont;
