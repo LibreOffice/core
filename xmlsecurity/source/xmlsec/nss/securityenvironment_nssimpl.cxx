@@ -4,9 +4,9 @@
  *
  *  $RCSfile: securityenvironment_nssimpl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:33:42 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 09:20:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,8 +76,8 @@
 
 // MM : added for password exception
 #include <com/sun/star/security/NoPasswordException.hpp>
+namespace csss = ::com::sun::star::security;
 using namespace ::com::sun::star::security;
-
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::lang ;
@@ -728,7 +728,7 @@ Reference< XCertificate > SecurityEnvironment_NssImpl :: createCertificateFromAs
 }
 
 sal_Int32 SecurityEnvironment_NssImpl :: verifyCertificate( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& aCert ) throw( ::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException ) {
-    sal_Int32 validity ;
+    sal_Int32 validity;
     const X509Certificate_NssImpl* xcert ;
     const CERTCertificate* cert ;
 
@@ -743,69 +743,51 @@ sal_Int32 SecurityEnvironment_NssImpl :: verifyCertificate( const ::com::sun::st
     }
 
     cert = xcert->getNssCert() ;
-    if( cert != NULL ) {
+    if( cert != NULL )
+    {
         int64 timeboundary ;
         SECStatus status ;
 
         //Get the system clock time
         timeboundary = PR_Now() ;
-
-        if( m_pHandler != NULL ) {
-            status = CERT_VerifyCertificate( m_pHandler, ( CERTCertificate* )cert, PR_FALSE, (SECCertificateUsage)0, timeboundary , NULL, NULL, NULL ) ;
-        } else {
-            status = CERT_VerifyCertificate( CERT_GetDefaultCertDB(), ( CERTCertificate* )cert, PR_FALSE, (SECCertificateUsage)0, timeboundary , NULL, NULL, NULL ) ;
+        SECCertificateUsage usage = NULL;
+        if( m_pHandler != NULL )
+        {
+            status = CERT_VerifyCertificate(
+                m_pHandler, ( CERTCertificate* )cert, PR_TRUE,
+                (SECCertificateUsage)0, timeboundary , NULL, NULL, &usage);
+        }
+        else
+        {
+            status = CERT_VerifyCertificate(
+                CERT_GetDefaultCertDB(), ( CERTCertificate* )cert,
+                PR_TRUE, (SECCertificateUsage)0, timeboundary , NULL, NULL, &usage);
         }
 
-        if( status == SECSuccess ) {
-            validity = 0x00000000 ;
-        } else {
-            validity = ::com::sun::star::security::CertificateValidity::INVALID ;
-#if (  __GNUC__ == 3 && __GNUC_MINOR__ == 4 )
-            // Gcc-3.4.1 has a serious bug which prevents compiling this switch construct,
-            // if "status" in the switch statement is a signed integer type.
-            // It wrongly complains about "duplicate values".
-            // Note that all SEC_ERROR_* below are negativ enum values, starting from -0x2000
-            // This gross WORKAROUND should be removed as soon as possible.
-            switch( (unsigned int)status ) {
-#else
-            switch( status ) {
-#endif
-                case SEC_ERROR_BAD_SIGNATURE :
-                    validity |= ::com::sun::star::security::CertificateValidity::SIGNATURE_INVALID ;
-                    break ;
-                case SEC_ERROR_EXPIRED_CERTIFICATE :
-                    validity |= ::com::sun::star::security::CertificateValidity::TIMEOUT ;
-                    break ;
-                case SEC_ERROR_REVOKED_CERTIFICATE :
-                    validity |= ::com::sun::star::security::CertificateValidity::REVOKED ;
-                    break ;
-                case SEC_ERROR_UNKNOWN_ISSUER :
-                    validity |= ::com::sun::star::security::CertificateValidity::ISSUER_UNKNOWN ;
-                    break ;
-                case SEC_ERROR_UNTRUSTED_ISSUER :
-                    validity |= ::com::sun::star::security::CertificateValidity::ISSUER_UNTRUSTED ;
-                    break ;
-                case SEC_ERROR_UNTRUSTED_CERT :
-                    validity |= ::com::sun::star::security::CertificateValidity::UNTRUSTED ;
-                    break ;
-                case SEC_ERROR_CERT_VALID :
-                case SEC_ERROR_CERT_NOT_VALID :
-                    break ;
-                case SEC_ERROR_EXPIRED_ISSUER_CERTIFICATE :
-                    validity |= ::com::sun::star::security::CertificateValidity::ISSUER_INVALID ;
-                    break ;
-                case SEC_ERROR_CA_CERT_INVALID :
-                    validity |= ::com::sun::star::security::CertificateValidity::ROOT_INVALID ;
-                    break ;
-                case SEC_ERROR_UNKNOWN_CRITICAL_EXTENSION :
-                    validity |= ::com::sun::star::security::CertificateValidity::EXTENSION_INVALID ;
-                    break ;
-                case SEC_ERROR_UNKNOWN_CERT :
-                    validity |= ::com::sun::star::security::CertificateValidity::CHAIN_INCOMPLETE ;
-                    break ;
-            }
+        if( status == SECSuccess )
+        {
+            //do not use certificateUsageSSLClient. The problem is that we create the certificate
+            //from the embedded certificate and another time, when we view the certificate path,
+            //it is probably taken from store. In the first case cert->trust is NIL, in the  latter
+            //it contains a value that may make the verification fail in CERT_VerifyCertificate
+            //The expression  if ( flags & CERTDB_TRUSTED ) fails. This occurred with openssl
+            //generated certificates, when the trust settings of the root certificate had only the
+            //item "This certificate can identify web sites" checked.
+            if (usage & certificateUsageEmailSigner
+                || usage & certificateUsageEmailRecipient
+                || usage & certificateUsageSSLCA
+                /*|| usage & certificateUsageSSLClient*/)
+                validity = csss::CertificateValidity::VALID;
+            else
+                validity = csss::CertificateValidity::INVALID;
         }
-    } else {
+        else
+        {
+            validity = csss::CertificateValidity::INVALID;
+        }
+    }
+    else
+    {
         validity = ::com::sun::star::security::CertificateValidity::INVALID ;
     }
 
