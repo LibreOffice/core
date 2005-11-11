@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:58:52 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:08:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,6 +144,9 @@
 #endif
 #ifndef _SVTOOLS_TOOLBOXCONTROLLER_HXX
 #include <svtools/toolboxcontroller.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_CMDOPTIONS_HXX
+#include <svtools/cmdoptions.hxx>
 #endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
@@ -324,7 +327,7 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     m_pToolBar->SetToolboxButtonSize( m_bSmallSymbols ? TOOLBOX_BUTTONSIZE_SMALL : TOOLBOX_BUTTONSIZE_LARGE );
 
     // enables a menu for clipped items and customization
-    m_pToolBar->SetMenuType( TOOLBOX_MENUTYPE_CLIPPEDITEMS | TOOLBOX_MENUTYPE_CUSTOMIZE );
+    m_pToolBar->SetMenuType( TOOLBOX_MENUTYPE_CLIPPEDITEMS );
     m_pToolBar->SetMenuButtonHdl( LINK( this, ToolBarManager, MenuButton ) );
     m_pToolBar->GetMenu()->SetSelectHdl( LINK( this, ToolBarManager, MenuSelect ) );
     m_pToolBar->GetMenu()->SetDeactivateHdl( LINK( this, ToolBarManager, MenuDeactivate ) );
@@ -938,6 +941,12 @@ void ToolBarManager::CreateControllers( const ControllerParamsVector& rControlle
     Reference< XComponentContext > xComponentContext;
     Reference< XPropertySet > xProps( m_xServiceManager, UNO_QUERY );
     Reference< XWindow > xToolbarWindow = VCLUnoHelper::GetInterface( m_pToolBar );
+    Reference< css::util::XURLTransformer > xTrans( m_xServiceManager->createInstance(
+        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), css::uno::UNO_QUERY );
+
+    css::util::URL      aURL;
+    sal_Bool            bHasDisabledEntries = SvtCommandOptions().HasEntries( SvtCommandOptions::CMDOPTION_DISABLED );
+    SvtCommandOptions   aCmdOptions;
 
     if ( xProps.is() )
         xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xComponentContext;
@@ -955,6 +964,18 @@ void ToolBarManager::CreateControllers( const ControllerParamsVector& rControlle
         Reference< XStatusListener > xController;
 
         svt::ToolboxController* pController( 0 );
+
+        if ( bHasDisabledEntries )
+        {
+            aURL.Complete = aCommandURL;
+            xTrans->parseStrict( aURL );
+            if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, aURL.Path ))
+            {
+                m_aControllerVector.push_back( xController );
+                m_pToolBar->HideItem( nId );
+                continue;
+            }
+        }
 
         if ( m_xToolbarControllerRegistration.is() &&
              m_xToolbarControllerRegistration->hasController( aCommandURL, m_aModuleIdentifier ))
