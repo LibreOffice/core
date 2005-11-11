@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxecode.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:33:31 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:12:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,7 @@
 #define ERRCODE_SFX_NO_ABOBOX               (ERRCODE_AREA_SFX| ERRCODE_CLASS_READ | 41)
 #define ERRCODE_SFX_CANTGETPASSWD           (ERRCODE_AREA_SFX| ERRCODE_CLASS_READ | 42)
 #define ERRCODE_SFX_TARGETFILECORRUPTED     (ERRCODE_AREA_SFX| ERRCODE_CLASS_READ | 43)
+#define ERRCODE_SFX_NOMOREDOCUMENTSALLOWED  (ERRCODE_WARNING_MASK | ERRCODE_AREA_SFX | ERRCODE_CLASS_NONE | 44)
 
 //Dies und das
 #define ERRCTX_ERROR                    21
