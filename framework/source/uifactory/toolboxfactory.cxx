@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolboxfactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:01:36 $
+ *  last change: $Author: kz $ $Date: 2005-11-11 14:14:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,17 +158,20 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
     rtl::OUString                        aResourceURL( ResourceURL );
     sal_Bool                             bPersistent( sal_True );
     sal_Bool                             bMenuOnly( sal_False );
+    sal_Bool                             bPopupMode( sal_False );
 
     for ( sal_Int32 n = 0; n < Args.getLength(); n++ )
     {
         if ( Args[n].Name.equalsAscii( "ConfigurationSource" ))
             Args[n].Value >>= xConfigSource;
-        else if ( Args[n].Name.equalsAscii( "Frame" ))
+        else if ( Args[n].Name.equalsAsciiL( "Frame", 5 ))
             Args[n].Value >>= xFrame;
-        else if ( Args[n].Name.equalsAscii( "ResourceURL" ))
+        else if ( Args[n].Name.equalsAsciiL( "ResourceURL", 11 ))
             Args[n].Value >>= aResourceURL;
-        else if ( Args[n].Name.equalsAscii( "Persistent" ))
+        else if ( Args[n].Name.equalsAsciiL( "Persistent", 10 ))
             Args[n].Value >>= bPersistent;
+        else if ( Args[n].Name.equalsAsciiL( "PopupMode", 9 ))
+            Args[n].Value >>= bPopupMode;
     }
 
     Reference< XUIConfigurationManager > xCfgMgr;
@@ -213,7 +216,7 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
     }
 
     PropertyValue aPropValue;
-    Sequence< Any > aPropSeq( 4 );
+    Sequence< Any > aPropSeq( 5 );
     aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
     aPropValue.Value <<= xFrame;
     aPropSeq[0] <<= aPropValue;
@@ -226,6 +229,9 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
     aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Persistent" ));
     aPropValue.Value <<= bPersistent;
     aPropSeq[3] <<= aPropValue;
+    aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PopupMode" ));
+    aPropValue.Value <<= bPopupMode;
+    aPropSeq[4] <<= aPropValue;
 
     vos::OGuard aGuard( Application::GetSolarMutex() );
     ToolBarWrapper* pToolBarWrapper = new ToolBarWrapper( m_xServiceManager );
