@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dynamicmenuoptions.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:37:10 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:47:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,8 @@
 #ifndef __SGI_STL_VECTOR
 #include <vector>
 #endif
+
+#include <itemholder1.hxx>
 
 #include <algorithm>
 
@@ -863,6 +865,7 @@ SvtDynamicMenuOptions::SvtDynamicMenuOptions()
     if( m_pDataContainer == NULL )
     {
         m_pDataContainer = new SvtDynamicMenuOptions_Impl;
+        ItemHolder1::holdConfigItem(E_DYNAMICMENUOPTIONS);
     }
 }
 
