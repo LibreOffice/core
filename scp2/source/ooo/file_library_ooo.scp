@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.159 $
+ *  $Revision: 1.160 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 16:36:15 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 10:25:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,14 +223,42 @@ End
 
 File gid_File_Lib_Cli_Types_Assembly
     TXT_FILE_BODY;
-    Styles = (PACKED, ASSEMBLY, PATCH);
+    Styles = (PACKED, ASSEMBLY, PATCH, DONTRENAMEINPATCH);
     Name = "cli_types.dll";
     Dir = gid_Dir_Program;
     Assemblyname = "cli_types";
     PublicKeyToken = "ce2cb7e279207b9e";
-    Version = "1.1.0.0";
+    Version = "1.1.1.0";
     Culture = "neutral";
     Attributes = "0";
+End
+
+#endif
+
+#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
+
+File gid_File_Lib_Policy_Cli_Types_Assembly
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSEMBLY, PATCH, DONTRENAMEINPATCH);
+    Name = "policy.1.1.cli_types.dll";
+    Dir = gid_Dir_Program;
+    Assemblyname = "policy.1.1.cli_types";
+    PublicKeyToken = "ce2cb7e279207b9e";
+    Version = "1.0.0.0";
+    Culture = "neutral";
+    Attributes = "0";
+End
+
+#endif
+
+#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
+
+File gid_File_Lib_Policy_Cli_Types_Config
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSIGNCOMPOMENT, PATCH, DONTRENAMEINPATCH);
+    Name = "cli_types.config";
+    Dir = gid_Dir_Program;
+    AssignComponent = gid_File_Lib_Policy_Cli_Types_Assembly;
 End
 
 #endif
@@ -2194,7 +2222,7 @@ File gid_File_Lib_XSec_XMLSecurity
         Name = "xmlsecurity.dll";
     #endif
     Dir = gid_Dir_Program;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT, PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
 End
 
@@ -2218,7 +2246,7 @@ File gid_File_Lib_LibXMLSec_xmlsecmscrypto
     TXT_FILE_BODY;
     Name = "libxmlsec-mscrypto.dll";
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
 End
 #endif
 
