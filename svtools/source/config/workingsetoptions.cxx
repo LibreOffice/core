@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workingsetoptions.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:48:53 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:55:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,8 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
+
+#include <itemholder1.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespaces
@@ -346,6 +348,7 @@ SvtWorkingSetOptions::SvtWorkingSetOptions()
     if( m_pDataContainer == NULL )
     {
         m_pDataContainer = new SvtWorkingSetOptions_Impl;
+        ItemHolder1::holdConfigItem(E_WORKINGSETOPTIONS);
     }
 }
 
