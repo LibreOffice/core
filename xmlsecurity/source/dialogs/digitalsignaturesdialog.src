@@ -4,9 +4,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 13:28:40 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 09:18:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,22 @@ ModalDialog RID_XMLSECDLG_DIGSIG
         Text [ de ] = "Die Signaturen in diesem Dokument sind ungültig.";
         Text [ en-US ] = "The signatures in this document are invalid";
     };
+    FixedImage IMG_STATE_NOTVALIDATED
+    {
+        Pos = MAP_APPFONT( DS_COL_0, DS_ROW_2A );
+        Size = MAP_APPFONT( IMG1_WIDTH, IMG1_HEIGHT );
+        Fixed = Image
+        {
+            ImageBitmap = Bitmap { File = "notcertificate_16.png"; };
+            MaskColor = STD_MASKCOLOR;
+        };
+    };
+    FixedText FI_STATE_NOTVALIDATED
+    {
+        Pos = MAP_APPFONT( DS_COL_0, DS_ROW_2A );
+        Size = MAP_APPFONT( DS_COL_7-DS_COL_0, RSC_CD_FIXEDTEXT_HEIGHT );
+        Hide = TRUE;
+    };
     PushButton BTN_VIEWCERT
     {
         Pos = MAP_APPFONT( DS_COL_1, DS_ROW_3 );
@@ -186,6 +202,11 @@ ModalDialog RID_XMLSECDLG_DIGSIG
     Image IMG_STATE_BROKEN_HC
     {
         ImageBitmap = Bitmap { File = "caution_11x16_h.png"; };
+        MaskColor = STD_MASKCOLOR;
+    };
+    Image IMG_STATE_NOTVALIDATED_HC
+    {
+        ImageBitmap = Bitmap { File = "notcertificate_16_h.png"; };
         MaskColor = STD_MASKCOLOR;
     };
 };
