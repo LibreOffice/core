@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saveopt.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:46:01 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:53:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -807,8 +807,7 @@ SvtSaveOptions::SvtSaveOptions()
         pOptions->pSaveOpt = new SvtSaveOptions_Impl;
         pOptions->pLoadOpt = new SvtLoadOptions_Impl;
 
-        ItemHolder1* pHolder = ItemHolder1::getGlobalItemHolder();
-        pHolder->holdConfigItem(E_SAVEOPTIONS);
+        ItemHolder1::holdConfigItem(E_SAVEOPTIONS);
    }
    ++nRefCount;
     pImp = pOptions;
