@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemholder2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:40:47 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:50:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,10 +51,20 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
 
+#include <accessibilityoptions.hxx>
+#include <apearcfg.hxx>
+#include <cjkoptions.hxx>
+#include <colorcfg.hxx>
+#include <ctloptions.hxx>
+#include <fontsubstconfig.hxx>
 #include <helpopt.hxx>
+#include <languageoptions.hxx>
+#include <misccfg.hxx>
+#include <printoptions.hxx>
 #include <syslocaleoptions.hxx>
 #include <undoopt.hxx>
 #include <useroptions.hxx>
+
 #include <tools/debug.hxx>
 
 //-----------------------------------------------
@@ -109,14 +119,21 @@ ItemHolder2::~ItemHolder2()
 }
 
 //-----------------------------------------------
-ItemHolder2* ItemHolder2::getGlobalItemHolder()
+void ItemHolder2::holdConfigItem(EItem eItem)
 {
     static ItemHolder2* pHolder = new ItemHolder2();
-    return pHolder;
+    pHolder->impl_addItem(eItem);
 }
 
 //-----------------------------------------------
-void ItemHolder2::holdConfigItem(EItem eItem)
+void SAL_CALL ItemHolder2::disposing(const css::lang::EventObject& aEvent)
+    throw(css::uno::RuntimeException)
+{
+    impl_releaseAllItems();
+}
+
+//-----------------------------------------------
+void ItemHolder2::impl_addItem(EItem eItem)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
@@ -135,13 +152,6 @@ void ItemHolder2::holdConfigItem(EItem eItem)
     impl_newItem(aNewItem);
     if (aNewItem.pItem)
         m_lItems.push_back(aNewItem);
-}
-
-//-----------------------------------------------
-void SAL_CALL ItemHolder2::disposing(const css::lang::EventObject& aEvent)
-    throw(css::uno::RuntimeException)
-{
-    impl_releaseAllItems();
 }
 
 //-----------------------------------------------
@@ -165,6 +175,50 @@ void ItemHolder2::impl_newItem(TItemInfo& rItem)
 {
     switch(rItem.eItem)
     {
+        case E_ACCESSIBILITYOPTIONS :
+            rItem.pItem = new SvtAccessibilityOptions();
+            break;
+
+        case E_APEARCFG :
+// no ref count            rItem.pItem = new SvtTabAppearanceCfg();
+            break;
+
+        case E_CJKOPTIONS :
+            rItem.pItem = new SvtCJKOptions();
+            break;
+
+        case E_COLORCFG :
+            rItem.pItem = new ::svtools::ColorConfig();
+            break;
+
+        case E_CTLOPTIONS :
+            rItem.pItem = new SvtCTLOptions();
+            break;
+
+        case E_FONTSUBSTCONFIG :
+// no ref count            rItem.pItem = new SvtFontSubstConfig();
+            break;
+
+        case E_HELPOPTIONS :
+            rItem.pItem = new SvtHelpOptions();
+            break;
+
+        case E_LANGUAGEOPTIONS :
+// capsulate CTL and CJL options !            rItem.pItem = new SvtLanguageOptions();
+            break;
+
+        case E_MISCCFG :
+// no ref count            rItem.pItem = new SfxMiscCfg();
+            break;
+
+        case E_PRINTOPTIONS :
+            rItem.pItem = new SvtPrinterOptions();
+            break;
+
+        case E_PRINTFILEOPTIONS :
+            rItem.pItem = new SvtPrintFileOptions();
+            break;
+
         case E_SYSLOCALEOPTIONS :
             rItem.pItem = new SvtSysLocaleOptions();
             break;
@@ -176,19 +230,18 @@ void ItemHolder2::impl_newItem(TItemInfo& rItem)
         case E_USEROPTIONS :
             rItem.pItem = new SvtUserOptions();
             break;
-
-        case E_HELPOPTIONS :
-            rItem.pItem = new SvtHelpOptions();
-            break;
     }
 }
 
 //-----------------------------------------------
 void ItemHolder2::impl_deleteItem(TItemInfo& rItem)
 {
-    if (!rItem.pItem)
-        return;
-
+    if (rItem.pItem)
+    {
+        delete rItem.pItem;
+        rItem.pItem = 0;
+    }
+/*
     switch(rItem.eItem)
     {
         case E_SYSLOCALEOPTIONS :
@@ -206,8 +259,6 @@ void ItemHolder2::impl_deleteItem(TItemInfo& rItem)
         case E_HELPOPTIONS :
             delete (SvtHelpOptions*)rItem.pItem;
             break;
-
     }
-
-    rItem.pItem = 0;
+*/
 }
