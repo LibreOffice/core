@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.98 $
+#   $Revision: 1.99 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 02:08:44 $
+#   last change: $Author: rt $ $Date: 2005-11-11 12:09:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,8 @@ LIB2OBJFILES=   $(SLO)$/attributelist.obj                       \
                 $(SLO)$/uielementwrapperbase.obj                \
                 $(SLO)$/uiconfigelementwrapperbase.obj          \
                 $(SLO)$/configimporter.obj                      \
-                $(SLO)$/menuextensionsupplier.obj
+                $(SLO)$/menuextensionsupplier.obj               \
+                $(SLO)$/preventduplicateinteraction.obj
 
 # --- import classes library ---------------------------------------------------
 
@@ -312,7 +313,8 @@ SHL4OBJS=       \
                 $(SLO)$/sessionlistener.obj         \
                 $(SLO)$/newmenucontroller.obj          \
                 $(SLO)$/logoimagestatusbarcontroller.obj \
-                $(SLO)$/logotextstatusbarcontroller.obj
+                $(SLO)$/logotextstatusbarcontroller.obj \
+                $(SLO)$/globalsettings.obj
 
 SHL4STDLIBS=	\
                 $(FWILIB)                           \
