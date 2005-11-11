@@ -4,9 +4,9 @@
  *
  *  $RCSfile: profile_ooo.scp,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 13:24:37 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:27:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ Profile gid_Profile_Configmgr_Ini
     Name = "configmgr.ini";
   #endif
     Dir = gid_Dir_Program;
-    Styles = (NETWORK);
+    Styles = (NETWORK, PATCH);
 End
 
 Profile gid_Profile_Setup_Ini
