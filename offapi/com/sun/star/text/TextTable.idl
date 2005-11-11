@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextTable.idl,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:32:50 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 13:24:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,11 +100,10 @@
     <p>If the document in which a table is to be inserted has its own
     <type scope="com::sun::star::lang">XMultiServiceFactory</type>, this must be
     used to create the instance.
-
     </p>
+
     <p>If a descriptor is used, a descriptor created by the same
     <type scope="com::sun::star::lang">XMultiServiceFactory</type> must be used.
-
     </p>
 
     @example Create and insert a TextTable via a TextTableDescriptor:
@@ -128,6 +127,17 @@
     xTable.RightMargin = 1500
     xTextDoc.getText.insertTextContent( xTextRange, xTable, false )
     </listing>
+
+
+    <p>Note: The anchor of the actual implementation for text tables
+    does not have a position in the text. Thus that anchor can not be
+    used for some operation like <member>attach</member> for example or
+    <member scope="com::sun::star::text">insertTextContent</member>
+    or other function that require the object to have a position in the text.</p>
+
+    <p>The reason why a text table still needs an anchor is that for example
+    tables should be insertable via <member scope="com::sun::star::text">insertTextContent</member>
+    and that interface uses a parameter of that type.</p>
 
     @see    com::sun::star::text::Cell
     @see    com::sun::star::text::CellRange
