@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 12:59:39 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:55:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,13 @@
 #include <brdwin.hxx>
 #endif
 
+#include <unohelp.hxx>
+#ifndef _UNOTOOLS_CONFIGNODE_HXX_
+#include <unotools/confignode.hxx>
+#endif
+
 using namespace vcl;
+using namespace rtl;
 
 // =======================================================================
 
@@ -2084,7 +2090,13 @@ const Link& ToolBox::GetDropdownClickHdl() const
 
 void ToolBox::SetMenuType( USHORT aType )
 {
-    mpData->maMenuType = aType;
+    if( aType != mpData->maMenuType )
+    {
+        mpData->maMenuType = aType;
+        // trigger redraw of menu button
+        if( !mpData->maMenubuttonItem.maRect.IsEmpty() )
+            Invalidate(mpData->maMenubuttonItem.maRect);
+    }
 }
 
 USHORT ToolBox::GetMenuType() const
@@ -2304,3 +2316,41 @@ void ToolBox::Lock( BOOL bLock )
 
 // -----------------------------------------------------------------------
 
+BOOL ToolBox::AlwaysLocked()
+{
+    // read config item to determine toolbox behaviour, used for subtoolbars
+
+    static int nAlwaysLocked = -1;
+
+    if( nAlwaysLocked == -1 )
+    {
+        nAlwaysLocked = 0; // ask configuration only once
+
+        utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
+            vcl::unohelper::GetMultiServiceFactory(),
+            OUString::createFromAscii( "/org.openoffice.Office.UI.GlobalSettings/Toolbars" ) );    // note: case sensisitive !
+        if ( aNode.isValid() )
+        {
+            // feature enabled ?
+            BOOL bStatesEnabled;
+            ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString::createFromAscii( "StatesEnabled" ) );
+            if( aValue >>= bStatesEnabled )
+            {
+                if( bStatesEnabled == TRUE )
+                {
+                    // now read the locking state
+                    utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
+                        vcl::unohelper::GetMultiServiceFactory(),
+                        OUString::createFromAscii( "/org.openoffice.Office.UI.GlobalSettings/Toolbars/States" ) );    // note: case sensisitive !
+
+                    BOOL bLocked;
+                    ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString::createFromAscii( "Locked" ) );
+                    if( aValue >>= bLocked )
+                        nAlwaysLocked = (bLocked == TRUE) ? 1 : 0;
+                }
+            }
+        }
+    }
+
+    return nAlwaysLocked == 1 ? TRUE : FALSE;
+}
