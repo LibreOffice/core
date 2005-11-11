@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calc.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 08:21:02 $
+ *  last change: $Author: kz $ $Date: 2005-11-11 18:47:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,7 +148,7 @@ public:
     SwSbxValue& MakeDouble();
 
     bool IsVoidValue() {return bVoid;}
-    void SetVoidValue() {bVoid = true;}
+    void SetVoidValue(bool bSet) {bVoid = bSet;}
 };
 
 /******************************************************************************
