@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extendedsecurityoptions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:37:55 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:48:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -480,8 +480,7 @@ SvtExtendedSecurityOptions::SvtExtendedSecurityOptions()
        RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtExtendedSecurityOptions_Impl::ctor()");
        m_pDataContainer = new SvtExtendedSecurityOptions_Impl;
 
-        ItemHolder1* pHolder = ItemHolder1::getGlobalItemHolder();
-        pHolder->holdConfigItem(E_EXTENDEDSECURITYOPTIONS);
+        ItemHolder1::holdConfigItem(E_EXTENDEDSECURITYOPTIONS);
     }
 }
 

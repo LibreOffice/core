@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltrcfg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:38:12 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:48:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,8 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+
+#include <rtl/logfile.hxx>
 
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
@@ -226,6 +228,7 @@ SvtFilterOptions::SvtFilterOptions() :
     ConfigItem( C2U("Office.Common/Filter/Microsoft") ),
     pImp(new SvtFilterOptions_Impl)
 {
+    RTL_LOGFILE_CONTEXT(aLog, "svtools (???) SvtFilterOptions::SvtFilterOptions()");
     EnableNotification(GetPropertyNames());
     Load();
 }
