@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.160 $
+ *  $Revision: 1.161 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 10:25:46 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:04:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1577,7 +1577,7 @@ STD_UNO_LIB_FILE( gid_File_Lib_Bindet, bindet)
 // end binfilter #110743#
 //
 
-STD_UNO_LIB_FILE( gid_File_Lib_Scn, scn)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Scn, scn)
 
 File gid_File_Lib_Scriptframe
     TXT_FILE_BODY;
