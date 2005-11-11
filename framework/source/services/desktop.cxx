@@ -4,9 +4,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-03 12:01:10 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:06:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1280,7 +1280,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const ::r
     if ( sTargetFrameName==SPECIALTARGET_BLANK )
     {
         TaskCreator aCreator(xFactory);
-        xTarget = aCreator.createTask(::rtl::OUString(),sal_False);
+        xTarget = aCreator.createTask(sTargetFrameName,sal_False);
     }
 
     //-----------------------------------------------------------------------------------------------------
