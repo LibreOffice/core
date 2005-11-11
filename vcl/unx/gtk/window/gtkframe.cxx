@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 13:00:08 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:56:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -368,6 +368,7 @@ void GtkSalFrame::InitCommon()
     m_pIMHandler        = NULL;
     m_hBackgroundPixmap = None;
     m_nSavedScreenSaverTimeout = 0;
+    m_nExtStyle         = 0;
 
     gtk_widget_set_app_paintable( GTK_WIDGET(m_pWindow), TRUE );
     gtk_widget_set_double_buffered( GTK_WIDGET(m_pWindow), FALSE );
@@ -516,6 +517,10 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
     m_aForeignTopLevelWindow = None;
     m_nStyle = nStyle;
 
+    // force wm class hint
+    m_nExtStyle = ~0;
+    SetExtendedFrameStyle( 0 );
+
     if( m_pParent && m_pParent->m_pWindow && ! (m_pParent->m_nStyle & SAL_FRAME_STYLE_CHILD) )
         gtk_window_set_screen( m_pWindow, gtk_window_get_screen( m_pParent->m_pWindow ) );
 
@@ -563,6 +568,7 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
         if( (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
             lcl_set_accept_focus( m_pWindow, FALSE, false );
     }
+
 }
 
 GdkNativeWindow GtkSalFrame::findTopLevelSystemWindow( GdkNativeWindow aWindow )
@@ -618,6 +624,30 @@ void GtkSalFrame::Init( SystemParentData* pSysData )
                      (XLIB_Window)pSysData->aWindow,
                      0, 0 );
 }
+
+void GtkSalFrame::SetExtendedFrameStyle( SalExtStyle nStyle )
+{
+    if( nStyle != m_nExtStyle )
+    {
+        m_nExtStyle = nStyle;
+        if( GTK_WIDGET_REALIZED( GTK_WIDGET(m_pWindow) ) )
+        {
+            XClassHint* pClass = XAllocClassHint();
+            rtl::OString aResHint = SalData::getFrameResName( m_nExtStyle );
+            pClass->res_name  = const_cast<char*>(aResHint.getStr());
+            pClass->res_class = const_cast<char*>(SalData::getFrameClassName());
+            XSetClassHint( getDisplay()->GetDisplay(),
+                           GDK_WINDOW_XWINDOW(GTK_WIDGET(m_pWindow)->window),
+                           pClass );
+            XFree( pClass );
+        }
+        else
+            gtk_window_set_wmclass( m_pWindow,
+                                    SalData::getFrameResName( m_nExtStyle ),
+                                    SalData::getFrameClassName() );
+    }
+}
+
 
 SalGraphics* GtkSalFrame::GetGraphics()
 {
