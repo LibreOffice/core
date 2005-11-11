@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accelcfg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:33:46 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:45:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,7 @@
 #include "accelcfg.hxx"
 #include "xmlaccelcfg.hxx"
 #include "pathoptions.hxx"
+#include "itemholder1.hxx"
 
 
 using namespace utl;
@@ -188,6 +189,9 @@ SvtAcceleratorConfiguration::SvtAcceleratorConfiguration()
         {
             pOptions = new SvtAcceleratorConfig_Impl();
         }
+
+        if (pOptions)
+            ItemHolder1::holdConfigItem(E_ACCELCFG);
 
         delete pStream;
     }
