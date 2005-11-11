@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:18:53 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:16:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,8 @@ using namespace com::sun::star::i18n;
 using namespace com::sun::star::lang;
 
 
-Databases::Databases( const rtl::OUString& instPath,
+Databases::Databases( sal_Bool showBasic,
+                      const rtl::OUString& instPath,
                       const rtl::OUString& imageZip,
                       const rtl::OUString& productName,
                       const rtl::OUString& productVersion,
@@ -85,6 +86,7 @@ Databases::Databases( const rtl::OUString& instPath,
                       const rtl::OUString& styleSheet,
                       com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xSMgr )
     : m_xSMgr( xSMgr ),
+      m_bShowBasic(showBasic),
       m_nErrorDocLength( 0 ),
       m_pErrorDoc( 0 ),
       m_nCustomCSSDocLength( 0 ),
@@ -311,7 +313,7 @@ std::vector< rtl::OUString > Databases::getModuleList( const rtl::OUString& Lang
 
         fileName = aStatus.getFileName();
 
-        // Check, whether fileName is of the form *.db with the exception of picture.db
+        // Check, whether fileName is of the form *.cfg
         idx = fileName.lastIndexOf(  sal_Unicode( '.' ) );
 
         if( idx == -1 )
@@ -323,8 +325,11 @@ std::vector< rtl::OUString > Databases::getModuleList( const rtl::OUString& Lang
             ( str[idx + 1] == 'c' || str[idx + 1] == 'C' )    &&
             ( str[idx + 2] == 'f' || str[idx + 2] == 'F' )    &&
             ( str[idx + 3] == 'g' || str[idx + 3] == 'G' )    &&
-            ( fileName = fileName.copy(0,idx).toAsciiLowerCase() ).compareToAscii( "picture" ) != 0 )
+            ( fileName = fileName.copy(0,idx).toAsciiLowerCase() ).compareToAscii( "picture" ) != 0 ) {
+          if(! m_bShowBasic && fileName.compareToAscii("sbasic") == 0 )
+            continue;
           ret.push_back( fileName );
+        }
     }
 
     return ret;
