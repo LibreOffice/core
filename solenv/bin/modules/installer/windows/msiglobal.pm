@@ -4,9 +4,9 @@
 #
 #   $RCSfile: msiglobal.pm,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-09 09:11:51 $
+#   last change: $Author: kz $ $Date: 2005-11-11 14:18:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1412,11 +1412,19 @@ sub set_global_code_variables
     # my $codeblock = installer::windows::idtglobal::get_language_block_from_language_file($searchstring, $codefile);
     # $installer::globals::productcode = installer::windows::idtglobal::get_code_from_code_block($codeblock, $onelanguage);
 
-    # UpgradeCode can take english as default, if not defined in specified language
+    if ( $installer::globals::patch ) # patch upgrade codes are defined in soffice.lst
+    {
+        if ( $allvariableshashref->{'PATCHUPGRADECODE'} ) { $installer::globals::upgradecode = $allvariableshashref->{'PATCHUPGRADECODE'}; }
+        else { installer::exiter::exit_program("ERROR: PATCHUPGRADECODE not defined in list file!", "set_global_code_variables"); }
+    }
+    else
+    {
+        # UpgradeCode can take english as default, if not defined in specified language
 
-    $searchstring = "UPGRADECODE";
-    $codeblock = installer::windows::idtglobal::get_language_block_from_language_file($searchstring, $codefile);
-    $installer::globals::upgradecode = installer::windows::idtglobal::get_language_string_from_language_block($codeblock, $onelanguage, "");
+        $searchstring = "UPGRADECODE";  # searching in the codes.txt file
+        $codeblock = installer::windows::idtglobal::get_language_block_from_language_file($searchstring, $codefile);
+        $installer::globals::upgradecode = installer::windows::idtglobal::get_language_string_from_language_block($codeblock, $onelanguage, "");
+    }
 
     # if (( $installer::globals::productcode eq "" ) && ( ! $isopensource )) { installer::exiter::exit_program("ERROR: ProductCode for language $onelanguage not defined in $installer::globals::codefilename !", "set_global_code_variables"); }
     if ( $installer::globals::upgradecode eq "" ) { installer::exiter::exit_program("ERROR: UpgradeCode not defined in $installer::globals::codefilename !", "set_global_code_variables"); }
