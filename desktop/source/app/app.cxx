@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.186 $
+ *  $Revision: 1.187 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-24 18:33:51 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:29:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,6 +235,9 @@
 #ifndef _OSL_PROCESS_H_
 #include <osl/process.h>
 #endif
+#ifndef _OSL_SIGNAL_H_
+#include <osl/signal.h>
+#endif
 
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
@@ -335,13 +338,14 @@ using namespace ::com::sun::star::container;
 
 namespace css = ::com::sun::star;
 
-ResMgr*                    desktop::Desktop::pResMgr = 0;
+ResMgr*                 desktop::Desktop::pResMgr = 0;
 sal_Bool                desktop::Desktop::bSuppressOpenDefault = sal_False;
 
 namespace desktop
 {
 
 static SalMainPipeExchangeSignalHandler* pSignalHandler = 0;
+static sal_Bool _bCrashReporterEnabled = sal_True;
 
 // ----------------------------------------------------------------------------
 
@@ -1095,6 +1099,38 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
      return;
 }
 
+
+void Desktop::retrieveCrashReporterState()
+{
+    static const ::rtl::OUString CFG_PACKAGE_RECOVERY   = ::rtl::OUString::createFromAscii("org.openoffice.Office.Recovery/");
+    static const ::rtl::OUString CFG_PATH_CRASHREPORTER = ::rtl::OUString::createFromAscii("CrashReporter"                  );
+    static const ::rtl::OUString CFG_ENTRY_ENABLED      = ::rtl::OUString::createFromAscii("Enabled"                                   );
+
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+
+    sal_Bool bEnabled( sal_True );
+    if ( xSMGR.is() )
+    {
+        css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
+                                    xSMGR,
+                                    CFG_PACKAGE_RECOVERY,
+                                    CFG_PATH_CRASHREPORTER,
+                                    CFG_ENTRY_ENABLED,
+                                    ::comphelper::ConfigurationHelper::E_READONLY);
+        aVal >>= bEnabled;
+    }
+    _bCrashReporterEnabled = bEnabled;
+}
+
+//-----------------------------------------------
+/** @short  check if crash reporter feature is enabled or
+            disabled.
+*/
+sal_Bool Desktop::isCrashReporterEnabled()
+{
+    return _bCrashReporterEnabled;
+}
+
 //-----------------------------------------------
 /** @short  check if recovery must be started or not.
 
@@ -1116,10 +1152,12 @@ void impl_checkRecoveryState(sal_Bool& bCrashed           ,
                              sal_Bool& bRecoveryDataExists,
                              sal_Bool& bSessionDataExists )
 {
-    static ::rtl::OUString SERVICENAME_RECOVERYCORE = ::rtl::OUString::createFromAscii("com.sun.star.frame.AutoRecovery");
-    static ::rtl::OUString PROP_CRASHED             = ::rtl::OUString::createFromAscii("Crashed"                        );
-    static ::rtl::OUString PROP_EXISTSRECOVERY      = ::rtl::OUString::createFromAscii("ExistsRecoveryData"             );
-    static ::rtl::OUString PROP_EXISTSSESSION       = ::rtl::OUString::createFromAscii("ExistsSessionData"              );
+    static const ::rtl::OUString SERVICENAME_RECOVERYCORE = ::rtl::OUString::createFromAscii("com.sun.star.frame.AutoRecovery");
+    static const ::rtl::OUString PROP_CRASHED             = ::rtl::OUString::createFromAscii("Crashed"                        );
+    static const ::rtl::OUString PROP_EXISTSRECOVERY      = ::rtl::OUString::createFromAscii("ExistsRecoveryData"             );
+    static const ::rtl::OUString PROP_EXISTSSESSION       = ::rtl::OUString::createFromAscii("ExistsSessionData"              );
+    static const ::rtl::OUString CFG_PACKAGE_RECOVERY     = ::rtl::OUString::createFromAscii("org.openoffice.Office.Recovery/");
+    static const ::rtl::OUString CFG_PATH_RECOVERYINFO    = ::rtl::OUString::createFromAscii("RecoveryInfo"                   );
 
     bCrashed            = sal_False;
     bRecoveryDataExists = sal_False;
@@ -1146,8 +1184,8 @@ void impl_checkRecoveryState(sal_Bool& bCrashed           ,
             differs between EMERGENCY_SAVE and RECOVERY
 */
 sal_Bool impl_callRecoveryUI(sal_Bool bEmergencySave     ,
-                         sal_Bool bCrashed           ,
-                         sal_Bool bExistsRecoveryData)
+                             sal_Bool bCrashed           ,
+                             sal_Bool bExistsRecoveryData)
 {
     static ::rtl::OUString SERVICENAME_RECOVERYUI = ::rtl::OUString::createFromAscii("com.sun.star.comp.svx.RecoveryUI"          );
     static ::rtl::OUString SERVICENAME_URLPARSER  = ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer"          );
@@ -1173,14 +1211,18 @@ sal_Bool impl_callRecoveryUI(sal_Bool bEmergencySave     ,
         if (bExistsRecoveryData)
             aURL.Complete = COMMAND_RECOVERY;
         else
-        if (bCrashed)
+        if (bCrashed && Desktop::isCrashReporterEnabled() )
             aURL.Complete = COMMAND_CRASHREPORT;
     }
-    xURLParser->parseStrict(aURL);
 
-    css::uno::Any aRet = xRecoveryUI->dispatchWithReturnValue(aURL, css::uno::Sequence< css::beans::PropertyValue >());
     sal_Bool bRet = sal_False;
-    aRet >>= bRet;
+    if ( aURL.Complete.getLength() > 0 )
+    {
+        xURLParser->parseStrict(aURL);
+
+        css::uno::Any aRet = xRecoveryUI->dispatchWithReturnValue(aURL, css::uno::Sequence< css::beans::PropertyValue >());
+        aRet >>= bRet;
+    }
     return bRet;
 }
 
@@ -1229,7 +1271,7 @@ USHORT Desktop::Exception(USHORT nError)
                                                     ( !pArgs->IsServer()    )
                                                   );
     if (
-        ( bAllowRecoveryAndSessionManagement       ) &&
+        ( bAllowRecoveryAndSessionManagement ) &&
         (( nError & EXC_MAJORTYPE ) != EXC_DISPLAY )
        )
         bRestart = SaveTasks(DESKTOP_SAVETASKS_MOD);
@@ -1415,6 +1457,14 @@ void Desktop::Main()
         if ( !InitializeConfiguration() ) return;
 
         //SetSplashScreenProgress(20);
+
+        // set static variable to enabled/disable crash reporter
+        retrieveCrashReporterState();
+        if ( !isCrashReporterEnabled() )
+        {
+            osl_setErrorReporting( sal_False );
+            // disable stack trace feature
+        }
 
         // create title string
         sal_Bool bCheckOk = sal_False;
