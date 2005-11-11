@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:56:11 $
+ *  last change: $Author: kz $ $Date: 2005-11-11 13:55:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1197,13 +1197,20 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                     rSet.Put( SfxBoolItem(nWhich, GetFormModel()->GetOpenInDesignMode() ) );
                 break;
 
-            case SID_FM_SCROLLBAR:
             case SID_FM_NAVIGATIONBAR:
+            case SID_FM_DBGRID:
+                if ( !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
+                {
+                    rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
+                    break;
+                }
+                // NO break!
+
+            case SID_FM_SCROLLBAR:
             case SID_FM_IMAGECONTROL:
             case SID_FM_FILECONTROL:
             case SID_FM_CURRENCYFIELD:
             case SID_FM_PATTERNFIELD:
-            case SID_FM_DBGRID:
                 if ( GetImpl()->isEnhancedForm() )
                 {
                     // in XForms mode, several controls are disabled:
