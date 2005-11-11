@@ -4,9 +4,9 @@
 #
 #   $RCSfile: packagedef.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 21:33:38 $
+#   last change: $Author: kz $ $Date: 2005-11-11 14:08:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@ DIR_MODPACKS     := $(DIR_FILTERCFGOUT)$/modulepacks
 .INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_calc.mk
 .INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_draw.mk
 .INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_impress.mk
+.INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_database.mk
 .INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_chart.mk
 .INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_math.mk
 .INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_xslt.mk
