@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:43:33 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:56:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,8 +45,8 @@
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
 #endif
-#ifndef _SV_SALWTYPE_HXX
-#include <salwtype.hxx>
+#ifndef _SV_SALFRAME_HXX
+#include <salframe.hxx>
 #endif
 #ifndef _SV_SALINST_H
 #include <salinst.h>
@@ -62,7 +62,6 @@
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class SalXLib;
 class SalDisplay;
-class SalFrame;
 class SalPrinter;
 
 // -=-= typedefs -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -120,6 +119,7 @@ public:
     // set helper functions to set class and res name in W_CLASS hint
     static const char* getFrameResName();
     static const char* getFrameClassName();
+    static rtl::OString getFrameResName( SalExtStyle nStyle );
 
 };
 
