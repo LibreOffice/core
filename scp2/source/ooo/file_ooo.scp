@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:54:20 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 09:09:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1557,14 +1557,14 @@ End
 
 File gid_File_Oo_Setup_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice;
     Name = "/registry/schema/org/openoffice/Setup.xcs";
 End
 
 File gid_File_Oo_Setup_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, SCPZIP_REPLACE);
+    Styles = (PACKED, SCPZIP_REPLACE,PATCH);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice;
     Name = "/registry/data/org/openoffice/Setup.xcu";
 End
