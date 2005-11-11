@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:40:30 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 13:34:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -767,7 +767,8 @@ enum SwPropNameIds
 /* 0700 */  UNO_NAME_IS_FIELD_USED,
 /* 0701 */  UNO_NAME_IS_FIELD_DISPLAYED,
 /* 0702 */  UNO_NAME_BUILDID,
-/* 0703 */  SW_PROPNAME_END
+/* 0703 */  UNO_NAME_PARA_STYLE_CONDITIONS,
+/* 0704 */  SW_PROPNAME_END
 };
 
 
