@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:57:07 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:14:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -807,9 +807,15 @@ void SvtFileViewWindow_Impl::OpenFolder( const String& rURL )
 
     rParent.SetPrevLevelButtonState( rURL );
 
+    aFileView.SetUrlFilter( &aURLFilter );
+
     INetProtocol eProt = INetURLObject( rURL ).GetProtocol();
     bIsTemplateFolder = ( eProt == INET_PROT_VND_SUN_STAR_HIER );
-    if ( eProt == INET_PROT_PRIVATE )
+    bool isNewDocumentFolder = ( eProt == INET_PROT_PRIVATE );
+
+    aURLFilter.enableFilter( !bIsTemplateFolder && !isNewDocumentFolder );
+
+    if ( isNewDocumentFolder )
     {
         aFileView.EnableNameReplacing( sal_False );
         aFileView.Initialize( GetNewDocContents() );
