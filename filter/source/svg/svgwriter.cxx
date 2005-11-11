@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svgwriter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 12:53:53 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 10:58:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@
 // - statics -
 // -----------
 
-static const char   aXMLElemSVG[] = "svg";
 static const char   aXMLElemG[] = "g";
 static const char   aXMLElemDefs[] = "defs";
 static const char   aXMLElemClipPath[] = "clipPath";
