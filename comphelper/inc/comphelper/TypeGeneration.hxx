@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TypeGeneration.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:24:20 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 13:32:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,6 +124,8 @@ namespace comphelper
         // --> OD 2004-08-09 #i28749#
         CPPUTYPE_TRANSFORMATIONINHORIL2R, //getCppuType( (drawing::HomogenMatrix3)* )
         // <--
+        CPPUTYPE_SEQNAMEDVALUE,     //getCppuType( (Sequence<beans::NamedValue>*)0 )
+
         CPPUTYPE_END
     };
     COMPHELPER_DLLPUBLIC void GenerateCppuType ( sal_uInt16 eType, const com::sun::star::uno::Type*& pType );
