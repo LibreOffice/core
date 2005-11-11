@@ -4,9 +4,9 @@
  *
  *  $RCSfile: historyoptions.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:39:26 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:49:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -831,8 +831,7 @@ SvtHistoryOptions::SvtHistoryOptions()
         RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtHistoryOptions_Impl::ctor()");
         m_pDataContainer = new SvtHistoryOptions_Impl;
 
-        ItemHolder1* pHolder = ItemHolder1::getGlobalItemHolder();
-        pHolder->holdConfigItem(E_HISTORYOPTIONS);
+        ItemHolder1::holdConfigItem(E_HISTORYOPTIONS);
     }
 }
 

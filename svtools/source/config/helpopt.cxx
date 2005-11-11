@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpopt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:39:10 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:49:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -581,8 +581,7 @@ SvtHelpOptions::SvtHelpOptions()
         RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtHelpOptions_Impl::ctor()");
         pOptions = new SvtHelpOptions_Impl;
 
-        ItemHolder2* pHolder = ItemHolder2::getGlobalItemHolder();
-        pHolder->holdConfigItem(E_HELPOPTIONS);
+        ItemHolder2::holdConfigItem(E_HELPOPTIONS);
     }
     pImp = pOptions;
 }
