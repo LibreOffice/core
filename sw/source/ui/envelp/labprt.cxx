@@ -4,9 +4,9 @@
  *
  *  $RCSfile: labprt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:30:25 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:47:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,9 @@
 
 #ifndef _SV_PRNSETUP_HXX_ //autogen
 #include <svtools/prnsetup.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_CMDOPTIONS_HXX
+#include <svtools/cmdoptions.hxx>
 #endif
 #ifndef _SV_PRINT_HXX
 #include <vcl/print.hxx>
@@ -102,6 +105,16 @@ SwLabPrtPage::SwLabPrtPage(Window* pParent, const SfxItemSet& rSet) :
     aSingleButton.SetClickHdl( aLk );
 
     aPrtSetup.SetClickHdl( aLk );
+
+    SvtCommandOptions aCmdOpts;
+    if ( aCmdOpts.Lookup(
+             SvtCommandOptions::CMDOPTION_DISABLED,
+             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Print"  ) ) ) )
+    {
+        aPrinterInfo.Hide();
+        aPrtSetup.Hide();
+        aFLPrinter.Hide();
+    }
 }
 
 // --------------------------------------------------------------------------
