@@ -4,9 +4,9 @@
  *
  *  $RCSfile: remove_quickstart_link.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:34:11 $
+ *  last change: $Author: kz $ $Date: 2005-11-11 13:57:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ extern "C" UINT __stdcall RemoveQuickstarterLink( MSIHANDLE hMSI )
         std::string sQuickstartLinkPath = szStartupPath;
 
         sQuickstartLinkPath += "\\";
-        sQuickstartLinkPath += GetOfficeProductName( hMSI );
+        sQuickstartLinkPath += GetQuickstarterLinkName( hMSI );
         sQuickstartLinkPath += ".lnk";
 
         DeleteFileA( sQuickstartLinkPath.c_str() );
