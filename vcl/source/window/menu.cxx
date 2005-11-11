@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.129 $
+ *  $Revision: 1.130 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:33:43 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:54:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,6 +148,9 @@
 #endif
 
 #include <unohelp.hxx>
+#ifndef VCL_INC_CONFIGSETTINGS_HXX
+#include <configsettings.hxx>
+#endif
 
 #include <map>
 
@@ -175,6 +178,22 @@ DBG_NAME( Menu );
 
 // document closer
 #define IID_DOCUMENTCLOSE 1
+
+static BOOL ImplAccelDisabled()
+{
+    // display of accelerator strings may be suppressed via configuration
+    static int nAccelDisabled = -1;
+
+    if( nAccelDisabled == -1 )
+    {
+        rtl::OUString aStr =
+            vcl::SettingsConfigItem::get()->
+            getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Menu" ) ),
+                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SuppressAccelerators" ) ) );
+        nAccelDisabled = aStr.equalsIgnoreAsciiCaseAscii( "true" ) ? 1 : 0;
+    }
+    return (nAccelDisabled == 1) ? TRUE : FALSE;
+}
 
 struct MenuItemData
 {
@@ -2156,7 +2175,7 @@ Size Menu::ImplCalcSize( Window* pWin )
             }
 
             // Accel
-            if ( !bIsMenuBar && pData->aAccelKey.GetCode() )
+            if ( !bIsMenuBar && pData->aAccelKey.GetCode() && !ImplAccelDisabled() )
             {
                 String aName = pData->aAccelKey.GetName();
                 long nAccWidth = pWin->GetTextWidth( aName );
@@ -2342,7 +2361,7 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                 }
 
                 // Accel
-                if ( !bLayout && !bIsMenuBar && pData->aAccelKey.GetCode() )
+                if ( !bLayout && !bIsMenuBar && pData->aAccelKey.GetCode() && !ImplAccelDisabled() )
                 {
                     XubString aAccText = pData->aAccelKey.GetName();
                     aTmpPos.X() = aOutSz.Width() - pWin->GetTextWidth( aAccText );
