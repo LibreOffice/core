@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlsignature_nssimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:36:20 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 09:21:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,7 @@ SAL_CALL XMLSignature_NssImpl :: generate(
     if( pSecEnv == NULL )
         throw RuntimeException() ;
 
-     setErrorRecorder( aTemplate );
+     setErrorRecorder();
 
     pMngr = pSecEnv->createKeysManager() ; //i39448
     if( !pMngr ) {
@@ -173,18 +173,18 @@ SAL_CALL XMLSignature_NssImpl :: generate(
     }
 
     //Sign the template
-    if( xmlSecDSigCtxSign( pDsigCtx , pNode ) < 0 ) {
-        xmlSecDSigCtxDestroy( pDsigCtx ) ;
-        pSecEnv->destroyKeysManager( pMngr ) ; //i39448
-
-        //Unregistered the stream/URI binding
-        if( xUriBinding.is() )
-            xmlUnregisterStreamInputCallbacks() ;
-
-        //throw XMLSignatureException() ;
-        clearErrorRecorder();
-        return aTemplate;
+    if( xmlSecDSigCtxSign( pDsigCtx , pNode ) == 0 )
+    {
+        if (pDsigCtx->status == xmlSecDSigStatusSucceeded)
+            aTemplate->setStatus(com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
+        else
+            aTemplate->setStatus(com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN);
     }
+    else
+    {
+        aTemplate->setStatus(com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN);
+    }
+
 
     xmlSecDSigCtxDestroy( pDsigCtx ) ;
     pSecEnv->destroyKeysManager( pMngr ) ; //i39448
@@ -240,7 +240,7 @@ SAL_CALL XMLSignature_NssImpl :: validate(
             throw RuntimeException() ;
     }
 
-     setErrorRecorder( aTemplate );
+     setErrorRecorder();
 
     sal_Int32 nSecurityEnvironment = aSecurityCtx->getSecurityEnvironmentNumber();
     sal_Int32 i;
@@ -277,14 +277,24 @@ SAL_CALL XMLSignature_NssImpl :: validate(
         //Verify signature
         int rs = xmlSecDSigCtxVerify( pDsigCtx , pNode );
 
-        xmlSecDSigCtxDestroy( pDsigCtx ) ;
-        pSecEnv->destroyKeysManager( pMngr ) ; //i39448
 
-        if (rs >= 0)
+        if (rs == 0 &&
+            pDsigCtx->status == xmlSecDSigStatusSucceeded)
         {
+            aTemplate->setStatus(com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
+            xmlSecDSigCtxDestroy( pDsigCtx ) ;
+            pSecEnv->destroyKeysManager( pMngr );
             break;
         }
+        else
+        {
+            aTemplate->setStatus(com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN);
+        }
+        xmlSecDSigCtxDestroy( pDsigCtx ) ;
+        pSecEnv->destroyKeysManager( pMngr );
     }
+
+
 
     //Unregistered the stream/URI binding
     if( xUriBinding.is() )
