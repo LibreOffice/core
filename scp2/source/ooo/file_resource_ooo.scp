@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_resource_ooo.scp,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:26:55 $
+ *  last change: $Author: kz $ $Date: 2005-11-11 14:26:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,6 @@
 
 #include "macros.inc"
 
-STD_RES_FILE( gid_File_Res_Abp, abp)
-
 STD_RES_FILE( gid_File_Res_Basctl, basctl)
 
 STD_RES_FILE( gid_File_Res_Bib, bib )
@@ -48,10 +46,6 @@ STD_RES_FILE( gid_File_Res_Cal, cal )
 // STD_RES_FILE( gid_File_Res_Chartcontroller, chartcontroller )
 
 STD_RES_FILE( gid_File_Res_Dba, dba)
-
-STD_RES_FILE( gid_File_Res_Dbp, dbp)
-
-STD_RES_FILE_PATCH( gid_File_Res_Dbu, dbu)
 
 STD_RES_FILE( gid_File_Res_Dbw, dbw )
 
