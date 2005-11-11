@@ -4,9 +4,9 @@
  *
  *  $RCSfile: searchopt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:46:16 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:53:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@
 #ifndef _COM_SUN_STAR_UNO_ANY_H_
 #include <com/sun/star/uno/Any.h>
 #endif
+#include <rtl/logfile.hxx>
 
 
 using namespace rtl;
@@ -99,6 +100,7 @@ public:
 SvtSearchOptions_Impl::SvtSearchOptions_Impl() :
     ConfigItem( OUString::createFromAscii( "Office.Common/SearchOptions" ) )
 {
+    RTL_LOGFILE_CONTEXT(aLog, "svtools (???) SvtSearchOptions_Impl::SvtSearchOptions_Impl()");
     nFlags = 0x0003FFFF;    // set all options values to 'true'
     Load();
     SetModified( FALSE );
