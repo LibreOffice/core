@@ -41,6 +41,7 @@ hedabu: ..\inc\classes\addonmenu.hxx %_DEST%\inc%_EXT%\framework\addonmenu.hxx
 hedabu: ..\inc\classes\sfxhelperfunctions.hxx %_DEST%\inc%_EXT%\framework\sfxhelperfunctions.hxx
 hedabu: ..\inc\helper\configimporter.hxx %_DEST%\inc%_EXT%\framework\configimporter.hxx
 hedabu: ..\inc\classes\menuextensionsupplier.hxx %_DEST%\inc%_EXT%\framework\menuextensionsupplier.hxx
+hedabu: ..\inc\interaction\preventduplicateinteraction.hxx %_DEST%\inc%_EXT%\framework\preventduplicateinteraction.hxx
 
 ..\uiconfig\startmodule\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\menubar\*.xml
 ..\uiconfig\startmodule\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\toolbar\*.xml
