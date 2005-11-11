@@ -4,9 +4,9 @@
  *
  *  $RCSfile: syslocaleoptions.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:47:29 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:54:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -479,8 +479,7 @@ SvtSysLocaleOptions::SvtSysLocaleOptions()
         RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtSysLocaleOptions_Impl::ctor()");
         pOptions = new SvtSysLocaleOptions_Impl;
 
-        ItemHolder2* pHolder = ItemHolder2::getGlobalItemHolder();
-        pHolder->holdConfigItem(E_SYSLOCALEOPTIONS);
+        ItemHolder2::holdConfigItem(E_SYSLOCALEOPTIONS);
     }
     ++nRefCount;
 }
