@@ -6,25 +6,21 @@ T4_BASE = \
     writer_web_HTML_help \
     wav_Wave_Audio_File \
     component_Bibliography \
-    StarBase \
     component_DB
 
 # -----------------------------------------------
 # count = 2
 F4_BASE = \
-    writer_web_HTML_help \
-    StarOffice_XML__Base_
+    writer_web_HTML_help
     
 # -----------------------------------------------
 # count = 1
-F4_UI_BASE = \
-    StarOffice_XML__Base__ui
+F4_UI_BASE =
 
 # -----------------------------------------------
 # count = 3
 L4_BASE = \
     com_sun_star_frame_Bibliography \
-    org_openoffice_comp_dbflt_DBContentLoader2 \
     com_sun_star_sdb_ContentLoader
 
 # -----------------------------------------------
