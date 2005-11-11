@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-09 09:40:13 $
+#   last change: $Author: rt $ $Date: 2005-11-11 09:55:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,8 @@ SCP1FILES  = installation_ooo.par          \
              file_xsltfilter.par           \
              module_python.par             \
              file_python.par               \
-             profileitem_python.par
+             profileitem_python.par        \
+             shortcut_python.par
 
 .IF "$(SOLAR_JAVA)"!=""
 SCP1FILES +=                               \
