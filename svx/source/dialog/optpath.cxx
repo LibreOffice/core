@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optpath.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:48:20 $
+ *  last change: $Author: kz $ $Date: 2005-11-11 13:55:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,9 @@
 
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
 #endif
 
 #define _SVX_OPTPATH_CXX
@@ -329,6 +332,7 @@ void SvxPathTabPage::Reset( const SfxItemSet& )
     SvtPathOptions aPathOpt;
 
     for( USHORT i = 0; i <= (USHORT)SvtPathOptions::PATH_WORK; ++i )
+    {
         switch(i)
         {
             case SvtPathOptions::PATH_CONFIG:
@@ -344,30 +348,37 @@ void SvxPathTabPage::Reset( const SfxItemSet& )
             break;
             default:
             {
-                String aStr( SVX_RES(RID_SVXSTR_PATH_NAME_START + i));
-                String sTmpPath(aPathOpt.GetPath(SvtPathOptions::Pathes(i)));
-                String aValue( sTmpPath );
-                if(i == SvtPathOptions::PATH_ADDIN ||
-                        i == SvtPathOptions::PATH_FILTER ||
-                        i == SvtPathOptions::PATH_HELP  ||
-                        i == SvtPathOptions::PATH_MODULE  ||
-                        i == SvtPathOptions::PATH_PLUGIN  ||
-                        i == SvtPathOptions::PATH_STORAGE  )
-                    ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sTmpPath, aValue );
-                aStr += '\t';
-                aStr += Convert_Impl( aValue );
-                SvLBoxEntry* pEntry = pPathBox->InsertEntry( aStr );
-                BOOL   bReadonly = aPathOpt.IsPathReadonly((SvtPathOptions::Pathes) i);
-                if(bReadonly)
+                // only writer uses autotext
+                if ( i != SvtPathOptions::PATH_AUTOTEXT ||
+                     SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
                 {
-                    pPathBox->SetCollapsedEntryBmp( pEntry, pImpl->aLockImage,   BMP_COLOR_NORMAL );
-                    pPathBox->SetCollapsedEntryBmp( pEntry, pImpl->aLockImageHC,   BMP_COLOR_HIGHCONTRAST  );
+                    String aStr( SVX_RES(RID_SVXSTR_PATH_NAME_START + i));
+                    String sTmpPath(aPathOpt.GetPath(SvtPathOptions::Pathes(i)));
+                    String aValue( sTmpPath );
+                    if(i == SvtPathOptions::PATH_ADDIN ||
+                            i == SvtPathOptions::PATH_FILTER ||
+                            i == SvtPathOptions::PATH_HELP  ||
+                            i == SvtPathOptions::PATH_MODULE  ||
+                            i == SvtPathOptions::PATH_PLUGIN  ||
+                            i == SvtPathOptions::PATH_STORAGE  )
+                        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sTmpPath, aValue );
+                    aStr += '\t';
+                    aStr += Convert_Impl( aValue );
+                    SvLBoxEntry* pEntry = pPathBox->InsertEntry( aStr );
+                    BOOL   bReadonly = aPathOpt.IsPathReadonly((SvtPathOptions::Pathes) i);
+                    if(bReadonly)
+                    {
+                        pPathBox->SetCollapsedEntryBmp( pEntry, pImpl->aLockImage,   BMP_COLOR_NORMAL );
+                        pPathBox->SetCollapsedEntryBmp( pEntry, pImpl->aLockImageHC,   BMP_COLOR_HIGHCONTRAST  );
+                    }
+                    PathUserData_Impl* pPathImpl = new PathUserData_Impl( i );
+                    pPathImpl->aPathStr = aValue;
+                    pEntry->SetUserData( pPathImpl );
                 }
-                PathUserData_Impl* pPathImpl = new PathUserData_Impl( i );
-                pPathImpl->aPathStr = aValue;
-                pEntry->SetUserData( pPathImpl );
             }
         }
+    }
+
     String aUserData = GetUserData();
     if ( aUserData.Len() )
     {
