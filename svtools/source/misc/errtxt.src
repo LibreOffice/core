@@ -4,9 +4,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:54:25 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:14:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -590,6 +590,11 @@ Resource RID_ERRHDL
     {
         Text [ de ] = "Die Datei $(FILENAME) konnte nicht gespeichert werden. Bitte Ã¼berprÃ¼fen Sie Ihre Systemeinstellungen. Eine automatisch erstellte Sicherungsdatei finden Sie unter dem Namen $(BACKUPNAME) im Ordner $(PATH).";
         Text [ en-US ] = "The file $(FILENAME) cannot be saved. Please check your system settings. You can find an automatically generated backup copy of this file in folder $(PATH) named $(BACKUPNAME).";
+    };
+    String ERRCODE_SFX_NOMOREDOCUMENTSALLOWED
+    {
+        Text [ de ] = "Die maximale Anzahl von Dokumenten, die gleichzeitig geöffnet sein können, ist erreicht. Sie müssen ein oder mehrere Dokumente schließen, bevor Sie ein neues Dokument öffnen können";
+        Text [ en-US ] = "The maximum number of documents that can be opened at the same time has been reached. You need to close one or more documents before you can open a new document";
     };
 
 #ifdef ERRCODE_IO_INVALIDLENGTH
