@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxmsbas.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:40:00 $
+ *  last change: $Author: dr $ $Date: 2005-11-11 09:11:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -283,7 +283,11 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
             for( UINT16 i=0; i<nStreamCount;i++)
             {
                 StringArray aDecompressed = aVBA.Decompress(i);
-
+#if 0
+/*  DR 2005-08-11 #124850# Do not filter special characters from module name.
+    Just put the original module name and let the Basic interpreter deal with
+    it. Needed for roundtrip...
+ */
                 ByteString sByteBasic(aVBA.GetStreamName(i),
                     RTL_TEXTENCODING_ASCII_US,
                         (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_UNDERLINE|
