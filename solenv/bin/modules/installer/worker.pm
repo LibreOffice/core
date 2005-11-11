@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-10 14:55:48 $
+#   last change: $Author: kz $ $Date: 2005-11-11 17:24:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -758,6 +758,10 @@ sub write_content_into_inf_file
     for ( my $i = 0; $i <= $#{$folderitemsref}; $i++ )
     {
         my $folderitem = ${$folderitemsref}[$i];
+
+        my $styles = "";
+        if ( $folderitem->{'Styles'} ) { $styles = $folderitem->{'Styles'}; }
+        if ( $styles =~ /\bNON_ADVERTISED\b/ ) { next; }    # no entry for non-advertised shortcuts
 
         if (( ! $folderitem->{'ismultilingual'} ) || (( $folderitem->{'ismultilingual'} ) && ( $folderitem->{'specificlanguage'} eq $onelanguage )))
         {
