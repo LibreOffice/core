@@ -4,9 +4,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:00:57 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:25:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,6 +144,7 @@ what looks like a bug in the new handler*/
 };
 const int NoSignals = sizeof(Signals) / sizeof(struct SignalAction);
 
+static sal_Bool               bErrorReportingEnabled = sal_True;
 static sal_Bool               bInitSignal = sal_False;
 static oslMutex               SignalListMutex;
 static oslSignalHandlerImpl*  SignalList;
@@ -386,6 +387,9 @@ static int ReportCrash( int Signal )
 {
     static sal_Bool bCrashReporterExecuted = sal_False;
     sal_Bool        bAutoCrashReport = sal_False;
+
+    if ( !bErrorReportingEnabled )
+        return -1;
 
     sal_uInt32  argi;
     sal_uInt32  argc;
@@ -929,3 +933,13 @@ oslSignalAction SAL_CALL osl_raiseSignal(sal_Int32 UserSignal, void* UserData)
     return (Action);
 }
 
+/*****************************************************************************/
+/* osl_setErrorReporting */
+/*****************************************************************************/
+sal_Bool SAL_CALL osl_setErrorReporting( sal_Bool bEnable )
+{
+    sal_Bool bOld = bErrorReportingEnabled;
+    bErrorReportingEnabled = bEnable;
+
+    return bOld;
+}
