@@ -39,7 +39,8 @@ T4_IMPRESS = \
     pdf_Portable_Document_Format \
     pwp_PlaceWare\
     impress8\
-    impress8_template
+    impress8_template\
+    draw8
 
 # -----------------------------------------------
 # count = 19
@@ -71,7 +72,7 @@ F4_UI_IMPRESS = \
     impress8_ui \
     impress8_template_ui \
     impress8_draw_ui
-    
+
 # -----------------------------------------------
 # count = 0
 L4_GLOBAL =
@@ -95,8 +96,8 @@ ALL_4fcfg_impress = \
     $(UI_FILTERS_4fcfg_impress) \
     $(FRAMELOADERS_4fcfg_impress) \
     $(CONTENTHANDLERS_4fcfg_impress)
-    
+
 ALL_UI_FILTERS+=$(UI_FILTERS_4fcfg_impress)
-    
+
 ALL_PACKAGES+=impress
 
