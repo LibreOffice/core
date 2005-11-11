@@ -4,9 +4,9 @@
  *
  *  $RCSfile: certificateviewer.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:06:30 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 09:17:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,11 +150,16 @@ private:
     CertificateViewer*  mpParent;
     bool                mbFirstActivateDone;
     Image               maCertImage;
+    Image               maCertNotValidatedImage;
+    String              msCertOK;
+    String              msCertNotValidated;
 
     DECL_LINK(          ViewCertHdl, void* );
     DECL_LINK(          CertSelectHdl, void* );
     void                Clear( void );
-    SvLBoxEntry*        InsertCert( SvLBoxEntry* _pParent, const String& _rName, cssu::Reference< dcss::security::XCertificate > rxCert );
+    SvLBoxEntry*        InsertCert( SvLBoxEntry* _pParent, const String& _rName,
+                                    cssu::Reference< dcss::security::XCertificate > rxCert,
+                                    bool bValid);
 
 public:
                         CertificateViewerCertPathTP( Window* pParent, CertificateViewer* _pDlg );
