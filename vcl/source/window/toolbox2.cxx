@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:55:25 $
+ *  last change: $Author: kz $ $Date: 2005-11-11 17:20:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,7 @@ ImplToolBoxPrivateData::ImplToolBoxPrivateData() : m_pLayoutData( NULL )
     mbKeyInputDisabled = FALSE;
     mbMenubuttonSelected = FALSE;
     mbPageScroll = FALSE;
+    mbWillUsePopupMode = FALSE;
 }
 
 ImplToolBoxPrivateData::~ImplToolBoxPrivateData()
@@ -2354,3 +2355,15 @@ BOOL ToolBox::AlwaysLocked()
 
     return nAlwaysLocked == 1 ? TRUE : FALSE;
 }
+
+BOOL ToolBox::WillUsePopupMode() const
+{
+    return mpData->mbWillUsePopupMode;
+}
+
+void ToolBox::WillUsePopupMode( BOOL b )
+{
+    mpData->mbWillUsePopupMode = b;
+}
+
+// -----------------------------------------------------------------------
