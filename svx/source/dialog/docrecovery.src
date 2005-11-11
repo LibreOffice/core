@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docrecovery.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-03 11:54:41 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:50:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -288,6 +288,16 @@ TabPage RID_SVXPAGE_DOCRECOVERY_RECOVER
     {
         Text[ de ] = "%PRODUCTNAME %PRODUCTVERSION beginnt jetzt mit der Wiederherstellung Ihrer Dokumente. Dieses kann abhängig von der Größe der Dokumente einige Zeit in Anspruch nehmen.\n\nEs wurde ein Fehlerbericht erstellt, der uns bei der Identifizierung des Problems in %PRODUCTNAME hilft. Betätigen Sie die 'Weiter' Schaltfläche, um zum Fehlerbericht-Programm zu gelangen oder 'Abbrechen' um diesen Schritt zu überspringen";
         Text[ en-US ] = "%PRODUCTNAME %PRODUCTVERSION starts now to recovers your documents. Depending on the size of the documents this process can take some time.\n\nA report of the crash was created helping us to identify the cause why %PRODUCTNAME crashed. Click 'Next' to get to the Error Report Tool or press 'Cancel' to skip this step." ;
+    };
+    String STR_RECOVERYONLY_DESCR
+    {
+        Text[ de ] = "Klicken Sie auf 'Wiederherstellung starten', um mit dem Wiederherstellungsprozess der weiter unten aufgelisteten Dokumente zu beginnen.";
+        Text[ en-US ] = "Press 'Start Recovery' to start the recovery process of the documents listed below.";
+    };
+    String STR_RECOVERYONLY_FINISH
+    {
+        Text[ de ] = "~Fertig";
+        Text[ en-US ] = "Finish";
     };
 };
 
