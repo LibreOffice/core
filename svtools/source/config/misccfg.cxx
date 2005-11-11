@@ -4,9 +4,9 @@
  *
  *  $RCSfile: misccfg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:43:33 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:51:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,9 @@
 #include <tools/debug.hxx>
 #endif
 
+#include <rtl/logfile.hxx>
+
+
 #define DEFAULT_TAB 2000
 
 #define DEF_INCH    2540L
@@ -67,6 +70,8 @@ SfxMiscCfg::SfxMiscCfg() :
     bPaperSize(FALSE),
     bPaperOrientation (FALSE)
 {
+    RTL_LOGFILE_CONTEXT(aLog, "svtools (???) SfxMiscCfg::SfxMiscCfg()");
+
     Load();
 }
 /* -----------------------------02.03.01 15:31--------------------------------
