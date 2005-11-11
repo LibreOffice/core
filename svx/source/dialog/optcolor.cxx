@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optcolor.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:39:56 $
+ *  last change: $Author: kz $ $Date: 2005-11-11 15:05:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,9 @@
 #ifndef _XTABLE_HXX
 #include <xtable.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
+#endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
@@ -76,18 +79,35 @@
 
 using namespace ::com::sun::star;
 using namespace ::svtools;
-#define GROUP_COUNT 6
+#define GROUP_COUNT     6
+#define GROUP_UNKNOWN   -1
+#define GROUP_GENERAL   0
+#define GROUP_WRITER    1
+#define GROUP_HTML      2
+#define GROUP_CALC      3
+#define GROUP_DRAW      4
+#define GROUP_BASIC     5
+
 /* -----------------------------2002/06/26 10:48------------------------------
 
  ---------------------------------------------------------------------------*/
+
 class SvxExtFixedText_Impl : public FixedText
 {
+private:
+    long            m_nGroupHeight;
+
 protected:
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+
 public:
     SvxExtFixedText_Impl(Window* pParent, const ResId& rResId) :
-        FixedText(pParent, rResId){}
+        FixedText(pParent, rResId), m_nGroupHeight(0) {}
+
+    inline long     GetGroupHeight() { return m_nGroupHeight; }
+    inline void     SetGroupHeight( long _nHeight ) { m_nGroupHeight = _nHeight; }
 };
+
 /* -----------------------------25.03.2002 15:48------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -225,17 +245,138 @@ class ColorConfigWindow_Impl : public Window
     ColorListBox*   aColorBoxes[ColorConfigEntryCount];
     Window*         aWindows[ColorConfigEntryCount];
 
-    virtual void        Command( const CommandEvent& rCEvt );
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+    SvtModuleOptions    m_aModuleOptions;
+
+    void            SetNewPosition( sal_Int16 _nFeature, Window* _pWin );
+
+    virtual void    Command( const CommandEvent& rCEvt );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+
 public:
     ColorConfigWindow_Impl(Window* pParent, const ResId& rResId);
     ~ColorConfigWindow_Impl();
+
+    inline const SvtModuleOptions&  GetModuleOptions() const { return m_aModuleOptions; }
 };
+
+sal_Bool lcl_isGroupVisible( sal_Int16 _nGroup, const SvtModuleOptions& _rModOptions )
+{
+    sal_Bool bRet = sal_True;
+
+    switch ( _nGroup )
+    {
+        case GROUP_WRITER :
+        case GROUP_HTML :
+        {
+            bRet = _rModOptions.IsModuleInstalled( SvtModuleOptions::E_SWRITER );
+            break;
+        }
+
+        case GROUP_CALC :
+        {
+            bRet = _rModOptions.IsModuleInstalled( SvtModuleOptions::E_SCALC );
+            break;
+        }
+
+        case GROUP_DRAW :
+        {
+            bRet = ( _rModOptions.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) ||
+                     _rModOptions.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) );
+            break;
+        }
+    }
+
+    return bRet;
+}
+
+sal_Int16 lcl_getGroup( sal_Int16 _nFeature )
+{
+    sal_Int16 nRet = GROUP_UNKNOWN;
+
+    switch ( _nFeature )
+    {
+        case DOCCOLOR :
+        case DOCBOUNDARIES :
+        case APPBACKGROUND :
+        case OBJECTBOUNDARIES :
+        case TABLEBOUNDARIES :
+        case FONTCOLOR :
+        case LINKS :
+        case LINKSVISITED :
+        case ANCHOR :
+        case SPELL :
+        {
+            nRet = GROUP_GENERAL;
+            break;
+        }
+
+        case WRITERTEXTGRID :
+        case WRITERFIELDSHADINGS :
+        case WRITERIDXSHADINGS :
+        case WRITERDIRECTCURSOR :
+        case WRITERNOTESINDICATOR :
+        case WRITERSCRIPTINDICATOR :
+        case WRITERSECTIONBOUNDARIES :
+        case WRITERPAGEBREAKS :
+        {
+            nRet = GROUP_WRITER;
+            break;
+        }
+
+        case HTMLSGML :
+        case HTMLCOMMENT :
+        case HTMLKEYWORD :
+        case HTMLUNKNOWN :
+        {
+            nRet = GROUP_HTML;
+            break;
+        }
+
+        case CALCGRID :
+        case CALCPAGEBREAK :
+        case CALCPAGEBREAKMANUAL :
+        case CALCPAGEBREAKAUTOMATIC :
+        case CALCDETECTIVE :
+        case CALCDETECTIVEERROR :
+        case CALCREFERENCE :
+        case CALCNOTESBACKGROUND :
+        {
+            nRet = GROUP_CALC;
+            break;
+        }
+
+        case DRAWGRID :
+        case DRAWDRAWING :
+        case DRAWFILL :
+        {
+            nRet = GROUP_DRAW;
+            break;
+        }
+
+        case BASICIDENTIFIER :
+        case BASICCOMMENT :
+        case BASICNUMBER :
+        case BASICSTRING :
+        case BASICOPERATOR :
+        case BASICKEYWORD :
+        case BASICERROR :
+        {
+            nRet = GROUP_BASIC;
+            break;
+        }
+    }
+
+    return nRet;
+}
+
 /* -----------------------------25.03.2002 17:05------------------------------
 
  ---------------------------------------------------------------------------*/
 ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rResId) :
         Window(pParent, rResId),
+
+#pragma warning (disable : 4355)
+
         aGeneralBackWN(this),
         aGeneralFT(&aGeneralBackWN,  ResId(        FT_GENERAL              )),
         aDocColorFT(this, ResId(        FT_DOCCOLOR             )),
@@ -359,9 +500,12 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
         aBasicErrorFT(this, ResId( FT_BASICERROR        )),
         aBasicErrorLB(this, ResId( LB_BASICERROR        )),
         aBasicErrorWN(this, ResId( WN_BASICERROR        ))
+
+#pragma warning (default : 4355)
+
 {
     FreeResource();
-    long i;
+    sal_Int16 i;
     for( i = 0; i < ColorConfigEntryCount; i++ )
     {
         aCheckBoxes[i] = 0;
@@ -480,12 +624,17 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aWindows[BASICOPERATOR       ] = &aBasicOperatorWN;
     aWindows[BASICKEYWORD        ] = &aBasicKeywordWN;
     aWindows[BASICERROR        ] = &aBasicErrorWN;
-    aChapters[0] = &aGeneralFT; aChapterWins[0] = &aGeneralBackWN;
-    aChapters[1] = &aWriterFT;  aChapterWins[1] = &aWriterBackWN;
-    aChapters[2] = &aHTMLFT;    aChapterWins[2] = &aHTMLBackWN;
-    aChapters[3] = &aCalcFT;    aChapterWins[3] = &aCalcBackWN;
-    aChapters[4] = &aDrawFT;    aChapterWins[4] = &aDrawBackWN;
-    aChapters[5] = &aBasicFT;   aChapterWins[5] = &aBasicBackWN;
+    aChapters[GROUP_GENERAL]= &aGeneralFT; aChapterWins[GROUP_GENERAL]  = &aGeneralBackWN;
+    aChapters[GROUP_WRITER] = &aWriterFT;  aChapterWins[GROUP_WRITER]   = &aWriterBackWN;
+    aChapters[GROUP_HTML]   = &aHTMLFT;    aChapterWins[GROUP_HTML]     = &aHTMLBackWN;
+    aChapters[GROUP_CALC]   = &aCalcFT;    aChapterWins[GROUP_CALC]     = &aCalcBackWN;
+    aChapters[GROUP_DRAW]   = &aDrawFT;    aChapterWins[GROUP_DRAW]     = &aDrawBackWN;
+    aChapters[GROUP_BASIC]  = &aBasicFT;   aChapterWins[GROUP_BASIC]    = &aBasicBackWN;
+    // calculate heights of groups which can be hidden (Height of GENERAL and BASIC not used)
+    aChapters[GROUP_WRITER]->SetGroupHeight( aChapters[GROUP_HTML]->GetPosPixel().Y() -  aChapters[GROUP_WRITER]->GetPosPixel().Y() );
+    aChapters[GROUP_HTML]  ->SetGroupHeight( aChapters[GROUP_CALC]->GetPosPixel().Y() -  aChapters[GROUP_HTML]->GetPosPixel().Y() );
+    aChapters[GROUP_CALC]  ->SetGroupHeight( aChapters[GROUP_DRAW]->GetPosPixel().Y() -  aChapters[GROUP_CALC]->GetPosPixel().Y() );
+    aChapters[GROUP_DRAW]  ->SetGroupHeight( aChapters[GROUP_BASIC]->GetPosPixel().Y() - aChapters[GROUP_DRAW]->GetPosPixel().Y() );
 
     Color TempColor(COL_TRANSPARENT);
     Wallpaper aTransparentWall(TempColor);
@@ -498,16 +647,25 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
         aBackColor = rStyleSettings.GetShadowColor();
     else
         aBackColor = Color( COL_LIGHTGRAY);
+
     for( i = 0; i < GROUP_COUNT; ++i)
     {
-        Font aFont = aChapters[i]->GetFont();
-        aFont.SetWeight(WEIGHT_BOLD);
-        aChapters[i]->SetFont(aFont);
-        aChapters[i]->SetBackground(aTransparentWall);
-        aChapterWins[i]->SetPosSizePixel( Point(0, aChapters[i]->GetPosPixel().Y()),
-                            Size(nWinWidth, nFTHeight));
-        aChapterWins[i]->SetBackground(Wallpaper(aBackColor));
-        aChapterWins[i]->Show();
+        if ( lcl_isGroupVisible( i, m_aModuleOptions ) )
+        {
+            Font aFont = aChapters[i]->GetFont();
+            aFont.SetWeight(WEIGHT_BOLD);
+            aChapters[i]->SetFont(aFont);
+            aChapters[i]->SetBackground(aTransparentWall);
+            aChapterWins[i]->SetPosSizePixel( Point(0, aChapters[i]->GetPosPixel().Y()),
+                                Size(nWinWidth, nFTHeight));
+            aChapterWins[i]->SetBackground(Wallpaper(aBackColor));
+            aChapterWins[i]->Show();
+        }
+        else
+        {
+            aChapters[i]->Hide();
+            aChapterWins[i]->Hide();
+        }
     }
     Color aTextColor;
     BOOL bSetTextColor = FALSE;
@@ -522,12 +680,30 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
         if(aRCheckCol == aWinCol)
             aRCheckCol = Color(COL_BLACK);
     }
+
+    sal_Int16 nGroup = GROUP_UNKNOWN;
     for( i = 0; i < ColorConfigEntryCount; i++ )
     {
         if(ANCHOR == i)
             continue;
+        sal_Int16 nNewGroup = lcl_getGroup(i);
+        sal_Bool bShow = lcl_isGroupVisible( nNewGroup, m_aModuleOptions );
+
+        if ( nNewGroup > nGroup )
+        {
+            nGroup = nNewGroup;
+            if ( bShow && nGroup >= GROUP_CALC )
+            {
+                SetNewPosition( i, aChapters[nGroup] );
+                SetNewPosition( i, aChapterWins[nGroup] );
+            }
+        }
         if(aCheckBoxes[i])
         {
+            if ( bShow )
+                SetNewPosition( i, aCheckBoxes[i] );
+            else
+                aCheckBoxes[i]->Hide();
             aCheckBoxes[i]->SetBackground(aTransparentWall);
             aCheckBoxes[i]->SetHelpId(HID_COLORPAGE_CHECKBOX_START + i);
             if(bSetTextColor)
@@ -535,12 +711,30 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
         }
         if(aFixedTexts[i])
         {
+            if ( bShow )
+                SetNewPosition( i, aFixedTexts[i] );
+            else
+                aFixedTexts[i]->Hide();
             aFixedTexts[i]->SetBackground(aTransparentWall);
             if(bSetTextColor)
                 aFixedTexts[i]->SetTextColor(aRCheckCol);
         }
         if(aWindows[i])
-            aWindows[i]->SetBorderStyle(WINDOW_BORDER_MONO     );
+        {
+            if ( bShow )
+                SetNewPosition( i, aWindows[i] );
+            else
+                aWindows[i]->Hide();
+            aWindows[i]->SetBorderStyle(WINDOW_BORDER_MONO);
+        }
+
+        if ( aColorBoxes[i] )
+        {
+            if ( bShow )
+                SetNewPosition( i, aColorBoxes[i] );
+            else
+                aColorBoxes[i]->Hide();
+        }
     }
 
     XColorTable aColorTable( SvtPathOptions().GetPalettePath() );
@@ -600,6 +794,30 @@ void SvxExtFixedText_Impl::DataChanged(const DataChangedEvent& rDCEvt)
         SetBackground(aTransparentWall);
     }
 }
+
+void ColorConfigWindow_Impl::SetNewPosition( sal_Int16 _nFeature, Window* _pWin )
+{
+    DBG_ASSERT( _pWin, "ColorConfigWindow_Impl::SetNewPosition(): no window" );
+
+    // calculate the overall height of the invisible groups
+    long nDelta = 0;
+    sal_Int16 nGroup = lcl_getGroup( _nFeature ) - 1;
+    while ( nGroup > 0 ) // GROUP_GENERAL (0) is always visible
+    {
+        if ( !lcl_isGroupVisible( nGroup, m_aModuleOptions ) )
+            nDelta += aChapters[nGroup]->GetGroupHeight();
+        nGroup--;
+    }
+
+    // move this window to its new position
+    if ( nDelta > 0 )
+    {
+        Point aPos = _pWin->GetPosPixel();
+        aPos.Y() -= nDelta;
+        _pWin->SetPosPixel( aPos );
+    }
+}
+
 /* -----------------------------08.04.2002 17:10------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -651,6 +869,9 @@ public:
 ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(
         Window* pParent, const ResId& rResId) :
         Control(pParent, rResId),
+
+#pragma warning (disable : 4355)
+
         aHeaderHB(this, WB_BUTTONSTYLE | WB_BOTTOMBORDER),
         aVScroll(this,      ResId(VB_VSCROLL)),
         aScrollWindow(this, ResId(WN_SCROLL )),
@@ -658,6 +879,9 @@ ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(
         sUIElem(            ResId(ST_UIELEM )),
         sColSetting(        ResId(ST_COLSET )),
         sPreview(           ResId(ST_PREVIEW)),
+
+#pragma warning (default : 4355)
+
         nScrollPos(0),
         pColorConfig(0)
 {
@@ -687,9 +911,28 @@ ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(
     sal_Int32 nScrollOffset = aScrollWindow.aColorBoxes[1]->GetPosPixel().Y() - aScrollWindow.aColorBoxes[0]->GetPosPixel().Y();
     sal_Int32 nVisibleEntries = aScrollWindow.GetSizePixel().Height() / nScrollOffset;
     aVScroll.SetRangeMax(ColorConfigEntryCount + GROUP_COUNT );
-    //minus two for DRAWFILL and DRAWDRAWING
-    aVScroll.SetRangeMax(aVScroll.GetRangeMax() -2);
-    aVScroll.SetRangeMax(aVScroll.GetRangeMax() -1);
+    // static: minus three for ANCHOR, DRAWFILL and DRAWDRAWING
+    aVScroll.SetRangeMax( aVScroll.GetRangeMax() - 3 );
+    // dynamic: calculate the hidden lines
+    long nInvisibleLines = 0;
+    sal_Int16 nGroup = GROUP_UNKNOWN;
+    for ( sal_Int16 i = 0; i < ColorConfigEntryCount; i++ )
+    {
+        if ( ANCHOR == i || DRAWFILL == i || DRAWDRAWING == i ) // not used at the moment
+            continue;
+        sal_Int16 nNewGroup = lcl_getGroup(i);
+        sal_Bool bVisible = lcl_isGroupVisible( nNewGroup, aScrollWindow.GetModuleOptions() );
+        if ( !bVisible )
+            nInvisibleLines++;
+        if ( nNewGroup > nGroup )
+        {
+            nGroup = nNewGroup;
+            if ( !bVisible )
+                nInvisibleLines++;
+        }
+    }
+    aVScroll.SetRangeMax( aVScroll.GetRangeMax() - nInvisibleLines );
+
     aVScroll.SetPageSize( nVisibleEntries - 1 );
     aVScroll.SetVisibleSize(nVisibleEntries);
     Link aScrollLink = LINK(this, ColorConfigCtrl_Impl, ScrollHdl);
@@ -756,7 +999,7 @@ void ColorConfigCtrl_Impl::Update()
 /* -----------------------------26.03.2002 12:55------------------------------
 
  ---------------------------------------------------------------------------*/
-sal_Bool lcl_MoveAndShow(Window* pWindow, long nOffset, long nMaxVisible)
+sal_Bool lcl_MoveAndShow(Window* pWindow, long nOffset, long nMaxVisible, bool _bShow)
 {
     BOOL bHide = TRUE;
     if(pWindow)
@@ -764,7 +1007,8 @@ sal_Bool lcl_MoveAndShow(Window* pWindow, long nOffset, long nMaxVisible)
         Point aPos = pWindow->GetPosPixel();
         aPos.Y() += nOffset;
         pWindow->SetPosPixel(aPos);
-        bHide = aPos.Y() > nMaxVisible || (aPos.Y() + pWindow->GetSizePixel().Height()) < 0;
+        if ( _bShow )
+            bHide = aPos.Y() > nMaxVisible || (aPos.Y() + pWindow->GetSizePixel().Height()) < 0;
         pWindow->Show(!bHide);
     }
     return !bHide;
@@ -772,23 +1016,25 @@ sal_Bool lcl_MoveAndShow(Window* pWindow, long nOffset, long nMaxVisible)
 IMPL_LINK(ColorConfigCtrl_Impl, ScrollHdl, ScrollBar*, pScrollBar)
 {
     aScrollWindow.SetUpdateMode(TRUE);
-    sal_Int32 i;
+    sal_Int16 i;
     long nOffset = aScrollWindow.aColorBoxes[1]->GetPosPixel().Y() - aScrollWindow.aColorBoxes[0]->GetPosPixel().Y();
     nOffset *= (nScrollPos - pScrollBar->GetThumbPos());
     nScrollPos = pScrollBar->GetThumbPos();
     const long nWindowHeight = aScrollWindow.GetSizePixel().Height();
-    long nFirstVisible = -1;
-    long nLastVisible = -1;
+    sal_Int16 nFirstVisible = -1;
+    sal_Int16 nLastVisible = -1;
     for( i = 0; i < ColorConfigEntryCount; i++ )
     {
         if(ANCHOR == i)
             continue;
         Point aPos;
         //controls outside of the view need to be hidden to speed up accessibility tools
-        lcl_MoveAndShow(aScrollWindow.aCheckBoxes[i], nOffset, nWindowHeight);
-        lcl_MoveAndShow(aScrollWindow.aFixedTexts[i], nOffset, nWindowHeight);
-        lcl_MoveAndShow(aScrollWindow.aWindows[i]   , nOffset, nWindowHeight);
-        BOOL bShow = lcl_MoveAndShow(aScrollWindow.aColorBoxes[i], nOffset, nWindowHeight);
+        bool bShowCtrl = ( lcl_isGroupVisible(
+            lcl_getGroup(i), aScrollWindow.GetModuleOptions() ) != sal_False );
+        lcl_MoveAndShow(aScrollWindow.aCheckBoxes[i], nOffset, nWindowHeight, bShowCtrl);
+        lcl_MoveAndShow(aScrollWindow.aFixedTexts[i], nOffset, nWindowHeight, bShowCtrl);
+        lcl_MoveAndShow(aScrollWindow.aWindows[i]   , nOffset, nWindowHeight, bShowCtrl);
+        BOOL bShow = lcl_MoveAndShow(aScrollWindow.aColorBoxes[i], nOffset, nWindowHeight, bShowCtrl);
         if(bShow)
         {
             if(nFirstVisible == -1)
@@ -807,10 +1053,14 @@ IMPL_LINK(ColorConfigCtrl_Impl, ScrollHdl, ScrollBar*, pScrollBar)
             --nFirstVisible;
         while(!aScrollWindow.aCheckBoxes[nFirstVisible] && !aScrollWindow.aColorBoxes[nFirstVisible] && nFirstVisible >= 0);
 
-        if(aScrollWindow.aCheckBoxes[nFirstVisible])
-            aScrollWindow.aCheckBoxes[nFirstVisible]->Show();
-        if(aScrollWindow.aColorBoxes[nFirstVisible])
-            aScrollWindow.aColorBoxes[nFirstVisible]->Show();
+        if ( lcl_isGroupVisible(
+                lcl_getGroup( nFirstVisible ), aScrollWindow.GetModuleOptions() ) != sal_False )
+        {
+            if(aScrollWindow.aCheckBoxes[nFirstVisible])
+                aScrollWindow.aCheckBoxes[nFirstVisible]->Show();
+            if(aScrollWindow.aColorBoxes[nFirstVisible])
+                aScrollWindow.aColorBoxes[nFirstVisible]->Show();
+        }
     }
 
     if(nLastVisible < ColorConfigEntryCount - 1)
@@ -822,10 +1072,14 @@ IMPL_LINK(ColorConfigCtrl_Impl, ScrollHdl, ScrollBar*, pScrollBar)
             nLastVisible++;
         if(nLastVisible < ColorConfigEntryCount)
         {
-            if(aScrollWindow.aCheckBoxes[nLastVisible])
-                aScrollWindow.aCheckBoxes[nLastVisible]->Show();
-            if(aScrollWindow.aColorBoxes[nLastVisible])
-                aScrollWindow.aColorBoxes[nLastVisible]->Show();
+            if ( lcl_isGroupVisible(
+                    lcl_getGroup( nLastVisible ), aScrollWindow.GetModuleOptions() ) != sal_False )
+            {
+                if(aScrollWindow.aCheckBoxes[nLastVisible])
+                    aScrollWindow.aCheckBoxes[nLastVisible]->Show();
+                if(aScrollWindow.aColorBoxes[nLastVisible])
+                    aScrollWindow.aColorBoxes[nLastVisible]->Show();
+            }
         }
     }
     for( i = 0; i < GROUP_COUNT; i++ )
@@ -963,6 +1217,9 @@ IMPL_LINK(ColorConfigCtrl_Impl, ControlFocusHdl, Control*, pCtrl)
 SvxColorOptionsTabPage::SvxColorOptionsTabPage(
     Window* pParent, const SfxItemSet& rCoreSet) :
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_COLORCONFIG ), rCoreSet ),
+
+#pragma warning (disable : 4355)
+
        aColorSchemeFL(  this, ResId( FL_COLORSCHEME ) ),
        aColorSchemeFT(  this, ResId( FT_COLORSCHEME ) ),
        aColorSchemeLB(  this, ResId( LB_COLORSCHEME ) ),
@@ -970,6 +1227,9 @@ SvxColorOptionsTabPage::SvxColorOptionsTabPage(
        aDeleteSchemePB( this, ResId( PB_DELETESCHEME ) ),
        aCustomColorsFL( this, ResId( FL_CUSTOMCOLORS ) ),
        pColorConfigCT(  new ColorConfigCtrl_Impl(this, ResId( CT_COLORCONFIG ) )),
+
+#pragma warning (default : 4355)
+
        pColorConfig(0),
        bFillItemSetCalled(FALSE)
 {
