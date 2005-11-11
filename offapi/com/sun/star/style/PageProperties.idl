@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PageProperties.idl,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:30:08 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 13:23:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,91 +216,91 @@ published service PageProperties
 //-----------------------------------------------------------------------------
 /** contains the color of the background of the header.
  */
-[property] com::sun::star::util::Color HeaderBackColor;
+[property, maybevoid] com::sun::star::util::Color HeaderBackColor;
 //-----------------------------------------------------------------------------
 /**
  */
-//[property] HeaderBackGraphic;
+//[property, maybevoid] HeaderBackGraphic;
 //-----------------------------------------------------------------------------
 /** contains the URL of the background graphic of the header.
  */
-[property] string HeaderBackGraphicURL;
+[property, maybevoid] string HeaderBackGraphicURL;
 //-----------------------------------------------------------------------------
 /** contains the filter name of the background graphic of the header.
  */
-[property] string HeaderBackGraphicFilter;
+[property, maybevoid] string HeaderBackGraphicFilter;
 //-----------------------------------------------------------------------------
 /** determines the location of the background graphic of the header.
  */
-[property] com::sun::star::style::GraphicLocation HeaderBackGraphicLocation;
+[property, maybevoid] com::sun::star::style::GraphicLocation HeaderBackGraphicLocation;
 //-----------------------------------------------------------------------------
 /** contains the left margin of the header.
  */
-[property] long HeaderLeftMargin;
+[property, maybevoid] long HeaderLeftMargin;
 //-----------------------------------------------------------------------------
 /** contains the right margin of the header.
  */
-[property] long HeaderRightMargin;
+[property, maybevoid] long HeaderRightMargin;
 //-----------------------------------------------------------------------------
 /** determines if the the background color of the header is transparent.
 
     <p>If this property is set to <TRUE/>,
     <member>PageStyle::HeaderBackColor</member> will not be used.</p>
  */
-[property] boolean HeaderBackTransparent;
+[property, maybevoid] boolean HeaderBackTransparent;
 //-----------------------------------------------------------------------------
 /** determines the style of the left border line of the header.
  */
-[property] com::sun::star::table::BorderLine HeaderLeftBorder;
+[property, maybevoid] com::sun::star::table::BorderLine HeaderLeftBorder;
 //-----------------------------------------------------------------------------
 /** determines the style of the right border line of the header.
  */
-[property] com::sun::star::table::BorderLine HeaderRightBorder;
+[property, maybevoid] com::sun::star::table::BorderLine HeaderRightBorder;
 //-----------------------------------------------------------------------------
 /** determines the style of the top border line of the header.
  */
-[property] com::sun::star::table::BorderLine HeaderTopBorder;
+[property, maybevoid] com::sun::star::table::BorderLine HeaderTopBorder;
 //-----------------------------------------------------------------------------
 /** determines the style of the bottom border line of the header.
  */
-[property] com::sun::star::table::BorderLine HeaderBottomBorder;
+[property, maybevoid] com::sun::star::table::BorderLine HeaderBottomBorder;
 
 //-----------------------------------------------------------------------------
 /** determines the left border distance of the header.
  */
-[property] long HeaderLeftBorderDistance;
+[property, maybevoid] long HeaderLeftBorderDistance;
 //-----------------------------------------------------------------------------
 /** determines the right border distance of the header.
  */
-[property] long HeaderRightBorderDistance;
+[property, maybevoid] long HeaderRightBorderDistance;
 //-----------------------------------------------------------------------------
 /** determines the top border distance of the header.
  */
-[property] long HeaderTopBorderDistance;
+[property, maybevoid] long HeaderTopBorderDistance;
 //-----------------------------------------------------------------------------
 /** determines the bottom border distance of the header.
  */
-[property] long HeaderBottomBorderDistance;
+[property, maybevoid] long HeaderBottomBorderDistance;
 //-----------------------------------------------------------------------------
 /** determines the shadow of the header.
  */
-[property] com::sun::star::table::ShadowFormat HeaderShadowFormat;
+[property, maybevoid] com::sun::star::table::ShadowFormat HeaderShadowFormat;
 //-----------------------------------------------------------------------------
 /** determines the distance between the header and the body text area.
  */
-[property] long HeaderBodyDistance;
+[property, maybevoid] long HeaderBodyDistance;
 //-----------------------------------------------------------------------------
 /** determines if the header content on left and right pages is the same.
  */
-[property] boolean HeaderIsShared;
+[property, maybevoid] boolean HeaderIsShared;
 //-----------------------------------------------------------------------------
 /** contains the height of the header.
  */
-[property] long HeaderHeight;
+[property, maybevoid] long HeaderHeight;
 //-----------------------------------------------------------------------------
 /** determines if the height of the header depends on the content.
  */
-[property] boolean HeaderIsDynamicHeight;
+[property, maybevoid] boolean HeaderIsDynamicHeight;
 //-----------------------------------------------------------------------------
 /** determines if a header is used on the page.
  */
@@ -309,100 +309,100 @@ published service PageProperties
 //-----------------------------------------------------------------------------
 /** contains the interface to the text of the header.
  */
-[optional, property] com::sun::star::text::XText HeaderText;
+[optional, property, maybevoid] com::sun::star::text::XText HeaderText;
 //-----------------------------------------------------------------------------
 /** contains the interface to the text of the header of left pages.
  */
-[optional, property] com::sun::star::text::XText HeaderTextLeft;
+[optional, property, maybevoid] com::sun::star::text::XText HeaderTextLeft;
 //-----------------------------------------------------------------------------
 /** contains the interface to the text of the header of right pages.
  */
-[optional, property] com::sun::star::text::XText HeaderTextRight;
+[optional, property, maybevoid] com::sun::star::text::XText HeaderTextRight;
 
 //-----------------------------------------------------------------------------
 /** contains the color of the background of the footer.
  */
-[property] com::sun::star::util::Color FooterBackColor;
+[property, maybevoid] com::sun::star::util::Color FooterBackColor;
 //-----------------------------------------------------------------------------
 /**
  */
-//[property] FooterBackGraphic;
+//[property, maybevoid] FooterBackGraphic;
 //-----------------------------------------------------------------------------
 /** contains the URL of the background graphic in the footer.
  */
-[property] string FooterBackGraphicURL;
+[property, maybevoid] string FooterBackGraphicURL;
 //-----------------------------------------------------------------------------
 /** contains the filter name of the background graphic in the footer.
  */
-[property] string FooterBackGraphicFilter;
+[property, maybevoid] string FooterBackGraphicFilter;
 //-----------------------------------------------------------------------------
 /** determines the location of the background graphic in the footer.
  */
-[property] com::sun::star::style::GraphicLocation FooterBackGraphicLocation;
+[property, maybevoid] com::sun::star::style::GraphicLocation FooterBackGraphicLocation;
 //-----------------------------------------------------------------------------
 /** determines the left margin of the footer.
  */
-[property] long FooterLeftMargin;
+[property, maybevoid] long FooterLeftMargin;
 //-----------------------------------------------------------------------------
 /** determines the right margin of the footer.
  */
-[property] long FooterRightMargin;
+[property, maybevoid] long FooterRightMargin;
 //-----------------------------------------------------------------------------
 /** determines if the background of the footer is transparent.
  */
-[property] boolean FooterBackTransparent;
+[property, maybevoid] boolean FooterBackTransparent;
 //-----------------------------------------------------------------------------
 /** contains the style of the left border line of the footer.
  */
-[property] com::sun::star::table::BorderLine FooterLeftBorder;
+[property, maybevoid] com::sun::star::table::BorderLine FooterLeftBorder;
 //-----------------------------------------------------------------------------
 /** contains the style of the right border line of the footer.
  */
-[property] com::sun::star::table::BorderLine FooterRightBorder;
+[property, maybevoid] com::sun::star::table::BorderLine FooterRightBorder;
 //-----------------------------------------------------------------------------
 /** contains the style of the top border line of the footer.
  */
-[property] com::sun::star::table::BorderLine FooterTopBorder;
+[property, maybevoid] com::sun::star::table::BorderLine FooterTopBorder;
 //-----------------------------------------------------------------------------
 /** contains the style of the bottom border line of the footer.
  */
-[property] com::sun::star::table::BorderLine FooterBottomBorder;
+[property, maybevoid] com::sun::star::table::BorderLine FooterBottomBorder;
 //-----------------------------------------------------------------------------
 /** contains the left border distance of the footer.
  */
-[property] long FooterLeftBorderDistance;
+[property, maybevoid] long FooterLeftBorderDistance;
 //-----------------------------------------------------------------------------
 /** contains the right border distance of the footer.
  */
-[property] long FooterRightBorderDistance;
+[property, maybevoid] long FooterRightBorderDistance;
 //-----------------------------------------------------------------------------
 /** contains the top border distance of the footer.
  */
-[property] long FooterTopBorderDistance;
+[property, maybevoid] long FooterTopBorderDistance;
 //-----------------------------------------------------------------------------
 /** contains the bottom border distance of the footer.
  */
-[property] long FooterBottomBorderDistance;
+[property, maybevoid] long FooterBottomBorderDistance;
 //-----------------------------------------------------------------------------
 /** determines the shadow of the footer.
  */
-[property] com::sun::star::table::ShadowFormat FooterShadowFormat;
+[property, maybevoid] com::sun::star::table::ShadowFormat FooterShadowFormat;
 //-----------------------------------------------------------------------------
 /** determines the distance between the footer and the body text area.
  */
-[property] long FooterBodyDistance;
+[property, maybevoid] long FooterBodyDistance;
 //-----------------------------------------------------------------------------
 /** determines if the height of the footer depends on the content.
  */
-[property] boolean FooterIsDynamicHeight;
+[property, maybevoid] boolean FooterIsDynamicHeight;
 //-----------------------------------------------------------------------------
 /** determines if the footer content on left and right pages is the same.
  */
-[property] boolean FooterIsShared;
+[property, maybevoid] boolean FooterIsShared;
 //-----------------------------------------------------------------------------
 /** determines the height of the footer.
  */
-[property] long FooterHeight;
+[property, maybevoid] long FooterHeight;
 //-----------------------------------------------------------------------------
 /** determines if a footer is used on the page.
  */
@@ -410,18 +410,18 @@ published service PageProperties
 //-----------------------------------------------------------------------------
 /** contains the interface to the text of the footer.
  */
-[optional,property] com::sun::star::text::XText FooterText;
+[optional, property, maybevoid] com::sun::star::text::XText FooterText;
 //-----------------------------------------------------------------------------
 /** contains the interface to the text of the footer of a left page.
  */
-[optional,property] com::sun::star::text::XText FooterTextLeft;
+[optional, property, maybevoid] com::sun::star::text::XText FooterTextLeft;
 //-----------------------------------------------------------------------------
 /** contains the interface to the text of the footer of a right page.
  */
 //-----------------------------------------------------------------------------
 /** contains .
  */
-[optional,property] com::sun::star::text::XText FooterTextRight;
+[optional, property, maybevoid] com::sun::star::text::XText FooterTextRight;
 //-----------------------------------------------------------------------------
 /** contains the maximum height of the footnote area. If set to zero then the height
 of the current page is used as limit.
@@ -487,19 +487,19 @@ of the current page is used as limit.
 [optional, property] boolean GridDisplay;
 //-----------------------------------------------------------------------------
 /** determines whether to use dynamic spacing in header or not. */
-[optional, property] boolean HeaderDynamicSpacing;
+[optional, property, maybevoid] boolean HeaderDynamicSpacing;
 //-----------------------------------------------------------------------------
 /** determines whether to use dynamic spacing in footer or not. */
-[optional, property] boolean FooterDynamicSpacing;
+[optional, property, maybevoid] boolean FooterDynamicSpacing;
 //-----------------------------------------------------------------------------
 /** determines the distance of all borders of the page. */
 [property] long BorderDistance;
 //-----------------------------------------------------------------------------
 /** contains the distance of all borders of the footer. */
-[property] long FooterBorderDistance;
+[property, maybevoid] long FooterBorderDistance;
 //-----------------------------------------------------------------------------
 /** determines the distance of all borders of the header. */
-[property] long HeaderBorderDistance;
+[property, maybevoid] long HeaderBorderDistance;
 
 };
 //=============================================================================
