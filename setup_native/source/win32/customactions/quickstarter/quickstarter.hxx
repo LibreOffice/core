@@ -7,4 +7,5 @@
 
 std::string GetOfficeInstallationPath(MSIHANDLE handle);
 std::string GetOfficeProductName(MSIHANDLE handle);
+std::string GetQuickstarterLinkName(MSIHANDLE handle);
 std::string GetProcessImagePath( DWORD dwProcessId );
