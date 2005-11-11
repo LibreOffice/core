@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splash.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:49:54 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:29:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,10 +94,6 @@ SplashScreen::SplashScreen(const Reference< XMultiServiceFactory >& rSMgr)
     _width = aSize.Width();
     if (_width > 500)
     {
-        /* --> PB 2004-11-17 #118510# new branding
-        absolute values,
-        see: http://so-doc.germany.sun.com/Teams/StarOffice_Applications/Extras/Design/Splash_About/splash_progressbar.html
-        */
         Point xtopleft(212,216);
         if ( -1 == _tlx || -1 == _tly )
         {
@@ -330,26 +326,58 @@ void SplashScreen::loadConfig()
 
 void SplashScreen::initBitmap()
 {
-    String aBmpFileName;
-    OUString aIniPath;
-    OUString aLogo( RTL_CONSTASCII_USTRINGPARAM( "1" ) );
+    rtl::OUString aLogo( RTL_CONSTASCII_USTRINGPARAM( "1" ) );
     aLogo = ::utl::Bootstrap::getLogoData( aLogo );
-    sal_Bool bLogo = (sal_Bool)aLogo.toInt32();
-    if ( bLogo )
+    sal_Bool bShowLogo = (sal_Bool)aLogo.toInt32();
+
+    if ( bShowLogo )
     {
         xub_StrLen nIndex = 0;
-        aBmpFileName += String( DEFINE_CONST_UNICODE("intro.bmp") );
-        // retrieve our current installation path
-        INetURLObject aObj( _sExecutePath, INET_PROT_FILE );
-        aObj.insertName( aBmpFileName );
-        SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
-        if ( !aStrm.GetError() )
+        String aBmpFileName( String( DEFINE_CONST_UNICODE("intro.bmp") ) );
+
+        bool haveBitmap = false;
+
+        // First, try to use custom bitmap data.
+        rtl::OUString value;
+        rtl::Bootstrap::get(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CustomDataUrl" ) ), value );
+        if ( value.getLength() > 0 )
         {
-            // Default case, we load the intro bitmap from a seperate file
-            // (e.g. staroffice_intro.bmp or starsuite_intro.bmp)
-            aStrm >> _aIntroBmp;
+            if ( value[ value.getLength() - 1 ] != sal_Unicode( '/' ) )
+                value += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/program" ) );
+            else
+                value += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "program" ) );
+
+            INetURLObject aObj( value, INET_PROT_FILE );
+            aObj.insertName( aBmpFileName );
+
+            SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
+            if ( !aStrm.GetError() )
+            {
+                // Default case, we load the intro bitmap from a seperate file
+                // (e.g. staroffice_intro.bmp or starsuite_intro.bmp)
+                aStrm >> _aIntroBmp;
+                haveBitmap = true;
+            }
         }
-        else
+
+        // Then, try to use bitmap located in the same directory as the executable.
+        if ( !haveBitmap )
+        {
+            INetURLObject aObj( _sExecutePath, INET_PROT_FILE );
+            aObj.insertName( aBmpFileName );
+
+            SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
+            if ( !aStrm.GetError() )
+            {
+                // Default case, we load the intro bitmap from a seperate file
+                // (e.g. staroffice_intro.bmp or starsuite_intro.bmp)
+                aStrm >> _aIntroBmp;
+                haveBitmap = true;
+            }
+        }
+
+        if ( !haveBitmap )
         {
             // Save case:
             // Create resource manager for intro bitmap. Due to our problem that we don't have
