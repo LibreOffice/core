@@ -306,11 +306,16 @@ namespace treeview {
         getHierAccess( const ::com::sun::star::uno::Reference<  ::com::sun::star::lang::XMultiServiceFactory >& sProvider,
                        const char* file ) const;
 
-        ::rtl::OUString
-        getKey( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >& xHierAccess,
+      ::rtl::OUString
+      getKey( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >& xHierAccess,
                 const char* key ) const;
 
-        void subst(
+      sal_Bool
+      getBooleanKey(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >& xHierAccess,
+                    const char* key) const;
+
+      void subst(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xMSgr,
             rtl::OUString& instpath ) const;
 
