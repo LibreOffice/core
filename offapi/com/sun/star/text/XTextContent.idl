@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XTextContent.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:46:44 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 13:24:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,6 @@ published interface XTextContent: com::sun::star::lang::XComponent
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::text::XTextContent::attach
     /** is called when this object gets embedded in a text.
 
 
@@ -85,9 +84,18 @@ published interface XTextContent: com::sun::star::lang::XComponent
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::text::XTextContent::getAnchor
     /** @returns
                 the text range to which the content is attached.
+
+        <p>Note: The anchor of the actual implementation for text tables
+        does not have a position in the text. Thus that anchor can not be
+        used for some operation like <member>attach</member> for example or
+        <member scope="com::sun::star::text">insertTextContent</member>
+        or other function that require the object to have a position in the text.</p>
+
+        <p>The reason why a text table still needs an anchor is that for example
+        tables should be insertable via <member scope="com::sun::star::text">insertTextContent</member>
+        and that interface uses a parameter of that type.</p>
      */
     com::sun::star::text::XTextRange getAnchor();
 
