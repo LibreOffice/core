@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewoptions.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 15:45:35 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:55:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,8 @@
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <unotools/processfactory.hxx>
 #endif
+
+#include <itemholder1.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespaces
@@ -856,6 +858,7 @@ SvtViewOptions::SvtViewOptions(       EViewType        eType     ,
                                     {
                                         //m_pDataContainer_Dialogs = new SvtViewDialogOptions_Impl( LIST_DIALOGS );
                                         m_pDataContainer_Dialogs = new SvtViewOptionsBase_Impl( LIST_DIALOGS );
+                                        ItemHolder1::holdConfigItem(E_VIEWOPTIONS_DIALOG);
                                     }
                                 }
                                 break;
@@ -866,6 +869,7 @@ SvtViewOptions::SvtViewOptions(       EViewType        eType     ,
                                     if( m_nRefCount_TabDialogs == 1 )
                                     {
                                         m_pDataContainer_TabDialogs = new SvtViewOptionsBase_Impl( LIST_TABDIALOGS );
+                                        ItemHolder1::holdConfigItem(E_VIEWOPTIONS_TABDIALOG);
                                     }
                                 }
                                 break;
@@ -876,6 +880,7 @@ SvtViewOptions::SvtViewOptions(       EViewType        eType     ,
                                     if( m_nRefCount_TabPages == 1 )
                                     {
                                         m_pDataContainer_TabPages = new SvtViewOptionsBase_Impl( LIST_TABPAGES );
+                                        ItemHolder1::holdConfigItem(E_VIEWOPTIONS_TABPAGE);
                                     }
                                 }
                                 break;
@@ -886,6 +891,7 @@ SvtViewOptions::SvtViewOptions(       EViewType        eType     ,
                                     if( m_nRefCount_Windows == 1 )
                                     {
                                         m_pDataContainer_Windows = new SvtViewOptionsBase_Impl( LIST_WINDOWS );
+                                        ItemHolder1::holdConfigItem(E_VIEWOPTIONS_WINDOW);
                                     }
                                 }
                                 break;
@@ -1303,13 +1309,25 @@ void SvtViewOptions::AcquireOptions()
 {
     ::osl::MutexGuard aGuard( GetOwnStaticMutex() );
     if( ++m_nRefCount_Dialogs == 1 )
+    {
         m_pDataContainer_Dialogs = new SvtViewOptionsBase_Impl( LIST_DIALOGS );
+        ItemHolder1::holdConfigItem(E_VIEWOPTIONS_DIALOG);
+    }
     if( ++m_nRefCount_TabDialogs == 1 )
+    {
         m_pDataContainer_TabDialogs = new SvtViewOptionsBase_Impl( LIST_TABDIALOGS );
+        ItemHolder1::holdConfigItem(E_VIEWOPTIONS_TABDIALOG);
+    }
     if( ++m_nRefCount_TabPages == 1 )
+    {
         m_pDataContainer_TabPages = new SvtViewOptionsBase_Impl( LIST_TABPAGES );
+        ItemHolder1::holdConfigItem(E_VIEWOPTIONS_TABPAGE);
+    }
     if( ++m_nRefCount_Windows == 1 )
+    {
         m_pDataContainer_Windows = new SvtViewOptionsBase_Impl( LIST_WINDOWS );
+        ItemHolder1::holdConfigItem(E_VIEWOPTIONS_WINDOW);
+    }
 }
 
 void SvtViewOptions::ReleaseOptions()
