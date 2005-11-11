@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.46 $
+#   $Revision: 1.47 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-09 09:46:45 $
+#   last change: $Author: rt $ $Date: 2005-11-11 10:39:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,8 @@ LOCALPYFILES= \
     $(BIN)$/uno.py \
     $(BIN)$/unohelper.py \
     $(BIN)$/pythonloader.py \
-    $(BIN)$/pythonscript.py
+    $(BIN)$/pythonscript.py \
+    $(BIN)$/mailmerge.py
 
 # PKGFORMAT taken from environment. See possible
 # values below.
