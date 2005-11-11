@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:08:03 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:24:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,6 +148,9 @@ struct SfxObjectShell_Impl
     sal_Int16                nMacroMode;
     sal_Bool                bDisposing;
 
+    sal_Bool                bMacroDisabled;
+    sal_Bool                bMacroDisabledMessageIsShown;
+
     sal_Bool                m_bEnableSetModified;
     sal_Bool                m_bIsModified;
 
@@ -219,6 +222,8 @@ struct SfxObjectShell_Impl
         , nStyleFilter( 0 )
         , nMacroMode( -1 )
         , bDisposing( sal_False )
+        , bMacroDisabled( sal_False )
+        , bMacroDisabledMessageIsShown( sal_False )
         , bIsPrintJobCancelable( sal_True )
         , m_bEnableSetModified( sal_True )
         , m_bIsModified( sal_False )
