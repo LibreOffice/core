@@ -4,9 +4,9 @@
  *
  *  $RCSfile: useroptions.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:48:17 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:55:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -542,8 +542,7 @@ SvtUserOptions::SvtUserOptions()
         RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtUserOptions_Impl::ctor()");
         pOptions = new SvtUserOptions_Impl;
 
-        ItemHolder2* pHolder = ItemHolder2::getGlobalItemHolder();
-        pHolder->holdConfigItem(E_USEROPTIONS);
+        ItemHolder2::holdConfigItem(E_USEROPTIONS);
     }
     ++nRefCount;
     pImp = pOptions;
