@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2005-10-25 11:56:16 $
+#   last change: $Author: kz $ $Date: 2005-11-11 14:07:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,7 @@ REALFILTERPACKAGES_TYPES_FLAG = \
     $(DIR_FILTERCFGOUT)$/fcfg_calc.types_flag               \
     $(DIR_FILTERCFGOUT)$/fcfg_draw.types_flag               \
     $(DIR_FILTERCFGOUT)$/fcfg_impress.types_flag            \
+    $(DIR_FILTERCFGOUT)$/fcfg_database.types_flag           \
     $(DIR_FILTERCFGOUT)$/fcfg_chart.types_flag              \
     $(DIR_FILTERCFGOUT)$/fcfg_math.types_flag               \
     $(DIR_FILTERCFGOUT)$/fcfg_xslt.types_flag               \
@@ -80,6 +81,7 @@ REALFILTERPACKAGES_FILTERS_FLAG = \
     $(DIR_FILTERCFGOUT)$/fcfg_calc.filters_flag               \
     $(DIR_FILTERCFGOUT)$/fcfg_draw.filters_flag               \
     $(DIR_FILTERCFGOUT)$/fcfg_impress.filters_flag            \
+    $(DIR_FILTERCFGOUT)$/fcfg_database.filters_flag           \
     $(DIR_FILTERCFGOUT)$/fcfg_chart.filters_flag              \
     $(DIR_FILTERCFGOUT)$/fcfg_math.filters_flag               \
     $(DIR_FILTERCFGOUT)$/fcfg_xslt.filters_flag               \
@@ -107,6 +109,7 @@ REALFILTERPACKAGES_OTHERS_FLAG = \
     $(DIR_FILTERCFGOUT)$/fcfg_calc.others_flag               \
     $(DIR_FILTERCFGOUT)$/fcfg_draw.others_flag               \
     $(DIR_FILTERCFGOUT)$/fcfg_impress.others_flag            \
+    $(DIR_FILTERCFGOUT)$/fcfg_database.others_flag           \
     $(DIR_FILTERCFGOUT)$/fcfg_chart.others_flag              \
     $(DIR_FILTERCFGOUT)$/fcfg_math.others_flag               \
     $(DIR_FILTERCFGOUT)$/fcfg_xslt.others_flag               \
