@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.161 $
+ *  $Revision: 1.162 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:04:44 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:26:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1729,7 +1729,7 @@ File gid_File_Lib_Spell
     Dir = gid_Dir_Program;
 End
 
-STD_UNO_LIB_FILE( gid_File_Lib_Spl, spl)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Spl, spl)
 
 SPECIAL_UNO_LIB_FILE(gid_File_Lib_Srtrs1,srtrs1)
 
@@ -1893,7 +1893,7 @@ SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Lib_Toutstrm,textoutstream.uno)
 
 File gid_File_Lib_Tvhlp1
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
   #ifdef UNX
@@ -1934,7 +1934,7 @@ File gid_File_Lib_Ucpchelp1
     Name = "ucpchelp1.dll";
   #endif
     Dir = gid_Dir_Program;
-    Styles = (PACKED, UNO_COMPONENT);
+    Styles = (PACKED, UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
 End
 
