@@ -4,9 +4,9 @@
  *
  *  $RCSfile: officeloader.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:20:52 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 13:09:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,12 @@
  *
  ************************************************************************/
 #define UNICODE
+#define _UNICODE
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <shellapi.h>
 
-#define _UNICODE
 #include <tchar.h>
 
 #include <malloc.h>
@@ -119,6 +120,18 @@ BOOL WINAPI ConvertSidToStringSid( PSID pSid, LPTSTR* StringSid )
 
 //---------------------------------------------------------------------------
 
+static LPTSTR   *GetCommandArgs( int *pArgc )
+{
+#ifdef UNICODE
+    return CommandLineToArgvW( GetCommandLineW(), pArgc );
+#else
+    *pArgc = __argc;
+    return __argv;
+#endif
+}
+
+//---------------------------------------------------------------------------
+
 int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 {
     TCHAR               szTargetFileName[MAX_PATH] = TEXT("");
@@ -154,7 +167,10 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
     // are directed to the created pipes
 
     DWORD   dwExitCode = (DWORD)-1;
+
+    // FALSE indicates first start
     BOOL    fSuccess = FALSE;
+    LPTSTR  lpCommandLine = NULL;
 
     do
     {
@@ -251,13 +267,51 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
             }
         }
 
+        if ( fSuccess && !lpCommandLine )
+        {
+            int     argc;
+            LPTSTR  *argv = GetCommandArgs( &argc );
+
+            if ( argc > 1 )
+            {
+                int n;
+                int nBufferChars = _tcslen( argv[0] ) + 2;
+
+                for ( n = 1; n < argc; n++ )
+                {
+                    if ( 0 == _tcsnicmp( argv[n], _T("-env:"), 5 ) )
+                        nBufferChars += _tcslen( argv[n] ) + 3;
+                }
+
+                if ( nBufferChars )
+                {
+                    lpCommandLine = new TCHAR[nBufferChars + 1];
+
+                    _tcscpy( lpCommandLine, _T("\"") );
+                    _tcscat( lpCommandLine, argv[0] );
+                    _tcscat( lpCommandLine, _T("\"") );
+
+                    for ( n = 1; n < argc; n++ )
+                    {
+                        if ( 0 == _tcsnicmp( argv[n], _T("-env:"), 5 ) )
+                        {
+                            _tcscat( lpCommandLine, _T(" ") );
+                            _tcscat( lpCommandLine, _T("\"") );
+                            _tcscat( lpCommandLine, argv[n] );
+                            _tcscat( lpCommandLine, _T("\"") );
+                        }
+                    }
+                }
+            }
+        }
+
         PROCESS_INFORMATION aProcessInfo;
 
         fSuccess = FALSE;
         fSuccess = CreateProcess(
             szTargetFileName,
-            // When restarting office process do not pass a command line
-            fSuccess ? NULL : GetCommandLine(),
+            // When restarting office process only reuse bootstrap parameters
+            fSuccess ? lpCommandLine : GetCommandLine(),
             NULL,
             NULL,
             TRUE,
@@ -291,6 +345,12 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 
             CloseHandle( aProcessInfo.hProcess );
             CloseHandle( aProcessInfo.hThread );
+
+            if ( lpCommandLine )
+            {
+                delete lpCommandLine;
+                lpCommandLine = 0;
+            }
         }
     } while ( fSuccess && ::desktop::ExitHelper::E_CRASH_WITH_RESTART == dwExitCode );
 
