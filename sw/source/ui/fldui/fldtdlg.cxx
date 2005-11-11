@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldtdlg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:41:41 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:47:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,12 @@
 #include <swtypes.hxx>
 #endif
 
+#ifndef _UNOTOOLS_CONFIGNODE_HXX_
+#include <unotools/confignode.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 #ifndef _BASEDLGS_HXX //autogen
 #include <sfx2/basedlgs.hxx>
 #endif
@@ -308,7 +314,24 @@ SwFldDlg::SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent)
     {
         AddTabPage(TP_FLD_REF, SwFldRefPage::Create, 0);
         AddTabPage(TP_FLD_FUNC, SwFldFuncPage::Create, 0);
-        AddTabPage(TP_FLD_DB, SwFldDBPage::Create, 0);
+
+        utl::OConfigurationTreeRoot aCfgRoot
+            = utl::OConfigurationTreeRoot::createWithServiceFactory(
+                ::comphelper::getProcessServiceFactory(),
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "/org.openoffice.Office.DataAccess/ApplicationIntegration/InstalledFeatures/Writer" ) ),
+                -1,
+                utl::OConfigurationTreeRoot::CM_READONLY);
+
+        sal_Bool bDatabaseFields = sal_True;
+        aCfgRoot.getNodeValue(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DatabaseFields"))) >>= bDatabaseFields;
+
+        if (bDatabaseFields)
+            AddTabPage(TP_FLD_DB, SwFldDBPage::Create, 0);
+        else
+            RemoveTabPage(TP_FLD_DB);
     }
     else
     {
