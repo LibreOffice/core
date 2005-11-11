@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:31:10 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:22:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -287,6 +287,7 @@
 
 #define STR_QUERY_UPDATE_LINKS                  (RID_SFX_APP_START + 192)
 #define STR_DDE_ERROR                           (RID_SFX_APP_START + 193)
+#define RID_SECURITY_WARNING_NO_HYPERLINKS      (RID_SFX_APP_START + 194)
 
 #define MD_DDE_LINKEDIT                         (RID_SFX_APP_START + 1)
 
