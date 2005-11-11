@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.55 $
+#   $Revision: 1.56 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-30 10:14:05 $
+#   last change: $Author: rt $ $Date: 2005-11-11 13:51:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,7 @@ SLOFILES = \
     $(SLO)$/pathoptions.obj             \
     $(SLO)$/saveopt.obj					\
     $(SLO)$/helpopt.obj                 \
+    $(SLO)$/optionsdlg.obj              \
     $(SLO)$/javaoptions.obj             \
     $(SLO)$/securityoptions.obj			\
     $(SLO)$/localisationoptions.obj		\
@@ -106,7 +107,6 @@ EXCEPTIONSFILES = \
     $(SLO)$/itemholder1.obj    \
     $(SLO)$/itemholder2.obj	\
     $(SLO)$/viewoptions.obj
-    
 
 # --- config.lib Files --------------------------------------------------------
 LIB1TARGET= $(SLB)$/$(TARGET).lib
@@ -144,8 +144,9 @@ LIB1OBJFILES=  \
     $(SLO)$/sourceviewconfig.obj		\
     $(SLO)$/compatibility.obj           \
     $(SLO)$/eventcfg.obj                \
+    $(SLO)$/optionsdlg.obj              \
     $(SLO)$/itemholder1.obj
-    
+
 # --- heavyconfig.lib Files --------------------------------------------------------
 LIB2TARGET= $(SLB)$/$(TARGET1).lib
 
