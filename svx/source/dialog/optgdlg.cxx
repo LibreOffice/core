@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:36:04 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:50:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -283,6 +283,7 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aHelpFormatFT       ( this, ResId( FT_HELPFORMAT ) ),
     aHelpFormatLB       ( this, ResId( LB_HELPFORMAT ) ),
     aFileDlgFL          ( this, ResId( FL_FILEDLG ) ),
+    aFileDlgROImage     ( this, ResId( FI_FILEDLG_RO ) ),
     aFileDlgCB          ( this, ResId( CB_FILEDLG ) ),
     aDocStatusFL        ( this, ResId( FL_DOCSTATUS ) ),
     aDocStatusCB        ( this, ResId( CB_DOCSTATUS ) ),
@@ -303,11 +304,37 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
 #   ifdef ENABLE_GTK
     if (!lcl_HasSystemFilePicker())
     {
-            aFileDlgFL.Hide();
-            aFileDlgCB.Hide();
+        aFileDlgFL.Hide();
+        aFileDlgCB.Hide();
     }
 #   endif
 #endif
+
+    if ( !aFileDlgCB.IsVisible() )
+    {
+        // rearrange the following controls
+        Point aNewPos = aDocStatusFL.GetPosPixel();
+        long nDelta = aNewPos.Y() - aFileDlgFL.GetPosPixel().Y();
+
+        Window* pWins[] =
+        {
+            &aDocStatusFL, &aDocStatusCB, &aTwoFigureFL,
+            &aInterpretFT, &aYearValueField, &aToYearFT
+        };
+        Window** pCurrent = pWins;
+        const sal_Int32 nCount = sizeof( pWins ) / sizeof( pWins[ 0 ] );
+        for ( sal_Int32 i = 0; i < nCount; ++i, ++pCurrent )
+        {
+            aNewPos = (*pCurrent)->GetPosPixel();
+            aNewPos.Y() -= nDelta;
+            (*pCurrent)->SetPosPixel( aNewPos );
+        }
+    }
+    else if ( SvtMiscOptions().IsUseSystemFileDialogReadOnly() )
+    {
+        aFileDlgROImage.Show();
+        aFileDlgCB.Disable();
+    }
 
     // at least the button is as wide as its text
     long nTxtWidth = aHelpAgentResetBtn.GetTextWidth( aHelpAgentResetBtn.GetText() );
@@ -1219,7 +1246,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
         if (m_sUserLocaleValue.getLength() > 0)
         {
             sal_Int32 d = 0;
-            for (sal_Int32 i=0; i < aUserInterfaceLB.GetEntryCount(); i++)
+            for (USHORT i=0; i < aUserInterfaceLB.GetEntryCount(); i++)
             {
                 d = (sal_Int32)(sal_IntPtr)aUserInterfaceLB.GetEntryData(i);
                 if ( d > 0 && seqInstalledLanguages.getLength() > d-1 && seqInstalledLanguages[d-1].equals(m_sUserLocaleValue))
