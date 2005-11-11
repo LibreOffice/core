@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cjkoptions.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:35:14 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:46:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,8 @@
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
 #endif
+
+#include <itemholder2.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
@@ -422,7 +424,10 @@ SvtCJKOptions::SvtCJKOptions(sal_Bool bDontLoad)
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( CJKMutex::get() );
     if ( !pCJKOptions )
+    {
         pCJKOptions = new SvtCJKOptions_Impl;
+        ItemHolder2::holdConfigItem(E_CJKOPTIONS);
+    }
     if( !bDontLoad && !pCJKOptions->IsLoaded())
         pCJKOptions->Load();
 
