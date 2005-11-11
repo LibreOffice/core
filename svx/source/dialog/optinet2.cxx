@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optinet2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 08:40:38 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:51:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1469,27 +1469,62 @@ void SvxSecurityTabPage::CheckRecordChangesState( void )
 
 void SvxSecurityTabPage::InitControls()
 {
-    // if the button text is too wide, then broaden the button
     const long nOffset = 10;
-    String sText = maMacroSecPB.GetText();
-    long nTxtW = maMacroSecPB.GetTextWidth( sText );
-    if ( sText.Search( '~' ) == STRING_NOTFOUND )
-        nTxtW += nOffset;
-    long nBtnW = maMacroSecPB.GetSizePixel().Width();
-    if ( nTxtW > nBtnW )
+
+    // Hide all controls which belong to the macro security button in case the macro
+    // security settings managed by the macro security dialog opened via the button
+    // are all readonly or if the macros are disabled in general.
+    // @@@ Better would be to query the dialog whether it is 'useful' or not. Exposing
+    //     macro security dialog implementations here, which is bad.
+    if (    mpSecOptions->IsMacroDisabled()
+         || (    mpSecOptions->IsReadOnly( SvtSecurityOptions::E_MACRO_SECLEVEL )
+              && mpSecOptions->IsReadOnly( SvtSecurityOptions::E_MACRO_TRUSTEDAUTHORS )
+              && mpSecOptions->IsReadOnly( SvtSecurityOptions::E_SECUREURLS ) ) )
     {
-        // broaden the button
-        long nDelta = nTxtW - nBtnW;
-        Size aNewSize = maMacroSecPB.GetSizePixel();
-        aNewSize.Width() += nDelta;
-        maMacroSecPB.SetSizePixel( aNewSize );
-        Point aNewPos = maMacroSecPB.GetPosPixel();
-        aNewPos.X() -= nDelta;
-        maMacroSecPB.SetPosPixel( aNewPos );
-        // and narrow the fixedtext of the left side
-        aNewSize = maMacroSecFI.GetSizePixel();
-        aNewSize.Width() -= nDelta;
-        maMacroSecFI.SetSizePixel( aNewSize );
+        maMacroSecFL.Hide();
+        maMacroSecFI.Hide();
+        maMacroSecPB.Hide();
+
+        // rearrange the following controls
+        Point aNewPos = maFilesharingFL.GetPosPixel();
+        long nDelta = aNewPos.Y() - maMacroSecFL.GetPosPixel().Y();
+
+        Window* pWins[] =
+        {
+            &maFilesharingFL, &maRecommReadOnlyCB, &maRecordChangesCB, &maProtectRecordsPB
+        };
+        Window** pCurrent = pWins;
+        const sal_Int32 nCount = sizeof( pWins ) / sizeof( pWins[ 0 ] );
+        for ( sal_Int32 i = 0; i < nCount; ++i, ++pCurrent )
+        {
+            aNewPos = (*pCurrent)->GetPosPixel();
+            aNewPos.Y() -= nDelta;
+            (*pCurrent)->SetPosPixel( aNewPos );
+        }
+    }
+    else
+    {
+        // if the button text is too wide, then broaden the button
+        String sText = maMacroSecPB.GetText();
+        long nTxtW = maMacroSecPB.GetTextWidth( sText );
+        if ( sText.Search( '~' ) == STRING_NOTFOUND )
+            nTxtW += nOffset;
+        long nBtnW = maMacroSecPB.GetSizePixel().Width();
+        if ( nTxtW > nBtnW )
+        {
+            // broaden the button
+            long nDelta = nTxtW - nBtnW;
+            Size aNewSize = maMacroSecPB.GetSizePixel();
+            aNewSize.Width() += nDelta;
+            maMacroSecPB.SetSizePixel( aNewSize );
+            Point aNewPos = maMacroSecPB.GetPosPixel();
+            aNewPos.X() -= nDelta;
+            maMacroSecPB.SetPosPixel( aNewPos );
+            // and narrow the fixedtext of the left side
+            aNewSize = maMacroSecFI.GetSizePixel();
+            aNewSize.Width() -= nDelta;
+            maMacroSecFI.SetSizePixel( aNewSize );
+        }
     }
 
     long nTxtW1 = maProtectRecordsPB.GetTextWidth( msProtectRecordsStr );
@@ -1498,8 +1533,8 @@ void SvxSecurityTabPage::InitControls()
     long nTxtW2 = maProtectRecordsPB.GetTextWidth( msUnprotectRecordsStr );
     if ( msUnprotectRecordsStr.Search( '~' ) == STRING_NOTFOUND )
         nTxtW2 += nOffset;
-    nTxtW = Max( nTxtW1, nTxtW2 );
-    nBtnW = maProtectRecordsPB.GetSizePixel().Width();
+    long nTxtW = Max( nTxtW1, nTxtW2 );
+    long nBtnW = maProtectRecordsPB.GetSizePixel().Width();
     if ( nTxtW > nBtnW )
     {
         // broaden the button
