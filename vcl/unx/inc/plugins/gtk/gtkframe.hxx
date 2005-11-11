@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 14:59:38 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:56:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,6 +176,7 @@ class GtkSalFrame : public SalFrame
     GdkNativeWindow                 m_aForeignTopLevelWindow;
     Pixmap                          m_hBackgroundPixmap;
     ULONG                           m_nStyle;
+    SalExtStyle                     m_nExtStyle;
     GtkFixed*                       m_pFixedContainer;
     GtkSalFrame*                    m_pParent;
     GdkWindowState                  m_nState;
@@ -287,6 +288,7 @@ public:
     virtual void                SetMenu( SalMenu *pSalMenu );
     virtual void                DrawMenuBar();
 
+    virtual void                SetExtendedFrameStyle( SalExtStyle nExtStyle );
     // Before the window is visible, a resize event
     // must be sent with the correct size
     virtual void                Show( BOOL bVisible, BOOL bNoActivate = FALSE );
