@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemholder1.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:40:15 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:50:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,21 +46,38 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
 
-#include <moduleoptions.hxx>
+#include <accelcfg.hxx>
 #include <addxmltostorageoptions.hxx>
+#include <cacheoptions.hxx>
+#include <cmdoptions.hxx>
+#include <compatibility.hxx>
+#include <defaultoptions.hxx>
+#include <dynamicmenuoptions.hxx>
+#include <eventcfg.hxx>
 #include <extendedsecurityoptions.hxx>
+#include <fltrcfg.hxx>
 #include <fontoptions.hxx>
 #include <historyoptions.hxx>
 #include <inetoptions.hxx>
 #include <internaloptions.hxx>
-#include <languageoptions.hxx>
+#include <javaoptions.hxx>
+#include <lingucfg.hxx>
 #include <localisationoptions.hxx>
 #include <menuoptions.hxx>
 #include <miscopt.hxx>
 #include <moduleoptions.hxx>
+#include <options3d.hxx>
+#include <pathoptions.hxx>
+#include <printwarningoptions.hxx>
+#include <regoptions.hxx>
 #include <saveopt.hxx>
+#include <searchopt.hxx>
 #include <securityoptions.hxx>
+#include <sourceviewconfig.hxx>
 #include <startoptions.hxx>
+#include <viewoptions.hxx>
+#include <workingsetoptions.hxx>
+#include <xmlaccelcfg.hxx>
 
 //-----------------------------------------------
 // namespaces
@@ -110,14 +127,22 @@ ItemHolder1::~ItemHolder1()
 }
 
 //-----------------------------------------------
-ItemHolder1* ItemHolder1::getGlobalItemHolder()
+void ItemHolder1::holdConfigItem(EItem eItem)
 {
     static ItemHolder1* pHolder = new ItemHolder1();
-    return pHolder;
+    pHolder->impl_addItem(eItem);
 }
 
 //-----------------------------------------------
-void ItemHolder1::holdConfigItem(EItem eItem)
+void SAL_CALL ItemHolder1::disposing(const css::lang::EventObject& aEvent)
+    throw(css::uno::RuntimeException)
+{
+    css::uno::Reference< css::uno::XInterface > xSelfHold(static_cast< css::lang::XEventListener* >(this), css::uno::UNO_QUERY);
+    impl_releaseAllItems();
+}
+
+//-----------------------------------------------
+void ItemHolder1::impl_addItem(EItem eItem)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
@@ -136,13 +161,6 @@ void ItemHolder1::holdConfigItem(EItem eItem)
     impl_newItem(aNewItem);
     if (aNewItem.pItem)
         m_lItems.push_back(aNewItem);
-}
-
-//-----------------------------------------------
-void SAL_CALL ItemHolder1::disposing(const css::lang::EventObject& aEvent)
-    throw(css::uno::RuntimeException)
-{
-    impl_releaseAllItems();
 }
 
 //-----------------------------------------------
@@ -166,16 +184,40 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
 {
     switch(rItem.eItem)
     {
-        case E_MODULEOPTIONS :
-            rItem.pItem = new SvtModuleOptions();
+        case E_ACCELCFG :
+            rItem.pItem = new SvtAcceleratorConfiguration();
             break;
 
         case E_ADDXMLTOSTORAGEOPTIONS :
             rItem.pItem = new SvtAddXMLToStorageOptions();
             break;
 
+        case E_CMDOPTIONS :
+            rItem.pItem = new SvtCommandOptions();
+            break;
+
+        case E_COMPATIBILITY :
+            rItem.pItem = new SvtCompatibilityOptions();
+            break;
+
+        case E_DEFAULTOPTIONS :
+            rItem.pItem = new SvtDefaultOptions();
+            break;
+
+        case E_DYNAMICMENUOPTIONS :
+            rItem.pItem = new SvtDynamicMenuOptions();
+            break;
+
+        case E_EVENTCFG :
+            //rItem.pItem = new GlobalEventConfig();
+            break;
+
         case E_EXTENDEDSECURITYOPTIONS :
             rItem.pItem = new SvtExtendedSecurityOptions();
+            break;
+
+        case E_FLTRCFG :
+// no ref count            rItem.pItem = new SvtFilterOptions();
             break;
 
         case E_FONTOPTIONS :
@@ -194,6 +236,14 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
             rItem.pItem = new SvtInternalOptions();
             break;
 
+        case E_JAVAOPTIONS :
+// no ref count            rItem.pItem = new SvtJavaOptions();
+            break;
+
+        case E_LINGUCFG :
+            rItem.pItem = new SvtLinguConfig();
+            break;
+
         case E_LOCALISATIONOPTIONS :
             rItem.pItem = new SvtLocalisationOptions();
             break;
@@ -206,16 +256,68 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
             rItem.pItem = new SvtMiscOptions();
             break;
 
+        case E_MODULEOPTIONS :
+            rItem.pItem = new SvtModuleOptions();
+            break;
+
+        case E_OPTIONS3D :
+            rItem.pItem = new SvtOptions3D();
+            break;
+
+        case E_PATHOPTIONS :
+            rItem.pItem = new SvtPathOptions();
+            break;
+
+        case E_PRINTWARNINGOPTIONS :
+            rItem.pItem = new SvtPrintWarningOptions();
+            break;
+
+        case E_REGOPTIONS :
+// no ref count            rItem.pItem = new ::svt::RegOptions();
+            break;
+
         case E_SAVEOPTIONS :
             rItem.pItem = new SvtSaveOptions();
+            break;
+
+        case E_SEARCHOPT :
+// no ref count            rItem.pItem = new SvtSearchOptions();
             break;
 
         case E_SECURITYOPTIONS :
             rItem.pItem = new SvtSecurityOptions();
             break;
 
+        case E_SOURCEVIEWCONFIG :
+            rItem.pItem = new ::svt::SourceViewConfig();
+            break;
+
         case E_STARTOPTIONS :
             rItem.pItem = new SvtStartOptions();
+            break;
+
+        case E_VIEWOPTIONS_DIALOG :
+            rItem.pItem = new SvtViewOptions(E_DIALOG, ::rtl::OUString());
+            break;
+
+        case E_VIEWOPTIONS_TABDIALOG :
+            rItem.pItem = new SvtViewOptions(E_TABDIALOG, ::rtl::OUString());
+            break;
+
+        case E_VIEWOPTIONS_TABPAGE :
+            rItem.pItem = new SvtViewOptions(E_TABPAGE, ::rtl::OUString());
+            break;
+
+        case E_VIEWOPTIONS_WINDOW :
+            rItem.pItem = new SvtViewOptions(E_WINDOW, ::rtl::OUString());
+            break;
+
+        case E_WORKINGSETOPTIONS :
+            rItem.pItem = new SvtWorkingSetOptions();
+            break;
+
+        case E_XMLACCELCFG :
+            // ??? TODO
             break;
     }
 }
@@ -223,63 +325,9 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
 //-----------------------------------------------
 void ItemHolder1::impl_deleteItem(TItemInfo& rItem)
 {
-    if (!rItem.pItem)
-        return;
-
-    switch(rItem.eItem)
+    if (rItem.pItem)
     {
-        case E_MODULEOPTIONS :
-            delete (SvtModuleOptions*)rItem.pItem;
-            break;
-
-        case E_ADDXMLTOSTORAGEOPTIONS :
-            delete (SvtAddXMLToStorageOptions*)rItem.pItem;
-            break;
-
-        case E_EXTENDEDSECURITYOPTIONS :
-            delete (SvtExtendedSecurityOptions*)rItem.pItem;
-            break;
-
-        case E_FONTOPTIONS :
-            delete (SvtFontOptions*)rItem.pItem;
-            break;
-
-        case E_HISTORYOPTIONS :
-            delete (SvtHistoryOptions*)rItem.pItem;
-            break;
-
-        case E_INETOPTIONS :
-            delete (SvtInetOptions*)rItem.pItem;
-            break;
-
-        case E_INTERNALOPTIONS :
-            delete (SvtInternalOptions*)rItem.pItem;
-            break;
-
-        case E_LOCALISATIONOPTIONS :
-            delete (SvtLocalisationOptions*)rItem.pItem;
-            break;
-
-        case E_MENUOPTIONS :
-            delete (SvtMenuOptions*)rItem.pItem;
-            break;
-
-        case E_MISCOPTIONS :
-            delete (SvtMiscOptions*)rItem.pItem;
-            break;
-
-        case E_SAVEOPTIONS :
-            delete (SvtSaveOptions*)rItem.pItem;
-            break;
-
-        case E_SECURITYOPTIONS :
-            delete (SvtSecurityOptions*)rItem.pItem;
-            break;
-
-        case E_STARTOPTIONS :
-            delete (SvtStartOptions*)rItem.pItem;
-            break;
+        delete rItem.pItem;
+        rItem.pItem = 0;
     }
-
-    rItem.pItem = 0;
 }
