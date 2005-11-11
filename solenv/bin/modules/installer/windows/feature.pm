@@ -4,9 +4,9 @@
 #
 #   $RCSfile: feature.pm,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:15:43 $
+#   last change: $Author: kz $ $Date: 2005-11-11 14:17:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -122,6 +122,9 @@ sub get_feature_display
     {
         $display = "0";
     }
+
+    # Special handling for c05office. No program module visible.
+    if (( $onefeature->{'gid'} eq "gid_Module_Prg" ) && ( $installer::globals::product =~ /c05office/i )) { $display = "0"; }
 
     if ( $installer::globals::languagepack ) { $display = "0"; }     # making all feature invisible!
 
