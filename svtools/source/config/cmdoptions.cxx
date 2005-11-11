@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdoptions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:35:31 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:46:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,8 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
+
+#include <itemholder1.hxx>
 
 #include <algorithm>
 #include <hash_map>
@@ -541,6 +543,7 @@ SvtCommandOptions::SvtCommandOptions()
     if( m_pDataContainer == NULL )
     {
         m_pDataContainer = new SvtCommandOptions_Impl;
+        ItemHolder1::holdConfigItem(E_CMDOPTIONS);
     }
 }
 
