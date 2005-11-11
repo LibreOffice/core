@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XStyleCondition.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:34:11 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 13:23:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,14 +46,14 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::style::XStyleCondition
 /** This interface makes it possible to access conditional styles of the object.
+
+    @deprecated This interface was never implemented or referenced.
  */
 published interface XStyleCondition: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::style::XStyleCondition::getStyleConditionByType
     /** @returns
                     the style condition for the specified type.
      */
@@ -61,7 +61,6 @@ published interface XStyleCondition: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::style::XStyleCondition::setStyleConditionByType
     /** sets the style condition for the specified type.
      */
     [oneway] void setStyleConditionByType( [in] string StyleName,
