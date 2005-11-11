@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-03 12:06:00 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 09:06:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2360,6 +2360,32 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
             throw ILLEGALARGUMENTIOEXCEPTION();
         }
 
+        sal_Bool bSalvage = sal_False;
+        SFX_ITEMSET_ARG( pParams, pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
+        if( pSalvageItem )
+        {
+            bSalvage = sal_True;
+            if ( pSalvageItem->GetValue().Len() )
+            {
+                // if an URL is provided in SalvageItem that means that the FileName refers to a temporary file
+                // that must be copied here
+
+                SFX_ITEMSET_ARG( pParams, pFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE );
+                ::rtl::OUString aNewTempFileURL = SfxMedium::CreateTempCopyWithExt( pFileNameItem->GetValue() );
+                if ( aNewTempFileURL.getLength() )
+                {
+                    pParams->Put( SfxStringItem( SID_FILE_NAME, aNewTempFileURL ) );
+                    pParams->ClearItem( SID_INPUTSTREAM );
+                    pParams->ClearItem( SID_STREAM );
+                    pParams->ClearItem( SID_CONTENT );
+                }
+                else
+                {
+                    OSL_ENSURE( sal_False, "Can not create a new temporary file for crash recovery!\n" );
+                }
+            }
+        }
+
         BOOL bReadOnly = FALSE;
         SFX_ITEMSET_ARG( pParams, pReadOnlyItem, SfxBoolItem, SID_DOC_READONLY, FALSE );
         if ( pReadOnlyItem && pReadOnlyItem->GetValue() )
@@ -2433,11 +2459,6 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
 
         if ( !nError )
         {
-            BOOL bSalvage = FALSE;
-            SFX_ITEMSET_ARG( pParams, pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
-            if( pSalvageItem )
-                bSalvage = TRUE;
-
             if( bTemplate )
             {
                 //TODO/LATER: make sure that templates always are XML docs!
