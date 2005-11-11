@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 15:44:13 $
+#   last change: $Author: rt $ $Date: 2005-11-11 11:43:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,8 @@ XCSFILES= \
     WriterWebWindowState.xcs \
     Effects.xcs \
     Category.xcs \
-    GenericCategories.xcs
+    GenericCategories.xcs \
+    GlobalSettings.xcs
 
 .INCLUDE :  target.mk
 
