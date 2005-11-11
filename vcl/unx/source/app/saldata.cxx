@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:00:20 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:57:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -898,4 +898,12 @@ const char* SalData::getFrameClassName()
     return aClassName.getStr();
 }
 
+rtl::OString SalData::getFrameResName( SalExtStyle nStyle )
+{
+    rtl::OStringBuffer aBuf( 64 );
+    aBuf.append( getFrameResName() );
+    if( (nStyle & SAL_FRAME_EXT_STYLE_DOCUMENT) )
+        aBuf.append( ".DocumentWindow" );
 
+    return aBuf.makeStringAndClear();
+}
