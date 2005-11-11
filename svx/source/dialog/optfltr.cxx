@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optfltr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:41:54 $
+ *  last change: $Author: kz $ $Date: 2005-11-11 13:54:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,10 @@
 #endif
 
 // include ---------------------------------------------------------------
+
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
+#endif
 
 #include <svtools/fltrcfg.hxx>
 #include "optfltr.hxx"
@@ -214,7 +218,7 @@ BOOL OfaMSFilterTabPage2::FillItemSet( SfxItemSet& rSet )
             InvalidCBEntry != pArr->eType; ++pArr, bFirst = !bFirst )
     {
         USHORT nCol = bFirst ? 1 : 2;
-        SvLBoxEntry* pEntry = aCheckLB.GetEntry( pArr->eType );
+        SvLBoxEntry* pEntry = GetEntry4Type( pArr->eType );
         if( pEntry )
         {
             SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem( nCol ));
@@ -243,17 +247,23 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet& rSet )
     aCheckLB.SetUpdateMode(FALSE);
     aCheckLB.Clear();
 
+    SvtModuleOptions aModuleOpt;
+
     // int the same sequence as the enums of MSFltrPg2_CheckBoxEntries
-    InsertEntry( sChgToFromMath );
-    InsertEntry( sChgToFromWriter );
-    InsertEntry( sChgToFromCalc );
-    InsertEntry( sChgToFromImpress  );
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
+        InsertEntry( sChgToFromMath, static_cast< sal_Int32 >( Math ) );
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+        InsertEntry( sChgToFromWriter, static_cast< sal_Int32 >( Writer ) );
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
+        InsertEntry( sChgToFromCalc, static_cast< sal_Int32 >( Calc ) );
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
+        InsertEntry( sChgToFromImpress, static_cast< sal_Int32 >( Impress ) );
 
     static struct ChkCBoxEntries{
         MSFltrPg2_CheckBoxEntries eType;
         BOOL (SvtFilterOptions:: *FnIs)() const;
     } aChkArr[] = {
-        { Math,     &SvtFilterOptions::IsMathType2Math  },
+        { Math,     &SvtFilterOptions::IsMathType2Math },
         { Math,     &SvtFilterOptions::IsMath2MathType },
         { Writer,   &SvtFilterOptions::IsWinWord2Writer },
         { Writer,   &SvtFilterOptions::IsWriter2WinWord },
@@ -261,7 +271,7 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet& rSet )
         { Calc,     &SvtFilterOptions::IsCalc2Excel },
         { Impress,  &SvtFilterOptions::IsPowerPoint2Impress },
         { Impress,  &SvtFilterOptions::IsImpress2PowerPoint },
-        { InvalidCBEntry, 0 }
+        { InvalidCBEntry, NULL }
     };
 
     BOOL bFirst = TRUE;
@@ -269,7 +279,7 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet& rSet )
             InvalidCBEntry != pArr->eType; ++pArr, bFirst = !bFirst )
     {
         USHORT nCol = bFirst ? 1 : 2;
-        SvLBoxEntry* pEntry = aCheckLB.GetEntry( pArr->eType );
+        SvLBoxEntry* pEntry = GetEntry4Type( static_cast< sal_Int32 >( pArr->eType ) );
         if( pEntry )
         {
             SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem( nCol ));
@@ -286,7 +296,7 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet& rSet )
     aCheckLB.SetUpdateMode( TRUE );
 }
 
-void OfaMSFilterTabPage2::InsertEntry( const String& rTxt )
+void OfaMSFilterTabPage2::InsertEntry( const String& _rTxt, sal_Int32 _nType )
 {
     SvLBoxEntry* pEntry = new SvLBoxEntry;
 
@@ -296,9 +306,23 @@ void OfaMSFilterTabPage2::InsertEntry( const String& rTxt )
     pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));
     pEntry->AddItem( new SvLBoxButton( pEntry, 0, pCheckButtonData ) );
     pEntry->AddItem( new SvLBoxButton( pEntry, 0, pCheckButtonData ) );
-    pEntry->AddItem( new SvLBoxString( pEntry, 0, rTxt ) );
+    pEntry->AddItem( new SvLBoxString( pEntry, 0, _rTxt ) );
+
+    pEntry->SetUserData( (void*)_nType );
 
     aCheckLB.GetModel()->Insert( pEntry );
+}
+
+SvLBoxEntry* OfaMSFilterTabPage2::GetEntry4Type( sal_Int32 _nType ) const
+{
+    SvLBoxEntry* pEntry = aCheckLB.First();
+    while ( pEntry )
+    {
+        if ( _nType == (sal_Int32)pEntry->GetUserData() )
+            return pEntry;
+        pEntry = aCheckLB.Next( pEntry );
+    }
+    return NULL;
 }
 
 void OfaMSFilterTabPage2::MSFltrSimpleTable::SetTabs()
