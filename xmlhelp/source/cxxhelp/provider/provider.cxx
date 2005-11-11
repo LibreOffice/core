@@ -4,9 +4,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:20:03 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:17:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -395,7 +395,9 @@ void ContentProvider::init()
             imageZip += rtl::OUString::createFromAscii("/images.zip");
     }
 
-    m_pDatabases = new Databases( instPath,
+    sal_Bool showBasic = getBooleanKey(xHierAccess,"Help/ShowBasic");
+    m_pDatabases = new Databases( showBasic,
+                                  instPath,
                                   imageZip,
                                   productname,
                                   productversion,
@@ -438,7 +440,7 @@ Reference< XMultiServiceFactory > ContentProvider::getConfiguration() const
         }
         catch( const com::sun::star::uno::Exception& )
         {
-            OSL_ENSURE( sProvider.is(),"cant instantiate configuration" );
+          OSL_ENSURE( sProvider.is(),"cant instantiate configuration" );
         }
     }
 
@@ -499,6 +501,30 @@ ContentProvider::getKey(const Reference<
         aAny >>= instPath;
     }
     return instPath;
+}
+
+
+sal_Bool
+ContentProvider::getBooleanKey(const Reference<
+                        XHierarchicalNameAccess >& xHierAccess,
+                        const char* key) const
+{
+  sal_Bool ret = sal_False;
+  if( xHierAccess.is() )
+    {
+      Any aAny;
+      try
+        {
+          aAny =
+            xHierAccess->getByHierarchicalName(
+                                               rtl::OUString::createFromAscii(key));
+        }
+      catch( const com::sun::star::container::NoSuchElementException& )
+        {
+        }
+      aAny >>= ret;
+    }
+  return ret;
 }
 
 
