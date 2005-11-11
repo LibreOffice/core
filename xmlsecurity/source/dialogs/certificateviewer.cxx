@@ -4,9 +4,9 @@
  *
  *  $RCSfile: certificateviewer.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:10:44 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 09:18:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #include <xmlsecurity/certificateviewer.hxx>
 
 #ifndef _COM_SUN_STAR_SECURITY_XCERTIFICATE_HPP_
@@ -41,7 +40,7 @@
 
 #include <com/sun/star/security/CertificateCharacters.hpp>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
-
+#include <com/sun/star/security/CertificateValidity.hpp>
 
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/datetime.hxx>
@@ -56,6 +55,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+namespace css = ::com::sun::star;
 
 
 namespace
@@ -127,10 +127,28 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     ,maKeyImg               ( this, ResId( IMG_KEY ) )
     ,maHintCorrespPrivKeyFI ( this, ResId( FI_CORRPRIVKEY ) )
 {
+    //Verify the certificate
+    sal_Int32 certStatus = mpDlg->mxSecurityEnvironment->verifyCertificate(mpDlg->mxCert);
+    //We currently have two status
+    //These errors are alloweds
+    sal_Int32 validCertErrors = css::security::CertificateValidity::VALID
+        | css::security::CertificateValidity::UNKNOWN_REVOKATION;
+
+    //Build a  mask to filter out the allowed errors
+    sal_Int32 mask = ~validCertErrors;
+    // "subtract" the allowed error flags from the result
+    sal_Int32 certErrors = certStatus & mask;
+    bool bCertValid = certErrors > 0 ? false : true;
+
+    if ( !bCertValid )
+    {
+        maCertImg.SetImage( Image( ResId( IMG_STATE_NOT_VALIDATED ) ) );
+        maHintNotTrustedFI.SetText( String( ResId( STR_CERTIFICATE_NOT_VALIDATED ) ) );
+    }
+
     FreeResource();
 
-    Wallpaper       aBack( GetSettings().GetStyleSettings().GetWindowColor() );
-
+    Wallpaper aBack( GetSettings().GetStyleSettings().GetWindowColor() );
     maFrameWin.SetBackground( aBack );
     maCertImg.SetBackground( aBack );
     maCertInfoFI.SetBackground( aBack );
@@ -215,6 +233,7 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
 
 void CertificateViewerGeneralTP::ActivatePage()
 {
+
 }
 
 
@@ -379,8 +398,13 @@ struct CertPath_UserData
 {
     cssu::Reference< dcss::security::XCertificate > mxCert;
     String                                          maStatus;
+    bool mbValid;
 
-    CertPath_UserData( cssu::Reference< dcss::security::XCertificate > xCert ) { mxCert = xCert; }
+    CertPath_UserData( cssu::Reference< dcss::security::XCertificate > xCert, bool bValid):
+        mxCert(xCert),
+        mbValid(bValid)
+    {
+    }
 };
 
 
@@ -393,7 +417,11 @@ CertificateViewerCertPathTP::CertificateViewerCertPathTP( Window* _pParent, Cert
     ,maCertStatusML         ( this, ResId( ML_CERTSTATUS ) )
     ,mpParent               ( _pDlg )
     ,mbFirstActivateDone    ( false )
-    ,maCertImage            ( ResId( IMG_CERT_SMAL ) )
+    ,maCertImage            ( ResId( IMG_CERT_SMALL ) )
+    ,maCertNotValidatedImage( ResId( IMG_CERT_NOTVALIDATED_SMALL ) )
+    ,msCertOK               ( ResId( STR_PATH_CERT_OK ) )
+    ,msCertNotValidated     ( ResId( STR_PATH_CERT_NOT_VALIDATED ) )
+
 {
 
     FreeResource();
@@ -445,7 +473,19 @@ void CertificateViewerCertPathTP::ActivatePage()
         {
             const Reference< security::XCertificate > rCert = pCertPath[ --i ];
             String sName = XmlSec::GetContentPart( rCert->getSubjectName() );
-            pParent = InsertCert( pParent, sName, rCert );
+            //Verify the certificate
+            sal_Int32 certStatus = mpDlg->mxSecurityEnvironment->verifyCertificate(rCert);
+            //We currently have two status
+            //These errors are alloweds
+            sal_Int32 validCertErrors = css::security::CertificateValidity::VALID
+                | css::security::CertificateValidity::UNKNOWN_REVOKATION;
+
+            //Build a  mask to filter out the allowed errors
+            sal_Int32 mask = ~validCertErrors;
+            // "subtract" the allowed error flags from the result
+            sal_Int32 certErrors = certStatus & mask;
+            bool bCertValid = certErrors > 0 ? false : true;
+            pParent = InsertCert( pParent, sName, rCert, bCertValid);
         }
 
         maCertPathLB.Select( pParent );
@@ -456,6 +496,8 @@ void CertificateViewerCertPathTP::ActivatePage()
             maCertPathLB.Expand( pParent );
             pParent = maCertPathLB.GetParent( pParent );
         }
+
+        CertSelectHdl( NULL );
     }
 }
 
@@ -473,24 +515,17 @@ IMPL_LINK( CertificateViewerCertPathTP, ViewCertHdl, void*, EMPTYARG )
 
 IMPL_LINK( CertificateViewerCertPathTP, CertSelectHdl, void*, EMPTYARG )
 {
-    String  aStatus;
-
+    String sStatus;
     SvLBoxEntry* pEntry = maCertPathLB.FirstSelected();
     if( pEntry )
     {
         CertPath_UserData* pData = (CertPath_UserData*) pEntry->GetUserData();
-        if ( !pData->maStatus.Len() )
-        {
-            // Figure out status...
-            // pData->maStatus = ...
-        }
-        aStatus = pData->maStatus;
+        if ( pData )
+            sStatus = pData->mbValid ? msCertOK : msCertNotValidated;
     }
 
-    maCertStatusML.SetText( aStatus );
-
+    maCertStatusML.SetText( sStatus );
     maViewCertPB.Enable( pEntry && ( pEntry != maCertPathLB.Last() ) );
-
     return 0;
 }
 
@@ -509,10 +544,14 @@ void CertificateViewerCertPathTP::Clear( void )
     maCertPathLB.Clear();
 }
 
-SvLBoxEntry* CertificateViewerCertPathTP::InsertCert( SvLBoxEntry* _pParent, const String& _rName, cssu::Reference< dcss::security::XCertificate > rxCert )
+SvLBoxEntry* CertificateViewerCertPathTP::InsertCert(
+    SvLBoxEntry* _pParent, const String& _rName, cssu::Reference< dcss::security::XCertificate > rxCert,
+    bool bValid)
 {
-    SvLBoxEntry* pEntry = maCertPathLB.InsertEntry( _rName, maCertImage, maCertImage, _pParent );
-    pEntry->SetUserData( ( void* ) new CertPath_UserData( rxCert ) );
+    Image aImage = bValid ? maCertImage : maCertNotValidatedImage;
+    SvLBoxEntry* pEntry = maCertPathLB.InsertEntry( _rName, aImage, aImage, _pParent );
+    pEntry->SetUserData( ( void* ) new CertPath_UserData( rxCert, bValid ) );
 
     return pEntry;
 }
+
