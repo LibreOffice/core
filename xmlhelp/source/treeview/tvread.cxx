@@ -646,13 +646,15 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
     Reference< XHierarchicalNameAccess > xHierAccess( getHierAccess( sProvider,
                                                                      "org.openoffice.Office.Common" ) );
     rtl::OUString system( getKey( xHierAccess,"Help/System" ) );
+    sal_Bool showBasic( getBooleanKey(xHierAccess,"Help/ShowBasic") );
     rtl::OUString instPath( getKey( xHierAccess,"Path/Current/Help" ) );
     if( ! instPath.getLength() )
-        // try to determine path from default
-        instPath = rtl::OUString::createFromAscii( "$(instpath)/help" );
+      // try to determine path from default
+      instPath = rtl::OUString::createFromAscii( "$(instpath)/help" );
 
     // replace anything like $(instpath);
     subst( xSMgr,instPath );
+
 
     /**********************************************************************/
     /*                       reading Webtop.Common                        */
@@ -707,35 +709,42 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
     // first of all, try do determine whether there are any *.tree files present
 
     osl::Directory aDirectory( url );
-    osl::FileStatus aFileStatus( FileStatusMask_FileSize | FileStatusMask_FileURL );
+    osl::FileStatus aFileStatus( FileStatusMask_FileName | FileStatusMask_FileSize | FileStatusMask_FileURL );
     if( osl::Directory::E_None == aDirectory.open() )
     {
         int idx = 0,j = 0;
-        rtl::OUString aFileUrl;
+        rtl::OUString aFileUrl, aFileName;
         while( aDirectory.getNextItem( aDirItem ) == osl::FileBase::E_None &&
                aDirItem.getFileStatus( aFileStatus ) == osl::FileBase::E_None &&
-               aFileStatus.isValid( FileStatusMask_FileURL ) )
-        {
+               aFileStatus.isValid( FileStatusMask_FileURL ) &&
+               aFileStatus.isValid( FileStatusMask_FileName ) )
+          {
             aFileUrl = aFileStatus.getFileURL();
-            idx = aFileUrl.lastIndexOf( sal_Unicode( '.' ) );
+            aFileName = aFileStatus.getFileName();
+            idx = aFileName.lastIndexOf( sal_Unicode( '.' ) );
             if( idx == -1 )
-                continue;
+              continue;
 
-            const sal_Unicode* str = aFileUrl.getStr();
+            const sal_Unicode* str = aFileName.getStr();
 
-            if( aFileUrl.getLength() == idx + 5                   &&
+            if( aFileName.getLength() == idx + 5                   &&
                 ( str[idx + 1] == 't' || str[idx + 1] == 'T' )    &&
                 ( str[idx + 2] == 'r' || str[idx + 2] == 'R' )    &&
                 ( str[idx + 3] == 'e' || str[idx + 3] == 'E' )    &&
                 ( str[idx + 4] == 'e' || str[idx + 4] == 'E' ) )
-            {
+              {
                 OSL_ENSURE( j < MAX_MODULE_COUNT,"too many modules installed" );
                 OSL_ENSURE( aFileStatus.isValid( FileStatusMask_FileSize ),
                             "invalid file size" );
+
+                rtl::OUString baseName = aFileName.copy(0,idx).toAsciiLowerCase();
+                if(! showBasic && baseName.compareToAscii("sbasic") == 0 )
+                  continue;
+
                 configData.filelen[j] = aFileStatus.getFileSize();
                 configData.fileurl[j++] = aFileUrl ;
-            }
-        }
+              }
+          }
         aDirectory.close();
     }
 
@@ -858,6 +867,29 @@ TVChildTarget::getKey( const Reference< XHierarchicalNameAccess >& xHierAccess,
     return instPath;
 }
 
+
+sal_Bool
+TVChildTarget::getBooleanKey(const Reference<
+                             XHierarchicalNameAccess >& xHierAccess,
+                             const char* key) const
+{
+  sal_Bool ret = sal_False;
+  if( xHierAccess.is() )
+    {
+      Any aAny;
+      try
+        {
+          aAny =
+            xHierAccess->getByHierarchicalName(
+                                               rtl::OUString::createFromAscii(key));
+        }
+      catch( const com::sun::star::container::NoSuchElementException& )
+        {
+        }
+      aAny >>= ret;
+    }
+  return ret;
+}
 
 
 void TVChildTarget::subst( const Reference< XMultiServiceFactory >& m_xSMgr,
