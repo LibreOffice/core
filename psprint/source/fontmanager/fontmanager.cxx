@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 14:26:33 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:45:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2234,7 +2234,7 @@ void PrintFontManager::initialize( void* pInitDisplay )
         std::list< PrintFont* > aCacheFonts;
         if( m_pFontCache->listDirectory( aPath, aCacheFonts ) )
         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "adding cache directory: %s\n", aPath.getStr() );
 #endif
             for( ::std::list< PrintFont* >::iterator it = aCacheFonts.begin(); it != aCacheFonts.end(); ++it )
@@ -2247,13 +2247,15 @@ void PrintFontManager::initialize( void* pInitDisplay )
                     m_aFontFileToFontID[ static_cast<TrueTypeFontFile*>(*it)->m_aFontFile ].insert( aFont );
                 else if( (*it)->m_eType == fonttype::Builtin )
                     m_aFontFileToFontID[ static_cast<BuiltinFont*>(*it)->m_aMetricFile ].insert( aFont );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 if( (*it)->m_eType == fonttype::Builtin )
                     nBuiltinFonts++;
                 nCached++;
+#if OSL_DEBUG_LEVEL > 2
                 fprintf( stderr, "adding cached font %d: \"%s\" from %s\n", aFont,
                          OUStringToOString( getFontFamily( aFont ), RTL_TEXTENCODING_MS_1252 ).getStr(),
                          getFontFileSysPath( aFont ).getStr() );
+#endif
 #endif
             }
             if( ! m_pFontCache->scanAdditionalFiles( aPath ) )
@@ -2330,7 +2332,7 @@ void PrintFontManager::initialize( void* pInitDisplay )
                                 m_aFontFileToFontID[ aFileName ].insert( aFont );
                                 m_pFontCache->updateFontCacheEntry( *it, false );
                                 nDirFonts++;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
                                 fprintf( stderr, "adding font %d: \"%s\" from %s\n", aFont,
                                          OUStringToOString( getFontFamily( aFont ), RTL_TEXTENCODING_MS_1252 ).getStr(),
                                          getFontFileSysPath( aFont ).getStr() );
@@ -2365,7 +2367,7 @@ void PrintFontManager::initialize( void* pInitDisplay )
 
         if( m_pFontCache->listDirectory( aDir, aCacheFonts ) )
         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "adding cache directory: %s\n", aDir.getStr() );
 #endif
             for( ::std::list< PrintFont* >::iterator it = aCacheFonts.begin(); it != aCacheFonts.end(); ++it )
@@ -2378,13 +2380,15 @@ void PrintFontManager::initialize( void* pInitDisplay )
                     m_aFontFileToFontID[ static_cast<TrueTypeFontFile*>(*it)->m_aFontFile ].insert( aFont );
                 else if( (*it)->m_eType == fonttype::Builtin )
                     m_aFontFileToFontID[ static_cast<BuiltinFont*>(*it)->m_aMetricFile ].insert( aFont );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 if( (*it)->m_eType == fonttype::Builtin )
                     nBuiltinFonts++;
                 nCached++;
+#if OSL_DEBUG_LEVEL > 2
                 fprintf( stderr, "adding cached font %d: \"%s\" from %s\n", aFont,
                          OUStringToOString( getFontFamily( aFont ), RTL_TEXTENCODING_MS_1252 ).getStr(),
                          getFontFileSysPath( aFont ).getStr() );
+#endif
 #endif
             }
             continue;
@@ -2421,7 +2425,7 @@ void PrintFontManager::initialize( void* pInitDisplay )
                                 m_aFontFileToFontID[ aFileName ].insert( m_nNextFontID );
                                 m_aFonts[ m_nNextFontID++ ] = *it;
                                 m_pFontCache->updateFontCacheEntry( *it, false );
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
                                 nBuiltinFonts++;
 #endif
                             }
