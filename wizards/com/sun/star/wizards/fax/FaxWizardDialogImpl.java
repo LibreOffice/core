@@ -20,6 +20,7 @@ import com.sun.star.uno.RuntimeException;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.text.*;
 import com.sun.star.wizards.common.*;
+import com.sun.star.task.XInteractionHandler;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.CloseVetoException;
@@ -154,6 +155,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog {
     public void cancelWizard() {
         xWindow.setVisible(false);
         closeDocument();
+        removeTerminateListener();
         running = false;
     }
 
@@ -193,8 +195,8 @@ public class FaxWizardDialogImpl extends FaxWizardDialog {
                 xWindow.setVisible(false);
                 closeDocument();
                 //myFaxDoc.xTextDocument.unlockControllers();
-
-                PropertyValue loadValues[] = new PropertyValue[3];
+                XInteractionHandler xIH = (XInteractionHandler) UnoRuntime.queryInterface(XInteractionHandler.class, xMSF.createInstance("com.sun.star.comp.uui.UUIInteractionHandler"));
+                PropertyValue loadValues[] = new PropertyValue[4];
                 loadValues[0] = new PropertyValue();
                 loadValues[0].Name = "AsTemplate";
                 loadValues[1] = new PropertyValue();
@@ -203,6 +205,10 @@ public class FaxWizardDialogImpl extends FaxWizardDialog {
                 loadValues[2] = new PropertyValue();
                 loadValues[2].Name = "UpdateDocMode";
                 loadValues[2].Value = new Short (com.sun.star.document.UpdateDocMode.FULL_UPDATE);
+                loadValues[3] = new PropertyValue();
+                loadValues[3].Name = "InteractionHandler";
+                loadValues[3].Value = xIH;
+
 
                 if (bEditTemplate) {
                     loadValues[0].Value = Boolean.FALSE;
@@ -221,6 +227,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog {
             e.printStackTrace();
         }
         finally {
+            removeTerminateListener();
             running = false;
         }
 

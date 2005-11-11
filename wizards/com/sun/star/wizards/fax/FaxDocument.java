@@ -22,7 +22,7 @@ public class FaxDocument extends TextDocument {
     boolean keepTypeFrame = true;
 
     public FaxDocument(XMultiServiceFactory xMSF, XTerminateListener listener) {
-        super(xMSF, listener);
+        super(xMSF, listener, "WIZARD_LIVE_PREVIEW");
     }
 
     public XWindowPeer getWindowPeer() {
