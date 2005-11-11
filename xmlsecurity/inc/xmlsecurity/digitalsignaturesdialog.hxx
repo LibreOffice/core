@@ -4,9 +4,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:06:58 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 09:17:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,8 @@ private:
     FixedInfo           maSigsValidFI;
     FixedImage          maSigsInvalidImg;
     FixedInfo           maSigsInvalidFI;
+    FixedImage          maSigsNotvalidatedImg;
+    FixedInfo           maSigsNotvalidatedFI;
 
     PushButton          maViewBtn;
     PushButton          maAddBtn;
