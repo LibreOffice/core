@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fpsmartcontent.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:31:30 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:39:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,29 @@ namespace svt
         if (!m_xOwnInteraction.is())
             return NULL;
         return m_pOwnInteraction;
+    }
+
+    //--------------------------------------------------------------------
+    SmartContent::InteractionHandlerType SmartContent::queryCurrentInteractionHandler() const
+    {
+        if (m_xOwnInteraction.is())
+            return IHT_OWN;
+
+        if (!m_xCmdEnv.is())
+            return IHT_NONE;
+
+        return IHT_DEFAULT;
+    }
+
+    //--------------------------------------------------------------------
+    void SmartContent::disableInteractionHandler()
+    {
+        // Don't free the memory here! It will be done by the next
+        // call automaticly - releasing of the uno reference ...
+        m_pOwnInteraction = NULL;
+        m_xOwnInteraction.clear();
+
+        m_xCmdEnv.clear();
     }
 
     //--------------------------------------------------------------------
