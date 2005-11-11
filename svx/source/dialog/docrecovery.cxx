@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docrecovery.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-03 11:54:15 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 09:01:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -374,6 +374,38 @@ void RecoveryCore::forgetAllRecoveryEntries()
          ++pIt                 )
     {
         const TURLInfo& rInfo = *pIt;
+        lRemoveArgs[1].Value <<= rInfo.ID;
+        m_xRealCore->dispatch(aRemoveURL, lRemoveArgs);
+    }
+}
+
+//===============================================
+void RecoveryCore::forgetBrokenRecoveryEntries()
+{
+    if (!m_xRealCore.is())
+        return;
+
+    css::util::URL aRemoveURL = impl_getParsedURL(RECOVERY_CMD_DO_ENTRY_CLEANUP);
+    css::uno::Sequence< css::beans::PropertyValue > lRemoveArgs(2);
+    lRemoveArgs[0].Name    = PROP_DISPATCHASYNCHRON;
+    lRemoveArgs[0].Value <<= sal_False;
+    lRemoveArgs[1].Name    = PROP_ENTRYID;
+    // lRemoveArgs[1].Value will be changed during next loop ...
+
+    // work on a copied list only ...
+    // Reason: We will get notifications from the core for every
+    // changed or removed element. And that will change our m_lURLs list.
+    // That's not a good idea, if we use a stl iterator inbetween .-)
+    TURLList lURLs = m_lURLs;
+    TURLList::const_iterator pIt;
+    for (  pIt  = lURLs.begin();
+           pIt != lURLs.end()  ;
+         ++pIt                 )
+    {
+        const TURLInfo& rInfo = *pIt;
+        if (!RecoveryCore::isBrokenTempEntry(rInfo))
+            continue;
+
         lRemoveArgs[1].Value <<= rInfo.ID;
         m_xRealCore->dispatch(aRemoveURL, lRemoveArgs);
     }
@@ -1289,7 +1321,10 @@ short RecoveryDialog::execute()
                  }
 
                  // a,b,c)
-                 m_pCore->forgetAllRecoveryEntries();
+                 if (m_bWasRecoveryStarted)
+                    m_pCore->forgetBrokenRecoveryEntries();
+                 else
+                    m_pCore->forgetAllRecoveryEntries();
                  m_eRecoveryState = RecoveryDialog::E_RECOVERY_HANDLED;
 
                  // THERE IS NO WAY BACK. see impl_askUserForWizardCancel()!
