@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.173 $
+ *  $Revision: 1.174 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 09:06:02 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 10:20:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SECURITY_DOCUMENTSIGNATURESINFORMATION_HPP_
-#include <com/sun/star/security/DocumentSignaturesInformation.hpp>
+#include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SECURITY_XDOCUMENTDIGITALSIGNATURES_HPP_
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
