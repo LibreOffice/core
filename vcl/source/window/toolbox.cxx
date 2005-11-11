@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 12:59:25 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:55:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3216,6 +3216,10 @@ void ToolBox::ImplDrawMenubutton( ToolBox *pThis, BOOL bHighlight )
 {
     if( !pThis->mpData->maMenubuttonItem.maRect.IsEmpty() )
     {
+        // #i53937# paint menu button only if necessary
+        if( !(pThis->GetMenuType() & TOOLBOX_MENUTYPE_CUSTOMIZE) && !pThis->ImplHasClippedItems() )
+            return;
+
         // execute pending paint requests
         ImplCheckUpdate( pThis );
 
@@ -3286,14 +3290,8 @@ void ToolBox::ImplDrawMenubutton( ToolBox *pThis, BOOL bHighlight )
         else
             aRect.Left() = aRect.Right() - aRect.getWidth()/3;
 
-        BOOL bSetColor = TRUE;
-        if( !(pThis->mpData->maMenuType & TOOLBOX_MENUTYPE_CUSTOMIZE) )
-        {
-            // customization disabled
-            bSetColor = FALSE;
-            pThis->SetFillColor( pThis->GetSettings().GetStyleSettings().GetShadowColor() );
-        }
-        ImplDrawDropdownArrow( pThis, aRect, bSetColor, !pThis->mbHorz );
+        if( pThis->mpData->maMenuType & TOOLBOX_MENUTYPE_CUSTOMIZE )
+            ImplDrawDropdownArrow( pThis, aRect, TRUE, !pThis->mbHorz );
 
         if( pThis->ImplHasClippedItems() )
         {
