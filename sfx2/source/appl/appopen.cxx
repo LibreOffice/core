@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 15:49:23 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:22:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,9 @@
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONREQUEST_HPP_
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TASK_ERRORCODEREQUEST_HPP_
+#include <com/sun/star/task/ErrorCodeRequest.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -128,7 +131,9 @@
 #ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
 #endif
-
+#ifndef __FRAMEWORK_INTERACTION_PREVENTDUPLICATEINTERACTION_HXX_
+#include <framework/preventduplicateinteraction.hxx>
+#endif
 #include <svtools/ehdl.hxx>
 #include <basic/sbxobj.hxx>
 #include <svtools/urihelper.hxx>
@@ -196,6 +201,8 @@ using namespace ::com::sun::star::system;
 using namespace ::com::sun::star::task;
 using namespace ::cppu;
 using namespace ::sfx2;
+
+namespace css = ::com::sun::star;
 
 //=========================================================================
 
@@ -1073,6 +1080,32 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             if ( nSID == SID_OPENTEMPLATE )
                 rReq.AppendItem( SfxBoolItem( SID_TEMPLATE, FALSE ) );
 
+            // This helper wraps an existing (or may new created InteractionHandler)
+            // intercept all incoming interactions and provide usefull informations
+            // later if the following transaction was finished.
+
+            ::framework::PreventDuplicateInteraction*                 pHandler       = new ::framework::PreventDuplicateInteraction(::comphelper::getProcessServiceFactory());
+            css::uno::Reference< css::task::XInteractionHandler >     xHandler       (static_cast< css::task::XInteractionHandler* >(pHandler), css::uno::UNO_QUERY);
+            css::uno::Reference< css::task::XInteractionHandler >     xWrappedHandler;
+
+            // wrap existing handler or create new UUI handler
+            SFX_REQUEST_ARG(rReq, pInteractionItem, SfxUnoAnyItem, SID_INTERACTIONHANDLER, FALSE);
+            if (pInteractionItem)
+            {
+                pInteractionItem->GetValue() >>= xWrappedHandler;
+                rReq.RemoveItem( SID_INTERACTIONHANDLER );
+            }
+            if (xWrappedHandler.is())
+                pHandler->setHandler(xWrappedHandler);
+            else
+                pHandler->useDefaultUUIHandler();
+            rReq.AppendItem( SfxUnoAnyItem(SID_INTERACTIONHANDLER,::com::sun::star::uno::makeAny(xHandler)) );
+
+            // define rules for this handler
+            css::uno::Type                                            aInteraction = ::getCppuType(static_cast< css::task::ErrorCodeRequest* >(0));
+            ::framework::PreventDuplicateInteraction::InteractionInfo aRule        (aInteraction, 1);
+            pHandler->addInteractionRule(aRule);
+
             for ( USHORT i = 0; i < pURLList->Count(); ++i )
             {
                 String aURL = *(pURLList->GetObject(i));
@@ -1083,7 +1116,25 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 // geladen wird
                 // TODO/LATER: use URLList argument and always remove one document after another, each step in asychronous execution, until finished
                 // but only if reschedule is a problem
-                GetDispatcher_Impl()->Execute( SID_OPENDOC, rReq.IsSynchronCall() ? SFX_CALLMODE_SYNCHRON : SFX_CALLMODE_ASYNCHRON, *rReq.GetArgs() );
+                GetDispatcher_Impl()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, *rReq.GetArgs() );
+
+                // check for special interaction "NO MORE DOCUMENTS ALLOWED" and
+                // break loop then. Otherwise we risk showing the same interaction more then once.
+                if ( pHandler->getInteractionInfo(aInteraction, &aRule) )
+                {
+                    if (aRule.m_nCallCount > 0)
+                    {
+                        if (aRule.m_xRequest.is())
+                        {
+                            css::task::ErrorCodeRequest aRequest;
+                            if (aRule.m_xRequest->getRequest() >>= aRequest)
+                            {
+                                if (aRequest.ErrCode == ERRCODE_SFX_NOMOREDOCUMENTSALLOWED)
+                                    break;
+                            }
+                        }
+                    }
+                }
             }
 
             delete pURLList;
@@ -1243,8 +1294,15 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 */
                 }
             }
-            else if ( eMode == SvtExtendedSecurityOptions::OPEN_NEVER )
+            else if ( eMode == SvtExtendedSecurityOptions::OPEN_NEVER && aINetProtocol != INET_PROT_VND_SUN_STAR_HELP )
             {
+                vos::OGuard aGuard( Application::GetSolarMutex() );
+                Window *pWindow = SFX_APP()->GetTopWindow();
+
+                String aSecurityWarningBoxTitle( SfxResId( RID_SECURITY_WARNING_TITLE ));
+                WarningBox  aSecurityWarningBox( pWindow, SfxResId( RID_SECURITY_WARNING_NO_HYPERLINKS ));
+                aSecurityWarningBox.SetText( aSecurityWarningBoxTitle );
+                aSecurityWarningBox.Execute();
                 return;
             }
 
