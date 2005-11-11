@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 10:20:18 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:23:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1047,7 +1047,13 @@ void SfxObjectShell::CheckMacrosOnLoading_Impl()
     if ( GetError() != ERRCODE_NONE )
         return;
 
-    if ( bHasStorage && ( !pFilter || !( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) ) )
+    if ( SvtSecurityOptions().IsMacroDisabled() )
+    {
+        // no macro should be executed at all
+        pImp->bMacroDisabled = sal_True;
+        pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
+    }
+    else if ( bHasStorage && ( !pFilter || !( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) ) )
     {
         uno::Reference< embed::XStorage > xStorage = pMedium->GetStorage();
         if ( xStorage.is() )
@@ -1056,7 +1062,7 @@ void SfxObjectShell::CheckMacrosOnLoading_Impl()
 
             if ( bHasMacros )
             {
-                AdjustMacroMode( String() );
+                AdjustMacroMode( String() ); // if macros are disabled the message will be shown here
                 if ( SvtSecurityOptions().GetMacroSecurityLevel() >= 2
                     && MacroExecMode::NEVER_EXECUTE == pImp->nMacroMode )
                 {
@@ -1064,7 +1070,7 @@ void SfxObjectShell::CheckMacrosOnLoading_Impl()
                     aBox.Execute();
                 }
             }
-            else
+            else if ( !pImp->bMacroDisabled )
             {
                 // if macros will be added by the user later, the security check is obsolete
                 pImp->nMacroMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
@@ -1078,7 +1084,7 @@ void SfxObjectShell::CheckMacrosOnLoading_Impl()
         if ( HasMacrosLib_Impl() )
         {
             // no signing in alien formats!
-            AdjustMacroMode( String() );
+            AdjustMacroMode( String() ); // if macros are disabled the message will be shown here
             if ( SvtSecurityOptions().GetMacroSecurityLevel() >= 2
               && MacroExecMode::NEVER_EXECUTE == pImp->nMacroMode )
             {
@@ -1086,7 +1092,7 @@ void SfxObjectShell::CheckMacrosOnLoading_Impl()
                 aBox.Execute();
             }
         }
-        else
+        else if ( !pImp->bMacroDisabled )
         {
             // if macros will be added by the user later, the security check is obsolete
             pImp->nMacroMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
@@ -1867,6 +1873,22 @@ void SfxObjectShell::AdjustMacroMode( const String& rScriptType )
         pImp->bSignatureErrorIsShown = sal_True;
     }
     // <--
+
+    if ( SvtSecurityOptions().IsMacroDisabled() )
+    {
+        // no macro should be executed at all
+        pImp->bMacroDisabled = sal_True;
+        pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
+
+        if ( !pImp->bMacroDisabledMessageIsShown )
+        {
+            String aMessage( SfxResId( STR_MACROS_DISABLED ) );
+            WarningBox( NULL, WB_OK, aMessage ).Execute();
+            pImp->bMacroDisabledMessageIsShown = sal_True;
+        }
+
+        return;
+    }
 
     // get setting from configuration if required
     sal_Int16 nAutoConformation = 0;
