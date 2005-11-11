@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guisaveas.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-30 10:24:41 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:23:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,6 +113,7 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/configurationhelper.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/window.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
@@ -255,7 +256,9 @@ public:
 
     sal_Bool ExecuteFilterDialog_Impl( const ::rtl::OUString& aFilterName );
 
+    sal_Int8 CheckSaveAcceptable( sal_Int8 nCurStatus );
     sal_Int8 CheckStateForSave();
+
     sal_Int8 CheckFilter( const ::rtl::OUString& );
 
     sal_Bool CheckFilterOptionsDialogExistence();
@@ -566,6 +569,56 @@ sal_Bool ModelData_Impl::ExecuteFilterDialog_Impl( const ::rtl::OUString& aFilte
 }
 
 //-------------------------------------------------------------------------
+sal_Int8 ModelData_Impl::CheckSaveAcceptable( sal_Int8 nCurStatus )
+{
+    sal_Int8 nResult = nCurStatus;
+
+    if ( nResult != STATUS_NO_ACTION && GetStorable()->hasLocation() )
+    {
+        // check whether save is acceptable by the configuration
+        // it is done only for documents that have persistence already
+        uno::Reference< uno::XInterface > xCommonConfig = ::comphelper::ConfigurationHelper::openConfig(
+                            m_pOwner->GetServiceFactory(),
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common" ) ),
+                            ::comphelper::ConfigurationHelper::E_STANDARD );
+        if ( !xCommonConfig.is() )
+            throw uno::RuntimeException(); // should the saving proceed as usual instead?
+
+        try
+        {
+            sal_Bool bAlwaysSaveAs = sal_False;
+
+            // the saving is acceptable
+            // in case the configuration entry is not set or set to false
+            // or in case of version creation
+            ::rtl::OUString aVersionCommentString = ::rtl::OUString::createFromAscii( "VersionComment" );
+            if ( ( ::comphelper::ConfigurationHelper::readRelativeKey(
+                    xCommonConfig,
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Save/Document/" ) ),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AlwaysSaveAs" ) ) ) >>= bAlwaysSaveAs )
+              && bAlwaysSaveAs
+            && GetMediaDescr().find( aVersionCommentString ) == GetMediaDescr().end() )
+            {
+                // notify the user that SaveAs is going to be done
+                String aString( SfxResId( STR_NEW_FILENAME_SAVE ) );
+                Window* pWin = SfxStoringHelper::GetModelWindow( m_xModel );
+                QueryBox aMessageBox( pWin, WB_OK_CANCEL | WB_DEF_OK, aString );
+                if ( aMessageBox.Execute() == RET_OK )
+                    nResult = STATUS_SAVEAS;
+                else
+                    nResult = STATUS_NO_ACTION;
+            }
+        }
+        catch( uno::Exception& )
+        {
+            // impossibility to get the configuration access means normal saving flow for now
+        }
+    }
+
+    return nResult;
+}
+
+//-------------------------------------------------------------------------
 sal_Int8 ModelData_Impl::CheckStateForSave()
 {
     // check acceptable entries for media descriptor
@@ -607,7 +660,9 @@ sal_Int8 ModelData_Impl::CheckStateForSave()
     ::rtl::OUString aOldFilterName = GetDocProps().getUnpackedValueOrDefault(
                                                     ::rtl::OUString::createFromAscii( "FilterName" ),
                                                     ::rtl::OUString() );
-    return CheckFilter( aOldFilterName );
+    sal_Int8 nResult = CheckFilter( aOldFilterName );
+
+    return nResult;
 }
 
 sal_Int8 ModelData_Impl::CheckFilter( const ::rtl::OUString& aFilterName )
@@ -1152,10 +1207,22 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
             if ( bWideExport )
                 nStoreMode = EXPORT_REQUESTED | WIDEEXPORT_REQUESTED;
         }
+
+        // if saving is not acceptable the warning must be shown even in case of SaveAs operation
+        if ( ( nStoreMode & SAVEAS_REQUESTED ) && aModelData.CheckSaveAcceptable( STATUS_SAVEAS ) == STATUS_NO_ACTION )
+            throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), ERRCODE_IO_ABORT );
     }
     else if ( nStoreMode & SAVE_REQUESTED )
     {
-        sal_Int8 nStatusSave = aModelData.CheckStateForSave();
+        // if saving is not acceptable by the configuration the warning must be shown
+        sal_Int8 nStatusSave = aModelData.CheckSaveAcceptable( STATUS_SAVE );
+
+        if ( nStatusSave == STATUS_NO_ACTION )
+            throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), ERRCODE_IO_ABORT );
+        else if ( nStatusSave == STATUS_SAVE )
+            // check whether it is possible to use save operation
+            nStatusSave = aModelData.CheckStateForSave();
+
         if ( nStatusSave == STATUS_NO_ACTION )
         {
             throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), ERRCODE_IO_ABORT );
@@ -1818,28 +1885,7 @@ sal_Bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::
     if ( !SvtSaveOptions().IsWarnAlienFormat() )
         return sal_True;
 
-    Window* pWin = 0;
-    try {
-        uno::Reference< frame::XController > xController = xModel->getCurrentController();
-        if ( xController.is() )
-        {
-            uno::Reference< frame::XFrame > xFrame = xController->getFrame();
-            if ( xFrame.is() )
-            {
-                uno::Reference< awt::XWindow > xWindow = xFrame->getContainerWindow();
-                if ( xWindow.is() )
-                {
-                    VCLXWindow* pVCLWindow = VCLXWindow::GetImplementation( xWindow );
-                    if ( pVCLWindow )
-                        pWin = pVCLWindow->GetWindow();
-                }
-            }
-        }
-    }
-    catch ( uno::Exception& )
-    {
-    }
-
+    Window* pWin = SfxStoringHelper::GetModelWindow( xModel );
     SfxAlienWarningDialog aDlg( pWin, aOldUIName );
 
     /*String aWarn;
@@ -1868,3 +1914,36 @@ void SfxStoringHelper::ExecuteFilterDialog( SfxStoringHelper& _rStorageHelper
     if ( aModelData.ExecuteFilterDialog_Impl( _sFilterName ) )
         _rArgsSequence = aModelData.GetMediaDescr().getAsConstPropertyValueList();
 }
+
+// static
+Window* SfxStoringHelper::GetModelWindow( const uno::Reference< frame::XModel >& xModel )
+{
+    Window* pWin = 0;
+    try {
+        if ( xModel.is() )
+        {
+            uno::Reference< frame::XController > xController = xModel->getCurrentController();
+            if ( xController.is() )
+            {
+                uno::Reference< frame::XFrame > xFrame = xController->getFrame();
+                if ( xFrame.is() )
+                {
+                    uno::Reference< awt::XWindow > xWindow = xFrame->getContainerWindow();
+                    if ( xWindow.is() )
+                    {
+                        VCLXWindow* pVCLWindow = VCLXWindow::GetImplementation( xWindow );
+                        if ( pVCLWindow )
+                            pWin = pVCLWindow->GetWindow();
+                    }
+                }
+            }
+        }
+    }
+    catch ( uno::Exception& )
+    {
+    }
+
+    return pWin;
+}
+
+
