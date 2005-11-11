@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:20:08 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:22:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1294,6 +1294,15 @@ WarningBox RID_SECURITY_WARNING_HYPERLINK
     DefButton = WB_DEF_NO ;
     Message [ de ] = "Dieser Hyperlink wird \"%s\" Ã¶ffnen. Wollen Sie fortfahren?" ;
     Message [ en-US ] = "This hyperlink is going to open \"%s\". Do you want to proceed?" ;
+};
+
+WarningBox RID_SECURITY_WARNING_NO_HYPERLINKS
+{
+    //HelpId = HID_WARNING_SECURITY_NO_HYPERLINKS;
+    Buttons = WB_OK ;
+    DefButton = WB_DEF_OK ;
+    Message [ de ] = "Der Hyperlink wird aus Sicherheitsgünden nicht aus geführt.\nDie angegebene Adresse wird nicht geöffnet.";
+    Message [ en-US ] = "For security reasons, the hyperlink cannot be executed.\nThe stated address will not be opened.";
 };
 
 String RID_SECURITY_WARNING_TITLE
