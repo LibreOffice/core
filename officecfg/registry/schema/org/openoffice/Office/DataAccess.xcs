@@ -5,9 +5,9 @@
  *
  *  $RCSfile: DataAccess.xcs,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:13:00 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:42:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,6 +177,27 @@
 		<info>
 			<author>OJ</author>
 		</info>
+        <group oor:name="ApplicationIntegration">
+            <info>
+                <desc>Specifies sevaral settings related to integrating data access functionality into the main applications.</desc>
+            </info>
+            <group oor:name="InstalledFeatures">
+                <info>
+                    <desc>Specifies which data-access related features are available in non-Base applications.</desc>
+                </info>
+                <group oor:name="Writer">
+                    <info>
+                        <desc>Specifies which data-access related features areavailable in OpenOffice.org Writer.</desc>
+                    </info>
+                    <prop oor:name="DatabaseFields" oor:type="xs:boolean">
+                        <info>
+                            <desc>Specifies that the Database tab page should be available in the fields dialog.</desc>
+                        </info>
+                        <value>true</value>
+                    </prop>
+                </group>
+            </group>
+        </group>
 		<group oor:name="EmbeddedDatabases">
 			<info>
 				<desc>Specifies the default embedded database which should be used.</desc>
