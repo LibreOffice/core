@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:13:55 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 10:19:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,13 +71,10 @@
 #include <comphelper/processfactory.hxx>
 #endif
 #ifndef _COM_SUN_STAR_SECURITY_DOCUMENTSIGNATURESINFORMATION_HPP_
-#include <com/sun/star/security/DocumentSignaturesInformation.hpp>
+#include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SECURITY_XDOCUMENTDIGITALSIGNATURES_HPP_
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SECURITY_DOCUMENTSIGNATURESINFORMATION_HPP_
-#include <com/sun/star/security/DocumentSignaturesInformation.hpp>
 #endif
 
 #include "dinfdlg.hxx"
@@ -689,7 +686,7 @@ void SfxDocumentPage::ImplUpdateSignatures()
             if( xD.is() )
             {
                 String s;
-                Sequence< security::DocumentSignaturesInformation > aInfos;
+                Sequence< security::DocumentSignatureInformation > aInfos;
                 aInfos = xD->verifyDocumentContentSignatures( pMedium->GetLastCommitReadStorage_Impl(),
                                                                 uno::Reference< io::XInputStream >() );
                 if( aInfos.getLength() > 1 )
@@ -699,7 +696,7 @@ void SfxDocumentPage::ImplUpdateSignatures()
                 else if( aInfos.getLength() == 1 )
                 {
                     String aCN_Id( String::CreateFromAscii( "CN" ) );
-                    const security::DocumentSignaturesInformation& rInfo = aInfos[ 0 ];
+                    const security::DocumentSignatureInformation& rInfo = aInfos[ 0 ];
                     s = GetDateTimeString( rInfo.SignatureDate, rInfo.SignatureTime );
                     s.AppendAscii( ", " );
                     s += GetContentPart( rInfo.Signer->getSubjectName(), aCN_Id );
