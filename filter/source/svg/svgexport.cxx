@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svgexport.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:54:53 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 10:58:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -314,6 +314,7 @@ sal_Bool SVGFilter::implExportDocument( const Reference< XDrawPages >& rxMasterP
     aAttr += B2UCONST( " " );
     aAttr += OUString::valueOf( nDocHeight );
 
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "version", B2UCONST( "1.1" ) );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "viewBox", aAttr );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "preserveAspectRatio", B2UCONST( "xMidYMid" ) );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "fill-rule", B2UCONST( "evenodd" ) );
@@ -324,6 +325,10 @@ sal_Bool SVGFilter::implExportDocument( const Reference< XDrawPages >& rxMasterP
         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "onclick", B2UCONST( "onClick(evt)" ) );
         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "onkeypress", B2UCONST( "onKeyPress(evt)" ) );
     }
+
+
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns", B2UCONST( "http://www.w3.org/2000/svg" ) );
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:xlink", B2UCONST( "http://www.w3.org/1999/xlink" ) );
 
     mpSVGDoc = new SvXMLElementExport( *mpSVGExport, XML_NAMESPACE_NONE, "svg", TRUE, TRUE );
 
