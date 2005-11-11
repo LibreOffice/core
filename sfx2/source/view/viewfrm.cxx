@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:47:12 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:24:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,9 @@
 #ifndef _EHDL_HXX
 #include <svtools/ehdl.hxx>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
+#include <com/sun/star/container/XIndexAccess.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #endif
@@ -91,6 +94,12 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAMES_HPP_
+#include <com/sun/star/frame/XFrames.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
+#include <com/sun/star/frame/XFramesSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
@@ -135,6 +144,10 @@
 
 #include <unotools/localfilehelper.hxx>
 #include <comphelper/processfactory.hxx>
+
+#ifndef _COMPHELPER_CONFIGURATIONHELPER_HXX_
+#include <comphelper/configurationhelper.hxx>
+#endif
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/ucb/XContent.hpp>
@@ -2826,6 +2839,75 @@ void SfxViewFrame::ExecView_Impl
 }
 
 //-------------------------------------------------------------------------
+/* TODO as96863:
+        This method try to collect informations about the count of currently open documents.
+        But the algorithm is implemented very simple ...
+        E.g. hidden documents should be ignored here ... but they are counted.
+        TODO: export special helper "framework::FrameListAnalyzer" within the framework module
+        and use it here.
+*/
+sal_Bool impl_maxOpenDocCountReached()
+{
+    static ::rtl::OUString SERVICE_DESKTOP = ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop");
+
+    try
+    {
+        css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+        css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
+                                xSMGR,
+                                ::rtl::OUString::createFromAscii("org.openoffice.Office.Common/"),
+                                ::rtl::OUString::createFromAscii("Misc"),
+                                ::rtl::OUString::createFromAscii("MaxOpenDocuments"),
+                                ::comphelper::ConfigurationHelper::E_READONLY);
+
+        // NIL means: count of allowed documents = infinite !
+        if ( ! aVal.hasValue())
+            return sal_False;
+
+        sal_Int32 nOpenDocs = 0;
+        sal_Int32 nMaxDocs  = 0;
+        aVal >>= nMaxDocs;
+
+        css::uno::Reference< css::frame::XFramesSupplier >  xDesktop(xSMGR->createInstance(SERVICE_DESKTOP), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::container::XIndexAccess > xCont   (xDesktop->getFrames()                 , css::uno::UNO_QUERY_THROW);
+
+        sal_Int32 c = xCont->getCount();
+        sal_Int32 i = 0;
+
+        for (i=0; i<c; ++i)
+        {
+            try
+            {
+                css::uno::Reference< css::frame::XFrame > xFrame;
+                xCont->getByIndex(i) >>= xFrame;
+                if ( ! xFrame.is())
+                    continue;
+
+                // a) do not count the help window
+                if (xFrame->getName().equalsAscii("OFFICE_HELP_TASK"))
+                    continue;
+
+                // b) count all other frames
+                ++nOpenDocs;
+            }
+            catch(const css::uno::Exception&)
+                // A IndexOutOfBoundException can happen in multithreaded environments,
+                // where any other thread can change this container !
+                { continue; }
+        }
+
+        return (nOpenDocs >= nMaxDocs);
+    }
+    catch(const css::uno::Exception&)
+        {}
+
+    // Any internal error is no reason to stop opening documents !
+    // Limitation of opening documents is a special "nice to  have" feature.
+    // Otherwhise it can happen, that NO document will be opened ...
+    return sal_False;
+}
+
+//-------------------------------------------------------------------------
 void SfxViewFrame::StateView_Impl
 (
     SfxItemSet&     rSet            /*  leeres <SfxItemSet> mit <Which-Ranges>,
@@ -2902,6 +2984,11 @@ void SfxViewFrame::StateView_Impl
                 {
                     if ( !GetViewShell()->NewWindowAllowed() && !pDocSh->HasName() )
                             rSet.DisableItem( nWhich );
+                    else
+                    {
+                        if (impl_maxOpenDocCountReached())
+                            rSet.DisableItem( nWhich );
+                    }
                     break;
                 }
             }
@@ -3989,7 +4076,13 @@ void SfxViewFrame::UpdateDocument_Impl()
     if ( pDoc->IsLoadingFinished() )
     {
         // if the loading still not finished the macros will be handled immediatelly after loading
-        if ( pDoc->HasMacrosLib_Impl() || pDoc->HasMacrosStor_Impl() )
+        if ( SvtSecurityOptions().IsMacroDisabled() )
+        {
+            // no macro should be executed at all
+            pDoc->Get_Impl()->bMacroDisabled = sal_True;
+            pDoc->Get_Impl()->nMacroMode = ::com::sun::star::document::MacroExecMode::NEVER_EXECUTE;
+        }
+        else if ( pDoc->HasMacrosLib_Impl() || pDoc->HasMacrosStor_Impl() )
             pDoc->AdjustMacroMode( String() );
         else
         {
