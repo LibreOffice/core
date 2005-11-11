@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarsmenucontroller.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:59:06 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:08:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,7 @@
 #ifndef INCLUDED_SVTOOLS_MENUOPTIONS_HXX
 #include <svtools/menuoptions.hxx>
 #endif
-//#include <tools/solar.hrc>
+#include <svtools/cmdoptions.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -146,6 +146,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::ui;
 
+static const char CONFIGURE_TOOLBARS_CMD[]      = "ConfigureDialog";
 static const char CONFIGURE_TOOLBARS[]          = ".uno:ConfigureDialog";
 static const char CMD_COLORBAR[]                = ".uno:ColorControl";
 static const char CMD_HYPERLINKBAR[]            = ".uno:InsertHyperlink";
@@ -512,14 +513,28 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
                 addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_FORMULABAR )), 20128 );
         }
 
-        // Create command for configure
-        if ( m_xPopupMenu->getItemCount() > 0 )
+        sal_Bool          bAddCommand( sal_True );
+        SvtCommandOptions aCmdOptions;
+        rtl::OUString     aConfigureToolbar( RTL_CONSTASCII_USTRINGPARAM( CONFIGURE_TOOLBARS ));
+
+        if ( aCmdOptions.HasEntries( SvtCommandOptions::CMDOPTION_DISABLED ))
         {
-            USHORT        nItemCount = m_xPopupMenu->getItemCount();
-            m_xPopupMenu->insertSeparator( nItemCount+1 );
+            if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED,
+                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CONFIGURE_TOOLBARS_CMD ))))
+                bAddCommand = sal_False;
         }
 
-        addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CONFIGURE_TOOLBARS )), 5904 );
+        if ( bAddCommand )
+        {
+            // Create command for configure
+            if ( m_xPopupMenu->getItemCount() > 0 )
+            {
+                USHORT        nItemCount = m_xPopupMenu->getItemCount();
+                m_xPopupMenu->insertSeparator( nItemCount+1 );
+            }
+
+            addCommand( m_xPopupMenu, aConfigureToolbar, 5904 );
+        }
     }
 }
 
@@ -799,6 +814,7 @@ void SAL_CALL ToolbarsMenuController::initialize( const Sequence< Any >& aArgume
                         if ( xUIConfigurationManagerSupplier.is() )
                             m_xDocCfgMgr = xUIConfigurationManagerSupplier->getUIConfigurationManager();
                     }
+                    m_aModuleIdentifier = aModuleIdentifier;
                 }
                 catch ( Exception& )
                 {
