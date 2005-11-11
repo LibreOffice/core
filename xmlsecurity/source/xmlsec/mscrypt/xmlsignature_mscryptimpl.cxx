@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlsignature_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:32:34 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 09:20:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,8 @@
 #ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
 #endif
+
+#include "com/sun/star/xml/crypto/SecurityOperationStatus.hdl"
 
 #ifndef _XMLSIGNATURE_MSCRYPTIMPL_HXX_
 #include "xmlsignature_mscryptimpl.hxx"
@@ -83,6 +85,7 @@ using ::com::sun::star::xml::crypto::XXMLSignatureTemplate ;
 using ::com::sun::star::xml::crypto::XXMLSecurityContext ;
 using ::com::sun::star::xml::crypto::XUriBinding ;
 using ::com::sun::star::xml::crypto::XMLSignatureException ;
+
 
 XMLSignature_MSCryptImpl :: XMLSignature_MSCryptImpl( const Reference< XMultiServiceFactory >& aFactory ) : m_xServiceManager( aFactory ) {
 }
@@ -144,7 +147,7 @@ SAL_CALL XMLSignature_MSCryptImpl :: generate(
             throw RuntimeException() ;
     }
 
-     setErrorRecorder( aTemplate );
+     setErrorRecorder( );
 
     pMngr = pSecEnv->createKeysManager() ; //i39448
     if( !pMngr ) {
@@ -162,18 +165,18 @@ SAL_CALL XMLSignature_MSCryptImpl :: generate(
     }
 
     //Sign the template
-    if( xmlSecDSigCtxSign( pDsigCtx , pNode ) < 0 ) {
-        xmlSecDSigCtxDestroy( pDsigCtx ) ;
-        pSecEnv->destroyKeysManager( pMngr ) ; //i39448
-
-        //Unregistered the stream/URI binding
-        if( xUriBinding.is() )
-            xmlUnregisterStreamInputCallbacks() ;
-
-        //throw XMLSignatureException() ;
-        clearErrorRecorder();
-        return aTemplate;
+    if( xmlSecDSigCtxSign( pDsigCtx , pNode ) == 0 )
+    {
+        if (pDsigCtx->status == xmlSecDSigStatusSucceeded)
+            aTemplate->setStatus(com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
+        else
+            aTemplate->setStatus(com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN);
     }
+    else
+    {
+        aTemplate->setStatus(com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN);
+    }
+
 
     xmlSecDSigCtxDestroy( pDsigCtx ) ;
     pSecEnv->destroyKeysManager( pMngr ) ; //i39448
@@ -251,7 +254,7 @@ SAL_CALL XMLSignature_MSCryptImpl :: validate(
     }
     */
 
-     setErrorRecorder( aTemplate );
+     setErrorRecorder( );
 
     pMngr = pSecEnv->createKeysManager() ; //i39448
     if( !pMngr ) {
@@ -269,20 +272,23 @@ SAL_CALL XMLSignature_MSCryptImpl :: validate(
     }
 
     //Verify signature
-    if( xmlSecDSigCtxVerify( pDsigCtx , pNode ) < 0 ) {
-        xmlSecDSigCtxDestroy( pDsigCtx ) ;
-        pSecEnv->destroyKeysManager( pMngr ) ; //i39448
-
-        //Unregistered the stream/URI binding
-        if( xUriBinding.is() )
-            xmlUnregisterStreamInputCallbacks() ;
-
-        //throw XMLSignatureException() ;
-        clearErrorRecorder();
-        return aTemplate;
+    //The documentation says that the signature is only valid if the return value is 0 (that is, not < 0)
+    //AND pDsigCtx->status == xmlSecDSigStatusSucceeded. That is, we must not make any assumptions, if
+    //the return value is < 0. Then we must regard the signature as INVALID. We cannot use the
+    //error recorder feature to get the ONE error that made the verification fail, because there is no
+    //documentation/specification as to how to interpret the number of recorded errors and what is the initial
+    //error.
+    if( xmlSecDSigCtxVerify( pDsigCtx , pNode ) == 0 )
+    {
+        if (pDsigCtx->status == xmlSecDSigStatusSucceeded)
+            aTemplate->setStatus(com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
+        else
+            aTemplate->setStatus(com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN);
     }
-
-    //valid = ( pDsigCtx->status == xmlSecDSigStatusSucceeded ) ;
+    else
+    {
+        aTemplate->setStatus(com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN);
+    }
 
     xmlSecDSigCtxDestroy( pDsigCtx ) ;
     pSecEnv->destroyKeysManager( pMngr ) ; //i39448
@@ -291,8 +297,9 @@ SAL_CALL XMLSignature_MSCryptImpl :: validate(
     if( xUriBinding.is() )
         xmlUnregisterStreamInputCallbacks() ;
 
+
     clearErrorRecorder();
-    return aTemplate ;
+    return aTemplate;
 }
 
 /* XInitialization */
