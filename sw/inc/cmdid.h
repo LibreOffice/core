@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:36:53 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 13:14:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -888,6 +888,8 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_UNO_DEFAULT_OUTLINE_LEVEL        (FN_EXTRA2 + 99)
 
 #define FN_XFORMS_DESIGN_MODE               (FN_EXTRA2 + 100)
+
+#define FN_UNO_PARA_STYLE_CONDITIONS        (FN_EXTRA2 + 101)
 
 /*--------------------------------------------------------------------
     Bereich: Hilfe
