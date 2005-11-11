@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontconfig.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-27 07:55:13 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:44:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -361,7 +361,7 @@ bool PrintFontManager::initFontconfig()
             if( eFileRes != FcResultMatch || eFamilyRes != FcResultMatch || eOutRes != FcResultMatch )
                 continue;
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
             fprintf( stderr, "found font \"%s\" in file %s\n"
                      "   weight = %d, slant = %d, style = \"%s\"\n"
                      "   spacing = %d, outline = %d\n"
@@ -386,7 +386,7 @@ bool PrintFontManager::initFontconfig()
             int nDirID = getDirectoryAtom( aDir, true );
             if( ! m_pFontCache->getFontCacheFile( nDirID, aDir, aBase, aFonts ) )
             {
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
                 fprintf( stderr, "file %s not cached\n", aBase.getStr() );
 #endif
                 // not known, analyze font file to get attributes
@@ -500,7 +500,7 @@ bool PrintFontManager::initFontconfig()
                 m_aFonts[ aFont ] = pUpdate;
                 m_aFontFileToFontID[ aBase ].insert( aFont );
                 nFonts++;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
                 fprintf( stderr, "inserted font %s as fontID %d\n", family, aFont );
 #endif
             }
