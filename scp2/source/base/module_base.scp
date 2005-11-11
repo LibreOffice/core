@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_base.scp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:19:21 $
+ *  last change: $Author: kz $ $Date: 2005-11-11 14:26:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,9 +45,17 @@ Module gid_Module_Prg_Base_Bin
     ParentID = gid_Module_Prg_Base;
     Minimal = NO;
     Default = YES;
-    Files = (gid_File_Share_Xdg_Base,
-        gid_File_Registry_Spool_Oo_Setup_Base_Xcu,gid_File_Registry_Spool_Oo_Common_Base_Xcu,
-        gid_File_Exe_Sbase);
+    Files =
+        (gid_File_Share_Xdg_Base
+        ,gid_File_Registry_Spool_Oo_Setup_Base_Xcu,gid_File_Registry_Spool_Oo_Common_Base_Xcu
+        ,gid_File_Exe_Sbase
+        ,gid_File_Registry_Spool_Oo_TypeDetection_Database_Types_Xcu
+        ,gid_File_Registry_Spool_Oo_TypeDetection_Database_Filters_Xcu
+        ,gid_File_Registry_Spool_Oo_TypeDetection_Database_Others_Xcu
+        ,gid_File_Lib_Abp,gid_File_Res_Abp
+        ,gid_File_Lib_Dbp,gid_File_Res_Dbp
+        ,gid_File_Lib_Dbu,gid_File_Res_Dbu
+    );
 End
 
 Module gid_Module_Prg_Base_Help
