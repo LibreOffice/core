@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CharacterPropertiesAsian.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:26:54 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 13:23:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,19 +93,6 @@ published service CharacterPropertiesAsian
     /** contains the value of the locale.
      */
     [property] com::sun::star::lang::Locale CharLocaleAsian;
-        //-------------------------------------------------------------------------
-        /** specifies if an automatic spacing is inserted between characters of different script types.
-         */
-        [property] boolean ParaIsCharacterDistance;
-        //-------------------------------------------------------------------------
-        /** specifies if rules for forbidden characters at beginning or end of line are applied.
-         */
-        [property] boolean ParaIsForbiddenRules;
-        //-------------------------------------------------------------------------
-        /** specifies if hanging punctuation is allowed in this paragraph.
-         */
-        [property] boolean ParaIsHangingPunctuation;
-        //-------------------------------------------------------------------------
 };
 }; }; }; };
 #endif
