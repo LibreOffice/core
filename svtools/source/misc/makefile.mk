@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 16:21:38 $
+#   last change: $Author: rt $ $Date: 2005-11-11 12:14:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,8 @@ SLOFILES=\
     $(SLO)$/imap3.obj		\
     $(SLO)$/ownlist.obj		\
     $(SLO)$/pver.obj		\
-    $(SLO)$/vcldata.obj
+    $(SLO)$/vcldata.obj     \
+    $(SLO)$/restrictedpaths.obj
 
 # --- Targets -------------------------------------------------------
 
