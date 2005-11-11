@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 15:50:23 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:58:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1319,6 +1319,13 @@ static void ImplSalShow( HWND hWnd, BOOL bVisible, BOOL bNoActivate )
         else
             ShowWindow( hWnd, SW_HIDE );
     }
+}
+
+// -----------------------------------------------------------------------
+
+
+void WinSalFrame::SetExtendedFrameStyle( SalExtStyle nExtStyle )
+{
 }
 
 // -----------------------------------------------------------------------
