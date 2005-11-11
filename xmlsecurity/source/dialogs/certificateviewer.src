@@ -4,9 +4,9 @@
  *
  *  $RCSfile: certificateviewer.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 13:28:08 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 09:18:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #include "dialogs.hrc"
 #include "helpids.hrc"
 
@@ -189,6 +188,11 @@ TabPage RID_XMLSECTP_GENERAL
         Text [ de ] = "Das Zertifikat konnte nicht verifiziert werden.";
         Text [ en-US ] = "The certificate could not be validated.";
     };
+        Image IMG_STATE_NOT_VALIDATED
+        {
+            ImageBitmap = Bitmap { File = "notcertificate_40x56.png"; };
+            MaskColor = STD_MASKCOLOR;
+    };
 };
 
 TabPage RID_XMLSECTP_DETAILS
@@ -334,9 +338,14 @@ TabPage RID_XMLSECTP_CERTPATH
         ReadOnly = TRUE;
         Border = TRUE;
     };
-    Image IMG_CERT_SMAL
+    Image IMG_CERT_SMALL
     {
         ImageBitmap = Bitmap { File = "certificate_16.png"; };
+        MaskColor = STD_MASKCOLOR;
+    };
+    Image IMG_CERT_NOTVALIDATED_SMALL
+    {
+        ImageBitmap = Bitmap { File = "notcertificate_16.png"; };
         MaskColor = STD_MASKCOLOR;
     };
     String STR_PATH_CERT_OK
