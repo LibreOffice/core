@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdoptions.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:46:48 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:12:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,6 +128,11 @@ class SvtCmdOptions
         void Clear()
         {
             m_aCommandHashMap.clear();
+        }
+
+        sal_Bool HasEntries() const
+        {
+            return ( m_aCommandHashMap.size() > 0 );
         }
 
         void SetContainerSize( sal_Int32 nSize )
@@ -253,6 +258,7 @@ class SvtCommandOptions_Impl : public ConfigItem
         *//*-*****************************************************************************************************/
 
         void                    Clear       (   SvtCommandOptions::CmdOption    eCmdOption  );
+        sal_Bool                HasEntries  (   SvtCommandOptions::CmdOption    eOption     ) const;
         sal_Bool                Lookup      (   SvtCommandOptions::CmdOption    eCmdOption, const OUString& ) const;
         Sequence< OUString >    GetList     (   SvtCommandOptions::CmdOption    eCmdOption  ) const ;
         void                    AddCommand  (   SvtCommandOptions::CmdOption    eCmdOption,
@@ -422,6 +428,17 @@ void SvtCommandOptions_Impl::Clear( SvtCommandOptions::CmdOption eCmdOption )
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
+sal_Bool SvtCommandOptions_Impl::HasEntries( SvtCommandOptions::CmdOption eOption ) const
+{
+    if ( eOption == SvtCommandOptions::CMDOPTION_DISABLED )
+        return ( m_aDisabledCommands.HasEntries() > 0 );
+    else
+        return sal_False;
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
 Sequence< OUString > SvtCommandOptions_Impl::GetList( SvtCommandOptions::CmdOption eCmdOption ) const
 {
     Sequence< OUString > lReturn;
@@ -572,6 +589,15 @@ void SvtCommandOptions::Clear( CmdOption eCmdOption )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->Clear( eCmdOption );
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+sal_Bool SvtCommandOptions::HasEntries( CmdOption eOption ) const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->HasEntries( eOption );
 }
 
 //*****************************************************************************************************************
