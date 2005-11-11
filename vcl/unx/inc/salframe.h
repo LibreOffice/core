@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:36:47 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:56:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,6 +126,7 @@ class VCL_DLLPUBLIC X11SalFrame : public SalFrame
     int             nHeight_;           // client height
     Rectangle       maRestorePosSize;
     ULONG           nStyle_;
+    SalExtStyle     mnExtStyle;
     BOOL            bAlwaysOnTop_;
     BOOL            bViewable_;
     BOOL            bMapped_;
@@ -154,6 +155,7 @@ class VCL_DLLPUBLIC X11SalFrame : public SalFrame
 
     SalI18N_InputContext *mpInputContext;
     Bool            mbInputFocus;
+
 
     void            GetPosSize( Rectangle &rPosSize );
     void            SetSize   ( const Size      &rSize );
@@ -224,6 +226,7 @@ public:
     virtual void                SetMenu( SalMenu* pMenu );
     virtual void                                DrawMenuBar();
 
+    virtual void                SetExtendedFrameStyle( SalExtStyle nExtStyle );
     virtual void                Show( BOOL bVisible, BOOL bNoActivate = FALSE );
     virtual void                Enable( BOOL bEnable );
     virtual void              SetMinClientSize( long nWidth, long nHeight );
