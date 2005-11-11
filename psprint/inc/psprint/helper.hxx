@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:34:10 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:44:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ void normPath( rtl::OString& rPath );
 // rOrgPath will be subject to normPath
 void splitPath( rtl::OString& rOrgPath, rtl::OString& rDir, rtl::OString& rBase );
 
-enum whichOfficePath { NetPath, UserPath };
+enum whichOfficePath { NetPath, UserPath, ConfigPath };
 const rtl::OUString& getOfficePath( enum whichOfficePath ePath );
 } // namespace
 
