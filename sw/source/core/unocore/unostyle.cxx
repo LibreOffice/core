@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:30:40 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 13:16:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,14 +155,14 @@
 #ifndef _FMTRUBY_HXX
 #include <fmtruby.hxx>
 #endif
-#ifndef _COM_SUN_STAR_STYLE_PARAGRAPHSTYLECATEGORY_HPP_
-#include <com/sun/star/style/ParagraphStyleCategory.hpp>
-#endif
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
 #ifndef _SFX_PRINTER_HXX
 #include <sfx2/printer.hxx>
+#endif
+#ifndef _COM_SUN_STAR_STYLE_PARAGRAPHSTYLECATEGORY_HPP_
+#include <com/sun/star/style/ParagraphStyleCategory.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
@@ -173,12 +173,19 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
+
 #ifndef _GETMETRICVAL_HXX
 #include <GetMetricVal.hxx>
 #endif
 #ifndef _FMTFSIZE_HXX
 #include <fmtfsize.hxx>
 #endif
+
+#include "ccoll.hxx"
+
 #define STYLE_FAMILY_COUNT 5            // we have 5 style families
 #define TYPE_BOOL       0
 #define TYPE_SIZE       1
@@ -206,9 +213,11 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::container;
 using namespace ::rtl;
 using com::sun::star::frame::XModel;
+
 /******************************************************************************
  *
  ******************************************************************************/
+
 //convert FN_... to RES_ in header and footer itemset
 sal_uInt16 lcl_ConvertFNToRES(sal_uInt16 nFNId)
 {
@@ -1387,7 +1396,7 @@ SwXStyle::SwXStyle( SwDoc *pDoc, SfxStyleFamily eFam, BOOL bConditional) :
         break;
         case SFX_STYLE_FAMILY_PARA:
         {
-            nMapId = PROPERTY_MAP_PARA_STYLE;
+            nMapId = bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : PROPERTY_MAP_PARA_STYLE;
             aAny = xFamilies->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ParagraphStyles" ) ) );
             // Get the Frame family (and keep it for later)
             aAny >>= mxStyleFamily;
@@ -1440,7 +1449,7 @@ SwXStyle::SwXStyle(SfxStyleSheetBasePool& rPool, SfxStyleFamily eFam,
         {
             const sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(sStyleName, GET_POOLID_TXTCOLL);
             if(nId != USHRT_MAX)
-                ::IsConditionalByPoolId( nId );
+                bIsConditional = ::IsConditionalByPoolId( nId );
             else
                 bIsConditional = RES_CONDTXTFMTCOLL == ((SwDocStyleSheet*)pBase)->GetCollection()->Which();
         }
@@ -1642,8 +1651,9 @@ Reference< XPropertySetInfo >  SwXStyle::getPropertySetInfo(void)
             static Reference< XPropertySetInfo >  xParaRef;
             if(!xParaRef.is())
             {
+                sal_uInt16 nMapId = bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : PROPERTY_MAP_PARA_STYLE;
                 SfxItemPropertySet aPropSet(
-                    aSwMapProvider.GetPropertyMap(PROPERTY_MAP_PARA_STYLE));
+                    aSwMapProvider.GetPropertyMap(nMapId));
                 xParaRef = aPropSet.getPropertySetInfo();
             }
             xRet = xParaRef;
@@ -1795,6 +1805,7 @@ const SwPageDesc& SwStyleBase_Impl::GetOldPageDesc()
 /* -----------------------------19.04.01 09:44--------------------------------
 
  ---------------------------------------------------------------------------*/
+
 void lcl_SetStyleProperty(const SfxItemPropertyMap* pMap,
                         SfxItemPropertySet& rPropSet,
                         const Any& rValue,
@@ -2005,6 +2016,59 @@ void lcl_SetStyleProperty(const SfxItemPropertyMap* pMap,
                 rBase.pNewBase->GetFrmFmt()->SetAutoUpdateFmt(bAuto);
         }
         break;
+        case FN_UNO_PARA_STYLE_CONDITIONS:
+        {
+            uno::Sequence< beans::NamedValue > aSeq;
+            if (!(rValue >>= aSeq))
+                throw IllegalArgumentException();
+
+            DBG_ASSERT(COND_COMMAND_COUNT == 28,
+                    "invalid size of comman count?");
+            const beans::NamedValue *pSeq = aSeq.getConstArray();
+            sal_Int32 nLen = aSeq.getLength();
+
+            sal_Bool bFailed = sal_False;
+            SwCondCollItem aCondItem;
+            for(USHORT i = 0; i < nLen; i++)
+            {
+                OUString aTmp;
+                if ((pSeq[i].Value >>= aTmp))
+                {
+                    // get UI style name from programmatic style name
+                    String aStyleName;
+                       SwStyleNameMapper::FillUIName( aTmp, aStyleName, lcl_GetSwEnumFromSfxEnum ( eFamily ), sal_True );
+
+                    //
+                    // check for correct context and style name
+                    //
+                    sal_Int16 nIdx = GetCommandContextIndex( pSeq[i].Name );
+                    //
+                    pBasePool->SetSearchMask( SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL );
+                    sal_Bool bStyleFound = sal_False;
+                    const SfxStyleSheetBase* pBase = pBasePool->First();
+                    while (pBase && !bStyleFound)
+                    {
+                        if(pBase->GetName() == aStyleName)
+                            bStyleFound = sal_True;
+                        pBase = pBasePool->Next();
+                    }
+                    //
+                    if (nIdx == -1 || !bStyleFound)
+                    {
+                        bFailed = sal_True;
+                        break;
+                    }
+
+                    aCondItem.SetStyle( &aStyleName, nIdx);
+                }
+                else
+                    bFailed = sal_True;
+            }
+            if (bFailed)
+                throw IllegalArgumentException();
+            rBase.GetItemSet().Put( aCondItem );
+        }
+        break;
         case FN_UNO_CATEGORY:
         {
             if(!rBase.pNewBase->IsUserDefined())
@@ -2139,19 +2203,19 @@ void SAL_CALL SwXStyle::SetPropertyValues_Impl(
     sal_Int8 nPropSetId = PROPERTY_SET_CHAR_STYLE;
     switch(eFamily)
     {
-        case SFX_STYLE_FAMILY_PARA: nPropSetId = PROPERTY_SET_PARA_STYLE  ; break;
-        case SFX_STYLE_FAMILY_FRAME: nPropSetId = PROPERTY_SET_FRAME_STYLE ;break;
-        case SFX_STYLE_FAMILY_PAGE: nPropSetId = PROPERTY_SET_PAGE_STYLE  ;break;
+        case SFX_STYLE_FAMILY_PARA  : nPropSetId = bIsConditional ? PROPERTY_SET_CONDITIONAL_PARA_STYLE : PROPERTY_SET_PARA_STYLE; break;
+        case SFX_STYLE_FAMILY_FRAME : nPropSetId = PROPERTY_SET_FRAME_STYLE ;break;
+        case SFX_STYLE_FAMILY_PAGE  : nPropSetId = PROPERTY_SET_PAGE_STYLE  ;break;
         case SFX_STYLE_FAMILY_PSEUDO: nPropSetId = PROPERTY_SET_NUM_STYLE   ;break;
     }
-    SfxItemPropertySet& aPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
+    SfxItemPropertySet &rPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
+    const SfxItemPropertyMap *pMap = rPropSet.getPropertyMap();
 
     if(rPropertyNames.getLength() != rValues.getLength())
         throw IllegalArgumentException();
 
     const OUString* pNames = rPropertyNames.getConstArray();
     const Any* pValues = rValues.getConstArray();
-    const SfxItemPropertyMap*   pMap = aPropSet.getPropertyMap();
 
     SwStyleBase_Impl aBaseImpl(*m_pDoc, sStyleName);
     if(pBasePool)
@@ -2171,13 +2235,14 @@ void SAL_CALL SwXStyle::SetPropertyValues_Impl(
     {
         pMap = SfxItemPropertyMap::GetByName( pMap, pNames[nProp]);
 
-        if(!pMap)
+        if(!pMap ||
+           (!bIsConditional && pNames[nProp].equalsAsciiL(SW_PROP_NAME(UNO_NAME_PARA_STYLE_CONDITIONS))))
             throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
         if ( pMap->nFlags & PropertyAttribute::READONLY)
             throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
         if(aBaseImpl.pNewBase)
         {
-            lcl_SetStyleProperty(pMap, aPropSet, pValues[nProp], aBaseImpl,
+            lcl_SetStyleProperty(pMap, rPropSet, pValues[nProp], aBaseImpl,
                                  pBasePool, m_pDoc, eFamily);
         }
         else if(bIsDescriptor)
@@ -2214,6 +2279,7 @@ void SwXStyle::setPropertyValues(
         throw aWExc;
     }
 }
+
 
 Any lcl_GetStyleProperty(const SfxItemPropertyMap* pMap,
                         SfxItemPropertySet& rPropSet,
@@ -2318,6 +2384,37 @@ Any lcl_GetStyleProperty(const SfxItemPropertyMap* pMap,
                 aRet <<= sName;
             }
             break;
+            case FN_UNO_PARA_STYLE_CONDITIONS:
+            {
+                DBG_ASSERT(COND_COMMAND_COUNT == 28,
+                        "invalid size of comman count?");
+                //SfxItemSet& rStyleSet = rBase.GetItemSet();
+                uno::Sequence< beans::NamedValue > aSeq(COND_COMMAND_COUNT);
+                beans::NamedValue *pSeq = aSeq.getArray();
+
+                SwFmt *pFmt = ((SwDocStyleSheet*)pBase)->GetCollection();
+                const CommandStruct *pCmds = SwCondCollItem::GetCmds();
+                for (USHORT n = 0;  n < COND_COMMAND_COUNT;  ++n)
+                {
+                    String aStyleName;
+
+                    const SwCollCondition* pCond;
+                    if( pFmt && RES_CONDTXTFMTCOLL == pFmt->Which() &&
+                        0 != ( pCond = ((SwConditionTxtFmtColl*)pFmt)->
+                        HasCondition( SwCollCondition( 0, pCmds[n].nCnd, pCmds[n].nSubCond ) ) )
+                        && pCond->GetTxtFmtColl() )
+                    {
+                        // get programmatic style name from UI style name
+                        aStyleName = pCond->GetTxtFmtColl()->GetName();
+                        SwStyleNameMapper::FillProgName(aStyleName, aStyleName, lcl_GetSwEnumFromSfxEnum ( eFamily ), sal_True);
+                    }
+
+                    pSeq[n].Name  = GetCommandContextByIndex(n);
+                    pSeq[n].Value <<= rtl::OUString( aStyleName );
+                }
+                aRet <<= aSeq;
+            }
+            break;
             case FN_UNO_CATEGORY:
             {
                 sal_uInt16 nPoolId = rBase.pNewBase->GetCollection()->GetPoolFmtId();
@@ -2383,22 +2480,24 @@ uno::Sequence< Any > SAL_CALL SwXStyle::GetPropertyValues_Impl(
     sal_Int8 nPropSetId = PROPERTY_SET_CHAR_STYLE;
     switch(eFamily)
     {
-        case SFX_STYLE_FAMILY_PARA: nPropSetId = PROPERTY_SET_PARA_STYLE  ; break;
-        case SFX_STYLE_FAMILY_FRAME: nPropSetId = PROPERTY_SET_FRAME_STYLE ;break;
-        case SFX_STYLE_FAMILY_PAGE: nPropSetId = PROPERTY_SET_PAGE_STYLE  ;break;
+        case SFX_STYLE_FAMILY_PARA  : nPropSetId = bIsConditional ? PROPERTY_SET_CONDITIONAL_PARA_STYLE : PROPERTY_SET_PARA_STYLE; break;
+        case SFX_STYLE_FAMILY_FRAME : nPropSetId = PROPERTY_SET_FRAME_STYLE ;break;
+        case SFX_STYLE_FAMILY_PAGE  : nPropSetId = PROPERTY_SET_PAGE_STYLE  ;break;
         case SFX_STYLE_FAMILY_PSEUDO: nPropSetId = PROPERTY_SET_NUM_STYLE   ;break;
     }
-    SfxItemPropertySet& aPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
+    SfxItemPropertySet &rPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
+    const SfxItemPropertyMap *pMap = rPropSet.getPropertyMap();
+
     const OUString* pNames = rPropertyNames.getConstArray();
     Sequence< Any > aRet(rPropertyNames.getLength());
     Any* pRet = aRet.getArray();
-    const SfxItemPropertyMap*   pMap = aPropSet.getPropertyMap();
     SwStyleBase_Impl aBase(*m_pDoc, sStyleName);
     SfxStyleSheetBase* pBase = 0;
     for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
     {
         pMap = SfxItemPropertyMap::GetByName( pMap, pNames[nProp]);
-        if(!pMap)
+        if(!pMap ||
+           (!bIsConditional && pNames[nProp].equalsAsciiL(SW_PROP_NAME(UNO_NAME_PARA_STYLE_CONDITIONS))))
             throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
         if(pBasePool)
         {
@@ -2409,7 +2508,7 @@ uno::Sequence< Any > SAL_CALL SwXStyle::GetPropertyValues_Impl(
                 pBase = pBasePool->Find(sStyleName);
                 pBasePool->SetSearchMask(eFamily, nSaveMask );
             }
-            pRet[nProp] = lcl_GetStyleProperty(pMap, aPropSet, aBase, pBase, eFamily, GetDoc() );
+            pRet[nProp] = lcl_GetStyleProperty(pMap, rPropSet, aBase, pBase, eFamily, GetDoc() );
         }
         else if(bIsDescriptor)
         {
@@ -2611,20 +2710,19 @@ Sequence< PropertyState > SwXStyle::getPropertyStates(
             sal_Int8 nPropSetId = PROPERTY_SET_CHAR_STYLE;
             switch(eFamily)
             {
-                case SFX_STYLE_FAMILY_PARA: nPropSetId = PROPERTY_SET_PARA_STYLE  ; break;
-                case SFX_STYLE_FAMILY_FRAME: nPropSetId = PROPERTY_SET_FRAME_STYLE ;break;
-                case SFX_STYLE_FAMILY_PAGE: nPropSetId = PROPERTY_SET_PAGE_STYLE;   break;
+                case SFX_STYLE_FAMILY_PARA  : nPropSetId = bIsConditional ? PROPERTY_SET_CONDITIONAL_PARA_STYLE : PROPERTY_SET_PARA_STYLE; break;
+                case SFX_STYLE_FAMILY_FRAME : nPropSetId = PROPERTY_SET_FRAME_STYLE ;break;
+                case SFX_STYLE_FAMILY_PAGE  : nPropSetId = PROPERTY_SET_PAGE_STYLE;   break;
                 case SFX_STYLE_FAMILY_PSEUDO: nPropSetId = PROPERTY_SET_NUM_STYLE   ;break;
             }
+            SfxItemPropertySet &rPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
+            const SfxItemPropertyMap *pMap = rPropSet.getPropertyMap();
 
             SfxItemSet aSet = aStyle.GetItemSet();
-            SfxItemPropertySet& rStylePropSet = aSwMapProvider.GetPropertySet(nPropSetId);
             for(sal_Int32 i = 0; i < rPropertyNames.getLength(); i++)
             {
                 const String& rPropName = pNames[i];
-                const SfxItemPropertyMap*   pMap =
-                    SfxItemPropertyMap::GetByName(
-                            rStylePropSet.getPropertyMap(), rPropName);
+                pMap = SfxItemPropertyMap::GetByName(pMap, rPropName);
                 if(!pMap)
                     throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropName, static_cast < cppu::OWeakObject * > ( this ) );
                 if( FN_UNO_NUM_RULES ==  pMap->nWID ||
@@ -2663,7 +2761,7 @@ Sequence< PropertyState > SwXStyle::getPropertyStates(
                 }
                 else
                 {
-                    pStates[i] = rStylePropSet.getPropertyState(*pMap, aSet);
+                    pStates[i] = rPropSet.getPropertyState(*pMap, aSet);
                     if( SFX_STYLE_FAMILY_PAGE == eFamily &&
                         SID_ATTR_PAGE_SIZE == pMap->nWID &&
                         PropertyState_DIRECT_VALUE == pStates[i] )
@@ -2737,13 +2835,14 @@ void SAL_CALL SwXStyle::setPropertiesToDefault( const Sequence< OUString >& aPro
     sal_Int8 nPropSetId = PROPERTY_SET_CHAR_STYLE;
     switch(eFamily)
     {
-        case SFX_STYLE_FAMILY_PARA: nPropSetId = PROPERTY_SET_PARA_STYLE  ; break;
-        case SFX_STYLE_FAMILY_FRAME: nPropSetId = PROPERTY_SET_FRAME_STYLE ;break;
-        case SFX_STYLE_FAMILY_PAGE: nPropSetId = PROPERTY_SET_PAGE_STYLE  ;break;
-        case SFX_STYLE_FAMILY_PSEUDO: nPropSetId = PROPERTY_SET_NUM_STYLE   ;break;
+        case SFX_STYLE_FAMILY_PARA  : nPropSetId = bIsConditional ? PROPERTY_SET_CONDITIONAL_PARA_STYLE : PROPERTY_SET_PARA_STYLE; break;
+        case SFX_STYLE_FAMILY_FRAME : nPropSetId = PROPERTY_SET_FRAME_STYLE; break;
+        case SFX_STYLE_FAMILY_PAGE  : nPropSetId = PROPERTY_SET_PAGE_STYLE; break;
+        case SFX_STYLE_FAMILY_PSEUDO: nPropSetId = PROPERTY_SET_NUM_STYLE; break;
     }
+    SfxItemPropertySet &rPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
+    const SfxItemPropertyMap *pMap = rPropSet.getPropertyMap();
 
-    const SfxItemPropertyMap* pMap = aSwMapProvider.GetPropertyMap(nPropSetId);
     const OUString* pNames = aPropertyNames.getConstArray();
 
     if ( pTargetFmt )
@@ -2900,14 +2999,15 @@ Sequence< Any > SAL_CALL SwXStyle::getPropertyDefaults( const Sequence< OUString
                 sal_Int8 nPropSetId = PROPERTY_SET_CHAR_STYLE;
                 switch(eFamily)
                 {
-                    case SFX_STYLE_FAMILY_PARA: nPropSetId = PROPERTY_SET_PARA_STYLE  ; break;
-                    case SFX_STYLE_FAMILY_FRAME: nPropSetId = PROPERTY_SET_FRAME_STYLE ;break;
-                    case SFX_STYLE_FAMILY_PAGE: nPropSetId = PROPERTY_SET_PAGE_STYLE  ;break;
-                    case SFX_STYLE_FAMILY_PSEUDO: nPropSetId = PROPERTY_SET_NUM_STYLE   ;break;
+                    case SFX_STYLE_FAMILY_PARA  : nPropSetId = bIsConditional ? PROPERTY_SET_CONDITIONAL_PARA_STYLE : PROPERTY_SET_PARA_STYLE; break;
+                    case SFX_STYLE_FAMILY_FRAME : nPropSetId = PROPERTY_SET_FRAME_STYLE; break;
+                    case SFX_STYLE_FAMILY_PAGE  : nPropSetId = PROPERTY_SET_PAGE_STYLE; break;
+                    case SFX_STYLE_FAMILY_PSEUDO: nPropSetId = PROPERTY_SET_NUM_STYLE; break;
                 }
+                SfxItemPropertySet &rPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
+                const SfxItemPropertyMap* pMap = rPropSet.getPropertyMap();
 
                 const SfxItemSet &rSet = aStyle.GetItemSet(), *pParentSet = rSet.GetParent();
-                const SfxItemPropertyMap* pMap = aSwMapProvider.GetPropertyMap(nPropSetId);
                 const OUString *pNames = aPropertyNames.getConstArray();
                 Any *pRet = aRet.getArray();
                 for ( sal_Int32 i = 0 ; i < nCount; i++)
