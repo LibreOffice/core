@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 15:44:05 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:06:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -922,7 +922,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
     if ( sTargetFrameName==SPECIALTARGET_BLANK )
     {
         TaskCreator aCreator(xFactory);
-        xTarget = aCreator.createTask(::rtl::OUString(),sal_False);
+        xTarget = aCreator.createTask(sTargetFrameName,sal_False);
     }
 
     //-----------------------------------------------------------------------------------------------------
