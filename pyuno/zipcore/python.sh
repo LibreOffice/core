@@ -5,9 +5,9 @@
 #
 #   $RCSfile: python.sh,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 16:55:24 $
+#   last change: $Author: rt $ $Date: 2005-11-11 09:21:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -101,14 +101,14 @@ case $sd_platform in
     ;;
 esac
 
-PYTHONPATH="$sd_prog":"$sd_prog/python-core/lib":"$sd_prog/python-core/lib/lib-dynload":"$sd_prog/python-core/lib/lib-tk":"$PYTHONPATH"
+PYTHONPATH="$sd_prog":"$sd_prog/python-core-%%PYVERSION%%/lib":"$sd_prog/python-core-%%PYVERSION%%/lib/lib-dynload":"$sd_prog/python-core-%%PYVERSION%%/lib/lib-tk":"$PYTHONPATH"
 export PYTHONPATH
 
-PYTHONHOME="$sd_prog"/python-core
+PYTHONHOME="$sd_prog"/python-core-%%PYVERSION%%
 export PYTHONHOME
 
 # set path so that other apps can be started from soffice just by name
 PATH="$sd_prog":$PATH
 export PATH
-exec "$sd_prog/python-core/bin/python" "$@"
+exec "$sd_prog/python.bin" "$@"
 
