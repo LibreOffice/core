@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlencryption_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:31:29 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 09:20:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,7 +184,7 @@ SAL_CALL XMLEncryption_MSCryptImpl :: encrypt(
         isParentRef = sal_False;
     }
 
-     setErrorRecorder( aTemplate );
+     setErrorRecorder( );
 
     pMngr = pSecEnv->createKeysManager() ; //i39448
     if( !pMngr ) {
@@ -203,14 +203,13 @@ SAL_CALL XMLEncryption_MSCryptImpl :: encrypt(
 
     //Encrypt the template
     if( xmlSecEncCtxXmlEncrypt( pEncCtx , pEncryptedData , pContent ) < 0 ) {
+        aTemplate->setStatus(::com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN);
         xmlSecEncCtxDestroy( pEncCtx ) ;
         pSecEnv->destroyKeysManager( pMngr ) ; //i39448
-
-        //throw XMLEncryptionException() ;
         clearErrorRecorder();
         return aTemplate;
     }
-
+    aTemplate->setStatus(::com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
     xmlSecEncCtxDestroy( pEncCtx ) ;
     pSecEnv->destroyKeysManager( pMngr ) ; //i39448
 
@@ -292,7 +291,7 @@ XMLEncryption_MSCryptImpl :: decrypt(
         isParentRef = sal_False;
     }
 
-     setErrorRecorder( aTemplate );
+     setErrorRecorder( );
 
     pMngr = pSecEnv->createKeysManager() ; //i39448
     if( !pMngr ) {
@@ -311,6 +310,7 @@ XMLEncryption_MSCryptImpl :: decrypt(
 
     //Decrypt the template
     if( xmlSecEncCtxDecrypt( pEncCtx , pEncryptedData ) < 0 || pEncCtx->result == NULL ) {
+        aTemplate->setStatus(::com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN);
         xmlSecEncCtxDestroy( pEncCtx ) ;
         pSecEnv->destroyKeysManager( pMngr ) ; //i39448
 
@@ -318,6 +318,7 @@ XMLEncryption_MSCryptImpl :: decrypt(
         clearErrorRecorder();
         return aTemplate;
     }
+    aTemplate->setStatus(::com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
     /*----------------------------------------
     if( pEncCtx->resultReplaced != 0 ) {
         pContent = pEncryptedData ;
