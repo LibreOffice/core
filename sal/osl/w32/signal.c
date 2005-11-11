@@ -4,9 +4,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:11:51 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:25:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@ typedef struct _oslSignalHandlerImpl
     struct _oslSignalHandlerImpl* pNext;
 } oslSignalHandlerImpl;
 
+static sal_Bool               bErrorReportingEnabled = sal_True;
 static sal_Bool               bInitSignal = sal_False;
 static oslMutex               SignalListMutex;
 static oslSignalHandlerImpl*  SignalList;
@@ -119,6 +120,9 @@ static BOOL ReportCrash( LPEXCEPTION_POINTERS lpEP )
     PROCESS_INFORMATION ProcessInfo;
     STARTUPINFO StartupInfo;
     int     argi;
+
+    if ( !bErrorReportingEnabled )
+        return FALSE;
 
     /* Check if crash reporter was disabled by command line */
 
@@ -418,3 +422,13 @@ oslSignalAction SAL_CALL osl_raiseSignal(sal_Int32 UserSignal, void* UserData)
     return (Action);
 }
 
+/*****************************************************************************/
+/* osl_setErrorReporting */
+/*****************************************************************************/
+sal_Bool SAL_CALL osl_setErrorReporting( sal_Bool bEnable )
+{
+    sal_Bool bOld = bErrorReportingEnabled;
+    bErrorReportingEnabled = bEnable;
+
+    return bOld;
+}
