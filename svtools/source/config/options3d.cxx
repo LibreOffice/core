@@ -4,9 +4,9 @@
  *
  *  $RCSfile: options3d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:44:25 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:52:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,8 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
+
+#include <itemholder1.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespaces
@@ -355,6 +357,7 @@ SvtOptions3D::SvtOptions3D()
     if( m_pDataContainer == NULL )
     {
         m_pDataContainer = new SvtOptions3D_Impl();
+        ItemHolder1::holdConfigItem(E_OPTIONS3D);
     }
 }
 
