@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:51:43 $
+ *  last change: $Author: kz $ $Date: 2005-11-11 14:00:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,9 @@
 #endif
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
 #endif
 #ifndef SVTOOLS_FILENOTATION_HXX_
 #include <svtools/filenotation.hxx>
@@ -2310,11 +2313,19 @@ class EventsNameReplace_Impl:
                 break;
 
             case PROPERTY_ID_COMMAND:
-                m_bHasCursorSource = sal_True;
+                // no cursor source if no Base is installed. #124939#
+                // This fix is not intendend to appear on the main trunk. If you find it there,
+                // please tell me! frank.schoenheit@sun.com
+                if ( SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
+                    m_bHasCursorSource = sal_True;
                 break;
 
             case PROPERTY_ID_LISTSOURCE:
-                m_bHasListSource = sal_True;
+                // no cursor source if no Base is installed. #124939#
+                // This fix is not intendend to appear on the main trunk. If you find it there,
+                // please tell me! frank.schoenheit@sun.com
+                if ( SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
+                    m_bHasListSource = sal_True;
                 break;
         }
 
@@ -2415,6 +2426,12 @@ class EventsNameReplace_Impl:
 
             SetCursorSource( sal_True, sal_True );
             SetListSource( sal_True );
+
+            // no data page if no Base is installed. #124939#
+            // This fix is not intendend to appear on the main trunk. If you find it there,
+            // please tell me! frank.schoenheit@sun.com
+            if ( !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
+                bRemoveDataPage = sal_True;
 
             if (bRemoveDataPage && !m_bHasCursorSource && !m_bHasListSource)
             {
