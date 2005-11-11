@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-30 10:08:35 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:51:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,9 @@
 #endif
 #ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
 #include <svtools/languageoptions.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_OPTIONSDLG_HXX
+#include <svtools/optionsdlg.hxx>
 #endif
 #ifndef _SFXMODULE_HXX //autogen
 #include <sfx2/module.hxx>
@@ -332,15 +335,138 @@ SfxTabPage* CreateGeneralTabPage( sal_uInt16 nId, Window* pParent, const SfxItem
 }
 
 
+struct OptionsMapping_Impl
+{
+    const char* m_pGroupName;
+    const char* m_pPageName;
+    USHORT      m_nPageId;
+};
 
+static OptionsMapping_Impl __READONLY_DATA OptionsMap_Impl[] =
+{
+//    GROUP                 PAGE                    PAGE-ID
+    { "ProductName",        NULL,                   SID_GENERAL_OPTIONS },
+    { "ProductName",        "UserData",             RID_SFXPAGE_GENERAL },
+    { "ProductName",        "General",              OFA_TP_MISC },
+    { "ProductName",        "Memory",               OFA_TP_MEMORY },
+    { "ProductName",        "View",                 OFA_TP_VIEW },
+    { "ProductName",        "Print",                RID_SFXPAGE_PRINTOPTIONS },
+    { "ProductName",        "Paths",                RID_SFXPAGE_PATH },
+    { "ProductName",        "Colors",               RID_SVXPAGE_COLOR },
+    { "ProductName",        "Fonts",                RID_SVX_FONT_SUBSTITUTION },
+    { "ProductName",        "Security",             RID_SVXPAGE_INET_SECURITY },
+    { "ProductName",        "Appearance",           RID_SVXPAGE_COLORCONFIG },
+    { "ProductName",        "Accessibility",        RID_SVXPAGE_ACCESSIBILITYCONFIG },
+    { "ProductName",        "Java",                 RID_SVXPAGE_OPTIONS_JAVA },
+    { "ProductName",        "NetworkIdentity",      RID_SVXPAGE_SSO },
+    { "LanguageSettings",   NULL,                   SID_LANGUAGE_OPTIONS },
+    { "LanguageSettings",   "Languages",            OFA_TP_LANGUAGES  },
+    { "LanguageSettings",   "WritingAids",          RID_SFXPAGE_LINGU },
+    { "LanguageSettings",   "SearchingInJapanese",  RID_SVXPAGE_JSEARCH_OPTIONS },
+    { "LanguageSettings",   "AsianLayout",          RID_SVXPAGE_ASIAN_LAYOUT },
+    { "LanguageSettings",   "ComplexTextLayout",    RID_SVXPAGE_OPTIONS_CTL },
+    { "Internet",           NULL,                   SID_INET_DLG },
+    { "Internet",           "Proxy",                RID_SVXPAGE_INET_PROXY },
+    { "Internet",           "Search",               RID_SVXPAGE_INET_SEARCH },
+    { "Internet",           "Email",                RID_SVXPAGE_INET_MAIL },
+    { "Internet",           "MozillaPlugin",        RID_SVXPAGE_INET_MOZPLUGIN },
+    { "LoadSave",           NULL,                   SID_FILTER_DLG },
+    { "LoadSave",           "General",              RID_SFXPAGE_SAVE },
+    { "LoadSave",           "VBAProperties",        SID_OPTFILTER_MSOFFICE },
+    { "LoadSave",           "MicrosoftOffice",      RID_OFAPAGE_MSFILTEROPT2 },
+    { "LoadSave",           "HTMLCompatibility",    RID_OFAPAGE_HTMLOPT },
+    { "Writer",             NULL,                   SID_SW_EDITOPTIONS },
+    { "Writer",             "General",              RID_SW_TP_OPTLOAD_PAGE },
+    { "Writer",             "View",                 RID_SW_TP_CONTENT_OPT },
+    { "Writer",             "FormattingAids",       RID_SW_TP_OPTSHDWCRSR },
+    { "Writer",             "Grid",                 RID_SVXPAGE_GRID },
+    { "Writer",             "BasicFontsWestern",    RID_SW_TP_STD_FONT },
+    { "Writer",             "BasicFontsAsian",      RID_SW_TP_STD_FONT_CJK },
+    { "Writer",             "BasicFontsCTL",        RID_SW_TP_STD_FONT_CTL },
+    { "Writer",             "Print",                RID_SW_TP_OPTPRINT_PAGE },
+    { "Writer",             "Table",                RID_SW_TP_OPTTABLE_PAGE },
+    { "Writer",             "Changes",              RID_SW_TP_REDLINE_OPT },
+    { "Writer",             "Compatibility",        RID_SW_TP_OPTCOMPATIBILITY_PAGE },
+    { "Writer",             "AutoCaption",          RID_SW_TP_OPTCAPTION_PAGE },
+    { "Writer",             "MailMerge",            RID_SW_TP_MAILCONFIG },
+    { "WriterWeb",          NULL,                   SID_SW_ONLINEOPTIONS },
+    { "WriterWeb",          "View",                 RID_SW_TP_HTML_CONTENT_OPT },
+    { "WriterWeb",          "FormattingAids",       RID_SW_TP_HTML_OPTSHDWCRSR },
+    { "WriterWeb",          "Grid",                 RID_SW_TP_HTML_OPTGRID_PAGE },
+    { "WriterWeb",          "Print",                RID_SW_TP_HTML_OPTPRINT_PAGE },
+    { "WriterWeb",          "Table",                RID_SW_TP_HTML_OPTTABLE_PAGE },
+    { "WriterWeb",          "Background",           RID_SW_TP_BACKGROUND },
+    { "Math",               NULL,                   SID_SM_EDITOPTIONS },
+    { "Math",               "Settings",             SID_SM_TP_PRINTOPTIONS },
+    { "Calc",               NULL,                   SID_SC_EDITOPTIONS },
+    { "Calc",               "General",              SID_SC_TP_LAYOUT },
+    { "Calc",               "View",                 SID_SC_TP_CONTENT },
+    { "Calc",               "International",        RID_OFA_TP_INTERNATIONAL },
+    { "Calc",               "Calculate",            SID_SC_TP_CALC },
+    { "Calc",               "SortLists",            SID_SC_TP_USERLISTS },
+    { "Calc",               "Changes",              SID_SC_TP_CHANGES },
+    { "Calc",               "Grid",                 SID_SC_TP_GRID },
+    { "Calc",               "Print",                RID_SC_TP_PRINT },
+    { "Impress",            NULL,                   SID_SD_EDITOPTIONS },
+    { "Impress",            "General",              SID_SI_TP_MISC },
+    { "Impress",            "View",                 SID_SI_TP_CONTENTS },
+    { "Impress",            "Grid",                 SID_SI_TP_SNAP },
+    { "Impress",            "Print",                SID_SI_TP_PRINT },
+    { "Draw",               NULL,                   SID_SD_GRAPHIC_OPTIONS },
+    { "Draw",               "General",              SID_SD_TP_MISC },
+    { "Draw",               "View",                 SID_SD_TP_CONTENTS },
+    { "Draw",               "Grid",                 SID_SD_TP_SNAP },
+    { "Draw",               "Print",                SID_SD_TP_PRINT },
+    { "Charts",             NULL,                   SID_SCH_EDITOPTIONS },
+    { "Charts",             "DefaultColors",        SID_SCH_TP_DEFCOLORS },
+    { "Base",               NULL,                   SID_SB_STARBASEOPTIONS },
+    { "Base",               "Connections",          SID_SB_CONNECTIONPOOLING },
+    { "Base",               "Databases",            SID_SB_DBREGISTEROPTIONS },
+    { NULL,                 NULL,                   0 }
+};
+
+static sal_Bool lcl_getStringFromID( USHORT _nPageId, String& _rGroupName, String& _rPageName )
+{
+    sal_Bool bRet = sal_False;
+
+    USHORT nIdx = 0;
+    while ( OptionsMap_Impl[nIdx].m_pGroupName != NULL )
+    {
+        if ( _nPageId == OptionsMap_Impl[nIdx].m_nPageId )
+        {
+            bRet = sal_True;
+            _rGroupName = String( OptionsMap_Impl[nIdx].m_pGroupName, RTL_TEXTENCODING_ASCII_US );
+            if ( OptionsMap_Impl[nIdx].m_pPageName != NULL )
+                _rPageName = String( OptionsMap_Impl[nIdx].m_pPageName, RTL_TEXTENCODING_ASCII_US );
+            break;
+        }
+        ++nIdx;
+    }
+
+    return bRet;
+}
+
+static sal_Bool lcl_isOptionHidden( USHORT _nPageId, const SvtOptionsDialogOptions& _rOptOptions )
+{
+    sal_Bool bIsHidden = sal_False;
+    String sGroupName, sPageName;
+    if ( lcl_getStringFromID( _nPageId, sGroupName, sPageName ) )
+    {
+        if ( sPageName.Len() == 0 )
+            bIsHidden =  _rOptOptions.IsGroupHidden( sGroupName );
+        else
+            bIsHidden =  _rOptOptions.IsPageHidden( sPageName, sGroupName );
+    }
+    return bIsHidden;
+}
 
 /* -----------------11.02.99 09:56-------------------
  *
  * --------------------------------------------------*/
 struct OptionsPageInfo
 {
-    SfxTabPage*     pPage;
-    sal_uInt16          nPageId;
+    SfxTabPage* pPage;
+    sal_uInt16  nPageId;
 };
 
 struct OptionsGroupInfo
@@ -1554,41 +1680,59 @@ void OfaTreeOptionsDialog::Initialize()
     sal_uInt16 nGroup = 0;
     SfxApplication* pApp = SFX_APP();
 
+    SvtOptionsDialogOptions aOptionsDlgOpt;
+    sal_uInt16 i, nPageId;
+
+    // %PRODUCTNAME options
     BOOL isSSOEnabled = EnableSSO();
-
-    ResStringArray& rGeneralArray = aDlgResource.GetGeneralArray();
-    nGroup = AddGroup(rGeneralArray.GetString(0), 0, 0, SID_GENERAL_OPTIONS );
-    sal_uInt16 nEnd = static_cast< sal_uInt16 >( rGeneralArray.Count() );
-
-    sal_uInt16 i;
-    for(i = 1; i < nEnd; i++)
+    if ( !lcl_isOptionHidden( SID_GENERAL_OPTIONS, aOptionsDlgOpt ) )
     {
-        sal_uInt16 nPageId = (sal_uInt16)rGeneralArray.GetValue(i);
-        if ( nPageId != RID_SVXPAGE_SSO || isSSOEnabled )
-            AddTabPage( nPageId, rGeneralArray.GetString(i), nGroup );
+        ResStringArray& rGeneralArray = aDlgResource.GetGeneralArray();
+        nGroup = AddGroup( rGeneralArray.GetString(0), 0, 0, SID_GENERAL_OPTIONS );
+        sal_uInt16 nEnd = static_cast< sal_uInt16 >( rGeneralArray.Count() );
+
+        for ( i = 1; i < nEnd; ++i )
+        {
+            nPageId = (sal_uInt16)rGeneralArray.GetValue(i);
+            if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
+                continue;
+            if ( nPageId != RID_SVXPAGE_SSO || isSSOEnabled )
+                AddTabPage( nPageId, rGeneralArray.GetString(i), nGroup );
+        }
     }
 
-    //load/save
-    ResStringArray& rFilterArray = aDlgResource.GetFilterArray();
-    nGroup = AddGroup( rFilterArray.GetString(0), 0, 0, SID_FILTER_DLG );
-    for(i = 1; i < rFilterArray.Count(); ++i )
-        AddTabPage( (sal_uInt16)rFilterArray.GetValue(i),
-                            rFilterArray.GetString(i), nGroup );
+    // Load and Save options
+    if ( !lcl_isOptionHidden( SID_FILTER_DLG, aOptionsDlgOpt ) )
+    {
+        ResStringArray& rFilterArray = aDlgResource.GetFilterArray();
+        nGroup = AddGroup( rFilterArray.GetString(0), 0, 0, SID_FILTER_DLG );
+        for ( i = 1; i < rFilterArray.Count(); ++i )
+        {
+            nPageId = (sal_uInt16)rFilterArray.GetValue(i);
+            if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
+                AddTabPage( nPageId, rFilterArray.GetString(i), nGroup );
+        }
+    }
 
-    // language options
+    // Language options
     SvtLanguageOptions aLanguageOptions;
-    ResStringArray& rLangArray = aDlgResource.GetLangArray();
-    nGroup = AddGroup( rLangArray.GetString(0), 0, 0, SID_LANGUAGE_OPTIONS );
-    for ( USHORT i = 1; i < rLangArray.Count(); ++i )
+    if ( !lcl_isOptionHidden( SID_LANGUAGE_OPTIONS, aOptionsDlgOpt ) )
     {
-        sal_uInt16 nValue = (sal_uInt16)rLangArray.GetValue(i);
-        if ( ( RID_SVXPAGE_JSEARCH_OPTIONS != nValue || aLanguageOptions.IsJapaneseFindEnabled() ) &&
-             ( RID_SVXPAGE_ASIAN_LAYOUT != nValue    || aLanguageOptions.IsAsianTypographyEnabled() ) &&
-             ( RID_SVXPAGE_OPTIONS_CTL != nValue     || aLanguageOptions.IsCTLFontEnabled() ) )
-            AddTabPage( nValue, rLangArray.GetString(i), nGroup );
+        ResStringArray& rLangArray = aDlgResource.GetLangArray();
+        nGroup = AddGroup( rLangArray.GetString(0), 0, 0, SID_LANGUAGE_OPTIONS );
+        for ( i = 1; i < rLangArray.Count(); ++i )
+        {
+            nPageId = (sal_uInt16)rLangArray.GetValue(i);
+            if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
+                continue;
+            if ( ( RID_SVXPAGE_JSEARCH_OPTIONS != nPageId || aLanguageOptions.IsJapaneseFindEnabled() ) &&
+                 ( RID_SVXPAGE_ASIAN_LAYOUT != nPageId    || aLanguageOptions.IsAsianTypographyEnabled() ) &&
+                 ( RID_SVXPAGE_OPTIONS_CTL != nPageId     || aLanguageOptions.IsCTLFontEnabled() ) )
+                AddTabPage( nPageId, rLangArray.GetString(i), nGroup );
+        }
     }
 
-
+    // Writer and Writer/Web options
     sal_Bool bHasAnyFilter = sal_False;
     SvtModuleOptions aModuleOpt;
     if ( aModuleOpt.IsWriter() )
@@ -1599,131 +1743,182 @@ void OfaTreeOptionsDialog::Initialize()
         SfxModule *pSwMod = (*(SfxModule**) GetAppData(SHL_WRITER));
         if ( pSwMod && pSwMod->IsActive() )
         {
-            nGroup = AddGroup(rTextArray.GetString(0), pSwMod, pSwMod, SID_SW_EDITOPTIONS );
-            USHORT i;
-            for(i = 1; i < rTextArray.Count(); i++)
+            if ( !lcl_isOptionHidden( SID_SW_EDITOPTIONS, aOptionsDlgOpt ) )
             {
-                sal_uInt16 nValue = (sal_uInt16)rTextArray.GetValue(i);
-                if((RID_SW_TP_STD_FONT_CJK != nValue || aLanguageOptions.IsCJKFontEnabled())&&
-                    (RID_SW_TP_STD_FONT_CTL != nValue || aLanguageOptions.IsCTLFontEnabled())&&
-                    (RID_SW_TP_MAILCONFIG != nValue || (MailMergeCfg_Impl().IsEmailSupported())))
-                    AddTabPage( nValue, rTextArray.GetString(i), nGroup);
+                nGroup = AddGroup(rTextArray.GetString(0), pSwMod, pSwMod, SID_SW_EDITOPTIONS );
+                for ( i = 1; i < rTextArray.Count(); ++i )
+                {
+                    nPageId = (sal_uInt16)rTextArray.GetValue(i);
+                    if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
+                        continue;
+                    if ( ( RID_SW_TP_STD_FONT_CJK != nPageId || aLanguageOptions.IsCJKFontEnabled() ) &&
+                         ( RID_SW_TP_STD_FONT_CTL != nPageId || aLanguageOptions.IsCTLFontEnabled() ) &&
+                         ( RID_SW_TP_MAILCONFIG != nPageId || MailMergeCfg_Impl().IsEmailSupported() ) )
+                        AddTabPage( nPageId, rTextArray.GetString(i), nGroup );
+                }
+#ifndef PRODUCT
+                AddTabPage( RID_SW_TP_OPTTEST_PAGE, String::CreateFromAscii("Interner Test"), nGroup );
+#endif
             }
-#ifndef PRODUCT
-            AddTabPage( RID_SW_TP_OPTTEST_PAGE, String::CreateFromAscii("Interner Test"), nGroup);
-#endif
+
             // HTML-Dokument
-            ResStringArray& rHTMLArray = aDlgResource.GetHTMLArray();
-            nGroup = AddGroup(rHTMLArray.GetString(0), pSwMod, pSwMod, SID_SW_ONLINEOPTIONS );
-            for(i = 1; i < rHTMLArray.Count(); i++)
-                AddTabPage( (sal_uInt16)rHTMLArray.GetValue(i), rHTMLArray.GetString(i), nGroup);
+            if ( !lcl_isOptionHidden( SID_SW_ONLINEOPTIONS, aOptionsDlgOpt ) )
+            {
+                ResStringArray& rHTMLArray = aDlgResource.GetHTMLArray();
+                nGroup = AddGroup(rHTMLArray.GetString(0), pSwMod, pSwMod, SID_SW_ONLINEOPTIONS );
+                for( i = 1; i < rHTMLArray.Count(); ++i )
+                {
+                    nPageId = (sal_uInt16)rHTMLArray.GetValue(i);
+                    if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
+                        AddTabPage( nPageId, rHTMLArray.GetString(i), nGroup );
+                }
 #ifndef PRODUCT
-            AddTabPage( RID_SW_TP_OPTTEST_PAGE, String::CreateFromAscii("Interner Test"), nGroup);
+                AddTabPage( RID_SW_TP_OPTTEST_PAGE, String::CreateFromAscii("Interner Test"), nGroup );
 #endif
+            }
         }
     }
 
+    // Calc options
     if ( aModuleOpt.IsCalc() )
     {
         // StarCalc-Dialog
         bHasAnyFilter = sal_True;
-        SfxModule*      pScMod = ( *( SfxModule** ) GetAppData( SHL_CALC ) );
+        SfxModule* pScMod = ( *( SfxModule** ) GetAppData( SHL_CALC ) );
         if ( pScMod && pScMod->IsActive() )
         {
-            ResStringArray& rCalcArray = aDlgResource.GetCalcArray();
-            nGroup = AddGroup( rCalcArray.GetString( 0 ), pScMod, pScMod, SID_SC_EDITOPTIONS );
-            const sal_Bool  bCTL = aLanguageOptions.IsCTLFontEnabled();
-            sal_uInt16      nId;
-            const USHORT    nCount = static_cast< USHORT >( rCalcArray.Count() );
-            for( USHORT i = 1 ; i < nCount ; ++i )
+            if ( !lcl_isOptionHidden( SID_SC_EDITOPTIONS, aOptionsDlgOpt ) )
             {
-                nId = ( sal_uInt16 ) rCalcArray.GetValue( i );
-//              if( bCTL || nId != RID_OFA_TP_INTERNATIONAL )
-//              #103755# if an international tabpage is need one day, this should be used again... ;-)
-                if( nId != RID_OFA_TP_INTERNATIONAL )
-                    AddTabPage( nId, rCalcArray.GetString( i ), nGroup );
+                ResStringArray& rCalcArray = aDlgResource.GetCalcArray();
+                nGroup = AddGroup( rCalcArray.GetString( 0 ), pScMod, pScMod, SID_SC_EDITOPTIONS );
+                const sal_Bool bCTL = aLanguageOptions.IsCTLFontEnabled();
+                const USHORT nCount = static_cast< const USHORT >( rCalcArray.Count() );
+                for ( i = 1; i < nCount; ++i )
+                {
+                    nPageId = (sal_uInt16)rCalcArray.GetValue(i);
+                    if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
+                        continue;
+//                  if( bCTL || nId != RID_OFA_TP_INTERNATIONAL )
+//                  #103755# if an international tabpage is need one day, this should be used again... ;-)
+                    if ( nPageId != RID_OFA_TP_INTERNATIONAL )
+                        AddTabPage( nPageId, rCalcArray.GetString( i ), nGroup );
+                }
             }
         }
     }
 
+    // Impress options
     if ( aModuleOpt.IsImpress() )
     {
-        //Praesentation
         bHasAnyFilter = sal_True;
         SfxModule* pSdMod = ( *( SfxModule** ) GetAppData( SHL_DRAW ) );
         if ( pSdMod && pSdMod->IsActive() && getCurrentFactory_Impl() == SvtModuleOptions::E_IMPRESS )
         {
-            ResStringArray& rImpressArray = aDlgResource.GetImpressArray();
-            nGroup = AddGroup( rImpressArray.GetString( 0 ), pSdMod, pSdMod, SID_SD_EDITOPTIONS );
-            const sal_Bool  bCTL = aLanguageOptions.IsCTLFontEnabled();
-            sal_uInt16      nId;
-            const USHORT    nCount = static_cast< USHORT >( rImpressArray.Count() );
-            for( USHORT i = 1 ; i < nCount ; ++i )
+            if ( !lcl_isOptionHidden( SID_SD_EDITOPTIONS, aOptionsDlgOpt ) )
             {
-                nId = ( sal_uInt16 ) rImpressArray.GetValue( i );
-                if( bCTL || nId != RID_OFA_TP_INTERNATIONAL_IMPR )
-                    AddTabPage( nId, rImpressArray.GetString( i ), nGroup );
+                ResStringArray& rImpressArray = aDlgResource.GetImpressArray();
+                nGroup = AddGroup( rImpressArray.GetString( 0 ), pSdMod, pSdMod, SID_SD_EDITOPTIONS );
+                const sal_Bool bCTL = aLanguageOptions.IsCTLFontEnabled();
+                const USHORT nCount = static_cast< const USHORT >( rImpressArray.Count() );
+                for ( i = 1; i < nCount; ++i )
+                {
+                    nPageId = (sal_uInt16)rImpressArray.GetValue(i);
+                    if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
+                        continue;
+                    if ( bCTL || nPageId != RID_OFA_TP_INTERNATIONAL_IMPR )
+                        AddTabPage( nPageId, rImpressArray.GetString(i), nGroup );
+                }
             }
         }
     }
 
+    // Draw options
     if ( aModuleOpt.IsDraw() )
     {
-        //Zeichnung
         SfxModule* pSdMod = ( *( SfxModule** ) GetAppData( SHL_DRAW ) );
         if ( pSdMod && pSdMod->IsActive() && getCurrentFactory_Impl() == SvtModuleOptions::E_DRAW )
         {
-            ResStringArray& rDrawArray = aDlgResource.GetDrawArray();
-            nGroup = AddGroup( rDrawArray.GetString( 0 ), pSdMod, pSdMod, SID_SD_GRAPHIC_OPTIONS );
-            const sal_Bool  bCTL = aLanguageOptions.IsCTLFontEnabled();
-            sal_uInt16      nId;
-            const USHORT    nCount = static_cast< USHORT >( rDrawArray.Count() );
-            for( USHORT i = 1 ; i < nCount ; ++i )
+            if ( !lcl_isOptionHidden( SID_SD_GRAPHIC_OPTIONS, aOptionsDlgOpt ) )
             {
-                nId = ( sal_uInt16 ) rDrawArray.GetValue( i );
-                if( bCTL || nId != RID_OFA_TP_INTERNATIONAL_SD )
-                    AddTabPage( nId, rDrawArray.GetString( i ), nGroup );
+                ResStringArray& rDrawArray = aDlgResource.GetDrawArray();
+                nGroup = AddGroup( rDrawArray.GetString( 0 ), pSdMod, pSdMod, SID_SD_GRAPHIC_OPTIONS );
+                const sal_Bool bCTL = aLanguageOptions.IsCTLFontEnabled();
+                const USHORT nCount = static_cast< const USHORT >( rDrawArray.Count() );
+                for ( i = 1; i < nCount; ++i )
+                {
+                    nPageId = (sal_uInt16)rDrawArray.GetValue(i);
+                    if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
+                        continue;
+                    if ( bCTL || nPageId != RID_OFA_TP_INTERNATIONAL_SD )
+                        AddTabPage( nPageId, rDrawArray.GetString(i), nGroup );
+                }
             }
         }
     }
 
+    // Math options
     if ( aModuleOpt.IsMath() )
     {
-        // StarMath-Dialog
-        SfxModule *pSmMod = (*(SfxModule**) GetAppData(SHL_SM));
+        SfxModule* pSmMod = (*(SfxModule**) GetAppData(SHL_SM));
         if ( pSmMod && pSmMod->IsActive() )
         {
-            ResStringArray& rStarMathArray = aDlgResource.GetStarMathArray();
-            nGroup = AddGroup(rStarMathArray.GetString(0), pSmMod, pSmMod, SID_SM_EDITOPTIONS );
-            for(USHORT i = 1; i < rStarMathArray.Count(); i++)
-                AddTabPage( (sal_uInt16)rStarMathArray.GetValue(i), rStarMathArray.GetString(i), nGroup);
+            if ( !lcl_isOptionHidden( SID_SM_EDITOPTIONS, aOptionsDlgOpt ) )
+            {
+                ResStringArray& rStarMathArray = aDlgResource.GetStarMathArray();
+                nGroup = AddGroup(rStarMathArray.GetString(0), pSmMod, pSmMod, SID_SM_EDITOPTIONS );
+                for ( i = 1; i < rStarMathArray.Count(); ++i )
+                {
+                    nPageId = (sal_uInt16)rStarMathArray.GetValue(i);
+                    if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
+                        AddTabPage( nPageId, rStarMathArray.GetString(i), nGroup );
+                }
+            }
         }
     }
-    // Data access (always installed)
-    ResStringArray& rDSArray = aDlgResource.GetDatasourcesArray();
-    nGroup = AddGroup(rDSArray.GetString(0), 0, NULL, SID_SB_STARBASEOPTIONS );
-    for(USHORT i = 1; i < rDSArray.Count(); i++)
-        AddTabPage( (sal_uInt16)rDSArray.GetValue(i), rDSArray.GetString(i), nGroup);
-
-    // new spec: always show chart pages in general options
-    ResStringArray& rChartArray = aDlgResource.GetChartArray();
-    nGroup = AddGroup( rChartArray.GetString(0), 0, 0, SID_SCH_EDITOPTIONS );
-    for(USHORT i1 = 1; i1 < rChartArray.Count(); i1++)
-        AddTabPage( (sal_uInt16)rChartArray.GetValue(i1), rChartArray.GetString(i1), nGroup);
-
-    // Internet
-    ResStringArray& rInetArray = aDlgResource.GetInetArray();
-    nGroup = AddGroup(rInetArray.GetString(0), 0, 0, SID_INET_DLG );
-
-    for ( sal_uInt16 i = 1; i < rInetArray.Count(); i++ )
+    // Database options (always installed and active)
+    if ( !lcl_isOptionHidden( SID_SB_STARBASEOPTIONS, aOptionsDlgOpt ) )
     {
-        sal_uInt16 nPageId = (sal_uInt16)rInetArray.GetValue(i);
+        ResStringArray& rDSArray = aDlgResource.GetDatasourcesArray();
+        nGroup = AddGroup( rDSArray.GetString(0), 0, NULL, SID_SB_STARBASEOPTIONS );
+        for ( i = 1; i < rDSArray.Count(); ++i )
+        {
+            nPageId = (sal_uInt16)rDSArray.GetValue(i);
+            if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
+                AddTabPage( nPageId, rDSArray.GetString(i), nGroup );
+        }
+    }
+
+    // Chart options (always installed and active)
+    if ( !lcl_isOptionHidden( SID_SCH_EDITOPTIONS, aOptionsDlgOpt ) )
+    {
+        ResStringArray& rChartArray = aDlgResource.GetChartArray();
+        nGroup = AddGroup( rChartArray.GetString(0), 0, 0, SID_SCH_EDITOPTIONS );
+        for ( i = 1; i < rChartArray.Count(); ++i )
+        {
+            nPageId = (sal_uInt16)rChartArray.GetValue(i);
+            if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
+               AddTabPage( nPageId, rChartArray.GetString(i), nGroup );
+        }
+    }
+
+    // Internet options
+    if ( !lcl_isOptionHidden( SID_INET_DLG, aOptionsDlgOpt ) )
+    {
+        ResStringArray& rInetArray = aDlgResource.GetInetArray();
+        nGroup = AddGroup(rInetArray.GetString(0), 0, 0, SID_INET_DLG );
+
+        for ( i = 1; i < rInetArray.Count(); ++i )
+        {
+            nPageId = (sal_uInt16)rInetArray.GetValue(i);
+            if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
+                continue;
 #if defined WNT
-        // Disable E-mail tab-page on Windows
-        if ( nPageId == RID_SVXPAGE_INET_MAIL )
-            continue;
+            // Disable E-mail tab-page on Windows
+            if ( nPageId == RID_SVXPAGE_INET_MAIL )
+                continue;
 #endif
-        AddTabPage( nPageId, rInetArray.GetString(i), nGroup );
+            AddTabPage( nPageId, rInetArray.GetString(i), nGroup );
+        }
     }
 
     ResizeTreeLB();
