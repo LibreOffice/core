@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontsubstconfig.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:38:42 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:49:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,7 @@
 #endif
 
 #include <vcl/outdev.hxx>
+#include <rtl/logfile.hxx>
 
 using namespace utl;
 using namespace rtl;
@@ -92,6 +93,8 @@ SvtFontSubstConfig::SvtFontSubstConfig() :
     bIsEnabled(sal_False),
     pImpl(new SvtFontSubstConfig_Impl)
 {
+    RTL_LOGFILE_CONTEXT(aLog, "svtools (???) SvtFontSubstConfig::SvtFontSubstConfig()");
+
     Sequence<OUString> aNames(1);
     aNames.getArray()[0] = C2U(cReplacement);
     Sequence<Any> aValues = GetProperties(aNames);

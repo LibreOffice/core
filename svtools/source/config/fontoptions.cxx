@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontoptions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:38:27 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:48:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -430,8 +430,7 @@ SvtFontOptions::SvtFontOptions()
         RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtFontOptions_Impl::ctor()");
         m_pDataContainer = new SvtFontOptions_Impl;
 
-        ItemHolder1* pHolder = ItemHolder1::getGlobalItemHolder();
-        pHolder->holdConfigItem(E_FONTOPTIONS);
+        ItemHolder1::holdConfigItem(E_FONTOPTIONS);
     }
 }
 
