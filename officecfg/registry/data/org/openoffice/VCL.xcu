@@ -5,9 +5,9 @@
  *
  *  $RCSfile: VCL.xcu,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-13 15:03:01 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:41:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,11 @@
     <node oor:name="Transfer" oor:op="replace">
       <prop oor:name="SelectionTimeout" oor:type="xs:string" oor:op="replace">
         <value>3</value>
+      </prop>
+    </node>
+    <node oor:name="Menu" oor:op="replace">
+      <prop oor:name="SuppressAccelerators" oor:type="xs:string" oor:op="replace">
+        <value>false</value>
       </prop>
     </node>
   </node>
