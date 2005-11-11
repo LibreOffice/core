@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctloptions.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:36:33 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:47:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,8 @@
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
 #endif
+
+#include <itemholder2.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -376,7 +378,10 @@ SvtCTLOptions::SvtCTLOptions( sal_Bool bDontLoad )
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( CTLMutex::get() );
     if ( !pCTLOptions )
+    {
         pCTLOptions = new SvtCTLOptions_Impl;
+        ItemHolder2::holdConfigItem(E_CTLOPTIONS);
+    }
     if( !bDontLoad && !pCTLOptions->IsLoaded() )
         pCTLOptions->Load();
 
