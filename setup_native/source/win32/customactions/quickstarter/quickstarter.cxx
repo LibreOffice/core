@@ -39,6 +39,33 @@ std::string GetOfficeProductName(MSIHANDLE handle)
     return productname;
 }
 
+std::string GetQuickstarterLinkName(MSIHANDLE handle)
+{
+    std::string quickstarterlinkname;
+    DWORD sz = 0;
+    LPTSTR dummy = TEXT("");
+
+    if (MsiGetProperty(handle, TEXT("Quickstarterlinkname"), dummy, &sz) == ERROR_MORE_DATA)
+    {
+        sz++; // space for the final '\0'
+        DWORD nbytes = sz * sizeof(TCHAR);
+        LPTSTR buff = reinterpret_cast<LPTSTR>(_alloca(nbytes));
+        ZeroMemory(buff, nbytes);
+        MsiGetProperty(handle, TEXT("Quickstarterlinkname"), buff, &sz);
+        quickstarterlinkname = buff;
+    }
+    else if (MsiGetProperty(handle, TEXT("ProductName"), dummy, &sz) == ERROR_MORE_DATA)
+    {
+        sz++; // space for the final '\0'
+        DWORD nbytes = sz * sizeof(TCHAR);
+        LPTSTR buff = reinterpret_cast<LPTSTR>(_alloca(nbytes));
+        ZeroMemory(buff, nbytes);
+        MsiGetProperty(handle, TEXT("ProductName"), buff, &sz);
+        quickstarterlinkname = buff;
+    }
+    return quickstarterlinkname;
+}
+
 inline bool IsValidHandle( HANDLE handle )
 {
     return NULL != handle && INVALID_HANDLE_VALUE != handle;
