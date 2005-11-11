@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.hrc,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:43:08 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:50:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,14 +181,15 @@
 #define LB_USERINTERFACE        31
 #define STR_IB_LANGCHANGE_TITLE 32
 
-#define FL_FILEDLG              53
-#define CB_FILEDLG              54
-#define FT_GRAPHICCACHE_UNIT        55
-#define FT_GRAPHICOBJECTCACHE_UNIT  56
-#define FT_GRAPHICOBJECTTIME_UNIT   57
-#define FT_HELPAGENT_TIME_UNIT      58
-#define FL_DOCSTATUS                59
-#define CB_DOCSTATUS                60
+#define FL_FILEDLG                  53
+#define FI_FILEDLG_RO               54
+#define CB_FILEDLG                  55
+#define FT_GRAPHICCACHE_UNIT        56
+#define FT_GRAPHICOBJECTCACHE_UNIT  57
+#define FT_GRAPHICOBJECTTIME_UNIT   58
+#define FT_HELPAGENT_TIME_UNIT      59
+#define FL_DOCSTATUS                60
+#define CB_DOCSTATUS                61
 #endif // #ifndef _SVX_OPTGDLG_HRC
 
 // ******************************************************************* EOF
