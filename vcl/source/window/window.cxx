@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.223 $
+ *  $Revision: 1.224 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 15:49:35 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:55:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5559,6 +5559,17 @@ void Window::SetExtendedStyle( WinBits nExtendedStyle )
 
     if ( mpWindowImpl->mnExtendedStyle != nExtendedStyle )
     {
+        Window* pWindow = ImplGetBorderWindow();
+        if( ! pWindow )
+            pWindow = this;
+        if( pWindow->mpWindowImpl->mbFrame )
+        {
+            SalExtStyle nExt = 0;
+            if( (nExtendedStyle & WB_EXT_DOCUMENT) )
+                nExt |= SAL_FRAME_EXT_STYLE_DOCUMENT;
+
+            pWindow->ImplGetFrame()->SetExtendedFrameStyle( nExt );
+        }
         mpWindowImpl->mnPrevExtendedStyle = mpWindowImpl->mnExtendedStyle;
         mpWindowImpl->mnExtendedStyle = nExtendedStyle;
         StateChanged( STATE_CHANGE_EXTENDEDSTYLE );
