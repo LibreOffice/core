@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:30:55 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 13:16:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1806,6 +1806,12 @@ uno::Reference< beans::XPropertySetInfo >  SwXTextTableCursor::getPropertySetInf
 /*-- 11.12.98 12:16:17---------------------------------------------------
 
   -----------------------------------------------------------------------*/
+extern sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
+            SwPaM& rPam,
+            SfxItemSet& rSet,
+            const uno::Any& aValue ) throw (lang::IllegalArgumentException);
+
+
 void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName,
                                                         const uno::Any& aValue)
             throw( beans::UnknownPropertyException,
@@ -1853,13 +1859,12 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName,
                 break;
                 default:
                 {
-                    SfxItemSet rSet(pDoc->GetAttrPool(),
-                        RES_CHRATR_BEGIN,       RES_FRMATR_END -1,
-                        RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
-                        0L);
-                    SwXTextCursor::GetCrsrAttr(pTblCrsr->GetSelRing(), rSet);
-                    aPropSet.setPropertyValue(*pMap, aValue, rSet);
-                    SwXTextCursor::SetCrsrAttr(pTblCrsr->GetSelRing(), rSet, CRSR_ATTR_MODE_TABLE);
+                    SfxItemSet aItemSet( pDoc->GetAttrPool(), pMap->nWID, pMap->nWID );
+                    SwXTextCursor::GetCrsrAttr( pTblCrsr->GetSelRing(), aItemSet );
+
+                    if(!lcl_setCrsrPropertyValue( pMap, pTblCrsr->GetSelRing(), aItemSet, aValue ))
+                        aPropSet.setPropertyValue( *pMap, aValue, aItemSet );
+                    SwXTextCursor::SetCrsrAttr( pTblCrsr->GetSelRing(), aItemSet, CRSR_ATTR_MODE_TABLE );
                 }
             }
         }
@@ -4047,14 +4052,12 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
                 break;
                 default:
                 {
-                    SfxItemSet rSet(pDoc->GetAttrPool(),
-                        RES_CHRATR_BEGIN,       RES_FRMATR_END -1,
-                        0L);
-                    SwCursor& rSelCrsr = pCrsr->GetSelRing();
-                    SwXTextCursor::GetCrsrAttr(rSelCrsr, rSet);
-                    SwXTextCursor::SetPropertyValue(
-                        rSelCrsr, aPropSet, rPropertyName,
-                        aValue, pMap, CRSR_ATTR_MODE_TABLE);
+                    SfxItemSet aItemSet( pDoc->GetAttrPool(), pMap->nWID, pMap->nWID );
+                    SwXTextCursor::GetCrsrAttr( pCrsr->GetSelRing(), aItemSet );
+
+                    if(!lcl_setCrsrPropertyValue( pMap, pCrsr->GetSelRing(), aItemSet, aValue ))
+                        aPropSet.setPropertyValue(*pMap, aValue, aItemSet );
+                    SwXTextCursor::SetCrsrAttr(pCrsr->GetSelRing(), aItemSet, CRSR_ATTR_MODE_TABLE );
                 }
             }
         }
@@ -4769,14 +4772,24 @@ sal_Bool SwXTableRows::hasElements(void) throw( uno::RuntimeException )
 void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+    if (nCount == 0)
+        return;
     SwFrmFmt* pFrmFmt = GetFrmFmt();
-    if(!pFrmFmt || nIndex < 0 || nCount <= 0)
+    if(!pFrmFmt)
         throw uno::RuntimeException();
     else
     {
         SwTable* pTable = SwTable::FindTable( pFrmFmt );
         if(!pTable->IsTblComplex())
         {
+            sal_uInt16 nRowCount = pTable->GetTabLines().Count();
+            if (nCount <= 0 || !(0 <= nIndex && nIndex < nRowCount))
+            {
+                uno::RuntimeException aExcept;
+                aExcept.Message = C2U("Illegal arguments");
+                throw aExcept;
+            }
+
             String sTLName = lcl_GetCellName(0, (sal_Int16)nIndex);
             const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
             sal_Bool bAppend = sal_False;
@@ -4815,6 +4828,8 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
 void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+    if (nCount == 0)
+        return;
     SwFrmFmt* pFrmFmt = GetFrmFmt();
     if(!pFrmFmt || nIndex < 0 || nCount <=0 )
         throw uno::RuntimeException();
@@ -4961,7 +4976,7 @@ uno::Any SwXTableColumns::getByIndex(sal_Int32 nIndex)
         }
         if(nCount <= nIndex || nIndex < 0)
             throw IndexOutOfBoundsException();
-        xRet = *new cppu::OWeakObject();
+        xRet = uno::Reference<uno::XInterface>();   //!! writer tables do not have columns !!
     }
     return uno::Any(&xRet, ::getCppuType((const uno::Reference<uno::XInterface>*)0));
 }
@@ -4990,14 +5005,26 @@ sal_Bool SwXTableColumns::hasElements(void) throw( uno::RuntimeException )
 void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+    if (nCount == 0)
+        return;
     SwFrmFmt* pFrmFmt = GetFrmFmt();
-    if(!pFrmFmt|| nIndex < 0 || nCount <=0 )
+    if(!pFrmFmt)
         throw uno::RuntimeException();
     else
     {
         SwTable* pTable = SwTable::FindTable( pFrmFmt );
         if(!pTable->IsTblComplex())
         {
+            SwTableLines& rLines = pTable->GetTabLines();
+            SwTableLine* pLine = rLines.GetObject(0);
+            sal_uInt16 nColCount = pLine->GetTabBoxes().Count();
+            if (nCount <= 0 || !(0 <= nIndex && nIndex < nColCount))
+            {
+                uno::RuntimeException aExcept;
+                aExcept.Message = C2U("Illegal arguments");
+                throw aExcept;
+            }
+
             String sTLName = lcl_GetCellName((sal_Int16)nIndex, 0);
             const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
             sal_Bool bAppend = sal_False;
@@ -5035,6 +5062,8 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
 void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+    if (nCount == 0)
+        return;
     SwFrmFmt* pFrmFmt = GetFrmFmt();
     if(!pFrmFmt|| nIndex < 0 || nCount <=0 )
         throw uno::RuntimeException();
