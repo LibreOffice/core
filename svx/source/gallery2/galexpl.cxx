@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galexpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:06:46 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:03:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,8 @@ Gallery* GalleryExplorer::ImplGetGallery()
 {
     static Gallery* pGallery = NULL;
 
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+
     if( !pGallery )
         pGallery = Gallery::AcquireGallery( SvtPathOptions().GetGalleryPath() );
 
@@ -65,6 +67,8 @@ Gallery* GalleryExplorer::ImplGetGallery()
 GalleryExplorer* GalleryExplorer::GetGallery()
 {
     static GalleryExplorer* pThis = NULL;
+
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
 
     // only create a dummy object which can be accessed
     if( !pThis )
