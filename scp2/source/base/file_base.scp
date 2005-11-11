@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_base.scp,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:18:02 $
+ *  last change: $Author: kz $ $Date: 2005-11-11 14:25:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,10 @@ File gid_File_Exe_Sbase
     Styles = (PACKED);
 End
 
+STD_UNO_LIB_FILE( gid_File_Lib_Abp, abp)
+STD_UNO_LIB_FILE( gid_File_Lib_Dbp, dbp)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dbu, dbu )
+
 #ifdef UNX
 
 File gid_File_Share_Xdg_Base
@@ -76,3 +80,25 @@ File gid_File_Registry_Spool_Oo_Common_Base_Xcu
     Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Common;
     Name = "/registry/spool/org/openoffice/Office/Common-base.xcu";
 End
+
+File gid_File_Registry_Spool_Oo_TypeDetection_Database_Types_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
+    Name = "/registry/spool/fcfg_database_types.xcu";
+End
+
+File gid_File_Registry_Spool_Oo_TypeDetection_Database_Filters_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
+    Name = "/registry/spool/fcfg_database_filters.xcu";
+End
+
+File gid_File_Registry_Spool_Oo_TypeDetection_Database_Others_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Misc;
+    Name = "/registry/spool/fcfg_database_others.xcu";
+End
+
