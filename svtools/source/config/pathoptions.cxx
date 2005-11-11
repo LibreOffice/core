@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:44:42 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:52:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,8 @@
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
 #endif
+
+#include <itemholder1.hxx>
 
 #include <vector>
 #include <hash_map>
@@ -596,7 +598,10 @@ SvtPathOptions::SvtPathOptions()
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( lclMutex::get() );
     if ( !pOptions )
+    {
         pOptions = new SvtPathOptions_Impl;
+        ItemHolder1::holdConfigItem(E_PATHOPTIONS);
+    }
     ++nRefCount;
     pImp = pOptions;
 }
