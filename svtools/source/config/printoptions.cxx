@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printoptions.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:45:00 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:53:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,8 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
+
+#include <itemholder2.hxx>
 
 // -----------
 // - statics -
@@ -650,6 +652,7 @@ SvtPrinterOptions::SvtPrinterOptions()
         OUString aRootPath( ROOTNODE_START );
         SetDataContainer( m_pStaticDataContainer = new SvtPrintOptions_Impl( aRootPath += OUString( RTL_CONSTASCII_USTRINGPARAM( "/Printer" ) ) ) );
         pPrinterOptionsDataContainer = m_pStaticDataContainer;
+        ItemHolder2::holdConfigItem(E_PRINTOPTIONS);
     }
 }
 
@@ -687,6 +690,8 @@ SvtPrintFileOptions::SvtPrintFileOptions()
         OUString aRootPath( ROOTNODE_START );
         SetDataContainer( m_pStaticDataContainer = new SvtPrintOptions_Impl( aRootPath += OUString( RTL_CONSTASCII_USTRINGPARAM( "/File" ) ) ) );
         pPrintFileOptionsDataContainer = m_pStaticDataContainer;
+
+        ItemHolder2::holdConfigItem(E_PRINTFILEOPTIONS);
     }
 }
 
