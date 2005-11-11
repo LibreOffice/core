@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dockmgr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:25:15 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:54:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -669,51 +669,54 @@ void ImplPopupFloatWin::DrawGrip()
         DrawRect( aRect );
     }
 
-#ifdef TEAROFF_DASHED
-    // draw single dashed line
-    LineInfo aLineInfo( LINE_DASH );
-    aLineInfo.SetDistance( 4 );
-    aLineInfo.SetDashLen( 12 );
-    aLineInfo.SetDashCount( 1 );
-
-    aRect.nLeft+=2; aRect.nRight-=2;
-
-    aRect.nTop+=2;
-    aRect.nBottom = aRect.nTop;
-    SetLineColor( GetSettings().GetStyleSettings().GetDarkShadowColor() );
-    DrawLine( aRect.TopLeft(), aRect.TopRight(), aLineInfo );
-
-    if( !mbHighlight )
+    if( !ToolBox::AlwaysLocked() )  // no grip if toolboxes are locked
     {
-        aRect.nTop++; aRect.nBottom++;
-        SetLineColor( GetSettings().GetStyleSettings().GetLightColor() );
+#ifdef TEAROFF_DASHED
+        // draw single dashed line
+        LineInfo aLineInfo( LINE_DASH );
+        aLineInfo.SetDistance( 4 );
+        aLineInfo.SetDashLen( 12 );
+        aLineInfo.SetDashCount( 1 );
+
+        aRect.nLeft+=2; aRect.nRight-=2;
+
+        aRect.nTop+=2;
+        aRect.nBottom = aRect.nTop;
+        SetLineColor( GetSettings().GetStyleSettings().GetDarkShadowColor() );
         DrawLine( aRect.TopLeft(), aRect.TopRight(), aLineInfo );
-    }
+
+        if( !mbHighlight )
+        {
+            aRect.nTop++; aRect.nBottom++;
+            SetLineColor( GetSettings().GetStyleSettings().GetLightColor() );
+            DrawLine( aRect.TopLeft(), aRect.TopRight(), aLineInfo );
+        }
 
 #else
-    // draw several grip lines
-    SetFillColor( GetSettings().GetStyleSettings().GetShadowColor() );
-    aRect.nTop++;
-    aRect.nBottom = aRect.nTop;
+        // draw several grip lines
+        SetFillColor( GetSettings().GetStyleSettings().GetShadowColor() );
+        aRect.nTop++;
+        aRect.nBottom = aRect.nTop;
 
-    int width = POPUP_DRAGWIDTH;
-    while( width >= aRect.getWidth() )
-        width -= 4;
-    if( width <= 0 )
-        width = aRect.getWidth();
-    //aRect.nLeft = aRect.nLeft + (aRect.getWidth() - width) / 2;
-    aRect.nLeft = (aRect.nLeft + aRect.nRight - width) / 2;
-    aRect.nRight = aRect.nLeft + width;
+        int width = POPUP_DRAGWIDTH;
+        while( width >= aRect.getWidth() )
+            width -= 4;
+        if( width <= 0 )
+            width = aRect.getWidth();
+        //aRect.nLeft = aRect.nLeft + (aRect.getWidth() - width) / 2;
+        aRect.nLeft = (aRect.nLeft + aRect.nRight - width) / 2;
+        aRect.nRight = aRect.nLeft + width;
 
-    int i=0;
-    while( i< POPUP_DRAGGRIP )
-    {
-        DrawRect( aRect );
-        aRect.nTop+=2;
-        aRect.nBottom+=2;
-        i+=2;
-    }
+        int i=0;
+        while( i< POPUP_DRAGGRIP )
+        {
+            DrawRect( aRect );
+            aRect.nTop+=2;
+            aRect.nBottom+=2;
+            i+=2;
+        }
 #endif
+    }
 
     if( bLinecolor )
         SetLineColor( aLinecolor );
@@ -738,22 +741,25 @@ void ImplPopupFloatWin::MouseMove( const MouseEvent& rMEvt )
 {
     Point aMousePos = rMEvt.GetPosPixel();
 
-    if( rMEvt.IsLeft() && GetDragRect().IsInside( aMousePos ) )
+    if( !ToolBox::AlwaysLocked() )  // no tear off if locking is enabled
     {
-        // start window move
-        mbMoving = TRUE;
-        StartTracking( STARTTRACK_NOKEYCANCEL );
-        return;
-    }
-    if( !mbHighlight && GetDragRect().IsInside( aMousePos ) )
-    {
-        mbHighlight = TRUE;
-        DrawGrip();
-    }
-    if( mbHighlight && ( rMEvt.IsLeaveWindow() || !GetDragRect().IsInside( aMousePos ) ) )
-    {
-        mbHighlight = FALSE;
-        DrawGrip();
+        if( rMEvt.IsLeft() && GetDragRect().IsInside( aMousePos ) )
+        {
+            // start window move
+            mbMoving = TRUE;
+            StartTracking( STARTTRACK_NOKEYCANCEL );
+            return;
+        }
+        if( !mbHighlight && GetDragRect().IsInside( aMousePos ) )
+        {
+            mbHighlight = TRUE;
+            DrawGrip();
+        }
+        if( mbHighlight && ( rMEvt.IsLeaveWindow() || !GetDragRect().IsInside( aMousePos ) ) )
+        {
+            mbHighlight = FALSE;
+            DrawGrip();
+        }
     }
 }
 
