@@ -4,9 +4,9 @@
  *
  *  $RCSfile: miscopt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:52:11 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 13:51:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,10 +123,15 @@ class SvtMiscOptions_Impl : public ConfigItem
 
     private:
     LinkList    aList;
-    sal_Int16   m_nSymbolSet;
-    sal_Int16   m_nToolboxStyle;
-    sal_Bool    m_bPluginsEnabled;
     sal_Bool    m_bUseSystemFileDialog;
+    sal_Bool    m_bIsUseSystemFileDialogRO;
+    sal_Bool    m_bPluginsEnabled;
+    sal_Bool    m_bIsPluginsEnabledRO;
+    sal_Int16   m_nSymbolSet;
+    sal_Bool    m_bIsSymbolSetRO;
+    sal_Int16   m_nToolboxStyle;
+    sal_Bool    m_bIsToolboxStyleRO;
+
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
     //-------------------------------------------------------------------------------------------------------------
@@ -191,15 +196,24 @@ class SvtMiscOptions_Impl : public ConfigItem
         inline void SetUseSystemFileDialog( sal_Bool bSet )
         {  m_bUseSystemFileDialog = bSet; SetModified(); }
 
+        inline sal_Bool IsUseSystemFileDialogReadOnly() const
+        { return m_bIsUseSystemFileDialogRO; }
+
         inline sal_Bool IsPluginsEnabled() const
         { return m_bPluginsEnabled; }
 
         void SetPluginsEnabled( sal_Bool bEnable );
 
+        inline sal_Bool IsPluginsEnabledReadOnly() const
+        { return m_bIsPluginsEnabledRO; }
+
         inline sal_Int16 GetSymbolSet()
         { return m_nSymbolSet; }
 
         void SetSymbolSet( sal_Int16 nSet );
+
+        inline sal_Bool IsGetSymbolSetReadOnly()
+        { return m_bIsSymbolSetRO; }
 
         // translate to VCL settings ( "0" = 3D, "1" = FLAT )
         inline sal_Int16 GetToolboxStyle()
@@ -207,6 +221,9 @@ class SvtMiscOptions_Impl : public ConfigItem
 
         // translate from VCL settings
         void SetToolboxStyle( sal_Int16 nStyle, bool _bSetModified );
+
+        inline sal_Bool IsGetToolboxStyleReadOnly()
+        { return m_bIsToolboxStyleRO; }
 
         void AddListener( const Link& rLink );
         void RemoveListener( const Link& rLink );
@@ -244,18 +261,27 @@ class SvtMiscOptions_Impl : public ConfigItem
 SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     // Init baseclasses first
     : ConfigItem( ROOTNODE_MISC )
+
+    , m_bUseSystemFileDialog( sal_False )
+    , m_bIsUseSystemFileDialogRO( sal_False )
+    , m_bPluginsEnabled( sal_False )
+    , m_bIsPluginsEnabledRO( sal_False )
     , m_nSymbolSet( 0 )
+    , m_bIsSymbolSetRO( sal_False )
     , m_nToolboxStyle( 1 )
+    , m_bIsToolboxStyleRO( sal_False )
+
 {
     // Use our static list of configuration keys to get his values.
     Sequence< OUString >    seqNames    = GetPropertyNames  (           );
     Load( seqNames );
     Sequence< Any >         seqValues   = GetProperties     ( seqNames  );
+    Sequence< sal_Bool >    seqRO       = GetReadOnlyStates ( seqNames  );
 
     // Safe impossible cases.
     // We need values from ALL configuration keys.
     // Follow assignment use order of values in relation to our list of key names!
-    DBG_ASSERT( !(seqNames.getLength()!=seqValues.getLength()), "SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()\nI miss some values of configuration keys!\n" );
+    DBG_ASSERT( !(seqNames.getLength()!=seqValues.getLength()), "SvtMiscOptions_Impl::SvtMiscOptions_Impl()\nI miss some values of configuration keys!\n" );
 
     // Copy values from list in right order to ouer internal member.
     sal_Int32 nPropertyCount = seqValues.getLength();
@@ -266,26 +292,37 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
         DBG_ASSERT( !(seqValues[nProperty].hasValue()==sal_False), "SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()\nInvalid property value detected!\n" );
         switch( nProperty )
         {
-            case PROPERTYHANDLE_PLUGINSENABLED      :   {
-                                                            if( !(seqValues[nProperty] >>= m_bPluginsEnabled) )
-                                                                DBG_ERROR("Wrong type of \"Misc\\PluginsEnabled\"!" );
-                                                        }
-                                                    break;
-            case PROPERTYHANDLE_SYMBOLSET           :   {
-                                                            if( !(seqValues[nProperty] >>= m_nSymbolSet) )
-                                                                DBG_ERROR("Wrong type of \"Misc\\SymbolSet\"!" );
-                                                        }
-                                                    break;
-            case PROPERTYHANDLE_TOOLBOXSTYLE        :   {
-                                                            if( !(seqValues[nProperty] >>= m_nToolboxStyle) )
-                                                                DBG_ERROR("Wrong type of \"Misc\\ToolboxStyle\"!" );
-                                                        }
-                                                    break;
-            case PROPERTYHANDLE_USESYSTEMFILEDIALOG      :   {
-                                                            if( !(seqValues[nProperty] >>= m_bUseSystemFileDialog) )
-                                                                DBG_ERROR("Wrong type of \"Misc\\PluginsEnabled\"!" );
-                                                        }
-                                                    break;
+            case PROPERTYHANDLE_PLUGINSENABLED :
+            {
+                if( !(seqValues[nProperty] >>= m_bPluginsEnabled) )
+                    DBG_ERROR("Wrong type of \"Misc\\PluginsEnabled\"!" );
+                m_bIsPluginsEnabledRO = seqRO[nProperty];
+                break;
+            }
+
+            case PROPERTYHANDLE_SYMBOLSET :
+            {
+                if( !(seqValues[nProperty] >>= m_nSymbolSet) )
+                    DBG_ERROR("Wrong type of \"Misc\\SymbolSet\"!" );
+                m_bIsSymbolSetRO = seqRO[nProperty];
+                break;
+            }
+
+            case PROPERTYHANDLE_TOOLBOXSTYLE :
+            {
+                if( !(seqValues[nProperty] >>= m_nToolboxStyle) )
+                    DBG_ERROR("Wrong type of \"Misc\\ToolboxStyle\"!" );
+                m_bIsToolboxStyleRO = seqRO[nProperty];
+                break;
+            }
+
+            case PROPERTYHANDLE_USESYSTEMFILEDIALOG :
+            {
+                if( !(seqValues[nProperty] >>= m_bUseSystemFileDialog) )
+                    DBG_ERROR("Wrong type of \"Misc\\PluginsEnabled\"!" );
+                m_bIsUseSystemFileDialogRO = seqRO[nProperty];
+                break;
+            }
         }
     }
 
@@ -433,22 +470,33 @@ void SvtMiscOptions_Impl::Commit()
     {
         switch( nProperty )
         {
-            case PROPERTYHANDLE_PLUGINSENABLED      :   {
-                                                        seqValues[nProperty] <<= m_bPluginsEnabled;
-                                                    }
-                                                    break;
-            case PROPERTYHANDLE_SYMBOLSET           :   {
-                                                        seqValues[nProperty] <<= m_nSymbolSet;
-                                                    }
-                                                    break;
-            case PROPERTYHANDLE_TOOLBOXSTYLE        :   {
-                                                        seqValues[nProperty] <<= m_nToolboxStyle;
-                                                    }
-                                                    break;
-            case PROPERTYHANDLE_USESYSTEMFILEDIALOG      :   {
-                                                        seqValues[nProperty] <<= m_bUseSystemFileDialog;
-                                                    }
-                                                    break;
+            case PROPERTYHANDLE_PLUGINSENABLED :
+            {
+                if ( !m_bIsPluginsEnabledRO )
+                    seqValues[nProperty] <<= m_bPluginsEnabled;
+                break;
+            }
+
+            case PROPERTYHANDLE_SYMBOLSET :
+            {
+                if ( !m_bIsSymbolSetRO )
+                   seqValues[nProperty] <<= m_nSymbolSet;
+                break;
+            }
+
+            case PROPERTYHANDLE_TOOLBOXSTYLE :
+            {
+                if ( !m_bIsToolboxStyleRO )
+                    seqValues[nProperty] <<= m_nToolboxStyle;
+                break;
+            }
+
+            case PROPERTYHANDLE_USESYSTEMFILEDIALOG :
+            {
+                if ( !m_bIsUseSystemFileDialogRO )
+                    seqValues[nProperty] <<= m_bUseSystemFileDialog;
+                break;
+            }
         }
     }
     // Set properties in configuration.
@@ -497,8 +545,7 @@ SvtMiscOptions::SvtMiscOptions()
     {
        RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtMiscOptions_Impl::ctor()");
        m_pDataContainer = new SvtMiscOptions_Impl;
-
-        ItemHolder1::holdConfigItem(E_MISCOPTIONS);
+       ItemHolder1::holdConfigItem(E_MISCOPTIONS);
     }
 }
 
@@ -520,6 +567,21 @@ SvtMiscOptions::~SvtMiscOptions()
     }
 }
 
+sal_Bool SvtMiscOptions::UseSystemFileDialog() const
+{
+    return m_pDataContainer->UseSystemFileDialog();
+}
+
+void SvtMiscOptions::SetUseSystemFileDialog( sal_Bool bEnable )
+{
+    m_pDataContainer->SetUseSystemFileDialog( bEnable );
+}
+
+sal_Bool SvtMiscOptions::IsUseSystemFileDialogReadOnly() const
+{
+    return m_pDataContainer->IsUseSystemFileDialogReadOnly();
+}
+
 sal_Bool SvtMiscOptions::IsPluginsEnabled() const
 {
     return m_pDataContainer->IsPluginsEnabled();
@@ -530,24 +592,24 @@ void SvtMiscOptions::SetPluginsEnabled( sal_Bool bEnable )
     m_pDataContainer->SetPluginsEnabled( bEnable );
 }
 
+sal_Bool SvtMiscOptions::IsPluginsEnabledReadOnly() const
+{
+    return m_pDataContainer->IsPluginsEnabledReadOnly();
+}
+
 sal_Int16 SvtMiscOptions::GetSymbolSet() const
 {
     return m_pDataContainer->GetSymbolSet();
 }
 
-void SvtMiscOptions::SetUseSystemFileDialog( sal_Bool bEnable )
-{
-    m_pDataContainer->SetUseSystemFileDialog( bEnable );
-}
-
-sal_Bool SvtMiscOptions::UseSystemFileDialog() const
-{
-    return m_pDataContainer->UseSystemFileDialog();
-}
-
 void SvtMiscOptions::SetSymbolSet( sal_Int16 nSet )
 {
     m_pDataContainer->SetSymbolSet( nSet );
+}
+
+sal_Bool SvtMiscOptions::IsGetSymbolSetReadOnly() const
+{
+    return m_pDataContainer->IsGetSymbolSetReadOnly();
 }
 
 sal_Int16 SvtMiscOptions::GetToolboxStyle() const
@@ -558,6 +620,11 @@ sal_Int16 SvtMiscOptions::GetToolboxStyle() const
 void SvtMiscOptions::SetToolboxStyle( sal_Int16 nStyle )
 {
     m_pDataContainer->SetToolboxStyle( nStyle, true );
+}
+
+sal_Bool SvtMiscOptions::IsGetToolboxStyleReadOnly() const
+{
+    return m_pDataContainer->IsGetToolboxStyleReadOnly();
 }
 
 //*****************************************************************************************************************
