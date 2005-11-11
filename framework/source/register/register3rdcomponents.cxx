@@ -4,9 +4,9 @@
  *
  *  $RCSfile: register3rdcomponents.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:39:16 $
+ *  last change: $Author: kz $ $Date: 2005-11-11 14:13:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,10 +69,16 @@
 #include <jobs/helponstartup.hxx>
 #endif
 
+#ifndef __FRAMEWORK_DISPATCH_SYSTEMEXEC_HXX_
+#include <dispatch/systemexec.hxx>
+#endif
+
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
 COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::HelpOnStartup   )
+                        COMPONENTINFO( ::framework::SystemExec      )
                     )
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::HelpOnStartup       )
+                        IFFACTORY( ::framework::SystemExec          )
                     )
