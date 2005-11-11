@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AgendaTemplate.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:28:51 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 13:05:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -300,7 +300,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
      * @param resources_ resources.
      */
     AgendaTemplate(XMultiServiceFactory xmsf_, CGAgenda agenda_ , AgendaWizardDialogResources resources_, XTerminateListener listener) {
-        super(xmsf_, listener);
+        super(xmsf_, listener, "WIZARD_LIVE_PREVIEW");
 
         agenda = agenda_;
         resources = resources_;
