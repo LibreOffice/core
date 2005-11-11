@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sourceviewconfig.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:46:54 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:54:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,8 @@
 #ifndef _SFXSMPLHINT_HXX
 #include "smplhint.hxx"
 #endif
+
+#include <itemholder1.hxx>
 
 using namespace utl;
 using namespace rtl;
@@ -224,7 +226,11 @@ SourceViewConfig::SourceViewConfig()
     {
         ::osl::MutexGuard aGuard( lclMutex::get() );
         if(!m_pImplConfig)
+        {
             m_pImplConfig = new SourceViewConfig_Impl;
+            ItemHolder1::holdConfigItem(E_SOURCEVIEWCONFIG);
+        }
+
          ++m_nRefCount;
     }
     StartListening( *m_pImplConfig, TRUE );
