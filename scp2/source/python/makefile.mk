@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 01:43:01 $
+#   last change: $Author: rt $ $Date: 2005-11-11 09:22:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,8 @@ SCP_PRODUCT_TYPE=osl
 PARFILES=\
         module_python.par              \
         profileitem_python.par         \
-        file_python.par
+        file_python.par                \
+        shortcut_python.par
 
 ULFFILES= \
         module_python.ulf 
