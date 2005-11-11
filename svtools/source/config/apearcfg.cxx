@@ -4,9 +4,9 @@
  *
  *  $RCSfile: apearcfg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:34:43 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:46:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@
 #include "tools/debug.hxx"
 #include "vcl/settings.hxx"
 #include "vcl/svapp.hxx"
+#include <rtl/logfile.hxx>
 
 #define DEFAULT_LOOKNFEEL   0
 #define DEFAULT_DRAGMODE    2
@@ -77,6 +78,8 @@ SvtTabAppearanceCfg::SvtTabAppearanceCfg()
     ,bFontAntialiasing  ( TRUE )
 #endif
 {
+    RTL_LOGFILE_CONTEXT(aLog, "svtools (???) SvtTabAppearanceCfg::SvtTabAppearanceCfg()");
+
     const Sequence<OUString>& rNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(rNames);
     const Any* pValues = aValues.getConstArray();
