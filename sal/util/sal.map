@@ -532,3 +532,8 @@ UDK_3.3 {
         rtl_ustr_asciil_reverseEquals_WithLength;
 } UDK_3.2;
 
+UDK_3.4 {
+    global:
+        osl_setErrorReporting;
+} UDK_3.3;
+
