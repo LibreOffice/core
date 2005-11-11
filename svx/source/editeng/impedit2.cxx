@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 09:10:10 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 13:31:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,10 @@
 
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HPP_
 #include <com/sun/star/i18n/ScriptType.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_TEXT_CHARACTERCOMPRESSIONTYPE_HPP_
@@ -1449,10 +1453,18 @@ EditPaM ImpEditEngine::WordLeft( const EditPaM& rPaM, sal_Int16 nWordType )
     }
     else
     {
+        // we need to increase the position by 1 when retrieving the locale
+        // since the attribute for the char left to the cursor position is returned
+        EditPaM aTmpPaM( aNewPaM );
+        xub_StrLen nMax = rPaM.GetNode()->Len();
+        if ( aTmpPaM.GetIndex() < nMax )
+            aTmpPaM.SetIndex( aTmpPaM.GetIndex() + 1 );
+        lang::Locale aLocale( GetLocale( aTmpPaM ) );
+
         uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
-        i18n::Boundary aBoundary = xBI->getWordBoundary( *aNewPaM.GetNode(), nCurrentPos, GetLocale( EditPaM( aNewPaM.GetNode(), nCurrentPos ) ), nWordType, sal_True );
+        i18n::Boundary aBoundary = xBI->getWordBoundary( *aNewPaM.GetNode(), nCurrentPos, aLocale, nWordType, sal_True );
         if ( aBoundary.startPos >= nCurrentPos )
-            aBoundary = xBI->previousWord( *aNewPaM.GetNode(), nCurrentPos, GetLocale( EditPaM( aNewPaM.GetNode(), nCurrentPos ) ), nWordType );
+            aBoundary = xBI->previousWord( *aNewPaM.GetNode(), nCurrentPos, aLocale, nWordType );
         aNewPaM.SetIndex( ( aBoundary.startPos != (-1) ) ? (USHORT)aBoundary.startPos : 0 );
     }
 
@@ -1465,8 +1477,14 @@ EditPaM ImpEditEngine::WordRight( const EditPaM& rPaM, sal_Int16 nWordType )
     EditPaM aNewPaM( rPaM );
     if ( aNewPaM.GetIndex() < nMax )
     {
+        // we need to increase the position by 1 when retrieving the locale
+        // since the attribute for the char left to the cursor position is returned
+        EditPaM aTmpPaM( aNewPaM );
+        aTmpPaM.SetIndex( aTmpPaM.GetIndex() + 1 );
+        lang::Locale aLocale( GetLocale( aTmpPaM ) );
+
         uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
-        i18n::Boundary aBoundary = xBI->nextWord( *aNewPaM.GetNode(), aNewPaM.GetIndex(), GetLocale( aNewPaM ), nWordType );
+        i18n::Boundary aBoundary = xBI->nextWord( *aNewPaM.GetNode(), aNewPaM.GetIndex(), aLocale, nWordType );
         aNewPaM.SetIndex( (USHORT)aBoundary.startPos );
     }
     // not 'else', maybe the index reached nMax now...
@@ -1487,8 +1505,17 @@ EditPaM ImpEditEngine::WordRight( const EditPaM& rPaM, sal_Int16 nWordType )
 EditPaM ImpEditEngine::StartOfWord( const EditPaM& rPaM, sal_Int16 nWordType )
 {
     EditPaM aNewPaM( rPaM );
+
+    // we need to increase the position by 1 when retrieving the locale
+    // since the attribute for the char left to the cursor position is returned
+    EditPaM aTmpPaM( aNewPaM );
+    xub_StrLen nMax = rPaM.GetNode()->Len();
+    if ( aTmpPaM.GetIndex() < nMax )
+        aTmpPaM.SetIndex( aTmpPaM.GetIndex() + 1 );
+    lang::Locale aLocale( GetLocale( aTmpPaM ) );
+
     uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
-    i18n::Boundary aBoundary = xBI->getWordBoundary( *rPaM.GetNode(), rPaM.GetIndex(), GetLocale( rPaM ), nWordType, sal_True );
+    i18n::Boundary aBoundary = xBI->getWordBoundary( *rPaM.GetNode(), rPaM.GetIndex(), aLocale, nWordType, sal_True );
     aNewPaM.SetIndex( (USHORT)aBoundary.startPos );
     return aNewPaM;
 }
@@ -1496,8 +1523,17 @@ EditPaM ImpEditEngine::StartOfWord( const EditPaM& rPaM, sal_Int16 nWordType )
 EditPaM ImpEditEngine::EndOfWord( const EditPaM& rPaM, sal_Int16 nWordType )
 {
     EditPaM aNewPaM( rPaM );
+
+    // we need to increase the position by 1 when retrieving the locale
+    // since the attribute for the char left to the cursor position is returned
+    EditPaM aTmpPaM( aNewPaM );
+    xub_StrLen nMax = rPaM.GetNode()->Len();
+    if ( aTmpPaM.GetIndex() < nMax )
+        aTmpPaM.SetIndex( aTmpPaM.GetIndex() + 1 );
+    lang::Locale aLocale( GetLocale( aTmpPaM ) );
+
     uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
-    i18n::Boundary aBoundary = xBI->getWordBoundary( *rPaM.GetNode(), rPaM.GetIndex(), GetLocale( rPaM ), nWordType, sal_True );
+    i18n::Boundary aBoundary = xBI->getWordBoundary( *rPaM.GetNode(), rPaM.GetIndex(), aLocale, nWordType, sal_True );
     aNewPaM.SetIndex( (USHORT)aBoundary.endPos );
     return aNewPaM;
 }
@@ -1506,11 +1542,20 @@ EditSelection ImpEditEngine::SelectWord( const EditSelection& rCurSel, sal_Int16
 {
     EditSelection aNewSel( rCurSel );
     EditPaM aPaM( rCurSel.Max() );
+
+    // we need to increase the position by 1 when retrieving the locale
+    // since the attribute for the char left to the cursor position is returned
+    EditPaM aTmpPaM( aPaM );
+    xub_StrLen nMax = aPaM.GetNode()->Len();
+    if ( aTmpPaM.GetIndex() < nMax )
+        aTmpPaM.SetIndex( aTmpPaM.GetIndex() + 1 );
+    lang::Locale aLocale( GetLocale( aTmpPaM ) );
+
     uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
-    sal_Int16 nType = xBI->getWordType( *aPaM.GetNode(), aPaM.GetIndex(), GetLocale( aPaM ) );
+    sal_Int16 nType = xBI->getWordType( *aPaM.GetNode(), aPaM.GetIndex(), aLocale );
     if ( nType == i18n::WordType::ANY_WORD )
     {
-        i18n::Boundary aBoundary = xBI->getWordBoundary( *aPaM.GetNode(), aPaM.GetIndex(), GetLocale( aPaM ), nWordType, sal_True );
+        i18n::Boundary aBoundary = xBI->getWordBoundary( *aPaM.GetNode(), aPaM.GetIndex(), aLocale, nWordType, sal_True );
         // don't select when curser at end of word
         if ( ( aBoundary.endPos > aPaM.GetIndex() ) &&
              ( ( aBoundary.startPos < aPaM.GetIndex() ) || ( bAcceptStartOfWord && ( aBoundary.startPos == aPaM.GetIndex() ) ) ) )
