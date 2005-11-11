@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 09:09:31 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:26:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,7 +212,7 @@ End
 File gid_File_Script_Unopkg
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Name = "unopkg";
 End
 
@@ -1092,14 +1092,21 @@ End
 
 File gid_File_Oo_Office_Common_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/Common.xcs";
 End
 
+File gid_File_Oo_Office_OptionsDialog_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED,PATCH);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/OptionsDialog.xcs";
+End
+
 File gid_File_Oo_Office_Recovery_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/Recovery.xcs";
 End
@@ -1299,6 +1306,13 @@ File gid_File_Oo_Office_Ui_Genericcommands_Xcu
     Styles = (PACKED, PATCH);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/GenericCommands.xcu";
+End
+
+File gid_File_Oo_Office_Ui_GlobalSettings_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED,PATCH);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
+    Name = "/registry/schema/org/openoffice/Office/UI/GlobalSettings.xcs";
 End
 
 File gid_File_Oo_Office_Impress_Xcs
