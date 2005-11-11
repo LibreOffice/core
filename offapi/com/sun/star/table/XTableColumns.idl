@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XTableColumns.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:52:49 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 13:24:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,9 @@ published interface XTableColumns: com::sun::star::container::XIndexAccess
 
     /** inserts new columns.
 
+        <p>When the index or combination of index and count is out
+        of bounds an exception will be thrown.</p>
+
         @param nIndex
             is the index the first inserted column will have.
 
@@ -68,6 +71,9 @@ published interface XTableColumns: com::sun::star::container::XIndexAccess
     //-------------------------------------------------------------------------
 
     /** deletes columns.
+
+        <p>When the index or combination of index and count is out
+        of bounds an exception will be thrown.</p>
 
         @param nIndex
             is the index of the first column to delete.
