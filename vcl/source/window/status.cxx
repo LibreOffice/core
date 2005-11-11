@@ -4,9 +4,9 @@
  *
  *  $RCSfile: status.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:30:07 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 09:14:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,7 @@ struct ImplStatusItem
     long                mnX;
     XubString           maText;
     XubString           maHelpText;
+    XubString           maQuickHelpText;
     ULONG               mnHelpId;
     void*               mpUserData;
     BOOL                mbVisible;
@@ -760,33 +761,33 @@ void StatusBar::RequestHelp( const HelpEvent& rHEvt )
 
     if ( nItemId )
     {
+        Rectangle aItemRect = GetItemRect( nItemId );
+        Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
+        aItemRect.Left()   = aPt.X();
+        aItemRect.Top()    = aPt.Y();
+        aPt = OutputToScreenPixel( aItemRect.BottomRight() );
+        aItemRect.Right()  = aPt.X();
+        aItemRect.Bottom() = aPt.Y();
+
         if ( rHEvt.GetMode() & HELPMODE_BALLOON )
         {
-            Rectangle aItemRect = GetItemRect( nItemId );
-            Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
-            aItemRect.Left()   = aPt.X();
-            aItemRect.Top()    = aPt.Y();
-            aPt = OutputToScreenPixel( aItemRect.BottomRight() );
-            aItemRect.Right()  = aPt.X();
-            aItemRect.Bottom() = aPt.Y();
             XubString aStr = GetHelpText( nItemId );
             Help::ShowBalloon( this, aItemRect.Center(), aItemRect, aStr );
             return;
         }
         else if ( rHEvt.GetMode() & HELPMODE_QUICK )
         {
-            Rectangle   aItemRect = GetItemRect( nItemId );
-            XubString   aStr = GetItemText( nItemId );
-            // Wir zeigen die Quick-Hilfe nur an, wenn Text nicht
-            // vollstaendig sichtbar
+            XubString   aStr = GetQuickHelpText( nItemId );
+            // Show quickhelp if available
+            if( aStr.Len() )
+            {
+                Help::ShowQuickHelp( this, aItemRect, aStr );
+                return;
+            }
+            aStr = GetItemText( nItemId );
+            // show a quick help if item text doesn't fit
             if ( GetTextWidth( aStr ) > aItemRect.GetWidth() )
             {
-                Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
-                aItemRect.Left()   = aPt.X();
-                aItemRect.Top()    = aPt.Y();
-                aPt = OutputToScreenPixel( aItemRect.BottomRight() );
-                aItemRect.Right()  = aPt.X();
-                aItemRect.Bottom() = aPt.Y();
                 Help::ShowQuickHelp( this, aItemRect, aStr );
                 return;
             }
@@ -1364,6 +1365,31 @@ const XubString& StatusBar::GetHelpText( USHORT nItemId ) const
         }
 
         return pItem->maHelpText;
+    }
+    else
+        return ImplGetSVEmptyStr();
+}
+
+// -----------------------------------------------------------------------
+
+void StatusBar::SetQuickHelpText( USHORT nItemId, const XubString& rText )
+{
+    USHORT nPos = GetItemPos( nItemId );
+
+    if ( nPos != STATUSBAR_ITEM_NOTFOUND )
+        mpItemList->GetObject( nPos )->maQuickHelpText = rText;
+}
+
+// -----------------------------------------------------------------------
+
+const XubString& StatusBar::GetQuickHelpText( USHORT nItemId ) const
+{
+    USHORT nPos = GetItemPos( nItemId );
+
+    if ( nPos != STATUSBAR_ITEM_NOTFOUND )
+    {
+        ImplStatusItem* pItem = mpItemList->GetObject( nPos );
+        return pItem->maQuickHelpText;
     }
     else
         return ImplGetSVEmptyStr();
