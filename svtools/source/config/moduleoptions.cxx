@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduleoptions.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:44:08 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:52:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1164,8 +1164,7 @@ SvtModuleOptions::SvtModuleOptions()
         RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtModuleOptions_Impl::ctor()");
         m_pDataContainer = new SvtModuleOptions_Impl(this);
 
-        ItemHolder1* pHolder = ItemHolder1::getGlobalItemHolder();
-        pHolder->holdConfigItem(E_MODULEOPTIONS);
+        ItemHolder1::holdConfigItem(E_MODULEOPTIONS);
     }
 }
 
