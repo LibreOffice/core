@@ -4,9 +4,9 @@
  *
  *  $RCSfile: securityenvironment_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:29:47 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 09:19:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -757,123 +757,65 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: buildC
 
     pChainContext = NULL ;
 
-    //Above all, we try to find the certificate in the given key store.
-    if( pCertContext != NULL ) {
-        if( !CertGetCertificateChain(
-                NULL ,
-                pCertContext ,
-                NULL ,
-                m_hKeyStore ,
-                &chainPara ,
-                0 ,
-                NULL ,
-                &pChainContext
-            )
-        ) {
-            pChainContext = NULL ;
-        }
-    }
-
-    //firstly, we try to find the certificate in the given cert store.
-    if( pCertContext != NULL && pChainContext != NULL ) {
-        if( !CertGetCertificateChain(
-                NULL ,
-                pCertContext ,
-                NULL ,
-                m_hCertStore ,
-                &chainPara ,
-                0 ,
-                NULL ,
-                &pChainContext
-            )
-        ) {
-            pChainContext = NULL ;
-        }
-    }
-
-    //Secondly, we try to find certificate from system default system store.
-    if( pCertContext != NULL && pChainContext != NULL ) {
-        HCERTSTORE hCollectionStore ;
-
-        hCollectionStore = CertOpenStore(
+    BOOL bChain = FALSE;
+    if( pCertContext != NULL )
+    {
+        HCERTSTORE hAdditionalStore = NULL;
+        HCERTSTORE hCollectionStore = NULL;
+        if (m_hCertStore && m_hKeyStore)
+        {
+            //Merge m_hCertStore and m_hKeyStore into one store.
+            hCollectionStore = CertOpenStore(
                 CERT_STORE_PROV_COLLECTION ,
                 0 ,
                 NULL ,
                 0 ,
                 NULL
-            ) ;
-
-        if( hCollectionStore != NULL ) {
-            HCERTSTORE hSystemStore ;
-
-            //Add system key store to the collection.
-            hSystemStore = CertOpenSystemStore( 0, "MY" ) ;
-            if( hSystemStore != NULL ) {
-                CertAddStoreToCollection (
-                    hCollectionStore ,
-                    hSystemStore ,
-                    CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG ,
-                    1
                 ) ;
-                CertCloseStore( hSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
-            }
-
-            //Add system root store to the collection.
-            hSystemStore = CertOpenSystemStore( 0, "Root" ) ;
-            if( hSystemStore != NULL ) {
+            if (hCollectionStore != NULL)
+            {
                 CertAddStoreToCollection (
-                    hCollectionStore ,
-                    hSystemStore ,
-                    CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG ,
-                    2
-                ) ;
-                CertCloseStore( hSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
-            }
-
-            //Add system trust store to the collection.
-            hSystemStore = CertOpenSystemStore( 0, "Trust" ) ;
-            if( hSystemStore != NULL ) {
+                     hCollectionStore ,
+                     m_hCertStore ,
+                     CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG ,
+                     0) ;
                 CertAddStoreToCollection (
-                    hCollectionStore ,
-                    hSystemStore ,
-                    CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG ,
-                    3
-                ) ;
-                CertCloseStore( hSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
+                     hCollectionStore ,
+                     m_hCertStore ,
+                     CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG ,
+                     0) ;
+                hAdditionalStore = hCollectionStore;
             }
 
-            //Add system CA store to the collection.
-            hSystemStore = CertOpenSystemStore( 0, "CA" ) ;
-            if( hSystemStore != NULL ) {
-                CertAddStoreToCollection (
-                    hCollectionStore ,
-                    hSystemStore ,
-                    CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG ,
-                    4
-                ) ;
-                CertCloseStore( hSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
-            }
-
-            //Get the chain from the collection store.
-            if( !CertGetCertificateChain(
-                    NULL ,
-                    pCertContext ,
-                    NULL ,
-                    hCollectionStore ,
-                    &chainPara ,
-                    0 ,
-                    NULL ,
-                    &pChainContext
-                )
-            ) {
-                pChainContext = NULL ;
-            }
-
-            CertCloseStore( hCollectionStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
         }
+
+        //if the merge of both stores failed then we add only m_hCertStore
+        if (hAdditionalStore == NULL && m_hCertStore)
+            hAdditionalStore = m_hCertStore;
+        else if (hAdditionalStore == NULL && m_hKeyStore)
+            hAdditionalStore = m_hKeyStore;
+        else
+            hAdditionalStore = NULL;
+
+        //CertGetCertificateChain searches by default in MY, CA, ROOT and TRUST
+        if( ! (bChain = CertGetCertificateChain(
+                NULL ,
+                pCertContext ,
+                NULL , //use current system time
+                hAdditionalStore,
+                &chainPara ,
+                CERT_CHAIN_REVOCATION_CHECK_CHAIN | CERT_CHAIN_TIMESTAMP_TIME ,
+                NULL ,
+                &pChainContext)))
+        {
+            pChainContext = NULL ;
+        }
+        //Close the additional store
+       CertCloseStore(hCollectionStore, CERT_CLOSE_STORE_CHECK_FLAG);
     }
 
-    if( pChainContext != NULL && pChainContext->cChain > 0 ) {
+    if(bChain &&  pChainContext != NULL && pChainContext->cChain > 0 )
+    {
         PCCERT_CONTEXT pCertInChain ;
         PCERT_SIMPLE_CHAIN pCertChain ;
         X509Certificate_MSCryptImpl* pCert ;
@@ -901,6 +843,8 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: buildC
             return xCertChain ;
         }
     }
+    if (pChainContext)
+        CertFreeCertificateChain(pChainContext);
 
     return NULL ;
 }
@@ -941,11 +885,10 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: createCertificateFr
 }
 
 sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& aCert ) throw( ::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException ) {
-    sal_Int32 validity ;
-    PCCERT_CHAIN_CONTEXT pChainContext ;
-    PCCERT_CONTEXT pCertContext ;
-    const X509Certificate_MSCryptImpl* xcert ;
-    FILETIME fTime ;
+    sal_Int32 validity = 0;
+    PCCERT_CHAIN_CONTEXT pChainContext = NULL;
+    PCCERT_CONTEXT pCertContext = NULL;
+    const X509Certificate_MSCryptImpl* xcert = NULL;
     DWORD chainStatus ;
 
     CERT_ENHKEY_USAGE   enhKeyUsage ;
@@ -964,12 +907,7 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate( const ::com::sun
 
     pCertContext = xcert->getMswcryCert() ;
 
-    //Get the current system time.
-    GetSystemTimeAsFileTime( &fTime ) ;
-
-    /*-
-     * Build and validate the certificate
-     */
+    //Prepare parameter for CertGetCertificateChain
     enhKeyUsage.cUsageIdentifier = 0 ;
     enhKeyUsage.rgpszUsageIdentifier = NULL ;
     certUsage.dwType = USAGE_MATCH_TYPE_AND ;
@@ -977,148 +915,87 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate( const ::com::sun
     chainPara.cbSize = sizeof( CERT_CHAIN_PARA ) ;
     chainPara.RequestedUsage = certUsage ;
 
-    pChainContext = NULL ;
-
-    //Above all, we try to find the certificate in the given key store.
-    if( pCertContext != NULL ) {
-        if( !CertGetCertificateChain(
-                NULL ,
-                pCertContext ,
-                &fTime ,
-                m_hKeyStore ,
-                &chainPara ,
-                CERT_CHAIN_REVOCATION_CHECK_CHAIN | CERT_CHAIN_TIMESTAMP_TIME ,
-                NULL ,
-                &pChainContext
-            )
-        ) {
-            pChainContext = NULL ;
-        }
-    }
-
-    //firstly, we try to find the certificate in the given cert store.
-    if( pCertContext != NULL && pChainContext != NULL ) {
-        if( !CertGetCertificateChain(
-                NULL ,
-                pCertContext ,
-                &fTime ,
-                m_hCertStore ,
-                &chainPara ,
-                CERT_CHAIN_REVOCATION_CHECK_CHAIN | CERT_CHAIN_TIMESTAMP_TIME ,
-                NULL ,
-                &pChainContext
-            )
-        ) {
-            pChainContext = NULL ;
-        }
-    }
-
-    //Secondly, we try to find certificate from system default system store.
-    if( pCertContext != NULL && pChainContext != NULL ) {
-        HCERTSTORE hCollectionStore ;
-
-        hCollectionStore = CertOpenStore(
+    BOOL bChain = FALSE;
+    if( pCertContext != NULL )
+    {
+        HCERTSTORE hAdditionalStore = NULL;
+        HCERTSTORE hCollectionStore = NULL;
+        if (m_hCertStore && m_hKeyStore)
+        {
+            //Merge m_hCertStore and m_hKeyStore into one store.
+            hCollectionStore = CertOpenStore(
                 CERT_STORE_PROV_COLLECTION ,
                 0 ,
                 NULL ,
                 0 ,
                 NULL
-            ) ;
-
-        if( hCollectionStore != NULL ) {
-            HCERTSTORE hSystemStore ;
-
-            //Add system key store to the collection.
-            hSystemStore = CertOpenSystemStore( 0, "MY" ) ;
-            if( hSystemStore != NULL ) {
-                CertAddStoreToCollection (
-                    hCollectionStore ,
-                    hSystemStore ,
-                    CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG ,
-                    1
                 ) ;
-                CertCloseStore( hSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
-            }
-
-            //Add system root store to the collection.
-            hSystemStore = CertOpenSystemStore( 0, "Root" ) ;
-            if( hSystemStore != NULL ) {
+            if (hCollectionStore != NULL)
+            {
                 CertAddStoreToCollection (
-                    hCollectionStore ,
-                    hSystemStore ,
-                    CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG ,
-                    2
-                ) ;
-                CertCloseStore( hSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
-            }
-
-            //Add system trust store to the collection.
-            hSystemStore = CertOpenSystemStore( 0, "Trust" ) ;
-            if( hSystemStore != NULL ) {
+                     hCollectionStore ,
+                     m_hCertStore ,
+                     CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG ,
+                     0) ;
                 CertAddStoreToCollection (
-                    hCollectionStore ,
-                    hSystemStore ,
-                    CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG ,
-                    3
-                ) ;
-                CertCloseStore( hSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
+                     hCollectionStore ,
+                     m_hCertStore ,
+                     CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG ,
+                     0) ;
+                hAdditionalStore = hCollectionStore;
             }
 
-            //Add system CA store to the collection.
-            hSystemStore = CertOpenSystemStore( 0, "CA" ) ;
-            if( hSystemStore != NULL ) {
-                CertAddStoreToCollection (
-                    hCollectionStore ,
-                    hSystemStore ,
-                    CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG ,
-                    4
-                ) ;
-                CertCloseStore( hSystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
-            }
-
-            //Get the chain from the collection store.
-            if( !CertGetCertificateChain(
-                    NULL ,
-                    pCertContext ,
-                    &fTime ,
-                    hCollectionStore ,
-                    &chainPara ,
-                    CERT_CHAIN_REVOCATION_CHECK_CHAIN | CERT_CHAIN_TIMESTAMP_TIME ,
-                    NULL ,
-                    &pChainContext
-                )
-            ) {
-                pChainContext = NULL ;
-            }
-
-            CertCloseStore( hCollectionStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
         }
+
+        //if the merge of both stores failed then we add only m_hCertStore
+        if (hAdditionalStore == NULL && m_hCertStore)
+            hAdditionalStore = m_hCertStore;
+        else if (hAdditionalStore == NULL && m_hKeyStore)
+            hAdditionalStore = m_hKeyStore;
+        else
+            hAdditionalStore = NULL;
+
+        //CertGetCertificateChain searches by default in MY, CA, ROOT and TRUST
+        if( !(bChain = CertGetCertificateChain(
+                NULL ,
+                pCertContext ,
+                NULL , //use current system time
+                hAdditionalStore,
+                &chainPara ,
+                CERT_CHAIN_REVOCATION_CHECK_CHAIN | CERT_CHAIN_TIMESTAMP_TIME ,
+                NULL ,
+                &pChainContext)))
+        {
+            pChainContext = NULL ;
+        }
+        //Close the additional store
+       CertCloseStore(hCollectionStore, CERT_CLOSE_STORE_CHECK_FLAG);
     }
 
-    if( pChainContext != NULL ) {
+    if(bChain && pChainContext != NULL )
+    {
         chainStatus = pChainContext->TrustStatus.dwErrorStatus ;
-        CertFreeCertificateChain( pChainContext ) ;
 
-        if( chainStatus == CERT_TRUST_NO_ERROR ) {
-            validity = !( ::com::sun::star::security::CertificateValidity::INVALID ) ;
-        } else {
-            validity = ::com::sun::star::security::CertificateValidity::INVALID ;
-        }
+        if( chainStatus == CERT_TRUST_NO_ERROR )
+            validity = ::com::sun::star::security::CertificateValidity::VALID ;
 
         if( ( chainStatus & CERT_TRUST_IS_NOT_TIME_VALID ) == CERT_TRUST_IS_NOT_TIME_VALID ) {
-            validity |= ::com::sun::star::security::CertificateValidity::TIMEOUT ;
+            validity |= ::com::sun::star::security::CertificateValidity::TIME_INVALID ;
         }
 
         if( ( chainStatus & CERT_TRUST_IS_NOT_TIME_NESTED ) == CERT_TRUST_IS_NOT_TIME_NESTED ) {
-            validity |= ::com::sun::star::security::CertificateValidity::TIMEOUT ;
+            validity |= ::com::sun::star::security::CertificateValidity::NOT_TIME_NESTED;
         }
 
         if( ( chainStatus & CERT_TRUST_IS_REVOKED ) == CERT_TRUST_IS_REVOKED ) {
             validity |= ::com::sun::star::security::CertificateValidity::REVOKED ;
         }
 
+        //JL My interpretation is that CERT_TRUST_IS_OFFLINE_REVOCATION  does not mean that the certificate was revoked.
+        //Instead the CRL cannot be retrieved from the net, or an available CRL is stale (too old).
+        //This error may also occurs if the certificate does not contain the CDP (Certificate Distribution Point)extension
         if( ( chainStatus & CERT_TRUST_IS_OFFLINE_REVOCATION ) == CERT_TRUST_IS_OFFLINE_REVOCATION ) {
-            validity |= ::com::sun::star::security::CertificateValidity::REVOKED ;
+            validity |= ::com::sun::star::security::CertificateValidity::UNKNOWN_REVOKATION ;
         }
 
         if( ( chainStatus & CERT_TRUST_IS_NOT_SIGNATURE_VALID ) == CERT_TRUST_IS_NOT_SIGNATURE_VALID ) {
@@ -1140,9 +1017,29 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate( const ::com::sun
         if( ( chainStatus & CERT_TRUST_IS_PARTIAL_CHAIN ) == CERT_TRUST_IS_PARTIAL_CHAIN ) {
             validity |= ::com::sun::star::security::CertificateValidity::CHAIN_INCOMPLETE ;
         }
+        //todo
+        if (chainStatus & CERT_TRUST_IS_NOT_VALID_FOR_USAGE
+            || chainStatus & CERT_TRUST_IS_CYCLIC
+            || chainStatus & CERT_TRUST_INVALID_POLICY_CONSTRAINTS
+            || chainStatus & CERT_TRUST_INVALID_BASIC_CONSTRAINTS
+            || chainStatus & CERT_TRUST_INVALID_NAME_CONSTRAINTS
+            || chainStatus & CERT_TRUST_HAS_NOT_SUPPORTED_NAME_CONSTRAINT
+            || chainStatus & CERT_TRUST_HAS_NOT_DEFINED_NAME_CONSTRAINT
+            || chainStatus & CERT_TRUST_HAS_NOT_PERMITTED_NAME_CONSTRAINT
+            || chainStatus & CERT_TRUST_HAS_EXCLUDED_NAME_CONSTRAINT
+            || chainStatus & CERT_TRUST_NO_ISSUANCE_CHAIN_POLICY
+            || chainStatus & CERT_TRUST_CTL_IS_NOT_TIME_VALID
+            || chainStatus & CERT_TRUST_CTL_IS_NOT_SIGNATURE_VALID
+            || chainStatus & CERT_TRUST_CTL_IS_NOT_VALID_FOR_USAGE)
+        {
+            validity = ::com::sun::star::security::CertificateValidity::INVALID;
+        }
     } else {
         validity = ::com::sun::star::security::CertificateValidity::INVALID ;
     }
+
+    if (pChainContext)
+        CertFreeCertificateChain(pChainContext);
 
     return validity ;
 }
