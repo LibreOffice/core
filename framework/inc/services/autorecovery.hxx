@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autorecovery.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:28:18 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:44:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,10 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_UTIL_XMODIFYLISTENER_HPP_
+#include <com/sun/star/util/XModifyListener.hpp>
+#endif
+
 //_______________________________________________
 // other includes
 
@@ -158,6 +162,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
                     , public  css::frame::XDispatch
                     , public  css::document::XEventListener         // => css.lang.XEventListener
                     , public  css::util::XChangesListener           // => css.lang.XEventListener
+                    , public  css::util::XModifyListener            // => css.lang.XEventListener
                     // attention! Must be the first base class to guarentee right initialize lock ...
                     , private ThreadHelpBase
                     , public  ::cppu::OBroadcastHelper
@@ -169,7 +174,14 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
     public:
 
-        // TODO document me ... flag field!
+        /** These values are used as flags and represent the current state of a document.
+            Every state of the life time of a document has to be recognized here.
+
+            @attention  Do not change (means reorganize) already used numbers.
+                        There exists some code inside SVX, which uses the same numbers,
+                        to analyze such document states.
+                        Not the best design ... but may be it will be changed later .-)
+        */
         enum EDocStates
         {
             /* TEMP STATES */
@@ -178,6 +190,12 @@ class AutoRecovery  : public  css::lang::XTypeProvider
             E_UNKNOWN = 0,
             /// modified against the original file
             E_MODIFIED = 1,
+            /** We differe between the states: "modified in general" and "modified after last AutoSave".
+                The first state will be interesting in case the crashed document will be restored. Then we have
+                set the right modify state after loading the document. But the second state let us optimize the
+                AutoSave itself. see member ListenForModify too ...
+            */
+            E_MODIFIED_SINCE_LAST_AUTOSAVE = 1024,
             /// an active document can be postponed to be saved later.
             E_POSTPONED = 2,
             /// was already handled during one AutoSave/Recovery session.
@@ -251,9 +269,10 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
                 //-------------------------------
                 TDocumentInfo()
-                    : DocumentState(E_UNKNOWN)
-                    , UsedForSaving(sal_False)
-                    , ID           (-1       )
+                    : DocumentState  (E_UNKNOWN)
+                    , UsedForSaving  (sal_False)
+                    , ListenForModify(sal_False)
+                    , ID             (-1       )
                 {}
 
                 //-------------------------------
@@ -279,6 +298,14 @@ class AutoRecovery  : public  css::lang::XTypeProvider
                     by others.
                  */
                 sal_Bool UsedForSaving;
+
+                //-------------------------------
+                /** For every user action, which modifies a document (e.g. key input) we get
+                    a notification as XModifyListener. That seams to be a "performance issue" .-)
+                    So we decided to listen for such modify events only for the time in which the document
+                    was stored as temp. file and was not modified again by the user.
+                */
+                sal_Bool ListenForModify;
 
                 //-------------------------------
                 /** TODO: document me */
@@ -314,17 +341,31 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
 
         //---------------------------------------
-        /** @short  points to the underlying configuration.
+        /** @short  points to the underlying recovery configuration.
             @descr  This instance does not cache - it calls directly the
                     configuration API!
           */
-        css::uno::Reference< css::container::XNameAccess > m_xCFG;
+        css::uno::Reference< css::container::XNameAccess > m_xRecoveryCFG;
+
+        //---------------------------------------
+        /** @short  points to the used configuration package or.openoffice.Setup
+            @descr  This instance does not cache - it calls directly the
+                    configuration API!
+          */
+        css::uno::Reference< css::container::XNameAccess > m_xModuleCFG;
 
         //---------------------------------------
         /** @short  holds the global event broadcaster alive,
                     where we listen for new created documents.
           */
         css::uno::Reference< css::document::XEventBroadcaster > m_xNewDocBroadcaster;
+
+        //---------------------------------------
+        /** @short  because we stop/restart listening sometimes, it's a good idea to know
+                    if we already registered as listener .-)
+        */
+        sal_Bool m_bListenForDocEvents;
+        sal_Bool m_bListenForConfigChanges;
 
         //---------------------------------------
         /** @short  specify the time intervall between two save actions.
@@ -475,6 +516,11 @@ class AutoRecovery  : public  css::lang::XTypeProvider
             throw(css::uno::RuntimeException);
 
         //---------------------------------------
+        // css.util.XModifyListener
+        virtual void SAL_CALL modified(const css::lang::EventObject& aEvent)
+            throw(css::uno::RuntimeException);
+
+        //---------------------------------------
         // css.lang.XEventListener
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
             throw(css::uno::RuntimeException);
@@ -551,10 +597,12 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         //---------------------------------------
         // TODO document me
         void implts_startListening();
+        void implts_startModifyListeningOnDoc(AutoRecovery::TDocumentInfo& rInfo);
 
         //---------------------------------------
         // TODO document me
         void implts_stopListening();
+        void implts_stopModifyListeningOnDoc(AutoRecovery::TDocumentInfo& rInfo);
 
         //---------------------------------------
         /** @short  stops and may be(!) restarts the timer.
@@ -615,13 +663,29 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         void implts_registerDocument(const css::uno::Reference< css::frame::XModel >& xDocument);
 
         //---------------------------------------
-        // TODO document me
-        void implts_deregisterDocument(const css::uno::Reference< css::frame::XModel >& xDocument            ,
-                                             sal_Bool                                   bStopDisposeListening);
+        /** @short  remove the specified document from our internal document list.
+
+            @param  xDocument
+                    the new document, which should be deregistered.
+
+            @param  bStopListening
+                    FALSE: must be used in case this method is called withion disposing() of the document,
+                           where it make no sense to deregister our listener. The container dies ...
+                    TRUE : must be used in case this method is used on "dergistration" of this document, where
+                           we must deregister our listener .-)
+
+            @threadsafe
+         */
+        void implts_deregisterDocument(const css::uno::Reference< css::frame::XModel >& xDocument                ,
+                                             sal_Bool                                   bStopListening = sal_True);
 
         //---------------------------------------
         // TODO document me
-        void implts_toggleModifiedState(const css::uno::Reference< css::frame::XModel >& xDocument);
+        void implts_markDocumentModifiedAgainstLastBackup(const css::uno::Reference< css::frame::XModel >& xDocument);
+
+        //---------------------------------------
+        // TODO document me
+        void implts_actualizeModifiedState(const css::uno::Reference< css::frame::XModel >& xDocument);
 
         //---------------------------------------
         // TODO document me
@@ -748,7 +812,8 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
         //---------------------------------------
         // TODO document me
-        void implts_removeTempFile(const ::rtl::OUString& sURL);
+        void implts_removeTempFile(const ::rtl::OUString& sURL      ,
+                                   const ::rtl::OUString& sAppModule);
 
         //---------------------------------------
         /** @short  notifies all interested listener about the current state
