@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:41:38 $
+ *  last change: $Author: kz $ $Date: 2005-11-11 14:24:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -315,6 +315,8 @@ SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
     aRightLb.SetPosSizePixel(pParent->LogicToPixel(Point(103, 6), MAP_APPFONT),
                              pParent->LogicToPixel(Size(94, 132), MAP_APPFONT));
 
+    if ( !SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SDATABASE) )
+        aAddressTemplateBtn.Hide();
     Font aFont(aLeftLb.GetFont());
     aFont.SetWeight(WEIGHT_NORMAL);
     aLeftLb.SetFont(aFont);
@@ -1577,7 +1579,33 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( BOOL bOpen, const String& rFileName )
                         DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
     // add template filter
     String sFilterName( SfxResId( STR_TEMPLATE_FILTER ) );
-    String sFilterExt( DEFINE_CONST_UNICODE( "*.ott;*.ots;*.otg;*.otp;*.oth;*.stw;*.stc;*.std;*.sti;*.vor" ) );
+    String sFilterExt;
+    // add filters of modules which are installed
+    SvtModuleOptions aModuleOpt;
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+        sFilterExt += DEFINE_CONST_UNICODE( "*.ott;*.stw" );
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
+    {
+        if ( sFilterExt.Len() > 0 )
+            sFilterExt += ';';
+        sFilterExt += DEFINE_CONST_UNICODE( "*.ots;*.stc" );
+    }
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
+    {
+        if ( sFilterExt.Len() > 0 )
+            sFilterExt += ';';
+        sFilterExt += DEFINE_CONST_UNICODE( "*.otp;*.sti" );
+    }
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
+    {
+        if ( sFilterExt.Len() > 0 )
+            sFilterExt += ';';
+        sFilterExt += DEFINE_CONST_UNICODE( "*.otg;*.std" );
+    }
+    if ( sFilterExt.Len() > 0 )
+        sFilterExt += ';';
+    sFilterExt += DEFINE_CONST_UNICODE( "*.vor" );
+
     sFilterName += DEFINE_CONST_UNICODE( " (" );
     sFilterName += sFilterExt;
     sFilterName += ')';
@@ -1650,56 +1678,81 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( BOOL bOpen, const String& rFileName )
 */
 
 {
-   ::com::sun::star::uno::Sequence< ::rtl::OUString > aPaths;
-   String aExtension( DEFINE_CONST_UNICODE( "vor" ) );
-   sfx2::FileDialogHelper aFileDlg( ::sfx2::FILEOPEN_SIMPLE , SFXWB_MULTISELECTION );
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > aPaths;
+    String aExtension( DEFINE_CONST_UNICODE( "vor" ) );
+    sfx2::FileDialogHelper aFileDlg( ::sfx2::FILEOPEN_SIMPLE , SFXWB_MULTISELECTION );
 
-   // add "All" filter
-   aFileDlg.AddFilter( String( SfxResId( STR_FILTERNAME_ALL ) ),
-                       DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
-   // add template filter
-   String sFilterName( SfxResId( STR_TEMPLATE_FILTER ) );
-   String sFilterExt( DEFINE_CONST_UNICODE( "*.vor;*.stw;*.stc;*.std;*.sti;*.ott;*.ots;*.otp;*.otg" ) );
-   sFilterName += DEFINE_CONST_UNICODE( " (" );
-   sFilterName += sFilterExt;
-   sFilterName += ')';
-   aFileDlg.AddFilter( sFilterName, sFilterExt );
+    // add "All" filter
+    aFileDlg.AddFilter( String( SfxResId( STR_FILTERNAME_ALL ) ),
+                        DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
+    // add template filter
+    String sFilterName( SfxResId( STR_TEMPLATE_FILTER ) );
+    String sFilterExt;
+    // add filters of modules which are installed
+    SvtModuleOptions aModuleOpt;
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+        sFilterExt += DEFINE_CONST_UNICODE( "*.ott;*.stw" );
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
+    {
+        if ( sFilterExt.Len() > 0 )
+            sFilterExt += ';';
+        sFilterExt += DEFINE_CONST_UNICODE( "*.ots;*.stc" );
+    }
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
+    {
+        if ( sFilterExt.Len() > 0 )
+            sFilterExt += ';';
+        sFilterExt += DEFINE_CONST_UNICODE( "*.otp;*.sti" );
+    }
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
+    {
+        if ( sFilterExt.Len() > 0 )
+            sFilterExt += ';';
+        sFilterExt += DEFINE_CONST_UNICODE( "*.otg;*.std" );
+    }
+    if ( sFilterExt.Len() > 0 )
+        sFilterExt += ';';
+    sFilterExt += DEFINE_CONST_UNICODE( "*.vor" );
 
-   aFileDlg.SetCurrentFilter( sFilterName );
+    sFilterName += DEFINE_CONST_UNICODE( " (" );
+    sFilterName += sFilterExt;
+    sFilterName += ')';
+    aFileDlg.AddFilter( sFilterName, sFilterExt );
+    aFileDlg.SetCurrentFilter( sFilterName );
 
-   if ( aLastDir.Len() || rFileName.Len() )
-   {
-       INetURLObject aObj;
-       if ( aLastDir.Len() )
-       {
-           aObj.SetURL( aLastDir );
-           if ( rFileName.Len() )
-               aObj.insertName( rFileName );
-       }
-       else
-           aObj.SetURL( rFileName );
+    if ( aLastDir.Len() || rFileName.Len() )
+    {
+        INetURLObject aObj;
+        if ( aLastDir.Len() )
+        {
+            aObj.SetURL( aLastDir );
+            if ( rFileName.Len() )
+                aObj.insertName( rFileName );
+        }
+        else
+            aObj.SetURL( rFileName );
 
-       if ( aObj.hasExtension() )
-       {
-           aExtension = aObj.getExtension( INetURLObject::LAST_SEGMENT, true,
-                                           INetURLObject::DECODE_WITH_CHARSET );
-           aObj.removeExtension();
-       }
+        if ( aObj.hasExtension() )
+        {
+            aExtension = aObj.getExtension( INetURLObject::LAST_SEGMENT, true,
+                                            INetURLObject::DECODE_WITH_CHARSET );
+            aObj.removeExtension();
+        }
 
-       DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
-       aFileDlg.SetDisplayDirectory( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
-   }
+        DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
+        aFileDlg.SetDisplayDirectory( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
+    }
 
-   if ( ERRCODE_NONE == aFileDlg.Execute() )
-   {
-       aPaths = aFileDlg.GetMPath();
-       sal_Int32 lastCount = aPaths.getLength() - 1;
-       INetURLObject aObj( aPaths.getArray()[ lastCount ] );
+    if ( ERRCODE_NONE == aFileDlg.Execute() )
+    {
+        aPaths = aFileDlg.GetMPath();
+        sal_Int32 lastCount = aPaths.getLength() - 1;
+        INetURLObject aObj( aPaths.getArray()[ lastCount ] );
 
-       aObj.removeSegment();
-       aLastDir = aObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
-   }
-   return aPaths;
+        aObj.removeSegment();
+        aLastDir = aObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
+    }
+    return aPaths;
 }
 
 //-------------------------------------------------------------------------
