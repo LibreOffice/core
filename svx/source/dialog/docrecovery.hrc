@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docrecovery.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-03 11:54:27 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:50:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,6 +123,8 @@
 #define STR_NOTRECOVYET             24
 #define STR_RECOVERY_NEXT           25
 #define STR_RECOVERY_INPROGRESS     26
+#define STR_RECOVERYONLY_DESCR      27
+#define STR_RECOVERYONLY_FINISH     28
 
 #define RECOV_WIDTH                 SAVE_WIDTH
 #define RECOV_HEIGHT                SAVE_HEIGHT
