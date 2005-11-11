@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:27:42 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:23:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -659,6 +659,20 @@ String STR_HIDDENINFO_CONTINUE_CREATEPDF
 {
     Text [ de ] = "MÃ¶chten Sie mit dem Erstellen der PDF-Datei fortfahren?" ;
     Text [ en-US ] = "Do you want to continue creating a PDF file?" ;
+};
+
+String STR_NEW_FILENAME_SAVE
+{
+    Text [ de ] = "Wenn Sie das originale Dokument nicht überschreiben wollen, sollten Sie Ihre Arbeit unter einem neuen Dateinamen speichern." ;
+    Text [ en-US ] = "If you do not want to overwrite the original document, you should save your work under a new filename." ;
+    Text [ x-comment ] = " ";
+};
+
+String STR_MACROS_DISABLED
+{
+    Text [ de ] = "Es wurde versucht, ein Makro auszuführen.\nMakros werden aus Sicherheitsgünden nicht unterstützt.";
+    Text [ en-US ] = "An attempt was made to execute a macro.\nFor security reasons, macro support is disabled.";
+    Text [ x-comment ] = " ";
 };
 
 // ******************************************************************* EOF
