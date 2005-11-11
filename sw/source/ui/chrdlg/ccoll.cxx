@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ccoll.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:35:29 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 13:16:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,66 @@
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
+
+#define C2U(x) rtl::OUString::createFromAscii(x)
+
+// ******************************************************************
+
+//!! order of entries has to be the same as in
+//!! CommandStruct SwCondCollItem::aCmds[]
+
+const char *aCommandContext[COND_COMMAND_COUNT] =
+{
+    "TableHeader",
+    "Table",
+    "Frame",
+    "Section",
+    "Footnote",
+    "Endnote",
+    "Header",
+    "Footer",
+    "OutlineLevel1",
+    "OutlineLevel2",
+    "OutlineLevel3",
+    "OutlineLevel4",
+    "OutlineLevel5",
+    "OutlineLevel6",
+    "OutlineLevel7",
+    "OutlineLevel8",
+    "OutlineLevel9",
+    "OutlineLevel10",
+    "NumberingLevel1",
+    "NumberingLevel2",
+    "NumberingLevel3",
+    "NumberingLevel4",
+    "NumberingLevel5",
+    "NumberingLevel6",
+    "NumberingLevel7",
+    "NumberingLevel8",
+    "NumberingLevel9",
+    "NumberingLevel10"
+};
+
+sal_Int16 GetCommandContextIndex( const rtl::OUString &rContextName )
+{
+    sal_Int16 nRes = -1;
+    for (sal_Int16 i = 0;  nRes == -1 && i < COND_COMMAND_COUNT;  ++i)
+    {
+        if (rContextName.equalsAscii( aCommandContext[i] ))
+            nRes = i;
+    }
+    return nRes;
+}
+
+rtl::OUString GetCommandContextByIndex( sal_Int16 nIndex )
+{
+    rtl::OUString aRes;
+    if (0 <= nIndex  &&  nIndex < COND_COMMAND_COUNT)
+    {
+        aRes = C2U( aCommandContext[ nIndex ] );
+    }
+    return aRes;
+}
 
 // Globals ******************************************************************
 
@@ -401,7 +461,6 @@ Page: Reset-Overload
 //CHINA001 pFmt = pFormat;
 //CHINA001 bNewTemplate = bNew;
 //CHINA001 }
-
 
 /****************************************************************************
     Item fuer den Transport der Bedingungstabelle
