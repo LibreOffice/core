@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:54:20 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:22:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,9 @@
 #endif
 #ifndef  _COM_SUN_STAR_CONTAINER_XCONTAINERQUERY_HPP_
 #include <com/sun/star/container/XContainerQuery.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UCB_INTERACTIVEAUGMENTEDIOEXCEPTION_HPP_
+#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -222,7 +225,7 @@
 
 //-----------------------------------------------------------------------------
 
-using namespace ::com::sun::star;
+using namespace ::com::sun;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
@@ -757,15 +760,15 @@ void FileDialogHelper_Impl::updateVersions()
         {
             try
             {
-                uno::Reference< embed::XStorage > xStorage = ::comphelper::OStorageHelper::GetStorageFromURL(
+                star::uno::Reference< star::embed::XStorage > xStorage = ::comphelper::OStorageHelper::GetStorageFromURL(
                                                                 aObj.GetMainURL( INetURLObject::NO_DECODE ),
-                                                                embed::ElementModes::READ );
+                                                                star::embed::ElementModes::READ );
 
                 DBG_ASSERT( xStorage.is(), "The method must return the storage or throw an exception!" );
                 if ( !xStorage.is() )
-                    throw uno::RuntimeException();
+                    throw star::uno::RuntimeException();
 
-                uno::Sequence < util::RevisionTag > xVersions = SfxMedium::GetVersionList( xStorage );
+                star::uno::Sequence < star::util::RevisionTag > xVersions = SfxMedium::GetVersionList( xStorage );
 
                 aEntries.realloc( xVersions.getLength() + 1 );
                 aEntries[0] = OUString( String ( SfxResId( STR_SFX_FILEDLG_ACTUALVERSION ) ) );
@@ -785,7 +788,7 @@ void FileDialogHelper_Impl::updateVersions()
 //REMOVE                        }
 //REMOVE                    }
             }
-            catch( uno::Exception& )
+            catch( star::uno::Exception& )
             {
             }
         }
@@ -2397,16 +2400,25 @@ void FileDialogHelper::SetDisplayDirectory( const String& _rPath )
     ::rtl::OUString sFileName;
 
     INetURLObject aObj( _rPath );
-    if ( !::utl::UCBContentHelper::IsFolder( _rPath ) )
+    try
     {
-        sFileName = aObj.GetName( INetURLObject::DECODE_WITH_CHARSET );
-        aObj.removeSegment();
+        ::ucb::Content aContent(
+            _rPath, star::uno::Reference< star::ucb::XCommandEnvironment >() );
+        if ( !aContent.isFolder() )
+        {
+            sFileName = aObj.GetName( INetURLObject::DECODE_WITH_CHARSET );
+            aObj.removeSegment();
+            mpImp->setFileName( sFileName );
+        }
+    }
+    catch ( star::ucb::ContentCreationException const & )
+    {
+    }
+    catch ( star::ucb::InteractiveAugmentedIOException const & )
+    {
     }
 
-    sPath = aObj.GetMainURL( INetURLObject::NO_DECODE );
-
-    mpImp->displayFolder( sPath );
-    mpImp->setFileName( sFileName );
+    mpImp->displayFolder( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
 }
 
 // ------------------------------------------------------------------------
