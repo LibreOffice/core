@@ -4,9 +4,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 14:57:17 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 09:18:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
 #include <xmlsecurity/digitalsignaturesdialog.hxx>
 #include <xmlsecurity/certificatechooser.hxx>
 #include <xmlsecurity/certificateviewer.hxx>
@@ -52,6 +51,7 @@
 #include <com/sun/star/security/NoPasswordException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/security/CertificateValidity.hdl>
 
 #ifndef _COM_SUN_STAR_PACKAGES_WRONGPASSWORDEXCEPTION_HPP_
 #include <com/sun/star/packages/WrongPasswordException.hpp>
@@ -67,6 +67,7 @@
 #include <vcl/msgbox.hxx> // Until encrypted docs work...
 
 using namespace ::com::sun::star::security;
+namespace css = ::com::sun::star;
 
 /* HACK: disable some warnings for MS-C */
 #ifdef _MSC_VER
@@ -123,6 +124,8 @@ DigitalSignaturesDialog::DigitalSignaturesDialog( Window* pParent, uno::Referenc
     ,maSigsValidFI      ( this, ResId( FI_STATE_VALID ) )
     ,maSigsInvalidImg   ( this, ResId( IMG_STATE_BROKEN ) )
     ,maSigsInvalidFI    ( this, ResId( FI_STATE_BROKEN ) )
+    ,maSigsNotvalidatedImg( this, ResId( IMG_STATE_NOTVALIDATED ) )
+    ,maSigsNotvalidatedFI ( this, ResId( FI_STATE_NOTVALIDATED ) )
     ,maViewBtn          ( this, ResId( BTN_VIEWCERT ) )
     ,maAddBtn           ( this, ResId( BTN_ADDCERT ) )
     ,maRemoveBtn        ( this, ResId( BTN_REMOVECERT ) )
@@ -135,11 +138,14 @@ DigitalSignaturesDialog::DigitalSignaturesDialog( Window* pParent, uno::Referenc
     maSignaturesLB.SetTabs( &nTabs[ 0 ] );
     maSignaturesLB.InsertHeaderEntry( String( ResId( STR_HEADERBAR ) ) );
 
+    maSigsNotvalidatedFI.SetText( String( ResId( STR_NO_INFO_TO_VERIFY ) ) );
+
     if ( GetBackground().GetColor().IsDark() )
     {
         // high contrast mode needs other images
         maSigsValidImg.SetImage( Image( ResId( IMG_STATE_VALID_HC ) ) );
         maSigsInvalidImg.SetImage( Image( ResId( IMG_STATE_BROKEN_HC ) ) );
+        maSigsNotvalidatedImg.SetImage( Image( ResId( IMG_STATE_NOTVALIDATED_HC ) ) );
     }
 
     FreeResource();
@@ -170,6 +176,7 @@ DigitalSignaturesDialog::DigitalSignaturesDialog( Window* pParent, uno::Referenc
     // adjust fixed text to images
     XmlSec::AlignAndFitImageAndControl( maSigsValidImg, maSigsValidFI, 5 );
     XmlSec::AlignAndFitImageAndControl( maSigsInvalidImg, maSigsInvalidFI, 5 );
+    XmlSec::AlignAndFitImageAndControl( maSigsNotvalidatedImg, maSigsNotvalidatedFI, 5 );
 }
 
 DigitalSignaturesDialog::~DigitalSignaturesDialog()
@@ -301,12 +308,25 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
 
             maSignatureHelper.EndMission();
 
+            // If stream was not provided, we are responsible for committing it....
+            if ( !mxSignatureStream.is() )
+            {
+                uno::Reference< embed::XTransactedObject > xTrans( aStreamHelper.xSignatureStorage, uno::UNO_QUERY );
+                xTrans->commit();
+            }
+
+            aStreamHelper = SignatureStreamHelper();    // release objects...
+
             sal_Int32 nStatus = maSignatureHelper.GetSignatureInformation( nSecurityId ).nStatus;
             if ( nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED )
             {
                 mbSignaturesChanged = true;
 
                 // Can't simply remember current information, need parsing for getting full information :(
+                // We need to verify the signatures again, otherwise the status in the signature information
+                // will not contain
+                // SecurityOperationStatus_OPERATION_SUCCEEDED
+                mbVerifySignatures = true;
                 ImplGetSignatureInformations();
                 ImplFillSignaturesBox();
             }
@@ -345,6 +365,15 @@ IMPL_LINK( DigitalSignaturesDialog, RemoveButtonHdl, Button*, EMPTYARG )
 
             mbSignaturesChanged = true;
 
+            // If stream was not provided, we are responsible for committing it....
+            if ( !mxSignatureStream.is() )
+            {
+                uno::Reference< embed::XTransactedObject > xTrans( aStreamHelper.xSignatureStorage, uno::UNO_QUERY );
+                xTrans->commit();
+            }
+
+            aStreamHelper = SignatureStreamHelper();    // release objects...
+
             ImplFillSignaturesBox();
         }
         catch ( uno::Exception& )
@@ -373,7 +402,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
 
     String aNullStr;
     int nInfos = maCurrentSignatureInformations.size();
-    int nValidSigs = 0;
+    int nValidSigs = 0, nValidCerts = 0;
 
     if( nInfos )
     {
@@ -381,36 +410,52 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
         for( int n = 0; n < nInfos; ++n )
         {
             const SignatureInformation& rInfo = maCurrentSignatureInformations[n];
-            xCert = xSecEnv->getCertificate( rInfo.ouX509IssuerName, numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
-
-            // If we don't get it, create it from signature data:
-            // MT: Maybe after 2.0: Why not always use the attached certificate?
-            if ( !xCert.is() && rInfo.ouX509Certificate.getLength() )
-                xCert = xSecEnv->createCertificateFromAscii( rInfo.ouX509Certificate ) ;
+            //First we try to get the certificate which is embedded in the XML Signature
+            if (rInfo.ouX509Certificate.getLength())
+                xCert = xSecEnv->createCertificateFromAscii(rInfo.ouX509Certificate);
+            //In case there is no embedded certificate we try to get it from a local store
+            if (!xCert.is())
+                xCert = xSecEnv->getCertificate( rInfo.ouX509IssuerName, numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
 
             DBG_ASSERT( xCert.is(), "Certificate not found and can't be created!" );
 
             String  aSubject;
             String  aIssuer;
             String  aDateTimeStr;
+
+            bool bSigValid = false;
+            bool bCertValid = false;
             if( xCert.is() )
             {
+                //check the validity of the cert
+                try {
+                    sal_Int32 certResult = xSecEnv->verifyCertificate(xCert);
+
+                    //These errors are alloweds
+                    sal_Int32 validErrors = css::security::CertificateValidity::VALID
+                        | css::security::CertificateValidity::UNKNOWN_REVOKATION;
+
+                    //Build a  mask to filter out the allowed errors
+                    sal_Int32 mask = ~validErrors;
+                    // "subtract" the allowed error flags from the result
+                    sal_Int32 errors = certResult & mask;
+                    bCertValid = errors > 0 ? false : true;
+                    if ( bCertValid )
+                        nValidCerts++;
+
+                } catch (css::uno::SecurityException& ) {
+                    OSL_ENSURE(0, "Verification of certificate failed");
+                    bCertValid = false;
+                }
+
                 aSubject = XmlSec::GetContentPart( xCert->getSubjectName() );
                 aIssuer = XmlSec::GetContentPart( rInfo.ouX509IssuerName );
                 // --> PB 2004-10-12 #i20172# String with date and time information
                 aDateTimeStr = XmlSec::GetDateTimeString( rInfo.stDateTime );
             }
+            bSigValid = ( rInfo.nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED );
 
-            // New signatures are not verified, must be valid. Status is INIT.
-            // HACK for #i46696#
-            // KEY_NOT_FOUND only happen because of author or issuer certificates are missing in keystore.
-            // We always have the key from authors certificate, because it's attached.
-            // This is a question of trust, not of a *broken* signature.
-            bool bValid = ( rInfo.nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED )
-                || ( rInfo.nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN )
-                || ( ( rInfo.nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_KEY_NOT_FOUND) && rInfo.ouX509Certificate.getLength());
-
-            if ( bValid )
+            if ( bSigValid )
             {
                 // Can only be valid if ALL streams are signed, which means real stream count == signed stream count
                 int nRealCount = 0;
@@ -421,14 +466,21 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
                     if ( ( rInf.nType == TYPE_BINARYSTREAM_REFERENCE ) || ( rInf.nType == TYPE_XMLSTREAM_REFERENCE ) )
                         nRealCount++;
                 }
-                bValid = ( aElementsToBeVerified.size() == nRealCount );
+                bSigValid = ( aElementsToBeVerified.size() == nRealCount );
 
-                if( bValid )
+                if( bSigValid )
                     nValidSigs++;
             }
 
-            Image aImg( bValid? maSigsValidImg.GetImage() : maSigsInvalidImg.GetImage() );
-            SvLBoxEntry* pEntry = maSignaturesLB.InsertEntry( aNullStr, aImg, aImg );
+            Image aImage;
+            if ( bSigValid && bCertValid )
+                aImage = maSigsValidImg.GetImage();
+            else if ( bSigValid && !bCertValid )
+                aImage = maSigsNotvalidatedImg.GetImage();
+            else if ( !bSigValid )
+                aImage = maSigsInvalidImg.GetImage();
+
+            SvLBoxEntry* pEntry = maSignaturesLB.InsertEntry( aNullStr, aImage, aImage );
             maSignaturesLB.SetEntryText( aSubject, pEntry, 1 );
             maSignaturesLB.SetEntryText( aIssuer, pEntry, 2 );
             maSignaturesLB.SetEntryText( aDateTimeStr, pEntry, 3 );
@@ -437,12 +489,16 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
     }
 
     bool bAllSigsValid = ( nValidSigs == nInfos );
-    bool bShowValidState = nInfos && bAllSigsValid;
+    bool bAllCertsValid = ( nValidCerts == nInfos );
+    bool bShowValidState = nInfos && ( bAllSigsValid && bAllCertsValid );
+    bool bShowNotValidatedState = nInfos && ( bAllSigsValid && !bAllCertsValid );
     bool bShowInvalidState = nInfos && !bAllSigsValid;
     maSigsValidImg.Show( bShowValidState );
     maSigsValidFI.Show( bShowValidState );
     maSigsInvalidImg.Show( bShowInvalidState );
     maSigsInvalidFI.Show( bShowInvalidState );
+    maSigsNotvalidatedImg.Show( bShowNotValidatedState );
+    maSigsNotvalidatedFI.Show( bShowNotValidatedState );
 
     SignatureHighlightHdl( NULL );
 }
@@ -472,9 +528,16 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
     {
         USHORT nSelected = (USHORT) (sal_uIntPtr) maSignaturesLB.FirstSelected()->GetUserData();
         const SignatureInformation& rInfo = maCurrentSignatureInformations[ nSelected ];
-
+        css::uno::Reference<css::xml::crypto::XSecurityEnvironment > xSecEnv =
+            maSignatureHelper.GetSecurityEnvironment();
         // Use Certificate from doc, not from key store
-        uno::Reference< dcss::security::XCertificate > xCert = rInfo.ouX509Certificate.getLength() ? maSignatureHelper.GetSecurityEnvironment()->createCertificateFromAscii( rInfo.ouX509Certificate ) : NULL;
+        uno::Reference< dcss::security::XCertificate > xCert;
+        if (rInfo.ouX509Certificate.getLength())
+            xCert = xSecEnv->createCertificateFromAscii(rInfo.ouX509Certificate);
+        //fallback if no certificate is embedded, get if from store
+        if (!xCert.is())
+            xCert = xSecEnv->getCertificate( rInfo.ouX509IssuerName, numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
+
         DBG_ASSERT( xCert.is(), "Error getting cCertificate!" );
         if ( xCert.is() )
         {
