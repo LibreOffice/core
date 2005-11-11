@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ *  $RCSfile: GlobalSettings.xcs,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:43:48 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************ -->
+<!DOCTYPE oor:component-schema SYSTEM "../../../../../component-schema.dtd">
+<oor:component-schema oor:name="GlobalSettings" oor:package="org.openoffice.Office.UI" xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <info>
+		<author>CD</author>
+		<desc>Contains global settings to use for user interface elements of OpenOffice.org.</desc>
+	</info>
+	<templates>
+	    <group oor:name="GlobalWindowState">
+            <info>
+                <desc>Provides window state settings to be set globally for OpenOfficre.org.</desc>
+            </info>
+            <prop oor:name="Locked" oor:type="xs:boolean">
+                <info>
+                    <desc>Specifies that windows should be globally locked by default.</desc>
+                </info>
+                <!-- Attention: This property has three different states:
+                    NIL   = Ignore this property.
+                    TRUE  = All toolbars should be locked by default.
+                    FALSE = All toolbars should never be locked by default.
+                -->
+            </prop>
+            <prop oor:name="Docked" oor:type="xs:boolean">
+                <info>
+                    <desc>Specifies that windows should be globally docked by default.</desc>
+                </info>
+                <!-- Attention: This property has three different states:
+                    NIL   = Ignore this property.
+                    TRUE  = All toolbars should be docked by default.
+                    FALSE = All toolbars should never be docked by default.
+                -->
+            </prop>
+	    </group>
+	</templates>
+	<component>
+		<group oor:name="Toolbars">
+		    <info>
+		        <desc>Contains global settings for the toolbars."</desc>
+		    </info>
+			<prop oor:name="StatesEnabled" oor:type="xs:boolean">
+		        <info>
+		            <desc>Determines if the global states set should be used or not."</desc>
+		        </info>
+			</prop>
+			<node-ref oor:name="States" oor:node-type="GlobalWindowState">
+		        <info>
+		            <desc>Contains global window states for the OpenOffice.org toolbars."</desc>
+		        </info>
+			</node-ref>
+		</group>
+	</component>
+</oor:component-schema>
