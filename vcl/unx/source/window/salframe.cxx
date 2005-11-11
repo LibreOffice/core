@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.195 $
+ *  $Revision: 1.196 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:40:18 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:57:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -602,6 +602,7 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, ULONG nSalFrameStyle, SystemParentD
     nWidth_                     = 0;
     nHeight_                    = 0;
     nStyle_                     = 0;
+    mnExtStyle                  = 0;
     bAlwaysOnTop_               = FALSE;
     // set bViewable_ to TRUE: hack GetClientSize to report something
     // different to 0/0 before first map
@@ -737,6 +738,23 @@ X11SalFrame::~X11SalFrame()
     }
 
     passOnSaveYourSelf();
+}
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+void X11SalFrame::SetExtendedFrameStyle( SalExtStyle nStyle )
+{
+    if( nStyle != mnExtStyle )
+    {
+        mnExtStyle = nStyle;
+
+        XClassHint* pClass = XAllocClassHint();
+        rtl::OString aResHint = SalData::getFrameResName( mnExtStyle );
+        pClass->res_name  = const_cast<char*>(aResHint.getStr());
+        pClass->res_class = const_cast<char*>(SalData::getFrameClassName());
+        XSetClassHint( GetXDisplay(), GetShellWindow(), pClass );
+        XFree( pClass );
+    }
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
