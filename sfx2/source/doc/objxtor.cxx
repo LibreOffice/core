@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-03 12:05:44 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 09:06:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -271,15 +271,6 @@ SfxObjectShell::~SfxObjectShell()
 
     DELETEX( pMedium );
 
-    if ( pImp->aTempName.Len() )
-    {
-//REMOVE            if ( aPhysName == pImp->aTempName && !IsHandsOff() )
-//REMOVE                HandsOff();
-        String aTmp;
-        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( pImp->aTempName, aTmp );
-        ::utl::UCBContentHelper::Kill( aTmp );
-    }
-
     if ( pImp->mpObjectContainer )
     {
         pImp->mpObjectContainer->CloseEmbeddedObjects();
@@ -288,6 +279,14 @@ SfxObjectShell::~SfxObjectShell()
 
     if ( pImp->bOwnsStorage && pImp->m_xDocStorage.is() )
         pImp->m_xDocStorage->dispose();
+
+    // The removing of the temporary file must be done as the latest step in the document destruction
+    if ( pImp->aTempName.Len() )
+    {
+        String aTmp;
+        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( pImp->aTempName, aTmp );
+        ::utl::UCBContentHelper::Kill( aTmp );
+    }
 
     delete pImp;
 }
