@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compatibility.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:36:05 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:47:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,8 @@
 #ifndef __SGI_STL_VECTOR
 #include <vector>
 #endif
+
+#include <itemholder1.hxx>
 
 #include <algorithm>
 
@@ -646,6 +648,7 @@ SvtCompatibilityOptions::SvtCompatibilityOptions()
     if( m_pDataContainer == NULL )
     {
         m_pDataContainer = new SvtCompatibilityOptions_Impl;
+        ItemHolder1::holdConfigItem(E_COMPATIBILITY);
     }
 }
 
