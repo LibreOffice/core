@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sddetect.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:48:11 $
+ *  last change: $Author: kz $ $Date: 2005-11-11 13:49:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -448,31 +448,24 @@ SdFilterDetect::~SdFilterDetect()
                             }
                             else
                             {
-                                if( SvtModuleOptions().IsDraw() )
-                                {
-                                    String aShortName( aDesc.GetImportFormatShortName( aDesc.GetFileFormat() ) );
-                                    const String aName( pGrfFilter->GetImportFormatTypeName( pGrfFilter->GetImportFormatNumberForShortName( aShortName ) ) );
+                                String aShortName( aDesc.GetImportFormatShortName( aDesc.GetFileFormat() ) );
+                                const String aName( pGrfFilter->GetImportFormatTypeName( pGrfFilter->GetImportFormatNumberForShortName( aShortName ) ) );
 
-                                    if ( pFilter && aShortName.EqualsIgnoreCaseAscii( "PCD" ) )    // there is a multiple pcd selection possible
-                                    {
-                                        sal_Int32 nBase = 2;    // default Base0
-                                        String aFilterTypeName( pFilter->GetRealTypeName() );
-                                        if ( aFilterTypeName.CompareToAscii( "pcd_Photo_CD_Base4" ) == COMPARE_EQUAL )
-                                            nBase = 1;
-                                        else if ( aFilterTypeName.CompareToAscii( "pcd_Photo_CD_Base16" ) == COMPARE_EQUAL )
-                                            nBase = 0;
-                                        String aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Import/PCD" ) );
-                                        FilterConfigItem aFilterConfigItem( aFilterConfigPath );
-                                        aFilterConfigItem.WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Resolution" ) ), nBase );
-                                    }
-
-                                    SfxFilterMatcher aMatch( String::CreateFromAscii("sdraw") );
-                                    pFilter = aMatch.GetFilter4FilterName( aName );
-                                }
-                                else
+                                if ( pFilter && aShortName.EqualsIgnoreCaseAscii( "PCD" ) )    // there is a multiple pcd selection possible
                                 {
-                                    pFilter = NULL;
+                                    sal_Int32 nBase = 2;    // default Base0
+                                    String aFilterTypeName( pFilter->GetRealTypeName() );
+                                    if ( aFilterTypeName.CompareToAscii( "pcd_Photo_CD_Base4" ) == COMPARE_EQUAL )
+                                        nBase = 1;
+                                    else if ( aFilterTypeName.CompareToAscii( "pcd_Photo_CD_Base16" ) == COMPARE_EQUAL )
+                                        nBase = 0;
+                                    String aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Import/PCD" ) );
+                                    FilterConfigItem aFilterConfigItem( aFilterConfigPath );
+                                    aFilterConfigItem.WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Resolution" ) ), nBase );
                                 }
+
+                                SfxFilterMatcher aMatch( String::CreateFromAscii("sdraw") );
+                                pFilter = aMatch.GetFilter4FilterName( aName );
                             }
                         }
                     }
