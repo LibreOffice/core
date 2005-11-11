@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessibilityoptions.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:34:05 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:46:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,8 @@
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
 #endif
+
+#include <itemholder2.hxx>
 
 using namespace utl;
 using namespace rtl;
@@ -340,7 +342,10 @@ SvtAccessibilityOptions::SvtAccessibilityOptions()
     {
         ::osl::MutexGuard aGuard( SingletonMutex::get() );
         if(!sm_pSingleImplConfig)
+        {
             sm_pSingleImplConfig = new SvtAccessibilityOptions_Impl;
+            ItemHolder2::holdConfigItem(E_ACCESSIBILITYOPTIONS);
+        }
          ++sm_nAccessibilityRefCount;
     }
     StartListening( *sm_pSingleImplConfig, TRUE );
