@@ -12,7 +12,11 @@ systempython:
 
 PYDIRNAME=python-core-$(PYVERSION)
 DESTROOT=$(BIN)$/python-core-$(PYVERSION)
+.IF "$(GUI)" == "UNX"
+PYTHONBINARY=$(BIN)$/python$(EXECPOST).bin
+.ELSE
 PYTHONBINARY=$(DESTROOT)$/bin$/python$(EXECPOST)
+.ENDIF
 
 FINDLIBFILES_TMP:=$(subst,/,$/ \
     $(shell +$(FIND) $(SOLARLIBDIR)$/python -type f| $(GREP) -v .pyc ))
@@ -29,6 +33,8 @@ target: \
 $(BIN)$/python.sh : python.sh
     -rm -f $@
     cat $? > $@
+    sed 's/%%PYVERSION%%/$(PYVERSION)/g' < $@ > $@.new
+    mv $@.new $@
 .IF "$(GUI)" == "UNX"
     chmod +x $@
 .ENDIF
@@ -47,15 +53,21 @@ $(DESTROOT)$/lib$/% : $(SOLARLIBDIR)$/python$/%
     -rm -f $@
     cat $< > $@
 
-$(DESTROOT)$/bin$/python$(EXECPOST) : $(SOLARBINDIR)$/python$(EXECPOST)
+.IF "$(GUI)"== "UNX"
+$(BIN)$/python$(EXECPOST).bin : $(SOLARBINDIR)$/python$(EXECPOST)
     -+$(MKDIRHIER) $(@:d)
     -rm -f $@
     cat $< > $@
-.IF "$(GUI)"== "UNX"
 .IF "$(OS)" != "MACOSX"
     strip $@
 .ENDIF
     chmod +x $@
+.ELSE
+$(DESTROOT)$/bin$/python$(EXECPOST) : $(SOLARBINDIR)$/python$(EXECPOST)
+    -+$(MKDIRHIER) $(@:d)
+    -rm -f $@
+    cat $< > $@
+    strip $@
 .ENDIF
 
 .ENDIF
