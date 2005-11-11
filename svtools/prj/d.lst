@@ -189,6 +189,7 @@ hedabu: ..\inc\toolboxcontroller.hxx %_DEST%\inc%_EXT%\svtools\toolboxcontroller
 hedabu: ..\inc\framestatuslistener.hxx %_DEST%\inc%_EXT%\svtools\framestatuslistener.hxx
 hedabu: ..\inc\statusbarcontroller.hxx %_DEST%\inc%_EXT%\svtools\statusbarcontroller.hxx
 hedabu: ..\inc\generictoolboxcontroller.hxx %_DEST%\inc%_EXT%\svtools\generictoolboxcontroller.hxx
+hedabu: ..\inc\restrictedpaths.hxx %_DEST%\inc%_EXT%\svtools\restrictedpaths.hxx
 
 hedabu: ..\inc\imap.hxx %_DEST%\inc%_EXT%\svtools\imap.hxx
 hedabu: ..\inc\imapobj.hxx %_DEST%\inc%_EXT%\svtools\imapobj.hxx
@@ -261,6 +262,7 @@ hedabu: ..\inc\fstathelper.hxx %_DEST%\inc%_EXT%\svtools\fstathelper.hxx
 hedabu: ..\inc\saveopt.hxx %_DEST%\inc%_EXT%\svtools\saveopt.hxx
 hedabu: ..\inc\undoopt.hxx %_DEST%\inc%_EXT%\svtools\undoopt.hxx
 hedabu: ..\inc\helpopt.hxx %_DEST%\inc%_EXT%\svtools\helpopt.hxx
+hedabu: ..\inc\optionsdlg.hxx %_DEST%\inc%_EXT%\svtools\optionsdlg.hxx
 hedabu: ..\inc\moduleoptions.hxx %_DEST%\inc%_EXT%\svtools\moduleoptions.hxx
 hedabu: ..\inc\securityoptions.hxx %_DEST%\inc%_EXT%\svtools\securityoptions.hxx
 hedabu: ..\inc\extendedsecurityoptions.hxx %_DEST%\inc%_EXT%\svtools\extendedsecurityoptions.hxx
