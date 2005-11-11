@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeFilePicker.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:28:41 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:39:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -437,11 +437,17 @@ sal_Int16 SvtFilePicker::implExecutePicker( )
 
             INetURLObject aPath( m_aDisplayDirectory );
             if ( m_aDefaultName.getLength() > 0 )
+            {
                 aPath.insertName( m_aDefaultName );
+                getDialog()->SetHasFilename( true );
+            }
             getDialog()->SetPath( aPath.GetMainURL( INetURLObject::NO_DECODE ) );
         }
         else if ( m_aDefaultName.getLength() > 0 )
+        {
             getDialog()->SetPath( m_aDefaultName );
+            getDialog()->SetHasFilename( true );
+        }
     }
     else
     {
