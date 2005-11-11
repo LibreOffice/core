@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogs.hrc,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 13:28:25 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 09:18:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,8 +88,11 @@
 #define FI_STATE_VALID                  8
 #define IMG_STATE_BROKEN                9
 #define FI_STATE_BROKEN                 10
-#define IMG_STATE_VALID_HC              11
-#define IMG_STATE_BROKEN_HC             12
+#define IMG_STATE_NOTVALIDATED          11
+#define FI_STATE_NOTVALIDATED           12
+#define IMG_STATE_VALID_HC              13
+#define IMG_STATE_BROKEN_HC             14
+#define IMG_STATE_NOTVALIDATED_HC       15
 
 //#define DS_WIDTH                      DLGS_WIDTH
 //#define DS_HEIGHT                     DLGS_HEIGHT
@@ -178,6 +181,7 @@
 #define IMG_KEY                         13
 #define FI_CORRPRIVKEY                  14
 #define STR_CERTIFICATE_NOT_VALIDATED   15
+#define IMG_STATE_NOT_VALIDATED         16
 
 #define IMG1_WIDTH                      33
 #define IMG1_HEIGHT                     22
@@ -236,9 +240,10 @@
 #define FT_CERTPATH                     1
 #define FT_CERTSTATUS                   2
 #define ML_CERTSTATUS                   3
-#define IMG_CERT_SMAL                   4
-#define STR_PATH_CERT_OK                5
-#define STR_PATH_CERT_NOT_VALIDATED     6
+#define IMG_CERT_SMALL                  4
+#define IMG_CERT_NOTVALIDATED_SMALL     5
+#define STR_PATH_CERT_OK                6
+#define STR_PATH_CERT_NOT_VALIDATED     7
 
 #define CVP_ROW_0                       RSC_SP_TBPG_INNERBORDER_TOP
 #define CVP_ROW_1                       (CVP_ROW_0+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_DESC_Y)
