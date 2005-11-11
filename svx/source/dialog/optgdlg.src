@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:44:11 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:50:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,6 +122,12 @@ TabPage OFA_TP_MISC
         Size = MAP_APPFONT( WHOLE_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
         Text [ de ] = "Öffnen/Speichern-Dialoge" ;
         Text [ en-US ] = "Open/Save dialogs";
+    };
+    FixedImage FI_FILEDLG_RO
+    {
+        Pos = MAP_APPFONT( COL1 - 7, ROW7 + 2 );
+        Size = MAP_APPFONT( 6, 6 );
+        Hide = TRUE;
     };
     CheckBox CB_FILEDLG
     {
