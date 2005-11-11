@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:55:25 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:07:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,9 +86,6 @@
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
-#include <com/sun/star/util/XURLTransformer.hpp>
-#endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -163,6 +160,9 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_CMDOPTIONS_HXX
+#include <svtools/cmdoptions.hxx>
 #endif
 #ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
@@ -1050,8 +1050,9 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
     if ( pMenu == m_pVCLMenu )
     {
         // set/unset hiding disabled menu entries
-        sal_Bool bDontHide          = SvtMenuOptions().IsEntryHidingEnabled();
-        sal_Bool bShowMenuImages    = SvtMenuOptions().IsMenuIconsEnabled();
+        sal_Bool bDontHide           = SvtMenuOptions().IsEntryHidingEnabled();
+        sal_Bool bShowMenuImages     = SvtMenuOptions().IsMenuIconsEnabled();
+        sal_Bool bHasDisabledEntries = SvtCommandOptions().HasEntries( SvtCommandOptions::CMDOPTION_DISABLED );
 
         ResetableGuard aGuard( m_aLock );
 
@@ -1171,7 +1172,8 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
         Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
         if ( xDispatchProvider.is() )
         {
-            KeyCode aEmptyKeyCode;
+            KeyCode             aEmptyKeyCode;
+            SvtCommandOptions   aCmdOptions;
             std::vector< MenuItemHandler* >::iterator p;
             for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
             {
@@ -1200,6 +1202,14 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
                             aTargetURL.Complete = aItemCommand;
 
                             xTrans->parseStrict( aTargetURL );
+
+                            if ( bHasDisabledEntries )
+                            {
+                                if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, aTargetURL.Path ))
+                                    pMenu->HideItem( pMenuItemHandler->nItemId );
+                            }
+                            else
+                                pMenu->ShowItem( pMenuItemHandler->nItemId );
 
                             if ( m_bIsBookmarkMenu )
                                 xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, pMenuItemHandler->aTargetFrame, 0 );
@@ -1364,6 +1374,49 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu )
 IMPL_LINK( MenuBarManager, Highlight, Menu *, pMenu )
 {
     return 0;
+}
+
+sal_Bool MenuBarManager::MustBeHidden( PopupMenu* pPopupMenu, const Reference< XURLTransformer >& rTransformer )
+{
+    if ( pPopupMenu )
+    {
+        URL               aTargetURL;
+        SvtCommandOptions aCmdOptions;
+
+        sal_uInt16 nCount = pPopupMenu->GetItemCount();
+        sal_uInt16 nHideCount( 0 );
+
+        for ( sal_uInt16 i = 0; i < nCount; i++ )
+        {
+            sal_uInt16 nId = pPopupMenu->GetItemId( i );
+            if ( nId >= 0 )
+            {
+                PopupMenu* pSubPopupMenu = pPopupMenu->GetPopupMenu( nId );
+                if ( pSubPopupMenu )
+                {
+                    if ( MustBeHidden( pSubPopupMenu, rTransformer ))
+                    {
+                        pPopupMenu->HideItem( nId );
+                        ++nHideCount;
+                    }
+                }
+                else
+                {
+                    aTargetURL.Complete = pPopupMenu->GetItemCommand( nId );
+                    rTransformer->parseStrict( aTargetURL );
+
+                    if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, aTargetURL.Path ))
+                        ++nHideCount;
+                }
+            }
+            else
+                ++nHideCount;
+        }
+
+        return ( nCount == nHideCount );
+    }
+
+    return sal_True;
 }
 
 String MenuBarManager::RetrieveLabelFromCommand( const String& aCmdURL )
@@ -1923,6 +1976,35 @@ void MenuBarManager::RetrieveImageManagers()
     }
 }
 
+void MenuBarManager::FillMenuWithConfiguration(
+    USHORT&                             nId,
+    Menu*                               pMenu,
+    const ::rtl::OUString&              rModuleIdentifier,
+    const Reference< XIndexAccess >&    rItemContainer,
+    const Reference< XURLTransformer >& rTransformer )
+{
+    MenuBarManager::FillMenu( nId, pMenu, rModuleIdentifier, rItemContainer );
+
+    sal_Bool bHasDisabledEntries = SvtCommandOptions().HasEntries( SvtCommandOptions::CMDOPTION_DISABLED );
+    if ( bHasDisabledEntries )
+    {
+        sal_uInt16 nCount = pMenu->GetItemCount();
+        for ( sal_uInt16 i = 0; i < nCount; i++ )
+        {
+            sal_uInt16 nID = pMenu->GetItemId( i );
+            if ( nID >= 0 )
+            {
+                PopupMenu* pPopupMenu = pMenu->GetPopupMenu( nID );
+                if ( pPopupMenu )
+                {
+                    if ( MustBeHidden( pPopupMenu, rTransformer ))
+                        pMenu->HideItem( nId );
+                }
+            }
+        }
+    }
+}
+
 void MenuBarManager::FillMenu( USHORT& nId, Menu* pMenu, const rtl::OUString& rModuleIdentifier, const Reference< XIndexAccess >& rItemContainer )
 {
     // Fill menu bar with container contents
@@ -2024,7 +2106,10 @@ void MenuBarManager::SetItemContainer( const Reference< XIndexAccess >& rItemCon
         rtl::OUString   aModuleIdentifier;
 
         // Fill menu bar with container contents
-        FillMenu( nId, (Menu *)m_pVCLMenu, aModuleIdentifier, rItemContainer );
+        Reference< XURLTransformer > xTrans( getServiceFactory()->createInstance(
+                                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
+        FillMenuWithConfiguration( nId, (Menu *)m_pVCLMenu, aModuleIdentifier, rItemContainer, xTrans );
 
         // Refill menu manager again
         FillMenuManager( m_pVCLMenu, xFrame, aModuleIdentifier, sal_False, sal_True );
