@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autorecovery.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:44:22 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:06:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,6 +225,7 @@ namespace framework
 static const ::rtl::OUString CFG_PACKAGE_RECOVERY             = ::rtl::OUString::createFromAscii("org.openoffice.Office.Recovery/");
 static const ::rtl::OUString CFG_ENTRY_RECOVERYLIST           = ::rtl::OUString::createFromAscii("RecoveryList"                   );
 static const ::rtl::OUString CFG_PATH_RECOVERYINFO            = ::rtl::OUString::createFromAscii("RecoveryInfo"                   );
+static const ::rtl::OUString CFG_ENTRY_ENABLED                = ::rtl::OUString::createFromAscii("Enabled"                        );
 static const ::rtl::OUString CFG_ENTRY_CRASHED                = ::rtl::OUString::createFromAscii("Crashed"                        );
 static const ::rtl::OUString CFG_ENTRY_SESSIONDATA            = ::rtl::OUString::createFromAscii("SessionData"                    );
 static const ::rtl::OUString CFG_ENTRY_AUTOSAVE_ENABLED       = ::rtl::OUString::createFromAscii("AutoSave/Enabled"               );
