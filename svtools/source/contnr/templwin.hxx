@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:57:41 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:14:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,9 @@
 #endif
 #ifndef _SVTOOLS_SVMEDIT2_HXX
 #include "svmedit2.hxx"
+#endif
+#ifndef SVTOOLS_RESTRICTEDPATHS_HXX
+#include "restrictedpaths.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
@@ -158,6 +161,8 @@ private:
     String              aFolderURL;
     String              aMyDocumentsURL;
     String              aSamplesFolderURL;
+    ::svt::RestrictedPaths
+                        aURLFilter;
 
     sal_Bool            bIsTemplateFolder;
 
