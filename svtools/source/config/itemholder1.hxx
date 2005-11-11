@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemholder1.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:40:31 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:50:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,8 +76,7 @@ class ItemHolder1 : private ItemHolderMutexBase
 
         ItemHolder1();
         virtual ~ItemHolder1();
-        virtual void holdConfigItem(EItem eItem);
-        static ItemHolder1* getGlobalItemHolder();
+        static void holdConfigItem(EItem eItem);
 
     //...........................................
     // uno interface
@@ -90,6 +89,7 @@ class ItemHolder1 : private ItemHolderMutexBase
     // helper
     private:
 
+        void impl_addItem(EItem eItem);
         void impl_releaseAllItems();
         void impl_newItem(TItemInfo& rItem);
         void impl_deleteItem(TItemInfo& rItem);
