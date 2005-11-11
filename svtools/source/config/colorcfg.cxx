@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colorcfg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:35:47 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:47:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,8 @@
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
+
+#include <itemholder2.hxx>
 
  /* #100822# ----
 #ifndef _SV_WRKWIN_HXX
@@ -520,7 +522,10 @@ ColorConfig::ColorConfig()
 {
     ::osl::MutexGuard aGuard( ColorMutex_Impl::get() );
     if ( !m_pImpl )
+    {
         m_pImpl = new ColorConfig_Impl;
+        ItemHolder2::holdConfigItem(E_COLORCFG);
+    }
     ++nColorRefCount_Impl;
     StartListening( *m_pImpl);
 }
