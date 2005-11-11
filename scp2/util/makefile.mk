@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-11 09:55:38 $
+#   last change: $Author: rt $ $Date: 2005-11-11 10:40:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,7 @@ SCP1FILES  = installation_ooo.par          \
              module_xsltfilter.par         \
              file_xsltfilter.par           \
              module_python.par             \
+             module_python_mailmerge.par   \
              file_python.par               \
              profileitem_python.par        \
              shortcut_python.par
@@ -192,6 +193,7 @@ SCP2FILES  = installation_ooo.par          \
              module_xsltfilter.par         \
              file_xsltfilter.par           \
              module_python.par             \
+             module_python_mailmerge.par   \
              file_python.par               \
              profileitem_python.par
 
