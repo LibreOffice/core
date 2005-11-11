@@ -4,9 +4,9 @@
  *
  *  $RCSfile: signal.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:32:46 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:25:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,19 @@ sal_Bool SAL_CALL osl_removeSignalHandler(oslSignalHandler hHandler);
 
 oslSignalAction SAL_CALL osl_raiseSignal(sal_Int32 UserSignal, void* UserData);
 
+/** Enables or disables error reporting
+
+    On default error reporting is enabled after process startup.
+
+    @param  bEnable [in]
+    Enables or disables error reporting.
+
+    @return
+    sal_True if previous state of error reporting was enabled<br>
+    sal_False if previous state of error reporting was disbaled<br>
+*/
+
+sal_Bool SAL_CALL osl_setErrorReporting( sal_Bool bEnable );
 
 #ifdef __cplusplus
 }
