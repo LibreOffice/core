@@ -4,9 +4,9 @@
 #
 #   $RCSfile: property.pm,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-28 13:17:30 $
+#   last change: $Author: kz $ $Date: 2005-11-11 14:18:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -163,7 +163,28 @@ sub get_productname_for_property_table
     my $infoline = "Defined variable PROPERTYTABLEPRODUCTNAME: $productname\n";
     push(@installer::globals::logfileinfo, $infoline);
 
+    # Saving this name in hash $allvariables for further usage
+    $allvariables->{'PROPERTYTABLEPRODUCTNAME'} = $productname;
+    my $infoline = "Defined variable PROPERTYTABLEPRODUCTNAME: $productname\n";
+    push(@installer::globals::logfileinfo, $infoline);
+
     return $productname;
+}
+
+sub get_quickstarterlinkname_for_property_table
+{
+    my ( $allvariables ) = @_;
+
+    # no usage of POSTVERSIONEXTENSION for Quickstarter link name!
+
+    my $name = $allvariables->{'PRODUCTNAME'};
+    my $version = $allvariables->{'PRODUCTVERSION'};
+    my $quickstartername = $name . " " . $version;
+
+    my $infoline = "Defined Quickstarter Link name: $quickstartername\n";
+    push(@installer::globals::logfileinfo, $infoline);
+
+    return $quickstartername;
 }
 
 sub get_productversion_for_property_table
@@ -258,6 +279,7 @@ sub update_property_table
     my $productlanguage = get_productlanguage_for_property_table($language);
     my $productname = get_productname_for_property_table($allvariables);
     my $productversion = get_productversion_for_property_table();
+    my $quickstarterlinkname = get_quickstarterlinkname_for_property_table($allvariables);
 
     # Updating the values
 
@@ -270,6 +292,7 @@ sub update_property_table
         ${$propertyfile}[$i] =~ s/\bPRODUCTLANGUAGETEMPLATE\b/$productlanguage/;
         ${$propertyfile}[$i] =~ s/\bPRODUCTNAMETEMPLATE\b/$productname/;
         ${$propertyfile}[$i] =~ s/\bPRODUCTVERSIONTEMPLATE\b/$productversion/;
+        ${$propertyfile}[$i] =~ s/\bQUICKSTARTERLINKNAMETEMPLATE\b/$quickstarterlinkname/;
     }
 
     # Setting variables into propertytable
