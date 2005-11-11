@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filectrl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:26:36 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 09:16:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,10 @@
 #ifndef _SV_FILECTRL_HXX
 #define _SV_FILECTRL_HXX
 
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
 #endif
@@ -60,7 +64,7 @@ typedef USHORT FileControlMode_Internal;
 #define FILECTRL_ORIGINALBUTTONTEXT     ((USHORT)0x0002)
 
 
-class FileControl : public Window
+class SVT_DLLPUBLIC FileControl : public Window
 {
 private:
     Edit            maEdit;
@@ -75,14 +79,14 @@ private:
     FileControlMode_Internal    mnInternalFlags;
 
 private:
-    void            ImplBrowseFile( );
+    SVT_DLLPRIVATE void     ImplBrowseFile( );
 
 protected:
-    void            Resize();
-    void            GetFocus();
-    void            StateChanged( StateChangedType nType );
-    WinBits         ImplInitStyle( WinBits nStyle );
-    DECL_LINK(      ButtonHdl, PushButton* );
+    SVT_DLLPRIVATE void     Resize();
+    SVT_DLLPRIVATE void     GetFocus();
+    SVT_DLLPRIVATE void     StateChanged( StateChangedType nType );
+    SVT_DLLPRIVATE WinBits  ImplInitStyle( WinBits nStyle );
+    DECL_DLLPRIVATE_LINK( ButtonHdl, PushButton* );
 
 public:
                     FileControl( Window* pParent, WinBits nStyle, FileControlMode = 0 );
