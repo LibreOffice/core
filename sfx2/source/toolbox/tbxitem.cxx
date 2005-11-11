@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:13:56 $
+ *  last change: $Author: kz $ $Date: 2005-11-11 14:24:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -933,11 +933,13 @@ void SfxToolBoxControl::createAndPositionSubToolBar( const ::rtl::OUString& rSub
             xWeakUIElementFactory = xUIEementFactory;
         }
 
-        Sequence< PropertyValue > aPropSeq( 2 );
+        Sequence< PropertyValue > aPropSeq( 3 );
         aPropSeq[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
         aPropSeq[0].Value <<= xFrame;
         aPropSeq[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Persistent" ));
         aPropSeq[1].Value <<= sal_False;
+        aPropSeq[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PopupMode" ));
+        aPropSeq[2].Value <<= sal_True;
 
         try
         {
