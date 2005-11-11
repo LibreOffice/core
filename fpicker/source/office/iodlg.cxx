@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:32:00 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:40:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -508,27 +508,6 @@ namespace
     }
 }
 
-//........................................................................
-namespace svt
-{
-//........................................................................
-
-    // -----------------------------------------------------------------------
-    void    getUnrestrictedFolders( ::std::vector< String >& _rFolders )
-    {
-        _rFolders.resize( 0 );
-        ::rtl::OUString sRestrictedPathList;
-        if ( getEnvironmentValue( "RestrictedPath", sRestrictedPathList ) )
-            // append a final slash. This ensures that when we later on check
-            // for unrestricted paths, we don't allow paths like "/home/user35" just because
-            // "/home/user3" is allowed - with the final slash, we make it "/home/user3/".
-            convertStringListToUrls( sRestrictedPathList, _rFolders, true );
-    }
-
-//........................................................................
-}   // namespace svt
-//........................................................................
-
 //***************************************************************************
 // ControlChain_Impl
 //***************************************************************************
@@ -620,6 +599,7 @@ SvtFileDialog::SvtFileDialog
     ,_bIsInExecute( FALSE )
     ,_pUserControls( NULL )
     ,m_bInExecuteAsync( false )
+    ,m_bHasFilename( false )
 {
     Init_Impl( nBits );
 }
@@ -641,6 +621,7 @@ SvtFileDialog::SvtFileDialog ( Window* _pParent, WinBits nBits )
     ,_nExtraBits( 0L )
     ,_bIsInExecute( FALSE )
     ,_pUserControls( NULL )
+    ,m_bHasFilename( false )
 {
     Init_Impl( nBits );
 }
@@ -708,7 +689,7 @@ void SvtFileDialog::Init_Impl
     _pImp->_pFtFileName = new FixedText( this, SvtResId( FT_EXPLORERFILE_FILENAME ) );
 
     SvtURLBox* pURLBox = new SvtURLBox( this );
-    pURLBox->SetUrlFilter( this );
+    pURLBox->SetUrlFilter( &m_aURLFilter );
     _pImp->_pEdFileName = pURLBox;
 
     Edit aDummy( this, SvtResId( ED_EXPLORERFILE_FILENAME ) );
@@ -771,7 +752,7 @@ void SvtFileDialog::Init_Impl
     _pFileView = new SvtFileView( this, SvtResId( CTL_EXPLORERFILE_FILELIST ),
                                        FILEDLG_TYPE_PATHDLG == _pImp->_eDlgType,
                                        _pImp->_bMultiSelection );
-    _pFileView->SetUrlFilter( this );
+    _pFileView->SetUrlFilter( &m_aURLFilter );
     _pFileView->EnableAutoResize();
 
     _pFileView->SetHelpId( HID_FILEDLG_STANDARD );
@@ -966,15 +947,6 @@ void SvtFileDialog::Init_Impl
 
     // correct the z-order of the controls
     implArrangeControls();
-
-    // #102204# ---------------
-    if ( nStyle & WB_SAVEAS )
-        // when doing a save-as, we do not want the handler to handle "this file does not exist" messages
-        // - finally we're going to save that file, aren't we?
-        // #105812# - 2002-12-02 - fs@openoffice.org
-        m_aContent.enableOwnInteractionHandler(::svt::OFilePickerInteractionHandler::E_DOESNOTEXIST);
-    else
-        m_aContent.enableDefaultInteractionHandler();
 
     // special URLs, such as favourites and "restricted" paths
     implInitializeSpecialURLLists( );
@@ -1271,19 +1243,43 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
     // #97148# & #102204# ---------
     if ( aFileName.Len() )
     {
+        // Make sure we have own Interaction Handler in place. We do not need
+        // to intercept interactions here, but to record the fact that there
+        // was an interaction.
+        SmartContent::InteractionHandlerType eInterActionHandlerType
+            = pThis->m_aContent.queryCurrentInteractionHandler();
+        if ( ( eInterActionHandlerType == SmartContent::IHT_NONE ) ||
+             ( eInterActionHandlerType == SmartContent::IHT_DEFAULT ) )
+            pThis->m_aContent.enableOwnInteractionHandler(
+                OFilePickerInteractionHandler::E_NOINTERCEPTION );
+
         bFolder = pThis->m_aContent.isFolder( aFileName );
 
-        // access denied to the given resource - and interaction was already used => break following operations
-        OFilePickerInteractionHandler* pHandler = pThis->m_aContent.getOwnInteractionHandler();
-        if (pHandler && pHandler->wasAccessDenied())
+        // access denied to the given resource - and interaction was already
+        // used => break following operations
+        OFilePickerInteractionHandler* pHandler
+            = pThis->m_aContent.getOwnInteractionHandler();
+
+        OSL_ENSURE( pHandler, "Got no Interaction Handler!!!" );
+
+        if ( pHandler->wasAccessDenied() )
             return 0;
 
-        if  (   pThis->m_aContent.isInvalid()
-            &&  ( FILEDLG_MODE_OPEN == pThis->_pImp->_eMode )
-            )
-            return 0;
-    }
+        if ( pThis->m_aContent.isInvalid() &&
+             ( pThis->_pImp->_eMode == FILEDLG_MODE_OPEN ) )
+        {
+            if ( !pHandler->wasUsed() )
+                ErrorHandler::HandleError( ERRCODE_IO_NOTEXISTS );
 
+            return 0;
+        }
+
+        // restore previous Interaction Handler
+        if ( eInterActionHandlerType == SmartContent::IHT_NONE )
+            pThis->m_aContent.disableInteractionHandler();
+        else if ( eInterActionHandlerType == SmartContent::IHT_DEFAULT )
+            pThis->m_aContent.enableDefaultInteractionHandler();
+     }
 
     if  (   !bFolder                                        // no existent folder
         &&  pThis->_pImp->_pCbAutoExtension                 // auto extension is enabled in general
@@ -1334,7 +1330,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
         {
             if ( aFileName != pThis->_pFileView->GetViewURL() )
             {
-                if ( !pThis->isUrlAllowed( aFileName ) )
+                if ( !pThis->m_aURLFilter.isUrlAllowed( aFileName ) )
                 {
                     pThis->simulateAccessDenied( aFileName );
                     return 0;
@@ -1372,7 +1368,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
     }
 
     // if restrictions for the allowed folders are in place, we need to do a check here
-    if ( !pThis->isUrlAllowed( aFileObj.GetMainURL( INetURLObject::NO_DECODE ) ) )
+    if ( !pThis->m_aURLFilter.isUrlAllowed( aFileObj.GetMainURL( INetURLObject::NO_DECODE ) ) )
     {
         pThis->simulateAccessDenied( aFileName );
         return 0;
@@ -1794,7 +1790,7 @@ IMPL_LINK( SvtFileDialog, OpenDoneHdl_Impl, SvtFileView*, pView )
 {
     String sCurrentFolder( pView->GetViewURL() );
     // check if we can create new folders
-    EnableControl( _pImp->_pBtnNewFolder, ContentCanMakeFolder( sCurrentFolder ) );
+    EnableControl( _pImp->_pBtnNewFolder, ContentCanMakeFolder( sCurrentFolder ) && m_aURLFilter.isUrlAllowed( sCurrentFolder, false ) );
 
     // check if we can travel one level up
     bool bCanTravelUp = ContentHasParentFolder( pView->GetViewURL() );
@@ -1806,7 +1802,7 @@ IMPL_LINK( SvtFileDialog, OpenDoneHdl_Impl, SvtFileView*, pView )
             "SvtFileDialog::OpenDoneHdl_Impl: invalid current URL!" );
 
         aCurrentFolder.removeSegment();
-        bCanTravelUp &= isUrlAllowed( aCurrentFolder.GetMainURL( INetURLObject::NO_DECODE ) );
+        bCanTravelUp &= m_aURLFilter.isUrlAllowed( aCurrentFolder.GetMainURL( INetURLObject::NO_DECODE ) );
     }
     EnableControl( _pImp->_pBtnUp, bCanTravelUp );
 
@@ -1969,8 +1965,21 @@ void SvtFileDialog::updateListboxLabelSizes()
     }
 }
 
+namespace
+{
+
+bool implIsInvalid( const String & rURL )
+{
+    SmartContent aContent( rURL );
+    aContent.enableOwnInteractionHandler( ::svt::OFilePickerInteractionHandler::E_DOESNOTEXIST );
+    aContent.isFolder();    // do this _before_ asking isInvalid! Otherwise result might be wrong.
+    return aContent.isInvalid();
+}
+
+}
+
 //---------------------------------------------------------------------
-String SvtFileDialog::implConvertToURL( const String& _rPath, sal_Bool _bAssumeFile, const String& _rFallback )
+String SvtFileDialog::implGetInitialURL( const String& _rPath, const String& _rFallback )
 {
     // an URL parser for the fallback
     INetURLObject aURLParser;
@@ -1979,32 +1988,61 @@ String SvtFileDialog::implConvertToURL( const String& _rPath, sal_Bool _bAssumeF
     bool bWasAbsolute = FALSE;
     aURLParser = aURLParser.smartRel2Abs( _rPath, bWasAbsolute );
 
-    // is it an valid folder?
+    // is it a valid folder?
     m_aContent.bindTo( aURLParser.GetMainURL( INetURLObject::NO_DECODE ) );
     sal_Bool bIsFolder = m_aContent.isFolder( );    // do this _before_ asking isInvalid!
     sal_Bool bIsInvalid = m_aContent.isInvalid();
 
-    if ( bIsInvalid && _bAssumeFile && !aURLParser.hasFinalSlash() )
+    if ( bIsInvalid && m_bHasFilename && !aURLParser.hasFinalSlash() )
     {   // check if the parent folder exists
         // #108429# - 2003-03-26 - fs@openoffice.org
         INetURLObject aParent( aURLParser );
         aParent.removeSegment( );
         aParent.setFinalSlash( );
-        SmartContent aTemporary( aParent.GetMainURL( INetURLObject::NO_DECODE ) );
-        bIsInvalid = aTemporary.isInvalid();
+        bIsInvalid = implIsInvalid( aParent.GetMainURL( INetURLObject::NO_DECODE ) );
     }
 
     if ( bIsInvalid )
-        aURLParser = INetURLObject( _rFallback );
-    else if ( bIsFolder )
-        aURLParser.setFinalSlash();
+    {
+        INetURLObject aFallback( _rFallback );
+        bIsInvalid = implIsInvalid( aFallback.GetMainURL( INetURLObject::NO_DECODE ) );
 
+        if ( !bIsInvalid )
+            aURLParser = aFallback;
+    }
+
+    if ( bIsInvalid )
+    {
+        INetURLObject aParent( aURLParser );
+        while ( bIsInvalid && aParent.removeSegment() )
+        {
+            aParent.setFinalSlash( );
+            bIsInvalid = implIsInvalid( aParent.GetMainURL( INetURLObject::NO_DECODE ) );
+        }
+
+        if ( !bIsInvalid )
+            aURLParser = aParent;
+    }
+
+    if ( !bIsInvalid && bIsFolder )
+    {
+        aURLParser.setFinalSlash();
+    }
     return aURLParser.GetMainURL( INetURLObject::NO_DECODE );
 }
 
 //---------------------------------------------------------------------
 short SvtFileDialog::Execute()
 {
+    // #102204# ---------------
+    if ( ( _pImp->_nStyle & WB_SAVEAS ) && m_bHasFilename )
+        // when doing a save-as, we do not want the handler to handle "this file does not exist" messages
+        // - finally we're going to save that file, aren't we?
+        // #105812# - 2002-12-02 - fs@openoffice.org
+        m_aContent.enableOwnInteractionHandler(::svt::OFilePickerInteractionHandler::E_DOESNOTEXIST);
+    else
+        m_aContent.enableDefaultInteractionHandler();
+
     // #53016# evtl. nur ein Filename ohne Pfad?
     String aFileNameOnly;
     if( _aPath.Len() && (_pImp->_eMode == FILEDLG_MODE_SAVE)
@@ -2028,18 +2066,17 @@ short SvtFileDialog::Execute()
     }
 
     //.....................................................................
-    // convert input (_aPath) to url
-    _aPath = implConvertToURL( _aPath, ( FILEDLG_MODE_SAVE == _pImp->_eMode ), GetStandardDir() );
+    _aPath = implGetInitialURL( _aPath, GetStandardDir() );
+
+    if ( _pImp->_nStyle & WB_SAVEAS && !m_bHasFilename )
+        // when doing a save-as, we do not want the handler to handle "this file does not exist" messages
+        // - finally we're going to save that file, aren't we?
+        m_aContent.enableOwnInteractionHandler(::svt::OFilePickerInteractionHandler::E_DOESNOTEXIST);
 
     //.....................................................................
     // care for possible restrictions on the paths we're allowed to show
-    if ( !isUrlAllowed( _aPath ) )
-    {
-        DBG_ASSERT( !m_aApprovedURLs.empty(), "SvtFileDialog::Execute: how this?" );
-            // isUrlAllowed should return true if m_aApprovedURLs is empty
-        if ( !m_aApprovedURLs.empty() )
-            _aPath = m_aApprovedURLs[0];
-    }
+    if ( !m_aURLFilter.isUrlAllowed( _aPath ) )
+        _aPath = m_aURLFilter.getFilter()[0];
 
     // Ggf. Filter anzeigen.
     _pImp->InitFilterList();
@@ -2273,14 +2310,13 @@ void SvtFileDialog::EnableControl( Control* _pControl, BOOL _bEnable )
 //-----------------------------------------------------------------------------
 void SvtFileDialog::implInitializeSpecialURLLists( )
 {
-    m_aApprovedURLs.resize( 0 );
-    ::std::vector< String > aFavourites;
+    m_aURLFilter = ::svt::RestrictedPaths();
 
-    getUnrestrictedFolders( m_aApprovedURLs );
-    if ( !m_aApprovedURLs.empty() )
+    ::std::vector< String > aFavourites;
+    if ( m_aURLFilter.hasFilter() )
     {
         // if we have restrictions, then the "favourites" are the restricted folders only
-        aFavourites = m_aApprovedURLs;
+        aFavourites = m_aURLFilter.getFilter();
         // for approved URLs, we needed the final slashes, for
         // favourites, we do not want to have them
         ::std::for_each( aFavourites.begin(), aFavourites.end(), RemoveFinalSlash() );
@@ -2376,7 +2412,7 @@ void SvtFileDialog::PrevLevel_Impl()
 
 void SvtFileDialog::OpenURL_Impl( const String& _rURL )
 {
-    DBG_ASSERT( isUrlAllowed( _rURL ), "SvtFileDialog::OpenURL_Impl: forbidden URL! Should have been handled by the caller!" );
+    DBG_ASSERT( m_aURLFilter.isUrlAllowed( _rURL ), "SvtFileDialog::OpenURL_Impl: forbidden URL! Should have been handled by the caller!" );
     executeAsync( AsyncPickerAction::eOpenURL, _rURL, getMostCurrentFilter( _pImp ) );
 }
 
@@ -3368,63 +3404,6 @@ sal_Bool SvtFileDialog::ContentGetTitle( const rtl::OUString& rURL, String& rTit
     rTitle = sTitle;
 
     return m_aContent.isValid();
-}
-
-// -----------------------------------------------------------------------
-struct CheckURLAllowed
-{
-protected:
-#ifdef WNT
-    SvtSysLocale    m_aSysLocale;
-#endif
-    String          m_sCheckURL;    // the URL to check
-
-public:
-    inline CheckURLAllowed( const String& _rCheckURL )
-        :m_sCheckURL( _rCheckURL )
-    {
-#ifdef WNT
-        // on windows, assume that the relevant file systems are case insensitive,
-        // thus normalize the URL
-        m_sCheckURL = m_aSysLocale.GetCharClass().toLower( m_sCheckURL, 0, m_sCheckURL.Len() );
-#endif
-    }
-
-    bool operator()( const String& _rApprovedURL )
-    {
-#ifdef WNT
-        // on windows, assume that the relevant file systems are case insensitive,
-        // thus normalize the URL
-        String sApprovedURL( m_aSysLocale.GetCharClass().toLower( _rApprovedURL, 0, _rApprovedURL.Len() ) );
-#else
-        String sApprovedURL( _rApprovedURL );
-#endif
-
-        // check if m_rCheckURL denotes a folder which is a descendant
-        // of _rApprovedURL
-        if ( 0 == m_sCheckURL.Search( sApprovedURL ) )
-            return true;
-        // check if m_rCheckURL denotes a folder which is a ancestor
-        // of _rApprovedURL
-        if ( 0 == sApprovedURL.Search( m_sCheckURL ) )
-            return true;
-        return false;
-    }
-};
-
-// -----------------------------------------------------------------------
-bool SvtFileDialog::isUrlAllowed( const String& _rURL ) const
-{
-    if ( m_aApprovedURLs.empty() )
-        return true;
-
-    ::std::vector< String >::const_iterator aApprovedURL = ::std::find_if(
-        m_aApprovedURLs.begin(),
-        m_aApprovedURLs.end(),
-        CheckURLAllowed( _rURL )
-    );
-
-    return ( aApprovedURL != m_aApprovedURLs.end() );
 }
 
 // -----------------------------------------------------------------------
