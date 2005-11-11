@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addonstoolbarmanager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:51:50 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:07:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,6 +155,7 @@ AddonsToolBarManager::AddonsToolBarManager( const Reference< XMultiServiceFactor
     // must disable some menu entries.
     m_bCanBeCustomized = sal_False;
 
+    m_pToolBar->SetMenuType( TOOLBOX_MENUTYPE_CLIPPEDITEMS );
     m_pToolBar->SetSelectHdl( LINK( this, AddonsToolBarManager, Select) );
     m_pToolBar->SetActivateHdl( LINK( this, AddonsToolBarManager, Activate) );
     m_pToolBar->SetDeactivateHdl( LINK( this, AddonsToolBarManager, Deactivate) );
