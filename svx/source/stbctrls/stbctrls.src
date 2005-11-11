@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stbctrls.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 13:36:13 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 09:13:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,6 +274,14 @@ Image RID_SVXBMP_SIGNET_BROKEN
     };
     MaskColor = STD_MASKCOLOR;
 };
+Image RID_SVXBMP_SIGNET_NOTVALIDATED
+{
+    ImageBitmap = Bitmap
+    {
+        File = "notcertificate_16.png" ;
+    };
+    MaskColor = STD_MASKCOLOR;
+};
 Image RID_SVXBMP_SIGNET_H
 {
     ImageBitmap = Bitmap
@@ -287,6 +295,14 @@ Image RID_SVXBMP_SIGNET_BROKEN_H
     ImageBitmap = Bitmap
     {
         File = "caution_11x16_h.png" ;
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+Image RID_SVXBMP_SIGNET_NOTVALIDATED_H
+{
+    ImageBitmap = Bitmap
+    {
+        File = "notcertificate_16_h.png" ;
     };
     MaskColor = STD_MASKCOLOR;
 };
