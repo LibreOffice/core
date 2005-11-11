@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 09:06:05 $
+ *  last change: $Author: kz $ $Date: 2005-11-11 13:50:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,9 @@
 #endif
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
+#endif
+#ifndef _SFXVISIBILITYITEM_HXX
+#include <svtools/visitem.hxx>
 #endif
 #ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
@@ -1368,7 +1371,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
     if (!SvtModuleOptions().IsCalc())
     {
-        rSet.DisableItem( SID_ATTR_TABLE );
+        // remove menu entry if module is not available
+        rSet.Put( SfxVisibilityItem( SID_ATTR_TABLE, sal_False ) );
     }
     if (!SvtModuleOptions().IsChart())
     {
