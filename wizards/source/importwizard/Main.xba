@@ -43,6 +43,7 @@ Sub Main()
 	ImportDialog.ImportPreview.BackGroundColor = RGB(0,60,126)	
 	ImportDialog.cmdGoOn.DefaultButton = True
 	ImportDialogArea.GetControl(&quot;optSODocuments&quot;).SetFocus()
+	ToggleCheckboxesWithBoolean(False)
 	RetValue = ImportDialogArea.Execute()
 	If bShowLogFile=TRUE Then 
 		OpenDocument(sLogUrl, NoArgs())
@@ -185,17 +186,16 @@ Function CheckInstalledModule(Index as Integer) as Boolean
 Dim ModuleName as String
 Dim NameList() as String
 Dim MaxIndex as Integer
-Dim i as Integer
+Dim i as Integer		
 	ModuleName = ModuleList(Index)
 	If Instr(1,ModuleName,&quot;/&quot;) &lt;&gt; 0 Then
+		CheckInstalledModule() = False
 		NameList() = ArrayoutOfString(ModuleName,&quot;/&quot;, MaxIndex)
 		For i = 0 To MaxIndex
-			If Not oFactoryKey.HasByName(NameList(i)) Then
-				CheckInstalledModule() = False
-				Exit Function
+			If oFactoryKey.HasByName(NameList(i)) Then
+				CheckInstalledModule() = True
 			End If
 		Next i
-		CheckInstalledModule() = True
 	Else
 		CheckInstalledModule() = oFactoryKey.HasByName(ModuleName)
 	End If
@@ -206,9 +206,16 @@ Sub ToggleCheckboxes(oEvent as Object)
 Dim bMSEnable as Boolean
 	WizardMode = oEvent.Source.Model.Tag
 	bMSEnable = WizardMode = &quot;MS&quot;
-	If WizardMode = &quot;MS&quot; Then
+	ToggleCheckBoxesWithBoolean(bMSEnable)
+End Sub
+
+
+Sub ToggleCheckboxesWithBoolean(bMSEnable as Boolean)
+	If bMSEnable = True Then
+		WizardMode = SBMICROSOFTMODE
 		MaxApplCount = 3
 	Else
+		WizardMode = SBXMLMODE
 		MaxApplCount = 4
 	End If
 	With ImportDialogArea
