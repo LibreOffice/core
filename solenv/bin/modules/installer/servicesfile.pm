@@ -4,9 +4,9 @@
 #
 #   $RCSfile: servicesfile.pm,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:11:16 $
+#   last change: $Author: rt $ $Date: 2005-11-11 10:38:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -376,7 +376,8 @@ sub register_pythoncomponents
                 $counter++;
             }
 
-            if ((( $counter > 0 ) && ( $counter%$installer::globals::unomaxservices == 0 )) || (( $counter > 0 ) && ( $i == $#{$pythoncomponents} )))   # limiting to $installer::globals::maxservices files
+#           if ((( $counter > 0 ) && ( $counter%$installer::globals::unomaxservices == 0 )) || (( $counter > 0 ) && ( $i == $#{$pythoncomponents} )))   # limiting to $installer::globals::maxservices files
+            if ( $counter > 0 )
             {
                 $filestring =~ s/\;\s*$//;
                 $filestring = substr( $filestring, 0, length($filestring)-3);
