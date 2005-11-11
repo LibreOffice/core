@@ -4,9 +4,9 @@
  *
  *  $RCSfile: securityoptions.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:54:01 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:13:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,7 @@ using namespace ::com::sun::star::uno   ;
 #define CSTR_DOCWARN_RECOMMENDPASSWORD  "RecommendPasswordProtection"
 #define CSTR_MACRO_SECLEVEL             "MacroSecurityLevel"
 #define CSTR_MACRO_TRUSTEDAUTHORS       "TrustedAuthors"
+#define CSTR_MACRO_DISABLE              "DisableMacrosExecution"
 #define CSTR_TRUSTEDAUTHOR_SUBJECTNAME  "SubjectName"
 #define CSTR_TRUSTEDAUTHOR_SERIALNUMBER "SerialNumber"
 #define CSTR_TRUSTEDAUTHOR_RAWDATA      "RawData"
@@ -121,6 +122,7 @@ using namespace ::com::sun::star::uno   ;
 #define PROPERTYNAME_DOCWARN_RECOMMENDPASSWORD  OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_DOCWARN_RECOMMENDPASSWORD     ))
 #define PROPERTYNAME_MACRO_SECLEVEL             OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_MACRO_SECLEVEL                ))
 #define PROPERTYNAME_MACRO_TRUSTEDAUTHORS       OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_MACRO_TRUSTEDAUTHORS          ))
+#define PROPERTYNAME_MACRO_DISABLE              OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_MACRO_DISABLE                 ))
 #define PROPERTYNAME_TRUSTEDAUTHOR_SUBJECTNAME  OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_TRUSTEDAUTHOR_SUBJECTNAME))
 #define PROPERTYNAME_TRUSTEDAUTHOR_SERIALNUMBER OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_TRUSTEDAUTHOR_SERIALNUMBER))
 #define PROPERTYNAME_TRUSTEDAUTHOR_RAWDATA      OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_TRUSTEDAUTHOR_RAWDATA))
@@ -150,8 +152,9 @@ using namespace ::com::sun::star::uno   ;
 #define PROPERTYHANDLE_DOCWARN_RECOMMENDPASSWORD    10
 #define PROPERTYHANDLE_MACRO_SECLEVEL               11
 #define PROPERTYHANDLE_MACRO_TRUSTEDAUTHORS         12
+#define PROPERTYHANDLE_MACRO_DISABLE                13
 
-#define PROPERTYCOUNT                               13
+#define PROPERTYCOUNT                               14
 #define PROPERTYHANDLE_INVALID                      -1
 
 #define CFG_READONLY_DEFAULT                        sal_False
@@ -223,6 +226,8 @@ class SvtSecurityOptions_Impl : public ConfigItem
         inline sal_Int32        GetMacroSecurityLevel   (                                               ) const ;
         void                    SetMacroSecurityLevel   ( sal_Int32 _nLevel                             )       ;
 
+        inline sal_Bool         IsMacroDisabled         (                                               ) const ;
+
         Sequence< SvtSecurityOptions::Certificate > GetTrustedAuthors       (                                                                                       ) const ;
         void                                        SetTrustedAuthors       ( const Sequence< SvtSecurityOptions::Certificate >& rAuthors                           )       ;
         sal_Bool                                    IsTrustedAuthorsEnabled (                                                                                       )       ;
@@ -261,6 +266,7 @@ private:
         sal_Bool                                    m_bRecommendPwd;
         sal_Int32                                   m_nSecLevel;
         Sequence< SvtSecurityOptions::Certificate > m_seqTrustedAuthors;
+        sal_Bool                                    m_bDisableMacros;
 
         sal_Bool                                    m_bROSecureURLs;
         sal_Bool                                    m_bROSaveOrSend;
@@ -271,6 +277,7 @@ private:
         sal_Bool                                    m_bRORecommendPwd;
         sal_Bool                                    m_bROSecLevel;
         sal_Bool                                    m_bROTrustedAuthors;
+        sal_Bool                                    m_bRODisableMacros;
 
 
         // xmlsec05 depricated
@@ -311,6 +318,7 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
     ,m_bRemoveInfo          ( sal_True                  )
     ,m_nSecLevel            ( sal_True                  )
     ,m_seqTrustedAuthors    ( DEFAULT_TRUSTEDAUTHORS    )
+    ,m_bDisableMacros       ( sal_False                 )
     ,m_bROSecureURLs        ( CFG_READONLY_DEFAULT      )
     ,m_bROSaveOrSend        ( CFG_READONLY_DEFAULT      )
     ,m_bROSigning           ( CFG_READONLY_DEFAULT      )
@@ -319,6 +327,7 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
     ,m_bRORemoveInfo        ( CFG_READONLY_DEFAULT      )
     ,m_bROSecLevel          ( CFG_READONLY_DEFAULT      )
     ,m_bROTrustedAuthors    ( CFG_READONLY_DEFAULT      )
+    ,m_bRODisableMacros     ( sal_True                  ) // currently is not intended to be changed
 
     // xmlsec05 depricated
     ,   m_eBasicMode        ( DEFAULT_STAROFFICEBASIC )
@@ -426,8 +435,18 @@ void SvtSecurityOptions_Impl::SetProperty( sal_Int32 nProperty, const Any& rValu
         break;
 
         case PROPERTYHANDLE_MACRO_TRUSTEDAUTHORS:
-            // don't care here...
-            break;
+        {
+            // don't care about value here...
+            m_bROTrustedAuthors = bRO;
+        }
+        break;
+
+        case PROPERTYHANDLE_MACRO_DISABLE:
+        {
+            rValue >>= m_bDisableMacros;
+            m_bRODisableMacros = bRO;
+        }
+        break;
 
 
         // xmlsec05 depricated
@@ -531,6 +550,8 @@ sal_Int32 SvtSecurityOptions_Impl::GetHandle( const OUString& rName )
         nHandle = PROPERTYHANDLE_MACRO_SECLEVEL;
     else if( rName.compareToAscii( CSTR_MACRO_TRUSTEDAUTHORS ) == 0 )
         nHandle = PROPERTYHANDLE_MACRO_TRUSTEDAUTHORS;
+    else if( rName.compareToAscii( CSTR_MACRO_DISABLE ) == 0 )
+        nHandle = PROPERTYHANDLE_MACRO_DISABLE;
 
     // xmlsec05 depricated
     else if( rName == PROPERTYNAME_STAROFFICEBASIC )
@@ -729,6 +750,14 @@ void SvtSecurityOptions_Impl::Commit()
             }
             break;
 
+            case PROPERTYHANDLE_MACRO_DISABLE:
+            {
+                bDone = !m_bRODisableMacros;
+                if( bDone )
+                    lValues[ nRealCount ] <<= (sal_Bool)m_bDisableMacros;
+            }
+            break;
+
 
             // xmlsec05 depricated
             case PROPERTYHANDLE_STAROFFICEBASIC:
@@ -809,6 +838,9 @@ sal_Bool SvtSecurityOptions_Impl::IsReadOnly( SvtSecurityOptions::EOption eOptio
             break;
         case SvtSecurityOptions::E_MACRO_TRUSTEDAUTHORS:
             bReadonly = m_bROTrustedAuthors;
+            break;
+        case SvtSecurityOptions::E_MACRO_DISABLE:
+            bReadonly = m_bRODisableMacros;
             break;
 
 
@@ -902,6 +934,11 @@ sal_Bool SvtSecurityOptions_Impl::IsSecureURL(  const   OUString&   sURL    ,
 inline sal_Int32 SvtSecurityOptions_Impl::GetMacroSecurityLevel() const
 {
     return m_nSecLevel;
+}
+
+inline sal_Bool SvtSecurityOptions_Impl::IsMacroDisabled() const
+{
+    return m_bDisableMacros;
 }
 
 void SvtSecurityOptions_Impl::SetMacroSecurityLevel( sal_Int32 _nLevel )
@@ -1002,7 +1039,8 @@ Sequence< OUString > SvtSecurityOptions_Impl::GetPropertyNames()
         PROPERTYNAME_DOCWARN_REMOVEPERSONALINFO,
         PROPERTYNAME_DOCWARN_RECOMMENDPASSWORD,
         PROPERTYNAME_MACRO_SECLEVEL,
-        PROPERTYNAME_MACRO_TRUSTEDAUTHORS
+        PROPERTYNAME_MACRO_TRUSTEDAUTHORS,
+        PROPERTYNAME_MACRO_DISABLE
     };
     // Initialize return sequence with these list ...
     static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
@@ -1084,6 +1122,12 @@ void SvtSecurityOptions::SetMacroSecurityLevel( sal_Int32 _nLevel )
 {
     MutexGuard aGuard( GetInitMutex() );
     m_pDataContainer->SetMacroSecurityLevel( _nLevel );
+}
+
+sal_Bool SvtSecurityOptions::IsMacroDisabled() const
+{
+    MutexGuard aGuard( GetInitMutex() );
+    return m_pDataContainer->IsMacroDisabled();
 }
 
 Sequence< SvtSecurityOptions::Certificate > SvtSecurityOptions::GetTrustedAuthors() const
