@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 14:01:51 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:55:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,6 +204,7 @@
 class MenuBar;
 namespace framework
 {
+    class GlobalSettings;
     class LayoutManager : public  css::lang::XTypeProvider                        ,
                           public  css::lang::XServiceInfo                         ,
                           public  ::com::sun::star::frame::XLayoutManager         ,
@@ -563,6 +564,7 @@ namespace framework
                                                                                         m_bParentWindowVisible : 1;
             sal_Bool                                                                    m_bMustDoLayout : 1,
                                                                                         m_bAutomaticToolbars : 1;
+            sal_Bool                                                                    m_bGlobalSettings : 1;
             DockingOperation                                                            m_eDockOperation;
             UIElement                                                                   m_aDockUIElement;
             css::awt::Rectangle                                                         m_aDockingArea;
@@ -579,6 +581,7 @@ namespace framework
             css::uno::Reference< ::com::sun::star::frame::XStatusListener >             m_xMenuBarCloseListener;
             css::uno::Reference< ::com::sun::star::container::XNameAccess >             m_xPersistentWindowState;
             css::uno::Reference< ::com::sun::star::container::XNameAccess >             m_xPersistentWindowStateSupplier;
+            GlobalSettings*                                                             m_pGlobalSettings;
             rtl::OUString                                                               m_aModuleIdentifier;
             rtl::OUString                                                               m_aCustomTbxPrefix;
             rtl::OUString                                                               m_aFullCustomTbxPrefix;
@@ -594,6 +597,7 @@ namespace framework
             rtl::OUString                                                               m_aPropUIName;
             rtl::OUString                                                               m_aPropStyle;
             rtl::OUString                                                               m_aPropLocked;
+            rtl::OUString                                                               m_aCustomizeCmd;
             AddonsOptions*                                                              m_pAddonOptions;
             SvtMiscOptions*                                                             m_pMiscOptions;
             sal_Int16                                                                   m_eSymbolSet;
