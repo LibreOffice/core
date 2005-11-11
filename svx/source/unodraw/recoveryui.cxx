@@ -4,9 +4,9 @@
  *
  *  $RCSfile: recoveryui.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:02:32 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:51:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,10 @@
 
 #ifndef _RTL_BOOTSTRAP_HXX_
 #include <rtl/bootstrap.hxx>
+#endif
+
+#ifndef _COMPHELPER_CONFIGURATIONHELPER_HXX_
+#include <comphelper/configurationhelper.hxx>
 #endif
 
 //===============================================
@@ -309,6 +313,22 @@ sal_Bool RecoveryUI::impl_doEmergencySave()
 //===============================================
 void RecoveryUI::impl_doRecovery()
 {
+    sal_Bool bRecoveryOnly( sal_False );
+
+    ::rtl::OUString CFG_PACKAGE_RECOVERY( RTL_CONSTASCII_USTRINGPARAM  ( "org.openoffice.Office.Recovery/" ));
+    ::rtl::OUString CFG_PATH_CRASHREPORTER( RTL_CONSTASCII_USTRINGPARAM( "CrashReporter"                 ));
+    ::rtl::OUString CFG_ENTRY_ENABLED( RTL_CONSTASCII_USTRINGPARAM     ( "Enabled"                       ));
+
+    sal_Bool bCrashRepEnabled( sal_True );
+    css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
+                                m_xSMGR,
+                                CFG_PACKAGE_RECOVERY,
+                                CFG_PATH_CRASHREPORTER,
+                                CFG_ENTRY_ENABLED,
+                                ::comphelper::ConfigurationHelper::E_READONLY);
+    aVal >>= bCrashRepEnabled;
+    bRecoveryOnly = !bCrashRepEnabled;
+
     // create core service, which implements the real "emergency save" algorithm.
     svxdr::RecoveryCore* pCore = new svxdr::RecoveryCore(m_xSMGR, sal_False);
     css::uno::Reference< css::frame::XStatusListener > xCore(pCore);
@@ -317,11 +337,17 @@ void RecoveryUI::impl_doRecovery()
     // and bind it to the used core service
     svxdr::TabDialog4Recovery* pWizard = new svxdr::TabDialog4Recovery   (m_pParentWindow);
     svxdr::IExtendedTabPage*   pPage1  = new svxdr::RecoveryDialog       (pWizard, pCore );
-    svxdr::IExtendedTabPage*   pPage2  = new svxdr::ErrorRepWelcomeDialog(pWizard        );
-    svxdr::IExtendedTabPage*   pPage3  = new svxdr::ErrorRepSendDialog   (pWizard        );
+    svxdr::IExtendedTabPage*   pPage2  = 0;
+    svxdr::IExtendedTabPage*   pPage3  = 0;
+
     pWizard->addTabPage(pPage1);
-    pWizard->addTabPage(pPage2);
-    pWizard->addTabPage(pPage3);
+    if ( !bRecoveryOnly )
+    {
+        pPage2 = new svxdr::ErrorRepWelcomeDialog(pWizard        );
+        pPage3 = new svxdr::ErrorRepSendDialog   (pWizard        );
+        pWizard->addTabPage(pPage2);
+        pWizard->addTabPage(pPage3);
+    }
 
     // start the wizard
     short nRet = pWizard->Execute();
