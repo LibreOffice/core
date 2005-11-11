@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:06:14 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:03:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -915,6 +915,11 @@ ULONG GalleryBrowser2::ImplGetSelectedItemId( const Point* pSelPos, Point& rSelP
 
     rSelPos.X() = Max( Min( rSelPos.X(), aOutputSizePixel.Width() - 1L ), 0L );
     rSelPos.Y() = Max( Min( rSelPos.Y(), aOutputSizePixel.Height() - 1L ), 0L );
+
+    if( nRet && ( !mpCurTheme || ( nRet > mpCurTheme->GetObjectCount() ) ) )
+    {
+        nRet = 0;
+    }
 
     return nRet;
 }
