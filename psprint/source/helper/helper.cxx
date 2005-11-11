@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:43:20 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:45:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@ const OUString& getOfficePath( enum whichOfficePath ePath )
 {
     static OUString aNetPath;
     static OUString aUserPath;
+    static OUString aConfigPath;
     static OUString aEmpty;
     static bool bOnce = false;
 
@@ -74,9 +75,16 @@ const OUString& getOfficePath( enum whichOfficePath ePath )
         aIni = aIni.copy( 0, aIni.lastIndexOf( '/' )+1 );
         aIni += OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_CONFIGFILE( "bootstrap" ) ) );
         Bootstrap aBootstrap( aIni );
+        aBootstrap.getFrom( OUString( RTL_CONSTASCII_USTRINGPARAM( "CustomDataUrl" ) ), aConfigPath );
         aBootstrap.getFrom( OUString( RTL_CONSTASCII_USTRINGPARAM( "BaseInstallation" ) ), aNetPath );
         aBootstrap.getFrom( OUString( RTL_CONSTASCII_USTRINGPARAM( "UserInstallation" ) ), aUserPath );
 
+        if( ! aConfigPath.compareToAscii( "file://", 7 ) )
+        {
+            OUString aSysPath;
+            if( osl_getSystemPathFromFileURL( aConfigPath.pData, &aSysPath.pData ) == osl_File_E_None )
+                aConfigPath = aSysPath;
+        }
         if( ! aNetPath.compareToAscii( "file://", 7 ) )
         {
             OUString aSysPath;
@@ -93,6 +101,7 @@ const OUString& getOfficePath( enum whichOfficePath ePath )
 
     switch( ePath )
     {
+        case ConfigPath: return aConfigPath;
         case NetPath: return aNetPath;
         case UserPath: return aUserPath;
     }
@@ -203,19 +212,35 @@ const OUString& psp::getFontPath()
 
     if( ! aPath.getLength() )
     {
+        OUString aConfigPath = getOfficePath( psp::ConfigPath );
         OUString aNetPath = getOfficePath( psp::NetPath );
         OUString aUserPath = getOfficePath( psp::UserPath );
-        if( aNetPath.getLength() )
+        if( aConfigPath.getLength() )
         {
-            aPath  = aNetPath;
-            aPath += OUString( RTL_CONSTASCII_USTRINGPARAM("/share/fonts/truetype;") );
-            aPath += aNetPath;
-            aPath += OUString( RTL_CONSTASCII_USTRINGPARAM("/share/fonts/type1;") );
+            // #i53530# Path from CustomDataUrl will completely
+            // replace net and user paths if the path exists
+            aPath  = aConfigPath;
+            aPath += OUString( RTL_CONSTASCII_USTRINGPARAM("/share/fonts") );
+            // check existance of config path
+            struct stat aStat;
+            if( 0 != stat( OUStringToOString( aPath, osl_getThreadTextEncoding() ).getStr(), &aStat )
+                || ! S_ISDIR( aStat.st_mode ) )
+                aConfigPath = OUString();
         }
-        if( aUserPath.getLength() )
+        if( aConfigPath.getLength() == 0 )
         {
-            aPath += aUserPath;
-            aPath += OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/fonts" ) );
+            if( aNetPath.getLength() )
+            {
+                aPath  = aNetPath;
+                aPath += OUString( RTL_CONSTASCII_USTRINGPARAM("/share/fonts/truetype;") );
+                aPath += aNetPath;
+                aPath += OUString( RTL_CONSTASCII_USTRINGPARAM("/share/fonts/type1;") );
+            }
+            if( aUserPath.getLength() )
+            {
+                aPath += aUserPath;
+                aPath += OUString( RTL_CONSTASCII_USTRINGPARAM( "/user/fonts" ) );
+            }
         }
         aPath += ::psp::getEnvironmentPath( "SAL_FONTPATH_PRIVATE", (sal_Unicode)';' );
 
