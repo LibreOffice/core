@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyprlink.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:18:35 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:49:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,9 @@
 #endif
 #ifndef _UTL_CONFIGITEM_HXX_
 #include <unotools/configitem.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_CMDOPTIONS_HXX
+#include <svtools/cmdoptions.hxx>
 #endif
 #ifndef _INETIMG_HXX
 #include <svtools/inetimg.hxx>
@@ -215,6 +218,14 @@ SvxHyperlinkDlg::SvxHyperlinkDlg( SfxBindings *pBindings, Window* pParent) :
     // drop down lists.
     aNameCB.SetAccessibleName (aNameCB.GetQuickHelpText());
     aUrlCB.SetAccessibleName (aUrlCB.GetQuickHelpText());
+
+    // Hide button according to config item.
+    SvtCommandOptions aCmdOpts;
+    if ( aCmdOpts.Lookup( SvtCommandOptions::CMDOPTION_DISABLED,
+                          rtl::OUString(
+                              RTL_CONSTASCII_USTRINGPARAM(
+                                  "InternetSearch" ) ) ) )
+        HideItem( BTN_INET_SEARCH );
 }
 
 /*--------------------------------------------------------------------
