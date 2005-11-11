@@ -485,10 +485,21 @@ Sub SetupXMLConfiguration()
 	XMLFilterName(1,2) = &quot;ods|ods&quot;
 	XMLFilterName(1,3) = sDocumentCheckBox(1)
 
-	XMLFilterName(2,0) = &quot;sdd|sda|sxi|sxd&quot;
-	XMLFilterName(2,1) = &quot;impress8|draw8|impress8|draw8&quot;
-	XMLFilterName(2,2) = &quot;odp|odg|odp|odg&quot;
+	If oFactoryKey.HasByName(&quot;com.sun.star.drawing.DrawingDocument&quot;) and oFactoryKey.HasByName(&quot;com.sun.star.presentation.PresentationDocument&quot;) Then
+		XMLFilterName(2,0) = &quot;sdd|sda|sxi|sxd&quot;
+		XMLFilterName(2,1) = &quot;impress8|draw8|impress8|draw8&quot;
+		XMLFilterName(2,2) = &quot;odp|odg|odp|odg&quot;
+	Elseif oFactoryKey.HasByName(&quot;com.sun.star.drawing.DrawingDocument&quot;) Then
+		XMLFilterName(2,0) = &quot;sda|sxd&quot;
+		XMLFilterName(2,1) = &quot;draw8|draw8&quot;
+		XMLFilterName(2,2) = &quot;odg|odg&quot;
+	Elseif oFactoryKey.HasByName(&quot;com.sun.star.presentation.PresentationDocument&quot;) Then
+		XMLFilterName(2,0) = &quot;sdd|sxi&quot;
+		XMLFilterName(2,1) = &quot;impress8|impress8&quot;
+		XMLFilterName(2,2) = &quot;odp|odp&quot;
+	End If
 	XMLFilterName(2,3) = sDocumentCheckBox(2)
+
 	
 	XMLFilterName(3,0) = &quot;smf|sxm&quot;
 	XMLFilterName(3,1) = &quot;math8|math8&quot;
@@ -508,15 +519,27 @@ Sub SetupXMLConfiguration()
 
 	&apos; due to bug #108942# impress templates of the version 4.0 have to be handled in a special way because their mimetype 
 	&apos; falsely points to the draw application.
-	XMLFilterName(6,0) = &quot;application/x-openoffice-starimpress|application/x-openoffice-stardraw-40|application/x-openoffice-stardraw|application/vnd.sun.xml.impress|application/vnd.sun.xml.draw&quot;
-	XMLFilterName(6,1) = &quot;impress8_template|impress8_template|draw8_template|impress8_template|draw8_template&quot;
-	XMLFilterName(6,2) = &quot;otp|otp|otg|otp|otg&quot;
+	If oFactoryKey.HasByName(&quot;com.sun.star.drawing.DrawingDocument&quot;) and  oFactoryKey.HasByName(&quot;com.sun.star.presentation.PresentationDocument&quot;) Then
+		XMLFilterName(6,0) = &quot;application/x-openoffice-starimpress|application/x-openoffice-stardraw-40|application/x-openoffice-stardraw|application/vnd.sun.xml.impress|application/vnd.sun.xml.draw&quot;
+		XMLFilterName(6,1) = &quot;impress8_template|impress8_template|draw8_template|impress8_template|draw8_template&quot;
+		XMLFilterName(6,2) = &quot;otp|otp|otg|otp|otg&quot;
+	Elseif oFactoryKey.HasByName(&quot;com.sun.star.drawing.DrawingDocument&quot;) Then
+		XMLFilterName(6,0) = &quot;application/x-openoffice-stardraw|application/vnd.sun.xml.draw&quot;
+		XMLFilterName(6,1) = &quot;draw8_template|draw8_template&quot;
+		XMLFilterName(6,2) = &quot;otg|otg&quot;
+	Elseif oFactoryKey.HasByName(&quot;com.sun.star.presentation.PresentationDocument&quot;) Then
+		XMLFilterName(6,0) = &quot;application/x-openoffice-starimpress|application/x-openoffice-stardraw-40|application/vnd.sun.xml.impress&quot;
+		XMLFilterName(6,1) = &quot;impress8_template|impress8_template|impress8_template&quot;
+		XMLFilterName(6,2) = &quot;otp|otp|otp&quot;
+	End If	
 	XMLFilterName(6,3) = sTemplateCheckBox(2)
 	
-	XMLFilterName(7,0) = &quot;sgl|sxg&quot;
-	XMLFilterName(7,1) = &quot;writerglobal8|writerglobal8&quot;
-	XMLFilterName(7,2) = &quot;odm|odm&quot;
-	XMLFilterName(7,3) = sTemplateCheckBox(3)
+	If oFactoryKey.HasByName(&quot;com.sun.star.text.GlobalDocument&quot;) Then
+		XMLFilterName(7,0) = &quot;sgl|sxg&quot;
+		XMLFilterName(7,1) = &quot;writerglobal8|writerglobal8&quot;
+		XMLFilterName(7,2) = &quot;odm|odm&quot;
+		XMLFilterName(7,3) = sTemplateCheckBox(3)
+	End If
 End Sub
 
 
