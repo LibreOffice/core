@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docrecovery.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 09:01:45 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:48:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,9 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#ifndef _COMPHELPER_CONFIGURATIONHELPER_HXX_
+#include <comphelper/configurationhelper.hxx>
+#endif
 #include <svtools/imagemgr.hxx>
 #ifndef _XTEXTEDT_HXX
 #include <svtools/xtextedt.hxx>
@@ -1062,32 +1065,49 @@ short impl_askUserForWizardCancel(Window* pParent, sal_Int16 nRes)
 RecoveryDialog::RecoveryDialog(Window*       pParent,
                                RecoveryCore* pCore  )
     : IExtendedTabPage( pParent      , SVX_RES( RID_SVXPAGE_DOCRECOVERY_RECOVER ) )
-    , m_aTitleWin   ( this           , ResId  ( WIN_RECOV_TITLE                ) )
-    , m_aTitleFT    ( this           , ResId  ( FT_RECOV_TITLE                 ) )
-    , m_aTitleFL    ( this           , ResId  ( FL_RECOV_TITLE                 ) )
-    , m_aDescrFT    ( this           , ResId  ( FT_RECOV_DESCR                 ) )
-    , m_aProgressFT ( this           , ResId  ( FT_RECOV_PROGR                 ) )
-    , m_aProgrParent( this           , ResId  ( WIN_RECOV_PROGR                ) )
-    , m_aFileListFT ( this           , ResId  ( FT_RECOV_FILELIST              ) )
-    , m_aFileListLB ( this           , ResId  ( LB_RECOV_FILELIST              ) )
-    , m_aBottomFL   ( this           , ResId  ( FL_RECOV_BOTTOM                ) )
-    , m_aNextBtn    ( this           , ResId  ( BTN_RECOV_NEXT                 ) )
-    , m_aCancelBtn  ( this           , ResId  ( BTN_RECOV_CANCEL               ) )
-    , m_aNextStr    (                  ResId  ( STR_RECOVERY_NEXT              ) )
-    , m_aTitleRecoveryInProgress(      ResId  ( STR_RECOVERY_INPROGRESS        ) )
-    , m_pCore       ( pCore                                                      )
-    , m_pDefButton  ( NULL                                                       )
+    , m_aTitleWin           ( this           , ResId  ( WIN_RECOV_TITLE                ) )
+    , m_aTitleFT            ( this           , ResId  ( FT_RECOV_TITLE                 ) )
+    , m_aTitleFL            ( this           , ResId  ( FL_RECOV_TITLE                 ) )
+    , m_aDescrFT            ( this           , ResId  ( FT_RECOV_DESCR                 ) )
+    , m_aProgressFT         ( this           , ResId  ( FT_RECOV_PROGR                 ) )
+    , m_aProgrParent        ( this           , ResId  ( WIN_RECOV_PROGR                ) )
+    , m_aFileListFT         ( this           , ResId  ( FT_RECOV_FILELIST              ) )
+    , m_aFileListLB         ( this           , ResId  ( LB_RECOV_FILELIST              ) )
+    , m_aBottomFL           ( this           , ResId  ( FL_RECOV_BOTTOM                ) )
+    , m_aNextBtn            ( this           , ResId  ( BTN_RECOV_NEXT                 ) )
+    , m_aCancelBtn          ( this           , ResId  ( BTN_RECOV_CANCEL               ) )
+    , m_aNextStr            (                  ResId  ( STR_RECOVERY_NEXT              ) )
+    , m_aTitleRecoveryInProgress(              ResId  ( STR_RECOVERY_INPROGRESS        ) )
+    , m_aRecoveryOnlyDescr  (                  ResId  ( STR_RECOVERYONLY_DESCR         ) )
+    , m_aRecoveryOnlyFinish (                  ResId  ( STR_RECOVERYONLY_FINISH        ) )
+    , m_pCore               ( pCore                                                      )
+    , m_pDefButton          ( NULL                                                       )
     , m_eRecoveryState      (RecoveryDialog::E_RECOVERY_PREPARED)
     , m_bWaitForUser        (sal_False)
     , m_bUserDecideNext     (sal_False)
     , m_bWaitForCore        (sal_False)
     , m_bWasRecoveryStarted (sal_False)
+    , m_bRecoveryOnly       (sal_False)
 {
     static long nTabs[] = { 2, 0, 40*RECOV_CONTROLWIDTH/100 };
     m_aFileListLB.SetTabs( &nTabs[0] );
     m_aFileListLB.InsertHeaderEntry( String( ResId( STR_HEADERBAR ) ) );
 
     FreeResource();
+
+    ::rtl::OUString CFG_PACKAGE_RECOVERY( RTL_CONSTASCII_USTRINGPARAM  ( "org.openoffice.Office.Recovery/" ));
+    ::rtl::OUString CFG_PATH_CRASHREPORTER( RTL_CONSTASCII_USTRINGPARAM( "CrashReporter"                 ));
+    ::rtl::OUString CFG_ENTRY_ENABLED( RTL_CONSTASCII_USTRINGPARAM     ( "Enabled"                       ));
+
+    sal_Bool bCrashRepEnabled( sal_True );
+    css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
+                                pCore->getSMGR(),
+                                CFG_PACKAGE_RECOVERY,
+                                CFG_PATH_CRASHREPORTER,
+                                CFG_ENTRY_ENABLED,
+                                ::comphelper::ConfigurationHelper::E_READONLY);
+    aVal >>= bCrashRepEnabled;
+    m_bRecoveryOnly = !bCrashRepEnabled;
 
     PluginProgress* pProgress   = new PluginProgress( &m_aProgrParent, pCore->getSMGR() );
                     m_xProgress = css::uno::Reference< css::task::XStatusIndicator >(static_cast< css::task::XStatusIndicator* >(pProgress), css::uno::UNO_QUERY_THROW);
@@ -1106,6 +1126,9 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
     m_aNextBtn.Enable(TRUE);
     m_aNextBtn.SetClickHdl( LINK( this, RecoveryDialog, NextButtonHdl ) );
     m_aCancelBtn.SetClickHdl( LINK( this, RecoveryDialog, CancelButtonHdl ) );
+
+    if ( m_bRecoveryOnly )
+        m_aDescrFT.SetText( m_aRecoveryOnlyDescr );
 
     // fill list box first time
     TURLList*                pURLList = m_pCore->getURLListAccess();
@@ -1185,9 +1208,18 @@ short RecoveryDialog::execute()
              {
                  // the core finished it's task.
                  // let the user decide the next step.
-                 m_aNextBtn.SetText(m_aNextStr);
-                 m_aNextBtn.Enable(TRUE);
-                 m_aCancelBtn.Enable(TRUE);
+                 if ( m_bRecoveryOnly )
+                 {
+                     m_aNextBtn.SetText(m_aRecoveryOnlyFinish);
+                     m_aNextBtn.Enable(TRUE);
+                     m_aCancelBtn.Enable(FALSE);
+                 }
+                 else
+                 {
+                    m_aNextBtn.SetText(m_aNextStr);
+                    m_aNextBtn.Enable(TRUE);
+                    m_aCancelBtn.Enable(TRUE);
+                 }
 
                  m_bWaitForUser = sal_True;
                  while(m_bWaitForUser)
