@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 08:23:00 $
+ *  last change: $Author: kz $ $Date: 2005-11-11 18:47:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -575,6 +575,8 @@ SwCalcExp* SwCalc::VarInsert( const String &rStr )
 |******************************************************************************/
 SwCalcExp* SwCalc::VarLook( const String& rStr, USHORT ins )
 {
+    aErrExpr.nValue.SetVoidValue(false);
+
     USHORT ii = 0;
     String aStr( rStr );
     pCharClass->toLower( aStr );
@@ -689,7 +691,7 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, USHORT ins )
         else
         {
             //data source was not available - set return to "NoValue"
-            aErrExpr.nValue.SetVoidValue();
+            aErrExpr.nValue.SetVoidValue(true);
         }
         // auf keinen fall eintragen!!
         return &aErrExpr;
@@ -714,7 +716,7 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, USHORT ins )
             !pMgr->IsInMerge())
             pNewExp->nValue.PutULong( pMgr->GetSelectedRecordId(sSourceName, sTableName));
         else
-            pNewExp->nValue.SetVoidValue();
+            pNewExp->nValue.SetVoidValue(true);
     }
 
     return pNewExp;
