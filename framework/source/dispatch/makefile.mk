@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 01:20:51 $
+#   last change: $Author: kz $ $Date: 2005-11-11 14:13:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,8 @@ SLOFILES=			$(SLO)$/interceptionhelper.obj				\
                     $(SLO)$/soundhandler.obj					\
                     $(SLO)$/interaction.obj						\
                     $(SLO)$/servicehandler.obj                  \
-                    $(SLO)$/closedispatcher.obj
+                    $(SLO)$/closedispatcher.obj                 \
+                    $(SLO)$/systemexec.obj
 
 #                    $(SLO)$/basedispatcher.obj                  \
 #                    $(SLO)$/blankdispatcher.obj                 \
