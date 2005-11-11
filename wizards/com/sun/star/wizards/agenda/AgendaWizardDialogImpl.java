@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AgendaWizardDialogImpl.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 16:13:31 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 13:06:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -31,7 +31,9 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *    MA  02111-1307  USA
  *
- ************************************************************************/package com.sun.star.wizards.agenda;
+ ************************************************************************/
+
+package com.sun.star.wizards.agenda;
 
 import java.util.Vector;
 
@@ -44,7 +46,9 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XStorable;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.task.XInteractionHandler;
 import com.sun.star.text.XTextDocument;
+//import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.CloseVetoException;
 import com.sun.star.util.XCloseable;
@@ -454,6 +458,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
     public void cancelWizard() {
         xWindow.setVisible(false);
         closeDocument();
+        removeTerminateListener();
         running = false;
     }
 
@@ -516,8 +521,9 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
             running = false;
             closeDocument();
             agendaTemplate.xTextDocument.unlockControllers();
+            removeTerminateListener();
 
-            PropertyValue loadValues[] = new PropertyValue[1];
+            PropertyValue loadValues[] = new PropertyValue[2];
             loadValues[0] = new PropertyValue();
             loadValues[0].Name = "AsTemplate";
             if (agenda.cp_ProceedMethod == 1) {
@@ -525,7 +531,16 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
             } else {
                 loadValues[0].Value = Boolean.FALSE;
             }
-            Object oDoc = OfficeDocument.load(Desktop.getDesktop(xMSF), sPath, "_default", new PropertyValue[0]);
+            loadValues[1] = new PropertyValue();
+            loadValues[1].Name = "InteractionHandler";
+            try {
+                XInteractionHandler xIH = (XInteractionHandler) UnoRuntime.queryInterface(XInteractionHandler.class, xMSF.createInstance("com.sun.star.comp.uui.UUIInteractionHandler"));
+                loadValues[1].Value = xIH;
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            Object oDoc = OfficeDocument.load(Desktop.getDesktop(xMSF), agenda.cp_TemplatePath, "_default", new PropertyValue[0]);
             xTextDocument = (com.sun.star.text.XTextDocument) oDoc;
             XMultiServiceFactory xDocMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
             ViewHandler myViewHandler = new ViewHandler(xDocMSF, xTextDocument);
