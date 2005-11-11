@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.54 $
+#   $Revision: 1.55 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-10 16:17:17 $
+#   last change: $Author: kz $ $Date: 2005-11-11 14:16:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1715,16 +1715,19 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "ExecuteQuickstart", "82", "install_quickstart.exe", "", 0, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
             # if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "install_quickstart.exe", "ExecuteQuickstart", "\&FEATURETEMPLATE=3 And Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
 
-            # adding the custom action for the reg4msdoc in uisequence table into the product (CustomAc.idt and InstallU.idt)
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Regmsdocmsidll1", "65", "reg4msdocmsi.dll", "InstallUiSequenceEntry", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction )
+            if ( ! ( $installer::globals::product =~ /c05office/i ))
             {
-                # conneting the custom action to a control in the controlevent table
-                installer::windows::idtglobal::connect_custom_action_to_control($controleventtable, $controleventtablename, "SetupType", "Next", "DoAction", "Regmsdocmsidll1", "_IsSetupTypeMin = \"Typical\"", "1");
-                installer::windows::idtglobal::connect_custom_action_to_control($controleventtable, $controleventtablename, "CustomSetup", "Next", "DoAction", "Regmsdocmsidll1", "1", "1");
-                installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "FileTypeDialog", "CheckBox1", "Disable", "(\!gm_p_Wrt_Bin=2 And \&gm_p_Wrt_Bin=-1) Or (\!gm_p_Wrt_Bin=3 And \&gm_p_Wrt_Bin=2)");
-                installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "FileTypeDialog", "CheckBox2", "Disable", "(\!gm_p_Calc_Bin=2 And \&gm_p_Calc_Bin=-1) Or (\!gm_p_Calc_Bin=3 And \&gm_p_Calc_Bin=2)");
-                installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "FileTypeDialog", "CheckBox3", "Disable", "(\!gm_p_Impress_Bin=2 And \&gm_p_Impress_Bin=-1) Or (\!gm_p_Impress_Bin=3 And \&gm_p_Impress_Bin=2)");
+                # adding the custom action for the reg4msdoc in uisequence table into the product (CustomAc.idt and InstallU.idt)
+                $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Regmsdocmsidll1", "65", "reg4msdocmsi.dll", "InstallUiSequenceEntry", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
+                if ( $added_customaction )
+                {
+                    # conneting the custom action to a control in the controlevent table
+                    installer::windows::idtglobal::connect_custom_action_to_control($controleventtable, $controleventtablename, "SetupType", "Next", "DoAction", "Regmsdocmsidll1", "_IsSetupTypeMin = \"Typical\"", "1");
+                    installer::windows::idtglobal::connect_custom_action_to_control($controleventtable, $controleventtablename, "CustomSetup", "Next", "DoAction", "Regmsdocmsidll1", "1", "1");
+                    installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "FileTypeDialog", "CheckBox1", "Disable", "(\!gm_p_Wrt_Bin=2 And \&gm_p_Wrt_Bin=-1) Or (\!gm_p_Wrt_Bin=3 And \&gm_p_Wrt_Bin=2)");
+                    installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "FileTypeDialog", "CheckBox2", "Disable", "(\!gm_p_Calc_Bin=2 And \&gm_p_Calc_Bin=-1) Or (\!gm_p_Calc_Bin=3 And \&gm_p_Calc_Bin=2)");
+                    installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "FileTypeDialog", "CheckBox3", "Disable", "(\!gm_p_Impress_Bin=2 And \&gm_p_Impress_Bin=-1) Or (\!gm_p_Impress_Bin=3 And \&gm_p_Impress_Bin=2)");
+                }
             }
 
             # adding the custom action for the reg4msdoc in executesequence table into the product (CustomAc.idt and InstallE.idt)
