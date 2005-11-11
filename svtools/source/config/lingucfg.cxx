@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lingucfg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:42:19 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:51:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,8 @@
 #ifndef _SVTOOLS_LINGUPROPS_HXX_
 #include <linguprops.hxx>
 #endif
+
+#include <itemholder1.hxx>
 
 using namespace rtl;
 using namespace com::sun::star::uno;
@@ -910,7 +912,10 @@ SvtLinguConfigItem & SvtLinguConfig::GetConfigItem()
     // Global access, must be guarded (multithreading)
     osl::MutexGuard aGuard( GetOwnMutex() );
     if (!pCfgItem)
+    {
         pCfgItem = new SvtLinguConfigItem;
+        ItemHolder1::holdConfigItem(E_LINGUCFG);
+    }
     ++nCfgItemRefCount;
     return *pCfgItem;
 }
