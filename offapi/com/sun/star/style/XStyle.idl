@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XStyle.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:33:56 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 13:23:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,21 +50,18 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::style::XStyle
 /** specifies a template for a style (aka style sheet).
  */
 published interface XStyle: com::sun::star::container::XNamed
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::style::XStyle::isUserDefined
     /** identifies a style as defined by the user.
      */
     boolean isUserDefined();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::style::XStyle::isInUse
     /** @returns
                     <TRUE/> if this type is used in the document.
      */
@@ -72,7 +69,6 @@ published interface XStyle: com::sun::star::container::XNamed
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: method com::sun::star::style::XStyle::getParentStyle
     /** @returns
                     the name of the parent style, probably empty.
      */
@@ -80,7 +76,6 @@ published interface XStyle: com::sun::star::container::XNamed
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::style::XStyle::setParentStyle
     /** sets the name of the parent style.
      */
     void setParentStyle( [in] string aParentStyle )
