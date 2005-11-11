@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Style.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:32:19 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 13:23:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,9 @@
 #ifndef __com_sun_star_beans_XMultiPropertyStates_idl__
 #include <com/sun/star/beans/XMultiPropertyStates.idl>
 #endif
+#ifndef __com_sun_star_beans_NamedValue_idl__
+#include <com/sun/star/beans/NamedValue.idl>
+#endif
 
 
 //=============================================================================
@@ -56,12 +59,10 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::style::Style
 /** This service specifies a single style sheet.
  */
 published service Style
 {
-    // DocMerge: empty anyway
     interface com::sun::star::style::XStyle;
 
         interface com::sun::star::beans::XPropertySet;
@@ -73,7 +74,6 @@ published service Style
     [optional] interface com::sun::star::beans::XMultiPropertyStates;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::Style::IsPhysical
     /** determines if a style is physically created.
 
         <p> Built in styles may not be created until they are needed.
@@ -84,7 +84,6 @@ published service Style
     [optional, readonly, property] boolean IsPhysical;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::Style::FollowStyle
     /** contains the name of the style that is applied to the next paragraph.
 
         <p> This property is usually available at paragraph styles only. </p>
@@ -92,7 +91,6 @@ published service Style
     [optional, property] boolean FollowStyle;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::Style::DisplayName
     /** contains the name of the style as it is displayed in the user interface.
 
         <p> The names of the styles at the API are language independent. The user interface
@@ -101,7 +99,6 @@ published service Style
     [optional, readonly, property] string DisplayName;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::Style::IsAutoUpdate
     /** determines if a style is automatically updated, if the properties of an object
         that the style is applied to are changed.
 
@@ -109,6 +106,59 @@ published service Style
         are changed then the style will be updated accordingly.</p>
      */
     [optional, property] string IsAutoUpdate;
+    //-------------------------------------------------------------------------
+
+    /** defines the context and styles for conditional paragraphs.
+
+        <p>This property is only available if the style is a conditional
+        paragraph style.</p>
+
+        <p>The sequence consists of pairs where the name part of the pair
+        defines the context where it should be applied and the value part
+        is a string naming the style to be used in that context.</p>
+
+        <p>Assigning an empty string to the style name will disable
+        the conditional style for that context.</p>
+
+        <p>The alowed strings (contexts) for the name part of an entry
+        of the sequence are:</p>
+
+        <ul>
+            <li>TableHeader</li>
+            <li>Table</li>
+            <li>Frame</li>
+            <li>Section</li>
+            <li>Footnote</li>
+            <li>Endnote</li>
+            <li>Header</li>
+            <li>Footer</li>
+            <li>OutlineLevel1</li>
+            <li>OutlineLevel2</li>
+            <li>OutlineLevel3</li>
+            <li>OutlineLevel4</li>
+            <li>OutlineLevel5</li>
+            <li>OutlineLevel6</li>
+            <li>OutlineLevel7</li>
+            <li>OutlineLevel8</li>
+            <li>OutlineLevel9</li>
+            <li>OutlineLevel10</li>
+            <li>NumberingLevel1</li>
+            <li>NumberingLevel2</li>
+            <li>NumberingLevel3</li>
+            <li>NumberingLevel4</li>
+            <li>NumberingLevel5</li>
+            <li>NumberingLevel6</li>
+            <li>NumberingLevel7</li>
+            <li>NumberingLevel8</li>
+            <li>NumberingLevel9</li>
+            <li>NumberingLevel10</li>
+        </ul>
+
+
+        @since  OOo 2.0.1.
+     */
+    [optional, property] sequence< com::sun::star::beans::NamedValue > ParaStyleConditions;
+
 };
 
 //=============================================================================
