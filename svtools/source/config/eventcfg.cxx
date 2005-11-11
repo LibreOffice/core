@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventcfg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:37:28 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:48:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,8 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
+
+#include <itemholder1.hxx>
 
 #include <algorithm>
 
@@ -341,6 +343,7 @@ GlobalEventConfig::GlobalEventConfig()
     if( m_pImpl == NULL )
     {
         m_pImpl = new GlobalEventConfig_Impl;
+        ItemHolder1::holdConfigItem(E_EVENTCFG);
     }
 }
 
