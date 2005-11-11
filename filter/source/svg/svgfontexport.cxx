@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svgfontexport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:55:45 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 10:58:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,6 +205,8 @@ void SVGFontExport::implEmbedGlyph( OutputDevice& rOut, const ::rtl::OUString& r
     {
         Rectangle aBoundRect;
 
+        aPolyPoly.Scale( 1.0, -1.0 );
+
         if( !rOut.GetTextBoundRect( aBoundRect, aStr ) )
             aBoundRect = Rectangle( Point( 0, 0 ), Size( rOut.GetTextWidth( aStr ), 0 ) );
 
@@ -216,13 +218,16 @@ void SVGFontExport::implEmbedGlyph( OutputDevice& rOut, const ::rtl::OUString& r
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "horiz-adv-x", SVGActionWriter::GetValueString( aBoundRect.GetWidth() ) );
 
         {
-            SvXMLElementExport  aExp( mrExport, XML_NAMESPACE_NONE, "glyph", TRUE, TRUE );
+            SvXMLElementExport    aExp( mrExport, XML_NAMESPACE_NONE, "glyph", TRUE, TRUE );
+            const ::rtl::OUString aPathString( SVGActionWriter::GetPathString( aPolyPoly, sal_False ) );
 
-            aPolyPoly.Scale( 1.0, -1.0 );
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, "d", SVGActionWriter::GetPathString( aPolyPoly, sal_False ) );
-
+            if( aPathString.getLength() )
             {
-                SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, B2UCONST( "path" ), TRUE, TRUE );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, "d", aPathString );
+
+                {
+                    SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, B2UCONST( "path" ), TRUE, TRUE );
+                }
             }
         }
     }
