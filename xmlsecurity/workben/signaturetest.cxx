@@ -4,9 +4,9 @@
  *
  *  $RCSfile: signaturetest.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:47:08 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 09:21:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -395,11 +395,11 @@ IMPL_LINK( MyWin, VerifyDigitalSignaturesHdl, Button*, EMPTYARG )
         comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ), uno::UNO_QUERY );
     if ( xD.is() )
     {
-        uno::Sequence< security::DocumentSignaturesInformation > aInfos = xD->verifyDocumentContentSignatures( xStore, NULL );
+        uno::Sequence< security::DocumentSignatureInformation > aInfos = xD->verifyDocumentContentSignatures( xStore, NULL );
         int nInfos = aInfos.getLength();
         for ( int n = 0; n < nInfos; n++ )
         {
-            security::DocumentSignaturesInformation& rInf = aInfos[n];
+            security::DocumentSignatureInformation& rInf = aInfos[n];
             String aText( RTL_CONSTASCII_USTRINGPARAM( "The document is signed by\n\n  " ) );
             aText += String( rInf.Signer->getSubjectName() );
             aText += String( RTL_CONSTASCII_USTRINGPARAM( "\n\n The signature is " ) );
