@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Recovery.xcs,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:16:40 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:43:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,12 @@
             <info>
                 <desc>TODO</desc>
             </info>
+            <prop oor:name="Enabled" oor:type="xs:boolean">
+                <info>
+                    <desc>Determines if the recovery feature should be enabled or disabled</desc>
+                </info>
+                <value>true</value>
+            </prop>
             <prop oor:name="Crashed" oor:type="xs:boolean">
                 <info>
                     <desc>TODO</desc>
@@ -101,6 +107,17 @@
                     <desc>TODO</desc>
                 </info>
                 <value>false</value>
+            </prop>
+        </group>
+        <group oor:name="CrashReporter">
+            <info>
+                <desc>Settings for the crash reporter.</desc>
+            </info>
+            <prop oor:name="Enabled" oor:type="xs:boolean">
+                <info>
+                    <desc>Specifies if the crash reporter should be enabled or disabled.</desc>
+                </info>
+                <value>true</value>
             </prop>
         </group>
         <group oor:name="AutoSave">
