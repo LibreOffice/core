@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menubarmanager.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:44:59 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:04:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UI_XACCELERATORCONFIGURATION_HPP_
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
+#include <com/sun/star/util/XURLTransformer.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -208,6 +211,10 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         Menu*   GetMenuBar() const { return m_pVCLMenu; }
 
         // Configuration methods
+        static void FillMenuWithConfiguration( USHORT& nId, Menu* pMenu,
+                                               const ::rtl::OUString& rModuleIdentifier,
+                                               const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rItemContainer,
+                                               const ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >& rTransformer );
         static void FillMenu( USHORT& nId, Menu* pMenu, const ::rtl::OUString& rModuleIdentifier, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rItemContainer );
         void FillMenuManager( Menu* pMenu, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const rtl::OUString& rModuleIdentifier, sal_Bool bDelete, sal_Bool bDeleteChildren );
         void SetItemContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rItemContainer );
@@ -220,6 +227,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         void RemoveListener();
         void RequestImages();
         void RetrieveImageManagers();
+        static sal_Bool MustBeHidden( PopupMenu* pPopupMenu, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >& rTransformer );
 
     private:
         String RetrieveLabelFromCommand( const String& aCmdURL );
@@ -233,10 +241,12 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
                              ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xManager,
                              ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& rDispatch ) :
                              nItemId( aItemId ),
+                             bCheckHide( sal_True ),
                              xSubMenuManager( xManager ),
                              xMenuItemDispatch( rDispatch ) {}
 
             USHORT                                                                                      nItemId;
+            sal_Bool                                                                                    bCheckHide;
             ::rtl::OUString                                                                             aTargetFrame;
             ::rtl::OUString                                                                             aMenuItemURL;
             ::rtl::OUString                                                                             aFilter;
@@ -244,7 +254,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
             ::rtl::OUString                                                                             aTitle;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >                xSubMenuManager;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >                      xMenuItemDispatch;
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XPopupMenuController >   xPopupMenuController;
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XPopupMenuController >           xPopupMenuController;
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >                       xPopupMenu;
             KeyCode                                                                                     aKeyCode;
         };
