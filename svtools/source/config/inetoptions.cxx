@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inetoptions.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:39:43 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:49:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -466,8 +466,7 @@ SvtInetOptions::SvtInetOptions()
         RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtInetOptions_Impl::ctor()");
         m_pImpl = new Impl;
 
-        ItemHolder1* pHolder = ItemHolder1::getGlobalItemHolder();
-        pHolder->holdConfigItem(E_INETOPTIONS);
+        ItemHolder1::holdConfigItem(E_INETOPTIONS);
     }
     m_pImpl->acquire();
 }
