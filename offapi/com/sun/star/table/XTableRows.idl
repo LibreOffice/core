@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XTableRows.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:53:02 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 13:24:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,9 @@ published interface XTableRows: com::sun::star::container::XIndexAccess
 
     /** inserts new rows.
 
+        <p>When the index or combination of index and count is out
+        of bounds an exception will be thrown.</p>
+
         @param nIndex
             is the index the first inserted row will have.
 
@@ -67,6 +70,9 @@ published interface XTableRows: com::sun::star::container::XIndexAccess
     //-------------------------------------------------------------------------
 
     /** deletes rows.
+
+        <p>When the index or combination of index and count is out
+        of bounds an exception will be thrown.</p>
 
         @param nIndex
             is the index of the first row to delete.
