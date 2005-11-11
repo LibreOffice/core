@@ -4,9 +4,9 @@
 #
 #   $RCSfile: shortcut.pm,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:22:05 $
+#   last change: $Author: kz $ $Date: 2005-11-11 14:18:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -157,6 +157,13 @@ sub get_shortcut_component
     my $component = "";
     my $found = 0;
     my $shortcut_fileid = $shortcut->{'FileID'};
+
+    my $absolute_filename = 0;
+    if ( $shortcut->{'Styles'} ) { $styles = $shortcut->{'Styles'}; }
+    if ( $styles =~ /\bABSOLUTE_FILENAME\b/ ) { $absolute_filename = 1; }   # FileID contains an absolute filename
+
+    # if the FileID contains an absolute filename, therefore the entry for "ComponentIDFile" has to be used.
+    if ( $absolute_filename ) { $shortcut_fileid = $shortcut->{'ComponentIDFile'}; }
 
     for ( my $i = 0; $i <= $#{$filesref}; $i++ )
     {
@@ -377,6 +384,7 @@ sub get_folderitem_directory
 
 ########################################################################
 # Returning the target (feature) for a folderitem for shortcut table.
+# For non-advertised shortcuts this is a formatted string.
 ########################################################################
 
 sub get_folderitem_target
@@ -387,6 +395,20 @@ sub get_folderitem_target
     my $target = "";
     my $found = 0;
     my $shortcut_fileid = $shortcut->{'FileID'};
+
+    my $styles = "";
+    my $nonadvertised = 0;
+    my $absolute_filename = 0;
+    if ( $shortcut->{'Styles'} ) { $styles = $shortcut->{'Styles'}; }
+    if ( $styles =~ /\bNON_ADVERTISED\b/ ) { $nonadvertised = 1; }  # this is a non-advertised shortcut
+    if ( $styles =~ /\bABSOLUTE_FILENAME\b/ ) { $absolute_filename = 1; }   # FileID contains an absolute filename
+
+    # if the FileID contains an absolute filename this can simply be returned as target for the shortcut table.
+    if ( $absolute_filename )
+    {
+        $shortcut->{'target'} = $shortcut_fileid;
+        return $shortcut_fileid;
+    }
 
     for ( my $i = 0; $i <= $#{$filesref}; $i++ )
     {
@@ -404,6 +426,16 @@ sub get_folderitem_target
     {
         installer::exiter::exit_program("ERROR: Did not find FileID $shortcut_fileid in file collection for folderitem", "get_folderitem_target");
     }
+
+    # Non advertised shortcuts do not return the feature, but the path to the file
+    if ( $nonadvertised )
+    {
+        $target = "\[" . $onefile->{'uniquedirname'} . "\]" . "\\" . $onefile->{'Name'};
+        $shortcut->{'target'} = $target;
+        return $target;
+    }
+
+    # the rest only for advertised shortcuts, which contain the feature in the shortcut table.
 
     if ( $onefile->{'modules'} ) { $target = $onefile->{'modules'}; }
 
@@ -445,6 +477,10 @@ sub get_folderitem_arguments
 sub get_folderitem_icon
 {
     my ($shortcut, $filesref, $iconfilecollector) = @_;
+
+    my $styles = "";
+    if ( $shortcut->{'Styles'} ) { $styles = $shortcut->{'Styles'}; }
+    if ( $styles =~ /\bNON_ADVERTISED\b/ ) { return ""; }   # no icon for non-advertised shortcuts
 
     my $iconfilegid = "";
 
@@ -492,6 +528,10 @@ sub get_folderitem_icon
 sub get_folderitem_iconindex
 {
     my ($shortcut) = @_;
+
+    my $styles = "";
+    if ( $shortcut->{'Styles'} ) { $styles = $shortcut->{'Styles'}; }
+    if ( $styles =~ /\bNON_ADVERTISED\b/ ) { return ""; }   # no iconindex for non-advertised shortcuts
 
     my $iconid = 0;
 
