@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextDocument.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:41:56 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:19:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,12 +99,17 @@ public class TextDocument {
     public com.sun.star.lang.Locale CharLocale;
     public XStorable xStorable;
 
-    //creates an instance of TextDocument and creates a frame
+    //creates an instance of TextDocument and creates a blank frame
     public TextDocument(XMultiServiceFactory xMSF, XTerminateListener listener) {
-        this.xMSF = xMSF;
-        XDesktop xDesktop = Desktop.getDesktop(xMSF);
-        xFrame = OfficeDocument.createNewFrame(xMSF, listener);
+        this(xMSF, listener, "_blank");
     }
+
+//  creates an instance of TextDocument and creates a named frame
+    public TextDocument(XMultiServiceFactory xMSF, XTerminateListener listener, String FrameName) {
+        this.xMSF = xMSF;
+        xFrame = OfficeDocument.createNewFrame(xMSF, listener, FrameName);
+    }
+
 
     //creates an instance of TextDocument and creates a frame with an empty document
     public TextDocument(XMultiServiceFactory xMSF, boolean bshowStatusIndicator, boolean bgetCurrentFrame, XTerminateListener listener) {
