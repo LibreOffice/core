@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoopt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:47:54 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:54:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,8 +201,7 @@ SvtUndoOptions::SvtUndoOptions()
         RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtUndoOptions_Impl::ctor()");
         pOptions = new SvtUndoOptions_Impl;
 
-        ItemHolder2* pHolder = ItemHolder2::getGlobalItemHolder();
-        pHolder->holdConfigItem(E_UNDOOPTIONS);
+        ItemHolder2::holdConfigItem(E_UNDOOPTIONS);
     }
     ++nRefCount;
     pImp = pOptions;
