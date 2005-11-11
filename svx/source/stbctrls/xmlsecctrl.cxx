@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlsecctrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:20:05 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 09:13:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,7 @@ struct XmlSecStatusBarControl::XmlSecStatusBarControl_Impl
     UINT16      mnState;
     Image       maImage;
     Image       maImageBroken;
+    Image       maImageNotValidated;
 };
 
 
@@ -116,6 +117,8 @@ XmlSecStatusBarControl::XmlSecStatusBarControl( USHORT _nSlotId,  USHORT _nId, S
     mpImpl->maImage = Image( SVX_RES( bIsDark ? RID_SVXBMP_SIGNET_H : RID_SVXBMP_SIGNET ) );
     mpImpl->maImageBroken =
         Image( SVX_RES( bIsDark ? RID_SVXBMP_SIGNET_BROKEN_H : RID_SVXBMP_SIGNET_BROKEN ) );
+    mpImpl->maImageNotValidated =
+        Image( SVX_RES( bIsDark ? RID_SVXBMP_SIGNET_NOTVALIDATED_H : RID_SVXBMP_SIGNET_NOTVALIDATED ) );
 }
 
 XmlSecStatusBarControl::~XmlSecStatusBarControl()
@@ -125,8 +128,9 @@ XmlSecStatusBarControl::~XmlSecStatusBarControl()
 
 void XmlSecStatusBarControl::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
-    GetStatusBar().SetHelpText( GetId(), String() );    // necessary ?
-    GetStatusBar().SetHelpId( GetId(), nSID );          // necessary ?
+    GetStatusBar().SetHelpText( GetId(), String() );// necessary ?
+
+    GetStatusBar().SetHelpId( GetId(), nSID );      // necessary ?
 
     if( SFX_ITEM_AVAILABLE != eState )
     {
@@ -147,6 +151,15 @@ void XmlSecStatusBarControl::StateChanged( USHORT nSID, SfxItemState eState, con
         GetStatusBar().SetItemData( GetId(), 0 );
 
     GetStatusBar().SetItemText( GetId(), String() );    // necessary ?
+
+    USHORT nResId = RID_SVXSTR_XMLSEC_NO_SIG;
+    if ( mpImpl->mnState == SIGNATURESTATE_SIGNATURES_OK )
+        nResId = RID_SVXSTR_XMLSEC_SIG_OK;
+    else if ( mpImpl->mnState == SIGNATURESTATE_SIGNATURES_BROKEN )
+        nResId = RID_SVXSTR_XMLSEC_SIG_NOT_OK;
+    else if ( mpImpl->mnState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED )
+        nResId = RID_SVXSTR_XMLSEC_SIG_OK_NO_VERIFY;
+    GetStatusBar().SetQuickHelpText( GetId(), SVX_RESSTR( nResId ) );
 }
 
 void XmlSecStatusBarControl::Command( const CommandEvent& rCEvt )
@@ -195,6 +208,11 @@ void XmlSecStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
         ++aRect.Top();
         pDev->DrawImage( aRect.TopLeft(), mpImpl->maImageBroken );
     }
+    else if( mpImpl->mnState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED )
+    {
+        ++aRect.Top();
+        pDev->DrawImage( aRect.TopLeft(), mpImpl->maImageNotValidated );
+    }
     else
         pDev->DrawRect( aRect );
 
@@ -206,3 +224,4 @@ long XmlSecStatusBarControl::GetDefItemWidth( StatusBar& _rStatusBar )
 {
     return 16;
 }
+
