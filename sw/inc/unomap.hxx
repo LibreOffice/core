@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:40:15 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 13:15:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,13 +132,17 @@
 #define PROPERTY_MAP_MAILMERGE                          89
 #define PROPERTY_MAP_FLDTYP_DROPDOWN                    90
 #define PROPERTY_MAP_TEXT_VIEW                          91
-#define PROPERTY_MAP_END                                92
+#define PROPERTY_MAP_CONDITIONAL_PARA_STYLE             92
+#define PROPERTY_MAP_END                                93
 
 #define PROPERTY_SET_CHAR_STYLE             1
 #define PROPERTY_SET_PARA_STYLE             2
 #define PROPERTY_SET_FRAME_STYLE            3
 #define PROPERTY_SET_PAGE_STYLE             4
 #define PROPERTY_SET_NUM_STYLE              5
+// basically the same as PROPERTY_SET_PARA_STYLE with additional property
+// that is only available for conditional para styles
+#define PROPERTY_SET_CONDITIONAL_PARA_STYLE 6
 
 //S&E
 #define WID_WORDS                0
@@ -339,6 +343,7 @@ class SwUnoPropertyMapProvider
     SfxItemPropertySet* pFrameStyleMap;
     SfxItemPropertySet* pPageStyleMap;
     SfxItemPropertySet* pNumStyleMap;
+    SfxItemPropertySet* pConditionalParaStyleMap;
 
     void            Sort(sal_uInt16 nId);
 public:
