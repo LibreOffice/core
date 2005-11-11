@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-03 12:00:54 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:05:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,10 @@
 
 #ifndef _FRAMEWORK_UIELEMENT_PROGRESSBARWRAPPER_HXX_
 #include <uielement/progressbarwrapper.hxx>
+#endif
+
+#ifndef __FRAMEWORK_UICONFIGURATION_GLOBALSETTINGS_HXX_
+#include <uiconfiguration/globalsettings.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -188,6 +192,7 @@
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
 #endif
+#include <svtools/cmdoptions.hxx>
 
 #include <algorithm>
 
@@ -426,7 +431,10 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
         ,   m_aPropUIName( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_UINAME ))
         ,   m_aPropLocked( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_LOCKED ))
         ,   m_aPropStyle( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_STYLE ))
+        ,   m_aCustomizeCmd( RTL_CONSTASCII_USTRINGPARAM( "ConfigureDialog" ))
         ,   m_aListenerContainer( m_aLock.getShareableOslMutex() )
+        ,   m_pGlobalSettings( 0 )
+        ,   m_bGlobalSettings( sal_False )
 {
     // Initialize statusbar member
     m_aStatusBarElement.m_aType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "statusbar" ));
@@ -1007,6 +1015,11 @@ void LayoutManager::implts_createAddonsToolBars()
                     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                     if ( pWindow->GetText().Len() == 0 )
                         pWindow->SetText( aGenericAddonTitle );
+                    if ( pWindow->GetType() == WINDOW_TOOLBOX )
+                    {
+                        ToolBox* pToolbar = (ToolBox *)pWindow;
+                        pToolbar->SetMenuType();
+                    }
                 }
             }
         }
@@ -1285,9 +1298,19 @@ void LayoutManager::implts_writeNewStateData( const rtl::OUString aName, const R
 
 sal_Bool LayoutManager::implts_readWindowStateData( const rtl::OUString& aName, UIElement& rElementData )
 {
-    ReadGuard aReadLock( m_aLock );
+    sal_Bool bGetSettingsState( sal_False );
+
+    WriteGuard aWriteLock( m_aLock );
+    sal_Bool bGlobalSettings( m_bGlobalSettings );
     Reference< XNameAccess > xPersistentWindowState( m_xPersistentWindowState );
-    aReadLock.unlock();
+    GlobalSettings* pGlobalSettings( 0 );
+    if ( m_pGlobalSettings == 0 )
+    {
+        m_pGlobalSettings = new GlobalSettings( m_xSMGR );
+        bGetSettingsState = sal_True;
+    }
+    pGlobalSettings = m_pGlobalSettings;
+    aWriteLock.unlock();
 
     if ( xPersistentWindowState.is() )
     {
@@ -1378,9 +1401,34 @@ sal_Bool LayoutManager::implts_readWindowStateData( const rtl::OUString& aName, 
                             rElementData.m_bSoftClose = bValue;
                     }
                 }
-
-                return sal_True;
             }
+
+            // oversteer values with global settings
+            if ( pGlobalSettings && ( bGetSettingsState || bGlobalSettings ))
+            {
+                if ( pGlobalSettings->HasStatesInfo( GlobalSettings::UIELEMENT_TYPE_TOOLBAR ))
+                {
+                    WriteGuard aWriteLock( m_aLock );
+                    m_bGlobalSettings = sal_True;
+                    aWriteLock.unlock();
+
+                    css::uno::Any aValue;
+                    sal_Bool      bValue;
+                    if ( pGlobalSettings->GetStateInfo( GlobalSettings::UIELEMENT_TYPE_TOOLBAR,
+                                                        GlobalSettings::STATEINFO_LOCKED,
+                                                        aValue ))
+                        aValue >>= rElementData.m_aDockedData.m_bLocked;
+                    if ( pGlobalSettings->GetStateInfo( GlobalSettings::UIELEMENT_TYPE_TOOLBAR,
+                                                        GlobalSettings::STATEINFO_DOCKED,
+                                                        aValue ))
+                    {
+                        if ( aValue >>= bValue )
+                            rElementData.m_bFloating = !bValue;
+                    }
+                }
+            }
+
+            return sal_True;
         }
         catch ( NoSuchElementException& )
         {
@@ -3713,9 +3761,9 @@ throw (RuntimeException)
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
 
-    sal_Bool                                            bFound = sal_False;
-    OUString                                            aElementType;
-    OUString                                            aElementName;
+    sal_Bool                                      bFound = sal_False;
+    OUString                                      aElementType;
+    OUString                                      aElementName;
     Reference< ::com::sun::star::ui::XUIElement > xUIElement;
 
     implts_findElement( aName, aElementType, aElementName, xUIElement );
@@ -3727,6 +3775,8 @@ throw (RuntimeException)
         {
             if ( !bFound  )
             {
+                SvtCommandOptions aCmdOptions;
+
                 xUIElement = implts_createElement( aName );
                 sal_Bool bVisible( sal_False );
                 if ( xUIElement.is() )
@@ -3765,6 +3815,18 @@ throw (RuntimeException)
                         implts_setElementData( aNewToolbar, xDockWindow );
                         m_aUIElements.push_back( aNewToolbar );
                         bVisible = aNewToolbar.m_bVisible;
+                    }
+
+                    // set toolbar menu style according to customize command state
+                    Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+                    if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
+                    {
+                        ToolBox* pToolbar = (ToolBox *)pWindow;
+                        USHORT nMenuType = pToolbar->GetMenuType();
+                        if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, m_aCustomizeCmd ))
+                            pToolbar->SetMenuType( nMenuType & ~TOOLBOX_MENUTYPE_CUSTOMIZE );
+                        else
+                            pToolbar->SetMenuType( nMenuType | TOOLBOX_MENUTYPE_CUSTOMIZE );
                     }
                 }
                 aWriteLock.unlock();
@@ -6672,6 +6734,8 @@ throw( RuntimeException )
         m_xDocCfgMgr.clear();
         m_xModuleCfgMgr.clear();
         m_xFrame.clear();
+        delete m_pGlobalSettings;
+        m_pGlobalSettings = 0;
 
         bDisposeAndClear = sal_True;
     }
