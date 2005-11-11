@@ -4,9 +4,9 @@
  *
  *  $RCSfile: errorcallback.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:26:10 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 09:19:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,10 @@
 #include <com/sun/star/xml/crypto/XXMLEncryptionTemplate.hpp>
 #endif
 
-void setErrorRecorder(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XXMLSignatureTemplate >& xTemplate);
-void setErrorRecorder(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XXMLEncryptionTemplate >& xTemplate);
+// Only used for logging
+void setErrorRecorder();
+//ToDo
+//void setErrorRecorder(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XXMLEncryptionTemplate >& xTemplate);
 void clearErrorRecorder();
 
 #endif
