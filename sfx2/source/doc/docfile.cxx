@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.172 $
+ *  $Revision: 1.173 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:45:59 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 09:06:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1408,7 +1408,8 @@ void SfxMedium::CloseStorage()
     if ( pImp->xStorage.is() )
     {
         uno::Reference < lang::XComponent > xComp( pImp->xStorage, uno::UNO_QUERY );
-        if ( pImp->bDisposeStorage )
+        // in the salvage mode the medium does not own the storage
+        if ( pImp->bDisposeStorage && !pImp->m_bSalvageMode )
         {
             try {
                 xComp->dispose();
@@ -3583,3 +3584,46 @@ BOOL SfxMedium::IsOpen() const
 {
     return pInStream || pOutStream || pImp->xStorage.is();
 }
+
+::rtl::OUString SfxMedium::CreateTempCopyWithExt( const ::rtl::OUString& aURL )
+{
+    ::rtl::OUString aResult;
+
+    if ( aURL.getLength() )
+    {
+        sal_Int32 nPrefixLen = aURL.lastIndexOf( '.' );
+        String aExt = ( nPrefixLen == -1 ) ? String() : String( aURL.copy( nPrefixLen ) );
+
+        ::rtl::OUString aNewTempFileURL = ::utl::TempFile( String(), &aExt ).GetURL();
+        if ( aNewTempFileURL.getLength() )
+        {
+            INetURLObject aSource( aURL );
+            INetURLObject aDest( aNewTempFileURL );
+            ::rtl::OUString aFileName = aDest.getName( INetURLObject::LAST_SEGMENT,
+                                                        true,
+                                                        INetURLObject::DECODE_WITH_CHARSET );
+            if ( aFileName.getLength() && aDest.removeSegment() )
+            {
+                try
+                {
+                    uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xComEnv;
+                    ::ucb::Content aTargetContent( aDest.GetMainURL( INetURLObject::NO_DECODE ), xComEnv );
+                    ::ucb::Content aSourceContent( aSource.GetMainURL( INetURLObject::NO_DECODE ), xComEnv );
+                    if ( aTargetContent.transferContent( aSourceContent,
+                                                        ::ucb::InsertOperation_COPY,
+                                                        aFileName,
+                                                        NameClash::OVERWRITE ) )
+                    {
+                        // Success
+                        aResult = aNewTempFileURL;
+                    }
+                }
+                catch( uno::Exception& )
+                {}
+            }
+        }
+    }
+
+    return aResult;
+}
+
