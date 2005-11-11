@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javaoptions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:41:40 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:51:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,8 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
+#include <rtl/logfile.hxx>
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
@@ -87,6 +89,8 @@ SvtExecAppletsItem_Impl::SvtExecAppletsItem_Impl() :
         bRO            (CFG_READONLY_DEFAULT            ),
         bExecute       (sal_False                       )
 {
+    RTL_LOGFILE_CONTEXT(aLog, "svtools (???) SvtExecAppletsItem_Impl::SvtExecAppletsItem_Impl()");
+
     Sequence< OUString > aNames(1);
     aNames.getArray()[0] = C2U("Enable");
     Sequence< Any > aValues = GetProperties(aNames);
@@ -150,6 +154,8 @@ SvtJavaOptions::SvtJavaOptions() :
     utl::ConfigItem(C2U("Office.Java/VirtualMachine")),
     pImpl(new SvtJavaOptions_Impl)
 {
+    RTL_LOGFILE_CONTEXT(aLog, "svtools (???) SvtJavaOptions::SvtJavaOptions()");
+
     Sequence< Any > aValues = GetProperties(pImpl->aPropertyNames);
     Sequence< sal_Bool > aROStates = GetReadOnlyStates(pImpl->aPropertyNames);
     const Any* pValues = aValues.getConstArray();
