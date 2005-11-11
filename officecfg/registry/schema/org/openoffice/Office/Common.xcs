@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:12:19 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 11:42:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1961,6 +1961,13 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 					</info>
                                         <value>true</value>
 				</prop>
+				<prop oor:name="AlwaysSaveAs" oor:type="xs:boolean">
+					<info>
+						<author>MAV</author>
+						<desc>If the option is set, every time a user triggers a plain Save operation, SaveAs operation with possible additional user notifications will be started.</desc>
+					</info>
+					<value>false</value>
+				</prop>
 			</group>
 			<group oor:name="Graphic">
 				<info>
@@ -2168,6 +2175,13 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 						</maxInclusive>
 					</constraints>
 					<value>1</value>
+				</prop>
+				<prop oor:name="DisableMacrosExecution" oor:type="xs:boolean">
+					<info>
+						<author>MAV</author>
+						<desc>Specifies whether the macro execution is disabled in general. If it is set to true, the "MacroSecurityLevel" is ignored. If it is set to false, the mentioned entry specified the level of macro security.</desc>
+					</info>
+					<value>false</value>
 				</prop>
 				<set oor:name="TrustedAuthors" oor:node-type="TrustedAuthor">
 					<info>
@@ -3045,6 +3059,13 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 				<author>FS</author>
 				<desc>Contains settings that specify the common help settings.</desc>
 			</info>
+			<prop oor:name="ShowBasic" oor:type="xs:boolean">
+				<info>
+					<author>ABI</author>
+					<desc>Determines wether basic help should be shown.</desc>
+				</info>
+				<value>true</value>
+			</prop>
 			<prop oor:name="Locale" oor:type="xs:string">
 				<info>
 					<author>ABI</author>
@@ -4858,6 +4879,12 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 				<author>MBA</author>
 				<desc>Determines the miscellaneous entries for the common group.</desc>
 			</info>
+			<prop oor:name="MaxOpenDocuments" oor:type="xs:int">
+				<info>
+					<author>AS</author>
+					<desc>Determines the maximum count of documents, which are allowed to be open at the same time. NIL will be interpreted as infinite!</desc>
+				</info>
+			</prop>
 			<prop oor:name="PluginsEnabled" oor:type="xs:boolean">
 				<!-- OldPath: ? -->
 				<!-- OldLocation: soffice.ini -->
