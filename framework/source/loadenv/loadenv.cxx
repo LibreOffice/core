@@ -4,9 +4,9 @@
  *
  *  $RCSfile: loadenv.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:37:50 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:06:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,8 +95,16 @@
 #include <services.h>
 #endif
 
+#ifndef __FRAMEWORK_DISPATCH_INTERACTION_HXX_
+#include <dispatch/interaction.hxx>
+#endif
+
 //_______________________________________________
 // includes of uno interface
+
+#ifndef _COM_SUN_STAR_TASK_ERRORCODEREQUEST_HPP_
+#include <com/sun/star/task/ErrorCodeRequest.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -104,6 +112,10 @@
 
 #ifndef _COM_SUN_STAR_FRAME_DISPATCHRESULTSTATE_HPP_
 #include <com/sun/star/frame/DispatchResultState.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
@@ -227,6 +239,10 @@
 
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
+#endif
+
+#ifndef _SFXECODE_HXX
+#include <svtools/sfxecode.hxx>
 #endif
 
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
@@ -1096,9 +1112,94 @@ sal_Bool LoadEnv::impl_handleContent()
     return sal_False;
 }
 
-/*-----------------------------------------------
-    15.08.2003 09:35
------------------------------------------------*/
+//-----------------------------------------------
+sal_Bool LoadEnv::impl_furtherDocsAllowed()
+{
+    // SAFE ->
+    ReadGuard aReadLock(m_aLock);
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    aReadLock.unlock();
+    // <- SAFE
+
+    sal_Bool bAllowed = sal_True;
+
+    try
+    {
+        css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
+                                xSMGR,
+                                ::rtl::OUString::createFromAscii("org.openoffice.Office.Common/"),
+                                ::rtl::OUString::createFromAscii("Misc"),
+                                ::rtl::OUString::createFromAscii("MaxOpenDocuments"),
+                                ::comphelper::ConfigurationHelper::E_READONLY);
+
+        // NIL means: count of allowed documents = infinite !
+        //     => return TRUE
+        if ( ! aVal.hasValue())
+            bAllowed = sal_True;
+        else
+        {
+            sal_Int32 nMaxOpenDocuments = 0;
+            aVal >>= nMaxOpenDocuments;
+
+            css::uno::Reference< css::frame::XFramesSupplier > xDesktop(
+                xSMGR->createInstance(SERVICENAME_DESKTOP),
+                css::uno::UNO_QUERY_THROW);
+
+            FrameListAnalyzer aAnalyzer(xDesktop,
+                                        css::uno::Reference< css::frame::XFrame >(),
+                                        FrameListAnalyzer::E_HELP |
+                                        FrameListAnalyzer::E_BACKINGCOMPONENT |
+                                        FrameListAnalyzer::E_HIDDEN);
+
+            sal_Int32 nOpenDocuments = aAnalyzer.m_lOtherVisibleFrames.getLength();
+                      bAllowed       = (nOpenDocuments < nMaxOpenDocuments);
+        }
+    }
+    catch(const css::uno::Exception&)
+        { bAllowed = sal_True; } // !! internal errors are no reason to disturb the office from opening documents .-)
+
+    if ( ! bAllowed )
+    {
+        // SAFE ->
+        aReadLock.lock();
+        css::uno::Reference< css::task::XInteractionHandler > xInteraction = m_lMediaDescriptor.getUnpackedValueOrDefault(
+                                                                                ::comphelper::MediaDescriptor::PROP_INTERACTIONHANDLER(),
+                                                                                css::uno::Reference< css::task::XInteractionHandler >());
+        aReadLock.unlock();
+        // <- SAFE
+
+        if (xInteraction.is())
+        {
+            css::uno::Any                                                                    aInteraction;
+            css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations(2);
+
+            ContinuationAbort*   pAbort   = new ContinuationAbort();
+            ContinuationApprove* pApprove = new ContinuationApprove();
+
+            lContinuations[0] = css::uno::Reference< css::task::XInteractionContinuation >(
+                                    static_cast< css::task::XInteractionContinuation* >(pAbort),
+                                    css::uno::UNO_QUERY_THROW);
+            lContinuations[1] = css::uno::Reference< css::task::XInteractionContinuation >(
+                                    static_cast< css::task::XInteractionContinuation* >(pApprove),
+                                    css::uno::UNO_QUERY_THROW);
+
+            css::task::ErrorCodeRequest aErrorCode;
+            aErrorCode.ErrCode = ERRCODE_SFX_NOMOREDOCUMENTSALLOWED;
+            aInteraction <<= aErrorCode;
+
+            InteractionRequest* pRequest = new InteractionRequest(aInteraction, lContinuations);
+            css::uno::Reference< css::task::XInteractionRequest > xRequest(
+                static_cast< css::task::XInteractionRequest* >(pRequest),
+                css::uno::UNO_QUERY_THROW);
+
+            xInteraction->handle(xRequest);
+        }
+    }
+
+    return bAllowed;
+}
+
+//-----------------------------------------------
 sal_Bool LoadEnv::impl_loadContent()
     throw(LoadEnvException, css::uno::RuntimeException)
 {
@@ -1106,26 +1207,43 @@ sal_Bool LoadEnv::impl_loadContent()
     WriteGuard aWriteLock(m_aLock);
 
     // search or create right target frame
-    if (TargetHelper::matchSpecialTarget(m_sTarget, TargetHelper::E_DEFAULT))
+    ::rtl::OUString sTarget = m_sTarget;
+    if (TargetHelper::matchSpecialTarget(sTarget, TargetHelper::E_DEFAULT))
     {
         m_xTargetFrame = impl_searchAlreadyLoaded();
-        // document is already loaded ... => break loading with SUCCESS=TRUE!
         if (m_xTargetFrame.is())
         {
             impl_setResult(sal_True);
             return sal_True;
         }
         m_xTargetFrame = impl_searchRecycleTarget();
-        if (!m_xTargetFrame.is())
+    }
+
+    if (! m_xTargetFrame.is())
+    {
+        if (
+            (TargetHelper::matchSpecialTarget(sTarget, TargetHelper::E_BLANK  )) ||
+            (TargetHelper::matchSpecialTarget(sTarget, TargetHelper::E_DEFAULT))
+           )
         {
-            m_xTargetFrame = m_xBaseFrame->findFrame(SPECIALTARGET_BLANK, 0);
-            // it is a new created target frame ... we have to close it
-            // in case loading failed. Because its an hidden frame now!
+            if (! impl_furtherDocsAllowed())
+                return sal_False;
+            m_xTargetFrame       = m_xBaseFrame->findFrame(SPECIALTARGET_BLANK, 0);
             m_bCloseFrameOnError = m_xTargetFrame.is();
         }
+        else
+        {
+            sal_Int32 nFlags = m_nSearchFlags & ~css::frame::FrameSearchFlag::CREATE;
+            m_xTargetFrame   = m_xBaseFrame->findFrame(sTarget, nFlags);
+            if (! m_xTargetFrame.is())
+            {
+                if (! impl_furtherDocsAllowed())
+                    return sal_False;
+                m_xTargetFrame       = m_xBaseFrame->findFrame(SPECIALTARGET_BLANK, 0);
+                m_bCloseFrameOnError = m_xTargetFrame.is();
+            }
+        }
     }
-    else
-        m_xTargetFrame = m_xBaseFrame->findFrame(m_sTarget, m_nSearchFlags);
 
     // If we couldn't find a valid frame or the frame has no container window
     // we have to throw an exception.
