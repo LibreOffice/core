@@ -5,9 +5,9 @@
 #
 #   $RCSfile: soffice.sh,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 17:02:48 $
+#   last change: $Author: rt $ $Date: 2005-11-11 12:28:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -147,9 +147,18 @@ case $sd_platform in
     ;;
 esac
 
+#collect all bootstrap variables specified on the command line
+#so that they can be passed as arguments to javaldx later on
+for arg in $@
+do
+  case "$arg" in
+       -env:*) BOOTSTRAPVARS=$BOOTSTRAPVARS" ""$arg";;
+  esac
+done
+
 # extend the ld_library_path for java: javaldx checks the sofficerc for us
 if [ -x "$sd_prog/javaldx" ] ; then
-    java_ld_library_path=`"$sd_prog/javaldx"`
+    java_ld_library_path=`"$sd_prog/javaldx" $BOOTSTRAPVARS`
     if [ "$java_ld_library_path" != "" ] ; then
         case $sd_platform in
             AIX)
@@ -225,7 +234,7 @@ export PATH
 
 while [ $? -eq 79 ]
 do
-    "$sd_prog/$sd_binary"
+    "$sd_prog/$sd_binary" ""$BOOTSTRAPVARS""
 done
 
 exit
