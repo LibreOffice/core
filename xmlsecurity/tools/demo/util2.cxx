@@ -4,9 +4,9 @@
  *
  *  $RCSfile: util2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:39:15 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 09:21:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,6 @@
  *
  ************************************************************************/
 
-//CP : added by CP
 #include <rtl/locale.h>
 #include <osl/nlsupport.h>
 
@@ -41,9 +40,7 @@
 #include <osl/process.h>
 #endif
 
-//CP : end
-
-#include "util.hxx"
+#include <util.hxx>
 
 #include <stdio.h>
 
@@ -400,15 +397,11 @@ void QueryPrintSignatureDetails( const SignatureInformations& SignatureInformati
     fprintf( stdout, "\nDisplay details (y/n) [y]?" );
     fflush(stdin);
     fscanf( stdin, "%c", &cShowDetails);
-    if ( cShowDetails != 'y' )
+    if ( cShowDetails == 'y' )
     {
-
-        // By CP , for correct encoding
-        sal_uInt16 encoding ;
         rtl_Locale *pLocale = NULL ;
         osl_getProcessLocale( &pLocale ) ;
-        encoding = osl_getTextEncodingFromLocale( pLocale ) ;
-        // CP end
+        sal_uInt16 encoding = osl_getTextEncodingFromLocale( pLocale ) ;
 
         fprintf( stdout, "------------- Signature details START -------------\n" );
         fprintf( stdout, "%s",
