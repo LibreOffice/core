@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarwrapper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:59:20 $
+ *  last change: $Author: kz $ $Date: 2005-11-11 14:14:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,6 +201,20 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) th
     {
         UIConfigElementWrapperBase::initialize( aArguments );
 
+        sal_Bool bPopupMode( sal_False );
+        for ( sal_Int32 i = 0; i < aArguments.getLength(); i++ )
+        {
+            PropertyValue aPropValue;
+            if ( aArguments[i] >>= aPropValue )
+            {
+                if ( aPropValue.Name.equalsAsciiL( "PopupMode", 9 ))
+                {
+                    aPropValue.Value >>= bPopupMode;
+                    break;
+                }
+            }
+        }
+
         Reference< XFrame > xFrame( m_xWeakFrame );
         if ( xFrame.is() && m_xConfigSource.is() )
         {
@@ -219,6 +233,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                     pToolBarManager = new ToolBarManager( m_xServiceManager, xFrame, m_aResourceURL, pToolBar );
                     pToolBar->SetToolBarManager( pToolBarManager );
                     m_xToolBarManager = Reference< XComponent >( static_cast< OWeakObject *>( pToolBarManager ), UNO_QUERY );
+                    pToolBar->WillUsePopupMode( bPopupMode );
                 }
             }
 
