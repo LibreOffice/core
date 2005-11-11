@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menubarwrapper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:56:09 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 12:08:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,7 @@ using namespace com::sun::star::frame;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace com::sun::star::awt;
+using namespace com::sun::star::util;
 using namespace ::com::sun::star::ui;
 
 namespace framework
@@ -183,8 +184,11 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                 if ( m_xConfigData.is() )
                 {
                     // Fill menubar with container contents
+                    Reference< XURLTransformer > xTrans( getServiceFactory()->createInstance(
+                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                    "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
                     USHORT nId = 1;
-                    MenuBarManager::FillMenu( nId, pVCLMenuBar, aModuleIdentifier, m_xConfigData );
+                    MenuBarManager::FillMenuWithConfiguration( nId, pVCLMenuBar, aModuleIdentifier, m_xConfigData, xTrans );
                 }
             }
             catch ( NoSuchElementException& )
