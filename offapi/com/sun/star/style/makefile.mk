@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 05:34:52 $
+#   last change: $Author: rt $ $Date: 2005-11-11 13:24:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -80,9 +80,9 @@ IDLFILES=\
     VerticalAlignment.idl\
     XDefaultsSupplier.idl\
     XStyle.idl\
-    XStyleCondition.idl\
     XStyleFamiliesSupplier.idl\
     XStyleLoader.idl\
+    XStyleCondition.idl
 
 # ------------------------------------------------------------------
 
