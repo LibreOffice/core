@@ -4,9 +4,9 @@
  *
  *  $RCSfile: internaloptions.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:40:00 $
+ *  last change: $Author: rt $ $Date: 2005-11-11 08:49:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -536,8 +536,7 @@ SvtInternalOptions::SvtInternalOptions()
         RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtInternalOptions_Impl::ctor()");
         m_pDataContainer = new SvtInternalOptions_Impl();
 
-        ItemHolder1* pHolder = ItemHolder1::getGlobalItemHolder();
-        pHolder->holdConfigItem(E_INTERNALOPTIONS);
+        ItemHolder1::holdConfigItem(E_INTERNALOPTIONS);
      }
 }
 
