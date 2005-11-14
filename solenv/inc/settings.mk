@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.177 $
+#   $Revision: 1.178 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-07 12:43:19 $
+#   last change: $Author: hjs $ $Date: 2005-11-14 09:33:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1130,7 +1130,7 @@ EXTMAXPROCESS*=$(MAXPROCESS)
 IDLC*=$(WRAPCMD) idlc
 REGMERGE*=$(WRAPCMD) regmerge
 REGCOMPARE*=$(WRAPCMD) regcompare
-REGCOMP*=$(WRAPCMD) regcomp
+REGCOMP*=$(WRAPCMD_ENV) regcomp
 CPPUMAKER*=$(WRAPCMD) cppumaker
 JAVAMAKER*=$(WRAPCMD) javamaker
 RDBMAKER*=$(WRAPCMD) rdbmaker
