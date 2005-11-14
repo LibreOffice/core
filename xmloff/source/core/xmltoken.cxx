@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:05:41 $
+ *  last change: $Author: rt $ $Date: 2005-11-14 09:12:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2861,6 +2861,9 @@ namespace xmloff { namespace token {
         // <--
         // --> OD 2005-10-10 #i45874#
         TOKEN( "restart-numbering",               XML_RESTART_NUMBERING),
+        // <--
+        // -> FLR #i52127#
+        TOKEN( "numbered-paragraph", XML_NUMBERED_PARAGRAPH),
         // <--
 
 #if OSL_DEBUG_LEVEL > 0
