@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:06:22 $
+ *  last change: $Author: rt $ $Date: 2005-11-14 09:10:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1963,4 +1963,35 @@ void XMLParaContext::Characters( const OUString& rChars )
     GetImport().GetTextImport()->InsertString( rChars, bIgnoreLeadingSpace );
 #endif
 }
+
+
+
+TYPEINIT1( XMLNumberedParaContext, SvXMLImportContext );
+
+XMLNumberedParaContext::XMLNumberedParaContext(
+        SvXMLImport& rImport,
+        sal_uInt16 nPrfx,
+        const OUString& rLName,
+        const Reference< xml::sax::XAttributeList > & xAttrList ) :
+     SvXMLImportContext( rImport, nPrfx, rLName )
+ {
+ }
+
+ XMLNumberedParaContext::~XMLNumberedParaContext()
+ {
+ }
+
+ SvXMLImportContext *XMLNumberedParaContext::CreateChildContext(
+         sal_uInt16 nPrefix, const OUString& rLocalName,
+         const Reference< xml::sax::XAttributeList > & xAttrList )
+ {
+    //FIXME #i52127#: currently <text:numbered-paragraph> is not implemented!
+     SvXMLImportContext *pContext = GetImport().GetTextImport()->CreateTextChildContext(
+             GetImport(), nPrefix, rLocalName, xAttrList, XML_TEXT_TYPE_BODY );
+     return pContext;
+ }
+
+ void XMLNumberedParaContext::Characters( const OUString& rChars )
+ {
+ }
 
