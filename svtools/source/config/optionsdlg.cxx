@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optionsdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:13:40 $
+ *  last change: $Author: rt $ $Date: 2005-11-14 12:59:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,8 +274,7 @@ SvtOptionsDialogOptions::SvtOptionsDialogOptions()
     {
         pOptions = new SvtOptionsDlgOptions_Impl;
 
-        ItemHolder1* pHolder = ItemHolder1::getGlobalItemHolder();
-        pHolder->holdConfigItem( E_OPTIONSDLGOPTIONS );
+        ItemHolder1::holdConfigItem( E_OPTIONSDLGOPTIONS );
     }
     m_pImp = pOptions;
 }
