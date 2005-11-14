@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:51:56 $
+ *  last change: $Author: rt $ $Date: 2005-11-14 09:16:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@
 #ifndef INCLUDED_SVTOOLS_HELPOPT_HXX
 #include <svtools/helpopt.hxx>
 #endif
-#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
 #endif
 #ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
@@ -1735,7 +1735,7 @@ void OfaTreeOptionsDialog::Initialize()
     // Writer and Writer/Web options
     sal_Bool bHasAnyFilter = sal_False;
     SvtModuleOptions aModuleOpt;
-    if ( aModuleOpt.IsWriter() )
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
     {
         // Textdokument
         bHasAnyFilter = sal_True;
@@ -1780,9 +1780,8 @@ void OfaTreeOptionsDialog::Initialize()
     }
 
     // Calc options
-    if ( aModuleOpt.IsCalc() )
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
     {
-        // StarCalc-Dialog
         bHasAnyFilter = sal_True;
         SfxModule* pScMod = ( *( SfxModule** ) GetAppData( SHL_CALC ) );
         if ( pScMod && pScMod->IsActive() )
@@ -1808,7 +1807,7 @@ void OfaTreeOptionsDialog::Initialize()
     }
 
     // Impress options
-    if ( aModuleOpt.IsImpress() )
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
     {
         bHasAnyFilter = sal_True;
         SfxModule* pSdMod = ( *( SfxModule** ) GetAppData( SHL_DRAW ) );
@@ -1833,7 +1832,7 @@ void OfaTreeOptionsDialog::Initialize()
     }
 
     // Draw options
-    if ( aModuleOpt.IsDraw() )
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
     {
         SfxModule* pSdMod = ( *( SfxModule** ) GetAppData( SHL_DRAW ) );
         if ( pSdMod && pSdMod->IsActive() && getCurrentFactory_Impl() == SvtModuleOptions::E_DRAW )
@@ -1857,7 +1856,7 @@ void OfaTreeOptionsDialog::Initialize()
     }
 
     // Math options
-    if ( aModuleOpt.IsMath() )
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
     {
         SfxModule* pSmMod = (*(SfxModule**) GetAppData(SHL_SM));
         if ( pSmMod && pSmMod->IsActive() )
@@ -1875,8 +1874,13 @@ void OfaTreeOptionsDialog::Initialize()
             }
         }
     }
-    // Database options (always installed and active)
-    if ( !lcl_isOptionHidden( SID_SB_STARBASEOPTIONS, aOptionsDlgOpt ) )
+
+    // Database - needed only if there is an application which integrates with databases
+    if ( !lcl_isOptionHidden( SID_SB_STARBASEOPTIONS, aOptionsDlgOpt ) &&
+        (   aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SDATABASE )
+        ||  aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER )
+        ||  aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC )
+        ) )
     {
         ResStringArray& rDSArray = aDlgResource.GetDatasourcesArray();
         nGroup = AddGroup( rDSArray.GetString(0), 0, NULL, SID_SB_STARBASEOPTIONS );
@@ -2022,3 +2026,4 @@ short OfaTreeOptionsDialog::Execute()
 
     return nRet;
 }
+
