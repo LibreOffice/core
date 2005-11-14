@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparai.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:06:34 $
+ *  last change: $Author: rt $ $Date: 2005-11-14 09:10:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,5 +95,27 @@ public:
 
 };
 
+class XMLNumberedParaContext : public SvXMLImportContext
+{
+public:
+
+    TYPEINFO();
+
+    XMLNumberedParaContext( SvXMLImport& rImport,
+            sal_uInt16 nPrfx,
+            const ::rtl::OUString& rLName,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+
+    virtual ~XMLNumberedParaContext();
+
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+            const ::rtl::OUString& rLocalName,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+
+    virtual void Characters( const ::rtl::OUString& rChars );
+
+};
 
 #endif
