@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-09 13:28:35 $
+#   last change: $Author: hjs $ $Date: 2005-11-14 10:21:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,9 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  	settings.mk
 
+# don't link default libraries from sal
+UWINAPILIB=
+LIBSALCPPRT=
 # --- Files -------------------------------------
 
 SLOFILES= \
