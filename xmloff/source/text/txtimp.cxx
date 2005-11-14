@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:05:54 $
+ *  last change: $Author: rt $ $Date: 2005-11-14 09:10:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,6 +238,9 @@ static __FAR_DATA SvXMLTokenMapEntry aTextElemTokenMap[] =
     { XML_NAMESPACE_OFFICE, XML_FORMS,          XML_TOK_TEXT_FORMS },
     { XML_NAMESPACE_TABLE, XML_CALCULATION_SETTINGS,    XML_TOK_TEXT_CALCULATION_SETTINGS },
     { XML_NAMESPACE_TEXT, XML_ALPHABETICAL_INDEX_AUTO_MARK_FILE, XML_TOK_TEXT_AUTOMARK },
+    // --> FLR #i52127#
+    { XML_NAMESPACE_TEXT, XML_NUMBERED_PARAGRAPH, XML_TOK_TEXT_NUMBERED_PARAGRAPH   },
+    // <--
 
     XML_TOKEN_MAP_END
 };
@@ -1531,6 +1534,9 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         {
             rImport.GetProgressBarHelper()->Increment();
         }
+        break;
+     case XML_TOK_TEXT_NUMBERED_PARAGRAPH:
+         pContext = new XMLNumberedParaContext( rImport, nPrefix, rLocalName, xAttrList );
         break;
     case XML_TOK_TEXT_LIST:
         pContext = new XMLTextListBlockContext( rImport, *this,
