@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XSLTransformer.java,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: lo $ $Date: 2005-10-25 15:41:13 $
+ *  last change: $Author: obo $ $Date: 2005-11-15 17:05:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,8 @@ import java.net.URLConnection;
 // Imported TraX classes
 import javax.xml.transform.*;
 import javax.xml.transform.stream.*;
+import javax.xml.transform.sax.*;
+import javax.xml.parsers.*;
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
 
@@ -65,7 +67,7 @@ import com.sun.star.lib.uno.adapter.*;
  */
 public class XSLTransformer
     implements XTypeProvider, XServiceName, XServiceInfo, XActiveDataSink,
-        XActiveDataSource, XActiveDataControl, XInitialization, URIResolver
+        XActiveDataSource, XActiveDataControl, XInitialization, URIResolver, EntityResolver
 
 
 {
@@ -117,6 +119,10 @@ public class XSLTransformer
     // Resolve URIs to an empty source
     public Source resolve(String href, String base) {
         return new StreamSource(new StringReader(""));
+    }
+
+    public InputSource resolveEntity(String publicId, String systemId) throws SAXException, java.io.IOException {
+        return new InputSource(new StringReader(""));
     }
 
     // --- Initialization ---
@@ -243,7 +249,13 @@ public class XSLTransformer
 
                     InputStream xmlinput = new BufferedInputStream(
                             new XInputStreamToInputStreamAdapter(xistream));
-                    StreamSource xmlsource = new StreamSource(xmlinput);
+                    //Source xmlsource = new StreamSource(xmlinput);
+                    SAXParserFactory spf = SAXParserFactory.newInstance();
+                    spf.setValidating(false);
+                    spf.setNamespaceAware(true);
+                    XMLReader xmlReader = spf.newSAXParser().getXMLReader();
+                    xmlReader.setEntityResolver(XSLTransformer.this);
+                    Source xmlsource = new SAXSource(xmlReader, new InputSource(xmlinput));
 
                     BufferedOutputStream output = new BufferedOutputStream(
                         new XOutputStreamToOutputStreamAdapter(xostream));
@@ -283,7 +295,7 @@ public class XSLTransformer
                             TransformerFactory tfactory = TransformerFactory.newInstance();
                             transformer = tfactory.newTransformer(new StreamSource(stylesheeturl));
                             transformer.setOutputProperty("encoding", "UTF-8");
-                            transformer.setURIResolver(XSLTransformer.this);
+                            // transformer.setURIResolver(XSLTransformer.this);
 
                             // store the transformation into the cache
                             transformation = new Transformation();
