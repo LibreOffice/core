@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tagtest.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-06 12:44:21 $
+ *  last change: $Author: obo $ $Date: 2005-11-15 19:17:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -436,15 +436,16 @@ BOOL TokenInfo::IsPropertyRelevant( const ByteString &aName, const String &aValu
 
 BOOL TokenInfo::IsPropertyValueValid( const ByteString &aName, const String &aValue ) const
 {
+/*  removed due to i56740
     if ( aTagName.EqualsAscii( "switchinline" ) && aName.Equals( "select" ) )
     {
         return aValue.EqualsAscii("sys") ||
                aValue.EqualsAscii("appl") ||
                aValue.EqualsAscii("distrib");
-    }
+    } */
     if ( aTagName.EqualsAscii( "caseinline" ) && aName.Equals( "select" ) )
     {
-        return !aValue.EqualsAscii("OS2") &&
+        return /*!aValue.EqualsAscii("OS2") &&  removed due to i56740 */
                !aValue.EqualsAscii("");
     }
 
