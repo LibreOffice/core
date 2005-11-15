@@ -1,6 +1,7 @@
 # Syntax: language ANSI-Codepage LCID
 # comment lines begin with hash
 en-US 1252  1033
+bs      0   5146 # bosnian
 pt    1252  2070
 pt-PT 1252  2070
 ru    1251  1049
@@ -16,6 +17,7 @@ it    1252  1040
 cs    1250  1029   # Czech
 sk    1250  1051   # Slovak
 en-GB 1252  2057
+en-ZA 1252  7177
 da    1252  1030
 sv    1252  1053
 nb    1252  1044
