@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registrationdlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:42:26 $
+ *  last change: $Author: obo $ $Date: 2005-11-15 21:55:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,13 +71,13 @@ ModalDialog DLG_REGISTRATION_REQUEST
         Pos = MAP_APPFONT ( 33, 6 ) ;
         Size = MAP_APPFONT ( 153 , 32 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "Sie haben jetzt die Möglichkeit, sich als %PRODUCTNAME Anwender registrieren zu lassen." ;
+        Text [ de ] = "Sie haben jetzt die MÃ¶glichkeit, sich als %PRODUCTNAME Anwender registrieren zu lassen." ;
         Text [ en-US ] = "You now have the opportunity to register as a %PRODUCTNAME user." ;
     };
 
     String STR_COMPLETE_INTRO
     {
-        Text [ de ] = " Die Registrierung ist freiwillig und für Sie unverbindlich." ;
+        Text [ de ] = " Die Registrierung ist freiwillig und fÃ¼r Sie unverbindlich." ;
         Text [ en-US ] = " Registration is voluntary and is without obligation." ;
         Text [ x-comment ] = "This text will be appended to the text from FT_INTRO. In most languages the author knows :), this implies that you should start this text here with a space character. Thanks.";
     };
@@ -94,7 +94,7 @@ ModalDialog DLG_REGISTRATION_REQUEST
     {
         Pos = MAP_APPFONT ( 33 , 54 ) ;
         Size = MAP_APPFONT ( 153 , 10 ) ;
-        Text [ de ] = "Später registrieren" ;
+        Text [ de ] = "SpÃ¤ter registrieren" ;
         Text [ en-US ] = "Remind me to register later" ;
     };
     RadioButton RB_NEVER
@@ -110,7 +110,7 @@ ModalDialog DLG_REGISTRATION_REQUEST
         Size = MAP_APPFONT ( 153 , 20 ) ;
         WordBreak = TRUE;
 
-        Text [ de ] = "Registrierung für %PRODUCTNAME %PRODUCTVERSION bereits durchgeführt" ;
+        Text [ de ] = "Registrierung fÃ¼r %PRODUCTNAME %PRODUCTVERSION bereits durchgefÃ¼hrt" ;
         Text [ en-US ] = "Already registered as %PRODUCTNAME %PRODUCTVERSION user." ;
     };
 
@@ -139,7 +139,7 @@ ErrorBox ERRBOX_REG_NOSYSBROWSER
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
 
-    Message [ de ] = "Fehler beim Starten des Webbrowsers.\nBitte überprüfen Sie die Einstellungen von %PRODUCTNAME und die des Webbrowsers." ;
+    Message [ de ] = "Fehler beim Starten des Webbrowsers.\nBitte Ã¼berprÃ¼fen Sie die Einstellungen von %PRODUCTNAME und die des Webbrowsers." ;
     Message [ en-US ] = "An error occurred in starting the web browser.\nPlease check the %PRODUCTNAME and web browser settings.";
 };
 
