@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_base.scp,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-11 14:25:33 $
+ *  last change: $Author: fs $ $Date: 2005-11-15 12:54:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,8 +43,14 @@ File gid_File_Exe_Sbase
 End
 
 STD_UNO_LIB_FILE( gid_File_Lib_Abp, abp)
+STD_RES_FILE( gid_File_Res_Abp, abp)
+
 STD_UNO_LIB_FILE( gid_File_Lib_Dbp, dbp)
+STD_RES_FILE( gid_File_Res_Dbp, dbp)
+
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dbu, dbu )
+STD_RES_FILE_PATCH( gid_File_Res_Dbu, dbu)
+
 
 #ifdef UNX
 

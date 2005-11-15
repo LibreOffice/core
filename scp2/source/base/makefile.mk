@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-11 14:25:46 $
+#   last change: $Author: fs $ $Date: 2005-11-15 12:54:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,8 +49,7 @@ SCP_PRODUCT_TYPE=osl
 
 PARFILES= \
         module_base.par             \
-        file_base.par               \
-        resource_base.par
+        file_base.par
 
 .IF "$(GUI)"=="WNT"
 PARFILES += \
