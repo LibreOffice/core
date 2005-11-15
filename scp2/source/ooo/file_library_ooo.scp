@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.164 $
+ *  $Revision: 1.165 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-11 14:26:28 $
+ *  last change: $Author: obo $ $Date: 2005-11-15 17:06:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2147,7 +2147,7 @@ File gid_File_Lib_Xml2
 End
 #endif
 
-STD_UNO_LIB_FILE( gid_File_Lib_Unoxml, unoxml )
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Unoxml, unoxml )
 
 File gid_File_Lib_Jvmfwk
     TXT_FILE_BODY;
