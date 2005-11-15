@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docrecovery.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:50:34 $
+ *  last change: $Author: obo $ $Date: 2005-11-15 18:46:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,8 +177,8 @@ TabPage RID_SVXPAGE_DOCRECOVERY_RECOVER
         Pos = MAP_APPFONT( RECOV_COL1, RECOV_ROW2 );
         Size = MAP_APPFONT( RECOV_CONTROLWIDTH, RECOV_DESCRHEIGHT );
         WordBreak = TRUE;
-        Text[ de ] = "Klicken Sie auf 'Wiederherstellung starten', um mit dem  Wiederherstellungsprozess der weiter unten aufgelisteten Dokumente zu beginnen.\n\nDie 'Status' Spalte zeigt Informationen über den Wiederherstellungsprozess der einzelnen Dokumente an.";
-        Text[ en-US ] = "Press 'Start Recovery' to start the recovery process  of the documents listed below.\n\nThe 'Status' column shows whether the document could be recovered.";
+        Text[ de ] = "Klicken Sie auf 'Wiederherstellung starten', um mit dem Wiederherstellungsprozess der weiter unten aufgelisteten Dokumente zu beginnen.\n\nDie 'Status' Spalte zeigt Informationen über den Wiederherstellungsprozess der einzelnen Dokumente an.";
+        Text[ en-US ] = "Press 'Start Recovery' to start the recovery process of the documents listed below.\n\nThe 'Status' column shows whether the document could be recovered.";
     };
     FixedText FT_RECOV_PROGR
     {
