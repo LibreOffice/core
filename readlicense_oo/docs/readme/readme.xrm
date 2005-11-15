@@ -7,8 +7,8 @@
 			<Text id="a" xml:lang="de">Willkommen</Text>
 		</Paragraph>
 		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US">Last updated $Date: 2005-10-25 11:48:52 $</Text>
-			<Text id="a" xml:lang="de">Letztes Update $Date: 2005-10-25 11:48:52 $</Text>
+			<Text id="a" xml:lang="en-US">Last updated $Date: 2005-11-15 18:08:40 $</Text>
+			<Text id="a" xml:lang="de">Letztes Update $Date: 2005-11-15 18:08:40 $</Text>
 		</Paragraph>
 		<Paragraph id="A3" style="H1">
 			<Text id="a" xml:lang="en-US">OpenOffice.org 2.0 ReadMe</Text>
@@ -226,7 +226,7 @@
 		        <Text id="macxpn42dfgf" xml:lang="de">400 MB (Chinesische, Japanische und Koreanische Versionen: 550 MB, mehrsprachige Version: 900 MB) verfügbarer Festplattenplatz</Text>
 				<Text id="macxpn42dfgf" xml:lang="en-US">400 MB (Chinese, Japanese and Korean versions: 550 MB, multi-language version: 900 MB) available hard disk space</Text>
 		        <Text id="macxpghjhhr" xml:lang="de">X-Server (Apple X11 oder XDarwin 1.0) mit einer Bildschirmauflösung von 800x600 Punkten oder höher, mindestens 256 Farben</Text>
-				<Text id="macxpghjhhr" xml:lang="en-US">X-Server (Apple's X11 or XDarwin1.0) with 800x600 or higher resolution, with at least 256 colors</Text>
+				<Text id="macxpghjhhr" xml:lang="en-US">X-Server (Apple's X11 or XDarwin 1.0) with 800x600 or higher resolution, with at least 256 colors</Text>
 		        <Text id="macxpwd2dff" xml:lang="de">Gnome 2.6 oder höher für die Unterstützung von AT-Technologien (Assistive Technology Tools) über Java Accessibility</Text>
 				<Text id="macxpwd2dff" xml:lang="en-US">Gnome 2.6 or higher required for Assistive Technology Tools</Text>
 		        <Text id="macxpfhrtz5" xml:lang="de">Aquawm oder anderen X11 Window Manager</Text>
@@ -328,19 +328,19 @@
 		</Paragraph>
 	</Section>
 	<Section id="Scroll">
-		<Paragraph id="F1a" style="H2" gui="UNX">
+		<Paragraph id="F1a" style="H2" gui="WNT">
             <Text id="naso" xml:lang="de">ALPS/Synaptics Notebook Touchpads unter Windows</Text>
             <Text id="naso" xml:lang="en-US">ALPS/Synaptics notebook touchpads in Windows</Text>
 		</Paragraph>
-		<Paragraph id="F1b" gui="UNX">
+		<Paragraph id="F1b" gui="WNT">
             <Text id="naso2" xml:lang="de">Bedingt durch ein Problem mit dem Windows Treiber können Sie nicht durch OpenOffice.org Dokumente scrollen, wenn Sie mit dem Finger über ein ALPS/Synaptics Touchpad fahren.</Text>
             <Text id="naso2" xml:lang="en-US">Due to a Windows driver issue, you cannot scroll through OpenOffice.org documents when you slide your finger across an ALPS/Synaptics touchpad.</Text>
         </Paragraph>
-    		<Paragraph id="F1c" gui="UNX">
+    		<Paragraph id="F1c" gui="WNT">
                 <Text id="naso2" xml:lang="en-US">To enable touchpad scrolling, add the following lines to the &quot;C:\Program Files\Synaptics\SynTP\SynTPEnh.ini&quot; configuration file, and restart your computer:</Text>
                 <Text id="naso2" xml:lang="de">Um das Scrollen mit dem Trackpad zu ermöglichen, fügen Sie folgende Zeilen zur &quot;C:\Programme\Synaptics\SynTP\SynTPEnh.ini&quot; Konfigurationsdatei hinzu und starten Sie den Computer neu: </Text>
             </Paragraph>
-    		<Paragraph id="F1d" gui="UNX">
+    		<Paragraph id="F1d" gui="WNT">
                 <Text id="naso2" xml:lang="en-US">[OpenOffice.org]</Text>
                 <Text id="naso2" xml:lang="de">[OpenOffice.org]</Text>
                 <Text id="naso3" xml:lang="en-US">FC = &quot;SALFRAME&quot;</Text>
@@ -350,7 +350,7 @@
                 <Text id="naso5" xml:lang="en-US">SF |= 0x00004000</Text>
                 <Text id="naso5" xml:lang="de">SF |= 0x00004000</Text>
              </Paragraph>
-    		<Paragraph id="F1e" gui="UNX">
+    		<Paragraph id="F1e" gui="WNT">
                 <Text id="naso2" xml:lang="de">Hinweis: Der Pfad zur Konfigurationsdatei kann je nach Windows Version unterschiedlich sein.</Text>
                 <Text id="naso2" xml:lang="en-US">Note: The location of the configuration file might vary on different versions of Windows.</Text>
              </Paragraph>
@@ -474,8 +474,8 @@
 		<Paragraph id="A2">
 			<Text id="a" xml:lang="en-US" url="ahead">Please take a little time to complete the minimal Product Registration process when you install the software. While registration is optional, we encourage you to register, since the information enables the community to make an even better software suite and address user needs directly. Through its Privacy Policy, the OpenOffice.org Community takes every precaution to safeguard your personal data. If you missed the registration at installation, you can return and register at any time at </Text>
 			<Text id="a" xml:lang="de" url="ahead">Bitte nehmen Sie sich ein wenig Zeit, die minimal gehaltene Produkt-Registrierung während der Installation der Software durchzuführen. Auch wenn die Registrierung freiwillig ist, so bitten wir Sie dennoch, die Registrierung durchzuführen, denn diese Information hilft der Gemeinschaft, ein besseres Softwareprodukt herzustellen und den Anwenderbedürfnissen unmittelbarer zu entsprechen. Unsere Datenschutzrichtlinien verpflichten die OpenOffice.org-Gemeinschaft jede Vorkehrung zu nutzen, die den Schutz Ihrer Daten gewährleistet. Wenn Sie die Registrierung während der Installation nicht durchführen wollen, lässt sich die Registrierung jederzeit nachholen unter </Text>
-            <Text id="b" xml:lang="en-US" url="true" >http://www.openoffice.org/welcome/registration-site.html </Text>
-            <Text id="b" xml:lang="de" url="true" >http://www.openoffice.org/welcome/registration-site.html </Text>
+            <Text id="b" xml:lang="en-US" url="true" >http://www.openoffice.org/welcome/registration20.html </Text>
+            <Text id="b" xml:lang="de" url="true" >http://www.openoffice.org/welcome/registration20.html </Text>
 		</Paragraph>
 	</Section>
 	<Section id="UserSurvey">
