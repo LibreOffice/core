@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlnum.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:26:21 $
+ *  last change: $Author: obo $ $Date: 2005-11-15 14:53:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,10 +121,6 @@ void SwHTMLNumRuleInfo::Set( const SwTxtNode& rTxtNd )
         nDeep = 0;
         bNumbered = bRestart = sal_False;
     }
-
-#ifndef NUM_RELSPACE
-    bUpdateWholeNum = sal_False;
-#endif
 }
 
 /*  */
@@ -180,7 +176,6 @@ void SwHTMLParser::NewNumBulList( int nToken )
             nChrFmtPoolId = RES_POOLCHR_BUL_LEVEL;
         }
 
-#ifdef NUM_RELSPACE
         sal_uInt16 nAbsLSpace = HTML_NUMBUL_MARGINLEFT;
         short nFirstLineIndent  = HTML_NUMBUL_INDENT;
         if( nLevel > 0 )
@@ -191,10 +186,6 @@ void SwHTMLParser::NewNumBulList( int nToken )
         }
         aNumFmt.SetAbsLSpace( nAbsLSpace );
         aNumFmt.SetFirstLineOffset( nFirstLineIndent );
-#else
-        aNumFmt.SetAbsLSpace( (nLevel+1) * HTML_NUMBUL_MARGINLEFT );
-        aNumFmt.SetFirstLineOffset( HTML_NUMBUL_INDENT );
-#endif
         aNumFmt.SetCharFmt( pCSS1Parser->GetCharFmtFromPool(nChrFmtPoolId) );
         bChangeNumFmt = sal_True;
     }
@@ -334,15 +325,6 @@ void SwHTMLParser::NewNumBulList( int nToken )
     // einen neuen Kontext anlegen
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( nToken );
 
-#ifndef NUM_RELSPACE
-    // darin auch die Raender merken
-    sal_uInt16 nLeft=0, nRight=0;
-    short nIndent=0;
-    GetMarginsFromContext( nLeft, nRight, nIndent );
-    nLeft += HTML_NUMBUL_MARGINLEFT;
-    pCntxt->SetMargins( nLeft, nRight, nIndent );
-#endif
-
     // Styles parsen
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
     {
@@ -351,7 +333,6 @@ void SwHTMLParser::NewNumBulList( int nToken )
 
         if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
-#ifdef NUM_RELSPACE
             if( bNewNumFmt )
             {
                 if( aPropInfo.bLeftMargin )
@@ -384,7 +365,6 @@ void SwHTMLParser::NewNumBulList( int nToken )
             aPropInfo.bLeftMargin = aPropInfo.bTextIndent = sal_False;
             if( !aPropInfo.bRightMargin )
                 aItemSet.ClearItem( RES_LR_SPACE );
-#endif
             DoPositioning( aItemSet, aPropInfo, pCntxt );
             InsertAttrs( aItemSet, aPropInfo, pCntxt );
         }
@@ -471,11 +451,6 @@ void SwHTMLParser::EndNumBulList( int nToken )
             // loeschen. Das ResetAttr loescht das NodeNum-Objekt mit!
             pPam->GetNode()->GetTxtNode()->ResetAttr( RES_PARATR_NUMRULE );
 
-#ifndef NUM_RELSPACE
-            // Die Numerierung komplett beenden.
-            if( pTable )
-                UpdateNumRuleInTable();
-#endif
             rInfo.Clear();
         }
         else
@@ -571,15 +546,6 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
 
         pDoc->MakeNumRule( aNumRuleName, &aNumRule );
 
-#ifndef NUM_RELSPACE
-        // Hier muessen wir hart attributieren
-        sal_uInt16 nLeft=0, nRight=0;
-        short nIndent=0;
-        GetMarginsFromContext( nLeft, nRight, nIndent );
-        nLeft += (sal_uInt16)(-HTML_NUMBUL_INDENT);
-        pCntxt->SetMargins( nLeft, nRight, nIndent );
-#endif
-
         ASSERT( !nOpenParaToken,
                 "Jetzt geht ein offenes Absatz-Element verloren" );
         // Wir tun so, als ob wir in einem Absatz sind. Dann wird
@@ -592,11 +558,15 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
     SwTxtNode* pTxtNode = pPam->GetNode()->GetTxtNode();
     ((SwCntntNode *)pTxtNode)->SetAttr( SwNumRuleItem(aNumRuleName) );
     pTxtNode->SetLevel(nLevel);
+    // --> OD 2005-11-14 #i57656#
+    // <IsCounted()> state of text node has to be adjusted accordingly.
+    if ( nLevel >= 0 && nLevel < MAXLEVEL )
+    {
+        pTxtNode->SetCounted( true );
+    }
+    // <--
     pTxtNode->SetStart(nStart);
 
-#ifndef NUM_RELSPACE
-    pTxtNode->SetNumLSpace( GetNumInfo().GetNumRule()!=0 );
-#endif
     if( GetNumInfo().GetNumRule() )
         GetNumInfo().GetNumRule()->SetInvalidRule( sal_True );
 
@@ -680,41 +650,24 @@ void SwHTMLParser::SetNodeNum( sal_uInt8 nLevel )
     const String& rName = GetNumInfo().GetNumRule()->GetName();
     ((SwCntntNode *)pTxtNode)->SetAttr( SwNumRuleItem(rName) );
 
-    pTxtNode->SetLevel( nLevel );
-#ifndef NUM_RELSPACE
-    pTxtNode->SetNumLSpace( sal_True );
-#endif
+    // --> OD 2005-11-14 #i57656#
+    // consider usage of NO_NUMLEVEL - see implementation of <SwTxtNode::SetLevel(..)>
+    if ( nLevel >= 0 && ( nLevel & NO_NUMLEVEL ) )
+    {
+        pTxtNode->SetLevel( nLevel & ~NO_NUMLEVEL );
+        pTxtNode->SetCounted( false );
+    }
+    else
+    {
+        pTxtNode->SetLevel( nLevel );
+        pTxtNode->SetCounted( true );
+    }
 
     // NumRule invalidieren, weil sie durch ein EndAction bereits
     // auf valid geschaltet worden sein kann.
     GetNumInfo().GetNumRule()->SetInvalidRule( sal_False );
 }
 
-
-#ifndef NUM_RELSPACE
-void SwHTMLParser::UpdateNumRuleInTable()
-{
-    // Wenn wir in einer Tabelle sind, muss die Numerierung wegen
-    // GetMixMaxSize gliech updatet werden. Wenn die Numerierung
-    // in einen Rahmen rein oder aus einem Rahmen heraus geschoben
-    // muss sie komplett updatet werden. Sonst genuegt es, sie
-    // innerhalb der aktuellen Zelle zu updaten.
-
-    ASSERT( GetNumInfo().GetNumRule(), "UpdateNumRuleInTable: Keine NumRule" );
-    ASSERT( pTable, "UpdateNumRuleInTable: Keine Tabele, Aufruf unneotig" );
-
-    sal_uInt32 nPos = ULONG_MAX;
-    if( !GetNumInfo().IsUpdateWholeNum() )
-    {
-        const SwStartNode *pSttNd = pPam->GetNode()->FindTableBoxStartNode();
-        ASSERT( pSttNd || pPam->GetNode()->FindFlyStartNode(),
-                "UpdateNumRuleInTable: Doch keine Tabelle?" );
-        if( pSttNd )
-            nPos = pSttNd->GetIndex();
-    }
-    pDoc->UpdateNumRule( GetNumInfo().GetNumRule()->GetName(), nPos );
-}
-#endif
 
 /*  */
 
@@ -939,10 +892,8 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
         if( sOut.Len() )
             rWrt.Strm() << sOut.GetBuffer();
 
-#ifdef NUM_RELSPACE
         if( rWrt.bCfgOutStyles )
             OutCSS1_NumBulListStyleOpt( rWrt, *rInfo.GetNumRule(), (BYTE)i );
-#endif
 
         rWrt.Strm() << '>';
 
