@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ednumber.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:19:38 $
+ *  last change: $Author: obo $ $Date: 2005-11-15 14:53:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -471,6 +471,12 @@ BOOL SwEditShell::MoveNumParas( BOOL bUpperLower, BOOL bUpperLeft )
                         {
                             ++nIdx;
                         }
+                        // --> OD 2005-11-14 #i57856#
+                        else
+                        {
+                            break;
+                        }
+                        // <--
                     }
 
                     if( nStt == nIdx || !GetDoc()->GetNodes()[ nIdx ]->IsTxtNode() )
