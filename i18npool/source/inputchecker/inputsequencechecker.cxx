@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputsequencechecker.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:17:12 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:18:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,20 @@ InputSequenceCheckerImpl::checkInputSequence(const OUString& Text, sal_Int32 nSt
             return sal_True; // not a checkable languages.
 }
 
+sal_Int32 SAL_CALL
+InputSequenceCheckerImpl::correctInputSequence(OUString& Text, sal_Int32 nStartPos,
+        sal_Unicode inputChar, sal_Int16 inputCheckMode) throw(RuntimeException)
+{
+        if (inputCheckMode != InputSequenceCheckMode::PASSTHROUGH) {
+            sal_Char* language = getLanguageByScripType(Text[nStartPos], inputChar);
+
+            if (language)
+                return getInputSequenceChecker(language)->correctInputSequence(Text, nStartPos, inputChar, inputCheckMode);
+        }
+        Text = Text.replaceAt(++nStartPos, 0, OUString(inputChar));
+        return nStartPos;
+}
+
 static ScriptTypeList typeList[] = {
         //{ UnicodeScript_kHebrew,              UnicodeScript_kHebrew },        // 10,
         //{ UnicodeScript_kArabic,              UnicodeScript_kArabic },        // 11,
@@ -105,7 +119,7 @@ InputSequenceCheckerImpl::getLanguageByScripType(sal_Unicode cChar, sal_Unicode 
     return NULL;
 }
 
-Reference< XInputSequenceChecker >& SAL_CALL
+Reference< XExtendedInputSequenceChecker >& SAL_CALL
 InputSequenceCheckerImpl::getInputSequenceChecker(sal_Char* rLanguage) throw (RuntimeException)
 {
         if (cachedItem && cachedItem->aLanguage == rLanguage) {
@@ -123,8 +137,8 @@ InputSequenceCheckerImpl::getInputSequenceChecker(sal_Char* rLanguage) throw (Ru
                         OUString::createFromAscii(rLanguage));
 
             if ( xI.is() ) {
-                Reference< XInputSequenceChecker > xISC;
-                xI->queryInterface( getCppuType((const Reference< XInputSequenceChecker>*)0) ) >>= xISC;
+                Reference< XExtendedInputSequenceChecker > xISC;
+                xI->queryInterface( getCppuType((const Reference< XExtendedInputSequenceChecker>*)0) ) >>= xISC;
                 if (xISC.is()) {
                     lookupTable.push_back(cachedItem = new lookupTableItem(rLanguage, xISC));
                     return cachedItem->xISC;
