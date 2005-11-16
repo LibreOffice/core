@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:54:54 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:06:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -269,8 +269,10 @@ public:
     MenuItemData*   GetDataFromPos( ULONG nPos ) const
                         { return (MenuItemData*)List::GetObject( nPos ); }
 
-    MenuItemData*   SearchItem( xub_Unicode cSelectChar, USHORT& rPos, USHORT& nDuplicates, USHORT nCurrentPos ) const;
+    MenuItemData*   SearchItem( xub_Unicode cSelectChar, KeyCode aKeyCode, USHORT& rPos, USHORT& nDuplicates, USHORT nCurrentPos ) const;
     USHORT          GetItemCount( xub_Unicode cSelectChar ) const;
+    USHORT          GetItemCount( KeyCode aKeyCode ) const;
+
     uno::Reference< i18n::XCharacterClassification > GetCharClass() const;
 };
 
@@ -374,22 +376,59 @@ MenuItemData* MenuItemList::GetData( USHORT nSVId, USHORT& rPos ) const
     return NULL;
 }
 
-MenuItemData* MenuItemList::SearchItem( xub_Unicode cSelectChar, USHORT& rPos, USHORT& nDuplicates, USHORT nCurrentPos ) const
+MenuItemData* MenuItemList::SearchItem( xub_Unicode cSelectChar, KeyCode aKeyCode, USHORT& rPos, USHORT& nDuplicates, USHORT nCurrentPos ) const
 {
     const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
 
-    nDuplicates = GetItemCount( cSelectChar );  // return number of duplicates
-
     USHORT nListCount = (USHORT)Count();
 
-    for ( rPos = 0; rPos < nListCount; rPos++)
+    // try character code first
+    nDuplicates = GetItemCount( cSelectChar );  // return number of duplicates
+    if( nDuplicates )
     {
-        MenuItemData* pData = GetDataFromPos( rPos );
-        if ( pData->bEnabled && rI18nHelper.MatchMnemonic( pData->aText, cSelectChar ) )
-            if( nDuplicates > 1 && rPos == nCurrentPos )
-                continue;   // select next entry with the same mnemonic
-            else
-                return pData;
+        for ( rPos = 0; rPos < nListCount; rPos++)
+        {
+            MenuItemData* pData = GetDataFromPos( rPos );
+            if ( pData->bEnabled && rI18nHelper.MatchMnemonic( pData->aText, cSelectChar ) )
+                if( nDuplicates > 1 && rPos == nCurrentPos )
+                    continue;   // select next entry with the same mnemonic
+                else
+                    return pData;
+        }
+    }
+
+    // nothing found, try keycode instead
+    nDuplicates = GetItemCount( aKeyCode ); // return number of duplicates
+
+    if( nDuplicates )
+    {
+        char ascii = 0;
+        if( aKeyCode.GetCode() >= KEY_A && aKeyCode.GetCode() <= KEY_Z )
+            ascii = 'A' + (aKeyCode.GetCode() - KEY_A);
+
+        for ( rPos = 0; rPos < nListCount; rPos++)
+        {
+            MenuItemData* pData = GetDataFromPos( rPos );
+            if ( pData->bEnabled )
+            {
+                USHORT n = pData->aText.Search( '~' );
+                if ( n != STRING_NOTFOUND )
+                {
+                    KeyCode mnKeyCode;
+                    xub_Unicode mnUnicode = pData->aText.GetChar(n+1);
+                    if( (ImplGetDefaultWindow()->ImplGetFrame()->MapUnicodeToKeyCode( mnUnicode, Application::GetSettings().GetUILanguage(), mnKeyCode )
+                        && aKeyCode.GetCode() == mnKeyCode.GetCode())
+                        || (ascii && rI18nHelper.MatchMnemonic( pData->aText, ascii ) ) )
+
+                    {
+                        if( nDuplicates > 1 && rPos == nCurrentPos )
+                            continue;   // select next entry with the same mnemonic
+                        else
+                            return pData;
+                    }
+                }
+            }
+        }
     }
 
     return NULL;
@@ -406,6 +445,38 @@ USHORT MenuItemList::GetItemCount( xub_Unicode cSelectChar ) const
         MenuItemData* pData = GetDataFromPos( --nPos );
         if ( pData->bEnabled && rI18nHelper.MatchMnemonic( pData->aText, cSelectChar ) )
             nItems++;
+    }
+
+    return nItems;
+}
+
+USHORT MenuItemList::GetItemCount( KeyCode aKeyCode ) const
+{
+    // returns number of entries with same mnemonic
+    // uses key codes instead of character codes
+    const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
+    char ascii = 0;
+    if( aKeyCode.GetCode() >= KEY_A && aKeyCode.GetCode() <= KEY_Z )
+        ascii = 'A' + (aKeyCode.GetCode() - KEY_A);
+
+    USHORT nItems = 0, nPos;
+    for ( nPos = (USHORT)Count(); nPos; )
+    {
+        MenuItemData* pData = GetDataFromPos( --nPos );
+        if ( pData->bEnabled )
+        {
+            USHORT n = pData->aText.Search( '~' );
+            if ( n != STRING_NOTFOUND )
+            {
+                KeyCode mnKeyCode;
+                // if MapUnicodeToKeyCode fails or is unsupported we try the pure ascii mapping of the keycodes
+                // so we have working shortcuts when ascii mnemonics are used
+                if( (ImplGetDefaultWindow()->ImplGetFrame()->MapUnicodeToKeyCode( pData->aText.GetChar(n+1), Application::GetSettings().GetUILanguage(), mnKeyCode )
+                    && aKeyCode.GetCode() == mnKeyCode.GetCode())
+                    || ( ascii && rI18nHelper.MatchMnemonic( pData->aText, ascii ) ) )
+                    nItems++;
+            }
+        }
     }
 
     return nItems;
@@ -4398,7 +4469,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
             xub_Unicode nCharCode = rKEvent.GetCharCode();
             USHORT nPos;
             USHORT nDuplicates = 0;
-            MenuItemData* pData = nCharCode ? pMenu->GetItemList()->SearchItem( nCharCode, nPos, nDuplicates, nHighlightedItem ) : NULL;
+            MenuItemData* pData = nCharCode ? pMenu->GetItemList()->SearchItem( nCharCode, rKEvent.GetKeyCode(), nPos, nDuplicates, nHighlightedItem ) : NULL;
             if ( pData )
             {
                 if ( pData->pSubMenu || nDuplicates > 1 )
@@ -5095,7 +5166,7 @@ BOOL MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu 
         if ( nCharCode )
         {
             USHORT nEntry, nDuplicates;
-            MenuItemData* pData = pMenu->GetItemList()->SearchItem( nCharCode, nEntry, nDuplicates, nHighlightedItem );
+            MenuItemData* pData = pMenu->GetItemList()->SearchItem( nCharCode, rKEvent.GetKeyCode(), nEntry, nDuplicates, nHighlightedItem );
             if ( pData && (nEntry != ITEMPOS_INVALID) )
             {
                 mbAutoPopup = TRUE;
