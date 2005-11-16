@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputsequencechecker_hi.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:17:29 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:19:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,4 +137,17 @@ InputSequenceChecker_hi::checkInputSequence(const OUString& Text,
     return (_DEV_Composible[inputCheckMode][dev_cell_check[ch2][ch1]]);
 }
 
+sal_Int32 SAL_CALL
+InputSequenceChecker_hi::correctInputSequence(OUString& Text,
+                                            sal_Int32       nStartPos,
+                                            sal_Unicode     inputChar,
+                                            sal_Int16       inputCheckMode)
+  throw(com::sun::star::uno::RuntimeException)
+{
+    if (checkInputSequence(Text, nStartPos, inputChar, inputCheckMode))
+        Text = Text.replaceAt(++nStartPos, 0, OUString(inputChar));
+    else
+        nStartPos=Text.getLength();
+    return nStartPos;
+}
 } } } }
