@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localebackend.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:48:28 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:16:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,11 +142,14 @@ class LocaleBackend : public ::cppu::WeakImplHelper2 <
         // for configuration layers.
         static rtl::OUString createTimeStamp(void);
 
-        // Returns the system locale
+        // Returns the user locale
         static rtl::OUString getLocale(void);
 
-        // Returns the system UI locale
+        // Returns the user UI locale
         static rtl::OUString getUILocale(void);
+
+        // Returns the system default locale
+        static rtl::OUString getSystemLocale(void);
 } ;
 
 
