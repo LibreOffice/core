@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:24:19 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:13:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -742,6 +742,22 @@ void ScModule::GetState( SfxItemSet& rSet )
 
         }
         nWhich = aIter.NextWhich();
+    }
+}
+
+
+void ScModule::HideDisabledSlots( SfxItemSet& rSet )
+{
+    if( SfxViewFrame* pViewFrm = SfxViewFrame::Current() )
+    {
+        SfxBindings& rBindings = pViewFrm->GetBindings();
+        SfxWhichIter aIter( rSet );
+        for( USHORT nWhich = aIter.FirstWhich(); nWhich != 0; nWhich = aIter.NextWhich() )
+        {
+            ScViewUtil::HideDisabledSlot( rSet, rBindings, nWhich );
+            // always disable the slots
+            rSet.DisableItem( nWhich );
+        }
     }
 }
 
