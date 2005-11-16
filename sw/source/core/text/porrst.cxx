@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:22:03 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:31:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,9 @@
 #endif
 #ifndef _SVX_ADJITEM_HXX //autogen
 #include <svx/adjitem.hxx>
+#endif
+#ifndef _SVX_ESCPITEM_HXX //autogen
+#include <svx/escpitem.hxx>
 #endif
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
@@ -534,6 +537,9 @@ sal_Bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
     return ( 0 != rRegDiff );
 }
 
+/*************************************************************************
+ *              virtual SwHiddenTextPortion::Paint()
+ *************************************************************************/
 
 void SwHiddenTextPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
@@ -551,6 +557,10 @@ void SwHiddenTextPortion::Paint( const SwTxtPaintInfo &rInf ) const
 #endif
 }
 
+/*************************************************************************
+ *              virtual SwHiddenTextPortion::Format()
+ *************************************************************************/
+
 sal_Bool SwHiddenTextPortion::Format( SwTxtFormatInfo &rInf )
 {
     Width( 0 );
@@ -559,3 +569,76 @@ sal_Bool SwHiddenTextPortion::Format( SwTxtFormatInfo &rInf )
     return sal_False;
 };
 
+/*************************************************************************
+ *              virtual SwControlCharPortion::Paint()
+ *************************************************************************/
+
+void SwControlCharPortion::Paint( const SwTxtPaintInfo &rInf ) const
+{
+    if ( Width() )  // is only set during prepaint mode
+    {
+        rInf.DrawViewOpt( *this, POR_CONTROLCHAR );
+
+        if ( !rInf.GetOpt().IsPagePreview() &&
+             !rInf.GetOpt().IsReadonly() &&
+              SwViewOption::IsFieldShadings() &&
+              CHAR_ZWNBSP != mcChar )
+        {
+            SwFont aTmpFont( *rInf.GetFont() );
+            aTmpFont.SetEscapement( CHAR_ZWSP == mcChar ? DFLT_ESC_AUTO_SUB : -25 );
+            const USHORT nProp = 40;
+            aTmpFont.SetProportion( nProp );  // a smaller font
+            SwFontSave aFontSave( rInf, &aTmpFont );
+
+            String aOutString;
+
+            switch ( mcChar )
+            {
+                case CHAR_ZWSP :
+                    aOutString = '/'; break;
+//                case CHAR_LRM :
+//                    rTxt = sal_Unicode(0x2514); break;
+//                case CHAR_RLM :
+//                    rTxt = sal_Unicode(0x2518); break;
+            }
+
+            if ( !mnHalfCharWidth )
+                mnHalfCharWidth = rInf.GetTxtSize( aOutString ).Width() / 2;
+
+            Point aOldPos = rInf.GetPos();
+            Point aNewPos( aOldPos );
+            aNewPos.X() = aNewPos.X() + ( Width() / 2 ) - mnHalfCharWidth;
+            const_cast< SwTxtPaintInfo& >( rInf ).SetPos( aNewPos );
+
+            rInf.DrawText( aOutString, *this );
+
+            const_cast< SwTxtPaintInfo& >( rInf ).SetPos( aOldPos );
+        }
+    }
+}
+
+/*************************************************************************
+ *              virtual SwControlCharPortion::Format()
+ *************************************************************************/
+
+sal_Bool SwControlCharPortion::Format( SwTxtFormatInfo &rInf )
+{
+    const SwLinePortion* pRoot = rInf.GetRoot();
+    Width( 0 );
+    Height( pRoot->Height() );
+    SetAscent( pRoot->GetAscent() );
+
+    return sal_False;
+}
+
+/*************************************************************************
+ *              virtual SwControlCharPortion::GetViewWidth()
+ *************************************************************************/
+
+KSHORT SwControlCharPortion::GetViewWidth( const SwTxtSizeInfo& rInf ) const
+{
+    if( !mnViewWidth )
+        mnViewWidth = rInf.GetTxtSize( ' ' ).Width();
+
+    return mnViewWidth;
+}
