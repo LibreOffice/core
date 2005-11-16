@@ -4,9 +4,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:04:42 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:15:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,6 +171,7 @@ public:
                                         pCondSet->GetItemState( ATTR_FONT_HEIGHT, TRUE ); }
 
     BOOL    IsRightToLeftAttr() const;
+    BOOL    HasEditCharacters() const;
 };
 
 //==================================================================
@@ -561,6 +562,15 @@ BOOL ScDrawStringsVars::IsRightToLeftAttr() const
                                     pPattern->GetItem( ATTR_WRITINGDIR, pCondSet )).GetValue();
     return ( eCellDir == FRMDIR_HORI_RIGHT_TOP ||
             ( eCellDir == FRMDIR_ENVIRONMENT && pOutput->nTabTextDirection == EE_HTEXTDIR_R2L ) );
+}
+
+BOOL ScDrawStringsVars::HasEditCharacters() const
+{
+    static const sal_Unicode pChars[] =
+    {
+        CHAR_NBSP, CHAR_SHY, CHAR_ZWSP, CHAR_LRM, CHAR_RLM, CHAR_NBHY, CHAR_ZWNBSP, 0
+    };
+    return aString.SearchChar( pChars ) != STRING_NOTFOUND;
 }
 
 //==================================================================
@@ -1406,7 +1416,10 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                         lcl_CreateInterpretProgress( bProgress, pDoc, (ScFormulaCell*)pCell );
                     if ( aVars.SetText(pCell) )
                         pOldPattern = NULL;
-
+                    bNeedEdit = aVars.HasEditCharacters();
+                }
+                if (bDoCell && !bNeedEdit)
+                {
                     CellType eCellType = pCell->GetCellType();
                     bCellIsValue = ( eCellType == CELLTYPE_VALUE );
                     if ( eCellType == CELLTYPE_FORMULA )
