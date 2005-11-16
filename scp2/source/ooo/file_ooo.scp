@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:26:34 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:20:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1113,7 +1113,7 @@ End
 
 File gid_File_Oo_Office_Common_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, SCPZIP_REPLACE);
+    Styles = (PACKED, SCPZIP_REPLACE, PATCH);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
     Name = "/registry/data/org/openoffice/Office/Common.xcu";
 End
@@ -1599,7 +1599,7 @@ End
 
 File gid_File_Oo_System_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice;
     Name = "/registry/schema/org/openoffice/System.xcs";
 End
@@ -1922,7 +1922,7 @@ File gid_File_Share_Config_Sofficecfg_uiconfig_Zip
                   "modules/simpress/accelerator/en-US/default.xml",
                   "modules/simpress/accelerator/es/default.xml",
                   "modules/simpress/accelerator/fr/default.xml",
-                  "modules/simpress/menubar/menubar.xml",                  
+                  "modules/simpress/menubar/menubar.xml",
                   "modules/sdraw/accelerator/de/default.xml",
                   "modules/sdraw/accelerator/en-GB/default.xml",
                   "modules/sdraw/accelerator/en-US/default.xml",
