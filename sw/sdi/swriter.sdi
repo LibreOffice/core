@@ -4290,30 +4290,6 @@ SfxBoolItem InsertGraphicRuler FN_INSERT_HRULER
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
-SfxVoidItem InsertHardHyphen FN_INSERT_HARDHYPHEN
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_INSERT;
-]
 
 
 //--------------------------------------------------------------------------
@@ -4441,31 +4417,6 @@ SfxVoidItem InsertNeutralParagraph FN_NUM_BULLET_NONUM
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_ENUMERATION;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem InsertNonBreakingSpace FN_INSERT_HARD_SPACE
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_INSERT;
 ]
 
 //--------------------------------------------------------------------------
@@ -4792,31 +4743,6 @@ SfxVoidItem InsertScript FN_JAVAEDIT
     RecordAbsolute = FALSE,
     RecordPerSet;
     Asynchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_INSERT;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem InsertSoftHyphen FN_INSERT_SOFT_HYPHEN
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
 
     /* config: */
     AccelConfig = TRUE,
@@ -9963,4 +9889,5 @@ SfxVoidItem RemoveDirectCharFormats FN_REMOVE_DIRECT_CHAR_FORMATS
     ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
 ]
+
 
