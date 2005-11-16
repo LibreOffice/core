@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.196 $
+ *  $Revision: 1.197 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:57:37 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:07:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2252,6 +2252,12 @@ XubString X11SalFrame::GetKeyName( USHORT nKeyCode )
 XubString X11SalFrame::GetSymbolKeyName( const XubString&, USHORT nKeyCode )
 {
   return GetKeyName( nKeyCode );
+}
+
+BOOL X11SalFrame::MapUnicodeToKeyCode( sal_Unicode , LanguageType , KeyCode& )
+{
+    // not supported yet
+    return FALSE;
 }
 
 LanguageType X11SalFrame::GetInputLanguage()
