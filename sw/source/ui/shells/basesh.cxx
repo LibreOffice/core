@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:32:41 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:52:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,9 @@
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
-
+#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
+#include <svtools/languageoptions.hxx>
+#endif
 
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
@@ -90,6 +92,9 @@
 #endif
 #ifndef _GALLERY_HXX_ //autogen
 #include <svx/gallery.hxx>
+#endif
+#ifndef _SVX_LANGITEM_HXX
+#include <svx/langitem.hxx>
 #endif
 #ifndef _SVX_CLIPFMTITEM_HXX
 #include <svx/clipfmtitem.hxx>
@@ -189,6 +194,9 @@
 #endif
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
+#endif
+#ifndef _FONTCFG_HXX
+#include <fontcfg.hxx>
 #endif
 //CHINA001 #ifndef _CHANGEDB_HXX
 //CHINA001 #include <changedb.hxx>
@@ -2104,18 +2112,89 @@ void SwBaseShell::ExecTxtCtrl( SfxRequest& rReq )
         SfxItemPool& rPool = rSh.GetAttrPool();
         USHORT nWhich = rPool.GetWhich( nSlot );
         USHORT nScripts = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+        SfxItemSet aHeightSet( GetPool(),  RES_CHRATR_FONTSIZE, RES_CHRATR_FONTSIZE,
+                                            RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CJK_FONTSIZE,
+                                            RES_CHRATR_CTL_FONTSIZE, RES_CHRATR_CTL_FONTSIZE,
+                                        0L);
 
         switch( nSlot )
         {
-        case SID_ATTR_CHAR_FONT:
-            nScripts = rSh.GetScriptType();
-        case SID_ATTR_CHAR_FONTHEIGHT:
-        case SID_ATTR_CHAR_POSTURE:
-        case SID_ATTR_CHAR_WEIGHT:
+            case SID_ATTR_CHAR_FONT:
+            {
+                nScripts = rSh.GetScriptType();
+                // #42732# input language should be preferred over
+                // current cursor position to detect script type
+                if(!rSh.HasSelection())
+                {
+                    LanguageType nInputLang = GetView().GetEditWin().GetInputLanguage();
+                    if(nInputLang != LANGUAGE_DONTKNOW && nInputLang != LANGUAGE_SYSTEM)
+                        nScripts = SvtLanguageOptions::GetScriptTypeOfLanguage( nInputLang );
+                }
+            }
+            case SID_ATTR_CHAR_POSTURE:
+            case SID_ATTR_CHAR_WEIGHT:
             {
                 pSSetItem = new SvxScriptSetItem( nSlot, rPool );
                 pSSetItem->PutItemForScriptType( nScripts, pArgs->Get( nWhich ));
                 pArgs = &pSSetItem->GetItemSet();
+            }
+            break;
+            case SID_ATTR_CHAR_FONTHEIGHT:
+            {
+                if(rSh.HasSelection())
+                {
+                    pSSetItem = new SvxScriptSetItem( nSlot, rPool );
+                    pSSetItem->PutItemForScriptType( nScripts, pArgs->Get( nWhich ));
+                    pArgs = &pSSetItem->GetItemSet();
+                }
+                else
+                {
+                    nScripts = rSh.GetScriptType();
+                    LanguageType nInputLang = GetView().GetEditWin().GetInputLanguage();
+                    if(nInputLang != LANGUAGE_DONTKNOW && nInputLang != LANGUAGE_SYSTEM)
+                        nScripts = SvtLanguageOptions::GetScriptTypeOfLanguage( nInputLang );
+                    UINT32 nHeight = static_cast< const SvxFontHeightItem& >(pArgs->Get( nWhich )).GetHeight();
+                    SwStdFontConfig* pStdFont = SW_MOD()->GetStdFontConfig();
+
+                    SfxItemSet aLangSet( GetPool(), RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE,
+                                                    RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE,
+                                                    RES_CHRATR_CTL_LANGUAGE, RES_CHRATR_CTL_LANGUAGE,
+                                                    0L);
+                    rSh.GetAttr( aLangSet );
+
+                    sal_Int32 nWesternSize =
+                            pStdFont->GetFontHeight(FONT_STANDARD, FONT_GROUP_DEFAULT,
+                            static_cast<const SvxLanguageItem&>(aLangSet.Get( RES_CHRATR_LANGUAGE)).GetLanguage());
+                    sal_Int32 nCJKSize =
+                            pStdFont->GetFontHeight(FONT_STANDARD, FONT_GROUP_CJK,
+                            static_cast<const SvxLanguageItem&>(aLangSet.Get( RES_CHRATR_CJK_LANGUAGE)).GetLanguage());
+                    sal_Int32 nCTLSize =
+                            pStdFont->GetFontHeight(FONT_STANDARD, FONT_GROUP_CTL,
+                            static_cast<const SvxLanguageItem&>(aLangSet.Get( RES_CHRATR_CTL_LANGUAGE)).GetLanguage());
+
+                    switch(nScripts)
+                    {
+                        case SCRIPTTYPE_LATIN:
+                            nCJKSize = nHeight * nCJKSize / nWesternSize;
+                            nCTLSize = nHeight * nCTLSize / nWesternSize;
+                            nWesternSize = (sal_Int32) nHeight;
+                        break;
+                        case SCRIPTTYPE_ASIAN:
+                            nCTLSize = nHeight* nCTLSize / nCJKSize;
+                            nWesternSize = nHeight * nWesternSize / nCJKSize;
+                            nCJKSize = (sal_Int32) nHeight;
+                        break;
+                        case SCRIPTTYPE_COMPLEX:
+                            nCJKSize = nHeight * nCJKSize / nCTLSize;
+                            nWesternSize = nHeight * nWesternSize / nCTLSize;
+                            nCTLSize = (sal_Int32) nHeight;
+                        break;
+                    }
+                    aHeightSet.Put( SvxFontHeightItem( (UINT32)nWesternSize, 100, RES_CHRATR_FONTSIZE ));
+                    aHeightSet.Put( SvxFontHeightItem( (UINT32)nCJKSize, 100, RES_CHRATR_CJK_FONTSIZE ));
+                    aHeightSet.Put( SvxFontHeightItem( (UINT32)nCTLSize, 100, RES_CHRATR_CTL_FONTSIZE ));
+                    pArgs = &aHeightSet;
+                }
             }
             break;
         }
@@ -2171,6 +2250,16 @@ void SwBaseShell::GetTxtFontCtrlState( SfxItemSet& rSet )
                                     RES_CHRATR_BEGIN, RES_CHRATR_END-1 );
                     rSh.GetAttr( *pFntCoreSet );
                     nScriptType = rSh.GetScriptType();
+                    // #42732# input language should be preferred over
+                    // current cursor position to detect script type
+                    if(!rSh.HasSelection() && (
+                        nWhich == RES_CHRATR_FONT ||
+                        nWhich == RES_CHRATR_FONTSIZE ))
+                    {
+                        LanguageType nInputLang = GetView().GetEditWin().GetInputLanguage();
+                        if(nInputLang != LANGUAGE_DONTKNOW && nInputLang != LANGUAGE_SYSTEM)
+                            nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( nInputLang );
+                    }
                 }
                 SfxItemPool& rPool = *rSet.GetPool();
                 SvxScriptSetItem aSetItem( rPool.GetSlotId( nWhich ), rPool );
