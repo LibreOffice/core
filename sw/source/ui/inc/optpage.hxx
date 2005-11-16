@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optpage.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:55:37 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:52:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,7 @@ class SvStringsDtor;
 class SfxPrinter;
 class SwStdFontConfig;
 class SwWrtShell;
+class FontList;
 
 /*-----------------31.08.96 10.09-------------------
 
@@ -193,16 +194,31 @@ public:
 class SwStdFontTabPage : public SfxTabPage
 {
     FixedLine       aStdChrFL  ;
+
+    FixedText       aTypeFT;
+
     FixedText       aStandardLbl;
     ComboBox        aStandardBox;
+
+    FixedText       aHeightFT;
+    FontSizeBox     aStandardHeightLB;
+
     FixedText       aTitleLbl   ;
     ComboBox        aTitleBox   ;
+    FontSizeBox     aTitleHeightLB;
+
     FixedText       aListLbl    ;
     ComboBox        aListBox    ;
+    FontSizeBox     aListHeightLB;
+
     FixedText       aLabelLbl   ;
     ComboBox        aLabelBox   ;
+    FontSizeBox     aLabelHeightLB;
+
     FixedText       aIdxLbl     ;
     ComboBox        aIdxBox     ;
+    FontSizeBox     aIndexHeightLB;
+
     CheckBox        aDocOnlyCB  ;
     PushButton      aStandardPB;
 
@@ -213,6 +229,7 @@ class SwStdFontTabPage : public SfxTabPage
     String          sShellIndex;
 
     SfxPrinter*         pPrt;
+    FontList*           pFontList;
     SwStdFontConfig*    pFontConfig;
     SwWrtShell*         pWrtShell;
     LanguageType        eLanguage;
@@ -225,6 +242,13 @@ class SwStdFontTabPage : public SfxTabPage
     BOOL    bSetIdxDefault  :1;
     BOOL    bDeletePrinter :1;
 
+    BOOL    bListHeightDefault    :1;
+    BOOL    bSetListHeightDefault :1;
+    BOOL    bLabelHeightDefault   :1;
+    BOOL    bSetLabelHeightDefault :1;
+    BOOL    bIndexHeightDefault     :1;
+    BOOL    bSetIndexHeightDefault  :1;
+
     sal_uInt8 nFontGroup; //fontcfg.hxx: FONT_GROUP_[STANDARD|CJK|CTL]
 
     String sScriptWestern;
@@ -233,6 +257,8 @@ class SwStdFontTabPage : public SfxTabPage
 
     DECL_LINK( StandardHdl, PushButton * );
     DECL_LINK( ModifyHdl, ComboBox * );
+    DECL_LINK( ModifyHeightHdl, FontSizeBox * );
+    DECL_LINK( LoseFocusHdl, ComboBox * );
 
             SwStdFontTabPage( Window* pParent,
                                        const SfxItemSet& rSet );
