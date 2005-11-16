@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:42:44 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:17:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5553,7 +5553,14 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="CTLCursorMovement" oor:type="xs:int">
+                <prop oor:name="CTLSequenceCheckingTypeAndReplace" oor:type="xs:boolean">
+                    <!-- UIHints: setup -->
+                    <info>
+                        <desc>Specifies whether CTL input sequences are corrected while typing. Is only effective when CTLSequenceChecking is true.</desc>
+                    </info>
+                    <value>false</value>
+                </prop>
+                <prop oor:name="CTLCursorMovement" oor:type="xs:int">
 					<!-- UIHints: options-->
 					<info>
 						<desc>Specifies the type of text cursor movement (logical (0) or visual (1)) within mixed text (RTL and LTR).</desc>
