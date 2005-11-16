@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:21:51 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:30:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1312,16 +1312,26 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
 
         switch( cChar )
         {
-            case CH_TAB    : pPor = NewTabPortion( rInf, false ); break;
-            case CH_BREAK  : pPor = new SwBreakPortion( *rInf.GetLast() ); break;
+            case CH_TAB:
+                pPor = NewTabPortion( rInf, false ); break;
+
+            case CH_BREAK:
+                pPor = new SwBreakPortion( *rInf.GetLast() ); break;
 
             case CHAR_SOFTHYPHEN:                   // soft hyphen
                 pPor = new SwSoftHyphPortion; break;
 
             case CHAR_HARDBLANK:                    // no-break space
                 pPor = new SwBlankPortion( ' ' ); break;
+
             case CHAR_HARDHYPHEN:               // non-breaking hyphen
                 pPor = new SwBlankPortion( '-' ); break;
+
+            case CHAR_ZWSP:                     // zero width space
+            case CHAR_ZWNBSP :                  // word joiner
+//            case CHAR_RLM :                     // right to left mark
+//            case CHAR_LRM :                     // left to right mark
+                pPor = new SwControlCharPortion( cChar ); break;
 
             case CH_TXTATR_BREAKWORD:
             case CH_TXTATR_INWORD:
