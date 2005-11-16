@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.sdi,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:09:01 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:12:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,19 @@ interface StarCalc : Module
 
 
     SID_OPEN_XML_FILTERSETTINGS [ ExecMethod = Execute; ]
+
+
+    SID_HANGUL_HANJA_CONVERSION [ StateMethod = HideDisabledSlots; Export = FALSE; ]
+    SID_CHINESE_CONVERSION      [ StateMethod = HideDisabledSlots; Export = FALSE; ]
+    SID_TRANSLITERATE_HALFWIDTH [ StateMethod = HideDisabledSlots; Export = FALSE; ]
+    SID_TRANSLITERATE_FULLWIDTH [ StateMethod = HideDisabledSlots; Export = FALSE; ]
+    SID_TRANSLITERATE_HIRAGANA  [ StateMethod = HideDisabledSlots; Export = FALSE; ]
+    SID_TRANSLITERATE_KATAGANA  [ StateMethod = HideDisabledSlots; Export = FALSE; ]
+
+    SID_INSERT_RLM              [ StateMethod = HideDisabledSlots; Export = FALSE; ]
+    SID_INSERT_LRM              [ StateMethod = HideDisabledSlots; Export = FALSE; ]
+    SID_INSERT_ZWSP             [ StateMethod = HideDisabledSlots; Export = FALSE; ]
+    SID_INSERT_ZWNBSP           [ StateMethod = HideDisabledSlots; Export = FALSE; ]
 
 }
 
