@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localebackend.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-13 09:43:41 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:15:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -283,12 +283,23 @@ rtl::OUString LocaleBackend::getUILocale(void)
 #endif
 }
 
+// ---------------------------------------------------------------------------------------
+
+rtl::OUString LocaleBackend::getSystemLocale(void)
+{
+// note: the implementation differs from getLocale() only on Windows
+#if defined WNT
+    return ImplGetLocale( GetSystemDefaultLCID() );
+#else
+    return getLocale();
+#endif
+}
 //------------------------------------------------------------------------------
 
 rtl::OUString LocaleBackend::createTimeStamp()
 {
     // the time stamp is free text, so just returning the values here.
-    return getLocale() + getUILocale();
+    return getLocale() + getUILocale() + getSystemLocale();
 }
 
 //------------------------------------------------------------------------------
@@ -302,7 +313,7 @@ uno::Reference<backend::XLayer> SAL_CALL LocaleBackend::getLayer(
     {
         if( ! m_xSystemLayer.is() )
         {
-            uno::Sequence<backend::PropertyInfo> aPropInfoList(2);
+            uno::Sequence<backend::PropertyInfo> aPropInfoList(3);
 
             aPropInfoList[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.System/L10N/UILocale") );
             aPropInfoList[0].Type = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "string" ) );
@@ -313,6 +324,11 @@ uno::Reference<backend::XLayer> SAL_CALL LocaleBackend::getLayer(
             aPropInfoList[1].Type = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "string" ));
             aPropInfoList[1].Protected = sal_False;
             aPropInfoList[1].Value = uno::makeAny( getLocale() );
+
+            aPropInfoList[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.System/L10N/SystemLocale") );
+            aPropInfoList[2].Type = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "string" ));
+            aPropInfoList[2].Protected = sal_False;
+            aPropInfoList[2].Value = uno::makeAny( getSystemLocale() );
 
             m_xSystemLayer = new LocaleLayer(aPropInfoList, createTimeStamp(), m_xContext);
         }
