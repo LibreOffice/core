@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Writer.xcs,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:28:32 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:17:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1726,7 +1726,15 @@
 					<label>Standard</label>
 				</info>
 			</prop>
-			<prop oor:name="Heading" oor:type="xs:string">
+            <prop oor:name="StandardHeight" oor:type="xs:int">
+                <!-- UIHints: Tools - Options - Text document  Default Fonts (Western) -->
+                <info>
+                    <author>OS</author>
+                    <desc>Specifies the font size to be used for the Standard paragraph style.</desc>
+                    <label>StandardHeight</label>
+                </info>
+            </prop>
+            <prop oor:name="Heading" oor:type="xs:string">
 				<!-- OldPath: Writer/Default_Fonts -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (Western)-->
@@ -1736,7 +1744,15 @@
 					<label>Heading</label>
 				</info>
 			</prop>
-			<prop oor:name="List" oor:type="xs:string">
+            <prop oor:name="HeadingHeight" oor:type="xs:int">
+                <!-- UIHints: Tools - Options - Text document  Default Fonts (Western) -->
+                <info>
+                    <author>OS</author>
+                    <desc>Specifies the font size to be used for the Heading paragraph style.</desc>
+                    <label>HeadingHeight</label>
+                </info>
+            </prop>
+            <prop oor:name="List" oor:type="xs:string">
 				<!-- OldPath: Writer/Default_Fonts -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (Western)-->
@@ -1746,7 +1762,15 @@
 					<label>List</label>
 				</info>
 			</prop>
-			<prop oor:name="Caption" oor:type="xs:string">
+            <prop oor:name="ListHeight" oor:type="xs:int">
+                <!-- UIHints: Tools - Options - Text document  Default Fonts (Western) -->
+                <info>
+                    <author>OS</author>
+                    <desc>Specifies the font size to be used in the paragraph styles for lists and numberings.</desc>
+                    <label>ListHeight</label>
+                </info>
+            </prop>
+            <prop oor:name="Caption" oor:type="xs:string">
 				<!-- OldPath: Writer/Default_Fonts -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (Western)-->
@@ -1756,7 +1780,15 @@
 					<label>Caption</label>
 				</info>
 			</prop>
-			<prop oor:name="Index" oor:type="xs:string">
+            <prop oor:name="CaptionHeight" oor:type="xs:int">
+                <!-- UIHints: Tools - Options - Text document  Default Fonts (Western) -->
+                <info>
+                    <author>OS</author>
+                    <desc>Specifies the font size to be used for the labels of images and tables.</desc>
+                    <label>CaptionHeight</label>
+                </info>
+            </prop>
+            <prop oor:name="Index" oor:type="xs:string">
 				<!-- OldPath: Writer/Default_Fonts -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (Western)-->
@@ -1766,7 +1798,15 @@
 					<label>Index</label>
 				</info>
 			</prop>
-			<prop oor:name="Document" oor:type="xs:boolean">
+            <prop oor:name="IndexHeight" oor:type="xs:int">
+                <!-- UIHints: Tools - Options - Text document  Default Fonts (Western) -->
+                <info>
+                    <author>OS</author>
+                    <desc>Specifies the font size to be applied to the paragraph styles for user-defined indexes, alphabetical indexes, tables of contents and to all of the paragraph styles derived from this.</desc>
+                    <label>IndexHeight</label>
+                </info>
+            </prop>
+            <prop oor:name="Document" oor:type="xs:boolean">
 				<!-- OldPath: Writer/Default_Fonts -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Tools - Options - Text document  Default Fonts -->
@@ -1790,7 +1830,15 @@
 					<label>Standard</label>
 				</info>
 			</prop>
-			<prop oor:name="Heading" oor:type="xs:string">
+            <prop oor:name="StandardHeight" oor:type="xs:int">
+                <!-- UIHints: Tools - Options - Text document  Default Fonts (CJK) -->
+                <info>
+                    <author>OS</author>
+                    <desc>Specifies the font size to be used for the Standard paragraph style.</desc>
+                    <label>StandardHeight</label>
+                </info>
+            </prop>
+            <prop oor:name="Heading" oor:type="xs:string">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (Asian)-->
 				<info>
 					<author>OS</author>
@@ -1798,7 +1846,15 @@
 					<label>Heading</label>
 				</info>
 			</prop>
-			<prop oor:name="List" oor:type="xs:string">
+            <prop oor:name="HeadingHeight" oor:type="xs:int">
+                <!-- UIHints: Tools - Options - Text document  Default Fonts (CJK) -->
+                <info>
+                    <author>OS</author>
+                    <desc>Specifies the font size to be used for the Heading paragraph style.</desc>
+                    <label>HeadingHeight</label>
+                </info>
+            </prop>
+            <prop oor:name="List" oor:type="xs:string">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (Asian)-->
 				<info>
 					<author>OS</author>
@@ -1806,7 +1862,15 @@
 					<label>List</label>
 				</info>
 			</prop>
-			<prop oor:name="Caption" oor:type="xs:string">
+            <prop oor:name="ListHeight" oor:type="xs:int">
+                <!-- UIHints: Tools - Options - Text document  Default Fonts (CJK) -->
+                <info>
+                    <author>OS</author>
+                    <desc>Specifies the font size to be used in the paragraph styles for lists and numberings.</desc>
+                    <label>ListHeight</label>
+                </info>
+            </prop>
+            <prop oor:name="Caption" oor:type="xs:string">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (Asian)-->
 				<info>
 					<author>OS</author>
@@ -1814,7 +1878,15 @@
 					<label>Caption</label>
 				</info>
 			</prop>
-			<prop oor:name="Index" oor:type="xs:string">
+            <prop oor:name="CaptionHeight" oor:type="xs:int">
+                <!-- UIHints: Tools - Options - Text document  Default Fonts (CJK) -->
+                <info>
+                    <author>OS</author>
+                    <desc>Specifies the font size to be used for the labels of images and tables.</desc>
+                    <label>CaptionHeight</label>
+                </info>
+            </prop>
+            <prop oor:name="Index" oor:type="xs:string">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (Asian)-->
 				<info>
 					<author>OS</author>
@@ -1822,7 +1894,15 @@
 					<label>Index</label>
 				</info>
 			</prop>
-			<prop oor:name="Document" oor:type="xs:boolean">
+            <prop oor:name="IndexHeight" oor:type="xs:int">
+                <!-- UIHints: Tools - Options - Text document  Default Fonts (CJK) -->
+                <info>
+                    <author>OS</author>
+                    <desc>Specifies the font size to be applied to the paragraph styles for user-defined indexes, alphabetical indexes, tables of contents and to all of the paragraph styles derived from this.</desc>
+                    <label>IndexHeight</label>
+                </info>
+            </prop>
+            <prop oor:name="Document" oor:type="xs:boolean">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (Asian)-->
 				<info>
 					<author>OS</author>
@@ -1844,7 +1924,15 @@
 					<label>Standard</label>
 				</info>
 			</prop>
-			<prop oor:name="Heading" oor:type="xs:string">
+            <prop oor:name="StandardHeight" oor:type="xs:int">
+                <!-- UIHints: Tools - Options - Text document  Default Fonts (CTL) -->
+                <info>
+                    <author>OS</author>
+                    <desc>Specifies the font size to be used for the Standard paragraph style.</desc>
+                    <label>StandardHeight</label>
+                </info>
+            </prop>
+            <prop oor:name="Heading" oor:type="xs:string">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (CTL)-->
 				<info>
 					<author>OS</author>
@@ -1852,7 +1940,15 @@
 					<label>Heading</label>
 				</info>
 			</prop>
-			<prop oor:name="List" oor:type="xs:string">
+            <prop oor:name="HeadingHeight" oor:type="xs:int">
+                <!-- UIHints: Tools - Options - Text document  Default Fonts (CTL) -->
+                <info>
+                    <author>OS</author>
+                    <desc>Specifies the font size to be used for the Heading paragraph style.</desc>
+                    <label>HeadingHeight</label>
+                </info>
+            </prop>
+            <prop oor:name="List" oor:type="xs:string">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (CTL)-->
 				<info>
 					<author>OS</author>
@@ -1860,7 +1956,15 @@
 					<label>List</label>
 				</info>
 			</prop>
-			<prop oor:name="Caption" oor:type="xs:string">
+            <prop oor:name="ListHeight" oor:type="xs:int">
+                <!-- UIHints: Tools - Options - Text document  Default Fonts (CTL) -->
+                <info>
+                    <author>OS</author>
+                    <desc>Specifies the font size to be used in the paragraph styles for lists and numberings.</desc>
+                    <label>ListHeight</label>
+                </info>
+            </prop>
+            <prop oor:name="Caption" oor:type="xs:string">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (CTL)-->
 				<info>
 					<author>OS</author>
@@ -1868,7 +1972,15 @@
 					<label>Caption</label>
 				</info>
 			</prop>
-			<prop oor:name="Index" oor:type="xs:string">
+            <prop oor:name="CaptionHeight" oor:type="xs:int">
+                <!-- UIHints: Tools - Options - Text document  Default Fonts (CTL) -->
+                <info>
+                    <author>OS</author>
+                    <desc>Specifies the font size to be used for the labels of images and tables.</desc>
+                    <label>CaptionHeight</label>
+                </info>
+            </prop>
+            <prop oor:name="Index" oor:type="xs:string">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (CTL)-->
 				<info>
 					<author>OS</author>
@@ -1876,7 +1988,15 @@
 					<label>Index</label>
 				</info>
 			</prop>
-			<prop oor:name="Document" oor:type="xs:boolean">
+            <prop oor:name="IndexHeight" oor:type="xs:int">
+                <!-- UIHints: Tools - Options - Text document  Default Fonts (CTL) -->
+                <info>
+                    <author>OS</author>
+                    <desc>Specifies the font size to be applied to the paragraph styles for user-defined indexes, alphabetical indexes, tables of contents and to all of the paragraph styles derived from this.</desc>
+                    <label>IndexHeight</label>
+                </info>
+            </prop>
+            <prop oor:name="Document" oor:type="xs:boolean">
 				<!-- UIHints: Tools - Options - Text document  Default Fonts (CTL)-->
 				<info>
 					<author>OS</author>
