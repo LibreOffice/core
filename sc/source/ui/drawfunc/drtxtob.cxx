@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:53:50 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:13:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,6 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/cjkoptions.hxx>
 #include <svtools/cliplistener.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/whiter.hxx>
@@ -415,31 +414,14 @@ void __EXPORT ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
             rSet.DisableItem( SID_OPEN_HYPERLINK );
     }
 
-    if ( rSet.GetItemState( SID_TRANSLITERATE_HALFWIDTH ) != SFX_ITEM_UNKNOWN ||
-         rSet.GetItemState( SID_TRANSLITERATE_FULLWIDTH ) != SFX_ITEM_UNKNOWN ||
-         rSet.GetItemState( SID_TRANSLITERATE_HIRAGANA ) != SFX_ITEM_UNKNOWN ||
-         rSet.GetItemState( SID_TRANSLITERATE_KATAGANA ) != SFX_ITEM_UNKNOWN )
-    {
-        SvtCJKOptions aCJKOptions;
-        if (!aCJKOptions.IsChangeCaseMapEnabled())
-        {
-            pViewFrm->GetBindings().SetVisibleState( SID_TRANSLITERATE_HALFWIDTH, sal_False );
-            pViewFrm->GetBindings().SetVisibleState( SID_TRANSLITERATE_FULLWIDTH, sal_False );
-            pViewFrm->GetBindings().SetVisibleState( SID_TRANSLITERATE_HIRAGANA, sal_False );
-            pViewFrm->GetBindings().SetVisibleState( SID_TRANSLITERATE_KATAGANA, sal_False );
-            rSet.DisableItem( SID_TRANSLITERATE_HALFWIDTH );
-            rSet.DisableItem( SID_TRANSLITERATE_FULLWIDTH );
-            rSet.DisableItem( SID_TRANSLITERATE_HIRAGANA );
-            rSet.DisableItem( SID_TRANSLITERATE_KATAGANA );
-        }
-        else
-        {
-            pViewFrm->GetBindings().SetVisibleState( SID_TRANSLITERATE_HALFWIDTH, sal_True );
-            pViewFrm->GetBindings().SetVisibleState( SID_TRANSLITERATE_FULLWIDTH, sal_True );
-            pViewFrm->GetBindings().SetVisibleState( SID_TRANSLITERATE_HIRAGANA, sal_True );
-            pViewFrm->GetBindings().SetVisibleState( SID_TRANSLITERATE_KATAGANA, sal_True );
-        }
-    }
+    if( rSet.GetItemState( SID_TRANSLITERATE_HALFWIDTH ) != SFX_ITEM_UNKNOWN )
+        ScViewUtil::HideDisabledSlot( rSet, pViewFrm->GetBindings(), SID_TRANSLITERATE_HALFWIDTH );
+    if( rSet.GetItemState( SID_TRANSLITERATE_FULLWIDTH ) != SFX_ITEM_UNKNOWN )
+        ScViewUtil::HideDisabledSlot( rSet, pViewFrm->GetBindings(), SID_TRANSLITERATE_FULLWIDTH );
+    if( rSet.GetItemState( SID_TRANSLITERATE_HIRAGANA ) != SFX_ITEM_UNKNOWN )
+        ScViewUtil::HideDisabledSlot( rSet, pViewFrm->GetBindings(), SID_TRANSLITERATE_HIRAGANA );
+    if( rSet.GetItemState( SID_TRANSLITERATE_KATAGANA ) != SFX_ITEM_UNKNOWN )
+        ScViewUtil::HideDisabledSlot( rSet, pViewFrm->GetBindings(), SID_TRANSLITERATE_KATAGANA );
 
     if ( rSet.GetItemState( SID_ENABLE_HYPHENATION ) != SFX_ITEM_UNKNOWN )
     {
@@ -820,6 +802,18 @@ void __EXPORT ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
 
             USHORT nScript = pView->GetScriptType();
 
+            if ( nSlot == SID_ATTR_CHAR_FONT || nSlot == SID_ATTR_CHAR_FONTHEIGHT )
+            {
+                // #i55929# script type for font / height depends on input language if nothing is selected
+                OutlinerView* pOutView = pView->GetTextEditOutlinerView();
+                if (pOutView && !pOutView->GetSelection().HasRange())
+                {
+                    LanguageType nInputLang = pViewData->GetActiveWin()->GetInputLanguage();
+                    if (nInputLang != LANGUAGE_DONTKNOW && nInputLang != LANGUAGE_SYSTEM)
+                        nScript = SvtLanguageOptions::GetScriptTypeOfLanguage( nInputLang );
+                }
+            }
+
             SfxItemPool& rPool = GetPool();
             SvxScriptSetItem aSetItem( nSlot, rPool );
             USHORT nWhich = rPool.GetWhich( nSlot );
@@ -860,10 +854,21 @@ void __EXPORT ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
 
     USHORT nScript = pView->GetScriptType();
 
+    // #i55929# input-language-dependent script type (depends on input language if nothing selected)
+    USHORT nInputScript = nScript;
+    OutlinerView* pOutView = pView->GetTextEditOutlinerView();
+    if (pOutView && !pOutView->GetSelection().HasRange())
+    {
+        LanguageType nInputLang = pViewData->GetActiveWin()->GetInputLanguage();
+        if (nInputLang != LANGUAGE_DONTKNOW && nInputLang != LANGUAGE_SYSTEM)
+            nInputScript = SvtLanguageOptions::GetScriptTypeOfLanguage( nInputLang );
+    }
+
+    // #i55929# according to spec, nInputScript is used for font and font height only
     if ( rDestSet.GetItemState( EE_CHAR_FONTINFO ) != SFX_ITEM_UNKNOWN )
-        ScViewUtil::PutItemScript( rDestSet, aAttrSet, EE_CHAR_FONTINFO, nScript );
+        ScViewUtil::PutItemScript( rDestSet, aAttrSet, EE_CHAR_FONTINFO, nInputScript );
     if ( rDestSet.GetItemState( EE_CHAR_FONTHEIGHT ) != SFX_ITEM_UNKNOWN )
-        ScViewUtil::PutItemScript( rDestSet, aAttrSet, EE_CHAR_FONTHEIGHT, nScript );
+        ScViewUtil::PutItemScript( rDestSet, aAttrSet, EE_CHAR_FONTHEIGHT, nInputScript );
     if ( rDestSet.GetItemState( EE_CHAR_WEIGHT ) != SFX_ITEM_UNKNOWN )
         ScViewUtil::PutItemScript( rDestSet, aAttrSet, EE_CHAR_WEIGHT, nScript );
     if ( rDestSet.GetItemState( EE_CHAR_ITALIC ) != SFX_ITEM_UNKNOWN )
