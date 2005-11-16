@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 16:30:55 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:21:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,6 +137,10 @@
 
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
+
+#ifndef SD_FU_BULLET_HXX
+#include "fubullet.hxx"
+#endif
 
 using namespace sd;
 #define ViewShellBase
@@ -868,9 +872,9 @@ void ViewShellBase::GetState (SfxItemSet& rSet)
         rSet.DisableItem(SID_WIN_FULLSCREEN);
 
     mpPaneManager->GetSlotState (rSet);
+
+    FuBullet::GetSlotState( rSet, 0, GetViewFrame() );
 }
-
-
 
 void ViewShellBase::WriteUserDataSequence (
     ::com::sun::star::uno::Sequence <
