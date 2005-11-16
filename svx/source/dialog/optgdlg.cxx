@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:50:11 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:03:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1391,6 +1391,20 @@ void lcl_UpdateAndDelete(SfxVoidItem* pInvalidItems[], SfxBoolItem* pBoolItems[]
 
 BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
 {
+    if(aCTLSupportCB.IsChecked() &&
+            (aCTLSupportCB.GetSavedValue() != aCTLSupportCB.IsChecked()) ||
+            (aComplexLanguageLB.GetSavedValue() != aComplexLanguageLB.GetSelectEntryPos()))
+    {
+        //sequence checking has to be switched on depending on the selected CTL language
+        LanguageType eCTLLang = aComplexLanguageLB.GetSelectLanguage();
+        sal_Bool bOn = eCTLLang == LANGUAGE_THAI ||
+                eCTLLang == LANGUAGE_LAO ||
+                eCTLLang == LANGUAGE_VIETNAMESE ||
+                eCTLLang == LANGUAGE_KHMER;
+        pLangConfig->aLanguageOptions.SetCTLSequenceCheckingRestricted(bOn);
+        pLangConfig->aLanguageOptions.SetCTLSequenceChecking(bOn);
+        pLangConfig->aLanguageOptions.SetCTLSequenceCheckingTypeAndReplace(bOn);
+    }
     try
     {
         // handle settings for UI Language
