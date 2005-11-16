@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fubullet.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:29:46 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:20:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,12 @@
 #include "fupoor.hxx"
 #endif
 
+class SfxItemSet;
+class SfxViewFrame;
+
 namespace sd {
+
+class ViewShell;
 
 class FuBullet
     : public FuPoor
@@ -55,6 +60,11 @@ public:
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
     virtual ~FuBullet (void) {}
+
+    void InsertSpecialCharacter();
+    void InsertFormattingMark( sal_Unicode cMark );
+
+    static void GetSlotState( SfxItemSet& rSet, ViewShell* pViewShell, SfxViewFrame* pViewFrame );
 };
 
 } // end of namespace sd
