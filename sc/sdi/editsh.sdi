@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.sdi,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:11:18 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:12:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,14 @@ interface TableText : Selection
     SID_TRANSLITERATE_FULLWIDTH [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
     SID_TRANSLITERATE_HIRAGANA  [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
     SID_TRANSLITERATE_KATAGANA  [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
+
+    FN_INSERT_SOFT_HYPHEN       [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    FN_INSERT_HARDHYPHEN        [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    FN_INSERT_HARD_SPACE        [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_INSERT_RLM              [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_INSERT_LRM              [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_INSERT_ZWSP             [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_INSERT_ZWNBSP           [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
 }
 
 
