@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 15:57:36 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:51:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4732,6 +4732,11 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
         break;
         case COMMAND_HANGUL_HANJA_CONVERSION :
             GetView().GetViewFrame()->GetDispatcher()->Execute(SID_HANGUL_HANJA_CONVERSION);
+        break;
+        case COMMAND_INPUTLANGUAGECHANGE :
+            //#i42732# update state of fontname if input language changes
+            rView.GetViewFrame()->GetBindings().Invalidate( SID_ATTR_CHAR_FONT );
+            rView.GetViewFrame()->GetBindings().Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
         break;
 
 #ifdef DBG_UTIL
