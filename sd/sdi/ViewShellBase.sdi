@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellBase.sdi,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 16:29:16 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:19:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -342,6 +342,41 @@ interface ViewShellBaseView : View
     [
         ExecMethod = Execute;
         StateMethod = GetState;
+    ]
+    FN_INSERT_SOFT_HYPHEN // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_INSERT_HARDHYPHEN // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_INSERT_HARD_SPACE // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_INSERT_RLM
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_INSERT_LRM
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_INSERT_ZWSP
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_INSERT_ZWNBSP
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
     ]
     SID_RESTORE_EDITING_VIEW
     [
