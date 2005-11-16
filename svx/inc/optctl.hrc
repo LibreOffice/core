@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optctl.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:11:29 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:01:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #define FL_SEQUENCECHECKING     10
 #define CB_SEQUENCECHECKING     11
 #define CB_RESTRICTED           12
+#define CB_TYPE_REPLACE         13
 
 #define FL_CURSORCONTROL        20
 #define FT_MOVEMENT             21
