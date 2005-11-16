@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txttypes.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:03:24 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:30:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@
 #define POR_ARROW       0x0084
 #define POR_MULTI       0x0085
 #define POR_HIDDEN_TXT  0x0086
+#define POR_CONTROLCHAR 0x0087
 
 #define POR_TXT         0x8000
 #define POR_LAY         0x8001
