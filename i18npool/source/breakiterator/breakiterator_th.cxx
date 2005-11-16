@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakiterator_th.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-17 15:42:14 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:18:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 BreakIterator_th::BreakIterator_th()
 {
     cBreakIterator = "com.sun.star.i18n.BreakIterator_th";
-    wordRule=NULL;
+    wordRule=lineRule=NULL;
 }
 
 BreakIterator_th::~BreakIterator_th()
