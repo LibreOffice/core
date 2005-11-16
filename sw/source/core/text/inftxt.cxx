@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:53:17 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:30:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1244,6 +1244,7 @@ void SwTxtPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
             case POR_HIDDEN:
             case POR_TOX:
             case POR_REF :
+            case POR_CONTROLCHAR:
                 if ( !GetOpt().IsPagePreview() &&
                      !GetOpt().IsReadonly() &&
                      SwViewOption::IsFieldShadings() &&
@@ -1603,6 +1604,10 @@ xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nStart,
         case CHAR_HARDBLANK:
         case CH_TAB:
         case CH_BREAK:
+        case CHAR_ZWSP :
+        case CHAR_ZWNBSP :
+//        case CHAR_RLM :
+//        case CHAR_LRM :
             cHookChar = cPos;
             return i;
 
