@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:52:43 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:51:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -466,9 +466,58 @@ TabPage TP_STD_FONT
         Text [ de ] = "Grundschriften (%1)" ;
         Text [ en-US ] = "Basic fonts (%1)";
     };
+    FixedText FT_TYPE
+    {
+        Pos = MAP_APPFONT ( 63 , 14 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
+        Text [ de ] = "~Schriftart";
+        Text [ en-US ] = "Font";
+    };
+    FixedText FT_SIZE
+    {
+        Pos = MAP_APPFONT ( 204 , 14 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
+        Text [ de ] = "Sc~hriftgrad";
+        Text [ en-US ] = "Size";
+    };
+    MetricBox LB_STANDARD_SIZE
+    {
+        Pos = MAP_APPFONT ( 204 , 25 ) ;
+        Size = MAP_APPFONT ( 30 , 60 ) ;
+        Border = TRUE ;
+        DropDown = TRUE;
+    };
+    MetricBox LB_TITLE_SIZE
+    {
+        Pos = MAP_APPFONT ( 204 , 42 ) ;
+        Size = MAP_APPFONT ( 30 , 60 ) ;
+        Border = TRUE ;
+        DropDown = TRUE;
+    };
+    MetricBox LB_LIST_SIZE
+    {
+        Pos = MAP_APPFONT ( 204 , 59 ) ;
+        Size = MAP_APPFONT ( 30 , 60 ) ;
+        Border = TRUE ;
+        DropDown = TRUE;
+    };
+    MetricBox LB_LABEL_SIZE
+    {
+        Pos = MAP_APPFONT ( 204 , 76 ) ;
+        Size = MAP_APPFONT ( 30 , 60 ) ;
+        Border = TRUE ;
+        DropDown = TRUE;
+    };
+    MetricBox LB_INDEX_SIZE
+    {
+        Pos = MAP_APPFONT ( 204 , 93 ) ;
+        Size = MAP_APPFONT ( 30 , 60 ) ;
+        Border = TRUE ;
+        DropDown = TRUE;
+    };
     FixedText FT_STANDARD
     {
-        Pos = MAP_APPFONT ( 12 , 15 ) ;
+        Pos = MAP_APPFONT ( 12 , 26 ) ;
         Size = MAP_APPFONT ( 48 , 10 ) ;
         Text [ de ] = "~Standard" ;
         Left = TRUE ;
@@ -477,7 +526,7 @@ TabPage TP_STD_FONT
     };
     FixedText FT_TITLE
     {
-        Pos = MAP_APPFONT ( 12 , 32 ) ;
+        Pos = MAP_APPFONT ( 12 , 43 ) ;
         Size = MAP_APPFONT ( 48 , 10 ) ;
         Text [ de ] = "~Überschrift" ;
         Text [ en-US ] = "Headin~g" ;
@@ -486,7 +535,7 @@ TabPage TP_STD_FONT
     };
     FixedText FT_LIST
     {
-        Pos = MAP_APPFONT ( 12 , 49 ) ;
+        Pos = MAP_APPFONT ( 12 , 60 ) ;
         Size = MAP_APPFONT ( 48 , 10 ) ;
         Text [ de ] = "~Liste" ;
         Text [ en-US ] = "~List" ;
@@ -495,7 +544,7 @@ TabPage TP_STD_FONT
     };
     FixedText FT_LABEL
     {
-        Pos = MAP_APPFONT ( 12 , 66 ) ;
+        Pos = MAP_APPFONT ( 12 , 77 ) ;
         Size = MAP_APPFONT ( 48 , 10 ) ;
         Text [ de ] = "~Beschriftung" ;
         Text [ en-US ] = "C~aption" ;
@@ -504,7 +553,7 @@ TabPage TP_STD_FONT
     };
     FixedText FT_IDX
     {
-        Pos = MAP_APPFONT ( 12 , 83 ) ;
+        Pos = MAP_APPFONT ( 12 , 94 ) ;
         Size = MAP_APPFONT ( 48 , 10 ) ;
         Text [ de ] = "~Verzeichnis" ;
         Text [ en-US ] = "~Index" ;
@@ -513,7 +562,7 @@ TabPage TP_STD_FONT
     };
     ComboBox LB_STANDARD
     {
-        Pos = MAP_APPFONT ( 63 , 14 ) ;
+        Pos = MAP_APPFONT ( 63 , 25 ) ;
         Size = MAP_APPFONT ( 135 , 73 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -521,7 +570,7 @@ TabPage TP_STD_FONT
     };
     ComboBox LB_TITLE
     {
-        Pos = MAP_APPFONT ( 63 , 31 ) ;
+        Pos = MAP_APPFONT ( 63 , 42 ) ;
         Size = MAP_APPFONT ( 135, 73 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -529,7 +578,7 @@ TabPage TP_STD_FONT
     };
     ComboBox LB_LIST
     {
-        Pos = MAP_APPFONT ( 63 , 48 ) ;
+        Pos = MAP_APPFONT ( 63 , 59 ) ;
         Size = MAP_APPFONT ( 135 , 73 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -537,7 +586,7 @@ TabPage TP_STD_FONT
     };
     ComboBox LB_LABEL
     {
-        Pos = MAP_APPFONT ( 63 , 65 ) ;
+        Pos = MAP_APPFONT ( 63 , 76 ) ;
         Size = MAP_APPFONT ( 135 , 73 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -545,7 +594,7 @@ TabPage TP_STD_FONT
     };
     ComboBox LB_IDX
     {
-        Pos = MAP_APPFONT ( 63 , 83 ) ;
+        Pos = MAP_APPFONT ( 63 , 94 ) ;
         Size = MAP_APPFONT ( 135, 73 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -553,7 +602,7 @@ TabPage TP_STD_FONT
     };
     CheckBox CB_DOCONLY
     {
-        Pos = MAP_APPFONT ( 12 , 100 ) ;
+        Pos = MAP_APPFONT ( 12 , 111 ) ;
         Size = MAP_APPFONT ( 147 , 10 ) ;
         Text [ de ] = "~Nur für das aktuelle Dokument" ;
         Text [ en-US ] = "C~urrent document only" ;
