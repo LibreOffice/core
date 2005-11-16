@@ -4,9 +4,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:03:06 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:31:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,8 +148,9 @@ USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
         if ( LANGUAGE_KOREAN != aLang && LANGUAGE_KOREAN_JOHAB != aLang )
         {
             const SwLinePortion* pPor = rPor.GetPortion();
-            if ( pPor && pPor->IsKernPortion() )
-                pPor = pPor->GetPortion();
+            if ( pPor && ( pPor->IsKernPortion() ||
+                           pPor->IsControlCharPortion() ||
+                           pPor->IsPostItsPortion() ) )
 
             nCnt += nEnd - nPos;
 
@@ -172,7 +173,9 @@ USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
             nCnt = SwScriptInfo::ThaiJustify( *pStr, 0, 0, nPos, nEnd - nPos );
 
             const SwLinePortion* pPor = rPor.GetPortion();
-            if ( pPor && pPor->IsKernPortion() )
+            if ( pPor && ( pPor->IsKernPortion() ||
+                           pPor->IsControlCharPortion() ||
+                           pPor->IsPostItsPortion() ) )
                 pPor = pPor->GetPortion();
 
             if ( nCnt && ( ! pPor || pPor->IsHolePortion() || pPor->InFixMargGrp() ) )
@@ -668,7 +671,7 @@ long SwTxtPortion::CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) cons
 
     if ( InExpGrp() )
     {
-        if( !IsBlankPortion() && !InNumberGrp() )
+        if( !IsBlankPortion() && !InNumberGrp() && !IsCombinedPortion() )
         {
             // Bei OnWin() wird anstatt eines Leerstrings gern mal ein Blank
             // zurueckgeliefert, das koennen wir hier aber gar nicht gebrauchen
