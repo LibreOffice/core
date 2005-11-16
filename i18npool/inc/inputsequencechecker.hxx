@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputsequencechecker.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:53:17 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:17:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/i18n/XInputSequenceChecker.hpp>
+#include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
 
 #include <vector>
 
@@ -50,7 +50,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 //  ----------------------------------------------------
 class InputSequenceCheckerImpl : public cppu::WeakImplHelper2
 <
-    com::sun::star::i18n::XInputSequenceChecker,
+    com::sun::star::i18n::XExtendedInputSequenceChecker,
     com::sun::star::lang::XServiceInfo
 >
 {
@@ -60,6 +60,9 @@ public:
     ~InputSequenceCheckerImpl();
 
     virtual sal_Bool SAL_CALL checkInputSequence(const rtl::OUString& Text, sal_Int32 nStartPos,
+        sal_Unicode inputChar, sal_Int16 inputCheckMode) throw(com::sun::star::uno::RuntimeException);
+
+    virtual sal_Int32 SAL_CALL correctInputSequence(rtl::OUString& Text, sal_Int32 nStartPos,
         sal_Unicode inputChar, sal_Int16 inputCheckMode) throw(com::sun::star::uno::RuntimeException);
 
     //XServiceInfo
@@ -75,17 +78,17 @@ protected:
 
 private :
     struct lookupTableItem {
-        lookupTableItem(const sal_Char* rLanguage, const com::sun::star::uno::Reference < com::sun::star::i18n::XInputSequenceChecker >& rxISC) :
+        lookupTableItem(const sal_Char* rLanguage, const com::sun::star::uno::Reference < com::sun::star::i18n::XExtendedInputSequenceChecker >& rxISC) :
             aLanguage(rLanguage), xISC(rxISC) {}
         const sal_Char* aLanguage;
-        com::sun::star::uno::Reference < com::sun::star::i18n::XInputSequenceChecker > xISC;
+        com::sun::star::uno::Reference < com::sun::star::i18n::XExtendedInputSequenceChecker > xISC;
     };
     std::vector<lookupTableItem*> lookupTable;
     lookupTableItem *cachedItem;
 
     com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xMSF;
 
-    com::sun::star::uno::Reference< com::sun::star::i18n::XInputSequenceChecker >& SAL_CALL getInputSequenceChecker(sal_Char* rLanguage)
+    com::sun::star::uno::Reference< com::sun::star::i18n::XExtendedInputSequenceChecker >& SAL_CALL getInputSequenceChecker(sal_Char* rLanguage)
         throw (com::sun::star::uno::RuntimeException);
     sal_Char* SAL_CALL getLanguageByScripType(sal_Unicode cChar, sal_Unicode nChar);
 };
