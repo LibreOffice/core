@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-03 15:26:20 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:06:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -269,12 +269,14 @@ inline bool IsControlChar( sal_Unicode cChar )
     if( (0x0001 <= cChar) && (cChar <= 0x001F) )
         return true;
     // formatting characters
-    if( (0x200C <= cChar) && (cChar <= 0x200F) )
+    if( (0x200B <= cChar) && (cChar <= 0x200F) )
         return true;
     if( (0x2028 <= cChar) && (cChar <= 0x202E) )
         return true;
     // deprecated formatting characters
     if( (0x206A <= cChar) && (cChar <= 0x206F) )
+        return true;
+    if( (0x2060 == cChar) )
         return true;
     // byte order markers and invalid unicode
     if( (cChar == 0xFEFF) || (cChar == 0xFFFE) || (cChar == 0xFFFF) )
