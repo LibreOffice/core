@@ -4,9 +4,9 @@
  *
  *  $RCSfile: checkit.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:59:54 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:29:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ SwCheckIt::SwCheckIt()
         ::rtl::OUString::createFromAscii( "com.sun.star.i18n.InputSequenceChecker" ) );
     if ( xI.is() )
     {
-        Any x = xI->queryInterface( ::getCppuType((const Reference< XInputSequenceChecker >*)0) );
+        Any x = xI->queryInterface( ::getCppuType((const Reference< XExtendedInputSequenceChecker >*)0) );
         x >>= xCheck;
     }
 }
