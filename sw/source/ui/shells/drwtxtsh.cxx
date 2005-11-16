@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwtxtsh.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:50:09 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:52:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -612,6 +612,29 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
 
     switch (rReq.GetSlot())
     {
+        case FN_INSERT_SOFT_HYPHEN:
+        case FN_INSERT_HARDHYPHEN:
+        case FN_INSERT_HARD_SPACE:
+        case SID_INSERT_RLM :
+        case SID_INSERT_LRM :
+        case SID_INSERT_ZWNBSP :
+        case SID_INSERT_ZWSP:
+        {
+            sal_Unicode cIns = 0;
+            switch(rReq.GetSlot())
+            {
+                case FN_INSERT_SOFT_HYPHEN: cIns = CHAR_SOFTHYPHEN; break;
+                case FN_INSERT_HARDHYPHEN: cIns = CHAR_HARDHYPHEN; break;
+                case FN_INSERT_HARD_SPACE: cIns = CHAR_HARDBLANK; break;
+                case SID_INSERT_RLM : cIns = CHAR_RLM ; break;
+                case SID_INSERT_LRM : cIns = CHAR_LRM ; break;
+                case SID_INSERT_ZWSP : cIns = CHAR_ZWSP ; break;
+                case SID_INSERT_ZWNBSP: cIns = CHAR_ZWNBSP; break;
+            }
+            pOLV->InsertText( String(cIns), TRUE );
+            rReq.Done();
+        }
+        break;
         case FN_INSERT_SYMBOL:  // Sonderzeichen einfuegen
             InsertSymbol(rReq);
             break;
