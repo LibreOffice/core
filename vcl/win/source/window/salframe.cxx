@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:58:08 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:08:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3480,6 +3480,38 @@ LanguageType WinSalFrame::GetInputLanguage()
 
 // -----------------------------------------------------------------------
 
+BOOL WinSalFrame::MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode )
+{
+    BOOL bRet = FALSE;
+    HKL hkl = 0;
+
+    // just use the passed language identifier, do not try to load additional keyboard support
+    hkl = (HKL) aLangType;
+
+    if( hkl )
+    {
+        SHORT scan = VkKeyScanExW( aUnicode, hkl );
+        if( LOWORD(scan) == 0xFFFF )
+            // keyboard not loaded or key cannot be mapped
+            bRet = FALSE;
+        else
+        {
+            BYTE vkeycode   = LOBYTE(scan);
+            BYTE shiftstate = HIBYTE(scan);
+
+            rKeyCode = KeyCode( ImplSalGetKeyCode( vkeycode ),
+                (shiftstate & 0x01) ? TRUE : FALSE,     // shift
+                (shiftstate & 0x02) ? TRUE : FALSE,     // ctrl
+                (shiftstate & 0x04) ? TRUE : FALSE );   // alt
+            bRet = TRUE;
+        }
+    }
+
+    return bRet;
+}
+
+// -----------------------------------------------------------------------
+
 static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
                               WPARAM wParam, LPARAM lParam, LRESULT& rResult )
 {
@@ -5111,7 +5143,12 @@ static void ImplHandleInputLangChange( HWND hWnd, WPARAM wParam, LPARAM lParam )
     }
 
     // trigger input language and codepage update
+    UINT nLang = pFrame->mnInputLang;
     ImplUpdateInputLang( pFrame );
+
+    // notify change
+    if( nLang != pFrame->mnInputLang )
+        pFrame->CallCallback( SALEVENT_INPUTLANGUAGECHANGE, 0 );
 
     ImplSalYieldMutexRelease();
 }
