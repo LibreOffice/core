@@ -5,9 +5,9 @@
  *
  *  $RCSfile: VCL.xcu,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:41:45 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:15:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -419,22 +419,22 @@
     </node>
     <node oor:name="th" oor:op="replace">
      <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
-        <value>OONaksit;Tahoma;Lucidasans;Arial Unicode MS;clearlyU</value>
+        <value>Angsana New;OONaksit;Tahoma;Lucidasans;Arial Unicode MS;clearlyU</value>
      </prop>
      <prop oor:name="CTL_DISPLAY" oor:type="xs:string" oor:op="replace">
-        <value>OONaksit;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>Angsana New;OONaksit;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
      </prop>
      <prop oor:name="CTL_HEADING" oor:type="xs:string" oor:op="replace">
-        <value>OONaksit;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>Angsana New;OONaksit;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
      </prop>
      <prop oor:name="CTL_PRESENTATION" oor:type="xs:string" oor:op="replace">
-        <value>OONaksit;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>Angsana New;OONaksit;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
      </prop>
      <prop oor:name="CTL_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>OONaksit;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>Angsana New;OONaksit;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
      </prop>
      <prop oor:name="CTL_TEXT" oor:type="xs:string" oor:op="replace">
-        <value>OONaksit;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>Angsana New;OONaksit;Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
      </prop>
     </node>
     <node oor:name="ja" oor:op="replace">
@@ -7334,6 +7334,112 @@
         </prop>
       </node>
 
+      <node oor:name="angsananew" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>angsanaupc;oonaksit;tahoma;browallianew;lucidasans;arialunicodems;clearlyu</value>
+        </prop>
+      </node>
+
+      <node oor:name="angsanaupc" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>angsananew;oonaksit;tahoma;browalliaupc;lucidasans;arialunicodems;clearlyu</value>
+        </prop>
+      </node>
+
+      <node oor:name="browallianew" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>browalliaupc;angsananew;oonaksit;tahoma;lucidasans;arialunicodems;clearlyu</value>
+        </prop>
+      </node>
+
+      <node oor:name="browalliaupc" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>browallianew;angsanaupc;oonaksit;tahoma;lucidasans;arialunicodems;clearlyu</value>
+        </prop>
+      </node>
+
+      <node oor:name="cordianew" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>cordiaupc;browalliaupc;angsananew;oonaksit;tahoma;lucidasans;arialunicodems;clearlyu</value>
+        </prop>
+      </node>
+
+      <node oor:name="cordiaupc" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>cordianew;browallianew;angsanaupc;oonaksit;tahoma;lucidasans;arialunicodems;clearlyu</value>
+        </prop>
+      </node>
+
+
+      <node oor:name="ooannop" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>cordianew;browallianew;angsananew;tahoma</value>
+        </prop>
+        <prop oor:name="FontType"><value>CTL</value></prop>
+        <prop oor:name="SubstFontsMS"><value>angsananew</value></prop>
+        <prop oor:name="SubstFontsHTML"><value>angsananew</value></prop>
+      </node>
+
+      <node oor:name="oonaksit" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>cordianew;browallianew;angsananew;tahoma</value>
+        </prop>
+        <prop oor:name="FontType"><value>CTL</value></prop>
+        <prop oor:name="SubstFontsMS"><value>angsananew</value></prop>
+        <prop oor:name="SubstFontsHTML"><value>angsananew</value></prop>
+      </node>
+
+      <node oor:name="ooratchada" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>cordianew;browallianew;angsananew;tahoma</value>
+        </prop>
+        <prop oor:name="FontType"><value>CTL</value></prop>
+        <prop oor:name="SubstFontsMS"><value>angsananew</value></prop>
+        <prop oor:name="SubstFontsHTML"><value>angsananew</value></prop>
+      </node>
+
+      <node oor:name="oosawasdee" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>cordianew;browallianew;angsananew;tahoma</value>
+        </prop>
+        <prop oor:name="FontType"><value>CTL</value></prop>
+        <prop oor:name="SubstFontsMS"><value>angsananew</value></prop>
+        <prop oor:name="SubstFontsHTML"><value>angsananew</value></prop>
+      </node>
+
+      <node oor:name="oothanakrit" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>cordianew;browallianew;angsananew;tahoma</value>
+        </prop>
+        <prop oor:name="FontType"><value>CTL</value></prop>
+        <prop oor:name="SubstFontsMS"><value>angsananew</value></prop>
+        <prop oor:name="SubstFontsHTML"><value>angsananew</value></prop>
+      </node>
+
+      <node oor:name="garuda" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>cordianew;browallianew;angsananew;tahoma</value>
+        </prop>
+        <prop oor:name="FontType"><value>CTL</value></prop>
+        <prop oor:name="SubstFontsMS"><value>angsananew</value></prop>
+        <prop oor:name="SubstFontsHTML"><value>angsananew</value></prop>
+      </node>
+
+      <node oor:name="norasi" oor:op="replace">
+        <prop oor:name="SubstFonts">
+           <value>cordianew;browallianew;angsananew;tahoma</value>
+        </prop>
+        <prop oor:name="FontType"><value>CTL</value></prop>
+        <prop oor:name="SubstFontsMS"><value>angsananew</value></prop>
+        <prop oor:name="SubstFontsHTML"><value>angsananew</value></prop>
+      </node>
+
+      <node oor:name="nftnorasi" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>norasi</value>
+        </prop>
+        <prop oor:name="FontType"><value>CTL</value></prop>
+      </node>
 
 
      </node>
