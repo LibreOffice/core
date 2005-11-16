@@ -4,9 +4,9 @@
  *
  *  $RCSfile: langselect.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-24 18:34:04 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:21:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/lang/XLocalizable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include "com/sun/star/util/XFlushable.hpp"
 #include <rtl/locale.hxx>
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
@@ -92,23 +93,63 @@ Locale LanguageSelection::IsoStringToLocale(const OUString& str)
 
 bool LanguageSelection::prepareLanguage()
 {
+    OUString sConfigSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
+    Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
+    Reference< XLocalizable > theConfigProvider;
+    try
+    {
+        theConfigProvider = Reference< XLocalizable >(theMSF->createInstance( sConfigSrvc ),UNO_QUERY_THROW );
+    }
+    catch(const Exception&)
+    {
+    }
+    if(!theConfigProvider.is())
+        return false;
 
     sal_Bool bSuccess = sal_False;
 
+    // #i42730#get the windows 16Bit locale - it should be preferred over the UI language
+    try
+    {
+        Reference< XPropertySet > xProp(getConfigAccess("org.openoffice.System/L10N/", sal_False), UNO_QUERY_THROW);
+        Any aWin16SysLocale = xProp->getPropertyValue(OUString::createFromAscii("SystemLocale"));
+        ::rtl::OUString sWin16SysLocale;
+        aWin16SysLocale >>= sWin16SysLocale;
+        if( sWin16SysLocale.getLength())
+            setDefaultLocale(sWin16SysLocale);
+    }
+    catch(const Exception&)
+    {
+    }
+
+    // #i32939# use system locale to set document default locale
+    try
+    {
+        OUString usLocale;
+        Reference< XPropertySet > xLocaleProp(getConfigAccess(
+            "org.openoffice.System/L10N", sal_True), UNO_QUERY_THROW);
+           // "org.openoffice.Office.Linguistic/General", sal_True), UNO_QUERY_THROW);
+        xLocaleProp->getPropertyValue(OUString::createFromAscii("Locale")) >>= usLocale;
+            setDefaultLocale(usLocale);
+    }
+    catch (Exception&)
+    {
+    }
     // get the selected UI language as string
     OUString aLocaleString = getLanguageString();
     if ( aLocaleString.getLength() > 0 )
     {
-        OUString sConfigSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
-        Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
         try
         {
             // prepare default config provider by localizing it to the selected locale
             // this will ensure localized configuration settings to be selected accoring to the
             // UI language.
-            Reference< XLocalizable > theConfigProvider(
-                theMSF->createInstance( sConfigSrvc ),UNO_QUERY_THROW );
             Locale loc = LanguageSelection::IsoStringToLocale(aLocaleString);
+            // flush any data already written to the configuration (which
+            // currently uses independent caches for different locales and thus
+            // would ignore data written to another cache):
+            Reference< XFlushable >(theConfigProvider, UNO_QUERY_THROW)->
+                flush();
             theConfigProvider->setLocale(loc);
 
             Reference< XPropertySet > xProp(getConfigAccess("org.openoffice.Setup/L10N/", sal_True), UNO_QUERY_THROW);
@@ -133,51 +174,11 @@ bool LanguageSelection::prepareLanguage()
     // #i32939# this should not be based on the UI language
     setDefaultLocale(aLocaleString);
 
-
-    return bSuccess;
-}
-
-void LanguageSelection::setDefaultLocale(const OUString& usUILocale)
-{
-    // #i32939# setting of default document locale
-    // org.openoffice.Office.Linguistic/General/DefaultLocale
-    // org.openoffice.Office.Linguistic/General/DefaultLocale_CJK
-    // org.openoffice.Office.Linguistic/General/DefaultLocale_CTL
-
-    OUString usLocale = usUILocale; // UILocale will be fallback
-    // #i32939# use system locale to set document default locale
-    try {
-        Reference< XPropertySet > xLocaleProp(getConfigAccess(
-            "org.openoffice.System/L10N", sal_True), UNO_QUERY_THROW);
-           // "org.openoffice.Office.Linguistic/General", sal_True), UNO_QUERY_THROW);
-        xLocaleProp->getPropertyValue(OUString::createFromAscii("Locale")) >>= usLocale;
-        // fprintf(stderr, "defaultLocale -> %s\n", OUStringToOString(usLocale, RTL_TEXTENCODING_UTF8).getStr());
-    } catch (Exception &e) {
-        // ui locale will be used...
-        /*
-        fprintf(stderr, "no default locale, using UI language (%s)\n",
-                OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
-                */
-    }
-
-
-    // determine script type of locale
-    LanguageType ltLocale = ConvertIsoStringToLanguage(usLocale);
-    sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage(ltLocale);
-
+    // fallback: set en-US as default Western locale if no Western locale is set
+    OUString usWesternName = OUString::createFromAscii("DefaultLocale");
     Reference< XPropertySet > xProp(getConfigAccess(
         "org.openoffice.Office.Linguistic/General/", sal_True), UNO_QUERY_THROW);
-    OUString usWesternName = OUString::createFromAscii("DefaultLocale");
-    OUString usCJKName = OUString::createFromAscii("DefaultLocale_CJK");
-    OUString usCTLName = OUString::createFromAscii("DefaultLocale_CTL");
-    /*
-    SCRIPTTYPE_ASIAN:
-    SCRIPTTYPE_COMPLEX:
-    */
-
-
     OUString usValue;
-    // check whether we need to set the western local
     xProp->getPropertyValue(usWesternName) >>= usValue;
     if (usValue.getLength() == 0)
     {
@@ -186,9 +187,6 @@ void LanguageSelection::setDefaultLocale(const OUString& usUILocale)
         // will become the default western docuemnt language
         // otherwise, fall back to en-US
         OUString usDefault = OUString::createFromAscii("en-US");
-        if (nScriptType  == SCRIPTTYPE_LATIN) {
-            usDefault = ConvertLanguageToIsoString(ltLocale);
-        }
         try
         {
             xProp->setPropertyValue(usWesternName, makeAny(usDefault));
@@ -200,29 +198,50 @@ void LanguageSelection::setDefaultLocale(const OUString& usUILocale)
         }
     }
 
-    try {
-        OUString usDefault = ConvertLanguageToIsoString(ltLocale);
-        switch(nScriptType) {
+    return bSuccess;
+}
+
+void LanguageSelection::setDefaultLocale(const OUString& usUILocale)
+{
+    // #i32939# setting of default document locale
+    // org.openoffice.Office.Linguistic/General/DefaultLocale
+    // org.openoffice.Office.Linguistic/General/DefaultLocale_CJK
+    // org.openoffice.Office.Linguistic/General/DefaultLocale_CTL
+
+    // determine script type of UI locale
+    LanguageType ltUILocale = ConvertIsoStringToLanguage(usUILocale);
+    sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage(ltUILocale);
+
+    Reference< XPropertySet > xProp(getConfigAccess(
+        "org.openoffice.Office.Linguistic/General/", sal_True), UNO_QUERY_THROW);
+    OUString usName = OUString::createFromAscii("DefaultLocale");
+    switch (nScriptType)
+    {
         case SCRIPTTYPE_ASIAN:
-            xProp->getPropertyValue(usCJKName) >>= usValue;
-            if (usValue.getLength() == 0) {
-                xProp->setPropertyValue(usCJKName, makeAny(usDefault));
-                Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
-            }
+            usName = OUString::createFromAscii("DefaultLocale_CJK");
             break;
         case SCRIPTTYPE_COMPLEX:
-            xProp->getPropertyValue(usCTLName) >>= usValue;
-            if (usValue.getLength() == 0) {
-                xProp->setPropertyValue(usCTLName, makeAny(usDefault));
-                Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
-            }
+            usName = OUString::createFromAscii("DefaultLocale_CTL");
             break;
-            // if no CJK/CTL script type is selected, we are finished
-        }
     }
-    catch ( PropertyVetoException )
+    OUString usValue;
+    xProp->getPropertyValue(usName) >>= usValue;
+    if (usValue.getLength() == 0)
     {
-        // we are not allowed to change this
+        // there is no document language set, for the script type selected
+        // in the UI
+        // covert the LanguageType we've got from the LanguageTable back to
+        // an iso string and store it
+        OUString usDefault = ConvertLanguageToIsoString(ltUILocale);
+        try
+        {
+            xProp->setPropertyValue(usName, makeAny(usDefault));
+            Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
+        }
+        catch ( PropertyVetoException )
+        {
+            // we are not allowed to change this
+        }
     }
 }
 
