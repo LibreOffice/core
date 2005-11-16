@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxbmpnumvalueset.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:07:39 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:03:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -508,6 +508,7 @@ SvxNumValueSet::SvxNumValueSet( Window* pParent, const ResId& rResId, USHORT nTy
     aLineColor  ( COL_LIGHTGRAY )
 {
     SetColCount( 4 );
+    SetLineCount( 2 );
     SetStyle( GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER );
     if(NUM_PAGETYPE_BULLET == nType)
     {
@@ -535,7 +536,9 @@ void SvxNumValueSet::SetNumberingSettings(
     aNumSettings = aNum;
     xFormatter = xFormat;
     aLocale = rLocale;
-    for ( USHORT i = 0; i < aNum.getLength() && i < 8; i++ )
+    if(aNum.getLength() > 8)
+            SetStyle( GetStyle()|WB_VSCROLL);
+    for ( USHORT i = 0; i < aNum.getLength(); i++ )
             InsertItem( i + 1, i );
 }
 /* -----------------------------31.01.01 09:50--------------------------------
@@ -549,7 +552,9 @@ void SvxNumValueSet::SetOutlineNumberingSettings(
     aOutlineSettings = rOutline;
     xFormatter = xFormat;
     aLocale = rLocale;
-    for ( sal_uInt16 i = 0; i < aOutlineSettings.getLength() && i < 8; i++ )
+    if(aOutlineSettings.getLength() > 8)
+        SetStyle( GetStyle() | WB_VSCROLL );
+    for ( sal_uInt16 i = 0; i < aOutlineSettings.getLength(); i++ )
         InsertItem( i + 1, i );
 }
 
