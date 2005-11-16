@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakiterator_ctl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:00:52 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:18:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,7 +137,7 @@ LineBreakResults SAL_CALL BreakIterator_CTL::getLineBreak(
 {
     LineBreakResults lbr = BreakIterator_Unicode::getLineBreak(Text, nStartPos,
                     rLocale, nMinBreakPos, hOptions, bOptions );
-    makeIndex(Text, nStartPos);
+    makeIndex(Text, lbr.breakIndex);
     lbr.breakIndex = previousCellIndex[ lbr.breakIndex ];
     return lbr;
 }
