@@ -142,6 +142,17 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:Bullet" menu:helpid="27019" menu:label="" />
+            <menu:menu menu:id=".uno:FormattingMarkMenu" menu:label="" >
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:InsertNonBreakingSpace" menu:helpid="20344" menu:label="" />
+                    <menu:menuitem menu:id=".uno:InsertHardHyphen" menu:helpid="20385" menu:label="" />
+                    <menu:menuitem menu:id=".uno:InsertSoftHyphen" menu:helpid="20343" menu:label="" />
+                    <menu:menuitem menu:id=".uno:InsertZWSP" menu:helpid="21425" menu:label="" />
+                    <menu:menuitem menu:id=".uno:InsertZWNBSP" menu:helpid="21424" menu:label="" />
+                    <menu:menuitem menu:id=".uno:InsertLRM" menu:helpid="21423" menu:label="" />
+                    <menu:menuitem menu:id=".uno:InsertRLM" menu:helpid="21422" menu:label="" />
+                </menu:menupopup>
+            </menu:menu>
             <menu:menuitem menu:id=".uno:HyperlinkDialog" menu:helpid="5678" menu:label="" />
             <menu:menuitem menu:id=".uno:AnimationObjects" menu:helpid="27062" menu:label="" />
             <menu:menuseparator/>
