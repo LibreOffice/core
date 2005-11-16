@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:52:40 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:14:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@
 
 #include "scitems.hxx"
 
-#include <svtools/cjkoptions.hxx>
 #include <svtools/slstitm.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/whiter.hxx>
@@ -228,16 +227,8 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case SID_TRANSLITERATE_FULLWIDTH:
             case SID_TRANSLITERATE_HIRAGANA:
             case SID_TRANSLITERATE_KATAGANA:
-                {
-                    // SvtCJKOptions is ref-counted - can be constructed every time
-                    SvtCJKOptions aCJKOptions;
-                    bDisable = !aCJKOptions.IsChangeCaseMapEnabled();
-                    if ( bDisable )
-                        GetViewData()->GetBindings().SetVisibleState( nWhich, sal_False );
-                    else
-                        GetViewData()->GetBindings().SetVisibleState( nWhich, sal_True );
-                }
-                break;
+                ScViewUtil::HideDisabledSlot( rSet, GetViewData()->GetBindings(), nWhich );
+            break;
         }
         if (!bDisable && bNeedEdit && !bEditable)
             bDisable = TRUE;
@@ -926,13 +917,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case SID_CHINESE_CONVERSION:
             case SID_HANGUL_HANJA_CONVERSION:
-                if (!SvtCJKOptions().IsAnyEnabled())
-                {
-                    GetViewData()->GetBindings().SetVisibleState( nWhich, sal_False );
-                    rSet.DisableItem(nWhich);
-                }
-                else
-                    GetViewData()->GetBindings().SetVisibleState( nWhich, sal_True );
+                ScViewUtil::HideDisabledSlot( rSet, pViewData->GetBindings(), nWhich );
             break;
 
         } // switch ( nWitch )
