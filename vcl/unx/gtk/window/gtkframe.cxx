@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:56:02 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:07:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1504,6 +1504,12 @@ void GtkSalFrame::EndExtTextInput( USHORT nFlags )
 {
     if( m_pIMHandler )
         m_pIMHandler->endExtTextInput( nFlags );
+}
+
+BOOL GtkSalFrame::MapUnicodeToKeyCode( sal_Unicode , LanguageType , KeyCode& )
+{
+    // not supported yet
+    return FALSE;
 }
 
 LanguageType GtkSalFrame::GetInputLanguage()
