@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scmod.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:54:58 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:12:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,6 +183,7 @@ public:
 
     void                Execute( SfxRequest& rReq );
     void                GetState( SfxItemSet& rSet );
+    void                HideDisabledSlots( SfxItemSet& rSet );
 
     void                AnythingChanged();
 
