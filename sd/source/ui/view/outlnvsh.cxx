@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 09:06:32 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:22:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,6 +133,9 @@
 #endif
 #ifndef _SFX_SRCHITEM_HXX
 #include <sfx2/srchitem.hxx>
+#endif
+#ifndef SD_FU_BULLET_HXX
+#include "fubullet.hxx"
 #endif
 
 #ifndef _SD_OPTSITEM_HXX
@@ -1241,6 +1244,8 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
             rSet.DisableItem( SID_PRESENTATION );
         }
     }
+
+    FuBullet::GetSlotState( rSet, this, GetViewFrame() );
 
     //rSet.DisableItem( SID_PRINTDOC );
     //rSet.DisableItem( SID_PRINTDOCDIRECT );
