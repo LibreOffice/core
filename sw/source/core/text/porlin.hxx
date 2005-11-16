@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porlin.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:00:34 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:30:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,6 +167,7 @@ public:
     inline const sal_Bool IsArrowPortion( ) const{ return nWhichPor == POR_ARROW; }
     inline const sal_Bool IsMultiPortion( ) const{ return nWhichPor == POR_MULTI; }
     inline const sal_Bool IsNumberPortion( ) const{ return nWhichPor == POR_NUMBER; } // #i23726#
+    inline const sal_Bool IsControlCharPortion() const { return nWhichPor == POR_CONTROLCHAR; }
 
     // Positionierung
     SwLinePortion *FindPrevPortion( const SwLinePortion *pRoot );
