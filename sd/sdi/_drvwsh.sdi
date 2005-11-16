@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _drvwsh.sdi,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:05:29 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:20:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,6 +244,42 @@ interface DrawView : Object
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    FN_INSERT_SOFT_HYPHEN // status(final|play)
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    FN_INSERT_HARDHYPHEN // status()
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    FN_INSERT_HARD_SPACE // status(final|play)
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_INSERT_RLM
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_INSERT_LRM
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_INSERT_ZWSP
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_INSERT_ZWNBSP
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+
     SID_PASTE2 // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
