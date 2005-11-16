@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cjkoptions.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:46:37 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:10:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,8 +247,13 @@ void SvtCJKOptions_Impl::Load()
         }
     }
 
-    sal_uInt16 nType = SvtLanguageOptions::GetScriptTypeOfLanguage(LANGUAGE_SYSTEM);
-    if ( !bCJKFont && ( nType & SCRIPTTYPE_ASIAN ) )
+    SvtSystemLanguageOptions aSystemLocaleSettings;
+    LanguageType eSystemLanguage = aSystemLocaleSettings.GetWin16SystemLanguage();
+    sal_uInt16 nWinScript = SvtLanguageOptions::GetScriptTypeOfLanguage( eSystemLanguage );
+
+    sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage(LANGUAGE_SYSTEM);
+    if ( !bCJKFont && (( nScriptType & SCRIPTTYPE_ASIAN )||
+             ((eSystemLanguage != LANGUAGE_SYSTEM)  && ( nWinScript & SCRIPTTYPE_ASIAN ))))
     {
         SetAll(sal_True);
     }
