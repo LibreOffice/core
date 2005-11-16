@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:41:58 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:50:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,30 +85,49 @@ inline LanguageType lcl_LanguageOfType(sal_Int16 nType, sal_Int16 eWestern, sal_
  ---------------------------------------------------------------------------*/
 Sequence<OUString> SwStdFontConfig::GetPropertyNames()
 {
-    static const char* aPropNames[] =
+    Sequence<OUString> aNames;
+    if(!aNames.getLength())
     {
-        "DefaultFont/Standard",    // 0
-        "DefaultFont/Heading",     // 1
-        "DefaultFont/List",        // 2
-        "DefaultFont/Caption",     // 3
-        "DefaultFont/Index",       // 4
-        "DefaultFontCJK/Standard", // 5
-        "DefaultFontCJK/Heading",  // 6
-        "DefaultFontCJK/List",     // 7
-        "DefaultFontCJK/Caption",  // 8
-        "DefaultFontCJK/Index",    // 9
-        "DefaultFontCTL/Standard", // 10
-        "DefaultFontCTL/Heading",  // 11
-        "DefaultFontCTL/List",     // 12
-        "DefaultFontCTL/Caption",  // 13
-        "DefaultFontCTL/Index",    // 14
-    };
-    const int nCount = 15;
-    Sequence<OUString> aNames(nCount);
-    OUString* pNames = aNames.getArray();
-    for(int i = 0; i < nCount; i++)
-    {
-        pNames[i] = OUString::createFromAscii(aPropNames[i]);
+        static const char* aPropNames[] =
+        {
+            "DefaultFont/Standard",    // 0
+            "DefaultFont/Heading",     // 1
+            "DefaultFont/List",        // 2
+            "DefaultFont/Caption",     // 3
+            "DefaultFont/Index",       // 4
+            "DefaultFontCJK/Standard", // 5
+            "DefaultFontCJK/Heading",  // 6
+            "DefaultFontCJK/List",     // 7
+            "DefaultFontCJK/Caption",  // 8
+            "DefaultFontCJK/Index",    // 9
+            "DefaultFontCTL/Standard", // 10
+            "DefaultFontCTL/Heading",  // 11
+            "DefaultFontCTL/List",     // 12
+            "DefaultFontCTL/Caption",  // 13
+            "DefaultFontCTL/Index",    // 14
+            "DefaultFont/StandardHeight",    // 15
+            "DefaultFont/HeadingHeight",     // 16
+            "DefaultFont/ListHeight",        // 17
+            "DefaultFont/CaptionHeight",     // 18
+            "DefaultFont/IndexHeight",       // 19
+            "DefaultFontCJK/StandardHeight", // 20
+            "DefaultFontCJK/HeadingHeight",  // 21
+            "DefaultFontCJK/ListHeight",     // 22
+            "DefaultFontCJK/CaptionHeight",  // 23
+            "DefaultFontCJK/IndexHeight",    // 24
+            "DefaultFontCTL/StandardHeight", // 25
+            "DefaultFontCTL/HeadingHeight",  // 26
+            "DefaultFontCTL/ListHeight",     // 27
+            "DefaultFontCTL/CaptionHeight",  // 28
+            "DefaultFontCTL/IndexHeight"     // 29
+        };
+        const int nCount = sizeof(aPropNames)/sizeof(const char*);
+        aNames.realloc(nCount);
+        OUString* pNames = aNames.getArray();
+        for(int i = 0; i < nCount; i++)
+        {
+            pNames[i] = OUString::createFromAscii(aPropNames[i]);
+        }
     }
     return aNames;
 }
@@ -128,8 +147,11 @@ SwStdFontConfig::SwStdFontConfig() :
                 eCJK = aLinguOpt.nDefaultLanguage_CJK,
                 eCTL = aLinguOpt.nDefaultLanguage_CTL;
     for(sal_Int16 i = 0; i < DEF_FONT_COUNT; i++)
+    {
         sDefaultFonts[i] = GetDefaultFor(i,
             lcl_LanguageOfType(i, eWestern, eCJK, eCTL));
+        nDefaultFontHeight[i] = -1;
+    }
 
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
@@ -141,9 +163,17 @@ SwStdFontConfig::SwStdFontConfig() :
         {
             if(pValues[nProp].hasValue())
             {
-                OUString sVal;
-                pValues[nProp] >>= sVal;
-                sDefaultFonts[nProp] = sVal;
+                if( nProp < DEF_FONT_COUNT)
+                {
+                    OUString sVal;
+                    pValues[nProp] >>= sVal;
+                    sDefaultFonts[nProp] = sVal;
+                }
+                else
+                {
+                   pValues[nProp] >>= nDefaultFontHeight[nProp - DEF_FONT_COUNT];
+                   nDefaultFontHeight[nProp - DEF_FONT_COUNT] = MM100_TO_TWIP(nDefaultFontHeight[nProp - DEF_FONT_COUNT]);
+                }
             }
         }
     }
@@ -167,8 +197,16 @@ void    SwStdFontConfig::Commit()
                 eCTL = aLinguOpt.nDefaultLanguage_CTL;
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
-        if(GetDefaultFor(nProp, lcl_LanguageOfType(nProp, eWestern, eCJK, eCTL)) != sDefaultFonts[nProp])
+        if( nProp < DEF_FONT_COUNT )
+        {
+            if(GetDefaultFor(nProp, lcl_LanguageOfType(nProp, eWestern, eCJK, eCTL)) != sDefaultFonts[nProp])
                 pValues[nProp] <<= OUString(sDefaultFonts[nProp]);
+        }
+        else
+        {
+            if(nDefaultFontHeight[nProp - DEF_FONT_COUNT] > 0)
+                pValues[nProp] <<= TWIP_TO_MM100(nDefaultFontHeight[nProp - DEF_FONT_COUNT]);
+        }
     }
     PutProperties(aNames, aValues);
 }
@@ -278,3 +316,58 @@ String  SwStdFontConfig::GetDefaultFor(USHORT nFontType, LanguageType eLang)
     Font aFont = OutputDevice::GetDefaultFont(nFontId, eLang, DEFAULTFONT_FLAGS_ONLYONE);
     return  aFont.GetName();
 }
+
+/*-- 11.10.2005 10:43:43---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Int32 SwStdFontConfig::GetDefaultHeightFor(USHORT nFontType, LanguageType eLang)
+{
+    sal_Int32 nRet = FONTSIZE_DEFAULT;
+    switch( nFontType )
+    {
+        case  FONT_OUTLINE:
+        case  FONT_OUTLINE_CJK:
+        case  FONT_OUTLINE_CTL:
+            nRet = FONTSIZE_OUTLINE;
+        break;
+    }
+    if( eLang == LANGUAGE_THAI && nFontType >= FONT_STANDARD_CTL )
+    {
+        nRet = nRet * 3 / 2;
+    }
+    return nRet;
+}
+
+/*-- 11.10.2005 10:50:06---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwStdFontConfig::ChangeInt( USHORT nFontType, sal_Int32 nHeight )
+{
+    DBG_ASSERT( nFontType < DEF_FONT_COUNT, "invalid index in SwStdFontConfig::ChangInt()")
+    if( nFontType < DEF_FONT_COUNT && nDefaultFontHeight[nFontType] != nHeight)
+    {
+        SvtLinguOptions aLinguOpt;
+        SwLinguConfig().GetOptions( aLinguOpt );
+        sal_Int16   eWestern = aLinguOpt.nDefaultLanguage,
+                    eCJK = aLinguOpt.nDefaultLanguage_CJK,
+                    eCTL = aLinguOpt.nDefaultLanguage_CTL;
+        if( nHeight != GetDefaultHeightFor(nFontType, lcl_LanguageOfType(nFontType, eWestern, eCJK, eCTL)))
+        {
+            SetModified();
+            nDefaultFontHeight[nFontType] = nHeight;
+        }
+    }
+}
+
+/*-- 08.11.2005 14:18:26---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Int32 SwStdFontConfig::GetFontHeight( sal_uInt8 nFont, sal_uInt8 nScriptType, LanguageType eLang )
+{
+    DBG_ASSERT(nFont + FONT_PER_GROUP * nScriptType < DEF_FONT_COUNT, "wrong index in SwStdFontConfig::GetFontHeight()")
+    sal_Int32 nRet = nDefaultFontHeight[nFont + FONT_PER_GROUP * nScriptType];
+    if(nRet <= 0)
+        return GetDefaultHeightFor(nFont + FONT_PER_GROUP * nScriptType, eLang);
+    return nRet;
+}
+
