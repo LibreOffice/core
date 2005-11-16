@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 17:39:08 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:14:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sot/exchange.hxx>
-#include <svtools/cjkoptions.hxx>
 #include <svtools/cliplistener.hxx>
 #include <svtools/whiter.hxx>
 #include <vcl/msgbox.hxx>
@@ -160,6 +159,15 @@ void lcl_RemoveAttribs( EditView& rEditView )
     pEngine->GetUndoManager().LeaveListAction();
 
     pEngine->SetUpdateMode(bOld);
+}
+
+void lclInsertCharacter( EditView* pTableView, EditView* pTopView, sal_Unicode cChar )
+{
+    String aString( cChar );
+    if( pTableView )
+        pTableView->InsertText( aString );
+    if( pTopView )
+        pTopView->InsertText( aString );
 }
 
 void ScEditShell::Execute( SfxRequest& rReq )
@@ -528,6 +536,28 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     return;
                 }
                 break;
+
+        case FN_INSERT_SOFT_HYPHEN:
+            lclInsertCharacter( pTableView, pTopView, CHAR_SHY );
+        break;
+        case FN_INSERT_HARDHYPHEN:
+            lclInsertCharacter( pTableView, pTopView, CHAR_NBHY );
+        break;
+        case FN_INSERT_HARD_SPACE:
+            lclInsertCharacter( pTableView, pTopView, CHAR_NBSP );
+        break;
+        case SID_INSERT_RLM:
+            lclInsertCharacter( pTableView, pTopView, CHAR_RLM );
+        break;
+        case SID_INSERT_LRM:
+            lclInsertCharacter( pTableView, pTopView, CHAR_LRM );
+        break;
+        case SID_INSERT_ZWSP:
+            lclInsertCharacter( pTableView, pTopView, CHAR_ZWSP );
+        break;
+        case SID_INSERT_ZWNBSP:
+            lclInsertCharacter( pTableView, pTopView, CHAR_ZWNBSP );
+        break;
     }
 
     pHdl->DataChanged();
@@ -608,18 +638,12 @@ void __EXPORT ScEditShell::GetState( SfxItemSet& rSet )
             case SID_TRANSLITERATE_FULLWIDTH:
             case SID_TRANSLITERATE_HIRAGANA:
             case SID_TRANSLITERATE_KATAGANA:
-                {
-                    // SvtCJKOptions is ref-counted - can be constructed every time
-                    SvtCJKOptions aCJKOptions;
-                    if (!aCJKOptions.IsChangeCaseMapEnabled())
-                    {
-                        pViewData->GetBindings().SetVisibleState( nWhich, sal_False );
-                        rSet.DisableItem( nWhich );
-                    }
-                    else
-                        pViewData->GetBindings().SetVisibleState( nWhich, sal_True );
-                }
-                break;
+            case SID_INSERT_RLM:
+            case SID_INSERT_LRM:
+            case SID_INSERT_ZWNBSP:
+            case SID_INSERT_ZWSP:
+                ScViewUtil::HideDisabledSlot( rSet, pViewData->GetBindings(), nWhich );
+            break;
         }
         nWhich = aIter.NextWhich();
     }
@@ -730,6 +754,14 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
                 {
                     USHORT nScript = pEditView->GetSelectedScriptType();
                     if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
+
+                    // #i55929# script type for font / height depends on input language if nothing is selected
+                    if ( !pEditView->GetSelection().HasRange() )
+                    {
+                        LanguageType nInputLang = pViewData->GetActiveWin()->GetInputLanguage();
+                        if (nInputLang != LANGUAGE_DONTKNOW && nInputLang != LANGUAGE_SYSTEM)
+                            nScript = SvtLanguageOptions::GetScriptTypeOfLanguage( nInputLang );
+                    }
 
                     SfxItemPool& rPool = GetPool();
                     SvxScriptSetItem aSetItem( nSlot, rPool );
@@ -914,10 +946,20 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
     USHORT nScript = pEditView->GetSelectedScriptType();
     if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
 
+    // #i55929# input-language-dependent script type (depends on input language if nothing selected)
+    USHORT nInputScript = nScript;
+    if ( !pEditView->GetSelection().HasRange() )
+    {
+        LanguageType nInputLang = pViewData->GetActiveWin()->GetInputLanguage();
+        if (nInputLang != LANGUAGE_DONTKNOW && nInputLang != LANGUAGE_SYSTEM)
+            nInputScript = SvtLanguageOptions::GetScriptTypeOfLanguage( nInputLang );
+    }
+
+    // #i55929# according to spec, nInputScript is used for font and font height only
     if ( rSet.GetItemState( EE_CHAR_FONTINFO ) != SFX_ITEM_UNKNOWN )
-        ScViewUtil::PutItemScript( rSet, aAttribs, EE_CHAR_FONTINFO, nScript );
+        ScViewUtil::PutItemScript( rSet, aAttribs, EE_CHAR_FONTINFO, nInputScript );
     if ( rSet.GetItemState( EE_CHAR_FONTHEIGHT ) != SFX_ITEM_UNKNOWN )
-        ScViewUtil::PutItemScript( rSet, aAttribs, EE_CHAR_FONTHEIGHT, nScript );
+        ScViewUtil::PutItemScript( rSet, aAttribs, EE_CHAR_FONTHEIGHT, nInputScript );
     if ( rSet.GetItemState( EE_CHAR_WEIGHT ) != SFX_ITEM_UNKNOWN )
         ScViewUtil::PutItemScript( rSet, aAttribs, EE_CHAR_WEIGHT, nScript );
     if ( rSet.GetItemState( EE_CHAR_ITALIC ) != SFX_ITEM_UNKNOWN )
