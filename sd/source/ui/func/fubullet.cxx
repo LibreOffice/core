@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fubullet.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:34:15 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:20:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,10 @@
 #pragma hdrstop
 
 #include "fubullet.hxx"
+
+#ifndef _BINDING_HXX //autogen
+#include <sfx2/bindings.hxx>
+#endif
 
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
@@ -68,6 +72,12 @@
 #ifndef _SVX_CHARMAP_HXX //autogen
 #include <svx/charmap.hxx>
 #endif
+#ifndef _SFXREQUEST_HXX //autogen
+#include <sfx2/request.hxx>
+#endif
+#ifndef _SVTOOLS_CTLOPTIONS_HXX
+#include <svtools/ctloptions.hxx>
+#endif
 
 #ifdef IRIX
 #ifndef _SBXCLASS_HXX
@@ -76,8 +86,21 @@
 #endif
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
+#ifndef SD_DRAW_VIEW_HXX
+#include "drawview.hxx"
+#endif
+
+#include "app.hrc"
 
 namespace sd {
+
+const sal_Unicode CHAR_HARDBLANK    =   ((sal_Unicode)0x00A0);
+const sal_Unicode CHAR_HARDHYPHEN   =   ((sal_Unicode)0x2011);
+const sal_Unicode CHAR_SOFTHYPHEN   =   ((sal_Unicode)0x00AD);
+const sal_Unicode CHAR_RLM          =   ((sal_Unicode)0x200F);
+const sal_Unicode CHAR_LRM          =   ((sal_Unicode)0x200E);
+const sal_Unicode CHAR_ZWSP         =   ((sal_Unicode)0x200B);
+const sal_Unicode CHAR_ZWNBSP       =   ((sal_Unicode)0x2060);
 
 TYPEINIT1( FuBullet, FuPoor );
 
@@ -96,6 +119,84 @@ FuBullet::FuBullet (
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
 
+    if( rReq.GetSlot() == SID_BULLET )
+        InsertSpecialCharacter();
+    else
+    {
+        sal_Unicode cMark = 0;
+        switch( rReq.GetSlot() )
+        {
+            case FN_INSERT_SOFT_HYPHEN: cMark = CHAR_SOFTHYPHEN ; break;
+            case FN_INSERT_HARDHYPHEN:  cMark = CHAR_HARDHYPHEN ; break;
+            case FN_INSERT_HARD_SPACE:  cMark = CHAR_HARDBLANK ; break;
+            case SID_INSERT_RLM : cMark = CHAR_RLM ; break;
+            case SID_INSERT_LRM : cMark = CHAR_LRM ; break;
+            case SID_INSERT_ZWSP : cMark = CHAR_ZWSP ; break;
+            case SID_INSERT_ZWNBSP: cMark = CHAR_ZWNBSP; break;
+        }
+
+        DBG_ASSERT( cMark != 0, "FuBullet::FuBullet(), illegal slot used!" );
+
+        if( cMark )
+            InsertFormattingMark( cMark );
+    }
+
+}
+
+void FuBullet::InsertFormattingMark( sal_Unicode cMark )
+{
+    OutlinerView* pOV = NULL;
+    ::Outliner*   pOL = NULL;
+
+    // depending on ViewShell set Outliner and OutlinerView
+    if (pViewShell->ISA(DrawViewShell))
+    {
+        pOV = pView->GetTextEditOutlinerView();
+        if (pOV)
+            pOL = pView->GetTextEditOutliner();
+    }
+    else if (pViewShell->ISA(OutlineViewShell))
+    {
+        pOL = static_cast<OutlineView*>(pView)->GetOutliner();
+        pOV = static_cast<OutlineView*>(pView)->GetViewByWindow(
+            pViewShell->GetActiveWindow());
+    }
+
+    // insert string
+    if(pOV && pOL)
+    {
+        // prevent flickering
+        pOV->HideCursor();
+        pOL->SetUpdateMode(FALSE);
+
+        // remove old selected text
+        String aEmptyStr;
+        pOV->InsertText( aEmptyStr );
+
+        // prepare undo
+        SfxUndoManager& rUndoMgr =  pOL->GetUndoManager();
+        rUndoMgr.EnterListAction(String(SdResId(STR_UNDO_INSERT_SPECCHAR)),
+                                    aEmptyStr );
+
+        // insert given text
+        String aStr( cMark );
+        pOV->InsertText( cMark, TRUE);
+
+        ESelection aSel = pOV->GetSelection();
+        aSel.nStartPara = aSel.nEndPara;
+        aSel.nStartPos = aSel.nEndPos;
+        pOV->SetSelection(aSel);
+
+        rUndoMgr.LeaveListAction();
+
+        // restart repainting
+        pOL->SetUpdateMode(TRUE);
+        pOV->ShowCursor();
+    }
+}
+
+void FuBullet::InsertSpecialCharacter()
+{
     //CHINA001 SvxCharacterMap* pDlg = new SvxCharacterMap( NULL, FALSE );
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
@@ -134,7 +235,7 @@ FuBullet::FuBullet (
         ::Outliner*   pOL = NULL;
 
         // je nach ViewShell Outliner und OutlinerView bestimmen
-        if (pViewSh->ISA(DrawViewShell))
+        if (pViewShell->ISA(DrawViewShell))
         {
             pOV = pView->GetTextEditOutlinerView();
             if (pOV)
@@ -142,7 +243,7 @@ FuBullet::FuBullet (
                 pOL = pView->GetTextEditOutliner();
             }
         }
-        else if (pViewSh->ISA(OutlineViewShell))
+        else if (pViewShell->ISA(OutlineViewShell))
         {
             pOL = static_cast<OutlineView*>(pView)->GetOutliner();
             pOV = static_cast<OutlineView*>(pView)->GetViewByWindow(
@@ -199,4 +300,50 @@ FuBullet::FuBullet (
     }
 }
 
+void FuBullet::GetSlotState( SfxItemSet& rSet, ViewShell* pViewShell, SfxViewFrame* pViewFrame )
+{
+    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_BULLET ) ||
+        SFX_ITEM_AVAILABLE == rSet.GetItemState( FN_INSERT_SOFT_HYPHEN ) ||
+        SFX_ITEM_AVAILABLE == rSet.GetItemState( FN_INSERT_HARDHYPHEN ) ||
+        SFX_ITEM_AVAILABLE == rSet.GetItemState( FN_INSERT_HARD_SPACE ) ||
+        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_INSERT_RLM ) ||
+        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_INSERT_LRM ) ||
+        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_INSERT_ZWNBSP ) ||
+        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_INSERT_ZWSP ))
+    {
+        ::sd::View* pView = pViewShell ? pViewShell->GetView() : 0;
+        OutlinerView* pOLV = pView ? pView->GetTextEditOutlinerView() : 0;
+
+        const bool bTextEdit = pOLV;
+
+        SvtCTLOptions aCTLOptions;
+        const sal_Bool bCtlEnabled = aCTLOptions.IsCTLFontEnabled();
+
+        if(!bTextEdit )
+        {
+            rSet.DisableItem(SID_BULLET);
+            rSet.DisableItem(FN_INSERT_SOFT_HYPHEN);
+            rSet.DisableItem(FN_INSERT_HARDHYPHEN);
+            rSet.DisableItem(FN_INSERT_HARD_SPACE);
+        }
+
+        if(!bTextEdit || !bCtlEnabled )
+        {
+            rSet.DisableItem(SID_INSERT_RLM);
+            rSet.DisableItem(SID_INSERT_LRM);
+            rSet.DisableItem(SID_INSERT_ZWNBSP);
+            rSet.DisableItem(SID_INSERT_ZWSP);
+        }
+
+        if( pViewFrame )
+        {
+            SfxBindings& rBindings = pViewFrame->GetBindings();
+
+            rBindings.SetVisibleState( SID_INSERT_RLM, bCtlEnabled );
+            rBindings.SetVisibleState( SID_INSERT_LRM, bCtlEnabled );
+            rBindings.SetVisibleState( SID_INSERT_ZWNBSP, bCtlEnabled );
+            rBindings.SetVisibleState( SID_INSERT_ZWSP, bCtlEnabled );
+        }
+    }
+}
 } // end of namespace sd
