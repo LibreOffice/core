@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:29:10 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:22:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -735,7 +735,13 @@ void ViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 
     if( !bDone )
     {
-        if(mpSlideShow)
+        if( rCEvt.GetCommand() == COMMAND_INPUTLANGUAGECHANGE )
+        {
+            //#i42732# update state of fontname if input language changes
+            GetViewFrame()->GetBindings().Invalidate( SID_ATTR_CHAR_FONT );
+            GetViewFrame()->GetBindings().Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
+        }
+        else if(mpSlideShow)
         {
             mpSlideShow->command(rCEvt);
         }
