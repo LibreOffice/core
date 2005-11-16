@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakiterator_unicode.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-17 15:42:00 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:17:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ public:
         throw( com::sun::star::uno::RuntimeException );
 
 protected:
-    const sal_Char *cBreakIterator, *wordRule;
+    const sal_Char *cBreakIterator, *wordRule, *lineRule;
     Boundary result; // for word break iterator
 
     rtl::OUString aText;
