@@ -106,4 +106,5 @@
     <accel:item accel:code="KEY_SPACE" accel:mod1="true" accel:shift="true" xlink:href=".uno:ResetAttributes"/>
     <accel:item accel:code="KEY_J" accel:shift="true" accel:mod1="true" xlink:href=".uno:FullScreen"/>
     <accel:item accel:code="KEY_X" accel:shift="true" accel:mod1="true" xlink:href=".uno:RemoveDirectCharFormats"/>
+    <accel:item accel:code="KEY_DIVIDE" accel:mod1="true" xlink:href=".uno:InsertZWSP"/>
 </accel:acceleratorlist>
