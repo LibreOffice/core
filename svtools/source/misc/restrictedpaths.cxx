@@ -4,9 +4,9 @@
  *
  *  $RCSfile: restrictedpaths.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-14 14:07:30 $
+ *  last change: $Author: hjs $ $Date: 2005-11-16 09:03:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 #include <unotools/localfilehelper.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
-#include <svtools/syslocale.hxx>
+#include "syslocale.hxx"
 #endif
 
 namespace svt
