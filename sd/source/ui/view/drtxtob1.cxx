@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:07:15 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:21:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -584,6 +584,30 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                       nSlot == SID_ATTR_CHAR_WEIGHT )
             {
                 USHORT nScriptType = pView->GetScriptType();
+
+                if( (nSlot == SID_ATTR_CHAR_FONT) || (nSlot == SID_ATTR_CHAR_FONTHEIGHT) )
+                {
+                    // #42732# input language should be preferred over
+                    // current cursor position to detect script type
+                    OutlinerView* pOLV = pView->GetTextEditOutlinerView();
+
+                    if (pView->ISA(OutlineView))
+                    {
+                        pOLV = static_cast<OutlineView*>(pView)->GetViewByWindow(
+                            pViewShell->GetActiveWindow());
+                    }
+
+                    if(pOLV && !pOLV->GetSelection().HasRange())
+                    {
+                        if( pViewShell && pViewShell->GetViewShell() && pViewShell->GetViewShell()->GetWindow() )
+                        {
+                            LanguageType nInputLang = pViewShell->GetViewShell()->GetWindow()->GetInputLanguage();
+                            if(nInputLang != LANGUAGE_DONTKNOW && nInputLang != LANGUAGE_SYSTEM)
+                                nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( nInputLang );
+                        }
+                    }
+                }
+
                 SfxItemPool& rPool = pView->GetDoc()->GetPool();
                 SvxScriptSetItem aSvxScriptSetItem( nSlot, rPool );
                 aSvxScriptSetItem.PutItemForScriptType( nScriptType, pArgs->Get( rPool.GetWhich( nSlot ) ) );
