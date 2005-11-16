@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-11 13:50:09 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:21:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,6 +166,9 @@
 #include "fupoor.hxx"
 #include "Window.hxx"
 #include "fuediglu.hxx"
+#ifndef SD_FU_BULLET_HXX
+#include "fubullet.hxx"
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -1004,8 +1007,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CUT ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_COPY ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OUTLINE_BULLET ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_BULLET ) )
+        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OUTLINE_BULLET ))
     {
         OutlinerView* pOlView = pDrView->GetTextEditOutlinerView();
 
@@ -1048,16 +1050,9 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             }
         }
 
-        // ggfs. Menuepunkt "Aufzaehlungszeichen" bzw. "Sonderzeichen" disablen
-        if (! pOlView )
-        {
-            rSet.DisableItem(SID_BULLET);
-        }
-        else if (!pDrView->GetTextEditObject())
-        {
-            rSet.DisableItem(SID_BULLET);
-        }
     }
+
+    FuBullet::GetSlotState( rSet, this, GetViewFrame() );
 
     if ( GetDocSh()->IsUIActive() )
     {
