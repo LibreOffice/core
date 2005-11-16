@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:32:55 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:53:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,9 @@
 #endif
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <svtools/cjkoptions.hxx>
+#endif
+#ifndef _SVTOOLS_CTLOPTIONS_HXX
+#include <svtools/ctloptions.hxx>
 #endif
 
 #ifndef _CHARFMT_HXX
@@ -1478,6 +1481,18 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                                 RES_TXTATR_INETFMT);
                 rSh.GetAttr(aSet);
                 if(SFX_ITEM_SET > aSet.GetItemState( RES_TXTATR_INETFMT, FALSE ))
+                    rSet.DisableItem(nWhich);
+            }
+            break;
+            case SID_INSERT_RLM :
+            case SID_INSERT_LRM :
+            case SID_INSERT_ZWNBSP :
+            case SID_INSERT_ZWSP:
+            {
+                SvtCTLOptions aCTLOptions;
+                sal_Bool bEnabled = aCTLOptions.IsCTLFontEnabled();
+                GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, bEnabled );
+                if(!bEnabled)
                     rSet.DisableItem(nWhich);
             }
             break;
