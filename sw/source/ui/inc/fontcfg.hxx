@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontcfg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:14:32 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:51:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,9 @@
 #ifndef _LANG_HXX
 #include <tools/lang.hxx>
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 #ifndef INCLUDED_SWDLLAPI_H
 #include "swdllapi.h"
@@ -72,9 +75,15 @@
 #define FONT_GROUP_CJK      1
 #define FONT_GROUP_CTL      2
 
+//pt-size of fonts
+#define FONTSIZE_DEFAULT            240
+#define FONTSIZE_OUTLINE            280
+
+
 class SW_DLLPUBLIC SwStdFontConfig : public utl::ConfigItem
 {
     String      sDefaultFonts[DEF_FONT_COUNT];
+    sal_Int32   nDefaultFontHeight[DEF_FONT_COUNT];
 
     SW_DLLPRIVATE com::sun::star::uno::Sequence<rtl::OUString>    GetPropertyNames();
 
@@ -86,6 +95,9 @@ class SW_DLLPUBLIC SwStdFontConfig : public utl::ConfigItem
                 sDefaultFonts[nFontType] = rSet;
             }
         }
+
+    void ChangeInt( USHORT nFontType, sal_Int32 nHeight );
+
 public:
     SwStdFontConfig();
     ~SwStdFontConfig();
@@ -113,7 +125,13 @@ public:
     void     SetFontIndex  (const String& rSet, sal_uInt8 nFontGroup)
                     {    ChangeString(FONT_INDEX + FONT_PER_GROUP * nFontGroup, rSet);}
 
-    static String   GetDefaultFor(USHORT nFontType, LanguageType eLang);
+    void     SetFontHeight( sal_Int32 nHeight, sal_uInt8 nFont, sal_uInt8 nScriptType )
+                    {    ChangeInt(nFont + FONT_PER_GROUP * nScriptType, nHeight);}
+
+    sal_Int32 GetFontHeight( sal_uInt8 nFont, sal_uInt8 nScriptType, LanguageType eLang );
+
+    static String    GetDefaultFor(USHORT nFontType, LanguageType eLang);
+    static sal_Int32 GetDefaultHeightFor(USHORT nFontType, LanguageType eLang);
 };
 #endif
 
