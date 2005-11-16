@@ -415,18 +415,6 @@
                     <value>1</value>
                 </prop>
             </node>
-            <node oor:name=".uno:InsertSoftHyphen" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Weichen Trenner einfügen</value>
-                    <value xml:lang="en-US">Insert Optional Hyphen</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:InsertNonBreakingSpace" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Geschütztes Leerzeichen einfügen</value>
-                    <value xml:lang="en-US">Insert Non-breaking Space</value>
-                </prop>
-            </node>
             <node oor:name=".uno:ToggleAnchorType" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Verankerung wechseln</value>
@@ -510,12 +498,6 @@
                 <prop oor:name="ContextLabel" oor:type="xs:string">
                     <value xml:lang="de">Als Zeichen</value>
                     <value xml:lang="en-US">As C~haracter</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:InsertHardHyphen" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Geschützen Trenner einfügen</value>
-                    <value xml:lang="en-US">Insert Non-breaking Hyphen</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertCtrl" oor:op="replace">
