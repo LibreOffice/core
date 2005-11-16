@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optdlg.hrc,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:44:45 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:50:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,6 +146,13 @@
 #define ST_SCRIPT_WESTERN              103
 #define ST_SCRIPT_ASIAN                104
 #define ST_SCRIPT_CTL                  105
+#define FT_TYPE                        106
+#define FT_SIZE                        107
+#define LB_STANDARD_SIZE               108
+#define LB_TITLE_SIZE                  109
+#define LB_LIST_SIZE                   110
+#define LB_LABEL_SIZE                  111
+#define LB_INDEX_SIZE                  112
 
 //Tabpage Tabelle
 #define CB_HEADER           101
