@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:15:10 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:14:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2732,6 +2732,17 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
         {
             PasteSelection( rCEvt.GetMousePosPixel() );
         }
+        return;
+    }
+
+    if ( nCmd == COMMAND_INPUTLANGUAGECHANGE )
+    {
+        // #i55929# Font and font size state depends on input language if nothing is selected,
+        // so the slots have to be invalidated when the input language is changed.
+
+        SfxBindings& rBindings = pViewData->GetBindings();
+        rBindings.Invalidate( SID_ATTR_CHAR_FONT );
+        rBindings.Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
         return;
     }
 
