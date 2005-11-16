@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 15:57:57 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:52:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -364,7 +364,22 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 rSh.Insert( String( cIns ) );
         }
         break;
-
+    case SID_INSERT_RLM :
+    case SID_INSERT_LRM :
+    case SID_INSERT_ZWNBSP :
+    case SID_INSERT_ZWSP:
+    {
+        sal_Unicode cIns = 0;
+        switch(nSlot)
+        {
+            case SID_INSERT_RLM : cIns = CHAR_RLM ; break;
+            case SID_INSERT_LRM : cIns = CHAR_LRM ; break;
+            case SID_INSERT_ZWSP : cIns = CHAR_ZWSP ; break;
+            case SID_INSERT_ZWNBSP: cIns = CHAR_ZWNBSP; break;
+        }
+        rSh.Insert( String( cIns ) );
+    }
+    break;
     case FN_INSERT_BREAK:
         rSh.SplitNode();
         rReq.Done();
