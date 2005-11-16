@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:48:59 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:29:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1822,3 +1822,24 @@ SfxSlotInfo FN_XFORMS_INIT
     SlotName[ de ] = "XML Formular-Dokument";
     SlotName[ en-US ] = "XML Form Document";
 };
+SfxSlotInfo FN_INSERT_RLM
+{
+    SlotName[ de ] = "Markierung für rechts-nach-links-Schreibrichtung";
+    SlotName[ en-US ] = "Right-to-left mark";
+};
+SfxSlotInfo FN_INSERT_LRM
+{
+    SlotName[ de ] = "Markierung für links-nach-rechts-Schreibrichtung";
+    SlotName[ en-US ] = "Left-to-right mark";
+};
+SfxSlotInfo FN_INSERT_ZWSP
+{
+    SlotName[ de ] = "Verbindungselement mit Breite 0";
+    SlotName[ en-US ] = "No-width no break";
+};
+SfxSlotInfo FN_INSERT_ZWNBSP
+{
+    SlotName[ de ] = "Optional Umbruch mit Breite 0";
+    SlotName[ en-US ] = "No-width optional break";
+};
+
