@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtypes.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:17:26 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:28:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -271,6 +271,11 @@ enum SetAttrMode
 #define CHAR_HARDBLANK      ((sal_Unicode)0x00A0)
 #define CHAR_HARDHYPHEN     ((sal_Unicode)0x2011)
 #define CHAR_SOFTHYPHEN     ((sal_Unicode)0x00AD)
+#define CHAR_RLM            ((sal_Unicode)0x200F)
+#define CHAR_LRM            ((sal_Unicode)0x200E)
+#define CHAR_ZWSP           ((sal_Unicode)0x200B)
+#define CHAR_ZWNBSP         ((sal_Unicode)0x2060)
+
 
 // returns the APP - CharClass instance - used for all ToUpper/ToLower/...
 SW_DLLPUBLIC CharClass& GetAppCharClass();
