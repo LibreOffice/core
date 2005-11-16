@@ -4,9 +4,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:41:44 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:12:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,8 +114,20 @@ struct LabelData;
 
 #define STRING_STANDARD "Standard"
 
+// characters -----------------------------------------------------------------
+
 //  '\r' geht auf'm Mac nicht...
 #define CHAR_CR     char(13)
+
+const sal_Unicode CHAR_NBSP     = 0x00A0;
+const sal_Unicode CHAR_SHY      = 0x00AD;
+const sal_Unicode CHAR_ZWSP     = 0x200B;
+const sal_Unicode CHAR_LRM      = 0x200E;
+const sal_Unicode CHAR_RLM      = 0x200F;
+const sal_Unicode CHAR_NBHY     = 0x2011;
+const sal_Unicode CHAR_ZWNBSP   = 0x2060;
+
+// ----------------------------------------------------------------------------
 
 #define MINDOUBLE   1.7e-307
 #define MAXDOUBLE   1.7e307
