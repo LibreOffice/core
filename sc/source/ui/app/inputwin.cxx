@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:22:31 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:13:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -890,6 +890,19 @@ void __EXPORT ScTextWnd::Command( const CommandEvent& rCEvt )
         else if ( nCommand == COMMAND_CURSORPOS )
         {
             //  don't call InputChanged for COMMAND_CURSORPOS
+        }
+        else if ( nCommand == COMMAND_INPUTLANGUAGECHANGE )
+        {
+            // #i55929# Font and font size state depends on input language if nothing is selected,
+            // so the slots have to be invalidated when the input language is changed.
+
+            SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+            if (pViewFrm)
+            {
+                SfxBindings& rBindings = pViewFrm->GetBindings();
+                rBindings.Invalidate( SID_ATTR_CHAR_FONT );
+                rBindings.Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
+            }
         }
         else
             SC_MOD()->InputChanged( pEditView );
