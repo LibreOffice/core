@@ -138,6 +138,17 @@
             <menu:menuitem menu:id=".uno:InsertSheetFromFile" menu:helpid="26275" menu:label="" />
             <menu:menuitem menu:id=".uno:InsertExternalDataSource" menu:helpid="26085" menu:label="" />
             <menu:menuitem menu:id=".uno:InsertSymbol" menu:helpid="10503" menu:label="" />
+            <menu:menu menu:id=".uno:FormattingMarkMenu" >
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:InsertNonBreakingSpace" menu:helpid="20344" />
+                    <menu:menuitem menu:id=".uno:InsertHardHyphen" menu:helpid="20385" />
+                    <menu:menuitem menu:id=".uno:InsertSoftHyphen" menu:helpid="20343" />
+                    <menu:menuitem menu:id=".uno:InsertZWSP" menu:helpid="21425" />
+                    <menu:menuitem menu:id=".uno:InsertZWNBSP" menu:helpid="21424" />
+                    <menu:menuitem menu:id=".uno:InsertLRM" menu:helpid="21423" />
+                    <menu:menuitem menu:id=".uno:InsertRLM" menu:helpid="21422" />
+                </menu:menupopup>
+            </menu:menu>
             <menu:menuitem menu:id=".uno:HyperlinkDialog" menu:helpid="5678" menu:label="" />
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:FunctionDialog" menu:helpid="26152" menu:label="" />
