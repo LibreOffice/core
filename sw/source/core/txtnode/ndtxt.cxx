@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-09 10:09:43 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:31:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1656,7 +1656,8 @@ SwTxtNode& SwTxtNode::Insert( const XubString   &rStr,
     xub_StrLen nLen = aText.Len() - aPos;
 
     // sequence input checking
-    sal_Bool bInputChecked = sal_False;
+    bool bInputChecked = false;
+    bool bInputCorrected = false;
 
     // We check only buffers which contain less than MAX_SEQUENCE_CHECK_LEN
     // characters. This is for performance reasons, because a "copy and paste"
@@ -1674,30 +1675,60 @@ SwTxtNode& SwTxtNode::Insert( const XubString   &rStr,
 
         if ( pCheckIt->xCheck.is() )
         {
-            xub_StrLen nI = 0;
             xub_StrLen nTmpPos = aPos;
+            xub_StrLen nI = 0;
             xub_Unicode cChar;
             sal_Int16 nCheckMode = rCTLOptions.IsCTLSequenceCheckingRestricted()? cssii::STRICT : cssii::BASIC;
+            bInputChecked = true;
 
-            while ( nI < rStr.Len() )
+            if ( rCTLOptions.IsCTLSequenceCheckingTypeAndReplace() )
             {
-                cChar = rStr.GetChar( nI++ );
-                if ( pCheckIt->xCheck->checkInputSequence( aText, nTmpPos - 1, cChar, nCheckMode ) )
+                rtl::OUString aTmpText = aText;
+
+                while ( nI < rStr.Len() )
                 {
-                    // character can be inserted
-                    aText.Insert( cChar, nTmpPos++ );
+                    cChar = rStr.GetChar( nI++ );
+                    nTmpPos = static_cast<xub_StrLen>(pCheckIt->xCheck->correctInputSequence( aTmpText, nTmpPos - 1, cChar, nCheckMode ));
+
+                    // valid sequence or sequence could be corrected:
+                    if ( nTmpPos != aTmpText.getLength() )
+                        bInputCorrected = true;
+                }
+
+                aText = aTmpText;
+            }
+            else
+            {
+                while ( nI < rStr.Len() )
+                {
+                    cChar = rStr.GetChar( nI++ );
+                    if ( pCheckIt->xCheck->checkInputSequence( aText, nTmpPos - 1, cChar, nCheckMode ) )
+                    {
+                        // character can be inserted:
+                        aText.Insert( cChar, nTmpPos++ );
+                    }
                 }
             }
-            bInputChecked = sal_True;
         }
     }
 
-    if ( ! bInputChecked )
+    if ( !bInputChecked )
         aText.Insert( rStr, aPos );
 
     nLen = aText.Len() - aPos - nLen;
-    if( !nLen )                         // String nicht gewachsen ??
+    if( !nLen )
+    {
+        // String nicht gewachsen ??
+          if ( bInputCorrected && GetDepends() )
+        {
+            // In case a sequence input correction took place
+            // without affecting the string length, this triggers
+            // a reformatting:
+            SwUpdateAttr aHint( aPos - 1, aPos, 0 );
+            SwModify::Modify( 0, &aHint );
+        }
         return *this;
+    }
     Update( rIdx, nLen );       // um reale Groesse Updaten !
 
     // analog zu Insert(char) in txtedt.cxx:
