@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlnvs2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:15:01 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:22:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -291,6 +291,13 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         }
         break;
 
+        case FN_INSERT_SOFT_HYPHEN:
+        case FN_INSERT_HARDHYPHEN:
+        case FN_INSERT_HARD_SPACE:
+        case SID_INSERT_RLM :
+        case SID_INSERT_LRM :
+        case SID_INSERT_ZWNBSP :
+        case SID_INSERT_ZWSP:
         case SID_BULLET:
         {
             pFuActual = new FuBullet( this, GetActiveWindow(), pOlView, GetDoc(), rReq );
