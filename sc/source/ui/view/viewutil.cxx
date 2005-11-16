@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewutil.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:14:41 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:15:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,12 +42,15 @@
 // INCLUDE ---------------------------------------------------------------
 #include <tools/list.hxx>
 #include "scitems.hxx"
+#include <sfx2/bindings.hxx>
 #include <svx/charmap.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/langitem.hxx>
 #include <svx/scripttypeitem.hxx>
 #include <svtools/itempool.hxx>
 #include <svtools/itemset.hxx>
+#include <svtools/cjkoptions.hxx>
+#include <svtools/ctloptions.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
@@ -278,6 +281,44 @@ bool ScViewUtil::HasFiltered( const ScRange& rRange, ScDocument* pDoc )
     }
 
     return false;
+}
+
+// static
+void ScViewUtil::HideDisabledSlot( SfxItemSet& rSet, SfxBindings& rBindings, USHORT nSlotId )
+{
+    SvtCJKOptions aCJKOptions;
+    SvtCTLOptions aCTLOptions;
+    bool bEnabled = true;
+
+    switch( nSlotId )
+    {
+        case SID_CHINESE_CONVERSION:
+        case SID_HANGUL_HANJA_CONVERSION:
+            bEnabled = aCJKOptions.IsAnyEnabled();
+        break;
+
+        case SID_TRANSLITERATE_HALFWIDTH:
+        case SID_TRANSLITERATE_FULLWIDTH:
+        case SID_TRANSLITERATE_HIRAGANA:
+        case SID_TRANSLITERATE_KATAGANA:
+            bEnabled = aCJKOptions.IsChangeCaseMapEnabled();
+        break;
+
+        case SID_INSERT_RLM:
+        case SID_INSERT_LRM:
+        case SID_INSERT_ZWNBSP:
+        case SID_INSERT_ZWSP:
+            bEnabled = aCTLOptions.IsCTLFontEnabled();
+        break;
+
+        default:
+            DBG_ERRORFILE( "ScViewUtil::HideDisabledSlot - unknown slot ID" );
+            return;
+    }
+
+    rBindings.SetVisibleState( nSlotId, bEnabled );
+    if( !bEnabled )
+        rSet.DisableItem( nSlotId );
 }
 
 //==================================================================
