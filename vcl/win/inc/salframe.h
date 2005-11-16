@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:57:53 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:08:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,6 +137,7 @@ public:
     virtual void                EndExtTextInput( USHORT nFlags );
     virtual String              GetKeyName( USHORT nKeyCode );
     virtual String              GetSymbolKeyName( const XubString& rFontName, USHORT nKeyCode );
+    virtual BOOL                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
     virtual LanguageType        GetInputLanguage();
     virtual SalBitmap*          SnapShot();
     virtual void                UpdateSettings( AllSettings& rSettings );
