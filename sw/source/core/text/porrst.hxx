@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porrst.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:02:07 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:31:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,6 +170,33 @@ public:
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
 };
+
+/*************************************************************************
+ *                      class SwControlCharPortion
+ *************************************************************************/
+
+class SwControlCharPortion : public SwLinePortion
+{
+
+private:
+    mutable USHORT mnViewWidth;            // used to cache a calculated value
+    mutable USHORT mnHalfCharWidth;        // used to cache a calculated value
+    sal_Unicode mcChar;
+
+public:
+
+    inline SwControlCharPortion( sal_Unicode cChar )
+        : mnViewWidth( 0 ), mnHalfCharWidth( 0 ), mcChar( cChar )
+    {
+        SetWhichPor( POR_CONTROLCHAR ); SetLen( 1 );
+    }
+
+    virtual void Paint( const SwTxtPaintInfo &rInf ) const;
+    virtual sal_Bool Format( SwTxtFormatInfo &rInf );
+    virtual KSHORT GetViewWidth( const SwTxtSizeInfo& rInf ) const;
+};
+
+
 
 /*************************************************************************
  *                  inline - Implementations
