@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 15:09:07 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:08:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1475,15 +1475,33 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
                     {
                         // request fallback for the left-to-right cell
                         for( int c = nMinCharPos; c < nEndCharPos; ++c )
+                        {
                             if( mpLogClusters[ c ] == i )
-                                rArgs.NeedFallback( c, false );
+                            {
+                                // --> HDU/FME 2005-10-25 #i55716# skip WORDJOINER
+                                if( rArgs.mpStr[ c ] == 0x2060 )
+                                    mpOutGlyphs[ i + rVisualItem.mnMinGlyphPos ] = 1;
+                                else
+                                // <--
+                                    rArgs.NeedFallback( c, false );
+                           }
+                        }
                     }
                     else
                     {
                         // request fallback for the right to left cell
                         for( int c = nEndCharPos; --c >= nMinCharPos; )
+                        {
                             if( mpLogClusters[ c ] == i )
-                                rArgs.NeedFallback( c, true );
+                            {
+                                // --> HDU/FME 2005-10-25 #i55716# skip WORDJOINER
+                                if( rArgs.mpStr[ c ] == 0x2060 )
+                                    mpOutGlyphs[ i + rVisualItem.mnMinGlyphPos ] = 1;
+                                else
+                                // <--
+                                    rArgs.NeedFallback( c, true );
+                            }
+                        }
                     }
                 } while( ++i < nGlyphCount );
             }
