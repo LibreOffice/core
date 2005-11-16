@@ -4,9 +4,9 @@
  *
  *  $RCSfile: languageoptions.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:41:55 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:10:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,11 +46,11 @@
 #ifndef _SVTOOLS_CTLOPTIONS_HXX
 #include <ctloptions.hxx>
 #endif
-#ifndef _LANG_HXX
-#include <tools/lang.hxx>
-#endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+#ifndef _ISOLANG_HXX
+#include <tools/isolang.hxx>
 #endif
 
 #ifndef _VOS_MUTEX_HXX_
@@ -65,7 +65,7 @@
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
 #endif
-
+using namespace ::com::sun::star;
 // global ----------------------------------------------------------------------
 
 namespace { struct ALMutex : public rtl::Static< ::osl::Mutex, ALMutex > {}; }
@@ -169,6 +169,35 @@ sal_Bool SvtLanguageOptions::IsCTLSequenceChecking() const
 {
     return m_pCTLOptions->IsCTLSequenceChecking();
 }
+/*-- 26.09.2005 15:48:23---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SvtLanguageOptions::SetCTLSequenceCheckingRestricted( sal_Bool _bEnable )
+{
+    m_pCTLOptions->SetCTLSequenceCheckingRestricted( _bEnable );
+}
+/*-- 26.09.2005 15:48:23---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Bool SvtLanguageOptions::IsCTLSequenceCheckingRestricted( void ) const
+{
+    return m_pCTLOptions->IsCTLSequenceCheckingRestricted();
+}
+/*-- 26.09.2005 15:48:23---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SvtLanguageOptions::SetCTLSequenceCheckingTypeAndReplace( sal_Bool _bEnable )
+{
+    m_pCTLOptions->SetCTLSequenceCheckingTypeAndReplace( _bEnable );
+}
+/*-- 26.09.2005 15:48:24---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Bool SvtLanguageOptions::IsCTLSequenceCheckingTypeAndReplace() const
+{
+    return m_pCTLOptions->IsCTLSequenceCheckingTypeAndReplace();
+}
+
 //------------------------------------------------------------------------------
 sal_Bool SvtLanguageOptions::IsReadOnly(SvtLanguageOptions::EOption eOption) const
 {
@@ -316,3 +345,45 @@ sal_uInt16 SvtLanguageOptions::GetScriptTypeOfLanguage( sal_uInt16 nLang )
     return nScript;
 }
 // -----------------------------------------------------------------------------
+
+
+/*-- 27.10.2005 08:18:01---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SvtSystemLanguageOptions::SvtSystemLanguageOptions() :
+    utl::ConfigItem( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("System/L10N") ))
+{
+    uno::Sequence< rtl::OUString > aPropertyNames(1);
+    rtl::OUString* pNames = aPropertyNames.getArray();
+    pNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("SystemLocale"));
+    uno::Sequence< uno::Any > aValues = GetProperties( aPropertyNames );
+
+    if ( aValues.getLength() )
+    {
+        aValues[0]>>= m_sWin16SystemLocale;
+    }
+}
+/*-- 27.10.2005 08:18:01---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SvtSystemLanguageOptions::~SvtSystemLanguageOptions()
+{
+}
+/*-- 27.10.2005 08:18:02---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void    SvtSystemLanguageOptions::Commit()
+{
+    //does nothing
+}
+/*-- 27.10.2005 08:36:14---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+LanguageType SvtSystemLanguageOptions::GetWin16SystemLanguage()
+{
+    if( m_sWin16SystemLocale.getLength() == 0 )
+        return LANGUAGE_NONE;
+    return ConvertIsoStringToLanguage( m_sWin16SystemLocale );
+}
+
+
