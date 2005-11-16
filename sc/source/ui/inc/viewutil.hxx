@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewutil.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:05:26 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:14:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@
 
 class String;
 class SfxItemSet;
+class SfxBindings;
 class SvxFontItem;
 
 class ScChangeAction;
@@ -81,6 +82,8 @@ public:
 
     static bool HasFiltered( const ScRange& rRange, ScDocument* pDoc );
     static void UnmarkFiltered( ScMarkData& rMark, ScDocument* pDoc );
+
+    static void HideDisabledSlot( SfxItemSet& rSet, SfxBindings& rBindings, USHORT nSlotId );
 };
 
 // ---------------------------------------------------------------------------
