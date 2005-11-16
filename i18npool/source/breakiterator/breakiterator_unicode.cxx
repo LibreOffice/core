@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakiterator_unicode.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-17 15:42:30 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:18:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 BreakIterator_Unicode::BreakIterator_Unicode()
 {
         wordRule="word";
+        lineRule="line";
         aBreakIterator = NULL;
         aText = OUString();
         cBreakIterator = ImplementName;
@@ -301,32 +302,52 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
 {
         LineBreakResults lbr;
 
-        loadICUBreakIterator(rLocale, LOAD_LINE_BREAKITERATOR, 0, "line", Text);
+        loadICUBreakIterator(rLocale, LOAD_LINE_BREAKITERATOR, 0, lineRule, Text);
 
-        if (aBreakIterator->isBoundary(nStartPos)) { //Line boundary break
-            lbr.breakIndex = nStartPos;
-            lbr.breakType = BreakType::WORDBOUNDARY;
-        } else if (hOptions.rHyphenator.is()) { //Hyphenation break
-            Boundary wBoundary = getWordBoundary( Text, nStartPos, rLocale,
-                                            WordType::DICTIONARY_WORD, false);
-            Reference< linguistic2::XHyphenatedWord > aHyphenatedWord;
-            aHyphenatedWord = hOptions.rHyphenator->hyphenate(Text.copy(wBoundary.startPos,
-                wBoundary.endPos - wBoundary.startPos), rLocale,
-                (sal_Int16) (hOptions.hyphenIndex - wBoundary.startPos), hOptions.aHyphenationOptions);
-            if (aHyphenatedWord.is()) {
-                lbr.rHyphenatedWord = aHyphenatedWord;
-                if(wBoundary.startPos + aHyphenatedWord->getHyphenationPos() + 1 < nMinBreakPos )
-                    lbr.breakIndex = -1;
-                else
-                    lbr.breakIndex = wBoundary.startPos; //aHyphenatedWord->getHyphenationPos();
-                lbr.breakType = BreakType::HYPHENATION;
-            } else {
+        sal_Bool GlueSpace=sal_True;
+        while (GlueSpace) {
+            if (aBreakIterator->isBoundary(nStartPos)) { //Line boundary break
+                lbr.breakIndex = nStartPos;
+                lbr.breakType = BreakType::WORDBOUNDARY;
+            } else if (hOptions.rHyphenator.is()) { //Hyphenation break
+                Boundary wBoundary = getWordBoundary( Text, nStartPos, rLocale,
+                                                WordType::DICTIONARY_WORD, false);
+                Reference< linguistic2::XHyphenatedWord > aHyphenatedWord;
+                aHyphenatedWord = hOptions.rHyphenator->hyphenate(Text.copy(wBoundary.startPos,
+                    wBoundary.endPos - wBoundary.startPos), rLocale,
+                    (sal_Int16) (hOptions.hyphenIndex - wBoundary.startPos), hOptions.aHyphenationOptions);
+                if (aHyphenatedWord.is()) {
+                    lbr.rHyphenatedWord = aHyphenatedWord;
+                    if(wBoundary.startPos + aHyphenatedWord->getHyphenationPos() + 1 < nMinBreakPos )
+                        lbr.breakIndex = -1;
+                    else
+                        lbr.breakIndex = wBoundary.startPos; //aHyphenatedWord->getHyphenationPos();
+                    lbr.breakType = BreakType::HYPHENATION;
+                } else {
+                    lbr.breakIndex = aBreakIterator->preceding(nStartPos);
+                    lbr.breakType = BreakType::WORDBOUNDARY;;
+                }
+            } else { //word boundary break
                 lbr.breakIndex = aBreakIterator->preceding(nStartPos);
-                lbr.breakType = BreakType::WORDBOUNDARY;;
+                lbr.breakType = BreakType::WORDBOUNDARY;
             }
-        } else { //word boundary break
-            lbr.breakIndex = aBreakIterator->preceding(nStartPos);
-            lbr.breakType = BreakType::WORDBOUNDARY;
+
+#define WJ 0x2060   // Word Joiner
+            GlueSpace=sal_False;
+            if (lbr.breakType == BreakType::WORDBOUNDARY) {
+                nStartPos = lbr.breakIndex;
+                if (Text[nStartPos--] == WJ)
+                    GlueSpace=sal_True;
+                while (nStartPos >= 0 &&
+                    (unicode::isWhiteSpace(Text[nStartPos]) || Text[nStartPos] == WJ)) {
+                    if (Text[nStartPos--] == WJ)
+                        GlueSpace=sal_True;
+                }
+                if (GlueSpace && nStartPos < 0)  {
+                    lbr.breakIndex = 0;
+                    break;
+                }
+            }
         }
 
         return lbr;
