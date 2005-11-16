@@ -4,9 +4,9 @@
  *
  *  $RCSfile: checkit.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:36:11 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:28:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,8 @@
 #include <com/sun/star/uno/Reference.h>
 #endif
 
-#ifndef _COM_SUN_STAR_I18N_XINPUTSEQUENCECHECKER_HPP_
-#include <com/sun/star/i18n/XInputSequenceChecker.hpp>
+#ifndef _COM_SUN_STAR_I18N_XEXTENDEDINPUTSEQUENCECHECKER_HDL_
+#include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
 #endif
 
 /*************************************************************************
@@ -59,7 +59,7 @@
 class SwCheckIt
 {
 public:
-    com::sun::star::uno::Reference < com::sun::star::i18n::XInputSequenceChecker > xCheck;
+    com::sun::star::uno::Reference < com::sun::star::i18n::XExtendedInputSequenceChecker > xCheck;
 
     SwCheckIt();
 };
