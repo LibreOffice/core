@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:35:03 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:06:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2181,6 +2181,18 @@ static void ImplHandleSalKeyMod( Window* pWindow, SalKeyModEvent* pEvent )
 
 // -----------------------------------------------------------------------
 
+static void ImplHandleInputLanguageChange( Window* pWindow )
+{
+    // find window
+    Window* pChild = ImplGetKeyInputWindow( pWindow );
+    if ( !pChild )
+        return;
+
+    ImplCallCommand( pChild, COMMAND_INPUTLANGUAGECHANGE );
+}
+
+// -----------------------------------------------------------------------
+
 static void ImplHandleSalSettings( Window* pWindow, USHORT nEvent )
 {
     // Application Notification werden nur fuer das erste Window ausgeloest
@@ -2364,6 +2376,10 @@ long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
             break;
         case SALEVENT_KEYMODCHANGE:
             ImplHandleSalKeyMod( (Window*)pInst, (SalKeyModEvent*)pEvent );
+            break;
+
+        case SALEVENT_INPUTLANGUAGECHANGE:
+            ImplHandleInputLanguageChange( (Window*)pInst );
             break;
 
         case SALEVENT_MENUACTIVATE:
