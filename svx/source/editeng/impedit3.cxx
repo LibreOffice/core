@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:09:13 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:03:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3018,6 +3018,96 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     nTextStart = nIndex;
                                     nTextLen = pTextPortion->GetLen();
                                     pDXArray = pLine->GetCharPosArray().GetData()+( nIndex-pLine->GetStart() );
+
+                                    // --> FME 2005-10-18 #i55716# Paint control characters
+                                    if ( aStatus.MarkFields() )
+                                    {
+                                        xub_StrLen nTmpIdx;
+                                        const xub_StrLen nTmpEnd = nTextStart + pTextPortion->GetLen();
+
+                                        for ( nTmpIdx = nTextStart; nTmpIdx <= nTmpEnd ; ++nTmpIdx )
+                                        {
+                                            const sal_Unicode cChar = ( nTmpIdx != aText.Len() && ( nTmpIdx != nTextStart || 0 == nTextStart ) ) ?
+                                                                        aText.GetChar( nTmpIdx ) :
+                                                                        0;
+
+                                            if ( 0x200B == cChar || 0x2060 == cChar )
+                                            {
+                                                const String aBlank( ' ' );
+                                                short nHalfBlankWidth = aTmpFont.QuickGetTextSize( pOutDev, aBlank, 0, 1, 0 ).Width() / 2;
+
+                                                const long nAdvanceX = ( nTmpIdx == nTmpEnd ?
+                                                                         pTextPortion->GetSize().Width() :
+                                                                         pDXArray[ nTmpIdx - nTextStart ] ) - nHalfBlankWidth;
+                                                const long nAdvanceY = -pLine->GetMaxAscent();
+
+                                                Point aTopLeftRectPos( aTmpPos );
+                                                if ( !IsVertical() )
+                                                {
+                                                    aTopLeftRectPos.X() += nAdvanceX;
+                                                    aTopLeftRectPos.Y() += nAdvanceY;
+                                                }
+                                                else
+                                                {
+                                                    aTopLeftRectPos.Y() += nAdvanceX;
+                                                    aTopLeftRectPos.X() -= nAdvanceY;
+                                                }
+
+                                                Point aBottomRightRectPos( aTopLeftRectPos );
+                                                if ( !IsVertical() )
+                                                {
+                                                    aBottomRightRectPos.X() += 2 * nHalfBlankWidth;
+                                                    aBottomRightRectPos.Y() += pLine->GetHeight();
+                                                }
+                                                else
+                                                {
+                                                    aBottomRightRectPos.X() -= pLine->GetHeight();
+                                                    aBottomRightRectPos.Y() += 2 * nHalfBlankWidth;
+                                                }
+
+                                                pOutDev->Push( PUSH_FILLCOLOR );
+                                                pOutDev->Push( PUSH_LINECOLOR );
+                                                pOutDev->SetFillColor( COL_LIGHTGRAY );
+                                                pOutDev->SetLineColor( COL_LIGHTGRAY );
+
+                                                const Rectangle aBackRect( aTopLeftRectPos, aBottomRightRectPos );
+                                                pOutDev->DrawRect( aBackRect );
+
+                                                pOutDev->Pop();
+                                                pOutDev->Pop();
+
+                                                if ( 0x200B == cChar )
+                                                {
+                                                    const String aSlash( '/' );
+                                                    const short nOldEscapement = aTmpFont.GetEscapement();
+                                                    const BYTE nOldPropr = aTmpFont.GetPropr();
+
+                                                    aTmpFont.SetEscapement( -20 );
+                                                    aTmpFont.SetPropr( 25 );
+                                                    aTmpFont.SetPhysFont( pOutDev );
+
+                                                    const Size aSlashSize = aTmpFont.QuickGetTextSize( pOutDev, aSlash, 0, 1, 0 );
+                                                    Point aSlashPos( aTmpPos );
+                                                    const long nAddX = nHalfBlankWidth - aSlashSize.Width() / 2;
+                                                    if ( !IsVertical() )
+                                                    {
+                                                        aSlashPos.X() = aTopLeftRectPos.X() + nAddX;
+                                                    }
+                                                    else
+                                                    {
+                                                        aSlashPos.Y() = aTopLeftRectPos.Y() + nAddX;
+                                                    }
+
+                                                    aTmpFont.QuickDrawText( pOutDev, aSlashPos, aSlash, 0, 1, 0 );
+
+                                                    aTmpFont.SetEscapement( nOldEscapement );
+                                                    aTmpFont.SetPropr( nOldPropr );
+                                                    aTmpFont.SetPhysFont( pOutDev );
+                                                }
+                                            }
+                                        }
+                                    }
+                                    // <--
                                 }
                                 else if ( pTextPortion->GetKind() == PORTIONKIND_FIELD )
                                 {
