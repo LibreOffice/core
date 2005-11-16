@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:36:48 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 10:02:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -330,7 +330,8 @@ SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(Window* pParent,
             aNumberings =
                 xDefNum->getDefaultContinuousNumberingLevels( aLocale );
 
-            sal_Int32 nLength = aNumberings.getLength() > 8 ? 8 :aNumberings.getLength();
+
+            sal_Int32 nLength = aNumberings.getLength() > NUM_VALUSET_COUNT ? NUM_VALUSET_COUNT :aNumberings.getLength();
 
             const Sequence<PropertyValue>* pValuesArr = aNumberings.getConstArray();
             for(sal_Int32 i = 0; i < nLength; i++)
