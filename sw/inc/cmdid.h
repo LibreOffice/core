@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 13:14:59 $
+ *  last change: $Author: obo $ $Date: 2005-11-16 09:28:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -378,8 +378,8 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_INSERT_IDX_ENTRY_DLG (FN_INSERT + 35)    /* Verzeichniseintrag einfuegen */
 #define FN_INSERT_FRAME_INTERACT_NOCOL (FN_INSERT + 36) /*insert interactive non column frame*/
 
-#define FN_INSERT_SOFT_HYPHEN   (FN_INSERT + 43)    /* weicher Trenner */
-#define FN_INSERT_HARD_SPACE    (FN_INSERT + 44)    /* hartes Space */
+//#define FN_INSERT_SOFT_HYPHEN  (FN_INSERT + 43)    /* weicher Trenner */
+//#define FN_INSERT_HARD_SPACE   (FN_INSERT + 44)    /* hartes Space */
 
 
 #define FN_TOOL_GROUP           (FN_INSERT + 47)    /* Objekte gruppieren */
@@ -410,7 +410,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_QRY_GET_PHYS_RECORD_ID (FN_INSERT + 80)  /* Physikalische (absolute) Datensatznummer erfragen (Basic) */
 
 #define FN_TOOL_ANKER_CHAR       (FN_INSERT + 84)   /* DrawObject zeichengebunden */
-#define FN_INSERT_HARDHYPHEN     (FN_INSERT + 85)   /* Bindestrich ohne Umbruch*/
+//#define FN_INSERT_HARDHYPHEN    (FN_INSERT + 85)   /* Bindestrich ohne Umbruch*/
 
 #define FN_QRY_INSERT           (FN_INSERT + 86)    /* Datensatz-Selektion in Text einfuegen */
 #define FN_QRY_MERGE_FIELD      (FN_INSERT + 87)    /* Datensatz-Selektion in Felder einfuegen */
