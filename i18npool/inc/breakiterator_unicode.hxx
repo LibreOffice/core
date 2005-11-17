@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakiterator_unicode.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:17:20 $
+ *  last change: $Author: hr $ $Date: 2005-11-17 20:30:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,9 +90,11 @@ protected:
     const sal_Char *cBreakIterator, *wordRule, *lineRule;
     Boundary result; // for word break iterator
 
-    rtl::OUString aText;
+    struct {
+        rtl::OUString aText;
+        icu::BreakIterator *aBreakIterator;
+    } character, word, sentence, line, *icuBI;
     com::sun::star::lang::Locale aLocale;
-    icu::BreakIterator *aBreakIterator;
     sal_Int16 aBreakType, aWordType;
     void SAL_CALL loadICUBreakIterator(const com::sun::star::lang::Locale& rLocale,
         sal_Int16 rBreakType, sal_Int16 rWordType, const sal_Char* name, const rtl::OUString& rText) throw(com::sun::star::uno::RuntimeException);
