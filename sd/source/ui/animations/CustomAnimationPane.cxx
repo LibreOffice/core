@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationPane.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:24:06 $
+ *  last change: $Author: obo $ $Date: 2005-11-17 16:11:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -817,6 +817,8 @@ void CustomAnimationPane::updateControls()
         {
             PropertySubControl* pSubControl = NULL;
 
+            Any aValue;
+
             UStringList aProperties( pDescriptor->getProperties() );
             if( aProperties.size() >= 1 )
             {
@@ -826,14 +828,26 @@ void CustomAnimationPane::updateControls()
 
                 mpFTProperty->SetText( getPropertyName( mnPropertyType )  );
 
-                Any aValue( getProperty1Value( mnPropertyType, pEffect ) );
-                if( aValue.hasValue() )
-                {
-                    pSubControl = PropertySubControl::create( mnPropertyType, this, aValue, pEffect->getPresetId(), LINK( this, CustomAnimationPane, implPropertyHdl ) );
-                }
+                aValue = getProperty1Value( mnPropertyType, pEffect );
             }
 
-            mpLBProperty->setSubControl( pSubControl );
+            if( aValue.hasValue() )
+            {
+                pSubControl = mpLBProperty->getSubControl();
+                if( !pSubControl || (pSubControl->getControlType() != mnPropertyType) )
+                {
+                    pSubControl = PropertySubControl::create( mnPropertyType, this, aValue, pEffect->getPresetId(), LINK( this, CustomAnimationPane, implPropertyHdl ) );
+                    mpLBProperty->setSubControl( pSubControl );
+                }
+                else
+                {
+                    pSubControl->setValue( aValue, pEffect->getPresetId() );
+                }
+            }
+            else
+            {
+                mpLBProperty->setSubControl( 0 );
+            }
 
             bool bEnable = (pSubControl != 0) && (pSubControl->getControl()->IsEnabled());
             mpLBProperty->Enable( bEnable );
