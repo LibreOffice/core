@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvashelper_texturefill.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:00:37 $
+ *  last change: $Author: obo $ $Date: 2005-11-17 16:08:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -496,7 +496,7 @@ namespace vclcanvas
                                ((nStepCount - i)*rColor1.GetGreen() + i*rColor2.GetGreen())/nStepCount,
                                ((nStepCount - i)*rColor1.GetBlue() + i*rColor2.GetBlue())/nStepCount ) );
 
-#if defined(VERBOSE) && defined(DBG_UTIL)
+#if defined(VERBOSE) && OSL_DEBUG_LEVEL > 0
                     if( i && !(i % 10) )
                         rOutDev.SetFillColor( COL_RED );
 #endif
@@ -765,7 +765,7 @@ namespace vclcanvas
                 }
             }
 
-#if defined(VERBOSE) && defined(DBG_UTIL)
+#if defined(VERBOSE) && OSL_DEBUG_LEVEL > 0
             {
                 ::basegfx::B2DRectangle aRect(0.0, 0.0, 1.0, 1.0);
                 ::basegfx::B2DRectangle aTextureDeviceRect;
