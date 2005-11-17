@@ -4,9 +4,9 @@
  *
  *  $RCSfile: profileitem_ooo.scp,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:27:37 $
+ *  last change: $Author: hr $ $Date: 2005-11-17 18:01:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,7 @@ ProfileItem gid_Profileitem_Version_Productpatch
     Section = "Version";
     Order = 6;
     Key = "ProductPatch";
-    Value = "";
+    Value = "<productupdate>";
 End
 
 ProfileItem gid_Profileitem_Version_Productsource
