@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-11 14:14:06 $
+ *  last change: $Author: hr $ $Date: 2005-11-17 17:18:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,6 +167,7 @@
 #ifndef INCLUDED_SVTOOLS_MENUOPTIONS_HXX
 #include <svtools/menuoptions.hxx>
 #endif
+#include <svtools/cmdoptions.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespaces
@@ -327,7 +328,11 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     m_pToolBar->SetToolboxButtonSize( m_bSmallSymbols ? TOOLBOX_BUTTONSIZE_SMALL : TOOLBOX_BUTTONSIZE_LARGE );
 
     // enables a menu for clipped items and customization
-    m_pToolBar->SetMenuType( TOOLBOX_MENUTYPE_CLIPPEDITEMS );
+    SvtCommandOptions aCmdOptions;
+    USHORT nMenuType = TOOLBOX_MENUTYPE_CLIPPEDITEMS;
+    if ( !aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, OUString::createFromAscii( "CreateDialog" )))
+         nMenuType |= TOOLBOX_MENUTYPE_CUSTOMIZE;
+    m_pToolBar->SetMenuType( nMenuType );
     m_pToolBar->SetMenuButtonHdl( LINK( this, ToolBarManager, MenuButton ) );
     m_pToolBar->GetMenu()->SetSelectHdl( LINK( this, ToolBarManager, MenuSelect ) );
     m_pToolBar->GetMenu()->SetDeactivateHdl( LINK( this, ToolBarManager, MenuDeactivate ) );
