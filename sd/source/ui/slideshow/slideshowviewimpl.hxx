@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowviewimpl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:18:27 $
+ *  last change: $Author: obo $ $Date: 2005-11-17 16:11:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,17 +244,20 @@ struct WrappedMouseMotionEvent : public ::com::sun::star::lang::EventObject
 // SlideShowViewListeners
 ///////////////////////////////////////////////////////////////////////
 
-typedef ::comphelper::OListenerContainerBase< ::com::sun::star::util::XModifyListener,
-                                                ::com::sun::star::awt::WindowEvent >        SlideShowViewListeners_Base;
-
-class SlideShowViewListeners : public SlideShowViewListeners_Base
+typedef std::vector< ::com::sun::star::uno::WeakReference< ::com::sun::star::util::XModifyListener > > ViewListenerVector;
+class SlideShowViewListeners
 {
 public:
     SlideShowViewListeners( ::osl::Mutex& rMutex );
 
+    void    addListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& _rxListener );
+    void    removeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& _rxListener );
+    bool    notify( const ::com::sun::star::lang::EventObject& _rEvent ) throw( com::sun::star::uno::Exception );
+    void    disposing( const ::com::sun::star::lang::EventObject& _rEventSource );
+
 protected:
-    virtual bool implNotify( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& rListener,
-                             const ::com::sun::star::awt::WindowEvent&                  rEvent ) throw( ::com::sun::star::uno::Exception );
+    ViewListenerVector maListeners;
+    ::osl::Mutex& mrMutex;
 };
 
 typedef ::std::auto_ptr< SlideShowViewListeners >   SlideShowViewListenersPtr;
