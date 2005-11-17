@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 09:31:59 $
+ *  last change: $Author: hr $ $Date: 2005-11-17 19:59:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2687,7 +2687,8 @@ BOOL SwTxtNode::HasBullet() const
 }
 // <- #i29560#
 
-XubString SwTxtNode::GetNumString() const
+// --> OD 2005-11-17 #128041# - introduce parameter <_bInclPrefixAndSuffixStrings>
+XubString SwTxtNode::GetNumString( const bool _bInclPrefixAndSuffixStrings ) const
 {
     // --> OD 2005-11-02 #i51089 - TUNING#
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
@@ -2695,7 +2696,10 @@ XubString SwTxtNode::GetNumString() const
          GetNum()->IsCounted() &&
          pRule->Get( GetNum()->GetLevel() ).IsTxtFmt() )
     {
-        return pRule->MakeNumString( *(GetNum()) );
+        // --> OD 2005-11-17 #128041#
+        return pRule->MakeNumString( *(GetNum()),
+                                     _bInclPrefixAndSuffixStrings ? TRUE : FALSE );
+        // <--
     }
     // <--
 
