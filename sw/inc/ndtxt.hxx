@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:12:41 $
+ *  last change: $Author: hr $ $Date: 2005-11-17 19:58:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -358,10 +358,17 @@ public:
      */
     void NumRuleChgd();
 
-    /**
-       Returns outline of numbering string
-     */
-    XubString GetNumString() const;
+    /** Returns outline of numbering string
+
+        OD 2005-11-17 #128041#
+        Introduce parameter <_bInclPrefixAndSuffixStrings> in order to control,
+        if the prefix and the suffix strings have to been included or not.
+
+        @param _bInclPrefixAndSuffixStrings
+        optional input parameter - boolean indicating, if the prefix and the
+        suffix strings have to been included or not. default value = <true>
+    */
+    XubString GetNumString( const bool _bInclPrefixAndSuffixStrings = true ) const;
 
     /**
        Returns the additional indents of this text node and its numbering.
