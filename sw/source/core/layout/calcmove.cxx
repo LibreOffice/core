@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:10:56 $
+ *  last change: $Author: obo $ $Date: 2005-11-17 16:33:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -604,12 +604,13 @@ void SwFrm::MakePos()
             // NOTE: Footer frame is <ColLocked()> during its
             //     <FormatSize(..)>, which is called from <Format(..)>, which
             //     is called from <MakeAll()>, which is called from <Calc()>.
-            // --> OD 2004-11-02 #i23129#, #i36347#
-            // - no format of upper Writer fly frame.
+            // --> OD 2005-11-17 #i56850#
+            // - no format of upper Writer fly frame, which is anchored
+            //   at-paragraph or at-character.
             if ( !GetUpper()->IsTabFrm() &&
                  !( IsTabFrm() && GetUpper()->IsInTab() ) &&
                  !GetUpper()->IsSctFrm() &&
-                 !GetUpper()->IsFlyFrm() &&
+                 !dynamic_cast<SwFlyAtCntFrm*>(GetUpper()) &&
                  !( GetUpper()->IsFooterFrm() &&
                     GetUpper()->IsColLocked() )
                )
