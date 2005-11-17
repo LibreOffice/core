@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtstyle.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:33:49 $
+ *  last change: $Author: hr $ $Date: 2005-11-17 17:37:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,7 +152,7 @@ void XMLTextParagraphExport::exportStyleAttributes(
                 xPropState->getPropertyState( sPageDescName  ) )
         {
             xPropSet->getPropertyValue( sPageDescName ) >>= sName;
-            if( sName.getLength() > 0 )
+            // fix for #i5551#  if( sName.getLength() > 0 )
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                           XML_MASTER_PAGE_NAME,
                                           GetExport().EncodeStyleName( sName ) );
