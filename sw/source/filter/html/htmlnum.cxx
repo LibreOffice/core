@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlnum.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-15 14:53:17 $
+ *  last change: $Author: obo $ $Date: 2005-11-17 16:26:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,7 +113,15 @@ void SwHTMLNumRuleInfo::Set( const SwTxtNode& rTxtNd )
         pNumRule = (SwNumRule *)rTxtNd.GetNumRule();
         nDeep = pNumRule ? rTxtNd.GetLevel() + 1 : 0;
         bNumbered = rTxtNd.IsCounted();
-        bRestart = rTxtNd.IsRestart();
+        // --> OD 2005-11-16 #i57919#
+        // correction of refactoring done by cws swnumtree:
+        // <bRestart> has to be set to <true>, if numbering is restarted at this
+        // text node and the start value equals <USHRT_MAX>.
+        // Start value <USHRT_MAX> indicates, that at this text node the numbering
+        // is restarted with the value given at the corresponding level.
+        bRestart = rTxtNd.IsRestart() &&
+                   rTxtNd.GetNum() && rTxtNd.GetNum()->GetStartValue() == USHRT_MAX;
+        // <--
     }
     else
     {
@@ -565,7 +573,17 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
         pTxtNode->SetCounted( true );
     }
     // <--
-    pTxtNode->SetStart(nStart);
+    // --> OD 2005-11-15 #i57919#
+    // correction of refactoring done by cws swnumtree
+    // - <nStart> contains the start value, if the numbering has to be restarted
+    //   at this text node. Value <USHRT_MAX> indicates, that numbering isn't
+    //   restarted at this text node
+    if ( nStart != USHRT_MAX )
+    {
+        pTxtNode->SetRestart( true );
+        pTxtNode->SetStart( nStart );
+    }
+    // <--
 
     if( GetNumInfo().GetNumRule() )
         GetNumInfo().GetNumRule()->SetInvalidRule( sal_True );
