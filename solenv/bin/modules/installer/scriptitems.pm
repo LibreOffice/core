@@ -4,9 +4,9 @@
 #
 #   $RCSfile: scriptitems.pm,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-09 09:10:24 $
+#   last change: $Author: hr $ $Date: 2005-11-17 17:59:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -410,7 +410,7 @@ sub changing_name_of_language_dependent_keys
 
 ################################################################################
 # Replacement of setup variables in ConfigurationItems and ProfileItems
-# <productkey>, <buildid>, <sequence_languages>, <productcode>, <upgradecode>
+# <productkey>, <buildid>, <sequence_languages>, <productcode>, <upgradecode>, <productupdate>
 ################################################################################
 
 sub replace_setup_variables
@@ -427,6 +427,11 @@ sub replace_setup_variables
     my $productname = $hashref->{'PRODUCTNAME'};
     my $productversion = $hashref->{'PRODUCTVERSION'};
     my $productkey = $productname . " " . $productversion;
+
+    # string "Product Update X"
+
+    my $productupdatestring = "";
+    if ( $hashref->{'WINDOWSPATCHLEVEL'} ) { $productupdatestring = "(Product Update $hashref->{'WINDOWSPATCHLEVEL'})"; }
 
     # string $buildid, which is used to replace the setup variable <buildid>
 
@@ -460,6 +465,7 @@ sub replace_setup_variables
         $value =~ s/\<productminor\>/$localminor/;
         $value =~ s/\<productbuildid\>/$installer::globals::buildid/;
         $value =~ s/\<sourceid\>/$installer::globals::build/;
+        $value =~ s/\<productupdate\>/$productupdatestring/;
 
         $oneitem->{'Value'} = $value;
     }
