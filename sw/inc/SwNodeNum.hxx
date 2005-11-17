@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNodeNum.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:11:05 $
+ *  last change: $Author: obo $ $Date: 2005-11-17 16:20:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,13 @@ public:
 
     friend class SwTxtNode;
     friend class SwNumRule;
+
+    // --> OD 2005-11-16 #i57919# - direct access on <mnStart>, needed for HTML export
+    inline const tSwNumTreeNumber GetStartValue() const
+    {
+        return mnStart;
+    }
+    // <--
 };
 
 #endif // _SW_NODE_NUM_HXX
