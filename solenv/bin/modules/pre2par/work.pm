@@ -4,9 +4,9 @@
 #
 #   $RCSfile: work.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:32:52 $
+#   last change: $Author: obo $ $Date: 2005-11-17 16:35:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -134,10 +134,16 @@ sub convert
 
         # searching for lines with brackets, like Customs = { ..., which can be parted above several lines
 
-        if ( $oneline =~ /^\s*\w+ \s+\=\s*\(.*\)\s*\;\s*$/ )        # only one line
+        if ( $oneline =~ /^\s*\w+\s+\=\s*\(.*\)\s*\;\s*$/ )     # only one line
         {
             $oneline =~ s/\s//g;        # removing whitespaces in lists
             $oneline =~ s/\=/\ \=\ /;   # adding whitespace around equals sign
+        }
+
+        if ( $oneline =~ /^\s*\w+\s+\=\s*$/ )
+        {
+            $oneline =~ s/\s*$//;
+            pre2par::exiter::exit_program("Error: Illegal syntax, no line break after eqals sign allowed. Line: \"$oneline\"", "convert");
         }
 
         if (( $oneline =~ /^\s*\w+\s+\=\s*\(/ ) && (!( $oneline =~ /\)\s*\;\s*$/ )))     # several lines
