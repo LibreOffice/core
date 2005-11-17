@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-11 17:20:53 $
+ *  last change: $Author: hr $ $Date: 2005-11-17 17:21:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2094,9 +2094,23 @@ void ToolBox::SetMenuType( USHORT aType )
     if( aType != mpData->maMenuType )
     {
         mpData->maMenuType = aType;
-        // trigger redraw of menu button
-        if( !mpData->maMenubuttonItem.maRect.IsEmpty() )
-            Invalidate(mpData->maMenubuttonItem.maRect);
+        if( IsFloatingMode() )
+        {
+            // the menu button may have to be moved into the decoration which changes the layout
+            ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
+            if( pWrapper )
+                pWrapper->ShowTitleButton( TITLE_BUTTON_MENU, ( aType & TOOLBOX_MENUTYPE_CUSTOMIZE) );
+
+            mbFormat = TRUE;
+            ImplFormat();
+            ImplSetMinMaxFloatSize( this );
+        }
+        else
+        {
+            // trigger redraw of menu button
+            if( !mpData->maMenubuttonItem.maRect.IsEmpty() )
+                Invalidate(mpData->maMenubuttonItem.maRect);
+        }
     }
 }
 
