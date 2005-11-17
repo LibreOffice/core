@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectformattertxtfrm.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:14:28 $
+ *  last change: $Author: obo $ $Date: 2005-11-17 16:34:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -718,24 +718,28 @@ void lcl_FormatCntntOfLayoutFrm( SwLayoutFrm* pLayFrm,
     }
 }
 // <--
-/** method to format the anchor frame for checking of the move forward condition
+/** method to format given anchor text frame and its previous frames
 
-    OD 2005-01-11 #i40141#
+    OD 2005-11-17 #i56300#
+    Usage: Needed to check, if the anchor text frame is moved forward
+    due to the positioning and wrapping of its anchored objects, and
+    to format the frames, which have become invalid due to the anchored
+    object formatting in the iterative object positioning algorithm
 
     @author OD
 */
-void SwObjectFormatterTxtFrm::_FormatAnchorFrmForCheckMoveFwd()
+void SwObjectFormatterTxtFrm::FormatAnchorFrmAndItsPrevs( SwTxtFrm& _rAnchorTxtFrm )
 {
     // --> OD 2005-04-13 #i47014# - no format of section and previous columns
     // for follow text frames.
-    if ( !mrAnchorTxtFrm.IsFollow() )
+    if ( !_rAnchorTxtFrm.IsFollow() )
     {
         // if anchor frame is directly inside a section, format this section and
         // its previous frames.
         // Note: It's a very simple format without formatting objects.
-        if ( mrAnchorTxtFrm.IsInSct() )
+        if ( _rAnchorTxtFrm.IsInSct() )
         {
-            SwFrm* pSectFrm = mrAnchorTxtFrm.GetUpper();
+            SwFrm* pSectFrm = _rAnchorTxtFrm.GetUpper();
             while ( pSectFrm )
             {
                 if ( pSectFrm->IsSctFrm() || pSectFrm->IsCellFrm() )
@@ -747,7 +751,7 @@ void SwObjectFormatterTxtFrm::_FormatAnchorFrmForCheckMoveFwd()
             if ( pSectFrm && pSectFrm->IsSctFrm() )
             {
                 // --> OD 2005-03-04 #i44049#
-                mrAnchorTxtFrm.LockJoin();
+                _rAnchorTxtFrm.LockJoin();
                 // <--
                 SwFrm* pFrm = pSectFrm->GetUpper()->GetLower();
                 // --> OD 2005-05-23 #i49605# - section frame could move forward
@@ -764,9 +768,9 @@ void SwObjectFormatterTxtFrm::_FormatAnchorFrmForCheckMoveFwd()
                     pFrm = pFrm->GetNext();
                 }
                 lcl_FormatCntntOfLayoutFrm( static_cast<SwLayoutFrm*>(pSectFrm),
-                                            &mrAnchorTxtFrm );
+                                            &_rAnchorTxtFrm );
                 // --> OD 2005-03-04 #i44049#
-                mrAnchorTxtFrm.UnlockJoin();
+                _rAnchorTxtFrm.UnlockJoin();
                 // <--
             }
         }
@@ -774,11 +778,11 @@ void SwObjectFormatterTxtFrm::_FormatAnchorFrmForCheckMoveFwd()
         // --> OD 2005-01-12 #i40140# - if anchor frame is inside a column,
         // format the content of the previous columns.
         // Note: It's a very simple format without formatting objects.
-        SwFrm* pColFrmOfAnchor = mrAnchorTxtFrm.FindColFrm();
+        SwFrm* pColFrmOfAnchor = _rAnchorTxtFrm.FindColFrm();
         if ( pColFrmOfAnchor )
         {
             // --> OD 2005-03-04 #i44049#
-            mrAnchorTxtFrm.LockJoin();
+            _rAnchorTxtFrm.LockJoin();
             // <--
             SwFrm* pColFrm = pColFrmOfAnchor->GetUpper()->GetLower();
             while ( pColFrm != pColFrmOfAnchor )
@@ -797,7 +801,7 @@ void SwObjectFormatterTxtFrm::_FormatAnchorFrmForCheckMoveFwd()
                 pColFrm = pColFrm->GetNext();
             }
             // --> OD 2005-03-04 #i44049#
-            mrAnchorTxtFrm.UnlockJoin();
+            _rAnchorTxtFrm.UnlockJoin();
             // <--
         }
         // <--
@@ -807,13 +811,25 @@ void SwObjectFormatterTxtFrm::_FormatAnchorFrmForCheckMoveFwd()
     // format anchor frame - format of its follow not needed
     // --> OD 2005-04-08 #i43255# - forbid follow format, only if anchor text
     // frame is in table
-    if ( mrAnchorTxtFrm.IsInTab() )
+    if ( _rAnchorTxtFrm.IsInTab() )
     {
-        SwForbidFollowFormat aForbidFollowFormat( mrAnchorTxtFrm );
-        mrAnchorTxtFrm.Calc();
+        SwForbidFollowFormat aForbidFollowFormat( _rAnchorTxtFrm );
+        _rAnchorTxtFrm.Calc();
     }
     else
     {
-        mrAnchorTxtFrm.Calc();
+        _rAnchorTxtFrm.Calc();
     }
 }
+
+/** method to format the anchor frame for checking of the move forward condition
+
+    OD 2005-01-11 #i40141#
+
+    @author OD
+*/
+void SwObjectFormatterTxtFrm::_FormatAnchorFrmForCheckMoveFwd()
+{
+    SwObjectFormatterTxtFrm::FormatAnchorFrmAndItsPrevs( mrAnchorTxtFrm );
+}
+
