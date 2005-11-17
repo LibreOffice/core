@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.197 $
+ *  $Revision: 1.198 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:07:49 $
+ *  last change: $Author: hr $ $Date: 2005-11-17 17:21:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -554,9 +554,9 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
 
         if( nStyle_ & SAL_FRAME_STYLE_DEFAULT )
             pDisplay_->getWMAdaptor()->maximizeFrame( this, true, true );
-
-        m_nWorkArea = GetDisplay()->getWMAdaptor()->getCurrentWorkArea();
     }
+
+    m_nWorkArea = GetDisplay()->getWMAdaptor()->getCurrentWorkArea();
 
     // Pointer
     SetPointer( POINTER_ARROW );
