@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 16:51:25 $
+ *  last change: $Author: obo $ $Date: 2005-11-17 16:33:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,11 @@
 // --> OD 2005-09-29 #125370#,#125957#
 #ifndef _LAYOUTER_HXX
 #include <layouter.hxx>
+#endif
+// <--
+// --> OD 2005-11-17 #i56300#
+#ifndef _OBJECTFORMATTERTXTFRM_HXX
+#include <objectformattertxtfrm.hxx>
 #endif
 // <--
 
@@ -477,15 +482,19 @@ void SwFlyAtCntFrm::MakeAll()
                 // wrapping style influence is considered on object positioning
                 if ( bFormatAnchor )
                 {
-                    // If the anchor is located inside a section, we better calculate
-                    // the section first:
-                    lcl_CalcUpperSection( *AnchorFrm() );
-                    // --> OD 2005-06-07 #i50356#
-                    GetAnchorFrmContainingAnchPos()->Calc();
+                    SwTxtFrm* pAnchPosAnchorFrm =
+                            dynamic_cast<SwTxtFrm*>(GetAnchorFrmContainingAnchPos());
+                    ASSERT( pAnchPosAnchorFrm,
+                            "<SwFlyAtCntFrm::MakeAll()> - anchor frame of wrong type -> crash" );
+                    // --> OD 2005-11-17 #i56300#
+                    // perform complete format of anchor text frame and its
+                    // previous frames, which have become invalid due to the
+                    // fly frame format.
+                    SwObjectFormatterTxtFrm::FormatAnchorFrmAndItsPrevs( *pAnchPosAnchorFrm );
                     // <--
                     // --> OD 2004-10-22 #i35911#
                     // --> OD 2005-01-14 #i40444#
-                    if ( GetAnchorFrmContainingAnchPos()->FindPageFrm()->GetPhyPageNum() >
+                    if ( pAnchPosAnchorFrm->FindPageFrm()->GetPhyPageNum() >
                                                 GetPageFrm()->GetPhyPageNum() )
                     {
                         bConsiderWrapInfluenceDueToMovedFwdAnchor = true;
@@ -493,7 +502,7 @@ void SwFlyAtCntFrm::MakeAll()
                         // directly, that it is moved forward by object positioning.
                         SwTxtFrm* pAnchorTxtFrm( static_cast<SwTxtFrm*>(AnchorFrm()) );
                         const SwPageFrm* pAnchorPageFrm =
-                                GetAnchorFrmContainingAnchPos()->FindPageFrm();
+                                                pAnchPosAnchorFrm->FindPageFrm();
                         bool bInsert( true );
                         sal_uInt32 nToPageNum( 0L );
                         const SwDoc& rDoc = *(GetFrmFmt().GetDoc());
