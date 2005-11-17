@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_base.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-11 14:26:02 $
+ *  last change: $Author: obo $ $Date: 2005-11-17 16:36:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,8 +45,7 @@ Module gid_Module_Prg_Base_Bin
     ParentID = gid_Module_Prg_Base;
     Minimal = NO;
     Default = YES;
-    Files =
-        (gid_File_Share_Xdg_Base
+    Files = (gid_File_Share_Xdg_Base
         ,gid_File_Registry_Spool_Oo_Setup_Base_Xcu,gid_File_Registry_Spool_Oo_Common_Base_Xcu
         ,gid_File_Exe_Sbase
         ,gid_File_Registry_Spool_Oo_TypeDetection_Database_Types_Xcu
