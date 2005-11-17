@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:32:23 $
+ *  last change: $Author: hr $ $Date: 2005-11-17 19:59:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1157,7 +1157,9 @@ void    NumberingPreview::Paint( const Rectangle& rRect )
                     pVDev->SetFont(aStdFont);
                     if(pActNum->IsContinusNum())
                         aNumVector[nLevel] = nPreNum;
-                    String aText(pActNum->MakeNumString( aNumVector, nLevel ));
+                    // --> OD 2005-11-17 #128041#
+                    String aText(pActNum->MakeNumString( aNumVector ));
+                    // <--
                     pVDev->DrawText( Point(nNumberXPos, nYStart), aText );
                     nBulletWidth = (USHORT)pVDev->GetTextWidth(aText);
                     nPreNum++;
@@ -1200,7 +1202,9 @@ void    NumberingPreview::Paint( const Rectangle& rRect )
                     pVDev->SetFont(aStdFont);
                     if(pActNum->IsContinusNum())
                         aNumVector[nLevel] = nPreNum;
-                    String aText(pActNum->MakeNumString( aNumVector, nLevel ));
+                    // --> OD 2005-11-17 #128041#
+                    String aText(pActNum->MakeNumString( aNumVector ));
+                    // <--
                     pVDev->DrawText( Point(nXStart, nYStart), aText );
                     nTextOffset = (USHORT)pVDev->GetTextWidth(aText);
                     nTextOffset += nXStep;
