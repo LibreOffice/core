@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationDialog.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 10:45:20 $
+ *  last change: $Author: obo $ $Date: 2005-11-17 16:11:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,8 +126,12 @@ const sal_Int32 nPropertyTypeScale = 21;
 class PropertySubControl
 {
 public:
-    virtual             ~PropertySubControl();
+    PropertySubControl( sal_Int32 nType ) : mnType( nType ) {}
+    virtual ~PropertySubControl();
+
     virtual             ::com::sun::star::uno::Any getValue() = 0;
+    virtual             void setValue( const ::com::sun::star::uno::Any& rValue, const rtl::OUString& rPresetId ) = 0;
+
     virtual Control*    getControl() = 0;
 
     static PropertySubControl*
@@ -137,6 +141,10 @@ public:
                                 const rtl::OUString& rPresetId,
                                 const Link& rModifyHdl );
 
+    sal_Int32 getControlType() const { return mnType; }
+
+protected:
+    sal_Int32           mnType;
 };
 
 // --------------------------------------------------------------------
