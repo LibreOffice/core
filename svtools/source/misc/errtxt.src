@@ -4,9 +4,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:14:41 $
+ *  last change: $Author: hr $ $Date: 2005-11-17 15:23:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -593,7 +593,7 @@ Resource RID_ERRHDL
     };
     String ERRCODE_SFX_NOMOREDOCUMENTSALLOWED
     {
-        Text [ de ] = "Die maximale Anzahl von Dokumenten, die gleichzeitig geöffnet sein können, ist erreicht. Sie müssen ein oder mehrere Dokumente schließen, bevor Sie ein neues Dokument öffnen können";
+        Text [ de ] = "Die maximale Anzahl von Dokumenten, die gleichzeitig geÃ¶ffnet sein kÃ¶nnen, ist erreicht. Sie mÃ¼ssen ein oder mehrere Dokumente schlieÃŸen, bevor Sie ein neues Dokument Ã¶ffnen kÃ¶nnen";
         Text [ en-US ] = "The maximum number of documents that can be opened at the same time has been reached. You need to close one or more documents before you can open a new document";
     };
 
