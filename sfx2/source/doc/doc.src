@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:23:21 $
+ *  last change: $Author: hr $ $Date: 2005-11-17 15:22:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -663,14 +663,14 @@ String STR_HIDDENINFO_CONTINUE_CREATEPDF
 
 String STR_NEW_FILENAME_SAVE
 {
-    Text [ de ] = "Wenn Sie das originale Dokument nicht überschreiben wollen, sollten Sie Ihre Arbeit unter einem neuen Dateinamen speichern." ;
+    Text [ de ] = "Wenn Sie das originale Dokument nicht Ã¼berschreiben wollen, sollten Sie Ihre Arbeit unter einem neuen Dateinamen speichern." ;
     Text [ en-US ] = "If you do not want to overwrite the original document, you should save your work under a new filename." ;
     Text [ x-comment ] = " ";
 };
 
 String STR_MACROS_DISABLED
 {
-    Text [ de ] = "Es wurde versucht, ein Makro auszuführen.\nMakros werden aus Sicherheitsgünden nicht unterstützt.";
+    Text [ de ] = "Es wurde versucht, ein Makro auszufÃ¼hren.\nMakros werden aus SicherheitsgrÃ¼nden nicht unterstÃ¼tzt.";
     Text [ en-US ] = "An attempt was made to execute a macro.\nFor security reasons, macro support is disabled.";
     Text [ x-comment ] = " ";
 };
