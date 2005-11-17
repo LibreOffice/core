@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splash.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:29:48 $
+ *  last change: $Author: obo $ $Date: 2005-11-17 10:00:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -333,7 +333,7 @@ void SplashScreen::initBitmap()
     if ( bShowLogo )
     {
         xub_StrLen nIndex = 0;
-        String aBmpFileName( String( DEFINE_CONST_UNICODE("intro.bmp") ) );
+        String aBmpFileName( DEFINE_CONST_UNICODE("intro.bmp") );
 
         bool haveBitmap = false;
 
