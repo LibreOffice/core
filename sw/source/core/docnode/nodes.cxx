@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodes.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:18:55 $
+ *  last change: $Author: obo $ $Date: 2005-11-17 16:21:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,23 +210,24 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSize,
 
             unsigned nTxtNodeLevel = 0;
 
-            if( rNd.IsTxtNode() && NO_NUMBERING !=
-                ((SwTxtNode&)rNd).GetTxtColl()->GetOutlineLevel() )
+            // --> OD 2005-11-16 #i57920#
+            // correction of refactoring done by cws swnumtree:
+            // - <SwTxtNode::SetLevel( NO_NUMBERING ) is deprecated and
+            //   set <IsCounted> state of the text node to <false>, which
+            //   isn't correct here.
+            if ( rNd.IsTxtNode() )
             {
-                const SwNodePtr pSrch = (SwNodePtr)&rNd;
-                pOutlineNds->Remove( pSrch );
+                SwTxtNode* pTxtNode = rNd.GetTxtNode();
+                nTxtNodeLevel = pTxtNode->GetLevel();
+                pTxtNode->UnregisterNumber();
 
-                SwTxtNode * pTxtNode = rNd.GetTxtNode();
-
-                pTxtNode->SetLevel(NO_NUMBERING);
+                if ( pTxtNode->GetTxtColl()->GetOutlineLevel() != NO_NUMBERING )
+                {
+                    const SwNodePtr pSrch = (SwNodePtr)&rNd;
+                    pOutlineNds->Remove( pSrch );
+                }
             }
-
-            if (rNd.IsTxtNode())
-            {
-                SwTxtNode& rTxtNd = (SwTxtNode&)rNd;
-                nTxtNodeLevel = rTxtNd.GetLevel();
-                rTxtNd.UnregisterNumber();
-            }
+            // <--
 
             BigPtrArray::Move( aDelIdx.GetIndex(), rInsPos.GetIndex() );
 
@@ -238,8 +239,8 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSize,
                 if (rTxtNd.GetNumRule())
                     rTxtNd.SetLevel(nTxtNodeLevel);
 
-                if( bInsOutlineIdx && NO_NUMBERING !=
-                    rTxtNd.GetTxtColl()->GetOutlineLevel() )
+                if( bInsOutlineIdx &&
+                    NO_NUMBERING != rTxtNd.GetTxtColl()->GetOutlineLevel() )
                 {
                     const SwNodePtr pSrch = (SwNodePtr)&rNd;
                     pOutlineNds->Insert( pSrch );
