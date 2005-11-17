@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectformattertxtfrm.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:22:51 $
+ *  last change: $Author: obo $ $Date: 2005-11-17 16:34:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,6 +186,22 @@ class SwObjectFormatterTxtFrm : public SwObjectFormatter
                                                 SwTxtFrm& _rAnchorTxtFrm,
                                                 const SwPageFrm& _rPageFrm,
                                                 SwLayAction* _pLayAction );
+
+        /** method to format given anchor text frame and its previous frames
+
+            OD 2005-11-17 #i56300#
+            Usage: Needed to check, if the anchor text frame is moved forward
+            due to the positioning and wrapping of its anchored objects, and
+            to format the frames, which have become invalid due to the anchored
+            object formatting in the iterative object positioning algorithm
+
+            @author OD
+
+            @param _rAnchorTxtFrm
+            input parameter - reference to anchor text frame, which has to be
+            formatted including its previous frames of the page.
+        */
+        static void FormatAnchorFrmAndItsPrevs( SwTxtFrm& _rAnchorTxtFrm );
 };
 
 #endif
