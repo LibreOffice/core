@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowviewimpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:18:15 $
+ *  last change: $Author: obo $ $Date: 2005-11-17 16:11:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::WeakReference;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::lang::XComponent;
 using ::com::sun::star::uno::Exception;
@@ -75,15 +76,63 @@ namespace sd
 ///////////////////////////////////////////////////////////////////////
 
 SlideShowViewListeners::SlideShowViewListeners( ::osl::Mutex& rMutex )
-:   SlideShowViewListeners_Base( rMutex )
+:   mrMutex( rMutex )
 {
 }
 
-bool SlideShowViewListeners::implNotify( const Reference< util::XModifyListener >&  rListener,
-                                         const awt::WindowEvent&                    rEvent ) throw( uno::Exception )
+void SlideShowViewListeners::addListener( const Reference< util::XModifyListener >& _rxListener )
 {
-    rListener->modified( rEvent );
-    return true; // continue calling listeners
+    ::osl::MutexGuard aGuard( mrMutex );
+
+    WeakReference< util::XModifyListener > xWeak( _rxListener );
+    if( std::find( maListeners.begin(), maListeners.end(), xWeak ) == maListeners.end() )
+        maListeners.push_back( xWeak );
+}
+
+void SlideShowViewListeners::removeListener( const Reference< util::XModifyListener >& _rxListener )
+{
+    ::osl::MutexGuard aGuard( mrMutex );
+
+    WeakReference< util::XModifyListener > xWeak( _rxListener );
+    ViewListenerVector::iterator aIter( std::find( maListeners.begin(), maListeners.end(), xWeak ) );
+    if( aIter != maListeners.end() )
+        maListeners.erase( aIter );
+}
+
+bool SlideShowViewListeners::notify( const lang::EventObject& _rEvent ) throw( com::sun::star::uno::Exception )
+{
+    ::osl::MutexGuard aGuard( mrMutex );
+
+    ViewListenerVector::iterator aIter( maListeners.begin() );
+    while( aIter != maListeners.end() )
+    {
+        Reference< util::XModifyListener > xListener( (*aIter) );
+        if( xListener.is() )
+        {
+            xListener->modified( _rEvent );
+            aIter++;
+        }
+        else
+        {
+            aIter = maListeners.erase( aIter );
+        }
+    }
+    return true;
+}
+
+void SlideShowViewListeners::disposing( const lang::EventObject& _rEventSource )
+{
+    ::osl::MutexGuard aGuard( mrMutex );
+
+    ViewListenerVector::iterator aIter( maListeners.begin() );
+    while( aIter != maListeners.end() )
+    {
+        Reference< util::XModifyListener > xListener( (*aIter++) );
+        if( xListener.is() )
+            xListener->disposing( _rEventSource );
+    }
+
+    maListeners.clear();
 }
 
 ///////////////////////////////////////////////////////////////////////
