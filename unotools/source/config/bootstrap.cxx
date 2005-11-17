@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 13:22:00 $
+ *  last change: $Author: hr $ $Date: 2005-11-17 18:00:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -723,7 +723,14 @@ OUString Bootstrap::getProductPatchLevel(OUString const& _sDefault)
 {
     OUString const csBuildIdItem(RTL_CONSTASCII_USTRINGPARAM(BOOTSTRAP_ITEM_PRODUCT_PATCH_LEVEL));
 
-    return data().getBootstrapValue( csBuildIdItem, _sDefault );
+    // pb: #127910# ProductPatch key has moved from bootstrap[rc|.ini] to version[rc|.ini]
+    OUString sPPLevel;
+    // read ProductPatchLevel from version[rc|.ini], if it doesn't exist or ProductPatchLevel is empty
+    if ( data().getVersionValue( csBuildIdItem, sPPLevel, _sDefault ) != sal_True ||
+         sPPLevel.getLength() == 0 )
+         // read ProductPatchLevel from bootstrap[rc|.ini]
+        sPPLevel = data().getBootstrapValue( csBuildIdItem, _sDefault );
+    return sPPLevel;
 }
 // ---------------------------------------------------------------------------------------
 
