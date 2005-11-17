@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:13:46 $
+ *  last change: $Author: obo $ $Date: 2005-11-17 16:21:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,10 +68,6 @@
 #include <SwRewriter.hxx>
 #endif
 #include <svx/svdundo.hxx> // #111827#
-
-#ifndef _SW_NODE_NUM_HXX
-#include <SwNodeNum.hxx>
-#endif
 
 class SwUndoIter;
 class SwHistory;
