@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlatr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:25:25 $
+ *  last change: $Author: obo $ $Date: 2005-11-17 16:21:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -758,18 +758,19 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         if( bNumbered )
         {
             nBulletGrfLvl = nLvl; // nur veruebergehend!!!
-            nNumStart = pTxtNd->GetStart();
+            // --> OD 2005-11-15 #i57919#
+            // correction of re-factoring done by cws swnumtree:
+            // - <nNumStart> has to contain the restart value, if the
+            //   numbering is restarted at this text node. Value <USHRT_MAX>
+            //   indicates, that no additional restart value has to be written.
+            if ( pTxtNd->IsRestart() )
+            {
+                nNumStart = pTxtNd->GetStart();
+            }
+            // <--
             DBG_ASSERT( rHWrt.nLastParaToken == 0,
                 "<PRE> wurde nicht vor <LI> beendet." );
         }
-
-#ifndef NUM_RELSPACE
-        // die Absatz-Abstaende/Einzuege muessen beruecksichtigen,
-        // dass wir in einer Liste sind
-        rHWrt.nLeftMargin = (nLvl+1) *  HTML_NUMBUL_MARGINLEFT;
-
-        rHWrt.nFirstLineIndent = bNumbered ? HTML_NUMBUL_INDENT : 0;
-#endif
     }
 
     // Jetzt holen wir das Token und ggf. die Klasse
