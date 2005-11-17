@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spritehelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:05:00 $
+ *  last change: $Author: obo $ $Date: 2005-11-17 16:08:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,6 +266,31 @@ namespace vclcanvas
                         // the final sprite output position.
                         aClipPoly.transform( aTransform );
 
+#ifndef WNT
+                        // non-Windows only - bAtLeastOnePolygon is
+                        // only used in non-WNT code below
+
+                        // check whether maybe the clip consists
+                        // solely out of rectangular polygons. If this
+                        // is the case, enforce using the triangle
+                        // clip region setup - non-optimized X11
+                        // drivers tend to perform abyssmally on
+                        // XPolygonRegion, which is used internally,
+                        // when filling complex polypolygons.
+                        bool bAtLeastOnePolygon( false );
+                        const sal_Int32 nPolygons( aClipPoly.count() );
+
+                        for( sal_Int32 i=0; i<nPolygons; ++i )
+                        {
+                            if( !::basegfx::tools::isRectangle(
+                                    aClipPoly.getB2DPolygon(i)) )
+                            {
+                                bAtLeastOnePolygon = true;
+                                break;
+                            }
+                        }
+#endif
+
                         if( mbShowSpriteBounds )
                         {
                             // Paint green sprite clip area
@@ -279,7 +304,8 @@ namespace vclcanvas
                         // as a matter of fact, this fast path only
                         // performs well for X11 - under Windows, the
                         // clip via SetTriangleClipRegion is faster.
-                        if( bBufferedUpdate &&
+                        if( bAtLeastOnePolygon &&
+                            bBufferedUpdate &&
                             ::rtl::math::approxEqual(fAlpha, 1.0) &&
                             !maContent->IsTransparent() )
                         {

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spritecanvashelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:04:38 $
+ *  last change: $Author: obo $ $Date: 2005-11-17 16:08:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,7 +195,7 @@ namespace vclcanvas
         mbShowSpriteBounds( false ),
         mbIsUnsafeScrolling( false )
     {
-#if defined(VERBOSE) && defined(DBG_UTIL)
+#if defined(VERBOSE) && OSL_DEBUG_LEVEL > 0
         // inverse defaults for verbose debug mode
         mbShowSpriteBounds = mbShowFrameInfo = true;
 #endif
@@ -329,7 +329,7 @@ namespace vclcanvas
             renderMemUsage( rOutDev );
         }
 
-#if defined(VERBOSE) && defined(DBG_UTIL)
+#if defined(VERBOSE) && OSL_DEBUG_LEVEL > 0
         static ::canvas::tools::ElapsedTime aElapsedTime;
 
         // log time immediately after surface flip
