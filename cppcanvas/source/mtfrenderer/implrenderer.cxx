@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implrenderer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:40:15 $
+ *  last change: $Author: obo $ $Date: 2005-11-17 16:14:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2996,23 +2996,7 @@ namespace cppcanvas
                             nEndIndex,
                             maActions.end() );
 
-            ::basegfx::B2DRange aBounds(
-                aQuery.getBounds() );
-
-            OSL_ENSURE( aBounds.getMinX() >= 0.0 &&
-                        aBounds.getMinY() >= 0.0 &&
-                        aBounds.getMaxX() <= 1.0 &&
-                        aBounds.getMaxY() <= 1.0,
-                        "ImplRenderer::getSubsetArea(): bounds larger than original shape - clipping!" );
-
-            // really make sure no shape appears larger than its
-            // original bounds (there _are_ some pathologic cases,
-            // especially when imported from PPT, that have
-            // e.g. obscenely large polygon bounds)
-            aBounds.intersect(
-                ::basegfx::B2DRange( 0.0, 0.0,
-                                     1.0, 1.0 ));
-            return aBounds;
+            return aQuery.getBounds();
         }
 
         bool ImplRenderer::draw() const
