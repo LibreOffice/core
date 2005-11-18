@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:29:39 $
+ *  last change: $Author: thb $ $Date: 2005-11-18 20:03:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1178,6 +1178,10 @@ namespace
                                           sal_uInt32 dwNumSpansPerScanline ) : maNumScanlines(dwNumScanlines),
                                                                                maNumSpansPerScanline(dwNumSpansPerScanline)
     {
+        // #128002# add one scanline buffer at the end, as
+        // SpanIterator::Skip reads two bytes past the end.
+        ++dwNumScanlines;
+
         // since each triangle could possibly add another span
         // we can calculate the upper limit by [num scanlines * num triangles].
         const sal_uInt32 dwNumPossibleRegions = dwNumScanlines*dwNumSpansPerScanline;
