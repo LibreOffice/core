@@ -67,7 +67,6 @@ $(DESTROOT)$/bin$/python$(EXECPOST) : $(SOLARBINDIR)$/python$(EXECPOST)
     -+$(MKDIRHIER) $(@:d)
     -rm -f $@
     cat $< > $@
-    strip $@
 .ENDIF
 
 .ENDIF
