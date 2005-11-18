@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.47 $
+#   $Revision: 1.48 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-11 10:39:44 $
+#   last change: $Author: hjs $ $Date: 2005-11-18 16:14:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -213,7 +213,7 @@ openoffice:
 .ENDIF			# "$(alllangiso)"!=""
 
 .IF "$(PKGFORMAT)"!=""
-ure_en-US: ure_en-US{$(PKGFORMAT:^".")}
+ure_en-US: $$@{$(PKGFORMAT:^".")}
 ure_en-US{$(PKGFORMAT:^".")} : $(MISC)$/ure$/services.rdb
 .ELSE			# "$(PKGFORMAT)"!=""
 ure_en-US: $(MISC)$/ure$/services.rdb
