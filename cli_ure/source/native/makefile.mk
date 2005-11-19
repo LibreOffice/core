@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hr $ $Date: 2005-10-25 11:14:54 $
+#   last change: $Author: obo $ $Date: 2005-11-19 17:00:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,14 +57,16 @@ ECHOQUOTE=
 
 #!!! Always change version if code has changed. Provide a publisher
 #policy assembly!!!
-ASSEMBLY_VERSION="1.0.0.0"
+ASSEMBLY_VERSION="1.0.1.0"
+POLICYASSEMBLY = policy.1.0.cli_cppuhelper.dll
 
 ASSEMBLY_KEY="$(BIN)$/cliuno.snk"
 
 ASSEMBLY_ATTRIBUTES = $(MISC)$/assembly_cppuhelper.cxx
 
 ALLTAR : \
-    $(ASSEMBLY_ATTRIBUTES)
+    $(ASSEMBLY_ATTRIBUTES) \
+    $(OUT)$/bin$/$(POLICYASSEMBLY)	
 
 ASSEMBLY_KEY_X=$(subst,\,\\ $(ASSEMBLY_KEY)) 
 
@@ -122,6 +124,17 @@ SHL1VERSIONMAP = msvc.map
 
 SHL1DEF = $(MISC)$/$(SHL1TARGET).def
 DEF1NAME = $(SHL1TARGET)
+
+
+#do not forget to deliver cli_cppuhelper.config. It is NOT embedded in the policy file.
+$(OUT)$/bin$/$(POLICYASSEMBLY) : cli_cppuhelper.config
+    +$(COPY) cli_cppuhelper.config $(OUT)$/bin  
+    +$(WRAPCMD) AL.exe -out:$@ \
+            -version:1.0.0.0 \
+            -keyfile:$(BIN)$/cliuno.snk \
+            -link:cli_cppuhelper.config
+
+
 
 .ENDIF
 
