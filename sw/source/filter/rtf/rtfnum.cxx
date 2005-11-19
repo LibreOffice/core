@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfnum.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:27:05 $
+ *  last change: $Author: obo $ $Date: 2005-11-19 13:34:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1253,7 +1253,12 @@ void SwRTFWriter::OutRTFListTab()
             {
                 memset( aNumLvlPos, 0, MAXLEVEL );
                 BYTE* pLvlPos = aNumLvlPos;
-                String sNumStr( pRule->MakeNumString(aNumVector, FALSE, TRUE));
+                // --> OD 2005-11-18 #128056#
+                // correction of refactoring done by cws swnumtree:
+                // - the numbering string has to be restrict to the level
+                //   currently working on.
+                String sNumStr( pRule->MakeNumString( aNumVector, FALSE, TRUE, nLvl ));
+                // <--
 
                 // now search the nums in the string
                 for( BYTE i = 0; i <= nLvl; ++i )
