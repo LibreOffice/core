@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.167 $
+ *  $Revision: 1.168 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-19 17:01:23 $
+ *  last change: $Author: obo $ $Date: 2005-11-19 18:30:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -683,7 +683,7 @@ File gid_File_Lib_Filterconfig1
     Name = SPECIAL_NAME(filterconfig1);
 End
 
-STD_UNO_LIB_FILE( gid_File_Lib_Flat, flat)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Flat, flat)
 
 #ifdef WNT
 
@@ -1027,7 +1027,7 @@ End
 
 File gid_File_Lib_Jdbc_2
     TXT_FILE_BODY;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
   #ifdef UNX
