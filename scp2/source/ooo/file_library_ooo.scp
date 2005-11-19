@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.166 $
+ *  $Revision: 1.167 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:19:54 $
+ *  last change: $Author: obo $ $Date: 2005-11-19 17:01:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,7 +185,7 @@ End
 
 File gid_File_Lib_Cli_Cppuhelper
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Name = "cli_cppuhelper.dll";
     Dir = gid_Dir_Program_Assembly;
 End
@@ -196,10 +196,25 @@ End
 
 File gid_File_Lib_Cli_Cppuhelper_Assembly
     TXT_FILE_BODY;
-    Styles = (PACKED, ASSEMBLY);
+    Styles = (PACKED, ASSEMBLY, PATCH, DONTRENAMEINPATCH);
     Name = "cli_cppuhelper.dll";
     Dir = gid_Dir_Program;
     Assemblyname = "cli_cppuhelper";
+    PublicKeyToken = "ce2cb7e279207b9e";
+    Version = "1.0.1.0";
+    Culture = "neutral";
+    Attributes = "0";
+End
+
+#endif
+#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
+
+File gid_File_Lib_Policy_Cli_Cppuhelper_Assembly
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSEMBLY, PATCH, DONTRENAMEINPATCH);
+    Name = "policy.1.0.cli_cppuhelper.dll";
+    Dir = gid_Dir_Program;
+    Assemblyname = "policy.1.0.cli_cppuhelper";
     PublicKeyToken = "ce2cb7e279207b9e";
     Version = "1.0.0.0";
     Culture = "neutral";
@@ -207,6 +222,20 @@ File gid_File_Lib_Cli_Cppuhelper_Assembly
 End
 
 #endif
+
+#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
+
+File gid_File_Lib_Policy_Cli_Cppuhelper_Config
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSIGNCOMPOMENT, PATCH, DONTRENAMEINPATCH);
+    Name = "cli_cppuhelper.config";
+    Dir = gid_Dir_Program;
+    AssignComponent = gid_File_Lib_Policy_Cli_Cppuhelper_Assembly;
+End
+
+#endif
+
+
 
 #if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
 
@@ -305,7 +334,7 @@ End
 
 File gid_File_Lib_Cli_Ure
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, PATCH);
     Name = "cli_ure.dll";
     Dir = gid_Dir_Program_Assembly;
 End
@@ -316,10 +345,25 @@ End
 
 File gid_File_Lib_Cli_Ure_Assembly
     TXT_FILE_BODY;
-    Styles = (PACKED, ASSEMBLY);
+    Styles = (PACKED, ASSEMBLY, PATCH, DONTRENAMEINPATCH);
     Name = "cli_ure.dll";
     Dir = gid_Dir_Program;
     Assemblyname = "cli_ure";
+    PublicKeyToken = "ce2cb7e279207b9e";
+    Version = "1.0.1.0";
+    Culture = "neutral";
+    Attributes = "0";
+End
+
+#endif
+#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
+
+File gid_File_Lib_Policy_Cli_Ure_Assembly
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSEMBLY, PATCH, DONTRENAMEINPATCH);
+    Name = "policy.1.0.cli_ure.dll";
+    Dir = gid_Dir_Program;
+    Assemblyname = "policy.1.0.cli_ure";
     PublicKeyToken = "ce2cb7e279207b9e";
     Version = "1.0.0.0";
     Culture = "neutral";
@@ -327,6 +371,19 @@ File gid_File_Lib_Cli_Ure_Assembly
 End
 
 #endif
+
+#if defined WNT && (defined M1300 || defined M1310) // currently the only cli platform
+
+File gid_File_Lib_Policy_Cli_Ure_Config
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSIGNCOMPOMENT, PATCH, DONTRENAMEINPATCH);
+    Name = "cli_ure.config";
+    Dir = gid_Dir_Program;
+    AssignComponent = gid_File_Lib_Policy_Cli_Ure_Assembly;
+End
+
+#endif
+
 
 #if ! defined WNT // no longer supported on Windows
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Cmdmail, cmdmail.uno )
