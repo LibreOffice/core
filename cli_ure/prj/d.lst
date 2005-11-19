@@ -4,5 +4,5 @@
 
 ..\%__SRC%\bin\cli_*.dll %_DEST%\bin%_EXT%\cli_*.dll
 ..\%__SRC%\bin\cli_*.pdb %_DEST%\bin%_EXT%\cli_*.pdb
-..\%__SRC%\bin\cli_types.config %_DEST%\bin%_EXT%\cli_types.config
+..\%__SRC%\bin\cli_*.config %_DEST%\bin%_EXT%\cli_*.config
 ..\%__SRC%\bin\policy*.dll %_DEST%\bin%_EXT%\policy*.dll
