@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:11:20 $
+ *  last change: $Author: obo $ $Date: 2005-11-19 13:38:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3122,7 +3122,7 @@ Rectangle SdrObjCustomShape::ImpCalculateTextFrame( const FASTBOOL bHgt, const F
 FASTBOOL SdrObjCustomShape::NbcAdjustTextFrameWidthAndHeight(FASTBOOL bHgt, FASTBOOL bWdt)
 {
     Rectangle aNewTextRect = ImpCalculateTextFrame( bHgt, bWdt );
-    sal_Bool bRet = !aNewTextRect.IsEmpty();
+    sal_Bool bRet = !aNewTextRect.IsEmpty() && ( aNewTextRect != aRect );
     if ( bRet )
     {
         // taking care of handles that should not been changed
@@ -3152,7 +3152,7 @@ FASTBOOL SdrObjCustomShape::NbcAdjustTextFrameWidthAndHeight(FASTBOOL bHgt, FAST
 FASTBOOL SdrObjCustomShape::AdjustTextFrameWidthAndHeight(FASTBOOL bHgt, FASTBOOL bWdt)
 {
     Rectangle aNewTextRect = ImpCalculateTextFrame( bHgt, bWdt );
-    sal_Bool bRet = !aNewTextRect.IsEmpty();
+    sal_Bool bRet = !aNewTextRect.IsEmpty() && ( aNewTextRect != aRect );
     if ( bRet )
     {
         Rectangle aBoundRect0;
