@@ -70,5 +70,25 @@ SRC680 m122
 	cli_ure.dll 1.0.0.0
 	no policy assembly
 
+SRC680 m140
+        cli_types.dll 1.1.1.0 (added types)
+	policy.1.1.cli_types.dll 1.0.0.0 
+	cli_cppuhelper 1.0.0.0
+	no policy assembly
+	cli_basetypes.dll 1.0.0.0
+	no policy assembly
+	cli_ure.dll 1.0.0.0
+	no policy assembly
+
+SRC680 m143 (or a little later)
+        cli_types.dll 1.1.1.0 (added types)
+	policy.1.1.cli_types.dll 1.0.0.0 
+	cli_cppuhelper 1.0.1.0 (references cli_types.dll 1.1.1.0)
+	policy.1.0.cli_cppuhelper.dll 
+	cli_basetypes.dll 1.0.0.0
+	no policy assembly
+	cli_ure.dll 1.0.1.0 (references cli_types.dll 1.1.1.0)
+	policy.1.0.cli_ure.dll
+
 		
 
