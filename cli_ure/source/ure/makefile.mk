@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2005-10-25 11:15:12 $
+#   last change: $Author: obo $ $Date: 2005-11-19 17:00:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,14 +53,18 @@ ECHOQUOTE=
 
 .IF "$(BUILD_FOR_CLI)" != ""
 
+POLICYASSEMBLY = policy.1.0.cli_ure.dll
+
 #!!! Always change version if code has changed. Provide a publisher
 #policy assembly!!!
-ASSEMBLY_VERSION="1.0.0.0"
+ASSEMBLY_VERSION="1.0.1.0"
 
 ASSEMBLY_ATTRIBUTES = $(MISC)$/assembly_ure_$(TARGET).cs
 
 ALLTAR : \
-    $(BIN)$/cli_ure.dll
+    $(BIN)$/cli_ure.dll \
+    $(OUT)$/bin$/$(POLICYASSEMBLY)	
+
 
 CSFILES = \
     uno$/util$/DisposeGuard.cs					\
@@ -84,6 +88,16 @@ $(BIN)$/cli_ure.dll : $(CSFILES) $(BIN)$/cli_types.dll
         -reference:System.dll \
         $(CSFILES)
     @echo "If code has changed then provide a policy assembly and change the version!"
+
+
+#do not forget to deliver cli_ure.config. It is NOT embedded in the policy file.
+$(OUT)$/bin$/$(POLICYASSEMBLY) : cli_ure.config
+    +$(COPY) cli_ure.config $(OUT)$/bin  
+    +$(WRAPCMD) AL.exe -out:$@ \
+            -version:1.0.0.0 \
+            -keyfile:$(BIN)$/cliuno.snk \
+            -link:cli_ure.config
+
 
 .ENDIF
     
