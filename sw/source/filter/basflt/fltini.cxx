@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 17:24:53 $
+ *  last change: $Author: obo $ $Date: 2005-11-19 13:34:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -712,7 +712,16 @@ void SwRelNumRuleSpaces::SetOultineRelSpaces( const SwNodeIndex& rStt,
 void SwRelNumRuleSpaces::SetNumLSpace( SwTxtNode& rNd, const SwNumRule& rRule )
 {
     BOOL bOutlineRule = OUTLINE_RULE == rRule.GetRuleType();
-    BYTE nLvl = rNd.GetLevel();
+    // --> OD 2005-11-18 #128056#
+    // correction of refactoring done by cws swnumtree:
+    // - assure a correct level for retrieving numbering format.
+//    BYTE nLvl = rNd.GetLevel();
+    BYTE nLvl = 0;
+    if ( rNd.GetLevel() >= 0 && rNd.GetLevel() < MAXLEVEL )
+    {
+        nLvl = rNd.GetLevel();
+    }
+    // <--
     const SwNumFmt& rFmt = rRule.Get( nLvl );
     const SvxLRSpaceItem& rLR = rNd.GetSwAttrSet().GetLRSpace();
 
