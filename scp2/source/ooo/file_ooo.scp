@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 10:20:12 $
+ *  last change: $Author: obo $ $Date: 2005-11-19 18:30:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1907,16 +1907,19 @@ File gid_File_Share_Config_Sofficecfg_uiconfig_Zip
                   "modules/sglobal/accelerator/en-US/default.xml",
                   "modules/sglobal/accelerator/es/default.xml",
                   "modules/sglobal/accelerator/fr/default.xml",
+                  "modules/sglobal/menubar/menubar.xml",
                   "modules/sweb/accelerator/de/default.xml",
                   "modules/sweb/accelerator/en-GB/default.xml",
                   "modules/sweb/accelerator/en-US/default.xml",
                   "modules/sweb/accelerator/es/default.xml",
                   "modules/sweb/accelerator/fr/default.xml",
+                  "modules/sweb/menubar/menubar.xml",
                   "modules/swriter/accelerator/de/default.xml",
                   "modules/swriter/accelerator/en-GB/default.xml",
                   "modules/swriter/accelerator/en-US/default.xml",
                   "modules/swriter/accelerator/es/default.xml",
                   "modules/swriter/accelerator/fr/default.xml",
+                  "modules/swriter/menubar/menubar.xml",
                   "modules/simpress/accelerator/de/default.xml",
                   "modules/simpress/accelerator/en-GB/default.xml",
                   "modules/simpress/accelerator/en-US/default.xml",
