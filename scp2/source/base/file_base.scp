@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_base.scp,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2005-11-15 12:54:19 $
+ *  last change: $Author: obo $ $Date: 2005-11-21 16:07:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,21 +89,21 @@ End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Database_Types_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
     Name = "/registry/spool/fcfg_database_types.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Database_Filters_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
     Name = "/registry/spool/fcfg_database_filters.xcu";
 End
 
 File gid_File_Registry_Spool_Oo_TypeDetection_Database_Others_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Misc;
     Name = "/registry/spool/fcfg_database_others.xcu";
 End
