@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printoptions.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:53:08 $
+ *  last change: $Author: obo $ $Date: 2005-11-22 16:33:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -650,10 +650,12 @@ SvtPrinterOptions::SvtPrinterOptions()
     if( m_pStaticDataContainer == NULL )
     {
         OUString aRootPath( ROOTNODE_START );
-        SetDataContainer( m_pStaticDataContainer = new SvtPrintOptions_Impl( aRootPath += OUString( RTL_CONSTASCII_USTRINGPARAM( "/Printer" ) ) ) );
+        m_pStaticDataContainer = new SvtPrintOptions_Impl( aRootPath += OUString( RTL_CONSTASCII_USTRINGPARAM( "/Printer" ) ) );
         pPrinterOptionsDataContainer = m_pStaticDataContainer;
         ItemHolder2::holdConfigItem(E_PRINTOPTIONS);
     }
+
+    SetDataContainer( m_pStaticDataContainer );
 }
 
 // -----------------------------------------------------------------------------
@@ -688,11 +690,13 @@ SvtPrintFileOptions::SvtPrintFileOptions()
     if( m_pStaticDataContainer == NULL )
     {
         OUString aRootPath( ROOTNODE_START );
-        SetDataContainer( m_pStaticDataContainer = new SvtPrintOptions_Impl( aRootPath += OUString( RTL_CONSTASCII_USTRINGPARAM( "/File" ) ) ) );
+        m_pStaticDataContainer = new SvtPrintOptions_Impl( aRootPath += OUString( RTL_CONSTASCII_USTRINGPARAM( "/File" ) ) );
         pPrintFileOptionsDataContainer = m_pStaticDataContainer;
 
         ItemHolder2::holdConfigItem(E_PRINTFILEOPTIONS);
     }
+
+    SetDataContainer( m_pStaticDataContainer );
 }
 
 // -----------------------------------------------------------------------------
