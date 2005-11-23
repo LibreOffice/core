@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-11 17:24:41 $
+#   last change: $Author: obo $ $Date: 2005-11-23 16:21:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1191,7 +1191,7 @@ sub prepare_windows_patchfiles
 
         my $olddestination = $onefile->{'destination'};
         my $newdestination = $olddestination . "." . $windowspatchlevel;
-        my $line = "\"" . $olddestination . "\"" . "=" . "\"" . $newdestination . "\"" . "\n";
+        my $line = "\"" . $olddestination . "\"" . "=" . "\"" . "\." . $windowspatchlevel . "\"" . "\n";
         $onefile->{'destination'} = $newdestination;
 
         my $newfilename = $onefile->{'Name'} . "." . $windowspatchlevel;
