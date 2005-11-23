@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swappatchfiles.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 14:56:11 $
+ *  last change: $Author: obo $ $Date: 2005-11-23 16:22:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,17 +263,14 @@ extern "C" UINT __stdcall InstallPatchedFiles( MSIHANDLE handle )
                     if ( GetPrivateProfileString( pSectionName, pKeyName, TEXT(""), szValue, elementsof(szValue), sPatchFile.c_str() ) )
                     {
                         std::_tstring   sFileName1 = pKeyName;
-                        std::_tstring   sFileName2 = szValue;
+                        std::_tstring   sExtension = szValue;
+                        std::_tstring   sFileName2;
 
                         sFileName1 = strip( sFileName1, '\"' );
-                        sFileName2 = strip( sFileName2, '\"' );
-
-                        // TCHAR *lpLastDot = _tcsrchr( sFileName1.c_str(), '.' );
-                        // if ( lpLastDot )
-                        //  *lpLastDot = 0;
+                        sExtension = strip( sExtension, '\"' );
 
                         sFileName1 = sInstDir + sFileName1;
-                        sFileName2 = sInstDir + sFileName2;
+                        sFileName2 = sFileName1 + sExtension;
 
                         // mystr = "Convert: " + sFileName1 + " to " + sFileName2;
                         // MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
@@ -352,13 +349,14 @@ extern "C" UINT __stdcall UninstallPatchedFiles( MSIHANDLE handle )
                     if ( GetPrivateProfileString( pSectionName, pKeyName, TEXT(""), szValue, elementsof(szValue), sPatchFile.c_str() ) )
                     {
                         std::_tstring   sFileName1 = pKeyName;
-                        std::_tstring   sFileName2 = szValue;
+                        std::_tstring   sExtension = szValue;
+                        std::_tstring   sFileName2;
 
                         sFileName1 = strip( sFileName1, '\"' );
-                        sFileName2 = strip( sFileName2, '\"' );
+                        sExtension = strip( sExtension, '\"' );
 
                         sFileName1 = sInstDir + sFileName1;
-                        sFileName2 = sInstDir + sFileName2;
+                        sFileName2 = sFileName1 + sExtension;
 
                         // mystr = "Convert: " + sFileName1 + " to " + sFileName2;
                         // MessageBox( NULL, mystr.c_str(), "Titel", MB_OK );
