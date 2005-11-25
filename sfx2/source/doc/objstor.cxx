@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.172 $
+ *  $Revision: 1.173 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-07 15:15:05 $
+ *  last change: $Author: rt $ $Date: 2005-11-25 17:26:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -257,7 +257,16 @@ void impl_addToModelCollection(const css::uno::Reference< css::frame::XModel >& 
         xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.GlobalEventBroadcaster")),
         css::uno::UNO_QUERY);
     if (xModelCollection.is())
-        xModelCollection->insert(css::uno::makeAny(xModel));
+    {
+        try
+        {
+            xModelCollection->insert(css::uno::makeAny(xModel));
+        }
+        catch ( uno::Exception& )
+        {
+            OSL_ENSURE( sal_False, "The document seems to be in the collection already!\n" );
+        }
+    }
 }
 
 //=========================================================================
