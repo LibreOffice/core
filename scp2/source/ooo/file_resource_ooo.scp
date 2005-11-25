@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_resource_ooo.scp,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-11 14:26:43 $
+ *  last change: $Author: obo $ $Date: 2005-11-25 07:43:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,7 @@ STD_RES_FILE( gid_File_Res_Bf_Svx, bf_svx )
 STD_RES_FILE( gid_File_Res_Bf_Frm, bf_frm )
 STD_RES_FILE_PATCH( gid_File_Res_Bf_Ofa, bf_ofa )
 STD_RES_FILE( gid_File_Res_Bf_Sd, bf_sd )
-STD_RES_FILE( gid_File_Res_Bf_Sw, bf_sw )
+STD_RES_FILE_PATCH( gid_File_Res_Bf_Sw, bf_sw )
 STD_RES_FILE( gid_File_Res_Bf_Sfx, bf_sfx )
 #endif
 
