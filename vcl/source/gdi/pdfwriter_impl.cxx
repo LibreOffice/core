@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:32:49 $
+ *  last change: $Author: obo $ $Date: 2005-11-25 10:02:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -365,8 +365,8 @@ void doTestCode()
 #endif
 static const sal_Int32 nLog10Divisor = 1;
 static const double fDivisor = 10.0;
-static const sal_Int32 nFineFactor = 100;
-static const sal_Int32 nFineLog10Divisor = nLog10Divisor+2;
+static const sal_Int32 nFineFactor = 1;
+static const sal_Int32 nFineLog10Divisor = nLog10Divisor;
 
 static inline double pixelToPoint( sal_Int32 px ) { return double(px)/fDivisor; }
 static inline double pixelToPoint( double px ) { return px/fDivisor; }
