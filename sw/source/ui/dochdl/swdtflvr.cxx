@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-24 15:32:29 $
+ *  last change: $Author: rt $ $Date: 2005-11-25 17:25:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3819,12 +3819,19 @@ void SwTrnsfrDdeLink::Disconnect( BOOL bRemoveDataAdvise )
         BOOL bUndo = pDoc->DoesUndo();
         pDoc->DoUndo( FALSE );
 
+        // --> OD, CD, OS 2005-11-25 #i58448#
+        Link aSavedOle2Link( pDoc->GetOle2Link() );
+        pDoc->SetOle2Link( Link() );
+        // <--
         BOOL bIsModified = pDoc->IsModified();
 
         pDoc->DelBookmark( sName );
 
         if( !bIsModified )
             pDoc->ResetModified();
+        // --> OD, CD, OS 2005-11-25 #i58448#
+        pDoc->SetOle2Link( aSavedOle2Link );
+        // <--
 
         pDoc->DoUndo( bUndo );
         bDelBookmrk = FALSE;
