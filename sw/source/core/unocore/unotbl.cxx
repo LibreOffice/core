@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 13:16:23 $
+ *  last change: $Author: kz $ $Date: 2005-11-30 13:23:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4783,7 +4783,7 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
         if(!pTable->IsTblComplex())
         {
             sal_uInt16 nRowCount = pTable->GetTabLines().Count();
-            if (nCount <= 0 || !(0 <= nIndex && nIndex < nRowCount))
+            if (nCount <= 0 || !(0 <= nIndex && nIndex <= nRowCount))
             {
                 uno::RuntimeException aExcept;
                 aExcept.Message = C2U("Illegal arguments");
@@ -5018,7 +5018,7 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
             SwTableLines& rLines = pTable->GetTabLines();
             SwTableLine* pLine = rLines.GetObject(0);
             sal_uInt16 nColCount = pLine->GetTabBoxes().Count();
-            if (nCount <= 0 || !(0 <= nIndex && nIndex < nColCount))
+            if (nCount <= 0 || !(0 <= nIndex && nIndex <= nColCount))
             {
                 uno::RuntimeException aExcept;
                 aExcept.Message = C2U("Illegal arguments");
