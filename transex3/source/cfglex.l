@@ -59,17 +59,19 @@ int bText=0;
 	WorkOnTokenSet( CFG_TEXT_START, yytext );
 }
 
-"<!--"[^\>]*\> {
-	bText = 0;
-	WorkOnTokenSet( COMMEND, yytext );
-}
 
-\<[^\/][^\>]*\>	{
+\<[^\/\!][^\>]*\>	{
 	bText = 0;
 	WorkOnTokenSet( CFG_TAG, yytext );
 }
 
-"<!--"	{
+"<!"DOCTYPE[^\>]*\>	{
+	bText = 0;
+	WorkOnTokenSet( CFG_TAG, yytext );
+}
+
+
+\<\!\-\-	{
 	char c1 = 0, c2 = 0, c3 = input();
 	char pChar[2];
 	pChar[1] = 0x00;
@@ -96,7 +98,7 @@ int bText=0;
 	WorkOnTokenSet( CFG_CLOSETAG, yytext );
 }
 
-\<[^\>]*\> {
+\<[^\>\!]*\> {
 	bText = 0;
 	if ( yytext[ 1 ] == '!' && yytext[ 2 ] == '-' && yytext[ 3 ] == '-' )
 		WorkOnTokenSet( COMMEND, yytext );
@@ -209,3 +211,12 @@ main( int argc, char* argv[])
 /* return error level */
 	return nRetValue;
 }
+
+/*"<!--"[^"-->"]*"-->" {
+	bText = 0;
+	WorkOnTokenSet( COMMEND, yytext );
+}*/
+/*"<!"[^\-].*\>	{
+	bText = 0;
+	WorkOnTokenSet( CFG_TAG, yytext );
+}*/
