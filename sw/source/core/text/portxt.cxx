@@ -4,9 +4,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 09:31:42 $
+ *  last change: $Author: hr $ $Date: 2005-12-06 18:20:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,6 +151,7 @@ USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
             if ( pPor && ( pPor->IsKernPortion() ||
                            pPor->IsControlCharPortion() ||
                            pPor->IsPostItsPortion() ) )
+                pPor = pPor->GetPortion();
 
             nCnt += nEnd - nPos;
 
