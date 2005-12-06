@@ -4,9 +4,9 @@
 #
 #   $RCSfile: CvsModule.pm,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-03 10:32:33 $
+#   last change: $Author: hr $ $Date: 2005-12-06 17:55:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -470,6 +470,11 @@ sub get_aliases_hash {
     my $server     = $self->cvs_server();
     my $repository = $self->cvs_repository();
     my $vcsid      = $self->vcsid();
+
+    if ( !$vcsid ) {
+        croak("ERROR: CvsModule::get_aliases_hash(): VCSID not set");
+    }
+
     my $root = ":$method:$vcsid\@$server:$repository";
     my $commando = "$cvs_binary -d $root checkout -c";
     if(!open(CHECKOUT, "$commando 2>&1 |")) {
