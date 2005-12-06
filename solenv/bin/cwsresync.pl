@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsresync.pl,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-07 17:05:43 $
+#   last change: $Author: hr $ $Date: 2005-12-06 17:55:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ use CwsConfig;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.20 $ ';
+my $id_str = ' $Revision: 1.21 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -790,20 +790,26 @@ sub update_sources {
     if (!opendir(SOURCE_ROOT, $stand_dir)) {
         print_error("Root dir of child ($stand_dir) workspace not accessible: $!", 1);
     };
-    my @found_dirs = readdir(SOURCE_ROOT);
-    closedir SOURCE_ROOT;
-    my $cvs_module = CvsModule->new();
-    my %cvs_aliases = $cvs_module->get_aliases_hash();
-    my $result = '';
 
+    my @found_dirs = ();
+    my $cvs_module;
+    my %cvs_aliases;
     if ($opt_skip_update) {
         print "Skipping main tree update\n";
-        @found_dirs = ();
     }
+    else {
+        @found_dirs = readdir(SOURCE_ROOT);
+        closedir(SOURCE_ROOT);
+        # TODO clean this incredible mess up
+        $cvs_module = get_cvs_module('solenv'); # solenv always on OOo CVS server
+        %cvs_aliases = $cvs_module->get_aliases_hash();
+    }
+
     foreach my $module (@found_dirs) {
         next if (!-d $stand_dir . "/$module/CVS");
         print "\tUpdating '$module'";
         $cvs_module->module($module);
+        my $result ='';
         if (defined $added_modules_hash{$module}) {
             print " with '$cws_branch_tag' ...\n";
             $result = $cvs_module->update($stand_dir, $cws_branch_tag, '-dP');
