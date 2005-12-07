@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 09:22:34 $
+ *  last change: $Author: hr $ $Date: 2005-12-07 17:44:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -778,37 +778,40 @@ BOOL ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
         {
             const CommandWheelData* pData = rCEvt.GetWheelData();
 
-            if( pData && pData->IsMod1() )
+            if (pData != NULL)
             {
-                if( !GetDocSh()->IsUIActive() )
+                if (pData->IsMod1())
                 {
-                    const long  nOldZoom = GetActiveWindow()->GetZoom();
-                    long        nNewZoom;
+                    if( !GetDocSh()->IsUIActive() )
+                    {
+                        const long  nOldZoom = GetActiveWindow()->GetZoom();
+                        long        nNewZoom;
 
-                    if( pData->GetDelta() < 0L )
-                        nNewZoom = Max( (long) pWin->GetMinZoom(), (long)(nOldZoom - DELTA_ZOOM) );
-                    else
-                        nNewZoom = Min( (long) pWin->GetMaxZoom(), (long)(nOldZoom + DELTA_ZOOM) );
+                        if( pData->GetDelta() < 0L )
+                            nNewZoom = Max( (long) pWin->GetMinZoom(), (long)(nOldZoom - DELTA_ZOOM) );
+                        else
+                            nNewZoom = Min( (long) pWin->GetMaxZoom(), (long)(nOldZoom + DELTA_ZOOM) );
 
-                    SetZoom( nNewZoom );
-                    Invalidate( SID_ATTR_ZOOM );
-                    bDone = TRUE;
+                        SetZoom( nNewZoom );
+                        Invalidate( SID_ATTR_ZOOM );
+                        bDone = TRUE;
+                    }
                 }
-            }
-            else
-            {
-                if( mpContentWindow.get() == pWin )
+                else
                 {
-                    ULONG nScrollLines = pData->GetScrollLines();
-                    if(IsPageFlipMode())
-                        nScrollLines = COMMAND_WHEEL_PAGESCROLL;
-                    CommandWheelData aWheelData( pData->GetDelta(),pData->GetNotchDelta(),
-                    nScrollLines,pData->GetMode(),pData->GetModifier(),pData->IsHorz() );
-                    CommandEvent aReWrite( rCEvt.GetMousePosPixel(),rCEvt.GetCommand(),
-                    rCEvt.IsMouseEvent(),(const void *) &aWheelData );
-                    bDone = pWin->HandleScrollCommand( aReWrite,
-                        mpHorizontalScrollBar.get(),
-                        mpVerticalScrollBar.get());
+                    if( mpContentWindow.get() == pWin )
+                    {
+                        ULONG nScrollLines = pData->GetScrollLines();
+                        if(IsPageFlipMode())
+                            nScrollLines = COMMAND_WHEEL_PAGESCROLL;
+                        CommandWheelData aWheelData( pData->GetDelta(),pData->GetNotchDelta(),
+                            nScrollLines,pData->GetMode(),pData->GetModifier(),pData->IsHorz() );
+                        CommandEvent aReWrite( rCEvt.GetMousePosPixel(),rCEvt.GetCommand(),
+                            rCEvt.IsMouseEvent(),(const void *) &aWheelData );
+                        bDone = pWin->HandleScrollCommand( aReWrite,
+                            mpHorizontalScrollBar.get(),
+                            mpVerticalScrollBar.get());
+                    }
                 }
             }
         }
