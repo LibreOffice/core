@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.168 $
+ *  $Revision: 1.169 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-19 18:30:27 $
+ *  last change: $Author: fs $ $Date: 2005-12-07 15:18:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1390,7 +1390,7 @@ SPECIAL_UNO_LIB_FILE_PATCH(gid_File_Lib_Package2,package2)
 
 SPECIAL_UNO_COMPONENT_LIB_FILE( gid_File_Lib_Passwordcontainer, passwordcontainer.uno )
 
-STD_UNO_LIB_FILE( gid_File_Lib_Pcr, pcr)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Pcr, pcr)
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Pdffilter, pdffilter)
 
