@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-03 11:53:21 $
+ *  last change: $Author: hr $ $Date: 2005-12-08 16:03:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5306,7 +5306,7 @@ SvxNewToolbarDialog::SvxNewToolbarDialog(
     Window* pWindow, const String& rName )
     :
     ModalDialog     ( pWindow, ResId( MD_NEW_TOOLBAR, DIALOG_MGR() ) ),
-    aFtDescription  ( this, ResId( FT_DESCRIPTION ) ),
+    aFtDescription  ( this, ResId( FT_NAME ) ),
     aEdtName        ( this, ResId( EDT_STRING ) ),
     aSaveInText     ( this, ResId( TXT_SAVEIN ) ),
     aSaveInListBox  ( this, ResId( LB_SAVEIN ) ),
