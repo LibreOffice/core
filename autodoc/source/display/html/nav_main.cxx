@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nav_main.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:31:05 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:33:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -318,6 +318,7 @@ MainRow::Write2( csi::xml::Element & o_rOut ) const
     Table * pTable = new Table;
     o_rOut
         >> *pTable
+                << new AnAttribute( "class", "navimain" )
                 << new AnAttribute( "border", "0" )
                 << new AnAttribute( "cellpadding", "1" )
                 << new AnAttribute( "cellspacing", "0" );
