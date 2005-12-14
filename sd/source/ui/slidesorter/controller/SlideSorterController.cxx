@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 16:30:12 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:20:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,9 +173,9 @@ void SlideSorterController::Init (void)
         SID_OBJECT_SELECT,
         0,
         GetModel().GetDocument()->GetItemPool());
-    FuPoor* pFunction = CreateSelectionFunction (aRequest);
-    GetViewShell().SetCurrentFunction (pFunction);
-    GetViewShell().SetOldFunction (pFunction);
+    FunctionReference xFunc( CreateSelectionFunction (aRequest) );
+    GetViewShell().SetCurrentFunction(xFunc);
+    GetViewShell().SetOldFunction(xFunc);
 
     Listener* pListener = new Listener (*this);
     mpListener = ::comphelper::ImplementationReference
@@ -1190,9 +1190,10 @@ void SlideSorterController::SetZoom (long int nZoom)
 
 
 
-FuPoor* SlideSorterController::CreateSelectionFunction (SfxRequest& rRequest)
+FunctionReference SlideSorterController::CreateSelectionFunction (SfxRequest& rRequest)
 {
-    return new SelectionFunction (*this, rRequest);
+    FunctionReference xFunc( SelectionFunction::Create(*this, rRequest) );
+    return xFunc;
 }
 
 
