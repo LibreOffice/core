@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futext.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:41:20 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:18:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,12 +61,8 @@ class FuText
 public:
     TYPEINFO();
 
-    FuText (ViewShell* pViewSh,
-        ::sd::Window* pWin,
-        ::sd::View* pView,
-        SdDrawDocument* pDoc,
-        SfxRequest& rReq);
-    virtual ~FuText (void);
+    static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+    virtual void DoExecute( SfxRequest& rReq );
 
     virtual BOOL KeyInput(const KeyEvent& rKEvt);
     virtual BOOL MouseMove(const MouseEvent& rMEvt);
@@ -86,16 +82,6 @@ public:
     void    ObjectChanged();
     SdrTextObj* GetTextObj() { return pTextObj; }
     void    SetSpellOptions( ULONG& rCntrl );
-
-    // #71422: Start the functionality of this class in this method
-    // and not in the ctor.
-    // If you construct an object of this class and you put the
-    // address of this object to pFuActual you got a problem,
-    // because some methods inside DoExecute use the pFuActual-Pointer.
-    // If the code inside DoExecute is executed inside the ctor,
-    // the value of pFuActual is not right. And the value will not
-    // be right until the ctor finished !!!
-    void        DoExecute ();
 
     DECL_LINK(SpellError, void* );
 
@@ -131,6 +117,14 @@ public:
     void TextEditingHasEnded (const SdrTextObj* pTextObject);
 
 protected:
+    FuText (ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+
+    virtual void disposing();
+
     SdrTextObj*         pTextObj;
     Link                aOldLink;
     BOOL                bFirstObjCreated;
