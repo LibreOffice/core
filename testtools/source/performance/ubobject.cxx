@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: kr $ $Date: 2001-05-04 07:05:18 $
-#*    $Revision: 1.1 $
+#*    last change   $Author: rt $ $Date: 2005-12-14 11:24:18 $
+#*    $Revision: 1.2 $
 #*
 #*    $Logfile: $
 #*
@@ -84,9 +84,9 @@ public:
         }
         return aRet;
     }
-    virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL acquire() throw()
         { osl_incrementInterlockedCount( &_nRef ); }
-    virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL release() throw()
         { if (! osl_decrementInterlockedCount( &_nRef )) delete this; }
 
     // XServiceInfo
@@ -291,6 +291,12 @@ void * SAL_CALL component_getFactory(
 
 /**************************************************************************
     $Log: not supported by cvs2svn $
+    Revision 1.1.130.1  2005/08/23 07:20:29  sb
+    #i52998# Made rotting code compile again (patch supplied by cyb).
+
+    Revision 1.1  2001/05/04 07:05:18  kr
+    moved from grande to openoffice
+
     Revision 1.4  2001/03/12 16:22:44  jl
     OSL_ENSHURE replaced by OSL_ENSURE
 
