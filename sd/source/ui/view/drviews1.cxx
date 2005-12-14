@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-25 11:53:38 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:26:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -342,9 +342,9 @@ void DrawViewShell::SelectionHasChanged (void)
                 RTL_TEXTENCODING_UTF8 )).getStr() );
     }
 
-    if( pFuActual )
+    if( HasCurrentFunction() )
     {
-        pFuActual->SelectionHasChanged();
+        GetCurrentFunction()->SelectionHasChanged();
     }
     else
     {
@@ -414,9 +414,9 @@ USHORT DrawViewShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
     }
 */
 
-    if( bRet && pFuActual )
+    if( bRet && HasCurrentFunction() )
     {
-        USHORT nID = pFuActual->GetSlotID();
+        USHORT nID = GetCurrentFunction()->GetSlotID();
         if (nID == SID_TEXTEDIT || nID == SID_ATTR_CHAR)
         {
             pDrView->EndTextEdit();
