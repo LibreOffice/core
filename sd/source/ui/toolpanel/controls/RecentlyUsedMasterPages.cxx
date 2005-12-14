@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RecentlyUsedMasterPages.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:43:05 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:22:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@
 #endif
 
 using namespace ::std;
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
