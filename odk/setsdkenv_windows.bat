@@ -6,7 +6,6 @@ set SDK_DIR=%SDK_DIR_TMP:~0,-1%
 if "%@RIGHT[5,%SDK_DIR%]" EQU "~0,-1" (
    set SDK_DIR=%@FULL[%0]
    set /A LENGTH=%@LEN[%SDK_DIR%] - 22
-   echo LENGTH=%LENGTH%
    set SDK_DIR=%@LEFT[%LENGTH%,%SDK_DIR%]
    unset LENGTH
 )
