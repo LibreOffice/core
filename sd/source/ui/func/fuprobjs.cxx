@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuprobjs.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:49:35 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:02:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,18 +91,33 @@ FuPresentationObjects::FuPresentationObjects (
     SfxRequest& rReq)
      : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
+}
+
+FunctionReference FuPresentationObjects::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    FunctionReference xFunc( new FuPresentationObjects( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    return xFunc;
+}
+
+void FuPresentationObjects::DoExecute( SfxRequest& rReq )
+{
+    OutlineViewShell* pOutlineViewShell = dynamic_cast< OutlineViewShell* >( pViewShell );
+    DBG_ASSERT( pOutlineViewShell, "sd::FuPresentationObjects::DoExecute(), does not work without an OutlineViewShell!");
+    if( !pOutlineViewShell )
+        return;
+
     // ergibt die Selektion ein eindeutiges Praesentationslayout?
     // wenn nicht, duerfen die Vorlagen nicht bearbeitet werden
     SfxItemSet aSet(pDoc->GetItemPool(), SID_STATUS_LAYOUT, SID_STATUS_LAYOUT);
-    static_cast<OutlineViewShell*>(pViewSh)->GetStatusBarState( aSet );
+    pOutlineViewShell->GetStatusBarState( aSet );
     String aLayoutName = (((SfxStringItem&)aSet.Get(SID_STATUS_LAYOUT)).GetValue());
     DBG_ASSERT(aLayoutName.Len(), "Layout unbestimmt");
 
     BOOL    bUnique = FALSE;
     USHORT  nDepth, nTmp;
-    OutlineView* pOlView = static_cast<OutlineView*>(
-        static_cast<OutlineViewShell*>(pViewSh)->GetView());
-    OutlinerView* pOutlinerView = pOlView->GetViewByWindow( (Window*) pWin );
+    OutlineView* pOlView = static_cast<OutlineView*>(pOutlineViewShell->GetView());
+    OutlinerView* pOutlinerView = pOlView->GetViewByWindow( (Window*) pWindow );
     ::Outliner* pOutl = pOutlinerView->GetOutliner();
     List* pList = pOutlinerView->CreateSelectionList();
     Paragraph* pPara = (Paragraph*)pList->First();
@@ -152,14 +167,10 @@ FuPresentationObjects::FuPresentationObjects (
         {
             SfxStyleSheetBase& rStyleSheet = *pStyleSheet;
 
-//CHINA001          SdPresLayoutTemplateDlg* pDlg = new SdPresLayoutTemplateDlg( pDocSh, NULL,
-//CHINA001          SdResId( nDlgId ), rStyleSheet, ePO, pStyleSheetPool );
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
-            DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
-            SfxAbstractTabDialog* pDlg = pFact->CreateSdPresLayoutTemplateDlg(ResId( TAB_PRES_LAYOUT_TEMPLATE ), pDocSh, NULL,
-                                                SdResId( nDlgId ), rStyleSheet, ePO, pStyleSheetPool );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-            if( pDlg->Execute() == RET_OK )
+            SfxAbstractTabDialog* pDlg = pFact ? pFact->CreateSdPresLayoutTemplateDlg(ResId( TAB_PRES_LAYOUT_TEMPLATE ), pDocSh, NULL, SdResId( nDlgId ), rStyleSheet, ePO, pStyleSheetPool ) : 0;
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            if( pDlg && (pDlg->Execute() == RET_OK) )
             {
                 const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
                 // Undo-Action
@@ -175,17 +186,5 @@ FuPresentationObjects::FuPresentationObjects (
         }
     }
 }
-
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
-
-FuPresentationObjects::~FuPresentationObjects()
-{
-}
-
-
 
 } // end of namespace sd
