@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawDocShell.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 14:38:12 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:06:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,9 @@
 #ifndef INCLUDED_SDDLLAPI_H
 #include "sddllapi.h"
 #endif
+#ifndef SD_FU_POOR_HXX
+#include "fupoor.hxx"
+#endif
 
 class SfxStyleSheetBasePool;
 class SfxStatusBarManager;
@@ -76,7 +79,6 @@ class SdFormatClipboard;
 
 namespace sd {
 
-class FuPoor;
 class FrameView;
 class View;
 class ViewShell;
@@ -133,7 +135,8 @@ public:
     sd::ViewShell* GetViewShell() { return pViewShell; }
     ::sd::FrameView* GetFrameView();
     ::Window* GetWindow() const;
-    ::sd::FuPoor* GetActualFunction() const { return pFuActual; }
+    ::sd::FunctionReference GetDocShellFunction() const { return mxDocShellFunction; }
+    void SetDocShellFunction( const ::sd::FunctionReference& xFunction );
 
     SdDrawDocument*         GetDoc();
     DocumentType            GetDocumentType() const { return eDocType; }
@@ -239,7 +242,7 @@ protected:
     SfxPrinter*             pPrinter;
     ::sd::ViewShell* pViewShell;
     FontList*               pFontList;
-    ::sd::FuPoor* pFuActual;
+    ::sd::FunctionReference mxDocShellFunction;
     DocumentType            eDocType;
     UINT16                  nStyleFamily;
     const USHORT*           pFilterSIDs;
