@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-11 14:07:36 $
+#   last change: $Author: rt $ $Date: 2005-12-14 14:48:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -96,10 +96,10 @@ REALFILTERPACKAGES_FILTERS_UI_MERGE = \
 
 REALFILTERPACKAGES_FILTERS_UI_LANGPACKS = \
     $(foreach,i,$(alllangiso) $(DIR_LANGPACK)$/$i$/org$/openoffice$/TypeDetection$/Filter.xcu)
-    
+
 REALFILTERPACKAGES_FILTERS_UI_LANGPACKS_PACKED = \
     $(foreach,i,$(alllangiso) $(COMMONBIN)$/fcfg_langpack_$i.zip)
-    
+
 REALFILTERPACKAGES_OTHERS_FLAG = \
     $(DIR_FILTERCFGOUT)$/fcfg_base.others_flag               \
     $(DIR_FILTERCFGOUT)$/fcfg_writer.others_flag             \
@@ -125,6 +125,15 @@ INTERNALFILTERPACKAGES_TYPES_FLAG = \
 INTERNALFILTERPACKAGES_FILTERS_FLAG = \
     $(DIR_FILTERCFGOUT)$/fcfg_internalgraphics.filters_flag
 
+ALL_FLAGS = \
+    $(REALFILTERPACKAGES_TYPES_FLAG)                    \
+    $(REALFILTERPACKAGES_FILTERS_FLAG)                  \
+    $(REALFILTERPACKAGES_FILTERS_UI_MERGE)              \
+    $(REALFILTERPACKAGES_FILTERS_UI_LANGPACKS)          \
+    $(REALFILTERPACKAGES_OTHERS_FLAG)                   \
+    $(INTERNALFILTERPACKAGES_TYPES_FLAG)                \
+    $(INTERNALFILTERPACKAGES_FILTERS_FLAG)
+
 # -----------------------------------------------------------------------------
 # build all
 # -----------------------------------------------------------------------------
@@ -138,21 +147,20 @@ ZIP1LIST=$(LANGDIR)$/*
 
 .INCLUDE: target.mk
 
-ALLTAR: \
-    $(REALFILTERPACKAGES_TYPES_FLAG)                    \
-    $(REALFILTERPACKAGES_FILTERS_FLAG)                  \
-    $(REALFILTERPACKAGES_FILTERS_UI_MERGE)              \
-    $(REALFILTERPACKAGES_FILTERS_UI_LANGPACKS)          \
-    $(REALFILTERPACKAGES_OTHERS_FLAG)                   \
-    $(INTERNALFILTERPACKAGES_TYPES_FLAG)                \
-    $(INTERNALFILTERPACKAGES_FILTERS_FLAG)
+ALLTAR : $(ALL_FLAGS)
+
+$(ALL_FLAGS) : $(INCLUDE_FRAGMENTS)
 
 .IF "$(SOLAR_JAVA)"==""
 #cmc, hack to workaround the java build requirement
 MERGE:=python ../tools/merge/pyAltFCFGMerge
 .ELSE
 MERGE    := $(JAVAI) -jar $(CLASSDIR)$/FCFGMerge.jar
-PACKLANG := $(JAVAI) $(JAVACPS) $(SOLARBINDIR)/xalan.jar org.apache.xalan.xslt.Process -XSL langfilter.xsl
+.IF "$(JDK)" == "gcj"
+XALANCLASS=$(SOLARBINDIR)/xalan.jar
+CLASSPATH:=$(CLASSPATH)$(PATH_SEPERATOR){$(subst,%Z*Z%,$(PATH_SEPERATOR) $(XALANCLASS:s/ /%Z*Z%/))}
+.ENDIF
+PACKLANG := $(JAVAI) org.apache.xalan.xslt.Process -XSL langfilter.xsl
 .ENDIF
 
 # -----------------------------------------------------------------------------
