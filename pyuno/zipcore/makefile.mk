@@ -39,7 +39,7 @@ $(BIN)$/python.sh : python.sh
     chmod +x $@
 .ENDIF
 
-$(BIN)$/python-core-$(PYVERSION).zip : $(FILES)
+$(BIN)$/python-core-$(PYVERSION).zip : $(FILES) $(BIN)$/python.sh
 .IF "$(GUI)" == "UNX"
 .IF "$(OS)" != "MACOSX"
     cd $(BIN) && find . -name '*$(DLLPOST)' | xargs strip
