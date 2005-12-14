@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fudspord.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:32:55 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:10:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,13 +62,7 @@ class FuDisplayOrder
 public:
     TYPEINFO();
 
-    FuDisplayOrder (
-        ViewShell* pViewSh,
-        ::sd::Window* pWin,
-        ::sd::View* pView,
-        SdDrawDocument* pDoc,
-        SfxRequest& rReq);
-    virtual ~FuDisplayOrder (void);
+    static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
 
     // Mouse- & Key-Events
     virtual BOOL MouseMove(const MouseEvent& rMEvt);
@@ -79,9 +73,19 @@ public:
     virtual void Deactivate();      // Function deaktivieren
 
 protected:
-     Pointer            aPtr;
+    virtual ~FuDisplayOrder (void);
+
+    Pointer         aPtr;
      SdrObject*         pRefObj;
      SdrViewUserMarker* pUserMarker;
+
+private:
+    FuDisplayOrder (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
 };
 
 } // end of namespace sd
