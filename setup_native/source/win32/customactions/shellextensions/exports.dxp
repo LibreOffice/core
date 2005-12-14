@@ -5,5 +5,5 @@ DeinstallStartmenuFolderIcon
 SetProductInstallMode
 RebuildShellIconCache
 ExecutePostUninstallScript
+MigrateInstallPath
 
-    
