@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LocaleDataItem.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:48:41 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 11:30:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@ module com { module sun { module star { module i18n {
 
 published struct LocaleDataItem
 {
-    /// internal ID string, not unique, not meaningful to the outer world
+        /// internal ID string, not unique, not meaningful to the outer world
     string unoID;
     /// date separator, for example, <b>"/"</b> or <b>"."</b> or <b>"-"</b>
     string dateSeparator;
@@ -72,11 +72,11 @@ published struct LocaleDataItem
     string doubleQuotationStart;
     /// double quotation mark end
     string doubleQuotationEnd;
-    /// measurement system, <b>"metric"</b> or <b>"us"</b>
+        /// time AM symbol, for example, <b>"AM"</b> or <b>"am"</b>
     string timeAM;
-    /// time AM symbol, for example, <b>"AM"</b> or <b>"am"</b>
+        /// time PM symbol, for example, <b>"PM"</b> or <b>"pm"</b>
     string timePM;
-    /// time PM symbol, for example, <b>"PM"</b> or <b>"pm"</b>
+    /// measurement system, <b>"metric"</b> or <b>"us"</b>
     string measurementSystem;
     /// long date day of week separator, for example, <b>", "</b>
     string LongDateDayOfWeekSeparator;
