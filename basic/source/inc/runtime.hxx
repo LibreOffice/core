@@ -4,9 +4,9 @@
  *
  *  $RCSfile: runtime.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 15:33:21 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:35:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,7 +213,7 @@ class SbiInstance
     SvNumberFormatter* pNumberFormatter;
     LanguageType    meFormatterLangType;
     DateFormat      meFormatterDateFormat;
-    ULONG           nStdDateIdx, nStdTimeIdx, nStdDateTimeIdx;
+    sal_uInt32      nStdDateIdx, nStdTimeIdx, nStdDateTimeIdx;
 
     SbError         nErr;           // aktueller Fehlercode
     String          aErrorMsg;      // letzte Error-Message fuer $ARG
@@ -263,13 +263,13 @@ public:
     SbiRTLData* GetRTLData() const { return (SbiRTLData*)&aRTLData; }
 
     SvNumberFormatter* GetNumberFormatter();
-    ULONG GetStdDateIdx() const { return nStdDateIdx; }
-    ULONG GetStdTimeIdx() const { return nStdTimeIdx; }
-    ULONG GetStdDateTimeIdx() const { return nStdDateTimeIdx; }
+    sal_uInt32 GetStdDateIdx() const { return nStdDateIdx; }
+    sal_uInt32 GetStdTimeIdx() const { return nStdTimeIdx; }
+    sal_uInt32 GetStdDateTimeIdx() const { return nStdDateTimeIdx; }
 
     // #39629# NumberFormatter auch statisch anbieten
     static void PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
-        ULONG &rnStdDateIdx, ULONG &rnStdTimeIdx, ULONG &rnStdDateTimeIdx,
+        sal_uInt32 &rnStdDateIdx, sal_uInt32 &rnStdTimeIdx, sal_uInt32 &rnStdDateTimeIdx,
         LanguageType* peFormatterLangType=NULL, DateFormat* peFormatterDateFormat=NULL );
 };
 
