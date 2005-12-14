@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:28:58 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:31:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1214,7 +1214,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     {
         Cancel();
 
-        if (pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT )
+        if(HasCurrentFunction(SID_BEZIER_EDIT) )
             GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
 
         StarBASIC::FatalError (SbERR_WRONG_ARGS);
@@ -1251,7 +1251,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
         {
             Cancel();
 
-            if (pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT )
+            if(HasCurrentFunction( SID_BEZIER_EDIT ) )
                 GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
 
             StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
