@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusearch.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:50:02 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:03:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,17 @@ FuSearch::FuSearch (
       pSdOutliner(NULL),
       bOwnOutliner(FALSE)
 {
+}
+
+FunctionReference FuSearch::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    FunctionReference xFunc( new FuSearch( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    return xFunc;
+}
+
+void FuSearch::DoExecute( SfxRequest& rReq )
+{
     pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArraySpell );
 
     if ( pViewShell->ISA(DrawViewShell) )
@@ -113,8 +124,6 @@ FuSearch::FuSearch (
     if (pSdOutliner)
        pSdOutliner->PrepareSpelling();
 }
-
-
 
 /*************************************************************************
 |*
