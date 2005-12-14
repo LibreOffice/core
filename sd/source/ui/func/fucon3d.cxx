@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fucon3d.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:35:19 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 16:55:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,17 +110,21 @@ FuConstruct3dObject::FuConstruct3dObject (
     SfxRequest&     rReq)
     : FuConstruct(pViewSh, pWin, pView, pDoc, rReq)
 {
-    pViewShell->GetObjectBarManager().SwitchObjectBar (RID_DRAW_OBJ_TOOLBOX);
 }
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
-
-FuConstruct3dObject::~FuConstruct3dObject()
+FunctionReference FuConstruct3dObject::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent )
 {
+    FuConstruct3dObject* pFunc;
+    FunctionReference xFunc( pFunc = new FuConstruct3dObject( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    pFunc->SetPermanent(bPermanent);
+    return xFunc;
+}
+
+void FuConstruct3dObject::DoExecute( SfxRequest& rReq )
+{
+    FuConstruct::DoExecute( rReq );
+    pViewShell->GetObjectBarManager().SwitchObjectBar (RID_DRAW_OBJ_TOOLBOX);
 }
 
 /*************************************************************************
