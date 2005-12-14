@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fumorph.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-27 12:24:10 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:00:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,17 @@ FuMorph::FuMorph (
     SdDrawDocument* pDoc,
     SfxRequest& rReq )
     :   FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+{
+}
+
+FunctionReference FuMorph::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    FunctionReference xFunc( new FuMorph( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    return xFunc;
+}
+
+void FuMorph::DoExecute( SfxRequest& rReq )
 {
     const SdrMarkList&  rMarkList = pView->GetMarkedObjectList();
 
