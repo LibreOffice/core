@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fubullet.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 09:20:50 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:07:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,24 +47,26 @@ namespace sd {
 
 class ViewShell;
 
-class FuBullet
-    : public FuPoor
+class FuBullet : public FuPoor
 {
 public:
     TYPEINFO();
 
+    static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+    virtual void DoExecute( SfxRequest& rReq );
+
+    static void GetSlotState( SfxItemSet& rSet, ViewShell* pViewShell, SfxViewFrame* pViewFrame );
+
+private:
     FuBullet (
         ViewShell* pViewSh,
         ::sd::Window* pWin,
         ::sd::View* pView,
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
-    virtual ~FuBullet (void) {}
 
     void InsertSpecialCharacter();
     void InsertFormattingMark( sal_Unicode cMark );
-
-    static void GetSlotState( SfxItemSet& rSet, ViewShell* pViewShell, SfxViewFrame* pViewFrame );
 };
 
 } // end of namespace sd
