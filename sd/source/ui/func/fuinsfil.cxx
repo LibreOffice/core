@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:43:44 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 16:59:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,11 +140,12 @@
 #endif
 #include "sdabstdlg.hxx" //CHINA001
 #include "inspagob.hrc" //CHINA001
+
+using ::rtl::OUString;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star;
-using namespace ::rtl;
 
 namespace sd {
 
@@ -167,6 +168,17 @@ FuInsertFile::FuInsertFile (
     SdDrawDocument* pDoc,
     SfxRequest&    rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+{
+}
+
+FunctionReference FuInsertFile::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    FunctionReference xFunc( new FuInsertFile( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    return xFunc;
+}
+
+void FuInsertFile::DoExecute( SfxRequest& rReq )
 {
     SfxFilterMatcher&       rMatcher = SFX_APP()->GetFilterMatcher();
     ::std::vector< String > aFilterVector;
@@ -326,7 +338,7 @@ FuInsertFile::FuInsertFile (
     SfxMedium*          pMedium = new SfxMedium( aFile, STREAM_READ | STREAM_NOCREATE, FALSE );
     const SfxFilter*    pFilter = NULL;
     ErrCode             nErr = SFX_APP()->GetFilterMatcher().GuessFilter( *pMedium, &pFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
-    BOOL                bDrawMode = pViewSh->ISA(DrawViewShell);
+    BOOL                bDrawMode = pViewShell && pViewShell->ISA(DrawViewShell);
     BOOL                bInserted = FALSE;
 
     if( pFilter )
@@ -383,26 +395,6 @@ FuInsertFile::FuInsertFile (
         aErrorBox.Execute();
         delete pMedium;
     }
-}
-
-// -----------------------------------------------------------------------------
-
-FuInsertFile::~FuInsertFile()
-{
-}
-
-// -----------------------------------------------------------------------------
-
-void FuInsertFile::Activate()
-{
-    FuPoor::Activate();
-}
-
-// -----------------------------------------------------------------------------
-
-void FuInsertFile::Deactivate()
-{
-    FuPoor::Deactivate();
 }
 
 // -----------------------------------------------------------------------------
