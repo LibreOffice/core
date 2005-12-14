@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 16:30:40 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:22:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,6 +159,7 @@ SlideSorterViewShell::SlideSorterViewShell (
 
 SlideSorterViewShell::~SlideSorterViewShell (void)
 {
+    DisposeFunctions();
     ReleaseListeners();
 
     try
