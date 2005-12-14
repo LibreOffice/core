@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chpfld.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:36:25 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:45:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ class SwChapterField : public SwField
     BYTE nLevel;
     String sTitle, sNumber, sPre, sPost;
 public:
-    SwChapterField(SwChapterFieldType*, ULONG nFmt = 0);
+    SwChapterField(SwChapterFieldType*, sal_uInt32 nFmt = 0);
 
     void ChangeExpansion(const SwFrm*, const SwTxtNode*,
         BOOL bSrchNum = FALSE);
