@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NDatabaseMetaData.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:50:31 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 09:41:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,10 +62,10 @@ namespace connectivity
         //**************************************************************
 
         const GParamSpec *getField(guint n);
-        guint             getFieldCount() G_GNUC_CONST;
-        sal_Int32        getFieldType(sal_Int32 nCol) G_GNUC_CONST;
-        rtl::OUString    getFieldTypeName(sal_Int32 nCol) G_GNUC_CONST;
-        rtl::OUString     getFieldName(sal_Int32 nCol) G_GNUC_CONST;
+        guint             getFieldCount();
+        sal_Int32        getFieldType(sal_Int32 nCol);
+        rtl::OUString    getFieldTypeName(sal_Int32 nCol);
+        rtl::OUString     getFieldName(sal_Int32 nCol);
 
         class OEvoabDatabaseMetaData : public ODatabaseMetaDataBase
         {
