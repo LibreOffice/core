@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:41:23 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 16:57:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,6 +155,14 @@ FuDraw::FuDraw(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
     bPermanent(FALSE),
     bDragHelpLine(FALSE)
 {
+}
+
+FunctionReference FuDraw::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent )
+{
+    FuDraw* pFunc;
+    FunctionReference xFunc( pFunc = new FuDraw( pViewSh, pWin, pView, pDoc, rReq ) );
+    pFunc->SetPermanent(bPermanent);
+    return xFunc;
 }
 
 /*************************************************************************
