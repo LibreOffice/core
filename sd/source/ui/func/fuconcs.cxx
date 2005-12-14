@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconcs.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:37:09 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 16:55:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,6 +175,21 @@ FuConstructCustomShape::FuConstructCustomShape (
         SfxRequest&         rReq ) :
     FuConstruct(pViewSh, pWin, pView, pDoc, rReq)
 {
+}
+
+FunctionReference FuConstructCustomShape::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent )
+{
+    FuConstructCustomShape* pFunc;
+    FunctionReference xFunc( pFunc = new FuConstructCustomShape( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    pFunc->SetPermanent( bPermanent );
+    return xFunc;
+}
+
+void FuConstructCustomShape::DoExecute( SfxRequest& rReq )
+{
+    FuConstruct::DoExecute( rReq );
+
     const SfxItemSet* pArgs = rReq.GetArgs();
     if ( pArgs )
     {
@@ -182,16 +197,6 @@ FuConstructCustomShape::FuConstructCustomShape (
         aCustomShape = rItm.GetValue();
     }
     pViewShell->GetObjectBarManager().SwitchObjectBar( RID_DRAW_OBJ_TOOLBOX );
-}
-
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
-
-FuConstructCustomShape::~FuConstructCustomShape()
-{
 }
 
 /*************************************************************************
