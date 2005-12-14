@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fubullet.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 09:20:37 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 16:54:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,17 @@ FuBullet::FuBullet (
     SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
+}
 
+FunctionReference FuBullet::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    FunctionReference xFunc( new FuBullet( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    return xFunc;
+}
+
+void FuBullet::DoExecute( SfxRequest& rReq )
+{
     if( rReq.GetSlot() == SID_BULLET )
         InsertSpecialCharacter();
     else
@@ -235,7 +245,7 @@ void FuBullet::InsertSpecialCharacter()
         ::Outliner*   pOL = NULL;
 
         // je nach ViewShell Outliner und OutlinerView bestimmen
-        if (pViewShell->ISA(DrawViewShell))
+        if(pViewShell && pViewShell->ISA(DrawViewShell))
         {
             pOV = pView->GetTextEditOutlinerView();
             if (pOV)
@@ -243,7 +253,7 @@ void FuBullet::InsertSpecialCharacter()
                 pOL = pView->GetTextEditOutliner();
             }
         }
-        else if (pViewShell->ISA(OutlineViewShell))
+        else if(pViewShell && pViewShell->ISA(OutlineViewShell))
         {
             pOL = static_cast<OutlineView*>(pView)->GetOutliner();
             pOV = static_cast<OutlineView*>(pView)->GetViewByWindow(
