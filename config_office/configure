@@ -309,7 +309,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS AWK SED LOCAL_SOLENV UPD SOURCEVERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP ENABLE_VCTK VC_STANDARD ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS ENABLE_CUPS ENABLE_FONTCONFIG WITH_BINFILTER ENABLE_DIRECTX NETTOOLKIT ENABLE_RPATH WITH_MYSPELL_DICTS USE_SHELL WITH_MINGWIN TCSH GCC_HOME CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH GCCVER HAVE_GCC_VISIBILITY_FEATURE GNUMAKE _cc MSPDB_PATH COMEX MIDL_PATH CSC_PATH NMAKE_PATH FRAME_HOME CPP EGREP PAM_LINK CRYPT_LINK CXX CXXFLAGS ac_ct_CXX GXX_INCLUDE_PATH EXCEPTIONS CXXCPP STLPORT4 USE_SYSTEM_STL BUILD_VER_STRING SOLAR_JAVA LANG JAVAINTERPRETER JAVACOMPILER JAVADOC AWTLIB JAVA_HOME JDK JAVACACHE XSLTPROC PERL DMAKE BUILD_DMAKE EPM DPKG PKGMK BUILD_EPM PKGFORMAT RPM SYSTEM_STDLIBS SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG FREETYPE_CFLAGS FREETYPE_LIBS SYSTEM_FREETYPE LIBWPD_CFLAGS LIBWPD_LIBS SYSTEM_LIBWPD LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS SYSTEM_DB DB_VERSION DB_INCLUDES DB_JAR SABLOTCONFIG SYSTEM_SABLOT SABLOT_LIBS CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_BOOST SYSTEM_ODBC_HEADERS WITH_MOZILLA WITH_OPENLDAP MOZILLAXPCOM_CFLAGS MOZILLAXPCOM_LIBS MOZ_NSS_CFLAGS MOZ_NSS_LIBS MOZILLA_VERSION MOZILLA_TOOLKIT MOZLIBREQ_CFLAGS MOZLIBREQ_LIBS BUILD_MOZAB SYSTEM_MOZILLA MOZ_INC MOZ_LIB MOZ_LIB_XPCOM MOZ_LDAP_CFLAGS SYSTEM_SANE_HEADER X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB SYSTEM_XRENDER_HEADERS XRENDER_LINK XMKMF SYSTEM_NAS NAS_INCLUDES ENABLE_NAS ENABLE_PASF SYSTEM_PORTAUDIO SYSTEM_SNDFILE BUILD_TYPE NEON_CFLAGS NEON_LIBS SYSTEM_NEON MYSPELL_CFLAGS MYSPELL_LIBS SYSTEM_MYSPELL SYSTEM_HYPH SYSTEM_MYTHES PSDK_HOME DIRECTXSDK_HOME DIRECTXSDK_LIB NSIS_PATH EXTRA_DOTNET_FILES BISON FLEX PATCH GNUPATCH GNUCP CYGWIN_PATH ML_EXE ASM_HOME ZIP ZIP_HOME LIBART_CFLAGS LIBART_LIBS WITH_LIBART WITH_GPC ENABLE_GTK ENABLE_KDE GNOMEVFS_CFLAGS GNOMEVFS_LIBS GCONF_CFLAGS GCONF_LIBS ENABLE_GNOMEVFS GTK_CFLAGS GTK_LIBS GDKPIXBUF_CFLAGS GDKPIXBUF_LIBS MOC KDE_CFLAGS KDE_LIBS LIBSN_CFLAGS LIBSN_LIBS WITH_LIBSN GOBJECT_CFLAGS GOBJECT_LIBS ENABLE_EVOAB2 WITH_FONTOOO SYSTEM_MSPACK WITH_FONTS SCPDEFS USE_XINERAMA XINERAMA_LINK ANT ANT_HOME ANT_LIB WITH_LANG WITH_DICT ENABLE_STATIC_GTK CUSTOM_IMAGE_SETS LOCAL_SOLVER LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS AWK SED LOCAL_SOLENV UPD SOURCEVERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP ENABLE_VCTK VC_STANDARD ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS ENABLE_CUPS ENABLE_FONTCONFIG WITH_BINFILTER ENABLE_DIRECTX NETTOOLKIT ENABLE_RPATH WITH_MYSPELL_DICTS USE_SHELL WITH_MINGWIN TCSH GCC_HOME CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH GCCVER HAVE_GCC_VISIBILITY_FEATURE GNUMAKE _cc MSPDB_PATH COMEX MIDL_PATH CSC_PATH NMAKE_PATH FRAME_HOME CPP EGREP PAM_LINK CRYPT_LINK CXX CXXFLAGS ac_ct_CXX GXX_INCLUDE_PATH EXCEPTIONS CXXCPP STLPORT4 USE_SYSTEM_STL BUILD_VER_STRING SOLAR_JAVA LANG JAVAINTERPRETER JAVACOMPILER JAVADOC AWTLIB JAVA_HOME JDK JAVACACHE XSLTPROC PERL DMAKE BUILD_DMAKE EPM DPKG PKGMK BUILD_EPM PKGFORMAT RPM SYSTEM_STDLIBS SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG FREETYPE_CFLAGS FREETYPE_LIBS SYSTEM_FREETYPE LIBWPD_CFLAGS LIBWPD_LIBS SYSTEM_LIBWPD LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS SYSTEM_DB DB_VERSION DB_INCLUDES DB_JAR SABLOTCONFIG SYSTEM_SABLOT SABLOT_LIBS CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_BOOST SYSTEM_ODBC_HEADERS WITH_MOZILLA WITH_OPENLDAP MOZILLAXPCOM_CFLAGS MOZILLAXPCOM_LIBS MOZ_NSS_CFLAGS MOZ_NSS_LIBS MOZILLA_VERSION MOZILLA_TOOLKIT MOZLIBREQ_CFLAGS MOZLIBREQ_LIBS BUILD_MOZAB SYSTEM_MOZILLA MOZ_INC MOZ_LIB MOZ_LIB_XPCOM MOZ_LDAP_CFLAGS SYSTEM_SANE_HEADER X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB SYSTEM_XRENDER_HEADERS XRENDER_LINK XMKMF SYSTEM_NAS NAS_INCLUDES ENABLE_NAS ENABLE_PASF SYSTEM_PORTAUDIO SYSTEM_SNDFILE BUILD_TYPE NEON_CFLAGS NEON_LIBS SYSTEM_NEON AGG_CFLAGS AGG_LIBS SYSTEM_AGG MYSPELL_CFLAGS MYSPELL_LIBS SYSTEM_MYSPELL SYSTEM_HYPH SYSTEM_MYTHES PSDK_HOME DIRECTXSDK_HOME DIRECTXSDK_LIB NSIS_PATH EXTRA_DOTNET_FILES BISON FLEX PATCH GNUPATCH GNUCP CYGWIN_PATH ML_EXE ASM_HOME ZIP ZIP_HOME LIBART_CFLAGS LIBART_LIBS WITH_LIBART WITH_GPC ENABLE_GTK ENABLE_KDE GNOMEVFS_CFLAGS GNOMEVFS_LIBS GCONF_CFLAGS GCONF_LIBS ENABLE_GNOMEVFS GTK_CFLAGS GTK_LIBS GDKPIXBUF_CFLAGS GDKPIXBUF_LIBS MOC KDE_CFLAGS KDE_LIBS LIBSN_CFLAGS LIBSN_LIBS WITH_LIBSN GOBJECT_CFLAGS GOBJECT_LIBS ENABLE_EVOAB2 WITH_FONTOOO SYSTEM_MSPACK WITH_FONTS SCPDEFS USE_XINERAMA XINERAMA_LINK ANT ANT_HOME ANT_LIB WITH_LANG WITH_DICT ENABLE_STATIC_GTK CUSTOM_IMAGE_SETS LOCAL_SOLVER LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1058,6 +1058,8 @@ Optional Packages:
   --with-system-portaudio Use portaudio already on system
 
   --with-system-neon      Use neon already on system
+
+  --with-system-agg       Use AGG already on system
 
   --with-system-myspell   Use myspell already on system
 
@@ -2081,6 +2083,12 @@ fi;
 # Check whether --with-system-neon or --without-system-neon was given.
 if test "${with_system_neon+set}" = set; then
   withval="$with_system_neon"
+
+fi;
+
+# Check whether --with-system-agg or --without-system-agg was given.
+if test "${with_system_agg+set}" = set; then
+  withval="$with_system_agg"
 
 fi;
 
@@ -15541,6 +15549,119 @@ fi
 
 
 
+echo "$as_me:$LINENO: checking which AGG to use" >&5
+echo $ECHO_N "checking which AGG to use... $ECHO_C" >&6
+if test -n "$with_system_agg" -o -n "$with_system_libs" && \
+   test "$with_system_agg" != "no"; then
+         echo "$as_me:$LINENO: result: external" >&5
+echo "${ECHO_T}external" >&6
+
+  succeeded=no
+
+  if test -z "$PKG_CONFIG"; then
+    # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
+  ;;
+esac
+fi
+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+
+if test -n "$PKG_CONFIG"; then
+  echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
+echo "${ECHO_T}$PKG_CONFIG" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+  fi
+
+  if test "$PKG_CONFIG" = "no" ; then
+     echo "*** The pkg-config script could not be found. Make sure it is"
+     echo "*** in your path, or set the PKG_CONFIG environment variable"
+     echo "*** to the full path to pkg-config."
+     echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
+  else
+     PKG_CONFIG_MIN_VERSION=0.9.0
+     if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
+        echo "$as_me:$LINENO: checking for libagg >= 2.3" >&5
+echo $ECHO_N "checking for libagg >= 2.3... $ECHO_C" >&6
+
+        if $PKG_CONFIG --exists "libagg >= 2.3" ; then
+            echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+            succeeded=yes
+
+            echo "$as_me:$LINENO: checking AGG_CFLAGS" >&5
+echo $ECHO_N "checking AGG_CFLAGS... $ECHO_C" >&6
+            AGG_CFLAGS=`$PKG_CONFIG --cflags "libagg >= 2.3"`
+            echo "$as_me:$LINENO: result: $AGG_CFLAGS" >&5
+echo "${ECHO_T}$AGG_CFLAGS" >&6
+
+            echo "$as_me:$LINENO: checking AGG_LIBS" >&5
+echo $ECHO_N "checking AGG_LIBS... $ECHO_C" >&6
+            AGG_LIBS=`$PKG_CONFIG --libs "libagg >= 2.3"`
+            echo "$as_me:$LINENO: result: $AGG_LIBS" >&5
+echo "${ECHO_T}$AGG_LIBS" >&6
+        else
+            AGG_CFLAGS=""
+            AGG_LIBS=""
+            ## If we have a custom action on failure, don't print errors, but
+            ## do set a variable so people can do so.
+            AGG_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libagg >= 2.3"`
+            echo $AGG_PKG_ERRORS
+        fi
+
+
+
+     else
+        echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
+        echo "*** See http://www.freedesktop.org/software/pkgconfig"
+     fi
+  fi
+
+  if test $succeeded = yes; then
+     :
+  else
+     { { echo "$as_me:$LINENO: error: Library requirements (libagg >= 2.3) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&5
+echo "$as_me: error: Library requirements (libagg >= 2.3) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&2;}
+   { (exit 1); exit 1; }; }
+  fi
+
+         SYSTEM_AGG=YES
+else
+         echo "$as_me:$LINENO: result: internal" >&5
+echo "${ECHO_T}internal" >&6
+         SYSTEM_AGG=NO
+         BUILD_TYPE="$BUILD_TYPE AGG"
+fi
+
+
 echo "$as_me:$LINENO: checking which myspell to use" >&5
 echo $ECHO_N "checking which myspell to use... $ECHO_C" >&6
 if test -n "$with_system_myspell" && test "$with_system_myspell" != "no"; then
@@ -19889,6 +20010,9 @@ s,@BUILD_TYPE@,$BUILD_TYPE,;t t
 s,@NEON_CFLAGS@,$NEON_CFLAGS,;t t
 s,@NEON_LIBS@,$NEON_LIBS,;t t
 s,@SYSTEM_NEON@,$SYSTEM_NEON,;t t
+s,@AGG_CFLAGS@,$AGG_CFLAGS,;t t
+s,@AGG_LIBS@,$AGG_LIBS,;t t
+s,@SYSTEM_AGG@,$SYSTEM_AGG,;t t
 s,@MYSPELL_CFLAGS@,$MYSPELL_CFLAGS,;t t
 s,@MYSPELL_LIBS@,$MYSPELL_LIBS,;t t
 s,@SYSTEM_MYSPELL@,$SYSTEM_MYSPELL,;t t
