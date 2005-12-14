@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-07 14:41:17 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:06:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -881,7 +881,7 @@ BOOL ScCompiler::IsOpCode2( const String& rName )
 BOOL ScCompiler::IsValue( const String& rSym )
 {
     double fVal;
-    ULONG nIndex = ( pSymbolTable == pSymbolTableEnglish ?
+    sal_uInt32 nIndex = ( pSymbolTable == pSymbolTableEnglish ?
         pDoc->GetFormatTable()->GetStandardIndex( LANGUAGE_ENGLISH_US ) : 0 );
 //  ULONG nIndex = 0;
 ////    ULONG nIndex = pDoc->GetFormatTable()->GetStandardIndex(ScGlobal::eLnge);
