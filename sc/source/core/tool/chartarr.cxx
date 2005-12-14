@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chartarr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:39:54 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:05:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -734,7 +734,7 @@ SchMemChart* ScChartArray::CreateMemChartSingle()
                             nVal = ((ScValueCell*)pCell)->GetValue();
                             if ( bCalcAsShown && nVal != 0.0 )
                             {
-                                ULONG nFormat;
+                                sal_uInt32 nFormat;
                                 pDocument->GetNumberFormat( pCols[nCol],
                                     pRows[nRow], nTab1, nFormat );
                                 nVal = pDocument->RoundValueAsShown( nVal, nFormat );
