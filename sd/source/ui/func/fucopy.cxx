@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fucopy.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:40:10 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 16:57:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,17 @@ FuCopy::FuCopy (
     SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
+}
+
+FunctionReference FuCopy::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    FunctionReference xFunc( new FuCopy( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    return xFunc;
+}
+
+void FuCopy::DoExecute( SfxRequest& rReq )
+{
     if( pView->AreObjectsMarked() )
     {
         // Undo
@@ -116,7 +127,7 @@ FuCopy::FuCopy (
 
         if( !pArgs )
         {
-            SfxItemSet aSet( pViewSh->GetPool(),
+            SfxItemSet aSet( pViewShell->GetPool(),
                                 ATTR_COPY_START, ATTR_COPY_END, 0 );
 
             // Farb-Attribut angeben
@@ -250,7 +261,7 @@ FuCopy::FuCopy (
 
             if( ( 1 == i ) && bColor )
             {
-                SfxItemSet aNewSet( pViewSh->GetPool(), XATTR_FILLSTYLE, XATTR_FILLCOLOR, 0L );
+                SfxItemSet aNewSet( pViewShell->GetPool(), XATTR_FILLSTYLE, XATTR_FILLCOLOR, 0L );
                 aNewSet.Put( XFillStyleItem( XFILL_SOLID ) );
                 aNewSet.Put( XFillColorItem( String(), aStartColor ) );
                 pView->SetAttributes( aNewSet );
@@ -313,7 +324,7 @@ FuCopy::FuCopy (
                 BYTE nGreen = aStartColor.GetGreen() + (BYTE) ( ( (long) aEndColor.GetGreen() - (long) aStartColor.GetGreen() ) *  (long) i / (long) nNumber );
                 BYTE nBlue = aStartColor.GetBlue() + (BYTE) ( ( (long) aEndColor.GetBlue() - (long) aStartColor.GetBlue() ) * (long) i / (long) nNumber );
                 Color aNewColor( nRed, nGreen, nBlue );
-                SfxItemSet aNewSet( pViewSh->GetPool(), XATTR_FILLSTYLE, XATTR_FILLCOLOR, 0L );
+                SfxItemSet aNewSet( pViewShell->GetPool(), XATTR_FILLSTYLE, XATTR_FILLCOLOR, 0L );
                 aNewSet.Put( XFillStyleItem( XFILL_SOLID ) );
                 aNewSet.Put( XFillColorItem( String(), aNewColor ) );
                 pView->SetAttributes( aNewSet );
@@ -333,38 +344,5 @@ FuCopy::FuCopy (
         pView->EndUndo();
     }
 }
-
-/*************************************************************************
-|*
-|* Dtor
-|*
-\************************************************************************/
-
-FuCopy::~FuCopy()
-{
-}
-
-/*************************************************************************
-|*
-|* Function aktivieren
-|*
-\************************************************************************/
-
-void FuCopy::Activate()
-{
-    FuPoor::Activate();
-}
-
-/*************************************************************************
-|*
-|* Function deaktivieren
-|*
-\************************************************************************/
-
-void FuCopy::Deactivate()
-{
-    FuPoor::Deactivate();
-}
-
 
 } // end of namespace
