@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:08:16 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:26:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,17 +239,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
     CheckLineTo (rReq);
 
-    if (pFuActual)
-    {
-        pFuActual->Deactivate();
-
-        if (pFuActual != pFuOld)
-        {
-            delete pFuActual;
-        }
-
-        pFuActual = NULL;
-    }
+    DeactivateCurrentFunction();
 
     USHORT nSId = rReq.GetSlot();
 
@@ -444,7 +434,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             SdPage* pNewPage = CreateOrDuplicatePage (rReq, ePageKind, GetActualPage());
             Cancel();
-            if (pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT )
+            if(HasCurrentFunction(SID_BEZIER_EDIT) )
                 GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
             if (pNewPage != NULL)
                 SwitchPage((pNewPage->GetPageNum()-1)/2);
@@ -474,7 +464,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
 
             Cancel();
-            if (pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT )
+            if(HasCurrentFunction(SID_BEZIER_EDIT))
                 GetViewFrame()->GetDispatcher()->Execute(
                     SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
             rReq.Done ();
@@ -703,7 +693,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             else
             {
                 // hier den Zoom-Dialog oeffnen
-                pFuActual = new FuScale( this, GetActiveWindow(), pDrView, GetDoc(), rReq );
+                SetCurrentFunction( FuScale::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
             }
             Cancel();
         }
@@ -732,7 +722,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 else
                 {
                     if( pDrView->IsVectorizeAllowed() )
-                        pFuActual = new FuVectorize( this, GetActiveWindow(), pDrView, GetDoc(), rReq );
+                        SetCurrentFunction( FuVectorize::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
                     else
                     {
                         WaitObject aWait( (Window*)GetActiveWindow() );
@@ -745,7 +735,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
             Cancel();
 
-            if ( pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT )
+            if( HasCurrentFunction(SID_BEZIER_EDIT) )
             {   // ggf. die richtige Editfunktion aktivieren
                 GetViewFrame()->GetDispatcher()->Execute(SID_SWITCH_POINTEDIT,
                                         SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
@@ -1012,9 +1002,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         break;
     }
 
-    if (pFuActual)
+    if(HasCurrentFunction())
     {
-        pFuActual->Activate();
+        GetCurrentFunction()->Activate();
     }
 }
 
