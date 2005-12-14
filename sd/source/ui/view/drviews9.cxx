@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews9.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:10:32 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:28:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,7 +160,7 @@ SO2_DECL_REF(SvStorage)
 void DrawViewShell::ExecGallery(SfxRequest& rReq)
 {
     // waehrend einer Diashow wird nichts ausgefuehrt!
-    if (pFuActual && pFuActual->GetSlotID() == SID_PRESENTATION)
+    if(HasCurrentFunction(SID_PRESENTATION))
         return;
 
     const SfxItemSet* pArgs = rReq.GetArgs();
@@ -321,7 +321,7 @@ void DrawViewShell::GetGalleryState(SfxItemSet& rSet)
 void DrawViewShell::AttrExec (SfxRequest &rReq)
 {
     // waehrend einer Diashow wird nichts ausgefuehrt!
-    if (pFuActual && pFuActual->    GetSlotID() == SID_PRESENTATION)
+    if(HasCurrentFunction(SID_PRESENTATION))
         return;
 
     CheckLineTo (rReq);
