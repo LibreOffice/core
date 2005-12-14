@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 09:57:33 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:55:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3046,7 +3046,22 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
         // TextPathMode
         const rtl::OUString sTextPathMode( RTL_CONSTASCII_USTRINGPARAM ( "TextPathMode" ) );
         sal_Bool bTextPathFitPath = ( GetPropertyValue( DFF_Prop_gtextFStrikethrough ) & 0x100 ) != 0;
-        sal_Bool bTextPathFitShape = ( GetPropertyValue( DFF_Prop_gtextFStrikethrough ) & 0x400 ) != 0;
+
+        sal_Bool bTextPathFitShape;
+        if ( IsHardAttribute( DFF_Prop_gtextFStretch ) )
+            bTextPathFitShape = ( GetPropertyValue( DFF_Prop_gtextFStrikethrough ) & 0x400 ) != 0;
+        else
+        {
+            bTextPathFitShape = true;
+            switch( eShapeType )
+            {
+                case mso_sptTextArchUpCurve :
+                case mso_sptTextArchDownCurve :
+                case mso_sptTextCircleCurve :
+                case mso_sptTextButtonCurve :
+                    bTextPathFitShape = false;
+            }
+        }
         EnhancedCustomShapeTextPathMode eTextPathMode( EnhancedCustomShapeTextPathMode_NORMAL );
         if ( bTextPathFitShape )
             eTextPathMode = EnhancedCustomShapeTextPathMode_SHAPE;
