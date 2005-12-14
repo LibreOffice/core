@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table3.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:30:49 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:05:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1306,7 +1306,7 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, BOOL bKeepSub)
 
         if ( rEntry.bQueryByString )
         {
-            ULONG nIndex = 0;
+            sal_uInt32 nIndex = 0;
             rEntry.bQueryByString = !(pDocument->GetFormatTable()->
                 IsNumberFormat( *rEntry.pStr, nIndex, rEntry.nVal ));
         }
