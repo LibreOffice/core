@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuzoom.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:53:51 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:06:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,6 +113,12 @@ FuZoom::~FuZoom()
         bVisible = FALSE;
         bStartDrag = FALSE;
     }
+}
+
+FunctionReference FuZoom::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    FunctionReference xFunc( new FuZoom( pViewSh, pWin, pView, pDoc, rReq ) );
+    return xFunc;
 }
 
 /*************************************************************************
