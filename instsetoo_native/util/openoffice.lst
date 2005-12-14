@@ -22,6 +22,9 @@ OpenOffice
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
 			OPENSOURCE 1
 			SUNDIR 0
+			CHANGETARGETDIR 1
+			USE_FILEVERSION 1
+			LIBRARYVERSION 8.0.1
 			PATCHCODEFILE ooo_patchcodes.txt
 			DOWNLOADBANNER	ooobanner.bmp
 			DOWNLOADBITMAP	ooobitmap.bmp
@@ -62,6 +65,9 @@ OpenOffice_wJRE
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
 			OPENSOURCE 1
 			SUNDIR 0
+			CHANGETARGETDIR 1
+			USE_FILEVERSION 1
+			LIBRARYVERSION 8.0.1
 			PATCHCODEFILE ooo_patchcodes.txt
 			JAVAPRODUCT 1
 			DOWNLOADBANNER	ooobanner.bmp
@@ -102,6 +108,9 @@ OpenOffice_Dev
 			GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
 			OPENSOURCE 1
 			SUNDIR 0
+			CHANGETARGETDIR 1
+			USE_FILEVERSION 1
+			LIBRARYVERSION 8.0.1
 			PATCHCODEFILE ooo_patchcodes.txt
 			CODEFILENAME codes_ooodev.txt
 			DOWNLOADBANNER	ooobanner.bmp
