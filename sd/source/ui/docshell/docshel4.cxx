@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:16:58 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:37:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -954,7 +954,7 @@ BOOL DrawDocShell::SaveAsOwnFormat( SfxMedium& rMedium )
 \************************************************************************/
 
 void DrawDocShell::FillClass(SvGlobalName* pClassName,
-                                        ULONG*  pFormat,
+                                        sal_uInt32*  pFormat,
                                         String* pAppName,
                                         String* pFullTypeName,
                                         String* pShortTypeName,
