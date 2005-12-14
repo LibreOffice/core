@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preventduplicateinteraction.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:05:36 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:49:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,8 @@ namespace css = ::com::sun::star;
 //_________________________________________________________________________________________________________________
 
 PreventDuplicateInteraction::PreventDuplicateInteraction(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
-    : m_xSMGR(xSMGR)
+    : ThreadHelpBase2()
+    , m_xSMGR(xSMGR)
 {
 }
 
