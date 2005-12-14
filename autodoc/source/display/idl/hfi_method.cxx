@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_method.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:43:03 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:34:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -349,6 +349,7 @@ HF_IdlMethod::enter_ContentCell() const
                                              sContentWidth,
                                              sContentPadding,
                                              sContentSpacing )
+                            << new Html::ClassAttr("table-in-method")
                             << new Html::BgColorAttr(sBgWhite)
                             << new Html::AlignAttr(sCenter)
                             >> *new Html::TableRow
