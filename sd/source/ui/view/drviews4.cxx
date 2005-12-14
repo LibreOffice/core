@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews4.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:09:02 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:27:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -654,7 +654,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                 {
                     SdrObject* pObj = pDrView->GetMarkedObjectList().GetMark(0)->GetObj();
 
-                    if ( pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT && pObj->ISA(SdrPathObj) )
+                    if( HasCurrentFunction(SID_BEZIER_EDIT) && pObj->ISA(SdrPathObj) )
                     {
                         nSdResId = RID_BEZIER_POPUP;
                     }
