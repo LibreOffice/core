@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuhhconv.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:12:51 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:11:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,20 +47,10 @@ class Outliner;
 
 class FuHangulHanjaConversion : public FuPoor
 {
- protected:
-    Outliner*   pSdOutliner;
-    BOOL            bOwnOutliner;
-
  public:
     TYPEINFO();
 
-    FuHangulHanjaConversion (
-        ViewShell* pViewSh,
-        ::sd::Window* pWin,
-        ::sd::View* pView,
-        SdDrawDocument* pDoc,
-        SfxRequest& rReq );
-    ~FuHangulHanjaConversion();
+    static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
 
     void StartConversion( INT16 nSourceLanguage,  INT16 nTargetLanguage,
                           const Font *pTargetFont, INT32 nOptions, BOOL bIsInteractive );
@@ -70,6 +60,21 @@ class FuHangulHanjaConversion : public FuPoor
     void ConvertStyles( INT16 nTargetLanguage, const Font *pTargetFont );
 
     Outliner* GetOutliner() const { return pSdOutliner; }
+
+ protected:
+    ~FuHangulHanjaConversion();
+
+    Outliner*   pSdOutliner;
+    BOOL            bOwnOutliner;
+
+private:
+    FuHangulHanjaConversion (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq );
+
 };
 
 #endif // _SD_FUHHCONV_HXX
