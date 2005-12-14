@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XDispatch.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:09:53 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 13:21:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,10 +58,10 @@ module com {  module sun {  module star {  module frame {
 
 //=============================================================================
 /** serves state information of objects which can be connected to
-        controls (e.g., toolbox controls).
+        controls (e.g. toolbox controls).
 
     <p>
-    Each state change is to be broadcast to all registered
+    Each state change is to be broadcasted to all registered
     status listeners. The first notification should be performed
     synchronously from <member>XDispatch::addStatusListener()</member>;
         if not, controls may flicker. State listener must be aware of this
@@ -70,10 +70,10 @@ module com {  module sun {  module star {  module frame {
 
     <p>
     The state consists of enabled/disabled and a short descriptive text
-    of the function (e.g., "undo insert character"). It is to be broadcast
+    of the function (e.g. "undo insert character"). It is to be broadcasted
         whenever this state changes or the control should re-get the value
-    for the URL to which it is connected. Additionally, a context-switch-event
-    is to be broadcast whenever the object may be out of scope,
+    for the URL it is connected to. Additionally, a context-switch-event
+    is to be broadcasted whenever the object may be out of scope,
     to force the state listener to requery the <type>XDispatch</type>.
     </p>
 
@@ -87,15 +87,15 @@ published interface XDispatch: com::sun::star::uno::XInterface
 
         <p>
         It is only allowed to dispatch URLs for which this <type>XDispatch</type>
-        was explicitely queried. Additional arguments "'#..." or "?...") are allowed.
+        was explicitely queried. Additional arguments ("'#..." or "?...") are allowed.
         </p>
 
         @param URL
-            full parsed URL wich describe the feature which should be dispatched (executed)
+            fully parsed URL describing the feature which should be dispatched (=executed)
 
         @param Arguments
-            optional arguments for this request
-            They depends from the real implementation of the dipsatch object.
+            optional arguments for this request.
+            They depend on the real implementation of the dipsatch object.
 
         @example
             <listing>
@@ -125,20 +125,20 @@ published interface XDispatch: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
         /** registers a listener of a control for a specific URL
-        to this object to receive status events.
+        at this object to receive status events.
 
         <p>
-        It is only allowed to register for URLs for which this <type>XDispatch</type>
+        It is only allowed to register URLs for which this <type>XDispatch</type>
         was explicitely queried. Additional arguments ("#..." or "?...") will be ignored.
-        Note: Notifications can't be guranteed! This will be a part of interface <type>XNotifyingDispatch</type>.
         </p>
+        Note: Notifications can't be guaranteed! This will be a part of interface <type>XNotifyingDispatch</type>.
 
         @param Control
-            listener which wish to be informed
+            listener that wishes to be informed
 
         @param URL
-            the URL (without additional arguments) for which the listener wish to be registered
-            So a listener can be registered for more then one URLs at the same time.
+            the URL (without additional arguments) the listener wishes to be registered for.
+            A listener can be registered for more than one URL at the same time.
 
         @see XStatusListener
         @see XDispatch::removeStatusListener()
@@ -148,13 +148,13 @@ published interface XDispatch: com::sun::star::uno::XInterface
         [in] com::sun::star::util::URL URL);
 
     //-------------------------------------------------------------------------
-        /** unregisters a listener of a control.
+        /** unregisters a listener from a control.
 
         @param Control
-            listener which wish to be unregistered
+            listener that wishes to be unregistered
 
         @param URL
-            the URL for which the listener was registered
+            URL the listener was registered for.
             Additional arguments ("#..." or "?...") will be ignored.
 
         @see XStatusListener
