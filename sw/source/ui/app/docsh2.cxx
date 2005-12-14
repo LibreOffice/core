@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 16:01:11 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:51:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1602,7 +1602,7 @@ long SwDocShell::DdeSetData( const String& rItem, const String& rMimeType,
  --------------------------------------------------------------------*/
 
 void SwDocShell::FillClass( SvGlobalName * pClassName,
-                                   ULONG * pClipFormat,
+                                   sal_uInt32 * pClipFormat,
                                    String * pAppName,
                                    String * pLongUserName,
                                    String * pUserName,
