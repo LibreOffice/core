@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleSlideSorterObject.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:28:41 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 16:53:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@
 #include "sdresid.hxx"
 #include "glob.hrc"
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
