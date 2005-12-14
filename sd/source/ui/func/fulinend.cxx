@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fulinend.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:44:11 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 16:59:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,17 @@ TYPEINIT1( FuLineEnd, FuPoor );
 FuLineEnd::FuLineEnd(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
                     SdDrawDocument* pDoc, SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+{
+}
+
+FunctionReference FuLineEnd::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    FunctionReference xFunc( new FuLineEnd( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    return xFunc;
+}
+
+void FuLineEnd::DoExecute( SfxRequest& rReq )
 {
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 
@@ -202,7 +213,7 @@ FuLineEnd::FuLineEnd(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
             else
             {
                 String aStr(SdResId( STR_WARN_NAME_DUPLICATE ));
-                WarningBox aWarningBox( pWin, WinBits( WB_OK ),
+                WarningBox aWarningBox( pWindow, WinBits( WB_OK ),
                      aStr );
                 aWarningBox.Execute();
             }
@@ -211,5 +222,12 @@ FuLineEnd::FuLineEnd(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
     }
 }
 
+void FuLineEnd::Activate()
+{
+}
+
+void FuLineEnd::Deactivate()
+{
+}
 
 } // end of namespace sd
