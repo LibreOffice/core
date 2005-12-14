@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxhtml.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:00:11 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:17:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -700,12 +700,12 @@ const String& SfxHTMLParser::GetScriptTypeString(
     return aScriptType;
 }
 
-double SfxHTMLParser::GetTableDataOptionsValNum( ULONG& nNumForm,
+double SfxHTMLParser::GetTableDataOptionsValNum( sal_uInt32& nNumForm,
         LanguageType& eNumLang, const String& aValStr, const String& aNumStr,
         SvNumberFormatter& rFormatter )
 {
     LanguageType eParseLang = (LanguageType )aNumStr.ToInt32();
-    ULONG nParseForm =
+    sal_uInt32 nParseForm =
         rFormatter.GetFormatForLanguageIfBuiltIn( 0, eParseLang );
     double fVal;
     rFormatter.IsNumberFormat( aValStr, nParseForm, fVal );
