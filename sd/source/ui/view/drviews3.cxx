@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2005-10-11 08:19:27 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:27:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,8 +187,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 {
     // waehrend einer Diashow wird nichts ausser dem Seitenwechsel und dem
     // Sprung zur Bookmark ausgefuehrt!
-    if (pFuActual &&
-        pFuActual->GetSlotID() == SID_PRESENTATION &&
+    if( HasCurrentFunction(SID_PRESENTATION) &&
         rReq.GetSlot() != SID_SWITCHPAGE &&
         rReq.GetSlot() != SID_JUMPTOMARK)
         return;
@@ -273,7 +272,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 
                 SwitchPage(nSelectedPage);
 
-                if (pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT)
+                if(HasCurrentFunction(SID_BEZIER_EDIT))
                     GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
 
                 Invalidate();
@@ -603,8 +602,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 void  DrawViewShell::ExecRuler(SfxRequest& rReq)
 {
     // waehrend einer Diashow wird nichts ausgefuehrt!
-    if (pFuActual &&
-        pFuActual->GetSlotID() == SID_PRESENTATION)
+    if(HasCurrentFunction(SID_PRESENTATION))
         return;
 
     CheckLineTo (rReq);
@@ -979,8 +977,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
 void  DrawViewShell::ExecStatusBar(SfxRequest& rReq)
 {
     // waehrend einer Diashow wird nichts ausgefuehrt!
-    if (pFuActual &&
-        pFuActual->GetSlotID() == SID_PRESENTATION)
+    if(HasCurrentFunction(SID_PRESENTATION))
         return;
 
     CheckLineTo (rReq);
