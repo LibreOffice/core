@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:30:23 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:04:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1343,7 +1343,7 @@ void ScDocument::SetLostData()
     bLostData = TRUE;
 }
 
-void ScDocument::DeleteNumberFormat( const ULONG* pDelKeys, ULONG nCount )
+void ScDocument::DeleteNumberFormat( const sal_uInt32* pDelKeys, sal_uInt32 nCount )
 {
 /*
     for (ULONG i = 0; i < nCount; i++)
@@ -1717,7 +1717,7 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
         SvNumberFormatter* pOtherFormatter = pSrcDoc->xPoolHelper->GetFormTable();
         if (pOtherFormatter && pOtherFormatter != pThisFormatter)
         {
-            SvULONGTable* pExchangeList =
+            SvNumberFormatterIndexTable* pExchangeList =
                      pThisFormatter->MergeFormatter(*(pOtherFormatter));
             if (pExchangeList->Count() > 0)
                 pFormatExchangeList = pExchangeList;
