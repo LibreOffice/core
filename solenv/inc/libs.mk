@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.94 $
+#   $Revision: 1.95 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-02 13:52:18 $
+#   last change: $Author: rt $ $Date: 2005-12-14 14:41:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.94 $$"
+LIBSMKREV!:="$$Revision: 1.95 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -114,7 +114,11 @@ VCLLIB=$(SVLIB)
 BASEGFXLIB=-lbasegfx$(OFFICEUPD)$(DLLPOSTFIX)
 CANVASTOOLSLIB=-lcanvastools$(OFFICEUPD)$(DLLPOSTFIX)
 CPPCANVASLIB=-lcppcanvas$(OFFICEUPD)$(DLLPOSTFIX)
+.IF "$(SYSTEM_AGG)" == "YES"
+AGGLIB=-lagg
+.ELSE
 AGGLIB=-lagg$(OFFICEUPD)$(DLLPOSTFIX)
+.ENDIF
 .IF "$(SYSTEM_FREETYPE)"=="YES"
 FREETYPELIB=$(FREETYPE_LIBS)
 FREETYPELIBST=$(FREETYPE_LIBS)
