@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xestyle.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 11:57:22 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:08:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1306,7 +1306,7 @@ void XclExpNumFmtBuffer::WriteFormatRecord( XclExpStream& rStrm, const XclExpNum
             {
                 xub_StrLen nCheckPos;
                 short nType = NUMBERFORMAT_DEFINED;
-                ULONG nKey;
+                sal_uInt32 nKey;
                 String aTemp( pEntry->GetFormatstring() );
                 mxFormatter->PutandConvertEntry( aTemp, nCheckPos, nType, nKey, eLang, LANGUAGE_ENGLISH_US );
                 DBG_ASSERT( nCheckPos == 0, "XclExpNumFmtBuffer::WriteFormatRecord - format code not convertible" );
