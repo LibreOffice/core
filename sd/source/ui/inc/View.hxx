@@ -4,9 +4,9 @@
  *
  *  $RCSfile: View.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:24:53 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:06:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,9 @@
 #ifndef _SVDPAGE_HXX //autogen
 #include <svx/svdpage.hxx>
 #endif
+#ifndef SD_FU_POOR_HXX
+#include "fupoor.hxx"
+#endif
 
 class SdDrawDocument;
 class SdrOle2Obj;
@@ -79,7 +82,6 @@ struct SdNavigatorDropEvent;
 class ViewShell;
 class Window;
 class ViewClipboard;
-class FuPoor;
 
 // -------------------
 // - SdViewRedrawRec -
@@ -152,7 +154,7 @@ public:
                                          BOOL bDontDeleteOutliner=FALSE, BOOL bOnlyOneView=FALSE, BOOL bGrabFocus=TRUE );
     virtual SdrEndTextEditKind EndTextEdit(BOOL bDontDeleteReally=FALSE);
 
-    SdrEndTextEditKind          EndTextEdit(BOOL bDontDeleteReally, FuPoor* pFunc);
+    SdrEndTextEditKind          EndTextEdit(BOOL bDontDeleteReally, FunctionReference xFunc);
 
     BOOL                    InsertData( const TransferableDataHelper& rDataHelper,
                                         const Point& rPos, sal_Int8& rDnDAction, BOOL bDrag,
