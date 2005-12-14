@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationPane.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-17 16:11:25 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:52:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1337,6 +1337,10 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
     while( aIter != aEnd )
     {
         CustomAnimationEffectPtr pEffect = (*aIter++);
+
+        DBG_ASSERT( pEffect->getEffectSequence(), "sd::CustomAnimationPane::changeSelection(), dead effect in selection!" );
+        if( !pEffect->getEffectSequence() )
+            continue;
 
         double fDuration; // we might need this for iterate-interval
         if( pResultSet->getPropertyState( nHandleDuration ) == STLPropertyState_DIRECT )
