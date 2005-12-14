@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:31:44 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:04:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1657,7 +1657,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
             SvNumberFormatter* pOtherFormatter = pClipDoc->xPoolHelper->GetFormTable();
             if (pOtherFormatter && pOtherFormatter != pThisFormatter)
             {
-                SvULONGTable* pExchangeList =
+                SvNumberFormatterIndexTable* pExchangeList =
                          pThisFormatter->MergeFormatter(*(pOtherFormatter));
                 if (pExchangeList->Count() > 0)
                     pFormatExchangeList = pExchangeList;
@@ -2147,7 +2147,7 @@ double ScDocument::GetValue( const ScAddress& rPos )
 
 
 void ScDocument::GetNumberFormat( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                  ULONG& rFormat )
+                                  sal_uInt32& rFormat )
 {
     if (VALIDTAB(nTab))
         if (pTab[nTab])
@@ -2159,7 +2159,7 @@ void ScDocument::GetNumberFormat( SCCOL nCol, SCROW nRow, SCTAB nTab,
 }
 
 
-ULONG ScDocument::GetNumberFormat( const ScAddress& rPos ) const
+sal_uInt32 ScDocument::GetNumberFormat( const ScAddress& rPos ) const
 {
     SCTAB nTab = rPos.Tab();
     if ( pTab[nTab] )
