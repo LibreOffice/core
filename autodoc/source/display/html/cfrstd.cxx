@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfrstd.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:24:32 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:32:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@
 
 /*                      CSS Styles
                         ----------
-
 
 Colors:
 -   light background color              #eeeeff
@@ -106,6 +105,12 @@ classes:
 
 namespace
 {
+
+bool            bUse_OOoFrameDiv = true;
+
+
+//***************   These are used for IDL currently only!   ********************
+
 const char * const C_sStdStyle =
     "/*See bottom of file for explanations.*/"CRLF
     CRLF
@@ -117,7 +122,7 @@ const char * const C_sStdStyle =
     "                 margin-top:3pt; margin-bottom:1pt; }"CRLF
     "pre            { font-family:monospace; }"CRLF
     CRLF
-    "table.lightbg  { background-color:#eeeeff; }"CRLF
+    "table.navimain { background-color:#eeeeff; }"CRLF
     "table.subtitle { margin-top:6pt; margin-bottom:6pt; }"CRLF
     CRLF
     "td             {                     font-size:11pt; }"CRLF
@@ -153,7 +158,6 @@ const char * const C_sStdStyle =
 const char * const C_sCssExplanations =
     "/* Explanation of CSS classes:"CRLF
     CRLF
-    "table.lightbg      Background of navigation bar."CRLF
     ".navimain          Text in main navigation bar."CRLF
     ".navisub           Text in lower navigation bar."CRLF
     "td.navimainself    Cell in main navigation bar with \"selected\" shadow: You are here."CRLF
@@ -174,6 +178,70 @@ const char * const C_sCssExplanations =
     "                   description."CRLF
     "*/"CRLF
     ;
+
+const char * const C_sStdStyle_withDivFrame =
+    "/*See bottom of file for explanations.*/"CRLF
+    CRLF
+    "body { background-color:#ffffff; }"CRLF
+    CRLF
+    "#adc-idlref h3 { font-size:13pt; font-weight:bold;"CRLF
+    "                 margin-top:3pt; margin-bottom:1pt; }"CRLF
+    "#adc-idlref p, #adc-idlref dt, #adc-idlref dd, #adc-idlref pre"CRLF
+    "               { font-size:11pt;"CRLF
+    "                 margin-top:3pt; margin-bottom:1pt; }"CRLF
+    "#adc-idlref pre    { font-family:monospace; }"CRLF
+    CRLF
+    "#adc-idlref table.navimain { background-color:#eeeeff; }"CRLF
+    "#adc-idlref table.subtitle { margin-top:6pt; margin-bottom:6pt; }"CRLF
+    CRLF
+    "#adc-idlref td             { font-size:11pt; }"CRLF
+    "#adc-idlref td.title       { font-family: Arial; font-size:19pt; font-weight:bold;"CRLF
+    "                             line-height:30pt;   background-color:#ccccff; text-align:center; }"CRLF
+    "#adc-idlref td.subtitle    { font-family: Arial; font-size:13pt;"CRLF
+    "                             line-height:20pt;   background-color:#ccccff; }"CRLF
+    "#adc-idlref td.crosstitle  { font-size:12pt; font-weight:bold;"CRLF
+    "                             line-height:15pt;   background-color:#eeeeff; }"CRLF
+    "#adc-idlref td.imdetail    { width:100%;         background-color:#eeeeff; }"CRLF
+    CRLF
+    "#adc-idlref td.imsum_left  { width:30%;  }"CRLF
+    "#adc-idlref td.imsum_right { width:70%;  }"CRLF
+    CRLF
+    "#adc-idlref td.navimain, #adc-idlref a.navimain"CRLF
+    "                   { text-align:center; font-family: Arial; font-size:12pt; font-weight:bold; }"CRLF
+    "#adc-idlref td.navimainself    { text-align:center; font-family: Arial; font-size:12pt; font-weight:bold;"CRLF
+    "                                 color:#ffffff; background-color:#2222ad; }"CRLF
+    "#adc-idlref td.navimainnone    { text-align:center; font-family: Arial; font-size:12pt; }"CRLF
+    "#adc-idlref td.navisub, #adc-idlref a.navisub"CRLF
+    "                   { text-align:center; font-family: Arial; font-size:9pt; font-variant:small-caps; }"CRLF
+    "#adc-idlref td.navimain, #adc-idlref td.navisub"CRLF
+    "                   { padding-left:7pt; padding-right:7pt; }"CRLF
+    CRLF
+    "#adc-idlref a.membertitle  { font-size:12pt; font-weight:bold; line-height:18pt; }"CRLF
+    "#adc-idlref a.navimain, #adc-idlref a.navisub  { color:#000000; }"CRLF
+    "#adc-idlref .dt            { font-weight:bold; }"CRLF
+    "#adc-idlref .namechain     { font-size:13pt; font-weight:bold;"CRLF
+    "                             margin-top:3pt; margin-bottom:6pt; }"CRLF
+    ""CRLF
+    "#adc-idlref table { empty-cells:show; }"CRLF
+    ""CRLF
+    "#adc-idlref .childlist td, "CRLF
+    "#adc-idlref .commentedlinks td, "CRLF
+    "#adc-idlref .memberlist td, "CRLF
+    "#adc-idlref .subtitle td, "CRLF
+    "#adc-idlref .crosstitle td  { border: .1pt solid #000000; }"CRLF
+    ""CRLF
+    "#adc-idlref .flag-table td { border: .1pt solid #cccccc; } "CRLF
+    ""CRLF
+    "#adc-idlref .title-table td, "CRLF
+    "#adc-idlref .table-in-method td, "CRLF
+    "#adc-idlref .table-in-data td, "CRLF
+    "#adc-idlref .navimain td, "CRLF
+    "#adc-idlref .navisub td, "CRLF
+    "#adc-idlref .expl-table td, "CRLF
+    "#adc-idlref .param-table td  { border: none; }"CRLF
+    ;
+
+
 }   // anonymous namespace
 
 
@@ -217,7 +285,10 @@ StdFrame::CopyrightText() const
 const char *
 StdFrame::CssStyle() const
 {
-    return C_sStdStyle;
+    if (bUse_OOoFrameDiv)
+        return C_sStdStyle_withDivFrame;
+    else
+        return C_sStdStyle;
 }
 
 const char *
