@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:48:32 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:10:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -809,7 +809,7 @@ bool lcl_PutString( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
         //! SetString mit Extra-Flag ???
 
         SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-        ULONG nEnglish = pFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US);
+        sal_uInt32 nEnglish = pFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US);
         double fVal;
         if ( pFormatter->IsNumberFormat( rStr, nEnglish, fVal ) )
         {
@@ -1513,7 +1513,7 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
                         aCode.Erase( nPos, 1 );
                     xub_StrLen nCheckPos;
                     short nType;
-                    ULONG nKey;
+                    sal_uInt32 nKey;
                     pDoc->GetFormatTable()->PutandConvertEntry(
                         aCode, nCheckPos, nType, nKey, LANGUAGE_ENGLISH_US,
                         ScGlobal::eLnge );
