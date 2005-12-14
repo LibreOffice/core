@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 09:06:18 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:28:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -295,22 +295,7 @@ DrawViewShell::~DrawViewShell()
     if (mpSlideShow != NULL)
         StopSlideShow(false);
 
-    if (pFuActual)
-    {
-        if (pFuOld == pFuActual)
-            pFuOld = NULL;
-
-        pFuActual->Deactivate();
-        FuPoor* pFunction = pFuActual;
-        pFuActual = NULL;
-        delete pFunction;
-    }
-
-    if (pFuOld)
-    {
-        delete pFuOld;
-        pFuOld = NULL;
-    }
+    DisposeFunctions();
 
     SdPage* pPage;
     USHORT nSelectedPage = 0;
@@ -981,14 +966,11 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
 
 void DrawViewShell::Notify (SfxBroadcaster& rBC, const SfxHint& rHint)
 {
-
     SfxSimpleHint* pSimple = PTR_CAST(SfxSimpleHint, &rHint);
     if (pSimple!=NULL && pSimple->GetId()==SFX_HINT_MODECHANGED)
     {
         // Change to selection when turning on read-only mode.
-        if (GetDocSh()->IsReadOnly()
-            && pFuActual!=NULL
-            && !pFuActual->ISA(FuSelection))
+        if(GetDocSh()->IsReadOnly() && dynamic_cast< FuSelection* >( GetCurrentFunction().get() ) )
         {
             SfxRequest aReq(SID_OBJECT_SELECT, 0, GetDoc()->GetItemPool());
             FuPermanent(aReq);
