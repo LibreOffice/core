@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtable.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:16:56 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:46:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -359,7 +359,7 @@ public:
     BOOL IsInHeadline( const SwTable* pTbl = 0 ) const;
 
     // enthaelt die Box Inhalt, der als Nummer formatiert werden kann?
-    BOOL HasNumCntnt( double& rNum, ULONG& rFmtIndex,
+    BOOL HasNumCntnt( double& rNum, sal_uInt32& rFmtIndex,
                     BOOL& rIsEmptyTxtNd ) const;
     ULONG IsValidNumTxtNd( BOOL bCheckAttr = TRUE ) const;
     // teste ob der BoxInhalt mit der Nummer uebereinstimmt, wenn eine
