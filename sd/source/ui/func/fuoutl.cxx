@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuoutl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:48:20 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:01:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,14 +71,10 @@ FuOutline::FuOutline (
 {
 }
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
-
-FuOutline::~FuOutline()
+FunctionReference FuOutline::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
+    FunctionReference xFunc( new FuOutline( pViewSh, pWin, pView, pDoc, rReq ) );
+    return xFunc;
 }
 
 /*************************************************************************
@@ -103,6 +99,13 @@ BOOL FuOutline::Command(const CommandEvent& rCEvt)
     return bResult;
 }
 
+void FuOutline::ScrollStart()
+{
+}
+
+void FuOutline::ScrollEnd()
+{
+}
 
 
 } // end of namespace sd
