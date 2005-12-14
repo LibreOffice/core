@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:45:36 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:09:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,7 +204,7 @@ TYPEINIT1( ScDocShell, SfxObjectShell );        // SfxInPlaceObject: kein Type-I
 //------------------------------------------------------------------
 
 void __EXPORT ScDocShell::FillClass( SvGlobalName* pClassName,
-                                        ULONG* pFormat,
+                                        sal_uInt32* pFormat,
                                         String* pAppName,
                                         String* pFullTypeName,
                                         String* pShortTypeName,
@@ -1513,7 +1513,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                     }
                     else if ( ((ScFormulaCell*)pCell)->IsValue() )
                     {
-                        ULONG nFormat;
+                        sal_uInt32 nFormat;
                         aDocument.GetNumberFormat( nCol, nRow, nTab, nFormat );
                         if ( bFixedWidth )
                         {
@@ -1547,7 +1547,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                 break;
             case CELLTYPE_VALUE :
                 {
-                    ULONG nFormat;
+                    sal_uInt32 nFormat;
                     aDocument.GetNumberFormat( nCol, nRow, nTab, nFormat );
                     if ( bFixedWidth )
                     {
