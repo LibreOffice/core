@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:41:42 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:46:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,7 +237,7 @@ public:
                                 const ::com::sun::star::uno::Any & rValue );
     virtual ::sfx2::SvLinkSource* DdeCreateLinkSource( const String& rItem );
     virtual void FillClass( SvGlobalName * pClassName,
-                                   ULONG * pClipFormat,
+                                   sal_uInt32 * pClipFormat,
                                    String * pAppName,
                                    String * pLongUserName,
                                    String * pUserName,
