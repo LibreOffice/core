@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:56:40 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:07:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -652,7 +652,7 @@ BOOL XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
     else
     {
         double  fVal    = 0.0;
-        ULONG   nIndex  = 0;
+        sal_uInt32  nIndex  = 0;
         BOOL    bIsNum  = bLen ? GetFormatter().IsNumberFormat( sText, nIndex, fVal ) : TRUE;
         String* pText   = bIsNum ? NULL : &sText;
 
