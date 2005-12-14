@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowviewimpl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-17 16:11:37 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:19:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ using ::com::sun::star::presentation::XShapeEventListener;
 using ::com::sun::star::presentation::XSlideShowListener;
 using ::comphelper::ImplementationReference;
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star;
 
