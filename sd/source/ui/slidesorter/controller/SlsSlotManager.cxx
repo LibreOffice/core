@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSlotManager.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:29:31 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:21:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,12 +128,11 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
     SdDrawDocument* pDocument = mrController.GetModel().GetDocument();
 
     SlideSorterViewShell& rShell (mrController.GetViewShell());
-    if (rShell.GetActualFunction() != NULL)
+    if (rShell.GetCurrentFunction().is())
     {
-        rShell.GetActualFunction()->Deactivate();
-        if (rShell.GetActualFunction() != rShell.GetOldFunction())
-            delete rShell.GetActualFunction();
-        rShell.SetCurrentFunction (NULL);
+        rShell.GetCurrentFunction()->Deactivate();
+        FunctionReference xEmpty;
+        rShell.SetCurrentFunction(xEmpty);
     }
 
     ::sd::Window* pWindow = rShell.GetActiveWindow();
@@ -146,10 +145,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
             break;
 
         case SID_HIDE_SLIDE:
-            rShell.SetCurrentFunction (
-                new HideSlideFunction (
-                    mrController,
-                    rRequest));
+            rShell.SetCurrentFunction( HideSlideFunction::Create( mrController, rRequest));
             rShell.Cancel();
             break;
 
@@ -203,8 +199,8 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         }
 
         case SID_PRESENTATION_DLG:
-            rShell.SetCurrentFunction (
-                new FuSlideShowDlg (
+            rShell.SetCurrentFunction(
+                FuSlideShowDlg::Create (
                     &rShell,
                     mrController.GetView().GetWindow(),
                     &mrController.GetView(),
@@ -215,7 +211,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
 
         case SID_CUSTOMSHOW_DLG:
             rShell.SetCurrentFunction (
-                new FuCustomShowDlg (
+                FuCustomShowDlg::Create (
                     &rShell,
                     mrController.GetView().GetWindow(),
                     &mrController.GetView(),
@@ -226,7 +222,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
 
         case SID_EXPAND_PAGE:
             rShell.SetCurrentFunction (
-                new FuExpandPage (
+                FuExpandPage::Create (
                     &rShell,
                     mrController.GetView().GetWindow(),
                     &mrController.GetView(),
@@ -237,7 +233,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
 
         case SID_SUMMARY_PAGE:
             rShell.SetCurrentFunction (
-                new FuSummaryPage (
+                FuSummaryPage::Create (
                     &rShell,
                     mrController.GetView().GetWindow(),
                     &mrController.GetView(),
@@ -290,9 +286,9 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
             break;
     }
 
-    if (rShell.GetActualFunction() != NULL)
+    if (rShell.GetCurrentFunction().is())
     {
-        rShell.GetActualFunction()->Activate();
+        rShell.GetCurrentFunction()->Activate();
     }
 }
 
@@ -301,22 +297,21 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
 
 void SlotManager::FuPermanent (SfxRequest& rRequest)
 {
-    SlideSorterViewShell& rShell (mrController.GetViewShell());
-    if (rShell.GetActualFunction() != NULL)
+    SlideSorterViewShell& rShell(mrController.GetViewShell());
+    if(rShell.GetCurrentFunction().is())
     {
-        if (rShell.GetOldFunction() == rShell.GetActualFunction())
-            rShell.SetOldFunction (NULL);
+        FunctionReference xEmpty;
+        if (rShell.GetOldFunction() == rShell.GetCurrentFunction())
+            rShell.SetOldFunction(xEmpty);
 
-        rShell.GetActualFunction()->Deactivate();
-        delete rShell.GetActualFunction();
-        rShell.SetCurrentFunction (NULL);
+        rShell.GetCurrentFunction()->Deactivate();
+        rShell.SetCurrentFunction(xEmpty);
     }
 
-    switch (rRequest.GetSlot())
+    switch(rRequest.GetSlot())
     {
         case SID_OBJECT_SELECT:
-            rShell.SetCurrentFunction (
-                new SelectionFunction (mrController, rRequest));
+            rShell.SetCurrentFunction( SelectionFunction::Create(mrController, rRequest) );
             rRequest.Done();
             break;
 
@@ -324,25 +319,22 @@ void SlotManager::FuPermanent (SfxRequest& rRequest)
                 break;
     }
 
-    if (rShell.GetOldFunction() != NULL)
+    if(rShell.GetOldFunction().is())
     {
         rShell.GetOldFunction()->Deactivate();
-        delete rShell.GetOldFunction();
-        rShell.SetOldFunction (NULL);
+        FunctionReference xEmpty;
+        rShell.SetOldFunction(xEmpty);
     }
 
-    if (rShell.GetActualFunction() != NULL)
+    if(rShell.GetCurrentFunction().is())
     {
-        rShell.GetActualFunction()->Activate();
-        rShell.SetOldFunction (rShell.GetActualFunction());
+        rShell.GetCurrentFunction()->Activate();
+        rShell.SetOldFunction(rShell.GetCurrentFunction());
     }
 
     //! das ist nur bis das ENUM-Slots sind
     //  Invalidate( SID_OBJECT_SELECT );
 }
-
-
-
 
 void SlotManager::FuSupport (SfxRequest& rRequest)
 {
@@ -561,9 +553,9 @@ void SlotManager::GetMenuState ( SfxItemSet& rSet)
     DrawDocShell* pDocShell
         = mrController.GetModel().GetDocument()->GetDocSh();
 
-    if (rShell.GetActualFunction())
+    if(rShell.GetCurrentFunction().is())
     {
-        USHORT nSId = rShell.GetActualFunction()->GetSlotID();
+        USHORT nSId = rShell.GetCurrentFunction()->GetSlotID();
 
         rSet.Put( SfxBoolItem( nSId, TRUE ) );
     }
