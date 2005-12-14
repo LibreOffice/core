@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 12:10:08 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:12:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -973,9 +973,9 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
 
     if ( pDialogSet->GetItemState( ATTR_VALUE_FORMAT ) == SFX_ITEM_SET )
     {   // #82521# don't reset to default SYSTEM GENERAL if not intended
-        ULONG nOldFormat =
+        sal_uInt32 nOldFormat =
             ((const SfxUInt32Item&)pOldSet->Get( ATTR_VALUE_FORMAT )).GetValue();
-        ULONG nNewFormat =
+        sal_uInt32 nNewFormat =
             ((const SfxUInt32Item&)pDialogSet->Get( ATTR_VALUE_FORMAT )).GetValue();
         if ( nNewFormat != nOldFormat )
         {
@@ -993,7 +993,7 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
                     SvxLanguageItem( eNewLang, ATTR_LANGUAGE_FORMAT ) );
 
                 //  #40606# nur die Sprache geaendert -> Zahlformat-Attribut nicht anfassen
-                ULONG nNewMod = nNewFormat % SV_COUNTRY_LANGUAGE_OFFSET;
+                sal_uInt32 nNewMod = nNewFormat % SV_COUNTRY_LANGUAGE_OFFSET;
                 if ( nNewMod == ( nOldFormat % SV_COUNTRY_LANGUAGE_OFFSET ) &&
                      nNewMod <= SV_MAX_ANZ_STANDARD_FORMATE )
                     aNewAttrs.GetItemSet().ClearItem( ATTR_VALUE_FORMAT );
@@ -2435,7 +2435,7 @@ void ScViewFunc::SetNumberFormat( short nFormatType, ULONG nAdd )
         return;
     }
 
-    ULONG               nNumberFormat = 0;
+    sal_uInt32          nNumberFormat = 0;
     ScViewData*         pViewData = GetViewData();
     ScDocument*         pDoc = pViewData->GetDocument();
     SvNumberFormatter*  pNumberFormatter = pDoc->GetFormatTable();
@@ -2444,7 +2444,7 @@ void ScViewFunc::SetNumberFormat( short nFormatType, ULONG nAdd )
 
     //  #67936# always take language from cursor position, even if there is a selection
 
-    ULONG nCurrentNumberFormat;
+    sal_uInt32 nCurrentNumberFormat;
     pDoc->GetNumberFormat( pViewData->GetCurX(),
                            pViewData->GetCurY(),
                            pViewData->GetTabNo(),
@@ -2477,7 +2477,7 @@ void ScViewFunc::SetNumFmtByStr( const String& rCode )
 
     //  Sprache immer von Cursorposition
 
-    ULONG nCurrentNumberFormat;
+    sal_uInt32 nCurrentNumberFormat;
     pDoc->GetNumberFormat( pViewData->GetCurX(), pViewData->GetCurY(),
                            pViewData->GetTabNo(), nCurrentNumberFormat );
     const SvNumberformat* pEntry = pFormatter->GetEntry( nCurrentNumberFormat );
@@ -2486,7 +2486,7 @@ void ScViewFunc::SetNumFmtByStr( const String& rCode )
     //  Index fuer String bestimmen
 
     BOOL bOk = TRUE;
-    ULONG nNumberFormat = pFormatter->GetEntryKey( rCode, eLanguage );
+    sal_uInt32 nNumberFormat = pFormatter->GetEntryKey( rCode, eLanguage );
     if ( nNumberFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
     {
         //  neu eintragen
@@ -2526,7 +2526,7 @@ void ScViewFunc::ChangeNumFmtDecimals( BOOL bIncrement )
     SCROW nRow = GetViewData()->GetCurY();
     SCTAB nTab = GetViewData()->GetTabNo();
 
-    ULONG nOldFormat;
+    sal_uInt32 nOldFormat;
     pDoc->GetNumberFormat( nCol, nRow, nTab, nOldFormat );
     const SvNumberformat* pOldEntry = pFormatter->GetEntry( nOldFormat );
     if (!pOldEntry)
@@ -2537,7 +2537,7 @@ void ScViewFunc::ChangeNumFmtDecimals( BOOL bIncrement )
 
     //  was haben wir denn da?
 
-    ULONG nNewFormat = nOldFormat;
+    sal_uInt32 nNewFormat = nOldFormat;
     BOOL bError = FALSE;
 
     LanguageType eLanguage = pOldEntry->GetLanguage();
