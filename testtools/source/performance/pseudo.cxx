@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: vg $ $Date: 2003-04-15 16:42:32 $
-#*    $Revision: 1.2 $
+#*    last change   $Author: rt $ $Date: 2005-12-14 11:24:01 $
+#*    $Revision: 1.3 $
 #*
 #*    $Logfile: $
 #*
@@ -241,12 +241,12 @@ pseudo_Mapping::~pseudo_Mapping()
 }
 
 //##################################################################################################
-extern "C" SAL_DLLEXPORT void SAL_CALL uno_initEnvironment( uno_Environment * pUnoEnv )
+extern "C" void SAL_CALL uno_initEnvironment( uno_Environment * pUnoEnv )
 {
     OSL_ENSURE( sal_False, "### no impl: unexpected call!" );
 }
 //##################################################################################################
-extern "C" SAL_DLLEXPORT void SAL_CALL uno_ext_getMapping(
+extern "C" void SAL_CALL uno_ext_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo )
 {
     OSL_ASSERT( ppMapping && pFrom && pTo );
@@ -275,6 +275,13 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_ext_getMapping(
 
 /**************************************************************************
     $Log: not supported by cvs2svn $
+    Revision 1.2.88.1  2005/08/23 07:20:29  sb
+    #i52998# Made rotting code compile again (patch supplied by cyb).
+
+    Revision 1.2  2003/04/15 16:42:32  vg
+    INTEGRATION: CWS dbgmacros1 (1.1.46); FILE MERGED
+    2003/04/10 09:20:16 kso 1.1.46.1: #108413# - debug macro unification.
+
     Revision 1.1.46.1  2003/04/10 09:20:16  kso
     #108413# - debug macro unification.
 
