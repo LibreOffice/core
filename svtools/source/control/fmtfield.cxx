@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:02:16 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:00:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -688,7 +688,7 @@ void FormattedField::SetFormatter(SvNumberFormatter* pFormatter, BOOL bResetForm
         LanguageType aOldLang;
         GetFormat(sOldFormat, aOldLang);
 
-        ULONG nDestKey = pFormatter->TestNewString(sOldFormat);
+        sal_uInt32 nDestKey = pFormatter->TestNewString(sOldFormat);
         if (nDestKey == NUMBERFORMAT_ENTRY_NOT_FOUND)
         {
             // die Sprache des neuen Formatters
@@ -721,7 +721,7 @@ void FormattedField::GetFormat(XubString& rFormatString, LanguageType& eLang) co
 BOOL FormattedField::SetFormat(const XubString& rFormatString, LanguageType eLang)
 {
     DBG_CHKTHIS(FormattedField, NULL);
-    ULONG nNewKey = ImplGetFormatter()->TestNewString(rFormatString, eLang);
+    sal_uInt32 nNewKey = ImplGetFormatter()->TestNewString(rFormatString, eLang);
     if (nNewKey == NUMBERFORMAT_ENTRY_NOT_FOUND)
     {
         USHORT nCheckPos;
@@ -772,7 +772,7 @@ void FormattedField::SetThousandsSep(BOOL _bUseSeparator)
     ImplGetFormatter()->GenerateFormat(sFmtDescription, m_nFormatKey, eLang, _bUseSeparator, IsRed, nPrecision, nAnzLeading);
     // ... and introduce it to the formatter
     USHORT nCheckPos;
-    ULONG  nNewKey;
+    sal_uInt32  nNewKey;
     short nType;
     ImplGetFormatter()->PutEntry(sFmtDescription, nCheckPos, nType, nNewKey, eLang);
 
@@ -816,7 +816,7 @@ void FormattedField::SetDecimalDigits(USHORT _nPrecision)
     ImplGetFormatter()->GenerateFormat(sFmtDescription, m_nFormatKey, eLang, bThousand, IsRed, _nPrecision, nAnzLeading);
     // ... and introduce it to the formatter
     USHORT nCheckPos;
-    ULONG nNewKey;
+    sal_uInt32 nNewKey;
     short nType;
     ImplGetFormatter()->PutEntry(sFmtDescription, nCheckPos, nType, nNewKey, eLang);
 
@@ -1039,7 +1039,7 @@ BOOL FormattedField::ImplGetValue(double& dNewVal)
 
     DBG_ASSERT(ImplGetFormatter() != NULL, "FormattedField::ImplGetValue : can't give you a current value without a formatter !");
 
-    ULONG nFormatKey = m_nFormatKey;    // IsNumberFormat veraendert den FormatKey ...
+    sal_uInt32 nFormatKey = m_nFormatKey;   // IsNumberFormat veraendert den FormatKey ...
 
     if (ImplGetFormatter()->IsTextFormat(nFormatKey) && m_bTreatAsNumber)
         // damit wir in einem als Text formatierten Feld trotzdem eine Eingabe wie '1,1' erkennen ...
@@ -1053,7 +1053,7 @@ BOOL FormattedField::ImplGetValue(double& dNewVal)
         // the default number format for this language
         ULONG nStandardNumericFormat = m_pFormatter->GetStandardFormat(NUMBERFORMAT_NUMBER, eLanguage);
 
-        ULONG nTempFormat = nStandardNumericFormat;
+        sal_uInt32 nTempFormat = nStandardNumericFormat;
         double dTemp;
         if (m_pFormatter->IsNumberFormat(sText, nTempFormat, dTemp) &&
             NUMBERFORMAT_NUMBER == m_pFormatter->GetType(nTempFormat))
