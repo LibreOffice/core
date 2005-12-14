@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:28:46 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:31:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -809,9 +809,9 @@ void ViewShell::SetActiveWindow (::sd::Window* pWin)
     {
         mpSlideShow->setWindow(pWin);
     }
-    if (pFuActual)
+    if(HasCurrentFunction())
     {
-        pFuActual->SetWindow(pWin);
+        GetCurrentFunction()->SetWindow(pWin);
     }
 }
 
@@ -833,9 +833,9 @@ BOOL ViewShell::RequestHelp(const HelpEvent& rHEvt, ::sd::Window* pWin)
         {
             bReturn = mpSlideShow->requestHelp(rHEvt);
         }
-        else if (pFuActual)
+        else if(HasCurrentFunction())
         {
-            bReturn = pFuActual->RequestHelp(rHEvt);
+            bReturn = GetCurrentFunction()->RequestHelp(rHEvt);
         }
     }
 
@@ -1091,19 +1091,6 @@ const Rectangle& ViewShell::GetAllWindowRect()
     maAllWindowRectangle.SetPos(
         mpContentWindow->OutputToScreenPixel(Point(0,0)));
     return maAllWindowRectangle;
-}
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
-void ViewShell::CancelSearching()
-{
-    delete pFuSearch;
-    pFuSearch = NULL;
 }
 
 /*************************************************************************
