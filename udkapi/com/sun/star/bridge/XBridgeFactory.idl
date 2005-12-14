@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XBridgeFactory.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:03:19 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 11:32:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,8 @@ published interface XBridgeFactory: com::sun::star::uno::XInterface
      */
     XBridge getBridge( [in] string  sName );
 
-    /** returns the sequence of all existing (including unnamed)bridges.
+    /** returns the sequence of all named and unnamed UNO interprocess
+        bridges that are instantiated at the time the call is made.
      */
     sequence < XBridge > getExistingBridges( );
 };
