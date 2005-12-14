@@ -4,9 +4,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 15:33:49 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:36:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -346,7 +346,7 @@ SvNumberFormatter* SbiInstance::GetNumberFormatter()
 
 // #39629 NumberFormatter auch statisch anbieten
 void SbiInstance::PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
-    ULONG &rnStdDateIdx, ULONG &rnStdTimeIdx, ULONG &rnStdDateTimeIdx,
+    sal_uInt32 &rnStdDateIdx, sal_uInt32 &rnStdTimeIdx, sal_uInt32 &rnStdDateTimeIdx,
     LanguageType* peFormatterLangType, DateFormat* peFormatterDateFormat )
 {
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
