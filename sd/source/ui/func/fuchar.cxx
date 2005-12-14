@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuchar.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:34:47 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 16:54:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,17 @@ FuChar::FuChar (
     SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
+}
+
+FunctionReference FuChar::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    FunctionReference xFunc( new FuChar( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    return xFunc;
+}
+
+void FuChar::DoExecute( SfxRequest& rReq )
+{
     const SfxItemSet* pArgs = rReq.GetArgs();
 
     if( !pArgs )
@@ -96,7 +107,7 @@ FuChar::FuChar (
         SfxItemSet aEditAttr( pDoc->GetPool() );
         pView->GetAttributes( aEditAttr );
 
-        SfxItemSet aNewAttr( pViewSh->GetPool(),
+        SfxItemSet aNewAttr( pViewShell->GetPool(),
                                 EE_ITEMS_START, EE_ITEMS_END );
         aNewAttr.Put( aEditAttr, FALSE );
 
@@ -152,6 +163,14 @@ FuChar::FuChar (
             pDoc->StartOnlineSpelling();
         }
     }
+}
+
+void FuChar::Activate()
+{
+}
+
+void FuChar::Deactivate()
+{
 }
 
 } // end of namespace sd
