@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XStorable.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:26:35 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 11:30:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@
     </p>
     <ol>
         <li>
-            Large components which are wrapped with <em>StarOne</em> interfaces
+            Large components which are wrapped up in UNO interfaces
             and for which distinct filters are not available separately as
             components.
         </li>
