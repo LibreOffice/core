@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbinsdlg.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:09:01 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:51:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ struct SwInsDBColumn
 {
     rtl::OUString sColumn, sUsrNumFmt;
     sal_Int32 nDBNumFmt;
-    ULONG nUsrNumFmt;
+    sal_uInt32 nUsrNumFmt;
     LanguageType eUsrNumFmtLng;
     USHORT nCol;
     BOOL bHasFmt : 1;
