@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-07 17:44:06 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:32:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,9 +216,6 @@ ViewShell::ViewShell (
       mpActiveWindow(NULL),
       mpView(NULL),
       pFrameView(NULL),
-      pFuActual(NULL),
-      pFuOld(NULL),
-      pFuSearch(NULL),
       mpSlideShow(NULL),
       pZoomList(NULL),
       aViewPos(),
@@ -256,9 +253,6 @@ ViewShell::ViewShell(
       mpActiveWindow(NULL),
       mpView(NULL),
       pFrameView(NULL),
-      pFuActual(NULL),
-      pFuOld(NULL),
-      pFuSearch(NULL),
       mpSlideShow(NULL),
       pZoomList(NULL),
       aViewPos(),
@@ -307,8 +301,6 @@ ViewShell::~ViewShell()
     // Keep the content window from accessing in its destructor the
     // WindowUpdater.
     mpContentWindow->SetViewShell(NULL);
-
-    CancelSearching();
 
     // Stop listening for window events.
     // GetParentWindow()->RemoveEventListener (
@@ -421,31 +413,6 @@ void ViewShell::Exit (void)
 
 /*************************************************************************
 |*
-|* Diese Methode deaktiviert und loescht die aktuelle Funktion. Falls es
-|* eine alte Funktion gibt, wird sie als aktuelle Funktion eingesetzt und
-|* aktiviert.
-|*
-\************************************************************************/
-
-void ViewShell::Cancel()
-{
-    if (pFuActual && pFuActual != pFuOld)
-    {
-        FuPoor* pTemp = pFuActual;
-        pFuActual     = NULL;
-        pTemp->Deactivate();
-        delete pTemp;
-    }
-
-    if (pFuOld)
-    {
-        pFuActual = pFuOld;
-        pFuActual->Activate();
-    }
-}
-
-/*************************************************************************
-|*
 |* Aktivierung: Arbeitsfenster den Fokus zuweisen
 |*
 \************************************************************************/
@@ -485,9 +452,9 @@ void ViewShell::Activate(BOOL bIsMDIActivate)
         {
             mpSlideShow->activate();
         }
-        if (pFuActual)
+        if(HasCurrentFunction())
         {
-            pFuActual->Activate();
+            GetCurrentFunction()->Activate();
         }
 
         if(!GetDocSh()->IsUIActive())
@@ -548,9 +515,9 @@ void ViewShell::Deactivate(BOOL bIsMDIActivate)
         {
             mpSlideShow->deactivate();
         }
-        if (pFuActual)
+        if(HasCurrentFunction())
         {
-            pFuActual->Deactivate();
+            GetCurrentFunction()->Deactivate();
         }
 
         ::sd::View* pView = GetView();
@@ -610,9 +577,9 @@ BOOL ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
         {
             bReturn = mpSlideShow->keyInput(rKEvt);
         }
-        else if(pFuActual)
+        else if(HasCurrentFunction())
         {
-            bReturn = pFuActual->KeyInput(rKEvt);
+            bReturn = GetCurrentFunction()->KeyInput(rKEvt);
         }
     }
 
@@ -662,9 +629,9 @@ void ViewShell::MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin)
     {
         mpSlideShow->mouseButtonDown(rMEvt);
     }
-    else if (pFuActual)
+    else if (HasCurrentFunction())
     {
-        pFuActual->MouseButtonDown(rMEvt);
+        GetCurrentFunction()->MouseButtonDown(rMEvt);
     }
 }
 
@@ -689,9 +656,9 @@ void ViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
     {
         mpSlideShow->mouseMove(rMEvt);
     }
-    else if (pFuActual)
+    else if(HasCurrentFunction())
     {
-        pFuActual->MouseMove(rMEvt);
+        GetCurrentFunction()->MouseMove(rMEvt);
     }
 }
 
@@ -716,9 +683,9 @@ void ViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
     {
         mpSlideShow->mouseButtonUp(rMEvt);
     }
-    else if (pFuActual)
+    else if(HasCurrentFunction())
     {
-        pFuActual->MouseButtonUp(rMEvt);
+        GetCurrentFunction()->MouseButtonUp(rMEvt);
     }
 }
 
@@ -745,9 +712,9 @@ void ViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
         {
             mpSlideShow->command(rCEvt);
         }
-        else if (pFuActual)
+        else if(HasCurrentFunction())
         {
-            pFuActual->Command(rCEvt);
+            GetCurrentFunction()->Command(rCEvt);
         }
     }
 }
@@ -1328,11 +1295,12 @@ void ViewShell::ExecReq( SfxRequest& rReq )
     {
         case SID_MAIL_SCROLLBODY_PAGEDOWN:
         {
-            if( pFuActual )
+            FunctionReference xFunc( GetCurrentFunction() );
+            if( xFunc.is() )
             {
-                pFuActual->ScrollStart();
+                xFunc->ScrollStart();
                 ScrollLines( 0, -1 );
-                pFuActual->ScrollEnd();
+                xFunc->ScrollEnd();
             }
 
             rReq.Done();
@@ -1471,32 +1439,81 @@ SdDrawDocument* ViewShell::GetDoc (void) const
     return GetViewShellBase().GetDocument();
 }
 
-
-
-
 ErrCode ViewShell::DoVerb (long nVerb)
 {
     return ERRCODE_NONE;
 }
 
-
-
-
-void ViewShell::SetCurrentFunction (FuPoor* pFunction)
+void ViewShell::SetCurrentFunction( const FunctionReference& xFunction)
 {
-    pFuActual = pFunction;
+    if( mxCurrentFunction.is() && (mxOldFunction != mxCurrentFunction) )
+        mxCurrentFunction->Dispose();
+    FunctionReference xTemp( mxCurrentFunction );
+    mxCurrentFunction = xFunction;
 }
 
-
-
-
-void ViewShell::SetOldFunction (FuPoor* pFunction)
+void ViewShell::SetOldFunction(const FunctionReference& xFunction)
 {
-    pFuOld = pFunction;
+    if( mxOldFunction.is() && (xFunction != mxOldFunction) && (mxCurrentFunction != mxOldFunction) )
+        mxOldFunction->Dispose();
+
+    FunctionReference xTemp( mxOldFunction );
+    mxOldFunction = xFunction;
 }
 
+/** this method deactivates the current function. If an old function is
+    saved, this will become activated and current function.
+*/
+void ViewShell::Cancel()
+{
+    if(mxCurrentFunction.is() && (mxCurrentFunction != mxOldFunction ))
+    {
+        FunctionReference xTemp( mxCurrentFunction );
+        mxCurrentFunction.clear();
+        xTemp->Deactivate();
+        xTemp->Dispose();
+    }
 
+    if(mxOldFunction.is())
+    {
+        mxCurrentFunction = mxOldFunction;
+        mxCurrentFunction->Activate();
+    }
+}
 
+void ViewShell::DeactivateCurrentFunction( bool bPermanent /* == false */ )
+{
+    if( mxCurrentFunction.is() )
+    {
+        if(bPermanent && (mxOldFunction == mxCurrentFunction))
+            mxOldFunction.clear();
+
+        mxCurrentFunction->Deactivate();
+        if( mxCurrentFunction != mxOldFunction )
+            mxCurrentFunction->Dispose();
+
+        FunctionReference xTemp( mxCurrentFunction );
+        mxCurrentFunction.clear();
+    }
+}
+
+void ViewShell::DisposeFunctions()
+{
+    if(mxCurrentFunction.is())
+    {
+        FunctionReference xTemp( mxCurrentFunction );
+        mxCurrentFunction.clear();
+        xTemp->Deactivate();
+        xTemp->Dispose();
+    }
+
+    if(mxOldFunction.is())
+    {
+        FunctionReference xTemp( mxOldFunction );
+        mxOldFunction->Dispose();
+        mxOldFunction.clear();
+    }
+}
 
 void ViewShell::SetSlideShow(sd::Slideshow* pSlideShow)
 {
