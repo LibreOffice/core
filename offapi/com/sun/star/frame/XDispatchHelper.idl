@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XDispatchHelper.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:10:07 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 13:21:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,8 +52,7 @@
  module com {  module sun {  module star {  module frame {
 
 //=============================================================================
-/** provides any easy dispatch interfaces for certain functions which
-    are useful at the UI.
+/** provides an easy way to dispatch functions useful at UI level.
 
     @see XDispatch
 
@@ -64,16 +63,16 @@ published interface XDispatchHelper : com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
         /** executes the dispatch.
 
-        Listener are not supported here!
+        Listeners are not supported here!
 
         @param DispatchProvider
              points to the provider, which should be asked for valid dispatch objects
 
         @param URL
-            describe the feature which should be supported by internaly used dispatch object
+            describes the feature which should be supported by internally used dispatch object
 
         @param TargetFrameName
-            specify the frame which should be the target for this request
+            specifies the frame which should be the target for this request
 
         @param SearchFlags
             optional search parameter for finding the frame if no special
@@ -81,11 +80,11 @@ published interface XDispatchHelper : com::sun::star::uno::XInterface
 
         @param Arguments
             optional arguments for this request
-            They depends from the real implementation of the dispatch object.
+            They depend on the real implementation of the dispatch object.
 
         @return
-            A possible result of the excuted internal dispatch.
-            The information behind this any depends from the dispatch!
+            A possible result of the executed internal dispatch.
+            The information behind this <atom>any</atom> depends on the dispatch!
 
         @see XDispatch::dispatch()
         */
