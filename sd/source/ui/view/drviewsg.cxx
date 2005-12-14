@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:12:39 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:29:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@ namespace sd {
 void DrawViewShell::ExecIMap( SfxRequest& rReq )
 {
     // waehrend einer Diashow wird nichts ausgefuehrt!
-    if (pFuActual && pFuActual->GetSlotID() == SID_PRESENTATION)
+    if(HasCurrentFunction(SID_PRESENTATION) )
         return;
 
     if ( rReq.GetSlot() == SID_IMAP_EXEC )
@@ -155,7 +155,7 @@ void DrawViewShell::GetIMapState( SfxItemSet& rSet )
 void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
 {
     // waehrend einer Diashow wird nichts ausgefuehrt!
-    if (pFuActual && pFuActual->GetSlotID() == SID_PRESENTATION)
+    if(HasCurrentFunction(SID_PRESENTATION))
         return;
 
     BOOL   bDefault = FALSE;
