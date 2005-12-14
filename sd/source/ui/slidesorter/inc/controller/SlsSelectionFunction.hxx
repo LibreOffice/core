@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:19:43 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:22:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,12 +62,9 @@ class SelectionFunction
 public:
     TYPEINFO();
 
-    SelectionFunction (
-        SlideSorterController& rController,
-        SfxRequest& rRequest);
+    static FunctionReference Create( SlideSorterController& rController, SfxRequest& rRequest );
 
-    virtual ~SelectionFunction (void);
-                                                   // Mouse- & Key-Events
+                                       // Mouse- & Key-Events
     virtual BOOL KeyInput(const KeyEvent& rKEvt);
     virtual BOOL MouseMove(const MouseEvent& rMEvt);
     virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
@@ -101,6 +98,11 @@ public:
 protected:
     SlideSorterController& mrController;
 
+    SelectionFunction (
+        SlideSorterController& rController,
+        SfxRequest& rRequest);
+
+    virtual ~SelectionFunction();
 
 private:
     class SubstitutionHandler;
