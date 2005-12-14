@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:31:31 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 16:52:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,11 +153,11 @@
 
 #include <sfx2/frame.hxx>
 
+using rtl::OUString;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::document;
-using namespace rtl;
 using namespace comphelper;
 
 #define SD_XML_READERROR 1234
