@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2005-10-05 12:58:22 $
+#   last change: $Author: rt $ $Date: 2005-12-14 09:41:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,7 @@ ALLTAR : $(RPMFILE)
 
 %.desktop :
     @$(MKDIRHIER) $(@:d)
-    @ln -s $(subst,$(UNIXFILENAME)-, /etc/$(UNIXFILENAME)/share/xdg/$(@:f)) $@
+    @ln -sf $(subst,$(UNIXFILENAME)-, /etc/$(UNIXFILENAME)/share/xdg/$(@:f)) $@
 
 # --- icons --------------------------------------------------------
 
