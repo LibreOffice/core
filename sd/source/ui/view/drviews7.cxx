@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 09:21:45 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:28:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,7 +170,7 @@
 #include "fubullet.hxx"
 #endif
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -379,18 +379,11 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     // Images der Toolboxen mappen (nur Zoom)
     UpdateToolboxImages( rSet, FALSE );
 
-    if (pFuActual)
+    if(HasCurrentFunction())
     {
-        USHORT nSId = pFuActual->GetSlotID();
+        USHORT nSId = GetCurrentFunction()->GetSlotID();
 
-//      switch ( nSId )
-//      {
-//          case SID_OBJECT_SELECT:
-//              rSet.Put( SfxAllEnumItem( SID_OBJECT_SELECT, pFuActual->GetSlotValue() ) );
-//              break;
-//          default:
-                rSet.Put( SfxBoolItem( nSId, TRUE ) );
-//      }
+        rSet.Put( SfxBoolItem( nSId, TRUE ) );
 
         // Bewirkt ein uncheck eines simulierten Slots
         USHORT nId = GetIdBySubId( nSId );
@@ -580,7 +573,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     else
         rSet.Put(SfxBoolItem(SID_BEZIER_EDIT, FALSE));
 
-    if (pFuActual!=NULL && pFuActual->ISA(FuEditGluePoints))
+    if(dynamic_cast<FuEditGluePoints*>( GetCurrentFunction().get()))
         rSet.Put(SfxBoolItem(SID_GLUE_EDITMODE, TRUE));
     else
         rSet.Put(SfxBoolItem(SID_GLUE_EDITMODE, FALSE));
@@ -1106,9 +1099,9 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     {
         USHORT nCurrentSId = SID_ATTR_CHAR;
 
-        if (pFuActual)
+        if(HasCurrentFunction())
         {
-            nCurrentSId = pFuActual->GetSlotID();
+            nCurrentSId = GetCurrentFunction()->GetSlotID();
         }
         if( nCurrentSId != SID_TEXT_FITTOSIZE &&
             nCurrentSId != SID_TEXT_FITTOSIZE_VERTICAL &&
@@ -1619,8 +1612,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     //highlight selected custom shape
     {
         USHORT nCurrentSId = 0;
-        if (pFuActual)
-            nCurrentSId = pFuActual->GetSlotID();
+        if(HasCurrentFunction())
+            nCurrentSId = GetCurrentFunction()->GetSlotID();
 
         if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DRAWTBX_CS_BASIC ) )
             rSet.Put(SfxBoolItem(SID_DRAWTBX_CS_BASIC, SID_DRAWTBX_CS_BASIC == nCurrentSId ));
@@ -1703,7 +1696,7 @@ void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
         rSet.Put(SfxBoolItem(SID_HANDOUTMODE, FALSE));
     }
 
-    // #101976# Removed [GetDocSh()->GetActualFunction() ||] from the following
+    // #101976# Removed [GetDocSh()->GetCurrentFunction() ||] from the following
     // clause because the current function of the docshell can only be
     // search and replace or spell checking and in that case switching the
     // view mode is allowed.
