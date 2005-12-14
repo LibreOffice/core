@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuslsel.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:40:06 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:17:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,13 +65,8 @@ class FuSlideSelection
 public:
     TYPEINFO();
 
-    FuSlideSelection (
-        SlideViewShell* pViewSh,
-        ::sd::Window* pWin,
-        SlideView* pView,
-        SdDrawDocument* pDoc,
-        SfxRequest& rReq);
-    virtual ~FuSlideSelection (void);
+    static FunctionReference Create( SlideViewShell* pViewSh, ::sd::Window* pWin, SlideView* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+    virtual void DoExecute( SfxRequest& rReq );
 
     // Mouse- & Key-Events
     virtual BOOL                KeyInput(const KeyEvent& rKEvt);
@@ -95,6 +90,15 @@ public:
         @returns true if a active function was aborted
     */
     virtual bool cancel();
+
+protected:
+    FuSlideSelection (
+        SlideViewShell* pViewSh,
+        ::sd::Window* pWin,
+        SlideView* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuSlideSelection (void);
 
 private:
     BOOL                        bSubstShown;
