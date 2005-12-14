@@ -4,9 +4,9 @@
 #
 #   $RCSfile: file.pm,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-09 09:11:13 $
+#   last change: $Author: rt $ $Date: 2005-12-14 12:32:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -267,6 +267,25 @@ sub get_filesize
     return $filesize;
 }
 
+#############################################
+# Returning the file version, if required
+# Sample: "8.0.1.8976";
+#############################################
+
+sub get_fileversion
+{
+    my ($fileref, $allvariables) = @_;
+
+    my $fileversion = "";
+
+    if ( $allvariables->{'USE_FILEVERSION'} )
+    {
+        if ( ! $allvariables->{'LIBRARYVERSION'} ) { installer::exiter::exit_program("ERROR: USE_FILEVERSION is set, but not LIBRARYVERSION", "get_fileversion"); }
+        $fileversion = $allvariables->{'LIBRARYVERSION'} . "\." . $installer::globals::buildid;
+    }
+
+    return $fileversion;
+}
 
 #############################################
 # Returning the sequence for a file
@@ -316,7 +335,7 @@ sub get_language_for_file
 
 sub create_files_table
 {
-    my ($filesref, $allfilecomponentsref, $basedir) = @_;
+    my ($filesref, $allfilecomponentsref, $basedir, $allvariables) = @_;
 
     installer::logger::include_timestamp_into_logfile("Performance Info: File Table start");
 
@@ -361,7 +380,7 @@ sub create_files_table
 
         $file{'FileSize'} = get_filesize($onefile);
 
-        $file{'Version'} = "";
+        $file{'Version'} = get_fileversion($onefile, $allvariables);
 
         $file{'Language'} = get_language_for_file($onefile);
 
