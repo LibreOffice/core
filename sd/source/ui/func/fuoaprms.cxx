@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuoaprms.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:45:03 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:00:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,8 +112,20 @@ FuObjectAnimationParameters::FuObjectAnimationParameters (
     SfxRequest&  rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
+}
+
+FunctionReference FuObjectAnimationParameters::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    FunctionReference xFunc( new FuObjectAnimationParameters( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    return xFunc;
+}
+
+void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
+{
+
     BOOL bOnMaster = pView->GetPageViewPvNum(0)->GetPage()->IsMasterPage();
-    SfxUndoManager* pUndoMgr = pViewSh->GetViewFrame()->GetObjectShell()->
+    SfxUndoManager* pUndoMgr = pViewShell->GetViewFrame()->GetObjectShell()->
                                 GetUndoManager();
 
     const SdrMarkList& rMarkList  = pView->GetMarkedObjectList();
@@ -867,39 +879,5 @@ FuObjectAnimationParameters::FuObjectAnimationParameters (
     }
     // sieht man nicht, also muss an den Bindings nicht invalidiert werden
 }
-
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
-
-FuObjectAnimationParameters::~FuObjectAnimationParameters()
-{
-}
-
-/*************************************************************************
-|*
-|* Function aktivieren
-|*
-\************************************************************************/
-
-void FuObjectAnimationParameters::Activate()
-{
-    FuPoor::Activate();
-
-}
-
-/*************************************************************************
-|*
-|* Function deaktivieren
-|*
-\************************************************************************/
-
-void FuObjectAnimationParameters::Deactivate()
-{
-    FuPoor::Deactivate();
-}
-
 
 } // end of namespace sd
