@@ -4,9 +4,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-09 13:27:56 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 11:16:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,41 +63,41 @@
 // includes from antigrain [i would love to write this stuff by myself]
 //////////////////////////////////////////////////////////////////////////////////
 
-#include <agg/agg_rendering_buffer.h>
-#include <agg/agg_pixfmt_rgb.h>
-#include <agg/agg_pixfmt_rgba.h>
-#include <agg/agg_renderer_base.h>
-#include <agg/agg_color_rgba.h>
-#include <agg/agg_rasterizer_outline_aa.h>
-#include <agg/agg_rasterizer_scanline_aa.h>
-#include <agg/agg_scanline_p.h>
-#include <agg/agg_scanline_u.h>
-#include <agg/agg_renderer_scanline.h>
-#include <agg/agg_renderer_outline_aa.h>
-#include <agg/agg_renderer_primitives.h>
-#include <agg/agg_path_storage.h>
-#include <agg/agg_span_pattern.h>
-#include <agg/agg_span_pattern_rgba.h>
-#include <agg/agg_span_pattern_resample_rgb.h>
-#include <agg/agg_span_pattern_resample_rgba.h>
-#include <agg/agg_span_interpolator_linear.h>
-#include <agg/agg_span_gradient.h>
-#include <agg/agg_span_image_resample_rgb.h>
-#include <agg/agg_span_image_resample_rgba.h>
-#include <agg/agg_image_filters.h>
-#include <agg/agg_dda_line.h>
-#include <agg/agg_scanline_storage_aa.h>
-#include <agg/agg_scanline_storage_bin.h>
-#include <agg/agg_scanline_bin.h>
-#include <agg/agg_path_storage_integer.h>
-#include <agg/agg_conv_contour.h>
-#include <agg/agg_conv_curve.h>
-#include <agg/agg_conv_stroke.h>
-#include <agg/agg_conv_transform.h>
-#include <agg/agg_trans_affine.h>
-#include <agg/agg_font_cache_manager.h>
-#include <agg/agg_bitset_iterator.h>
-#include <agg/agg_path_storage.h>
+#include <agg2/agg_rendering_buffer.h>
+#include <agg2/agg_pixfmt_rgb.h>
+#include <agg2/agg_pixfmt_rgba.h>
+#include <agg2/agg_renderer_base.h>
+#include <agg2/agg_color_rgba.h>
+#include <agg2/agg_rasterizer_outline_aa.h>
+#include <agg2/agg_rasterizer_scanline_aa.h>
+#include <agg2/agg_scanline_p.h>
+#include <agg2/agg_scanline_u.h>
+#include <agg2/agg_renderer_scanline.h>
+#include <agg2/agg_renderer_outline_aa.h>
+#include <agg2/agg_renderer_primitives.h>
+#include <agg2/agg_path_storage.h>
+#include <agg2/agg_span_pattern.h>
+#include <agg2/agg_span_pattern_rgba.h>
+#include <agg2/agg_span_pattern_resample_rgb.h>
+#include <agg2/agg_span_pattern_resample_rgba.h>
+#include <agg2/agg_span_interpolator_linear.h>
+#include <agg2/agg_span_gradient.h>
+#include <agg2/agg_span_image_resample_rgb.h>
+#include <agg2/agg_span_image_resample_rgba.h>
+#include <agg2/agg_image_filters.h>
+#include <agg2/agg_dda_line.h>
+#include <agg2/agg_scanline_storage_aa.h>
+#include <agg2/agg_scanline_storage_bin.h>
+#include <agg2/agg_scanline_bin.h>
+#include <agg2/agg_path_storage_integer.h>
+#include <agg2/agg_conv_contour.h>
+#include <agg2/agg_conv_curve.h>
+#include <agg2/agg_conv_stroke.h>
+#include <agg2/agg_conv_transform.h>
+#include <agg2/agg_trans_affine.h>
+#include <agg2/agg_font_cache_manager.h>
+#include <agg2/agg_bitset_iterator.h>
+#include <agg2/agg_path_storage.h>
 
 //////////////////////////////////////////////////////////////////////////////////
 // platform-dependend includes [wrapped into their own namepsaces]
