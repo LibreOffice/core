@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_linklist.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:42:21 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:33:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,9 @@ HF_CommentedLink_Table::HF_CommentedLink_Table( Environment  &          io_rEnv,
          pCurLinkColumn(0),
          pCurCommentColumn(0)
 {
+    *pTable
+        << new Html::ClassAttr("commentedlinks");
+
     CurOut()
         >> *new Html::Label(i_sLabel)
            << new Html::LineBreak;
@@ -120,6 +123,9 @@ HF_MemberTable::HF_MemberTable( Environment  &      io_rEnv,
          pCurDescription(0),
          bInline(i_bInline)
 {
+    *pTable
+        << new Html::ClassAttr("memberlist");
+
     CurOut()
         >> *new Html::Label(i_sLabel)
            << new Html::LineBreak;
