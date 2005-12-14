@@ -4,9 +4,9 @@
  *
  *  $RCSfile: html_kit.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:30:06 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:32:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,6 +191,7 @@ ExplanationTable::ExplanationTable( XmlElement &    o_rOwner )
         pDefinition(0)
 {
     pTable = new Table("0", "100%", "3", "0");
+    *pTable << new AnAttribute("class", "expl-table");
     o_rOwner << pTable;
 }
 
@@ -227,6 +228,7 @@ ParameterTable::ParameterTable( XmlElement &    o_rOwner )
         pDefinition(0)
 {
     pTable = new Table;
+    *pTable << new AnAttribute("class", "param-table");
     o_rOwner << pTable;
 }
 
@@ -248,7 +250,8 @@ FlagTable::FlagTable( XmlElement &        o_rOwner,
                       uintt               i_nNrOfColumns )
 {
     pTable = new Table;
-    *pTable << new AnAttribute("border", "");
+    *pTable << new AnAttribute("class", "flag-table");
+    *pTable << new AnAttribute("border", "1");
     *pTable << new AnAttribute("cellspacing", "0");
     o_rOwner << pTable;
 
