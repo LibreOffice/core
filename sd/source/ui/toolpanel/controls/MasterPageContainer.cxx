@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterPageContainer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:39:29 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:52:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -308,6 +308,16 @@ private:
     static const int DELAYED_CREATION_TIMEOUT=250;
     /// The time to wait when the system is not idle.
     static const int DELAYED_CREATION_TIMEOUT_WHEN_NOT_IDLE=1000;
+
+    /** This substition of page preview shows "Preparing preview" and is
+        shown as long as the actual previews are not being present.
+    */
+    Image maPreviewBeingCreated;
+
+    /** This substition of page preview is shown when a preview can not be
+        created and thus is not available.
+    */
+    Image maPreviewNotAvailable;
 
     DECL_LINK(DelayedPreviewCreation, Timer *);
     ::sd::DrawDocShell* LoadDocument (
@@ -631,7 +641,9 @@ MasterPageContainer::Implementation::Implementation (void)
       maRequestQueue(),
       mxModel(NULL),
       mpDocument(NULL),
-      maPreviewRenderer()
+      maPreviewRenderer(),
+      maPreviewBeingCreated(),
+      maPreviewNotAvailable()
 {
     try
     {
@@ -1188,19 +1200,18 @@ Image MasterPageContainer::Implementation::GetPreviewForToken (
         if (aPreview.GetSizePixel().Width()==0
             || aPreview.GetSizePixel().Height()==0)
         {
-            // All else failed so create an empty preview with a text that
+            // All else failed so return an empty preview with a text that
             // tells the user that there is no preview available.
-            static Image sSubstPreview;
-            if( nWidth != sSubstPreview.GetSizePixel().Width() )
+            if (maPreviewNotAvailable.GetSizePixel().Width() != nWidth)
             {
-                sSubstPreview = maPreviewRenderer.RenderPage(
+                maPreviewNotAvailable = maPreviewRenderer.RenderPage(
                     mpDocument->GetSdPage(0, PK_STANDARD),
                     nWidth,
                     SdResId(STR_TASKPANEL_NOT_AVAILABLE_SUBSTITUTION));
             }
-            maContainer[aToken].maPreview = sSubstPreview;
-            maContainer[aToken].maScaledPreview = sSubstPreview;
-            aPreview = sSubstPreview;
+            maContainer[aToken].maPreview = maPreviewNotAvailable;
+            maContainer[aToken].maScaledPreview = maPreviewNotAvailable;
+            aPreview = maPreviewNotAvailable;
         }
     }
 
@@ -1273,16 +1284,16 @@ Image MasterPageContainer::Implementation::GetPreviewForToken (
 
     if (bShowSubstitution)
     {
-        static Image sSubstPreview;
-        if( nWidth != sSubstPreview.GetSizePixel().Width() )
+        // If the preview substitution is not yet present or has the wrong
+        // size then create a new one.
+        if (maPreviewBeingCreated.GetSizePixel().Width() != nWidth)
         {
-            // #i42576# cache substitution bitmap
-            sSubstPreview = maPreviewRenderer.RenderPage(
+            maPreviewBeingCreated = maPreviewRenderer.RenderPage(
                 mpDocument->GetSdPage(0, PK_STANDARD),
                 nWidth,
                 SdResId(STR_TASKPANEL_PREPARING_PREVIEW_SUBSTITUTION));
         }
-        aPreview = sSubstPreview;
+        aPreview = maPreviewBeingCreated;
     }
 
     return aPreview;
