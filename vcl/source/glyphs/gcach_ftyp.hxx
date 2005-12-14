@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:30:35 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 09:12:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,6 +212,10 @@ private:
     double                      mfStretch;
     FT_FaceRec_*                maFaceFT;
     FT_SizeRec_*                maSizeFT;
+
+    bool            mbArtItalic;
+    bool            mbArtBold;
+    bool            mbUseGamma;
 
     typedef ::std::hash_map<int,int> GlyphSubstitution;
     GlyphSubstitution           maGlyphSubstitution;
