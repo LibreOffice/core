@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawDocShell.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:03:43 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:38:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,7 @@ public:
     virtual SfxStyleSheetBasePool* GetStyleSheetPool();
     virtual void            SetOrganizerSearchMask(SfxStyleSheetBasePool* pBasePool) const;
     virtual Size            GetFirstPageSize();
-    virtual void            FillClass(SvGlobalName* pClassName, ULONG*  pFormat, String* pAppName, String* pFullTypeName, String* pShortTypeName, sal_Int32 nFileFormat ) const;
+    virtual void            FillClass(SvGlobalName* pClassName, sal_uInt32*  pFormat, String* pAppName, String* pFullTypeName, String* pShortTypeName, sal_Int32 nFileFormat ) const;
     virtual void            SetModified( BOOL = TRUE );
 
 
