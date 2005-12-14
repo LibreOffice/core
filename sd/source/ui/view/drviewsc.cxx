@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsc.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:11:26 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:28:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -585,7 +585,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
         case SID_SELECTALL:  // BASIC
         {
-            if (pFuOld && pFuOld->ISA(FuSelection) &&
+            if( (dynamic_cast<FuSelection*>( GetOldFunction().get() ) != 0) &&
                 !GetView()->IsFrameDragSingles() && GetView()->HasMarkablePoints())
             {
                 if ( !pDrView->IsAction() )
@@ -642,7 +642,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
             if( rReq.GetArgs() )
             {
-                pFuActual = new FuTemplate( this, GetActiveWindow(), pDrView, GetDoc(), rReq );
+                SetCurrentFunction( FuTemplate::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
                 if( rReq.GetSlot() == SID_STYLE_APPLY )
                     GetViewFrame()->GetBindings().Invalidate( SID_STYLE_APPLY );
                 Cancel();
