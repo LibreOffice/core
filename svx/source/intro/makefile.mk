@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-28 15:44:58 $
+#   last change: $Author: rt $ $Date: 2005-12-14 15:16:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,13 +45,9 @@ TARGET=intro
 
 RSCLOCINC!:=$(RSCLOCINC);$(PRJ)$/RES
 
-# setting the compiled by $user$ using $license$ string in the about box
-
-.IF "$(BUILD_SPECIAL)"==""
-RSCDEFS+=-DOOO_VENDOR="$(USER)$(USERNAME)"  -DOOO_LICENSE="LGPL"
-.ELSE
-RSCDEFS+=-DBUILD_SPECIAL=True -DOOO_LICENSE="LGPL"
-.ENDIF
+# setting the compiled by $user$ string in the About box
+OOO_VENDOR*="$(USER)$(USERNAME)"
+RSCDEFS+=-DOOO_VENDOR=$(OOO_VENDOR)
 
 # --- Allgemein -----------------------------------------------------------
 
@@ -66,7 +62,7 @@ RESLIB1IMAGES=$(PRJ)$/res
 RESLIB1SRSFILES= \
     $(SRS)$/$(SRS1NAME).srs
 
-# Version "OpenOffice"
+# Version "OpenOffice.org"
 SRS4NAME= ooo
 SRC4FILES=	\
     $(SRS4NAME).src
