@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconbez.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:36:25 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 16:55:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,14 +106,18 @@ FuConstructBezierPolygon::FuConstructBezierPolygon (
 {
 }
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
-
-FuConstructBezierPolygon::~FuConstructBezierPolygon()
+FunctionReference FuConstructBezierPolygon::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent )
 {
+    FuConstructBezierPolygon* pFunc;
+    FunctionReference xFunc( pFunc = new FuConstructBezierPolygon( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    pFunc->SetPermanent(bPermanent);
+    return xFunc;
+}
+
+void FuConstructBezierPolygon::DoExecute( SfxRequest& rReq )
+{
+    FuConstruct::DoExecute( rReq );
 }
 
 /*************************************************************************
