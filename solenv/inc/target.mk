@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.161 $
+#   $Revision: 1.162 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-03 13:44:24 $
+#   last change: $Author: rt $ $Date: 2005-12-14 15:37:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1999,7 +1999,7 @@ $(SCP_PRODUCT_TYPE):
     +$(TOUCH) $@
 
 .IF "$(COMPVERMK)"!=""
-.IF "$(UPDATER)"!=""
+.IF "$(UPDATER)"!="" || "$(CWS_WORK_STAMP)"!=""
 .IF "$(COMPATH)"!="$(COMPATH_STORED)"
 COMPVERMK_PHONY:=.PHONY
 .ENDIF			# "$(COMPATH)"!="$(COMPATH_STORED)"
@@ -2022,7 +2022,7 @@ COMPVTMP:=$(mktmp iii)
 .ENDIF          # "$(CCNUMVER)"!=""
 
 .ENDIF			# "$(COMPVERMK)"!=""
-.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(UPDATER)"!="" || "$(CWS_WORK_STAMP)"!=""
 
 .IF "$(JAVAVERMK)"!=""
 .IF "$(JAVALOCATION)"!="$(JAVA_HOME)"
