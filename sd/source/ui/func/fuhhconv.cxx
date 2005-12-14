@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuhhconv.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:11:46 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 16:58:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,6 +137,11 @@ FuHangulHanjaConversion::~FuHangulHanjaConversion()
         delete pSdOutliner;
 }
 
+FunctionReference FuHangulHanjaConversion::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    FunctionReference xFunc( new FuHangulHanjaConversion( pViewSh, pWin, pView, pDoc, rReq ) );
+    return xFunc;
+}
 
 /*************************************************************************
 |*
