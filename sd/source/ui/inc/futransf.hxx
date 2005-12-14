@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futransf.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:41:47 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:18:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,16 +52,16 @@ class FuTransform
 public:
     TYPEINFO();
 
+    static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+    virtual void DoExecute( SfxRequest& rReq );
+
+private:
     FuTransform (
         ViewShell* pViewSh,
         ::sd::Window* pWin,
         ::sd::View* pView,
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
-    virtual ~FuTransform (void) {}
-
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
 
     Point   GetPoint( Rectangle aRect, RECT_POINT eRP );
 };
