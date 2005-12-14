@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XFilter.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:13:12 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 13:21:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,9 +52,9 @@ module com {  module sun {  module star {  module document {
 
     <p>
     This interface will be used by service <type>ImportFilter</type> or
-    <type>ExportFilter</type> to supports loading/saving of documents with
+    <type>ExportFilter</type> to support loading/saving of documents in
     different formats. The target/source of such filter operations must
-    well known BEFORE filtering will be started.
+    be known <em>before</em> filtering will be started.
     (see <type>XImporter</type> and <type>XExporter</type> too)
     Otherwise this interface can't work right.
     <p>
@@ -73,9 +73,12 @@ published interface XFilter: com::sun::star::uno::XInterface
         The given <type>MediaDescriptor</type> holds all neccessary information
         about the document.
 
-        Don't hold hard references to the descriptor items. You must copy needed informations!
+        Don't hold hard references to the descriptor items. You must copy needed information!
         Otherwise we couldn't destroy (for example) an existing input stream!
         </p>
+        @param aDescriptor
+            the MediaDescriptor describing the respective document.
+        @return a boolean value indicating whether the filter operation was successful or not.
      */
     boolean filter( [in] sequence< com::sun::star::beans::PropertyValue > aDescriptor );
 
