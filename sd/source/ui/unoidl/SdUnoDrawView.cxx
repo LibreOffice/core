@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdUnoDrawView.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:46:06 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:23:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@
 #endif
 
 using namespace ::std;
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::vos;
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -326,7 +326,7 @@ void SdUnoDrawView::FireSwitchCurrentPage (SdPage* pCurrentPage) throw()
     {
         (void)e;
         DBG_ERROR(
-            (OString("sd::SdUnoDrawView::FireSwitchCurrentPage(), "
+            (rtl::OString("sd::SdUnoDrawView::FireSwitchCurrentPage(), "
                      "exception caught: ") +
              rtl::OUStringToOString(
                  comphelper::anyToString( cppu::getCaughtException() ),
