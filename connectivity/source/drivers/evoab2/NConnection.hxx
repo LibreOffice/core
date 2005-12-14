@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NConnection.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:50:04 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 09:40:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,7 @@ namespace connectivity
             inline const OEvoabDriver*  getDriver()             const { return static_cast< const OEvoabDriver* >( m_pDriver );         }
 
             SDBCAddress::sdbc_address_type getSDBCAddressType() const { return m_eSDBCAddressType;}
-            SDBCAddress::sdbc_address_type setSDBCAddressType(SDBCAddress::sdbc_address_type _eSDBCAddressType) {m_eSDBCAddressType = _eSDBCAddressType;}
+            void setSDBCAddressType(SDBCAddress::sdbc_address_type _eSDBCAddressType) {m_eSDBCAddressType = _eSDBCAddressType;}
 
             // OComponentHelper
             virtual void SAL_CALL disposing(void);
