@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filldlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:08:29 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:10:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,7 +242,7 @@ void ScFillSeriesDlg::Init( USHORT nPossDir )
 BOOL __EXPORT ScFillSeriesDlg::CheckStartVal()
 {
     BOOL bValOk = FALSE;
-    ULONG  nKey = 0;
+    sal_uInt32 nKey = 0;
     String aStr( aEdStartVal.GetText() );
 
     if ( aStr.Len() == 0 || aBtnAutoFill.IsChecked())
@@ -261,7 +261,7 @@ BOOL __EXPORT ScFillSeriesDlg::CheckStartVal()
 
 BOOL __EXPORT ScFillSeriesDlg::CheckIncrementVal()
 {
-    ULONG  nKey = 0;
+    sal_uInt32 nKey = 0;
     String aStr( aEdIncrement.GetText() );
 
     return rDoc.GetFormatTable()->IsNumberFormat( aStr, nKey, fIncrement );
@@ -273,7 +273,7 @@ BOOL __EXPORT ScFillSeriesDlg::CheckIncrementVal()
 BOOL __EXPORT ScFillSeriesDlg::CheckEndVal()
 {
     BOOL    bValOk = FALSE;
-    ULONG   nKey = 0;
+    sal_uInt32 nKey = 0;
     String  aStr( aEdEndVal.GetText() );
 
     if ( aStr.Len() == 0 )
