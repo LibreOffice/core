@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconcs.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:30:59 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:08:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,18 +57,11 @@ namespace sd {
 class FuConstructCustomShape
     : public FuConstruct
 {
-    rtl::OUString aCustomShape;
-
 public:
     TYPEINFO();
 
-    FuConstructCustomShape (
-        ViewShell* pViewSh,
-        ::sd::Window* pWin,
-        ::sd::View* pView,
-        SdDrawDocument* pDoc,
-        SfxRequest& rReq);
-    virtual ~FuConstructCustomShape (void);
+    static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent );
+    virtual void DoExecute( SfxRequest& rReq );
 
     // Mouse- & Key-Events
     virtual BOOL KeyInput(const KeyEvent& rKEvt);
@@ -85,6 +78,17 @@ public:
 
     // #i33136#
     virtual bool doConstructOrthogonal() const;
+
+protected:
+    FuConstructCustomShape (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+
+private:
+    rtl::OUString aCustomShape;
 };
 
 } // end of namespace sd
