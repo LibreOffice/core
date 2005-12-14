@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh5.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:09:41 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:11:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -417,11 +417,11 @@ void ScTabViewShell::UpdateNumberFormatter(
                         ScDocument*              pDoc,
                         const SvxNumberInfoItem& rInfoItem )
 {
-    const ULONG nDelCount = rInfoItem.GetDelCount();
+    const sal_uInt32 nDelCount = rInfoItem.GetDelCount();
 
     if ( nDelCount > 0 )
     {
-        const ULONG* pDelArr = rInfoItem.GetDelArray();
+        const sal_uInt32* pDelArr = rInfoItem.GetDelArray();
 
         for ( USHORT i=0; i<nDelCount; i++ )
             rInfoItem.GetNumberFormatter()->DeleteEntry( pDelArr[i] );
