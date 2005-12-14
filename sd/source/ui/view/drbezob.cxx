@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drbezob.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:06:18 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:26:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,20 +168,18 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
     pView->GetAttributes( aAttrSet );
     rSet.Put(aAttrSet, FALSE); // <- FALSE, damit DontCare-Status uebernommen wird
 
-    FuPoor* pFuActual = pViewSh->GetActualFunction();
+    FunctionReference xFunc( pViewSh->GetCurrentFunction() );
 
-    if (pFuActual)
+    if(xFunc.is())
     {
-        if (pFuActual->ISA(FuSelection))
+        if(xFunc->ISA(FuSelection))
         {
-            USHORT nEditMode = ((FuSelection*) pFuActual)->GetEditMode();
+            USHORT nEditMode = static_cast<FuSelection*>(xFunc.get())->GetEditMode();
             rSet.Put(SfxBoolItem(nEditMode, TRUE));
         }
-        else if (pFuActual->ISA(FuConstructBezierPolygon))
+        else if (xFunc->ISA(FuConstructBezierPolygon))
         {
-            USHORT nEditMode =
-                static_cast<FuConstructBezierPolygon*>(pFuActual)
-                ->GetEditMode();
+            USHORT nEditMode = static_cast<FuConstructBezierPolygon*>(xFunc.get())->GetEditMode();
             rSet.Put(SfxBoolItem(nEditMode, TRUE));
         }
     }
@@ -333,18 +331,17 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
         case SID_BEZIER_MOVE:
         case SID_BEZIER_INSERT:
         {
-            FuPoor* pFuActual = pViewSh->GetActualFunction();
+            FunctionReference xFunc( pViewSh->GetCurrentFunction() );
 
-            if (pFuActual)
+            if(xFunc.is())
             {
-                if (pFuActual->ISA(FuSelection))
+                if(xFunc->ISA(FuSelection))
                 {
-                    ((FuSelection*) pFuActual)->SetEditMode(rReq.GetSlot());
+                    static_cast<FuSelection*>(xFunc.get())->SetEditMode(rReq.GetSlot());
                 }
-                else if (pFuActual->ISA(FuConstructBezierPolygon))
+                else if(xFunc->ISA(FuConstructBezierPolygon))
                 {
-                    static_cast<FuConstructBezierPolygon*>(pFuActual)
-                        ->SetEditMode(rReq.GetSlot());
+                    static_cast<FuConstructBezierPolygon*>(xFunc.get())->SetEditMode(rReq.GetSlot());
                 }
             }
 
