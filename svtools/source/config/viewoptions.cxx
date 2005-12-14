@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewoptions.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:55:28 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 16:01:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -500,6 +500,7 @@ sal_Bool SvtViewOptionsBase_Impl::Delete( const ::rtl::OUString& sName )
         css::uno::Reference< css::container::XNameContainer > xSet(m_xSet, css::uno::UNO_QUERY_THROW);
         xSet->removeByName(sName);
         bDeleted = sal_True;
+        ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
     catch(const css::container::NoSuchElementException&)
         { bDeleted = sal_True; }
@@ -559,6 +560,7 @@ void SvtViewOptionsBase_Impl::SetWindowState( const ::rtl::OUString& sName  ,
             impl_getSetNode(sName, sal_True),
             css::uno::UNO_QUERY_THROW);
         xNode->setPropertyValue(PROPERTY_WINDOWSTATE, css::uno::makeAny(sState));
+        ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
     catch(const css::uno::Exception& ex)
         {
@@ -634,6 +636,7 @@ void SvtViewOptionsBase_Impl::SetUserData( const ::rtl::OUString&               
                     xUserData->insertByName(pData[i].Name, pData[i].Value);
             }
         }
+        ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
     catch(const css::uno::Exception& ex)
         {
@@ -695,6 +698,7 @@ void SvtViewOptionsBase_Impl::SetUserItem( const ::rtl::OUString& sName  ,
             else
                 xUserData->insertByName(sItem, aValue);
         }
+        ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
     catch(const css::uno::Exception& ex)
         {
@@ -741,6 +745,7 @@ void SvtViewOptionsBase_Impl::SetPageID( const ::rtl::OUString& sName ,
             impl_getSetNode(sName, sal_True),
             css::uno::UNO_QUERY_THROW);
         xNode->setPropertyValue(PROPERTY_PAGEID, css::uno::makeAny(nID));
+        ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
     catch(const css::uno::Exception& ex)
         {
@@ -787,6 +792,7 @@ void SvtViewOptionsBase_Impl::SetVisible( const ::rtl::OUString& sName    ,
             impl_getSetNode(sName, sal_True),
             css::uno::UNO_QUERY_THROW);
         xNode->setPropertyValue(PROPERTY_VISIBLE, css::uno::makeAny(bVisible));
+        ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
     catch(const css::uno::Exception& ex)
         {
