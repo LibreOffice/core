@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dociter.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:18:55 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:03:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -492,7 +492,7 @@ ScQueryValueIterator::ScQueryValueIterator(ScDocument* pDocument, SCTAB nTable, 
     for (i=0; (i<nCount) && (aParam.GetEntry(i).bDoQuery); i++)
     {
         ScQueryEntry& rEntry = aParam.GetEntry(i);
-        ULONG nIndex = 0;
+        sal_uInt32 nIndex = 0;
         rEntry.bQueryByString =
                 !(pDoc->GetFormatTable()->IsNumberFormat(*rEntry.pStr, nIndex, rEntry.nVal));
     }
@@ -774,7 +774,7 @@ ScQueryCellIterator::ScQueryCellIterator(ScDocument* pDocument, SCTAB nTable,
         for (i=0; (i<MAXQUERY) && (aParam.GetEntry(i).bDoQuery); i++)
         {
             ScQueryEntry& rEntry = aParam.GetEntry(i);
-            ULONG nIndex = 0;
+            sal_uInt32 nIndex = 0;
             rEntry.bQueryByString =
                      !(pDoc->GetFormatTable()->IsNumberFormat(*rEntry.pStr,
                                                               nIndex, rEntry.nVal));
