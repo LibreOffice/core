@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.93 $
+#   $Revision: 1.94 $
 #
-#   last change: $Author: rt $ $Date: 2005-12-14 12:06:19 $
+#   last change: $Author: rt $ $Date: 2005-12-14 15:31:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.93 $ ';
+$id_str = ' $Revision: 1.94 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -80,6 +80,7 @@ print "$script_name -- version: $script_rev\n";
 
 $is_debug           = 0;
 
+$error              = 0;
 $module             = 0;            # module name
 $base_dir           = 0;            # path to module base directory
 $dlst_file          = 0;            # path to d.lst
@@ -110,7 +111,13 @@ $opt_log            = 1;            # create an additional log file
 $opt_link           = 0;            # hard link files into the solver to save disk space
 $opt_deloutput      = 0;            # delete the output tree for the project once successfully delivered
 
-$strip = 'strip' if (($ENV{COM} ne 'MSC') && (((defined $ENV{ENABLE_SYMBOLS}) && ($ENV{ENABLE_SYMBOLS} ne "TRUE") && ($ENV{ENABLE_SYMBOLS} ne "SMALL")) || (!defined $ENV{ENABLE_SYMBOLS})));
+if ( $ENV{GUI} eq 'WNT' ) {
+    if ($ENV{COM} eq 'GCC') {
+        warn("Warning: do we need stripping for windows gcc? Nothing defined yet.");
+    }
+} else {
+    $strip = 'strip' if (((defined $ENV{ENABLE_SYMBOLS}) && ($ENV{ENABLE_SYMBOLS} ne "TRUE") && ($ENV{ENABLE_SYMBOLS} ne "SMALL")) || (!defined $ENV{ENABLE_SYMBOLS}));
+}
 
 $strip .= " -R '.comment' -s" if ($ENV{OS} eq 'LINUX');
 
@@ -144,7 +151,7 @@ zip_files() if $opt_zip;
 delete_output() if $opt_deloutput;
 print_stats();
 
-exit(0);
+exit($error);
 
 #### implemented actions #####
 
@@ -401,11 +408,12 @@ sub parse_options
         $arg =~ /^-check$/  and $opt_check  = 1 and next;
         $arg =~ /^-zip$/    and $opt_zip    = 1 and next;
         $arg =~ /^-delete$/ and $opt_delete = 1 and next;
+        $arg =~ /^-help$/   and $opt_help   = 1 and $arg = '';
         $arg =~ /^-link$/ and $ENV{GUI} ne 'WNT' and $opt_link = 1 and next;
         $arg =~ /^-deloutput$/ and $opt_deloutput = 1 and next;
         $arg =~ /^-debug$/  and $is_debug   = 1 and next;
         print_error("invalid option $arg") if ( $arg =~ /^-/ );
-        if ( $arg =~ /^-/ || $#ARGV > -1 ) {
+        if ( $arg =~ /^-/ || $opt_help || $#ARGV > -1 ) {
             usage();
             exit(1);
         }
@@ -567,6 +575,11 @@ sub parse_dlst
             push(@action_data, [$1, $2]);
         }
         else {
+            if ( /^\s*%(COMMON)?_DEST%\\/ ) {
+                # only copy from source dir to solver, not from solver to solver
+                print_error("illegal copy action, ignored: \'$_\'", $line_cnt);
+                next;
+            }
             push(@action_data, ['copy', $_]);
             # for each ressource file (.res) copy its image list (.ilst)
             if ( /\.res\s/ ) {
@@ -1301,6 +1314,7 @@ sub print_error
         print STDERR "line $line: ";
     }
     print STDERR "ERROR: $message\n";
+    $error ++;
 }
 
 sub print_stats
@@ -1332,17 +1346,19 @@ sub cleanup_and_die
 
 sub usage
 {
-    print STDERR "Usage:\ndeliver [-force] [-minor] [-check] [-zip] [-delete] [destination-path]\n";
-    print STDERR "Options:\n  -force\tcopy even if not newer\n";
-    print STDERR "  -minor\tdeliver into minor\n";
-    print STDERR "  -check\tjust print what would happen, no actual copying of files\n";
-    print STDERR "  -zip  \tcreate additional zip files of delivered content\n";
-    print STDERR "  -delete\tdelete files, use with care\n";
+    print STDERR "Usage:\ndeliver [OPTION]... [DESTINATION-PATH]\n";
+    print STDERR "Options:\n";
+    print STDERR "  -check       just print what would happen, no actual copying of files\n";
+    print STDERR "  -delete      delete files (undeliver), use with care\n";
+    print STDERR "  -deloutput   remove the output tree after copying\n";
+    print STDERR "  -force       copy even if not newer\n";
+    print STDERR "  -help        print this message\n";
     if ( !defined($ENV{GUI}) || $ENV{GUI} ne 'WNT' ) {
-        print STDERR "  -link  \thard link files into the solver to save disk space\n";
+        print STDERR "  -link        hard link files into the solver to save disk space\n";
     }
-    print STDERR "  -deloutput\tremove the output tree\n";
-    print STDERR "The option -zip and a destination-path are mutually exclusive\n";
+    print STDERR "  -minor       deliver into minor (milestone)\n";
+    print STDERR "  -zip         additionally create zip files of delivered content\n";
+    print STDERR "The option -zip and a destination-path are mutually exclusive.\n";
 }
 
 # vim: set ts=4 shiftwidth=4 expandtab syntax=perl:
