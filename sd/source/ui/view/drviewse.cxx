@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:12:08 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:29:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -279,36 +279,43 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
     USHORT nSId = rReq.GetSlot();
 
-    if( pFuActual && pFuActual->ISA(FuText) &&
+    if( HasCurrentFunction() &&
         ( nSId == SID_TEXTEDIT || nSId == SID_ATTR_CHAR || nSId == SID_TEXT_FITTOSIZE ||
           nSId == SID_ATTR_CHAR_VERTICAL || nSId == SID_TEXT_FITTOSIZE_VERTICAL ) )
     {
-        ((FuText*) pFuActual)->SetPermanent(TRUE);
-        pFuActual->ReceiveRequest( rReq );
+        FunctionReference xFunc( GetCurrentFunction() );
 
-        MapSlot( nSId );
+        FuText* pFuText = dynamic_cast< FuText* >( xFunc.get() );
 
-        Invalidate();
+        if( pFuText )
+        {
+            pFuText->SetPermanent(TRUE);
+            xFunc->ReceiveRequest( rReq );
 
-        Invalidate();
+            MapSlot( nSId );
 
-        // #98198# evtl. feed characters to activated textedit
-        if(SID_ATTR_CHAR == nSId && GetView() && GetView()->IsTextEdit())
-            ImpAddPrintableCharactersToTextEdit(rReq, GetView());
+            Invalidate();
 
-        rReq.Done();
-        return;
+            Invalidate();
+
+            // #98198# evtl. feed characters to activated textedit
+            if(SID_ATTR_CHAR == nSId && GetView() && GetView()->IsTextEdit())
+                ImpAddPrintableCharactersToTextEdit(rReq, GetView());
+
+            rReq.Done();
+            return;
+        }
     }
 
     CheckLineTo (rReq);
     USHORT nOldSId = 0;
     BOOL bPermanent = FALSE;
 
-    if (pFuActual)
+    if(HasCurrentFunction())
     {
-        if (pFuOld == pFuActual)
+        if(GetOldFunction() == GetCurrentFunction())
         {
-            pFuOld = NULL;
+            SetOldFunction(0);
         }
 
         if ( nSId != SID_TEXTEDIT && nSId != SID_ATTR_CHAR && nSId != SID_TEXT_FITTOSIZE &&
@@ -318,20 +325,23 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
             pDrView->EndTextEdit();
         }
 
-        nOldSId = pFuActual->GetSlotID();
-
-        if (nOldSId == nSId ||
-            ((nOldSId == SID_TEXTEDIT || nOldSId == SID_ATTR_CHAR || nOldSId == SID_TEXT_FITTOSIZE ||
-              nOldSId == SID_ATTR_CHAR_VERTICAL || nOldSId == SID_TEXT_FITTOSIZE_VERTICAL) &&
-             (nSId == SID_TEXTEDIT || nSId == SID_ATTR_CHAR || nSId == SID_TEXT_FITTOSIZE ||
-              nSId == SID_ATTR_CHAR_VERTICAL || nSId == SID_TEXT_FITTOSIZE_VERTICAL )))
+        if( HasCurrentFunction() )
         {
-            bPermanent = TRUE;
+            nOldSId = GetCurrentFunction()->GetSlotID();
+
+            if (nOldSId == nSId ||
+                ((nOldSId == SID_TEXTEDIT || nOldSId == SID_ATTR_CHAR || nOldSId == SID_TEXT_FITTOSIZE ||
+                nOldSId == SID_ATTR_CHAR_VERTICAL || nOldSId == SID_TEXT_FITTOSIZE_VERTICAL) &&
+                (nSId == SID_TEXTEDIT || nSId == SID_ATTR_CHAR || nSId == SID_TEXT_FITTOSIZE ||
+                nSId == SID_ATTR_CHAR_VERTICAL || nSId == SID_TEXT_FITTOSIZE_VERTICAL )))
+            {
+                bPermanent = TRUE;
+            }
+
+            GetCurrentFunction()->Deactivate();
         }
 
-        pFuActual->Deactivate();
-        delete pFuActual;
-        pFuActual = NULL;
+        SetCurrentFunction(0);
 
         SfxBindings& rBind = GetViewFrame()->GetBindings();
         rBind.Invalidate(nOldSId);
@@ -349,8 +359,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         case SID_TEXT_FITTOSIZE:
         case SID_TEXT_FITTOSIZE_VERTICAL:
         {
-            pFuActual = new FuText(this, GetActiveWindow(), pDrView, GetDoc(), rReq);
-            ( (FuText*) pFuActual)->DoExecute();
+            SetCurrentFunction( FuText::Create(this, GetActiveWindow(), pDrView, GetDoc(), rReq) );
             // Das Setzen des Permanent-Status erfolgt weiter oben!
 
             SfxBindings& rBindings = GetViewFrame()->GetBindings();
@@ -369,10 +378,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
         case SID_FM_CREATE_CONTROL:
         {
-            pFuActual = new FuConstructUnoControl(
-                this, GetActiveWindow(), pDrView, GetDoc(), rReq);
-            static_cast<FuConstructUnoControl*>(pFuActual)
-                ->SetPermanent(bPermanent);
+            SetCurrentFunction( FuConstructUnoControl::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq, bPermanent ) );
             rReq.Done();
         }
         break;
@@ -486,9 +492,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                 }
             }
 
-            pFuActual = new FuSelection(this, GetActiveWindow(), pDrView,
-                                              GetDoc(), rReq);
-
+            SetCurrentFunction( FuSelection::Create(this, GetActiveWindow(), pDrView, GetDoc(), rReq) );
             rReq.Done();
             Invalidate( SID_OBJECT_SELECT );
         }
@@ -548,11 +552,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         case SID_CONNECTOR_LINES_CIRCLE_END:
         case SID_CONNECTOR_LINES_CIRCLES:
         {
-            pFuActual = new FuConstructRectangle(
-                this, GetActiveWindow(), pDrView, GetDoc(), rReq);
-            static_cast<FuConstructRectangle*>(pFuActual)
-                ->SetPermanent(bPermanent);
-
+            SetCurrentFunction( FuConstructRectangle::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq, bPermanent ) );
             rReq.Done();
         }
         break;
@@ -565,10 +565,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         case SID_DRAW_BEZIER_FILL:          // BASIC
         case SID_DRAW_BEZIER_NOFILL:        // BASIC
         {
-            pFuActual = new FuConstructBezierPolygon(
-                this, GetActiveWindow(), pDrView, GetDoc(), rReq);
-            static_cast<FuConstructBezierPolygon*>(pFuActual)
-                ->SetPermanent(bPermanent);
+            SetCurrentFunction( FuConstructBezierPolygon::Create(this, GetActiveWindow(), pDrView, GetDoc(), rReq, bPermanent) );
             rReq.Done();
         }
         break;
@@ -577,8 +574,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         {
             if (nOldSId != SID_GLUE_EDITMODE)
             {
-                pFuActual = new FuEditGluePoints( this, GetActiveWindow(), pDrView, GetDoc(), rReq );
-                ((FuEditGluePoints*) pFuActual)->SetPermanent(bPermanent);
+                SetCurrentFunction( FuEditGluePoints::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq, bPermanent ) );
             }
             else
             {
@@ -600,9 +596,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         case SID_DRAW_CIRCLECUT:
         case SID_DRAW_CIRCLECUT_NOFILL:
         {
-            pFuActual = new FuConstructArc(
-                this, GetActiveWindow(), pDrView, GetDoc(), rReq);
-            static_cast<FuConstructArc*>(pFuActual)->SetPermanent(bPermanent);
+            SetCurrentFunction( FuConstructArc::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq, bPermanent) );
             rReq.Done();
         }
         break;
@@ -616,10 +610,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         case SID_3D_CONE:
         case SID_3D_PYRAMID:
         {
-            pFuActual = new FuConstruct3dObject(
-                this, GetActiveWindow(), pDrView, GetDoc(), rReq);
-            static_cast<FuConstruct3dObject*>(pFuActual)
-                ->SetPermanent(bPermanent);
+            SetCurrentFunction( FuConstruct3dObject::Create(this, GetActiveWindow(), pDrView, GetDoc(), rReq, bPermanent ) );
             rReq.Done();
         }
         break;
@@ -632,10 +623,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         case SID_DRAWTBX_CS_STAR :
         case SID_DRAW_CS_ID :
         {
-            pFuActual = new FuConstructCustomShape(
-                this, GetActiveWindow(), pDrView, GetDoc(), rReq);
-            static_cast<FuConstructCustomShape*>(pFuActual)
-                ->SetPermanent(bPermanent);
+            SetCurrentFunction( FuConstructCustomShape::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq, bPermanent ) );
             rReq.Done();
 
             if ( nSId != SID_DRAW_CS_ID )
@@ -651,25 +639,24 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         break;
     }
 
-    if (pFuOld)
+    if(HasOldFunction())
     {
-        USHORT nSId = pFuOld->GetSlotID();
+        USHORT nSId = GetOldFunction()->GetSlotID();
 
-        pFuOld->Deactivate();
-        delete pFuOld;
-        pFuOld = NULL;
+        GetOldFunction()->Deactivate();
+        SetOldFunction(0);
 
         SfxBindings& rBind = GetViewFrame()->GetBindings();
         rBind.Invalidate( nSId );
         rBind.Update( nSId );
     }
 
-    if (pFuActual)
+    if(HasCurrentFunction())
     {
-        pFuActual->Activate();
-        pFuOld = pFuActual;
+        GetCurrentFunction()->Activate();
+        SetOldFunction( GetCurrentFunction() );
 
-        SetHelpId( pFuActual->GetSlotID() );
+        SetHelpId( GetCurrentFunction()->GetSlotID() );
     }
 
     // Shell wird invalidiert, schneller als einzeln (laut MI)
@@ -677,7 +664,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     Invalidate();
 
     // #97016# III CTRL-SID_OBJECT_SELECT -> select first draw object if none is selected yet
-    if(SID_OBJECT_SELECT == nSId && pFuActual && (rReq.GetModifier() & KEY_MOD1))
+    if(SID_OBJECT_SELECT == nSId && HasCurrentFunction() && (rReq.GetModifier() & KEY_MOD1))
     {
         if(!GetView()->AreObjectsMarked())
         {
@@ -692,7 +679,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
     }
 
     // #97016# with qualifier construct directly
-    if(pFuActual && (rReq.GetModifier() & KEY_MOD1))
+    if(HasCurrentFunction() && (rReq.GetModifier() & KEY_MOD1))
     {
         // get SdOptions
         SdOptions* pOptions = SD_MOD()->GetSdOptions(GetDoc()->GetDocumentType());
@@ -710,7 +697,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         if(pPageView)
         {
             // create the default object
-            SdrObject* pObj = pFuActual->CreateDefaultObject(nSId, aNewObjectRectangle);
+            SdrObject* pObj = GetCurrentFunction()->CreateDefaultObject(nSId, aNewObjectRectangle);
 
             if(pObj)
             {
@@ -850,9 +837,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             /******************************************************************
             * ObjectBar einschalten
             ******************************************************************/
-            if (pFuActual &&
-                (pFuActual->ISA(FuSelection)
-                    || pFuActual->ISA(FuConstructBezierPolygon)))
+            if( dynamic_cast< FuSelection* >( GetCurrentFunction().get() ) || dynamic_cast< FuConstructBezierPolygon* >( GetCurrentFunction().get() ) )
             {
                 GetObjectBarManager().SelectionHasChanged(pDrView);//context has changed
             }
@@ -888,8 +873,14 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             }
             else
             {
-                if (pFuActual)      pFuActual->DoCut();
-                else if (pDrView)   pDrView->DoCut();
+                if(HasCurrentFunction())
+                {
+                    GetCurrentFunction()->DoCut();
+                }
+                else if(pDrView)
+                {
+                    pDrView->DoCut();
+                }
             }
             rReq.Ignore ();
         }
@@ -904,10 +895,14 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             }
             else
             {
-                if (pFuActual)
-                    pFuActual->DoCopy();
-                else
+                if(HasCurrentFunction())
+                {
+                    GetCurrentFunction()->DoCopy();
+                }
+                else if( pDrView )
+                {
                     pDrView->DoCopy();
+                }
             }
             rReq.Ignore ();
         }
@@ -917,8 +912,14 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         {
             WaitObject aWait( (Window*)GetActiveWindow() );
 
-            if (pFuActual)      pFuActual->DoPaste();
-            else if (pDrView)   pDrView->DoPaste();
+            if(HasCurrentFunction())
+            {
+                GetCurrentFunction()->DoPaste();
+            }
+            else if(pDrView)
+            {
+                pDrView->DoPaste();
+            }
 
             rReq.Ignore ();
         }
@@ -981,13 +982,15 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 ::sd::Window* pWindow = GetActiveWindow();
                 InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
             }
-            else if (pFuActual)
+            else if( HasCurrentFunction() )
             {
                 KeyCode aKCode(KEY_DELETE);
                 KeyEvent aKEvt( 0, aKCode);
 
-                if ( !pFuActual->KeyInput(aKEvt) )
+                if( !GetCurrentFunction()->KeyInput(aKEvt) && pDrView )
+                {
                     pDrView->DeleteMarked();
+                }
             }
             else
             {
@@ -1114,7 +1117,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
                 ChangeEditMode(EM_MASTERPAGE, mbIsLayerModeActive);
 
-                if (pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT)
+                if(HasCurrentFunction(SID_BEZIER_EDIT))
                     GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
             }
             else
@@ -1171,8 +1174,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             Broadcast (
                 ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_END));
 
-            if (pFuActual != NULL
-                && pFuActual->GetSlotID() == SID_BEZIER_EDIT)
+            if(HasCurrentFunction(SID_BEZIER_EDIT))
             {
                 GetViewFrame()->GetDispatcher()->Execute(
                     SID_OBJECT_SELECT,
@@ -1421,10 +1423,11 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         case SID_GLUE_VERTALIGN_TOP:
         case SID_GLUE_VERTALIGN_BOTTOM:
         {
-            if (pFuActual && pFuActual->ISA(FuEditGluePoints))
-            {
-                ((FuEditGluePoints*) pFuActual)->ReceiveRequest(rReq);
-            }
+            FunctionReference xFunc( GetCurrentFunction() );
+            FuEditGluePoints* pFunc = dynamic_cast< FuEditGluePoints* >( xFunc.get() );
+
+            if(pFunc)
+                pFunc->ReceiveRequest(rReq);
 
             rReq.Done();
         }
