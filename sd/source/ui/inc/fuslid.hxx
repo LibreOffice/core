@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuslid.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:39:52 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:16:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,26 +61,23 @@ class FuSlide
 public:
     TYPEINFO();
 
+    static FunctionReference Create( SlideViewShell* pViewSh, ::sd::Window* pWin, SlideView* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+
+    virtual BOOL MouseMove(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
+
+    virtual void ScrollStart();
+    virtual void ScrollEnd();
+
+protected:
     FuSlide (
         SlideViewShell* pViewSh,
         ::sd::Window* pWin,
         SlideView* pView,
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
-    virtual ~FuSlide (void);
 
-    virtual BOOL KeyInput(const KeyEvent& rKEvt);
-    virtual BOOL MouseMove(const MouseEvent& rMEvt) { return FALSE; }
-    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt) { return FALSE; }
-    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt) { return FALSE; }
-
-    virtual void Activate();
-    virtual void Deactivate();
-
-    virtual void ScrollStart();
-    virtual void ScrollEnd();
-
-protected:
     SlideViewShell* pSlViewShell;
     SlideView*    pSlView;
 };
