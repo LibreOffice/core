@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docufld.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:42:30 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:46:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,7 +160,7 @@ class SwPageNumberFieldType : public SwFieldType
 public:
     SwPageNumberFieldType();
 
-    String& Expand( ULONG nFmt, short nOff, const String&, String& rRet ) const;
+    String& Expand( sal_uInt32 nFmt, short nOff, const String&, String& rRet ) const;
     void ChangeExpansion( SwDoc* pDoc, USHORT nNum, USHORT nMax,
                             BOOL bVirtPageNum, const sal_Int16* pNumFmt = 0 );
     inline sal_Int16 GetNumFormat() const { return nNumberingType; }
@@ -179,7 +179,7 @@ class SwPageNumberField : public SwField
 
 public:
     SwPageNumberField(SwPageNumberFieldType*, USHORT nSub = PG_RANDOM,
-                      ULONG nFmt = 0, short nOff = 0);
+                      sal_uInt32 nFmt = 0, short nOff = 0);
 
     virtual String      Expand() const;
     virtual SwField*    Copy() const;
@@ -218,7 +218,7 @@ class SwAuthorField : public SwField
     String  aContent;
 
 public:
-    SwAuthorField(SwAuthorFieldType*, ULONG nFmt = 0);
+    SwAuthorField(SwAuthorFieldType*, sal_uInt32 nFmt = 0);
 
     virtual String      Expand() const;
     virtual SwField*    Copy() const;
@@ -253,7 +253,7 @@ class SwFileNameField : public SwField
     String aContent;
 
 public:
-    SwFileNameField(SwFileNameFieldType*, ULONG nFmt = 0);
+    SwFileNameField(SwFileNameFieldType*, sal_uInt32 nFmt = 0);
 
     virtual String      Expand() const;
     virtual SwField*    Copy() const;
@@ -286,7 +286,7 @@ public:
 class SwTemplNameField : public SwField
 {
 public:
-    SwTemplNameField(SwTemplNameFieldType*, ULONG nFmt = 0);
+    SwTemplNameField(SwTemplNameFieldType*, sal_uInt32 nFmt = 0);
 
     virtual String      Expand() const;
     virtual SwField*    Copy() const;
@@ -306,7 +306,7 @@ class SwDocStatFieldType : public SwFieldType
 
 public:
     SwDocStatFieldType(SwDoc*);
-    String                  Expand(USHORT nSubType, ULONG nFmt) const;
+    String                  Expand(USHORT nSubType, sal_uInt32 nFmt) const;
     virtual SwFieldType*    Copy() const;
 
     inline sal_Int16        GetNumFormat() const        { return nNumberingType; }
@@ -323,7 +323,7 @@ class SwDocStatField : public SwField
 
 public:
     SwDocStatField( SwDocStatFieldType*,
-                    USHORT nSubType = 0, ULONG nFmt = 0);
+                    USHORT nSubType = 0, sal_uInt32 nFmt = 0);
 
     void ChangeExpansion( const SwFrm* pFrm );
 
@@ -559,7 +559,7 @@ class SwDocInfoFieldType : public SwValueFieldType
 public:
     SwDocInfoFieldType(SwDoc* pDc);
 
-    String                  Expand(USHORT nSubType, ULONG nFormat, USHORT nLang) const;
+    String                  Expand(USHORT nSubType, sal_uInt32 nFormat, USHORT nLang) const;
     virtual SwFieldType*    Copy() const;
 };
 
@@ -569,7 +569,7 @@ class SwDocInfoField : public SwValueField
     String  aContent;
 
 public:
-    SwDocInfoField(SwDocInfoFieldType*, USHORT nSub, ULONG nFmt=0);
+    SwDocInfoField(SwDocInfoFieldType*, USHORT nSub, sal_uInt32 nFmt=0);
 
     virtual void            SetSubType(USHORT);
     virtual USHORT          GetSubType() const;
@@ -597,7 +597,7 @@ public:
     inline const String&    GetData() const                 { return aData; }
     inline void             SetData(const String& rStr)     { aData = rStr; }
 
-    String                  Expand(USHORT nSubType, ULONG nFormat) const;
+    String                  Expand(USHORT nSubType, sal_uInt32 nFormat) const;
     virtual SwFieldType*    Copy() const;
 };
 
@@ -607,7 +607,7 @@ class SwExtUserField : public SwField
     USHORT  nType;
 
 public:
-    SwExtUserField(SwExtUserFieldType*, USHORT nSub, ULONG nFmt=0);
+    SwExtUserField(SwExtUserFieldType*, USHORT nSub, sal_uInt32 nFmt=0);
 
     virtual String      Expand() const;
     virtual SwField*    Copy() const;
@@ -697,7 +697,7 @@ class SwRefPageGetField : public SwField
 {
     String sTxt;
 public:
-    SwRefPageGetField( SwRefPageGetFieldType*, ULONG nFmt );
+    SwRefPageGetField( SwRefPageGetFieldType*, sal_uInt32 nFmt );
 
     virtual String      Expand() const;
     virtual SwField*    Copy() const;
@@ -733,7 +733,7 @@ class SwJumpEditField : public SwField
 {
     String sTxt, sHelp;
 public:
-    SwJumpEditField( SwJumpEditFieldType*, ULONG nFormat,
+    SwJumpEditField( SwJumpEditFieldType*, sal_uInt32 nFormat,
                     const String& sText, const String& sHelp );
 
     virtual String      Expand() const;
