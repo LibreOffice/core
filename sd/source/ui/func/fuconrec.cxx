@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:38:21 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 16:56:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,6 +154,21 @@ FuConstructRectangle::FuConstructRectangle (
     SfxRequest&     rReq)
     : FuConstruct(pViewSh, pWin, pView, pDoc, rReq)
 {
+}
+
+FunctionReference FuConstructRectangle::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent )
+{
+    FuConstructRectangle* pFunc;
+    FunctionReference xFunc( pFunc = new FuConstructRectangle( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    pFunc->SetPermanent(bPermanent);
+    return xFunc;
+}
+
+void FuConstructRectangle::DoExecute( SfxRequest& rReq )
+{
+    FuConstruct::DoExecute( rReq );
+
     pViewShell->GetObjectBarManager().SwitchObjectBar (RID_DRAW_OBJ_TOOLBOX);
 
     const SfxItemSet *pArgs = rReq.GetArgs ();
@@ -240,16 +255,6 @@ FuConstructRectangle::FuConstructRectangle (
     {
         pView->UnmarkAll();
     }
-}
-
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
-
-FuConstructRectangle::~FuConstructRectangle()
-{
 }
 
 /*************************************************************************
