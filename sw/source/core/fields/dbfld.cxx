@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbfld.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:32:32 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:48:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -408,7 +408,7 @@ void SwDBField::Evaluate()
     if(!pMgr || !pMgr->IsDataSourceOpen(aTmpData.sDataSource, aTmpData.sCommand, sal_True))
         return ;
 
-    ULONG nFmt;
+    sal_uInt32 nFmt;
 
     // Passenden Spaltennamen suchen
     String aColNm( ((SwDBFieldType*)GetTyp())->GetColumnName() );
