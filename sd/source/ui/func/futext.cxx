@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:52:26 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:05:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,7 +151,7 @@
 #include "pres.hxx"
 #include "optsitem.hxx"
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -218,7 +218,15 @@ FuText::FuText (
       pTextObj(NULL),
       bFirstObjCreated(FALSE),
       rRequest (rReq)
-{}
+{
+}
+
+FunctionReference FuText::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    FunctionReference xFunc( new FuText( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    return xFunc;
+}
 
 /*************************************************************************
 |*
@@ -226,20 +234,24 @@ FuText::FuText (
 |*
 \************************************************************************/
 
-FuText::~FuText()
+void FuText::disposing()
 {
-    if(pView->EndTextEdit(FALSE,this) == SDRENDTEXTEDIT_DELETED)
-        pTextObj = NULL;
-
-    // die RequestHandler der benutzten Outliner zuruecksetzen auf den
-    // Handler am Dokument
-    ::Outliner* pOutliner = pView->GetTextEditOutliner();
-
-    if (pOutliner)
+    if(pView)
     {
-        pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)
-                    pDoc->GetStyleSheetPool());
-        pOutliner->SetMinDepth(0);
+        FunctionReference xThis(this);
+        if(pView->EndTextEdit(FALSE,xThis) == SDRENDTEXTEDIT_DELETED)
+            pTextObj = NULL;
+
+        // die RequestHandler der benutzten Outliner zuruecksetzen auf den
+        // Handler am Dokument
+        ::Outliner* pOutliner = pView->GetTextEditOutliner();
+
+        if (pOutliner)
+        {
+            pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)
+                        pDoc->GetStyleSheetPool());
+            pOutliner->SetMinDepth(0);
+        }
     }
 }
 
@@ -257,7 +269,7 @@ FuText::~FuText()
 |* be right until the ctor finished !!!
 |*
 \************************************************************************/
-void FuText::DoExecute ()
+void FuText::DoExecute( SfxRequest& rReq )
 {
     pViewShell->GetObjectBarManager().SwitchObjectBar (RID_DRAW_TEXT_TOOLBOX);
 
