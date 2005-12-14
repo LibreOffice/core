@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.55 $
+#   $Revision: 1.56 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-11 14:16:51 $
+#   last change: $Author: rt $ $Date: 2005-12-14 12:32:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1536,7 +1536,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         installer::windows::msiglobal::set_msiproductversion($allvariableshashref);
         installer::windows::msiglobal::put_msiproductversion_into_bootstrapfile($filesinproductlanguageresolvedarrayref);
 
-        installer::windows::file::create_files_table($filesinproductlanguageresolvedarrayref, \@allfilecomponents, $newidtdir);
+        installer::windows::file::create_files_table($filesinproductlanguageresolvedarrayref, \@allfilecomponents, $newidtdir, $allvariableshashref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles17.log", $filesinproductlanguageresolvedarrayref); }
 
         installer::windows::directory::create_directory_table($directoriesforepmarrayref, $newidtdir, $allvariableshashref);
@@ -1802,6 +1802,11 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # adding the custom action for starting an inf file in deinstallation process (CustomAc.idt and InstallE.idt)
             $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Shellextensionsdll7", "65", "shlxtmsi.dll", "ExecutePostUninstallScript", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
             if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "shlxtmsi.dll",  "Shellextensionsdll7", "REMOVE=\"ALL\" And Not PATCH", "InstallValidate", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+
+            # adding the custom action for migration of installation path (CustomAc.idt and InstallE.idt and InstallU.idt)
+            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "MigrateInstallPath", "321", "shlxtmsi.dll", "MigrateInstallPath", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
+            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "shlxtmsi.dll",  "MigrateInstallPath", "Not REMOVE=\"ALL\" And Not PATCH", "CostInitialize", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installuitable, "shlxtmsi.dll", "MigrateInstallPath", "Not REMOVE=\"ALL\" And Not PATCH", "CostInitialize", $filesinproductlanguageresolvedarrayref, $installuitablename); }
 
             # adding the custom action to remove old Windows registry (CustomAc.idt and InstallE.idt )
             $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "RegCleanOld", "65", "regcleanold.dll", "CleanCurUserOldSystemRegistryFromSetup", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
