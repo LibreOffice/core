@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.78 $
-# Date:        $Date: 2005-10-28 11:59:53 $
+# Version:     $Revision: 1.79 $
+# Date:        $Date: 2005-12-14 14:42:40 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1781,6 +1781,7 @@ ToFile( "SYSTEM_PORTAUDIO",  "@SYSTEM_PORTAUDIO@", "e" );
 ToFile( "SYSTEM_NEON",       "@SYSTEM_NEON@",      "e" );
 ToFile( "NEON_LIBS",         "@NEON_LIBS@",        "e" );
 ToFile( "NEON_CFLAGS",       "@NEON_CFLAGS@",      "e" );
+ToFile( "SYSTEM_AGG",	     "@SYSTEM_AGG@",       "e" );
 ToFile( "BUILD_DMAKE",       "@BUILD_DMAKE@",      "e" );
 ToFile( "USE_XINERAMA",      "@USE_XINERAMA@",     "e" );
 ToFile( "XINERAMA_LINK",     "@XINERAMA_LINK@",    "e" );
