@@ -4,9 +4,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 15:33:34 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:35:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1728,11 +1728,11 @@ RTLFUNC(DateValue)
             pFormatter = pINST->GetNumberFormatter();
         else
         {
-            ULONG n;    // Dummy
+            sal_uInt32 n;   // Dummy
             SbiInstance::PrepareNumberFormatter( pFormatter, n, n, n );
         }
 
-        ULONG nIndex;
+        sal_uInt32 nIndex;
         double fResult;
         String aStr( rPar.Get(1)->GetString() );
         BOOL bSuccess = pFormatter->IsNumberFormat( aStr, nIndex, fResult );
@@ -1771,11 +1771,11 @@ RTLFUNC(TimeValue)
             pFormatter = pINST->GetNumberFormatter();
         else
         {
-            ULONG n;    // Dummy
+            sal_uInt32 n;   // Dummy
             SbiInstance::PrepareNumberFormatter( pFormatter, n, n, n );
         }
 
-        ULONG nIndex;
+        sal_uInt32 nIndex;
         double fResult;
         BOOL bSuccess = pFormatter->IsNumberFormat( rPar.Get(1)->GetString(),
                                                    nIndex, fResult );
@@ -1952,7 +1952,7 @@ RTLFUNC(Time)
 
             // #39629 pINST pruefen, kann aus URL-Zeile gerufen werden
             SvNumberFormatter* pFormatter = NULL;
-            ULONG nIndex;
+            sal_uInt32 nIndex;
             if( pINST )
             {
                 pFormatter = pINST->GetNumberFormatter();
@@ -1960,7 +1960,7 @@ RTLFUNC(Time)
             }
             else
             {
-                ULONG n;    // Dummy
+                sal_uInt32 n;   // Dummy
                 SbiInstance::PrepareNumberFormatter( pFormatter, n, nIndex, n );
             }
 
@@ -2003,7 +2003,7 @@ RTLFUNC(Date)
 
             // #39629 pINST pruefen, kann aus URL-Zeile gerufen werden
             SvNumberFormatter* pFormatter = NULL;
-            ULONG nIndex;
+            sal_uInt32 nIndex;
             if( pINST )
             {
                 pFormatter = pINST->GetNumberFormatter();
@@ -2011,7 +2011,7 @@ RTLFUNC(Date)
             }
             else
             {
-                ULONG n;    // Dummy
+                sal_uInt32 n;   // Dummy
                 SbiInstance::PrepareNumberFormatter( pFormatter, nIndex, n, n );
             }
 
@@ -2808,7 +2808,7 @@ RTLFUNC(FileDateTime)
 
         // #39629 pINST pruefen, kann aus URL-Zeile gerufen werden
         SvNumberFormatter* pFormatter = NULL;
-        ULONG nIndex;
+        sal_uInt32 nIndex;
         if( pINST )
         {
             pFormatter = pINST->GetNumberFormatter();
@@ -2816,7 +2816,7 @@ RTLFUNC(FileDateTime)
         }
         else
         {
-            ULONG n;    // Dummy
+            sal_uInt32 n;   // Dummy
             SbiInstance::PrepareNumberFormatter( pFormatter, n, n, nIndex );
         }
 
