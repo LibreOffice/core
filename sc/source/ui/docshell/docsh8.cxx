@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh8.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:09:41 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:09:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -581,7 +581,7 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
                 nDbType = sdbc::DataType::VARCHAR;
             else
             {
-                ULONG nFormat;
+                sal_uInt32 nFormat;
                 pDoc->GetNumberFormat( nCol, nFirstDataRow, nTab, nFormat );
                 if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA
                   && ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0) )
@@ -969,7 +969,7 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
                                 }
                                 else
                                 {
-                                    ULONG nFormat;
+                                    sal_uInt32 nFormat;
                                     Color* pColor;
                                     aDocument.GetNumberFormat( nDocCol, nDocRow, nTab, nFormat );
                                     ScCellFormat::GetString( pCell, nFormat, aString, &pColor, *pNumFmt );
