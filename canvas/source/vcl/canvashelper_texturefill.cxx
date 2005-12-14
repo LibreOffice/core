@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvashelper_texturefill.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-17 16:08:14 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:57:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -777,13 +777,12 @@ namespace vclcanvas
                 rOutDev.DrawRect( ::vcl::unotools::rectangleFromB2DRectangle( aTextureDeviceRect ) );
 
                 rOutDev.SetLineColor( COL_BLUE );
-                ::basegfx::B2DPolygon aPoly(
-                    ::Polygon(
-                        ::vcl::unotools::rectangleFromB2DRectangle(
-                            aRect ) ).getB2DPolygon() );
-                aPoly.transform( aTextureTransform );
-                ::Polygon aPoly2( aPoly );
-                rOutDev.DrawPolygon( aPoly2 );
+                ::Polygon aPoly1(
+                    ::vcl::unotools::rectangleFromB2DRectangle( aRect ));
+                ::basegfx::B2DPolygon aPoly2( aPoly1.getB2DPolygon() );
+                aPoly2.transform( aTextureTransform );
+                ::Polygon aPoly3( aPoly2 );
+                rOutDev.DrawPolygon( aPoly3 );
             }
 #endif
 
