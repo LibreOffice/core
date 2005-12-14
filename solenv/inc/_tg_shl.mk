@@ -55,13 +55,14 @@ SHL1DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL1DESC:b)$($(WINVERSIONNAMES)_MAJOR)_descripti
 SHL1VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .IF "$(GUI)" == "UNX"
-SHL1DEPN+=$(SHL1VERSIONOBJ:s/.o/.obj/)
+SHL1VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
 .ELSE           # "$(GUI)" == "UNX"
-SHL1DEPN+=$(SHL1VERSIONOBJ)
+SHL1VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}$(VERSIONOBJ:f)
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)$/$(SHL1VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/_version.h
     +$(COPY) $(SOLARENV)$/src$/version.c $@
 
+.INIT : $(SHL1VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
 .IF "$(GUI)" != "UNX"
@@ -220,7 +221,6 @@ $(SHL1TARGETN) : \
                     $(USE_SHL1DEF)\
                     $(USE_SHL1VERSIONMAP)\
                     $(SHL1RES)\
-                    $(SHL1VERSIONH)\
                     $(SHL1DEPN) \
                     $(SHL1LINKLIST) 
     @echo ------------------------------
@@ -452,13 +452,14 @@ SHL2DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL2DESC:b)$($(WINVERSIONNAMES)_MAJOR)_descripti
 SHL2VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .IF "$(GUI)" == "UNX"
-SHL2DEPN+=$(SHL2VERSIONOBJ:s/.o/.obj/)
+SHL2VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
 .ELSE           # "$(GUI)" == "UNX"
-SHL2DEPN+=$(SHL2VERSIONOBJ)
+SHL2VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}$(VERSIONOBJ:f)
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)$/$(SHL2VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/_version.h
     +$(COPY) $(SOLARENV)$/src$/version.c $@
 
+.INIT : $(SHL2VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
 .IF "$(GUI)" != "UNX"
@@ -617,7 +618,6 @@ $(SHL2TARGETN) : \
                     $(USE_SHL2DEF)\
                     $(USE_SHL2VERSIONMAP)\
                     $(SHL2RES)\
-                    $(SHL2VERSIONH)\
                     $(SHL2DEPN) \
                     $(SHL2LINKLIST) 
     @echo ------------------------------
@@ -849,13 +849,14 @@ SHL3DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL3DESC:b)$($(WINVERSIONNAMES)_MAJOR)_descripti
 SHL3VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .IF "$(GUI)" == "UNX"
-SHL3DEPN+=$(SHL3VERSIONOBJ:s/.o/.obj/)
+SHL3VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
 .ELSE           # "$(GUI)" == "UNX"
-SHL3DEPN+=$(SHL3VERSIONOBJ)
+SHL3VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}$(VERSIONOBJ:f)
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)$/$(SHL3VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/_version.h
     +$(COPY) $(SOLARENV)$/src$/version.c $@
 
+.INIT : $(SHL3VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
 .IF "$(GUI)" != "UNX"
@@ -1014,7 +1015,6 @@ $(SHL3TARGETN) : \
                     $(USE_SHL3DEF)\
                     $(USE_SHL3VERSIONMAP)\
                     $(SHL3RES)\
-                    $(SHL3VERSIONH)\
                     $(SHL3DEPN) \
                     $(SHL3LINKLIST) 
     @echo ------------------------------
@@ -1246,13 +1246,14 @@ SHL4DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL4DESC:b)$($(WINVERSIONNAMES)_MAJOR)_descripti
 SHL4VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .IF "$(GUI)" == "UNX"
-SHL4DEPN+=$(SHL4VERSIONOBJ:s/.o/.obj/)
+SHL4VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
 .ELSE           # "$(GUI)" == "UNX"
-SHL4DEPN+=$(SHL4VERSIONOBJ)
+SHL4VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}$(VERSIONOBJ:f)
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)$/$(SHL4VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/_version.h
     +$(COPY) $(SOLARENV)$/src$/version.c $@
 
+.INIT : $(SHL4VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
 .IF "$(GUI)" != "UNX"
@@ -1411,7 +1412,6 @@ $(SHL4TARGETN) : \
                     $(USE_SHL4DEF)\
                     $(USE_SHL4VERSIONMAP)\
                     $(SHL4RES)\
-                    $(SHL4VERSIONH)\
                     $(SHL4DEPN) \
                     $(SHL4LINKLIST) 
     @echo ------------------------------
@@ -1643,13 +1643,14 @@ SHL5DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL5DESC:b)$($(WINVERSIONNAMES)_MAJOR)_descripti
 SHL5VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .IF "$(GUI)" == "UNX"
-SHL5DEPN+=$(SHL5VERSIONOBJ:s/.o/.obj/)
+SHL5VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
 .ELSE           # "$(GUI)" == "UNX"
-SHL5DEPN+=$(SHL5VERSIONOBJ)
+SHL5VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}$(VERSIONOBJ:f)
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)$/$(SHL5VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/_version.h
     +$(COPY) $(SOLARENV)$/src$/version.c $@
 
+.INIT : $(SHL5VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
 .IF "$(GUI)" != "UNX"
@@ -1808,7 +1809,6 @@ $(SHL5TARGETN) : \
                     $(USE_SHL5DEF)\
                     $(USE_SHL5VERSIONMAP)\
                     $(SHL5RES)\
-                    $(SHL5VERSIONH)\
                     $(SHL5DEPN) \
                     $(SHL5LINKLIST) 
     @echo ------------------------------
@@ -2040,13 +2040,14 @@ SHL6DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL6DESC:b)$($(WINVERSIONNAMES)_MAJOR)_descripti
 SHL6VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .IF "$(GUI)" == "UNX"
-SHL6DEPN+=$(SHL6VERSIONOBJ:s/.o/.obj/)
+SHL6VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
 .ELSE           # "$(GUI)" == "UNX"
-SHL6DEPN+=$(SHL6VERSIONOBJ)
+SHL6VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}$(VERSIONOBJ:f)
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)$/$(SHL6VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/_version.h
     +$(COPY) $(SOLARENV)$/src$/version.c $@
 
+.INIT : $(SHL6VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
 .IF "$(GUI)" != "UNX"
@@ -2205,7 +2206,6 @@ $(SHL6TARGETN) : \
                     $(USE_SHL6DEF)\
                     $(USE_SHL6VERSIONMAP)\
                     $(SHL6RES)\
-                    $(SHL6VERSIONH)\
                     $(SHL6DEPN) \
                     $(SHL6LINKLIST) 
     @echo ------------------------------
@@ -2437,13 +2437,14 @@ SHL7DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL7DESC:b)$($(WINVERSIONNAMES)_MAJOR)_descripti
 SHL7VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .IF "$(GUI)" == "UNX"
-SHL7DEPN+=$(SHL7VERSIONOBJ:s/.o/.obj/)
+SHL7VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
 .ELSE           # "$(GUI)" == "UNX"
-SHL7DEPN+=$(SHL7VERSIONOBJ)
+SHL7VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}$(VERSIONOBJ:f)
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)$/$(SHL7VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/_version.h
     +$(COPY) $(SOLARENV)$/src$/version.c $@
 
+.INIT : $(SHL7VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
 .IF "$(GUI)" != "UNX"
@@ -2602,7 +2603,6 @@ $(SHL7TARGETN) : \
                     $(USE_SHL7DEF)\
                     $(USE_SHL7VERSIONMAP)\
                     $(SHL7RES)\
-                    $(SHL7VERSIONH)\
                     $(SHL7DEPN) \
                     $(SHL7LINKLIST) 
     @echo ------------------------------
@@ -2834,13 +2834,14 @@ SHL8DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL8DESC:b)$($(WINVERSIONNAMES)_MAJOR)_descripti
 SHL8VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .IF "$(GUI)" == "UNX"
-SHL8DEPN+=$(SHL8VERSIONOBJ:s/.o/.obj/)
+SHL8VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
 .ELSE           # "$(GUI)" == "UNX"
-SHL8DEPN+=$(SHL8VERSIONOBJ)
+SHL8VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}$(VERSIONOBJ:f)
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)$/$(SHL8VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/_version.h
     +$(COPY) $(SOLARENV)$/src$/version.c $@
 
+.INIT : $(SHL8VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
 .IF "$(GUI)" != "UNX"
@@ -2999,7 +3000,6 @@ $(SHL8TARGETN) : \
                     $(USE_SHL8DEF)\
                     $(USE_SHL8VERSIONMAP)\
                     $(SHL8RES)\
-                    $(SHL8VERSIONH)\
                     $(SHL8DEPN) \
                     $(SHL8LINKLIST) 
     @echo ------------------------------
@@ -3231,13 +3231,14 @@ SHL9DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL9DESC:b)$($(WINVERSIONNAMES)_MAJOR)_descripti
 SHL9VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .IF "$(GUI)" == "UNX"
-SHL9DEPN+=$(SHL9VERSIONOBJ:s/.o/.obj/)
+SHL9VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
 .ELSE           # "$(GUI)" == "UNX"
-SHL9DEPN+=$(SHL9VERSIONOBJ)
+SHL9VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}$(VERSIONOBJ:f)
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)$/$(SHL9VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/_version.h
     +$(COPY) $(SOLARENV)$/src$/version.c $@
 
+.INIT : $(SHL9VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
 .IF "$(GUI)" != "UNX"
@@ -3396,7 +3397,6 @@ $(SHL9TARGETN) : \
                     $(USE_SHL9DEF)\
                     $(USE_SHL9VERSIONMAP)\
                     $(SHL9RES)\
-                    $(SHL9VERSIONH)\
                     $(SHL9DEPN) \
                     $(SHL9LINKLIST) 
     @echo ------------------------------
@@ -3628,13 +3628,14 @@ SHL10DESCRIPTIONOBJ*=$(SLO)$/$(LOCAL10DESC:b)$($(WINVERSIONNAMES)_MAJOR)_descrip
 SHL10VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}$(VERSIONOBJ:f)
 USE_VERSIONH:=$(INCCOM)$/_version.h
 .IF "$(GUI)" == "UNX"
-SHL10DEPN+=$(SHL10VERSIONOBJ:s/.o/.obj/)
+SHL10VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}$(VERSIONOBJ:f:s/.o/.obj/)
 .ELSE           # "$(GUI)" == "UNX"
-SHL10DEPN+=$(SHL10VERSIONOBJ)
+SHL10VERSIONOBJDEP:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}$(VERSIONOBJ:f)
 .ENDIF          # "$(GUI)" == "UNX"
 $(MISC)$/$(SHL10VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/_version.h
     +$(COPY) $(SOLARENV)$/src$/version.c $@
 
+.INIT : $(SHL10VERSIONOBJDEP)
 .ENDIF			# "$(VERSIONOBJ)"!=""
 
 .IF "$(GUI)" != "UNX"
@@ -3793,7 +3794,6 @@ $(SHL10TARGETN) : \
                     $(USE_SHL10DEF)\
                     $(USE_SHL10VERSIONMAP)\
                     $(SHL10RES)\
-                    $(SHL10VERSIONH)\
                     $(SHL10DEPN) \
                     $(SHL10LINKLIST) 
     @echo ------------------------------
