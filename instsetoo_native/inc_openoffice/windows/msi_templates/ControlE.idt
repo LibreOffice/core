@@ -40,7 +40,7 @@ DatabaseFolder	ChangeFolder	SpawnDialog	InstallChangeFolder	1	1
 DatabaseFolder	Next	NewDialog	SetupType	1	1
 DestinationFolder	Back	NewDialog	CustomerInformation	1	0
 DestinationFolder	Cancel	SpawnDialog	CancelSetup	1	1
-DestinationFolder	ChangeFolder	[_BrowseProperty]	INSTALLDIR	1	2
+DestinationFolder	ChangeFolder	[_BrowseProperty]	INSTALLLOCATION	1	2
 DestinationFolder	ChangeFolder	SpawnDialog	InstallChangeFolder	1	1
 DestinationFolder	Next	NewDialog	SetupType	1	0
 DiskSpaceRequirements	OK	EndDialog	Return	1	0
