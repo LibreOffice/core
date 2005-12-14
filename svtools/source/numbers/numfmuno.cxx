@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numfmuno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:33:29 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:01:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,7 +204,7 @@ sal_Int32 SAL_CALL SvNumberFormatterServiceObj::detectNumberFormat(
     if (pFormatter)
     {
         String aTemp = aString;
-        ULONG nUKey = nKey;
+        sal_uInt32 nUKey = nKey;
         double fValue = 0.0;
         if ( pFormatter->IsNumberFormat(aTemp, nUKey, fValue) )
             nRet = nUKey;
@@ -228,7 +228,7 @@ double SAL_CALL SvNumberFormatterServiceObj::convertStringToNumber(
     if (pFormatter)
     {
         String aTemp = aString;
-        ULONG nUKey = nKey;
+        sal_uInt32 nUKey = nKey;
         double fValue = 0.0;
         if ( pFormatter->IsNumberFormat(aTemp, nUKey, fValue) )
             fRet = fValue;
@@ -481,15 +481,15 @@ uno::Sequence<sal_Int32> SAL_CALL SvNumberFormatsObj::queryKeys( sal_Int16 nType
     SvNumberFormatter* pFormatter = pSupplier ? pSupplier->GetNumberFormatter() : NULL;
     if ( pFormatter )
     {
-        ULONG nIndex = 0;
+        sal_uInt32 nIndex = 0;
         LanguageType eLang = lcl_GetLanguage( nLocale );
         SvNumberFormatTable& rTable = bCreate ?
                                         pFormatter->ChangeCL( nType, nIndex, eLang ) :
                                         pFormatter->GetEntryTable( nType, nIndex, eLang );
-        ULONG nCount = rTable.Count();
+        sal_uInt32 nCount = rTable.Count();
         uno::Sequence<sal_Int32> aSeq(nCount);
         sal_Int32* pAry = aSeq.getArray();
-        for (ULONG i=0; i<nCount; i++)
+        for (sal_uInt32 i=0; i<nCount; i++)
             pAry[i] = rTable.GetObjectKey( i );
 
         return aSeq;
@@ -536,7 +536,7 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::addNew( const rtl::OUString& aFormat,
     {
         String aFormStr = aFormat;
         LanguageType eLang = lcl_GetLanguage( nLocale );
-        ULONG nKey = 0;
+        sal_uInt32 nKey = 0;
         xub_StrLen nCheckPos = 0;
         short nType = 0;
         BOOL bOk = pFormatter->PutEntry( aFormStr, nCheckPos, nType, nKey, eLang );
@@ -568,7 +568,7 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::addNewConverted( const rtl::OUString& aFo
         String aFormStr = aFormat;
         LanguageType eLang = lcl_GetLanguage( nLocale );
         LanguageType eNewLang = lcl_GetLanguage( nNewLocale );
-        ULONG nKey = 0;
+        sal_uInt32 nKey = 0;
         xub_StrLen nCheckPos = 0;
         short nType = 0;
         BOOL bOk = pFormatter->PutandConvertEntry( aFormStr, nCheckPos, nType, nKey, eLang, eNewLang );
