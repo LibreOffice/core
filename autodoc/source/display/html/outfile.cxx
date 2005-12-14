@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outfile.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:32:51 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:33:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,13 @@
 #include <udm/html/htmlitem.hxx>
 #include <toolkit/out_position.hxx>
 #include "strconst.hxx"
+
+
+namespace
+{
+bool            bUse_OOoFrameDiv = true;
+const String    C_sOOoFrameDiv_CppId("adc-cppref");
+}
 
 
 using namespace csi;
@@ -152,6 +159,79 @@ const char * const
     ;
 
 
+const char * const
+    C_sStdStyle_withDivFrame =
+    "body   { background-color:#ffffff; }"CRLF
+    "#adc-cppref h1     { font-size:20pt; margin-top:3pt; margin-bottom:7pt; }"CRLF
+    "#adc-cppref h2     { font-family:Arial; font-size:16pt; margin-top:3pt; margin-bottom:5pt; }"CRLF
+    "#adc-cppref h3     { font-size:13pt; margin-top:2pt; margin-bottom:3pt; }"CRLF
+    "#adc-cppref h4     { font-size:10pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }"CRLF
+    "#adc-cppref dl     { margin-top:1pt; margin-bottom:1pt; }"CRLF
+    "#adc-cppref dl.member  { margin-top:1pt; margin-bottom:1pt; background-color:#eeeeff; }"CRLF
+    "#adc-cppref dt     { font-size:10pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }"CRLF
+    "#adc-cppref dt.member  { font-size:13pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }"CRLF
+    "#adc-cppref dt.simple  { font-size:10pt; font-weight:normal; margin-top:2pt; margin-bottom:1pt; }"CRLF
+    "#adc-cppref dd     { font-size:10pt; margin-top:1pt; margin-bottom:1pt; }"CRLF
+    "#adc-cppref dd.member  { font-size:10pt; margin-top:1pt; margin-bottom:1pt; background-color:#ffffff; }"CRLF
+    "#adc-cppref p      { font-size:10pt; margin-top:3pt; margin-bottom:1pt; }"CRLF
+    "#adc-cppref pre    { font-family:monospace; font-size:10pt; margin-top:1pt; margin-bottom:1pt; }"CRLF
+    "#adc-cppref tr     { font-size:10pt; }"CRLF
+    "#adc-cppref td     { font-size:10pt; }"CRLF
+    CRLF
+    "#adc-cppref dt.attention   { color:#dd0000; }"CRLF
+    CRLF
+    "#adc-cppref div.title      { text-align:center;  line-height:26pt; background-color:#ccccff; }"CRLF
+    "#adc-cppref .subtitle      { background-color:#ccccff; }"CRLF
+    CRLF
+    "#adc-cppref td.flagname    { background-color:#eeeeff; font-family:Arial; font-size:8pt; font-weight:bold; }"CRLF
+    "#adc-cppref td.flagyes     { font-family:Arial; font-size:8pt; font-weight:bold; }"CRLF
+    "#adc-cppref td.flagno      { font-family:Arial; font-size:8pt; }"CRLF
+    "#adc-cppref td.flagtext    { font-family:Arial; font-size:8pt; font-weight:bold; }"CRLF
+    CRLF
+    "#adc-cppref td.navimain, #adc-cppref td.navimain a"CRLF
+    "               { background-color:#eeeeff; color:#000000;"CRLF
+    "                 font-family:Arial; font-size:12pt; font-weight:bold; }"CRLF
+    "#adc-cppref td.navimainself"CRLF
+    "               { background-color:#2222ad; color:#ffffff;"CRLF
+    "                 font-family:Arial; font-size:12pt; font-weight:bold; }"CRLF
+    "#adc-cppref td.navimainnone"CRLF
+    "               { background-color:#eeeeff; color:#000000;"CRLF
+    "                 font-family:Arial; font-size:12pt; }"CRLF
+    CRLF
+    "#adc-cppref div.define     { font-family:Arial; background-color:#ccccff; }"CRLF
+    CRLF
+    "#adc-cppref .nqclass       { color:#008800; }"CRLF
+    CRLF
+    "#adc-cppref h3.help        { background-color:#eeeeff; margin-top:12pt; }"CRLF
+    CRLF
+    "#adc-cppref .btpubl        { color:#33ff33; }"CRLF
+    "#adc-cppref .btprot        { color:#cc9933; }"CRLF
+    "#adc-cppref .btpriv        { color:#ff6666; }"CRLF
+    "#adc-cppref .btvpubl       { color:#33ff33; font-style:italic; }"CRLF
+    "#adc-cppref .btvprot       { color:#cc9933; font-style:italic; }"CRLF
+    "#adc-cppref .btvpriv       { color:#ff6666; font-style:italic; }"CRLF
+    "#adc-cppref .btself        { font-weight:bold; }"CRLF
+    ""CRLF
+    "#adc-cppref table { empty-cells:show; }"CRLF
+    ""CRLF
+    "#adc-cppref .childlist td, "CRLF
+    "#adc-cppref .commentedlinks td, "CRLF
+    "#adc-cppref .memberlist td, "CRLF
+    "#adc-cppref .subtitle td, "CRLF
+    "#adc-cppref .crosstitle td  { border: .1pt solid #000000; }"CRLF
+    ""CRLF
+    "#adc-cppref .flag-table td { border: .1pt solid #cccccc; } "CRLF
+    ""CRLF
+    "#adc-cppref .title-table td, "CRLF
+    "#adc-cppref .table-in-method td, "CRLF
+    "#adc-cppref .table-in-data td, "CRLF
+    "#adc-cppref .navimain td, "CRLF
+    "#adc-cppref .navisub td, "CRLF
+    "#adc-cppref .expl-table td, "CRLF
+    "#adc-cppref .param-table td  { border: none; }"CRLF
+    ;
+
+
 
 HtmlDocuFile::HtmlDocuFile()
     :   sFilePath(),
@@ -198,10 +278,19 @@ void
 HtmlDocuFile::EmptyBody()
 {
      aBodyData.SetContent(0);
+
+     if (bUse_OOoFrameDiv)
+     {
+        // Insert <div> tag to allow better formatting for OOo.
+        aBodyData
+            << new xml::XmlCode("<div id=\"")
+            << new xml::XmlCode(C_sOOoFrameDiv_CppId)
+            << new xml::XmlCode("\">\n\n");
+     }
+
     aBodyData
         >> *new html::Label( "_top_" )
         << " ";
-
 }
 
 bool
@@ -242,7 +331,12 @@ HtmlDocuFile::WriteCssFile( const csv::ploc::Path & i_rFilePath )
     }
 
     aCssFile.write("/*      Autodoc css file for C++ documentation      */\n\n\n");
-    aCssFile.write(C_sStdStyle);
+
+    if (bUse_OOoFrameDiv)
+        aCssFile.write(C_sStdStyle_withDivFrame);
+    else
+        aCssFile.write(C_sStdStyle);
+
     aCssFile.write("\n\n\n");
     aCssFile.write(C_sCssExplanations);
 }
@@ -297,7 +391,16 @@ HtmlDocuFile::WriteBody( csv::File & io_aFile )
                     << new xml::AnAttribute( "align", "center" )
                     << new xml::XmlCode(sCopyright);
     }
-    aBodyData.WriteOut(aBuffer);
 
+     if (bUse_OOoFrameDiv)
+    {
+        // Insert <div> tag to allow better formatting for OOo.
+        aBodyData
+            << new xml::XmlCode("\n</div> <!-- id=\"")
+            << new xml::XmlCode(C_sOOoFrameDiv_CppId)
+            << new xml::XmlCode("\" -->\n");
+    }
+
+    aBodyData.WriteOut(aBuffer);
     io_aFile.write(aBuffer.c_str(), aBuffer.size());
 }
