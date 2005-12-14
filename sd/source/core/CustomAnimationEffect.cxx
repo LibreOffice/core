@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationEffect.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 10:41:40 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:51:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -434,7 +434,9 @@ CustomAnimationEffectPtr CustomAnimationEffect::clone() const
 {
     Reference< XCloneable > xCloneable( mxNode, UNO_QUERY_THROW );
     Reference< XAnimationNode > xNode( xCloneable->createClone(), UNO_QUERY_THROW );
-    return CustomAnimationEffectPtr( new CustomAnimationEffect( xNode ) );
+    CustomAnimationEffectPtr pEffect( new CustomAnimationEffect( xNode ) );
+    pEffect->setEffectSequence( getEffectSequence() );
+    return pEffect;
 }
 
 // --------------------------------------------------------------------
@@ -3434,8 +3436,10 @@ bool MainSequence::setTrigger( const CustomAnimationEffectPtr& pEffect, const ::
 
     if( pOldSequence != pNewSequence )
     {
-        pOldSequence->maEffects.remove( pEffect );
-        pNewSequence->maEffects.push_back( pEffect );
+        if( pOldSequence )
+            pOldSequence->maEffects.remove( pEffect );
+        if( pNewSequence )
+            pNewSequence->maEffects.push_back( pEffect );
         pEffect->setEffectSequence( pNewSequence );
         return true;
     }
