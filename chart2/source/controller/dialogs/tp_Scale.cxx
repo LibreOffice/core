@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_Scale.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:16:43 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:58:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -354,7 +354,7 @@ int SchScaleYAxisTabPage::DeactivatePage(SfxItemSet* pItemSet)
         return LEAVE_PAGE;
     }
 
-    ULONG nIndex = pNumFormatter->GetStandardIndex(LANGUAGE_SYSTEM);
+    sal_uInt32 nIndex = pNumFormatter->GetStandardIndex(LANGUAGE_SYSTEM);
     Edit* pEdit = NULL;
     USHORT nErrStrId = 0;
     double fDummy;
