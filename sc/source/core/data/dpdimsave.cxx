@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpdimsave.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:22:17 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:04:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,7 +130,7 @@ void ScDPSaveGroupItem::AddToData( ScDPGroupDimension& rDataDim, SvNumberFormatt
 
     for ( std::vector<String>::const_iterator aIter(aElements.begin()); aIter != aElements.end(); aIter++ )
     {
-        ULONG nFormat = 0;      //! ...
+        sal_uInt32 nFormat = 0;      //! ...
         double fValue;
         if ( pFormatter->IsNumberFormat( *aIter, nFormat, fValue ) )
             aData = ScDPItemData( *aIter, fValue, TRUE );
