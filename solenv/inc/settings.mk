@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.178 $
+#   $Revision: 1.179 $
 #
-#   last change: $Author: hjs $ $Date: 2005-11-14 09:33:05 $
+#   last change: $Author: rt $ $Date: 2005-12-14 15:09:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,8 @@ unsupported_4nt_version:
 .IF "$(USE_COMMENT)"!=""
 .INCLUDE : comment.mak
 .ENDIF
+
+.INCLUDE .IGNORE : ooo_vendor.mk
 
 # --- common tool makros --------------------------------------
 
