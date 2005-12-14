@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 20:19:53 $
+#   last change: $Author: rt $ $Date: 2005-12-14 15:39:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,11 @@ SHL1STDLIBS= \
         $(CPPULIB) \
         $(SALLIB)
 
+.IF "$(GUI)"=="WNT" && "$(COMID)"=="MSC"
+SHL1STDLIBS+= \
+        $(SVTOOLLIB)
+.ENDIF			# "$(GUI)"=="WNT"
+
 .IF "$(SOLAR_JAVA)"!=""
     SHL1STDLIBS+=$(JVMACCESSLIB)
 .ENDIF
@@ -92,11 +97,5 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo exception::exception>>$@
 .IF "$(COM)"=="MSC"
     @echo __CT>>$@
+    @echo _C@>>$@
 .ENDIF
-.IF "$(COM)"=="ICC"
-    @echo __lower_bound>>$@
-    @echo __stl_prime>>$@
-    @echo __alloc>>$@
-    @echo __malloc>>$@
-.ENDIF
-
