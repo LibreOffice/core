@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:47:17 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:21:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,7 +151,7 @@ public:
 
 NoHelpErrorBox::NoHelpErrorBox( Window* _pParent ) :
 
-    ErrorBox( _pParent, WB_OK, String( SfxResId( RID_STR_HLPAPPNOTSTARTED ) ) )
+    ErrorBox( _pParent, WB_OK, String( SfxResId( RID_STR_HLPFILENOTEXIST ) ) )
 {
     // Error message: "No help available"
 }
