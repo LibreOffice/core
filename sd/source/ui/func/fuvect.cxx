@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuvect.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:53:37 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:06:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,17 @@ FuVectorize::FuVectorize (
     SfxRequest& rReq)
     : FuPoor (pViewSh, pWin, pView, pDoc, rReq)
 {
+}
+
+FunctionReference FuVectorize::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    FunctionReference xFunc( new FuVectorize( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    return xFunc;
+}
+
+void FuVectorize::DoExecute( SfxRequest& rReq )
+{
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 
     if( rMarkList.GetMarkCount() == 1 )
@@ -94,12 +105,10 @@ FuVectorize::FuVectorize (
 
         if( pObj && pObj->ISA( SdrGrafObj ) )
         {
-            //CHINA001 SdVectorizeDlg aDlg(pWin, ( (SdrGrafObj*) pObj )->GetGraphic().GetBitmap(), pDocSh );
-            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
-            DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
-            AbstractSdVectorizeDlg* pDlg = pFact->CreateSdVectorizeDlg(ResId( DLG_VECTORIZE ), pWin, ( (SdrGrafObj*) pObj )->GetGraphic().GetBitmap(), pDocSh );
-            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-            if( pDlg->Execute() == RET_OK ) //CHINA001 if( aDlg.Execute() == RET_OK )
+            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+            AbstractSdVectorizeDlg* pDlg = pFact ? pFact->CreateSdVectorizeDlg(ResId( DLG_VECTORIZE ), pWindow, ( (SdrGrafObj*) pObj )->GetGraphic().GetBitmap(), pDocSh ) : 0;
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");
+            if( pDlg && pDlg->Execute() == RET_OK )
             {
                 const GDIMetaFile&  rMtf = pDlg->GetGDIMetaFile(); //CHINA001 const GDIMetaFile&    rMtf = aDlg.GetGDIMetaFile();
                 SdrPageView*        pPageView = pView->GetPageViewPvNum( 0 );
@@ -117,7 +126,7 @@ FuVectorize::FuVectorize (
                     pView->EndUndo();
                 }
             }
-            delete pDlg; //add by CHINA001
+            delete pDlg;
         }
     }
 }
