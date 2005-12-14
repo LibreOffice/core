@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writerwordglue.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:04 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:50:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -905,8 +905,8 @@ namespace sw
         {
             // tell the Formatter about the new entry
             UINT16 nCheckPos = 0;
-            INT16  nType = NUMBERFORMAT_DEFINED;
-            ULONG  nKey = 0;
+            short  nType = NUMBERFORMAT_DEFINED;
+            sal_uInt32  nKey = 0;
 
             SwapQuotesInField(rParams);
 
