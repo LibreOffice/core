@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusumry.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:51:56 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:04:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,17 @@ FuSummaryPage::FuSummaryPage (
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+{
+}
+
+FunctionReference FuSummaryPage::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    FunctionReference xFunc( new FuSummaryPage( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    return xFunc;
+}
+
+void FuSummaryPage::DoExecute( SfxRequest& rReq )
 {
     ::sd::Outliner* pOutl = NULL;
     SdPage* pSummaryPage = NULL;
@@ -233,10 +244,10 @@ FuSummaryPage::FuSummaryPage (
         pView->EndUndo();
         delete pOutl;
 
-        if (pViewSh->ISA(DrawViewShell))
+        DrawViewShell* pDrawViewShell= dynamic_cast< DrawViewShell* >( pViewShell );
+        if(pDrawViewShell)
         {
-            static_cast<DrawViewShell*>(pViewSh)->SwitchPage(
-                (pSummaryPage->GetPageNum() - 1) / 2);
+            pDrawViewShell->SwitchPage( (pSummaryPage->GetPageNum() - 1) / 2);
         }
     }
 }
