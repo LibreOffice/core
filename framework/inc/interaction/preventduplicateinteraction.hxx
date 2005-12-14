@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preventduplicateinteraction.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:03:33 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:49:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,14 +122,14 @@ namespace framework{
                 On the other side there exists some interactions, which allow a retry.
                 So this helper allow to set a list of interactions combined with a retry value.
  */
-struct ThreadHelpBase
+struct ThreadHelpBase2
 {
     public:
         mutable ::osl::Mutex m_aLock;
 };
 
 class PreventDuplicateInteraction : public ::cppu::WeakImplHelper1< css::task::XInteractionHandler >
-                                  , private ThreadHelpBase
+                                  , private ThreadHelpBase2
 {
     //_____________________________________
     // structs, types etcp.
