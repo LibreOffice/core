@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-25 11:54:09 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:30:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -444,14 +444,14 @@ void View::StartDrag( const Point& rStartPos, Window* pWindow )
         if( IsTextEdit() )
             EndTextEdit();
 
-        ViewShell* pViewShell= pDocSh->GetViewShell();
+        DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >( pDocSh ? pDocSh->GetViewShell() : 0 );
 
-        if( pViewShell && pViewShell->ISA( DrawViewShell ) )
+        if( pDrawViewShell )
         {
-            FuPoor* pFunc = ( (DrawViewShell*) pViewShell )->GetActualFunction();
+            FunctionReference xFunction( pDrawViewShell->GetCurrentFunction() );
 
-            if( pFunc && pFunc->ISA( FuDraw ) )
-                ( (FuDraw*) pFunc)->ForcePointer( NULL );
+            if( xFunction.is() && xFunction->ISA( FuDraw ) )
+                static_cast<FuDraw*>(xFunction.get())->ForcePointer( NULL );
         }
 
         pDragSrcMarkList = new SdrMarkList(GetMarkedObjectList());
