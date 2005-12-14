@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngppc.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: kz $ $Date: 2005-10-05 11:34:42 $
+#   last change: $Author: rt $ $Date: 2005-12-14 10:27:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,8 @@ STATIC = -Wl,-Bstatic
 DYNAMIC = -Wl,-Bdynamic 
 
 # name of linker
-LINK*=gcc 
+LINK*=$(CXX)
+LINKC*=$(CC)
 # default linker flags
 LINKFLAGS=-Wl,-rpath,\''$$ORIGIN'\'
 
