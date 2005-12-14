@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-10-25 11:23:57 $
+dnl * Date: $Date: 2005-12-14 14:42:25 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.139 $ )
+AC_REVISION( $Revision: 1.140 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -265,6 +265,9 @@ AC_ARG_WITH(system-portaudio,
 ],,)
 AC_ARG_WITH(system-neon,
 [  --with-system-neon      Use neon already on system
+],,)
+AC_ARG_WITH(system-agg,
+[  --with-system-agg       Use AGG already on system
 ],,)
 AC_ARG_WITH(system-myspell,
 [  --with-system-myspell   Use myspell already on system
@@ -3207,6 +3210,22 @@ fi
 AC_SUBST(SYSTEM_NEON)
 AC_SUBST(NEON_LIBS)
 AC_SUBST(NEON_CFLAGS)
+
+dnl ===================================================================
+dnl Check for system AGG
+dnl ===================================================================
+AC_MSG_CHECKING([which AGG to use])
+if test -n "$with_system_agg" -o -n "$with_system_libs" && \
+   test "$with_system_agg" != "no"; then
+         AC_MSG_RESULT([external])
+         PKG_CHECK_MODULES(AGG, libagg >= 2.3)
+         SYSTEM_AGG=YES
+else
+         AC_MSG_RESULT([internal])
+         SYSTEM_AGG=NO
+         BUILD_TYPE="$BUILD_TYPE AGG"
+fi
+AC_SUBST(SYSTEM_AGG)
 
 dnl ===================================================================
 dnl Check for system myspell
