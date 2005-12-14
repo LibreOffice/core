@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:22:13 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:09:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2070,7 +2070,7 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
             ScDocument* pDoc = pActiveViewSh->GetViewData()->GetDocument();
             SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
             // without conditional format, as in ScColumn::SetString
-            ULONG nFormat = pLastPattern->GetNumberFormat( pFormatter );
+            sal_uInt32 nFormat = pLastPattern->GetNumberFormat( pFormatter );
             double nVal;
             if ( pFormatter->IsNumberFormat( aString, nFormat, nVal ) )
             {
