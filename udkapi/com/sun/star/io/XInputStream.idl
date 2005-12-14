@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XInputStream.idl,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:31:59 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 13:23:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,8 @@ published interface XInputStream: com::sun::star::uno::XInterface
              there is an unnecessary memory allocation/deallocation (the out parameter
              is of course NOT transported over the connection), but this should
              be negligible compared to a synchron call.
+         @param nBytesToRead
+        the total number of bytes to read
      */
     long readBytes( [out] sequence<byte> aData,
              [in] long nBytesToRead )
@@ -135,6 +137,8 @@ published interface XInputStream: com::sun::star::uno::XInterface
 
         <p>It is up to the implementation whether this method is
         blocking the thread or not.  </p>
+      @param nBytesToSkip
+        number of bytes to skip
      */
     void skipBytes( [in] long nBytesToSkip )
             raises( com::sun::star::io::NotConnectedException,
