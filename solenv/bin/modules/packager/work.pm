@@ -4,9 +4,9 @@
 #
 #   $RCSfile: work.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:24:31 $
+#   last change: $Author: rt $ $Date: 2005-12-14 13:09:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -295,7 +295,7 @@ sub do_broadcast
     my ( $tempdir, $prjname, $prj, $platform, $prjdep ) = @_;
 
     # Syntax:  cmd_bcst -s 18 "Version;Environment;Project;Verzeichnis;Restriction[;Abhaengigkeit1][;Abhaengigkeit n]..."
-    # Example: cmd_bcst -s 18 "SRC680;wntmsci10.pro;instsetoo_native;instsetoo_native\bla1;instsetoo_native\util"
+    # Example: cmd_bcst -s 18 "SRC680;wntmsci10.pro;instsetoo_native;;instsetoo_native\bla1;instsetoo_native\util"
 
     if ( ! $ENV{'WORK_STAMP'} ) { packager::exiter::exit_program("ERROR: Environment variable WORK_STAMP not set!", "do_broadcast"); }
     my $workstamp = $ENV{WORK_STAMP};
@@ -310,8 +310,8 @@ sub do_broadcast
     if ( ! $tmpfile_handle ) {
         packager::exiter::exit_program("ERROR: Couldn't open temporary file \"$tmpfile_name\"!", "do_broadcast");
     }
-    print $tmpfile_handle "\"$workstamp;$platform;$prjname;$prjdir;;$prjdep\"";
-    print "to tmpfile: \"$workstamp;$platform;$prjname;$prjdir;;$prjdep\"\n";
+    print $tmpfile_handle "\"$workstamp;$platform;$prjname;$prjdir;nobase;$prjdep\"";
+    print "to tmpfile: \"$workstamp;$platform;$prjname;$prjdir;nobase;$prjdep\"\n";
     close $tmpfile_handle;
     my $returnvalue = system("cmd_bcst -s 18 \@$tmpfile_name");
     print "cmd_bcst -s 18 \@$tmpfile_name\n";
