@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuparagr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:48:53 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:01:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,17 @@ FuParagraph::FuParagraph (
     SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
+}
+
+FunctionReference FuParagraph::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    FunctionReference xFunc( new FuParagraph( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    return xFunc;
+}
+
+void FuParagraph::DoExecute( SfxRequest& rReq )
+{
     const SfxItemSet* pArgs = rReq.GetArgs();
 
     if( !pArgs )
@@ -158,4 +169,13 @@ FuParagraph::FuParagraph (
 
     pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
 }
+
+void FuParagraph::Activate()
+{
+}
+
+void FuParagraph::Deactivate()
+{
+}
+
 } // end of namespace sd
