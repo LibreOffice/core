@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numfmt.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:35:40 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:55:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -832,7 +832,7 @@ BOOL SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
         // OK chosen - Is format code input entered already taken over?
         // If not, simulate Add. Upon syntax error ignore input and prevent Put.
         String      aFormat = aEdFormat.GetText();
-        ULONG nCurKey = pNumFmtShell->GetCurNumFmtKey();
+        sal_uInt32 nCurKey = pNumFmtShell->GetCurNumFmtKey();
 
         if ( aIbAdd.IsEnabled() || pNumFmtShell->IsTmpCurrencyFormat(aFormat) )
         {   // #79599# It is not sufficient to just add the format code (or
@@ -867,11 +867,11 @@ BOOL SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
         // --------------------------------------------------------------
         // List of changed user defined formats:
         // -------------------------------------
-        const ULONG nDelCount = pNumFmtShell->GetUpdateDataCount();
+        const sal_uInt32 nDelCount = pNumFmtShell->GetUpdateDataCount();
 
         if ( nDelCount > 0 )
         {
-            ULONG*          pDelArr = new ULONG[nDelCount];
+            sal_uInt32*         pDelArr = new sal_uInt32[nDelCount];
 
             pNumFmtShell->GetUpdateData( pDelArr, nDelCount );
             pNumItem->SetDelFormatArray( pDelArr, nDelCount );
@@ -1112,7 +1112,7 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( BOOL bCheckCatChange /*= FALSE*
     }
     else if ( aLbFormat.GetEntryCount() > 0 )
     {
-        ULONG nCurEntryKey=NUMKEY_UNDEFINED;
+        sal_uInt32 nCurEntryKey=NUMKEY_UNDEFINED;
         if(!pNumFmtShell->FindEntry( aEdFormat.GetText(),&nCurEntryKey))
         {
             aLbFormat.SetNoSelection();
@@ -1489,7 +1489,7 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, ImageButton*, pIB)
         SvxDelStrgs a2EntryList;
         USHORT      nCatLbSelPos = 0;
         short       nFmtLbSelPos = SELPOS_NONE;
-        ULONG       nErrPos=0;
+        xub_StrLen  nErrPos=0;
 
         pNumFmtShell->SetCurCurrencyEntry(NULL);
         bAdded = pNumFmtShell->AddFormat( aFormat, nErrPos,
@@ -1644,7 +1644,7 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, ImageButton*, pIB)
 
 IMPL_LINK( SvxNumberFormatTabPage, EditHdl_Impl, Edit*, pEdFormat )
 {
-    ULONG nCurKey = NUMKEY_UNDEFINED;
+    sal_uInt32 nCurKey = NUMKEY_UNDEFINED;
 
     if ( aEdFormat.GetText().Len() == 0 )
     {
