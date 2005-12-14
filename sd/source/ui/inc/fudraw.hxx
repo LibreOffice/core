@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fudraw.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:32:42 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:10:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,12 +61,7 @@ class FuDraw
 public:
     TYPEINFO();
 
-    FuDraw (ViewShell* pViewSh,
-        ::sd::Window* pWin,
-        ::sd::View* pView,
-        SdDrawDocument* pDoc,
-        SfxRequest& rReq);
-    virtual ~FuDraw();
+    static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent );
 
     virtual BOOL KeyInput(const KeyEvent& rKEvt);
     virtual BOOL MouseMove(const MouseEvent& rMEvt);
@@ -98,12 +93,21 @@ public:
     virtual bool cancel();
 
 protected:
+    FuDraw (ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+
+    virtual ~FuDraw();
+
     Pointer aNewPointer;
     Pointer aOldPointer;
     BOOL    bMBDown;
     BOOL    bDragHelpLine;
     USHORT  nHelpLine;
     BOOL    bPermanent;
+
 };
 
 } // end of namespace sd
