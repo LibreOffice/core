@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:52:56 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:11:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -593,7 +593,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     const SfxPoolItem* pItem;
                     String  aFillDir, aFillCmd, aFillDateCmd;
                     String  aFillStep, aFillStart, aFillMax;
-                    ULONG   nKey;
+                    sal_uInt32 nKey;
                     double  fTmpVal;
 
                     bDoIt=FALSE;
@@ -657,7 +657,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 else // (pReqArgs == NULL) => Dialog hochziehen
                 {
                     //
-                    ULONG nPrivFormat;
+                    sal_uInt32 nPrivFormat;
                     CellType eCellType;
                     pDoc->GetNumberFormat( nStartCol, nStartRow, nStartTab, nPrivFormat );
                     pDoc->GetCellType( nStartCol, nStartRow, nStartTab,eCellType );
