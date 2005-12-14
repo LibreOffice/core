@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxdate.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:48:16 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:36:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,7 @@ double ImpGetDate( const SbxValues* p )
                     xFactory = comphelper::getProcessServiceFactory();
                 pFormatter = new SvNumberFormatter( xFactory, eLangType );
 
-                ULONG nIndex;
+                sal_uInt32 nIndex;
                 xub_StrLen nCheckPos = 0;
                 short nType = 127;
 
@@ -280,7 +280,7 @@ start:
                 xFactory = comphelper::getProcessServiceFactory();
             pFormatter = new SvNumberFormatter( xFactory, eLangType );
 
-            ULONG nIndex;
+            sal_uInt32 nIndex;
             xub_StrLen nCheckPos = 0;
             short nType;
 
