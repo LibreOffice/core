@@ -4,9 +4,9 @@
 #
 #   $RCSfile: packagedef.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-11 14:08:09 $
+#   last change: $Author: rt $ $Date: 2005-12-14 14:48:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -33,28 +33,31 @@
 #
 #*************************************************************************
 
-DIR_FILTERCFGOUT := $(MISC)$/filters 
+DIR_FILTERCFGOUT := $(MISC)$/filters
 DIR_LOCFRAG      := $(DIR_FILTERCFGOUT)$/ui$/fragments
 DIR_LOCMERGE     := $(DIR_FILTERCFGOUT)$/ui$/merge
 DIR_LANGPACK     := $(DIR_FILTERCFGOUT)$/ui$/langpacks
 DIR_MODPACKS     := $(DIR_FILTERCFGOUT)$/modulepacks
 
-.INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_base.mk
-.INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_writer.mk
-.INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_web.mk
-.INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_global.mk
-.INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_w4w.mk
-.INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_calc.mk
-.INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_draw.mk
-.INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_impress.mk
-.INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_database.mk
-.INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_chart.mk
-.INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_math.mk
-.INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_xslt.mk
-.INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_palm.mk
-.INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_pocketword.mk
-.INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_pocketexcel.mk
-.INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_drawgraphics.mk
-.INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_impressgraphics.mk
-.INCLUDE: $(PRJ)$/source$/config$/fragments$/fcfg_internalgraphics.mk
+INCLUDE_FRAGMENTS = \
+     $(PRJ)$/source$/config$/fragments$/fcfg_base.mk \
+     $(PRJ)$/source$/config$/fragments$/fcfg_database.mk \
+     $(PRJ)$/source$/config$/fragments$/fcfg_writer.mk \
+     $(PRJ)$/source$/config$/fragments$/fcfg_web.mk \
+     $(PRJ)$/source$/config$/fragments$/fcfg_global.mk \
+     $(PRJ)$/source$/config$/fragments$/fcfg_w4w.mk \
+     $(PRJ)$/source$/config$/fragments$/fcfg_calc.mk \
+     $(PRJ)$/source$/config$/fragments$/fcfg_draw.mk \
+     $(PRJ)$/source$/config$/fragments$/fcfg_impress.mk \
+     $(PRJ)$/source$/config$/fragments$/fcfg_database.mk \
+     $(PRJ)$/source$/config$/fragments$/fcfg_chart.mk \
+     $(PRJ)$/source$/config$/fragments$/fcfg_math.mk \
+     $(PRJ)$/source$/config$/fragments$/fcfg_xslt.mk \
+     $(PRJ)$/source$/config$/fragments$/fcfg_palm.mk \
+     $(PRJ)$/source$/config$/fragments$/fcfg_pocketword.mk \
+     $(PRJ)$/source$/config$/fragments$/fcfg_pocketexcel.mk \
+     $(PRJ)$/source$/config$/fragments$/fcfg_drawgraphics.mk \
+     $(PRJ)$/source$/config$/fragments$/fcfg_impressgraphics.mk \
+     $(PRJ)$/source$/config$/fragments$/fcfg_internalgraphics.mk
 
+.INCLUDE: $(INCLUDE_FRAGMENTS)
