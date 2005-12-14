@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblafmt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:19:31 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:47:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -759,7 +759,7 @@ void SwTableAutoFmt::UpdateToSet( BYTE nPos, SfxItemSet& rSet,
                 short nType;
                 BOOL bNew;
                 xub_StrLen nCheckPos;
-                ULONG nKey = pNFmtr->GetIndexPuttingAndConverting( sFmt, eLng,
+                sal_uInt32 nKey = pNFmtr->GetIndexPuttingAndConverting( sFmt, eLng,
                         eSys, nType, bNew, nCheckPos);
                 rSet.Put( SwTblBoxNumFormat( nKey ));
             }
