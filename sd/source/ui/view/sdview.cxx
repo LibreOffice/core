@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:34:38 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:30:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -721,10 +721,11 @@ BOOL View::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
 
 SdrEndTextEditKind View::EndTextEdit(BOOL bDontDeleteReally)
 {
-    return EndTextEdit(bDontDeleteReally, NULL );
+    FunctionReference xFunc;
+    return EndTextEdit(bDontDeleteReally, xFunc );
 }
 
-SdrEndTextEditKind View::EndTextEdit(BOOL bDontDeleteReally, FuPoor* pFunc)
+SdrEndTextEditKind View::EndTextEdit(BOOL bDontDeleteReally, FunctionReference xFunc)
 {
     SdrObject* pObj = GetTextEditObject();
 
@@ -734,14 +735,14 @@ SdrEndTextEditKind View::EndTextEdit(BOOL bDontDeleteReally, FuPoor* pFunc)
 
     ViewShell* pViewShell= pDocSh->GetViewShell();
 
-    if( pFunc == 0 )
+    if( !xFunc.is() )
     {
         if( pViewShell && pViewShell->ISA(DrawViewShell) )
         {
-            pFunc = ( (DrawViewShell*) pViewShell)->GetActualFunction();
+            xFunc = static_cast< DrawViewShell* >(pViewShell)->GetCurrentFunction();
 
-            if ( !pFunc || !pFunc->ISA(FuText) )
-                pFunc = ( (DrawViewShell*) pViewShell)->GetOldFunction();
+            if ( !xFunc.is() || !xFunc->ISA(FuText) )
+                xFunc = ( (DrawViewShell*) pViewShell)->GetOldFunction();
         }
     }
 
@@ -763,13 +764,14 @@ SdrEndTextEditKind View::EndTextEdit(BOOL bDontDeleteReally, FuPoor* pFunc)
         }
     }
 
-    if ( pFunc && pFunc->ISA(FuText) )
+    FuText* pFuText = dynamic_cast<FuText*>(xFunc.get());
+    if ( pFuText )
     {
-        SdrTextObj* pTextObj = ( (FuText*) pFunc)->GetTextObj();
-        BOOL bDefaultTextRestored = ( (FuText*) pFunc)->RestoreDefaultText();
+        SdrTextObj* pTextObj = pFuText->GetTextObj();
+        BOOL bDefaultTextRestored = pFuText->RestoreDefaultText();
         eKind = FmFormView::EndTextEdit(bDontDeleteReally);
 
-        pTextObj = ( (FuText*) pFunc)->GetTextObj();
+        pTextObj = pFuText->GetTextObj();
 
         if( pTextObj )
         {
@@ -784,11 +786,11 @@ SdrEndTextEditKind View::EndTextEdit(BOOL bDontDeleteReally, FuPoor* pFunc)
         }
 
         if (eKind == SDRENDTEXTEDIT_CHANGED && !bDefaultTextRestored)
-            ( (FuText*) pFunc)->ObjectChanged();
+            pFuText->ObjectChanged();
 
         // Tell the text function that the text object is not
         // edited anymore and must not be accessed.
-        static_cast<FuText*>(pFunc)->TextEditingHasEnded(pTextObj);
+        pFuText->TextEditingHasEnded(pTextObj);
     }
     else
         eKind = FmFormView::EndTextEdit(bDontDeleteReally);
