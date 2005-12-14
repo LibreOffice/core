@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuscale.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:49:49 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:02:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,17 @@ FuScale::FuScale (
     SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
+}
+
+FunctionReference FuScale::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    FunctionReference xFunc( new FuScale( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    return xFunc;
+}
+
+void FuScale::DoExecute( SfxRequest& rReq )
+{
     INT16 nValue;
 
     const SfxItemSet* pArgs = rReq.GetArgs();
@@ -124,8 +135,8 @@ FuScale::FuScale (
         nValue = (INT16) pWindow->GetZoom();
 
         // Zoom auf Seitengroesse ?
-        if( pViewSh->ISA( DrawViewShell ) &&
-            static_cast<DrawViewShell*>(pViewSh)->IsZoomOnPage() )
+        if( pViewShell && pViewShell->ISA( DrawViewShell ) &&
+            static_cast<DrawViewShell*>(pViewShell)->IsZoomOnPage() )
         {
             pZoomItem = new SvxZoomItem( SVX_ZOOM_WHOLEPAGE, nValue );
         }
@@ -135,26 +146,29 @@ FuScale::FuScale (
         }
 
         // Bereich einschraenken
-        if( pViewSh->ISA( DrawViewShell ) )
+        if( pViewShell )
         {
-            SdrPageView* pPageView = pView->GetPageViewPvNum( 0 );
-            if( ( pPageView && pPageView->GetObjList()->GetObjCount() == 0 ) )
-                // || ( pView->GetMarkedObjectList().GetMarkCount() == 0 ) )
+            if( pViewShell->ISA( DrawViewShell ) )
+            {
+                SdrPageView* pPageView = pView->GetPageViewPvNum( 0 );
+                if( ( pPageView && pPageView->GetObjList()->GetObjCount() == 0 ) )
+                    // || ( pView->GetMarkedObjectList().GetMarkCount() == 0 ) )
+                {
+                    nZoomValues &= ~SVX_ZOOM_ENABLE_OPTIMAL;
+                }
+            }
+            else if( pViewShell->ISA( OutlineViewShell ) )
             {
                 nZoomValues &= ~SVX_ZOOM_ENABLE_OPTIMAL;
+                nZoomValues &= ~SVX_ZOOM_ENABLE_WHOLEPAGE;
+                nZoomValues &= ~SVX_ZOOM_ENABLE_PAGEWIDTH;
             }
-        }
-        else if( pViewSh->ISA( OutlineViewShell ) )
-        {
-            nZoomValues &= ~SVX_ZOOM_ENABLE_OPTIMAL;
-            nZoomValues &= ~SVX_ZOOM_ENABLE_WHOLEPAGE;
-            nZoomValues &= ~SVX_ZOOM_ENABLE_PAGEWIDTH;
-        }
-        else if( pViewSh->ISA( SlideViewShell ) )
-        {
-            nZoomValues &= ~SVX_ZOOM_ENABLE_OPTIMAL;
-            nZoomValues &= ~SVX_ZOOM_ENABLE_PAGEWIDTH;
-            nZoomValues &= ~(SVX_ZOOM_ENABLE_100|SVX_ZOOM_ENABLE_150|SVX_ZOOM_ENABLE_200);
+            else if( pViewShell->ISA( SlideViewShell ) )
+            {
+                nZoomValues &= ~SVX_ZOOM_ENABLE_OPTIMAL;
+                nZoomValues &= ~SVX_ZOOM_ENABLE_PAGEWIDTH;
+                nZoomValues &= ~(SVX_ZOOM_ENABLE_100|SVX_ZOOM_ENABLE_150|SVX_ZOOM_ENABLE_200);
+            }
         }
 
         pZoomItem->SetValueSet( nZoomValues );
@@ -168,76 +182,80 @@ FuScale::FuScale (
             pDlg = pFact->CreateSvxZoomDialog(NULL, aNewAttr, ResId(RID_SVXDLG_ZOOM));
             DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         }
-        pDlg->SetLimits( pWin->GetMinZoom(), pWin->GetMaxZoom() );
-        USHORT nResult = pDlg->Execute();
-        switch( nResult )
+
+        if( pDlg )
         {
-            case RET_CANCEL:
+            pDlg->SetLimits( pWindow->GetMinZoom(), pWindow->GetMaxZoom() );
+            USHORT nResult = pDlg->Execute();
+            switch( nResult )
             {
-                delete pDlg;
-                delete pZoomItem;
-                rReq.Ignore ();
-                return; // Abbruch
+                case RET_CANCEL:
+                {
+                    delete pDlg;
+                    delete pZoomItem;
+                    rReq.Ignore ();
+                    return; // Abbruch
+                }
+                default:
+                {
+                    rReq.Ignore ();
+        /*
+                        rReq.Done( *( pDlg->GetOutputItemSet() ) );
+                        pArgs = rReq.GetArgs();*/
+                }
+                break;
             }
-            default:
+
+            const SfxItemSet aArgs (*(pDlg->GetOutputItemSet ()));
+
+            delete pDlg;
+
+    //      SvxZoomType eZT = ((const SvxZoomItem &) aArgs.Get (RID_SVXDLG_ZOOM)).GetType ();
+            switch (((const SvxZoomItem &) aArgs.Get (RID_SVXDLG_ZOOM)).GetType ())
             {
-                rReq.Ignore ();
-    /*
-                    rReq.Done( *( pDlg->GetOutputItemSet() ) );
-                    pArgs = rReq.GetArgs();*/
+                case SVX_ZOOM_PERCENT:
+                {
+                    nValue = ((const SvxZoomItem &) aArgs.Get (RID_SVXDLG_ZOOM)).GetValue ();
+
+                    pViewShell->SetZoom( nValue );
+
+                    pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArrayZoom );
+                }
+                break;
+
+                case SVX_ZOOM_OPTIMAL:
+                {
+                    if( pViewShell->ISA( DrawViewShell ) )
+                    {
+                        // Namensverwirrung: SID_SIZE_ALL -> Zoom auf alle Objekte
+                        // --> Wird als Optimal im Programm angeboten
+                        pViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_SIZE_ALL, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+                    }
+                    else if( pViewShell->ISA( SlideViewShell ) )
+                        pViewShell->SetZoom( 20 );
+                        // Hier sollte sich noch etwas besseres ueberlegt werden !!!
+                    // ???!!
+                    /*
+                        aNewAttr.Put( SvxZoomItem( SVX_ZOOM_PERCENT, 20 ) );
+                    rReq.Done( aNewAttr );
+                    pArgs = rReq.GetArgs();
+                    */
+                }
+                break;
+
+                case SVX_ZOOM_PAGEWIDTH:
+                    pViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_SIZE_PAGE_WIDTH, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+                    break;
+
+                case SVX_ZOOM_WHOLEPAGE:
+                    pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_PAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+                    break;
             }
-            break;
         }
-
-        const SfxItemSet aArgs (*(pDlg->GetOutputItemSet ()));
-
-        delete pDlg;
 
         delete pZoomItem;
-
-//      SvxZoomType eZT = ((const SvxZoomItem &) aArgs.Get (RID_SVXDLG_ZOOM)).GetType ();
-        switch (((const SvxZoomItem &) aArgs.Get (RID_SVXDLG_ZOOM)).GetType ())
-        {
-            case SVX_ZOOM_PERCENT:
-            {
-                nValue = ((const SvxZoomItem &) aArgs.Get (RID_SVXDLG_ZOOM)).GetValue ();
-
-                pViewShell->SetZoom( nValue );
-
-                pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArrayZoom );
-            }
-            break;
-
-            case SVX_ZOOM_OPTIMAL:
-            {
-                if( pViewShell->ISA( DrawViewShell ) )
-                {
-                    // Namensverwirrung: SID_SIZE_ALL -> Zoom auf alle Objekte
-                    // --> Wird als Optimal im Programm angeboten
-                    pViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_SIZE_ALL, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
-                }
-                else if( pViewShell->ISA( SlideViewShell ) )
-                    pViewShell->SetZoom( 20 );
-                    // Hier sollte sich noch etwas besseres ueberlegt werden !!!
-                // ???!!
-                /*
-                    aNewAttr.Put( SvxZoomItem( SVX_ZOOM_PERCENT, 20 ) );
-                rReq.Done( aNewAttr );
-                pArgs = rReq.GetArgs();
-                 */
-            }
-            break;
-
-            case SVX_ZOOM_PAGEWIDTH:
-                pViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_SIZE_PAGE_WIDTH, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
-                break;
-
-            case SVX_ZOOM_WHOLEPAGE:
-                pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_PAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
-                break;
-        }
     }
-    else if (pArgs->Count () == 1)
+    else if(pViewShell && (pArgs->Count () == 1))
     {
         SFX_REQUEST_ARG (rReq, pScale, SfxUInt32Item, ID_VAL_ZOOM, FALSE);
         pViewShell->SetZoom (pScale->GetValue ());
@@ -246,39 +264,5 @@ FuScale::FuScale (
     }
 
 }
-
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
-
-FuScale::~FuScale()
-{
-}
-
-/*************************************************************************
-|*
-|* Function aktivieren
-|*
-\************************************************************************/
-
-void FuScale::Activate()
-{
-    FuPoor::Activate();
-}
-
-/*************************************************************************
-|*
-|* Function deaktivieren
-|*
-\************************************************************************/
-
-void FuScale::Deactivate()
-{
-    FuPoor::Deactivate();
-}
-
-
 
 } // end of namespace sd
