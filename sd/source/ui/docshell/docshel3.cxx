@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshel3.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 13:11:04 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 16:54:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,7 +163,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
         case FID_SEARCH_OFF:
         {
-            if ( pFuActual && pFuActual->ISA(FuSearch) )
+            if( dynamic_cast< FuSearch* >(mxDocShellFunction.get()) )
             {
                 // Suchen&Ersetzen in allen DocShells beenden
                 SfxObjectShell* pFirstShell = SfxObjectShell::GetFirst();
@@ -184,8 +184,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
                     }
                 }
 
-                delete pFuActual;
-                pFuActual = NULL;
+                SetDocShellFunction(0);
                 Invalidate();
                 rReq.Done();
             }
@@ -198,15 +197,16 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
             if ( pReqArgs )
             {
-                if ( !pFuActual || !pFuActual->ISA(FuSearch) )
+                rtl::Reference< FuSearch > xFuSearch( dynamic_cast< FuSearch* >( GetDocShellFunction().get() ) );
+
+                if( !xFuSearch.is() )
                 {
-                    delete pFuActual;
                     ::sd::View* pView = pViewShell->GetView();
-                    pFuActual = new FuSearch( pViewShell, pViewShell->GetActiveWindow(),
-                                              pView, pDoc, rReq );
+                    SetDocShellFunction( FuSearch::Create( pViewShell, pViewShell->GetActiveWindow(), pView, pDoc, rReq ) );
+                    xFuSearch.set( dynamic_cast< FuSearch* >( GetDocShellFunction().get() ) );
                 }
 
-                if ( pFuActual && pFuActual->ISA(FuSearch) )
+                if( xFuSearch.is() )
                 {
                     const SvxSearchItem* pSearchItem =
                     (const SvxSearchItem*) &pReqArgs->Get(ITEMID_SEARCH);
@@ -216,8 +216,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
                     delete pAppSearchItem;
                     pAppSearchItem = (SvxSearchItem*)pSearchItem->Clone();
                     SD_MOD()->SetSearchItem(pAppSearchItem);
-
-                    ( (FuSearch*) pFuActual)->SearchAndReplace(pSearchItem);
+                    xFuSearch->SearchAndReplace(pSearchItem);
                 }
             }
 
@@ -253,15 +252,15 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
         case SID_HANGUL_HANJA_CONVERSION:
         {
-            FuHangulHanjaConversion aFunc( pViewShell, pViewShell->GetActiveWindow(), pViewShell->GetView(), pDoc, rReq );
-            aFunc.StartConversion( LANGUAGE_KOREAN, LANGUAGE_KOREAN, NULL, 0, sal_True );
+            FunctionReference aFunc( FuHangulHanjaConversion::Create( pViewShell, pViewShell->GetActiveWindow(), pViewShell->GetView(), pDoc, rReq ) );
+            static_cast< FuHangulHanjaConversion* >( aFunc.get() )->StartConversion( LANGUAGE_KOREAN, LANGUAGE_KOREAN, NULL, 0, sal_True );
         }
         break;
 
         case SID_CHINESE_CONVERSION:
         {
-            FuHangulHanjaConversion aFunc( pViewShell, pViewShell->GetActiveWindow(), pViewShell->GetView(), pDoc, rReq );
-            aFunc.StartChineseConversion();
+            FunctionReference aFunc( FuHangulHanjaConversion::Create( pViewShell, pViewShell->GetActiveWindow(), pViewShell->GetView(), pDoc, rReq ) );
+            static_cast< FuHangulHanjaConversion* >( aFunc.get() )->StartChineseConversion();
         }
         break;
 
@@ -283,5 +282,12 @@ void DrawDocShell::SetOrganizerSearchMask(SfxStyleSheetBasePool* pBasePool) cons
 }
 
 
+void DrawDocShell::SetDocShellFunction( const ::sd::FunctionReference& xFunction )
+{
+    if( mxDocShellFunction.is() )
+        mxDocShellFunction->Dispose();
+
+    mxDocShellFunction = xFunction;
+}
 
 } // end of namespace sd
