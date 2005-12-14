@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hf_navi_main.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:00:58 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:34:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,9 +124,9 @@ HF_NaviMainRow::HF_NaviMainRow( Xml::Element & o_out )
     pRow =
     &(  CurOut()
         >> *new Html::Table
+           << new Html::ClassAttr("navimain")
            << new Xml::AnAttribute( "border", "0" )
            << new Xml::AnAttribute( "cellpadding", "3" )
-           << new Html::ClassAttr("lightbg")
            >> *new Html::TableRow
      );
 }
