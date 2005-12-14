@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 16:02:31 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:51:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1639,7 +1639,7 @@ void SwTableShell::ExecNumberFormat(SfxRequest& rReq)
     //  Sprache immer von Cursorposition besorgen
     LanguageType eLang = rSh.GetCurLang();
     SvNumberFormatter* pFormatter = rSh.GetNumberFormatter();
-    ULONG nNumberFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
+    sal_uInt32 nNumberFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
     USHORT nFmtType = 0, nOffset = 0;
 
     switch ( nSlot )
