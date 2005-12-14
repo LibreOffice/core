@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:29:12 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:21:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,16 +254,16 @@ SelectionFunction::SelectionFunction (
     aDragTimer.SetTimeoutHdl( LINK( this, SelectionFunction, DragSlideHdl ) );
 }
 
-
-
-
 SelectionFunction::~SelectionFunction (void)
 {
     aDragTimer.Stop();
 }
 
-
-
+FunctionReference SelectionFunction::Create( SlideSorterController& rController, SfxRequest& rRequest )
+{
+    FunctionReference xFunc( new SelectionFunction( rController, rRequest ) );
+    return xFunc;
+}
 
 BOOL SelectionFunction::MouseButtonDown (const MouseEvent& rEvent)
 {
