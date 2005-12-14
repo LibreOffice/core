@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 12:09:11 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:09:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -982,7 +982,7 @@ ScBaseCell* ScDocFunc::InterpretEnglishString( const ScAddress& rPos, const Stri
     else        // (nur) auf englisches Zahlformat testen
     {
         SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-        ULONG nEnglish = pFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US);
+        sal_uInt32 nEnglish = pFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US);
         double fVal;
         if ( pFormatter->IsNumberFormat( rText, nEnglish, fVal ) )
             pNewCell = new ScValueCell( fVal );
