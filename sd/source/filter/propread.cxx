@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propread.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:16:18 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:51:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -399,8 +399,13 @@ Section::~Section()
 
 void Section::Read( SvStorageStream *pStrm )
 {
-    sal_uInt32 i, nSecOfs, nSecSize, nPropCount, nPropId, nPropOfs, nPropType, nPropSize, nCurrent, nVectorCount, nTemp;
+    sal_uInt32 i, nSecOfs, nSecSize, nPropCount, nPropId, nPropOfs, nPropType, nPropSize, nCurrent, nVectorCount, nTemp, nStrmSize;
     nSecOfs = pStrm->Tell();
+
+    pStrm->Seek( STREAM_SEEK_TO_END );
+    nStrmSize = pStrm->Tell();
+    pStrm->Seek( nSecOfs );
+
     mnTextEnc = RTL_TEXTENCODING_MS_1252;
     *pStrm >> nSecSize >> nPropCount;
     while( nPropCount-- && ( pStrm->GetError() == ERRCODE_NONE ) )
@@ -542,6 +547,11 @@ void Section::Read( SvStorageStream *pStrm )
             nSize = pStrm->Tell();
             pStrm->Seek( nPropOfs + nSecOfs );
             nSize -= pStrm->Tell();
+            if ( nSize > nStrmSize )
+            {
+                nPropCount = 0;
+                break;
+            }
             sal_uInt8* pBuf = new sal_uInt8[ nSize ];
             pStrm->Read( pBuf, nSize );
             AddProperty( 0xffffffff, pBuf, nSize );
@@ -638,7 +648,11 @@ void PropRead::Read()
             sal_uInt8*  pSectCLSID = new sal_uInt8[ 16 ];
             mpSvStream->Read( mApplicationCLSID, 16 );
             *mpSvStream >> nSections;
-            for ( sal_uInt32 i = 0; i < nSections; i++ )
+            if ( nSections > 2 )                // sj: PowerPoint documents are containing max 2 sections
+            {
+                mbStatus = sal_False;
+            }
+            else for ( sal_uInt32 i = 0; i < nSections; i++ )
             {
                 mpSvStream->Read( pSectCLSID, 16 );
                 *mpSvStream >> nSectionOfs;
