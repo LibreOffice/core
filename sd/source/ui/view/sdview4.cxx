@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview4.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:17:20 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:30:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -422,7 +422,7 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, pTimer )
 
                         aReq.AppendItem( aItem1 );
                         aReq.AppendItem( aItem2 );
-                        delete( new FuInsertFile( pViewSh, pWin, this, pDoc, aReq ) );
+                        FuInsertFile::Create( pViewSh, pWin, this, pDoc, aReq );
                         bOK = TRUE;
                     }
                 }
