@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:09:18 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:27:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -623,11 +623,11 @@ void DrawViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
 
     if( pWin )
     {
-        if( GetDocSh()->GetActualFunction() )
-            GetDocSh()->GetActualFunction()->Paint( rRect, pWin );
+        if( GetDocSh()->GetDocShellFunction().is() )
+            GetDocSh()->GetDocShellFunction()->Paint( rRect, pWin );
 
-        if( pFuActual )
-            pFuActual->Paint( rRect, pWin );
+        if( HasCurrentFunction() )
+            GetCurrentFunction()->Paint( rRect, pWin );
     }
 }
 
