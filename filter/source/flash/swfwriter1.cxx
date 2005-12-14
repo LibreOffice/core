@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfwriter1.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2005-10-05 12:53:35 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:48:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -845,7 +845,7 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
 
     getBitmapData( bmpSource, pImageData, pAlphaData, width, height );
     sal_uInt32 raw_size = width * height * 4;
-    sal_uInt32 compressed_size = raw_size + (sal_uInt32)(raw_size/100) + 12;
+    uLongf compressed_size = raw_size + (sal_uInt32)(raw_size/100) + 12;
     sal_uInt8 *pCompressed = new sal_uInt8[ compressed_size ];
 
     if(compress2(pCompressed, &compressed_size, pImageData, raw_size, Z_BEST_COMPRESSION) != Z_OK)
@@ -853,11 +853,11 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
 
     // AS: SWF files let you provide an Alpha mask for JPEG images, but we have
     //  to ZLIB compress the alpha channel seperately.
-    sal_uInt32 alpha_compressed_size = 0;
+    uLongf alpha_compressed_size = 0;
     sal_uInt8 *pAlphaCompressed = NULL;
     if (bmpSource.IsAlpha() || bmpSource.IsTransparent())
     {
-        alpha_compressed_size = width * height + (sal_uInt32)(raw_size/100) + 12;
+        alpha_compressed_size = uLongf(width * height + (sal_uInt32)(raw_size/100) + 12);
         pAlphaCompressed = new sal_uInt8[ compressed_size ];
 
         if(compress2(pAlphaCompressed, &alpha_compressed_size, pAlphaData, width * height, Z_BEST_COMPRESSION) != Z_OK)
