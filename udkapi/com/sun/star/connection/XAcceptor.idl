@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XAcceptor.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:10:03 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 11:32:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ published interface XAcceptor: com::sun::star::uno::XInterface
        @param sConnectionDescription
                 contains the kind of the connection plus a
               comma seperated list of attributes,
-               e.g., <em>socket,host=locahost,port=2345</em> for a tcpip connection.
+               e.g., <em>socket,host=localhost,port=2345</em> for a tcpip connection.
 
        @return null reference,
             stopAccepting was called.
