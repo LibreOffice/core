@@ -1,0 +1,2 @@
+@echo off
+call perl5 %SOLARENV\bin\cwsview.pl %1&
