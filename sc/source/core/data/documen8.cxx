@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:31:22 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:04:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -331,7 +331,7 @@ void ScDocument::CopyStdStylesFrom( ScDocument* pSrcDoc )
     SvNumberFormatter* pOtherFormatter = pSrcDoc->xPoolHelper->GetFormTable();
     if (pOtherFormatter && pOtherFormatter != pThisFormatter)
     {
-        SvULONGTable* pExchangeList =
+        SvNumberFormatterIndexTable* pExchangeList =
                 pThisFormatter->MergeFormatter(*(pOtherFormatter));
         if (pExchangeList->Count() > 0)
             pFormatExchangeList = pExchangeList;
