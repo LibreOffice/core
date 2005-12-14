@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:26:15 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:03:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,10 +170,10 @@ namespace com { namespace sun { namespace star {
 
 
 #ifdef _ZFORLIST_DECLARE_TABLE
-class SvULONGTable;
+class SvNumberFormatterIndexTable;
 #else
 class Table;
-typedef Table SvULONGTable;
+typedef Table SvNumberFormatterIndexTable;
 #endif
 
 
@@ -262,7 +262,7 @@ private:
     XColorTable*        pColorTable;
     ScConditionalFormatList* pCondFormList;             // bedingte Formate
     ScValidationDataList* pValidationList;              // Gueltigkeit
-    SvULONGTable*       pFormatExchangeList;            // zum Umsetzen von Zahlenformaten
+    SvNumberFormatterIndexTable*    pFormatExchangeList;            // zum Umsetzen von Zahlenformaten
     ScTable*            pTab[MAXTABCOUNT];
     ScRangeName*        pRangeName;
     ScDBCollection*     pDBCollection;
@@ -500,7 +500,7 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
     SC_DLLPUBLIC BOOL           GetName( SCTAB nTab, String& rName ) const;
     BOOL            GetTable( const String& rName, SCTAB& rTab ) const;
     inline SCTAB    GetTableCount() const { return nMaxTableNumber; }
-    SvULONGTable*   GetFormatExchangeList() const { return pFormatExchangeList; }
+    SvNumberFormatterIndexTable* GetFormatExchangeList() const { return pFormatExchangeList; }
 
     void            SetDocProtection( BOOL bProtect, const com::sun::star::uno::Sequence <sal_Int8>& aPass );
     void            SetTabProtection( SCTAB nTab, BOOL bProtect, const com::sun::star::uno::Sequence <sal_Int8>& aPass );
@@ -712,8 +712,8 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
     void            GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab, double& rValue );
     double          RoundValueAsShown( double fVal, ULONG nFormat );
     void            GetNumberFormat( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                     ULONG& rFormat );
-    ULONG           GetNumberFormat( const ScAddress& ) const;
+                                     sal_uInt32& rFormat );
+    sal_uInt32      GetNumberFormat( const ScAddress& ) const;
                     /// if no number format attribute is set the calculated
                     /// number format of the formula cell is returned
     void            GetNumberFormatInfo( short& nType, ULONG& nIndex,
@@ -1103,7 +1103,7 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
                                     BOOL bPutToPool = FALSE );
     void            SetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPatternAttr& rAttr,
                                     BOOL bPutToPool = FALSE );
-    void            DeleteNumberFormat( const ULONG* pDelKeys, ULONG nCount );
+    void            DeleteNumberFormat( const sal_uInt32* pDelKeys, sal_uInt32 nCount );
 
     void            AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                     USHORT nFormatNo, const ScMarkData& rMark );
