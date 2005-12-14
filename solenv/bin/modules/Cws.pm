@@ -4,9 +4,9 @@
 #
 #   $RCSfile: Cws.pm,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-03 10:32:47 $
+#   last change: $Author: rt $ $Date: 2005-12-14 09:50:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -315,6 +315,12 @@ sub get_tags
         return undef;
     }
 
+    my $childws = $self->child();
+    # check if child workspace is a clone,
+    if ( $childws =~ /(\w+)_[[:upper:]]{3}\d{3}/ ) {
+        $childws = $1;
+    }
+
     # check in environment if master is on the the HEAD branch
     my $cvs_head = get_cvs_head();
     my $current_master = $self->master();
@@ -327,7 +333,7 @@ sub get_tags
 
     my $master_branch_tag
         = (lc($current_master) eq lc($cvs_head)) ? '' : 'mws_' . lc($current_master);
-    my $cws_branch_tag = 'cws_' . lc($creation_master) . '_' . lc($self->child());
+    my $cws_branch_tag = 'cws_' . lc($creation_master) . '_' . lc($childws);
     my $cws_root_tag   = uc($cws_branch_tag) . "_ANCHOR";
     my $master_milestone_tag = uc($current_master) . "_" . $milestone;
 
@@ -489,8 +495,8 @@ sub get_cws_with_state
     my $mws = shift;
     my $status = shift;
 
-    return wantarray ? @{$self->get_cws_with_state_from_ice($mws, $status)}
-                    :   $self->get_cws_with_state_from_ice($mws, $status);
+    return wantarray ? @{$self->get_cws_with_state_from_eis($mws, $status)}
+                    :   $self->get_cws_with_state_from_eis($mws, $status);
 }
 
 sub get_task_prio_cws
@@ -498,6 +504,24 @@ sub get_task_prio_cws
     my $self        = shift;
     my $ref_taskids = shift;
     return @{$self->get_task_prios_of_tasks($ref_taskids)};
+}
+
+# Check is CWS is cloneable for specified master
+sub is_cws_cloneable
+{
+    my $self      = shift;
+    my $master    = shift;
+
+    return $self->get_is_cws_cloneable_from_eis($master);
+}
+
+# Clone CWS for specified master
+sub clone_cws
+{
+    my $self      = shift;
+    my $master    = shift;
+
+    return $self->clone_cws_in_eis($master);
 }
 
 sub set_log_entry
@@ -1171,7 +1195,7 @@ sub get_childworkspaces_for_milestone
     return $result;
 }
 
-sub get_cws_with_state_from_ice {
+sub get_cws_with_state_from_eis {
     my $self = shift;
     my $mws = shift;
     my $status = shift;
@@ -1331,6 +1355,52 @@ sub set_l10n_status_from_eis
     return $result;
 }
 
+sub get_is_cws_cloneable_from_eis
+{
+    my $self   = shift;
+    my $master = Eis::to_string( shift );
+
+    # check if child workspace is valid
+    my $id = $self->eis_id();
+    if ( !$id ) {
+        carp("ERROR: Childworkspace not (yet) registered with EIS.\n");
+        return undef;
+    }
+
+    my $eis = Cws::eis();
+    my $result;
+
+    eval { $result = $eis->isClonableForMaster($id, $master) };
+    if ( $@ ) {
+        carp("ERROR:  get_is_cws_cloneable_from_eis(): EIS database transaction failed. Reason:\n$@\n");
+    }
+
+    return $result;
+}
+
+sub clone_cws_in_eis
+{
+    my $self   = shift;
+    my $master = Eis::to_string( shift );
+
+    # check if child workspace is valid
+    my $id = $self->eis_id();
+    if ( !$id ) {
+        carp("ERROR: Childworkspace not (yet) registered with EIS.\n");
+        return undef;
+    }
+
+    my $eis = Cws::eis();
+    my $result;
+
+    eval { $eis->cloneForMaster($id, $master) };
+    if ( $@ ) {
+        carp("ERROR:  clone_cws_in_eis(): EIS database transaction failed. Reason:\n$@\n");
+        return 0;
+    }
+
+    return 1;
+}
 
 
 #logging
