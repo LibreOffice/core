@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconarc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:35:47 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 16:55:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,21 @@ FuConstructArc::FuConstructArc (
     SfxRequest&     rReq )
     : FuConstruct( pViewSh, pWin, pView, pDoc, rReq )
 {
+}
+
+FunctionReference FuConstructArc::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent  )
+{
+    FuConstructArc* pFunc;
+    FunctionReference xFunc( pFunc = new FuConstructArc( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    pFunc->SetPermanent(bPermanent);
+    return xFunc;
+}
+
+void FuConstructArc::DoExecute( SfxRequest& rReq )
+{
+    FuConstruct::DoExecute( rReq );
+
     pViewShell->GetObjectBarManager().SwitchObjectBar (RID_DRAW_OBJ_TOOLBOX);
 
     const SfxItemSet *pArgs = rReq.GetArgs ();
@@ -133,16 +148,6 @@ FuConstructArc::FuConstructArc (
 
         pView->InsertObject(pNewCircle, *pPV, SDRINSERT_SETDEFLAYER);
     }
-}
-
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
-
-FuConstructArc::~FuConstructArc()
-{
 }
 
 /*************************************************************************
