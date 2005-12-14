@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSlideFunction.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:20:04 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:22:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,19 +55,11 @@ class SlideFunction
 public:
     TYPEINFO();
 
-    SlideFunction (
-        SlideSorterController& rController,
-        SfxRequest& rRequest);
+    static FunctionReference Create( SlideSorterController& rController, SfxRequest& rRequest );
 
-    virtual ~SlideFunction (void);
-
-    virtual BOOL KeyInput (const KeyEvent& rKEvt);
-    virtual BOOL MouseMove (const MouseEvent& rMEvt) { return FALSE; }
-    virtual BOOL MouseButtonUp (const MouseEvent& rMEvt) { return FALSE; }
-    virtual BOOL MouseButtonDown (const MouseEvent& rMEvt) { return FALSE; }
-
-    virtual void Activate (void);
-    virtual void Deactivate (void);
+    virtual BOOL MouseMove (const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonUp (const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonDown (const MouseEvent& rMEvt);
 
     /** Called from ForceScroll() before the actual scrolling.
     */
@@ -76,6 +68,11 @@ public:
     /** Called from ForceScroll() after the actual scrolling.
     */
     virtual void ScrollEnd (void);
+
+protected:
+    SlideFunction (
+        SlideSorterController& rController,
+        SfxRequest& rRequest);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller
