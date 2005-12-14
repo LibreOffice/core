@@ -87,8 +87,8 @@ en-US = "Searching for related applications"
 de = "Suche nach verwandten Anwendungen"
 
 [OOO_ACTIONTEXT_23]
-en-US = "Found application: [1]"
-de = "Anwendung gefunden: [1]"
+en-US = "Found application"
+de = "Anwendung gefunden"
 
 [OOO_ACTIONTEXT_24]
 en-US = "Generating script operations for action:"
