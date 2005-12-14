@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fulinend.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:35:11 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:12:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,16 +48,20 @@ class FuLineEnd
 public:
     TYPEINFO();
 
+    virtual void Activate();
+    virtual void Deactivate();
+
+    static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+    virtual void DoExecute( SfxRequest& rReq );
+
+private:
+
     FuLineEnd (
         ViewShell* pViewSh,
         ::sd::Window* pWin,
         ::sd::View* pView,
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
-    virtual ~FuLineEnd (void) {}
-
-    virtual void Activate() {}
-    virtual void Deactivate() {}
 };
 
 } // end of namespace sd
