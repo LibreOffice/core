@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futempl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:52:10 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:05:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,6 +154,17 @@ FuTemplate::FuTemplate (
     SdDrawDocument* pDoc,
     SfxRequest& rReq )
     : FuPoor( pViewSh, pWin, pView, pDoc, rReq )
+{
+}
+
+FunctionReference FuTemplate::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    FunctionReference xFunc( new FuTemplate( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    return xFunc;
+}
+
+void FuTemplate::DoExecute( SfxRequest& rReq )
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
     USHORT nSlotId = rReq.GetSlot();
@@ -333,7 +344,7 @@ FuTemplate::FuTemplate (
             {
                 SD_MOD()->SetWaterCan( FALSE );
                 // Werkzeugleiste muss wieder enabled werden
-                pViewSh->Invalidate();
+                pViewShell->Invalidate();
             }
         }
         break;
@@ -632,15 +643,15 @@ FuTemplate::FuTemplate (
 
                         ( (SfxStyleSheet*) pStyleSheet )->Broadcast( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
 
-                        if ( pViewSh->ISA(DrawViewShell ) )
+                        DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >( pViewShell );
+                        if( pDrawViewShell )
                         {
-                            PageKind ePageKind = static_cast<DrawViewShell*>(
-                                pViewShell)->GetPageKind();
+                            PageKind ePageKind = pDrawViewShell->GetPageKind();
                             if( ePageKind == PK_NOTES || ePageKind == PK_HANDOUT )
                             {
-                                SdPage* pPage = pViewSh->GetActualPage();
+                                SdPage* pPage = pViewShell->GetActualPage();
 
-                                if (static_cast<DrawViewShell*>(pViewShell)->GetEditMode() == EM_MASTERPAGE)
+                                if(pDrawViewShell->GetEditMode() == EM_MASTERPAGE)
                                 {
                                     pPage = static_cast<SdPage*>((&(pPage->TRG_GetMasterPage())));
                                 }
@@ -765,5 +776,12 @@ FuTemplate::FuTemplate (
         rReq.SetReturnValue( SfxUInt16Item( nSlotId, nRetMask ) );
 }
 
+void FuTemplate::Activate()
+{
+}
+
+void FuTemplate::Deactivate()
+{
+}
 
 } // end of namespace sd
