@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ddelink.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:42:00 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:06:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,7 +213,7 @@ void __EXPORT ScDdeLink::DataChanged( const String& rMimeType,
             for (SCSIZE nC=0; nC<nCols; nC++)
             {
                 aEntry = aLine.GetToken( (xub_StrLen) nC, '\t' );
-                ULONG nIndex = nStdFormat;
+                sal_uInt32 nIndex = nStdFormat;
                 double fVal;
                 if ( nMode != SC_DDE_TEXT && pFormatter->IsNumberFormat( aEntry, nIndex, fVal ) )
                     pResult->PutDouble( fVal, nC, nR );
