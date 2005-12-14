@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellImplementation.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:04:10 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:53:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,12 +175,21 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
             SfxBoolItem aMakeToolPaneVisible (ID_VAL_ISVISIBLE, TRUE);
             SfxUInt32Item aPanelId (ID_VAL_PANEL_INDEX,
                 ::sd::toolpanel::TaskPaneViewShell::PID_LAYOUT);
-            mrViewShell.GetDispatcher()->Execute (
-                SID_TASK_PANE,
-                SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
-                &aMakeToolPaneVisible,
-                &aPanelId,
-                NULL);
+            SfxViewFrame* pFrame = mrViewShell.GetViewFrame();
+            if (pFrame!=NULL && pFrame->GetDispatcher()!=NULL)
+            {
+                pFrame->GetDispatcher()->Execute (
+                    SID_TASK_PANE,
+                    SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+                    &aMakeToolPaneVisible,
+                    &aPanelId,
+                    NULL);
+            }
+            else
+            {
+                DBG_ASSERT(pFrame!=NULL && pFrame->GetDispatcher()!=NULL,
+                    "ViewShell::Implementation::ProcessModifyPageSlot(): can not get dispatcher");
+            }
 
             // We have activated a non-modal control in the task pane.
             // Because it does not return anything we can not do anything
