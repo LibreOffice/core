@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 09:21:31 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:26:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,24 +179,25 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             {
                 SdDrawDocument* pDoc = pView->GetDoc();
                 OSL_ASSERT (pViewShell->GetViewShell()!=NULL);
-                FuPoor* pFuActual = new FuTemplate( pViewShell,
-                    static_cast< ::sd::Window*>(
-                        pViewShell->GetViewShell()->GetWindow()),
-                    pView, pDoc, rReq );
+                FunctionReference xFunc( FuTemplate::Create( pViewShell, static_cast< ::sd::Window*>( pViewShell->GetViewShell()->GetWindow()), pView, pDoc, rReq ) );
 
-                if (pFuActual)
+                if(xFunc.is())
                 {
-                    pFuActual->Activate();
-                    pFuActual->Deactivate();
-                    delete pFuActual;
+                    xFunc->Activate();
+                    xFunc->Deactivate();
 
                     if( rReq.GetSlot() == SID_STYLE_APPLY )
-                        pViewShell->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_APPLY );
+                    {
+                        if( pViewShell && pViewShell->GetViewFrame() )
+                            pViewShell->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_APPLY );
+                    }
                 }
             }
             else
-                pViewShell->GetViewFrame()->GetDispatcher()->
-                Execute( SID_STYLE_DESIGNER, SFX_CALLMODE_ASYNCHRON );
+            {
+                if( pViewShell && pViewShell->GetViewFrame() )
+                    pViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_STYLE_DESIGNER, SFX_CALLMODE_ASYNCHRON );
+            }
 
             rReq.Done();
         }
