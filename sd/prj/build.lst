@@ -7,6 +7,7 @@ sd	sd\res									get		-	all	sd_res NULL
 sd	sd\res\imagelst							get		-	all	sd_resil NULL
 sd	sd\sdi									nmake	-	all	sd_sdi NULL
 sd	sd\source\unotypes						nmake	-	all	sd_unotypes NULL
+sd	sd\source\helper						nmake	-	all sd_helper NULL
 sd	sd\source\ui\func						nmake	-	all	sd_func sd_sdi NULL
 sd	sd\source\ui\view						nmake	-	all	sd_view sd_sdi sd_unotypes NULL
 sd	sd\source\ui\app						nmake	-	all	sd_app sd_sdi NULL
@@ -33,4 +34,4 @@ sd	sd\source\filter\xml					nmake	-	all	sd_xml NULL
 sd	sd\source\filter\html					nmake	-	all	sd_html NULL
 sd	sd\source\ui\animations					nmake	-	all sd_animations sd_unotypes NULL
 sd	sd\source\ui\slideshow					nmake	-	all sd_slideshow sd_unotypes sd_sdi NULL
-sd	sd\util									nmake	-	all	sd_util sd_app sd_cgm sd_core sd_dlg sd_docsh sd_eppt sd_filt sd_func sd_grf sd_unid sd_view sd_xml sd_html sd_ppt sd_accessibility sd_animations sd_toolpanel sd_toolpanel_controls sd_tools sd_slsshell sd_slsmodel sd_slsview sd_slscontroller sd_slscache sd_notes sd_slideshow NULL
+sd	sd\util									nmake	-	all	sd_util sd_app sd_cgm sd_core sd_dlg sd_docsh sd_eppt sd_filt sd_func sd_grf sd_unid sd_view sd_xml sd_html sd_ppt sd_accessibility sd_animations sd_toolpanel sd_toolpanel_controls sd_tools sd_slsshell sd_slsmodel sd_slsview sd_slscontroller sd_slscache sd_notes sd_slideshow sd_helper NULL
