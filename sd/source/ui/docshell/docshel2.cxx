@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshel2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:28:15 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 16:53:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -409,9 +409,9 @@ BOOL DrawDocShell::CheckPageName (::Window* pWin, String& rName )
         if( pViewShell )
             aNameDlg->SetCheckNameHdl( LINK( this, DrawDocShell, RenameSlideHdl ) ); //CHINA001 aNameDlg.SetCheckNameHdl( LINK( this, SdDrawDocShell, RenameSlideHdl ) );
 
-        FuPoor* pFunc = pViewShell->GetActualFunction();
-        if( pFunc )
-            pFunc->cancel();
+        FunctionReference xFunc( pViewShell->GetCurrentFunction() );
+        if( xFunc.is() )
+            xFunc->cancel();
 
         if( aNameDlg->Execute() == RET_OK ) //CHINA001 if( aNameDlg.Execute() == RET_OK )
         {
