@@ -147,7 +147,7 @@ int MyThes::Lookup(const char * pText, int len, mentry** pme)
     memcpy(wrd,pText,len);
 
     /* find it in the list */
-    int idx = binsearch(wrd,list,nw);
+    int idx = nw > 0 ? binsearch(wrd,list,nw) : -1;
     free(wrd);
     if (idx < 0) return 0;
 
