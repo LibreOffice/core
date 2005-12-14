@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSlideFunction.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:16:42 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:21:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,49 +58,34 @@ SlideFunction::SlideFunction (
 {
 }
 
-
-
-SlideFunction::~SlideFunction (void)
+FunctionReference SlideFunction::Create( SlideSorterController& rController, SfxRequest& rRequest )
 {
+    FunctionReference xFunc( new SlideFunction( rController, rRequest ) );
+    return xFunc;
 }
-
-
-
 
 void SlideFunction::ScrollStart (void)
 {
 }
 
-
-
-
 void SlideFunction::ScrollEnd (void)
 {
 }
 
-
-
-
-BOOL SlideFunction::KeyInput (const KeyEvent& rKEvt)
+BOOL SlideFunction::MouseMove(const MouseEvent& rMEvt)
 {
-    return FuPoor::KeyInput(rKEvt);
+    return FALSE;
 }
 
-
-
-
-void SlideFunction::Activate (void)
+BOOL SlideFunction::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    FuPoor::Activate();
+    return FALSE;
+
 }
 
-
-
-
-void SlideFunction::Deactivate (void)
+BOOL SlideFunction::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    FuPoor::Deactivate();
+    return FALSE;
 }
-
 
 } } } // end of namespace ::sd::slidesorter::controller

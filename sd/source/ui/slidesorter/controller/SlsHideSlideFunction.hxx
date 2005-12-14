@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsHideSlideFunction.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:14:31 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:20:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,10 +51,15 @@ class HideSlideFunction
 public:
     TYPEINFO();
 
+    static FunctionReference Create( SlideSorterController& rController, SfxRequest& rRequest );
+    virtual void DoExecute( SfxRequest& rReq );
+
+protected:
     HideSlideFunction (
         SlideSorterController& rController,
         SfxRequest& rRequest);
-    virtual ~HideSlideFunction (void);
+
+    SlideSorterController& mrController;
 };
 
 } } } // end of namespace ::sd::slidesorter::controller
