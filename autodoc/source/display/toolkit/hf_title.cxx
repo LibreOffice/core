@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hf_title.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:01:41 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:35:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,7 @@ HF_TitleTable::HF_TitleTable( Xml::Element & o_rOut )
                                               C_sTitleWidth,
                                               C_sTitlePadding,
                                               C_sTitleSpacing )
+                            << new Html::ClassAttr("title-table")
                             << new Html::StyleAttr("margin-bottom:6pt;") )
 {
 }
