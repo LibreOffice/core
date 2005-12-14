@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numfmtlb.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:29:23 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:52:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -493,7 +493,7 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
 
             if( pItem && 0 != ((SvxNumberInfoItem*)pItem)->GetDelCount() )
             {
-                const ULONG* pDelArr = ((SvxNumberInfoItem*)pItem)->GetDelArray();
+                const sal_uInt32* pDelArr = ((SvxNumberInfoItem*)pItem)->GetDelArray();
 
                 for ( USHORT i = 0; i < ((SvxNumberInfoItem*)pItem)->GetDelCount(); i++ )
                     pFormatter->DeleteEntry( pDelArr[i] );
