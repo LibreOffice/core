@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeEngine.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:25:24 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:55:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -257,8 +257,6 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
             }
             else
                 pRenderedShape = pTextObj;
-
-            pTextObj->SetPage( pCustoObj->GetPage() );
         }
 
         // force group
@@ -270,6 +268,7 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
                 pRenderedShape = new SdrObjGroup();
                 ((SdrObjGroup*)pRenderedShape)->GetSubList()->NbcInsertObject( pTmp );
             }
+            pRenderedShape->SetPage( pCustoObj->GetPage() );
             pRenderedShape->SetModel( pCustoObj->GetModel() );
         }
     }
