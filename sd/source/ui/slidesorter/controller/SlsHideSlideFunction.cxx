@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsHideSlideFunction.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:14:12 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:20:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,19 +51,29 @@ namespace sd { namespace slidesorter { namespace controller {
 
 TYPEINIT1(HideSlideFunction, SlideFunction);
 
-HideSlideFunction::HideSlideFunction (
-    SlideSorterController& rController,
-    SfxRequest& rRequest)
-    : SlideFunction (
-        rController,
-        rRequest)
+HideSlideFunction::HideSlideFunction( SlideSorterController& rController, SfxRequest& rRequest)
+: SlideFunction( rController, rRequest)
+, mrController(rController)
 {
+}
+
+FunctionReference HideSlideFunction::Create( SlideSorterController& rController, SfxRequest& rRequest )
+{
+    FunctionReference xFunc( new HideSlideFunction( rController, rRequest ) );
+    xFunc->DoExecute(rRequest);
+    return xFunc;
+}
+
+void HideSlideFunction::DoExecute(SfxRequest& rRequest)
+{
+    SlideFunction::DoExecute(rRequest);
+
     enum {UNDEFINED, EXCLUDED, INCLUDED, BOTH} eState (UNDEFINED);
     BOOL bState;
 
     // Get toggle state of the selected pages.
     model::SlideSorterModel::Enumeration aSelectedPages (
-        rController.GetModel().GetSelectedPagesEnumeration());
+        mrController.GetModel().GetSelectedPagesEnumeration());
     while (aSelectedPages.HasMoreElements() && eState!=BOTH)
     {
         bState = aSelectedPages.GetNextElement().GetPage()->IsExcluded();
@@ -125,14 +135,5 @@ HideSlideFunction::HideSlideFunction (
     rBindings.Invalidate (SID_REHEARSE_TIMINGS);
     pDoc->SetChanged();
 }
-
-
-
-
-HideSlideFunction::~HideSlideFunction (void)
-{
-}
-
-
 
 } } } // end of namespace ::sd::slidesorter::controller
