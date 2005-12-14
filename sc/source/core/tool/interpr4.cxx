@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 11:54:33 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:07:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -265,7 +265,7 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, const ScBaseCel
                     ((ScStringCell*)pCell)->GetString( aStr );
                 else
                     ((ScEditCell*)pCell)->GetString( aStr );
-                ULONG nFIndex = 0;                  // damit default Land/Spr.
+                sal_uInt32 nFIndex = 0;                 // damit default Land/Spr.
                 if ( !pFormatter->IsNumberFormat( aStr, nFIndex, fValue ) )
                 {
                     SetError(errNoValue);
@@ -1442,7 +1442,7 @@ double ScInterpreter::GetDouble()
         case svString:
         {
             String aStr(PopString());
-            ULONG nFIndex = 0;                  // damit default Land/Spr.
+            sal_uInt32 nFIndex = 0;                 // damit default Land/Spr.
             if(!pFormatter->IsNumberFormat( aStr, nFIndex, nVal ) )
             {
                 SetError(errIllegalArgument);
