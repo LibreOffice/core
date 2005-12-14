@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-11 10:40:58 $
+#   last change: $Author: rt $ $Date: 2005-12-14 14:59:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -143,7 +143,7 @@ SCP1FILES += \
 .ENDIF
 .ENDIF
 
-.IF "$(ENABLE_CRASHDUMP)" != "" || "$(PRODUCT)" == "" 
+.IF "$(ENABLE_CRASHDUMP)" != ""
 SCP1FILES += \
              file_crashrep_dynamic.par
 .ENDIF
@@ -250,7 +250,7 @@ SCP2FILES += \
 .ENDIF
 .ENDIF
 
-.IF "$(ENABLE_CRASHDUMP)" != "" || "$(PRODUCT)" == "" 
+.IF "$(ENABLE_CRASHDUMP)" != ""
 SCP2FILES += \
              file_crashrep_dynamic.par
 .ENDIF
