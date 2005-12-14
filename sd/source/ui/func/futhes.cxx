@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futhes.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:52:55 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:05:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@
 #endif
 #include "sdresid.hxx"
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -107,10 +107,21 @@ FuThesaurus::FuThesaurus( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pV
                   SdDrawDocument* pDoc, SfxRequest& rReq )
        : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
-    SfxErrorContext aContext(ERRCTX_SVX_LINGU_THESAURUS, String(),
-                             pWin, RID_SVXERRCTX, DIALOG_MGR() );
+}
 
-    if ( pViewShell->ISA(DrawViewShell) )
+FunctionReference FuThesaurus::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    FunctionReference xFunc( new FuThesaurus( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    return xFunc;
+}
+
+void FuThesaurus::DoExecute( SfxRequest& rReq )
+{
+    SfxErrorContext aContext(ERRCTX_SVX_LINGU_THESAURUS, String(),
+                             pWindow, RID_SVXERRCTX, DIALOG_MGR() );
+
+    if( pViewShell && pViewShell->ISA(DrawViewShell) )
     {
         SdrTextObj* pTextObj = NULL;
 
@@ -184,17 +195,5 @@ FuThesaurus::FuThesaurus( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pV
         }
     }
 }
-
-
-
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
-FuThesaurus::~FuThesaurus()
-{
-}
-
 
 } // end of namespace sd
