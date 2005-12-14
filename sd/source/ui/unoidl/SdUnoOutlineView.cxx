@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdUnoOutlineView.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 09:05:39 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:23:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@
 #endif
 #include <cppuhelper/proptypehlp.hxx>
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::vos;
 using namespace ::cppu;
 using namespace ::com::sun::star;
