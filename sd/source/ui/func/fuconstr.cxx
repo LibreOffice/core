@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconstr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:38:54 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 16:56:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,14 +99,16 @@ FuConstruct::FuConstruct (
 {
 }
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
-
-FuConstruct::~FuConstruct()
+FunctionReference FuConstruct::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
+    FunctionReference xFunc( new FuConstruct( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    return xFunc;
+}
+
+void FuConstruct::DoExecute( SfxRequest& rReq )
+{
+    FuDraw::DoExecute( rReq );
 }
 
 /*************************************************************************
