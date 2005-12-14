@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usrfld.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:36:43 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:49:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -295,7 +295,7 @@ double SwUserFieldType::GetValue( SwCalc& rCalc )
 
 String SwUserFieldType::GetContent( sal_uInt32 nFmt )
 {
-    if (nFmt && nFmt != ULONG_MAX)
+    if (nFmt && nFmt != SAL_MAX_UINT32)
     {
         String sFormattedValue;
         Color* pCol = 0;
@@ -315,7 +315,7 @@ void SwUserFieldType::SetContent( const String& rStr, sal_uInt32 nFmt )
     {
         aContent = rStr;
 
-        if (nFmt && nFmt != ULONG_MAX)
+        if (nFmt && nFmt != SAL_MAX_UINT32)
         {
             double fValue;
 
