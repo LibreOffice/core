@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xistyle.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 11:58:44 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:08:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -547,7 +547,7 @@ void XclImpNumFmtBuffer::CreateScFormats()
         // insert/convert the Excel number format
         xub_StrLen nCheckPos;
         short nType = NUMBERFORMAT_DEFINED;
-        ULONG nKey;
+        sal_uInt32 nKey;
         if( rNumFmt.maFormat.Len() )
         {
             String aFormat( rNumFmt.maFormat );
