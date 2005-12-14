@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuolbull.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:36:24 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:13:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,16 +61,16 @@ class FuOutlineBullet
 public:
     TYPEINFO();
 
+    static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+    virtual void DoExecute( SfxRequest& rReq );
+
+private:
     FuOutlineBullet (
         ViewShell* pViewShell,
         ::sd::Window* pWin,
         ::sd::View* pView,
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
-    virtual ~FuOutlineBullet (void);
-
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
 };
 
 } // end of namespace sd
