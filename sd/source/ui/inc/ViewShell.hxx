@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShell.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:25:04 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:07:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,7 +188,6 @@ public:
     virtual void Exit (void);
 
     void Cancel();
-    void CancelSearching();
 
     /** Return the window that is the parent of all controls of this view
         shell.  This may or may not be the window of the frame.
@@ -317,10 +316,15 @@ public:
     */
     virtual SdPage* getCurrentPage() const = 0;
 
-    FuPoor* GetOldFunction() const    { return pFuOld; }
-    FuPoor* GetActualFunction() const { return pFuActual; }
-    void SetCurrentFunction (FuPoor* pFunction);
-    void SetOldFunction (FuPoor* pFunction);
+    FunctionReference GetOldFunction() const { return mxOldFunction; }
+    bool HasOldFunction() const { return mxOldFunction.is(); }
+    FunctionReference GetCurrentFunction() const { return mxCurrentFunction; }
+    bool HasCurrentFunction( USHORT nSID ) { return mxCurrentFunction.is() && (mxCurrentFunction->GetSlotID() == nSID ); }
+    bool HasCurrentFunction() { return mxCurrentFunction.is(); }
+
+    void SetCurrentFunction(const FunctionReference& xFunction);
+    void SetOldFunction(const FunctionReference& xFunction);
+    void DeactivateCurrentFunction( bool bPermanent = false );
 
     Slideshow* GetSlideShow() const { return mpSlideShow; }
     void SetSlideShow(Slideshow* pSlideShow );
@@ -521,6 +525,10 @@ public:
     BOOL IsPageFlipMode(void) const;
 
 protected:
+    /** must be called in the beginning of each subclass d'tor.
+        disposes and clears both current and old function. */
+    void DisposeFunctions();
+
     friend class ViewShellBase;
 
     /** Window inside the rulers and scroll bars that shows a view of the
@@ -550,9 +558,8 @@ protected:
     ::sd::View* mpView;
     FrameView*  pFrameView;
 
-    FuPoor*      pFuActual;
-    FuPoor*      pFuOld;
-    FuSearch*    pFuSearch;
+    FunctionReference   mxCurrentFunction;
+    FunctionReference   mxOldFunction;
     Slideshow*  mpSlideShow;
     ZoomList*    pZoomList;
 
