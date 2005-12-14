@@ -14,9 +14,9 @@
 #
 #   $RCSfile: linkoo,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 22:10:09 $
+#   last change: $Author: rt $ $Date: 2005-12-14 14:58:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -197,26 +197,27 @@ sub scan_and_link_files($$$)
 	for $elem (@search_dirs) {
 	    my $dirh_module;
 	    my $module_path = "$module/$elem";
-	    opendir ($dirh_module, $module_path) || die "Can't open '$module_path': $!";
-	    while (my $file = readdir($dirh_module)) {
-		if (defined $installed_files->{$file}) {
-		    if (defined $build_files{$file}) {
-			my $known = 0;
-			for my $regexp (@known_duplicates) {
-			    if ($file =~ m/$regexp/) {
-				$known = 1;
-			    }
+	    if (opendir ($dirh_module, $module_path)) {
+			while (my $file = readdir($dirh_module)) {
+				if (defined $installed_files->{$file}) {
+					if (defined $build_files{$file}) {
+						my $known = 0;
+						for my $regexp (@known_duplicates) {
+							if ($file =~ m/$regexp/) {
+								$known = 1;
+							}
+						}
+						if (!$known) {
+							print "Unknown duplicate file '$file' in: '" . 
+							$build_files{$file} . "' vs '" .
+							$module_path . "' in module $module\n";
+							exit (1);
+						}
+					}
+					$build_files{$file} = $module_path;
+				}
 			}
-			if (!$known) {
-			    print "Unknown duplicate file '$file' in: '" . 
-				$build_files{$file} . "' vs '" .
-				$module_path . "' in module $module\n";
-			    exit (1);
-			}
-		    }
-		    $build_files{$file} = $module_path;
 		}
-	    }
 	    closedir ($dirh_module);
 	}
     }
