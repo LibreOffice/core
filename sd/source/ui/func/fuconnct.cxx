@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconnct.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:37:45 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 16:56:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,17 @@ FuConnectionDlg::FuConnectionDlg (
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+{
+}
+
+FunctionReference FuConnectionDlg::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    FunctionReference xFunc( new FuConnectionDlg( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    return xFunc;
+}
+
+void FuConnectionDlg::DoExecute( SfxRequest& rReq )
 {
     SfxItemSet aNewAttr( pDoc->GetPool() );
     pView->GetAttributes( aNewAttr );
