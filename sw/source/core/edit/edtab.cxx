@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtab.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:29:27 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:48:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -414,7 +414,7 @@ BOOL SwEditShell::IsTableBoxTextFormat() const
     if( !pBox )
         return FALSE;
 
-    ULONG nFmt;
+    sal_uInt32 nFmt;
     const SfxPoolItem* pItem;
     if( SFX_ITEM_SET == pBox->GetFrmFmt()->GetAttrSet().GetItemState(
         RES_BOXATR_FORMAT, TRUE, &pItem ))
