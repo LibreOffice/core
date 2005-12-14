@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconarc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:30:31 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:08:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,13 +49,8 @@ class FuConstructArc
 public:
     TYPEINFO();
 
-    FuConstructArc (
-        ViewShell* pViewSh,
-        ::sd::Window* pWin,
-        ::sd::View* pView,
-        SdDrawDocument* pDoc,
-        SfxRequest& rReq);
-    virtual ~FuConstructArc (void);
+    static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent );
+    virtual void DoExecute( SfxRequest& rReq );
 
     // Mouse- & Key-Events
     virtual BOOL KeyInput(const KeyEvent& rKEvt);
@@ -68,6 +63,15 @@ public:
 
     // #97016#
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
+
+protected:
+    FuConstructArc (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+
 };
 
 } // end of namespace sd

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fucon3d.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:30:17 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:08:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,13 +53,8 @@ class FuConstruct3dObject
 public:
     TYPEINFO();
 
-    FuConstruct3dObject (
-        ViewShell* pViewSh,
-        ::sd::Window* pWin,
-        ::sd::View* pView,
-        SdDrawDocument* pDoc,
-        SfxRequest& rReq);
-    virtual ~FuConstruct3dObject (void);
+    static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent );
+    virtual void DoExecute( SfxRequest& rReq );
 
     // Mouse- & Key-Events
     virtual BOOL KeyInput(const KeyEvent& rKEvt);
@@ -74,6 +69,13 @@ public:
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 
 private:
+    FuConstruct3dObject (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+
     // #97016#
     void ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dScene *pScene);
     E3dCompoundObject* ImpCreateBasic3DShape();
