@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuformatpaintbrush.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:33:45 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:11:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,13 +53,7 @@ class FuFormatPaintBrush
 public:
     TYPEINFO();
 
-    FuFormatPaintBrush (
-        ViewShell* pViewSh,
-        ::sd::Window* pWin,
-        ::sd::View* pView,
-        SdDrawDocument* pDoc,
-        SfxRequest& rReq);
-    virtual ~FuFormatPaintBrush ();
+    static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
 
     virtual BOOL MouseMove(const MouseEvent& rMEvt);
     virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
@@ -68,6 +62,15 @@ public:
 
     virtual void Activate();
     virtual void Deactivate();
+
+private:
+        FuFormatPaintBrush (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+
 };
 
 } // end of namespace sd

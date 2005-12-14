@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fugrid.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:33:59 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:11:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,16 +48,18 @@ class FuGrid
 public:
     TYPEINFO();
 
+    static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+
+    virtual void Activate();
+    virtual void Deactivate();
+
+private:
     FuGrid (
         ViewShell* pViewSh,
         ::sd::Window* pWin,
         ::sd::View* pView,
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
-    virtual ~FuGrid (void) {}
-
-    virtual void Activate() {}         // Function aktivieren
-    virtual void Deactivate() {}           // Function deaktivieren
 };
 
 } // end of namespace sd
