@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldbas.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:33:48 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:49:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,7 +247,7 @@ BOOL SwFieldType::PutValue( const uno::Any& rVal, BYTE nMId )
                     Felder sind n-mal vorhanden, Feldtypen nur einmal
  --------------------------------------------------------------------*/
 
-SwField::SwField(SwFieldType* pTyp, ULONG nFmt, USHORT nLng) :
+SwField::SwField(SwFieldType* pTyp, sal_uInt32 nFmt, USHORT nLng) :
     nFormat(nFmt),
     nLang(nLng),
     bIsAutomaticLanguage(TRUE)
@@ -458,7 +458,7 @@ void SwField::SetLanguage(USHORT nLng)
     nLang = nLng;
 }
 
-void SwField::ChangeFormat(ULONG n)
+void SwField::ChangeFormat(sal_uInt32 n)
 {
     nFormat = n;
 }
@@ -497,7 +497,7 @@ FASTBOOL SwField::IsFixed() const
     Beschreibung: Numerierung expandieren
  --------------------------------------------------------------------*/
 
-String FormatNumber(USHORT nNum, ULONG nFormat)
+String FormatNumber(USHORT nNum, sal_uInt32 nFormat)
 {
     if(SVX_NUM_PAGEDESC == nFormat)
         return  String::CreateFromInt32( nNum );
@@ -532,7 +532,7 @@ SwValueFieldType::SwValueFieldType( const SwValueFieldType& rTyp )
  --------------------------------------------------------------------*/
 
 String SwValueFieldType::ExpandValue( const double& rVal,
-                                        ULONG nFmt, USHORT nLng) const
+                                        sal_uInt32 nFmt, USHORT nLng) const
 {
     if (rVal >= DBL_MAX)        // FehlerString fuer Calculator
         return ViewShell::GetShellRes()->aCalc_Error;
@@ -553,7 +553,7 @@ String SwValueFieldType::ExpandValue( const double& rVal,
 
         if (pEntry && nLng != pEntry->GetLanguage())
         {
-            ULONG nNewFormat = pFormatter->GetFormatForLanguageIfBuiltIn(nFmt,
+            sal_uInt32 nNewFormat = pFormatter->GetFormatForLanguageIfBuiltIn(nFmt,
                                                     (LanguageType)nFmtLng);
 
             if (nNewFormat == nFmt)
@@ -587,7 +587,7 @@ String SwValueFieldType::ExpandValue( const double& rVal,
  --------------------------------------------------------------------*/
 
 void SwValueFieldType::DoubleToString( String &rValue, const double &rVal,
-                                        ULONG nFmt) const
+                                        sal_uInt32 nFmt) const
 {
     SvNumberFormatter* pFormatter = pDoc->GetNumberFormatter();
     const SvNumberformat* pEntry = pFormatter->GetEntry(nFmt);
@@ -618,7 +618,7 @@ void SwValueFieldType::DoubleToString( String &rValue, const double &rVal,
     Beschreibung: CTOR SwValueField
  --------------------------------------------------------------------*/
 
-SwValueField::SwValueField( SwValueFieldType* pFldType, ULONG nFmt,
+SwValueField::SwValueField( SwValueFieldType* pFldType, sal_uInt32 nFmt,
                             USHORT nLang, const double fVal )
     : SwField(pFldType, nFmt, nLang),
     fValue(fVal)
@@ -671,14 +671,14 @@ void SwValueField::ChangeFormat(ULONG n)
     Beschreibung: Format in Office-Sprache ermitteln
  --------------------------------------------------------------------*/
 
-ULONG SwValueField::GetSystemFormat(SvNumberFormatter* pFormatter, ULONG nFmt)
+sal_uInt32 SwValueField::GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt32 nFmt)
 {
     const SvNumberformat* pEntry = pFormatter->GetEntry(nFmt);
     USHORT nLng = SvxLocaleToLanguage( GetAppLocaleData().getLocale() );
 
     if (pEntry && nLng != pEntry->GetLanguage())
     {
-        ULONG nNewFormat = pFormatter->GetFormatForLanguageIfBuiltIn(nFmt,
+        sal_uInt32 nNewFormat = pFormatter->GetFormatForLanguageIfBuiltIn(nFmt,
                                                         (LanguageType)nLng);
 
         if (nNewFormat == nFmt)
@@ -689,7 +689,7 @@ ULONG SwValueField::GetSystemFormat(SvNumberFormatter* pFormatter, ULONG nFmt)
 
             String sFmt(pEntry->GetFormatstring());
 
-            ULONG nFormat = nFmt;
+            sal_uInt32 nFormat = nFmt;
             pFormatter->PutandConvertEntry(sFmt, nDummy, nType,
                                 nFormat, pEntry->GetLanguage(), nLng);
             nFmt = nFormat;
@@ -709,7 +709,7 @@ void SwValueField::SetLanguage( USHORT nLng )
 {
     if( IsAutomaticLanguage() &&
             ((SwValueFieldType *)GetTyp())->UseFormat() &&
-        GetFormat() != ULONG_MAX )
+        GetFormat() != SAL_MAX_UINT32 )
     {
         // wegen Bug #60010
         SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
@@ -724,7 +724,7 @@ void SwValueField::SetLanguage( USHORT nLng )
 
             if( pEntry && nFmtLng != pEntry->GetLanguage() )
             {
-                ULONG nNewFormat = pFormatter->GetFormatForLanguageIfBuiltIn(
+                sal_uInt32 nNewFormat = pFormatter->GetFormatForLanguageIfBuiltIn(
                                         GetFormat(), (LanguageType)nFmtLng );
 
                 if( nNewFormat == GetFormat() )
@@ -765,7 +765,7 @@ void SwValueField::SetValue( const double& rVal )
     Beschreibung: SwFormulaField
  --------------------------------------------------------------------*/
 
-SwFormulaField::SwFormulaField( SwValueFieldType* pFldType, ULONG nFmt, const double fVal)
+SwFormulaField::SwFormulaField( SwValueFieldType* pFldType, sal_uInt32 nFmt, const double fVal)
     : SwValueField(pFldType, nFmt, LANGUAGE_SYSTEM, fVal)
 {
 }
@@ -795,7 +795,7 @@ void SwFormulaField::SetFormula(const String& rStr)
 
     ULONG nFmt(GetFormat());
 
-    if( nFmt && ULONG_MAX != nFmt )
+    if( nFmt && SAL_MAX_UINT32 != nFmt )
     {
         xub_StrLen nPos = 0;
         double fValue;
@@ -810,9 +810,9 @@ void SwFormulaField::SetFormula(const String& rStr)
 
 void SwFormulaField::SetExpandedFormula( const String& rStr )
 {
-    ULONG nFmt(GetFormat());
+    sal_uInt32 nFmt(GetFormat());
 
-    if (nFmt && nFmt != ULONG_MAX && ((SwValueFieldType *)GetTyp())->UseFormat())
+    if (nFmt && nFmt != SAL_MAX_UINT32 && ((SwValueFieldType *)GetTyp())->UseFormat())
     {
         double fValue;
 
@@ -836,9 +836,9 @@ void SwFormulaField::SetExpandedFormula( const String& rStr )
 
 String SwFormulaField::GetExpandedFormula() const
 {
-    ULONG nFmt(GetFormat());
+    sal_uInt32 nFmt(GetFormat());
 
-    if (nFmt && nFmt != ULONG_MAX && ((SwValueFieldType *)GetTyp())->UseFormat())
+    if (nFmt && nFmt != SAL_MAX_UINT32 && ((SwValueFieldType *)GetTyp())->UseFormat())
     {
         String sFormattedValue;
         Color* pCol = 0;
