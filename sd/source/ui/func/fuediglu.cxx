@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuediglu.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:42:39 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 16:58:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,20 @@ FuEditGluePoints::FuEditGluePoints (
     SfxRequest& rReq)
     : FuDraw(pViewSh, pWin, pView, pDoc, rReq)
 {
+}
+
+FunctionReference FuEditGluePoints::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent )
+{
+    FuEditGluePoints* pFunc;
+    FunctionReference xFunc( pFunc = new FuEditGluePoints( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    pFunc->SetPermanent( bPermanent );
+    return xFunc;
+}
+
+void FuEditGluePoints::DoExecute( SfxRequest& rReq )
+{
+    FuDraw::DoExecute( rReq );
     pView->SetInsGluePointMode(FALSE);
     pViewShell->GetObjectBarManager().ActivateObjectBar(RID_GLUEPOINTS_TOOLBOX);//todo: would be better to call just 'GetObjectBarManager().SelectionHasChanged(pView)' but this is not possible currently because the Gluepoint mode is not correctly detectable(SDRCONTEXT_GLUEPOINTEDIT is not sufficient); the view context design needs a cleanup first; than we could maybe introduce a methhod ObjectBarManager::ContextChanged( ... )
 }
