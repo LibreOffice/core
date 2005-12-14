@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:37:54 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:06:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2355,7 +2355,7 @@ void ScInterpreter::ScT()
 void ScInterpreter::ScValue()
 {
     String aInputString = GetString();
-    ULONG nFIndex = 0;                  // damit default Land/Spr.
+    sal_uInt32 nFIndex = 0;                 // damit default Land/Spr.
     double fVal;
     if (pFormatter->IsNumberFormat(aInputString, nFIndex, fVal))
         PushDouble(fVal);
@@ -2665,7 +2665,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, BOOL bTextAsZero )
                 if( eFunc == ifCOUNT )
                 {
                     String aStr( PopString() );
-                    ULONG nFIndex = 0;                  // damit default Land/Spr.
+                    sal_uInt32 nFIndex = 0;                 // damit default Land/Spr.
                     if ( bTextAsZero || pFormatter->IsNumberFormat(aStr, nFIndex, fVal))
                         nCount++;
                 }
@@ -3746,7 +3746,7 @@ void ScInterpreter::ScCountIf()
             else
             {
                 rParam.FillInExcelSyntax(rString, 0);
-                ULONG nIndex = 0;
+                sal_uInt32 nIndex = 0;
                 rEntry.bQueryByString =
                     !(pFormatter->IsNumberFormat(
                         *rEntry.pStr, nIndex, rEntry.nVal));
@@ -3923,7 +3923,7 @@ void ScInterpreter::ScSumIf()
             else
             {
                 rParam.FillInExcelSyntax(rString, 0);
-                ULONG nIndex = 0;
+                sal_uInt32 nIndex = 0;
                 rEntry.bQueryByString =
                     !(pFormatter->IsNumberFormat(
                         *rEntry.pStr, nIndex, rEntry.nVal));
@@ -5046,7 +5046,7 @@ BOOL ScInterpreter::GetDBParams(SCTAB& rTab, ScQueryParam& rParam,
                         ScQueryEntry& rEntry = rParam.GetEntry(i);
                         if ( rEntry.bDoQuery )
                         {
-                            ULONG nIndex = 0;
+                            sal_uInt32 nIndex = 0;
                             rEntry.bQueryByString = !pFormatter->IsNumberFormat(
                                 *rEntry.pStr, nIndex, rEntry.nVal );
                             if ( rEntry.bQueryByString && !rParam.bRegExp )
