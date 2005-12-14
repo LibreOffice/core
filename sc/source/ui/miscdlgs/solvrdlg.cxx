@@ -4,9 +4,9 @@
  *
  *  $RCSfile: solvrdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:14:19 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:10:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,7 +222,7 @@ BOOL ScSolverDlg::IsRefInputMode() const
 
 BOOL __EXPORT ScSolverDlg::CheckTargetValue( String& rStrVal )
 {
-    ULONG  n1 = 0;
+    sal_uInt32 n1 = 0;
     double n2;
 
     return pDoc->GetFormatTable()->IsNumberFormat( rStrVal, n1, n2 );
