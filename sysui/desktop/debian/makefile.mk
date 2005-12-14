@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2005-10-13 09:27:25 $
+#   last change: $Author: rt $ $Date: 2005-12-14 09:41:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -165,7 +165,7 @@ ALLTAR : $(DEBFILE)
 
 %.desktop :
     @$(MKDIRHIER) $(@:d)
-    @ln -s -f $(subst,$(UNIXFILENAME)-, /etc/$(UNIXFILENAME)/share/xdg/$(@:f)) $@
+    @ln -sf $(subst,$(UNIXFILENAME)-, /etc/$(UNIXFILENAME)/share/xdg/$(@:f)) $@
 
 %/Office :
     @$(MKDIRHIER) $@
