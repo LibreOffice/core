@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fupoor.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:37:37 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:14:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,13 @@
 #ifndef _SV_EVENT_HXX //autogen
 #include <vcl/event.hxx>
 #endif
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
+#endif
+
+#ifndef _SALHELPER_SIMPLEREFERENCECOMPONENT_HXX_
+#include "helper/simplereferencecomponent.hxx"
+#endif
 
 class SdDrawDocument;
 class SfxRequest;
@@ -64,15 +71,13 @@ class View;
 class ViewShell;
 class Window;
 
-
-
 /*************************************************************************
 |*
 |* Basisklasse fuer alle Funktionen
 |*
 \************************************************************************/
 
-class FuPoor
+class FuPoor : public SimpleReferenceComponent
 {
 public:
     static const int HITPIX = 2;                   // Hit-Toleranz in Pixel
@@ -80,16 +85,7 @@ public:
 
     TYPEINFO();
 
-    /**
-        @param pViewSh
-            May be NULL.
-    */
-    FuPoor (ViewShell* pViewSh,
-        ::sd::Window* pWin,
-        ::sd::View* pView,
-        SdDrawDocument* pDoc,
-        SfxRequest& rReq);
-    virtual ~FuPoor (void);
+    virtual void DoExecute( SfxRequest& rReq );
 
     // #95491# see member
     void SetMouseButtonCode(sal_uInt16 nNew) { if(nNew != mnCode) mnCode = nNew; }
@@ -157,6 +153,17 @@ public:
     virtual bool doConstructOrthogonal() const;
 
 protected:
+    /**
+        @param pViewSh
+            May be NULL.
+    */
+    FuPoor (ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuPoor (void);
+
     DECL_LINK( DelayHdl, Timer * );
     long diffPoint (long pos1, long pos2);
 
@@ -218,6 +225,8 @@ private:
     sal_uInt16      mnCode;
 
 };
+
+typedef rtl::Reference< FuPoor > FunctionReference;
 
 } // end of namespace sd
 
