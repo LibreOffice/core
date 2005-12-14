@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuinsert.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:34:29 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:12:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,13 +48,17 @@ class FuInsertGraphic
 public:
     TYPEINFO();
 
+    static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+    virtual void DoExecute( SfxRequest& rReq );
+
+private:
+
     FuInsertGraphic (
         ViewShell* pViewSh,
         ::sd::Window* pWin,
         ::sd::View* pView,
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
-    virtual ~FuInsertGraphic (void);
 };
 
 
@@ -66,13 +70,16 @@ class FuInsertClipboard
 public:
     TYPEINFO();
 
+    static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+    virtual void DoExecute( SfxRequest& rReq );
+
+private:
     FuInsertClipboard (
         ViewShell* pViewSh,
         ::sd::Window* pWin,
         ::sd::View* pView,
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
-    virtual ~FuInsertClipboard (void);
 };
 
 
@@ -84,13 +91,16 @@ class FuInsertOLE
  public:
     TYPEINFO();
 
+    static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+    virtual void DoExecute( SfxRequest& rReq );
+
+private:
     FuInsertOLE (
         ViewShell* pViewSh,
         ::sd::Window* pWin,
         ::sd::View* pView,
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
-    virtual ~FuInsertOLE (void);
 };
 
 /************************************************************************/
@@ -101,13 +111,16 @@ class FuInsertAVMedia
 public:
     TYPEINFO();
 
+    static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+    virtual void DoExecute( SfxRequest& rReq );
+
+private:
     FuInsertAVMedia (
         ViewShell* pViewSh,
         ::sd::Window* pWin,
         ::sd::View* pView,
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
-    virtual ~FuInsertAVMedia (void);
 };
 
 
