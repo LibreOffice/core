@@ -4,9 +4,9 @@
  *
  *  $RCSfile: methods1.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:40:12 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:36:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2218,7 +2218,7 @@ RTLFUNC(FormatDateTime)
                 pFormatter = pINST->GetNumberFormatter();
             else
             {
-                ULONG n;    // Dummy
+                sal_uInt32 n;   // Dummy
                 SbiInstance::PrepareNumberFormatter( pFormatter, n, n, n );
             }
 
