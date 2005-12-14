@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-25 11:53:22 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 16:53:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,7 +247,7 @@ DECLARE_LIST( PasswordEntryList, PasswordEntry * );
 class AssistentDlgImpl : public SfxListener
 {
 public:
-    AssistentDlgImpl( Window* pWindow, const Link& rFinishLink, BOOL bAutoPilot  );
+    AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, BOOL bAutoPilot  );
     ~AssistentDlgImpl();
 
     /// Local mutex used to serialize concurrent method calls.
@@ -298,7 +298,7 @@ public:
     */
     BOOL m_bPreviewUpdating;
 
-    Window* m_pWindow;
+    ::Window* m_pWindow;
 
     void SavePassword( SfxObjectShellLock xDoc, const String& rPath );
     void RestorePassword( SfxItemSet* pSet, const String& rPath );
@@ -456,7 +456,7 @@ public:
 
 // ====================================================================
 
-AssistentDlgImpl::AssistentDlgImpl( Window* pWindow, const Link& rFinishLink, BOOL bAutoPilot ) :
+AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, BOOL bAutoPilot ) :
     m_aFinishButton(pWindow,SdResId(BUT_FINISH)),
     m_aHelpButton(pWindow,SdResId(BUT_HELP)),
     m_aCancelButton(pWindow,SdResId(BUT_CANCEL)),
@@ -1630,7 +1630,7 @@ void AssistentDlgImpl::UpdatePreview( BOOL bDocPreview )
     {
         CloseDocShell();
 
-        Window *pParent = Application::GetDefDialogParent();
+        ::Window *pParent = Application::GetDefDialogParent();
         Application::SetDefDialogParent( m_pWindow );
 
         SfxErrorContext eEC(ERRCTX_SFX_LOADTEMPLATE,m_pWindow);
@@ -1683,7 +1683,7 @@ void AssistentDlgImpl::UpdatePreview( BOOL bDocPreview )
         SfxErrorContext eEC(ERRCTX_SFX_LOADTEMPLATE,m_pWindow);
         SfxItemSet* pSet = new SfxAllItemSet( pSfxApp->GetPool() );
 
-        Window *pParent = Application::GetDefDialogParent();
+        ::Window *pParent = Application::GetDefDialogParent();
         Application::SetDefDialogParent( m_pWindow );
 
         if(IsOwnFormat(aLayoutFile))
