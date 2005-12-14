@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuspell.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:40:33 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:17:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,21 +52,26 @@ class FuSpell
 public:
     TYPEINFO();
 
-    FuSpell (
-        ViewShell* pViewSh,
-        ::sd::Window* pWin,
-        ::sd::View* pView,
-        SdDrawDocument* pDoc,
-        SfxRequest& rReq);
-    virtual ~FuSpell (void);
+    static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+    virtual void DoExecute( SfxRequest& rReq );
 
     void    StartSpelling();
 
     ::sd::Outliner* GetOutliner() const { return pSdOutliner; }
 
 protected:
+    virtual ~FuSpell (void);
+
     ::sd::Outliner* pSdOutliner;
     BOOL bOwnOutliner;
+
+private:
+    FuSpell (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
 };
 
 } // end of namespace sd
