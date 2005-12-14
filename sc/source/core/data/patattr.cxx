@@ -4,9 +4,9 @@
  *
  *  $RCSfile: patattr.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:27:59 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:05:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -915,7 +915,7 @@ SfxStyleSheetBase* lcl_CopyStyleToPool
         SfxStyleSheetBase*      pSrcStyle,
         SfxStyleSheetBasePool*  pSrcPool,
         SfxStyleSheetBasePool*  pDestPool,
-        const SvULONGTable*     pFormatExchangeList
+        const SvNumberFormatterIndexTable*     pFormatExchangeList
     )
 {
     if ( !pSrcStyle || !pDestPool || !pSrcPool )
@@ -1019,7 +1019,7 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
 
                         ScStyleSheetPool* pSrcSPool = pSrcDoc->GetStyleSheetPool();
                         ScStyleSheetPool* pDestSPool = pDestDoc->GetStyleSheetPool();
-                        const SvULONGTable* pFormatExchangeList = pDestDoc->GetFormatExchangeList();
+                        const SvNumberFormatterIndexTable* pFormatExchangeList = pDestDoc->GetFormatExchangeList();
                         USHORT nStlCnt = pOldData->Count();
                         for (USHORT i=0; i<nStlCnt; i++)
                         {
