@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsClipboard.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:25:42 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:20:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,20 +108,20 @@ Clipboard::~Clipboard (void)
 */
 void Clipboard::HandleSlotCall (SfxRequest& rRequest)
 {
-    FuPoor* pCurrentFunction = mrController.GetViewShell().GetActualFunction();
+    FunctionReference xFunc( mrController.GetViewShell().GetCurrentFunction() );
     switch (rRequest.GetSlot())
     {
         case SID_CUT:
-            if (pCurrentFunction != NULL)
-                pCurrentFunction->DoCut();
+            if(xFunc.is())
+                xFunc->DoCut();
             else
                 DoCut();
             rRequest.Done();
             break;
 
         case SID_COPY:
-            if (pCurrentFunction != NULL)
-                pCurrentFunction->DoCopy();
+            if(xFunc.is())
+                xFunc->DoCopy();
             else
                 DoCopy();
             rRequest.Done();
@@ -134,8 +134,8 @@ void Clipboard::HandleSlotCall (SfxRequest& rRequest)
             if (mrController.GetModel().GetEditMode() != EM_MASTERPAGE)
             {
                 mrController.GetView().LockRedraw (TRUE);
-                if (pCurrentFunction != NULL)
-                    pCurrentFunction->DoPaste();
+                if(xFunc.is())
+                    xFunc->DoPaste();
                 else
                     DoPaste();
                 mrController.MakeSelectionVisible();
