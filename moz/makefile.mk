@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 19:59:19 $
+#   last change: $Author: rt $ $Date: 2005-12-14 08:38:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ DISABLE_MOZ_EXECUTABLE=TRUE
 
 .IF "$(SYSBASE)"!="" && "$(OS)" == "LINUX"
 CFLAGS:=-isystem $(SYSBASE)/usr/include
-LDFLAGS:=-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib
+LDFLAGS:=-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -LX11
 SYSBASE_X11:=--x-includes=$(SYSBASE)/usr/include/X11 --x-libraries=$(SYSBASE)/usr/X11R6/lib
 .EXPORT : CFLAGS LDFLAGS
 .ENDIF			# "$(SYSBASE)"!="" && "$(OS)" == "LINUX"
