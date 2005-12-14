@@ -4,9 +4,9 @@
  *
  *  $RCSfile: image.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-09 13:28:09 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 11:16:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@
 #endif
 
 #include <canvas/elapsedtime.hxx>
-#include <agg/agg_rendering_buffer.h>
+#include <agg2/agg_rendering_buffer.h>
 
 
 struct BitmapSystemData;
