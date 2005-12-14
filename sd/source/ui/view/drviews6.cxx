@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews6.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:09:38 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:27:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,7 @@ namespace sd {
 void DrawViewShell::ExecFormText(SfxRequest& rReq)
 {
     // waehrend einer Diashow wird nichts ausgefuehrt!
-    if (pFuActual && pFuActual->GetSlotID() == SID_PRESENTATION)
+    if(HasCurrentFunction(SID_PRESENTATION))
         return;
 
     CheckLineTo (rReq);
@@ -190,7 +190,7 @@ void DrawViewShell::ExecFormText(SfxRequest& rReq)
                                    ((const XFormTextStdFormItem*) pItem)->
                                    GetValue());
 
-            if (pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT)
+            if(HasCurrentFunction(SID_BEZIER_EDIT))
             {   // ggf. die richtige Editfunktion aktivieren
                 GetViewFrame()->GetDispatcher()->Execute(SID_SWITCH_POINTEDIT,
                                     SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
@@ -290,7 +290,7 @@ void DrawViewShell::GetObjPaletteState(SfxItemSet& rSet)
 void DrawViewShell::ExecAnimationWin( SfxRequest& rReq )
 {
     // waehrend einer Diashow wird nichts ausgefuehrt!
-    if (pFuActual && pFuActual->GetSlotID() == SID_PRESENTATION)
+    if (HasCurrentFunction(SID_PRESENTATION))
         return;
 
     CheckLineTo (rReq);
@@ -444,7 +444,7 @@ void DrawViewShell::SetChildWindowState( SfxItemSet& rSet )
 void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
 {
     // waehrend einer Diashow wird nichts ausgefuehrt!
-    if (pFuActual && pFuActual->GetSlotID() == SID_PRESENTATION)
+    if (HasCurrentFunction(SID_PRESENTATION))
         return;
 
     switch ( rReq.GetSlot() )
@@ -579,7 +579,7 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
                     }
 
                     pFormatClipboard->Copy( *pDrView, bPersistentCopy );
-                    pFuActual = new FuFormatPaintBrush( this, GetActiveWindow(), pDrView, GetDoc(), rReq );
+                    SetCurrentFunction( FuFormatPaintBrush::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
                     GetViewFrame()->GetBindings().Invalidate(SID_FORMATPAINTBRUSH);
                 }
             }
@@ -779,21 +779,21 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
 
         case SID_PRESENTATION_DLG:
         {
-            pFuActual = new FuSlideShowDlg( this, GetActiveWindow(), pDrView, GetDoc(), rReq );
+            SetCurrentFunction( FuSlideShowDlg::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
             Cancel();
         }
         break;
 
         case SID_CUSTOMSHOW_DLG:
         {
-            pFuActual = new FuCustomShowDlg( this, GetActiveWindow(), pDrView, GetDoc(), rReq );
+            SetCurrentFunction( FuCustomShowDlg::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
             Cancel();
         }
         break;
 
         case SID_EXPAND_PAGE:
         {
-            pFuActual = new FuExpandPage( this, GetActiveWindow(), pDrView, GetDoc(), rReq );
+            SetCurrentFunction( FuExpandPage::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
             Cancel();
         }
         break;
@@ -801,7 +801,7 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
         case SID_SUMMARY_PAGE:
         {
             pDrView->EndTextEdit();
-            pFuActual = new FuSummaryPage( this, GetActiveWindow(), pDrView, GetDoc(), rReq );
+            SetCurrentFunction( FuSummaryPage::Create( this, GetActiveWindow(), pDrView, GetDoc(), rReq ) );
             Cancel();
         }
         break;
