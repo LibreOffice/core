@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 16:40:10 $
+#   last change: $Author: rt $ $Date: 2005-12-14 12:34:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,8 @@ SLOFILES = \
     $(SLO)$/startmenuicon.obj \
     $(SLO)$/upgrade.obj \
     $(SLO)$/iconcache.obj \
-    $(SLO)$/postuninstall.obj
+    $(SLO)$/postuninstall.obj \
+    $(SLO)$/migrateinstallpath.obj
 
 
 SHL1STDLIBS=	kernel32.lib\
