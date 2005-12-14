@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuspell.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:51:41 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:04:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,6 +92,17 @@ FuSpell::FuSpell (
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq),
       pSdOutliner(NULL),
       bOwnOutliner(FALSE)
+{
+}
+
+FunctionReference FuSpell::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    FunctionReference xFunc( new FuSpell( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    return xFunc;
+}
+
+void FuSpell::DoExecute( SfxRequest& rReq )
 {
     pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArraySpell );
 
