@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: rt $ $Date: 2005-10-19 12:05:35 $
+#   last change: $Author: rt $ $Date: 2005-12-14 17:32:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -131,6 +131,7 @@ LIB3FILES=      \
             $(SLB)$/docshell.lib    \
             $(SLB)$/dlg.lib			\
             $(SLB)$/core.lib		\
+            $(SLB)$/helper.lib		\
             $(SLB)$/xml.lib			\
             $(SLB)$/cgm.lib			\
             $(SLB)$/grf.lib			\
