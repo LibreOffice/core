@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usrfld.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:30:03 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:47:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,10 +66,10 @@ public:
     virtual const String&   GetName() const;
     virtual SwFieldType*    Copy() const;
 
-    String                  Expand(ULONG nFmt, USHORT nSubType, USHORT nLng);
+    String                  Expand(sal_uInt32 nFmt, USHORT nSubType, USHORT nLng);
 
-    String                  GetContent( ULONG nFmt = 0 );
-           void             SetContent( const String& rStr, ULONG nFmt = 0 );
+    String                  GetContent( sal_uInt32 nFmt = 0 );
+           void             SetContent( const String& rStr, sal_uInt32 nFmt = 0 );
            void             CtrlSetContent( const String& rStr );
 
     inline BOOL             IsValid() const;
@@ -121,7 +121,7 @@ class SwUserField : public SwValueField
     USHORT  nSubType;
 
 public:
-    SwUserField(SwUserFieldType*, USHORT nSub = 0, ULONG nFmt = 0);
+    SwUserField(SwUserFieldType*, USHORT nSub = 0, sal_uInt32 nFmt = 0);
 
     virtual USHORT          GetSubType() const;
     virtual void            SetSubType(USHORT nSub);
