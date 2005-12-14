@@ -4,9 +4,9 @@
  *
  *  $RCSfile: difimp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:53:12 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:07:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -494,7 +494,7 @@ DATASET DifParser::GetNextDataset( void )
                 {   // ...und zur Strafe mit'm Numberformatter...
                     DBG_ASSERT( pNumFormatter, "-DifParser::GetNextDataset(): No Formatter, more fun!" );
                     String          aTestVal( pAkt );
-                    ULONG           nFormat = 0;
+                    sal_uInt32      nFormat = 0;
                     double          fTmpVal;
                     if( pNumFormatter->IsNumberFormat( aTestVal, nFormat, fTmpVal ) )
                     {
