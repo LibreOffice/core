@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fupage.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:37:08 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:14:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,13 +53,8 @@ class FuPage
  public:
     TYPEINFO();
 
-    FuPage (
-        ViewShell* pViewSh,
-        ::sd::Window* pWin,
-        ::sd::View* pView,
-        SdDrawDocument* pDoc,
-        SfxRequest& rReq );
-    virtual ~FuPage (void);
+    static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+    virtual void DoExecute( SfxRequest& rReq );
 
     virtual void Activate();           // Function aktivieren
     virtual void Deactivate();         // Function deaktivieren
@@ -67,7 +62,17 @@ class FuPage
     const SfxItemSet* ExecuteDialog( Window* pParent );
     void ApplyItemSet( const SfxItemSet* pArgs );
 
+protected:
+    virtual ~FuPage (void);
+
 private:
+    FuPage (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq );
+
     SfxRequest&                 mrReq;
     const SfxItemSet*           mpArgs;
     SdBackgroundObjUndoAction*  mpBackgroundObjUndoAction;
