@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tautofmt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:19:52 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:52:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -776,7 +776,7 @@ MAKENUMSTR:
                 short nType;
                 BOOL bNew;
                 xub_StrLen nCheckPos;
-                ULONG nKey = pNumFmt->GetIndexPuttingAndConverting( sFmt, eLng,
+                sal_uInt32 nKey = pNumFmt->GetIndexPuttingAndConverting( sFmt, eLng,
                         eSys, nType, bNew, nCheckPos);
                 Color* pDummy;
                 pNumFmt->GetOutputString( nVal, nKey, cellString, &pDummy );
