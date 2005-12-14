@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-19 12:12:50 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:55:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -340,6 +340,27 @@ void SvxTextEditSourceImpl::ChangeModel( SdrModel* pNewModel )
     {
         if( mpModel )
             EndListening( *mpModel );
+
+        if( mpOutliner )
+        {
+            mpOutliner->SetNotifyHdl( Link() );
+
+            if( mpModel )
+                mpModel->disposeOutliner( mpOutliner );
+            else
+                delete mpOutliner;
+            mpOutliner = 0;
+        }
+
+        if( mpView )
+        {
+            EndListening( *mpView );
+            mpView = 0;
+        }
+
+        mpWindow = 0;
+        m_xLinguServiceManager.clear();
+        mpOwner = 0;
 
         mpModel = pNewModel;
 
