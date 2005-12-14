@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-21 11:45:39 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:01:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1585,7 +1585,7 @@ void SvNumberformat::ConvertLanguage( SvNumberFormatter& rConverter,
         LanguageType eConvertFrom, LanguageType eConvertTo, BOOL bSystem )
 {
     xub_StrLen nCheckPos;
-    ULONG nKey;
+    sal_uInt32 nKey;
     short nType = eType;
     String aFormatString( sFormatstring );
     if ( bSystem )
