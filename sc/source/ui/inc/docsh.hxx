@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:21:20 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:10:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,7 +197,7 @@ public:
     virtual SfxUndoManager*     GetUndoManager();
 
     virtual void    FillClass( SvGlobalName * pClassName,
-                               ULONG * pFormat,
+                               sal_uInt32 * pFormat,
                                String * pAppName,
                                String * pFullTypeName,
                                String * pShortTypeName,
