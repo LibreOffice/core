@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:10:52 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 16:51:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,7 +193,7 @@
 #include <tools/tenccvt.hxx>
 #endif
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::sd;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
