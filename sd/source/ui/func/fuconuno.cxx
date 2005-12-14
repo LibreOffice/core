@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconuno.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:39:27 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 16:57:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,21 @@ FuConstructUnoControl::FuConstructUnoControl (
     SfxRequest&     rReq)
     : FuConstruct(pViewSh, pWin, pView, pDoc, rReq)
 {
+}
+
+FunctionReference FuConstructUnoControl::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent )
+{
+    FuConstructUnoControl* pFunc;
+    FunctionReference xFunc( pFunc = new FuConstructUnoControl( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    pFunc->SetPermanent(bPermanent);
+    return xFunc;
+}
+
+void FuConstructUnoControl::DoExecute( SfxRequest& rReq )
+{
+    FuConstruct::DoExecute( rReq );
+
     SFX_REQUEST_ARG( rReq, pInventorItem, SfxUInt32Item, SID_FM_CONTROL_INVENTOR, FALSE );
     SFX_REQUEST_ARG( rReq, pIdentifierItem, SfxUInt16Item, SID_FM_CONTROL_IDENTIFIER, FALSE );
     if( pInventorItem )
@@ -111,15 +126,6 @@ FuConstructUnoControl::FuConstructUnoControl (
         nIdentifier = pIdentifierItem->GetValue();
 
     pViewShell->GetObjectBarManager().SwitchObjectBar (RID_DRAW_OBJ_TOOLBOX);
-}
-
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
-FuConstructUnoControl::~FuConstructUnoControl()
-{
 }
 
 /*************************************************************************
