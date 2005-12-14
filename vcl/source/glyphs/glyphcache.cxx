@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:30:49 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 09:12:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,8 @@ size_t GlyphCache::IFSD_Hash::operator()( const ImplFontSelectData& rFontSelData
     nHash   += rFontSelData.mnHeight;
     nHash   += rFontSelData.mnOrientation;
     nHash   += rFontSelData.mbVertical;
+    nHash   += rFontSelData.meItalic;
+    nHash   += rFontSelData.meWeight;
     return nHash;
 }
 
@@ -105,6 +107,10 @@ bool GlyphCache::IFSD_Equal::operator()( const ImplFontSelectData& rA, const Imp
     ||  (rA.mbVertical       != rB.mbVertical)
     ||  (rA.mbNonAntialiased != rB.mbNonAntialiased) )
         return false;
+
+    if( (rA.meItalic != rB.meItalic)
+    ||  (rA.meWeight != rB.meWeight) )
+    return false;
 
     if( (rA.mnWidth != rB.mnWidth)
     && ((rA.mnHeight != rB.mnWidth) || (rA.mnWidth != 0)) )
