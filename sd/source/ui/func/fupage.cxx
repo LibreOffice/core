@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fupage.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:48:34 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:01:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,7 +173,18 @@ FuPage::FuPage( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
     mbMasterPage( false ),
     mbDisplayBackgroundTabPage( true )
 {
-    mpDrawViewShell = dynamic_cast<DrawViewShell*>(pViewSh);
+}
+
+FunctionReference FuPage::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    FunctionReference xFunc( new FuPage( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    return xFunc;
+}
+
+void FuPage::DoExecute( SfxRequest& rReq )
+{
+    mpDrawViewShell = dynamic_cast<DrawViewShell*>(pViewShell);
     DBG_ASSERT( mpDrawViewShell, "sd::FuPage::FuPage(), called without a current DrawViewShell!" );
     if( mpDrawViewShell )
     {
@@ -188,7 +199,7 @@ FuPage::FuPage( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
         if( !mpArgs )
         {
             pView->EndTextEdit();
-            mpArgs = ExecuteDialog(pWin);
+            mpArgs = ExecuteDialog(pWindow);
         }
 
         // if we now have arguments, apply them to current page
