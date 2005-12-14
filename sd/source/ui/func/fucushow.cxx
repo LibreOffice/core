@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fucushow.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:40:44 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 16:57:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,33 +82,43 @@ FuCustomShowDlg::FuCustomShowDlg (
     SfxRequest& rReq)
     : FuPoor( pViewSh, pWin, pView, pDoc, rReq )
 {
-    USHORT nRet = RET_YES;
+}
 
-    //CHINA001 SdCustomShowDlg  aDlg( NULL, *pDoc );
+FunctionReference FuCustomShowDlg::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    FunctionReference xFunc( new FuCustomShowDlg( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    return xFunc;
+}
+
+void FuCustomShowDlg::DoExecute( SfxRequest& rReq )
+{
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
-    DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
-    AbstractSdCustomShowDlg* pDlg = pFact->CreateSdCustomShowDlg(ResId( DLG_CUSTOMSHOW ), NULL, *pDoc );
+    AbstractSdCustomShowDlg* pDlg = pFact ? pFact->CreateSdCustomShowDlg(ResId( DLG_CUSTOMSHOW ), NULL, *pDoc ) : 0;
     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-    nRet = pDlg->Execute(); //CHINA001 nRet = aDlg.Execute();
-    if( nRet != RET_CANCEL )
+    if( pDlg )
     {
-        // wenn sich etwas geaendert hat, setzen wir das Modified-Flag,
-        if( pDlg->IsModified() )//CHINA001 if( aDlg.IsModified() )
+        USHORT nRet = pDlg->Execute(); //CHINA001 nRet = aDlg.Execute();
+        if( nRet != RET_CANCEL )
         {
-            pDoc->SetChanged( TRUE );
-            sd::PresentationSettings& rSettings = pDoc->getPresentationSettings();
-            rSettings.mbCustomShow = pDlg->IsCustomShow();
-        }
+            // wenn sich etwas geaendert hat, setzen wir das Modified-Flag,
+            if( pDlg->IsModified() )//CHINA001 if( aDlg.IsModified() )
+            {
+                pDoc->SetChanged( TRUE );
+                sd::PresentationSettings& rSettings = pDoc->getPresentationSettings();
+                rSettings.mbCustomShow = pDlg->IsCustomShow();
+            }
 
-        if( nRet == RET_YES )
-        {
-            pViewSh->SetStartShowWithDialog();
+            if( nRet == RET_YES )
+            {
+                pViewShell->SetStartShowWithDialog();
 
-            pViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_PRESENTATION,
-                    SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+                pViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_PRESENTATION,
+                        SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
+            }
         }
+        delete pDlg; //CHINA001
     }
-    delete pDlg; //CHINA001
 }
 
 } // end of namespace
