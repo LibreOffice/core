@@ -7134,3 +7134,111 @@
       // 'Dependent' means that params of this type are dependent upon other 
       // params. e.g. an T_INTERFACE_IS is dependent upon some other param at 
 
+*** misc/mozilla/netwerk/protocol/http/src/nsHttpConnectionMgr.cpp	Thu Sep  2 01:45:24 2004
+--- misc/build/mozilla/netwerk/protocol/http/src/nsHttpConnectionMgr.cpp	Sat Nov  5 22:45:54 2005
+***************
+*** 834,841 ****
+  void
+  nsHttpConnectionMgr::OnMsgUpdateParam(nsresult status, void *param)
+  {
+!     PRUint16 name  = (PRUint32(param) & 0xFFFF0000) >> 16;
+!     PRUint16 value =  PRUint32(param) & 0x0000FFFF;
+  
+      switch (name) {
+      case MAX_CONNECTIONS:
+--- 834,841 ----
+  void
+  nsHttpConnectionMgr::OnMsgUpdateParam(nsresult status, void *param)
+  {
+!     PRUint16 name  = (NS_PTR_TO_INT32(param) & 0xFFFF0000) >> 16;
+!     PRUint16 value =  NS_PTR_TO_INT32(param) & 0x0000FFFF;
+  
+      switch (name) {
+      case MAX_CONNECTIONS:
+*** misc/mozilla/widget/src/gtk2/nsDragService.cpp	Thu Oct 30 02:48:41 2003
+--- misc/build/mozilla/widget/src/gtk2/nsDragService.cpp	Sat Nov  5 22:54:28 2005
+***************
+*** 838,844 ****
+              (GtkTargetEntry *)g_malloc(sizeof(GtkTargetEntry));
+          listTarget->target = g_strdup(gMimeListType);
+          listTarget->flags = 0;
+!         listTarget->info = (guint)listAtom;
+          PR_LOG(sDragLm, PR_LOG_DEBUG,
+                 ("automatically adding target %s with id %ld\n",
+                 listTarget->target, listAtom));
+--- 838,844 ----
+              (GtkTargetEntry *)g_malloc(sizeof(GtkTargetEntry));
+          listTarget->target = g_strdup(gMimeListType);
+          listTarget->flags = 0;
+!         listTarget->info = GPOINTER_TO_UINT(listAtom);
+          PR_LOG(sDragLm, PR_LOG_DEBUG,
+                 ("automatically adding target %s with id %ld\n",
+                 listTarget->target, listAtom));
+***************
+*** 877,883 ****
+                               (GtkTargetEntry *)g_malloc(sizeof(GtkTargetEntry));
+                              listTarget->target = g_strdup(gTextUriListType);
+                              listTarget->flags = 0;
+!                             listTarget->info = (guint)listAtom;
+                              PR_LOG(sDragLm, PR_LOG_DEBUG,
+                                     ("automatically adding target %s with \
+                                     id %ld\n", listTarget->target, listAtom));
+--- 877,883 ----
+                               (GtkTargetEntry *)g_malloc(sizeof(GtkTargetEntry));
+                              listTarget->target = g_strdup(gTextUriListType);
+                              listTarget->flags = 0;
+!                             listTarget->info = GPOINTER_TO_UINT(listAtom);
+                              PR_LOG(sDragLm, PR_LOG_DEBUG,
+                                     ("automatically adding target %s with \
+                                     id %ld\n", listTarget->target, listAtom));
+***************
+*** 914,920 ****
+                            (GtkTargetEntry *)g_malloc(sizeof(GtkTargetEntry));
+                          target->target = g_strdup(flavorStr);
+                          target->flags = 0;
+!                         target->info = (guint)atom;
+                          PR_LOG(sDragLm, PR_LOG_DEBUG,
+                                 ("adding target %s with id %ld\n",
+                                 target->target, atom));
+--- 914,920 ----
+                            (GtkTargetEntry *)g_malloc(sizeof(GtkTargetEntry));
+                          target->target = g_strdup(flavorStr);
+                          target->flags = 0;
+!                         target->info = GPOINTER_TO_UINT(atom);
+                          PR_LOG(sDragLm, PR_LOG_DEBUG,
+                                 ("adding target %s with id %ld\n",
+                                 target->target, atom));
+***************
+*** 931,937 ****
+                               (GtkTargetEntry *)g_malloc(sizeof(GtkTargetEntry));
+                              plainTarget->target = g_strdup(kTextMime);
+                              plainTarget->flags = 0;
+!                             plainTarget->info = (guint)plainAtom;
+                              PR_LOG(sDragLm, PR_LOG_DEBUG,
+                                     ("automatically adding target %s with \
+                                     id %ld\n", plainTarget->target, plainAtom));
+--- 931,937 ----
+                               (GtkTargetEntry *)g_malloc(sizeof(GtkTargetEntry));
+                              plainTarget->target = g_strdup(kTextMime);
+                              plainTarget->flags = 0;
+!                             plainTarget->info = GPOINTER_TO_UINT(plainAtom);
+                              PR_LOG(sDragLm, PR_LOG_DEBUG,
+                                     ("automatically adding target %s with \
+                                     id %ld\n", plainTarget->target, plainAtom));
+***************
+*** 948,954 ****
+                               (GtkTargetEntry *)g_malloc(sizeof(GtkTargetEntry));
+                              urlTarget->target = g_strdup(gMozUrlType);
+                              urlTarget->flags = 0;
+!                             urlTarget->info = (guint)urlAtom;
+                              PR_LOG(sDragLm, PR_LOG_DEBUG,
+                                     ("automatically adding target %s with \
+                                     id %ld\n", urlTarget->target, urlAtom));
+--- 948,954 ----
+                               (GtkTargetEntry *)g_malloc(sizeof(GtkTargetEntry));
+                              urlTarget->target = g_strdup(gMozUrlType);
+                              urlTarget->flags = 0;
+!                             urlTarget->info = GPOINTER_TO_UINT(urlAtom);
+                              PR_LOG(sDragLm, PR_LOG_DEBUG,
+                                     ("automatically adding target %s with \
+                                     id %ld\n", urlTarget->target, urlAtom));
