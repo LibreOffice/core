@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 01:24:24 $
+#   last change: $Author: rt $ $Date: 2005-12-14 14:59:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,10 +45,14 @@ TARGETTYPE=CUI
 
 .INCLUDE :  settings.mk
 
+.IF "$(ENABLE_CRASHDUMP)" != ""
+
 SCP_PRODUCT_TYPE=osl
 
 PARFILES = \
     file_crashrep_dynamic.par
+
+.ENDIF # "$(ENABLE_CRASHDUMP)" != ""
 
 # --- File ---------------------------------------------------------
 .INCLUDE :  target.mk
