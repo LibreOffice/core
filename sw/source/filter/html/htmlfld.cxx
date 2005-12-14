@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlfld.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:42:18 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:50:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -403,7 +403,7 @@ void SwHTMLParser::NewField()
             USHORT nSub = 0;
 
             SvNumberFormatter *pFormatter = pDoc->GetNumberFormatter();
-            ULONG nNumFmt;
+            sal_uInt32 nNumFmt;
             LanguageType eLang;
             double dValue = GetTableDataOptionsValNum(
                                 nNumFmt, eLang, aNumValue, aNumFmt,
@@ -474,7 +474,7 @@ void SwHTMLParser::NewField()
                     nSub |= nExtSub;
                 }
 
-                ULONG nNumFmt = 0;
+                sal_uInt32 nNumFmt = 0;
                 double dValue = 0;
                 if( bHasNumFmt && (DI_SUB_DATE==nExtSub || DI_SUB_TIME==nExtSub) )
                 {
