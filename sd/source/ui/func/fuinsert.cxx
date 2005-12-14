@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:43:31 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 16:59:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,10 +160,6 @@ TYPEINIT1( FuInsertAVMedia, FuPoor );
 |*
 \************************************************************************/
 
-#ifdef WNT
-#pragma optimize ( "", off )
-#endif
-
 FuInsertGraphic::FuInsertGraphic (
     ViewShell* pViewSh,
     ::sd::Window* pWin,
@@ -171,6 +167,21 @@ FuInsertGraphic::FuInsertGraphic (
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+{
+}
+
+FunctionReference FuInsertGraphic::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    FunctionReference xFunc( new FuInsertGraphic( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    return xFunc;
+}
+
+#ifdef WNT
+#pragma optimize ( "", off )
+#endif
+
+void FuInsertGraphic::DoExecute( SfxRequest& rReq )
 {
     SvxOpenGraphicDialog    aDlg(SdResId(STR_INSERTGRAPHIC));
 
@@ -181,7 +192,7 @@ FuInsertGraphic::FuInsertGraphic (
 
         if( (nError=aDlg.GetGraphic(aGraphic)) == GRFILTER_OK )
         {
-            if( pViewSh->ISA(DrawViewShell))
+            if( pViewShell && pViewShell->ISA(DrawViewShell))
             {
                 sal_Int8    nAction = DND_ACTION_COPY;
                 SdrGrafObj* pEmptyGrafObj = NULL;
@@ -233,17 +244,6 @@ FuInsertGraphic::FuInsertGraphic (
 #pragma optimize ( "", on )
 #endif
 
-
-/*************************************************************************
-|*
-|* FuInsertGraphic::Destruktor
-|*
-\************************************************************************/
-
-FuInsertGraphic::~FuInsertGraphic()
-{
-}
-
 /*************************************************************************
 |*
 |* FuInsertClipboard::Konstruktor
@@ -258,7 +258,18 @@ FuInsertClipboard::FuInsertClipboard (
     SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
-    TransferableDataHelper                      aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
+}
+
+FunctionReference FuInsertClipboard::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    FunctionReference xFunc( new FuInsertClipboard( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    return xFunc;
+}
+
+void FuInsertClipboard::DoExecute( SfxRequest& rReq )
+{
+    TransferableDataHelper                      aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWindow ) );
     ULONG                                       nFormatId;
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -311,15 +322,6 @@ FuInsertClipboard::FuInsertClipboard (
     }
 }
 
-/*************************************************************************
-|*
-|* FuInsertClipboard::Destruktor
-|*
-\************************************************************************/
-
-FuInsertClipboard::~FuInsertClipboard()
-{
-}
 
 /*************************************************************************
 |*
@@ -334,6 +336,17 @@ FuInsertOLE::FuInsertOLE (
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+{
+}
+
+FunctionReference FuInsertOLE::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    FunctionReference xFunc( new FuInsertOLE( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    return xFunc;
+}
+
+void FuInsertOLE::DoExecute( SfxRequest& rReq )
 {
     String aEmptyStr;
 
@@ -386,7 +399,7 @@ FuInsertOLE::FuInsertOLE (
                 aSize = OutputDevice::LogicToLogic(aSize, aUnit, MAP_100TH_MM);
 
             Point aPos;
-            Rectangle aWinRect(aPos, pWin->GetOutputSizePixel() );
+            Rectangle aWinRect(aPos, pWindow->GetOutputSizePixel() );
             aPos = aWinRect.Center();
             aPos = pWindow->PixelToLogic(aPos);
             aPos.X() -= aSize.Width() / 2;
@@ -486,7 +499,7 @@ FuInsertOLE::FuInsertOLE (
                 case SID_INSERT_VIDEO :
                 {
                     // create special filedialog for plugins
-                    SvxPluginFileDlg aPluginFileDialog (pWin, nSlotId);
+                    SvxPluginFileDlg aPluginFileDialog (pWindow, nSlotId);
                     if( ERRCODE_NONE == aPluginFileDialog.Execute () )
                     {
                         // get URL
@@ -519,7 +532,7 @@ FuInsertOLE::FuInsertOLE (
                             String aMask;
                             aMask += sal_Unicode('%');
                             aStrErr.SearchAndReplace( aMask, aStrURL );
-                            ErrorBox( pWin, WB_3DLOOK | WB_OK, aStrErr ).Execute();
+                            ErrorBox( pWindow, WB_3DLOOK | WB_OK, aStrErr ).Execute();
                         }
                     }
                 }
@@ -644,8 +657,8 @@ FuInsertOLE::FuInsertOLE (
                         pViewShell->ActivateObject(pObj, SVVERB_SHOW);
                     }
 
-                    Size aVisSizePixel = pWin->GetOutputSizePixel();
-                    Rectangle aVisAreaWin = pWin->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
+                    Size aVisSizePixel = pWindow->GetOutputSizePixel();
+                    Rectangle aVisAreaWin = pWindow->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
                     pViewShell->VisAreaChanged(aVisAreaWin);
                     pDocSh->SetVisArea(aVisAreaWin);
                 }
@@ -654,15 +667,6 @@ FuInsertOLE::FuInsertOLE (
     }
 }
 
-/*************************************************************************
-|*
-|* FuInsertOLE::Destruktor
-|*
-\************************************************************************/
-
-FuInsertOLE::~FuInsertOLE()
-{
-}
 
 /*************************************************************************
 |*
@@ -677,6 +681,17 @@ FuInsertAVMedia::FuInsertAVMedia(
     SdDrawDocument* pDoc,
     SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+{
+}
+
+FunctionReference FuInsertAVMedia::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    FunctionReference xFunc( new FuInsertAVMedia( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    return xFunc;
+}
+
+void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
 {
     ::rtl::OUString     aURL;
     const SfxItemSet*   pReqArgs = rReq.GetArgs();
@@ -697,13 +712,13 @@ FuInsertAVMedia::FuInsertAVMedia(
     {
         Size aPrefSize;
 
-        if( pWin )
-            pWin->EnterWait();
+        if( pWindow )
+            pWindow->EnterWait();
 
         if( !::avmedia::MediaWindow::isMediaURL( aURL, true, &aPrefSize ) )
         {
-            if( pWin )
-                pWin->LeaveWait();
+            if( pWindow )
+                pWindow->LeaveWait();
 
             if( !bAPI )
                 ::avmedia::MediaWindow::executeFormatErrorBox( pWindow );
@@ -716,38 +731,27 @@ FuInsertAVMedia::FuInsertAVMedia(
 
             if( aPrefSize.Width() && aPrefSize.Height() )
             {
-                if( pWin )
-                    aSize = pWin->PixelToLogic( aPrefSize, MAP_100TH_MM );
+                if( pWindow )
+                    aSize = pWindow->PixelToLogic( aPrefSize, MAP_100TH_MM );
                 else
                     aSize = Application::GetDefaultDevice()->PixelToLogic( aPrefSize, MAP_100TH_MM );
             }
             else
                 aSize = Size( 5000, 5000 );
 
-            if( pWin )
+            if( pWindow )
             {
-                aPos = pWindow->PixelToLogic( Rectangle( aPos, pWin->GetOutputSizePixel() ).Center() );
+                aPos = pWindow->PixelToLogic( Rectangle( aPos, pWindow->GetOutputSizePixel() ).Center() );
                 aPos.X() -= aSize.Width() >> 1;
                 aPos.Y() -= aSize.Height() >> 1;
             }
 
             pView->InsertMediaURL( aURL, nAction, aPos, aSize ) ;
 
-            if( pWin )
-                pWin->LeaveWait();
+            if( pWindow )
+                pWindow->LeaveWait();
         }
     }
 }
-
-/*************************************************************************
-|*
-|* FuInsertClipboard::Destruktor
-|*
-\************************************************************************/
-
-FuInsertAVMedia::~FuInsertAVMedia()
-{
-}
-
 
 } // end of namespace sd
