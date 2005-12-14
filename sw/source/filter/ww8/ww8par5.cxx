@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:31:53 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:50:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1692,7 +1692,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
             break;
     }
 
-    ULONG nFormat = 0;
+    sal_uInt32 nFormat = 0;
 
     USHORT nLang(0);
     if (bDateTime)
@@ -1769,7 +1769,7 @@ eF_ResT SwWW8ImplReader::Read_F_DateTime( WW8FieldDesc*pF, String& rStr )
         }
     }
 
-    ULONG nFormat = 0;
+    sal_uInt32 nFormat = 0;
 
     USHORT nLang(0);
     short nDT = GetTimeDatePara(rStr, nFormat, nLang, ww::eDATE, bHijri);
