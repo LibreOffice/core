@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.173 $
+ *  $Revision: 1.174 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-25 17:26:52 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:17:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -430,7 +430,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
     {
         SvGlobalName aName;
         String aFullTypeName, aShortTypeName, aAppName;
-        ULONG nClipFormat=0;
+        sal_uInt32 nClipFormat=0;
 
         FillClass( &aName, &nClipFormat, &aAppName, &aFullTypeName, &aShortTypeName, nVersion );
         if ( nClipFormat )
