@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsha.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:10:30 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:11:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,7 @@ BOOL ScTabViewShell::GetFunction( String& rFuncStr )
         aStr += '=';
 
         //  Anzahl im Standardformat, die anderen nach Cursorposition
-        ULONG nNumFmt = 0;
+        sal_uInt32 nNumFmt = 0;
         SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
         if ( eFunc != SUBTOTAL_FUNC_CNT && eFunc != SUBTOTAL_FUNC_CNT2 )
         {
@@ -534,7 +534,7 @@ void ScTabViewShell::UpdateInputHandler( BOOL bForce /* = FALSE */, BOOL bStopEd
                     //! Auch bei Zahlformat "Text"? -> dann beim Editieren wegnehmen
 
                     SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-                    ULONG nNumFmt;
+                    sal_uInt32 nNumFmt;
                     pDoc->GetNumberFormat( nPosX, nPosY, nTab, nNumFmt );
                     double fDummy;
                     if ( pFormatter->IsNumberFormat(aString, nNumFmt, fDummy) )
