@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlfile.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:01:59 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:35:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,11 @@
 #include <cosv/file.hxx>
 #include <udm/html/htmlitem.hxx>
 
+namespace
+{
+bool            bUse_OOoFrameDiv = true;
+const String    C_sOOoFrameDiv_IdlId("adc-idlref");
+}
 
 using namespace csi;
 using csi::xml::AnAttribute;
@@ -93,6 +98,16 @@ void
 DocuFile_Html::EmptyBody()
 {
     aBodyData.SetContent(0);
+
+     if (bUse_OOoFrameDiv)
+     {
+        // Insert <div> tag to allow better formatting for OOo.
+        aBodyData
+            << new xml::XmlCode("<div id=\"")
+            << new xml::XmlCode(C_sOOoFrameDiv_IdlId)
+            << new xml::XmlCode("\">\n\n");
+     }
+
     aBodyData
         >> *new html::Label( "_top_" )
         << " ";
@@ -188,8 +203,17 @@ DocuFile_Html::WriteBody( csv::File & io_aFile )
                     << new xml::AnAttribute( "align", "center" )
                     << new xml::XmlCode(sCopyright);
     }
-    aBodyData.WriteOut(aBuffer);
 
+     if (bUse_OOoFrameDiv)
+    {
+        // Insert <div> tag to allow better formatting for OOo.
+        aBodyData
+            << new xml::XmlCode("\n</div> <!-- id=\"")
+            << new xml::XmlCode(C_sOOoFrameDiv_IdlId)
+            << new xml::XmlCode("\" -->\n");
+    }
+
+    aBodyData.WriteOut(aBuffer);
     io_aFile.write(aBuffer.c_str(), aBuffer.size());
 }
 
