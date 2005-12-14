@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvascommons.scp,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 14:07:37 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:43:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,5 +37,7 @@
 
 STD_LIB_FILE_PATCH(gid_File_Lib_CppCanvas, cppcanvas)
 STD_LIB_FILE_PATCH(gid_File_Lib_CanvasTools, canvastools)
+#ifndef SYSTEM_AGG
 STD_LIB_FILE_PATCH(gid_File_Lib_Agg, agg)
+#endif
 SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH(gid_File_CanvasFactory, canvasfactory.uno)
