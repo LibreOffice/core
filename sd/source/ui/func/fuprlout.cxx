@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuprlout.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:49:20 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:02:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,6 +118,17 @@ FuPresentationLayout::FuPresentationLayout (
     SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
+}
+
+FunctionReference FuPresentationLayout::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    FunctionReference xFunc( new FuPresentationLayout( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    return xFunc;
+}
+
+void FuPresentationLayout::DoExecute( SfxRequest& rReq )
+{
     // damit nicht Objekte, die gerade editiert werden oder selektiert
     // sind , verschwinden
     pView->EndTextEdit();
@@ -150,10 +161,10 @@ FuPresentationLayout::FuPresentationLayout (
     // wenn wir auf einer Masterpage sind, gelten die Aenderungen fuer alle
     // Seiten und Notizseiten, die das betreffende Layout benutzen
     BOOL bOnMaster = FALSE;
-    if (pViewSh->ISA(DrawViewShell))
+    if( pViewShell && pViewShell->ISA(DrawViewShell))
     {
         EditMode eEditMode =
-            static_cast<DrawViewShell*>(pViewSh)->GetEditMode();
+            static_cast<DrawViewShell*>(pViewShell)->GetEditMode();
         if (eEditMode == EM_MASTERPAGE)
             bOnMaster = TRUE;
     }
@@ -173,7 +184,7 @@ FuPresentationLayout::FuPresentationLayout (
     //CHINA001 SdPresLayoutDlg* pDlg = new SdPresLayoutDlg( pDocSh, pViewSh, NULL, aSet);
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
     DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
-    AbstractSdPresLayoutDlg* pDlg = pFact->CreateSdPresLayoutDlg(ResId( DLG_PRESLT ), pDocSh, pViewSh, NULL, aSet );
+    AbstractSdPresLayoutDlg* pDlg = pFact->CreateSdPresLayoutDlg(ResId( DLG_PRESLT ), pDocSh, pViewShell, NULL, aSet );
     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
     USHORT nResult = pDlg->Execute();
 
@@ -279,18 +290,6 @@ FuPresentationLayout::FuPresentationLayout (
 
         pDocSh->SetWaitCursor( FALSE );
     }
-}
-
-
-
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
-
-FuPresentationLayout::~FuPresentationLayout()
-{
 }
 
 /*************************************************************************
