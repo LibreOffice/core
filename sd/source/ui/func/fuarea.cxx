@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuarea.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:33:39 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 16:54:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,13 +83,19 @@ TYPEINIT1( FuArea, FuPoor );
 |*
 \************************************************************************/
 
-FuArea::FuArea (
-    ViewShell* pViewSh,
-    ::sd::Window* pWin,
-    ::sd::View* pView,
-    SdDrawDocument* pDoc,
-    SfxRequest& rReq)
-    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+FuArea::FuArea( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq)
+: FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+{
+}
+
+FunctionReference FuArea::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    FunctionReference xFunc( new FuArea( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    return xFunc;
+}
+
+void FuArea::DoExecute( SfxRequest& rReq )
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
 
@@ -139,6 +145,14 @@ FuArea::FuArea (
 
     rReq.Ignore ();
 
+}
+
+void FuArea::Activate()
+{
+}
+
+void FuArea::Deactivate()
+{
 }
 
 } // end of namespace sd
