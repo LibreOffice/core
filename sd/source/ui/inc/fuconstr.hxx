@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconstr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:31:41 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:09:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,12 +60,8 @@ public:
 
     TYPEINFO();
 
-    FuConstruct (ViewShell* pViewSh,
-        ::sd::Window* pWin,
-        ::sd::View* pView,
-        SdDrawDocument* pDoc,
-        SfxRequest& rReq);
-    virtual ~FuConstruct (void);
+    static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
+    virtual void DoExecute( SfxRequest& rReq );
 
     // Mouse- & Key-Events
     virtual BOOL KeyInput(const KeyEvent& rKEvt);
@@ -88,6 +84,12 @@ public:
             const sal_Bool bUseFillStyle, const sal_Bool bUseNoFillStyle );
 
 protected:
+    FuConstruct (ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+
     bool bSelectionChanged;
 };
 
