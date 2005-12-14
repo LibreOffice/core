@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuolbull.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:47:49 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:00:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,6 +92,17 @@ FuOutlineBullet::FuOutlineBullet(ViewShell* pViewShell, ::sd::Window* pWindow,
                                  SfxRequest& rReq)
        : FuPoor(pViewShell, pWindow, pView, pDoc, rReq)
 {
+}
+
+FunctionReference FuOutlineBullet::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+{
+    FunctionReference xFunc( new FuOutlineBullet( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute(rReq);
+    return xFunc;
+}
+
+void FuOutlineBullet::DoExecute( SfxRequest& rReq )
+{
     const SfxItemSet* pArgs = rReq.GetArgs();
 
     if( !pArgs )
@@ -149,38 +160,6 @@ FuOutlineBullet::FuOutlineBullet(ViewShell* pViewShell, ::sd::Window* pWindow,
 
     // evtl. Betroffene Felder invalidieren
     pViewShell->Invalidate( FN_NUM_BULLET_ON );
-}
-
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
-
-FuOutlineBullet::~FuOutlineBullet()
-{
-}
-
-/*************************************************************************
-|*
-|* Function aktivieren
-|*
-\************************************************************************/
-
-void FuOutlineBullet::Activate()
-{
-    FuPoor::Activate();
-}
-
-/*************************************************************************
-|*
-|* Function deaktivieren
-|*
-\************************************************************************/
-
-void FuOutlineBullet::Deactivate()
-{
-    FuPoor::Deactivate();
 }
 
 
