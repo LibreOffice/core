@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuoltext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:48:05 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:01:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,46 +128,13 @@ FuOutlineText::FuOutlineText(ViewShell* pViewShell, ::sd::Window* pWindow,
                              SfxRequest& rReq)
        : FuOutline(pViewShell, pWindow, pView, pDoc, rReq)
 {
-//    ERSTELLT SLOTFILTER-LISTING
-//    FILE* pFile = fopen("menu.dat", "w");
-//    fprintf(pFile, "SID_STYLE_FAMILY2,               %6d\n", SID_STYLE_FAMILY2);
-//    fprintf(pFile, "SID_STYLE_FAMILY5,               %6d\n", SID_STYLE_FAMILY5);
-//    fprintf(pFile, "SID_STYLE_UPDATE_BY_EXAMPLE,     %6d\n", SID_STYLE_UPDATE_BY_EXAMPLE);
-//    fprintf(pFile, "SID_CUT,                            %6d\n", SID_CUT);
-//    fprintf(pFile, "SID_COPY,                           %6d\n", SID_COPY);
-//    fprintf(pFile, "SID_PASTE,                          %6d\n", SID_PASTE);
-//    fprintf(pFile, "SID_SELECTALL,                      %6d\n", SID_SELECTALL);
-//    fprintf(pFile, "SID_ATTR_CHAR_FONT,                 %6d\n", SID_ATTR_CHAR_FONT);
-//    fprintf(pFile, "SID_ATTR_CHAR_POSTURE,              %6d\n", SID_ATTR_CHAR_POSTURE);
-//    fprintf(pFile, "SID_ATTR_CHAR_WEIGHT,               %6d\n", SID_ATTR_CHAR_WEIGHT);
-//    fprintf(pFile, "SID_ATTR_CHAR_UNDERLINE,            %6d\n", SID_ATTR_CHAR_UNDERLINE);
-//    fprintf(pFile, "SID_ATTR_CHAR_FONTHEIGHT,           %6d\n", SID_ATTR_CHAR_FONTHEIGHT);
-//    fprintf(pFile, "SID_ATTR_CHAR_COLOR,                %6d\n", SID_ATTR_CHAR_COLOR);
-//    fprintf(pFile, "SID_OUTLINE_UP,                     %6d\n", SID_OUTLINE_UP);
-//    fprintf(pFile, "SID_OUTLINE_DOWN,                   %6d\n", SID_OUTLINE_DOWN);
-//    fprintf(pFile, "SID_OUTLINE_LEFT,                   %6d\n", SID_OUTLINE_LEFT);
-//    fprintf(pFile, "SID_OUTLINE_RIGHT,                  %6d\n", SID_OUTLINE_RIGHT);
-//    fprintf(pFile, "SID_OUTLINE_COLLAPSE_ALL,           %6d\n", SID_OUTLINE_COLLAPSE_ALL);
-//    fprintf(pFile, "SID_OUTLINE_COLLAPSE,               %6d\n", SID_OUTLINE_COLLAPSE);
-//    fprintf(pFile, "SID_OUTLINE_EXPAND_ALL,             %6d\n", SID_OUTLINE_EXPAND_ALL);
-//    fprintf(pFile, "SID_OUTLINE_EXPAND,                 %6d\n", SID_OUTLINE_EXPAND);
-//    fprintf(pFile, "SID_SET_SUPER_SCRIPT,               %6d\n", SID_SET_SUPER_SCRIPT);
-//    fprintf(pFile, "SID_SET_SUB_SCRIPT,                 %6d\n", SID_SET_SUB_SCRIPT);
-//    fprintf(pFile, "SID_PRESENTATION_TEMPLATES,         %6d\n", SID_PRESENTATION_TEMPLATES);
-//    fprintf(pFile, "SID_STATUS_PAGE,                    %6d\n", SID_STATUS_PAGE);
-//    fprintf(pFile, "SID_STATUS_LAYOUT,                  %6d\n", SID_STATUS_LAYOUT);
-//    fprintf(pFile, "SID_HYPERLINK_GETLINK,              %6d\n", SID_HYPERLINK_GETLINK);
-//    fclose(pFile);
 }
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
-
-FuOutlineText::~FuOutlineText()
+FunctionReference FuOutlineText::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 {
+    FunctionReference xFunc( new FuOutlineText( pViewSh, pWin, pView, pDoc, rReq ) );
+    xFunc->DoExecute( rReq );
+    return xFunc;
 }
 
 /*************************************************************************
@@ -322,9 +289,6 @@ BOOL FuOutlineText::KeyInput(const KeyEvent& rKEvt)
     return (bReturn);
 }
 
-
-
-
 void FuOutlineText::UpdateForKeyPress (const KeyEvent& rEvent)
 {
     // Attributes at the current text position may have changed.
@@ -412,8 +376,6 @@ void FuOutlineText::DoPaste()
 {
     pOutlineView->GetViewByWindow(pWindow)->PasteSpecial();
 }
-
-
 
 
 } // end of namespace sd
