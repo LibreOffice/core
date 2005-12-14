@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 15:47:32 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 16:54:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,17 +230,13 @@ DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
     pDoc(NULL),
     pUndoManager(NULL),
     pFontList(NULL),
-    pFuActual(NULL),
-    //bUIActive(FALSE),
     pFormatClipboard(new SdFormatClipboard()),
     pProgress(NULL),
-//  pStbMgr( NULL ),
     bSdDataObj(bDataObject),
     bOwnPrinter(FALSE),
     eDocType(eDocumentType),
     mbNewDocument( sal_True )
 {
-//    pDoc = new SdDrawDocument(eDocType, this);
     Construct();
 }
 
@@ -259,11 +255,8 @@ DrawDocShell::DrawDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
     pDoc(pDoc),
     pUndoManager(NULL),
     pFontList(NULL),
-    pFuActual(NULL),
-    //bUIActive(FALSE),
     pFormatClipboard(new SdFormatClipboard()),
     pProgress(NULL),
-//  pStbMgr( NULL ),
     bSdDataObj(bDataObject),
     bOwnPrinter(FALSE),
     eDocType(eDocumentType),
@@ -287,8 +280,8 @@ DrawDocShell::~DrawDocShell()
     Broadcast(SfxSimpleHint(SFX_HINT_DYING));
 
     bInDestruction = TRUE;
-    delete pFuActual;
-    pFuActual = NULL;
+
+    SetDocShellFunction(0);
 
     delete pFontList;
     delete pUndoManager;
@@ -581,10 +574,9 @@ void DrawDocShell::UpdateTablePointers()
 
 void DrawDocShell::CancelSearching()
 {
-    if ( pFuActual && pFuActual->ISA(FuSearch) )
+    if( dynamic_cast<FuSearch*>( mxDocShellFunction.get() ) )
     {
-        delete pFuActual;
-        pFuActual = NULL;
+        SetDocShellFunction(0);
     }
 }
 
