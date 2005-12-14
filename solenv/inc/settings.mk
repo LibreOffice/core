@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.179 $
+#   $Revision: 1.180 $
 #
-#   last change: $Author: rt $ $Date: 2005-12-14 15:09:40 $
+#   last change: $Author: rt $ $Date: 2005-12-14 15:37:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,7 @@ SOLARVERSION=$(SOLARVER)$/$(UPD)
 
 .INCLUDE : minor.mk
 
-.IF "$(UPDATER)"!=""
+.IF "$(UPDATER)"!="" || "$(CWS_WORK_STAMP)"!=""
 %minor.mk :
 .IF "$(SOURCEVERSION)"=="$(WORK_STAMP)"
     @+-$(MKDIRHIER) $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT) >& $(NULLDEV)
@@ -110,7 +110,7 @@ SOLARVERSION=$(SOLARVER)$/$(UPD)
     @+$(COPY) $(SOLARENV)$/inc$/minor.mk $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk >& $(NULLDEV)
     @+$(TOUCH) $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg >& $(NULLDEV)
 .ENDIF			# "$(GUI)"=="UNX"
-.ENDIF          # "$(UPDATER)"!=""
+.ENDIF          # "$(UPDATER)"!="" || "$(CWS_WORK_STAMP)"!=""
 
 .IF "$(BSCLIENT)"=="TRUE"
 .IF "$(UPDATER)"!="YES"
@@ -985,11 +985,6 @@ CDEFS+=-D_STLP_DEBUG
 CDEFS+=$(CDEFS_PRESET)
 .ENDIF
 
-.IF "$(COM)"=="GCC"
-GXX_INCLUDE_PATH*=$(COMPATH)$/include$/c++$/$(CCVER)
-CDEFS+= -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH)
-.ENDIF
-
 .IF "$(TIMELOG)" != ""
 CDEFS+=-DTIMELOG
 .ENDIF
@@ -1155,6 +1150,12 @@ COMID=$(COM)
 .INCLUDE : tg_javav.mk
 .ENDIF "$(USE_JAVAVER)"!=""
 .ENDIF			# "$(SOLAR_JAVA)"=="TRUE"
+
+.IF "$(COM)"=="GCC"
+GXX_INCLUDE_PATH*:=$(COMPATH)$/include$/c++$/$(CCVER)
+.EXPORT : GXX_INCLUDE_PATH
+CDEFS+= -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH)
+.ENDIF
 
 # --- extend new environment ----------------------------------
 CDEFS+= -DSUPD=$(UPD)
