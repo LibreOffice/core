@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 09:22:22 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 17:29:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,7 +184,7 @@
 #endif
 #include "UpdateLockManager.hxx"
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -367,21 +367,7 @@ OutlineViewShell::OutlineViewShell (
 
 OutlineViewShell::~OutlineViewShell()
 {
-    if (pFuActual)
-    {
-        if (pFuOld == pFuActual)
-            pFuOld = NULL;
-
-        pFuActual->Deactivate();
-        delete pFuActual;
-        pFuActual = NULL;
-    }
-
-    if (pFuOld)
-    {
-        delete pFuOld;
-        pFuOld = NULL;
-    }
+    DisposeFunctions();
 
     // The sub shell manager will be destroyed in a short time.
     // Disable the switching of object bars now anyway just in case
@@ -414,9 +400,9 @@ void OutlineViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
         pOlView->Paint(rRect, pWin);
     }
 
-    if (pFuActual)
+    if(HasCurrentFunction())
     {
-        pFuActual->Paint(rRect, pWin);
+        GetCurrentFunction()->Paint(rRect, pWin);
     }
 }
 
@@ -664,9 +650,9 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
     {
         case SID_CUT:
         {
-            if (pFuActual)
+            if(HasCurrentFunction())
             {
-                pFuActual->DoCut();
+                GetCurrentFunction()->DoCut();
             }
             else if (pOlView)
             {
@@ -679,9 +665,9 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
 
         case SID_COPY:
         {
-            if (pFuActual)
+            if(HasCurrentFunction())
             {
-                pFuActual->DoCopy();
+                GetCurrentFunction()->DoCopy();
             }
             else if (pOlView)
             {
@@ -696,9 +682,9 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
         {
             OutlineViewPageChangesGuard aGuard(pOlView);
 
-            if (pFuActual)
+            if(HasCurrentFunction())
             {
-                pFuActual->DoPaste();
+                GetCurrentFunction()->DoPaste();
             }
             else if (pOlView)
             {
@@ -721,8 +707,11 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
                     KeyCode  aKCode(KEY_DELETE);
                     KeyEvent aKEvt( 0, aKCode );
                     pOutlView->PostKeyEvent(aKEvt);
-                    if (pFuActual!=NULL && pFuActual->ISA(FuOutlineText))
-                        static_cast<FuOutlineText*>(pFuActual)->UpdateForKeyPress (aKEvt);
+
+                    FunctionReference xFunc( GetCurrentFunction() );
+                    FuOutlineText* pFuOutlineText = dynamic_cast< FuOutlineText* >( xFunc.get() );
+                    if( pFuOutlineText )
+                        pFuOutlineText->UpdateForKeyPress (aKEvt);
                 }
             }
             rReq.Done();
@@ -853,16 +842,9 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
 
 void OutlineViewShell::FuPermanent(SfxRequest &rReq)
 {
-    if (pFuActual)
+    if(HasCurrentFunction())
     {
-        if (pFuOld == pFuActual)
-        {
-            pFuOld = NULL;
-        }
-
-        pFuActual->Deactivate();
-        delete pFuActual;
-        pFuActual = NULL;
+        DeactivateCurrentFunction(true);
     }
 
     switch ( rReq.GetSlot() )
@@ -884,7 +866,7 @@ void OutlineViewShell::FuPermanent(SfxRequest &rReq)
             ::Outliner* pOutl = pOlView->GetOutliner();
             pOutl->UpdateFields();
 
-            pFuActual = new FuOutlineText(this,GetActiveWindow(),pOlView,GetDoc(),rReq);
+            SetCurrentFunction( FuOutlineText::Create(this,GetActiveWindow(),pOlView,GetDoc(),rReq) );
 
             rReq.Done();
         }
@@ -894,17 +876,16 @@ void OutlineViewShell::FuPermanent(SfxRequest &rReq)
       break;
     }
 
-    if (pFuOld)
+    if(HasOldFunction())
     {
-        pFuOld->Deactivate();
-        delete pFuOld;
-        pFuOld = NULL;
+        GetOldFunction()->Deactivate();
+        SetOldFunction(0);
     }
 
-    if (pFuActual)
+    if(HasCurrentFunction())
     {
-        pFuActual->Activate();
-        pFuOld = pFuActual;
+        GetCurrentFunction()->Activate();
+        SetOldFunction(GetCurrentFunction());
     }
 }
 
@@ -1618,9 +1599,9 @@ BOOL OutlineViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
     BOOL bReturn = FALSE;
     OutlineViewPageChangesGuard aGuard(pOlView);
 
-    if (pWin == NULL && pFuActual)
+    if (pWin == NULL && HasCurrentFunction())
     {
-        bReturn = pFuActual->KeyInput(rKEvt);
+        bReturn = GetCurrentFunction()->KeyInput(rKEvt);
     }
 
     // nein, weiterleiten an Basisklasse
