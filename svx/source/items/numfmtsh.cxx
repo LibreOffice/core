@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numfmtsh.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:37:15 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:56:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -268,7 +268,7 @@ void SvxNumberFormatShell::FormatChanged( sal_uInt16  nFmtLbPos,
 }
 // -----------------------------------------------------------------------
 
-sal_Bool SvxNumberFormatShell::AddFormat( String& rFormat,  sal_uInt32& rErrPos,
+sal_Bool SvxNumberFormatShell::AddFormat( String& rFormat,  xub_StrLen& rErrPos,
                                       sal_uInt16& rCatLbSelPos, short& rFmtSelPos,
                                       SvStrings& rFmtEntries )
 {
@@ -300,11 +300,9 @@ sal_Bool SvxNumberFormatShell::AddFormat( String& rFormat,  sal_uInt32& rErrPos,
     }
     else // neues Format
     {
-        xub_StrLen nErrPos = (xub_StrLen)rErrPos;
-        bInserted = pFormatter->PutEntry( rFormat, nErrPos,
+        bInserted = pFormatter->PutEntry( rFormat, rErrPos,
                                           nCurCategory, nAddKey,
                                           eCurLanguage );
-        rErrPos = sal_uInt32(nErrPos);
     }
 
     if ( bInserted ) // eingefuegt
@@ -387,7 +385,7 @@ void SvxNumberFormatShell::MakeFormat( String& rFormat,
 {
     if(aCurrencyFormatList.Count()>nCurrencyPos)
     {
-         sal_uInt32 rErrPos=0;
+        xub_StrLen rErrPos=0;
         sal_uInt16 rCatLbSelPos=0;
         short  rFmtSelPos=0;
         SvStrings aFmtEList;
