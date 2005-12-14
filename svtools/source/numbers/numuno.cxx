@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numuno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:34:36 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:01:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,7 @@ void SvNumberFormatsSupplierObj::SetNumberFormatter(SvNumberFormatter* pNew)
     pImpl->pFormatter = pNew;
 }
 
-void SvNumberFormatsSupplierObj::NumberFormatDeleted(ULONG nKey)
+void SvNumberFormatsSupplierObj::NumberFormatDeleted(sal_uInt32 nKey)
 {
     //  Basis-Implementierung tut nix...
 }
