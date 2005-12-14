@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpshttab.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:23:56 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 15:04:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,7 @@ ScSheetDPData::ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc )
             }
             else
             {
-                ULONG nIndex = 0;
+                sal_uInt32 nIndex = 0;
                 rEntry.bQueryByString =
                             !(pD->GetFormatTable()->
                                 IsNumberFormat(*rEntry.pStr, nIndex, rEntry.nVal));
