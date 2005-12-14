@@ -7,9 +7,9 @@
 #
 #   $RCSfile: cwsview.pl,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 22:07:38 $
+#   last change: $Author: rt $ $Date: 2005-12-14 12:06:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ use CvsModule;
 #### script id #####
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.3 $ ';
+    $id_str = ' $Revision: 1.4 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -65,6 +65,8 @@ my $cws_name = $ENV{CWS_WORK_STAMP};
 my $cws = Cws->new();
 $cws->child($cws_name);
 $cws->master($masterws);
+my %modules_view_info = ();
+my ($master_branch_tag, $cws_branch_tag, $cws_root_tag) = $cws->get_tags();
 
 # check if we got a valid child workspace
 my $id = $cws->eis_id();
@@ -75,6 +77,7 @@ my @modules = get_options();
 @modules = get_checked_modules(\@modules);
 
 do_cvs_view(\@modules);
+print_resume();
 
 exit(0);
 ### end of main ###
@@ -85,14 +88,30 @@ exit(0);
 #                       #
 #########################
 
+sub print_resume {
+#    return if (!scalar keys %modules_view_info);
+    my $summary_printed = 0;
+    foreach (keys %modules_view_info) {
+        foreach my $line (sort @{$modules_view_info{$_}}) {
+            if (!$summary_printed) {
+                print "\n========== SUMMARY ==========\n";
+                $summary_printed++;
+            };
+            print "$line";
+        }
+    }
+    print "\n";
+};
+
 sub do_cvs_view {
     my $modules_ref = shift;
     my $cvs_module = CvsModule->new();
+    my $changed_files_ref;
     foreach my $module (@$modules_ref) {
         print "\n######## $module ########\n";
         $cvs_module->module($module);
         my $path = $ENV{SRC_ROOT} . '/' . $module;
-        $cvs_module->view($path);
+        $modules_view_info{$module} = $cvs_module->view($path);
     };
 };
 
