@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_jar.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:44:35 $
+#   last change: $Author: rt $ $Date: 2005-12-14 15:37:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@ JARCOMPRESS_FLAG=0
 .ENDIF
 
 .IF "$(NEW_JAR_PACK)"!=""
-$(JARTARGETN) : $(JARMANIFEST)
+$(JARTARGETN) : $(JARMANIFEST) $(JAVACLASSFILES)
 .ENDIF			# "$(NEW_JAR_PACK)"!=""
 
 .IF "$(NEW_JAR_PACK)"!=""
