@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.92 $
+#   $Revision: 1.93 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 22:07:53 $
+#   last change: $Author: rt $ $Date: 2005-12-14 12:06:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.92 $ ';
+$id_str = ' $Revision: 1.93 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -111,6 +111,8 @@ $opt_link           = 0;            # hard link files into the solver to save di
 $opt_deloutput      = 0;            # delete the output tree for the project once successfully delivered
 
 $strip = 'strip' if (($ENV{COM} ne 'MSC') && (((defined $ENV{ENABLE_SYMBOLS}) && ($ENV{ENABLE_SYMBOLS} ne "TRUE") && ($ENV{ENABLE_SYMBOLS} ne "SMALL")) || (!defined $ENV{ENABLE_SYMBOLS})));
+
+$strip .= " -R '.comment' -s" if ($ENV{OS} eq 'LINUX');
 
 $upd           = $ENV{'UPD'};
 ($gui       = lc($ENV{GUI}))        || die "can't determine GUI";
