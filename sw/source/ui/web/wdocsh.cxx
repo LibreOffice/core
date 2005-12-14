@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wdocsh.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:34:33 $
+ *  last change: $Author: rt $ $Date: 2005-12-14 14:52:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@ SwWebDocShell::~SwWebDocShell()
 
 
 void SwWebDocShell::FillClass( SvGlobalName * pClassName,
-                                   ULONG * pClipFormat,
+                                   sal_uInt32 * pClipFormat,
                                    String * pAppName,
                                    String * pLongUserName,
                                    String * pUserName,
