@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-09 09:09:49 $
+#   last change: $Author: rt $ $Date: 2005-12-15 16:19:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1325,6 +1325,9 @@ sub include_patchinfos_into_pkginfo
     my $obsoletes = "";
     if ( $variableshashref->{$patchobsoletesname} ) { $obsoletes = $variableshashref->{$patchobsoletesname}; }
     $newline = "SUNW_OBSOLETES=" . $obsoletes . "\n";
+    add_one_line_into_file($changefile, $newline, $filename);
+
+    $newline = "SUNW_PATCH_PROPERTIES=\n";
     add_one_line_into_file($changefile, $newline, $filename);
 
     # $newline = "SUNW_PKGTYPE=usr\n";
