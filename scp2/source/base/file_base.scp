@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_base.scp,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-21 16:07:27 $
+ *  last change: $Author: obo $ $Date: 2005-12-19 17:23:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,8 +42,8 @@ File gid_File_Exe_Sbase
     Styles = (PACKED);
 End
 
-STD_UNO_LIB_FILE( gid_File_Lib_Abp, abp)
-STD_RES_FILE( gid_File_Res_Abp, abp)
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Abp, abp)
+STD_RES_FILE_PATCH( gid_File_Res_Abp, abp)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Dbp, dbp)
 STD_RES_FILE( gid_File_Res_Dbp, dbp)
