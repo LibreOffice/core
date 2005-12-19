@@ -4,9 +4,9 @@
  *
  *  $RCSfile: abspilot.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 10:39:01 $
+ *  last change: $Author: obo $ $Date: 2005-12-19 17:26:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,10 +151,14 @@ namespace abp
         m_pCancel->SetClickHdl( LINK( this, OAddessBookSourcePilot, OnCancelClicked) );
 
         // some initial settings
+#ifdef WITH_MOZILLA
 #ifdef UNX
         m_aSettings.eType = AST_MORK;
 #else
         m_aSettings.eType = AST_OE;
+#endif
+#else
+        m_aSettings.eType = AST_OTHER;
 #endif
         m_aSettings.sDataSourceName = String(ModuleRes(RID_STR_DEFAULT_NAME));
         m_aSettings.bRegisterDataSource = sal_False;
@@ -404,6 +408,10 @@ namespace abp
 
             case AST_EVOLUTION:
                 m_aNewDataSource = aContext.createNewEvolution( m_aSettings.sDataSourceName );
+                break;
+
+            case AST_KAB:
+                m_aNewDataSource = aContext.createNewKab( m_aSettings.sDataSourceName );
                 break;
 
             case AST_LDAP:
