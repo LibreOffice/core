@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CRowSetColumn.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:55:36 $
+ *  last change: $Author: obo $ $Date: 2005-12-19 17:13:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ Any SAL_CALL ORowSetColumn::queryInterface( const Type & _rType ) throw (Runtime
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* ORowSetColumn::createArrayHelper( ) const
 {
-    BEGIN_PROPERTY_HELPER(29)
+    BEGIN_PROPERTY_HELPER(30)
         DECL_PROP2(ALIGN,                   sal_Int32,          BOUND,MAYBEVOID);
         DECL_PROP1(CATALOGNAME,             ::rtl::OUString,    READONLY);
         DECL_PROP2(CONTROLDEFAULT,          ::rtl::OUString,    BOUND,MAYBEVOID);
@@ -108,6 +108,7 @@ Any SAL_CALL ORowSetColumn::queryInterface( const Type & _rType ) throw (Runtime
         DECL_PROP1_BOOL(ISDEFINITELYWRITABLE,                   READONLY);
         DECL_PROP1(ISNULLABLE,              sal_Int32,          READONLY);
         DECL_PROP1_BOOL(ISREADONLY,                             READONLY);
+        DECL_PROP1_BOOL(ISROWVERSION,                           READONLY);
         DECL_PROP1_BOOL(ISSEARCHABLE,                           READONLY);
         DECL_PROP1_BOOL(ISSIGNED,                               READONLY);
         DECL_PROP1_BOOL(ISWRITABLE,                             READONLY);
