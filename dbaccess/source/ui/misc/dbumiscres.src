@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:17:42 $
+ *  last change: $Author: obo $ $Date: 2005-12-19 17:18:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,10 @@ Resource RSC_DATASOURCE_TYPES
     {
         Text  ="sdbc:address:evolution";
     };
+    String STR_KAB
+    {
+        Text  ="sdbc:address:kab";
+    };
     String STR_EMBEDDED
     {
         Text = "sdbc:embedded:";
@@ -199,6 +203,11 @@ Resource RSC_DATASOURCE_TYPE_UINAMES
     {
         Text [ de ] = "Evolution Adressbuch";
         Text[ en-US ] = "Evolution Address Book";
+    };
+    String STR_KAB
+    {
+        Text [ de ] = "KDE Adressbuch";
+        Text[ en-US ] = "KDE Address Book";
     };
     String STR_EMBEDDED
     {
