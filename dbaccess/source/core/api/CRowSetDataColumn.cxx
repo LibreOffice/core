@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CRowSetDataColumn.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:56:23 $
+ *  last change: $Author: obo $ $Date: 2005-12-19 17:13:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,10 +74,11 @@ ORowSetDataColumn::ORowSetDataColumn(   const Reference < XResultSetMetaData >& 
                                       const Reference < XRow >& _xRow,
                                       const Reference < XRowUpdate >& _xRowUpdate,
                                       sal_Int32 _nPos,
+                                      const Reference< XDatabaseMetaData >& _rxDBMeta,
                                       const ::rtl::OUString& _rDescription,
                                       const ORowSetCacheIterator& _rColumnValue,
                                       ORowSetMatrix::iterator& _rEnd)
-    : ODataColumn(_xMetaData,_xRow,_xRowUpdate,_nPos)
+    : ODataColumn(_xMetaData,_xRow,_xRowUpdate,_nPos,_rxDBMeta)
     ,m_aDescription(_rDescription)
     ,m_aColumnValue(_rColumnValue)
     ,m_rEnd(_rEnd)
@@ -94,7 +95,7 @@ ORowSetDataColumn::~ORowSetDataColumn()
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* ORowSetDataColumn::createArrayHelper( ) const
 {
-    BEGIN_PROPERTY_HELPER(30)
+    BEGIN_PROPERTY_HELPER(31)
         DECL_PROP2(ALIGN,                   sal_Int32,          BOUND,MAYBEVOID);
         DECL_PROP1(CATALOGNAME,             ::rtl::OUString,    READONLY);
         DECL_PROP2(CONTROLDEFAULT,          ::rtl::OUString,    BOUND,MAYBEVOID);
@@ -110,6 +111,7 @@ ORowSetDataColumn::~ORowSetDataColumn()
         DECL_PROP1_BOOL(ISDEFINITELYWRITABLE,                   READONLY);
         DECL_PROP1(ISNULLABLE,              sal_Int32,          READONLY);
         DECL_PROP1_BOOL(ISREADONLY,                             READONLY);
+        DECL_PROP1_BOOL(ISROWVERSION,                           READONLY);
         DECL_PROP1_BOOL(ISSEARCHABLE,                           READONLY);
         DECL_PROP1_BOOL(ISSIGNED,                               READONLY);
         DECL_PROP1_BOOL(ISWRITABLE,                             READONLY);
