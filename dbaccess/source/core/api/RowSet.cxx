@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.137 $
+ *  $Revision: 1.138 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:36:38 $
+ *  last change: $Author: obo $ $Date: 2005-12-19 17:14:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1747,6 +1747,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                                                                                         this,
                                                                                         this,
                                                                                         i+1,
+                                                                                        m_xActiveConnection->getMetaData(),
                                                                                         aDescription,
                                                                                         m_aCurrentRow,
                                                                                         m_pCache->getEnd());
@@ -1833,6 +1834,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                                                                                     this,
                                                                                     this,
                                                                                     i,
+                                                                                    m_xActiveConnection->getMetaData(),
                                                                                     aDescription,
                                                                                     m_aCurrentRow,
                                                                                     m_pCache->getEnd());
@@ -2572,6 +2574,7 @@ ORowSetClone::ORowSetClone(ORowSet& rParent,::osl::Mutex* _pMutex)
         ORowSetColumn* pColumn = new ORowSetColumn( rParent.getMetaData(),
                                                             this,
                                                             i,
+                                                            rParent.m_xActiveConnection->getMetaData(),
                                                             aDescription,
                                                             m_aCurrentRow,
                                                             m_pCache->getEnd());
