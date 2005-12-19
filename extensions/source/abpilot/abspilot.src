@@ -4,9 +4,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 10:39:25 $
+ *  last change: $Author: obo $ $Date: 2005-12-19 17:26:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,9 +145,17 @@ TabPage RID_PAGE_SELECTABTYPE
         Text [ de ] = "Evolution";
         Text [ en-US ] = "Evolution";
     };
+    RadioButton RB_KAB
+     {
+         Pos        = MAP_APPFONT ( 15, 101 ) ;
+         Size   = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
+
+        Text [ de ] = "KDE Adressbuch";
+        Text [ en-US ] = "KDE address book";
+    };
     RadioButton RB_LDAP
     {
-        Pos     = MAP_APPFONT ( 15, 101 ) ;
+        Pos     = MAP_APPFONT ( 15, 112 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
         Text [ de ] = "LDAP Adress-Bestand";
@@ -155,7 +163,7 @@ TabPage RID_PAGE_SELECTABTYPE
     };
     RadioButton RB_OUTLOOK
     {
-        Pos     = MAP_APPFONT ( 15, 111 ) ;
+        Pos     = MAP_APPFONT ( 15, 123 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
         Text [ de ] = "Outlook Adressbuch";
@@ -163,7 +171,7 @@ TabPage RID_PAGE_SELECTABTYPE
     };
     RadioButton RB_OUTLOOKEXPRESS
     {
-        Pos     = MAP_APPFONT ( 15,123 ) ;
+        Pos     = MAP_APPFONT ( 15,134 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
         Text [ de ] = "Windows System-Adressbuch";
@@ -171,7 +179,7 @@ TabPage RID_PAGE_SELECTABTYPE
     };
     RadioButton RB_OTHER
     {
-        Pos     = MAP_APPFONT ( 15, 134 ) ;
+        Pos     = MAP_APPFONT ( 15, 145 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
         Text [ de ] = "andere externe Datenquelle";
