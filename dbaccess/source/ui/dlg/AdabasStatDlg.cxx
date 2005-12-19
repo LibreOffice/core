@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AdabasStatDlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:24:44 $
+ *  last change: $Author: obo $ $Date: 2005-12-19 17:15:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,32 +118,6 @@ DBG_NAME(OAdabasStatPageDlg)
             case DST_ADABAS:
                 AddTabPage(TAB_PAG_ADABAS_SETTINGS, String(ResId(STR_PAGETITLE_ADABAS_STATISTIC)), ODriversSettings::CreateAdabas,0, sal_False, 1);
                 break;
-            case DST_DBASE:
-            case DST_FLAT:
-            case DST_MSACCESS:
-            case DST_ADO:
-            case DST_ODBC:
-            case DST_MYSQL_ODBC:
-            case DST_MYSQL_JDBC:
-            case DST_LDAP:
-            case DST_CALC:
-            case DST_MOZILLA:
-            case DST_THUNDERBIRD:
-            case DST_EVOLUTION:
-            case DST_OUTLOOK    :
-            case DST_OUTLOOKEXP:
-            case DST_JDBC:
-            case DST_ORACLE_JDBC:
-            case DST_USERDEFINE1:   /// first user defined driver
-            case DST_USERDEFINE2:
-            case DST_USERDEFINE3:
-            case DST_USERDEFINE4:
-            case DST_USERDEFINE5:
-            case DST_USERDEFINE6:
-            case DST_USERDEFINE7:
-            case DST_USERDEFINE8:
-            case DST_USERDEFINE9:
-            case DST_USERDEFINE10:
             default:
                 OSL_ENSURE(0,"Not supported for other types thasn adabas!");
                 break;
