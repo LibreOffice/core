@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbadmin2.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:13:21 $
+ *  last change: $Author: obo $ $Date: 2005-12-19 17:16:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,7 @@ String STR_ADDRESSBOOK_THUNDERBIRD
 };
 String STR_ADDRESSBOOK_EVOLUTION
 {
-    Text [ de ] ="Evolution address book";
+    Text [ de ] ="Evolution Adressbuch";
     Text[ en-US ] = "Evolution address book";
 };
 String STR_ADDRESSBOOK_LDAP
