@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 19:08:58 $
+#   last change: $Author: obo $ $Date: 2005-12-19 17:27:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,9 @@ SLOFILES=	\
         $(EXCEPTIONSFILES)
 
 
+.IF "WITH_MOZILLA" != ""
+CDEFS+=-DWITH_MOZILLA
+.ENDIF
 
 SRS1NAME=$(TARGET)
 SRC1FILES=			abspilot.src
