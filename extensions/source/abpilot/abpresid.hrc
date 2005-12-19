@@ -4,9 +4,9 @@
  *
  *  $RCSfile: abpresid.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 10:38:40 $
+ *  last change: $Author: obo $ $Date: 2005-12-19 17:26:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,10 +169,11 @@
 #define RB_MORK                 1
 #define RB_THUNDERBIRD          2
 #define RB_EVOLUTION            3
-#define RB_LDAP                 4
-#define RB_OUTLOOK              5
-#define RB_OUTLOOKEXPRESS       6
-#define RB_OTHER                7
+#define RB_KAB                  4
+#define RB_LDAP                 5
+#define RB_OUTLOOK              6
+#define RB_OUTLOOKEXPRESS       7
+#define RB_OTHER                8
 
 //........................................................................
 #define ET_DATASOURCENAME       1
