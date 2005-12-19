@@ -4,9 +4,9 @@
  *
  *  $RCSfile: abspilot.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:04:21 $
+ *  last change: $Author: obo $ $Date: 2005-12-19 17:26:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,7 @@ namespace abp
 
         inline sal_Bool needManualFieldMapping( AddressSourceType _eType ) const
         {
-            return ( AST_OTHER == _eType );
+            return ( AST_OTHER == _eType ) || ( AST_KAB == _eType );
         }
         /// checks if we need a manual (user-guided) field mapping
         inline sal_Bool needManualFieldMapping() const
