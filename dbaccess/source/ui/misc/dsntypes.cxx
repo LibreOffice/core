@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:39:42 $
+ *  last change: $Author: obo $ $Date: 2005-12-19 17:18:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -387,6 +387,7 @@ sal_Bool ODsnTypeCollection::supportsTableCreation(DATASOURCE_TYPE _eType)
             case DST_OUTLOOKEXP:
             case DST_FLAT:
             case DST_EVOLUTION:
+            case DST_KAB:
              case DST_THUNDERBIRD:
             case DST_CALC:
                 bSupportsTableCreation = FALSE;
@@ -432,6 +433,7 @@ sal_Bool ODsnTypeCollection::supportsBrowsing(DATASOURCE_TYPE _eType)
         case DST_OUTLOOKEXP:
         case DST_JDBC:
         case DST_EVOLUTION:
+        case DST_KAB:
             bEnableBrowseButton = FALSE;
             break;
         default:
@@ -472,6 +474,7 @@ sal_Bool ODsnTypeCollection::hasAuthentication(DATASOURCE_TYPE _eType) const
         case DST_MOZILLA:
         case DST_THUNDERBIRD:
         case DST_EVOLUTION:
+        case DST_KAB:
         case DST_OUTLOOK:
         case DST_OUTLOOKEXP: //????
         case DST_DBASE:
@@ -550,6 +553,8 @@ DATASOURCE_TYPE ODsnTypeCollection::implDetermineType(const String& _rDsn) const
             return DST_OUTLOOKEXP;
         if (_rDsn.EqualsIgnoreCaseAscii("evolution", nSeparator,_rDsn.Len() - nSeparator))
             return DST_EVOLUTION;
+        if (_rDsn.EqualsIgnoreCaseAscii("kab", nSeparator,_rDsn.Len() - nSeparator))
+            return DST_KAB;
     }
 
     // find third :
