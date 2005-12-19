@@ -18125,7 +18125,7 @@ your KDE installation by exporting KDEDIR before running \"configure\"." >&2;}
    { (exit 1); exit 1; }; }
     fi
 
-        KDE_CFLAGS="-I$qt_incdir -I$kde_incdir -DQT_CLEAN_NAMESPACE -DQT_NO_EMIT -DQT_THREAD_SUPPORT"
+        KDE_CFLAGS="-I$qt_incdir -I$kde_incdir -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"
     KDE_LIBS="-L$kde_libdir -L$qt_libdir -lkdeui -lkdecore -lqt-mt"
 fi
 
