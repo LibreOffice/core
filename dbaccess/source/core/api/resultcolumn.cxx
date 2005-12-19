@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resultcolumn.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:09:27 $
+ *  last change: $Author: obo $ $Date: 2005-12-19 17:14:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,12 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
+#ifndef _CPPUHELPER_EXC_HLP_HXX_
+#include <cppuhelper/exc_hlp.hxx>
+#endif
+#ifndef _OSL_THREAD_H_
+#include <osl/thread.h>
+#endif
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
@@ -77,11 +83,62 @@ DBG_NAME(OResultColumn);
 //--------------------------------------------------------------------------
 OResultColumn::OResultColumn(
                          const Reference < XResultSetMetaData >& _xMetaData,
-                         sal_Int32 _nPos)
+                         sal_Int32 _nPos,
+                         const Reference< XDatabaseMetaData >& _rxDBMeta )
                      :m_xMetaData(_xMetaData)
                      ,m_nPos(_nPos)
+                     ,m_xDBMetaData(_rxDBMeta)
 {
     DBG_CTOR(OResultColumn,NULL);
+}
+// -----------------------------------------------------------------------------
+void OResultColumn::impl_determineIsRowVersion_nothrow()
+{
+    if ( m_aIsRowVersion.hasValue() )
+        return;
+    m_aIsRowVersion <<= (sal_Bool)(sal_False);
+
+    OSL_ENSURE( m_xDBMetaData.is(), "OResultColumn::impl_determineIsRowVersion_nothrow: no DBMetaData!" );
+    if ( !m_xDBMetaData.is() )
+        return;
+
+    try
+    {
+        ::rtl::OUString sCatalog, sSchema, sTable, sColumnName;
+        getPropertyValue( PROPERTY_CATALOGNAME ) >>= sCatalog;
+        getPropertyValue( PROPERTY_SCHEMANAME ) >>= sSchema;
+        getPropertyValue( PROPERTY_TABLENAME ) >>= sTable;
+        getPropertyValue( PROPERTY_NAME ) >>= sColumnName;
+
+        Reference< XResultSet > xVersionColumns = m_xDBMetaData->getVersionColumns(
+            makeAny( sCatalog ), sSchema, sTable );
+        if ( xVersionColumns.is() ) // allowed to be NULL
+        {
+            Reference< XRow > xResultRow( xVersionColumns, UNO_QUERY_THROW );
+            while ( xVersionColumns->next() )
+            {
+                if ( xResultRow->getString( 2 ) == sColumnName )
+                {
+                    m_aIsRowVersion <<= (sal_Bool)(sal_True);
+                    break;
+                }
+            }
+        }
+    }
+    catch( const Exception& e )
+    {
+    #if OSL_DEBUG_LEVEL > 0
+        Any caught( ::cppu::getCaughtException() );
+        ::rtl::OString sMessage( "impl_determineIsRowVersion_nothrow: caught an exception!" );
+        sMessage += "\ntype: ";
+        sMessage += ::rtl::OString( caught.getValueTypeName().getStr(), caught.getValueTypeName().getLength(), osl_getThreadTextEncoding() );
+        sMessage += "\nmessage: ";
+        sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
+        OSL_ENSURE( false, sMessage );
+    #else
+        e; // make compiler happy
+    #endif
+    }
 }
 // -----------------------------------------------------------------------------
 OResultColumn::~OResultColumn()
@@ -135,7 +192,7 @@ void OResultColumn::disposing()
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OResultColumn::createArrayHelper( ) const
 {
-    BEGIN_PROPERTY_HELPER(20)
+    BEGIN_PROPERTY_HELPER(21)
         DECL_PROP1(CATALOGNAME,             ::rtl::OUString,    READONLY);
         DECL_PROP1(DISPLAYSIZE,             sal_Int32,          READONLY);
         DECL_PROP1_BOOL(ISAUTOINCREMENT,                        READONLY);
@@ -144,6 +201,7 @@ void OResultColumn::disposing()
         DECL_PROP1_BOOL(ISDEFINITELYWRITABLE,                   READONLY);
         DECL_PROP1(ISNULLABLE,              sal_Int32,          READONLY);
         DECL_PROP1_BOOL(ISREADONLY,                             READONLY);
+        DECL_PROP1_BOOL(ISROWVERSION,                           READONLY);
         DECL_PROP1_BOOL(ISSEARCHABLE,                           READONLY);
         DECL_PROP1_BOOL(ISSIGNED,                               READONLY);
         DECL_PROP1_BOOL(ISWRITABLE,                             READONLY);
@@ -173,6 +231,10 @@ void OResultColumn::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
     {
         switch (nHandle)
         {
+            case PROPERTY_ID_ISROWVERSION:
+                const_cast< OResultColumn* >( this )->impl_determineIsRowVersion_nothrow();
+                rValue = m_aIsRowVersion;
+                break;
             case PROPERTY_ID_TABLENAME:
                 rValue <<= m_xMetaData->getTableName(m_nPos);
                 break;
@@ -265,6 +327,7 @@ void OResultColumn::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
                 // empty string'S
                 rValue <<= rtl::OUString();
                 break;
+            case PROPERTY_ID_ISROWVERSION:
             case PROPERTY_ID_ISAUTOINCREMENT:
             case PROPERTY_ID_ISWRITABLE:
             case PROPERTY_ID_ISDEFINITELYWRITABLE:

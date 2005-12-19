@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datacolumn.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:05:27 $
+ *  last change: $Author: obo $ $Date: 2005-12-19 17:14:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,8 +77,9 @@ ODataColumn::ODataColumn(
                          const Reference < XResultSetMetaData >& _xMetaData,
                          const Reference < XRow >& _xRow,
                          const Reference < XRowUpdate >& _xRowUpdate,
-                         sal_Int32 _nPos)
-                     :OResultColumn(_xMetaData, _nPos)
+                         sal_Int32 _nPos,
+                         const Reference< XDatabaseMetaData >& _rxDBMeta)
+                     :OResultColumn(_xMetaData, _nPos, _rxDBMeta)
                      ,m_xRow(_xRow)
                      ,m_xRowUpdate(_xRowUpdate)
 {

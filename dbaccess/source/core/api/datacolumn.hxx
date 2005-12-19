@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datacolumn.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:05:47 $
+ *  last change: $Author: obo $ $Date: 2005-12-19 17:14:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,8 @@ namespace dbaccess
         ODataColumn  (const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XResultSetMetaData >& _xMetaData,
                       const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XRow >& _xRow,
                       const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XRowUpdate >& _xRowUpdate,
-                      sal_Int32 _nPos);
+                      sal_Int32 _nPos,
+                      const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxDBMeta);
 
     // com::sun::star::lang::XTypeProvider
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
