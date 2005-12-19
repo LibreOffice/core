@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbu_dlg.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:49:11 $
+ *  last change: $Author: obo $ $Date: 2005-12-19 17:17:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,11 +82,11 @@
 #define STR_ADDRESSBOOK_SYSTEM              RID_STR_DLG_START + 17
 #define STR_ADDRESSBOOK_MOZILLA             RID_STR_DLG_START + 18
 #define STR_ADDRESSBOOK_EVOLUTION           RID_STR_DLG_START + 19
-#define STR_ADDRESSBOOK_LDAP                RID_STR_DLG_START + 20
-#define STR_ADDRESSBOOK_OUTLOOK             RID_STR_DLG_START + 21
-#define STR_COMMAND_EXECUTED_SUCCESSFULLY   RID_STR_DLG_START + 22
-#define STR_DIRECTSQL_CONNECTIONLOST        RID_STR_DLG_START + 23
     // FREE
+#define STR_ADDRESSBOOK_LDAP                RID_STR_DLG_START + 21
+#define STR_ADDRESSBOOK_OUTLOOK             RID_STR_DLG_START + 22
+#define STR_COMMAND_EXECUTED_SUCCESSFULLY   RID_STR_DLG_START + 23
+#define STR_DIRECTSQL_CONNECTIONLOST        RID_STR_DLG_START + 24
 #define STR_HINT_READONLY_CONNECTION        RID_STR_DLG_START + 25
 #define STR_HINT_CONNECTION_NOT_CAPABLE     RID_STR_DLG_START + 26
 #define STR_USERADMIN_NOT_AVAILABLE         RID_STR_DLG_START + 27
