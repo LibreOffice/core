@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resultset.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:10:03 $
+ *  last change: $Author: obo $ $Date: 2005-12-19 17:15:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,12 @@
 #endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
+#endif
+#ifndef _CPPUHELPER_EXC_HLP_HXX_
+#include <cppuhelper/exc_hlp.hxx>
+#endif
+#ifndef _OSL_THREAD_H_
+#include <osl/thread.h>
 #endif
 
 
@@ -357,6 +363,41 @@ sal_Int32 OResultSet::findColumn(const rtl::OUString& columnName) throw( SQLExce
     return Reference< XColumnLocate >(m_xAggregateAsResultSet, UNO_QUERY)->findColumn(columnName);
 }
 
+//------------------------------------------------------------------------------
+namespace
+{
+    static Reference< XDatabaseMetaData > lcl_getDBMetaDataFromStatement_nothrow( const Reference< XInterface >& _rxStatement )
+    {
+        Reference< XDatabaseMetaData > xDBMetaData;
+        try
+        {
+            Reference< XStatement > xStatement( _rxStatement, UNO_QUERY );
+            Reference< XPreparedStatement > xPreparedStatement( _rxStatement, UNO_QUERY );
+            Reference< XConnection > xConn;
+            if ( xStatement.is() )
+                xConn = xStatement->getConnection();
+            else if ( xPreparedStatement.is() )
+                xConn = xPreparedStatement->getConnection();
+            if ( xConn.is() )
+                xDBMetaData = xConn->getMetaData();
+        }
+        catch( const Exception& e )
+        {
+        #if OSL_DEBUG_LEVEL > 0
+            Any caught( ::cppu::getCaughtException() );
+            ::rtl::OString sMessage( "lcl_getDBMetaDataFromStatement_nothrow: caught an exception!" );
+            sMessage += "\ntype: ";
+            sMessage += ::rtl::OString( caught.getValueTypeName().getStr(), caught.getValueTypeName().getLength(), osl_getThreadTextEncoding() );
+            sMessage += "\nmessage: ";
+            sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
+            OSL_ENSURE( false, sMessage );
+        #else
+            e; // make compiler happy
+        #endif
+        }
+        return xDBMetaData;
+    }
+}
 // ::com::sun::star::sdbcx::XColumnsSupplier
 //------------------------------------------------------------------------------
 Reference< ::com::sun::star::container::XNameAccess > OResultSet::getColumns(void) throw( RuntimeException )
@@ -372,11 +413,13 @@ Reference< ::com::sun::star::container::XNameAccess > OResultSet::getColumns(voi
         // do we have columns
         try
         {
+            Reference< XDatabaseMetaData > xDBMetaData( lcl_getDBMetaDataFromStatement_nothrow( getStatement() ) );
+
             for (sal_Int32 i = 0, nCount = xMetaData->getColumnCount(); i < nCount; ++i)
             {
                 // retrieve the name of the column
                 rtl::OUString aName = xMetaData->getColumnName(i + 1);
-                ODataColumn* pColumn = new ODataColumn(xMetaData, m_xAggregateAsRow, m_xAggregateAsRowUpdate, i + 1);
+                ODataColumn* pColumn = new ODataColumn(xMetaData, m_xAggregateAsRow, m_xAggregateAsRowUpdate, i + 1, xDBMetaData);
                 m_pColumns->append(aName, pColumn);
             }
         }
