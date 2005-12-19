@@ -5,9 +5,9 @@
  *
  *  $RCSfile: DataAccess.xcu,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:48:08 $
+ *  last change: $Author: obo $ $Date: 2005-12-19 17:08:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,17 @@
       <node oor:name="com.sun.star.comp.sdbc.evoab.OEvoabDriver" oor:op="replace">
          <prop oor:name="DriverName">
            <value>com.sun.star.comp.sdbc.evoab.OEvoabDriver</value>
+         </prop>
+         <prop oor:name="Enable">
+           <value>false</value>
+         </prop>
+         <prop oor:name="Timeout">
+           <value>60</value>
+         </prop>
+      </node>
+      <node oor:name="com.sun.star.comp.sdbc.kab.Driver" oor:op="replace">
+         <prop oor:name="DriverName">
+           <value>com.sun.star.comp.sdbc.kab.Driver</value>
          </prop>
          <prop oor:name="Enable">
            <value>false</value>
