@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.169 $
+ *  $Revision: 1.170 $
  *
- *  last change: $Author: fs $ $Date: 2005-12-07 15:18:08 $
+ *  last change: $Author: obo $ $Date: 2005-12-19 17:23:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -646,6 +646,18 @@ File gid_File_Lib_Evoab_1
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT2(libevoab1,UNXSUFFIX));
 End
+
+#ifdef ENABLE_KDE
+
+File gid_File_Lib_Kab_1
+    TXT_FILE_BODY;
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT2(libkab1,UNXSUFFIX));
+End
+
+#endif
 
 #endif
 
