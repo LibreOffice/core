@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typeselectionpage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 10:41:08 $
+ *  last change: $Author: obo $ $Date: 2005-12-19 17:28:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,8 +52,47 @@
 //.........................................................................
 namespace abp
 {
-    using namespace ::com::sun::star::uno;
 //.........................................................................
+
+    using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::sdbc;
+
+    //---------------------------------------------------------------------
+    namespace
+    {
+        void lcl_hideChoice( ::std::vector< RadioButton* >& _allTypes, RadioButton& _typeToHide )
+        {
+            for (   ::std::vector< RadioButton* >::iterator loop = _allTypes.begin();
+                    loop != _allTypes.end();
+                    ++loop
+                )
+            {
+                if ( *loop == &_typeToHide )
+                {
+                    // remove the element from the allTypes array
+                    ::std::copy( loop + 1, _allTypes.end(), loop );
+                    _allTypes.resize( _allTypes.size() - 1 );
+
+                    // hide the control in question
+                    _typeToHide.Hide();
+
+                    // change position of all subsequent controls
+                    if ( loop != _allTypes.end() )
+                    {
+                        sal_Int32 nMoveUp = (*loop)->GetPosPixel().Y() - _typeToHide.GetPosPixel().Y();
+                        do
+                        {
+                            Point aPos = (*loop)->GetPosPixel();
+                            aPos.Y() -= nMoveUp;
+                            (*loop)->SetPosPixel( aPos );
+                        }
+                        while ( ++loop != _allTypes.end() );
+                    }
+                    break;
+                }
+            }
+        }
+    }
 
     //=====================================================================
     //= TypeSelectionPage
@@ -66,6 +105,7 @@ namespace abp
         ,m_aMORK            (this,  ResId(RB_MORK))
         ,m_aThunderbird     (this,  ResId(RB_THUNDERBIRD))
         ,m_aEvolution       (this,  ResId(RB_EVOLUTION))
+        ,m_aKab             (this,  ResId(RB_KAB))
         ,m_aLDAP            (this,  ResId(RB_LDAP))
         ,m_aOutlook         (this,  ResId(RB_OUTLOOK))
         ,m_aOE              (this,  ResId(RB_OUTLOOKEXPRESS))
@@ -73,56 +113,57 @@ namespace abp
     {
         FreeResource();
 
-        Link aTypeSelectionHandler = LINK(this, TypeSelectionPage, OnTypeSelected );
-        m_aMORK.SetClickHdl( aTypeSelectionHandler );
-        m_aThunderbird.SetClickHdl( aTypeSelectionHandler );
-        m_aEvolution.SetClickHdl( aTypeSelectionHandler );
-        m_aLDAP.SetClickHdl( aTypeSelectionHandler );
-        m_aOutlook.SetClickHdl( aTypeSelectionHandler );
-        m_aOE.SetClickHdl( aTypeSelectionHandler );
-        m_aOther.SetClickHdl( aTypeSelectionHandler );
+        ::std::vector< RadioButton* > allTypes;
+            // must be sorted by ascending y-coordinate
+        allTypes.push_back( &m_aMORK );
+        allTypes.push_back( &m_aThunderbird );
+        allTypes.push_back( &m_aEvolution );
+        allTypes.push_back( &m_aKab );
+        allTypes.push_back( &m_aLDAP );
+        allTypes.push_back( &m_aOutlook );
+        allTypes.push_back( &m_aOE );
+        allTypes.push_back( &m_aOther );
+
+#ifndef WITH_MOZILLA
+        // the following 5 types are provided by the Mozilla-based database driver. If we're compiled without
+        // without Mozilla support, then they're not available.
+        lcl_hideChoice( allTypes, m_aMORK );
+        lcl_hideChoice( allTypes, m_aThunderbird );
+        lcl_hideChoice( allTypes, m_aLDAP );
+        lcl_hideChoice( allTypes, m_aOutlook );
+        lcl_hideChoice( allTypes, m_aOE );
+#endif
 
 #ifndef UNX
-        sal_Int32 nMoveControlsUp = m_aLDAP.GetPosPixel().Y() - m_aEvolution.GetPosPixel().Y();
-        m_aEvolution.Hide();
-
-        Control* pMoveControls[] = {
-            &m_aLDAP, &m_aOutlook, &m_aOE, &m_aOther, NULL
-        };
-        for ( Control** pMoveIt = pMoveControls; *pMoveIt; ++pMoveIt )
-        {
-            Point aPos = (*pMoveIt)->GetPosPixel();
-            aPos.Y() -= nMoveControlsUp;
-            (*pMoveIt)->SetPosPixel( aPos );
-        }
+        // no Evolution nor KDE address book on Windows systems
+        lcl_hideChoice( allTypes, m_aEvolution );
+        lcl_hideChoice( allTypes, m_aKab );
 #endif
 
 #ifdef UNX
         // no Outlook / Outlook Express for ~NIX systems
-        sal_Int32 nMoveControlsUp = m_aOther.GetPosPixel().Y() - m_aOutlook.GetPosPixel().Y();
+        lcl_hideChoice( allTypes, m_aOutlook );
+        lcl_hideChoice( allTypes, m_aOE );
 
-        m_aOutlook.Hide();
-        m_aOE.Hide();
+        Reference< XDriverAccess> xManager(_pParent->getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.DriverManager"))), UNO_QUERY);
 
-        Point aPos = m_aOther.GetPosPixel();
-        aPos.Y() -= nMoveControlsUp;
-        m_aOther.SetPosPixel( aPos );
+        // check whether Evolution is available
+        Reference< XDriver > xDriver( xManager->getDriverByURL(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:evolution"))) );
+        if ( !xDriver.is() )
+            lcl_hideChoice( allTypes, m_aEvolution );
 
-        Reference< ::com::sun::star::sdbc::XDriverAccess> xManager(_pParent->getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.DriverManager"))), UNO_QUERY);
-        if(!(xManager->getDriverByURL(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:evolution"))).is()))
-        {
-            nMoveControlsUp = m_aLDAP.GetPosPixel().Y() - m_aEvolution.GetPosPixel().Y();
-            m_aEvolution.Hide();
-
-            aPos = m_aLDAP.GetPosPixel();
-            aPos.Y() -= nMoveControlsUp;
-            m_aLDAP.SetPosPixel( aPos );
-
-            aPos = m_aOther.GetPosPixel();
-            aPos.Y() -= nMoveControlsUp;
-            m_aOther.SetPosPixel( aPos );
-        }
+        // check whether KDE address book is available
+        xDriver = xManager->getDriverByURL(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:kab")));
+        if ( !xDriver.is() )
+            lcl_hideChoice( allTypes, m_aKab );
 #endif
+
+        Link aTypeSelectionHandler = LINK(this, TypeSelectionPage, OnTypeSelected );
+        for (   ::std::vector< RadioButton* >::const_iterator loop = allTypes.begin();
+                loop != allTypes.end();
+                ++loop
+            )
+            (*loop)->SetClickHdl( aTypeSelectionHandler );
     }
 
     //---------------------------------------------------------------------
@@ -131,7 +172,7 @@ namespace abp
         AddressBookSourcePage::ActivatePage();
 
         RadioButton* pOptions[] = {
-            &m_aMORK, &m_aThunderbird, &m_aEvolution, &m_aLDAP, &m_aOutlook, &m_aOE, &m_aOther, NULL
+            &m_aMORK, &m_aThunderbird, &m_aEvolution, &m_aKab, &m_aLDAP, &m_aOutlook, &m_aOE, &m_aOther, NULL
         };
         for ( RadioButton** pCheck = pOptions; *pCheck; ++pCheck )
             if ( (*pCheck)->IsChecked() )
@@ -156,6 +197,7 @@ namespace abp
         m_aMORK.Check(AST_MORK == _eType);
         m_aThunderbird.Check(AST_THUNDERBIRD == _eType);
         m_aEvolution.Check(AST_EVOLUTION == _eType);
+        m_aKab.Check(AST_KAB == _eType);
         m_aLDAP.Check(AST_LDAP == _eType);
         m_aOutlook.Check(AST_OUTLOOK == _eType);
         m_aOE.Check(AST_OE == _eType);
@@ -171,6 +213,8 @@ namespace abp
             return AST_THUNDERBIRD;
         else if (m_aEvolution.IsChecked())
             return AST_EVOLUTION;
+        else if (m_aKab.IsChecked())
+            return AST_KAB;
         else if (m_aLDAP.IsChecked())
             return AST_LDAP;
         else if (m_aOutlook.IsChecked())
