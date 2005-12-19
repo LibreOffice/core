@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwizsetup.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:57:34 $
+ *  last change: $Author: obo $ $Date: 2005-12-19 17:17:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,10 +242,11 @@ using namespace ::cppu;
 #define OUTLOOK_PATH           14
 #define MOZILLA_PATH           15
 #define EVOLUTION_PATH         16
-#define THUNDERBIRD_PATH       17
-#define CREATENEW_PATH         18
-#define USERDEFINED_PATH       19
-#define OPEN_DOC_PATH          20
+#define KAB_PATH               17
+#define THUNDERBIRD_PATH       18
+#define CREATENEW_PATH         19
+#define USERDEFINED_PATH       20
+#define OPEN_DOC_PATH          21
 
 OFinalDBPageSetup*          pFinalPage;
 
@@ -393,6 +394,11 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     else
         declarePath( EVOLUTION_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
 
+    if ( m_pCollection->hasAuthentication(DST_KAB))
+        declarePath( KAB_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
+    else
+        declarePath( KAB_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
+
     if ( m_pCollection->hasAuthentication(m_pCollection->getEmbeddedDatabaseType(getORB())))
         declarePath( CREATENEW_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
     else
@@ -534,6 +540,7 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
             { DST_MOZILLA,      MOZILLA_PATH        },
             { DST_THUNDERBIRD,  THUNDERBIRD_PATH    },
             { DST_EVOLUTION,    EVOLUTION_PATH      },
+            { DST_KAB,          KAB_PATH            },
             { DST_USERDEFINE1,  USERDEFINED_PATH    },
             { DST_USERDEFINE2,  USERDEFINED_PATH    },
             { DST_USERDEFINE3,  USERDEFINED_PATH    },
@@ -604,6 +611,7 @@ sal_Bool ODbTypeWizDialogSetup::IsConnectionUrlRequired()
     DATASOURCE_TYPE eType = getDatasourceType(*m_pOutSet);
     switch ( m_eType )
     {
+        case DST_KAB:
         case DST_EVOLUTION:
         case DST_OUTLOOK:
         case DST_OUTLOOKEXP:
