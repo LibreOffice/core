@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CRowSetColumn.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:55:55 $
+ *  last change: $Author: obo $ $Date: 2005-12-19 17:13:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,10 +61,11 @@ namespace dbaccess
         ORowSetColumn(  const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XResultSetMetaData >& _xMetaData,
                         const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XRow >& _xRow,
                         sal_Int32 _nPos,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxDBMeta,
                         const ::rtl::OUString& _rDescription,
                         ORowSetCacheIterator& _rColumnValue,
                         ORowSetMatrix::iterator& _rEnd)
-          : ORowSetDataColumn(_xMetaData,_xRow,NULL,_nPos,_rDescription,_rColumnValue,_rEnd)
+          : ORowSetDataColumn(_xMetaData,_xRow,NULL,_nPos,_rxDBMeta,_rDescription,_rColumnValue,_rEnd)
         {
         }
 
