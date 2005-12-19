@@ -4,9 +4,9 @@
  *
  *  $RCSfile: preparedstatement.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:07:06 $
+ *  last change: $Author: obo $ $Date: 2005-12-19 17:14:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,11 +211,16 @@ Reference< ::com::sun::star::container::XNameAccess > OPreparedStatement::getCol
             // do we have columns
             if ( xMetaData.is() )
             {
+                Reference< XDatabaseMetaData > xDBMeta;
+                Reference< XConnection > xConn( getConnection() );
+                if ( xConn.is() )
+                    xDBMeta = xConn->getMetaData();
+
                 for (sal_Int32 i = 0, nCount = xMetaData->getColumnCount(); i < nCount; ++i)
                 {
                     // retrieve the name of the column
                     rtl::OUString aName = xMetaData->getColumnName(i + 1);
-                    OResultColumn* pColumn = new OResultColumn(xMetaData, i + 1);
+                    OResultColumn* pColumn = new OResultColumn(xMetaData, i + 1, xDBMeta);
                     m_pColumns->append(aName, pColumn);
                 }
             }
