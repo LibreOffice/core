@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CRowSetDataColumn.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:56:45 $
+ *  last change: $Author: obo $ $Date: 2005-12-19 17:13:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,7 @@ namespace dbaccess
                           const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XRow >& _xRow,
                           const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XRowUpdate >& _xRowUpdate,
                           sal_Int32 _nPos,
+                          const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxDBMeta,
                           const ::rtl::OUString& _rDescription,
                           const ORowSetCacheIterator& _rColumnValue,
                           ORowSetMatrix::iterator& _rEnd);
