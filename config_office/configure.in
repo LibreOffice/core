@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-12-14 14:42:25 $
+dnl * Date: $Date: 2005-12-19 17:09:30 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.140 $ )
+AC_REVISION( $Revision: 1.141 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -3914,7 +3914,7 @@ your KDE installation by exporting KDEDIR before running "configure".])
     fi
 
     dnl Set the variables
-    KDE_CFLAGS="-I$qt_incdir -I$kde_incdir -DQT_CLEAN_NAMESPACE -DQT_NO_EMIT -DQT_THREAD_SUPPORT"
+    KDE_CFLAGS="-I$qt_incdir -I$kde_incdir -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"
     KDE_LIBS="-L$kde_libdir -L$qt_libdir -lkdeui -lkdecore -lqt-mt"
 fi
 AC_SUBST(KDE_CFLAGS)
