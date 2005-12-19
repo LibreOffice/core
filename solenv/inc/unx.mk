@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unx.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-07 12:43:30 $
+#   last change: $Author: obo $ $Date: 2005-12-19 17:07:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -198,3 +198,11 @@ SONAME_SWITCH*=-h
 DLLPOST!:=$(DLLPOST).$($(UNIXVERSIONNAMES)_MAJOR)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 
+# enable building/linking KDE-dependent code in both OOo and SO build environment
+.IF "$(ENABLE_KDE)" != ""
+.IF "$(KDE_ROOT)"!=""
+KDE_CFLAGS:=-I$(KDE_ROOT)$/include -DQT_CLEAN_NAMESPACE
+KDE_LIBS:=-lkdeui -lkdecore -lqt-mt
+SOLARLIB+=-L$(KDE_ROOT)$/lib
+.ENDIF          # "$(KDE_ROOT)"!=""
+.ENDIF          # "$(ENABLE_KDE)" != ""
