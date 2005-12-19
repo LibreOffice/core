@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:30:07 $
+ *  last change: $Author: obo $ $Date: 2005-12-19 17:15:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -777,7 +777,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 if ( aReturn.bEnabled = m_xDataSource.is() )
                 {
                     DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
-                    aReturn.bEnabled = DST_EMBEDDED != eType && DST_MOZILLA != eType && DST_EVOLUTION != eType && DST_OUTLOOK != eType && DST_OUTLOOKEXP != eType;
+                    aReturn.bEnabled = DST_EMBEDDED != eType && DST_MOZILLA != eType && DST_EVOLUTION != eType && DST_KAB != eType && DST_OUTLOOK != eType && DST_OUTLOOKEXP != eType;
                 }
                 break;
             case SID_DB_APP_DSCONNECTION_TYPE:
@@ -791,7 +791,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 if ( aReturn.bEnabled = m_xDataSource.is() )
                 {
                     DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
-                    aReturn.bEnabled = DST_EMBEDDED != eType && DST_LDAP != eType && DST_CALC != eType && DST_MOZILLA != eType && DST_THUNDERBIRD != eType && DST_EVOLUTION != eType && DST_OUTLOOK != eType && DST_OUTLOOKEXP != eType;
+                    aReturn.bEnabled = DST_EMBEDDED != eType && DST_LDAP != eType && DST_CALC != eType && DST_MOZILLA != eType && DST_THUNDERBIRD != eType && DST_EVOLUTION != eType && DST_KAB != eType && DST_OUTLOOK != eType && DST_OUTLOOKEXP != eType;
                 }
                 break;
             case SID_DB_APP_CONVERTTOVIEW:
