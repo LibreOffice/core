@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resultcolumn.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:09:45 $
+ *  last change: $Author: obo $ $Date: 2005-12-19 17:15:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,12 +52,16 @@ namespace dbaccess
     {
     protected:
         ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XResultSetMetaData > m_xMetaData;
-        sal_Int32               m_nPos;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xDBMetaData;
+        sal_Int32                   m_nPos;
+        ::com::sun::star::uno::Any  m_aIsRowVersion;
 
         virtual ~OResultColumn();
     public:
-        OResultColumn(const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XResultSetMetaData >& _xMetaData,
-                      sal_Int32 _nPos);
+        OResultColumn(
+            const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XResultSetMetaData >& _xMetaData,
+            sal_Int32 _nPos,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxDBMeta );
 
     // com::sun::star::lang::XTypeProvider
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
@@ -78,6 +82,9 @@ namespace dbaccess
                                     ::com::sun::star::uno::Any& rValue,
                                     sal_Int32 nHandle
                                          ) const;
+
+    private:
+        void    impl_determineIsRowVersion_nothrow();
     };
 }
 #endif // _DBACORE_RESULTCOLUMN_HXX_
