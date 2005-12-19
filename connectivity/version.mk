@@ -4,9 +4,9 @@
 #
 #   $RCSfile: version.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 04:54:58 $
+#   last change: $Author: obo $ $Date: 2005-12-19 16:47:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -227,6 +227,22 @@ EVOAB_MICRO=0
 EVOAB_CPP=1
 
 EVOAB=$(EVOAB_TARGET_TARGET)_$(CMPEXT)
+
+# ----------------------------Kab settings-------------------------------------#
+# target
+KAB_TARGET=kab
+
+# the major 
+KAB_MAJOR=1
+# the minor 
+KAB_MINOR=0
+# the micro 
+KAB_MICRO=0
+
+# this is a c++ compatible library 
+KAB_CPP=1
+
+KAB=$(KAB_TARGET_TARGET)_$(CMPEXT)
 
 # ----------------------------HSQLDB settings-----------------------------------#
 # target
