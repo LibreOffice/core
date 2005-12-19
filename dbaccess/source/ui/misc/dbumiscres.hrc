@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbumiscres.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:13:11 $
+ *  last change: $Author: obo $ $Date: 2005-12-19 17:18:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,8 +55,9 @@
 #define STR_OUTLOOK             14
 #define STR_OUTLOOKEXP          15
 #define STR_EVOLUTION           16
-#define STR_EMBEDDED            17
-#define STR_THUNDERBIRD         18
+#define STR_KAB                 17
+#define STR_EMBEDDED            18
+#define STR_THUNDERBIRD         19
 
 #define STR_END                 STR_THUNDERBIRD + 1
 
