@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:59:24 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:31:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -259,9 +259,6 @@
 #endif
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef _COMPHELPER_GUARDING_HXX_
-#include <comphelper/guarding.hxx>
 #endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
@@ -3276,7 +3273,7 @@ sal_Bool FmXFormShell::HasAnyPendingCursorAction() const
 void FmXFormShell::CancelAnyPendingCursorAction()
 {
     OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
-    ::comphelper::OReusableGuard< ::osl::Mutex> aGuard(m_aAsyncSafety);
+    ::osl::ResettableMutexGuard aGuard( m_aAsyncSafety );
 
     CursorActions::iterator aIter;
     for (aIter = m_aCursorActions.begin(); aIter != m_aCursorActions.end(); ++aIter)
@@ -3288,7 +3285,7 @@ void FmXFormShell::CancelAnyPendingCursorAction()
             aGuard.clear();
             (*aIter).second.pThread->StopItWait();
                 // StopItWait returns after the termination handler (our OnCursorActionDone) has been called
-            aGuard.attach(m_aAsyncSafety);
+            aGuard.reset();
         }
     }
 
