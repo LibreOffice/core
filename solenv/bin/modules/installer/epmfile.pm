@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: obo $ $Date: 2005-12-21 12:47:53 $
+#   last change: $Author: obo $ $Date: 2005-12-21 15:36:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1784,6 +1784,7 @@ sub create_packages_without_epm
         my $target = "";
         if ( $installer::globals::compiler =~ /unxlngi/) { $target = "i586"; }
         if ( $installer::globals::compiler =~ /unxlngx/) { $target = "x86_64"; }
+        if ( $installer::globals::compiler =~ /unxlngs/) { $target = "sparc"; }
 
         my $systemcall = "$rpmcommand -bb $specfilename --target $target 2\>\&1 |";
 
@@ -1964,6 +1965,7 @@ sub create_new_directory_structure
         my $rpmdir;
         if ( $installer::globals::compiler =~ /unxlngi/) { $rpmdir = "$installer::globals::epmoutpath/RPMS/i586"; }
         if ( $installer::globals::compiler =~ /unxlngx/) { $rpmdir = "$installer::globals::epmoutpath/RPMS/x86_64"; }
+        if ( $installer::globals::compiler =~ /unxlngs/) { $rpmdir = "$installer::globals::epmoutpath/RPMS/sparc"; }
 
         my $systemcall = "mv $rpmdir/* $newdir";    # moving the rpms into the directory "RPMS"
 
@@ -1988,6 +1990,7 @@ sub create_new_directory_structure
         installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/x86_64");
         installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/i586");
         installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/i386");
+        installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS/sparc");
         installer::systemactions::remove_empty_directory("$installer::globals::epmoutpath/RPMS");
 
     }
