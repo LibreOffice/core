@@ -4,9 +4,9 @@
 #
 #   $RCSfile: archivefiles.pm,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-09 09:09:02 $
+#   last change: $Author: obo $ $Date: 2005-12-21 12:47:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -296,6 +296,7 @@ sub resolving_archive_flag
                             installer::pathanalyzer::get_path_from_fullqualifiedname(\$destination);
                             $newfile{'destination'} = $destination . $zipname;
                             $newfile{'sourcepath'} = $unzipdir . $zipname;
+                            $newfile{'zipfilename'} = $onefile->{'Name'};
 
                             if (( $use_internal_rights ) && ( ! $installer::globals::iswin ))
                             {
