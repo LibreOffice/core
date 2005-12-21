@@ -1,6 +1,7 @@
+#include <fcntl.h>
 #include <sys/types.h>
-#include <unistd.h>
 #include <sys/stat.h>
+#include <unistd.h>
 #include <dlfcn.h>
 
 #ifdef _cplusplus
@@ -17,6 +18,7 @@ int   lchown (const char *path, uid_t owner, gid_t group) {return 0;}
 int   fchown (int fildes, uid_t owner, gid_t group)       {return 0;}
 
 uid_t getuid  (void) {return 0;}
+int stat(const char *path,  struct stat *buf);
 #ifdef __notdef__
 uid_t geteuid (void) {return 0;}
 gid_t getgid  (void) {return 0;}
@@ -43,6 +45,31 @@ int fstat(int fildes, struct stat *buf)
 
     return ret;
 }
+
+/* this is to fool mkdir, don't allow to remove owner execute right from directories */
+int chmod(const char *path, mode_t mode)
+{
+    int ret = 0;
+    static int (*p_chmod) (const char *path, mode_t mode) = NULL;
+    if (p_chmod == NULL)
+        p_chmod = (int (*)(const char *path, mode_t mode))
+            dlsym (RTLD_NEXT, "chmod");
+
+    if ((mode & S_IXUSR) == 0)
+    {
+        struct stat statbuf;
+        if (stat(path, &statbuf) == 0)
+        {
+            if ((statbuf.st_mode & S_IFDIR) != 0)
+                mode = (mode | S_IXUSR);
+        }
+    }
+
+    ret = (*p_chmod)(path, mode);
+    return ret;
+}
+
+
 
 /* This is to fool tar */
 int fstatat64(int fildes, const char *path, struct stat64  *buf, int flag)
