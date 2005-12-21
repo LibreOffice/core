@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AResultSet.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:30:40 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:15:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,6 @@ OResultSet::OResultSet(ADORecordset* _pRecordSet,OStatement_Base* pStmt) :  ORes
                         ,m_pRecordSet(_pRecordSet)
                         ,m_bEOF(sal_False)
 {
-    construct();
 }
 // -------------------------------------------------------------------------
 OResultSet::OResultSet(ADORecordset* _pRecordSet) : OResultSet_BASE(m_aMutex)
@@ -145,7 +144,6 @@ OResultSet::OResultSet(ADORecordset* _pRecordSet) : OResultSet_BASE(m_aMutex)
                         ,m_pRecordSet(_pRecordSet)
                         ,m_bEOF(sal_False)
 {
-    construct();
 }
 // -----------------------------------------------------------------------------
 void OResultSet::construct()
