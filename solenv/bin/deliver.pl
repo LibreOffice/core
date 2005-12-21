@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.94 $
+#   $Revision: 1.95 $
 #
-#   last change: $Author: rt $ $Date: 2005-12-14 15:31:07 $
+#   last change: $Author: obo $ $Date: 2005-12-21 16:59:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.94 $ ';
+$id_str = ' $Revision: 1.95 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -110,6 +110,12 @@ $opt_zip            = 0;            # create an additional zip file
 $opt_log            = 1;            # create an additional log file
 $opt_link           = 0;            # hard link files into the solver to save disk space
 $opt_deloutput      = 0;            # delete the output tree for the project once successfully delivered
+
+if ($^O ne 'cygwin') {              # iz59477 - cygwin needes a dot "." at the end of filenames to disable
+  $maybedot     = '';               # some .exe transformation magic.
+} else {
+  $maybedot     = '.';
+}
 
 if ( $ENV{GUI} eq 'WNT' ) {
     if ($ENV{COM} eq 'GCC') {
@@ -701,7 +707,7 @@ sub glob_and_copy
 sub is_unstripped {
     my $file_name = shift;
 
-    if (-f $file_name && (( `file $file_name` ) =~ /not stripped/o)) {
+    if (-f $file_name.$maybedot && (( `file $file_name` ) =~ /not stripped/o)) {
         return '1' if ($file_name =~ /\.bin$/o);
         return '1' if ($file_name =~ /\.so\.*/o);
         return '1' if (basename($file_name) !~ /\./o);
@@ -837,7 +843,7 @@ sub is_newer
         my $touch = shift;
         my (@from_stat, @to_stat);
 
-        @from_stat = stat($from);
+        @from_stat = stat($from.$maybedot);
         return 0 unless -f _;
 
         if ( $touch ) {
@@ -860,7 +866,7 @@ sub is_newer
             }
         }
 
-        @to_stat = stat($to);
+        @to_stat = stat($to.$maybedot);
         return \@from_stat unless -f _;
 
         if ( $opt_force ) {
@@ -1099,7 +1105,7 @@ sub push_on_loglist
     return 0 if ( $opt_check );
     return -1 if ( $#entry != 2 );
     if (( $entry[0] eq "COPY" ) || ( $entry[0] eq "HEDABU" )) {
-        return 0 if ( ! -e $entry[1] );
+        return 0 if ( ! -e $entry[1].$maybedot );
         # make 'from' relative to source root
         $entry[1] = $module . "/prj/" . $entry[1];
         $entry[1] =~ s/^$module\/prj\/\.\./$module/;
