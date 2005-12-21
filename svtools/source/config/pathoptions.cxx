@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:52:56 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 16:11:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -520,15 +520,26 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
                                                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                                         "com.sun.star.util.PathSettings" ))),
                                                 UNO_QUERY );
+    if ( !m_xPathSettings.is() )
+    {
+        // #112719#: check for existance
+        DBG_ERROR( "SvtPathOptions_Impl::SvtPathOptions_Impl(): #112719# happened again!" );
+        throw RuntimeException(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Service com.sun.star.util.PathSettings cannot be created" )),
+            Reference< XInterface >() );
+    }
+
     m_xSubstVariables = Reference< XStringSubstitution >( xSMgr->createInstance(
                                                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                                         "com.sun.star.util.PathSubstitution" ))),
                                                 UNO_QUERY );
-
-    if ( !m_xPathSettings.is() || !m_xSubstVariables.is() )
-    {   // #112719#: check for existance
+    if ( !m_xSubstVariables.is() )
+    {
+        // #112719#: check for existance
         DBG_ERROR( "SvtPathOptions_Impl::SvtPathOptions_Impl(): #112719# happened again!" );
-        return;
+        throw RuntimeException(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Service com.sun.star.util.PathSubstitution cannot be created" )),
+            Reference< XInterface >() );
     }
 
     // Create temporary hash map to have a mapping between property names and property handles
