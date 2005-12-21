@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nfuncs.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:51:16 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 11:13:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,7 +231,7 @@ extern "C" {
         return NULL;
     }
 
-    void* SAL_CALL NP_LOADDS  NPN_GetJavaPeer( NPP instance )
+    jref SAL_CALL NP_LOADDS  NPN_GetJavaPeer( NPP instance )
     {
         TRACE( "NPN_GetJavaPeer" );
         return NULL;
