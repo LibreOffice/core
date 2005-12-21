@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LTable.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:47:56 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:16:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,7 @@ namespace connectivity
             sal_Int32                       m_nMaxRowCount; // will be set if stream is once eof
             ::std::vector< ::rtl::OUString> m_aColumnRawNames;
             sal_Bool    setColumnAliases();
-            void        fillColumns();
+            void        fillColumns(const ::com::sun::star::lang::Locale& _aLocale);
             sal_Bool checkHeaderLine();
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet> isUniqueByColumnName(const ::rtl::OUString& _rColName);
 
