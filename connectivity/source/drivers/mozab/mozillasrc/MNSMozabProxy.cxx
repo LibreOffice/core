@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MNSMozabProxy.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:28:06 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:18:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -303,7 +303,7 @@ NS_IMETHODIMP MLDAPMessageListener::OnLDAPMessage( nsILDAPMessage* aMessage )
     case nsILDAPMessage::RES_BIND:
         rv = aMessage->GetErrorCode(&errCode);
         // if the login failed
-        if (errCode != nsILDAPErrors::SUCCESS) {
+        if (errCode != (PRInt32)nsILDAPErrors::SUCCESS) {
             setConnectionStatus( sal_False );
         }
         else
