@@ -4,9 +4,9 @@
 #
 #   $RCSfile: idtglobal.pm,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-09 09:11:26 $
+#   last change: $Author: obo $ $Date: 2005-12-21 12:48:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1138,7 +1138,7 @@ sub get_position_in_sequencetable
 
 sub set_custom_action
 {
-    my ($customactionidttable, $binarytable, $actionname, $actionflags, $exefilename, $actionparameter, $inbinarytable, $filesref, $customactionidttablename) = @_;
+    my ($customactionidttable, $actionname, $actionflags, $exefilename, $actionparameter, $inbinarytable, $filesref, $customactionidttablename) = @_;
 
     my $included_customaction = 0;
     my $infoline = "";
@@ -1706,6 +1706,211 @@ sub setencoding
 
         installer::files::save_file($onefilename, $onefile);
     }
+}
+
+#############################################
+# Putting array values into hash
+#############################################
+
+sub fill_assignment_hash
+{
+    my ($gid, $name, $key, $assignmenthashref, $parameter, $tablename, $assignmentarray) = @_;
+
+    my $max = $parameter - 1;
+
+    if ( $max != $#{$assignmentarray} )
+    {
+        my $definedparameter = $#{$assignmentarray} + 1;
+        installer::exiter::exit_program("ERROR: gid: $gid, key: $key ! Wrong parameter in scp. For table $tablename $parameter parameter are required ! You defined: $definedparameter", "fill_assignment_hash");
+    }
+
+    for ( my $i = 0; $i <= $#{$assignmentarray}; $i++ )
+    {
+        my $counter = $i + 1;
+        my $key = "parameter". $counter;
+
+        my $localvalue = ${$assignmentarray}[$i];
+        installer::remover::remove_leading_and_ending_quotationmarks(\$localvalue);
+        $localvalue =~ s/\\\"/\"/g;
+        $localvalue =~ s/\\\!/\!/g;
+        $localvalue =~ s/\\\&/\&/g;
+        $localvalue =~ s/\\\</\</g;
+        $localvalue =~ s/\\\>/\>/g;
+        $assignmenthashref->{$key} = $localvalue;
+    }
+}
+
+##########################################################################
+# Checking the assignment of a Windows CustomAction and putting it
+# into a hash
+##########################################################################
+
+sub create_customaction_assignment_hash
+{
+    my ($gid, $name, $key, $assignmentarray) = @_;
+
+    my %assignment = ();
+    my $assignmenthashref = \%assignment;
+
+    my $tablename = ${$assignmentarray}[0];
+    installer::remover::remove_leading_and_ending_quotationmarks(\$tablename);
+
+    my $tablename_defined = 0;
+    my $parameter = 0;
+
+    if ( $tablename eq "InstallUISequence" )
+    {
+        $tablename_defined = 1;
+        $parameter = 3;
+        fill_assignment_hash($gid, $name, $key, $assignmenthashref, $parameter, $tablename, $assignmentarray);
+    }
+
+    if ( $tablename eq "InstallExecuteSequence" )
+    {
+        $tablename_defined = 1;
+        $parameter = 3;
+        fill_assignment_hash($gid, $name, $key, $assignmenthashref, $parameter, $tablename, $assignmentarray);
+    }
+
+    if ( $tablename eq "AdminExecuteSequence" )
+    {
+        $tablename_defined = 1;
+        $parameter = 3;
+        fill_assignment_hash($gid, $name, $key, $assignmenthashref, $parameter, $tablename, $assignmentarray);
+    }
+
+    if ( $tablename eq "ControlEvent" )
+    {
+        $tablename_defined = 1;
+        $parameter = 7;
+        fill_assignment_hash($gid, $name, $key, $assignmenthashref, $parameter, $tablename, $assignmentarray);
+    }
+
+    if ( $tablename eq "ControlCondition" )
+    {
+        $tablename_defined = 1;
+        $parameter = 5;
+        fill_assignment_hash($gid, $name, $key, $assignmenthashref, $parameter, $tablename, $assignmentarray);
+    }
+
+    if ( ! $tablename_defined )
+    {
+        installer::exiter::exit_program("ERROR: gid: $gid, key: $key ! Unknown Windows CustomAction table: $tablename ! Currently supported: InstallUISequence, InstallExecuteSequence, ControlEvent, ControlCondition", "create_customaction_assignment_hash");
+    }
+
+    return $assignmenthashref;
+}
+
+##########################################################################
+# Setting the Windows custom actions into different tables
+# CustomAc.idt, InstallE.idt, InstallU.idt, ControlE.idt, ControlC.idt
+##########################################################################
+
+sub addcustomactions
+{
+    my ($languageidtdir, $customactions, $filesarray) = @_;
+
+    my $customactionidttablename = $languageidtdir . $installer::globals::separator . "CustomAc.idt";
+    my $customactionidttable = installer::files::read_file($customactionidttablename);
+    my $installexecutetablename = $languageidtdir . $installer::globals::separator . "InstallE.idt";
+    my $installexecutetable = installer::files::read_file($installexecutetablename);
+    my $adminexecutetablename = $languageidtdir . $installer::globals::separator . "AdminExe.idt";
+    my $adminexecutetable = installer::files::read_file($adminexecutetablename);
+    my $installuitablename = $languageidtdir . $installer::globals::separator . "InstallU.idt";
+    my $installuitable = installer::files::read_file($installuitablename);
+    my $controleventtablename = $languageidtdir . $installer::globals::separator . "ControlE.idt";
+    my $controleventtable = installer::files::read_file($controleventtablename);
+    my $controlconditiontablename = $languageidtdir . $installer::globals::separator . "ControlC.idt";
+    my $controlconditiontable = installer::files::read_file($controlconditiontablename);
+
+    # Iterating over all Windows custom actions
+
+    for ( my $i = 0; $i <= $#{$customactions}; $i++ )
+    {
+        my $customaction = ${$customactions}[$i];
+        my $name = $customaction->{'Name'};
+        my $typ = $customaction->{'Typ'};
+        my $source = $customaction->{'Source'};
+        my $target = $customaction->{'Target'};
+        my $inbinarytable = $customaction->{'Inbinarytable'};
+        my $gid = $customaction->{'gid'};
+
+        my $added_customaction = set_custom_action($customactionidttable, $name, $typ, $source, $target, $inbinarytable, $filesarray, $customactionidttablename);
+
+        if ( $added_customaction )
+        {
+            # If the CustomAction was added into the CustomAc.idt, it can be connected to the installation.
+            # There are currently two different ways for doing this:
+            # 1. Using "add_custom_action_to_install_table", which adds the CustomAction to the install sequences,
+            #    which are saved in InstallE.idt and InstallU.idt
+            # 2. Using "connect_custom_action_to_control" and "connect_custom_action_to_control". The first method
+            #    connects a CustomAction to a control in ControlE.idt. The second method sets a condition for a control,
+            #    which might be influenced by the CustomAction. This happens in ControlC.idt.
+
+            # Any Windows CustomAction can have a lot of different assignments.
+
+            for ( my $j = 1; $j <= 50; $j++ )
+            {
+                my $key = "Assignment" . $j;
+                my $value = "";
+                if ( $customaction->{$key} ) { $value = $customaction->{$key}; }
+                else { last; }
+
+                # $value is now a comma separated list
+                if ( $value =~ /^\s*\(\s*(.*)\s*\);?\s*$/ ) { $value = $1; }
+                my $assignmentarray = installer::converter::convert_stringlist_into_array(\$value, ",");
+                my $assignment = create_customaction_assignment_hash($gid, $name, $key, $assignmentarray);
+
+                if ( $assignment->{'parameter1'} eq "InstallExecuteSequence" )
+                {
+                    add_custom_action_to_install_table($installexecutetable, $source, $name, $assignment->{'parameter2'}, $assignment->{'parameter3'}, $filesarray, $installexecutetablename);
+                }
+                elsif ( $assignment->{'parameter1'} eq "AdminExecuteSequence" )
+                {
+                    add_custom_action_to_install_table($adminexecutetable, $source, $name, $assignment->{'parameter2'}, $assignment->{'parameter3'}, $filesarray, $adminexecutetablename);
+                }
+                elsif ( $assignment->{'parameter1'} eq "InstallUISequence" )
+                {
+                    add_custom_action_to_install_table($installuitable, $source, $name, $assignment->{'parameter2'}, $assignment->{'parameter3'}, $filesarray, $installuitablename);
+                }
+                elsif ( $assignment->{'parameter1'} eq "ControlEvent" )
+                {
+                    connect_custom_action_to_control($controleventtable, $controleventtablename, $assignment->{'parameter2'}, $assignment->{'parameter3'}, $assignment->{'parameter4'}, $assignment->{'parameter5'}, $assignment->{'parameter6'}, $assignment->{'parameter7'});
+                }
+                elsif ( $assignment->{'parameter1'} eq "ControlCondition" )
+                {
+                    connect_condition_to_control($controlconditiontable, $controlconditiontablename, $assignment->{'parameter2'}, $assignment->{'parameter3'}, $assignment->{'parameter4'}, $assignment->{'parameter5'});
+                }
+                else
+                {
+                    installer::exiter::exit_program("ERROR: gid: $gid, key: $key ! Unknown Windows CustomAction table: $assignmenthashref->{'parameter1'} ! Currently supported: InstallUISequence, InstallESequence, ControlEvent, ControlCondition", "addcustomactions");
+                }
+            }
+        }
+    }
+
+    # Saving the files
+
+    installer::files::save_file($customactionidttablename, $customactionidttable);
+    installer::files::save_file($installexecutetablename, $installexecutetable);
+    installer::files::save_file($adminexecutetablename, $adminexecutetable);
+    installer::files::save_file($installuitablename, $installuitable);
+    installer::files::save_file($controleventtablename, $controleventtable);
+    installer::files::save_file($controlconditiontablename, $controlconditiontable);
+
+    my $infoline = "Updated idt file: $customactionidttablename\n";
+    push(@installer::globals::logfileinfo, $infoline);
+    $infoline = "Updated idt file: $installexecutetablename\n";
+    push(@installer::globals::logfileinfo, $infoline);
+    $infoline = "Updated idt file: $adminexecutetablename\n";
+    push(@installer::globals::logfileinfo, $infoline);
+    $infoline = "Updated idt file: $installuitablename\n";
+    push(@installer::globals::logfileinfo, $infoline);
+    $infoline = "Updated idt file: $controleventtablename\n";
+    push(@installer::globals::logfileinfo, $infoline);
+    $infoline = "Updated idt file: $controlconditiontablename\n";
+    push(@installer::globals::logfileinfo, $infoline);
+
 }
 
 1;
