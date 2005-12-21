@@ -4,9 +4,9 @@
  *
  *  $RCSfile: File.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:38:50 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:21:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,9 @@
 #endif
 #ifndef _COMPHELPER_BASIC_IO_HXX_
 #include <comphelper/basicio.hxx>
+#endif
+#ifndef _COMPHELPER_GUARDING_HXX_
+#include <comphelper/guarding.hxx>
 #endif
 
 //.........................................................................
@@ -291,7 +294,7 @@ void SAL_CALL OFileControlModel::reset() throw ( ::com::sun::star::uno::RuntimeE
             ::osl::MutexGuard aGuard(m_aMutex);
             _reset();
         }
-        NOTIFY_LISTENERS(m_aResetListeners, XResetListener, resetted, aEvt);
+        m_aResetListeners.notifyEach( &XResetListener::resetted, aEvt );
     }
 }
 
