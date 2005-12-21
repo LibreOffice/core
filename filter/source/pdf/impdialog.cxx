@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:20:30 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 15:00:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,8 +84,10 @@ ImpPDFDialog::ImpPDFDialog( Window* pParent, ResMgr& rResMgr, Sequence< Property
     maCbTransitionEffects( this, ResId( CB_TRANSITIONEFFECTS ) ),
     maFtFormsFormat( this, ResId( FT_FORMSFORMAT ) ),
     maLbFormsFormat( this, ResId( LB_FORMSFORMAT ) ),
+    maCbExportEmptyPages( this, ResId( CB_EXPORTEMPTYPAGES ) ),
     maConfigItem( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/PDF/Export/" ) ), &rFilterData ),
-    mbIsPresentation( sal_False )
+    mbIsPresentation( sal_False ),
+    mbIsWriter( sal_False )
 {
     FreeResource();
     maRbRange.SetToggleHdl( LINK( this, ImpPDFDialog, TogglePagesHdl ) );
@@ -144,13 +146,15 @@ ImpPDFDialog::ImpPDFDialog( Window* pParent, ResMgr& rResMgr, Sequence< Property
         {
             if ( xInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) ) )
                 mbIsPresentation = sal_True;
+            if ( xInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) ) ) )
+                mbIsWriter = sal_True;
         }
     }
     catch( RuntimeException )
     {
     }
     maCbTransitionEffects.Enable( mbIsPresentation );
-
+    maCbExportEmptyPages.Enable( mbIsWriter );
 
 //  SJ: Dont know if there are Notes available also for writer.
 //  maCbExportNotes.Enable( bIsPresentation );
@@ -181,6 +185,7 @@ ImpPDFDialog::ImpPDFDialog( Window* pParent, ResMgr& rResMgr, Sequence< Property
         maCbExportNotes.Check( maConfigItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "ExportNotes"  ) ), sal_True ) );
 
     maCbTransitionEffects.Check( maConfigItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "UseTransitionEffects"  ) ), sal_True ) );
+    maCbExportEmptyPages.Check( !maConfigItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages"  ) ), sal_False ) );
 
     sal_Int32 nFormsType = maConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "FormsType" ) ), 0 );
     if ( ( nFormsType < 0 ) || ( nFormsType > 3 ) )
@@ -209,6 +214,8 @@ Sequence< PropertyValue > ImpPDFDialog::GetFilterData()
     else
         maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotes" ) ), maCbExportNotes.IsChecked() );
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "UseTransitionEffects" ) ), maCbTransitionEffects.IsChecked() );
+    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages" ) ), !maCbExportEmptyPages.IsChecked() );
+
     /*
     * FIXME: the entries are only implicitly defined by the resource file. Should there
     * ever be an additional form submit format this could get invalid.
