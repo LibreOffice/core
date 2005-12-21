@@ -4,9 +4,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 17:26:59 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 18:07:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -349,7 +349,7 @@ TabPage RID_PAGE_FINAL
         Group = FALSE;
 
         Text [ de ] = "Durchsuchen...";
-        Text [ en-US ] = "Browse..";
+        Text [ en-US ] = "Browse...";
     };
 
     CheckBox CB_REGISTER_DS
