@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Recovery.xcs,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:43:23 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 16:12:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,18 @@
                 </info>
                 <value>15</value>
             </prop>
+            <prop oor:name="MinSpaceDocSave" oor:type="xs:int">
+                <info>
+                    <desc>Define the minimum space in [MB], which must be available on disc to save backups for open documents. Note: values less then 1 will be ignored.</desc>
+                </info>
+                <value>5</value>
+            </prop>
+            <prop oor:name="MinSpaceConfigSave" oor:type="xs:int">
+                <info>
+                    <desc>Define the minimum space in [MB], which must be available on disc to store the recovery configuration. Note: values less then 1 will be ignored.</desc>
+                </info>
+                <value>1</value>
+            </prop>
         </group>
-    </component>        
+    </component>
 </oor:component-schema>
