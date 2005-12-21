@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 07:48:02 $
+#   last change: $Author: obo $ $Date: 2005-12-21 16:51:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ PATCH_FILE_NAME=STLport-4.5-0119.patch
 TAR_EXCLUDES=*/SC5/*
 .ENDIF          # "$(USE_SHELL)"=="4nt"
 
-ADDITIONAL_FILES=src$/gcc-3.0.mak src$/gcc-3.0-macosx.mak src$/gcc-3.0-freebsd.mak src$/sunpro8.mak
+ADDITIONAL_FILES=src$/gcc-3.0.mak src$/gcc-3.0-macosx.mak src$/gcc-3.0-freebsd.mak src$/sunpro8.mak src$/sunpro11.mak
 
 
 CONFIGURE_ACTION=none
@@ -133,11 +133,13 @@ BUILD_FLAGS=-f vc7.mak
 
 .IF "$(COM)"=="C52"
 BUILD_ACTION=make
-.IF "$(CCNUMVER)">="00050005"
+.IF "$(CCNUMVER)">="00050008"
+BUILD_FLAGS=-f sunpro11.mak
+.ELIF "$(CCNUMVER)">="00050005"
 BUILD_FLAGS=-f sunpro8.mak
 .ELSE
 BUILD_FLAGS=-f sunpro6.mak
-.ENDIF # "$(CCNUMVER)">="00050005"
+.ENDIF # "$(CCNUMVER)">="00050008"
 
 OUT2INC= \
     stlport$/SC5$/*.SUNWCCh
