@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:22:56 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:45:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2419,6 +2419,18 @@ void FileDialogHelper::SetDisplayDirectory( const String& _rPath )
     }
 
     mpImp->displayFolder( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
+}
+
+// ------------------------------------------------------------------------
+void FileDialogHelper::SetDisplayFolder( const String& _rURL )
+{
+    mpImp->displayFolder( _rURL );
+}
+
+// ------------------------------------------------------------------------
+void FileDialogHelper::SetFileName( const String& _rFileName )
+{
+    mpImp->setFileName( _rFileName );
 }
 
 // ------------------------------------------------------------------------
