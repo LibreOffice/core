@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SingleSelectQueryComposer.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:03:23 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:34:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -728,13 +728,16 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( !m_aCurrentColumns[SelectColumns] )
+    {
+        ::std::vector< ::rtl::OUString> aNames;
+        ::vos::ORef< OSQLColumns> aCols;
+        sal_Bool bCase = sal_True;
         try
         {
+            bCase = m_xMetaData->storesMixedCaseQuotedIdentifiers();
+            aCols = m_aSqlIterator.getSelectColumns();
             // now set the columns we have to look if the order of the columns is correct
             Reference<XStatement> xStmt = m_xConnection->createStatement();
-
-            ::std::vector< ::rtl::OUString> aNames;
-            ::vos::ORef< OSQLColumns> aCols = m_aSqlIterator.getSelectColumns();
             if ( xStmt.is() )
             {
                 ::rtl::OUString sSql = m_aPureSelectSQL;
@@ -828,12 +831,12 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
                 for(OSQLColumns::const_iterator aIter = aCols->begin(); aIter != aCols->end();++aIter)
                     aNames.push_back(getString((*aIter)->getPropertyValue(PROPERTY_NAME)));
             }
-
-            m_aCurrentColumns[SelectColumns] = new OPrivateColumns(aCols,m_xMetaData->storesMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames);
         }
         catch(Exception&)
         {
         }
+        m_aCurrentColumns[SelectColumns] = new OPrivateColumns(aCols,bCase,*this,m_aMutex,aNames);
+    }
     return m_aCurrentColumns[SelectColumns];
 }
 // -------------------------------------------------------------------------
