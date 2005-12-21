@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optpage.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 09:52:03 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 15:13:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,6 +156,7 @@ class SwAddPrinterTabPage : public SfxTabPage
     RadioButton     aEndPageRB;
     FixedLine        aFL3;
     FixedLine        aFL4;
+    CheckBox        aPrintEmptyPagesCB;
     CheckBox        aSingleJobsCB;
     CheckBox        aPaperFromSetupCB;
     FixedText       aFaxFT;
