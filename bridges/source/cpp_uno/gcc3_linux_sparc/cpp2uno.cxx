@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:25:05 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 15:38:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -371,10 +371,12 @@ static typelib_TypeClass cpp_mediate(
  */
 static void cpp_vtable_call()
 {
-    volatile sal_Int64 nRegReturn;
+    sal_Int64 nRegReturn;
     int nFunctionIndex;
     void** pCallStack;
     int vTableOffset;
+
+void * pRegReturn = &nRegReturn;
 
     __asm__( "st %%i0, %0\n\t"
             "st %%i1, %1\n\t"
@@ -394,41 +396,40 @@ static void cpp_vtable_call()
         case typelib_TypeClass_BYTE:
             __asm__( "ld %0, %%l0\n\t"
                      "ldsb [%%l0], %%i0\n"
-                     : : "m"(&nRegReturn) );
+                     : : "m"(pRegReturn) );
             break;
         case typelib_TypeClass_CHAR:
         case typelib_TypeClass_SHORT:
         case typelib_TypeClass_UNSIGNED_SHORT:
             __asm__( "ld %0, %%l0\n\t"
                      "ldsh [%%l0], %%i0\n"
-                     : : "m"(&nRegReturn) );
+                     : : "m"(pRegReturn) );
             break;
         case typelib_TypeClass_HYPER:
         case typelib_TypeClass_UNSIGNED_HYPER:
-
             __asm__( "ld %0, %%l0\n\t"
                      "ld [%%l0], %%i0\n\t"
-                     "ld %1, %%l0\n\t"
+                     "add %%l0, 4, %%l0\n\t"
                      "ld [%%l0], %%i1\n\t"
-                     : : "m"(&nRegReturn), "m"(((long*)&nRegReturn) +1) );
+                      : : "m"(pRegReturn) );
 
             break;
         case typelib_TypeClass_FLOAT:
             __asm__( "ld %0, %%l0\n\t"
                      "ld [%%l0], %%f0\n"
-                     : : "m"(&nRegReturn) );
+                     : : "m"(pRegReturn) );
             break;
         case typelib_TypeClass_DOUBLE:
             __asm__( "ld %0, %%l0\n\t"
                      "ldd [%%l0], %%f0\n"
-                     : : "m"(&nRegReturn) );
+                     : : "m"(pRegReturn) );
             break;
         case typelib_TypeClass_VOID:
             break;
         default:
             __asm__( "ld %0, %%l0\n\t"
                      "ld [%%l0], %%i0\n"
-                     : : "m"(&nRegReturn) );
+                     : : "m"(pRegReturn) );
             break;
     }
 
