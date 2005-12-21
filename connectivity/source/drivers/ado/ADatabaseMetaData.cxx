@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ADatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:37:33 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:14:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -974,22 +974,28 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion(  ) throw(RuntimeExc
     OLEVariant  vtEmpty;
     vtEmpty.setNoArg();
     m_pADOConnection->OpenSchema(adSchemaDBInfoKeywords,vtEmpty,vtEmpty,&pRecordset);
+    OSL_ENSURE(pRecordset,"getSQLKeywords: no resultset!");
     ADOS::ThrowException(*m_pADOConnection,*this);
-    WpADORecordset aRecordset(pRecordset);
-
-    aRecordset.MoveFirst();
-    OLEVariant  aValue;
-    ::rtl::OUString aRet,aComma = ::rtl::OUString::createFromAscii(",");
-    while(!aRecordset.IsAtEOF())
+    if ( pRecordset )
     {
-        WpOLEAppendCollection<ADOFields, ADOField, WpADOField>  aFields(aRecordset.GetFields());
-        WpADOField aField(aFields.GetItem(0));
-        aField.get_Value(aValue);
-        aRet = aRet + aValue + aComma;
-        aRecordset.MoveNext();
+        WpADORecordset aRecordset(pRecordset);
+
+        aRecordset.MoveFirst();
+        OLEVariant  aValue;
+        ::rtl::OUString aRet,aComma = ::rtl::OUString::createFromAscii(",");
+        while(!aRecordset.IsAtEOF())
+        {
+            WpOLEAppendCollection<ADOFields, ADOField, WpADOField>  aFields(aRecordset.GetFields());
+            WpADOField aField(aFields.GetItem(0));
+            aField.get_Value(aValue);
+            aRet = aRet + aValue + aComma;
+            aRecordset.MoveNext();
+        }
+        aRecordset.Close();
+        if ( aRet.getLength() )
+            return aRet.copy(0,aRet.lastIndexOf(','));
     }
-    aRecordset.Close();
-    return aRet.copy(0,aRet.lastIndexOf(','));
+    return ::rtl::OUString();
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ODatabaseMetaData::getSearchStringEscape(  ) throw(SQLException, RuntimeException)
