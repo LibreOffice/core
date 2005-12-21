@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormComponent.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:54:32 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:23:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,9 +144,6 @@
 #endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
-#ifndef _COMPHELPER_GUARDING_HXX_
-#include <comphelper/guarding.hxx>
 #endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
@@ -384,9 +381,7 @@ class OControlModel :public ::cppu::OComponentHelper
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xServiceFactory;
 
-    OCountedMutex           m_aMutex;
-        // we use this kind of mutex to check the correct using of MutexRelease
-        // (in the product version OCountedMutex is defined as OMutex)
+    ::osl::Mutex    m_aMutex;
 
     InterfaceRef                    m_xParent;                  // ParentComponent
     OImplementationIdsRef           m_aHoldIdHelper;
