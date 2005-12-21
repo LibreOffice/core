@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 19:38:38 $
+#   last change: $Author: obo $ $Date: 2005-12-21 11:13:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ dummy:
 .IF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD"
 INC+= -DNP_LINUX
 .IF "$(SYSTEM_MOZILLA)" == "YES"
-INCPRE=-I$(MOZ_INC)/nspr -I$(MOZ_INC)/java -I$(MOZ_INC)/plugin
+INCPRE=$(MOZ_NSPR_CFLAGS) -I$(MOZ_INC)/java -I$(MOZ_INC)/plugin
 # not sure about -DMOZ_X11 but otheriwse some struct member don't exist...
 CFLAGS+=-DSYSTEM_MOZILLA -DMOZ_X11
 .ENDIF
