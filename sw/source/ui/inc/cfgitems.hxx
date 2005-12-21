@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgitems.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:03:16 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 15:12:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,6 +173,7 @@ public:
     BOOL IsPrintRightPage() const { return bPrintRightPage; }
     BOOL IsPrintReverse  () const { return bPrintReverse; }
     BOOL IsPaperFromSetup() const { return bPaperFromSetup; }
+    BOOL IsPrintEmptyPages() const { return bPrintEmptyPages; }
     BOOL IsPrintPageBackground() const { return bPrintPageBackground; }
     BOOL IsPrintBlackFont() const { return bPrintBlackFont; }
     BOOL IsPrintSingleJobs() const { return bPrintSingleJobs; }
