@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stdmenu.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:57:48 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 17:54:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,14 +198,14 @@ public:
 #define FONTSTYLEMENU_FIRSTID       62000
 #define FONTSTYLEMENU_LASTID        62999
 
-class FontStyleMenu : public PopupMenu
+class SVT_DLLPUBLIC FontStyleMenu : public PopupMenu
 {
 private:
     XubString       maCurStyle;
     Link            maSelectHdl;
     Link            maHighlightHdl;
 
-    BOOL            ImplIsAlreadyInserted( const XubString& rStyleName, USHORT nCount );
+    SVT_DLLPRIVATE BOOL         ImplIsAlreadyInserted( const XubString& rStyleName, USHORT nCount );
 
 public:
                     FontStyleMenu();
