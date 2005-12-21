@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:28:36 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:35:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
@@ -605,11 +608,11 @@ Reference< XInterface > ODatabaseSource_CreateInstance(const Reference< XMultiSe
 
 //--------------------------------------------------------------------------
 ODatabaseSource::ODatabaseSource(const ::rtl::Reference<ODatabaseModelImpl>& _pImpl)
-            :OSubComponent(m_aMutex, Reference< XInterface >())
+            :ModelDependentComponent( _pImpl )
+            ,OSubComponent( getMutex(), Reference< XInterface >() )
             ,OPropertySetHelper(OComponentHelper::rBHelper)
-            ,m_aBookmarks(*this, m_aMutex)
-            ,m_pImpl(_pImpl)
-            ,m_aFlushListeners(m_aMutex)
+            ,m_aBookmarks( *this, getMutex() )
+            ,m_aFlushListeners( getMutex() )
 {
     // some kind of default
     DBG_CTOR(ODatabaseSource,NULL);
@@ -1052,15 +1055,14 @@ void ODatabaseSource::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) con
 //------------------------------------------------------------------------------
 void ODatabaseSource::setLoginTimeout(sal_Int32 seconds) throw( SQLException, RuntimeException )
 {
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
-    MutexGuard aGuard(m_aMutex);
+    ModelMethodGuard aGuard( *this );
     m_pImpl->m_nLoginTimeout = seconds;
 }
 
 //------------------------------------------------------------------------------
 sal_Int32 ODatabaseSource::getLoginTimeout(void) throw( SQLException, RuntimeException )
 {
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ModelMethodGuard aGuard( *this );
     return m_pImpl->m_nLoginTimeout;
 }
 
@@ -1089,8 +1091,7 @@ Reference< XConnection > SAL_CALL ODatabaseSource::getIsolatedConnectionWithComp
 // -----------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const Reference< XInteractionHandler >& _rxHandler,sal_Bool _bIsolated ) throw(SQLException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ModelMethodGuard aGuard( *this );
 
     if (!_rxHandler.is())
     {
@@ -1126,13 +1127,13 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
         // handle the request
         try
         {
-            MutexRelease aRelease(m_aMutex);
+            MutexRelease aRelease( getMutex() );
                 // release the mutex when calling the handler, it may need to lock the SolarMutex
             _rxHandler->handle(xRequest);
         }
         catch(Exception&)
         {
-            DBG_ERROR("ODatabaseSource::connectWithCompletion: caught an exception while calling the handler!");
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         if (!pAuthenticate->wasSelected())
@@ -1183,8 +1184,7 @@ Reference< XConnection > ODatabaseSource::buildIsolatedConnection(const rtl::OUS
 //------------------------------------------------------------------------------
 Reference< XConnection > ODatabaseSource::getConnection(const rtl::OUString& user, const rtl::OUString& password,sal_Bool _bIsolated) throw( SQLException, RuntimeException )
 {
-    MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ModelMethodGuard aGuard( *this );
 
     Reference< XConnection > xConn;
     if ( _bIsolated )
@@ -1215,15 +1215,15 @@ Reference< XConnection > ODatabaseSource::getConnection(const rtl::OUString& use
 //------------------------------------------------------------------------------
 Reference< XNameAccess > SAL_CALL ODatabaseSource::getBookmarks(  ) throw (RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
+    ModelMethodGuard aGuard( *this );
     return static_cast< XNameContainer* >(&m_aBookmarks);
 }
 
 //------------------------------------------------------------------------------
 Reference< XNameAccess > SAL_CALL ODatabaseSource::getQueryDefinitions( ) throw(RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ModelMethodGuard aGuard( *this );
+
     Reference< XNameAccess > xContainer = m_pImpl->m_xCommandDefinitions;
     if ( !xContainer.is() )
     {
@@ -1236,31 +1236,13 @@ Reference< XNameAccess > SAL_CALL ODatabaseSource::getQueryDefinitions( ) throw(
     }
     return xContainer;
 }
-// -----------------------------------------------------------------------------
-class OConnectionNotifier //: public ::std::unary_function<OWeakConnection,void>
-{
-public:
-    OConnectionNotifier()
-    {
-    }
-
-    void operator()(OWeakConnection& _xConnection)
-    {
-    }
-};
-// -----------------------------------------------------------------------------
-void ODatabaseSource::flushTables()
-{
-    // flush all tables and queries
-    ::std::for_each(m_pImpl->m_aConnections.begin(),m_pImpl->m_aConnections.end(),OConnectionNotifier());
-}
 //------------------------------------------------------------------------------
 // XTablesSupplier
 //------------------------------------------------------------------------------
 Reference< XNameAccess >  ODatabaseSource::getTables() throw( RuntimeException )
 {
-    MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
+    ModelMethodGuard aGuard( *this );
+
     Reference< XNameAccess > xContainer = m_pImpl->m_xTableDefinitions;
     if ( !xContainer.is() )
     {
@@ -1276,18 +1258,17 @@ Reference< XNameAccess >  ODatabaseSource::getTables() throw( RuntimeException )
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseSource::flush(  ) throw (RuntimeException)
 {
+    ModelMethodGuard aGuard( *this );
     try
     {
-        ResettableMutexGuard _rGuard(m_aMutex);
-        ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
-
         SharedModel xModel( impl_getModel( true ) );
         Reference< css::frame::XStorable> xStorable( xModel, UNO_QUERY );
         if ( xStorable.is() )
             xStorable->store();
 
-        css::lang::EventObject aEvt(*this);
-        NOTIFY_LISTERNERS(m_aFlushListeners,XFlushListener,flushed)
+        css::lang::EventObject aFlushedEvent(*this);
+        aGuard.clear();
+        m_aFlushListeners.notifyEach( &XFlushListener::flushed, aFlushedEvent );
     }
     catch(Exception&)
     {
@@ -1297,8 +1278,7 @@ void SAL_CALL ODatabaseSource::flush(  ) throw (RuntimeException)
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseSource::flushed( const EventObject& rEvent ) throw (RuntimeException)
 {
-    ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
-    MutexGuard aGuard(m_aMutex);
+    ModelMethodGuard aGuard( *this );
 
     // Okay, this is some hack.
     //
@@ -1341,18 +1321,21 @@ void SAL_CALL ODatabaseSource::removeFlushListener( const Reference< ::com::sun:
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseSource::elementInserted( const ContainerEvent& Event ) throw (RuntimeException)
 {
+    ModelMethodGuard aGuard( *this );
     if ( m_pImpl.is() )
         m_pImpl->setModified(sal_True);
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseSource::elementRemoved( const ContainerEvent& Event ) throw (RuntimeException)
 {
+    ModelMethodGuard aGuard( *this );
     if ( m_pImpl.is() )
         m_pImpl->setModified(sal_True);
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseSource::elementReplaced( const ContainerEvent& Event ) throw (RuntimeException)
 {
+    ModelMethodGuard aGuard( *this );
     if ( m_pImpl.is() )
         m_pImpl->setModified(sal_True);
 }
@@ -1372,11 +1355,17 @@ ODatabaseSource::SharedModel ODatabaseSource::impl_getModel( bool _bTakeOwnershi
 // XDocumentDataSource
 Reference< XOfficeDatabaseDocument > SAL_CALL ODatabaseSource::getDatabaseDocument() throw (RuntimeException)
 {
+    ModelMethodGuard aGuard( *this );
     return Reference< XOfficeDatabaseDocument >( impl_getModel( false ), UNO_QUERY );
     // by definition, clients of getDatabaseDocument are responsible for the model they obtain,
     // including responsibility for (attempting to) close the model when they don't need it anymore.
     // Thus the "false" parameter in the call to impl_getModel: We don't take the ownership
     // of the model, even if it had to be newly created during this call.
+}
+// -----------------------------------------------------------------------------
+Reference< XInterface > ODatabaseSource::getThis()
+{
+    return *this;
 }
 // -----------------------------------------------------------------------------
 //........................................................................
