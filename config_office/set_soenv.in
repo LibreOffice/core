@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.80 $
-# Date:        $Date: 2005-12-14 15:38:22 $
+# Version:     $Revision: 1.81 $
+# Date:        $Date: 2005-12-21 11:09:50 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1724,6 +1724,7 @@ ToFile( "SYSTEM_MOZILLA",    "@SYSTEM_MOZILLA@",   "e" );
 ToFile( "MOZ_INC",           "@MOZ_INC@",          "e" );
 ToFile( "MOZ_LIB",           "@MOZ_LIB@",          "e" );
 ToFile( "MOZ_LIB_XPCOM",     "@MOZ_LIB_XPCOM@",    "e" );
+ToFile( "MOZ_NSPR_CFLAGS",   "@MOZ_NSPR_CFLAGS@",  "e" );
 ToFile( "MOZ_NSS_CFLAGS",    "@MOZ_NSS_CFLAGS@",   "e" );
 ToFile( "MOZ_LDAP_CFLAGS",   "@MOZ_LDAP_CFLAGS@",  "e" );
 ToFile( "WITH_FONTS",        "@WITH_FONTS@",       "e" );
