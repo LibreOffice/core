@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autorecovery.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:06:27 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 16:08:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,9 @@
 #ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
 #include <threadhelp/writeguard.hxx>
 #endif
+
+#include <classes/resource.hrc>
+#include <classes/fwkresid.hxx>
 
 #ifndef __FRAMEWORK_PROTOCOLS_H_
 #include <protocols.h>
@@ -203,6 +206,8 @@
 #endif
 
 #include <osl/time.h>
+#include <vcl/msgbox.hxx>
+#include <osl/file.hxx>
 
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
@@ -228,8 +233,13 @@ static const ::rtl::OUString CFG_PATH_RECOVERYINFO            = ::rtl::OUString:
 static const ::rtl::OUString CFG_ENTRY_ENABLED                = ::rtl::OUString::createFromAscii("Enabled"                        );
 static const ::rtl::OUString CFG_ENTRY_CRASHED                = ::rtl::OUString::createFromAscii("Crashed"                        );
 static const ::rtl::OUString CFG_ENTRY_SESSIONDATA            = ::rtl::OUString::createFromAscii("SessionData"                    );
+
 static const ::rtl::OUString CFG_ENTRY_AUTOSAVE_ENABLED       = ::rtl::OUString::createFromAscii("AutoSave/Enabled"               );
 static const ::rtl::OUString CFG_ENTRY_AUTOSAVE_TIMEINTERVALL = ::rtl::OUString::createFromAscii("AutoSave/TimeIntervall"         );
+
+static const ::rtl::OUString CFG_PATH_AUTOSAVE                = ::rtl::OUString::createFromAscii("AutoSave"                       );
+static const ::rtl::OUString CFG_ENTRY_MINSPACE_DOCSAVE       = ::rtl::OUString::createFromAscii("MinSpaceDocSave"                );
+static const ::rtl::OUString CFG_ENTRY_MINSPACE_CONFIGSAVE    = ::rtl::OUString::createFromAscii("MinSpaceConfigSave"             );
 
 static const ::rtl::OUString CFG_PACKAGE_MODULES              = ::rtl::OUString::createFromAscii("org.openoffice.Setup/Office/Factories");
 static const ::rtl::OUString CFG_ENTRY_REALDEFAULTFILTER      = ::rtl::OUString::createFromAscii("ooSetupFactoryActualFilter"           );
@@ -294,6 +304,12 @@ static const ::rtl::OUString OPERATION_START                 = ::rtl::OUString::
 static const ::rtl::OUString OPERATION_STOP                  = ::rtl::OUString::createFromAscii("stop"  );
 static const ::rtl::OUString OPERATION_UPDATE                = ::rtl::OUString::createFromAscii("update");
 
+static const sal_Int32       MIN_DISCSPACE_DOCSAVE                  =   5; // [MB]
+static const sal_Int32       MIN_DISCSPACE_CONFIGSAVE               =   1; // [MB]
+static const sal_Int32       RETRY_STORE_ON_FULL_DISC_FOREVER       = 300; // not forever ... but often enough .-)
+static const sal_Int32       RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL =   3; // in case FULL DISC does not seam the real problem
+static const sal_Int32       GIVE_UP_RETRY                          =   1; // in case FULL DISC does not seam the real problem
+
 #define SAVE_IN_PROGRESS            sal_True
 #define SAVE_FINISHED               sal_False
 
@@ -301,6 +317,15 @@ static const ::rtl::OUString OPERATION_UPDATE                = ::rtl::OUString::
 #define LOCK_FOR_CACHE_USE          sal_False
 
 #define MIN_TIME_FOR_USER_IDLE 10000 // 10s user idle
+
+// enable the following defines in case you whish to simulate a full disc for debug purposes .-)
+
+// this define throws everytime a document is stored or a configuration change
+// should be flushed an exception ... so the special error handler for this scenario is triggered
+// #define TRIGGER_FULL_DISC_CHECK
+
+// force "return FALSE" for the method impl_enoughDiscSpace().
+// #define SIMULATE_FULL_DISC
 
 //-----------------------------------------------
 // #define ENABLE_RECOVERY_LOGGING
@@ -602,6 +627,8 @@ AutoRecovery::AutoRecovery(const css::uno::Reference< css::lang::XMultiServiceFa
     , m_nWorkingEntryID         (-1                                                 )
     , m_bListenForDocEvents     (sal_False                                          )
     , m_bListenForConfigChanges (sal_False                                          )
+    , m_nMinSpaceDocSave        (MIN_DISCSPACE_DOCSAVE                              )
+    , m_nMinSpaceConfigSave     (MIN_DISCSPACE_CONFIGSAVE                           )
 
     #if OSL_DEBUG_LEVEL > 1
     , m_dbg_bMakeItFaster       (sal_False                                          )
@@ -1008,9 +1035,36 @@ css::uno::Reference< css::container::XNameAccess > AutoRecovery::implts_openConf
         ::comphelper::ConfigurationHelper::openConfig(xSMGR, CFG_PACKAGE_RECOVERY, ::comphelper::ConfigurationHelper::E_STANDARD),
         css::uno::UNO_QUERY);
 
+    sal_Int32 nMinSpaceDocSave    = MIN_DISCSPACE_DOCSAVE;
+    sal_Int32 nMinSpaceConfigSave = MIN_DISCSPACE_CONFIGSAVE;
+
+    try
+    {
+        ::comphelper::ConfigurationHelper::readDirectKey(xSMGR,
+                                                         CFG_PACKAGE_RECOVERY,
+                                                         CFG_PATH_AUTOSAVE,
+                                                         CFG_ENTRY_MINSPACE_DOCSAVE,
+                                                         ::comphelper::ConfigurationHelper::E_STANDARD) >>= nMinSpaceDocSave;
+
+        ::comphelper::ConfigurationHelper::readDirectKey(xSMGR,
+                                                         CFG_PACKAGE_RECOVERY,
+                                                         CFG_PATH_AUTOSAVE,
+                                                         CFG_ENTRY_MINSPACE_CONFIGSAVE,
+                                                         ::comphelper::ConfigurationHelper::E_STANDARD) >>= nMinSpaceConfigSave;
+    }
+    catch(const css::uno::Exception&)
+        {
+            // These config keys are not sooooo important, that
+            // we are interested on errors here realy .-)
+            nMinSpaceDocSave    = MIN_DISCSPACE_DOCSAVE;
+            nMinSpaceConfigSave = MIN_DISCSPACE_CONFIGSAVE;
+        }
+
     // SAFE -> ----------------------------------
     aWriteLock.lock();
-    m_xRecoveryCFG = xCFG;
+    m_xRecoveryCFG        = xCFG;
+    m_nMinSpaceDocSave    = nMinSpaceDocSave;
+    m_nMinSpaceConfigSave = nMinSpaceConfigSave;
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
 
@@ -1227,15 +1281,17 @@ void AutoRecovery::implts_specifyAppModuleAndFactoryURL(AutoRecovery::TDocumentI
 //-----------------------------------------------
 void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rInfo, sal_Bool bRemoveIt)
 {
+    css::uno::Reference< css::container::XHierarchicalNameAccess > xCFG;
+
     try
     {
-        css::uno::Reference< css::container::XHierarchicalNameAccess > xCFG  (implts_openConfig(), css::uno::UNO_QUERY);
-        css::uno::Reference< css::container::XNameAccess >             xCheck;
+        xCFG = css::uno::Reference< css::container::XHierarchicalNameAccess >(implts_openConfig(), css::uno::UNO_QUERY_THROW);
+
+        css::uno::Reference< css::container::XNameAccess > xCheck;
         xCFG->getByHierarchicalName(CFG_ENTRY_RECOVERYLIST) >>= xCheck;
 
-        css::uno::Reference< css::container::XNameContainer >   xModify(xCheck, css::uno::UNO_QUERY);
-        css::uno::Reference< css::lang::XSingleServiceFactory > xCreate(xCheck, css::uno::UNO_QUERY);
-        css::uno::Reference< css::util::XChangesBatch >         xFlush (xCFG  , css::uno::UNO_QUERY);
+        css::uno::Reference< css::container::XNameContainer >   xModify(xCheck, css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::lang::XSingleServiceFactory > xCreate(xCheck, css::uno::UNO_QUERY_THROW);
 
         ::rtl::OUStringBuffer sIDBuf;
         sIDBuf.append(RECOVERY_ITEM_BASE_IDENTIFIER);
@@ -1261,7 +1317,7 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
             css::uno::Reference< css::beans::XPropertySet > xSet;
             sal_Bool                                        bNew = (!xCheck->hasByName(sID));
             if (bNew)
-                xSet = css::uno::Reference< css::beans::XPropertySet >(xCreate->createInstance(), css::uno::UNO_QUERY);
+                xSet = css::uno::Reference< css::beans::XPropertySet >(xCreate->createInstance(), css::uno::UNO_QUERY_THROW);
             else
                 xCheck->getByName(sID) >>= xSet;
 
@@ -1276,13 +1332,51 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
             if (bNew)
                 xModify->insertByName(sID, css::uno::makeAny(xSet));
         }
-
-        xFlush->commitChanges();
     }
+    catch(const css::uno::RuntimeException& exRun)
+        { throw exRun; }
     catch(const css::uno::Exception&)
+        {} // ??? can it happen that a full disc let these set of operations fail too ???
+
+    sal_Int32 nRetry = RETRY_STORE_ON_FULL_DISC_FOREVER;
+    do
     {
-        LOG_ASSERT(sal_False, "May be you found the reason for bug #125528#. Please report a test scenario to the right developer. THX.");
+        try
+        {
+            css::uno::Reference< css::util::XChangesBatch > xFlush(xCFG, css::uno::UNO_QUERY_THROW);
+            xFlush->commitChanges();
+
+            #ifdef TRIGGER_FULL_DISC_CHECK
+            throw css::uno::Exception();
+            #endif
+
+            nRetry = 0;
+        }
+        catch(const css::uno::Exception& ex)
+            {
+                // a) FULL DISC seams to be the problem behind                              => show error and retry it forever (e.g. retry=300)
+                // b) unknown problem (may be locking problem)                              => reset RETRY value to more usefull value(!) (e.g. retry=3)
+                // c) unknown problem (may be locking problem) + 1..2 repeating operations  => throw the original exception to force generation of a stacktrace !
+
+                // SAFE ->
+                ReadGuard aReadLock(m_aLock);
+                sal_Int32 nMinSpaceConfigSave = m_nMinSpaceConfigSave;
+                aReadLock.unlock();
+                // <- SAFE
+
+                if (! impl_enoughDiscSpace(nMinSpaceConfigSave))
+                    AutoRecovery::impl_showFullDiscError();
+                else
+                if (nRetry > RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL)
+                    nRetry = RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL;
+                else
+                if (nRetry <= GIVE_UP_RETRY)
+                    throw ex; // force stacktrace to know if there exist might other reasons, why an AutoSave can fail !!!
+
+                --nRetry;
+            }
     }
+    while(nRetry>0);
 }
 
 //-----------------------------------------------
@@ -1290,9 +1384,10 @@ void AutoRecovery::implts_startListening()
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory >  xSMGR        = m_xSMGR;
-    css::uno::Reference< css::util::XChangesNotifier >      xCFG         (m_xRecoveryCFG, css::uno::UNO_QUERY);
-    css::uno::Reference< css::document::XEventBroadcaster > xBroadcaster = m_xNewDocBroadcaster;
+    css::uno::Reference< css::lang::XMultiServiceFactory >  xSMGR               = m_xSMGR;
+    css::uno::Reference< css::util::XChangesNotifier >      xCFG                (m_xRecoveryCFG, css::uno::UNO_QUERY);
+    css::uno::Reference< css::document::XEventBroadcaster > xBroadcaster        = m_xNewDocBroadcaster;
+    sal_Bool                                                bListenForDocEvents = m_bListenForDocEvents;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
@@ -1316,12 +1411,16 @@ void AutoRecovery::implts_startListening()
     }
 
     if (
-        (  xBroadcaster.is()    ) &&
-        (! m_bListenForDocEvents)
+        (  xBroadcaster.is()  ) &&
+        (! bListenForDocEvents)
        )
     {
         xBroadcaster->addEventListener(static_cast< css::document::XEventListener* >(this));
+        // SAFE ->
+        WriteGuard aWriteLock(m_aLock);
         m_bListenForDocEvents = sal_True;
+        aWriteLock.unlock();
+        // <- SAFE
     }
 }
 
@@ -1448,97 +1547,96 @@ IMPL_LINK(AutoRecovery, implts_timerExpired, void*, pVoid)
 {
     try
     {
-    // This method is called by using a pointer to us.
-    // But we must be aware that we can be destroyed hardly
-    // if our uno reference will be gone!
-    // => Hold this object alive till this method finish its work.
-    css::uno::Reference< css::uno::XInterface > xSelfHold(static_cast< css::lang::XTypeProvider* >(this));
+        // This method is called by using a pointer to us.
+        // But we must be aware that we can be destroyed hardly
+        // if our uno reference will be gone!
+        // => Hold this object alive till this method finish its work.
+        css::uno::Reference< css::uno::XInterface > xSelfHold(static_cast< css::lang::XTypeProvider* >(this));
 
-    // Needed! Otherwise every reschedule request allow a new triggered timer event :-(
-    implts_stopTimer();
+        // Needed! Otherwise every reschedule request allow a new triggered timer event :-(
+        implts_stopTimer();
 
-    // The timer must be ignored if AutoSave/Recovery was disabled for this
-    // office session. That can happen if e.g. the command line arguments "-norestore" or "-headless"
-    // was set. But normaly the timer was disabled if recovery was disabled ...
-    // But so we are more "safe" .-)
-    // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
-    if ((m_eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) == AutoRecovery::E_DISABLE_AUTORECOVERY)
-       return 0;
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
+        // The timer must be ignored if AutoSave/Recovery was disabled for this
+        // office session. That can happen if e.g. the command line arguments "-norestore" or "-headless"
+        // was set. But normaly the timer was disabled if recovery was disabled ...
+        // But so we are more "safe" .-)
+        // SAFE -> ----------------------------------
+        ReadGuard aReadLock(m_aLock);
+        if ((m_eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) == AutoRecovery::E_DISABLE_AUTORECOVERY)
+           return 0;
+        aReadLock.unlock();
+        // <- SAFE ----------------------------------
 
-    // check some "states", where its not allowed (better: not a good idea) to
-    // start an AutoSave. (e.g. if the user makes drag & drop ...)
-    // Then we poll till this "disallowed" state is gone.
-    sal_Bool bAutoSaveNotAllowed = Application::IsUICaptured();
-    if (bAutoSaveNotAllowed)
-    {
-        // SAFE -> ------------------------------
-        WriteGuard aWriteLock(m_aLock);
-        m_eTimerType = AutoRecovery::E_POLL_TILL_AUTOSAVE_IS_ALLOWED;
-        aWriteLock.unlock();
-        // <- SAFE ------------------------------
-        implts_actualizeTimer();
-        return 0;
-    }
-
-    // analyze timer type.
-    // If we poll for an user idle period, may be we must
-    // do nothing here and start the timer again.
-    // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
-
-    if (m_eTimerType == AutoRecovery::E_POLL_FOR_USER_IDLE)
-    {
-        sal_Bool bUserIdle = (Application::GetLastInputInterval()>MIN_TIME_FOR_USER_IDLE);
-        if (!bUserIdle)
+        // check some "states", where its not allowed (better: not a good idea) to
+        // start an AutoSave. (e.g. if the user makes drag & drop ...)
+        // Then we poll till this "disallowed" state is gone.
+        sal_Bool bAutoSaveNotAllowed = Application::IsUICaptured();
+        if (bAutoSaveNotAllowed)
         {
+            // SAFE -> ------------------------------
+            WriteGuard aWriteLock(m_aLock);
+            m_eTimerType = AutoRecovery::E_POLL_TILL_AUTOSAVE_IS_ALLOWED;
+            aWriteLock.unlock();
+            // <- SAFE ------------------------------
             implts_actualizeTimer();
             return 0;
         }
+
+        // analyze timer type.
+        // If we poll for an user idle period, may be we must
+        // do nothing here and start the timer again.
+        // SAFE -> ----------------------------------
+        WriteGuard aWriteLock(m_aLock);
+
+        if (m_eTimerType == AutoRecovery::E_POLL_FOR_USER_IDLE)
+        {
+            sal_Bool bUserIdle = (Application::GetLastInputInterval()>MIN_TIME_FOR_USER_IDLE);
+            if (!bUserIdle)
+            {
+                implts_actualizeTimer();
+                return 0;
+            }
+        }
+
+        aWriteLock.unlock();
+        // <- SAFE ----------------------------------
+
+        implts_informListener(AutoRecovery::E_AUTO_SAVE,
+            AutoRecovery::implst_createFeatureStateEvent(AutoRecovery::E_AUTO_SAVE, OPERATION_START, NULL));
+
+        // force save of all currently open documents
+        // The called method returns an info, if and how this
+        // timer must be restarted.
+        sal_Bool bAllowUserIdleLoop = sal_True;
+        AutoRecovery::ETimerType eSuggestedTimer = implts_saveDocs(bAllowUserIdleLoop);
+
+        // If timer isnt used for "short callbacks" (means polling
+        // for special states) ... reset the handle state of all
+        // cache items. Such handle state indicates, that a document
+        // was already saved during the THIS(!) AutoSave session.
+        // Of course NEXT AutoSave session must be started without
+        // any "handle" state ...
+        if (
+            (eSuggestedTimer == AutoRecovery::E_DONT_START_TIMER         ) ||
+            (eSuggestedTimer == AutoRecovery::E_NORMAL_AUTOSAVE_INTERVALL)
+           )
+        {
+            implts_resetHandleStates(sal_False);
+        }
+
+        implts_informListener(AutoRecovery::E_AUTO_SAVE,
+            AutoRecovery::implst_createFeatureStateEvent(AutoRecovery::E_AUTO_SAVE, OPERATION_STOP, NULL));
+
+        // restart timer - because it was disabled before ...
+        // SAFE -> ----------------------------------
+        aWriteLock.lock();
+        m_eTimerType = eSuggestedTimer;
+        aWriteLock.unlock();
+        // <- SAFE ----------------------------------
+
+        implts_actualizeTimer();
     }
-
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
-
-    implts_informListener(AutoRecovery::E_AUTO_SAVE,
-        AutoRecovery::implst_createFeatureStateEvent(AutoRecovery::E_AUTO_SAVE, OPERATION_START, NULL));
-
-    // force save of all currently open documents
-    // The called method returns an info, if and how this
-    // timer must be restarted.
-    sal_Bool bAllowUserIdleLoop = sal_True;
-    AutoRecovery::ETimerType eSuggestedTimer = implts_saveDocs(bAllowUserIdleLoop);
-
-    // If timer isnt used for "short callbacks" (means polling
-    // for special states) ... reset the handle state of all
-    // cache items. Such handle state indicates, that a document
-    // was already saved during the THIS(!) AutoSave session.
-    // Of course NEXT AutoSave session must be started without
-    // any "handle" state ...
-    if (
-        (eSuggestedTimer == AutoRecovery::E_DONT_START_TIMER         ) ||
-        (eSuggestedTimer == AutoRecovery::E_NORMAL_AUTOSAVE_INTERVALL)
-       )
-    {
-        implts_resetHandleStates(sal_False);
-    }
-
-    implts_informListener(AutoRecovery::E_AUTO_SAVE,
-        AutoRecovery::implst_createFeatureStateEvent(AutoRecovery::E_AUTO_SAVE, OPERATION_STOP, NULL));
-
-    // restart timer - because it was disabled before ...
-    // SAFE -> ----------------------------------
-    aWriteLock.lock();
-    m_eTimerType = eSuggestedTimer;
-    aWriteLock.unlock();
-    // <- SAFE ----------------------------------
-
-    implts_actualizeTimer();
-
-    }
-    catch(const css::uno::Exception& ex)
+    catch(const css::uno::Exception&)
     {
         LOG_ASSERT(sal_False, "May be you found the reason for bug #125528#. Please report a test scenario to the right developer. THX.");
     }
@@ -1995,24 +2093,7 @@ void AutoRecovery::implts_prepareSessionShutdown()
 //-----------------------------------------------
 sal_Bool impl_mustBeSavedReal(const AutoRecovery::TDocumentInfo& aInfo)
 {
-    sal_Bool bSaveItReal = ((aInfo.DocumentState & AutoRecovery::E_MODIFIED_SINCE_LAST_AUTOSAVE ) == AutoRecovery::E_MODIFIED_SINCE_LAST_AUTOSAVE);
-
-/* Fixed ... hopefully .-)
-    Now we can use the normal "private:factory/simpress" URL without any Wizard used by this URL.
-
-    // TODO HACK impress documents (created by a wizard) cant be restored by using its URL :-( ... save it realy
-    if (aInfo.FactoryURL.matchIgnoreAsciiCaseAsciiL("private:factory/simpress", 24))
-    {
-        if (
-            (!aInfo.OrgURL.getLength()     ) &&
-            (!aInfo.TemplateURL.getLength())
-           )
-        {
-            bSaveItReal = sal_True;
-        }
-    }
-*/
-    return bSaveItReal;
+    return ((aInfo.DocumentState & AutoRecovery::E_MODIFIED_SINCE_LAST_AUTOSAVE ) == AutoRecovery::E_MODIFIED_SINCE_LAST_AUTOSAVE);
 }
 
 //-----------------------------------------------
@@ -2072,7 +2153,12 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(sal_Bool bAllowUserIdleLo
 
         // Not modified documents are not saved.
         // We safe an information about the URL only!
-        sal_Bool bSaveItReal = impl_mustBeSavedReal(aInfo);
+        sal_Bool bModified = ((aInfo.DocumentState & AutoRecovery::E_MODIFIED_SINCE_LAST_AUTOSAVE ) == AutoRecovery::E_MODIFIED_SINCE_LAST_AUTOSAVE);
+        if (! bModified)
+        {
+            aInfo.DocumentState |= AutoRecovery::E_HANDLED;
+            continue;
+        }
 
         // check if this document is still used by a concurrent save operation
         // e.g. if the user tried to save via UI.
@@ -2097,16 +2183,13 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(sal_Bool bAllowUserIdleLo
         {
             if ((eJob & AutoRecovery::E_EMERGENCY_SAVE) == AutoRecovery::E_EMERGENCY_SAVE)
             {
-                if (bSaveItReal)
-                {
-                    lDangerousDocs.push_back(pIt);
-                    continue;
-                }
+                lDangerousDocs.push_back(pIt);
+                continue;
             }
             else
             if ((eJob & AutoRecovery::E_SESSION_SAVE) == AutoRecovery::E_SESSION_SAVE)
             {
-                bSaveItReal = sal_False;
+                continue;
             }
             else
             if ((eJob & AutoRecovery::E_AUTO_SAVE) == AutoRecovery::E_AUTO_SAVE)
@@ -2125,7 +2208,6 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(sal_Bool bAllowUserIdleLo
         sal_Bool bWasPostponed = ((aInfo.DocumentState & AutoRecovery::E_POSTPONED) == AutoRecovery::E_POSTPONED);
 
         if (
-              bSaveItReal   &&
             ! bWasPostponed &&
               bActive
            )
@@ -2144,17 +2226,9 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(sal_Bool bAllowUserIdleLo
         // b, c, d)
         // <- SAFE --------------------------
         aWriteLock.unlock();
-        if (bSaveItReal)
-            implts_saveOneDoc(sBackupPath, aInfo);
-            // changing of aInfo and flushing it is done inside implts_saveOneDoc!
-        else
-        {
-            aInfo.DocumentState |= AutoRecovery::E_HANDLED ;
-            aInfo.DocumentState |= AutoRecovery::E_SUCCEDED;
-            implts_flushConfigItem(aInfo);
-        }
-        implts_informListener(eJob,
-            AutoRecovery::implst_createFeatureStateEvent(eJob, OPERATION_UPDATE, &aInfo));
+        // changing of aInfo and flushing it is done inside implts_saveOneDoc!
+        implts_saveOneDoc(sBackupPath, aInfo);
+        implts_informListener(eJob, AutoRecovery::implst_createFeatureStateEvent(eJob, OPERATION_UPDATE, &aInfo));
         aWriteLock.lock();
         // SAFE -> --------------------------
 
@@ -2173,10 +2247,9 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(sal_Bool bAllowUserIdleLo
 
         // <- SAFE --------------------------
         aWriteLock.unlock();
-        implts_saveOneDoc(sBackupPath, aInfo);
         // changing of aInfo and flushing it is done inside implts_saveOneDoc!
-        implts_informListener(eJob,
-            AutoRecovery::implst_createFeatureStateEvent(eJob, OPERATION_UPDATE, &aInfo));
+        implts_saveOneDoc(sBackupPath, aInfo);
+        implts_informListener(eJob, AutoRecovery::implst_createFeatureStateEvent(eJob, OPERATION_UPDATE, &aInfo));
         aWriteLock.lock();
         // SAFE -> --------------------------
 
@@ -2237,41 +2310,74 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&             sBackupP
     // try to save this document as a new temp file everytimes.
     // Mark AutoSave state as "INCOMPLETE" if it failed.
     // Because the last temp file is to old and does not include all changes.
-    try
+    css::uno::Reference< css::frame::XStorable > xStore(rInfo.Document, css::uno::UNO_QUERY_THROW);
+
+    // safe the state about "trying to save"
+    // ... we need it for recovery if e.g. a crash occures inside next line!
+    rInfo.DocumentState |= AutoRecovery::E_TRY_SAVE;
+    implts_flushConfigItem(rInfo);
+
+    sal_Int32 nRetry = RETRY_STORE_ON_FULL_DISC_FOREVER;
+    sal_Bool  bError = sal_False;
+    do
     {
-        // safe the state about "trying to save"
-        // ... we need it for recovery if e.g. a crash occures inside next line!
-        rInfo.DocumentState |= AutoRecovery::E_TRY_SAVE;
-        implts_flushConfigItem(rInfo);
+        try
+        {
+            xStore->storeToURL(rInfo.NewTempURL, lNewArgs.getAsConstPropertyValueList());
 
-        css::uno::Reference< css::frame::XStorable > xStore(rInfo.Document, css::uno::UNO_QUERY);
-        xStore->storeToURL(rInfo.NewTempURL, lNewArgs.getAsConstPropertyValueList());
+            #ifdef TRIGGER_FULL_DISC_CHECK
+            throw css::uno::Exception();
+            #endif
 
+            bError = sal_False;
+            nRetry = 0;
+        }
+        catch(const css::uno::Exception& ex)
+            {
+                bError = sal_True;
+
+                // a) FULL DISC seams to be the problem behind                              => show error and retry it forever (e.g. retry=300)
+                // b) unknown problem (may be locking problem)                              => reset RETRY value to more usefull value(!) (e.g. retry=3)
+                // c) unknown problem (may be locking problem) + 1..2 repeating operations  => throw the original exception to force generation of a stacktrace !
+
+                // SAFE ->
+                ReadGuard aReadLock(m_aLock);
+                sal_Int32 nMinSpaceDocSave = m_nMinSpaceDocSave;
+                aReadLock.unlock();
+                // <- SAFE
+
+                if (! impl_enoughDiscSpace(nMinSpaceDocSave))
+                    AutoRecovery::impl_showFullDiscError();
+                else
+                if (nRetry > RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL)
+                    nRetry = RETRY_STORE_ON_MIGHT_FULL_DISC_USEFULL;
+                else
+                if (nRetry <= GIVE_UP_RETRY)
+                    throw ex; // force stacktrace to know if there exist might other reasons, why an AutoSave can fail !!!
+
+                --nRetry;
+            }
+    }
+    while(nRetry>0);
+
+    if (! bError)
+    {
         // safe the state about success
         // ... you know the reason: to know it on recovery time if next line crash .-)
         rInfo.DocumentState &= ~AutoRecovery::E_TRY_SAVE;
         rInfo.DocumentState |=  AutoRecovery::E_HANDLED;
         rInfo.DocumentState |=  AutoRecovery::E_SUCCEDED;
         rInfo.DocumentState &= ~AutoRecovery::E_MODIFIED_SINCE_LAST_AUTOSAVE;
-        implts_flushConfigItem(rInfo);
-
-        // We must know if the user modifies the document again ...
-        implts_startModifyListeningOnDoc(rInfo);
     }
-/*
-    catch(const css::uno::RuntimeException&)
-        { throw; }
-*/
-    catch(const css::uno::Exception&)
-        {
-            // safe the state about error ...
-            rInfo.NewTempURL     = ::rtl::OUString();
-            rInfo.DocumentState &= ~AutoRecovery::E_TRY_SAVE;
-            rInfo.DocumentState |=  AutoRecovery::E_HANDLED;
-            rInfo.DocumentState |=  AutoRecovery::E_INCOMPLETE;
-            implts_flushConfigItem(rInfo);
-            return;
-        }
+    else
+    {
+        // safe the state about error ...
+        rInfo.NewTempURL     = ::rtl::OUString();
+        rInfo.DocumentState &= ~AutoRecovery::E_TRY_SAVE;
+        rInfo.DocumentState |=  AutoRecovery::E_HANDLED;
+        rInfo.DocumentState |=  AutoRecovery::E_INCOMPLETE;
+    }
+
 
     // try to remove the old temp file.
     // Ignore any error here. We have a new temp file, which is up to date.
@@ -2279,7 +2385,12 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&             sBackupP
     ::rtl::OUString sRemoveFile      = rInfo.OldTempURL;
                     rInfo.OldTempURL = rInfo.NewTempURL;
                     rInfo.NewTempURL = ::rtl::OUString();
+
     implts_flushConfigItem(rInfo);
+
+    // We must know if the user modifies the document again ...
+    implts_startModifyListeningOnDoc(rInfo);
+
     implts_removeTempFile(sRemoveFile, rInfo.AppModule);
 }
 
@@ -3262,6 +3373,56 @@ void AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()
         {}
 
     LOG_RECOVERY("... AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()")
+}
+
+//-----------------------------------------------
+sal_Bool AutoRecovery::impl_enoughDiscSpace(sal_Int32 nRequiredSpace)
+{
+    #ifdef SIMULATE_FULL_DISC
+    return sal_False;
+    #endif
+
+    // In case an error occures and we are not able to retrieve the needed information
+    // it's better to "disable" the feature ShowErrorOnFullDisc !
+    // Otherwhise we start a confusing process of error handling ...
+
+    sal_uInt64 nFreeSpace = SAL_MAX_UINT64;
+
+    ::rtl::OUString     sBackupPath(SvtPathOptions().GetBackupPath());
+    ::osl::VolumeInfo   aInfo      (VolumeInfoMask_FreeSpace);
+    ::osl::FileBase::RC aRC         = ::osl::Directory::getVolumeInfo(sBackupPath, aInfo);
+
+    if (
+        (aInfo.isValid(VolumeInfoMask_FreeSpace)) &&
+        (aRC == ::osl::FileBase::E_None         )
+       )
+    {
+        nFreeSpace = aInfo.getFreeSpace();
+    }
+
+    sal_uInt64 nFreeMB = (nFreeSpace/1048576);
+    return (nFreeMB >= (sal_uInt64)nRequiredSpace);
+}
+
+//-----------------------------------------------
+void AutoRecovery::impl_showFullDiscError()
+{
+    static String PLACEHOLDER_PATH = String::CreateFromAscii("%PATH");
+
+    String sBtn(FwkResId(STR_FULL_DISC_RETRY_BUTTON));
+    String sMsg(FwkResId(STR_FULL_DISC_MSG         ));
+
+    String sBackupURL(SvtPathOptions().GetBackupPath());
+    INetURLObject aConverter(sBackupURL);
+    sal_Unicode aDelimiter;
+    String sBackupPath = aConverter.getFSysPath(INetURLObject::FSYS_DETECT, &aDelimiter);
+    if (sBackupPath.Len()<1)
+        sBackupPath = sBackupURL;
+    sMsg.SearchAndReplace(PLACEHOLDER_PATH, sBackupPath);
+
+    ErrorBox dlgError(0, WB_OK, sMsg);
+    dlgError.SetButtonText(dlgError.GetButtonId(0), sBtn);
+    dlgError.Execute();
 }
 
 } // namespace framework
