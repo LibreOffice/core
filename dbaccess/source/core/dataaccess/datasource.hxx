@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:28:48 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:35:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,11 +177,11 @@ typedef ::cppu::ImplHelper11    <   ::com::sun::star::lang::XServiceInfo
                                 >   ODatabaseSource_Base;
 
 
-class ODatabaseSource   :public ::comphelper::OBaseMutex
-                    ,public OSubComponent
-                    ,public ::cppu::OPropertySetHelper
-                    ,public ::comphelper::OPropertyArrayUsageHelper < ODatabaseSource >
-                    ,public ODatabaseSource_Base
+class ODatabaseSource   :public ModelDependentComponent // must be first
+                        ,public OSubComponent
+                        ,public ::cppu::OPropertySetHelper
+                        ,public ::comphelper::OPropertyArrayUsageHelper < ODatabaseSource >
+                        ,public ODatabaseSource_Base
 {
     friend class ODatabaseContext;
     friend class OConnection;
@@ -193,7 +193,6 @@ private:
     typedef ::utl::SharedUNOComponent< ::com::sun::star::frame::XModel, ::utl::CloseableComponent >
                                                 SharedModel;
 
-    ::rtl::Reference<ODatabaseModelImpl>    m_pImpl;
     OBookmarkContainer                      m_aBookmarks;
     ::cppu::OInterfaceContainerHelper       m_aFlushListeners;
 
@@ -288,6 +287,10 @@ public:
     // XDocumentDataSource
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XOfficeDatabaseDocument > SAL_CALL getDatabaseDocument() throw (::com::sun::star::uno::RuntimeException);
 
+protected:
+    // ModelDependentComponent overridables
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getThis();
+
 private:
 // helper
     /** open a connection for the current settings. this is the simple connection we get from the driver
@@ -312,9 +315,6 @@ private:
         and ownership of the model is not taken.
     */
     SharedModel impl_getModel( bool _bTakeOwnershipIfNewlyCreated );
-
-// other stuff
-    void    flushTables();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection( const ::rtl::OUString& user, const ::rtl::OUString& password , sal_Bool _bIsolated) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL connectWithCompletion( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& handler , sal_Bool _bIsolated) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
