@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbexception.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:01:10 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:13:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,6 +163,14 @@ void throwFunctionNotSupportedException(
     )   throw ( ::com::sun::star::sdbc::SQLException );
 
 //----------------------------------------------------------------------------------
+/** throws an exception with SQL state IM001, saying that a certain function is not supported
+*/
+void throwFunctionNotSupportedException(
+        const sal_Char* _pAsciiFunctionName,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
+        const ::com::sun::star::uno::Any* _pNextException = NULL
+    )   throw ( ::com::sun::star::sdbc::SQLException );
+//----------------------------------------------------------------------------------
 /** throw a function sequence exception
 */
 void throwFunctionSequenceException(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _Context,
@@ -187,6 +195,34 @@ void throwGenericSQLException(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxSource,
             const ::com::sun::star::uno::Any& _rNextException
             )
+    throw (::com::sun::star::sdbc::SQLException);
+
+//----------------------------------------------------------------------------------
+/** throw a SQLException with SQLState HYC00 (Optional feature not implemented)
+    @param _pAsciiFeatureName
+        an ASCII description of the feature which is not implemented. It's recommended that the feature
+        name is built from the name of the interface plus its method, for instance "XParameters::updateBinaryStream"
+    @param _rxContext
+        the context of the exception
+    @param _pNextException
+        the next exception to chain into the thrown exception, if any
+*/
+void throwFeatureNotImplementedException(
+        const sal_Char* _pAsciiFeatureName,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
+        const ::com::sun::star::uno::Any* _pNextException = NULL
+    )
+    throw (::com::sun::star::sdbc::SQLException);
+
+/** throws an SQLException
+*/
+void throwSQLException(
+        const sal_Char* _pAsciiMessage,
+        const sal_Char* _pAsciiState,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
+        const sal_Int32 _nErrorCode = 0,
+        const ::com::sun::star::uno::Any* _pNextException = NULL
+    )
     throw (::com::sun::star::sdbc::SQLException);
 
 //.........................................................................
