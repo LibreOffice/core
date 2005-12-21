@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.138 $
+ *  $Revision: 1.139 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 17:14:01 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:33:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1821,7 +1821,6 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                                             m_xColumns->getByName(aSeq.getConstArray()[i-1]) >>= xColumn;
                                     }
                                 }
-                                DBG_ASSERT(xColumn.is(), "ORowSet::execute_NoApprove_NoNewConn: invalid column (NULL)!");
                                 if(bReFetchName && xColumn.is())
                                     xColumn->getPropertyValue(PROPERTY_NAME) >>= sName;
                                 aColumnMap.insert(::std::map< Reference<XPropertySet>,int>::value_type(xColumn,0));
