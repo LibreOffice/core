@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-12-19 17:09:30 $
+dnl * Date: $Date: 2005-12-21 11:09:36 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.141 $ )
+AC_REVISION( $Revision: 1.142 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -2814,6 +2814,12 @@ if test -n "$with_system_mozilla"; then
 
     PKG_CHECK_MODULES( MOZILLAXPCOM, $moz_flavour-xpcom )
 
+    if $PKG_CONFIG --exists nspr ; then
+      PKG_CHECK_MODULES( MOZ_NSPR, nspr )
+    else
+      PKG_CHECK_MODULES( MOZ_NSPR, mozilla-nspr )
+    fi
+
     PKG_CHECK_MODULES( MOZ_NSS, $moz_flavour-nss )
     save_CPPFLAGS="$CPPFLAGS"
     save_LDFLAGS="$LDFLAGS"
@@ -2940,6 +2946,7 @@ AC_SUBST(SYSTEM_MOZILLA)
 AC_SUBST(MOZ_INC)
 AC_SUBST(MOZ_LIB)
 AC_SUBST(MOZ_LIB_XPCOM)
+AC_SUBST(MOZ_NSPR_CFLAGS)
 AC_SUBST(MOZ_NSS_CFLAGS)
 AC_SUBST(MOZ_LDAP_CFLAGS)
 
