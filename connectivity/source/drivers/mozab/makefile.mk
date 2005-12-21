@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 06:22:19 $
+#   last change: $Author: obo $ $Date: 2005-12-21 13:17:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -92,10 +92,6 @@ ENVCFLAGS+=/FR$(SLO)$/
 .INCLUDE : settings.mk
 
 .INCLUDE :  $(PRJ)$/version.mk
-
-# --- Recursiveness  ---------------------------------------------------
-
-RC_SUBDIRS = mozillasrc bootstrap
 
 # --- Files -------------------------------------
 
