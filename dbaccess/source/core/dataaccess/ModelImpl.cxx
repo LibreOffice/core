@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModelImpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:28:12 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:34:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,9 +117,6 @@
 #ifndef _DBA_CORE_CONNECTION_HXX_
 #include "connection.hxx"
 #endif
-#ifndef _COMPHELPER_GUARDING_HXX_
-#include <comphelper/guarding.hxx>
-#endif
 #ifndef _RTL_DIGEST_H_
 #include <rtl/digest.h>
 #endif
@@ -181,6 +178,33 @@ namespace css = ::com::sun::star;
 namespace dbaccess
 {
 //........................................................................
+
+//========================================================================
+//= DocumentStorageAccess
+//========================================================================
+//------------------------------------------------------------------------
+SharedMutex::SharedMutex()
+    :m_refCount( 0 )
+{
+}
+
+//------------------------------------------------------------------------
+SharedMutex::~SharedMutex()
+{
+}
+
+//------------------------------------------------------------------------
+void SAL_CALL SharedMutex::acquire()
+{
+    osl_incrementInterlockedCount( &m_refCount );
+}
+
+//------------------------------------------------------------------------
+void SAL_CALL SharedMutex::release()
+{
+    if ( 0 == osl_decrementInterlockedCount( &m_refCount ) )
+        delete this;
+}
 
 //============================================================
 //= DocumentStorageAccess
@@ -377,6 +401,7 @@ ODatabaseModelImpl::ODatabaseModelImpl(const Reference< XMultiServiceFactory >& 
             ,m_nLoginTimeout(0)
             ,m_refCount(0)
             ,m_pStorageAccess( NULL )
+            ,m_xMutex( new SharedMutex )
 {
     // some kind of default
     DBG_CTOR(ODatabaseModelImpl,NULL);
@@ -407,6 +432,7 @@ ODatabaseModelImpl::ODatabaseModelImpl(
             ,m_nLoginTimeout(0)
             ,m_refCount(0)
             ,m_pStorageAccess( NULL )
+            ,m_xMutex( new SharedMutex )
 {
     DBG_CTOR(ODatabaseModelImpl,NULL);
     // adjust our readonly flag
@@ -472,8 +498,11 @@ void SAL_CALL ODatabaseModelImpl::disposing( const ::com::sun::star::lang::Event
 //------------------------------------------------------------------------------
 void ODatabaseModelImpl::clearConnections()
 {
+    OWeakConnectionArray aConnections;
+    aConnections.swap( m_aConnections );
+
     Reference< XConnection > xConn;
-    for (OWeakConnectionArray::iterator i = m_aConnections.begin(); m_aConnections.end() != i; ++i)
+    for ( OWeakConnectionArray::iterator i = aConnections.begin(); aConnections.end() != i; ++i )
     {
         xConn = *i;
         if ( xConn.is() )
@@ -488,7 +517,6 @@ void ODatabaseModelImpl::clearConnections()
             }
         }
     }
-    m_aConnections.clear();
 
     m_pSharedConnectionManager = NULL;
     m_xSharedConnectionManager = NULL;
@@ -873,6 +901,14 @@ void ODatabaseModelImpl::commitStorages() SAL_THROW(( IOException, RuntimeExcept
         throw IOException();
     }
 }
+
+// -----------------------------------------------------------------------------
+ModelDependentComponent::ModelDependentComponent( const ::rtl::Reference< ODatabaseModelImpl >& _model )
+    :m_pImpl( _model )
+    ,m_xMutex( _model->getSharedMutex() )
+{
+}
+
 //........................................................................
 }   // namespace dbaccess
 //........................................................................
