@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2005-10-25 11:18:56 $
+#   last change: $Author: obo $ $Date: 2005-12-21 11:35:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,9 +40,5 @@ TARGET=javaexamples
 .INCLUDE : ant.mk
 
 .IF "$(SOLAR_JAVA)"!=""
-
-CLASSPATH+=$PATH_SEPERATOR$SOLARVER/$UPD/$INPATH/bin/crimson.jar
-.EXPORT : CLASSPATH
-
 ALLTAR : ANTBUILD
 .ENDIF
