@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-13 17:08:58 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:16:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 // -------------------------------------------------------------------------
-void OFlatTable::fillColumns()
+void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
 {
     BOOL bRead = TRUE;
 
@@ -168,6 +168,7 @@ void OFlatTable::fillColumns()
     m_aScales.reserve(nFieldCount);
 
     sal_Bool bCase = getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers();
+    CharClass aCharClass(pConnection->getDriver()->getFactory(),_aLocale);
     // read description
     sal_Unicode cDecimalDelimiter  = pConnection->getDecimalDelimiter();
     sal_Unicode cThousandDelimiter = pConnection->getThousandDelimiter();
@@ -233,7 +234,7 @@ void OFlatTable::fillColumns()
                     // nur Ziffern und Dezimalpunkt und Tausender-Trennzeichen?
                     if ((!cDecimalDelimiter || c != cDecimalDelimiter) &&
                         (!cThousandDelimiter || c != cThousandDelimiter) &&
-                        !isdigit(c))
+                        !aCharClass.isDigit(aField2,j))
                     {
                         bNumeric = FALSE;
                         break;
@@ -415,7 +416,7 @@ void OFlatTable::construct()
                                     nSize > 100000  ? 16384 :
                                     nSize > 10000   ? 4096  : 1024);
 
-        fillColumns();
+        fillColumns(aAppLocale);
 
         refreshColumns();
     }
