@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.48 $
+#   $Revision: 1.49 $
 #
-#   last change: $Author: hjs $ $Date: 2005-11-18 16:14:01 $
+#   last change: $Author: obo $ $Date: 2005-12-21 12:52:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -127,15 +127,18 @@ sdkoo: $(foreach,i,$(alllangiso) sdkoo_$i)
 
 MSIOFFICETEMPLATESOURCE=$(PRJ)$/inc_openoffice$/windows$/msi_templates
 MSILANGPACKTEMPLATESOURCE=$(PRJ)$/inc_ooolangpack$/windows$/msi_templates
+MSIURETEMPLATESOURCE=$(PRJ)$/inc_ure$/windows$/msi_templates
 MSISDKOOTEMPLATESOURCE=$(PRJ)$/inc_sdkoo$/windows$/msi_templates
 .IF "$(BUILD_SPECIAL)"!=""
 MSIOFFICETEMPLATEDIR=$(MSIOFFICETEMPLATESOURCE)
 MSILANGPACKTEMPLATEDIR=$(MSILANGPACKTEMPLATESOURCE)
+MSIURETEMPLATEDIR=$(MSIURETEMPLATESOURCE)
 MSISDKOOTEMPLATEDIR=$(MSISDKOOTEMPLATESOURCE)
 .ELSE			# "$(BUILD_SPECIAL)"!=""
 NOLOGOSPLASH:=$(BIN)$/intro.bmp
 MSIOFFICETEMPLATEDIR=$(MISC)$/openoffice$/msi_templates
 MSILANGPACKTEMPLATEDIR=$(MISC)$/ooolangpack$/msi_templates
+MSIURETEMPLATEDIR=$(MISC)$/ure$/msi_templates
 MSISDKOOTEMPLATEDIR=$(MISC)$/sdkoo$/msi_templates
 ADDDEPS=$(NOLOGOSPLASH) hack_msitemplates
 
@@ -221,7 +224,7 @@ ure_en-US: $(MISC)$/ure$/services.rdb
     +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst \
         -l en-US -p URE -u $(OUT) -buildid $(BUILD) $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH)) \
         -packagelist $(PRJ)$/inc_ure$/unix$/packagelist.txt \
-        -msitemplate $(MSILANGPACKTEMPLATEDIR) \
+        -msitemplate $(MSIURETEMPLATEDIR) \
         -msilanguage $(COMMONMISC)$/win_ulffiles
 
 .IF "$(USE_SHELL)"!="4nt"
@@ -346,14 +349,18 @@ $(BIN)$/intro.bmp : $(SOLARCOMMONPCKDIR)$/openoffice$/nologointro.bmp
 hack_msitemplates .PHONY:
     +-$(MKDIRHIER) $(MSIOFFICETEMPLATEDIR)
     +-$(MKDIRHIER) $(MSILANGPACKTEMPLATEDIR)
+    +-$(MKDIRHIER) $(MSIURETEMPLATEDIR)
     +-$(MKDIRHIER) $(MSISDKOOTEMPLATEDIR)
     $(GNUCOPY) -ua $(MSIOFFICETEMPLATESOURCE) $(MSIOFFICETEMPLATEDIR:d:d)
     $(GNUCOPY) -ua $(MSILANGPACKTEMPLATESOURCE) $(MSILANGPACKTEMPLATEDIR:d:d)
+    $(GNUCOPY) -ua $(MSIURETEMPLATESOURCE) $(MSIURETEMPLATEDIR:d:d)
     $(GNUCOPY) -ua $(MSISDKOOTEMPLATESOURCE) $(MSISDKOOTEMPLATEDIR:d:d)
     +$(RM) $(MSIOFFICETEMPLATEDIR)$/Binary$/Image.bmp
     +$(RM) $(MSILANGPACKTEMPLATEDIR)$/Binary$/Image.bmp
+    +$(RM) $(MSIURETEMPLATEDIR)$/Binary$/Image.bmp
     +$(RM) $(MSISDKOOTEMPLATEDIR)$/Binary$/Image.bmp
     +$(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSIOFFICETEMPLATEDIR)$/Binary$/Image.bmp
     +$(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSILANGPACKTEMPLATEDIR)$/Binary$/Image.bmp
+    +$(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSIURETEMPLATEDIR)$/Binary$/Image.bmp
     +$(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSISDKOOTEMPLATEDIR)$/Binary$/Image.bmp
 
