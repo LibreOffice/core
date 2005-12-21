@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:47:55 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 15:01:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,7 @@ private:
     CheckBox                            maCbTransitionEffects;
     FixedText                           maFtFormsFormat;
     ListBox                             maLbFormsFormat;
+    CheckBox                            maCbExportEmptyPages;
 
     OKButton                            maBtnOK;
     CancelButton                        maBtnCancel;
@@ -82,6 +83,7 @@ private:
     FilterConfigItem                    maConfigItem;
     Any                                 maSelection;
     sal_Bool                            mbIsPresentation;
+    sal_Bool                            mbIsWriter;
 
                                         DECL_LINK( TogglePagesHdl, void* );
                                         DECL_LINK( ToggleCompressionHdl, void* );
