@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AResultSet.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:53:13 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:18:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,6 @@ namespace connectivity
 
             void setFetchDirection(sal_Int32 _par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             void setFetchSize(sal_Int32 _par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void construct();
             void updateValue(sal_Int32 columnIndex,const OLEVariant& x);
             OLEVariant getValue(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
@@ -165,6 +164,8 @@ namespace connectivity
             OResultSet( ADORecordset* _pRecordSet,OStatement_Base* pStmt);
             OResultSet( ADORecordset* _pRecordSet);
 
+            // late constructor
+            void construct();
 
             virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
             virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
