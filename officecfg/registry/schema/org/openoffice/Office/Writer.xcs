@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Writer.xcs,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 09:17:19 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 15:03:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -619,7 +619,7 @@
 				<info>
 					<desc>Enables Communication Type.</desc>
 				</info>
-			</prop>			
+			</prop>
 			<prop oor:type="xs:boolean" oor:name="PrintSubjectLine">
 				<info>
 					<desc>Enables the Subject line.</desc>
@@ -644,7 +644,7 @@
 				<info>
 					<desc>Type of the Communication.</desc>
 				</info>
-			</prop>			
+			</prop>
 			<prop oor:type="xs:string" oor:name="Salutation">
 				<info>
 					<desc>Type of the salutation.</desc>
@@ -689,7 +689,7 @@
 				<info>
 					<desc>Sender Fax number.</desc>
 				</info>
-			</prop>			
+			</prop>
 			<prop oor:type="xs:int" oor:name="ReceiverAddressType">
 				<info>
 					<desc>Receiver Address Type.</desc>
@@ -782,7 +782,7 @@
                 </info>
                 <value></value>
             </prop>
-            
+
             <prop oor:name="SavedDocuments" oor:type="oor:string-list">
                 <info>
                     <author>OS</author>
@@ -797,7 +797,7 @@
                     <label>Address block settings</label>
                 </info>
                 <value oor:separator=";">&lt;0&gt;\n&lt;1&gt; &lt;2&gt;\n&lt;4&gt;\n&lt;8&gt; &lt;6&gt;;&lt;0&gt;\n&lt;1&gt; &lt;2&gt;\n&lt;4&gt;\n&lt;8&gt; &lt;6&gt;\n&lt;9&gt;;&lt;3&gt;\n&lt;1&gt; &lt;2&gt;\n&lt;4&gt;\n&lt;8&gt; &lt;6&gt;;&lt;3&gt;\n&lt;1&gt; &lt;2&gt;\n&lt;4&gt;\n&lt;8&gt; &lt;6&gt;\n&lt;9&gt;</value>
-            
+
             </prop>
             <prop oor:name="IsAddressBlock" oor:type="xs:boolean">
                 <info>
@@ -2206,7 +2206,17 @@
 					<value>false</value>
 				</prop>
 			</group>
-		</group>
+                        <prop oor:name="EmptyPages" oor:type="xs:boolean">
+                                <!-- UIHints: Tools - Options - Text document - Print - Other - Print automatically inserted blank pages -->
+                                <info>
+                                        <author>FME</author>
+                                        <desc>Contains settings for printing of empty pages.</desc>
+                                        <desc>Specifies that automatically inserted empty pages are printed.</desc>
+                                        <label>Print automatically inserted blank pages</label>
+                                </info>
+                                <value>true</value>
+                        </prop>
+                </group>
 		<group oor:name="Table">
 			<info>
 				<desc>Contains settings for tables.</desc>
