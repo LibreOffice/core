@@ -4255,14 +4255,14 @@ echo $ECHO_N "checking the SUN Workshop C compiler version... $ECHO_C" >&6
       _workshop_version=`echo $_workshop_string | $AWK '{ print $1 }'`
       _workshop_major=`echo $_workshop_version | $AWK -F. '{ print $1 }'`
       if test "$_workshop_major" != "5"; then
-         { { echo "$as_me:$LINENO: error: found version \"$_workshop_version\", use version 5.0, 5.2 or 5.5 of the Sun Workshop C compiler" >&5
-echo "$as_me: error: found version \"$_workshop_version\", use version 5.0, 5.2 or 5.5 of the Sun Workshop C compiler" >&2;}
+         { { echo "$as_me:$LINENO: error: found version \"$_workshop_version\", use version 5.5 or 5.8 of the Sun Workshop C compiler" >&5
+echo "$as_me: error: found version \"$_workshop_version\", use version 5.5 or 5.8 of the Sun Workshop C compiler" >&2;}
    { (exit 1); exit 1; }; }
       else
-         _workshop_minor=`echo $_workshop_version | $AWK -F. '{ if ($2 == 0) print "true"; else if ($2 == 2) print "true"; else if ($2 == 5) print "true"; else print "false" }'`
+         _workshop_minor=`echo $_workshop_version | $AWK -F. '{ if ($2 == 5) print "true"; else if ($2 == 8) print "true"; else print "false" }'`
          if test "$_workshop_minor" = "false"; then
-            { { echo "$as_me:$LINENO: error: found version \"$_workshop_version\", use version 5.0, 5.2 or 5.5 of the Sun Workshop C compiler" >&5
-echo "$as_me: error: found version \"$_workshop_version\", use version 5.0, 5.2 or 5.5 of the Sun Workshop C compiler" >&2;}
+            { { echo "$as_me:$LINENO: error: found version \"$_workshop_version\", use version 5.5 or 5.8 of the Sun Workshop C compiler" >&5
+echo "$as_me: error: found version \"$_workshop_version\", use version 5.5 or 5.8 of the Sun Workshop C compiler" >&2;}
    { (exit 1); exit 1; }; }
          else
                         echo "$as_me:$LINENO: result: checked" >&5
