@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:03:17 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:41:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,6 +231,8 @@ SvtMatchContext_Impl::SvtMatchContext_Impl(
     pURLs = new SvStringsDtor;
     pCompletions = new SvStringsDtor;
 
+    aLink.CreateMutex();
+
     FillPicklist( aPickList );
 
     create();
@@ -284,18 +286,15 @@ void SAL_CALL SvtMatchContext_Impl::Cancel()
 //-------------------------------------------------------------------------
 void SvtMatchContext_Impl::Stop()
 {
+    bStop = TRUE;
+
     if( isRunning() )
-    {
-        bStop = TRUE;
         terminate();
-    }
 }
 
 //-------------------------------------------------------------------------
 void SvtMatchContext_Impl::onTerminated( )
 {
-    // protect against concurrency
-    aLink.CreateMutex();
     aLink.Call( this );
 }
 
@@ -308,15 +307,12 @@ void SvtMatchContext_Impl::onTerminated( )
 
 IMPL_STATIC_LINK( SvtMatchContext_Impl, Select_Impl, void*, pArg )
 {
-    if( pArg )
+    // avoid recursion through cancel button
+    if( pThis->bStop )
     {
-        // avoid recursion through cancel button
-        if( pThis->bStop )
-        {
-            // completions was stopped, no display
-            delete pThis;
-            return 0;
-        }
+        // completions was stopped, no display
+        delete pThis;
+        return 0;
     }
 
     SvtURLBox* pBox = pThis->pBox;
@@ -668,6 +664,12 @@ String SvtURLBox::ParseSmart( String aText, String aBaseURL, String aWorkDir )
 void SvtMatchContext_Impl::run()
 {
     ::vos::OGuard aGuard( GetMutex() );
+    if( bStop )
+    {
+        // have we been stopped while we were waiting for the mutex?
+        delete this;
+        return;
+    }
 
     // Reset match lists
     pCompletions->Remove( 0, pCompletions->Count() );
@@ -847,7 +849,14 @@ void SvtURLBox::TryAutoComplete( BOOL bForward, BOOL bForce )
     USHORT nLen = (USHORT)aSelection.Min();
     aCurText.Erase( nLen );
     if( aCurText.Len() )
+    {
+        if ( pCtx )
+        {
+            pCtx->Stop();
+            pCtx = NULL;
+        }
         pCtx = new SvtMatchContext_Impl( this, aCurText );
+    }
 }
 
 //-------------------------------------------------------------------------
@@ -933,7 +942,7 @@ void SvtURLBox::UpdatePickList( )
     if( pCtx )
     {
         pCtx->Stop();
-        pCtx = 0;
+        pCtx = NULL;
     }
 
     String sText = GetText();
@@ -1023,7 +1032,7 @@ BOOL SvtURLBox::ProcessKey( const KeyCode& rKey )
     if( pCtx )
     {
         pCtx->Stop();
-        pCtx = 0;
+        pCtx = NULL;
     }
 
     KeyCode aCode( rKey.GetCode() );
@@ -1157,7 +1166,7 @@ long SvtURLBox::Notify( NotifyEvent &rEvt )
         if ( pCtx )
         {
             pCtx->Stop();
-            pCtx = 0;
+            pCtx = NULL;
         }
     }
 
