@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: rt $ $Date: 2005-12-15 16:19:01 $
+#   last change: $Author: obo $ $Date: 2005-12-21 12:47:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1388,6 +1388,53 @@ sub include_languageinfos_into_pkginfo
 }
 
 ############################################################
+# Collecting all files included in patch in
+# @installer::globals::patchfilecollector
+############################################################
+
+sub collect_patch_files
+{
+    my ($file, $packagename, $prefix) = @_;
+
+    # $file is the spec file or the prototypefile
+
+    $prefix = $prefix . "/";
+    my $packagenamestring = "Package " . $packagename . " \:\n";
+    push(@installer::globals::patchfilecollector, $packagenamestring);
+
+    for ( my $i = 0; $i <= $#{$file}; $i++ )
+    {
+        my $line = ${$file}[$i];
+
+        if ( $installer::globals::islinuxrpmbuild )
+        {
+            # %attr(0444,root,root) "/opt/openofficeorg20/program/about.bmp"
+
+            if ( $line =~ /^\s*\%attr\(.*\)\s*\"(.*?)\"\s*$/ )
+            {
+                my $filename = $1 . "\n";
+                $filename =~ s/^\s*\Q$prefix\E//;
+                push(@installer::globals::patchfilecollector, $filename);
+            }
+        }
+
+        if ( $installer::globals::issolarispkgbuild )
+        {
+            # f none program/msomrl.rdb=/ab/SRC680/unxsols4.pro/bin/msomrl.rdb 0444 root bin
+
+            if ( $line =~ /^\s*f\s+\w+\s+(.*?)\=/ )
+            {
+                my $filename = $1 . "\n";
+                push(@installer::globals::patchfilecollector, $filename);
+            }
+        }
+    }
+
+    push(@installer::globals::patchfilecollector, "\n");
+
+}
+
+############################################################
 # Including the relocatable directory into
 # spec file and pkginfo file
 # Linux: set topdir in specfile
@@ -1440,6 +1487,7 @@ sub prepare_packages
         set_tab_into_datafile($changefile, $filesref);
         # check_requirements_in_specfile($changefile);
         installer::files::save_file($completefilename, $changefile);
+        if ( $installer::globals::patch ) { collect_patch_files($changefile, $packagename, $localrelocatablepath); }
     }
 
     # removing the relocatable path in prototype file
@@ -1470,6 +1518,7 @@ sub prepare_packages
         if ( $installer::globals::patch ) { add_scripts_into_prototypefile($prototypefile); }
 
         installer::files::save_file($prototypefilename, $prototypefile);
+        if ( $installer::globals::patch ) { collect_patch_files($prototypefile, $packagename, ""); }
     }
 
     return $newepmdir;
