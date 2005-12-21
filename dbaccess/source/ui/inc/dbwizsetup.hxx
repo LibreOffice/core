@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwizsetup.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:51:37 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:36:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,7 +183,7 @@ private:
     void RegisterDataSourceByLocation(const ::rtl::OUString& sPath);
     sal_Bool SaveDatabaseDocument();
     void activateDatabasePath();
-    void createUniqueFileName(INetURLObject* pURL);
+    String createUniqueFileName(const INetURLObject& rURL);
     void CreateDatabase();
     void createUniqueFolderName(INetURLObject* pURL);
     DATASOURCE_TYPE VerifyDataSourceType(const DATASOURCE_TYPE _DatabaseType) const;
