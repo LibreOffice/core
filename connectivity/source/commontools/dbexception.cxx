@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbexception.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:14:30 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:14:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -376,6 +376,15 @@ void throwFunctionNotSupportedException(const ::rtl::OUString& _rMsg,
     throw SQLException(_rMsg,_Context,sStatus,0,_Next);
 }
 // -----------------------------------------------------------------------------
+void throwFunctionNotSupportedException( const sal_Char* _pAsciiFunctionName, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
+        const ::com::sun::star::uno::Any* _pNextException ) throw ( ::com::sun::star::sdbc::SQLException )
+{
+    ::rtl::OUString sMessage = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": Driver does not support this function: " ) );
+    sMessage += ::rtl::OUString::createFromAscii( _pAsciiFunctionName );
+    ::rtl::OUString sState( RTL_CONSTASCII_USTRINGPARAM( "IM001" ) );
+    throw SQLException( sMessage, _rxContext, sState, 0, _pNextException ? *_pNextException : Any() );
+}
+// -----------------------------------------------------------------------------
 void throwGenericSQLException(const ::rtl::OUString& _rMsg, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxSource)
     throw (::com::sun::star::sdbc::SQLException)
 {
@@ -388,6 +397,28 @@ void throwGenericSQLException(const ::rtl::OUString& _rMsg, const Reference< XIn
 {
     static ::rtl::OUString sStatus = ::rtl::OUString::createFromAscii("S1000");
     throw SQLException(_rMsg, _rxSource, sStatus, 0, _rNextException);
+}
+
+// -----------------------------------------------------------------------------
+void throwFeatureNotImplementedException( const sal_Char* _pAsciiFeatureName, const Reference< XInterface >& _rxContext, const Any* _pNextException )
+    throw (SQLException)
+{
+    ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii( _pAsciiFeatureName ) + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": feature not implemented." ) );
+    ::rtl::OUString sState( RTL_CONSTASCII_USTRINGPARAM( "HYC00" ) );
+    throw SQLException( sMessage, _rxContext, sState, 0, _pNextException ? *_pNextException : Any() );
+}
+
+// -----------------------------------------------------------------------------
+void throwSQLException( const sal_Char* _pAsciiMessage, const sal_Char* _pAsciiState,
+        const Reference< XInterface >& _rxContext, const sal_Int32 _nErrorCode, const Any* _pNextException ) throw (SQLException)
+{
+    throw SQLException(
+        ::rtl::OUString::createFromAscii( _pAsciiMessage ),
+        _rxContext,
+        ::rtl::OUString::createFromAscii( _pAsciiState ),
+        _nErrorCode,
+        _pNextException ? *_pNextException : Any()
+    );
 }
 
 // -----------------------------------------------------------------------------
