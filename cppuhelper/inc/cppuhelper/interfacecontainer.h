@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interfacecontainer.h,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dbo $ $Date: 2005-10-28 09:13:27 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:19:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,6 +215,30 @@ public:
     template <typename ListenerT, typename FuncT>
     inline void forEach( FuncT const& func );
 
+    /** Calls a UNO listener method for each contained listener.
+
+        The listener method must take a single argument of type EventT,
+        and return <code>void</code>.
+
+        If a com::sun::star::lang::DisposedException occurs which relates to
+        the called listener, then that listener is removed from the container.
+
+        @tpl ListenerT UNO event listener type, let your compiler deduce this for you
+        @tpl EventT event type, let your compiler deduce this for you
+        @param NotificationMethod
+            Pointer to a method of a ListenerT interface.
+        @param Event
+            Event to notify to all contained listeners
+
+        @example
+<pre>
+    awt::PaintEvent aEvent( static_cast< ::cppu::OWeakObject* >( this ), ... );
+    listeners.notifyEach( &XPaintListener::windowPaint, aEvent );
+</pre>
+    */
+    template< typename ListenerT, typename EventT >
+    inline void notifyEach( void ( SAL_CALL ListenerT::*NotificationMethod )( const EventT& ), const EventT& Event );
+
 private:
 friend class OInterfaceIteratorHelper;
     /**
@@ -236,7 +260,23 @@ friend class OInterfaceIteratorHelper;
       The mutex must be locked and the memberbInUse must be true.
      */
     void copyAndResetInUse() SAL_THROW( () );
-public:
+
+private:
+    template< typename ListenerT, typename EventT >
+    class NotifySingleListener
+    {
+    private:
+        typedef void ( SAL_CALL ListenerT::*NotificationMethod )( const EventT& );
+        NotificationMethod  m_pMethod;
+        const EventT&       m_rEvent;
+    public:
+        NotifySingleListener( NotificationMethod method, const EventT& event ) : m_pMethod( method ), m_rEvent( event ) { }
+
+        void operator()( const ::com::sun::star::uno::Reference<ListenerT>& listener ) const
+        {
+            (listener.get()->*m_pMethod)( m_rEvent );
+        }
+    };
 };
 
 template <typename ListenerT, typename FuncT>
@@ -260,6 +300,12 @@ inline void OInterfaceContainerHelper::forEach( FuncT const& func )
 #endif
         }
     }
+}
+
+template< typename ListenerT, typename EventT >
+inline void OInterfaceContainerHelper::notifyEach( void ( SAL_CALL ListenerT::*NotificationMethod )( const EventT& ), const EventT& Event )
+{
+    forEach< ListenerT, NotifySingleListener< ListenerT, EventT > >( NotifySingleListener< ListenerT, EventT >( NotificationMethod, Event ) );
 }
 
 //===================================================================
