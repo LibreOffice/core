@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:40:01 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:10:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -283,14 +283,19 @@ namespace
     }
 
     //-----------------------------------------------------------------------------
-    String GetFsysExtension_Impl( const String& rFile )
+    String GetFsysExtension_Impl( const String& rFile, const String& rLastFilterExt )
     {
-        const sal_Unicode* p0 = rFile.GetBuffer();
-        const sal_Unicode* p1 = p0 + rFile.Len() - 1;
-        while ( p1 >= p0 && *p1 != sal_Unicode( '.' ) )
-            p1--;
-        if ( p1 >= p0 )
-            return String( rFile.Copy( p1 - p0 + 1 ) );
+        xub_StrLen nDotPos = rFile.SearchBackward( '.' );
+        if ( nDotPos >= 0 )
+        {
+            if ( rLastFilterExt.Len() )
+            {
+                if ( rFile.Copy( nDotPos + 1 ).EqualsIgnoreCaseAscii( rLastFilterExt ) )
+                    return String( rLastFilterExt );
+            }
+            else
+                return String( rFile.Copy( nDotPos ) );
+        }
         return String();
     }
 
@@ -337,14 +342,14 @@ namespace
     }
 
     //-------------------------------------------------------------------------
-    void lcl_autoUpdateFileExtension( SvtFileDialog* _pDialog )
+    void lcl_autoUpdateFileExtension( SvtFileDialog* _pDialog, const String& _rLastFilterExt )
     {
         // if auto extension is enabled ....
         if ( _pDialog->isAutoExtensionEnabled() )
         {
             // automatically switch to the extension of the (maybe just newly selected) extension
             String aNewFile = _pDialog->getCurrentFileText( );
-            String aExt = GetFsysExtension_Impl( aNewFile );
+            String aExt = GetFsysExtension_Impl( aNewFile, _rLastFilterExt );
 
             // but only if there already is an extension
             if ( aExt.Len() )
@@ -1021,7 +1026,7 @@ sal_Bool SvtFileDialog::createNewUserFilter( const String& _rNewFilter, sal_Bool
     if ( !_bAllowUserDefExt || bUseCurFilterExt )
     {
         if ( _pImp->GetCurFilter( ) )
-            SetDefaultExt( _pImp->GetCurFilter( )->GetType().Copy(2) );
+            SetDefaultExt( _pImp->GetCurFilter( )->GetExtension() );
         else
             EraseDefaultExt();
     }
@@ -1505,20 +1510,22 @@ IMPL_STATIC_LINK( SvtFileDialog, FilterSelectHdl_Impl, ListBox*, pBox )
                 ||  pThis->_pImp->_pUserFilter
                 )
         {
-            // Ggf. Filter des Benutzers entfernen.
+            // Store the old filter for the auto extension handling
+            String sLastFilterExt = pThis->_pImp->GetCurFilter()->GetExtension();
             DELETEZ( pThis->_pImp->_pUserFilter );
+
+            // Ggf. Filter des Benutzers entfernen.
             pThis->_pImp->SetCurFilter( pSelectedFilter, sSelectedFilterDisplayName );
 
             // Ggf. Endung anzeigen.
-            const String& rType = pSelectedFilter->GetType();
-            pThis->SetDefaultExt( rType.Copy( 2 ) );
+            pThis->SetDefaultExt( pSelectedFilter->GetExtension() );
             USHORT nSepPos = pThis->GetDefaultExt().Search( FILEDIALOG_DEF_EXTSEP );
 
             if ( nSepPos != STRING_NOTFOUND )
                 pThis->EraseDefaultExt( nSepPos );
 
             // update the extension of the current file if necessary
-            lcl_autoUpdateFileExtension( pThis );
+            lcl_autoUpdateFileExtension( pThis, sLastFilterExt );
 
             // wenn der Benutzer schnell durch die Filterbox
             // travelt, nicht sofort Filtern
@@ -1818,7 +1825,7 @@ IMPL_LINK( SvtFileDialog, AutoExtensionHdl_Impl, CheckBox*, EMPTYARG )
                                 CHECKBOX_AUTOEXTENSION );
 
     // update the extension of the current file if necessary
-    lcl_autoUpdateFileExtension( this );
+    lcl_autoUpdateFileExtension( this, _pImp->GetCurFilter()->GetExtension() );
 
     return 0;
 }
@@ -2108,8 +2115,7 @@ short SvtFileDialog::Execute()
 
         // Anzeige anpassen.
         _pImp->SelectFilterListEntry( _pImp->GetCurFilter()->GetName() );
-        String aType( _pImp->GetCurFilter()->GetType() );
-        SetDefaultExt( aType.Copy( 2 ) );
+        SetDefaultExt( _pImp->GetCurFilter()->GetExtension() );
         USHORT nSepPos = GetDefaultExt().Search( FILEDIALOG_DEF_EXTSEP );
         if ( nSepPos != STRING_NOTFOUND )
             EraseDefaultExt( nSepPos );
