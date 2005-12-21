@@ -790,10 +790,6 @@ de = "Status:"
 en-US = "&Next >"
 de = "&Weiter >"
 
-[OOO_CONTROL_243]
-en-US = ""
-de = ""
-
 [OOO_CONTROL_244]
 en-US = "Estimated time remaining:"
 de = "Geschätzte Restzeit:"
