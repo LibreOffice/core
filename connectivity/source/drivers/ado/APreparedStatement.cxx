@@ -4,9 +4,9 @@
  *
  *  $RCSfile: APreparedStatement.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:20:35 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:15:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -337,10 +337,11 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLE
     CHECK_RETURN(m_RecordSet.get_LockType(m_eLockType))
 
     OResultSet* pSet = new OResultSet(m_RecordSet,this);
-    Reference< XResultSet > pRs = pSet;
-    m_xResultSet = WeakReference<XResultSet>(pRs);
+    Reference< XResultSet > xRs = pSet;
+    pSet->construct();
+    m_xResultSet = WeakReference<XResultSet>(xRs);
 
-    return m_xResultSet;
+    return xRs;
 }
 // -------------------------------------------------------------------------
 
