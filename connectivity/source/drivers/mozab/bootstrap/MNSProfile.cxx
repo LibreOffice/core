@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MNSProfile.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:24:31 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:17:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -370,7 +370,7 @@ NS_IMETHODIMP nsProfile::ShutDownCurrentProfile(PRUint32 shutDownType)
 
     // if shutDownType is not a well know value, skip the notifications
     // see DoOnShutdown() in nsAppRunner.cpp for where we use this behaviour to our benefit
-    if (shutDownType == SHUTDOWN_PERSIST || shutDownType == SHUTDOWN_CLEANSE) {
+    if (shutDownType == (PRUint32)SHUTDOWN_PERSIST || shutDownType == (PRUint32)SHUTDOWN_CLEANSE ) {
       nsCOMPtr<nsIObserverService> observerService =
         do_GetService("@mozilla.org/observer-service;1", &rv);
       NS_ENSURE_TRUE(observerService, NS_ERROR_FAILURE);
@@ -379,7 +379,7 @@ NS_IMETHODIMP nsProfile::ShutDownCurrentProfile(PRUint32 shutDownType)
 
       NS_NAMED_LITERAL_STRING(cleanseString, "shutdown-cleanse");
       NS_NAMED_LITERAL_STRING(persistString, "shutdown-persist");
-      const nsAFlatString& context = (shutDownType == SHUTDOWN_CLEANSE) ? cleanseString : persistString;
+      const nsAFlatString& context = (shutDownType == (PRUint32)SHUTDOWN_CLEANSE) ? cleanseString : persistString;
 
       // Phase 1: See if anybody objects to the profile being changed.
       mProfileChangeVetoed = PR_FALSE;
