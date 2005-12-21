@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodlgimp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:33:13 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:10:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,7 @@ public:
 
     const String&       GetName() const     { return m_aName; }
     const String&       GetType() const     { return m_aType; }
+    const String        GetExtension() const    { return m_aType.Copy( 2 ); }
 
     sal_Bool            isGroupSeparator() const    { return 0 == m_aType.Len(); }
 };
