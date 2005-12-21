@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_resource_ooo.scp,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-25 07:43:57 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 15:20:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@ STD_RES_FILE( gid_File_Res_Opc, opc )
 
 STD_RES_FILE( gid_File_Res_Pcr, pcr)
 
-STD_RES_FILE( gid_File_Res_Pdffilter, pdffilter)
+STD_RES_FILE_PATCH( gid_File_Res_Pdffilter, pdffilter)
 
 STD_RES_FILE_PATCH( gid_File_Res_Preload, preload)
 
