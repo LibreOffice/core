@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:04:55 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:34:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,9 +40,6 @@
 #endif
 #ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
-#endif
-#ifndef _COMPHELPER_GUARDING_HXX_
-#include <comphelper/guarding.hxx>
 #endif
 #include <comphelper/documentconstants.hxx>
 #ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
@@ -109,6 +106,10 @@
 #include <tools/debug.hxx>
 #endif
 
+#ifndef BOOST_BIND_HPP_INCLUDED
+#include <boost/bind.hpp>
+#endif
+
 namespace css = ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -163,11 +164,11 @@ Reference< XInterface > ODatabaseDocument_CreateInstance(const Reference< XMulti
 }
 //--------------------------------------------------------------------------
 ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>& _pImpl )
-            :ODatabaseDocument_OfficeDocument(m_aMutex)
-            ,m_pImpl(_pImpl)
-            ,m_aModifyListeners(m_aMutex)
-            ,m_aCloseListener(m_aMutex)
-            ,m_aDocEventListeners(m_aMutex)
+            :ModelDependentComponent( _pImpl )
+            ,ODatabaseDocument_OfficeDocument( getMutex() )
+            ,m_aModifyListeners( getMutex() )
+            ,m_aCloseListener( getMutex() )
+            ,m_aDocEventListeners( getMutex() )
 {
     DBG_CTOR(ODatabaseDocument,NULL);
 
@@ -243,8 +244,7 @@ void lcl_extractAndStartStatusIndicator( const ::comphelper::MediaDescriptor& _r
 // ATTENTION: The Application controller attaches the same resource to force a reload.
 sal_Bool SAL_CALL ODatabaseDocument::attachResource( const ::rtl::OUString& _rURL, const Sequence< PropertyValue >& _aArguments ) throw (RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(ODatabaseDocument_OfficeDocument::rBHelper.bDisposed);
+    ModelMethodGuard aGuard( *this );
     OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
 
     try
@@ -333,8 +333,7 @@ sal_Bool SAL_CALL ODatabaseDocument::attachResource( const ::rtl::OUString& _rUR
 // -----------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ODatabaseDocument::getURL(  ) throw (RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(ODatabaseDocument_OfficeDocument::rBHelper.bDisposed);
+    ModelMethodGuard aGuard( *this );
     OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
 
     return m_pImpl->m_sRealFileURL;
@@ -342,8 +341,7 @@ sal_Bool SAL_CALL ODatabaseDocument::attachResource( const ::rtl::OUString& _rUR
 // -----------------------------------------------------------------------------
 Sequence< PropertyValue > SAL_CALL ODatabaseDocument::getArgs(  ) throw (RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(ODatabaseDocument_OfficeDocument::rBHelper.bDisposed);
+    ModelMethodGuard aGuard( *this );
     OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
 
     return m_pImpl->m_aArgs;
@@ -351,8 +349,7 @@ Sequence< PropertyValue > SAL_CALL ODatabaseDocument::getArgs(  ) throw (Runtime
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseDocument::connectController( const Reference< XController >& _xController ) throw (RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(ODatabaseDocument_OfficeDocument::rBHelper.bDisposed);
+    ModelMethodGuard aGuard( *this );
     OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
 
     m_pImpl->m_aControllers.push_back(_xController);
@@ -360,8 +357,7 @@ void SAL_CALL ODatabaseDocument::connectController( const Reference< XController
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseDocument::disconnectController( const Reference< XController >& _xController ) throw (RuntimeException)
 {
-    ClearableMutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(ODatabaseDocument_OfficeDocument::rBHelper.bDisposed);
+    ModelMethodGuard aGuard( *this );
     OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
 
     m_pImpl->m_aControllers.erase(::std::find(m_pImpl->m_aControllers.begin(),m_pImpl->m_aControllers.end(),_xController));
@@ -371,8 +367,7 @@ void SAL_CALL ODatabaseDocument::disconnectController( const Reference< XControl
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseDocument::lockControllers(  ) throw (RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(ODatabaseDocument_OfficeDocument::rBHelper.bDisposed);
+    ModelMethodGuard aGuard( *this );
     OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
 
     ++m_pImpl->m_nControllerLockCount;
@@ -380,8 +375,7 @@ void SAL_CALL ODatabaseDocument::lockControllers(  ) throw (RuntimeException)
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseDocument::unlockControllers(  ) throw (RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(ODatabaseDocument_OfficeDocument::rBHelper.bDisposed);
+    ModelMethodGuard aGuard( *this );
     OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
 
     --m_pImpl->m_nControllerLockCount;
@@ -389,8 +383,7 @@ void SAL_CALL ODatabaseDocument::unlockControllers(  ) throw (RuntimeException)
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseDocument::hasControllersLocked(  ) throw (RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(ODatabaseDocument_OfficeDocument::rBHelper.bDisposed);
+    ModelMethodGuard aGuard( *this );
     OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
 
     return m_pImpl->m_nControllerLockCount != 0;
@@ -398,8 +391,7 @@ sal_Bool SAL_CALL ODatabaseDocument::hasControllersLocked(  ) throw (RuntimeExce
 // -----------------------------------------------------------------------------
 Reference< XController > SAL_CALL ODatabaseDocument::getCurrentController() throw (RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(ODatabaseDocument_OfficeDocument::rBHelper.bDisposed);
+    ModelMethodGuard aGuard( *this );
     OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
 
     return m_pImpl->m_xCurrentController.is() ? m_pImpl->m_xCurrentController : ( m_pImpl->m_aControllers.empty() ? Reference< XController >() : *m_pImpl->m_aControllers.begin() );
@@ -407,8 +399,7 @@ Reference< XController > SAL_CALL ODatabaseDocument::getCurrentController() thro
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseDocument::setCurrentController( const Reference< XController >& _xController ) throw (NoSuchElementException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(ODatabaseDocument_OfficeDocument::rBHelper.bDisposed);
+    ModelMethodGuard aGuard( *this );
     OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
 
     m_pImpl->m_xCurrentController = _xController;
@@ -416,8 +407,7 @@ void SAL_CALL ODatabaseDocument::setCurrentController( const Reference< XControl
 // -----------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL ODatabaseDocument::getCurrentSelection(  ) throw (RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(ODatabaseDocument_OfficeDocument::rBHelper.bDisposed);
+    ModelMethodGuard aGuard( *this );
     OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
 
     Reference< XInterface > xRet;
@@ -432,8 +422,7 @@ Reference< XInterface > SAL_CALL ODatabaseDocument::getCurrentSelection(  ) thro
 // XStorable
 sal_Bool SAL_CALL ODatabaseDocument::hasLocation(  ) throw (RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(ODatabaseDocument_OfficeDocument::rBHelper.bDisposed);
+    ModelMethodGuard aGuard( *this );
     OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
 
     return m_pImpl->m_sRealFileURL.getLength() != 0;
@@ -441,8 +430,7 @@ sal_Bool SAL_CALL ODatabaseDocument::hasLocation(  ) throw (RuntimeException)
 // -----------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ODatabaseDocument::getLocation(  ) throw (RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(ODatabaseDocument_OfficeDocument::rBHelper.bDisposed);
+    ModelMethodGuard aGuard( *this );
     OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
 
     return m_pImpl->m_sRealFileURL;
@@ -450,8 +438,7 @@ sal_Bool SAL_CALL ODatabaseDocument::hasLocation(  ) throw (RuntimeException)
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseDocument::isReadonly(  ) throw (RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(ODatabaseDocument_OfficeDocument::rBHelper.bDisposed);
+    ModelMethodGuard aGuard( *this );
     OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
 
     return m_pImpl->m_bDocumentReadOnly;
@@ -459,8 +446,7 @@ sal_Bool SAL_CALL ODatabaseDocument::isReadonly(  ) throw (RuntimeException)
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseDocument::store(  ) throw (IOException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(ODatabaseDocument_OfficeDocument::rBHelper.bDisposed);
+    ModelMethodGuard aGuard( *this );
     OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
 
     if ( m_pImpl->m_sFileURL == m_pImpl->m_sRealFileURL )
@@ -468,7 +454,7 @@ void SAL_CALL ODatabaseDocument::store(  ) throw (IOException, RuntimeException)
     else
         storeAsURL( m_pImpl->m_sRealFileURL, m_pImpl->m_aArgs );
 
-    notifyEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnSaveDone")));
+    impl_notifyEvent( "OnSaveDone", aGuard );
 }
 // -----------------------------------------------------------------------------
 void ODatabaseDocument::store(const ::rtl::OUString& _rURL
@@ -491,83 +477,81 @@ void ODatabaseDocument::store(const ::rtl::OUString& _rURL
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseDocument::storeAsURL( const ::rtl::OUString& _rURL, const Sequence< PropertyValue >& _rArguments ) throw (IOException, RuntimeException)
 {
-    ClearableMutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(ODatabaseDocument_OfficeDocument::rBHelper.bDisposed);
+    ModelMethodGuard aGuard( *this );
     OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
 
     Reference< XSingleServiceFactory > xStorageFactory( m_pImpl->createStorageFactory() );
-    if ( xStorageFactory.is() )
+    if ( !xStorageFactory.is() )
+        throw RuntimeException();
+
+    // don't use _rURL - we might be recovering/salvaging a file currently ...
+    // #i45314# / 2005-03-21 / frank.schoenheit@sun.com
+    ::comphelper::MediaDescriptor aDescriptor( _rArguments );
+
+    sal_Bool bLocationChanged = ( _rURL != m_pImpl->m_sFileURL );
+    if ( bLocationChanged )
     {
-        // don't use _rURL - we might be recovering/salvaging a file currently ...
-        // #i45314# / 2005-03-21 / frank.schoenheit@sun.com
-        ::comphelper::MediaDescriptor aDescriptor( _rArguments );
-
-        sal_Bool bLocationChanged = ( _rURL != m_pImpl->m_sFileURL );
-        if ( bLocationChanged )
+        Sequence<Any> aParam(2);
+        aParam[0] <<= _rURL;
+        aParam[1] <<= ElementModes::READWRITE | ElementModes::TRUNCATE;
+        Reference<XStorage> xStorage;
+        try
         {
-            Sequence<Any> aParam(2);
-            aParam[0] <<= _rURL;
-            aParam[1] <<= ElementModes::READWRITE | ElementModes::TRUNCATE;
-            Reference<XStorage> xStorage;
-            try
-            {
-                xStorage.set(xStorageFactory->createInstanceWithArguments( aParam ),UNO_QUERY);
-            }
-            catch(Exception&)
-            {
-            }
-            if ( !xStorage.is() )
-                throw IOException();
-
-            if ( m_pImpl->isEmbeddedDatabase() )
-                m_pImpl->clearConnections();
-            m_pImpl->commitEmbeddedStorage();
-
-            Reference<XStorage> xMyStorage = m_pImpl->getStorage();
-            if ( xMyStorage.is() )
-            {
-                m_pImpl->commitStorages();
-                xMyStorage->copyToStorage( xStorage );
-            }
-
-            m_pImpl->disposeStorages();
-
-            m_pImpl->m_xStorage = xStorage;
-            if ( m_pImpl->m_bOwnStorage )
-                ::comphelper::disposeComponent(xMyStorage);
-            else
-                m_pImpl->m_bOwnStorage = sal_True;
-
-            m_pImpl->m_bDocumentReadOnly = sal_False;
-            if ( _rURL != m_pImpl->m_sRealFileURL )
-            {
-                if ( m_pImpl->m_pDBContext )
-                {
-                    if ( m_pImpl->m_sRealFileURL.getLength() )
-                        m_pImpl->m_pDBContext->nameChangePrivate(m_pImpl->m_sRealFileURL,_rURL);
-                    else
-                        m_pImpl->m_pDBContext->registerPrivate(_rURL,m_pImpl);
-                }
-
-                INetURLObject aURL( _rURL );
-                if( aURL.GetProtocol() != INET_PROT_NOT_VALID )
-                    m_pImpl->m_sName = _rURL;
-            }
-            m_pImpl->m_sRealFileURL = m_pImpl->m_sFileURL = _rURL;
+            xStorage.set(xStorageFactory->createInstanceWithArguments( aParam ),UNO_QUERY);
         }
-        lcl_stripLoadArguments( aDescriptor, m_pImpl->m_aArgs );
-        store(m_pImpl->m_sFileURL,_rArguments);
-        notifyEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnSaveAsDone")));
+        catch(Exception&)
+        {
+        }
+        if ( !xStorage.is() )
+            throw IOException();
+
+        if ( m_pImpl->isEmbeddedDatabase() )
+            m_pImpl->clearConnections();
+        m_pImpl->commitEmbeddedStorage();
+
+        Reference<XStorage> xMyStorage = m_pImpl->getStorage();
+        if ( xMyStorage.is() )
+        {
+            m_pImpl->commitStorages();
+            xMyStorage->copyToStorage( xStorage );
+        }
+
+        m_pImpl->disposeStorages();
+
+        m_pImpl->m_xStorage = xStorage;
+        if ( m_pImpl->m_bOwnStorage )
+            ::comphelper::disposeComponent(xMyStorage);
+        else
+            m_pImpl->m_bOwnStorage = sal_True;
+
+        m_pImpl->m_bDocumentReadOnly = sal_False;
+        if ( _rURL != m_pImpl->m_sRealFileURL )
+        {
+            if ( m_pImpl->m_pDBContext )
+            {
+                if ( m_pImpl->m_sRealFileURL.getLength() )
+                    m_pImpl->m_pDBContext->nameChangePrivate(m_pImpl->m_sRealFileURL,_rURL);
+                else
+                    m_pImpl->m_pDBContext->registerPrivate(_rURL,m_pImpl);
+            }
+
+            INetURLObject aURL( _rURL );
+            if( aURL.GetProtocol() != INET_PROT_NOT_VALID )
+                m_pImpl->m_sName = _rURL;
+        }
+        m_pImpl->m_sRealFileURL = m_pImpl->m_sFileURL = _rURL;
     }
-    else
-        throw IOException();
+    lcl_stripLoadArguments( aDescriptor, m_pImpl->m_aArgs );
+    store(m_pImpl->m_sFileURL,_rArguments);
+
+    impl_notifyEvent( "OnSaveAsDone", aGuard );
 }
+
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseDocument::storeToURL( const ::rtl::OUString& _rURL, const Sequence< PropertyValue >& _rArguments ) throw (IOException, RuntimeException)
 {
-    ::connectivity::checkDisposed(ODatabaseDocument_OfficeDocument::rBHelper.bDisposed);
+    ModelMethodGuard aGuard( *this );
     OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
-    MutexGuard aGuard(m_aMutex);
 
     Reference< XSingleServiceFactory > xStorageFactory( m_pImpl->createStorageFactory() );
     Sequence<Any> aParam(2);
@@ -627,8 +611,7 @@ void SAL_CALL ODatabaseDocument::removeModifyListener( const Reference< XModifyL
 // XModifiable
 sal_Bool SAL_CALL ODatabaseDocument::isModified(  ) throw (RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(ODatabaseDocument_OfficeDocument::rBHelper.bDisposed);
+    ModelMethodGuard aGuard( *this );
     OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
 
     return m_pImpl->m_bModified;
@@ -636,17 +619,21 @@ sal_Bool SAL_CALL ODatabaseDocument::isModified(  ) throw (RuntimeException)
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseDocument::setModified( sal_Bool _bModified ) throw (PropertyVetoException, RuntimeException)
 {
-    ResettableMutexGuard _rGuard(m_aMutex);
-    ::connectivity::checkDisposed(ODatabaseDocument_OfficeDocument::rBHelper.bDisposed);
+    ModelMethodGuard aGuard( *this );
 
-    if ( m_pImpl->m_bModified != _bModified )
-    {
-        m_pImpl->m_bModified = _bModified;
-        lang::EventObject aEvt(*this);
-        NOTIFY_LISTERNERS(m_aModifyListeners,XModifyListener,modified)
-        notifyEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnModifyChanged")));
-    }
+    if ( m_pImpl->m_bModified == _bModified )
+        return;
+
+    m_pImpl->m_bModified = _bModified;
+    lang::EventObject aEvt( *this );
+
+    aGuard.clear();
+    m_aModifyListeners.notifyEach( &XModifyListener::modified, aEvt );
+
+    aGuard.reset();
+    impl_notifyEvent( "OnModifyChanged", aGuard );
 }
+
 // ::com::sun::star::document::XEventBroadcaster
 void SAL_CALL ODatabaseDocument::addEventListener(const css::uno::Reference< css::document::XEventListener >& _xListener ) throw (css::uno::RuntimeException)
 {
@@ -663,9 +650,10 @@ void SAL_CALL ODatabaseDocument::removeEventListener( const css::uno::Reference<
 // ::com::sun::star::document::XEventListener
 void SAL_CALL ODatabaseDocument::notifyEvent( const css::document::EventObject& aEvent ) throw (css::uno::RuntimeException)
 {
+    ModelMethodGuard aGuard( *this );
     // used only to forward external events (e.g. for doc creation) from the frame loader
     // to the global event broadcaster and all other interested doc event listener.
-    notifyEvent(aEvent.EventName);
+    impl_notifyEvent( aEvent.EventName, aGuard );
 }
 // -----------------------------------------------------------------------------
 // ::com::sun::star::view::XPrintable
@@ -710,19 +698,24 @@ void ODatabaseDocument::impl_closeControllerFrames( sal_Bool _bDeliverOwnership 
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseDocument::close( sal_Bool _bDeliverOwnership ) throw (::com::sun::star::util::CloseVetoException, RuntimeException)
 {
-    ResettableMutexGuard _rGuard(m_aMutex);
-    ::connectivity::checkDisposed(ODatabaseDocument_OfficeDocument::rBHelper.bDisposed);
+    ModelMethodGuard aGuard( *this );
 
-    lang::EventObject aEvt( static_cast< ::cppu::OWeakObject* >( this ) );
+    lang::EventObject aEvent( *this );
+
     {
-        NOTIFY_LISTERNERS1(m_aCloseListener,com::sun::star::util::XCloseListener,queryClosing,_bDeliverOwnership);
+        aGuard.clear();
+        m_aCloseListener.forEach< XCloseListener >(
+            boost::bind( &XCloseListener::queryClosing, _1, boost::cref( aEvent ), boost::cref( _bDeliverOwnership ) ) );
+        aGuard.reset();
     }
 
     DBG_ASSERT( m_pImpl->m_aControllers.empty(), "ODatabaseDocument::close: aren't controllers expected to veto the closing?" );
     impl_closeControllerFrames( _bDeliverOwnership );
 
     {
-        NOTIFY_LISTERNERS(m_aCloseListener,com::sun::star::util::XCloseListener,notifyClosing);
+        aGuard.clear();
+        m_aCloseListener.notifyEach( &XCloseListener::notifyClosing, aEvent );
+        aGuard.reset();
     }
 
     dispose();
@@ -742,8 +735,7 @@ void SAL_CALL ODatabaseDocument::removeCloseListener( const Reference< ::com::su
 // -----------------------------------------------------------------------------
 Reference< XNameAccess > SAL_CALL ODatabaseDocument::getFormDocuments(  ) throw (RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(ODatabaseDocument_OfficeDocument::rBHelper.bDisposed);
+    ModelMethodGuard aGuard( *this );
     OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
 
     Reference< XNameAccess > xContainer = m_pImpl->m_xForms;
@@ -764,8 +756,7 @@ Reference< XNameAccess > SAL_CALL ODatabaseDocument::getFormDocuments(  ) throw 
 // -----------------------------------------------------------------------------
 Reference< XNameAccess > SAL_CALL ODatabaseDocument::getReportDocuments(  ) throw (RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(ODatabaseDocument_OfficeDocument::rBHelper.bDisposed);
+    ModelMethodGuard aGuard( *this );
     OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
 
     Reference< XNameAccess > xContainer = m_pImpl->m_xReports;
@@ -966,8 +957,7 @@ void ODatabaseDocument::writeStorage(const ::rtl::OUString& _rURL
 // -----------------------------------------------------------------------------
 Reference< ::com::sun::star::ui::XUIConfigurationManager > SAL_CALL ODatabaseDocument::getUIConfigurationManager(  ) throw (RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(ODatabaseDocument_OfficeDocument::rBHelper.bDisposed);
+    ModelMethodGuard aGuard( *this );
     OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
 
     if ( !m_xUIConfigurationManager.is() )
@@ -1011,8 +1001,7 @@ Reference< ::com::sun::star::ui::XUIConfigurationManager > SAL_CALL ODatabaseDoc
 // -----------------------------------------------------------------------------
 Reference< XStorage > SAL_CALL ODatabaseDocument::getDocumentSubStorage( const ::rtl::OUString& aStorageName, sal_Int32 nMode ) throw (RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-    ::connectivity::checkDisposed(ODatabaseDocument_OfficeDocument::rBHelper.bDisposed);
+    ModelMethodGuard aGuard( *this );
 
     Reference< XDocumentSubStorageSupplier > xStorageAccess( m_pImpl->getDocumentSubStorageSupplier() );
     return xStorageAccess->getDocumentSubStorage( aStorageName, nMode );
@@ -1024,30 +1013,27 @@ Sequence< ::rtl::OUString > SAL_CALL ODatabaseDocument::getDocumentSubStoragesNa
     return xStorageAccess->getDocumentSubStoragesNames();
 }
 // -----------------------------------------------------------------------------
-void ODatabaseDocument::notifyEvent(const ::rtl::OUString& _sEventName)
+void ODatabaseDocument::impl_notifyEvent( const ::rtl::OUString& _sEventName, ::osl::ClearableMutexGuard& _rGuard )
 {
     try
     {
-        ResettableMutexGuard _rGuard(m_aMutex);
-        if (ODatabaseDocument_OfficeDocument::rBHelper.bDisposed)
-            throw DisposedException();
-
         css::document::EventObject aEvt(*this, _sEventName);
-        /// TODO: this code has to be deleted after as cws will be integrated
+        Reference< XEventListener > xDocEventBroadcaster;
+        /// TODO: this code has to be deleted after AS' cws will be integrated
         try
         {
-            Reference< ::com::sun::star::document::XEventListener > xDocEventBroadcaster(m_pImpl->m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster"))),
-                UNO_QUERY);
-            if ( xDocEventBroadcaster.is() )
-            {
-                xDocEventBroadcaster->notifyEvent(aEvt);
-            }
+            xDocEventBroadcaster = xDocEventBroadcaster.query( m_pImpl->m_xServiceFactory->createInstance(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.GlobalEventBroadcaster" ) ) ) );
         }
         catch(Exception)
         {
             OSL_ENSURE(0,"Could not create GlobalEventBroadcaster!");
         }
-        NOTIFY_LISTERNERS(m_aDocEventListeners,css::document::XEventListener,notifyEvent)
+
+        _rGuard.clear();
+        if ( xDocEventBroadcaster.is() )
+            xDocEventBroadcaster->notifyEvent(aEvt);
+        m_aDocEventListeners.notifyEach( &css::document::XEventListener::notifyEvent, aEvt );
     }
     catch(Exception&)
     {
@@ -1056,15 +1042,24 @@ void ODatabaseDocument::notifyEvent(const ::rtl::OUString& _sEventName)
 //------------------------------------------------------------------------------
 void ODatabaseDocument::disposing()
 {
+    if ( !m_pImpl.is() )
+    {
+        // this means that we're already disposed
+        DBG_ASSERT( ODatabaseDocument_OfficeDocument::rBHelper.bDisposed, "ODatabaseDocument::disposing: no impl anymore, but not yet disposed!" );
+        return;
+    }
+
     DBG_ASSERT( m_pImpl->m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
         // normally, nobody should explicitly dispose, but only XCloseable::close the document. And controllers
         // are expected to veto the closing, so when we're here, there shouldn't be any controllers anymore.
-    if ( m_pImpl.is() )
-         m_pImpl->m_aControllers.clear();
+    m_pImpl->m_aControllers.clear();
 
     Reference< XModel > xHoldAlive( this );
     {
-        notifyEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnUnload")));
+        {
+            ::osl::ClearableMutexGuard aGuard( getMutex() );
+            impl_notifyEvent( "OnUnload", aGuard );
+        }
 
         css::lang::EventObject aDisposeEvent(static_cast<XWeak*>(this));
         m_aModifyListeners.disposeAndClear( aDisposeEvent );
@@ -1150,6 +1145,7 @@ sal_Bool ODatabaseDocument::supportsService( const ::rtl::OUString& _rServiceNam
 // -----------------------------------------------------------------------------
 Reference< XDataSource > SAL_CALL ODatabaseDocument::getDataSource() throw (RuntimeException)
 {
+    ModelMethodGuard aGuard( *this );
     OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
     return m_pImpl->getDataSource();
 }
@@ -1159,6 +1155,13 @@ void SAL_CALL ODatabaseDocument::disposing( const ::com::sun::star::lang::EventO
     if ( m_pImpl.is() )
         m_pImpl->disposing(Source);
 }
+
+//------------------------------------------------------------------
+Reference< XInterface > ODatabaseDocument::getThis()
+{
+    return *this;
+}
+
 //------------------------------------------------------------------
 //........................................................................
 }   // namespace dbaccess
