@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LFolderList.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:45:36 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:16:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ namespace connectivity
             sal_Bool                        m_bIsNull;
 
         private:
-            void fillColumns();
+            void fillColumns(const ::com::sun::star::lang::Locale& _aLocale);
             BOOL CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo);
 
             sal_Bool fetchRow(OValueRow _rRow,const OSQLColumns& _rCols);
