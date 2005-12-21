@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 09:51:02 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 15:11:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -409,9 +409,17 @@ TabPage TP_OPTPRINT_PAGE
         Group = TRUE ;
         Text [ en-US ] = "Other";
     };
-    CheckBox CB_SINGLEJOBS
+    CheckBox CB_PRINTEMPTYPAGES
     {
         Pos = MAP_APPFONT ( 12 , 106 ) ;
+        Size = MAP_APPFONT ( 200 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ de ] = "Automatisch eingefügte ~Leerseiten drucken";
+        Text [ en-US ] = "Print ~automatically inserted blank pages";
+    };
+    CheckBox CB_SINGLEJOBS
+    {
+        Pos = MAP_APPFONT ( 12 , 119 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         Text [ de ] = "Einzelne Druck~jobs erzeugen" ;
         TabStop = TRUE ;
@@ -419,7 +427,7 @@ TabPage TP_OPTPRINT_PAGE
     };
     CheckBox CB_PAPERFROMSETUP
     {
-        Pos = MAP_APPFONT ( 12 , 119 ) ;
+        Pos = MAP_APPFONT ( 12 , 132 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         TabStop = TRUE ;
         Text [ de ] = "Papierschacht aus ~Druckereinstellung" ;
@@ -428,7 +436,7 @@ TabPage TP_OPTPRINT_PAGE
     };
     FixedText FT_FAX
     {
-        Pos = MAP_APPFONT ( 12 , 134 ) ;
+        Pos = MAP_APPFONT ( 12 , 147 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Group = TRUE ;
         Text [ de ] = "Fa~x" ;
@@ -437,7 +445,7 @@ TabPage TP_OPTPRINT_PAGE
     ListBox LB_FAX
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 70 , 132 ) ;
+        Pos = MAP_APPFONT ( 70 , 145 ) ;
         Size = MAP_APPFONT ( 184 , 70 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
