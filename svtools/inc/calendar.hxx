@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calendar.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:12:02 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 17:54:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,7 +186,7 @@ oder durch Beendigung einer Selektion ausgeloest.
 // - Calendar -
 // ------------
 
-class Calendar : public Control
+class SVT_DLLPUBLIC Calendar : public Control
 {
 private:
     ImplDateTable*  mpDateTable;
@@ -259,28 +259,28 @@ private:
     USHORT          mnDragScrollHitTest;
 
 #ifdef _SV_CALENDAR_CXX
-    void            ImplInit( WinBits nWinStyle );
-    void            ImplInitSettings();
-    void            ImplGetWeekFont( Font& rFont ) const;
-    void            ImplFormat();
-    USHORT          ImplHitTest( const Point& rPos, Date& rDate ) const;
-    void            ImplDrawSpin( BOOL bDrawPrev = TRUE, BOOL bDrawNext = TRUE );
-    void            ImplDrawDate( long nX, long nY,
+    SVT_DLLPRIVATE void         ImplInit( WinBits nWinStyle );
+    SVT_DLLPRIVATE void         ImplInitSettings();
+    SVT_DLLPRIVATE void         ImplGetWeekFont( Font& rFont ) const;
+    SVT_DLLPRIVATE void         ImplFormat();
+    SVT_DLLPRIVATE USHORT           ImplHitTest( const Point& rPos, Date& rDate ) const;
+    SVT_DLLPRIVATE void         ImplDrawSpin( BOOL bDrawPrev = TRUE, BOOL bDrawNext = TRUE );
+    SVT_DLLPRIVATE void         ImplDrawDate( long nX, long nY,
                                   USHORT nDay, USHORT nMonth, USHORT nYear,
                                   DayOfWeek eDayOfWeek,
                                   BOOL bBack = TRUE, BOOL bOther = FALSE,
                                   ULONG nToday = 0 );
-    void            ImplDraw( BOOL bPaint = FALSE );
-    void            ImplUpdateDate( const Date& rDate );
-    void            ImplUpdateSelection( Table* pOld );
-    void            ImplMouseSelect( const Date& rDate, USHORT nHitTest,
+    SVT_DLLPRIVATE void         ImplDraw( BOOL bPaint = FALSE );
+    SVT_DLLPRIVATE void         ImplUpdateDate( const Date& rDate );
+    SVT_DLLPRIVATE void         ImplUpdateSelection( Table* pOld );
+    SVT_DLLPRIVATE void         ImplMouseSelect( const Date& rDate, USHORT nHitTest,
                                      BOOL bMove, BOOL bExpand, BOOL bExtended );
-    void            ImplUpdate( BOOL bCalcNew = FALSE );
-    void            ImplScroll( BOOL bPrev );
-    void            ImplInvertDropPos();
-    void            ImplShowMenu( const Point& rPos, const Date& rDate );
-    void            ImplTracking( const Point& rPos, BOOL bRepeat );
-    void            ImplEndTracking( const Point& rPos, BOOL bCancel );
+    SVT_DLLPRIVATE void         ImplUpdate( BOOL bCalcNew = FALSE );
+    SVT_DLLPRIVATE void         ImplScroll( BOOL bPrev );
+    SVT_DLLPRIVATE void         ImplInvertDropPos();
+    SVT_DLLPRIVATE void         ImplShowMenu( const Point& rPos, const Date& rDate );
+    SVT_DLLPRIVATE void         ImplTracking( const Point& rPos, BOOL bRepeat );
+    SVT_DLLPRIVATE void         ImplEndTracking( const Point& rPos, BOOL bCancel );
 #endif
 
 protected:
