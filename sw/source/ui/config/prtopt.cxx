@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prtopt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:46:15 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 15:12:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,9 +82,10 @@ Sequence<OUString> SwPrintOptions::GetPropertyNames()
         "Papertray/FromPrinterSetup",   // 10
         "Content/Drawing",              // 11 not in SW/Web
         "Page/LeftPage",                // 12 not in SW/Web
-        "Page/RightPage"                // 13 not in SW/Web
+        "Page/RightPage",               // 13 not in SW/Web
+        "EmptyPages"                    // 14 not in SW/Web
     };
-    const int nCount = bIsWeb ? 11 : 14;
+    const int nCount = bIsWeb ? 11 : 15;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -135,6 +136,7 @@ SwPrintOptions::SwPrintOptions(sal_Bool bWeb) :
                     case 11: bPrintDraw         = *(sal_Bool*)pValues[nProp].getValue() ;  break;
                     case 12: bPrintLeftPage     = *(sal_Bool*)pValues[nProp].getValue();  break;
                     case 13: bPrintRightPage        = *(sal_Bool*)pValues[nProp].getValue();  break;
+                    case 14: bPrintEmptyPages       = *(sal_Bool*)pValues[nProp].getValue();  break;
                 }
             }
         }
@@ -177,6 +179,7 @@ void    SwPrintOptions::Commit()
             case 11: bVal = bPrintDraw           ; pValues[nProp].setValue(&bVal, rType);  break;
             case 12: bVal = bPrintLeftPage       ; pValues[nProp].setValue(&bVal, rType);  break;
             case 13: bVal = bPrintRightPage     ; pValues[nProp].setValue(&bVal, rType);  break;
+            case 14: bVal = bPrintEmptyPages    ; pValues[nProp].setValue(&bVal, rType);  break;
         }
     }
     PutProperties(aNames, aValues);
