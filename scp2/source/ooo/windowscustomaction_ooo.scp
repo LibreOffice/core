@@ -4,9 +4,9 @@
  *
  *  $RCSfile: windowscustomaction_ooo.scp,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 12:54:37 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:08:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -285,4 +285,14 @@ WindowsCustomAction gid_Customaction_Langpack_SetUserInstallMode
 	Assignment8 = ("ControlCondition", "DestinationFolder", "LabelStartInstall2", "Show", "NOT INVALIDDIRECTORY And NOT ISWRONGPRODUCT");
 	Assignment9 = ("ControlCondition", "DestinationFolder", "LabelInvalidDir2", "Show", "INVALIDDIRECTORY");
 	Assignment10 = ("ControlCondition", "DestinationFolder", "LabelWrongProduct2", "Show", "ISWRONGPRODUCT");
+End
+
+WindowsCustomAction gid_Customaction_MigrateInstallPath
+      Name = "MigrateInstallPath";
+      Typ = "321";
+      Source = "shlxtmsi.dll";
+      Target = "MigrateInstallPath";
+      Inbinarytable = 1;
+      Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH", "CostInitialize");
+      Assignment2 = ("InstallUISequence", "Not REMOVE=\"ALL\" And Not PATCH", "CostInitialize");
 End
