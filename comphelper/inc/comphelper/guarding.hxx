@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guarding.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:31:37 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:46:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,45 +64,6 @@ public:
 };
 
 typedef ORelease< ::osl::Mutex >    MutexRelease;
-
-// ===================================================================================================
-// = class OCountedMutex - a Mutex which counts the acquire-/release-calls and "ensures" (with
-// =                        assertions) that the acquire-counter isn't negative ....
-// =                        (best used with MutexRelease to ensure that this "dangerous" class is used
-// =                        correctly)
-// ===================================================================================================
-
-// CAN'T USE THIS AS THERE NO SUCH THING AS IMutex ANYMORE ...
-// AND OMutex DOESN'T HAVE THE VIRTUAL METHODS IMutex HAD ...
-typedef ::osl::Mutex    OCountedMutex;
-
-// ===================================================================================================
-// = class OReusableGuard
-// = a mutex guard which can be cleared and reattached
-// ===================================================================================================
-template<class T>
-class OReusableGuard : public ::osl::ClearableGuard<T>
-{
-public:
-    OReusableGuard(T& _rMutex) : ::osl::ClearableGuard<T>(_rMutex) { }
-    ~OReusableGuard() { }
-
-    const OReusableGuard& operator= (const OReusableGuard& _rMaster)
-    {
-        this->clear();
-        this->pT = _rMaster.pT;
-        if (this->pT)
-            this->pT->acquire();
-        return *this;
-    }
-
-    void attach(T& rMutex)
-    {
-        this->clear();
-        this->pT = &rMutex;
-        this->pT->acquire();
-    }
-};
 
 //.........................................................................
 }   // namespace comphelper
