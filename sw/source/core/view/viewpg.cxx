@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewpg.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:32:36 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 15:10:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,6 +186,8 @@ void ViewShell::PrintPreViewPage( SwPrtOptions& rOptions,
     USHORT nCopyCnt = rOptions.bCollate ? rOptions.nCopyCount : 1;
     BOOL bStartJob = FALSE;
 
+    const bool bPrintEmptyPages = rOptions.IsPrintEmptyPages();
+
     for ( USHORT nCnt = 0; nCnt < nCopyCnt; nCnt++ )
     {
         if( rOptions.IsPrintSingleJobs() && rOptions.GetJobName().Len() &&
@@ -292,7 +294,9 @@ void ViewShell::PrintPreViewPage( SwPrtOptions& rOptions,
             if ( !pPrt->IsJobActive() )
                 break;
 
-            if( aMulti.IsSelected( nPageNo ) )
+            // --> FME 2005-12-12 #b6354161# Feature - Print empty pages
+            if( aMulti.IsSelected( nPageNo ) && bPrintEmptyPages || !pStPage->IsEmptyPage() )
+            // <--
             {
                 if( rOptions.bPrintReverse )
                     aPageArr[ nPages - ++nCntPage ] = (SwPageFrm*)pStPage;
