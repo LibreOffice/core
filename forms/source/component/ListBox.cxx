@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:45:04 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:22:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -372,7 +372,7 @@ namespace frm
         }
 
         EventObject aEvt(static_cast< XWeak*>(this));
-        NOTIFY_LISTENERS(m_aRefreshListeners, XRefreshListener, refreshed, aEvt);
+        m_aRefreshListeners.notifyEach( &XRefreshListener::refreshed, aEvt );
     }
 
     //------------------------------------------------------------------------------
