@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optdlg.hrc,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 09:50:47 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 15:11:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,6 +128,7 @@
 #define LB_VMETRIC         89
 #define FL_SEP_PRT_LEFT     90
 #define FL_SEP_PRT_RIGHT    91
+#define CB_PRINTEMPTYPAGES  92
 
 // Tabpage Grundschriften
 #define FT_STANDARD         90
