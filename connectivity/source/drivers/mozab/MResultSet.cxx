@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MResultSet.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:19:38 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:17:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,16 +206,22 @@ Any SAL_CALL OResultSet::queryInterface( const Type & rType ) throw(RuntimeExcep
     return ::comphelper::concatSequences(aTypes.getTypes(),OResultSet_BASE::getTypes());
 }
 // -------------------------------------------------------------------------
+void OResultSet::methodEntry()
+{
+    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    if ( !m_pTable )
+    {
+        OSL_ENSURE( false, "OResultSet::methodEntry: looks like we're disposed, but how is this possible?" );
+        throw DisposedException( ::rtl::OUString(), *this );
+    }
+}
 
+// -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OResultSet::findColumn( const ::rtl::OUString& columnName ) throw(SQLException, RuntimeException)
 {
-
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    ResultSetEntryGuard aGuard( *this );
 
     // find the first column with the name columnName
-
-    ::osl::MutexGuard aGuard( m_aMutex );
-
     Reference< XResultSetMetaData > xMeta = getMetaData();
     sal_Int32 nLen = xMeta->getColumnCount();
     sal_Int32 i = 1;
@@ -239,9 +245,7 @@ Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 col
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
+    ResultSetEntryGuard aGuard( *this );
     m_bWasNull = sal_True;
     return sal_False;
 }
@@ -249,42 +253,50 @@ sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLExcep
 
 sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    ResultSetEntryGuard aGuard( *this );
     return 0;
 }
 // -------------------------------------------------------------------------
 
 Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    ResultSetEntryGuard aGuard( *this );
     return Sequence< sal_Int8 >();
 }
 // -------------------------------------------------------------------------
 
 Date SAL_CALL OResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    ResultSetEntryGuard aGuard( *this );
     return Date();
 }
 // -------------------------------------------------------------------------
 
 double SAL_CALL OResultSet::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    ResultSetEntryGuard aGuard( *this );
     return 0.0;
 }
 // -------------------------------------------------------------------------
 
 float SAL_CALL OResultSet::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    ResultSetEntryGuard aGuard( *this );
     return 0;
 }
 // -------------------------------------------------------------------------
 
 sal_Int32 SAL_CALL OResultSet::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    ResultSetEntryGuard aGuard( *this );
     return 0;
 }
 
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OResultSet::getRow(  ) throw(SQLException, RuntimeException)
 {
+    ResultSetEntryGuard aGuard( *this );
+
     OSL_TRACE("In/Out: OResultSet::getRow, return = %u", m_nRowPos );
     return m_nRowPos;
 }
@@ -292,15 +304,14 @@ sal_Int32 SAL_CALL OResultSet::getRow(  ) throw(SQLException, RuntimeException)
 
 sal_Int64 SAL_CALL OResultSet::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    ResultSetEntryGuard aGuard( *this );
     return sal_Int64();
 }
 // -------------------------------------------------------------------------
 
 Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
+    ResultSetEntryGuard aGuard( *this );
 
     if(!m_xMetaData.is())
         m_xMetaData = new OResultSetMetaData(
@@ -361,8 +372,8 @@ sal_uInt32  OResultSet::currentRowCount()
 
 sal_Bool OResultSet::fetchCurrentRow( ) throw(SQLException, RuntimeException)
 {
-        OSL_TRACE("fetchCurrentRow, m_nRowPos = %u", m_nRowPos );
-        return fetchRow(getCurrentCardNumber());
+    OSL_TRACE("fetchCurrentRow, m_nRowPos = %u", m_nRowPos );
+    return fetchRow(getCurrentCardNumber());
 }
 
 // -------------------------------------------------------------------------
@@ -394,7 +405,7 @@ sal_Bool OResultSet::pushCard(sal_uInt32 cardNumber) throw(SQLException, Runtime
 // -------------------------------------------------------------------------
 sal_Bool OResultSet::fetchRow(sal_uInt32 cardNumber,sal_Bool bForceReload) throw(SQLException, RuntimeException)
 {
-    OSL_TRACE("fetchCurrentRow, cardNumber = %u", cardNumber );
+    OSL_TRACE("fetchRow, cardNumber = %u", cardNumber );
     if (!bForceReload)
     {
         // Check whether we've already fetched the row...
@@ -451,11 +462,10 @@ const ORowSetValue& OResultSet::getValue(sal_uInt32 cardNumber, sal_Int32 column
 
 ::rtl::OUString SAL_CALL OResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    ResultSetEntryGuard aGuard( *this );
+
     OSL_ENSURE(m_xColumns.isValid(), "Need the Columns!!");
     OSL_ENSURE(columnIndex <= (sal_Int32)m_xColumns->size(), "Trying to access invalid columns number");
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
     checkIndex( columnIndex );
 
     // If this query was sorted then we should have a valid KeySet, so use it
@@ -466,6 +476,7 @@ const ORowSetValue& OResultSet::getValue(sal_uInt32 cardNumber, sal_Int32 column
 
 Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    ResultSetEntryGuard aGuard( *this );
     return Time();
 }
 // -------------------------------------------------------------------------
@@ -473,15 +484,14 @@ Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, R
 
 DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
+    ResultSetEntryGuard aGuard( *this );
     return DateTime();
 }
 // -------------------------------------------------------------------------
 
 sal_Bool SAL_CALL OResultSet::isBeforeFirst(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
+    ResultSetEntryGuard aGuard( *this );
 
     // here you have to implement your movements
     // return true means there is no data
@@ -491,8 +501,7 @@ sal_Bool SAL_CALL OResultSet::isBeforeFirst(  ) throw(SQLException, RuntimeExcep
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::isAfterLast(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    ResultSetEntryGuard aGuard( *this );
 
     OSL_TRACE("In/Out: OResultSet::isAfterLast" );
     return m_nRowPos > currentRowCount() && m_aQuery.queryComplete();
@@ -500,9 +509,7 @@ sal_Bool SAL_CALL OResultSet::isAfterLast(  ) throw(SQLException, RuntimeExcepti
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::isFirst(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
+    ResultSetEntryGuard aGuard( *this );
 
     OSL_TRACE("In/Out: OResultSet::isFirst" );
     return m_nRowPos == 1;
@@ -510,9 +517,7 @@ sal_Bool SAL_CALL OResultSet::isFirst(  ) throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::isLast(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
+    ResultSetEntryGuard aGuard( *this );
 
     OSL_TRACE("In/Out: OResultSet::isLast" );
     return m_nRowPos == currentRowCount() && m_aQuery.queryComplete();
@@ -520,8 +525,7 @@ sal_Bool SAL_CALL OResultSet::isLast(  ) throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::beforeFirst(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    ResultSetEntryGuard aGuard( *this );
 
     // move before the first row so that isBeforeFirst returns false
     OSL_TRACE("In/Out: OResultSet::beforeFirst" );
@@ -531,9 +535,8 @@ void SAL_CALL OResultSet::beforeFirst(  ) throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::afterLast(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ResultSetEntryGuard aGuard( *this );
     OSL_TRACE("In/Out: OResultSet::afterLast" );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     if(last())
         next();
@@ -542,11 +545,7 @@ void SAL_CALL OResultSet::afterLast(  ) throw(SQLException, RuntimeException)
 
 void SAL_CALL OResultSet::close(  ) throw(SQLException, RuntimeException)
 {
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
-    }
+    ResultSetEntryGuard aGuard( *this );
     OSL_TRACE("In/Out: OResultSet::close" );
     // dispose();
 }
@@ -579,15 +578,14 @@ sal_Bool SAL_CALL OResultSet::relative( sal_Int32 row ) throw(SQLException, Runt
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::previous(  ) throw(SQLException, RuntimeException)
 {
+    ResultSetEntryGuard aGuard( *this );
     OSL_TRACE("In/Out: OResultSet::previous" );
     return seekRow( PRIOR_POS );
 }
 // -------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL OResultSet::getStatement(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
+    ResultSetEntryGuard aGuard( *this );
 
     OSL_TRACE("In/Out: OResultSet::getStatement" );
     return m_xStatement;
@@ -596,18 +594,21 @@ Reference< XInterface > SAL_CALL OResultSet::getStatement(  ) throw(SQLException
 
 sal_Bool SAL_CALL OResultSet::rowDeleted(  ) throw(SQLException, RuntimeException)
 {
+    ResultSetEntryGuard aGuard( *this );
     OSL_TRACE("In/Out: OResultSet::rowDeleted, m_RowStates=%u",m_RowStates );
     return ((m_RowStates & RowStates_Deleted) == RowStates_Deleted) ;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::rowInserted(  ) throw(SQLException, RuntimeException)
 {
+    ResultSetEntryGuard aGuard( *this );
     OSL_TRACE("In/Out: OResultSet::rowInserted,m_RowStates=%u",m_RowStates );
     return ((m_RowStates & RowStates_Inserted) == RowStates_Inserted);
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::rowUpdated(  ) throw(SQLException, RuntimeException)
 {
+    ResultSetEntryGuard aGuard( *this );
     OSL_TRACE("In/Out: OResultSet::rowUpdated,m_RowStates=%u",m_RowStates );
     return ((m_RowStates & RowStates_Updated) == RowStates_Updated) ;
 }
@@ -621,8 +622,7 @@ sal_Bool SAL_CALL OResultSet::next(  ) throw(SQLException, RuntimeException)
 
 sal_Bool SAL_CALL OResultSet::wasNull(  ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    ResultSetEntryGuard aGuard( *this );
 
     return m_bWasNull;
 }
@@ -630,8 +630,7 @@ sal_Bool SAL_CALL OResultSet::wasNull(  ) throw(SQLException, RuntimeException)
 
 void SAL_CALL OResultSet::cancel(  ) throw(RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    ResultSetEntryGuard aGuard( *this );
     OSL_TRACE("In/Out: OResultSet::cancel" );
 
 }
@@ -1210,21 +1209,29 @@ static sal_Bool matchRow( OValueRow& row1, OValueRow& row2 )
 sal_Int32 OResultSet::getRowForCardNumber(sal_Int32 nCardNum)
 {
     OSL_TRACE("In/Out: OResultSet::getRowForCardNumber, nCardNum = %u", nCardNum );
-    sal_Int32  nPos;
-    for(nPos=0;nPos < (sal_Int32)m_pKeySet->size();nPos++)
+
+    if ( m_pKeySet.isValid() )
     {
-        if (nCardNum == (*m_pKeySet)[nPos])
-            break;
+        sal_Int32  nPos;
+        for(nPos=0;nPos < (sal_Int32)m_pKeySet->size();nPos++)
+        {
+            if (nCardNum == (*m_pKeySet)[nPos])
+            {
+                OSL_TRACE("In/Out: OResultSet::getRowForCardNumber, return = %u", nPos+1 );
+                return nPos+1;
+            }
+        }
     }
-    OSL_TRACE("In/Out: OResultSet::getRowForCardNumber, return = %u", nPos+1 );
-    return nPos+1;
+
+    ::dbtools::throwSQLException( "Invalid bookmark value", "HY111", *this );
+    return 0;
 }
 
 // -----------------------------------------------------------------------------
 void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLException,
                                                 ::com::sun::star::uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    ResultSetEntryGuard aGuard( *this );
 
     OSL_ENSURE( m_pTable, "Need a Table object");
     if(!m_pTable)
@@ -1533,8 +1540,7 @@ sal_Bool OResultSet::validRow( sal_uInt32 nRow )
 }
 sal_Bool OResultSet::fillKeySet(sal_Int32 nMaxCardNumber)
 {
-    if (!m_pKeySet.isValid())
-        m_pKeySet = new OKeySet();
+    impl_ensureKeySet();
     if (m_CurrentRowCount < nMaxCardNumber)
     {
          sal_Int32  nKeyValue;
@@ -1555,16 +1561,16 @@ sal_Bool OResultSet::fillKeySet(sal_Int32 nMaxCardNumber)
 
 sal_Int32 OResultSet::deletedCount()
 {
-    if (!m_pKeySet.isValid())
-        m_pKeySet = new OKeySet();
+    impl_ensureKeySet();
     return m_CurrentRowCount - m_pKeySet->size();
 
 }
 // -----------------------------------------------------------------------------
 sal_Bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    ResultSetEntryGuard aGuard( *this );
+    if ( !m_pKeySet.isValid() )
+        ::dbtools::throwGenericSQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Illegal cursor movement" ) ), *this );
 
     sal_Int32  nNumberOfRecords = m_aQuery.getRealRowCount();
     sal_Int32  nRetrivedRows = currentRowCount();
@@ -1649,8 +1655,7 @@ void OResultSet::setColumnMapping(const ::std::vector<sal_Int32>& _aColumnMappin
 ::com::sun::star::uno::Any OResultSet::getBookmark(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     OSL_TRACE("getBookmark, m_nRowPos = %u", m_nRowPos );
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    ResultSetEntryGuard aGuard( *this );
     if ( fetchCurrentRow() == sal_False )
         ::dbtools::throwGenericSQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Can't get current row")),NULL);
 
@@ -1659,6 +1664,7 @@ void OResultSet::setColumnMapping(const ::std::vector<sal_Int32>& _aColumnMappin
 }
 sal_Bool  OResultSet::moveToBookmark( const ::com::sun::star::uno::Any& bookmark ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    ResultSetEntryGuard aGuard( *this );
     OSL_TRACE("moveToBookmark, bookmark = %u", comphelper::getINT32(bookmark) );
     sal_Int32 nCardNum = comphelper::getINT32(bookmark);
     m_nRowPos = getRowForCardNumber(nCardNum);
@@ -1667,6 +1673,7 @@ sal_Bool  OResultSet::moveToBookmark( const ::com::sun::star::uno::Any& bookmark
 }
 sal_Bool  OResultSet::moveRelativeToBookmark( const ::com::sun::star::uno::Any& bookmark, sal_Int32 rows ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    ResultSetEntryGuard aGuard( *this );
     OSL_TRACE("moveRelativeToBookmark, bookmark = %u rows= %u", comphelper::getINT32(bookmark),rows );
     sal_Int32 nCardNum = comphelper::getINT32(bookmark);
     m_nRowPos = getRowForCardNumber(nCardNum);
@@ -1674,6 +1681,7 @@ sal_Bool  OResultSet::moveRelativeToBookmark( const ::com::sun::star::uno::Any& 
 }
 sal_Int32 OResultSet::compareBookmarks( const ::com::sun::star::uno::Any& first, const ::com::sun::star::uno::Any& second ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    ResultSetEntryGuard aGuard( *this );
     OSL_TRACE("compareBookmarks, m_nRowPos = %u", m_nRowPos );
         sal_Int32 nFirst=0;
         sal_Int32 nSecond=0;
@@ -1693,18 +1701,20 @@ sal_Int32 OResultSet::compareBookmarks( const ::com::sun::star::uno::Any& first,
 }
 sal_Bool OResultSet::hasOrderedBookmarks(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    ResultSetEntryGuard aGuard( *this );
     OSL_TRACE("hasOrderedBookmarks, m_nRowPos = %u", m_nRowPos );
     return sal_True;
 }
 sal_Int32 OResultSet::hashBookmark( const ::com::sun::star::uno::Any& bookmark ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    ResultSetEntryGuard aGuard( *this );
     OSL_TRACE("hashBookmark, m_nRowPos = %u", m_nRowPos );
     return  comphelper::getINT32(bookmark);
 }
 
 sal_Int32 OResultSet::getCurrentCardNumber()
 {
-    if (m_nRowPos == 0)
+    if ( ( m_nRowPos == 0 ) || !m_pKeySet.isValid() )
         return 0;
     if (m_pKeySet->size() < m_nRowPos)
         return 0;
@@ -1730,8 +1740,7 @@ void OResultSet::checkPendingUpdate() throw(SQLException, RuntimeException)
 void OResultSet::updateValue(sal_Int32 columnIndex ,const ORowSetValue& x) throw(SQLException, RuntimeException)
 {
     OSL_TRACE("updateValue, m_nRowPos = %u", m_nRowPos );
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    ResultSetEntryGuard aGuard( *this );
     if ( fetchCurrentRow() == sal_False )
         ::dbtools::throwGenericSQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Can't get current row")),NULL);
 
@@ -1751,8 +1760,7 @@ void OResultSet::updateValue(sal_Int32 columnIndex ,const ORowSetValue& x) throw
 void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     OSL_TRACE("updateNull, m_nRowPos = %u", m_nRowPos );
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    ResultSetEntryGuard aGuard( *this );
     if ( fetchCurrentRow() == sal_False )
         ::dbtools::throwGenericSQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Can't get current row")),NULL);
 
@@ -1834,8 +1842,7 @@ void SAL_CALL OResultSet::updateTimestamp( sal_Int32 columnIndex, const ::com::s
 
 void SAL_CALL OResultSet::updateBinaryStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    ResultSetEntryGuard aGuard( *this );
 
     if(!x.is())
         ::dbtools::throwGenericSQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Invalid use of null pointer")),*this);
@@ -1866,6 +1873,7 @@ void SAL_CALL OResultSet::updateNumericObject( sal_Int32 columnIndex, const Any&
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::insertRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    ResultSetEntryGuard aGuard( *this );
     OSL_TRACE("insertRow in, m_nRowPos = %u", m_nRowPos );
     m_RowStates = RowStates_Inserted;
     updateRow();
@@ -1878,8 +1886,9 @@ void SAL_CALL OResultSet::insertRow(  ) throw(::com::sun::star::sdbc::SQLExcepti
 void SAL_CALL OResultSet::updateRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     OSL_TRACE("updateRow in, m_nRowPos = %u", m_nRowPos );
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    ResultSetEntryGuard aGuard( *this );
+    impl_ensureKeySet();
+
     if (!m_nRowPos || m_pKeySet->size() < m_nRowPos )
         ::dbtools::throwGenericSQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Call update on invalid row")),NULL);
 
@@ -1907,8 +1916,7 @@ void SAL_CALL OResultSet::updateRow(  ) throw(::com::sun::star::sdbc::SQLExcepti
 void SAL_CALL OResultSet::deleteRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     OSL_TRACE("deleteRow, m_nRowPos = %u", m_nRowPos );
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    ResultSetEntryGuard aGuard( *this );
     if (rowDeleted())
         throw SQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Row Already deleted")) ,*this
                     ,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000)
@@ -1932,6 +1940,7 @@ void SAL_CALL OResultSet::deleteRow(  ) throw(::com::sun::star::sdbc::SQLExcepti
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::cancelRowUpdates(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    ResultSetEntryGuard aGuard( *this );
     OSL_TRACE("cancelRowUpdates, m_nRowPos = %u", m_nRowPos );
     if (fetchRow(getCurrentCardNumber(),sal_True))  //force fetch current row will cause we lose all change to the current row
         ::dbtools::throwGenericSQLException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Can't cancel row updates")), NULL );
@@ -1940,7 +1949,7 @@ void SAL_CALL OResultSet::cancelRowUpdates(  ) throw(::com::sun::star::sdbc::SQL
 void SAL_CALL OResultSet::moveToInsertRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     OSL_TRACE("moveToInsertRow in, m_nRowPos = %u", m_nRowPos );
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ResultSetEntryGuard aGuard( *this );
     m_nOldRowPos = m_nRowPos;
 
     if (!m_nNewRow) //no new row now, insert one
@@ -1968,6 +1977,7 @@ void SAL_CALL OResultSet::moveToInsertRow(  ) throw(::com::sun::star::sdbc::SQLE
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::moveToCurrentRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    ResultSetEntryGuard aGuard( *this );
     OSL_TRACE("moveToCurrentRow, m_nRowPos = %u", m_nRowPos );
     if (rowInserted())
     {
