@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ADatabaseMetaDataImpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:27:31 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:15:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,30 +98,33 @@ void ODatabaseMetaData::fillLiterals()
 
     ADOS::ThrowException(*m_pADOConnection,*this);
 
-    OSL_ENSURE(pRecordset,"getMaxSize no resultset!");
-    WpADORecordset aRecordset(pRecordset);
-
-    aRecordset.MoveFirst();
-    OLEVariant  aValue;
-    sal_Int32 nRet = 0;
-    LiteralInfo aInfo;
-    while(!aRecordset.IsAtEOF())
+    OSL_ENSURE(pRecordset,"fillLiterals: no resultset!");
+    if ( pRecordset )
     {
-        WpOLEAppendCollection<ADOFields, ADOField, WpADOField>  aFields(aRecordset.GetFields());
-        WpADOField aField(aFields.GetItem(1));
-        aInfo.pwszLiteralValue = aField.get_Value();
-        aField = aFields.GetItem(5);
-        aInfo.fSupported = aField.get_Value();
-        aField = aFields.GetItem(6);
-        aInfo.cchMaxLen = aField.get_Value().getUInt32();
+        WpADORecordset aRecordset(pRecordset);
 
-        aField = aFields.GetItem(4);
-        sal_uInt32 nId = aField.get_Value().getUInt32();
-        m_aLiteralInfo[nId] = aInfo;
+        aRecordset.MoveFirst();
+        OLEVariant  aValue;
+        sal_Int32 nRet = 0;
+        LiteralInfo aInfo;
+        while(!aRecordset.IsAtEOF())
+        {
+            WpOLEAppendCollection<ADOFields, ADOField, WpADOField>  aFields(aRecordset.GetFields());
+            WpADOField aField(aFields.GetItem(1));
+            aInfo.pwszLiteralValue = aField.get_Value();
+            aField = aFields.GetItem(5);
+            aInfo.fSupported = aField.get_Value();
+            aField = aFields.GetItem(6);
+            aInfo.cchMaxLen = aField.get_Value().getUInt32();
 
-        aRecordset.MoveNext();
+            aField = aFields.GetItem(4);
+            sal_uInt32 nId = aField.get_Value().getUInt32();
+            m_aLiteralInfo[nId] = aInfo;
+
+            aRecordset.MoveNext();
+        }
+        aRecordset.Close();
     }
-    aRecordset.Close();
 }
 // -------------------------------------------------------------------------
 sal_Int32 ODatabaseMetaData::getMaxSize(sal_uInt32 _nId)
