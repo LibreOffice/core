@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-12-21 11:09:36 $
+dnl * Date: $Date: 2005-12-21 16:50:43 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.142 $ )
+AC_REVISION( $Revision: 1.143 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -1109,11 +1109,11 @@ if test "$_os" = "SunOS"; then
       _workshop_version=`echo $_workshop_string | $AWK '{ print $1 }'`
       _workshop_major=`echo $_workshop_version | $AWK -F. '{ print $1 }'` 
       if test "$_workshop_major" != "5"; then
-         AC_MSG_ERROR([found version "$_workshop_version", use version 5.0, 5.2 or 5.5 of the Sun Workshop C compiler])
+         AC_MSG_ERROR([found version "$_workshop_version", use version 5.5 or 5.8 of the Sun Workshop C compiler])
       else
-         _workshop_minor=`echo $_workshop_version | $AWK -F. '{ if ($2 == 0) print "true"; else if ($2 == 2) print "true"; else if ($2 == 5) print "true"; else print "false" }'` 
+         _workshop_minor=`echo $_workshop_version | $AWK -F. '{ if ($2 == 5) print "true"; else if ($2 == 8) print "true"; else print "false" }'` 
          if test "$_workshop_minor" = "false"; then
-            AC_MSG_ERROR([found version "$_workshop_version", use version 5.0, 5.2 or 5.5 of the Sun Workshop C compiler])
+            AC_MSG_ERROR([found version "$_workshop_version", use version 5.5 or 5.8 of the Sun Workshop C compiler])
          else
             dnl compiler will do
             AC_MSG_RESULT([checked])
