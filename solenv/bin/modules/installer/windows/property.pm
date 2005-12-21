@@ -4,9 +4,9 @@
 #
 #   $RCSfile: property.pm,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-11 14:18:29 $
+#   last change: $Author: obo $ $Date: 2005-12-21 12:49:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -157,11 +157,6 @@ sub get_productname_for_property_table
         my $patchstring = "Product Update" . " " . $allvariables->{'WINDOWSPATCHLEVEL'};
         $productname = $productname . " " . $patchstring;
     }
-
-    # Saving this name in hash $allvariables for further usage
-    $allvariables->{'PROPERTYTABLEPRODUCTNAME'} = $productname;
-    my $infoline = "Defined variable PROPERTYTABLEPRODUCTNAME: $productname\n";
-    push(@installer::globals::logfileinfo, $infoline);
 
     # Saving this name in hash $allvariables for further usage
     $allvariables->{'PROPERTYTABLEPRODUCTNAME'} = $productname;
