@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentcontainer.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:06:11 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:35:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,8 +203,8 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
 
         ODefinitionContainer_Impl* pItem = static_cast<ODefinitionContainer_Impl*>(m_pImpl.get());
 
-        sal_Bool bNew;
-        if ( bNew = (0 == sPersistentName.getLength()) )
+        sal_Bool bNew = ( 0 == sPersistentName.getLength() );
+        if ( bNew )
         {
             const static ::rtl::OUString sBaseName(RTL_CONSTASCII_USTRINGPARAM("Obj"));
             // -----------------------------------------------------------------------------
@@ -213,6 +213,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
             Reference<XNameAccess> xElements(getStorage(),UNO_QUERY);
             if ( xElements.is() )
                 sPersistentName = ::dbtools::createUniqueName(xElements,sPersistentName);
+
             if ( xCopyFrom.is() )
             {
                 Sequence<Any> aIni(2);
@@ -227,6 +228,11 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
                 if ( xProp.is() && xProp->getPropertySetInfo().is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_AS_TEMPLATE) )
                     xProp->getPropertyValue(PROPERTY_AS_TEMPLATE) >>= bAsTemplate;
             }
+
+            if ( ( aClassID.getLength() == 0 ) && ( 0 == sURL.getLength() ) )
+                // default the class id, if none is given
+                // #i57097# / 2005-11-01 / frank.schoenheit@sun.com
+                aClassID = ODocumentDefinition::getDefaultDocumentTypeClassId();
         }
 
         ODefinitionContainer_Impl::Documents::iterator aFind = pItem->m_aDocumentMap.find(sName);
