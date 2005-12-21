@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:08:58 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 15:13:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -927,7 +927,7 @@ void SwPagePreViewWin::CalcWish( BYTE nNewRow, BYTE nNewCol )
     mrView.ScrollViewSzChg();
 }
 /*--------------------------------------------------------------------
-    Beschreibung:
+    Beschreibung:, mnSttPage is Absolute
  --------------------------------------------------------------------*/
 
 
@@ -945,26 +945,36 @@ int SwPagePreViewWin::MovePage( int eMoveMode )
     switch( eMoveMode )
     {
     case MV_PAGE_UP:
-        // OD 03.12.2002 #103492# - correct calculation of new start page.
-        nNewSttPage = (mnSttPage - nPages > 0) ? (mnSttPage - nPages) : nDefSttPg;
-        // OD 13.12.2002 #103492# - correct calculation of new selected page.
-        if ( (SelectedPage() - nPages) > 0 )
-            SetSelectedPage( SelectedPage() - nPages );
-        else
-            SetSelectedPage( 1 );
+    {
+        const sal_uInt16 nRelSttPage = mpPgPrevwLayout->ConvertAbsoluteToRelativePageNum( mnSttPage );
+        const sal_uInt16 nNewAbsSttPage = nRelSttPage - nPages > 0 ?
+                                          mpPgPrevwLayout->ConvertRelativeToAbsolutePageNum( nRelSttPage - nPages ) :
+                                          nDefSttPg;
+        nNewSttPage = nNewAbsSttPage;
+
+        const sal_uInt16 nRelSelPage = mpPgPrevwLayout->ConvertAbsoluteToRelativePageNum( SelectedPage() );
+        const sal_uInt16 nNewRelSelPage = nRelSelPage - nPages > 0 ?
+                                          nRelSelPage - nPages :
+                                          1;
+        SetSelectedPage( mpPgPrevwLayout->ConvertRelativeToAbsolutePageNum( nNewRelSelPage ) );
+
         break;
+    }
     case MV_PAGE_DOWN:
-        // OD 03.12.2002 #103492# - correct calculation of new start page.
-        nNewSttPage = (mnSttPage + nPages) < nPageCount ? (mnSttPage + nPages) : nPageCount;
-        // OD 03.12.2002 #103492# - correct calculation of new selected page.
-        if ( (SelectedPage() + nPages) < nPageCount )
-            SetSelectedPage( SelectedPage() + nPages );
-        else
-            SetSelectedPage( nPageCount );
+    {
+        const sal_uInt16 nRelSttPage = mpPgPrevwLayout->ConvertAbsoluteToRelativePageNum( mnSttPage );
+        const sal_uInt16 nNewAbsSttPage = mpPgPrevwLayout->ConvertRelativeToAbsolutePageNum( nRelSttPage + nPages );
+        nNewSttPage = nNewAbsSttPage < nPageCount ? nNewAbsSttPage : nPageCount;
+
+        const sal_uInt16 nRelSelPage = mpPgPrevwLayout->ConvertAbsoluteToRelativePageNum( SelectedPage() );
+        const sal_uInt16 nNewAbsSelPage = mpPgPrevwLayout->ConvertRelativeToAbsolutePageNum( nRelSelPage + nPages );
+        SetSelectedPage( nNewAbsSelPage < nPageCount ? nNewAbsSelPage : nPageCount );
+
         break;
+    }
     case MV_DOC_STT:
         nNewSttPage = nDefSttPg;
-        SetSelectedPage( nNewSttPage ? nNewSttPage : 1 );
+        SetSelectedPage( mpPgPrevwLayout->ConvertRelativeToAbsolutePageNum( nNewSttPage ? nNewSttPage : 1 ) );
         break;
     case MV_DOC_END:
         // OD 03.12.2002 #103492# - correct calculation of new start page.
