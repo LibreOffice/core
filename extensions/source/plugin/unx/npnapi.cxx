@@ -2,7 +2,7 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/npnapi.cxx,v 1.7 2004-10-13 09:03:01 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/npnapi.cxx,v 1.8 2005-12-21 11:14:16 obo Exp $
 
 *************************************************************************/
 #include <plugin/unx/plugcon.hxx>
@@ -23,7 +23,7 @@ void* CreateNewShell( void**, XLIB_Window );
 // begin Netscape plugin api calls
 extern "C" {
 
-static void* l_NPN_MemAlloc( UINT32 nBytes )
+static void* l_NPN_MemAlloc( uint32 nBytes )
 {
     void* pMem = new char[nBytes];
     return pMem;
@@ -34,7 +34,7 @@ static void l_NPN_MemFree( void* pMem )
     delete [] (char*)pMem;
 }
 
-static UINT32 l_NPN_MemFlush( UINT32 nSize )
+static uint32 l_NPN_MemFlush( uint32 nSize )
 {
     return 0;
 }
@@ -165,7 +165,7 @@ static NPError l_NPN_NewStream( NPP instance, NPMIMEType type, const char* targe
     return aRet;
 }
 
-static NPError l_NPN_PostURLNotify( NPP instance, const char* url, const char* target, UINT32 len, const char* buf, NPBool file, void* notifyData )
+static NPError l_NPN_PostURLNotify( NPP instance, const char* url, const char* target, uint32 len, const char* buf, NPBool file, void* notifyData )
 {
     UINT32 nInstance = pConnector->GetNPPID( instance );
     if( nInstance == PluginConnector::UnknownNPPID )
@@ -190,7 +190,7 @@ static NPError l_NPN_PostURLNotify( NPP instance, const char* url, const char* t
     return aRet;
 }
 
-static NPError l_NPN_PostURL( NPP instance, const char* url, const char* window, UINT32 len, const char* buf, NPBool file )
+static NPError l_NPN_PostURL( NPP instance, const char* url, const char* window, uint32 len, const char* buf, NPBool file )
 {
     UINT32 nInstance = pConnector->GetNPPID( instance );
     if( nInstance == PluginConnector::UnknownNPPID )
