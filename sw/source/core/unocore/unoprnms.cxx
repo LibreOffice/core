@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-14 20:57:51 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 15:10:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -756,7 +756,8 @@ const SwPropNameTab aPropNameTab = {
 /* 0700 UNO_NAME_IS_FIELD_USED */       {MAP_CHAR_LEN("IsFieldUsed")},
 /* 0701 UNO_NAME_IS_FIELD_DISPLAYED */  {MAP_CHAR_LEN("IsFieldDisplayed")},
 /* 0702 UNO_NAME_BUILDID */             {MAP_CHAR_LEN("BuildId")},
-/* 0703 UNO_NAME_PARA_STYLE_CONDITIONS*/    {MAP_CHAR_LEN("ParaStyleConditions")}
+/* 0703 UNO_NAME_PARA_STYLE_CONDITIONS*/    {MAP_CHAR_LEN("ParaStyleConditions")},
+/* 0704 UNO_NAME_PRINT_EMPTY_PAGES*/    {MAP_CHAR_LEN("PrintEmptyPages")}
 };
 
 const SwPropNameLen& SwGetPropName( USHORT nId )
