@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:03:25 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:34:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,7 +224,6 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                             if ( xColSup.is() )
                             {
                                 Reference<XNameAccess> xSelColumns = xColSup->getColumns();
-
                                 Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
                                 OColumnNamePos aColumnNames(xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers() ? true : false);
                                 ::dbaccess::getColumnPositions(xSelColumns,xColumns,aUpdateTableName,aColumnNames);
