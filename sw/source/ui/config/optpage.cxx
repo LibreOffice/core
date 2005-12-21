@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 09:51:17 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 15:12:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -451,8 +451,9 @@ SwAddPrinterTabPage::SwAddPrinterTabPage( Window* pParent,
     aEndPageRB       (this, SW_RES(RB_PAGEEND)),
     aFL3          (this, SW_RES(FL_3)),
     aFL4          (this, SW_RES(FL_4)),
-    aPaperFromSetupCB(this, SW_RES(CB_PAPERFROMSETUP)),
+    aPrintEmptyPagesCB(this, SW_RES(CB_PRINTEMPTYPAGES)),
     aSingleJobsCB    (this, SW_RES(CB_SINGLEJOBS)),
+    aPaperFromSetupCB(this, SW_RES(CB_PAPERFROMSETUP)),
     aFaxFT           (this, SW_RES(FT_FAX)),
     aFaxLB           (this, SW_RES(LB_FAX)),
     sNone(ResId(ST_NONE)),
@@ -472,6 +473,7 @@ SwAddPrinterTabPage::SwAddPrinterTabPage( Window* pParent,
     aReverseCB.SetClickHdl( aLk );
     aProspectCB.SetClickHdl( aLk );
     aPaperFromSetupCB.SetClickHdl( aLk );
+    aPrintEmptyPagesCB.SetClickHdl( aLk );
     aEndPageRB.SetClickHdl( aLk );
     aEndRB.SetClickHdl( aLk );
     aOnlyRB.SetClickHdl( aLk );
@@ -541,6 +543,7 @@ BOOL    SwAddPrinterTabPage::FillItemSet( SfxItemSet& rCoreSet )
         aAddPrinterAttr.bPrintReverse   = aReverseCB.IsChecked();
         aAddPrinterAttr.bPrintProspect  = aProspectCB.IsChecked();
         aAddPrinterAttr.bPaperFromSetup = aPaperFromSetupCB.IsChecked();
+        aAddPrinterAttr.bPrintEmptyPages = aPrintEmptyPagesCB.IsChecked();
         aAddPrinterAttr.bPrintSingleJobs = aSingleJobsCB.IsChecked();
 
         if (aNoRB.IsChecked())  aAddPrinterAttr.nPrintPostIts =
@@ -579,6 +582,7 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet&  )
         aRightPageCB.Check(     pAddPrinterAttr->bPrintRightPage);
         aReverseCB.Check(       pAddPrinterAttr->bPrintReverse);
         aPaperFromSetupCB.Check(pAddPrinterAttr->bPaperFromSetup);
+        aPrintEmptyPagesCB.Check(pAddPrinterAttr->bPrintEmptyPages);
         aProspectCB.Check(      pAddPrinterAttr->bPrintProspect);
         aSingleJobsCB.Check(    pAddPrinterAttr->bPrintSingleJobs);
 
