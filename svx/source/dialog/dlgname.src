@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgname.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:00:22 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 16:19:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,57 +32,60 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
- // include ------------------------------------------------------------------
+
+// include ------------------------------------------------------------------
+
 #include "dialogs.hrc"
 #include "helpid.hrc"
 #include "dlgname.hrc"
- // pragma -------------------------------------------------------------------
 
- // RID_SVXDLG_NAME ----------------------------------------------------------
+// RID_SVXDLG_NAME ----------------------------------------------------------
+
 ModalDialog RID_SVXDLG_NAME
 {
     HelpId = HID_DLG_NAME ;
     OutputSize = TRUE ;
     SvLook = TRUE ;
-    Size = MAP_APPFONT ( 165 , 63 ) ;
+    Size = MAP_APPFONT ( 180 , 63 ) ;
     Text [ de ] = "Name" ;
     Text [ en-US ] = "Name" ;
     Moveable = TRUE ;
+    FixedText FT_DESCRIPTION
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 112 , 8 ) ;
+        WordBreak = TRUE ;
+    };
     Edit EDT_STRING
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 45 ) ;
-        Size = MAP_APPFONT ( 97 , 12 ) ;
+        Pos = MAP_APPFONT ( 6 , 17 ) ;
+        Size = MAP_APPFONT ( 112 , 12 ) ;
         TabStop = TRUE ;
     };
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 109 , 6 ) ;
+        Pos = MAP_APPFONT ( 124 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 109 , 23 ) ;
+        Pos = MAP_APPFONT ( 124 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 109 , 43 ) ;
+        Pos = MAP_APPFONT ( 124 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    FixedText FT_DESCRIPTION
-    {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 98 , 31 ) ;
-        WordBreak = TRUE ;
-    };
-    Text [ x-comment ] = " ";
 };
- // RID_SVXDLG_MESSBOX -------------------------------------------------------
+
+// RID_SVXDLG_MESSBOX -------------------------------------------------------
+
 ModalDialog RID_SVXDLG_MESSBOX
 {
     HelpId = HID_DLG_MESSBOX ;
