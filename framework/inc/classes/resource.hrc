@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resource.hrc,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:07:51 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 16:07:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,9 @@
 #define STR_NODOCUMENT                          (RID_STR_START+6)
 #define STR_TOOLBAR_TITLE_ADDON                 (RID_STR_START+7)
 #define STR_STATUSBAR_LOGOTEXT                  (RID_STR_START+8)
+#define STR_FULL_DISC_RETRY_BUTTON              (RID_STR_START+9)  // used by AuotSave to show error state: full disc
+#define STR_FULL_DISC_MSG                       (RID_STR_START+10) // used by AuotSave to show error state: full disc
+
 #define POPUPMENU_TOOLBAR_QUICKCUSTOMIZATION    (RID_MENU_START+0)
 
 #define MENUITEM_TOOLBAR_VISIBLEBUTTON          1
@@ -76,4 +79,4 @@
 #define PB_DECLINE                          (RID_FWK_DIALOG_START+22)
 #define PB_ACCEPT                           (RID_FWK_DIALOG_START+23)
 
-#endif 
+#endif
