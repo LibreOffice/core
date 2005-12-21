@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:42:00 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:22:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -361,7 +361,7 @@ sal_Bool SAL_CALL OGridControlModel::select(const Any& rElement) throw(IllegalAr
     {
         m_xSelection = xSel;
         EventObject aEvt(xMe);
-        NOTIFY_LISTENERS(m_aSelectListeners, XSelectionChangeListener, selectionChanged, aEvt);
+        m_aSelectListeners.notifyEach( &XSelectionChangeListener::selectionChanged, aEvt );
         return sal_True;
     }
     return sal_False;
@@ -435,7 +435,7 @@ void SAL_CALL OGridControlModel::reset() throw ( ::com::sun::star::uno::RuntimeE
     if (bContinue)
     {
         _reset();
-        NOTIFY_LISTENERS(m_aResetListeners, XResetListener, resetted, aEvt);
+        m_aResetListeners.notifyEach( &XResetListener::resetted, aEvt );
     }
 }
 
@@ -879,7 +879,7 @@ void OGridControlModel::lostColumn(const Reference< XInterface >& _rxColumn)
     {   // the currently selected element was replaced
         m_xSelection.clear();
         EventObject aEvt(static_cast<XWeak*>(this));
-        NOTIFY_LISTENERS(m_aSelectListeners, XSelectionChangeListener, selectionChanged, aEvt);
+        m_aSelectListeners.notifyEach( &XSelectionChangeListener::selectionChanged, aEvt );
     }
 }
 
