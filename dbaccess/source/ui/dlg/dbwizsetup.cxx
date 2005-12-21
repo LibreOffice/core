@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwizsetup.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 17:17:18 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:36:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1082,15 +1082,16 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         const SfxFilter* pFilter = getStandardDatabaseFilter();
         if ( pFilter )
         {
-            INetURLObject aWorkURL(m_sWorkPath);
-            String sBase = String(ModuleRes(STR_DATABASEDEFAULTNAME));
-            aWorkURL.Append(sBase);
-//            aWorkURL.setBase(sBase);
+            INetURLObject aWorkURL( m_sWorkPath );
+            aFileDlg.SetDisplayFolder( aWorkURL.GetMainURL( INetURLObject::NO_DECODE ));
+
+            ::rtl::OUString sDefaultName = String( ModuleRes( STR_DATABASEDEFAULTNAME ) );
             ::rtl::OUString sExtension = pFilter->GetDefaultExtension();
-            sExtension = sExtension.replaceAt( 0, 2, ::rtl::OUString());
-            aWorkURL.setExtension(sExtension);
-            createUniqueFileName(&aWorkURL);
-            aFileDlg.SetDisplayDirectory( aWorkURL.GetMainURL( INetURLObject::NO_DECODE ));
+            sDefaultName += sExtension.replaceAt( 0, 1, ::rtl::OUString() );
+            aWorkURL.Append( sDefaultName );
+            sDefaultName = createUniqueFileName( aWorkURL );
+            aFileDlg.SetFileName( sDefaultName );
+
             aFileDlg.AddFilter(pFilter->GetUIName(),pFilter->GetDefaultExtension());
             aFileDlg.SetCurrentFilter(pFilter->GetUIName());
         }
@@ -1129,23 +1130,26 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     }
 
     //-------------------------------------------------------------------------
-    void ODbTypeWizDialogSetup::createUniqueFileName(INetURLObject* pURL)
+    String ODbTypeWizDialogSetup::createUniqueFileName(const INetURLObject& _rURL)
     {
         Reference< XSimpleFileAccess > xSimpleFileAccess(getORB()->createInstance(::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" )), UNO_QUERY);
-        :: rtl::OUString sFilename = pURL->getName();
-        ::rtl::OUString BaseName = pURL->getBase();
-        ::rtl::OUString sExtension = pURL->getExtension();
+        :: rtl::OUString sFilename = _rURL.getName();
+        ::rtl::OUString BaseName = _rURL.getBase();
+        ::rtl::OUString sExtension = _rURL.getExtension();
+
         sal_Bool bElementExists = sal_True;
-        sal_Int32 i = 1;
-        while (bElementExists == sal_True)
+
+        INetURLObject aExistenceCheck( _rURL );
+        for ( sal_Int32 i = 1; bElementExists; ++i )
         {
-            bElementExists = xSimpleFileAccess->exists(pURL->GetMainURL( INetURLObject::NO_DECODE ));
-            if (bElementExists == sal_True)
+            bElementExists = xSimpleFileAccess->exists( aExistenceCheck.GetMainURL( INetURLObject::NO_DECODE ) );
+            if ( bElementExists )
             {
-                i++;
-                pURL->setBase(BaseName.concat(::rtl::OUString::valueOf(i)));
+                ++i;
+                aExistenceCheck.setBase( BaseName.concat( ::rtl::OUString::valueOf( i ) ) );
             }
         }
+        return aExistenceCheck.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
     }
     // -----------------------------------------------------------------------------
     IWizardPage* ODbTypeWizDialogSetup::getWizardPage(TabPage* _pCurrentPage) const
