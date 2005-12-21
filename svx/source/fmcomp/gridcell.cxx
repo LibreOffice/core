@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:59:08 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:30:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,6 +112,9 @@
 #endif
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 
 #ifndef _COMPHELPER_NUMBERS_HXX_
@@ -1428,26 +1431,33 @@ String DbFormattedField::GetFormatText(const Reference< ::com::sun::star::sdb::X
         return String();
 
     String aText;
-    if (m_rColumn.IsNumeric())
+    try
     {
-        // das IsNumeric an der Column sagt nichts aus ueber die Klasse des benutzen Formates, sondern
-        // ueber die des an die Column gebundenen Feldes. Wenn man also eine FormattedField-Spalte an
-        // ein double-Feld bindet und als Text formatiert, liefert m_rColumn.IsNumeric() sal_True. Das heisst
-        // also einfach, dass ich den Inhalt der Variant mittels getDouble abfragen kann, und dann kann
-        // ich den Rest (die Formatierung) dem FormattedField ueberlassen.
-        double dValue = getValue(_rxField, m_rColumn.GetParent().getNullDate(), m_nKeyType);
-        if (_rxField->wasNull())
-            return aText;
-        ((FormattedField*)m_pPainter)->SetValue(dValue);
+        if (m_rColumn.IsNumeric())
+        {
+            // das IsNumeric an der Column sagt nichts aus ueber die Klasse des benutzen Formates, sondern
+            // ueber die des an die Column gebundenen Feldes. Wenn man also eine FormattedField-Spalte an
+            // ein double-Feld bindet und als Text formatiert, liefert m_rColumn.IsNumeric() sal_True. Das heisst
+            // also einfach, dass ich den Inhalt der Variant mittels getDouble abfragen kann, und dann kann
+            // ich den Rest (die Formatierung) dem FormattedField ueberlassen.
+            double dValue = getValue(_rxField, m_rColumn.GetParent().getNullDate(), m_nKeyType);
+            if (_rxField->wasNull())
+                return aText;
+            ((FormattedField*)m_pPainter)->SetValue(dValue);
+        }
+        else
+        {
+            // Hier kann ich nicht mit einem double arbeiten, da das Feld mir keines liefern kann.
+            // Also einfach den Text vom ::com::sun::star::util::NumberFormatter in die richtige ::com::sun::star::form::component::Form brinden lassen.
+            aText = (const sal_Unicode*)_rxField->getString();
+            if (_rxField->wasNull())
+                return aText;
+            ((FormattedField*)m_pPainter)->SetTextFormatted(aText);
+        }
     }
-    else
+    catch( const Exception& )
     {
-        // Hier kann ich nicht mit einem double arbeiten, da das Feld mir keines liefern kann.
-        // Also einfach den Text vom ::com::sun::star::util::NumberFormatter in die richtige ::com::sun::star::form::component::Form brinden lassen.
-        aText = (const sal_Unicode*)_rxField->getString();
-        if (_rxField->wasNull())
-            return aText;
-        ((FormattedField*)m_pPainter)->SetTextFormatted(aText);
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     aText = m_pPainter->GetText();
@@ -1460,32 +1470,39 @@ String DbFormattedField::GetFormatText(const Reference< ::com::sun::star::sdb::X
 //------------------------------------------------------------------------------
 void DbFormattedField::UpdateFromField(const Reference< ::com::sun::star::sdb::XColumn >& _rxField, const Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter)
 {
-    FormattedField* pFormattedWindow = static_cast<FormattedField*>(m_pWindow);
-    if (!_rxField.is())
-    {   // NULL-Wert -> leerer Text
-        m_pWindow->SetText(String());
-    }
-    else if (m_rColumn.IsNumeric())
+    try
     {
-        // das IsNumeric an der Column sagt nichts aus ueber die Klasse des benutzen Formates, sondern
-        // ueber die des an die Column gebundenen Feldes. Wenn man also eine FormattedField-Spalte an
-        // ein double-Feld bindet und als Text formatiert, liefert m_rColumn.IsNumeric() sal_True. Das heisst
-        // also einfach, dass ich den Inhalt der Variant mittels getDouble abfragen kann, und dann kann
-        // ich den Rest (die Formatierung) dem FormattedField ueberlassen.
-        double dValue = getValue(_rxField, m_rColumn.GetParent().getNullDate(), m_nKeyType);
-        if (_rxField->wasNull())
+        FormattedField* pFormattedWindow = static_cast<FormattedField*>(m_pWindow);
+        if (!_rxField.is())
+        {   // NULL-Wert -> leerer Text
             m_pWindow->SetText(String());
+        }
+        else if (m_rColumn.IsNumeric())
+        {
+            // das IsNumeric an der Column sagt nichts aus ueber die Klasse des benutzen Formates, sondern
+            // ueber die des an die Column gebundenen Feldes. Wenn man also eine FormattedField-Spalte an
+            // ein double-Feld bindet und als Text formatiert, liefert m_rColumn.IsNumeric() sal_True. Das heisst
+            // also einfach, dass ich den Inhalt der Variant mittels getDouble abfragen kann, und dann kann
+            // ich den Rest (die Formatierung) dem FormattedField ueberlassen.
+            double dValue = getValue(_rxField, m_rColumn.GetParent().getNullDate(), m_nKeyType);
+            if (_rxField->wasNull())
+                m_pWindow->SetText(String());
+            else
+                pFormattedWindow->SetValue(dValue);
+        }
         else
-            pFormattedWindow->SetValue(dValue);
-    }
-    else
-    {
-        // Hier kann ich nicht mit einem double arbeiten, da das Feld mir keines liefern kann.
-        // Also einfach den Text vom ::com::sun::star::util::NumberFormatter in die richtige ::com::sun::star::form::component::Form brinden lassen.
-        String sText( _rxField->getString());
+        {
+            // Hier kann ich nicht mit einem double arbeiten, da das Feld mir keines liefern kann.
+            // Also einfach den Text vom ::com::sun::star::util::NumberFormatter in die richtige ::com::sun::star::form::component::Form brinden lassen.
+            String sText( _rxField->getString());
 
-        pFormattedWindow->SetTextFormatted( sText );
-        pFormattedWindow->SetSelection( Selection( SELECTION_MAX, SELECTION_MIN ) );
+            pFormattedWindow->SetTextFormatted( sText );
+            pFormattedWindow->SetSelection( Selection( SELECTION_MAX, SELECTION_MIN ) );
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
