@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagepreviewlayout.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:31:35 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 15:10:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,10 @@
 #include <svx/zoomitem.hxx>
 #endif
 
+#ifndef _SW_PRINTDATA_HXX
+#include <printdata.hxx>
+#endif
+
 // OD 20.02.2003 #107369# - method to update statics for paint
 // Note: method defined in '/sw/source/core/layout/paintfrm.cxx'
 extern void SwCalcPixStatics( OutputDevice *pOut );
@@ -101,6 +105,9 @@ SwPagePreviewLayout::SwPagePreviewLayout( ViewShell& _rParentViewShell,
     // OD 2004-03-05 #i18143#
     mbBookPreview = false;
     mbBookPreviewModeToggled = false;
+
+    const SwPrintData* pPrintData = mrParentViewShell.GetPrintData();
+    mbPrintEmptyPages = pPrintData ? pPrintData->IsPrintEmptyPages() : true;
 }
 
 void SwPagePreviewLayout::_Clear()
@@ -173,6 +180,12 @@ void SwPagePreviewLayout::_CalcPrevwLayoutSizes()
     const SwPageFrm* pPage = static_cast<const SwPageFrm*>(mrLayoutRootFrm.Lower());
     while ( pPage )
     {
+        if ( !mbBookPreview && !mbPrintEmptyPages && pPage->IsEmptyPage() )
+        {
+            pPage = static_cast<const SwPageFrm*>(pPage->GetNext());
+            continue;
+        }
+
         ++mnPages;
         pPage->Calc();
         register const Size& rPageSize = pPage->Frm().SSize();
@@ -337,7 +350,7 @@ bool SwPagePreviewLayout::ReInit()
     OD 12.12.2002 #103492#
     OD 21.03.2003 #108282# - delete parameter _onStartPageVirtNum
 
-    @author OD
+    @author OD, _nProposedStartPageNum, _onStartPageNum are absolute
 */
 bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
                                    const Point      _aProposedStartPos,
@@ -347,7 +360,7 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
                                    const bool       _bStartWithPageAtFirstCol
                                  )
 {
-    sal_uInt16 nProposedStartPageNum = _nProposedStartPageNum;
+    sal_uInt16 nProposedStartPageNum = ConvertAbsoluteToRelativePageNum( _nProposedStartPageNum );
     // check environment and parameters
     {
         bool bLayoutSettingsValid = mbLayoutInfoValid && mbLayoutSizesValid;
@@ -356,7 +369,7 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
         if ( !bLayoutSettingsValid )
             return false;
 
-        bool bStartPageRangeValid = _nProposedStartPageNum <= mnPages;
+        bool bStartPageRangeValid = nProposedStartPageNum <= mnPages;
         ASSERT( bStartPageRangeValid,
                 "proposed start page not existing - no prepare of preview paint");
         if ( !bStartPageRangeValid )
@@ -407,6 +420,9 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
         }
         else
             mnPaintPhyStartPageNum = nProposedStartPageNum;
+
+        mnPaintPhyStartPageNum = ConvertRelativeToAbsolutePageNum( mnPaintPhyStartPageNum );
+
         // set starting column
         if ( _bStartWithPageAtFirstCol )
             mnPaintStartCol = 1;
@@ -630,6 +646,12 @@ void SwPagePreviewLayout::_CalcPreviewPages()
             aCurrPaintOffset.Y() < maWinSize.Height()
           )
     {
+        if ( !mbBookPreview && !mbPrintEmptyPages && pPage->IsEmptyPage() )
+        {
+            pPage = static_cast<const SwPageFrm*>(pPage->GetNext());
+            continue;
+        }
+
         pPage->Calc();
 
         // consider only pages, which have to be painted.
@@ -651,8 +673,7 @@ void SwPagePreviewLayout::_CalcPreviewPages()
         {
             // OD 19.02.2003 #107369# - leaving left-top-corner blank is
             // controlled by <mbBookPreview>.
-            if ( mbBookPreview &&
-                 pPage->GetPhyPageNum() == 1 && mnCols != 1 && nCurrCol == 1
+            if ( mbBookPreview && pPage->GetPhyPageNum() == 1 && mnCols != 1 && nCurrCol == 1
                )
             {
                 // first page in 2nd column
@@ -679,6 +700,7 @@ void SwPagePreviewLayout::_CalcPreviewPages()
 
         // prepare data for next loop
         pPage = static_cast<const SwPageFrm*>(pPage->GetNext());
+
         aCurrPaintOffset.X() += mnColWidth;
         ++nCurrCol;
         if ( nCurrCol > mnCols )
@@ -845,7 +867,7 @@ Point SwPagePreviewLayout::GetPreviewStartPosForNewScale(
 
     OD 12.12.2002 #103492#
 
-    @author OD
+    @author OD, _nPageNum is absolut!
 */
 bool SwPagePreviewLayout::IsPageVisible( const sal_uInt16 _nPageNum ) const
 {
@@ -857,7 +879,7 @@ bool SwPagePreviewLayout::IsPageVisible( const sal_uInt16 _nPageNum ) const
 
     OD 12.12.2002 #103492#
 
-    @author OD
+    @author OD, IN/OUT parameters are absolute page numbers!!!
 */
 bool SwPagePreviewLayout::CalcStartValuesForSelectedPageMove(
                                 const sal_Int16  _nHoriMove,
@@ -867,47 +889,49 @@ bool SwPagePreviewLayout::CalcStartValuesForSelectedPageMove(
                                 Point&           _orNewStartPos ) const
 {
     // determine position of current selected page
-    sal_uInt16 nTmpSelPageNum = mnSelectedPageNum;
+    sal_uInt16 nTmpRelSelPageNum = ConvertAbsoluteToRelativePageNum( mnSelectedPageNum );
+    sal_uInt16 nNewRelSelectedPageNum = nTmpRelSelPageNum;
+
     // OD 19.02.2003 #107369# - leaving left-top-corner blank is controlled
     // by <mbBookPreview>.
     if ( mbBookPreview )
     {
         // Note: consider that left-top-corner is left blank --> +1
-        ++nTmpSelPageNum;
+        ++nTmpRelSelPageNum;
     }
-    sal_uInt16 nTmpCol = nTmpSelPageNum % mnCols;
+    sal_uInt16 nTmpCol = nTmpRelSelPageNum % mnCols;
     sal_uInt16 nCurrCol = nTmpCol > 0 ? nTmpCol : mnCols;
-    sal_uInt16 nCurrRow = nTmpSelPageNum / mnCols;
+    sal_uInt16 nCurrRow = nTmpRelSelPageNum / mnCols;
     if ( nTmpCol > 0 )
         ++nCurrRow;
 
     // determine new selected page number
-    sal_uInt16 nNewSelectedPageNum = mnSelectedPageNum;
     {
         if ( _nHoriMove != 0 )
         {
-            if ( (nNewSelectedPageNum + _nHoriMove) < 1 )
-                nNewSelectedPageNum = 1;
-            else if ( (nNewSelectedPageNum + _nHoriMove) > mnPages )
-                nNewSelectedPageNum = mnPages;
+            if ( (nNewRelSelectedPageNum + _nHoriMove) < 1 )
+                nNewRelSelectedPageNum = 1;
+            else if ( (nNewRelSelectedPageNum + _nHoriMove) > mnPages )
+                nNewRelSelectedPageNum = mnPages;
             else
-                nNewSelectedPageNum += _nHoriMove;
+                nNewRelSelectedPageNum += _nHoriMove;
         }
         if ( _nVertMove != 0 )
         {
-            if ( (nNewSelectedPageNum + (_nVertMove * mnCols)) < 1 )
-                nNewSelectedPageNum = 1;
-            else if ( (nNewSelectedPageNum + (_nVertMove * mnCols)) > mnPages )
-                nNewSelectedPageNum = mnPages;
+            if ( (nNewRelSelectedPageNum + (_nVertMove * mnCols)) < 1 )
+                nNewRelSelectedPageNum = 1;
+            else if ( (nNewRelSelectedPageNum + (_nVertMove * mnCols)) > mnPages )
+                nNewRelSelectedPageNum = mnPages;
             else
-                nNewSelectedPageNum += ( _nVertMove * mnCols );
+                nNewRelSelectedPageNum += ( _nVertMove * mnCols );
         }
     }
 
     sal_uInt16 nNewStartPage = mnPaintPhyStartPageNum;
     Point aNewStartPos = Point(0,0);
 
-    if ( !IsPageVisible( nNewSelectedPageNum ) )
+    sal_uInt16 nNewAbsSelectedPageNum = ConvertRelativeToAbsolutePageNum( nNewRelSelectedPageNum );
+    if ( !IsPageVisible( nNewAbsSelectedPageNum ) )
     {
         if ( _nHoriMove != 0 && _nVertMove != 0 )
         {
@@ -934,15 +958,16 @@ bool SwPagePreviewLayout::CalcStartValuesForSelectedPageMove(
                 // because of blank left-top-corner
                 --nNewStartPage;
             }
+            nNewStartPage = ConvertRelativeToAbsolutePageNum( nNewStartPage );
         }
         else
         {
             // new proposed start page = new selected page.
-            nNewStartPage = nNewSelectedPageNum;
+            nNewStartPage = ConvertRelativeToAbsolutePageNum( nNewRelSelectedPageNum );
         }
     }
 
-    _orNewSelectedPage = nNewSelectedPageNum;
+    _orNewSelectedPage = nNewAbsSelectedPageNum;
     _orNewStartPage = nNewStartPage;
     _orNewStartPos = aNewStartPos;
 
@@ -1343,7 +1368,7 @@ const void SwPagePreviewLayout::_PaintSelectMarkAtPage(
     Perform paint for current selected page in order to unmark it.
     Set new selected page and perform paint to mark this page.
 
-    @author OD
+    @author OD, _nSelectedPage, mnSelectedPage are absolut
 */
 void SwPagePreviewLayout::MarkNewSelectedPage( const sal_uInt16 _nSelectedPage )
 {
@@ -1420,7 +1445,7 @@ const PrevwPage* SwPagePreviewLayout::_GetPrevwPageByPageNum( const sal_uInt16 _
 
     OD 17.01.2003 #103492#
 
-    @author OD
+    @author OD, _nPageNum is relative
 */
 sal_uInt16 SwPagePreviewLayout::GetRowOfPage( sal_uInt16 _nPageNum ) const
 {
@@ -1444,7 +1469,7 @@ sal_uInt16 SwPagePreviewLayout::GetRowOfPage( sal_uInt16 _nPageNum ) const
 
     OD 17.01.2003 #103492#
 
-    @author OD
+    @author OD, _nPageNum is relative
 */
 sal_uInt16 SwPagePreviewLayout::GetColOfPage( sal_uInt16 _nPageNum ) const
 {
@@ -1512,4 +1537,57 @@ sal_uInt16 SwPagePreviewLayout::GetVirtPageNumByPageNum( sal_uInt16 _nPageNum ) 
     {
         return 0;
     }
+}
+
+/** Convert absolute to relative page numbers (see PrintEmptyPages)
+
+    @author FME
+*/
+sal_uInt16 SwPagePreviewLayout::ConvertAbsoluteToRelativePageNum( sal_uInt16 _nAbsPageNum ) const
+{
+    if ( mbBookPreview || mbPrintEmptyPages || !_nAbsPageNum )
+    {
+        return _nAbsPageNum;
+    }
+
+    const SwPageFrm* pTmpPage = static_cast<const SwPageFrm*>(mrLayoutRootFrm.Lower());
+
+    sal_uInt16 nRet = 1;
+
+    while ( pTmpPage && pTmpPage->GetPhyPageNum() != _nAbsPageNum )
+    {
+        if ( !pTmpPage->IsEmptyPage() )
+            ++nRet;
+
+        pTmpPage = static_cast<const SwPageFrm*>( pTmpPage->GetNext() );
+    }
+
+    return nRet;
+}
+
+/** Convert relative to absolute page numbers (see PrintEmptyPages)
+
+    @author FME
+*/
+sal_uInt16 SwPagePreviewLayout::ConvertRelativeToAbsolutePageNum( sal_uInt16 _nRelPageNum ) const
+{
+    if ( mbBookPreview || mbPrintEmptyPages || !_nRelPageNum )
+    {
+        return _nRelPageNum;
+    }
+
+    const SwPageFrm* pTmpPage = static_cast<const SwPageFrm*>(mrLayoutRootFrm.Lower());
+    const SwPageFrm* pRet = 0;
+
+    USHORT i = 0;
+    while( pTmpPage && i != _nRelPageNum )
+    {
+        if ( !pTmpPage->IsEmptyPage() )
+            ++i;
+
+        pRet = pTmpPage;
+        pTmpPage = static_cast<const SwPageFrm*>( pTmpPage->GetNext() );
+    }
+
+    return pRet->GetPhyPageNum();
 }
