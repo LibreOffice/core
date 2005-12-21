@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:37:20 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:20:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,9 +231,8 @@ void OEditControl::focusLost( const FocusEvent& e ) throw ( ::com::sun::star::un
         xSet->getPropertyValue( PROPERTY_TEXT ) >>= sNewHtmlChangeValue;
         if( sNewHtmlChangeValue != m_aHtmlChangeValue )
         {
-            EventObject aEvt;
-            aEvt.Source = *this;
-            NOTIFY_LISTENERS(m_aChangeListeners, XChangeListener, changed, aEvt);
+            EventObject aEvt( *this );
+            m_aChangeListeners.notifyEach( &XChangeListener::changed, aEvt );
         }
     }
 }
