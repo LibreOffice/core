@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqliterator.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:02:07 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:13:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,6 +124,8 @@ namespace connectivity
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>    m_xDatabaseMetaData;
 
         void appendWarning(const ::rtl::OUString& _sErrMsg); // append warnings if m_pParser is set
+
+        void                traverseParameter(OSQLParseNode* _pParseNode,OSQLParseNode* _pColumnRef,const ::rtl::OUString& _aColumnName,const ::rtl::OUString& _aTableRange);
         // F"ugt eine Tabelle in die Map ein
         void                traverseOneTableName(OSQLTables& _rTables,const OSQLParseNode * pTableName, const ::rtl::OUString & rTableRange, const sal_Bool bIsCreateTable);
         void                traverseORCriteria(OSQLParseNode * pSearchCondition);
