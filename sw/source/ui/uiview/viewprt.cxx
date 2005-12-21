@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:15:17 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 15:13:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -358,7 +358,7 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
             if( -1 != bPrintSelection )
                 aOpts.bPrintSelection = 0 != bPrintSelection;
 
-            com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue> aViewProperties(15);
+            com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue> aViewProperties(16);
             com::sun::star::beans::PropertyValue* pViewProperties =  aViewProperties.getArray();
             pViewProperties[1].Name = C2U("PrintGraphics");
             pViewProperties[1].Value <<= (sal_Bool)aOpts.IsPrintGraphic();
@@ -390,6 +390,8 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
             pViewProperties[0].Value <<= (sal_Bool)aOpts.IsPrintSingleJobs();
             pViewProperties[14].Name = C2U("Selection");
             pViewProperties[14].Value <<= (sal_Bool)aOpts.bPrintSelection;
+            pViewProperties[15].Name = C2U("PrintEmptyPages");
+            pViewProperties[15].Value <<= (sal_Bool)aOpts.bPrintEmptyPages;
             SetAdditionalPrintOptions(aViewProperties);
 
             SfxViewShell::Print(*pProgress);
