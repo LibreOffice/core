@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LTable.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:47:42 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:16:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 // -------------------------------------------------------------------------
-void OEvoabTable::fillColumns()
+void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
 {
     BOOL bRead = TRUE;
 
@@ -173,6 +173,7 @@ void OEvoabTable::fillColumns()
     m_aScales.reserve(nFieldCount);
 
     sal_Bool bCase = getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers();
+    CharClass aCharClass(pConnection->getDriver()->getFactory(),_aLocale);
     // read description
     sal_Unicode cDecimalDelimiter  = pConnection->getDecimalDelimiter();
     sal_Unicode cThousandDelimiter = pConnection->getThousandDelimiter();
@@ -238,7 +239,7 @@ void OEvoabTable::fillColumns()
                     // nur Ziffern und Dezimalpunkt und Tausender-Trennzeichen?
                     if ((!cDecimalDelimiter || c != cDecimalDelimiter) &&
                         (!cThousandDelimiter || c != cThousandDelimiter) &&
-                        !isdigit(c))
+                        !aCharClass.isDigit(aField2,j))
                     {
                         bNumeric = FALSE;
                         break;
@@ -431,7 +432,7 @@ void OEvoabTable::construct()
                                     nSize > 10000   ? 4096  : 1024);
         OSL_TRACE("OEvoabTable::construct()::m_pFileStream->Tell() = %d\n", nSize );
 
-        fillColumns();
+        fillColumns(aAppLocale);
 
         refreshColumns();
     }
