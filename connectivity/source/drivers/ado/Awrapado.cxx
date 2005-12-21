@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Awrapado.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:38:15 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:15:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -848,11 +848,11 @@ WpADOFields WpADORecordset::GetFields() const
 }
 
 
- sal_Bool WpADORecordset::Move(sal_Int32 nRows, VARIANT aBmk)   {return SUCCEEDED(pInterface->Move(nRows, aBmk));}
- sal_Bool WpADORecordset::MoveNext() {return SUCCEEDED(pInterface->MoveNext());}
- sal_Bool WpADORecordset::MovePrevious() {return SUCCEEDED(pInterface->MovePrevious());}
- sal_Bool WpADORecordset::MoveFirst() {return SUCCEEDED(pInterface->MoveFirst());}
- sal_Bool WpADORecordset::MoveLast()    {return SUCCEEDED(pInterface->MoveLast());}
+ sal_Bool WpADORecordset::Move(sal_Int32 nRows, VARIANT aBmk)   {return pInterface && SUCCEEDED(pInterface->Move(nRows, aBmk));}
+ sal_Bool WpADORecordset::MoveNext() {return pInterface && SUCCEEDED(pInterface->MoveNext());}
+ sal_Bool WpADORecordset::MovePrevious() {return pInterface && SUCCEEDED(pInterface->MovePrevious());}
+ sal_Bool WpADORecordset::MoveFirst() {return pInterface && SUCCEEDED(pInterface->MoveFirst());}
+ sal_Bool WpADORecordset::MoveLast()    {return pInterface && SUCCEEDED(pInterface->MoveLast());}
 
  sal_Bool WpADORecordset::IsAtBOF() const
 {
