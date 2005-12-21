@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CommonTools.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:35:55 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:14:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -336,7 +336,7 @@ sal_Bool isValidSQLName(const ::rtl::OUString& rName,const ::rtl::OUString& _rSp
     // Dieses ist wichtig fuer Tabellennamen beispielsweise
     ::rtl::OString aName(rName,rName.getLength(),RTL_TEXTENCODING_ASCII_US);
     const char* pStr = aName.getStr();
-    if (isdigit(*pStr))
+    if (*pStr > 127 || isdigit(*pStr))
         return sal_False;
 
     for (; *pStr; ++pStr )
@@ -374,7 +374,7 @@ sal_Bool isCharOk(char c,const ::rtl::OUString& _rSpecials)
     ::rtl::OUString aNewName(rName);
     const sal_Unicode* pStr = rName.getStr();
     sal_Int32 nLength = rName.getLength();
-    sal_Bool bValid(!isdigit(*pStr));
+    sal_Bool bValid(*pStr < 128 && !isdigit(*pStr));
     for (sal_Int32 i=0; bValid && i < nLength; ++pStr,++i )
         if(!isCharOk(*pStr,_rSpecials))
         {
