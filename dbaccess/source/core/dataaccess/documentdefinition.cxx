@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-03 12:35:42 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:36:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -315,28 +315,19 @@ namespace dbaccess
 
         virtual void SAL_CALL saveObject(  ) throw (ObjectSaveVetoException, Exception, RuntimeException)
         {
-            if ( m_pClient )
-                m_pClient->saveObject();
         }
         virtual void SAL_CALL onShowWindow( sal_Bool bVisible ) throw (RuntimeException)
         {
-            if ( m_pClient )
-                m_pClient->onShowWindow(bVisible);
         }
         // XComponentSupplier
         virtual Reference< ::com::sun::star::util::XCloseable > SAL_CALL getComponent(  ) throw (RuntimeException)
         {
-            Reference< ::com::sun::star::util::XCloseable > xRet;
-            // if ( m_pClient )
-            //  xRet = m_pClient->getComponent();
-            return xRet;
+            return Reference< css::util::XCloseable >();
         }
 
         // XEmbeddedClient
         virtual void SAL_CALL visibilityChanged( ::sal_Bool bVisible ) throw (WrongStateException, RuntimeException)
         {
-            if ( m_pClient )
-                m_pClient->visibilityChanged( bVisible );
         }
         inline void resetClient(ODocumentDefinition* _pClient) { m_pClient = _pClient; }
     };
@@ -1041,10 +1032,6 @@ void ODocumentDefinition::insert(const ::rtl::OUString& _sURL, const Reference< 
 //  inserted();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL ODocumentDefinition::saveObject(  ) throw (ObjectSaveVetoException, Exception, RuntimeException)
-{
-}
-// -----------------------------------------------------------------------------
 sal_Bool ODocumentDefinition::save(sal_Bool _bApprove)
 {
     // default handling: instantiate an interaction handler and let it handle the parameter request
@@ -1180,6 +1167,12 @@ void ODocumentDefinition::fillLoadArgs(Sequence<PropertyValue>& _rArgs,Sequence<
     _rEmbeddedObjectDescriptor[nLen++].Value <<= xInterceptor;
 }
 // -----------------------------------------------------------------------------
+Sequence< sal_Int8 > ODocumentDefinition::getDefaultDocumentTypeClassId()
+{
+    return lcl_GetSequenceClassID( SO3_SW_CLASSID );
+}
+
+// -----------------------------------------------------------------------------
 void ODocumentDefinition::loadEmbeddedObject(const Sequence< sal_Int8 >& _aClassID,const Reference<XConnection>& _xConnection,sal_Bool _bReadOnly)
 {
     if ( !m_xEmbeddedObject.is() )
@@ -1201,7 +1194,7 @@ void ODocumentDefinition::loadEmbeddedObject(const Sequence< sal_Int8 >& _aClass
                 }
                 else
                 {
-                    aClassID = lcl_GetSequenceClassID(SO3_SW_CLASSID);
+                    aClassID = getDefaultDocumentTypeClassId();
                     sDocumentService = lcl_GetDocumentServiceFromMediaType(xStorage,m_pImpl->m_aProps.sPersistentName);
                 }
 
@@ -1241,7 +1234,10 @@ void ODocumentDefinition::loadEmbeddedObject(const Sequence< sal_Int8 >& _aClass
     else if ( m_xEmbeddedObject->getCurrentState() == EmbedStates::LOADED )
     {
         if ( !m_pClientHelper )
+        {
             m_pClientHelper = new OEmbeddedClientHelper(this);
+            m_pClientHelper->acquire();
+        }
         Reference<XEmbeddedClient> xClient = m_pClientHelper;
         m_xEmbeddedObject->setClientSite(xClient);
 
@@ -1293,11 +1289,6 @@ void ODocumentDefinition::loadEmbeddedObject(const Sequence< sal_Int8 >& _aClass
 
         xModel->attachResource(xModel->getURL(),aArgs);
     }
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL ODocumentDefinition::onShowWindow( sal_Bool bVisible ) throw (RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
 }
 // -----------------------------------------------------------------------------
 void ODocumentDefinition::generateNewImage(Any& _rImage)
@@ -1371,26 +1362,6 @@ Reference< ::com::sun::star::util::XCloseable> ODocumentDefinition::getComponent
         }
     }
     return xComp;
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL ODocumentDefinition::visibilityChanged( ::sal_Bool bVisible ) throw (WrongStateException, RuntimeException)
-{
-//  ::osl::MutexGuard aGuard(m_aMutex);
-//  if ( m_xEmbeddedObject.is() && !bVisible )
-//  {
-//      try
-//      {
-//          Reference< com::sun::star::util::XCloseable> xCloseable(m_xEmbeddedObject,UNO_QUERY);
-//          if ( xCloseable.is() )
-//              xCloseable->close(sal_True);
-//      }
-//      catch(Exception)
-//      {
-//      }
-//      m_xEmbeddedObject = NULL;
-//      if ( m_pClientHelper )
-//          m_pClientHelper->resetClient(NULL);
-//  }
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL ODocumentDefinition::rename( const ::rtl::OUString& newName ) throw (SQLException, ElementExistException, RuntimeException)
