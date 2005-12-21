@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AStatement.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:31:09 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:15:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -347,11 +347,12 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUS
     CHECK_RETURN(aSet.get_LockType(m_eLockType))
 
     OResultSet* pSet = new OResultSet(aSet,this);
-    Reference< XResultSet > pRs = pSet;
+    Reference< XResultSet > xRs = pSet;
+    pSet->construct();
 
-    m_xResultSet = WeakReference<XResultSet>(pRs);
+    m_xResultSet = WeakReference<XResultSet>(xRs);
 
-    return m_xResultSet;
+    return xRs;
 }
 // -------------------------------------------------------------------------
 
