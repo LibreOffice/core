@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:41:10 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:18:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -714,7 +714,7 @@ void OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
             else if (SQL_ISRULE(pColumnRef,derived_column))
             {
                 ::rtl::OUString aColumnAlias(getColumnAlias(pColumnRef)); // kann leer sein
-                ::rtl::OUString aColumnName;
+                ::rtl::OUString sColumnName;
                 ::rtl::OUString aTableRange;
                 sal_Int32 nType = DataType::VARCHAR;
                 sal_Bool bFkt(sal_False);
@@ -728,8 +728,8 @@ void OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
 
                 if (SQL_ISRULE(pColumnRef,column_ref))
                 {
-                    getColumnRange(pColumnRef,aColumnName,aTableRange);
-                    OSL_ENSURE(aColumnName.getLength(),"Columnname darf nicht leer sein");
+                    getColumnRange(pColumnRef,sColumnName,aTableRange);
+                    OSL_ENSURE(sColumnName.getLength(),"Columnname darf nicht leer sein");
                 }
                 else /*if (SQL_ISRULE(pColumnRef,general_set_fct) || SQL_ISRULE(pColumnRef,set_fct_spec)    ||
                          SQL_ISRULE(pColumnRef,position_exp)    || SQL_ISRULE(pColumnRef,extract_exp)   ||
@@ -737,7 +737,11 @@ void OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
                          SQL_ISRULE(pColumnRef,num_value_exp)   || SQL_ISRULE(pColumnRef,term))*/
                 {
                     /* Funktionsaufruf vorhanden */
-                    pColumnRef->parseNodeToStr(aColumnName,m_xDatabaseMetaData,NULL,sal_False,sal_True);
+                    pColumnRef->parseNodeToStr(sColumnName,m_xDatabaseMetaData,NULL,sal_False,sal_True);
+                    ::rtl::OUString sTableRange;
+                    // check if the column is also a parameter
+                    traverseORCriteria(pColumnRef); // num_value_exp
+                    traverseParameter(pColumnRef,NULL,sColumnName,sTableRange);
 
                     // gehoeren alle beteiligten Spalten der Funktion zu einer Tabelle
                     if (m_aTables.size() == 1)
@@ -774,8 +778,8 @@ void OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
                 }
                 */
                 if(!aColumnAlias.getLength())
-                    aColumnAlias = aColumnName;
-                setSelectColumnName(m_aSelectColumns,aColumnName,aColumnAlias,aTableRange,bFkt,nType,SQL_ISRULE(pColumnRef,general_set_fct) || SQL_ISRULE(pColumnRef,set_fct_spec));
+                    aColumnAlias = sColumnName;
+                setSelectColumnName(m_aSelectColumns,sColumnName,aColumnAlias,aTableRange,bFkt,nType,SQL_ISRULE(pColumnRef,general_set_fct) || SQL_ISRULE(pColumnRef,set_fct_spec));
             }
         }
 
@@ -832,7 +836,7 @@ void OSQLParseTreeIterator::traverseByColumnNames(const OSQLParseNode* pSelectNo
     OSL_ENSURE(!_bOrder || SQL_ISRULE(pOrderingSpecCommalist,ordering_spec_commalist),"OSQLParseTreeIterator:ordering_spec_commalist Fehler im Parse Tree");
     OSL_ENSURE(pOrderingSpecCommalist->count() > 0,"OSQLParseTreeIterator: Fehler im Parse Tree");
 
-    ::rtl::OUString aColumnName,aColumnAlias;
+    ::rtl::OUString sColumnName,aColumnAlias;
     ::rtl::OUString aTableRange;
     sal_uInt32 nCount = pOrderingSpecCommalist->count();
     for (sal_uInt32 i = 0; i < nCount; ++i)
@@ -847,20 +851,20 @@ void OSQLParseTreeIterator::traverseByColumnNames(const OSQLParseNode* pSelectNo
             pColumnRef = pColumnRef->getChild(0);
         }
         aTableRange = ::rtl::OUString();
-        aColumnName = ::rtl::OUString();
+        sColumnName = ::rtl::OUString();
         if ( SQL_ISRULE(pColumnRef,column_ref) )
         {
             // Column-Name (und TableRange):
             if(SQL_ISRULE(pColumnRef,column_ref))
-                getColumnRange(pColumnRef,aColumnName,aTableRange);
+                getColumnRange(pColumnRef,sColumnName,aTableRange);
             else // eine Expression
-                pColumnRef->parseNodeToStr(aColumnName,m_xDatabaseMetaData,NULL,sal_False,sal_False);
+                pColumnRef->parseNodeToStr(sColumnName,m_xDatabaseMetaData,NULL,sal_False,sal_False);
 
-            OSL_ENSURE(aColumnName.getLength(),"aColumnName darf nicht leer sein");
+            OSL_ENSURE(sColumnName.getLength(),"sColumnName darf nicht leer sein");
         }
         else
         {   // here I found a predicate
-            pColumnRef->parseNodeToStr(aColumnName,m_xDatabaseMetaData,NULL,sal_False,sal_False);
+            pColumnRef->parseNodeToStr(sColumnName,m_xDatabaseMetaData,NULL,sal_False,sal_False);
         }
         OSL_ENSURE(pColumnRef != NULL,"OSQLParseTreeIterator: Fehler im Parse Tree");
         if ( _bOrder )
@@ -870,10 +874,10 @@ void OSQLParseTreeIterator::traverseByColumnNames(const OSQLParseNode* pSelectNo
             OSL_ENSURE(pOptAscDesc != NULL,"OSQLParseTreeIterator: Fehler im Parse Tree");
 
             sal_Bool bAscending = pOptAscDesc && SQL_ISTOKEN(pOptAscDesc,ASC);
-            setOrderByColumnName(aColumnName, aTableRange,bAscending);
+            setOrderByColumnName(sColumnName, aTableRange,bAscending);
         }
         else
-            setGroupByColumnName(aColumnName, aTableRange);
+            setGroupByColumnName(sColumnName, aTableRange);
     }
 }
 //-----------------------------------------------------------------------------
@@ -1170,7 +1174,112 @@ void OSQLParseTreeIterator::traverseANDCriteria(OSQLParseNode * pSearchCondition
     }
     // Fehler einfach weiterreichen.
 }
+//-----------------------------------------------------------------------------
+void OSQLParseTreeIterator::traverseParameter(OSQLParseNode* _pParseNode
+                                              ,OSQLParseNode* _pColumnRef
+                                              ,const ::rtl::OUString& _aColumnName
+                                              ,const ::rtl::OUString& _aTableRange)
+{
+    if (SQL_ISRULE(_pParseNode,parameter))
+    {
+        OSL_ENSURE(_pParseNode->count() > 0,"OSQLParseTreeIterator: Fehler im Parse Tree");
+        OSQLParseNode * pMark = _pParseNode->getChild(0);
+        ::rtl::OUString aName,rValue;
 
+        ::rtl::OUString aParameterName;
+        if (SQL_ISPUNCTUATION(pMark,"?"))
+        {
+            // Name = "?", da kein Parametername verfuegbar (z. B. bei Native SQL)
+            rValue = ::rtl::OUString::createFromAscii("?");
+            if(_aColumnName.getLength())
+                rValue = _aColumnName;
+            aName  = ::rtl::OUString::createFromAscii("?");
+        }
+        else if (SQL_ISPUNCTUATION(pMark,":"))
+        {
+            rValue = _pParseNode->getChild(1)->getTokenValue();
+            aName = ::rtl::OUString::createFromAscii(":");
+        }
+        else if (SQL_ISPUNCTUATION(pMark,"["))
+        {
+            rValue = _pParseNode->getChild(1)->getTokenValue();
+            aName = ::rtl::OUString::createFromAscii("[");
+        }
+        else
+        {
+            OSL_ASSERT("OSQLParseTreeIterator: Fehler im Parse Tree");
+        }
+        // found a parameter
+        if ( _pColumnRef && (SQL_ISRULE(_pColumnRef,general_set_fct) || SQL_ISRULE(_pColumnRef,set_fct_spec)) )
+        {// found a function as column_ref
+            ::rtl::OUString sFunctionName;
+            _pColumnRef->getChild(0)->parseNodeToStr(sFunctionName,m_xDatabaseMetaData,NULL,sal_False,sal_False);
+            sal_Int32 nType = ::connectivity::OSQLParser::getFunctionReturnType(sFunctionName,m_pParser ? &m_pParser->getContext() : NULL);
+
+            OParseColumn* pColumn = new OParseColumn(   rValue  ,
+                                                        ::rtl::OUString(),
+                                                        ::rtl::OUString(),
+                                                        ColumnValue::NULLABLE_UNKNOWN,
+                                                        0,
+                                                        0,
+                                                        nType,
+                                                        sal_False,
+                                                        sal_False,
+                                                        m_aCaseEqual.isCaseSensitive());
+            pColumn->setFunction(sal_True);
+            pColumn->setAggregateFunction(sal_True);
+            pColumn->setRealName(sFunctionName);
+            m_aParameters->push_back(pColumn);
+        }
+        else
+        {
+            sal_Bool bNotFound = sal_True;
+            OSQLColumns::const_iterator aIter = ::connectivity::find(m_aSelectColumns->begin(),m_aSelectColumns->end(),_aColumnName,m_aCaseEqual);
+            if(aIter != m_aSelectColumns->end())
+            {
+                OParseColumn* pNewColumn = new OParseColumn(*aIter,m_aCaseEqual.isCaseSensitive());
+                pNewColumn->setName(rValue);
+                pNewColumn->setRealName(_aColumnName);
+                m_aParameters->push_back(pNewColumn);
+                bNotFound = sal_False;
+            }
+            else if(_aColumnName.getLength())// search in the tables for the right one
+            {
+
+                Reference<XPropertySet> xColumn = findColumn(m_aTables,_aColumnName,_aTableRange);
+                if ( !xColumn.is() )
+                    xColumn = findColumn(m_pImpl->m_aSubTables,_aColumnName,_aTableRange);
+
+                if ( xColumn.is() )
+                {
+                    OParseColumn* pNewColumn = new OParseColumn(xColumn,m_aCaseEqual.isCaseSensitive());
+                    pNewColumn->setName(rValue);
+                    pNewColumn->setRealName(_aColumnName);
+                    m_aParameters->push_back(pNewColumn);
+                    bNotFound = sal_False;
+                }
+            }
+            if ( bNotFound )
+            {
+                ::rtl::OUString aNewColName(getUniqueColumnName(rValue));
+
+                OParseColumn* pColumn = new OParseColumn(aNewColName,
+                                                        ::rtl::OUString(),
+                                                        ::rtl::OUString(),
+                                                        ColumnValue::NULLABLE_UNKNOWN,
+                                                        0,
+                                                        0,
+                                                        DataType::VARCHAR,
+                                                        sal_False,
+                                                        sal_False,
+                                                        m_xDatabaseMetaData.is() && m_xDatabaseMetaData->storesMixedCaseQuotedIdentifiers());
+                pColumn->setName(rValue);
+                pColumn->setRealName(rValue);
+                m_aParameters->push_back(pColumn);
+            }
+        }
+    }
+}
 //-----------------------------------------------------------------------------
 void OSQLParseTreeIterator::traverseOnePredicate(
                                 OSQLParseNode * pColumnRef,
@@ -1190,103 +1299,7 @@ void OSQLParseTreeIterator::traverseOnePredicate(
     if (pParseNode)         //event. Parameter, oder Columnref oder
     {
         if (SQL_ISRULE(pParseNode,parameter))
-        {
-            OSL_ENSURE(pParseNode->count() > 0,"OSQLParseTreeIterator: Fehler im Parse Tree");
-            OSQLParseNode * pMark = pParseNode->getChild(0);
-
-            ::rtl::OUString aParameterName;
-            if (SQL_ISPUNCTUATION(pMark,"?"))
-            {
-                // Name = "?", da kein Parametername verfuegbar (z. B. bei Native SQL)
-                rValue = ::rtl::OUString::createFromAscii("?");
-                if(aColumnName.getLength())
-                    rValue = aColumnName;
-                aName  = ::rtl::OUString::createFromAscii("?");
-            }
-            else if (SQL_ISPUNCTUATION(pMark,":"))
-            {
-                rValue = pParseNode->getChild(1)->getTokenValue();
-                aName = ::rtl::OUString::createFromAscii(":");
-            }
-            else if (SQL_ISPUNCTUATION(pMark,"["))
-            {
-                rValue = pParseNode->getChild(1)->getTokenValue();
-                aName = ::rtl::OUString::createFromAscii("[");
-            }
-            else
-            {
-                OSL_ASSERT("OSQLParseTreeIterator: Fehler im Parse Tree");
-            }
-            // found a parameter
-            if(SQL_ISRULE(pColumnRef,general_set_fct) || SQL_ISRULE(pColumnRef,set_fct_spec))
-            {// found a function as column_ref
-                ::rtl::OUString sFunctionName;
-                pColumnRef->getChild(0)->parseNodeToStr(sFunctionName,m_xDatabaseMetaData,NULL,sal_False,sal_False);
-                sal_Int32 nType = ::connectivity::OSQLParser::getFunctionReturnType(sFunctionName,m_pParser ? &m_pParser->getContext() : NULL);
-
-                OParseColumn* pColumn = new OParseColumn(   rValue  ,
-                                                            ::rtl::OUString(),
-                                                            ::rtl::OUString(),
-                                                            ColumnValue::NULLABLE_UNKNOWN,
-                                                            0,
-                                                            0,
-                                                            nType,
-                                                            sal_False,
-                                                            sal_False,
-                                                            m_aCaseEqual.isCaseSensitive());
-                pColumn->setFunction(sal_True);
-                pColumn->setAggregateFunction(sal_True);
-                pColumn->setRealName(sFunctionName);
-                m_aParameters->push_back(pColumn);
-            }
-            else
-            {
-                sal_Bool bNotFound = sal_True;
-                OSQLColumns::const_iterator aIter = ::connectivity::find(m_aSelectColumns->begin(),m_aSelectColumns->end(),aColumnName,m_aCaseEqual);
-                if(aIter != m_aSelectColumns->end())
-                {
-                    OParseColumn* pNewColumn = new OParseColumn(*aIter,m_aCaseEqual.isCaseSensitive());
-                    pNewColumn->setName(rValue);
-                    pNewColumn->setRealName(aColumnName);
-                    m_aParameters->push_back(pNewColumn);
-                    bNotFound = sal_False;
-                }
-                else if(aColumnName.getLength())// search in the tables for the right one
-                {
-
-                    Reference<XPropertySet> xColumn = findColumn(m_aTables,aColumnName,aTableRange);
-                    if ( !xColumn.is() )
-                        xColumn = findColumn(m_pImpl->m_aSubTables,aColumnName,aTableRange);
-
-                    if ( xColumn.is() )
-                    {
-                        OParseColumn* pNewColumn = new OParseColumn(xColumn,m_aCaseEqual.isCaseSensitive());
-                        pNewColumn->setName(rValue);
-                        pNewColumn->setRealName(aColumnName);
-                        m_aParameters->push_back(pNewColumn);
-                        bNotFound = sal_False;
-                    }
-                }
-                if ( bNotFound )
-                {
-                    ::rtl::OUString aNewColName(getUniqueColumnName(rValue));
-
-                    OParseColumn* pColumn = new OParseColumn(aNewColName,
-                                                            ::rtl::OUString(),
-                                                            ::rtl::OUString(),
-                                                            ColumnValue::NULLABLE_UNKNOWN,
-                                                            0,
-                                                            0,
-                                                            DataType::VARCHAR,
-                                                            sal_False,
-                                                            sal_False,
-                                                            m_xDatabaseMetaData.is() && m_xDatabaseMetaData->storesMixedCaseQuotedIdentifiers());
-                    pColumn->setName(rValue);
-                    pColumn->setRealName(rValue);
-                    m_aParameters->push_back(pColumn);
-                }
-            }
-        }
+            traverseParameter(pParseNode,pColumnRef,aColumnName,aTableRange);
         else if (SQL_ISRULE(pParseNode,column_ref))// Column-Name (und TableRange):
             getColumnRange(pParseNode,aName,rValue);
         else
