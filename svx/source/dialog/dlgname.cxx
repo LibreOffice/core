@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgname.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:59:33 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 16:18:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,8 @@
 #include "dlgname.hrc"
 #include "dialmgr.hxx"
 
+#define MAX_DESCRIPTION_LINES   ((long)5)
+
 /*************************************************************************
 |*
 |* Dialog zum Editieren eines Namens
@@ -79,7 +81,22 @@ SvxNameDialog::SvxNameDialog( Window* pWindow, const String& rName, const String
     aEdtName.SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
     ModifyHdl(&aEdtName);
     aEdtName.SetModifyHdl(LINK(this, SvxNameDialog, ModifyHdl));
+
+    // dynamic height of the description field
+    Size aSize = aFtDescription.GetSizePixel();
+    long nTxtWidth = aFtDescription.GetCtrlTextWidth( rDesc );
+    if ( nTxtWidth > aSize.Width() )
+    {
+        long nLines = Min( ( nTxtWidth / aSize.Width() + 1 ), MAX_DESCRIPTION_LINES );
+        long nHeight = aSize.Height();
+        aSize.Height() = nHeight * nLines;
+        aFtDescription.SetSizePixel( aSize );
+        Point aPnt = aEdtName.GetPosPixel();
+        aPnt.Y() += ( aSize.Height() - nHeight );
+        aEdtName.SetPosPixel( aPnt );
+    }
 }
+
 /* -----------------------------27.02.2002 15:22------------------------------
 
  ---------------------------------------------------------------------------*/
