@@ -4,9 +4,9 @@
 #
 #   $RCSfile: msiglobal.pm,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-11 14:18:15 $
+#   last change: $Author: obo $ $Date: 2005-12-21 12:49:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1317,6 +1317,8 @@ sub execute_packaging
     if ( $ENV{'TMP'} ) { $origtemppath = $ENV{'TMP'}; }
     $ENV{'TMP'} = $installer::globals::temppath;    # setting TMP to the new unique directory!
 
+    my $maxmakecabcalls = 3;
+
     for ( my $i = 0; $i <= $#{$localpackjobref}; $i++ )
     {
         my $systemcall = ${$localpackjobref}[$i];
@@ -1327,27 +1329,55 @@ sub execute_packaging
 
         # my $returnvalue = system($systemcall);
 
-        my @ddfoutput = ();
-
-        my $infoline = "Systemcall: $systemcall";
-        push( @installer::globals::logfileinfo, $infoline);
-
-        open (DDF, "$systemcall");
-        while (<DDF>) {push(@ddfoutput, $_); }
-        close (DDF);
-
-        my $returnvalue = $?;   # $? contains the return value of the systemcall
-
-        if ($returnvalue)
+        for ( my $n = 1; $n <= $maxmakecabcalls; $n++ )
         {
-            $infoline = "ERROR: $systemcall !";
+            my @ddfoutput = ();
+
+            my $infoline = "Systemcall: $systemcall";
             push( @installer::globals::logfileinfo, $infoline);
-            for ( my $j = 0; $j <= $#ddfoutput; $j++ ) { push( @installer::globals::logfileinfo, "$ddfoutput[$j]"); }
-        }
-        else
-        {
-            $infoline = "Success: $systemcall";
-            push( @installer::globals::logfileinfo, $infoline);
+
+            open (DDF, "$systemcall");
+            while (<DDF>) {push(@ddfoutput, $_); }
+            close (DDF);
+
+            my $returnvalue = $?;   # $? contains the return value of the systemcall
+
+            if ($returnvalue)
+            {
+                if ( $n < $maxmakecabcalls )
+                {
+                    installer::logger::print_message( "makecab_error (Try $n): Trying again \n" );
+                    $infoline = "makecab_error (Try $n): $systemcall !";
+                }
+                else
+                {
+                    installer::logger::print_message( "ERROR (Try $n): Abort packing \n" );
+                    $infoline = "ERROR (Try $n): $systemcall !";
+                }
+
+                push( @installer::globals::logfileinfo, $infoline);
+                # for ( my $j = 0; $j <= $#ddfoutput; $j++ ) { push( @installer::globals::logfileinfo, "$ddfoutput[$j]"); }
+
+                for ( my $m = 0; $m <= $#ddfoutput; $m++ )
+                {
+                    if ( $ddfoutput[$m] =~ /(ERROR\:.*?)\s*$/ )
+                    {
+                        $infoline = $1 . "\n";
+                        if ( $n < $maxmakecabcalls ) { $infoline =~ s/ERROR\:/makecab_error\:/i; }
+                        installer::logger::print_message( $infoline );
+                        push( @installer::globals::logfileinfo, $infoline);
+                    }
+                }
+
+                if ( $n == $maxmakecabcalls ) { installer::exiter::exit_program("ERROR: \"$systemcall\"!", "execute_packaging"); }
+            }
+            else
+            {
+                # installer::logger::print_message( "Success (Try $n): \"$systemcall\"\n" );
+                $infoline = "Success (Try $n): $systemcall";
+                push( @installer::globals::logfileinfo, $infoline);
+                last;
+            }
         }
     }
 
