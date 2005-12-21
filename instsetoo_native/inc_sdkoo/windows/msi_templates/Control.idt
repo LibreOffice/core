@@ -351,7 +351,7 @@ SetupProgress	LbSec	Text	172	139	32	12	2		OOO_CONTROL_240
 SetupProgress	LbStatus	Text	59	85	70	12	3		OOO_CONTROL_241		
 SetupProgress	Next	PushButton	230	243	66	17	1		OOO_CONTROL_242	Cancel	
 SetupProgress	SetupIcon	Icon	21	51	24	24	5242881		SetupIco		
-SetupProgress	ShowTime	Text	155	139	17	12	2		OOO_CONTROL_243		
+SetupProgress	ShowTime	Text	155	139	17	12	2				
 SetupProgress	TextTime	Text	59	139	96	12	2		OOO_CONTROL_244		
 SetupResume	Back	PushButton	164	243	66	17	1		OOO_CONTROL_245	Next	
 SetupResume	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_246	Back	
