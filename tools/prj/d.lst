@@ -59,6 +59,7 @@ hedabu: ..\inc\date.hxx %_DEST%\inc%_EXT%\tools\date.hxx
 hedabu: ..\inc\datetime.hxx %_DEST%\inc%_EXT%\tools\datetime.hxx
 hedabu: ..\inc\timestamp.hxx %_DEST%\inc%_EXT%\tools\timestamp.hxx
 hedabu: ..\inc\debug.hxx %_DEST%\inc%_EXT%\tools\debug.hxx
+hedabu: ..\inc\diagnose_ex.h %_DEST%\inc%_EXT%\tools\diagnose_ex.h
 hedabu: ..\inc\download.hxx %_DEST%\inc%_EXT%\tools\download.hxx
 hedabu: ..\inc\dynary.hxx %_DEST%\inc%_EXT%\tools\dynary.hxx
 hedabu: ..\inc\errcode.hxx %_DEST%\inc%_EXT%\tools\errcode.hxx
