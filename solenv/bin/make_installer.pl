@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.56 $
+#   $Revision: 1.57 $
 #
-#   last change: $Author: rt $ $Date: 2005-12-14 12:32:35 $
+#   last change: $Author: obo $ $Date: 2005-12-21 13:02:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -371,8 +371,9 @@ if ( $installer::globals::globallogging ) { installer::files::save_array_of_hash
 my $folderinproductarrayref;
 my $folderitemsinproductarrayref;
 my $registryitemsinproductarrayref;
+my $windowscustomactionsarrayref;
 
-if ( $installer::globals::iswindowsbuild )  # Windows specific items: Folder, FolderItem, RegistryItem
+if ( $installer::globals::iswindowsbuild )  # Windows specific items: Folder, FolderItem, RegistryItem, WindowsCustomAction
 {
     installer::logger::print_message( "... analyzing folders ... \n" );
 
@@ -394,6 +395,11 @@ if ( $installer::globals::iswindowsbuild )  # Windows specific items: Folder, Fo
 
     $registryitemsinproductarrayref = installer::scriptitems::remove_uninstall_regitems_from_script($registryitemsinproductarrayref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "registryitems1b.log", $registryitemsinproductarrayref); }
+
+    installer::logger::print_message( "... analyzing Windows custom actions ... \n" );
+
+    $windowscustomactionsarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "WindowsCustomAction");
+    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "windowscustomactions1.log", $windowscustomactionsarrayref); }
 }
 
 my $modulesinproductarrayref;
@@ -919,6 +925,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         }
 
     }
+
+    # Collecting all files without flag PATCH (for maintenance reasons)
+    if ( $installer::globals::patch ) { installer::worker::collect_all_files_without_patch_flag($filesinproductlanguageresolvedarrayref); }
 
     # Patch projects can now start to select the required information
     if (( $installer::globals::patch ) && (( $installer::globals::issolarispkgbuild ) || ( $installer::globals::iswindowsbuild )))
@@ -1692,189 +1701,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             if (( $installer::globals::patch ) || ( $installer::globals::languagepack )) { installer::windows::patch::update_patch_tables($languageidtdir, $allvariableshashref); }
 
-            # Adding Windows Installer CustomActions dynamically
+            # Adding Windows Installer CustomActions
 
-            my $customactionidttablename = $languageidtdir . $installer::globals::separator . "CustomAc.idt";
-            my $customactionidttable = installer::files::read_file($customactionidttablename);
-            my $installexecutetablename = $languageidtdir . $installer::globals::separator . "InstallE.idt";
-            my $installexecutetable = installer::files::read_file($installexecutetablename);
-            my $installuitablename = $languageidtdir . $installer::globals::separator . "InstallU.idt";
-            my $installuitable = installer::files::read_file($installuitablename);
-            my $binarytablename = $languageidtdir . $installer::globals::separator . "Binary.idt";
-            my $binarytable = installer::files::read_file($binarytablename);
-            my $controleventtablename = $languageidtdir . $installer::globals::separator . "ControlE.idt";
-            my $controleventtable = installer::files::read_file($controleventtablename);
-            my $controlconditiontablename = $languageidtdir . $installer::globals::separator . "ControlC.idt";
-            my $controlconditiontable = installer::files::read_file($controlconditiontablename);
-            my $adminexecutetablename = $languageidtdir . $installer::globals::separator . "AdminExe.idt";
-            my $adminexecutetable = installer::files::read_file($adminexecutetablename);
-
-            # The following addition of Custom Actions has to be done by scp as soon as old setup is removed
-
-            # adding the custom action for the quickstarter into the product (CustomAc.idt and InstallE.idt)
-            # $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "ExecuteQuickstart", "82", "install_quickstart.exe", "", 0, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            # if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "install_quickstart.exe", "ExecuteQuickstart", "\&FEATURETEMPLATE=3 And Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-
-            if ( ! ( $installer::globals::product =~ /c05office/i ))
-            {
-                # adding the custom action for the reg4msdoc in uisequence table into the product (CustomAc.idt and InstallU.idt)
-                $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Regmsdocmsidll1", "65", "reg4msdocmsi.dll", "InstallUiSequenceEntry", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-                if ( $added_customaction )
-                {
-                    # conneting the custom action to a control in the controlevent table
-                    installer::windows::idtglobal::connect_custom_action_to_control($controleventtable, $controleventtablename, "SetupType", "Next", "DoAction", "Regmsdocmsidll1", "_IsSetupTypeMin = \"Typical\"", "1");
-                    installer::windows::idtglobal::connect_custom_action_to_control($controleventtable, $controleventtablename, "CustomSetup", "Next", "DoAction", "Regmsdocmsidll1", "1", "1");
-                    installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "FileTypeDialog", "CheckBox1", "Disable", "(\!gm_p_Wrt_Bin=2 And \&gm_p_Wrt_Bin=-1) Or (\!gm_p_Wrt_Bin=3 And \&gm_p_Wrt_Bin=2)");
-                    installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "FileTypeDialog", "CheckBox2", "Disable", "(\!gm_p_Calc_Bin=2 And \&gm_p_Calc_Bin=-1) Or (\!gm_p_Calc_Bin=3 And \&gm_p_Calc_Bin=2)");
-                    installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "FileTypeDialog", "CheckBox3", "Disable", "(\!gm_p_Impress_Bin=2 And \&gm_p_Impress_Bin=-1) Or (\!gm_p_Impress_Bin=3 And \&gm_p_Impress_Bin=2)");
-                }
-            }
-
-            # adding the custom action for the reg4msdoc in executesequence table into the product (CustomAc.idt and InstallE.idt)
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Regmsdocmsidll2", "65", "reg4msdocmsi.dll", "InstallExecSequenceEntry", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "reg4msdocmsi.dll", "Regmsdocmsidll2", "Not REMOVE=\"ALL\" And Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-
-            # adding the custom action for the reg4msdoc in executesequence table into the product (CustomAc.idt and InstallE.idt)
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Regmsdocmsidll3", "65", "reg4msdocmsi.dll", "DeinstallExecSequenceEntry", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "reg4msdocmsi.dll",  "Regmsdocmsidll3", "REMOVE\<\>\"\" And Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-
-            # adding the custom action for the pythonmsi in executesequence table into the product (CustomAc.idt and InstallE.idt)
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Pythonmsidll1", "65", "pythonmsi.dll", "InstallExecSequenceEntry", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "pythonmsi.dll",  "Pythonmsidll1", "\&FEATURETEMPLATE=3 And Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-
-            # adding the custom action for the pythonmsi in executesequence table into the product (CustomAc.idt and InstallE.idt)
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Pythonmsidll2", "65", "pythonmsi.dll", "DeinstallExecSequenceEntry", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "pythonmsi.dll",  "Pythonmsidll2", "\&FEATURETEMPLATE=2 And \!FEATURETEMPLATE=3 And Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-
-            # adding the custom action for the regactivex in executesequence table into the product (CustomAc.idt and InstallE.idt)
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Regactivexdll1", "65", "regactivex.dll", "InstallActiveXControl", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "regactivex.dll", "Regactivexdll1", "\&FEATURETEMPLATE=3 And Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-
-            # adding the custom action for the regactivex in executesequence table into the product (CustomAc.idt and InstallE.idt)
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Regactivexdll2", "65", "regactivex.dll", "DeinstallActiveXControl", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "regactivex.dll",  "Regactivexdll2", "\&FEATURETEMPLATE=2 And \!FEATURETEMPLATE=3 And Not PATCH", "RemoveExistingProducts", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-
-            # adding the custom action for the javafilter in executesequence table into the product (CustomAc.idt and InstallE.idt)
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Jfregcadll1", "65", "jfregca.dll", "install_jf", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "jfregca.dll", "Jfregcadll1", "\&FEATURETEMPLATE=3 And Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-
-            # adding the custom action for the javafilter in executesequence table into the product (CustomAc.idt and InstallE.idt)
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Jfregcadll2", "65", "jfregca.dll", "uninstall_jf", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "jfregca.dll",  "Jfregcadll2", "\&FEATURETEMPLATE=2 And \!FEATURETEMPLATE=3 And Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-
-            # adding the custom action for shutting down the quickstarter in executesequence table into the product (CustomAc.idt and InstallE.idt)
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "sdqsmsidll", "65", "sdqsmsi.dll", "ShutDownQuickstarter", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "sdqsmsi.dll", "sdqsmsidll", "REMOVE=\"ALL\" And Not PATCH", "InstallInitialize", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-
-            # adding the custom action for the removal of the startup folder link in executesequence table into the product (CustomAc.idt and InstallE.idt)
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "qslnkmsidll", "65", "qslnkmsi.dll", "RemoveQuickstarterLink", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "qslnkmsi.dll",  "qslnkmsidll", "REMOVE=\"ALL\" And Not PATCH", "sdqsmsidll", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-
-            # adding the custom action for the winexplorerext in executesequence table into the product (CustomAc.idt and InstallE.idt)
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Shellextensionsdll1", "65", "shlxtmsi.dll", "InstallExecSequenceEntry", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "shlxtmsi.dll", "Shellextensionsdll1", "\&FEATURETEMPLATE=3 And Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-
-            # adding the custom action for the winexplorerext in executesequence table into the product (CustomAc.idt and InstallE.idt)
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Shellextensionsdll2", "65", "shlxtmsi.dll", "DeinstallExecSequenceEntry", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "shlxtmsi.dll",  "Shellextensionsdll2", "\&FEATURETEMPLATE=2 And \!FEATURETEMPLATE=3 And Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-
-            # adding the custom action for restarting the indexing service, necessary for the installation of ooofilt.dll in executesequence table into the product (CustomAc.idt and InstallE.idt)
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Instooofiltmsidll", "65", "instooofiltmsi.dll", "RestartIndexingService", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "instooofiltmsi.dll",  "Instooofiltmsidll", "Not REMOVE=\"ALL\" And Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-
-            # adding the custom action for adding the icon to the office folder in start menu (CustomAc.idt and InstallE.idt)
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Shellextensionsdll3", "65", "shlxtmsi.dll", "InstallStartmenuFolderIcon", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "shlxtmsi.dll", "Shellextensionsdll3", "Not REMOVE=\"ALL\" And Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-
-            # adding the custom action for removing the icon from the office folder in start menu (CustomAc.idt and InstallE.idt)
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Shellextensionsdll4", "65", "shlxtmsi.dll", "DeinstallStartmenuFolderIcon", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "shlxtmsi.dll",  "Shellextensionsdll4", "REMOVE=\"ALL\" And Not PATCH", "qslnkmsidll", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-
-            # adding the custom action for setting the correct ALLUSERS value (CustomAc.idt and InstallE.idt and InstallU.idt )
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Shellextensionsdll5", "321", "shlxtmsi.dll", "SetProductInstallMode", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "shlxtmsi.dll",  "Shellextensionsdll5", "Not REMOVE=\"ALL\" And Not PATCH", "FindRelatedProducts", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installuitable, "shlxtmsi.dll", "Shellextensionsdll5", "Not REMOVE=\"ALL\" And Not PATCH", "FindRelatedProducts", $filesinproductlanguageresolvedarrayref, $installuitablename); }
-
-            # adding the custom action for rebuilding the icon cache (CustomAc.idt and InstallE.idt)
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Shellextensionsdll6", "65", "shlxtmsi.dll", "RebuildShellIconCache", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "shlxtmsi.dll",  "Shellextensionsdll6", "Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-
-            # adding the custom action for starting an inf file in deinstallation process (CustomAc.idt and InstallE.idt)
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Shellextensionsdll7", "65", "shlxtmsi.dll", "ExecutePostUninstallScript", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "shlxtmsi.dll",  "Shellextensionsdll7", "REMOVE=\"ALL\" And Not PATCH", "InstallValidate", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-
-            # adding the custom action for migration of installation path (CustomAc.idt and InstallE.idt and InstallU.idt)
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "MigrateInstallPath", "321", "shlxtmsi.dll", "MigrateInstallPath", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "shlxtmsi.dll",  "MigrateInstallPath", "Not REMOVE=\"ALL\" And Not PATCH", "CostInitialize", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installuitable, "shlxtmsi.dll", "MigrateInstallPath", "Not REMOVE=\"ALL\" And Not PATCH", "CostInitialize", $filesinproductlanguageresolvedarrayref, $installuitablename); }
-
-            # adding the custom action to remove old Windows registry (CustomAc.idt and InstallE.idt )
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "RegCleanOld", "65", "regcleanold.dll", "CleanCurUserOldSystemRegistryFromSetup", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "regcleanold.dll",  "RegCleanOld", "Not REMOVE=\"ALL\" And Not PATCH And Not ALLUSERS=\"\"", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-
-            if ( $installer::globals::tab )
-            {
-                # adding the tab custom action (CustomAc.idt and InstallE.idt)
-                $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "InstallTab", "65", "tabaction.dll", "TabSetup", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-                if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "tabaction.dll", "InstallTab", "Not REMOVE=\"ALL\"  And Not PATCH", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-            }
-
-            if ( $installer::globals::patch )
-            {
-                # adding the custom action for setting the correct ALLUSERS value (CustomAc.idt and InstallE.idt and InstallU.idt )
-                $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "SetProductInstallModeAction", "321", "patchmsi.dll", "SetProductInstallMode", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-                if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "patchmsi.dll",  "SetProductInstallModeAction", "Not REMOVE=\"ALL\"", "FindRelatedProducts", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-                if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installuitable, "patchmsi.dll", "SetProductInstallModeAction", "Not REMOVE=\"ALL\"", "FindRelatedProducts", $filesinproductlanguageresolvedarrayref, $installuitablename); }
-
-                # adding the patch custom action (CustomAc.idt and InstallE.idt (install and deinstall))
-                $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "InstallExchangeFiles", "65", "patchmsi.dll", "InstallPatchedFiles", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-                if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "patchmsi.dll", "InstallExchangeFiles", "Not REMOVE=\"ALL\"", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-                if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($adminexecutetable, "patchmsi.dll", "InstallExchangeFiles", "", "end", $filesinproductlanguageresolvedarrayref, $adminexecutetablename); }
-                $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "DeinstallExchangeFiles", "65", "patchmsi.dll", "UninstallPatchedFiles", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-                if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "patchmsi.dll", "DeinstallExchangeFiles", "REMOVE=\"ALL\"", "RemoveIniValues", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
-                $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "SetUserInstallMode", "65", "patchmsi.dll", "GetUserInstallMode", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-                if ( $added_customaction )
-                {
-                    # conneting the custom action to a control in the controlevent table
-                    installer::windows::idtglobal::connect_custom_action_to_control($controleventtable, $controleventtablename, "LicenseAgreement", "Next", "DoAction", "SetUserInstallMode", "1", "1");
-                    installer::windows::idtglobal::connect_custom_action_to_control($controleventtable, $controleventtablename, "InstallChangeFolder", "OK", "DoAction", "SetUserInstallMode", "1", "4");
-                    installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "Next", "Enable", "NOT INVALIDDIRECTORY And NOT PATCHISOLDER And NOT ISWRONGPRODUCT");
-                    installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "Next", "Disable", "INVALIDDIRECTORY Or PATCHISOLDER Or ISWRONGPRODUCT");
-                    installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "LabelStartInstall", "Show", "NOT INVALIDDIRECTORY And NOT PATCHISOLDER And NOT ISWRONGPRODUCT");
-                    installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "LabelInvalidDir", "Show", "INVALIDDIRECTORY");
-                    installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "LabelPatchOlder", "Show", "PATCHISOLDER");
-                    installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "LabelWrongProduct", "Show", "ISWRONGPRODUCT");
-                    installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "LabelStartInstall2", "Show", "NOT INVALIDDIRECTORY And NOT PATCHISOLDER And NOT ISWRONGPRODUCT");
-                    installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "LabelInvalidDir2", "Show", "INVALIDDIRECTORY");
-                    installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "LabelPatchOlder2", "Show", "PATCHISOLDER");
-                    installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "LabelWrongProduct2", "Show", "ISWRONGPRODUCT");
-                }
-            }
-
-            # custom actions for language packs
-
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "SetUserInstallMode", "65", "lngpckinsthlp.dll", "GetUserInstallMode", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction )
-            {
-                # conneting the custom action to a control in the controlevent table
-                installer::windows::idtglobal::connect_custom_action_to_control($controleventtable, $controleventtablename, "LicenseAgreement", "Next", "DoAction", "SetUserInstallMode", "1", "1");
-                installer::windows::idtglobal::connect_custom_action_to_control($controleventtable, $controleventtablename, "InstallChangeFolder", "OK", "DoAction", "SetUserInstallMode", "1", "4");
-                installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "Next", "Enable", "NOT INVALIDDIRECTORY And NOT ISWRONGPRODUCT");
-                installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "Next", "Disable", "INVALIDDIRECTORY Or ISWRONGPRODUCT");
-                installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "LabelStartInstall", "Show", "NOT INVALIDDIRECTORY And NOT ISWRONGPRODUCT");
-                installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "LabelInvalidDir", "Show", "INVALIDDIRECTORY");
-                installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "LabelWrongProduct", "Show", "ISWRONGPRODUCT");
-                installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "LabelStartInstall2", "Show", "NOT INVALIDDIRECTORY And NOT ISWRONGPRODUCT");
-                installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "LabelInvalidDir2", "Show", "INVALIDDIRECTORY");
-                installer::windows::idtglobal::connect_condition_to_control($controlconditiontable, $controlconditiontablename, "DestinationFolder", "LabelWrongProduct2", "Show", "ISWRONGPRODUCT");
-            }
-
-            installer::files::save_file($customactionidttablename, $customactionidttable);
-            installer::files::save_file($installexecutetablename, $installexecutetable);
-            installer::files::save_file($installuitablename, $installuitable);
-            installer::files::save_file($controleventtablename, $controleventtable);
-            installer::files::save_file($controlconditiontablename, $controlconditiontable);
-            installer::files::save_file($adminexecutetablename, $adminexecutetable);
+            installer::windows::idtglobal::addcustomactions($languageidtdir, $windowscustomactionsarrayref, $filesinproductlanguageresolvedarrayref);
 
             # Adding child projects if specified
 
