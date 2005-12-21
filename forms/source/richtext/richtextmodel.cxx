@@ -4,9 +4,9 @@
  *
  *  $RCSfile: richtextmodel.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:08:17 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:23:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,9 @@
 
 #ifndef _SV_OUTDEV_HXX
 #include <vcl/outdev.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 
 //--------------------------------------------------------------------------
@@ -417,7 +420,7 @@ namespace frm
             }
             else if ( PROPERTY_ID_TEXT == _nHandle )
             {
-                implSetEngineText( m_sLastKnownEngineText );
+                impl_smlock_setEngineText( m_sLastKnownEngineText );
             }
         }
         else if ( isFontRelatedProperty( _nHandle ) )
@@ -498,10 +501,11 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void ORichTextModel::implSetEngineText( const ::rtl::OUString& _rText )
+    void ORichTextModel::impl_smlock_setEngineText( const ::rtl::OUString& _rText )
     {
         if ( m_pEngine )
         {
+            ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
             m_bSettingEngineText = true;
             m_pEngine->SetText( _rText );
             m_bSettingEngineText = false;
