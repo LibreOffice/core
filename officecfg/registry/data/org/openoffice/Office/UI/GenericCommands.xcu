@@ -5,9 +5,9 @@
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 09:16:12 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 16:12:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5666,8 +5666,8 @@
             </node>
                         <node oor:name=".uno:Signature" oor:op="replace">
                                 <prop oor:name="Label" oor:type="xs:string">
-                                        <value xml:lang="de">Digitale Signaturen...</value>
-                                        <value xml:lang="en-US">Digital Signatures...</value>
+                                        <value xml:lang="de">Digitale Signatu~ren...</value>
+                                        <value xml:lang="en-US">Digital Signatu~res...</value>
                                 </prop>
                         </node>
                         <node oor:name=".uno:MacroSignature" oor:op="replace">
