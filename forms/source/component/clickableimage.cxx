@@ -4,9 +4,9 @@
  *
  *  $RCSfile: clickableimage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:47:29 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:22:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -448,7 +448,7 @@ namespace frm
             {
                     // notify the action listeners for a push button
                 ActionEvent aEvt(static_cast<XWeak*>(this), m_aActionCommand);
-                NOTIFY_LISTENERS(m_aActionListeners, XActionListener, actionPerformed, aEvt);
+                m_aActionListeners.notifyEach( &XActionListener::actionPerformed, aEvt );
             }
         }
     }
