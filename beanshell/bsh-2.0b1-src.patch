@@ -46,16 +46,16 @@
 ***************
 *** 1 ****
 ! dummy
---- 1,46 ----
+--- 1,43 ----
 ! #*************************************************************************
 ! #
 ! #   OpenOffice.org - a multi-platform office productivity suite
 ! #
 ! #   $RCSfile: bsh-2.0b1-src.patch,v $
 ! #
-! #   $Revision: 1.5 $
+! #   $Revision: 1.6 $
 ! #
-! #   last change: $Author: hr $ $Date: 2005-10-25 11:42:49 $
+! #   last change: $Author: obo $ $Date: 2005-12-21 11:36:35 $
 ! #
 ! #   The Contents of this file are made available subject to
 ! #   the terms of GNU Lesser General Public License Version 2.1.
@@ -88,9 +88,6 @@
 ! 
 ! .INCLUDE : ant.mk
 ! 
-! CLASSPATH+=$PATH_SEPERATOR$SOLARVER/$UPD/$INPATH/bin/crimson.jar
-! .EXPORT : CLASSPATH
-!
 ! ALLTAR : ANTBUILD
 ! 
 *** misc/BeanShell/src/bsh/ClassGeneratorUtil.java	2003-12-19 17:14:28.000000000 +0100
