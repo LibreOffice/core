@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: obo $ $Date: 2005-11-23 16:21:32 $
+#   last change: $Author: obo $ $Date: 2005-12-21 12:48:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -235,6 +235,78 @@ sub save_checksum_file
     installer::files::save_file($installchecksumdir . $installer::globals::separator . $numberedchecksumfilename, $checksumfile);
 }
 
+#################################################
+# Writing some global information into
+# the list of files without flag PATCH
+#################################################
+
+sub write_nopatchlist_header
+{
+    my ( $content ) = @_;
+
+    my @header = ();
+    my $infoline = "This is a list of files, that are defined in scp-projects without\n";
+    push(@header, $infoline);
+    $infoline = "flag \"PATCH\". Important: This does not mean in any case, that \n";
+    push(@header, $infoline);
+    $infoline = "this files are included into or excluded from a patch. \n\n";
+    push(@header, $infoline);
+    $infoline = "Exception Linux: A patch rpm is a complete rpm. This means that all \n";
+    push(@header, $infoline);
+    $infoline = "files are included into a patch rpm, if only one file of the rpm has the \n";
+    push(@header, $infoline);
+    $infoline = "style \"PATCH\". \n\n";
+    push(@header, $infoline);
+
+    for ( my $i = 0; $i <= $#header; $i++ ) { push(@{$content},$header[$i]); }
+}
+
+#################################################
+# Creating the content of the list of files
+# without flag PATCH.
+# All files are saved in
+# @{$installer::globals::nopatchfilecollector}
+#################################################
+
+sub create_nopatchlist
+{
+    my @content =();
+
+    write_nopatchlist_header(\@content);
+
+    for ( my $i = 0; $i <= $#{$installer::globals::nopatchfilecollector}; $i++ )
+    {
+        my $onefile = ${$installer::globals::nopatchfilecollector}[$i];
+        my $oneline = $onefile->{'destination'};
+        if ( $onefile->{'zipfilename'} ) { $oneline = $oneline . " (" . $onefile->{'zipfilename'} . ")"; }
+        $oneline = $oneline . "\n";
+        push(@content, $oneline);
+    }
+
+    return \@content;
+}
+
+#########################################
+# Saving the patchlist file
+#########################################
+
+sub save_patchlist_file
+{
+    my ($installlogdir, $patchlistfilename) = @_;
+
+    my $installpatchlistdir = installer::systemactions::create_directory_next_to_directory($installlogdir, "patchlist");
+    $patchlistfilename =~ s/log\_/patchfiles\_/;
+    $patchlistfilename =~ s/\.log/\.txt/;
+    installer::files::save_file($installpatchlistdir . $installer::globals::separator . $patchlistfilename, \@installer::globals::patchfilecollector);
+    installer::logger::print_message( "... creating patchlist file $patchlistfilename \n" );
+
+    $patchlistfilename =~ s/patchfiles\_/nopatchfiles\_/;
+    my $nopatchlist = create_nopatchlist();
+    installer::files::save_file($installpatchlistdir . $installer::globals::separator . $patchlistfilename, $nopatchlist);
+    installer::logger::print_message( "... creating patch exclusion file $patchlistfilename \n" );
+
+}
+
 ###############################################################
 # Removing all directories of a special language
 # in the directory $basedir
@@ -402,6 +474,9 @@ sub analyze_and_save_logfile
     # Saving the checksumfile in a checksum directory in the install directory
     # installer::worker::save_checksum_file($current_install_number, $installchecksumdir, $checksumfile);
 
+    # Saving the list of patchfiles in a patchlist directory in the install directory
+    if ( $installer::globals::patch ) { installer::worker::save_patchlist_file($installlogdir, $numberedlogfilename); }
+
     return ($is_success, $finalinstalldir);
 }
 
@@ -519,6 +594,45 @@ sub collect_all_items_with_special_flag
         if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'} };
 
         if ( $styles =~ /\b$flag\b/ )
+        {
+            push( @allitems, $oneitem );
+        }
+    }
+
+    return \@allitems;
+}
+
+##############################################################
+# Collecting all files without patch flag in
+# $installer::globals::nopatchfilecollector
+##############################################################
+
+sub collect_all_files_without_patch_flag
+{
+    my ($filesref) = @_;
+
+    my $newfiles = collect_all_items_without_special_flag($filesref, "PATCH");
+
+    for ( my $i = 0; $i <= $#{$newfiles}; $i++ ) { push(@{$installer::globals::nopatchfilecollector}, ${$newfiles}[$i]); }
+}
+
+##############################################################
+# Collecting all items without a defined flag
+##############################################################
+
+sub collect_all_items_without_special_flag
+{
+    my ($itemsref, $flag) = @_;
+
+    my @allitems = ();
+
+    for ( my $i = 0; $i <= $#{$itemsref}; $i++ )
+    {
+        my $oneitem = ${$itemsref}[$i];
+        my $styles = "";
+        if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'} };
+
+        if ( !( $styles =~ /\b$flag\b/ ))
         {
             push( @allitems, $oneitem );
         }
@@ -1198,6 +1312,10 @@ sub prepare_windows_patchfiles
         $onefile->{'Name'} = $newfilename;
 
         push(@patchfiles, $line);
+
+        # also collecting all files from patch in @installer::globals::patchfilecollector
+        my $patchfileline = $olddestination . "\n";
+        push(@installer::globals::patchfilecollector, $patchfileline);
     }
 
     my $winpatchdirname = "winpatch";
