@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:04:00 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 16:23:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,8 @@
 
 #include "app.hxx"
 #include "cmdlineargs.hxx"
+#include "desktopresid.hxx"
+#include "desktop.hrc"
 
 #ifndef _COM_SUN_STAR_REGISTRY_XSIMPLEREGISTRY_HPP_
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
@@ -112,6 +114,7 @@
 
 #include <cppuhelper/bootstrap.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/rcid.h>
 
 #include <rtl/logfile.hxx>
 #ifndef INCLUDED_RTL_INSTANCE_HXX
@@ -456,12 +459,31 @@ void Desktop::CreateTemporaryDirectory()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::createTemporaryDirectory" );
 
+    ::rtl::OUString aTempBaseURL;
+    try
+    {
+        SvtPathOptions aOpt;
+        aTempBaseURL = aOpt.GetTempPath();
+    }
+    catch ( RuntimeException& e )
+    {
+        // Catch runtime exception here: We have to add language dependent info
+        // to the exception message. Fallback solution uses hard coded string.
+        OUString aMsg;
+        DesktopResId aResId( STR_BOOTSTRAP_ERR_NO_PATHSET_SERVICE );
+        aResId.SetRT( RSC_STRING );
+        if ( aResId.GetResMgr()->IsAvailable( aResId ))
+            aMsg = String( aResId );
+        else
+            aMsg = OUString( RTL_CONSTASCII_USTRINGPARAM( "The path manager is not available.\n" ));
+        e.Message = aMsg + e.Message;
+        throw e;
+    }
+
     // remove possible old directory and base directory
-    SvtPathOptions      aOpt;
     SvtInternalOptions  aInternalOpt;
 
     // set temp base directory
-    ::rtl::OUString aTempBaseURL( aOpt.GetTempPath() );
     sal_Int32 nLength = aTempBaseURL.getLength();
     if ( aTempBaseURL.matchAsciiL( "/", 1, nLength-1 ) )
         aTempBaseURL = aTempBaseURL.copy( 0, nLength - 1 );
