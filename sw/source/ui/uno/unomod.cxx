@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:21:53 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 15:13:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,7 +171,8 @@ enum SwPrintSettingsPropertyHandles
     HANDLE_PRINTSET_FAX_NAME,
     HANDLE_PRINTSET_PAPER_FROM_SETUP,
     HANDLE_PRINTSET_TABLES,
-    HANDLE_PRINTSET_SINGLE_JOBS
+    HANDLE_PRINTSET_SINGLE_JOBS,
+    HANDLE_PRINTSET_EMPTY_PAGES
 };
 
 static ChainablePropertySetInfo * lcl_createViewSettingsInfo()
@@ -238,6 +239,7 @@ static ChainablePropertySetInfo * lcl_createPrintSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM ( "PrintPaperFromSetup" ),  HANDLE_PRINTSET_PAPER_FROM_SETUP   , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintTables" ),          HANDLE_PRINTSET_TABLES             , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintSingleJobs" ),      HANDLE_PRINTSET_SINGLE_JOBS        , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintEmptyPages" ),      HANDLE_PRINTSET_EMPTY_PAGES        , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { 0, 0, 0, CPPUTYPE_UNKNOWN, 0, 0 }
     };
     return new ChainablePropertySetInfo ( aPrintSettingsMap_Impl );
@@ -483,6 +485,12 @@ void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, 
                 throw lang::IllegalArgumentException();
         }
         break;
+        case HANDLE_PRINTSET_EMPTY_PAGES:
+        {
+            bVal = *(sal_Bool*)rValue.getValue();
+            mpPrtOpt->SetPrintEmptyPages(bVal);
+        }
+        break;
         case HANDLE_PRINTSET_FAX_NAME:
         {
             OUString sString;
@@ -567,6 +575,9 @@ void SwXPrintSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, 
         break;
         case HANDLE_PRINTSET_SINGLE_JOBS:
             bBoolVal = mpPrtOpt->IsPrintSingleJobs();
+        break;
+        case HANDLE_PRINTSET_EMPTY_PAGES:
+            bBoolVal = mpPrtOpt->IsPrintEmptyPages();
         break;
         case HANDLE_PRINTSET_PAPER_FROM_SETUP:
             bBoolVal = mpPrtOpt->IsPaperFromSetup();
