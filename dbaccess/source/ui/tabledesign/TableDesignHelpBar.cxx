@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableDesignHelpBar.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:40:50 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:37:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
 #endif
-
+#include <memory>
 using namespace dbaui;
 #define STANDARD_MARGIN                 6
 //==================================================================
@@ -67,7 +67,7 @@ OTableDesignHelpBar::OTableDesignHelpBar( Window* pParent ) :
 OTableDesignHelpBar::~OTableDesignHelpBar()
 {
     DBG_DTOR(OTableDesignHelpBar,NULL);
-    delete m_pTextWin;
+    ::std::auto_ptr<Window> aTemp(m_pTextWin);
     m_pTextWin = NULL;
 }
 
