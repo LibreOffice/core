@@ -5,9 +5,9 @@
 #
 #   $RCSfile: soffice.sh,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-11 12:28:45 $
+#   last change: $Author: obo $ $Date: 2005-12-21 18:08:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -212,11 +212,6 @@ for sd_arg in ${1+"$@"} ; do
         ;;
     esac
 done
-
-# read database entries for Adabas D
-if [ -f /etc/adabasrc ]; then
-  . /etc/adabasrc
-fi
 
 sd_pagein_args="${sd_pagein_args:+${sd_pagein_args} }@pagein-common"
 "${sd_prog}"/pagein -L"${sd_prog}" ${sd_pagein_args}
