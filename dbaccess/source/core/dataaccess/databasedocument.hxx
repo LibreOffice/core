@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasedocument.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:05:10 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:35:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,8 +108,8 @@ typedef ::cppu::WeakComponentImplHelper10<  ::com::sun::star::frame::XModel
                             //, ::com::sun::star::document::XStorageBasedDocument
                             >   ODatabaseDocument_OfficeDocument;
 
-class ODatabaseDocument : public ::comphelper::OBaseMutex
-                         ,public ODatabaseDocument_OfficeDocument
+class ODatabaseDocument :public ModelDependentComponent             // ModelDependentComponent must be first!
+                        ,public ODatabaseDocument_OfficeDocument
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager>    m_xUIConfigurationManager;
     ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener >      m_xDocEventBroadcaster;
@@ -117,7 +117,6 @@ class ODatabaseDocument : public ::comphelper::OBaseMutex
     ::cppu::OInterfaceContainerHelper                   m_aModifyListeners;
     ::cppu::OInterfaceContainerHelper                   m_aCloseListener;
     ::cppu::OInterfaceContainerHelper                   m_aDocEventListeners;
-    ::rtl::Reference<ODatabaseModelImpl>                m_pImpl;
     sal_Bool                                            m_bCommitMasterStorage;
 
     void setMeAsParent(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xName);
@@ -142,8 +141,18 @@ class ODatabaseDocument : public ::comphelper::OBaseMutex
             OnSaveDone   => "Save" ended
             OnSaveAsDone   => "SaveAs" ended
             OnModifyChanged   => modified/unmodified
+        @param _rClearForNotify
+            a guard to our mutex, which will be cleared (i.e. the mutex released) immediately before
+            the notification happens
     */
-    void notifyEvent(const ::rtl::OUString& _sEventName);
+    void impl_notifyEvent( const ::rtl::OUString& _sEventName, ::osl::ClearableMutexGuard& _rClearForNotify );
+
+    /** notifies the global event broadcaster
+    */
+    inline void impl_notifyEvent( const sal_Char* _pAsciiEventName, ::osl::ClearableMutexGuard& _rClearForNotify  )
+    {
+        impl_notifyEvent( ::rtl::OUString::createFromAscii( _pAsciiEventName ), _rClearForNotify );
+    }
 
     /// write a single XML stream into the package
     sal_Bool WriteThroughComponent(
@@ -186,6 +195,9 @@ class ODatabaseDocument : public ::comphelper::OBaseMutex
                     , const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& lArguments
                     , const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _xStorageToSaveTo);
 
+
+    // ModelDependentComponent overridables
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getThis();
 
 private:
     ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>& _pImpl);
