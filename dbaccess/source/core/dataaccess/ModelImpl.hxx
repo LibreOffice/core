@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModelImpl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:17:45 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:34:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,10 +170,30 @@ class ODatabaseContext;
 class OSharedConnectionManager;
 
 //============================================================
+//= SharedMutex
+//============================================================
+class SharedMutex
+{
+private:
+    oslInterlockedCount m_refCount;
+    ::osl::Mutex        m_aMutex;
+
+public:
+    SharedMutex();
+
+    void SAL_CALL acquire();
+    void SAL_CALL release();
+
+    inline ::osl::Mutex&   getMutex() { return m_aMutex; }
+
+private:
+    ~SharedMutex();
+};
+
+//============================================================
 //= ODatabaseModelImpl
 //============================================================
 DECLARE_STL_USTRINGACCESS_MAP(::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >,TStorages);
-
 
 class ODatabaseContext;
 class DocumentStorageAccess;
@@ -181,10 +201,11 @@ class OSharedConnectionManager;
 class ODatabaseModelImpl : public ::rtl::IReference
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>                      m_xTempModel;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDataSource>              m_xDataSource;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>          m_xTempModel;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDataSource>  m_xDataSource;
 
-    DocumentStorageAccess*                                                                  m_pStorageAccess;
+    DocumentStorageAccess*                                                      m_pStorageAccess;
+    ::rtl::Reference< SharedMutex >                                             m_xMutex;
 
 public:
 
@@ -404,6 +425,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > createNewModel_deliverOwnership();
 
     struct ResetModelAccess { friend class ODatabaseDocument; private: ResetModelAccess() { } };
+
     /** resets the model to NULL
 
         Only to be called when the model is being disposed
@@ -416,7 +438,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentSubStorageSupplier >
             getDocumentSubStorageSupplier();
 
-//  void clear();
+    inline ::rtl::Reference< SharedMutex > getSharedMutex() const { return m_xMutex; }
 
     /** @see osl_incrementInterlockedCount.
      */
@@ -427,6 +449,87 @@ public:
     virtual oslInterlockedCount SAL_CALL release();
 
 
+};
+
+/** a small base class for UNO components whose functionality depends on a ODatabaseModelImpl
+*/
+class ModelDependentComponent
+{
+protected:
+    ::rtl::Reference< ODatabaseModelImpl >  m_pImpl;
+    ::rtl::Reference< SharedMutex >         m_xMutex;
+
+protected:
+    ModelDependentComponent( const ::rtl::Reference< ODatabaseModelImpl >& _model );
+
+    /** returns the component itself
+    */
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getThis() = 0;
+
+    inline ::osl::Mutex& getMutex()
+    {
+        return m_xMutex->getMutex();
+    }
+
+public:
+    struct GuardAccess { friend class ModelMethodGuard; private: GuardAccess() { } };
+
+    /** returns the mutex used for thread safety
+
+        @throws ::com::sun::star::lang::DisposedException
+            if m_pImpl is <NULL/>. Usually, you will set this member in your derived
+            component's <code>dispose</code> method to <NULL/>.
+    */
+    inline ::osl::Mutex& getMutex( GuardAccess )
+    {
+        return getMutex();
+    }
+    inline ::rtl::Reference< ODatabaseModelImpl > getImpl( GuardAccess )
+    {
+        return m_pImpl;
+    }
+
+    void checkDisposed()
+    {
+        if ( !m_pImpl.is() )
+            throw ::com::sun::star::lang::DisposedException( ::rtl::OUString::createFromAscii( "Component is already disposed." ), getThis() );
+    }
+};
+
+/** a guard for public methods of objects dependent on a ODatabaseModelImpl instance
+
+    Just put this guard onto the stack at the beginning of your method. Don't bother yourself
+    with a MutexGuard, checks for being disposed, and the like.
+*/
+class ModelMethodGuard  :public ::osl::ResettableMutexGuard
+{
+private:
+    typedef ::osl::ResettableMutexGuard             BaseMutexGuard;
+
+public:
+    /** constructs the guard
+
+        @param _component
+            the component whose functionality depends on a ODatabaseModelImpl instance
+
+        @throws ::com::sun::star::lang::DisposedException
+            If the given component is already disposed
+    */
+    ModelMethodGuard( ModelDependentComponent& _component )
+        :BaseMutexGuard( _component.getMutex( ModelDependentComponent::GuardAccess() ) )
+    {
+        _component.checkDisposed();
+    }
+
+    inline void clear()
+    {
+        BaseMutexGuard::clear();
+    }
+
+    inline void reset()
+    {
+        BaseMutexGuard::reset();
+    }
 };
 
 //........................................................................
