@@ -4,9 +4,9 @@
  *
  *  $RCSfile: plugcon.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:54:39 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 11:14:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,9 +74,16 @@
 #include <X11/Xatom.h>
 #define XP_UNIX
 #include <stdio.h>
+#ifdef SYSTEM_MOZILLA
+#define OJI
+#define MOZ_X11
+#include <npupp.h>
+#include <npapi.h>
+#else
 #ifndef _NPAPI_H_
 #include <npsdk/npupp.h>
 #include <npsdk/npapi.h>
+#endif
 #endif
 #undef Window
 #undef Font
