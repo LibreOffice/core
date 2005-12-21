@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:21:36 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 15:01:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,7 @@ ModalDialog RID_PDF_EXPORT_DLG
     };
     FixedText FT_QUALITY
     {
-        Pos = MAP_APPFONT ( 30 , 88 ) ;
+        Pos = MAP_APPFONT ( 30 , 89 ) ;
         Size = MAP_APPFONT ( 70, 10 ) ;
         Text[ de ] = "~Qualität" ;
         Text[ en-US ] = "~Quality";
@@ -113,7 +113,7 @@ ModalDialog RID_PDF_EXPORT_DLG
     MetricField NF_QUALITY
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 114, 88 ) ;
+        Pos = MAP_APPFONT ( 114, 87 ) ;
         Size = MAP_APPFONT ( 48, 12 ) ;
         TabStop = TRUE ;
         Spin = TRUE ;
@@ -123,7 +123,7 @@ ModalDialog RID_PDF_EXPORT_DLG
     };
     CheckBox CB_REDUCEIMAGERESOLUTION
     {
-        Pos = MAP_APPFONT ( 12 , 102 ) ;
+        Pos = MAP_APPFONT ( 12 , 104 ) ;
         Size = MAP_APPFONT ( 103 , 10 ) ;
         TabStop = TRUE ;
         Text[ de ] = "~Grafikauflösung verringern" ;
@@ -131,7 +131,7 @@ ModalDialog RID_PDF_EXPORT_DLG
     };
     ComboBox CO_REDUCEIMAGERESOLUTION
     {
-        Pos = MAP_APPFONT ( 114 , 102 ) ;
+        Pos = MAP_APPFONT ( 114 , 101 ) ;
         Size = MAP_APPFONT ( 48 , 50 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -185,7 +185,7 @@ ModalDialog RID_PDF_EXPORT_DLG
     ListBox LB_FORMSFORMAT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 124, 171 ) ;
+        Pos = MAP_APPFONT ( 124, 168 ) ;
         Size = MAP_APPFONT ( 38, 48 ) ;
         DeltaLang = < Default ; Default ; Default ; Default ; > ;
         TabStop = TRUE ;
@@ -197,6 +197,14 @@ ModalDialog RID_PDF_EXPORT_DLG
             < "HTML" ; > ;
             < "XML" ; > ;
         };
+    };
+    CheckBox CB_EXPORTEMPTYPAGES
+    {
+        Pos = MAP_APPFONT ( 12 , 185 ) ;
+        Size = MAP_APPFONT ( 153 , 10 ) ;
+        TabStop = TRUE ;
+        Text[ de ] = "Automatisch eingefügte ~Leerseiten exportieren" ;
+        Text[ en-US ] = "Export automatically inserted ~blank pages";
     };
     OKButton BT_OK
     {
