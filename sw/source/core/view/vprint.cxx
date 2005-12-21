@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:33:23 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 15:11:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1039,9 +1039,6 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
     //! rOptions.bPrintSelection parameter will be false.
     BOOL bSelection = rOptions.bPrintSelection;
 
-    // Damit beim Selektionsdruck nicht mit einer leeren Seite gestartet wird
-    BOOL bIgnoreEmptyPage = bSelection;
-
     MultiSelection aMulti( rOptions.aMulti );
 
     if ( !aMulti.GetSelectCount() )
@@ -1444,9 +1441,9 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
                             ::SetSwVisArea( pShell, pStPage->Frm(), 0 != pPDFOut );
                             nJobStartError = JOBSET_ERR_ISSTARTET;
                         }
-                        // Bei Selektionsdruck wird ggf. die erste leere Seite ausgelassen
-                        if( !bIgnoreEmptyPage || (0==(bIgnoreEmptyPage=TRUE)) ||
-                            pStPage->Frm().Height() )
+                        // --> FME 2005-12-12 #b6354161# Feature - Print empty pages
+                        if ( rOptions.bPrintEmptyPages || pStPage->Frm().Height() )
+                        // <--
                         {
                             if (pPrt)
                                 pPrt->StartPage();
