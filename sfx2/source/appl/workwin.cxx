@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-30 13:24:56 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 16:21:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -780,8 +780,17 @@ void SfxWorkWindow::DeleteControllers_Impl()
             pWorkWin->GetSystemWindow()->GetTaskPaneList()->RemoveWindow( pChild->GetWindow() );
             pChild->Destroy();
         }
+
         delete pCW->pControl;
         delete pCW;
+
+        // ATTENTION: The array itself is cleared after this loop!!
+        // Therefore we have to set every array entry to zero as it could be
+        // accessed by calling pChild->Destroy().
+        // See task 128307 (Windows)
+        // Window::NotifyAllChilds() calls SfxWorkWindow::DataChanged_Impl for
+        // 8-bit displays (WM_QUERYPALETTECHANGED message due to focus change)!!
+        (*pChildWins)[n] = 0;
     }
 
     pChildWins->Remove((USHORT)0, nCount);
