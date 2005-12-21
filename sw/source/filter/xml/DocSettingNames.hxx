@@ -22,4 +22,5 @@ const char* aNmArr[] = {
     "PrintTables" ,
     "PrintSingleJobs",
     "UpdateFromTemplate",
+    "PrintEmptyPages",
 };
