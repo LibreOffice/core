@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:28:32 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 10:46:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,12 +90,15 @@
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
-
+#include <set>
+#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
+#include <boost/shared_ptr.hpp>
+#endif
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::rtl;
-
+using namespace ::std;
 /******************************************************************
  *  SwXTextPortionEnumeration
  ******************************************************************/
@@ -286,50 +289,63 @@ void lcl_InsertTOXMarkPortion(
 #define BKM_TYPE_START_END      2
 struct SwXBookmarkPortion_Impl
 {
-    SwXBookmark*                pBookmark;
     Reference<XTextContent>     xBookmark;
     BYTE                        nBkmType;
-    ULONG                       nIndex;
+    const SwPosition            aPosition;
 
-    SwXBookmarkPortion_Impl( SwXBookmark* pXMark, BYTE nType, ULONG nIdx) :
-        pBookmark(pXMark),
-        xBookmark(pXMark),
-        nBkmType(nType),
-        nIndex(nIdx){}
-
-    // compare by nIndex
-    BOOL operator < (const SwXBookmarkPortion_Impl &rCmp) const;
-    BOOL operator ==(const SwXBookmarkPortion_Impl &rCmp) const;
-
+    SwXBookmarkPortion_Impl( SwXBookmark* pXMark, BYTE nType, const SwPosition &rPosition )
+    : xBookmark ( pXMark )
+    , nBkmType  ( nType )
+    , aPosition ( rPosition )
+    {
+    }
+    ULONG getIndex ()
+    {
+        return aPosition.nContent.GetIndex();
+    }
 };
-BOOL SwXBookmarkPortion_Impl::operator ==(const SwXBookmarkPortion_Impl &rCmp) const
-{
-    return nIndex == rCmp.nIndex &&
-        pBookmark == rCmp.pBookmark &&
-            nBkmType == rCmp.nBkmType;
-}
 
-BOOL SwXBookmarkPortion_Impl::operator < (const SwXBookmarkPortion_Impl &rCmp) const
+typedef boost::shared_ptr < SwXBookmarkPortion_Impl > SwXBookmarkPortion_ImplSharedPtr;
+struct BookmarkCompareStruct
 {
-    // #i16896# for bookmark portions at the same position, the start should
-    // always precede the end. Hence compare positions, and use bookmark type
-    // as tie-breaker for same position.
-    return ( nIndex == rCmp.nIndex )
-        ? ( nBkmType < rCmp.nBkmType )
-        : ( nIndex < rCmp.nIndex );
-}
+    bool operator () ( const SwXBookmarkPortion_ImplSharedPtr &r1,
+                       const SwXBookmarkPortion_ImplSharedPtr &r2 )
+    {
+        // #i16896# for bookmark portions at the same position, the start should
+        // always precede the end. Hence compare positions, and use bookmark type
+        // as tie-breaker for same position.
+        // return ( r1->nIndex   == r2->nIndex )
+        //   ? ( r1->nBkmType <  r2->nBkmType )
+        //   : ( r1->nIndex   <  r2->nIndex );
 
-typedef SwXBookmarkPortion_Impl* SwXBookmarkPortion_ImplPtr;
-SV_DECL_PTRARR_SORT(SwXBookmarkPortionArr, SwXBookmarkPortion_ImplPtr, 0, 2)
-SV_IMPL_OP_PTRARR_SORT(SwXBookmarkPortionArr, SwXBookmarkPortion_ImplPtr)
+        // MTG: 25/11/05: Note that the above code does not correctly handle
+        // the case when one bookmark ends, and another begins in the same
+        // position. When this occurs, the above code will return the
+        // the start of the 2nd bookmark BEFORE the end of the first bookmark
+        // See bug #i58438# for more details. The below code is correct and
+        // fixes both #i58438 and #i16896#
+        return r1->aPosition < r2->aPosition;
+    }
+};
+typedef std::multiset < SwXBookmarkPortion_ImplSharedPtr, BookmarkCompareStruct > SwXBookmarkPortion_ImplList;
 //-----------------------------------------------------------------------------
 void lcl_ExportBookmark(
-    SwXBookmarkPortionArr& rBkmArr, ULONG nIndex,
+    SwXBookmarkPortion_ImplList& rBkmArr, ULONG nIndex,
     SwUnoCrsr* pUnoCrsr, Reference<XText> & rParent, XTextRangeArr& rPortionArr)
 {
-    SwXBookmarkPortion_ImplPtr pPtr;
-    while(rBkmArr.Count() && nIndex == (pPtr = rBkmArr.GetObject(0))->nIndex)
+    for ( SwXBookmarkPortion_ImplList::iterator aIter = rBkmArr.begin(), aEnd = rBkmArr.end();
+          aIter != aEnd;
+          ++aIter )
     {
+        SwXBookmarkPortion_ImplSharedPtr pPtr = (*aIter);
+        if ( nIndex > pPtr->getIndex() )
+        {
+            rBkmArr.erase( aIter );
+            continue;
+        }
+        if ( nIndex < pPtr->getIndex() )
+            break;
+
         SwXTextPortion* pPortion;
         if(BKM_TYPE_START == pPtr->nBkmType || BKM_TYPE_START_END == pPtr->nBkmType)
         {
@@ -347,8 +363,7 @@ void lcl_ExportBookmark(
                 rPortionArr.Count());
             pPortion->SetBookmark(pPtr->xBookmark);
         }
-        rBkmArr.Remove((USHORT)0);
-        delete pPtr;
+        rBkmArr.erase( aIter );
     }
 }
 /* -----------------------------18.12.00 14:51--------------------------------
@@ -366,33 +381,32 @@ struct SwXRedlinePortion_Impl
     const SwRedline*    pRedline;
     sal_Bool            bStart;
 
-    SwXRedlinePortion_Impl(const SwRedline* pRed, sal_Bool bIsStart) :
-        pRedline(pRed),
-        bStart(bIsStart)
-        {}
-
-    USHORT GetIndexPos()
+    SwXRedlinePortion_Impl ( const SwRedline* pRed, sal_Bool bIsStart )
+    : pRedline(pRed)
+    , bStart(bIsStart)
     {
-        const SwPosition* pOwnPos = bStart ?
-                    pRedline->Start() : pRedline->End();
-        return pOwnPos->nContent.GetIndex();
     }
-    // compare by Position
-    BOOL operator < (const SwXRedlinePortion_Impl &rCmp) const
-        {   const SwPosition* pOwnPos = bStart ?
-                    pRedline->Start() : pRedline->End();
-            const SwPosition* pCmpPos = rCmp.bStart ?
-                rCmp.pRedline->Start() : rCmp.pRedline->End();
-            return *pOwnPos <= *pCmpPos;
-        }
-
-    BOOL operator ==(const SwXRedlinePortion_Impl &rCmp) const
-        {return pRedline == rCmp.pRedline &&
-                    bStart == rCmp.bStart;}
+    ULONG getRealIndex ()
+    {
+        return bStart ? pRedline->Start()->nContent.GetIndex() :
+                        pRedline->End()  ->nContent.GetIndex();
+    }
 };
-typedef SwXRedlinePortion_Impl* SwXRedlinePortion_ImplPtr;
-SV_DECL_PTRARR_SORT(SwXRedlinePortionArr, SwXRedlinePortion_ImplPtr, 0, 2)
-SV_IMPL_OP_PTRARR_SORT(SwXRedlinePortionArr, SwXRedlinePortion_ImplPtr)
+
+typedef boost::shared_ptr < SwXRedlinePortion_Impl > SwXRedlinePortion_ImplSharedPtr;
+struct RedlineCompareStruct
+{
+    const SwPosition& getPosition ( const SwXRedlinePortion_ImplSharedPtr &r )
+    {
+        return *(r->bStart ? r->pRedline->Start() : r->pRedline->End());
+    }
+    bool operator () ( const SwXRedlinePortion_ImplSharedPtr &r1,
+                       const SwXRedlinePortion_ImplSharedPtr &r2 )
+    {
+        return getPosition ( r1 ) < getPosition ( r2 );
+    }
+};
+typedef std::multiset < SwXRedlinePortion_ImplSharedPtr, RedlineCompareStruct > SwXRedlinePortion_ImplList;
 
 //-----------------------------------------------------------------------------
 Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
@@ -402,8 +416,8 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
                                 const xub_StrLen nCurrentIndex,
                                 SwTextPortionType& ePortionType,
                                 const xub_StrLen& nFirstFrameIndex,
-                                SwXBookmarkPortionArr& aBkmArr,
-                                SwXRedlinePortionArr& aRedArr,
+                                SwXBookmarkPortion_ImplList& aBkmArr,
+                                SwXRedlinePortion_ImplList& aRedArr,
                                 sal_Int32 nEndPos )
 {
     Reference<XTextRange> xRef;
@@ -596,16 +610,16 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
         if(nEndPos >= 0 && nMovePos > nEndPos)
             nMovePos = (USHORT)nEndPos;
 
-        if(aBkmArr.Count() && aBkmArr.GetObject(0)->nIndex < nMovePos)
+        if(aBkmArr.size() && (*aBkmArr.begin())->getIndex() < nMovePos)
         {
-            DBG_ASSERT(aBkmArr.GetObject(0)->nIndex > nCurrentIndex,
+            DBG_ASSERT((*aBkmArr.begin())->getIndex() > nCurrentIndex,
                 "forgotten bookmark(s)")
-            nMovePos = aBkmArr.GetObject(0)->nIndex;
+            nMovePos = (sal_uInt16)(*aBkmArr.begin())->getIndex();
         }
         // break up portions for redlines
-        if (aRedArr.Count() && aRedArr.GetObject(0)->GetIndexPos() < nMovePos)
+        if (aRedArr.size() && (*aRedArr.begin())->getRealIndex() < nMovePos)
         {
-            nMovePos = aRedArr.GetObject(0)->GetIndexPos();
+            nMovePos = (sal_uInt16)(*aRedArr.begin())->getRealIndex();
         }
         // break up if the destination is behind a frame
         if(nFirstFrameIndex != STRING_MAXLEN && nMovePos > nFirstFrameIndex)
@@ -629,7 +643,7 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
     return xRef;
 }
 //-----------------------------------------------------------------------------
-void lcl_FillBookmarkArray(SwDoc& rDoc,SwUnoCrsr& rUnoCrsr, SwXBookmarkPortionArr& rBkmArr )
+void lcl_FillBookmarkArray(SwDoc& rDoc,SwUnoCrsr& rUnoCrsr, SwXBookmarkPortion_ImplList& rBkmArr )
 {
     const SwBookmarks& rMarks = rDoc.GetBookmarks();
     sal_uInt16 nArrLen = rMarks.Count();
@@ -653,24 +667,22 @@ void lcl_FillBookmarkArray(SwDoc& rDoc,SwUnoCrsr& rUnoCrsr, SwXBookmarkPortionAr
                 {
                     nType = BKM_TYPE_START_END;
                 }
-                SwXBookmarkPortion_ImplPtr pBkmPtr = new SwXBookmarkPortion_Impl(
-                    SwXBookmarks::GetObject( *pMark, &rDoc ), nType, rPos1.nContent.GetIndex() );
 
-                rBkmArr.Insert(pBkmPtr);
+                rBkmArr.insert ( SwXBookmarkPortion_ImplSharedPtr (
+                    new SwXBookmarkPortion_Impl ( SwXBookmarks::GetObject( *pMark, &rDoc ), nType, rPos1 )));
 
             }
             if(pPos2 && pPos2->nNode == nOwnNode)
             {
                 BYTE nType = bBackward ? BKM_TYPE_START : BKM_TYPE_END;
-                SwXBookmarkPortion_ImplPtr pBkmPtr = new SwXBookmarkPortion_Impl(
-                        SwXBookmarks::GetObject( *pMark, &rDoc ), nType, pPos2->nContent.GetIndex() );
-                rBkmArr.Insert(pBkmPtr);
+                rBkmArr.insert( SwXBookmarkPortion_ImplSharedPtr (
+                    new SwXBookmarkPortion_Impl( SwXBookmarks::GetObject( *pMark, &rDoc ), nType, *pPos2 ) ) );
             }
         }
     }
 }
 //-----------------------------------------------------------------------------
-void lcl_FillRedlineArray(SwDoc& rDoc,SwUnoCrsr& rUnoCrsr, SwXRedlinePortionArr& rRedArr )
+void lcl_FillRedlineArray(SwDoc& rDoc,SwUnoCrsr& rUnoCrsr, SwXRedlinePortion_ImplList& rRedArr )
 {
     const SwRedlineTbl& rRedTbl = rDoc.GetRedlineTbl();
     USHORT nRedTblCount = rRedTbl.Count();
@@ -687,68 +699,76 @@ void lcl_FillRedlineArray(SwDoc& rDoc,SwUnoCrsr& rUnoCrsr, SwXRedlinePortionArr&
             const SwPosition* pRedStart = pRedline->Start();
             const SwNodeIndex nRedNode = pRedStart->nNode;
             SwRedlineType nType = pRedline->GetType();
-            if(nOwnNode == nRedNode)
-            {
-                SwXRedlinePortion_ImplPtr pToInsert = new SwXRedlinePortion_Impl(pRedline, TRUE);
-                rRedArr.Insert(pToInsert);
-            }
-            if(pRedline->HasMark() && pRedline->End()->nNode == nOwnNode)
-            {
-                SwXRedlinePortion_ImplPtr pToInsert = new SwXRedlinePortion_Impl(pRedline, FALSE);
-                rRedArr.Insert(pToInsert);
-            }
-        }
+            if ( nOwnNode == nRedNode )
+                rRedArr.insert( SwXRedlinePortion_ImplSharedPtr (
+                    new SwXRedlinePortion_Impl ( pRedline, TRUE) ) );
+            if( pRedline->HasMark() && pRedline->End()->nNode == nOwnNode )
+                rRedArr.insert( SwXRedlinePortion_ImplSharedPtr (
+                    new SwXRedlinePortion_Impl ( pRedline, FALSE) ) );
+       }
     }
 }
 /* -----------------------------19.12.00 12:25--------------------------------
 
  ---------------------------------------------------------------------------*/
 void lcl_ExportRedline(
-    SwXRedlinePortionArr& rRedlineArr, ULONG nIndex,
+    SwXRedlinePortion_ImplList& rRedlineArr, ULONG nIndex,
     SwUnoCrsr* pUnoCrsr, Reference<XText> & rParent, XTextRangeArr& rPortionArr)
 {
-    SwXRedlinePortion_ImplPtr pPtr;
-    while(rRedlineArr.Count() &&  0 != (pPtr = rRedlineArr.GetObject(0)) &&
-        ((pPtr->bStart && (nIndex == pPtr->pRedline->Start()->nContent.GetIndex()))||
-            (!pPtr->bStart && (nIndex == pPtr->pRedline->End()->nContent.GetIndex()))))
+
+    // MTG: 23/11/05: We want this loop to iterate over all red lines in this
+    // array. We will only insert the ones with index matches
+    for ( SwXRedlinePortion_ImplList::iterator aIter = rRedlineArr.begin(), aEnd = rRedlineArr.end();
+          aIter != aEnd;
+          ++aIter )
     {
-        SwXTextPortion* pPortion;
-        rPortionArr.Insert(
-            new Reference< XTextRange >(pPortion = new SwXRedlinePortion(
-                        pPtr->pRedline, *pUnoCrsr, rParent,
-                        pPtr->bStart)),
-            rPortionArr.Count());
-        rRedlineArr.Remove((USHORT)0);
-        delete pPtr;
+        SwXRedlinePortion_ImplSharedPtr pPtr = (*aIter );
+        ULONG nRealIndex = pPtr->getRealIndex();
+        // MTG: 23/11/05: If there are elements before nIndex, remove them
+        if ( nIndex > nRealIndex )
+            rRedlineArr.erase ( aIter );
+        // MTG: 23/11/05: If the elements match, and them to the list
+        else if ( nIndex == nRealIndex )
+        {
+            rPortionArr.Insert(
+                new Reference< XTextRange >( new SwXRedlinePortion(
+                            pPtr->pRedline, *pUnoCrsr, rParent,
+                            pPtr->bStart)),
+                rPortionArr.Count());
+            rRedlineArr.erase ( aIter );
+        }
+        // MTG: 23/11/05: If we've iterated past nIndex, exit the loop
+        else
+            break;
     }
 }
 /* -----------------------------19.12.00 13:09--------------------------------
 
  ---------------------------------------------------------------------------*/
 void lcl_ExportBkmAndRedline(
-    SwXBookmarkPortionArr& rBkmArr,
-    SwXRedlinePortionArr& rRedlineArr, ULONG nIndex,
+    SwXBookmarkPortion_ImplList& rBkmArr,
+    SwXRedlinePortion_ImplList& rRedlineArr, ULONG nIndex,
     SwUnoCrsr* pUnoCrsr, Reference<XText> & rParent, XTextRangeArr& rPortionArr)
 {
-    if (rBkmArr.Count())
+    if (rBkmArr.size())
         lcl_ExportBookmark(rBkmArr, nIndex, pUnoCrsr, rParent, rPortionArr);
 
-    if (rRedlineArr.Count())
+    if (rRedlineArr.size())
         lcl_ExportRedline(rRedlineArr, nIndex, pUnoCrsr, rParent, rPortionArr);
 }
 //-----------------------------------------------------------------------------
-sal_Int32 lcl_GetNextIndex(SwXBookmarkPortionArr& rBkmArr, SwXRedlinePortionArr& rRedlineArr)
+sal_Int32 lcl_GetNextIndex(SwXBookmarkPortion_ImplList& rBkmArr, SwXRedlinePortion_ImplList& rRedlineArr)
 {
     sal_Int32 nRet = -1;
-    if(rBkmArr.Count())
+    if(rBkmArr.size())
     {
-        SwXBookmarkPortion_ImplPtr pPtr = rBkmArr.GetObject(0);
-        nRet = pPtr->nIndex;
+        SwXBookmarkPortion_ImplSharedPtr pPtr = (*rBkmArr.begin());
+        nRet = pPtr->getIndex();
     }
-    if(rRedlineArr.Count())
+    if(rRedlineArr.size())
     {
-        SwXRedlinePortion_ImplPtr pPtr = rRedlineArr.GetObject(0);
-        USHORT nTmp = pPtr->GetIndexPos();
+        SwXRedlinePortion_ImplSharedPtr pPtr = (*rRedlineArr.begin());
+        sal_Int32 nTmp = pPtr->getRealIndex();
         if(nRet < 0 || nTmp < nRet)
             nRet = nTmp;
     }
@@ -770,16 +790,18 @@ void SwXTextPortionEnumeration::CreatePortions()
     }
     if(pUnoCrsr /*&& !bAtEnd*/)
     {
-        SwXBookmarkPortionArr aBkmArr;
-        SwXRedlinePortionArr aRedArr;
+        SwXBookmarkPortion_ImplList aBkmArr;
+        SwXRedlinePortion_ImplList aRedArr;
 
         SwDoc* pDoc = pUnoCrsr->GetDoc();
         lcl_FillRedlineArray(*pDoc, *pUnoCrsr, aRedArr);
         lcl_FillBookmarkArray(*pDoc, *pUnoCrsr, aBkmArr );
 #if OSL_DEBUG_LEVEL > 1
-        for(long i_debug = 0; i_debug <aBkmArr.Count(); i_debug++)
+        for (SwXBookmarkPortion_ImplList::const_iterator aIter = aBkmArr.begin(), aEnd = aBkmArr.end();
+             aIter != aEnd;
+             ++aIter )
         {
-            SwXBookmarkPortion_ImplPtr pPtr = aBkmArr.GetObject(i_debug);
+            SwXBookmarkPortion_ImplSharedPtr pPtr = (*aIter);
         }
 
 #endif
@@ -910,7 +932,7 @@ void SwXTextPortionEnumeration::CreatePortions()
                             {
                                 DBG_ASSERT(nNextIndex > nCurrentIndex || nNextIndex == nEndPos,
                                     "wrong move index")
-                                pUnoCrsr->Right(nNextIndex - nCurrentIndex,CRSR_SKIP_CHARS,FALSE,FALSE);
+                                pUnoCrsr->Right((sal_uInt16)(nNextIndex - nCurrentIndex),CRSR_SKIP_CHARS,FALSE,FALSE);
                             }
                         }
                     }
