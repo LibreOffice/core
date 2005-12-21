@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:55:22 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:30:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -344,16 +344,16 @@ String RID_STR_RECORDSEARCH_BUTTONS
 ErrorBox RID_SVXERR_SEARCH_NORECORD
 {
     Buttons = WB_OK;
-    Message [ de ] = "Es wurden keine Datensätze, die zu Ihren Angaben passen, gefunden !" ;
-    Message [ en-US ] = "No records corresponding to your data found!";
+    Message [ de ] = "Es wurden keine Datensätze, die zu Ihren Angaben passen, gefunden." ;
+    Message [ en-US ] = "No records corresponding to your data found.";
     Message [ x-comment ] = " ";
 };
 
 ErrorBox RID_SVXERR_SEARCH_GENERAL_ERROR
 {
     Buttons = WB_OK;
-    Message [ de ] = "Es trat ein nicht näher bekannter Fehler auf. Die Suche konnte nicht beendet werden !" ;
-    Message [ en-US ] = "An unknown error occurred. The search could  not be terminated!";
+    Message [ de ] = "Es trat ein nicht näher bekannter Fehler auf. Die Suche konnte nicht beendet werden." ;
+    Message [ en-US ] = "An unknown error occurred. The search could not be finished.";
     Message [ x-comment ] = " ";
 };
 
