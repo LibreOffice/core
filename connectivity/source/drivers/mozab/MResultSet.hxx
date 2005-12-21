@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MResultSet.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:19:52 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:17:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -369,6 +369,16 @@ public:
                 sal_Bool _bSetColumnMapping,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData,
                 ::std::vector<sal_Int32>& _rColMapping);
+
+            ::osl::Mutex&   getMutex() { return m_aMutex; }
+            void            methodEntry();
+
+            private:
+                inline void impl_ensureKeySet()
+                {
+                    if ( !m_pKeySet.isValid() )
+                        m_pKeySet = new OKeySet();
+                }
         };
 
         inline sal_Int32 OResultSet::mapColumn(sal_Int32 column)
@@ -383,6 +393,15 @@ public:
 
             return map;
         }
+
+        class ResultSetEntryGuard : public ::osl::MutexGuard
+        {
+        public:
+            ResultSetEntryGuard( OResultSet& _rRS ) : ::osl::MutexGuard( _rRS.getMutex() )
+            {
+                _rRS.methodEntry();
+            }
+        };
 
     }
 }
