@@ -1,12 +1,12 @@
-/*************************************************************************
+﻿/*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: resource.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:09:16 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 16:08:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -309,3 +309,16 @@ Image RID_IMAGE_STATUSBAR_LOGO
     MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
 };
 
+String STR_FULL_DISC_RETRY_BUTTON
+{
+    Text [ de ] = "Wiederholen" ;
+    Text [ en-US ] = "Retry" ;
+    Text [ x-comment ] = " ";
+};
+
+String STR_FULL_DISC_MSG
+{
+    Text [ de ] = "%PRODUCTNAME konnte wichtige interne Informationen nicht speichern, da im folgenden Pfad nicht genügend freier Speicherplatz zur Verfügung steht:\n%PATH\n\nSie können Ihre Arbeit mit %PRODUCTNAME erst fortsetzen, wenn sie genügend freien Speicherplatz zur Verfügung gestellt haben.\n\nBetätigen Sie die Schaltfläche 'Wiederholen', nachdem Sie mehr freien Speicher zur Verfügung gestellt haben, um das Speichern der Daten zu wiederholen.\n\n" ;
+    Text [ en-US ] = "%PRODUCTNAME could not save important internal information due to insufficient free disk space at the following location:\n%PATH\n\nYou will not be able to continue working with %PRODUCTNAME without allocating more free disk space at that location.\n\nPress the 'Retry' button after you have allocated more free disk space to retry saving the data.\n\n" ;
+    Text [ x-comment ] = " ";
+};
