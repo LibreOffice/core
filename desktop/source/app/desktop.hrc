@@ -4,9 +4,9 @@
  *
  *  $RCSfile: desktop.hrc,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:06:33 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 16:23:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,7 @@
 #define STR_BOOTSTRAP_ERR_NO_SERVICE        (RID_DESKTOP_STRING_START+120)
 #define STR_BOOTSTRAP_ERR_NO_CFG_SERVICE    (RID_DESKTOP_STRING_START+121)
 #define STR_BOOTSTRAP_ERR_CFG_DATAACCESS    (RID_DESKTOP_STRING_START+122)
+#define STR_BOOTSTRAP_ERR_NO_PATHSET_SERVICE (RID_DESKTOP_STRING_START+123)
 
 #define STR_ASK_START_SETUP_REPAIR          (RID_DESKTOP_STRING_START+150)
 #define STR_ASK_START_SETUP                 (RID_DESKTOP_STRING_START+151)
