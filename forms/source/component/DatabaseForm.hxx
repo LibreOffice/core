@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseForm.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:36:37 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:20:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,9 +153,6 @@
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
-#ifndef _COMPHELPER_GUARDING_HXX_
-#include <comphelper/guarding.hxx>
-#endif
 #ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
 #include <comphelper/proparrhlp.hxx>
 #endif
@@ -175,8 +172,6 @@ namespace com { namespace sun { namespace star { namespace sdbc {
 
 class Timer;
 class INetMIMEMessage;
-
-typedef ::comphelper::OReusableGuard< ::osl::Mutex > ReusableMutexGuard;
 
 //.........................................................................
 namespace frm
@@ -523,9 +518,9 @@ protected:
     virtual void _propertyChanged( const ::com::sun::star::beans::PropertyChangeEvent& ) throw(::com::sun::star::uno::RuntimeException);
 
 private:
-    sal_Bool executeRowSet(ReusableMutexGuard& _rClearForNotifies, sal_Bool bMoveToFirst = sal_True,
+    sal_Bool executeRowSet(::osl::ResettableMutexGuard& _rClearForNotifies, sal_Bool bMoveToFirst = sal_True,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxCompletionHandler = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >());
-    bool    fillParameters(ReusableMutexGuard& _rClearForNotifies,
+    bool    fillParameters(::osl::ResettableMutexGuard& _rClearForNotifies,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxCompletionHandler = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >());
     void    updateParameterInfo();
     bool    hasValidParent() const;
