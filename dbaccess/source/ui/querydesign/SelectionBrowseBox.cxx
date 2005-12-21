@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:32:22 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:37:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,9 +34,6 @@
  ************************************************************************/
 #ifndef DBAUI_QUERYDESIGN_OSELECTIONBROWSEBOX_HXX
 #include "SelectionBrowseBox.hxx"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
@@ -524,10 +521,15 @@ CellController* OSelectionBrowseBox::GetController(long nRow, sal_uInt16 nColId)
 void OSelectionBrowseBox::InitController(CellControllerRef& rController, long nRow, sal_uInt16 nColId)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
+    OSL_ENSURE(nColId != BROWSER_INVALIDID,"An Invalid Id was set!");
+    if ( nColId == BROWSER_INVALIDID )
+        return;
     OQueryController* pController = static_cast<OQueryController*>(static_cast<OQueryController*>(getDesignView()->getController()));
 
-
-    OTableFieldDescRef pEntry = getFields()[GetColumnPos(nColId)-1];
+    USHORT nPos = GetColumnPos(nColId);
+    if ( nPos == 0 || nPos == BROWSER_ENDOFSELECTION || nPos > getFields().size() )
+        return;
+    OTableFieldDescRef pEntry = getFields()[nPos-1];
     DBG_ASSERT(pEntry.isValid(), "OSelectionBrowseBox::InitController : keine FieldDescription !");
     long nCellIndex = GetRealRow(nRow);
 
@@ -963,6 +965,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
         // fuer die Undo-Action
         String strOldCellContents,sNewValue;
         long nRow = GetRealRow(GetCurRow());
+        sal_Bool bAppendRow = sal_False;
         switch (nRow)
         {
             case BROW_VIS_ROW:
@@ -1231,17 +1234,20 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                 pEntry->SetCriteria(nIdx, aCrit);
                 sNewValue = pEntry->GetCriteria(nIdx);
                 if(aCrit.getLength() && nRow >= (GetRowCount()-1))
-                {
-                    RowInserted( GetRowCount()-1, 1, TRUE );
-                    m_bVisibleRow.push_back(sal_True);
-                    ++m_nVisibleCount;
-                }
+                    bAppendRow = sal_True;
             }
         }
         if(!bError && Controller())
             Controller()->ClearModified();
 
         RowModified(GetCurRow(), GetCurColumnId());
+
+        if ( bAppendRow )
+        {
+            RowInserted( GetRowCount()-1, 1, TRUE );
+            m_bVisibleRow.push_back(sal_True);
+            ++m_nVisibleCount;
+        }
 
         if(!bError)
         {
