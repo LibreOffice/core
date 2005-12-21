@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autorecovery.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 08:44:08 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 16:08:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -468,6 +468,12 @@ class AutoRecovery  : public  css::lang::XTypeProvider
                     this lock ... not the first one ! So we use a "ref count" mechanism for that."
          */
         sal_Int32 m_nDocCacheLock;
+
+        /** @descr  These members are used to check the minimum disc space, which must exists
+                    to start the corresponding operation.
+         */
+        sal_Int32 m_nMinSpaceDocSave;
+        sal_Int32 m_nMinSpaceConfigSave;
 
     //___________________________________________
     // interface
@@ -935,6 +941,12 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
         /// TODO
         void implts_verifyCacheAgainstDesktopDocumentList();
+
+        /// TODO document me
+        sal_Bool impl_enoughDiscSpace(sal_Int32 nRequiredSpace);
+
+        /// TODO document me
+        static void impl_showFullDiscError();
 };
 
 } // namespace framework
