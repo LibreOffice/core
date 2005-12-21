@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:29:13 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:36:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,9 +60,6 @@
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
-#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDCLIENT_HPP_
-#include <com/sun/star/embed/XEmbeddedClient.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
 #endif
@@ -81,15 +78,15 @@ namespace dbaccess
 {
 //........................................................................
 
-    typedef ::cppu::ImplHelper1<        ::com::sun::star::embed::XEmbeddedClient
-                                >   ODocumentDefinition_Base;
-
     class OInterceptor;
     class OEmbeddedClientHelper;
 //==========================================================================
 //= ODocumentDefinition - a database "document" which is simply a link to a real
 //=                   document
 //==========================================================================
+
+    typedef ::cppu::ImplHelper1<        ::com::sun::star::embed::XComponentSupplier
+                                >   ODocumentDefinition_Base;
 
 class ODocumentDefinition
         :public OContentHelper
@@ -168,17 +165,11 @@ public:
     // XComponentSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > SAL_CALL getComponent(  ) throw (::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL visibilityChanged( ::sal_Bool bVisible ) throw (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::RuntimeException);
-
 // OPropertySetHelper
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
     // XCommandProcessor
     virtual ::com::sun::star::uno::Any SAL_CALL execute( const ::com::sun::star::ucb::Command& aCommand, sal_Int32 CommandId, const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& Environment ) throw (::com::sun::star::uno::Exception, ::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::RuntimeException) ;
-
-    // XEmbeddedClient
-    virtual void SAL_CALL saveObject(  ) throw (::com::sun::star::embed::ObjectSaveVetoException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL onShowWindow( sal_Bool bVisible ) throw (::com::sun::star::uno::RuntimeException);
 
     // XRename
     virtual void SAL_CALL rename( const ::rtl::OUString& newName ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
@@ -199,6 +190,8 @@ public:
             <TRUE/> if and only if the document component can be closed
     */
     bool prepareClose();
+
+    static ::com::sun::star::uno::Sequence< sal_Int8 > getDefaultDocumentTypeClassId();
 
     /** does necessary initializations after our embedded object has been switched to ACTIVE
         @param _bOpenedInDesignMode
