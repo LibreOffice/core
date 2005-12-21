@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printdata.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:05:30 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 15:09:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,11 @@ struct SwPrintData
 {
     sal_Bool bPrintGraphic, bPrintTable, bPrintDraw, bPrintControl, bPrintPageBackground,
              bPrintBlackFont, bPrintLeftPage, bPrintRightPage, bPrintReverse, bPrintProspect,
-             bPrintSingleJobs, bPaperFromSetup, bModified;
+             bPrintSingleJobs, bPaperFromSetup,
+             // --> FME 2005-12-13 #b6354161# Print empty pages
+             bPrintEmptyPages,
+             // <--
+             bModified;
 
     sal_Int16           nPrintPostIts;
     rtl::OUString       sFaxName;
@@ -60,7 +64,8 @@ struct SwPrintData
         bPrintControl           =
         bPrintLeftPage          =
         bPrintRightPage         =
-        bPrintPageBackground    = sal_True;
+        bPrintPageBackground    =
+        bPrintEmptyPages        = sal_True;
 
         bPaperFromSetup         =
         bPrintReverse           =
@@ -87,6 +92,7 @@ struct SwPrintData
         bPrintProspect      ==   rData.bPrintProspect      &&
         bPrintSingleJobs    ==   rData.bPrintSingleJobs    &&
         bPaperFromSetup     ==   rData.bPaperFromSetup     &&
+        bPrintEmptyPages    ==   rData.bPrintEmptyPages   &&
         nPrintPostIts       ==   rData.nPrintPostIts       &&
         sFaxName            ==   rData.sFaxName;
     }
@@ -98,6 +104,7 @@ struct SwPrintData
     sal_Bool IsPrintRightPage() const { return bPrintRightPage; }
     sal_Bool IsPrintReverse()   const { return bPrintReverse; }
     sal_Bool IsPaperFromSetup() const { return bPaperFromSetup; }
+    sal_Bool IsPrintEmptyPages() const{ return bPrintEmptyPages; }
     sal_Bool IsPrintProspect()  const { return bPrintProspect; }
     sal_Bool IsPrintPageBackground() const { return bPrintPageBackground; }
     sal_Bool IsPrintBlackFont() const { return bPrintBlackFont;}
@@ -113,6 +120,7 @@ struct SwPrintData
     void SetPrintRightPage( sal_Bool b ) { doSetModified(); bPrintRightPage = b;}
     void SetPrintReverse  ( sal_Bool b ) { doSetModified(); bPrintReverse = b;}
     void SetPaperFromSetup( sal_Bool b ) { doSetModified(); bPaperFromSetup = b;}
+    void SetPrintEmptyPages(sal_Bool b ) { doSetModified(); bPrintEmptyPages = b;}
     void SetPrintPostIts    ( sal_Int16 n){ doSetModified(); nPrintPostIts = n; }
     void SetPrintProspect   ( sal_Bool b ) { doSetModified(); bPrintProspect = b; }
     void SetPrintPageBackground(sal_Bool b){ doSetModified(); bPrintPageBackground = b;}
