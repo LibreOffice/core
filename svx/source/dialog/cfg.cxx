@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-08 16:03:00 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 16:18:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2611,7 +2611,7 @@ IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton )
             SvxConfigEntry* pMenuData = GetTopLevelSelection();
 
             String aNewName( stripHotKey( pMenuData->GetName() ) );
-            String aDesc( RTL_CONSTASCII_USTRINGPARAM( "Enter New Name" ) );
+            String aDesc( SVX_RESSTR( RID_SVXSTR_LABEL_NEW_NAME ) );
 
             SvxAbstractDialogFactory* pFact =
                 SvxAbstractDialogFactory::Create();
@@ -2621,6 +2621,7 @@ IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton )
                     0, aNewName, aDesc, ResId(RID_SVXDLG_NAME) );
 
             pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_MENU );
+            pNameDialog->SetText( SVX_RESSTR( RID_SVXSTR_RENAME_MENU ) );
 
             bool ret = pNameDialog->Execute();
 
@@ -2670,8 +2671,8 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton )
     {
         case ID_ADD_SUBMENU:
         {
-            String aNewName( RTL_CONSTASCII_USTRINGPARAM( "" ) );
-            String aDesc( RTL_CONSTASCII_USTRINGPARAM( "Enter New Name" ) );
+            String aNewName;
+            String aDesc( SVX_RESSTR( RID_SVXSTR_SUBMENU_NAME ) );
 
             SvxAbstractDialogFactory* pFact =
                 SvxAbstractDialogFactory::Create();
@@ -2681,6 +2682,7 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton )
                     0, aNewName, aDesc, ResId(RID_SVXDLG_NAME) );
 
             pNameDialog->SetHelpId( HID_SVX_CONFIG_NAME_SUBMENU );
+            pNameDialog->SetText( SVX_RESSTR( RID_SVXSTR_ADD_SUBMENU ) );
 
             bool ret = pNameDialog->Execute();
 
@@ -2722,7 +2724,7 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton )
                 (SvxConfigEntry*) pActEntry->GetUserData();
 
             String aNewName( stripHotKey( pEntry->GetName() ) );
-            String aDesc( RTL_CONSTASCII_USTRINGPARAM( "Enter New Name" ) );
+            String aDesc( SVX_RESSTR( RID_SVXSTR_LABEL_NEW_NAME ) );
 
             SvxAbstractDialogFactory* pFact =
                 SvxAbstractDialogFactory::Create();
@@ -2732,6 +2734,7 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton )
                     0, aNewName, aDesc, ResId(RID_SVXDLG_NAME) );
 
             pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_MENU_ITEM );
+            pNameDialog->SetText( SVX_RESSTR( RID_SVXSTR_RENAME_MENU ) );
 
             bool ret = pNameDialog->Execute();
 
@@ -3545,7 +3548,7 @@ IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton )
         case ID_RENAME:
         {
             String aNewName( stripHotKey( pToolbar->GetName() ) );
-            String aDesc( RTL_CONSTASCII_USTRINGPARAM( "Enter New Name" ) );
+            String aDesc( SVX_RESSTR( RID_SVXSTR_LABEL_NEW_NAME ) );
 
             SvxAbstractDialogFactory* pFact =
                 SvxAbstractDialogFactory::Create();
@@ -3555,6 +3558,7 @@ IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton )
                     0, aNewName, aDesc, ResId(RID_SVXDLG_NAME) );
 
             pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_TOOLBAR );
+            pNameDialog->SetText( SVX_RESSTR( RID_SVXSTR_RENAME_TOOLBAR ) );
 
             bool ret = pNameDialog->Execute();
 
@@ -3641,7 +3645,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
                 (SvxConfigEntry*) pActEntry->GetUserData();
 
             String aNewName( stripHotKey( pEntry->GetName() ) );
-            String aDesc( RTL_CONSTASCII_USTRINGPARAM( "Enter New Name" ) );
+            String aDesc( SVX_RESSTR( RID_SVXSTR_LABEL_NEW_NAME ) );
 
             SvxAbstractDialogFactory* pFact =
                 SvxAbstractDialogFactory::Create();
@@ -3651,6 +3655,7 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
                     0, aNewName, aDesc, ResId(RID_SVXDLG_NAME) );
 
             pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_TOOLBAR_ITEM );
+            pNameDialog->SetText( SVX_RESSTR( RID_SVXSTR_RENAME_TOOLBAR ) );
 
             bool ret = pNameDialog->Execute();
 
