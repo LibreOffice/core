@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-28 15:47:30 $
+#   last change: $Author: obo $ $Date: 2005-12-21 12:54:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -168,7 +168,8 @@ PARFILES +=                        \
         file_jre_ooo.par           \
         folder_ooo.par             \
         folderitem_ooo.par         \
-        registryitem_ooo.par
+        registryitem_ooo.par       \
+        windowscustomaction_ooo.par
 .ENDIF
 
 ULFFILES=                          \
