@@ -92,6 +92,8 @@ private:
     mutable bool mbInPaint;
     mutable bool mbNewLayoutDuringPaint;
 
+    bool mbPrintEmptyPages;
+
     /** clear internal data about current page preview
 
         OD 11.12.2002 #103492#
@@ -606,6 +608,24 @@ public:
     bool SetBookPreviewMode( const bool  _bEnableBookPreview,
                              sal_uInt16& _onStartPageNum,
                              Rectangle&  _orDocPreviewPaintRect );
+
+    /** Convert relative to absolute page numbers (see PrintEmptyPages)
+
+        @author FME
+    */
+    sal_uInt16 SwPagePreviewLayout::ConvertRelativeToAbsolutePageNum( sal_uInt16 _nRelPageNum ) const;
+
+    /** Convert absolute to relative page numbers (see PrintEmptyPages)
+
+        @author FME
+    */
+    sal_uInt16 SwPagePreviewLayout::ConvertAbsoluteToRelativePageNum( sal_uInt16 _nAbsPageNum ) const;
+
+    /** get the number of preview pages
+
+        @author FME
+    */
+    sal_uInt16 GetNumberOfPreviewPages() { return maPrevwPages.size(); }
 };
 
 #endif // _PAGEPREVIEWLAYOUT_HXX
