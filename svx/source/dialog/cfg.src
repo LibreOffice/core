@@ -1,12 +1,12 @@
-/*************************************************************************
+﻿/*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-03 11:54:00 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 16:18:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -781,3 +781,23 @@ InfoBox IBX_MNUCFG_ALREADY_INCLUDED
     Message [ de ] = "Die Funktion ist bereits in diesem Popup enthalten." ;
     Message [ en-US ] = "Function is already included in this popup." ;
 };
+
+String RID_SVXSTR_LABEL_NEW_NAME
+{
+    Text [ de ] = "~Neuer Name";
+    Text [ en-US ] = "~New name";
+};
+
+String RID_SVXSTR_RENAME_MENU
+{
+    Text [ de ] = "Menü umbenennen";
+    Text [ en-US ] = "Rename Menu";
+};
+
+String RID_SVXSTR_RENAME_TOOLBAR
+{
+    Text [ de ] = "Symbolleiste umbenennen";
+    Text [ en-US ] = "Rename Toolbar";
+};
+
+
