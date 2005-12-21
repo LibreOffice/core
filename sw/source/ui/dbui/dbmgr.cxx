@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 15:57:22 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 15:12:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1095,7 +1095,7 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
     long nStartRow, nEndRow;
     //calculate number of data sets to be printed
 
-    Sequence<PropertyValue> aViewProperties(15);
+    Sequence<PropertyValue> aViewProperties(16);
     PropertyValue* pViewProperties =  aViewProperties.getArray();
     pViewProperties[0].Name = C2U("MailMergeCount");
     pViewProperties[0].Value <<= (sal_Int32)rOpt.nMergeCnt;
@@ -1127,6 +1127,8 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
     pViewProperties[13].Value <<= (sal_Bool)rOpt.IsPrintBlackFont();
     pViewProperties[14].Name = C2U("IsSinglePrintJob");
     pViewProperties[14].Value <<= (sal_Bool)rOpt.IsPrintSingleJobs();
+    pViewProperties[15].Name = C2U("PrintEmptyPages");
+    pViewProperties[15].Value <<= (sal_Bool)rOpt.IsPrintEmptyPages();
 
     rView.SetAdditionalPrintOptions(aViewProperties);
     do {
@@ -1228,7 +1230,7 @@ BOOL SwNewDBMgr::MergePrintDocuments( SwView& rView,
          bRet = FALSE;
     //calculate number of data sets to be printed
 
-    Sequence<PropertyValue> aViewProperties(15);
+    Sequence<PropertyValue> aViewProperties(16);
     PropertyValue* pViewProperties =  aViewProperties.getArray();
     pViewProperties[0].Name = C2U("MailMergeCount");
     pViewProperties[0].Value <<= (sal_Int32)rOpt.nMergeCnt;
@@ -1260,6 +1262,8 @@ BOOL SwNewDBMgr::MergePrintDocuments( SwView& rView,
     pViewProperties[13].Value <<= (sal_Bool)rOpt.IsPrintBlackFont();
     pViewProperties[14].Name = C2U("IsSinglePrintJob");
     pViewProperties[14].Value <<= (sal_Bool)rOpt.IsPrintSingleJobs();
+    pViewProperties[15].Name = C2U("PrintEmptyPages");
+    pViewProperties[15].Value <<= (sal_Bool)rOpt.IsPrintEmptyPages();
 
     rView.SetAdditionalPrintOptions(aViewProperties);
 
