@@ -4,9 +4,9 @@
  *
  *  $RCSfile: richtextmodel.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:08:32 $
+ *  last change: $Author: obo $ $Date: 2005-12-21 13:24:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,7 +206,16 @@ namespace frm
         void    implInit();
         void    implDoAggregation();
         void    implRegisterProperties();
-        void    implSetEngineText( const ::rtl::OUString& _rText );
+
+        /** propagates a new text to the EditEngine
+
+            This method needs to lock the global solar mutex, so our own mutex must not
+            be locked when calling.
+
+        @precond
+            our mutex is not locked
+        */
+        void    impl_smlock_setEngineText( const ::rtl::OUString& _rText );
 
         DECL_LINK( OnEngineContentModified, void* );
 
