@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: vg $ $Date: 2005-12-23 14:15:40 $
+#   last change: $Author: vg $ $Date: 2005-12-23 14:22:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ TARGET=so_berkeleydb
 .IF "$(SYSTEM_DB)" == "YES"
 all:
         @echo "An already available installation of db should exist on your system."
-    @echo "Therefore  the version provided here does not need to be built in addition."
+    @echo "Therefore the version provided here does not need to be built in addition."
 .ENDIF
 
 # --- Files --------------------------------------------------------
