@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableDescriptor.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:25:46 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:18:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,23 +39,15 @@ import java.util.Vector;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.PropertyVetoException;
-import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.ContainerEvent;
-import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XContainer;
 import com.sun.star.container.XContainerListener;
 import com.sun.star.container.XHierarchicalNameAccess;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.EventObject;
-import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.IndexOutOfBoundsException;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.sdbc.ColumnValue;
-import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbcx.KeyType;
 import com.sun.star.sdbcx.XAppend;
 import com.sun.star.sdbcx.XColumnsSupplier;
@@ -66,7 +58,6 @@ import com.sun.star.sdbcx.XTablesSupplier;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Desktop;
-import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.Properties;
 
 
@@ -207,7 +198,9 @@ public class TableDescriptor extends CommandMetaData  implements XContainerListe
                     }
                    xKeyAppend.appendByDescriptor(xKey);
                 }
+//              XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xNameAccessColumns.getByName("AnlageID"));
                 xTableAppend.appendByDescriptor(xPropTableDataDescriptor);
+//              xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xNameAccessColumns.getByName("AnlageID"));
                 return true;
             } catch (Exception e) {
                 e.printStackTrace(System.out);
@@ -263,12 +256,13 @@ public class TableDescriptor extends CommandMetaData  implements XContainerListe
 
         public boolean modifyColumnName(String _soldname, String _snewname){
         try {
-            if (hasByName(_soldname)){
-                ColumnDescriptor oColumnDescriptor = this.getColumnDescriptorByName(_soldname);
-                oColumnDescriptor.xColPropertySet.setPropertyValue("Name", _snewname);
-                oColumnDescriptor.Name = _snewname;
-            }
-            return true;
+            return modifyColumn(_soldname, "Name", _snewname);
+//          if (hasByName(_soldname)){
+//              ColumnDescriptor oColumnDescriptor = this.getColumnDescriptorByName(_soldname);
+//              oColumnDescriptor.xColPropertySet.setPropertyValue("Name", _snewname);
+//              oColumnDescriptor.Name = _snewname;
+//          }
+//          return true;
         } catch (Exception e) {
             e.printStackTrace(System.out);
             showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, e.getMessage());
@@ -285,6 +279,8 @@ public class TableDescriptor extends CommandMetaData  implements XContainerListe
                             oColumnDescriptor.xColPropertySet.setPropertyValue(_spropname, _oValue);
                             if (_spropname.equals("Name"))
                                 oColumnDescriptor.Name = (String) _oValue;
+                            columncontainer.remove(i);
+                            columncontainer.insertElementAt(oColumnDescriptor, i);
                             return true;
                         }
                     }
@@ -444,6 +440,16 @@ public class TableDescriptor extends CommandMetaData  implements XContainerListe
         return false;
         }
 
+        public boolean moveColumn(int _nOldIndex, int _nNewIndex){
+        try{
+            ColumnDescriptor oColumnDescriptor = (ColumnDescriptor) this.columncontainer.get(_nOldIndex);
+            this.columncontainer.remove(_nOldIndex);
+            columncontainer.add(_nNewIndex, oColumnDescriptor);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
+            return false;
+        }}
 
         public boolean addColumn(String _columnname, XPropertySet _xNewColPropertySet){
         try {
