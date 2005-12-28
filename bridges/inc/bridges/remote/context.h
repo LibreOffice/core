@@ -4,9 +4,9 @@
  *
  *  $RCSfile: context.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:11:39 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:32:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,7 +189,7 @@ remote_removeContextListener( remote_contextListenerFunc listener , void *pObjec
 extern "C" rtl_uString ** SAL_CALL
 remote_getContextList(
     sal_Int32 *pnStringCount,
-    void * ( SAL_CALL * memAlloc ) ( sal_uInt32 nBytesToAlloc ) );
+    void * ( SAL_CALL * memAlloc ) ( sal_Size nBytesToAlloc ) );
 
 
 struct remote_BridgeImpl;
