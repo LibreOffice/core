@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WWD_Startup.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:59:09 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:26:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
