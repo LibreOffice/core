@@ -31,15 +31,16 @@
  *                      - added ability to parse slightly broken files
  *                      - added charwidth member to GlobalFontInfo
  *  04/26/2001 pl       - added OpenOffice header
+ *  10/19/2005 pl       - changed parseFile to accept a file name instead of a stream
  */
 
 /*************************************************************************
  *
  *  $RCSfile: parseAFM.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:45:36 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:08:50 $
  *
  ************************************************************************/
 
@@ -337,7 +338,7 @@ typedef struct
  *  The possible return codes from parseFile are defined above.
  */
 
-int parseFile( FILE *fp, FontInfo **fi, FLAGS flags );
+int parseFile( const char* pFilename, FontInfo **fi, FLAGS flags );
 void freeFontInfo(FontInfo *fi);
 
 } // namespace
