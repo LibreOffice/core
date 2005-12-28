@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2005-10-18 08:48:21 $
+#   last change: $Author: hr $ $Date: 2005-12-28 16:59:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,9 +67,16 @@ CONFIGURE_FLAGS+=debug=yes
 BUILD_ACTION=nmake
 BUILD_DIR=$(CONFIGURE_DIR)
 .ELSE
+.IF "$(SYSBASE)"!=""
+xml2_CFLAGS+=-I$(SYSBASE)$/usr$/include
+.IF "$(COMNAME)"=="sunpro5"
+xml2_CFLAGS+=$(C_RESTRICTIONFLAGS)
+.ENDIF			# "$(COMNAME)"=="sunpro5"
+xml2_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
+.ENDIF			# "$(SYSBASE)"!=""
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--enable-ipv6=no --without-python --enable-static=no --with-sax1=yes
+CONFIGURE_FLAGS=--enable-ipv6=no --without-python --enable-static=no --with-sax1=yes CFLAGS="$(xml2_CFLAGS)" LDFLAGS="$(xml2_LDFLAGS)"
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
