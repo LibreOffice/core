@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DBColumn.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:36:34 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:21:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,7 +198,6 @@ public class DBColumn {
     public void setDBField(String _FieldName){
         CurDBField = CurDBMetaData.getFieldColumnByDisplayName(_FieldName);
         CurDBField.DisplayFieldName = _FieldName;
-        CurDBField.FieldName = FieldColumn.getFieldName(CurDBField.DisplayFieldName);
         CurDBField.AliasName = CurDBMetaData.getFieldTitle(_FieldName);
     }
 
@@ -220,8 +219,8 @@ public class DBColumn {
 
 
     public void initializeNumberFormat(){
-        oTextTableHandler.getNumberFormatter().setNumberFormat(xValCell, CurDBField.DBFormatKey);
         setCellFont();
+        oTextTableHandler.getNumberFormatter().setNumberFormat(xValCell, CurDBField.DBFormatKey);
     }
 
 
@@ -325,7 +324,7 @@ public class DBColumn {
         if (bAlignLeft)
         Helper.setUnoPropertyValue(xValCellCursor, "ParaAdjust", new Integer(ParagraphAdjust.LEFT_value));
 
-        if (CurDBField.FieldType == com.sun.star.sdbc.DataType.BIT){
+        if ((CurDBField.FieldType == com.sun.star.sdbc.DataType.BIT) || (CurDBField.FieldType == com.sun.star.sdbc.DataType.BOOLEAN)){
             CharFontName = "StarSymbol";
             Helper.setUnoPropertyValue(xValCellCursor, "CharFontName", CharFontName);
             if (bIsGroupColumn == false)
@@ -351,9 +350,12 @@ public class DBColumn {
     try{
         XPropertyState xPropertyState;
         int FieldType = CurDBField.FieldType;
-        if (FieldType == com.sun.star.sdbc.DataType.BIT){
+        if ((FieldType == com.sun.star.sdbc.DataType.BIT) || (CurDBField.FieldType == com.sun.star.sdbc.DataType.BOOLEAN)){
             CharFontName = "StarSymbol";
             PropertyState = com.sun.star.beans.PropertyState.DIRECT_VALUE;
+            xValCellCursor.gotoStart(false);
+            xValCellCursor.gotoEnd(true);
+            Helper.setUnoPropertyValue(xValCellCursor, "CharFontName", CharFontName);
         }
         else{
             xPropertyState = (XPropertyState) UnoRuntime.queryInterface(XPropertyState.class, xValCellCursor);
