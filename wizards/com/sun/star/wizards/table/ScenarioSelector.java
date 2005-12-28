@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScenarioSelector.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:41:05 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:23:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,8 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.EventObject;
+import com.sun.star.lang.Locale;
+import com.sun.star.lang.XMultiServiceFactory;
 //import com.sun.star.uno.Exception;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.uno.UnoRuntime;
@@ -59,6 +61,7 @@ import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
 import com.sun.star.wizards.ui.WizardDialog;
 import com.sun.star.wizards.ui.XFieldSelectionListener;
+
 
 /**
  * @author Administrator
@@ -80,14 +83,19 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
     String SELECTCATEGORY = "selectCategory";
     private int curcategory;
     public boolean bcolumnnameislimited;
+    private int imaxcolumnchars;
     private String[] fieldnames;
     String smytable;
+    Locale aLocale;
+    XMultiServiceFactory xMSF;
 
     public ScenarioSelector(TableWizard _CurUnoDialog, TableDescriptor _curtabledescriptor, String _reslblFields, String _reslblSelFields) {
         super(_CurUnoDialog, TableWizard.SOMAINPAGE, 91, 108, 210, 72, _reslblFields, _reslblSelFields, 41209, true );
         CurUnoDialog = (TableWizard) _CurUnoDialog;
+        xMSF = CurUnoDialog.xMSF;
+        aLocale = Configuration.getOfficeLocale(xMSF);
         curtabledescriptor = _curtabledescriptor;
-        int imaxcolumnchars = this.curtabledescriptor.getMaxColumnNameLength();
+        imaxcolumnchars = this.curtabledescriptor.getMaxColumnNameLength();
         bcolumnnameislimited = (imaxcolumnchars > 0) && (imaxcolumnchars < 16);
         addFieldSelectionListener( this);
         short pretabindex = (short) (50);
@@ -167,7 +175,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
     public void initializeTable(int _iTable){
         Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "SelectedItems", new short[]{(short)_iTable});
         oCGTable.initialize(oCGCategory.xNameAccessTablesNode, _iTable);
-        super.initialize(oCGTable.getFieldNames(bcolumnnameislimited), true);
+        super.initialize(oCGTable.getFieldNames(bcolumnnameislimited, imaxcolumnchars), true);
     }
 
 
@@ -288,14 +296,14 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                     if (iduplicate != -1){
                         XNameAccess xNameAccessFieldNode;
                         String sdisplayname = Desktop.getUniqueName(NewItems, NewItems[iduplicate], "");
-                        FieldDescription curfielddescription = new FieldDescription(this, sdisplayname, NewItems[iduplicate]);
+                        FieldDescription curfielddescription = new FieldDescription(xMSF, aLocale, this, sdisplayname, NewItems[iduplicate], imaxcolumnchars);
                         CurUnoDialog.fielditems.put(sdisplayname, curfielddescription);
                         NewItems[iduplicate] = sdisplayname;
                         setSelectedFieldNames(NewItems);
                     }
                 }
                 else
-                    CurUnoDialog.fielditems.put(NewItems[i], new FieldDescription(this, NewItems[i], NewItems[i]));
+                    CurUnoDialog.fielditems.put(NewItems[i], new FieldDescription(xMSF, aLocale, this, NewItems[i], NewItems[i], imaxcolumnchars));
              }
         }
         CurUnoDialog.setcompleted(TableWizard.SOMAINPAGE, NewItems.length > 0);
