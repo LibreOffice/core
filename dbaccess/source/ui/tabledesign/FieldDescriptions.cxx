@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldDescriptions.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:38:53 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:37:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -261,6 +261,7 @@ void OFieldDescription::FillFromTypeInfo(const TOTypeInfoSP& _pType,sal_Bool _bF
             SetAutoIncrement(sal_False);
         SetCurrency( _pType->bCurrency );
         SetType(_pType);
+        SetTypeName(_pType->aTypeName);
     }
 }
 // -----------------------------------------------------------------------------
