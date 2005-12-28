@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FilterComponent.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:47:29 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:25:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sdbc.DataType;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
@@ -242,16 +243,35 @@ public class FilterComponent{
                         else if ((CurFieldColumn.StandardFormatKey == oQueryMetaData.getNumberFormatter().getDateFormatKey()) || (CurFieldColumn.StandardFormatKey == oQueryMetaData.getNumberFormatter().getDateTimeFormatKey())){
                             String sDate = CurControlRow.getDateTimeString(true);
                             curValue = "{D '" + sDate + "' }";  // FormatsSupplier
-
                         }
                         else if (CurFieldColumn.StandardFormatKey == oQueryMetaData.getNumberFormatter().getTimeFormatKey()){
                             String sTime = CurControlRow.getDateTimeString(true);
                             curValue = "'{T '" + sTime + "' }";
                         }
-                        else
+                        else{
                             curValue = CurControlRow.getValue();
-                        String sval = String.valueOf(curValue);
-                        PropertyValue oPropertyValue = Properties.createProperty(curFieldName, sval, curOperator);
+                            switch (CurFieldColumn.FieldType){
+                                case DataType.TINYINT:
+                                case DataType.BIGINT:
+                                case DataType.INTEGER:
+                                case DataType.SMALLINT:
+                                    curValue = String.valueOf(((Double) curValue).intValue());
+                                    break;
+                                case DataType.BIT:
+                                case DataType.BOOLEAN:
+                                    double dblvalue = ((Double) curValue).doubleValue();
+                                    curValue = new Boolean(dblvalue == 1.0);
+                                    /**TODO: 1) Datei SingleSelectQueryComposer modifizieren:
+                                    / Zeilen 1525ff in Methode auslagern und Aufruf in Zeile 1356 ändern TypeConverter is parameter
+                                     * 2) setDisplayCondition ändern
+                                    */
+                                    break;
+                                default:
+                                    curValue = String.valueOf(curValue);
+                                    break;
+                            }
+                        }
+                        PropertyValue oPropertyValue = Properties.createProperty(curFieldName, curValue, curOperator);
                         if (this.ifilterstate == this.SOIMATCHALL) {
                             if (i == 0)
                                 filterconditions[0] = new PropertyValue[filtercount];
