@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldColumn.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:24:15 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:16:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,6 +182,7 @@ public class FieldColumn {
             FieldType = AnyConverter.toInt(xColPropertySet.getPropertyValue("Type"));
             switch (FieldType) {
                 case DataType.BIT : // ==  -7;
+                case DataType.BOOLEAN :
                     // Todo: Look if the defaultvalue has been set in the Datasource
                     StandardFormatKey = iLogicalFormatKey;
                     FieldWidth = 5;
@@ -304,6 +305,7 @@ public class FieldColumn {
     public Object getDefaultValue() {
         switch (FieldType) {
             case DataType.BIT : // ==  -7;
+            case DataType.BOOLEAN:
                 DefaultValue = (Object) Integer.valueOf("1");
                 break;
 
