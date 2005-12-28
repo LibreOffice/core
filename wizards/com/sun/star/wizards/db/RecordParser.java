@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RecordParser.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:25:11 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:17:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,6 +123,7 @@ public class RecordParser extends QueryMetaData {
         Object oAny = Any.VOID;
         switch (iType) {
             case DataType.BIT : // ==  -7;
+            case DataType.BOOLEAN :
                 oAny = getColumnDoubleValue(ColIndex, false);
                 break;
 
