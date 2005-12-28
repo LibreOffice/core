@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: hr $ $Date: 2005-09-26 13:00:50 $
+#   last change: $Author: hr $ $Date: 2005-12-28 16:57:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -95,14 +95,22 @@ CONFIGURE_DIR=
 .IF "$(GUI)"=="UNX"
 BUILD_DIR=
 MYCWD=$(shell pwd)/$(INPATH)/misc/build
-CONFIGURE_ACTION= ./configure --prefix=$(MYCWD)/python-inst --enable-shared
+
+.IF "$(SYSBASE)"!=""
+python_CFLAGS+=-I$(SYSBASE)$/usr$/include
+python_LDFLAGS+=-L$(SYSBASE)/usr/lib
+.IF "$(COMNAME)"=="sunpro5"
+python_CFLAGS+=$(C_RESTRICTIONFLAGS)
+.ENDIF			# "$(COMNAME)"=="sunpro5"
+.ENDIF			# "$(SYSBASE)"!=""
+
+CONFIGURE_ACTION=./configure --prefix=$(MYCWD)/python-inst --enable-shared CFLAGS="$(python_CFLAGS)" LDFLAGS="$(python_LDFLAGS)"
 .IF "$(OS)$(CPU)" == "SOLARISI"
 CONFIGURE_ACTION += --disable-ipv6
 .ENDIF
 .IF "$(COMNAME)"=="sunpro5"
 .IF "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
 CC:=$(COMPATH)$/bin$/cc
-CXX:=$(COMPATH)$/bin$/CC
 .ENDIF          # "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
 .ENDIF          # "$(COMNAME)"=="sunpro5"
 
