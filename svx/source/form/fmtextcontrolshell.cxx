@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtextcontrolshell.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 08:26:55 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:37:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1147,7 +1147,7 @@ namespace svx
     {
 #if OSL_DEBUG_LEVEL > 0
         ::rtl::OString sTrace( "FmTextControlShell::formActivated: 0x" );
-        sTrace += ::rtl::OString::valueOf( (sal_Int32)_rxController.get(), 16 );
+        sTrace += ::rtl::OString::valueOf( (sal_IntPtr)_rxController.get(), 16 );
         DBG_TRACE( sTrace );
 #endif
 
@@ -1175,7 +1175,7 @@ namespace svx
     {
 #if OSL_DEBUG_LEVEL > 0
         ::rtl::OString sTrace( "FmTextControlShell::formDeactivated: 0x" );
-        sTrace += ::rtl::OString::valueOf( (sal_Int32)_rxController.get(), 16 );
+        sTrace += ::rtl::OString::valueOf( (sal_IntPtr)_rxController.get(), 16 );
         DBG_TRACE( sTrace );
 #endif
 
@@ -1410,7 +1410,7 @@ namespace svx
 
 #if OSL_DEBUG_LEVEL > 0
         ::rtl::OString sTrace( "FmTextControlShell::focusGained: 0x" );
-        sTrace += ::rtl::OString::valueOf( (sal_Int32)xControl.get(), 16 );
+        sTrace += ::rtl::OString::valueOf( (sal_IntPtr)xControl.get(), 16 );
         DBG_TRACE( sTrace );
 #endif
 
@@ -1426,7 +1426,7 @@ namespace svx
 
 #if OSL_DEBUG_LEVEL > 0
         ::rtl::OString sTrace( "FmTextControlShell::focusLost: 0x" );
-        sTrace += ::rtl::OString::valueOf( (sal_Int32)xControl.get(), 16 );
+        sTrace += ::rtl::OString::valueOf( (sal_IntPtr)xControl.get(), 16 );
         DBG_TRACE( sTrace );
 #endif
 
