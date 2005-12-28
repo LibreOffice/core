@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docdraw.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:11:23 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:11:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -322,14 +322,32 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
         SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
         const SwFmtAnchor aAnch( pContact->GetFmt()->GetAnchor() );
 
-        SwUndoDrawGroup* pUndo = !DoesUndo() ? 0 : new SwUndoDrawGroup(
-                                                (USHORT)rMrkList.GetMarkCount() );
+        SwUndoDrawGroup* pUndo = !DoesUndo()
+                                 ? 0
+                                 : new SwUndoDrawGroup( (USHORT)rMrkList.GetMarkCount() );
 
+        // --> OD 2005-08-16 #i53320#
+        bool bGroupMembersNotPositioned( false );
+        {
+            SwAnchoredDrawObject* pAnchoredDrawObj =
+                static_cast<SwAnchoredDrawObject*>(pContact->GetAnchoredObj( pObj ));
+            bGroupMembersNotPositioned = pAnchoredDrawObj->NotYetPositioned();
+        }
+        // <--
         //ContactObjekte und Formate vernichten.
         for( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             pObj = rMrkList.GetMark( i )->GetObj();
             SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
+
+            // --> OD 2005-08-16 #i53320#
+#ifndef PRODUCT
+            SwAnchoredDrawObject* pAnchoredDrawObj =
+                static_cast<SwAnchoredDrawObject*>(pContact->GetAnchoredObj( pObj ));
+            ASSERT( bGroupMembersNotPositioned == pAnchoredDrawObj->NotYetPositioned(),
+                    "<SwDoc::GroupSelection(..)> - group members have different positioning status!" );
+#endif
+            // <--
 
             pFmt = (SwDrawFrmFmt*)pContact->GetFmt();
             //loescht sich selbst!
@@ -368,8 +386,14 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
         pNewContact->MoveObjToVisibleLayer( pNewGroupObj );
         // <--
         pNewContact->ConnectToLayout();
-        // OD 2004-04-01 #i26791# - Adjust positioning and alignment attributes.
-        lcl_AdjustPositioningAttr( pFmt, *pNewGroupObj );
+        // --> OD 2005-08-16 #i53320# - No adjustment of the positioning and
+        // alignment attributes, if group members aren't positioned yet.
+        if ( !bGroupMembersNotPositioned )
+        {
+            // OD 2004-04-01 #i26791# - Adjust positioning and alignment attributes.
+            lcl_AdjustPositioningAttr( pFmt, *pNewGroupObj );
+        }
+        // <--
 
         if( pUndo )
         {
