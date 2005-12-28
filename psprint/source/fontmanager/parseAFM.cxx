@@ -31,15 +31,24 @@
  *                      - added ability to parse slightly broken files
  *                      - added charwidth member to GlobalFontInfo
  *  04/26/2001 pl       - added OpenOffice header
+ *  10/19/2005 pl       - performance increase:
+ *                         - fread file in one pass
+ *                         - replace file io by buffer access
+ *  10/20/2005 pl       - performance increase:
+ *                         - use one table lookup in token() routine
+ *                           instead of many conditions
+ *                         - return token length in toke() routine
+ *                         - use hash lookup instead of binary search
+ *                           in recognize() routine
  */
 
 /*************************************************************************
  *
  *  $RCSfile: parseAFM.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 13:47:25 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:08:38 $
  *
  ************************************************************************/
 
@@ -77,9 +86,11 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <sys/file.h>
+#include <sys/stat.h>
 #include <math.h>
 #include <parseAFM.hxx>
 #include <psprint/strhelper.hxx>
+#include <rtl/alloc.h>
 
 #define lineterm EOL    /* line terminating character */
 #define normalEOF 1 /* return code from parsing routines used only */
@@ -93,11 +104,55 @@
 
 namespace psp {
 
+class FileInputStream
+{
+    char*         m_pMemory;
+    unsigned int        m_nPos;
+    unsigned int        m_nLen;
+    public:
+    FileInputStream( const char* pFilename );
+    ~FileInputStream();
+
+    int getc() { return (m_nPos < m_nLen) ? int(m_pMemory[m_nPos++]) : -1; }
+    void ungetc()
+    {
+        if( m_nPos > 0 )
+            m_nPos--;
+    }
+    unsigned int tell() const { return m_nPos; }
+    void seek( unsigned int nPos )
+    // NOTE: do not check input data since only results of tell()
+    // get seek()ed in this file
+    { m_nPos = nPos; }
+};
+
+FileInputStream::FileInputStream( const char* pFilename ) :
+    m_pMemory( NULL ),
+    m_nPos( 0 ),
+    m_nLen( 0 )
+{
+    struct stat aStat;
+    if( ! stat( pFilename, &aStat ) &&
+        S_ISREG( aStat.st_mode )    &&
+        aStat.st_size > 0
+      )
+    {
+        FILE* fp = fopen( pFilename, "r" );
+        if( fp )
+        {
+            m_pMemory = (char*)rtl_allocateMemory( aStat.st_size );
+            m_nLen = (unsigned int)fread( m_pMemory, 1, aStat.st_size, fp );
+            fclose( fp );
+        }
+    }
+}
+
+FileInputStream::~FileInputStream()
+{
+    rtl_freeMemory( m_pMemory );
+}
+
 /*************************** GLOBALS ***********************/
-
-static char *ident = NULL; /* storage buffer for keywords */
-
-
 /* "shorts" for fast case statement
  * The values of each of these enumerated items correspond to an entry in the
  * table of strings defined below. Therefore, if you add a new string as
@@ -129,61 +184,115 @@ enum parseKey {
     NOPE
 };
 
-/* keywords for the system:
- * This a table of all of the current strings that are vaild AFM keys.
- * Each entry can be referenced by the appropriate parseKey value (an
- * enumerated data type defined above). If you add a new keyword here,
- * a corresponding parseKey MUST be added to the enumerated data type
- * defined above, AND it MUST be added in the same position as the
- * string is in this table.
- *
- * IMPORTANT: since the sorting algorithm is a binary search, the keywords
- * must be placed in lexicographical order. And, NULL should remain at the
- * end.
- */
-
-static char    *keyStrings[] = {
-    "Ascender", "Ascent", "B", "C", "CC", "CH", "CapHeight", "CharWidth", "CharacterSet" ,"Characters", "Comment",
-    "Descender", "Descent", "Em", "EncodingScheme", "EndCharMetrics", "EndComposites", "EndDirection",
-    "EndFontMetrics", "EndKernData", "EndKernPairs", "EndTrackKern",
-    "FamilyName", "FontBBox", "FontName", "FullName", "IsBaseFont", "IsFixedPitch",
-    "ItalicAngle", "KP", "KPX", "L", "MappingScheme", "MetricsSets", "N",
-    "Notice", "PCC", "StartCharMetrics", "StartComposites", "StartDirection",
-    "StartFontMetrics", "StartKernData", "StartKernPairs",
-    "StartTrackKern", "StdHW", "StdVW", "TrackKern", "UnderlinePosition",
-    "UnderlineThickness", "V", "Version", "W", "W0X", "WX", "Weight", "XHeight",
-    NULL};
-
 /*************************** PARSING ROUTINES **************/
 
 /*************************** token *************************/
 
-/*  A "AFM File Conventions" tokenizer. That means that it will
+/*  A "AFM file Conventions" tokenizer. That means that it will
  *  return the next token delimited by white space.  See also
  *  the `linetoken' routine, which does a similar thing but
  *  reads all tokens until the next end-of-line.
  */
 
-static char *token( FILE* stream )
+// token white space is ' ', '\n', '\r', ',', '\t', ';'
+static const bool is_white_Array[ 256 ] =
+{   false, false, false, false, false, false, false, false, // 0-7
+    false,  true,  true, false, false,  true, false, false, // 8-15
+    false, false, false, false, false, false, false, false, // 16-23
+    false, false, false, false, false, false, false, false, // 24-31
+     true, false, false, false, false, false, false, false, // 32-39
+    false, false, false, false,  true, false, false, false, // 40-47
+    false, false, false, false, false, false, false, false, // 48-55
+    false, false, false,  true, false, false, false, false, // 56-63
+
+    false, false, false, false, false, false, false, false, // 64 -
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false, // 127
+
+    false, false, false, false, false, false, false, false, // 128 -
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false, // 191
+
+    false, false, false, false, false, false, false, false, // 192 -
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false, // 255
+};
+// token delimiters are ' ', '\n', '\r', '\t', ':', ';'
+static const bool is_delimiter_Array[ 256 ] =
+{   false, false, false, false, false, false, false, false, // 0-7
+    false,  true,  true, false, false,  true, false, false, // 8-15
+    false, false, false, false, false, false, false, false, // 16-23
+    false, false, false, false, false, false, false, false, // 24-31
+     true, false, false, false, false, false, false, false, // 32-39
+    false, false, false, false, false, false, false, false, // 40-47
+    false, false, false, false, false, false, false, false, // 48-55
+    false, false,  true,  true, false, false, false, false, // 56-63
+
+    false, false, false, false, false, false, false, false, // 64 -
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false, // 127
+
+    false, false, false, false, false, false, false, false, // 128 -
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false, // 191
+
+    false, false, false, false, false, false, false, false, // 192 -
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false,
+    false, false, false, false, false, false, false, false, // 255
+};
+static char *token( FileInputStream* stream, int& rLen )
 {
+    static char ident[MAX_NAME]; /* storage buffer for keywords */
+
     int ch, idx;
 
     /* skip over white space */
-    while ((ch = fgetc(stream)) == ' ' || ch == lineterm || ch == '\r' ||
-           ch == ',' || ch == '\t' || ch == ';');
+    // relies on EOF = -1
+    while( is_white_Array[ (ch = stream->getc()) & 255 ] )
+        ;
 
     idx = 0;
-    while (ch != EOF && ch != ' ' && ch != lineterm && ch != '\r'
-           && ch != '\t' && ch != ':' && ch != ';')
+    while( ch != -1 && ! is_delimiter_Array[ ch & 255 ] )
     {
         ident[idx++] = ch;
-        ch = fgetc(stream);
-    } /* while */
+        ch = stream->getc();
+    }
 
-    if (ch == EOF && idx < 1) return ((char *)NULL);
-    if (idx >= 1 && ch != ':' ) ungetc(ch, stream);
+    if (ch == -1 && idx < 1) return ((char *)NULL);
+    if (idx >= 1 && ch != ':' ) stream->ungetc();
     if (idx < 1 ) ident[idx++] = ch;    /* single-character token */
     ident[idx] = 0;
+    rLen = idx;
 
     return(ident);  /* returns pointer to the token */
 
@@ -197,20 +306,21 @@ static char *token( FILE* stream )
  *  more than one word (like Comment lines and FullName).
  */
 
-static char *linetoken( FILE* stream )
+static char *linetoken( FileInputStream* stream )
 {
+    static char ident[MAX_NAME]; /* storage buffer for keywords */
     int ch, idx;
 
-    while ((ch = fgetc(stream)) == ' ' || ch == '\t' );
+    while ((ch = stream->getc()) == ' ' || ch == '\t' );
 
     idx = 0;
-    while (ch != EOF && ch != lineterm && ch != '\r')
+    while (ch != -1 && ch != lineterm && ch != '\r')
     {
         ident[idx++] = ch;
-        ch = fgetc(stream);
+        ch = stream->getc();
     } /* while */
 
-    ungetc(ch, stream);
+    stream->ungetc();
     ident[idx] = 0;
 
     return(ident);  /* returns pointer to the token */
@@ -227,37 +337,25 @@ static char *linetoken( FILE* stream )
  *
  *  The algorithm is a standard Knuth binary search.
  */
+#include "afm_hash.cpp"
 
-static enum parseKey recognize( register char* ident)
+static inline enum parseKey recognize( register char* ident, int len)
 {
-    int lower = 0, upper = (int) NOPE, midpoint, cmpvalue;
-    bool found = false;
-
-    while ((upper >= lower) && !found)
-    {
-        midpoint = (lower + upper)/2;
-        if (keyStrings[midpoint] == NULL) break;
-        cmpvalue = strncmp(ident, keyStrings[midpoint], MAX_NAME);
-        if (cmpvalue == 0) found = true;
-        else if (cmpvalue < 0) upper = midpoint - 1;
-        else lower = midpoint + 1;
-    } /* while */
-
-    if (found) return (enum parseKey) midpoint;
-    else return NOPE;
+    const hash_entry* pEntry = AfmKeywordHash::in_word_set( ident, len );
+    return pEntry ? pEntry->eKey : NOPE;
 
 } /* recognize */
 
 
 /************************* parseGlobals *****************************/
 
-/*  This function is called by "parseFile". It will parse the AFM File
+/*  This function is called by "parseFile". It will parse the AFM file
  *  up to the "StartCharMetrics" keyword, which essentially marks the
  *  end of the Global Font Information and the beginning of the character
  *  metrics information.
  *
  *  If the caller of "parseFile" specified that it wanted the Global
- *  Font Information (as defined by the "AFM File Specification"
+ *  Font Information (as defined by the "AFM file Specification"
  *  document), then that information will be stored in the returned
  *  data structure.
  *
@@ -270,16 +368,17 @@ static enum parseKey recognize( register char* ident)
  *  parseFile to determine if there is more file to parse.
  */
 
-static int parseGlobals( FILE* fp, register GlobalFontInfo* gfi )
+static int parseGlobals( FileInputStream* fp, register GlobalFontInfo* gfi )
 {
     bool cont = true, save = (gfi != NULL);
     int error = ok;
     register char *keyword;
     int direction = -1;
+    int tokenlen;
 
     while (cont)
     {
-        keyword = token(fp);
+        keyword = token(fp, tokenlen);
 
         if (keyword == NULL)
             /* Have reached an early and unexpected EOF. */
@@ -291,7 +390,7 @@ static int parseGlobals( FILE* fp, register GlobalFontInfo* gfi )
         if (!save)
             /* get tokens until the end of the Global Font info section */
             /* without saving any of the data */
-            switch (recognize(keyword))
+            switch (recognize(keyword, tokenlen))
             {
                 case STARTCHARMETRICS:
                     cont = false;
@@ -306,21 +405,21 @@ static int parseGlobals( FILE* fp, register GlobalFontInfo* gfi )
         else
             /* otherwise parse entire global font info section, */
             /* saving the data */
-            switch(recognize(keyword))
+            switch(recognize(keyword, tokenlen))
             {
                 case STARTFONTMETRICS:
-                    keyword = token(fp);
+                    keyword = token(fp,tokenlen);
                     gfi->afmVersion = strdup( keyword );
                     break;
                 case COMMENT:
                     keyword = linetoken(fp);
                     break;
                 case FONTNAME:
-                    keyword = token(fp);
+                    keyword = token(fp, tokenlen);
                     gfi->fontName = strdup( keyword );
                     break;
                 case ENCODINGSCHEME:
-                    keyword = token(fp);
+                    keyword = token(fp, tokenlen);
                     gfi->encodingScheme = strdup( keyword );
                     break;
                 case FULLNAME:
@@ -332,30 +431,30 @@ static int parseGlobals( FILE* fp, register GlobalFontInfo* gfi )
                     gfi->familyName = strdup( keyword );
                     break;
                 case WEIGHT:
-                    keyword = token(fp);
+                    keyword = token(fp, tokenlen);
                     gfi->weight = strdup( keyword );
                     break;
                 case ITALICANGLE:
-                    keyword = token(fp);
+                    keyword = token(fp,tokenlen);
                     gfi->italicAngle = StringToDouble( keyword );
                     break;
                 case ISFIXEDPITCH:
-                    keyword = token(fp);
+                    keyword = token(fp,tokenlen);
                     if (MATCH(keyword, False))
                         gfi->isFixedPitch = 0;
                     else
                         gfi->isFixedPitch = 1;
                     break;
                 case UNDERLINEPOSITION:
-                    keyword = token(fp);
+                    keyword = token(fp,tokenlen);
                     gfi->underlinePosition = atoi(keyword);
                     break;
                 case UNDERLINETHICKNESS:
-                    keyword = token(fp);
+                    keyword = token(fp,tokenlen);
                     gfi->underlineThickness = atoi(keyword);
                     break;
                 case VERSION:
-                    keyword = token(fp);
+                    keyword = token(fp,tokenlen);
                     gfi->version = strdup( keyword );
                     break;
                 case NOTICE:
@@ -363,34 +462,34 @@ static int parseGlobals( FILE* fp, register GlobalFontInfo* gfi )
                     gfi->notice = strdup( keyword );
                     break;
                 case FONTBBOX:
-                    keyword = token(fp);
+                    keyword = token(fp,tokenlen);
                     gfi->fontBBox.llx = atoi(keyword);
-                    keyword = token(fp);
+                    keyword = token(fp,tokenlen);
                     gfi->fontBBox.lly = atoi(keyword);
-                    keyword = token(fp);
+                    keyword = token(fp,tokenlen);
                     gfi->fontBBox.urx = atoi(keyword);
-                    keyword = token(fp);
+                    keyword = token(fp,tokenlen);
                     gfi->fontBBox.ury = atoi(keyword);
                     break;
                 case CAPHEIGHT:
-                    keyword = token(fp);
+                    keyword = token(fp,tokenlen);
                     gfi->capHeight = atoi(keyword);
                     break;
                 case XHEIGHT:
-                    keyword = token(fp);
+                    keyword = token(fp,tokenlen);
                     gfi->xHeight = atoi(keyword);
                     break;
                 case DESCENT:
-                    keyword = token(fp);
+                    keyword = token(fp,tokenlen);
                     gfi->descender = -atoi(keyword);
                     break;
                 case DESCENDER:
-                    keyword = token(fp);
+                    keyword = token(fp,tokenlen);
                     gfi->descender = atoi(keyword);
                     break;
                 case ASCENT:
                 case ASCENDER:
-                    keyword = token(fp);
+                    keyword = token(fp,tokenlen);
                     gfi->ascender = atoi(keyword);
                     break;
                 case STARTCHARMETRICS:
@@ -402,41 +501,41 @@ static int parseGlobals( FILE* fp, register GlobalFontInfo* gfi )
                     break;
                 case EM:
                     // skip one token
-                    keyword = token(fp);
+                    keyword = token(fp,tokenlen);
                     break;
                 case STARTDIRECTION:
-                    keyword = token(fp);
+                    keyword = token(fp,tokenlen);
                     direction = atoi(keyword);
                     break; /* ignore this for now */
                 case ENDDIRECTION:
                     break; /* ignore this for now */
                 case MAPPINGSCHEME:
-                    keyword = token(fp);
+                    keyword = token(fp,tokenlen);
                     break; /* ignore     this for now */
                 case CHARACTERS:
-                    keyword = token(fp);
+                    keyword = token(fp,tokenlen);
                     break; /* ignore this for now */
                 case ISBASEFONT:
-                    keyword = token(fp);
+                    keyword = token(fp,tokenlen);
                     break; /* ignore this for now */
                 case CHARACTERSET:
-                    keyword=token(fp); //ignore
+                    keyword=token(fp,tokenlen); //ignore
                     break;
                 case STDHW:
-                    keyword=token(fp); //ignore
+                    keyword=token(fp,tokenlen); //ignore
                     break;
                 case STDVW:
-                    keyword=token(fp); //ignore
+                    keyword=token(fp,tokenlen); //ignore
                     break;
                 case CHARWIDTH:
-                    keyword = token(fp);
+                    keyword = token(fp,tokenlen);
                     if (direction == 0)
                         gfi->charwidth = atoi(keyword);
-                    keyword = token(fp);
+                    keyword = token(fp,tokenlen);
                     /* ignore y-width for now */
                     break;
                 case METRICSSETS:
-                    keyword = token(fp);
+                    keyword = token(fp,tokenlen);
                     break; /* ignore this for now */
                 case NOPE:
                 default:
@@ -450,7 +549,7 @@ static int parseGlobals( FILE* fp, register GlobalFontInfo* gfi )
 } /* parseGlobals */
 
 
-
+#if 0
 /************************* initializeArray ************************/
 
 /*  Unmapped character codes are (at Adobe Systems) assigned the
@@ -466,43 +565,43 @@ static int parseGlobals( FILE* fp, register GlobalFontInfo* gfi )
  *  values in the array of character widths.
  *
  *  Before returning, the position of the read/write pointer of the
- *  file is reset to be where it was upon entering this function.
+ *  FileInputStream is reset to be where it was upon entering this function.
  */
 
-static int initializeArray( FILE* fp, register int* cwi)
+static int initializeArray( FileInputStream* fp, register int* cwi)
 {
     bool cont = true, found = false;
-    long opos = ftell(fp);
-    int code = 0, width = 0, i = 0, error = 0;
+    unsigned int opos = fp->tell();
+    int code = 0, width = 0, i = 0, error = 0, tokenlen;
     register char *keyword;
 
     while (cont)
     {
-        keyword = token(fp);
+        keyword = token(fp,tokenlen);
         if (keyword == NULL)
         {
             error = earlyEOF;
             break; /* get out of loop */
         }
-        switch(recognize(keyword))
+        switch(recognize(keyword,tokenlen))
         {
             case COMMENT:
                 keyword = linetoken(fp);
                 break;
             case CODE:
-                code = atoi(token(fp));
+                code = atoi(token(fp,tokenlen));
                 break;
             case CODEHEX:
-                sscanf(token(fp),"<%x>", &code);
+                sscanf(token(fp,tokenlen),"<%x>", &code);
                 break;
             case XWIDTH:
-                width = atoi(token(fp));
+                width = atoi(token(fp,tokenlen));
                 break;
             case X0WIDTH:
-                (void) token(fp);
+                (void) token(fp,tokenlen);
                 break;
             case CHARNAME:
-                keyword = token(fp);
+                keyword = token(fp,tokenlen);
                 if (MATCH(keyword, Space))
                 {
                     cont = false;
@@ -529,16 +628,16 @@ static int initializeArray( FILE* fp, register int* cwi)
     for (i = 0; i < 256; ++i)
         cwi[i] = width;
 
-    fseek(fp, opos, 0);
+    fp->seek(opos);
 
     return(error);
 
 } /* initializeArray */
-
+#endif
 
 /************************* parseCharWidths **************************/
 
-/*  This function is called by "parseFile". It will parse the AFM File
+/*  This function is called by "parseFile". It will parse the AFM file
  *  up to the "EndCharMetrics" keyword. It will save the character
  *  width info (as opposed to all of the character metric information)
  *  if requested by the caller of parseFile. Otherwise, it will just
@@ -556,15 +655,15 @@ static int initializeArray( FILE* fp, register int* cwi)
  *  parseFile to determine if there is more file to parse.
  */
 
-static int parseCharWidths( FILE* fp, register int* cwi)
+static int parseCharWidths( FileInputStream* fp, register int* cwi)
 {
     bool cont = true, save = (cwi != NULL);
-    int pos = 0, error = ok;
+    int pos = 0, error = ok, tokenlen;
     register char *keyword;
 
     while (cont)
     {
-        keyword = token(fp);
+        keyword = token(fp,tokenlen);
         /* Have reached an early and unexpected EOF. */
         /* Set flag and stop parsing */
         if (keyword == NULL)
@@ -575,7 +674,7 @@ static int parseCharWidths( FILE* fp, register int* cwi)
         if (!save)
             /* get tokens until the end of the Char Metrics section without */
             /* saving any of the data*/
-            switch (recognize(keyword))
+            switch (recognize(keyword,tokenlen))
             {
                 case ENDCHARMETRICS:
                     cont = false;
@@ -590,29 +689,29 @@ static int parseCharWidths( FILE* fp, register int* cwi)
         else
             /* otherwise parse entire char metrics section, saving */
             /* only the char x-width info */
-            switch(recognize(keyword))
+            switch(recognize(keyword,tokenlen))
             {
                 case COMMENT:
                     keyword = linetoken(fp);
                     break;
                 case CODE:
-                    keyword = token(fp);
+                    keyword = token(fp,tokenlen);
                     pos = atoi(keyword);
                     break;
                 case XYWIDTH:
                     /* PROBLEM: Should be no Y-WIDTH when doing "quick & dirty" */
-                    keyword = token(fp); keyword = token(fp); /* eat values */
+                    keyword = token(fp,tokenlen); keyword = token(fp,tokenlen); /* eat values */
                     error = parseError;
                     break;
                 case CODEHEX:
-                    keyword = token(fp);
+                    keyword = token(fp,tokenlen);
                     sscanf(keyword, "<%x>", &pos);
                     break;
                 case X0WIDTH:
-                    (void) token(fp);
+                    (void) token(fp,tokenlen);
                     break;
                 case XWIDTH:
-                    keyword = token(fp);
+                    keyword = token(fp,tokenlen);
                     if (pos >= 0) /* ignore unmapped chars */
                         cwi[pos] = atoi(keyword);
                     break;
@@ -624,18 +723,18 @@ static int parseCharWidths( FILE* fp, register int* cwi)
                     error = normalEOF;
                     break;
                 case CHARNAME:  /* eat values (so doesn't cause parseError) */
-                    keyword = token(fp);
+                    keyword = token(fp,tokenlen);
                     break;
                 case CHARBBOX:
-                    keyword = token(fp); keyword = token(fp);
-                    keyword = token(fp); keyword = token(fp);
+                    keyword = token(fp,tokenlen); keyword = token(fp,tokenlen);
+                    keyword = token(fp,tokenlen); keyword = token(fp,tokenlen);
                     break;
                 case LIGATURE:
-                    keyword = token(fp); keyword = token(fp);
+                    keyword = token(fp,tokenlen); keyword = token(fp,tokenlen);
                     break;
                 case VVECTOR:
-                    keyword = token(fp);
-                    keyword = token(fp);
+                    keyword = token(fp,tokenlen);
+                    keyword = token(fp,tokenlen);
                     break;
                 case NOPE:
                 default:
@@ -709,22 +808,22 @@ enlargeCount( unsigned int n_oldcount )
  *  parseFile to determine if there is more file to parse.
  */
 
-static int parseCharMetrics( FILE* fp, register FontInfo* fi)
+static int parseCharMetrics( FileInputStream* fp, register FontInfo* fi)
 {
     bool cont = true, firstTime = true;
-    int error = ok, count = 0;
+    int error = ok, count = 0, tokenlen;
     register CharMetricInfo *temp = fi->cmi;
     register char *keyword;
 
     while (cont)
     {
-        keyword = token(fp);
+        keyword = token(fp,tokenlen);
         if (keyword == NULL)
         {
             error = earlyEOF;
             break; /* get out of loop */
         }
-        switch(recognize(keyword))
+        switch(recognize(keyword,tokenlen))
         {
             case COMMENT:
                 keyword = linetoken(fp);
@@ -741,7 +840,7 @@ static int parseCharMetrics( FILE* fp, register FontInfo* fi)
                 {
                     if (firstTime) firstTime = false;
                     else temp++;
-                    temp->code = atoi(token(fp));
+                    temp->code = atoi(token(fp,tokenlen));
                     if (fi->gfi && fi->gfi->charwidth)
                         temp->wx = fi->gfi->charwidth;
                     count++;
@@ -765,7 +864,7 @@ static int parseCharMetrics( FILE* fp, register FontInfo* fi)
                         firstTime = false;
                     else
                         temp++;
-                    sscanf(token(fp),"<%x>", &temp->code);
+                    sscanf(token(fp,tokenlen),"<%x>", &temp->code);
                     if (fi->gfi && fi->gfi->charwidth)
                         temp->wx = fi->gfi->charwidth;
                     count++;
@@ -776,24 +875,24 @@ static int parseCharMetrics( FILE* fp, register FontInfo* fi)
                 }
                 break;
             case XYWIDTH:
-                temp->wx = atoi(token(fp));
-                temp->wy = atoi(token(fp));
+                temp->wx = atoi(token(fp,tokenlen));
+                temp->wy = atoi(token(fp,tokenlen));
                 break;
             case X0WIDTH:
-                temp->wx = atoi(token(fp));
+                temp->wx = atoi(token(fp,tokenlen));
                 break;
             case XWIDTH:
-                temp->wx = atoi(token(fp));
+                temp->wx = atoi(token(fp,tokenlen));
                 break;
             case CHARNAME:
-                keyword = token(fp);
+                keyword = token(fp,tokenlen);
                 temp->name = (char *)strdup(keyword);
                 break;
             case CHARBBOX:
-                temp->charBBox.llx = atoi(token(fp));
-                temp->charBBox.lly = atoi(token(fp));
-                temp->charBBox.urx = atoi(token(fp));
-                temp->charBBox.ury = atoi(token(fp));
+                temp->charBBox.llx = atoi(token(fp,tokenlen));
+                temp->charBBox.lly = atoi(token(fp,tokenlen));
+                temp->charBBox.urx = atoi(token(fp,tokenlen));
+                temp->charBBox.ury = atoi(token(fp,tokenlen));
                 break;
             case LIGATURE: {
                 Ligature **tail = &(temp->ligs);
@@ -807,9 +906,9 @@ static int parseCharMetrics( FILE* fp, register FontInfo* fi)
                 }
 
                 *tail = (Ligature *) calloc(1, sizeof(Ligature));
-                keyword = token(fp);
+                keyword = token(fp,tokenlen);
                 (*tail)->succ = (char *)strdup(keyword);
-                keyword = token(fp);
+                keyword = token(fp,tokenlen);
                 (*tail)->lig = (char *)strdup(keyword);
                 break; }
             case ENDCHARMETRICS:
@@ -820,8 +919,8 @@ static int parseCharMetrics( FILE* fp, register FontInfo* fi)
                 error = normalEOF;
                 break;
             case VVECTOR:
-                keyword = token(fp);
-                keyword = token(fp);
+                keyword = token(fp,tokenlen);
+                keyword = token(fp,tokenlen);
                 break;
             case NOPE:
             default:
@@ -845,7 +944,7 @@ static int parseCharMetrics( FILE* fp, register FontInfo* fi)
 
 /************************* parseTrackKernData ***********************/
 
-/*  This function is called by "parseFile". It will parse the AFM File
+/*  This function is called by "parseFile". It will parse the AFM file
  *  up to the "EndTrackKern" or "EndKernData" keywords. It will save the
  *  track kerning data if requested by the caller of parseFile.
  *
@@ -858,15 +957,15 @@ static int parseCharMetrics( FILE* fp, register FontInfo* fi)
  *  parseFile to determine if there is more file to parse.
  */
 
-static int parseTrackKernData( FILE* fp, register FontInfo* fi)
+static int parseTrackKernData( FileInputStream* fp, register FontInfo* fi)
 {
     bool cont = true, save = (fi->tkd != NULL);
-    int pos = 0, error = ok, tcount = 0;
+    int pos = 0, error = ok, tcount = 0, tokenlen;
     register char *keyword;
 
     while (cont)
     {
-        keyword = token(fp);
+        keyword = token(fp,tokenlen);
 
         if (keyword == NULL)
         {
@@ -876,7 +975,7 @@ static int parseTrackKernData( FILE* fp, register FontInfo* fi)
         if (!save)
             /* get tokens until the end of the Track Kerning Data */
             /* section without saving any of the data */
-            switch(recognize(keyword))
+            switch(recognize(keyword,tokenlen))
             {
                 case ENDTRACKKERN:
                 case ENDKERNDATA:
@@ -892,7 +991,7 @@ static int parseTrackKernData( FILE* fp, register FontInfo* fi)
         else
             /* otherwise parse entire Track Kerning Data section, */
             /* saving the data */
-            switch(recognize(keyword))
+            switch(recognize(keyword,tokenlen))
             {
                 case COMMENT:
                     keyword = linetoken(fp);
@@ -906,15 +1005,15 @@ static int parseTrackKernData( FILE* fp, register FontInfo* fi)
 
                     if (tcount < fi->numOfTracks)
                     {
-                        keyword = token(fp);
+                        keyword = token(fp,tokenlen);
                         fi->tkd[pos].degree = atoi(keyword);
-                        keyword = token(fp);
+                        keyword = token(fp,tokenlen);
                         fi->tkd[pos].minPtSize = StringToDouble(keyword);
-                        keyword = token(fp);
+                        keyword = token(fp,tokenlen);
                         fi->tkd[pos].minKernAmt = StringToDouble(keyword);
-                        keyword = token(fp);
+                        keyword = token(fp,tokenlen);
                         fi->tkd[pos].maxPtSize = StringToDouble(keyword);
-                        keyword = token(fp);
+                        keyword = token(fp,tokenlen);
                         fi->tkd[pos++].maxKernAmt = StringToDouble(keyword);
                         tcount++;
                     }
@@ -953,7 +1052,7 @@ static int parseTrackKernData( FILE* fp, register FontInfo* fi)
 
 /************************* parsePairKernData ************************/
 
-/*  This function is called by "parseFile". It will parse the AFM File
+/*  This function is called by "parseFile". It will parse the AFM file
  *  up to the "EndKernPairs" or "EndKernData" keywords. It will save
  *  the pair kerning data if requested by the caller of parseFile.
  *
@@ -966,15 +1065,15 @@ static int parseTrackKernData( FILE* fp, register FontInfo* fi)
  *  parseFile to determine if there is more file to parse.
  */
 
-static int parsePairKernData( FILE* fp, register FontInfo* fi)
+static int parsePairKernData( FileInputStream* fp, register FontInfo* fi)
 {
     bool cont = true, save = (fi->pkd != NULL);
-    int pos = 0, error = ok, pcount = 0;
+    int pos = 0, error = ok, pcount = 0, tokenlen;
     register char *keyword;
 
     while (cont)
     {
-        keyword = token(fp);
+        keyword = token(fp,tokenlen);
 
         if (keyword == NULL)
         {
@@ -984,7 +1083,7 @@ static int parsePairKernData( FILE* fp, register FontInfo* fi)
         if (!save)
             /* get tokens until the end of the Pair Kerning Data */
             /* section without saving any of the data */
-            switch(recognize(keyword))
+            switch(recognize(keyword,tokenlen))
             {
                 case ENDKERNPAIRS:
                 case ENDKERNDATA:
@@ -1000,7 +1099,7 @@ static int parsePairKernData( FILE* fp, register FontInfo* fi)
         else
             /* otherwise parse entire Pair Kerning Data section, */
             /* saving the data */
-            switch(recognize(keyword))
+            switch(recognize(keyword,tokenlen))
             {
                 case COMMENT:
                     keyword = linetoken(fp);
@@ -1013,13 +1112,13 @@ static int parsePairKernData( FILE* fp, register FontInfo* fi)
                     }
                     if (pcount < fi->numOfPairs)
                     {
-                        keyword = token(fp);
+                        keyword = token(fp,tokenlen);
                         fi->pkd[pos].name1 = strdup( keyword );
-                        keyword = token(fp);
+                        keyword = token(fp,tokenlen);
                         fi->pkd[pos].name2 = strdup( keyword );
-                        keyword = token(fp);
+                        keyword = token(fp,tokenlen);
                         fi->pkd[pos].xamt = atoi(keyword);
-                        keyword = token(fp);
+                        keyword = token(fp,tokenlen);
                         fi->pkd[pos++].yamt = atoi(keyword);
                         pcount++;
                     }
@@ -1037,11 +1136,11 @@ static int parsePairKernData( FILE* fp, register FontInfo* fi)
                     }
                     if (pcount < fi->numOfPairs)
                     {
-                        keyword = token(fp);
+                        keyword = token(fp,tokenlen);
                         fi->pkd[pos].name1 = strdup( keyword );
-                        keyword = token(fp);
+                        keyword = token(fp,tokenlen);
                         fi->pkd[pos].name2 = strdup( keyword );
-                        keyword = token(fp);
+                        keyword = token(fp,tokenlen);
                         fi->pkd[pos++].xamt = atoi(keyword);
                         pcount++;
                     }
@@ -1080,7 +1179,7 @@ static int parsePairKernData( FILE* fp, register FontInfo* fi)
 
 /************************* parseCompCharData **************************/
 
-/*  This function is called by "parseFile". It will parse the AFM File
+/*  This function is called by "parseFile". It will parse the AFM file
  *  up to the "EndComposites" keyword. It will save the composite
  *  character data if requested by the caller of parseFile.
  *
@@ -1096,15 +1195,15 @@ static int parsePairKernData( FILE* fp, register FontInfo* fi)
  *  parseFile to determine if there is more file to parse.
  */
 
-static int parseCompCharData( FILE* fp, register FontInfo* fi)
+static int parseCompCharData( FileInputStream* fp, register FontInfo* fi)
 {
     bool cont = true, firstTime = true, save = (fi->ccd != NULL);
-    int pos = 0, j = 0, error = ok, ccount = 0, pcount = 0;
+    int pos = 0, j = 0, error = ok, ccount = 0, pcount = 0, tokenlen;
     register char *keyword;
 
     while (cont)
     {
-        keyword = token(fp);
+        keyword = token(fp,tokenlen);
         if (keyword == NULL)
             /* Have reached an early and unexpected EOF. */
             /* Set flag and stop parsing */
@@ -1125,7 +1224,7 @@ static int parseCompCharData( FILE* fp, register FontInfo* fi)
         if (!save)
             /* get tokens until the end of the Composite Character info */
             /* section without saving any of the data */
-            switch(recognize(keyword))
+            switch(recognize(keyword,tokenlen))
             {
                 case ENDCOMPOSITES:
                     cont = false;
@@ -1144,7 +1243,7 @@ static int parseCompCharData( FILE* fp, register FontInfo* fi)
         else
             /* otherwise parse entire Composite Character info section, */
             /* saving the data */
-            switch(recognize(keyword))
+            switch(recognize(keyword,tokenlen))
             {
                 case COMMENT:
                     keyword = linetoken(fp);
@@ -1157,14 +1256,14 @@ static int parseCompCharData( FILE* fp, register FontInfo* fi)
                     }
                     if (ccount < fi->numOfComps)
                     {
-                        keyword = token(fp);
+                        keyword = token(fp,tokenlen);
                         if (pcount != fi->ccd[pos].numOfPieces)
                             error = parseError;
                         pcount = 0;
                         if (firstTime) firstTime = false;
                         else pos++;
                         fi->ccd[pos].ccName = strdup( keyword );
-                        keyword = token(fp);
+                        keyword = token(fp,tokenlen);
                         fi->ccd[pos].numOfPieces = atoi(keyword);
                         fi->ccd[pos].pieces = (Pcc *)
                             calloc(fi->ccd[pos].numOfPieces, sizeof(Pcc));
@@ -1180,11 +1279,11 @@ static int parseCompCharData( FILE* fp, register FontInfo* fi)
                 case COMPCHARPIECE:
                     if (pcount < fi->ccd[pos].numOfPieces)
                     {
-                        keyword = token(fp);
+                        keyword = token(fp,tokenlen);
                         fi->ccd[pos].pieces[j].pccName = strdup( keyword );
-                        keyword = token(fp);
+                        keyword = token(fp,tokenlen);
                         fi->ccd[pos].pieces[j].deltax = atoi(keyword);
-                        keyword = token(fp);
+                        keyword = token(fp,tokenlen);
                         fi->ccd[pos].pieces[j++].deltay = atoi(keyword);
                         pcount++;
                     }
@@ -1229,10 +1328,10 @@ static int parseCompCharData( FILE* fp, register FontInfo* fi)
  *  The caller of this function is responsible for locating and opening
  *  an AFM file and handling all errors associated with that task.
  *
- *  parseFile expects 3 parameters: a vaild file pointer, a pointer
+ *  parseFile expects 3 parameters: a filename pointer, a pointer
  *  to a (FontInfo *) variable (for which storage will be allocated and
  *  the data requested filled in), and a mask specifying which
- *  data from the AFM File should be saved in the FontInfo structure.
+ *  data from the AFM file should be saved in the FontInfo structure.
  *
  *  The file will be parsed and the requested data will be stored in
  *  a record of type FontInfo (refer to ParseAFM.h).
@@ -1243,18 +1342,16 @@ static int parseCompCharData( FILE* fp, register FontInfo* fi)
  *  pointer upon return of this function is undefined.
  */
 
-int parseFile ( FILE* fp, FontInfo** fi, FLAGS flags)
+int parseFile( const char* pFilename, FontInfo** fi, FLAGS flags)
 {
+    FileInputStream aFile( pFilename );
 
     int code = ok;  /* return code from each of the parsing routines */
     int error = ok; /* used as the return code from this function */
+    int tokenlen;
 
     register char *keyword; /* used to store a token */
 
-
-    /* storage data for the global variable ident */
-    ident = (char *) calloc(MAX_NAME, sizeof(char));
-    if (ident == NULL) {error = storageProblem; return(error);}
 
     (*fi) = (FontInfo *) calloc(1, sizeof(FontInfo));
     if ((*fi) == NULL) {error = storageProblem; return(error);}
@@ -1265,9 +1362,9 @@ int parseFile ( FILE* fp, FontInfo** fi, FLAGS flags)
         if ((*fi)->gfi == NULL) {error = storageProblem; return(error);}
     }
 
-    /* The AFM File begins with Global Font Information. This section */
+    /* The AFM file begins with Global Font Information. This section */
     /* will be parsed whether or not information should be saved. */
-    code = parseGlobals(fp, (*fi)->gfi);
+    code = parseGlobals(&aFile, (*fi)->gfi);
 
     if (code < 0) error = code;
 
@@ -1281,13 +1378,13 @@ int parseFile ( FILE* fp, FontInfo** fi, FLAGS flags)
 
     if ((code != normalEOF) && (code != earlyEOF))
     {
-        (*fi)->numOfChars = atoi(token(fp));
+        (*fi)->numOfChars = atoi(token(&aFile,tokenlen));
         if (flags & (P_M ^ P_W))
         {
             (*fi)->cmi = (CharMetricInfo *)
                 calloc((*fi)->numOfChars, sizeof(CharMetricInfo));
             if ((*fi)->cmi == NULL) {error = storageProblem; return(error);}
-            code = parseCharMetrics(fp, *fi);
+            code = parseCharMetrics(&aFile, *fi);
         }
         else
         {
@@ -1301,7 +1398,7 @@ int parseFile ( FILE* fp, FontInfo** fi, FLAGS flags)
                 }
             }
             /* parse section regardless */
-            code = parseCharWidths(fp, (*fi)->cwi);
+            code = parseCharWidths(&aFile, (*fi)->cwi);
         } /* else */
     } /* if */
 
@@ -1315,7 +1412,7 @@ int parseFile ( FILE* fp, FontInfo** fi, FLAGS flags)
 
     while ((code != normalEOF) && (code != earlyEOF))
     {
-        keyword = token(fp);
+        keyword = token(&aFile,tokenlen);
         if (keyword == NULL)
             /* Have reached an early and unexpected EOF. */
             /* Set flag and stop parsing */
@@ -1323,14 +1420,14 @@ int parseFile ( FILE* fp, FontInfo** fi, FLAGS flags)
             code = earlyEOF;
             break; /* get out of loop */
         }
-        switch(recognize(keyword))
+        switch(recognize(keyword,tokenlen))
         {
             case STARTKERNDATA:
                 break;
             case ENDKERNDATA:
                 break;
             case STARTTRACKKERN:
-                keyword = token(fp);
+                keyword = token(&aFile,tokenlen);
                 if (flags & P_T)
                 {
                     (*fi)->numOfTracks = atoi(keyword);
@@ -1342,10 +1439,10 @@ int parseFile ( FILE* fp, FontInfo** fi, FLAGS flags)
                         return(error);
                     }
                 } /* if */
-                code = parseTrackKernData(fp, *fi);
+                code = parseTrackKernData(&aFile, *fi);
                 break;
             case STARTKERNPAIRS:
-                keyword = token(fp);
+                keyword = token(&aFile,tokenlen);
                 if (flags & P_P)
                 {
                     (*fi)->numOfPairs = atoi(keyword);
@@ -1357,10 +1454,10 @@ int parseFile ( FILE* fp, FontInfo** fi, FLAGS flags)
                         return(error);
                     }
                 } /* if */
-                code = parsePairKernData(fp, *fi);
+                code = parsePairKernData(&aFile, *fi);
                 break;
             case STARTCOMPOSITES:
-                keyword = token(fp);
+                keyword = token(&aFile,tokenlen);
                 if (flags & P_C)
                 {
                     (*fi)->numOfComps = atoi(keyword);
@@ -1372,13 +1469,13 @@ int parseFile ( FILE* fp, FontInfo** fi, FLAGS flags)
                         return(error);
                     }
                 } /* if */
-                code = parseCompCharData(fp, *fi);
+                code = parseCompCharData(&aFile, *fi);
                 break;
             case ENDFONTMETRICS:
                 code = normalEOF;
                 break;
             case COMMENT:
-                linetoken(fp);
+                linetoken(&aFile);
                 break;
             case NOPE:
             default:
@@ -1391,8 +1488,6 @@ int parseFile ( FILE* fp, FontInfo** fi, FLAGS flags)
     } /* while */
 
     if ((error != earlyEOF) && (code < 0)) error = code;
-
-    if (ident != NULL) { free(ident); ident = NULL; }
 
     return(error);
 
