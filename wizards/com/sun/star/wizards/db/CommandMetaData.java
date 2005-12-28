@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CommandMetaData.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:23:15 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:15:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -406,6 +406,7 @@ public class CommandMetaData extends DBMetaData {
                         XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xIndexKeys.getByIndex(i) );
                         int curtype = AnyConverter.toInt(xPropertySet.getPropertyValue("Type"));
                         if (curtype == KeyType.FOREIGN){
+                            // getImportedKeys (RelationController.cxx /source/ui/relationdesign) /Zeile 475
                             String sreftablename = AnyConverter.toString(xPropertySet.getPropertyValue("ReferencedTable"));
                             if (xTableNames.hasByName(sreftablename))
                                 TableVector.addElement(sreftablename);
@@ -437,11 +438,11 @@ public class CommandMetaData extends DBMetaData {
                         XColumnsSupplier xColumnsSupplier = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, xPropertySet);
                         String[] smastercolnames = xColumnsSupplier.getColumns().getElementNames();
                         skeycolumnnames = new String[2][smastercolnames.length];
-                        skeycolumnnames[1] = smastercolnames;
-                        skeycolumnnames[0] = new String[smastercolnames.length];
+                        skeycolumnnames[0] = smastercolnames;
+                        skeycolumnnames[1] = new String[smastercolnames.length];
                         for (int n = 0; n < smastercolnames.length; n++){
                             XPropertySet xcolPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xColumnsSupplier.getColumns().getByName(smastercolnames[n]));
-                            skeycolumnnames[0][n] = AnyConverter.toString(xcolPropertySet.getPropertyValue("RelatedColumn"));
+                            skeycolumnnames[1][n] = AnyConverter.toString(xcolPropertySet.getPropertyValue("RelatedColumn"));
                         }
                         return skeycolumnnames;
                     }
