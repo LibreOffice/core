@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commoncpp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-27 17:11:08 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:56:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,8 +59,12 @@ rtl::OString scopedCppName(rtl::OString const & type, bool bNoNameSpace,
     sal_Int32 nPos = type.lastIndexOf( c );
     if (nPos == -1) {
         nPos = type.lastIndexOf( '.' );
-        if (nPos == -1)
+        if (nPos == -1) {
+            if (shortname && type.indexOf("::com::sun::star") == 0)
+                return type.replaceAt(0, 16, "css");
+
             return type;
+        }
         c = '.';
     }
     if (bNoNameSpace)
@@ -78,6 +82,8 @@ rtl::OString scopedCppName(rtl::OString const & type, bool bNoNameSpace,
         rtl::OString s(tmpBuf.makeStringAndClear());
         if (s.indexOf("::com::sun::star") == 0)
             return s.replaceAt(0, 16, "css");
+        else
+            return s;
     }
 
     return tmpBuf.makeStringAndClear();
