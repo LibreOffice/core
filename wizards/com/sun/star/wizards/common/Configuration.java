@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Configuration.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:19:14 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:14:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -331,6 +331,28 @@ public abstract class Configuration {
         String[] sdisplaynames = new String[snames.length];
         for (int i = 0; i < snames.length; i++){
             String curdisplayname = (String) Helper.getUnoPropertyValue(_xNameAccessNode.getByName(snames[i]), _nodename);
+            if (curdisplayname.equals(_displayname))
+                return (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, _xNameAccessNode.getByName(snames[i]));
+        }
+    } catch (Exception e) {
+        e.printStackTrace(System.out);
+    }
+    return null;
+    }
+
+
+    public static XNameAccess getChildNodebyDisplayName(XMultiServiceFactory _xMSF, Locale _aLocale, XNameAccess _xNameAccessNode, String _displayname, String _nodename, int _nmaxcharcount){
+    String[] snames = null;
+    try {
+        snames = _xNameAccessNode.getElementNames();
+        String[] sdisplaynames = new String[snames.length];
+        for (int i = 0; i < snames.length; i++){
+            String curdisplayname = (String) Helper.getUnoPropertyValue(_xNameAccessNode.getByName(snames[i]), _nodename);
+            if ((_nmaxcharcount > 0) && (_nmaxcharcount < curdisplayname.length())){
+                curdisplayname = curdisplayname.substring(0, _nmaxcharcount);
+            }
+            curdisplayname = Desktop.removeSpecialCharacters(_xMSF, _aLocale, curdisplayname);
+
             if (curdisplayname.equals(_displayname))
                 return (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, _xNameAccessNode.getByName(snames[i]));
         }
