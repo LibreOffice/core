@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CGTable.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:39:28 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:22:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,11 +69,16 @@ public class CGTable{
     }}
 
 
-    public String[] getFieldNames(boolean _bgetbyShortName){
+    public String[] getFieldNames(boolean _bgetbyShortName, int _imaxcolumnchars){
     try {
         String[] fieldnames = null;
-        if (_bgetbyShortName)
+        if (_bgetbyShortName){
             fieldnames = Configuration.getNodeChildNames(xNameAccessFieldsNode, "ShortName");
+            for (int i = 0; i < fieldnames.length; i++){
+                if (fieldnames[i].length() > _imaxcolumnchars)
+                    fieldnames[i]= fieldnames[i].substring(0, _imaxcolumnchars);
+            }
+        }
         else
             fieldnames = Configuration.getNodeChildNames(xNameAccessFieldsNode, "Name");
 
