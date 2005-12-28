@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryWizard.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:35:45 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:21:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,12 +94,14 @@ public class QueryWizard extends WizardDialog {
     }
 
     public static void main(String args[]) {
-        String ConnectStr = "uno:socket,host=localhost,port=8111;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService"; //  //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
+        String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService"; //  //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
         try {
             XMultiServiceFactory xLocMSF = Desktop.connect(ConnectStr);
             if (xLocMSF != null) {
                 PropertyValue[] curproperties = new PropertyValue[1];
                 curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/Mydbwizard2DocAssign.odb"); //Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb MyDBase.odb; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
+                curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///x:/bc/nyt1.odb"); //Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb MyDBase.odb; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
+                curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyveryveryNewHSQLDatabase.odb"); //baseLocation ); "DataSourceName", "db1");
 
 //              curproperties[0] = Properties.createProperty("DataSourceName", "TESTDB");
                 QueryWizard CurQueryWizard = new QueryWizard(xLocMSF);
