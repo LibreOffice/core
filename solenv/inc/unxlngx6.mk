@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngx6.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-07 10:27:48 $
+#   last change: $Author: hr $ $Date: 2005-12-28 17:28:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,7 @@ CFLAGSOPT+=-Wuninitialized				# not supported without optimization
 CFLAGSOPT=   							# no optimizing for non products
 .ENDIF	# "$(PRODUCT)"!=""
 # Compiler flags for disabling optimizations
-CFLAGSNOOPT=-O
+CFLAGSNOOPT=-O0
 # Compiler flags for describing the output path
 CFLAGSOUTOBJ=-o
 # Enable all warnings
