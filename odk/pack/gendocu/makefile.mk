@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 20:17:23 $
+#   last change: $Author: hr $ $Date: 2005-12-28 18:06:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,8 @@ JAVADOCREFNAME="UDK $(UDK_MAJOR).$(UDK_MINOR).$(UDK_MICRO) Java API Reference"
 
 CPP_DOCU_INDEX_FILE = $(DESTDIRGENCPPREF)$/index.html
 JAVA_DOCU_INDEX_FILE = $(DESTDIRGENJAVAREF)$/index.html
+
+CPP_DOCU_CLEANUP_FLAG = $(MISC)$/cpp_docu_cleanup.flag
 
 JAVA_SRC_DIR=$(MISC)$/java_src
 JAVA_PACKAGES=\
@@ -98,7 +100,12 @@ all: \
 all: $(CPP_DOCU_INDEX_FILE)
 .ENDIF
 
-$(CPP_DOCU_INDEX_FILE) : $(INCLUDELIST)
+
+$(CPP_DOCU_CLEANUP_FLAG) : $(INCLUDELIST) $(PRJ)$/docs$/cpp$/ref$/cpp.css
+    +-$(MY_DELETE_RECURSIVE) $(DESTDIRGENCPPREF) >& $(NULLDEV)
+    +$(TOUCH) $@
+
+$(CPP_DOCU_INDEX_FILE) : $(CPP_DOCU_CLEANUP_FLAG)
     +-$(MKDIRHIER) $(@:d)        
     +$(MY_AUTODOC) -html $(DESTDIRGENCPPREF) -name $(CPPDOCREFNAME) $(AUTODOCPARAMS)
     +-rm $(@:d)$/cpp.css
