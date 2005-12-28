@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Dataimport.java,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:36:51 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:22:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@ import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextTable;
 
+import com.sun.star.uno.Any;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.wizards.db.*;
@@ -118,9 +119,15 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
             xMSF = com.sun.star.wizards.common.Desktop.connect(ConnectStr);
             if (xMSF != null)
                 System.out.println("Connected to " + ConnectStr);
+            PropertyValue[] curproperties = new PropertyValue[3];
+            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyDocAssign.odb"); //baseLocation ); "DataSourceName", "db1");
+            curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");
+            curproperties[1] = Properties.createProperty("CommandType", new Integer(CommandType.TABLE));
+            curproperties[2] = Properties.createProperty("Command", "Table2");
+
             Dataimport CurDataimport = new Dataimport(xMSF);
             TextDocument oTextDocument = new TextDocument(xMSF, true, true, null);
-            CurDataimport.createReport(xMSF, oTextDocument.xTextDocument,null);
+            CurDataimport.createReport(xMSF, oTextDocument.xTextDocument, curproperties);
 
         } catch (Exception e) {
             e.printStackTrace(System.out);
@@ -180,9 +187,11 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
             xNamedTextSection.setName(COPYOFGROUPSECTION + (i+1));
             renameTableofLastSection(COPYOFTBLGROUPSECTION + (i+1));
         }
-        XNamed xNamedTextSection = addLinkedTextSection(xTextCursor, RECORDSECTION, null, null);
-        xNamedTextSection.setName(COPYOFRECORDSECTION);
-        renameTableofLastSection(COPYOFTBLRECORDSECTION);
+        if( CurReportDocument.CurDBMetaData.RecordFieldNames.length > 0){
+            XNamed xNamedTextSection = addLinkedTextSection(xTextCursor, RECORDSECTION, null, null);
+            xNamedTextSection.setName(COPYOFRECORDSECTION);
+            renameTableofLastSection(COPYOFTBLRECORDSECTION);
+        }
     }
 
 
@@ -205,7 +214,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
     }
 
 
-    public void createReport(final XMultiServiceFactory xMSF,XTextDocument _textDocument,PropertyValue[] properties) {
+    public void createReport(final XMultiServiceFactory xMSF,XTextDocument _textDocument, PropertyValue[] properties) {
         CurReportDocument = new ReportDocument(xMSF, _textDocument,false, oResource);
         CurProperties = properties;
         int iWidth = CurReportDocument.xFrame.getComponentWindow().getPosSize().Width;
@@ -333,6 +342,20 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
                     CurReportDocument.unlockallControllers();
                     return;
                 }
+            }
+            else{
+                for (ColIndex = 0; ColIndex < GroupFieldCount; ColIndex++) {
+                    CurDBColumn = (DBColumn) CurReportDocument.DBColumnsVector.elementAt(ColIndex);
+                    Object oValue = "";
+                    addLinkedTextSection(xTextCursor, COPYOFGROUPSECTION + Integer.toString(ColIndex + 1), CurDBColumn, oValue);
+                }
+                addLinkedTextSection(xTextCursor, COPYOFRECORDSECTION, null, null);
+                Object[][] RecordArray = new Object[1][RecordFieldCount];
+                for (int i = 0; i < RecordArray[0].length; i++){
+                    RecordArray[0][i] = Any.VOID;
+                }
+                XTextTable xTextTable = CurReportDocument.oTextTableHandler.getlastTextTable();
+                OfficeDocument.ArraytoCellRange(RecordArray, xTextTable, 0, 1);
             }
             CurReportDocument.oTextSectionHandler.breakLinkofTextSections();
             Object oTextTable = null;
