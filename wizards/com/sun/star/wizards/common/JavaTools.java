@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JavaTools.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:20:30 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:15:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -616,5 +616,30 @@ public class JavaTools {
         tempbaselist.toArray(sretlist);
         return sretlist;
     }
+
+
+    /**
+     * compares two strings. If one of them is empty and the other one is null it also returns true
+     * @param sFirstString
+     * @param sSecondString
+     * @return
+     */
+    public static boolean isSame(String sFirstString, String sSecondString){
+        boolean bissame = false;
+        if (sFirstString == null){
+            if (sSecondString != null)
+                bissame = sSecondString.equals("");
+            else
+                bissame = (sSecondString == null);
+        }
+        else{
+            if (sFirstString.equals(""))
+                bissame = (sSecondString == null);
+            else if (sSecondString != null)
+                bissame = sFirstString.equals(sSecondString);
+        }
+        return bissame;
+    }
+
 
 }
