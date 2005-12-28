@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javatype.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:18:18 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:56:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2288,11 +2288,7 @@ void handleInterfaceType(
     typereg::Reader const & reader, Dependencies * dependencies)
 {
     OSL_ASSERT(dependencies != 0);
-    if (reader.getReferenceCount() != 0) {
-        throw CannotDumpException(
-            rtl::OString(RTL_CONSTASCII_STRINGPARAM("Bad type information")));
-            //TODO
-    }
+
     rtl::OString className(codemaker::convertString(reader.getTypeName()));
     sal_uInt16 superTypes = reader.getSuperTypeCount();
     sal_uInt16 fields = reader.getFieldCount();
