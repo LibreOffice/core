@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontcache.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 11:44:36 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:07:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -330,20 +330,26 @@ void FontCache::read()
             OString aFile( aLine.Copy( 5 ) );
             aStream.ReadLine( aLine );
 
-            nIndex = 0;
-            fonttype::type eType = (fonttype::type)aLine.GetToken( 0, ';', nIndex ).ToInt32();
+            const char* pLine = aLine.GetBuffer();
+
+            fonttype::type eType = (fonttype::type)atoi( pLine );
             if( eType != fonttype::TrueType     &&
                 eType != fonttype::Type1        &&
                 eType != fonttype::Builtin
                 )
                 continue;
-            if( nIndex == STRING_NOTFOUND )
+            while( *pLine && *pLine != ';' )
+                pLine++;
+            if( *pLine != ';' )
                 continue;
 
-            sal_Int32 nFonts = aLine.GetToken( 0, ';', nIndex ).ToInt32();
+            pLine++;
+            sal_Int32 nFonts = atoi( pLine );
             for( int n = 0; n < nFonts; n++ )
             {
                 aStream.ReadLine( aLine );
+                pLine = aLine.GetBuffer();
+                int nLen = aLine.Len();
 
                 PrintFontManager::PrintFont* pFont = NULL;
                 switch( eType )
@@ -359,70 +365,86 @@ void FontCache::read()
                         break;
                     default: break;
                 }
-                nIndex = 0;
+
+                for( nIndex = 0; nIndex < nLen && pLine[nIndex] != ';'; nIndex++ )
+                    ;
 
                 pFont->m_nFamilyName = pAtoms->getAtom( ATOM_FAMILYNAME,
-                                                        String( aLine.GetToken( 0, ';', nIndex ), RTL_TEXTENCODING_UTF8 ),
+                                                        OUString( pLine, nIndex, RTL_TEXTENCODING_UTF8 ),
                                                         sal_True );
-                while( nIndex != STRING_NOTFOUND )
+                while( nIndex < nLen )
                 {
-                    String aAlias( aLine.GetToken( 0, ';', nIndex ), RTL_TEXTENCODING_UTF8 );
-                    if( aAlias.Len() )
+                    xub_StrLen nLastIndex = nIndex+1;
+                    for( nIndex = nLastIndex ; nIndex < nLen && pLine[nIndex] != ';'; nIndex++ )
+                        ;
+                    if( nIndex - nLastIndex > 1 )
+                    {
+                        OUString aAlias( pLine+nLastIndex, nIndex-nLastIndex-1, RTL_TEXTENCODING_UTF8 );
                         pFont->m_aAliases.push_back( pAtoms->getAtom( ATOM_FAMILYNAME, aAlias, sal_True ) );
+                    }
                 }
-
-#define CHECKINDEX() if( nIndex == STRING_NOTFOUND ) { delete pFont; continue; }
                 aStream.ReadLine( aLine );
-                nIndex = 0;
+                pLine = aLine.GetBuffer();
+                nLen = aLine.Len();
 
-                int nCollEntry = aLine.GetToken( 0, ';', nIndex ).ToInt32();
-                CHECKINDEX();
-                pFont->m_nPSName = pAtoms->getAtom( ATOM_PSNAME, String( aLine.GetToken( 0, ';', nIndex ), RTL_TEXTENCODING_UTF8 ), sal_True );
-                CHECKINDEX();
-                pFont->m_eItalic = (italic::type)aLine.GetToken( 0, ';', nIndex ).ToInt32();
-                CHECKINDEX();
-                pFont->m_eWeight = (weight::type)aLine.GetToken( 0, ';', nIndex ).ToInt32();
-                CHECKINDEX();
-                pFont->m_eWidth = (width::type)aLine.GetToken( 0, ';', nIndex ).ToInt32();
-                CHECKINDEX();
-                pFont->m_ePitch = (pitch::type)aLine.GetToken( 0, ';', nIndex ).ToInt32();
-                CHECKINDEX();
-                pFont->m_aEncoding = (rtl_TextEncoding)aLine.GetToken( 0, ';', nIndex ).ToInt32();
-                CHECKINDEX();
-                pFont->m_nAscend = aLine.GetToken( 0, ';', nIndex ).ToInt32();
-                CHECKINDEX();
-                pFont->m_nDescend = aLine.GetToken( 0, ';', nIndex ).ToInt32();
-                CHECKINDEX();
-                pFont->m_nLeading = aLine.GetToken( 0, ';', nIndex ).ToInt32();
-                CHECKINDEX();
-                pFont->m_bHaveVerticalSubstitutedGlyphs = (aLine.GetToken( 0, ';', nIndex ).ToInt32() != 0 ) ? true : false;
-                CHECKINDEX();
-                pFont->m_aGlobalMetricX.width = aLine.GetToken( 0, ';', nIndex ).ToInt32();
-                CHECKINDEX();
-                pFont->m_aGlobalMetricX.height = aLine.GetToken( 0, ';', nIndex ).ToInt32();
-                CHECKINDEX();
-                pFont->m_aGlobalMetricY.width = aLine.GetToken( 0, ';', nIndex ).ToInt32();
-                CHECKINDEX();
-                pFont->m_aGlobalMetricY.height = aLine.GetToken( 0, ';', nIndex ).ToInt32();
-                CHECKINDEX();
-                pFont->m_bUserOverride = (aLine.GetToken( 0, ';', nIndex ).ToInt32() != 0) ? true : false;
-
+                // get up to 18 token positions
+                const int nMaxTokens = 18;
+                int nTokenPos[nMaxTokens];
+                nTokenPos[0] = 0;
+                int nTokens = 1;
+                for( int i = 0; i < nLen; i++ )
+                {
+                    if( pLine[i] == ';' )
+                    {
+                        nTokenPos[nTokens++] = i+1;
+                        if( nTokens == nMaxTokens )
+                            break;
+                    }
+                }
+                if( nTokens < 16 )
+                {
+                    delete pFont;
+                    continue;
+                }
+                int nCollEntry      = atoi( pLine );
+                pFont->m_nPSName    = pAtoms->getAtom( ATOM_PSNAME, OUString( pLine + nTokenPos[1], nTokenPos[2]-nTokenPos[1]-1, RTL_TEXTENCODING_UTF8 ), sal_True );
+                pFont->m_eItalic    = (italic::type)atoi( pLine+nTokenPos[2] );
+                pFont->m_eWeight    = (weight::type)atoi( pLine+nTokenPos[3] );
+                pFont->m_eWidth     = (width::type)atoi( pLine+nTokenPos[4] );
+                pFont->m_ePitch     = (pitch::type)atoi( pLine+nTokenPos[5] );
+                pFont->m_aEncoding  = (rtl_TextEncoding)atoi( pLine+nTokenPos[6] );
+                pFont->m_nAscend    = atoi( pLine + nTokenPos[7] );
+                pFont->m_nDescend   = atoi( pLine + nTokenPos[8] );
+                pFont->m_nLeading   = atoi( pLine + nTokenPos[9] );
+                pFont->m_bHaveVerticalSubstitutedGlyphs
+                                    = (atoi( pLine + nTokenPos[10] ) != 0);
+                pFont->m_aGlobalMetricX.width
+                                    = atoi( pLine + nTokenPos[11] );
+                pFont->m_aGlobalMetricX.height
+                                    = atoi( pLine + nTokenPos[12] );
+                pFont->m_aGlobalMetricY.width
+                                    = atoi( pLine + nTokenPos[13] );
+                pFont->m_aGlobalMetricY.height
+                                    = atoi( pLine + nTokenPos[14] );
+                pFont->m_bUserOverride
+                                    = (atoi( pLine + nTokenPos[15] ) != 0);
+                int nStyleTokenNr = 16;
                 switch( eType )
                 {
                     case fonttype::TrueType:
-                        CHECKINDEX();
-                        static_cast<PrintFontManager::TrueTypeFontFile*>(pFont)->m_nTypeFlags = aLine.GetToken( 0, ';', nIndex ).ToInt32();
+                        static_cast<PrintFontManager::TrueTypeFontFile*>(pFont)->m_nTypeFlags = atoi( pLine + nTokenPos[16] );
                         static_cast<PrintFontManager::TrueTypeFontFile*>(pFont)->m_nCollectionEntry = nCollEntry;
                         static_cast<PrintFontManager::TrueTypeFontFile*>(pFont)->m_nDirectory = nDir;
                         static_cast<PrintFontManager::TrueTypeFontFile*>(pFont)->m_aFontFile = aFile;
+                        nStyleTokenNr++;
                         break;
                     case fonttype::Type1:
                     {
-                        CHECKINDEX();
-                        ByteString aMetricFile( aLine.GetToken( 0, ';', nIndex ) );
-                        static_cast<PrintFontManager::Type1FontFile*>(pFont)->m_aMetricFile =  aMetricFile;
+                        int nTokLen = (nTokens > 16 ) ? nTokenPos[17]-nTokenPos[16]-1 : nLen - nTokenPos[16];
+                        static_cast<PrintFontManager::Type1FontFile*>(pFont)->m_aMetricFile = OString( pLine + nTokenPos[16], nTokLen );
                         static_cast<PrintFontManager::Type1FontFile*>(pFont)->m_nDirectory = nDir;
                         static_cast<PrintFontManager::Type1FontFile*>(pFont)->m_aFontFile = aFile;
+                        nStyleTokenNr++;
                     }
                     break;
                     case fonttype::Builtin:
@@ -431,8 +453,8 @@ void FontCache::read()
                         break;
                     default: break;
                 }
-                if( nIndex != STRING_NOTFOUND )
-                    pFont->m_aStyleName = String( aLine.Copy( nIndex ), RTL_TEXTENCODING_UTF8 );
+                if( nTokens > nStyleTokenNr )
+                    pFont->m_aStyleName = OUString( pLine + nTokenPos[nStyleTokenNr], nLen - nTokenPos[nStyleTokenNr], RTL_TEXTENCODING_UTF8 );
 
                 bool bObsolete = false;
                 if( bKeepOnlyUserOverridden )
