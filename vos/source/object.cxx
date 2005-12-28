@@ -4,9 +4,9 @@
  *
  *  $RCSfile: object.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:08:09 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:33:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,11 +69,7 @@ OObject::~OObject()
 {
 }
 
-#if defined MACOS || defined MACOSX
 void* OObject::operator new(size_t size)
-#else
-void* OObject::operator new(unsigned int size)
-#endif
 {
    void* p = rtl_allocateMemory(size);
 
@@ -82,11 +78,7 @@ void* OObject::operator new(unsigned int size)
    return (p);
 }
 
-#if defined MACOS || defined MACOSX
 void* OObject::operator new(size_t size, void* p)
-#else
-void* OObject::operator new(unsigned int size, void* p)
-#endif
 {
    return (p);
 }
@@ -187,8 +179,3 @@ VOS_CLASSINIT::VOS_CLASSINIT(register OClassInfo* pNewClass)
 
     pClassRoot->m_pNextClass = pNewClass;
 }
-
-
-
-
-
