@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TitlesComponent.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:48:40 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:25:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,8 @@ public class TitlesComponent extends ControlScroller{
         for (int i = 0; i < super.ControlGroupVector.size(); i++){
             ControlRow curControlRow = (ControlRow) ControlGroupVector.elementAt(i);
             XTextComponent xTextBox = curControlRow.xTextComponent;
-            xTextBox.addTextListener(_xTextListener);
+            if ((xTextBox != null) && (_xTextListener != null))
+                xTextBox.addTextListener(_xTextListener);
         }
     }
 
