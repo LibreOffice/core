@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.180 $
+#   $Revision: 1.181 $
 #
-#   last change: $Author: rt $ $Date: 2005-12-14 15:37:07 $
+#   last change: $Author: hr $ $Date: 2005-12-28 16:55:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1316,7 +1316,7 @@ environment_confusion:
 .ENDIF          # "$(DISABLE_JAVA)"==""
 
 .IF "$(WORK_STAMP)"!=""
-CDEFS+=-D$(WORK_STAMP)
+CDEFS+=-D$(WORK_STAMP)=$(WORK_STAMP)
 .ENDIF
 
 .INCLUDE .IGNORE: $(UPD)$(LAST_MINOR).mk
