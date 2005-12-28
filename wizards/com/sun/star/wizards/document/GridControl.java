@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GridControl.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:27:15 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:19:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@ import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.container.XNamed;
 import com.sun.star.form.XGridColumnFactory;
+import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 
 
@@ -57,6 +58,7 @@ public class GridControl extends Shape{
     XNameAccess xNameAccess;
     final String SODEFAULTNAME = "Grid1";
     XControlModel xControlModel;
+    public XComponent xComponent;
 
     public GridControl(XMultiServiceFactory _xMSF, String _sname, FormHandler _oFormHandler, XNameContainer _xFormName, FieldColumn[] _fieldcolumns, Point _aPoint, Size _aSize) {
     super(_oFormHandler, _aPoint, _aSize);
@@ -71,6 +73,8 @@ public class GridControl extends Shape{
         xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oGridModel);
         oFormHandler.xDrawPage.add(xShape);
         xGridColumnFactory = (XGridColumnFactory) UnoRuntime.queryInterface(XGridColumnFactory.class, oGridModel);
+        xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, oGridModel);
+
 //      Helper.setUnoPropertyValue(oGridModel, "Name", _sname);
         for (int i = 0; i < fieldcolumns.length; i++){
             FieldColumn curfieldcolumn = fieldcolumns[i];
