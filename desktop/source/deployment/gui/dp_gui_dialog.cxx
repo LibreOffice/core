@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dialog.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:16:27 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:40:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,7 +227,7 @@ DialogImpl::~DialogImpl()
         selWidth - statusWidth - vscrollWidth );
     that->m_headerBar->InsertItem( ITEM_ID_STATUS, strStatus, statusWidth );
 
-    sal_Int32 tabs[ 3 ];
+    long tabs[ 3 ];
     tabs[ 0 ] = 2; // two tabs
     tabs[ 1 ] = statusWidth;
     tabs[ 2 ] = selWidth - statusWidth - vscrollWidth;
