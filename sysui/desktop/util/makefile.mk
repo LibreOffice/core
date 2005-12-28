@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 11:51:24 $
+#   last change: $Author: hr $ $Date: 2005-12-28 16:54:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,13 @@ PKGCONFIG_MODULES=gnome-vfs-2.0 ORBit-2.0 ORBit-CosNaming-2.0 gconf-2.0 bonobo-a
 .INCLUDE: pkg_config.mk
 
 .IF "$(OS)" == "SOLARIS"
+.IF "$(SYSBASE)"!=""
+.IF "$(COMNAME)"=="sunpro5"
+# soften C restrictions to survive "inline" keyword
+CFLAGSCC!:=$(subst,-xc99=none,-xc99=no_lib $(CFLAGSCC))
+.ENDIF          # "$(COMNAME)"=="sunpro5"
+.ENDIF			# "$(SYSBASE)"!=""
+
 LINKFLAGS+=-z nodefs
 .ENDIF # "$(OS)" == "SOLARIS"
 
