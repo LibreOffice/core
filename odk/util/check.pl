@@ -2,9 +2,9 @@
 #
 #   $RCSfile: check.pl,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2005-11-11 10:58:54 $
+#   last change: $Author: hr $ $Date: 2005-12-28 18:06:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,12 @@ if (-d "$StartDir") {
         if (! -e "$StartDir/$OperatingSystem/bin/regcomp.exe") {
         $return++;
         print "\nERROR: \"$StartDir/$OperatingSystem/bin/regcomp.exe\" is missing\n";
+        } else {
+        print "+";
+        }
+        if (! -e "$StartDir/$OperatingSystem/bin/climaker.exe") {
+        $return++;
+        print "\nERROR: \"$StartDir/$OperatingSystem/bin/climaker.exe\" is missing\n";
         } else {
         print "+";
         }
