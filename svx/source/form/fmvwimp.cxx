@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 11:59:46 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:37:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1653,8 +1653,8 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
             const sal_uInt16 nObjID = OBJ_FM_BUTTON;
             ::Size controlSize(4000, 500);
             FmFormObj *pControl = static_cast<FmFormObj*>(SdrObjFactory::MakeNewObject( FmFormInventor, nObjID, NULL, NULL ));
-            controlSize.Width() = sal_Int32(Fraction(controlSize.Width(), 1) * eTargetMode.GetScaleX());
-            controlSize.Height() = sal_Int32(Fraction(controlSize.Height(), 1) * eTargetMode.GetScaleY());
+            controlSize.Width() = Fraction(controlSize.Width(), 1) * eTargetMode.GetScaleX();
+            controlSize.Height() = Fraction(controlSize.Height(), 1) * eTargetMode.GetScaleY();
             ::Point controlPos(_pOutDev->LogicToLogic(Point(controlSize.Width(),0),eSourceMode,eTargetMode));
             ::Rectangle controlRect(controlPos,_pOutDev->LogicToLogic(controlSize, eSourceMode, eTargetMode));
             pControl->SetLogicRect(controlRect);
