@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:18:14 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:36:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,7 @@
         ByteString _aStr( RTL_CONSTASCII_STRINGPARAM( "SvxTrace" ) );\
         _aStr.Append( ByteString::CreateFromInt32( b ) );            \
         _aStr.Append( "->" );                                        \
-        _aStr.Append( ByteString::CreateFromInt32( (sal_Int32) this ) );     \
+        _aStr.Append( ByteString::CreateFromInt64( (sal_IntPtr) this ) );    \
         _aStr.Append( '@' );                                         \
         _aStr.Append( a );                                           \
         DBG_TRACE( _aStr.GetBuffer() );                      \
