@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmfmt.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:54:59 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:11:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -301,6 +301,13 @@ public:
         mbPosAttrSet = true;
     }
     // <--
+    // --> OD 2005-08-16 #i53320#
+    inline void ResetPosAttr()
+    {
+        mbPosAttrSet = false;
+    }
+    // <--
+
     virtual String GetDescription() const;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwDrawFrmFmt);
