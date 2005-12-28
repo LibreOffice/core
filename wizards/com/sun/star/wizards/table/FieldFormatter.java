@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldFormatter.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:40:15 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:23:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,7 @@ public class FieldFormatter  implements XItemListener{
 
         CurUnoDialog.insertLabel("lblFieldName",
                 new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
-                new Object[] {UIConsts.INTEGERS[8], sFieldName, new Integer(158), new Integer(39),IFieldFormatStep, new Short(curtabindex++), new Integer(100)});
+                new Object[] {UIConsts.INTEGERS[8], sFieldName, new Integer(158), new Integer(39),IFieldFormatStep, new Short(curtabindex++), new Integer(94)});
 
         txtfieldname = CurUnoDialog.insertTextField("txtfieldname", MODIFYFIELDNAME, this,
                 new String[] {"Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Text", "Width"},
@@ -243,6 +243,8 @@ public class FieldFormatter  implements XItemListener{
         String oldfieldname = xlstFieldNames.getSelectedItem();
         if (!newfieldname.equals(oldfieldname)){
             if (curTableDescriptor.modifyColumnName(oldfieldname, newfieldname)){
+                Object oColumn = Helper.getUnoPropertyValue(oColumnDescriptorModel, "Column");
+                Helper.setUnoPropertyValue(oColumn, "Name", newfieldname);
                 FieldDescription curfielddescription = (FieldDescription) CurUnoDialog.fielditems.get(oldfieldname);
                 CurUnoDialog.fielditems.remove(oldfieldname);
                 curfielddescription.setName(newfieldname);
@@ -261,8 +263,10 @@ public class FieldFormatter  implements XItemListener{
         short ipos = xlstFieldNames.getSelectedItemPos();
         String[] snewlist = shiftArrayItem(xlstFieldNames.getItems(), ipos, -1);
         Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), "StringItemList", snewlist);
-        if ((ipos - 1) > -1)
-            xlstFieldNames.selectItemPos((short) (ipos - 1), true);
+        if ((ipos - 1) > -1){
+            Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), "SelectedItems", new short[] {(short) (ipos-1)});
+            curTableDescriptor.moveColumn(ipos, ipos-1);
+        }
         toggleButtons();
     }
 
@@ -271,8 +275,10 @@ public class FieldFormatter  implements XItemListener{
         short ipos = xlstFieldNames.getSelectedItemPos();
         String[] snewlist = shiftArrayItem(xlstFieldNames.getItems(), ipos, 1);
         Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), "StringItemList", snewlist);
-        if ((ipos + 1) < xlstFieldNames.getItemCount())
-            xlstFieldNames.selectItemPos((short) (ipos + 1), true);
+        if ((ipos + 1) < xlstFieldNames.getItemCount()){
+            Helper.setUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), "SelectedItems", new short[] {(short) (ipos+1)});
+            curTableDescriptor.moveColumn(ipos, ipos+1);
+        }
         toggleButtons();
     }
 
