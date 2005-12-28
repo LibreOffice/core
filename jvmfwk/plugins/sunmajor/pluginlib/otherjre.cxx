@@ -4,9 +4,9 @@
  *
  *  $RCSfile: otherjre.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-25 11:35:14 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:38:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,7 @@ char const* const* OtherInfo::getRuntimePaths(int * size)
     "/bin/classic/libjvm.so", // for IBM Java
         "/jre/bin/classic/libjvm.so", // for IBM Java
         "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so", // for Blackdown PPC
+        "/lib/" JFW_PLUGIN_ARCH "/server/libjvm.so", // for Blackdown AMD64
         "/lib/" JFW_PLUGIN_ARCH "/classic/libjvm.so" // for Blackdown PPC
     "/lib/" JFW_PLUGIN_ARCH "/jrockit/libjvm.so" // for Java of BEA Systems
 #endif
@@ -103,6 +104,7 @@ char const* const* OtherInfo::getLibraryPaths(int* size)
         "/bin/classic",
         "/jre/bin/classic",
         "/lib/" JFW_PLUGIN_ARCH "/client",
+        "/lib/" JFW_PLUGIN_ARCH "/server",
         "/lib/" JFW_PLUGIN_ARCH "/classic",
         "/lib/" JFW_PLUGIN_ARCH "/jrockit",
         "/lib/" JFW_PLUGIN_ARCH "/native_threads",
