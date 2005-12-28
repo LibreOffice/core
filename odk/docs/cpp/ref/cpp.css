@@ -3,67 +3,84 @@
 
 body   { background-color:#ffffff; }
 
-a { text-decoration: none; }
-a:link { color: #C44B01; }
-a:visited { color: #638093; }
-a:active { color: #9DCA12; }
+#adc-cppref a { text-decoration: none; }
+#adc-cppref a:link { color: #C44B01; }
+#adc-cppref a:visited { color: #638093; }
+#adc-cppref a:active { color: #9DCA12; }
 
-h1     { font-size:20pt; margin-top:3pt; margin-bottom:7pt; }
-h2     { font-family:Arial; font-size:16pt; margin-top:3pt; margin-bottom:5pt; }
-h3     { font-size:13pt; margin-top:2pt; margin-bottom:3pt; }
-h4     { font-size:10pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }
-dl     { margin-top:1pt; margin-bottom:1pt; }
-dl.member  { margin-top:1pt; margin-bottom:1pt; 
+#adc-cppref h1     { font-size:20pt; margin-top:3pt; margin-bottom:7pt; }
+#adc-cppref h2     { font-family:Arial; font-size:16pt; margin-top:3pt; margin-bottom:5pt; }
+#adc-cppref h3     { font-size:13pt; margin-top:2pt; margin-bottom:3pt; }
+#adc-cppref h4     { font-size:10pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }
+#adc-cppref dl     { margin-top:1pt; margin-bottom:1pt; }
+#adc-cppref dl.member  { margin-top:1pt; margin-bottom:1pt; 
 	     background-image:url(../../images/bg_table3.gif); }
-dt     { font-size:10pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }
-dt.member  { font-size:13pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }
-dt.simple  { font-size:10pt; font-weight:normal; margin-top:2pt; margin-bottom:1pt; }
-dd     { font-size:10pt; margin-top:1pt; margin-bottom:1pt; }
-dd.member  { font-size:10pt; margin-top:1pt; margin-bottom:1pt; background-color:#ffffff; }
-p      { font-size:10pt; margin-top:3pt; margin-bottom:1pt; }
-pre    { font-family:monospace; font-size:10pt; margin-top:1pt; margin-bottom:1pt; }
-tr     { font-size:10pt; }
-td     { font-size:10pt; }
+#adc-cppref dt     { font-size:10pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }
+#adc-cppref dt.member  { font-size:13pt; font-weight:bold; margin-top:2pt; margin-bottom:1pt; }
+#adc-cppref dt.simple  { font-size:10pt; font-weight:normal; margin-top:2pt; margin-bottom:1pt; }
+#adc-cppref dd     { font-size:10pt; margin-top:1pt; margin-bottom:1pt; }
+#adc-cppref dd.member  { font-size:10pt; margin-top:1pt; margin-bottom:1pt; background-color:#ffffff; }
+#adc-cppref p      { font-size:10pt; margin-top:3pt; margin-bottom:1pt; }
+#adc-cppref pre    { font-family:monospace; font-size:10pt; margin-top:1pt; margin-bottom:1pt; }
+#adc-cppref tr     { font-size:10pt; }
+#adc-cppref td     { font-size:10pt; }
 
-dt.attention   { color:#dd0000; }
+#adc-cppref dt.attention   { color:#dd0000; }
 
-div.title      { text-align:center;  line-height:26pt; 
+#adc-cppref div.title      { text-align:center;  line-height:26pt; 
 		 background-image:url(../../images/bg_table.gif); }
-.subtitle      { background-image:url(../../images/bg_table.gif); }
+#adc-cppref .subtitle      { background-image:url(../../images/bg_table.gif); }
 
-td.flagname    { background-image:url(../../images/bg_table2.gif);
+#adc-cppref td.flagname    { background-image:url(../../images/bg_table2.gif);
 	         font-family:Arial; font-size:8pt; font-weight:bold; }
-td.flagyes     { font-family:Arial; font-size:8pt; font-weight:bold; }
-td.flagno      { font-family:Arial; font-size:8pt; }
-td.flagtext    { font-family:Arial; font-size:8pt; font-weight:bold; }
+#adc-cppref td.flagyes     { font-family:Arial; font-size:8pt; font-weight:bold; }
+#adc-cppref td.flagno      { font-family:Arial; font-size:8pt; }
+#adc-cppref td.flagtext    { font-family:Arial; font-size:8pt; font-weight:bold; }
 
-td.navimain, td.navimain a
+#adc-cppref td.navimain, td.navimain a
                { background-image:url(../../images/bg_table2.gif);
                  font-family:Arial; font-size:12pt; font-weight:bold; }
 
 /* background-color:#eeeeff; color:#000000; */
 
-td.navimainself
+#adc-cppref td.navimainself
                { background-color:#2222ad; color:#ffffff;
                  font-family:Arial; font-size:12pt; font-weight:bold; }
-td.navimainnone
+#adc-cppref td.navimainnone
                { background-image:url(../../images/bg_table2.gif);
                  font-family:Arial; font-size:12pt; }
 
-div.define     { font-family:Arial; background-color:#ccccff; }
+#adc-cppref div.define     { font-family:Arial; background-color:#ccccff; }
 
-.nqclass       { color:#008800; }
+#adc-cppref .nqclass       { color:#008800; }
 
-h3.help        { background-color:#eeeeff; margin-top:12pt; }
+#adc-cppref h3.help        { background-color:#eeeeff; margin-top:12pt; }
 
-.btpubl        { color:#33ff33; }
-.btprot        { color:#cc9933; }
-.btpriv        { color:#ff6666; }
-.btvpubl       { color:#33ff33; font-style:italic; }
-.btvprot       { color:#cc9933; font-style:italic; }
-.btvpriv       { color:#ff6666; font-style:italic; }
-.btself        { font-weight:bold; }
+#adc-cppref .btpubl        { color:#33ff33; }
+#adc-cppref .btprot        { color:#cc9933; }
+#adc-cppref .btpriv        { color:#ff6666; }
+#adc-cppref .btvpubl       { color:#33ff33; font-style:italic; }
+#adc-cppref .btvprot       { color:#cc9933; font-style:italic; }
+#adc-cppref .btvpriv       { color:#ff6666; font-style:italic; }
+#adc-cppref .btself        { font-weight:bold; }
 
+#adc-cppref table { empty-cells:show; }
+
+#adc-cppref .childlist td, 
+#adc-cppref .commentedlinks td, 
+#adc-cppref .memberlist td, 
+#adc-cppref .title-table td, 
+#adc-cppref .subtitle td, 
+#adc-cppref .crosstitle td  { border: .1pt solid grey }
+
+#adc-cppref .flag-table td { border: .1pt solid #cccccc; } 
+
+#adc-cppref .table-in-method td, 
+#adc-cppref .table-in-data td, 
+#adc-cppref .navimain td, 
+#adc-cppref .navisub td, 
+#adc-cppref .expl-table td, 
+#adc-cppref .param-table td  { border: none; }
 
 
 /* Explanation of CSS classes:
