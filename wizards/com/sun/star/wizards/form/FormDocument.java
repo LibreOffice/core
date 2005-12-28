@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormDocument.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:31:45 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:20:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -276,11 +276,11 @@ public class FormDocument extends TextDocument {
             if (oMasterControlForm.xFormContainer.hasByName(SOSUBFORM)){
                 ControlForm oSubControlForm = getControlFormByName(SOSUBFORM);
                 oSubControlForm.setFormProperties(aFormProperties, oSubFormDBMetaData);
-                String sreftablename = _curFormConfiguration.getreferencedTableName();
-                if (sreftablename.equals(""))
+                String sRefTableName = _curFormConfiguration.getreferencedTableName();
+                if (sRefTableName.equals(""))
                     LinkFieldNames = _curFieldLinker.getLinkFieldNames();
                 else
-                    LinkFieldNames = _curFieldLinker.getLinkFieldNames(oMainFormDBMetaData, sreftablename);
+                    LinkFieldNames = _curFieldLinker.getLinkFieldNames(_curFormConfiguration.getRelationController(), sRefTableName);
                 if (LinkFieldNames != null){
                     if (LinkFieldNames.length > 0){
                         oSubControlForm.xPropertySet.setPropertyValue("DetailFields", LinkFieldNames[0]);
@@ -339,6 +339,7 @@ public class FormDocument extends TextDocument {
             curArrangement = _curArrangement;
             if (oGridControl != null){
                 oFormHandler.xDrawPage.remove(oGridControl.xShape);
+                oGridControl.xComponent.dispose();
                 oGridControl = null;
             }
             if (oFormController == null)
@@ -347,7 +348,6 @@ public class FormDocument extends TextDocument {
                 if (curArrangement == FormWizard.SOGRID){
                     oFormHandler.moveShapesToNirwana(getLabelControls());
                     oFormHandler.moveShapesToNirwana(getDatabaseControls());
-//                  oFormHandler.moveShapesToNirwana();
                 }
             }
             if (curArrangement == FormWizard.SOGRID){
@@ -466,16 +466,6 @@ public class FormDocument extends TextDocument {
                         }
                     }
                     else{
-                        String fieldname = null;
-                        try {
-                            fieldname = (String) oDBControls[i].xPropertySet.getPropertyValue("DataField");
-                        } catch (Exception e) {
-                            e.printStackTrace(System.out);
-                        }
-//                      if (fieldname != null){
-//                          oLabelControls[i].insertControlInContainer(fieldname);
-//                          oDBControls[i].insertControlInContainer(fieldname);
-//                      }
                         oFormHandler.groupShapesTogether(xMSF,oLabelControls[i].xShape, oDBControls[i].xShape);
                     }
 
