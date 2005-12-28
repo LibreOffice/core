@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 17:43:26 $
+#   last change: $Author: hr $ $Date: 2005-12-28 16:54:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,9 +64,20 @@ CXX:=$(COMPATH)$/bin$/CC
 .ENDIF          # "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
 .ENDIF          # "$(COMNAME)"=="sunpro5"
 
+.IF "$(SYSBASE)"!=""
+icu_CFLAGS+=-I$(SYSBASE)$/usr$/include
+.IF "$(COMNAME)"=="sunpro5"
+icu_CFLAGS+=$(C_RESTRICTIONFLAGS)
+.ENDIF			# "$(COMNAME)"=="sunpro5"
+icu_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
+.ENDIF			# "$(SYSBASE)"!=""
+
+icu_CFLAGS+=-O $(ARCH_FLAGS)
+icu_CXXFLAGS+=-O $(ARCH_FLAGS)
+
 CONFIGURE_DIR=source
 
-CONFIGURE_ACTION=sh -c 'CFLAGS="-O $(ARCH_FLAGS)"  CXXFLAGS="-O $(ARCH_FLAGS)" ./configure --enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no'
+CONFIGURE_ACTION=sh -c 'CFLAGS="$(icu_CFLAGS)" CXXFLAGS="$(icu_CXXFLAGS)" LDFLAGS="$(icu_LDFLAGS)" ./configure --enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no'
 
 #CONFIGURE_FLAGS=--enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no
 CONFIGURE_FLAGS=
