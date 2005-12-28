@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CommandName.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:23:34 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:15:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,34 +38,35 @@ import com.sun.star.uno.Exception;
 import com.sun.star.wizards.common.JavaTools;
 
 public class CommandName{
-    private CommandMetaData CurDBMetaData;
-    private String CatalogName = null;
-    private String SchemaName = null;
-    private String TableName = null;
-    private String DisplayName = null;
-    private String ComposedName = "";
-    private String AliasName = "";
-    private boolean bCatalogAtStart;
-    private String sCatalogSep;
-    private String sIdentifierQuote;
-    private boolean baddQuotation = true;
+    protected CommandMetaData oCommandMetaData;
+    protected String CatalogName = "";
+    protected String SchemaName = "";
+    protected String TableName = "";
+    protected String DisplayName = "";
+    protected String ComposedName = "";
+    protected String AliasName = "";
+    protected boolean bCatalogAtStart;
+    protected String sCatalogSep;
+    protected String sIdentifierQuote;
+    protected boolean baddQuotation = true;
 
 
-    public CommandName(CommandMetaData _CurDBMetaData, String _DisplayName){
-        CurDBMetaData = _CurDBMetaData;
+    public CommandName(CommandMetaData _CommandMetaData, String _DisplayName){
+        oCommandMetaData = _CommandMetaData;
         setComposedCommandName(_DisplayName);
     }
 
 
-    public CommandName(CommandMetaData _CurDBMetaData, String _CatalogName, String _SchemaName, String _TableName, boolean _baddQuotation){
+    public CommandName(CommandMetaData _CommandMetaData, String _CatalogName, String _SchemaName, String _TableName, boolean _baddQuotation){
+    try {
         baddQuotation = _baddQuotation;
-        CurDBMetaData = _CurDBMetaData;
-        if (_CatalogName != null){
+        oCommandMetaData = _CommandMetaData;
+        if ((_CatalogName != null) && (oCommandMetaData.xDBMetaData.supportsCatalogsInTableDefinitions())){
             if (!_CatalogName.equals("")){
                 CatalogName = _CatalogName;
             }
         }
-        if (_SchemaName != null){
+        if ((_SchemaName != null) && (oCommandMetaData.xDBMetaData.supportsSchemasInTableDefinitions())){
             if (!_SchemaName.equals("")){
                 SchemaName = _SchemaName;
             }
@@ -76,7 +77,9 @@ public class CommandName{
             }
         }
         setComposedCommandName();
-    }
+    } catch (SQLException e) {
+        e.printStackTrace(System.out);
+    }}
 
 
     private void setComposedCommandName(String _DisplayName) {
@@ -84,7 +87,7 @@ public class CommandName{
         if (this.setMetaDataAttributes()){
             this.DisplayName = _DisplayName;
             int iIndex;
-            if (CurDBMetaData.xDBMetaData.supportsCatalogsInDataManipulation() == true) { // ...dann Catalog mit in TableName
+            if (oCommandMetaData.xDBMetaData.supportsCatalogsInDataManipulation() == true) { // ...dann Catalog mit in TableName
                 iIndex = _DisplayName.indexOf(sCatalogSep);
                 if (iIndex >= 0) {
                     if (bCatalogAtStart == true) {
@@ -96,7 +99,7 @@ public class CommandName{
                     }
                 }
             }
-            if (CurDBMetaData.xDBMetaData.supportsSchemasInDataManipulation() == true) {
+            if (oCommandMetaData.xDBMetaData.supportsSchemasInDataManipulation() == true) {
                 String[] NameList;
                 NameList = new String[0];
                 NameList = JavaTools.ArrayoutofString(_DisplayName, ".");
@@ -113,26 +116,34 @@ public class CommandName{
 
     public void setComposedCommandName() {
         if (this.setMetaDataAttributes()){
-            if (CatalogName != null)
-                if (bCatalogAtStart == true)
-                    ComposedName = quoteName(CatalogName) + sCatalogSep;
-            if (SchemaName != null)
-                ComposedName += quoteName(SchemaName) + ".";
+            if (CatalogName != null){
+                if (!CatalogName.equals("")){
+                    if (bCatalogAtStart == true){
+                        ComposedName = quoteName(CatalogName) + sCatalogSep;
+                    }
+                }
+            }
+            if (SchemaName != null){
+                if (!SchemaName.equals(""))
+                    ComposedName += quoteName(SchemaName) + ".";
+            }
             if (ComposedName == "")
                 ComposedName = quoteName(TableName);
             else
                 ComposedName += quoteName(TableName);
-            if ((bCatalogAtStart == false) && (CatalogName != null))
-                ComposedName += sCatalogSep + quoteName(CatalogName);
+            if ((bCatalogAtStart == false) && (CatalogName != null)){
+                if (!CatalogName.equals(""))
+                    ComposedName += sCatalogSep + quoteName(CatalogName);
+            }
         }
     }
 
 
     private boolean setMetaDataAttributes(){
     try {
-        bCatalogAtStart = CurDBMetaData.xDBMetaData.isCatalogAtStart();
-        sCatalogSep = CurDBMetaData.xDBMetaData.getCatalogSeparator();
-        sIdentifierQuote = CurDBMetaData.xDBMetaData.getIdentifierQuoteString();
+        bCatalogAtStart = oCommandMetaData.xDBMetaData.isCatalogAtStart();
+        sCatalogSep = oCommandMetaData.xDBMetaData.getCatalogSeparator();
+        sIdentifierQuote = oCommandMetaData.xDBMetaData.getIdentifierQuoteString();
         return true;
     } catch (SQLException e) {
         e.printStackTrace(System.out);
@@ -142,7 +153,7 @@ public class CommandName{
 
     public String quoteName(String _sName) {
         if (baddQuotation)
-            return quoteName(_sName, this.CurDBMetaData.getIdentifierQuote());
+            return quoteName(_sName, this.oCommandMetaData.getIdentifierQuote());
         else
             return _sName;
     }
@@ -195,5 +206,9 @@ public class CommandName{
      */
     public String getTableName() {
         return TableName;
+    }
+
+    public CommandMetaData getCommandMetaData(){
+        return oCommandMetaData;
     }
 }
