@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontmanager.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 14:23:22 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:06:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -298,7 +298,7 @@ class PrintFontManager
         virtual ~PrintFont();
         virtual bool queryMetricPage( int nPage, utl::MultiAtomProvider* pProvider ) = 0;
 
-        bool readAfmMetrics( const rtl::OString& rFileName, utl::MultiAtomProvider* pProvider, bool bFillEncodingvector = false );
+        bool readAfmMetrics( const rtl::OString& rFileName, utl::MultiAtomProvider* pProvider, bool bFillEncodingvector, bool bOnlyGlobalAttributes );
     };
 
     struct Type1FontFile : public PrintFont
