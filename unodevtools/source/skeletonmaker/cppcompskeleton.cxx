@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cppcompskeleton.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2005-10-21 13:52:34 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 18:01:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,43 +96,47 @@ short generateNamespace(std::ostream & o, const OString & implname)
     return count;
 }
 
+
 void generateServiceHelper(std::ostream & o,
          const OString & implname,
+         const OString & classname,
          const std::hash_set< OString, OStringHash >& services)
 {
-    o << "::rtl::OUString SAL_CALL _getImplementationName() {\n"
-      << "    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\n"
+    o << "::rtl::OUString SAL_CALL " << classname
+      << "::_getImplementationName() {\n"
+      << "    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\n"
       << "        \"" << implname << "\"));\n}\n\n";
 
-    o << "css::uno::Sequence< rtl::OUString > SAL_CALL _getSupportedServiceNames()\n{\n"
-      << "    css::uno::Sequence< rtl::OUString > s(" << services.size() << ");\n";
+    o << "css::uno::Sequence< ::rtl::OUString > SAL_CALL " << classname
+      << "::_getSupportedServiceNames()\n{\n    css::uno::Sequence< "
+      << "::rtl::OUString >" << " s(" << services.size() << ");\n";
 
     std::hash_set< OString, OStringHash >::const_iterator iter = services.begin();
     short i=0;
     while (iter != services.end()) {
-        o << "    s[" << i++ << "] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\n"
-          << "         \"" << (*iter).replace('/','.') << "\"));\n";
+        o << "    s[" << i++ << "] = ::rtl::OUString("
+          << "RTL_CONSTASCII_USTRINGPARAM(\n        \""
+          << (*iter).replace('/','.') << "\"));\n";
         iter++;
     }
     o << "    return s;\n}\n\n";
-}
 
-void generateCreateFunction(std::ostream & o, const OString & classname)
-{
-    o << "css::uno::Reference< css::uno::XInterface > SAL_CALL _create(\n"
-      << "    css::uno::Reference< css::uno::XComponentContext > const & context)\n"
-      << "        SAL_THROW((css::uno::Exception))\n{\n"
-      << "    return static_cast< cppu::OWeakObject * >(new "
+    o << "css::uno::Reference< css::uno::XInterface > SAL_CALL "
+      << classname << "::_create("
+      << "\n    css::uno::Reference< css::uno::XComponentContext > const & "
+      << "context)\n        SAL_THROW((css::uno::Exception))\n{\n"
+      << "    return static_cast< ::cppu::OWeakObject * >(new "
       << classname <<  "(context));\n}\n\n";
 }
 
-void generateCompFunctions(std::ostream & o, const OString & nmspace)
+void generateCompFunctions(std::ostream & o, const OString & nmspace,
+                           const OString & classname)
 {
-    o << "static struct cppu::ImplementationEntry entries[] = {\n"
-      << "    { &" << nmspace << "_create, &"
-      << nmspace << "_getImplementationName,\n      &"
-      << nmspace << "_getSupportedServiceNames,\n"
-      << "      &cppu::createSingleComponentFactory, 0, 0 },\n"
+    o << "static struct ::cppu::ImplementationEntry entries[] = {\n"
+      << "    { &" << nmspace << classname << "::_create,\n      &"
+      << nmspace << classname << "::_getImplementationName,\n      &"
+      << nmspace << classname << "::_getSupportedServiceNames,\n"
+      << "      &::cppu::createSingleComponentFactory, 0, 0 },\n"
       << "    { 0, 0, 0, 0, 0, 0 }\n};\n\n";
 
     o << "extern \"C\" void SAL_CALL component_getImplementationEnvironment(\n"
@@ -141,12 +145,12 @@ void generateCompFunctions(std::ostream & o, const OString & nmspace)
 
     o << "extern \"C\" void * SAL_CALL component_getFactory(\n"
       << "    char const * implName, void * serviceManager, void * registryKey)\n{\n"
-      << "    return cppu::component_getFactoryHelper(\n"
+      << "    return ::cppu::component_getFactoryHelper(\n"
       << "        implName, serviceManager, registryKey, entries);\n}\n\n";
 
     o << "extern \"C\" sal_Bool SAL_CALL component_writeInfo(\n"
       << "    void * serviceManager, void * registryKey)\n{\n"
-      << "    return cppu::component_writeInfoHelper("
+      << "    return ::cppu::component_writeInfoHelper("
       << "serviceManager, registryKey, entries);\n}\n";
 }
 
@@ -154,6 +158,7 @@ OString generateClassDefinition(std::ostream& o,
          ProgramOptions const & options,
          TypeManager const & manager,
          const OString & classname,
+         const std::hash_set< OString, OStringHash >& services,
          const std::hash_set< OString, OStringHash >& interfaces,
          const StringPairHashMap& properties,
          const StringPairHashMap& attributes,
@@ -163,20 +168,20 @@ OString generateClassDefinition(std::ostream& o,
     OStringBuffer parentname(64);
     o << "class " << classname << ":\n";
     if (propertyhelper.getLength() > 1)
-        o << "    public cppu::PropertySetMixin< "
+        o << "    public ::cppu::PropertySetMixin< "
           << scopedCppName(propertyhelper, false, true) << " >,\n";
 
     if (!interfaces.empty()) {
         if (supportxcomponent) {
-            parentname.append("cppu::WeakComponentImplHelper");
+            parentname.append("::cppu::WeakComponentImplHelper");
             parentname.append(static_cast<sal_Int32>(interfaces.size()));
-            o << "    private cppu::BaseMutex,\n"
-              << "    public cppu::WeakComponentImplHelper"
+            o << "    private ::cppu::BaseMutex,\n"
+              << "    public ::cppu::WeakComponentImplHelper"
               << interfaces.size() << "<";
         } else {
-            parentname.append("cppu::WeakImplHelper");
+            parentname.append("::cppu::WeakImplHelper");
             parentname.append(static_cast<sal_Int32>(interfaces.size()));
-            o << "    public cppu::WeakImplHelper" << interfaces.size() << "<";
+            o << "    public ::cppu::WeakImplHelper" << interfaces.size() << "<";
         }
         std::hash_set< OString, OStringHash >::const_iterator iter =
             interfaces.begin();
@@ -192,6 +197,15 @@ OString generateClassDefinition(std::ostream& o,
     o << "{\npublic:\n"
       << "    explicit " << classname << "("
       << "css::uno::Reference< css::uno::XComponentContext > const & context);\n\n";
+
+    // generate component/service helper functions
+    o << "    /* component and service helper functions */\n"
+      << "    static ::rtl::OUString SAL_CALL _getImplementationName();\n"
+      << "    static css::uno::Sequence< ::rtl::OUString > SAL_CALL "
+      << "_getSupportedServiceNames();\n"
+      << "    static css::uno::Reference< css::uno::XInterface > SAL_CALL _create("
+      << "\n        css::uno::Reference< css::uno::XComponentContext > const & "
+      << "context);\n\n";
 
     // overload queryInterface
     if (propertyhelper.getLength() > 0) {
@@ -266,7 +280,7 @@ OString generateClassDefinition(std::ostream& o,
     o << classname << "::" << classname
       << "(css::uno::Reference< css::uno::XComponentContext > const & context) :\n";
     if (supportxcomponent) {
-        o << "    cppu::WeakComponentImplHelper" << interfaces.size() << "<";
+        o << "    ::cppu::WeakComponentImplHelper" << interfaces.size() << "<";
         std::hash_set< OString, OStringHash >::const_iterator iter =
             interfaces.begin();
         while (iter != interfaces.end()) {
@@ -279,7 +293,7 @@ OString generateClassDefinition(std::ostream& o,
         }
     }
     if (propertyhelper.getLength() > 0) {
-        o << "    cppu::PropertySetMixin< "
+        o << "    ::cppu::PropertySetMixin< "
           << scopedCppName(propertyhelper, false, true) << " >(\n"
           << "        context, static_cast< Implements >(\n            ";
         OStringBuffer buffer(128);
@@ -306,6 +320,9 @@ OString generateClassDefinition(std::ostream& o,
 
     o << "    m_xContext(context)\n{}\n\n";
 
+    // generate service/component helper function implementations
+    generateServiceHelper(o, options.implname, classname, services);
+
     return parentname.makeStringAndClear();
 }
 
@@ -313,20 +330,20 @@ void generateXServiceInfoBodies(std::ostream& o,
                                    const OString & classname)
 {
     o << "/* com.sun.star.uno.XServiceInfo */\n"
-      << "rtl::OUString  SAL_CALL " << classname << "getImplementationName() "
+      << "::rtl::OUString  SAL_CALL " << classname << "getImplementationName() "
       << "throw (css::uno::RuntimeException)\n{\n    "
       << "return _getImplementationName();\n}\n\n";
 
     o << "sal_Bool  SAL_CALL " << classname
-      << "supportsService(rtl::OUString const & "
+      << "supportsService(::rtl::OUString const & "
       << "serviceName) throw (css::uno::RuntimeException)\n{\n    "
-      << "css::uno::Sequence< rtl::OUString > serviceNames = "
+      << "css::uno::Sequence< ::rtl::OUString > serviceNames = "
       << "_getSupportedServiceNames();\n    "
       << "for (sal_Int32 i = 0; i < serviceNames.getLength(); ++i) {\n    "
       << "    if (serviceNames[i] == serviceName)\n            return true;\n"
       << "    }\n    return false;\n}\n\n";
 
-    o << "css::uno::Sequence< rtl::OUString >  SAL_CALL " << classname
+    o << "css::uno::Sequence< ::rtl::OUString >  SAL_CALL " << classname
       << "getSupportedServiceNames() throw (css::uno::RuntimeException)\n{\n    "
       << "return _getSupportedServiceNames();\n}\n\n";
 }
@@ -393,9 +410,9 @@ void generateQueryInterface(std::ostream& o,
         o << "::queryInterface(type));\n";
         o << "    return a.hasValue() ? a\n        : (";
         if (propertyhelper.equals("_")) {
-            o << "cppu::OPropertySetHelper::queryInterface(type));\n";
+            o << "::cppu::OPropertySetHelper::queryInterface(type));\n";
         } else {
-            o << "cppu::PropertySetMixin<\n            ";
+            o << "::cppu::PropertySetMixin<\n            ";
             printType(o, options, manager, propertyhelper.replace('.', '/'),
                       0, false, false);
             o << " >::queryInterface(\n               type));\n";
@@ -473,11 +490,9 @@ void generateSkeleton(ProgramOptions const & options,
             classname = classname.copy(index+1);
         }
 
-        generateServiceHelper(oFile, options.implname, services);
-
         OString parentname(
-            generateClassDefinition(
-                oFile, options, manager,classname, interfaces, properties,
+            generateClassDefinition(oFile,
+                options, manager, classname, services, interfaces, properties,
                 attributes, propinterfaces, propertyhelper, supportxcomponent));
 
         generateQueryInterface(oFile, options, manager, interfaces, parentname,
@@ -486,14 +501,12 @@ void generateSkeleton(ProgramOptions const & options,
         generateMethodBodies(oFile, options, manager, classname, interfaces,
                              propertyhelper.getLength() > 1);
 
-        generateCreateFunction(oFile, classname);
-
         // close namepsace
         for (short i=0; i < nm; i++)
             oFile << "} ";
         oFile << "// closing namespace\n\n";
 
-        generateCompFunctions(oFile, nmspace);
+        generateCompFunctions(oFile, nmspace, classname);
 
         oFile.close();
         OSL_VERIFY(makeValidTypeFile(compFileName, tmpFileName, sal_False));
