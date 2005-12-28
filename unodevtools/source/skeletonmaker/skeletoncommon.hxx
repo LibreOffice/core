@@ -4,9 +4,9 @@
  *
  *  $RCSfile: skeletoncommon.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2005-09-09 13:50:33 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 18:02:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,11 +59,12 @@ namespace skeletonmaker {
 
 struct ProgramOptions {
     ProgramOptions(): java5(true), all(false), dump(false),
-                      language(1) {}
+                      shortnames(false), language(1) {}
 
     bool java5;
     bool all;
     bool dump;
+    bool shortnames;
     // language specifier - is extendable
     // 1 = Java
     // 2 = C++
