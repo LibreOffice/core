@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 19:37:59 $
+#   last change: $Author: hr $ $Date: 2005-12-28 16:58:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -83,16 +83,35 @@ BUILD_ACTION=nmake
 BUILD_DIR=$(CONFIGURE_DIR)
 .ELSE
 .IF "$(GUI)"=="UNX"
+
+.IF "$(SYSBASE)"!=""
+xmlsec_CFLAGS+=-I$(SYSBASE)$/usr$/include
+.IF "$(COMNAME)"=="sunpro5"
+xmlsec_CFLAGS+=$(C_RESTRICTIONFLAGS)
+.ENDIF			# "$(COMNAME)"=="sunpro5"
+xmlsec_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
+.ENDIF			# "$(SYSBASE)"!=""
+
 .IF "$(OS)$(COM)"=="LINUXGCC"
-LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN'
+xmlsec_LDFLAGS+=-Wl,-rpath,'$$$$ORIGIN'
 .ENDIF			# "$(OS)$(COM)"=="LINUXGCC"
 .IF "$(OS)$(COM)"=="SOLARISC52"
-LDFLAGS:=-Wl,-R'$$$$ORIGIN'
+xmlsec_LDFLAGS+=-Wl,-R'$$$$ORIGIN'
 .ENDIF			# "$(OS)$(COM)"=="SOLARISC52"
+LDFLAGS:=$(xmlsec_LDFLAGS)
 .EXPORT: LDFLAGS
+
+#.IF "$(OS)$(COM)"=="LINUXGCC"
+#LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN'
+#.ENDIF			# "$(OS)$(COM)"=="LINUXGCC"
+#.IF "$(OS)$(COM)"=="SOLARISC52"
+#LDFLAGS:=-Wl,-R'$$$$ORIGIN'
+#.ENDIF			# "$(OS)$(COM)"=="SOLARISC52"
+#.EXPORT: LDFLAGS
 .ENDIF
 CONFIGURE_DIR=
-CONFIGURE_ACTION=chmod 777 libxml2-config && .$/configure
+#CONFIGURE_ACTION=chmod 777 libxml2-config && .$/configure CFLAGS="$(xmlsec_CFLAGS)" CPPFLAGS="$(xmlsec_CPPFLAGS)" LDFLAGS="$(xmlsec_LDFLAGS)"
+CONFIGURE_ACTION=chmod 777 libxml2-config && .$/configure CFLAGS="$(xmlsec_CFLAGS)" CPPFLAGS="$(xmlsec_CPPFLAGS)"
 CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no
 # system-mozilla needs pkgconfig to get the information about nss
 # FIXME: This also will enable pkg-config usage for libxml2. It *seems*
