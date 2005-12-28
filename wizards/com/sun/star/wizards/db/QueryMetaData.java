@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryMetaData.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:24:31 $
+ *  last change: $Author: hr $ $Date: 2005-12-28 17:17:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,13 +108,13 @@ public class QueryMetaData extends CommandMetaData {
     }
 
 
-    public void setFieldNames(String[] _FieldNames) {
+    public void setFieldNames(String[] _FieldNames){ //, String _CommandName) {
         int FieldCount = _FieldNames.length;
         FieldNames = new String[FieldCount];
         //      FieldTitles = new String[FieldCount];
         QueryFields.removeAllElements();
         for (int i = 0; i < FieldCount; i++) {
-            CurFieldColumn = new FieldColumn(this, _FieldNames[i]);
+            CurFieldColumn = new FieldColumn(this, _FieldNames[i]); //, _CommandName);
             QueryFields.add(QueryFields.size(), CurFieldColumn);
             FieldNames[i] = _FieldNames[i];
             if (FieldTitleSet != null){
